@@ -344,6 +344,15 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
         pcb_io.Format( aModule );
 
         FILE* fp = wxFopen( dlg.GetPath(), wxT( "wt" ) );
+
+        if( fp == NULL )
+        {
+            wxMessageBox( wxString::Format(
+                          _( "Unable to create or write file '%s'" ),
+                         GetChars( dlg.GetPath() ) ) );
+            return;
+        }
+
         fprintf( fp, "%s", pcb_io.GetStringOutput( false ).c_str() );
         fclose( fp );
     }

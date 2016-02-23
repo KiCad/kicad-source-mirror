@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,14 +108,17 @@ bool BITMAP_BASE::SaveData( FILE* aFile ) const
         wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
         char*           begin  = (char*) buffer->GetBufferStart();
         int             ii;
+
         for( ii = 0; begin <= buffer->GetBufferEnd(); begin++, ii++ )
         {
             if( ii >= 32 )
             {
                 ii = 0;
+
                 if( fprintf( aFile, "\n" ) == EOF )
                     return false;
             }
+
             if( fprintf( aFile, "%2.2X ", *begin & 0xFF ) == EOF )
                 return false;
         }
@@ -123,6 +126,7 @@ bool BITMAP_BASE::SaveData( FILE* aFile ) const
 
     return true;
 }
+
 
 void BITMAP_BASE::SaveData( wxArrayString& aPngStrings ) const
 {
@@ -134,7 +138,8 @@ void BITMAP_BASE::SaveData( wxArrayString& aPngStrings ) const
         // Write binary data in hexadecimal form (ASCII)
         wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
         char*           begin  = (char*) buffer->GetBufferStart();
-        wxString line;
+        wxString        line;
+
         for( int ii = 0; begin <= buffer->GetBufferEnd(); begin++, ii++ )
         {
             if( ii >= 32 )
@@ -144,7 +149,7 @@ void BITMAP_BASE::SaveData( wxArrayString& aPngStrings ) const
                 line.Empty();
             }
 
-            line << wxString::Format( wxT("%2.2X "), *begin & 0xFF );
+            line << wxString::Format( wxT( "%2.2X " ), *begin & 0xFF );
         }
 
         // Add last line:
@@ -218,6 +223,11 @@ void BITMAP_BASE::DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     wxPoint pos  = aPos;
     wxSize  size = GetSize();
 
+    // This fixes a bug in OSX that should be fixed in the 3.0.3 version or later.
+    // See: http://trac.wxwidgets.org/ticket/16329 for more information.
+    if( ( size.x == 0 ) || ( size.y == 0 ) )
+        return;
+
     // To draw the bitmap, pos is the upper left corner position
     pos.x -= size.x / 2;
     pos.y -= size.y / 2;
@@ -228,7 +238,7 @@ void BITMAP_BASE::DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     aDC->GetLogicalOrigin( &logicalOriginX, &logicalOriginY );
     aDC->SetUserScale( scale * GetScalingFactor(), scale * GetScalingFactor() );
     aDC->SetLogicalOrigin( logicalOriginX / GetScalingFactor(),
-                          logicalOriginY / GetScalingFactor() );
+                           logicalOriginY / GetScalingFactor() );
     aDC->DrawBitmap( *m_bitmap,
                      KiROUND( pos.x / GetScalingFactor() ),
                      KiROUND( pos.y / GetScalingFactor() ),
@@ -238,9 +248,6 @@ void BITMAP_BASE::DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 }
 
 
-/* Function GetSize
- * returns the actual size (in user units, not in pixels) of the image
- */
 wxSize BITMAP_BASE::GetSize() const
 {
     wxSize size;
@@ -258,12 +265,6 @@ wxSize BITMAP_BASE::GetSize() const
 }
 
 
-/*
- * Mirror image vertically (i.e. relative to its horizontal X axis )
- *  or horizontally (i.e relative to its vertical Y axis)
- * param aVertically = false to mirror horizontally
- *                      or true to mirror vertically
- */
 void BITMAP_BASE::Mirror( bool aVertically )
 {
     if( m_image )
@@ -292,10 +293,9 @@ void BITMAP_BASE::PlotImage( PLOTTER*       aPlotter,
     if( m_image == NULL )
         return;
 
-    // These 2 lines are useful only fot plotters that cannot plot a bitmap
+    // These 2 lines are useful only for plotters that cannot plot a bitmap
     // and plot a rectangle instead of.
     aPlotter->SetColor( aDefaultColor );
     aPlotter->SetCurrentLineWidth( aDefaultPensize );
-
     aPlotter->PlotImage( *m_image, aPos, GetScalingFactor() );
 }
