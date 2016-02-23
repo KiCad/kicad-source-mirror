@@ -22,13 +22,12 @@
  */
 
 
-#include <iostream>
-#include <sstream>
-#include <streambuf>
 #include <iomanip>
-#include <string>
-#include <utility>
+#include <iostream>
 #include <map>
+#include <sstream>
+#include <utility>
+#include <wx/log.h>
 
 #include "3d_cache/sg/sg_helpers.h"
 #include "3d_cache/sg/sg_node.h"
@@ -214,9 +213,11 @@ S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
     if( '[' != schar )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] corrupt data; missing left bracket at position ";
-        std::cerr << aFile.tellg() << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] corrupt data; missing left bracket at position ";
+        ostr << aFile.tellg();
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return S3D::SGTYPE_END;
@@ -234,8 +235,10 @@ S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
     if( schar != ']' )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] corrupt data; could not find right bracket\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] corrupt data; could not find right bracket";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return S3D::SGTYPE_END;
@@ -247,9 +250,11 @@ S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
     if( std::string::npos == upos )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] corrupt data; no underscore in name '";
-        std::cerr << name << "'\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] corrupt data; no underscore in name '";
+        ostr << name << "'";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return S3D::SGTYPE_END;
@@ -275,9 +280,13 @@ S3D::SGTYPES S3D::ReadTag( std::ifstream& aFile, std::string& aName )
     }
 
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [INFO] corrupt data; no node type matching '";
-    std::cerr << name << "'\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] corrupt data; no node type matching '";
+        ostr << name << "'";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return S3D::SGTYPE_END;
@@ -380,8 +389,10 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
     if( vsize < 3 )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid vertex set (fewer than 3 vertices)\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] invalid vertex set (fewer than 3 vertices)";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -392,8 +403,10 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
     if( 0 != isize % 3 || index.empty() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid index set (not multiple of 3)\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] invalid index set (not multiple of 3)";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -402,8 +415,10 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
     if( !norms.empty() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] normals set is not empty\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] normals set is not empty";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -424,8 +439,10 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
             p3 < 0 || p3 >= vsize )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] invalid index set; index out of bounds\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] invalid index set; index out of bounds";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -509,8 +526,10 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
     if( norms.size() != coords.size() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] number of normals does not equal number of vertices\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] number of normals does not equal number of vertices";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;

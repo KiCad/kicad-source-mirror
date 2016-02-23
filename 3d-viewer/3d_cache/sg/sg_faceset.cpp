@@ -23,6 +23,9 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "3d_cache/sg/sg_faceset.h"
 #include "3d_cache/sg/sg_colors.h"
 #include "3d_cache/sg/sg_coords.h"
@@ -48,9 +51,11 @@ SGFACESET::SGFACESET( SGNODE* aParent ) : SGNODE( aParent )
         m_Parent = NULL;
 
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] inappropriate parent to SGFACESET (type ";
-        std::cerr << aParent->GetNodeType() << ")\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] inappropriate parent to SGFACESET (type ";
+        ostr << aParent->GetNodeType() << ")";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
     }
     else if( NULL != aParent && S3D::SGTYPE_SHAPE == aParent->GetNodeType() )
@@ -252,8 +257,12 @@ void SGFACESET::unlinkNode( const SGNODE* aNode, bool isChild )
     }
 
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] unlinkNode() did not find its target\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] unlinkNode() did not find its target";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return;
@@ -280,8 +289,10 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
     if( NULL == aNode )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aNode\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] NULL pointer passed for aNode";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -297,8 +308,10 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
             if( aNode != m_Colors && aNode != m_RColors )
             {
                 #ifdef DEBUG
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [BUG] assigning multiple Colors nodes\n";
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [BUG] assigning multiple Colors nodes";
+                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
                 #endif
 
                 return false;
@@ -328,8 +341,10 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
             if( aNode != m_Coords && aNode != m_RCoords )
             {
                 #ifdef DEBUG
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [BUG] assigning multiple Coords nodes\n";
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [BUG] assigning multiple Coords nodes";
+                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
                 #endif
 
                 return false;
@@ -359,8 +374,10 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
             if( aNode != m_Normals && aNode != m_RNormals )
             {
                 #ifdef DEBUG
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [BUG] assigning multiple Normals nodes\n";
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [BUG] assigning multiple Normals nodes";
+                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
                 #endif
 
                 return false;
@@ -390,8 +407,10 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
             if( aNode != m_CoordIndices )
             {
                 #ifdef DEBUG
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [BUG] assigning multiple CoordIndex nodes\n";
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [BUG] assigning multiple CoordIndex nodes";
+                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
                 #endif
 
                 return false;
@@ -407,10 +426,14 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
     }
 
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] object '" << aNode->GetName();
-    std::cerr << "' (type " << aNode->GetNodeType();
-    std::cerr << ") is not a valid type for this object (" << aNode->GetNodeType() << ")\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] object '" << aNode->GetName();
+        ostr << "' (type " << aNode->GetNodeType();
+        ostr << ") is not a valid type for this object (" << aNode->GetNodeType() << ")";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return false;
@@ -521,8 +544,10 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
         if( NULL == m_Parent )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] corrupt data; m_aParent is NULL\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] corrupt data; m_aParent is NULL";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -539,8 +564,10 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( parentNode != m_Parent )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] corrupt data; parentNode != m_aParent\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] corrupt data; parentNode != m_aParent";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -549,8 +576,10 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( !aFile.good() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad stream\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] bad stream";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -630,8 +659,10 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         || m_Normals || m_RNormals )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] non-empty node\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] non-empty node";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -647,9 +678,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         || ( items[5] && items[6] ) )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] corrupt data; multiple item definitions at position ";
-        std::cerr << aFile.tellg() << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] corrupt data; multiple item definitions at position ";
+        ostr << aFile.tellg();
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -662,9 +695,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_COORDS != S3D::ReadTag( aFile, name ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; bad child coords tag at position ";
-            std::cerr << aFile.tellg() << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data; bad child coords tag at position ";
+            ostr << aFile.tellg();
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -676,9 +711,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( !m_Coords->ReadCache( aFile, this ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data while reading coords '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data while reading coords '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -690,9 +727,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_COORDS != S3D::ReadTag( aFile, name ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; bad ref coords tag at position ";
-            std::cerr << aFile.tellg() << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data; bad ref coords tag at position ";
+            ostr << aFile.tellg();
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -703,9 +742,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( !np )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data: cannot find ref coords '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data: cannot find ref coords '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -714,9 +755,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_COORDS != np->GetNodeType() )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data: type is not SGCOORDS '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data: type is not SGCOORDS '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -731,9 +774,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_COORDINDEX != S3D::ReadTag( aFile, name ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; bad coord index tag at position ";
-            std::cerr << aFile.tellg() << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data; bad coord index tag at position ";
+            ostr << aFile.tellg();
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -745,9 +790,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( !m_CoordIndices->ReadCache( aFile, this ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data while reading coord index '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data while reading coord index '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -759,9 +806,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_NORMALS != S3D::ReadTag( aFile, name ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; bad child normals tag at position ";
-            std::cerr << aFile.tellg() << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data; bad child normals tag at position ";
+            ostr << aFile.tellg();
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -773,9 +822,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( !m_Normals->ReadCache( aFile, this ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data while reading normals '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data while reading normals '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -787,9 +838,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_NORMALS != S3D::ReadTag( aFile, name ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; bad ref normals tag at position ";
-            std::cerr << aFile.tellg() << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data; bad ref normals tag at position ";
+            ostr << aFile.tellg();
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -800,9 +853,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( !np )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data: cannot find ref normals '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data: cannot find ref normals '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -811,9 +866,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_NORMALS != np->GetNodeType() )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data: type is not SGNORMALS '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data: type is not SGNORMALS '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -828,9 +885,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_COLORS != S3D::ReadTag( aFile, name ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; bad child colors tag at position ";
-            std::cerr << aFile.tellg() << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data; bad child colors tag at position ";
+            ostr << aFile.tellg();
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -842,9 +901,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( !m_Colors->ReadCache( aFile, this ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data while reading colors '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data while reading colors '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -856,9 +917,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_COLORS != S3D::ReadTag( aFile, name ) )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; bad ref colors tag at position ";
-            std::cerr << aFile.tellg() << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data; bad ref colors tag at position ";
+            ostr << aFile.tellg();
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -869,9 +932,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( !np )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data: cannot find ref colors '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data: cannot find ref colors '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -880,9 +945,11 @@ bool SGFACESET::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
         if( S3D::SGTYPE_COLORS != np->GetNodeType() )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data: type is not SGCOLORS '";
-            std::cerr << name << "'\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] corrupt data: type is not SGCOLORS '";
+            ostr << name << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -911,8 +978,10 @@ bool SGFACESET::validate( void )
         || (NULL == m_CoordIndices) )
     {
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad model; no vertices, vertex indices, or normals\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] bad model; no vertices, vertex indices, or normals";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
         validated = true;
         valid = false;
@@ -932,8 +1001,10 @@ bool SGFACESET::validate( void )
     if( nCoords < 3 )
     {
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad model; fewer than 3 vertices\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] bad model; fewer than 3 vertices";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
         validated = true;
         valid = false;
@@ -948,8 +1019,10 @@ bool SGFACESET::validate( void )
     if( nCIdx < 3 || ( nCIdx % 3 > 0 ) )
     {
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad model; no vertex indices or not multiple of 3\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] bad model; no vertex indices or not multiple of 3";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
         validated = true;
         valid = false;
@@ -962,8 +1035,10 @@ bool SGFACESET::validate( void )
         if( lCIdx[i] < 0 || lCIdx[i] >= nCoords )
         {
 #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad model; vertex index out of bounds\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad model; vertex index out of bounds";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
             validated = true;
             valid = false;
@@ -984,9 +1059,11 @@ bool SGFACESET::validate( void )
     if( nNorms != nCoords )
     {
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad model; number of normals (" << nNorms;
-        std::cerr << ") does not match number of vertices (" << nCoords << ")\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] bad model; number of normals (" << nNorms;
+        ostr << ") does not match number of vertices (" << nCoords << ")";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
         validated = true;
         valid = false;

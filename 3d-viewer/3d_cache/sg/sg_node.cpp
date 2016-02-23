@@ -21,11 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <iostream>
-#include <sstream>
+#include <algorithm>
 #include <cmath>
 #include <cstring>
-#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <wx/log.h>
 
 #include "3d_cache/sg/sg_node.h"
 #include "plugins/3dapi/c3dmodel.h"
@@ -167,8 +168,10 @@ void SGNODE::delNodeRef( SGNODE* aNode )
     }
 
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] delNodeRef() did not find its target\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] delNodeRef() did not find its target";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return;
@@ -180,8 +183,10 @@ void SGNODE::AssociateWrapper( SGNODE** aWrapperRef )
     if( NULL == aWrapperRef )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL handle\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] NULL handle";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return;
@@ -190,8 +195,10 @@ void SGNODE::AssociateWrapper( SGNODE** aWrapperRef )
     if( *aWrapperRef != this )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] handle value does not match this object's pointer\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] handle value does not match this object's pointer";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return;
@@ -204,8 +211,10 @@ void SGNODE::AssociateWrapper( SGNODE** aWrapperRef )
         *m_Association = NULL;
 
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [WARNING] association being broken with previous wrapper\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [WARNING] association being broken with previous wrapper";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
     }
 
@@ -222,8 +231,10 @@ void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef )
     if( !aWrapperRef )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid handle value aWrapperRef\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] invalid handle value aWrapperRef";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return;
@@ -232,13 +243,15 @@ void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef )
     if( *aWrapperRef != *m_Association || aWrapperRef != m_Association )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] *aWrapperRef (" << *aWrapperRef;
-        std::cerr << ") does not match *m_Association (" << *m_Association << ") in type ";
-        std::cerr << node_names[ m_SGtype] << "\n";
-        std::cerr << " * [INFO] OR aWrapperRef(" << aWrapperRef << ") != m_Association(";
-        std::cerr << m_Association << ")\n";
-        std::cerr << " * [INFO] node name: " << GetName() << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] *aWrapperRef (" << *aWrapperRef;
+        ostr << ") does not match *m_Association (" << *m_Association << ") in type ";
+        ostr << node_names[ m_SGtype] << "\n";
+        ostr << " * [INFO] OR aWrapperRef(" << aWrapperRef << ") != m_Association(";
+        ostr << m_Association << ")\n";
+        ostr << " * [INFO] node name: " << GetName();
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return;
@@ -266,16 +279,20 @@ bool S3D::GetMatIndex( MATLIST& aList, SGNODE* aNode, int& aIndex )
     if( NULL == aNode || S3D::SGTYPE_APPEARANCE != aNode->GetNodeType() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        ostr.str( "" );
 
         if( NULL == aNode )
         {
-            std::cerr << " * [BUG] aNode is NULL\n";
+            wxLogTrace( MASK_3D_SG, " * [BUG] aNode is NULL\n" );
         }
         else
         {
-            std::cerr << " * [BUG] invalid node type (" << aNode->GetNodeType();
-            std::cerr << "), expected " << S3D::SGTYPE_APPEARANCE << "\n";
+            ostr << " * [BUG] invalid node type (" << aNode->GetNodeType();
+            ostr << "), expected " << S3D::SGTYPE_APPEARANCE;
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         }
         #endif
 

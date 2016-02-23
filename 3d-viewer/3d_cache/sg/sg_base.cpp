@@ -22,8 +22,11 @@
  */
 
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "plugins/3dapi/sg_base.h"
 
 
@@ -41,8 +44,10 @@ SGCOLOR::SGCOLOR( float aRVal, float aGVal, float aBVal )
     if( !checkRange( aRVal, aGVal, aBVal ) )
     {
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid value passed to constructor\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] invalid value passed to constructor";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
         red = 0.0;
         green = 0.0;
@@ -80,8 +85,10 @@ void SGCOLOR::GetColor( SGCOLOR* aColor ) const
     if( NULL == aColor )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aColor\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] NULL pointer passed for aColor";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return;
@@ -121,8 +128,10 @@ bool SGCOLOR::SetColor( const SGCOLOR* aColor )
     if( NULL == aColor )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aColor\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] NULL pointer passed for aColor";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -142,8 +151,10 @@ bool SGCOLOR::checkRange( float aRedVal, float aGreenVal, float aBlueVal ) const
     if( aRedVal < 0.0 || aRedVal > 1.0 )
     {
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid RED value: " << aRedVal << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] invalid RED value: " << aRedVal;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
         ok = false;
     }
@@ -153,9 +164,9 @@ bool SGCOLOR::checkRange( float aRedVal, float aGreenVal, float aBlueVal ) const
 #ifdef DEBUG
         if( ok )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d\n", __FILE__, __FUNCTION__, __LINE__ );
         }
-        std::cerr << " * [BUG] invalid GREEN value: " << aGreenVal << "\n";
+        wxLogTrace( MASK_3D_SG, " * [BUG] invalid GREEN value: %f\n", aGreenVal );
 #endif
         ok = false;
     }
@@ -165,9 +176,9 @@ bool SGCOLOR::checkRange( float aRedVal, float aGreenVal, float aBlueVal ) const
 #ifdef DEBUG
         if( ok )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d\n", __FILE__, __FUNCTION__, __LINE__ );
         }
-        std::cerr << " * [BUG] invalid BLUE value: " << aBlueVal << "\n";
+        wxLogTrace( MASK_3D_SG, " * [BUG] invalid BLUE value: %f\n", aBlueVal );
 #endif
         ok = false;
     }
@@ -216,8 +227,10 @@ void SGPOINT::GetPoint( SGPOINT* aPoint )
     if( NULL == aPoint )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aPoint\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] NULL pointer passed for aPoint";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return;

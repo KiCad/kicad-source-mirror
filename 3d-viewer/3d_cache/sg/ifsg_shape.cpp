@@ -65,8 +65,8 @@ IFSG_SHAPE::IFSG_SHAPE( SGNODE* aParent )
 
             #ifdef DEBUG
             std::ostringstream ostr;
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << WrongParent;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << WrongParent;
             wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
@@ -88,8 +88,8 @@ IFSG_SHAPE::IFSG_SHAPE( IFSG_NODE& aParent )
     if( ! pp )
     {
         std::ostringstream ostr;
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadParent;
         wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     }
     #endif
@@ -105,8 +105,8 @@ IFSG_SHAPE::IFSG_SHAPE( IFSG_NODE& aParent )
 
             #ifdef DEBUG
             std::ostringstream ostr;
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << WrongParent;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << WrongParent;
             wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
@@ -153,10 +153,10 @@ bool IFSG_SHAPE::NewNode( SGNODE* aParent )
     {
         #ifdef DEBUG
         std::ostringstream ostr;
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid SGNODE parent (";
-        std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        std::cerr << ") to SGSHAPE";
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] invalid SGNODE parent (";
+        ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
+        ostr << ") to SGSHAPE";
         wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
@@ -179,8 +179,8 @@ bool IFSG_SHAPE::NewNode( IFSG_NODE& aParent )
     {
         #ifdef DEBUG
         std::ostringstream ostr;
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadParent;
         wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 

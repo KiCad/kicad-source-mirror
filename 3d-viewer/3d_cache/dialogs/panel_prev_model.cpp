@@ -316,7 +316,7 @@ PANEL_PREV_3D::~PANEL_PREV_3D()
 void PANEL_PREV_3D::View3DISO( wxCommandEvent& event )
 {
     // XXX - TO BE IMPLEMENTED
-    std::cout << "Switch to Isometric View\n";
+    // std::cout << "Switch to Isometric View\n";
     return;
 }
 
@@ -324,7 +324,7 @@ void PANEL_PREV_3D::View3DISO( wxCommandEvent& event )
 void PANEL_PREV_3D::View3DUpdate( wxCommandEvent& event )
 {
     // XXX - TO BE IMPLEMENTED
-    std::cout << "Update 3D View\n";
+    // std::cout << "Update 3D View\n";
 
     // update the model filename if appropriate
     if( NULL != m_FileTree )
@@ -340,7 +340,7 @@ void PANEL_PREV_3D::View3DUpdate( wxCommandEvent& event )
 void PANEL_PREV_3D::View3DLeft( wxCommandEvent& event )
 {
     // XXX - TO BE IMPLEMENTED
-    std::cout << "Switch to Left View\n";
+    // std::cout << "Switch to Left View\n";
     return;
 }
 
@@ -348,7 +348,7 @@ void PANEL_PREV_3D::View3DLeft( wxCommandEvent& event )
 void PANEL_PREV_3D::View3DRight( wxCommandEvent& event )
 {
     // XXX - TO BE IMPLEMENTED
-    std::cout << "Switch to Right View\n";
+    // std::cout << "Switch to Right View\n";
     return;
 }
 
@@ -356,7 +356,7 @@ void PANEL_PREV_3D::View3DRight( wxCommandEvent& event )
 void PANEL_PREV_3D::View3DFront( wxCommandEvent& event )
 {
     // XXX - TO BE IMPLEMENTED
-    std::cout << "Switch to Front View\n";
+    // std::cout << "Switch to Front View\n";
     return;
 }
 
@@ -364,7 +364,7 @@ void PANEL_PREV_3D::View3DFront( wxCommandEvent& event )
 void PANEL_PREV_3D::View3DBack( wxCommandEvent& event )
 {
     // XXX - TO BE IMPLEMENTED
-    std::cout << "Switch to Back View\n";
+    // std::cout << "Switch to Back View\n";
     return;
 }
 
@@ -372,7 +372,7 @@ void PANEL_PREV_3D::View3DBack( wxCommandEvent& event )
 void PANEL_PREV_3D::View3DTop( wxCommandEvent& event )
 {
     // XXX - TO BE IMPLEMENTED
-    std::cout << "Switch to Top View\n";
+    // std::cout << "Switch to Top View\n";
     return;
 }
 
@@ -380,7 +380,7 @@ void PANEL_PREV_3D::View3DTop( wxCommandEvent& event )
 void PANEL_PREV_3D::View3DBottom( wxCommandEvent& event )
 {
     // XXX - TO BE IMPLEMENTED
-    std::cout << "Switch to Bottom View\n";
+    // std::cout << "Switch to Bottom View\n";
     return;
 }
 
@@ -459,26 +459,8 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
         wxString newModelFile;
         newModelFile = m_resolver->ResolvePath( aModelName );
 
-        if( newModelFile.empty() )
-        {
-            #ifdef DEBUG
-            std::cout << "[3dv] Update Model: (no such file) " << aModelName.ToUTF8() << "\n";
-            #endif
-        }
-        else if( newModelFile.Cmp( currentModelFile ) )
-        {
+        if( !newModelFile.empty() && newModelFile.Cmp( currentModelFile ) )
             newModel = true;
-
-            #ifdef DEBUG
-            std::cout << "[3dv] Update Model: " << newModelFile.ToUTF8() << "\n";
-            #endif
-        }
-        #ifdef DEBUG
-        else
-        {
-            std::cout << "[3dv] Update Model: [model unchanged]\n";
-        }
-        #endif
 
         currentModelFile = newModelFile;
         modelInfo.filename = currentModelFile;
@@ -486,9 +468,6 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
 
     if( currentModelFile.empty() || newModel )
     {
-#ifdef DEBUG
-        std::cout << "[3dv] Update Model: painting black\n";
-#endif
         if( NULL != canvas )
         {
             canvas->Clear3DModel();
@@ -509,10 +488,6 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
 
     if( NULL == model )
     {
-#ifdef DEBUG
-        std::cout << "[3dv] Update Model: no model loaded\n";
-#endif
-
         if( NULL != canvas )
         {
             canvas->Refresh();
@@ -522,23 +497,10 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
         return;
     }
 
-#ifdef DEBUG
-    std::cout << "[3dv] Update Model: loading preview\n";
-#endif
-
     if( NULL == canvas )
     {
-#ifdef DEBUG
-        std::cout << "[3dv] Update Model: creating canvas\n";
-#endif
-
         canvas = new C3D_MODEL_VIEWER( preview,
             COGL_ATT_LIST::GetAttributesList( true ) );
-
-        #ifdef DEBUG
-        if( NULL == canvas )
-            std::cout << "[3dv] Update Model: canvas creation FAILED\n";
-        #endif
 
         wxSizer* ws = new wxBoxSizer( wxHORIZONTAL );
         canvas->Set3DModel( *model );

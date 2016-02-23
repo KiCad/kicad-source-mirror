@@ -21,8 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "3d_cache/sg/sg_index.h"
 
 
@@ -33,9 +36,11 @@ SGINDEX::SGINDEX( SGNODE* aParent ) : SGNODE( aParent )
         m_Parent = NULL;
 
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] inappropriate parent to SGINDEX (type ";
-        std::cerr << aParent->GetNodeType() << ")\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] inappropriate parent to SGINDEX (type ";
+        ostr << aParent->GetNodeType() << ")";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
     }
 
@@ -95,8 +100,10 @@ SGNODE* SGINDEX::FindNode(const char *aNodeName, const SGNODE *aCaller)
 void SGINDEX::unlinkChildNode( const SGNODE* aCaller )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] unexpected code branch; node should have no children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return;
@@ -106,8 +113,10 @@ void SGINDEX::unlinkChildNode( const SGNODE* aCaller )
 void SGINDEX::unlinkRefNode( const SGNODE* aCaller )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] unexpected code branch; node should have no children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return;
@@ -117,8 +126,10 @@ void SGINDEX::unlinkRefNode( const SGNODE* aCaller )
 bool SGINDEX::AddRefNode( SGNODE* aNode )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] this node does not accept children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] this node does not accept children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return false;
@@ -128,8 +139,10 @@ bool SGINDEX::AddRefNode( SGNODE* aNode )
 bool SGINDEX::AddChildNode( SGNODE* aNode )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] this node does not accept children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] this node does not accept children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return false;
@@ -201,8 +214,10 @@ bool SGINDEX::writeCoordIndex( std::ofstream& aFile )
     if( n % 3 )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] coord index is not divisible by three (violates triangle constraint)\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] coord index is not divisible by three (violates triangle constraint)";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -287,8 +302,10 @@ bool SGINDEX::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
         if( NULL == m_Parent )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] corrupt data; m_aParent is NULL\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] corrupt data; m_aParent is NULL";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -305,8 +322,10 @@ bool SGINDEX::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( parentNode != m_Parent )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] corrupt data; parentNode != m_aParent\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] corrupt data; parentNode != m_aParent";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -315,8 +334,10 @@ bool SGINDEX::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( !aFile.good() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad stream\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] bad stream";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -341,8 +362,10 @@ bool SGINDEX::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     if( !index.empty() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] non-empty node\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] non-empty node";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;

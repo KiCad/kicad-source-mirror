@@ -23,6 +23,8 @@
 
 #include <iostream>
 #include <utility>
+#include <sstream>
+#include <wx/log.h>
 
 #include "3d_cache/sg/sg_appearance.h"
 #include "3d_cache/sg/sg_helpers.h"
@@ -42,9 +44,11 @@ SGAPPEARANCE::SGAPPEARANCE( SGNODE* aParent ) : SGNODE( aParent)
         m_Parent = NULL;
 
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] inappropriate parent to SGAPPEARANCE (type ";
-        std::cerr << aParent->GetNodeType() << ")\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] inappropriate parent to SGAPPEARANCE (type ";
+        ostr << aParent->GetNodeType() << ")";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
     }
     else if( NULL != aParent && S3D::SGTYPE_SHAPE == aParent->GetNodeType() )
@@ -103,8 +107,10 @@ bool SGAPPEARANCE::SetEmissive( const SGCOLOR* aRGBColor )
     if( NULL == aRGBColor )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aRGBColor\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] NULL pointer passed for aRGBColor";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -131,8 +137,10 @@ bool SGAPPEARANCE::SetDiffuse( const SGCOLOR* aRGBColor )
     if( NULL == aRGBColor )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aRGBColor\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] NULL pointer passed for aRGBColor";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -159,8 +167,10 @@ bool SGAPPEARANCE::SetSpecular( const SGCOLOR* aRGBColor )
     if( NULL == aRGBColor )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aRGBColor\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] NULL pointer passed for aRGBColor";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -186,8 +196,10 @@ bool SGAPPEARANCE::SetAmbient( const SGCOLOR* aRGBColor )
     if( NULL == aRGBColor )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aRGBColor\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] NULL pointer passed for aRGBColor";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -218,8 +230,10 @@ SGNODE* SGAPPEARANCE::FindNode(const char *aNodeName, const SGNODE *aCaller)
 void SGAPPEARANCE::unlinkChildNode( const SGNODE* aCaller )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] unexpected code branch; node should have no children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return;
@@ -229,8 +243,10 @@ void SGAPPEARANCE::unlinkChildNode( const SGNODE* aCaller )
 void SGAPPEARANCE::unlinkRefNode( const SGNODE* aCaller )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] unexpected code branch; node should have no children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return;
@@ -240,8 +256,10 @@ void SGAPPEARANCE::unlinkRefNode( const SGNODE* aCaller )
 bool SGAPPEARANCE::AddRefNode( SGNODE* aNode )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] this node does not accept children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] this node does not accept children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return false;
@@ -251,8 +269,10 @@ bool SGAPPEARANCE::AddRefNode( SGNODE* aNode )
 bool SGAPPEARANCE::AddChildNode( SGNODE* aNode )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] this node does not accept children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] this node does not accept children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return false;
@@ -353,8 +373,10 @@ bool SGAPPEARANCE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
         if( NULL == m_Parent )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] corrupt data; m_aParent is NULL\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] corrupt data; m_aParent is NULL";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -371,8 +393,10 @@ bool SGAPPEARANCE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( parentNode != m_Parent )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] corrupt data; parentNode != m_aParent\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] corrupt data; parentNode != m_aParent";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -381,8 +405,10 @@ bool SGAPPEARANCE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( !aFile.good() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad stream\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] bad stream";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;

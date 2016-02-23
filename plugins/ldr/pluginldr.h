@@ -31,8 +31,11 @@
 #define PLUGINLDR_H
 
 #include <string>
-#include <wx/string.h>
 #include <wx/dynlib.h>
+#include <wx/string.h>
+
+#define MASK_PLUGINLDR "PLUGIN_LOADER"
+
 
 // helper function to link functions in the plugin
 #define LINK_ITEM( funcPtr, funcType, funcName ) \

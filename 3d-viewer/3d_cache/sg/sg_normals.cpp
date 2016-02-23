@@ -22,6 +22,9 @@
  */
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "3d_cache/sg/sg_normals.h"
 #include "3d_cache/sg/sg_helpers.h"
 
@@ -35,9 +38,11 @@ SGNORMALS::SGNORMALS( SGNODE* aParent ) : SGNODE( aParent )
         m_Parent = NULL;
 
 #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] inappropriate parent to SGNORMALS (type ";
-        std::cerr << aParent->GetNodeType() << ")\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] inappropriate parent to SGNORMALS (type ";
+        ostr << aParent->GetNodeType() << ")";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
 #endif
     }
     else if( NULL != aParent && S3D::SGTYPE_FACESET == aParent->GetNodeType() )
@@ -101,8 +106,10 @@ SGNODE* SGNORMALS::FindNode(const char *aNodeName, const SGNODE *aCaller)
 void SGNORMALS::unlinkChildNode( const SGNODE* aCaller )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] unexpected code branch; node should have no children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return;
@@ -112,8 +119,10 @@ void SGNORMALS::unlinkChildNode( const SGNODE* aCaller )
 void SGNORMALS::unlinkRefNode( const SGNODE* aCaller )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] unexpected code branch; node should have no children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return;
@@ -123,8 +132,10 @@ void SGNORMALS::unlinkRefNode( const SGNODE* aCaller )
 bool SGNORMALS::AddRefNode( SGNODE* aNode )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] this node does not accept children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] this node does not accept children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return false;
@@ -134,8 +145,10 @@ bool SGNORMALS::AddRefNode( SGNODE* aNode )
 bool SGNORMALS::AddChildNode( SGNODE* aNode )
 {
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] this node does not accept children or refs\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] this node does not accept children or refs";
+    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 
     return false;
@@ -258,8 +271,10 @@ bool SGNORMALS::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
         if( NULL == m_Parent )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] corrupt data; m_aParent is NULL\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] corrupt data; m_aParent is NULL";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return false;
@@ -276,8 +291,10 @@ bool SGNORMALS::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( parentNode != m_Parent )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] corrupt data; parentNode != m_aParent\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] corrupt data; parentNode != m_aParent";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -286,8 +303,10 @@ bool SGNORMALS::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( !aFile.good() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad stream\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] bad stream";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -312,8 +331,10 @@ bool SGNORMALS::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
     if( !norms.empty() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] non-empty node\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] non-empty node";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;

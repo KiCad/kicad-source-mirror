@@ -21,9 +21,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <sstream>
 #include <iostream>
+#include <sstream>
 #include <wx/dynload.h>
+#include <wx/log.h>
 #include <wx/string.h>
 #include <wx/translation.h>
 
@@ -67,8 +68,10 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
     if( !m_PluginLoader.IsLoaded() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * could not open file: '" << aFullFileName.ToUTF8() << "'\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * could not open file: '" << aFullFileName.ToUTF8() << "'";
+        wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
         #endif
         return false;
     }
@@ -84,10 +87,12 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
 
         if( !m_getPluginClass )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             wxString errmsg = _( "incompatible plugin (missing function 'GetKicadPluginClass')" );
-            std::cerr << errmsg.ToUTF8() << "\n";
-            std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
+            ostr << errmsg.ToUTF8() << "\n";
+            ostr << "'" << aFullFileName.ToUTF8() << "'";
+            wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             fail = true;
         }
 
@@ -95,16 +100,20 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
         {
             if( !fail )
             {
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 wxString errmsg = _( "incompatible plugin (missing function 'GetClassVersion')" );
-                std::cerr << errmsg.ToUTF8() << "\n";
-                std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
+                ostr << errmsg.ToUTF8() << "\n";
+                ostr << "'" << aFullFileName.ToUTF8() << "'";
+                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
                 fail = true;
             }
             else
             {
+                std::ostringstream ostr;
                 wxString errmsg = _( "missing function 'GetClassVersion'" );
-                std::cerr << errmsg.ToUTF8() << "\n";
+                ostr << errmsg.ToUTF8();
+                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             }
         }
 
@@ -112,16 +121,20 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
         {
             if( !fail )
             {
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 wxString errmsg = _( "incompatible plugin (missing function 'CheckClassVersion')" );
-                std::cerr << errmsg.ToUTF8() << "\n";
-                std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
+                ostr << errmsg.ToUTF8() << "\n";
+                ostr << "'" << aFullFileName.ToUTF8() << "'";
+                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
                 fail = true;
             }
             else
             {
+                std::ostringstream ostr;
                 wxString errmsg = _( "missing function 'CheckClassVersion'" );
-                std::cerr << errmsg.ToUTF8() << "\n";
+                ostr << errmsg.ToUTF8();
+                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             }
         }
 
@@ -129,16 +142,20 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
         {
             if( !fail )
             {
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 wxString errmsg = _( "incompatible plugin (missing function 'GetKicadPluginName')" );
-                std::cerr << errmsg.ToUTF8() << "\n";
-                std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
+                ostr << errmsg.ToUTF8() << "\n";
+                ostr << "'" << aFullFileName.ToUTF8() << "'";
+                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
                 fail = true;
             }
             else
             {
+                std::ostringstream ostr;
                 wxString errmsg = _( "missing function 'GetKicadPluginName'" );
-                std::cerr << errmsg.ToUTF8() << "\n";
+                ostr << errmsg.ToUTF8();
+                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             }
         }
 
@@ -146,16 +163,20 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
         {
             if( !fail )
             {
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
                 wxString errmsg = _( "incompatible plugin (missing function 'GetVersion')" );
-                std::cerr << errmsg.ToUTF8() << "\n";
-                std::cerr << "'" << aFullFileName.ToUTF8() << "'\n";
+                ostr << errmsg.ToUTF8() << "\n";
+                ostr << "'" << aFullFileName.ToUTF8() << "'";
+                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
                 fail = true;
             }
             else
             {
+                std::ostringstream ostr;
                 wxString errmsg = _( "missing function 'GetVersion'" );
-                std::cerr << errmsg.ToUTF8() << "\n";
+                ostr << errmsg.ToUTF8() << "\n";
+                wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
             }
         }
 
@@ -233,11 +254,17 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
     m_fileName = aFullFileName;
 
     #ifdef DEBUG
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [INFO] opened plugin " << m_fileName.ToUTF8() << "\n";
-    char const* cp = m_getPluginName();
-    if( !cp )
-        std::cerr << " * [INFO] plugin name: '" << cp << "'\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [INFO] opened plugin " << m_fileName.ToUTF8();
+        char const* cp = m_getPluginName();
+
+        if( !cp )
+            ostr << " * [INFO] plugin name: '" << cp << "'\n";
+
+        wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     ok = true;
@@ -305,8 +332,10 @@ char const* KICAD_PLUGIN_LDR::GetKicadPluginClass( void )
         m_error = "[BUG] GetPluginClass is not linked";
 
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * " << m_error << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * " << m_error;
+        wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
         #endif
 
         return NULL;
@@ -351,8 +380,10 @@ bool KICAD_PLUGIN_LDR::GetClassVersion( unsigned char* Major, unsigned char* Min
         m_error = "[BUG] CheckClassVersion is not linked";
 
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * " << m_error << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * " << m_error;
+        wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -394,8 +425,10 @@ bool KICAD_PLUGIN_LDR::CheckClassVersion( unsigned char Major, unsigned char Min
         m_error = "[BUG] CheckClassVersion is not linked";
 
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * " << m_error << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * " << m_error;
+        wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -422,8 +455,10 @@ const char* KICAD_PLUGIN_LDR::GetKicadPluginName( void )
         m_error = "[BUG] GetKicadPluginName is not linked";
 
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * " << m_error << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * " << m_error;
+        wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
         #endif
 
         return NULL;
@@ -451,8 +486,10 @@ bool KICAD_PLUGIN_LDR::GetVersion( unsigned char* Major, unsigned char* Minor,
         m_error = "[BUG] GetKicadPluginName is not linked";
 
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * " << m_error << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * " << m_error;
+        wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
