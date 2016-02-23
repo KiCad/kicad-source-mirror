@@ -22,6 +22,8 @@
  */
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
 
 #include "vrml2_base.h"
 #include "vrml2_transform.h"
@@ -50,9 +52,13 @@ WRL2TRANSFORM::WRL2TRANSFORM( WRL2NODE* aParent ) : WRL2NODE()
 WRL2TRANSFORM::~WRL2TRANSFORM()
 {
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    std::cerr << " * [INFO] Destroying Transform with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Destroying Transform with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return;
@@ -89,8 +95,12 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( NULL == aTopNode )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] aTopNode is NULL\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] aTopNode is NULL";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -123,9 +133,13 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( proc.eof() )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected eof at line ";
-        std::cerr << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected eof at line ";
+            ostr << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -134,10 +148,14 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( '{' != tok )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << proc.GetError() << "\n";
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-        std::cerr  << "' at line " << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << proc.GetError() << "\n";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
+            ostr  << "' at line " << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -157,8 +175,12 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         if( !proc.ReadName( glob ) )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << proc.GetError() <<  "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << proc.GetError();
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -179,11 +201,15 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFVec3f( center ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid center at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid center at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -199,11 +225,15 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFRotation( rotation ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid rotation at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid rotation at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -214,11 +244,15 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFVec3f( scale ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid scale at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid scale at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -229,11 +263,15 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFRotation( scaleOrientation ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid scaleOrientation at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid scaleOrientation at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -244,11 +282,15 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFVec3f( translation ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid translation at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid translation at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -267,10 +309,14 @@ bool WRL2TRANSFORM::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         else
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad Transform at line " << line << ", column ";
-            std::cerr << column << "\n";
-            std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad Transform at line " << line << ", column ";
+                ostr << column << "\n";
+                ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -286,8 +332,12 @@ bool WRL2TRANSFORM::AddRefNode( WRL2NODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed as node pointer\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL passed as node pointer";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -327,9 +377,13 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
     if( proc.eof() )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected eof at line ";
-        std::cerr << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected eof at line ";
+            ostr << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -373,9 +427,13 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
 SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent )
 {
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    std::cerr << " * [INFO] Translating Transform with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Translating Transform with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     if( m_Children.empty() && m_Refs.empty() )
@@ -386,9 +444,13 @@ SGNODE* WRL2TRANSFORM::TranslateToSG( SGNODE* aParent )
     if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] Transform does not have a Transform parent (parent ID: ";
-        std::cerr << ptype << ")\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] Transform does not have a Transform parent (parent ID: ";
+            ostr << ptype << ")";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return NULL;

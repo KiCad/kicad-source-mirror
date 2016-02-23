@@ -23,6 +23,8 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
 
 #include "vrml2_base.h"
 #include "vrml2_faceset.h"
@@ -57,9 +59,13 @@ WRL2FACESET::WRL2FACESET( WRL2NODE* aParent ) : WRL2NODE()
 WRL2FACESET::~WRL2FACESET()
 {
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    std::cerr << " * [INFO] Destroying IndexedFaceSet with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Destroying IndexedFaceSet with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return;
@@ -125,8 +131,12 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aNode\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL passed for aNode";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -137,9 +147,13 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
     if( !checkNodeType( type ) )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected child node '";
-        std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected child node '";
+            ostr << aNode->GetNodeTypeName( type ) << "'";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -150,8 +164,12 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
         if( NULL != color )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple color nodes\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad file format; multiple color nodes";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -166,8 +184,12 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
         if( NULL != coord )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad file format; multiple coordinate nodes";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -182,8 +204,12 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
         if( NULL != normal )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple normal nodes\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad file format; multiple normal nodes";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -196,8 +222,12 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
     if( WRL2_TEXTURECOORDINATE != type )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] unexpected code branch\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] unexpected code branch";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -206,8 +236,12 @@ bool WRL2FACESET::AddRefNode( WRL2NODE* aNode )
     if( NULL != texCoord )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple texCoord nodes\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; multiple texCoord nodes";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -223,8 +257,12 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aNode\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL passed for aNode";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -235,9 +273,13 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
     if( !checkNodeType( type ) )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected child node '";
-        std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected child node '";
+            ostr << aNode->GetNodeTypeName( type ) << "'";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -248,8 +290,12 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
         if( NULL != color )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple color nodes\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad file format; multiple color nodes";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -264,8 +310,12 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
         if( NULL != coord )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple coordinate nodes\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad file format; multiple coordinate nodes";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -280,8 +330,12 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
         if( NULL != normal )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple normal nodes\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad file format; multiple normal nodes";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -294,8 +348,12 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
     if( WRL2_TEXTURECOORDINATE != type )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] unexpected code branch\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] unexpected code branch";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -304,8 +362,12 @@ bool WRL2FACESET::AddChildNode( WRL2NODE* aNode )
     if( NULL != texCoord )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple texCoord nodes\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; multiple texCoord nodes";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -327,9 +389,13 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( proc.eof() )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected eof at line ";
-        std::cerr << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected eof at line ";
+            ostr << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -338,10 +404,14 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( '{' != tok )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << proc.GetError() << "\n";
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-        std::cerr  << "' at line " << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << proc.GetError() << "\n";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
+            ostr  << "' at line " << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -361,8 +431,12 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         if( !proc.ReadName( glob ) )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << proc.GetError() <<  "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << proc.GetError();
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -394,11 +468,15 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFBool( ccw ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid ccw at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid ccw at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -409,11 +487,15 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFBool( colorPerVertex ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid colorPerVertex at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid colorPerVertex at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -424,11 +506,15 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFBool( convex ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid convex at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid convex at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -439,11 +525,15 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFBool( normalPerVertex ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid normalPerVertex at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid normalPerVertex at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -454,11 +544,15 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFBool( solid ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid solid at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid solid at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -469,11 +563,15 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadSFFloat( creaseAngle ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid creaseAngle at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid creaseAngle at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -491,11 +589,15 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadMFInt( colorIndex ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid colorIndex at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid colorIndex at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -506,11 +608,15 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadMFInt( coordIndex ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid coordIndex at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid coordIndex at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -521,11 +627,15 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !proc.ReadMFInt( normalIndex ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid normalIndex at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid normalIndex at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -536,8 +646,12 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] could not read color node information\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] could not read color node information";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -548,8 +662,12 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] could not read coord node information\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] could not read coord node information";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -560,8 +678,12 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] could not read normal node information\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] could not read normal node information";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -572,8 +694,12 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] could not read texCoord node information\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] could not read texCoord node information";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -582,10 +708,14 @@ bool WRL2FACESET::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         else
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad IndexedFaceSet at line " << line << ", column ";
-            std::cerr << column << "\n";
-            std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad IndexedFaceSet at line " << line << ", column ";
+                ostr << column << "\n";
+                ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -603,19 +733,27 @@ SGNODE* WRL2FACESET::TranslateToSG( SGNODE* aParent )
     if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] IndexedFaceSet does not have a Shape parent (parent ID: ";
-        std::cerr << ptype << ")\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] IndexedFaceSet does not have a Shape parent (parent ID: ";
+            ostr << ptype << ")";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return NULL;
     }
 
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    std::cerr << " * [INFO] Translating IndexedFaceSet with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references, ";
-    std::cerr << m_BackPointers.size() << " backpointers and ";
-    std::cerr << coordIndex.size() << " coord indices\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Translating IndexedFaceSet with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references, ";
+        ostr << m_BackPointers.size() << " backpointers and ";
+        ostr << coordIndex.size() << " coord indices";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     if( m_sgNode )

@@ -28,7 +28,9 @@
 #include <iterator>
 #include <cctype>
 #include <iostream>
+#include <sstream>
 #include <algorithm>
+#include <wx/log.h>
 
 #include "vrml2_node.h"
 
@@ -195,8 +197,12 @@ void WRL2NODE::delNodeRef( WRL2NODE* aNode )
     }
 
     #ifdef DEBUG_VRML2
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] delNodeRef() did not find its target\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] delNodeRef() did not find its target";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return;
@@ -231,8 +237,12 @@ bool WRL2NODE::SetName( const std::string& aName )
     if( item != badNames.end() )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid node name '" << *item << "' (matches restricted word)\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] invalid node name '" << *item << "' (matches restricted word)";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -242,8 +252,12 @@ bool WRL2NODE::SetName( const std::string& aName )
     if( isdigit( aName[0] ) )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid node name '" << *item << "' (begins with digit)\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] invalid node name '" << *item << "' (begins with digit)";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -260,9 +274,13 @@ bool WRL2NODE::SetName( const std::string& aName )
         || std::string::npos != aName.find_first_of( BAD_CHARS2 ) )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid node name '" << aName;
-        std::cerr<< "' (contains invalid character)\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] invalid node name '" << aName;
+            ostr << "' (contains invalid character)";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -364,8 +382,12 @@ bool WRL2NODE::AddChildNode( WRL2NODE* aNode )
     if( aNode->GetNodeType() == WRL2_BASE )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] attempting to add a base node to another node\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] attempting to add a base node to another node";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -396,8 +418,12 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed as node pointer\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL passed as node pointer";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -406,8 +432,12 @@ bool WRL2NODE::AddRefNode( WRL2NODE* aNode )
     if( aNode->GetNodeType() == WRL2_BASE )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] attempting to add a base node ref to another base node\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] attempting to add a base node ref to another base node";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;

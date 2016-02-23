@@ -23,6 +23,8 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
 
 #include "vrml2_base.h"
 #include "vrml2_shape.h"
@@ -56,9 +58,13 @@ WRL2SHAPE::WRL2SHAPE( WRL2NODE* aParent ) : WRL2NODE()
 WRL2SHAPE::~WRL2SHAPE()
 {
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    std::cerr << " * [INFO] Destroying Shape with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Destroying Shape with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return;
@@ -85,8 +91,12 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aNode\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL passed for aNode";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -97,9 +107,13 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
     if( !checkNodeType( type ) )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected child node '";
-        std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected child node '";
+            ostr << aNode->GetNodeTypeName( type ) << "'";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -110,8 +124,12 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
         if( NULL != appearance )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple appearance nodes\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad file format; multiple appearance nodes";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -124,8 +142,12 @@ bool WRL2SHAPE::AddRefNode( WRL2NODE* aNode )
     if( NULL != geometry )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple geometry nodes\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; multiple geometry nodes";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -141,8 +163,12 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed for aNode\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL passed for aNode";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -153,9 +179,13 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
     if( !checkNodeType( type ) )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected child node '";
-        std::cerr << aNode->GetNodeTypeName( type ) << "'\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected child node '";
+            ostr << aNode->GetNodeTypeName( type ) << "'";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -166,8 +196,12 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
         if( NULL != appearance )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; multiple appearance nodes\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad file format; multiple appearance nodes";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -180,8 +214,12 @@ bool WRL2SHAPE::AddChildNode( WRL2NODE* aNode )
     if( NULL != geometry )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; multiple geometry nodes\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; multiple geometry nodes";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -223,8 +261,12 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( NULL == aTopNode )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] aTopNode is NULL\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] aTopNode is NULL";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -238,9 +280,13 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( proc.eof() )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected eof at line ";
-        std::cerr << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected eof at line ";
+            ostr << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -249,10 +295,14 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( '{' != tok )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << proc.GetError() << "\n";
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-        std::cerr  << "' at line " << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << proc.GetError() << "\n";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
+            ostr  << "' at line " << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -272,8 +322,12 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         if( !proc.ReadName( glob ) )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << proc.GetError() <<  "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << proc.GetError();
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -290,8 +344,12 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] could not read appearance information\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] could not read appearance information";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -302,8 +360,12 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
             if( !aTopNode->ReadNode( proc, this, NULL ) )
             {
                 #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] could not read geometry information\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] could not read geometry information";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -312,10 +374,14 @@ bool WRL2SHAPE::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         else
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad Shape at line " << line << ", column ";
-            std::cerr << column << "\n";
-            std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad Shape at line " << line << ", column ";
+                ostr << column << "\n";
+                ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -346,9 +412,13 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
     }
 
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 2 )
-    std::cerr << " * [INFO] Translating Shape with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Translating Shape with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     bool vcolors = false;
@@ -371,9 +441,13 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
     if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
         #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] Shape does not have a Transform parent (parent ID: ";
-        std::cerr << ptype << ")\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] Shape does not have a Transform parent (parent ID: ";
+            ostr << ptype << ")";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return NULL;

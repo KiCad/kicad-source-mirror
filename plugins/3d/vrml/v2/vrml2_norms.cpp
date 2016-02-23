@@ -23,6 +23,8 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
 
 #include "vrml2_base.h"
 #include "vrml2_norms.h"
@@ -50,7 +52,7 @@ WRL2NORMS::WRL2NORMS( WRL2NODE* aParent ) : WRL2NODE()
 WRL2NORMS::~WRL2NORMS()
 {
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 3 )
-    std::cerr << " * [INFO] Destroying Normal node\n";
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying Normal node\n" );
     #endif
 
     return;
@@ -73,8 +75,12 @@ bool WRL2NORMS::AddRefNode( WRL2NODE* aNode )
     // this node may not own or reference any other node
 
     #ifdef DEBUG_VRML2
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] AddRefNode is not applicable\n";
+    do {
+        std::ostringstream ostr;
+        ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr<< " * [BUG] AddRefNode is not applicable";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return false;
@@ -86,8 +92,12 @@ bool WRL2NORMS::AddChildNode( WRL2NODE* aNode )
     // this node may not own or reference any other node
 
     #ifdef DEBUG_VRML2
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] AddChildNode is not applicable\n";
+    do {
+        std::ostringstream ostr;
+        ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr<< " * [BUG] AddChildNode is not applicable";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return false;
@@ -104,9 +114,13 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( proc.eof() )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected eof at line ";
-        std::cerr << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr<< " * [INFO] bad file format; unexpected eof at line ";
+            ostr<< line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -115,10 +129,14 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( '{' != tok )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << proc.GetError() << "\n";
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-        std::cerr  << "' at line " << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr<< proc.GetError() << "\n";
+            ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr<< " * [INFO] bad file format; expecting '{' but got '" << tok;
+            ostr << "' at line " << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -136,8 +154,12 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     if( !proc.ReadName( glob ) )
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << proc.GetError() <<  "\n";
+        do {
+            std::ostringstream ostr;
+            ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr<< proc.GetError();
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -151,11 +173,15 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
         if( !proc.ReadMFVec3f( vectors ) )
         {
             #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] invalid vector set at line " << line << ", column ";
-            std::cerr << column << "\n";
-            std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-            std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+            do {
+                std::ostringstream ostr;
+                ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr<< " * [INFO] invalid vector set at line " << line << ", column ";
+                ostr<< column << "\n";
+                ostr<< " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                ostr<< " * [INFO] message: '" << proc.GetError() << "'";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -164,10 +190,14 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     else
     {
         #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad Normal at line " << line << ", column ";
-        std::cerr << column << "\n";
-        std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+        do {
+            std::ostringstream ostr;
+            ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr<< " * [INFO] bad Normal at line " << line << ", column ";
+            ostr<< column << "\n";
+            ostr<< " * [INFO] file: '" << proc.GetFileName() << "'";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -182,10 +212,14 @@ bool WRL2NORMS::Read( WRLPROC& proc, WRL2BASE* aTopNode )
     proc.GetFilePosData( line, column );
 
     #if defined( DEBUG_VRML2 ) && ( DEBUG_VRML2 > 1 )
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [INFO] bad Normal at line " << line << ", column ";
-    std::cerr << column << " (no closing brace)\n";
-    std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+    do {
+        std::ostringstream ostr;
+        ostr<< __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr<< " * [INFO] bad Normal at line " << line << ", column ";
+        ostr<< column << " (no closing brace)\n";
+        ostr<< " * [INFO] file: '" << proc.GetFileName() << "'";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return false;
