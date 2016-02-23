@@ -22,26 +22,17 @@
  */
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
-#include <string>
-#include <locale.h>
 #include <wx/filename.h>
-#include <wx/string.h>
+#include <wx/log.h>
 #include "plugins/3dapi/ifsg_api.h"
-#include "plugins/3dapi/sg_types.h"
 #include "plugins/3dapi/sg_version.h"
 #include "3d_cache/sg/sg_node.h"
 #include "3d_cache/sg/scenegraph.h"
 #include "3d_cache/sg/sg_appearance.h"
-#include "3d_cache/sg/sg_colors.h"
-#include "3d_cache/sg/sg_coordindex.h"
-#include "3d_cache/sg/sg_coords.h"
-#include "3d_cache/sg/sg_faceset.h"
-#include "3d_cache/sg/sg_normals.h"
 #include "3d_cache/sg/sg_shape.h"
 #include "3d_cache/sg/sg_helpers.h"
-#include "3d_info.h"
-#include "plugins/3dapi/c3dmodel.h"
 
 
 #ifdef DEBUG
@@ -126,8 +117,12 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
     if( NULL == aTopNode )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL pointer passed for aTopNode\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL pointer passed for aTopNode";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -136,8 +131,12 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
     if( S3D::SGTYPE_TRANSFORM != aTopNode->GetNodeType() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] aTopNode is not a SCENEGRAPH object\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] aTopNode is not a SCENEGRAPH object";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -150,9 +149,11 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
 
     if( !op.is_open() )
     {
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "failed to open file" );
-        std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '" << filename << "'\n";
+        ostr << " * [INFO] " << errmsg.ToUTF8() << " '" << filename << "'";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         return false;
     }
 
@@ -174,9 +175,13 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
 
     op.close();
 
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    wxString errmsg = _( "problems encountered writing file" );
-    std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '" << filename << "'\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        wxString errmsg = _( "problems encountered writing file" );
+        ostr << " * [INFO] " << errmsg.ToUTF8() << " '" << filename << "'";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+    } while( 0 );
 
     return false;
 }
@@ -187,8 +192,12 @@ void S3D::ResetNodeIndex( SGNODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadNode;
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << BadNode;
+            wxLogTrace( MASK_3D_SG, "%s", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return;
@@ -205,8 +214,12 @@ void S3D::RenameNodes( SGNODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadNode;
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << BadNode;
+            wxLogTrace( MASK_3D_SG, "%s", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return;
@@ -223,8 +236,12 @@ void S3D::DestroyNode( SGNODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadNode;
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << BadNode;
+            wxLogTrace( MASK_3D_SG, "%s", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return;
@@ -247,8 +264,12 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
     if( NULL == aNode )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadNode;
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << BadNode;
+            wxLogTrace( MASK_3D_SG, "%s", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -259,20 +280,25 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
     {
         if( !overwrite )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             wxString errmsg = _( "file exists; not overwriting" );
-            std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '";
-            std::cerr << aFileName << "'\n";
+            ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
+            ostr << aFileName << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+
             return false;
         }
 
         // make sure we make no attempt to write a directory
         if( !wxFileName::FileExists( aFileName ) )
         {
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             wxString errmsg = _( "specified path is a directory" );
-            std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '";
-            std::cerr << aFileName << "'\n";
+            ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
+            ostr << aFileName << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             return false;
         }
     }
@@ -283,9 +309,11 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
 
     if( !output.is_open() )
     {
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "failed to open file" );
-        std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '" << aFileName << "'\n";
+        ostr << " * [INFO] " << errmsg.ToUTF8() << " '" << aFileName << "'";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         return false;
     }
 
@@ -302,9 +330,13 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
     if( !rval )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] problems encountered writing cache file '";
-        std::cerr << aFileName << "'\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] problems encountered writing cache file '";
+            ostr << aFileName << "'";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         // delete the defective file
@@ -325,10 +357,14 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
 
     if( !wxFileName::FileExists( aFileName ) )
     {
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "no such file" );
-        std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '";
-        std::cerr << aFileName << "'\n";
+        ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
+        ostr << aFileName << "'";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+
+        return NULL;
     }
 
     SGNODE* np = new SCENEGRAPH( NULL );
@@ -336,9 +372,14 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
     if( NULL == np )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] failed to instantiate SCENEGRAPH\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] failed to instantiate SCENEGRAPH";
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
+
         return NULL;
     }
 
@@ -348,10 +389,12 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
     if( !file.is_open() )
     {
         delete np;
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "failed to open file" );
-        std::cerr << " * [INFO] " << " '";
-        std::cerr << aFileName << "'\n";
+        ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
+        ostr << aFileName << "'";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         return NULL;
     }
 
@@ -366,9 +409,13 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
         if( '(' != schar )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; missing left parenthesis at position ";
-            std::cerr << file.tellg() << "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] corrupt data; missing left parenthesis at position ";
+                ostr << file.tellg();
+                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             file.close();
@@ -402,9 +449,13 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
         if( '(' != schar )
         {
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] corrupt data; missing left parenthesis at position ";
-            std::cerr << file.tellg() << "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] corrupt data; missing left parenthesis at position ";
+                ostr << file.tellg();
+                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             file.close();
@@ -434,10 +485,12 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
     if( !rval )
     {
         delete np;
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         wxString errmsg = _( "problems encountered reading cache file" );
-        std::cerr << " * [INFO] " << errmsg.ToUTF8() << " '";
-        std::cerr << aFileName << "'\n";
+        ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
+        ostr << aFileName << "'";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         return NULL;
     }
 

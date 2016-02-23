@@ -51,6 +51,7 @@
 
 #if defined (COMPILE_SGLIB)
     #define SGLIB_API APIEXPORT
+    #define MASK_3D_SG "3D_SG"
 #else
     #define SGLIB_API APIIMPORT
 #endif

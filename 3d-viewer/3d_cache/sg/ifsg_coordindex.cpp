@@ -23,9 +23,11 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "plugins/3dapi/ifsg_coordindex.h"
 #include "3d_cache/sg/sg_coordindex.h"
-#include "plugins/3dapi/sg_types.h"
 
 
 extern char BadObject[];
@@ -60,8 +62,10 @@ IFSG_COORDINDEX::IFSG_COORDINDEX( SGNODE* aParent )
         m_node = NULL;
 
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << WrongParent << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << WrongParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return;
@@ -80,8 +84,10 @@ IFSG_COORDINDEX::IFSG_COORDINDEX( IFSG_NODE& aParent )
     if( !pp )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return;
@@ -92,8 +98,10 @@ IFSG_COORDINDEX::IFSG_COORDINDEX( IFSG_NODE& aParent )
     if( !m_node->SetParent( pp ) )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << WrongParent << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << WrongParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         delete m_node;
@@ -139,10 +147,12 @@ bool IFSG_COORDINDEX::NewNode( SGNODE* aParent )
     if( aParent != m_node->GetParent() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid SGNODE parent (";
-        std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        std::cerr << ") to SGCOORDINDEX\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] invalid SGNODE parent (";
+        ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
+        ostr << ") to SGCOORDINDEX";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         delete m_node;
@@ -163,8 +173,10 @@ bool IFSG_COORDINDEX::NewNode( IFSG_NODE& aParent )
     if( NULL == np )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;

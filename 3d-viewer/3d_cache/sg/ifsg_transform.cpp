@@ -23,6 +23,9 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "plugins/3dapi/ifsg_transform.h"
 #include "3d_cache/sg/scenegraph.h"
 
@@ -60,8 +63,10 @@ IFSG_TRANSFORM::IFSG_TRANSFORM( SGNODE* aParent )
             m_node = NULL;
 
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << WrongParent << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << WrongParent;
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return;
@@ -106,10 +111,12 @@ bool IFSG_TRANSFORM::NewNode( SGNODE* aParent )
     if( aParent != m_node->GetParent() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid SGNODE parent (";
-        std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        std::cerr << ") to SCENEGRAPH\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] invalid SGNODE parent (";
+        ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
+        ostr << ") to SCENEGRAPH";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         delete m_node;
@@ -130,8 +137,10 @@ bool IFSG_TRANSFORM::NewNode( IFSG_NODE& aParent )
     if( NULL == np )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -146,8 +155,10 @@ bool IFSG_TRANSFORM::SetRotation( const SGVECTOR& aRotationAxis, double aAngle )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -165,8 +176,10 @@ bool IFSG_TRANSFORM::SetScale( const SGPOINT& aScale )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -183,8 +196,10 @@ bool IFSG_TRANSFORM::SetScale( double aScale )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -193,8 +208,10 @@ bool IFSG_TRANSFORM::SetScale( double aScale )
     if( aScale < 1e-8 && aScale > -1e-8 )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] |scale| is < 1e-8 - this seems strange\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] |scale| is < 1e-8 - this seems strange";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -211,8 +228,10 @@ bool IFSG_TRANSFORM::SetTranslation( const SGPOINT& aTranslation )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -229,8 +248,10 @@ bool IFSG_TRANSFORM::SetScaleOrientation( const SGVECTOR& aScaleAxis, double aAn
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -248,8 +269,10 @@ bool IFSG_TRANSFORM::SetCenter( const SGPOINT& aCenter )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;

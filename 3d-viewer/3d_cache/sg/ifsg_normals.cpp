@@ -23,6 +23,9 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "plugins/3dapi/ifsg_normals.h"
 #include "3d_cache/sg/sg_normals.h"
 
@@ -61,8 +64,10 @@ IFSG_NORMALS::IFSG_NORMALS( SGNODE* aParent )
             m_node = NULL;
 
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << WrongParent << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << WrongParent;
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return;
@@ -82,8 +87,10 @@ IFSG_NORMALS::IFSG_NORMALS( IFSG_NODE& aParent )
     #ifdef DEBUG
     if( ! pp )
     {
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     }
     #endif
 
@@ -97,8 +104,10 @@ IFSG_NORMALS::IFSG_NORMALS( IFSG_NODE& aParent )
             m_node = NULL;
 
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << WrongParent << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << WrongParent;
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return;
@@ -143,10 +152,12 @@ bool IFSG_NORMALS::NewNode( SGNODE* aParent )
     if( aParent != m_node->GetParent() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid SGNODE parent (";
-        std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        std::cerr << ") to SGNORMALS\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] invalid SGNODE parent (";
+        ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
+        ostr << ") to SGNORMALS";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         delete m_node;
@@ -167,8 +178,10 @@ bool IFSG_NORMALS::NewNode( IFSG_NODE& aParent )
     if( NULL == np )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -183,8 +196,10 @@ bool IFSG_NORMALS::GetNormalList( size_t& aListSize, SGVECTOR*& aNormalList )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -199,8 +214,10 @@ bool IFSG_NORMALS::SetNormalList( size_t aListSize, const SGVECTOR* aNormalList 
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -216,8 +233,10 @@ bool IFSG_NORMALS::AddNormal( double aXValue, double aYValue, double aZValue )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -233,8 +252,10 @@ bool IFSG_NORMALS::AddNormal( const SGVECTOR& aNormal )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;

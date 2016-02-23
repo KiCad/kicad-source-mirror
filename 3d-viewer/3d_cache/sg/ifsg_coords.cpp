@@ -22,6 +22,9 @@
  */
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "plugins/3dapi/ifsg_coords.h"
 #include "3d_cache/sg/sg_coords.h"
 
@@ -59,8 +62,10 @@ IFSG_COORDS::IFSG_COORDS( SGNODE* aParent )
             m_node = NULL;
 
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << WrongParent << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << WrongParent;
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return;
@@ -80,8 +85,10 @@ IFSG_COORDS::IFSG_COORDS( IFSG_NODE& aParent )
     #ifdef DEBUG
     if( ! pp )
     {
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     }
     #endif
 
@@ -95,8 +102,10 @@ IFSG_COORDS::IFSG_COORDS( IFSG_NODE& aParent )
             m_node = NULL;
 
             #ifdef DEBUG
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << WrongParent << "\n";
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << WrongParent;
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return;
@@ -141,10 +150,12 @@ bool IFSG_COORDS::NewNode( SGNODE* aParent )
     if( aParent != m_node->GetParent() )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] invalid SGNODE parent (";
-        std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        std::cerr << ") to SGCOORDS\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] invalid SGNODE parent (";
+        ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
+        ostr << ") to SGCOORDS";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         delete m_node;
@@ -165,8 +176,10 @@ bool IFSG_COORDS::NewNode( IFSG_NODE& aParent )
     if( NULL == np )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -181,8 +194,10 @@ bool IFSG_COORDS::GetCoordsList( size_t& aListSize, SGPOINT*& aCoordsList )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -197,8 +212,10 @@ bool IFSG_COORDS::SetCoordsList( size_t aListSize, const SGPOINT* aCoordsList )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -215,8 +232,10 @@ bool IFSG_COORDS::AddCoord( double aXValue, double aYValue, double aZValue )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -233,8 +252,10 @@ bool IFSG_COORDS::AddCoord( const SGPOINT& aPoint )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;

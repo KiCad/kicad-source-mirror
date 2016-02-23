@@ -23,6 +23,9 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "plugins/3dapi/ifsg_index.h"
 #include "3d_cache/sg/sg_coordindex.h"
 
@@ -44,8 +47,10 @@ bool IFSG_INDEX::GetIndices( size_t& nIndices, int*& aIndexList )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -60,8 +65,10 @@ bool IFSG_INDEX::SetIndices( size_t nIndices, int* aIndexList )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
@@ -78,8 +85,10 @@ bool IFSG_INDEX::AddIndex( int aIndex )
     if( NULL == m_node )
     {
         #ifdef DEBUG
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadObject << "\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << BadObject;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;

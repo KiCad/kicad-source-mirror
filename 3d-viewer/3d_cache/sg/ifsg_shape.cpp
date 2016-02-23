@@ -23,6 +23,9 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
+
 #include "plugins/3dapi/ifsg_shape.h"
 #include "3d_cache/sg/sg_shape.h"
 
@@ -61,8 +64,10 @@ IFSG_SHAPE::IFSG_SHAPE( SGNODE* aParent )
             m_node = NULL;
 
             #ifdef DEBUG
+            std::ostringstream ostr;
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << WrongParent << "\n";
+            std::cerr << WrongParent;
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return;
@@ -82,8 +87,10 @@ IFSG_SHAPE::IFSG_SHAPE( IFSG_NODE& aParent )
     #ifdef DEBUG
     if( ! pp )
     {
+        std::ostringstream ostr;
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent << "\n";
+        std::cerr << BadParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     }
     #endif
 
@@ -97,8 +104,10 @@ IFSG_SHAPE::IFSG_SHAPE( IFSG_NODE& aParent )
             m_node = NULL;
 
             #ifdef DEBUG
+            std::ostringstream ostr;
             std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << WrongParent << "\n";
+            std::cerr << WrongParent;
+            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
             return;
@@ -143,10 +152,12 @@ bool IFSG_SHAPE::NewNode( SGNODE* aParent )
     if( aParent != m_node->GetParent() )
     {
         #ifdef DEBUG
+        std::ostringstream ostr;
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         std::cerr << " * [BUG] invalid SGNODE parent (";
         std::cerr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        std::cerr << ") to SGSHAPE\n";
+        std::cerr << ") to SGSHAPE";
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         delete m_node;
@@ -167,8 +178,10 @@ bool IFSG_SHAPE::NewNode( IFSG_NODE& aParent )
     if( NULL == np )
     {
         #ifdef DEBUG
+        std::ostringstream ostr;
         std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << BadParent << "\n";
+        std::cerr << BadParent;
+        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
         #endif
 
         return false;
