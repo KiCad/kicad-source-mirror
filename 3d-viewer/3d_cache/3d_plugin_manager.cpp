@@ -25,13 +25,14 @@
 #include <utility>
 #include <iostream>
 #include <sstream>
-#include <wx/log.h>
 
-#include <wx/string.h>
-#include <wx/dir.h>
 #include <wx/config.h>
-#include <wx/stdpaths.h>
+#include <wx/dir.h>
 #include <wx/dynlib.h>
+#include <wx/filename.h>
+#include <wx/log.h>
+#include <wx/stdpaths.h>
+#include <wx/string.h>
 
 #include "3d_plugin_manager.h"
 #include "plugins/3d/3d_plugin.h"
