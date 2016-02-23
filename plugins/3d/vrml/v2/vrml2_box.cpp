@@ -153,7 +153,7 @@ bool WRL2BOX::Read( WRLPROC& proc, WRL2BASE* aTopNode )
                 ostr << " * [INFO] invalid size at line " << line << ", column ";
                 ostr << column << "\n";
                 ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                ostr << " * [INFO] message: '" << proc.GetError() << "';
+                ostr << " * [INFO] message: '" << proc.GetError() << "'";
                 wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
             } while( 0 );
             #endif

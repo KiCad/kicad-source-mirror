@@ -303,10 +303,14 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
         if( NULL == m_current.coord )
+        {
             wxLogTrace( MASK_VRML, " * [INFO] bad model: no vertex set\n" );
+        }
 
         if( NULL == m_current.mat )
+        {
             wxLogTrace( MASK_VRML, " * [INFO] bad model: no material set\n" );
+        }
         #endif
 
         return NULL;
