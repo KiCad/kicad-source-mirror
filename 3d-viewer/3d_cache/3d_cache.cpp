@@ -264,7 +264,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
 
     if( !getSHA1( aFileName, sha1sum ) || m_CacheDir.empty() )
     {
-        // just in case we can't get an hash digest (for example, on access issues)
+        // just in case we can't get a hash digest (for example, on access issues)
         // or we do not have a configured cache file directory, we create an
         // entry to prevent further attempts at loading the file
         S3D_CACHE_ENTRY* ep = new S3D_CACHE_ENTRY;
@@ -352,6 +352,10 @@ bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
     }
 
     FILE* fp = fopen( aFileName.ToUTF8(), "rb" );
+
+    if( NULL == fp )
+        return false;
+
     boost::uuids::detail::sha1 dblock;
     unsigned char block[4096];
     size_t bsize = 0;
