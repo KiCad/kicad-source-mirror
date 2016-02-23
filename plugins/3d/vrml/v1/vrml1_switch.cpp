@@ -22,7 +22,9 @@
  */
 
 #include <iostream>
+#include <sstream>
 #include <iterator>
+#include <wx/log.h>
 
 #include "vrml1_base.h"
 #include "vrml1_switch.h"
@@ -55,9 +57,13 @@ WRL1SWITCH::WRL1SWITCH( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 WRL1SWITCH::~WRL1SWITCH()
 {
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    std::cerr << " * [INFO] Destroying Switch with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Destroying Switch with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return;
@@ -79,8 +85,12 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     if( NULL == aTopNode )
     {
         #ifdef DEBUG_VRML1
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] aTopNode is NULL\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] aTopNode is NULL";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -94,9 +104,13 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     if( proc.eof() )
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected eof at line ";
-        std::cerr << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected eof at line ";
+            ostr << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -105,10 +119,14 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     if( '{' != tok )
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        std::cerr << proc.GetError() << "\n";
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-        std::cerr  << "' at line " << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << proc.GetError() << "\n";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
+            ostr << "' at line " << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -131,8 +149,12 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             if( !proc.ReadName( glob ) )
             {
                 #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << proc.GetError() <<  "\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << proc.GetError();
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -143,11 +165,15 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
                 if( !proc.ReadSFInt( whichChild ) )
                 {
                     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    std::cerr << " * [INFO] invalid whichChild at line " << line << ", column ";
-                    std::cerr << column << "\n";
-                    std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                    std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                    do {
+                        std::ostringstream ostr;
+                        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                        ostr << " * [INFO] invalid whichChild at line " << line << ", column ";
+                        ostr << column << "\n";
+                        ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                        ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                    } while( 0 );
                     #endif
 
                     return false;
@@ -157,10 +183,14 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             }
 
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] invalid Switch at line " << line << ", column ";
-            std::cerr << column << " (expected 'whichChild')\n";
-            std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] invalid Switch at line " << line << ", column ";
+                ostr << column << " (expected 'whichChild')\n";
+                ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -171,9 +201,13 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         if( !aTopNode->ReadNode( proc, this, NULL ) )
         {
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad file format; unexpected eof at line ";
-            std::cerr << line << ", column " << column << "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad file format; unexpected eof at line ";
+                ostr << line << ", column " << column;
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -191,10 +225,14 @@ bool WRL1SWITCH::Read( WRLPROC& proc, WRL1BASE* aTopNode )
 SGNODE* WRL1SWITCH::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
 {
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    std::cerr << " * [INFO] Translating Switch with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers (total ";
-    std::cerr << m_Items.size() << " items)\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Translating Switch with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers (total ";
+        ostr << m_Items.size() << " items)";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     if( m_Items.empty() )

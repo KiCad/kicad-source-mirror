@@ -23,7 +23,9 @@
 
 
 #include <iostream>
+#include <sstream>
 #include <wx/xml/xml.h>
+#include <wx/log.h>
 #include "x3d_ops.h"
 #include "x3d_transform.h"
 #include "plugins/3dapi/ifsg_all.h"
@@ -60,9 +62,13 @@ X3DTRANSFORM::X3DTRANSFORM( X3DNODE* aParent ) : X3DNODE()
 X3DTRANSFORM::~X3DTRANSFORM()
 {
     #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    std::cerr << " * [INFO] Destroying Transform with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Destroying Transform with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return;
@@ -265,9 +271,13 @@ bool X3DTRANSFORM::AddRefNode( X3DNODE* aNode )
 SGNODE* X3DTRANSFORM::TranslateToSG( SGNODE* aParent )
 {
     #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    std::cerr << " * [INFO] Translating Transform with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Translating Transform with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     if( m_Children.empty() && m_Refs.empty() )
@@ -277,10 +287,14 @@ SGNODE* X3DTRANSFORM::TranslateToSG( SGNODE* aParent )
 
     if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
-        #ifdef DEBUG_VRML2
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] Transform does not have a Transform parent (parent ID: ";
-        std::cerr << ptype << ")\n";
+        #ifdef DEBUG_X3D
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] Transform does not have a Transform parent (parent ID: ";
+            ostr << ptype << ")";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return NULL;

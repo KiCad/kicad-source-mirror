@@ -23,6 +23,8 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
 
 #include "vrml1_base.h"
 #include "vrml1_material.h"
@@ -56,7 +58,7 @@ WRL1MATERIAL::WRL1MATERIAL( NAMEREGISTER* aDictionary, WRL1NODE* aParent ) :
 WRL1MATERIAL::~WRL1MATERIAL()
 {
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    std::cerr << " * [INFO] Destroying Material node\n";
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying Material node\n" );
     #endif
 
     // destroy any orphaned color nodes
@@ -65,14 +67,22 @@ WRL1MATERIAL::~WRL1MATERIAL()
         if( NULL != colors[i] )
         {
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-            std::cerr << " * [INFO] Destroying SGCOLOR #" << i << "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << " * [INFO] Destroying SGCOLOR #" << i;
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             if( NULL == S3D::GetSGNodeParent( colors[i] ) )
                 S3D::DestroyNode( colors[i] );
 
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-            std::cerr << " * [INFO] destroyed SGCOLOR #" << i << "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << " * [INFO] destroyed SGCOLOR #" << i;
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
         }
     }
@@ -86,8 +96,12 @@ bool WRL1MATERIAL::AddRefNode( WRL1NODE* aNode )
     // this node may not own or reference any other node
 
     #ifdef DEBUG_VRML1
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] AddRefNode is not applicable\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] AddRefNode is not applicable";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return false;
@@ -99,8 +113,12 @@ bool WRL1MATERIAL::AddChildNode( WRL1NODE* aNode )
     // this node may not own or reference any other node
 
     #ifdef DEBUG_VRML1
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] AddChildNode is not applicable\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] AddChildNode is not applicable";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return false;
@@ -112,8 +130,12 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     if( NULL == aTopNode )
     {
         #ifdef DEBUG_VRML1
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] aTopNode is NULL\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] aTopNode is NULL";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -127,9 +149,13 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     if( proc.eof() )
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; unexpected eof at line ";
-        std::cerr << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; unexpected eof at line ";
+            ostr << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -138,10 +164,14 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     if( '{' != tok )
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        std::cerr << proc.GetError() << "\n";
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] bad file format; expecting '{' but got '" << tok;
-        std::cerr  << "' at line " << line << ", column " << column << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << proc.GetError() << "\n";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] bad file format; expecting '{' but got '" << tok;
+            ostr << "' at line " << line << ", column " << column;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -161,8 +191,12 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         if( !proc.ReadName( glob ) )
         {
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << proc.GetError() <<  "\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << proc.GetError();
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -183,11 +217,15 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             if( !proc.ReadMFVec3f( specularColor ) )
             {
                 #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid specularColor at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid specularColor at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -198,11 +236,15 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             if( !proc.ReadMFVec3f( diffuseColor ) )
             {
                 #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid diffuseColor at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid diffuseColor at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -213,11 +255,15 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             if( !proc.ReadMFVec3f( emissiveColor ) )
             {
                 #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid emissiveColor at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid emissiveColor at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -228,11 +274,15 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             if( !proc.ReadMFFloat( shininess ) )
             {
                 #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid shininess at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid shininess at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -243,11 +293,15 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             if( !proc.ReadMFFloat( transparency ) )
             {
                 #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid transparency at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid transparency at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -258,11 +312,15 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
             if( !proc.ReadMFVec3f( ambientColor ) )
             {
                 #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid ambientColor at line " << line << ", column ";
-                std::cerr << column << "\n";
-                std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
-                std::cerr << " * [INFO] message: '" << proc.GetError() << "'\n";
+                do {
+                    std::ostringstream ostr;
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] invalid ambientColor at line " << line << ", column ";
+                    ostr << column << "\n";
+                    ostr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+                    ostr << " * [INFO] message: '" << proc.GetError() << "'";
+                    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+                } while( 0 );
                 #endif
 
                 return false;
@@ -271,10 +329,14 @@ bool WRL1MATERIAL::Read( WRLPROC& proc, WRL1BASE* aTopNode )
         else
         {
             #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] bad Material at line " << line << ", column ";
-            std::cerr << column << "\n";
-            std::cerr << " * [INFO] file: '" << proc.GetFileName() << "'\n";
+            do {
+                std::ostringstream ostr;
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] bad Material at line " << line << ", column ";
+                ostr << column << "\n";
+                ostr << " * [INFO] file: '" << proc.GetFileName() << "'";
+                wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+            } while( 0 );
             #endif
 
             return false;
@@ -290,7 +352,7 @@ SGNODE* WRL1MATERIAL::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     if( NULL == sp )
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        std::cerr << " * [INFO] bad model: no base data given\n";
+        wxLogTrace( MASK_VRML, " * [INFO] bad model: no base data given\n" );
         #endif
 
         return NULL;

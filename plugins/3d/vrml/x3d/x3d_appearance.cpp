@@ -23,6 +23,8 @@
 
 
 #include <iostream>
+#include <sstream>
+#include <wx/log.h>
 #include <wx/xml/xml.h>
 #include "x3d_ops.h"
 #include "x3d_appearance.h"
@@ -61,7 +63,7 @@ X3DAPP::X3DAPP( X3DNODE* aParent ) : X3DNODE()
 X3DAPP::~X3DAPP()
 {
     #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    std::cerr << " * [INFO] Destroying Appearance\n";
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying Appearance\n" );
     #endif
 
     if( !m_MatName.empty() && m_Dict )
@@ -237,18 +239,24 @@ SGNODE* X3DAPP::TranslateToSG( SGNODE* aParent )
     if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
         #ifdef DEBUG_X3D
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] Appearance does not have a Shape parent (parent ID: ";
-        std::cerr << ptype << ")\n";
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] Appearance does not have a Shape parent (parent ID: ";
+        ostr << ptype << ")";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
         #endif
 
         return NULL;
     }
 
     #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    std::cerr << " * [INFO] Translating Appearance with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Translating Appearance with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     if( m_sgNode )

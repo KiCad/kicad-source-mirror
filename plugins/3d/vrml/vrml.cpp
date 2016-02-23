@@ -32,11 +32,7 @@
  */
 
 #include <locale.h>
-#include <fstream>
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <wx/string.h>
+#include <wx/log.h>
 #include <wx/filename.h>
 #include "richio.h"
 #include "plugins/3d/3d_plugin.h"
@@ -188,9 +184,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
     }
     catch( IO_ERROR &e )
     {
-        #ifdef DEBUG
-        std::cerr << " * [INFO] load failed: input line too long\n";
-        #endif
+        wxLogError( _( " * [INFO] load failed: input line too long\n" ) );
         return NULL;
     }
 
@@ -200,9 +194,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
     if( proc.GetVRMLType() == VRML_V1 )
     {
-        #ifdef DEBUG
-        std::cerr << " * [INFO] Processing VRML 1.0 file\n";
-        #endif
+        wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 1.0 file\n" );
 
         WRL1BASE* bp = new WRL1BASE;
 
@@ -211,15 +203,11 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
         if( !bp->Read( proc ) )
         {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] load failed\n";
-            #endif
+            wxLogTrace( MASK_VRML, " * [INFO] load failed\n" );
         }
         else
         {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] load completed\n";
-            #endif
+            wxLogTrace( MASK_VRML, " * [INFO] load completed\n" );
 
             scene = (SCENEGRAPH*)bp->TranslateToSG( NULL, NULL );
         }
@@ -228,9 +216,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
     }
     else
     {
-        #ifdef DEBUG
-        std::cerr << " * [INFO] Processing VRML 2.0 file\n";
-        #endif
+        wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 2.0 file\n" );
 
         WRL2BASE* bp = new WRL2BASE;
 
@@ -239,15 +225,11 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
         if( !bp->Read( proc ) )
         {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] load failed\n";
-            #endif
+            wxLogTrace( MASK_VRML, " * [INFO] load failed\n" );
         }
         else
         {
-            #ifdef DEBUG
-            std::cerr << " * [INFO] load completed\n";
-            #endif
+            wxLogTrace( MASK_VRML, " * [INFO] load completed\n" );
 
             // for now we recalculate all normals per-vertex per-face
             scene = (SCENEGRAPH*)bp->TranslateToSG( NULL );

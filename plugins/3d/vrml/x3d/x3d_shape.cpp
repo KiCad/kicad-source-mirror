@@ -23,7 +23,9 @@
 
 
 #include <iostream>
+#include <sstream>
 #include <wx/xml/xml.h>
+#include <wx/log.h>
 #include "x3d_ops.h"
 #include "x3d_shape.h"
 #include "plugins/3dapi/ifsg_all.h"
@@ -63,9 +65,13 @@ X3DSHAPE::X3DSHAPE( X3DNODE* aParent ) : X3DNODE()
 X3DSHAPE::~X3DSHAPE()
 {
     #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    std::cerr << " * [INFO] Destroying Shape with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Destroying Shape with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return;
@@ -247,9 +253,13 @@ SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
         return NULL;
 
     #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    std::cerr << " * [INFO] Translating Shape with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Translating Shape with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     S3D::SGTYPES ptype = S3D::GetSGNodeType( aParent );
@@ -257,9 +267,13 @@ SGNODE* X3DSHAPE::TranslateToSG( SGNODE* aParent )
     if( NULL != aParent && ptype != S3D::SGTYPE_TRANSFORM )
     {
         #ifdef DEBUG_X3D
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] Shape does not have a Transform parent (parent ID: ";
-        std::cerr << ptype << ")\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] Shape does not have a Transform parent (parent ID: ";
+            ostr << ptype << ")";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return NULL;

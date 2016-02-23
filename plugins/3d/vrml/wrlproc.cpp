@@ -24,6 +24,7 @@
 #include <iostream>
 #include <sstream>
 #include <wx/string.h>
+#include <wx/log.h>
 #include "wrlproc.h"
 
 #define GETLINE do {\
@@ -374,9 +375,7 @@ bool WRLPROC::DiscardNode( void )
         ostr << ", column " << m_bufpos;
         m_error = ostr.str();
 
-        #ifdef DEBUG
-        std::cerr << m_error << "\n";
-        #endif
+        wxLogTrace( MASK_VRML, "%s\n", m_error.c_str() );
 
         return false;
     }

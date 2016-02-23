@@ -29,6 +29,8 @@
 #include <cctype>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
+#include <wx/log.h>
 
 #include "vrml1_node.h"
 
@@ -141,9 +143,13 @@ WRL1NODE::WRL1NODE( NAMEREGISTER* aDictionary )
 WRL1NODE::~WRL1NODE()
 {
     #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-    std::cerr << " * [INFO] ^^ Destroying Type " << m_Type << " with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references and ";
-    std::cerr << m_BackPointers.size() << " backpointers\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] ^^ Destroying Type " << m_Type << " with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references and ";
+        ostr << m_BackPointers.size() << " backpointers";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     m_Items.clear();
@@ -165,13 +171,21 @@ WRL1NODE::~WRL1NODE()
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
         ++acc;
-        std::cerr << " * [INFO] " << tabs << "Type " << m_Type << " is Unlinking ref #";
-        std::cerr << acc << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << " * [INFO] " << tabs << "Type " << m_Type << " is Unlinking ref #";
+            ostr << acc;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
         (*sBP)->unlinkRefNode( this );
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-        std::cerr << " * [INFO] " << tabs << "Type " << m_Type << " has unlinked ref #";
-        std::cerr << acc << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << " * [INFO] " << tabs << "Type " << m_Type << " has unlinked ref #";
+            ostr << acc;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
         ++sBP;
     }
@@ -190,18 +204,30 @@ WRL1NODE::~WRL1NODE()
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
         ++acc;
-        std::cerr << " * [INFO] " << otabs << "Type " << m_Type << " is Deleting child #";
-        std::cerr << acc << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << " * [INFO] " << otabs << "Type " << m_Type << " is Deleting child #";
+            ostr << acc;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
         (*sC)->SetParent( NULL, false );
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-        std::cerr << " * [INFO] " << otabs << "Type " << m_Type << " has unlinked child #";
-        std::cerr << acc << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << " * [INFO] " << otabs << "Type " << m_Type << " has unlinked child #";
+            ostr << acc;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
-        //delete *sC;
+        delete *sC;
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 2 )
-        std::cerr << " * [INFO] " << otabs << "Type " << m_Type << " has deleted child #";
-        std::cerr << acc << "\n";
+        do {
+            std::ostringstream ostr;
+            ostr << " * [INFO] " << otabs << "Type " << m_Type << " has deleted child #";
+            ostr << acc;
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
         ++sC;
     }
@@ -269,8 +295,12 @@ void WRL1NODE::delNodeRef( WRL1NODE* aNode )
     }
 
     #ifdef DEBUG_VRML1
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] delNodeRef() did not find its target\n";
+    do {
+        std::ostringstream ostr;
+        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+        ostr << " * [BUG] delNodeRef() did not find its target";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     return;
@@ -303,8 +333,12 @@ bool WRL1NODE::SetName( const std::string& aName )
     if( isdigit( aName[0] ) )
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid node name '" << aName << "' (begins with digit)\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] invalid node name '" << aName << "' (begins with digit)";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -320,9 +354,13 @@ bool WRL1NODE::SetName( const std::string& aName )
         || std::string::npos != aName.find_first_of( BAD_CHARS2 ) )
     {
         #if defined( DEBUG_VRML1 ) && ( DEBUG_VRML1 > 1 )
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [INFO] invalid node name '" << aName;
-        std::cerr<< "' (contains invalid character)\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] invalid node name '" << aName;
+            ostr << "' (contains invalid character)";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -406,8 +444,12 @@ bool WRL1NODE::AddChildNode( WRL1NODE* aNode )
     if( aNode->GetNodeType() == WRL1_BASE )
     {
         #ifdef DEBUG_VRML1
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] attempting to add a base node to another node\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] attempting to add a base node to another node";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -439,8 +481,12 @@ bool WRL1NODE::AddRefNode( WRL1NODE* aNode )
     if( NULL == aNode )
     {
         #ifdef DEBUG_VRML1
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] NULL passed as node pointer\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] NULL passed as node pointer";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;
@@ -449,8 +495,12 @@ bool WRL1NODE::AddRefNode( WRL1NODE* aNode )
     if( aNode->GetNodeType() == WRL1_BASE )
     {
         #ifdef DEBUG_VRML1
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] attempting to add a base node ref to another base node\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] attempting to add a base node ref to another base node";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return false;

@@ -23,7 +23,9 @@
 
 
 #include <iostream>
+#include <sstream>
 #include <cmath>
+#include <wx/log.h>
 #include <wx/xml/xml.h>
 #include <wx/tokenzr.h>
 #include "x3d_ops.h"
@@ -67,7 +69,7 @@ X3DIFACESET::X3DIFACESET( X3DNODE* aParent ) : X3DNODE()
 X3DIFACESET::~X3DIFACESET()
 {
     #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    std::cerr << " * [INFO] Destroying IndexedFaceSet\n";
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying IndexedFaceSet\n" );
     #endif
 
     return;
@@ -241,19 +243,27 @@ SGNODE* X3DIFACESET::TranslateToSG( SGNODE* aParent )
     if( NULL != aParent && ptype != S3D::SGTYPE_SHAPE )
     {
         #ifdef DEBUG_X3D
-        std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        std::cerr << " * [BUG] IndexedFaceSet does not have a Shape parent (parent ID: ";
-        std::cerr << ptype << ")\n";
+        do {
+            std::ostringstream ostr;
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] IndexedFaceSet does not have a Shape parent (parent ID: ";
+            ostr << ptype << ")";
+            wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+        } while( 0 );
         #endif
 
         return NULL;
     }
 
     #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    std::cerr << " * [INFO] Translating IndexedFaceSet with " << m_Children.size();
-    std::cerr << " children, " << m_Refs.size() << " references, ";
-    std::cerr << m_BackPointers.size() << " backpointers and ";
-    std::cerr << coordIndex.size() << " coord indices\n";
+    do {
+        std::ostringstream ostr;
+        ostr << " * [INFO] Translating IndexedFaceSet with " << m_Children.size();
+        ostr << " children, " << m_Refs.size() << " references, ";
+        ostr << m_BackPointers.size() << " backpointers and ";
+        ostr << coordIndex.size() << " coord indices";
+        wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
+    } while( 0 );
     #endif
 
     if( m_sgNode )

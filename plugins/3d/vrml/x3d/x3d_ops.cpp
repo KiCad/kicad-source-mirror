@@ -23,13 +23,10 @@
 
 #include <wx/tokenzr.h>
 #include <wx/xml/xml.h>
-#include <iostream>
 
 #include "x3d_appearance.h"
 #include "x3d_coords.h"
-#include "x3d_ifaceset.h"
 #include "x3d_ops.h"
-#include "x3d_shape.h"
 #include "x3d_transform.h"
 
 

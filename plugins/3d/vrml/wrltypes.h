@@ -33,6 +33,9 @@
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 
+// log mask for wxLogTrace
+#define MASK_VRML "PLUGIN_VRML"
+
 // version of the VRML file being parsed
 enum WRLVERSION
 {

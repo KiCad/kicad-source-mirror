@@ -25,6 +25,7 @@
 #include <iostream>
 #include <wx/xml/xml.h>
 #include <wx/tokenzr.h>
+#include <wx/log.h>
 #include "x3d_ops.h"
 #include "x3d_coords.h"
 
@@ -59,7 +60,7 @@ X3DCOORDS::X3DCOORDS( X3DNODE* aParent ) : X3DNODE()
 X3DCOORDS::~X3DCOORDS()
 {
     #if defined( DEBUG_X3D ) && ( DEBUG_X3D > 2 )
-    std::cerr << " * [INFO] Destroying Coordinate\n";
+    wxLogTrace( MASK_VRML, " * [INFO] Destroying Coordinate\n" );
     #endif
     return;
 }

@@ -23,9 +23,12 @@
 
 
 #include <iostream>
+#include <sstream>
 #include <utility>
 #include <algorithm>
+#include <wx/log.h>
 #include "x3d_base.h"
+#include "wrltypes.h"
 
 
 bool X3D_DICT::AddName( const wxString& aName, X3DNODE* aNode )
@@ -169,8 +172,10 @@ void X3DNODE::delNodeRef( X3DNODE* aNode )
     }
 
     #ifdef DEBUG_X3D
-    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    std::cerr << " * [BUG] delNodeRef() did not find its target\n";
+    std::ostringstream ostr;
+    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+    ostr << " * [BUG] delNodeRef() did not find its target";
+    wxLogTrace( MASK_VRML, "%s\n", ostr.str().c_str() );
     #endif
 
     return;
