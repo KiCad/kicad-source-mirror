@@ -111,7 +111,8 @@ void CBBOX::Union( const SFVEC3F &aPoint )
 
 void CBBOX::Union( const CBBOX &aBBox )
 {
-    wxASSERT( aBBox.IsInitialized() );
+    if( !aBBox.IsInitialized() )
+        return;
 
     // get the minimun value between the added bounding box and the existent bounding box
     m_min.x =  fmin( m_min.x, aBBox.m_min.x );
