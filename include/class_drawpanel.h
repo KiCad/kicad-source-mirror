@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,6 +73,7 @@ private:
     bool    m_abortRequest;                 ///< Flag used to abort long commands.
 
     bool    m_enableZoomNoCenter;           ///< True to enable zooming around the crosshair instead of the center
+    bool    m_enableMousewheelPan;          ///< True to enable mousewheel panning by default.
     bool    m_enableMiddleButtonPan;        ///< True to enable middle mouse button panning.
     bool    m_panScrollbarLimits;           ///< has meaning only if m_enableMiddleButtonPan = true
                                             ///< true to limit panning to scrollbar current limits
@@ -141,6 +142,10 @@ public:
     bool GetAbortRequest() const { return m_abortRequest; }
 
     void SetAbortRequest( bool aAbortRequest ) { m_abortRequest = aAbortRequest; }
+
+    bool GetEnableMousewheelPan() const { return m_enableMousewheelPan; }
+
+    void SetEnableMousewheelPan( bool aEnable );
 
     bool GetEnableMiddleButtonPan() const { return m_enableMiddleButtonPan; }
 

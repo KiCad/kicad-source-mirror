@@ -3,6 +3,8 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -49,7 +51,7 @@ public:
     VIEW_CONTROLS( VIEW* aView ) : m_view( aView ),
         m_forceCursorPosition( false ), m_cursorCaptured( false ), m_snappingEnabled( false ),
         m_grabMouse( false ), m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ),
-        m_autoPanSpeed( 0.15 ), m_warpCursor( false )
+        m_autoPanSpeed( 0.15 ), m_warpCursor( false ), m_enableMousewheelPan( false )
     {
     }
 
@@ -194,6 +196,25 @@ public:
     }
 
     /**
+     * Function EnableMousewheelPan()
+     * Enables or disables mousewheel panning.
+     * @param aEnabled is true if mouse-wheel panning is enabled.
+     */
+    virtual void EnableMousewheelPan( bool aEnable )
+    {
+        m_enableMousewheelPan = aEnable;
+    }
+
+    /**
+     * Function IsMousewheelPanEnabled()
+     * Returns the current setting for mousewheel panning
+     */
+    virtual bool IsMousewheelPanEnabled() const
+    {
+        return m_enableMousewheelPan;
+    }
+
+    /**
      * Function CenterOnCursor()
      * Sets the viewport center to the current cursor position and warps the cursor to the
      * screen center.
@@ -239,6 +260,9 @@ protected:
 
     /// If the cursor is allowed to be warped
     bool        m_warpCursor;
+
+    /// Mousewheel (2-finger touchpad) panning
+    bool        m_enableMousewheelPan;
 };
 } // namespace KIGFX
 

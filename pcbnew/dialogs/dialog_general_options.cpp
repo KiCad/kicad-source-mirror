@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,6 +85,7 @@ void DIALOG_GENERALOPTIONS::init()
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
     m_Segments_45_Only_Ctrl->SetValue( g_Segments_45_Only );
     m_ZoomCenterOpt->SetValue( ! GetParent()->GetCanvas()->GetEnableZoomNoCenter() );
+    m_MousewheelPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableMousewheelPan() );
     m_MiddleButtonPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableMiddleButtonPan() );
     m_OptMiddleButtonPanLimited->SetValue( GetParent()->GetCanvas()->GetMiddleButtonPanLimited() );
     m_OptMiddleButtonPanLimited->Enable( m_MiddleButtonPANOpt->GetValue() );
@@ -137,10 +138,11 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
 
     GetParent()->GetCanvas()->SetEnableZoomNoCenter( ! m_ZoomCenterOpt->GetValue() );
+    GetParent()->GetCanvas()->SetEnableMousewheelPan( m_MousewheelPANOpt->GetValue() );
     GetParent()->GetCanvas()->SetEnableMiddleButtonPan( m_MiddleButtonPANOpt->GetValue() );
     GetParent()->GetCanvas()->SetMiddleButtonPanLimited( m_OptMiddleButtonPanLimited->GetValue() );
-
     GetParent()->GetCanvas()->SetEnableAutoPan( m_AutoPANOpt->GetValue() );
+
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
     g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
     g_MagneticTrackOption = m_MagneticTrackOptCtrl->GetSelection();
