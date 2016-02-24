@@ -5,3 +5,6 @@ A PCAD ASCII sample file can be downloaded from http://www.pcadbegin.webtm.ru
 (Provided by its author Andrey Manin <pcadbegin[at]rambler.ru>)
 
 http://www.pcadbegin.webtm.ru/schetchik.php?scach=1 (CK1202_V1.pcb)
+
+Other sample:
+http://www.firstpr.com.au/temp/kicad-bugs/P-CAD-conversion/S1000MA-1992-09-08-via-Altium-P-CAD-ASCII.pcb

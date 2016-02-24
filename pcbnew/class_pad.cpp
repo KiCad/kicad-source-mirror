@@ -110,8 +110,6 @@ LSET D_PAD::ConnSMDMask()
 
 LSET D_PAD::UnplatedHoleMask()
 {
-    // was #define PAD_ATTRIB_HOLE_NOT_PLATED_DEFAULT_LAYERS ALL_CU_LAYERS |
-    // SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT
     static LSET saved = LSET::AllCuMask() | LSET( 3, F_SilkS, B_Mask, F_Mask );
     return saved;
 }
