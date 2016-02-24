@@ -78,6 +78,9 @@ void PCB_TEXT::Parse( XNODE*        aNode,
 
     aNode->GetAttribute( wxT( "Name" ), &m_name.text );
 
+    str = FindNodeGetContent( aNode, wxT( "justify" ) );
+    m_name.justify = GetJustifyIdentificator( str );
+
     str = FindNodeGetContent( aNode, wxT( "isFlipped" ) );
 
     if( str == wxT( "True" ) )
@@ -98,9 +101,10 @@ void PCB_TEXT::AddToModule( MODULE* aModule )
 void PCB_TEXT::AddToBoard()
 {
     // Simple, not the best, but acceptable text positioning.
-    m_name.textPositionX    = m_positionX;
-    m_name.textPositionY    = m_positionY;
-    CorrectTextPosition( &m_name, m_rotation );
+    m_name.textPositionX = m_positionX;
+    m_name.textPositionY = m_positionY;
+    m_name.textRotation = m_rotation;
+    CorrectTextPosition( &m_name );
 
     TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
     m_board->Add( pcbtxt, ADD_APPEND );
@@ -111,9 +115,10 @@ void PCB_TEXT::AddToBoard()
                              KiROUND( m_name.textHeight / 1.1 ) ) );
 
     pcbtxt->SetThickness( m_name.textstrokeWidth );
-    pcbtxt->SetOrientation( m_rotation );
+    pcbtxt->SetOrientation( m_name.textRotation );
 
-    pcbtxt->SetTextPosition( wxPoint( m_name.correctedPositionX, m_name.correctedPositionY ) );
+    pcbtxt->SetTextPosition( wxPoint( m_name.correctedPositionX,
+                                      m_name.correctedPositionY ) );
 
     pcbtxt->SetMirrored( m_name.mirror );
     pcbtxt->SetTimeStamp( 0 );

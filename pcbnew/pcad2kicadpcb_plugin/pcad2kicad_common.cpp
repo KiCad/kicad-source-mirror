@@ -37,6 +37,9 @@
 
 namespace PCAD2KICAD {
 
+// PCAD stroke font average ratio of width to height
+const double TEXT_WIDTH_TO_HEIGHT = 0.79;
+
 wxString GetWord( wxString* aStr )
 {
     wxString result = wxEmptyString;
@@ -270,6 +273,31 @@ void SetDoublePrecisionPosition( wxString   aStr,
                                      aActualConversion );
 }
 
+TTEXT_JUSTIFY GetJustifyIdentificator( wxString aJustify )
+{
+    TTEXT_JUSTIFY id;
+
+    if( aJustify == wxT( "LowerCenter" ) )
+        id = LowerCenter;
+    else if( aJustify == wxT( "LowerRight" ) )
+        id = LowerRight;
+    else if( aJustify == wxT( "UpperLeft" ) )
+        id = UpperLeft;
+    else if( aJustify == wxT( "UpperCenter" ) )
+        id = UpperCenter;
+    else if( aJustify == wxT( "UpperRight" ) )
+        id = UpperRight;
+    else if( aJustify == wxT( "Left" ) )
+        id = Left;
+    else if( aJustify == wxT( "Center" ) )
+        id = Center;
+    else if( aJustify == wxT( "Right" ) )
+        id = Right;
+    else
+        id = LowerLeft;
+
+    return id;
+}
 
 void SetTextParameters( XNODE*      aNode,
                         TTEXTVALUE* aTextValue,
@@ -303,6 +331,14 @@ void SetTextParameters( XNODE*      aNode,
         aTextValue->textIsVisible = 1;
     else if( str == wxT( "False" ) )
         aTextValue->textIsVisible = 0;
+
+    str = FindNodeGetContent( aNode, wxT( "justify" ) );
+    aTextValue->justify = GetJustifyIdentificator( str );
+
+    str = FindNodeGetContent( aNode, wxT( "isFlipped" ) );
+
+    if( str == wxT( "True" ) )
+        aTextValue->mirror = 1;
 
     tNode = FindNode( aNode, wxT( "textStyleRef" ) );
 
@@ -367,48 +403,102 @@ void SetFontProperty( XNODE*        aNode,
     }
 }
 
-
-void CorrectTextPosition( TTEXTVALUE* aValue, int aRotation )
+int CalculateTextLengthSize( TTEXTVALUE* aText )
 {
-    aValue->correctedPositionX  = aValue->textPositionX;
-    aValue->correctedPositionY  = aValue->textPositionY;
-    aValue->correctedPositionY  = aValue->correctedPositionY - KiROUND(
-        (double) aValue->textHeight / 3.0 );
-    aValue->correctedPositionX = aValue->correctedPositionX +
-                                 KiROUND( ( (double) aValue->text.Len() /
-                                            1.4 ) * ( (double) aValue->textHeight / 1.8 ) );
+    return KiROUND( (double) aText->text.Len() *
+                    (double) aText->textHeight * TEXT_WIDTH_TO_HEIGHT );
+}
 
-    if( aRotation == 900 )
-    {
-        aValue->correctedPositionX  = -aValue->textPositionY;
-        aValue->correctedPositionY  = aValue->textPositionX;
-        aValue->correctedPositionX  = aValue->correctedPositionX + KiROUND(
-            (double) aValue->textHeight / 3.0 );
-        aValue->correctedPositionY = aValue->correctedPositionY +
-                                     KiROUND( ( (double) aValue->text.Len() /
-                                                1.4 ) * ( (double) aValue->textHeight / 1.8 ) );
-    }
+void CorrectTextPosition( TTEXTVALUE* aValue )
+{
+    int cm = aValue->mirror ? -1 : 1;
+    // sizes of justify correction
+    int cl = KiROUND( (double) CalculateTextLengthSize( aValue ) / 2.0 );
+    int ch = KiROUND( (double) aValue->textHeight / 2.0 );
 
-    if( aRotation == 1800 )
-    {
-        aValue->correctedPositionX  = -aValue->textPositionX;
-        aValue->correctedPositionY  = -aValue->textPositionY;
-        aValue->correctedPositionY  = aValue->correctedPositionY +
-                                      KiROUND( (double) aValue->textHeight / 3.0 );
-        aValue->correctedPositionX = aValue->correctedPositionX -
-                                     KiROUND( ( (double) aValue->text.Len() /
-                                                1.4 ) * ( (double) aValue->textHeight / 1.8 ) );
-    }
+    aValue->correctedPositionX = aValue->textPositionX;
+    aValue->correctedPositionY = aValue->textPositionY;
 
-    if( aRotation == 2700 )
+    switch( aValue->textRotation )
     {
-        aValue->correctedPositionX  = aValue->textPositionY;
-        aValue->correctedPositionY  = -aValue->textPositionX;
-        aValue->correctedPositionX  = aValue->correctedPositionX +
-                                      KiROUND( (double) aValue->textHeight / 1.0 );
-        aValue->correctedPositionY = aValue->correctedPositionY -
-                                     KiROUND( ( (double) aValue->text.Len() /
-                                                3.4 ) * ( (double) aValue->textHeight / 1.8 ) );
+    case 0:
+        if( aValue->justify == LowerLeft ||
+            aValue->justify == Left ||
+            aValue->justify == UpperLeft )
+            aValue->correctedPositionX += cl * cm;
+        else if( aValue->justify == LowerRight ||
+                 aValue->justify == Right ||
+                 aValue->justify == UpperRight )
+            aValue->correctedPositionX -= cl * cm;
+
+        if( aValue->justify == LowerLeft ||
+            aValue->justify == LowerCenter ||
+            aValue->justify == LowerRight )
+            aValue->correctedPositionY -= ch;
+        else if( aValue->justify == UpperLeft ||
+                 aValue->justify == UpperCenter ||
+                 aValue->justify == UpperRight )
+            aValue->correctedPositionY += ch;
+        break;
+    case 900:
+        if( aValue->justify == LowerLeft ||
+            aValue->justify == LowerCenter ||
+            aValue->justify == LowerRight )
+            aValue->correctedPositionX -= ch * cm;
+        else if( aValue->justify == UpperLeft ||
+                 aValue->justify == UpperCenter ||
+                 aValue->justify == UpperRight )
+            aValue->correctedPositionX += ch * cm;
+
+        if( aValue->justify == LowerLeft ||
+            aValue->justify == Left ||
+            aValue->justify == UpperLeft )
+            aValue->correctedPositionY -= cl;
+        else if( aValue->justify == LowerRight ||
+                 aValue->justify == Right ||
+                 aValue->justify == UpperRight )
+            aValue->correctedPositionY += cl;
+        break;
+    case 1800:
+        if( aValue->justify == LowerLeft ||
+            aValue->justify == Left ||
+            aValue->justify == UpperLeft )
+            aValue->correctedPositionX -= cl * cm;
+        else if( aValue->justify == LowerRight ||
+                 aValue->justify == Right ||
+                 aValue->justify == UpperRight )
+            aValue->correctedPositionX += cl * cm;
+
+        if( aValue->justify == LowerLeft ||
+            aValue->justify == LowerCenter ||
+            aValue->justify == LowerRight )
+            aValue->correctedPositionY += ch;
+        else if( aValue->justify == UpperLeft ||
+                 aValue->justify == UpperCenter ||
+                 aValue->justify == UpperRight )
+            aValue->correctedPositionY -= ch;
+        break;
+    case 2700:
+        if( aValue->justify == LowerLeft ||
+            aValue->justify == LowerCenter ||
+            aValue->justify == LowerRight )
+            aValue->correctedPositionX += ch * cm;
+        else if( aValue->justify == UpperLeft ||
+                 aValue->justify == UpperCenter ||
+                 aValue->justify == UpperRight )
+            aValue->correctedPositionX -= ch * cm;
+
+        if( aValue->justify == LowerLeft ||
+            aValue->justify == Left ||
+            aValue->justify == UpperLeft )
+            aValue->correctedPositionY += cl;
+        else if( aValue->justify == LowerRight ||
+                 aValue->justify == Right ||
+                 aValue->justify == UpperRight )
+            aValue->correctedPositionY -= cl;
+        break;
+    default:
+        break;
     }
 }
 
@@ -457,6 +547,7 @@ void InitTTextValue( TTEXTVALUE* aTextValue )
     aTextValue->textUnit    = 0;
     aTextValue->correctedPositionX  = 0;
     aTextValue->correctedPositionY  = 0;
+    aTextValue->justify = LowerLeft;
 }
 
 } // namespace PCAD2KICAD

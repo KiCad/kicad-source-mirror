@@ -39,6 +39,19 @@ namespace PCAD2KICAD
 
 #define PCAD2KICAD_SCALE_SCH_TO_INCH_GRID
 
+enum TTEXT_JUSTIFY
+{
+   LowerLeft,
+   LowerCenter,
+   LowerRight,
+   UpperLeft,
+   UpperCenter,
+   UpperRight,
+   Left,
+   Center,
+   Right
+};
+
 typedef struct _TTEXTVALUE
 {
     wxString    text;
@@ -46,6 +59,7 @@ typedef struct _TTEXTVALUE
                 textRotation, textHeight, textstrokeWidth;
     int textIsVisible, mirror, textUnit;
     int correctedPositionX, correctedPositionY;
+    TTEXT_JUSTIFY justify;
 } TTEXTVALUE;
 
 extern wxString     GetWord( wxString* aStr );
@@ -69,6 +83,7 @@ extern void         SetDoublePrecisionPosition( wxString    aStr,
                                                 double*     aX,
                                                 double*     aY,
                                                 wxString    aActualConversion );
+extern TTEXT_JUSTIFY GetJustifyIdentificator( wxString aJustify );
 extern void         SetTextParameters( XNODE*       aNode,
                                        TTEXTVALUE*  aTextValue,
                                        wxString     aDefaultMeasurementUnit,
@@ -77,7 +92,8 @@ extern void         SetFontProperty( XNODE*         aNode,
                                      TTEXTVALUE*    aTextValue,
                                      wxString       aDefaultMeasurementUnit,
                                      wxString       aActualConversion );
-extern void         CorrectTextPosition( TTEXTVALUE* aValue, int aRotation );
+extern int          CalculateTextLengthSize( TTEXTVALUE* aText );
+extern void         CorrectTextPosition( TTEXTVALUE* aValue );
 
 extern XNODE*       FindNode( XNODE* aChild, wxString aTag );
 extern wxString     FindNodeGetContent( XNODE* aChild, wxString aTag );
