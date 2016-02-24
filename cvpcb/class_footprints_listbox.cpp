@@ -127,7 +127,7 @@ void FOOTPRINTS_LISTBOX::SetSelection( int index, bool State )
 
 
 void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName,
-                                        COMPONENT* aComponent, int aFilterType )
+                                        COMPONENT* aComponent, const wxString &footPrintName, int aFilterType )
 {
     wxArrayString   newList;
     wxString        msg;
@@ -158,6 +158,15 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
         if( (aFilterType & BY_PIN_COUNT) && aComponent
           && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
             continue;
+
+        wxString itemsName = aList.GetItem( ii ).GetNickname().Lower () +
+                             aList.GetItem (ii).GetFootprintName().Lower ();
+
+        if( (aFilterType & BY_NAME) && !footPrintName.IsEmpty()
+            && itemsName.Find (footPrintName.Lower ()) == wxNOT_FOUND)
+        {
+            continue;
+        }
 
         msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),
                     GetChars( aList.GetItem( ii ).GetNickname() ),

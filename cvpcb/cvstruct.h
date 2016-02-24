@@ -96,6 +96,7 @@ public:
         BY_COMPONENT = 0x0001,
         BY_PIN_COUNT = 0x0002,
         BY_LIBRARY   = 0x0004,
+        BY_NAME      = 0x0008,
     };
 
     FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
@@ -119,7 +120,9 @@ public:
      * @param aFilterType defines the criteria to filter \a aList.
      */
     void     SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName,
-                            COMPONENT* aComponent, int aFilterType );
+                            COMPONENT* aComponent, const wxString &footPrintName, int aFilterType );
+
+//    void searchByName (FOOTPRINT_LIST& aList, const wxString &footPrintName);
 
     wxString GetSelectedFootprint();
 

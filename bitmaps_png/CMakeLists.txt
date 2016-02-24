@@ -362,6 +362,7 @@ set( BMAPS_MID
     module_options
     module_pin_filtered_list
     module_library_list
+    module_name_filtered_list
     module_ratsnest
     module
     modview_icon

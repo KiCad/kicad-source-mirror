@@ -58,6 +58,7 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
     friend struct CV::IFACE;
 
     wxArrayString             m_footprintListEntries;
+    wxString                  m_currentSearch;
 
 public:
     bool                      m_KeepCvpcbOpen;
@@ -102,6 +103,8 @@ public:
      * * Updates the footprint shown in footprint display window (if opened)
      */
     void             OnSelectComponent( wxListEvent& event );
+    void             OnToolbarSearch (wxCommandEvent& aEvent);
+    void             OnMenuSearch (wxCommandEvent& aEvent);
 
     /**
      * Function OnEditFootrprintLibraryTable
@@ -292,6 +295,11 @@ private:
      * @return the error count ( 0 = no error)
      */
     int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages = NULL );
+
+    void RefreshAfterComponentSearch (COMPONENT* component);
+    int getFilterType ();
+    void SearchDialogAndStore ();
+
 
     DECLARE_EVENT_TABLE()
 };

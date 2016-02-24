@@ -105,11 +105,18 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             _( "Filter footprint list by library" ),
                             wxEmptyString );
 
+    m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME,
+                            KiBitmap( module_name_filtered_list_xpm ),
+                            wxNullBitmap, true, NULL,
+                            _( "Find footprint by its name\nor filter the footprint list by the partial name\n"
+                               "Ctrl+F to call the dialog to enter the filter string" ),
+                            wxEmptyString );
     if( config )
     {
         wxString key = wxT( FILTERFOOTPRINTKEY );
         int      opt = config->Read( key, (long) 1 );
 
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME, opt & 8 );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, opt & 4 );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, opt & 2 );
         m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, opt & 1 );

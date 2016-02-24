@@ -137,6 +137,7 @@ add_library( cvpcb_kiface MODULE
     ${CVPCB_SRCS}
     ${CVPCB_DIALOGS}
     )
+
 set_target_properties( cvpcb_kiface PROPERTIES
     OUTPUT_NAME     cvpcb
     PREFIX          ${KIFACE_PREFIX}

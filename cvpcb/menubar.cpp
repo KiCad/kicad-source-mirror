@@ -78,7 +78,15 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                  _( "&Close" ), _( "Close CvPcb" ),
                  KiBitmap( exit_xpm ) );
 
-    // Menu Preferences:
+    // Find menu
+    wxMenu* findMenu = new wxMenu;
+
+    AddMenuItem( findMenu, ID_FIND_ITEMS,
+                 _( "&Find footprint\tCtrl+F" ),
+                 _( "Find footprint by its name\nor filter the footprint list by the partial name" ),
+                 KiBitmap( info_xpm ));
+
+    // Preferences Menu :
     wxMenu* preferencesMenu = new wxMenu;
 
     AddMenuItem( preferencesMenu, ID_CVPCB_LIB_TABLE_EDIT,
@@ -139,6 +147,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // Create the menubar and append all submenus
     menuBar->Append( filesMenu, _( "&Save" ) );
+    menuBar->Append( findMenu, _( "&Find" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
