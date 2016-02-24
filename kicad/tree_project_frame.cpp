@@ -1,8 +1,3 @@
-/**
- * @file tree_project_frame.cpp
- * @brief Function to build the tree of files in the current project directory
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -28,23 +23,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <confirm.h>
-#include <gestfich.h>
-#include <pgm_base.h>
-#include <macros.h>
+/**
+ * @file tree_project_frame.cpp
+ * @brief Function to build the tree of files in the current project directory
+ */
 
-#include <tree_project_frame.h>
-#include <class_treeprojectfiles.h>
-#include <class_treeproject_item.h>
-#include <wildcards_and_files_ext.h>
+
+#include <stack>
 
 #include <wx/regex.h>
-#include <wx/dir.h>
-#include <wx/imaglist.h>
 #include <wx/stdpaths.h>
+#include <wx/string.h>
+
+#include <bitmaps.h>
+#include <gestfich.h>
 #include <menus_helpers.h>
-#include <stack>
+#include <wildcards_and_files_ext.h>
+
+#include "class_treeproject_item.h"
+#include "class_treeprojectfiles.h"
+#include "pgm_kicad.h"
+
+#include "tree_project_frame.h"
 
 
 /* Note about the tree project build process:

@@ -27,14 +27,11 @@
  * @file preferences.cpp
  */
 
-#include <fctsys.h>
-#include <pgm_kicad.h>
+
 #include <confirm.h>
-#include <gestfich.h>
 
-#include <kicad.h>
-
-#include <wx/fontdlg.h>
+#include "kicad.h"
+#include "pgm_kicad.h"
 
 
 void KICAD_MANAGER_FRAME::OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event )
@@ -93,4 +90,3 @@ void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
     Pgm().ForceSystemPdfBrowser( false );
     Pgm().WritePdfBrowserInfos();
 }
-

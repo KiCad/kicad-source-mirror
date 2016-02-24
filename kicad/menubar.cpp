@@ -27,12 +27,15 @@
  * @file kicad/menubar.cpp
  * @brief (Re)Create the project manager menubar for KiCad
  */
-#include <fctsys.h>
-#include <pgm_kicad.h>
-#include <kicad.h>
-#include <menus_helpers.h>
-#include <tree_project_frame.h>
+
+
+#include <bitmaps.h>
 #include <hotkeys_basic.h>
+#include <menus_helpers.h>
+
+#include "kicad.h"
+#include "pgm_kicad.h"
+
 
 // Menubar and toolbar event table
 BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )

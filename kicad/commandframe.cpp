@@ -1,8 +1,3 @@
-/**
- * @file commandframe.cpp
- * @brief Frame showing fast launch buttons and messages box
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,12 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file commandframe.cpp
+ * @brief Frame showing fast launch buttons and messages box
+ */
 
-#include <fctsys.h>
-#include <macros.h>
 
-#include <kicad.h>
-#include <menus_helpers.h>
+#include <bitmaps.h>
+
+#include "kicad.h"
 
 
 LAUNCHER_PANEL::LAUNCHER_PANEL( wxWindow* parent ) :

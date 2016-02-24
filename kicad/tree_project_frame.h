@@ -1,7 +1,3 @@
-/**
- * @file tree_project_frame.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -26,14 +22,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file tree_project_frame.h
+ */
+
+
 #ifndef TREEPRJ_FRAME_H
 #define TREEPRJ_FRAME_H
 
-#include <kicad.h>
 #include <wx/fswatcher.h>
+#include <wx/laywin.h>
+#include <wx/treebase.h>
+
+#include "kicad.h"
 
 
+class KICAD_MANAGER_FRAME;
 class TREEPROJECT_ITEM;
+class TREEPROJECTFILES;
 
 /** class TREE_PROJECT_FRAME
  * Window to display the tree files

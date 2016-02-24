@@ -30,7 +30,12 @@
  * in menubars or popup menus
  */
 
+
+#include <wx/menu.h>
+#include <wx/menuitem.h>
+
 #include <bitmaps.h>
+
 
 /**
  * Definition SETBITMAPS

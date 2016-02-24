@@ -25,6 +25,12 @@
 #ifndef TREEPROJECT_ITEM_H_
 #define TREEPROJECT_ITEM_H_
 
+
+#include <wx/treebase.h>
+
+#include "kicad.h"
+
+
 /**
  * Class TREEPROJECT_ITEM
  * handles one item (a file or a directory name) for the tree file

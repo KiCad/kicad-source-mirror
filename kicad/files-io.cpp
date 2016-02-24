@@ -1,7 +1,3 @@
-/**
- * @file kicad/files-io.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -26,21 +22,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <pgm_kicad.h>
-#include <kiway.h>
-#include <wx/fs_zip.h>
-#include <wx/zipstrm.h>
-#include <wx/docview.h>
-#include <wx/wfstream.h>
-#include <wx/zstream.h>
+/**
+ * @file kicad/files-io.cpp
+ */
+
+
 #include <wx/dir.h>
+#include <wx/fs_zip.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 
 #include <confirm.h>
-#include <gestfich.h>
-#include <macros.h>
+#include <kiway.h>
 
-#include <kicad.h>
+#include "pgm_kicad.h"
+
+#include "kicad.h"
+
 
 #define     ZipFileExtension    wxT( "zip" )
 #define     ZipFileWildcard     _( "Zip file (*.zip)|*.zip" )

@@ -1,8 +1,3 @@
-/**
- * @file prjconfig.cpp
- * Load and save project configuration files (*.pro)
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,27 +22,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <pgm_kicad.h>
-#include <kiway.h>
-#include <project.h>
-#include <confirm.h>
-#include <gestfich.h>
-#include <kicad.h>
-#include <config_params.h>
-#include <project_template.h>
-#include <tree_project_frame.h>
-#include <wildcards_and_files_ext.h>
-#include <vector>
-#include <build_version.h>
-#include <macros.h>
-#include <common.h>
+/**
+ * @file prjconfig.cpp
+ * Load and save project configuration files (*.pro)
+ */
+
 
 #include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 
+#include <build_version.h>
+#include <config_params.h>
+#include <confirm.h>
+#include <kiway.h>
+#include <project.h>
+#include <wildcards_and_files_ext.h>
+
 #include "dialogs/dialog_template_selector.h"
+
+#include "kicad.h"
+#include "pgm_kicad.h"
+#include "tree_project_frame.h"
+
 
 #define SEP()   wxFileName::GetPathSeparator()
 

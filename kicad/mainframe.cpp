@@ -1,8 +1,3 @@
-/**
- * @file kicad/mainframe.cpp
- * @brief KICAD_MANAGER_FRAME is the KiCad main frame.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -28,21 +23,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <pgm_kicad.h>
+/**
+ * @file kicad/mainframe.cpp
+ * @brief KICAD_MANAGER_FRAME is the KiCad main frame.
+ */
+
+
+#include <dialog_hotkeys_editor.h>
+#include <gestfich.h>
 #include <kiway.h>
 #include <kiway_player.h>
-#include <confirm.h>
-#include <gestfich.h>
-#include <macros.h>
-
-#include <kicad.h>
-#include <tree_project_frame.h>
 #include <wildcards_and_files_ext.h>
-#include <menus_helpers.h>
-#include <dialog_hotkeys_editor.h>
 
-#include <wx/filefn.h>
+#include "pgm_kicad.h"
+#include "tree_project_frame.h"
+
+#include "kicad.h"
 
 
 #define TREE_FRAME_WIDTH_ENTRY     wxT( "LeftWinWidth" )
@@ -474,7 +470,6 @@ void KICAD_MANAGER_FRAME::OnRefresh( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::language_change( wxCommandEvent& event )
 {
     int id = event.GetId();
-
     Kiway.SetLanguage( id );
 }
 

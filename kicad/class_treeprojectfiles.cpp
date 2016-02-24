@@ -1,7 +1,3 @@
-/**
- * @file class_treeprojectfiles.cpp
- * this is the wxTreeCtrl that shows a KiCad tree project files
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -26,17 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file class_treeprojectfiles.cpp
+ * this is the wxTreeCtrl that shows a KiCad tree project files
+ */
 
-#include <fctsys.h>
 
-#include <kicad.h>
-#include <tree_project_frame.h>
-#include <class_treeprojectfiles.h>
-#include <class_treeproject_item.h>
+#include <bitmaps.h>
 
-#include <wx/regex.h>
-#include <wx/imaglist.h>
-#include <menus_helpers.h>
+#include "class_treeproject_item.h"
+#include "tree_project_frame.h"
+
+#include "class_treeprojectfiles.h"
 
 
 IMPLEMENT_ABSTRACT_CLASS( TREEPROJECTFILES, wxTreeCtrl )
@@ -109,4 +106,3 @@ int TREEPROJECTFILES::OnCompareItems( const wxTreeItemId& item1, const wxTreeIte
 
     return myitem1->GetFileName().CmpNoCase( myitem2->GetFileName() );
 }
-
