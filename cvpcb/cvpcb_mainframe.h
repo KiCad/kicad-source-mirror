@@ -58,7 +58,7 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
     friend struct CV::IFACE;
 
     wxArrayString             m_footprintListEntries;
-    wxString                  m_currentSearch;
+    wxString                  m_currentSearchPattern;
     bool                      m_keepCvpcbOpen;
     NETLIST                   m_netlist;
     int                       m_filteringOptions;
@@ -66,6 +66,7 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
     FOOTPRINTS_LISTBOX*       m_footprintListBox;
     LIBRARY_LISTBOX*          m_libListBox;
     COMPONENTS_LISTBOX*       m_compListBox;
+    wxTextCtrl*               m_tcFilterString;
 
 public:
     wxArrayString             m_ModuleLibNames;
@@ -103,15 +104,12 @@ public:
      */
     void             OnSelectComponent( wxListEvent& event );
 
-    void             OnToolbarSearch (wxCommandEvent& aEvent);
-    void             OnMenuSearch (wxCommandEvent& aEvent);
-
     /**
-     * Function OnEditFootrprintLibraryTable
+     * Function OnEditFootprintLibraryTable
      * displays the footprint library table editing dialog and updates the global and local
      * footprint tables accordingly.
      */
-    void             OnEditFootrprintLibraryTable( wxCommandEvent& event );
+    void             OnEditFootprintLibraryTable( wxCommandEvent& event );
 
     void             OnQuit( wxCommandEvent& event );
     void             OnCloseWindow( wxCloseEvent& Event );
@@ -130,14 +128,7 @@ public:
      */
     void             DelAssociations( wxCommandEvent& event );
 
-    void             SaveProjectFile( wxCommandEvent& aEvent );
     void             SaveQuitCvpcb( wxCommandEvent& event );
-
-    /**
-     * Function OnEditLibraryTable
-     * envokes the footprint library table edit dialog.
-     */
-    void             OnEditFootprintLibraryTable( wxCommandEvent& aEvent );
 
     void             OnConfigurePaths( wxCommandEvent& aEvent );
 
@@ -169,11 +160,10 @@ public:
     void             OnSelectFilteringFootprint( wxCommandEvent& event );
 
     /**
-     * Function OnUpdateKeepOpenOnSave
-     * Command event handler to choose if CvPcb will be closed as soon as the footprint
-     * association is saved, or if it is left open.
+     * Function OnEnterFilteringText
+     * Is called each time the text of m_tcFilterString is changed.
      */
-    void             OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event );
+    void             OnEnterFilteringText( wxCommandEvent& event );
 
     /**
      * Function SetNewPkg
@@ -212,9 +202,15 @@ public:
 
     /**
      * Function LoadProjectFile
-     * reads the configuration parameter from the project (.pro) file \a aFileName
+     * reads the CvPcb configuration parameter from the project (.pro) file \a aFileName
      */
     void LoadProjectFile();
+
+    /**
+     * Function SaveProjectFile
+     * Saves the CvPcb configuration parameter from the project (.pro) file \a aFileName
+     */
+    void SaveProjectFile();
 
     void LoadSettings( wxConfigBase* aCfg );    // override virtual
 
@@ -289,7 +285,9 @@ public:
     const wxString GetSelectedFootprint();
 
 private:
-    // UI event handlers
+    // UI event handlers.
+    // Keep consistent the display state of toggle menus or tools in toolbar
+    void OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event );
     void OnFilterFPbyKeywords( wxUpdateUIEvent& event );
     void OnFilterFPbyPinCount( wxUpdateUIEvent& event );
     void OnFilterFPbyLibrary( wxUpdateUIEvent& event );
@@ -304,9 +302,7 @@ private:
      */
     int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages = NULL );
 
-    void RefreshAfterComponentSearch (COMPONENT* component);
-    void SearchDialogAndStore();
-
+    void refreshAfterComponentSearch (COMPONENT* component);
 
     DECLARE_EVENT_TABLE()
 };

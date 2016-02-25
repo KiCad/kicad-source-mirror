@@ -67,7 +67,7 @@ void CVPCB_MAINFRAME::LoadProjectFile()
 }
 
 
-void CVPCB_MAINFRAME::SaveProjectFile( wxCommandEvent& aEvent )
+void CVPCB_MAINFRAME::SaveProjectFile()
 {
     PROJECT&    prj = Prj();
     wxFileName  fn = prj.GetProjectFullName();

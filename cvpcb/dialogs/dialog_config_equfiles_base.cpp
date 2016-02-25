@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,7 +22,7 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerFlist;
 	bSizerFlist = new wxBoxSizer( wxVERTICAL );
 	
-	m_ListEquiv = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
+	m_ListEquiv = new wxListBox( sbEquivChoiceSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_HSCROLL|wxLB_NEEDED_SB|wxLB_SINGLE ); 
 	m_ListEquiv->SetMinSize( wxSize( 350,-1 ) );
 	
 	bSizerFlist->Add( m_ListEquiv, 1, wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -33,21 +33,21 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bSizerButtons;
 	bSizerButtons = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonAddEqu = new wxButton( this, ID_ADD_EQU, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonAddEqu = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_ADD_EQU, _("Add"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonAddEqu, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonRemoveEqu = new wxButton( this, ID_REMOVE_EQU, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRemoveEqu = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_REMOVE_EQU, _("Remove"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonRemoveEqu->SetToolTip( _("Unload the selected library") );
 	
 	bSizerButtons->Add( m_buttonRemoveEqu, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonMoveUp = new wxButton( this, ID_EQU_UP, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonMoveUp = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_EQU_UP, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonMoveUp, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonMoveDown = new wxButton( this, ID_EQU_DOWN, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonMoveDown = new wxButton( sbEquivChoiceSizer->GetStaticBox(), ID_EQU_DOWN, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonMoveDown, 0, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonEdit = new wxButton( this, wxID_ANY, _("Edit Equ File"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonEdit = new wxButton( sbEquivChoiceSizer->GetStaticBox(), wxID_ANY, _("Edit Equ File"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonEdit, 0, wxALL|wxEXPAND, 5 );
 	
 	
@@ -132,7 +132,6 @@ DIALOG_CONFIG_EQUFILES_BASE::DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWi
 	m_buttonMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveUp ), NULL, this );
 	m_buttonMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveDown ), NULL, this );
 	m_buttonEdit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnEditEquFile ), NULL, this );
-	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnOkClick ), NULL, this );
 }
 
@@ -145,7 +144,6 @@ DIALOG_CONFIG_EQUFILES_BASE::~DIALOG_CONFIG_EQUFILES_BASE()
 	m_buttonMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveUp ), NULL, this );
 	m_buttonMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnButtonMoveDown ), NULL, this );
 	m_buttonEdit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnEditEquFile ), NULL, this );
-	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIG_EQUFILES_BASE::OnOkClick ), NULL, this );
 	
 }

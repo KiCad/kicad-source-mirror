@@ -118,12 +118,11 @@ public:
      * @param aLibName is wxString containing the name of the selected library.  Can be
      *                 wxEmptyString.
      * @param aComponent is the #COMPONENT used by the filtering criteria.  Can be NULL.
+     * @param aFootPrintFilterPattern = a filter used to filter list by names
      * @param aFilterType defines the criteria to filter \a aList.
      */
     void     SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName,
-                            COMPONENT* aComponent, const wxString &footPrintName, int aFilterType );
-
-//    void searchByName (FOOTPRINT_LIST& aList, const wxString &footPrintName);
+                            COMPONENT* aComponent, const wxString &aFootPrintFilterPattern, int aFilterType );
 
     wxString GetSelectedFootprint();
 

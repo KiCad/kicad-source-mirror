@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -68,7 +68,6 @@ class DIALOG_CONFIG_EQUFILES_BASE : public DIALOG_SHIM
 		virtual void OnButtonMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditEquFile( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

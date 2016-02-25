@@ -34,6 +34,7 @@
 #include <cvpcb_mainframe.h>
 #include <listview_classes.h>
 #include <cvpcb_id.h>
+#include <eda_pattern_match.h>
 
 
 FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent,
@@ -124,11 +125,16 @@ void FOOTPRINTS_LISTBOX::SetSelection( int index, bool State )
 
 
 void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName,
-                                        COMPONENT* aComponent, const wxString &footPrintName, int aFilterType )
+                                        COMPONENT* aComponent,
+                                        const wxString &aFootPrintFilterPattern,
+                                        int aFilterType )
 {
     wxArrayString   newList;
     wxString        msg;
     wxString        oldSelection;
+
+    EDA_PATTERN_MATCH_WILDCARD patternFilter;
+    patternFilter.SetPattern( aFootPrintFilterPattern.Lower() );    // Use case insensitive search
 
     if( GetSelection() >= 0 && GetSelection() < (int)m_footprintList.GetCount() )
         oldSelection = m_footprintList[ GetSelection() ];
@@ -156,11 +162,15 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
             && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
             continue;
 
-        wxString itemsName = aList.GetItem( ii ).GetNickname().Lower () +
-                             aList.GetItem (ii).GetFootprintName().Lower ();
+        // We can search (Using case insensitive search) in full FPID or only
+        // in the fp name itself.
+        // After tests, only in the fp name itself looks better.
+        // However, the code to take in account the nickname is just commented, no removed.
+        wxString currname = //aList.GetItem( ii ).GetNickname().Lower() + ":" +
+                            aList.GetItem( ii ).GetFootprintName().Lower();
 
-        if( (aFilterType & FILTERING_BY_NAME) && !footPrintName.IsEmpty()
-            && itemsName.Find (footPrintName.Lower ()) == wxNOT_FOUND)
+        if( (aFilterType & FILTERING_BY_NAME) && !aFootPrintFilterPattern.IsEmpty()
+            && patternFilter.Find( currname ) == EDA_PATTERN_NOT_FOUND )
         {
             continue;
         }

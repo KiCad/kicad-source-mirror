@@ -103,12 +103,19 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             _( "Filter footprint list by library" ),
                             wxEmptyString );
 
+    m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME,
                             KiBitmap( module_name_filtered_list_xpm ),
                             wxNullBitmap, true, NULL,
                             _( "Find footprint by its name\nor filter the footprint list by the partial name\n"
                                "Ctrl+F to call the dialog to enter the filter string" ),
                             wxEmptyString );
+
+    if( m_tcFilterString == NULL )
+        m_tcFilterString = new wxTextCtrl( m_mainToolBar, ID_CVPCB_FILTER_TEXT_EDIT );
+
+    m_mainToolBar->AddControl( m_tcFilterString );
+
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();

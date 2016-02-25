@@ -66,7 +66,6 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
     EVT_MENU( wxID_EXIT, CVPCB_MAINFRAME::OnQuit )
     EVT_MENU( wxID_HELP, CVPCB_MAINFRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, CVPCB_MAINFRAME::GetKicadAbout )
-    EVT_MENU( ID_FIND_ITEMS, CVPCB_MAINFRAME::OnMenuSearch )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, CVPCB_MAINFRAME::OnConfigurePaths )
     EVT_MENU( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE, CVPCB_MAINFRAME::OnKeepOpenOnSave )
     EVT_MENU( ID_CVPCB_EQUFILES_LIST_EDIT, CVPCB_MAINFRAME::OnEditEquFilesList )
@@ -88,7 +87,8 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME,
-              CVPCB_MAINFRAME::OnToolbarSearch )
+              CVPCB_MAINFRAME::OnSelectFilteringFootprint )
+    EVT_TEXT( ID_CVPCB_FILTER_TEXT_EDIT, OnEnterFilteringText )
 
     // Frame events
     EVT_CLOSE( CVPCB_MAINFRAME::OnCloseWindow )
@@ -120,6 +120,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_undefinedComponentCnt = 0;
     m_skipComponentSelect   = false;
     m_filteringOptions      = 0;
+    m_tcFilterString        = NULL;
 
     /* Name of the document footprint list
      * usually located in share/modules/footprints_doc
@@ -481,54 +482,13 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     libraryName = m_libListBox->GetSelectedLibrary();
 
     m_footprintListBox->SetFootprints( m_FootprintsList, libraryName, component,
-                                       m_currentSearch, m_filteringOptions);
+                                       m_currentSearchPattern, m_filteringOptions);
 
-    RefreshAfterComponentSearch (component);
-}
-
-void CVPCB_MAINFRAME::OnToolbarSearch( wxCommandEvent& aEvent )
-{
-    if( m_skipComponentSelect )
-        return;
-
-    if(m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME ) )
-    {
-        m_filteringOptions |= FOOTPRINTS_LISTBOX::FILTERING_BY_NAME;
-        SearchDialogAndStore ();
-    }
-    else
-    {
-        m_filteringOptions &= ~FOOTPRINTS_LISTBOX::FILTERING_BY_NAME;
-        m_currentSearch = "";
-    }
-
-    OnSelectFilteringFootprint( aEvent );
-}
-
-void CVPCB_MAINFRAME::OnMenuSearch( wxCommandEvent& aEvent )
-{
-        if( m_skipComponentSelect )
-            return;
-
-        m_filteringOptions |= FOOTPRINTS_LISTBOX::FILTERING_BY_NAME;
-        SearchDialogAndStore();
-        OnSelectFilteringFootprint( aEvent );
-}
-
-void CVPCB_MAINFRAME::SearchDialogAndStore()
-{
-        wxTextEntryDialog myDialog( this, _("Find footprint"), _("Find"), "" );
-
-        if( myDialog.ShowModal() == wxID_OK )
-        {
-            m_currentSearch = myDialog.GetValue();
-        }
-
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME, !m_currentSearch.empty() );
+    refreshAfterComponentSearch (component);
 }
 
 
-void CVPCB_MAINFRAME::RefreshAfterComponentSearch (COMPONENT* component)
+void CVPCB_MAINFRAME::refreshAfterComponentSearch( COMPONENT* component )
 {
     // Tell AuiMgr that objects are changed !
     if( m_auimgr.GetManagedWindow() )   // Be sure Aui Manager is initialized
@@ -602,6 +562,7 @@ void CVPCB_MAINFRAME::OnSelectFilteringFootprint( wxCommandEvent& event )
         break;
 
     case ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME:
+        m_currentSearchPattern = m_tcFilterString->GetValue();
         option = FOOTPRINTS_LISTBOX::FILTERING_BY_NAME;
         break;
     }
@@ -620,6 +581,7 @@ void CVPCB_MAINFRAME::OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event )
 {
     event.Check( m_keepCvpcbOpen );
 }
+
 
 void CVPCB_MAINFRAME::OnFilterFPbyKeywords( wxUpdateUIEvent& event )
 {
@@ -642,6 +604,21 @@ void CVPCB_MAINFRAME::OnFilterFPbyLibrary( wxUpdateUIEvent& event )
 void CVPCB_MAINFRAME::OnFilterFPbyKeyName( wxUpdateUIEvent& event )
 {
     event.Check( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_NAME );
+}
+
+
+void CVPCB_MAINFRAME::OnEnterFilteringText( wxCommandEvent& aEvent )
+{
+    // Called when changing the filter string in main toolbar.
+    // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_NAME is set, update the list of
+    // available footprints which match the filter
+
+    m_currentSearchPattern = m_tcFilterString->GetValue();
+
+    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_NAME ) == 0 )
+        return;
+
+    OnSelectFilteringFootprint( aEvent );
 }
 
 
