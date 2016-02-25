@@ -88,7 +88,7 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
-    EVT_TEXT( ID_CVPCB_FILTER_TEXT_EDIT, OnEnterFilteringText )
+    EVT_TEXT( ID_CVPCB_FILTER_TEXT_EDIT, CVPCB_MAINFRAME::OnEnterFilteringText )
 
     // Frame events
     EVT_CLOSE( CVPCB_MAINFRAME::OnCloseWindow )
