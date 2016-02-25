@@ -29,13 +29,10 @@
 
 #include <fctsys.h>
 #include <wxstruct.h>
-#include <macros.h>
-#include <pgm_base.h>
-#include <wildcards_and_files_ext.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
-#include <cvstruct.h>
+#include <listview_classes.h>
 #include <cvpcb_id.h>
 
 
@@ -138,7 +135,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
 
     for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
-        if( aFilterType == UNFILTERED )
+        if( aFilterType == UNFILTERED_FP_LIST )
         {
             msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),
                         GetChars( aList.GetItem( ii ).GetNickname() ),
@@ -147,22 +144,22 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
             continue;
         }
 
-        if( (aFilterType & BY_LIBRARY) && !aLibName.IsEmpty()
-          && !aList.GetItem( ii ).InLibrary( aLibName ) )
+        if( (aFilterType & FILTERING_BY_LIBRARY) && !aLibName.IsEmpty()
+            && !aList.GetItem( ii ).InLibrary( aLibName ) )
             continue;
 
-        if( (aFilterType & BY_COMPONENT) && aComponent
-          && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).GetFootprintName() ) )
+        if( (aFilterType & FILTERING_BY_COMPONENT_KEYWORD) && aComponent
+            && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).GetFootprintName() ) )
             continue;
 
-        if( (aFilterType & BY_PIN_COUNT) && aComponent
-          && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
+        if( (aFilterType & FILTERING_BY_PIN_COUNT) && aComponent
+            && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
             continue;
 
         wxString itemsName = aList.GetItem( ii ).GetNickname().Lower () +
                              aList.GetItem (ii).GetFootprintName().Lower ();
 
-        if( (aFilterType & BY_NAME) && !footPrintName.IsEmpty()
+        if( (aFilterType & FILTERING_BY_NAME) && !footPrintName.IsEmpty()
             && itemsName.Find (footPrintName.Lower ()) == wxNOT_FOUND)
         {
             continue;

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2007-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,8 +41,6 @@
 
 void CVPCB_MAINFRAME::ReCreateHToolbar()
 {
-    wxConfigBase* config = Kiface().KifaceSettings();
-
     if( m_mainToolBar != NULL )
         return;
 
@@ -111,16 +109,6 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             _( "Find footprint by its name\nor filter the footprint list by the partial name\n"
                                "Ctrl+F to call the dialog to enter the filter string" ),
                             wxEmptyString );
-    if( config )
-    {
-        wxString key = wxT( FILTERFOOTPRINTKEY );
-        int      opt = config->Read( key, (long) 1 );
-
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME, opt & 8 );
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, opt & 4 );
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, opt & 2 );
-        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, opt & 1 );
-    }
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();

@@ -90,13 +90,14 @@ private:
     wxArrayString  m_footprintList;
 
 public:
+    // OR'ed mask to manage footprint filtering options
     enum FP_FILTER_T
     {
-        UNFILTERED   = 0,
-        BY_COMPONENT = 0x0001,
-        BY_PIN_COUNT = 0x0002,
-        BY_LIBRARY   = 0x0004,
-        BY_NAME      = 0x0008,
+        UNFILTERED_FP_LIST              = 0,
+        FILTERING_BY_COMPONENT_KEYWORD  = 0x0001,
+        FILTERING_BY_PIN_COUNT          = 0x0002,
+        FILTERING_BY_LIBRARY            = 0x0004,
+        FILTERING_BY_NAME               = 0x0008
     };
 
     FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,

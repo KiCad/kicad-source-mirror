@@ -48,7 +48,7 @@
 #include <cvpcb_mainframe.h>
 #include <class_DisplayFootprintsFrame.h>
 #include <cvpcb_id.h>
-#include <cvstruct.h>
+#include <listview_classes.h>
 
 #include <3d_viewer.h>
 
@@ -487,7 +487,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
     CVPCB_MAINFRAME* parentframe = (CVPCB_MAINFRAME *) GetParent();
 
-    wxString footprintName = parentframe->m_footprintListBox->GetSelectedFootprint();
+    wxString footprintName = parentframe->GetSelectedFootprint();
 
     if( !footprintName.IsEmpty() )
     {
@@ -495,7 +495,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
         SetTitle( msg );
         const FOOTPRINT_INFO* module_info =
-                parentframe->m_footprints.GetModuleInfo( footprintName );
+                parentframe->m_FootprintsList.GetModuleInfo( footprintName );
 
         const wxChar* libname;
 

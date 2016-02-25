@@ -669,7 +669,6 @@ public:
     void SetPrintSheetReference( bool aShow ) { m_printSheetReference = aShow; }
 
     // Plot functions:
-//    void ToPostProcess( wxCommandEvent& event );
     void PlotSchematic( wxCommandEvent& event );
 
     // read and save files

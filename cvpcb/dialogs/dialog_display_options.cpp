@@ -31,7 +31,7 @@
 #include <common.h>
 #include <cvpcb.h>
 #include <class_drawpanel.h>
-#include <cvstruct.h>
+#include <listview_classes.h>
 #include <class_DisplayFootprintsFrame.h>
 
 #include <dialog_display_options.h>

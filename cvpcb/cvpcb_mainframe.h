@@ -59,24 +59,23 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
 
     wxArrayString             m_footprintListEntries;
     wxString                  m_currentSearch;
-
-public:
-    bool                      m_KeepCvpcbOpen;
+    bool                      m_keepCvpcbOpen;
+    NETLIST                   m_netlist;
+    int                       m_filteringOptions;
+    wxAuiToolBar*             m_mainToolBar;
     FOOTPRINTS_LISTBOX*       m_footprintListBox;
     LIBRARY_LISTBOX*          m_libListBox;
     COMPONENTS_LISTBOX*       m_compListBox;
-    wxAuiToolBar*             m_mainToolBar;
+
+public:
     wxArrayString             m_ModuleLibNames;
     wxArrayString             m_EquFilesNames;
-    wxString                  m_NetlistFileExtension;
     wxString                  m_DocModulesFileName;
-    FOOTPRINT_LIST            m_footprints;
-    NETLIST                   m_netlist;
+    FOOTPRINT_LIST            m_FootprintsList;
 
 protected:
     int             m_undefinedComponentCnt;
     bool            m_modified;
-    bool            m_isEESchemaNetlist;
     bool            m_skipComponentSelect;      // true to skip OnSelectComponent event
                                                 // (in automatic selection/deletion of associations)
     PARAM_CFG_ARRAY m_projectFileParams;
@@ -103,6 +102,7 @@ public:
      * * Updates the footprint shown in footprint display window (if opened)
      */
     void             OnSelectComponent( wxListEvent& event );
+
     void             OnToolbarSearch (wxCommandEvent& aEvent);
     void             OnMenuSearch (wxCommandEvent& aEvent);
 
@@ -132,13 +132,6 @@ public:
 
     void             SaveProjectFile( wxCommandEvent& aEvent );
     void             SaveQuitCvpcb( wxCommandEvent& event );
-
-    /**
-     * Function LoadNetList
-     * reads a netlist selected by user when clicking on load netlist button or any entry
-     * in the file history menu.
-     */
-    void             LoadNetList( wxCommandEvent& event );
 
     /**
      * Function OnEditLibraryTable
@@ -175,6 +168,11 @@ public:
      */
     void             OnSelectFilteringFootprint( wxCommandEvent& event );
 
+    /**
+     * Function OnUpdateKeepOpenOnSave
+     * Command event handler to choose if CvPcb will be closed as soon as the footprint
+     * association is saved, or if it is left open.
+     */
     void             OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event );
 
     /**
@@ -196,11 +194,11 @@ public:
     void             CreateScreenCmp();
 
     /**
-     * Function SaveEdits
+     * Function SaveFootprintAssociation
      * saves the edits that the user has done by sending them back to eeschema
      * via the kiway.
      */
-    void SaveEdits();
+    void SaveFootprintAssociation();
 
     /**
      * Function ReadNetList
@@ -268,10 +266,9 @@ public:
      * Function UpdateTitle
      * sets the main window title bar text.
      * <p>
-     * If file name defined by CVPCB_MAINFRAME::m_NetlistFileName is not set, the title is
-     * set to the application name appended with no file.  Otherwise, the title is set to
-     * the full path and file name and read only is appended to the title if the user does
-     * not have write access to the file.
+     * If no current project open( eeschema run outside kicad manager with no schematic loaded),
+     * the title is set to the application name appended with "no project".
+     * Otherwise, the title shows the project name.
      */
     void UpdateTitle();
 
@@ -285,7 +282,18 @@ public:
 
     COMPONENT* GetSelectedComponent();
 
+    /**
+     * @return the FPID of the selected footprint in footprint listview
+     * or a empty string if no selection
+     */
+    const wxString GetSelectedFootprint();
+
 private:
+    // UI event handlers
+    void OnFilterFPbyKeywords( wxUpdateUIEvent& event );
+    void OnFilterFPbyPinCount( wxUpdateUIEvent& event );
+    void OnFilterFPbyLibrary( wxUpdateUIEvent& event );
+    void OnFilterFPbyKeyName( wxUpdateUIEvent& event );
 
     /**
      * read the .equ files and populate the list of equvalents
@@ -297,8 +305,7 @@ private:
     int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages = NULL );
 
     void RefreshAfterComponentSearch (COMPONENT* component);
-    int getFilterType ();
-    void SearchDialogAndStore ();
+    void SearchDialogAndStore();
 
 
     DECLARE_EVENT_TABLE()
