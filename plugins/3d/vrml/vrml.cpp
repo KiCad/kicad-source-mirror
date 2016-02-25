@@ -46,7 +46,7 @@
 #define PLUGIN_VRML_MAJOR 1
 #define PLUGIN_VRML_MINOR 3
 #define PLUGIN_VRML_PATCH 0
-#define PLUGIN_VRML_REVNO 0
+#define PLUGIN_VRML_REVNO 1
 
 
 const char* GetKicadPluginName( void )
@@ -197,9 +197,6 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
         wxLogTrace( MASK_VRML, " * [INFO] Processing VRML 1.0 file\n" );
 
         WRL1BASE* bp = new WRL1BASE;
-
-        // allow or ignore Inline{} files
-        bp->SetEnableInline( useInline );
 
         if( !bp->Read( proc ) )
         {

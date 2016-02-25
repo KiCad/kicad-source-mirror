@@ -40,7 +40,6 @@
 
 WRL1BASE::WRL1BASE() : WRL1NODE( NULL )
 {
-    m_useInline = false;
     m_Type = WRL1_BASE;
     m_dictionary = new NAMEREGISTER;
     return;
@@ -71,44 +70,6 @@ bool WRL1BASE::SetParent( WRL1NODE* aParent )
     #endif
 
     return false;
-}
-
-
-void WRL1BASE::SetEnableInline( bool enable )
-{
-    m_useInline = enable;
-    return;
-}
-
-
-bool WRL1BASE::GetEnableInline( void )
-{
-    return  m_useInline;
-}
-
-
-SGNODE* WRL1BASE::AddInlineData( const std::string& aName, WRL1INLINE* aObject )
-{
-    std::map< std::string, WRL1INLINE* >::iterator dp = m_inlineModels.find( aName );
-    // XXX;
-    // qwerty;
-    return NULL;
-}
-
-
-SGNODE* WRL1BASE::GetInlineData( const std::string& aName, WRL1INLINE* aObject )
-{
-    // XXX;
-    // qwerty;
-    return NULL;
-}
-
-
-void WRL1BASE::DelInlineData( const std::string& aName, WRL1INLINE* aObject )
-{
-    // XXX;
-    // qwerty;
-    return;
 }
 
 

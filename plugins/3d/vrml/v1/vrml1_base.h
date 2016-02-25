@@ -45,8 +45,6 @@ class WRL1INLINE;
 class WRL1BASE : public WRL1NODE
 {
 private:
-    bool m_useInline;
-
     // handle cases of USE / DEF
     bool implementUse( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool implementDef( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
@@ -61,20 +59,9 @@ private:
     bool readTransform( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
     bool readShapeHints( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
 
-    std::map< std::string, WRL1INLINE* > m_inlineModels;
-
 public:
     WRL1BASE();
     virtual ~WRL1BASE();
-
-    // function to enable/disable Inline{} expansion
-    void SetEnableInline( bool enable );
-    bool GetEnableInline( void );
-
-    // functions to manipulate Inline{} objects
-    SGNODE* AddInlineData( const std::string& aName, WRL1INLINE* aObject );
-    SGNODE* GetInlineData( const std::string& aName, WRL1INLINE* aObject );
-    void DelInlineData( const std::string& aName, WRL1INLINE* aObject );
 
     // function to read entire VRML file
     bool Read( WRLPROC& proc );
