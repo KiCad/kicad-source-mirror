@@ -150,14 +150,13 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
 
     wxString kmod;
 
-    // add the current working directory as the first entry by
-    // default; since CWD is not necessarily what we really want,
+    // add an entry for the default search path; at this point
+    // we cannot set a sensible default so we use an empty string.
     // the user may change this later with a call to SetProjectDir()
 
     S3D_ALIAS lpath;
     lpath.m_alias = _( "(DEFAULT)" );
-    lpath.m_pathvar = _( "(PROJECT DIR)" );
-    lpath.m_pathexp = wxFileName::GetCwd();
+    lpath.m_pathvar = _( "${PROJDIR}" );
     lpath.m_description = _( "Current project directory" );
     m_Paths.push_back( lpath );
 
@@ -275,7 +274,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     // check the path relative to the current project directory;
     // note: this is not necessarily the same as the current working
     // directory, which has already been checked
-    do
+    if( !sPL->m_pathexp.empty() )
     {
         wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
         wxString fullPath = fpath.GetPathWithSep() + tname;
@@ -291,7 +290,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
             return tname;
         }
-    } while( 0 );
+    }
 
     ++sPL;  // skip to item 2: KISYS3DMOD
 
@@ -334,7 +333,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
     while( sPL != ePL )
     {
-        if( !sPL->m_alias.Cmp( alias ) )
+        if( !sPL->m_alias.Cmp( alias ) && !sPL->m_pathexp.empty() )
         {
             wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
             wxString fullPath = fpath.GetPathWithSep() + relpath;
@@ -443,7 +442,7 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
         }
 
         // aliases with the same m_pathexp are acceptable (one or both
-        // aliases being testes may be expanded variables) but when shortening
+        // aliases being tested may be expanded variables) but when shortening
         // names the preference is for (a) a fully specified path in m_pathvar
         // then (b) the more senior alias in the list
         if( !sPL->m_pathexp.empty() && !tpath.m_pathexp.empty() )
