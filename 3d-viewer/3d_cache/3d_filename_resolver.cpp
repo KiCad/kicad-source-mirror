@@ -325,7 +325,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             wxString errmsg = _( "No such path; ensure KISYS3DMOD is correctly defined" );
             errmsg.append( "\n" );
             errmsg.append( tname );
-            wxMessageBox( errmsg, _( "3D file resolver" ) );
+            wxLogMessage( "%s\n", errmsg.ToUTF8() );
         }
 
         return wxEmptyString;
