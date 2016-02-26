@@ -322,7 +322,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         if( !( m_errflags & ERRFLG_RELPATH ) )
         {
             m_errflags |= ERRFLG_RELPATH;
-            wxString errmsg = _( "No such path; ensure KISYS3DMOD is correctly defined" );
+            wxString errmsg = _( "[3D File Resolver] No such path; ensure KISYS3DMOD is correctly defined" );
             errmsg.append( "\n" );
             errmsg.append( tname );
             wxLogMessage( "%s\n", errmsg.ToUTF8() );
@@ -357,10 +357,10 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     if( !( m_errflags & ERRFLG_ALIAS ) )
     {
         m_errflags |= ERRFLG_ALIAS;
-        wxString errmsg = _( "No such path; ensure the path alias is defined" );
+        wxString errmsg = _( "[3D File Resolver] No such path; ensure the path alias is defined" );
         errmsg.append( "\n" );
         errmsg.append( tname.substr( 1 ) );
-        wxMessageBox( errmsg, _( "3D file resolver" ) );
+        wxLogMessage( "%s\n", errmsg.ToUTF8() );
     }
 
     return wxEmptyString;
