@@ -259,10 +259,10 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         if( !( m_errflags & ERRFLG_ENVPATH ) )
         {
             m_errflags |= ERRFLG_ENVPATH;
-            wxString errmsg = _( "No such path; ensure the environment var is defined" );
+            wxString errmsg = _( "[3D File Resolver] No such path; ensure the environment var is defined" );
             errmsg.append( "\n" );
             errmsg.append( tname );
-            wxMessageBox( errmsg, _( "3D file resolver" ) );
+            wxLogMessage( "%s\n", errmsg.ToUTF8() );
         }
 
         return wxEmptyString;
