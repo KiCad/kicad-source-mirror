@@ -315,7 +315,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( item && (item->Type() == SCH_SHEET_T) )
         {
-            m_CurrentSheet->Push( (SCH_SHEET*) item );
+            m_CurrentSheet->push_back( (SCH_SHEET*) item );
             DisplayCurrentSheet();
         }
 
@@ -324,7 +324,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_LEAVE_SHEET:
         if( m_CurrentSheet->Last() != g_RootSheet )
         {
-            m_CurrentSheet->Pop();
+            m_CurrentSheet->pop_back();
             DisplayCurrentSheet();
         }
 

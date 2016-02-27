@@ -158,7 +158,7 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint
     m_Tree->SetItemBold( cellule, true );
 
     SCH_SHEET_PATH list;
-    list.Push( g_RootSheet );
+    list.push_back( g_RootSheet );
     m_Tree->SetItemData( cellule, new TreeItemData( list ) );
 
     if( m_Parent->GetCurrentSheet().Last() == g_RootSheet )
@@ -227,7 +227,7 @@ void HIERARCHY_NAVIG_DLG::BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId*  
             SCH_SHEET* sheet = (SCH_SHEET*) schitem;
             m_nbsheets++;
             menu = m_Tree->AppendItem( *previousmenu, sheet->GetName(), 0, 1 );
-            list->Push( sheet );
+            list->push_back( sheet );
             m_Tree->SetItemData( menu, new TreeItemData( *list ) );
             int ll = m_Tree->GetItemText( menu ).Len();
 
@@ -248,7 +248,7 @@ void HIERARCHY_NAVIG_DLG::BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId*  
 
             BuildSheetsTree( list, &menu );
             m_Tree->Expand( menu );
-            list->Pop();
+            list->pop_back();
         }
 
         schitem = schitem->Next();

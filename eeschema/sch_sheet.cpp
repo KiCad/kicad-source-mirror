@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2011 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -725,7 +725,7 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
 {
     if( m_screen )
     {
-        aList->Push( this );
+        aList->push_back( this );
 
         if( m_screen == aScreen )
             return true;
@@ -745,8 +745,9 @@ bool SCH_SHEET::LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList )
             strct = strct->Next();
         }
 
-        aList->Pop();
+        aList->pop_back();
     }
+
     return false;
 }
 
@@ -1082,7 +1083,7 @@ void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                 SCH_SHEET_PATH*      aSheetPath )
 {
     SCH_SHEET_PATH sheetPath = *aSheetPath;
-    sheetPath.Push( this );
+    sheetPath.push_back( this );
 
     for( size_t i = 0;  i < m_pins.size();  i++ )
     {

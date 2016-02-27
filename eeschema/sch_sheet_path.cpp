@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,6 @@
 
 #include <sch_reference_list.h>
 #include <class_library.h>
-#include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
 #include <template_fieldnames.h>
@@ -50,64 +49,25 @@
 
 SCH_SHEET_PATH::SCH_SHEET_PATH()
 {
-    for( int i = 0; i<DSLSZ; i++ )
-        m_sheets[i] = NULL;
-
-    m_numSheets = 0;
-}
-
-
-bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound )
-{
-    if( aFound )
-        return true;
-
-    if( GetCount() == 0 )
-        Push( g_RootSheet );
-
-    if( aPath == Path() )
-        return true;
-
-    SCH_ITEM* schitem = LastDrawList();
-
-    while( schitem && GetCount() < NB_MAX_SHEET )
-    {
-        if( schitem->Type() == SCH_SHEET_T )
-        {
-            SCH_SHEET* sheet = (SCH_SHEET*) schitem;
-            Push( sheet );
-
-            if( aPath == Path() )
-                return true;
-
-            if( BuildSheetPathInfoFromSheetPathValue( aPath ) )
-                return true;
-
-            Pop();
-        }
-
-        schitem = schitem->Next();
-    }
-
-    return false;
+    m_pageNumber = 0;
 }
 
 
 int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
 {
-    if( m_numSheets > aSheetPathToTest.m_numSheets )
+    if( size() > aSheetPathToTest.size() )
         return 1;
 
-    if( m_numSheets < aSheetPathToTest.m_numSheets )
+    if( size() < aSheetPathToTest.size() )
         return -1;
 
     //otherwise, same number of sheets.
-    for( unsigned i = 0; i<m_numSheets; i++ )
+    for( unsigned i = 0; i < size(); i++ )
     {
-        if( m_sheets[i]->GetTimeStamp() > aSheetPathToTest.m_sheets[i]->GetTimeStamp() )
+        if( at( i )->GetTimeStamp() > aSheetPathToTest.at( i )->GetTimeStamp() )
             return 1;
 
-        if( m_sheets[i]->GetTimeStamp() < aSheetPathToTest.m_sheets[i]->GetTimeStamp() )
+        if( at( i )->GetTimeStamp() < aSheetPathToTest.at( i )->GetTimeStamp() )
             return -1;
     }
 
@@ -117,8 +77,8 @@ int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
 
 SCH_SHEET* SCH_SHEET_PATH::Last() const
 {
-    if( m_numSheets )
-        return m_sheets[m_numSheets - 1];
+    if( !empty() )
+        return at( size() - 1 );
 
     return NULL;
 }
@@ -150,8 +110,8 @@ SCH_ITEM* SCH_SHEET_PATH::FirstDrawList() const
 {
     SCH_ITEM* item = NULL;
 
-    if( m_numSheets && m_sheets[0]->GetScreen() )
-        item = m_sheets[0]->GetScreen()->GetDrawItems();
+    if( !empty() && at( 0 )->GetScreen() )
+        item = at( 0 )->GetScreen()->GetDrawItems();
 
     /* @fixme - These lists really should be one of the boost pointer containers.  This
      *          is a brain dead hack to allow reverse iteration of EDA_ITEM linked
@@ -169,29 +129,6 @@ SCH_ITEM* SCH_SHEET_PATH::FirstDrawList() const
 }
 
 
-void SCH_SHEET_PATH::Push( SCH_SHEET* aSheet )
-{
-    wxCHECK_RET( m_numSheets < DSLSZ,
-                 wxString::Format( _( "Schematic sheets can only be nested %d levels deep." ),
-                                   DSLSZ ) );
-
-    m_sheets[ m_numSheets ] = aSheet;
-    m_numSheets++;
-}
-
-
-SCH_SHEET* SCH_SHEET_PATH::Pop()
-{
-    if( m_numSheets > 0 )
-    {
-        m_numSheets--;
-        return m_sheets[m_numSheets];
-    }
-
-    return NULL;
-}
-
-
 wxString SCH_SHEET_PATH::Path() const
 {
     wxString s, t;
@@ -201,9 +138,9 @@ wxString SCH_SHEET_PATH::Path() const
     // start at 1 to avoid the root sheet,
     // which does not need to be added to the path
     // it's timestamp changes anyway.
-    for( unsigned i = 1; i < m_numSheets; i++ )
+    for( unsigned i = 1; i < size(); i++ )
     {
-        t.Printf( _( "%8.8lX/" ), (long unsigned) m_sheets[i]->GetTimeStamp() );
+        t.Printf( _( "%8.8lX/" ), (long unsigned) at( i )->GetTimeStamp() );
         s = s + t;
     }
 
@@ -218,9 +155,9 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
     s = wxT( "/" );
 
     // start at 1 to avoid the root sheet, as above.
-    for( unsigned i = 1; i< m_numSheets; i++ )
+    for( unsigned i = 1; i < size(); i++ )
     {
-        s = s + m_sheets[i]->GetName() + wxT( "/" );
+        s = s + at( i )->GetName() + wxT( "/" );
     }
 
     return s;
@@ -255,7 +192,7 @@ void SCH_SHEET_PATH::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
     for( EDA_ITEM* item = LastDrawList();  item;  item = item->Next() )
     {
         if( item->Type() != SCH_COMPONENT_T )
-                continue;
+            continue;
 
         SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
         LIB_PART*       part = aLibs->FindLibPart( component->GetPartName() );
@@ -282,19 +219,9 @@ void SCH_SHEET_PATH::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
 }
 
 
-void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols )
+void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
+                                    bool aIncludePowerSymbols )
 {
-    // Search to sheet path number:
-    int sheetnumber = 1;    // 1 = root
-
-    SCH_SHEET_LIST sheetList;
-
-    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path; path = sheetList.GetNext(), sheetnumber++ )
-    {
-        if( Cmp( *path ) == 0 )
-            break;
-    }
-
     for( SCH_ITEM* item = LastDrawList(); item; item = item->Next() )
     {
         if( item->Type() == SCH_COMPONENT_T )
@@ -307,33 +234,28 @@ void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aRefer
                 continue;
 
             LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
+
             if( part )
             {
                 SCH_REFERENCE reference = SCH_REFERENCE( component, part, *this );
-                reference.SetSheetNumber( sheetnumber );
+                reference.SetSheetNumber( m_pageNumber );
                 aReferences.AddItem( reference );
             }
         }
     }
 }
 
-void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-       bool aIncludePowerSymbols )
+
+void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs,
+                                             SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+                                             bool aIncludePowerSymbols )
 {
-    // Find sheet path number
-    int sheetnumber = 1; // 1 = root
-
-    SCH_SHEET_LIST sheetList;
-
-    for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path; path = sheetList.GetNext(), sheetnumber++ )
-    {
-        if( Cmp( *path ) == 0 )
-            break;
-    }
 
     for( SCH_ITEM* item = LastDrawList(); item; item = item->Next() )
     {
-        if( item->Type() != SCH_COMPONENT_T ) continue;
+        if( item->Type() != SCH_COMPONENT_T )
+            continue;
+
         SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
         // Skip pseudo components, which have a reference starting with #.  This mainly
@@ -342,14 +264,16 @@ void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_RE
             continue;
 
         LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
+
         if( part && part->GetUnitCount() > 1 )
         {
             SCH_REFERENCE reference = SCH_REFERENCE( component, part, *this );
-            reference.SetSheetNumber( sheetnumber );
+            reference.SetSheetNumber( m_pageNumber );
             wxString reference_str = reference.GetRef();
 
             // Never lock unassigned references
-            if( reference_str[reference_str.Len() - 1] == '?' ) continue;
+            if( reference_str[reference_str.Len() - 1] == '?' )
+                continue;
 
             aRefList[reference_str].AddItem( reference );
         }
@@ -435,33 +359,14 @@ bool SCH_SHEET_PATH::SetComponentFootprint( const wxString& aReference, const wx
 }
 
 
-SCH_SHEET_PATH& SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& d1 )
-{
-    if( this == &d1 )     // Self assignment is bad!
-        return *this;
-
-    m_numSheets = d1.m_numSheets;
-
-    unsigned i;
-
-    for( i = 0; i < m_numSheets; i++ )
-        m_sheets[i] = d1.m_sheets[i];
-
-    for( ; i < DSLSZ; i++ )
-        m_sheets[i] = 0;
-
-    return *this;
-}
-
-
 bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
 {
-    if( m_numSheets != d1.m_numSheets )
+    if( size() != d1.size() )
         return false;
 
-    for( unsigned i = 0; i < m_numSheets; i++ )
+    for( unsigned i = 0; i < size(); i++ )
     {
-        if( m_sheets[i] != d1.m_sheets[i] )
+        if( at( i ) != d1[i] )
             return false;
     }
 
@@ -492,9 +397,9 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
     ///       located in the project folder which may or may not be desirable.
     unsigned i = 0;
 
-    while( i < m_numSheets )
+    while( i < size() )
     {
-        wxFileName cmpFn = m_sheets[i]->GetFileName();
+        wxFileName cmpFn = at( i )->GetFileName();
 
         if( cmpFn.IsRelative() )
             cmpFn.MakeAbsolute( rootFn.GetPath() );
@@ -508,7 +413,7 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
 
     // The destination sheet file name was not found in the sheet path or the destination
     // sheet file name is the root sheet so no recursion is possible.
-    if( i >= m_numSheets || i == 0 )
+    if( i >= size() || i == 0 )
         return false;
 
     // Walk back up to the root sheet to see if the source file name is already a parent in
@@ -517,7 +422,7 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
     {
         i -= 1;
 
-        wxFileName cmpFn = m_sheets[i]->GetFileName();
+        wxFileName cmpFn = at( i )->GetFileName();
 
         if( cmpFn.IsRelative() )
             cmpFn.MakeAbsolute( rootFn.GetPath() );
@@ -534,9 +439,9 @@ bool SCH_SHEET_PATH::TestForRecursion( const wxString& aSrcFileName,
 
 int SCH_SHEET_PATH::FindSheet( const wxString& aFileName ) const
 {
-    for( unsigned i = 0; i < m_numSheets; i++ )
+    for( unsigned i = 0; i < size(); i++ )
     {
-        if( m_sheets[i]->GetFileName().CmpNoCase( aFileName ) == 0 )
+        if( at( i )->GetFileName().CmpNoCase( aFileName ) == 0 )
             return (int)i;
     }
 
@@ -546,10 +451,10 @@ int SCH_SHEET_PATH::FindSheet( const wxString& aFileName ) const
 
 SCH_SHEET* SCH_SHEET_PATH::FindSheetByName( const wxString& aSheetName )
 {
-    for( unsigned i = 0; i < m_numSheets; i++ )
+    for( unsigned i = 0; i < size(); i++ )
     {
-        if( m_sheets[i]->GetName().CmpNoCase( aSheetName ) == 0 )
-            return m_sheets[i];
+        if( at( i )->GetName().CmpNoCase( aSheetName ) == 0 )
+            return at( i );
     }
 
     return NULL;
@@ -657,10 +562,17 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
         m_count = count;
         m_index = 0;
         m_list = new SCH_SHEET_PATH[ count ];
-        m_currList.Clear();
+        m_currList.clear();
     }
 
-    m_currList.Push( aSheet );
+    m_currList.push_back( aSheet );
+
+    /**
+     * @todo:  Schematic page number is currently a left over relic and is generated as
+     *         SCH_SHEET_PATH object is pushed to the list.  This only has meaning when
+     *         entire hierarchy is created from the root sheet down.
+     */
+    m_currList.SetPageNumber( m_index + 1 );
     m_list[m_index] = m_currList;
     m_index++;
 
@@ -680,7 +592,7 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
         }
     }
 
-    m_currList.Pop();
+    m_currList.pop_back();
 }
 
 
@@ -896,7 +808,7 @@ bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
         {
             SCH_SHEET_PATH* sheetPath = aSrcSheetHierarchy.GetSheet( j );
 
-            for( unsigned k = 0; k < sheetPath->GetCount(); k++ )
+            for( unsigned k = 0; k < sheetPath->size(); k++ )
             {
                 if( m_list[i].TestForRecursion( sheetPath->GetSheet( k )->GetFileName(),
                                                 aDestFileName ) )

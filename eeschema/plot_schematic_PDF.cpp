@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,23 +67,20 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
     // First page handling is different
     bool first_page = true;
+
     do
     {
         // Step over the schematic hierarchy
         if( aPlotAll )
         {
-            SCH_SHEET_PATH list;
+            wxCHECK_RET( sheetpath != NULL, wxT( "Attempt to plot undefined sheet path." ) );
 
-            if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
-            {
-                m_parent->SetCurrentSheet( list );
-                m_parent->GetCurrentSheet().UpdateAllScreenReferences();
-                m_parent->SetSheetNumberAndCount();
-                screen = m_parent->GetCurrentSheet().LastScreen();
-            }
-            else // Should not happen
-                wxASSERT( 0 );
+            SCH_SHEET_PATH list = *sheetpath;
 
+            m_parent->SetCurrentSheet( list );
+            m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+            m_parent->SetSheetNumberAndCount();
+            screen = m_parent->GetCurrentSheet().LastScreen();
             sheetpath = SheetList.GetNext();
         }
 
@@ -99,7 +96,8 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
 
                 if( !plotter->OpenFile( plotFileName.GetFullPath() ) )
                 {
-                    msg.Printf( _( "Unable to create file '%s'.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                    msg.Printf( _( "Unable to create file '%s'.\n" ),
+                                GetChars( plotFileName.GetFullPath() ) );
                     reporter.Report( msg, REPORTER::RPT_ERROR );
                     delete plotter;
                     return;
@@ -139,14 +137,12 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
     msg.Printf( _( "Plot: '%s' OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
     reporter.Report( msg, REPORTER::RPT_ACTION );
 
-
-    restoreEnvironment(plotter, oldsheetpath );
-
+    restoreEnvironment( plotter, oldsheetpath );
 }
 
 
 void DIALOG_PLOT_SCHEMATIC::restoreEnvironment( PDF_PLOTTER* aPlotter,
-                            SCH_SHEET_PATH& aOldsheetpath )
+                                                SCH_SHEET_PATH& aOldsheetpath )
 {
     aPlotter->EndPlot();
     delete aPlotter;

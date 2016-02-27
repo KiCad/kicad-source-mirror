@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
     if( aPrintAll )
     {
         SCH_SHEET_PATH* sheetpath;
-        SCH_SHEET_PATH  oldsheetpath    = m_parent->GetCurrentSheet();
+        SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
         SCH_SHEET_LIST  SheetList( NULL );
         sheetpath = SheetList.GetFirst();
         SCH_SHEET_PATH  list;
@@ -62,20 +62,11 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
             }
 
             SCH_SCREEN*  screen;
-            list.Clear();
-
-            if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
-            {
-                m_parent->SetCurrentSheet( list );
-                m_parent->GetCurrentSheet().UpdateAllScreenReferences();
-                m_parent->SetSheetNumberAndCount();
-                screen = m_parent->GetCurrentSheet().LastScreen();
-            }
-            else // Should not happen
-            {
-                return;
-            }
-
+            list = *sheetpath;
+            m_parent->SetCurrentSheet( list );
+            m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+            m_parent->SetSheetNumberAndCount();
+            screen = m_parent->GetCurrentSheet().LastScreen();
             sheetpath = SheetList.GetNext();
 
             try

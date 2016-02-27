@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,11 +76,11 @@
  * (usable in flat and simple hierarchies).
  */
 
+#include "sch_sheet.h"       // SCH_SHEETS
 
 class wxFindReplaceData;
 class SCH_SCREEN;
 class SCH_MARKER;
-class SCH_SHEET;
 class SCH_ITEM;
 class SCH_REFERENCE_LIST;
 class PART_LIBS;
@@ -96,39 +96,34 @@ typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
 
 /**
  * Class SCH_SHEET_PATH
- * handles access to a sheet by way of a path.
+ *
+ * handles access to a stack of flattened #SCH_SHEET objects by way of a path for
+ * creating a flattened schematic hierarchy.
+ *
  * <p>
- * The member m_sheets stores the list of sheets from the first (usually
- * g_RootSheet) to a given sheet in last position.
- * The _last_ sheet is usually the sheet we want to select or reach (which is
- * what the function Last() returns).
- * Others sheets constitute the "path" from the first to the last sheet.
+ * The #SCH_SHEET objects are stored in a list from first (usually the root sheet) to a
+ * given sheet in last position.  The _last_ sheet is usually the sheet we want to select
+ * or reach (which is what the function Last() returns).   Others sheets constitute the
+ * "path" from the first to the last sheet.
  * </p>
  */
-class SCH_SHEET_PATH
+class SCH_SHEET_PATH : public SCH_SHEETS
 {
-#define DSLSZ 32          // Max number of levels for a sheet path
+#define MAX_SHEET_DEPTH 32         /// Maximum number of levels for a sheet path.
 
-    SCH_SHEET* m_sheets[ DSLSZ ];
-    unsigned   m_numSheets;
+    int m_pageNumber;              /// Page numbers are maintained by the sheet load order.
 
 public:
     SCH_SHEET_PATH();
 
-    void Clear()
-    {
-        m_numSheets = 0;
-    }
+    void SetPageNumber( int aPageNumber ) { m_pageNumber = aPageNumber; }
 
-    unsigned GetCount()
-    {
-        return m_numSheets;
-    }
+    int GetPageNumber() const { return m_pageNumber; }
 
-    SCH_SHEET* GetSheet( unsigned index )
+    SCH_SHEET* GetSheet( unsigned aIndex )
     {
-        if( index < m_numSheets )
-            return m_sheets[index];
+        if( aIndex < size() )
+            return at( aIndex );
 
         return NULL;
     }
@@ -172,24 +167,6 @@ public:
     SCH_ITEM* FirstDrawList() const;
 
     /**
-     * Function Push
-     * store (push) aSheet in list
-     * @param aSheet = pointer to the SCH_SHEET to store in list
-     * Push is used when entered a sheet to select or analyze it
-     * This is like cd &ltdirectory&gt in directories navigation
-     */
-    void Push( SCH_SHEET* aSheet );
-
-    /**
-     * Function Pop
-     * retrieves (pop) the last entered sheet and remove it from list
-     * @return a SCH_SHEET* pointer to the removed sheet in list
-     * Pop is used when leaving a sheet after a selection or analyze
-     * This is like cd .. in directories navigation
-     */
-    SCH_SHEET* Pop();
-
-    /**
      * Function Path
      * the path uses the time stamps which do not changes even when editing
      * sheet parameters
@@ -205,15 +182,6 @@ public:
      * sheet parameters).
      */
     wxString PathHumanReadable() const;
-
-    /**
-     * Function BuildSheetPathInfoFromSheetPathValue
-     * Fill this with data to access to the hierarchical sheet known by its path \a aPath
-     * @param aPath = path of the sheet to reach (in non human readable format)
-     * @param aFound - Please document me.
-     * @return true if success else false
-     */
-    bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound = false );
 
     /**
      * Function UpdateAllScreenReferences
@@ -321,7 +289,15 @@ public:
      */
     SCH_SHEET* FindSheetByName( const wxString& aSheetName );
 
-    SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& d1 );
+    /**
+     * Function FindSheetByPageNumber
+     *
+     * searches the #SCH_SHEET_LIST for a sheet with \a aPageNumber.
+     *
+     * @param aPageNumber is the number of the sheet to find.
+     * @return a pointer to a #SCH_SHEET object page \a aPageNumber if found or NULL if not found.
+     */
+    SCH_SHEET* FindSheetByPageNumber( int aPageNumber );
 
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
