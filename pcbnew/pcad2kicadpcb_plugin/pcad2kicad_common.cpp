@@ -37,8 +37,11 @@
 
 namespace PCAD2KICAD {
 
-// PCAD stroke font average ratio of width to height
-const double TEXT_WIDTH_TO_HEIGHT = 0.79;
+// PCAD stroke font average ratio of width to size
+const double TEXT_WIDTH_TO_SIZE_AVERAGE = 0.79;
+// PCAD proportions of stroke font
+const double TEXT_HEIGHT_TO_SIZE = 0.656;
+const double TEXT_WIDTH_TO_SIZE = 0.656;
 
 wxString GetWord( wxString* aStr )
 {
@@ -403,10 +406,53 @@ void SetFontProperty( XNODE*        aNode,
     }
 }
 
+void SetTextJustify( EDA_TEXT* aText, TTEXT_JUSTIFY aJustify )
+{
+    switch( aJustify )
+    {
+    case LowerLeft:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+    case LowerCenter:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+    case LowerRight:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+    case UpperLeft:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+    case UpperCenter:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+    case UpperRight:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+    case Left:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+    case Center:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+    case Right:
+        aText->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        aText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+    }
+}
+
 int CalculateTextLengthSize( TTEXTVALUE* aText )
 {
     return KiROUND( (double) aText->text.Len() *
-                    (double) aText->textHeight * TEXT_WIDTH_TO_HEIGHT );
+                    (double) aText->textHeight * TEXT_WIDTH_TO_SIZE_AVERAGE );
 }
 
 void CorrectTextPosition( TTEXTVALUE* aValue )
@@ -502,6 +548,11 @@ void CorrectTextPosition( TTEXTVALUE* aValue )
     }
 }
 
+void SetTextSizeFromStrokeFontHeight( EDA_TEXT* aText, int aTextHeight )
+{
+    aText->SetSize( wxSize( KiROUND( aTextHeight * TEXT_WIDTH_TO_SIZE ),
+                            KiROUND( aTextHeight * TEXT_HEIGHT_TO_SIZE ) ) );
+}
 
 XNODE* FindNode( XNODE* aChild, wxString aTag )
 {

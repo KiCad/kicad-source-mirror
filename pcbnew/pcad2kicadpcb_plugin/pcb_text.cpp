@@ -77,6 +77,7 @@ void PCB_TEXT::Parse( XNODE*        aNode,
     }
 
     aNode->GetAttribute( wxT( "Name" ), &m_name.text );
+    m_name.text.Replace( "\r", "" );
 
     str = FindNodeGetContent( aNode, wxT( "justify" ) );
     m_name.justify = GetJustifyIdentificator( str );
@@ -100,25 +101,23 @@ void PCB_TEXT::AddToModule( MODULE* aModule )
 
 void PCB_TEXT::AddToBoard()
 {
-    // Simple, not the best, but acceptable text positioning.
     m_name.textPositionX = m_positionX;
     m_name.textPositionY = m_positionY;
     m_name.textRotation = m_rotation;
-    CorrectTextPosition( &m_name );
 
     TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
     m_board->Add( pcbtxt, ADD_APPEND );
 
     pcbtxt->SetText( m_name.text );
 
-    pcbtxt->SetSize( wxSize( KiROUND( m_name.textHeight / 2 ),
-                             KiROUND( m_name.textHeight / 1.1 ) ) );
+    SetTextSizeFromStrokeFontHeight( pcbtxt, m_name.textHeight );
 
     pcbtxt->SetThickness( m_name.textstrokeWidth );
     pcbtxt->SetOrientation( m_name.textRotation );
 
-    pcbtxt->SetTextPosition( wxPoint( m_name.correctedPositionX,
-                                      m_name.correctedPositionY ) );
+    SetTextJustify( pcbtxt, m_name.justify );
+    pcbtxt->SetTextPosition( wxPoint( m_name.textPositionX,
+                                      m_name.textPositionY ) );
 
     pcbtxt->SetMirrored( m_name.mirror );
     pcbtxt->SetTimeStamp( 0 );

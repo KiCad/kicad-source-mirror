@@ -34,6 +34,8 @@
 #include <wx/xml/xml.h>
 #include <xnode.h>
 
+#include <eda_text.h>
+
 namespace PCAD2KICAD
 {
 
@@ -92,8 +94,11 @@ extern void         SetFontProperty( XNODE*         aNode,
                                      TTEXTVALUE*    aTextValue,
                                      wxString       aDefaultMeasurementUnit,
                                      wxString       aActualConversion );
+extern void         SetTextJustify( EDA_TEXT* aText, TTEXT_JUSTIFY aJustify );
 extern int          CalculateTextLengthSize( TTEXTVALUE* aText );
 extern void         CorrectTextPosition( TTEXTVALUE* aValue );
+extern void         SetTextSizeFromStrokeFontHeight( EDA_TEXT* aText,
+                                                     int aTextHeight );
 
 extern XNODE*       FindNode( XNODE* aChild, wxString aTag );
 extern wxString     FindNodeGetContent( XNODE* aChild, wxString aTag );

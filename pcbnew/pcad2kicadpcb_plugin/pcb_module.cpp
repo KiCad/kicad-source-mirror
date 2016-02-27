@@ -533,8 +533,7 @@ void PCB_MODULE::AddToBoard()
     ref_text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
 
     ref_text->SetPos0( wxPoint( m_name.correctedPositionX, m_name.correctedPositionY ) );
-    ref_text->SetSize( wxSize( KiROUND( m_name.textHeight / 2 ),
-                               KiROUND( m_name.textHeight / 1.5 ) ) );
+    SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
 
     r = m_name.textRotation - m_rotation;
     ref_text->SetOrientation( r );
@@ -556,8 +555,7 @@ void PCB_MODULE::AddToBoard()
     val_text->SetType( TEXTE_MODULE::TEXT_is_VALUE );
 
     val_text->SetPos0( wxPoint( m_value.correctedPositionX, m_value.correctedPositionY ) );
-    val_text->SetSize( wxSize( KiROUND( m_value.textHeight / 2 ),
-                               KiROUND( m_value.textHeight / 1.5 ) ) );
+    SetTextSizeFromStrokeFontHeight( val_text, m_value.textHeight );
 
     r = m_value.textRotation - m_rotation;
     val_text->SetOrientation( r );
