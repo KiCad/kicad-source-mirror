@@ -22,6 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+
+#ifndef __DIALOG_EDIT_MODULE_FOR_BOARDEDITOR__
+#define __DIALOG_EDIT_MODULE_FOR_BOARDEDITOR__
+
+
 #include <dialog_edit_module_for_BoardEditor_base.h>
 #include <3d_struct.h>
 
@@ -83,5 +88,8 @@ private:
     void GotoModuleEditor( wxCommandEvent& event );
     void ExchangeModule( wxCommandEvent& event );
     void ModuleOrientEvent( wxCommandEvent& event );
+    void Cfg3DPath( wxCommandEvent& event );
 };
 
+
+#endif      // __DIALOG_EDIT_MODULE_FOR_BOARDEDITOR__

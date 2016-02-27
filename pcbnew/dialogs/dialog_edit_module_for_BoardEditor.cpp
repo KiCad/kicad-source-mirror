@@ -808,3 +808,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
     m_ValueCtrl->SetValue( m_ValueCopy->GetText() );
 }
 
+
+void DIALOG_MODULE_BOARD_EDITOR::Cfg3DPath( wxCommandEvent& event )
+{
+    S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() );
+}

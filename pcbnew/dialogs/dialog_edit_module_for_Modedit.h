@@ -74,6 +74,7 @@ private:
     }
     void OnCancelClick( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
+    void Cfg3DPath( wxCommandEvent& event );
 };
 
 

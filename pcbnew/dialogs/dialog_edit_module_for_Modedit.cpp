@@ -630,3 +630,9 @@ void DIALOG_MODULE_MODULE_EDITOR::OnEditValue(wxCommandEvent& event)
     m_parent->SetCrossHairPosition( tmp );
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
 }
+
+
+void DIALOG_MODULE_MODULE_EDITOR::Cfg3DPath( wxCommandEvent& event )
+{
+    S3D::Configure3DPaths( this, Prj().Get3DCacheManager()->GetResolver() );
+}
