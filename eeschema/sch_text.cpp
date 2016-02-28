@@ -102,11 +102,11 @@ static int* TemplateShape[5][4] =
 
 SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     SCH_ITEM( NULL, aType ),
-    EDA_TEXT( text )
+    EDA_TEXT( text ),
+    m_shape( NET_INPUT )
 {
     m_Layer = LAYER_NOTES;
     m_Pos = pos;
-    m_shape = 0;
     m_isDangling = false;
     m_MultilineAllowed = true;
     m_schematicOrientation = 0;

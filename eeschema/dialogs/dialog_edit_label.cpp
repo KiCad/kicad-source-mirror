@@ -301,7 +301,8 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
     m_CurrentText->SetSize( wxSize( value, value ) );
 
     if( m_TextShape )
-        m_CurrentText->SetShape( m_TextShape->GetSelection() );
+        /// @todo move cast to widget
+        m_CurrentText->SetShape( static_cast<TypeSheetLabel>( m_TextShape->GetSelection() ) );
 
     int style = m_TextStyle->GetSelection();
 

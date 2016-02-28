@@ -5,6 +5,8 @@
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "pin_shape_combobox.h"
+#include "pin_type_combobox.h"
 #include "wx/bmpcbox.h"
 
 #include "dialog_lib_edit_pin_base.h"
@@ -61,14 +63,14 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	fgSizerPins->Add( m_staticTextEType, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_choiceElectricalType = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY ); 
+	m_choiceElectricalType = new PinTypeComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY ); 
 	fgSizerPins->Add( m_choiceElectricalType, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	m_staticTextGstyle = new wxStaticText( this, wxID_ANY, _("Graphic &Style:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGstyle->Wrap( -1 );
 	fgSizerPins->Add( m_staticTextGstyle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_choiceStyle = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY ); 
+	m_choiceStyle = new PinShapeComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY ); 
 	fgSizerPins->Add( m_choiceStyle, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 	
 	

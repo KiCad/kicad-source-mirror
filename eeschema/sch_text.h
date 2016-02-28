@@ -58,7 +58,7 @@ extern const char* SheetLabelType[];    /* names of types of labels */
 class SCH_TEXT : public SCH_ITEM, public EDA_TEXT
 {
 protected:
-    int m_shape;
+    TypeSheetLabel m_shape;
 
     /// True if not connected to another object if the object derive from SCH_TEXT
     /// supports connections.
@@ -120,9 +120,9 @@ public:
 
     int GetOrientation() { return m_schematicOrientation; }
 
-    int GetShape() const { return m_shape; }
+    TypeSheetLabel GetShape() const { return m_shape; }
 
-    void SetShape( int aShape ) { m_shape = aShape; }
+    void SetShape( TypeSheetLabel aShape ) { m_shape = aShape; }
 
     /**
      * Function GetSchematicTextOffset (virtual)

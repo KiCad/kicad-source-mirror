@@ -27,7 +27,7 @@
 
 #include <wx/htmllbox.h>
 #include <vector>
-#include <lib_pin.h>        // For PIN_NMAX definition
+#include <lib_pin.h>        // For PINTYPE_COUNT definition
 
 #include <dialog_erc_base.h>
 #include "dialog_erc_listbox.h"
@@ -40,7 +40,7 @@ class DIALOG_ERC : public DIALOG_ERC_BASE
 
 private:
     SCH_EDIT_FRAME* m_parent;
-    wxBitmapButton* m_buttonList[PIN_NMAX][PIN_NMAX];
+    wxBitmapButton* m_buttonList[PINTYPE_COUNT][PINTYPE_COUNT];
     bool            m_initialized;
     const SCH_MARKER* m_lastMarkerFound;
     static bool     m_writeErcFile;

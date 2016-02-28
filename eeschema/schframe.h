@@ -38,6 +38,8 @@
 #include <class_sch_screen.h>
 #include <sch_collectors.h>
 
+// enum TypeSheetLabel
+#include <sch_text.h>
 
 class LIB_EDIT_FRAME;
 class LIB_VIEW_FRAME;
@@ -173,7 +175,7 @@ private:
     wxArrayString   m_componentLibFiles;
     */
 
-    static int      m_lastSheetPinType;         ///< Last sheet pin type.
+    static TypeSheetLabel      m_lastSheetPinType;         ///< Last sheet pin type.
     static wxSize   m_lastSheetPinTextSize;     ///< Last sheet pin text size.
     static wxPoint  m_lastSheetPinPosition;     ///< Last sheet pin position.
 

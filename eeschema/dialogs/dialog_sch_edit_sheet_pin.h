@@ -34,6 +34,9 @@
 
 #include <dialog_sch_edit_sheet_pin_base.h>
 
+// enum TypeSheetLabel
+#include <sch_text.h>
+
 
 class DIALOG_SCH_EDIT_SHEET_PIN : public DIALOG_SCH_EDIT_SHEET_PIN_BASE
 {
@@ -49,8 +52,9 @@ public:
     void SetTextWidth( const wxString& aWidth ) { m_textWidth->SetValue( aWidth ); }
     wxString GetTextWidth() const { return m_textWidth->GetValue(); }
 
-    void SetConnectionType( int aType ) { m_choiceConnectionType->SetSelection( aType ); }
-    int GetConnectionType() const { return m_choiceConnectionType->GetCurrentSelection(); }
+    void SetConnectionType( TypeSheetLabel aType ) { m_choiceConnectionType->SetSelection( aType ); }
+    /// @todo move cast to widget
+    TypeSheetLabel GetConnectionType() const { return static_cast<TypeSheetLabel>( m_choiceConnectionType->GetCurrentSelection() ); }
 
     void SetTextHeightUnits( const wxString& aUnit ) { m_staticHeightUnits->SetLabel( aUnit ); }
     void SetTextWidthUnits( const wxString& aUnit ) { m_staticWidthUnits->SetLabel( aUnit ); }

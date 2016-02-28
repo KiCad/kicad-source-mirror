@@ -57,7 +57,7 @@ static wxPoint OldPos;
 static wxPoint PinPreviousPos;
 static ELECTRICAL_PINTYPE LastPinType   = PIN_INPUT;
 static int     LastPinOrient        = PIN_RIGHT;
-static int     LastPinShape         = NONE;
+static GRAPHIC_PINSHAPE LastPinShape = PINSHAPE_LINE;
 static bool    LastPinCommonConvert = false;
 static bool    LastPinCommonUnit    = false;
 static bool    LastPinVisible       = true;
@@ -104,10 +104,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     wxString units = GetUnitsLabel( g_UserUnit );
     dlg.SetOrientationList( LIB_PIN::GetOrientationNames(), LIB_PIN::GetOrientationSymbols() );
     dlg.SetOrientation( LIB_PIN::GetOrientationCodeIndex( pin->GetOrientation() ) );
-    dlg.SetStyleList( LIB_PIN::GetStyleNames(), LIB_PIN::GetStyleSymbols() );
-    dlg.SetStyle( LIB_PIN::GetStyleCodeIndex( pin->GetShape() ) );
-    dlg.SetElectricalTypeList( LIB_PIN::GetElectricalTypeNames(),
-                               LIB_PIN::GetElectricalTypeSymbols() );
+    dlg.SetStyle( pin->GetShape() );
     dlg.SetElectricalType( pin->GetType() );
     dlg.SetPinName( pin->GetName() );
     dlg.SetPinNameTextSize( StringFromValue( g_UserUnit, pin->GetNameTextSize() ) );
@@ -147,7 +144,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     LastPinNumSize = ValueFromString( g_UserUnit, dlg.GetPadNameTextSize() );
     LastPinOrient = LIB_PIN::GetOrientationCode( dlg.GetOrientation() );
     LastPinLength = ValueFromString( g_UserUnit, dlg.GetLength() );
-    LastPinShape = LIB_PIN::GetStyleCode( dlg.GetStyle() );
+    LastPinShape = dlg.GetStyle();
     LastPinType = dlg.GetElectricalType();
     LastPinCommonConvert = dlg.GetAddToAllBodyStyles();
     LastPinCommonUnit = dlg.GetAddToAllParts();
