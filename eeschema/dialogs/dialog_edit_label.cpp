@@ -302,7 +302,7 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     if( m_TextShape )
         /// @todo move cast to widget
-        m_CurrentText->SetShape( static_cast<TypeSheetLabel>( m_TextShape->GetSelection() ) );
+        m_CurrentText->SetShape( static_cast<PINSHEETLABEL_SHAPE>( m_TextShape->GetSelection() ) );
 
     int style = m_TextStyle->GetSelection();
 

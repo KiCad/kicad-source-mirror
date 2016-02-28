@@ -311,12 +311,12 @@ void LIB_PIN::SetShape( GRAPHIC_PINSHAPE aShape )
 
 void LIB_PIN::SetType( ELECTRICAL_PINTYPE aType )
 {
-    assert( aType >= 0 && aType < (int) PINTYPE_COUNT );
+    assert( aType >= 0 && aType < (int)PINTYPE_COUNT );
 
     if( aType < PIN_INPUT )
         aType = PIN_INPUT;
 
-    if( aType >= PINTYPE_COUNT )
+    if( aType >= (int)PINTYPE_COUNT )
         aType = PIN_NC;
 
     if( m_type != aType )

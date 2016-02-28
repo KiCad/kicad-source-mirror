@@ -41,10 +41,10 @@
 #include <eeschema_id.h>
 
 
-static TypeSheetLabel   lastGlobalLabelShape = NET_INPUT;
-static int              lastTextOrientation = 0;
-static bool             lastTextBold = false;
-static bool             lastTextItalic = false;
+static PINSHEETLABEL_SHAPE  lastGlobalLabelShape = NET_INPUT;
+static int                  lastTextOrientation = 0;
+static bool                 lastTextBold = false;
+static bool                 lastTextItalic = false;
 
 
 void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC )
