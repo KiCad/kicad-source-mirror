@@ -116,7 +116,7 @@
  *  Return NULL if out of bounds.   */
 #define list_nth( elt, list, n )                                \
     MACRO_BEGIN                                                 \
-    int _x; /* only evaluate n once */                         \
+    int _x;    /* only evaluate n once */                         \
     for( _x = (n), elt = list; _x && elt; _x--, elt = elt->next ) {}   \
     MACRO_END
 
@@ -124,7 +124,7 @@
  *  Return NULL if out of bounds.   */
 #define list_nth_hook( elt, list, n, hook )                     \
     MACRO_BEGIN                                                 \
-    int _x; /* only evaluate n once */                         \
+    int _x;    /* only evaluate n once */                         \
     for( _x = (n), elt = list, hook = &list; _x && elt; \
          _x--, hook = &elt->next, elt = elt->next ) {}   \
     MACRO_END
@@ -265,8 +265,8 @@
 
 #define dlist_append( head, end, elt )                    \
     MACRO_BEGIN                                            \
-    elt->prev = end;                   \
-    elt->next = NULL;                  \
+    elt->prev   = end;                   \
+    elt->next   = NULL;                  \
     if( end ) {                         \
         end->next = elt;                     \
     } \
@@ -294,8 +294,8 @@
         else {                         \
             end = NULL;                    \
         }                            \
-        elt->prev = NULL;                    \
-        elt->next = NULL;                    \
+        elt->prev   = NULL;                    \
+        elt->next   = NULL;                    \
     }                          \
     MACRO_END
 

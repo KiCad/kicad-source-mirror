@@ -5,6 +5,10 @@
 
 /* Routines for manipulating bitmaps, including reading pbm files. */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdio.h>
 
 #include "bitmap.h"
@@ -181,7 +185,7 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
 {
     potrace_bitmap_t* bm;
     int x, y, i, b, b1, sum;
-    int bpr; /* bytes per row (as opposed to 4*bm->c) */
+    int bpr;    /* bytes per row (as opposed to 4*bm->c) */
     int w, h, max;
 
     bm = NULL;
@@ -301,7 +305,7 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
     case '4':
         /* read P4 format: PBM raw */
 
-        b = fgetc( f ); /* read single white-space character after height */
+        b = fgetc( f );    /* read single white-space character after height */
 
         if( b==EOF )
         {
@@ -339,7 +343,7 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
             goto format_error;
         }
 
-        b = fgetc( f ); /* read single white-space character after max */
+        b = fgetc( f );    /* read single white-space character after max */
 
         if( b==EOF )
         {
@@ -382,7 +386,7 @@ static int bm_readbody_pnm( FILE* f, double threshold, potrace_bitmap_t** bmp, i
             goto format_error;
         }
 
-        b = fgetc( f ); /* read single white-space character after max */
+        b = fgetc( f );    /* read single white-space character after max */
 
         if( b==EOF )
         {
@@ -573,6 +577,9 @@ static int bmp_forward( FILE* f, int pos )
 /* correct y-coordinate for top-down format */
 #define ycorr( y ) (bmpinfo.topdown ? bmpinfo.h - 1 - y : y)
 
+/* safe colortable access */
+#define COLTABLE( c ) ( (c) < bmpinfo.ncolors ? coltable[(c)] : 0 )
+
 /* read BMP stream after magic number. Return values as for bm_read.
  *  We choose to be as permissive as possible, since there are many
  *  programs out there which produce BMP. For instance, ppmtobmp can
@@ -599,7 +606,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     bm = NULL;
     coltable = NULL;
 
-    bmp_pos = 2; /* set file position */
+    bmp_pos = 2;    /* set file position */
 
     /* file header (minus magic number) */
     TRY( bmp_readint( f, 4, &bmpinfo.FileSize ) );
@@ -613,7 +620,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
         || bmpinfo.InfoSize == 108 || bmpinfo.InfoSize == 124 )
     {
         /* Windows or new OS/2 format */
-        bmpinfo.ctbits = 32; /* sample size in color table */
+        bmpinfo.ctbits = 32;    /* sample size in color table */
         TRY( bmp_readint( f, 4, &bmpinfo.w ) );
         TRY( bmp_readint( f, 4, &bmpinfo.h ) );
         TRY( bmp_readint( f, 2, &bmpinfo.Planes ) );
@@ -625,7 +632,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
         TRY( bmp_readint( f, 4, &bmpinfo.ncolors ) );
         TRY( bmp_readint( f, 4, &bmpinfo.ColorsImportant ) );
 
-        if( bmpinfo.InfoSize >= 108 ) /* V4 and V5 bitmaps */
+        if( bmpinfo.InfoSize >= 108 )    /* V4 and V5 bitmaps */
         {
             TRY( bmp_readint( f, 4, &bmpinfo.RedMask ) );
             TRY( bmp_readint( f, 4, &bmpinfo.GreenMask ) );
@@ -656,7 +663,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     else if( bmpinfo.InfoSize == 12 )
     {
         /* old OS/2 format */
-        bmpinfo.ctbits = 24; /* sample size in color table */
+        bmpinfo.ctbits = 24;    /* sample size in color table */
         TRY( bmp_readint( f, 2, &bmpinfo.w ) );
         TRY( bmp_readint( f, 2, &bmpinfo.h ) );
         TRY( bmp_readint( f, 2, &bmpinfo.Planes ) );
@@ -676,13 +683,18 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
         goto format_error;
     }
 
+    if( bmpinfo.comp > 3 || bmpinfo.bits > 32 )
+    {
+        goto format_error;
+    }
+
     /* forward to color table (e.g., if bmpinfo.InfoSize == 64) */
     TRY( bmp_forward( f, 14 + bmpinfo.InfoSize ) );
 
     if( bmpinfo.Planes != 1 )
     {
         bm_read_error = "cannot handle bmp planes";
-        goto format_error; /* can't handle planes */
+        goto format_error;    /* can't handle planes */
     }
 
     if( bmpinfo.ncolors == 0 )
@@ -716,7 +728,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
     }
 
     /* forward to data */
-    if( bmpinfo.InfoSize != 12 ) /* not old OS/2 format */
+    if( bmpinfo.InfoSize != 12 )    /* not old OS/2 format */
     {
         TRY( bmp_forward( f, bmpinfo.DataOffset ) );
     }
@@ -768,7 +780,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
 
         break;
 
-    case 0x002: /* 2-bit to 8-bit palettes */
+    case 0x002:    /* 2-bit to 8-bit palettes */
     case 0x003:
     case 0x004:
     case 0x005:
@@ -794,7 +806,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
                 b = bitbuf >> (INTBITS - bmpinfo.bits);
                 bitbuf <<= bmpinfo.bits;
                 n -= bmpinfo.bits;
-                BM_UPUT( bm, x, ycorr( y ), coltable[b] );
+                BM_UPUT( bm, x, ycorr( y ), COLTABLE( b ) );
             }
 
             TRY( bmp_pad( f ) );
@@ -802,15 +814,15 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
 
         break;
 
-    case 0x010: /* 16-bit encoding */
+    case 0x010:    /* 16-bit encoding */
         /* can't do this format because it is not well-documented and I
          *  don't have any samples */
         bm_read_error = "cannot handle bmp 16-bit coding";
         goto format_error;
         break;
 
-    case 0x018: /* 24-bit encoding */
-    case 0x020: /* 32-bit encoding */
+    case 0x018:     /* 24-bit encoding */
+    case 0x020:     /* 32-bit encoding */
 
         for( y = 0; y<bmpinfo.h; y++ )
         {
@@ -828,7 +840,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
 
         break;
 
-    case 0x320: /* 32-bit encoding with bitfields */
+    case 0x320:    /* 32-bit encoding with bitfields */
         redshift = lobit( bmpinfo.RedMask );
         greenshift  = lobit( bmpinfo.GreenMask );
         blueshift   = lobit( bmpinfo.BlueMask );
@@ -851,20 +863,20 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
 
         break;
 
-    case 0x204: /* 4-bit runlength compressed encoding (RLE4) */
+    case 0x204:    /* 4-bit runlength compressed encoding (RLE4) */
         x   = 0;
         y   = 0;
 
         while( 1 )
         {
-            TRY_EOF( bmp_readint( f, 1, &b ) ); /* opcode */
-            TRY_EOF( bmp_readint( f, 1, &c ) ); /* argument */
+            TRY_EOF( bmp_readint( f, 1, &b ) );     /* opcode */
+            TRY_EOF( bmp_readint( f, 1, &c ) );     /* argument */
 
             if( b>0 )
             {
                 /* repeat count */
-                col[0]  = coltable[(c >> 4) & 0xf];
-                col[1]  = coltable[c & 0xf];
+                col[0]  = COLTABLE( (c >> 4) & 0xf );
+                col[1]  = COLTABLE( c & 0xf );
 
                 for( i = 0; i<b && x<bmpinfo.w; i++ )
                 {
@@ -897,8 +909,8 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
             else if( c == 2 )
             {
                 /* "delta": skip pixels in x and y directions */
-                TRY_EOF( bmp_readint( f, 1, &b ) ); /* x offset */
-                TRY_EOF( bmp_readint( f, 1, &c ) ); /* y offset */
+                TRY_EOF( bmp_readint( f, 1, &b ) );     /* x offset */
+                TRY_EOF( bmp_readint( f, 1, &c ) );     /* y offset */
                 x   += b;
                 y   += c;
             }
@@ -923,7 +935,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
                         break;
                     }
 
-                    BM_PUT( bm, x, ycorr( y ), coltable[( b >> ( 4 - 4 * (i & 1) ) ) & 0xf] );
+                    BM_PUT( bm, x, ycorr( y ), COLTABLE( ( b >> ( 4 - 4 * (i & 1) ) ) & 0xf ) );
                     x++;
                 }
 
@@ -937,14 +949,14 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
 
         break;
 
-    case 0x108: /* 8-bit runlength compressed encoding (RLE8) */
+    case 0x108:    /* 8-bit runlength compressed encoding (RLE8) */
         x   = 0;
         y   = 0;
 
         while( 1 )
         {
-            TRY_EOF( bmp_readint( f, 1, &b ) ); /* opcode */
-            TRY_EOF( bmp_readint( f, 1, &c ) ); /* argument */
+            TRY_EOF( bmp_readint( f, 1, &b ) );     /* opcode */
+            TRY_EOF( bmp_readint( f, 1, &c ) );     /* argument */
 
             if( b>0 )
             {
@@ -962,7 +974,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
                         break;
                     }
 
-                    BM_UPUT( bm, x, ycorr( y ), coltable[c] );
+                    BM_UPUT( bm, x, ycorr( y ), COLTABLE( c ) );
                     x++;
                 }
             }
@@ -980,8 +992,8 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
             else if( c == 2 )
             {
                 /* "delta": skip pixels in x and y directions */
-                TRY_EOF( bmp_readint( f, 1, &b ) ); /* x offset */
-                TRY_EOF( bmp_readint( f, 1, &c ) ); /* y offset */
+                TRY_EOF( bmp_readint( f, 1, &b ) );     /* x offset */
+                TRY_EOF( bmp_readint( f, 1, &c ) );     /* y offset */
                 x   += b;
                 y   += c;
             }
@@ -1003,7 +1015,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
                         break;
                     }
 
-                    BM_PUT( bm, x, ycorr( y ), coltable[b] );
+                    BM_PUT( bm, x, ycorr( y ), COLTABLE( b ) );
                     x++;
                 }
 
@@ -1016,7 +1028,7 @@ static int bm_readbody_bmp( FILE* f, double threshold, potrace_bitmap_t** bmp )
         }
 
         break;
-    } /* switch */
+    }    /* switch */
 
     /* skip any potential junk after the data section, but don't
      *  complain in case EOF is encountered */
@@ -1034,7 +1046,7 @@ eof:
 format_error:
 try_error:
     free( coltable );
-    free( bm );
+    bm_free( bm );
 
     if( !bm_read_error )
     {
@@ -1045,7 +1057,7 @@ try_error:
 
 std_error:
     free( coltable );
-    free( bm );
+    bm_free( bm );
     return -1;
 }
 

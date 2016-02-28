@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 
 /* internal format for greymaps. Note: in this format, rows are
  *  ordered from bottom to top. The pixels in each row are given from
@@ -24,7 +25,7 @@ typedef struct greymap_s greymap_t;
 /* macros for accessing pixel at index (x,y). Note that the origin is
  *  in the *lower* left corner. U* macros omit the bounds check. */
 
-#define gm_index( gm, x, y )    (&(gm)->map[(x) + (y) * (ssize_t) (gm)->w])
+#define gm_index( gm, x, y )    (&(gm)->map[(x) + (y) * (ptrdiff_t) (gm)->w])
 #define gm_safe( gm, x, \
                  y )            ( (int) (x)>=0 && (int) (x)<(gm)->w && (int) (y)>=0 \
                                   && (int) (y)<(gm)->h )

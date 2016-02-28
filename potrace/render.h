@@ -13,8 +13,8 @@ struct render_s
     greymap_t* gm;
     double x0, y0, x1, y1;
     int x0i, y0i, x1i, y1i;
-    double a0, a1;
-    int* incrow_buf;
+    double  a0, a1;
+    int*    incrow_buf;
 };
 typedef struct render_s render_t;
 
