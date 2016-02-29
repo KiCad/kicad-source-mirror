@@ -96,44 +96,6 @@ static const wxString sha1ToWXString( const unsigned char* aSHA1Sum )
 }
 
 
-static bool sha1Matches( const unsigned char* sha1a, const unsigned char* sha1b )
-{
-    for( int i = 0; i < 20; ++i )
-    {
-        if( sha1a[i] != sha1b[i] )
-            return false;
-    }
-
-    return true;
-}
-
-
-static bool isSHA1null( const unsigned char* aSHA1Sum )
-{
-    if( NULL == aSHA1Sum )
-    {
-        #ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] NULL passed for aSHA1Sum";
-            wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-        #endif
-
-        return false;
-    }
-
-    for( int i = 0; i < 20; ++i )
-    {
-        if( 0 != aSHA1Sum[i] )
-            return false;
-    }
-
-    return true;
-}
-
-
 class S3D_CACHE_ENTRY
 {
 private:

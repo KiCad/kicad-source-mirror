@@ -783,7 +783,7 @@ static bool makeComponents( IDF3_BOARD& brd, SGNODE* aParent )
 
         while( so != eo )
         {
-            if( abs( (*so)->GetOutline()->GetThickness() ) < 0.001 )
+            if( std::abs( (*so)->GetOutline()->GetThickness() ) < 0.001 )
             {
                 ++so;
                 continue;
@@ -889,7 +889,7 @@ static bool makeOtherOutlines( IDF3_BOARD& brd, SGNODE* aParent )
     {
         pout = sc->second;
 
-        if( abs( pout->GetThickness() ) < 0.001 )
+        if( std::abs( pout->GetThickness() ) < 0.001 )
         {
             ++sc;
             continue;

@@ -843,7 +843,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 {
     aResult.clear();
 
-    if( aIndex < 0 || aIndex >= aString.size() )
+    if( aIndex >= aString.size() )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";

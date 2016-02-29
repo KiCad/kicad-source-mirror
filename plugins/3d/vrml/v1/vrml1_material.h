@@ -35,7 +35,7 @@
 
 class WRL1BASE;
 class SGNODE;
-struct SGCOLOR;
+class SGCOLOR;
 
 /**
  * Class WRL1MATERIAL

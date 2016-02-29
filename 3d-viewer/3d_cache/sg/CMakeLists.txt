@@ -29,14 +29,22 @@ add_library( kicad_3dsg SHARED
     ifsg_api.cpp
 )
 
+if( APPLE )
+    # puts library into the main kicad.app bundle in build tree
+    set_target_properties( kicad_3dsg PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_LIB_DIR}"
+        INSTALL_NAME_DIR "${OSX_BUNDLE_BUILD_LIB_DIR}"
+    )
+endif()
+
 find_file( S3DSG_VERSION_FILE sg_version.h
         PATHS ${CMAKE_SOURCE_DIR}/include/plugins/3dapi NO_DEFAULT_PATH )
 
 if( NOT ${S3DSG_VERSION_FILE} STREQUAL "S3DSG_VERSION_FILE-NOTFOUND" )
 
-    # extract the "#define SG_VERSION_*" lines
+    # extract the "#define KICADSG_VERSION_*" lines
     file( STRINGS ${S3DSG_VERSION_FILE} _version
-        REGEX "^[' ','\t']*#define[' ','\t']*SG_VERSION_.*" )
+        REGEX "^[' ','\t']*#define[' ','\t']*KICADSG_VERSION_.*" )
 
     foreach( SVAR ${_version} )
         string( REGEX MATCH KICADSG_VERSION_[M,A,J,O,R,I,N,P,T,C,H,E,V]* _VARNAME ${SVAR} )

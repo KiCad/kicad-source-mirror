@@ -34,6 +34,8 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
+#include "common.h"
+#include "pgm_base.h"
 #include "3d_plugin_manager.h"
 #include "plugins/3d/3d_plugin.h"
 #include "3d_cache/sg/scenegraph.h"
@@ -118,7 +120,9 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     std::list< wxString > pluginlist;
     wxFileName fn;
 
-#ifdef DEBUG
+#ifndef __WXMAC__
+
+    #ifdef DEBUG
     // set up to work from the build directory
     fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
     fn.AppendDir( wxT("..") );
@@ -127,11 +131,11 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
 
     std::string testpath = std::string( fn.GetPathWithSep().ToUTF8() );
     checkPluginPath( testpath, searchpaths );
-#endif
+    #endif
 
     #ifndef _WIN32  // suppress 'kicad' subdir since it is redundant on MSWin
-        fn.Assign( wxStandardPaths::Get().GetPluginsDir() );
-        fn.AppendDir( wxT( "kicad" ) );
+    fn.Assign( wxStandardPaths::Get().GetPluginsDir() );
+    fn.AppendDir( wxT( "kicad" ) );
     #else
         fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
     #endif
@@ -144,24 +148,28 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     checkPluginPath( wxT( "/usr/local/lib/kicad/plugins/3d" ), searchpaths );
     checkPluginPath( wxT( "/opt/kicad/lib/kicad/plugins/3d" ), searchpaths );
 
-#ifdef __APPLE__
-    // XXX - we want to use GetOSX... so add support for that somehow in order to avoid hard coding
-    // "/Library/Application Support/kicad/plugins/3d"
-    checkPluginPath( wxT( "/Library/Application Support/kicad/plugins/3d" ), searchpaths );
-
-    // /Library/Application Support/kicad/plugins
-    //fn.Assign( GetOSXKicadMachineDataDir() );
-    //fn.AppendDir( wxT( "plugins" ) );
-    //fn.AppendDir( wxT( "3d" ) );
-    //checkPluginPath( fn.GetPathWithSep(), searchpaths );
-#endif
-
     // note: GetUserDataDir() gives '.pcbnew' rather than '.kicad' since it uses the exe name;
     fn.Assign( wxStandardPaths::Get().GetUserDataDir() );
     fn.AppendDir( wxT( ".kicad" ) );
     fn.AppendDir( wxT( "plugins" ) );
     fn.AppendDir( wxT( "3d" ) );
     checkPluginPath( fn.GetPathWithSep(), searchpaths );
+
+#else
+
+   // Search path on OS X is
+   // (1) User     ~/Library/Application Support/kicad/PlugIns/3d
+   checkPluginPath( GetOSXKicadUserDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
+   // (2) Machine  /Library/Application Support/kicad/PlugIns/3d
+   checkPluginPath( GetOSXKicadMachineDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
+   // (3) Bundle   kicad.app/Contents/PlugIns/3d
+   fn.Assign( Pgm().GetExecutablePath() );
+   fn.AppendDir( wxT( "Contents" ) );
+   fn.AppendDir( wxT( "PlugIns" ) );
+   fn.AppendDir( wxT( "3d" ) );
+   checkPluginPath( fn.GetPathWithSep(), searchpaths );
+
+#endif
 
     std::list< wxString >::iterator sPL = searchpaths.begin();
     std::list< wxString >::iterator ePL = searchpaths.end();
@@ -269,7 +277,18 @@ void S3D_PLUGIN_MANAGER::listPlugins( const wxString& aPath,
         return;
 
     nameFilter = wxT( "*" );
+
+#ifndef __WXMAC__
     nameFilter.Append( wxDynamicLibrary::GetDllExt( wxDL_MODULE ) );
+#else
+    // wxDynamicLibrary::GetDllExt( wxDL_MODULE ) will return ".bundle" on OS X.
+    // This might be correct, but cmake builds a ".so" for a library MODULE.
+    // Per definition a loadable "xxx.bundle" is similar to an "xxx.app" app
+    // bundle being a folder with some special content in it. We obviously don't
+    // want to have that here for our loadable module, so just use ".so".
+    nameFilter.Append( wxT( ".so" ) );
+#endif
+
     wxString lp = wd.GetNameWithSep();
 
     if( wd.GetFirst( &lName, nameFilter, wxDIR_FILES ) )

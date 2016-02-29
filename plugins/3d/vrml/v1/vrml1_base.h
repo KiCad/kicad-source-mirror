@@ -75,7 +75,7 @@ public:
 
     // functions inherited from WRL1NODE
     bool Read( WRLPROC& proc, WRL1BASE* aTopNode );
-    bool SetParent( WRL1NODE* aParent );
+    bool SetParent( WRL1NODE* aParent, bool doUnlink = true );
     SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp );
 };
 

@@ -58,7 +58,7 @@ WRL1BASE::~WRL1BASE()
 
 
 // functions inherited from WRL1NODE
-bool WRL1BASE::SetParent( WRL1NODE* aParent )
+bool WRL1BASE::SetParent( WRL1NODE* aParent, bool /* doUnlink */ )
 {
     #ifdef DEBUG_VRML1
     do {

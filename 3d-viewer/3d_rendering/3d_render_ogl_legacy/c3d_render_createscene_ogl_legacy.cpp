@@ -48,15 +48,10 @@ void C3D_RENDER_OGL_LEGACY::reload()
 
     COBJECT2D_STATS::Instance().ResetStats();
 
-    printf("InitSettings...\n");
-    unsigned stats_startReloadTime = GetRunningMicroSecs();
     m_settings.InitSettings();
-    unsigned stats_endReloadTime = GetRunningMicroSecs();
 
     SFVEC3F camera_pos = m_settings.GetBoardCenter3DU();
     m_settings.CameraGet().SetBoardLookAtPos( camera_pos );
-
-    unsigned stats_start_OpenGL_Load_Time = GetRunningMicroSecs();
 
     // Create Board
     // /////////////////////////////////////////////////////////////////////////
@@ -297,7 +292,6 @@ void C3D_RENDER_OGL_LEGACY::reload()
                     float radius = filledCircle->GetRadius() * 2.0f;            // Double because the render triangle
                     float radiusSquared = radius * radius;
 
-                    const float texture_factor = (0.9f/(float)SIZE_OF_CIRCLE_TEXTURE) + 1.0f;
                     const float f = (sqrtf(2.0f) / 2.0f) * radius * 0.9;// * texture_factor;
 
                     layerTriangles->m_layer_top_segment_ends->AddTriangle( SFVEC3F( center.x + f, center.y, layer_z_top ),
@@ -793,14 +787,6 @@ void C3D_RENDER_OGL_LEGACY::reload()
                                                                         layerColor );
     }// for each layer on map
 
-    unsigned stats_end_OpenGL_Load_Time = GetRunningMicroSecs();
-
-#ifdef RAYTRACING_PRINT_STATISTICS
-    printf( "C3D_RENDER_OGL_LEGACY::reload times:\n" );
-    printf( "  Reload board:             %.3f ms\n", (float)( stats_endReloadTime        - stats_startReloadTime        ) / 1000.0f );
-    printf( "  Loading to openGL:        %.3f ms\n", (float)( stats_end_OpenGL_Load_Time - stats_start_OpenGL_Load_Time ) / 1000.0f );
-    COBJECT2D_STATS::Instance().PrintStats();
-#endif
 }
 
 

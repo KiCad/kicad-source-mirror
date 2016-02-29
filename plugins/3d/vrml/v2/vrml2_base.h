@@ -109,7 +109,7 @@ public:
 
     // functions inherited from WRL2NODE
     bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
-    bool SetParent( WRL2NODE* aParent );
+    bool SetParent( WRL2NODE* aParent, bool doUnlink = true );
     SGNODE* TranslateToSG( SGNODE* aParent );
 };
 
