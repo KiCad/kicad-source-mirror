@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -647,7 +647,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
             wxPoint pos    = RefPos( false );
             MODULE* module = GetBoard()->GetFootprint( pos, UNDEFINED_LAYER, false );
 
-            if( module == NULL )
+            if( module == NULL || module->IsLocked() )
                 return false;
 
             RemoveStruct( module, aDC );
@@ -661,13 +661,14 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
         {
             item = PcbGeneralLocateAndDisplay();
 
-            if( item == NULL )
+            // Shouldn't there be a check for locked tracks and vias here?
+            if( item == NULL || (item->Type() == PCB_MODULE_T && (MODULE*)item->IsLocked()) )
                 return false;
 
             RemoveStruct( item, aDC );
         }
         else
-        return false;
+            return false;
     }
 
     OnModify();
@@ -920,6 +921,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
     return false;
 }
 
+
 bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
 {
     BOARD_ITEM* item = GetCurItem();
@@ -1132,6 +1134,7 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 
     return false;
 }
+
 
 bool PCB_EDIT_FRAME::OnHotkeyDuplicateOrArrayItem( int aIdCommand )
 {
