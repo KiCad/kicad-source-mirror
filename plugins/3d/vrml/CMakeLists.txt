@@ -6,7 +6,22 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/x3d
 )
 
-add_definitions( -DDEBUG_VRML1=1 -DDEBUG_VRML2=1 -DDEBUG_X3D=1 )
+# Developers may wish to set one of these parameters on debug
+# builds to get informational messages from the various parser
+# modules. Valid values are 1..4. Setting a value of 4 is
+# generally not recommended since it causes the parsers to
+# write a VRML2 equivalent copy of the input file by invoking the
+# SceneGraph->WriteVRML() function and depending on the setup
+# the object may attempt to write to a protected directory.
+#
+# add_definitions( -DDEBUG_VRML1=1 -DDEBUG_VRML2=1 -DDEBUG_X3D=1 )
+#
+# In addition to setting the verbosity of each parser module,
+# an appropriate WXTRACE value must be set prior to program
+# execution to enable the logging:
+#
+# export WXTRACE="PLUGIN_VRML"
+#
 
 add_library( s3d_plugin_vrml MODULE
         ${CMAKE_SOURCE_DIR}/common/richio.cpp

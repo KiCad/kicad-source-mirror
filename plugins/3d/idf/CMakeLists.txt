@@ -1,3 +1,17 @@
+# Developers may wish to set DEBUG_IDF to a value from 1..3 to
+# enable informational messages in Debug build. Setting a value
+# of 4 or greater will instruct the parser to write a VRML2
+# equivalent copy of the input file by invoking the
+# SceneGraph->WriteVRML() function and depending on the setup
+# the object may attempt to write to a protected directory.
+#
+# In addition to setting the verbosity via DEBUG_IDF, an
+# appropriate WXTRACE value must be set prior to program
+# execution to enable the logging:
+#
+# export WXTRACE="PLUGIN_IDF"
+#
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/utils/idftools
