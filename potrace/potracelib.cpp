@@ -2,6 +2,10 @@
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -11,10 +15,6 @@
 #include "trace.h"
 #include "progress.h"
 #include <potrace_version.h>
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 /* default parameters */
 static const potrace_param_t param_default =
@@ -93,7 +93,7 @@ potrace_state_t* potrace_trace( const potrace_param_t* param, const potrace_bitm
 
     st->status  = POTRACE_STATUS_OK;
     st->plist   = plist;
-    st->priv = NULL; /* private state currently unused */
+    st->priv = NULL;    /* private state currently unused */
 
     progress_subrange_end( &prog, &subprog );
 

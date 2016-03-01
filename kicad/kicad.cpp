@@ -1,8 +1,3 @@
-/**
- * @file kicad.cpp
- * @brief Main KiCad Project manager file
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,19 +22,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file kicad.cpp
+ * @brief Main KiCad Project manager file
+ */
 
-#include <macros.h>
-#include <fctsys.h>
+
+#include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/stdpaths.h>
-#include <kicad.h>
-#include <kiway.h>
-#include <pgm_kicad.h>
-#include <tree_project_frame.h>
-#include <wildcards_and_files_ext.h>
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <hotkeys_basic.h>
+#include <wx/string.h>
 
-#include <build_version.h>
+#include <common.h>
+#include <hotkeys_basic.h>
+#include <kiway.h>
+#include <richio.h>
+#include <wildcards_and_files_ext.h>
+
+#include "pgm_kicad.h"
+
+#include "kicad.h"
 
 
 /// Extend LIB_ENV_VAR list with the directory from which I came, prepending it.

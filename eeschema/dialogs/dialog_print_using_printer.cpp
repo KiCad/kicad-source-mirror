@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2015-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,6 +92,7 @@ public:
     void DrawPage( SCH_SCREEN* aScreen );
 };
 
+
 /**
  * Custom schematic print preview frame.
  * This derived preview frame remembers its size and position during a session
@@ -135,6 +136,7 @@ private:
     static wxPoint  s_pos;
     static wxSize   s_size;
 };
+
 
 wxPoint SCH_PREVIEW_FRAME::s_pos;
 wxSize  SCH_PREVIEW_FRAME::s_size;
@@ -251,7 +253,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
     if( preview == NULL )
     {
-        DisplayError( this, wxT( "Print preview error!" ) );
+        DisplayError( this, _( "Print preview error!" ) );
         return;
     }
 
@@ -320,12 +322,13 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
 
     SCH_SCREEN*     screen       = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
-    SCH_SHEET_PATH  list;
     SCH_SHEET_LIST  SheetList( NULL );
     SCH_SHEET_PATH* sheetpath = SheetList.GetSheet( page - 1 );
+    SCH_SHEET_PATH  list;
 
-    if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
+    if( sheetpath )
     {
+        list = *sheetpath;
         m_parent->SetCurrentSheet( list );
         m_parent->GetCurrentSheet().UpdateAllScreenReferences();
         m_parent->SetSheetNumberAndCount();
@@ -360,6 +363,7 @@ bool SCH_PRINTOUT::HasPage( int pageNum )
     int pageCount;
 
     pageCount = g_RootSheet->CountSheets();
+
     if( pageCount >= pageNum )
         return true;
 

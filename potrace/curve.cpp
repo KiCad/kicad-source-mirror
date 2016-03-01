@@ -4,6 +4,10 @@
 
 /* private part of the path and curve data structures */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

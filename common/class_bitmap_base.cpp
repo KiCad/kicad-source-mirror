@@ -224,7 +224,6 @@ void BITMAP_BASE::DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     wxSize  size = GetSize();
 
     // This fixes a bug in OSX that should be fixed in the 3.0.3 version or later.
-    // See: http://trac.wxwidgets.org/ticket/16329 for more information.
     if( ( size.x == 0 ) || ( size.y == 0 ) )
         return;
 

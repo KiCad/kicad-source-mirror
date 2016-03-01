@@ -2,6 +2,9 @@
  *  This file is part of Potrace. It is free software and it is covered
  *  by the GNU General Public License. See the file COPYING for details. */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -132,7 +135,7 @@ static void incrow( render_t* rm, int x, int y, int b )
 
     if( rm->incrow_buf[y] == 0 )
     {
-        rm->incrow_buf[y] = x + 1; /* store x+1 so that we can use 0 for "vacant" */
+        rm->incrow_buf[y] = x + 1;    /* store x+1 so that we can use 0 for "vacant" */
         return;
     }
 
@@ -162,8 +165,8 @@ void render_lineto( render_t* rm, double x2, double y2 )
     int x2i, y2i;
     double t0 = 2, s0 = 2;
     int sn, tn;
-    double ss = 2, ts = 2;
-    double r0, r1;
+    double  ss = 2, ts = 2;
+    double  r0, r1;
     int i, j;
     int rxi, ryi;
     int s;
@@ -188,8 +191,8 @@ void render_lineto( render_t* rm, double x2, double y2 )
 
     r0 = 0;
 
-    i = 0;
-    j = 0;
+    i   = 0;
+    j   = 0;
 
     rxi = rm->x1i;
     ryi = rm->y1i;
@@ -277,7 +280,7 @@ void render_curveto( render_t* rm, double x2, double y2, double x3, double y3, d
      *  between the true curve and its approximation does not exceed the
      *  desired accuracy delta. */
 
-    delta = .1; /* desired accuracy, in pixels */
+    delta = .1;    /* desired accuracy, in pixels */
 
     /* let dd = maximal value of 2nd derivative over curve - this must
      *  occur at an endpoint. */
@@ -285,7 +288,7 @@ void render_curveto( render_t* rm, double x2, double y2, double x3, double y3, d
     dd1 = sq( x2 - 2 * x3 + x4 ) + sq( y2 - 2 * y3 + y4 );
     dd  = 6 * sqrt( max( dd0, dd1 ) );
     e2  = 8 * delta <= dd ? 8 * delta / dd : 1;
-    epsilon = sqrt( e2 ); /* necessary interval size */
+    epsilon = sqrt( e2 );    /* necessary interval size */
 
     for( t = epsilon; t<1; t += epsilon )
     {

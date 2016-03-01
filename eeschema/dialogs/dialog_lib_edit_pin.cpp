@@ -133,7 +133,7 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
     int pinNumSize = ValueFromString( g_UserUnit, GetPadNameTextSize());
     int pinOrient = LIB_PIN::GetOrientationCode( GetOrientation() );
     int pinLength = ValueFromString( g_UserUnit, GetLength() );
-    int pinShape = LIB_PIN::GetStyleCode( GetStyle() );
+    GRAPHIC_PINSHAPE pinShape = GetStyle();
     ELECTRICAL_PINTYPE pinType = GetElectricalType();
 
     m_dummyPin->SetName( GetPinName() );
@@ -159,30 +159,5 @@ void DIALOG_LIB_EDIT_PIN::SetOrientationList( const wxArrayString& list,
             m_choiceOrientation->Append( list[ii] );
         else
             m_choiceOrientation->Insert( list[ii], KiBitmap( aBitmaps[ii] ), ii );
-    }
-}
-
-
-void DIALOG_LIB_EDIT_PIN::SetElectricalTypeList( const wxArrayString& list,
-                                                 const BITMAP_DEF* aBitmaps )
-{
-    for ( unsigned ii = 0; ii < list.GetCount(); ii++ )
-    {
-        if( aBitmaps == NULL )
-            m_choiceElectricalType->Append( list[ii] );
-        else
-            m_choiceElectricalType->Insert( list[ii], KiBitmap( aBitmaps[ii] ), ii );
-    }
-}
-
-
-void DIALOG_LIB_EDIT_PIN::SetStyleList( const wxArrayString& list, const BITMAP_DEF* aBitmaps )
-{
-    for ( unsigned ii = 0; ii < list.GetCount(); ii++ )
-    {
-        if( aBitmaps == NULL )
-            m_choiceStyle->Append( list[ii] );
-        else
-            m_choiceStyle->Insert( list[ii], KiBitmap( aBitmaps[ii] ), ii );
     }
 }

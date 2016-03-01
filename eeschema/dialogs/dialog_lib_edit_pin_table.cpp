@@ -183,7 +183,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent,
             100,
             wxAlignment( wxALIGN_LEFT | wxALIGN_TOP ),
             wxDATAVIEW_COL_RESIZABLE | wxDATAVIEW_COL_SORTABLE );
-    wxDataViewTextRenderer* rend2 = new wxDataViewTextRenderer( wxT( "string" ), wxDATAVIEW_CELL_INERT );
+    wxDataViewIconTextRenderer* rend2 = new wxDataViewIconTextRenderer( wxT( "wxDataViewIconText" ), wxDATAVIEW_CELL_INERT );
     wxDataViewColumn* col2 = new wxDataViewColumn( _( "Type" ),
             rend2,
             DataViewModel::PIN_TYPE,
@@ -255,7 +255,23 @@ unsigned int DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetColumnCount() const
 
 wxString DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::GetColumnType( unsigned int aCol ) const
 {
-    return wxT( "string" );
+    switch( aCol )
+    {
+    case PIN_NUMBER:
+        return wxT( "string" );
+
+    case PIN_NAME:
+        return wxT( "string" );
+
+    case PIN_TYPE:
+        return wxT( "wxDataViewIconText" );
+
+    case PIN_POSITION:
+        return wxT( "string" );
+    }
+
+    assert( ! "Unhandled column" );
+    return wxT( "" );
 }
 
 
@@ -431,8 +447,20 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::GetValue( wxVariant& aValu
     if( aCol == m_GroupingColumn )
         // shortcut
         m_Members.front()->GetValue( aValue, aCol );
-    else
+    else if( aCol != PIN_TYPE )
         aValue = GetString( aCol );
+    else
+    {
+        PinNumbers values;
+
+        for( std::list<Pin*>::const_iterator i = m_Members.begin(); i != m_Members.end(); ++i )
+            values.insert( (*i)->GetString( aCol ) );
+
+        if( values.size() > 1 )
+            aValue << wxDataViewIconText( boost::algorithm::join( values, "," ), wxNullIcon );
+        else
+            m_Members.front()->GetValue( aValue, aCol );
+    }
 }
 
 
@@ -476,7 +504,22 @@ void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group::Add( Pin* aPin )
 void DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Pin::GetValue( wxVariant& aValue,
         unsigned int aCol ) const
 {
-    aValue = GetString( aCol );
+    switch( aCol )
+    {
+    case PIN_NUMBER:
+    case PIN_NAME:
+    case PIN_POSITION:
+        aValue = GetString( aCol );
+        break;
+
+    case PIN_TYPE:
+        {
+            wxIcon icon;
+            icon.CopyFromBitmap( KiBitmap ( GetBitmap( m_Backing->GetType() ) ) );
+            aValue << wxDataViewIconText( m_Backing->GetElectricalTypeName(), icon );
+        }
+        break;
+    }
 }
 
 

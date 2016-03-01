@@ -46,7 +46,6 @@ private:
     // Virtual event handlers
     void OnCloseWindow( wxCloseEvent& event );
     void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
     void OnAddFiles( wxCommandEvent& event );
     void OnEditEquFile( wxCommandEvent& event );
     void OnRemoveFiles( wxCommandEvent& event );

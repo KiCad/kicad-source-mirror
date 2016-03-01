@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,6 +69,8 @@ static const wxChar keyCopperColor_Blue[]   = wxT( "CopperColor_Blue" );
 static const wxChar keyBoardBodyColor_Red[] = wxT( "BoardBodyColor_Red" );
 static const wxChar keyBoardBodyColor_Green[]    = wxT( "BoardBodyColor_Green" );
 static const wxChar keyBoardBodyColor_Blue[]= wxT( "BoardBodyColor_Blue" );
+
+static const wxChar keyMousewheelPanning[] =    wxT( "MousewheelPAN3D" );
 
 static const wxChar keyShowRealisticMode[] =    wxT( "ShowRealisticMode" );
 static const wxChar keyRenderShadows[] =        wxT( "Render_Shadows" );
@@ -280,6 +282,9 @@ void EDA_3D_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( keyBoardBodyColor_Blue, &GetPrm3DVisu().m_BoardBodyColor.m_Blue, 22.0 /255.0 );
 
     bool tmp;
+    aCfg->Read( keyMousewheelPanning, &tmp, false );
+    prms.SetFlag( FL_MOUSEWHEEL_PANNING, tmp );
+
     aCfg->Read( keyShowRealisticMode, &tmp, false );
     prms.SetFlag( FL_USE_REALISTIC_MODE, tmp );
 
@@ -377,6 +382,8 @@ void EDA_3D_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( keyBoardBodyColor_Red, GetPrm3DVisu().m_BoardBodyColor.m_Red );
     aCfg->Write( keyBoardBodyColor_Green, GetPrm3DVisu().m_BoardBodyColor.m_Green );
     aCfg->Write( keyBoardBodyColor_Blue, GetPrm3DVisu().m_BoardBodyColor.m_Blue );
+
+    aCfg->Write( keyMousewheelPanning, prms.GetFlag( FL_MOUSEWHEEL_PANNING ) );
 
     aCfg->Write( keyShowRealisticMode, prms.GetFlag( FL_USE_REALISTIC_MODE ) );
 
@@ -563,6 +570,10 @@ void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Set3DBoardBodyColorFromUser();
         break;
 
+    case ID_MENU3D_MOUSEWHEEL_PANNING:
+        GetPrm3DVisu().SetFlag( FL_MOUSEWHEEL_PANNING, isChecked );
+        return;
+
     case ID_MENU3D_REALISTIC_MODE:
         GetPrm3DVisu().SetFlag( FL_USE_REALISTIC_MODE, isChecked );
         GetMenuBar()->FindItem( ID_MENU3D_COMMENTS_ONOFF )->Enable( !isChecked );
@@ -745,8 +756,6 @@ void EDA_3D_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
-/* called to set the background color of the 3D scene
- */
 bool EDA_3D_FRAME::Set3DColorFromUser( S3D_COLOR &aColor, const wxString& aTitle,
                                        wxColourData* aPredefinedColors )
 {
@@ -778,13 +787,12 @@ bool EDA_3D_FRAME::Set3DColorFromUser( S3D_COLOR &aColor, const wxString& aTitle
     return true;
 }
 
-/* called to set the silkscreen color. Sets up a number of default colors
- */
+
 bool EDA_3D_FRAME::Set3DSilkScreenColorFromUser()
 {
     wxColourData definedColors;
 
-    definedColors.SetCustomColour(0, wxColour( 241, 241, 241 ) );      // White
+    definedColors.SetCustomColour(0, wxColour( 241, 241, 241 ) );     // White
     definedColors.SetCustomColour(1, wxColour( 180, 180, 180 ) );     // Gray
 
     bool change = Set3DColorFromUser( GetPrm3DVisu().m_SilkScreenColor,
@@ -798,8 +806,6 @@ bool EDA_3D_FRAME::Set3DSilkScreenColorFromUser()
 }
 
 
-/* called to set the soldermask color. Sets up a number of default colors
- */
 bool EDA_3D_FRAME::Set3DSolderMaskColorFromUser()
 {
     wxColourData definedColors;
@@ -822,8 +828,6 @@ bool EDA_3D_FRAME::Set3DSolderMaskColorFromUser()
 }
 
 
-/* called to set the copper surface color. Sets up a number of default colors
- */
 bool EDA_3D_FRAME::Set3DCopperColorFromUser()
 {
     wxColourData definedColors;
@@ -845,8 +849,6 @@ bool EDA_3D_FRAME::Set3DCopperColorFromUser()
 }
 
 
-/* called to set the board body color. Sets up a number of default colors
- */
 bool EDA_3D_FRAME::Set3DBoardBodyColorFromUser()
 {
     wxColourData definedColors;
@@ -871,8 +873,6 @@ bool EDA_3D_FRAME::Set3DBoardBodyColorFromUser()
 }
 
 
-/* called to set the solder paste layer color. Sets up a number of default colors
- */
 bool EDA_3D_FRAME::Set3DSolderPasteColorFromUser()
 {
     wxColourData definedColors;
@@ -904,6 +904,7 @@ INFO3D_VISU& EDA_3D_FRAME::GetPrm3DVisu() const
     // to draw the 3D view of the board
     return g_Parm_3D_Visu;
 }
+
 
 bool EDA_3D_FRAME::IsEnabled( DISPLAY3D_FLG aItem ) const
 {

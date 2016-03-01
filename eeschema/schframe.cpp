@@ -535,8 +535,8 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     g_RootSheet->GetScreen()->SetFileName( m_DefaultSchematicFileName );
 
-    m_CurrentSheet->Clear();
-    m_CurrentSheet->Push( g_RootSheet );
+    m_CurrentSheet->clear();
+    m_CurrentSheet->push_back( g_RootSheet );
 
     if( GetScreen() == NULL )
     {
@@ -680,7 +680,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     g_RootSheet->GetScreen()->Clear();
 
     // all sub sheets are deleted, only the main sheet is usable
-    m_CurrentSheet->Clear();
+    m_CurrentSheet->clear();
 
     Destroy();
 }

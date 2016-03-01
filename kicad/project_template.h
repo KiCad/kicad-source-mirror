@@ -104,11 +104,14 @@
 #ifndef PROJECT_TEMPLATE_H
 #define PROJECT_TEMPLATE_H
 
+
 #include <vector>
 
-#include <wx/wx.h>
-#include <wx/image.h>
 #include <wx/filename.h>
+#include <wx/intl.h>
+
+
+class wxBitmap;
 
 /**
  * @brief A directory which contains information about the project template and does not get

@@ -44,7 +44,7 @@
 
 #include <cvpcb_mainframe.h>
 #include <cvpcb.h>
-#include <cvstruct.h>
+#include <listview_classes.h>
 #include <invoke_pcb_dialog.h>
 #include <class_DisplayFootprintsFrame.h>
 #include <cvpcb_id.h>
@@ -66,7 +66,6 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
     EVT_MENU( wxID_EXIT, CVPCB_MAINFRAME::OnQuit )
     EVT_MENU( wxID_HELP, CVPCB_MAINFRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, CVPCB_MAINFRAME::GetKicadAbout )
-    EVT_MENU( ID_SAVE_PROJECT, CVPCB_MAINFRAME::SaveProjectFile )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, CVPCB_MAINFRAME::OnConfigurePaths )
     EVT_MENU( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE, CVPCB_MAINFRAME::OnKeepOpenOnSave )
     EVT_MENU( ID_CVPCB_EQUFILES_LIST_EDIT, CVPCB_MAINFRAME::OnEditEquFilesList )
@@ -87,12 +86,21 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
+    EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME,
+              CVPCB_MAINFRAME::OnSelectFilteringFootprint )
+    EVT_TEXT( ID_CVPCB_FILTER_TEXT_EDIT, CVPCB_MAINFRAME::OnEnterFilteringText )
 
     // Frame events
     EVT_CLOSE( CVPCB_MAINFRAME::OnCloseWindow )
     EVT_SIZE( CVPCB_MAINFRAME::OnSize )
 
+    // UI event handlers
     EVT_UPDATE_UI( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE, CVPCB_MAINFRAME::OnUpdateKeepOpenOnSave )
+    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, CVPCB_MAINFRAME::OnFilterFPbyKeywords)
+    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST, CVPCB_MAINFRAME::OnFilterFPbyPinCount )
+    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST, CVPCB_MAINFRAME::OnFilterFPbyLibrary )
+    EVT_UPDATE_UI( ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME, CVPCB_MAINFRAME::OnFilterFPbyKeyName )
+
 END_EVENT_TABLE()
 
 
@@ -108,11 +116,11 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_libListBox            = NULL;
     m_mainToolBar           = NULL;
     m_modified              = false;
-    m_isEESchemaNetlist     = false;
-    m_KeepCvpcbOpen         = false;
+    m_keepCvpcbOpen         = false;
     m_undefinedComponentCnt = 0;
     m_skipComponentSelect   = false;
-    m_NetlistFileExtension  = wxT( "net" );
+    m_filteringOptions      = 0;
+    m_tcFilterString        = NULL;
 
     /* Name of the document footprint list
      * usually located in share/modules/footprints_doc
@@ -199,9 +207,10 @@ void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
-    aCfg->Read( KeepCvpcbOpenEntry, &m_KeepCvpcbOpen, true );
+    aCfg->Read( KeepCvpcbOpenEntry, &m_keepCvpcbOpen, true );
     aCfg->Read( FootprintDocFileEntry, &m_DocModulesFileName,
                 DEFAULT_FOOTPRINTS_LIST_FILENAME );
+    aCfg->Read( FILTERFOOTPRINTKEY, &m_filteringOptions, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
 }
 
 
@@ -209,21 +218,9 @@ void CVPCB_MAINFRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_BASE_FRAME::SaveSettings( aCfg );
 
-    aCfg->Write( KeepCvpcbOpenEntry, m_KeepCvpcbOpen );
+    aCfg->Write( KeepCvpcbOpenEntry, m_keepCvpcbOpen );
     aCfg->Write( FootprintDocFileEntry, m_DocModulesFileName );
-
-    int state = 0;
-
-    if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
-        state |= FOOTPRINTS_LISTBOX::BY_COMPONENT;
-
-    if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ) )
-        state |= FOOTPRINTS_LISTBOX::BY_PIN_COUNT;
-
-    if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST ) )
-        state |= FOOTPRINTS_LISTBOX::BY_LIBRARY;
-
-    aCfg->Write( wxT( FILTERFOOTPRINTKEY ), state );
+    aCfg->Write( FILTERFOOTPRINTKEY, m_filteringOptions );
 }
 
 
@@ -256,7 +253,7 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
             break;
 
         case wxID_YES:
-            SaveEdits();
+            SaveFootprintAssociation();
             break;
         }
     }
@@ -359,11 +356,11 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
 
 void CVPCB_MAINFRAME::SaveQuitCvpcb( wxCommandEvent& aEvent )
 {
-    SaveEdits();
+    SaveFootprintAssociation();
 
     m_modified = false;
 
-    if( !m_KeepCvpcbOpen )
+    if( !m_keepCvpcbOpen )
         Close( true );
 }
 
@@ -395,36 +392,6 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
 
     DisplayStatus();
 }
-
-
-/* Remove in favor of Kiway messaging method of sending netlist
-void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
-{
-    int        id = event.GetId();
-    wxFileName newFileName;
-
-    if( id >= wxID_FILE1 && id <= wxID_FILE9 )
-    {
-        newFileName = GetFileFromHistory( id, _( "Netlist" ) );
-    }
-    else
-    {
-        wxFileDialog dlg( this, _( "Open Net List" ), wxGetCwd(),
-                          wxEmptyString, NetlistFileWildcard,
-                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return;
-
-        newFileName = dlg.GetPath();
-    }
-
-    if( newFileName == m_NetlistFileName )
-        return;
-
-    OpenProjectFiles( std::vector<wxString>( 1, newFileName.GetFullPath() ) );
-}
-*/
 
 
 bool CVPCB_MAINFRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
@@ -481,14 +448,14 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
     if( tableChanged )
     {
         BuildLIBRARY_LISTBOX();
-        m_footprints.ReadFootprintFiles( Prj().PcbFootprintLibs() );
+        m_FootprintsList.ReadFootprintFiles( Prj().PcbFootprintLibs() );
     }
 }
 
 
 void CVPCB_MAINFRAME::OnKeepOpenOnSave( wxCommandEvent& event )
 {
-    m_KeepCvpcbOpen = event.IsChecked();
+    m_keepCvpcbOpen = event.IsChecked();
 }
 
 
@@ -511,22 +478,18 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
         return;
 
     wxString   libraryName;
-    COMPONENT* component = NULL;
-    int        filter = FOOTPRINTS_LISTBOX::UNFILTERED;
-
-    if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
-        filter |= FOOTPRINTS_LISTBOX::BY_COMPONENT;
-
-    if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ) )
-        filter |= FOOTPRINTS_LISTBOX::BY_PIN_COUNT;
-
-    if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST ) )
-        filter |= FOOTPRINTS_LISTBOX::BY_LIBRARY;
-
-    component = GetSelectedComponent();
+    COMPONENT* component = GetSelectedComponent();
     libraryName = m_libListBox->GetSelectedLibrary();
-    m_footprintListBox->SetFootprints( m_footprints, libraryName, component, filter );
 
+    m_footprintListBox->SetFootprints( m_FootprintsList, libraryName, component,
+                                       m_currentSearchPattern, m_filteringOptions);
+
+    refreshAfterComponentSearch (component);
+}
+
+
+void CVPCB_MAINFRAME::refreshAfterComponentSearch( COMPONENT* component )
+{
     // Tell AuiMgr that objects are changed !
     if( m_auimgr.GetManagedWindow() )   // Be sure Aui Manager is initialized
                                         // (could be not the case when starting CvPcb
@@ -580,18 +543,82 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     DisplayStatus();
 }
 
-
 void CVPCB_MAINFRAME::OnSelectFilteringFootprint( wxCommandEvent& event )
 {
-    wxListEvent l_event;
+    int option = 0;
 
+    switch( event.GetId() )
+    {
+    case ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST:
+        option = FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_KEYWORD;
+        break;
+
+    case ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST:
+        option = FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT;
+        break;
+
+    case ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST:
+        option = FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY;
+        break;
+
+    case ID_CVPCB_FOOTPRINT_DISPLAY_BY_NAME:
+        m_currentSearchPattern = m_tcFilterString->GetValue();
+        option = FOOTPRINTS_LISTBOX::FILTERING_BY_NAME;
+        break;
+    }
+
+    if( event.IsChecked() )
+        m_filteringOptions |= option;
+    else
+        m_filteringOptions &= ~option;
+
+    wxListEvent l_event;
     OnSelectComponent( l_event );
 }
 
 
 void CVPCB_MAINFRAME::OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event )
 {
-    event.Check( m_KeepCvpcbOpen );
+    event.Check( m_keepCvpcbOpen );
+}
+
+
+void CVPCB_MAINFRAME::OnFilterFPbyKeywords( wxUpdateUIEvent& event )
+{
+    event.Check( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_KEYWORD );
+}
+
+
+void CVPCB_MAINFRAME::OnFilterFPbyPinCount( wxUpdateUIEvent& event )
+{
+    event.Check( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT );
+}
+
+
+void CVPCB_MAINFRAME::OnFilterFPbyLibrary( wxUpdateUIEvent& event )
+{
+    event.Check( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY );
+}
+
+
+void CVPCB_MAINFRAME::OnFilterFPbyKeyName( wxUpdateUIEvent& event )
+{
+    event.Check( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_NAME );
+}
+
+
+void CVPCB_MAINFRAME::OnEnterFilteringText( wxCommandEvent& aEvent )
+{
+    // Called when changing the filter string in main toolbar.
+    // If the option FOOTPRINTS_LISTBOX::FILTERING_BY_NAME is set, update the list of
+    // available footprints which match the filter
+
+    m_currentSearchPattern = m_tcFilterString->GetValue();
+
+    if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_NAME ) == 0 )
+        return;
+
+    OnSelectFilteringFootprint( aEvent );
 }
 
 
@@ -627,9 +654,9 @@ void CVPCB_MAINFRAME::DisplayStatus()
     }
     else
     {
-        wxString footprintName = m_footprintListBox->GetSelectedFootprint();
+        wxString footprintName = GetSelectedFootprint();
 
-        FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( footprintName );
+        FOOTPRINT_INFO* module = m_FootprintsList.GetModuleInfo( footprintName );
 
         if( module )    // can be NULL if no netlist loaded
         {
@@ -646,10 +673,10 @@ void CVPCB_MAINFRAME::DisplayStatus()
 
     if( m_footprintListBox )
     {
-        if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
+        if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_COMPONENT_KEYWORD ) )
             filters = _( "key words" );
 
-        if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST ) )
+        if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_PIN_COUNT ) )
         {
             if( !filters.IsEmpty() )
                 filters += wxT( "+" );
@@ -657,12 +684,20 @@ void CVPCB_MAINFRAME::DisplayStatus()
             filters += _( "pin count" );
         }
 
-        if( m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_BY_LIBRARY_LIST ) )
+        if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY ) )
         {
             if( !filters.IsEmpty() )
                 filters += wxT( "+" );
 
             filters += _( "library" );
+        }
+
+        if( ( m_filteringOptions & FOOTPRINTS_LISTBOX::FILTERING_BY_NAME ) )
+        {
+            if( !filters.IsEmpty() )
+                filters += wxT( "+" );
+
+            filters += _( "name" );
         }
 
         if( filters.IsEmpty() )
@@ -689,11 +724,11 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
         return false;
     }
 
-    m_footprints.ReadFootprintFiles( fptbl );
+    m_FootprintsList.ReadFootprintFiles( fptbl );
 
-    if( m_footprints.GetErrorCount() )
+    if( m_FootprintsList.GetErrorCount() )
     {
-        m_footprints.DisplayErrors( this );
+        m_FootprintsList.DisplayErrors( this );
     }
 
     return true;
@@ -821,8 +856,8 @@ void CVPCB_MAINFRAME::BuildFOOTPRINTS_LISTBOX()
                                              wxFONTWEIGHT_NORMAL ) );
     }
 
-    m_footprintListBox->SetFootprints( m_footprints, wxEmptyString, NULL,
-                                       FOOTPRINTS_LISTBOX::UNFILTERED );
+    m_footprintListBox->SetFootprints( m_FootprintsList, wxEmptyString, NULL,
+                    wxEmptyString, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
     DisplayStatus();
 }
 
@@ -912,6 +947,13 @@ DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFootprintViewerFrame()
     // returns the Footprint Viewer frame, if exists, or NULL
     return dynamic_cast<DISPLAY_FOOTPRINTS_FRAME*>
             ( wxWindow::FindWindowByName( FOOTPRINTVIEWER_FRAME_NAME ) );
+}
+
+const wxString CVPCB_MAINFRAME::GetSelectedFootprint()
+{
+    // returns the FPID of the selected footprint in footprint listview
+    // or a empty string
+    return m_footprintListBox->GetSelectedFootprint();
 }
 
 

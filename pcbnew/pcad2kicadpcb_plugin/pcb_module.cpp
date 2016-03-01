@@ -43,6 +43,8 @@
 #include <pcb_text.h>
 #include <pcb_via.h>
 
+#include <trigo.h>
+
 namespace PCAD2KICAD {
 
 PCB_MODULE::PCB_MODULE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCB_COMPONENT( aCallbacks,
@@ -282,7 +284,7 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
             propValue.Trim( false );
             propValue.Trim( true );
 
-            if( propValue == wxT( "Type" ) )
+            if( propValue == wxT( "RefDes" ) )
             {
                 tNode = FindNode( lNode, wxT( "textStyleRef" ) );
 
@@ -500,10 +502,16 @@ wxString PCB_MODULE::ModuleLayer( int aMirror )
 void PCB_MODULE::AddToBoard()
 {
     int i;
+    int r;
 
     // transform text positions
-    CorrectTextPosition( &m_name, m_rotation );
-    CorrectTextPosition( &m_value, m_rotation );
+    CorrectTextPosition( &m_name );
+    RotatePoint( &m_name.correctedPositionX, &m_name.correctedPositionY,
+                 (double) -m_rotation );
+
+    CorrectTextPosition( &m_value );
+    RotatePoint( &m_value.correctedPositionX, &m_value.correctedPositionY,
+                 (double) -m_rotation );
 
     MODULE* module = new MODULE( m_board );
     m_board->Add( module, ADD_APPEND );
@@ -525,10 +533,11 @@ void PCB_MODULE::AddToBoard()
     ref_text->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );
 
     ref_text->SetPos0( wxPoint( m_name.correctedPositionX, m_name.correctedPositionY ) );
-    ref_text->SetSize( wxSize( KiROUND( m_name.textHeight / 2 ),
-                               KiROUND( m_name.textHeight / 1.5 ) ) );
+    SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
 
-    ref_text->SetOrientation( m_name.textRotation );
+    r = m_name.textRotation - m_rotation;
+    ref_text->SetOrientation( r );
+
     ref_text->SetThickness( m_name.textstrokeWidth );
 
     ref_text->SetMirrored( m_name.mirror );
@@ -546,10 +555,11 @@ void PCB_MODULE::AddToBoard()
     val_text->SetType( TEXTE_MODULE::TEXT_is_VALUE );
 
     val_text->SetPos0( wxPoint( m_value.correctedPositionX, m_value.correctedPositionY ) );
-    val_text->SetSize( wxSize( KiROUND( m_value.textHeight / 2 ),
-                               KiROUND( m_value.textHeight / 1.5 ) ) );
+    SetTextSizeFromStrokeFontHeight( val_text, m_value.textHeight );
 
-    val_text->SetOrientation( m_value.textRotation );
+    r = m_value.textRotation - m_rotation;
+    val_text->SetOrientation( r );
+
     val_text->SetThickness( m_value.textstrokeWidth );
 
     val_text->SetMirrored( m_value.mirror );
@@ -611,10 +621,6 @@ void PCB_MODULE::Flip()
         // Flipped
         m_KiCadLayer    = FlipLayer( m_KiCadLayer );
         m_rotation      = -m_rotation;
-        m_name.textPositionX = -m_name.textPositionX;
-        m_name.mirror = m_mirror;
-        m_value.textPositionX = -m_value.textPositionX;
-        m_value.mirror = m_mirror;
 
         for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
         {

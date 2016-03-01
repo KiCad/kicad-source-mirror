@@ -31,6 +31,8 @@
  */
 
 #include <wx/bmpcbox.h>
+#include <pin_shape_combobox.h>
+#include <pin_type_combobox.h>
 
 #include <dialog_lib_edit_pin_base.h>
 
@@ -59,22 +61,18 @@ public:
     }
     int GetOrientation( void ) { return m_choiceOrientation->GetSelection(); }
 
-    void SetElectricalTypeList( const wxArrayString& list, const BITMAP_DEF* aBitmaps );
-    void SetElectricalType( int type )
+    void SetElectricalType( ELECTRICAL_PINTYPE type )
     {
         m_choiceElectricalType->SetSelection( type );
     }
 
     ELECTRICAL_PINTYPE GetElectricalType( void )
     {
-        // m_choiceElectricalType is expected having the eletrical type names
-        // order indentical to the ELECTRICAL_PINTYPE enum
-        return (ELECTRICAL_PINTYPE)m_choiceElectricalType->GetSelection();
+        return m_choiceElectricalType->GetSelection();
     }
 
-    void SetStyleList( const wxArrayString& list, const BITMAP_DEF* aBitmaps );
-    void SetStyle( int style ) { m_choiceStyle->SetSelection( style ); }
-    int GetStyle( void ) { return m_choiceStyle->GetSelection(); }
+    void SetStyle( GRAPHIC_PINSHAPE style ) { m_choiceStyle->SetSelection( style ); }
+    GRAPHIC_PINSHAPE GetStyle( void ) { return m_choiceStyle->GetSelection(); }
 
     void SetPinName( const wxString& name ) { m_textPinName->SetValue( name ); }
     wxString GetPinName( void ) { return m_textPinName->GetValue(); }

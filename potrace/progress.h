@@ -16,10 +16,10 @@ struct progress_s
 {
     void (* callback)( double progress, void* privdata );   /* callback fn */
     void* data;                                             /* callback function's private data */
-    double min, max;                                        /* desired range of progress, e.g. 0.0 to 1.0 */
-    double epsilon;                                         /* granularity: can skip smaller increments */
-    double b;                                               /* upper limit of subrange in superrange units */
-    double d_prev;                                          /* previous value of d */
+    double  min, max;                                       /* desired range of progress, e.g. 0.0 to 1.0 */
+    double  epsilon;                                        /* granularity: can skip smaller increments */
+    double  b;                                              /* upper limit of subrange in superrange units */
+    double  d_prev;                                         /* previous value of d */
 };
 typedef struct progress_s progress_t;
 
@@ -64,14 +64,14 @@ static inline void progress_subrange_start( double a,
 
     if( max - min < prog->epsilon )
     {
-        sub->callback = NULL; /* no further progress info in subrange */
+        sub->callback = NULL;    /* no further progress info in subrange */
         sub->b = b;
         return;
     }
 
     sub->callback = prog->callback;
     sub->data = prog->data;
-    sub->epsilon    = prog->epsilon;
+    sub->epsilon = prog->epsilon;
     sub->min    = min;
     sub->max    = max;
     sub->d_prev = prog->d_prev;

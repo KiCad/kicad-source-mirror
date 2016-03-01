@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 Lorenzo Marcantonio
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,20 +62,11 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
             if( sheetpath == NULL )
                 break;
 
-            list.Clear();
-
-            if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
-            {
-                schframe->SetCurrentSheet( list );
-                schframe->GetCurrentSheet().UpdateAllScreenReferences();
-                schframe->SetSheetNumberAndCount();
-                screen = schframe->GetCurrentSheet().LastScreen();
-            }
-            else  // Should not happen
-            {
-                return;
-            }
-
+            list = *sheetpath;
+            schframe->SetCurrentSheet( list );
+            schframe->GetCurrentSheet().UpdateAllScreenReferences();
+            schframe->SetSheetNumberAndCount();
+            screen = schframe->GetCurrentSheet().LastScreen();
             sheetpath = SheetList.GetNext();
         }
 
@@ -89,14 +80,16 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
             wxFileName plotFileName = createPlotFileName( m_outputDirectoryName, fname,
                                                           ext, &reporter );
 
-            if( PlotOneSheetDXF( plotFileName.GetFullPath(), screen, plot_offset, 1.0, aPlotFrameRef ) )
+            if( PlotOneSheetDXF( plotFileName.GetFullPath(), screen, plot_offset, 1.0,
+                                 aPlotFrameRef ) )
             {
                 msg.Printf( _( "Plot: '%s' OK.\n" ), GetChars( plotFileName.GetFullPath() ) );
                 reporter.Report( msg, REPORTER::RPT_ACTION );
             }
             else    // Error
             {
-                msg.Printf( _( "Unable to create file '%s'.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                msg.Printf( _( "Unable to create file '%s'.\n" ),
+                            GetChars( plotFileName.GetFullPath() ) );
                 reporter.Report( msg, REPORTER::RPT_ERROR );
             }
         }

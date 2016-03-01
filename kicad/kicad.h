@@ -1,8 +1,3 @@
-/**
- * @file kicad/kicad.h
- * @brief KICAD_MANAGER_FRAME is the KiCad main frame.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,18 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file kicad/kicad.h
+ * @brief KICAD_MANAGER_FRAME is the KiCad main frame.
+ */
+
 #ifndef KICAD_H
 #define KICAD_H
 
-#include <vector>
 
-#include <wx/treectrl.h>
-#include <wx/dragimag.h>
-#include <wx/filename.h>
 #include <wx/process.h>
 
 #include <id.h>
 #include <wxstruct.h>
+
 
 #define KICAD_MANAGER_FRAME_NAME   wxT( "KicadFrame" )
 

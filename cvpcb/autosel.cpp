@@ -42,7 +42,7 @@
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
-#include <cvstruct.h>
+#include <listview_classes.h>
 #include <autosel.h>
 
 #define QUOTE   '\''
@@ -215,7 +215,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
             if( equivItem.m_ComponentValue.CmpNoCase( component->GetValue() ) != 0 )
                 continue;
 
-            const FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( equivItem.m_FootprintFPID );
+            const FOOTPRINT_INFO *module = m_FootprintsList.GetModuleInfo( equivItem.m_FootprintFPID );
 
             bool equ_is_unique = true;
             unsigned next = idx+1;
@@ -277,7 +277,7 @@ void CVPCB_MAINFRAME::AutomaticFootprintMatching( wxCommandEvent& event )
         {
             // we do not need to analyze wildcards: single footprint do not
             // contain them and if there are wildcards it just will not match any
-            const FOOTPRINT_INFO* module = m_footprints.GetModuleInfo( component->GetFootprintFilters()[0] );
+            const FOOTPRINT_INFO* module = m_FootprintsList.GetModuleInfo( component->GetFootprintFilters()[0] );
 
             if( module )
                 SetNewPkg( component->GetFootprintFilters()[0] );

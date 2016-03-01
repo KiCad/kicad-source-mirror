@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,7 @@ void GERBVIEW_FRAME::InstallGerberOptionsDialog( wxCommandEvent& event )
         m_canvas->Refresh();
 }
 
+
 DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( GERBVIEW_FRAME *parent) :
     DIALOG_DISPLAY_OPTIONS_BASE( parent, wxID_ANY )
 {
@@ -125,6 +126,7 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 
 
     m_OptZoomNoCenter->SetValue( m_Parent->GetCanvas()->GetEnableZoomNoCenter() );
+    m_OptMousewheelPan->SetValue( m_Parent->GetCanvas()->GetEnableMousewheelPan() );
     m_OptMiddleButtonPan->SetValue( m_Parent->GetCanvas()->GetEnableMiddleButtonPan() );
     m_OptMiddleButtonPanLimited->SetValue( m_Parent->GetCanvas()->GetMiddleButtonPanLimited() );
     m_OptMiddleButtonPanLimited->Enable( m_OptMiddleButtonPan->GetValue() );
@@ -169,6 +171,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     m_Parent->SetPageSettings( pageInfo );
 
     m_Parent->GetCanvas()->SetEnableZoomNoCenter( m_OptZoomNoCenter->GetValue() );
+    m_Parent->GetCanvas()->SetEnableMousewheelPan( m_OptMousewheelPan->GetValue() );
     m_Parent->GetCanvas()->SetEnableMiddleButtonPan( m_OptMiddleButtonPan->GetValue() );
     m_Parent->GetCanvas()->SetMiddleButtonPanLimited( m_OptMiddleButtonPanLimited->GetValue() );
 

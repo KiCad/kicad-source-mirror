@@ -49,8 +49,8 @@
 #include <erc.h>
 #include <id.h>
 
-extern int           DiagErc[PIN_NMAX][PIN_NMAX];
-extern int           DefaultDiagErc[PIN_NMAX][PIN_NMAX];
+extern int           DiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
+extern int           DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
 
 
 
@@ -63,7 +63,7 @@ bool DIALOG_ERC::m_tstUniqueGlobalLabels = true;    // saved only for the curren
 #define ID_MATRIX_0 1800
 
 BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
-    EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PIN_NMAX * PIN_NMAX ) - 1,
+    EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PINTYPE_COUNT * PINTYPE_COUNT ) - 1,
                        wxEVT_COMMAND_BUTTON_CLICKED, DIALOG_ERC::ChangeErrorLevel )
 END_EVENT_TABLE()
 
@@ -91,9 +91,9 @@ void DIALOG_ERC::Init()
 {
     m_initialized = false;
 
-    for( int ii = 0; ii < PIN_NMAX; ii++ )
+    for( int ii = 0; ii < PINTYPE_COUNT; ii++ )
     {
-        for( int jj = 0; jj < PIN_NMAX; jj++ )
+        for( int jj = 0; jj < PINTYPE_COUNT; jj++ )
             m_buttonList[ii][jj] = NULL;
     }
 
@@ -290,7 +290,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
     if( m_initialized == false )
     {
         // Print row labels
-        for( int ii = 0; ii < PIN_NMAX; ii++ )
+        for( int ii = 0; ii < PINTYPE_COUNT; ii++ )
         {
             int y = pos.y + (ii * bitmap_size.y);
             text = new wxStaticText( m_matrixPanel, -1, CommentERC_H[ii],
@@ -305,7 +305,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
     else
         pos = m_buttonList[0][0]->GetPosition();
 
-    for( int ii = 0; ii < PIN_NMAX; ii++ )
+    for( int ii = 0; ii < PINTYPE_COUNT; ii++ )
     {
         int y = pos.y + (ii * bitmap_size.y);
 
@@ -323,7 +323,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
                 text     = new wxStaticText( m_matrixPanel, -1, CommentERC_V[ii], txtpos );
             }
 
-            int event_id = ID_MATRIX_0 + ii + ( jj * PIN_NMAX );
+            int event_id = ID_MATRIX_0 + ii + ( jj * PINTYPE_COUNT );
             BITMAP_DEF bitmap_butt = erc_green_xpm;
 
             delete m_buttonList[ii][jj];
@@ -420,7 +420,7 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
     wxBitmapButton* butt = (wxBitmapButton*) event.GetEventObject();
     pos  = butt->GetPosition();
 
-    x = ii / PIN_NMAX; y = ii % PIN_NMAX;
+    x = ii / PINTYPE_COUNT; y = ii % PINTYPE_COUNT;
 
     level = DiagErc[y][x];
 

@@ -114,12 +114,12 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
         if( item )  // The user has clicked on a sheet: this is an enter sheet command
         {
-            m_CurrentSheet->Push( (SCH_SHEET*) item );
+            m_CurrentSheet->push_back( (SCH_SHEET*) item );
             DisplayCurrentSheet();
         }
         else if( m_CurrentSheet->Last() != g_RootSheet )
         {   // The user has clicked ouside a sheet:this is an leave sheet command
-            m_CurrentSheet->Pop();
+            m_CurrentSheet->pop_back();
             DisplayCurrentSheet();
         }
         break;
@@ -356,7 +356,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         switch( item->Type() )
         {
         case SCH_SHEET_T:
-            m_CurrentSheet->Push( (SCH_SHEET*) item );
+            m_CurrentSheet->push_back( (SCH_SHEET*) item );
             DisplayCurrentSheet();
             break;
 

@@ -1,11 +1,3 @@
-# the map generation creates on Windows/gcc a lot of useless warnings
-# so disable it on windows
-if( WIN32 AND NOT CMAKE_CROSSCOMPILING )
-    set( MAKE_LINK_MAPS false )
-else()
-    set( MAKE_LINK_MAPS true )
-endif()
-
 add_definitions( -DCVPCB )
 
 include_directories( BEFORE ${INC_BEFORE} )
@@ -137,6 +129,7 @@ add_library( cvpcb_kiface MODULE
     ${CVPCB_SRCS}
     ${CVPCB_DIALOGS}
     )
+
 set_target_properties( cvpcb_kiface PROPERTIES
     OUTPUT_NAME     cvpcb
     PREFIX          ${KIFACE_PREFIX}

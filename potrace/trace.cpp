@@ -4,6 +4,10 @@
 
 /* transform jaggy paths into smooth curves */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -91,7 +95,7 @@ static void pointslope( privpath_t* pp, int i, int j, dpoint_t* ctr, dpoint_t* d
     double  x, y, x2, xy, y2;
     double  k;
     double  a, b, c, lambda2, l;
-    int r = 0; /* rotations from i to j */
+    int r = 0;    /* rotations from i to j */
 
     while( j>=n )
     {
@@ -131,7 +135,7 @@ static void pointslope( privpath_t* pp, int i, int j, dpoint_t* ctr, dpoint_t* d
     b   = (xy - (double) x * y / k) / k;
     c   = (y2 - (double) y * y / k) / k;
 
-    lambda2 = ( a + c + sqrt( (a - c) * (a - c) + 4 * b * b ) ) / 2; /* larger e.value */
+    lambda2 = ( a + c + sqrt( (a - c) * (a - c) + 4 * b * b ) ) / 2;    /* larger e.value */
 
     /* now find e.vector for lambda2 */
     a   -= lambda2;
@@ -160,8 +164,8 @@ static void pointslope( privpath_t* pp, int i, int j, dpoint_t* ctr, dpoint_t* d
 
     if( l==0 )
     {
-        dir->x = dir->y = 0; /* sometimes this can happen when k=4:
-                              *  the two eigenvalues coincide */
+        dir->x = dir->y = 0;    /* sometimes this can happen when k=4:
+                                 *  the two eigenvalues coincide */
     }
 }
 
@@ -409,7 +413,7 @@ static int calc_lon( privpath_t* pp )
     {
         if( pt[i].x != pt[k].x && pt[i].y != pt[k].y )
         {
-            k = i + 1; /* necessarily i<n-1 in this case */
+            k = i + 1;    /* necessarily i<n-1 in this case */
         }
 
         nc[i] = k;
@@ -523,7 +527,7 @@ constraint_viol:
         pivk[i] = mod( k1 + j, n );
 foundk:
         ;
-    } /* for i */
+    }    /* for i */
 
     /* clean up: for each i, let lon[i] be the largest k such that for
      *  all i' with i<=i'<k, i'<k<=pivk[i']. */
@@ -575,7 +579,7 @@ static double penalty3( privpath_t* pp, int i, int j )
     double  a, b, c, s;
     double  px, py, ex, ey;
 
-    int r = 0; /* rotations from i to j */
+    int r = 0;    /* rotations from i to j */
 
     if( j>=n )
     {
@@ -773,7 +777,7 @@ static int adjust_vertices( privpath_t* pp )
 
     dpoint_t*   ctr = NULL;     /* ctr[m] */
     dpoint_t*   dir = NULL;     /* dir[m] */
-    quadform_t* q   = NULL;     /* q[m] */
+    quadform_t* q = NULL;       /* q[m] */
     double  v[3];
     double  d;
     int i, j, k, l;
@@ -839,7 +843,7 @@ static int adjust_vertices( privpath_t* pp )
      *  the two lines. */
     for( i = 0; i<m; i++ )
     {
-        quadform_t Q;
+        quadform_t  Q;
         dpoint_t    w;
         double  dx, dy;
         double  det;
@@ -934,7 +938,7 @@ static int adjust_vertices( privpath_t* pp )
             goto fixx;
         }
 
-        for( z = 0; z<2; z++ ) /* value of the y-coordinate */
+        for( z = 0; z<2; z++ )    /* value of the y-coordinate */
         {
             w.y     = s.y - 0.5 + z;
             w.x     = -(Q[0][1] * w.y + Q[0][2]) / Q[0][0];
@@ -956,7 +960,7 @@ fixx:
             goto corners;
         }
 
-        for( z = 0; z<2; z++ ) /* value of the x-coordinate */
+        for( z = 0; z<2; z++ )    /* value of the x-coordinate */
         {
             w.x     = s.x - 0.5 + z;
             w.y     = -(Q[1][0] * w.x + Q[1][2]) / Q[1][1];
@@ -1062,7 +1066,7 @@ static void smooth( privcurve_t* curve, double alphamax )
 
         if( alpha >= alphamax )     /* pointed corner */
         {
-            curve->tag[j] = POTRACE_CORNER;
+            curve->tag[j]   = POTRACE_CORNER;
             curve->c[j][1]  = curve->vertex[j];
             curve->c[j][2]  = p4;
         }
@@ -1079,13 +1083,13 @@ static void smooth( privcurve_t* curve, double alphamax )
 
             p2  = interval( .5 + .5 * alpha, curve->vertex[i], curve->vertex[j] );
             p3  = interval( .5 + .5 * alpha, curve->vertex[k], curve->vertex[j] );
-            curve->tag[j] = POTRACE_CURVETO;
+            curve->tag[j]   = POTRACE_CURVETO;
             curve->c[j][0]  = p2;
             curve->c[j][1]  = p3;
             curve->c[j][2]  = p4;
         }
 
-        curve->alpha[j] = alpha; /* store the "cropped" value of alpha */
+        curve->alpha[j] = alpha;    /* store the "cropped" value of alpha */
         curve->beta[j]  = 0.5;
     }
 
@@ -1101,8 +1105,8 @@ struct opti_s
 {
     double pen;         /* penalty */
     dpoint_t    c[2];   /* curve parameters */
-    double  t, s;       /* curve parameters */
-    double  alpha;      /* curve parameter */
+    double      t, s;   /* curve parameters */
+    double      alpha;  /* curve parameter */
 };
 typedef struct opti_s opti_t;
 
@@ -1121,17 +1125,17 @@ static int opti_penalty( privpath_t* pp,
     int k, k1, k2, conv, i1;
     double area, alpha, d, d1, d2;
     dpoint_t    p0, p1, p2, p3, pt;
-    double  A, R, A1, A2, A3, A4;
-    double  s, t;
+    double      A, R, A1, A2, A3, A4;
+    double      s, t;
 
     /* check convexity, corner-freeness, and maximum bend < 179 degrees */
 
-    if( i==j ) /* sanity - a full loop can never be an opticurve */
+    if( i==j )    /* sanity - a full loop can never be an opticurve */
     {
         return 1;
     }
 
-    k = i;
+    k   = i;
     i1  = mod( i + 1, m );
     k1  = mod( k + 1, m );
     conv = convc[k1];
@@ -1192,7 +1196,7 @@ static int opti_penalty( privpath_t* pp,
     /* A4 = dpara(p1, p2, p3); */
     A4 = A1 + A3 - A2;
 
-    if( A2 == A1 ) /* this should never happen */
+    if( A2 == A1 )    /* this should never happen */
     {
         return 1;
     }
@@ -1201,7 +1205,7 @@ static int opti_penalty( privpath_t* pp,
     s   = A2 / (A2 - A1);
     A   = A2 * t / 2.0;
 
-    if( A == 0.0 ) /* this should never happen */
+    if( A == 0.0 )    /* this should never happen */
     {
         return 1;
     }
@@ -1235,7 +1239,7 @@ static int opti_penalty( privpath_t* pp,
         pt  = bezier( t, p0, p1, p2, p3 );
         d   = ddist( pp->curve.vertex[k], pp->curve.vertex[k1] );
 
-        if( d == 0.0 ) /* this should never happen */
+        if( d == 0.0 )    /* this should never happen */
         {
             return 1;
         }
@@ -1270,7 +1274,7 @@ static int opti_penalty( privpath_t* pp,
         pt  = bezier( t, p0, p1, p2, p3 );
         d   = ddist( pp->curve.c[k][2], pp->curve.c[k1][2] );
 
-        if( d == 0.0 ) /* this should never happen */
+        if( d == 0.0 )    /* this should never happen */
         {
             return 1;
         }
@@ -1360,13 +1364,13 @@ static int opticurve( privpath_t* pp, double opttolerance )
             area    += 0.3 * alpha * (4 - alpha) * dpara( pp->curve.c[i][2],
                     pp->curve.vertex[i1],
                     pp->curve.c[i1][2] ) / 2;
-            area    += dpara( p0, pp->curve.c[i][2], pp->curve.c[i1][2] ) / 2;
+            area += dpara( p0, pp->curve.c[i][2], pp->curve.c[i1][2] ) / 2;
         }
 
         areac[i + 1] = area;
     }
 
-    pt[0] = -1;
+    pt[0]   = -1;
     pen[0]  = 0;
     len[0]  = 0;
 
@@ -1376,7 +1380,7 @@ static int opticurve( privpath_t* pp, double opttolerance )
     for( j = 1; j<=m; j++ )
     {
         /* calculate best path from 0 to j */
-        pt[j] = j - 1;
+        pt[j]   = j - 1;
         pen[j]  = pen[j - 1];
         len[j]  = len[j - 1] + 1;
 
@@ -1391,7 +1395,7 @@ static int opticurve( privpath_t* pp, double opttolerance )
 
             if( len[j] > len[i] + 1 || (len[j] == len[i] + 1 && pen[j] > pen[i] + o.pen) )
             {
-                pt[j] = i;
+                pt[j]   = i;
                 pen[j]  = pen[i] + o.pen;
                 len[j]  = len[i] + 1;
                 opt[j]  = o;
@@ -1416,7 +1420,7 @@ static int opticurve( privpath_t* pp, double opttolerance )
     {
         if( pt[j]==j - 1 )
         {
-            pp->ocurve.tag[i] = pp->curve.tag[mod( j, m )];
+            pp->ocurve.tag[i]   = pp->curve.tag[mod( j, m )];
             pp->ocurve.c[i][0]  = pp->curve.c[mod( j, m )][0];
             pp->ocurve.c[i][1]  = pp->curve.c[mod( j, m )][1];
             pp->ocurve.c[i][2]  = pp->curve.c[mod( j, m )][2];
@@ -1428,12 +1432,12 @@ static int opticurve( privpath_t* pp, double opttolerance )
         }
         else
         {
-            pp->ocurve.tag[i] = POTRACE_CURVETO;
+            pp->ocurve.tag[i]   = POTRACE_CURVETO;
             pp->ocurve.c[i][0]  = opt[j].c[0];
             pp->ocurve.c[i][1]  = opt[j].c[1];
             pp->ocurve.c[i][2]  = pp->curve.c[mod( j, m )][2];
-            pp->ocurve.vertex[i]    = interval( opt[j].s, pp->curve.c[mod( j,
-                                                                              m )][2],
+            pp->ocurve.vertex[i] = interval( opt[j].s, pp->curve.c[mod( j,
+                                                                           m )][2],
                     pp->curve.vertex[mod( j, m )] );
             pp->ocurve.alpha[i]     = opt[j].alpha;
             pp->ocurve.alpha0[i]    = opt[j].alpha;
@@ -1504,7 +1508,7 @@ int process_path( path_t* plist, const potrace_param_t* param, progress_t* progr
         TRY( bestpolygon( p->priv ) );
         TRY( adjust_vertices( p->priv ) );
 
-        if( p->sign == '-' ) /* reverse orientation of negative paths */
+        if( p->sign == '-' )    /* reverse orientation of negative paths */
         {
             reverse( &p->priv->curve );
         }

@@ -168,6 +168,12 @@ class PadGridArray(PadArray):
                 pad.SetPadName(self.GetName(x,y))
                 self.AddPad(pad)
 
+class EPADGridArray(PadGridArray):
+
+  def NamingFunction(self, nx, ny):
+    return self.firstPadNum
+
+
 
 class PadZGridArray(PadArray):
 

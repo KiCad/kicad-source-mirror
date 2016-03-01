@@ -43,7 +43,7 @@
 #include <dialogs/dialog_sch_edit_sheet_pin.h>
 
 
-int SCH_EDIT_FRAME::m_lastSheetPinType = NET_INPUT;
+PINSHEETLABEL_SHAPE SCH_EDIT_FRAME::m_lastSheetPinType = NET_INPUT;
 wxSize SCH_EDIT_FRAME::m_lastSheetPinTextSize( -1, -1 );
 wxPoint SCH_EDIT_FRAME::m_lastSheetPinPosition;
 

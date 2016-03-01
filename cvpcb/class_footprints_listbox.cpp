@@ -29,14 +29,12 @@
 
 #include <fctsys.h>
 #include <wxstruct.h>
-#include <macros.h>
-#include <pgm_base.h>
-#include <wildcards_and_files_ext.h>
 
 #include <cvpcb.h>
 #include <cvpcb_mainframe.h>
-#include <cvstruct.h>
+#include <listview_classes.h>
 #include <cvpcb_id.h>
+#include <eda_pattern_match.h>
 
 
 FOOTPRINTS_LISTBOX::FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent,
@@ -127,18 +125,23 @@ void FOOTPRINTS_LISTBOX::SetSelection( int index, bool State )
 
 
 void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName,
-                                        COMPONENT* aComponent, int aFilterType )
+                                        COMPONENT* aComponent,
+                                        const wxString &aFootPrintFilterPattern,
+                                        int aFilterType )
 {
     wxArrayString   newList;
     wxString        msg;
     wxString        oldSelection;
+
+    EDA_PATTERN_MATCH_WILDCARD patternFilter;
+    patternFilter.SetPattern( aFootPrintFilterPattern.Lower() );    // Use case insensitive search
 
     if( GetSelection() >= 0 && GetSelection() < (int)m_footprintList.GetCount() )
         oldSelection = m_footprintList[ GetSelection() ];
 
     for( unsigned ii = 0; ii < aList.GetCount(); ii++ )
     {
-        if( aFilterType == UNFILTERED )
+        if( aFilterType == UNFILTERED_FP_LIST )
         {
             msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),
                         GetChars( aList.GetItem( ii ).GetNickname() ),
@@ -147,17 +150,30 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
             continue;
         }
 
-        if( (aFilterType & BY_LIBRARY) && !aLibName.IsEmpty()
-          && !aList.GetItem( ii ).InLibrary( aLibName ) )
+        if( (aFilterType & FILTERING_BY_LIBRARY) && !aLibName.IsEmpty()
+            && !aList.GetItem( ii ).InLibrary( aLibName ) )
             continue;
 
-        if( (aFilterType & BY_COMPONENT) && aComponent
-          && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).GetFootprintName() ) )
+        if( (aFilterType & FILTERING_BY_COMPONENT_KEYWORD) && aComponent
+            && !aComponent->MatchesFootprintFilters( aList.GetItem( ii ).GetFootprintName() ) )
             continue;
 
-        if( (aFilterType & BY_PIN_COUNT) && aComponent
-          && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
+        if( (aFilterType & FILTERING_BY_PIN_COUNT) && aComponent
+            && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
             continue;
+
+        // We can search (Using case insensitive search) in full FPID or only
+        // in the fp name itself.
+        // After tests, only in the fp name itself looks better.
+        // However, the code to take in account the nickname is just commented, no removed.
+        wxString currname = //aList.GetItem( ii ).GetNickname().Lower() + ":" +
+                            aList.GetItem( ii ).GetFootprintName().Lower();
+
+        if( (aFilterType & FILTERING_BY_NAME) && !aFootPrintFilterPattern.IsEmpty()
+            && patternFilter.Find( currname ) == EDA_PATTERN_NOT_FOUND )
+        {
+            continue;
+        }
 
         msg.Printf( wxT( "%3d %s:%s" ), int( newList.GetCount() + 1 ),
                     GetChars( aList.GetItem( ii ).GetNickname() ),

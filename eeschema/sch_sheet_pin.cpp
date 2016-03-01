@@ -466,7 +466,7 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
      * for INPUT type the icon is the OUTPUT shape of SCH_HIERLABEL
      * for OUTPUT type the icon is the INPUT shape of SCH_HIERLABEL
      */
-    int tmp = m_shape;
+    PINSHEETLABEL_SHAPE tmp = m_shape;
 
     switch( m_shape )
     {

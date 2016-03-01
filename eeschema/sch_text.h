@@ -40,17 +40,16 @@ class LINE_READER;
 class NETLIST_OBJECT_LIST;
 
 
-/* Type of SCH_HIERLABEL and SCH_GLOBALLABEL
+/* Shape/Type of SCH_HIERLABEL and SCH_GLOBALLABEL
  * mainly used to handle the graphic associated shape
  */
-typedef enum {
+enum PINSHEETLABEL_SHAPE {
     NET_INPUT,
     NET_OUTPUT,
     NET_BIDI,
     NET_TRISTATE,
-    NET_UNSPECIFIED,
-    NET_TMAX        /* Last value */
-} TypeSheetLabel;
+    NET_UNSPECIFIED
+};
 
 
 extern const char* SheetLabelType[];    /* names of types of labels */
@@ -58,7 +57,7 @@ extern const char* SheetLabelType[];    /* names of types of labels */
 class SCH_TEXT : public SCH_ITEM, public EDA_TEXT
 {
 protected:
-    int m_shape;
+    PINSHEETLABEL_SHAPE m_shape;
 
     /// True if not connected to another object if the object derive from SCH_TEXT
     /// supports connections.
@@ -120,9 +119,9 @@ public:
 
     int GetOrientation() { return m_schematicOrientation; }
 
-    int GetShape() const { return m_shape; }
+    PINSHEETLABEL_SHAPE GetShape() const { return m_shape; }
 
-    void SetShape( int aShape ) { m_shape = aShape; }
+    void SetShape( PINSHEETLABEL_SHAPE aShape ) { m_shape = aShape; }
 
     /**
      * Function GetSchematicTextOffset (virtual)

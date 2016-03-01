@@ -1,5 +1,3 @@
-#ifndef PGM_KICAD_H_
-#define PGM_KICAD_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -23,6 +21,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef PGM_KICAD_H_
+#define PGM_KICAD_H_
 
 
 #include <pgm_base.h>

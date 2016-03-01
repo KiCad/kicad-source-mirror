@@ -38,7 +38,7 @@ class DIALOG_SHIM;
 class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		enum
 		{
@@ -55,7 +55,7 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 			wxID_MIDDLEBUTTONPAN,
 			wxID_AUTOPAN
 		};
-		
+
 		wxRadioBox* m_PolarDisplay;
 		wxRadioBox* m_UnitsSelection;
 		wxRadioBox* m_CursorShape;
@@ -79,24 +79,25 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxCheckBox* m_ZoomCenterOpt;
 		wxCheckBox* m_MiddleButtonPANOpt;
 		wxCheckBox* m_OptMiddleButtonPanLimited;
+		wxCheckBox* m_MousewheelPANOpt;
 		wxCheckBox* m_AutoPANOpt;
 		wxCheckBox* m_DumpZonesWhenFilling;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnMiddleBtnPanEnbl( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE();
-	
+
 };
 
 #endif //__DIALOG_GENERAL_OPTIONS_BOARDEDITOR_BASE_H__

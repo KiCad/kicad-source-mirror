@@ -22,18 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "project_template.h"
 
-#include <vector>
-
-#include <wx/wx.h>
-#include <wx/arrstr.h>
+#include <wx/bitmap.h>
 #include <wx/dir.h>
-#include <wx/filename.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 
-#include <macros.h>
+#include "project_template.h"
 
 
 #define SEP()   wxFileName::GetPathSeparator()

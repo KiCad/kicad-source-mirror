@@ -36,7 +36,7 @@ class DIALOG_SHIM;
 class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxRadioBox* m_PolarDisplay;
 		wxRadioBox* m_BoxUnits;
@@ -49,22 +49,23 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_OptZoomNoCenter;
 		wxCheckBox* m_OptMiddleButtonPan;
 		wxCheckBox* m_OptMiddleButtonPanLimited;
+		wxCheckBox* m_OptMousewheelPan;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnMiddleBtnPanEnbl( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKBUttonClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Gerbview Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Gerbview Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DISPLAY_OPTIONS_BASE();
-	
+
 };
 
 #endif //__GERBVIEW_DIALOG_DISPLAY_OPTIONS_FRAME_BASE_H__

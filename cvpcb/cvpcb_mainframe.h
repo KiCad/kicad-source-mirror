@@ -58,24 +58,25 @@ class CVPCB_MAINFRAME : public KIWAY_PLAYER
     friend struct CV::IFACE;
 
     wxArrayString             m_footprintListEntries;
-
-public:
-    bool                      m_KeepCvpcbOpen;
+    wxString                  m_currentSearchPattern;
+    bool                      m_keepCvpcbOpen;
+    NETLIST                   m_netlist;
+    int                       m_filteringOptions;
+    wxAuiToolBar*             m_mainToolBar;
     FOOTPRINTS_LISTBOX*       m_footprintListBox;
     LIBRARY_LISTBOX*          m_libListBox;
     COMPONENTS_LISTBOX*       m_compListBox;
-    wxAuiToolBar*             m_mainToolBar;
+    wxTextCtrl*               m_tcFilterString;
+
+public:
     wxArrayString             m_ModuleLibNames;
     wxArrayString             m_EquFilesNames;
-    wxString                  m_NetlistFileExtension;
     wxString                  m_DocModulesFileName;
-    FOOTPRINT_LIST            m_footprints;
-    NETLIST                   m_netlist;
+    FOOTPRINT_LIST            m_FootprintsList;
 
 protected:
     int             m_undefinedComponentCnt;
     bool            m_modified;
-    bool            m_isEESchemaNetlist;
     bool            m_skipComponentSelect;      // true to skip OnSelectComponent event
                                                 // (in automatic selection/deletion of associations)
     PARAM_CFG_ARRAY m_projectFileParams;
@@ -104,11 +105,11 @@ public:
     void             OnSelectComponent( wxListEvent& event );
 
     /**
-     * Function OnEditFootrprintLibraryTable
+     * Function OnEditFootprintLibraryTable
      * displays the footprint library table editing dialog and updates the global and local
      * footprint tables accordingly.
      */
-    void             OnEditFootrprintLibraryTable( wxCommandEvent& event );
+    void             OnEditFootprintLibraryTable( wxCommandEvent& event );
 
     void             OnQuit( wxCommandEvent& event );
     void             OnCloseWindow( wxCloseEvent& Event );
@@ -127,21 +128,7 @@ public:
      */
     void             DelAssociations( wxCommandEvent& event );
 
-    void             SaveProjectFile( wxCommandEvent& aEvent );
     void             SaveQuitCvpcb( wxCommandEvent& event );
-
-    /**
-     * Function LoadNetList
-     * reads a netlist selected by user when clicking on load netlist button or any entry
-     * in the file history menu.
-     */
-    void             LoadNetList( wxCommandEvent& event );
-
-    /**
-     * Function OnEditLibraryTable
-     * envokes the footprint library table edit dialog.
-     */
-    void             OnEditFootprintLibraryTable( wxCommandEvent& aEvent );
 
     void             OnConfigurePaths( wxCommandEvent& aEvent );
 
@@ -172,7 +159,11 @@ public:
      */
     void             OnSelectFilteringFootprint( wxCommandEvent& event );
 
-    void             OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event );
+    /**
+     * Function OnEnterFilteringText
+     * Is called each time the text of m_tcFilterString is changed.
+     */
+    void             OnEnterFilteringText( wxCommandEvent& event );
 
     /**
      * Function SetNewPkg
@@ -193,11 +184,11 @@ public:
     void             CreateScreenCmp();
 
     /**
-     * Function SaveEdits
+     * Function SaveFootprintAssociation
      * saves the edits that the user has done by sending them back to eeschema
      * via the kiway.
      */
-    void SaveEdits();
+    void SaveFootprintAssociation();
 
     /**
      * Function ReadNetList
@@ -211,9 +202,15 @@ public:
 
     /**
      * Function LoadProjectFile
-     * reads the configuration parameter from the project (.pro) file \a aFileName
+     * reads the CvPcb configuration parameter from the project (.pro) file \a aFileName
      */
     void LoadProjectFile();
+
+    /**
+     * Function SaveProjectFile
+     * Saves the CvPcb configuration parameter from the project (.pro) file \a aFileName
+     */
+    void SaveProjectFile();
 
     void LoadSettings( wxConfigBase* aCfg );    // override virtual
 
@@ -265,10 +262,9 @@ public:
      * Function UpdateTitle
      * sets the main window title bar text.
      * <p>
-     * If file name defined by CVPCB_MAINFRAME::m_NetlistFileName is not set, the title is
-     * set to the application name appended with no file.  Otherwise, the title is set to
-     * the full path and file name and read only is appended to the title if the user does
-     * not have write access to the file.
+     * If no current project open( eeschema run outside kicad manager with no schematic loaded),
+     * the title is set to the application name appended with "no project".
+     * Otherwise, the title shows the project name.
      */
     void UpdateTitle();
 
@@ -282,7 +278,20 @@ public:
 
     COMPONENT* GetSelectedComponent();
 
+    /**
+     * @return the FPID of the selected footprint in footprint listview
+     * or a empty string if no selection
+     */
+    const wxString GetSelectedFootprint();
+
 private:
+    // UI event handlers.
+    // Keep consistent the display state of toggle menus or tools in toolbar
+    void OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event );
+    void OnFilterFPbyKeywords( wxUpdateUIEvent& event );
+    void OnFilterFPbyPinCount( wxUpdateUIEvent& event );
+    void OnFilterFPbyLibrary( wxUpdateUIEvent& event );
+    void OnFilterFPbyKeyName( wxUpdateUIEvent& event );
 
     /**
      * read the .equ files and populate the list of equvalents
@@ -292,6 +301,8 @@ private:
      * @return the error count ( 0 = no error)
      */
     int buildEquivalenceList( FOOTPRINT_EQUIVALENCE_LIST& aList, wxString * aErrorMessages = NULL );
+
+    void refreshAfterComponentSearch (COMPONENT* component);
 
     DECLARE_EVENT_TABLE()
 };

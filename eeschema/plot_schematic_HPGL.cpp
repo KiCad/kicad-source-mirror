@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,21 +135,15 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
             if( sheetpath == NULL )
                 break;
 
-            list.Clear();
+            list = *sheetpath;
+            m_parent->SetCurrentSheet( list );
+            m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+            m_parent->SetSheetNumberAndCount();
 
-            if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
-            {
-                m_parent->SetCurrentSheet( list );
-                m_parent->GetCurrentSheet().UpdateAllScreenReferences();
-                m_parent->SetSheetNumberAndCount();
+            screen = m_parent->GetCurrentSheet().LastScreen();
 
-                screen = m_parent->GetCurrentSheet().LastScreen();
-
-                if( !screen ) // LastScreen() may return NULL
-                    screen = m_parent->GetScreen();
-            }
-            else // Should not happen
-                return;
+            if( !screen ) // LastScreen() may return NULL
+                screen = m_parent->GetScreen();
 
             sheetpath = SheetList.GetNext();
         }
@@ -192,7 +186,8 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef )
             }
             else
             {
-                msg.Printf( _( "Unable to create file '%s'.\n" ), GetChars( plotFileName.GetFullPath() ) );
+                msg.Printf( _( "Unable to create file '%s'.\n" ),
+                            GetChars( plotFileName.GetFullPath() ) );
                 reporter.Report( msg, REPORTER::RPT_ERROR );
             }
 

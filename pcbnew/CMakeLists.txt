@@ -1,12 +1,5 @@
-# the map generation creates on Windows/gcc a lot of useless warnings
-# so disable it on windows
-if( WIN32 AND NOT CMAKE_CROSSCOMPILING )
-    set( MAKE_LINK_MAPS false )
-else()
-    set( MAKE_LINK_MAPS true )
-endif()
-
 add_definitions( -DPCBNEW )
+
 add_subdirectory(router)
 
 # psnrouter depends on make_lexer outputs in common (bug # 1285878 )
@@ -458,7 +451,6 @@ endif()
 # Doxygen python documentation
 ###
 
-find_package( Doxygen )
 if( DOXYGEN_FOUND )
     if( KICAD_SCRIPTING )
 
@@ -494,8 +486,6 @@ if( DOXYGEN_FOUND )
             COMMENT "building doxygen docs into directory doxygen-python/html"
             )
     endif()
-else()
-    message( STATUS "WARNING: Doxygen not found - doxygen-docs (Source Docs) target not created" )
 endif()
 
 
@@ -698,18 +688,6 @@ if( KICAD_SCRIPTING_MODULES )
         DEPENDS _pcbnew
         COMMENT "Fixing swig_import_helper in Kicad scripting modules"
         )
-
-    if( NOT APPLE )
-        install( FILES ${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py DESTINATION ${PYTHON_DEST} )
-    else()
-        # put everything into bundle at build time, it is relocated at install
-        add_custom_target( ScriptingModulesPcbnewPyCopy ALL
-            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_BINARY_DIR}/pcbnew/pcbnew.py" "${PYTHON_DEST}/"
-            DEPENDS FixSwigImportsModuleScripting
-            COMMENT "Copying pcbnew.py into ${PYTHON_DEST}"
-            )
-        add_dependencies( ScriptingModulesPcbnewPyCopy ScriptingWxpythonCopy )
-    endif()
 
     if( MINGW )
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST} )

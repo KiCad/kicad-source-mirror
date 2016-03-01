@@ -6,10 +6,15 @@
 /* Routines for manipulating greymaps, including reading pgm files. We
  *  only deal with greymaps of depth 8 bits. */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <errno.h>
+#include <stddef.h>
 
 #include "greymap.h"
 #include "bitops.h"
@@ -28,8 +33,8 @@ static int  gm_readbody_bmp( FILE* f, greymap_t** gmp );
  *  Assumes w, h >= 0. */
 greymap_t* gm_new( int w, int h )
 {
-    greymap_t* gm;
-    ssize_t size = (ssize_t) w * (ssize_t) h * (ssize_t) sizeof(signed short int);
+    greymap_t*  gm;
+    ptrdiff_t   size = (ptrdiff_t) w * (ptrdiff_t) h * (ptrdiff_t) sizeof(signed short int);
 
     /* check for overflow error */
     if( size < 0 || size / w / h != sizeof(signed short int) )
@@ -272,7 +277,7 @@ static int gm_readbody_pnm( FILE* f, greymap_t** gmp, int magic )
 {
     greymap_t* gm;
     int x, y, i, j, b, b1, sum;
-    int bpr; /* bytes per row (as opposed to 4*gm->c) */
+    int bpr;    /* bytes per row (as opposed to 4*gm->c) */
     int w, h, max;
 
     gm = NULL;
@@ -392,7 +397,7 @@ static int gm_readbody_pnm( FILE* f, greymap_t** gmp, int magic )
     case '4':
         /* read P4 format: PBM raw */
 
-        b = fgetc( f ); /* read single white-space character after height */
+        b = fgetc( f );    /* read single white-space character after height */
 
         if( b==EOF )
         {
@@ -414,7 +419,7 @@ static int gm_readbody_pnm( FILE* f, greymap_t** gmp, int magic )
 
                 for( j = 0; j<8; j++ )
                 {
-                    GM_PUT( gm, i * 8 + j, y, (b & (0x80 >> j)) ? 0 : 255 );
+                    GM_PUT( gm, i * 8 + j, y, b & (0x80 >> j) ? 0 : 255 );
                 }
             }
         }
@@ -431,7 +436,7 @@ static int gm_readbody_pnm( FILE* f, greymap_t** gmp, int magic )
             goto format_error;
         }
 
-        b = fgetc( f ); /* read single white-space character after max */
+        b = fgetc( f );    /* read single white-space character after max */
 
         if( b==EOF )
         {
@@ -474,7 +479,7 @@ static int gm_readbody_pnm( FILE* f, greymap_t** gmp, int magic )
             goto format_error;
         }
 
-        b = fgetc( f ); /* read single white-space character after max */
+        b = fgetc( f );    /* read single white-space character after max */
 
         if( b==EOF )
         {
@@ -689,7 +694,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
     gm = NULL;
     coltable = NULL;
 
-    bmp_pos = 2; /* set file position */
+    bmp_pos = 2;    /* set file position */
 
     /* file header (minus magic number) */
     TRY( bmp_readint( f, 4, &bmpinfo.FileSize ) );
@@ -703,7 +708,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
         || bmpinfo.InfoSize == 108 || bmpinfo.InfoSize == 124 )
     {
         /* Windows or new OS/2 format */
-        bmpinfo.ctbits = 32; /* sample size in color table */
+        bmpinfo.ctbits = 32;    /* sample size in color table */
         TRY( bmp_readint( f, 4, &bmpinfo.w ) );
         TRY( bmp_readint( f, 4, &bmpinfo.h ) );
         TRY( bmp_readint( f, 2, &bmpinfo.Planes ) );
@@ -715,7 +720,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
         TRY( bmp_readint( f, 4, &bmpinfo.ncolors ) );
         TRY( bmp_readint( f, 4, &bmpinfo.ColorsImportant ) );
 
-        if( bmpinfo.InfoSize >= 108 ) /* V4 and V5 bitmaps */
+        if( bmpinfo.InfoSize >= 108 )    /* V4 and V5 bitmaps */
         {
             TRY( bmp_readint( f, 4, &bmpinfo.RedMask ) );
             TRY( bmp_readint( f, 4, &bmpinfo.GreenMask ) );
@@ -746,7 +751,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
     else if( bmpinfo.InfoSize == 12 )
     {
         /* old OS/2 format */
-        bmpinfo.ctbits = 24; /* sample size in color table */
+        bmpinfo.ctbits = 24;    /* sample size in color table */
         TRY( bmp_readint( f, 2, &bmpinfo.w ) );
         TRY( bmp_readint( f, 2, &bmpinfo.h ) );
         TRY( bmp_readint( f, 2, &bmpinfo.Planes ) );
@@ -772,7 +777,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
     if( bmpinfo.Planes != 1 )
     {
         gm_read_error = "cannot handle bmp planes";
-        goto format_error; /* can't handle planes */
+        goto format_error;    /* can't handle planes */
     }
 
     if( bmpinfo.ncolors == 0 )
@@ -801,7 +806,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
     }
 
     /* forward to data */
-    if( bmpinfo.InfoSize != 12 ) /* not old OS/2 format */
+    if( bmpinfo.InfoSize != 12 )    /* not old OS/2 format */
     {
         TRY( bmp_forward( f, bmpinfo.DataOffset ) );
     }
@@ -823,7 +828,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
         goto format_error;
         break;
 
-    case 0x001: /* monochrome palette */
+    case 0x001:    /* monochrome palette */
 
         /* raster data */
         for( y = 0; y<bmpinfo.h; y++ )
@@ -837,7 +842,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
                 for( j = 0; j<8; j++ )
                 {
                     GM_PUT( gm, i * 8 + j, ycorr( y ),
-                            (b & (0x80 >> j)) ? coltable[1] : coltable[0] );
+                            b & (0x80 >> j) ? coltable[1] : coltable[0] );
                 }
             }
 
@@ -846,7 +851,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
 
         break;
 
-    case 0x002: /* 2-bit to 8-bit palettes */
+    case 0x002:    /* 2-bit to 8-bit palettes */
     case 0x003:
     case 0x004:
     case 0x005:
@@ -880,15 +885,15 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
 
         break;
 
-    case 0x010: /* 16-bit encoding */
+    case 0x010:    /* 16-bit encoding */
         /* can't do this format because it is not well-documented and I
          *  don't have any samples */
         gm_read_error = "cannot handle bmp 16-bit coding";
         goto format_error;
         break;
 
-    case 0x018: /* 24-bit encoding */
-    case 0x020: /* 32-bit encoding */
+    case 0x018:     /* 24-bit encoding */
+    case 0x020:     /* 32-bit encoding */
 
         for( y = 0; y<bmpinfo.h; y++ )
         {
@@ -906,7 +911,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
 
         break;
 
-    case 0x320: /* 32-bit encoding with bitfields */
+    case 0x320:    /* 32-bit encoding with bitfields */
         redshift = lobit( bmpinfo.RedMask );
         greenshift  = lobit( bmpinfo.GreenMask );
         blueshift   = lobit( bmpinfo.BlueMask );
@@ -929,14 +934,14 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
 
         break;
 
-    case 0x204: /* 4-bit runlength compressed encoding (RLE4) */
+    case 0x204:    /* 4-bit runlength compressed encoding (RLE4) */
         x   = 0;
         y   = 0;
 
         while( 1 )
         {
-            TRY_EOF( bmp_readint( f, 1, &b ) ); /* opcode */
-            TRY_EOF( bmp_readint( f, 1, &c ) ); /* argument */
+            TRY_EOF( bmp_readint( f, 1, &b ) );     /* opcode */
+            TRY_EOF( bmp_readint( f, 1, &c ) );     /* argument */
 
             if( b>0 )
             {
@@ -975,8 +980,8 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
             else if( c == 2 )
             {
                 /* "delta": skip pixels in x and y directions */
-                TRY_EOF( bmp_readint( f, 1, &b ) ); /* x offset */
-                TRY_EOF( bmp_readint( f, 1, &c ) ); /* y offset */
+                TRY_EOF( bmp_readint( f, 1, &b ) );     /* x offset */
+                TRY_EOF( bmp_readint( f, 1, &c ) );     /* y offset */
                 x   += b;
                 y   += c;
             }
@@ -1015,14 +1020,14 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
 
         break;
 
-    case 0x108: /* 8-bit runlength compressed encoding (RLE8) */
+    case 0x108:    /* 8-bit runlength compressed encoding (RLE8) */
         x   = 0;
         y   = 0;
 
         while( 1 )
         {
-            TRY_EOF( bmp_readint( f, 1, &b ) ); /* opcode */
-            TRY_EOF( bmp_readint( f, 1, &c ) ); /* argument */
+            TRY_EOF( bmp_readint( f, 1, &b ) );     /* opcode */
+            TRY_EOF( bmp_readint( f, 1, &c ) );     /* argument */
 
             if( b>0 )
             {
@@ -1058,8 +1063,8 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
             else if( c == 2 )
             {
                 /* "delta": skip pixels in x and y directions */
-                TRY_EOF( bmp_readint( f, 1, &b ) ); /* x offset */
-                TRY_EOF( bmp_readint( f, 1, &c ) ); /* y offset */
+                TRY_EOF( bmp_readint( f, 1, &b ) );     /* x offset */
+                TRY_EOF( bmp_readint( f, 1, &c ) );     /* y offset */
                 x   += b;
                 y   += c;
             }
@@ -1094,7 +1099,7 @@ static int gm_readbody_bmp( FILE* f, greymap_t** gmp )
         }
 
         break;
-    } /* switch */
+    }    /* switch */
 
     /* skip any potential junk after the data section, but don't
      *  complain in case EOF is encountered */
@@ -1267,7 +1272,7 @@ int gm_print( FILE* f, greymap_t* gm )
                 }
             }
 
-            fputc( "*#=- "[5 * d / t], f ); /* what a cute trick :) */
+            fputc( "*#=- "[5 * d / t], f );    /* what a cute trick :) */
         }
 
         fputc( '\n', f );

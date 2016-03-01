@@ -90,12 +90,14 @@ private:
     wxArrayString  m_footprintList;
 
 public:
+    // OR'ed mask to manage footprint filtering options
     enum FP_FILTER_T
     {
-        UNFILTERED   = 0,
-        BY_COMPONENT = 0x0001,
-        BY_PIN_COUNT = 0x0002,
-        BY_LIBRARY   = 0x0004,
+        UNFILTERED_FP_LIST              = 0,
+        FILTERING_BY_COMPONENT_KEYWORD  = 0x0001,
+        FILTERING_BY_PIN_COUNT          = 0x0002,
+        FILTERING_BY_LIBRARY            = 0x0004,
+        FILTERING_BY_NAME               = 0x0008
     };
 
     FOOTPRINTS_LISTBOX( CVPCB_MAINFRAME* parent, wxWindowID id,
@@ -116,10 +118,11 @@ public:
      * @param aLibName is wxString containing the name of the selected library.  Can be
      *                 wxEmptyString.
      * @param aComponent is the #COMPONENT used by the filtering criteria.  Can be NULL.
+     * @param aFootPrintFilterPattern = a filter used to filter list by names
      * @param aFilterType defines the criteria to filter \a aList.
      */
     void     SetFootprints( FOOTPRINT_LIST& aList, const wxString& aLibName,
-                            COMPONENT* aComponent, int aFilterType );
+                            COMPONENT* aComponent, const wxString &aFootPrintFilterPattern, int aFilterType );
 
     wxString GetSelectedFootprint();
 
