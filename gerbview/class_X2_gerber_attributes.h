@@ -38,7 +38,7 @@
  * %TF.FileFunction,Copper,L1,Top*%
  *
  * Currently:
- *  .FileFunction .FileFunction Identifies the file’s function in the PCB.
+ *  .FileFunction .FileFunction Identifies the file's function in the PCB.
  * Other Standard Attributes, not yet used in Gerbview:
  *  .Part Identifies the part the file represents, e.g. a single PCB
  *  .MD5 Sets the MD5 file signature or checksum.
@@ -48,7 +48,7 @@
 
 /**
  * class X2_ATTRIBUTE
- * The attribute value consists of a number of substrings separated by a “,”
+ * The attribute value consists of a number of substrings separated by a ","
 */
 
 class X2_ATTRIBUTE
@@ -138,8 +138,8 @@ public:
  *      Corresponding position substring:
  *      Copper layer:   L1, L2, L3...to indicate the layer position followed by Top, Inr or
  *                      Bot. L1 is always the top copper layer. E.g. L2,Inr.
- *      Extra layer, e.g. solder mask: Top or Bot – defines the attachment of the layer.
- *      Drill/rout layer: E.g. 1,4 – where 1 is the start and 4 is the end copper layer. The
+ *      Extra layer, e.g. solder mask: Top or Bot - defines the attachment of the layer.
+ *      Drill/rout layer: E.g. 1,4 - where 1 is the start and 4 is the end copper layer. The
  *                        pair 1,4 defines the span of the drill/rout file
  * Optional index. This can be used in instances where for example there are two solder
  *                 masks on the same side. The index counts from the PCB surface outwards.
