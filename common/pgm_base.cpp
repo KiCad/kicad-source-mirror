@@ -481,9 +481,12 @@ bool PGM_BASE::initPgm()
 
     ReadPdfBrowserInfos();      // needs m_common_settings
 
-    loadCommonSettings();
-
+    // Init user language *before* calling loadCommonSettings, because
+    // env vars could be incorrectly initialized on Linux
+    // (if the value contains some non ASCII7 chars, the env var is not initialized)
     SetLanguage( true );
+
+    loadCommonSettings();
 
     // Set locale option for separator used in float numbers
     SetLocaleTo_Default();
@@ -546,22 +549,7 @@ void PGM_BASE::loadCommonSettings()
     m_help_size.x = 500;
     m_help_size.y = 400;
 
-    wxString languageSel;
-
-    m_common_settings->Read( languageCfgKey, &languageSel );
-    setLanguageId( wxLANGUAGE_DEFAULT );
-
     m_common_settings->Read( showEnvVarWarningDialog, &m_show_env_var_dialog );
-
-    // Search for the current selection
-    for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
-    {
-        if( s_Languages[ii].m_Lang_Label == languageSel )
-        {
-            setLanguageId( s_Languages[ii].m_WX_Lang_Identifier );
-            break;
-        }
-    }
 
     m_editor_name = m_common_settings->Read( wxT( "Editor" ) );
 
@@ -622,6 +610,26 @@ bool PGM_BASE::SetLanguage( bool first_time )
 {
     bool     retv = true;
 
+    if( first_time )
+    {
+        setLanguageId( wxLANGUAGE_DEFAULT );
+        // First time SetLanguage is called, the user selected language id is set
+        // from commun user config settings
+        wxString languageSel;
+
+        m_common_settings->Read( languageCfgKey, &languageSel );
+
+        // Search for the current selection
+        for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
+        {
+            if( s_Languages[ii].m_Lang_Label == languageSel )
+            {
+                setLanguageId( s_Languages[ii].m_WX_Lang_Identifier );
+                break;
+            }
+        }
+    }
+
     // dictionary file name without extend (full name is kicad.mo)
     wxString dictionaryName( wxT( "kicad" ) );
 
@@ -645,9 +653,12 @@ bool PGM_BASE::SetLanguage( bool first_time )
                     GetChars( dictionaryName ), GetChars( m_locale->GetName() ) );
     }
 
-    // how about a meaningful comment here.
     if( !first_time )
     {
+        // If we are here, the user has selected an other language.
+        // Therefore the new prefered language name is stored in common config.
+        // Do NOT store the wxWidgets language Id, it can change between wxWidgets
+        // versions, for a given language
         wxString languageSel;
 
         // Search for the current selection
