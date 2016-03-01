@@ -28,7 +28,7 @@
 /// Macros which export functions from a DLL/DSO.
 /// See: http://gcc.gnu.org/wiki/Visibility
 
-#if defined(__MINGW32__)
+#if defined(_WIN32)
  #define APIEXPORT __declspec(dllexport)
  #define APIIMPORT __declspec(dllimport)
  #define APILOCAL
