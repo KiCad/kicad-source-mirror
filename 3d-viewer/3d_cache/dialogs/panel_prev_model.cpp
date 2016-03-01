@@ -508,12 +508,18 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
         preview->SetSizer( ws );
         preview->Layout();
         ws->FitInside( preview );
+
+        // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
+        // in order to receive mouse events.  Otherwise, the user has to click somewhere on
+        // the canvas before it will respond to mouse wheel events.
+        canvas->SetFocus();
         return;
     }
 
     canvas->Set3DModel( *model );
     canvas->Refresh();
     canvas->Update();
+    canvas->SetFocus();
 
     return;
 }
