@@ -63,7 +63,7 @@ public:
     {
         int rc = aClearance + m_radius;
 
-        return aSeg.Distance( m_center ) <= rc;
+        return aSeg.Distance( m_center ) < rc;
     }
 
     void SetRadius( int aRadius )

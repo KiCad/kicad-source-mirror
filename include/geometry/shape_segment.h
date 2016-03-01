@@ -59,7 +59,7 @@ public:
 
     bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const
     {
-        return m_seg.Distance( aP ) <= ( m_width + 1 ) / 2 + aClearance;
+        return m_seg.Distance( aP ) < ( m_width + 1 ) / 2 + aClearance;
     }
 
     void SetSeg( const SEG& aSeg )

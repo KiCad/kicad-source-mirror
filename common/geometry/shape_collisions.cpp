@@ -121,14 +121,26 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
 
 static VECTOR2I pushoutForce( const SHAPE_CIRCLE& aA, const SEG& aB, int aClearance )
 {
-    VECTOR2I nearest = aB.NearestPoint( aA.GetCenter() );
-    VECTOR2I f (0, 0);
+    VECTOR2I f( 0, 0 );
 
-    int dist = ( nearest - aA.GetCenter() ).EuclideanNorm();
-    int min_dist = aClearance + aA.GetRadius();
+    const VECTOR2I c = aA.GetCenter();
+    const VECTOR2I nearest = aB.NearestPoint( c );
+
+    const int r = aA.GetRadius();
+
+    int dist = ( nearest - c ).EuclideanNorm();
+    int min_dist = aClearance + r;
 
     if( dist < min_dist )
-        f = ( aA.GetCenter() - nearest ).Resize ( min_dist - dist + 10 );
+    {
+        for( int corr = 0; corr < 5; corr++ )
+        {
+            f = ( aA.GetCenter() - nearest ).Resize( min_dist - dist + corr );
+
+            if( aB.Distance( c + f ) >= min_dist )
+                break;
+        }
+    }
 
     return f;
 }
