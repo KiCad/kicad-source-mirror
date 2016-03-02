@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 28 2016)
+// C++ code generated with wxFormBuilder (version Mar  2 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,7 +16,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_GeneralBoxSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_NoteBook = new wxNotebook( this, ID_NOTEBOOK, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PanelProperties = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	m_PanelProperties = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_PanelPropertiesBoxSizer;
 	m_PanelPropertiesBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -28,6 +28,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	PropLeftSizer->Add( m_staticTextDoc, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_DocCtrl = new wxTextCtrl( PropLeftSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_DocCtrl->SetMaxLength( 0 ); 
 	PropLeftSizer->Add( m_DocCtrl, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_staticTextKeywords = new wxStaticText( PropLeftSizer->GetStaticBox(), wxID_ANY, _("Keywords"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -35,6 +36,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	PropLeftSizer->Add( m_staticTextKeywords, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_KeywordCtrl = new wxTextCtrl( PropLeftSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_KeywordCtrl->SetMaxLength( 0 ); 
 	PropLeftSizer->Add( m_KeywordCtrl, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	m_staticTextRef = new wxStaticText( PropLeftSizer->GetStaticBox(), wxID_ANY, _("Reference"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -45,6 +47,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	bSizerRef = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ReferenceCtrl = new wxTextCtrl( PropLeftSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_ReferenceCtrl->SetMaxLength( 0 ); 
 	bSizerRef->Add( m_ReferenceCtrl, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_button4 = new wxButton( PropLeftSizer->GetStaticBox(), wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -61,6 +64,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	bSizerVal = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_ValueCtrl = new wxTextCtrl( PropLeftSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_ValueCtrl->SetMaxLength( 0 ); 
 	bSizerVal->Add( m_ValueCtrl, 1, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	
 	m_button5 = new wxButton( PropLeftSizer->GetStaticBox(), wxID_ANY, _("Edit"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -77,6 +81,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	PropLeftSizer->Add( m_staticTextFp, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_FootprintNameCtrl = new wxTextCtrl( PropLeftSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_FootprintNameCtrl->SetMaxLength( 0 ); 
 	PropLeftSizer->Add( m_FootprintNameCtrl, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	
@@ -157,6 +162,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	fgSizer1->Add( m_staticTextNetClearance, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_NetClearanceValueCtrl = new wxTextCtrl( sbSizer8->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_NetClearanceValueCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_NetClearanceValueCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_NetClearanceUnits = new wxStaticText( sbSizer8->GetStaticBox(), wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -179,6 +185,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	fgSizer1->Add( m_MaskClearanceTitle, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_SolderMaskMarginCtrl = new wxTextCtrl( sbSizer8->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderMaskMarginCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SolderMaskMarginCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_SolderMaskMarginUnits = new wxStaticText( sbSizer8->GetStaticBox(), wxID_ANY, _("inch"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -192,6 +199,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	fgSizer1->Add( m_staticTextSolderPaste, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_SolderPasteMarginCtrl = new wxTextCtrl( sbSizer8->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteMarginCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SolderPasteMarginCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_SolderPasteMarginUnits = new wxStaticText( sbSizer8->GetStaticBox(), wxID_ANY, _("Inch"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -205,6 +213,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	fgSizer1->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_SolderPasteMarginRatioCtrl = new wxTextCtrl( sbSizer8->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SolderPasteMarginRatioCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SolderPasteMarginRatioCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	m_SolderPasteRatioMarginUnits = new wxStaticText( sbSizer8->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -225,7 +234,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_PanelProperties->Layout();
 	m_PanelPropertiesBoxSizer->Fit( m_PanelProperties );
 	m_NoteBook->AddPage( m_PanelProperties, _("Properties"), false );
-	m_Panel3D = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	m_Panel3D = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerMain3D;
 	bSizerMain3D = new wxBoxSizer( wxVERTICAL );
 	
@@ -238,7 +247,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	wxBoxSizer* bSizer16;
 	bSizer16 = new wxBoxSizer( wxVERTICAL );
 	
-	m_3D_ShapeNameListBox = new wxListBox( sbSizer4->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,110 ), 0, NULL, wxLB_SINGLE ); 
+	m_3D_ShapeNameListBox = new wxListBox( sbSizer4->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( 200,110 ), 0, NULL, wxLB_SINGLE ); 
 	m_3D_ShapeNameListBox->SetMinSize( wxSize( -1,110 ) );
 	m_3D_ShapeNameListBox->SetMaxSize( wxSize( -1,200 ) );
 	
@@ -259,8 +268,8 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_buttonEdit = new wxButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Edit Filename"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3DButtons->Add( m_buttonEdit, 0, wxALL|wxEXPAND, 5 );
 	
-	m_btnCfgPath = new wxButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Configure Paths"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3DButtons->Add( m_btnCfgPath, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_button6 = new wxButton( sbSizer4->GetStaticBox(), wxID_ANY, _("Configure Paths"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3DButtons->Add( m_button6, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	bSizer15->Add( bSizer3DButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -280,7 +289,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_Panel3D->SetSizer( bSizerMain3D );
 	m_Panel3D->Layout();
 	bSizerMain3D->Fit( m_Panel3D );
-	m_NoteBook->AddPage( m_Panel3D, _("3D settings"), true );
+	m_NoteBook->AddPage( m_Panel3D, _("3D Settings"), true );
 	
 	m_GeneralBoxSizer->Add( m_NoteBook, 1, wxEXPAND | wxALL, 5 );
 	
@@ -305,7 +314,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::DIALOG_MODULE_MODULE_EDITOR_BASE( wxWindow* pa
 	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Add3DShape ), NULL, this );
 	m_buttonRemove->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Remove3DShape ), NULL, this );
 	m_buttonEdit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Edit3DShapeFilename ), NULL, this );
-	m_btnCfgPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Cfg3DPath ), NULL, this );
+	m_button6->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Cfg3DPath ), NULL, this );
 	m_sdbSizerStdButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerStdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::OnOkClick ), NULL, this );
 }
@@ -320,7 +329,7 @@ DIALOG_MODULE_MODULE_EDITOR_BASE::~DIALOG_MODULE_MODULE_EDITOR_BASE()
 	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Add3DShape ), NULL, this );
 	m_buttonRemove->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Remove3DShape ), NULL, this );
 	m_buttonEdit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Edit3DShapeFilename ), NULL, this );
-	m_btnCfgPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Cfg3DPath ), NULL, this );
+	m_button6->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::Cfg3DPath ), NULL, this );
 	m_sdbSizerStdButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizerStdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_MODULE_MODULE_EDITOR_BASE::OnOkClick ), NULL, this );
 	

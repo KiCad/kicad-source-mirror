@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 28 2016)
+// C++ code generated with wxFormBuilder (version Mar  2 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -92,7 +92,7 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		wxButton* m_buttonBrowse;
 		wxButton* m_buttonRemove;
 		wxButton* m_buttonEdit;
-		wxButton* m_btnCfgPath;
+		wxButton* m_button6;
 		wxBoxSizer* bLowerSizer3D;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
