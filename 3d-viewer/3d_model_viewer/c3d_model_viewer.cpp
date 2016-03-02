@@ -396,6 +396,7 @@ void C3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent &event )
 void C3D_MODEL_VIEWER::OnLeftDown( wxMouseEvent &event )
 {
     //m_is_moving_mouse = true;
+    event.Skip();
 }
 
 
@@ -403,12 +404,14 @@ void C3D_MODEL_VIEWER::OnLeftUp( wxMouseEvent &event )
 {
     //m_is_moving_mouse = false;
     //Refresh( false );
+    event.Skip();
 }
 
 
 void C3D_MODEL_VIEWER::OnMiddleDown( wxMouseEvent &event )
 {
     //m_is_moving_mouse = true;
+    event.Skip();
 }
 
 
@@ -416,11 +419,11 @@ void C3D_MODEL_VIEWER::OnMiddleUp( wxMouseEvent &event )
 {
     //m_is_moving_mouse = false;
     //Refresh( false );
+    event.Skip();
 }
 
 
 void C3D_MODEL_VIEWER::OnRightClick( wxMouseEvent &event )
 {
-
+    event.Skip();
 }
-
