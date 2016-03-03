@@ -668,7 +668,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
         // versions, for a given language
         wxString languageSel;
 
-        // Search for the current selection
+        // Search for the current selection language name
         for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
         {
             if( s_Languages[ii].m_WX_Lang_Identifier == m_language_id )
@@ -681,7 +681,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
         m_common_settings->Write( languageCfgKey, languageSel );
     }
 
-    // Test if floating point notation is working (bug in cross compilation, using wine)
+    // Test if floating point notation is working (bug encountered in cross compilation)
     // Make a conversion double <=> string
     double dtst = 0.5;
     wxString msg;
