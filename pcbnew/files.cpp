@@ -72,11 +72,11 @@ static const wxChar autosavePrefix[] = wxT( "_autosave-" );
  * @param aCtl is where to put the OpenProjectFiles() control bits.
  *
  * @param aFileName on entry is a probable choice, on return is the chosen filename.
- * @param aKicadFilesOnly true to list kiacad pcb files plugins only, false to list all plugins.
+ * @param aKicadFilesOnly true to list kiacad pcb files plugins only, false to list import plugins.
  *
  * @return bool - true if chosen, else false if user aborted.
  */
-bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bool aKicadFilesOnly = false )
+bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bool aKicadFilesOnly )
 {
     // This is a subset of all PLUGINs which are trusted to be able to
     // load a BOARD. User may occasionally use the wrong plugin to load a
@@ -88,23 +88,34 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         IO_MGR::PCB_FILE_T  pluginType;
     } loaders[] =
     {
-        { PcbFileWildcard,          IO_MGR::KICAD },
-        { LegacyPcbFileWildcard,    IO_MGR::LEGACY },
-        { EaglePcbFileWildcard,     IO_MGR::EAGLE },
-        { PCadPcbFileWildcard,      IO_MGR::PCAD },
+        { PcbFileWildcard,          IO_MGR::KICAD },    // Current Kicad board files
+        { LegacyPcbFileWildcard,    IO_MGR::LEGACY },   // Old Kicad board files
+        { EaglePcbFileWildcard,     IO_MGR::EAGLE },    // Import board files
+        { PCadPcbFileWildcard,      IO_MGR::PCAD },     // Import board files
     };
 
     wxFileName  fileName( *aFileName );
     wxString    fileFilters;
 
-    unsigned pluginsCount = aKicadFilesOnly ? 2 : DIM( loaders );
-
-    for( unsigned i=0; i < pluginsCount; ++i )
+    if( aKicadFilesOnly )
     {
-        if( i > 0 )
-            fileFilters += wxChar( '|' );
+        for( unsigned ii = 0; ii < 2; ++ii )
+        {
+            if( !fileFilters.IsEmpty() )
+                fileFilters += wxChar( '|' );
 
-        fileFilters += wxGetTranslation( loaders[i].filter );
+            fileFilters += wxGetTranslation( loaders[ii].filter );
+        }
+    }
+    else
+    {
+        for( unsigned ii = 2; ii < DIM( loaders ); ++ii )
+        {
+            if( !fileFilters.IsEmpty() )
+                fileFilters += wxChar( '|' );
+
+            fileFilters += wxGetTranslation( loaders[ii].filter );
+        }
     }
 
     wxString    path;
@@ -121,19 +132,18 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
         // leave name empty
     }
 
-    wxFileDialog dlg( aParent, _( "Open Board File" ), path, name, fileFilters,
+    wxFileDialog dlg( aParent,
+                      aKicadFilesOnly ? _( "Open Board File" ) : _( "Import Non Kicad Board File" ),
+                      path, name, fileFilters,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-    if( dlg.ShowModal() != wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_OK )
     {
-        int chosenFilter = dlg.GetFilterIndex();
-
-        // if Eagle, tell OpenProjectFiles() to use Eagle plugin.  It's the only special
-        // case because of the duplicate use of the *.brd file extension.  Other cases
-        // are clear because of unique file extensions.
-        *aCtl = chosenFilter == 2  ? KICTL_EAGLE_BRD : 0;
+        // For import option, if Eagle (*.brd files), tell OpenProjectFiles() to use Eagle plugin.
+        // It's the only special case because of the duplicate use of the *.brd file extension.
+        // Other cases are clear because of unique file extensions.
+        *aCtl = aKicadFilesOnly ? 0 : KICTL_EAGLE_BRD;
         *aFileName = dlg.GetPath();
-
         return true;
     }
     else
@@ -163,11 +173,7 @@ bool AskSaveBoardFileName( wxWindow* aParent, wxString* aFileName )
             fn.GetPath(),
             fn.GetFullName(),
             wildcard,
-            wxFD_SAVE
-            /* wxFileDialog is not equipped to handle multiple wildcards and
-               wxFD_OVERWRITE_PROMPT both together.
-               | wxFD_OVERWRITE_PROMPT
-            */
+            wxFD_SAVE | wxFD_OVERWRITE_PROMPT
             );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -177,23 +183,6 @@ bool AskSaveBoardFileName( wxWindow* aParent, wxString* aFileName )
 
     // always enforce filename extension, user may not have entered it.
     fn.SetExt( KiCadPcbFileExtension );
-
-    // Since the file overwrite test was removed from wxFileDialog because it doesn't work
-    // when multiple wildcards are defined, we have to check it ourselves to prevent an
-    // existing board file from silently being over written.
-    if( fn.FileExists() )
-    {
-        wxString ask = wxString::Format( _(
-                "The file '%s' already exists.\n\n"
-                "Do you want to overwrite it?" ),
-                 GetChars( fn.GetFullPath() )
-                 );
-
-        if( !IsOK( aParent, ask ) )
-        {
-            return false;
-        }
-    }
 
     *aFileName = fn.GetFullPath();
 
@@ -213,7 +202,7 @@ void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
 
         if( !wxFileName::IsFileReadable( fn ) )
         {
-            if( !AskLoadBoardFileName( this, &open_ctl, &fn ) )
+            if( !AskLoadBoardFileName( this, &open_ctl, &fn, true ) )
                 return;
         }
 
@@ -243,12 +232,22 @@ void PCB_EDIT_FRAME::Files_io_from_id( int id )
     {
     case ID_LOAD_FILE:
         {
-            // LoadOnePcbFile( GetBoard()->GetFileName(), append=false, aForceFileDialog=true );
-
-            int         open_ctl;
+            int         open_ctl = 0;
             wxString    fileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
 
-            if( !AskLoadBoardFileName( this, &open_ctl, &fileName ) )
+            if( !AskLoadBoardFileName( this, &open_ctl, &fileName, true ) )
+                return;
+
+            OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );
+        }
+        break;
+
+    case ID_IMPORT_NON_KICAD_BOARD:
+        {
+            int         open_ctl = 1;
+            wxString    fileName;// = Prj().AbsolutePath( GetBoard()->GetFileName() );
+
+            if( !AskLoadBoardFileName( this, &open_ctl, &fileName, false ) )
                 return;
 
             OpenProjectFiles( std::vector<wxString>( 1, fileName ), open_ctl );

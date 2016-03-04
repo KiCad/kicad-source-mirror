@@ -293,6 +293,7 @@ set( BMAPS_MID
     icon_txt
     import3d
     image
+    import_brd_file
     import_cmp_from_lib
     import_footprint_names
     import_hierarchical_label

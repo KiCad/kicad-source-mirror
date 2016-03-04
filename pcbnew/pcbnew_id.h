@@ -22,6 +22,7 @@ enum pcbnew_ids
     ID_READ_NETLIST,
     ID_SET_RELATIVE_OFFSET,
     ID_COPY_BOARD_AS,
+    ID_IMPORT_NON_KICAD_BOARD,
 
     // Right vertical tool bar command IDs.
     ID_PCB_HIGHLIGHT_BUTT,
