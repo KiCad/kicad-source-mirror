@@ -118,8 +118,10 @@ as such!  As such, it is OK to use UTF8 characters:
  #define LIB_ENV_VAR    wxT( "LD_LIBRARY_PATH" )
 #elif defined(__WXMAC__)
  #define LIB_ENV_VAR    wxT( "DYLD_LIBRARY_PATH" )
-#elif defined(__MINGW32__)
+#elif defined(_WIN32)
  #define LIB_ENV_VAR    wxT( "PATH" )
+#else
+ #error Platform support missing
 #endif
 
 
