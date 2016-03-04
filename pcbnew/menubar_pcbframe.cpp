@@ -43,7 +43,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
     wxString    text;
     wxMenuBar*  menuBar = GetMenuBar();
-    wxMenuItem * menutitem;
 
     wxFileHistory&  fhist = Kiface().GetFileHistory();
 
@@ -65,11 +64,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     if( Kiface().IsSingle() )   // not when under a project mgr
     {
         AddMenuItem( filesMenu, ID_NEW_BOARD,
-                _( "&New" ),
+                _( "&New Board" ),
                 _( "Clear current board and initialize a new one" ),
                 KiBitmap( new_pcb_xpm ) );
 
-        text = AddHotkeyName( _( "&Open" ), m_hotkeysDescrList, HK_LOAD_BOARD );
+        text = AddHotkeyName( _( "&Open Board" ), m_hotkeysDescrList, HK_LOAD_BOARD );
         AddMenuItem( filesMenu, ID_LOAD_FILE, text,
                 _( "Delete current board and load new board" ),
                 KiBitmap( open_brd_file_xpm ) );
@@ -94,15 +93,18 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                      -1, _( "Open &Recent" ),
                      _( "Open a recent opened board" ),
                      KiBitmap( open_project_xpm ) );
+        AddMenuItem( filesMenu, ID_APPEND_FILE,
+                     _( "&Append Board" ),
+                     _( "Append another Pcbnew board to the current loaded board. Available only when Pcbnew runs in stand alone mode" ),
+                     KiBitmap( import_xpm ) );
+
+        filesMenu->AppendSeparator();
+
+        AddMenuItem( filesMenu, ID_IMPORT_NON_KICAD_BOARD,
+                _( "Import Non Kicad Board File" ),
+                _( "Load a non KiCad board file and convert it to a .kicad_pcb file" ),
+                KiBitmap( import_brd_file_xpm ) );
     }
-
-    menutitem = AddMenuItem( filesMenu, ID_APPEND_FILE,
-                 _( "&Append Board" ),
-                 _( "Append another Pcbnew board to the current loaded board. Available only when Pcbnew runs in stand alone mode" ),
-                 KiBitmap( import_xpm ) );
-    if( ! Kiface().IsSingle() )      // disable when under a project mgr
-        menutitem->Enable( false );
-
 
     filesMenu->AppendSeparator();
 
