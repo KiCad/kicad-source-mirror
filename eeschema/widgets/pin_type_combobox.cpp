@@ -57,9 +57,9 @@ PinTypeComboBox::PinTypeComboBox( wxWindow* parent,
 }
 
 
-ELECTRICAL_PINTYPE PinTypeComboBox::GetSelection()
+ELECTRICAL_PINTYPE PinTypeComboBox::GetPinTypeSelection()
 {
-    return static_cast<ELECTRICAL_PINTYPE>( wxBitmapComboBox::GetSelection() );
+    return static_cast<ELECTRICAL_PINTYPE>( GetSelection() );
 }
 
 

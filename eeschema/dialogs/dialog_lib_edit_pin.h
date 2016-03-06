@@ -68,11 +68,11 @@ public:
 
     ELECTRICAL_PINTYPE GetElectricalType( void )
     {
-        return m_choiceElectricalType->GetSelection();
+        return m_choiceElectricalType->GetPinTypeSelection();
     }
 
     void SetStyle( GRAPHIC_PINSHAPE style ) { m_choiceStyle->SetSelection( style ); }
-    GRAPHIC_PINSHAPE GetStyle( void ) { return m_choiceStyle->GetSelection(); }
+    GRAPHIC_PINSHAPE GetStyle( void ) { return m_choiceStyle->GetPinShapeSelection(); }
 
     void SetPinName( const wxString& name ) { m_textPinName->SetValue( name ); }
     wxString GetPinName( void ) { return m_textPinName->GetValue(); }

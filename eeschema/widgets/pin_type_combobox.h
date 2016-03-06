@@ -46,6 +46,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxBitmapComboBoxNameStr );
 
-    ELECTRICAL_PINTYPE  GetSelection();
+    ELECTRICAL_PINTYPE  GetPinTypeSelection();
     void                SetSelection( ELECTRICAL_PINTYPE aType );
 };
