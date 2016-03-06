@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -528,13 +528,12 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
     }
     else
     {
-        SCH_SHEET_LIST schematic;
-        m_sheetPath = schematic.GetFirst();
+        SCH_SHEET_LIST schematic( g_RootSheet );
 
-        while( m_sheetPath != NULL )
+        for( unsigned i = 0; i < schematic.size(); i++ )
         {
+            m_sheetPath = &schematic[i];
             EDA_ITEM::IterateForward( m_sheetPath->LastDrawList(), this, NULL, m_ScanTypes );
-            m_sheetPath = schematic.GetNext();
         }
     }
 

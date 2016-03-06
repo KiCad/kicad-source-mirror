@@ -201,13 +201,13 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
         return;
 
     // Search for the selected marker
-    SCH_SHEET_PATH* sheet;
-    SCH_SHEET_LIST  SheetList;
+    unsigned i;
+    SCH_SHEET_LIST  sheetList( g_RootSheet );
     bool notFound = true;
 
-    for( sheet = SheetList.GetFirst(); sheet; sheet = SheetList.GetNext() )
+    for( i = 0;  i < sheetList.size(); i++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) sheet->LastDrawList();
+        SCH_ITEM* item = (SCH_ITEM*) sheetList[i].LastDrawList();
 
         for( ; item; item = item->Next() )
         {
@@ -231,10 +231,10 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
         return;
     }
 
-    if( *sheet != m_parent->GetCurrentSheet() )
+    if( sheetList[i] != m_parent->GetCurrentSheet() )
     {
-        sheet->LastScreen()->SetZoom( m_parent->GetScreen()->GetZoom() );
-        m_parent->SetCurrentSheet( *sheet );
+        sheetList[i].LastScreen()->SetZoom( m_parent->GetScreen()->GetZoom() );
+        m_parent->SetCurrentSheet( sheetList[i] );
         m_parent->GetCurrentSheet().UpdateAllScreenReferences();
     }
 
@@ -372,14 +372,12 @@ void DIALOG_ERC::setDRCMatrixButtonState( wxBitmapButton *aButton, int aState )
 
 void DIALOG_ERC::DisplayERC_MarkersList()
 {
-    SCH_SHEET_LIST sheetList;
+    SCH_SHEET_LIST sheetList( g_RootSheet);
     m_MarkersList->ClearList();
 
-    SCH_SHEET_PATH* sheet = sheetList.GetFirst();
-
-    for( ; sheet != NULL; sheet = sheetList.GetNext() )
+    for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        SCH_ITEM* item = sheet->LastDrawList();
+        SCH_ITEM* item = sheetList[i].LastDrawList();
 
         for( ; item != NULL; item = item->Next() )
         {
@@ -455,7 +453,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     m_tstUniqueGlobalLabels = m_cbTestUniqueGlbLabels->GetValue();
 
     // Build the whole sheet list in hierarchy (sheet, not screen)
-    SCH_SHEET_LIST sheets;
+    SCH_SHEET_LIST sheets( g_RootSheet );
     sheets.AnnotatePowerSymbols( Prj().SchLibs() );
 
     if( m_parent->CheckAnnotate( aMessagesList, false ) )

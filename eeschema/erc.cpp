@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -538,15 +538,14 @@ bool WriteDiagnosticERC( const wxString& aFullFileName )
     int err_count = 0;
     int warn_count = 0;
     int total_count = 0;
-    SCH_SHEET_LIST sheetList;
-    SCH_SHEET_PATH* sheet;
+    SCH_SHEET_LIST sheetList( g_RootSheet );
 
-    for( sheet = sheetList.GetFirst(); sheet != NULL; sheet = sheetList.GetNext() )
+    for( unsigned i = 0;  i < sheetList.size(); i++ )
     {
         msg << wxString::Format( _( "\n***** Sheet %s\n" ),
-                                 GetChars( sheet->PathHumanReadable() ) );
+                                 GetChars( sheetList[i].PathHumanReadable() ) );
 
-        for( SCH_ITEM* item = sheet->LastDrawList(); item != NULL; item = item->Next() )
+        for( SCH_ITEM* item = sheetList[i].LastDrawList(); item != NULL; item = item->Next() )
         {
             if( item->Type() != SCH_MARKER_T )
                 continue;

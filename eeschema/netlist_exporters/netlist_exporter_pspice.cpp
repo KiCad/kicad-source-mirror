@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,11 +79,11 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
     // commands) and create text list starting by [+]pspice , or [+]gnucap
     // (simulator commands)
     bufnum[BUFYPOS_LEN] = 0;
-    SCH_SHEET_LIST sheetList;
+    SCH_SHEET_LIST sheetList( g_RootSheet );
 
-    for( SCH_SHEET_PATH* sheet = sheetList.GetFirst(); sheet; sheet = sheetList.GetNext() )
+    for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        for( EDA_ITEM* item = sheet->LastDrawList(); item; item = item->Next() )
+        for( EDA_ITEM* item = sheetList[i].LastDrawList(); item; item = item->Next() )
         {
             size_t l1, l2;
             wxChar ident;
@@ -162,13 +162,13 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
     m_ReferencesAlreadyFound.Clear();
 
-    for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
+    for( unsigned i = 0;  i < sheetList.size();  i++ )
     {
-        ret |= fprintf( f, "* Sheet Name: %s\n", TO_UTF8( sheet->PathHumanReadable() ) );
+        ret |= fprintf( f, "* Sheet Name: %s\n", TO_UTF8( sheetList[i].PathHumanReadable() ) );
 
-        for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
+        for( EDA_ITEM* item = sheetList[i].LastDrawList();  item;  item = item->Next() )
         {
-            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, sheet );
+            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, &sheetList[i] );
 
             if( !comp )
                 break;
@@ -235,7 +235,7 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
             }
 
             //Get Standard Reference Designator:
-            wxString RefName = comp->GetRef( sheet );
+            wxString RefName = comp->GetRef( &sheetList[i] );
 
             //Conditionally add Prefix only for devices that begin with U or IC:
             if( aUsePrefix )

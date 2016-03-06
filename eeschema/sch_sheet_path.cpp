@@ -466,82 +466,23 @@ SCH_SHEET* SCH_SHEET_PATH::FindSheetByName( const wxString& aSheetName )
 /********************************************************************/
 SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet )
 {
-    m_index = 0;
-    m_count = 0;
-    m_list  = NULL;
     m_isRootSheet = false;
 
-    if( aSheet == NULL )
-        aSheet = g_RootSheet;
-
-    BuildSheetList( aSheet );
-}
-
-
-SCH_SHEET_PATH* SCH_SHEET_LIST::GetFirst()
-{
-    m_index = 0;
-
-    if( GetCount() > 0 )
-        return &( m_list[0] );
-
-    return NULL;
-}
-
-
-SCH_SHEET_PATH* SCH_SHEET_LIST::GetNext()
-{
-    if( m_index < GetCount() )
-        m_index++;
-
-    return GetSheet( m_index );
-}
-
-
-SCH_SHEET_PATH* SCH_SHEET_LIST::GetLast()
-{
-    if( GetCount() == 0 )
-        return NULL;
-
-    m_index = GetCount() - 1;
-
-    return GetSheet( m_index );
-}
-
-
-SCH_SHEET_PATH* SCH_SHEET_LIST::GetPrevious()
-{
-    if( m_index == 0 )
-        return NULL;
-
-    m_index -= 1;
-
-    return GetSheet( m_index );
-}
-
-
-SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheet( int aIndex ) const
-{
-    if( aIndex < GetCount() )
-        return &( m_list[aIndex] );
-
-    return NULL;
+    if( aSheet != NULL )
+        BuildSheetList( aSheet );
 }
 
 
 SCH_SHEET_PATH* SCH_SHEET_LIST::GetSheetByPath( const wxString aPath, bool aHumanReadable )
 {
-    SCH_SHEET_PATH* sheet = GetFirst();
     wxString sheetPath;
 
-    while( sheet )
+    for( unsigned i = 0; i < size(); i++ )
     {
-        sheetPath = ( aHumanReadable ) ? sheet->PathHumanReadable() : sheet->Path();
+        sheetPath = ( aHumanReadable ) ? at( i ).PathHumanReadable() : at( i ).Path();
 
         if( sheetPath == aPath )
-            return sheet;
-
-        sheet = GetNext();
+            return &at( i );
     }
 
     return NULL;
@@ -555,52 +496,41 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
     if( aSheet == g_RootSheet )
         m_isRootSheet = true;
 
-    if( m_list == NULL )
-    {
-        int count = aSheet->CountSheets();
-
-        m_count = count;
-        m_index = 0;
-        m_list = new SCH_SHEET_PATH[ count ];
-        m_currList.clear();
-    }
-
-    m_currList.push_back( aSheet );
+    m_currentSheetPath.push_back( aSheet );
 
     /**
      * @todo:  Schematic page number is currently a left over relic and is generated as
      *         SCH_SHEET_PATH object is pushed to the list.  This only has meaning when
      *         entire hierarchy is created from the root sheet down.
      */
-    m_currList.SetPageNumber( m_index + 1 );
-    m_list[m_index] = m_currList;
-    m_index++;
+    m_currentSheetPath.SetPageNumber( size() + 1 );
+    push_back( m_currentSheetPath );
 
     if( aSheet->GetScreen() )
     {
-        EDA_ITEM* strct = m_currList.LastDrawList();
+        EDA_ITEM* item = m_currentSheetPath.LastDrawList();
 
-        while( strct )
+        while( item )
         {
-            if( strct->Type() == SCH_SHEET_T )
+            if( item->Type() == SCH_SHEET_T )
             {
-                SCH_SHEET* sheet = (SCH_SHEET*) strct;
+                SCH_SHEET* sheet = (SCH_SHEET*) item;
                 BuildSheetList( sheet );
             }
 
-            strct = strct->Next();
+            item = item->Next();
         }
     }
 
-    m_currList.pop_back();
+    m_currentSheetPath.pop_back();
 }
 
 
 bool SCH_SHEET_LIST::IsModified()
 {
-    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
+    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
     {
-        if( sheet->LastScreen() && sheet->LastScreen()->IsModify() )
+        if( (*it).LastScreen() && (*it).LastScreen()->IsModify() )
             return true;
     }
 
@@ -610,9 +540,9 @@ bool SCH_SHEET_LIST::IsModified()
 
 bool SCH_SHEET_LIST::IsAutoSaveRequired()
 {
-    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
+    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
     {
-        if( sheet->LastScreen() && sheet->LastScreen()->IsSave() )
+        if( (*it).LastScreen() && (*it).LastScreen()->IsSave() )
             return true;
     }
 
@@ -622,10 +552,10 @@ bool SCH_SHEET_LIST::IsAutoSaveRequired()
 
 void SCH_SHEET_LIST::ClearModifyStatus()
 {
-    for( SCH_SHEET_PATH* sheet = GetFirst(); sheet; sheet = GetNext() )
+    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
     {
-        if( sheet->LastScreen() )
-            sheet->LastScreen()->ClrModify();
+        if( (*it).LastScreen() )
+            (*it).LastScreen()->ClrModify();
     }
 }
 
@@ -634,29 +564,32 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols( PART_LIBS* aLibs )
 {
     int ref = 1;
 
-    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
-        path->AnnotatePowerSymbols( aLibs, &ref );
+    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
+        (*it).AnnotatePowerSymbols( aLibs, &ref );
 }
 
 
 void SCH_SHEET_LIST::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
-        bool aIncludePowerSymbols )
+                                    bool aIncludePowerSymbols )
 {
-    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
-        path->GetComponents( aLibs, aReferences, aIncludePowerSymbols );
+    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
+        (*it).GetComponents( aLibs, aReferences, aIncludePowerSymbols );
 }
 
 void SCH_SHEET_LIST::GetMultiUnitComponents( PART_LIBS* aLibs,
-        SCH_MULTI_UNIT_REFERENCE_MAP &aRefList, bool aIncludePowerSymbols )
+                                             SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+                                             bool aIncludePowerSymbols )
 {
-    for( SCH_SHEET_PATH* path = GetFirst(); path; path = GetNext() )
+    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
     {
         SCH_MULTI_UNIT_REFERENCE_MAP tempMap;
-        path->GetMultiUnitComponents( aLibs, tempMap );
+        (*it).GetMultiUnitComponents( aLibs, tempMap );
+
         BOOST_FOREACH( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair, tempMap )
         {
             // Merge this list into the main one
             unsigned n_refs = pair.second.GetCount();
+
             for( unsigned thisRef = 0; thisRef < n_refs; ++thisRef )
             {
                 aRefList[pair.first].AddItem( pair.second[thisRef] );
@@ -673,11 +606,11 @@ SCH_ITEM* SCH_SHEET_LIST::FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFo
     bool firstItemFound = false;
 
     SCH_ITEM*       drawItem = NULL;
-    SCH_SHEET_PATH* sheet = GetFirst();
+    SCH_SHEET_PATHS_ITER it = begin();
 
-    while( sheet )
+    while( it != end() )
     {
-        drawItem = sheet->LastDrawList();
+        drawItem = (*it).LastDrawList();
 
         while( drawItem )
         {
@@ -686,7 +619,7 @@ SCH_ITEM* SCH_SHEET_LIST::FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFo
                 if( aLastItem == NULL || firstItemFound )
                 {
                     if( aSheetFoundIn )
-                        *aSheetFoundIn = sheet;
+                        *aSheetFoundIn = &(*it);
 
                     return drawItem;
                 }
@@ -699,12 +632,12 @@ SCH_ITEM* SCH_SHEET_LIST::FindNextItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFo
             drawItem = drawItem->Next();
         }
 
-        sheet = GetNext();
+        ++it;
 
-        if( sheet == NULL && aLastItem && aWrap && !hasWrapped )
+        if( it == end() && aLastItem && aWrap && !hasWrapped )
         {
             hasWrapped = true;
-            sheet = GetFirst();
+            it = begin();
         }
     }
 
@@ -718,11 +651,11 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
     bool hasWrapped = false;
     bool firstItemFound = false;
     SCH_ITEM* drawItem = NULL;
-    SCH_SHEET_PATH* sheet = GetLast();
+    SCH_SHEET_PATHS_RITER it = rbegin();
 
-    while( sheet )
+    while( it != rend() )
     {
-        drawItem = sheet->FirstDrawList();
+        drawItem = (*it).FirstDrawList();
 
         while( drawItem )
         {
@@ -731,7 +664,7 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
                 if( aLastItem == NULL || firstItemFound )
                 {
                     if( aSheetFoundIn )
-                        *aSheetFoundIn = sheet;
+                        *aSheetFoundIn = &(*it);
 
                     return drawItem;
                 }
@@ -744,12 +677,12 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
             drawItem = drawItem->Back();
         }
 
-        sheet = GetPrevious();
+        ++it;
 
-        if( sheet == NULL && aLastItem && aWrap && !hasWrapped )
+        if( it == rend() && aLastItem && aWrap && !hasWrapped )
         {
             hasWrapped = true;
-            sheet = GetLast();
+            it = rbegin();
         }
     }
 
@@ -762,8 +695,8 @@ bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
 {
     bool found = false;
 
-    for( SCH_SHEET_PATH* path = GetFirst();  path;  path = GetNext() )
-        found = path->SetComponentFootprint( aReference, aFootPrint, aSetVisible );
+    for( SCH_SHEET_PATHS_ITER it = begin(); it != end(); ++it )
+        found = (*it).SetComponentFootprint( aReference, aFootPrint, aSetVisible );
 
     return found;
 }
@@ -773,16 +706,16 @@ bool SCH_SHEET_LIST::IsComplexHierarchy() const
 {
     wxString fileName;
 
-    for( int i = 0;  i < m_count;  i++ )
+    for( unsigned i = 0;  i < size();  i++ )
     {
-        fileName = m_list[i].Last()->GetFileName();
+        fileName = at( i ).Last()->GetFileName();
 
-        for( int j = 0;  j < m_count;  j++ )
+        for( unsigned j = 0;  j < size();  j++ )
         {
             if( i == j )
                 continue;
 
-            if( fileName == m_list[j].Last()->GetFileName() )
+            if( fileName == at( j ).Last()->GetFileName() )
                 return true;
         }
     }
@@ -801,17 +734,17 @@ bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
         destFn.MakeAbsolute( rootFn.GetPath() );
 
     // Test each SCH_SHEET_PATH in this SCH_SHEET_LIST for potential recursion.
-    for( int i = 0; i < m_count; i++ )
+    for( unsigned i = 0; i < size(); i++ )
     {
         // Test each SCH_SHEET_PATH in the source sheet.
-        for( int j = 0; j < aSrcSheetHierarchy.GetCount(); j++ )
+        for( unsigned j = 0; j < aSrcSheetHierarchy.size(); j++ )
         {
-            SCH_SHEET_PATH* sheetPath = aSrcSheetHierarchy.GetSheet( j );
+            const SCH_SHEET_PATH* sheetPath = &aSrcSheetHierarchy[j];
 
             for( unsigned k = 0; k < sheetPath->size(); k++ )
             {
-                if( m_list[i].TestForRecursion( sheetPath->GetSheet( k )->GetFileName(),
-                                                aDestFileName ) )
+                if( at( i ).TestForRecursion( sheetPath->GetSheet( k )->GetFileName(),
+                                              aDestFileName ) )
                     return true;
             }
         }
@@ -824,9 +757,9 @@ bool SCH_SHEET_LIST::TestForRecursion( const SCH_SHEET_LIST& aSrcSheetHierarchy,
 
 SCH_SHEET* SCH_SHEET_LIST::FindSheetByName( const wxString& aSheetName )
 {
-    for( int i = 0; i < m_count; i++ )
+    for( unsigned i = 0; i < size(); i++ )
     {
-        SCH_SHEET* sheet = m_list[i].FindSheetByName( aSheetName );
+        SCH_SHEET* sheet = at( i ).FindSheetByName( aSheetName );
 
         if( sheet )
             return sheet;
