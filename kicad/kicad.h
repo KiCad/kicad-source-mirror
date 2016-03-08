@@ -308,7 +308,7 @@ private:
                                              *  of the first bitmap button
                                              */
     wxPoint m_buttonLastPosition;           // position of the last button in the window
-    int     m_bitmapButtons_maxHeigth;      // height of bigger bitmap buttons
+    int     m_bitmapButtons_maxHeight;      // height of bigger bitmap buttons
                                             // Used to calculate the height of the panel.
 
 public: LAUNCHER_PANEL( wxWindow* parent );
