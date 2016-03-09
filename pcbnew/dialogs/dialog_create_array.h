@@ -190,8 +190,9 @@ public:
                                      * for pin numbering on BGAs, etc
                                      */
         NUMBERING_ALPHA_FULL,       ///< Full 26-character alphabet
-        NUMBERING_TYPE_Max          ///< Invalid maximum value, insert above here
     };
+
+    #define NUMBERING_TYPE_MAX NUMBERING_ALPHA_FULL
 
     /**
      * Persistent dialog options
@@ -217,11 +218,11 @@ public:
          */
         virtual void TransformItem( int n, BOARD_ITEM* item,
                 const wxPoint& rotPoint ) const = 0;
-        virtual int         GetArraySize() const = 0;
+        virtual int GetArraySize() const = 0;
         virtual wxString GetItemNumber( int n ) const = 0;
         virtual wxString InterpolateNumberIntoString( int n, const wxString& pattern ) const;
 
-        bool        ShouldRenumberItems() const
+        bool ShouldRenumberItems() const
         {
             return m_shouldRenumber;
         }
@@ -342,8 +343,9 @@ private:
         std::string m_circCentreX, m_circCentreY,
                     m_circAngle, m_circCount, m_circNumberingOffset;
         bool m_circRotate;
-
         int m_arrayTypeTab;
+        int m_gridNumberingScheme;
+        int m_circNumberingScheme;
     };
 
     static CREATE_ARRAY_DIALOG_ENTRIES m_options;

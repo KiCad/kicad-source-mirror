@@ -1175,6 +1175,7 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         new_item = new_pad;
         break;
     }
+
     case PCB_MODULE_TEXT_T:
     {
         const TEXTE_MODULE* old_text = static_cast<const TEXTE_MODULE*>( aItem );
@@ -1190,6 +1191,7 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         }
         break;
     }
+
     case PCB_MODULE_EDGE_T:
     {
         EDGE_MODULE* new_edge = new EDGE_MODULE(
@@ -1199,6 +1201,7 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         new_item = new_edge;
         break;
     }
+
     case PCB_MODULE_T:
         // Ignore the module itself
         break;

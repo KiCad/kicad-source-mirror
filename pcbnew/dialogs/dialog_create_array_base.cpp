@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Jan  1 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -105,20 +105,22 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	wxString m_radioBoxGridNumberingAxisChoices[] = { _("Horizontal, then vertical"), _("Vertical, then horizontal") };
 	int m_radioBoxGridNumberingAxisNChoices = sizeof( m_radioBoxGridNumberingAxisChoices ) / sizeof( wxString );
-	m_radioBoxGridNumberingAxis = new wxRadioBox( m_gridPanel, wxID_ANY, _("Numbering Direction"), wxDefaultPosition, wxDefaultSize, m_radioBoxGridNumberingAxisNChoices, m_radioBoxGridNumberingAxisChoices, 1, wxRA_SPECIFY_COLS );
+	m_radioBoxGridNumberingAxis = new wxRadioBox( m_gridPanel, wxID_ANY, _("Pad Numbering Direction"), wxDefaultPosition, wxDefaultSize, m_radioBoxGridNumberingAxisNChoices, m_radioBoxGridNumberingAxisChoices, 1, wxRA_SPECIFY_COLS );
 	m_radioBoxGridNumberingAxis->SetSelection( 0 );
 	bSizer3->Add( m_radioBoxGridNumberingAxis, 0, wxALL|wxEXPAND, 5 );
 	
-	m_checkBoxGridReverseNumbering = new wxCheckBox( m_gridPanel, wxID_ANY, _("Reverse numbering on alternate rows or columns"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkBoxGridReverseNumbering = new wxCheckBox( m_gridPanel, wxID_ANY, _("Reverse pad numbering on alternate rows or columns"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3->Add( m_checkBoxGridReverseNumbering, 0, wxALL, 5 );
 	
-	m_checkBoxGridRestartNumbering = new wxCheckBox( m_gridPanel, wxID_ANY, _("Restart numbering"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxGridRestartNumbering->SetValue(true); 
-	bSizer3->Add( m_checkBoxGridRestartNumbering, 0, wxALL, 5 );
+	wxString m_rbGridStartNumberingOptChoices[] = { _("Use first free number"), _("From start value") };
+	int m_rbGridStartNumberingOptNChoices = sizeof( m_rbGridStartNumberingOptChoices ) / sizeof( wxString );
+	m_rbGridStartNumberingOpt = new wxRadioBox( m_gridPanel, wxID_ANY, _("Initial pad number"), wxDefaultPosition, wxDefaultSize, m_rbGridStartNumberingOptNChoices, m_rbGridStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbGridStartNumberingOpt->SetSelection( 1 );
+	bSizer3->Add( m_rbGridStartNumberingOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_radioBoxGridNumberingSchemeChoices[] = { _("Continuous (1, 2, 3...)"), _("Coordinate (A1, A2, ... B1, ...)") };
 	int m_radioBoxGridNumberingSchemeNChoices = sizeof( m_radioBoxGridNumberingSchemeChoices ) / sizeof( wxString );
-	m_radioBoxGridNumberingScheme = new wxRadioBox( m_gridPanel, wxID_ANY, _("Numbering Scheme"), wxDefaultPosition, wxDefaultSize, m_radioBoxGridNumberingSchemeNChoices, m_radioBoxGridNumberingSchemeChoices, 1, wxRA_SPECIFY_COLS );
+	m_radioBoxGridNumberingScheme = new wxRadioBox( m_gridPanel, wxID_ANY, _("Pad Numbering Scheme"), wxDefaultPosition, wxDefaultSize, m_radioBoxGridNumberingSchemeNChoices, m_radioBoxGridNumberingSchemeChoices, 1, wxRA_SPECIFY_COLS );
 	m_radioBoxGridNumberingScheme->SetSelection( 1 );
 	bSizer3->Add( m_radioBoxGridNumberingScheme, 0, wxALL|wxEXPAND, 5 );
 	
@@ -147,7 +149,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_labelGridNumberingOffset = new wxStaticText( m_gridPanel, wxID_ANY, _("Numbering start:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelGridNumberingOffset = new wxStaticText( m_gridPanel, wxID_ANY, _("Pad numbering start:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelGridNumberingOffset->Wrap( -1 );
 	bSizer5->Add( m_labelGridNumberingOffset, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -242,37 +244,30 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	bSizer4->Add( gbSizer2, 0, wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxVERTICAL );
+	wxStaticBoxSizer* sbcircPadNumberingSizer;
+	sbcircPadNumberingSizer = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Pad Numbering Options") ), wxVERTICAL );
 	
-	m_checkBoxCircRestartNumbering = new wxCheckBox( m_circularPanel, wxID_ANY, _("Restart numbering"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBoxCircRestartNumbering->SetValue(true); 
-	bSizer6->Add( m_checkBoxCircRestartNumbering, 0, wxALL, 5 );
-	
-	m_labelCircNumbering = new wxStaticText( m_circularPanel, wxID_ANY, _("Numbering type:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_labelCircNumbering->Wrap( -1 );
-	bSizer6->Add( m_labelCircNumbering, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	wxArrayString m_choiceCircNumberingTypeChoices;
-	m_choiceCircNumberingType = new wxChoice( m_circularPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceCircNumberingTypeChoices, 0 );
-	m_choiceCircNumberingType->SetSelection( 0 );
-	bSizer6->Add( m_choiceCircNumberingType, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	wxString m_rbCircStartNumberingOptChoices[] = { _("Use first free number"), _("From start value") };
+	int m_rbCircStartNumberingOptNChoices = sizeof( m_rbCircStartNumberingOptChoices ) / sizeof( wxString );
+	m_rbCircStartNumberingOpt = new wxRadioBox( sbcircPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Initial pad number"), wxDefaultPosition, wxDefaultSize, m_rbCircStartNumberingOptNChoices, m_rbCircStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbCircStartNumberingOpt->SetSelection( 0 );
+	sbcircPadNumberingSizer->Add( m_rbCircStartNumberingOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_labelCircNumStart = new wxStaticText( m_circularPanel, wxID_ANY, _("Numbering start:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircNumStart = new wxStaticText( sbcircPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Pad numbering start value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircNumStart->Wrap( -1 );
 	bSizer7->Add( m_labelCircNumStart, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_entryCircNumberingStart = new wxTextCtrl( m_circularPanel, wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_entryCircNumberingStart, 0, wxALL, 5 );
+	m_entryCircNumberingStart = new wxTextCtrl( sbcircPadNumberingSizer->GetStaticBox(), wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_entryCircNumberingStart, 1, wxALL, 5 );
 	
 	
-	bSizer6->Add( bSizer7, 0, wxEXPAND, 5 );
+	sbcircPadNumberingSizer->Add( bSizer7, 0, wxEXPAND, 5 );
 	
 	
-	bSizer4->Add( bSizer6, 1, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( sbcircPadNumberingSizer, 1, wxEXPAND|wxALL, 5 );
 	
 	
 	m_circularPanel->SetSizer( bSizer4 );
@@ -294,7 +289,6 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_CREATE_ARRAY_BASE::OnClose ) );
@@ -305,12 +299,13 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_entryOffsetX->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryOffsetY->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryStagger->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
-	m_checkBoxGridRestartNumbering->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_rbGridStartNumberingOpt->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_radioBoxGridNumberingScheme->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCentreX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCentreY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircAngle->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircCount->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_rbCircStartNumberingOpt->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_stdButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnOkClick ), NULL, this );
 }
 
@@ -325,12 +320,13 @@ DIALOG_CREATE_ARRAY_BASE::~DIALOG_CREATE_ARRAY_BASE()
 	m_entryOffsetX->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryOffsetY->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryStagger->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
-	m_checkBoxGridRestartNumbering->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_rbGridStartNumberingOpt->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_radioBoxGridNumberingScheme->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCentreX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCentreY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircAngle->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_entryCircCount->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
+	m_rbCircStartNumberingOpt->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnParameterChanged ), NULL, this );
 	m_stdButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CREATE_ARRAY_BASE::OnOkClick ), NULL, this );
 	
 }
