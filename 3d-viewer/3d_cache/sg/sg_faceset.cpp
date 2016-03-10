@@ -1032,7 +1032,7 @@ bool SGFACESET::validate( void )
     // check that vertex[n] >= 0 and < nVertices
     for( size_t i = 0; i < nCIdx; ++i )
     {
-        if( lCIdx[i] < 0 || lCIdx[i] >= nCoords )
+        if( lCIdx[i] < 0 || lCIdx[i] >= (int)nCoords )
         {
 #ifdef DEBUG
             std::ostringstream ostr;

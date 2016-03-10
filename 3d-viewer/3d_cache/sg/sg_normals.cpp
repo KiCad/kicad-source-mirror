@@ -177,7 +177,7 @@ void SGNORMALS::SetNormalList( size_t aListSize, const SGVECTOR* aNormalList )
     if( 0 == aListSize || NULL == aNormalList )
         return;
 
-    for( int i = 0; i < aListSize; ++i )
+    for( int i = 0; i < (int)aListSize; ++i )
         norms.push_back( aNormalList[i] );
 
     return;

@@ -535,7 +535,7 @@ S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
         size_t j = materials.matorder.size();
         SMATERIAL* lmat = new SMATERIAL[j];
 
-        for( int i = 0; i < j; ++i )
+        for( size_t i = 0; i < j; ++i )
             formatMaterial( lmat[i], materials.matorder[i] );
 
         model->m_Materials = lmat;
@@ -545,7 +545,7 @@ S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
         j = meshes.size();
         SMESH* lmesh = new SMESH[j];
 
-        for( int i = 0; i < j; ++i )
+        for( size_t i = 0; i < j; ++i )
             lmesh[i] = meshes[i];
 
         model->m_Meshes = lmesh;

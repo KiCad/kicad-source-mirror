@@ -435,8 +435,8 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
         p2 = index[i++];
         p3 = index[i++];
 
-        if( p1 < 0 || p1 >= vsize || p2 < 0 || p2 >= vsize ||
-            p3 < 0 || p3 >= vsize )
+        if( p1 < 0 || p1 >= (int)vsize || p2 < 0 || p2 >= (int)vsize ||
+            p3 < 0 || p3 >= (int)vsize )
         {
             #ifdef DEBUG
             std::ostringstream ostr;

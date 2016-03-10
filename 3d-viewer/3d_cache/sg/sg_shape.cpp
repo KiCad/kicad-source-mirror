@@ -817,8 +817,7 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
     // construct the final vertex/color list
     SFVEC3F* lColors = NULL;
     SFVEC3F* lCoords = new SFVEC3F[ vertices.size() ];
-    double red, green, blue;
-    int ti, ii;
+    int ti;
 
     if( pc )
     {
