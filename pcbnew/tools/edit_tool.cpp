@@ -702,6 +702,8 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
+    // Note: original items are no more modified.
+
     bool increment = aEvent.IsAction( &COMMON_ACTIONS::duplicateIncrement );
 
     // first, check if we have a selection, or try to get one
@@ -803,8 +805,6 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     if( !hoverSelection( selection ) )
         return 0;
 
-    bool originalItemsModified = false;
-
     // we have a selection to work on now, so start the tool process
 
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
@@ -814,11 +814,6 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     {
         // Module editors do their undo point upfront for the whole module
         editFrame->SaveCopyInUndoList( editFrame->GetBoard()->m_Modules, UR_MODEDIT );
-    }
-    else
-    {
-        // We may also change the original item
-        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
     }
 
     DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
@@ -840,106 +835,66 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
             if( !item )
                 continue;
 
-            wxString cachedString;
-
-            if( item->Type() == PCB_MODULE_T )
-            {
-                cachedString = static_cast<MODULE*>( item )->GetReferencePrefix();
-            }
-            else if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
-            {
-                // Copy the text (not just take a reference
-                cachedString = text->GetText();
-            }
-
             // iterate across the array, laying out the item at the
             // correct position
             const unsigned nPoints = array_opts->GetArraySize();
 
-            for( unsigned ptN = 0; ptN < nPoints; ++ptN )
+            // The first item in list is the original item. We do not modify it
+            for( unsigned ptN = 1; ptN < nPoints; ++ptN )
             {
                 BOARD_ITEM* newItem = NULL;
 
-                if( ptN == 0 )
-                    newItem = item;
+                // Some items cannot be duplicated
+                // i.e. the ref and value fields of a footprint or zones
+                // therefore newItem can be null
+
+                #define INCREMENT_REF false
+                #define INCREMENT_PADNUMBER true
+
+                if( m_editModules )
+                    newItem = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem(
+                                                            item, INCREMENT_PADNUMBER );
                 else
                 {
-                    // if renumbering, no need to increment
-                    const bool increment = !array_opts->ShouldRenumberItems();
-
-                    // Some items cannot be duplicated
-                    // i.e. the ref and value fields of a footprint or zones
-                    // therefore newItem can be null
-
-                    if( m_editModules )
-                        newItem = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
-                    else
-                    {
 #if 0
-                        // @TODO: see if we allow zone duplication here
-                        // Duplicate zones is especially tricky (overlaping zones must be merged)
-                        // so zones are not duplicated
-                        if( item->Type() == PCB_ZONE_AREA_T )
-                            newItem = NULL;
-                        else
+                    // @TODO: see if we allow zone duplication here
+                    // Duplicate zones is especially tricky (overlaping zones must be merged)
+                    // so zones are not duplicated
+                    if( item->Type() == PCB_ZONE_AREA_T )
+                        newItem = NULL;
+                    else
 #endif
-                            newItem = editFrame->GetBoard()->DuplicateAndAddItem( item, increment );
-                    }
-
-                    if( newItem )
-                    {
-                        array_opts->TransformItem( ptN, newItem, rotPoint );
-
-                        m_toolMgr->RunAction( COMMON_ACTIONS::unselectItem, true, newItem );
-
-                        newItemList.PushItem( newItem );
-
-                        if( newItem->Type() == PCB_MODULE_T)
-                        {
-                            static_cast<MODULE*>( newItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
-                                    getView(), _1 ) );
-                        }
-
-                        editFrame->GetGalCanvas()->GetView()->Add( newItem );
-                        getModel<BOARD>()->GetRatsnest()->Update( newItem );
-                    }
+                        newItem = editFrame->GetBoard()->DuplicateAndAddItem(
+                                                            item, INCREMENT_REF );
+                    // @TODO: we should merge zones. This is a bit tricky, because
+                    // the undo command needs saving old area, if it is merged.
                 }
 
-                // set the number if needed:
+                if( newItem )
+                {
+                    array_opts->TransformItem( ptN, newItem, rotPoint );
+
+                    m_toolMgr->RunAction( COMMON_ACTIONS::unselectItem, true, newItem );
+
+                    newItemList.PushItem( newItem );
+
+                    if( newItem->Type() == PCB_MODULE_T)
+                    {
+                        static_cast<MODULE*>( newItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
+                                getView(), _1 ) );
+                    }
+
+                    editFrame->GetGalCanvas()->GetView()->Add( newItem );
+                    getModel<BOARD>()->GetRatsnest()->Update( newItem );
+                }
+
+                // Only renumbering pads has meaning:
                 if( newItem && array_opts->ShouldRenumberItems() )
                 {
-                    switch( newItem->Type() )
-                    {
-                    case PCB_PAD_T:
+                    if( newItem->Type() == PCB_PAD_T )
                     {
                         const wxString padName = array_opts->GetItemNumber( ptN );
                         static_cast<D_PAD*>( newItem )->SetPadName( padName );
-
-                        originalItemsModified = true;
-                        break;
-                    }
-                    case PCB_MODULE_T:
-                    {
-                        const wxString moduleName = array_opts->GetItemNumber( ptN );
-                        MODULE* module = static_cast<MODULE*>( newItem );
-                        module->SetReference( cachedString + moduleName );
-
-                        originalItemsModified = true;
-                        break;
-                    }
-                    case PCB_MODULE_TEXT_T:
-                    case PCB_TEXT_T:
-                    {
-                        EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( newItem );
-                        if( text )
-                            text->SetText( array_opts->InterpolateNumberIntoString( ptN, cachedString ) );
-
-                        originalItemsModified = true;
-                        break;
-                    }
-                    default:
-                        // no renumbering of other items
-                        break;
                     }
                 }
             }
@@ -947,15 +902,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 
         if( !m_editModules )
         {
-            if( originalItemsModified )
-            {
-                // Update the appearance of the original items
-                selection.group->ItemsViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-            }
-
             // Add all items as a single undo point for PCB editors
-            // TODO: Can this be merged into the previous undo point (where
-            //       we saved the original items)
             editFrame->SaveCopyInUndoList( newItemList, UR_NEW );
         }
     }

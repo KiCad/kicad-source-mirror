@@ -57,9 +57,9 @@ PinShapeComboBox::PinShapeComboBox( wxWindow* parent,
 }
 
 
-GRAPHIC_PINSHAPE PinShapeComboBox::GetSelection()
+GRAPHIC_PINSHAPE PinShapeComboBox::GetPinShapeSelection()
 {
-    return static_cast<GRAPHIC_PINSHAPE>( wxBitmapComboBox::GetSelection() );
+    return static_cast<GRAPHIC_PINSHAPE>( GetSelection() );
 }
 
 

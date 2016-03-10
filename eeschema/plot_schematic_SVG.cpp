@@ -43,108 +43,60 @@
 
 void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
 {
-    wxString    msg;
-    REPORTER& reporter = m_MessagesBox->Reporter();
+    wxString        msg;
+    REPORTER&       reporter = m_MessagesBox->Reporter();
+    SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
+    SCH_SHEET_LIST  sheetList;
 
     if( aPrintAll )
+        sheetList.BuildSheetList( g_RootSheet );
+    else
+        sheetList.push_back( m_parent->GetCurrentSheet() );
+
+    for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        SCH_SHEET_PATH* sheetpath;
-        SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
-        SCH_SHEET_LIST  SheetList( NULL );
-        sheetpath = SheetList.GetFirst();
-        SCH_SHEET_PATH  list;
-
-        for( ; ; )
-        {
-            if( sheetpath == NULL )
-            {
-                break;
-            }
-
-            SCH_SCREEN*  screen;
-            list = *sheetpath;
-            m_parent->SetCurrentSheet( list );
-            m_parent->GetCurrentSheet().UpdateAllScreenReferences();
-            m_parent->SetSheetNumberAndCount();
-            screen = m_parent->GetCurrentSheet().LastScreen();
-            sheetpath = SheetList.GetNext();
-
-            try
-            {
-                wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
-                wxString ext = SVG_PLOTTER::GetDefaultFileExtension();
-                wxFileName plotFileName = createPlotFileName( m_outputDirectoryName,
-                                                              fname, ext, &reporter );
-
-                bool success = plotOneSheetSVG( m_parent, plotFileName.GetFullPath(), screen,
-                                                getModeColor() ? false : true,
-                                                aPrintFrameRef );
-
-                if( !success )
-                {
-                    msg.Printf( _( "Cannot create file '%s'.\n" ),
-                                GetChars( plotFileName.GetFullPath() ) );
-                    reporter.Report( msg, REPORTER::RPT_ERROR );
-                }
-                else
-                {
-                    msg.Printf( _( "Plot: '%s' OK.\n" ),
-                                    GetChars( plotFileName.GetFullPath() ) );
-                    reporter.Report( msg, REPORTER::RPT_ACTION );
-                }
-            }
-            catch( const IO_ERROR& e )
-            {
-                // Cannot plot SVG file
-                msg.Printf( wxT( "SVG Plotter exception: %s" ), GetChars( e.errorText ) );
-                reporter.Report( msg, REPORTER::RPT_ERROR );
-
-                m_parent->SetCurrentSheet( oldsheetpath );
-                m_parent->GetCurrentSheet().UpdateAllScreenReferences();
-                m_parent->SetSheetNumberAndCount();
-                return;
-            }
-        }
-
-        m_parent->SetCurrentSheet( oldsheetpath );
+        SCH_SCREEN*  screen;
+        m_parent->SetCurrentSheet( sheetList[i] );
         m_parent->GetCurrentSheet().UpdateAllScreenReferences();
         m_parent->SetSheetNumberAndCount();
-    }
-    else    // Print current sheet
-    {
-        SCH_SCREEN* screen = (SCH_SCREEN*) m_parent->GetScreen();
+        screen = m_parent->GetCurrentSheet().LastScreen();
 
         try
         {
-            wxString fname = screen->GetFileName();
+            wxString fname = m_parent->GetUniqueFilenameForCurrentSheet();
             wxString ext = SVG_PLOTTER::GetDefaultFileExtension();
-            wxFileName fn = createPlotFileName( m_outputDirectoryName, fname, ext );
+            wxFileName plotFileName = createPlotFileName( m_outputDirectoryName,
+                                                          fname, ext, &reporter );
 
-            bool success = plotOneSheetSVG( m_parent, fn.GetFullPath(), screen,
+            bool success = plotOneSheetSVG( m_parent, plotFileName.GetFullPath(), screen,
                                             getModeColor() ? false : true,
                                             aPrintFrameRef );
-            if( success )
+
+            if( !success )
+            {
+                msg.Printf( _( "Cannot create file '%s'.\n" ),
+                            GetChars( plotFileName.GetFullPath() ) );
+                reporter.Report( msg, REPORTER::RPT_ERROR );
+            }
+            else
             {
                 msg.Printf( _( "Plot: '%s' OK.\n" ),
-                            GetChars( fn.GetFullPath() ) );
+                            GetChars( plotFileName.GetFullPath() ) );
                 reporter.Report( msg, REPORTER::RPT_ACTION );
-
-            }
-            else    // Error
-            {
-                msg.Printf( _( "Unable to create file '%s'.\n" ),
-                            GetChars( fn.GetFullPath() ) );
-                reporter.Report( msg, REPORTER::RPT_ERROR );
             }
         }
         catch( const IO_ERROR& e )
         {
             // Cannot plot SVG file
-            msg.Printf( wxT( "SVG Plotter exception: %s."), GetChars( e.errorText ) );
+            msg.Printf( wxT( "SVG Plotter exception: %s" ), GetChars( e.errorText ) );
             reporter.Report( msg, REPORTER::RPT_ERROR );
-            return;
+            break;
         }
     }
+
+    m_parent->SetCurrentSheet( oldsheetpath );
+    m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+    m_parent->SetSheetNumberAndCount();
 }
 
 

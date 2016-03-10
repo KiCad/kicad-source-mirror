@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     SCH_SCREENS screens;
 
     // Build the sheet list.
-    SCH_SHEET_LIST sheets;
+    SCH_SHEET_LIST sheets( g_RootSheet );
 
     // Map of locked components
     SCH_MULTI_UNIT_REFERENCE_MAP lockedComponents;
@@ -187,7 +187,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly )
 {
     // build the screen list
-    SCH_SHEET_LIST SheetList;
+    SCH_SHEET_LIST SheetList( g_RootSheet );
     SCH_REFERENCE_LIST ComponentsList;
 
     // Build the list of components

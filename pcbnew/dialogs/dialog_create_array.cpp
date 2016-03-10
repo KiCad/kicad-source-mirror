@@ -57,11 +57,9 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrig
     };
     m_choicePriAxisNumbering->Set( DIM( charSetDescriptions ), charSetDescriptions );
     m_choiceSecAxisNumbering->Set( DIM( charSetDescriptions ), charSetDescriptions );
-    m_choiceCircNumberingType->Set( DIM( charSetDescriptions ), charSetDescriptions );;
 
     m_choicePriAxisNumbering->SetSelection( 0 );
     m_choiceSecAxisNumbering->SetSelection( 0 );
-    m_choiceCircNumberingType->SetSelection( 0 );
 
     Add( m_entryNx, m_options.m_gridNx );
     Add( m_entryNy, m_options.m_gridNy );
@@ -93,6 +91,9 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrig
     Add( m_entryGridPriNumberingOffset, m_options.m_gridPriNumberingOffset );
     Add( m_entryGridSecNumberingOffset, m_options.m_gridSecNumberingOffset );
 
+    Add( m_rbGridStartNumberingOpt, m_options.m_gridNumberingScheme );
+    Add( m_rbCircStartNumberingOpt, m_options.m_circNumberingScheme );
+
     RestoreConfigToControls();
 
     // Load units into labels
@@ -119,19 +120,8 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrig
 
 void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
 {
-    const wxObject* evObj = event.GetEventObject();
-
-    // some controls result in a change of enablement
-    if( evObj == m_radioBoxGridNumberingScheme
-        || evObj == m_checkBoxGridRestartNumbering )
-    {
-        setControlEnablement();
-    }
-
-    if( evObj == m_entryCentreX || evObj == m_entryCentreY )
-    {
-        calculateCircularArrayProperties();
-    }
+    setControlEnablement();
+    calculateCircularArrayProperties();
 }
 
 
@@ -142,12 +132,12 @@ static const std::string& alphabetFromNumberingScheme(
     static const std::string    alphaHex = "0123456789ABCDEF";
     static const std::string    alphaFull = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     static const std::string    alphaNoIOSQXZ   = "ABCDEFGHJKLMNPRTUVWY";
-    static const std::string    alphaEmpty      = "";
 
     switch( type )
     {
+    default:
     case DIALOG_CREATE_ARRAY::NUMBERING_NUMERIC:
-        return alphaNumeric;
+        break;
 
     case DIALOG_CREATE_ARRAY::NUMBERING_HEX:
         return alphaHex;
@@ -157,12 +147,9 @@ static const std::string& alphabetFromNumberingScheme(
 
     case DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_FULL:
         return alphaFull;
-
-    default:
-        wxASSERT_MSG( false, wxString( "Un-handled numbering scheme: " ) << type );
     }
 
-    return alphaEmpty;
+    return alphaNumeric;
 }
 
 
@@ -182,9 +169,6 @@ static bool getNumberingOffset( const std::string& str,
         int& offsetToFill )
 {
     const std::string alphabet = alphabetFromNumberingScheme( type );
-
-    wxASSERT_MSG( !alphabet.empty(), wxString(
-                    "Unable to determine alphabet for numbering scheme: " ) << type );
 
     int offset = 0;
     const int radix = alphabet.length();
@@ -242,8 +226,8 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
         newGrid->m_2dArrayNumbering = m_radioBoxGridNumberingScheme->GetSelection() != 0;
 
         // this is only correct if you set the choice up according to the enum size and order
-        ok = ok && m_choicePriAxisNumbering->GetSelection() < NUMBERING_TYPE_Max
-             && m_choiceSecAxisNumbering->GetSelection() < NUMBERING_TYPE_Max;
+        ok = ok && m_choicePriAxisNumbering->GetSelection() <= NUMBERING_TYPE_MAX
+             && m_choiceSecAxisNumbering->GetSelection() <= NUMBERING_TYPE_MAX;
 
         // mind undefined casts to enums (should not be able to happen)
         if( ok )
@@ -264,7 +248,7 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
                     m_entryGridSecNumberingOffset->GetValue().ToStdString(),
                     newGrid->m_secAxisNumType, newGrid->m_numberingOffsetY );
 
-        newGrid->m_shouldRenumber = m_checkBoxGridRestartNumbering->GetValue();
+        newGrid->m_shouldRenumber = m_rbGridStartNumberingOpt->GetSelection() == 1;
 
         // Only use settings if all values are good
         if( ok )
@@ -284,16 +268,8 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
         ok = ok && m_entryCircCount->GetValue().ToLong( &newCirc->m_nPts );
 
         newCirc->m_rotateItems = m_entryRotateItemsCb->GetValue();
-
-        newCirc->m_shouldRenumber = m_checkBoxCircRestartNumbering->GetValue();
-
-        // This is only correct if you set the choice up according to the enum size and order
-        ok = ok && m_choiceCircNumberingType->GetSelection() < NUMBERING_TYPE_Max;
-
-        // Mind undefined casts to enums (should not be able to happen)
-        if( ok )
-            newCirc->m_numberingType =
-                (ARRAY_NUMBERING_TYPE_T) m_choiceCircNumberingType->GetSelection();
+        newCirc->m_shouldRenumber = m_rbCircStartNumberingOpt->GetSelection() == 1;
+        newCirc->m_numberingType = NUMBERING_NUMERIC;
 
         ok = ok && m_entryCircNumberingStart->GetValue().ToLong( &newCirc->m_numberingOffset );
 
@@ -311,17 +287,19 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
 
         // assign pointer and ownership here
         *m_settings = newSettings;
-
         ReadConfigFromControls();
 
         EndModal( wxID_OK );
     }
+
+    else
+        wxMessageBox( _(" Bad parameters" ) );
 }
 
 
 void DIALOG_CREATE_ARRAY::setControlEnablement()
 {
-    const bool renumber = m_checkBoxGridRestartNumbering->GetValue();
+    const bool renumber = m_rbGridStartNumberingOpt->GetSelection() == 1;
 
     // If we're not renumbering, we can't set the numbering scheme
     // or axis numbering types
@@ -341,10 +319,7 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
     m_entryGridPriNumberingOffset->Enable( renumber );
     m_entryGridSecNumberingOffset->Enable( renumber && num2d );
 
-
-    // Circular array options
-    const bool circRenumber = m_checkBoxCircRestartNumbering->GetValue();
-    m_choiceCircNumberingType->Enable( circRenumber );
+    m_entryCircNumberingStart->Enable( m_rbCircStartNumberingOpt->GetSelection() == 1 );
 }
 
 
@@ -371,25 +346,22 @@ std::string DIALOG_CREATE_ARRAY::ARRAY_OPTIONS::getCoordinateNumber( int n,
     std::string itemNum;
     const std::string& alphabet = alphabetFromNumberingScheme( type );
 
-    if( !alphabet.empty() )
-    {
-        const bool nonUnitColsStartAt0 = schemeNonUnitColsStartAt0( type );
+    const bool nonUnitColsStartAt0 = schemeNonUnitColsStartAt0( type );
 
-        bool    firstRound = true;
-        int     radix = alphabet.length();
+    bool    firstRound = true;
+    int     radix = alphabet.length();
 
-        do {
-            int modN = n % radix;
+    do {
+        int modN = n % radix;
 
-            if( nonUnitColsStartAt0 && !firstRound )
-                modN--;    // Start the "tens/hundreds/etc column" at "Ax", not "Bx"
+        if( nonUnitColsStartAt0 && !firstRound )
+            modN--;    // Start the "tens/hundreds/etc column" at "Ax", not "Bx"
 
-            itemNum.insert( 0, 1, alphabet[modN] );
+        itemNum.insert( 0, 1, alphabet[modN] );
 
-            n /= radix;
-            firstRound = false;
-        } while( n );
-    }
+        n /= radix;
+        firstRound = false;
+    } while( n );
 
     return itemNum;
 }
@@ -493,7 +465,7 @@ void DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::TransformItem( int n, BOARD_IT
 
     if( m_angle == 0 )
         // angle is zero, divide evenly into m_nPts
-        angle = 3600.0 * n / float(m_nPts);
+        angle = 3600.0 * n / double( m_nPts );
     else
         // n'th step
         angle = m_angle * n;
@@ -508,5 +480,9 @@ void DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::TransformItem( int n, BOARD_IT
 
 wxString DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::GetItemNumber( int aN ) const
 {
-    return getCoordinateNumber( aN + m_numberingOffset, m_numberingType );
+    // The first new pad has aN number == 1, not 0
+    if( m_shouldRenumber )    // numbering pad from initial user value
+        return getCoordinateNumber( aN - 1 + m_numberingOffset, m_numberingType );
+    else    // numbering pad from inital pad number
+        return getCoordinateNumber( aN + m_numberingOffset, m_numberingType );
 }

@@ -315,6 +315,14 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 
 bool SCH_PRINTOUT::OnPrintPage( int page )
 {
+    SCH_SHEET_LIST sheetList( g_RootSheet );
+
+    wxCHECK_MSG( page >= 1 && page <= (int)sheetList.size(), false,
+                 wxT( "Cannot print invalid page number." ) );
+
+    wxCHECK_MSG( sheetList[ page - 1].LastScreen() != NULL, false,
+                 wxT( "Cannot print page with NULL screen." ) );
+
     wxString msg;
     msg.Printf( _( "Print page %d" ), page );
     m_parent->ClearMsgPanel();
@@ -322,26 +330,10 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
 
     SCH_SCREEN*     screen       = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
-    SCH_SHEET_LIST  SheetList( NULL );
-    SCH_SHEET_PATH* sheetpath = SheetList.GetSheet( page - 1 );
-    SCH_SHEET_PATH  list;
-
-    if( sheetpath )
-    {
-        list = *sheetpath;
-        m_parent->SetCurrentSheet( list );
-        m_parent->GetCurrentSheet().UpdateAllScreenReferences();
-        m_parent->SetSheetNumberAndCount();
-        screen = m_parent->GetCurrentSheet().LastScreen();
-    }
-    else
-    {
-        screen = NULL;
-    }
-
-    if( screen == NULL )
-        return false;
-
+    m_parent->SetCurrentSheet( sheetList[ page - 1 ] );
+    m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+    m_parent->SetSheetNumberAndCount();
+    screen = m_parent->GetCurrentSheet().LastScreen();
     DrawPage( screen );
     m_parent->SetCurrentSheet( oldsheetpath );
     m_parent->GetCurrentSheet().UpdateAllScreenReferences();

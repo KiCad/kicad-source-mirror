@@ -40,7 +40,6 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
 {
     SCH_EDIT_FRAME* schframe  = m_parent;
     SCH_SCREEN*     screen    = schframe->GetScreen();
-    SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();
 
     /* When printing all pages, the printed page is not the current page.
@@ -49,26 +48,21 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
      *  because in complex hierarchies a SCH_SCREEN (a schematic drawings)
      *  is shared between many sheets
      */
-    SCH_SHEET_LIST SheetList( NULL );
+    SCH_SHEET_LIST sheetList;
 
-    sheetpath = SheetList.GetFirst();
-    SCH_SHEET_PATH list;
+    if( aPlotAll )
+        sheetList.BuildSheetList( g_RootSheet );
+    else
+        sheetList.push_back( schframe->GetCurrentSheet() );
+
     REPORTER& reporter = m_MessagesBox->Reporter();
 
-    while( true )
+    for( unsigned i = 0; i < sheetList.size();  i++ )
     {
-        if( aPlotAll )
-        {
-            if( sheetpath == NULL )
-                break;
-
-            list = *sheetpath;
-            schframe->SetCurrentSheet( list );
-            schframe->GetCurrentSheet().UpdateAllScreenReferences();
-            schframe->SetSheetNumberAndCount();
-            screen = schframe->GetCurrentSheet().LastScreen();
-            sheetpath = SheetList.GetNext();
-        }
+        schframe->SetCurrentSheet( sheetList[i] );
+        schframe->GetCurrentSheet().UpdateAllScreenReferences();
+        schframe->SetSheetNumberAndCount();
+        screen = schframe->GetCurrentSheet().LastScreen();
 
         wxPoint plot_offset;
         wxString msg;
@@ -101,10 +95,6 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
             schframe->GetCurrentSheet().UpdateAllScreenReferences();
             schframe->SetSheetNumberAndCount();
             return;
-        }
-        if( !aPlotAll )
-        {
-            break;
         }
     }
 

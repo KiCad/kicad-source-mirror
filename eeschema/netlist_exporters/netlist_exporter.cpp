@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -328,22 +328,23 @@ void NETLIST_EXPORTER::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
     wxString    ref = aComponent->GetRef( aSheetPath );
     wxString    ref2;
 
-    SCH_SHEET_LIST sheetList;
+    SCH_SHEET_LIST sheetList( g_RootSheet );
 
-    for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
+    for( unsigned i = 0;  i < sheetList.size();  i++ )
     {
-        for( EDA_ITEM* item = sheet->LastDrawList();  item;  item = item->Next() )
+        for( EDA_ITEM* item = sheetList[i].LastDrawList();  item;  item = item->Next() )
         {
             if( item->Type() != SCH_COMPONENT_T )
                 continue;
 
             SCH_COMPONENT*  comp2 = (SCH_COMPONENT*) item;
 
-            ref2 = comp2->GetRef( sheet );
+            ref2 = comp2->GetRef( &sheetList[i] );
+
             if( ref2.CmpNoCase( ref ) != 0 )
                 continue;
 
-            int unit2 = comp2->GetUnitSelection( sheet );  // slow
+            int unit2 = comp2->GetUnitSelection( &sheetList[i] );  // slow
 
             for( LIB_PIN* pin = aEntry->GetNextPin();  pin;  pin = aEntry->GetNextPin( pin ) )
             {
@@ -356,7 +357,7 @@ void NETLIST_EXPORTER::findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
                     continue;
 
                 // A suitable pin is found: add it to the current list
-                addPinToComponentPinList( comp2, sheet, pin );
+                addPinToComponentPinList( comp2, &sheetList[i], pin );
             }
         }
     }

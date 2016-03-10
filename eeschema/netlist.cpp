@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ int TestDuplicateSheetNames( bool aCreateMarker );
 
 bool SCH_EDIT_FRAME::prepareForNetlist()
 {
-    SCH_SHEET_LIST sheets;
+    SCH_SHEET_LIST sheets( g_RootSheet );
 
     sheets.AnnotatePowerSymbols( Prj().SchLibs() );
 
@@ -173,7 +173,7 @@ NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase()
     std::auto_ptr<NETLIST_OBJECT_LIST> ret( new NETLIST_OBJECT_LIST() );
 
     // Creates the flattened sheet list:
-    SCH_SHEET_LIST aSheets;
+    SCH_SHEET_LIST aSheets( g_RootSheet );
 
     // Build netlist info
     bool success = ret->BuildNetListInfo( aSheets );
@@ -197,9 +197,10 @@ bool NETLIST_OBJECT_LIST::BuildNetListInfo( SCH_SHEET_LIST& aSheets )
     SCH_SHEET_PATH* sheet;
 
     // Fill list with connected items from the flattened sheet list
-    for( sheet = aSheets.GetFirst(); sheet != NULL;
-         sheet = aSheets.GetNext() )
+    for( unsigned i = 0; i < aSheets.size();  i++ )
     {
+        sheet = &aSheets[i];
+
         for( SCH_ITEM* item = sheet->LastScreen()->GetDrawItems(); item; item = item->Next() )
         {
             item->GetNetListItem( *this, sheet );
@@ -420,8 +421,7 @@ static int getPriority( const NETLIST_OBJECT* Objet )
  * evalLabelsPriority calculates the priority of alabel1 and aLabel2
  * return true if alabel1 has a higher priority than aLabel2
  */
-static bool evalLabelsPriority( const NETLIST_OBJECT* aLabel1,
-                                 const NETLIST_OBJECT* aLabel2 )
+static bool evalLabelsPriority( const NETLIST_OBJECT* aLabel1, const NETLIST_OBJECT* aLabel2 )
 {
     // Global labels have the highest prioriy.
     // For local labels: names are prefixed by their sheetpath
@@ -542,6 +542,7 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
     for( unsigned ii = 0; ii < size(); ii++ )
     {
         item = GetItem( ii );
+
         if( !item->HasNetNameCandidate() )
             list.push_back( item );
     }
@@ -592,6 +593,7 @@ void NETLIST_OBJECT_LIST::findBestNetNameForEachNet()
             // changed each time the netlist is built (power components)
             // and anyway obviously they are not a good candidate
             SCH_COMPONENT* link = item->GetComponentParent();
+
             if( link && link->IsInNetlist() )
             {
                 // select the better between the previous and this one
@@ -711,8 +713,7 @@ void NETLIST_OBJECT_LIST::propageNetCode( int aOldNetCode, int aNewNetCode, bool
 }
 
 
-void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus,
-                                               int start )
+void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus, int start )
 {
     int netCode;
 
@@ -808,7 +809,7 @@ void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus
 
 
 void NETLIST_OBJECT_LIST::segmentToPointConnect( NETLIST_OBJECT* aJonction,
-                                                bool aIsBus, int aIdxStart )
+                                                 bool aIsBus, int aIdxStart )
 {
     for( unsigned i = aIdxStart; i < size(); i++ )
     {

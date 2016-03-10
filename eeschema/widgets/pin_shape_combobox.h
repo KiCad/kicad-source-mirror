@@ -46,6 +46,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxBitmapComboBoxNameStr );
 
-    GRAPHIC_PINSHAPE    GetSelection();
-    void        SetSelection( GRAPHIC_PINSHAPE aShape );
+    GRAPHIC_PINSHAPE GetPinShapeSelection();
+    void             SetSelection( GRAPHIC_PINSHAPE aShape );
 };

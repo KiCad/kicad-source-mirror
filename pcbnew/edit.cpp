@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1605,10 +1605,14 @@ void PCB_BASE_EDIT_FRAME::createArray()
     if( !item )
         return;
 
+    // Note: original item is no more modified.
+
     bool editingModule = NULL != dynamic_cast<FOOTPRINT_EDIT_FRAME*>( this );
 
     BOARD* board = GetBoard();
-    // Remember it is valid only in the module editor
+
+    // Remember this is valid and used only in the module editor.
+    // in board editor, the parent of items is usually the board.
     MODULE* module = static_cast<MODULE*>( item->GetParent() );
 
     DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
@@ -1633,77 +1637,35 @@ void PCB_BASE_EDIT_FRAME::createArray()
             // modedit saves everything upfront
             SaveCopyInUndoList( board->m_Modules, UR_MODEDIT );
         }
-        else
-        {
-            // We may also change the original item
-            SaveCopyInUndoList( item, UR_CHANGED );
-        }
 
-        wxString cachedString;
+        #define INCREMENT_REF false
+        #define INCREMENT_PADNUMBER true
 
-        if( item->Type() == PCB_MODULE_T )
+        // The first item in list is the original item. We do not modify it
+        for( int ptN = 1; ptN < array_opts->GetArraySize(); ptN++ )
         {
-            cachedString = static_cast<MODULE*>( item )->GetReferencePrefix();
-        }
-        else if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( item ) )
-        {
-            // Copy the text (not just take a reference
-            cachedString = text->GetText();
-        }
+            BOARD_ITEM* new_item;
 
-        for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++ )
-        {
-            BOARD_ITEM* new_item = NULL;
-
-            if( ptN == 0 )
-            {
-                new_item = item;
-            }
+            if( editingModule )
+                new_item = module->DuplicateAndAddItem( item, INCREMENT_PADNUMBER );
             else
-            {
-                if( editingModule )
-                    new_item = module->DuplicateAndAddItem( item, true );
-                else
-                    new_item = board->DuplicateAndAddItem( item, true );
+                new_item = board->DuplicateAndAddItem( item, INCREMENT_REF );
 
-                if( new_item )
-                {
-                    array_opts->TransformItem( ptN, new_item, rotPoint );
-                    newItemsList.PushItem( new_item );
-                }
+            if( new_item )
+            {
+                array_opts->TransformItem( ptN, new_item, rotPoint );
+                newItemsList.PushItem( new_item );  // For undo list
             }
 
             if( !new_item || !array_opts->ShouldRenumberItems() )
                 continue;
 
-            // Renumber items
-            switch( new_item->Type() )
-            {
-            case PCB_MODULE_TEXT_T:
-            case PCB_TEXT_T:
-            {
-                EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( new_item );
-                if( text )
-                    text->SetText( array_opts->InterpolateNumberIntoString( ptN, cachedString ) );
-
-                break;
-            }
-            case PCB_MODULE_T:
-            {
-                const wxString padName = array_opts->GetItemNumber( ptN );
-                static_cast<MODULE*>( new_item )->SetReference( cachedString + padName );
-
-                break;
-            }
-            case PCB_PAD_T:
+            // Renumber pads. Only new pad number renumbering has meaning,
+            // in the footprint editor.
+            if( new_item->Type() == PCB_PAD_T )
             {
                 const wxString padName = array_opts->GetItemNumber( ptN );
                 static_cast<D_PAD*>( new_item )->SetPadName( padName );
-
-                break;
-            }
-            default:
-                break;
             }
         }
 

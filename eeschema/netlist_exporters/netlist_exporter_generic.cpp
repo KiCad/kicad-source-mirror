@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,16 +108,16 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 
     m_ReferencesAlreadyFound.Clear();
 
-    SCH_SHEET_LIST sheetList;
+    SCH_SHEET_LIST sheetList( g_RootSheet );
 
     // Output is xml, so there is no reason to remove spaces from the field values.
     // And XML element names need not be translated to various languages.
 
-    for( SCH_SHEET_PATH* path = sheetList.GetFirst();  path;  path = sheetList.GetNext() )
+    for( unsigned i = 0;  i < sheetList.size();  i++ )
     {
-        for( EDA_ITEM* schItem = path->LastDrawList();  schItem;  schItem = schItem->Next() )
+        for( EDA_ITEM* schItem = sheetList[i].LastDrawList();  schItem;  schItem = schItem->Next() )
         {
-            SCH_COMPONENT*  comp = findNextComponentAndCreatePinList( schItem, path );
+            SCH_COMPONENT*  comp = findNextComponentAndCreatePinList( schItem, &sheetList[i] );
             if( !comp )
                 break;  // No component left
 
@@ -131,7 +131,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             // an element.
 
             xcomps->AddChild( xcomp = node( sComponent ) );
-            xcomp->AddAttribute( sRef, comp->GetRef( path ) );
+            xcomp->AddAttribute( sRef, comp->GetRef( &sheetList[i] ) );
 
             xcomp->AddChild( node( sValue, comp->GetField( VALUE )->GetText() ) );
 
@@ -178,8 +178,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             XNODE* xsheetpath;
 
             xcomp->AddChild( xsheetpath = node( sSheetPath ) );
-            xsheetpath->AddAttribute( sNames, path->PathHumanReadable() );
-            xsheetpath->AddAttribute( sTStamps, path->Path() );
+            xsheetpath->AddAttribute( sNames, sheetList[i].PathHumanReadable() );
+            xsheetpath->AddAttribute( sTStamps, sheetList[i].Path() );
 
             timeStamp.Printf( sTSFmt, (unsigned long)comp->GetTimeStamp() );
             xcomp->AddChild( node( sTStamp, timeStamp ) );
@@ -193,7 +193,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
 XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
 {
     SCH_SCREEN* screen;
-    XNODE*     xdesign = node( wxT("design") );
+    XNODE*     xdesign = node( wxT( "design" ) );
     XNODE*     xtitleBlock;
     XNODE*     xsheet;
     XNODE*     xcomment;
@@ -211,21 +211,21 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
     /*
         Export the sheets information
     */
-    SCH_SHEET_LIST sheetList;
+    SCH_SHEET_LIST sheetList( g_RootSheet );
 
-    for( SCH_SHEET_PATH* sheet = sheetList.GetFirst();  sheet;  sheet = sheetList.GetNext() )
+    for( unsigned i = 0;  i < sheetList.size();  i++ )
     {
-        screen = sheet->LastScreen();
+        screen = sheetList[i].LastScreen();
 
         xdesign->AddChild( xsheet = node( wxT( "sheet" ) ) );
 
         // get the string representation of the sheet index number.
-        // Note that sheet->GetIndex() is zero index base and we need to increment the number by one to make
-        // human readable
-        sheetTxt.Printf( wxT( "%d" ), ( sheetList.GetIndex() + 1 ) );
+        // Note that sheet->GetIndex() is zero index base and we need to increment the
+        // number by one to make it human readable
+        sheetTxt.Printf( wxT( "%u" ), i + 1 );
         xsheet->AddAttribute( wxT( "number" ), sheetTxt );
-        xsheet->AddAttribute( wxT( "name" ), sheet->PathHumanReadable() );
-        xsheet->AddAttribute( wxT( "tstamps" ), sheet->Path() );
+        xsheet->AddAttribute( wxT( "name" ), sheetList[i].PathHumanReadable() );
+        xsheet->AddAttribute( wxT( "tstamps" ), sheetList[i].Path() );
 
 
         TITLE_BLOCK tb = screen->GetTitleBlock();

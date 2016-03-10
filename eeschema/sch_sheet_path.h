@@ -120,12 +120,19 @@ public:
 
     int GetPageNumber() const { return m_pageNumber; }
 
+    const SCH_SHEET* GetSheet( unsigned aIndex ) const
+    {
+        SCH_SHEET* retv = NULL;
+
+        if( aIndex < size() )
+            retv = at( aIndex );
+
+        return const_cast< SCH_SHEET* >( retv );
+    }
+
     SCH_SHEET* GetSheet( unsigned aIndex )
     {
-        if( aIndex < size() )
-            return at( aIndex );
-
-        return NULL;
+        return const_cast< SCH_SHEET* >( static_cast< const SCH_SHEET_PATH& >( *this ).GetSheet( aIndex ) );
     }
 
     /**
@@ -305,100 +312,40 @@ public:
 };
 
 
+typedef std::vector< SCH_SHEET_PATH >            SCH_SHEET_PATHS;
+typedef SCH_SHEET_PATHS::iterator                SCH_SHEET_PATHS_ITER;
+typedef SCH_SHEET_PATHS::const_iterator          SCH_SHEET_PATHS_CITER;
+typedef SCH_SHEET_PATHS::reverse_iterator        SCH_SHEET_PATHS_RITER;
+typedef SCH_SHEET_PATHS::const_reverse_iterator  SCH_SHEET_PATHS_CRITER;
+
+
 /**
  * Class SCH_SHEET_LIST
- * handles the list of Sheets in a hierarchy.
- * Sheets are not unique, there can be many sheets with the same
- * filename and the same SCH_SCREEN reference.
- * The schematic (SCH_SCREEN) is shared between these sheets,
- * and component references are specific to a sheet path.
- * When a sheet is entered, component references and sheet number are updated.
+ *
+ * handles a list of #SCH_SHEET_PATH objects in a flattened hierarchy.
+ *
+ * #SCH_SHEET objects are not unique, there can be many sheets with the same filename and
+ * that share the same #SCH_SCREEN reference.   Each The schematic file (#SCH_SCREEN) may
+ * be shared between these sheets and component references are specific to a sheet path.
+ * When a sheet is entered, component references and sheet page number are updated.
  */
-class SCH_SHEET_LIST
+class SCH_SHEET_LIST : public SCH_SHEET_PATHS
 {
 private:
-    SCH_SHEET_PATH* m_list;
-    int             m_count;     /* Number of sheets included in hierarchy,
-                                  * starting at the given sheet in constructor .
-                                  * the given sheet is counted
-                                 */
-    int             m_index;     /* internal variable to handle GetNext(): cleared by
-                                  * GetFirst() and incremented by GetNext() after
-                                  * returning the next item in m_list.  Also used for
-                                  * internal calculations in BuildSheetList()
-                                  */
     bool            m_isRootSheet;
-    SCH_SHEET_PATH  m_currList;
+    SCH_SHEET_PATH  m_currentSheetPath;
 
 public:
 
     /**
      * Constructor
-     * builds the list of sheets from aSheet.
-     * If aSheet == NULL (default) build the whole list of sheets in hierarchy.
-     * So usually call it with no parameter.
+     * build a flattened list of SCH_SHEET_PATH objects from \a aSheet.
+     *
+     * If aSheet == NULL, then this is an empty hierarchy which the user can populate.
      */
     SCH_SHEET_LIST( SCH_SHEET* aSheet = NULL );
 
-    ~SCH_SHEET_LIST()
-    {
-        if( m_list )
-            delete[] m_list;
-
-        m_list = NULL;
-    }
-
-    /**
-     * Function GetCount
-     * @return the number of sheets in list:
-     * usually the number of sheets found in the whole hierarchy
-     */
-    int GetCount() const { return m_count; }
-
-    /**
-     * Function GetIndex
-     * @return the last selected screen index.
-     */
-    int GetIndex() const { return m_index; }
-
-    /**
-     * Function GetFirst
-     * @return the first item (sheet) in m_list and prepare calls to GetNext()
-     */
-    SCH_SHEET_PATH* GetFirst();
-
-    /**
-     * Function GetNext
-     * @return the next item (sheet) in m_list or NULL if no more item in
-     * sheet list
-     */
-    SCH_SHEET_PATH* GetNext();
-
-    /**
-     * Function GetLast
-     * returns the last sheet in the sheet list.
-     *
-     * @return Last sheet in the list or NULL if sheet list is empty.
-     */
-    SCH_SHEET_PATH* GetLast();
-
-    /**
-     * Function GetPrevious
-     * returns the previous sheet in the sheet list.
-     *
-     * @return The previous sheet in the sheet list or NULL if already at the
-     *         beginning of the list.
-     */
-    SCH_SHEET_PATH* GetPrevious();
-
-    /**
-     * Function GetSheet
-     *
-     * @param aIndex A index in sheet list to get the sheet.
-     * @return the sheet at \a aIndex position in m_list or NULL if \a aIndex is
-     *         outside the bounds of the index list.
-     */
-    SCH_SHEET_PATH* GetSheet( int aIndex ) const;
+    ~SCH_SHEET_LIST() {}
 
     /**
      * Function GetSheetByPath
@@ -443,7 +390,8 @@ public:
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
+    void GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aReferences,
+                        bool aIncludePowerSymbols = true  );
 
     /**
      * Function GetMultiUnitComponents
@@ -455,7 +403,7 @@ public:
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
     void GetMultiUnitComponents( PART_LIBS* aLibs, SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-            bool aIncludePowerSymbols = true );
+                                 bool aIncludePowerSymbols = true );
 
     /**
      * Function FindNextItem
@@ -529,8 +477,6 @@ public:
      * @return a pointer to the sheet named \a aSheetName if found or NULL if not found.
      */
     SCH_SHEET* FindSheetByName( const wxString& aSheetName );
-
-private:
 
     /**
      * Function BuildSheetList

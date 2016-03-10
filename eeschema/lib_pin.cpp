@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +72,8 @@ static const BITMAP_DEF iconsPinsOrientations[] =
 
 const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType )
 {
-    assert( aType >= 0 && aType < (int) PINTYPE_COUNT );
+    if( aType < 0 || aType >= (int) PINTYPE_COUNT );
+        return wxT( "???" );
 
     // These strings are the canonical name of the electrictal type
     // Not translated, no space in name, only ASCII chars.
@@ -92,9 +93,6 @@ const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType
         wxT( "openEm" ),
         wxT( "NotConnected" )
     };
-
-    if( aType > (int) PINTYPE_COUNT )
-        return wxT( "???" );
 
     return msgPinElectricType[ aType ];
 }

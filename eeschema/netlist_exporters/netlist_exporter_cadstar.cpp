@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,6 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
 
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
-    SCH_SHEET_PATH* sheet;
     EDA_ITEM* DrawList;
     SCH_COMPONENT* component;
     wxString title = wxT( "Eeschema " ) + GetBuildVersion();
@@ -71,13 +70,13 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     // Create netlist module section
     m_ReferencesAlreadyFound.Clear();
 
-    SCH_SHEET_LIST SheetList;
+    SCH_SHEET_LIST sheetList( g_RootSheet );
 
-    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
+    for( unsigned i = 0; i < sheetList.size(); i++ )
     {
-        for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
+        for( DrawList = sheetList[i].LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
-            DrawList = component = findNextComponentAndCreatePinList( DrawList, sheet );
+            DrawList = component = findNextComponentAndCreatePinList( DrawList, &sheetList[i] );
 
             if( component == NULL )
                 break;
@@ -93,7 +92,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
                 footprint = wxT( "$noname" );
             */
 
-            msg = component->GetRef( sheet );
+            msg = component->GetRef( &sheetList[i] );
             ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
             ret |= fprintf( f, "%s", TO_UTF8( msg ) );
 
