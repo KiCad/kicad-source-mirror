@@ -39,24 +39,29 @@
 #include <class_drawpanel.h>
 #include <class_base_screen.h>
 
+#include <gal/stroke_font.h>
+
 
 #include <newstroke_font.h>
 #include <plot_common.h>
 
-/* factor used to calculate actual size of shapes from hershey fonts
- * (could be adjusted depending on the font name)
- * Its value is choosen in order to have letters like M, P .. vertical size
- * equal to the vertical char size parameter
- * Of course some shapes can be bigger or smaller than the vertical char size
- * parameter
- */
-#define HERSHEY_SCALE_FACTOR 1 / 21.0
-double s_HersheyScaleFactor = HERSHEY_SCALE_FACTOR;
+using namespace KIGFX;
+
+
+// A ugly hack to avoid UTF8::uni_iter method not found at link stage
+// in gerbview and pl_editor.
+// Hoping I (JPC) can remove that soon.
+void dummy()
+{
+    UTF8 text = "x";
+    for( UTF8::uni_iter it = text.ubegin(), end = text.uend(); it < end; ++it )
+        ;
+}
 
 
 int OverbarPositionY( int size_v )
 {
-    return KiROUND( size_v * 1.22 );
+    return KiROUND( size_v * STROKE_FONT::OVERBAR_HEIGHT );
 }
 
 
@@ -184,13 +189,13 @@ int GraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, bool aWid
         // Get metrics
         int         xsta    = *shape_ptr++ - 'R';
         int         xsto    = *shape_ptr++ - 'R';
-        tally += KiROUND( aXSize * (xsto - xsta) * s_HersheyScaleFactor );
+        tally += KiROUND( aXSize * (xsto - xsta) * STROKE_FONT::STROKE_FONT_SCALE );
     }
 
     // For italic correction, add 1/8 size
     if( aItalic )
     {
-        tally += KiROUND( aXSize * 0.125 );
+        tally += KiROUND( aXSize * STROKE_FONT::ITALIC_TILT );
     }
 
     return tally;
@@ -415,7 +420,7 @@ void DrawGraphicText( EDA_RECT* aClipBox,
 
     if( aItalic )
     {
-        overbar_italic_comp = OverbarPositionY( size_v ) / 8;
+        overbar_italic_comp = KiROUND( OverbarPositionY( size_v ) * STROKE_FONT::ITALIC_TILT );
 
         if( italic_reverse )
         {
@@ -519,13 +524,14 @@ void DrawGraphicText( EDA_RECT* aClipBox,
             {
                 wxPoint currpoint;
                 hc1 -= xsta; hc2 -= 10;    // Align the midpoint
-                hc1  = KiROUND( hc1 * size_h * s_HersheyScaleFactor );
-                hc2  = KiROUND( hc2 * size_v * s_HersheyScaleFactor );
+                hc1  = KiROUND( hc1 * size_h * STROKE_FONT::STROKE_FONT_SCALE );
+                hc2  = KiROUND( hc2 * size_v * STROKE_FONT::STROKE_FONT_SCALE );
 
                 // To simulate an italic font,
                 // add a x offset depending on the y offset
                 if( aItalic )
-                    hc1 -= KiROUND( italic_reverse ? -hc2 / 8.0 : hc2 / 8.0 );
+                    hc1 -= KiROUND( italic_reverse ? -hc2 * STROKE_FONT::ITALIC_TILT
+                                                          : hc2 * STROKE_FONT::ITALIC_TILT );
 
                 currpoint.x = hc1 + current_char_pos.x;
                 currpoint.y = hc2 + current_char_pos.y;
@@ -541,7 +547,7 @@ void DrawGraphicText( EDA_RECT* aClipBox,
         ptr++;
 
         // Apply the advance width
-        current_char_pos.x += KiROUND( size_h * (xsto - xsta) * s_HersheyScaleFactor );
+        current_char_pos.x += KiROUND( size_h * (xsto - xsta) * STROKE_FONT::STROKE_FONT_SCALE );
     }
 
     if( overbars % 2 )

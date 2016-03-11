@@ -31,4 +31,5 @@
  */
 extern const char* const newstroke_font[];        //The font
 extern const int         newstroke_font_bufsize;  //font buffer size
+
 #endif /* __NEWSTROKE_FONT_H__ */
