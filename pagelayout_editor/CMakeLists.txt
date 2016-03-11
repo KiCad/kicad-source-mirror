@@ -102,6 +102,7 @@ target_link_libraries( pl_editor_kiface
     common
     polygon
     bitmaps
+    gal
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )

@@ -252,6 +252,7 @@ target_link_libraries( eeschema_kiface
     common
     bitmaps
     polygon
+    gal
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )

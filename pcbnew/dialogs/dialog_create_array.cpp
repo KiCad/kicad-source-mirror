@@ -293,7 +293,7 @@ void DIALOG_CREATE_ARRAY::OnOkClick( wxCommandEvent& event )
     }
 
     else
-        wxMessageBox( _(" Bad parameters" ) );
+        wxMessageBox( _("Bad parameters" ) );
 }
 
 

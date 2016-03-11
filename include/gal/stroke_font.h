@@ -198,6 +198,16 @@ private:
             return std::count( aText.begin(), aText.end() - 1, '\n' ) + 1;
     }
 
+public:
+    // These members are declared public only to be (temporary, I am expecting)
+    // used in legacy canvas, to avoid multiple declarations of the same constants,
+    // having multiple declarations of the same constants is really a thing to avoid.
+    //
+    // They will be private later, when the legacy canvas is removed.
+
+    ///> Factor that determines the pitch between 2 lines.
+    static const double INTERLINE_PITCH_RATIO;
+
     ///> Factor that determines relative height of overbar.
     static const double OVERBAR_HEIGHT;
 
@@ -205,7 +215,11 @@ private:
     static const double BOLD_FACTOR;
 
     ///> Scale factor for a glyph
-    static const double HERSHEY_SCALE;
+    static const double STROKE_FONT_SCALE;
+
+    ///> Tilt factor for italic style (the is is the scaling factor
+    ///> on dY relative coordinates to give a tilst shape
+    static const double ITALIC_TILT;
 };
 } // namespace KIGFX
 
