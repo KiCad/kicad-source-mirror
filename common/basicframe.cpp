@@ -28,26 +28,17 @@
  * @brief EDA_BASE_FRAME class implementation.
  */
 
-#include <wx/aboutdlg.h>
-#include <wx/fontdlg.h>
-#include <wx/clipbrd.h>
-#include <wx/statline.h>
-#include <wx/platinfo.h>
+
 #include <wx/stdpaths.h>
+#include <wx/string.h>
 
-#include <build_version.h>
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
-#include <id.h>
-#include <eda_doc.h>
-#include <wxstruct.h>
-#include <macros.h>
-#include <menus_helpers.h>
 #include <dialog_shim.h>
+#include <eda_doc.h>
+#include <id.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
+#include <wxstruct.h>
 
-#include <boost/version.hpp>
-#include <typeinfo>
 
 /// The default auto save interval is 10 minutes.
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
@@ -93,10 +84,6 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
 
     m_FramePos.x = m_FramePos.y = 0;
-
-    Connect( ID_HELP_COPY_VERSION_STRING,
-             wxEVT_COMMAND_MENU_SELECTED,
-             wxCommandEventHandler( EDA_BASE_FRAME::CopyVersionInfoToClipboard ) );
 
     Connect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER,
              wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
@@ -484,145 +471,6 @@ void EDA_BASE_FRAME::GetKicadAbout( wxCommandEvent& event )
 }
 
 
-void EDA_BASE_FRAME::AddHelpVersionInfoMenuEntry( wxMenu* aMenu )
-{
-    wxASSERT( aMenu != NULL );
-
-    // Copy version string to clipboard for bug report purposes.
-    AddMenuItem( aMenu, ID_HELP_COPY_VERSION_STRING,
-                 _( "Copy &Version Information" ),
-                 _( "Copy the version string to clipboard to send with bug reports" ),
-                 KiBitmap( copy_button_xpm ) );
-}
-
-
-// This is an enhanced version of the compiler build macro provided by wxWidgets
-// in <wx/build.h>. Please do not make any of these strings translatable.  They
-// are used for conveying troubleshooting information to developers.
-
-#if defined(__GXX_ABI_VERSION)
-    #define __ABI_VERSION  ",compiler with C++ ABI " __WX_BO_STRINGIZE(__GXX_ABI_VERSION)
-#else
-    #define __ABI_VERSION  ",compiler without C++ ABI "
-#endif
-
-#if defined(__INTEL_COMPILER)
-    #define __BO_COMPILER ",Intel C++"
-#elif defined(__GNUG__)
-    #define __BO_COMPILER ",GCC " \
-            __WX_BO_STRINGIZE(__GNUC__) "." \
-            __WX_BO_STRINGIZE(__GNUC_MINOR__) "." \
-            __WX_BO_STRINGIZE(__GNUC_PATCHLEVEL__)
-#elif defined(__VISUALC__)
-    #define __BO_COMPILER ",Visual C++"
-#elif defined(__BORLANDC__)
-    #define __BO_COMPILER ",Borland C++"
-#elif defined(__DIGITALMARS__)
-    #define __BO_COMPILER ",DigitalMars"
-#elif defined(__WATCOMC__)
-    #define __BO_COMPILER ",Watcom C++"
-#else
-    #define __BO_COMPILER ",unknown"
-#endif
-
-
-static inline const char* KICAD_BUILD_OPTIONS_SIGNATURE()
-{
-    return
-#ifdef __WXDEBUG__
-    " (debug,"
-#else
-    " (release,"
-#endif
-    __WX_BO_UNICODE __ABI_VERSION __BO_COMPILER __WX_BO_STL
-    __WX_BO_WXWIN_COMPAT_2_8 ")"
-    ;
-}
-
-
-void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
-{
-    if( !wxTheClipboard->Open() )
-    {
-        wxMessageBox( _( "Could not open clipboard to write version information." ),
-                      _( "Clipboard Error" ), wxOK | wxICON_EXCLAMATION, this );
-        return;
-    }
-
-    wxString msg_version;
-    wxPlatformInfo info;
-
-    msg_version = wxT( "Application: " ) + Pgm().App().GetAppName() + wxT( "\n" );
-    msg_version << wxT( "Version: " ) << GetBuildVersion()
-#ifdef DEBUG
-                << wxT( " debug" )
-#else
-                << wxT( " release" )
-#endif
-                << wxT( " build\n" );
-    msg_version << wxT( "wxWidgets: Version " ) << FROM_UTF8( wxVERSION_NUM_DOT_STRING )
-                << FROM_UTF8( KICAD_BUILD_OPTIONS_SIGNATURE() ) << wxT( "\n" )
-                << wxT( "Platform: " ) << wxGetOsDescription() << wxT( ", " )
-                << info.GetArchName() << wxT( ", " ) << info.GetEndiannessName()
-                << wxT( ", " ) << info.GetPortIdName() << wxT( "\n" );
-
-    // Just in case someone builds KiCad with the platform native of Boost instead of
-    // the version included with the KiCad source.
-    msg_version << wxT( "Boost version: " ) << ( BOOST_VERSION / 100000 ) << wxT( "." )
-                << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
-                << ( BOOST_VERSION % 100 ) << wxT( "\n" );
-
-    msg_version << wxT( "         USE_WX_GRAPHICS_CONTEXT=" );
-#ifdef USE_WX_GRAPHICS_CONTEXT
-    msg_version << wxT( "ON\n" );
-#else
-    msg_version << wxT( "OFF\n" );
-#endif
-
-    msg_version << wxT( "         USE_WX_OVERLAY=" );
-#ifdef USE_WX_OVERLAY
-    msg_version << wxT( "ON\n" );
-#else
-    msg_version << wxT( "OFF\n" );
-#endif
-
-    msg_version << wxT( "         KICAD_SCRIPTING=" );
-#ifdef KICAD_SCRIPTING
-    msg_version << wxT( "ON\n" );
-#else
-    msg_version << wxT( "OFF\n" );
-#endif
-
-    msg_version << wxT( "         KICAD_SCRIPTING_MODULES=" );
-#ifdef KICAD_SCRIPTING_MODULES
-    msg_version << wxT( "ON\n" );
-#else
-    msg_version << wxT( "OFF\n" );
-#endif
-
-    msg_version << wxT( "         KICAD_SCRIPTING_WXPYTHON=" );
-#ifdef KICAD_SCRIPTING_WXPYTHON
-    msg_version << wxT( "ON\n" );
-#else
-    msg_version << wxT( "OFF\n" );
-#endif
-
-    msg_version << wxT( "         USE_FP_LIB_TABLE=HARD_CODED_ON\n" );
-
-    msg_version << wxT( "         BUILD_GITHUB_PLUGIN=" );
-#ifdef BUILD_GITHUB_PLUGIN
-    msg_version << wxT( "ON\n" );
-#else
-    msg_version << wxT( "OFF\n" );
-#endif
-
-    wxTheClipboard->SetData( new wxTextDataObject( msg_version ) );
-    wxTheClipboard->Close();
-
-    wxMessageBox( msg_version, _( "Version Information (copied to the clipboard)" ) );
-}
-
-
 bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
 {
     wxString msg;
@@ -734,4 +582,3 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName,
         wxRemoveFile( autoSaveFileName.GetFullPath() );
     }
 }
-

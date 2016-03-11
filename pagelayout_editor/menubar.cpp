@@ -1,8 +1,3 @@
-/**
- * @file pagelayout_editor/menubar.cpp
- * @brief (Re)Create the main menubar for Pl_Editor
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,14 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
+/**
+ * @file pagelayout_editor/menubar.cpp
+ * @brief (Re)Create the main menubar for Pl_Editor
+ */
 
-#include <pgm_base.h>
+
 #include <kiface_i.h>
-#include <pl_editor_frame.h>
-#include <pl_editor_id.h>
-#include <hotkeys.h>
 #include <menus_helpers.h>
+#include <pgm_base.h>
+
+#include "hotkeys.h"
+#include "pl_editor_frame.h"
+#include "pl_editor_id.h"
 
 
 void PL_EDITOR_FRAME::ReCreateMenuBar()
@@ -141,9 +141,6 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     // Menu Help
     wxMenu* helpMenu = new wxMenu;
-
-    // Version info
-    AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
     AddMenuItem( helpMenu,

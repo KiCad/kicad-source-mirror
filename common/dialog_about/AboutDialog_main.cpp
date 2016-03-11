@@ -22,12 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_about.h>
-#include <aboutinfo.h>
-#include <wx/aboutdlg.h>
-#include <wx/textctrl.h>
 #include <boost/version.hpp>
-
+#include <wx/aboutdlg.h>
+#include <wx/arrimpl.cpp>
+#include <wx/textctrl.h>
+#include <wx/utils.h>
 
 /* Used icons:
  *  lang_xx_xpm[];      // Icons of various national flags
@@ -36,13 +35,15 @@
  *  icon_kicad_xpm[];   // Icon of the application
  */
 #include <bitmaps.h>
-#include <wxstruct.h>
+#include <build_version.h>
 #include <common.h>
 #include <pgm_base.h>
-#include <build_version.h>
+#include <wxstruct.h>
+
+#include "aboutinfo.h"
+#include "dialog_about.h"
 
 
-#include <wx/arrimpl.cpp>
 WX_DEFINE_OBJARRAY( Contributors )
 
 // Helper functions:
@@ -74,14 +75,14 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     }
 
     /* Set title */
-    info.SetAppName( wxT( ".: " ) + Pgm().App().GetAppName() + wxT( " :." ) );
+    info.SetAppName( Pgm().App().GetAppName() );
 
     /* Copyright information */
-    info.SetCopyright( wxT( "(C) 1992-2015 KiCad Developers Team" ) );
+    info.SetCopyright( wxT( "(C) 1992-2016 KiCad Developers Team" ) );
 
     /* KiCad build version */
     wxString version;
-    version << wxT( "Version: " ) << GetBuildVersion()
+    version << GetBuildVersion()
 #ifdef DEBUG
             << wxT( ", debug" )
 #else
@@ -93,16 +94,13 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     /* wxWidgets version */
     wxString libVersion;
-    libVersion << wxT( "wxWidgets " )
-               << wxMAJOR_VERSION << wxT( "." )
-               << wxMINOR_VERSION << wxT( "." )
-               << wxRELEASE_NUMBER
+    libVersion << wxGetLibraryVersionInfo().GetVersionString();
 
     /* Unicode or ANSI version */
 #if wxUSE_UNICODE
-               << wxT( " Unicode " );
+    libVersion << wxT( " Unicode " );
 #else
-               << wxT( " ANSI " );
+    libVersion << wxT( " ANSI " );
 #endif
 
     // Just in case someone builds KiCad with the platform native of Boost instead of

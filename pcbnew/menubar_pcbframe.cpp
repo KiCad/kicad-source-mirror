@@ -28,16 +28,18 @@
  * @file menubar_pcbframe.cpp
  * Pcbnew editor menu bar
  */
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
-#include <pcbnew.h>
-#include <wxPcbStruct.h>
-#include <hotkeys.h>
-#include <pcbnew_id.h>
 
-#include <help_common_strings.h>
+
 #include <menus_helpers.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
+#include <wxPcbStruct.h>
+
+#include "help_common_strings.h"
+#include "hotkeys.h"
+#include "pcbnew.h"
+#include "pcbnew_id.h"
+
 
 void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
@@ -651,8 +653,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( copper_layers_setup_xpm ) );
 
     wxMenu* helpMenu = new wxMenu;
-
-    AddHelpVersionInfoMenuEntry( helpMenu );
 
     AddMenuItem( helpMenu, wxID_HELP,
                  _( "Pcbnew &Manual" ),

@@ -29,17 +29,17 @@
  * @file pcbnew/menubar_modedit.cpp
  * @brief (Re)Create the main menubar for the module editor
  */
-#include <fctsys.h>
-#include <pgm_base.h>
 
-#include <pcbnew.h>
-#include <wxPcbStruct.h>
-#include <module_editor_frame.h>
+
 #include <menus_helpers.h>
+#include <pgm_base.h>
+#include <wxPcbStruct.h>
 
-#include <pcbnew_id.h>
-#include <hotkeys.h>
-#include <help_common_strings.h>
+#include "help_common_strings.h"
+#include "hotkeys.h"
+#include "module_editor_frame.h"
+#include "pcbnew.h"
+#include "pcbnew_id.h"
 
 
 void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
@@ -332,9 +332,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     //----- Help menu --------------------
     wxMenu* helpMenu = new wxMenu;
-
-    // Version info
-    AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
     AddMenuItem( helpMenu, wxID_HELP,

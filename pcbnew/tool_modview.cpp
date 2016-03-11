@@ -29,17 +29,17 @@
  * @brief Build the toolbars for the library browser.
  */
 
-#include <fctsys.h>
-#include <macros.h>
-#include <pcbnew_id.h>
 
-#include <pcbnew.h>
-#include <wxPcbStruct.h>
-#include <menus_helpers.h>
-#include <hotkeys.h>
 #include <dialog_helpers.h>
-#include <modview_frame.h>
-#include <help_common_strings.h>
+#include <macros.h>
+#include <menus_helpers.h>
+#include <wxPcbStruct.h>
+
+#include "help_common_strings.h"
+#include "hotkeys.h"
+#include "modview_frame.h"
+#include "pcbnew.h"
+#include "pcbnew_id.h"
 
 
 void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
@@ -180,9 +180,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar( void )
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
-
-    // Version info
-    AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
     AddMenuItem( helpMenu, wxID_HELP,

@@ -219,20 +219,7 @@ public:
 
     void GetKicadAbout( wxCommandEvent& event );
 
-    /**
-     * Function CopyVersionInfoToClipboard
-     * copies the version information to the clipboard for bug reporting purposes.
-     */
-    void CopyVersionInfoToClipboard( wxCommandEvent& event );
-
     void PrintMsg( const wxString& text );
-
-    /**
-     * Append the copy version information to clipboard help menu entry to \a aMenu.
-     *
-     * @param aMenu - The menu to append.
-     */
-    void AddHelpVersionInfoMenuEntry( wxMenu* aMenu );
 
     /**
      * Function LoadSettings
