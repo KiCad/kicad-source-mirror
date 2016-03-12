@@ -567,6 +567,11 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     // Display new markers:
     m_parent->GetCanvas()->Refresh();
 
+    // Display message
+    wxString msg = _( "Finished" );
+    msg += wxT( "\n" );
+    aMessagesList->Add( msg );
+
     if( m_writeErcFile )
     {
         fn = g_RootSheet->GetScreen()->GetFileName();
