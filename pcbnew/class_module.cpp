@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -899,16 +899,16 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 
     switch( m_Layer )
     {
+
+    default:
+        wxASSERT_MSG( false, "Illegal layer" );    // do you really have modules placed on other layers?
+        // pass through
     case F_Cu:
         aLayers[1] = ITEM_GAL_LAYER( MOD_FR_VISIBLE );
         break;
 
     case B_Cu:
         aLayers[1] = ITEM_GAL_LAYER( MOD_BK_VISIBLE );
-        break;
-
-    default:
-        assert( false );    // do you really have modules placed on inner layers?
         break;
     }
 }

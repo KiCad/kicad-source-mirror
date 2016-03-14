@@ -1692,7 +1692,13 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
             break;
 
         case T_layer:
-            module->SetLayer( parseBoardItemLayer() );
+        {
+            // Footprints can be only on the front side or the back side.
+            // but because we can find some stupid layer in file, ensure a
+            // acceptable layer is set for the footprint
+            LAYER_ID layer = parseBoardItemLayer();
+            module->SetLayer( layer == B_Cu ? B_Cu : F_Cu );
+        }
             NeedRIGHT();
             break;
 
