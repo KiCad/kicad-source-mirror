@@ -27,15 +27,16 @@
  * @file gerbview/menubar.cpp
  * @brief (Re)Create the main menubar for GerbView
  */
-#include <fctsys.h>
 
-#include <pgm_base.h>
+
 #include <kiface_i.h>
-#include <gerbview.h>
-#include <gerbview_frame.h>
-#include <gerbview_id.h>
-#include <hotkeys.h>
 #include <menus_helpers.h>
+#include <pgm_base.h>
+
+#include "gerbview.h"
+#include "gerbview_frame.h"
+#include "gerbview_id.h"
+#include "hotkeys.h"
 
 
 void GERBVIEW_FRAME::ReCreateMenuBar()
@@ -214,9 +215,6 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     // Menu Help
     wxMenu* helpMenu = new wxMenu;
-
-    // Version info
-    AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
     AddMenuItem( helpMenu,

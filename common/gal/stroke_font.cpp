@@ -32,9 +32,11 @@
 
 using namespace KIGFX;
 
+const double STROKE_FONT::INTERLINE_PITCH_RATIO = 1.5;
 const double STROKE_FONT::OVERBAR_HEIGHT = 1.22;
 const double STROKE_FONT::BOLD_FACTOR = 1.3;
-const double STROKE_FONT::HERSHEY_SCALE = 1.0 / 21.0;
+const double STROKE_FONT::STROKE_FONT_SCALE = 1.0 / 21.0;
+const double STROKE_FONT::ITALIC_TILT = 1.0 / 8;
 
 STROKE_FONT::STROKE_FONT( GAL* aGal ) :
     m_gal( aGal ),
@@ -81,8 +83,8 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             if( i < 2 )
             {
                 // The first two values contain the width of the char
-                glyphStartX     = ( coordinate[0] - 'R' ) * HERSHEY_SCALE;
-                glyphEndX       = ( coordinate[1] - 'R' ) * HERSHEY_SCALE;
+                glyphStartX     = ( coordinate[0] - 'R' ) * STROKE_FONT_SCALE;
+                glyphEndX       = ( coordinate[1] - 'R' ) * STROKE_FONT_SCALE;
                 glyphBoundingX  = VECTOR2D( 0, glyphEndX - glyphStartX );
             }
             else if( ( coordinate[0] == ' ' ) && ( coordinate[1] == 'R' ) )
@@ -97,9 +99,9 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             {
                 // Every coordinate description of the Hershey format has an offset,
                 // it has to be subtracted
-                point.x = (double) ( coordinate[0] - 'R' ) * HERSHEY_SCALE - glyphStartX;
+                point.x = (double) ( coordinate[0] - 'R' ) * STROKE_FONT_SCALE - glyphStartX;
 				// -10 is here to keep GAL rendering consistent with the legacy gfx stuff
-                point.y = (double) ( coordinate[1] - 'R' - 10) * HERSHEY_SCALE;
+                point.y = (double) ( coordinate[1] - 'R' - 10) * STROKE_FONT_SCALE;
                 pointList.push_back( point );
             }
 
@@ -121,7 +123,7 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 
 int STROKE_FONT::getInterline() const
 {
-    return ( m_glyphSize.y * 14 ) / 10 + m_gal->GetLineWidth();
+    return KiROUND( m_glyphSize.y * INTERLINE_PITCH_RATIO ) + m_gal->GetLineWidth();
 }
 
 
@@ -307,11 +309,11 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         {
             if( m_mirrored )
             {
-                overbar_italic_comp = (-m_glyphSize.y * OVERBAR_HEIGHT) / 8;
+                overbar_italic_comp = (-m_glyphSize.y * OVERBAR_HEIGHT) / ITALIC_TILT;
             }
             else
             {
-                overbar_italic_comp = (m_glyphSize.y * OVERBAR_HEIGHT) / 8;
+                overbar_italic_comp = (m_glyphSize.y * OVERBAR_HEIGHT) / ITALIC_TILT;
             }
         }
 

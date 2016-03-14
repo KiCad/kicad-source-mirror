@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,8 @@
 #else
 #error "Cannot resolve units formatting due to no definition of EESCHEMA or PCBNEW."
 #endif
+
+#include <gal/stroke_font.h>
 
 #include <convert_to_biu.h>
 
@@ -106,15 +108,16 @@ wxString EDA_TEXT::ShortenedShownText() const
 }
 
 
-/**
- * Function GetInterline
- * return the distance between 2 text lines
- * has meaning only for multiline texts
+/*
+ * calculate the distance (pitch) between 2 text lines
+ * the distance includes the interline + room for chars like j { and [
+ * Is used for multiline texts, but also for single line texts, to calculate
+ * the text bounding box
  */
 int EDA_TEXT::GetInterline( int aTextThickness ) const
 {
     int thickness = aTextThickness <= 0 ? m_Thickness : aTextThickness;
-    return (( m_Size.y * 14 ) / 10) + thickness;
+    return KiROUND( m_Size.y * KIGFX::STROKE_FONT::INTERLINE_PITCH_RATIO ) + thickness;
 }
 
 EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
@@ -130,7 +133,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     {
         wxStringSplit( text, strings, '\n' );
 
-        if ( strings.GetCount() )     // GetCount() == 0 for void strings
+        if( strings.GetCount() )     // GetCount() == 0 for void strings
         {
             if( aLine >= 0 && (aLine < (int)strings.GetCount()) )
                 text = strings.Item( aLine );
@@ -153,11 +156,15 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     else
         rect.SetOrigin( m_Pos );
 
-    // extra dy interval for letters like j and y and ]
-    int extra_dy = dy - m_Size.y;
-    rect.Move( wxPoint( 0, -extra_dy / 2 ) ); // move origin by the half extra interval
+    // The bbox vertical size returned by GetInterline( aThickness )
+    // includes letters like j and y and ] + interval between lines.
+    // The interval below the last line is not usefull, and we can use its half value
+    // as vertical margin above the text
+    // the full interval is roughly m_Size.y * 0.4 - aThickness/2
+    rect.Move( wxPoint( 0, aThickness/4 - KiROUND( m_Size.y * 0.2 ) ) );
 
     // for multiline texts and aLine < 0, merge all rectangles
+    // ( if aLine < 0, we want the full text bounding box )
     if( m_MultilineAllowed && aLine < 0 )
     {
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
@@ -232,7 +239,6 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
         }
     }
 
-    rect.Inflate( thickness / 2 );
     rect.Normalize();       // Make h and v sizes always >= 0
 
     return rect;

@@ -26,16 +26,15 @@
  * @file cvpcb/menubar.cpp
  * @brief (Re)Create the menubar for CvPcb
  */
-#include <fctsys.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
-#include <menus_helpers.h>
-
-#include <cvpcb.h>
-#include <cvpcb_mainframe.h>
-#include <cvpcb_id.h>
 
 #include <common_help_msg.h>
+#include <kiface_i.h>
+#include <menus_helpers.h>
+#include <pgm_base.h>
+
+#include "cvpcb.h"
+#include "cvpcb_id.h"
+#include "cvpcb_mainframe.h"
 
 
 /**
@@ -110,9 +109,6 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
-
-    // Version info
-    AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Manual Contents
     AddMenuItem( helpMenu, wxID_HELP, _( "CvPcb &Manual" ),

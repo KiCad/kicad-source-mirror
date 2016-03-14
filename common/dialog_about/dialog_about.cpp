@@ -22,7 +22,36 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_about.h>
+
+#include <config.h>
+ 
+// kicad_curl.h must be included before wx headers, to avoid
+// conflicts for some defines, at least on Windows
+#ifdef BUILD_GITHUB_PLUGIN
+#include <curl/curlver.h>
+#include <kicad_curl/kicad_curl.h>
+#endif
+
+#include <boost/version.hpp>
+#include <wx/clipbrd.h>
+#include <wx/msgdlg.h>
+
+/* Pixel information of icons in XPM format.
+ * All KiCad icons are linked into shared library 'libbitmaps.a'.
+ *  Icons:
+ *  preference_xpm[];    // Icon for 'Developers' tab
+ *  editor_xpm[];        // Icon for 'Doc Writers' tab
+ *  palette_xpm[];       // Icon for 'Artists' tab
+ *  language_xpm[];      // Icon for 'Translators' tab
+ *  right_xpm[];         // Right arrow icon for list items
+ *  info_xpm[];          // Bulb for description tab
+ *  tools_xpm[];         // Sheet of paper icon for license info tab
+ */
+#include <bitmaps.h>
+#include <build_version.h>
+
+#include "dialog_about.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class dialog_about methods
@@ -43,7 +72,7 @@ dialog_about::dialog_about(wxWindow *parent, AboutAppInfo& appInfo)
 
     m_staticTextAppTitle->SetLabel( info.GetAppName() );
     m_staticTextCopyright->SetLabel( info.GetCopyright() );
-    m_staticTextBuildVersion->SetLabel( info.GetBuildVersion() );
+    m_staticTextBuildVersion->SetLabel( "Version: " + info.GetBuildVersion() );
     m_staticTextLibVersion->SetLabel( info.GetLibVersion() );
 
     DeleteNotebooks();
@@ -53,6 +82,8 @@ dialog_about::dialog_about(wxWindow *parent, AboutAppInfo& appInfo)
     m_auiNotebook->Update();
     SetFocus();
     Centre();
+
+    Connect( wxID_COPY, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( dialog_about::OnCopyVersionInfo ) );
 }
 
 
@@ -396,4 +427,113 @@ void dialog_about::OnOkClick( wxCommandEvent &event )
 void dialog_about::OnHtmlLinkClicked( wxHtmlLinkEvent& event )
 {
     ::wxLaunchDefaultBrowser( event.GetLinkInfo().GetHref() );
+}
+
+void dialog_about::OnCopyVersionInfo( wxCommandEvent& event )
+{
+    if( !wxTheClipboard->Open() )
+    {
+        wxMessageBox( _( "Could not open clipboard to write version information." ),
+                      _( "Clipboard Error" ), wxOK | wxICON_EXCLAMATION, this );
+        return;
+    }
+
+    wxPlatformInfo platform;
+
+    // DO NOT translate information in the msg_version string
+    wxString msg_version;
+    msg_version << "Application: " << info.GetAppName() << "\n";
+    msg_version << "Version: " << info.GetBuildVersion() << "\n";
+    msg_version << "Libraries: " << wxGetLibraryVersionInfo().GetVersionString() << "\n";
+#ifdef BUILD_GITHUB_PLUGIN
+    msg_version << "           " << KICAD_CURL::GetVersion() << "\n";
+#endif
+    msg_version << "Platform: " << wxGetOsDescription() << ", "
+                                << platform.GetArchName() << ", "
+                                << platform.GetEndiannessName() << ", "
+                                << platform.GetPortIdName() << "\n";
+
+    msg_version << "- Build Info -\n";
+    msg_version << "wxWidgets: " << wxVERSION_NUM_DOT_STRING << " (";
+    msg_version << __WX_BO_UNICODE __WX_BO_STL __WX_BO_WXWIN_COMPAT_2_8 ")\n";
+
+    msg_version << "Boost: " << ( BOOST_VERSION / 100000 ) << wxT( "." )
+                             << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
+                             << ( BOOST_VERSION % 100 ) << wxT( "\n" );
+
+#ifdef BUILD_GITHUB_PLUGIN
+    msg_version << "Curl: " << LIBCURL_VERSION << "\n";
+#endif
+
+    msg_version << "KiCad - Compiler: ";
+#if defined(__clang__)
+    msg_version << "Clang " << __clang_major__ << "." << __clang_minor__ << "." << __clang_patchlevel__;
+#elif defined(__GNUG__)
+    msg_version << "GCC " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__;
+#elif defined(_MSC_VER)
+    msg_version << "Visual C++ " << _MSC_VER;
+#elif defined(__INTEL_COMPILER)
+    msg_version << "Intel C++ " << __INTEL_COMPILER;
+#else
+    msg_version << "Other Compiler ";
+#endif
+
+#if defined(__GXX_ABI_VERSION)
+    msg_version << " with C++ ABI " << __GXX_ABI_VERSION << "\n";
+#else
+    msg_version << " without C++ ABI\n";
+#endif
+
+    msg_version << "        Settings: ";
+
+    #define ON "ON\n"
+    #define OFF "OFF\n"
+
+    msg_version << "USE_WX_GRAPHICS_CONTEXT=";
+#ifdef USE_WX_GRAPHICS_CONTEXT
+    msg_version << ON;
+#else
+    msg_version << OFF;
+#endif
+
+    msg_version << "                  USE_WX_OVERLAY=";
+#ifdef USE_WX_OVERLAY
+    msg_version << ON;
+#else
+    msg_version << OFF;
+#endif
+
+    msg_version << "                  KICAD_SCRIPTING=";
+#ifdef KICAD_SCRIPTING
+    msg_version << ON;
+#else
+    msg_version << OFF;
+#endif
+
+    msg_version << "                  KICAD_SCRIPTING_MODULES=";
+#ifdef KICAD_SCRIPTING_MODULES
+    msg_version << ON;
+#else
+    msg_version << OFF;
+#endif
+
+    msg_version << "                  KICAD_SCRIPTING_WXPYTHON=";
+#ifdef KICAD_SCRIPTING_WXPYTHON
+    msg_version << ON;
+#else
+    msg_version << OFF;
+#endif
+
+    msg_version << "                  USE_FP_LIB_TABLE=HARD_CODED_ON\n";
+
+    msg_version << "                  BUILD_GITHUB_PLUGIN=";
+#ifdef BUILD_GITHUB_PLUGIN
+    msg_version << ON;
+#else
+    msg_version << OFF;
+#endif
+
+    wxTheClipboard->SetData( new wxTextDataObject( msg_version ) );
+    wxTheClipboard->Close();
+    copyVersionInfo->SetLabel( _( "Copied..." ) );
 }

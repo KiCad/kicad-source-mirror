@@ -28,18 +28,16 @@
  * @brief (Re)Create the main menubar for the schematic frame
  */
 
-#include <fctsys.h>
+
 #include <kiface_i.h>
-#include <pgm_base.h>
-#include <schframe.h>
-
-#include <general.h>
-#include <eeschema_id.h>
-#include <hotkeys.h>
 #include <menus_helpers.h>
+#include <pgm_base.h>
 
-#include <help_common_strings.h>
-
+#include "eeschema_id.h"
+#include "general.h"
+#include "help_common_strings.h"
+#include "hotkeys.h"
+#include "schframe.h"
 
 void SCH_EDIT_FRAME::ReCreateMenuBar()
 {
@@ -496,9 +494,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Help Menu:
     wxMenu* helpMenu = new wxMenu;
-
-    // Version info
-    AddHelpVersionInfoMenuEntry( helpMenu );
 
     AddMenuItem( helpMenu,
                  wxID_HELP,

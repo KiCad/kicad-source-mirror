@@ -195,8 +195,6 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
 
     D_PAD* pad = new D_PAD( aModule );
 
-    aModule->Pads().PushBack( pad );
-
     if( !m_isHolePlated && m_hole )
     {
         // mechanical hole
@@ -237,12 +235,15 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
             }
         }
 
+        if( width == 0 || height == 0 )
+        {
+            delete pad;
+            return;
+        }
+
         if( padType == PAD_ATTRIB_STANDARD )
             // actually this is a thru-hole pad
             pad->SetLayerSet( LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask ) );
-
-        if( width == 0 || height == 0 )
-            THROW_IO_ERROR( wxT( "pad with zero size" ) );
 
         pad->SetPadName( m_name.text );
 
@@ -292,6 +293,8 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
         RotatePoint( &padpos, aModule->GetOrientation() );
         pad->SetPosition( padpos + aModule->GetPosition() );
     }
+
+    aModule->Pads().PushBack( pad );
 }
 
 
@@ -323,7 +326,7 @@ void PCB_PAD::AddToBoard()
         }
 
         if( width == 0 || height == 0 )
-            THROW_IO_ERROR( wxT( "pad or via with zero size" ) );
+            return;
 
         if( IsCopperLayer( m_KiCadLayer ) )
         {

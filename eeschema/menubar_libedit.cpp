@@ -27,16 +27,16 @@
  * @file eeschema/menubar_libedit.cpp
  * @brief (Re)Create the main menubar for the component editor frame (LibEdit)
  */
-#include <fctsys.h>
+
+#include <menus_helpers.h>
 #include <pgm_base.h>
 
-#include <general.h>
-#include <libeditframe.h>
-#include <eeschema_id.h>
-#include <hotkeys.h>
+#include "eeschema_id.h"
+#include "general.h"
+#include "help_common_strings.h"
+#include "hotkeys.h"
+#include "libeditframe.h"
 
-#include <help_common_strings.h>
-#include <menus_helpers.h>
 
 /**
  * @brief (Re)Create the menubar for the component editor frame
@@ -246,9 +246,6 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
-
-    // Version info
-    AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
     AddMenuItem( helpMenu,

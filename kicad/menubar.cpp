@@ -402,9 +402,6 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
 
-    // Version info
-    AddHelpVersionInfoMenuEntry( helpMenu );
-
     // Contents
     AddMenuItem( helpMenu, wxID_HELP,
                  _( "KiCad &Manual" ),

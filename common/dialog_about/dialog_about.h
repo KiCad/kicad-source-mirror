@@ -30,21 +30,8 @@
 #include <wx/stattext.h>
 #include <wx/hyperlink.h>
 
-#include <aboutinfo.h>
-#include <dialog_about_base.h>
-
-/* Pixel information of icons in XPM format.
- * All KiCad icons are linked into shared library 'libbitmaps.a'.
- *  Icons:
- *  preference_xpm[];    // Icon for 'Developers' tab
- *  editor_xpm[];        // Icon for 'Doc Writers' tab
- *  palette_xpm[];       // Icon for 'Artists' tab
- *  language_xpm[];      // Icon for 'Translators' tab
- *  right_xpm[];         // Right arrow icon for list items
- *  info_xpm[];          // Bulb for description tab
- *  tools_xpm[];         // Sheet of paper icon for license info tab
- */
-#include <bitmaps.h>
+#include "aboutinfo.h"
+#include "dialog_about_base.h"
 
 /**
  * About dialog to show application specific information.
@@ -74,6 +61,7 @@ private:
     virtual void     OnClose( wxCloseEvent& event );
     virtual void     OnOkClick( wxCommandEvent& event );
     virtual void     OnHtmlLinkClicked( wxHtmlLinkEvent& event );
+    virtual void     OnCopyVersionInfo( wxCommandEvent &event );
 
     // Notebook pages
     wxFlexGridSizer* CreateFlexGridSizer();
