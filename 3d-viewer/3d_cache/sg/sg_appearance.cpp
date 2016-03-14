@@ -387,7 +387,13 @@ bool SGAPPEARANCE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
         while( NULL != np->GetParent() )
             np = np->GetParent();
 
-        return np->WriteCache( aFile, NULL );
+        if( np->WriteCache( aFile, NULL ) )
+        {
+            m_written = true;
+            return true;
+        }
+
+        return false;
     }
 
     if( parentNode != m_Parent )
@@ -425,6 +431,7 @@ bool SGAPPEARANCE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( aFile.fail() )
         return false;
 
+    m_written = true;
     return true;
 }
 

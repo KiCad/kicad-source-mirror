@@ -363,7 +363,13 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
         while( NULL != np->GetParent() )
             np = np->GetParent();
 
-        return np->WriteCache( aFile, NULL );
+        if( np->WriteCache( aFile, NULL ) )
+        {
+            m_written = true;
+            return true;
+        }
+
+        return false;
     }
 
     if( parentNode != m_Parent )
@@ -406,7 +412,34 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     S3D::WriteVector( aFile, scale_axis );
     aFile.write( (char*)&scale_angle, sizeof( scale_angle ) );
 
-    size_t asize = m_Transforms.size();
+    // Transfer ownership of any Transform references which hadn't been written
+    size_t asize = m_RTransforms.size();
+    size_t i;
+
+    for( i = 0; i < asize; ++i )
+    {
+        if( !m_RTransforms[i]->isWritten() )
+        {
+            m_RTransforms[i]->SwapParent( this );
+            --asize;
+            --i;
+        }
+    }
+
+    // Transfer ownership of any Shape references which hadn't been written
+    asize = m_RShape.size();
+
+    for( i = 0; i < asize; ++i )
+    {
+        if( !m_RShape[i]->isWritten() )
+        {
+            m_RShape[i]->SwapParent( this );
+            --asize;
+            --i;
+        }
+    }
+
+    asize = m_Transforms.size();
     aFile.write( (char*)&asize, sizeof( size_t ) );
     asize = m_RTransforms.size();
     aFile.write( (char*)&asize, sizeof( size_t ) );
@@ -414,8 +447,6 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     aFile.write( (char*)&asize, sizeof( size_t ) );
     asize = m_RShape.size();
     aFile.write( (char*)&asize, sizeof( size_t ) );
-
-    size_t i;
     asize = m_Transforms.size();
 
     // write child transforms
@@ -464,6 +495,7 @@ bool SCENEGRAPH::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( aFile.fail() )
         return false;
 
+    m_written = true;
     return true;
 }
 
@@ -550,7 +582,7 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] corrupt data while reading transform '";
-            ostr << name << "'";
+            ostr << name << "' pos " << aFile.tellg();
             wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
@@ -582,7 +614,7 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] corrupt data: cannot find ref transform '";
-            ostr << name << "'";
+            ostr << name << "' pos " << aFile.tellg();
             wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
@@ -595,7 +627,7 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] corrupt data: type is not TRANSFORM '";
-            ostr << name << "'";
+            ostr << name << "' pos " << aFile.tellg();
             wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
@@ -630,7 +662,7 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] corrupt data while reading shape '";
-            ostr << name << "'";
+            ostr << name << "' pos " << aFile.tellg();
             wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
@@ -662,7 +694,7 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] corrupt data: cannot find ref shape '";
-            ostr << name << "'";
+            ostr << name << "' pos " << aFile.tellg();
             wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 
@@ -675,7 +707,7 @@ bool SCENEGRAPH::ReadCache( std::ifstream& aFile, SGNODE* parentNode )
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] corrupt data: type is not SGSHAPE '";
-            ostr << name << "'";
+            ostr << name << "' pos " << aFile.tellg();
             wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
             #endif
 

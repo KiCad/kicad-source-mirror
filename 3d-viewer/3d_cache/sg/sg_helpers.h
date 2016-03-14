@@ -84,17 +84,25 @@ class SGCOORDINDEX;
                 oSL = &aOwnedList; \
                 sL =  aOwnedList.begin(); \
                 eL =  aOwnedList.end(); \
+                while( sL != eL ) { \
+                    if( (SGNODE*)*sL == aNode ) { \
+                        oSL->erase( sL ); \
+                        return; \
+                    } \
+                    ++sL; \
+                } \
             } else { \
                 oSL = &aRefList; \
                 sL =  aRefList.begin(); \
                 eL =  aRefList.end(); \
-            } \
-            while( sL != eL ) { \
-                if( (SGNODE*)*sL == aNode ) { \
-                    oSL->erase( sL ); \
-                    return; \
+                while( sL != eL ) { \
+                    if( (SGNODE*)*sL == aNode ) { \
+                        delNodeRef( this ); \
+                        oSL->erase( sL ); \
+                        return; \
+                    } \
+                    ++sL; \
                 } \
-                ++sL; \
             } \
             return; \
         } } while( 0 )

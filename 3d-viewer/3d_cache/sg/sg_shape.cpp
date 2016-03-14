@@ -191,13 +191,16 @@ void SGSHAPE::unlinkNode( const SGNODE* aNode, bool isChild )
     {
         if( aNode == m_RAppearance )
         {
+            delNodeRef( this );
             m_RAppearance = NULL;
             return;
         }
 
         if( aNode == m_RFaceSet )
         {
+            delNodeRef( this );
             m_RFaceSet = NULL;
+            return;
         }
     }
 
@@ -421,7 +424,13 @@ bool SGSHAPE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
         while( NULL != np->GetParent() )
             np = np->GetParent();
 
-        return np->WriteCache( aFile, NULL );
+        if( np->WriteCache( aFile, NULL ) )
+        {
+            m_written = true;
+            return true;
+        }
+
+        return false;
     }
 
     if( parentNode != m_Parent )
@@ -447,6 +456,13 @@ bool SGSHAPE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 
         return false;
     }
+
+    // check if any references are unwritten and swap parents if so
+    if( NULL != m_RAppearance && !m_RAppearance->isWritten() )
+        m_RAppearance->SwapParent(this);
+
+    if( NULL != m_RFaceSet && !m_RFaceSet->isWritten() )
+        m_RFaceSet->SwapParent( this );
 
     aFile << "[" << GetName() << "]";
     #define NITEMS 4
@@ -490,6 +506,7 @@ bool SGSHAPE::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( aFile.fail() )
         return false;
 
+    m_written = true;
     return true;
 }
 

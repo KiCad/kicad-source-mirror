@@ -239,18 +239,21 @@ void SGFACESET::unlinkNode( const SGNODE* aNode, bool isChild )
     {
         if( aNode == m_RColors )
         {
+            delNodeRef( this );
             m_RColors = NULL;
             return;
         }
 
         if( aNode == m_RCoords )
         {
+            delNodeRef( this );
             m_RCoords = NULL;
             return;
         }
 
         if( aNode == m_RNormals )
         {
+            delNodeRef( this );
             m_RNormals = NULL;
             return;
         }
@@ -558,7 +561,13 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
         while( NULL != np->GetParent() )
             np = np->GetParent();
 
-        return np->WriteCache( aFile, NULL );
+        if( np->WriteCache( aFile, NULL ) )
+        {
+            m_written = true;
+            return true;
+        }
+
+        return false;
     }
 
     if( parentNode != m_Parent )
@@ -584,6 +593,16 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
 
         return false;
     }
+
+    // check if any references are unwritten and swap parents if so
+    if( NULL != m_RCoords && !m_RCoords->isWritten() )
+        m_RCoords->SwapParent( this );
+
+    if( NULL != m_RNormals && !m_RNormals->isWritten() )
+        m_RNormals->SwapParent( this );
+
+    if( NULL != m_RColors && !m_RColors->isWritten() )
+        m_RColors->SwapParent( this );
 
     aFile << "[" << GetName() << "]";
     #define NITEMS 7
@@ -648,6 +667,7 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( aFile.fail() )
         return false;
 
+    m_written = true;
     return true;
 }
 

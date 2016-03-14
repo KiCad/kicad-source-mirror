@@ -117,6 +117,36 @@ SGNODE* SGNODE::GetParent( void ) const
 }
 
 
+bool SGNODE::SwapParent( SGNODE* aNewParent )
+{
+    if( aNewParent == m_Parent )
+        return true;
+
+    if( NULL == aNewParent )
+        return false;
+
+    if( NULL == m_Parent )
+    {
+        if( aNewParent->AddChildNode( this ) )
+            return true;
+
+        return false;
+    }
+
+    if( aNewParent->GetNodeType() != m_Parent->GetNodeType() )
+        return false;
+
+    SGNODE* oldParent = m_Parent;
+    m_Parent->unlinkChildNode( this );
+    m_Parent = NULL;
+    aNewParent->unlinkRefNode( this );
+    aNewParent->AddChildNode( this );
+    oldParent->AddRefNode( this );
+
+    return true;
+}
+
+
 const char* SGNODE::GetName( void )
 {
     if( m_Name.empty() )
@@ -145,6 +175,9 @@ const char * SGNODE::GetNodeTypeName( S3D::SGTYPES aNodeType ) const
 
 void SGNODE::addNodeRef( SGNODE* aNode )
 {
+    if( NULL == aNode )
+        return;
+
     std::list< SGNODE* >::iterator np =
         std::find( m_BackPointers.begin(), m_BackPointers.end(), aNode );
 
@@ -156,8 +189,11 @@ void SGNODE::addNodeRef( SGNODE* aNode )
 }
 
 
-void SGNODE::delNodeRef( SGNODE* aNode )
+void SGNODE::delNodeRef( const SGNODE* aNode )
 {
+    if( NULL == aNode )
+        return;
+
     std::list< SGNODE* >::iterator np =
         std::find( m_BackPointers.begin(), m_BackPointers.end(), aNode );
 
@@ -170,7 +206,9 @@ void SGNODE::delNodeRef( SGNODE* aNode )
     #ifdef DEBUG
     std::ostringstream ostr;
     ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] delNodeRef() did not find its target";
+    ostr << " * [BUG] delNodeRef() did not find its target\n";
+    ostr << " * This Node Type: " << m_SGtype << ", Referenced node type: ";
+    ostr << aNode->GetNodeType() << "\n";
     wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
     #endif
 

@@ -120,7 +120,17 @@ public:
      *
      * @param aNode is the node holding a reference to this object
      */
-    void delNodeRef( SGNODE* aNode );
+    void delNodeRef( const SGNODE* aNode );
+
+    /**
+     * Function IsWritten
+     * returns true if the object had already been written to a
+     * cache file or VRML file; for internal use only.
+     */
+    bool isWritten( void )
+    {
+        return m_written;
+    }
 
 public:
     SGNODE( SGNODE* aParent );
@@ -149,6 +159,17 @@ public:
      * the derived object.
      */
     virtual bool SetParent( SGNODE* aParent, bool notify = true ) = 0;
+
+    /**
+     * Function SwapParent
+     * swaps the ownership with the given parent. This operation
+     * may be required when reordering nodes for optimization.
+     *
+     * @param aNewParent [in] will become the new parent to the
+     * object; it must be the same type as the parent of this
+     * instance.
+     */
+    bool SwapParent( SGNODE* aNewParent );
 
     const char* GetName( void );
     void SetName(const char *aName);
