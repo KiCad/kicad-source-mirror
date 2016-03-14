@@ -8,7 +8,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,15 +120,15 @@ void DIALOG_EXCHANGE_MODULE::init()
     m_CmpValue->AppendText( m_currentModule->GetValue() );
     m_CmpReference->AppendText( m_currentModule->GetReference() );
     m_Selection->SetString( 0, wxString::Format(
-                            _("Change footprint of '%s'" ),
+                            _( "Change footprint of '%s'" ),
                             GetChars( m_currentModule->GetReference() ) ) );
-    wxString fpname = m_CurrentFootprintFPID->GetValue().AfterLast(':');
+    wxString fpname = m_CurrentFootprintFPID->GetValue().AfterLast( ':' );
 
     if( fpname.IsEmpty() )    // Happens for old fp names
         fpname = m_CurrentFootprintFPID->GetValue();
 
     m_Selection->SetString( 1, wxString::Format(
-                            _("Change footprints '%s'" ),
+                            _( "Change footprints '%s'" ),
                             GetChars( fpname.Left( 12 ) ) ) );
 
     m_Selection->SetSelection( m_selectionMode );
@@ -198,11 +198,6 @@ void DIALOG_EXCHANGE_MODULE::OnSelectionClicked( wxCommandEvent& event )
 }
 
 
-/*
- * Rebuild the file name.CMP (if any) after exchanging footprints
- * if the footprint are managed by this file
- * Return false if error
- */
 void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
 {
     wxFileName  fn;
@@ -227,12 +222,6 @@ void DIALOG_EXCHANGE_MODULE::RebuildCmpList( wxCommandEvent& event )
 }
 
 
-/* Change the current footprint at the current cursor position.
- * Retains the following:
- * - position, orientation and side
- * - value and ref
- * - pads net names
- */
 bool DIALOG_EXCHANGE_MODULE::changeCurrentFootprint()
 {
     wxString newmodulename = m_NewFootprintFPID->GetValue();
@@ -244,17 +233,6 @@ bool DIALOG_EXCHANGE_MODULE::changeCurrentFootprint()
 }
 
 
-/*
- * Change all footprints having the same fpid by a new one from lib
- * Retains:
- * - direction, position, side
- * - value and ref
- * - pads net names
- * Note: m_currentModule is no longer the current footprint
- * since it has been changed!
- * if aUseValue is true, footprints having the same fpid should
- * also have the same value
- */
 bool DIALOG_EXCHANGE_MODULE::changeSameFootprints( bool aUseValue )
 {
     wxString msg;
@@ -325,13 +303,6 @@ bool DIALOG_EXCHANGE_MODULE::changeSameFootprints( bool aUseValue )
 }
 
 
-/*
- * Change all modules with module of the same name in library.
- * Maintains:
- * - direction, position, side
- * - value and ref
- * - pads net names
- */
 bool DIALOG_EXCHANGE_MODULE::changeAllFootprints()
 {
     MODULE* Module, * PtBack;
@@ -366,15 +337,6 @@ bool DIALOG_EXCHANGE_MODULE::changeAllFootprints()
 }
 
 
-/*
- * Change aModule to a new, fresh one from lib
- * Retains
- * - direction, position, side
- * - value and ref
- * - pads net names
- * Returns: false if no change (if the new module is not found)
- * true if OK
- */
 bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
                                               const FPID&        aNewFootprintFPID,
                                               bool               aShowError )
@@ -473,7 +435,6 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
 }
 
 
-// Runs the footprint viewer to select a footprint.
 void DIALOG_EXCHANGE_MODULE::ViewAndSelectFootprint( wxCommandEvent& event )
 {
     wxString newname;
@@ -542,7 +503,7 @@ bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
     for( ; module != NULL; module = module->Next() )
     {
         fprintf( cmpFile, "\nBeginCmp\n" );
-        fprintf( cmpFile, "TimeStamp = %8.8lX\n", module->GetTimeStamp() );
+        fprintf( cmpFile, "TimeStamp = %8.8lX\n", (unsigned long)module->GetTimeStamp() );
         fprintf( cmpFile, "Path = %s\n", TO_UTF8( module->GetPath() ) );
         fprintf( cmpFile, "Reference = %s;\n",
                  !module->GetReference().IsEmpty() ?

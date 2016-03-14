@@ -142,7 +142,7 @@ bool SCH_SHEET::Save( FILE* aFile ) const
         return false;
 
     //save the unique timestamp, like other schematic parts.
-    if( fprintf( aFile, "U %8.8lX\n", m_TimeStamp ) == EOF )
+    if( fprintf( aFile, "U %8.8lX\n", (unsigned long) m_TimeStamp ) == EOF )
         return false;
 
     /* Save schematic sheetname and filename. */
@@ -180,6 +180,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
     int              fieldNdx, size;
     SCH_SHEET_PIN*   sheetPin;
     char*            ptcar;
+    unsigned long    timeStamp = 0UL;
 
     SetTimeStamp( GetNewTimeStamp() );
 
@@ -219,9 +220,13 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         if( ((char*)aLine)[0] == 'U' )
         {
-            sscanf( ((char*)aLine) + 1, "%lX", &m_TimeStamp );
+            sscanf( ((char*)aLine) + 1, "%lX", &timeStamp );
+
+            m_TimeStamp = (time_t) timeStamp;
+
             if( m_TimeStamp == 0 )  // zero is not unique!
                 SetTimeStamp( GetNewTimeStamp() );
+
             continue;
         }
 
