@@ -328,9 +328,11 @@ double TEXTE_MODULE::GetDrawRotation() const
     if( module )
         rotation += module->GetOrientation();
 
-    // Keep angle between -90 .. 90 deg. Otherwise the text is not easy to read
-    while( rotation > 900 )
-        rotation -= 1800;
+    NORMALIZE_ANGLE_POS( rotation );
+
+    // For angle = 0 .. 360 deg
+    while( rotation > 2700 )
+        rotation -= 3600;
 
     while( rotation < -900 )
         rotation += 1800;
