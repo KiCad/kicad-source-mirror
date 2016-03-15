@@ -647,8 +647,8 @@ SGVECTOR S3D::CalcTriNorm( const SGPOINT& p1, const SGPOINT& p2, const SGPOINT& 
         return SGVECTOR( 0.0, 0.0, 1.0 );
 
     // normal
-    tri = cross( pts[1] - pts[0], pts[2] - pts[0] );
-    normalize( tri );
+    tri = glm::cross( pts[1] - pts[0], pts[2] - pts[0] );
+    glm::normalize( tri );
 
     return SGVECTOR( tri.x, tri.y, tri.z );
 }

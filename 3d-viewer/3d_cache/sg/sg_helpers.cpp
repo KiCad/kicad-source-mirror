@@ -375,7 +375,7 @@ static void calcTriad( glm::dvec3* pts, glm::dvec3& tri )
     }
 
     // normal * 2 * area
-    tri = cross( pts[1] - pts[0], pts[2] - pts[0] );
+    tri = glm::cross( pts[1] - pts[0], pts[2] - pts[0] );
 
     return;
 }
