@@ -130,6 +130,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_SVG_print.cpp
     dialogs/dialog_SVG_print_base.cpp
     dialogs/dialog_select_pretty_lib.cpp
+    dialogs/dialog_select_net_from_list_base.cpp
+    dialogs/dialog_select_net_from_list.cpp
     dialogs/dialog_select_pretty_lib_base.cpp
     dialogs/dialog_set_grid.cpp
     dialogs/dialog_set_grid_base.cpp
