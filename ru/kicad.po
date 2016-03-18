@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-12 14:03+0300\n"
-"PO-Revision-Date: 2016-03-12 14:15+0300\n"
+"POT-Creation-Date: 2016-03-18 19:17+0300\n"
+"PO-Revision-Date: 2016-03-18 19:26+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -752,31 +752,22 @@ msgstr ""
 msgid "Help file '%s' could not be found."
 msgstr "Файл помощи '%s' невозможно найти."
 
-#: common/basicframe.cpp:451
-#, c-format
-msgid "Executable file (%s)|%s"
-msgstr "Исполняемый файл (%s)|%s"
-
-#: common/basicframe.cpp:454
-msgid "Select Preferred Editor"
-msgstr "Выбрать редактор текстов"
-
-#: common/basicframe.cpp:494
+#: common/basicframe.cpp:486
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "У Вас нет прав на запись в директорию <%s>."
 
-#: common/basicframe.cpp:499
+#: common/basicframe.cpp:491
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr "У Вас нет прав на запись для сохранения файла <%s> в директорию <%s>."
 
-#: common/basicframe.cpp:504
+#: common/basicframe.cpp:496
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "У Вас нет прав на запись для сохранения файла <%s>."
 
-#: common/basicframe.cpp:536
+#: common/basicframe.cpp:528
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -789,12 +780,12 @@ msgstr ""
 "При последнем редактировании файл '%s'\n"
 "не был корректно сохранен. Хотите восстановить последние изменения?"
 
-#: common/basicframe.cpp:564
+#: common/basicframe.cpp:556
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "Не удалось создать файл резервной копии <%s>"
 
-#: common/basicframe.cpp:572
+#: common/basicframe.cpp:564
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "Файл автосохранения не может быть переименован в файл платы."
 
@@ -895,7 +886,7 @@ msgstr "Директория '%s' создана.\n"
 msgid "Cannot create output directory '%s'.\n"
 msgstr "Невозможно создать выходную директорию '%s'.\n"
 
-#: common/confirm.cpp:73 common/pgm_base.cpp:874 eeschema/symbedit.cpp:111
+#: common/confirm.cpp:73 common/pgm_base.cpp:890 eeschema/symbedit.cpp:111
 #: eeschema/widgets/widget_eeschema_color_config.cpp:274
 msgid "Warning"
 msgstr "Предупреждение"
@@ -916,7 +907,7 @@ msgstr "Подтверждение"
 #: common/dialog_about/AboutDialog_main.cpp:129
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
-#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1563
+#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1564
 #: eeschema/viewlibs.cpp:308
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:210 pcbnew/librairi.cpp:784
@@ -1059,6 +1050,7 @@ msgstr "OK"
 #: pcbnew/dialogs/dialog_plot_base.cpp:358
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:144
+#: pcbnew/dialogs/dialog_update_pcb.cpp:126
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:56
 msgid "Close"
 msgstr "Закрыть"
@@ -1987,24 +1979,32 @@ msgstr "Болгарский"
 msgid "No default editor found, you must choose it"
 msgstr "Редактор по умолчанию не найден, нужно выбрать его"
 
-#: common/pgm_base.cpp:346
-msgid "Preferred Editor:"
-msgstr "Предпочитаемый редактор:"
+#: common/pgm_base.cpp:358
+msgid "Executable file (*.exe)|*.exe"
+msgstr "Исполняемый файл (*.exe)|*.exe"
 
-#: common/pgm_base.cpp:375
+#: common/pgm_base.cpp:360
+msgid "Executable file (*)|*"
+msgstr "Исполняемый файл (*)|*"
+
+#: common/pgm_base.cpp:370
+msgid "Select Preferred Editor"
+msgstr "Выбрать предпочитаемый редактор"
+
+#: common/pgm_base.cpp:391
 #, c-format
 msgid "%s is already running, Continue?"
 msgstr "%s уже запущен, продолжить?"
 
-#: common/pgm_base.cpp:791
+#: common/pgm_base.cpp:807
 msgid "Language"
 msgstr "Язык"
 
-#: common/pgm_base.cpp:792
+#: common/pgm_base.cpp:808
 msgid "Select application language (only for testing!)"
 msgstr "Выбрать язык для приложения (только для тестирования!)"
 
-#: common/pgm_base.cpp:867
+#: common/pgm_base.cpp:883
 msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
@@ -2012,7 +2012,7 @@ msgstr ""
 "Предупреждение!  Некоторые пути, сконфигурированные вами, были определены \n"
 "внешне рабочему процессу и будут временно перезаписаны."
 
-#: common/pgm_base.cpp:869
+#: common/pgm_base.cpp:885
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -2027,7 +2027,7 @@ msgstr ""
 "либо удалите внешние определения переменных окружения\n"
 "из вашей системы."
 
-#: common/pgm_base.cpp:876
+#: common/pgm_base.cpp:892
 msgid "Do not show this message again."
 msgstr "Больше не показывать данное сообщение."
 
@@ -2638,7 +2638,7 @@ msgstr "Доступные переменные окружения для отн
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
 #: eeschema/dialogs/dialog_rescue_each.cpp:108 eeschema/lib_field.cpp:581
 #: eeschema/lib_field.cpp:759 eeschema/onrightclick.cpp:426
-#: eeschema/sch_component.cpp:1542 eeschema/template_fieldnames.cpp:42
+#: eeschema/sch_component.cpp:1543 eeschema/template_fieldnames.cpp:42
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
 #: pcbnew/class_edge_mod.cpp:261 pcbnew/class_text_mod.cpp:365
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:43
@@ -3714,7 +3714,7 @@ msgid "No"
 msgstr "Нет"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
-#: eeschema/sch_component.cpp:1547
+#: eeschema/sch_component.cpp:1548
 #: eeschema/widgets/widget_eeschema_color_config.cpp:100
 msgid "Component"
 msgstr "Компонент"
@@ -5300,7 +5300,7 @@ msgid "Action"
 msgstr "Действие"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:107 eeschema/lib_field.cpp:574
-#: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1538
+#: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1539
 #: eeschema/template_fieldnames.cpp:39
 #: eeschema/widgets/widget_eeschema_color_config.cpp:75
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
@@ -6242,7 +6242,7 @@ msgid "Field"
 msgstr "Поле"
 
 #: eeschema/lib_field.cpp:588 eeschema/onrightclick.cpp:436
-#: eeschema/sch_component.cpp:1560 eeschema/template_fieldnames.cpp:45
+#: eeschema/sch_component.cpp:1561 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:627
 #: pcbnew/class_pad.cpp:611 pcbnew/class_text_mod.cpp:369
 #: pcbnew/loadcmp.cpp:435 pcbnew/loadcmp.cpp:499
@@ -7989,28 +7989,28 @@ msgstr "Элемент %s компонента %s найден на листе %
 msgid "Item %s found in sheet %s"
 msgstr "Элемент %s найден на листе %s"
 
-#: eeschema/sch_component.cpp:1542
+#: eeschema/sch_component.cpp:1543
 msgid "Power symbol"
 msgstr "Символ питания"
 
-#: eeschema/sch_component.cpp:1550
+#: eeschema/sch_component.cpp:1551
 msgid "Alias of"
 msgstr "Оригинал"
 
-#: eeschema/sch_component.cpp:1552
+#: eeschema/sch_component.cpp:1553
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:185 pcbnew/loadcmp.cpp:436
 msgid "Library"
 msgstr "Библиотека"
 
-#: eeschema/sch_component.cpp:1558
+#: eeschema/sch_component.cpp:1559
 msgid "<Unknown>"
 msgstr "<Неизвестно>"
 
-#: eeschema/sch_component.cpp:1564
+#: eeschema/sch_component.cpp:1565
 msgid "Key Words"
 msgstr "Ключевые слова"
 
-#: eeschema/sch_component.cpp:1808
+#: eeschema/sch_component.cpp:1809
 #, c-format
 msgid "Component %s, %s"
 msgstr "Компонент %s, %s"
@@ -8052,19 +8052,19 @@ msgstr "%s линия на неопределенном слое из (%s,%s) в
 msgid "Electronics Rule Check Error"
 msgstr "Ошибка проверки электрических правил"
 
-#: eeschema/sch_sheet.cpp:829
+#: eeschema/sch_sheet.cpp:834
 msgid "Sheet Name"
 msgstr "Имя листа"
 
-#: eeschema/sch_sheet.cpp:830
+#: eeschema/sch_sheet.cpp:835
 msgid "File Name"
 msgstr "Имя файла"
 
-#: eeschema/sch_sheet.cpp:835
+#: eeschema/sch_sheet.cpp:840
 msgid "Time Stamp"
 msgstr "Временная метка"
 
-#: eeschema/sch_sheet.cpp:1048
+#: eeschema/sch_sheet.cpp:1053
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Иерархический лист %s"
@@ -8659,6 +8659,7 @@ msgid "Global label"
 msgstr "Глобальная метка"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:63
+#: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:54
 msgid "Net name"
 msgstr "Имя цепи"
 
@@ -12206,6 +12207,7 @@ msgid "Nodes"
 msgstr "Узлов"
 
 #: pcbnew/class_board.cpp:973 pcbnew/pcb_draw_panel_gal.cpp:359
+#: pcbnew/dialogs/dialog_select_net_from_list_base.h:58
 msgid "Nets"
 msgstr "Цепей"
 
@@ -18036,6 +18038,23 @@ msgstr "Одна страница"
 msgid "Page Print"
 msgstr "Печать страницы"
 
+#: pcbnew/dialogs/dialog_select_net_from_list.cpp:150
+#, c-format
+msgid "net %.3d"
+msgstr "цепь %.3d"
+
+#: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:25
+msgid "Net name filter"
+msgstr "Фильтр имени цепи"
+
+#: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:32
+msgid "Show zero pad nets"
+msgstr "Показать цепи без конт.пл."
+
+#: pcbnew/dialogs/dialog_select_net_from_list_base.cpp:55
+msgid "Number of pads"
+msgstr "Число конт.пл."
+
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:19
 msgid ""
 "The footprint library is a folder with a name ending with .pretty\n"
@@ -18090,11 +18109,11 @@ msgstr "Быстрое переключение"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:113
 msgid "Grid 1:"
-msgstr "Сетка для размещения:"
+msgstr "Сетка 1:"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:120
 msgid "Grid 2:"
-msgstr "Сетка для трассировки:"
+msgstr "Сетка 2:"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
 msgid "+"
@@ -18161,11 +18180,11 @@ msgstr ""
 "библиотеки в конфигурацию печатной платы. Печатная плата обновлена не "
 "полностью."
 
-#: pcbnew/dialogs/dialog_update_pcb.cpp:109
+#: pcbnew/dialogs/dialog_update_pcb.cpp:125
 msgid "Update complete"
 msgstr "Обновление завершено"
 
-#: pcbnew/dialogs/dialog_update_pcb.cpp:125
+#: pcbnew/dialogs/dialog_update_pcb.cpp:142
 msgid "Changes applied to the PCB:"
 msgstr "Изменения в плате:"
 
@@ -18976,18 +18995,6 @@ msgstr "неизвестный файл '%s' найден по пути библ
 msgid "footprint library '%s' cannot be deleted"
 msgstr "библиотеку посад.мест '%s' не удалось удалить"
 
-#: pcbnew/highlight.cpp:53
-msgid "Filter Net Names"
-msgstr "Фильтр имен цепей"
-
-#: pcbnew/highlight.cpp:53
-msgid "Net Filter"
-msgstr "Фильтр по цепи"
-
-#: pcbnew/highlight.cpp:76
-msgid "Select Net"
-msgstr "Выбрать цепь"
-
 #: pcbnew/hotkeys.cpp:72
 msgid "Switch to Copper (B.Cu) layer"
 msgstr "Переключить на медный (B.Cu) слой"
@@ -19499,12 +19506,12 @@ msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'"
 msgstr ""
 "Неизвестная форма конт.пл. '%c=0x%02x' в строке: %d в посад.месте: '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2480
+#: pcbnew/legacy_plugin.cpp:2479
 #, c-format
 msgid "duplicate NETCLASS name '%s'"
 msgstr "дубликат имена класса цепи '%s'"
 
-#: pcbnew/legacy_plugin.cpp:3007 pcbnew/legacy_plugin.cpp:3044
+#: pcbnew/legacy_plugin.cpp:3006 pcbnew/legacy_plugin.cpp:3043
 #, c-format
 msgid ""
 "invalid float number in file: '%s'\n"
@@ -19513,7 +19520,7 @@ msgstr ""
 "неверное число с плавающей точкой в файле: '%s'\n"
 "строка: %d, смещение: %d"
 
-#: pcbnew/legacy_plugin.cpp:3016 pcbnew/legacy_plugin.cpp:3052
+#: pcbnew/legacy_plugin.cpp:3015 pcbnew/legacy_plugin.cpp:3051
 #, c-format
 msgid ""
 "missing float number in file: '%s'\n"
@@ -19522,12 +19529,12 @@ msgstr ""
 "отсутствует число с плавающей точкой в файле: '%s'\n"
 "строка: %d, смещение: %d"
 
-#: pcbnew/legacy_plugin.cpp:3268
+#: pcbnew/legacy_plugin.cpp:3267
 #, c-format
 msgid "File '%s' is empty or is not a legacy library"
 msgstr "Файл '%s' пустой или не является библиотекой"
 
-#: pcbnew/legacy_plugin.cpp:3475
+#: pcbnew/legacy_plugin.cpp:3474
 #, c-format
 msgid "library '%s' cannot be deleted"
 msgstr "библиотеку '%s' не удалось удалить"
@@ -21515,14 +21522,14 @@ msgstr ""
 msgid "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d"
 msgstr "дубликат имени класса цепи '%s' в файле <%s> в строке %d, смещение %d"
 
-#: pcbnew/pcb_parser.cpp:1908
+#: pcbnew/pcb_parser.cpp:1914
 #, c-format
 msgid "cannot handle footprint text type %s"
 msgstr "не удалось обработать текст посад.места типа %s"
 
-#: pcbnew/pcb_parser.cpp:2316 pcbnew/pcb_parser.cpp:2322
-#: pcbnew/pcb_parser.cpp:2422 pcbnew/pcb_parser.cpp:2504
-#: pcbnew/pcb_parser.cpp:2568
+#: pcbnew/pcb_parser.cpp:2322 pcbnew/pcb_parser.cpp:2328
+#: pcbnew/pcb_parser.cpp:2428 pcbnew/pcb_parser.cpp:2510
+#: pcbnew/pcb_parser.cpp:2574
 #, c-format
 msgid ""
 "invalid net ID in\n"
@@ -21535,7 +21542,7 @@ msgstr ""
 "строка: %d\n"
 "смещение: %d"
 
-#: pcbnew/pcb_parser.cpp:2884
+#: pcbnew/pcb_parser.cpp:2890
 #, c-format
 msgid ""
 "There is a zone that belongs to a not existing net\n"
@@ -22631,7 +22638,7 @@ msgstr "Не удалось удалить обозначение компоне
 msgid "Cannot delete component value."
 msgstr "Не удалось удалить значение компонента"
 
-#: pcbnew/tools/edit_tool.cpp:783
+#: pcbnew/tools/edit_tool.cpp:784
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Скопирован(о) %d элемент(ов)"
@@ -22722,44 +22729,44 @@ msgstr "Изменить посад.место на '%s'"
 msgid "Change footprints '%s'"
 msgstr "Изменить посад.места '%s'"
 
-#: pcbnew/xchgmod.cpp:217
+#: pcbnew/xchgmod.cpp:212
 #, c-format
 msgid "File '%s' created\n"
 msgstr "Файл '%s' создан\n"
 
-#: pcbnew/xchgmod.cpp:222
+#: pcbnew/xchgmod.cpp:217
 #, c-format
 msgid "** Could not create file '%s' ***\n"
 msgstr "** Не удалось создать файл '%s' ***\n"
 
-#: pcbnew/xchgmod.cpp:282
+#: pcbnew/xchgmod.cpp:260
 #, c-format
 msgid "Change footprint %s -> %s (for value = %s)?"
 msgstr "Изменить посад.место %s -> %s (для значений = %s)?"
 
-#: pcbnew/xchgmod.cpp:289
+#: pcbnew/xchgmod.cpp:267
 #, c-format
 msgid "Change footprint %s -> %s ?"
 msgstr "Изменить посад.место %s -> %s ?"
 
-#: pcbnew/xchgmod.cpp:344
+#: pcbnew/xchgmod.cpp:315
 msgid "Are you sure you want to change all footprints?"
 msgstr "Вы уверены что хотите изменить все посад.места?"
 
-#: pcbnew/xchgmod.cpp:394
+#: pcbnew/xchgmod.cpp:356
 #, c-format
 msgid "Change footprint '%s' (from '%s') to '%s'"
 msgstr "Изменено посад.место '%s' (из '%s') на '%s'"
 
-#: pcbnew/xchgmod.cpp:501
+#: pcbnew/xchgmod.cpp:462
 msgid "No footprints!"
 msgstr "Нет посад.мест!"
 
-#: pcbnew/xchgmod.cpp:512
+#: pcbnew/xchgmod.cpp:473
 msgid "Save Footprint Association File"
 msgstr "Сохранить файл связи посад.мест"
 
-#: pcbnew/xchgmod.cpp:523
+#: pcbnew/xchgmod.cpp:484
 #, c-format
 msgid "Could not create file '%s'"
 msgstr "Не удалось создать файл '%s'"
