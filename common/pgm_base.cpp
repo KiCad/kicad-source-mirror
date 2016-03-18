@@ -308,14 +308,13 @@ void PGM_BASE::SetEditorName( const wxString& aFileName )
 }
 
 
-const wxString& PGM_BASE::GetEditorName()
+const wxString& PGM_BASE::GetEditorName( bool aCanShowFileChooser )
 {
     wxString editorname = m_editor_name;
 
     if( !editorname )
     {
-        // Get the preferred editor name from environment variable first.
-        if(!wxGetEnv( wxT( "EDITOR" ), &editorname ))
+        if( !wxGetEnv( wxT( "EDITOR" ), &editorname ) )
         {
             // If there is no EDITOR variable set, try the desktop default
 #ifdef __WXMAC__
@@ -326,28 +325,45 @@ const wxString& PGM_BASE::GetEditorName()
         }
     }
 
-    if( !editorname )       // We must get a preferred editor name
+    // If we still don't have an editor name show a dialog asking the user to select one
+    if( !editorname && aCanShowFileChooser )
     {
         DisplayInfoMessage( NULL,
                             _( "No default editor found, you must choose it" ) );
 
-        wxString mask( wxT( "*" ) );
-
-#ifdef __WINDOWS__
-        mask += wxT( ".exe" );
-#endif
-        editorname = EDA_FILE_SELECTOR( _( "Preferred Editor:" ), wxEmptyString,
-                                        wxEmptyString, wxEmptyString, mask,
-                                        NULL, wxFD_OPEN, true );
+        editorname = AskUserForPreferredEditor();
     }
 
+    // If we finally have a new editor name request it to be copied to m_editor_name and
+    // saved to the preferences file.
     if( !editorname.IsEmpty() )
-    {
-        m_editor_name = editorname;
-        m_common_settings->Write( wxT( "Editor" ), m_editor_name );
-    }
+        SetEditorName( editorname );
 
+    // m_editor_name already has the same value that editorname, or empty if no editor was
+    // found/chosen.
     return m_editor_name;
+}
+
+const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEditor )
+{
+    // Create a mask representing the executable files in the current platform
+#ifdef __WINDOWS__
+    wxString mask( _( "Executable file (*.exe)|*.exe" ) );
+#else
+    wxString mask( _( "Executable file (*)|*" ) );
+#endif
+
+    // Extract the path, name and extension from the default editor (even if the editor's
+    // name was empty, this method will succeed and return empty strings).
+    wxString path, name, ext;
+    wxFileName::SplitPath( aDefaultEditor, &path, &name, &ext );
+
+    // Show the modal editor and return the file chosen (may be empty if the user cancels
+    // the dialog).
+    return EDA_FILE_SELECTOR( _( "Select Preferred Editor" ), path,
+                              name, ext, mask,
+                              NULL, wxFD_OPEN | wxFD_FILE_MUST_EXIST,
+                              true );
 }
 
 
@@ -596,7 +612,7 @@ void PGM_BASE::saveCommonSettings()
 
         for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
         {
-            wxLogTrace( traceEnvVars, wxT( "Saving environment varaiable config entry %s as %s" ),
+            wxLogTrace( traceEnvVars, wxT( "Saving environment variable config entry %s as %s" ),
                         GetChars( it->first ),  GetChars( it->second.GetValue() ) );
             m_common_settings->Write( it->first, it->second.GetValue() );
         }

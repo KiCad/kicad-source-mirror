@@ -455,26 +455,18 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 
 void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
 {
-    wxFileName  fn = Pgm().GetEditorName();
-    wxString    wildcard( wxT( "*" ) );
+    // Ask for the current editor and instruct GetEditorName() to not show 
+    // unless we pass false as argument.
+    wxString editorname = Pgm().GetEditorName( false );
 
-#ifdef __WINDOWS__
-    wildcard += wxT( ".exe" );
-#endif
+    // Ask the user to select a new editor, but suggest the current one as the default.
+    editorname = Pgm().AskUserForPreferredEditor( editorname );
 
-    wildcard.Printf( _( "Executable file (%s)|%s" ),
-                     GetChars( wildcard ), GetChars( wildcard ) );
-
-    wxFileDialog dlg( this, _( "Select Preferred Editor" ), fn.GetPath(),
-                      fn.GetFullName(), wildcard,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    wxString editor = dlg.GetPath();
-
-    Pgm().SetEditorName( editor );
+    // If we have a new editor name request it to be copied to m_editor_name and saved
+    // to the preferences file. If the user cancelled the dialog then the previous
+    // value will be retained.
+    if( !editorname.IsEmpty() )
+        Pgm().SetEditorName( editorname );
 }
 
 
