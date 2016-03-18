@@ -1196,8 +1196,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDuplicateOrArrayItem( int aIdCommand )
         break;
 
     default:
-        wxASSERT_MSG( false, wxString::Format( "Unhandled move, duplicate or array for "
-                      "object type %d", item->Type() ) );
+        evt_type = 0;
         break;
     }
 
