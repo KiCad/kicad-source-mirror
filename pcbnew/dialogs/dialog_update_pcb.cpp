@@ -110,11 +110,14 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     {
         m_frame->SpreadFootprints( &newFootprints, false, false );
 
-        BOOST_FOREACH( MODULE* footprint, newFootprints )
+        if( !newFootprints.empty() )
         {
-            toolManager->RunAction( COMMON_ACTIONS::selectItem, true, footprint );
+            BOOST_FOREACH( MODULE* footprint, newFootprints )
+            {
+                toolManager->RunAction( COMMON_ACTIONS::selectItem, true, footprint );
+            }
+            toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
         }
-        toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
     }
 
 
