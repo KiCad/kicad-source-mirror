@@ -51,7 +51,6 @@ DXF2BRD_CONVERTER::DXF2BRD_CONVERTER() : DRW_Interface()
 {
     m_xOffset   = 0.0;      // X coord offset for conversion (in mm)
     m_yOffset   = 0.0;      // Y coord offset for conversion (in mm)
-    m_Dfx2mm    = 1.0;      // The scale factor to convert DXF units to mm
     m_version   = 0;
     m_defaultThickness = 0.1;
     m_brdLayer = Dwgs_User;
@@ -66,19 +65,19 @@ DXF2BRD_CONVERTER::~DXF2BRD_CONVERTER()
 // coordinate conversions from dxf to internal units
 int DXF2BRD_CONVERTER::mapX( double aDxfCoordX )
 {
-    return Millimeter2iu( m_xOffset + ( aDxfCoordX * m_Dfx2mm ) );
+    return Millimeter2iu( m_xOffset + ( aDxfCoordX * DXF_UNITS_PER_MM ) );
 }
 
 
 int DXF2BRD_CONVERTER::mapY( double aDxfCoordY )
 {
-    return Millimeter2iu( m_yOffset - ( aDxfCoordY * m_Dfx2mm ) );
+    return Millimeter2iu( m_yOffset - ( aDxfCoordY * DXF_UNITS_PER_MM ) );
 }
 
 
 int DXF2BRD_CONVERTER::mapDim( double aDxfValue )
 {
-    return Millimeter2iu( aDxfValue * m_Dfx2mm );
+    return Millimeter2iu( aDxfValue * DXF_UNITS_PER_MM );
 }
 
 
