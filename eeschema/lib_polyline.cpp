@@ -63,7 +63,7 @@ bool LIB_POLYLINE::Save( OUTPUTFORMATTER& aFormatter )
 
     for( unsigned i = 0; i < GetCornerCount(); i++ )
     {
-        aFormatter.Print( 0, "  %d %d", m_PolyPoints[i].x, m_PolyPoints[i].y );
+        aFormatter.Print( 0, " %d %d", m_PolyPoints[i].x, m_PolyPoints[i].y );
     }
 
     aFormatter.Print( 0, " %c\n", fill_tab[m_Fill] );
