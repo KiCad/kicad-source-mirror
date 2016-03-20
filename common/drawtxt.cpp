@@ -41,221 +41,29 @@
 
 #include <gal/stroke_font.h>
 
-#include <gal/graphics_abstraction_layer.h>
-#include <newstroke_font.h>
 
+#include <newstroke_font.h>
 #include <plot_common.h>
 
 using namespace KIGFX;
 
-struct TRANSFORM_PRM
+
+// A ugly hack to avoid UTF8::uni_iter method not found at link stage
+// in gerbview and pl_editor.
+// Hoping I (JPC) can remove that soon.
+void dummy()
 {
-    VECTOR2D m_rotCenter;
-    VECTOR2D m_moveOffset;
-    double   m_rotAngle;
-};
-
-class BASIC_GAL: public GAL
-{
-public:
-    wxDC* m_DC;
-    EDA_COLOR_T m_Color;
-
-private:
-    TRANSFORM_PRM m_transform;
-    std::stack <TRANSFORM_PRM>  m_transformHistory;
-
-public:
-    BASIC_GAL()
-    {
-        m_DC = NULL;
-        m_Color = RED;
-        m_plotter = NULL;
-        m_callback = NULL;
-    }
-
-    void SetPlotter( PLOTTER* aPlotter )
-    {
-        m_plotter = aPlotter;
-    }
-
-    void SetCallback( void (* aCallback)( int x0, int y0, int xf, int yf ) )
-    {
-        m_callback = aCallback;
-    }
-
-    /// Set a clip box for drawings
-    /// If NULL, no clip will be made
-    void SetClipBox( EDA_RECT* aClipBox )
-    {
-        m_isClipped = aClipBox != NULL;
-
-        if( aClipBox )
-            m_clipBox = *aClipBox;
-    }
-
-    /// @brief Save the context.
-    virtual void Save()
-    {
-        m_transformHistory.push( m_transform );
-    }
-
-    virtual void Restore()
-    {
-        m_transform = m_transformHistory.top();
-        m_transformHistory.pop();
-    }
-
-
-    /**
-     * @brief Draw a polyline
-     * @param aPointList is a list of 2D-Vectors containing the polyline points.
-     */
-    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList );
-
-    /** Start and end points are defined as 2D-Vectors.
-     * @param aStartPoint   is the start point of the line.
-     * @param aEndPoint     is the end point of the line.
-     */
-    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
-
-    /**
-     * @brief Translate the context.
-     *
-     * @param aTranslation is the translation vector.
-     */
-    virtual void Translate( const VECTOR2D& aTranslation )
-    {
-        m_transform.m_moveOffset += aTranslation;
-    }
-
-    /**
-     * @brief Rotate the context.
-     *
-     * @param aAngle is the rotation angle in radians.
-     */
-    virtual void Rotate( double aAngle )
-    {
-        m_transform.m_rotAngle = aAngle * M_PI/1800;
-        m_transform.m_rotCenter = m_transform.m_moveOffset;
-    }
-
-private:
-    // Apply the roation/translation transform to aPoint
-    const VECTOR2D transform( const VECTOR2D& aPoint ) const;
-
-    // A clip box, to clip drawings in a wxDC (mandatory to avoid draw issues)
-    EDA_RECT  m_clipBox;        // The clip box
-    bool      m_isClipped;      // Allows/disallows clipping
-
-    // When calling the draw functions outside a wxDC, to get the basic drawings
-    // lines / polylines ..., a callback function (used in DRC) to store
-    // coordinates of each segment:
-    void (* m_callback)( int x0, int y0, int xf, int yf );
-
-    // When calling the draw functions for plot, the plotter (has the same purpose
-    // as a wxDC) to plot basic drawings
-    PLOTTER* m_plotter;
-};
-
-
-const VECTOR2D BASIC_GAL::transform( const VECTOR2D& aPoint ) const
-{
-    VECTOR2D point = aPoint + m_transform.m_moveOffset - m_transform.m_rotCenter;
-    point = point.Rotate( m_transform.m_rotAngle ) + m_transform.m_rotCenter;
-    return point;
+    UTF8 text = "x";
+    for( UTF8::uni_iter it = text.ubegin(), end = text.uend(); it < end; ++it )
+        ;
 }
-
-void BASIC_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
-{
-    if( aPointList.empty() )
-        return;
-
-    std::deque<VECTOR2D>::const_iterator it = aPointList.begin();
-    std::vector <wxPoint> polyline_corners;
-
-    for( ; it != aPointList.end(); ++it )
-    {
-        VECTOR2D corner = transform(*it);
-        polyline_corners.push_back( wxPoint( corner.x, corner.y ) );
-    }
-
-    if( m_DC )
-    {
-        if( isFillEnabled )
-        {
-            GRPoly( m_isClipped ? &m_clipBox : NULL, m_DC, polyline_corners.size(),
-                    &polyline_corners[0], 0, GetLineWidth(), m_Color, m_Color );
-        }
-        else
-        {
-            for( unsigned ii = 1; ii < polyline_corners.size(); ++ii )
-            {
-                GRCSegm( m_isClipped ? &m_clipBox : NULL, m_DC, polyline_corners[ii-1],
-                         polyline_corners[ii], GetLineWidth(), m_Color );
-            }
-        }
-    }
-    else if( m_plotter )
-    {
-        m_plotter->MoveTo( polyline_corners[0] );
-
-        for( unsigned ii = 1; ii < polyline_corners.size(); ii++ )
-        {
-            m_plotter->LineTo( polyline_corners[ii] );
-        }
-
-        m_plotter->PenFinish();
-    }
-    else if( m_callback )
-    {
-        for( unsigned ii = 1; ii < polyline_corners.size(); ii++ )
-        {
-            m_callback( polyline_corners[ii-1].x, polyline_corners[ii-1].y,
-                        polyline_corners[ii].x, polyline_corners[ii].y );
-        }
-    }
-}
-
-void BASIC_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
-{
-    VECTOR2D startVector = transform( aStartPoint );
-    VECTOR2D endVector = transform( aEndPoint );
-
-    if( m_DC )
-    {
-        if( isFillEnabled )
-        {
-            GRLine( m_isClipped ? &m_clipBox : NULL, m_DC, startVector.x, startVector.y,
-                    endVector.x, endVector.y, GetLineWidth(), m_Color );
-        }
-        else
-        {
-            GRCSegm( m_isClipped ? &m_clipBox : NULL, m_DC, startVector.x, startVector.y,
-                    endVector.x, endVector.y, GetLineWidth(), 0, m_Color );
-        }
-    }
-    else if( m_plotter )
-    {
-        m_plotter->MoveTo( wxPoint( startVector.x, startVector.y ) );
-        m_plotter->LineTo( wxPoint( endVector.x, endVector.y ) );
-        m_plotter->PenFinish();
-    }
-    else if( m_callback )
-    {
-            m_callback( startVector.x, startVector.y,
-                        endVector.x, endVector.y );
-    }
-}
-
-
-BASIC_GAL basic_gal;
 
 
 int OverbarPositionY( int size_v )
 {
     return KiROUND( size_v * STROKE_FONT::OVERBAR_HEIGHT );
 }
+
 
 /**
  * Function GetPensizeForBold
@@ -298,6 +106,40 @@ int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold )
     int size = std::min( std::abs( aSize.x ), std::abs( aSize.y ) );
 
     return Clamp_Text_PenSize( aPenSize, size, aBold );
+}
+
+
+/* Functions to draw / plot a string.
+ *  texts have only one line.
+ *  They can be in italic.
+ *  Horizontal and Vertical justification are handled.
+ *  Texts can be rotated
+ *  substrings between ~ markers can be "negated" (i.e. with an over bar
+ */
+
+/**
+ * Function NegableTextLength
+ * Return the text length (char count) of a negable string,
+ * excluding the ~ markers
+ */
+int NegableTextLength( const wxString& aText )
+{
+    int char_count = aText.length();
+
+    // Fix the character count, removing the ~ found
+    for( int i = char_count - 1; i >= 0; i-- )
+    {
+        if( aText[i] == '~' )
+        {
+            // '~~' draw as '~' and count as two chars
+            if( i > 0 && aText[i - 1] == '~' )
+                i--;
+            else
+                char_count--;
+        }
+    }
+
+    return char_count;
 }
 
 
@@ -360,6 +202,51 @@ int GraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, bool aWid
 }
 
 
+// Helper function for drawing character polylines
+static void DrawGraphicTextPline( EDA_RECT* aClipBox,
+                                  wxDC* aDC,
+                                  EDA_COLOR_T aColor,
+                                  int aWidth,
+                                  bool aSketchMode,
+                                  int point_count,
+                                  wxPoint* coord,
+                                  void (* aCallback)( int x0, int y0, int xf, int yf ),
+                                  PLOTTER* aPlotter )
+{
+    if( aPlotter )
+    {
+        aPlotter->MoveTo( coord[0] );
+
+        for( int ik = 1; ik < point_count; ik++ )
+        {
+            aPlotter->LineTo( coord[ik] );
+        }
+
+        aPlotter->PenFinish();
+    }
+    else if( aCallback )
+    {
+        for( int ik = 0; ik < (point_count - 1); ik++ )
+        {
+            aCallback( coord[ik].x, coord[ik].y,
+                       coord[ik + 1].x, coord[ik + 1].y );
+        }
+    }
+    else if( aDC )
+    {
+        if( aSketchMode )
+        {
+            for( int ik = 0; ik < (point_count - 1); ik++ )
+                GRCSegm( aClipBox, aDC, coord[ik].x, coord[ik].y,
+                         coord[ik + 1].x, coord[ik + 1].y, aWidth, aColor );
+        }
+        else
+            GRPoly( aClipBox, aDC, point_count, coord, 0,
+                    aWidth, aColor, aColor );
+    }
+}
+
+
 /**
  * Function DrawGraphicText
  * Draw a graphic text (like module texts)
@@ -397,7 +284,21 @@ void DrawGraphicText( EDA_RECT* aClipBox,
                       void (* aCallback)( int x0, int y0, int xf, int yf ),
                       PLOTTER* aPlotter )
 {
-    bool    fill_mode = true;
+    int         AsciiCode;
+    int         x0, y0;
+    int         size_h, size_v;
+    unsigned    ptr;
+    int         dx, dy;                     // Draw coordinate for segments to draw. also used in some other calculation
+    wxPoint     current_char_pos;           // Draw coordinates for the current char
+    wxPoint     overbar_pos;                // Start point for the current overbar
+    int         overbar_italic_comp;        // Italic compensation for overbar
+    #define        BUF_SIZE 100
+    wxPoint coord[BUF_SIZE + 1];                // Buffer coordinate used to draw polylines (one char shape)
+    bool    sketch_mode     = false;
+    bool    italic_reverse  = false;            // true for mirrored texts with m_Size.x < 0
+
+    size_h  = aSize.x;                          /* PLEASE NOTE: H is for HORIZONTAL not for HEIGHT */
+    size_v  = aSize.y;
 
     if( aWidth == 0 && aBold ) // Use default values if aWidth == 0
         aWidth = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
@@ -405,33 +306,263 @@ void DrawGraphicText( EDA_RECT* aClipBox,
     if( aWidth < 0 )
     {
         aWidth = -aWidth;
-        fill_mode = false;
+        sketch_mode = true;
     }
 
-    basic_gal.SetIsFill( fill_mode );
-    basic_gal.SetLineWidth( aWidth );
+#ifdef CLIP_PEN      // made by draw and plot functions
+    aWidth = Clamp_Text_PenSize( aWidth, aSize, aBold );
+#endif
 
-    EDA_TEXT dummy;
-    dummy.SetItalic( aItalic );
-    dummy.SetBold( aBold );
-    dummy.SetHorizJustify( aH_justify );
-    dummy.SetVertJustify( aV_justify );
+    if( size_h < 0 ) // text is mirrored using size.x < 0 (mirror / Y axis)
+        italic_reverse = true;
 
-    wxSize size = aSize;
-    dummy.SetMirrored( size.x < 0 );
+    unsigned char_count = NegableTextLength( aText );
 
-    if( size.x < 0 )
-        size.x = - size.x;
+    if( char_count == 0 )
+        return;
 
-    dummy.SetSize( size );
+    current_char_pos = aPos;
 
-    basic_gal.SetTextAttributes( &dummy );
-    basic_gal.SetPlotter( aPlotter );
-    basic_gal.SetCallback( aCallback );
-    basic_gal.m_DC = aDC;
-    basic_gal.m_Color = aColor;
-    basic_gal.SetClipBox( aClipBox );
-    basic_gal.StrokeText( aText, VECTOR2D( aPos.x, aPos.y ), aOrient );
+    dx  = GraphicTextWidth( aText, size_h, aItalic, aWidth );
+    dy  = size_v;
+
+    /* Do not draw the text if out of draw area! */
+    if( aClipBox )
+    {
+        int xm, ym, ll, xc, yc;
+        ll = std::abs( dx );
+
+        xc  = current_char_pos.x;
+        yc  = current_char_pos.y;
+
+        x0  = aClipBox->GetX() - ll;
+        y0  = aClipBox->GetY() - ll;
+        xm  = aClipBox->GetRight() + ll;
+        ym  = aClipBox->GetBottom() + ll;
+
+        if( xc < x0 )
+            return;
+
+        if( yc < y0 )
+            return;
+
+        if( xc > xm )
+            return;
+
+        if( yc > ym )
+            return;
+    }
+
+
+    /* Compute the position of the first letter of the text
+     * this position is the position of the left bottom point of the letter
+     * this is the same as the text position only for a left and bottom justified text
+     * In others cases, this position must be calculated from the text position ans size
+     */
+
+    switch( aH_justify )
+    {
+    case GR_TEXT_HJUSTIFY_CENTER:
+        current_char_pos.x -= dx / 2;
+        break;
+
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        current_char_pos.x -= dx;
+        break;
+
+    case GR_TEXT_HJUSTIFY_LEFT:
+        break;
+    }
+
+    switch( aV_justify )
+    {
+    case GR_TEXT_VJUSTIFY_CENTER:
+        current_char_pos.y += dy / 2;
+        break;
+
+    case GR_TEXT_VJUSTIFY_TOP:
+        current_char_pos.y += dy;
+        break;
+
+    case GR_TEXT_VJUSTIFY_BOTTOM:
+        break;
+    }
+
+    // Note: if aPanel == NULL, we are using a GL Canvas that handle scaling
+    if( aSize.x == 0 )
+        return;
+
+    /* if a text size is too small, the text cannot be drawn, and it is drawn as a single
+     * graphic line */
+    if( aDC && ( aDC->LogicalToDeviceYRel( std::abs( aSize.y ) ) < MIN_DRAWABLE_TEXT_SIZE ))
+    {
+        // draw the text as a line always vertically centered
+        wxPoint end( current_char_pos.x + dx, current_char_pos.y );
+
+        RotatePoint( &current_char_pos, aPos, aOrient );
+        RotatePoint( &end, aPos, aOrient );
+
+        if( aPlotter )
+        {
+            aPlotter->MoveTo( current_char_pos );
+            aPlotter->FinishTo( end );
+        }
+        else if( aCallback )
+        {
+            aCallback( current_char_pos.x, current_char_pos.y, end.x, end.y );
+        }
+        else
+            GRLine( aClipBox, aDC,
+                    current_char_pos.x, current_char_pos.y, end.x, end.y, aWidth, aColor );
+
+        return;
+    }
+
+    if( aItalic )
+    {
+        overbar_italic_comp = KiROUND( OverbarPositionY( size_v ) * STROKE_FONT::ITALIC_TILT );
+
+        if( italic_reverse )
+        {
+            overbar_italic_comp = -overbar_italic_comp;
+        }
+    }
+    else
+    {
+        overbar_italic_comp = 0;
+    }
+
+    int overbars = 0;   // Number of '~' seen (except '~~')
+    ptr = 0;            // ptr = text index
+
+    while( ptr < char_count )
+    {
+        if( aText[ptr + overbars] == '~' )
+        {
+            if( ptr + overbars + 1 < aText.length()
+                && aText[ptr + overbars + 1] == '~' )   /* '~~' draw as '~' */
+                ptr++;                                  // skip first '~' char and draw second
+
+            else
+            {
+                // Found an overbar, adjust the pointers
+                overbars++;
+
+                if( overbars & 1 )      // odd overbars count
+                {
+                    // Starting the overbar
+                    overbar_pos     = current_char_pos;
+                    overbar_pos.x   += overbar_italic_comp;
+                    overbar_pos.y   -= OverbarPositionY( size_v );
+                    RotatePoint( &overbar_pos, aPos, aOrient );
+                }
+                else
+                {
+                    // Ending the overbar
+                    coord[0]        = overbar_pos;
+                    overbar_pos     = current_char_pos;
+                    overbar_pos.x   += overbar_italic_comp;
+                    overbar_pos.y   -= OverbarPositionY( size_v );
+                    RotatePoint( &overbar_pos, aPos, aOrient );
+                    coord[1] = overbar_pos;
+                    // Plot the overbar segment
+                    DrawGraphicTextPline( aClipBox, aDC, aColor, aWidth,
+                                          sketch_mode, 2, coord, aCallback, aPlotter );
+                }
+
+                continue;    // Skip ~ processing
+            }
+        }
+
+        AsciiCode = aText.GetChar( ptr + overbars );
+
+        const char* ptcar = GetHersheyShapeDescription( AsciiCode );
+        // Get metrics
+        int         xsta    = *ptcar++ - 'R';
+        int         xsto    = *ptcar++ - 'R';
+        int         point_count = 0;
+        bool        endcar = false;
+
+        while( !endcar )
+        {
+            int hc1, hc2;
+            hc1 = *ptcar++;
+
+            if( hc1 )
+            {
+                hc2 = *ptcar++;
+            }
+            else
+            {
+                // End of character, insert a synthetic pen up:
+                hc1    = ' ';
+                hc2    = 'R';
+                endcar = true;
+            }
+
+            // Do the Hershey decode thing:
+            // coordinates values are coded as <value> + 'R'
+            hc1 -= 'R';
+            hc2 -= 'R';
+
+            // Pen up request
+            if( hc1 == -50 && hc2 == 0 )
+            {
+                if( point_count )
+                {
+                    if( aWidth <= 1 )
+                        aWidth = 0;
+
+                    DrawGraphicTextPline( aClipBox, aDC, aColor, aWidth,
+                                          sketch_mode, point_count, coord,
+                                          aCallback, aPlotter );
+                }
+
+                point_count = 0;
+            }
+            else
+            {
+                wxPoint currpoint;
+                hc1 -= xsta; hc2 -= 10;    // Align the midpoint
+                hc1  = KiROUND( hc1 * size_h * STROKE_FONT::STROKE_FONT_SCALE );
+                hc2  = KiROUND( hc2 * size_v * STROKE_FONT::STROKE_FONT_SCALE );
+
+                // To simulate an italic font,
+                // add a x offset depending on the y offset
+                if( aItalic )
+                    hc1 -= KiROUND( italic_reverse ? -hc2 * STROKE_FONT::ITALIC_TILT
+                                                          : hc2 * STROKE_FONT::ITALIC_TILT );
+
+                currpoint.x = hc1 + current_char_pos.x;
+                currpoint.y = hc2 + current_char_pos.y;
+
+                RotatePoint( &currpoint, aPos, aOrient );
+                coord[point_count] = currpoint;
+
+                if( point_count < BUF_SIZE - 1 )
+                    point_count++;
+            }
+        }    // end draw 1 char
+
+        ptr++;
+
+        // Apply the advance width
+        current_char_pos.x += KiROUND( size_h * (xsto - xsta) * STROKE_FONT::STROKE_FONT_SCALE );
+    }
+
+    if( overbars % 2 )
+    {
+        // Close the last overbar
+        coord[0]       = overbar_pos;
+        overbar_pos    = current_char_pos;
+        overbar_pos.y -= OverbarPositionY( size_v );
+        RotatePoint( &overbar_pos, aPos, aOrient );
+        coord[1] = overbar_pos;
+
+        // Plot the overbar segment
+        DrawGraphicTextPline( aClipBox, aDC, aColor, aWidth,
+                              sketch_mode, 2, coord, aCallback, aPlotter );
+    }
 }
 
 void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
