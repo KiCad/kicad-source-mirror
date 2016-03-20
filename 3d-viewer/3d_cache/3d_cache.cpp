@@ -222,14 +222,14 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
 
     if( mi != m_CacheMap.end() )
     {
-        wxFileName fname( aModelFile );
+        wxFileName fname( full3Dpath );
         wxDateTime fmdate = fname.GetModificationTime();
         bool reload = false;
 
         if( fmdate != mi->second->modTime )
         {
             unsigned char hashSum[20];
-            getSHA1( aModelFile, hashSum );
+            getSHA1( full3Dpath, hashSum );
             mi->second->modTime = fmdate;
 
             if( !isSHA1Same( hashSum, mi->second->sha1sum ) )
@@ -250,7 +250,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
             if( NULL != mi->second->renderData )
                 S3D::Destroy3DModel( &mi->second->renderData );
 
-            mi->second->sceneData = m_Plugins->Load3DModel(aModelFile, mi->second->pluginInfo);
+            mi->second->sceneData = m_Plugins->Load3DModel( full3Dpath, mi->second->pluginInfo );
         }
 
         if( NULL != aCachePtr )
