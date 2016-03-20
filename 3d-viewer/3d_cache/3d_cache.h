@@ -79,9 +79,7 @@ private:
      * the cache data; a cache entry is created if one does not
      * already exist
      *
-     * @param aFileName [in] is a partial or full file path; a partial path is accepted
-     * so that a cached model may be used in cases where the user has moved or deleted
-     * the original model file.
+     * @param aFileName [in] is a partial or full file path
      * @param [out] if not NULL will hold a pointer to the cache entry for the model
      * @return on success a pointer to a SCENEGRAPH, otherwise NULL
      */

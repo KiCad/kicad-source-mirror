@@ -29,6 +29,7 @@
 #include <utility>
 #include <iterator>
 
+#include <wx/datetime.h>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/utils.h>
@@ -51,6 +52,15 @@
 
 #define CACHE_CONFIG_NAME wxT( "cache.cfg" )
 #define MASK_3D_CACHE "3D_CACHE"
+
+static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB )
+{
+    for( int i = 0; i < 20; ++i )
+        if( shaA[i] != shaB[i] )
+            return false;
+
+    return true;
+}
 
 static bool checkTag( const char* aTag, void* aPluginMgrPtr )
 {
@@ -112,6 +122,7 @@ public:
     void SetSHA1( const unsigned char* aSHA1Sum );
     const wxString GetCacheBaseName( void );
 
+    wxDateTime    modTime;      // file modification time
     unsigned char sha1sum[20];
     std::string   pluginInfo;   // PluginName:Version string
     SCENEGRAPH*   sceneData;
@@ -211,6 +222,37 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
 
     if( mi != m_CacheMap.end() )
     {
+        wxFileName fname( aModelFile );
+        wxDateTime fmdate = fname.GetModificationTime();
+        bool reload = false;
+
+        if( fmdate != mi->second->modTime )
+        {
+            unsigned char hashSum[20];
+            getSHA1( aModelFile, hashSum );
+            mi->second->modTime = fmdate;
+
+            if( !isSHA1Same( hashSum, mi->second->sha1sum ) )
+            {
+                mi->second->SetSHA1( hashSum );
+                reload = true;
+            }
+        }
+
+        if( reload )
+        {
+            if( NULL != mi->second->sceneData )
+            {
+                S3D::DestroyNode( mi->second->sceneData );
+                mi->second->sceneData = NULL;
+            }
+
+            if( NULL != mi->second->renderData )
+                S3D::Destroy3DModel( &mi->second->renderData );
+
+            mi->second->sceneData = m_Plugins->Load3DModel(aModelFile, mi->second->pluginInfo);
+        }
+
         if( NULL != aCachePtr )
             *aCachePtr = mi->second;
 
@@ -242,6 +284,8 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
         // entry to prevent further attempts at loading the file
         S3D_CACHE_ENTRY* ep = new S3D_CACHE_ENTRY;
         m_CacheList.push_back( ep );
+        wxFileName fname( aFileName );
+        ep->modTime = fname.GetModificationTime();
 
         if( m_CacheMap.insert( std::pair< wxString, S3D_CACHE_ENTRY* >
             ( aFileName, ep ) ).second == false )
@@ -271,6 +315,8 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
 
     S3D_CACHE_ENTRY* ep = new S3D_CACHE_ENTRY;
     m_CacheList.push_back( ep );
+    wxFileName fname( aFileName );
+    ep->modTime = fname.GetModificationTime();
 
     if( m_CacheMap.insert( std::pair< wxString, S3D_CACHE_ENTRY* >
                                ( aFileName, ep ) ).second == false )
