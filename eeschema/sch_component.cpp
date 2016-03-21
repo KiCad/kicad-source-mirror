@@ -1073,7 +1073,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         return false;
 
     // Generate unit number, convert and time stamp
-    if( fprintf( f, "U %d %d %8.8lX\n", m_unit, m_convert, m_TimeStamp ) == EOF )
+    if( fprintf( f, "U %d %d %8.8lX\n", m_unit, m_convert, (unsigned long)m_TimeStamp ) == EOF )
         return false;
 
     // Save the position
@@ -1157,13 +1157,13 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     // Remark: avoid using sscanf to read texts entered by user
     // which are UTF8 encoded, because sscanf does not work well on Windows
     // with some UTF8 values.
-    int         ii;
-    char        name1[256],
-                char1[256], char2[256], char3[256];
-    int         newfmt = 0;
-    char*       ptcar;
-    wxString    fieldName;
-    char*       line = aLine.Line();
+    int           ii;
+    char          name1[256], char1[256], char2[256], char3[256];
+    int           newfmt = 0;
+    char*         ptcar;
+    wxString      fieldName;
+    char*         line = aLine.Line();
+    unsigned long timeStamp;
 
     m_convert = 1;
 
@@ -1264,7 +1264,8 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         if( line[0] == 'U' )
         {
-            sscanf( line + 1, "%d %d %lX", &m_unit, &m_convert, &m_TimeStamp );
+            sscanf( line + 1, "%d %d %lX", &m_unit, &m_convert, &timeStamp );
+            m_TimeStamp = (time_t)timeStamp;
         }
         else if( line[0] == 'P' )
         {

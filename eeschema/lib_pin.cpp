@@ -72,7 +72,7 @@ static const BITMAP_DEF iconsPinsOrientations[] =
 
 const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType )
 {
-    if( aType < 0 || aType >= (int) PINTYPE_COUNT );
+    if( aType < 0 || aType >= (int) PINTYPE_COUNT )
         return wxT( "???" );
 
     // These strings are the canonical name of the electrictal type

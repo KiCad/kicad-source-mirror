@@ -197,7 +197,7 @@ set( BMAPS_MID
     delete_bus
     delete_circle
     delete_connection
-    delete_cotation
+    delete_dimension
     delete_field
     delete_glabel
     delete_line
@@ -339,7 +339,6 @@ set( BMAPS_MID
     library_update
     library
     library_table
-    libview
     lines90
     list_nets
     load_module_board
@@ -500,7 +499,6 @@ set( BMAPS_MID
     rotate_pos_z
     save_as
     save_library
-    save_netlist
     save_part_in_mem
     save_project
     save_setup
@@ -555,7 +553,6 @@ set( BMAPS_MID
     width_track_via
     width_track
     width_vias
-    window_close
     wizard_add_fplib_small
     zip_tool
     zip

@@ -2708,8 +2708,7 @@ BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem,
 
     default:
         // Un-handled item for duplication
-        wxASSERT_MSG( false, "Duplication not supported for items of class "
-                      + aItem->GetClass() );
+        new_item = NULL;
         break;
     }
 

@@ -2300,10 +2300,10 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         }
 #endif
 
-        int         makeType;
-        time_t      timeStamp;
-        LAYER_NUM   layer_num;
-        int         type, net_code, flags_int;
+        int           makeType;
+        unsigned long timeStamp;
+        LAYER_NUM     layer_num;
+        int           type, net_code, flags_int;
 
         // parse the 2nd line to determine the type of object
         // e.g. "De 15 1 7 0 0"   for a via
@@ -2337,8 +2337,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
             break;
         }
 
-        newTrack->SetTimeStamp( timeStamp );
-
+        newTrack->SetTimeStamp( (time_t)timeStamp );
         newTrack->SetPosition( wxPoint( start_x, start_y ) );
         newTrack->SetEnd( wxPoint( end_x, end_y ) );
 
@@ -2783,10 +2782,10 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
         else if( TESTLINE( "Ge" ) )
         {
-            LAYER_NUM layer_num;
-            time_t  timestamp;
-            int     shape;
-            int     ilayer;
+            LAYER_NUM      layer_num;
+            unsigned long  timestamp;
+            int            shape;
+            int            ilayer;
 
             sscanf( line + SZ( "Ge" ), " %d %d %lX", &shape, &ilayer, &timestamp );
 
@@ -2798,7 +2797,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
                 layer_num = ilayer;
 
             dim->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
-            dim->SetTimeStamp( timestamp );
+            dim->SetTimeStamp( (time_t) timestamp );
             dim->SetShape( shape );
         }
 

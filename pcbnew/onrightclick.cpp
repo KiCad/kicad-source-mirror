@@ -286,7 +286,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                                      HK_DELETE );
 
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DIMENSION,
-                             msg, KiBitmap( delete_xpm ) );
+                             msg, KiBitmap( delete_dimension_xpm ) );
             }
             break;
 

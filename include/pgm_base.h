@@ -133,8 +133,23 @@ public:
 
     /**
      * Return the preferred editor name.
+     * @param   aCanShowFileChooser If no editor is currently set and this argument is
+     *          'true' then this method will show a file chooser dialog asking for the
+     *          editor's executable.
+     * @return  Returns the full path of the editor, or an empty string if no editor has
+     *          been set.
      */
-    VTBL_ENTRY const wxString& GetEditorName();
+    VTBL_ENTRY const wxString& GetEditorName( bool aCanShowFileChooser = true );
+    
+    /**
+     * Shows a dialog that instructs the user to select a new preferred editor.
+     * @param   aDefaultEditor Default full path for the default editor this dialog should
+     *          show by default.
+     * @return  Returns the full path of the editor, or an empty string if no editor was
+     *          chosen.
+     */
+    VTBL_ENTRY const wxString AskUserForPreferredEditor(
+                                        const wxString& aDefaultEditor = wxEmptyString );
 
     VTBL_ENTRY bool IsKicadEnvVariableDefined() const               { return !m_kicad_env.IsEmpty(); }
 

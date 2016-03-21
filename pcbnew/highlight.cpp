@@ -30,10 +30,8 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <kicad_string.h>
 #include <wxPcbStruct.h>
 #include <kicad_device_context.h>
-#include <macros.h>
 
 #include <class_board.h>
 #include <class_track.h>
@@ -41,73 +39,6 @@
 
 #include <pcbnew.h>
 #include <collectors.h>
-
-
-void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
-{
-    NETINFO_ITEM* net;
-    wxString      netFilter;
-    wxArrayString list;
-
-    netFilter = wxT( "*" );
-    wxTextEntryDialog dlg( this, _( "Filter Net Names" ), _( "Net Filter" ), netFilter );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return; // cancelled by user
-
-    netFilter = dlg.GetValue( );
-
-    if( netFilter.IsEmpty() )
-        return;
-
-    wxString Line;
-    for( unsigned ii = 0; ii < GetBoard()->GetNetCount(); ii++ )
-    {
-        net = GetBoard()->m_NetInfo.GetNetItem( ii );
-
-        if( !WildCompareString( netFilter, net->GetNetname(), false ) )
-            continue;
-
-        Line.Printf( wxT( "net %3.3d:  %s" ), net->GetNet(),
-                     GetChars( net->GetNetname() ) );
-        list.Add( Line );
-    }
-
-    wxSingleChoiceDialog choiceDlg( this, wxEmptyString, _( "Select Net" ), list );
-
-    if( (choiceDlg.ShowModal() == wxID_CANCEL) || (choiceDlg.GetSelection() == wxNOT_FOUND) )
-        return;
-
-    bool     found   = false;
-    unsigned netcode = (unsigned) choiceDlg.GetSelection();
-
-    // Search for the net selected.
-    for( unsigned ii = 0; ii < GetBoard()->GetNetCount(); ii++ )
-    {
-        net = GetBoard()->FindNet( ii );
-
-        if( !WildCompareString( netFilter, net->GetNetname(), false ) )
-            continue;
-
-        if( ii == netcode )
-        {
-            netcode = net->GetNet();
-            found   = true;
-            break;
-        }
-    }
-
-    if( found )
-    {
-        INSTALL_UNBUFFERED_DC( dc, m_canvas );
-
-        if( GetBoard()->IsHighLightNetON() )
-            HighLight( &dc );
-
-        GetBoard()->SetHighLightNet( netcode );
-        HighLight( &dc );
-    }
-}
 
 
 int PCB_EDIT_FRAME::SelectHighLight( wxDC* DC )
