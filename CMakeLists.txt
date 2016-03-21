@@ -82,6 +82,11 @@ set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
 
+# Global setting: Use C++11
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 # CMP0063: CMake < 3.3 does not handle hidden visibility for static libraries,
 # and 3.3 is backwards compatible when the minimum version is smaller than 3.3.
 if( POLICY CMP0063 )
@@ -127,6 +132,24 @@ message( STATUS "Kicad install dir: <${DEFAULT_INSTALL_PATH}>" )
 # Generate build system specific header file.
 include( PerformFeatureChecks )
 perform_feature_checks()
+
+
+# Workaround: CMake < 3.1 does not support CMAKE_CXX_STANDARD
+if( NOT CMAKE_MINIMUM_REQUIRED_VERSION VERSION_LESS 3.1 )
+    message( FATAL_ERROR "Remove compatibility code" )
+endif()
+
+if( CMAKE_VERSION VERSION_LESS 3.1 AND ( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" ) )
+    include(CheckCXXCompilerFlag)
+
+    CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+
+    if(COMPILER_SUPPORTS_CXX11)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    else()
+        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+    endif()
+endif()
 
 
 #================================================
