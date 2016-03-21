@@ -1149,9 +1149,6 @@ void IDF_SEGMENT::CalcCenterAndRadius( void )
     center.x = h * cos( offAng ) + xm;
     center.y = h * sin( offAng ) + ym;
 
-    std::cout << "     Center: (" << center.x << ", " << center.y << "), radius: ";
-    std::cout << radius << "\n";
-
     offsetAngle = IDF3::CalcAngleDeg( center, startPoint );
 }
 
