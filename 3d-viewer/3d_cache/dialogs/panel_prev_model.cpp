@@ -32,8 +32,8 @@
 #include <wx/filename.h>
 #include <wx/glcanvas.h>
 #include <wx/dirctrl.h>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #include "project.h"
 #include "3d_cache.h"

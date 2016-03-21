@@ -31,15 +31,13 @@
 #define XV3D_TYPES_H
 
 #define GLM_FORCE_RADIANS
+
+// Disable SIMD detection
+#define GLM_FORCE_PURE
+
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/matrix_major_storage.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/fast_square_root.hpp>
-#include <glm/gtx/rotate_vector.hpp>
-//#include <glm/gtx/simd_vec4.hpp>
+#include <glm/ext.hpp>
+#include <mm_malloc.h>
 
 typedef glm::uvec2  SFVEC2UI;
 typedef glm::ivec2  SFVEC2I;
