@@ -777,16 +777,18 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     }
 
     // record the new items as added
-    if( !m_editModules )
+    if( !m_editModules && !selection.Empty() )
+    {
         editFrame->SaveCopyInUndoList( selection.items, UR_NEW );
 
-    editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
-            (int) old_items.size() ) );
+        editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
+                (int) old_items.size() ) );
 
-    // pick up the selected item(s) and start moving
-    // this works well for "dropping" copies around
-    TOOL_EVENT evt = COMMON_ACTIONS::editActivate.MakeEvent();
-    Main( evt );
+        // If items were duplicated, pick them up
+        // this works well for "dropping" copies around
+        TOOL_EVENT evt = COMMON_ACTIONS::editActivate.MakeEvent();
+        Main( evt );
+    }
 
     // and re-enable undos
     decUndoInhibit();
