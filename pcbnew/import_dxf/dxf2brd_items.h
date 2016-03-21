@@ -34,13 +34,6 @@ class BOARD;
 class BOARD_ITEM;
 
 /**
- * Conversion factor for DXF units to millimeters
- * It seems DRW_Interface always converts DXF coordinates in mm
- * (to be confirmed)
- */
-static const double DXF_UNITS_PER_MM = 1.0;
-
-/**
  * This format filter class can import and export DXF files.
  * It depends on the dxflib library.
  *
@@ -53,7 +46,8 @@ private:
     double m_xOffset;       // X coord offset for conversion (in mm)
     double m_yOffset;       // Y coord offset for conversion (in mm)
     double m_defaultThickness;  // default line thickness for conversion (in mm)
-    int m_brdLayer;         // The board layer to place imported dfx items
+    double m_DXF2mm;        // The scale factor to convert DXF units to mm
+    int m_brdLayer;         // The board layer to place imported DXF items
     int m_version;          // the dxf version, not used here
     std::string m_codePage; // The code page, not used here
 
@@ -102,6 +96,11 @@ private:
     int mapX( double aDxfCoordX );
     int mapY( double aDxfCoordY );
     int mapDim( double aDxfValue );
+
+    // Functions to aid in the creation of a LWPolyline
+    void insertLine( const wxRealPoint& aSegStart, const wxRealPoint& aSegEnd, int aWidth );
+    void insertArc( const wxRealPoint& aSegStart, const wxRealPoint& aSegEnd,
+                    double aBulge, int aWidth );
 
     // Methods from DRW_CreationInterface:
     // They are "call back" fonctions, called when the corresponding object
