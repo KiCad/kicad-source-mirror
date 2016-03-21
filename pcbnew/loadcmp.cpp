@@ -136,17 +136,17 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 {
     // Close the current non-modal Lib browser if opened, and open a new one, in "modal" mode:
     FOOTPRINT_VIEWER_FRAME* viewer;
-
     viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
 
     if( viewer )
         viewer->Destroy();
 
+    SetFocus();
+
     // Creates the modal Lib browser:
-    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true );
+    viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, this );
 
     wxString    fpid;
-
     int ret = viewer->ShowModal( &fpid, this );
     (void) ret;     // make static analyser quiet
 

@@ -77,20 +77,22 @@ END_EVENT_TABLE()
 
 
 /* Note:
- * LIB_VIEW_FRAME can be build in "modal mode", or as a usual frame.
+ * LIB_VIEW_FRAME can be created in "modal mode", or as a usual frame.
  * In modal mode:
  *  a tool to export the selected symbol is shown in the toolbar
- *  the style is wxSTAY_ON_TOP on Windows and wxFRAME_FLOAT_ON_PARENT on unix
- * reason:
- * the parent is usually the kicad window manager (not easy to change)
- * On windows, when the frame with stype wxFRAME_FLOAT_ON_PARENT is displayed
- * its parent frame is brought to the foreground, on the top of the calling frame.
- * and stays displayed when closing the LIB_VIEW_FRAME frame.
- * this issue does not happen on unix.
- *
- * So we use wxSTAY_ON_TOP on Windows, and wxFRAME_FLOAT_ON_PARENT on unix
- * to simulate a dialog called by ShowModal.
+ *  the style is wxFRAME_FLOAT_ON_PARENT
+ * Note:
+ * On windows, when the frame with type wxFRAME_FLOAT_ON_PARENT is displayed
+ * its parent frame is sometimes brought to the foreground when closing the
+ * LIB_VIEW_FRAME frame.
+ * If it still happens, it could be better to use wxSTAY_ON_TOP
+ * instead of wxFRAME_FLOAT_ON_PARENT
  */
+#ifdef __WINDOWS__
+#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT   // could be wxSTAY_ON_TOP if issues
+#else
+#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT
+#endif
 
 #define LIB_VIEW_FRAME_NAME wxT( "ViewlibFrame" )
 #define LIB_VIEW_FRAME_NAME_MODAL wxT( "ViewlibFrameModal" )
@@ -99,18 +101,15 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         PART_LIB* aLibrary ) :
     SCH_BASE_FRAME( aKiway, aParent, aFrameType, _( "Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
-            aFrameType==FRAME_SCH_VIEWER_MODAL ?
-#ifdef __WINDOWS__
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
-#else
-                aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
+            aFrameType == FRAME_SCH_VIEWER_MODAL ?
+                aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | MODAL_MODE_EXTRASTYLE
                           : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
-#endif
                 : KICAD_DEFAULT_DRAWFRAME_STYLE,
             aFrameType == FRAME_SCH_VIEWER_MODAL ?
                           LIB_VIEW_FRAME_NAME_MODAL : LIB_VIEW_FRAME_NAME )
 {
-    wxASSERT( aFrameType == FRAME_SCH_VIEWER || aFrameType == FRAME_SCH_VIEWER_MODAL );
+    wxASSERT( aFrameType == FRAME_SCH_VIEWER ||
+              aFrameType == FRAME_SCH_VIEWER_MODAL );
 
     if( aFrameType == FRAME_SCH_VIEWER_MODAL )
         SetModal( true );

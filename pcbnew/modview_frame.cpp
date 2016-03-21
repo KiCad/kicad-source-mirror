@@ -100,18 +100,19 @@ END_EVENT_TABLE()
  * FOOTPRINT_VIEWER_FRAME can be created in "modal mode", or as a usual frame.
  * In modal mode:
  *  a tool to export the selected footprint is shown in the toolbar
- *  the style is wxSTAY_ON_TOP on Windows and wxFRAME_FLOAT_ON_PARENT on unix
- * Reason:
- * the parent is usually the kicad window manager (not easy to change)
- * On windows, when the frame with stype wxFRAME_FLOAT_ON_PARENT is displayed
- * its parent frame is brought to the foreground, on the top of the calling frame.
- * and stays displayed when closing the FOOTPRINT_VIEWER_FRAME frame.
- * this issue does not happen on unix
- *
- * So we use wxSTAY_ON_TOP on Windows, and wxFRAME_FLOAT_ON_PARENT on unix
- * to force FOOTPRINT_VIEWER_FRAME to stay on parent when it is Modal.
+ *  the style is wxFRAME_FLOAT_ON_PARENT
+ * Note:
+ * On windows, when the frame with type wxFRAME_FLOAT_ON_PARENT is displayed
+ * its parent frame is sometimes brought to the foreground when closing the
+ * LIB_VIEW_FRAME frame.
+ * If it still happens, it could be better to use wxSTAY_ON_TOP
+ * instead of wxFRAME_FLOAT_ON_PARENT
  */
-
+#ifdef __WINDOWS__
+#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT   // could be wxSTAY_ON_TOP if issues
+#else
+#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT
+#endif
 
 #define FOOTPRINT_VIEWER_FRAME_NAME         wxT( "ModViewFrame" )
 #define FOOTPRINT_VIEWER_FRAME_NAME_MODAL   wxT( "ModViewFrameModal" )
@@ -121,20 +122,16 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
             aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
-#ifdef __WINDOWS__
-                KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
-#else
                     aParent ?
-                        KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
+                        KICAD_DEFAULT_DRAWFRAME_STYLE | MODAL_MODE_EXTRASTYLE
                         : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
-#endif
                 : KICAD_DEFAULT_DRAWFRAME_STYLE,
             aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
                                 FOOTPRINT_VIEWER_FRAME_NAME_MODAL
                                 : FOOTPRINT_VIEWER_FRAME_NAME )
 {
-    wxASSERT( aFrameType==FRAME_PCB_MODULE_VIEWER ||
-              aFrameType==FRAME_PCB_MODULE_VIEWER_MODAL );
+    wxASSERT( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ||
+              aFrameType == FRAME_PCB_MODULE_VIEWER );
 
     if( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL )
         SetModal( true );
@@ -304,6 +301,11 @@ FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
 void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     DBG(printf( "%s:\n", __func__ );)
+
+    // A workaround to avoid flicker, in modal mode when modview frame is destroyed,
+    // when the aui toolbar is not docked (i.e. shown in a miniframe)
+    // (usefull on windows only)
+    m_mainToolBar->SetFocus();
 
     if( IsGalCanvasActive() )
         GetGalCanvas()->StopDrawing();

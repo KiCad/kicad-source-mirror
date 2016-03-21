@@ -344,7 +344,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
 
             FOOTPRINT_WIZARD_FRAME* wizard = (FOOTPRINT_WIZARD_FRAME*) Kiway().Player(
-                        FRAME_PCB_FOOTPRINT_WIZARD_MODAL, true );
+                        FRAME_PCB_FOOTPRINT_WIZARD_MODAL, true, this );
 
             if( wizard->ShowModal( NULL, this ) )
             {

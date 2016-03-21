@@ -48,10 +48,19 @@ KIWAY::KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop ):
 {
     SetTop( aTop );     // hook player_destroy_handler() into aTop.
 
-    memset( m_player, 0, sizeof( m_player ) );
+
+    // Prepare the room to store the frame names, once they will be created
+    // with FRAME_T type as index in this table.
+    // (note this is a list of frame names, but a non empty entry
+    // does not mean the frame still exists. It means only the frame was created
+    // at least once. It can be destroyed after. These entries are not cleared.
+    // the purpose is just to allow a call to wxWindow::FindWindowByName(), from
+    // a FRAME_T frame type
+    m_playerFrameName.Add( wxEmptyString, KIWAY_PLAYER_COUNT );
 }
 
 
+#if 0
 // Any event types derived from wxCommandEvt, like wxWindowDestroyEvent, are
 // propogated upwards to parent windows if not handled below.  Therefore the
 // m_top window should receive all wxWindowDestroyEvents originating from
@@ -60,26 +69,14 @@ KIWAY::KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop ):
 
 void KIWAY::player_destroy_handler( wxWindowDestroyEvent& event )
 {
-    wxWindow* w = event.GetWindow();
-
-    for( unsigned i=0; i < KIWAY_PLAYER_COUNT;  ++i )
-    {
-        // if destroying one of our flock, then mark it as deceased.
-        if( (wxWindow*) m_player[i] == w )
-        {
-            DBG(printf( "%s: m_player[%u] destroyed: %s\n",
-                __func__, i, TO_UTF8( m_player[i]->GetName() ) );)
-
-            m_player[i] = 0;
-        }
-    }
-
+    // Currently : do nothing
     event.Skip();  // skip to who, the wxApp?  I'm the top window.
 }
-
+#endif
 
 void KIWAY::SetTop( wxFrame* aTop )
 {
+#if 0
     if( m_top )
     {
         m_top->Disconnect( wxEVT_DESTROY, wxWindowDestroyEventHandler( KIWAY::player_destroy_handler ), NULL, this );
@@ -89,6 +86,7 @@ void KIWAY::SetTop( wxFrame* aTop )
     {
         aTop->Connect( wxEVT_DESTROY, wxWindowDestroyEventHandler( KIWAY::player_destroy_handler ), NULL, this );
     }
+#endif
 
     m_top = aTop;
 }
@@ -271,14 +269,15 @@ KIWAY::FACE_T KIWAY::KifaceType( FRAME_T aFrameType )
 
 KIWAY_PLAYER* KIWAY::GetPlayerFrame( FRAME_T aFrameType )
 {
-    if( unsigned( aFrameType ) >= KIWAY_PLAYER_COUNT )
+    if( m_playerFrameName[aFrameType].IsEmpty() )
         return NULL;
 
-    return m_player[aFrameType];
+    return static_cast<KIWAY_PLAYER*>( wxWindow::FindWindowByName( m_playerFrameName[aFrameType] ) );
 }
 
 
-KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate )
+
+KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, KIWAY_PLAYER* aParent )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFrameType.
@@ -308,14 +307,16 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate )
         if( kiface )
         {
             frame = (KIWAY_PLAYER*) kiface->CreateWindow(
-                    m_top,
+                    aParent,    // Parent window of frame, NULL in non modal mode
                     aFrameType,
                     this,
-                    m_ctl    // questionable need, these same flags where passed to the KIFACE::OnKifaceStart()
+                    m_ctl       // questionable need, these same flags where passed to the KIFACE::OnKifaceStart()
                     );
             wxASSERT( frame );
 
-            return m_player[aFrameType] = frame;
+            m_playerFrameName[aFrameType] = frame->GetName();
+
+            return frame;
         }
     }
 
@@ -342,10 +343,7 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
         return true;
 
     if( frame->Close( doForce ) )
-    {
-        m_player[aFrameType] = 0;
         return true;
-    }
 
     return false;
 }

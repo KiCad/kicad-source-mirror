@@ -298,11 +298,13 @@ public:
      * @param aFrameType is from enum #FRAME_T.
      * @param doCreate when true asks that the player be created if it is not
      *   already created, false means do not create and maybe return NULL.
+     * @param aParent is a parent for modal KIWAY_PLAYER frames, otherwise NULL
+     *  used only when doCreate = true
      *
      * @return KIWAY_PLAYER* - a valid opened KIWAY_PLAYER or NULL if there
      *  is something wrong or doCreate was false and the player has yet to be created.
      */
-    VTBL_ENTRY KIWAY_PLAYER* Player( FRAME_T aFrameType, bool doCreate = true );
+    VTBL_ENTRY KIWAY_PLAYER* Player( FRAME_T aFrameType, bool doCreate = true, KIWAY_PLAYER* aParent = NULL );
 
     /**
      * Function PlayerClose
@@ -369,8 +371,10 @@ private:
     /// Get the full path & name of the DSO holding the requested FACE_T.
     static const wxString dso_full_path( FACE_T aFaceId );
 
+#if 0
     /// hooked into m_top in SetTop(), marks child frame as closed.
     void player_destroy_handler( wxWindowDestroyEvent& event );
+#endif
 
     bool set_kiface( FACE_T aFaceType, KIFACE* aKiface )
     {
@@ -393,10 +397,17 @@ private:
 
     PGM_BASE*       m_program;
     int             m_ctl;
+
     wxFrame*        m_top;      // Usually m_top is the Project manager
 
 
-    KIWAY_PLAYER*   m_player[KIWAY_PLAYER_COUNT];     // from frame_type.h
+    // a string array ( size KIWAY_PLAYER_COUNT ) to Store the frame name
+    // of PLAYER frames which were run.
+    // A non empty name means only a PLAYER was run at least one time.
+    // It can be closed. Call :
+    // wxWindow::FindWindowByName( m_playerFrameName[aFrameType] )
+    // to know if still exists (or GetPlayerFrame( FRAME_T aFrameType )
+    wxArrayString  m_playerFrameName;
 
     PROJECT         m_project;      // do not assume this is here, use Prj().
 };
