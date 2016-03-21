@@ -1141,11 +1141,16 @@ void IDF_SEGMENT::CalcCenterAndRadius( void )
     else
         offAng -= M_PI_2;
 
-    if( ( angle > 180.0 ) || ( angle < -180.0 ) )
+    if( angle < -180.0 )
         offAng += M_PI;
+    else if( angle > 180 )
+        offAng -= M_PI;
 
     center.x = h * cos( offAng ) + xm;
     center.y = h * sin( offAng ) + ym;
+
+    std::cout << "     Center: (" << center.x << ", " << center.y << "), radius: ";
+    std::cout << radius << "\n";
 
     offsetAngle = IDF3::CalcAngleDeg( center, startPoint );
 }

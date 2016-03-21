@@ -32,6 +32,10 @@ class DXF2IDF : public DRW_Interface
 {
 private:
     std::list< IDF_SEGMENT* > lines;    // Unsorted list of graphical segments
+    double m_scale;                     // scaling factor to mm
+
+    void insertLine( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd );
+    void insertArc( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd, double aBulge );
 
 public:
     ~DXF2IDF();
@@ -41,12 +45,14 @@ public:
 
 private:
     // DRW_Interface implemented callback functions
+    virtual void addHeader( const DRW_Header* data );
     virtual void addLine(const DRW_Line& data);
     virtual void addArc(const DRW_Arc& data );
     virtual void addCircle(const DRW_Circle& data );
+    virtual void addLWPolyline(const DRW_LWPolyline& data );
+    virtual void addPolyline(const DRW_Polyline& data );
 
     // DRW_Interface callbacks unsupported by DXF2IDF
-    virtual void addHeader( const DRW_Header* data ){}
     virtual void addLType( const DRW_LType& data ){}
     virtual void addLayer( const DRW_Layer& data ){}
     virtual void addDimStyle( const DRW_Dimstyle& data ){}
@@ -59,8 +65,6 @@ private:
     virtual void addRay(const DRW_Ray& data ){}
     virtual void addXline(const DRW_Xline& data ){}
     virtual void addEllipse(const DRW_Ellipse& data ){}
-    virtual void addLWPolyline(const DRW_LWPolyline& data ){}
-    virtual void addPolyline(const DRW_Polyline& data ){}
     virtual void addSpline(const DRW_Spline* data ){}
     virtual void addKnot(const DRW_Entity&){}
     virtual void addInsert(const DRW_Insert& data ){}
