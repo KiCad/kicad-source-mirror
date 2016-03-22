@@ -70,14 +70,37 @@ private:
     double parseDouble();
 
     void parseSetup( WORKSHEET_LAYOUT* aLayout ) throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * parse a graphic item starting by "(line" or "(rect" and read parameters.
+     */
     void parseGraphic( WORKSHEET_DATAITEM * aItem ) throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * parse a text item starting by "(tbtext" and read parameters.
+     */
     void parseText( WORKSHEET_DATAITEM_TEXT * aItem ) throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * parse a polygon item starting by "( polygon" and read parameters.
+     * the list of corners included in this description is read by parsePolyOutline
+     */
     void parsePolygon( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
         throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * parse a list of corners starting by "( pts" and read coordinates.
+     */
     void parsePolyOutline( WORKSHEET_DATAITEM_POLYPOLYGON * aItem )
         throw( IO_ERROR, PARSE_ERROR );
+
+
+    /**
+     * parse a bitmap item starting by "( bitmap" and read parameters.
+     */
     void parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
         throw( IO_ERROR, PARSE_ERROR );
+
     void parseCoordinate( POINT_COORD& aCoord) throw( IO_ERROR, PARSE_ERROR );
     void readOption( WORKSHEET_DATAITEM * aItem ) throw( IO_ERROR, PARSE_ERROR );
     void readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem ) throw( IO_ERROR, PARSE_ERROR );
@@ -463,12 +486,21 @@ void PAGE_LAYOUT_READER_PARSER::parseGraphic( WORKSHEET_DATAITEM * aItem )
 
         if( token == T_LEFT )
             token = NextTok();
+        else
+        {
+            // If an other token than T_LEFT is read here, this is an error
+            // however, due to a old bug in kicad, the token T_end can be found
+            // without T_LEFT in a very few .wks files (perhaps only one in a demo).
+            // So this ugly hack disables the error detection.
+            if( token != T_end )
+                Unexpected( CurText() );
+        }
 
         switch( token )
         {
         case T_comment:
             NeedSYMBOLorNUMBER();
-            aItem->m_Info =  FromUTF8();
+            aItem->m_Info = FromUTF8();
             NeedRIGHT();
             break;
 

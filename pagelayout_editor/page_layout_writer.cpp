@@ -188,12 +188,12 @@ void WORKSHEET_LAYOUT_IO::Format( WORKSHEET_LAYOUT* aPageLayout ) const
 {
     LOCALE_IO   toggle;     // switch on/off the locale "C" notation
 
-    m_out->Print( 0, "( page_layout\n" );
+    m_out->Print( 0, "(page_layout\n" );
 
     // Setup
     int nestLevel = 1;
     // Write default values:
-    m_out->Print( nestLevel, "(%s", getTokenName( T_setup ) );
+    m_out->Print( nestLevel, "(%s ", getTokenName( T_setup ) );
     m_out->Print( 0, "(textsize %s %s)",
                   double2Str( WORKSHEET_DATAITEM::m_DefaultTextSize.x ).c_str(),
                   double2Str( WORKSHEET_DATAITEM::m_DefaultTextSize.y ).c_str() );
@@ -323,7 +323,7 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM* aItem, int aNestLevel ) co
 void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNestLevel ) const
     throw( IO_ERROR )
 {
-    m_out->Print( aNestLevel, "( %s", getTokenName( T_polygon ) );
+    m_out->Print( aNestLevel, "(%s", getTokenName( T_polygon ) );
     m_out->Print( 0, " (%s %s)", getTokenName( T_name ),
                   m_out->Quotew( aItem->m_Name ).c_str() );
     formatCoordinate( getTokenName( T_pos ), aItem->m_Pos );
@@ -341,7 +341,7 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNe
     // Write polygon corners list
     for( int kk = 0; kk < aItem->GetPolyCount(); kk++ )
     {
-        m_out->Print( aNestLevel+1, "( %s", getTokenName( T_pts ) );
+        m_out->Print( aNestLevel+1, "(%s", getTokenName( T_pts ) );
         // Create current polygon corners list
         unsigned ist = aItem->GetPolyIndexStart( kk );
         unsigned iend = aItem->GetPolyIndexEnd( kk );
@@ -370,7 +370,7 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_POLYPOLYGON* aItem, int aNe
 void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLevel ) const
     throw( IO_ERROR )
 {
-    m_out->Print( aNestLevel, "( %s", getTokenName( T_bitmap ) );
+    m_out->Print( aNestLevel, "(%s", getTokenName( T_bitmap ) );
     m_out->Print( 0, " (%s %s)", getTokenName( T_name ),
                   m_out->Quotew( aItem->m_Name ).c_str() );
     formatCoordinate( getTokenName( T_pos ), aItem->m_Pos );
@@ -383,7 +383,7 @@ void WORKSHEET_LAYOUT_IO::format( WORKSHEET_DATAITEM_BITMAP* aItem, int aNestLev
     m_out->Print( 0,"\n");
 
     // Write image in png readable format
-    m_out->Print( aNestLevel, "( %s\n", getTokenName( T_pngdata ) );
+    m_out->Print( aNestLevel, "(%s\n", getTokenName( T_pngdata ) );
     wxArrayString pngStrings;
     aItem->m_ImageBitmap->SaveData( pngStrings );
 
