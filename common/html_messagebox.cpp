@@ -32,6 +32,7 @@ HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* parent, const wxString& aTitle,
         wxPoint aPos, wxSize aSize) :
     DIALOG_DISPLAY_HTML_TEXT_BASE( parent, wxID_ANY, aTitle, aPos, aSize )
 {
+    m_htmlWindow->SetLayoutDirection( wxLayout_LeftToRight );
     ListClear();
     Center();
 }
