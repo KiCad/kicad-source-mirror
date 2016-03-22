@@ -29,6 +29,13 @@
 // differences in angle smaller than MIN_ANG are considered equal
 #define MIN_ANG     (0.01)
 
+// min and max bulge bracketing min. arc before transition to line segment
+// and max. arc limit
+// MIN_BULGE = 0.002 ~0.45 degrees
+// MAX_BULGE = 2000  ~89.97 degrees
+#define MIN_BULGE 0.002
+#define MAX_BULGE 2000.0
+
 DXF2IDF::~DXF2IDF()
 {
     while( !lines.empty() )
@@ -60,22 +67,12 @@ void DXF2IDF::addLine( const DRW_Line& data )
 {
     IDF_POINT p1, p2;
 
-    p1.x = data.basePoint.x;
-    p1.y = data.basePoint.y;
-    p2.x = data.secPoint.x;
-    p2.y = data.secPoint.y;
+    p1.x = data.basePoint.x * m_scale;
+    p1.y = data.basePoint.y * m_scale;
+    p2.x = data.secPoint.x * m_scale;
+    p2.y = data.secPoint.y * m_scale;
 
-    IDF_SEGMENT* seg = new IDF_SEGMENT( p1, p2 );
-
-    if( !seg )
-    {
-        std::cerr << "* FAULT: could not add a linear segment to the outline\n";
-    }
-    else
-    {
-        lines.push_back( seg );
-    }
-
+    insertLine( p1, p2 );
     return;
 }
 
@@ -84,22 +81,16 @@ void DXF2IDF::addCircle( const DRW_Circle& data )
 {
     IDF_POINT p1, p2;
 
-    p1.x = data.basePoint.x;
-    p1.y = data.basePoint.y;
+    p1.x = data.basePoint.x * m_scale;
+    p1.y = data.basePoint.y * m_scale;
 
-    p2.x = p1.x + data.radious;
+    p2.x = p1.x + data.radious * m_scale;
     p2.y = p1.y;
 
     IDF_SEGMENT* seg = new IDF_SEGMENT( p1, p2, 360, true );
 
-    if( !seg )
-    {
-        std::cerr << "* FAULT: could not add a linear segment to the outline\n";
-    }
-    else
-    {
+    if( seg )
         lines.push_back( seg );
-    }
 
     return;
 }
@@ -109,8 +100,8 @@ void DXF2IDF::addArc( const DRW_Arc& data )
 {
     IDF_POINT p1, p2;
 
-    p1.x = data.basePoint.x;
-    p1.y = data.basePoint.y;
+    p1.x = data.basePoint.x * m_scale;
+    p1.y = data.basePoint.y * m_scale;
 
     // note: DXF circles always run CCW
     double ea = data.endangle;
@@ -118,21 +109,15 @@ void DXF2IDF::addArc( const DRW_Arc& data )
     while( ea < data.staangle )
         ea += M_PI;
 
-    p2.x = p1.x + cos( data.staangle ) * data.radious;
-    p2.y = p1.y + sin( data.staangle ) * data.radious;
+    p2.x = p1.x + cos( data.staangle ) * data.radious * m_scale;
+    p2.y = p1.y + sin( data.staangle ) * data.radious * m_scale;
 
     double angle = ( ea - data.staangle ) * 180.0 / M_PI;
 
     IDF_SEGMENT* seg = new IDF_SEGMENT( p1, p2, angle, true );
 
-    if( !seg )
-    {
-        std::cerr << "* FAULT: could not add a linear segment to the outline\n";
-    }
-    else
-    {
+    if( seg )
         lines.push_back( seg );
-    }
 
     return;
 }
@@ -289,4 +274,187 @@ bool DXF2IDF::WriteOutline( FILE* aFile, bool isInch )
     }
 
     return true;
+}
+
+
+void DXF2IDF::addHeader( const DRW_Header* data )
+{
+    std::map<std::string, DRW_Variant*>::const_iterator it;
+    m_scale = 1.0; // assume no scale factor
+
+    for( it = data->vars.begin(); it != data->vars.end(); ++it )
+    {
+        std::string key = ( (*it).first ).c_str();
+
+        if( key == "$INSUNITS" )
+        {
+            DRW_Variant* var = (*it).second;
+
+            switch( var->content.i )
+            {
+                case 1:     // inches
+                    m_scale = 25.4;
+                    break;
+
+                case 2:     // feet
+                    m_scale = 304.8;
+                    break;
+
+                case 5:     // centimeters
+                    m_scale = 10.0;
+                    break;
+
+                case 6:     // meters
+                    m_scale = 1000.0;
+                    break;
+
+                case 8:     // microinches
+                    m_scale = 2.54e-5;
+                    break;
+
+                case 9:     // mils
+                    m_scale = 0.0254;
+                    break;
+
+                case 10:    // yards
+                    m_scale = 914.4;
+                    break;
+
+                case 11:    // Angstroms
+                    m_scale = 1.0e-7;
+                    break;
+
+                case 12:    // nanometers
+                    m_scale = 1.0e-6;
+                    break;
+
+                case 13:    // micrometers
+                    m_scale = 1.0e-3;
+                    break;
+
+                case 14:    // decimeters
+                    m_scale = 100.0;
+                    break;
+
+                default:
+                    // use the default of 1.0 for:
+                    // 0: Unspecified Units
+                    // 4: mm
+                    // 3: miles
+                    // 7: kilometers
+                    // 15: decameters
+                    // 16: hectometers
+                    // 17: gigameters
+                    // 18: AU
+                    // 19: lightyears
+                    // 20: parsecs
+                    break;
+            }
+        }
+    }
+}
+
+
+void DXF2IDF::addLWPolyline(const DRW_LWPolyline& data )
+{
+    IDF_POINT poly_start;
+    IDF_POINT seg_start;
+    IDF_POINT seg_end;
+    double bulge = 0.0;
+
+    if( !data.vertlist.empty() )
+    {
+        DRW_Vertex2D* vertex = data.vertlist[0];
+        seg_start.x = vertex->x * m_scale;
+        seg_start.y = vertex->y * m_scale;
+        poly_start = seg_start;
+        bulge = vertex->bulge;
+    }
+
+    for( size_t i = 1; i < data.vertlist.size(); ++i )
+    {
+        DRW_Vertex2D* vertex = data.vertlist[i];
+        seg_end.x = vertex->x * m_scale;
+        seg_end.y = vertex->y * m_scale;
+
+        if( std::abs( bulge ) < MIN_BULGE )
+            insertLine( seg_start, seg_end );
+        else
+            insertArc( seg_start, seg_end, bulge );
+
+        seg_start = seg_end;
+        bulge = vertex->bulge;
+    }
+
+    // Polyline flags bit 0 indicates closed (1) or open (0) polyline
+    if( data.flags & 1 )
+    {
+        if( std::abs( bulge ) < MIN_BULGE )
+            insertLine( seg_start, poly_start );
+        else
+            insertArc( seg_start, poly_start, bulge );
+    }
+
+    return;
+}
+
+
+void DXF2IDF::addPolyline(const DRW_Polyline& data )
+{
+    IDF_POINT poly_start;
+    IDF_POINT seg_start;
+    IDF_POINT seg_end;
+
+    if( !data.vertlist.empty() )
+    {
+        DRW_Vertex* vertex = data.vertlist[0];
+        seg_start.x = vertex->basePoint.x * m_scale;
+        seg_start.y = vertex->basePoint.y * m_scale;
+        poly_start = seg_start;
+    }
+
+    for( size_t i = 1; i < data.vertlist.size(); ++i )
+    {
+        DRW_Vertex* vertex = data.vertlist[i];
+        seg_end.x = vertex->basePoint.x * m_scale;
+        seg_end.y = vertex->basePoint.y * m_scale;
+        insertLine( seg_start, seg_end );
+        seg_start = seg_end;
+    }
+
+    // Polyline flags bit 0 indicates closed (1) or open (0) polyline
+    if( data.flags & 1 )
+        insertLine( seg_start, poly_start );
+
+    return;
+}
+
+
+void DXF2IDF::insertLine( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd )
+{
+    IDF_SEGMENT* seg = new IDF_SEGMENT( aSegStart, aSegEnd );
+
+    if( seg )
+        lines.push_back( seg );
+
+    return;
+}
+
+
+void DXF2IDF::insertArc( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd,
+    double aBulge )
+{
+    if( aBulge < -MAX_BULGE )
+        aBulge = -MAX_BULGE;
+    else if( aBulge > MAX_BULGE )
+        aBulge = MAX_BULGE;
+
+    double ang = 720.0 * atan( aBulge ) / M_PI;
+
+    IDF_SEGMENT* seg = new IDF_SEGMENT( aSegStart, aSegEnd, ang, false );
+
+    if( seg )
+        lines.push_back( seg );
+
+    return;
 }
