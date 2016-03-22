@@ -251,11 +251,11 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
         break;
 
     case FIND_VALUE:               // find value
-        msg_item.Printf( _( "value" ), GetChars( aSearchText ) );
+        msg_item.Printf( _( "value %s" ), GetChars( aSearchText ) );
         break;
 
     case FIND_FIELD:               // find field. todo
-        msg_item.Printf( _( "field" ), GetChars( aSearchText ) );
+        msg_item.Printf( _( "field %s" ), GetChars( aSearchText ) );
         break;
     }
 
