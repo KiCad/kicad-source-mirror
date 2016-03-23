@@ -90,7 +90,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
     m_lblInfo->SetLabel( info_message );
 
     m_componentViewOld->SetLayoutDirection( wxLayout_LeftToRight );
-    m_componentViewNew->SetLayoutDirection( wxLayout_RightToLeft );
+    m_componentViewNew->SetLayoutDirection( wxLayout_LeftToRight );
 }
 
 
