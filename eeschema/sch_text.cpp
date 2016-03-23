@@ -48,6 +48,7 @@
 
 extern void IncrementLabelMember( wxString& name, int aIncrement );
 
+#define DRAW_BBOX 1     // Only for tests: set to 1 to draw the boudding box of labels
 
 /* Names of sheet label types. */
 const char* SheetLabelType[] =
@@ -361,7 +362,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
-#if 0
+#if DRAW_BBOX
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
         GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
@@ -957,49 +958,22 @@ void SCH_LABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
-    int x, y, dx, dy, length, height;
+    int linewidth = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
+    EDA_RECT rect = GetTextBox( -1, linewidth );
 
-    x = m_Pos.x;
-    y = m_Pos.y;
-    int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
-    length = LenSize( GetShownText() );
-    height = m_Size.y + width;
-    dx     = dy = 0;
+    if( m_Orient )
+    {   // Rotate rect
+        wxPoint pos = rect.GetOrigin();
+        wxPoint end = rect.GetEnd();
+        RotatePoint( &pos, m_Pos, m_Orient );
+        RotatePoint( &end, m_Pos, m_Orient );
+        rect.SetOrigin( pos );
+        rect.SetEnd( end );
 
-    switch( m_schematicOrientation )
-    {
-    case 0:             /* Horiz Normal Orientation (left justified) */
-        dx = 2 * DANGLING_SYMBOL_SIZE + length;
-        dy = -2 * DANGLING_SYMBOL_SIZE - height - TXTMARGE;
-        x -= DANGLING_SYMBOL_SIZE;
-        y += DANGLING_SYMBOL_SIZE;
-        break;
-
-    case 1:     /* Vert Orientation UP */
-        dx = -2 * DANGLING_SYMBOL_SIZE - height - TXTMARGE;
-        dy = -2 * DANGLING_SYMBOL_SIZE - length;
-        x += DANGLING_SYMBOL_SIZE;
-        y += DANGLING_SYMBOL_SIZE;
-        break;
-
-    case 2:     /* Horiz Orientation - Right justified */
-        dx = -2 * DANGLING_SYMBOL_SIZE - length;
-        dy = -2 * DANGLING_SYMBOL_SIZE - height - TXTMARGE;
-        x += DANGLING_SYMBOL_SIZE;
-        y += DANGLING_SYMBOL_SIZE;
-        break;
-
-    case 3:     /*  Vert Orientation BOTTOM */
-        dx = -2 * DANGLING_SYMBOL_SIZE - height - TXTMARGE;
-        dy = 2 * DANGLING_SYMBOL_SIZE + length;
-        x += DANGLING_SYMBOL_SIZE;
-        y -= DANGLING_SYMBOL_SIZE;
-        break;
+        rect.Normalize();
     }
 
-    EDA_RECT box( wxPoint( x, y ), wxSize( dx, dy ) );
-    box.Normalize();
-    return box;
+    return rect;
 }
 
 
@@ -1169,7 +1143,7 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
     int     width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
 
     width = Clamp_Text_PenSize( width, m_Size, m_Bold );
-    int     HalfSize = m_Size.x / 2;
+    int     halfSize = m_Size.x / 2;
     int     offset   = width;
 
     switch( m_shape )
@@ -1177,7 +1151,7 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
     case NET_INPUT:
     case NET_BIDI:
     case NET_TRISTATE:
-        offset += HalfSize;
+        offset += halfSize;
         break;
 
     case NET_OUTPUT:
@@ -1277,7 +1251,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
-#if 0
+#if DRAW_BBOX
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
         GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
@@ -1288,7 +1262,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
 
 void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
-    int HalfSize  = m_Size.y / 2;
+    int halfSize  = m_Size.y / 2;
     int linewidth = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
@@ -1301,13 +1275,31 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     int x = symb_len + linewidth + 3;
 
     // Use negation bar Y position to calculate full vertical size
-    #define Y_CORRECTION 1.3
-    // Note: this factor is due to the fact the negation bar Y position
-    // does not give exactly the full Y size of text
-    // and is experimentally set  to this value
-    int y = KiROUND( OverbarPositionY( HalfSize ) * Y_CORRECTION );
-    // add room for line thickness and space between top of text and graphic shape
-    y += linewidth;
+    // Search for overbar symbol
+    bool hasOverBar = false;
+
+    for( unsigned ii = 1; ii < m_Text.size(); ii++ )
+    {
+        if( m_Text[ii-1] == '~' && m_Text[ii] != '~' )
+        {
+            hasOverBar = true;
+            break;
+        }
+    }
+
+    #define Y_CORRECTION 1.40
+    // Note: this factor is due to the fact the Y size of a few letters like [
+    // are bigger than the y size value, and we need a margin for the graphic symbol.
+    int y = KiROUND( halfSize * Y_CORRECTION );
+
+    // Note: this factor is due to the fact we need a margin for the graphic symbol.
+    #define Y_OVERBAR_CORRECTION 1.2
+    if( hasOverBar )
+        y = KiROUND( OverbarPositionY( halfSize, linewidth ) * Y_OVERBAR_CORRECTION );
+
+    // Gives room for line thickess and margin
+    y += linewidth          // for line thickess
+         + linewidth/2;     // for margin
 
     // Starting point(anchor)
     aPoints.push_back( wxPoint( 0, 0 ) );
@@ -1322,19 +1314,19 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     switch( m_shape )
     {
     case NET_INPUT:
-        x_offset = -HalfSize;
-        aPoints[0].x += HalfSize;
+        x_offset = -halfSize;
+        aPoints[0].x += halfSize;
         break;
 
     case NET_OUTPUT:
-        aPoints[3].x -= HalfSize;
+        aPoints[3].x -= halfSize;
         break;
 
     case NET_BIDI:
     case NET_TRISTATE:
-        x_offset = -HalfSize;
-        aPoints[0].x += HalfSize;
-        aPoints[3].x -= HalfSize;
+        x_offset = -halfSize;
+        aPoints[0].x += halfSize;
+        aPoints[3].x -= halfSize;
         break;
 
     case NET_UNSPECIFIED:
@@ -1609,7 +1601,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
-#if 0
+#if DRAW_BBOX
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
         GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
@@ -1621,7 +1613,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
     int* Template = TemplateShape[m_shape][m_schematicOrientation];
-    int  HalfSize = m_Size.x / 2;
+    int  halfSize = m_Size.x / 2;
 
     int  imax = *Template; Template++;
 
@@ -1630,10 +1622,10 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
     for( int ii = 0; ii < imax; ii++ )
     {
         wxPoint corner;
-        corner.x = ( HalfSize * (*Template) ) + Pos.x;
+        corner.x = ( halfSize * (*Template) ) + Pos.x;
         Template++;
 
-        corner.y = ( HalfSize * (*Template) ) + Pos.y;
+        corner.y = ( halfSize * (*Template) ) + Pos.y;
         Template++;
 
         aPoints.push_back( corner );

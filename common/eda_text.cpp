@@ -90,7 +90,7 @@ EDA_TEXT::~EDA_TEXT()
 
 int EDA_TEXT::LenSize( const wxString& aLine ) const
 {
-    return GraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold );
+    return GraphicTextWidth( aLine, m_Size, m_Italic, m_Bold );
 }
 
 
@@ -128,6 +128,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     wxString       text = GetShownText();
     int            thickness = ( aThickness < 0 ) ? m_Thickness : aThickness;
     int            linecount = 1;
+    bool           hasOverBar = false;     // true if the first line of text as an overbar
 
     if( m_MultilineAllowed )
     {
@@ -144,9 +145,20 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
         }
     }
 
+    // Search for overbar symbol. Only text is scanned,
+    // because only this line can change the bounding box
+    for( unsigned ii = 1; ii < text.size(); ii++ )
+    {
+        if( text[ii-1] == '~' && text[ii] != '~' )
+        {
+            hasOverBar = true;
+            break;
+        }
+    }
+
     // calculate the H and V size
     int    dx = LenSize( text );
-    int    dy = GetInterline( aThickness );
+    int    dy = GetInterline( thickness );
 
     // Creates bounding box (rectangle) for an horizontal text
     wxSize textsize = wxSize( dx, dy );
@@ -161,7 +173,16 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     // The interval below the last line is not usefull, and we can use its half value
     // as vertical margin above the text
     // the full interval is roughly m_Size.y * 0.4 - aThickness/2
-    rect.Move( wxPoint( 0, aThickness/4 - KiROUND( m_Size.y * 0.2 ) ) );
+    rect.Move( wxPoint( 0, thickness/4 - KiROUND( m_Size.y * 0.2 ) ) );
+
+    if( hasOverBar )
+    {
+        // A overbar adds an extra size to the text
+        double curr_height = m_Size.y * 1.15;      // Height from the base line text of chars like [ or {
+        int extra_height = KiROUND( OverbarPositionY( m_Size.y, thickness ) - curr_height );
+        textsize.y += extra_height;
+        rect.Move( wxPoint( 0, -extra_height ) );
+    }
 
     // for multiline texts and aLine < 0, merge all rectangles
     // ( if aLine < 0, we want the full text bounding box )

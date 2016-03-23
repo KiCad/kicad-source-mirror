@@ -2,9 +2,9 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
  *
  * Stroke font class
  *
@@ -33,7 +33,7 @@
 using namespace KIGFX;
 
 const double STROKE_FONT::INTERLINE_PITCH_RATIO = 1.5;
-const double STROKE_FONT::OVERBAR_HEIGHT = 1.22;
+const double STROKE_FONT::OVERBAR_POSITION_FACTOR = 1.22;
 const double STROKE_FONT::BOLD_FACTOR = 1.3;
 const double STROKE_FONT::STROKE_FONT_SCALE = 1.0 / 21.0;
 const double STROKE_FONT::ITALIC_TILT = 1.0 / 8;
@@ -202,7 +202,7 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     }
 
     m_gal->SetIsStroke( true );
-    m_gal->SetIsFill( false );
+    //m_gal->SetIsFill( false );
 
     if( m_bold )
         m_gal->SetLineWidth( m_gal->GetLineWidth() * BOLD_FACTOR );
@@ -237,10 +237,13 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
     double      xOffset;
     VECTOR2D    glyphSize( m_glyphSize );
-    double      overbar_italic_comp = 0.0;
+    double      overbar_italic_comp = computeOverbarVerticalPosition() * ITALIC_TILT;
+
+    if( m_mirrored )
+        overbar_italic_comp = -overbar_italic_comp;
 
     // Compute the text size
-    VECTOR2D textSize = computeTextSize( aText );
+    VECTOR2D textSize = computeTextLineSize( aText );
 
     m_gal->Save();
 
@@ -305,24 +308,12 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         GLYPH& glyph = m_glyphs[dd];
         BOX2D& bbox  = m_glyphBoundingBoxes[dd];
 
-        if( m_overbar && m_italic )
-        {
-            if( m_mirrored )
-            {
-                overbar_italic_comp = (-m_glyphSize.y * OVERBAR_HEIGHT) / ITALIC_TILT;
-            }
-            else
-            {
-                overbar_italic_comp = (m_glyphSize.y * OVERBAR_HEIGHT) / ITALIC_TILT;
-            }
-        }
-
         if( m_overbar )
         {
             double overbar_start_x = xOffset;
-            double overbar_start_y = -m_glyphSize.y * OVERBAR_HEIGHT;
+            double overbar_start_y = - computeOverbarVerticalPosition();
             double overbar_end_x = xOffset + glyphSize.x * bbox.GetEnd().x;
-            double overbar_end_y = -m_glyphSize.y * OVERBAR_HEIGHT;
+            double overbar_end_y = overbar_start_y;
 
             if( !last_had_overbar )
             {
@@ -355,9 +346,9 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
                     // FIXME should be done other way - referring to the lowest Y value of point
                     // because now italic fonts are translated a bit
                     if( m_mirrored )
-                        pointPos.x += pointPos.y * 0.1;
+                        pointPos.x += pointPos.y * STROKE_FONT::ITALIC_TILT;
                     else
-                        pointPos.x -= pointPos.y * 0.1;
+                        pointPos.x -= pointPos.y * STROKE_FONT::ITALIC_TILT;
                 }
 
                 pointListScaled.push_back( pointPos );
@@ -373,7 +364,15 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 }
 
 
-VECTOR2D STROKE_FONT::computeTextSize( const UTF8& aText ) const
+double STROKE_FONT::computeOverbarVerticalPosition() const
+{
+    // Compute the Y position of the overbar. This is the distance between
+    // the text base line and the overbar axis.
+    return m_glyphSize.y * OVERBAR_POSITION_FACTOR + m_gal->GetLineWidth();
+}
+
+
+VECTOR2D STROKE_FONT::computeTextLineSize( const UTF8& aText ) const
 {
     VECTOR2D result = VECTOR2D( 0.0, m_glyphSize.y );
 
@@ -398,6 +397,10 @@ VECTOR2D STROKE_FONT::computeTextSize( const UTF8& aText ) const
 
         result.x += m_glyphSize.x * m_glyphBoundingBoxes[dd].GetEnd().x;
     }
+
+    // For italic correction, take in account italic tilt
+    if( m_italic )
+        result.x += result.y * STROKE_FONT::ITALIC_TILT;
 
     return result;
 }

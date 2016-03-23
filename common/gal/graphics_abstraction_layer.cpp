@@ -84,6 +84,14 @@ void GAL::SetTextAttributes( const EDA_TEXT* aText )
     strokeFont.SetMirrored( aText->IsMirrored() );
 }
 
+VECTOR2D GAL::GetTextLineSize( const UTF8& aText ) const
+{
+    // Compute the X and Y size of a given text.
+    // Because computeTextLineSize expects a one line text,
+    // aText is expected to be only one line text.
+    return strokeFont.computeTextLineSize( aText );
+}
+
 
 void GAL::ComputeWorldScreenMatrix()
 {

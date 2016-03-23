@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) - base class
  *
@@ -280,6 +280,25 @@ public:
                                     double aRotationAngle )
     {
         strokeFont.Draw( aText, aPosition, aRotationAngle );
+    }
+
+    /**
+     * @brief Compute the X and Y size of a given text. The text is expected to be
+     * a only one line text.
+     *
+     * @param aText is the text string (one line).
+     * @return is the text size.
+     */
+    VECTOR2D GetTextLineSize( const UTF8& aText ) const;
+
+    /**
+     * Compute the vertical position of an overbar, sometimes used in texts.
+     * This is the distance between the text base line and the overbar.
+     * @return the relative position of the overbar axis.
+     */
+    double GetOverbarVerticalPosition() const
+    {
+        return strokeFont.computeOverbarVerticalPosition();
     }
 
     /**

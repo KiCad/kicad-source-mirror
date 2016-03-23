@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2016 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -642,9 +642,12 @@ const EDA_RECT SCH_SHEET::GetBoundingBox() const
 
     // Determine length of texts
     wxString text    = wxT( "Sheet: " ) + m_name;
-    int      textlen  = GraphicTextWidth( text, m_sheetNameSize, false, lineWidth );
+    int      textlen  = GraphicTextWidth( text, wxSize( m_sheetNameSize, m_sheetNameSize ),
+                                          false, false );
+
     text = wxT( "File: " ) + m_fileName;
-    int      textlen2 = GraphicTextWidth( text, m_fileNameSize, false, lineWidth );
+    int      textlen2 = GraphicTextWidth( text, wxSize( m_fileNameSize, m_fileNameSize ),
+                                          false, false );
 
     // Calculate bounding box X size:
     textlen = std::max( textlen, textlen2 );

@@ -2,9 +2,9 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
  *
  * Stroke font class
  *
@@ -50,6 +50,8 @@ typedef std::vector<GLYPH>                 GLYPH_LIST;
  */
 class STROKE_FONT
 {
+    friend GAL;
+
 public:
     /// Constructor
     STROKE_FONT( GAL* aGal );
@@ -142,6 +144,23 @@ public:
         m_gal = aGal;
     }
 
+protected:
+    /**
+     * @brief Compute the X and Y size of a given text. The text is expected to be
+     * a only one line text.
+     *
+     * @param aText is the text string (one line).
+     * @return the text size.
+     */
+    VECTOR2D computeTextLineSize( const UTF8& aText ) const;
+
+    /**
+     * Compute the vertical position of an overbar, sometimes used in texts.
+     * This is the distance between the text base line and the overbar.
+     * @return the relative position of the overbar axis.
+     */
+    double   computeOverbarVerticalPosition() const;
+
 private:
     GAL*                m_gal;                                    ///< Pointer to the GAL
     GLYPH_LIST          m_glyphs;                                 ///< Glyph list
@@ -176,14 +195,6 @@ private:
     void drawSingleLineText( const UTF8& aText );
 
     /**
-     * @brief Compute the size of a given text.
-     *
-     * @param aText is the text string.
-     * @return is the text size.
-     */
-    VECTOR2D computeTextSize( const UTF8& aText ) const;
-
-    /**
      * @brief Returns number of lines for a given text.
      *
      * @param aText is the text to be checked.
@@ -198,18 +209,8 @@ private:
             return std::count( aText.begin(), aText.end() - 1, '\n' ) + 1;
     }
 
-public:
-    // These members are declared public only to be (temporary, I am expecting)
-    // used in legacy canvas, to avoid multiple declarations of the same constants,
-    // having multiple declarations of the same constants is really a thing to avoid.
-    //
-    // They will be private later, when the legacy canvas is removed.
-
-    ///> Factor that determines the pitch between 2 lines.
-    static const double INTERLINE_PITCH_RATIO;
-
-    ///> Factor that determines relative height of overbar.
-    static const double OVERBAR_HEIGHT;
+    ///> Factor that determines relative vertical position of the overbar.
+    static const double OVERBAR_POSITION_FACTOR;
 
     ///> Factor that determines relative line width for bold text.
     static const double BOLD_FACTOR;
@@ -220,6 +221,16 @@ public:
     ///> Tilt factor for italic style (the is is the scaling factor
     ///> on dY relative coordinates to give a tilst shape
     static const double ITALIC_TILT;
+
+public:
+    // These members are declared public only to be (temporary, I am expecting)
+    // used in legacy canvas, to avoid multiple declarations of the same constants,
+    // having multiple declarations of the same constants is really a thing to avoid.
+    //
+    // They will be private later, when the legacy canvas is removed.
+
+    ///> Factor that determines the pitch between 2 lines.
+    static const double INTERLINE_PITCH_RATIO;
 };
 } // namespace KIGFX
 
