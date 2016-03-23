@@ -264,14 +264,6 @@ void BASIC_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint
 
 BASIC_GAL basic_gal;
 
-
-int OverbarPositionY( int aVTextSize, int aThickness )
-{
-    basic_gal.SetGlyphSize( VECTOR2D( aVTextSize, aVTextSize ) );
-    basic_gal.SetLineWidth( aThickness );
-    return KiROUND( basic_gal.GetOverbarVerticalPosition() );
-}
-
 /**
  * Function GetPensizeForBold
  * @return the "best" value for a pen size to draw/plot a bold text

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,7 +151,7 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
 }
 
 
-void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField, wxDC* aDC )
+void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField )
 {
     wxCHECK_RET( aField != NULL && aField->Type() == SCH_FIELD_T && !aField->GetText().IsEmpty(),
                  wxT( "Cannot rotate invalid schematic field." ) );
@@ -162,14 +162,10 @@ void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField, wxDC* aDC )
     if( aField->GetFlags() == 0 )
         SaveCopyInUndoList( component, UR_CHANGED );
 
-    aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-
     if( aField->GetOrientation() == TEXT_ORIENT_HORIZ )
         aField->SetOrientation( TEXT_ORIENT_VERT );
     else
         aField->SetOrientation( TEXT_ORIENT_HORIZ );
-
-    aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     OnModify();
 }

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,22 +25,20 @@
 
 /**
  * @file sch_text.cpp
- * @brief Code for handling schematic sheet labels.
+ * @brief Code for handling schematic texts (texts, labels, hlabels and global labels).
  */
 
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <macros.h>
 #include <trigo.h>
-#include <eeschema_id.h>
 #include <class_drawpanel.h>
 #include <drawtxt.h>
 #include <schframe.h>
 #include <plot_common.h>
-#include <base_units.h>
 #include <msgpanel.h>
+#include <gal/stroke_font.h>
 
-#include <general.h>
 #include <protos.h>
 #include <sch_text.h>
 #include <class_netlist_object.h>
@@ -48,7 +46,7 @@
 
 extern void IncrementLabelMember( wxString& name, int aIncrement );
 
-#define DRAW_BBOX 1     // Only for tests: set to 1 to draw the boudding box of labels
+#define DRAW_BBOX 0     // Only for tests: set to 1 to draw the bounding box of labels
 
 /* Names of sheet label types. */
 const char* SheetLabelType[] =
@@ -1295,7 +1293,8 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     // Note: this factor is due to the fact we need a margin for the graphic symbol.
     #define Y_OVERBAR_CORRECTION 1.2
     if( hasOverBar )
-        y = KiROUND( OverbarPositionY( halfSize, linewidth ) * Y_OVERBAR_CORRECTION );
+        y = KiROUND( KIGFX::STROKE_FONT::GetInterline( halfSize, linewidth )
+                     * Y_OVERBAR_CORRECTION );
 
     // Gives room for line thickess and margin
     y += linewidth          // for line thickess

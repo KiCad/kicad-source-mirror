@@ -47,7 +47,7 @@ static bool                 lastTextBold = false;
 static bool                 lastTextItalic = false;
 
 
-void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC )
+void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem )
 {
     wxCHECK_RET( (aTextItem != NULL) && aTextItem->CanIncrementLabel(),
                  wxT( "Invalid schematic text item." )  );
@@ -58,12 +58,8 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC )
     if( aTextItem->GetFlags() == 0 )
         SaveCopyInUndoList( aTextItem, UR_CHANGED );
 
-    m_canvas->CrossHairOff( aDC );
-    aTextItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     aTextItem->SetOrientation( orient );
     OnModify();
-    aTextItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-    m_canvas->CrossHairOn( aDC );
 }
 
 

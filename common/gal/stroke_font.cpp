@@ -121,9 +121,16 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
 }
 
 
+// Static function:
+double STROKE_FONT::GetInterline( double aGlyphHeight, double aGlyphThickness )
+{
+    return ( aGlyphHeight * INTERLINE_PITCH_RATIO ) + aGlyphThickness;
+}
+
+
 int STROKE_FONT::getInterline() const
 {
-    return KiROUND( m_glyphSize.y * INTERLINE_PITCH_RATIO ) + m_gal->GetLineWidth();
+    return KiROUND( GetInterline( m_glyphSize.y, m_gal->GetLineWidth() ) );
 }
 
 
@@ -364,11 +371,20 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 }
 
 
+double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness )
+{
+    // Static method.
+    // Compute the Y position of the overbar. This is the distance between
+    // the text base line and the overbar axis.
+    return aGlyphHeight * OVERBAR_POSITION_FACTOR + aGlyphThickness;
+}
+
+
 double STROKE_FONT::computeOverbarVerticalPosition() const
 {
     // Compute the Y position of the overbar. This is the distance between
     // the text base line and the overbar axis.
-    return m_glyphSize.y * OVERBAR_POSITION_FACTOR + m_gal->GetLineWidth();
+    return ComputeOverbarVerticalPosition( m_glyphSize.y, m_gal->GetLineWidth() );
 }
 
 

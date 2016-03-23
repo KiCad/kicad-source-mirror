@@ -910,7 +910,7 @@ private:
     // Text, label, glabel
     SCH_TEXT* CreateNewText( wxDC* aDC, int aType );
     void EditSchematicText( SCH_TEXT* TextStruct );
-    void ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC );
+    void ChangeTextOrient( SCH_TEXT* aTextItem );
 
     /**
      * Function OnCovertTextType
@@ -1113,7 +1113,7 @@ private:
      */
     void EditComponentFieldText( SCH_FIELD* aField );
 
-    void RotateField( SCH_FIELD* aField, wxDC* aDC );
+    void RotateField( SCH_FIELD* aField );
 
     /**
      * Function PastListOfItems

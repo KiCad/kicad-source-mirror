@@ -85,6 +85,14 @@ public:
     }
 
     /**
+     * @return the current glyph size.
+     */
+    VECTOR2D GetGlyphSize() const
+    {
+        return m_glyphSize;
+    }
+
+    /**
      * @brief Set a bold property of current font.
      *
      * @param aBold tells if the font should be bold or not.
@@ -144,7 +152,31 @@ public:
         m_gal = aGal;
     }
 
-protected:
+    /**
+     * Compute the vertical position of an overbar, sometimes used in texts.
+     * This is the distance between the text base line and the overbar.
+     * @return the relative position of the overbar axis.
+     */
+    static double ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness );
+
+    /**
+     * @brief Compute the X and Y size of a given text. The text is expected to be
+     * a only one line text.
+     *
+     * @param aText is the text string (one line).
+     * @return the text size.
+     */
+    static double GetInterline( double aGlyphHeight, double aGlyphThickness );
+
+private:
+    GAL*                m_gal;                                    ///< Pointer to the GAL
+    GLYPH_LIST          m_glyphs;                                 ///< Glyph list
+    std::vector<BOX2D>  m_glyphBoundingBoxes;                     ///< Bounding boxes of the glyphs
+    VECTOR2D            m_glyphSize;                              ///< Size of the glyphs
+    EDA_TEXT_HJUSTIFY_T m_horizontalJustify;                      ///< Horizontal justification
+    EDA_TEXT_VJUSTIFY_T m_verticalJustify;                        ///< Vertical justification
+    bool                m_bold, m_italic, m_mirrored, m_overbar;  ///< Properties of text
+
     /**
      * @brief Compute the X and Y size of a given text. The text is expected to be
      * a only one line text.
@@ -160,15 +192,6 @@ protected:
      * @return the relative position of the overbar axis.
      */
     double   computeOverbarVerticalPosition() const;
-
-private:
-    GAL*                m_gal;                                    ///< Pointer to the GAL
-    GLYPH_LIST          m_glyphs;                                 ///< Glyph list
-    std::vector<BOX2D>  m_glyphBoundingBoxes;                     ///< Bounding boxes of the glyphs
-    VECTOR2D            m_glyphSize;                              ///< Size of the glyphs
-    EDA_TEXT_HJUSTIFY_T m_horizontalJustify;                      ///< Horizontal justification
-    EDA_TEXT_VJUSTIFY_T m_verticalJustify;                        ///< Vertical justification
-    bool                m_bold, m_italic, m_mirrored, m_overbar;  ///< Properties of text
 
     /**
      * @brief Returns a single line height using current settings.
@@ -221,13 +244,6 @@ private:
     ///> Tilt factor for italic style (the is is the scaling factor
     ///> on dY relative coordinates to give a tilst shape
     static const double ITALIC_TILT;
-
-public:
-    // These members are declared public only to be (temporary, I am expecting)
-    // used in legacy canvas, to avoid multiple declarations of the same constants,
-    // having multiple declarations of the same constants is really a thing to avoid.
-    //
-    // They will be private later, when the legacy canvas is removed.
 
     ///> Factor that determines the pitch between 2 lines.
     static const double INTERLINE_PITCH_RATIO;

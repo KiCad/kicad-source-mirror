@@ -81,14 +81,6 @@ int GetPenSizeForBold( int aTextSize );
 int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, bool bold );
 
 /**
- * @return the verical position of the overbar of a text
- * (relative to a horizontal text)
- * @param aVTextSize = the text vertical size
- * @param aThickness = the thickness of text
- */
-int OverbarPositionY( int aVTextSize, int aThickness );
-
-/**
  * Function DrawGraphicText
  * Draw a graphic text (like module texts)
  *  @param aClipBox = the clipping rect, or NULL if no clipping

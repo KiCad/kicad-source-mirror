@@ -117,7 +117,7 @@ wxString EDA_TEXT::ShortenedShownText() const
 int EDA_TEXT::GetInterline( int aTextThickness ) const
 {
     int thickness = aTextThickness <= 0 ? m_Thickness : aTextThickness;
-    return KiROUND( m_Size.y * KIGFX::STROKE_FONT::INTERLINE_PITCH_RATIO ) + thickness;
+    return KiROUND( KIGFX::STROKE_FONT::GetInterline( m_Size.y, thickness ) );
 }
 
 EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
@@ -178,8 +178,9 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     if( hasOverBar )
     {
         // A overbar adds an extra size to the text
-        double curr_height = m_Size.y * 1.15;      // Height from the base line text of chars like [ or {
-        int extra_height = KiROUND( OverbarPositionY( m_Size.y, thickness ) - curr_height );
+        double curr_height = m_Size.y * 1.15;   // Height from the base line text of chars like [ or {
+        int extra_height = KiROUND(
+            KIGFX::STROKE_FONT::ComputeOverbarVerticalPosition( m_Size.y, thickness ) - curr_height );
         textsize.y += extra_height;
         rect.Move( wxPoint( 0, -extra_height ) );
     }
