@@ -46,6 +46,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_search_container->SetTree( m_libraryComponentTree );
     m_searchBox->SetFocus();
     m_componentDetails->SetEditable( false );
+    m_componentView->SetLayoutDirection( wxLayout_LeftToRight );
 
     m_libraryComponentTree->ScrollTo( m_libraryComponentTree->GetFocusedItem() );
 

@@ -106,6 +106,8 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_scrollIncrementX = std::min( size.x / 8, 10 );
     m_scrollIncrementY = std::min( size.y / 8, 10 );
 
+    SetLayoutDirection( wxLayout_LeftToRight );
+
     SetBackgroundColour( MakeColour( parent->GetDrawBgColor() ) );
 
 #if KICAD_USE_BUFFERED_DC || KICAD_USE_BUFFERED_PAINTDC

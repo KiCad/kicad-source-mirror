@@ -88,6 +88,9 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
            "\n"
            "The following changes are recommended to update the project." );
     m_lblInfo->SetLabel( info_message );
+
+    m_componentViewOld->SetLayoutDirection( wxLayout_LeftToRight );
+    m_componentViewNew->SetLayoutDirection( wxLayout_LeftToRight );
 }
 
 
