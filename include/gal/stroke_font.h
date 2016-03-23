@@ -50,7 +50,7 @@ typedef std::vector<GLYPH>                 GLYPH_LIST;
  */
 class STROKE_FONT
 {
-    friend GAL;
+    friend class GAL;
 
 public:
     /// Constructor
