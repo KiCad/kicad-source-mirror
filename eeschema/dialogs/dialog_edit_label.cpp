@@ -165,9 +165,6 @@ void DIALOG_LABEL_EDITOR::InitDialog()
 
     default:
         SetTitle( _( "Text Properties" ) );
-        m_textLabel->Disconnect( wxEVT_COMMAND_TEXT_ENTER,
-                                 wxCommandEventHandler ( DIALOG_LABEL_EDITOR::OnEnterKey ),
-                                 NULL, this );
         break;
     }
 
