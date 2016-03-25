@@ -269,6 +269,12 @@ public:
     // ----
     // Text
     // ----
+
+    const STROKE_FONT& GetStrokeFont() const
+    {
+        return strokeFont;
+    }
+
     /**
      * @brief Draws a vector type text using preloaded Newstroke font.
      *

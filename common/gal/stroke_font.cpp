@@ -97,11 +97,20 @@ bool STROKE_FONT::LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNe
             }
             else
             {
-                // Every coordinate description of the Hershey format has an offset,
+                // In stroke font, coordinates values are coded as <value> + 'R',
+                // <value> is an ASCII char.
+                // therefore every coordinate description of the Hershey format has an offset,
                 // it has to be subtracted
+                // Note:
+                //  * the stroke coordinates are stored in reduced form (-1.0 to +1.0),
+                //    and the actual size is stroke coordinate * glyph size
+                //  * a few shapes have a height slightly bigger than 1.0 ( like '{' '[' )
                 point.x = (double) ( coordinate[0] - 'R' ) * STROKE_FONT_SCALE - glyphStartX;
-				// -10 is here to keep GAL rendering consistent with the legacy gfx stuff
-                point.y = (double) ( coordinate[1] - 'R' - 10) * STROKE_FONT_SCALE;
+                #define FONT_OFFSET -10
+				// FONT_OFFSET is here for historical reasons, due to the way the stroke font
+                // was built. It allows shapes coordinates like W M ... to be >= 0
+                // Only shapes like j y have coordinates < 0
+                point.y = (double) ( coordinate[1] - 'R' + FONT_OFFSET ) * STROKE_FONT_SCALE;
                 pointList.push_back( point );
             }
 
@@ -371,7 +380,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 }
 
 
-double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness )
+double STROKE_FONT::ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness ) const
 {
     // Static method.
     // Compute the Y position of the overbar. This is the distance between
@@ -390,7 +399,17 @@ double STROKE_FONT::computeOverbarVerticalPosition() const
 
 VECTOR2D STROKE_FONT::computeTextLineSize( const UTF8& aText ) const
 {
+    return ComputeStringBoundaryLimits( aText, m_glyphSize, m_gal->GetLineWidth() );
+}
+
+
+VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, VECTOR2D aGlyphSize,
+                                        double aGlyphThickness,
+                                        double* aTopLimit, double* aBottomLimit ) const
+{
     VECTOR2D result = VECTOR2D( 0.0, m_glyphSize.y );
+    double ymax = 0.0;
+    double ymin = 0.0;
 
     for( UTF8::uni_iter it = aText.ubegin(), end = aText.uend(); it < end; ++it )
     {
@@ -411,12 +430,36 @@ VECTOR2D STROKE_FONT::computeTextLineSize( const UTF8& aText ) const
         if( dd >= (int) m_glyphBoundingBoxes.size() || dd < 0 )
             dd = '?' - ' ';
 
-        result.x += m_glyphSize.x * m_glyphBoundingBoxes[dd].GetEnd().x;
+        const BOX2D& box = m_glyphBoundingBoxes[dd];
+
+        result.x += box.GetEnd().x;
+
+        // Calculate Y min and Y max
+        if( aTopLimit )
+        {
+            ymax = std::max( ymax, box.GetY() );
+            ymax = std::max( ymax, box.GetEnd().y );
+        }
+
+        if( aBottomLimit )
+        {
+            ymin = std::min( ymin, box.GetY() );
+            ymin = std::min( ymin, box.GetEnd().y );
+        }
     }
+
+    result.x *= aGlyphSize.x;
+    result.x += aGlyphThickness;
 
     // For italic correction, take in account italic tilt
     if( m_italic )
         result.x += result.y * STROKE_FONT::ITALIC_TILT;
+
+    if( aTopLimit )
+        *aTopLimit = ymax * aGlyphSize.y;
+
+    if( aBottomLimit )
+        *aBottomLimit = ymin * aGlyphSize.y;
 
     return result;
 }

@@ -153,11 +153,31 @@ public:
     }
 
     /**
+     * Compute the boundary limits of aText (the bbox of all shapes).
+     * The overbar is not taken in account, by ~ are skipped.
+     * @return a VECTOR2D giving the h size of line, and the V glyph size
+     * and ( if aTopLimit or aBottomLimit not NULL ) the top and bottom
+     * limits of the text.
+     */
+    VECTOR2D ComputeStringBoundaryLimits( const UTF8& aText, VECTOR2D aGlyphSize,
+                                          double aGlyphThickness,
+                                          double* aTopLimit = NULL, double* aBottomLimit = NULL ) const;
+
+    /**
+     * @brief Compute the X and Y size of a given text. The text is expected to be
+     * a only one line text.
+     *
+     * @param aText is the text string (one line).
+     * @return the text size.
+     */
+    VECTOR2D ComputeTextLineSize( const UTF8& aText ) const;
+
+    /**
      * Compute the vertical position of an overbar, sometimes used in texts.
      * This is the distance between the text base line and the overbar.
      * @return the relative position of the overbar axis.
      */
-    static double ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness );
+    double ComputeOverbarVerticalPosition( double aGlyphHeight, double aGlyphThickness ) const;
 
     /**
      * @brief Compute the X and Y size of a given text. The text is expected to be
@@ -168,14 +188,19 @@ public:
      */
     static double GetInterline( double aGlyphHeight, double aGlyphThickness );
 
+
+
 private:
-    GAL*                m_gal;                                    ///< Pointer to the GAL
-    GLYPH_LIST          m_glyphs;                                 ///< Glyph list
-    std::vector<BOX2D>  m_glyphBoundingBoxes;                     ///< Bounding boxes of the glyphs
-    VECTOR2D            m_glyphSize;                              ///< Size of the glyphs
-    EDA_TEXT_HJUSTIFY_T m_horizontalJustify;                      ///< Horizontal justification
-    EDA_TEXT_VJUSTIFY_T m_verticalJustify;                        ///< Vertical justification
-    bool                m_bold, m_italic, m_mirrored, m_overbar;  ///< Properties of text
+    GAL*                m_gal;                  ///< Pointer to the GAL
+    GLYPH_LIST          m_glyphs;               ///< Glyph list
+    std::vector<BOX2D>  m_glyphBoundingBoxes;   ///< Bounding boxes of the glyphs
+    VECTOR2D            m_glyphSize;            ///< Size of the glyphs
+    EDA_TEXT_HJUSTIFY_T m_horizontalJustify;    ///< Horizontal justification
+    EDA_TEXT_VJUSTIFY_T m_verticalJustify;      ///< Vertical justification
+    bool                m_bold;
+    bool                m_italic;
+    bool                m_mirrored;
+    bool                m_overbar;              ///< Properties of text
 
     /**
      * @brief Compute the X and Y size of a given text. The text is expected to be

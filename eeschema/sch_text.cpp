@@ -46,7 +46,8 @@
 
 extern void IncrementLabelMember( wxString& name, int aIncrement );
 
-#define DRAW_BBOX 0     // Only for tests: set to 1 to draw the bounding box of labels
+// Only for tests: set DRAW_BBOX to 1 to draw the bounding box of labels
+#define DRAW_BBOX 0
 
 /* Names of sheet label types. */
 const char* SheetLabelType[] =
