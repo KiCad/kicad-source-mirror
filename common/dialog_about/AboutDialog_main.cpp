@@ -137,8 +137,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     description << wxT( "</p>" );
 
     /* websites */
-    description << wxT( "<p>" );
-    description << wxT( "<b><u>" )
+    description << wxT( "<p><b><u>" )
                 << _( "KiCad on the web" )
                 << wxT( "</u></b>" ); // bold & underlined font for caption
 
@@ -149,22 +148,29 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                   _( "The official KiCad site" ) )
                 << wxT( "</li>" );
     description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "http://iut-tice.ujf-grenoble.fr/kicad" ),
-                                  _( "The original site of the KiCad project founder" ) )
-                << wxT( "</li>" );
-    description << wxT( "<li>" )
                 << HtmlHyperlink( wxT( "https://launchpad.net/kicad" ),
                                   _( "Developer's website on Launchpad" ) )
                 << wxT("</li>" );
     description << wxT( "<li>" )
+                << HtmlHyperlink( wxT( "https://github.com/KiCad/" ),
+                                  _( "Our official Repository for component and footprint libraries" ) )
+                << wxT( "</li>" );
+
+    description << wxT( "<p><u>" )
+                << _( "Non official repositories" )
+                << wxT( "</u>" );
+    description << wxT( "<li>" )
                 << HtmlHyperlink( wxT( "http://www.kicadlib.org" ),
-                                  _( "Repository with additional component libraries" ) )
+                                  _( "Additional component libraries repository (kicadlib)" ) )
+                << wxT( "</li>" );
+    description << wxT( "<li>" )
+                << HtmlHyperlink( wxT( "http://smisioto.no-ip.org/elettronica/kicad/kicad-en.htm" ),
+                                  _( "Additional component libraries repository (smisioto)" ) )
                 << wxT( "</li>" );
     description << wxT( "</ul>" );
     description << wxT( "</p>" );
 
-    description << wxT( "<p>" );
-    description << wxT( "<b><u>" )
+    description << wxT( "<p><b><u>" )
                 << _( "Contribute to KiCad" )
                 << wxT( "</u></b>" ); // bold & underlined font caption
 
