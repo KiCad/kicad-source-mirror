@@ -170,12 +170,19 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
     test();
 #endif
 
+    // This dynamic memory freeing optimize memory usage, but in fact can create
+    // out of memory issues because freeing and reallocation large chuncks of memory
+    // can create memory fragmentation and no room to reallocate large chuncks
+    // after many free/reallocate cycles during a session using the same complex board
+    // So it can be disable.
+#if 1
     // Dynamic memory freeing, there is no point in holding
     // a large amount of memory when there is no use for it
     if( m_freeSpace > ( 0.75 * m_currentSize ) && m_currentSize > m_initialSize )
     {
         resizeContainer( 0.5 * m_currentSize );
     }
+#endif
 }
 
 
