@@ -168,12 +168,12 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
 
     // Creates bounding box (rectangle) for an horizontal
     // and left and top justified text. the bounding box will be moved later
-    // according to the catual text options
+    // according to the actual text options
     wxSize textsize = wxSize( dx, dy );
     wxPoint pos = m_Pos;
 
     if( aInvertY )
-        pos.x = -pos.y;
+        pos.y = -pos.y;
 
     rect.SetOrigin( pos );
 
