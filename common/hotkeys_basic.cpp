@@ -55,7 +55,8 @@ wxString g_CommonSectionTag( wxT( "[common]" ) );
  * file.
  */
 
-EDA_HOTKEY::EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent )
+EDA_HOTKEY::EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent ) :
+    m_DefaultKeyCode( keycode )         // initialize DefaultKeyCode
 {
     m_KeyCode = keycode;            // Key code (ascii value for ascii keys
 
@@ -69,7 +70,8 @@ EDA_HOTKEY::EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode, int i
 }
 
 
-EDA_HOTKEY::EDA_HOTKEY( const EDA_HOTKEY* base )
+EDA_HOTKEY::EDA_HOTKEY( const EDA_HOTKEY* base ) :
+    m_DefaultKeyCode( base->m_DefaultKeyCode ) // initialize DefaultKeyCode
 {
     m_KeyCode     = base->m_KeyCode;
     m_InfoMsg     = base->m_InfoMsg;

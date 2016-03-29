@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 28 2015)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -40,12 +40,14 @@ class HOTKEYS_EDITOR_DIALOG_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText1;
 		wxPanel* m_panelHotkeys;
 		wxButton* m_resetButton;
+		wxButton* m_defaultButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void ResetClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void DefaultsClicked( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

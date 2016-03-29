@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 28 2015)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,6 +28,9 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 	m_resetButton = new wxButton( this, wxID_RESET, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
 	b_buttonsSizer->Add( m_resetButton, 0, wxALL|wxEXPAND, 5 );
 	
+	m_defaultButton = new wxButton( this, wxID_ANY, _("Defaults"), wxDefaultPosition, wxDefaultSize, 0 );
+	b_buttonsSizer->Add( m_defaultButton, 0, wxALL|wxEXPAND, 5 );
+	
 	
 	b_buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
@@ -49,11 +52,13 @@ HOTKEYS_EDITOR_DIALOG_BASE::HOTKEYS_EDITOR_DIALOG_BASE( wxWindow* parent, wxWind
 	
 	// Connect Events
 	m_resetButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( HOTKEYS_EDITOR_DIALOG_BASE::ResetClicked ), NULL, this );
+	m_defaultButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( HOTKEYS_EDITOR_DIALOG_BASE::DefaultsClicked ), NULL, this );
 }
 
 HOTKEYS_EDITOR_DIALOG_BASE::~HOTKEYS_EDITOR_DIALOG_BASE()
 {
 	// Disconnect Events
 	m_resetButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( HOTKEYS_EDITOR_DIALOG_BASE::ResetClicked ), NULL, this );
+	m_defaultButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( HOTKEYS_EDITOR_DIALOG_BASE::DefaultsClicked ), NULL, this );
 	
 }

@@ -575,6 +575,26 @@ void WIDGET_HOTKEY_LIST::InstallOnPanel( wxPanel* aPanel )
 }
 
 
+bool WIDGET_HOTKEY_LIST::TransferDefaultsToControl()
+{
+    Freeze();
+
+    for( wxTreeListItem item = GetFirstItem(); item.IsOk(); item = GetNextItem( item ) )
+    {
+        WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( item );
+        if( hkdata == NULL)
+            continue;
+
+        hkdata->GetHotkey().ResetKeyCodeToDefault();
+    }
+
+    UpdateFromClientData();
+    Thaw();
+
+    return true;
+}
+
+
 bool WIDGET_HOTKEY_LIST::TransferDataToControl()
 {
     Freeze();

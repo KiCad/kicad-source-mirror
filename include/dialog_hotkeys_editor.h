@@ -66,6 +66,14 @@ private:
      * @param aEvent is the button press event, unused
      */
     void ResetClicked( wxCommandEvent& aEvent );
+
+    /**
+     * Function DefaultsClicked
+     * Set the hotkeys to the default values (values after installation)
+     *
+     * @param aEvent is the button press event, unused
+     */
+    void DefaultsClicked( wxCommandEvent& aEvent );
 };
 
 /**

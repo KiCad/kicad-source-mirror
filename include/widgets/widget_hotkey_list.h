@@ -178,6 +178,13 @@ public:
     void InstallOnPanel( wxPanel* aPanel );
 
     /**
+     * Method TransferDefaultsToControl
+     * Set hotkeys in the control to default values.
+     * @return true iff the operation was successful
+     */
+    bool TransferDefaultsToControl();
+
+    /**
      * Method TransferDataToControl
      * Load the hotkey data into the control. It is safe to call this multiple times,
      * for example to reset the control.
