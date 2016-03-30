@@ -66,34 +66,45 @@ static DLIST< SCH_ITEM > s_wires;       // when creating a new set of wires,
  */
 static void RemoveBacktracks( DLIST<SCH_ITEM>& aWires )
 {
-    SCH_LINE* last_line = NULL;
-
     EDA_ITEM* first = aWires.GetFirst();
+    std::vector<SCH_LINE*> last_lines;
+
     for( EDA_ITEM* p = first; p; )
     {
-        SCH_LINE *line = dynamic_cast<SCH_LINE*>( p );
-        if( !line )
-        {
-            wxFAIL_MSG( "RemoveBacktracks() requires SCH_LINE items" );
-            break;
-        }
+        SCH_LINE *line = static_cast<SCH_LINE*>( p );
         p = line->Next();
 
-        if( last_line )
+        if( !last_lines.empty() )
         {
-            wxASSERT_MSG( last_line->GetEndPoint() == line->GetStartPoint(),
-                    "RemoveBacktracks() requires contiguous lines" );
-            if( IsPointOnSegment( last_line->GetStartPoint(), line->GetStartPoint(),
-                        line->GetEndPoint() ) )
+            SCH_LINE* last_line = last_lines[last_lines.size() - 1];
+            bool contiguous = ( last_line->GetEndPoint() == line->GetStartPoint() );
+            bool backtracks = IsPointOnSegment( last_line->GetStartPoint(),
+                    last_line->GetEndPoint(), line->GetEndPoint() );
+            bool total_backtrack = ( last_line->GetStartPoint() == line->GetEndPoint() );
+
+            if( contiguous && backtracks )
             {
-                last_line->SetEndPoint( line->GetEndPoint() );
-                delete s_wires.Remove( line );
+                if( total_backtrack )
+                {
+                    delete s_wires.Remove( last_line );
+                    delete s_wires.Remove( line );
+                    last_lines.pop_back();
+                }
+                else
+                {
+                    last_line->SetEndPoint( line->GetEndPoint() );
+                    delete s_wires.Remove( line );
+                }
             }
             else
-                last_line = line;
+            {
+                last_lines.push_back( line );
+            }
         }
         else
-            last_line = line;
+        {
+            last_lines.push_back( line );
+        }
     }
 }
 
