@@ -292,7 +292,7 @@ public:
             {
                 *aMatchersTriggered += 1;
 
-                if ( local_find < result )
+                if ( local_find < result || result == EDA_PATTERN_NOT_FOUND )
                 {
                     result = local_find;
                 }
