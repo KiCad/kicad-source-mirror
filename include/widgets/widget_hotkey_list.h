@@ -98,6 +98,12 @@ protected:
     void ResetItem( wxTreeListItem aItem );
 
     /**
+     * Method ResetItemToDefault
+     * Reset the item to the default value.
+     */
+    void ResetItemToDefault( wxTreeListItem aItem );
+
+    /**
      * Method OnActivated
      * Handle activation of a row.
      */
