@@ -796,7 +796,15 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
         aItem->SetStoredPos( wxPoint( 0,0 ) );
     }
     else
-        aItem->SetStoredPos( GetCrossHairPosition() - aItem->GetPosition() );
+    {
+        // Round the point under the cursor to a multiple of the grid
+        wxPoint cursorpos = GetCrossHairPosition() - aItem->GetPosition();
+        wxPoint gridsize = GetScreen()->GetGridSize();
+        cursorpos.x = ( cursorpos.x / gridsize.x ) * gridsize.x;
+        cursorpos.y = ( cursorpos.y / gridsize.y ) * gridsize.y;
+
+        aItem->SetStoredPos( cursorpos );
+    }
 
     OnModify();
 
