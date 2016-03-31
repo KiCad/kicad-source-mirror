@@ -104,7 +104,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
         if( aReporter )
         {
             wxArrayString output, errors;
-            int diag = wxExecute( commandLine, output, errors, wxEXEC_SYNC );
+            int diag = wxExecute( commandLine, output, errors, m_exec_flags );
 
             wxString msg;
 
@@ -142,7 +142,9 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
             }
         }
         else
-            ProcessExecute( commandLine, wxEXEC_SYNC );
+            ProcessExecute( commandLine, m_exec_flags );
+
+        DefaultExecFlags(); // Reset flags to default after executing
     }
 
     return res;

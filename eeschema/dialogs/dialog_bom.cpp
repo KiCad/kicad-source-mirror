@@ -34,6 +34,7 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <schframe.h>
+#include <wx/dynarray.h>
 
 #include <netlist.h>
 #include <netlist_exporter_generic.h>
@@ -56,16 +57,34 @@ const char * s_bomHelpInfo =
 using namespace T_BOMCFG_T;
 
 /**
+ * Structure BOM_PLUGIN
+ * holds data of the BOM plugin.
+ */
+struct BOM_PLUGIN
+{
+    wxString Name;
+    wxString Command;
+    wxArrayString Options;
+};
+
+/**
+ * Define wxArray of BOM_PLUGIN.
+ */
+WX_DECLARE_OBJARRAY( BOM_PLUGIN, BOM_PLUGIN_ARRAY );
+#include <wx/arrimpl.cpp>
+WX_DEFINE_OBJARRAY( BOM_PLUGIN_ARRAY );
+
+/**
  * Class BOM_CFG_READER_PARSER
  * holds data and functions pertinent to parsing a S-expression file
  * for a WORKSHEET_LAYOUT.
  */
 class BOM_CFG_READER_PARSER : public DIALOG_BOM_CFG_LEXER
 {
-    wxArrayString* m_pluginsList;
+    BOM_PLUGIN_ARRAY* m_pluginsList;
 
 public:
-    BOM_CFG_READER_PARSER( wxArrayString* aPlugins,
+    BOM_CFG_READER_PARSER( BOM_PLUGIN_ARRAY* aPlugins,
                            const char* aData, const wxString& aSource );
     void Parse() throw( PARSE_ERROR, IO_ERROR );
 
@@ -75,7 +94,7 @@ private:
 
 // PCB_PLOT_PARAMS_PARSER
 
-BOM_CFG_READER_PARSER::BOM_CFG_READER_PARSER(  wxArrayString* aPlugins,
+BOM_CFG_READER_PARSER::BOM_CFG_READER_PARSER(  BOM_PLUGIN_ARRAY* aPlugins,
                                               const char* aLine,
                                               const wxString& aSource ) :
     DIALOG_BOM_CFG_LEXER( aLine, aSource )
@@ -114,10 +133,10 @@ void BOM_CFG_READER_PARSER::Parse() throw( PARSE_ERROR, IO_ERROR )
 
 void BOM_CFG_READER_PARSER::parsePlugin() throw( IO_ERROR, PARSE_ERROR )
 {
-    wxString title, command;
+    BOM_PLUGIN plugin;
 
     NeedSYMBOLorNUMBER();
-    title = FromUTF8();
+    plugin.Name = FromUTF8();
 
     T token;
     while( ( token = NextTok() ) != T_RIGHT )
@@ -132,12 +151,14 @@ void BOM_CFG_READER_PARSER::parsePlugin() throw( IO_ERROR, PARSE_ERROR )
 
         case T_cmd:
             NeedSYMBOLorNUMBER();
-            command = FromUTF8();
+            plugin.Command = FromUTF8();
             NeedRIGHT();
             break;
 
         case T_opts:
-            while( ( token = NextTok() ) != T_RIGHT && token != T_EOF );
+            NeedSYMBOLorNUMBER();
+            plugin.Options.Add( FromUTF8() );
+            NeedRIGHT();
             break;
 
         default:
@@ -146,23 +167,16 @@ void BOM_CFG_READER_PARSER::parsePlugin() throw( IO_ERROR, PARSE_ERROR )
         }
     }
 
-    if( ! title.IsEmpty() )
-    {
-        m_pluginsList->Add( title );
-        m_pluginsList->Add( command );
-    }
+    if( ! plugin.Name.IsEmpty() )
+        m_pluginsList->Add( plugin );
 }
 
-// The main dialog frame tu run scripts to build bom
+// The main dialog frame to run scripts to build bom
 class DIALOG_BOM : public DIALOG_BOM_BASE
 {
 private:
     SCH_EDIT_FRAME*   m_parent;
-    // The list of scripts (or plugins):
-    // a script descr uses 2 lines:
-    // the first is the title
-    // the second is the command line
-    wxArrayString     m_plugins;
+    BOM_PLUGIN_ARRAY  m_plugins;
     wxConfigBase*     m_config;         // to store the "plugins"
 
 public:
@@ -180,6 +194,7 @@ private:
     void OnEditPlugin( wxCommandEvent& event );
     void OnCommandLineEdited( wxCommandEvent& event );
     void OnNameEdited( wxCommandEvent& event );
+    void OnShowConsoleChanged( wxCommandEvent& event );
 
     void pluginInit();
     void installPluginsList();
@@ -218,6 +233,10 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     m_config = Kiface().KifaceSettings();
     installPluginsList();
 
+#ifdef __WINDOWS__
+    m_checkBoxShowConsole->Show( true );
+#endif
+
     GetSizer()->Fit( this );
     Centre();
 }
@@ -228,18 +247,27 @@ DIALOG_BOM::~DIALOG_BOM()
     // the config stores only one string.
     // plugins are saved inside a S expr:
     // ( plugins
-    //    ( plugin "plugin name" (cmd "command line") )
+    //    ( plugin "plugin name 1" (cmd "command line 1") )
+    //    ( plugin "plugin name 2" (cmd "command line 2") (opts "option1") (opts "option2") )
     //     ....
     // )
 
     STRING_FORMATTER writer;
     writer.Print( 0, "(plugins" );
 
-    for( unsigned ii = 0; ii < m_plugins.GetCount(); ii += 2 )
+    for( unsigned ii = 0; ii < m_plugins.GetCount(); ii++ )
     {
-        writer.Print( 1, "(plugin %s (cmd %s))",
-                      writer.Quotew( m_plugins[ii] ).c_str(),
-                      writer.Quotew( m_plugins[ii+1] ).c_str() );
+        writer.Print( 1, "(plugin %s (cmd %s)",
+                      writer.Quotew( m_plugins.Item( ii ).Name ).c_str(),
+                      writer.Quotew( m_plugins.Item( ii ).Command ).c_str() );
+
+        for( unsigned jj = 0; jj < m_plugins.Item( ii ).Options.GetCount(); jj++ )
+        {
+            writer.Print( 1, "(opts %s)",
+                          writer.Quotew( m_plugins.Item( ii ).Options.Item( jj ) ).c_str() );
+        }
+
+        writer.Print( 0, ")" );
     }
 
     writer.Print( 0, ")" );
@@ -277,12 +305,12 @@ void DIALOG_BOM::installPluginsList()
     }
 
     // Populate list box
-    for( unsigned ii = 0; ii < m_plugins.GetCount(); ii+=2 )
+    for( unsigned ii = 0; ii < m_plugins.GetCount(); ii++ )
     {
-        m_lbPlugins->Append( m_plugins[ii] );
+        m_lbPlugins->Append( m_plugins.Item( ii ).Name );
 
-        if( active_plugin_name == m_plugins[ii] )
-            m_lbPlugins->SetSelection( ii/2 );
+        if( active_plugin_name == m_plugins.Item( ii ).Name )
+            m_lbPlugins->SetSelection( ii );
     }
 
     pluginInit();
@@ -305,8 +333,15 @@ void DIALOG_BOM::pluginInit()
         return;
     }
 
-    m_textCtrlName->SetValue( m_plugins[2 * ii] );
-    m_textCtrlCommand->SetValue( m_plugins[(2 * ii)+1] );
+    m_textCtrlName->SetValue( m_plugins.Item( ii ).Name );
+    m_textCtrlCommand->SetValue( m_plugins.Item( ii ).Command );
+
+#ifdef __WINDOWS__
+    if( m_plugins.Item( ii ).Options.Index( wxT( "show_console" ) ) == wxNOT_FOUND )
+        m_checkBoxShowConsole->SetValue( false );
+    else
+        m_checkBoxShowConsole->SetValue( true );
+#endif
 
     wxString pluginName = getPluginFileName( m_textCtrlCommand->GetValue() );
 
@@ -392,6 +427,12 @@ void DIALOG_BOM::OnRunPlugin( wxCommandEvent& event )
     wxString reportmsg;
     WX_STRING_REPORTER reporter( &reportmsg );
     m_parent->SetNetListerCommand( m_textCtrlCommand->GetValue() );
+
+#ifdef __WINDOWS__
+    if( m_checkBoxShowConsole->IsChecked() )
+        m_parent->SetExecFlags( wxEXEC_SHOW_CONSOLE );
+#endif
+
     m_parent->CreateNetlist( -1, fullfilename, 0, &reporter );
 
     m_Messages->SetValue( reportmsg );
@@ -417,7 +458,7 @@ void DIALOG_BOM::OnRemovePlugin( wxCommandEvent& event )
 
     m_lbPlugins->Delete( ii );
 
-    m_plugins.RemoveAt( 2*ii, 2 ); // Remove title and command line
+    m_plugins.RemoveAt( ii );
 
     // Select the next item, if exists
     if( (int)m_lbPlugins->GetCount() >= ii )
@@ -436,6 +477,7 @@ void DIALOG_BOM::OnRemovePlugin( wxCommandEvent& event )
 void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
 {
     wxString cmdLine = choosePlugin();
+    BOM_PLUGIN newPlugin;
 
     if( cmdLine.IsEmpty() )
         return;
@@ -451,18 +493,19 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
         return;
 
     // Verify if it does not exists
-    for( unsigned ii = 0; ii < m_plugins.GetCount(); ii += 2 )
+    for( unsigned ii = 0; ii < m_plugins.GetCount(); ii++ )
     {
-        if( name == m_plugins[ii] )
+        if( name == m_plugins.Item( ii ).Name )
         {
             wxMessageBox( _("This name already exists. Abort") );
             return;
         }
     }
 
-    // Eppend the new plugin
-    m_plugins.Add( name );
-    m_plugins.Add( wxEmptyString );
+    // Append the new plugin
+    newPlugin.Name = name;
+    newPlugin.Command = wxEmptyString;
+    m_plugins.Add( newPlugin );
     m_lbPlugins->SetSelection( m_lbPlugins->GetCount() - 1 );
     m_lbPlugins->Append( name );
     m_lbPlugins->SetSelection( m_lbPlugins->GetCount() - 1 );
@@ -497,7 +540,7 @@ wxString DIALOG_BOM::choosePlugin()
     // Creates a default command line,
     // suitable to run the external tool xslproc or python
     // The default command line depending on plugin extension, currently
-    // "xsl" or "exe" or "py"
+    // "xsl" or "exe" or "py" or "pyw"
     wxString    cmdLine;
     wxFileName  fn( fullFileName );
     wxString    ext = fn.GetExt();
@@ -508,6 +551,12 @@ wxString DIALOG_BOM::choosePlugin()
         cmdLine.Printf(wxT("\"%s\" < \"%%I\" > \"%%O\""), GetChars( fullFileName ) );
     else if( ext == wxT("py" ) || ext.IsEmpty() )
         cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), GetChars( fullFileName ) );
+    else if( ext == wxT("pyw" ) || ext.IsEmpty() )
+#ifdef __WINDOWS__
+        cmdLine.Printf(wxT("pythonw \"%s\" \"%%I\" \"%%O\""), GetChars( fullFileName ) );
+#else
+        cmdLine.Printf(wxT("python \"%s\" \"%%I\" \"%%O\""), GetChars( fullFileName ) );
+#endif
     else
         cmdLine.Printf(wxT("\"%s\""), GetChars( fullFileName ) );
 
@@ -520,12 +569,16 @@ wxString DIALOG_BOM::getPluginFileName(  const wxString& aCommand )
     wxString pluginName;
 
     // Try to find the plugin name.
-    // This is possible if the name ends by .py or .xsl
+    // This is possible if the name ends by .py or .pyw or .xsl or .exe
     int pos = -1;
 
-    if( (pos = aCommand.Find( wxT(".py") )) != wxNOT_FOUND )
+    if( (pos = aCommand.Find( wxT(".pyw") )) != wxNOT_FOUND )
+        pos += 3;
+    else if( (pos = aCommand.Find( wxT(".py") )) != wxNOT_FOUND )
         pos += 2;
     else if( (pos = aCommand.Find( wxT(".xsl") )) != wxNOT_FOUND )
+        pos += 3;
+    else if( (pos = aCommand.Find( wxT(".exe") )) != wxNOT_FOUND )
         pos += 3;
 
     // the end of plugin name is at position pos.
@@ -604,7 +657,7 @@ void DIALOG_BOM::OnCommandLineEdited( wxCommandEvent& event )
     if( ii < 0 )
         return;
 
-    m_plugins[(2 * ii)+1] = m_textCtrlCommand->GetValue();
+    m_plugins.Item( ii ).Command = m_textCtrlCommand->GetValue();
 }
 
 void DIALOG_BOM::OnNameEdited( wxCommandEvent& event )
@@ -614,6 +667,26 @@ void DIALOG_BOM::OnNameEdited( wxCommandEvent& event )
     if( ii < 0 )
         return;
 
-    m_plugins[2 * ii] = m_textCtrlName->GetValue();
-    m_lbPlugins->SetString( ii, m_plugins[2 * ii] );
+    m_plugins.Item( ii ).Name = m_textCtrlName->GetValue();
+    m_lbPlugins->SetString( ii, m_plugins.Item( ii ).Name );
+}
+
+void DIALOG_BOM::OnShowConsoleChanged( wxCommandEvent& event )
+{
+#ifdef __WINDOWS__
+    int ii = m_lbPlugins->GetSelection();
+
+    if( ii < 0 )
+        return;
+
+    if( m_checkBoxShowConsole->IsChecked() )
+    {
+        if( m_plugins.Item( ii ).Options.Index( wxT( "show_console" ) ) == wxNOT_FOUND )
+            m_plugins.Item( ii ).Options.Add( wxT( "show_console" ) );
+    }
+    else
+    {
+        m_plugins.Item( ii ).Options.Remove( wxT( "show_console" ) );
+    }
+#endif
 }

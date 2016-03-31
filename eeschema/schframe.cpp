@@ -420,6 +420,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     GetScreen()->SetZoom( BestZoom() );
 
     Zoom_Automatique( false );
+
+    // Net list generator
+    DefaultExecFlags();
 }
 
 

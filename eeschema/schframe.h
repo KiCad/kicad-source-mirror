@@ -145,6 +145,8 @@ private:
                                                   ///< simulator (gnucap, spice, ...)
     wxString                m_netListerCommand;   ///< Command line to call a custom net list
                                                   ///< generator.
+    int                     m_exec_flags;         ///< Flags of the wxExecute() function
+                                                  ///< to call a custom net list generator.
 
     bool                    m_forceHVLines;       ///< force H or V directions for wires, bus, line
 
@@ -522,7 +524,7 @@ public:
     bool CreateNetlist( int             aFormat,
                         const wxString& aFullFileName,
                         unsigned        aNetlistOptions,
-                        REPORTER* aReporter = NULL );
+                        REPORTER*       aReporter = NULL );
 
     /**
      * Function  WriteNetListFile
@@ -1352,6 +1354,29 @@ public:
     wxString GetSimulatorCommand() const { return m_simulatorCommand; }
 
     void SetNetListerCommand( const wxString& aCommand ) { m_netListerCommand = aCommand; }
+
+    /**
+     * Function DefaultExecFlags
+     * resets the execution flags to defaults for external netlist and
+     * bom generators.
+     */
+    void DefaultExecFlags() { m_exec_flags = wxEXEC_SYNC; }
+
+    /**
+     * Function SetExecFlags
+     * sets (adds) specified flags for next execution of external
+     * generator of the netlist or bom.
+     * @param aFlags = wxEXEC_* flags, see wxExecute docs.
+     */
+    void SetExecFlags( const int aFlags ) { m_exec_flags |= aFlags; }
+
+    /**
+     * Function ClearExecFlags
+     * clears (removes) specified flags that not needed for next execution
+     * of external generator of the netlist or bom.
+     * @param aFlags = wxEXEC_* flags, see wxExecute docs.
+     */
+    void ClearExecFlags( const int aFlags ) { m_exec_flags &= ~( aFlags ); }
 
     wxString GetNetListerCommand() const { return m_netListerCommand; }
 
