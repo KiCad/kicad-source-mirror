@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-25 20:02+0300\n"
-"PO-Revision-Date: 2016-03-25 20:03+0300\n"
+"POT-Creation-Date: 2016-04-01 18:52+0300\n"
+"PO-Revision-Date: 2016-04-01 19:15+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -922,47 +922,59 @@ msgstr ""
 "KiCad EDA Suite — программный комплекс с открытыми исходными текстами, "
 "предназначенный для разработки электрических схем и печатных плат."
 
-#: common/dialog_about/AboutDialog_main.cpp:142
+#: common/dialog_about/AboutDialog_main.cpp:141
 msgid "KiCad on the web"
 msgstr "KiCad в Интернете"
 
-#: common/dialog_about/AboutDialog_main.cpp:149
+#: common/dialog_about/AboutDialog_main.cpp:148
 msgid "The official KiCad site"
 msgstr "Официальный сайт KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:153
-msgid "The original site of the KiCad project founder"
-msgstr "Оригинальный сайт основателя проекта KiCad"
-
-#: common/dialog_about/AboutDialog_main.cpp:157
+#: common/dialog_about/AboutDialog_main.cpp:152
 msgid "Developer's website on Launchpad"
 msgstr "Веб-сайт разработчиков на Launchpad"
 
-#: common/dialog_about/AboutDialog_main.cpp:161
-msgid "Repository with additional component libraries"
-msgstr "Хранилище с дополнительными библиотеками компонент"
+#: common/dialog_about/AboutDialog_main.cpp:156
+msgid "Our official Repository for component and footprint libraries"
+msgstr "Наш официальный репозиторий для библиотек компонентов и посад.мест"
+
+#: common/dialog_about/AboutDialog_main.cpp:160
+msgid "Non official repositories"
+msgstr "Не официальные репозитории"
+
+#: common/dialog_about/AboutDialog_main.cpp:164
+msgid "Additional component libraries repository (kicadlib)"
+msgstr "Дополнительный репозиторий библиотек компонентов (kicadlib)"
 
 #: common/dialog_about/AboutDialog_main.cpp:168
-msgid "Contribute to KiCad"
-msgstr "Сделать вклад в KiCad"
+msgid "Additional component libraries repository (smisioto)"
+msgstr "Дополнительный репозиторий библиотек компонентов (smisioto)"
 
-#: common/dialog_about/AboutDialog_main.cpp:175
-msgid "Report bugs if you found any"
-msgstr "Сообщить о любых ошибках и дефектах"
+#: common/dialog_about/AboutDialog_main.cpp:174
+msgid "Bug tracker"
+msgstr "Багтрекер"
 
-#: common/dialog_about/AboutDialog_main.cpp:179
-msgid "File an idea for improvement"
-msgstr "Файл с идеями для усовершенствования"
+#: common/dialog_about/AboutDialog_main.cpp:181
+msgid "Report or examine bugs"
+msgstr "Сообщить или изучить ошибки"
 
-#: common/dialog_about/AboutDialog_main.cpp:183
-msgid "KiCad links to user groups, tutorials and much more"
-msgstr "KiCad - группы пользователей, руководства и многое другое"
+#: common/dialog_about/AboutDialog_main.cpp:186
+msgid "KiCad user group and community"
+msgstr "Пользовательская группа и сообщество KiCad"
+
+#: common/dialog_about/AboutDialog_main.cpp:192
+msgid "KiCad user group"
+msgstr "Пользовательская группа KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:197
+msgid "KiCad forum"
+msgstr "Форум KiCad"
+
+#: common/dialog_about/AboutDialog_main.cpp:210
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "Программный комплекс KiCad EDA Suite  распространяется под"
 
-#: common/dialog_about/AboutDialog_main.cpp:199
+#: common/dialog_about/AboutDialog_main.cpp:212
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "GNU General Public License (GPL) version 3 или любая поздняя версия"
 
@@ -1232,7 +1244,7 @@ msgid "Cancel"
 msgstr "Отмена"
 
 #: common/dialogs/dialog_get_component_base.cpp:25
-#: eeschema/dialogs/dialog_bom_base.cpp:44
+#: eeschema/dialogs/dialog_bom_base.cpp:45
 #: eeschema/dialogs/dialog_netlist_base.cpp:115
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
 #: pcbnew/librairi.cpp:617
@@ -1261,13 +1273,17 @@ msgid "Double-click to edit"
 msgstr "Двойной щелчок ЛКМ ля редактирования"
 
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:28
-#: common/widgets/widget_hotkey_list.cpp:376
+#: common/widgets/widget_hotkey_list.cpp:387
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:39
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:53
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:67
 msgid "Reset"
 msgstr "Сброс"
+
+#: common/dialogs/dialog_hotkeys_editor_base.cpp:31
+msgid "Defaults"
+msgstr "По умолчанию"
 
 #: common/dialogs/dialog_image_editor.cpp:130
 msgid "Incorrect scale number"
@@ -1819,57 +1835,57 @@ msgstr "Выбрать все\tCTRL+A"
 msgid "Select all cells"
 msgstr "Выбрать все ячейки"
 
-#: common/hotkeys_basic.cpp:464 common/hotkeys_basic.cpp:493
-#: common/hotkeys_basic.cpp:497
+#: common/hotkeys_basic.cpp:458 common/hotkeys_basic.cpp:487
+#: common/hotkeys_basic.cpp:491
 msgid "Hotkeys List"
 msgstr "Список горячих клавиш"
 
-#: common/hotkeys_basic.cpp:757
+#: common/hotkeys_basic.cpp:751
 msgid "Read Hotkey Configuration File:"
 msgstr "Считать файл конфигурации горячих клавиш"
 
-#: common/hotkeys_basic.cpp:788
+#: common/hotkeys_basic.cpp:782
 msgid "Write Hotkey Configuration File:"
 msgstr "Записать файл конфигурации горячих клавиш:"
 
-#: common/hotkeys_basic.cpp:817
+#: common/hotkeys_basic.cpp:811
 msgid "&List Current Keys"
 msgstr "Список текущих клавиш"
 
-#: common/hotkeys_basic.cpp:818
+#: common/hotkeys_basic.cpp:812
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Отображает текущий список горячих клавиш и соответствующих команд"
 
-#: common/hotkeys_basic.cpp:823
+#: common/hotkeys_basic.cpp:817
 msgid "&Edit Hotkeys"
 msgstr "Редактор горячих клавиш"
 
-#: common/hotkeys_basic.cpp:824
+#: common/hotkeys_basic.cpp:818
 msgid "Call the hotkeys editor"
 msgstr "Вызвать редактор горячих клавиш"
 
-#: common/hotkeys_basic.cpp:831 eeschema/menubar.cpp:409
+#: common/hotkeys_basic.cpp:825 eeschema/menubar.cpp:409
 msgid "E&xport Hotkeys"
 msgstr "Экспорт горячих клавиши"
 
-#: common/hotkeys_basic.cpp:832 eeschema/menubar.cpp:410
+#: common/hotkeys_basic.cpp:826 eeschema/menubar.cpp:410
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr ""
 "Создать файл конфигурации горячих клавиш для экспорта текущих горячих клавиш"
 
-#: common/hotkeys_basic.cpp:837 eeschema/menubar.cpp:415
+#: common/hotkeys_basic.cpp:831 eeschema/menubar.cpp:415
 msgid "&Import Hotkeys"
 msgstr "Импорт горячих клавиш"
 
-#: common/hotkeys_basic.cpp:838 eeschema/menubar.cpp:416
+#: common/hotkeys_basic.cpp:832 eeschema/menubar.cpp:416
 msgid "Load an existing hotkey configuration file"
 msgstr "Загрузить существующий файл конфигурации горячих клавиш"
 
-#: common/hotkeys_basic.cpp:843
+#: common/hotkeys_basic.cpp:837
 msgid "&Hotkeys"
 msgstr "Горячие клавиши"
 
-#: common/hotkeys_basic.cpp:844
+#: common/hotkeys_basic.cpp:838
 msgid "Hotkeys configuration and preferences"
 msgstr "Настройка горячих клавиш и предпочтения"
 
@@ -1890,7 +1906,8 @@ msgstr "Внутренний"
 msgid "Non-copper"
 msgstr "Не медь"
 
-#: common/pgm_base.cpp:108 pcbnew/dialogs/dialog_design_rules_base.cpp:59
+#: common/pgm_base.cpp:108 common/widgets/widget_hotkey_list.cpp:388
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:59
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:116
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:126
@@ -2073,31 +2090,35 @@ msgstr "OUTPUTSTREAM_OUTPUTFORMATTER ошибка записи"
 msgid "Colors"
 msgstr "Цвета"
 
-#: common/widgets/widget_hotkey_list.cpp:109
+#: common/widgets/widget_hotkey_list.cpp:111
 msgid "Press a new hotkey, or press Esc to cancel..."
 msgstr "Нажмите новую горячую клавишу или Esc для отмены..."
 
-#: common/widgets/widget_hotkey_list.cpp:116
+#: common/widgets/widget_hotkey_list.cpp:118
 msgid "Command:"
 msgstr "Команда:"
 
-#: common/widgets/widget_hotkey_list.cpp:124
+#: common/widgets/widget_hotkey_list.cpp:126
 msgid "Current key:"
 msgstr "Текущая клавиша: "
 
-#: common/widgets/widget_hotkey_list.cpp:218
+#: common/widgets/widget_hotkey_list.cpp:220
 msgid "Set Hotkey"
 msgstr "Установка горячих клавиш"
 
-#: common/widgets/widget_hotkey_list.cpp:375
+#: common/widgets/widget_hotkey_list.cpp:386
 msgid "Edit..."
 msgstr "Править..."
 
-#: common/widgets/widget_hotkey_list.cpp:378
+#: common/widgets/widget_hotkey_list.cpp:390
 msgid "Reset all"
 msgstr "Сбросить все"
 
-#: common/widgets/widget_hotkey_list.cpp:514
+#: common/widgets/widget_hotkey_list.cpp:391
+msgid "Reset all to default"
+msgstr "Сбросить все на по умолчанию"
+
+#: common/widgets/widget_hotkey_list.cpp:535
 #, c-format
 msgid ""
 "<%s> is already assigned to \"%s\" in section \"%s\". Are you sure you want "
@@ -2106,15 +2127,15 @@ msgstr ""
 "<%s> уже назначено для \"%s\" в секции \"%s\". Вы уверены в изменении "
 "назначения?"
 
-#: common/widgets/widget_hotkey_list.cpp:519
+#: common/widgets/widget_hotkey_list.cpp:540
 msgid "Confirm change"
 msgstr "Подтвердить изменения"
 
-#: common/widgets/widget_hotkey_list.cpp:543
+#: common/widgets/widget_hotkey_list.cpp:564
 msgid "Command"
 msgstr "Команда"
 
-#: common/widgets/widget_hotkey_list.cpp:544
+#: common/widgets/widget_hotkey_list.cpp:565
 msgid "Hotkey"
 msgstr "Горячая клавиша"
 
@@ -2558,7 +2579,7 @@ msgid "Project: '%s'"
 msgstr "Проект: '%s'"
 
 #: cvpcb/cvpcb_mainframe.cpp:751 eeschema/libedit.cpp:61
-#: eeschema/schframe.cpp:1361 kicad/prjconfig.cpp:332
+#: eeschema/schframe.cpp:1364 kicad/prjconfig.cpp:332
 #: pcbnew/moduleframe.cpp:768 pcbnew/pcbframe.cpp:993
 msgid " [Read Only]"
 msgstr " [Только чтение]"
@@ -3294,40 +3315,40 @@ msgstr "Очистить обозначения"
 msgid "Annotate"
 msgstr "Обозначить компоненты"
 
-#: eeschema/dialogs/dialog_bom.cpp:321
+#: eeschema/dialogs/dialog_bom.cpp:356
 #, c-format
 msgid "Failed to open file '%s'"
 msgstr "Не удалось открыть файл  '%s'"
 
-#: eeschema/dialogs/dialog_bom.cpp:447
+#: eeschema/dialogs/dialog_bom.cpp:489
 msgid "Plugin name in plugin list"
 msgstr "Наименование плагина в списке плагинов"
 
-#: eeschema/dialogs/dialog_bom.cpp:448
+#: eeschema/dialogs/dialog_bom.cpp:490
 msgid "Plugin name"
 msgstr "Имя плагина"
 
-#: eeschema/dialogs/dialog_bom.cpp:458
+#: eeschema/dialogs/dialog_bom.cpp:500
 msgid "This name already exists. Abort"
 msgstr "Такое наименование существует. Прервано"
 
-#: eeschema/dialogs/dialog_bom.cpp:486 eeschema/dialogs/dialog_netlist.cpp:840
+#: eeschema/dialogs/dialog_bom.cpp:529 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
 msgstr "Файлы плагинов:"
 
-#: eeschema/dialogs/dialog_bom.cpp:577
+#: eeschema/dialogs/dialog_bom.cpp:630
 msgid "Plugin file name not found. Cannot edit plugin file"
 msgstr "Файл плагина не существует. Невозможно редактировать файл плагина"
 
-#: eeschema/dialogs/dialog_bom.cpp:587
+#: eeschema/dialogs/dialog_bom.cpp:640
 msgid "No text editor selected in KiCad. Please choose it"
 msgstr "Не выбран редактор. Выберите один"
 
-#: eeschema/dialogs/dialog_bom.cpp:592
+#: eeschema/dialogs/dialog_bom.cpp:645
 msgid "Bom Generation Help"
 msgstr "Помощь в формировании ПЭ"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:37
+#: eeschema/dialogs/dialog_bom_base.cpp:38
 msgid "Plugins"
 msgstr "Плагины"
 
@@ -3358,7 +3379,21 @@ msgstr "Править файл плагина"
 msgid "Command line:"
 msgstr "Команда:"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:102
+#: eeschema/dialogs/dialog_bom_base.cpp:98
+msgid "Show console window"
+msgstr "Показать окно консоли"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:100
+msgid ""
+"By default, command line runs with hidden console window and output is "
+"redirected to \"Plugin info\" field. Set this option to show the window of "
+"the running command."
+msgstr ""
+"По умолчанию командная строка запускается со скрытым окном консоли и вывод "
+"перенаправляется в поле \"Информация плагина\". Установите эту опцию для "
+"показа окна запущенной команды."
+
+#: eeschema/dialogs/dialog_bom_base.cpp:107
 msgid "Plugin Info:"
 msgstr "Информация плагина:"
 
@@ -8222,7 +8257,7 @@ msgstr "Не найдено"
 msgid "The following libraries were not found:"
 msgstr "Следующие библиотеки не найдены:"
 
-#: eeschema/schframe.cpp:621 pcbnew/pcbframe.cpp:588
+#: eeschema/schframe.cpp:624 pcbnew/pcbframe.cpp:588
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -8233,23 +8268,23 @@ msgstr ""
 "'%s'\n"
 "перед закрытием?"
 
-#: eeschema/schframe.cpp:768
+#: eeschema/schframe.cpp:771
 msgid "Draw wires and buses in any direction"
 msgstr "Рисовать проводники и шины в любом направлении"
 
-#: eeschema/schframe.cpp:769
+#: eeschema/schframe.cpp:772
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Рисовать только гориз. и верт. проводники и шины"
 
-#: eeschema/schframe.cpp:778
+#: eeschema/schframe.cpp:781
 msgid "Do not show hidden pins"
 msgstr "Не показывать скрытые выводы"
 
-#: eeschema/schframe.cpp:779 eeschema/tool_sch.cpp:290
+#: eeschema/schframe.cpp:782 eeschema/tool_sch.cpp:290
 msgid "Show hidden pins"
 msgstr "Показать скрытые выводы"
 
-#: eeschema/schframe.cpp:833
+#: eeschema/schframe.cpp:836
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, you need to launch "
@@ -8259,15 +8294,15 @@ msgstr ""
 "автономном режиме. Для создания/обновления печатной платы необходимо "
 "запустить KiCAD оболочку и создать проект печатной платы."
 
-#: eeschema/schframe.cpp:948
+#: eeschema/schframe.cpp:951
 msgid "Schematic"
 msgstr "Схема"
 
-#: eeschema/schframe.cpp:967
+#: eeschema/schframe.cpp:970
 msgid "New Schematic"
 msgstr "Новая схема"
 
-#: eeschema/schframe.cpp:980
+#: eeschema/schframe.cpp:983
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr ""
@@ -8275,15 +8310,15 @@ msgstr ""
 "\n"
 "Используйте Отрыть вместо Создать"
 
-#: eeschema/schframe.cpp:1001
+#: eeschema/schframe.cpp:1004
 msgid "Open Schematic"
 msgstr "Открыть схему"
 
-#: eeschema/schframe.cpp:1131
+#: eeschema/schframe.cpp:1134
 msgid "Error: not a component or no component"
 msgstr "Ошибка: не компонент или нет компонента"
 
-#: eeschema/schframe.cpp:1364
+#: eeschema/schframe.cpp:1367
 msgid " [no file]"
 msgstr " [нет файла]"
 
@@ -22831,7 +22866,7 @@ msgstr "О"
 msgid "Path Configuration"
 msgstr "Настройка пути"
 
-#: common/dialogs/dialog_hotkeys_editor_base.h:53
+#: common/dialogs/dialog_hotkeys_editor_base.h:55
 msgid "Hotkeys Editor"
 msgstr "Редактор горячих клавиш"
 
@@ -22852,7 +22887,7 @@ msgstr "Параметры отображения"
 msgid "Annotate Schematic"
 msgstr "Обозначить схему"
 
-#: eeschema/dialogs/dialog_bom_base.h:93
+#: eeschema/dialogs/dialog_bom_base.h:97
 msgid "Bill of Material"
 msgstr "Перечень элементов"
 
