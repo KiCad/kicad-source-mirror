@@ -6,7 +6,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,80 +29,42 @@
 
 #include <dialog_lib_edit_text_base.h>
 
-
 class SCH_BASE_FRAME;
 class LIB_FIELD;
 class SCH_FIELD;
+class EDA_TEXT;
 
 
 /**
  * Class DIALOG_EDIT_ONE_FIELD
- * is a basic class to edit a field: a schematic or a lib component field
+ * is a base class to edit schematic and component library fields.
  * <p>
  * This class is setup in expectation of its children
  * possibly using Kiway player so ShowQuasiModal is required when calling
  * any subclasses.
+ *</p>
  */
 class DIALOG_EDIT_ONE_FIELD : public DIALOG_LIB_EDIT_TEXT_BASE
 {
-protected:
-    SCH_BASE_FRAME* m_parent;
-    int m_textshape;
-    int m_textsize;
-    int m_textorient;
-    EDA_TEXT_HJUSTIFY_T m_textHjustify;
-    EDA_TEXT_VJUSTIFY_T m_textVjustify;
-    bool m_text_invisible;
-
 public:
-    DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle ):
-        DIALOG_LIB_EDIT_TEXT_BASE( aParent )
-    {
-        m_parent = aParent;
-        SetTitle( aTitle );
+    DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+                           const EDA_TEXT* aTextItem );
 
-        // Avoid not initialized members:
-        m_textshape = 0;
-        m_textsize = 0;
-        m_textorient = 0;
-        m_textHjustify = GR_TEXT_HJUSTIFY_CENTER;
-        m_textVjustify = GR_TEXT_VJUSTIFY_CENTER;
-        m_text_invisible = false;
-    }
+    ~DIALOG_EDIT_ONE_FIELD() {}
 
-    // ~DIALOG_EDIT_ONE_FIELD() {};
+    virtual bool TransferDataToWindow();
 
-    /**
-     * Function TransfertDataToField
-     * Converts fields from dialog window to variables to be used by child classes
-     *
-     * @param aIncludeText Whether the valies transferred should include the actual
-     * item text. If this is false, formatting will be transferred, but text will
-     * not.
-     */
-    virtual void TransfertDataToField( bool aIncludeText = true );
+    virtual bool TransferDataFromWindow();
 
-    void SetTextField( const wxString& aText )
-    {
-         m_TextValue->SetValue( aText );
-    }
+    SCH_BASE_FRAME* GetParent() { return dynamic_cast< SCH_BASE_FRAME* >( wxDialog::GetParent() ); }
 
-    /**
-     * Function SetPowerWarning
-     * Disables the Text field and displays the "Power component values cannot
-     * be modified!" warning, if aWarn is true. Performs the inverse if aWarn
-     * is false (this, however, is the default).
-     *
-     * @param aWarn whether or not to produce the warning
-     */
-    void SetPowerWarning( bool aWarn );
+    const wxString& GetText() const { return m_text; }
 
 protected:
-    /**
-     * Function initDlg_base
-     * Common dialog option initialization for the subclasses to call
-     */
-    void initDlg_base();
+
+    void init();
+
+    void updateText( EDA_TEXT* aText );
 
     /**
      * Function OnTextValueSelectButtonClick
@@ -114,106 +77,87 @@ protected:
      */
     void OnTextValueSelectButtonClick( wxCommandEvent& aEvent );
 
+    /// @todo Update DIALOG_SHIM to handle this transparently so no matter what mode the
+    ///       dialogs is shown, everything is handled without this ugliness.
     void OnOkClick( wxCommandEvent& aEvent )
     {
-        EndQuasiModal( wxID_OK );
+        if( IsQuasiModal() )
+            EndQuasiModal( wxID_OK );
+        else
+            EndDialog( wxID_OK );
     }
 
     void OnCancelClick( wxCommandEvent& event )
     {
-        EndQuasiModal( wxID_CANCEL );
+        if( IsQuasiModal() )
+            EndQuasiModal( wxID_CANCEL );
+        else
+            EndDialog( wxID_CANCEL );
     }
 
     void OnCloseDialog( wxCloseEvent& aEvent )
     {
-        EndQuasiModal( wxID_CANCEL );
+        if( IsQuasiModal() )
+            EndQuasiModal( wxID_CANCEL );
+        else
+            EndDialog( wxID_CANCEL );
     }
+
+    int       m_fieldId;
+    bool      m_isPower;
+    wxString  m_text;
+    int       m_style;
+    int       m_size;
+    bool      m_orientation;
+    int       m_verticalJustification;
+    int       m_horizontalJustification;
+    bool      m_isVisible;
 };
 
 
 /**
  * Class DIALOG_LIB_EDIT_ONE_FIELD
- * is a the class to handle editing a single component field
- * in the library editor.
+ * is a the class to handle editing a single component field in the library editor.
  * <p>
- * Note: Use ShowQuasiModal when calling this class!
+ * @note Use ShowQuasiModal when calling this class!
+ * </p>
  */
 class DIALOG_LIB_EDIT_ONE_FIELD : public DIALOG_EDIT_ONE_FIELD
 {
-private:
-    LIB_FIELD* m_field;
-
 public:
     DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                               LIB_FIELD* aField ):
-        DIALOG_EDIT_ONE_FIELD( aParent, aTitle )
+                               const LIB_FIELD* aField );
+
+    ~DIALOG_LIB_EDIT_ONE_FIELD() {}
+
+    void UpdateField( LIB_FIELD* aField )
     {
-        m_field = aField;
-        initDlg();
-        GetSizer()->SetSizeHints( this );
-        Centre();
+        aField->SetText( m_text );
+        updateText( aField );
     }
-
-    ~DIALOG_LIB_EDIT_ONE_FIELD() {};
-
-    void TransfertDataToField( bool aIncludeText = true );
-
-    /**
-     * Function GetTextField
-     * Returns the dialog's text field value with spaces filtered to underscores
-     */
-    wxString GetTextField();
-
-private:
-    /**
-     * Function initDlg
-     * Initializes dialog data using the LIB_FIELD container of data, this function is
-     * otherwise identical to DIALOG_SCH_EDIT_ONE_FIELD::initDlg()
-     */
-    void initDlg( );
 };
 
 
 /**
  * Class DIALOG_SCH_EDIT_ONE_FIELD
- * is a the class to handle editing a single component field
- * in the schematic editor.
+ * is a the class to handle editing a single component field in the schematic editor.
  * <p>
- * Note: Use ShowQuasiModal when calling this class!
+ * @note Use ShowQuasiModal when calling this class!
+ * </p>
  */
 class DIALOG_SCH_EDIT_ONE_FIELD : public DIALOG_EDIT_ONE_FIELD
 {
-private:
-    SCH_FIELD* m_field;
-
 public:
-    DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
-                               const wxString& aTitle, SCH_FIELD* aField ):
-        DIALOG_EDIT_ONE_FIELD( aParent, aTitle )
+    DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+                               const SCH_FIELD* aField );
+
+    ~DIALOG_SCH_EDIT_ONE_FIELD() {}
+
+    void UpdateField( SCH_FIELD* aField )
     {
-        m_field = aField;
-        initDlg();
-        GetSizer()->SetSizeHints( this );
-        Centre();
+        aField->SetText( m_text );
+        updateText( aField );
     }
-
-    // ~DIALOG_SCH_EDIT_ONE_FIELD() {};
-
-    void TransfertDataToField( bool aIncludeText = true );
-
-    /**
-     * Function GetTextField
-     * Retrieves text field value from dialog with whitespaced on both sides trimmed
-     */
-    wxString GetTextField();
-
-private:
-    /**
-     * Function initDlg
-     * Initializes dialog data using the SCH_FIELD container of data, this function is
-     * otherwise identical to DIALOG_LIB_EDIT_ONE_FIELD::initDlg()
-     */
-    void initDlg( );
 };
 
 #endif    // DIALOG_EDIT_ONE_FIELD_H_

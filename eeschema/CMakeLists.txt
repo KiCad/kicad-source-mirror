@@ -155,6 +155,7 @@ set( EESCHEMA_SRCS
     sch_sheet_path.cpp
     sch_sheet_pin.cpp
     sch_text.cpp
+    sch_validators.cpp
     schedit.cpp
     schematic_undo_redo.cpp
     schframe.cpp

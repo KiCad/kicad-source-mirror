@@ -351,14 +351,14 @@ public:
     bool LoadAliases( char* aLine, wxString& aErrorMsg );
     bool LoadFootprints( LINE_READER& aReader, wxString& aErrorMsg );
 
-    bool IsPower()      { return m_options == ENTRY_POWER; }
-    bool IsNormal()     { return m_options == ENTRY_NORMAL; }
+    bool IsPower() const  { return m_options == ENTRY_POWER; }
+    bool IsNormal() const { return m_options == ENTRY_NORMAL; }
 
     void SetPower()     { m_options = ENTRY_POWER; }
     void SetNormal()    { m_options = ENTRY_NORMAL; }
 
     void LockUnits( bool aLockUnits ) { m_unitsLocked = aLockUnits; }
-    bool UnitsLocked()  { return m_unitsLocked; }
+    bool UnitsLocked() const { return m_unitsLocked; }
 
     /**
      * Function SetFields

@@ -505,6 +505,11 @@ int DIALOG_SHIM::ShowQuasiModal()
 
 void DIALOG_SHIM::EndQuasiModal( int retCode )
 {
+    // Hook up validator and transfer data from controls handling so quasi-modal dialogs
+    // handle validation in the same way as other dialogs.
+    if( ( retCode == wxID_OK ) && ( !Validate() || !TransferDataFromWindow() ) )
+        return;
+
     SetReturnCode( retCode );
 
     if( !IsQuasiModal() )
