@@ -1978,9 +1978,9 @@
                                         <property name="proportion">0</property>
                                         <object class="wxBoxSizer" expanded="0">
                                             <property name="minimum_size"></property>
-                                            <property name="name">bSizer3</property>
+                                            <property name="name">m_gridPadNumberingSizer</property>
                                             <property name="orient">wxVERTICAL</property>
-                                            <property name="permission">none</property>
+                                            <property name="permission">protected</property>
                                             <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxALL|wxEXPAND</property>
@@ -4397,10 +4397,9 @@
                                             <property name="id">wxID_ANY</property>
                                             <property name="label">Pad Numbering Options</property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">sbcircPadNumberingSizer</property>
+                                            <property name="name">m_circPadNumberingSizer</property>
                                             <property name="orient">wxVERTICAL</property>
-                                            <property name="parent">1</property>
-                                            <property name="permission">none</property>
+                                            <property name="permission">protected</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>

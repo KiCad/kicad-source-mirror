@@ -53,9 +53,9 @@
 #include <dialog_drc.h>
 #include <dialog_global_edit_tracks_and_vias.h>
 #include <invoke_pcb_dialog.h>
+#include <array_creator.h>
 
 #include <dialog_move_exact.h>
-#include <dialog_create_array.h>
 
 #include <tool/tool_manager.h>
 #include <tools/common_actions.h>
@@ -1599,83 +1599,56 @@ void PCB_BASE_EDIT_FRAME::duplicateItem( BOARD_ITEM* aItem, bool aIncrement )
 }
 
 
+class LEGACY_ARRAY_CREATOR: public ARRAY_CREATOR
+{
+public:
+
+    LEGACY_ARRAY_CREATOR( PCB_BASE_EDIT_FRAME& editFrame ):
+        ARRAY_CREATOR( editFrame ),
+        m_item( m_parent.GetScreen()->GetCurItem() )
+    {}
+
+private:
+
+    int getNumberOfItemsToArray() const //override
+    {
+        // only handle single items
+        return (m_item != NULL) ? 1 : 0;
+    }
+
+    BOARD_ITEM* getNthItemToArray( int n ) const //override
+    {
+        wxASSERT_MSG( n == 0, "Legacy array tool can only handle a single item" );
+        return m_item;
+    }
+
+    BOARD* getBoard() const //override
+    {
+        return m_parent.GetBoard();
+    }
+
+    MODULE* getModule() const //override
+    {
+        return dynamic_cast<MODULE*>( m_item->GetParent() );
+    }
+
+    wxPoint getRotationCentre() const //override
+    {
+        return m_item->GetCenter();
+    }
+
+    void finalise() // override
+    {
+        m_parent.GetCanvas()->Refresh();
+    }
+
+    BOARD_ITEM* m_item; // only have the one
+};
+
+
 void PCB_BASE_EDIT_FRAME::createArray()
 {
-    BOARD_ITEM* item = GetScreen()->GetCurItem();
+    LEGACY_ARRAY_CREATOR array_creator( *this );
 
-    if( !item )
-        return;
-
-    // Note: original item is no more modified.
-
-    bool editingModule = NULL != dynamic_cast<FOOTPRINT_EDIT_FRAME*>( this );
-
-    BOARD* board = GetBoard();
-
-    // Remember this is valid and used only in the module editor.
-    // in board editor, the parent of items is usually the board.
-    MODULE* module = static_cast<MODULE*>( item->GetParent() );
-
-    DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
-
-    const wxPoint rotPoint = item->GetCenter();
-
-    DIALOG_CREATE_ARRAY dialog( this, rotPoint, &array_opts );
-    int ret = dialog.ShowModal();
-
-    if( ret == wxID_OK && array_opts != NULL )
-    {
-        PICKED_ITEMS_LIST newItemsList;
-
-        if( item->Type() == PCB_PAD_T && !editingModule )
-        {
-            // If it is not the module editor, then duplicate the parent module instead
-            item = static_cast<MODULE*>( item )->GetParent();
-        }
-
-        if( editingModule )
-        {
-            // modedit saves everything upfront
-            SaveCopyInUndoList( board->m_Modules, UR_MODEDIT );
-        }
-
-        #define INCREMENT_REF false
-        #define INCREMENT_PADNUMBER true
-
-        // The first item in list is the original item. We do not modify it
-        for( int ptN = 1; ptN < array_opts->GetArraySize(); ptN++ )
-        {
-            BOARD_ITEM* new_item;
-
-            if( editingModule )
-                new_item = module->DuplicateAndAddItem( item, INCREMENT_PADNUMBER );
-            else
-                new_item = board->DuplicateAndAddItem( item, INCREMENT_REF );
-
-            if( new_item )
-            {
-                array_opts->TransformItem( ptN, new_item, rotPoint );
-                newItemsList.PushItem( new_item );  // For undo list
-            }
-
-            if( !new_item || !array_opts->ShouldRenumberItems() )
-                continue;
-
-            // Renumber pads. Only new pad number renumbering has meaning,
-            // in the footprint editor.
-            if( new_item->Type() == PCB_PAD_T )
-            {
-                const wxString padName = array_opts->GetItemNumber( ptN );
-                static_cast<D_PAD*>( new_item )->SetPadName( padName );
-            }
-        }
-
-        if( !editingModule )
-        {
-            // pcbnew saves the new items like this
-            SaveCopyInUndoList( newItemsList, UR_NEW );
-        }
-
-        m_canvas->Refresh();
-    }
+    array_creator.Invoke();
 }

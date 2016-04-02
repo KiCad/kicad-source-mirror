@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  1 2016)
+// C++ code generated with wxFormBuilder (version Mar  9 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -100,51 +100,50 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	bSizer2->Add( gbSizer1, 1, wxEXPAND, 5 );
 	
-	wxBoxSizer* bSizer3;
-	bSizer3 = new wxBoxSizer( wxVERTICAL );
+	m_gridPadNumberingSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxString m_radioBoxGridNumberingAxisChoices[] = { _("Horizontal, then vertical"), _("Vertical, then horizontal") };
 	int m_radioBoxGridNumberingAxisNChoices = sizeof( m_radioBoxGridNumberingAxisChoices ) / sizeof( wxString );
 	m_radioBoxGridNumberingAxis = new wxRadioBox( m_gridPanel, wxID_ANY, _("Pad Numbering Direction"), wxDefaultPosition, wxDefaultSize, m_radioBoxGridNumberingAxisNChoices, m_radioBoxGridNumberingAxisChoices, 1, wxRA_SPECIFY_COLS );
 	m_radioBoxGridNumberingAxis->SetSelection( 0 );
-	bSizer3->Add( m_radioBoxGridNumberingAxis, 0, wxALL|wxEXPAND, 5 );
+	m_gridPadNumberingSizer->Add( m_radioBoxGridNumberingAxis, 0, wxALL|wxEXPAND, 5 );
 	
 	m_checkBoxGridReverseNumbering = new wxCheckBox( m_gridPanel, wxID_ANY, _("Reverse pad numbering on alternate rows or columns"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( m_checkBoxGridReverseNumbering, 0, wxALL, 5 );
+	m_gridPadNumberingSizer->Add( m_checkBoxGridReverseNumbering, 0, wxALL, 5 );
 	
 	wxString m_rbGridStartNumberingOptChoices[] = { _("Use first free number"), _("From start value") };
 	int m_rbGridStartNumberingOptNChoices = sizeof( m_rbGridStartNumberingOptChoices ) / sizeof( wxString );
 	m_rbGridStartNumberingOpt = new wxRadioBox( m_gridPanel, wxID_ANY, _("Initial pad number"), wxDefaultPosition, wxDefaultSize, m_rbGridStartNumberingOptNChoices, m_rbGridStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbGridStartNumberingOpt->SetSelection( 1 );
-	bSizer3->Add( m_rbGridStartNumberingOpt, 0, wxALL|wxEXPAND, 5 );
+	m_gridPadNumberingSizer->Add( m_rbGridStartNumberingOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_radioBoxGridNumberingSchemeChoices[] = { _("Continuous (1, 2, 3...)"), _("Coordinate (A1, A2, ... B1, ...)") };
 	int m_radioBoxGridNumberingSchemeNChoices = sizeof( m_radioBoxGridNumberingSchemeChoices ) / sizeof( wxString );
 	m_radioBoxGridNumberingScheme = new wxRadioBox( m_gridPanel, wxID_ANY, _("Pad Numbering Scheme"), wxDefaultPosition, wxDefaultSize, m_radioBoxGridNumberingSchemeNChoices, m_radioBoxGridNumberingSchemeChoices, 1, wxRA_SPECIFY_COLS );
 	m_radioBoxGridNumberingScheme->SetSelection( 1 );
-	bSizer3->Add( m_radioBoxGridNumberingScheme, 0, wxALL|wxEXPAND, 5 );
+	m_gridPadNumberingSizer->Add( m_radioBoxGridNumberingScheme, 0, wxALL|wxEXPAND, 5 );
 	
 	m_labelPriAxisNumbering = new wxStaticText( m_gridPanel, wxID_ANY, _("Primary axis numbering:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelPriAxisNumbering->Wrap( -1 );
-	bSizer3->Add( m_labelPriAxisNumbering, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_gridPadNumberingSizer->Add( m_labelPriAxisNumbering, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	wxArrayString m_choicePriAxisNumberingChoices;
 	m_choicePriAxisNumbering = new wxChoice( m_gridPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePriAxisNumberingChoices, 0 );
 	m_choicePriAxisNumbering->SetSelection( 0 );
-	bSizer3->Add( m_choicePriAxisNumbering, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_gridPadNumberingSizer->Add( m_choicePriAxisNumbering, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_labelSecAxisNumbering = new wxStaticText( m_gridPanel, wxID_ANY, _("Secondary axis numbering:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelSecAxisNumbering->Wrap( -1 );
 	m_labelSecAxisNumbering->Enable( false );
 	
-	bSizer3->Add( m_labelSecAxisNumbering, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_gridPadNumberingSizer->Add( m_labelSecAxisNumbering, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_choiceSecAxisNumberingChoices;
 	m_choiceSecAxisNumbering = new wxChoice( m_gridPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceSecAxisNumberingChoices, 0 );
 	m_choiceSecAxisNumbering->SetSelection( 0 );
 	m_choiceSecAxisNumbering->Enable( false );
 	
-	bSizer3->Add( m_choiceSecAxisNumbering, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_gridPadNumberingSizer->Add( m_choiceSecAxisNumbering, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
@@ -160,10 +159,10 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	bSizer5->Add( m_entryGridSecNumberingOffset, 0, wxALL, 5 );
 	
 	
-	bSizer3->Add( bSizer5, 0, wxEXPAND, 5 );
+	m_gridPadNumberingSizer->Add( bSizer5, 0, wxEXPAND, 5 );
 	
 	
-	bSizer2->Add( bSizer3, 0, wxALL|wxEXPAND, 5 );
+	bSizer2->Add( m_gridPadNumberingSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	m_gridPanel->SetSizer( bSizer2 );
@@ -244,30 +243,29 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	
 	bSizer4->Add( gbSizer2, 0, wxALL|wxEXPAND, 5 );
 	
-	wxStaticBoxSizer* sbcircPadNumberingSizer;
-	sbcircPadNumberingSizer = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Pad Numbering Options") ), wxVERTICAL );
+	m_circPadNumberingSizer = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Pad Numbering Options") ), wxVERTICAL );
 	
 	wxString m_rbCircStartNumberingOptChoices[] = { _("Use first free number"), _("From start value") };
 	int m_rbCircStartNumberingOptNChoices = sizeof( m_rbCircStartNumberingOptChoices ) / sizeof( wxString );
-	m_rbCircStartNumberingOpt = new wxRadioBox( sbcircPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Initial pad number"), wxDefaultPosition, wxDefaultSize, m_rbCircStartNumberingOptNChoices, m_rbCircStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbCircStartNumberingOpt = new wxRadioBox( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Initial pad number"), wxDefaultPosition, wxDefaultSize, m_rbCircStartNumberingOptNChoices, m_rbCircStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbCircStartNumberingOpt->SetSelection( 0 );
-	sbcircPadNumberingSizer->Add( m_rbCircStartNumberingOpt, 0, wxALL|wxEXPAND, 5 );
+	m_circPadNumberingSizer->Add( m_rbCircStartNumberingOpt, 0, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_labelCircNumStart = new wxStaticText( sbcircPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Pad numbering start value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircNumStart = new wxStaticText( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Pad numbering start value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircNumStart->Wrap( -1 );
 	bSizer7->Add( m_labelCircNumStart, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_entryCircNumberingStart = new wxTextCtrl( sbcircPadNumberingSizer->GetStaticBox(), wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryCircNumberingStart = new wxTextCtrl( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer7->Add( m_entryCircNumberingStart, 1, wxALL, 5 );
 	
 	
-	sbcircPadNumberingSizer->Add( bSizer7, 0, wxEXPAND, 5 );
+	m_circPadNumberingSizer->Add( bSizer7, 0, wxEXPAND, 5 );
 	
 	
-	bSizer4->Add( sbcircPadNumberingSizer, 1, wxEXPAND|wxALL, 5 );
+	bSizer4->Add( m_circPadNumberingSizer, 1, wxEXPAND|wxALL, 5 );
 	
 	
 	m_circularPanel->SetSizer( bSizer4 );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  1 2016)
+// C++ code generated with wxFormBuilder (version Mar  9 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -68,6 +68,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelStagger;
 		wxTextCtrl* m_entryStagger;
 		wxRadioBox* m_radioBoxGridStaggerType;
+		wxBoxSizer* m_gridPadNumberingSizer;
 		wxRadioBox* m_radioBoxGridNumberingAxis;
 		wxCheckBox* m_checkBoxGridReverseNumbering;
 		wxRadioBox* m_rbGridStartNumberingOpt;
@@ -95,6 +96,7 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_entryCircCount;
 		wxStaticText* m_labelCircRotate;
 		wxCheckBox* m_entryRotateItemsCb;
+		wxStaticBoxSizer* m_circPadNumberingSizer;
 		wxRadioBox* m_rbCircStartNumberingOpt;
 		wxStaticText* m_labelCircNumStart;
 		wxTextCtrl* m_entryCircNumberingStart;

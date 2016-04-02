@@ -33,6 +33,7 @@
 #include <kiway.h>
 #include <class_draw_panel_gal.h>
 #include <module_editor_frame.h>
+#include <array_creator.h>
 
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
@@ -51,7 +52,6 @@
 
 #include <router/router_tool.h>
 
-#include <dialogs/dialog_create_array.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
 
@@ -794,7 +794,81 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     decUndoInhibit();
 
     return 0;
-}
+};
+
+
+class GAL_ARRAY_CREATOR: public ARRAY_CREATOR
+{
+public:
+
+    GAL_ARRAY_CREATOR( PCB_BASE_FRAME& editFrame, bool editModules,
+                       RN_DATA* ratsnest,
+                       const SELECTION& selection ):
+        ARRAY_CREATOR( editFrame ),
+        m_editModules( editModules ),
+        m_ratsnest( ratsnest ),
+        m_selection( selection )
+    {}
+
+private:
+
+    int getNumberOfItemsToArray() const //override
+    {
+        // only handle single items
+        return m_selection.Size();
+    }
+
+    BOARD_ITEM* getNthItemToArray( int n ) const //override
+    {
+        return m_selection.Item<BOARD_ITEM>( n );
+    }
+
+    BOARD* getBoard() const //override
+    {
+        return m_parent.GetBoard();
+    }
+
+    MODULE* getModule() const //override
+    {
+        // Remember this is valid and used only in the module editor.
+        // in board editor, the parent of items is usually the board.
+        return m_editModules ? m_parent.GetBoard()->m_Modules.GetFirst() : NULL;
+    }
+
+    wxPoint getRotationCentre() const //override
+    {
+        const VECTOR2I rp = m_selection.GetCenter();
+        return wxPoint( rp.x, rp.y );
+    }
+
+    void prePushAction( BOARD_ITEM* new_item ) // override
+    {
+        m_parent.GetToolManager()->RunAction( COMMON_ACTIONS::unselectItem,
+                                              true, new_item );
+    }
+
+    void postPushAction( BOARD_ITEM* new_item ) //override
+    {
+        KIGFX::VIEW* view = m_parent.GetToolManager()->GetView();
+        if( new_item->Type() == PCB_MODULE_T)
+        {
+            static_cast<MODULE*>( new_item )->RunOnChildren(
+                    boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+        }
+
+        m_parent.GetGalCanvas()->GetView()->Add( new_item );
+        m_ratsnest->Update( new_item );
+    }
+
+    void finalise() // override
+    {
+        m_ratsnest->Recalculate();
+    }
+
+    bool m_editModules;
+    RN_DATA* m_ratsnest;
+    const SELECTION& m_selection;
+};
 
 
 int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
@@ -803,113 +877,19 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selTool->GetSelection();
 
-    // Be sure that there is at least one item that we can modify
-    if( !hoverSelection( selection ) )
-        return 0;
+    // pick up items under the cursor if needed
+    hoverSelection( selection );
 
     // we have a selection to work on now, so start the tool process
 
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
     editFrame->OnModify();
 
-    if( m_editModules )
-    {
-        // Module editors do their undo point upfront for the whole module
-        editFrame->SaveCopyInUndoList( editFrame->GetBoard()->m_Modules, UR_MODEDIT );
-    }
+    GAL_ARRAY_CREATOR array_creator( *editFrame, m_editModules,
+                                     getModel<BOARD>()->GetRatsnest(),
+                                     selection );
 
-    DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* array_opts = NULL;
-
-    VECTOR2I rp = selection.GetCenter();
-    const wxPoint rotPoint( rp.x, rp.y );
-
-    DIALOG_CREATE_ARRAY dialog( editFrame, rotPoint, &array_opts );
-    int ret = dialog.ShowModal();
-
-    if( ret == wxID_OK && array_opts != NULL )
-    {
-        PICKED_ITEMS_LIST newItemList;
-
-        for( int i = 0; i < selection.Size(); ++i )
-        {
-            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
-
-            if( !item )
-                continue;
-
-            // iterate across the array, laying out the item at the
-            // correct position
-            const unsigned nPoints = array_opts->GetArraySize();
-
-            // The first item in list is the original item. We do not modify it
-            for( unsigned ptN = 1; ptN < nPoints; ++ptN )
-            {
-                BOARD_ITEM* newItem = NULL;
-
-                // Some items cannot be duplicated
-                // i.e. the ref and value fields of a footprint or zones
-                // therefore newItem can be null
-
-                #define INCREMENT_REF false
-                #define INCREMENT_PADNUMBER true
-
-                if( m_editModules )
-                    newItem = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem(
-                                                            item, INCREMENT_PADNUMBER );
-                else
-                {
-#if 0
-                    // @TODO: see if we allow zone duplication here
-                    // Duplicate zones is especially tricky (overlaping zones must be merged)
-                    // so zones are not duplicated
-                    if( item->Type() == PCB_ZONE_AREA_T )
-                        newItem = NULL;
-                    else
-#endif
-                        newItem = editFrame->GetBoard()->DuplicateAndAddItem(
-                                                            item, INCREMENT_REF );
-                    // @TODO: we should merge zones. This is a bit tricky, because
-                    // the undo command needs saving old area, if it is merged.
-                }
-
-                if( newItem )
-                {
-                    array_opts->TransformItem( ptN, newItem, rotPoint );
-
-                    m_toolMgr->RunAction( COMMON_ACTIONS::unselectItem, true, newItem );
-
-                    newItemList.PushItem( newItem );
-
-                    if( newItem->Type() == PCB_MODULE_T)
-                    {
-                        static_cast<MODULE*>( newItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
-                                getView(), _1 ) );
-                    }
-
-                    editFrame->GetGalCanvas()->GetView()->Add( newItem );
-                    getModel<BOARD>()->GetRatsnest()->Update( newItem );
-                }
-
-                // Only renumbering pads has meaning:
-                if( newItem && array_opts->ShouldRenumberItems() )
-                {
-                    if( newItem->Type() == PCB_PAD_T )
-                    {
-                        const wxString padName = array_opts->GetItemNumber( ptN );
-                        static_cast<D_PAD*>( newItem )->SetPadName( padName );
-                    }
-                }
-            }
-        }
-
-        if( !m_editModules )
-        {
-            // Add all items as a single undo point for PCB editors
-            editFrame->SaveCopyInUndoList( newItemList, UR_NEW );
-        }
-    }
-
-    getModel<BOARD>()->GetRatsnest()->Recalculate();
+    array_creator.Invoke();
 
     return 0;
 }

@@ -28,6 +28,9 @@
 // Include the wxFormBuider header base:
 #include <dialog_create_array_base.h>
 
+#include <class_board_item.h>
+#include <wxBasePcbFrame.h>
+
 #include <boost/bimap.hpp>
 
 class CONFIG_SAVE_RESTORE_WINDOW
@@ -72,7 +75,7 @@ protected:
         ctrls.push_back( ctrlInfo );
     }
 
-    void Add( wxTextCtrl* ctrl, std::string& dest )
+    void Add( wxTextCtrl* ctrl, wxString& dest )
     {
         CONFIG_CTRL_T ctrlInfo = { ctrl, CFG_CTRL_TEXT, (void*) &dest };
 
@@ -105,7 +108,7 @@ protected:
                 break;
 
             case CFG_CTRL_TEXT:
-                *(std::string*) iter->dest = static_cast<wxTextCtrl*>( iter->control )->GetValue();
+                *(wxString*) iter->dest = static_cast<wxTextCtrl*>( iter->control )->GetValue();
                 break;
 
             case CFG_CTRL_CHOICE:
@@ -144,7 +147,7 @@ protected:
                 break;
 
             case CFG_CTRL_TEXT:
-                static_cast<wxTextCtrl*>( iter->control )->SetValue( *(std::string*) iter->dest );
+                static_cast<wxTextCtrl*>( iter->control )->SetValue( *(wxString*) iter->dest );
                 break;
 
             case CFG_CTRL_CHOICE:
@@ -201,13 +204,13 @@ public:
     {
         ARRAY_OPTIONS( ARRAY_TYPE_T aType ) :
             m_type( aType ),
-            m_shouldRenumber( false )
+            m_shouldNumber( false ),
+            m_numberingStartIsSpecified( false )
         {}
 
         virtual ~ARRAY_OPTIONS() {};
 
         ARRAY_TYPE_T m_type;
-        bool m_shouldRenumber;
 
         /*!
          * Function GetArrayPositions
@@ -222,13 +225,37 @@ public:
         virtual wxString GetItemNumber( int n ) const = 0;
         virtual wxString InterpolateNumberIntoString( int n, const wxString& pattern ) const;
 
-        bool ShouldRenumberItems() const
+        /*!
+         * @return are the items in this array numberred, or are all the
+         * items numbered the same
+         */
+        bool ShouldNumberItems() const
         {
-            return m_shouldRenumber;
+            return m_shouldNumber;
         }
 
-protected:
-        static std::string getCoordinateNumber( int n, ARRAY_NUMBERING_TYPE_T type );
+        /*!
+         * @return is the numbering is enabled and should start at a point
+         * specified in these options or is it implicit according to the calling
+         * code?
+         */
+        bool NumberingStartIsSpecified() const
+        {
+            return m_shouldNumber && m_numberingStartIsSpecified;
+        }
+
+    protected:
+        static wxString getCoordinateNumber( int n, ARRAY_NUMBERING_TYPE_T type );
+
+        // allow the dialog to set directly
+        friend class DIALOG_CREATE_ARRAY;
+
+        /// True if this array numbers the new items
+        bool m_shouldNumber;
+
+        /// True if this array's number starts from the preset point
+        /// False if the array numbering starts from some externally provided point
+        bool m_numberingStartIsSpecified;
     };
 
     struct ARRAY_GRID_OPTIONS : public ARRAY_OPTIONS
@@ -289,16 +316,27 @@ private:
     };
 
     // Constructor and destructor
-    DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, wxPoint aOrigPos, ARRAY_OPTIONS** settings );
-    virtual ~DIALOG_CREATE_ARRAY() {};
+    DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNumbering,
+                         wxPoint aOrigPos );
+
+    ~DIALOG_CREATE_ARRAY();
+
+    /*!
+     * @return the array options set by this dialogue, or NULL if they were
+     * not set, or could not be set
+     */
+    ARRAY_OPTIONS* GetArrayOptions() const
+    {
+        return m_settings;
+    }
 
 private:
 
     /**
      * The settings object returned to the caller.
-     * We update the caller's object and never have ownership
+     * We retain ownership of this
      */
-    ARRAY_OPTIONS** m_settings;
+    ARRAY_OPTIONS* m_settings;
 
     /*
      * The position of the original item(s), used for finding radius, etc
@@ -329,27 +367,28 @@ private:
 
         bool m_optionsSet;
 
-        std::string m_gridNx, m_gridNy,
-                    m_gridDx, m_gridDy,
-                    m_gridOffsetX, m_gridOffsetY,
-                    m_gridStagger;
+        wxString m_gridNx, m_gridNy,
+                 m_gridDx, m_gridDy,
+                 m_gridOffsetX, m_gridOffsetY,
+                 m_gridStagger;
 
-        int m_gridStaggerType, m_gridNumberingAxis;
+        int     m_gridStaggerType, m_gridNumberingAxis;
         bool    m_gridNumberingReverseAlternate;
         int     m_grid2dArrayNumbering;
         int     m_gridPriAxisNumScheme, m_gridSecAxisNumScheme;
-        std::string m_gridPriNumberingOffset, m_gridSecNumberingOffset;
+        wxString m_gridPriNumberingOffset, m_gridSecNumberingOffset;
 
-        std::string m_circCentreX, m_circCentreY,
-                    m_circAngle, m_circCount, m_circNumberingOffset;
+        wxString m_circCentreX, m_circCentreY,
+                 m_circAngle, m_circCount, m_circNumberingOffset;
         bool m_circRotate;
         int m_arrayTypeTab;
-        int m_gridNumberingScheme;
-        int m_circNumberingScheme;
     };
 
-    static CREATE_ARRAY_DIALOG_ENTRIES m_options;
+    // some uses of arrays might not allow component renumbering
+    bool m_numberingEnabled;
 
+    // saved array options
+    static CREATE_ARRAY_DIALOG_ENTRIES m_options;
 };
 
 #endif      // __DIALOG_CREATE_ARRAY__
