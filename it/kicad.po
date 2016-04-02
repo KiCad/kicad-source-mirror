@@ -76,8 +76,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-02 14:38+0200\n"
-"PO-Revision-Date: 2016-04-02 14:55+0200\n"
+"POT-Creation-Date: 2016-04-03 00:38+0200\n"
+"PO-Revision-Date: 2016-04-03 00:38+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -6175,7 +6175,7 @@ msgid "Distance:"
 msgstr "Distanza:"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:137
-#: pcbnew/dialogs/dialog_create_array_base.cpp:212
+#: pcbnew/dialogs/dialog_create_array_base.cpp:211
 msgid "Angle:"
 msgstr "Angolo:"
 
@@ -6395,23 +6395,62 @@ msgstr ""
 "Lo spessore del testo è troppo grande per le dimensioni del testo. Verrà "
 "tagliato."
 
-#: pcbnew/dialogs/dialog_create_array.cpp:53
+#: pcbnew/dialogs/dialog_create_array.cpp:56
 msgid "Numerals (0,1,2,...,9,10)"
 msgstr "Numerali (0,1,2,...,9,10)"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:54
+#: pcbnew/dialogs/dialog_create_array.cpp:57
 msgid "Hexadecimal (0,1,...,F,10,...)"
 msgstr "Esadecimali (0,1,...,F,10,...)"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:55
+#: pcbnew/dialogs/dialog_create_array.cpp:58
 msgid "Alphabet, minus IOSQXZ"
 msgstr "Alfabeto, senza IOSQXZ"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:56
+#: pcbnew/dialogs/dialog_create_array.cpp:59
 msgid "Alphabet, full 26 characters"
 msgstr "Alfabeto, completo di 26 caratteri"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:296
+#: pcbnew/dialogs/dialog_create_array.cpp:232
+#, c-format
+msgid "Unrecognised numbering scheme: %d"
+msgstr "Schema numerazione non riconosciuto: %d"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:246
+#, c-format
+msgid ""
+"Could not determine numbering start from \"%s\": expected value consistent "
+"with alphabet \"%s\""
+msgstr ""
+"Impossibile determinare l'inizio numerazione da \"%s\": valore previsto "
+"consistente con l'alfabeto \"%s\""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:275
+#, c-format
+msgid "Bad integral value for %s: %s"
+msgstr "Errato valore intero per %s: %s"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:298
+msgid "horizontal count"
+msgstr "conteggio orizzontale"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:300
+msgid "vertical count"
+msgstr "conteggio verticale"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:310
+msgid "stagger"
+msgstr "alternanza"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:359
+msgid "point count"
+msgstr "conteggio punti"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:372
+msgid "numbering start"
+msgstr "inizio numerazione"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:398
 msgid "Bad parameters"
 msgstr "Parametri errati"
 
@@ -6515,7 +6554,7 @@ msgid "2"
 msgstr "2"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:45
-#: pcbnew/dialogs/dialog_create_array_base.cpp:229
+#: pcbnew/dialogs/dialog_create_array_base.cpp:228
 msgid "4"
 msgstr "4"
 
@@ -7693,9 +7732,9 @@ msgstr "x:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:237
 #: pcbnew/dialogs/dialog_create_array_base.cpp:69
 #: pcbnew/dialogs/dialog_create_array_base.cpp:80
-#: pcbnew/dialogs/dialog_create_array_base.cpp:186
-#: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#: pcbnew/dialogs/dialog_create_array_base.cpp:216
+#: pcbnew/dialogs/dialog_create_array_base.cpp:185
+#: pcbnew/dialogs/dialog_create_array_base.cpp:196
+#: pcbnew/dialogs/dialog_create_array_base.cpp:215
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:74
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:82
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:48
@@ -7710,8 +7749,8 @@ msgstr "0"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:61
 #: pcbnew/dialogs/dialog_create_array_base.cpp:72
 #: pcbnew/dialogs/dialog_create_array_base.cpp:83
-#: pcbnew/dialogs/dialog_create_array_base.cpp:189
-#: pcbnew/dialogs/dialog_create_array_base.cpp:200
+#: pcbnew/dialogs/dialog_create_array_base.cpp:188
+#: pcbnew/dialogs/dialog_create_array_base.cpp:199
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90 common/draw_frame.cpp:485
@@ -7743,7 +7782,7 @@ msgstr "Rotazione elemento:"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:63
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:141
-#: pcbnew/dialogs/dialog_create_array_base.cpp:221 common/common.cpp:209
+#: pcbnew/dialogs/dialog_create_array_base.cpp:220 common/common.cpp:209
 msgid "deg"
 msgstr "Gradi "
 
@@ -11112,9 +11151,9 @@ msgid "Stagger:"
 msgstr "Alternanza:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:91
-#: pcbnew/dialogs/dialog_create_array_base.cpp:156
-#: pcbnew/dialogs/dialog_create_array_base.cpp:159
-#: pcbnew/dialogs/dialog_create_array_base.cpp:263
+#: pcbnew/dialogs/dialog_create_array_base.cpp:155
+#: pcbnew/dialogs/dialog_create_array_base.cpp:158
+#: pcbnew/dialogs/dialog_create_array_base.cpp:261
 msgid "1"
 msgstr "1"
 
@@ -11130,82 +11169,82 @@ msgstr "Colonne"
 msgid "Stagger Type"
 msgstr "Tipo alternanza"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:106
+#: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Horizontal, then vertical"
 msgstr "Orizzontale, poi verticale"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:106
+#: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Vertical, then horizontal"
 msgstr "Verticale, poi orizzontale"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:108
+#: pcbnew/dialogs/dialog_create_array_base.cpp:107
 msgid "Pad Numbering Direction"
 msgstr "Direzione numerazione piazzola"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:112
+#: pcbnew/dialogs/dialog_create_array_base.cpp:111
 msgid "Reverse pad numbering on alternate rows or columns"
 msgstr "Numerazione inversa piazzola su righe o colonne alternate"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:115
-#: pcbnew/dialogs/dialog_create_array_base.cpp:250
+#: pcbnew/dialogs/dialog_create_array_base.cpp:114
+#: pcbnew/dialogs/dialog_create_array_base.cpp:248
 msgid "Use first free number"
 msgstr "Usa il primo numero libero"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:115
-#: pcbnew/dialogs/dialog_create_array_base.cpp:250
+#: pcbnew/dialogs/dialog_create_array_base.cpp:114
+#: pcbnew/dialogs/dialog_create_array_base.cpp:248
 msgid "From start value"
 msgstr "Dal valore di inizio"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:117
-#: pcbnew/dialogs/dialog_create_array_base.cpp:252
+#: pcbnew/dialogs/dialog_create_array_base.cpp:116
+#: pcbnew/dialogs/dialog_create_array_base.cpp:250
 msgid "Initial pad number"
 msgstr "Primo numero piazzola"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:121
+#: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Continuous (1, 2, 3...)"
 msgstr "Continua (1, 2, 3...)"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:121
+#: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Coordinate (A1, A2, ... B1, ...)"
 msgstr "Coordinata (A1, A2, ... B1, ...)"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:123
+#: pcbnew/dialogs/dialog_create_array_base.cpp:122
 msgid "Pad Numbering Scheme"
 msgstr "Schema numerazione piazzole"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:127
+#: pcbnew/dialogs/dialog_create_array_base.cpp:126
 msgid "Primary axis numbering:"
 msgstr "Numerazione asse primario:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:136
+#: pcbnew/dialogs/dialog_create_array_base.cpp:135
 msgid "Secondary axis numbering:"
 msgstr "Numerazione asse secondario:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:152
+#: pcbnew/dialogs/dialog_create_array_base.cpp:151
 msgid "Pad numbering start:"
 msgstr "Avvio numerazione piazzole:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:172
+#: pcbnew/dialogs/dialog_create_array_base.cpp:171
 msgid "Grid Array"
 msgstr "Schieramento a griglia"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:182
+#: pcbnew/dialogs/dialog_create_array_base.cpp:181
 msgid "Horizontal center:"
 msgstr "Centro orizzontale:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:193
+#: pcbnew/dialogs/dialog_create_array_base.cpp:192
 msgid "Vertical center:"
 msgstr "Centro verticale:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:204
+#: pcbnew/dialogs/dialog_create_array_base.cpp:203
 msgid "Radius:"
 msgstr "Raggio:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:208
+#: pcbnew/dialogs/dialog_create_array_base.cpp:207
 msgid "0 mm"
 msgstr "0 mm"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:217
+#: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
@@ -11213,33 +11252,33 @@ msgstr ""
 "Gli angoli positivi rappresentano la rotazione antioraria. Un angolo di 0 "
 "produrrà un cerchio completo diviso equamente in \"conteggio\" porzioni."
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:225
+#: pcbnew/dialogs/dialog_create_array_base.cpp:224
 msgid "Count:"
 msgstr "Conteggio:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:230
+#: pcbnew/dialogs/dialog_create_array_base.cpp:229
 msgid "How many items in the array."
 msgstr "Quanti elementi nell'array."
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:234
+#: pcbnew/dialogs/dialog_create_array_base.cpp:233
 msgid "Rotate:"
 msgstr "Ruota:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:240
+#: pcbnew/dialogs/dialog_create_array_base.cpp:239
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
 msgstr "Ruota e sposta l'elemento - la multiselezione verrà ruotata assieme."
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:248
+#: pcbnew/dialogs/dialog_create_array_base.cpp:246
 msgid "Pad Numbering Options"
 msgstr "Opzioni numerazione piazzole"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:259
+#: pcbnew/dialogs/dialog_create_array_base.cpp:257
 msgid "Pad numbering start value:"
 msgstr "Valore di inizio numerazione piazzole:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:276
+#: pcbnew/dialogs/dialog_create_array_base.cpp:274
 msgid "Circular Array"
 msgstr "Schieramento circolare"
 
@@ -12933,7 +12972,7 @@ msgstr "Duplica elemento"
 msgid "Duplicate Item and Increment"
 msgstr "Duplica elemento e incrementa"
 
-#: pcbnew/hotkeys.cpp:122 pcbnew/dialogs/dialog_create_array_base.h:113
+#: pcbnew/hotkeys.cpp:122 pcbnew/dialogs/dialog_create_array_base.h:115
 msgid "Create Array"
 msgstr "Crea array"
 
@@ -19528,7 +19567,11 @@ msgid ""
 "By default, command line runs with hidden console window and output is "
 "redirected to \"Plugin info\" field. Set this option to show the window of "
 "the running command."
-msgstr "Come impostazione predefinita, la riga di comando viene eseguita con la finestra di console nascosta e l'uscita viene redirezionata nel campo \"Plugin info\". Impostare quest'opzione per mostrare la finestra del comando in esecuzione."
+msgstr ""
+"Come impostazione predefinita, la riga di comando viene eseguita con la "
+"finestra di console nascosta e l'uscita viene redirezionata nel campo "
+"\"Plugin info\". Impostare quest'opzione per mostrare la finestra del "
+"comando in esecuzione."
 
 #: eeschema/dialogs/dialog_bom_base.cpp:107
 msgid "Plugin Info:"
@@ -23658,60 +23701,3 @@ msgstr ""
 "'%s'\n"
 "linea %d scostamento %d\n"
 "da %s : %s"
-
-#~ msgid "The reference field cannot be empty!  No change"
-#~ msgstr "Il campo Riferimento non può essere vuoto!"
-
-#~ msgid "The value field cannot be empty!  No change"
-#~ msgstr "Il campo Valore non può essere vuoto!"
-
-#~ msgid ""
-#~ "Whitespace is not permitted inside references or values (symbol names in "
-#~ "lib).\n"
-#~ "The text you entered has been converted to use underscores: %s"
-#~ msgstr ""
-#~ "Gli spazi bianchi non sono permessi dentro riferimenti o valori (nomi di "
-#~ "simboli nelle librerie).\n"
-#~ "Nel testo inserito sono stati sostituiti con caratteri di sottolineatura: "
-#~ "%s"
-
-#~ msgid "Illegal reference prefix. A reference must start by a letter"
-#~ msgstr ""
-#~ "Prefisso del riferimento errato. Un riferimento deve cominciare con una "
-#~ "lettera."
-
-#~ msgid "Illegal reference. A reference must start by a letter"
-#~ msgstr "Riferimento errato. Un riferimento deve cominciare con una lettera."
-
-#~ msgid "Filter Net Names"
-#~ msgstr "Filtro nomi collegamenti"
-
-#~ msgid "Net Filter"
-#~ msgstr "Filtro collegamenti"
-
-#~ msgid "Select Net"
-#~ msgstr "Seleziona collegamento"
-
-#~ msgid "Preferred Editor:"
-#~ msgstr "Editor preferito:"
-
-#~ msgid "The original site of the KiCad project founder"
-#~ msgstr "Sito originale del fondatore del progetto KiCad"
-
-#~ msgid "Repository with additional component libraries"
-#~ msgstr "Repository con librerie componenti aggiuntive"
-
-#~ msgid "Contribute to KiCad"
-#~ msgstr "Contribuire a KiCad"
-
-#~ msgid "Report bugs if you found any"
-#~ msgstr "Segnalare i difetti riscontrati"
-
-#~ msgid "File an idea for improvement"
-#~ msgstr "Suggerire un miglioramento"
-
-#~ msgid "KiCad links to user groups, tutorials and much more"
-#~ msgstr "Collegamento al gruppo utilizzatori, guide e altro ancora"
-
-#~ msgid "field"
-#~ msgstr "campo"
