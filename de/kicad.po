@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-31 21:19+0200\n"
-"PO-Revision-Date: 2016-03-31 21:40+0200\n"
+"POT-Creation-Date: 2016-04-01 22:00+0200\n"
+"PO-Revision-Date: 2016-04-01 22:19+0200\n"
 "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -23,6 +23,7 @@ msgstr ""
 "X-Poedit-SearchPath-6: gerbview\n"
 "X-Poedit-SearchPath-7: pagelayout_editor\n"
 "X-Poedit-SearchPath-8: pcb_calculator\n"
+"X-Poedit-SearchPath-9: bitmap2component\n"
 
 #: 3d-viewer/3d_canvas.cpp:399
 msgid "Zoom +"
@@ -458,6 +459,232 @@ msgstr "Alle Lagen einblenden"
 msgid "Show None"
 msgstr "Zeige nichts"
 
+#: bitmap2component/bitmap2cmp_gui.cpp:270 eeschema/edit_bitmap.cpp:103
+#: pagelayout_editor/pl_editor_frame.cpp:635
+msgid "Choose Image"
+msgstr "Wähle ein Bild"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:271 eeschema/edit_bitmap.cpp:104
+#: pagelayout_editor/pl_editor_frame.cpp:636
+msgid "Image Files "
+msgstr "Bilddateien"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:486
+msgid "Create a logo file"
+msgstr "Erstelle eine Logo Datei"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:505
+#: bitmap2component/bitmap2cmp_gui.cpp:543
+#: bitmap2component/bitmap2cmp_gui.cpp:580
+#: bitmap2component/bitmap2cmp_gui.cpp:617
+#, c-format
+msgid "File '%s' could not be created."
+msgstr "Konnte die Datei '%s' nicht erstellen."
+
+#: bitmap2component/bitmap2cmp_gui.cpp:523
+msgid "Create a Postscript file"
+msgstr "Postscript Datei erstellen"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:561
+msgid "Create a component library file for Eeschema"
+msgstr "Bauteilbibliotheksdatei für Eeschema erstellen"
+
+#: bitmap2component/bitmap2cmp_gui.cpp:598
+msgid "Create a footprint file for Pcbnew"
+msgstr "Footprintdatei für Pcbnew erstellen"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:24
+msgid "Original Picture"
+msgstr "Originaldatei"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:29
+msgid "Greyscale Picture"
+msgstr "Grauskalierte Datei"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:32
+msgid "Black&&White Picture"
+msgstr "Schwarz/Weiß Datei"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:41
+msgid "Bitmap Info:"
+msgstr "Bitmap Info:"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:50
+#: bitmap2component/bitmap2cmp_gui_base.cpp:66
+#: common/dialogs/dialog_page_settings_base.cpp:32
+msgid "Size:"
+msgstr "Größe:"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:54
+#: bitmap2component/bitmap2cmp_gui_base.cpp:58
+#: bitmap2component/bitmap2cmp_gui_base.cpp:70
+#: bitmap2component/bitmap2cmp_gui_base.cpp:74
+#: bitmap2component/bitmap2cmp_gui_base.cpp:86
+msgid "0000"
+msgstr "0000"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:62
+msgid "pixels"
+msgstr "Pixel"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:78 common/common.cpp:144
+#: common/common.cpp:202 common/dialogs/dialog_page_settings.cpp:471
+#: common/draw_frame.cpp:485
+#: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
+#: pagelayout_editor/pl_editor_frame.cpp:467 pcb_calculator/UnitSelector.cpp:38
+#: pcb_calculator/UnitSelector.cpp:70
+#: pcbnew/dialogs/dialog_create_array_base.cpp:50
+#: pcbnew/dialogs/dialog_create_array_base.cpp:61
+#: pcbnew/dialogs/dialog_create_array_base.cpp:72
+#: pcbnew/dialogs/dialog_create_array_base.cpp:83
+#: pcbnew/dialogs/dialog_create_array_base.cpp:189
+#: pcbnew/dialogs/dialog_create_array_base.cpp:200
+#: pcbnew/dialogs/dialog_export_idf_base.cpp:46
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
+#: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
+#: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:55
+#: pcbnew/dialogs/dialog_move_exact_base.cpp:35
+#: pcbnew/dialogs/dialog_move_exact_base.cpp:49
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
+msgid "mm"
+msgstr "mm"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:82
+msgid "BPP:"
+msgstr "BPP:"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:90
+msgid "bits"
+msgstr "Bits"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:97
+msgid "Resolution:"
+msgstr "Auflösung:"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:101
+#: bitmap2component/bitmap2cmp_gui_base.cpp:106
+msgid "300"
+msgstr "300"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:111
+msgid "DPI"
+msgstr "DPI"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:121
+msgid "Load Bitmap"
+msgstr "Bitmap laden"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:124 eeschema/libeditframe.cpp:1151
+msgid "Export"
+msgstr "Exportieren"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:125
+msgid ""
+"Create a library file for Eeschema\n"
+"This library contains only one component: logo"
+msgstr ""
+"Erstellt eine Bibliothek für Eeschema\n"
+"Diese Bibliothek enthält nur eine Komponente: Logo"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:129
+msgid "Eeschema (.lib file)"
+msgstr "Eeschema (.lib Datei)"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:129
+msgid "Pcbnew (.kicad_mod file)"
+msgstr "Pcbnew (.kicad_mod Datei)"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:129
+msgid "Postscript (.ps file)"
+msgstr "Postscript (.ps Datei)"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:129
+msgid "Logo for title block (.kicad_wks file)"
+msgstr "Logo für den Titelblock (.kicad_wks Datei)"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:131
+#: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
+#: pcbnew/dialogs/dialog_plot_base.cpp:245
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:187
+msgid "Format"
+msgstr "Format"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:135 common/eda_text.cpp:416
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
+#: eeschema/dialogs/dialog_edit_label_base.cpp:76
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/libedit.cpp:498
+#: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:758
+#: gerbview/class_GERBER.cpp:359 gerbview/class_GERBER.cpp:363
+#: gerbview/class_GERBER.cpp:366 pcbnew/class_module.cpp:610
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:100 pcbnew/muonde.cpp:859
+msgid "Normal"
+msgstr "Normal"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:135 gerbview/class_GERBER.cpp:359
+msgid "Negative"
+msgstr "Negativ"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:137
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
+#: eeschema/dialogs/dialog_erc_base.cpp:147
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:77
+#: pcbnew/dialogs/dialog_block_options_base.cpp:20
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:48
+#: pcbnew/dialogs/dialog_fp_lib_table.cpp:209
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:98
+#: pcbnew/dialogs/dialog_plot_base.cpp:81
+#: pcbnew/dialogs/dialog_pns_settings_base.cpp:26
+msgid "Options"
+msgstr "Optionen"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:141
+msgid "Threshold Value:"
+msgstr "Grenzwert:"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:146
+msgid ""
+"Adjust the level to convert the greyscale picture to a black and white "
+"picture."
+msgstr ""
+"Verändert den Level um eine Grauskalierte Datei in ein Schwarz/Weiß Datei "
+"umzuwandeln."
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:150
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:348
+msgid "Front silk screen"
+msgstr "Vorderseitiger Siebdruck"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:150
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:354
+msgid "Front solder mask"
+msgstr "Vorderseitige Lötstopmaske"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:150
+msgid "User layer Eco1"
+msgstr "Benutzer Lage Eco1"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:150
+msgid "User Layer Eco2"
+msgstr "Benutzer Lage Eco2"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:152
+msgid "Board Layer for Outline:"
+msgstr "Board Lage für Umriss:"
+
+#: bitmap2component/bitmap2cmp_gui_base.cpp:154
+msgid ""
+"Choose the board layer to place the outline.\n"
+"The 2 invisible fields reference and value are always placed on the silk "
+"screen layer."
+msgstr "Wählen Sie die Board Lage auf der der Umriss erstellt werden soll."
+
 #: common/base_screen.cpp:188
 msgid "User Grid"
 msgstr "Benutzerdef. Raster"
@@ -610,27 +837,6 @@ msgstr "Marker Info"
 #: common/common.cpp:140
 msgid "\""
 msgstr "\""
-
-#: common/common.cpp:144 common/common.cpp:202
-#: common/dialogs/dialog_page_settings.cpp:471 common/draw_frame.cpp:485
-#: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:45
-#: pagelayout_editor/pl_editor_frame.cpp:467 pcb_calculator/UnitSelector.cpp:38
-#: pcb_calculator/UnitSelector.cpp:70
-#: pcbnew/dialogs/dialog_create_array_base.cpp:50
-#: pcbnew/dialogs/dialog_create_array_base.cpp:61
-#: pcbnew/dialogs/dialog_create_array_base.cpp:72
-#: pcbnew/dialogs/dialog_create_array_base.cpp:83
-#: pcbnew/dialogs/dialog_create_array_base.cpp:189
-#: pcbnew/dialogs/dialog_create_array_base.cpp:200
-#: pcbnew/dialogs/dialog_export_idf_base.cpp:46
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
-#: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
-#: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:55
-#: pcbnew/dialogs/dialog_move_exact_base.cpp:35
-#: pcbnew/dialogs/dialog_move_exact_base.cpp:49
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:90
-msgid "mm"
-msgstr "mm"
 
 #: common/common.cpp:171 common/dialogs/dialog_page_settings.cpp:471
 #: pagelayout_editor/pl_editor_frame.cpp:463
@@ -1211,10 +1417,6 @@ msgstr ""
 msgid "Paper"
 msgstr "Papier"
 
-#: common/dialogs/dialog_page_settings_base.cpp:32
-msgid "Size:"
-msgstr "Größe:"
-
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
 msgstr "Dummytext"
@@ -1470,24 +1672,6 @@ msgstr "Die Dokumentationsdatei '%s' wurde nicht gefunden."
 #, c-format
 msgid "Unknown MIME type for doc file <%s>"
 msgstr "Unbekannter MIME Typ für Doc Datei <%s>"
-
-#: common/eda_text.cpp:416
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
-#: eeschema/dialogs/dialog_edit_label_base.cpp:76
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/libedit.cpp:498
-#: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:758
-#: gerbview/class_GERBER.cpp:359 gerbview/class_GERBER.cpp:363
-#: gerbview/class_GERBER.cpp:366 pcbnew/class_module.cpp:610
-#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:140
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:104
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:100 pcbnew/muonde.cpp:859
-msgid "Normal"
-msgstr "Normal"
 
 #: common/eda_text.cpp:417
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
@@ -3393,18 +3577,6 @@ msgstr ""
 "Wähle diese Option, wenn Bauteile aus mehrfachen Einheiten bestehen, welche "
 "nicht untereinander austauschbar sein sollen."
 
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
-#: eeschema/dialogs/dialog_erc_base.cpp:147
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:77
-#: pcbnew/dialogs/dialog_block_options_base.cpp:20
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:48
-#: pcbnew/dialogs/dialog_fp_lib_table.cpp:209
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:98
-#: pcbnew/dialogs/dialog_plot_base.cpp:81
-#: pcbnew/dialogs/dialog_pns_settings_base.cpp:26
-msgid "Options"
-msgstr "Optionen"
-
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:119
 msgid ""
 "A short description that is displayed in Eeschema.\n"
@@ -4926,12 +5098,6 @@ msgstr "DXF"
 msgid "HPGL"
 msgstr "HPGL"
 
-#: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
-#: pcbnew/dialogs/dialog_plot_base.cpp:245
-#: pcbnew/dialogs/wizard_add_fplib_base.cpp:187
-msgid "Format"
-msgstr "Format"
-
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:48
 msgid "Paper Options"
 msgstr "Seiteneinstellungen"
@@ -5350,14 +5516,6 @@ msgstr "Er&setzen"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
 msgid "Replace &All"
 msgstr "&Alle ersetzen"
-
-#: eeschema/edit_bitmap.cpp:103 pagelayout_editor/pl_editor_frame.cpp:635
-msgid "Choose Image"
-msgstr "Wähle ein Bild"
-
-#: eeschema/edit_bitmap.cpp:104 pagelayout_editor/pl_editor_frame.cpp:636
-msgid "Image Files "
-msgstr "Bilddateien"
 
 #: eeschema/edit_bitmap.cpp:115 eeschema/edit_bitmap.cpp:125
 #: pagelayout_editor/pl_editor_frame.cpp:646
@@ -6474,10 +6632,6 @@ msgstr "Lege Ankerposition fest"
 #: eeschema/libeditframe.cpp:1145
 msgid "Import"
 msgstr "Importieren"
-
-#: eeschema/libeditframe.cpp:1151
-msgid "Export"
-msgstr "Exportieren"
 
 #: eeschema/libeditframe.cpp:1163 eeschema/schedit.cpp:605 pcbnew/edit.cpp:1501
 #: pcbnew/modedit.cpp:987 pcbnew/tools/pcbnew_control.cpp:748
@@ -8484,10 +8638,6 @@ msgstr "Lage für Grafiken"
 #: gerbview/class_GERBER.cpp:356
 msgid "Img Rot."
 msgstr "Bildrotation"
-
-#: gerbview/class_GERBER.cpp:359
-msgid "Negative"
-msgstr "Negativ"
 
 #: gerbview/class_GERBER.cpp:360 gerbview/class_gerber_draw_item.cpp:568
 msgid "Polarity"
@@ -17086,17 +17236,9 @@ msgstr "Vorderseitige Lötpaste"
 msgid "Back solder paste"
 msgstr "Rückseitige Lötpaste"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:348
-msgid "Front silk screen"
-msgstr "Vorderseitiger Siebdruck"
-
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:351
 msgid "Back silk screen"
 msgstr "Rückseitiger Siebdruck"
-
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:354
-msgid "Front solder mask"
-msgstr "Vorderseitige Lötstopmaske"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:357
 msgid "Back solder mask"
@@ -22458,6 +22600,10 @@ msgstr "Aktualisiere Netzlinien ..."
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.h:79
 msgid "3D Display Options"
 msgstr "3D-Anzeigeoptionen"
+
+#: bitmap2component/bitmap2cmp_gui_base.h:92
+msgid "Bitmap to Component Converter"
+msgstr "Bitmap zu Bauteil Konverter"
 
 #: common/dialog_about/dialog_about_base.h:50
 msgid "About"
