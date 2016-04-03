@@ -133,6 +133,13 @@ SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
     wxFileName fn;
     fn.Assign( tname );
 
+    if( fn.IsRelative() && !m_dir.empty() )
+    {
+        wxString fname = wxString::FromUTF8Unchecked( m_dir.c_str() );
+        fname.append( tname );
+        fn.Assign( fname );
+    }
+
     if( !fn.Normalize() )
     {
         m_inlineModels.insert( std::pair< std::string, SGNODE* >( aName, NULL ) );
@@ -200,6 +207,7 @@ bool WRL2BASE::Read( WRLPROC& proc )
     }
 
     WRL2NODE* node = NULL;
+    m_dir = proc.GetParentDir();
 
     while( ReadNode( proc, this, &node ) && !proc.eof() );
 

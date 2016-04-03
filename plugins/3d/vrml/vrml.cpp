@@ -45,8 +45,8 @@
 
 #define PLUGIN_VRML_MAJOR 1
 #define PLUGIN_VRML_MINOR 3
-#define PLUGIN_VRML_PATCH 0
-#define PLUGIN_VRML_REVNO 1
+#define PLUGIN_VRML_PATCH 1
+#define PLUGIN_VRML_REVNO 0
 
 
 const char* GetKicadPluginName( void )

@@ -60,6 +60,7 @@ class WRL2BASE : public WRL2NODE
 {
 private:
     bool m_useInline;
+    std::string m_dir;  // parent directory of the file
 
     // handle cases of USE / DEF
     bool implementUse( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
