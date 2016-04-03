@@ -49,7 +49,8 @@ private:
     WRLVERSION m_fileVersion;   // VRML file version
     std::string m_error;        // error message
     std::string m_badchars;     // characters forbidden in VRML{1|2} names
-    std::string m_filename;
+    std::string m_filename;     // current file
+    std::string m_filedir;      // parent directory of the file
 
     // getRawLine reads a single non-blank line and in the case of a VRML1 file
     // it checks for invalid characters (bit 8 set). If m_buf is not empty and
@@ -66,6 +67,8 @@ public:
     // return the VRML Version
     WRLVERSION GetVRMLType( void );
 
+    // return the parent directory of the current file
+    const char* GetParentDir( void );
 
     // helper routines
     std::string GetError( void );
@@ -81,7 +84,7 @@ public:
     void Pop( void );
 
     // read up to the next whitespace or comma
-    bool ReadGlob( std::string& aGlob, bool* hasComma = NULL );
+    bool ReadGlob( std::string& aGlob );
     // read a VRML name; is similar to ReadGlob except that it enforces
     // name checking rules, does not allow a comma at the end, and
     // stops when a left brace or bracket is found.
@@ -92,12 +95,12 @@ public:
     // single variable readers
     bool ReadString( std::string& aSFString );  // read a VRML string
     bool ReadSFBool( bool& aSFBool );
-    bool ReadSFColor( WRLVEC3F& aSFColor, bool* hasComma = NULL );
-    bool ReadSFFloat( float& aSFFloat, bool* hasComma = NULL );
-    bool ReadSFInt( int& aSFInt32, bool* hasComma = NULL );
-    bool ReadSFRotation( WRLROTATION& aSFRotation, bool* hasComma = NULL );
-    bool ReadSFVec2f( WRLVEC2F& aSFVec2f, bool* hasComma = NULL );
-    bool ReadSFVec3f( WRLVEC3F& aSFVec3f, bool* hasComma = NULL );
+    bool ReadSFColor( WRLVEC3F& aSFColor );
+    bool ReadSFFloat( float& aSFFloat );
+    bool ReadSFInt( int& aSFInt32 );
+    bool ReadSFRotation( WRLROTATION& aSFRotation );
+    bool ReadSFVec2f( WRLVEC2F& aSFVec2f );
+    bool ReadSFVec3f( WRLVEC3F& aSFVec3f );
 
     // array readers
     bool ReadMFString( std::vector< std::string >& aMFString );
