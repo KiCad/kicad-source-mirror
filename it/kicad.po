@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-03 00:38+0200\n"
-"PO-Revision-Date: 2016-04-03 00:38+0200\n"
+"PO-Revision-Date: 2016-04-03 02:01+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -348,7 +348,7 @@ msgstr "Apri il manuale utente di KiCad"
 #: eeschema/menubar_libedit.cpp:259 cvpcb/menubar.cpp:120
 #: gerbview/menubar.cpp:228 pagelayout_editor/menubar.cpp:154
 msgid "&Getting Started in KiCad"
-msgstr "&Iniziare con KiCad"
+msgstr "&Introduzione a KiCad"
 
 #: kicad/menubar.cpp:413 eeschema/menubar.cpp:507 cvpcb/menubar.cpp:121
 #: gerbview/menubar.cpp:229 pagelayout_editor/menubar.cpp:155
