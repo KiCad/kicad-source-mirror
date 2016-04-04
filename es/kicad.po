@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-29 15:23+0200\n"
-"PO-Revision-Date: 2016-03-29 15:33+0200\n"
+"POT-Creation-Date: 2016-04-04 12:49+0200\n"
+"PO-Revision-Date: 2016-04-04 13:09+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -528,8 +528,8 @@ msgstr "pixeles"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:61
 #: pcbnew/dialogs/dialog_create_array_base.cpp:72
 #: pcbnew/dialogs/dialog_create_array_base.cpp:83
-#: pcbnew/dialogs/dialog_create_array_base.cpp:189
-#: pcbnew/dialogs/dialog_create_array_base.cpp:200
+#: pcbnew/dialogs/dialog_create_array_base.cpp:188
+#: pcbnew/dialogs/dialog_create_array_base.cpp:199
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:46
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:64
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
@@ -858,7 +858,7 @@ msgstr "unidades"
 msgid "in"
 msgstr "in"
 
-#: common/common.cpp:209 pcbnew/dialogs/dialog_create_array_base.cpp:221
+#: common/common.cpp:209 pcbnew/dialogs/dialog_create_array_base.cpp:220
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:63
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:141
 msgid "deg"
@@ -944,26 +944,30 @@ msgid "Additional component libraries repository (smisioto)"
 msgstr "Depósito adicional de librerías de componentes (smisioto)"
 
 #: common/dialog_about/AboutDialog_main.cpp:174
-msgid "Contribute to KiCad"
-msgstr "Contribuya con KiCad"
+msgid "Bug tracker"
+msgstr "Seguimiento de errores"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
-msgid "Report bugs if you found any"
-msgstr "Informe sobre errores si encuentra alguno"
+msgid "Report or examine bugs"
+msgstr "Informar o examinar errores"
 
-#: common/dialog_about/AboutDialog_main.cpp:185
-msgid "File an idea for improvement"
-msgstr "Envíe una idea de mejora"
+#: common/dialog_about/AboutDialog_main.cpp:186
+msgid "KiCad user group and community"
+msgstr "Comunidad y grupo de usuarios de KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:189
-msgid "KiCad links to user groups, tutorials and much more"
-msgstr "Enlaces a grupos de usuarios, tutoriales y mucho más sobre KiCad"
+#: common/dialog_about/AboutDialog_main.cpp:192
+msgid "KiCad user group"
+msgstr "Grupo de usuarios de KiCad"
 
-#: common/dialog_about/AboutDialog_main.cpp:203
+#: common/dialog_about/AboutDialog_main.cpp:197
+msgid "KiCad forum"
+msgstr "Foro de KiCad"
+
+#: common/dialog_about/AboutDialog_main.cpp:210
 msgid "The complete KiCad EDA Suite is released under the"
 msgstr "La suite completa KiCad EDA se pone a disposición bajo la"
 
-#: common/dialog_about/AboutDialog_main.cpp:205
+#: common/dialog_about/AboutDialog_main.cpp:212
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "Licencia Pública General (GPL) versión 3 o posterior"
 
@@ -1157,8 +1161,8 @@ msgstr "Variable de entorno Ayuda"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:38
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:186
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:181
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:188
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:182
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:338
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:341
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180 eeschema/lib_pin.cpp:1969
@@ -1235,7 +1239,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: common/dialogs/dialog_get_component_base.cpp:25
-#: eeschema/dialogs/dialog_bom_base.cpp:44
+#: eeschema/dialogs/dialog_bom_base.cpp:45
 #: eeschema/dialogs/dialog_netlist_base.cpp:115
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:28
 #: pcbnew/librairi.cpp:617
@@ -1264,13 +1268,17 @@ msgid "Double-click to edit"
 msgstr "Doble-click para editar"
 
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:28
-#: common/widgets/widget_hotkey_list.cpp:376
+#: common/widgets/widget_hotkey_list.cpp:387
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:39
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:53
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:67
 msgid "Reset"
 msgstr "Valor por defecto"
+
+#: common/dialogs/dialog_hotkeys_editor_base.cpp:31
+msgid "Defaults"
+msgstr "Defecto"
 
 #: common/dialogs/dialog_image_editor.cpp:130
 msgid "Incorrect scale number"
@@ -1828,58 +1836,58 @@ msgstr "Seleccionar todo\tCTRL+A"
 msgid "Select all cells"
 msgstr "Seleccionar todas las celdas"
 
-#: common/hotkeys_basic.cpp:464 common/hotkeys_basic.cpp:493
-#: common/hotkeys_basic.cpp:497
+#: common/hotkeys_basic.cpp:458 common/hotkeys_basic.cpp:487
+#: common/hotkeys_basic.cpp:491
 msgid "Hotkeys List"
 msgstr "Lista de atajos de teclado"
 
-#: common/hotkeys_basic.cpp:757
+#: common/hotkeys_basic.cpp:751
 msgid "Read Hotkey Configuration File:"
 msgstr "Leer archivo de configuración de atajos de teclado:"
 
-#: common/hotkeys_basic.cpp:788
+#: common/hotkeys_basic.cpp:782
 msgid "Write Hotkey Configuration File:"
 msgstr "Guardar archivo de configuración de atajos de teclado:"
 
-#: common/hotkeys_basic.cpp:817
+#: common/hotkeys_basic.cpp:811
 msgid "&List Current Keys"
 msgstr "&Mostrar atajos de teclado"
 
-#: common/hotkeys_basic.cpp:818
+#: common/hotkeys_basic.cpp:812
 msgid "Displays the current hotkeys list and corresponding commands"
 msgstr "Muestra la lista de atajos de teclado y los comandos correspondientes"
 
-#: common/hotkeys_basic.cpp:823
+#: common/hotkeys_basic.cpp:817
 msgid "&Edit Hotkeys"
 msgstr "&Editar atajos de teclado"
 
-#: common/hotkeys_basic.cpp:824
+#: common/hotkeys_basic.cpp:818
 msgid "Call the hotkeys editor"
 msgstr "Abrir el editor de atajos de teclado"
 
-#: common/hotkeys_basic.cpp:831 eeschema/menubar.cpp:409
+#: common/hotkeys_basic.cpp:825 eeschema/menubar.cpp:409
 msgid "E&xport Hotkeys"
 msgstr "E&xportar atajos de teclado"
 
-#: common/hotkeys_basic.cpp:832 eeschema/menubar.cpp:410
+#: common/hotkeys_basic.cpp:826 eeschema/menubar.cpp:410
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr ""
 "Crear un archivo de configuración de atajos de teclado para exportar los "
 "atajos actuales"
 
-#: common/hotkeys_basic.cpp:837 eeschema/menubar.cpp:415
+#: common/hotkeys_basic.cpp:831 eeschema/menubar.cpp:415
 msgid "&Import Hotkeys"
 msgstr "&Importar atajos de teclado"
 
-#: common/hotkeys_basic.cpp:838 eeschema/menubar.cpp:416
+#: common/hotkeys_basic.cpp:832 eeschema/menubar.cpp:416
 msgid "Load an existing hotkey configuration file"
 msgstr "Cargar un archivo de configuración de atajos de teclado"
 
-#: common/hotkeys_basic.cpp:843
+#: common/hotkeys_basic.cpp:837
 msgid "&Hotkeys"
 msgstr "&Atajos de teclado"
 
-#: common/hotkeys_basic.cpp:844
+#: common/hotkeys_basic.cpp:838
 msgid "Hotkeys configuration and preferences"
 msgstr "Preferencias y configuración de teclas rápidas"
 
@@ -1900,7 +1908,8 @@ msgstr "Interno"
 msgid "Non-copper"
 msgstr "Sin cobre"
 
-#: common/pgm_base.cpp:108 pcbnew/dialogs/dialog_design_rules_base.cpp:59
+#: common/pgm_base.cpp:108 common/widgets/widget_hotkey_list.cpp:388
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:59
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:116
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:126
@@ -2082,31 +2091,35 @@ msgstr "error al escribir OUTPUTSTREAM_OUTPUTFORMATTER"
 msgid "Colors"
 msgstr "Colores"
 
-#: common/widgets/widget_hotkey_list.cpp:109
+#: common/widgets/widget_hotkey_list.cpp:111
 msgid "Press a new hotkey, or press Esc to cancel..."
 msgstr "Pulsar nuevo atajo de teclado, o Esc para cancelar..."
 
-#: common/widgets/widget_hotkey_list.cpp:116
+#: common/widgets/widget_hotkey_list.cpp:118
 msgid "Command:"
 msgstr "Comando:"
 
-#: common/widgets/widget_hotkey_list.cpp:124
+#: common/widgets/widget_hotkey_list.cpp:126
 msgid "Current key:"
 msgstr "Tecla actual"
 
-#: common/widgets/widget_hotkey_list.cpp:218
+#: common/widgets/widget_hotkey_list.cpp:220
 msgid "Set Hotkey"
 msgstr "Crear atajo"
 
-#: common/widgets/widget_hotkey_list.cpp:375
+#: common/widgets/widget_hotkey_list.cpp:386
 msgid "Edit..."
 msgstr "Editar..."
 
-#: common/widgets/widget_hotkey_list.cpp:378
+#: common/widgets/widget_hotkey_list.cpp:390
 msgid "Reset all"
 msgstr "Reiniciar todo"
 
-#: common/widgets/widget_hotkey_list.cpp:514
+#: common/widgets/widget_hotkey_list.cpp:391
+msgid "Reset all to default"
+msgstr "Restablecer todos los valores predeterminados"
+
+#: common/widgets/widget_hotkey_list.cpp:535
 #, c-format
 msgid ""
 "<%s> is already assigned to \"%s\" in section \"%s\". Are you sure you want "
@@ -2115,15 +2128,15 @@ msgstr ""
 "<%s> ya ha sido asignado a \"%s\" en la sección \"%s\". ¿Está seguro de que "
 "quiere modificar la asignación?"
 
-#: common/widgets/widget_hotkey_list.cpp:519
+#: common/widgets/widget_hotkey_list.cpp:540
 msgid "Confirm change"
 msgstr "Confirmar el cambio"
 
-#: common/widgets/widget_hotkey_list.cpp:543
+#: common/widgets/widget_hotkey_list.cpp:564
 msgid "Command"
 msgstr "Comando"
 
-#: common/widgets/widget_hotkey_list.cpp:544
+#: common/widgets/widget_hotkey_list.cpp:565
 msgid "Hotkey"
 msgstr "Atajo de teclado"
 
@@ -2572,7 +2585,7 @@ msgid "Project: '%s'"
 msgstr "Proyecto: '%s'"
 
 #: cvpcb/cvpcb_mainframe.cpp:751 eeschema/libedit.cpp:61
-#: eeschema/schframe.cpp:1361 kicad/prjconfig.cpp:332
+#: eeschema/schframe.cpp:1364 kicad/prjconfig.cpp:332
 #: pcbnew/moduleframe.cpp:768 pcbnew/pcbframe.cpp:993
 msgid " [Read Only]"
 msgstr "[Solo lectura]"
@@ -2648,8 +2661,8 @@ msgid "Available environment variables for relative paths:"
 msgstr "Variables de entorno disponibles para rutas relativas:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:189
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:191
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:185
 #: eeschema/dialogs/dialog_rescue_each.cpp:111 eeschema/lib_field.cpp:581
 #: eeschema/lib_field.cpp:759 eeschema/onrightclick.cpp:426
 #: eeschema/sch_component.cpp:1543 eeschema/template_fieldnames.cpp:42
@@ -3322,41 +3335,41 @@ msgstr "Eliminar anotación"
 msgid "Annotate"
 msgstr "Anotar"
 
-#: eeschema/dialogs/dialog_bom.cpp:321
+#: eeschema/dialogs/dialog_bom.cpp:356
 #, c-format
 msgid "Failed to open file '%s'"
 msgstr "No se ha podido abrir el archivo '%s'"
 
-#: eeschema/dialogs/dialog_bom.cpp:447
+#: eeschema/dialogs/dialog_bom.cpp:489
 msgid "Plugin name in plugin list"
 msgstr "Nombre del complemento en la lista"
 
-#: eeschema/dialogs/dialog_bom.cpp:448
+#: eeschema/dialogs/dialog_bom.cpp:490
 msgid "Plugin name"
 msgstr "Nombre del complemento"
 
-#: eeschema/dialogs/dialog_bom.cpp:458
+#: eeschema/dialogs/dialog_bom.cpp:500
 msgid "This name already exists. Abort"
 msgstr "Este nombre ya existe. Abortar"
 
-#: eeschema/dialogs/dialog_bom.cpp:486 eeschema/dialogs/dialog_netlist.cpp:840
+#: eeschema/dialogs/dialog_bom.cpp:529 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
 msgstr "Archivos de complemento:"
 
-#: eeschema/dialogs/dialog_bom.cpp:577
+#: eeschema/dialogs/dialog_bom.cpp:630
 msgid "Plugin file name not found. Cannot edit plugin file"
 msgstr ""
 "No se ha encontrado el nombre del complemento. No puede editarse el archivo"
 
-#: eeschema/dialogs/dialog_bom.cpp:587
+#: eeschema/dialogs/dialog_bom.cpp:640
 msgid "No text editor selected in KiCad. Please choose it"
 msgstr "No se ha seleccionado un editor en KiCad. Por favor, elija uno"
 
-#: eeschema/dialogs/dialog_bom.cpp:592
+#: eeschema/dialogs/dialog_bom.cpp:645
 msgid "Bom Generation Help"
 msgstr "Ayuda para la generación de la Lista de Materiales"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:37
+#: eeschema/dialogs/dialog_bom_base.cpp:38
 msgid "Plugins"
 msgstr "Complementos"
 
@@ -3387,7 +3400,21 @@ msgstr "Editar complemento"
 msgid "Command line:"
 msgstr "Línea de comandos:"
 
-#: eeschema/dialogs/dialog_bom_base.cpp:102
+#: eeschema/dialogs/dialog_bom_base.cpp:98
+msgid "Show console window"
+msgstr "Mostrar consola"
+
+#: eeschema/dialogs/dialog_bom_base.cpp:100
+msgid ""
+"By default, command line runs with hidden console window and output is "
+"redirected to \"Plugin info\" field. Set this option to show the window of "
+"the running command."
+msgstr ""
+"Por defecto, la línea de comandos se ejecuta en una ventana oculta y la "
+"salida se redirecciona al campo de \"Información del plugin\". Marque esta "
+"opción para mostrar la ventana de ejecución del comando."
+
+#: eeschema/dialogs/dialog_bom_base.cpp:107
 msgid "Plugin Info:"
 msgstr "Información del complemento:"
 
@@ -3674,39 +3701,39 @@ msgstr ""
 msgid "Edit"
 msgstr "Editar"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:223
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:225
 #, c-format
 msgid "Component '%s' found in library '%s'"
 msgstr "Se ha encontrado el componente '%s' en la librería '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:229
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:231
 #, c-format
 msgid "Component '%s' not found in any library"
 msgstr "No se ha encontrado el componente '%s' en la librería"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:245
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:247
 msgid "However, some candidates are found:"
 msgstr "En cambio, se han encontrado algunos candidatos:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:251
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:253
 #, c-format
 msgid "'%s' found in library '%s'"
 msgstr "Se ha encrontrado '%s' en la librería '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:313
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:315
 msgid "No Component Name!"
 msgstr "¡Falta el nombre del componente!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:322
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:324
 #, c-format
 msgid "Component '%s' not found!"
 msgstr "¡No se ha encontrado el componente '%s'!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:396
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:398
 msgid "Illegal reference. A reference must start with a letter"
 msgstr "Referencia ilegal. Una referencia debe comenzar por una letra"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:422
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:424
 #, c-format
 msgid ""
 "The field name <%s> does not have a value and is not defined in the field "
@@ -3717,23 +3744,23 @@ msgstr ""
 "de campos. Los campos de valor nulo son inválidos y serán eliminados del "
 "componente. ¿Desea elminar tanto este como los demás campos sin definir?"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:429
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:431
 msgid "Remove Fields"
 msgstr "Eliminar campos"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:848
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:851
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:697
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:677
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
 msgid "Show in Browser"
 msgstr "Mostrar en explorador"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:850
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:699
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:853
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:679
 msgid "Assign Footprint"
 msgstr "Asignar huella"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:985
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:993
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/lib_pin.cpp:1987 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:145
@@ -3741,7 +3768,7 @@ msgstr "Asignar huella"
 msgid "Yes"
 msgstr "Sí"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:987
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:995
 #: eeschema/lib_pin.cpp:1989 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_text_mod.cpp:378
@@ -3761,9 +3788,9 @@ msgstr "Las unidades son intercambiables:"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:48
 #: pcbnew/dialogs/dialog_create_array_base.cpp:69
 #: pcbnew/dialogs/dialog_create_array_base.cpp:80
-#: pcbnew/dialogs/dialog_create_array_base.cpp:186
-#: pcbnew/dialogs/dialog_create_array_base.cpp:197
-#: pcbnew/dialogs/dialog_create_array_base.cpp:216
+#: pcbnew/dialogs/dialog_create_array_base.cpp:185
+#: pcbnew/dialogs/dialog_create_array_base.cpp:196
+#: pcbnew/dialogs/dialog_create_array_base.cpp:215
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:62
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:76
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:74
@@ -3840,7 +3867,7 @@ msgstr ""
 "Para puertas lógicas, esta es conversión \"De Morgan\""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:670
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:649
 msgid "Chip Name"
 msgstr "Nombre del componente"
 
@@ -4177,12 +4204,11 @@ msgstr "Pasivo"
 msgid "S&hape"
 msgstr "F&orma"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:243
-msgid "Illegal reference prefix. A reference must start by a letter"
-msgstr ""
-"Prefijo de referencia ilegal. Una referencia debe comenzar con una letra"
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:244
+msgid "Illegal reference.  References must start with a letter."
+msgstr "Referencia ilegal. La referencia debe comenzar con una letra."
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:259
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:260
 #, c-format
 msgid ""
 "A new name is entered for this component\n"
@@ -4211,16 +4237,9 @@ msgid ""
 "The vertical height of the currently selected field's text in the schematic"
 msgstr "La altura del texto del campo seleccionado en el esquema"
 
-#: eeschema/dialogs/dialog_edit_one_field.cpp:172
-#, c-format
-msgid ""
-"Whitespace is not permitted inside references or values (symbol names in "
-"lib).\n"
-"The text you entered has been converted to use underscores: %s"
-msgstr ""
-"El espacio no está permitido dentro de los nombres de referencias o valores "
-"(nombres de símbolo en librería).\n"
-"El texto introducido se ha modificado para utilizar subrayados: %s"
+#: eeschema/dialogs/dialog_edit_one_field.cpp:185
+msgid "Illegal reference field value!"
+msgstr "¡Valor del campo de la referencia ilegal!"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:137
 #, c-format
@@ -5516,23 +5535,10 @@ msgstr "Reemplazar &todo"
 msgid "Couldn't load image from <%s>"
 msgstr "No puede cargarse una imagen desde <%s>"
 
-#: eeschema/edit_component_in_schematic.cpp:73
+#: eeschema/edit_component_in_schematic.cpp:69
 #, c-format
 msgid "Edit %s Field"
 msgstr "Editar el campo %s"
-
-#: eeschema/edit_component_in_schematic.cpp:108
-msgid "Illegal reference string!  No change"
-msgstr "¡Texto de la referencia ilegal! No se realiza el cambio"
-
-#: eeschema/edit_component_in_schematic.cpp:117
-msgid "The reference field cannot be empty!  No change"
-msgstr ""
-"¡El campo de la referencia no puede estar vacío! No se realiza el cambio"
-
-#: eeschema/edit_component_in_schematic.cpp:127
-msgid "The value field cannot be empty!  No change"
-msgstr "¡El campo del valor no puede estar vacío! No se realiza el cambio"
 
 #: eeschema/eeschema_config.cpp:245 pcbnew/pcbnew_config.cpp:217
 msgid "Read Project File"
@@ -6883,34 +6889,24 @@ msgstr "Editar el campo %s"
 msgid "Enter a new value for the %s field."
 msgstr "Introduzca un nuevo valor para el campo %s."
 
-#: eeschema/libfield.cpp:79
-#, c-format
-msgid "A %s field cannot be empty."
-msgstr "Un campo de %s no puede estar vacío."
-
-#: eeschema/libfield.cpp:88
-msgid "Illegal reference. A reference must start by a letter"
-msgstr "Referencia ilegal. Una referencia debe comenzar por una letra"
-
-#: eeschema/libfield.cpp:108
+#: eeschema/libfield.cpp:91
 #, c-format
 msgid ""
 "The name '%s' conflicts with an existing entry in the component library "
 "'%s'.\n"
 "\n"
-"Do you wish to replace the current component in library with this one?"
+"Do you wish to replace the current component in the library with this one?"
 msgstr ""
-"El nombre '%s' entra en conflicto con una entrada ya existente en la "
-"librería ?%s'.\n"
+"El nombre '%s' entra en conflicto con una entrada existente en la librería "
+"de componentes '%s'.\n"
 "\n"
-"¿Desea reemplazar el componente de la librería con el actual?"
+"¿Desea reemplazar el componente actual en la librería con este?"
 
-#: eeschema/libfield.cpp:114 eeschema/libfield.cpp:130
-#: eeschema/libfield.cpp:149
+#: eeschema/libfield.cpp:97 eeschema/libfield.cpp:111 eeschema/libfield.cpp:131
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: eeschema/libfield.cpp:125
+#: eeschema/libfield.cpp:107
 #, c-format
 msgid ""
 "The current component already has an alias named '%s'.\n"
@@ -6921,7 +6917,7 @@ msgstr ""
 "\n"
 "¿Desea eliminar este alias del componente?"
 
-#: eeschema/libfield.cpp:144
+#: eeschema/libfield.cpp:125
 #, c-format
 msgid ""
 "The new component contains alias names that conflict with entries in the "
@@ -8189,6 +8185,77 @@ msgstr "Etiqueta global %s"
 msgid "Hierarchical Label %s"
 msgstr "Etiqueta jerárquica %s"
 
+#: eeschema/sch_validators.cpp:80
+msgid "reference designator"
+msgstr "indicador de referencia"
+
+#: eeschema/sch_validators.cpp:81
+msgid "value"
+msgstr "valor"
+
+#: eeschema/sch_validators.cpp:82
+msgid "footprint"
+msgstr "huella"
+
+#: eeschema/sch_validators.cpp:83
+msgid "data sheet"
+msgstr "hoja de datos"
+
+#: eeschema/sch_validators.cpp:84
+msgid "user definded"
+msgstr "definido por el usuario"
+
+#: eeschema/sch_validators.cpp:92
+#, c-format
+msgid "The %s field cannot be empty."
+msgstr "El campo %s no puede estar vacío."
+
+#: eeschema/sch_validators.cpp:98
+msgid "carriage return"
+msgstr "retorno de carro"
+
+#: eeschema/sch_validators.cpp:100
+msgid "line feed"
+msgstr "avance de línea"
+
+#: eeschema/sch_validators.cpp:102
+msgid "tab"
+msgstr "tabulador"
+
+#: eeschema/sch_validators.cpp:104
+msgid "space"
+msgstr "espacio"
+
+#: eeschema/sch_validators.cpp:111
+#, c-format
+msgid "%s or %s"
+msgstr "%s o %s"
+
+#: eeschema/sch_validators.cpp:113
+#, c-format
+msgid "%s, %s, or %s"
+msgstr "%s, %s o %s"
+
+#: eeschema/sch_validators.cpp:115
+#, c-format
+msgid "%s, %s, %s, or %s"
+msgstr "%s, %s, %s o %s"
+
+#: eeschema/sch_validators.cpp:120
+#, c-format
+msgid "The %s field cannot contain %s characters."
+msgstr "El campo %s no puede tener %s caracteres."
+
+#: eeschema/sch_validators.cpp:124
+#, c-format
+msgid "The %s field cannot contain leading and/or trailing white space."
+msgstr ""
+"El campo %s no puede tener un espacio en blanco al comienzo o al final."
+
+#: eeschema/sch_validators.cpp:132
+msgid "Field Validation Error"
+msgstr "Error de validación de campo"
+
 #: eeschema/schedit.cpp:265
 msgid "There are no undefined labels in this sheet to clean up."
 msgstr "No queda ninguna etiqueta sin definir en la hoja."
@@ -8277,7 +8344,7 @@ msgstr "No encontrado"
 msgid "The following libraries were not found:"
 msgstr "No se han encontrado las siguientes librerías:"
 
-#: eeschema/schframe.cpp:621 pcbnew/pcbframe.cpp:588
+#: eeschema/schframe.cpp:624 pcbnew/pcbframe.cpp:588
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -8288,23 +8355,23 @@ msgstr ""
 "'%s'\n"
 "antes de cerrar?"
 
-#: eeschema/schframe.cpp:768
+#: eeschema/schframe.cpp:771
 msgid "Draw wires and buses in any direction"
 msgstr "Dibujar líneas o buses en cualquier dirección"
 
-#: eeschema/schframe.cpp:769
+#: eeschema/schframe.cpp:772
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Dibujar únicamente líneas y buses horizontales o verticales"
 
-#: eeschema/schframe.cpp:778
+#: eeschema/schframe.cpp:781
 msgid "Do not show hidden pins"
 msgstr "No mostrar pines ocultos"
 
-#: eeschema/schframe.cpp:779 eeschema/tool_sch.cpp:290
+#: eeschema/schframe.cpp:782 eeschema/tool_sch.cpp:290
 msgid "Show hidden pins"
 msgstr "Mostrar pines ocultos"
 
-#: eeschema/schframe.cpp:833
+#: eeschema/schframe.cpp:836
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, you need to launch "
@@ -8314,28 +8381,28 @@ msgstr ""
 "modo independiente. Para crear/actualizar placas desde el esquema es "
 "necesario crear un projecto de placa desde la ventana principal de KiCad."
 
-#: eeschema/schframe.cpp:948
+#: eeschema/schframe.cpp:951
 msgid "Schematic"
 msgstr "Esquema"
 
-#: eeschema/schframe.cpp:967
+#: eeschema/schframe.cpp:970
 msgid "New Schematic"
 msgstr "Nuevo esquema"
 
-#: eeschema/schframe.cpp:980
+#: eeschema/schframe.cpp:983
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr "Ya existe el archivo de esquema '%s', utilice Abrir"
 
-#: eeschema/schframe.cpp:1001
+#: eeschema/schframe.cpp:1004
 msgid "Open Schematic"
 msgstr "Abrir esquema"
 
-#: eeschema/schframe.cpp:1131
+#: eeschema/schframe.cpp:1134
 msgid "Error: not a component or no component"
 msgstr "Error: no es un componente o no hay componente"
 
-#: eeschema/schframe.cpp:1364
+#: eeschema/schframe.cpp:1367
 msgid " [no file]"
 msgstr " [no hay archivo]"
 
@@ -8987,7 +9054,7 @@ msgstr "Obtener elección guardada"
 #: pagelayout_editor/events_functions.cpp:517
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:114
 msgid "Error Init Printer info"
-msgstr ""
+msgstr "Error de inicialización de información de la impresora"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:297
 #: pcbnew/dialogs/dialog_plot.cpp:755
@@ -13621,23 +13688,64 @@ msgstr ""
 "Exporta los ajustes seleccionados en esta zona (exceptuando la capa y la "
 "red) a las demás zonas de cobre."
 
-#: pcbnew/dialogs/dialog_create_array.cpp:53
+#: pcbnew/dialogs/dialog_create_array.cpp:56
 msgid "Numerals (0,1,2,...,9,10)"
 msgstr "Números (0,1,2,...,9,10)"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:54
+#: pcbnew/dialogs/dialog_create_array.cpp:57
 msgid "Hexadecimal (0,1,...,F,10,...)"
 msgstr "Hexadecimal (0,1,...,F,10,...)"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:55
+#: pcbnew/dialogs/dialog_create_array.cpp:58
 msgid "Alphabet, minus IOSQXZ"
 msgstr "Letras, excepto IOSQXZ"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:56
+#: pcbnew/dialogs/dialog_create_array.cpp:59
 msgid "Alphabet, full 26 characters"
 msgstr "Letras, 26 caracteres"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:296
+#: pcbnew/dialogs/dialog_create_array.cpp:232
+#, c-format
+msgid "Unrecognised numbering scheme: %d"
+msgstr "Esquema de numeración desconocido: %d"
+
+# Pendiente de contexto
+#: pcbnew/dialogs/dialog_create_array.cpp:246
+#, c-format
+msgid ""
+"Could not determine numbering start from \"%s\": expected value consistent "
+"with alphabet \"%s\""
+msgstr ""
+"No puede determinarse el inicio de la numeración desde \"%s\": se esperaba "
+"valor consistente con el alfabeto \"%s\""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:275
+#, c-format
+msgid "Bad integral value for %s: %s"
+msgstr "Valor entero incorrecto para %s: %s"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:298
+msgid "horizontal count"
+msgstr "posiciones horizontales"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:300
+msgid "vertical count"
+msgstr "posiciones verticales"
+
+# pendiente de contexto
+#: pcbnew/dialogs/dialog_create_array.cpp:310
+msgid "stagger"
+msgstr "escalonado"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:359
+msgid "point count"
+msgstr "número de puntos"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:372
+msgid "numbering start"
+msgstr "inicio de numeración"
+
+#: pcbnew/dialogs/dialog_create_array.cpp:398
 msgid "Bad parameters"
 msgstr "Parámetros incorrectos"
 
@@ -13677,9 +13785,9 @@ msgid "Stagger:"
 msgstr "Escalonado:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:91
-#: pcbnew/dialogs/dialog_create_array_base.cpp:156
-#: pcbnew/dialogs/dialog_create_array_base.cpp:159
-#: pcbnew/dialogs/dialog_create_array_base.cpp:263
+#: pcbnew/dialogs/dialog_create_array_base.cpp:155
+#: pcbnew/dialogs/dialog_create_array_base.cpp:158
+#: pcbnew/dialogs/dialog_create_array_base.cpp:261
 msgid "1"
 msgstr "1"
 
@@ -13695,88 +13803,88 @@ msgstr "Columnas"
 msgid "Stagger Type"
 msgstr "Tipo de escalonado"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:106
+#: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Horizontal, then vertical"
 msgstr "Horizontal, luego vertical"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:106
+#: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Vertical, then horizontal"
 msgstr "Vertical, luego horizontal"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:108
+#: pcbnew/dialogs/dialog_create_array_base.cpp:107
 msgid "Pad Numbering Direction"
 msgstr "Dirección de la numeración de pads"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:112
+#: pcbnew/dialogs/dialog_create_array_base.cpp:111
 msgid "Reverse pad numbering on alternate rows or columns"
 msgstr "Invertir numeración de pads o alternar filas o columnas"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:115
-#: pcbnew/dialogs/dialog_create_array_base.cpp:250
+#: pcbnew/dialogs/dialog_create_array_base.cpp:114
+#: pcbnew/dialogs/dialog_create_array_base.cpp:248
 msgid "Use first free number"
 msgstr "Utilizar primer número libre"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:115
-#: pcbnew/dialogs/dialog_create_array_base.cpp:250
+#: pcbnew/dialogs/dialog_create_array_base.cpp:114
+#: pcbnew/dialogs/dialog_create_array_base.cpp:248
 msgid "From start value"
 msgstr "A partir del valor inicial"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:117
-#: pcbnew/dialogs/dialog_create_array_base.cpp:252
+#: pcbnew/dialogs/dialog_create_array_base.cpp:116
+#: pcbnew/dialogs/dialog_create_array_base.cpp:250
 msgid "Initial pad number"
 msgstr "Número de pad inicial"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:121
+#: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Continuous (1, 2, 3...)"
 msgstr "Continua (1, 2, 3...)"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:121
+#: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Coordinate (A1, A2, ... B1, ...)"
 msgstr "Coordinada (A1, A2, ... B1, ...)"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:123
+#: pcbnew/dialogs/dialog_create_array_base.cpp:122
 msgid "Pad Numbering Scheme"
 msgstr "Esquema de numeración de pads"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:127
+#: pcbnew/dialogs/dialog_create_array_base.cpp:126
 msgid "Primary axis numbering:"
 msgstr "Numeración eje principal:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:136
+#: pcbnew/dialogs/dialog_create_array_base.cpp:135
 msgid "Secondary axis numbering:"
 msgstr "Numeración eje secundario:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:152
+#: pcbnew/dialogs/dialog_create_array_base.cpp:151
 msgid "Pad numbering start:"
 msgstr "Inicio de numeración de pads:"
 
 # A la espera de confirmar en KiCad
-#: pcbnew/dialogs/dialog_create_array_base.cpp:172
+#: pcbnew/dialogs/dialog_create_array_base.cpp:171
 msgid "Grid Array"
 msgstr "Matriz en cuadrícula"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:182
+#: pcbnew/dialogs/dialog_create_array_base.cpp:181
 msgid "Horizontal center:"
 msgstr "Centro horizontal:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:193
+#: pcbnew/dialogs/dialog_create_array_base.cpp:192
 msgid "Vertical center:"
 msgstr "Centro vertical:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:204
+#: pcbnew/dialogs/dialog_create_array_base.cpp:203
 msgid "Radius:"
 msgstr "Radio:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:208
+#: pcbnew/dialogs/dialog_create_array_base.cpp:207
 msgid "0 mm"
 msgstr "0 mm"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:212
+#: pcbnew/dialogs/dialog_create_array_base.cpp:211
 #: pcbnew/dialogs/dialog_move_exact.cpp:137
 msgid "Angle:"
 msgstr "Ángulo:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:217
+#: pcbnew/dialogs/dialog_create_array_base.cpp:216
 msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
 "produce a full circle divided evenly into \"Count\" portions."
@@ -13784,38 +13892,38 @@ msgstr ""
 "Los ángulos positivos representan un giro contra reloj. Un ángulo de 0 "
 "producirá un círculo completo dividido regularmente en el número indicado."
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:225
+#: pcbnew/dialogs/dialog_create_array_base.cpp:224
 msgid "Count:"
 msgstr "Cantidad:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:229
+#: pcbnew/dialogs/dialog_create_array_base.cpp:228
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:45
 msgid "4"
 msgstr "4"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:230
+#: pcbnew/dialogs/dialog_create_array_base.cpp:229
 msgid "How many items in the array."
 msgstr "Números de elementos en la serie."
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:234
+#: pcbnew/dialogs/dialog_create_array_base.cpp:233
 msgid "Rotate:"
 msgstr "Rotar:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:240
+#: pcbnew/dialogs/dialog_create_array_base.cpp:239
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
 msgstr "Rotar y mover el elemento. Las secciones múltiples se moveran juntas."
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:248
+#: pcbnew/dialogs/dialog_create_array_base.cpp:246
 msgid "Pad Numbering Options"
 msgstr "Opciones de numeración de pads"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:259
+#: pcbnew/dialogs/dialog_create_array_base.cpp:257
 msgid "Pad numbering start value:"
 msgstr "Valor inicial de numeración de pads:"
 
-#: pcbnew/dialogs/dialog_create_array_base.cpp:276
+#: pcbnew/dialogs/dialog_create_array_base.cpp:274
 msgid "Circular Array"
 msgstr "Matriz circular"
 
@@ -19305,7 +19413,7 @@ msgstr "Duplicar elemento"
 msgid "Duplicate Item and Increment"
 msgstr "Duplicar elemento e incrementar"
 
-#: pcbnew/hotkeys.cpp:122 pcbnew/dialogs/dialog_create_array_base.h:113
+#: pcbnew/hotkeys.cpp:122 pcbnew/dialogs/dialog_create_array_base.h:115
 msgid "Create Array"
 msgstr "Crear matriz"
 
@@ -23088,7 +23196,7 @@ msgstr "Acerca de"
 msgid "Path Configuration"
 msgstr "Configuración de rutas"
 
-#: common/dialogs/dialog_hotkeys_editor_base.h:53
+#: common/dialogs/dialog_hotkeys_editor_base.h:55
 msgid "Hotkeys Editor"
 msgstr "Editor de atajos de teclado"
 
@@ -23109,7 +23217,7 @@ msgstr "Opciones de visualización"
 msgid "Annotate Schematic"
 msgstr "Anotar esquema"
 
-#: eeschema/dialogs/dialog_bom_base.h:93
+#: eeschema/dialogs/dialog_bom_base.h:97
 msgid "Bill of Material"
 msgstr "Lista de materiales"
 
@@ -23588,6 +23696,58 @@ msgstr ""
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
 
+#~ msgid "Contribute to KiCad"
+#~ msgstr "Contribuya con KiCad"
+
+#~ msgid "Report bugs if you found any"
+#~ msgstr "Informe sobre errores si encuentra alguno"
+
+#~ msgid "File an idea for improvement"
+#~ msgstr "Envíe una idea de mejora"
+
+#~ msgid "KiCad links to user groups, tutorials and much more"
+#~ msgstr "Enlaces a grupos de usuarios, tutoriales y mucho más sobre KiCad"
+
+#~ msgid "Illegal reference prefix. A reference must start by a letter"
+#~ msgstr ""
+#~ "Prefijo de referencia ilegal. Una referencia debe comenzar con una letra"
+
+#~ msgid ""
+#~ "Whitespace is not permitted inside references or values (symbol names in "
+#~ "lib).\n"
+#~ "The text you entered has been converted to use underscores: %s"
+#~ msgstr ""
+#~ "El espacio no está permitido dentro de los nombres de referencias o "
+#~ "valores (nombres de símbolo en librería).\n"
+#~ "El texto introducido se ha modificado para utilizar subrayados: %s"
+
+#~ msgid "Illegal reference string!  No change"
+#~ msgstr "¡Texto de la referencia ilegal! No se realiza el cambio"
+
+#~ msgid "The reference field cannot be empty!  No change"
+#~ msgstr ""
+#~ "¡El campo de la referencia no puede estar vacío! No se realiza el cambio"
+
+#~ msgid "The value field cannot be empty!  No change"
+#~ msgstr "¡El campo del valor no puede estar vacío! No se realiza el cambio"
+
+#~ msgid "A %s field cannot be empty."
+#~ msgstr "Un campo de %s no puede estar vacío."
+
+#~ msgid "Illegal reference. A reference must start by a letter"
+#~ msgstr "Referencia ilegal. Una referencia debe comenzar por una letra"
+
+#~ msgid ""
+#~ "The name '%s' conflicts with an existing entry in the component library "
+#~ "'%s'.\n"
+#~ "\n"
+#~ "Do you wish to replace the current component in library with this one?"
+#~ msgstr ""
+#~ "El nombre '%s' entra en conflicto con una entrada ya existente en la "
+#~ "librería ?%s'.\n"
+#~ "\n"
+#~ "¿Desea reemplazar el componente de la librería con el actual?"
+
 #~ msgid "Executable file (%s)|%s"
 #~ msgstr "Archivo ejecutable (%s)|%s"
 
@@ -23610,9 +23770,6 @@ msgstr "Importar archivo DXF"
 
 #~ msgid "Preferred Editor:"
 #~ msgstr "Editor preferido:"
-
-#~ msgid "value"
-#~ msgstr "valor"
 
 #~ msgid "field"
 #~ msgstr "campo"
@@ -26504,9 +26661,6 @@ msgstr "Importar archivo DXF"
 
 #~ msgid "Show Text"
 #~ msgstr "Texto Visible"
-
-#~ msgid "Defaults"
-#~ msgstr "Defecto"
 
 #~ msgid "Global Label properties"
 #~ msgstr "Propiedades de Etiqueta Global"
