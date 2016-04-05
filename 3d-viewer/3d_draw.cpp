@@ -56,6 +56,7 @@
 #include <info3d_visu.h>
 #include <trackball.h>
 #include <3d_draw_basic_functions.h>
+#include "3d_rendering/3d_render_ogl_legacy/ogl_legacy_utils.h"
 
 #include <CImage.h>
 #include <reporter.h>
@@ -1135,9 +1136,7 @@ void EDA_3D_CANVAS::render3DComponentShape( MODULE* module,
                 glGetFloatv( GL_CURRENT_COLOR,currentColor );
                 currentColor[3] = 1.0f;
                 glColor4fv( currentColor );
-
-                CBBOX thisBBox = shape3D->getBBox();
-                thisBBox.GLdebug();
+                OGL_draw_bbox( shape3D->getBBox() );
             }
 
             glPopMatrix();

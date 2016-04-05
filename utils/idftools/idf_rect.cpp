@@ -33,11 +33,11 @@
 
 using namespace std;
 
-void writeLeaded( FILE* fp, double width, double length, double height,
+void writeLeaded( FILE* fp, double width, double length,
                   double wireDia, double pitch, bool inch );
 
 void writeLeadless( FILE* fp, double width, double length,
-                    double height, double chamfer, bool inch );
+                    double chamfer, bool inch );
 
 int main( int argc, char **argv )
 {
@@ -305,9 +305,9 @@ int main( int argc, char **argv )
         }
 
         if( leaded )
-            writeLeaded( fp, width, length, height, wireDia, pitch, inch );
+            writeLeaded( fp, width, length, wireDia, pitch, inch );
         else
-            writeLeadless( fp, width, length, height, chamfer, inch );
+            writeLeadless( fp, width, length, chamfer, inch );
 
         fprintf( fp, ".END_ELECTRICAL\n" );
         fclose( fp );
@@ -319,7 +319,7 @@ int main( int argc, char **argv )
 
 
 void writeLeaded( FILE* fp, double width, double length,
-                  double height, double wireDia, double pitch, bool inch )
+                  double wireDia, double pitch, bool inch )
 {
     if( inch )
     {
@@ -370,7 +370,7 @@ void writeLeaded( FILE* fp, double width, double length,
 }
 
 void writeLeadless( FILE* fp, double width, double length,
-                    double height, double chamfer, bool inch )
+                    double chamfer, bool inch )
 {
     if( chamfer < 0.001 )
     {

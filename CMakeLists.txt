@@ -305,9 +305,21 @@ if( NOT APPLE )
     if( WIN32 )
         set( KICAD_PLUGINS ${KICAD_BIN}/scripting/plugins
             CACHE PATH "Location of KiCad plugins." )
+
+        set( KICAD_LIB ${KICAD_BIN}
+            CACHE PATH "Location of KiCad shared objects" )
+
+        set( KICAD_USER_PLUGIN ${KICAD_BIN}/plugins
+            CACHE PATH "Location of KiCad user-loaded plugins" )
     else()
         set( KICAD_PLUGINS lib/kicad/plugins
             CACHE PATH "Location of KiCad plugins." )
+
+        set( KICAD_LIB ${CMAKE_INSTALL_PREFIX}/lib
+            CACHE PATH "Location of KiCad shared objects" )
+
+        set( KICAD_USER_PLUGIN ${CMAKE_INSTALL_PREFIX}/lib/kicad/plugins
+            CACHE PATH "Location of KiCad user-loaded plugins" )
     endif()
 
     set( KICAD_DATA share/kicad
@@ -335,16 +347,22 @@ else()
     set( OSX_BUNDLE_BUILD_BIN_DIR "${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_BIN_DIR}" )
     set( OSX_BUNDLE_BUILD_LIB_DIR "${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_LIB_DIR}" )
     set( OSX_BUNDLE_BUILD_KIFACE_DIR "${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_KIFACE_DIR}" )
+    set( OSX_BUNDLE_BUILD_PLUGIN_DIR "${OSX_BUNDLE_BUILD_DIR}/${OSX_BUNDLE_KIFACE_DIR}" )
     set( OSX_BUNDLE_INSTALL_DIR "${KICAD_BIN}/${OSX_BUNDLE_MAIN}" )
     set( OSX_BUNDLE_INSTALL_BIN_DIR "${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_BIN_DIR}" )
     set( OSX_BUNDLE_INSTALL_LIB_DIR "${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_LIB_DIR}" )
     set( OSX_BUNDLE_INSTALL_KIFACE_DIR "${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_KIFACE_DIR}" )
+    set( OSX_BUNDLE_INSTALL_PLUGIN_DIR "${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_KIFACE_DIR}" )
 
     # everything provided with the application bundle goes into
     # kicad.app/Contents/SharedSupport => accessible via GetDataDir()
     # everything else to the .dmg image
     set( KICAD_DATA ${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_SUP_DIR}
         CACHE PATH "Location of KiCad data files." FORCE )
+    set( KICAD_LIB ${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_LIB_DIR}
+        CACHE PATH "Location of KiCad shared objects" FORCE )
+    set( KICAD_USER_PLUGIN ${OSX_BUNDLE_INSTALL_PLUGIN_DIR}
+        CACHE PATH "Location of KiCad user-loaded plugins" FORCE )
     set( KICAD_TEMPLATE ${KICAD_DATA}/template
         CACHE PATH "Location of KiCad template files." FORCE )
     set( KICAD_PLUGINS ${KICAD_DATA}/plugins
@@ -353,6 +371,9 @@ else()
         CACHE PATH "Location of KiCad documentation files." FORCE )
     set( KICAD_DEMOS demos
         CACHE PATH "Location of KiCad demo files." FORCE )
+
+    # RPATH setttings for building shared libraries
+    set( CMAKE_MACOSX_RPATH FALSE )
 
     # Override default paths for fixup_bundle
     set( OSX_BUNDLE_OVERRIDE_PATHS "
@@ -380,6 +401,8 @@ endif()
 
 mark_as_advanced( KICAD_BIN
     KICAD_PLUGINS
+    KICAD_USER_PLUGIN
+    KICAD_LIB
     KICAD_DATA
     KICAD_DOCS
     KICAD_DEMOS
@@ -765,6 +788,7 @@ add_subdirectory( pagelayout_editor )
 add_subdirectory( potrace )
 add_subdirectory( bitmap2component )
 add_subdirectory( pcb_calculator )
+add_subdirectory( plugins )             # 3D plugins must be built before kicad
 add_subdirectory( kicad )               # should follow pcbnew, eeschema
 add_subdirectory( tools )
 add_subdirectory( utils )

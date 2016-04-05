@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Mar  2 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -88,20 +88,12 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
 		wxPanel* m_Panel3D;
-		wxStaticText* m_staticText3Dname;
 		wxListBox* m_3D_ShapeNameListBox;
-		wxStaticText* m_staticTextDefault3DPath;
-		wxTextCtrl* m_textCtrl3DDefaultPath;
-		wxStaticBoxSizer* m_Sizer3DValues;
-		wxBoxSizer* m_bSizerShapeScale;
-		wxStaticText* m_staticTextShapeScale;
-		wxBoxSizer* m_bSizerShapeOffset;
-		wxStaticText* m_staticTextShapeOffset;
-		wxBoxSizer* m_bSizerShapeRotation;
-		wxStaticText* m_staticTextShapeRotation;
 		wxButton* m_buttonBrowse;
 		wxButton* m_buttonRemove;
 		wxButton* m_buttonEdit;
+		wxButton* m_button6;
+		wxBoxSizer* bLowerSizer3D;
 		wxStdDialogButtonSizer* m_sdbSizerStdButtons;
 		wxButton* m_sdbSizerStdButtonsOK;
 		wxButton* m_sdbSizerStdButtonsCancel;
@@ -110,9 +102,10 @@ class DIALOG_MODULE_MODULE_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnEditReference( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditValue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void On3DShapeNameSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Edit3DShapeFilename( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Add3DShape( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Remove3DShape( wxCommandEvent& event ) { event.Skip(); }
-		virtual void Edit3DShapeFilename( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Cfg3DPath( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		

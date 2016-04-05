@@ -38,6 +38,7 @@ class PARAM_CFG_ARRAY;
 class FP_LIB_TABLE;
 class PART_LIBS;
 class SEARCH_STACK;
+class S3D_CACHE;
 
 #define VTBL_ENTRY      virtual
 
@@ -155,6 +156,7 @@ public:
         SCH_LIBEDIT_CUR_PART,        // eeschema/libeditframe.cpp
 
         VIEWER_3D_PATH,
+        VIEWER_3D_FILTER_INDEX,
 
         PCB_LIB_NICKNAME,
         PCB_FOOTPRINT,
@@ -190,6 +192,7 @@ public:
 
         ELEM_SCH_PART_LIBS,
         ELEM_SCH_SEARCH_STACK,
+        ELEM_3DCACHE,
 
         ELEM_COUNT
     };
@@ -249,6 +252,15 @@ public:
 #if defined(PCBNEW) || defined(CVPCB)
     // These are all prefaced with "Pcb"
     FP_LIB_TABLE* PcbFootprintLibs();
+
+    /**
+     * Function Get3DCacheManager
+     * returns a pointer to an instance of the 3D cache manager;
+     * an instance is created and initialized if appropriate.
+     *
+     * @return a pointer to an instance of the 3D cache manager or NULL on failure
+     */
+    S3D_CACHE* Get3DCacheManager( bool updateProjDir = false );
 #endif
 
 

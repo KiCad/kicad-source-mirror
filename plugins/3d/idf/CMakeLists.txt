@@ -1,0 +1,38 @@
+# Developers may wish to set DEBUG_IDF to a value from 1..3 to
+# enable informational messages in Debug build. Setting a value
+# of 4 or greater will instruct the parser to write a VRML2
+# equivalent copy of the input file by invoking the
+# SceneGraph->WriteVRML() function and depending on the setup
+# the object may attempt to write to a protected directory.
+#
+# In addition to setting the verbosity via DEBUG_IDF, an
+# appropriate WXTRACE value must be set prior to program
+# execution to enable the logging:
+#
+# export WXTRACE="PLUGIN_IDF"
+#
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/utils/idftools
+)
+
+add_library( s3d_plugin_idf MODULE
+        s3d_plugin_idf.cpp
+        ${CMAKE_SOURCE_DIR}/utils/idftools/vrml_layer.cpp
+        )
+
+target_link_libraries( s3d_plugin_idf kicad_3dsg idf3 ${OPENGL_LIBRARIES} ${wxWidgets_LIBRARIES} )
+
+if( APPLE )
+    # puts library into the main kicad.app bundle in build tree
+    set_target_properties( s3d_plugin_idf PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_PLUGIN_DIR}/3d"
+    )
+endif()
+
+install( TARGETS
+    s3d_plugin_idf
+    DESTINATION ${KICAD_USER_PLUGIN}/3d
+    COMPONENT binary
+    )
