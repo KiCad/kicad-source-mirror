@@ -1,0 +1,61 @@
+This directory will contain headers for the various types of
+KiCad dynamic plugins and associated APIs.
+
+In a typical implementation a dynamic plugin will provide a simple interface to
+provide KiCad with a list of functions which can be invoked to provide the
+desired feature. For example the 3D plugins provide a function to list the
+file types supported by the plugin, the associated filters required for browsing
+files, and a Load() function to process a 3D file and return a data structure
+which KiCad can use in the 3D rendering process. The set of functions provided
+by a plugin shall be referred to here as the Plugin Interface. Every plugin
+must be a derived class of at least one type of plugin declared in the header
+files in this directory. All implementations of a plugin interface constitute
+an actual plugin; the various KiCad tools such as pcbnew and eeschema contain
+no actual implementation of the plugin interface.
+
+Plugins also need to interact with KiCad and its internal data while knowing
+essentially nothing of the complex structures within KiCad. To make this possible
+each type of dynamic plugin must interact with at least one type of API which
+provides functions to create, inspect, and manipulate the complex data structures
+within KiCad. These APIs shall be declared in the api subdirectory and must be
+implemented within each KiCad tool which services the related plugin type. For
+example the 3D plugins must produce the intermediate scene graph data for use
+by the 3D renderer; to accomplish this an API is required to provide each 3D
+plugin with a method for creating the data structures required by pcbnew and
+cvpcb. In the implementation detail the API may be implemented once in the common
+static library of pcbnew or it can be implemented as a runtime shared library
+which can then be linked to by pcbnew. cvpcb, or even eeschema.
+
+Plugin specialization: To keep APIs and plugin interfaces as simple as possible
+it is necessary for plugins to be specialized (have different types). While it
+is possible to define only one plugin interface and one API for any and all
+plugins to use, this would result in a very large API which is difficult to
+maintain. Having specialized plugins and APIs ensures better maintainability
+of the code; a specific plugin may implement multiple plugin interfaces or
+interact with multiple APIs if it makes sense to do so. At least two plugin
+interfaces have been identified for implementation at this point: the 3D
+Plugin Interface and the PCBExport interface. The 3D Plugin Interface shall
+provide a method for processing supported 3D model types and returning an
+intermediate scene graph representation which a renderer can use to create a
+visual representation of the model. The PCBExport interface shall provide a
+means of exporting PCB data to a variety of formats such as Specctra DSN for
+the consumption of autorouters, GenCAD, VRML for visualization of the board
+using external tools, and IDF and IGES for interacting with mechanical designers
+and MCAD software. Other exporters such as netlist exporters or even BoM
+exporters should be possible. A PCBImport Interface is also a possibility but
+is currently a low priority item since there are currently only two import
+functions implemented (Specctra result import and DXF import) and a significant
+amount of work is required to implement the PCBImport API.
+
+Plugin management: Since plugins are specialized, each type should also be
+loaded and managed by a specialized plugin manager which has responsibilities
+for ensuring integration of the plugin with KiCad.  For example the
+3d_plugin_manager searches a list of paths to identify and load plugins which
+implement the 3D Plugin Interface. The 3D manager extracts information from
+each 3D plugin such as the types of 3D formats supported and the associated
+file extensions; the manager also responds to a Load() request by activating
+the appropriate 3D plugin and executing that plugin's Load() function. In the
+case of the Export Plugin Interface, a specific exporter would enumerate the
+plugins, add a menu item to the File->Export list, load and invoke a plugin's
+Export() function at the user's request, and unload the plugin when the
+Export() function completes.

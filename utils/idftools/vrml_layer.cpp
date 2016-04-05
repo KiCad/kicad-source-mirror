@@ -1344,28 +1344,32 @@ bool VRML_LAYER::addTriplet( VERTEX_3D* p0, VERTEX_3D* p1, VERTEX_3D* p2 )
 {
     double  dx0 = p1->x - p0->x;
     double  dx1 = p2->x - p0->x;
+    double  dx2 = p2->x - p1->x;
 
     double  dy0 = p1->y - p0->y;
     double  dy1 = p2->y - p0->y;
+    double  dy2 = p2->y - p1->y;
+
+    dx0 *= dx0;
+    dx1 *= dx1;
+    dx2 *= dx2;
+
+    dy0 *= dy0;
+    dy1 *= dy1;
+    dy2 *= dy2;
 
     // this number is chosen because we shall only write 9 decimal places
     // at most on the VRML output
     double err = 0.000000001;
 
-    // test if the triangles are degenerate (parallel sides)
-
-    if( dx0 < err && dx0 > -err && dx1 < err && dx1 > -err )
+    // test if the triangles are degenerate (equal points)
+    if( ( dx0 + dy0 ) < err )
         return false;
 
-    if( dy0 < err && dy0 > -err && dy1 < err && dy1 > -err )
+    if( ( dx1 + dy1 ) < err )
         return false;
 
-    double  sl0 = dy0 / dx0;
-    double  sl1 = dy1 / dx1;
-
-    double dsl = sl1 - sl0;
-
-    if( dsl < err && dsl > -err )
+    if( ( dx2 + dy2 ) < err )
         return false;
 
     triplets.push_back( TRIPLET_3D( p0->o, p1->o, p2->o ) );
@@ -1782,4 +1786,178 @@ void VRML_LAYER::SetVertexOffsets( double aXoffset, double aYoffset )
     offsetX = aXoffset;
     offsetY = aYoffset;
     return;
+}
+
+
+bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
+    std::vector< int > &aIndexPlane, std::vector< int > &aIndexSide,
+    double aTopZ, double aBotZ )
+{
+    aVertexList.clear();
+    aIndexPlane.clear();
+    aIndexSide.clear();
+
+    if( ordmap.size() < 3 || outline.empty() )
+        return false;
+
+    if( aTopZ <= aBotZ )
+    {
+        double tmp = aBotZ;
+        aBotZ = aTopZ;
+        aTopZ = tmp;
+    }
+
+    VERTEX_3D* vp = getVertexByIndex( ordmap[0], pholes );
+
+    if( !vp )
+        return false;
+
+    size_t i;
+    size_t vsize = ordmap.size();
+
+    // top vertices
+    for( i = 0; i < vsize; ++i )
+    {
+        vp = getVertexByIndex( ordmap[i], pholes );
+
+        if( !vp )
+        {
+            aVertexList.clear();
+            return false;
+        }
+
+        aVertexList.push_back( vp->x );
+        aVertexList.push_back( vp->y );
+        aVertexList.push_back( aTopZ );
+    }
+
+    // bottom vertices
+    for( i = 0; i < vsize; ++i )
+    {
+        vp = getVertexByIndex( ordmap[i], pholes );
+
+        aVertexList.push_back( vp->x );
+        aVertexList.push_back( vp->y );
+        aVertexList.push_back( aBotZ );
+    }
+
+    // create the index lists .. it is difficult to estimate the list size
+    // a priori so instead we use a vector to help
+
+    bool holes_only = triplets.empty();
+
+    if( !holes_only )
+    {
+        // go through the triplet list and write out the indices based on order
+        std::list< TRIPLET_3D >::const_iterator tbeg = triplets.begin();
+        std::list< TRIPLET_3D >::const_iterator tend = triplets.end();
+
+        std::vector< int > aIndexBot;
+
+        while( tbeg != tend )
+        {
+            // top vertices
+            aIndexPlane.push_back( (int) tbeg->i1 );
+            aIndexPlane.push_back( (int) tbeg->i2 );
+            aIndexPlane.push_back( (int) tbeg->i3 );
+
+            // bottom vertices
+            aIndexBot.push_back( (int) ( tbeg->i2 + vsize ) );
+            aIndexBot.push_back( (int) ( tbeg->i1 + vsize ) );
+            aIndexBot.push_back( (int) ( tbeg->i3 + vsize ) );
+
+            ++tbeg;
+        }
+
+        aIndexPlane.insert( aIndexPlane.end(), aIndexBot.begin(), aIndexBot.end() );
+    }
+
+    // compile indices for the walls joining top to bottom
+    int lastPoint;
+    int curPoint;
+    int curContour = 0;
+
+    std::list< std::list< int >* >::const_iterator  obeg = outline.begin();
+    std::list< std::list< int >* >::const_iterator  oend = outline.end();
+    std::list< int >* cp;
+    std::list< int >::const_iterator  cbeg;
+    std::list< int >::const_iterator  cend;
+
+    i = 2;
+    while( obeg != oend )
+    {
+        cp = *obeg;
+
+        if( cp->size() < 3 )
+        {
+            ++obeg;
+            ++curContour;
+            continue;
+        }
+
+        cbeg      = cp->begin();
+        cend      = cp->end();
+        lastPoint = *(cbeg++);
+
+        while( cbeg != cend )
+        {
+            curPoint = *(cbeg++);
+
+            if( !holes_only )
+            {
+                aIndexSide.push_back( curPoint );
+                aIndexSide.push_back( lastPoint );
+                aIndexSide.push_back( (int)( curPoint + vsize ) );
+
+                aIndexSide.push_back( (int)( curPoint + vsize ) );
+                aIndexSide.push_back( lastPoint );
+                aIndexSide.push_back( (int)( lastPoint + vsize ) );
+            }
+            else
+            {
+                aIndexSide.push_back( curPoint );
+                aIndexSide.push_back( (int)( curPoint + vsize ) );
+                aIndexSide.push_back( lastPoint );
+
+                aIndexSide.push_back( (int)( curPoint + vsize ) );
+                aIndexSide.push_back( (int)( lastPoint + vsize ) );
+                aIndexSide.push_back( lastPoint );
+            }
+
+            lastPoint = curPoint;
+        }
+
+        // check if the loop needs to be closed
+        cbeg = cp->begin();
+        cend = --cp->end();
+
+        curPoint = *(cbeg);
+        lastPoint  = *(cend);
+
+        if( !holes_only )
+        {
+            aIndexSide.push_back( curPoint );
+            aIndexSide.push_back( lastPoint );
+            aIndexSide.push_back( (int)( curPoint + vsize ) );
+
+            aIndexSide.push_back( (int)( curPoint + vsize ) );
+            aIndexSide.push_back( lastPoint );
+            aIndexSide.push_back( (int)( lastPoint + vsize ) );
+        }
+        else
+        {
+            aIndexSide.push_back( curPoint );
+            aIndexSide.push_back( (int)( curPoint + vsize ) );
+            aIndexSide.push_back( lastPoint );
+
+            aIndexSide.push_back( (int)( curPoint + vsize ) );
+            aIndexSide.push_back( (int)( lastPoint + vsize ) );
+            aIndexSide.push_back( lastPoint );
+        }
+
+        ++obeg;
+        ++curContour;
+    }
+
+    return true;
 }

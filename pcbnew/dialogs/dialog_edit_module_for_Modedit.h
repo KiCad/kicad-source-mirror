@@ -28,21 +28,22 @@
 // Include the wxFormBuider header base:
 #include <vector>
 #include <dialog_edit_module_for_Modedit_base.h>
+#include <3d_struct.h>
+
+class PANEL_PREV_3D;
 
 class DIALOG_MODULE_MODULE_EDITOR : public DIALOG_MODULE_MODULE_EDITOR_BASE
 {
 private:
 
-    FOOTPRINT_EDIT_FRAME*   m_parent;
-    MODULE* m_currentModule;
-    TEXTE_MODULE* m_referenceCopy;
-    TEXTE_MODULE* m_valueCopy;
-    std::vector <S3D_MASTER*> m_shapes3D_list;
-    int m_lastSelected3DShapeIndex;
-    S3DPOINT_VALUE_CTRL * m_3D_Scale;
-    S3DPOINT_VALUE_CTRL * m_3D_Offset;
-    S3DPOINT_VALUE_CTRL * m_3D_Rotation;
-    static size_t m_page;     // remember the last open page during session
+    FOOTPRINT_EDIT_FRAME*       m_parent;
+    MODULE*                     m_currentModule;
+    TEXTE_MODULE*               m_referenceCopy;
+    TEXTE_MODULE*               m_valueCopy;
+    std::vector <S3D_MASTER*>   m_shapes3D_list;
+    int                         m_lastSelected3DShapeIndex;
+    static size_t               m_page; // remember the last open page during session
+    PANEL_PREV_3D*              m_PreviewPane;
 
 public:
 
@@ -73,6 +74,7 @@ private:
     }
     void OnCancelClick( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
+    void Cfg3DPath( wxCommandEvent& event );
 };
 
 

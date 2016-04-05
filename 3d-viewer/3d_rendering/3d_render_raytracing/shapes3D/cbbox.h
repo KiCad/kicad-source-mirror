@@ -23,23 +23,22 @@
  */
 
  /**
- * @file CBBox.h
+ * @file cbbox.h
  * @brief Bounding Box class definition
  */
 
-#ifndef CBBox_h
-#define CBBox_h
+#ifndef _CBBOX_H_
+#define _CBBOX_H_
 
-#define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <3d_types.h>
-
+#include "plugins/3dapi/xv3d_types.h"
+#include "3d_rendering/3d_render_raytracing/ray.h"
+#include <fctsys.h>                                                             // For the DBG(
 
 /**
  * Class CBBOX
- * manages a bounding box defined by two S3D_VERTEX points.
+ * manages a bounding box defined by two SFVEC3F min max points.
  */
-class CBBOX
+GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) CBBOX
 {
 
 public:
@@ -55,7 +54,7 @@ public:
      * Initialize a bounding box with a given point
      * @param aPbInit a point for the bounding box initialization
      */
-    CBBOX( const S3D_VERTEX &aPbInit );
+    CBBOX( const SFVEC3F &aPbInit );
 
     /**
      * Constructor CBBOX
@@ -63,7 +62,7 @@ public:
      * @param aPbMin the minimun point to initialize the bounding box
      * @param aPbMax the maximun point to initialize the bounding box
      */
-    CBBOX( const S3D_VERTEX &aPbMin, const S3D_VERTEX &aPbMax );
+    CBBOX( const SFVEC3F &aPbMin, const SFVEC3F &aPbMax );
 
     ~CBBOX();
 
@@ -74,14 +73,16 @@ public:
      * @param aPbMin the minimun point to initialize the bounding box
      * @param aPbMax the maximun point to initialize the bounding box
      */
-    void Set( const S3D_VERTEX &aPbMin, const S3D_VERTEX &aPbMax );
+    void Set( const SFVEC3F &aPbMin, const SFVEC3F &aPbMax );
+
+    void Set( const CBBOX &aBBox );
 
     /**
      * Function Union
      * recalculate the bounding box adding a point
      * @param aPoint the point to be bounded
      */
-    void Union( const S3D_VERTEX &aPoint );
+    void Union( const SFVEC3F &aPoint );
 
     /**
      * Function Union
@@ -98,18 +99,30 @@ public:
     void Scale( float aScale );
 
     /**
-     * Function OverlapsBox
-     * test if a bounding box overlaps this box
-     * @param aBBox the bounding box to check if it overlaps
+     * Function ScaleNextUp
+     * scales a bounding box to the next float representation making it larger
      */
-    bool OverlapsBox( const CBBOX &aBBox ) const;
+    void ScaleNextUp();
+
+    /**
+     * Function ScaleNextDown
+     * scales a bounding box to the next float representation making it smaller
+     */
+    void ScaleNextDown();
+
+    /**
+     * Function Intersects
+     * test if a bounding box intersects this box
+     * @param aBBox the bounding box to check if it intersects
+     */
+    bool Intersects( const CBBOX &aBBox ) const;
 
     /**
      * Function Inside
      * check is a point is inside this bounding box
      * @param aPoint point to test
      */
-    bool Inside( const S3D_VERTEX &aPoint ) const;
+    bool Inside( const SFVEC3F &aPoint ) const;
 
     /**
      * Function ApplyTransformation
@@ -134,10 +147,10 @@ public:
     float Volume() const;
 
     /**
-     * Function GLdebug
-     * render a wired bounding box using openGL
+     * Function debug
+     * output to stdout
      */
-    void GLdebug() const;
+    void debug() const;
 
     /**
      * Function IsInitialized
@@ -155,28 +168,86 @@ public:
     /**
      * Function GetCenter
      * return the center point of the bounding box
-     * @return S3D_VERTEX - the position of the center of this bounding box
+     * @return SFVEC3F - the position of the center of this bounding box
      */
-    S3D_VERTEX GetCenter() const;
+    SFVEC3F GetCenter() const;
+
+    /**
+     * Function GetCenter
+     * return the center point of the bounding box for one Axis (0, 1 or 2)
+     * @return float - the position of the center of this bounding box for the axis
+     */
+    float GetCenter( unsigned int aAxis ) const;
+
+    /** Function Offset
+     *
+     * @return SFVEC3F - return the offset relative to max-min
+     */
+    SFVEC3F Offset( const SFVEC3F &p ) const;
+
+    /**
+     * Function GetExtent
+     * @return SFVEC3F - max-min
+     */
+    const SFVEC3F GetExtent() const;
 
     /**
      * Function Min
      * return the minimun vertex pointer
-     * @return S3D_VERTEX - the minimun vertice position
+     * @return SFVEC3F - the minimun vertice position
      */
-    S3D_VERTEX Min() const;
+    const SFVEC3F &Min() const { return m_min; }
 
     /**
      * Function Max
      * return the maximum vertex pointer
-     * @return S3D_VERTEX - the maximun vertice position
+     * @return SFVEC3F - the maximun vertice position
      */
-    S3D_VERTEX Max() const;
+    const SFVEC3F &Max() const { return m_max; }
+
+
+    /**
+     * Function MaxDimension
+     * @return the index of the max dimention (0=x, 1=y, 2=z)
+     */
+    unsigned int MaxDimension() const;
+
+    /**
+     * @brief GetMaxDimension
+     * @return the max dimension
+     */
+    float GetMaxDimension() const;
+
+    /**
+     * Function SurfaceArea
+     * @return the surface are of the box
+     */
+    float SurfaceArea() const;
+
+    /**
+     * Function Intersect
+     * @param aRay = ray to intersect the box
+     * @param t = distance point of the ray of the intersection (if true)
+     * @return true if the ray hits the box
+     */
+    bool Intersect( const RAY &aRay, float *t ) const;
+
+    bool Intersect( const RAY &aRay ) const;
+
+    /**
+     * Function Intersect - Useful for get the enter and exit position
+     * If the ray starts inside the bbox, it will return aOutHitt0 = 0.0
+     * @param aRay = ray to intersect the box
+     * @param aOutHitt0 = distance point of the ray of the intersection (if true)
+     * @param aOutHitt1 = distance point of the ray of the exit (if true)
+     * @return true if the ray hits the box
+     */
+    bool Intersect( const RAY &aRay, float *aOutHitt0, float *aOutHitt1 ) const;
 
 private:
-    S3D_VERTEX m_min;           ///< point of the lower position of the bounding box
-    S3D_VERTEX m_max;           ///< point of the higher position of the bounding box
-    bool m_initialized;         ///< initialization status of the bounding box. true - if initialized, false otherwise
+
+    SFVEC3F m_min;           ///< (12) point of the lower position of the bounding box
+    SFVEC3F m_max;           ///< (12) point of the higher position of the bounding box
 };
 
 #endif // CBBox_h

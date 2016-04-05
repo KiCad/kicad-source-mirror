@@ -37,7 +37,7 @@
 #include <glm/glm.hpp>
 #include "3d_struct.h"
 #include "3d_material.h"
-#include "CBBox.h"
+#include "3d_rendering/3d_render_raytracing/shapes3D/cbbox.h"
 
 class S3D_MESH;
 
