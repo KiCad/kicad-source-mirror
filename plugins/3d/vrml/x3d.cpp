@@ -62,7 +62,7 @@ SCENEGRAPH* X3DPARSER::Load( const wxString& aFileName )
 
     for( NODE_LIST::iterator node_it = children.begin();
          node_it != children.end();
-         node_it++ )
+         ++node_it )
     {
         wxXmlNode* node = *node_it;
         wxString name = node->GetName();

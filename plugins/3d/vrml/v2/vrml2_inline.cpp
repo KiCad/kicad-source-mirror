@@ -33,6 +33,7 @@
 
 WRL2INLINE::WRL2INLINE() : WRL2NODE()
 {
+    m_VRML2Base = NULL;
     m_Type = WRL2_INLINE;
     m_Parent = NULL;
 
@@ -42,6 +43,7 @@ WRL2INLINE::WRL2INLINE() : WRL2NODE()
 
 WRL2INLINE::WRL2INLINE( WRL2NODE* aParent ) : WRL2NODE()
 {
+    m_VRML2Base = NULL;
     m_Type = WRL2_INLINE;
     m_Parent = aParent;
 

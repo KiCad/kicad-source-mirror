@@ -307,7 +307,7 @@ const char* WRL2NODE::GetNodeTypeName( WRL2NODES aNodeType ) const
 }
 
 
-WRL2NODES WRL2NODE::getNodeTypeID( const std::string aNodeName )
+WRL2NODES WRL2NODE::getNodeTypeID( const std::string& aNodeName )
 {
     NODEMAP::iterator it = nodenames.find( aNodeName );
 

@@ -296,7 +296,7 @@ GLuint CLAYERS_OGL_DISP_LISTS::generate_top_or_bot_seg_ends(const CLAYER_TRIANGL
             glDisableClientState( GL_VERTEX_ARRAY );
             glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 
-            delete uvArray;
+            delete [] uvArray;
             return listIdx;
         }
     }

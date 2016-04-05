@@ -567,6 +567,7 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
 
     int lineno = 0;
     S3D_ALIAS al;
+    al.m_duplicate = false;
     size_t idx;
     int vnum = 0;           // version number
 
@@ -584,7 +585,7 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
             continue;
         }
 
-        if( 1 == lineno && cfgLine.find( "#V" ) == 0 )
+        if( 1 == lineno && cfgLine.compare( 0, 2, "#V" ) == 0 )
         {
             // extract the version number and parse accordingly
             if( cfgLine.size() > 2 )

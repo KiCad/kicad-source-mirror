@@ -291,7 +291,6 @@ bool WRL2SWITCH::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
     }
 
     proc.Pop();
-    std::string glob;
 
     while( true )
     {

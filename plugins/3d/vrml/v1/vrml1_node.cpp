@@ -35,7 +35,7 @@
 #include "vrml1_node.h"
 
 
-bool NAMEREGISTER::AddName( const std::string aName, WRL1NODE* aNode )
+bool NAMEREGISTER::AddName( const std::string& aName, WRL1NODE* aNode )
 {
     if( aName.empty() )
         return false;
@@ -51,7 +51,7 @@ bool NAMEREGISTER::AddName( const std::string aName, WRL1NODE* aNode )
 }
 
 
-bool NAMEREGISTER::DelName( const std::string aName, WRL1NODE* aNode )
+bool NAMEREGISTER::DelName( const std::string& aName, WRL1NODE* aNode )
 {
     if( aName.empty() )
         return false;
@@ -68,7 +68,7 @@ bool NAMEREGISTER::DelName( const std::string aName, WRL1NODE* aNode )
 }
 
 
-WRL1NODE* NAMEREGISTER::FindName( const std::string aName )
+WRL1NODE* NAMEREGISTER::FindName( const std::string& aName )
 {
     if( aName.empty() )
         return NULL;
@@ -390,7 +390,7 @@ const char* WRL1NODE::GetNodeTypeName( WRL1NODES aNodeType ) const
 }
 
 
-WRL1NODES WRL1NODE::getNodeTypeID( const std::string aNodeName )
+WRL1NODES WRL1NODE::getNodeTypeID( const std::string& aNodeName )
 {
     NODEMAP::iterator it = nodenames.find( aNodeName );
 

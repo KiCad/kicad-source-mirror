@@ -402,7 +402,6 @@ bool WRL2TRANSFORM::readChildren( WRLPROC& proc, WRL2BASE* aTopNode )
     }
 
     proc.Pop();
-    std::string glob;
 
     while( true )
     {

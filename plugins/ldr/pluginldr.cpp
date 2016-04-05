@@ -169,7 +169,6 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
                 ostr << errmsg.ToUTF8() << "\n";
                 ostr << "'" << aFullFileName.ToUTF8() << "'";
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-                fail = true;
             }
             else
             {
@@ -260,7 +259,7 @@ bool KICAD_PLUGIN_LDR::open( const wxString& aFullFileName, const char* aPluginC
         ostr << " * [INFO] opened plugin " << m_fileName.ToUTF8();
         char const* cp = m_getPluginName();
 
-        if( !cp )
+        if( NULL != cp )
             ostr << " * [INFO] plugin name: '" << cp << "'\n";
 
         wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );

@@ -202,7 +202,6 @@ bool KICAD_PLUGIN_LDR_3D::Open( const wxString& aFullFileName )
                 ostr << errmsg.ToUTF8() << "\n";
                 ostr << "'" << aFullFileName.ToUTF8() << "'";
                 wxLogTrace( MASK_PLUGINLDR, "%s\n", ostr.str().c_str() );
-                fail = true;
             }
             else
             {

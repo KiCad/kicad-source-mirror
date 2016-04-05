@@ -80,6 +80,7 @@ X3DNODE* X3D_DICT::FindName( const wxString& aName )
 
 X3DNODE::X3DNODE()
 {
+    m_Type = X3D_INVALID;
     m_Parent = NULL;
     m_sgNode = NULL;
     m_Dict = NULL;

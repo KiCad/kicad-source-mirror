@@ -337,9 +337,6 @@ SGNODE* WRL1FACESET::TranslateToSG( SGNODE* aParent, WRL1STATUS* sp )
     }
 
     // 1. create the vertex/normals/colors lists
-    std::vector< SGPOINT > vlist;
-    std::vector< SGVECTOR > nlist;
-    std::vector< SGCOLOR > colorlist;
     SGNODE* sgcolor = NULL;
     WRL1_BINDING mbind = m_current.matbind;
     size_t matSize = matIndex.size();

@@ -169,7 +169,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                     glDisableClientState( GL_NORMAL_ARRAY );
                     glDisableClientState( GL_VERTEX_ARRAY );
 
-                    delete pColorRGBA;
+                    delete [] pColorRGBA;
                 }
             }
         }// for each mesh

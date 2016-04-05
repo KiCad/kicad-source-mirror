@@ -49,9 +49,9 @@ private:
     std::map< std::string, WRL1NODE* > reg;
 
 public:
-    bool AddName( const std::string aName, WRL1NODE* aNode );
-    bool DelName( const std::string aName, WRL1NODE* aNode );
-    WRL1NODE* FindName( const std::string aName );
+    bool AddName( const std::string& aName, WRL1NODE* aNode );
+    bool DelName( const std::string& aName, WRL1NODE* aNode );
+    WRL1NODE* FindName( const std::string& aName );
 };
 
 
@@ -150,7 +150,7 @@ public:
      * returns the ID based on the given aNodeName or WRL1_INVALID (WRL1_END)
      * if no such node name exists
      */
-    WRL1NODES getNodeTypeID( const std::string aNodeName );
+    WRL1NODES getNodeTypeID( const std::string& aNodeName );
 
     /**
      * Function unlinkChild

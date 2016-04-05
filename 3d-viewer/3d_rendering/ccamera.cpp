@@ -27,6 +27,7 @@
  * @brief
  */
 
+#include <cstring>
 #include "../common_ogl/openGL_includes.h"
 #include "ccamera.h"
 #include <wx/log.h>
@@ -61,6 +62,7 @@ CCAMERA::CCAMERA( float aRangeScale )
     m_viewMatrix_inverse   = glm::inverse( m_viewMatrix );
     m_scr_nX.clear();
     m_scr_nY.clear();
+    memset( &m_frustum, 0, sizeof( m_frustum ) );
 }
 
 

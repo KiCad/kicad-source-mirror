@@ -76,7 +76,7 @@ public:
      * returns the ID based on the given aNodeName or WRL2_INVALID (WRL2_END)
      * if no such node name exists
      */
-    WRL2NODES getNodeTypeID( const std::string aNodeName );
+    WRL2NODES getNodeTypeID( const std::string& aNodeName );
 
     /**
      * Function unlinkChild

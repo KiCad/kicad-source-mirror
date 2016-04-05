@@ -120,7 +120,6 @@ bool WRL1SEPARATOR::Read( WRLPROC& proc, WRL1BASE* aTopNode )
     }
 
     proc.Pop();
-    std::string glob;
 
     while( true )
     {

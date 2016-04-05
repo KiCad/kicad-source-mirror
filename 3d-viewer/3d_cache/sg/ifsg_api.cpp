@@ -83,9 +83,8 @@ private:
     std::string lname;
 
 public:
-    VRML_LOCALE()
+    VRML_LOCALE() : lname( setlocale( LC_NUMERIC, NULL ) )
     {
-        lname = setlocale( LC_NUMERIC, NULL );
         setlocale( LC_NUMERIC, "C" );   // switch the numerics locale to "C"
     }
 

@@ -119,8 +119,6 @@ bool WRL1BASE::Read( WRLPROC& proc )
         return false;
     }
 
-    std::string glob;
-
     // Note: according to the VRML1 specification, a file may contain
     // only one grouping node at the top level. The following code
     // supports non-conformant VRML1 files by processing all top level

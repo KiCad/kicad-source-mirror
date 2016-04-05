@@ -118,7 +118,7 @@ SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
 
     wxString tname;
 
-    if( aName.find( "file://", 0, 7 ) == 0 )
+    if( aName.compare( 0, 7, "file://" ) == 0 )
     {
         if( aName.length() <= 7 )
             return NULL;

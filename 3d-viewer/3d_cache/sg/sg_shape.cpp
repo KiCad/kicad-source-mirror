@@ -365,8 +365,6 @@ bool SGSHAPE::WriteVRML( std::ofstream& aFile, bool aReuseFlag )
         return false;
     }
 
-    std::string tmp;
-
     if( aReuseFlag )
     {
         if( !m_written )

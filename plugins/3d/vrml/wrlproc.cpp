@@ -77,9 +77,7 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
     if( m_eof )
         return;
 
-    m_buf = m_buf.substr( 0, 16 );
-
-    if( m_buf.find( "#VRML V1.0 ascii"  ) == 0 )
+    if( m_buf.compare( 0, 16, "#VRML V1.0 ascii"  ) == 0 )
     {
         m_fileVersion = VRML_V1;
         // nothing < 0x20, and no:
@@ -92,7 +90,7 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
         return;
     }
 
-    if( m_buf.find( "#VRML V2.0 utf8" ) == 0 )
+    if( m_buf.compare( 0, 15, "#VRML V2.0 utf8" ) == 0 )
     {
         m_fileVersion = VRML_V2;
         // nothing < 0x20, and no:
@@ -260,7 +258,7 @@ bool WRLPROC::ReadGlob( std::string& aGlob )
 
     size_t ssize = m_buf.size();
 
-    while( m_buf[m_bufpos] > 0x20 && m_bufpos < ssize )
+    while( m_bufpos < ssize && m_buf[m_bufpos] > 0x20 )
     {
         if( ',' == m_buf[m_bufpos] )
         {
@@ -304,7 +302,7 @@ bool WRLPROC::ReadName( std::string& aName )
 
     size_t ssize = m_buf.size();
 
-    while( m_buf[m_bufpos] > 0x20 && m_bufpos < ssize )
+    while( m_bufpos < ssize && m_buf[m_bufpos] > 0x20 )
     {
         if( '[' == m_buf[m_bufpos] || '{' == m_buf[m_bufpos]
             || '.' == m_buf[m_bufpos] || '#' == m_buf[m_bufpos]

@@ -115,7 +115,6 @@ S3D_PLUGIN_MANAGER::~S3D_PLUGIN_MANAGER()
 
 void S3D_PLUGIN_MANAGER::loadPlugins( void )
 {
-    std::list< std::string > pathlist;
     std::list< wxString > searchpaths;
     std::list< wxString > pluginlist;
     wxFileName fn;
