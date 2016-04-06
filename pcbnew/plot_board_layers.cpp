@@ -380,6 +380,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 // Fall through:
             case PAD_SHAPE_TRAPEZOID:
             case PAD_SHAPE_RECT:
+            case PAD_SHAPE_ROUNDRECT:
             default:
                 itemplotter.PlotPad( pad, color, plotMode );
                 break;
@@ -869,7 +870,6 @@ static void initializePlotter( PLOTTER *aPlotter, BOARD * aBoard,
 
     aPlotter->SetViewport( offset, IU_PER_DECIMILS, compound_scale,
                            aPlotOpts->GetMirror() );
-
     // has meaning only for gerber plotter. Must be called only after SetViewport
     aPlotter->SetGerberCoordinatesFormat( aPlotOpts->GetGerberPrecision() );
 

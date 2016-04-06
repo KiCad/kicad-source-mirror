@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,8 @@
 #include <pcbnew_id.h>             // ID_TRACK_BUTT
 #include <pcbnew.h>
 #include <class_board.h>
+#include <convert_basic_shapes_to_polygon.h>
+
 
 
 /* uncomment this line to show this pad with its specfic size and color
@@ -315,7 +317,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
 
 void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
-    wxPoint coord[4];
+    wxPoint coord[12];
     double  angle = m_Orient;
     int     seg_width;
 
@@ -392,13 +394,69 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         if( aDrawInfo.m_PadClearance )
         {
-            BuildPadPolygon( coord, wxSize( aDrawInfo.m_PadClearance,
-                                            aDrawInfo.m_PadClearance ), angle );
-            for( int ii = 0; ii < 4; ii++ )
-                coord[ii] += shape_pos;
+            #define SEGCOUNT 32     // number of segments to approximate a circle
+            SHAPE_POLY_SET outline;
+            TransformShapeWithClearanceToPolygon( outline, aDrawInfo.m_PadClearance, SEGCOUNT, 1.0 );
 
-            GRClosedPoly( aClipBox, aDC, 4, coord, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
+            // Draw the polygon: Inflate creates only one convex polygon
+            SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+
+            GRClosedPoly( aClipBox, aDC, poly.PointCount(),
+                          (wxPoint*)&poly.Point( 0 ), false, 0,
+                          aDrawInfo.m_Color, aDrawInfo.m_Color );
         }
+        break;
+
+    case PAD_SHAPE_ROUNDRECT:
+    {
+        // Use solder[Paste/Mask]size or pad size to build pad shape to draw
+        wxSize size( GetSize() );
+        size += aDrawInfo.m_Mask_margin * 2;
+        int corner_radius = GetRoundRectCornerRadius( size );
+
+        // Draw the polygon: Inflate creates only one convex polygon
+        SHAPE_POLY_SET outline;
+        bool filled = aDrawInfo.m_ShowPadFilled;
+
+        if( filled )
+        {
+            wxPoint centers[4];
+            GetRoundRectCornerCenters( centers, corner_radius, shape_pos,
+                                       size, GetOrientation() );
+            GRClosedPoly( aClipBox, aDC, 4, centers, true, corner_radius*2,
+                          aDrawInfo.m_Color, aDrawInfo.m_Color );
+        }
+        else
+        {
+            TransformRoundRectToPolygon( outline, shape_pos, size, GetOrientation(),
+                                         corner_radius, 64 );
+
+            SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+
+            GRClosedPoly( aClipBox, aDC, poly.PointCount(),
+                          (wxPoint*)&poly.Point( 0 ), aDrawInfo.m_ShowPadFilled, 0,
+                          aDrawInfo.m_Color, aDrawInfo.m_Color );
+        }
+
+        if( aDrawInfo.m_PadClearance )
+        {
+            outline.RemoveAllContours();
+            size = GetSize();
+            size.x += aDrawInfo.m_PadClearance * 2;
+            size.y += aDrawInfo.m_PadClearance * 2;
+            corner_radius = GetRoundRectCornerRadius() + aDrawInfo.m_PadClearance;
+
+            TransformRoundRectToPolygon( outline, shape_pos, size, GetOrientation(),
+                                     corner_radius, 32 );
+
+            // Draw the polygon: Inflate creates only one convex polygon
+            SHAPE_LINE_CHAIN& clearance_poly = outline.Outline( 0 );
+
+            GRClosedPoly( aClipBox, aDC, clearance_poly.PointCount(),
+                          (wxPoint*)&clearance_poly.Point( 0 ), false, 0,
+                          aDrawInfo.m_Color, aDrawInfo.m_Color );
+        }
+    }
         break;
 
     default:

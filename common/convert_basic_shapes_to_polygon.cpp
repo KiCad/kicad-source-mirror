@@ -74,6 +74,13 @@ void GetRoundRectCornerCenters( wxPoint aCenters[4], int aRadius,
     size.x -= aRadius;
     size.y -= aRadius;
 
+    // Ensure size is > 0, to avoid generating unusable shapes
+    // which can crash kicad.
+    if( size.x <= 1 )
+        size.x = 1;
+    if( size.y <= 1 )
+        size.y = 1;
+
     aCenters[0].x = -size.x;
     aCenters[0].y = size.y;
 

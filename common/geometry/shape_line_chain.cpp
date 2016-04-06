@@ -382,7 +382,11 @@ const optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfIntersectin
                 is.p = s2a;
                 return is;
             }
-            else if( CSegment( s1 ).Contains( s2b ) )
+            else if( CSegment( s1 ).Contains( s2b ) &&
+                     // for closed polylines, the ending point of the
+                     // last segment == starting point of the first segment
+                     // this is a normal case, not self intersecting case
+                     !( IsClosed() && s1 == 0 && s2 == SegmentCount()-1 ) )
             {
                 INTERSECTION is;
                 is.our = CSegment( s1 );

@@ -146,9 +146,9 @@ public:
     {
         SHAPE_LINE_CHAIN rv;
         rv.Append( m_p0 );
-        rv.Append( m_p0.x, m_p0.y + m_w );
-        rv.Append( m_p0.x + m_h, m_p0.y + m_w );
-        rv.Append( m_p0.x + m_h, m_p0.y );
+        rv.Append( m_p0.x, m_p0.y + m_h );
+        rv.Append( m_p0.x + m_w, m_p0.y + m_h );
+        rv.Append( m_p0.x + m_w, m_p0.y );
         rv.Append( m_p0 );
         rv.SetClosed( true );
         return rv;

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
-  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,24 +30,20 @@
 
 #include <fctsys.h>
 #include <PolyLine.h>
-#include <common.h>
-#include <confirm.h>
-#include <kicad_string.h>
 #include <trigo.h>
-#include <richio.h>
 #include <wxstruct.h>
 #include <macros.h>
 #include <msgpanel.h>
 #include <base_units.h>
 
 #include <pcbnew.h>
-#include <pcbnew_id.h>                      // ID_TRACK_BUTT
 
 #include <class_board.h>
 #include <class_module.h>
 #include <polygon_test_point_inside.h>
 #include <convert_from_iu.h>
 #include <boost/foreach.hpp>
+#include <convert_basic_shapes_to_polygon.h>
 
 
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
@@ -74,6 +70,9 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
+    // Parameters for round rect only:
+    m_padRoundRectRadiusScale = 0.25;                   // from  IPC-7351C standard
+
     m_ZoneConnection      = PAD_ZONE_CONN_INHERITED; // Use parent setting by default
     m_ThermalWidth        = 0;                  // Use parent setting by default
     m_ThermalGap          = 0;                  // Use parent setting by default
@@ -114,6 +113,12 @@ LSET D_PAD::UnplatedHoleMask()
     return saved;
 }
 
+bool D_PAD::IsFlipped()
+{
+    if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
+        return true;
+    return false;
+}
 
 int D_PAD::boundingRadius() const
 {
@@ -140,11 +145,28 @@ int D_PAD::boundingRadius() const
         radius = 1 + KiROUND( hypot( x, y ) / 2 );
         break;
 
+    case PAD_SHAPE_ROUNDRECT:
+        radius = GetRoundRectCornerRadius();
+        x = m_Size.x >> 1;
+        y = m_Size.y >> 1;
+        radius += 1 + KiROUND( EuclideanNorm( wxSize( x - radius, y - radius )));
+        break;
+
     default:
         radius = 0;
     }
 
     return radius;
+}
+
+
+int D_PAD::GetRoundRectCornerRadius( const wxSize& aSize ) const
+{
+    // radius of rounded corners, usually 25% of shorter pad edge for now
+    int r = aSize.x > aSize.y ? aSize.y : aSize.x;
+    r = int( r * m_padRoundRectRadiusScale );
+
+    return r;
 }
 
 
@@ -162,8 +184,7 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         break;
 
     case PAD_SHAPE_OVAL:
-        //Use the maximal two most distant points and track their rotation
-        // (utilise symmetry to avoid four points)
+        // Calculate the position of each rounded ent
         quadrant1.x =  m_Size.x/2;
         quadrant1.y =  0;
         quadrant2.x =  0;
@@ -171,15 +192,21 @@ const EDA_RECT D_PAD::GetBoundingBox() const
 
         RotatePoint( &quadrant1, m_Orient );
         RotatePoint( &quadrant2, m_Orient );
+
+        // Calculate the max position of each end, relative to the pad position
+        // (the min position is symetrical)
         dx = std::max( std::abs( quadrant1.x ) , std::abs( quadrant2.x )  );
         dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
-        area.SetOrigin( m_Pos.x-dx, m_Pos.y-dy );
-        area.SetSize( 2*dx, 2*dy );
+
+        // Set the bbox
+        area.SetOrigin( m_Pos );
+        area.Inflate( dx, dy );
         break;
 
     case PAD_SHAPE_RECT:
-        //Use two corners and track their rotation
-        // (utilise symmetry to avoid four points)
+    case PAD_SHAPE_ROUNDRECT:
+        // Use two opposite corners and track their rotation
+        // (use symmetry for other points)
         quadrant1.x =  m_Size.x/2;
         quadrant1.y =  m_Size.y/2;
         quadrant2.x = -m_Size.x/2;
@@ -189,8 +216,10 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         RotatePoint( &quadrant2, m_Orient );
         dx = std::max( std::abs( quadrant1.x ) , std::abs( quadrant2.x )  );
         dy = std::max( std::abs( quadrant1.y ) , std::abs( quadrant2.y )  );
-        area.SetOrigin( m_Pos.x-dx, m_Pos.y-dy );
-        area.SetSize( 2*dx, 2*dy );
+
+        // Set the bbox
+        area.SetOrigin( m_Pos );
+        area.Inflate( dx, dy );
         break;
 
     case PAD_SHAPE_TRAPEZOID:
@@ -275,17 +304,13 @@ void D_PAD::SetOrientation( double aAngle )
 
 void D_PAD::Flip( const wxPoint& aCentre )
 {
-    int y = GetPosition().y - aCentre.y;
-
-    y = -y;         // invert about x axis.
-
-    y += aCentre.y;
-
+    int y = GetPosition().y;
+    MIRROR( y, aCentre.y );  // invert about x axis.
     SetY( y );
 
-    m_Pos0.y = -m_Pos0.y;
-    m_Offset.y = -m_Offset.y;
-    m_DeltaSize.y = -m_DeltaSize.y;
+    MIRROR( m_Pos0.y, 0 );
+    MIRROR( m_Offset.y, 0 );
+    MIRROR( m_DeltaSize.y, 0 );
 
     SetOrientation( -GetOrientation() );
 
@@ -434,6 +459,7 @@ void D_PAD::Copy( D_PAD* source )
     m_ZoneConnection = source->m_ZoneConnection;
     m_ThermalWidth = source->m_ThermalWidth;
     m_ThermalGap = source->m_ThermalGap;
+    m_padRoundRectRadiusScale = source->m_padRoundRectRadiusScale;
 
     SetSubRatsnest( 0 );
     SetSubNet( 0 );
@@ -766,6 +792,19 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
             return true;
 
         break;
+
+    case PAD_SHAPE_ROUNDRECT:
+    {
+        // Check for hit in polygon
+        SHAPE_POLY_SET outline;
+        const int segmentToCircleCount = 32;
+        TransformRoundRectToPolygon( outline, wxPoint(0,0), GetSize(), m_Orient,
+                                 GetRoundRectCornerRadius(), segmentToCircleCount );
+
+        const SHAPE_LINE_CHAIN &poly = outline.COutline( 0 );
+        return TestPointInsidePolygon( (const wxPoint*)&poly.CPoint(0), poly.PointCount(), delta );
+    }
+        break;
     }
 
     return false;
@@ -805,6 +844,8 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 
     if( ( diff = padref->m_DeltaSize.y - padcmp->m_DeltaSize.y ) != 0 )
         return diff;
+
+// TODO: test custom shapes
 
     // Dick: specctra_export needs this
     // Lorenzo: gencad also needs it to implement padstacks!
@@ -851,6 +892,9 @@ wxString D_PAD::ShowPadShape() const
 
     case PAD_SHAPE_TRAPEZOID:
         return _( "Trap" );
+
+    case PAD_SHAPE_ROUNDRECT:
+        return _( "Roundrect" );
 
     default:
         return wxT( "???" );

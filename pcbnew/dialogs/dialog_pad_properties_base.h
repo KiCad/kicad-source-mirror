@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Mar 28 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -23,6 +23,7 @@ class DIALOG_SHIM;
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/statbox.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
@@ -73,10 +74,9 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText15;
 		wxTextCtrl* m_ShapeSize_Y_Ctrl;
 		wxStaticText* m_PadShapeSizeY_Unit;
-		wxStaticText* m_staticText48;
+		wxStaticText* m_PadOrientText;
 		wxChoice* m_PadOrient;
 		wxStaticText* m_staticText491;
-		wxStaticText* m_PadOrientText;
 		wxTextCtrl* m_PadOrientCtrl;
 		wxStaticText* m_customOrientUnits;
 		wxStaticText* m_staticText17;
@@ -88,16 +88,23 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText38;
 		wxTextCtrl* m_LengthPadToDieCtrl;
 		wxStaticText* m_PadLengthDie_Unit;
+		wxStaticLine* m_staticline4;
+		wxStaticLine* m_staticline5;
+		wxStaticLine* m_staticline6;
 		wxStaticText* m_staticText21;
 		wxTextCtrl* m_ShapeDelta_Ctrl;
 		wxStaticText* m_PadShapeDelta_Unit;
 		wxStaticText* m_staticText23;
 		wxChoice* m_trapDeltaDirChoice;
-		wxStaticText* m_staticText521;
-		wxStaticText* m_staticTitleModuleRot;
-		wxStaticText* m_staticModuleRotValue;
-		wxStaticText* m_staticTitleModuleSide;
-		wxStaticText* m_staticModuleSideValue;
+		wxStaticLine* m_staticline7;
+		wxStaticLine* m_staticline8;
+		wxStaticLine* m_staticline9;
+		wxStaticText* m_staticTextCornerSizeRatio;
+		wxTextCtrl* m_tcCornerSizeRatio;
+		wxStaticText* m_staticTextCornerSizeRatioUnit;
+		wxStaticText* m_staticTextCornerRadius;
+		wxStaticText* m_staticTextCornerRadiusValue;
+		wxStaticText* m_staticTextCornerSizeUnit;
 		wxStaticText* m_staticText47;
 		wxChoice* m_DrillShapeCtrl;
 		wxStaticText* m_staticText51;
@@ -120,6 +127,10 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_PadLayerDraft;
 		wxCheckBox* m_PadLayerECO1;
 		wxCheckBox* m_PadLayerECO2;
+		wxStaticText* m_staticTitleModuleRot;
+		wxStaticText* m_staticModuleRotValue;
+		wxStaticText* m_staticTitleModuleSide;
+		wxStaticText* m_staticModuleSideValue;
 		wxPanel* m_localSettingsPanel;
 		wxStaticText* m_staticTextNetClearance;
 		wxTextCtrl* m_NetClearanceValueCtrl;
@@ -146,9 +157,9 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxPanel* m_panelShowPad;
 		PCB_DRAW_PANEL_GAL* m_panelShowPadGal;
 		wxStaticText* m_staticTextWarningPadFlipped;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
@@ -156,15 +167,15 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnPadShapeSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void PadOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetLayers( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCornerSizePercentChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
-		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void PadPropertiesAccept( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER ); 
+		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 785,659 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER ); 
 		~DIALOG_PAD_PROPERTIES_BASE();
 	
 };

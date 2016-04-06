@@ -1229,6 +1229,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     case PAD_SHAPE_RECT:      shape = "rect";         break;
     case PAD_SHAPE_OVAL:      shape = "oval";         break;
     case PAD_SHAPE_TRAPEZOID: shape = "trapezoid";    break;
+    case PAD_SHAPE_ROUNDRECT: shape = "roundrect";    break;
 
     default:
         THROW_IO_ERROR( wxString::Format( _( "unknown pad type: %d"), aPad->GetShape() ) );
@@ -1286,6 +1287,13 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     }
 
     formatLayers( aPad->GetLayerSet(), 0 );
+
+    // Output the radius ratio for rounded rect pads
+    if( aPad->GetShape() == PAD_SHAPE_ROUNDRECT )
+    {
+        m_out->Print( 0,  "(roundrect_rratio %s)",
+                      Double2Str( aPad->GetRoundRectRadiusRatio() ).c_str() );
+    }
 
     std::string output;
 

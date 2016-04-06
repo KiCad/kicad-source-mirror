@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -552,7 +552,7 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * clearance when the circle is approximated by segment bigger or equal
  * to the real clearance value (usually near from 1.0)
  */
-void D_PAD:: TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                    int             aClearanceValue,
                                                    int             aCircleToSegmentsCount,
                                                    double          aCorrectionFactor ) const
@@ -561,14 +561,14 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer
     int     dx = (m_Size.x / 2) + aClearanceValue;
     int     dy = (m_Size.y / 2) + aClearanceValue;
 
-    wxPoint PadShapePos = ShapePos();               /* Note: for pad having a shape offset,
+    wxPoint padShapePos = ShapePos();               /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
 
     switch( GetShape() )
     {
     case PAD_SHAPE_CIRCLE:
         dx = KiROUND( dx * aCorrectionFactor );
-        TransformCircleToPolygon( aCornerBuffer, PadShapePos, dx,
+        TransformCircleToPolygon( aCornerBuffer, padShapePos, dx,
                                   aCircleToSegmentsCount );
         break;
 
@@ -591,8 +591,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer
         }
 
         RotatePoint( &shape_offset, angle );
-        wxPoint start = PadShapePos - shape_offset;
-        wxPoint end = PadShapePos + shape_offset;
+        wxPoint start = padShapePos - shape_offset;
+        wxPoint end = padShapePos + shape_offset;
         TransformRoundedEndsSegmentToPolygon( aCornerBuffer, start, end,
                                               aCircleToSegmentsCount, width );
         }
@@ -605,24 +605,43 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer
         BuildPadPolygon( corners, wxSize( 0, 0 ), angle );
 
         SHAPE_POLY_SET outline;
-
         outline.NewOutline();
 
         for( int ii = 0; ii < 4; ii++ )
         {
-            corners[ii] += PadShapePos;
+            corners[ii] += padShapePos;
             outline.Append( corners[ii].x, corners[ii].y );
         }
 
-        double rounding_radius = aClearanceValue * aCorrectionFactor;
+        int rounding_radius = int( aClearanceValue * aCorrectionFactor );
+        outline.Inflate( rounding_radius, aCircleToSegmentsCount );
 
-        outline.Inflate( (int) rounding_radius, aCircleToSegmentsCount );
+        aCornerBuffer.Append( outline );
+    }
+        break;
+
+    case PAD_SHAPE_ROUNDRECT:
+    {
+        SHAPE_POLY_SET outline;
+        int pad_radius = GetRoundRectCornerRadius();
+        int clearance = int( aClearanceValue * aCorrectionFactor );
+        int rounding_radius = pad_radius + clearance;
+        wxSize shapesize( m_Size );
+        shapesize.x += clearance*2;
+        shapesize.y += clearance*2;
+
+        TransformRoundRectToPolygon( outline, padShapePos, shapesize, angle,
+                                     rounding_radius, aCircleToSegmentsCount );
 
         aCornerBuffer.Append( outline );
     }
         break;
     }
 }
+
+
+
+
 
 /*
  * Function BuildPadShapePolygon
@@ -636,12 +655,13 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
                                   double aCorrectionFactor ) const
 {
     wxPoint corners[4];
-    wxPoint PadShapePos = ShapePos();         /* Note: for pad having a shape offset,
-                                                     * the pad position is NOT the shape position */
+    wxPoint padShapePos = ShapePos();       /* Note: for pad having a shape offset,
+                                             * the pad position is NOT the shape position */
     switch( GetShape() )
     {
     case PAD_SHAPE_CIRCLE:
     case PAD_SHAPE_OVAL:
+    case PAD_SHAPE_ROUNDRECT:
         TransformShapeWithClearanceToPolygon( aCornerBuffer, aInflateValue.x,
                                               aSegmentsPerCircle, aCorrectionFactor );
         break;
@@ -653,7 +673,7 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
         BuildPadPolygon( corners, aInflateValue, m_Orient );
         for( int ii = 0; ii < 4; ii++ )
         {
-            corners[ii] += PadShapePos;          // Shift origin to position
+            corners[ii] += padShapePos;          // Shift origin to position
             aCornerBuffer.Append( corners[ii].x, corners[ii].y );
         }
 
@@ -734,7 +754,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                        double          aThermalRot )
 {
     wxPoint corner, corner_end;
-    wxPoint PadShapePos = aPad.ShapePos();      // Note: for pad having a shape offset,
+    wxPoint padShapePos = aPad.ShapePos();      // Note: for pad having a shape offset,
                                                 // the pad position is NOT the shape position
     wxSize  copper_thickness;
 
@@ -836,7 +856,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
                 {
                     corner = corners_buffer[ii];
                     RotatePoint( &corner, th_angle + angle_pad );          // Rotate by segment angle and pad orientation
-                    corner += PadShapePos;
+                    corner += padShapePos;
                     aCornerBuffer.Append( corner.x, corner.y );
                 }
 
@@ -940,7 +960,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
                 {
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );
-                    cpos += PadShapePos;
+                    cpos += padShapePos;
                     aCornerBuffer.Append( cpos.x, cpos.y );
                 }
 
@@ -966,7 +986,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
                 {
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );
-                    cpos += PadShapePos;
+                    cpos += padShapePos;
                     aCornerBuffer.Append( cpos.x, cpos.y );
                 }
 
@@ -975,7 +995,8 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         }
         break;
 
-    case PAD_SHAPE_RECT:       // draw 4 Holes
+    case PAD_SHAPE_ROUNDRECT:   // thermal shape is the same for round rect and rect.
+    case PAD_SHAPE_RECT:
         {
             /* we create 4 copper holes and put them in position 1, 2, 3 and 4
              * here is the area of the rectangular pad + its thermal gap
@@ -1039,7 +1060,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
                 {
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );            // Rotate according to module orientation
-                    cpos += PadShapePos;                    // Shift origin to position
+                    cpos += padShapePos;                    // Shift origin to position
                     aCornerBuffer.Append( cpos.x, cpos.y );
                 }
 
@@ -1063,7 +1084,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
                 {
                     wxPoint cpos = corners_buffer[ic];
                     RotatePoint( &cpos, angle );
-                    cpos += PadShapePos;
+                    cpos += padShapePos;
                     aCornerBuffer.Append( cpos.x, cpos.y );
                 }
 
@@ -1110,7 +1131,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         {
             wxPoint cpos = stubBuffer[ii];
             RotatePoint( &cpos, aPad.GetOrientation() );
-            cpos += PadShapePos;
+            cpos += padShapePos;
             stub.Append( cpos.x, cpos.y );
         }
 
@@ -1132,7 +1153,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         {
             wxPoint cpos = stubBuffer[ii];
             RotatePoint( &cpos, aPad.GetOrientation() );
-            cpos += PadShapePos;
+            cpos += padShapePos;
             stub.Append( cpos.x, cpos.y );
         }
 

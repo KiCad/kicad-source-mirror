@@ -38,6 +38,7 @@
 
 #include <pcb_painter.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <convert_basic_shapes_to_polygon.h>
 
 using namespace KIGFX;
 
@@ -653,6 +654,38 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         m_gal->DrawRectangle( VECTOR2D( -size.x, -size.y ), VECTOR2D( size.x, size.y ) );
         break;
 
+    case PAD_SHAPE_ROUNDRECT:
+    {
+        std::deque<VECTOR2D> pointList;
+
+        // Use solder[Paste/Mask]size or pad size to build pad shape
+        SHAPE_POLY_SET outline;
+        wxSize prsize( size.x*2, size.y*2 );
+        const int segmentToCircleCount = 64;
+        int corner_radius = aPad->GetRoundRectCornerRadius( prsize );
+        TransformRoundRectToPolygon( outline, wxPoint( 0, 0 ), prsize,
+                                    0.0 , corner_radius, segmentToCircleCount );
+
+        // Draw the polygon: Inflate creates only one convex polygon
+        SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+
+        for( int ii = 0; ii < poly.PointCount(); ii++ )
+            pointList.push_back( poly.Point( ii ) );
+
+        if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
+        {
+            // Add the beginning point to close the outline
+            pointList.push_back( pointList.front() );
+            m_gal->DrawPolyline( pointList );
+
+        }
+        else
+        {
+            m_gal->DrawPolygon( pointList );
+        }
+        break;
+    }
+
     case PAD_SHAPE_TRAPEZOID:
     {
         std::deque<VECTOR2D> pointList;
@@ -667,7 +700,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         pointList.push_back( VECTOR2D( corners[2] ) );
         pointList.push_back( VECTOR2D( corners[3] ) );
 
-        if( m_pcbSettings.m_sketchMode[PADS_VISIBLE] )
+        if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
         {
             // Add the beginning point to close the outline
             pointList.push_back( pointList.front() );

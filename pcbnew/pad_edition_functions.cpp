@@ -51,19 +51,12 @@ void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* aPad )
     SetMsgPanel( aPad );
 
     D_PAD& mp = GetDesignSettings().m_Pad_Master;
-
-    mp.SetShape( aPad->GetShape() );
-    mp.SetAttribute( aPad->GetAttribute() );
-    mp.SetLayerSet( aPad->GetLayerSet() );
-
+    // Copy all settings. Some of them are not used, but they break anything
+    mp.Copy( aPad );
+    // The pad orientation, for historical reasons is the
+    // pad rotation + parent rotation.
+    // store only the pad rotation.
     mp.SetOrientation( aPad->GetOrientation() - aPad->GetParent()->GetOrientation() );
-
-    mp.SetSize( aPad->GetSize() );
-    mp.SetDelta( aPad->GetDelta() );
-
-    mp.SetOffset( aPad->GetOffset() );
-    mp.SetDrillSize( aPad->GetDrillSize() );
-    mp.SetDrillShape( aPad->GetDrillShape() );
 }
 
 
@@ -113,6 +106,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         aPad->SetDrillSize( wxSize( 0, 0 ) );
         aPad->SetOffset( wxPoint( 0, 0 ) );
         break;
+
     default:
         ;
     }

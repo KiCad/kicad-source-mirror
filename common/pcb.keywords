@@ -142,6 +142,8 @@ rect_delta
 reference
 right
 rotate
+roundrect
+roundrect_rratio
 scale
 segment
 segment_width
