@@ -141,8 +141,11 @@ void S3D_MASTER::SetShape3DName( const wxString& aShapeName )
     else
         m_Shape3DFullFilename = m_Shape3DName;
 
-    m_Shape3DFullFilename = TheKiway->Prj().Get3DCacheManager()->GetResolver()
-        ->ResolvePath( m_Shape3DFullFilename );
+    if( NULL != TheKiway )
+    {
+        m_Shape3DFullFilename = TheKiway->Prj().Get3DCacheManager()->GetResolver()
+            ->ResolvePath( m_Shape3DFullFilename );
+    }
 
     return;
 }
