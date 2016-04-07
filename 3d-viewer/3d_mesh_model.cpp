@@ -112,24 +112,12 @@ void S3D_MESH::calcBBoxAllChilds( )
 
 void S3D_MESH::calcBBox( )
 {
-    CBBOX tmpBBox;
-
-    bool firstBBox = true;
+    m_BBox.Reset();
 
     // Calc boudingbox for all coords
     for( unsigned int idx = 0; idx < m_CoordIndex.size(); idx++ )
-    {
         for( unsigned int ii = 0; ii < m_CoordIndex[idx].size(); ii++ )
-            if( firstBBox )
-            {
-                firstBBox = false;
-                tmpBBox = CBBOX( m_Point[m_CoordIndex[idx][ii]] );              // Initialize with the first vertex found
-            }
-            else
-                tmpBBox.Union( m_Point[m_CoordIndex[idx][ii]] );
-    }
-
-    m_BBox = tmpBBox;
+                m_BBox.Union( m_Point[m_CoordIndex[idx][ii]] );
 }
 
 

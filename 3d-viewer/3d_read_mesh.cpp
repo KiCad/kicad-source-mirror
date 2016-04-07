@@ -139,15 +139,9 @@ void S3D_MASTER::calcBBox()
     if( m_parser == NULL )
         return;
 
-    bool firstBBox = true;
+    m_BBox.Reset();
 
     for( unsigned int idx = 0; idx < m_parser->childs.size(); idx++ )
-        if( firstBBox )
-        {
-            firstBBox = false;
-            m_BBox = m_parser->childs[idx]->getBBox();
-        }
-        else
             m_BBox.Union( m_parser->childs[idx]->getBBox() );
 
     // Calc transformation matrix to apply in AABBox

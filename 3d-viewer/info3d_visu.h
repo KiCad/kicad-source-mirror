@@ -32,8 +32,6 @@
 
 #include <layers_id_colors_and_visibility.h>    // Layers id definitions
 
-#include <wx/glcanvas.h>
-
 #ifdef __WXMAC__
 #  ifdef __DARWIN__
 #    include <OpenGL/glu.h>

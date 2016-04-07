@@ -36,9 +36,9 @@
 #error Please build wxWidgets with Opengl support (./configure --with-opengl)
 #endif
 
-#include <wx/glcanvas.h>
 #include <3d_struct.h>
 #include <info3d_visu.h>
+#include <wx/glcanvas.h>
 
 /// A variable name whose value holds the path of 3D shape files.
 /// Currently an environment variable, eventually a project variable.
