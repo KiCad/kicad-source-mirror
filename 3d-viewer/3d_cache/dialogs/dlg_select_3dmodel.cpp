@@ -175,7 +175,7 @@ bool DLG_SELECT_3DMODEL::TransferDataFromWindow()
     m_model->rotation.z = 0.0;
 
     m_model->offset = m_model->rotation;
-    m_model->filename.empty();
+    m_model->filename.clear();
 
     wxString fname = m_FileTree->GetFilePath();
 

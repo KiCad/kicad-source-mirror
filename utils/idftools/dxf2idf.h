@@ -38,6 +38,7 @@ private:
     void insertArc( const IDF_POINT& aSegStart, const IDF_POINT& aSegEnd, double aBulge );
 
 public:
+    DXF2IDF() : m_scale( 1.0 ) {};
     ~DXF2IDF();
 
     bool ReadDxf( const std::string aFile );

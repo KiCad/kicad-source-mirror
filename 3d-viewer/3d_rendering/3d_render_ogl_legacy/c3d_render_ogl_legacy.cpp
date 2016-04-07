@@ -42,6 +42,7 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( CINFO3D_VISU &aSettings,
     m_ogl_disp_lists_layers.clear();
     m_triangles.clear();
     m_ogl_disp_list_board = 0;
+    m_ogl_circle_texture = 0;
 }
 
 

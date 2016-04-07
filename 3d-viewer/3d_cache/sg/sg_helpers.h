@@ -82,8 +82,8 @@ class SGCOORDINDEX;
             std::vector< aType* >::iterator eL; \
             if( isChild ) { \
                 oSL = &aOwnedList; \
-                sL =  aOwnedList.begin(); \
-                eL =  aOwnedList.end(); \
+                sL =  oSL->begin(); \
+                eL =  oSL->end(); \
                 while( sL != eL ) { \
                     if( (SGNODE*)*sL == aNode ) { \
                         oSL->erase( sL ); \
@@ -93,8 +93,8 @@ class SGCOORDINDEX;
                 } \
             } else { \
                 oSL = &aRefList; \
-                sL =  aRefList.begin(); \
-                eL =  aRefList.end(); \
+                sL =  oSL->begin(); \
+                eL =  oSL->end(); \
                 while( sL != eL ) { \
                     if( (SGNODE*)*sL == aNode ) { \
                         delNodeRef( this ); \

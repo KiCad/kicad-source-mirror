@@ -52,6 +52,7 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
     m_eof = false;
     m_fileline = 0;
     m_bufpos = 0;
+    m_file = aLineReader;
 
     if( NULL == aLineReader )
     {
@@ -60,8 +61,6 @@ WRLPROC::WRLPROC( LINE_READER* aLineReader )
     }
 
     m_error.clear();
-    m_file = aLineReader;
-
     wxString tname = m_file->GetSource();
     m_filename = tname.ToUTF8();
     wxFileName fn( tname );
@@ -166,7 +165,7 @@ bool WRLPROC::getRawLine( void )
 
         while( sS != eS )
         {
-            if( '\xff' == ((*sS) & 0x80) )
+            if( ((*sS) & 0x80) )
             {
                 m_error = " non-ASCII character sequence in VRML1 file";
                 return false;

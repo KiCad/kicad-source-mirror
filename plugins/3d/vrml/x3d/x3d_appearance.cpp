@@ -117,11 +117,11 @@ void X3DAPP::readFields( wxXmlNode* aNode )
             m_MatName = prop->GetValue();
             m_Dict->AddName( m_MatName, this );
         }
-        if( pname == "USE" )
+        else if( pname == "USE" )
         {
             X3DNODE* np = m_Dict->FindName( prop->GetValue() );
 
-            if( np->GetNodeType() == X3D_APPEARANCE )
+            if( NULL != np && np->GetNodeType() == X3D_APPEARANCE )
             {
                 X3DAPP* ap = (X3DAPP*) np;
                 diffuseColor = ap->diffuseColor;

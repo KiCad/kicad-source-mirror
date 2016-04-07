@@ -37,6 +37,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
 {
     m_ogl_idx_list_opaque = 0;
     m_ogl_idx_list_transparent = 0;
+    m_ogl_idx_list_meshes = 0;
     m_nr_meshes = 0;
     m_meshs_bbox = NULL;
 

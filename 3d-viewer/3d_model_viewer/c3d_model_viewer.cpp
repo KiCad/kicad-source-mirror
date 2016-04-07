@@ -91,6 +91,7 @@ C3D_MODEL_VIEWER::C3D_MODEL_VIEWER( wxWindow *aParent,
     m_reload_is_needed = false;
     m_ogl_3dmodel = NULL;
     m_3d_model = NULL;
+    m_BiuTo3Dunits = 1.0;
 
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext( this );

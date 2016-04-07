@@ -133,8 +133,19 @@ void SCENEGRAPH::unlinkNode( const SGNODE* aNode, bool isChild )
     if( NULL == aNode )
         return;
 
-    UNLINK_NODE( S3D::SGTYPE_TRANSFORM, SCENEGRAPH, aNode, m_Transforms, m_RTransforms, isChild );
-    UNLINK_NODE( S3D::SGTYPE_SHAPE, SGSHAPE, aNode, m_Shape, m_RShape, isChild );
+    switch( aNode->GetNodeType() )
+    {
+        case S3D::SGTYPE_TRANSFORM:
+            UNLINK_NODE( S3D::SGTYPE_TRANSFORM, SCENEGRAPH, aNode, m_Transforms, m_RTransforms, isChild );
+            break;
+
+        case S3D::SGTYPE_SHAPE:
+            UNLINK_NODE( S3D::SGTYPE_SHAPE, SGSHAPE, aNode, m_Shape, m_RShape, isChild );
+            break;
+
+        default:
+            break;
+    }
 
     #ifdef DEBUG
     do {
