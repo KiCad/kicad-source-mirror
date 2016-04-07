@@ -84,9 +84,6 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     m_canvas->SetIgnoreMouseEvents( false );
     OnModify();
 
-    if( m_autoplaceFields )
-        component->AutoAutoplaceFields( GetScreen() );
-
     m_canvas->Refresh();
 
     MSG_PANEL_ITEMS items;
