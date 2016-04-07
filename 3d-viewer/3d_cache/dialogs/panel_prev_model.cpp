@@ -123,9 +123,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     zoff = NULL;
 
     wxBoxSizer* mainBox = new wxBoxSizer( wxVERTICAL );
-
-    wxStaticBoxSizer* vbox = new wxStaticBoxSizer( wxVERTICAL, this, _( "3D Model Orientation" ) );
-
+    wxStaticBoxSizer* vbox = new wxStaticBoxSizer( wxVERTICAL, this, _( "3D Preview" ) );
     m_FileTree = NULL;
 
     if( NULL != aParent )

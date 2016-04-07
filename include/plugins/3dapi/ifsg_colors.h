@@ -35,7 +35,7 @@
 
 
 /**
- * Class IFSG_INDEX
+ * Class IFSG_COLORS
  * is the wrapper for SGCOLORS
  */
 class SGLIB_API IFSG_COLORS : public IFSG_NODE

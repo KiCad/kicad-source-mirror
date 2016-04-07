@@ -53,20 +53,19 @@ class SGNODE;
  */
 class SGLIB_API IFSG_NODE
 {
-private:
-    // hide the copy constructors and assignment operator to avoid accidental misuse
-    IFSG_NODE( const IFSG_NODE& aParent );
-    IFSG_NODE( IFSG_NODE& aParent );
-    IFSG_NODE( volatile const IFSG_NODE& aParent );
-    IFSG_NODE( volatile IFSG_NODE& aParent );
-    IFSG_NODE& operator= ( const IFSG_NODE& );
-
 protected:
     SGNODE* m_node;
 
 public:
     IFSG_NODE();
     virtual ~IFSG_NODE();
+
+    // deleted operators
+    IFSG_NODE( const IFSG_NODE& aParent ) = delete;
+    IFSG_NODE( IFSG_NODE& aParent ) = delete;
+    IFSG_NODE( volatile const IFSG_NODE& aParent ) = delete;
+    IFSG_NODE( volatile IFSG_NODE& aParent ) = delete;
+    IFSG_NODE& operator= ( const IFSG_NODE& ) = delete;
 
     /**
      * Function Destroy

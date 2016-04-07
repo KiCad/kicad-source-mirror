@@ -43,7 +43,7 @@
 #define REVISION 0
 #define PATCH 0
 
-#include "../kicad_plugin.h"
+#include "plugins/kicad_plugin.h"
 
 
 KICAD_PLUGIN_EXPORT char const* GetKicadPluginClass( void )

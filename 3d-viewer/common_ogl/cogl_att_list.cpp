@@ -56,7 +56,8 @@ const int COGL_ATT_LIST::m_openGL_AttributesList[] = {
 
 
 int COGL_ATT_LIST::m_openGL_AttributesList_toUse[
-                      sizeof( COGL_ATT_LIST::m_openGL_AttributesList )] = { 0 };
+    sizeof( COGL_ATT_LIST::m_openGL_AttributesList ) /
+    sizeof( COGL_ATT_LIST::m_openGL_AttributesList[0] ) ] = { 0 };
 
 
 const int *COGL_ATT_LIST::GetAttributesList( bool aUseAntiAliasing )
