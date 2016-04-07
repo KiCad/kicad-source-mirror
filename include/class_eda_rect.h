@@ -29,6 +29,8 @@
 #ifndef CLASS_EDA_RECT_H
 #define CLASS_EDA_RECT_H
 
+#include <wx/gdicmn.h>
+
 /**
  * Class EDA_RECT
  * handles the component boundary box.

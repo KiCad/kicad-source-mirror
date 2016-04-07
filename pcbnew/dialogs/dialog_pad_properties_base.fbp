@@ -3838,7 +3838,7 @@
                                                                     <property name="caption"></property>
                                                                     <property name="caption_visible">1</property>
                                                                     <property name="center_pane">0</property>
-                                                                    <property name="choices">&quot;Horizotal&quot; &quot;Vertical&quot;</property>
+                                                                    <property name="choices">&quot;Horizontal&quot; &quot;Vertical&quot;</property>
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
@@ -4193,7 +4193,7 @@
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">Corner size ( % of width):</property>
+                                                                    <property name="label">Corner size ( percent of width):</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -4214,7 +4214,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass"></property>
                                                                     <property name="toolbar_pane">0</property>
-                                                                    <property name="tooltip">Corner radius in % of the pad width.&#x0A;The width is the smaller value between size X and size Y&#x0A;The max value is 50%</property>
+                                                                    <property name="tooltip">Corner radius in percent  of the pad width.&#x0A;The width is the smaller value between size X and size Y&#x0A;The max value is 50 percent </property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>

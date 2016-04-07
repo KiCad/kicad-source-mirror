@@ -70,6 +70,7 @@ public:
         m_Color = RED;
         m_plotter = NULL;
         m_callback = NULL;
+        m_isClipped = false;
     }
 
     void SetPlotter( PLOTTER* aPlotter )

@@ -55,6 +55,15 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER ( PCB_EDIT_FRAME *aFrame, BOARD *aB
 {
     m_reporter = &NULL_REPORTER::GetInstance();
     m_undoList = new PICKED_ITEMS_LIST;
+
+	m_deleteSinglePadNets = true;
+	m_deleteUnusedComponents = false;
+	m_isDryRun = false;
+	m_replaceFootprints = true;
+	m_lookupByTimestamp = false;
+
+	m_warningCount = 0;
+	m_errorCount = 0;
 }
 
 BOARD_NETLIST_UPDATER::~BOARD_NETLIST_UPDATER ()
