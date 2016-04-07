@@ -128,7 +128,7 @@ public:
      */
     void SetName( const wxString& aName );
 
-    int GetId() { return m_id; }
+    int GetId() const { return m_id; }
 
     void SetId( int aId ) { m_id = aId; }
 

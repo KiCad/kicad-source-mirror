@@ -7,7 +7,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,82 +32,111 @@
 #include <common.h>
 #include <base_units.h>
 #include <kiway.h>
+#include <confirm.h>
 
 #include <general.h>
 #include <sch_base_frame.h>
 #include <sch_component.h>
-#include <template_fieldnames.h>
 #include <class_libentry.h>
 #include <lib_field.h>
 #include <sch_component.h>
 #include <template_fieldnames.h>
+#include <class_library.h>
+#include <sch_validators.h>
 
 #include <dialog_edit_one_field.h>
 
 
-void DIALOG_EDIT_ONE_FIELD::initDlg_base()
+// These should probably moved into some other file as helpers.
+EDA_TEXT_HJUSTIFY_T IntToEdaTextHorizJustify( int aHorizJustify )
+{
+    wxASSERT( aHorizJustify >= GR_TEXT_HJUSTIFY_LEFT && aHorizJustify <= GR_TEXT_HJUSTIFY_RIGHT );
+
+    if( aHorizJustify > GR_TEXT_HJUSTIFY_RIGHT )
+        return GR_TEXT_HJUSTIFY_RIGHT;
+
+    if( aHorizJustify < GR_TEXT_HJUSTIFY_LEFT )
+        return GR_TEXT_HJUSTIFY_LEFT;
+
+    return (EDA_TEXT_HJUSTIFY_T) aHorizJustify;
+}
+
+
+EDA_TEXT_VJUSTIFY_T IntToEdaTextVertJustify( int aVertJustify )
+{
+    wxASSERT( aVertJustify >= GR_TEXT_VJUSTIFY_TOP && aVertJustify <= GR_TEXT_VJUSTIFY_BOTTOM );
+
+    if( aVertJustify > GR_TEXT_VJUSTIFY_BOTTOM )
+        return GR_TEXT_VJUSTIFY_BOTTOM;
+
+    if( aVertJustify < GR_TEXT_VJUSTIFY_TOP )
+        return GR_TEXT_VJUSTIFY_TOP;
+
+    return (EDA_TEXT_VJUSTIFY_T) aVertJustify;
+}
+
+
+DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+                                              const EDA_TEXT* aTextItem ) :
+    DIALOG_LIB_EDIT_TEXT_BASE( aParent )
+{
+    SetTitle( aTitle );
+
+    // The field ID and power status are Initialized in the derived object's ctor.
+    m_fieldId = VALUE;
+    m_isPower = false;
+
+    m_text = aTextItem->GetText();
+    m_style = aTextItem->IsItalic() ? 1 : 0;
+    m_style += aTextItem->IsBold() ? 2 : 0;
+    m_size = aTextItem->GetSize().x;
+    m_orientation = ( aTextItem->GetOrientation() == TEXT_ORIENT_VERT );
+    m_verticalJustification = aTextItem->GetVertJustify() + 1;
+    m_horizontalJustification = aTextItem->GetHorizJustify() + 1;
+    m_isVisible = aTextItem->IsVisible();
+}
+
+
+void DIALOG_EDIT_ONE_FIELD::init()
 {
     wxString msg;
 
     m_TextValue->SetFocus();
+    m_TextValue->SetValidator( SCH_FIELD_VALIDATOR( m_fieldId, &m_text ) );
 
-    // Disable options for graphic text edition, not existing in fields
+    // Disable options for graphic text editing which are not needed for fields.
     m_CommonConvert->Show( false );
     m_CommonUnit->Show( false );
 
-    msg = StringFromValue( g_UserUnit, m_textsize );
-    m_TextSize->SetValue( msg );
-
-    if( m_textorient == TEXT_ORIENT_VERT )
-        m_Orient->SetValue( true );
-
-    m_Invisible->SetValue( m_text_invisible );
-    m_TextShapeOpt->SetSelection( m_textshape );
-    SetPowerWarning( false );
-
-    switch ( m_textHjustify )
+    // Show the footprint selection dialog if this is the footprint field.
+    if( m_fieldId == FOOTPRINT )
     {
-    case GR_TEXT_HJUSTIFY_LEFT:
-        m_TextHJustificationOpt->SetSelection( 0 );
-        break;
-
-    case GR_TEXT_HJUSTIFY_CENTER:
-        m_TextHJustificationOpt->SetSelection( 1 );
-        break;
-
-    case GR_TEXT_HJUSTIFY_RIGHT:
-        m_TextHJustificationOpt->SetSelection( 2 );
-        break;
+        m_TextValueSelectButton->Show();
+        m_TextValueSelectButton->Enable();
     }
-
-    switch ( m_textVjustify )
+    else
     {
-    case GR_TEXT_VJUSTIFY_BOTTOM:
-        m_TextVJustificationOpt->SetSelection( 0 );
-        break;
-
-    case GR_TEXT_VJUSTIFY_CENTER:
-        m_TextVJustificationOpt->SetSelection( 1 );
-        break;
-
-    case GR_TEXT_VJUSTIFY_TOP:
-        m_TextVJustificationOpt->SetSelection( 2 );
-        break;
+        m_TextValueSelectButton->Hide();
+        m_TextValueSelectButton->Disable();
     }
 
     msg = m_TextSizeText->GetLabel() + ReturnUnitSymbol();
     m_TextSizeText->SetLabel( msg );
 
+
+    // Value fields of power components cannot be modified. This will grey out
+    // the text box and display an explanation.
+    if( m_fieldId == VALUE && m_isPower )
+    {
+        m_PowerComponentValues->Show( true );
+        m_TextValue->Enable( false );
+    }
+
     m_sdbSizerButtonsOK->SetDefault();
-
+    GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
-void DIALOG_EDIT_ONE_FIELD::SetPowerWarning( bool aWarn )
-{
-    m_PowerComponentValues->Show( aWarn );
-    m_TextValue->Enable( ! aWarn );
-    Fit();
-}
 
 void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent )
 {
@@ -117,7 +147,6 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 
     if( frame->ShowModal( &fpid, this ) )
     {
-        // DBG( printf( "%s: %s\n", __func__, TO_UTF8( fpid ) ); )
         m_TextValue->SetValue( fpid );
     }
 
@@ -125,179 +154,96 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 }
 
 
-void DIALOG_LIB_EDIT_ONE_FIELD::initDlg()
+bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 {
-    m_textsize = m_field->GetSize().x;
-    m_TextValue->SetValue( m_field->GetText() );
-    m_textorient = m_field->GetOrientation();
-    m_text_invisible = m_field->IsVisible() ? false : true;
+    wxLogDebug( "In DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()" );
 
-    m_textshape = 0;
+    m_TextValue->SetValue( m_text );
+    m_Orient->SetValue( m_orientation );
+    m_TextSize->SetValue( StringFromValue( g_UserUnit, m_size ) );
+    m_TextHJustificationOpt->SetSelection( m_horizontalJustification );
+    m_TextVJustificationOpt->SetSelection( m_verticalJustification );
+    m_Invisible->SetValue( !m_isVisible );
+    m_TextShapeOpt->SetSelection( m_style );
 
-    if( m_field->IsItalic() )
-        m_textshape = 1;
-
-    if( m_field->IsBold() )
-        m_textshape |= 2;
-
-    m_textHjustify = m_field->GetHorizJustify();
-    m_textVjustify = m_field->GetVertJustify();
-
-    if( m_field->GetId() == FOOTPRINT )
-    {
-        m_TextValueSelectButton->Show();
-        m_TextValueSelectButton->Enable();
-    }
-    else
-    {
-        m_TextValueSelectButton->Hide();
-        m_TextValueSelectButton->Disable();
-    }
-
-    initDlg_base();
+    return true;
 }
 
 
-wxString DIALOG_LIB_EDIT_ONE_FIELD::GetTextField()
+bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
 {
-    wxString line = m_TextValue->GetValue();
+    wxLogDebug( "In DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()" );
 
-    // Spaces are not allowed in reference or value
-    if( m_field->GetId() == REFERENCE || m_field->GetId() == VALUE )
+    m_text = m_TextValue->GetValue();
+
+    // There are lots of specific tests required to validate field text.
+    if( m_fieldId == REFERENCE )
     {
-        if( line.Replace( wxT( " " ), wxT( "_" ) ) )
+        // Test if the reference string is valid:
+        if( !SCH_COMPONENT::IsReferenceStringValid( m_text ) )
         {
-            wxString msg;
-            msg.Printf( _(
-                "Whitespace is not permitted inside references or values (symbol names in lib).\n"
-                "The text you entered has been converted to use underscores: %s" ),
-                line
-                );
-            wxMessageDialog dlg( this, msg );
-            dlg.ShowModal();
+            DisplayError( this, _( "Illegal reference field value!" ) );
+            return false;
         }
     }
 
-    // Prevent the message from appearing twice by restuffing the text box.
-    m_TextValue->SetValue( line );
+    m_orientation = m_Orient->GetValue();
+    m_size = ValueFromString( g_UserUnit, m_TextSize->GetValue() );
+    m_horizontalJustification = m_TextHJustificationOpt->GetSelection();
+    m_verticalJustification = m_TextVJustificationOpt->GetSelection();
+    m_isVisible = !m_Invisible->GetValue();
+    m_style = m_TextShapeOpt->GetSelection();
 
-    return line;
+    return true;
 }
 
 
-void DIALOG_EDIT_ONE_FIELD::TransfertDataToField( bool aIncludeText )
+void DIALOG_EDIT_ONE_FIELD::updateText( EDA_TEXT* aText )
 {
-    // This method doesn't transfer text anyway.
-    (void) aIncludeText;
-
-    m_textorient = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
-    wxString msg = m_TextSize->GetValue();
-    m_textsize = ValueFromString( g_UserUnit, msg );
-
-    switch( m_TextHJustificationOpt->GetSelection() )
-    {
-    case 0:
-        m_textHjustify = GR_TEXT_HJUSTIFY_LEFT;
-        break;
-
-    case 1:
-        m_textHjustify = GR_TEXT_HJUSTIFY_CENTER;
-        break;
-
-    case 2:
-        m_textHjustify = GR_TEXT_HJUSTIFY_RIGHT;
-        break;
-    }
-
-    switch( m_TextVJustificationOpt->GetSelection() )
-    {
-    case 0:
-        m_textVjustify = GR_TEXT_VJUSTIFY_BOTTOM;
-        break;
-
-    case 1:
-        m_textVjustify = GR_TEXT_VJUSTIFY_CENTER;
-        break;
-
-    case 2:
-        m_textVjustify = GR_TEXT_VJUSTIFY_TOP;
-        break;
-    }
+    aText->SetSize( wxSize( m_size, m_size ) );
+    aText->SetVisible( m_isVisible );
+    aText->SetOrientation( m_orientation ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ );
+    aText->SetItalic( (m_style & 1) != 0 );
+    aText->SetBold( (m_style & 2) != 0 );
+    aText->SetHorizJustify( IntToEdaTextHorizJustify( m_horizontalJustification - 1 ) );
+    aText->SetVertJustify( IntToEdaTextVertJustify( m_verticalJustification - 1 ) );
 }
 
 
-void DIALOG_LIB_EDIT_ONE_FIELD::TransfertDataToField( bool aIncludeText )
+DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
+                                                      const wxString& aTitle,
+                                                      const LIB_FIELD* aField ) :
+    DIALOG_EDIT_ONE_FIELD( aParent, aTitle, dynamic_cast< const EDA_TEXT* >( aField ) )
 {
-    DIALOG_EDIT_ONE_FIELD::TransfertDataToField( aIncludeText );
+    m_fieldId = aField->GetId();
 
-    if( aIncludeText )
-        m_field->SetText( GetTextField() );
+    LIB_PART* part = aField->GetParent();
 
-    m_field->SetSize( wxSize( m_textsize, m_textsize ) );
-    m_field->SetOrientation( m_textorient );
-    m_field->SetVisible( !m_Invisible->GetValue() );
-    m_field->SetItalic( ( m_TextShapeOpt->GetSelection() & 1 ) != 0 );
-    m_field->SetBold( ( m_TextShapeOpt->GetSelection() & 2 ) != 0 );
-    m_field->SetHorizJustify( m_textHjustify );
-    m_field->SetVertJustify( m_textVjustify );
+    wxASSERT_MSG( part, wxT( "LIB_FIELD has no LIB_PART as parent." ) );
+
+    m_isPower = part->IsPower();
+    init();
 }
 
 
-void DIALOG_SCH_EDIT_ONE_FIELD::initDlg()
+DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
+                                                      const wxString& aTitle,
+                                                      const SCH_FIELD* aField ) :
+    DIALOG_EDIT_ONE_FIELD( aParent, aTitle, dynamic_cast< const EDA_TEXT* >( aField ) )
 {
-    m_textsize = m_field->GetSize().x;
-    m_TextValue->SetValue( m_field->GetText() );
-    m_textorient = m_field->GetOrientation();
-    m_text_invisible = m_field->IsVisible() ? false : true;
+    m_fieldId = aField->GetId();
 
-    m_textshape = 0;
+    const SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
 
-    if( m_field->IsItalic() )
-        m_textshape = 1;
+    wxASSERT_MSG( component != NULL && component->Type() == SCH_COMPONENT_T,
+                  wxT( "Invalid schematic field parent item." ) );
 
-    if( m_field->IsBold() )
-        m_textshape |= 2;
+    const LIB_PART* part = GetParent()->Prj().SchLibs()->FindLibPart( component->GetPartName() );
 
-    m_textHjustify = m_field->GetHorizJustify();
-    m_textVjustify = m_field->GetVertJustify();
+    wxASSERT_MSG( part, wxT( "Library part for component <" ) +
+                  component->GetPartName() + wxT( "> could not be found." ) );
 
-    if( m_field->GetId() == FOOTPRINT )
-    {
-        m_TextValueSelectButton->Show();
-        m_TextValueSelectButton->Enable();
-    }
-    else
-    {
-        m_TextValueSelectButton->Hide();
-        m_TextValueSelectButton->Disable();
-    }
+    m_isPower = part->IsPower();
 
-    initDlg_base();
-}
-
-
-wxString DIALOG_SCH_EDIT_ONE_FIELD::GetTextField()
-{
-    wxString line = m_TextValue->GetValue();
-    line.Trim( true );
-    line.Trim( false );
-    return line;
-};
-
-
-void DIALOG_SCH_EDIT_ONE_FIELD::TransfertDataToField( bool aIncludeText )
-{
-    DIALOG_EDIT_ONE_FIELD::TransfertDataToField( aIncludeText );
-
-    if( aIncludeText )
-        m_field->SetText( GetTextField() );
-
-    m_field->SetSize( wxSize( m_textsize, m_textsize ) );
-    m_field->SetOrientation( m_textorient );
-    m_field->SetVisible( !m_Invisible->GetValue() );
-
-    m_field->SetItalic( ( m_TextShapeOpt->GetSelection() & 1 ) != 0 );
-    m_field->SetBold( ( m_TextShapeOpt->GetSelection() & 2 ) != 0 );
-    m_field->SetHorizJustify( m_textHjustify );
-    m_field->SetVertJustify( m_textVjustify );
+    init();
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2007-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@
 
 void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 {
-    wxString text;
+    wxString newFieldValue;
     wxString title;
     wxString caption;
     wxString oldName;
@@ -46,7 +46,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
     if( aField == NULL )
         return;
 
-    LIB_PART*      parent = aField->GetParent();
+    LIB_PART* parent = aField->GetParent();
 
     wxASSERT( parent );
 
@@ -66,48 +66,31 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 
     DIALOG_LIB_EDIT_ONE_FIELD dlg( this, caption, aField );
 
-    //The diag may invoke a kiway player for footprint fields
-    //so we must use a quasimodal
-    if( dlg.ShowQuasiModal() != wxID_OK  )
+    // The dialog may invoke a kiway player for footprint fields
+    // so we must use a quasimodal dialog.
+    if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
-    text = dlg.GetTextField();
-
-    // Perform some controls:
-    if( ( aField->GetId() == REFERENCE || aField->GetId() == VALUE ) && text.IsEmpty ( ) )
-    {
-        title.Printf( _( "A %s field cannot be empty." ), GetChars(aField->GetName().Lower() ) );
-        DisplayError( this, title );
-        return;
-    }
-
-    // Ensure the reference prefix is acceptable:
-    if( ( aField->GetId() == REFERENCE ) &&
-        ! SCH_COMPONENT::IsReferenceStringValid( text ) )
-    {
-        DisplayError( this, _( "Illegal reference. A reference must start by a letter" ) );
-        return;
-    }
-
+    newFieldValue = dlg.GetText();
     wxString fieldText = aField->GetFullText( m_unit );
 
     /* If the value field is changed, this is equivalent to creating a new component from
      * the old one.  Rename the component and remove any conflicting aliases to prevent name
      * errors when updating the library.
      */
-    if( aField->GetId() == VALUE && text != aField->GetText() )
+    if( aField->GetId() == VALUE && newFieldValue != aField->GetText() )
     {
         wxString msg;
 
         PART_LIB* lib = GetCurLib();
 
         // Test the current library for name conflicts.
-        if( lib && lib->FindEntry( text ) )
+        if( lib && lib->FindEntry( newFieldValue ) )
         {
             msg.Printf( _(
                 "The name '%s' conflicts with an existing entry in the component library '%s'.\n\n"
-                "Do you wish to replace the current component in library with this one?" ),
-                GetChars( text ),
+                "Do you wish to replace the current component in the library with this one?" ),
+                GetChars( newFieldValue ),
                 GetChars( lib->GetName() )
                 );
 
@@ -119,29 +102,28 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         }
 
         // Test the current component for name conflicts.
-        if( parent->HasAlias( text ) )
+        if( parent->HasAlias( newFieldValue ) )
         {
-            msg.Printf( _(
-                "The current component already has an alias named '%s'.\n\n"
-                "Do you wish to remove this alias from the component?" ),
-                GetChars( text )
-                );
+            msg.Printf( _( "The current component already has an alias named '%s'.\n\n"
+                           "Do you wish to remove this alias from the component?" ),
+                        GetChars( newFieldValue ) );
 
             int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
 
             if( rsp == wxNO )
                 return;
 
-            parent->RemoveAlias( text );
+            parent->RemoveAlias( newFieldValue );
         }
 
-        parent->SetName( text );
+        parent->SetName( newFieldValue );
 
         // Test the library for any conflicts with the any aliases in the current component.
         if( parent->GetAliasCount() > 1 && lib && lib->Conflicts( parent ) )
         {
             msg.Printf( _(
-                "The new component contains alias names that conflict with entries in the component library '%s'.\n\n"
+                "The new component contains alias names that conflict with entries in the "
+                "component library '%s'.\n\n"
                 "Do you wish to remove all of the conflicting aliases from this component?" ),
                 GetChars( lib->GetName() )
                 );
@@ -164,18 +146,13 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         }
 
         if( !parent->HasAlias( m_aliasName ) )
-            m_aliasName = text;
+            m_aliasName = newFieldValue;
     }
-    else
-    {
-        aField->SetText( text );
-    }
+
+    dlg.UpdateField( aField );
 
     if( !aField->InEditMode() )
         SaveCopyInUndoList( parent );
-
-    // Update field
-    dlg.TransfertDataToField();
 
     m_canvas->Refresh();
 

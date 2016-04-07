@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,8 @@
 #include <class_library.h>
 #include <sch_component.h>
 #include <dialog_helpers.h>
+#include <sch_validators.h>
+
 #include <dialog_edit_component_in_schematic_fbp.h>
 
 
@@ -837,6 +839,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     // may only delete user defined fields
     deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );
 
+    fieldValueTextCtrl->SetValidator( SCH_FIELD_VALIDATOR( field.GetId() ) );
     fieldValueTextCtrl->SetValue( field.GetText() );
 
     m_show_datasheet_button->Enable( fieldNdx == DATASHEET || fieldNdx == FOOTPRINT );
@@ -893,6 +896,11 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
 
     if( fieldNdx >= m_FieldsBuf.size() )        // traps the -1 case too
         return true;
+
+    // Check for illegal field text.
+    if( fieldValueTextCtrl->GetValidator()
+      && !fieldValueTextCtrl->GetValidator()->Validate( this ) )
+        return false;
 
     SCH_FIELD& field = m_FieldsBuf[fieldNdx];
 
