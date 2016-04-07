@@ -81,7 +81,7 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
     case VALUE:     fieldName = _( "value" );                break;
     case FOOTPRINT: fieldName = _( "footprint" );            break;
     case DATASHEET: fieldName = _( "data sheet" );           break;
-    default:        fieldName = _( "user definded" );        break;
+    default:        fieldName = _( "user defined" );         break;
     };
 
     wxString errorMsg;

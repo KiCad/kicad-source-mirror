@@ -131,6 +131,11 @@ void DIALOG_EDIT_ONE_FIELD::init()
         m_PowerComponentValues->Show( true );
         m_TextValue->Enable( false );
     }
+    else
+    {
+        m_PowerComponentValues->Show( false );
+        m_TextValue->Enable( true );
+    }
 
     m_sdbSizerButtonsOK->SetDefault();
     GetSizer()->SetSizeHints( this );
