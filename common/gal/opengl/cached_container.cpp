@@ -170,6 +170,8 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
     test();
 #endif
 
+    // Currently: it is disable to avoid "out of memory" issues
+#if 0
     // Dynamic memory freeing, there is no point in holding
     // a large amount of memory when there is no use for it
     if( m_freeSpace > ( 0.75 * m_currentSize ) && m_currentSize > m_initialSize )
