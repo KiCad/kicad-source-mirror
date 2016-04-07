@@ -514,13 +514,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
     if( wxFileName::Exists( fname ) )
     {
-        // determine if the file is a regular file
-        struct stat info;
-
-        if( stat( fname.ToUTF8(), &info ) )
-            return false;
-
-        if( !S_ISREG( info.st_mode ) )
+        if( !wxFileName::FileExists( fname ) )
         {
             wxString errmsg = _( "path exists but is not a regular file" );
             wxLogTrace( MASK_3D_CACHE, " * [3D model] %s '%s'\n", errmsg.ToUTF8(),
