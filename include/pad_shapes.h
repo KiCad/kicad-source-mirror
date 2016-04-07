@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
 /**
  * Enum PAD_SHAPE_T
  * is the set of pad shapes, used with D_PAD::{Set,Get}Shape()
+ * The double name is for compatibility with old Python scripts
  */
 enum PAD_SHAPE_T
 {
@@ -37,13 +38,12 @@ enum PAD_SHAPE_T
     PAD_SHAPE_OVAL,
     PAD_OVAL = PAD_SHAPE_OVAL,
     PAD_SHAPE_TRAPEZOID,
-    PAD_TRAPEZOID = PAD_SHAPE_TRAPEZOID
+    PAD_SHAPE_ROUNDRECT,
 };
 
 /**
  * Enum PAD_DRILL_SHAPE_T
  * is the set of pad drill shapes, used with D_PAD::{Set,Get}DrillShape()
- * The double name is for convenience of Python devs
  */
 enum PAD_DRILL_SHAPE_T
 {
@@ -59,14 +59,14 @@ enum PAD_DRILL_SHAPE_T
  */
 enum PAD_ATTR_T
 {
-    PAD_ATTRIB_STANDARD,           ///< Usual pad
+    PAD_ATTRIB_STANDARD,            ///< Usual pad
     PAD_STANDARD = PAD_ATTRIB_STANDARD,
-    PAD_ATTRIB_SMD,                ///< Smd pad, appears on the solder paste layer (default)
+    PAD_ATTRIB_SMD,                 ///< Smd pad, appears on the solder paste layer (default)
     PAD_SMD = PAD_ATTRIB_SMD,
-    PAD_ATTRIB_CONN,               ///< Like smd, does not appear on the solder paste layer (default)
-    PAD_CONN = PAD_ATTRIB_CONN,
-    PAD_ATTRIB_HOLE_NOT_PLATED,    ///< like PAD_STANDARD, but not plated
-                            ///< mechanical use only, no connection allowed
+    PAD_ATTRIB_CONN,                ///< Like smd, does not appear on the solder paste layer (default)
+                                    ///< Used for edgecard connectors for instance
+    PAD_ATTRIB_HOLE_NOT_PLATED,     ///< like PAD_STANDARD, but not plated
+                                    ///< mechanical use only, no connection allowed
     PAD_HOLE_NOT_PLATED = PAD_ATTRIB_HOLE_NOT_PLATED
 };
 

@@ -60,6 +60,8 @@
 #include <class_track.h>
 #include <ratsnest_data.h>
 #include <layers_id_colors_and_visibility.h>
+#include <geometry/convex_hull.h>
+
 
 // an ugly singleton for drawing debug items within the router context.
 // To be fixed sometime in the future.
@@ -267,6 +269,27 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
                 break;
             }
 
+            case PAD_SHAPE_ROUNDRECT:
+            {
+                SHAPE_POLY_SET outline;
+                const int segmentToCircleCount = 64;
+
+                aPad->BuildPadShapePolygon( outline, wxSize( 0, 0 ),
+                                            segmentToCircleCount, 1.0 );
+
+                // TransformRoundRectToPolygon creates only one convex polygon
+                SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+                SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+
+                for( int ii = 0; ii < poly.PointCount(); ++ii )
+                {
+                    shape->Append( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+                }
+
+                solid->SetShape( shape );
+            }
+                break;
+
             default:
                 TRACEn( 0, "unsupported pad shape" );
                 delete solid;
@@ -343,6 +366,26 @@ PNS_ITEM* PNS_ROUTER::syncPad( D_PAD* aPad )
                 solid->SetShape( shape );
                 break;
             }
+
+            case PAD_SHAPE_ROUNDRECT:
+            {
+                SHAPE_POLY_SET outline;
+                const int segmentToCircleCount = 32;
+                aPad->BuildPadShapePolygon( outline, wxSize( 0, 0 ),
+                                            segmentToCircleCount, 1.0 );
+
+                // TransformRoundRectToPolygon creates only one convex polygon
+                SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
+                SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+
+                for( int ii = 0; ii < poly.PointCount(); ++ii )
+                {
+                    shape->Append( wxPoint( poly.Point( ii ).x, poly.Point( ii ).y ) );
+                }
+
+                solid->SetShape( shape );
+            }
+                break;
 
             default:
                 TRACEn( 0, "unsupported pad shape" );

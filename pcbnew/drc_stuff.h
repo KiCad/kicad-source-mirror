@@ -365,12 +365,12 @@ private:
 
     /**
      * Helper function checkMarginToCircle
-     * Check the distance from a point to
-     * a segment. the segment is expected starting at 0,0, and on the X axis
+     * Check the distance from a point to a segment.
+     * The segment is expected starting at 0,0, and on the X axis
      * (used to test DRC between a segment and a round pad, via or round end of a track
      * @param aCentre The coordinate of the circle's center
      * @param aRadius A "keep out" radius centered over the circle
-     * @param aLength The length of the segment (i.e. coordinate of end, becuase it is on
+     * @param aLength The length of the segment (i.e. coordinate of end, because it is on
      *                the X axis)
      * @return bool - true if distance >= radius, else
      *                false when distance < aRadius

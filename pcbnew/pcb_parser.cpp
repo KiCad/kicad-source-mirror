@@ -2203,8 +2203,12 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
         pad->SetShape( PAD_SHAPE_TRAPEZOID );
         break;
 
+    case T_roundrect:
+        pad->SetShape( PAD_SHAPE_ROUNDRECT );
+        break;
+
     default:
-        Expecting( "circle, rectangle, oval, or trapezoid" );
+        Expecting( "circle, rectangle, roundrect, oval, trapezoid or custom" );
     }
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -2372,10 +2376,15 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
             NeedRIGHT();
             break;
 
+        case T_roundrect_rratio:
+            pad->SetRoundRectRadiusRatio( parseDouble( "roundrect radius ratio" ) );
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "at, drill, layers, net, die_length, solder_mask_margin, "
+            Expecting( "at, drill, layers, net, die_length, solder_mask_margin, roundrect_rratio,"
                        "solder_paste_margin, solder_paste_margin_ratio, clearance, "
-                       "zone_connect, thermal_width, or thermal_gap" );
+                       "zone_connect, fp_poly, basic_shapes, thermal_width, or thermal_gap" );
         }
     }
 

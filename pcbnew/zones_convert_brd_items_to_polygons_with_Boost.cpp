@@ -4,8 +4,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,12 +197,14 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
                 continue;
             }
 
+            // Pads are removed from zone if the setup is PAD_ZONE_CONN_NONE
             if( GetPadConnection( pad ) == PAD_ZONE_CONN_NONE )
             {
                 int gap = zone_clearance;
                 int thermalGap = GetThermalReliefGap( pad );
                 gap = std::max( gap, thermalGap );
                 item_boundingbox = pad->GetBoundingBox();
+                item_boundingbox.Inflate( gap );
 
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {

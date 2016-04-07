@@ -84,11 +84,16 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, EDA_COLOR_T aColor, EDA_DRAW_MODE_T
 
     case PAD_SHAPE_TRAPEZOID:
         {
-            wxPoint coord[4];
-            aPad->BuildPadPolygon( coord, wxSize(0,0), 0 );
-            m_plotter->FlashPadTrapez( shape_pos, coord,
-                                       aPad->GetOrientation(), aPlotMode );
+        wxPoint coord[4];
+        aPad->BuildPadPolygon( coord, wxSize(0,0), 0 );
+        m_plotter->FlashPadTrapez( shape_pos, coord,
+                                   aPad->GetOrientation(), aPlotMode );
         }
+        break;
+
+    case PAD_SHAPE_ROUNDRECT:
+        m_plotter->FlashPadRoundRect( shape_pos, aPad->GetSize(), aPad->GetRoundRectCornerRadius(),
+                                      aPad->GetOrientation(), aPlotMode );
         break;
 
     case PAD_SHAPE_RECT:
