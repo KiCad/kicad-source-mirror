@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-07 10:18+0200\n"
-"PO-Revision-Date: 2016-04-07 11:24+0200\n"
+"POT-Creation-Date: 2016-04-08 09:10+0200\n"
+"PO-Revision-Date: 2016-04-08 09:10+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: 3d-viewer/3d_cache/3d_cache.cpp:436 3d-viewer/3d_cache/3d_cache.cpp:507
 msgid "cannot load cached model; config directory unknown"
 msgstr ""
-"no puede cargarse el móduloen caché; carpeta de configuración desconocida"
+"no puede cargarse el módulo en caché; carpeta de configuración desconocida"
 
 #: 3d-viewer/3d_cache/3d_cache.cpp:446
 msgid "cannot open file"
@@ -321,26 +321,26 @@ msgstr "Rutas:"
 msgid "Configure Paths"
 msgstr "Configurar rutas"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:127
-msgid "3D Model Orientation"
-msgstr "Orientación modelo 3D"
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:126
+msgid "3D Preview"
+msgstr "Vista previa 3D"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:141
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:139
 msgid "Scale"
 msgstr "Escala"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:142
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:140
 #: gerbview/class_gerber_draw_item.cpp:564
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:350
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:68
 msgid "Rotation"
 msgstr "Rotación"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:143
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:141
 msgid "Offset (inches)"
 msgstr "Compensación (pulgadas)"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:601
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:599
 msgid "[INFO] invalid scale values; setting all to 1.0"
 msgstr "[INFO] valor de escala no válido; ajustando todos a 1.0"
 
@@ -8453,6 +8453,7 @@ msgstr "Pin de hoja jerárquica"
 
 #: eeschema/sch_text.cpp:736
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:110
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:208
 msgid "Horizontal"
 msgstr "Horizontal"
 
@@ -8500,7 +8501,7 @@ msgid "data sheet"
 msgstr "hoja de datos"
 
 #: eeschema/sch_validators.cpp:84
-msgid "user definded"
+msgid "user defined"
 msgstr "definido por el usuario"
 
 #: eeschema/sch_validators.cpp:92
@@ -12498,104 +12499,104 @@ msgstr "Zoom "
 msgid "Block Operation"
 msgstr "Operación en bloques"
 
-#: pcbnew/board_netlist_updater.cpp:114 pcbnew/class_board.cpp:2328
+#: pcbnew/board_netlist_updater.cpp:123 pcbnew/class_board.cpp:2328
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Añadiendo del nuevo componente \"%s:%s\" la huella \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:121
+#: pcbnew/board_netlist_updater.cpp:130
 #, c-format
 msgid "Add component %s, footprint: %s.\n"
 msgstr "Añadir componente %s, huella: %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:146
+#: pcbnew/board_netlist_updater.cpp:155
 #, c-format
 msgid "Cannot add component %s due to missing footprint %s.\n"
 msgstr ""
 "No puede añadirse el componente %s ya que no se encuentra la huella %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:152 pcbnew/class_board.cpp:2337
+#: pcbnew/board_netlist_updater.cpp:161 pcbnew/class_board.cpp:2337
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "No se puede añadir el nuevo componente \"%s:%s\" ya que le falta la huella "
 "\"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:180
+#: pcbnew/board_netlist_updater.cpp:189
 #, c-format
 msgid "Change component %s footprint from %s to %s.\n"
 msgstr "Cambiar huella del componente %s de %s a %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:187 pcbnew/class_board.cpp:2370
+#: pcbnew/board_netlist_updater.cpp:196 pcbnew/class_board.cpp:2370
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Reemplazando del componente \"%s:%s\" la huella \"%s\" con \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:217
+#: pcbnew/board_netlist_updater.cpp:226
 #, c-format
 msgid "Cannot change component %s footprint due to missing footprint %s.\n"
 msgstr ""
 "No puede modificarse el componente %s ya que no se encuentra la huella %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:224 pcbnew/class_board.cpp:2381
+#: pcbnew/board_netlist_updater.cpp:233 pcbnew/class_board.cpp:2381
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
 "No se puede reemplazar el componente \"%s:%s\" ya que le falta la huella \"%s"
 "\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:251
+#: pcbnew/board_netlist_updater.cpp:260
 #, c-format
 msgid "Change component %s reference to %s.\n"
 msgstr "Cambiar la referencia del componente %s a %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:257 pcbnew/class_board.cpp:2420
+#: pcbnew/board_netlist_updater.cpp:266 pcbnew/class_board.cpp:2420
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
 msgstr "Cambiando del componente \"%s:%s\" la referencia a \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:274
+#: pcbnew/board_netlist_updater.cpp:283
 #, c-format
 msgid "Change component %s value from %s to %s.\n"
 msgstr "Cambiar el valor del componente %s de %s a %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:281 pcbnew/class_board.cpp:2436
+#: pcbnew/board_netlist_updater.cpp:290 pcbnew/class_board.cpp:2436
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Cambiando del componente \"%s:%s\" el valor de \"%s\" a \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:298 pcbnew/class_board.cpp:2453
+#: pcbnew/board_netlist_updater.cpp:307 pcbnew/class_board.cpp:2453
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Cambiando la ruta del componente de \"%s:%s\" a \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:335
+#: pcbnew/board_netlist_updater.cpp:344
 #, c-format
 msgid "Disconnect component %s pin %s.\n"
 msgstr "Desconectar del componente %s el pin %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:340 pcbnew/class_board.cpp:2477
+#: pcbnew/board_netlist_updater.cpp:349 pcbnew/class_board.cpp:2477
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr ""
 "Borrando del componente \"%s:%s\" el nombre de la red del pin \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:371
+#: pcbnew/board_netlist_updater.cpp:380
 #, c-format
 msgid "Add net %s.\n"
 msgstr "Añadir red %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:379
+#: pcbnew/board_netlist_updater.cpp:388
 #, c-format
 msgid "Reconnect component %s pin %s from net %s to net %s.\n"
 msgstr "Reconectar del componente %s el pin %s desde la red %s a la red %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:386
+#: pcbnew/board_netlist_updater.cpp:395
 #, c-format
 msgid "Connect component %s pin %s to net %s.\n"
 msgstr "Conectar del componente %s el pin %s a la red %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:394 pcbnew/class_board.cpp:2493
+#: pcbnew/board_netlist_updater.cpp:403 pcbnew/class_board.cpp:2493
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
@@ -12603,47 +12604,47 @@ msgstr ""
 "Cambiando del componente \"%s:%s\" el nombre de la red del pin \"%s\" de \"%s"
 "\" a \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:441
+#: pcbnew/board_netlist_updater.cpp:450
 #, c-format
 msgid "Remove component %s."
 msgstr "Eliminar el componente %s."
 
-#: pcbnew/board_netlist_updater.cpp:445 pcbnew/class_board.cpp:2542
+#: pcbnew/board_netlist_updater.cpp:454 pcbnew/class_board.cpp:2542
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Eliminando el componente no utilizado \"%s:%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:513
+#: pcbnew/board_netlist_updater.cpp:522
 #, c-format
 msgid "Remove single pad net %s."
 msgstr "Eliminar la red de un único pad %s."
 
-#: pcbnew/board_netlist_updater.cpp:518 pcbnew/class_board.cpp:2602
+#: pcbnew/board_netlist_updater.cpp:527 pcbnew/class_board.cpp:2602
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Eliminar la red \"%s\" de un solo pad en \"%s\" pad '%s'\n"
 
-#: pcbnew/board_netlist_updater.cpp:582
+#: pcbnew/board_netlist_updater.cpp:591
 #, c-format
 msgid "Component %s pad %s not found in footprint %s\n"
 msgstr "No se ha encontrado del componente %s el pad %s en la huella %s\n"
 
-#: pcbnew/board_netlist_updater.cpp:603
+#: pcbnew/board_netlist_updater.cpp:612
 #, c-format
 msgid "Copper zone (net name %s): net has no pads connected."
 msgstr "Zona de cobre (nombre de red %s): la red no tiene pads conectados."
 
-#: pcbnew/board_netlist_updater.cpp:631
+#: pcbnew/board_netlist_updater.cpp:640
 #, c-format
 msgid "Processing component \"%s:%s:%s\".\n"
 msgstr "Prosesando componentes \"%s:%s:%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:688
+#: pcbnew/board_netlist_updater.cpp:697
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Número de avisos: %d, errores: %d."
 
-#: pcbnew/board_netlist_updater.cpp:697
+#: pcbnew/board_netlist_updater.cpp:706
 msgid ""
 "Errors occured during the netlist update. Unless you fix them, your board "
 "will not be consistent with the schematics."
@@ -12651,7 +12652,7 @@ msgstr ""
 "Han ocurrido errores al actualizar la lista de redes. Si no son corregidos, "
 "la placa no será consistente con el esquema."
 
-#: pcbnew/board_netlist_updater.cpp:703
+#: pcbnew/board_netlist_updater.cpp:712
 msgid "Netlist update successful!"
 msgstr "¡Lista de redes actualizada correctamente!"
 
@@ -17807,24 +17808,19 @@ msgstr "Incremento trapezoidal:"
 msgid "Trapezoid direction:"
 msgstr "Dirección del trapecio:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:208
-msgid "Horizotal"
-msgstr "Horizontal"
-
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
-#, c-format
-msgid "Corner size ( % of width):"
-msgstr "Tamaño de redondeo ( % del ancho):"
+msgid "Corner size ( percent of width):"
+msgstr "Tamaño de redondeo (porcentaje del ancho):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:228
 msgid ""
-"Corner radius in % of the pad width.\n"
+"Corner radius in percent  of the pad width.\n"
 "The width is the smaller value between size X and size Y\n"
-"The max value is 50%"
+"The max value is 50 percent "
 msgstr ""
-"Radio de redondeo en % de la anchura del pad.\n"
-"La anchura es el menor valor entre la dimensión X y la dimensión Y\n"
-"El valor máximo es del 50%"
+"Radio del redondeo en tanto por ciento del ancho del pad.\n"
+"El ancho es el valor menor entre la dimensión en X y la dimensión en Y\n"
+"El valor máximo es del 50% "
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:239
 msgid "Corner radius:"
@@ -24103,6 +24099,27 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "3D Model Orientation"
+#~ msgstr "Orientación modelo 3D"
+
+#~ msgid "user definded"
+#~ msgstr "definido por el usuario"
+
+#~ msgid "Horizotal"
+#~ msgstr "Horizontal"
+
+#~ msgid "Corner size ( % of width):"
+#~ msgstr "Tamaño de redondeo ( % del ancho):"
+
+#~ msgid ""
+#~ "Corner radius in % of the pad width.\n"
+#~ "The width is the smaller value between size X and size Y\n"
+#~ "The max value is 50%"
+#~ msgstr ""
+#~ "Radio de redondeo en % de la anchura del pad.\n"
+#~ "La anchura es el menor valor entre la dimensión X y la dimensión Y\n"
+#~ "El valor máximo es del 50%"
 
 #~ msgid "3D Shape:"
 #~ msgstr "Modelo 3D:"
