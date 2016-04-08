@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -447,6 +447,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
 
     if( tableChanged )
     {
+        wxBusyCursor dummy;
         BuildLIBRARY_LISTBOX();
         m_FootprintsList.ReadFootprintFiles( Prj().PcbFootprintLibs() );
     }
@@ -723,6 +724,8 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
                          "library table." ), _( "Configuration Error" ), wxOK | wxICON_ERROR );
         return false;
     }
+
+    wxBusyCursor dummy;  // Let the user know something is happening.
 
     m_FootprintsList.ReadFootprintFiles( fptbl );
 
