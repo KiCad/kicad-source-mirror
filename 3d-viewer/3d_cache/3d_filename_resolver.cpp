@@ -559,7 +559,7 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "could not open configuration file" );
+        wxString errmsg = _( "Could not open configuration file" );
         ostr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
         return false;
@@ -678,11 +678,10 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "could not open configuration file " );
+        wxString errmsg = _( "Could not open configuration file" );
         ostr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
-        wxMessageBox( _( "Could not open configuration file" ),
-                      _( "Write 3D search path list" ) );
+        wxMessageBox( errmsg, _( "Write 3D search path list" ) );
 
         return false;
     }
@@ -923,7 +922,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "missing closing quote mark in config file" );
+        wxString errmsg = "missing closing quote mark in config file";
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
 
