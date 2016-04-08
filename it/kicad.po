@@ -78,8 +78,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-07 16:07+0200\n"
-"PO-Revision-Date: 2016-04-07 16:08+0200\n"
+"POT-Creation-Date: 2016-04-08 13:28+0200\n"
+"PO-Revision-Date: 2016-04-08 13:28+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -10988,7 +10988,7 @@ msgid "Other"
 msgstr "Altro"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:68
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:142
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:140
 #: gerbview/class_gerber_draw_item.cpp:564
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:350
 msgid "Rotation"
@@ -21266,19 +21266,19 @@ msgstr "virgoletta di chiusura mancante nel file di configurazione"
 msgid "All Files (*.*)|*.*"
 msgstr "Tutti i file (*.*)|*.*"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:127
-msgid "3D Model Orientation"
-msgstr "Orientamento modello 3D"
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:126
+msgid "3D Preview"
+msgstr "Anteprima 3D"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:141
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:139
 msgid "Scale"
 msgstr "Scala"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:143
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:141
 msgid "Offset (inches)"
 msgstr "Spostamento (pollici)"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:601
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:599
 msgid "[INFO] invalid scale values; setting all to 1.0"
 msgstr "[INFO] valori di scala non validi; impostazione globale a 1.0"
 
