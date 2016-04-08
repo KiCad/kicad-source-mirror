@@ -35,7 +35,7 @@
 class DialogEditModuleText_base : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_ModuleInfoText;
 		wxStaticLine* m_staticline1;
@@ -53,23 +53,26 @@ class DialogEditModuleText_base : public DIALOG_SHIM
 		wxTextCtrl* m_TxtPosCtrlY;
 		wxStaticText* m_LayerLabel;
 		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
+		wxRadioBox* m_Show;
 		wxRadioBox* m_Style;
 		wxRadioBox* m_Orient;
-		wxRadioBox* m_Show;
+		wxStaticText* m_staticTextRotation;
+		wxTextCtrl* m_OrientValue;
 		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
+		virtual void ModuleOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 410,391 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DialogEditModuleText_base();
-	
+
 };
 
 #endif //__DIALOG_EDIT_MODULE_TEXT_BASE_H__

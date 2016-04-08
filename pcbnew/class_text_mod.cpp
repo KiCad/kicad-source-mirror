@@ -340,11 +340,12 @@ double TEXTE_MODULE::GetDrawRotation() const
     if( module )
         rotation += module->GetOrientation();
 
-    NORMALIZE_ANGLE_POS( rotation );
-
-    // For angle = 0 .. 180 deg
+    // For angle = -90 .. 90 deg
     while( rotation > 900 )
         rotation -= 1800;
+
+    while( rotation < -900 )
+        rotation += 1800;
 
     return rotation;
 }

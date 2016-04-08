@@ -135,7 +135,6 @@ public:
 
     void SetOrientation( double aOrientation )
     {
-        NORMALIZE_ANGLE_POS( aOrientation );
         m_Orient = aOrientation;
     }
     double GetOrientation() const          { return m_Orient; }

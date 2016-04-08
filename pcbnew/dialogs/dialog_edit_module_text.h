@@ -48,6 +48,7 @@ private:
     void initDlg( );
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
+    void ModuleOrientEvent( wxCommandEvent& event );
 };
 
 #endif /* DIALOG_EDIT_MODULE_TEXT_H */

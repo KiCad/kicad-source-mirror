@@ -159,6 +159,34 @@ void DialogEditModuleText::initDlg( )
     if( !m_currentText->IsVisible() )
         m_Show->SetSelection( 1 );
 
+    bool select = false;
+    switch( int( m_currentText->GetOrientation() ) )
+    {
+    case 0:
+        m_Orient->SetSelection( 0 );
+        break;
+
+    case 900:
+    case -2700:
+        m_Orient->SetSelection( 1 );
+        break;
+
+    case -900:
+    case 2700:
+        m_Orient->SetSelection( 2 );
+        break;
+
+    default:
+        m_Orient->SetSelection( 3 );
+        select = true;
+        break;
+    }
+
+    wxString msg2;
+    msg2 << m_currentText->GetOrientation();
+    m_OrientValue->SetValue( msg2 );
+    m_OrientValue->Enable( select );
+
     // Configure the layers list selector
     if( !m_parent->GetBoard()->IsLayerEnabled( m_currentText->GetLayer() ) )
         // Footprints are built outside the current board, so items cann be
@@ -178,6 +206,30 @@ void DialogEditModuleText::initDlg( )
     }
 }
 
+void DialogEditModuleText::ModuleOrientEvent( wxCommandEvent& event )
+{
+    switch( m_Orient->GetSelection() )
+    {
+    case 0:
+        m_OrientValue->Enable( false );
+        m_OrientValue->SetValue( wxT( "0" ) );
+        break;
+
+    case 1:
+        m_OrientValue->Enable( false );
+        m_OrientValue->SetValue( wxT( "900" ) );
+        break;
+
+    case 2:
+        m_OrientValue->Enable( false );
+        m_OrientValue->SetValue( wxT( "-900" ) );
+        break;
+
+    default:
+        m_OrientValue->Enable( true );
+        break;
+    }
+}
 
 void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 {
@@ -239,8 +291,65 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 
     m_currentText->SetVisible( m_Show->GetSelection() == 0 );
 
-    int text_orient = (m_Orient->GetSelection() == 0) ? 0 : 900;
-    m_currentText->SetOrientation( text_orient );
+    bool select = false;
+    switch( m_Orient->GetSelection() )
+    {
+      case 0:
+	m_currentText->SetOrientation( 0 );
+	break;
+
+      case 1:
+	m_currentText->SetOrientation( 900 );
+	break;
+
+      case 2:
+	m_currentText->SetOrientation( -900 );
+	break;
+
+      default:
+	select = true;
+	long orient = 0;
+	msg = m_OrientValue->GetValue();
+	msg.ToLong( &orient );
+	m_currentText->SetOrientation( orient );
+        break;
+    };
+
+    switch( int( m_currentText->GetOrientation() ) )
+    {
+    case 0:
+        m_Orient->SetSelection( 0 );
+        break;
+
+    case 900:
+    case -2700:
+        m_Orient->SetSelection( 1 );
+        break;
+
+    case -900:
+    case 2700:
+        m_Orient->SetSelection( 2 );
+        break;
+
+    default:
+        m_Orient->SetSelection( 3 );
+	long orient = 0;
+	msg = m_OrientValue->GetValue();
+	msg.ToLong( &orient );
+
+	while( orient < -900 )
+            orient += 1800;
+
+        while( orient > 900 )
+             orient -= 1800;
+
+	m_currentText->SetOrientation( orient );
+        select = true;
+        break;
+    }
+    msg << m_currentText->GetOrientation();
+    m_OrientValue->SetValue( msg );
+    m_OrientValue->Enable( select );
 
     m_currentText->SetDrawCoord();
 
