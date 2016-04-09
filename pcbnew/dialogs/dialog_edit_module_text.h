@@ -4,7 +4,7 @@
  * Copyright (C) 2013 Jean-Pierre Charras
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 #define DIALOG_EDIT_MODULE_TEXT_H
 
 #include <dialog_edit_module_text_base.h>
+#include <wx/valnum.h>
 
 /*************** **************/
 /* class DialogEditModuleText */
@@ -40,14 +41,18 @@ private:
     MODULE* m_module;
     TEXTE_MODULE* m_currentText;
 
+    wxFloatingPointValidator<double> m_OrientValidator;
+    double m_OrientValue;
+
 public:
     DialogEditModuleText( PCB_BASE_FRAME* aParent, TEXTE_MODULE* aTextMod, wxDC* aDC );
     ~DialogEditModuleText() {};
 
+protected:
+    bool TransferDataToWindow();
+    bool TransferDataFromWindow();
+
 private:
-    void initDlg( );
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
     void ModuleOrientEvent( wxCommandEvent& event );
 };
 

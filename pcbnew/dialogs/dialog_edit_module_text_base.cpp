@@ -121,12 +121,12 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	m_Orient->SetSelection( 2 );
 	bSizer4->Add( m_Orient, 1, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextRotation = new wxStaticText( this, wxID_ANY, _("Rotation (in 0.1 degrees):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotation = new wxStaticText( this, wxID_ANY, _("Rotation (-90.0 to 90.0)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotation->Wrap( -1 );
 	bSizer4->Add( m_staticTextRotation, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 	
-	m_OrientValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer4->Add( m_OrientValue, 0, wxALL|wxEXPAND, 5 );
+	m_OrientValueCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_OrientValueCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizer10->Add( bSizer4, 2, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );

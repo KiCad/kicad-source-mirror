@@ -40,6 +40,7 @@
 #include <confirm.h>
 #include <wxBasePcbFrame.h>
 #include <base_units.h>
+#include <wx/numformatter.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -63,7 +64,8 @@ void PCB_BASE_FRAME::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC
 
 DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
                                             TEXTE_MODULE* aTextMod, wxDC* aDC ) :
-    DialogEditModuleText_base( aParent )
+    DialogEditModuleText_base( aParent ),
+    m_OrientValidator( 1, &m_OrientValue, wxNUM_VAL_ZERO_AS_BLANK )
 
 {
     m_parent = aParent;
@@ -71,10 +73,11 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
     m_module = NULL;
     m_currentText = aTextMod;
 
+    m_OrientValidator.SetRange(-90.0, 90.0);
+    m_OrientValueCtrl->SetValidator( m_OrientValidator );
+
     if( m_currentText )
         m_module = (MODULE*) m_currentText->GetParent();
-
-    initDlg();
 
     m_sdbSizer1OK->SetDefault();
 
@@ -82,18 +85,14 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
     GetSizer()->SetSizeHints( this );
 
     Centre();
-}
-
-
-void DialogEditModuleText::OnCancelClick( wxCommandEvent& event )
-{
-   EndModal( 0 );
-}
-
-
-void DialogEditModuleText::initDlg( )
-{
     SetFocus();
+}
+
+
+bool DialogEditModuleText::TransferDataToWindow()
+{
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
 
     wxString msg;
 
@@ -136,18 +135,23 @@ void DialogEditModuleText::initDlg( )
 
     m_Style->SetSelection( m_currentText->IsItalic() ? 1 : 0 );
 
+    m_SizeXTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_SizeXTitle );
     PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->GetSize().x );
 
+    m_SizeYTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_SizeYTitle );
     PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->GetSize().y );
 
+    m_PosXTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_PosXTitle );
     PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->GetPos0().x );
 
+    m_PosYTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_PosYTitle );
     PutValueInLocalUnits( *m_TxtPosCtrlY, m_currentText->GetPos0().y );
 
+    m_WidthTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_WidthTitle );
     PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->GetThickness() );
 
@@ -160,7 +164,7 @@ void DialogEditModuleText::initDlg( )
     if( !m_currentText->IsVisible() )
         m_Show->SetSelection( 1 );
 
-    bool select = false;
+    bool custom_orientation = false;
     switch( int( m_currentText->GetOrientation() ) )
     {
     case 0:
@@ -179,14 +183,14 @@ void DialogEditModuleText::initDlg( )
 
     default:
         m_Orient->SetSelection( 3 );
-        select = true;
+        custom_orientation = true;
         break;
     }
 
-    wxString msg2;
-    msg2 << m_currentText->GetOrientation();
-    m_OrientValue->SetValue( msg2 );
-    m_OrientValue->Enable( select );
+    wxString orientation_fmt;
+    orientation_fmt.Printf( _( "%0.1f" ), (double)( m_currentText->GetOrientation() ) / 10.0 );
+    m_OrientValueCtrl->SetValue( orientation_fmt );
+    m_OrientValueCtrl->Enable( custom_orientation );
 
     // Configure the layers list selector
     if( !m_parent->GetBoard()->IsLayerEnabled( m_currentText->GetLayer() ) )
@@ -205,36 +209,15 @@ void DialogEditModuleText::initDlg( )
                         "Now, forced on the front silk screen layer. Please, fix it" ) );
         m_LayerSelectionCtrl->SetLayerSelection( F_SilkS );
     }
+
+    return true;
 }
 
-void DialogEditModuleText::ModuleOrientEvent( wxCommandEvent& event )
+
+bool DialogEditModuleText::TransferDataFromWindow()
 {
-    switch( m_Orient->GetSelection() )
-    {
-    case 0:
-        m_OrientValue->Enable( false );
-        m_OrientValue->SetValue( wxT( "0" ) );
-        break;
-
-    case 1:
-        m_OrientValue->Enable( false );
-        m_OrientValue->SetValue( wxT( "900" ) );
-        break;
-
-    case 2:
-        m_OrientValue->Enable( false );
-        m_OrientValue->SetValue( wxT( "-900" ) );
-        break;
-
-    default:
-        m_OrientValue->Enable( true );
-        break;
-    }
-}
-
-void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
-{
-    wxString msg;
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
 
     if( m_module )
         m_parent->SaveCopyInUndoList( m_module, UR_CHANGED );
@@ -252,11 +235,8 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 
     wxPoint tmp;
 
-    msg = m_TxtPosCtrlX->GetValue();
-    tmp.x = ValueFromString( g_UserUnit, msg );
-
-    msg = m_TxtPosCtrlY->GetValue();
-    tmp.y = ValueFromString( g_UserUnit, msg );
+    tmp.x = ValueFromString( g_UserUnit, m_TxtPosCtrlX->GetValue() );
+    tmp.y = ValueFromString( g_UserUnit, m_TxtPosCtrlY->GetValue() );
 
     m_currentText->SetPos0( tmp );
 
@@ -270,10 +250,9 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     if( textSize.y < TEXTS_MIN_SIZE )
         textSize.y = TEXTS_MIN_SIZE;
 
-    m_currentText->SetSize( textSize ),
+    m_currentText->SetSize( textSize );
 
-    msg = m_TxtWidthCtlr->GetValue();
-    int width = ValueFromString( g_UserUnit, msg );
+    int width = ValueFromString( g_UserUnit, m_TxtWidthCtlr->GetValue() );
 
     // Test for a reasonable width:
     if( width <= 1 )
@@ -292,27 +271,24 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 
     m_currentText->SetVisible( m_Show->GetSelection() == 0 );
 
-    bool select = false;
+    bool custom_orientation = false;
     switch( m_Orient->GetSelection() )
     {
-      case 0:
-	m_currentText->SetOrientation( 0 );
-	break;
+    case 0:
+        m_currentText->SetOrientation( 0 );
+        break;
 
-      case 1:
-	m_currentText->SetOrientation( 900 );
-	break;
+    case 1:
+        m_currentText->SetOrientation( 900 );
+        break;
 
-      case 2:
-	m_currentText->SetOrientation( -900 );
-	break;
+    case 2:
+        m_currentText->SetOrientation( -900 );
+        break;
 
-      default:
-	select = true;
-	long orient = 0;
-	msg = m_OrientValue->GetValue();
-	msg.ToLong( &orient );
-	m_currentText->SetOrientation( orient );
+    default:
+        custom_orientation = true;
+        m_currentText->SetOrientation( KiROUND( m_OrientValue * 10.0 ) );
         break;
     };
 
@@ -334,23 +310,14 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 
     default:
         m_Orient->SetSelection( 3 );
-	long orient = 0;
-	msg = m_OrientValue->GetValue();
-	msg.ToLong( &orient );
-
-	while( orient < -900 )
-            orient += 1800;
-
-        while( orient > 900 )
-             orient -= 1800;
-
-	m_currentText->SetOrientation( orient );
-        select = true;
+        m_currentText->SetOrientation( KiROUND( m_OrientValue * 10.0 ) );
+        custom_orientation = true;
         break;
     }
-    msg << m_currentText->GetOrientation();
-    m_OrientValue->SetValue( msg );
-    m_OrientValue->Enable( select );
+    m_OrientValue = 10.0 * m_currentText->GetOrientation();
+    m_OrientValueCtrl->Enable( custom_orientation );
+    m_OrientValidator.SetWindow( m_OrientValueCtrl );
+    m_OrientValidator.TransferToWindow();
 
     m_currentText->SetDrawCoord();
 
@@ -362,7 +329,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     if( m_dc )     // Display new text
     {
         m_currentText->Draw( m_parent->GetCanvas(), m_dc, GR_XOR,
-                             (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
+                (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
 #else
     m_parent->Refresh();
@@ -373,5 +340,35 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     if( m_module )
         m_module->SetLastEditTime();
 
-    EndModal( 1 );
+    return true;
 }
+
+
+void DialogEditModuleText::ModuleOrientEvent( wxCommandEvent& event )
+{
+    bool custom_orientation = false;
+
+    switch( m_Orient->GetSelection() )
+    {
+    case 0:
+        m_OrientValue = 0.0;
+        break;
+
+    case 1:
+        m_OrientValue = 90.0;
+        break;
+
+    case 2:
+        m_OrientValue = -90.0;
+        break;
+
+    default:
+        custom_orientation = true;
+        break;
+    }
+
+    m_OrientValidator.SetWindow( m_OrientValueCtrl );
+    m_OrientValidator.TransferToWindow();
+    m_OrientValueCtrl->Enable( custom_orientation );
+}
+

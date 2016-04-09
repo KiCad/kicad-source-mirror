@@ -59,7 +59,7 @@ class DialogEditModuleText_base : public DIALOG_SHIM
 		wxRadioBox* m_Style;
 		wxRadioBox* m_Orient;
 		wxStaticText* m_staticTextRotation;
-		wxTextCtrl* m_OrientValue;
+		wxTextCtrl* m_OrientValueCtrl;
 		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
@@ -72,7 +72,7 @@ class DialogEditModuleText_base : public DIALOG_SHIM
 	
 	public:
 		
-		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 479,413 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,401 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DialogEditModuleText_base();
 	
 };
