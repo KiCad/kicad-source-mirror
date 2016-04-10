@@ -65,7 +65,7 @@ void PCB_BASE_FRAME::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC
 DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
                                             TEXTE_MODULE* aTextMod, wxDC* aDC ) :
     DialogEditModuleText_base( aParent ),
-    m_OrientValidator( 1, &m_OrientValue, wxNUM_VAL_ZERO_AS_BLANK )
+    m_OrientValidator( 1, &m_OrientValue )
 
 {
     m_parent = aParent;
@@ -73,7 +73,7 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
     m_module = NULL;
     m_currentText = aTextMod;
 
-    m_OrientValidator.SetRange(-90.0, 90.0);
+    m_OrientValidator.SetRange( -90.0, 90.0 );
     m_OrientValueCtrl->SetValidator( m_OrientValidator );
 
     if( m_currentText )
@@ -160,19 +160,17 @@ bool DialogEditModuleText::TransferDataToWindow()
         m_Show->SetSelection( 1 );
 
     bool custom_orientation = false;
-    switch( int( m_currentText->GetOrientation() ) )
+    switch( int( text_orient ) )
     {
     case 0:
         m_Orient->SetSelection( 0 );
         break;
 
     case 900:
-    case -2700:
         m_Orient->SetSelection( 1 );
         break;
 
     case -900:
-    case 2700:
         m_Orient->SetSelection( 2 );
         break;
 
@@ -182,10 +180,10 @@ bool DialogEditModuleText::TransferDataToWindow()
         break;
     }
 
-    wxString orientation_fmt;
-    orientation_fmt.Printf( _( "%0.1f" ), (double)( m_currentText->GetOrientation() ) / 10.0 );
-    m_OrientValueCtrl->SetValue( orientation_fmt );
     m_OrientValueCtrl->Enable( custom_orientation );
+    m_OrientValue = text_orient / 10.0;
+    m_OrientValidator.SetWindow( m_OrientValueCtrl );
+    m_OrientValidator.TransferToWindow();
 
     // Configure the layers list selector
     if( !m_parent->GetBoard()->IsLayerEnabled( m_currentText->GetLayer() ) )
@@ -211,7 +209,7 @@ bool DialogEditModuleText::TransferDataToWindow()
 
 bool DialogEditModuleText::TransferDataFromWindow()
 {
-    if( !wxDialog::TransferDataFromWindow() )
+    if( !Validate() || !DialogEditModuleText_base::TransferDataFromWindow() )
         return false;
 
     if( m_module )
