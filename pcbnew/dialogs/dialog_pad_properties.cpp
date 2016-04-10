@@ -99,7 +99,8 @@ void PCB_BASE_FRAME::InstallPadOptionsFrame( D_PAD* aPad )
 
 
 DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
-    DIALOG_PAD_PROPERTIES_BASE( aParent )
+    DIALOG_PAD_PROPERTIES_BASE( aParent ),
+    m_OrientValidator( 1, &m_OrientValue )
 {
     m_canUpdate  = false;
     m_parent     = aParent;
@@ -107,6 +108,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
                                 // from the footprint editor to set default pad setup
 
     m_board      = m_parent->GetBoard();
+
+    m_OrientValidator.SetRange( -360.0, 360.0 );
+    m_PadOrientCtrl->SetValidator( m_OrientValidator );
 
     m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
@@ -143,6 +147,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     }
 
     initValues();
+    TransferDataToWindow();
 
     m_sdbSizerOK->SetDefault();
     GetSizer()->SetSizeHints( this );
@@ -514,8 +519,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         break;
     }
 
-    msg.Printf( wxT( "%g" ), angle );
-    m_PadOrientCtrl->SetValue( msg );
+    m_OrientValue = angle / 10.0;
 
     // Type of pad selection
     m_PadType->SetSelection( 0 );
@@ -669,9 +673,9 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
         break;
     }
 
-    wxString msg;
-    msg.Printf( wxT( "%g" ), m_dummyPad->GetOrientation() );
-    m_PadOrientCtrl->SetValue( msg );
+    m_OrientValue = m_dummyPad->GetOrientation() / 10.0;
+    m_OrientValidator.SetWindow( m_PadOrientCtrl );
+    m_OrientValidator.TransferToWindow();
 
     transferDataToPad( m_dummyPad );
     redraw();
@@ -892,9 +896,30 @@ void DIALOG_PAD_PROPERTIES::redraw()
 }
 
 
+bool DIALOG_PAD_PROPERTIES::TransferDataToWindow()
+{
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
+    if( !m_panelGeneral->TransferDataToWindow() )
+        return false;
+
+    if( !m_localSettingsPanel->TransferDataToWindow() )
+        return false;
+
+    return true;
+}
+
+
 bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    if( !m_panelGeneral->TransferDataFromWindow() )
+        return false;
+
+    if( !m_localSettingsPanel->TransferDataFromWindow() )
         return false;
 
     if( !padValuesOK() )
@@ -1027,6 +1052,16 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     wxString    msg;
     int         x, y;
 
+    if( !Validate() )
+        return true;
+    if( !m_panelGeneral->Validate() )
+        return true;
+    if( !m_localSettingsPanel->Validate() )
+        return true;
+
+    m_OrientValidator.SetWindow( m_PadOrientCtrl );
+    m_OrientValidator.TransferFromWindow();
+
     aPad->SetAttribute( code_type[m_PadType->GetSelection()] );
     aPad->SetShape( code_shape[m_PadShape->GetSelection()] );
 
@@ -1151,11 +1186,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     y = ValueFromTextCtrl( *m_ShapeOffset_Y_Ctrl );
     aPad->SetOffset( wxPoint( x, y ) );
 
-    double orient_value = 0;
-    msg = m_PadOrientCtrl->GetValue();
-    msg.ToDouble( &orient_value );
-
-    aPad->SetOrientation( orient_value );
+    aPad->SetOrientation( m_OrientValue * 10.0 );
 
     msg = m_PadNumCtrl->GetValue().Left( 4 );
     aPad->SetPadName( msg );

@@ -39,6 +39,7 @@
 #include <wxBasePcbFrame.h>
 #include <pcbcommon.h>
 #include <base_units.h>
+#include <wx/valnum.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -80,6 +81,9 @@ private:
     bool    m_canUpdate;
     bool    m_canEditNetName;       // true only if the caller is the board editor
 
+    wxFloatingPointValidator<double>    m_OrientValidator;
+    double  m_OrientValue;
+
 private:
     void initValues();
     bool padValuesOK();       ///< test if all values are acceptable for the pad
@@ -118,6 +122,7 @@ private:
     /// Updates the different parameters for the component being edited.
     /// Automatically fired from the OK button click.
     bool TransferDataFromWindow();
+    bool TransferDataToWindow();
 };
 
 #endif      // #ifndef _DIALOG_PAD_PROPERTIES_H_
