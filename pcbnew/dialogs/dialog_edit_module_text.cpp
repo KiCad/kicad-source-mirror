@@ -75,6 +75,7 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
 
     m_OrientValidator.SetRange( -90.0, 90.0 );
     m_OrientValueCtrl->SetValidator( m_OrientValidator );
+    m_OrientValidator.SetWindow( m_OrientValueCtrl );
 
     if( m_currentText )
         m_module = (MODULE*) m_currentText->GetParent();
@@ -182,7 +183,6 @@ bool DialogEditModuleText::TransferDataToWindow()
 
     m_OrientValueCtrl->Enable( custom_orientation );
     m_OrientValue = text_orient / 10.0;
-    m_OrientValidator.SetWindow( m_OrientValueCtrl );
     m_OrientValidator.TransferToWindow();
 
     // Configure the layers list selector
@@ -309,7 +309,6 @@ bool DialogEditModuleText::TransferDataFromWindow()
     }
     m_OrientValue = 10.0 * m_currentText->GetOrientation();
     m_OrientValueCtrl->Enable( custom_orientation );
-    m_OrientValidator.SetWindow( m_OrientValueCtrl );
     m_OrientValidator.TransferToWindow();
 
     m_currentText->SetDrawCoord();
@@ -360,7 +359,6 @@ void DialogEditModuleText::ModuleOrientEvent( wxCommandEvent& event )
         break;
     }
 
-    m_OrientValidator.SetWindow( m_OrientValueCtrl );
     m_OrientValidator.TransferToWindow();
     m_OrientValueCtrl->Enable( custom_orientation );
 }

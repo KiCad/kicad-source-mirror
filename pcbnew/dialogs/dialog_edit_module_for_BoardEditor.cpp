@@ -73,6 +73,7 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
 
     m_OrientValidator.SetRange( -360.0, 360.0 );
     m_OrientValueCtrl->SetValidator( m_OrientValidator );
+    m_OrientValidator.SetWindow( m_OrientValueCtrl );
 
     m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, aParent->Prj().Get3DCacheManager() );
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
@@ -147,7 +148,6 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 
     m_OrientValueCtrl->Enable( custom_orientation );
     m_OrientValue = m_CurrentModule->GetOrientation() / 10.0;
-    m_OrientValidator.SetWindow( m_OrientValueCtrl );
     m_OrientValidator.TransferToWindow();
 
     // Initialize dialog relative to masks clearances
@@ -245,7 +245,6 @@ void DIALOG_MODULE_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent& event )
         break;
     }
 
-    m_OrientValidator.SetWindow( m_OrientValueCtrl );
     m_OrientValidator.TransferToWindow();
     m_OrientValueCtrl->Enable( custom_orientation );
 }

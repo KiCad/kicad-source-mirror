@@ -111,6 +111,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     m_OrientValidator.SetRange( -360.0, 360.0 );
     m_PadOrientCtrl->SetValidator( m_OrientValidator );
+    m_OrientValidator.SetWindow( m_PadOrientCtrl );
 
     m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
@@ -674,7 +675,6 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
     }
 
     m_OrientValue = m_dummyPad->GetOrientation() / 10.0;
-    m_OrientValidator.SetWindow( m_PadOrientCtrl );
     m_OrientValidator.TransferToWindow();
 
     transferDataToPad( m_dummyPad );
@@ -1059,7 +1059,6 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     if( !m_localSettingsPanel->Validate() )
         return true;
 
-    m_OrientValidator.SetWindow( m_PadOrientCtrl );
     m_OrientValidator.TransferFromWindow();
 
     aPad->SetAttribute( code_type[m_PadType->GetSelection()] );
