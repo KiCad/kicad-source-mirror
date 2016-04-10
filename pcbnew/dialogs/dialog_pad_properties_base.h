@@ -170,7 +170,6 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onCornerSizePercentChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
-		virtual void PadPropertiesAccept( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

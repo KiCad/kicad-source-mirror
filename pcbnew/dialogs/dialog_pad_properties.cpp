@@ -35,13 +35,9 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
-#include <trigo.h>
-#include <macros.h>
 #include <wxBasePcbFrame.h>
 #include <pcbcommon.h>
 #include <base_units.h>
-
-#include <wx/dcbuffer.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -265,6 +261,11 @@ void DIALOG_PAD_PROPERTIES::updateRoundRectCornerValues()
                                         m_dummyPad->GetRoundRectRadiusRatio()*100 ) );
         m_staticTextCornerRadiusValue->SetLabel( StringFromValue( g_UserUnit,
                                                  m_dummyPad->GetRoundRectCornerRadius() ) );
+    }
+    else if( m_dummyPad->GetShape() == PAD_SHAPE_RECT )
+    {
+        m_tcCornerSizeRatio->ChangeValue( "0" );
+        m_staticTextCornerRadiusValue->SetLabel( "0" );
     }
     else
     {
@@ -549,14 +550,6 @@ void DIALOG_PAD_PROPERTIES::initValues()
     updateRoundRectCornerValues();
 }
 
-// A small helper function, to display coordinates:
-static wxString formatCoord( wxPoint aCoord )
-{
-    return wxString::Format( "X=%s  Y=%s",
-                CoordinateToString( aCoord.x, true ),
-                CoordinateToString( aCoord.y, true ) );
-}
-
 
 void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
 {
@@ -607,18 +600,14 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_ShapeSize_Y_Ctrl->Enable( true );
         m_ShapeOffset_X_Ctrl->Enable( true );
         m_ShapeOffset_Y_Ctrl->Enable( true );
+        // Ensure m_tcCornerSizeRatio contains the right value:
+        m_tcCornerSizeRatio->ChangeValue( wxString::Format( "%.1f",
+                                m_dummyPad->GetRoundRectRadiusRatio()*100 ) );
         break;
     }
 
     // A few widgets are enabled only for rounded rect pads:
-    bool roundrect = m_PadShape->GetSelection() == CHOICE_SHAPE_ROUNDRECT;
-
-    m_staticTextCornerSizeRatio->Enable( roundrect );
-	m_tcCornerSizeRatio->Enable( roundrect );
-	m_staticTextCornerSizeRatioUnit->Enable( roundrect );
-	m_staticTextCornerRadius->Enable( roundrect );
-	m_staticTextCornerRadiusValue->Enable( roundrect );
-	m_staticTextCornerSizeUnit->Enable( roundrect );
+	m_tcCornerSizeRatio->Enable( m_PadShape->GetSelection() == CHOICE_SHAPE_ROUNDRECT );
 
     transferDataToPad( m_dummyPad );
 
@@ -903,10 +892,13 @@ void DIALOG_PAD_PROPERTIES::redraw()
 }
 
 
-void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
+bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 {
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
     if( !padValuesOK() )
-        return;
+        return false;
 
     bool rastnestIsChanged = false;
     int  isign = m_isFlipped ? -1 : 1;
@@ -1007,6 +999,14 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_currentPad->SetThermalGap( m_padMaster->GetThermalGap() );
         m_currentPad->SetRoundRectRadiusRatio( m_padMaster->GetRoundRectRadiusRatio() );
 
+        // rounded rect pads with radius ratio = 0 are in fact rect pads.
+        // So set the right shape (and perhaps issues with a radius = 0)
+        if( m_currentPad->GetShape() == PAD_SHAPE_ROUNDRECT &&
+            m_currentPad->GetRoundRectRadiusRatio() == 0.0 )
+        {
+            m_currentPad->SetShape( PAD_SHAPE_RECT );
+        }
+
         footprint->CalculateBoundingBox();
         m_parent->SetMsgPanel( m_currentPad );
 
@@ -1015,10 +1015,10 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_parent->OnModify();
     }
 
-    EndModal( wxID_OK );
-
     if( rastnestIsChanged )  // The net ratsnest must be recalculated
         m_board->m_Status_Pcb = 0;
+
+    return true;
 }
 
 

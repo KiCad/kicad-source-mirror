@@ -9357,7 +9357,7 @@
                         <event name="OnContextHelpButtonClick"></event>
                         <event name="OnHelpButtonClick"></event>
                         <event name="OnNoButtonClick"></event>
-                        <event name="OnOKButtonClick">PadPropertiesAccept</event>
+                        <event name="OnOKButtonClick"></event>
                         <event name="OnSaveButtonClick"></event>
                         <event name="OnYesButtonClick"></event>
                     </object>

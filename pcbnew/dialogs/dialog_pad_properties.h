@@ -116,8 +116,8 @@ private:
     void OnValuesChanged( wxCommandEvent& event );
 
     /// Updates the different parameters for the component being edited.
-    /// Fired from the OK button click.
-    void PadPropertiesAccept( wxCommandEvent& event );
+    /// Automatically fired from the OK button click.
+    bool TransferDataFromWindow();
 };
 
 #endif      // #ifndef _DIALOG_PAD_PROPERTIES_H_

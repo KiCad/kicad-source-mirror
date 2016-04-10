@@ -135,23 +135,18 @@ bool DialogEditModuleText::TransferDataToWindow()
 
     m_Style->SetSelection( m_currentText->IsItalic() ? 1 : 0 );
 
-    m_SizeXTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_SizeXTitle );
     PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->GetSize().x );
 
-    m_SizeYTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_SizeYTitle );
     PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->GetSize().y );
 
-    m_PosXTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_PosXTitle );
     PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->GetPos0().x );
 
-    m_PosYTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_PosYTitle );
     PutValueInLocalUnits( *m_TxtPosCtrlY, m_currentText->GetPos0().y );
 
-    m_WidthTitle->SetLabelText( wxEmptyString );
     AddUnitSymbol( *m_WidthTitle );
     PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->GetThickness() );
 
