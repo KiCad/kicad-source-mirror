@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 
 #include <dialog_edit_module_for_BoardEditor_base.h>
 #include <3d_struct.h>
+#include <wx/valnum.h>
 
 class PANEL_PREV_3D;
 
@@ -44,6 +45,9 @@ private:
     int                         m_LastSelected3DShapeIndex;
     static size_t               m_page; // remember the last open page during session
     PANEL_PREV_3D*              m_PreviewPane;
+
+    wxFloatingPointValidator<double>    m_OrientValidator;
+    double  m_OrientValue;
 
 public:
     // The dialog can be closed for several reasons.
@@ -83,12 +87,13 @@ private:
     {
         BrowseAndAdd3DShapeFile();
     }
-    void OnCancelClick( wxCommandEvent& event );
-    void OnOkClick( wxCommandEvent& event );
     void GotoModuleEditor( wxCommandEvent& event );
     void ExchangeModule( wxCommandEvent& event );
     void ModuleOrientEvent( wxCommandEvent& event );
     void Cfg3DPath( wxCommandEvent& event );
+
+    bool TransferDataToWindow();
+    bool TransferDataFromWindow();
 };
 
 

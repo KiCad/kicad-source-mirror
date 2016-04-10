@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,8 @@ size_t DIALOG_MODULE_BOARD_EDITOR::m_page = 0;     // remember the last open pag
 DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent,
                                                         MODULE*          aModule,
                                                         wxDC*            aDC ) :
-    DIALOG_MODULE_BOARD_EDITOR_BASE( aParent )
+    DIALOG_MODULE_BOARD_EDITOR_BASE( aParent ),
+    m_OrientValidator( 1, &m_OrientValue )
 {
     m_Parent = aParent;
     m_DC     = aDC;
@@ -70,11 +71,11 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
 
+    m_OrientValidator.SetRange( -360.0, 360.0 );
+    m_OrientValueCtrl->SetValidator( m_OrientValidator );
+
     m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, aParent->Prj().Get3DCacheManager() );
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
-
-    InitModeditProperties();
-    InitBoardProperties();
 
     m_NoteBook->SetSelection( m_page );
     m_sdbSizerStdButtonsOK->SetDefault();
@@ -116,7 +117,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_LayerCtrl->SetSelection(
          (m_CurrentModule->GetLayer() == B_Cu) ? 1 : 0 );
 
-    bool select = false;
+    bool custom_orientation = false;
     switch( int( m_CurrentModule->GetOrientation() ) )
     {
     case 0:
@@ -140,14 +141,14 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 
     default:
         m_OrientCtrl->SetSelection( 4 );
-        select = true;
+        custom_orientation = true;
         break;
     }
 
-    wxString msg;
-    msg << m_CurrentModule->GetOrientation();
-    m_OrientValue->SetValue( msg );
-    m_OrientValue->Enable( select );
+    m_OrientValueCtrl->Enable( custom_orientation );
+    m_OrientValue = m_CurrentModule->GetOrientation() / 10.0;
+    m_OrientValidator.SetWindow( m_OrientValueCtrl );
+    m_OrientValidator.TransferToWindow();
 
     // Initialize dialog relative to masks clearances
     m_NetClearanceUnits->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
@@ -167,6 +168,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 
     // Add solder paste margin ration in per cent
     // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
+    wxString msg;
     msg.Printf( wxT( "%f" ),
                     m_CurrentModule->GetLocalSolderPasteMarginRatio() * 100.0 );
 
@@ -198,12 +200,6 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( PRM_EDITOR_ABORT );
-}
-
-
 void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
 {
     if( m_CurrentModule->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
@@ -224,32 +220,34 @@ void DIALOG_MODULE_BOARD_EDITOR::ExchangeModule( wxCommandEvent& event )
 
 void DIALOG_MODULE_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent& event )
 {
+    bool custom_orientation = false;
+
     switch( m_OrientCtrl->GetSelection() )
     {
     case 0:
-        m_OrientValue->Enable( false );
-        m_OrientValue->SetValue( wxT( "0" ) );
+        m_OrientValue = 0.0;
         break;
 
     case 1:
-        m_OrientValue->Enable( false );
-        m_OrientValue->SetValue( wxT( "900" ) );
+        m_OrientValue = 90.0;
         break;
 
     case 2:
-        m_OrientValue->Enable( false );
-        m_OrientValue->SetValue( wxT( "2700" ) );
+        m_OrientValue = 270.0;
         break;
 
     case 3:
-        m_OrientValue->Enable( false );
-        m_OrientValue->SetValue( wxT( "1800" ) );
+        m_OrientValue = 180.0;
         break;
 
     default:
-        m_OrientValue->Enable( true );
+        custom_orientation = true;
         break;
     }
+
+    m_OrientValidator.SetWindow( m_OrientValueCtrl );
+    m_OrientValidator.TransferToWindow();
+    m_OrientValueCtrl->Enable( custom_orientation );
 }
 
 
@@ -620,10 +618,35 @@ void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
 }
 
 
-void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
+bool DIALOG_MODULE_BOARD_EDITOR::TransferDataToWindow()
+{
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
+    if( !m_PanelProperties->TransferDataToWindow() )
+        return false;
+    if( !m_Panel3D->TransferDataToWindow() )
+        return false;
+
+    InitModeditProperties();
+    InitBoardProperties();
+
+    return true;
+}
+
+
+bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
 {
     wxPoint  modpos;
     wxString msg;
+
+    if( !Validate() || !DIALOG_MODULE_BOARD_EDITOR_BASE::TransferDataFromWindow() )
+        return false;
+
+    if( !m_PanelProperties->TransferDataFromWindow() )
+        return false;
+    if( !m_Panel3D->TransferDataFromWindow() )
+        return false;
 
     if( m_CurrentModule->GetFlags() == 0 )    // this is a simple edition, we
                                               // must create an undo entry
@@ -707,9 +730,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
      * because rotation changes fields positions on board according to the new orientation
      * (relative positions are not modified)
      */
-    long orient = 0;
-    msg = m_OrientValue->GetValue();
-    msg.ToLong( &orient );
+    int orient = KiROUND( m_OrientValue * 10.0 );
 
     if( m_CurrentModule->GetOrientation() != orient )
         m_CurrentModule->Rotate( m_CurrentModule->GetPosition(),
@@ -775,13 +796,15 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_Parent->OnModify();
 
-    EndModal( PRM_EDITOR_EDIT_OK );
+    SetReturnCode( PRM_EDITOR_EDIT_OK );
 
     if( m_DC )
     {
         m_CurrentModule->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
         m_Parent->GetCanvas()->CrossHairOn( m_DC );
     }
+
+    return true;
 }
 
 
