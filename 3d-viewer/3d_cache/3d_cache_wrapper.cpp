@@ -23,8 +23,10 @@
 
 
 #include <common.h>
+#include <wx/thread.h>
 #include "3d_cache_wrapper.h"
 
+static wxCriticalSection lock3D_wrapper;
 
 CACHE_WRAPPER::CACHE_WRAPPER()
 {
@@ -40,6 +42,7 @@ CACHE_WRAPPER::~CACHE_WRAPPER()
 
 S3D_CACHE* PROJECT::Get3DCacheManager( bool updateProjDir )
 {
+    wxCriticalSectionLocker lock( lock3D_wrapper );
     CACHE_WRAPPER* cw = (CACHE_WRAPPER*) GetElem( ELEM_3DCACHE );
     S3D_CACHE* cache = dynamic_cast<S3D_CACHE*>( cw );
 

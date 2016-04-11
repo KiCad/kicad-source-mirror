@@ -32,6 +32,7 @@
 #include <wx/datetime.h>
 #include <wx/filename.h>
 #include <wx/log.h>
+#include <wx/thread.h>
 #include <wx/utils.h>
 #include <wx/stdpaths.h>
 
@@ -50,6 +51,8 @@
 
 #define CACHE_CONFIG_NAME wxT( "cache.cfg" )
 #define MASK_3D_CACHE "3D_CACHE"
+
+static wxCriticalSection lock3D_cache;
 
 static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB )
 {
@@ -215,6 +218,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
     }
 
     // check cache if file is already loaded
+    wxCriticalSectionLocker lock( lock3D_cache );
     std::map< wxString, S3D_CACHE_ENTRY*, S3D::rsort_wxString >::iterator mi;
     mi = m_CacheMap.find( full3Dpath );
 

@@ -29,6 +29,7 @@
 #include <sstream>
 #include <wx/filename.h>
 #include <wx/log.h>
+#include <wx/thread.h>
 #include <wx/utils.h>
 #include <wx/msgdlg.h>
 
@@ -45,6 +46,7 @@
 
 #define MASK_3D_RESOLVER "3D_RESOLVER"
 
+static wxCriticalSection lock3D_resolver;
 
 static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& aResult );
 
@@ -203,6 +205,7 @@ bool S3D_FILENAME_RESOLVER::UpdatePathList( std::vector< S3D_ALIAS >& aPathList 
 
 wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 {
+    wxCriticalSectionLocker lock( lock3D_resolver );
     if( aFileName.empty() )
         return wxEmptyString;
 
@@ -371,6 +374,8 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
 {
     if( aPath.m_alias.empty() || aPath.m_pathvar.empty() )
         return false;
+
+    wxCriticalSectionLocker lock( lock3D_resolver );
 
     S3D_ALIAS tpath = aPath;
     tpath.m_duplicate = false;
@@ -735,6 +740,7 @@ wxString S3D_FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
     if( m_Paths.empty() )
         createPathList();
 
+    wxCriticalSectionLocker lock( lock3D_resolver );
     std::list< S3D_ALIAS >::const_iterator sL = m_Paths.begin();
     std::list< S3D_ALIAS >::const_iterator eL = m_Paths.end();
     size_t idx;
