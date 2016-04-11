@@ -725,9 +725,11 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
         return false;
     }
 
+    {
     wxBusyCursor dummy;  // Let the user know something is happening.
 
     m_FootprintsList.ReadFootprintFiles( fptbl );
+    }
 
     if( m_FootprintsList.GetErrorCount() )
     {
