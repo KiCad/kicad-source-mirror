@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,8 +48,8 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 {
     m_lastDrawItem = NULL;
 
-    wxFileDialog dlg( this, _( "Import Component" ), m_lastLibImportPath,
-                      m_mruPath, SchematicLibraryFileWildcard,
+    wxFileDialog dlg( this, _( "Import Component" ), m_mruPath,
+                      wxEmptyString, SchematicLibraryFileWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
@@ -92,11 +92,9 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 
     if( LoadOneLibraryPartAux( entry, lib.get() ) )
     {
-        fn = dlg.GetPath();
-        m_lastLibImportPath = fn.GetPath();
         DisplayLibInfos();
         GetScreen()->ClearUndoRedoList();
-        m_canvas->Refresh();
+        Zoom_Automatique( false );
     }
 }
 
@@ -120,8 +118,8 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
     title = createLib ? _( "New Library" ) : _( "Export Component" );
 
-    wxFileDialog dlg( this, title, m_lastLibExportPath, fn.GetFullName(),
-            SchematicLibraryFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog dlg( this, title, m_mruPath, fn.GetFullName(),
+                      SchematicLibraryFileWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -167,7 +165,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     }
 
     if( result )
-        m_lastLibExportPath = fn.GetPath();
+        m_mruPath = fn.GetPath();
 
     if( result )
     {

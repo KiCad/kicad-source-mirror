@@ -740,11 +740,6 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetGridColor( GetLayerColor( LAYER_GRID ) );
     SetDrawBgColor( GetLayerColor( LAYER_BACKGROUND ) );
 
-    wxString pro_dir = Prj().GetProjectFullName();
-
-    m_lastLibExportPath = aCfg->Read( lastLibExportPathEntry, pro_dir );
-    m_lastLibImportPath = aCfg->Read( lastLibImportPathEntry, pro_dir );
-
     SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
     SetDefaultPinLength( aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );
     m_textPinNumDefaultSize = aCfg->Read( defaultPinNumSizeEntry, DEFAULTPINNUMSIZE );
@@ -762,8 +757,6 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    aCfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
-    aCfg->Write( lastLibImportPathEntry, m_lastLibImportPath );
     aCfg->Write( DefaultPinLengthEntry, (long) GetDefaultPinLength() );
     aCfg->Write( defaultPinNumSizeEntry, (long) GetPinNumDefaultSize() );
     aCfg->Write( defaultPinNameSizeEntry, (long) GetPinNameDefaultSize() );
