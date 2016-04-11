@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,7 @@
 #include <fpid.h>
 #include <class_module.h>
 #include <boost/thread.hpp>
+#include <html_messagebox.h>
 
 
 /*
@@ -126,19 +127,10 @@ void FOOTPRINT_INFO::load()
                                     // were caused by latencies alone.
                                     // (If https://github.com does not mind.)
 
-#define NTOLERABLE_ERRORS   4       // max errors before aborting, although threads
-                                    // in progress will still pile on for a bit.  e.g. if 9 threads
-                                    // expect 9 greater than this.
-
 void FOOTPRINT_LIST::loader_job( const wxString* aNicknameList, int aJobZ )
 {
-    //DBG(printf( "%s: first:'%s' count:%d\n", __func__, (char*) TO_UTF8( *aNicknameList ), aJobZ );)
-
     for( int i=0; i<aJobZ; ++i )
     {
-        if( m_error_count >= NTOLERABLE_ERRORS )
-            break;
-
         const wxString& nickname = aNicknameList[i];
 
         try
@@ -233,16 +225,9 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
         // size() is small, I'll do myself.
         for( unsigned i=0; i<nicknames.size();  )
         {
-            if( m_error_count >= NTOLERABLE_ERRORS )
-            {
-                // abort the remaining nicknames.
-                retv = false;
-                break;
-            }
-
             int jobz = JOBZ;
 
-            if( i + jobz >= nicknames.size() )
+            if( i + jobz >= nicknames.size() )  // on the last iteration of this for(;;)
             {
                 jobz = nicknames.size() - i;
 
@@ -312,29 +297,8 @@ bool FOOTPRINT_INFO::InLibrary( const wxString& aLibrary ) const
 }
 
 
-#include <confirm.h>    // until scaffolding goes.
-
 void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 {
-#if 1
-    // scaffolding until a better one is written, hopefully below.
-
-    DBG(printf( "m_error_count:%d\n", m_error_count );)
-
-    wxString msg = _( "Errors were encountered loading footprints" );
-
-    msg += wxT( '\n' );
-
-    for( unsigned i = 0; i<m_errors.size();  ++i )
-    {
-        msg += m_errors[i].errorText;
-        msg += wxT( '\n' );
-    }
-
-    DisplayError( aWindow, msg );
-
-#else   // real evolving deal:
-
     // @todo: go to a more HTML !<table>! ? centric output, possibly with
     // recommendations for remedy of errors.  Add numeric error codes
     // to PARSE_ERROR, and switch on them for remedies, etc.  Full
@@ -342,13 +306,16 @@ void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 
     HTML_MESSAGE_BOX dlg( aWindow, _( "Load Error" ) );
 
-    dlg.MessageSet( _( "Errors were encountered loading footprints" ) );
+    dlg.MessageSet( _( "Errors were encountered loading footprints:" ) );
 
-    wxString msg = my html wizardry.
+    wxString msg;
+
+    for( unsigned i = 0; i<m_errors.size();  ++i )
+    {
+        msg += wxT( "<p>" ) + m_errors[i].errorText + wxT( "</p>" );
+    }
 
     dlg.AddHTML_Text( msg );
 
     dlg.ShowModal();
-
-#endif
 }
