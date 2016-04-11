@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Apr  9 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -52,8 +52,8 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_EndY_Ctrl;
 		wxStaticText* m_EndPointYUnit;
 		wxStaticLine* m_staticline2;
-		wxStaticText* m_Angle_Text;
-		wxTextCtrl* m_Angle_Ctrl;
+		wxStaticText* m_AngleText;
+		wxTextCtrl* m_AngleCtrl;
 		wxStaticText* m_AngleUnit;
 		wxStaticText* m_ThicknessLabel;
 		wxTextCtrl* m_ThicknessCtrl;
@@ -70,8 +70,6 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

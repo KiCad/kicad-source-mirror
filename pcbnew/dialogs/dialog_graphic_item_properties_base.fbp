@@ -1294,7 +1294,7 @@
                                                 <property name="minimize_button">0</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="moveable">1</property>
-                                                <property name="name">m_Angle_Text</property>
+                                                <property name="name">m_AngleText</property>
                                                 <property name="pane_border">1</property>
                                                 <property name="pane_position"></property>
                                                 <property name="pane_size"></property>
@@ -1377,7 +1377,7 @@
                                                 <property name="minimize_button">0</property>
                                                 <property name="minimum_size"></property>
                                                 <property name="moveable">1</property>
-                                                <property name="name">m_Angle_Ctrl</property>
+                                                <property name="name">m_AngleCtrl</property>
                                                 <property name="pane_border">1</property>
                                                 <property name="pane_position"></property>
                                                 <property name="pane_size"></property>
@@ -1460,7 +1460,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">0.1 degree</property>
+                                                <property name="label">degrees</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
                                                 <property name="maximum_size"></property>
@@ -2313,11 +2313,11 @@
                         <property name="name">m_StandardButtonsSizer</property>
                         <property name="permission">protected</property>
                         <event name="OnApplyButtonClick"></event>
-                        <event name="OnCancelButtonClick">OnCancelClick</event>
+                        <event name="OnCancelButtonClick"></event>
                         <event name="OnContextHelpButtonClick"></event>
                         <event name="OnHelpButtonClick"></event>
                         <event name="OnNoButtonClick"></event>
-                        <event name="OnOKButtonClick">OnOkClick</event>
+                        <event name="OnOKButtonClick"></event>
                         <event name="OnSaveButtonClick"></event>
                         <event name="OnYesButtonClick"></event>
                     </object>

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@
 #include <class_board_design_settings.h>
 #include <module_editor_frame.h>
 #include <base_units.h>
+#include <wx/valnum.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -59,29 +60,40 @@ private:
     BOARD_DESIGN_SETTINGS  m_brdSettings;
     MODULE*                m_module;
 
+    wxFloatingPointValidator<double>    m_AngleValidator;
+    double                 m_AngleValue;
+
 public:
     DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES( FOOTPRINT_EDIT_FRAME* aParent,
                                             EDGE_MODULE* aItem );
     ~DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES() {};
 
 private:
-    void initDlg();
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+    bool TransferDataToWindow();
+    bool TransferDataFromWindow();
     void OnLayerChoice( wxCommandEvent& event );
-    bool itemValuesOK();
+    bool Validate();
 };
 
 DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES(
                                                         FOOTPRINT_EDIT_FRAME* aParent,
                                                         EDGE_MODULE * aItem ):
-    DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( aParent )
+    DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( aParent ),
+    m_AngleValidator( 1, &m_AngleValue ),
+    m_AngleValue( 0.0 )
 {
     m_parent = aParent;
     m_item = aItem;
     m_brdSettings = m_parent->GetDesignSettings();
     m_module = m_parent->GetBoard()->m_Modules;
-    initDlg();
+
+    m_AngleValidator.SetRange( -360.0, 360.0 );
+    m_AngleCtrl->SetValidator( m_AngleValidator );
+    m_AngleValidator.SetWindow( m_AngleCtrl );
+
+    SetFocus();
+    m_StandardButtonsSizerOK->SetDefault();
+
     Layout();
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -109,11 +121,8 @@ void FOOTPRINT_EDIT_FRAME::InstallFootprintBodyItemPropertiesDlg( EDGE_MODULE* a
 }
 
 
-void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
+bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataToWindow()
 {
-    SetFocus();
-    m_StandardButtonsSizerOK->SetDefault();
-
     // Set unit symbol
     wxStaticText* texts_unit[] =
     {
@@ -123,14 +132,10 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
         m_EndPointYUnit,
         m_ThicknessTextUnit,
         m_DefaulThicknessTextUnit,
-        NULL
     };
 
-    for( int ii = 0; ; ii++ )
+    for( int ii = 0; ii < DIM( texts_unit ); ii++ )
     {
-        if( texts_unit[ii] == NULL )
-            break;
-
         texts_unit[ii]->SetLabel( GetAbbreviatedUnitsLabel() );
     }
 
@@ -145,8 +150,8 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
         m_StartPointYLabel->SetLabel( _( "Center Y" ) );
         m_EndPointXLabel->SetLabel( _( "Point X" ) );
         m_EndPointYLabel->SetLabel( _( "Point Y" ) );
-        m_Angle_Text->Show( false );
-        m_Angle_Ctrl->Show( false );
+        m_AngleText->Show( false );
+        m_AngleCtrl->Show( false );
         m_AngleUnit->Show( false );
         break;
 
@@ -157,10 +162,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
         m_EndPointXLabel->SetLabel( _( "Start Point X" ) );
         m_EndPointYLabel->SetLabel( _( "Start Point Y" ) );
 
-        // Here the angle is a double, but the UI is still working
-        // with integers
-        msg << int( m_item->GetAngle() );
-        m_Angle_Ctrl->SetValue( msg );
+        m_AngleValue = m_item->GetAngle() / 10.0;
         break;
 
     case S_SEGMENT:
@@ -168,8 +170,8 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
 
         // Fall through.
     default:
-        m_Angle_Text->Show( false );
-        m_Angle_Ctrl->Show( false );
+        m_AngleText->Show( false );
+        m_AngleCtrl->Show( false );
         m_AngleUnit->Show( false );
         break;
     }
@@ -198,24 +200,20 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::initDlg()
                          "It has been moved to the front silk screen layer. Please fix it." ) );
         m_LayerSelectionCtrl->SetLayerSelection( F_SilkS );
     }
+
+    return DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataToWindow();
 }
 
 
-/*******************************************************************/
 void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& event )
-/*******************************************************************/
 {
 }
 
 
-/*******************************************************************/
-void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
-/*******************************************************************/
-/* Copy values in text control to the item parameters
- */
+bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
 {
-    if( !itemValuesOK() )
-        return;
+    if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataFromWindow() )
+        return false;
 
     LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
 
@@ -225,7 +223,7 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
          * confirmation is requested */
         if( !IsOK( NULL,
                    _( "The graphic item will be on a copper layer. This is very dangerous. Are you sure?" ) ) )
-            return;
+            return false;;
     }
 
     m_parent->SaveCopyInUndoList( m_module, UR_MODEDIT );
@@ -261,22 +259,22 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnOkClick( wxCommandEvent& event )
 
     if( m_item->GetShape() == S_ARC )
     {
-        double angle;
-        m_Angle_Ctrl->GetValue().ToDouble( &angle );
-        NORMALIZE_ANGLE_360( angle );
-        m_item->SetAngle( angle );
+        m_item->SetAngle( m_AngleValue * 10.0 );
     }
 
     m_parent->OnModify();
     m_parent->SetMsgPanel( m_item );
 
-    Close( true );
+    return true;
 }
 
 
-bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::itemValuesOK()
+bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::Validate()
 {
     wxArrayString error_msgs;
+
+    if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::Validate() )
+        return false;
 
     // Load the start and end points -- all types use these in the checks.
     int startx = ValueFromString( g_UserUnit, m_Center_StartXCtrl->GetValue() );
@@ -290,7 +288,7 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::itemValuesOK()
     case S_ARC:
         // Check angle of arc.
         double angle;
-        m_Angle_Ctrl->GetValue().ToDouble( &angle );
+        m_AngleCtrl->GetValue().ToDouble( &angle );
         NORMALIZE_ANGLE_360( angle );
 
         if( angle == 0 )
