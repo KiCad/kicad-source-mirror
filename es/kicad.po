@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-11 13:00+0200\n"
-"PO-Revision-Date: 2016-04-11 13:01+0200\n"
+"POT-Creation-Date: 2016-04-12 09:40+0200\n"
+"PO-Revision-Date: 2016-04-12 09:42+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -2881,22 +2881,22 @@ msgstr "No hay librerías de huellas en la tabla de huellas activa."
 msgid "Configuration Error"
 msgstr "Error de configuración"
 
-#: cvpcb/cvpcb_mainframe.cpp:749
+#: cvpcb/cvpcb_mainframe.cpp:751
 #, c-format
 msgid "Project: '%s'"
 msgstr "Proyecto: '%s'"
 
-#: cvpcb/cvpcb_mainframe.cpp:754 eeschema/libedit.cpp:61
+#: cvpcb/cvpcb_mainframe.cpp:756 eeschema/libedit.cpp:61
 #: eeschema/schframe.cpp:1364 kicad/prjconfig.cpp:332
 #: pcbnew/moduleframe.cpp:768 pcbnew/pcbframe.cpp:993
 msgid " [Read Only]"
 msgstr "[Solo lectura]"
 
-#: cvpcb/cvpcb_mainframe.cpp:757
+#: cvpcb/cvpcb_mainframe.cpp:759
 msgid "[no project]"
 msgstr "[sin proyecto]"
 
-#: cvpcb/cvpcb_mainframe.cpp:800 pcbnew/netlist.cpp:94
+#: cvpcb/cvpcb_mainframe.cpp:802 pcbnew/netlist.cpp:94
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -2905,7 +2905,7 @@ msgstr ""
 "Error al cargar la lista de redes.\n"
 "%s"
 
-#: cvpcb/cvpcb_mainframe.cpp:801 pcbnew/dialogs/dialog_netlist.cpp:433
+#: cvpcb/cvpcb_mainframe.cpp:803 pcbnew/dialogs/dialog_netlist.cpp:433
 #: pcbnew/netlist.cpp:95
 msgid "Netlist Load Error"
 msgstr "Error al cargar la lista de redes"
@@ -3485,12 +3485,12 @@ msgstr "Marca de tiempo (%s) duplicada para %s%d y %s%d"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:25
 #: eeschema/lib_draw_item.cpp:72 eeschema/libedit.cpp:493
 #: eeschema/onrightclick.cpp:468
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:38
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:50
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:62
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:74
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:113
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:125
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:37
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:48
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:59
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:70
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:107
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:118
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:70
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:47
@@ -13040,7 +13040,7 @@ msgstr "Trampa"
 
 #: pcbnew/class_pad.cpp:897
 msgid "Roundrect"
-msgstr ""
+msgstr "Rectándulo redondeado"
 
 #: pcbnew/class_pad.cpp:910
 msgid "Std"
@@ -13748,7 +13748,7 @@ msgstr "Radio de redondeado"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:37
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:87
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:129
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:30
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:51
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:107
@@ -16309,48 +16309,48 @@ msgstr "Cambiar pads de la huella"
 msgid "Change Pads on Identical Footprints"
 msgstr "Cambiar pads en huellas idénticas"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:132
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:143
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:137
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:148
 msgid "Circle Properties"
 msgstr "Propiedades del círculo"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:133
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:144
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:138
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:149
 msgid "Center X:"
 msgstr "Centro X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:134
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:145
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:139
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:150
 msgid "Center Y:"
 msgstr "Centro Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:135
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:140
 msgid "Point X:"
 msgstr "Punto X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:136
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:141
 msgid "Point Y:"
 msgstr "Punto Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:143
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:154
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:148
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:159
 msgid "Arc Properties"
 msgstr "Propiedades del arco:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:146
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:151
 msgid "Start Point X:"
 msgstr "Punto de inicio X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:147
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:152
 msgid "Start Point Y:"
 msgstr "Punto inicio Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:155
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:167
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:158
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:169
 msgid "Line Segment Properties"
 msgstr "Propiedades del segmento"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:192
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:195
 msgid ""
 "This item was on an unknown layer.\n"
 "It has been moved to the drawings layer. Please fix it."
@@ -16358,32 +16358,32 @@ msgstr ""
 "Este elemento se encontraba en una capa desconocida.\n"
 "Se ha movido a la capa de dibujo. Por favor, soluciónelo."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:291
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:298
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:292
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:296
 msgid "The arc angle must be greater than zero."
 msgstr "El ángulo del arco debe ser mayor de cero."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:300
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:306
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:301
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:304
 msgid "The radius must be greater than zero."
 msgstr "El radio debe ser mayor de cero."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:310
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:314
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:311
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:312
 msgid "The start and end points cannot be the same."
 msgstr "El punto de inicio y el final no pueden ser el mismo."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:320
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:323
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:321
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:321
 msgid "The item thickness must be greater than zero."
 msgstr "El grosor del elemento debe ser mayor de cero."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:326
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:329
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:327
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:327
 msgid "The default thickness must be greater than zero."
 msgstr "El grosor por defecto debe ser mayor de cero."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:330
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:331
 msgid "Error List"
 msgstr "Lista de errores"
 
@@ -16392,64 +16392,64 @@ msgstr "Lista de errores"
 msgid "Start point X:"
 msgstr "Punto inicio X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:42
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:41
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:39
 msgid "Start point Y:"
 msgstr "Punto inicio Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:54
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:51
 msgid "End point X:"
 msgstr "Punto final X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:66
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:63
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:63
 msgid "End point Y:"
 msgstr "Punto final Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:93
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:89
 msgid "Arc angle:"
 msgstr "Ángulo del arco:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:101
-msgid "0.1 degree"
-msgstr "0,1 grados"
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:96
+msgid "degrees"
+msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:105
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:100
 msgid "Item thickness:"
 msgstr "Grosor del elemento:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:117
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:111
 msgid "Default thickness:"
 msgstr "Grosor por defecto:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:144
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:155
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:149
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:160
 msgid "Center X"
 msgstr "Centro X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:145
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:156
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:150
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:161
 msgid "Center Y"
 msgstr "Centro Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:146
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:151
 msgid "Point X"
 msgstr "Punto X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:147
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:152
 msgid "Point Y"
 msgstr "Punto Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:157
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:162
 msgid "Start Point X"
 msgstr "Punto de inicio X:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:158
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:163
 msgid "Start Point Y"
 msgstr "Punto inicio Y:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:197
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:199
 msgid ""
 "This item was on an unknown layer.\n"
 "It has been moved to the front silk screen layer. Please fix it."
@@ -16457,7 +16457,7 @@ msgstr ""
 "Este elemento se encontraba en una capa desconocida.\n"
 "Se ha movido a la capa de serigrafía. Por favor, soluciónelo."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:227
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:225
 msgid ""
 "The graphic item will be on a copper layer. This is very dangerous. Are you "
 "sure?"
@@ -16465,7 +16465,7 @@ msgstr ""
 "El elemento gráfico estará en una capa de cobre. Esto es muy peligroso. "
 "¿Está seguro?"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:333
+#: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:331
 msgid "Error list"
 msgstr "Lista de errores"
 
@@ -23986,7 +23986,7 @@ msgstr "Ajustar tamaño del texto"
 msgid "Global Pads Edition"
 msgstr "Edición global de pads"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:79
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:77
 msgid "Graphic Item Properties"
 msgstr "Propiedades de elemento gráfico"
 
@@ -24090,6 +24090,9 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "0.1 degree"
+#~ msgstr "0,1 grados"
 
 #~ msgid "Errors were encountered loading footprints"
 #~ msgstr "Se han encontrado errores al cargar las huellas"
