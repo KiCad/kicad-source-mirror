@@ -618,8 +618,8 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
     // Now adding all current files if available
     if( prjOpened )
     {
-        wxString    pro_dir = wxPathOnly( m_Parent->GetProjectFileName() );
-        wxDir       dir( pro_dir );
+        pro_dir = wxPathOnly( m_Parent->GetProjectFileName() );
+        wxDir dir( pro_dir );
 
         if( dir.IsOpened() )    // protected dirs will not open, see "man opendir()"
         {

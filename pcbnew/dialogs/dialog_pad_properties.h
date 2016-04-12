@@ -113,7 +113,7 @@ private:
     void OnPaintShowPanel( wxPaintEvent& event );
 
     // Called when corner setup value is changed for rounded rect pads
-	void onCornerSizePercentChange( wxCommandEvent& event );
+    void onCornerSizePercentChange( wxCommandEvent& event );
 
     /// Called when a dimension has changed.
     /// Update the graphical pad shown in the panel.

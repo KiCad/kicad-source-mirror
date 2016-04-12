@@ -238,11 +238,11 @@ public:
     class TERMINATE_HANDLER : public wxProcess
     {
     private:
-        wxString appName;
+        wxString m_appName;
 
     public:
         TERMINATE_HANDLER( const wxString& appName ) :
-            appName(appName)
+            m_appName(appName)
         {
         }
 

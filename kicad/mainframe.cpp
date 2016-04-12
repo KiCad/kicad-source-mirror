@@ -243,7 +243,7 @@ void KICAD_MANAGER_FRAME::OnExit( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::TERMINATE_HANDLER::OnTerminate( int pid, int status )
 {
     wxString msg = wxString::Format( _( "%s closed [pid=%d]\n" ),
-            GetChars( appName ), pid );
+            GetChars( m_appName ), pid );
 
     wxWindow* window = wxWindow::FindWindowByName( KICAD_MANAGER_FRAME_NAME );
 

@@ -118,7 +118,6 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         filename = openFileDialog.GetPath();
         if( ! InsertPageLayoutDescrFile( filename ) )
         {
-            wxString msg;
             msg.Printf( _("Unable to load %s file"), GetChars( filename ) );
             wxMessageBox( msg );
         }
@@ -144,7 +143,6 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         filename = openFileDialog.GetPath();
         if( ! LoadPageLayoutDescrFile( filename ) )
         {
-            wxString msg;
             msg.Printf( _("Unable to load %s file"), GetChars( filename ) );
             wxMessageBox( msg );
         }
@@ -190,7 +188,6 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
         if( !SavePageLayoutDescrFile( filename ) )
         {
-            wxString msg;
             msg.Printf( _("Unable to create <%s>"), GetChars( filename ) );
             wxMessageBox( msg );
         }

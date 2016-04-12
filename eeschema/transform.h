@@ -55,7 +55,7 @@ public:
      */
     TRANSFORM() : x1( 1 ), y1( 0 ), x2( 0 ), y2( -1 ) {}
 
-    TRANSFORM( int x1, int y1, int x2, int y2 ) : x1( x1 ), y1( y1 ), x2( x2 ), y2( y2 ) {}
+    TRANSFORM( int ax1, int ay1, int ax2, int ay2 ) : x1( ax1 ), y1( ay1 ), x2( ax2 ), y2( ay2 ) {}
 
     TRANSFORM& operator=( const TRANSFORM& aTransform );
 

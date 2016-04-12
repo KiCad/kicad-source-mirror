@@ -861,12 +861,12 @@ void PGM_BASE::SetLocalEnvVariables( const ENV_VAR_MAP& aEnvVarMap )
 
 void PGM_BASE::ConfigurePaths( wxWindow* aParent )
 {
-    DIALOG_ENV_VAR_CONFIG dlg( aParent, GetLocalEnvVariables() );
+    DIALOG_ENV_VAR_CONFIG dlg_envvars( aParent, GetLocalEnvVariables() );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg_envvars.ShowModal() == wxID_CANCEL )
         return;
 
-    ENV_VAR_MAP envVarMap = dlg.GetEnvVarMap();
+    ENV_VAR_MAP envVarMap = dlg_envvars.GetEnvVarMap();
 
     for( ENV_VAR_MAP_ITER it = envVarMap.begin(); it != envVarMap.end(); ++it )
     {
@@ -878,7 +878,7 @@ void PGM_BASE::ConfigurePaths( wxWindow* aParent )
     // If any of the environment variables are defined externally, warn the user that the
     // next time kicad is run that the externally defined variables will be used instead of
     // the user's settings.  This is by design.
-    if( dlg.ExternalDefsChanged() && m_show_env_var_dialog )
+    if( dlg_envvars.ExternalDefsChanged() && m_show_env_var_dialog )
     {
         wxString msg1 = _( "Warning!  Some of paths you have configured have been defined \n"
                            "externally to the running process and will be temporarily overwritten." );
@@ -894,5 +894,5 @@ void PGM_BASE::ConfigurePaths( wxWindow* aParent )
         m_show_env_var_dialog = !dlg.IsCheckBoxChecked();
     }
 
-    SetLocalEnvVariables( dlg.GetEnvVarMap() );
+    SetLocalEnvVariables( dlg_envvars.GetEnvVarMap() );
 }
