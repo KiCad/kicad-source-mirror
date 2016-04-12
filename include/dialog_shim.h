@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,22 @@ class EVENT_LOOP;
  **/
 class DIALOG_SHIM : public wxDialog, public KIWAY_HOLDER
 {
+    /**
+     * Function OnCloseWindow
+     *
+     * properly handles the wxCloseEvent when in the quasimodal mode when not calling
+     * EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
+     */
+    void OnCloseWindow( wxCloseEvent& aEvent );
+
+    /**
+     * Function OnCloseWindow
+     *
+     * properly handles the default button events when in the quasimodal mode when not
+     * calling EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
+     */
+    void OnButton( wxCommandEvent& aEvent );
+
 public:
 
     DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,

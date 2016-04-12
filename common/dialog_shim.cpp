@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,6 +69,9 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
 
     if( h )
         SetKiway( this, &h->Kiway() );
+
+    Bind( wxEVT_CLOSE_WINDOW, &DIALOG_SHIM::OnCloseWindow, this );
+    Bind( wxEVT_BUTTON, &DIALOG_SHIM::OnButton, this );
 
 #ifdef __WINDOWS__
     // On Windows, the app top windows can be brought to the foreground
@@ -534,4 +537,50 @@ void DIALOG_SHIM::EndQuasiModal( int retCode )
     m_qmodal_parent_disabler = 0;
 
     Show( false );
+}
+
+
+void DIALOG_SHIM::OnCloseWindow( wxCloseEvent& aEvent )
+{
+    if( IsQuasiModal() )
+    {
+        EndQuasiModal( wxID_CANCEL );
+        return;
+    }
+
+    // This is mandatory to allow wxDialogBase::OnCloseWindow() to be called.
+    aEvent.Skip();
+}
+
+
+void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
+{
+    if( IsQuasiModal() )
+    {
+        const int id = aEvent.GetId();
+
+        if( id == GetAffirmativeId() )
+        {
+            EndQuasiModal( id );
+        }
+        else if( id == wxID_APPLY )
+        {
+            if( Validate() )
+                TransferDataFromWindow();
+        }
+        else if( id == GetEscapeId() ||
+                 (id == wxID_CANCEL && GetEscapeId() == wxID_ANY) )
+        {
+            EndQuasiModal( wxID_CANCEL );
+        }
+        else // not a standard button
+        {
+            aEvent.Skip();
+        }
+
+        return;
+    }
+
+    // This is mandatory to allow wxDialogBase::OnButton() to be called.
+    aEvent.Skip();
 }
