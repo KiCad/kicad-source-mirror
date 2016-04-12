@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Apr  9 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -57,11 +57,9 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	fgSizer1->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_SizeXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizeXCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SizeXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_PositionXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PositionXCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_PositionXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_LayerSelectionCtrl = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
@@ -90,11 +88,9 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	fgSizer1->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_SizeYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizeYCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_SizeYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_PositionYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PositionYCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_PositionYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	wxString m_StyleCtrlChoices[] = { _("Normal"), _("Italic") };
@@ -113,7 +109,7 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	m_ThicknessLabel->Wrap( -1 );
 	fgSizer1->Add( m_ThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_orientationLabel = new wxStaticText( this, wxID_ANY, _("Orientation (0.1 deg):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_orientationLabel = new wxStaticText( this, wxID_ANY, _("Orientation (deg):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_orientationLabel->Wrap( -1 );
 	fgSizer1->Add( m_orientationLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
@@ -124,12 +120,10 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_ThicknessCtrl->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_ThicknessCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_OrientationCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_OrientationCtrl->SetMaxLength( 0 ); 
-	fgSizer1->Add( m_OrientationCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_OrientCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_OrientCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	
 	bSizer9->Add( fgSizer1, 1, wxALL|wxEXPAND, 5 );
@@ -152,18 +146,8 @@ DIALOG_PCB_TEXT_PROPERTIES_BASE::DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
-	
-	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PCB_TEXT_PROPERTIES_BASE::OnClose ) );
-	m_StandardSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCB_TEXT_PROPERTIES_BASE::OnCancelClick ), NULL, this );
-	m_StandardSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCB_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
 }
 
 DIALOG_PCB_TEXT_PROPERTIES_BASE::~DIALOG_PCB_TEXT_PROPERTIES_BASE()
 {
-	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PCB_TEXT_PROPERTIES_BASE::OnClose ) );
-	m_StandardSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCB_TEXT_PROPERTIES_BASE::OnCancelClick ), NULL, this );
-	m_StandardSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCB_TEXT_PROPERTIES_BASE::OnOkClick ), NULL, this );
-	
 }

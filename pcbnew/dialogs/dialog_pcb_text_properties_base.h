@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Apr  9 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -60,16 +60,10 @@ class DIALOG_PCB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ThicknessLabel;
 		wxStaticText* m_orientationLabel;
 		wxTextCtrl* m_ThicknessCtrl;
-		wxTextCtrl* m_OrientationCtrl;
+		wxTextCtrl* m_OrientCtrl;
 		wxStdDialogButtonSizer* m_StandardSizer;
 		wxButton* m_StandardSizerOK;
 		wxButton* m_StandardSizerCancel;
-		
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
 	
 	public:
 		

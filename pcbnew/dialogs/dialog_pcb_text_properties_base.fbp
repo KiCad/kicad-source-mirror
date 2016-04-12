@@ -61,7 +61,7 @@
             <event name="OnAuiPaneRestore"></event>
             <event name="OnAuiRender"></event>
             <event name="OnChar"></event>
-            <event name="OnClose">OnClose</event>
+            <event name="OnClose"></event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
@@ -220,7 +220,7 @@
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
                                 <property name="maximum_size"></property>
-                                <property name="maxlength"></property>
+                                <property name="maxlength">0</property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
                                 <property name="minimum_size">400,60</property>
@@ -1790,7 +1790,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Orientation (0.1 deg):</property>
+                                        <property name="label">Orientation (deg):</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>
@@ -1992,7 +1992,7 @@
                                         <property name="minimize_button">0</property>
                                         <property name="minimum_size"></property>
                                         <property name="moveable">1</property>
-                                        <property name="name">m_OrientationCtrl</property>
+                                        <property name="name">m_OrientCtrl</property>
                                         <property name="pane_border">1</property>
                                         <property name="pane_position"></property>
                                         <property name="pane_size"></property>
@@ -2062,11 +2062,11 @@
                                 <property name="name">m_StandardSizer</property>
                                 <property name="permission">protected</property>
                                 <event name="OnApplyButtonClick"></event>
-                                <event name="OnCancelButtonClick">OnCancelClick</event>
+                                <event name="OnCancelButtonClick"></event>
                                 <event name="OnContextHelpButtonClick"></event>
                                 <event name="OnHelpButtonClick"></event>
                                 <event name="OnNoButtonClick"></event>
-                                <event name="OnOKButtonClick">OnOkClick</event>
+                                <event name="OnOKButtonClick"></event>
                                 <event name="OnSaveButtonClick"></event>
                                 <event name="OnYesButtonClick"></event>
                             </object>

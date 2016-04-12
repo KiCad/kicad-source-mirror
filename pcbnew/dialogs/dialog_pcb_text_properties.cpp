@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras <jean-pierre.charras@gpisa-lab.inpg.fr>
- * Copyright (C) 2010-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 #include <drawtxt.h>
 #include <confirm.h>
 #include <base_units.h>
+#include <wx/valnum.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
@@ -58,12 +59,11 @@ private:
     wxDC*               m_DC;
     TEXTE_PCB*          m_SelectedPCBText;
 
-    void MyInit();
+    wxFloatingPointValidator<double>    m_OrientValidator;
+    double              m_OrientValue;
 
-    // Handlers for DIALOG_PCB_TEXT_PROPERTIES_BASE events.
-    void OnClose( wxCloseEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-    void OnOkClick( wxCommandEvent& event );
+    bool TransferDataToWindow();
+    bool TransferDataFromWindow();
 };
 
 
@@ -75,14 +75,19 @@ private:
  */
 
 DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
-                                                        TEXTE_PCB* passedTextPCB, wxDC* DC )
-                            : DIALOG_PCB_TEXT_PROPERTIES_BASE( parent )
+                                                        TEXTE_PCB* passedTextPCB, wxDC* DC ) :
+    DIALOG_PCB_TEXT_PROPERTIES_BASE( parent ),
+    m_OrientValidator( 1, &m_OrientValue )
 {
     m_Parent = parent;
     m_DC = DC;
     m_SelectedPCBText = passedTextPCB;
 
-    MyInit();
+    m_OrientValue = 0.0;
+    m_OrientValidator.SetRange( -360.0, 360.0 );
+    m_OrientCtrl->SetValidator( m_OrientValidator );
+    m_OrientValidator.SetWindow( m_OrientCtrl );
+
     m_StandardSizerOK->SetDefault();
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -108,7 +113,7 @@ void PCB_EDIT_FRAME::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
 }
 
 
-void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
+bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataToWindow()
 {
     // Put units symbols to text labels where appropriate
     AddUnitSymbol( *m_SizeXLabel );
@@ -135,9 +140,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     m_LayerSelectionCtrl->Resync();
     m_LayerSelectionCtrl->SetLayerSelection( m_SelectedPCBText->GetLayer() );
 
-    wxString orientationStr;
-    orientationStr << m_SelectedPCBText->GetOrientation();
-    m_OrientationCtrl->SetValue( orientationStr );
+    m_OrientValue = m_SelectedPCBText->GetOrientation() / 10.0;
 
     if( m_SelectedPCBText->IsMirrored() )
         m_DisplayCtrl->SetSelection( 1 );
@@ -159,8 +162,8 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     m_ThicknessCtrl->MoveAfterInTabOrder( m_SizeYCtrl );
     m_PositionXCtrl->MoveAfterInTabOrder( m_ThicknessCtrl );
     m_PositionYCtrl->MoveAfterInTabOrder( m_PositionXCtrl );
-    m_OrientationCtrl->MoveAfterInTabOrder( m_PositionYCtrl );
-    m_LayerSelectionCtrl->MoveAfterInTabOrder( m_OrientationCtrl );
+    m_OrientCtrl->MoveAfterInTabOrder( m_PositionYCtrl );
+    m_LayerSelectionCtrl->MoveAfterInTabOrder( m_OrientCtrl );
     m_StyleCtrl->MoveAfterInTabOrder( m_LayerSelectionCtrl );
     m_DisplayCtrl->MoveAfterInTabOrder( m_StyleCtrl );
     m_justifyChoice->MoveAfterInTabOrder( m_DisplayCtrl );
@@ -168,30 +171,24 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     // Set focus on most important control
     m_TextContentCtrl->SetFocus();
     m_TextContentCtrl->SetSelection( -1, -1 );
+
+    return DIALOG_PCB_TEXT_PROPERTIES_BASE::TransferDataToWindow();
 }
 
 
-void DIALOG_PCB_TEXT_PROPERTIES::OnClose( wxCloseEvent& event )
+bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataFromWindow()
 {
-    EndModal( 0 );
-}
 
+    if( !DIALOG_PCB_TEXT_PROPERTIES_BASE::TransferDataFromWindow() )
+        return false;
 
-void DIALOG_PCB_TEXT_PROPERTIES::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
-}
-
-
-void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
-{
     // Test for acceptable layer.
     // Incorrect layer can happen for old boards,
     // having texts on edge cut layer for instance
     if( m_LayerSelectionCtrl->GetLayerSelection() < 0 )
     {
         wxMessageBox( _( "No layer selected, Please select the text layer" ) );
-        return;
+        return false;
     }
 
     wxPoint newPosition;
@@ -268,10 +265,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     m_SelectedPCBText->SetMirrored( m_DisplayCtrl->GetSelection() == 1 );
 
     // Set the text orientation
-    long orientation;
-    m_OrientationCtrl->GetValue().ToLong( &orientation );
-    orientation = orientation % 3600;
-    m_SelectedPCBText->SetOrientation( orientation );
+    m_SelectedPCBText->SetOrientation( m_OrientValue * 10.0 );
 
     // Set whether the PCB text is slanted (it is not italics, as italics has additional curves in style)
     m_SelectedPCBText->SetItalic( m_StyleCtrl->GetSelection() );
@@ -302,5 +296,6 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     m_parent->Refresh();
 #endif
     m_Parent->OnModify();
-    EndModal( 1 );
+
+    return true;
 }
