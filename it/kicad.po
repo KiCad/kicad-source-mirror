@@ -78,8 +78,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-11 22:02+0200\n"
-"PO-Revision-Date: 2016-04-11 22:03+0200\n"
+"POT-Creation-Date: 2016-04-12 10:26+0200\n"
+"PO-Revision-Date: 2016-04-12 10:27+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -472,7 +472,7 @@ msgstr ""
 
 #: kicad/prjconfig.cpp:332 pcbnew/pcbframe.cpp:993 pcbnew/moduleframe.cpp:768
 #: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1364
-#: cvpcb/cvpcb_mainframe.cpp:754
+#: cvpcb/cvpcb_mainframe.cpp:756
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
 
@@ -8883,7 +8883,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:433 pcbnew/netlist.cpp:95
-#: cvpcb/cvpcb_mainframe.cpp:801
+#: cvpcb/cvpcb_mainframe.cpp:803
 msgid "Netlist Load Error"
 msgstr "Errore nel caricamento netlist"
 
@@ -12438,7 +12438,7 @@ msgstr "Mostra contorni in modalità schizzo"
 msgid "Warning: The Top Layer and Bottom Layer are same."
 msgstr "Attenzione: Lo strato superiore e quello inferiore sono identici"
 
-#: pcbnew/netlist.cpp:94 cvpcb/cvpcb_mainframe.cpp:800
+#: pcbnew/netlist.cpp:94 cvpcb/cvpcb_mainframe.cpp:802
 #, c-format
 msgid ""
 "Error loading netlist.\n"
@@ -19115,7 +19115,7 @@ msgstr "&Limita panoramica alle dimensioni scorrimento"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:285
 msgid "Use touchpa&d to pan"
-msgstr "Pan con il tochpa&d"
+msgstr "Usa il touchpa&d per il pan"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:300
 msgid "Controls"
@@ -20536,12 +20536,12 @@ msgstr ""
 msgid "Configuration Error"
 msgstr "Errore di configurazione"
 
-#: cvpcb/cvpcb_mainframe.cpp:749
+#: cvpcb/cvpcb_mainframe.cpp:751
 #, c-format
 msgid "Project: '%s'"
 msgstr "Progetto: \"%s\""
 
-#: cvpcb/cvpcb_mainframe.cpp:757
+#: cvpcb/cvpcb_mainframe.cpp:759
 msgid "[no project]"
 msgstr "[nessun progetto]"
 
@@ -24014,21 +24014,3 @@ msgstr ""
 "'%s'\n"
 "linea %d scostamento %d\n"
 "da %s : %s"
-
-#~ msgid "0.1 degree"
-#~ msgstr "0.1 Gradi"
-
-#~ msgid "0.1 deg"
-#~ msgstr "0.1 gradi"
-
-#~ msgid "Rotation (in 0.1 degrees):"
-#~ msgstr "Rotazione (in decimi di grado):"
-
-#~ msgid "could not open configuration file"
-#~ msgstr "impossibile aprire il file di configurazione"
-
-#~ msgid "could not open configuration file "
-#~ msgstr "impossibile aprire il file di configurazione"
-
-#~ msgid "missing closing quote mark in config file"
-#~ msgstr "virgoletta di chiusura mancante nel file di configurazione"
