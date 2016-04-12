@@ -123,7 +123,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_DefaulThicknessTextUnit,
     };
 
-    for( int ii = 0; ii < DIM( texts_unit ); ii++ )
+    for( size_t ii = 0; ii < DIM( texts_unit ); ii++ )
     {
         texts_unit[ii]->SetLabel( GetAbbreviatedUnitsLabel() );
     }
