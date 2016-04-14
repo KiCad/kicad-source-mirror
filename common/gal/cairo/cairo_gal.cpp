@@ -318,7 +318,7 @@ void CAIRO_GAL::SetIsFill( bool aIsFillEnabled )
     {
         GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_FILL;
-        groupElement.boolArgument = aIsFillEnabled;
+        groupElement.argument.boolArg = aIsFillEnabled;
         currentGroup->push_back( groupElement );
     }
 }
@@ -333,7 +333,7 @@ void CAIRO_GAL::SetIsStroke( bool aIsStrokeEnabled )
     {
         GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_STROKE;
-        groupElement.boolArgument = aIsStrokeEnabled;
+        groupElement.argument.boolArg = aIsStrokeEnabled;
         currentGroup->push_back( groupElement );
     }
 }
@@ -348,10 +348,10 @@ void CAIRO_GAL::SetStrokeColor( const COLOR4D& aColor )
     {
         GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_STROKECOLOR;
-        groupElement.arguments[0] = strokeColor.r;
-        groupElement.arguments[1] = strokeColor.g;
-        groupElement.arguments[2] = strokeColor.b;
-        groupElement.arguments[3] = strokeColor.a;
+        groupElement.argument.dblArg[0] = strokeColor.r;
+        groupElement.argument.dblArg[1] = strokeColor.g;
+        groupElement.argument.dblArg[2] = strokeColor.b;
+        groupElement.argument.dblArg[3] = strokeColor.a;
         currentGroup->push_back( groupElement );
     }
 }
@@ -366,10 +366,10 @@ void CAIRO_GAL::SetFillColor( const COLOR4D& aColor )
     {
         GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_FILLCOLOR;
-        groupElement.arguments[0] = fillColor.r;
-        groupElement.arguments[1] = fillColor.g;
-        groupElement.arguments[2] = fillColor.b;
-        groupElement.arguments[3] = fillColor.a;
+        groupElement.argument.dblArg[0] = fillColor.r;
+        groupElement.argument.dblArg[1] = fillColor.g;
+        groupElement.argument.dblArg[2] = fillColor.b;
+        groupElement.argument.dblArg[3] = fillColor.a;
         currentGroup->push_back( groupElement );
     }
 }
@@ -385,7 +385,7 @@ void CAIRO_GAL::SetLineWidth( double aLineWidth )
     {
         GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SET_LINE_WIDTH;
-        groupElement.arguments[0] = aLineWidth;
+        groupElement.argument.dblArg[0] = aLineWidth;
         currentGroup->push_back( groupElement );
     }
     else
@@ -432,7 +432,7 @@ void CAIRO_GAL::Rotate( double aAngle )
     {
         GROUP_ELEMENT groupElement;
         groupElement.command = CMD_ROTATE;
-        groupElement.arguments[0] = aAngle;
+        groupElement.argument.dblArg[0] = aAngle;
         currentGroup->push_back( groupElement );
     }
     else
@@ -450,8 +450,8 @@ void CAIRO_GAL::Translate( const VECTOR2D& aTranslation )
     {
         GROUP_ELEMENT groupElement;
         groupElement.command = CMD_TRANSLATE;
-        groupElement.arguments[0] = aTranslation.x;
-        groupElement.arguments[1] = aTranslation.y;
+        groupElement.argument.dblArg[0] = aTranslation.x;
+        groupElement.argument.dblArg[1] = aTranslation.y;
         currentGroup->push_back( groupElement );
     }
     else
@@ -469,8 +469,8 @@ void CAIRO_GAL::Scale( const VECTOR2D& aScale )
     {
         GROUP_ELEMENT groupElement;
         groupElement.command = CMD_SCALE;
-        groupElement.arguments[0] = aScale.x;
-        groupElement.arguments[1] = aScale.y;
+        groupElement.argument.dblArg[0] = aScale.x;
+        groupElement.argument.dblArg[1] = aScale.y;
         currentGroup->push_back( groupElement );
     }
     else
@@ -554,21 +554,21 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
         switch( it->command )
         {
         case CMD_SET_FILL:
-            isFillEnabled = it->boolArgument;
+            isFillEnabled = it->argument.boolArg;
             break;
 
         case CMD_SET_STROKE:
-            isStrokeEnabled = it->boolArgument;
+            isStrokeEnabled = it->argument.boolArg;
             break;
 
         case CMD_SET_FILLCOLOR:
-            fillColor = COLOR4D( it->arguments[0], it->arguments[1], it->arguments[2],
-                                 it->arguments[3] );
+            fillColor = COLOR4D( it->argument.dblArg[0], it->argument.dblArg[1], it->argument.dblArg[2],
+                                 it->argument.dblArg[3] );
             break;
 
         case CMD_SET_STROKECOLOR:
-            strokeColor = COLOR4D( it->arguments[0], it->arguments[1], it->arguments[2],
-                                   it->arguments[3] );
+            strokeColor = COLOR4D( it->argument.dblArg[0], it->argument.dblArg[1], it->argument.dblArg[2],
+                                   it->argument.dblArg[3] );
             break;
 
         case CMD_SET_LINE_WIDTH:
@@ -577,7 +577,7 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
                 double x = 1.0, y = 1.0;
                 cairo_device_to_user_distance( currentContext, &x, &y );
                 double minWidth = std::min( fabs( x ), fabs( y ) );
-                cairo_set_line_width( currentContext, std::max( it->arguments[0], minWidth ) );
+                cairo_set_line_width( currentContext, std::max( it->argument.dblArg[0], minWidth ) );
             }
             break;
 
@@ -596,21 +596,21 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
 
         case CMD_TRANSFORM:
             cairo_matrix_t matrix;
-            cairo_matrix_init( &matrix, it->arguments[0], it->arguments[1], it->arguments[2],
-                               it->arguments[3], it->arguments[4], it->arguments[5] );
+            cairo_matrix_init( &matrix, it->argument.dblArg[0], it->argument.dblArg[1], it->argument.dblArg[2],
+                               it->argument.dblArg[3], it->argument.dblArg[4], it->argument.dblArg[5] );
             cairo_transform( currentContext, &matrix );
             break;
 
         case CMD_ROTATE:
-            cairo_rotate( currentContext, it->arguments[0] );
+            cairo_rotate( currentContext, it->argument.dblArg[0] );
             break;
 
         case CMD_TRANSLATE:
-            cairo_translate( currentContext, it->arguments[0], it->arguments[1] );
+            cairo_translate( currentContext, it->argument.dblArg[0], it->argument.dblArg[1] );
             break;
 
         case CMD_SCALE:
-            cairo_scale( currentContext, it->arguments[0], it->arguments[1] );
+            cairo_scale( currentContext, it->argument.dblArg[0], it->argument.dblArg[1] );
             break;
 
         case CMD_SAVE:
@@ -622,7 +622,7 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
             break;
 
         case CMD_CALL_GROUP:
-            DrawGroup( it->intArgument );
+            DrawGroup( it->argument.intArg );
             break;
         }
     }
@@ -638,10 +638,10 @@ void CAIRO_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
     {
         if( it->command == CMD_SET_FILLCOLOR || it->command == CMD_SET_STROKECOLOR )
         {
-            it->arguments[0] = aNewColor.r;
-            it->arguments[1] = aNewColor.g;
-            it->arguments[2] = aNewColor.b;
-            it->arguments[3] = aNewColor.a;
+            it->argument.dblArg[0] = aNewColor.r;
+            it->argument.dblArg[1] = aNewColor.g;
+            it->argument.dblArg[2] = aNewColor.b;
+            it->argument.dblArg[3] = aNewColor.a;
         }
     }
 }
