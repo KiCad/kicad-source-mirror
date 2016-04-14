@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-12 09:40+0200\n"
-"PO-Revision-Date: 2016-04-12 09:42+0200\n"
+"POT-Creation-Date: 2016-04-14 11:58+0200\n"
+"PO-Revision-Date: 2016-04-14 12:01+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -950,8 +950,8 @@ msgstr "Formato"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:135
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:100 pcbnew/muonde.cpp:859
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:68
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:96 pcbnew/muonde.cpp:859
 msgid "Normal"
 msgstr "Normal"
 
@@ -1786,7 +1786,7 @@ msgstr "Tamaño personalizado:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:62
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:75
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:76
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:74
 msgid "Height:"
 msgstr "Alto:"
 
@@ -2031,7 +2031,7 @@ msgstr "Tipo MIME desconocido del archivo <%s>"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:100
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:96
 msgid "Italic"
 msgstr "Cursiva"
 
@@ -2596,7 +2596,7 @@ msgstr "Y"
 #: gerbview/class_GERBER.cpp:363 gerbview/class_GERBER.cpp:366
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
 #: pcbnew/tools/common_actions.cpp:206
 msgid "Center"
 msgstr "Centrado"
@@ -4238,7 +4238,7 @@ msgstr "Mover el campo seleccionado una posición hacia arriba"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: eeschema/lib_pin.cpp:114
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
 msgid "Left"
 msgstr "Izquierda"
 
@@ -4247,7 +4247,7 @@ msgstr "Izquierda"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 #: eeschema/lib_pin.cpp:113
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:106
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
 msgid "Right"
 msgstr "Derecha"
 
@@ -4304,7 +4304,7 @@ msgstr "Cursiva negrita"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:94
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:84
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:82
 msgid "Style:"
 msgstr "Estilo"
 
@@ -4417,7 +4417,7 @@ msgid "Hierarchical Sheet Pin Properties."
 msgstr "Propiedades del pin de hoja jerárquica."
 
 #: eeschema/dialogs/dialog_edit_label.cpp:167
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:76
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:70
 msgid "Text Properties"
 msgstr "Propiedades del texto"
 
@@ -10873,7 +10873,7 @@ msgstr ""
 "Se ha modificado el diseño de página.\n"
 "¿Desea descartar los cambios?"
 
-#: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:154
+#: pagelayout_editor/files.cpp:60 pagelayout_editor/files.cpp:152
 #, c-format
 msgid "File <%s> loaded"
 msgstr "Se ha abierto el archivo <%s>"
@@ -10882,35 +10882,35 @@ msgstr "Se ha abierto el archivo <%s>"
 msgid "Append Page Layout Descr File"
 msgstr "Añadir archivo de descripción de diseño de página"
 
-#: pagelayout_editor/files.cpp:122 pagelayout_editor/files.cpp:148
+#: pagelayout_editor/files.cpp:121 pagelayout_editor/files.cpp:146
 #, c-format
 msgid "Unable to load %s file"
 msgstr "No se ha podido abrir el archivo %s"
 
-#: pagelayout_editor/files.cpp:130
+#: pagelayout_editor/files.cpp:129
 #, c-format
 msgid "File <%s> inserted"
 msgstr "Se ha insertado el archivo <%s>"
 
-#: pagelayout_editor/files.cpp:138
+#: pagelayout_editor/files.cpp:137
 msgid "Open file"
 msgstr "Abrir archivo"
 
-#: pagelayout_editor/files.cpp:163
+#: pagelayout_editor/files.cpp:161
 #, c-format
 msgid "Unable to write <%s>"
 msgstr "No se puede escribir <%s>"
 
-#: pagelayout_editor/files.cpp:168 pagelayout_editor/files.cpp:200
+#: pagelayout_editor/files.cpp:166 pagelayout_editor/files.cpp:197
 #, c-format
 msgid "File <%s> written"
 msgstr "Se ha escrito el archivo <%s>"
 
-#: pagelayout_editor/files.cpp:175 pagelayout_editor/pl_editor_frame.cpp:243
+#: pagelayout_editor/files.cpp:173 pagelayout_editor/pl_editor_frame.cpp:243
 msgid "Create file"
 msgstr "Crear archivo"
 
-#: pagelayout_editor/files.cpp:194 pagelayout_editor/pl_editor_frame.cpp:255
+#: pagelayout_editor/files.cpp:191 pagelayout_editor/pl_editor_frame.cpp:255
 #: pcbnew/exporters/export_gencad.cpp:267
 #, c-format
 msgid "Unable to create <%s>"
@@ -12820,7 +12820,7 @@ msgstr "Pad cerca de pad"
 
 #: pcbnew/class_drc_item.cpp:71
 msgid "Via hole > diameter"
-msgstr "Agujero de vía > diámetro"
+msgstr "Taladro de vía > diámetro"
 
 #: pcbnew/class_drc_item.cpp:73
 msgid "Micro Via: incorrect layer pairs (not adjacent)"
@@ -14617,7 +14617,7 @@ msgstr "Nunca"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:31
 msgid "Defined holes"
-msgstr "Agujeros definidos"
+msgstr "Taladros definidos"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:31
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
@@ -14628,15 +14628,15 @@ msgstr "Siempre"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:33
 msgid "Show Via Holes:"
-msgstr "Mostrar agujeros de vías:"
+msgstr "Mostrar taladros de vías:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:35
 msgid ""
 "Show or hide via holes.\n"
 "If Defined Holes is selected, only the non default size holes are shown"
 msgstr ""
-"Mostrar u ocultar los agujeros de las vías.\n"
-"Si se ha seleccionado Agujeros definidos, solo se mostraran los agujeros de "
+"Mostrar u ocultar los taladros de las vías.\n"
+"Si se ha seleccionado taladros definidos, solo se mostraran los agujeros de "
 "tamaño diferente al tamaño por defecto."
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:43
@@ -15217,7 +15217,7 @@ msgstr ""
 "Se ha forzado a la capa de serigrafía frontal. Por favor, corríjalo."
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:259
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:260
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:257
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
 "El grosor del texto es demasiado grande para el tamaño del texto. Será "
@@ -15814,7 +15814,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:95
 msgid "Merge PTH and NPTH holes into one file"
-msgstr "Unificar agujeros con y sin plateado en un mismo archivo"
+msgstr "Unificar taladros con y sin plateado en un mismo archivo"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid ""
@@ -15823,7 +15823,7 @@ msgid ""
 "file."
 msgstr ""
 "No recomendado.\n"
-"Utilizar únicamente con fabricantes que exigen los agujeros pasantes "
+"Utilizar únicamente con fabricantes que exigen los taladros pasantes "
 "plateados y no plateados en un mismo archivo."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:103
@@ -15867,7 +15867,7 @@ msgstr "Valor del taladro de microvía"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:139
 msgid "Holes Count:"
-msgstr "Número de agujeros:"
+msgstr "Número de taladros:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:141
 msgid "Plated Pads:"
@@ -16277,7 +16277,7 @@ msgid "Current Text Dimensions"
 msgstr "Dimensiones del texto actual"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:86
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:112
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:108
 msgid "Thickness:"
 msgstr "Grosor:"
 
@@ -16413,7 +16413,7 @@ msgstr "Ángulo del arco:"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:96
 msgid "degrees"
-msgstr ""
+msgstr "grados"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:100
 msgid "Item thickness:"
@@ -17643,7 +17643,7 @@ msgstr "Error: el pad no tiene capa asignada"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:787
 msgid "Error: the pad is not on a copper layer and has a hole"
-msgstr "Error: el pad no está en una capa de cobre y tiene un agujero"
+msgstr "Error: el pad no está en una capa de cobre y tiene un taladro"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:792
 msgid ""
@@ -17750,7 +17750,7 @@ msgid "Position X:"
 msgstr "Posición X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:80
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:78
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:142
 msgid "Position Y:"
 msgstr "Posición Y:"
@@ -17833,11 +17833,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:277
 msgid "Circular hole"
-msgstr "Agujero circular"
+msgstr "Taladro circular"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:277
 msgid "Oval hole"
-msgstr "Agujero oval"
+msgstr "Taladro oval"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:321
 msgid "Copper:"
@@ -18004,7 +18004,7 @@ msgstr ""
 "Este pad se encuentra volteado en la placa.\n"
 "Las capas frontal y trasera serán intercambiadas."
 
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:193
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:190
 msgid "No layer selected, Please select the text layer"
 msgstr "No hay capa seleccionada, por favor, seleccione la capa de texto"
 
@@ -18012,17 +18012,17 @@ msgstr "No hay capa seleccionada, por favor, seleccione la capa de texto"
 msgid "Enter the text placed on selected layer."
 msgstr "Introduzca el texto emplazado en la capa seleccionada."
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70 pcbnew/muonde.cpp:859
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:68 pcbnew/muonde.cpp:859
 msgid "Mirrored"
 msgstr "Invertido"
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:88
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:86
 msgid "Justification:"
 msgstr "Justificado:"
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:116
-msgid "Orientation (0.1 deg):"
-msgstr "Orientación (0,1 grados):"
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:112
+msgid "Orientation (deg):"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:583
 msgid "HPGL pen size constrained."
@@ -19262,7 +19262,7 @@ msgid ""
 "Could not add holes to contours."
 msgstr ""
 "No se ha podido exportar el archivo VRML:\n"
-"No pueden añadirse agujeros a los contornos."
+"No pueden añadirse orificios a los contornos."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:233
 msgid "No footprint for automated placement."
@@ -24090,6 +24090,9 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "Orientation (0.1 deg):"
+#~ msgstr "Orientación (0,1 grados):"
 
 #~ msgid "0.1 degree"
 #~ msgstr "0,1 grados"
