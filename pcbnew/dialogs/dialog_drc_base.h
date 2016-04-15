@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Mar 28 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -55,8 +55,11 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_ClearanceTitle;
 		wxStaticText* m_TrackMinWidthTitle;
+		wxStaticText* m_TrackMinWidthUnit;
 		wxStaticText* m_ViaMinTitle;
+		wxStaticText* m_ViaMinUnit;
 		wxStaticText* m_MicroViaMinTitle;
+		wxStaticText* m_MicroViaMinUnit;
 		wxButton* m_BrowseButton;
 		wxStaticText* m_staticText6;
 		wxTextCtrl* m_Messages;
@@ -73,6 +76,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnActivateDlg( wxActivateEvent& event ) { event.Skip(); }
 		virtual void OnReportCheckBoxClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonBrowseRptFileClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStartdrcClick( wxCommandEvent& event ) { event.Skip(); }
@@ -100,7 +104,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		DRCLISTBOX* m_ClearanceListBox;
 		DRCLISTBOX* m_UnconnectedListBox;
 		
-		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,438 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DRC_CONTROL_BASE();
 	
 };
