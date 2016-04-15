@@ -71,6 +71,8 @@ private:
 
     void InitValues( );
 
+    void DisplayDRCValues( );
+
     void SetDrcParmeters( );
 
     /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX
@@ -109,6 +111,10 @@ private:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
     void OnOkClick( wxCommandEvent& event );
 
+    /// handler for activate event, updating data which can be modified outside the dialog
+    /// (DRC parameters)
+    void OnActivateDlg( wxActivateEvent& event );
+
     void OnMarkerSelectionEvent( wxCommandEvent& event );
     void OnUnconnectedSelectionEvent( wxCommandEvent& event );
     void OnChangingMarkerList( wxNotebookEvent& event );
@@ -118,6 +124,7 @@ private:
 
     void OnPopupMenu( wxCommandEvent& event );
 
+    BOARD*              m_currentBoard;     // the board currently on test
     DRC*                m_tester;
     PCB_EDIT_FRAME*     m_Parent;
 };

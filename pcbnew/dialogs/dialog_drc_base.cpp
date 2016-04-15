@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Mar 28 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,70 +28,86 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgMinValuesSizer;
-	fgMinValuesSizer = new wxFlexGridSizer( 4, 2, 0, 0 );
+	fgMinValuesSizer = new wxFlexGridSizer( 4, 3, 0, 0 );
 	fgMinValuesSizer->AddGrowableCol( 1 );
 	fgMinValuesSizer->SetFlexibleDirection( wxHORIZONTAL );
 	fgMinValuesSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_ClearanceTitle = new wxStaticText( this, wxID_ANY, _("Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ClearanceTitle = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("Clearance"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ClearanceTitle->Wrap( -1 );
 	fgMinValuesSizer->Add( m_ClearanceTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_SetClearance = new wxTextCtrl( this, wxID_ANY, _("By Netclass"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_SetClearance->SetMaxLength( 0 ); 
+	m_SetClearance = new wxTextCtrl( sbSizerOptions->GetStaticBox(), wxID_ANY, _("By Netclass"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SetClearance->Enable( false );
 	
 	fgMinValuesSizer->Add( m_SetClearance, 0, wxALL|wxEXPAND, 5 );
 	
-	m_TrackMinWidthTitle = new wxStaticText( this, wxID_ANY, _("Min track width"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	fgMinValuesSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_TrackMinWidthTitle = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("Min track width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackMinWidthTitle->Wrap( -1 );
 	m_TrackMinWidthTitle->SetToolTip( _("Enter the minimum acceptable value for a track width") );
 	
 	fgMinValuesSizer->Add( m_TrackMinWidthTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_SetTrackMinWidthCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SetTrackMinWidthCtrl->SetMaxLength( 0 ); 
+	m_SetTrackMinWidthCtrl = new wxTextCtrl( sbSizerOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgMinValuesSizer->Add( m_SetTrackMinWidthCtrl, 0, wxALL|wxEXPAND, 5 );
 	
-	m_ViaMinTitle = new wxStaticText( this, wxID_ANY, _("Min via size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackMinWidthUnit = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TrackMinWidthUnit->Wrap( -1 );
+	m_TrackMinWidthUnit->SetToolTip( _("Enter the minimum acceptable value for a track width") );
+	
+	fgMinValuesSizer->Add( m_TrackMinWidthUnit, 0, wxALL, 5 );
+	
+	m_ViaMinTitle = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("Min via size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaMinTitle->Wrap( -1 );
 	m_ViaMinTitle->SetHelpText( _("Enter the minimum acceptable diameter for a standard via") );
 	
 	fgMinValuesSizer->Add( m_ViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_SetViaMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SetViaMinSizeCtrl->SetMaxLength( 0 ); 
+	m_SetViaMinSizeCtrl = new wxTextCtrl( sbSizerOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgMinValuesSizer->Add( m_SetViaMinSizeCtrl, 0, wxALL|wxEXPAND, 5 );
 	
-	m_MicroViaMinTitle = new wxStaticText( this, wxID_ANY, _("Min uVia size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaMinUnit = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ViaMinUnit->Wrap( -1 );
+	m_ViaMinUnit->SetHelpText( _("Enter the minimum acceptable diameter for a standard via") );
+	
+	fgMinValuesSizer->Add( m_ViaMinUnit, 0, wxALL, 5 );
+	
+	m_MicroViaMinTitle = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("Min uVia size"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViaMinTitle->Wrap( -1 );
 	m_MicroViaMinTitle->SetToolTip( _("Enter the minimum acceptable diameter for a micro via") );
 	
 	fgMinValuesSizer->Add( m_MicroViaMinTitle, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
-	m_SetMicroViakMinSizeCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SetMicroViakMinSizeCtrl->SetMaxLength( 0 ); 
+	m_SetMicroViakMinSizeCtrl = new wxTextCtrl( sbSizerOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgMinValuesSizer->Add( m_SetMicroViakMinSizeCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	m_MicroViaMinUnit = new wxStaticText( sbSizerOptions->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MicroViaMinUnit->Wrap( -1 );
+	m_MicroViaMinUnit->SetToolTip( _("Enter the minimum acceptable diameter for a micro via") );
+	
+	fgMinValuesSizer->Add( m_MicroViaMinUnit, 0, wxALL, 5 );
 	
 	
 	bSizer7->Add( fgMinValuesSizer, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* ReportFileSizer;
-	ReportFileSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Create Report File") ), wxHORIZONTAL );
+	ReportFileSizer = new wxStaticBoxSizer( new wxStaticBox( sbSizerOptions->GetStaticBox(), wxID_ANY, _("Create Report File") ), wxHORIZONTAL );
 	
-	m_CreateRptCtrl = new wxCheckBox( this, ID_CHECKBOX_RPT_FILE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_CreateRptCtrl = new wxCheckBox( ReportFileSizer->GetStaticBox(), ID_CHECKBOX_RPT_FILE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_CreateRptCtrl->SetToolTip( _("Enable writing report to this file") );
 	
 	ReportFileSizer->Add( m_CreateRptCtrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_RptFilenameCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_RptFilenameCtrl->SetMaxLength( 0 ); 
+	m_RptFilenameCtrl = new wxTextCtrl( ReportFileSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_RptFilenameCtrl->SetToolTip( _("Enter the report filename") );
 	m_RptFilenameCtrl->SetMinSize( wxSize( 180,-1 ) );
 	
 	ReportFileSizer->Add( m_RptFilenameCtrl, 1, wxALL|wxEXPAND, 5 );
 	
-	m_BrowseButton = new wxButton( this, ID_BUTTON_BROWSE_RPT_FILE, _("..."), wxDefaultPosition, wxSize( 50,-1 ), 0 );
+	m_BrowseButton = new wxButton( ReportFileSizer->GetStaticBox(), ID_BUTTON_BROWSE_RPT_FILE, _("..."), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	ReportFileSizer->Add( m_BrowseButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
@@ -197,9 +213,9 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
-	m_MainSizer->Fit( this );
 	
 	// Connect Events
+	this->Connect( wxEVT_ACTIVATE, wxActivateEventHandler( DIALOG_DRC_CONTROL_BASE::OnActivateDlg ) );
 	m_CreateRptCtrl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnReportCheckBoxClicked ), NULL, this );
 	m_BrowseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnButtonBrowseRptFileClick ), NULL, this );
 	m_buttonRunDRC->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnStartdrcClick ), NULL, this );
@@ -220,6 +236,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 DIALOG_DRC_CONTROL_BASE::~DIALOG_DRC_CONTROL_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_ACTIVATE, wxActivateEventHandler( DIALOG_DRC_CONTROL_BASE::OnActivateDlg ) );
 	m_CreateRptCtrl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnReportCheckBoxClicked ), NULL, this );
 	m_BrowseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnButtonBrowseRptFileClick ), NULL, this );
 	m_buttonRunDRC->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DRC_CONTROL_BASE::OnStartdrcClick ), NULL, this );

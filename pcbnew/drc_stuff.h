@@ -195,7 +195,7 @@ private:
 
     PCB_EDIT_FRAME*     m_mainWindow;
     BOARD*              m_pcb;
-    DIALOG_DRC_CONTROL* m_ui;
+    DIALOG_DRC_CONTROL* m_drcDialog;
 
     DRC_LIST            m_unconnected;  ///< list of unconnected pads, as DRC_ITEMs
 

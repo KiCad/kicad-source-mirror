@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent ) :
 {
     m_tester = aTester;
     m_Parent = parent;
+    m_currentBoard = m_Parent->GetBoard();
     m_BrdSettings = m_Parent->GetBoard()->GetDesignSettings();
 
     InitValues();
@@ -52,6 +53,39 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent ) :
     }
 
     Centre();
+}
+
+
+void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
+{
+    if( m_currentBoard != m_Parent->GetBoard() )
+    {
+        // If m_currentBoard is not the current parent board,
+        // (for instance because a new board was loaded),
+        // close the dialog, because many pointers are now invalid
+        // in lists
+        SetReturnCode( wxID_CANCEL );
+        Close();
+        m_tester->DestroyDialog( wxID_CANCEL );
+        return;
+    }
+
+    // updating data which can be modified outside the dialog (DRC parameters, units ...)
+    // because the dialog is not modal
+    m_BrdSettings = m_Parent->GetBoard()->GetDesignSettings();
+    DisplayDRCValues();
+}
+
+
+void DIALOG_DRC_CONTROL::DisplayDRCValues()
+{
+    m_TrackMinWidthUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_ViaMinUnit->SetLabel( GetAbbreviatedUnitsLabel( g_UserUnit ) );
+    m_MicroViaMinUnit->SetLabel(GetAbbreviatedUnitsLabel( g_UserUnit ) );
+
+    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl, m_BrdSettings.m_TrackMinWidth );
+    PutValueInLocalUnits( *m_SetViaMinSizeCtrl, m_BrdSettings.m_ViasMinSize );
+    PutValueInLocalUnits( *m_SetMicroViakMinSizeCtrl, m_BrdSettings.m_MicroViasMinSize );
 }
 
 
@@ -71,11 +105,9 @@ void DIALOG_DRC_CONTROL::InitValues()
                                    wxMouseEventHandler(
                                        DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
 
-    AddUnitSymbol( *m_TrackMinWidthTitle );
-    AddUnitSymbol( *m_ViaMinTitle );
-    AddUnitSymbol( *m_MicroViaMinTitle );
-
     m_DeleteCurrentMarkerButton->Enable( false );
+
+    DisplayDRCValues();
 
     Layout();      // adding the units above expanded Clearance text, now resize.
 
@@ -91,11 +123,11 @@ void DIALOG_DRC_CONTROL::InitValues()
 */
 void DIALOG_DRC_CONTROL::SetDrcParmeters( )
 {
-     m_BrdSettings.m_TrackMinWidth = ValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
-     m_BrdSettings.m_ViasMinSize = ValueFromTextCtrl( *m_SetViaMinSizeCtrl );
-     m_BrdSettings.m_MicroViasMinSize = ValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl );
+    m_BrdSettings.m_TrackMinWidth = ValueFromTextCtrl( *m_SetTrackMinWidthCtrl );
+    m_BrdSettings.m_ViasMinSize = ValueFromTextCtrl( *m_SetViaMinSizeCtrl );
+    m_BrdSettings.m_MicroViasMinSize = ValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl );
 
-     m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
+    m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
 }
 
 
@@ -117,7 +149,6 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     }
 
     SetDrcParmeters();
-
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
                            true,        // unconnected pdas DRC test enabled
                            true,        // DRC test for zones enabled
@@ -131,9 +162,8 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     // run all the tests, with no UI at this time.
     m_Messages->Clear();
     wxSafeYield();                          // Allows time slice to refresh the m_Messages window
-    m_tester->m_pcb->m_Status_Pcb = 0;      // Force full connectivity and ratsnest recalculations
+    m_Parent->GetBoard()->m_Status_Pcb = 0; // Force full connectivity and ratsnest recalculations
     m_tester->RunTests(m_Messages);
-
     m_Notebook->ChangeSelection( 0 );       // display the 1at tab "...Markers ..."
 
 

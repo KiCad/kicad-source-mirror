@@ -4,7 +4,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,44 +55,35 @@
 
 void DRC::ShowDialog()
 {
-    if( !m_ui )
+    if( !m_drcDialog )
     {
         m_mainWindow->GetToolManager()->RunAction( COMMON_ACTIONS::selectionClear, true );
-        m_ui = new DIALOG_DRC_CONTROL( this, m_mainWindow );
+        m_drcDialog = new DIALOG_DRC_CONTROL( this, m_mainWindow );
         updatePointers();
 
-        // copy data retained in this DRC object into the m_ui DrcPanel:
-
-        PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl,
-                              m_pcb->GetDesignSettings().m_TrackMinWidth );
-        PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl,
-                              m_pcb->GetDesignSettings().m_ViasMinSize );
-        PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl,
-                              m_pcb->GetDesignSettings().m_MicroViasMinSize );
-
-        m_ui->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
-        m_ui->m_RptFilenameCtrl->SetValue( m_rptFilename );
+        m_drcDialog->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
+        m_drcDialog->m_RptFilenameCtrl->SetValue( m_rptFilename );
     }
     else
         updatePointers();
 
-    m_ui->Show( true );
+    m_drcDialog->Show( true );
 }
 
 
 void DRC::DestroyDialog( int aReason )
 {
-    if( m_ui )
+    if( m_drcDialog )
     {
         if( aReason == wxID_OK )
         {
             // if user clicked OK, save his choices in this DRC object.
-            m_doCreateRptFile = m_ui->m_CreateRptCtrl->GetValue();
-            m_rptFilename     = m_ui->m_RptFilenameCtrl->GetValue();
+            m_doCreateRptFile = m_drcDialog->m_CreateRptCtrl->GetValue();
+            m_rptFilename     = m_drcDialog->m_RptFilenameCtrl->GetValue();
         }
 
-        m_ui->Destroy();
-        m_ui = 0;
+        m_drcDialog->Destroy();
+        m_drcDialog = NULL;
     }
 }
 
@@ -101,7 +92,7 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
 {
     m_mainWindow = aPcbWindow;
     m_pcb = aPcbWindow->GetBoard();
-    m_ui  = 0;
+    m_drcDialog  = NULL;
 
     // establish initial values for everything:
     m_doPad2PadTest     = true;     // enable pad to pad clearance tests
@@ -176,6 +167,10 @@ int DRC::Drc( ZONE_CONTAINER* aArea, int aCornerIndex )
 
 void DRC::RunTests( wxTextCtrl* aMessages )
 {
+    // be sure m_pcb is the current board, not a old one
+    // ( the board can be reloaded )
+    m_pcb = m_mainWindow->GetBoard();
+
     // Ensure ratsnest is up to date:
     if( (m_pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
     {
@@ -199,7 +194,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         if( aMessages )
             aMessages->AppendText( _( "Aborting\n" ) );
 
-        // update the m_ui listboxes
+        // update the m_drcDialog listboxes
         updatePointers();
 
         return;
@@ -279,7 +274,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 
     testTexts();
 
-    // update the m_ui listboxes
+    // update the m_drcDialog listboxes
     updatePointers();
 
     if( aMessages )
@@ -295,7 +290,7 @@ void DRC::ListUnconnectedPads()
 {
     testUnconnected();
 
-    // update the m_ui listboxes
+    // update the m_drcDialog listboxes
     updatePointers();
 }
 
@@ -305,10 +300,10 @@ void DRC::updatePointers()
     // update my pointers, m_mainWindow is the only unchangeable one
     m_pcb = m_mainWindow->GetBoard();
 
-    if( m_ui )  // Use diag list boxes only in DRC dialog
+    if( m_drcDialog )  // Use diag list boxes only in DRC dialog
     {
-        m_ui->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
-        m_ui->m_UnconnectedListBox->SetList( new DRC_LIST_UNCONNECTED( &m_unconnected ) );
+        m_drcDialog->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
+        m_drcDialog->m_UnconnectedListBox->SetList( new DRC_LIST_UNCONNECTED( &m_unconnected ) );
     }
 }
 
@@ -955,7 +950,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             if( pad->PadNameEqual( aRefPad ) )
                 continue;
         }
-        
+
         // if either pad has no drill and is only on technical layers, not a clearance violation
         if( ( ( pad->GetLayerSet() & layerMask ) == 0 && !pad->GetDrillSize().x ) ||
             ( ( aRefPad->GetLayerSet() & layerMask ) == 0 && !aRefPad->GetDrillSize().x ) )
