@@ -147,8 +147,12 @@ bool GERBER_PLOTTER::StartPlot()
     else
         fputs( "%MOMM*%\n", outputFile );
 
-    /* Specify linear interpol (G01) */
+    // Be sure the usual dark polarity is selected:
+    fputs( "%LPD*%\n", outputFile );
+
+    // Specify linear interpol (G01):
     fputs( "G01*\n", outputFile );
+
     fputs( "G04 APERTURE LIST*\n", outputFile );
     /* Select the default aperture */
     SetCurrentLineWidth( -1 );
