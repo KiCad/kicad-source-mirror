@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,6 @@ class SCH_SHEET;
 #define EESCHEMA_VERSION 2
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 
-#define TXTMARGE 10                     // Offset in mils for placement of labels and pin numbers
 #define DANGLING_SYMBOL_SIZE 12
 
 

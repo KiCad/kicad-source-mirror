@@ -49,6 +49,9 @@ extern void IncrementLabelMember( wxString& name, int aIncrement );
 // Only for tests: set DRAW_BBOX to 1 to draw the bounding box of labels
 #define DRAW_BBOX 0
 
+// Margin in internal units (mils) between labels and wires
+#define TXT_MARGIN 4
+
 /* Names of sheet label types. */
 const char* SheetLabelType[] =
 {
@@ -141,25 +144,28 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
 
-    // add a small offset (TXTMARGE) to x ( or y) position to allow a text to
+    // add an offset to x ( or y) position to allow a text to
     // be on a wire or a line and be readable
+    int thick_offset = TXT_MARGIN +
+                       ( GetPenSize() + GetDefaultLineThickness() ) / 2;
+
     switch( m_schematicOrientation )
     {
     default:
     case 0: /* Horiz Normal Orientation (left justified) */
-        text_offset.y = -TXTMARGE;
+        text_offset.y = -thick_offset;
         break;
 
     case 1: /* Vert Orientation UP */
-        text_offset.x = -TXTMARGE;
+        text_offset.x = -thick_offset;
         break;
 
     case 2: /* Horiz Orientation - Right justified */
-        text_offset.y = -TXTMARGE;
+        text_offset.y = -thick_offset;
         break;
 
     case 3: /*  Vert Orientation BOTTOM */
-        text_offset.x = -TXTMARGE;
+        text_offset.x = -thick_offset;
         break;
     }
 
@@ -656,9 +662,7 @@ bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector <wxPoint> Poly;
-
     EDA_COLOR_T color = GetLayerColor( GetLayer() );
-    wxPoint     textpos   = m_Pos + GetSchematicTextOffset();
     int         thickness = GetPenSize();
 
     aPlotter->SetCurrentLineWidth( thickness );
@@ -674,13 +678,15 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
+            wxPoint textpos = positions[ii] + GetSchematicTextOffset();
             wxString& txt = strings_list.Item( ii );
-            aPlotter->Text( positions[ii], color, txt, m_Orient, m_Size, m_HJustify,
+            aPlotter->Text( textpos, color, txt, m_Orient, m_Size, m_HJustify,
                             m_VJustify, thickness, m_Italic, m_Bold );
         }
     }
     else
     {
+        wxPoint textpos = m_Pos + GetSchematicTextOffset();
         aPlotter->Text( textpos, color, GetShownText(), m_Orient, m_Size, m_HJustify,
                         m_VJustify, thickness, m_Italic, m_Bold );
     }
@@ -1155,7 +1161,7 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 
     case NET_OUTPUT:
     case NET_UNSPECIFIED:
-        offset += TXTMARGE;
+        offset += TXT_MARGIN;
         break;
 
     default:
@@ -1268,7 +1274,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     aPoints.clear();
 
-    int symb_len = LenSize( GetShownText() ) + ( TXTMARGE * 2 );
+    int symb_len = LenSize( GetShownText() ) + ( TXT_MARGIN * 2 );
 
     // Create outline shape : 6 points
     int x = symb_len + linewidth + 3;
@@ -1378,7 +1384,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     dx = dy = 0;
 
     int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
-    height = ( (m_Size.y * 15) / 10 ) + width + 2 * TXTMARGE;
+    height = ( (m_Size.y * 15) / 10 ) + width + 2 * TXT_MARGIN;
 
     // text X size add height for triangular shapes(bidirectional)
     length = LenSize( GetShownText() ) + height + DANGLING_SYMBOL_SIZE;
@@ -1642,7 +1648,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
     dx = dy = 0;
 
     int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
-    height = m_Size.y + width + 2 * TXTMARGE;
+    height = m_Size.y + width + 2 * TXT_MARGIN;
     length = LenSize( GetShownText() )
              + height                 // add height for triangular shapes
              + 2 * DANGLING_SYMBOL_SIZE;
@@ -1690,7 +1696,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 
     int     width = std::max( m_Thickness, GetDefaultLineThickness() );
 
-    int     ii = m_Size.x + TXTMARGE + width;
+    int     ii = m_Size.x + TXT_MARGIN + width;
 
     switch( m_schematicOrientation )
     {
