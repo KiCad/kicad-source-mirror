@@ -57,7 +57,6 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
     if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
     {
-        wxString msg;
         msg.Printf( _( "Failed to create file '%s'" ),
                     GetChars( aOutFileName ) );
         DisplayError( NULL, msg );
@@ -162,13 +161,14 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
     m_ReferencesAlreadyFound.Clear();
 
-    for( unsigned i = 0;  i < sheetList.size();  i++ )
+    for( unsigned sheet_idx = 0; sheet_idx < sheetList.size(); sheet_idx++ )
     {
-        ret |= fprintf( f, "* Sheet Name: %s\n", TO_UTF8( sheetList[i].PathHumanReadable() ) );
+        ret |= fprintf( f, "* Sheet Name: %s\n",
+                        TO_UTF8( sheetList[sheet_idx].PathHumanReadable() ) );
 
-        for( EDA_ITEM* item = sheetList[i].LastDrawList();  item;  item = item->Next() )
+        for( EDA_ITEM* item = sheetList[sheet_idx].LastDrawList(); item; item = item->Next() )
         {
-            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, &sheetList[i] );
+            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, &sheetList[sheet_idx] );
 
             if( !comp )
                 break;
@@ -235,7 +235,7 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
             }
 
             //Get Standard Reference Designator:
-            wxString RefName = comp->GetRef( &sheetList[i] );
+            wxString RefName = comp->GetRef( &sheetList[sheet_idx] );
 
             //Conditionally add Prefix only for devices that begin with U or IC:
             if( aUsePrefix )
@@ -314,14 +314,14 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
             ret |= fprintf( f, " %s\t\t",TO_UTF8( CompValue ) );
 
             // Show Seq Spec on same line as component using line-comment ";":
-            for( unsigned i = 0;  i < pinSequence.size();  ++i )
+            for( unsigned ii = 0; ii < pinSequence.size(); ++ii )
             {
-                if( i==0 )
+                if( ii == 0 )
                     ret |= fprintf( f, ";Node Sequence Spec.<" );
 
-                ret |= fprintf( f, "%s", TO_UTF8( stdPinNameArray.Item( pinSequence[i] ) ) );
+                ret |= fprintf( f, "%s", TO_UTF8( stdPinNameArray.Item( pinSequence[ii] ) ) );
 
-                if( i < pinSequence.size()-1 )
+                if( ii < pinSequence.size()-1 )
                     ret |= fprintf( f, "," );
                 else
                     ret |= fprintf( f, ">" );

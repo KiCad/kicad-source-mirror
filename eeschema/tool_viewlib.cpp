@@ -167,7 +167,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     for( int ii = 0; ii < parts_count; ii++ )
     {
-        wxString msg = wxString::Format( _( "Unit %c" ), 'A' + ii );
+        msg.Printf( _( "Unit %c" ), 'A' + ii );
         m_selpartBox->Append( msg );
     }
 

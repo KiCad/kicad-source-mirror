@@ -201,8 +201,7 @@ void COAX::synthesize()
  */
 void COAX::show_results()
 {
-    double fc;
-    short  m, n;
+    int  m, n;
     char   text[256], txt[256];
 
     atten_dielectric = alphad_coax() * l;

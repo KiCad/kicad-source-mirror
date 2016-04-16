@@ -175,20 +175,20 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
         m_Message7, NULL
     };
 
-    unsigned      ii = 0;
-    for( ; ii < tr_ident->m_Messages.GetCount(); ii++ )
+    unsigned jj = 0;
+    for( ; jj < tr_ident->m_Messages.GetCount(); jj++ )
     {
-        if( left_msg_list[ii] == NULL )
+        if( left_msg_list[jj] == NULL )
             break;
-        left_msg_list[ii]->SetLabel( tr_ident->m_Messages[ii] );
-        msg_list[ii]->SetLabel( wxEmptyString );
+        left_msg_list[jj]->SetLabel( tr_ident->m_Messages[jj] );
+        msg_list[jj]->SetLabel( wxEmptyString );
     }
 
-    while( left_msg_list[ii] )
+    while( left_msg_list[jj] )
     {
-        left_msg_list[ii]->SetLabel( wxEmptyString );
-        msg_list[ii]->SetLabel( wxEmptyString );
-        ii++;
+        left_msg_list[jj]->SetLabel( wxEmptyString );
+        msg_list[jj]->SetLabel( wxEmptyString );
+        jj++;
     }
 
     // Init parameters dialog items
@@ -286,7 +286,6 @@ void PCB_CALCULATOR_FRAME::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType 
             data->unit->Enable( prm->m_ConvUnit );
             data->unit->SetSelection( prm->m_UnitSelection );
         }
-
     }
 
     // Clear all unused params
