@@ -674,11 +674,24 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     m_show_datasheet_button->Enable( fieldNdx == DATASHEET || fieldNdx == FOOTPRINT );
 
     if( fieldNdx == DATASHEET )
-        m_show_datasheet_button->SetLabel( _( "Show in Browser" ) );
+    {
+        m_show_datasheet_button->SetLabel( _( "Show Datasheet" ) );
+        m_show_datasheet_button->SetToolTip(
+            _("If your datasheet is given as an http:// link,"
+              " then pressing this button should bring it up in your webbrowser.") );
+    }
     else if( fieldNdx == FOOTPRINT )
-        m_show_datasheet_button->SetLabel( _( "Assign Footprint" ) );
+    {
+        m_show_datasheet_button->SetLabel( _( "Browse Footprints" ) );
+        m_show_datasheet_button->SetToolTip(
+            _("Open the footprint browser to choose a footprint and assign it.") );
+    }
     else
+    {
         m_show_datasheet_button->SetLabel( wxEmptyString );
+        m_show_datasheet_button->SetToolTip(
+            _("Used only for fields Footprint and Datasheet.") );
+    }
 
     wxPoint coord = field.GetTextPosition();
     wxPoint zero;
