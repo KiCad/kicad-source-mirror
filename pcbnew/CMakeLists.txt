@@ -123,8 +123,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_print_for_modedit_base.cpp
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_print_using_printer_base.cpp
-    dialogs/dialog_orient_footprints.cpp
-    dialogs/dialog_orient_footprints_base.cpp
     dialogs/dialog_mask_clearance.cpp
     dialogs/dialog_mask_clearance_base.cpp
     dialogs/dialog_SVG_print.cpp

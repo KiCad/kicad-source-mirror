@@ -443,10 +443,6 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                               _( "Automatically Place New Footprints" ) );
             commands->Append( ID_POPUP_PCB_AUTOPLACE_NEXT_MODULE,
                               _( "Automatically Place Next Footprints" ) );
-            commands->AppendSeparator();
-            AddMenuItem( commands, ID_POPUP_PCB_REORIENT_ALL_MODULES,
-                         _( "Orient All Footprints" ), KiBitmap( rotate_module_cw_xpm ) );
-            aPopMenu->AppendSeparator();
         }
 
         if( m_mainToolBar->GetToolToggled( ID_TOOLBARH_PCB_MODE_TRACKS ) )
