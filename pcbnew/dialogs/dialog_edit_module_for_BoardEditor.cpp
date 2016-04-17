@@ -75,6 +75,7 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     m_OrientValueCtrl->SetValidator( m_OrientValidator );
     m_OrientValidator.SetWindow( m_OrientValueCtrl );
 
+    aParent->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
     m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, aParent->Prj().Get3DCacheManager() );
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
 

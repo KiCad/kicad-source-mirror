@@ -42,33 +42,35 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
         m_aliasValidator.SetCharExcludes( wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" ) );
 
         const std::list< S3D_ALIAS >* rpaths = m_resolver->GetPaths();
+        std::list< S3D_ALIAS >::const_iterator rI = rpaths->begin();
+        std::list< S3D_ALIAS >::const_iterator rE = rpaths->end();
         size_t listsize = rpaths->size();
+        size_t listidx = 0;
 
-        if( listsize > 0 )
-            m_curdir = rpaths->front().m_pathexp;
+        while( rI != rE && (*rI).m_alias.StartsWith( "${" ) )
+        {
+            ++listidx;
+            ++rI;
+        }
 
-        if( listsize < 3 )
+        if( listidx < listsize )
+            m_curdir = (*rI).m_pathexp;
+        else
             return;
 
-        listsize = listsize - 2 - m_Aliases->GetNumberRows();
+        listsize = listsize - listidx - m_Aliases->GetNumberRows();
 
         // note: if the list allocation fails we have bigger problems
         // and there is no point in trying to notify the user here
         if( listsize > 0 && !m_Aliases->InsertRows( 0, listsize ) )
             return;
 
-        std::list< S3D_ALIAS >::const_iterator sL = rpaths->begin();
-        std::list< S3D_ALIAS >::const_iterator eL = rpaths->end();
         int nitems = 0;
-
-        // skip the current project dir and KISYS3DMOD
-        ++sL;
-        ++sL;
         wxGridCellTextEditor* pEdAlias;
 
-        while( sL != eL )
+        while( rI != rE )
         {
-            m_Aliases->SetCellValue( nitems, 0, sL->m_alias );
+            m_Aliases->SetCellValue( nitems, 0, rI->m_alias );
 
             if( 0 == nitems )
             {
@@ -83,12 +85,12 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
                 m_Aliases->SetCellEditor( nitems, 0, pEdAlias );
             }
 
-            m_Aliases->SetCellValue( nitems, 1, sL->m_pathvar );
-            m_Aliases->SetCellValue( nitems++, 2, sL->m_description );
+            m_Aliases->SetCellValue( nitems, 1, rI->m_pathvar );
+            m_Aliases->SetCellValue( nitems++, 2, rI->m_description );
 
             // TODO: implement a wxGridCellEditor which invokes a wxDirDialog
 
-            ++sL;
+            ++rI;
         }
 
         m_Aliases->AutoSize();

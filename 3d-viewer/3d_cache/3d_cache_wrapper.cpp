@@ -24,6 +24,7 @@
 
 #include <common.h>
 #include <wx/thread.h>
+#include <pgm_base.h>
 #include "3d_cache_wrapper.h"
 
 static wxCriticalSection lock3D_wrapper;
@@ -57,6 +58,7 @@ S3D_CACHE* PROJECT::Get3DCacheManager( bool updateProjDir )
         wxFileName cfgpath;
         cfgpath.AssignDir( GetKicadConfigPath() );
         cfgpath.AppendDir( wxT( "3d" ) );
+        cache->SetProgramBase( &Pgm() );
         cache->Set3DConfigDir( cfgpath.GetFullPath() );
         SetElem( ELEM_3DCACHE, cw );
         updateProjDir = true;

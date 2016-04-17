@@ -22,6 +22,7 @@
  */
 
 
+#include <set>
 #include "dlg_select_3dmodel.h"
 #include "project.h"
 #include "3d_cache/3d_info.h"
@@ -240,12 +241,20 @@ void DLG_SELECT_3DMODEL::updateDirChoiceList( void )
     std::list< S3D_ALIAS > const* md = m_resolver->GetPaths();
     std::list< S3D_ALIAS >::const_iterator sL = md->begin();
     std::list< S3D_ALIAS >::const_iterator eL = md->end();
-    std::vector< wxString > cl;
+    std::set< wxString > cl;
+    wxString prjDir;
+
+    // extract the current project dir
+    if( sL != eL )
+    {
+        prjDir = sL->m_pathexp;
+        ++sL;
+    }
 
     while( sL != eL )
     {
-        if( !sL->m_pathexp.empty() && !sL->m_duplicate )
-            cl.push_back( sL->m_pathexp );
+        if( !sL->m_pathexp.empty() && sL->m_pathexp.compare( prjDir ) )
+            cl.insert( sL->m_pathexp );
 
         ++sL;
     }
@@ -253,7 +262,19 @@ void DLG_SELECT_3DMODEL::updateDirChoiceList( void )
     if( !cl.empty() )
     {
         dirChoices->Clear();
-        dirChoices->Append( (int)cl.size(), &cl[0] );
+
+        if( !prjDir.empty() )
+            dirChoices->Append( prjDir );
+
+        std::set< wxString >::const_iterator sI = cl.begin();
+        std::set< wxString >::const_iterator eI = cl.end();
+
+        while( sI != eI )
+        {
+            dirChoices->Append( *sI );
+            ++sI;
+        }
+
         dirChoices->Select( 0 );
     }
 

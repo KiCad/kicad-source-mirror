@@ -686,6 +686,13 @@ bool S3D_CACHE::SetProjectDir( const wxString& aProjDir )
 }
 
 
+void S3D_CACHE::SetProgramBase( PGM_BASE* aBase )
+{
+    m_FNResolver->SetProgramBase( aBase );
+    return;
+}
+
+
 wxString S3D_CACHE::GetProjectDir( void )
 {
     return m_FNResolver->GetProjectDir();

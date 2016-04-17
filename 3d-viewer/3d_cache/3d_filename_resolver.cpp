@@ -32,6 +32,7 @@
 #include <wx/thread.h>
 #include <wx/utils.h>
 #include <wx/msgdlg.h>
+#include <pgm_base.h>
 
 #include "3d_filename_resolver.h"
 
@@ -54,6 +55,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
 S3D_FILENAME_RESOLVER::S3D_FILENAME_RESOLVER()
 {
     m_errflags = 0;
+    m_pgm = NULL;
 }
 
 
@@ -86,7 +88,7 @@ bool S3D_FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgCh
     if( false == projdir.DirExists() )
         return false;
 
-    wxString path = projdir.GetPath();
+    m_curProjDir = projdir.GetPath();
 
     if( flgChanged )
         *flgChanged = false;
@@ -96,7 +98,7 @@ bool S3D_FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgCh
         S3D_ALIAS al;
         al.m_alias = _( "(DEFAULT)" );
         al.m_pathvar = _( "${PROJDIR}" );
-        al.m_pathexp = path;
+        al.m_pathexp = m_curProjDir;
         al.m_description = _( "Current project directory" );
         m_Paths.push_back( al );
         m_NameMap.clear();
@@ -107,9 +109,9 @@ bool S3D_FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgCh
     }
     else
     {
-        if( m_Paths.front().m_pathexp.Cmp( path ) )
+        if( m_Paths.front().m_pathexp.Cmp( m_curProjDir ) )
         {
-            m_Paths.front().m_pathexp = path;
+            m_Paths.front().m_pathexp = m_curProjDir;
             m_NameMap.clear();
 
             if( flgChanged )
@@ -138,10 +140,22 @@ bool S3D_FILENAME_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgCh
 
 wxString S3D_FILENAME_RESOLVER::GetProjectDir( void )
 {
-    if( m_Paths.empty() )
-        return wxEmptyString;
+    return m_curProjDir;
+}
 
-    return m_Paths.front().m_pathexp;
+
+void S3D_FILENAME_RESOLVER::SetProgramBase( PGM_BASE* aBase )
+{
+    m_pgm = aBase;
+
+    if( NULL == m_pgm || m_Paths.empty() )
+        return;
+
+    // recreate the path list
+    m_Paths.clear();
+    createPathList();
+
+    return;
 }
 
 
@@ -157,15 +171,61 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
     // the user may change this later with a call to SetProjectDir()
 
     S3D_ALIAS lpath;
-    lpath.m_alias = _( "(DEFAULT)" );
-    lpath.m_pathvar = _( "${PROJDIR}" );
-    lpath.m_description = _( "Current project directory" );
+    lpath.m_alias = _( "${KIPRJMOD}" );
+    lpath.m_pathvar = _( "${KIPRJMOD}" );
+    lpath.m_pathexp = m_curProjDir;
     m_Paths.push_back( lpath );
+    wxFileName fndummy;
+    wxUniChar psep = fndummy.GetPathSeparator();
 
-    lpath.m_alias = wxT( "KISYS3DMOD" );
-    lpath.m_pathvar = wxT( "${KISYS3DMOD}" );
-    lpath.m_description = _( "Legacy 3D environment path" );
-    addPath( lpath );
+    // iterate over the list of internally defined ENV VARs
+    // and add existing paths to the resolver
+    if( m_pgm )
+    {
+        ENV_VAR_MAP_CITER mS = m_pgm->GetLocalEnvVariables().begin();
+        ENV_VAR_MAP_CITER mE = m_pgm->GetLocalEnvVariables().end();
+
+        while( mS != mE )
+        {
+            // filter out URLs, template directories, and known system paths
+            if( mS->first == wxString( "KICAD_PTEMPLATES" )
+                || mS->first == wxString( "KIGITHUB" )
+                || mS->first == wxString( "KISYSMOD" ) )
+            {
+                ++mS;
+                continue;
+            }
+
+            if( wxString::npos != mS->second.GetValue().find( wxString( "://" ) ) )
+            {
+                ++mS;
+                continue;
+            }
+
+            fndummy.Assign( mS->second.GetValue(), "" );
+
+            if( !fndummy.DirExists() )
+            {
+                ++mS;
+                continue;
+            }
+
+            wxString tmp( "${" );
+            tmp.Append( mS->first );
+            tmp.Append( "}" );
+
+            lpath.m_alias =  tmp;
+            lpath.m_pathvar = tmp;
+            lpath.m_pathexp = mS->second.GetValue();
+
+            if( !lpath.m_pathexp.empty() && psep == *lpath.m_pathexp.rbegin() )
+                lpath.m_pathexp.erase( --lpath.m_pathexp.end() );
+
+            m_Paths.push_back( lpath );
+
+            ++mS;
+        }
+    }
 
     if( !m_ConfigDir.empty() )
         readPathList();
@@ -191,7 +251,9 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
 
 bool S3D_FILENAME_RESOLVER::UpdatePathList( std::vector< S3D_ALIAS >& aPathList )
 {
-    while( m_Paths.size() > 2 )
+    wxUniChar envMarker( '$' );
+
+    while( !m_Paths.empty() && envMarker != *m_Paths.back().m_alias.rbegin() )
         m_Paths.pop_back();
 
     size_t nI = aPathList.size();
@@ -258,6 +320,11 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
             return tname;
         }
+        else if( resolveVirtualEnv( aFileName, tname ) )
+        {
+            m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+            return tname;
+        }
 
         if( !( m_errflags & ERRFLG_ENVPATH ) )
         {
@@ -276,7 +343,8 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
     // check the path relative to the current project directory;
     // note: this is not necessarily the same as the current working
-    // directory, which has already been checked
+    // directory, which has already been checked. This case accounts
+    // for partial paths which do not contain ${KIPRJMOD}.
     if( !sPL->m_pathexp.empty() )
     {
         wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
@@ -295,28 +363,33 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         }
     }
 
-    ++sPL;  // skip to item 2: KISYS3DMOD
-
-    // check if the path is relative to KISYS3DMOD but lacking
-    // the "KISYS3DMOD:" alias tag
-    if( !sPL->m_pathexp.empty() )
+    // ${ENV_VAR} paths have already been checked; skip all but
+    // ${KISYS3DMOD}, since legacy behavior was to check if paths
+    // were relative to ${KISYS3DMOD}
+    while( sPL != ePL && sPL->m_alias.StartsWith( "${" ) )
     {
-        wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
-        wxString fullPath = fpath.GetPathWithSep() + tname;
-
-        if( wxFileName::FileExists( fullPath ) )
+        if( sPL->m_alias == "${KISYS3DMOD}" )
         {
-            wxFileName tmp( fullPath );
+            wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
+            wxString fullPath = fpath.GetPathWithSep() + tname;
 
-            if( tmp.Normalize() )
-                tname = tmp.GetFullPath();
+            if( wxFileName::FileExists( fullPath ) )
+            {
+                wxFileName tmp( fullPath );
 
-            m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+                if( tmp.Normalize() )
+                    tname = tmp.GetFullPath();
 
-            return tname;
+                m_NameMap.insert( std::pair< wxString, wxString > ( aFileName, tname ) );
+
+                return tname;
+            }
         }
+
+        ++sPL;
     }
 
+    // at this point the filename must contain an alias or else it is invalid
     wxString alias;         // the alias portion of the short filename
     wxString relpath;       // the path relative to the alias
 
@@ -324,8 +397,10 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     {
         if( !( m_errflags & ERRFLG_RELPATH ) )
         {
+            // this can happen if the file was intended to be relative to
+            // ${KISYS3DMOD} but ${KISYS3DMOD} not set or incorrect.
             m_errflags |= ERRFLG_RELPATH;
-            wxString errmsg = _( "[3D File Resolver] No such path; ensure KISYS3DMOD is correctly defined" );
+            wxString errmsg = _( "[3D File Resolver] No such path" );
             errmsg.append( "\n" );
             errmsg.append( tname );
             wxLogTrace( MASK_3D_RESOLVER, "%s\n", errmsg.ToUTF8() );
@@ -378,7 +453,6 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
     wxCriticalSectionLocker lock( lock3D_resolver );
 
     S3D_ALIAS tpath = aPath;
-    tpath.m_duplicate = false;
 
     #ifdef _WIN32
     while( tpath.m_pathvar.EndsWith( wxT( "\\" ) ) )
@@ -424,83 +498,6 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
 
     while( sPL != ePL )
     {
-        // aliases with the same m_pathvar are forbidden and the
-        // user must be forced to fix the problem in order to
-        // obtain good filename resolution
-        if( !sPL->m_pathvar.empty() && !tpath.m_pathvar.empty()
-            && !tpath.m_pathvar.Cmp( sPL->m_pathvar ) )
-        {
-            wxString msg = _( "This alias: " );
-            msg.append( tpath.m_alias );
-            msg.append( wxT( "\n" ) );
-            msg.append( _( "This path: " ) );
-            msg.append( tpath.m_pathvar );
-            msg.append( wxT( "\n" ) );
-            msg.append( _( "Existing alias: " ) );
-            msg.append( sPL->m_alias );
-            msg.append( wxT( "\n" ) );
-            msg.append( _( "Existing path: " ) );
-            msg.append( sPL->m_pathvar );
-            wxMessageBox( msg, _( "Bad alias (duplicate path)" ) );
-
-            return false;
-        }
-
-        // aliases with the same m_pathexp are acceptable (one or both
-        // aliases being tested may be expanded variables) but when shortening
-        // names the preference is for (a) a fully specified path in m_pathvar
-        // then (b) the more senior alias in the list
-        if( !sPL->m_pathexp.empty() && !tpath.m_pathexp.empty() )
-        {
-            if( !tpath.m_pathexp.Cmp( sPL->m_pathexp ) )
-            {
-                wxString msg = _( "This alias: " );
-                msg.append( tpath.m_alias );
-                msg.append( wxT( "\n" ) );
-                msg.append( _( "Existing alias: " ) );
-                msg.append( sPL->m_alias );
-                msg.append( wxT( "\n" ) );
-                msg.append( _( "This path: " ) );
-                msg.append( tpath.m_pathexp );
-                msg.append( wxT( "\n" ) );
-                msg.append( _( "Existing path: " ) );
-                msg.append( sPL->m_pathexp );
-                msg.append( wxT( "\n" ) );
-                msg.append( _( "This full path: " ) );
-                msg.append( tpath.m_pathexp );
-                msg.append( wxT( "\n" ) );
-                msg.append( _( "Existing full path: " ) );
-                msg.append( sPL->m_pathexp );
-                wxMessageBox( msg, _( "Bad alias (duplicate path)" ) );
-
-                if( tpath.m_pathvar.StartsWith( wxT( "${" ) ) )
-                    tpath.m_duplicate = true;
-                else if( sPL->m_pathvar.StartsWith( wxT( "${" ) ) )
-                    sPL->m_duplicate = true;
-
-            }
-
-            if( ( tpath.m_pathexp.find( sPL->m_pathexp ) != wxString::npos
-                || sPL->m_pathexp.find( tpath.m_pathexp ) != wxString::npos )
-                && tpath.m_pathexp.Cmp( sPL->m_pathexp ) )
-            {
-                wxString msg = _( "This alias: " );
-                msg.append( tpath.m_alias );
-                msg.append( wxT( "\n" ) );
-                msg.append( _( "This path: " ) );
-                msg.append( tpath.m_pathexp );
-                msg.append( wxT( "\n" ) );
-                msg.append( _( "Existing alias: " ) );
-                msg.append( sPL->m_alias );
-                msg.append( wxT( "\n" ) );
-                msg.append( _( "Existing path: " ) );
-                msg.append( sPL->m_pathexp );
-                wxMessageBox( msg, _( "Bad alias (common path)" ) );
-
-                return false;
-            }
-        }
-
         if( !tpath.m_alias.Cmp( sPL->m_alias ) )
         {
             wxString msg = _( "Alias: " );
@@ -518,8 +515,6 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
 
         ++sPL;
     }
-
-    // Note: at this point we may still have duplicated paths
 
     m_Paths.push_back( tpath );
     return true;
@@ -572,7 +567,6 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
 
     int lineno = 0;
     S3D_ALIAS al;
-    al.m_duplicate = false;
     size_t idx;
     int vnum = 0;           // version number
 
@@ -647,11 +641,18 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
         return false;
     }
 
+    // skip all ${ENV_VAR} alias names
+    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
+    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
+
+    while( sPL != ePL && sPL->m_alias.StartsWith( "${" ) )
+        ++sPL;
+
     wxFileName cfgpath( m_ConfigDir, S3D_RESOLVER_CONFIG );
     wxString cfgname = cfgpath.GetFullPath();
     std::ofstream cfgFile;
 
-    if( m_Paths.empty() || 1 == m_Paths.size() )
+    if( sPL == ePL )
     {
         wxMessageDialog md( NULL,
             _( "3D search path list is empty;\ncontinue to write empty file?" ),
@@ -692,23 +693,10 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
     }
 
     cfgFile << "#V" << CFGFILE_VERSION << "\n";
-    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
-    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
-
-    // the first entry is the current project dir; we never add the implicit
-    // project dir to the path list in the configuration file
-    ++sPL;
     std::string tstr;
 
     while( sPL != ePL )
     {
-        // never write the KISYS3DMOD entry
-        if( !sPL->m_alias.Cmp( wxT( "KISYS3DMOD") ) )
-        {
-            ++sPL;
-            continue;
-        }
-
         tstr = sPL->m_alias.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
         tstr = sPL->m_pathvar.ToUTF8();
@@ -733,6 +721,50 @@ bool S3D_FILENAME_RESOLVER::writePathList( void )
 }
 
 
+bool S3D_FILENAME_RESOLVER::resolveVirtualEnv( const wxString& aFileName, wxString& aFullPath )
+{
+    aFullPath.clear();
+
+    if( !aFileName.StartsWith( "${" ) )
+        return false;
+
+    size_t eDelim = aFileName.find( '}' );
+
+    if( eDelim == wxString::npos || eDelim + 2 >= aFileName.length() )
+        return false;
+
+    wxString tPath = aFileName.substr( 0, eDelim + 1 );
+
+    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
+    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
+
+    while( sPL != ePL )
+    {
+        if( !sPL->m_alias.StartsWith( "${" ) )
+            return false;
+
+        if( sPL->m_alias == tPath )
+        {
+            tPath.Append( aFileName.substr( eDelim + 2 ) );
+            wxFileName tFile( tPath );
+            tFile.Normalize();
+
+            if( tFile.FileExists() )
+            {
+                aFullPath = tFile.GetFullPath();
+                return true;
+            }
+
+            return false;
+        }
+
+        ++sPL;
+    }
+
+    return false;
+}
+
+
 wxString S3D_FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
 {
     wxString fname = aFullPathName;
@@ -745,32 +777,11 @@ wxString S3D_FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
     std::list< S3D_ALIAS >::const_iterator eL = m_Paths.end();
     size_t idx;
 
-    // test for files within the current project directory
-    // and KISYS3DMOD directory
-    for( int i = 0; i < 2 && sL != eL; ++i )
-    {
-        if( !sL->m_pathexp.empty() )
-        {
-            wxFileName fpath( sL->m_pathexp, wxT( "" ) );
-            wxString fps = fpath.GetPathWithSep();
-
-            idx = fname.find( fps );
-
-            if( std::string::npos != idx && 0 == idx  )
-            {
-                fname = fname.substr( fps.size() );
-                return fname;
-            }
-        }
-
-        ++sL;
-    }
-
     while( sL != eL )
     {
-        // undefined paths and duplicates do not participate
-        // in the file name shortening procedure
-        if( sL->m_pathexp.empty() || sL->m_duplicate )
+        // undefined paths do not participate in the
+        // file name shortening procedure
+        if( sL->m_pathexp.empty() )
         {
             ++sL;
             continue;
@@ -791,10 +802,21 @@ wxString S3D_FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
             fname.Replace( wxT( "\\" ), wxT( "/" ) );
             #endif
 
-            tname = ":";
-            tname.append( sL->m_alias );
-            tname.append( ":" );
-            tname.append( fname );
+            if( sL->m_alias.StartsWith( "${" ) )
+            {
+                // old style ENV_VAR
+                tname = sL->m_alias;
+                tname.Append( "/" );
+                tname.append( fname );
+            }
+            else
+            {
+                // new style alias
+                tname = ":";
+                tname.append( sL->m_alias );
+                tname.append( ":" );
+                tname.append( fname );
+            }
 
             return tname;
         }

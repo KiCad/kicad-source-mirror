@@ -39,9 +39,10 @@
 #include <wx/string.h>
 #include "str_rsort.h"
 
+class PGM_BASE;
+
 struct S3D_ALIAS
 {
-    bool m_duplicate;
     wxString m_alias;           // alias to the base path
     wxString m_pathvar;         // base path as stored in the config file
     wxString m_pathexp;         // expanded base path
@@ -56,6 +57,8 @@ private:
     // mapping of (short) file names to resolved names
     std::map< wxString, wxString, S3D::rsort_wxString > m_NameMap;
     int m_errflags;
+    PGM_BASE* m_pgm;
+    wxString m_curProjDir;
 
     /**
      * Function createPathList
@@ -95,6 +98,14 @@ private:
      */
     bool writePathList( void );
 
+    /**
+     * Function resolveVirtualEnv
+     * extracts the ${ENV_VAR} component of aFileName and puts a
+     * resolved path in aFullPath if the ${ENV_VAR} exists in the
+     * alias list and the referenced file exists.
+     */
+    bool resolveVirtualEnv( const wxString& aFileName, wxString& aFullPath );
+
 public:
     S3D_FILENAME_RESOLVER();
 
@@ -119,6 +130,13 @@ public:
      */
     bool SetProjectDir( const wxString& aProjDir, bool* flgChanged = NULL );
     wxString GetProjectDir( void );
+
+    /**
+     * Function SetProgramBase
+     * sets a pointer to the application's PGM_BASE instance;
+     * the pointer is used to extract the local env vars.
+     */
+    void SetProgramBase( PGM_BASE* aBase );
 
 
     /**

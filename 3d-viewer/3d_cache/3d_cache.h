@@ -38,6 +38,7 @@
 #include "plugins/3dapi/c3dmodel.h"
 
 
+class  PGM_BASE;
 class  S3D_CACHE;
 class  S3D_CACHE_ENTRY;
 class  SCENEGRAPH;
@@ -137,6 +138,14 @@ public:
      * affects the model search path
      */
     bool SetProjectDir( const wxString& aProjDir );
+
+    /**
+     * Function SetProgramBase
+     * sets the filename resolver's pointer to the application's
+     * PGM_BASE instance; the pointer is used to extract the
+     * local env vars.
+     */
+    void SetProgramBase( PGM_BASE* aBase );
 
     /**
      * Function GetProjectDir

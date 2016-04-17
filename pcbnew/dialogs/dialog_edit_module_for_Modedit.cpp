@@ -50,6 +50,7 @@
 #include <module_editor_frame.h>
 #include <dialog_edit_module_for_Modedit.h>
 #include <wildcards_and_files_ext.h>
+#include <pgm_base.h>
 #include "3d_cache/dialogs/panel_prev_model.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include "3d_cache/3d_cache.h"
@@ -70,6 +71,7 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
     icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
     SetIcon( icon );
 
+    aParent->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
     m_PreviewPane = new PANEL_PREV_3D( m_Panel3D, aParent->Prj().Get3DCacheManager() );
     bLowerSizer3D->Add( m_PreviewPane, 1, wxEXPAND, 5 );
 
