@@ -32,7 +32,6 @@
 
 #include <pcb_base_edit_frame.h>
 #include <config_params.h>
-#include <class_macros_record.h>
 #include <class_undoredo_container.h>
 #include <zones.h>
 
@@ -82,9 +81,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 
     void updateTraceWidthSelectBox();
     void updateViaSizeSelectBox();
-
-    int             m_RecordingMacros;
-    MACROS_RECORDED m_Macros[10];
 
     /// The auxiliary right vertical tool bar used to access the microwave tools.
     wxAuiToolBar* m_microWaveToolBar;
@@ -287,27 +283,6 @@ public:
      * called when the alt key is pressed during a mouse wheel action
      */
     void OnAltWheel( wxCommandEvent& event );
-
-    /**
-     * Function RecordMacros.
-     * records sequence of hotkeys and cursor positions to a macro.
-     * @param aDC = current device context
-     * @param aNumber The current number macros.
-     */
-    void RecordMacros( wxDC* aDC, int aNumber );
-
-    /**
-     * Function CallMacros
-     * play hotkeys and cursor position from a recorded macro.
-     * @param aDC = current device context
-     * @param aPosition The current cursor position in logical (drawing) units.
-     * @param aNumber The current number macros.
-     */
-    void CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumber );
-
-    void SaveMacros();
-
-    void ReadMacros();
 
     /**
      * Function PrintPage , virtual

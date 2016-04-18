@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2013-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,8 +151,6 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_PAD_SETUP, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_SAVE, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, PCB_EDIT_FRAME::Process_Config )
-    EVT_MENU( ID_PREFRENCES_MACROS_SAVE, PCB_EDIT_FRAME::Process_Config )
-    EVT_MENU( ID_PREFRENCES_MACROS_READ, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, PCB_EDIT_FRAME::InstallDisplayOptionsDialog )
     EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::Process_Special_Functions )
 
@@ -323,13 +321,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_show_layer_manager_tools = true;
     m_hotkeysDescrList = g_Board_Editor_Hokeys_Descr;
     m_hasAutoSave = true;
-    m_RecordingMacros = -1;
     m_microWaveToolBar = NULL;
 
     m_rotationAngle = 900;
-
-    for ( int i = 0; i < 10; i++ )
-        m_Macros[i].m_Record.clear();
 
     // Create GAL canvas
     EDA_DRAW_PANEL_GAL* galCanvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
@@ -473,11 +467,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
-    m_RecordingMacros = -1;
-
-    for( int i = 0; i < 10; i++ )
-        m_Macros[i].m_Record.clear();
-
     delete m_drc;
 }
 

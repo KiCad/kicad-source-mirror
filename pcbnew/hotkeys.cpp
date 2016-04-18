@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,48 +225,6 @@ static EDA_HOTKEY HkTrackDisplayMode( _HKI( "Track Display Mode" ),
                                       HK_SWITCH_TRACK_DISPLAY_MODE, 'K' );
 static EDA_HOTKEY HkAddModule( _HKI( "Add Footprint" ), HK_ADD_MODULE, 'O' );
 
-/* Record and play macros */
-static EDA_HOTKEY HkRecordMacros0( _HKI( "Record Macro 0" ), HK_RECORD_MACROS_0, GR_KB_CTRL+'0' );
-
-static EDA_HOTKEY HkCallMacros0( _HKI( "Call Macro 0" ), HK_CALL_MACROS_0, '0' );
-
-static EDA_HOTKEY HkRecordMacros1( _HKI( "Record Macro 1" ), HK_RECORD_MACROS_1, GR_KB_CTRL+'1' );
-
-static EDA_HOTKEY HkCallMacros1( _HKI( "Call Macro 1" ), HK_CALL_MACROS_1, '1' );
-
-static EDA_HOTKEY HkRecordMacros2( _HKI( "Record Macro 2" ), HK_RECORD_MACROS_2, GR_KB_CTRL+'2' );
-
-static EDA_HOTKEY HkCallMacros2( _HKI( "Call Macro 2" ), HK_CALL_MACROS_2, '2' );
-
-static EDA_HOTKEY HkRecordMacros3( _HKI( "Record Macro 3" ), HK_RECORD_MACROS_3, GR_KB_CTRL+'3' );
-
-static EDA_HOTKEY HkCallMacros3( _HKI( "Call Macro 3" ), HK_CALL_MACROS_3, '3' );
-
-static EDA_HOTKEY HkRecordMacros4( _HKI( "Record Macro 4" ), HK_RECORD_MACROS_4, GR_KB_CTRL+'4' );
-
-static EDA_HOTKEY HkCallMacros4( _HKI( "Call Macro 4" ), HK_CALL_MACROS_4, '4' );
-
-static EDA_HOTKEY HkRecordMacros5( _HKI( "Record Macro 5" ), HK_RECORD_MACROS_5, GR_KB_CTRL+'5' );
-
-static EDA_HOTKEY HkCallMacros5( _HKI( "Call Macro 5" ), HK_CALL_MACROS_5, '5' );
-
-static EDA_HOTKEY HkRecordMacros6( _HKI( "Record Macro 6" ), HK_RECORD_MACROS_6, GR_KB_CTRL+'6' );
-
-static EDA_HOTKEY HkCallMacros6( _HKI( "Call Macro 6" ), HK_CALL_MACROS_6, '6' );
-
-static EDA_HOTKEY HkRecordMacros7( _HKI( "Record Macro 7" ), HK_RECORD_MACROS_7, GR_KB_CTRL+'7' );
-
-static EDA_HOTKEY HkCallMacros7( _HKI( "Call Macro 7" ), HK_CALL_MACROS_7, '7' );
-
-static EDA_HOTKEY HkRecordMacros8( _HKI( "Record Macro 8" ), HK_RECORD_MACROS_8, GR_KB_CTRL+'8' );
-
-static EDA_HOTKEY HkCallMacros8( _HKI( "Call Macro 8" ), HK_CALL_MACROS_8, '8' );
-
-static EDA_HOTKEY HkRecordMacros9( _HKI( "Record Macro 9" ), HK_RECORD_MACROS_9, GR_KB_CTRL+'9' );
-
-static EDA_HOTKEY HkCallMacros9( _HKI( "Call Macro 9" ), HK_CALL_MACROS_9, '9' );
-
-
 // List of common hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
 {
@@ -315,11 +273,6 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkSwitch2NextCopperLayer, &HkSwitch2PreviousCopperLayer,&HkAddModule,
     &HkSwitchTrackWidthToNext, &HkSwitchTrackWidthToPrevious,&HkSwitchGridToFastGrid1,
     &HkSwitchGridToFastGrid2,  &HkSwitchGridToNext,          &HkSwitchGridToPrevious,
-    &HkRecordMacros0,          &HkCallMacros0,    &HkRecordMacros1,          &HkCallMacros1,
-    &HkRecordMacros2,          &HkCallMacros2,    &HkRecordMacros3,          &HkCallMacros3,
-    &HkRecordMacros4,          &HkCallMacros4,    &HkRecordMacros5,          &HkCallMacros5,
-    &HkRecordMacros6,          &HkCallMacros6,    &HkRecordMacros7,          &HkCallMacros7,
-    &HkRecordMacros8,          &HkCallMacros8,    &HkRecordMacros9,          &HkCallMacros9,
     &HkSwitchHighContrastMode,
     &HkCanvasDefault,          &HkCanvasCairo,               &HkCanvasOpenGL,
     &HkZoneFillOrRefill,       &HkZoneRemoveFilled,
@@ -396,7 +349,7 @@ EDA_HOTKEY* FOOTPRINT_VIEWER_FRAME::GetHotKeyDescription( int aCommand ) const
 
 
 bool FOOTPRINT_VIEWER_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
-                                     EDA_ITEM* aItem )
+                                       EDA_ITEM* aItem )
 {
     if( aHotKey == 0 )
         return false;

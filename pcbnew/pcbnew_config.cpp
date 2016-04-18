@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,15 +255,6 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         DisplayHotkeyList( this, g_Board_Editor_Hokeys_Descr );
         break;
 
-    // Macros IDs
-    case ID_PREFRENCES_MACROS_SAVE:
-        SaveMacros();
-        break;
-
-    case ID_PREFRENCES_MACROS_READ:
-        ReadMacros();
-        break;
-
     default:
         DisplayError( this, wxT( "PCB_EDIT_FRAME::Process_Config error" ) );
     }
@@ -431,123 +422,4 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     }
 
     return m_configSettings;
-}
-
-
-void PCB_EDIT_FRAME::SaveMacros()
-{
-    wxXmlDocument xml;
-    wxXmlAttribute *macrosProp, *hkProp, *xProp, *yProp;
-    wxString str, hkStr, xStr, yStr;
-
-    wxFileName fn = GetBoard()->GetFileName();
-    fn.SetExt( MacrosFileExtension );
-
-    wxFileDialog dlg( this, _( "Save Macros File" ), fn.GetPath(), fn.GetFullName(),
-                      MacrosFileWildcard, wxFD_SAVE | wxFD_CHANGE_DIR );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    XNODE *rootNode = new XNODE( wxXML_ELEMENT_NODE, wxT( "macrosrootnode" ), wxEmptyString );
-    xml.SetRoot( rootNode );
-
-    for( int number = 9; number >= 0; number-- )
-    {
-        str.Printf( wxT( "%d" ), number );
-        macrosProp = new wxXmlAttribute( wxT( "number" ), str );
-
-            XNODE * macrosNode = new XNODE( rootNode, wxXML_ELEMENT_NODE,
-                                            wxT( "macros" ), wxEmptyString,
-                                            macrosProp );
-
-        for( std::list<MACROS_RECORD>::reverse_iterator i = m_Macros[number].m_Record.rbegin();
-             i != m_Macros[number].m_Record.rend();
-             i++ )
-        {
-            hkStr.Printf( wxT( "%d" ), i->m_HotkeyCode );
-            xStr.Printf( wxT( "%d" ), i->m_Position.x );
-            yStr.Printf( wxT( "%d" ), i->m_Position.y );
-
-            yProp  = new wxXmlAttribute( wxT( "y" ), yStr );
-            xProp  = new wxXmlAttribute( wxT( "x" ), xStr, yProp );
-            hkProp = new wxXmlAttribute( wxT( "hkcode" ), hkStr, xProp );
-
-            new XNODE( macrosNode, wxXML_ELEMENT_NODE, wxT( "hotkey" ),
-                       wxEmptyString, hkProp );
-        }
-    }
-
-    xml.SetFileEncoding( wxT( "UTF-8" ) );
-    xml.Save( dlg.GetFilename() );
-}
-
-
-void PCB_EDIT_FRAME::ReadMacros()
-{
-    wxFileName fn;
-
-    fn = GetBoard()->GetFileName();
-    fn.SetExt( MacrosFileExtension );
-
-    wxFileDialog dlg( this, _( "Read Macros File" ), fn.GetPath(),
-                      fn.GetFullName(), MacrosFileWildcard,
-                      wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    if( !wxFileExists( dlg.GetPath() ) )
-    {
-        wxString msg;
-        msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
-        DisplayError( this, msg );
-        return;
-    }
-
-    wxXmlDocument xml;
-
-    xml.SetFileEncoding( wxT( "UTF-8" ) );
-
-    if( !xml.Load( dlg.GetFilename() ) )
-            return;
-
-    XNODE *macrosNode = (XNODE*) xml.GetRoot()->GetChildren();
-
-    while( macrosNode )
-    {
-        int number = -1;
-
-        if( macrosNode->GetName() == wxT( "macros" ) )
-        {
-            number = wxAtoi( macrosNode->GetAttribute( wxT( "number" ), wxT( "-1" ) ) );
-
-            if( number >= 0  && number < 10 )
-            {
-                m_Macros[number].m_Record.clear();
-
-                XNODE *hotkeyNode = macrosNode->GetChildren();
-
-                while( hotkeyNode )
-                {
-                    if( hotkeyNode->GetName() == wxT( "hotkey" ) )
-                    {
-                        int x = wxAtoi( hotkeyNode->GetAttribute( wxT( "x" ), wxT( "0" ) ) );
-                        int y = wxAtoi( hotkeyNode->GetAttribute( wxT( "y" ), wxT( "0" ) ) );
-                        int hk = wxAtoi( hotkeyNode->GetAttribute( wxT( "hkcode" ), wxT( "0" ) ) );
-
-                        MACROS_RECORD macros_record;
-                        macros_record.m_HotkeyCode = hk;
-                        macros_record.m_Position.x = x;
-                        macros_record.m_Position.y = y;
-                        m_Macros[number].m_Record.push_back( macros_record );
-                    }
-
-                    hotkeyNode = hotkeyNode->GetNext();
-                }
-            }
-        }
-
-        macrosNode = macrosNode->GetNext();
-    }
 }

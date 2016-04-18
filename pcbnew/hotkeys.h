@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,28 +93,6 @@ enum hotkey_id_commnand {
     HK_SWITCH_LAYER_TO_INNER14,
     HK_ADD_MODULE,
     HK_SLIDE_TRACK,
-    HK_MACRO_ID_BEGIN,
-    HK_RECORD_MACROS_0,     // keep these id ordered from 0 to 9
-    HK_RECORD_MACROS_1,     // because this order is used in code
-    HK_RECORD_MACROS_2,
-    HK_RECORD_MACROS_3,
-    HK_RECORD_MACROS_4,
-    HK_RECORD_MACROS_5,
-    HK_RECORD_MACROS_6,
-    HK_RECORD_MACROS_7,
-    HK_RECORD_MACROS_8,
-    HK_RECORD_MACROS_9,
-    HK_CALL_MACROS_0,
-    HK_CALL_MACROS_1,
-    HK_CALL_MACROS_2,
-    HK_CALL_MACROS_3,
-    HK_CALL_MACROS_4,
-    HK_CALL_MACROS_5,
-    HK_CALL_MACROS_6,
-    HK_CALL_MACROS_7,
-    HK_CALL_MACROS_8,
-    HK_CALL_MACROS_9,
-    HK_MACRO_ID_END,
     HK_SWITCH_HIGHCONTRAST_MODE,
     HK_CANVAS_LEGACY,
     HK_CANVAS_OPENGL,

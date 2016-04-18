@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -575,24 +575,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Hotkey submenu
     AddHotkeyConfigMenu( configmenu );
-
-    //--- Macros submenu --------------------------------------------------------
-    wxMenu* macrosMenu = new wxMenu;
-
-    AddMenuItem( macrosMenu, ID_PREFRENCES_MACROS_SAVE,
-                 _( "&Save macros" ),
-                 _( "Save macros to file" ),
-                 KiBitmap( save_setup_xpm ) );
-
-    AddMenuItem( macrosMenu, ID_PREFRENCES_MACROS_READ,
-                 _( "&Read macros" ),
-                 _( "Read macros from file" ),
-                 KiBitmap( read_setup_xpm ) );
-
-    AddMenuItem( configmenu, macrosMenu,
-                 -1, _( "Ma&cros" ),
-                 _( "Macros save/read operations" ),
-                 KiBitmap( macros_record_xpm ) );
 
     configmenu->AppendSeparator();
 

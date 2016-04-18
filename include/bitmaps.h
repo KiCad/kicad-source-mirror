@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -313,7 +313,6 @@ EXTERN_BITMAP( load_module_board_xpm )
 EXTERN_BITMAP( load_module_lib_xpm )
 EXTERN_BITMAP( local_ratsnest_xpm )
 EXTERN_BITMAP( locked_xpm )
-EXTERN_BITMAP( macros_record_xpm )
 EXTERN_BITMAP( mirepcb_xpm )
 EXTERN_BITMAP( mirror_h_xpm )
 EXTERN_BITMAP( mirror_v_xpm )
