@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-14 11:58+0200\n"
-"PO-Revision-Date: 2016-04-14 12:01+0200\n"
+"POT-Creation-Date: 2016-04-18 10:56+0200\n"
+"PO-Revision-Date: 2016-04-18 10:58+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -45,118 +45,79 @@ msgstr "no ha podido crearse la carpeta de caché 3D"
 msgid "cache directory"
 msgstr "carpeta de caché"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:97
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:160
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:99
 msgid "(DEFAULT)"
 msgstr "(POR DEFECTO)"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:98
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:161
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:100
 msgid "${PROJDIR}"
 msgstr "${PROJDIR}"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:100
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:162
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:102
 msgid "Current project directory"
 msgstr "Carpeta del proyecto activo"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:167
-msgid "Legacy 3D environment path"
-msgstr "Ruta del antiguo entorno 3D"
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:174
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:175
+msgid "${KIPRJMOD}"
+msgstr "${KIPRJMOD}"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:265
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:332
 msgid "[3D File Resolver] No such path; ensure the environment var is defined"
 msgstr ""
 "[3D File Resolver] No existe la ruta; asegúrese de que se ha definido la "
 "variable de entorno"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:328
-msgid "[3D File Resolver] No such path; ensure KISYS3DMOD is correctly defined"
-msgstr ""
-"[3D File Resolver] No existe la ruta; asegúrese de que se ha definido "
-"correctamente KISYS3DMOD"
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:403
+msgid "[3D File Resolver] No such path"
+msgstr "[3D File Resolver] No existe la ruta"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:363
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:438
 msgid "[3D File Resolver] No such path; ensure the path alias is defined"
 msgstr ""
 "[3D File Resolver] No existe la ruta; asegúrese de que se ha definido el "
 "alias de la ruta"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:433
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:457
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:487
-msgid "This alias: "
-msgstr "Este alias: "
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:436
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:463
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:490
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:509
-msgid "This path: "
-msgstr "Esta ruta: "
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:439
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:460
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:493
-msgid "Existing alias: "
-msgstr "Alias existente: "
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:442
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:466
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:496
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:512
-msgid "Existing path: "
-msgstr "Ruta existente: "
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:444
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:474
-msgid "Bad alias (duplicate path)"
-msgstr "Alias no válido (ruta duplicada)"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:469
-msgid "This full path: "
-msgstr "Esta ruta completa: "
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:472
-msgid "Existing full path: "
-msgstr "Ruta completa existente: "
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:498
-msgid "Bad alias (common path)"
-msgstr "Alias no válido (ruta común)"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:506
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:503
 msgid "Alias: "
 msgstr "Alias: "
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:514
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:506
+msgid "This path: "
+msgstr "Esta ruta: "
+
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:509
+msgid "Existing path: "
+msgstr "Ruta existente: "
+
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:511
 msgid "Bad alias (duplicate name)"
 msgstr "Alias no válido (nombre duplicado)"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:535
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:642
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:530
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:636
 msgid "3D configuration directory is unknown"
 msgstr "La carpeta de configuración 3D es desconocida"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:554
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:549
 msgid "no 3D configuration file"
 msgstr "no existe el archivo de configuración 3D"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:567
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:666
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:686
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:562
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:667
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
 msgid "Could not open configuration file"
 msgstr "No puede abrirse el archivo de configuración"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:645
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:658
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:667
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:689
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:727
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:639
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:659
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:668
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:690
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:715
 msgid "Write 3D search path list"
 msgstr "Escribir la lista de rutas de búsqueda 3D"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:657
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:658
 msgid ""
 "3D search path list is empty;\n"
 "continue to write empty file?"
@@ -164,21 +125,21 @@ msgstr ""
 "La lista de rutas de búsqueda 3D está vacía;\n"
 "¿desea escribir un archivo vacío?"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:726
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:714
 msgid "Problems writing configuration file"
 msgstr "Problemas al escribir el archivo de configuración"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:856
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:898
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:878
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:920
 msgid "bad Hollerith string on line"
 msgstr "cadena Hollerith no válida en la línea"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:869
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:891
 msgid "missing opening quote mark in config file"
 msgstr "no existe marca de apertura en el archivo de configuración"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:882
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:914
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:904
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:936
 msgid "invalid entry (unexpected end of line)"
 msgstr "entrada no válida (fin de línea inesperado)"
 
@@ -186,28 +147,28 @@ msgstr "entrada no válida (fin de línea inesperado)"
 msgid "All Files (*.*)|*.*"
 msgstr "Todos los archivos (*.*)|*.*"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:108
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:110
 msgid "[BUG] No valid resolver; data will not be updated"
 msgstr "[BUG] Resolver inválido; no se actualizarán los datos"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:109
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:111
 msgid "Update 3D search path list"
 msgstr "Actualizar lista de rutas de búsqueda 3D"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:169
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:209
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:250
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:171
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:211
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:252
 msgid "No entry selected"
 msgstr "No se ha seleccionado ninguna entrada"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:169
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:176
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:171
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:178
 msgid "Delete alias entry"
 msgstr "Eliminar entrada de alias"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:175
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:215
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:256
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:177
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:217
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:258
 msgid ""
 "Multiple entries selected; please\n"
 "select only one entry"
@@ -215,13 +176,13 @@ msgstr ""
 "Múltiples entradas seleccionadas; por favor\n"
 "seleccione solamente una"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:209
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:216
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:211
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:218
 msgid "Move alias up"
 msgstr "Subir alias"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:250
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:257
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:252
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:259
 msgid "Move alias down"
 msgstr "Bajar alias"
 
@@ -240,7 +201,7 @@ msgstr "Ruta"
 #: common/dialog_about/AboutDialog_main.cpp:129
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
-#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1564
+#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1563
 #: eeschema/viewlibs.cpp:308
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:210 pcbnew/librairi.cpp:784
@@ -276,7 +237,6 @@ msgstr "Bajar"
 #: common/dialog_about/dialog_about_base.cpp:73
 #: eeschema/dialogs/dialog_netlist_base.cpp:129
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:54
 #: pcbnew/dialogs/wizard_add_fplib.cpp:841 pcbnew/muonde.cpp:847
 msgid "OK"
 msgstr "Aceptar"
@@ -296,15 +256,15 @@ msgstr "Aceptar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:47
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:48
 msgid "Select 3D Model"
 msgstr "Seleccionar modelo 3D"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:139
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:140
 msgid "Paths:"
 msgstr "Rutas:"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:140
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:141
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:327
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:271
 msgid "Configure Paths"
@@ -943,7 +903,7 @@ msgstr "Formato"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/libedit.cpp:498
-#: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:758
+#: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:764
 #: gerbview/class_GERBER.cpp:359 gerbview/class_GERBER.cpp:363
 #: gerbview/class_GERBER.cpp:366 pcbnew/class_module.cpp:610
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
@@ -1372,7 +1332,6 @@ msgstr "Copiar información de la versión"
 #: pcbnew/dialogs/dialog_find_base.cpp:45
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:186
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:95
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:358
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:144
@@ -1485,7 +1444,7 @@ msgstr "Variable de entorno Ayuda"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:182
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:338
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:341
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180 eeschema/lib_pin.cpp:1969
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180 eeschema/lib_pin.cpp:1990
 #: eeschema/libedit.cpp:477
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:34
@@ -1515,8 +1474,8 @@ msgstr "Añadir nueva entrada a la tabla."
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71 pcbnew/onrightclick.cpp:645
-#: pcbnew/onrightclick.cpp:962 pcbnew/onrightclick.cpp:1014
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71 pcbnew/onrightclick.cpp:641
+#: pcbnew/onrightclick.cpp:958 pcbnew/onrightclick.cpp:1010
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -1605,7 +1564,7 @@ msgstr "Invertir Y"
 #: common/dialogs/dialog_image_editor_base.cpp:39
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:173
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:84
-#: pcbnew/modedit_onclick.cpp:290 pcbnew/onrightclick.cpp:1002
+#: pcbnew/modedit_onclick.cpp:290 pcbnew/onrightclick.cpp:998
 #: pcbnew/tools/common_actions.cpp:121
 msgid "Rotate"
 msgstr "Rotar"
@@ -1629,7 +1588,6 @@ msgstr "Escala de imagen:"
 #: common/dialogs/dialog_list_selector_base.cpp:19
 #: common/dialogs/wx_html_report_panel_base.cpp:34
 #: eeschema/dialogs/dialog_choose_component_base.cpp:22
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:31
 msgid "Filter:"
 msgstr "Filtro:"
 
@@ -1649,7 +1607,7 @@ msgstr "Elementos:"
 #: common/dialogs/wx_html_report_panel_base.cpp:14
 #: eeschema/dialogs/dialog_erc_base.cpp:71
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1151
-#: pcbnew/dialogs/dialog_drc_base.cpp:109
+#: pcbnew/dialogs/dialog_drc_base.cpp:125
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:89
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:196
 msgid "Messages:"
@@ -1775,7 +1733,6 @@ msgid "dummy text"
 msgstr "text aleatorio"
 
 #: common/dialogs/dialog_page_settings_base.cpp:42
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:125
 msgid "Orientation:"
 msgstr "Orientación:"
@@ -2028,7 +1985,7 @@ msgstr "Tipo MIME desconocido del archivo <%s>"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:764
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:96
@@ -2039,7 +1996,7 @@ msgstr "Cursiva"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:764
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:90
 msgid "Bold"
 msgstr "Negrita"
@@ -2738,7 +2695,7 @@ msgid "Show outlines in sketch mode"
 msgstr "Mostrar contornos en modo boceto"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:406 pcbnew/hotkeys.cpp:187
-#: pcbnew/moduleframe.cpp:693 pcbnew/pcbframe.cpp:663
+#: pcbnew/moduleframe.cpp:693 pcbnew/pcbframe.cpp:661
 msgid "3D Viewer"
 msgstr "Visualizador 3D"
 
@@ -2888,7 +2845,7 @@ msgstr "Proyecto: '%s'"
 
 #: cvpcb/cvpcb_mainframe.cpp:756 eeschema/libedit.cpp:61
 #: eeschema/schframe.cpp:1364 kicad/prjconfig.cpp:332
-#: pcbnew/moduleframe.cpp:768 pcbnew/pcbframe.cpp:993
+#: pcbnew/moduleframe.cpp:768 pcbnew/pcbframe.cpp:991
 msgid " [Read Only]"
 msgstr "[Solo lectura]"
 
@@ -2958,7 +2915,7 @@ msgstr "Variables de entorno disponibles para rutas relativas:"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:185
 #: eeschema/dialogs/dialog_rescue_each.cpp:111 eeschema/lib_field.cpp:581
 #: eeschema/lib_field.cpp:759 eeschema/onrightclick.cpp:426
-#: eeschema/sch_component.cpp:1543 eeschema/template_fieldnames.cpp:42
+#: eeschema/sch_component.cpp:1542 eeschema/template_fieldnames.cpp:42
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
 #: pcbnew/class_edge_mod.cpp:261 pcbnew/class_text_mod.cpp:366
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:42
@@ -3985,7 +3942,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:53
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:70
-#: pcbnew/modedit_onclick.cpp:418 pcbnew/onrightclick.cpp:1006
+#: pcbnew/modedit_onclick.cpp:418 pcbnew/onrightclick.cpp:1002
 msgid "Edit"
 msgstr "Editar"
 
@@ -4036,35 +3993,53 @@ msgstr ""
 msgid "Remove Fields"
 msgstr "Eliminar campos"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:851
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:677
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
-msgid "Show in Browser"
-msgstr "Mostrar en explorador"
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:852
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:678
+msgid "Show Datasheet"
+msgstr "Mostrar hoja de datos"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:853
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:679
-msgid "Assign Footprint"
-msgstr "Asignar huella"
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:854
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:680
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:125
+msgid ""
+"If your datasheet is given as an http:// link, then pressing this button "
+"should bring it up in your webbrowser."
+msgstr ""
+"Si la hoja de datos se introduce como un enlace http://, al presionar este "
+"botón se mostrará en el navegador web."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:993
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:859
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:685
+msgid "Browse Footprints"
+msgstr "Explorar huellas"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:861
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:687
+msgid "Open the footprint browser to choose a footprint and assign it."
+msgstr "Abrir el explorador de huellas para elegir y asignar una."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:867
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:693
+msgid "Used only for fields Footprint and Datasheet."
+msgstr "Utilizado únicamente para los campos Huella y Hoja de datos."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1006
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/lib_pin.cpp:1987 gerbview/class_gerber_draw_item.cpp:572
+#: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:145
 #: pcbnew/class_text_mod.cpp:381
 msgid "Yes"
 msgstr "Sí"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:995
-#: eeschema/lib_pin.cpp:1989 gerbview/class_gerber_draw_item.cpp:572
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1008
+#: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_text_mod.cpp:379
 msgid "No"
 msgstr "No"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
-#: eeschema/sch_component.cpp:1548
+#: eeschema/sch_component.cpp:1547
 #: eeschema/widgets/widget_eeschema_color_config.cpp:100
 msgid "Component"
 msgstr "Componente"
@@ -4236,7 +4211,7 @@ msgstr "Mover el campo seleccionado una posición hacia arriba"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
-#: eeschema/lib_pin.cpp:114
+#: eeschema/lib_pin.cpp:115
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
 msgid "Left"
@@ -4245,7 +4220,7 @@ msgstr "Izquierda"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
-#: eeschema/lib_pin.cpp:113
+#: eeschema/lib_pin.cpp:114
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
 msgid "Right"
@@ -4298,7 +4273,7 @@ msgstr "Marcar para que el texto de este campo se gire 90 grados"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:764
 msgid "Bold Italic"
 msgstr "Cursiva negrita"
 
@@ -4331,6 +4306,11 @@ msgstr ""
 msgid "Field Value"
 msgstr "Valor del campo"
 
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
+msgid "Show in Browser"
+msgstr "Mostrar en explorador"
+
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:214
 msgid ""
 "If your datasheet is an http:// link or a complete file path, then it may "
@@ -4341,7 +4321,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:227
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:138
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:53 eeschema/sch_text.cpp:790
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:53 eeschema/sch_text.cpp:796
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28 pcbnew/muonde.cpp:868
 msgid "Size"
 msgstr "Tamaño "
@@ -4356,6 +4336,8 @@ msgstr "El tamaño en el esquema de los campos de texto seleccionados"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:148
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:160
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:174
+#: pcbnew/dialogs/dialog_drc_base.cpp:57 pcbnew/dialogs/dialog_drc_base.cpp:72
+#: pcbnew/dialogs/dialog_drc_base.cpp:87
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:94
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:105
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:228
@@ -4444,12 +4426,12 @@ msgid "&Size:"
 msgstr "&Tamaño:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53 eeschema/lib_pin.cpp:115
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53 eeschema/lib_pin.cpp:116
 msgid "Up"
 msgstr "Subir"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56 eeschema/lib_pin.cpp:116
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56 eeschema/lib_pin.cpp:117
 msgid "Down"
 msgstr "Bajar"
 
@@ -4463,29 +4445,29 @@ msgstr "Est&ilo"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:30 eeschema/pin_type.cpp:38
-#: eeschema/sch_text.cpp:777
+#: eeschema/sch_text.cpp:783
 msgid "Input"
 msgstr "Entrada"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:31 eeschema/pin_type.cpp:41
-#: eeschema/sch_text.cpp:778
+#: eeschema/sch_text.cpp:784
 msgid "Output"
 msgstr "Salida"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:32 eeschema/pin_type.cpp:44
-#: eeschema/sch_text.cpp:779
+#: eeschema/sch_text.cpp:785
 msgid "Bidirectional"
 msgstr "Bidireccional"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:82 eeschema/sch_text.cpp:780
+#: eeschema/dialogs/dialog_edit_label_base.cpp:82 eeschema/sch_text.cpp:786
 msgid "Tri-State"
 msgstr "Triestado"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:34 eeschema/pin_type.cpp:50
-#: eeschema/sch_text.cpp:781
+#: eeschema/sch_text.cpp:787
 msgid "Passive"
 msgstr "Pasivo"
 
@@ -4512,14 +4494,6 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:120
 msgid "The text (or value) of the currently selected field"
 msgstr "El texto (o valor) del campo seleccionado"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:125
-msgid ""
-"If your datasheet is given as an http:// link, then pressing this button "
-"should bring it up in your webbrowser."
-msgstr ""
-"Si la hoja de datos se introduce como un enlace http://, al presionar este "
-"botón se mostrará en el navegador web."
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:144
 msgid ""
@@ -4822,7 +4796,7 @@ msgid "Default Value"
 msgstr "Valor por defecto"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:340
-#: eeschema/lib_pin.cpp:1991
+#: eeschema/lib_pin.cpp:2012
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:103
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:129
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:158
@@ -4861,7 +4835,7 @@ msgstr "Generar error"
 msgid "Annotation required!"
 msgstr "¡Se necesita anotar los componentes!"
 
-#: eeschema/dialogs/dialog_erc.cpp:571 pcbnew/drc.cpp:289
+#: eeschema/dialogs/dialog_erc.cpp:571 pcbnew/drc.cpp:284
 msgid "Finished"
 msgstr "Finalizado"
 
@@ -5030,13 +5004,13 @@ msgstr "Tamaño del texto del número:"
 msgid "&Length:"
 msgstr "&Longitud:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:173 eeschema/lib_pin.cpp:1976
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:173 eeschema/lib_pin.cpp:1997
 msgid "Number"
 msgstr "Número"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:187
-#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1978
-#: eeschema/libedit.cpp:507 eeschema/sch_text.cpp:785
+#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1999
+#: eeschema/libedit.cpp:507 eeschema/sch_text.cpp:791
 #: gerbview/class_gerber_draw_item.cpp:549
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
@@ -5088,7 +5062,7 @@ msgid "Invisible"
 msgstr "Invisible"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:99 eeschema/lib_field.cpp:746
-#: eeschema/lib_pin.cpp:1984 eeschema/sch_text.cpp:767
+#: eeschema/lib_pin.cpp:2005 eeschema/sch_text.cpp:773
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
 msgid "Style"
 msgstr "Estilo"
@@ -5648,7 +5622,7 @@ msgid "Action"
 msgstr "Acción"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/lib_field.cpp:574
-#: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1539
+#: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1538
 #: eeschema/template_fieldnames.cpp:39
 #: eeschema/widgets/widget_eeschema_color_config.cpp:75
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
@@ -6024,7 +5998,7 @@ msgstr "No puede guardarse una copia del archivo '%s'"
 #: eeschema/files-io.cpp:112
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:51
-#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:61
+#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:60
 #, c-format
 msgid "Failed to create file '%s'"
 msgstr "No puede crearse el archivo '%s'"
@@ -6581,7 +6555,7 @@ msgid "Field"
 msgstr "Campo"
 
 #: eeschema/lib_field.cpp:588 eeschema/onrightclick.cpp:436
-#: eeschema/sch_component.cpp:1561 eeschema/template_fieldnames.cpp:45
+#: eeschema/sch_component.cpp:1560 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:627
 #: pcbnew/class_pad.cpp:637 pcbnew/class_text_mod.cpp:370
 #: pcbnew/loadcmp.cpp:435 pcbnew/loadcmp.cpp:499
@@ -6617,22 +6591,22 @@ msgstr "Ancho"
 msgid "Height"
 msgstr "Alto"
 
-#: eeschema/lib_pin.cpp:155
+#: eeschema/lib_pin.cpp:156
 #: eeschema/widgets/widget_eeschema_color_config.cpp:72
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/lib_pin.cpp:1995 pcbnew/class_drawsegment.cpp:391
+#: eeschema/lib_pin.cpp:2016 pcbnew/class_drawsegment.cpp:391
 #: pcbnew/class_track.cpp:1057
 msgid "Length"
 msgstr "Longitud"
 
-#: eeschema/lib_pin.cpp:1998 eeschema/sch_text.cpp:756
+#: eeschema/lib_pin.cpp:2019 eeschema/sch_text.cpp:762
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:120
 msgid "Orientation"
 msgstr "Orientación"
 
-#: eeschema/lib_pin.cpp:2196
+#: eeschema/lib_pin.cpp:2217
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
@@ -6685,7 +6659,7 @@ msgstr "Rectángulo de (%s, %s) a (%s, %s)"
 msgid "Text only had %d parameters of the required 8"
 msgstr "El texto solo tiene %d parámetros de los 8 requeridos"
 
-#: eeschema/lib_text.cpp:490 eeschema/sch_text.cpp:603
+#: eeschema/lib_text.cpp:490 eeschema/sch_text.cpp:609
 #, c-format
 msgid "Graphic Text %s"
 msgstr "Texto gráfico %s"
@@ -6936,23 +6910,23 @@ msgid "Delete Rectangle"
 msgstr "Eliminar rectángulo"
 
 #: eeschema/libedit_onrightclick.cpp:188 eeschema/onrightclick.cpp:600
-#: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:877
+#: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:873
 msgid "Move Text"
 msgstr "Mover texto"
 
 #: eeschema/libedit_onrightclick.cpp:194 eeschema/onrightclick.cpp:96
 #: eeschema/onrightclick.cpp:610 pcbnew/modedit_onclick.cpp:379
-#: pcbnew/onrightclick.cpp:893
+#: pcbnew/onrightclick.cpp:889
 msgid "Edit Text"
 msgstr "Editar texto"
 
 #: eeschema/libedit_onrightclick.cpp:197 eeschema/onrightclick.cpp:608
-#: pcbnew/modedit_onclick.cpp:349 pcbnew/onrightclick.cpp:887
+#: pcbnew/modedit_onclick.cpp:349 pcbnew/onrightclick.cpp:883
 msgid "Rotate Text"
 msgstr "Girar texto"
 
 #: eeschema/libedit_onrightclick.cpp:202 eeschema/onrightclick.cpp:612
-#: pcbnew/modedit_onclick.cpp:385 pcbnew/onrightclick.cpp:904
+#: pcbnew/modedit_onclick.cpp:385 pcbnew/onrightclick.cpp:900
 msgid "Delete Text"
 msgstr "Eliminar texto"
 
@@ -6976,7 +6950,7 @@ msgstr "Editar opciones de la línea"
 msgid "Delete Line "
 msgstr "Eliminar línea"
 
-#: eeschema/libedit_onrightclick.cpp:239 pcbnew/onrightclick.cpp:649
+#: eeschema/libedit_onrightclick.cpp:239 pcbnew/onrightclick.cpp:645
 msgid "Delete Segment"
 msgstr "Eliminar segmento"
 
@@ -7038,7 +7012,7 @@ msgstr "Aplicar tamaño al número del resto"
 
 #: eeschema/libedit_onrightclick.cpp:323 eeschema/onrightclick.cpp:830
 #: gerbview/onrightclick.cpp:73 pcbnew/modedit_onclick.cpp:244
-#: pcbnew/onrightclick.cpp:490
+#: pcbnew/onrightclick.cpp:486
 msgid "Cancel Block"
 msgstr "Cancelar bloque"
 
@@ -7048,7 +7022,7 @@ msgstr "Zoom bloque (arrastrar botón central)"
 
 #: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:838
 #: gerbview/onrightclick.cpp:76 pcbnew/modedit_onclick.cpp:250
-#: pcbnew/onrightclick.cpp:494
+#: pcbnew/onrightclick.cpp:490
 msgid "Place Block"
 msgstr "Emplazar bloque"
 
@@ -7057,7 +7031,7 @@ msgid "Select Items"
 msgstr "Seleccionar elementos"
 
 #: eeschema/libedit_onrightclick.cpp:339 eeschema/onrightclick.cpp:847
-#: pcbnew/onrightclick.cpp:495
+#: pcbnew/onrightclick.cpp:491
 msgid "Copy Block"
 msgstr "Copiar"
 
@@ -7074,7 +7048,7 @@ msgid "Rotate Block ccw"
 msgstr "Girar en sentido anti horario"
 
 #: eeschema/libedit_onrightclick.cpp:346 eeschema/onrightclick.cpp:851
-#: pcbnew/onrightclick.cpp:498
+#: pcbnew/onrightclick.cpp:494
 msgid "Delete Block"
 msgstr "Eliminar bloque"
 
@@ -8125,11 +8099,11 @@ msgstr "Girar bloque en sentido anti horario"
 msgid "Copy to Clipboard"
 msgstr "Copiar al portapapeles"
 
-#: eeschema/onrightclick.cpp:873 pcbnew/onrightclick.cpp:1022
+#: eeschema/onrightclick.cpp:873 pcbnew/onrightclick.cpp:1018
 msgid "Delete Marker"
 msgstr "Eliminar marcador"
 
-#: eeschema/onrightclick.cpp:874 pcbnew/onrightclick.cpp:1024
+#: eeschema/onrightclick.cpp:874 pcbnew/onrightclick.cpp:1020
 msgid "Marker Error Info"
 msgstr "Información del marcador de error"
 
@@ -8329,28 +8303,28 @@ msgstr "Se ha encontrado el elemento %s hijo del padre %s en la hoja %s"
 msgid "Item %s found in sheet %s"
 msgstr "Se ha encontrado el elemento %s en la hoja %s"
 
-#: eeschema/sch_component.cpp:1543
+#: eeschema/sch_component.cpp:1542
 msgid "Power symbol"
 msgstr "Símbolo de alimentación"
 
-#: eeschema/sch_component.cpp:1551
+#: eeschema/sch_component.cpp:1550
 msgid "Alias of"
 msgstr "Alias de"
 
-#: eeschema/sch_component.cpp:1553 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
+#: eeschema/sch_component.cpp:1552 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
 #: pcbnew/loadcmp.cpp:436
 msgid "Library"
 msgstr "Librería"
 
-#: eeschema/sch_component.cpp:1559
+#: eeschema/sch_component.cpp:1558
 msgid "<Unknown>"
 msgstr "<Desconocido>"
 
-#: eeschema/sch_component.cpp:1565
+#: eeschema/sch_component.cpp:1564
 msgid "Key Words"
 msgstr "Palabras clave"
 
-#: eeschema/sch_component.cpp:1809
+#: eeschema/sch_component.cpp:1808
 #, c-format
 msgid "Component %s, %s"
 msgstr "Componente %s, %s"
@@ -8419,54 +8393,54 @@ msgstr "%8.8lX/"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Pin de hoja jerárquica %s"
 
-#: eeschema/sch_text.cpp:708
+#: eeschema/sch_text.cpp:714
 msgid "Graphic Text"
 msgstr "Texto gráfico"
 
-#: eeschema/sch_text.cpp:712
+#: eeschema/sch_text.cpp:718
 #: eeschema/widgets/widget_eeschema_color_config.cpp:61
 msgid "Label"
 msgstr "Etiqueta"
 
-#: eeschema/sch_text.cpp:716
+#: eeschema/sch_text.cpp:722
 msgid "Global Label"
 msgstr "Etiqueta global"
 
-#: eeschema/sch_text.cpp:720
+#: eeschema/sch_text.cpp:726
 msgid "Hierarchical Label"
 msgstr "Etiqueta jerárquica"
 
-#: eeschema/sch_text.cpp:724
+#: eeschema/sch_text.cpp:730
 msgid "Hierarchical Sheet Pin"
 msgstr "Pin de hoja jerárquica"
 
-#: eeschema/sch_text.cpp:736 pcbnew/dialogs/dialog_pad_properties_base.cpp:208
+#: eeschema/sch_text.cpp:742 pcbnew/dialogs/dialog_pad_properties_base.cpp:208
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: eeschema/sch_text.cpp:740
+#: eeschema/sch_text.cpp:746
 msgid "Vertical up"
 msgstr "Vertical hacia arriba"
 
-#: eeschema/sch_text.cpp:744
+#: eeschema/sch_text.cpp:750
 msgid "Horizontal invert"
 msgstr "Horizontal invertido"
 
-#: eeschema/sch_text.cpp:748
+#: eeschema/sch_text.cpp:754
 msgid "Vertical down"
 msgstr "Vertical hacia abajo"
 
-#: eeschema/sch_text.cpp:982
+#: eeschema/sch_text.cpp:988
 #, c-format
 msgid "Label %s"
 msgstr "Etiqueta %s"
 
-#: eeschema/sch_text.cpp:1426
+#: eeschema/sch_text.cpp:1432
 #, c-format
 msgid "Global Label %s"
 msgstr "Etiqueta global %s"
 
-#: eeschema/sch_text.cpp:1767
+#: eeschema/sch_text.cpp:1773
 #, c-format
 msgid "Hierarchical Label %s"
 msgstr "Etiqueta jerárquica %s"
@@ -8630,7 +8604,7 @@ msgstr "No encontrado"
 msgid "The following libraries were not found:"
 msgstr "No se han encontrado las siguientes librerías:"
 
-#: eeschema/schframe.cpp:624 pcbnew/pcbframe.cpp:588
+#: eeschema/schframe.cpp:624 pcbnew/pcbframe.cpp:586
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -9623,7 +9597,7 @@ msgid "No file loaded on the active layer %d"
 msgstr "No se ha cargado un archivo en la capa activa %d"
 
 #: gerbview/events_called_functions.cpp:319 gerbview/gerbview_frame.cpp:143
-#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:406 pcbnew/pcbframe.cpp:921
+#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:404 pcbnew/pcbframe.cpp:919
 msgid "Visibles"
 msgstr "Visibles"
 
@@ -11636,7 +11610,7 @@ msgstr "Er"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:656
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:666
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
-#: pcbnew/dialogs/dialog_drc_base.cpp:94
+#: pcbnew/dialogs/dialog_drc_base.cpp:110
 msgid "..."
 msgstr "..."
 
@@ -12716,7 +12690,7 @@ msgstr "Enlaces"
 msgid "Connections"
 msgstr "Conexiones"
 
-#: pcbnew/class_board.cpp:987 pcbnew/dialogs/dialog_drc_base.cpp:184
+#: pcbnew/class_board.cpp:987 pcbnew/dialogs/dialog_drc_base.cpp:200
 #: pcbnew/pcb_draw_panel_gal.cpp:362
 msgid "Unconnected"
 msgstr "No conectado"
@@ -13802,7 +13776,6 @@ msgid "Visible net filter:"
 msgstr "Filtro de redes visibles:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:86
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:35
 msgid "*"
 msgstr "*"
 
@@ -14438,7 +14411,7 @@ msgid "Minimum Allowed Values:"
 msgstr "Valores mínimos permitidos:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:193
-#: pcbnew/dialogs/dialog_drc_base.cpp:46
+#: pcbnew/dialogs/dialog_drc_base.cpp:48
 msgid "Min track width"
 msgstr "Ancho min de pista"
 
@@ -14730,20 +14703,20 @@ msgstr "Mostrar elementos gráficos en como bocetos"
 msgid "Show page limits"
 msgstr "Mostrar límites de hoja"
 
-#: pcbnew/dialogs/dialog_drc.cpp:148 pcbnew/dialogs/dialog_drc.cpp:211
+#: pcbnew/dialogs/dialog_drc.cpp:178 pcbnew/dialogs/dialog_drc.cpp:241
 #, c-format
 msgid "Report file \"%s\" created"
 msgstr "Se ha creado el informe \"%s\""
 
-#: pcbnew/dialogs/dialog_drc.cpp:150 pcbnew/dialogs/dialog_drc.cpp:212
+#: pcbnew/dialogs/dialog_drc.cpp:180 pcbnew/dialogs/dialog_drc.cpp:242
 msgid "Disk File Report Completed"
 msgstr "Archivo de informe de disco completado"
 
-#: pcbnew/dialogs/dialog_drc.cpp:232
+#: pcbnew/dialogs/dialog_drc.cpp:262
 msgid "DRC report files (.rpt)|*.rpt"
 msgstr "Informe de DCR (.rpt)|*.rpt"
 
-#: pcbnew/dialogs/dialog_drc.cpp:238
+#: pcbnew/dialogs/dialog_drc.cpp:268
 msgid "Save DRC Report File"
 msgstr "Guardar informe de DRC"
 
@@ -14751,90 +14724,90 @@ msgstr "Guardar informe de DRC"
 msgid "By Netclass"
 msgstr "Por tipo de red"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:48
+#: pcbnew/dialogs/dialog_drc_base.cpp:50 pcbnew/dialogs/dialog_drc_base.cpp:59
 msgid "Enter the minimum acceptable value for a track width"
 msgstr "Introducir el valor mínimo aceptable del ancho de pista"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:56
+#: pcbnew/dialogs/dialog_drc_base.cpp:63
 msgid "Min via size"
 msgstr "Tamaño min de vía"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:58
+#: pcbnew/dialogs/dialog_drc_base.cpp:65 pcbnew/dialogs/dialog_drc_base.cpp:74
 msgid "Enter the minimum acceptable diameter for a standard via"
 msgstr "Introduzca el diámetro mínimo aceptable para vías estandar"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:66
+#: pcbnew/dialogs/dialog_drc_base.cpp:78
 msgid "Min uVia size"
 msgstr "Tamaño min de microvía"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:68
+#: pcbnew/dialogs/dialog_drc_base.cpp:80 pcbnew/dialogs/dialog_drc_base.cpp:89
 msgid "Enter the minimum acceptable diameter for a micro via"
 msgstr "Introduzca el diámetro mínimo aceptable para microvías"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:80
+#: pcbnew/dialogs/dialog_drc_base.cpp:97
 msgid "Create Report File"
 msgstr "Crear informe"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:83
+#: pcbnew/dialogs/dialog_drc_base.cpp:100
 msgid "Enable writing report to this file"
 msgstr "Permitir escribir el informe en este archivo"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:89
+#: pcbnew/dialogs/dialog_drc_base.cpp:105
 msgid "Enter the report filename"
 msgstr "Introduzca el nombre del informe"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:124
+#: pcbnew/dialogs/dialog_drc_base.cpp:140
 msgid "Start DRC"
 msgstr "Comenzar DRC"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:126
+#: pcbnew/dialogs/dialog_drc_base.cpp:142
 msgid "Start the Design Rule Checker"
 msgstr "Control de las Reglas de Diseño (DRC)"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:130
+#: pcbnew/dialogs/dialog_drc_base.cpp:146
 msgid "List Unconnected"
 msgstr "Listar no conectados"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:131
+#: pcbnew/dialogs/dialog_drc_base.cpp:147
 msgid "List unconnected pads or tracks"
 msgstr "Listar pads o pistas no conectadas"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:135
+#: pcbnew/dialogs/dialog_drc_base.cpp:151
 msgid "Delete All Markers"
 msgstr "Borrar todos los marcadores"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:136
+#: pcbnew/dialogs/dialog_drc_base.cpp:152
 msgid "Delete every marker"
 msgstr "Borrar todos los marcadores"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:140
+#: pcbnew/dialogs/dialog_drc_base.cpp:156
 msgid "Delete Current Marker"
 msgstr "Borrar marcador activo"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:141
+#: pcbnew/dialogs/dialog_drc_base.cpp:157
 msgid "Delete the marker selected in the list box below"
 msgstr "Borrar el marcador seleccionado a continuación"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:151
+#: pcbnew/dialogs/dialog_drc_base.cpp:167
 msgid "Error Messages:"
 msgstr "Mensajes de error:"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:161
+#: pcbnew/dialogs/dialog_drc_base.cpp:177
 msgid ""
 "MARKERs, double click any to go there in PCB, right click for popup menu"
 msgstr ""
 "MARCADORES, hacer doble click en cualquiera para in a la posición "
 "correspondiente en la placa, botón derecho para menú contextual"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:170
+#: pcbnew/dialogs/dialog_drc_base.cpp:186
 msgid "Problems / Markers"
 msgstr "Problemas / Marcadores"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:176
+#: pcbnew/dialogs/dialog_drc_base.cpp:192
 msgid "A list of unconnected pads, right click for popup menu"
 msgstr "Una lista de pads sin conectar, botón derecho para menú contextual"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:303
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:304
 msgid ""
 "Use this attribute for most non SMD components\n"
 "Components with this option are not put in the footprint position list file"
@@ -14843,8 +14816,8 @@ msgstr ""
 "Los componentes con esta opción no aparecerán en el archivo de posicionado "
 "de huellas."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:306
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:161
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:307
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:163
 msgid ""
 "Use this attribute for SMD components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -14853,7 +14826,7 @@ msgstr ""
 "Solo los componentes con esta opción aparecerán en el archivo de posicionado "
 "de huellas."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:309
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:310
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
 "(like a old ISA PC bus connector)"
@@ -14861,7 +14834,7 @@ msgstr ""
 "Utilice este atributo para componentes \"virtuales\" dibujados en la placa\n"
 "(como, por ejemplo, un antiguo conector de BUS ISA)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:340
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:341
 msgid ""
 "Component can be freely moved and auto placed. User can arbitrarily select "
 "and edit component's pads."
@@ -14870,7 +14843,7 @@ msgstr ""
 "usuario puede seleccionar y editar los pads del componente de forma "
 "arbitraria."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:342
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:343
 msgid ""
 "Component can be freely moved and auto placed, but its pads cannot be "
 "selected or edited."
@@ -14878,14 +14851,14 @@ msgstr ""
 "El componente puede moverse libremente y ser colocado automáticamente, pero "
 "sus pads no pueden ser seleccionados o editados."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:344
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:345
 msgid "Component is locked: it cannot be freely moved or auto placed."
 msgstr ""
 "El componente está bloqueado: no puede moverse libremente ni ser colocado "
 "automáticamente."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:521
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:391
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:522
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:393
 msgid "Invalid filename: "
 msgstr "Nombre de archivo no válido: "
 
@@ -15111,11 +15084,11 @@ msgstr "Editar nombre de archivo"
 msgid "3D Settings"
 msgstr "Opciones 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:159
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:161
 msgid "Use this attribute for most non SMD components"
 msgstr "Utilice este atributo para la mayoría de los componentes no SMD"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:163
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:165
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board (like a old ISA "
 "PC bus connector)"
@@ -15123,18 +15096,18 @@ msgstr ""
 "Utilice este atributo para componentes \"virtuales\" dibujados en la placa "
 "(como, por ejemplo, un antiguo conector de BUS ISA)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:186
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:188
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr ""
 "Activar atajos de teclado para comandos de movimiento y el Auto Emplazamiento"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:187
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:189
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr ""
 "Desactivar atajos de teclado para comandos de movimiento y el Auto "
 "Emplazamiento"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:506
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:508
 #, c-format
 msgid ""
 "Error:\n"
@@ -16090,7 +16063,7 @@ msgid "Items to Delete"
 msgstr "Elementos a eliminar"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
-#: pcbnew/onrightclick.cpp:719 pcbnew/tools/pcb_editor_control.cpp:121
+#: pcbnew/onrightclick.cpp:715 pcbnew/tools/pcb_editor_control.cpp:121
 msgid "Zones"
 msgstr "Zonas"
 
@@ -17600,31 +17573,6 @@ msgstr "Aspecto del perímetro"
 msgid "Zone min thickness value"
 msgstr "Valor mínimo anchura de zonas"
 
-#: pcbnew/dialogs/dialog_orient_footprints.cpp:119
-#, c-format
-msgid "OK to set footprints orientation to %.1f degrees ?"
-msgstr "¿Ajustar la orientación de las huellas a %.1f grados?"
-
-#: pcbnew/dialogs/dialog_orient_footprints.cpp:150
-msgid "Bad value for footprints orientation"
-msgstr "Valor erróneo para la orientación de las huellas"
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:27
-msgid "New orientation (0.1 degree resolution)"
-msgstr "Nueva orientación (0,1 grados de resolución)"
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:36
-msgid "Filter to select footprints by reference"
-msgstr "Filtro para seleccionar huellas por referencia"
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:43
-msgid "Include Locked Footprints"
-msgstr "Incluir huellas bloqueadas"
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:44
-msgid "Force locked footprints to be modified"
-msgstr "Forzar la modificación de huellas bloqueadas"
-
 #: pcbnew/dialogs/dialog_pad_properties.cpp:350
 msgid "Back side (footprint is mirrored)"
 msgstr "Parte trasera (la huella se invierte)"
@@ -19004,81 +18952,81 @@ msgstr ""
 "El grosor del texto es demasiado grande para el tamaño del texto. Se "
 "estrechará."
 
-#: pcbnew/drc.cpp:184
+#: pcbnew/drc.cpp:179
 msgid "Compile ratsnest...\n"
 msgstr "Compilar redes...\n"
 
-#: pcbnew/drc.cpp:200
+#: pcbnew/drc.cpp:195
 msgid "Aborting\n"
 msgstr "Cancelando\n"
 
-#: pcbnew/drc.cpp:213
+#: pcbnew/drc.cpp:208
 msgid "Pad clearances...\n"
 msgstr "Márgenes de pads...\n"
 
-#: pcbnew/drc.cpp:223
+#: pcbnew/drc.cpp:218
 msgid "Track clearances...\n"
 msgstr "Márgenes de pistas...\n"
 
-#: pcbnew/drc.cpp:233
+#: pcbnew/drc.cpp:228
 msgid "Fill zones...\n"
 msgstr "Zonas de relleno...\n"
 
-#: pcbnew/drc.cpp:243
+#: pcbnew/drc.cpp:238
 msgid "Test zones...\n"
 msgstr "Comprobar zonas...\n"
 
-#: pcbnew/drc.cpp:254
+#: pcbnew/drc.cpp:249
 msgid "Unconnected pads...\n"
 msgstr "Pads sin conectar...\n"
 
-#: pcbnew/drc.cpp:266
+#: pcbnew/drc.cpp:261
 msgid "Keepout areas ...\n"
 msgstr "Áreas restringidas...\n"
 
-#: pcbnew/drc.cpp:276
+#: pcbnew/drc.cpp:271
 msgid "Test texts...\n"
 msgstr "Comprobar textos...\n"
 
-#: pcbnew/drc.cpp:327
+#: pcbnew/drc.cpp:322
 #, c-format
 msgid "NETCLASS: '%s' has Clearance:%s which is less than global:%s"
 msgstr "CLASE DE RED: '%s' tiene un margen de %s menor que el global de %s"
 
-#: pcbnew/drc.cpp:343
+#: pcbnew/drc.cpp:338
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un ancho de pista de %s menor que el global de %s"
 
-#: pcbnew/drc.cpp:358
+#: pcbnew/drc.cpp:353
 #, c-format
 msgid "NETCLASS: '%s' has Via Dia:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un diámetro de vía de %s menor que el global de %s"
 
-#: pcbnew/drc.cpp:373
+#: pcbnew/drc.cpp:368
 #, c-format
 msgid "NETCLASS: '%s' has Via Drill:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un taladro de vía de %s que es menor que el global "
 "de %s"
 
-#: pcbnew/drc.cpp:388
+#: pcbnew/drc.cpp:383
 #, c-format
 msgid "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un diámetro de microvía de %s que es menor que el "
 "global de %s"
 
-#: pcbnew/drc.cpp:403
+#: pcbnew/drc.cpp:398
 #, c-format
 msgid "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un taladro de microvía de %s que es menor que el "
 "global de %s"
 
-#: pcbnew/drc.cpp:496
+#: pcbnew/drc.cpp:491
 msgid "Track clearances"
 msgstr "Márgenes de pista"
 
@@ -19691,7 +19639,7 @@ msgid "Select Layer and Add Blind/Buried Via"
 msgstr "Seleccionar capa y añadir vía ciega/enterrada"
 
 # Pendiente de contexto
-#: pcbnew/hotkeys.cpp:110 pcbnew/onrightclick.cpp:605
+#: pcbnew/hotkeys.cpp:110 pcbnew/onrightclick.cpp:601
 #: pcbnew/router/router_tool.cpp:101
 msgid "Switch Track Posture"
 msgstr "Cambiar posición de pista"
@@ -19700,7 +19648,7 @@ msgstr "Cambiar posición de pista"
 msgid "Drag Track Keep Slope"
 msgstr "Arrastrar pista manteniendo inclinación"
 
-#: pcbnew/hotkeys.cpp:114 pcbnew/onrightclick.cpp:827
+#: pcbnew/hotkeys.cpp:114 pcbnew/onrightclick.cpp:823
 msgid "Edit with Footprint Editor"
 msgstr "Editar con el Editor de huellas"
 
@@ -21283,11 +21231,11 @@ msgstr "Editar huella"
 msgid "Transform Footprint"
 msgstr "Transformar huella"
 
-#: pcbnew/modedit_onclick.cpp:308 pcbnew/onrightclick.cpp:938
+#: pcbnew/modedit_onclick.cpp:308 pcbnew/onrightclick.cpp:934
 msgid "Move Pad"
 msgstr "Mover pad"
 
-#: pcbnew/modedit_onclick.cpp:312 pcbnew/onrightclick.cpp:943
+#: pcbnew/modedit_onclick.cpp:312 pcbnew/onrightclick.cpp:939
 msgid "Edit Pad"
 msgstr "Editar pad"
 
@@ -21327,7 +21275,7 @@ msgstr "Duplicar texto"
 msgid "Create Text Array"
 msgstr "Crear matriz de texto"
 
-#: pcbnew/modedit_onclick.cpp:374 pcbnew/onrightclick.cpp:881
+#: pcbnew/modedit_onclick.cpp:374 pcbnew/onrightclick.cpp:877
 msgid "Move Text Exactly"
 msgstr "Mover texto exactamente"
 
@@ -21700,17 +21648,17 @@ msgstr "Borrar mira de alineación"
 
 #: pcbnew/onrightclick.cpp:374 pcbnew/onrightclick.cpp:380
 #: pcbnew/onrightclick.cpp:398 pcbnew/onrightclick.cpp:411
-#: pcbnew/onrightclick.cpp:476 pcbnew/onrightclick.cpp:569
+#: pcbnew/onrightclick.cpp:472 pcbnew/onrightclick.cpp:565
 msgid "Select Working Layer"
 msgstr "Seleccionar capa de trabajo"
 
-#: pcbnew/onrightclick.cpp:388 pcbnew/onrightclick.cpp:468
-#: pcbnew/onrightclick.cpp:516
+#: pcbnew/onrightclick.cpp:388 pcbnew/onrightclick.cpp:464
+#: pcbnew/onrightclick.cpp:512
 msgid "Begin Track"
 msgstr "Comenzar pista"
 
-#: pcbnew/onrightclick.cpp:394 pcbnew/onrightclick.cpp:472
-#: pcbnew/onrightclick.cpp:640
+#: pcbnew/onrightclick.cpp:394 pcbnew/onrightclick.cpp:468
+#: pcbnew/onrightclick.cpp:636
 msgid "Select Track Width"
 msgstr "Seleccionar ancho de pista"
 
@@ -21754,294 +21702,290 @@ msgstr "Colocar automáticamente las huellas nuevas"
 msgid "Automatically Place Next Footprints"
 msgstr "Colocar automáticamente las huellas siguientes"
 
-#: pcbnew/onrightclick.cpp:448
-msgid "Orient All Footprints"
-msgstr "Orientar todas las huellas"
-
-#: pcbnew/onrightclick.cpp:455
+#: pcbnew/onrightclick.cpp:451
 msgid "Autoroute"
 msgstr "Enrutado automático"
 
-#: pcbnew/onrightclick.cpp:457
+#: pcbnew/onrightclick.cpp:453
 msgid "Select Layer Pair"
 msgstr "Seleccionar el par de capas"
 
-#: pcbnew/onrightclick.cpp:460
+#: pcbnew/onrightclick.cpp:456
 msgid "Automatically Route All Footprints"
 msgstr "Enrutar automáticamente todas las huellas"
 
-#: pcbnew/onrightclick.cpp:462
+#: pcbnew/onrightclick.cpp:458
 msgid "Reset Unrouted"
 msgstr "Reiniciar no enrutadas"
 
-#: pcbnew/onrightclick.cpp:492
+#: pcbnew/onrightclick.cpp:488
 msgid "Zoom Block"
 msgstr "Zoom bloque"
 
-#: pcbnew/onrightclick.cpp:496
+#: pcbnew/onrightclick.cpp:492
 msgid "Flip Block"
 msgstr "Voltear bloque"
 
-#: pcbnew/onrightclick.cpp:497
+#: pcbnew/onrightclick.cpp:493
 msgid "Rotate Block"
 msgstr "Girar bloque"
 
-#: pcbnew/onrightclick.cpp:523
+#: pcbnew/onrightclick.cpp:519
 msgid "Drag Via"
 msgstr "Arrastrar vía"
 
-#: pcbnew/onrightclick.cpp:532
+#: pcbnew/onrightclick.cpp:528
 msgid "Move Node"
 msgstr "Mover nodo"
 
-#: pcbnew/onrightclick.cpp:538
+#: pcbnew/onrightclick.cpp:534
 msgid "Drag Segments, Keep Slope"
 msgstr "Arrastrar segmentos, mantener inclinación"
 
-#: pcbnew/onrightclick.cpp:543
+#: pcbnew/onrightclick.cpp:539
 msgid "Drag Segment"
 msgstr "Arrastar segmento"
 
-#: pcbnew/onrightclick.cpp:548
+#: pcbnew/onrightclick.cpp:544
 msgid "Duplicate Track"
 msgstr "Duplicar pista"
 
-#: pcbnew/onrightclick.cpp:553
+#: pcbnew/onrightclick.cpp:549
 msgid "Move Track Exactly"
 msgstr "Mover pista exactamente"
 
-#: pcbnew/onrightclick.cpp:558
+#: pcbnew/onrightclick.cpp:554
 msgid "Create Track Array"
 msgstr "Crear matriz de pistas"
 
-#: pcbnew/onrightclick.cpp:564
+#: pcbnew/onrightclick.cpp:560
 msgid "Break Track"
 msgstr "Dividir pista"
 
-#: pcbnew/onrightclick.cpp:574
+#: pcbnew/onrightclick.cpp:570
 msgid "Place Node"
 msgstr "Colocar nodo"
 
-#: pcbnew/onrightclick.cpp:581 pcbnew/router/length_tuner_tool.cpp:54
+#: pcbnew/onrightclick.cpp:577 pcbnew/router/length_tuner_tool.cpp:54
 #: pcbnew/router/router_tool.cpp:67
 msgid "End Track"
 msgstr "Terminar pista"
 
-#: pcbnew/onrightclick.cpp:585 pcbnew/router/router_tool.cpp:78
+#: pcbnew/onrightclick.cpp:581 pcbnew/router/router_tool.cpp:78
 msgid "Place Through Via"
 msgstr "Situar vía pasante"
 
-#: pcbnew/onrightclick.cpp:588
+#: pcbnew/onrightclick.cpp:584
 msgid "Select Layer and Place Through Via"
 msgstr "Seleccionar capa y situar vía pasante"
 
-#: pcbnew/onrightclick.cpp:595 pcbnew/router/router_tool.cpp:84
+#: pcbnew/onrightclick.cpp:591 pcbnew/router/router_tool.cpp:84
 msgid "Place Blind/Buried Via"
 msgstr "Situar vía ciega/enterrada"
 
-#: pcbnew/onrightclick.cpp:599
+#: pcbnew/onrightclick.cpp:595
 msgid "Select Layer and Place Blind/Buried Via"
 msgstr "Seleccionar capa y situar vía ciega/enterrada"
 
-#: pcbnew/onrightclick.cpp:613
+#: pcbnew/onrightclick.cpp:609
 msgid "Place Micro Via"
 msgstr "Situar microvía"
 
-#: pcbnew/onrightclick.cpp:624
+#: pcbnew/onrightclick.cpp:620
 msgid "Change Via Size and Drill"
 msgstr "Cambiar tamaño y taladro de vía"
 
-#: pcbnew/onrightclick.cpp:630
+#: pcbnew/onrightclick.cpp:626
 msgid "Change Segment Width"
 msgstr "Cambiar ancho de segmento"
 
-#: pcbnew/onrightclick.cpp:634
+#: pcbnew/onrightclick.cpp:630
 msgid "Change Track Width"
 msgstr "Cambiar ancho de pista"
 
-#: pcbnew/onrightclick.cpp:649
+#: pcbnew/onrightclick.cpp:645
 msgid "Delete Via"
 msgstr "Eliminar vía"
 
-#: pcbnew/onrightclick.cpp:656
+#: pcbnew/onrightclick.cpp:652
 msgid "Delete Track"
 msgstr "Eliminar pista"
 
-#: pcbnew/onrightclick.cpp:658
+#: pcbnew/onrightclick.cpp:654
 msgid "Delete Net"
 msgstr "Eliminar red"
 
-#: pcbnew/onrightclick.cpp:667
+#: pcbnew/onrightclick.cpp:663
 msgid "Edit All Tracks and Vias"
 msgstr "Editar todas las pistas y vías"
 
-#: pcbnew/onrightclick.cpp:673
+#: pcbnew/onrightclick.cpp:669
 msgid "Set Flags"
 msgstr "Ajustar marcas"
 
-#: pcbnew/onrightclick.cpp:675
+#: pcbnew/onrightclick.cpp:671
 msgid "Locked: Yes"
 msgstr "Bloqueado: Sí"
 
-#: pcbnew/onrightclick.cpp:676
+#: pcbnew/onrightclick.cpp:672
 msgid "Locked: No"
 msgstr "Bloqueado: No"
 
-#: pcbnew/onrightclick.cpp:685
+#: pcbnew/onrightclick.cpp:681
 msgid "Track Locked: Yes"
 msgstr "Pista bloqueada: Sí"
 
-#: pcbnew/onrightclick.cpp:686
+#: pcbnew/onrightclick.cpp:682
 msgid "Track Locked: No"
 msgstr "Pista bloqueada: No"
 
-#: pcbnew/onrightclick.cpp:688
+#: pcbnew/onrightclick.cpp:684
 msgid "Net Locked: Yes"
 msgstr "Red bloqueada: Sí"
 
-#: pcbnew/onrightclick.cpp:689
+#: pcbnew/onrightclick.cpp:685
 msgid "Net Locked: No"
 msgstr "Red bloqueada: No"
 
-#: pcbnew/onrightclick.cpp:703
+#: pcbnew/onrightclick.cpp:699
 msgid "Place Edge Outline"
 msgstr "Situar contorno"
 
-#: pcbnew/onrightclick.cpp:709
+#: pcbnew/onrightclick.cpp:705
 msgid "Place Corner"
 msgstr "Situar esquina"
 
-#: pcbnew/onrightclick.cpp:712
+#: pcbnew/onrightclick.cpp:708
 msgid "Place Zone"
 msgstr "Situar zona"
 
-#: pcbnew/onrightclick.cpp:719
+#: pcbnew/onrightclick.cpp:715
 msgid "Keepout Area"
 msgstr "Área restringida"
 
-#: pcbnew/onrightclick.cpp:725
+#: pcbnew/onrightclick.cpp:721
 msgid "Move Corner"
 msgstr "Mover esquina"
 
-#: pcbnew/onrightclick.cpp:727
+#: pcbnew/onrightclick.cpp:723
 msgid "Delete Corner"
 msgstr "Eliminar esquina"
 
-#: pcbnew/onrightclick.cpp:732
+#: pcbnew/onrightclick.cpp:728
 msgid "Create Corner"
 msgstr "Crear esquina"
 
-#: pcbnew/onrightclick.cpp:733
+#: pcbnew/onrightclick.cpp:729
 msgid "Drag Outline Segment"
 msgstr "Arrastrar segmento"
 
-#: pcbnew/onrightclick.cpp:741
+#: pcbnew/onrightclick.cpp:737
 msgid "Add Similar Zone"
 msgstr "Añadir zona similar"
 
-#: pcbnew/onrightclick.cpp:744
+#: pcbnew/onrightclick.cpp:740
 msgid "Add Cutout Area"
 msgstr "Añadir zona de recorte"
 
-#: pcbnew/onrightclick.cpp:747
+#: pcbnew/onrightclick.cpp:743
 msgid "Duplicate Zone Onto Layer"
 msgstr "Duplicar zona en capa"
 
-#: pcbnew/onrightclick.cpp:752
+#: pcbnew/onrightclick.cpp:748
 msgid "Fill Zone"
 msgstr "Rellenar zona"
 
-#: pcbnew/onrightclick.cpp:758
+#: pcbnew/onrightclick.cpp:754
 msgid "Remove Filled Areas in Zone"
 msgstr "Eliminar zonas rellenas en zona"
 
-#: pcbnew/onrightclick.cpp:761
+#: pcbnew/onrightclick.cpp:757
 msgid "Move Zone"
 msgstr "Mover zona"
 
-#: pcbnew/onrightclick.cpp:764
+#: pcbnew/onrightclick.cpp:760
 msgid "Move Zone Exactly"
 msgstr "Mover zona exactamente"
 
-#: pcbnew/onrightclick.cpp:769
+#: pcbnew/onrightclick.cpp:765
 msgid "Edit Zone Properties"
 msgstr "Editar propiedades de zona"
 
-#: pcbnew/onrightclick.cpp:779
+#: pcbnew/onrightclick.cpp:775
 msgid "Delete Cutout"
 msgstr "Eliminar recorte"
 
-#: pcbnew/onrightclick.cpp:782
+#: pcbnew/onrightclick.cpp:778
 msgid "Delete Zone Outline"
 msgstr "Eliminar contorno de zona"
 
-#: pcbnew/onrightclick.cpp:802 pcbnew/onrightclick.cpp:994
+#: pcbnew/onrightclick.cpp:798 pcbnew/onrightclick.cpp:990
 #: pcbnew/tools/common_actions.cpp:100
 msgid "Move"
 msgstr "Mover"
 
-#: pcbnew/onrightclick.cpp:806
+#: pcbnew/onrightclick.cpp:802
 msgid "Drag"
 msgstr "Arrastrar"
 
-#: pcbnew/onrightclick.cpp:811
+#: pcbnew/onrightclick.cpp:807
 msgid "Rotate +"
 msgstr "Girar +"
 
-#: pcbnew/onrightclick.cpp:815
+#: pcbnew/onrightclick.cpp:811
 msgid "Rotate -"
 msgstr "Girar -"
 
-#: pcbnew/onrightclick.cpp:816 pcbnew/onrightclick.cpp:1004
+#: pcbnew/onrightclick.cpp:812 pcbnew/onrightclick.cpp:1000
 #: pcbnew/tools/common_actions.cpp:125
 msgid "Flip"
 msgstr "Invertir"
 
-#: pcbnew/onrightclick.cpp:822
+#: pcbnew/onrightclick.cpp:818
 msgid "Edit Parameters"
 msgstr "Editar parámetros"
 
-#: pcbnew/onrightclick.cpp:834
+#: pcbnew/onrightclick.cpp:830
 msgid "Delete Footprint"
 msgstr "Eliminar huella"
 
-#: pcbnew/onrightclick.cpp:841
+#: pcbnew/onrightclick.cpp:837
 msgid "Move Footprint Exactly"
 msgstr "Mover huella exactamente"
 
-#: pcbnew/onrightclick.cpp:846
+#: pcbnew/onrightclick.cpp:842
 msgid "Duplicate Footprint"
 msgstr "Duplicar huella"
 
-#: pcbnew/onrightclick.cpp:851
+#: pcbnew/onrightclick.cpp:847
 msgid "Create Footprint Array"
 msgstr "Crear matriz de huellas"
 
-#: pcbnew/onrightclick.cpp:857
+#: pcbnew/onrightclick.cpp:853
 msgid "Exchange Footprint(s)"
 msgstr "Cambiar huella(s)"
 
-#: pcbnew/onrightclick.cpp:897 pcbnew/onrightclick.cpp:1011
+#: pcbnew/onrightclick.cpp:893 pcbnew/onrightclick.cpp:1007
 msgid "Reset Size"
 msgstr "Tamaño por defecto"
 
-#: pcbnew/onrightclick.cpp:940
+#: pcbnew/onrightclick.cpp:936
 msgid "Drag Pad"
 msgstr "Arrastrar pad"
 
-#: pcbnew/onrightclick.cpp:948
+#: pcbnew/onrightclick.cpp:944
 msgid "Copy Current Settings to this Pad"
 msgstr "Copiar ajustes activos a este pad"
 
-#: pcbnew/onrightclick.cpp:952
+#: pcbnew/onrightclick.cpp:948
 msgid "Copy this Pad Settings to Current Settings"
 msgstr "Copiar ajustes de este pad como activos"
 
-#: pcbnew/onrightclick.cpp:957
+#: pcbnew/onrightclick.cpp:953
 msgid "Edit All Pads"
 msgstr "Editar todos los pads"
 
-#: pcbnew/onrightclick.cpp:958
+#: pcbnew/onrightclick.cpp:954
 msgid ""
 "Copy this pad's settings to all pads in this footprint (or similar "
 "footprints)"
@@ -22049,23 +21993,23 @@ msgstr ""
 "Copiar los ajustes de este pad a todos los pads de esta huella (o huellas "
 "similares)"
 
-#: pcbnew/onrightclick.cpp:966
+#: pcbnew/onrightclick.cpp:962
 msgid "Automatically Route Pad"
 msgstr "Enrutar pad automáticamente"
 
-#: pcbnew/onrightclick.cpp:967
+#: pcbnew/onrightclick.cpp:963
 msgid "Automatically Route Net"
 msgstr "Enrutar red automáticamente"
 
-#: pcbnew/onrightclick.cpp:997
+#: pcbnew/onrightclick.cpp:993
 msgid "Copy"
 msgstr "Copiar"
 
-#: pcbnew/onrightclick.cpp:1042
+#: pcbnew/onrightclick.cpp:1038
 msgid "Auto Width"
 msgstr "Ancho automático"
 
-#: pcbnew/onrightclick.cpp:1043
+#: pcbnew/onrightclick.cpp:1039
 msgid ""
 "Use the track width when starting on a track, otherwise the current track "
 "width"
@@ -22073,31 +22017,31 @@ msgstr ""
 "Utilizar el ancho de pista al partir de una previa, en otro caso utilizar el "
 "ancho actual"
 
-#: pcbnew/onrightclick.cpp:1053
+#: pcbnew/onrightclick.cpp:1049
 msgid "Use Netclass Values"
 msgstr "Utilizar valores de la clase de red"
 
-#: pcbnew/onrightclick.cpp:1054
+#: pcbnew/onrightclick.cpp:1050
 msgid "Use track and via sizes from their Netclass values"
 msgstr ""
 "Utilizar tamaños de pista y vía a partir de los valores de su clase red"
 
-#: pcbnew/onrightclick.cpp:1060
+#: pcbnew/onrightclick.cpp:1056
 #, c-format
 msgid "Track %s"
 msgstr "La pista %s"
 
 # Pendiente
-#: pcbnew/onrightclick.cpp:1063 pcbnew/onrightclick.cpp:1089
+#: pcbnew/onrightclick.cpp:1059 pcbnew/onrightclick.cpp:1085
 msgid " uses NetClass"
 msgstr " utiliza la clase de red"
 
-#: pcbnew/onrightclick.cpp:1081
+#: pcbnew/onrightclick.cpp:1077
 #, c-format
 msgid "Via %s"
 msgstr "Vía %s"
 
-#: pcbnew/onrightclick.cpp:1085
+#: pcbnew/onrightclick.cpp:1081
 #, c-format
 msgid "Via %s, drill %s"
 msgstr "Vía %s, taladro %s"
@@ -22203,16 +22147,16 @@ msgstr ""
 "\"%s\"\n"
 "debería verificarlo y editarlo (ejecutar un test DRC)."
 
-#: pcbnew/pcbframe.cpp:624
+#: pcbnew/pcbframe.cpp:622
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "¡No puede eliminarse el archivo de respaldo automático '%s'!"
 
-#: pcbnew/pcbframe.cpp:997
+#: pcbnew/pcbframe.cpp:995
 msgid " [new file]"
 msgstr " [nuevo archivo]"
 
-#: pcbnew/pcbframe.cpp:1094
+#: pcbnew/pcbframe.cpp:1092
 msgid ""
 "Cannot update the PCB, because the Kicad is opened in stand-alone mode. In "
 "order to create/update PCBs from schematics, you need to launch Kicad shell "
@@ -23921,7 +23865,7 @@ msgstr "Editor de Reglas de Diseño"
 msgid "Dimension Properties"
 msgstr "Propiedades de la dimensión"
 
-#: pcbnew/dialogs/dialog_drc_base.h:103
+#: pcbnew/dialogs/dialog_drc_base.h:107
 msgid "DRC Control"
 msgstr "Control DRC"
 
@@ -24019,10 +23963,6 @@ msgstr "Opciones del Editor de huellas"
 msgid "Non Copper Zones Properties"
 msgstr "Propiedades de zones sin cobre"
 
-#: pcbnew/dialogs/dialog_orient_footprints_base.h:53
-msgid "Footprints Orientation"
-msgstr "Orientación de huellas"
-
 #: pcbnew/dialogs/dialog_pad_properties_base.h:177
 msgid "Pad Properties"
 msgstr "Propiedades de pad"
@@ -24090,6 +24030,60 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "Legacy 3D environment path"
+#~ msgstr "Ruta del antiguo entorno 3D"
+
+#~ msgid ""
+#~ "[3D File Resolver] No such path; ensure KISYS3DMOD is correctly defined"
+#~ msgstr ""
+#~ "[3D File Resolver] No existe la ruta; asegúrese de que se ha definido "
+#~ "correctamente KISYS3DMOD"
+
+#~ msgid "This alias: "
+#~ msgstr "Este alias: "
+
+#~ msgid "Existing alias: "
+#~ msgstr "Alias existente: "
+
+#~ msgid "Bad alias (duplicate path)"
+#~ msgstr "Alias no válido (ruta duplicada)"
+
+#~ msgid "This full path: "
+#~ msgstr "Esta ruta completa: "
+
+#~ msgid "Existing full path: "
+#~ msgstr "Ruta completa existente: "
+
+#~ msgid "Bad alias (common path)"
+#~ msgstr "Alias no válido (ruta común)"
+
+#~ msgid "Assign Footprint"
+#~ msgstr "Asignar huella"
+
+#~ msgid "OK to set footprints orientation to %.1f degrees ?"
+#~ msgstr "¿Ajustar la orientación de las huellas a %.1f grados?"
+
+#~ msgid "Bad value for footprints orientation"
+#~ msgstr "Valor erróneo para la orientación de las huellas"
+
+#~ msgid "New orientation (0.1 degree resolution)"
+#~ msgstr "Nueva orientación (0,1 grados de resolución)"
+
+#~ msgid "Filter to select footprints by reference"
+#~ msgstr "Filtro para seleccionar huellas por referencia"
+
+#~ msgid "Include Locked Footprints"
+#~ msgstr "Incluir huellas bloqueadas"
+
+#~ msgid "Force locked footprints to be modified"
+#~ msgstr "Forzar la modificación de huellas bloqueadas"
+
+#~ msgid "Orient All Footprints"
+#~ msgstr "Orientar todas las huellas"
+
+#~ msgid "Footprints Orientation"
+#~ msgstr "Orientación de huellas"
 
 #~ msgid "Orientation (0.1 deg):"
 #~ msgstr "Orientación (0,1 grados):"
