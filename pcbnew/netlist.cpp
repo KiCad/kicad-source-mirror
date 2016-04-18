@@ -306,7 +306,6 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             {
                 if( aReporter )
                 {
-                    wxString msg;
                     msg.Printf( _( "Component '%s' footprint '%s' was not found in "
                                    "any libraries in the footprint library table.\n" ),
                                 GetChars( component->GetReference() ),

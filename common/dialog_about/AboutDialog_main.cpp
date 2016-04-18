@@ -402,42 +402,45 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                          wxT( "Bulgarian (BG)" ),
                                          KiBitmapNew( lang_bg_xpm ) ) );
 
-    // TODO: are these all russian translators,
-    // placed them here now,
-    // or else align them below other language maintainer with mail adress
+    // Maintainer who helper in translations, but not in a specific translation
+    #define OTHERS_IN_TRANSLATION _( "Others" )
     info.AddTranslator( new Contributor( wxT( "Remy Halvick" ),
                                          wxEmptyString,
-                                         wxT( "Others" ) ) );
+                                         OTHERS_IN_TRANSLATION ) );
     info.AddTranslator( new Contributor( wxT( "David Briscoe" ),
                                          wxEmptyString,
-                                         wxT( "Others" ) ) );
+                                         OTHERS_IN_TRANSLATION ) );
     info.AddTranslator( new Contributor( wxT( "Dominique Laigle" ),
                                          wxEmptyString,
-                                         wxT( "Others" ) ) );
+                                         OTHERS_IN_TRANSLATION ) );
     info.AddTranslator( new Contributor( wxT( "Paul Burke" ),
                                          wxEmptyString,
-                                         wxT( "Others" ) ) );
+                                         OTHERS_IN_TRANSLATION ) );
 
     // Programm credits for icons
+    #define ICON_CONTRIBUTION _( "Icons by" )
     info.AddArtist( new Contributor( wxT( "Iñigo Zuluaga" ),
                                      wxT( "inigo_zuluaga@yahoo.es" ),
-                                     wxT( "Icons by" ),
+                                     ICON_CONTRIBUTION,
                                      KiBitmapNew( edit_module_xpm ) ) );
     info.AddArtist( new Contributor( wxT( "Konstantin Baranovskiy" ),
                                      wxT( "baranovskiykonstantin@gmail.com" ),
-                                     wxT( "New icons by" ),
+                                     ICON_CONTRIBUTION,
                                      KiBitmapNew( edit_module_xpm ) ) );
     info.AddArtist( new Contributor( wxT( "Fabrizio Tappero" ),
                                      wxT( "fabrizio.tappero@gmail.com" ),
-                                     wxT( "New icons by" ),
+                                     ICON_CONTRIBUTION,
                                      KiBitmapNew( edit_module_xpm ) ) );
+
+    // Programm credits for 3d models
+    #define MODELS_3D_CONTRIBUTION _( "3D models by" )
     info.AddArtist( new Contributor( wxT( "Christophe Boschat" ),
                                      wxT( "nox454@hotmail.fr" ),
-                                     wxT( "3D models by" ),
+                                     MODELS_3D_CONTRIBUTION,
                                      KiBitmapNew( three_d_xpm ) ) );
     info.AddArtist( new Contributor( wxT( "Renie Marquet" ),
                                      wxT( "reniemarquet@uol.com.br" ),
-                                     wxT( "3D models by" ),
+                                     MODELS_3D_CONTRIBUTION,
                                      KiBitmapNew( three_d_xpm ) ) );
 
     // Programm credits for package developers.

@@ -24,7 +24,7 @@
 
 
 #include <config.h>
- 
+
 // kicad_curl.h must be included before wx headers, to avoid
 // conflicts for some defines, at least on Windows
 #ifdef BUILD_GITHUB_PLUGIN
@@ -53,12 +53,12 @@
 #include "dialog_about.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-/// Class dialog_about methods
-///////////////////////////////////////////////////////////////////////////////
+/*
+ * Class dialog_about methods
+ */
 
-dialog_about::dialog_about(wxWindow *parent, AboutAppInfo& appInfo)
-    : dialog_about_base(parent), info(appInfo)
+dialog_about::dialog_about(wxWindow *aParent, AboutAppInfo& appInfo)
+    : dialog_about_base(aParent), info(appInfo)
 {
     picInformation = KiBitmap( info_xpm );
     picDevelopers  = KiBitmap( preference_xpm );
@@ -83,7 +83,8 @@ dialog_about::dialog_about(wxWindow *parent, AboutAppInfo& appInfo)
     SetFocus();
     Centre();
 
-    Connect( wxID_COPY, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( dialog_about::OnCopyVersionInfo ) );
+    Connect( wxID_COPY, wxEVT_COMMAND_BUTTON_CLICKED,
+             wxCommandEventHandler( dialog_about::OnCopyVersionInfo ) );
 }
 
 
@@ -127,12 +128,12 @@ void dialog_about::CreateNotebooks()
     CreateNotebookHtmlPage( m_auiNotebook, _( "License" ), picLicense, info.GetLicense() );
 }
 
-void dialog_about::CreateNotebookPage( wxAuiNotebook* parent, const wxString& caption,
-                                       const wxBitmap& icon, const Contributors& contributors )
+void dialog_about::CreateNotebookPage( wxAuiNotebook* aParent, const wxString& aCaption,
+                                       const wxBitmap& aIcon, const Contributors& aContributors )
 {
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( parent, wxID_ANY,
+    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( aParent, wxID_ANY,
                                                                 wxDefaultPosition,
                                                                 wxDefaultSize,
                                                                 wxHSCROLL|wxVSCROLL );
@@ -145,9 +146,9 @@ void dialog_about::CreateNotebookPage( wxAuiNotebook* parent, const wxString& ca
 
     wxFlexGridSizer* fgSizer1 = CreateFlexGridSizer();
 
-    for( size_t i=0; i<contributors.GetCount(); ++i )
+    for( size_t i=0; i<aContributors.GetCount(); ++i )
     {
-        Contributor* contributor = &contributors.Item( i );
+        Contributor* contributor = &aContributors.Item( i );
 
         // Icon at first column
         wxStaticBitmap* m_bitmap1 = CreateStaticBitmap( m_scrolledWindow1, contributor->GetIcon() );
@@ -185,17 +186,17 @@ void dialog_about::CreateNotebookPage( wxAuiNotebook* parent, const wxString& ca
     m_scrolledWindow1->SetSizer( bSizer );
     m_scrolledWindow1->Layout();
     bSizer->Fit( m_scrolledWindow1 );
-    parent->AddPage( m_scrolledWindow1, caption, false, icon );
+    aParent->AddPage( m_scrolledWindow1, aCaption, false, aIcon );
 }
 
 
-void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* parent, const wxString& caption,
-                                                const wxBitmap& icon,
-                                                const Contributors& contributors)
+void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* aParent, const wxString& aCaption,
+                                                const wxBitmap& aIcon,
+                                                const Contributors& aContributors)
 {
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( parent, wxID_ANY,
+    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( aParent, wxID_ANY,
                                                                 wxDefaultPosition,
                                                                 wxDefaultSize,
                                                                 wxHSCROLL|wxVSCROLL );
@@ -208,9 +209,9 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* parent, const wxS
 
     wxFlexGridSizer* fgSizer1 = CreateFlexGridSizer();
 
-    for( size_t i=0; i<contributors.GetCount(); ++i )
+    for( size_t i=0; i < aContributors.GetCount(); ++i )
     {
-        Contributor* contributor = &contributors.Item( i );
+        Contributor* contributor = &aContributors.Item( i );
 
         wxBitmap* icon = contributor->GetIcon();
         wxString category = contributor->GetCategory();
@@ -237,28 +238,28 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* parent, const wxS
             fgSizer1->AddSpacer( 5 );
 
             // Now, all contributors of the same category will follow
-            for( size_t j=0; j<contributors.GetCount(); ++j )
+            for( size_t j=0; j < aContributors.GetCount(); ++j )
             {
-                Contributor* contributor = &contributors.Item( j );
+                Contributor* sub_contributor = &aContributors.Item( j );
 
-                if ( contributor->GetCategory() == category )
+                if ( sub_contributor->GetCategory() == category )
                 {
                     // First column is empty
                     fgSizer1->AddSpacer(5);
 
                     // Name of contributor at second column
                     wxStaticText* m_staticText2 = new wxStaticText( m_scrolledWindow1, wxID_ANY,
-                                                                    wxT(" • ") + contributor->GetName(),
+                                                                    wxT(" • ") + sub_contributor->GetName(),
                                                                     wxDefaultPosition,
                                                                     wxDefaultSize, 0 );
                     m_staticText1->Wrap( -1 );
                     fgSizer1->Add( m_staticText2, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
 
                     // Email address of contributor at third column
-                    if( contributor->GetEMail() != wxEmptyString )
+                    if( sub_contributor->GetEMail() != wxEmptyString )
                     {
                         wxHyperlinkCtrl* hyperlink = CreateHyperlink( m_scrolledWindow1,
-                                                                      contributor->GetEMail() );
+                                                                      sub_contributor->GetEMail() );
                         fgSizer1->Add( hyperlink, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
                     }
                     else
@@ -269,7 +270,7 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* parent, const wxS
                     /* this contributor was added to the GUI,
                      * thus can be ignored next time
                      */
-                    contributor->SetChecked( true );
+                    sub_contributor->SetChecked( true );
                 }
             }
         }
@@ -282,9 +283,9 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* parent, const wxS
     /* Now, lets list the remaining contributors that have not been considered
      * because they were not assigned to any category.
      */
-    for ( size_t k=0; k<contributors.GetCount(); ++k )
+    for ( size_t k=0; k < aContributors.GetCount(); ++k )
     {
-        Contributor* contributor = &contributors.Item( k );
+        Contributor* contributor = &aContributors.Item( k );
 
         if ( contributor->IsChecked() )
             continue;
@@ -325,14 +326,14 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* parent, const wxS
     m_scrolledWindow1->SetSizer( bSizer );
     m_scrolledWindow1->Layout();
     bSizer->Fit( m_scrolledWindow1 );
-    parent->AddPage( m_scrolledWindow1, caption, false, icon );
+    aParent->AddPage( m_scrolledWindow1, aCaption, false, aIcon );
 }
 
 
-void dialog_about::CreateNotebookHtmlPage( wxAuiNotebook* parent, const wxString& caption,
-                                           const wxBitmap& icon, const wxString& html )
+void dialog_about::CreateNotebookHtmlPage( wxAuiNotebook* aParent, const wxString& aCaption,
+                                           const wxBitmap& aIcon, const wxString& html )
 {
-    wxPanel* panel = new wxPanel( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+    wxPanel* panel = new wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                   wxTAB_TRAVERSAL );
 
     wxBoxSizer* bSizer = new wxBoxSizer( wxVERTICAL );
@@ -371,14 +372,14 @@ void dialog_about::CreateNotebookHtmlPage( wxAuiNotebook* parent, const wxString
     panel->SetSizer( bSizer );
     panel->Layout();
     bSizer->Fit( panel );
-    parent->AddPage( panel, caption, false, icon );
+    aParent->AddPage( panel, aCaption, false, aIcon );
 }
 
 
-wxHyperlinkCtrl* dialog_about::CreateHyperlink(wxScrolledWindow* parent, const wxString& email)
+wxHyperlinkCtrl* dialog_about::CreateHyperlink(wxScrolledWindow* aParent, const wxString& email)
 {
     wxHyperlinkCtrl* hyperlink = new wxHyperlinkCtrl(
-                                        parent, wxID_ANY,
+                                        aParent, wxID_ANY,
                                         wxT( "<" ) + email + wxT( ">" ), /* the label */
                                         wxT( "mailto:" ) + email
                                         + wxT( "?subject=KiCad - " )
@@ -390,14 +391,14 @@ wxHyperlinkCtrl* dialog_about::CreateHyperlink(wxScrolledWindow* parent, const w
 }
 
 
-wxStaticBitmap* dialog_about::CreateStaticBitmap(wxScrolledWindow* parent, wxBitmap* icon)
+wxStaticBitmap* dialog_about::CreateStaticBitmap(wxScrolledWindow* aParent, wxBitmap* aIcon)
 {
-    wxStaticBitmap* bitmap = new wxStaticBitmap( parent, wxID_ANY, wxNullBitmap,
+    wxStaticBitmap* bitmap = new wxStaticBitmap( aParent, wxID_ANY, wxNullBitmap,
                                                  wxDefaultPosition, wxDefaultSize, 0 );
 
-    if( icon )
+    if( aIcon )
     {
-        bitmap->SetBitmap( *icon );
+        bitmap->SetBitmap( *aIcon );
     }
     else
     {

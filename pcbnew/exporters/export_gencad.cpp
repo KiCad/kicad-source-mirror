@@ -699,13 +699,13 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
     {
         const char*   mirror;
         const char*   flip;
-        double        orient = module->GetOrientation();
+        double        fp_orient = module->GetOrientation();
 
         if( module->GetFlag() )
         {
             mirror = "0";
             flip   = "FLIP";
-            NEGATE_AND_NORMALIZE_ANGLE_POS( orient );
+            NEGATE_AND_NORMALIZE_ANGLE_POS( fp_orient );
         }
         else
         {
@@ -724,7 +724,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         fprintf( aFile, "LAYER %s\n",
                  (module->GetFlag()) ? "BOTTOM" : "TOP" );
         fprintf( aFile, "ROTATION %g\n",
-                 orient / 10.0 );
+                 fp_orient / 10.0 );
         fprintf( aFile, "SHAPE %s %s %s\n",
                  TO_UTF8( module->GetReference() ),
                  mirror, flip );
@@ -734,14 +734,14 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
         for( int ii = 0; ii < 2; ii++ )
         {
-            double      orient = textmod->GetOrientation();
+            double      txt_orient = textmod->GetOrientation();
             std::string layer  = GenCADLayerName( cu_count, module->GetFlag() ? B_SilkS : F_SilkS );
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
                      textmod->GetPos0().x / SCALE_FACTOR,
                     -textmod->GetPos0().y / SCALE_FACTOR,
                      textmod->GetSize().x / SCALE_FACTOR,
-                     orient / 10.0,
+                     txt_orient / 10.0,
                      mirror,
                      layer.c_str(),
                      TO_UTF8( textmod->GetText() ) );

@@ -750,10 +750,10 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
         m_CurrentModule->Flip( m_CurrentModule->GetPosition() );
 
     // Update 3D shape list
-    int ii = m_3D_ShapeNameListBox->GetSelection();
+    int idx = m_3D_ShapeNameListBox->GetSelection();
 
-    if( ii >= 0 )
-        TransfertDisplayTo3DValues( ii  );
+    if( idx >= 0 )
+        TransfertDisplayTo3DValues( idx );
 
     S3D_MASTER* draw3D = m_CurrentModule->Models();
 

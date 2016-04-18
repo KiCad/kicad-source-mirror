@@ -670,8 +670,8 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
         {
             msg  << wxT("/ ");
             wxString hole_str;
-            double valueMils = To_User_Unit( INCHES, hole ) * 1000;
-            double value_mm = To_User_Unit( MILLIMETRES, hole );
+            valueMils = To_User_Unit( INCHES, hole ) * 1000;
+            value_mm = To_User_Unit( MILLIMETRES, hole );
 
             if( mmFirst )
                 hole_str.Printf( _( "%.2f mm (%.1f mils)" ),

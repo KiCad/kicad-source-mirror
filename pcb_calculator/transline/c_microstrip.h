@@ -52,7 +52,6 @@ private:
     double er_eff_o;            // odd-mode effective dielectric constant
     double er_eff_e_0;          // static even-mode effective dielectric constant
     double er_eff_o_0;          // static odd-mode effective dielectric constant
-    double er_eff;              // FIXME: dummy
     double w_eff;               // Effective width of line
     double atten_dielectric_e;  // even-mode dielectric losses (dB)
     double atten_cond_e;        // even-mode conductors losses (dB)

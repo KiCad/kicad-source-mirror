@@ -459,13 +459,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     if (g_DumpZonesWhenFilling)
         dumper->Write( &solidAreas, "solid-areas-minus-holes" );
 
-    SHAPE_POLY_SET fractured = solidAreas;
-    fractured.Fracture( POLY_CALC_MODE );
+    SHAPE_POLY_SET areas_fractured = solidAreas;
+    areas_fractured.Fracture( POLY_CALC_MODE );
 
     if (g_DumpZonesWhenFilling)
-        dumper->Write( &fractured, "fractured" );
+        dumper->Write( &areas_fractured, "areas_fractured" );
 
-    m_FilledPolysList = fractured;
+    m_FilledPolysList = areas_fractured;
 
     // Remove insulated islands:
     if( GetNetCode() > 0 )
@@ -490,13 +490,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
             dumper->Write( &thermalHoles, "thermal-holes" );
 
         // put these areas in m_FilledPolysList
-        SHAPE_POLY_SET fractured = solidAreas;
-        fractured.Fracture( POLY_CALC_MODE );
+        SHAPE_POLY_SET th_fractured = solidAreas;
+        th_fractured.Fracture( POLY_CALC_MODE );
 
         if( g_DumpZonesWhenFilling )
-            dumper->Write ( &fractured, "fractured" );
+            dumper->Write ( &th_fractured, "th_fractured" );
 
-        m_FilledPolysList = fractured;
+        m_FilledPolysList = th_fractured;
 
         if( GetNetCode() > 0 )
             TestForCopperIslandAndRemoveInsulatedIslands( aPcb );

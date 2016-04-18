@@ -67,21 +67,21 @@ private:
     wxFlexGridSizer* CreateFlexGridSizer();
     void             DeleteNotebooks();
     void             CreateNotebooks();
-    void             CreateNotebookPage( wxAuiNotebook*      parent,
-                                         const wxString&     caption,
-                                         const wxBitmap&     icon,
-                                         const Contributors& contributors );
-    void             CreateNotebookPageByCategory( wxAuiNotebook*      parent,
-                                                   const wxString&     caption,
-                                                   const wxBitmap&     icon,
-                                                   const Contributors& contributors );
-    void             CreateNotebookHtmlPage( wxAuiNotebook*  parent,
-                                             const wxString& caption,
-                                             const wxBitmap& icon,
-                                             const wxString& html );
+    void             CreateNotebookPage( wxAuiNotebook*      aParent,
+                                         const wxString&     aCaption,
+                                         const wxBitmap&     aIcon,
+                                         const Contributors& aContributors );
+    void             CreateNotebookPageByCategory( wxAuiNotebook*      aParent,
+                                                   const wxString&     aCaption,
+                                                   const wxBitmap&     aIcon,
+                                                   const Contributors& aContributors );
+    void             CreateNotebookHtmlPage( wxAuiNotebook*  aParent,
+                                             const wxString& aCaption,
+                                             const wxBitmap& aIcon,
+                                             const wxString& aHtmlMessage );
 
-    wxHyperlinkCtrl* CreateHyperlink( wxScrolledWindow* parent, const wxString& email );
-    wxStaticBitmap*  CreateStaticBitmap( wxScrolledWindow* parent, wxBitmap* icon );
+    wxHyperlinkCtrl* CreateHyperlink( wxScrolledWindow* aParent, const wxString& email );
+    wxStaticBitmap*  CreateStaticBitmap( wxScrolledWindow* aParent, wxBitmap* icon );
 };
 
 #endif // DIALOG_ABOUT_H

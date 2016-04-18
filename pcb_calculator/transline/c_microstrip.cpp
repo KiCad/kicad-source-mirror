@@ -63,7 +63,6 @@ C_MICROSTRIP::C_MICROSTRIP() : TRANSLINE()
     er_eff_o = 0.0;             // odd-mode effective dielectric constant
     er_eff_e_0 = 0.0;           // static even-mode effective dielectric constant
     er_eff_o_0 = 0.0;           // static odd-mode effective dielectric constant
-    er_eff = 0.0;               // dummy
     w_eff = 0.0;                // Effective width of line
     atten_dielectric_e = 0.0;   // even-mode dielectric losses (dB)
     atten_cond_e = 0.0;         // even-mode conductors losses (dB)
@@ -198,14 +197,12 @@ double C_MICROSTRIP::filling_factor_even( double u, double g, double e_r )
  */
 double C_MICROSTRIP::filling_factor_odd( double u, double g, double e_r )
 {
-    double b_o, c_o, d_o, q_inf;
-
-    b_o = 0.747 * e_r / (0.15 + e_r);
-    c_o = b_o - (b_o - 0.207) * exp( -0.414 * u );
-    d_o = 0.593 + 0.694 * exp( -0.562 * u );
+    double b_odd = 0.747 * e_r / (0.15 + e_r);
+    double c_odd = b_odd - (b_odd - 0.207) * exp( -0.414 * u );
+    double d_odd = 0.593 + 0.694 * exp( -0.562 * u );
 
     /* filling factor, with width corrected for thickness */
-    q_inf = exp( -c_o * pow( g, d_o ) );
+    double q_inf = exp( -c_odd * pow( g, d_odd ) );
 
     return q_inf;
 }
@@ -603,13 +600,14 @@ void C_MICROSTRIP::syn_err_fun( double* f1,
                                 double  w_h_se,
                                 double  w_h_so )
 {
-    double g, h;
+    double g, he;
 
     g = cosh( 0.5 * M_PI * s_h );
-    h = cosh( M_PI * w_h + 0.5 * M_PI * s_h );
+    he = cosh( M_PI * w_h + 0.5 * M_PI * s_h );
 
-    *f1 = (2.0 / M_PI) * acosh( (2.0 * h - g + 1.0) / (g + 1.0) );
-    *f2 = (2.0 / M_PI) * acosh( (2.0 * h - g - 1.0) / (g - 1.0) );
+    *f1 = (2.0 / M_PI) * acosh( (2.0 * he - g + 1.0) / (g + 1.0) );
+    *f2 = (2.0 / M_PI) * acosh( (2.0 * he - g - 1.0) / (g - 1.0) );
+
     if( e_r <= 6.0 )
     {
         *f2 += ( 4.0 / ( M_PI * (1.0 + e_r / 2.0) ) ) * acosh( 1.0 + 2.0 * w_h / s_h );
@@ -618,6 +616,7 @@ void C_MICROSTRIP::syn_err_fun( double* f1,
     {
         *f2 += (1.0 / M_PI) * acosh( 1.0 + 2.0 * w_h / s_h );
     }
+
     *f1 -= w_h_se;
     *f2 -= w_h_so;
 }

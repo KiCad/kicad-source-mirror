@@ -84,7 +84,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     if( configChanged && !GetBoard()->GetFileName().IsEmpty()
       && IsOK( NULL, _( "The project configuration has changed.  Do you want to save it?" ) ) )
     {
-        wxFileName fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
+        fn = Prj().AbsolutePath( GetBoard()->GetFileName() );
         fn.SetExt( ProjectFileExtension );
 
         wxString pro_name = fn.GetFullPath();

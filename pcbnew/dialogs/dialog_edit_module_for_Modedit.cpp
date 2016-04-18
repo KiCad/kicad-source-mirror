@@ -564,10 +564,10 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     m_currentModule->SetLocalSolderPasteMarginRatio( dtmp / 100 );
 
     // Update 3D shape list
-    int ii = m_3D_ShapeNameListBox->GetSelection();
+    int idx = m_3D_ShapeNameListBox->GetSelection();
 
-    if ( ii >= 0 )
-        TransfertDisplayTo3DValues( ii );
+    if ( idx >= 0 )
+        TransfertDisplayTo3DValues( idx );
 
     S3D_MASTER*   draw3D  = m_currentModule->Models();
 
