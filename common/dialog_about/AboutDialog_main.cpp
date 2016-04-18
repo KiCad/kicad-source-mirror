@@ -309,6 +309,10 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
      * As category the language to which the translation was done is used
      * and as icon the national flag of the corresponding country.
      */
+    info.AddTranslator( new Contributor( wxT( "Robert Buj" ),
+                                         wxT( "rbuj@fedoraproject.org" ),
+                                         wxT( "Catalan (CA)" ),
+                                         KiBitmapNew( lang_catalan_xpm ) ) );
     info.AddTranslator( new Contributor( wxT( "Martin Kratoška" ),
                                          wxT( "martin@ok1rr.com" ),
                                          wxT( "Czech (CZ)" ),
