@@ -354,10 +354,8 @@ void BRDITEMS_PLOTTER::Plot_Edges_Modules()
         {
             EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( item );
 
-            if( !edge || !m_layerMask[edge->GetLayer()] )
-                continue;
-
-            Plot_1_EdgeModule( edge );
+            if( edge && m_layerMask[edge->GetLayer()] )
+                Plot_1_EdgeModule( edge );
         }
     }
 }
