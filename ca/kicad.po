@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-14 11:07+0200\n"
-"PO-Revision-Date: 2016-04-14 11:33+0200\n"
+"POT-Creation-Date: 2016-04-19 12:45+0200\n"
+"PO-Revision-Date: 2016-04-19 13:13+0200\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Robert Antoni Buj i Gelonch <rbuj@fodoraproject.org>\n"
 "Language: ca\n"
@@ -435,7 +435,7 @@ msgid "Open KiCad user manual"
 msgstr "Obre el manual d'usuari de KiCad"
 
 #: kicad/menubar.cpp:412 pcbnew/menubar_modedit.cpp:343
-#: pcbnew/menubar_pcbframe.cpp:663 pcbnew/tool_modview.cpp:191
+#: pcbnew/menubar_pcbframe.cpp:645 pcbnew/tool_modview.cpp:191
 #: eeschema/menubar.cpp:506 eeschema/menubar_libedit.cpp:259
 #: eeschema/tool_viewlib.cpp:252 cvpcb/menubar.cpp:120 gerbview/menubar.cpp:228
 #: pagelayout_editor/menubar.cpp:154
@@ -448,7 +448,7 @@ msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr ""
 
 #: kicad/menubar.cpp:421 pcbnew/menubar_modedit.cpp:350
-#: pcbnew/menubar_pcbframe.cpp:669 eeschema/menubar.cpp:513
+#: pcbnew/menubar_pcbframe.cpp:651 eeschema/menubar.cpp:513
 #: eeschema/menubar_libedit.cpp:268
 msgid "&About KiCad"
 msgstr "Qu&ant a KiCad"
@@ -461,7 +461,7 @@ msgid "About KiCad"
 msgstr "Quant a KiCad"
 
 #: kicad/menubar.cpp:426 pcbnew/menubar_modedit.cpp:355
-#: pcbnew/menubar_pcbframe.cpp:674 pcbnew/tool_modview.cpp:203
+#: pcbnew/menubar_pcbframe.cpp:656 pcbnew/tool_modview.cpp:203
 #: eeschema/menubar.cpp:518 eeschema/menubar_libedit.cpp:273
 #: eeschema/tool_viewlib.cpp:264 3d-viewer/3d_toolbar.cpp:135
 #: gerbview/menubar.cpp:243 pagelayout_editor/menubar.cpp:169
@@ -477,13 +477,13 @@ msgstr "Nave&ga"
 msgid "&Preferences"
 msgstr "P&referències"
 
-#: kicad/menubar.cpp:429 pcbnew/menubar_pcbframe.cpp:681
+#: kicad/menubar.cpp:429 pcbnew/menubar_pcbframe.cpp:663
 #: eeschema/menubar.cpp:523
 msgid "&Tools"
 msgstr "&Eines"
 
 #: kicad/menubar.cpp:430 pcbnew/menubar_modedit.cpp:361
-#: pcbnew/menubar_pcbframe.cpp:683 pcbnew/tool_modview.cpp:206
+#: pcbnew/menubar_pcbframe.cpp:665 pcbnew/tool_modview.cpp:206
 #: eeschema/menubar.cpp:524 eeschema/menubar_libedit.cpp:278
 #: eeschema/tool_viewlib.cpp:267 cvpcb/menubar.cpp:133 gerbview/menubar.cpp:246
 #: pagelayout_editor/menubar.cpp:171
@@ -504,7 +504,7 @@ msgstr "Refresca l'arbre del projecte"
 
 #: kicad/preferences.cpp:63
 msgid "You must choose a PDF viewer before using this option."
-msgstr ""
+msgstr "Heu de triar un visualitzador PDF abans d'utilitzar aquesta opció."
 
 #: kicad/preferences.cpp:75
 msgid "Executable files ("
@@ -529,6 +529,8 @@ msgstr "Plantilles portables"
 #: kicad/prjconfig.cpp:138
 msgid "No project template was selected.  Cannot generate new project."
 msgstr ""
+"No s'ha seleccionat cap plantilla de projecte. No es pot generar el nou "
+"projecte."
 
 #: kicad/prjconfig.cpp:140 pcbnew/router/length_tuner_tool.cpp:171
 #: common/confirm.cpp:78
@@ -538,6 +540,7 @@ msgstr "Error"
 #: kicad/prjconfig.cpp:151
 msgid "Problem whilst creating new project from template!"
 msgstr ""
+"Hi ha hagut un problema mentre es creava un nou projecte des de la plantilla!"
 
 #: kicad/prjconfig.cpp:152
 msgid "Template Error"
@@ -561,7 +564,7 @@ msgstr ""
 "El directori seleccionat no està buit. Us recomanem que creeu els vostres "
 "projectes als seus propis directoris nets.\n"
 "\n"
-"Coleu crear un nou directori buit per al projecte?"
+"Voleu crear un nou directori buit per al projecte?"
 
 #: kicad/prjconfig.cpp:305
 #, c-format
@@ -573,7 +576,7 @@ msgid "To proceed, you can use the File menu to start a new project."
 msgstr ""
 "Per començar, podeu utilitzar el menú Fitxer per iniciar un nou projecte."
 
-#: kicad/prjconfig.cpp:332 pcbnew/moduleframe.cpp:768 pcbnew/pcbframe.cpp:993
+#: kicad/prjconfig.cpp:332 pcbnew/moduleframe.cpp:768 pcbnew/pcbframe.cpp:980
 #: eeschema/libedit.cpp:61 eeschema/schframe.cpp:1364
 #: cvpcb/cvpcb_mainframe.cpp:756
 msgid " [Read Only]"
@@ -670,7 +673,7 @@ msgstr "Posiciona l'empremta %d de %d"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:466
 msgid "No PCB edge found, unknown board size!"
-msgstr ""
+msgstr "No s'han trobat les vores del PCB, es desconeix la mida de la placa!"
 
 #: pcbnew/autorouter/auto_place_footprints.cpp:475
 msgid "Cols"
@@ -894,7 +897,7 @@ msgstr "La zona de coure (nom de la xarxa %s): la xarxa no té pads connectats."
 #: pcbnew/board_netlist_updater.cpp:640
 #, c-format
 msgid "Processing component \"%s:%s:%s\".\n"
-msgstr "Processament del component “%s:%s:%s”.\n"
+msgstr "Processament del component «%s:%s:%s».\n"
 
 #: pcbnew/board_netlist_updater.cpp:697
 #, c-format
@@ -932,7 +935,7 @@ msgstr "Impossible de crear fitxer <%s>"
 
 #: pcbnew/build_BOM_from_board.cpp:116
 msgid "Id"
-msgstr "Id"
+msgstr "Id."
 
 #: pcbnew/build_BOM_from_board.cpp:117
 msgid "Designator"
@@ -992,7 +995,7 @@ msgstr "Enllaços"
 msgid "Connections"
 msgstr "Connexions"
 
-#: pcbnew/class_board.cpp:987 pcbnew/dialogs/dialog_drc_base.cpp:184
+#: pcbnew/class_board.cpp:987 pcbnew/dialogs/dialog_drc_base.cpp:200
 #: pcbnew/pcb_draw_panel_gal.cpp:362
 msgid "Unconnected"
 msgstr "No connectat"
@@ -1058,8 +1061,8 @@ msgstr "Dibuix"
 #: pcbnew/class_track.cpp:1181 pcbnew/class_track.cpp:1230
 #: pcbnew/class_zone.cpp:582 pcbnew/dialogs/dialog_layers_setup.cpp:346
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:187
-#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1978
-#: eeschema/libedit.cpp:507 eeschema/sch_text.cpp:785
+#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1999
+#: eeschema/libedit.cpp:507 eeschema/sch_text.cpp:791
 #: gerbview/class_gerber_draw_item.cpp:549
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
@@ -1089,7 +1092,7 @@ msgid "Segment"
 msgstr "Segment"
 
 #: pcbnew/class_drawsegment.cpp:391 pcbnew/class_track.cpp:1057
-#: eeschema/lib_pin.cpp:1995
+#: eeschema/lib_pin.cpp:2016
 msgid "Length"
 msgstr "Longitud"
 
@@ -1251,7 +1254,7 @@ msgstr "Pad dins d'un text"
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:627
 #: pcbnew/class_pad.cpp:637 pcbnew/class_text_mod.cpp:370
 #: pcbnew/loadcmp.cpp:435 pcbnew/loadcmp.cpp:499 eeschema/lib_field.cpp:588
-#: eeschema/onrightclick.cpp:436 eeschema/sch_component.cpp:1561
+#: eeschema/onrightclick.cpp:436 eeschema/sch_component.cpp:1560
 #: eeschema/template_fieldnames.cpp:45
 msgid "Footprint"
 msgstr "Empremta"
@@ -1266,7 +1269,7 @@ msgstr "Empremta"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:185
 #: eeschema/dialogs/dialog_rescue_each.cpp:111 eeschema/lib_field.cpp:581
 #: eeschema/lib_field.cpp:759 eeschema/onrightclick.cpp:426
-#: eeschema/sch_component.cpp:1543 eeschema/template_fieldnames.cpp:42
+#: eeschema/sch_component.cpp:1542 eeschema/template_fieldnames.cpp:42
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
 msgid "Value"
@@ -1335,7 +1338,7 @@ msgstr "Estat"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/libedit.cpp:498
-#: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:758
+#: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:764
 #: gerbview/class_GERBER.cpp:359 gerbview/class_GERBER.cpp:363
 #: gerbview/class_GERBER.cpp:366 bitmap2component/bitmap2cmp_gui_base.cpp:135
 msgid "Normal"
@@ -1740,16 +1743,16 @@ msgid "Mirror"
 msgstr "Reflexió"
 
 #: pcbnew/class_pcb_text.cpp:143 pcbnew/class_text_mod.cpp:379
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:995
-#: eeschema/lib_pin.cpp:1989 gerbview/class_gerber_draw_item.cpp:572
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1008
+#: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573
 msgid "No"
 msgstr "No"
 
 #: pcbnew/class_pcb_text.cpp:145 pcbnew/class_text_mod.cpp:381
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:993
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1006
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/lib_pin.cpp:1987 gerbview/class_gerber_draw_item.cpp:572
+#: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573
 msgid "Yes"
 msgstr "Sí"
@@ -1835,7 +1838,7 @@ msgstr "Tota la longitud"
 
 #: pcbnew/class_track.cpp:1065
 msgid "Pad To Die Length"
-msgstr ""
+msgstr "Pad a la llargada del dau"
 
 #: pcbnew/class_track.cpp:1073
 msgid "NC Name"
@@ -1949,7 +1952,7 @@ msgstr ""
 
 #: pcbnew/class_zone.cpp:631
 msgid "Corners"
-msgstr ""
+msgstr "Cantonades"
 
 #: pcbnew/class_zone.cpp:634
 msgid "Segments"
@@ -1970,7 +1973,7 @@ msgstr ""
 
 #: pcbnew/class_zone.cpp:647
 msgid "Corner Count"
-msgstr ""
+msgstr "Nombre de cantonades"
 
 #: pcbnew/class_zone.cpp:820
 msgid "(Keepout)"
@@ -2098,7 +2101,7 @@ msgstr "elimina els segments de pista que tinguin un extrem que pengi"
 #: pcbnew/dialogs/dialog_copper_zones.cpp:395
 #, c-format
 msgid "Clearance must be smaller than %f\" / %f mm."
-msgstr "El marge de seguretat ha de ser més petit que %f” / %f mm."
+msgstr "El marge de seguretat ha de ser més petit que %f\" / %f mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:407
 #, c-format
@@ -2108,6 +2111,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones.cpp:447
 msgid "Thermal relief spoke must be greater than the minimum width."
 msgstr ""
+"El radi de l'alleujament tèrmic ha de ser més gran que l'amplada mínima."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:460
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:227
@@ -2127,11 +2131,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:512
 msgid "Chamfer distance"
-msgstr ""
+msgstr "Distància del xamfrà"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:518
 msgid "Fillet radius"
-msgstr ""
+msgstr "Radi de l'arrodoniment"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:37
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:87
@@ -2174,7 +2178,7 @@ msgstr "Filtrat (nombre de pads)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:73
 msgid "Hidden net filter:"
-msgstr ""
+msgstr "Filtratge de xarxes ocultes:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:78
 msgid ""
@@ -2184,10 +2188,9 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:82
 msgid "Visible net filter:"
-msgstr ""
+msgstr "Filtratge de xarxes visibles:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:86
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:35
 msgid "*"
 msgstr "*"
 
@@ -2221,7 +2224,7 @@ msgstr "Gruix mínim de les àrees omplertes."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:122
 msgid "Corner smoothing:"
-msgstr ""
+msgstr "Suavització de les cantonades:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
@@ -2236,15 +2239,15 @@ msgstr "Cap"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Chamfer"
-msgstr ""
+msgstr "Xamfrà"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 msgid "Fillet"
-msgstr ""
+msgstr "Arrodonit"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:132
 msgid "Chamfer distance (mm):"
-msgstr ""
+msgstr "Distància del xamfrà (mm):"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:145
 msgid "Default pad connection:"
@@ -2266,7 +2269,7 @@ msgstr "Sòlid"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:195
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:502
 msgid "Thermal relief"
-msgstr ""
+msgstr "Alleujament tèrmic"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
 msgid "THT thermal"
@@ -2274,7 +2277,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:158
 msgid "Thermal Reliefs"
-msgstr ""
+msgstr "Alleujaments tèrmics"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:160
 msgid "Antipad clearance"
@@ -2288,11 +2291,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:169
 msgid "Spoke width"
-msgstr ""
+msgstr "Amplada del radi"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:174
 msgid "Width of copper in thermal reliefs."
-msgstr ""
+msgstr "Amplada del coure a l'alleujament tèrmic."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:187
 msgid "Zone priority level:"
@@ -2376,9 +2379,9 @@ msgid "Alphabet, full 26 characters"
 msgstr "Alfabet, tots els 26 caràcters"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognised numbering scheme: %d"
-msgstr "Esquema de numeració dels pads"
+msgstr "Esquema de numeració no reconegut: %d"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:246
 #, c-format
@@ -2401,9 +2404,8 @@ msgid "vertical count"
 msgstr "Nombre vertical"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:310
-#, fuzzy
 msgid "stagger"
-msgstr "Escalonament:"
+msgstr "escalonament"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:359
 msgid "point count"
@@ -2904,7 +2906,7 @@ msgid "Minimum Allowed Values:"
 msgstr "Valors mínims permesos:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:193
-#: pcbnew/dialogs/dialog_drc_base.cpp:46
+#: pcbnew/dialogs/dialog_drc_base.cpp:48
 msgid "Min track width"
 msgstr "Amplada mín. de la pista"
 
@@ -2930,6 +2932,10 @@ msgid ""
 "can be used to replace default Netclass values \n"
 "on demand, for arbitrary vias or track segments."
 msgstr ""
+"Valors específics dels diàmetres de les vies i de les amplades de les "
+"pistes,\n"
+"els quals es poden utilitzar per a substituir els valors predeterminats del\n"
+"Netclass a petició, per als segments de pistes o vies arbitraris."
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:253
 msgid "Custom Via Sizes:"
@@ -2938,6 +2944,7 @@ msgstr "Mides de les vies personalitzades:"
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:255
 msgid "Drill value: a blank or 0 => default Netclass value"
 msgstr ""
+"Valor de la perforació: en blanc o 0 => valor predeterminat del Netclass"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:279
 msgid "Via 1"
@@ -3186,7 +3193,7 @@ msgstr "Mostra el número del pad"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:88
 msgid "Show pad no net connection indicator"
-msgstr ""
+msgstr "Mostra l'indicador de connexió de pad sense xarxa"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:96
 msgid "Other:"
@@ -3200,20 +3207,20 @@ msgstr "Mostra els elements gràfics al mode d'esbós"
 msgid "Show page limits"
 msgstr "Mostra els límits de la pàgina"
 
-#: pcbnew/dialogs/dialog_drc.cpp:148 pcbnew/dialogs/dialog_drc.cpp:211
+#: pcbnew/dialogs/dialog_drc.cpp:178 pcbnew/dialogs/dialog_drc.cpp:241
 #, c-format
 msgid "Report file \"%s\" created"
-msgstr "S'ha crear el fitxer d'informe «%s»"
+msgstr "S'ha creat el fitxer d'informe «%s»"
 
-#: pcbnew/dialogs/dialog_drc.cpp:150 pcbnew/dialogs/dialog_drc.cpp:212
+#: pcbnew/dialogs/dialog_drc.cpp:180 pcbnew/dialogs/dialog_drc.cpp:242
 msgid "Disk File Report Completed"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc.cpp:232
+#: pcbnew/dialogs/dialog_drc.cpp:262
 msgid "DRC report files (.rpt)|*.rpt"
 msgstr "Fitxers d'informes DRC (.rpt)|*.rpt"
 
-#: pcbnew/dialogs/dialog_drc.cpp:238
+#: pcbnew/dialogs/dialog_drc.cpp:268
 msgid "Save DRC Report File"
 msgstr "Desa el fitxer de l'informe DRC"
 
@@ -3228,222 +3235,12 @@ msgstr "Opcions:"
 msgid "By Netclass"
 msgstr "Per Netclass"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:48
+#: pcbnew/dialogs/dialog_drc_base.cpp:50 pcbnew/dialogs/dialog_drc_base.cpp:59
 msgid "Enter the minimum acceptable value for a track width"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:56
-msgid "Min via size"
-msgstr "Mida mín. de la via"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:58
-msgid "Enter the minimum acceptable diameter for a standard via"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:66
-msgid "Min uVia size"
-msgstr "Mida mín. de la μvia"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:68
-msgid "Enter the minimum acceptable diameter for a micro via"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:80
-msgid "Create Report File"
-msgstr "Crea el fitxer de l'informe"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:83
-msgid "Enable writing report to this file"
-msgstr "Habilita l'escriptura de l'informe a aquest fitxer"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:89
-msgid "Enter the report filename"
-msgstr "Introduïu el nom del fitxer de l'informe"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:94
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:656
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:666
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
-msgid "..."
-msgstr "..."
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:109
-#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:89
-#: pcbnew/dialogs/dialog_gendrill_base.cpp:196
-#: common/dialogs/dialog_list_selector_base.cpp:37
-#: common/dialogs/wx_html_report_panel_base.cpp:14
-#: eeschema/dialogs/dialog_erc_base.cpp:71
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1151
-msgid "Messages:"
-msgstr "Missatges:"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:124
-msgid "Start DRC"
-msgstr "Inicia DRC"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:126
-msgid "Start the Design Rule Checker"
-msgstr "Inicia el comprovador de les regles de disseny (DRC)"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:130
-msgid "List Unconnected"
-msgstr "Llista dels no connectats"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:131
-msgid "List unconnected pads or tracks"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:135
-msgid "Delete All Markers"
-msgstr "Elimina tots els marcadors"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:136
-msgid "Delete every marker"
-msgstr "Elimina tots els marcadors"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:140
-msgid "Delete Current Marker"
-msgstr "Elimina el marcador actual"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:141
-msgid "Delete the marker selected in the list box below"
-msgstr "Elimina els marcadors seleccionats al quadre de la llista"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:151
-msgid "Error Messages:"
-msgstr "Missatges d'error:"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:161
-msgid ""
-"MARKERs, double click any to go there in PCB, right click for popup menu"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:170
-msgid "Problems / Markers"
-msgstr "Problemes / marcadors"
-
-#: pcbnew/dialogs/dialog_drc_base.cpp:176
-msgid "A list of unconnected pads, right click for popup menu"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:303
-msgid ""
-"Use this attribute for most non SMD components\n"
-"Components with this option are not put in the footprint position list file"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:306
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:161
-msgid ""
-"Use this attribute for SMD components.\n"
-"Only components with this option are put in the footprint position list file"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:309
-msgid ""
-"Use this attribute for \"virtual\" components drawn on board\n"
-"(like a old ISA PC bus connector)"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:340
-msgid ""
-"Component can be freely moved and auto placed. User can arbitrarily select "
-"and edit component's pads."
-msgstr ""
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:342
-msgid ""
-"Component can be freely moved and auto placed, but its pads cannot be "
-"selected or edited."
-msgstr ""
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:344
-msgid "Component is locked: it cannot be freely moved or auto placed."
-msgstr ""
-"El component està bloquejat: no es pot moure lliurement o posicionar "
-"automàticament."
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:521
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:391
-msgid "Invalid filename: "
-msgstr "Nom del fitxer no vàlid:"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
-#: pcbnew/dialogs/dialog_update_pcb_base.cpp:30
-#: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/lib_field.cpp:574
-#: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1539
-#: eeschema/template_fieldnames.cpp:39
-#: eeschema/widgets/widget_eeschema_color_config.cpp:75
-msgid "Reference"
-msgstr "Referència"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:36
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:53
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:70
-#: pcbnew/modedit_onclick.cpp:418 pcbnew/onrightclick.cpp:1006
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
-#: eeschema/onrightclick.cpp:421
-msgid "Edit"
-msgstr "Edita"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:58
-msgid "Front"
-msgstr "Frontal"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:58
-#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1168
-msgid "Back"
-msgstr "Posterior"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:60
-msgid "Board Side"
-msgstr "Cara de la placa"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:58
-#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:74
-msgid "0.0"
-msgstr "0.0"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
-msgid "+90.0"
-msgstr "+90.0"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
-msgid "-90.0"
-msgstr "-90.0"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
-msgid "180.0"
-msgstr "180.0"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
-#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
-msgid "Other"
-msgstr "Altres"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:140
-#: gerbview/class_gerber_draw_item.cpp:564
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:350
-msgid "Rotation"
-msgstr "Gir"
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:70
-msgid "Rotation (-360 to 360):"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:87
-#: pcbnew/dialogs/dialog_target_properties_base.cpp:54 common/wxwineda.cpp:170
-msgid "X"
-msgstr "X"
-
+#: pcbnew/dialogs/dialog_drc_base.cpp:57 pcbnew/dialogs/dialog_drc_base.cpp:72
+#: pcbnew/dialogs/dialog_drc_base.cpp:87
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:94
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:105
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:228
@@ -3475,6 +3272,218 @@ msgstr "X"
 msgid "unit"
 msgstr "unitat"
 
+#: pcbnew/dialogs/dialog_drc_base.cpp:63
+msgid "Min via size"
+msgstr "Mida mín. de la via"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:65 pcbnew/dialogs/dialog_drc_base.cpp:74
+msgid "Enter the minimum acceptable diameter for a standard via"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:78
+msgid "Min uVia size"
+msgstr "Mida mín. de la μvia"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:80 pcbnew/dialogs/dialog_drc_base.cpp:89
+msgid "Enter the minimum acceptable diameter for a micro via"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:97
+msgid "Create Report File"
+msgstr "Crea el fitxer de l'informe"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:100
+msgid "Enable writing report to this file"
+msgstr "Habilita l'escriptura de l'informe a aquest fitxer"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:105
+msgid "Enter the report filename"
+msgstr "Introduïu el nom del fitxer de l'informe"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:110
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:656
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:666
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:678
+msgid "..."
+msgstr "..."
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:125
+#: pcbnew/dialogs/dialog_exchange_modules_base.cpp:89
+#: pcbnew/dialogs/dialog_gendrill_base.cpp:196
+#: common/dialogs/dialog_list_selector_base.cpp:37
+#: common/dialogs/wx_html_report_panel_base.cpp:14
+#: eeschema/dialogs/dialog_erc_base.cpp:71
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1151
+msgid "Messages:"
+msgstr "Missatges:"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:140
+msgid "Start DRC"
+msgstr "Inicia DRC"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:142
+msgid "Start the Design Rule Checker"
+msgstr "Inicia el comprovador de les regles de disseny (DRC)"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:146
+msgid "List Unconnected"
+msgstr "Llista dels no connectats"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:147
+msgid "List unconnected pads or tracks"
+msgstr "Llista els pads o les pistes sense connectar"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:151
+msgid "Delete All Markers"
+msgstr "Elimina tots els marcadors"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:152
+msgid "Delete every marker"
+msgstr "Elimina tots els marcadors"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:156
+msgid "Delete Current Marker"
+msgstr "Elimina el marcador actual"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:157
+msgid "Delete the marker selected in the list box below"
+msgstr "Elimina els marcadors seleccionats al quadre de la llista"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:167
+msgid "Error Messages:"
+msgstr "Missatges d'error:"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:177
+msgid ""
+"MARKERs, double click any to go there in PCB, right click for popup menu"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:186
+msgid "Problems / Markers"
+msgstr "Problemes / marcadors"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:192
+msgid "A list of unconnected pads, right click for popup menu"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:304
+msgid ""
+"Use this attribute for most non SMD components\n"
+"Components with this option are not put in the footprint position list file"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:307
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:163
+msgid ""
+"Use this attribute for SMD components.\n"
+"Only components with this option are put in the footprint position list file"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:310
+msgid ""
+"Use this attribute for \"virtual\" components drawn on board\n"
+"(like a old ISA PC bus connector)"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:341
+msgid ""
+"Component can be freely moved and auto placed. User can arbitrarily select "
+"and edit component's pads."
+msgstr ""
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:343
+msgid ""
+"Component can be freely moved and auto placed, but its pads cannot be "
+"selected or edited."
+msgstr ""
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:345
+msgid "Component is locked: it cannot be freely moved or auto placed."
+msgstr ""
+"El component està bloquejat: no es pot moure lliurement o posicionar "
+"automàticament."
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:522
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:393
+msgid "Invalid filename: "
+msgstr "Nom del fitxer no vàlid:"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:42
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
+#: pcbnew/dialogs/dialog_update_pcb_base.cpp:30
+#: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/lib_field.cpp:574
+#: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1538
+#: eeschema/template_fieldnames.cpp:39
+#: eeschema/widgets/widget_eeschema_color_config.cpp:75
+msgid "Reference"
+msgstr "Referència"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:36
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:52
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:53
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:70
+#: pcbnew/modedit_onclick.cpp:418 pcbnew/onrightclick.cpp:1002
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:228
+#: eeschema/onrightclick.cpp:421
+msgid "Edit"
+msgstr "Edita"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:58
+msgid "Front"
+msgstr "Frontal"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:58
+#: pcbnew/dialogs/dialog_layers_setup_base.cpp:1168
+msgid "Back"
+msgstr "Posterior"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:60
+msgid "Board Side"
+msgstr "Cara de la placa"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:58
+#: pcbnew/import_dxf/dialog_dxf_import_base.cpp:74
+msgid "0.0"
+msgstr "0,0"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
+msgid "+90.0"
+msgstr "+90,0"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
+msgid "-90.0"
+msgstr "-90,0"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
+msgid "180.0"
+msgstr "180,0"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:64
+#: pcbnew/dialogs/dialog_edit_module_text_base.cpp:118
+msgid "Other"
+msgstr "Altres"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:140
+#: gerbview/class_gerber_draw_item.cpp:564
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:350
+msgid "Rotation"
+msgstr "Gir"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:70
+msgid "Rotation (-360 to 360):"
+msgstr "Gir (-360 fins a 360):"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:87
+#: pcbnew/dialogs/dialog_target_properties_base.cpp:54 common/wxwineda.cpp:170
+msgid "X"
+msgstr "X"
+
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:98
 #: common/wxwineda.cpp:183
 msgid "Y"
@@ -3496,7 +3505,7 @@ msgid "Change Footprint(s)"
 msgstr "Canvia les empremtes"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:129
-#: pcbnew/hotkeys.cpp:352 eeschema/tool_sch.cpp:162
+#: pcbnew/hotkeys.cpp:305 eeschema/tool_sch.cpp:162
 msgid "Footprint Editor"
 msgstr "Editor d'empremtes"
 
@@ -3683,7 +3692,7 @@ msgstr "Edita el nom del fitxer"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:327
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:271
-#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:140
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:141
 msgid "Configure Paths"
 msgstr "Configura els camins"
 
@@ -3692,29 +3701,29 @@ msgstr "Configura els camins"
 msgid "3D Settings"
 msgstr "Ajusts 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:159
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:161
 msgid "Use this attribute for most non SMD components"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:163
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:165
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board (like a old ISA "
 "PC bus connector)"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:186
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:188
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr ""
 "Habilita les dreceres per a les ordres de moviment i de posicionament "
 "automàtic"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:187
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:189
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr ""
 "Inhabilita les dreceres de teclat de les ordres de moviment i de "
 "posicionament automàtic"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:506
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:508
 #, c-format
 msgid ""
 "Error:\n"
@@ -3837,7 +3846,7 @@ msgstr "Desplaçament Y"
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:129
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:158
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:340
-#: eeschema/lib_pin.cpp:1991
+#: eeschema/lib_pin.cpp:2012
 msgid "Visible"
 msgstr "Visible"
 
@@ -3854,25 +3863,25 @@ msgstr "Invisible"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:764
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
 msgid "Italic"
 msgstr "Cursiva"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:99 eeschema/lib_field.cpp:746
-#: eeschema/lib_pin.cpp:1984 eeschema/sch_text.cpp:767
+#: eeschema/lib_pin.cpp:2005 eeschema/sch_text.cpp:773
 msgid "Style"
 msgstr "Estil"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:120
-#: eeschema/lib_pin.cpp:1998 eeschema/sch_text.cpp:756
+#: eeschema/lib_pin.cpp:2019 eeschema/sch_text.cpp:762
 msgid "Orientation"
 msgstr "Orientació"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:124
 msgid "Rotation (-90.0 to 90.0)"
-msgstr ""
+msgstr "Gir (-90,0 fins a 90,0)"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -3939,7 +3948,6 @@ msgstr "Aplica"
 #: pcbnew/dialogs/dialog_find_base.cpp:45
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:186
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:95
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:358
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:144
@@ -4043,7 +4051,7 @@ msgstr "metre"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
 msgid "0.1 Inch"
-msgstr "0.1 in"
+msgstr "0,1 in"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:113
 msgid "Copy 3D model files to 3D model path"
@@ -4058,7 +4066,7 @@ msgstr ""
 msgid "Use paths for model files in board VRML file relative to the vrml file"
 msgstr ""
 "Utilitza camins per als fitxers dels models al fitxer VRML de la placa "
-"relatiu al fitxer vrml"
+"relatius al fitxer vrml"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:122
 msgid "Plain PCB (no copper or silk)"
@@ -4106,7 +4114,7 @@ msgstr "Troba el marcador"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:182
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:338
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:341
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180 eeschema/lib_pin.cpp:1969
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180 eeschema/lib_pin.cpp:1990
 #: eeschema/libedit.cpp:477 cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 msgid "Name"
@@ -4117,7 +4125,7 @@ msgstr "Nom"
 #: common/dialog_about/AboutDialog_main.cpp:129
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
-#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1564
+#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1563
 #: eeschema/viewlibs.cpp:308
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:37
 msgid "Description"
@@ -4125,7 +4133,7 @@ msgstr "Descripció"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:204 pcbnew/librairi.cpp:783
 msgid "Nickname"
-msgstr ""
+msgstr "Sobrenom"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:205
 msgid "Library Path"
@@ -4142,7 +4150,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:446
 msgid "No Colon in Nicknames"
-msgstr ""
+msgstr "Cap punt al sobrenom"
 
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:476
 #, c-format
@@ -4229,7 +4237,7 @@ msgstr "Variable d'entorn"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:187
 msgid "Path Segment"
-msgstr "Segment de camí"
+msgstr "Segment del camí"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:199
 msgid "This is a read-only table which shows pertinent environment variables."
@@ -4265,8 +4273,8 @@ msgstr "Annexa una fila en blanc"
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:55
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:63
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71 pcbnew/onrightclick.cpp:645
-#: pcbnew/onrightclick.cpp:962 pcbnew/onrightclick.cpp:1014
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:71 pcbnew/onrightclick.cpp:641
+#: pcbnew/onrightclick.cpp:958 pcbnew/onrightclick.cpp:1010
 #: common/dialogs/dialog_env_var_config_base.cpp:64
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:231
@@ -4289,7 +4297,7 @@ msgstr "Mou la fila seleccionada una posició cap avall"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:90
 msgid "Option Choices:"
-msgstr ""
+msgstr "Selecció de les opcions:"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:94
 msgid "Options supported by current plugin"
@@ -4586,7 +4594,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:95
 msgid "Merge PTH and NPTH holes into one file"
-msgstr ""
+msgstr "Combina els forats PTH i NPTH a un fitxer"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid ""
@@ -4605,7 +4613,7 @@ msgstr "Eix auxiliar"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:105
 msgid "Drill Origin:"
-msgstr ""
+msgstr "Origen de perforació:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:107
 msgid ""
@@ -4646,7 +4654,7 @@ msgstr "Pads no metal·litzats:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:149
 msgid "Through Vias:"
-msgstr "A través de les vies:"
+msgstr "A través de vies:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:157
 msgid "Buried Vias:"
@@ -4817,7 +4825,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:146
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:154
 msgid "When creating tracks"
-msgstr ""
+msgstr "Quan es creïn les pistes"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:148
 msgid "Magnetic Pads"
@@ -4827,6 +4835,8 @@ msgstr "Pads magnètics"
 msgid ""
 "control the capture of the pcb cursor when the mouse cursor enters a pad area"
 msgstr ""
+"controla la captura del cursor PCB quan el cursor del ratolí entri en l'àrea "
+"d'un pad"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:156
 msgid "Magnetic Tracks"
@@ -4836,12 +4846,14 @@ msgstr "Pistes magnètiques"
 msgid ""
 "Control the capture of the pcb cursor when the mouse cursor enters a track"
 msgstr ""
+"Controla la captura del cursor PCB quan el cursor del ratolí entri en l'àrea "
+"d'una pista"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:163
 #: cvpcb/dialogs/dialog_display_options_base.cpp:41
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:84
 msgid "Pan and Zoom"
-msgstr ""
+msgstr "Panoràmica i zoom"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:165
 msgid "Ce&nter and warp cursor on zoom"
@@ -4898,7 +4910,7 @@ msgstr "Avançat/desenvolupador"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:196
 msgid "Dump zone geometry to files when filling"
-msgstr "Bolca la geometria de la zona als fitxes quan s'ompli"
+msgstr "Bolca la geometria de la zona als fitxers quan s'ompli"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "Available:"
@@ -4917,7 +4929,7 @@ msgid "Items to Delete"
 msgstr "Elements a eliminar"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
-#: pcbnew/onrightclick.cpp:719 pcbnew/tools/pcb_editor_control.cpp:121
+#: pcbnew/onrightclick.cpp:715 pcbnew/tools/pcb_editor_control.cpp:121
 msgid "Zones"
 msgstr "Zones"
 
@@ -5404,6 +5416,9 @@ msgid ""
 "Pen size used to draw items that have no pen size specified.\n"
 "Used mainly to draw items in sketch mode."
 msgstr ""
+"La mida del traç que s'utilitza per traçar els elements que no tenen "
+"especificada la mida del traç.\n"
+"S'utilitza principalment per traçar els elements en el mode d'esbós."
 
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:218
 msgid "Tracks, vias, and pads are allowed. The keepout is useless"
@@ -5424,7 +5439,7 @@ msgstr "180, 90 i 45 graus"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:49
 msgid "Zone Edge Orientation:"
-msgstr ""
+msgstr "Orientació de la cantonada de la zona:"
 
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
@@ -5462,7 +5477,7 @@ msgstr "Capa inferior/posterior"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:344
 msgid "Enabled"
-msgstr "Habilitat"
+msgstr "Habilitada"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:700
 msgid "Layer name may not be empty"
@@ -5482,7 +5497,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:25
 msgid "Preset Layer Groupings"
-msgstr ""
+msgstr "Agrupacions predefinides de les capes"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:129
@@ -5511,7 +5526,7 @@ msgstr "Quatre capes, peces en la part frontal i posterior"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "All layers on"
-msgstr "Totes les capes engegades"
+msgstr "Totes les capes activades"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:41
 msgid "Copper Layers"
@@ -5585,7 +5600,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:137
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1346
 msgid "Off-board, testing"
-msgstr ""
+msgstr "Part no integral, proves"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:141
 msgid "Fab_Front_later"
@@ -5593,14 +5608,14 @@ msgstr "Fab_Front_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:152
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr ""
+msgstr "Si voleu una capa de fabricació per a la cara frontal de la placa"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:162
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:187
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1296
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1321
 msgid "Off-board, manufacturing"
-msgstr ""
+msgstr "Part no integral, fabricació"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:166
 msgid "Adhes_Front_later"
@@ -5609,6 +5624,7 @@ msgstr "Adhes_Front_later"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:177
 msgid "If you want an adhesive template for the front side of the board"
 msgstr ""
+"Si voleu una capa de plantilla adhesiva per a la cara frontal de la placa"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:191
 msgid "SoldP_Front_later"
@@ -5617,6 +5633,7 @@ msgstr "SoldP_Front_later"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:202
 msgid "If you want a solder paster layer for front side of the board"
 msgstr ""
+"Si voleu una capa de pasta de soldadura per a la cara frontal de la placa"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:212
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:237
@@ -5625,7 +5642,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1246
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1271
 msgid "On-board, non-copper"
-msgstr ""
+msgstr "Part integral, no de coure"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:216
 msgid "SilkS_Front_later"
@@ -5633,7 +5650,7 @@ msgstr "SilkS_Front_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:227
 msgid "If you want a silk screen layer for the front side of the board"
-msgstr ""
+msgstr "Si voleu una capa de serigrafia per a la cara frontal de la placa"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:241
 msgid "Mask_Front_later"
@@ -5642,6 +5659,7 @@ msgstr "Mask_Front_later"
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:252
 msgid "If you want a solder mask layer for the front of the board"
 msgstr ""
+"Si voleu una capa de màscara de soldadura per a la part frontal de la placa"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:266
 msgid "Front_later"
@@ -5649,7 +5667,7 @@ msgstr "Front_later"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:268
 msgid "Layer name of front (top) copper layer"
-msgstr ""
+msgstr "Nom de la capa de la capa de coure frontal (superior)"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:280
 msgid "If you want a front copper layer"
@@ -6063,6 +6081,9 @@ msgid ""
 "- a positive value means a mask bigger than a pad\n"
 "- a negative value means a mask smaller than a pad\n"
 msgstr ""
+"Nota: Per als valors del marge de seguretat:\n"
+"- un valor positiu significa una màscara més gran que un pad\n"
+"- un valor negatiu significa una màscara més petita que un pad\n"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:42
 msgid ""
@@ -6081,6 +6102,11 @@ msgid ""
 "Two pad areas nearer than this value will be merged during plotting.\n"
 "This parameter is used only to plot solder mask layers."
 msgstr ""
+"Distància mínima entre les àrees de 2 pads.\n"
+"Les dues àrees dels pads que estiguin més a prop que aquest valor seran "
+"combinades en el ploteig.\n"
+"Aquest paràmetre només s'utilitza per a plotejar les capes de les màscares "
+"de soldadura."
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:79
 msgid ""
@@ -6475,7 +6501,7 @@ msgstr "H, V i 45 graus"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:48
 msgid "Zone Edges Orient"
-msgstr ""
+msgstr "Orientació de les cantonades de la zona"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:54
 msgid "Outlines Appearence"
@@ -6485,60 +6511,13 @@ msgstr "Aparença de les delimitacions"
 msgid "Zone min thickness value"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_orient_footprints.cpp:119
-#, c-format
-msgid "OK to set footprints orientation to %.1f degrees ?"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_orient_footprints.cpp:150
-msgid "Bad value for footprints orientation"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:22
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:125
-#: common/dialogs/dialog_page_settings_base.cpp:42
-msgid "Orientation:"
-msgstr "Orientació:"
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:27
-msgid "New orientation (0.1 degree resolution)"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:31
-#: common/dialogs/dialog_list_selector_base.cpp:19
-#: common/dialogs/wx_html_report_panel_base.cpp:34
-#: eeschema/dialogs/dialog_choose_component_base.cpp:22
-msgid "Filter:"
-msgstr "Filtra:"
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:36
-msgid "Filter to select footprints by reference"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:43
-msgid "Include Locked Footprints"
-msgstr "Inclou les empremtes bloquejades"
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:44
-msgid "Force locked footprints to be modified"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.cpp:54
-#: pcbnew/dialogs/wizard_add_fplib.cpp:841 pcbnew/muonde.cpp:847
-#: common/dialog_about/dialog_about_base.cpp:73
-#: eeschema/dialogs/dialog_netlist_base.cpp:129
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:70
-#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
-msgid "OK"
-msgstr "D'acord"
-
 #: pcbnew/dialogs/dialog_pad_properties.cpp:350
 msgid "Back side (footprint is mirrored)"
 msgstr "Cara posterior (l'empremta està reflectida)"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:766
 msgid "Pad size must be greater than zero"
-msgstr ""
+msgstr "La mida del pad ha de ser més gran que zero"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:772
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
@@ -6546,7 +6525,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:780
 msgid "Error: pad has no layer"
-msgstr ""
+msgstr "Error: el pad no té cap capa"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:787
 msgid "Error: the pad is not on a copper layer and has a hole"
@@ -6560,7 +6539,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:812
 msgid "Incorrect value for pad offset"
-msgstr ""
+msgstr "Valor incorrecte per al desplaçament del pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:818
 msgid "Too large value for pad delta size"
@@ -6581,18 +6560,17 @@ msgid "Error: only one external copper layer allowed for SMD or Connector pads"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:852
-#, fuzzy
 msgid "Incorrect corner size value"
-msgstr "número incorrecte, avorta"
+msgstr "valor incorrecte de la mida de la cantonada"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:856
 msgid "Incorrect (negative) corner size value"
-msgstr ""
+msgstr "Valor incorrecte (negatiu) de la mida de la cantonada"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:858
 #, fuzzy
 msgid "Corner size value must be smaller than 50%"
-msgstr "El marge de seguretat ha de ser més petit que %f” / %f mm."
+msgstr "El marge de seguretat ha de ser més petit que %f\" / %f mm."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:864
 msgid "Pad setup errors list"
@@ -6644,9 +6622,8 @@ msgid "Trapezoidal"
 msgstr "Trapezoïdal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:66
-#, fuzzy
 msgid "Rounded Rectangle"
-msgstr "Afegeix un rectangle"
+msgstr "Rectangle arrodonit"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:47
@@ -6672,6 +6649,11 @@ msgstr "Mida X:"
 msgid "Size Y:"
 msgstr "Mida Y:"
 
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:125
+#: common/dialogs/dialog_page_settings_base.cpp:42
+msgid "Orientation:"
+msgstr "Orientació:"
+
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:129
 msgid "90"
 msgstr "90"
@@ -6696,22 +6678,24 @@ msgstr "Desplaçament Y de la forma:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:171
 msgid "Pad to die length:"
-msgstr ""
+msgstr "Pad a la llargada del dau:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:173
 msgid ""
 "Wire length from pad to die on chip ( used to calculate actual track length)"
 msgstr ""
+"Llargada del fil des del pad fins al dau del xip (s'utilitza per calcular la "
+"llargada real de la pista)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:193
 msgid "Trapezoid delta:"
-msgstr ""
+msgstr "Delta del trapezi:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:204
 msgid "Trapezoid direction:"
-msgstr ""
+msgstr "Direcció del trapezi:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:208 eeschema/sch_text.cpp:736
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:208 eeschema/sch_text.cpp:742
 msgid "Horizontal"
 msgstr "Horitzontal"
 
@@ -6722,7 +6706,7 @@ msgstr "Vertical"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:226
 msgid "Corner size ( percent of width):"
-msgstr ""
+msgstr "Mida de la cantonada (percentatge d'amplitud):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:228
 msgid ""
@@ -6730,10 +6714,13 @@ msgid ""
 "The width is the smaller value between size X and size Y\n"
 "The max value is 50 percent "
 msgstr ""
+"El radi de la cantonada en percentatge de l'amplada del pad.\n"
+"L'amplada és el valor més petit entre la mida X i la mida Y\n"
+"El valor màxim és 50 per cent "
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:239
 msgid "Corner radius:"
-msgstr ""
+msgstr "Radi de la cantonada:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:241
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:247
@@ -6743,6 +6730,10 @@ msgid ""
 "The width is the smaller value between size X and size Y\n"
 "Note: IPC norm gives a max value = 0.25mm"
 msgstr ""
+"El radi de la cantonada.\n"
+"No pot ser més que l'amplada del pad.\n"
+"L'amplada és el valor més petit entre la mida X i la mida Y\n"
+"Nota: La norma IPC dóna un valor màxim = 0,25 mm"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:245
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:170
@@ -6801,37 +6792,37 @@ msgstr "Capes tècniques"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:337
 msgid "Front adhesive"
-msgstr ""
+msgstr "Adhesiu frontal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:340
 msgid "Back adhesive"
-msgstr ""
+msgstr "Adhesiu posterior"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:343
 msgid "Front solder paste"
-msgstr ""
+msgstr "Pasta de soldadura frontal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:346
 msgid "Back solder paste"
-msgstr ""
+msgstr "Pasta de soldadura posterior"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:349
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid "Front silk screen"
-msgstr ""
+msgstr "Serigrafia frontal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:352
 msgid "Back silk screen"
-msgstr ""
+msgstr "Serigrafia posterior"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:355
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid "Front solder mask"
-msgstr ""
+msgstr "Màscara de soldadura frontal"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:358
 msgid "Back solder mask"
-msgstr ""
+msgstr "Màscara de soldadura posterior"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:361
 msgid "Drafting notes"
@@ -6921,11 +6912,11 @@ msgstr "A partir de l'empremta ascendent"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:512
 msgid "Thermal relief width:"
-msgstr "Amplada d'alleujament tèrmica:"
+msgstr "Amplada de l'alleujament tèrmic:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:523
 msgid "Thermal relief gap:"
-msgstr "Separació d'alleujament tèrmica:"
+msgstr "Separació de l'alleujament tèrmic:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:540
 msgid "Set fields to 0 to use parent or global values"
@@ -6969,7 +6960,7 @@ msgstr "Justificació:"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
-#: eeschema/lib_pin.cpp:114
+#: eeschema/lib_pin.cpp:115
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 msgid "Left"
 msgstr "Esquerra"
@@ -6990,7 +6981,7 @@ msgstr "Centre"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
-#: eeschema/lib_pin.cpp:113
+#: eeschema/lib_pin.cpp:114
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 msgid "Right"
 msgstr "Dreta"
@@ -7072,7 +7063,7 @@ msgstr "Sense seleccionar la capa"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:26
 msgid "Plot format:"
-msgstr ""
+msgstr "Format de ploteig:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:30
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
@@ -7081,11 +7072,11 @@ msgstr "Postscript"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:89
 msgid "Plot sheet reference on all layers"
-msgstr ""
+msgstr "Ploteja la referència del full en totes les capes"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Plot pads on silkscreen"
-msgstr ""
+msgstr "Ploteja els pads en la serigrafia"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid ""
@@ -7096,7 +7087,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid "Plot footprint values"
-msgstr ""
+msgstr "Ploteja els valors de les empremtes"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:101
 msgid "Plot footprint references"
@@ -7104,11 +7095,11 @@ msgstr "Ploteja les referències de l'empremta"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Force plotting of invisible values/references"
-msgstr ""
+msgstr "Força el ploteig dels valors/referències invisibles"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:105
 msgid "Force plot invisible values and/or references"
-msgstr ""
+msgstr "Força el ploteig dels valors i/o les referències invisibles"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:109
 msgid "Do not tent vias"
@@ -7116,7 +7107,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:110
 msgid "Remove soldermask on vias"
-msgstr ""
+msgstr "Suprimeix la màscara de soldadura en les vies"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
 msgid "Exclude PCB edge layer from other layers"
@@ -7128,11 +7119,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:119
 msgid "Mirrored plot"
-msgstr ""
+msgstr "Ploteig reflectit"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:122
 msgid "Negative plot"
-msgstr ""
+msgstr "Ploteig negatiu"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "Use auxiliary axis as origin"
@@ -7144,7 +7135,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:136
 msgid "Drill marks:"
-msgstr ""
+msgstr "Marques de perforació:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:140
 msgid "Small"
@@ -7156,7 +7147,7 @@ msgstr "Mida real"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:146
 msgid "Scaling:"
-msgstr ""
+msgstr "Escalament:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:150
 msgid "Auto"
@@ -7180,14 +7171,14 @@ msgstr "3:1"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:156
 msgid "Plot mode:"
-msgstr ""
+msgstr "Mode de ploteig:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:160
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:53
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:59
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:65
 msgid "Filled"
-msgstr ""
+msgstr "Omplert"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:160
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:53
@@ -7198,19 +7189,19 @@ msgstr "Esbós"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:166
 msgid "Default line width"
-msgstr ""
+msgstr "Amplada de la línia predeterminada"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:173
 msgid "Line width for, e.g., sheet references."
-msgstr ""
+msgstr "Amplada de la línia per exemple per a les referències de les fulles."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:187
 msgid "Current solder mask settings:"
-msgstr ""
+msgstr "Ajusts actuals de la màscara de soldadura:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:196
 msgid "Margin between pads and solder mask"
-msgstr ""
+msgstr "Marge entre els pads i la màscara de soldadura"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:200
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
@@ -7229,35 +7220,37 @@ msgstr "Opcions Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:225
 msgid "Use Protel filename extensions"
-msgstr ""
+msgstr "Utilitza les extensions de nom de fitxer de Protel"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:226
 msgid "Use conventional Protel Gerber extensions - .GBL, .GTL, etc..."
 msgstr ""
+"Utilitza les extensions convencionals Gerber de Protel .GBL, .GTL, etc..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:230
 msgid "Include extended attributes"
-msgstr ""
+msgstr "Inclou els atributs estesos"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Include extended attributes (X2 Gerber files format) in the Gerber file"
 msgstr ""
+"Inclou els atributs estesos (format de fitxers Gerber X2) al fitxer Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:235
 msgid "Subtract soldermask from silkscreen"
-msgstr ""
+msgstr "Sostreu la màscara de soldadura de la serigrafia"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:236
 msgid "Remove silkscreen from areas without soldermask"
-msgstr ""
+msgstr "Suprimeix la serigrafia de les àrees sense màscara de soldadura"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:243
 msgid "4.5 (unit mm)"
-msgstr ""
+msgstr "4,5 (unitat mm)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:243
 msgid "4.6 (unit mm)"
-msgstr ""
+msgstr "4,6 (unitat mm)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:245
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:187
@@ -7271,6 +7264,8 @@ msgid ""
 "Resolution of coordinates in Gerber files.\n"
 "Use the higher value if possible."
 msgstr ""
+"Resolució de les coordenades als fitxers Gerber.\n"
+"Utilitzeu el valor més elevat si és possible."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:254
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
@@ -7316,7 +7311,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:325
 msgid "Force A4 output"
-msgstr ""
+msgstr "Força la sortida A4"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:351
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:110
@@ -7330,7 +7325,7 @@ msgstr "Genera el fitxer de perforació"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:369
 msgid "Select Fab Layers"
-msgstr ""
+msgstr "Selecciona les capes Fab"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:373
 msgid "Select all Copper Layers"
@@ -7352,7 +7347,7 @@ msgstr "Desselecciona totes les capes"
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:60
 msgid "u"
-msgstr ""
+msgstr "u"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
@@ -7607,13 +7602,13 @@ msgstr "Encaixa a la pàgina"
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 0.5"
-msgstr "Escala 0.5"
+msgstr "Escala 0,5"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 0.7"
-msgstr "Escala 0.7"
+msgstr "Escala 0,7"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 1"
@@ -7655,7 +7650,7 @@ msgstr "Escala 16"
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:51
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:46
 msgid "Approx. Scale:"
-msgstr "Escala aproximada:"
+msgstr "Escala d'aproximació:"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:112
@@ -7752,12 +7747,12 @@ msgstr ""
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Approx. Scale 1"
-msgstr ""
+msgstr "Escala 1 d'aproximació"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Accurate Scale 1"
-msgstr ""
+msgstr "Escala 1 acurada"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:55
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:50
@@ -7782,11 +7777,11 @@ msgstr "Ajusta escala X per al traçat a escala natural"
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:84
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:63
 msgid "Default pen size"
-msgstr ""
+msgstr "Mida predeterminada del traç"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:94
 msgid "Print frame ref"
-msgstr ""
+msgstr "Imprimeix la referència del marc"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:96
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:111
@@ -7851,10 +7846,12 @@ msgid ""
 "The footprint library is a folder with a name ending with .pretty\n"
 "Footprints are .kicad_mod files inside this folder."
 msgstr ""
+"La biblioteca d'empremtes és una carpeta amb un nom que acaba amb .pretty\n"
+"Les empremtes són els fitxers .kicad_mod que estan dins d'aquesta carpeta."
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:25
 msgid "Path base:"
-msgstr ""
+msgstr "Camí base:"
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:29
 msgid "Select a folder"
@@ -7862,7 +7859,7 @@ msgstr "Selecciona una carpeta"
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:34
 msgid "Library folder (.pretty will be added to name, if missing)"
-msgstr ""
+msgstr "Carpeta de la biblioteca (s'afegirà .pretty al nom si no hi és)"
 
 #: pcbnew/dialogs/dialog_set_grid.cpp:233
 #, c-format
@@ -7897,7 +7894,7 @@ msgstr "Y:"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:98 pcbnew/hotkeys.cpp:132
 msgid "Reset Grid Origin"
-msgstr ""
+msgstr "Restableix l'origen de la quadrícula"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:105
 msgid "Fast Switching"
@@ -7950,7 +7947,7 @@ msgstr "Mode d'impressió"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
 msgid "Full page with  frame ref"
-msgstr ""
+msgstr "Pàgina completa amb la referència al marc"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
 msgid "Current page size"
@@ -7974,19 +7971,19 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:93
 msgid "Print mirrored"
-msgstr ""
+msgstr "Impressió reflectida"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:94
 msgid "Print the layer(s) horizontally mirrored"
-msgstr ""
+msgstr "Imprimeix les capes reflectides horitzontalment"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
 msgid "One file per layer"
-msgstr ""
+msgstr "Un fitxer per capa"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
 msgid "All in one file"
-msgstr "Tots en un fitxer"
+msgstr "Tot en un fitxer"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:106
 msgid "File option:"
@@ -7995,7 +7992,7 @@ msgstr "Opció del fitxer:"
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28 pcbnew/muonde.cpp:868
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:227
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:138
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:53 eeschema/sch_text.cpp:790
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:53 eeschema/sch_text.cpp:796
 msgid "Size"
 msgstr "Mida"
 
@@ -8207,6 +8204,14 @@ msgstr "S'estan validant les biblioteques"
 msgid "NOT CHECKED"
 msgstr "NO COMPROVAT"
 
+#: pcbnew/dialogs/wizard_add_fplib.cpp:841 pcbnew/muonde.cpp:847
+#: common/dialog_about/dialog_about_base.cpp:73
+#: eeschema/dialogs/dialog_netlist_base.cpp:129
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:70
+#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
+msgid "OK"
+msgstr "D'acord"
+
 #: pcbnew/dialogs/wizard_add_fplib.cpp:845
 msgid "INVALID"
 msgstr "NO VÀLID"
@@ -8224,11 +8229,11 @@ msgid ""
 msgstr ""
 "Benvingut a l'assistent per afegir biblioteques d'empremtes!\n"
 "\n"
-"Si us plau, seleccioneu l'origen de les biblioteques per afegir:"
+"Si us plau, seleccioneu l'origen de les biblioteques a afegir:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:38
 msgid "Files on my computer"
-msgstr "Fitxers en el meu ordinador"
+msgstr "Fitxers al meu ordinador"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:46
 msgid "Github repository"
@@ -8251,7 +8256,7 @@ msgid "Review and confirm the changes to the libraries:"
 msgstr "Reviseu i confirmeu els canvis a les biblioteques:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:185 pcbnew/loadcmp.cpp:436
-#: eeschema/sch_component.cpp:1553
+#: eeschema/sch_component.cpp:1552
 msgid "Library"
 msgstr "Biblioteca"
 
@@ -8289,81 +8294,81 @@ msgstr ""
 msgid "The text thickness is too large for the text size.  It will be clamped"
 msgstr "El gruix de text és massa gran per la mida del text i s'acotarà"
 
-#: pcbnew/drc.cpp:184
+#: pcbnew/drc.cpp:179
 msgid "Compile ratsnest...\n"
 msgstr "Compila l'embolic...\n"
 
-#: pcbnew/drc.cpp:200
+#: pcbnew/drc.cpp:195
 msgid "Aborting\n"
 msgstr "S'està avortant\n"
 
-#: pcbnew/drc.cpp:213
+#: pcbnew/drc.cpp:208
 msgid "Pad clearances...\n"
 msgstr "Marges de seguretat del pad...\n"
 
-#: pcbnew/drc.cpp:223
+#: pcbnew/drc.cpp:218
 msgid "Track clearances...\n"
 msgstr "Marges de seguretat de les pistes...\n"
 
-#: pcbnew/drc.cpp:233
+#: pcbnew/drc.cpp:228
 msgid "Fill zones...\n"
 msgstr "Omple les zones...\n"
 
-#: pcbnew/drc.cpp:243
+#: pcbnew/drc.cpp:238
 msgid "Test zones...\n"
 msgstr "Prova les zones...\n"
 
-#: pcbnew/drc.cpp:254
+#: pcbnew/drc.cpp:249
 msgid "Unconnected pads...\n"
 msgstr "Pads sense connectar...\n"
 
-#: pcbnew/drc.cpp:266
+#: pcbnew/drc.cpp:261
 msgid "Keepout areas ...\n"
 msgstr "Àrees de prohibit el pas...\n"
 
-#: pcbnew/drc.cpp:276
+#: pcbnew/drc.cpp:271
 msgid "Test texts...\n"
 msgstr "Prova els texts...\n"
 
-#: pcbnew/drc.cpp:289 eeschema/dialogs/dialog_erc.cpp:571
+#: pcbnew/drc.cpp:284 eeschema/dialogs/dialog_erc.cpp:571
 msgid "Finished"
 msgstr "Acabat"
 
-#: pcbnew/drc.cpp:327
+#: pcbnew/drc.cpp:322
 #, c-format
 msgid "NETCLASS: '%s' has Clearance:%s which is less than global:%s"
 msgstr ""
-"NETCLASS: «%s» té un marge de seguretat:%s que és menys que el glogal:%s"
+"NETCLASS: «%s» té un marge de seguretat:%s que és menys que el global:%s"
 
-#: pcbnew/drc.cpp:343
+#: pcbnew/drc.cpp:338
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: «%s» té una amplada de pista:%s que és menys que la global:%s"
 
-#: pcbnew/drc.cpp:358
+#: pcbnew/drc.cpp:353
 #, c-format
 msgid "NETCLASS: '%s' has Via Dia:%s which is less than global:%s"
 msgstr "NETCLASS: «%s» té un diàmetre de via:%s que és menys que el global:%s"
 
-#: pcbnew/drc.cpp:373
+#: pcbnew/drc.cpp:368
 #, c-format
 msgid "NETCLASS: '%s' has Via Drill:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: «%s» té una perforació de via:%s que és menys que la global:%s"
 
-#: pcbnew/drc.cpp:388
+#: pcbnew/drc.cpp:383
 #, c-format
 msgid "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s"
 msgstr "NETCLASS: «%s» té un diàmetre de μvia:%s que és menys que el global:%s"
 
-#: pcbnew/drc.cpp:403
+#: pcbnew/drc.cpp:398
 #, c-format
 msgid "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"
 msgstr ""
 "NETCLASS: «%s» té una perforació de μvia:%s que és menys que la global:%s"
 
-#: pcbnew/drc.cpp:496
+#: pcbnew/drc.cpp:491
 msgid "Track clearances"
 msgstr "Marges de seguretat de la pista"
 
@@ -8833,6 +8838,13 @@ msgid ""
 "directory <b>must</b> have a <b>.pretty</b> file extension because the "
 "format of the save is pretty.</p>"
 msgstr ""
+"Establiu aquesta propietat a un directori en el qual s'escriuran les "
+"empremtes com a empremtes pretty quan es desi aquesta biblioteca. Qualsevol "
+"cosa que s'hagi desat tindrà prioritat sobre les empremtes amb el mateix nom "
+"al dipòsit de GitHub. Aquestes empremtes desades es poden enviar a "
+"l'encarregat de la biblioteca com a actualitzacions. <p>El directori <b>ha "
+"de tenir</b> una extensió de fitxer <b>.pretty</b> pel fet que el format de "
+"desament és pretty.</p>"
 
 #: pcbnew/github/github_plugin.cpp:394
 #, c-format
@@ -8922,20 +8934,20 @@ msgstr "no es pot eliminar la biblioteca d'empremtes «%s»"
 #: pcbnew/hotkeys.cpp:67 eeschema/hotkeys.cpp:135
 #: pagelayout_editor/hotkeys.cpp:67
 msgid "Mouse Left Click"
-msgstr ""
+msgstr "Clic amb el botó esquerre del ratolí"
 
 #: pcbnew/hotkeys.cpp:69 eeschema/hotkeys.cpp:136
 #: pagelayout_editor/hotkeys.cpp:68
 msgid "Mouse Left Double Click"
-msgstr ""
+msgstr "Doble clic amb el botó esquerre del ratolí"
 
 #: pcbnew/hotkeys.cpp:72
 msgid "Switch to Copper (B.Cu) layer"
-msgstr ""
+msgstr "Canvia a la capa del coure (B.Cu)"
 
 #: pcbnew/hotkeys.cpp:75
 msgid "Switch to Component (F.Cu) layer"
-msgstr ""
+msgstr "Canvia a la capa del component (F.Cu)"
 
 #: pcbnew/hotkeys.cpp:78
 msgid "Switch to Inner layer 1"
@@ -8967,7 +8979,7 @@ msgstr "Canvia a la següent capa"
 
 #: pcbnew/hotkeys.cpp:93 gerbview/hotkeys.cpp:78
 msgid "Switch to Previous Layer"
-msgstr ""
+msgstr "Canvia a la capa prèvia"
 
 #: pcbnew/hotkeys.cpp:96 pcbnew/librairi.cpp:73
 msgid "Save Footprint"
@@ -8995,7 +9007,7 @@ msgstr "Afegeix una nova pista"
 
 #: pcbnew/hotkeys.cpp:103
 msgid "Add Through Via"
-msgstr ""
+msgstr "Afegeix a través d'una via"
 
 #: pcbnew/hotkeys.cpp:104
 msgid "Select Layer and Add Through Via"
@@ -9013,10 +9025,10 @@ msgstr "Afegeix una via cega o enterrada"
 msgid "Select Layer and Add Blind/Buried Via"
 msgstr "Selecciona la capa i afegeix una via cega o enterrada"
 
-#: pcbnew/hotkeys.cpp:110 pcbnew/onrightclick.cpp:605
+#: pcbnew/hotkeys.cpp:110 pcbnew/onrightclick.cpp:601
 #: pcbnew/router/router_tool.cpp:101
 msgid "Switch Track Posture"
-msgstr ""
+msgstr "Canvia el posicionament de la pista"
 
 #: pcbnew/hotkeys.cpp:111
 msgid "Drag Track Keep Slope"
@@ -9031,7 +9043,7 @@ msgstr "Afegeix un element"
 msgid "Edit Item"
 msgstr "Edita l'element"
 
-#: pcbnew/hotkeys.cpp:114 pcbnew/onrightclick.cpp:827
+#: pcbnew/hotkeys.cpp:114 pcbnew/onrightclick.cpp:823
 msgid "Edit with Footprint Editor"
 msgstr "Edita amb l'editor d'empremtes"
 
@@ -9111,7 +9123,7 @@ msgstr "Canvia al llenç Cairo"
 
 #: pcbnew/hotkeys.cpp:153 pcbnew/onrightclick.cpp:362
 msgid "Fill or Refill All Zones"
-msgstr ""
+msgstr "Omple o reomple totes les zones"
 
 #: pcbnew/hotkeys.cpp:155 pcbnew/onrightclick.cpp:366
 msgid "Remove Filled Areas in All Zones"
@@ -9142,7 +9154,7 @@ msgstr "Amplia el zoom"
 msgid "Zoom Out"
 msgstr "Redueix el zoom"
 
-#: pcbnew/hotkeys.cpp:187 pcbnew/moduleframe.cpp:693 pcbnew/pcbframe.cpp:663
+#: pcbnew/hotkeys.cpp:187 pcbnew/moduleframe.cpp:693 pcbnew/pcbframe.cpp:650
 #: cvpcb/class_DisplayFootprintsFrame.cpp:406
 msgid "3D Viewer"
 msgstr "Visualitzador 3D"
@@ -9159,27 +9171,27 @@ msgstr "Refés"
 
 #: pcbnew/hotkeys.cpp:204
 msgid "Switch Track Width To Next"
-msgstr ""
+msgstr "Canvia l'amplada de la via a la de la xarxa"
 
 #: pcbnew/hotkeys.cpp:207
 msgid "Switch Track Width To Previous"
-msgstr ""
+msgstr "Canvia l'amplada de la via a la prèvia"
 
 #: pcbnew/hotkeys.cpp:211
 msgid "Switch Grid To Fast Grid1"
-msgstr ""
+msgstr "Canvia la quadrícula a la quadrícula ràpida 1"
 
 #: pcbnew/hotkeys.cpp:214
 msgid "Switch Grid To Fast Grid2"
-msgstr ""
+msgstr "Canvia la quadrícula a la quadrícula ràpida 2"
 
 #: pcbnew/hotkeys.cpp:217
 msgid "Switch Grid To Next"
-msgstr ""
+msgstr "Canvia la quadrícula a la següent"
 
 #: pcbnew/hotkeys.cpp:220
 msgid "Switch Grid To Previous"
-msgstr ""
+msgstr "Canvia la quadrícula a l'anterior"
 
 #: pcbnew/hotkeys.cpp:223 gerbview/hotkeys.cpp:68
 msgid "Switch Units"
@@ -9193,114 +9205,14 @@ msgstr ""
 msgid "Add Footprint"
 msgstr "Afegeix una empremta"
 
-#: pcbnew/hotkeys.cpp:229
-msgid "Record Macro 0"
-msgstr "Enregistra la macro 0"
-
-#: pcbnew/hotkeys.cpp:231
-msgid "Call Macro 0"
-msgstr "Crida la macro 0"
-
-#: pcbnew/hotkeys.cpp:233
-msgid "Record Macro 1"
-msgstr "Enregistra la macro 1"
-
-#: pcbnew/hotkeys.cpp:235
-msgid "Call Macro 1"
-msgstr "Crida la macro 1"
-
-#: pcbnew/hotkeys.cpp:237
-msgid "Record Macro 2"
-msgstr "Enregistra la macro 2"
-
-#: pcbnew/hotkeys.cpp:239
-msgid "Call Macro 2"
-msgstr "Crida la macro 2"
-
-#: pcbnew/hotkeys.cpp:241
-msgid "Record Macro 3"
-msgstr "Enregistra la macro 3"
-
-#: pcbnew/hotkeys.cpp:243
-msgid "Call Macro 3"
-msgstr "Crida la macro 3"
-
-#: pcbnew/hotkeys.cpp:245
-msgid "Record Macro 4"
-msgstr "Enregistra la macro 4"
-
-#: pcbnew/hotkeys.cpp:247
-msgid "Call Macro 4"
-msgstr "Crida la macro 4"
-
-#: pcbnew/hotkeys.cpp:249
-msgid "Record Macro 5"
-msgstr "Enregistra la macro 5"
-
-#: pcbnew/hotkeys.cpp:251
-msgid "Call Macro 5"
-msgstr "Crida la macro 5"
-
-#: pcbnew/hotkeys.cpp:253
-msgid "Record Macro 6"
-msgstr "Enregistra la macro 6"
-
-#: pcbnew/hotkeys.cpp:255
-msgid "Call Macro 6"
-msgstr "Crida la macro 6"
-
-#: pcbnew/hotkeys.cpp:257
-msgid "Record Macro 7"
-msgstr "Enregistra la macro 7"
-
-#: pcbnew/hotkeys.cpp:259
-msgid "Call Macro 7"
-msgstr "Crida la macro 7"
-
-#: pcbnew/hotkeys.cpp:261
-msgid "Record Macro 8"
-msgstr "Enregistra la macro 8"
-
-#: pcbnew/hotkeys.cpp:263
-msgid "Call Macro 8"
-msgstr "Crida la macro 8"
-
-#: pcbnew/hotkeys.cpp:265
-msgid "Record Macro 9"
-msgstr "Enregistra la macro 9"
-
-#: pcbnew/hotkeys.cpp:267
-msgid "Call Macro 9"
-msgstr "Crida la macro 9"
-
-#: pcbnew/hotkeys.cpp:350 eeschema/hotkeys.cpp:329
+#: pcbnew/hotkeys.cpp:303 eeschema/hotkeys.cpp:329
 #: pagelayout_editor/hotkeys.cpp:114
 msgid "Common"
 msgstr "Comú"
 
-#: pcbnew/hotkeys.cpp:351
+#: pcbnew/hotkeys.cpp:304
 msgid "Board Editor"
 msgstr "Editor de plaques"
-
-#: pcbnew/hotkeys_board_editor.cpp:63
-#, c-format
-msgid "Recording macro %d"
-msgstr ""
-
-#: pcbnew/hotkeys_board_editor.cpp:70
-#, c-format
-msgid "Macro %d recorded"
-msgstr "Macro %d enregistrada"
-
-#: pcbnew/hotkeys_board_editor.cpp:82
-#, c-format
-msgid "Call macro %d"
-msgstr "Crida la macro %d"
-
-#: pcbnew/hotkeys_board_editor.cpp:160
-#, c-format
-msgid "Add key [%c] in macro %d"
-msgstr ""
 
 #: pcbnew/import_dxf/dialog_dxf_import.cpp:137
 msgid "Open File"
@@ -9317,7 +9229,7 @@ msgstr "Centre de la pàgina"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "Upper left corner of page"
-msgstr ""
+msgstr "Cantonada esquerra superior de la pàgina"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "Center left side of page"
@@ -9325,7 +9237,7 @@ msgstr ""
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "Lower left corner of page"
-msgstr ""
+msgstr "Cantonada esquerra inferior de la pàgina"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "User defined position"
@@ -9415,17 +9327,17 @@ msgstr "la biblioteca «%s» no té cap empremta «%s» a eliminar"
 #: pcbnew/kicad_plugin.cpp:1235 pcbnew/legacy_plugin.cpp:98
 #, c-format
 msgid "unknown pad type: %d"
-msgstr ""
+msgstr "tipus de pad desconegut: %d"
 
 #: pcbnew/kicad_plugin.cpp:1248 pcbnew/legacy_plugin.cpp:99
 #, c-format
 msgid "unknown pad attribute: %d"
-msgstr ""
+msgstr "atribut de pad desconegut: %d"
 
 #: pcbnew/kicad_plugin.cpp:1437
 #, c-format
 msgid "unknown via type %d"
-msgstr ""
+msgstr "tipus de via desconegut %d"
 
 #: pcbnew/kicad_plugin.cpp:1568
 #, c-format
@@ -9454,7 +9366,7 @@ msgstr ""
 
 #: pcbnew/layer_widget.cpp:436
 msgid "Enable this for visibility"
-msgstr ""
+msgstr "Habiliteu-ho per a la visibilitat"
 
 #: pcbnew/layer_widget.cpp:464
 msgid "Left double click or middle click for color change"
@@ -9512,7 +9424,7 @@ msgstr ""
 #: pcbnew/legacy_plugin.cpp:97
 #, c-format
 msgid "unknown graphic type: %d"
-msgstr ""
+msgstr "tipus de gràfic desconegut: %d"
 
 #: pcbnew/legacy_plugin.cpp:735
 #, c-format
@@ -9750,7 +9662,7 @@ msgstr "Estableix la biblioteca acti&va"
 
 #: pcbnew/menubar_modedit.cpp:68 pcbnew/tool_modedit.cpp:55
 msgid "Select active library"
-msgstr "Selecciona una biblioteca activa"
+msgstr "Selecciona la biblioteca activa"
 
 #: pcbnew/menubar_modedit.cpp:74
 msgid "&New Footprint"
@@ -9814,7 +9726,7 @@ msgstr "Des&a l'empremta en una nova biblioteca"
 
 #: pcbnew/menubar_modedit.cpp:122
 msgid "Create a new library and save current footprint into it"
-msgstr ""
+msgstr "Crea una nova biblioteca i desa-hi l'empremta actual"
 
 #: pcbnew/menubar_modedit.cpp:127
 msgid "&Export Footprint"
@@ -9822,7 +9734,7 @@ msgstr "&Exporta l'empremta"
 
 #: pcbnew/menubar_modedit.cpp:128
 msgid "Save currently loaded footprint into file"
-msgstr ""
+msgstr "Desa l'empremta carregada actualment al fitxer"
 
 #: pcbnew/menubar_modedit.cpp:133
 msgid "&Import DXF File"
@@ -10030,38 +9942,38 @@ msgstr "Ajust&s"
 msgid "Change the footprint editor settings."
 msgstr "Canvia els ajusts de l'editor de les empremtes."
 
-#: pcbnew/menubar_modedit.cpp:338 pcbnew/menubar_pcbframe.cpp:658
+#: pcbnew/menubar_modedit.cpp:338 pcbnew/menubar_pcbframe.cpp:640
 #: pcbnew/tool_modview.cpp:186
 msgid "Pcbnew &Manual"
 msgstr "&Manual de Pcbnew"
 
-#: pcbnew/menubar_modedit.cpp:339 pcbnew/menubar_pcbframe.cpp:659
+#: pcbnew/menubar_modedit.cpp:339 pcbnew/menubar_pcbframe.cpp:641
 msgid "Open the Pcbnew Manual"
 msgstr "Obre el manual de Pcbnew"
 
-#: pcbnew/menubar_modedit.cpp:344 pcbnew/menubar_pcbframe.cpp:664
+#: pcbnew/menubar_modedit.cpp:344 pcbnew/menubar_pcbframe.cpp:646
 #: pcbnew/tool_modview.cpp:192 eeschema/menubar_libedit.cpp:260
 #: eeschema/tool_viewlib.cpp:253
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 msgstr ""
 
-#: pcbnew/menubar_modedit.cpp:356 pcbnew/menubar_pcbframe.cpp:675
+#: pcbnew/menubar_modedit.cpp:356 pcbnew/menubar_pcbframe.cpp:657
 #: eeschema/menubar.cpp:519 eeschema/menubar_libedit.cpp:274
 msgid "&Edit"
 msgstr "&Edita"
 
-#: pcbnew/menubar_modedit.cpp:357 pcbnew/menubar_pcbframe.cpp:676
+#: pcbnew/menubar_modedit.cpp:357 pcbnew/menubar_pcbframe.cpp:658
 #: pcbnew/tool_modview.cpp:205 eeschema/menubar.cpp:520
 #: eeschema/menubar_libedit.cpp:275 eeschema/tool_viewlib.cpp:266
 msgid "&View"
 msgstr "&Visualització"
 
-#: pcbnew/menubar_modedit.cpp:358 pcbnew/menubar_pcbframe.cpp:677
+#: pcbnew/menubar_modedit.cpp:358 pcbnew/menubar_pcbframe.cpp:659
 #: eeschema/menubar.cpp:521 eeschema/menubar_libedit.cpp:276
 msgid "&Place"
 msgstr "A&fegeix"
 
-#: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:679
+#: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:661
 #: eeschema/menubar.cpp:522 eeschema/menubar_libedit.cpp:277
 msgid "P&references"
 msgstr "P&referències"
@@ -10126,7 +10038,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:143
 msgid "Revert to Las&t"
-msgstr ""
+msgstr "Reverteix a l'úl&tim"
 
 #: pcbnew/menubar_pcbframe.cpp:144
 msgid "Clear board and get previous backup version of board"
@@ -10216,7 +10128,7 @@ msgstr "&Specctra DSN"
 
 #: pcbnew/menubar_pcbframe.cpp:208
 msgid "Export the current board to a \"Specctra DSN\" file"
-msgstr "Exporta la placa actual a un fitxer “Specctra DSN”"
+msgstr "Exporta la placa actual a un fitxer “Specctra DSN\""
 
 #: pcbnew/menubar_pcbframe.cpp:212
 msgid "&GenCAD"
@@ -10299,7 +10211,7 @@ msgstr ""
 
 #: pcbnew/menubar_pcbframe.cpp:266
 msgid "&Create Library and Archive Footprints"
-msgstr ""
+msgstr "&Crea una biblioteca i arxiva les empremtes"
 
 #: pcbnew/menubar_pcbframe.cpp:267
 msgid ""
@@ -10580,121 +10492,97 @@ msgstr ""
 msgid "Save dimension preferences"
 msgstr "Desa les preferències de les dimensions"
 
-#: pcbnew/menubar_pcbframe.cpp:583
-msgid "&Save macros"
-msgstr "De&sa les macros"
-
-#: pcbnew/menubar_pcbframe.cpp:584
-msgid "Save macros to file"
-msgstr "Desa les macros al fitxer"
-
-#: pcbnew/menubar_pcbframe.cpp:588
-msgid "&Read macros"
-msgstr "Llegeix mac&ros"
-
-#: pcbnew/menubar_pcbframe.cpp:589
-msgid "Read macros from file"
-msgstr "Llegeix les macros del fitxer"
-
-#: pcbnew/menubar_pcbframe.cpp:593
-msgid "Ma&cros"
-msgstr "Ma&cros"
-
-#: pcbnew/menubar_pcbframe.cpp:594
-msgid "Macros save/read operations"
-msgstr ""
-
-#: pcbnew/menubar_pcbframe.cpp:600 eeschema/menubar.cpp:397
+#: pcbnew/menubar_pcbframe.cpp:582 eeschema/menubar.cpp:397
 msgid "&Save Preferences"
 msgstr "De&sa les preferències"
 
-#: pcbnew/menubar_pcbframe.cpp:601 eeschema/menubar.cpp:398
+#: pcbnew/menubar_pcbframe.cpp:583 eeschema/menubar.cpp:398
 msgid "Save application preferences"
 msgstr "Desa les preferències de l'aplicació"
 
-#: pcbnew/menubar_pcbframe.cpp:605 eeschema/menubar.cpp:403
+#: pcbnew/menubar_pcbframe.cpp:587 eeschema/menubar.cpp:403
 msgid "Load Prefe&rences"
 msgstr "Carrega les prefe&rències"
 
-#: pcbnew/menubar_pcbframe.cpp:606 eeschema/menubar.cpp:404
+#: pcbnew/menubar_pcbframe.cpp:588 eeschema/menubar.cpp:404
 msgid "Load application preferences"
 msgstr "Carrega les preferències de l'aplicació"
 
-#: pcbnew/menubar_pcbframe.cpp:614 pcbnew/dialogs/dialog_update_pcb_base.h:55
+#: pcbnew/menubar_pcbframe.cpp:596 pcbnew/dialogs/dialog_update_pcb_base.h:55
 #: eeschema/hotkeys.cpp:226 eeschema/menubar.cpp:428
 msgid "Update PCB from Schematics"
 msgstr "Actualitza el PCB a partir de l'esquemàtic"
 
-#: pcbnew/menubar_pcbframe.cpp:615 eeschema/menubar.cpp:432
+#: pcbnew/menubar_pcbframe.cpp:597 eeschema/menubar.cpp:432
 msgid "Updates the PCB design with the current schematic (forward annotation)."
 msgstr ""
 "Actualitza el disseny del PCB amb l'esquemàtic actual (avança l'anotació)."
 
-#: pcbnew/menubar_pcbframe.cpp:621
+#: pcbnew/menubar_pcbframe.cpp:603
 msgid "&Netlist"
 msgstr "&Netlist"
 
-#: pcbnew/menubar_pcbframe.cpp:622
+#: pcbnew/menubar_pcbframe.cpp:604
 msgid "Read the netlist and update board connectivity"
 msgstr "Llegeix el netlist i actualitza la connectivitat de la placa"
 
-#: pcbnew/menubar_pcbframe.cpp:626
+#: pcbnew/menubar_pcbframe.cpp:608
 msgid "&Layer Pair"
 msgstr "Pare&ll de capes"
 
-#: pcbnew/menubar_pcbframe.cpp:626
+#: pcbnew/menubar_pcbframe.cpp:608
 msgid "Change the active layer pair"
 msgstr "Canvia el parell de capes actiu"
 
-#: pcbnew/menubar_pcbframe.cpp:630
+#: pcbnew/menubar_pcbframe.cpp:612
 msgid "&DRC"
 msgstr "&DRC"
 
-#: pcbnew/menubar_pcbframe.cpp:631 pcbnew/tool_pcb.cpp:273
+#: pcbnew/menubar_pcbframe.cpp:613 pcbnew/tool_pcb.cpp:273
 msgid "Perform design rules check"
 msgstr "Realitza la comprovació de les regles de disseny"
 
-#: pcbnew/menubar_pcbframe.cpp:634
+#: pcbnew/menubar_pcbframe.cpp:616
 msgid "&FreeRoute"
 msgstr "&FreeRoute"
 
-#: pcbnew/menubar_pcbframe.cpp:635
+#: pcbnew/menubar_pcbframe.cpp:617
 msgid "Fast access to the web based FreeROUTE advanced router"
 msgstr "Accés ràpid a l'encaminador basat en web FreeROUTE"
 
-#: pcbnew/menubar_pcbframe.cpp:640
+#: pcbnew/menubar_pcbframe.cpp:622
 msgid "&Scripting Console"
 msgstr "Consola de seqüències d'ordres"
 
-#: pcbnew/menubar_pcbframe.cpp:641
+#: pcbnew/menubar_pcbframe.cpp:623
 msgid "Show/Hide the Python scripting console"
 msgstr "Mostra o oculta la consola de seqüències d'ordres de Python"
 
-#: pcbnew/menubar_pcbframe.cpp:648 pcbnew/menubar_pcbframe.cpp:682
+#: pcbnew/menubar_pcbframe.cpp:630 pcbnew/menubar_pcbframe.cpp:664
 msgid "&Design Rules"
 msgstr "Regles de &disseny"
 
-#: pcbnew/menubar_pcbframe.cpp:649
+#: pcbnew/menubar_pcbframe.cpp:631
 msgid "Open the design rules editor"
 msgstr "Obre l'editor de les regles de disseny"
 
-#: pcbnew/menubar_pcbframe.cpp:652
+#: pcbnew/menubar_pcbframe.cpp:634
 msgid "&Layers Setup"
 msgstr "Configuració de &les capes"
 
-#: pcbnew/menubar_pcbframe.cpp:652
+#: pcbnew/menubar_pcbframe.cpp:634
 msgid "Enable and set layer properties"
 msgstr "Habilita i estableix les propietats de la capa"
 
-#: pcbnew/menubar_pcbframe.cpp:670
+#: pcbnew/menubar_pcbframe.cpp:652
 msgid "Display the KiCad About dialog"
 msgstr "Mostra el diàleg quant a KiCad"
 
-#: pcbnew/menubar_pcbframe.cpp:678
+#: pcbnew/menubar_pcbframe.cpp:660
 msgid "Ro&ute"
 msgstr "Encam&ina"
 
-#: pcbnew/menubar_pcbframe.cpp:680
+#: pcbnew/menubar_pcbframe.cpp:662
 msgid "D&imensions"
 msgstr "D&imensions"
 
@@ -10764,7 +10652,7 @@ msgstr "Ajusts del pad"
 msgid "End Tool"
 msgstr "Acaba l'eina"
 
-#: pcbnew/modedit_onclick.cpp:244 pcbnew/onrightclick.cpp:490
+#: pcbnew/modedit_onclick.cpp:244 pcbnew/onrightclick.cpp:486
 #: eeschema/libedit_onrightclick.cpp:323 eeschema/onrightclick.cpp:830
 #: gerbview/onrightclick.cpp:73
 msgid "Cancel Block"
@@ -10774,7 +10662,7 @@ msgstr "Cancel·la el bloc"
 msgid "Zoom Block (drag middle mouse)"
 msgstr ""
 
-#: pcbnew/modedit_onclick.cpp:250 pcbnew/onrightclick.cpp:494
+#: pcbnew/modedit_onclick.cpp:250 pcbnew/onrightclick.cpp:490
 #: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:838
 #: gerbview/onrightclick.cpp:76
 msgid "Place Block"
@@ -10800,7 +10688,7 @@ msgstr "Elimina el bloc (Majús.+control + arrossegar ratolí)"
 msgid "Move Block Exactly"
 msgstr "Mou el bloc exactament"
 
-#: pcbnew/modedit_onclick.cpp:290 pcbnew/onrightclick.cpp:1002
+#: pcbnew/modedit_onclick.cpp:290 pcbnew/onrightclick.cpp:998
 #: pcbnew/tools/common_actions.cpp:121
 #: common/dialogs/dialog_image_editor_base.cpp:39
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:173
@@ -10820,11 +10708,11 @@ msgstr "Edita l'empremta"
 msgid "Transform Footprint"
 msgstr "Transforma l'empremta"
 
-#: pcbnew/modedit_onclick.cpp:308 pcbnew/onrightclick.cpp:938
+#: pcbnew/modedit_onclick.cpp:308 pcbnew/onrightclick.cpp:934
 msgid "Move Pad"
 msgstr "Mou el pad"
 
-#: pcbnew/modedit_onclick.cpp:312 pcbnew/onrightclick.cpp:943
+#: pcbnew/modedit_onclick.cpp:312 pcbnew/onrightclick.cpp:939
 msgid "Edit Pad"
 msgstr "Edita el pad"
 
@@ -10856,12 +10744,12 @@ msgstr "Crea una matriu de pads"
 msgid "Global Pad Settings"
 msgstr "Ajusts globals del pad"
 
-#: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:877
+#: pcbnew/modedit_onclick.cpp:343 pcbnew/onrightclick.cpp:873
 #: eeschema/libedit_onrightclick.cpp:188 eeschema/onrightclick.cpp:600
 msgid "Move Text"
 msgstr "Mou el text"
 
-#: pcbnew/modedit_onclick.cpp:349 pcbnew/onrightclick.cpp:887
+#: pcbnew/modedit_onclick.cpp:349 pcbnew/onrightclick.cpp:883
 #: eeschema/libedit_onrightclick.cpp:197 eeschema/onrightclick.cpp:608
 msgid "Rotate Text"
 msgstr "Gira el text"
@@ -10874,17 +10762,17 @@ msgstr "Duplica el text"
 msgid "Create Text Array"
 msgstr "Crea una matriu de texts"
 
-#: pcbnew/modedit_onclick.cpp:374 pcbnew/onrightclick.cpp:881
+#: pcbnew/modedit_onclick.cpp:374 pcbnew/onrightclick.cpp:877
 msgid "Move Text Exactly"
 msgstr "Mou el text exactament"
 
-#: pcbnew/modedit_onclick.cpp:379 pcbnew/onrightclick.cpp:893
+#: pcbnew/modedit_onclick.cpp:379 pcbnew/onrightclick.cpp:889
 #: eeschema/libedit_onrightclick.cpp:194 eeschema/onrightclick.cpp:96
 #: eeschema/onrightclick.cpp:610
 msgid "Edit Text"
 msgstr "Edita el text"
 
-#: pcbnew/modedit_onclick.cpp:385 pcbnew/onrightclick.cpp:904
+#: pcbnew/modedit_onclick.cpp:385 pcbnew/onrightclick.cpp:900
 #: eeschema/libedit_onrightclick.cpp:202 eeschema/onrightclick.cpp:612
 msgid "Delete Text"
 msgstr "Elimina el text"
@@ -10933,7 +10821,7 @@ msgstr "Canvia la capa dels elements del cos"
 msgid "Set Line Width"
 msgstr "Estableix l'amplada de la línia"
 
-#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:406 pcbnew/pcbframe.cpp:921
+#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:398 pcbnew/pcbframe.cpp:908
 #: gerbview/events_called_functions.cpp:319 gerbview/gerbview_frame.cpp:143
 msgid "Visibles"
 msgstr "Visibles"
@@ -11152,7 +11040,7 @@ msgstr ""
 msgid "Component '%s' footprint ID '%s' is not valid.\n"
 msgstr ""
 
-#: pcbnew/netlist.cpp:310
+#: pcbnew/netlist.cpp:309
 #, c-format
 msgid ""
 "Component '%s' footprint '%s' was not found in any libraries in the "
@@ -11242,7 +11130,7 @@ msgstr "Tanca la delimitació de la zona"
 
 #: pcbnew/onrightclick.cpp:240
 msgid "Delete Last Corner"
-msgstr ""
+msgstr "Elimina l'última cantonada"
 
 #: pcbnew/onrightclick.cpp:266
 msgid "Edit Dimension"
@@ -11286,17 +11174,17 @@ msgstr ""
 
 #: pcbnew/onrightclick.cpp:374 pcbnew/onrightclick.cpp:380
 #: pcbnew/onrightclick.cpp:398 pcbnew/onrightclick.cpp:411
-#: pcbnew/onrightclick.cpp:476 pcbnew/onrightclick.cpp:569
+#: pcbnew/onrightclick.cpp:472 pcbnew/onrightclick.cpp:565
 msgid "Select Working Layer"
 msgstr "Selecciona la capa de treball"
 
-#: pcbnew/onrightclick.cpp:388 pcbnew/onrightclick.cpp:468
-#: pcbnew/onrightclick.cpp:516
+#: pcbnew/onrightclick.cpp:388 pcbnew/onrightclick.cpp:464
+#: pcbnew/onrightclick.cpp:512
 msgid "Begin Track"
 msgstr "Comença una pista"
 
-#: pcbnew/onrightclick.cpp:394 pcbnew/onrightclick.cpp:472
-#: pcbnew/onrightclick.cpp:640
+#: pcbnew/onrightclick.cpp:394 pcbnew/onrightclick.cpp:468
+#: pcbnew/onrightclick.cpp:636
 msgid "Select Track Width"
 msgstr "Selecciona l'amplada de la pista"
 
@@ -11340,308 +11228,304 @@ msgstr "Afegeix automàticament les noves empremtes"
 msgid "Automatically Place Next Footprints"
 msgstr "Afegeix automàticament les següents empremtes"
 
-#: pcbnew/onrightclick.cpp:448
-msgid "Orient All Footprints"
-msgstr "Orienta totes les empremtes"
-
-#: pcbnew/onrightclick.cpp:455
+#: pcbnew/onrightclick.cpp:451
 msgid "Autoroute"
 msgstr "Emplaçament automatitzat"
 
-#: pcbnew/onrightclick.cpp:457
+#: pcbnew/onrightclick.cpp:453
 msgid "Select Layer Pair"
 msgstr "Selecció del parell de capes"
 
-#: pcbnew/onrightclick.cpp:460
+#: pcbnew/onrightclick.cpp:456
 msgid "Automatically Route All Footprints"
 msgstr ""
 
-#: pcbnew/onrightclick.cpp:462
+#: pcbnew/onrightclick.cpp:458
 msgid "Reset Unrouted"
 msgstr ""
 
-#: pcbnew/onrightclick.cpp:492
+#: pcbnew/onrightclick.cpp:488
 msgid "Zoom Block"
 msgstr ""
 
-#: pcbnew/onrightclick.cpp:495 eeschema/libedit_onrightclick.cpp:339
+#: pcbnew/onrightclick.cpp:491 eeschema/libedit_onrightclick.cpp:339
 #: eeschema/onrightclick.cpp:847
 msgid "Copy Block"
 msgstr "Copia bloc"
 
-#: pcbnew/onrightclick.cpp:496
+#: pcbnew/onrightclick.cpp:492
 msgid "Flip Block"
 msgstr "Capgira el bloc"
 
-#: pcbnew/onrightclick.cpp:497
+#: pcbnew/onrightclick.cpp:493
 msgid "Rotate Block"
 msgstr "Gira el bloc"
 
-#: pcbnew/onrightclick.cpp:498 eeschema/libedit_onrightclick.cpp:346
+#: pcbnew/onrightclick.cpp:494 eeschema/libedit_onrightclick.cpp:346
 #: eeschema/onrightclick.cpp:851
 msgid "Delete Block"
 msgstr "Elimina el bloc"
 
-#: pcbnew/onrightclick.cpp:523
+#: pcbnew/onrightclick.cpp:519
 msgid "Drag Via"
 msgstr "Arrossega la via"
 
-#: pcbnew/onrightclick.cpp:532
+#: pcbnew/onrightclick.cpp:528
 msgid "Move Node"
 msgstr "Mou el node"
 
-#: pcbnew/onrightclick.cpp:538
+#: pcbnew/onrightclick.cpp:534
 msgid "Drag Segments, Keep Slope"
 msgstr "Arrossega segments i mantén la inclinació"
 
-#: pcbnew/onrightclick.cpp:543
+#: pcbnew/onrightclick.cpp:539
 msgid "Drag Segment"
 msgstr "Arrossega el segment"
 
-#: pcbnew/onrightclick.cpp:548
+#: pcbnew/onrightclick.cpp:544
 msgid "Duplicate Track"
 msgstr "Duplica la pista"
 
-#: pcbnew/onrightclick.cpp:553
+#: pcbnew/onrightclick.cpp:549
 msgid "Move Track Exactly"
 msgstr "Mou la pista exactament"
 
-#: pcbnew/onrightclick.cpp:558
+#: pcbnew/onrightclick.cpp:554
 msgid "Create Track Array"
 msgstr "Crea una matriu de pistes"
 
-#: pcbnew/onrightclick.cpp:564
+#: pcbnew/onrightclick.cpp:560
 msgid "Break Track"
 msgstr "Talla la pista"
 
-#: pcbnew/onrightclick.cpp:574
+#: pcbnew/onrightclick.cpp:570
 msgid "Place Node"
 msgstr "Posa Node"
 
-#: pcbnew/onrightclick.cpp:581 pcbnew/router/length_tuner_tool.cpp:54
+#: pcbnew/onrightclick.cpp:577 pcbnew/router/length_tuner_tool.cpp:54
 #: pcbnew/router/router_tool.cpp:67
 msgid "End Track"
 msgstr "Acaba la pista"
 
-#: pcbnew/onrightclick.cpp:585 pcbnew/router/router_tool.cpp:78
+#: pcbnew/onrightclick.cpp:581 pcbnew/router/router_tool.cpp:78
 msgid "Place Through Via"
-msgstr "Afegeix a través de la via"
+msgstr "Afegeix a través d'una via"
 
-#: pcbnew/onrightclick.cpp:588
+#: pcbnew/onrightclick.cpp:584
 msgid "Select Layer and Place Through Via"
-msgstr ""
+msgstr "Selecciona la capa i afegeix a través d'una vía"
 
-#: pcbnew/onrightclick.cpp:595 pcbnew/router/router_tool.cpp:84
+#: pcbnew/onrightclick.cpp:591 pcbnew/router/router_tool.cpp:84
 msgid "Place Blind/Buried Via"
 msgstr "Afegeix una via cega o enterrada"
 
-#: pcbnew/onrightclick.cpp:599
+#: pcbnew/onrightclick.cpp:595
 msgid "Select Layer and Place Blind/Buried Via"
 msgstr "Selecciona la capa i afegeix una via cega o enterrada"
 
-#: pcbnew/onrightclick.cpp:613
+#: pcbnew/onrightclick.cpp:609
 msgid "Place Micro Via"
 msgstr "Afegeix una microvia"
 
-#: pcbnew/onrightclick.cpp:624
+#: pcbnew/onrightclick.cpp:620
 msgid "Change Via Size and Drill"
 msgstr "Canvia la mida de la via i de la perforació"
 
-#: pcbnew/onrightclick.cpp:630
+#: pcbnew/onrightclick.cpp:626
 msgid "Change Segment Width"
 msgstr "Canvi a l'amplada del segment"
 
-#: pcbnew/onrightclick.cpp:634
+#: pcbnew/onrightclick.cpp:630
 msgid "Change Track Width"
 msgstr "Canvia l'amplada de la pista"
 
-#: pcbnew/onrightclick.cpp:649
+#: pcbnew/onrightclick.cpp:645
 msgid "Delete Via"
 msgstr "Elimina la via"
 
-#: pcbnew/onrightclick.cpp:649 eeschema/libedit_onrightclick.cpp:239
+#: pcbnew/onrightclick.cpp:645 eeschema/libedit_onrightclick.cpp:239
 msgid "Delete Segment"
 msgstr "Elimina el segment"
 
-#: pcbnew/onrightclick.cpp:656
+#: pcbnew/onrightclick.cpp:652
 msgid "Delete Track"
 msgstr "Elimina la pista"
 
-#: pcbnew/onrightclick.cpp:658
+#: pcbnew/onrightclick.cpp:654
 msgid "Delete Net"
 msgstr "Elimina la xarxa"
 
-#: pcbnew/onrightclick.cpp:667
+#: pcbnew/onrightclick.cpp:663
 msgid "Edit All Tracks and Vias"
 msgstr "Edita totes les pistes i vies"
 
-#: pcbnew/onrightclick.cpp:673
+#: pcbnew/onrightclick.cpp:669
 msgid "Set Flags"
 msgstr "Estableix els indicadors"
 
-#: pcbnew/onrightclick.cpp:675
+#: pcbnew/onrightclick.cpp:671
 msgid "Locked: Yes"
 msgstr "Bloquejat: Sí"
 
-#: pcbnew/onrightclick.cpp:676
+#: pcbnew/onrightclick.cpp:672
 msgid "Locked: No"
 msgstr "Bloquejat: No"
 
-#: pcbnew/onrightclick.cpp:685
+#: pcbnew/onrightclick.cpp:681
 msgid "Track Locked: Yes"
 msgstr "Pista bloquejada: Sí"
 
-#: pcbnew/onrightclick.cpp:686
+#: pcbnew/onrightclick.cpp:682
 msgid "Track Locked: No"
 msgstr "Pista bloquejada: No"
 
-#: pcbnew/onrightclick.cpp:688
+#: pcbnew/onrightclick.cpp:684
 msgid "Net Locked: Yes"
 msgstr "Xarxa bloquejada: Sí"
 
-#: pcbnew/onrightclick.cpp:689
+#: pcbnew/onrightclick.cpp:685
 msgid "Net Locked: No"
 msgstr "Xarxa bloquejada: No"
 
-#: pcbnew/onrightclick.cpp:703
+#: pcbnew/onrightclick.cpp:699
 msgid "Place Edge Outline"
 msgstr ""
 
-#: pcbnew/onrightclick.cpp:709
+#: pcbnew/onrightclick.cpp:705
 msgid "Place Corner"
-msgstr ""
+msgstr "Afegeix una cantonada"
 
-#: pcbnew/onrightclick.cpp:712
+#: pcbnew/onrightclick.cpp:708
 msgid "Place Zone"
 msgstr "Afegeix una zona"
 
-#: pcbnew/onrightclick.cpp:719
+#: pcbnew/onrightclick.cpp:715
 msgid "Keepout Area"
 msgstr "Àrea de prohibit el pas"
 
-#: pcbnew/onrightclick.cpp:725
+#: pcbnew/onrightclick.cpp:721
 msgid "Move Corner"
-msgstr ""
+msgstr "Mou la cantonada"
 
-#: pcbnew/onrightclick.cpp:727
+#: pcbnew/onrightclick.cpp:723
 msgid "Delete Corner"
-msgstr ""
+msgstr "Elimina la cantonada"
 
-#: pcbnew/onrightclick.cpp:732
+#: pcbnew/onrightclick.cpp:728
 msgid "Create Corner"
-msgstr ""
+msgstr "Crea una cantonada"
 
-#: pcbnew/onrightclick.cpp:733
+#: pcbnew/onrightclick.cpp:729
 msgid "Drag Outline Segment"
 msgstr "Arrossega el segment de delimitació"
 
-#: pcbnew/onrightclick.cpp:741
+#: pcbnew/onrightclick.cpp:737
 msgid "Add Similar Zone"
 msgstr "Afegeix una zona similar"
 
-#: pcbnew/onrightclick.cpp:744
+#: pcbnew/onrightclick.cpp:740
 msgid "Add Cutout Area"
 msgstr ""
 
-#: pcbnew/onrightclick.cpp:747
+#: pcbnew/onrightclick.cpp:743
 msgid "Duplicate Zone Onto Layer"
 msgstr ""
 
-#: pcbnew/onrightclick.cpp:752
+#: pcbnew/onrightclick.cpp:748
 msgid "Fill Zone"
 msgstr "Omple la zona"
 
-#: pcbnew/onrightclick.cpp:758
+#: pcbnew/onrightclick.cpp:754
 msgid "Remove Filled Areas in Zone"
 msgstr "Suprimeix les àrees omplertes a la zona"
 
-#: pcbnew/onrightclick.cpp:761
+#: pcbnew/onrightclick.cpp:757
 msgid "Move Zone"
 msgstr "Mou la zona"
 
-#: pcbnew/onrightclick.cpp:764
+#: pcbnew/onrightclick.cpp:760
 msgid "Move Zone Exactly"
 msgstr "Mou la zona exactament"
 
-#: pcbnew/onrightclick.cpp:769
+#: pcbnew/onrightclick.cpp:765
 msgid "Edit Zone Properties"
 msgstr "Edita les propietats de la zona"
 
-#: pcbnew/onrightclick.cpp:779
+#: pcbnew/onrightclick.cpp:775
 msgid "Delete Cutout"
 msgstr ""
 
-#: pcbnew/onrightclick.cpp:782
+#: pcbnew/onrightclick.cpp:778
 msgid "Delete Zone Outline"
 msgstr "Elimina la delimitació de la zona"
 
-#: pcbnew/onrightclick.cpp:802 pcbnew/onrightclick.cpp:994
+#: pcbnew/onrightclick.cpp:798 pcbnew/onrightclick.cpp:990
 #: pcbnew/tools/common_actions.cpp:100
 msgid "Move"
 msgstr "Mou"
 
-#: pcbnew/onrightclick.cpp:806
+#: pcbnew/onrightclick.cpp:802
 msgid "Drag"
 msgstr "Arrossega"
 
-#: pcbnew/onrightclick.cpp:811
+#: pcbnew/onrightclick.cpp:807
 msgid "Rotate +"
 msgstr "Gira +"
 
-#: pcbnew/onrightclick.cpp:815
+#: pcbnew/onrightclick.cpp:811
 msgid "Rotate -"
 msgstr "Gira -"
 
-#: pcbnew/onrightclick.cpp:816 pcbnew/onrightclick.cpp:1004
+#: pcbnew/onrightclick.cpp:812 pcbnew/onrightclick.cpp:1000
 #: pcbnew/tools/common_actions.cpp:125
 msgid "Flip"
 msgstr "Capgira"
 
-#: pcbnew/onrightclick.cpp:822
+#: pcbnew/onrightclick.cpp:818
 msgid "Edit Parameters"
 msgstr "Edita els paràmetres"
 
-#: pcbnew/onrightclick.cpp:834
+#: pcbnew/onrightclick.cpp:830
 msgid "Delete Footprint"
 msgstr "Elimina l'empremta"
 
-#: pcbnew/onrightclick.cpp:841
+#: pcbnew/onrightclick.cpp:837
 msgid "Move Footprint Exactly"
 msgstr "Mou l'empremta exactament"
 
-#: pcbnew/onrightclick.cpp:846
+#: pcbnew/onrightclick.cpp:842
 msgid "Duplicate Footprint"
 msgstr "Duplica l'empremta"
 
-#: pcbnew/onrightclick.cpp:851
+#: pcbnew/onrightclick.cpp:847
 msgid "Create Footprint Array"
 msgstr "Crea una matriu d'empremtes"
 
-#: pcbnew/onrightclick.cpp:857
+#: pcbnew/onrightclick.cpp:853
 msgid "Exchange Footprint(s)"
 msgstr "Intercanvi d'empremtes"
 
-#: pcbnew/onrightclick.cpp:897 pcbnew/onrightclick.cpp:1011
+#: pcbnew/onrightclick.cpp:893 pcbnew/onrightclick.cpp:1007
 msgid "Reset Size"
 msgstr "Restableix la mida"
 
-#: pcbnew/onrightclick.cpp:940
+#: pcbnew/onrightclick.cpp:936
 msgid "Drag Pad"
 msgstr "Arrossega el pad"
 
-#: pcbnew/onrightclick.cpp:948
+#: pcbnew/onrightclick.cpp:944
 msgid "Copy Current Settings to this Pad"
 msgstr "Copia els ajusts actuals a aquest pad"
 
-#: pcbnew/onrightclick.cpp:952
+#: pcbnew/onrightclick.cpp:948
 msgid "Copy this Pad Settings to Current Settings"
 msgstr "Copia els ajusts del pad als ajusts actuals"
 
-#: pcbnew/onrightclick.cpp:957
+#: pcbnew/onrightclick.cpp:953
 msgid "Edit All Pads"
 msgstr "Edita tots els pads"
 
-#: pcbnew/onrightclick.cpp:958
+#: pcbnew/onrightclick.cpp:954
 msgid ""
 "Copy this pad's settings to all pads in this footprint (or similar "
 "footprints)"
@@ -11649,31 +11533,31 @@ msgstr ""
 "Copia els ajusts del pad a tots els pads en aquesta empremta (o empremtes "
 "similars)"
 
-#: pcbnew/onrightclick.cpp:966
+#: pcbnew/onrightclick.cpp:962
 msgid "Automatically Route Pad"
 msgstr "Encamina automàticament el pad"
 
-#: pcbnew/onrightclick.cpp:967
+#: pcbnew/onrightclick.cpp:963
 msgid "Automatically Route Net"
 msgstr "Encamina automàticament la xarxa"
 
-#: pcbnew/onrightclick.cpp:997
+#: pcbnew/onrightclick.cpp:993
 msgid "Copy"
 msgstr "Copia"
 
-#: pcbnew/onrightclick.cpp:1022 eeschema/onrightclick.cpp:873
+#: pcbnew/onrightclick.cpp:1018 eeschema/onrightclick.cpp:873
 msgid "Delete Marker"
 msgstr "Elimina el marcador"
 
-#: pcbnew/onrightclick.cpp:1024 eeschema/onrightclick.cpp:874
+#: pcbnew/onrightclick.cpp:1020 eeschema/onrightclick.cpp:874
 msgid "Marker Error Info"
 msgstr "Informació d'error del marcador"
 
-#: pcbnew/onrightclick.cpp:1042
+#: pcbnew/onrightclick.cpp:1038
 msgid "Auto Width"
 msgstr "Amplada automàtica"
 
-#: pcbnew/onrightclick.cpp:1043
+#: pcbnew/onrightclick.cpp:1039
 msgid ""
 "Use the track width when starting on a track, otherwise the current track "
 "width"
@@ -11681,29 +11565,29 @@ msgstr ""
 "Utilitzar l'amplada de la via quan es comenci una pista, en cas contrari "
 "l'amplada de la pista actual"
 
-#: pcbnew/onrightclick.cpp:1053
+#: pcbnew/onrightclick.cpp:1049
 msgid "Use Netclass Values"
 msgstr "Utilitza els valors de Netclass"
 
-#: pcbnew/onrightclick.cpp:1054
+#: pcbnew/onrightclick.cpp:1050
 msgid "Use track and via sizes from their Netclass values"
 msgstr "Utilitza les mides de pista i la via des dels seus valors Netclass"
 
-#: pcbnew/onrightclick.cpp:1060
+#: pcbnew/onrightclick.cpp:1056
 #, c-format
 msgid "Track %s"
 msgstr "Pista de %s"
 
-#: pcbnew/onrightclick.cpp:1063 pcbnew/onrightclick.cpp:1089
+#: pcbnew/onrightclick.cpp:1059 pcbnew/onrightclick.cpp:1085
 msgid " uses NetClass"
 msgstr " que utilitza el NetClass"
 
-#: pcbnew/onrightclick.cpp:1081
+#: pcbnew/onrightclick.cpp:1077
 #, c-format
 msgid "Via %s"
 msgstr "Via de %s"
 
-#: pcbnew/onrightclick.cpp:1085
+#: pcbnew/onrightclick.cpp:1081
 #, c-format
 msgid "Via %s, drill %s"
 msgstr "Via de %s, perforació de %s"
@@ -11721,7 +11605,7 @@ msgid ""
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"número en plnt plotant no vàlid a\n"
+"número en punt flotant no vàlid a\n"
 "fitxer: <%s>\n"
 "línia: %d\n"
 "desplaçament: %d"
@@ -11742,7 +11626,7 @@ msgstr ""
 #: pcbnew/pcb_parser.cpp:591
 #, c-format
 msgid "page type \"%s\" is not valid "
-msgstr "el tipus de pàgina “%s” no és vàlid"
+msgstr "el tipus de pàgina “%s\" no és vàlid"
 
 #: pcbnew/pcb_parser.cpp:823
 #, c-format
@@ -11796,7 +11680,7 @@ msgid ""
 "you should verify and edit it (run DRC test)."
 msgstr ""
 
-#: pcbnew/pcbframe.cpp:588 eeschema/schframe.cpp:624
+#: pcbnew/pcbframe.cpp:575 eeschema/schframe.cpp:624
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -11807,16 +11691,16 @@ msgstr ""
 "«%s»\n"
 "abans de sortir?"
 
-#: pcbnew/pcbframe.cpp:624
+#: pcbnew/pcbframe.cpp:611
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr ""
 
-#: pcbnew/pcbframe.cpp:997
+#: pcbnew/pcbframe.cpp:984
 msgid " [new file]"
 msgstr " [nou fitxer]"
 
-#: pcbnew/pcbframe.cpp:1094
+#: pcbnew/pcbframe.cpp:1081
 msgid ""
 "Cannot update the PCB, because the Kicad is opened in stand-alone mode. In "
 "order to create/update PCBs from schematics, you need to launch Kicad shell "
@@ -11860,61 +11744,62 @@ msgstr "Mostra e&l gestor de capes"
 
 #: pcbnew/pcbnew_config.cpp:90 pcbnew/tool_pcb.cpp:795
 msgid "Hide Microwave Toolbar"
-msgstr ""
+msgstr "Oculta la barra d'eines de microones"
 
 #: pcbnew/pcbnew_config.cpp:217 eeschema/eeschema_config.cpp:245
 msgid "Read Project File"
 msgstr "Llegeix el fitxer del projecte"
 
-#: pcbnew/pcbnew_config.cpp:227 pcbnew/pcbnew_config.cpp:503
-#: gerbview/excellon_read_drill_file.cpp:199
+#: pcbnew/pcbnew_config.cpp:227 gerbview/excellon_read_drill_file.cpp:199
 #, c-format
 msgid "File %s not found"
 msgstr "Fitxer %s no trobat"
 
-#: pcbnew/pcbnew_config.cpp:300 eeschema/eeschema_config.cpp:486
+#: pcbnew/pcbnew_config.cpp:291 eeschema/eeschema_config.cpp:486
 msgid "Save Project File"
 msgstr "Desa el fitxer del projecte"
-
-#: pcbnew/pcbnew_config.cpp:446
-msgid "Save Macros File"
-msgstr "Desa el fitxer de les macros"
-
-#: pcbnew/pcbnew_config.cpp:493
-msgid "Read Macros File"
-msgstr "Llegeix el fitxer de les macros"
 
 #: pcbnew/plot_board_layers.cpp:116 pcbnew/plot_board_layers.cpp:301
 #, c-format
 msgid "Your BOARD has a bad layer number for footprint %s"
-msgstr ""
+msgstr "La vostra placa té un número de capa incorrecte per a l'empremta %s"
 
 #: pcbnew/plugin.cpp:118
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr ""
+"Habilita el registre de <b>depuració</b> per a les funcions Footprint*() en "
+"aquest complement."
 
 #: pcbnew/plugin.cpp:122
 msgid "Regular expression <b>footprint name</b> filter."
-msgstr ""
+msgstr "Expressió regular del filtre del <b>nom de l'empremta</b>."
 
 #: pcbnew/plugin.cpp:126
 msgid ""
 "Enable transaction logging. The mere presence of this option turns on the "
 "logging, no need to set a Value."
 msgstr ""
+"Habilita el registre de les transaccions. La mera presència d'aquesta opció "
+"activa el registre, no es necessita establir cap valor."
 
 #: pcbnew/plugin.cpp:131
 msgid "User name for <b>login</b> to some special library server."
 msgstr ""
+"Nom d'usuari per a l'<b>inici de sessió</b> a un servidor de biblioteques "
+"especials."
 
 #: pcbnew/plugin.cpp:135
 msgid "Password for <b>login</b> to some special library server."
 msgstr ""
+"Contrasenya per a l'<b>inici de sessió</b> a un servidor de biblioteques "
+"especials."
 
 #: pcbnew/plugin.cpp:143
 msgid ""
 "Enter the python module which implements the PLUGIN::Footprint*() functions."
 msgstr ""
+"introduïu el mòdul de python que implementi les funcions PLUGIN::"
+"Footprint*()."
 
 #: pcbnew/router/length_tuner_tool.cpp:51 pcbnew/router/router_tool.cpp:64
 msgid "New Track"
@@ -12112,7 +11997,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:102
 msgid "Switches posture of the currenly routed track."
-msgstr ""
+msgstr "Canvia el posicionament de la pista que s'està encaminant actualment."
 
 #: pcbnew/router/router_tool.cpp:107
 msgid "Differential Pair Dimensions..."
@@ -12160,7 +12045,7 @@ msgstr "Les microvies han d'estar habilitades als ajusts del disseny."
 
 #: pcbnew/router/router_tool.cpp:417
 msgid "Only through vias are allowed on 2 layer boards."
-msgstr ""
+msgstr "Únicament es permet a través d'una via a les plaques de 2 capes."
 
 #: pcbnew/router/router_tool.cpp:424
 msgid ""
@@ -12278,7 +12163,7 @@ msgstr ""
 
 #: pcbnew/swap_layers.cpp:93
 msgid "Swap Layers:"
-msgstr "Permuta capes:"
+msgstr "Intercanvia les capes:"
 
 #: pcbnew/swap_layers.cpp:244 pcbnew/swap_layers.cpp:251
 #: pcbnew/swap_layers.cpp:329
@@ -12806,15 +12691,15 @@ msgstr ""
 
 #: pcbnew/tools/common_actions.cpp:176
 msgid "Increase the line width"
-msgstr ""
+msgstr "Incrementa l'amplada de la línia"
 
 #: pcbnew/tools/common_actions.cpp:180
 msgid "Decrease the line width"
-msgstr ""
+msgstr "Disminueix l'amplada de la línia"
 
 #: pcbnew/tools/common_actions.cpp:184
 msgid "Switch the arc posture"
-msgstr ""
+msgstr "Canvia el posicionament de l'arc"
 
 #: pcbnew/tools/common_actions.cpp:363
 msgid "Fill"
@@ -12886,11 +12771,11 @@ msgstr ""
 
 #: pcbnew/tools/common_actions.cpp:551
 msgid "Create corner"
-msgstr ""
+msgstr "Crea una cantonada"
 
 #: pcbnew/tools/common_actions.cpp:555
 msgid "Remove corner"
-msgstr ""
+msgstr "Suprimeix la cantonada"
 
 #: pcbnew/tools/common_actions.cpp:560
 msgid "Align items to the top"
@@ -12898,7 +12783,7 @@ msgstr "Alinea els elements al capdamunt"
 
 #: pcbnew/tools/common_actions.cpp:561
 msgid "Aligns selected items to the top edge"
-msgstr ""
+msgstr "Alinea els elements seleccionats a la vora superior"
 
 #: pcbnew/tools/common_actions.cpp:565
 msgid "Align items to the bottom"
@@ -12906,7 +12791,7 @@ msgstr "Alinea els elements al capdavall"
 
 #: pcbnew/tools/common_actions.cpp:566
 msgid "Aligns selected items to the bottom edge"
-msgstr ""
+msgstr "Alinea els elements seleccionats a la vora inferior"
 
 #: pcbnew/tools/common_actions.cpp:570
 msgid "Align items to the left"
@@ -12914,7 +12799,7 @@ msgstr "Alinea els elements a l'esquerra"
 
 #: pcbnew/tools/common_actions.cpp:571
 msgid "Aligns selected items to the left edge"
-msgstr ""
+msgstr "Alinea els elements seleccionats a la vora esquerra"
 
 #: pcbnew/tools/common_actions.cpp:575
 msgid "Align items to the right"
@@ -12922,23 +12807,23 @@ msgstr "Alinea els elements a la dreta"
 
 #: pcbnew/tools/common_actions.cpp:576
 msgid "Aligns selected items to the right edge"
-msgstr ""
+msgstr "Alinea els elements seleccionats a la vora dreta"
 
 #: pcbnew/tools/common_actions.cpp:580
 msgid "Distribute horizontally"
-msgstr ""
+msgstr "Distribueix horitzontalment"
 
 #: pcbnew/tools/common_actions.cpp:581
 msgid "Distributes selected items along the horizontal axis"
-msgstr ""
+msgstr "Distribueix els elements seleccionats al llarg de l'eix horitzontal"
 
 #: pcbnew/tools/common_actions.cpp:585
 msgid "Distribute vertically"
-msgstr ""
+msgstr "Distribueix verticalment"
 
 #: pcbnew/tools/common_actions.cpp:586
 msgid "Distributes selected items along the vertical axis"
-msgstr ""
+msgstr "Distribueix els elements seleccionats al llarg de l'eix vertical"
 
 #: pcbnew/tools/edit_tool.cpp:582
 msgid "Cannot delete component reference."
@@ -13055,7 +12940,7 @@ msgstr ""
 #: pcbnew/xchgmod.cpp:267
 #, c-format
 msgid "Change footprint %s -> %s ?"
-msgstr ""
+msgstr "Voleu canviar l'empremta %s -> %s ?"
 
 #: pcbnew/xchgmod.cpp:315
 msgid "Are you sure you want to change all footprints?"
@@ -13144,7 +13029,7 @@ msgstr "Propietats de la dimensió"
 msgid "Display Options"
 msgstr "Opcions de la pantalla"
 
-#: pcbnew/dialogs/dialog_drc_base.h:103
+#: pcbnew/dialogs/dialog_drc_base.h:107
 msgid "DRC Control"
 msgstr "Control DRC"
 
@@ -13159,7 +13044,7 @@ msgstr "Propietats del text de l'empremta"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:53
 msgid "Pad enumeration settings"
-msgstr ""
+msgstr "Ajusts de l'enumeració dels pads"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.h:71
 msgid "Change Footprint"
@@ -13218,7 +13103,7 @@ msgstr "Estableix la mida del text"
 
 #: pcbnew/dialogs/dialog_global_pads_edition_base.h:58
 msgid "Global Pads Edition"
-msgstr ""
+msgstr "Edició dels pads globals"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:77
 msgid "Graphic Item Properties"
@@ -13243,7 +13128,7 @@ msgstr "Selecciona el parell de capes de coure:"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.h:418
 msgid "Layer Setup"
-msgstr ""
+msgstr "Ajust de les capes"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.h:74
 msgid "Pads Mask Clearance"
@@ -13260,11 +13145,7 @@ msgstr "Netlist"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.h:67
 msgid "Non Copper Zones Properties"
-msgstr ""
-
-#: pcbnew/dialogs/dialog_orient_footprints_base.h:53
-msgid "Footprints Orientation"
-msgstr ""
+msgstr "Propietats de les zones sense coure"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:177
 msgid "Pad Properties"
@@ -13289,7 +13170,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.h:59
 msgid "Select Footprint Library Folder"
-msgstr ""
+msgstr "Selecció de la carpeta de la biblioteca de les empremtes"
 
 #: pcbnew/dialogs/dialog_set_grid_base.h:70
 msgid "Grid Properties"
@@ -13559,47 +13440,44 @@ msgstr "El lloc oficial de KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:152
 msgid "Developer's website on Launchpad"
-msgstr "Lloc web dels desenvolupadors en Launchpad"
+msgstr "El lloc web dels desenvolupadors a Launchpad"
 
 #: common/dialog_about/AboutDialog_main.cpp:156
-#, fuzzy
 msgid "Our official Repository for component and footprint libraries"
 msgstr ""
-"Visiteu el nostre dipòsit oficial de Kicad a Github i obteniu més "
-"biblioteques"
+"El nostre dipòsit oficial per a les biblioteques de components i d'empremtes"
 
 #: common/dialog_about/AboutDialog_main.cpp:160
 msgid "Non official repositories"
-msgstr ""
+msgstr "Els dipòsits no oficials"
 
 #: common/dialog_about/AboutDialog_main.cpp:164
 msgid "Additional component libraries repository (kicadlib)"
-msgstr ""
+msgstr "El dipòsit de biblioteques de components addicionals (kicadlib)"
 
 #: common/dialog_about/AboutDialog_main.cpp:168
 msgid "Additional component libraries repository (smisioto)"
-msgstr ""
+msgstr "El dipòsit de biblioteques de components addicionals (smisioto)"
 
 #: common/dialog_about/AboutDialog_main.cpp:174
-#, fuzzy
 msgid "Bug tracker"
-msgstr "Comença una pista"
+msgstr "Eina de seguiment d'errors de programari"
 
 #: common/dialog_about/AboutDialog_main.cpp:181
 msgid "Report or examine bugs"
-msgstr ""
+msgstr "Informeu o examineu els errors de programari"
 
 #: common/dialog_about/AboutDialog_main.cpp:186
 msgid "KiCad user group and community"
-msgstr ""
+msgstr "Grup d'usuaris i comunitat de KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:192
 msgid "KiCad user group"
-msgstr "Grup d'usuaris de KiCad"
+msgstr "El grup d'usuaris de KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:197
 msgid "KiCad forum"
-msgstr ""
+msgstr "El fòrum de KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:210
 msgid "The complete KiCad EDA Suite is released under the"
@@ -13612,44 +13490,56 @@ msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr ""
 "Llicència pública general de GNU (GPL) versió 3 o qualsevol versió posterior"
 
-#: common/dialog_about/dialog_about.cpp:115
+#: common/dialog_about/AboutDialog_main.cpp:406
+msgid "Others"
+msgstr "Altres"
+
+#: common/dialog_about/AboutDialog_main.cpp:421
+msgid "Icons by"
+msgstr ""
+
+#: common/dialog_about/AboutDialog_main.cpp:436
+msgid "3D models by"
+msgstr "Models 3D per"
+
+#: common/dialog_about/dialog_about.cpp:116
 msgid "Information"
 msgstr "Informació"
 
-#: common/dialog_about/dialog_about.cpp:118
+#: common/dialog_about/dialog_about.cpp:119
 msgid "Developers"
 msgstr "Desenvolupadors"
 
-#: common/dialog_about/dialog_about.cpp:119
+#: common/dialog_about/dialog_about.cpp:120
 msgid "Doc Writers"
-msgstr "Escriptors del document"
+msgstr "Documentalistes"
 
-#: common/dialog_about/dialog_about.cpp:121
+#: common/dialog_about/dialog_about.cpp:122
 msgid "Artists"
 msgstr "Artistes"
 
-#: common/dialog_about/dialog_about.cpp:122
+#: common/dialog_about/dialog_about.cpp:123
 msgid "Translators"
 msgstr "Traductors"
 
-#: common/dialog_about/dialog_about.cpp:124
+#: common/dialog_about/dialog_about.cpp:125
 msgid "Packagers"
 msgstr "Empaquetadors"
 
-#: common/dialog_about/dialog_about.cpp:127
+#: common/dialog_about/dialog_about.cpp:128
 msgid "License"
 msgstr "Llicència"
 
-#: common/dialog_about/dialog_about.cpp:436
+#: common/dialog_about/dialog_about.cpp:437
 msgid "Could not open clipboard to write version information."
 msgstr ""
 "No es pot obrir el porta-retalls per escriure la informació de la versió."
 
-#: common/dialog_about/dialog_about.cpp:437
+#: common/dialog_about/dialog_about.cpp:438
 msgid "Clipboard Error"
 msgstr "Erros del porta-retalls"
 
-#: common/dialog_about/dialog_about.cpp:538
+#: common/dialog_about/dialog_about.cpp:539
 msgid "Copied..."
 msgstr "Copiada..."
 
@@ -13683,7 +13573,7 @@ msgstr "El nom de la variable d'entorn no pot estar en blanc."
 
 #: common/dialogs/dialog_env_var_config.cpp:129
 msgid "Environment variable value cannot be empty."
-msgstr "El valor de la variable d'entorn no pot estar buid."
+msgstr "El valor de la variable d'entorn no pot estar buit."
 
 #: common/dialogs/dialog_env_var_config.cpp:140
 msgid ""
@@ -13747,7 +13637,7 @@ msgstr ""
 
 #: common/dialogs/dialog_env_var_config.cpp:282
 msgid "Environment Variable Help"
-msgstr ""
+msgstr "Ajuda de les variables d'entorn"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:36
@@ -13809,11 +13699,11 @@ msgstr ""
 
 #: common/dialogs/dialog_image_editor.cpp:138
 msgid "Scale is too small for this image"
-msgstr ""
+msgstr "L'escala és massa petita per a aquesta imatge"
 
 #: common/dialogs/dialog_image_editor.cpp:143
 msgid "Scale is too large for this image"
-msgstr ""
+msgstr "L'escala és massa gran per a aquesta imatge"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33 eeschema/hotkeys.cpp:168
 msgid "Mirror X"
@@ -13825,7 +13715,7 @@ msgstr "Reflecteix Y"
 
 #: common/dialogs/dialog_image_editor_base.cpp:42
 msgid "Grey"
-msgstr ""
+msgstr "Gris"
 
 #: common/dialogs/dialog_image_editor_base.cpp:45
 msgid "Half Size"
@@ -13838,6 +13728,12 @@ msgstr "&Desfés"
 #: common/dialogs/dialog_image_editor_base.cpp:52
 msgid "Image Scale:"
 msgstr "Escala de la imatge:"
+
+#: common/dialogs/dialog_list_selector_base.cpp:19
+#: common/dialogs/wx_html_report_panel_base.cpp:34
+#: eeschema/dialogs/dialog_choose_component_base.cpp:22
+msgid "Filter:"
+msgstr "Filtra:"
 
 #: common/dialogs/dialog_list_selector_base.cpp:21
 msgid ""
@@ -13891,11 +13787,11 @@ msgstr "ANSI E 34×44 in×in"
 
 #: common/dialogs/dialog_page_settings.cpp:73
 msgid "USLetter 8.5x11in"
-msgstr "Letter 8.5×11 in×in"
+msgstr "Letter 8,5×11 in×in"
 
 #: common/dialogs/dialog_page_settings.cpp:74
 msgid "USLegal 8.5x14in"
-msgstr "Legal 8.5×14 in×in"
+msgstr "Legal 8,5×14 in×in"
 
 #: common/dialogs/dialog_page_settings.cpp:75
 msgid "USLedger 11x17in"
@@ -14041,11 +13937,11 @@ msgstr "Fitxer de descripció de la disposició de la pàgina"
 
 #: common/dialogs/wx_html_report_panel.cpp:137
 msgid "<b>Error: </b></font><font size=2>"
-msgstr ""
+msgstr "<b>Error: </b></font><font size=2>"
 
 #: common/dialogs/wx_html_report_panel.cpp:139
 msgid "<b>Warning: </b></font><font size=2>"
-msgstr ""
+msgstr "<b>Advertència: </b></font><font size=2>"
 
 #: common/dialogs/wx_html_report_panel.cpp:141
 msgid "<b>Info: </b>"
@@ -14070,7 +13966,7 @@ msgstr "Desa l'informe al fitxer"
 #: common/dialogs/wx_html_report_panel.cpp:257
 #, c-format
 msgid "Cannot write report to file '%s'."
-msgstr ""
+msgstr "No es pot escriure l'informe al fitxer «%s»."
 
 #: common/dialogs/wx_html_report_panel.cpp:259
 msgid "File save error"
@@ -14155,7 +14051,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:764
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:90
 msgid "Bold"
 msgstr "Negreta"
@@ -14202,7 +14098,7 @@ msgstr "S'ha trobat un caràcter no permès a la revisió"
 #: common/gestfich.cpp:233
 #, c-format
 msgid "Command <%s> could not found"
-msgstr "No s'ha trobar l'ordre <%s>"
+msgstr "No s'ha trobat l'ordre <%s>"
 
 #: common/gestfich.cpp:376
 #, c-format
@@ -14307,7 +14203,7 @@ msgstr "Configuració i preferències de les dreceres de teclat"
 #: common/page_layout/page_layout_reader.cpp:852
 #, c-format
 msgid "The file <%s> was not fully read"
-msgstr ""
+msgstr "No s'ha llegit totalment el fitxer <%s>"
 
 #: common/pcbcommon.cpp:47
 msgid "No layers"
@@ -14399,7 +14295,7 @@ msgstr "Búlgar"
 
 #: common/pgm_base.cpp:339
 msgid "No default editor found, you must choose it"
-msgstr ""
+msgstr "No s'ha trobat cap editor de text predeterminat, heu de triar-ne un."
 
 #: common/pgm_base.cpp:358
 msgid "Executable file (*.exe)|*.exe"
@@ -14453,7 +14349,7 @@ msgstr "No s'ha pogut trobar el fitxer de configuració de la plantilla «%s»."
 #: common/project.cpp:270
 #, c-format
 msgid "Cannot create prj file '%s' (Directory not writable)"
-msgstr ""
+msgstr "No es pot crear el fitxer prj «%s» (no es pot escriure al directori)"
 
 #: common/richio.cpp:206
 #, c-format
@@ -14512,7 +14408,7 @@ msgstr "Restableix-ho tot"
 
 #: common/widgets/widget_hotkey_list.cpp:391
 msgid "Reset all to default"
-msgstr "Restableix-ho tot al valor per defecte"
+msgstr "Restableix-ho tot als valors predeterminats"
 
 #: common/widgets/widget_hotkey_list.cpp:535
 #, c-format
@@ -14594,63 +14490,59 @@ msgid "Geda PCB footprint library file (*.fp)|*.fp"
 msgstr "Fitxer de biblioteca d'empremtes PCB de Geda (*.fp)|*.fp"
 
 #: common/wildcards_and_files_ext.cpp:85
-msgid "KiCad recorded macros (*.mcr)|*.mcr"
-msgstr "Macros enregistrades de KiCad (*.mcr)|*.mcr"
-
-#: common/wildcards_and_files_ext.cpp:86
 msgid "Component-footprint link file (*.cmp)|*cmp"
 msgstr ""
 
-#: common/wildcards_and_files_ext.cpp:87
+#: common/wildcards_and_files_ext.cpp:86
 msgid "Page layout descr file (*.kicad_wks)|*kicad_wks"
 msgstr ""
 "Fitxer de descripció de la disposició de la pàgina (*.kicad_wks)|*kicad_wks"
 
-#: common/wildcards_and_files_ext.cpp:89
+#: common/wildcards_and_files_ext.cpp:88
 msgid "All files (*)|*"
 msgstr "Tots els fitxers (*)|*"
 
-#: common/wildcards_and_files_ext.cpp:92
+#: common/wildcards_and_files_ext.cpp:91
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
 msgstr ""
 
-#: common/wildcards_and_files_ext.cpp:95
+#: common/wildcards_and_files_ext.cpp:94
 msgid "Drill files (*.drl)|*.drl;*.DRL"
 msgstr "Fitxers de perforació (*.drl)|*.drl;*.DRL"
 
-#: common/wildcards_and_files_ext.cpp:96
+#: common/wildcards_and_files_ext.cpp:95
 msgid "SVG files (*.svg)|*.svg;*.SVG"
 msgstr "Fitxers SVG (*.svg)|*.svg;*.SVG"
 
-#: common/wildcards_and_files_ext.cpp:97
+#: common/wildcards_and_files_ext.cpp:96
 msgid "HTML files (*.html)|*.htm;*.html"
 msgstr "Fitxers HTML (*.html)|*.htm;*.html"
 
-#: common/wildcards_and_files_ext.cpp:98
+#: common/wildcards_and_files_ext.cpp:97
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr ""
 
-#: common/wildcards_and_files_ext.cpp:99
+#: common/wildcards_and_files_ext.cpp:98
 msgid "PostScript files (.ps)|*.ps"
 msgstr "Fitxers PostScript (.ps)|*.ps"
 
-#: common/wildcards_and_files_ext.cpp:100
+#: common/wildcards_and_files_ext.cpp:99
 msgid "Report files (*.rpt)|*.rpt"
 msgstr "Fitxers d'informes (*.rpt)|*.rpt"
 
-#: common/wildcards_and_files_ext.cpp:101
+#: common/wildcards_and_files_ext.cpp:100
 msgid "Footprint place files (*.pos)|*.pos"
 msgstr "Fitxers de posicionament de les empremtes (*.pos)|*.pos"
 
-#: common/wildcards_and_files_ext.cpp:102
+#: common/wildcards_and_files_ext.cpp:101
 msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
 msgstr "Fitxers vrml i x3d (*.wrl *.x3d)|*.wrl;*.x3d"
 
-#: common/wildcards_and_files_ext.cpp:103
+#: common/wildcards_and_files_ext.cpp:102
 msgid "IDFv3 component files (*.idf)|*.idf"
 msgstr "Fitxers de components IDFv3 (*.idf)|*.idf"
 
-#: common/wildcards_and_files_ext.cpp:104
+#: common/wildcards_and_files_ext.cpp:103
 msgid "Text files (*.txt)|*.txt"
 msgstr "Fitxers de text (*.txt)|*.txt"
 
@@ -14756,26 +14648,30 @@ msgstr ""
 #: eeschema/class_drc_erc_item.cpp:44
 msgid "Pin not connected (and no connect symbol found on this pin)"
 msgstr ""
+"Pin no connectat (tampoc s'ha trobat cap símbol de connexió en aquest pin)"
 
 #: eeschema/class_drc_erc_item.cpp:46
 msgid "Pin connected to some others pins but no pin to drive it"
 msgstr ""
+"Pin connectat a alguns altres pins, però no hi ha cap pin per conduir-lo"
 
 #: eeschema/class_drc_erc_item.cpp:48
 msgid "Conflict problem between pins. Severity: warning"
-msgstr ""
+msgstr "Problema de conflicte entre pins. Gravetat: advertència"
 
 #: eeschema/class_drc_erc_item.cpp:50
 msgid "Conflict problem between pins. Severity: error"
-msgstr ""
+msgstr "Problema de conflicte entre pins. Gravetat: error"
 
 #: eeschema/class_drc_erc_item.cpp:52
 msgid "Mismatch between hierarchical labels and pins sheets"
 msgstr ""
+"Falta de correspondència entre les etiquetes jeràrquiques i les fulles dels "
+"pins"
 
 #: eeschema/class_drc_erc_item.cpp:54
 msgid "A no connect symbol is connected to more than 1 pin"
-msgstr ""
+msgstr "Un símbol de no connexió està connectat a més d'1 pin"
 
 #: eeschema/class_drc_erc_item.cpp:56
 msgid "Global label not connected to any other global label"
@@ -14784,10 +14680,14 @@ msgstr "L'etiqueta global no està connectada a cap altra etiqueta global"
 #: eeschema/class_drc_erc_item.cpp:58
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr ""
+"Les etiquetes són similars (tan sols es diferencien amb majúscules i "
+"minúscules)"
 
 #: eeschema/class_drc_erc_item.cpp:60
 msgid "Global labels are similar (lower/upper case difference only)"
 msgstr ""
+"Les etiquetes globals són similars (tan sols es diferencien amb majúscules i "
+"minúscules)"
 
 #: eeschema/class_libentry.cpp:108 eeschema/class_libentry.cpp:268
 msgid "none"
@@ -14798,6 +14698,8 @@ msgstr "cap"
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
 msgstr ""
+"Es va fer un intent per eliminar el camp %s del component %s a la biblioteca "
+"%s."
 
 #: eeschema/class_library.cpp:52
 #, c-format
@@ -14810,7 +14712,7 @@ msgstr ""
 #: eeschema/class_library.cpp:299
 #, c-format
 msgid "Cannot add duplicate alias '%s' to library '%s'."
-msgstr ""
+msgstr "No es pot afegir l'àlies duplicat «%s» a la biblioteca «%s»."
 
 #: eeschema/class_library.cpp:466
 msgid "The component library file name is not set."
@@ -14831,6 +14733,7 @@ msgstr "El fitxer NO és una biblioteca d'Eeschema!"
 #: eeschema/class_library.cpp:511
 msgid "The file header is missing version and time stamp information."
 msgstr ""
+"En la capçalera falta la informació de la versió i de la marca de temps."
 
 #: eeschema/class_library.cpp:555
 msgid "An error occurred attempting to read the header."
@@ -14845,6 +14748,7 @@ msgstr ""
 #, c-format
 msgid "Could not open component document library file '%s'."
 msgstr ""
+"No s'ha pogut obrir el fitxer de biblioteca de documents del component «%s»."
 
 #: eeschema/class_library.cpp:663
 #, c-format
@@ -14878,12 +14782,12 @@ msgstr ""
 #: eeschema/component_references_lister.cpp:521
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
-msgstr ""
+msgstr "Element sense anotar: %s%s (unitat %d)\n"
 
 #: eeschema/component_references_lister.cpp:528
 #, c-format
 msgid "Item not annotated: %s%s\n"
-msgstr ""
+msgstr "Element sense anotar: %s%s\n"
 
 #: eeschema/component_references_lister.cpp:551
 #, c-format
@@ -14894,13 +14798,13 @@ msgstr ""
 #: eeschema/component_references_lister.cpp:623
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
-msgstr ""
+msgstr "Element múltiple %s%s (unitat %d)\n"
 
 #: eeschema/component_references_lister.cpp:598
 #: eeschema/component_references_lister.cpp:630
 #, c-format
 msgid "Multiple item %s%s\n"
-msgstr ""
+msgstr "Element múltiple %s%s\n"
 
 #: eeschema/component_references_lister.cpp:646
 #, c-format
@@ -15092,16 +14996,15 @@ msgstr "Suprimeix el connector"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:77
 msgid "Edit Plugin File"
-msgstr "Edita el fitxer connector del connector"
+msgstr "Edita el fitxer del connector"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:89
 msgid "Command line:"
 msgstr "Línia d'ordres:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:98
-#, fuzzy
 msgid "Show console window"
-msgstr "Mostra els forats a les zones"
+msgstr "Mostra la finestra de la consola"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:100
 msgid ""
@@ -15384,20 +15287,36 @@ msgstr ""
 msgid "Remove Fields"
 msgstr "Suprimeix els camps"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:851
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:677
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
-msgid "Show in Browser"
-msgstr "Mostra al navegador"
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:852
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:678
+msgid "Show Datasheet"
+msgstr "Mostra el full de dades"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:853
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:679
-msgid "Assign Footprint"
-msgstr "Assigna l'empremta"
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:854
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:680
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:125
+msgid ""
+"If your datasheet is given as an http:// link, then pressing this button "
+"should bring it up in your webbrowser."
+msgstr ""
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:859
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:685
+msgid "Browse Footprints"
+msgstr "Navega per les empremtes"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:861
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:687
+msgid "Open the footprint browser to choose a footprint and assign it."
+msgstr "Obre el navegador d'empremtes per a triar i assignar l'empremta."
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:867
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:693
+msgid "Used only for fields Footprint and Datasheet."
+msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
-#: eeschema/sch_component.cpp:1548
+#: eeschema/sch_component.cpp:1547
 #: eeschema/widgets/widget_eeschema_color_config.cpp:100
 msgid "Component"
 msgstr "Component"
@@ -15446,7 +15365,7 @@ msgid ""
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
 "Utilitza la forma alternativa d'aquest component.\n"
-"Per a les portes, aquesta és la conversió “De Morgan”"
+"Per a les portes, aquesta és la conversió “De Morgan\""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:649
@@ -15545,7 +15464,7 @@ msgstr "Marqueu-ho si voleu que el text d'aquest component es giri 90 graus"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:758
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/sch_text.cpp:764
 msgid "Bold Italic"
 msgstr "Cursiva negreta"
 
@@ -15571,6 +15490,11 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:114
 msgid "Field Value"
 msgstr "Valor del camp"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:124
+msgid "Show in Browser"
+msgstr "Mostra al navegador"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:214
 msgid ""
@@ -15640,12 +15564,12 @@ msgid "&Size:"
 msgstr "&Mida:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53 eeschema/lib_pin.cpp:115
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53 eeschema/lib_pin.cpp:116
 msgid "Up"
 msgstr "Amunt"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
-#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56 eeschema/lib_pin.cpp:116
+#: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56 eeschema/lib_pin.cpp:117
 msgid "Down"
 msgstr "Avall"
 
@@ -15659,29 +15583,29 @@ msgstr "Est&il"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:30 eeschema/pin_type.cpp:38
-#: eeschema/sch_text.cpp:777
+#: eeschema/sch_text.cpp:783
 msgid "Input"
 msgstr "Entrada"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:31 eeschema/pin_type.cpp:41
-#: eeschema/sch_text.cpp:778
+#: eeschema/sch_text.cpp:784
 msgid "Output"
 msgstr "Sortida"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:32 eeschema/pin_type.cpp:44
-#: eeschema/sch_text.cpp:779
+#: eeschema/sch_text.cpp:785
 msgid "Bidirectional"
 msgstr "Bidireccional"
 
-#: eeschema/dialogs/dialog_edit_label_base.cpp:82 eeschema/sch_text.cpp:780
+#: eeschema/dialogs/dialog_edit_label_base.cpp:82 eeschema/sch_text.cpp:786
 msgid "Tri-State"
 msgstr "Triestat"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:34 eeschema/pin_type.cpp:50
-#: eeschema/sch_text.cpp:781
+#: eeschema/sch_text.cpp:787
 msgid "Passive"
 msgstr "Passiu"
 
@@ -15690,9 +15614,8 @@ msgid "S&hape"
 msgstr "F&orma"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:244
-#, fuzzy
 msgid "Illegal reference.  References must start with a letter."
-msgstr "Referència il·legal. Una referència ha de començar amb una lletra"
+msgstr "Referència il·legal. Les referències han de començar amb una lletra."
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:260
 #, c-format
@@ -15706,12 +15629,6 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:120
 msgid "The text (or value) of the currently selected field"
 msgstr "El text (o valor) del camp seleccionat en aquest moment"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:125
-msgid ""
-"If your datasheet is given as an http:// link, then pressing this button "
-"should bring it up in your webbrowser."
-msgstr ""
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:144
 msgid ""
@@ -15816,7 +15733,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:120
 msgid "Check for cache/library conflicts when loading schematic"
 msgstr ""
-"Comprova si hi ha conflictes amb la cache i la biblioteca en carregar "
+"Comprova si hi ha conflictes amb la memòria cau i la biblioteca en carregar "
 "l'esquemàtic"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:43
@@ -15966,7 +15883,7 @@ msgstr "Utilitza el botó central del ratolí per al moviment panoràmic"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:280
 msgid "&Limit panning to scroll size"
-msgstr "&limita el moviment panoràmic a la mida del desplaçament"
+msgstr "&Limita el moviment panoràmic a la mida del desplaçament"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:285
 msgid "Use touchpa&d to pan"
@@ -15984,7 +15901,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:339
 msgid "Default Value"
-msgstr "Valor per defecte"
+msgstr "Valor predeterminat"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:362
 msgid "&Add"
@@ -15996,7 +15913,7 @@ msgstr "E&limina"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:378
 msgid "Default Fields"
-msgstr "Caps per defecte"
+msgstr "Camps predeterminats"
 
 #: eeschema/dialogs/dialog_erc.cpp:227
 msgid "Marker not found"
@@ -16068,7 +15985,7 @@ msgstr "Inicialitza-ho al predeterminat"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:119
 msgid "Pin to pin connections"
-msgstr "Pin a les connexions dels pins"
+msgstr "Pin a les connexions del pin"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:129
 msgid "Label to label connections"
@@ -16076,7 +15993,7 @@ msgstr "Etiqueta a les connexions de l'etiqueta"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:133
 msgid "Test similar labels"
-msgstr "Prova les etiquetes similars"
+msgstr "Prova d'etiquetes similars"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:134
 msgid ""
@@ -16086,7 +16003,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_erc_base.cpp:138
 msgid "Test unique global labels"
-msgstr ""
+msgstr "Prova d'etiquetes globals úniques"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:139
 msgid ""
@@ -16106,12 +16023,12 @@ msgstr "Compartició"
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:64
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:85
 msgid "Common to all &units in component"
-msgstr ""
+msgstr "Comú a &totes les unitats al component"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:76
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:88
 msgid "Common to all body &styles (DeMorgan)"
-msgstr ""
+msgstr "Comú a tots els estils de cos (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:85
 msgid "Fill Style"
@@ -16139,7 +16056,7 @@ msgstr "Nú&mero del pin:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:45
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
-msgstr ""
+msgstr "Número del pin: d'1 a 4 lletres ASCII i/o dígits"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:53
 msgid "&Orientation:"
@@ -16177,13 +16094,13 @@ msgstr "Mida del te&xt del número:"
 msgid "&Length:"
 msgstr "&Longitud:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:173 eeschema/lib_pin.cpp:1976
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:173 eeschema/lib_pin.cpp:1997
 msgid "Number"
 msgstr "Número"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:67
 msgid "Power component value text cannot be modified!"
-msgstr ""
+msgstr "No es pot modificar el text del valor del component de l'alimentació!"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:85
 msgid "Common to all units"
@@ -16238,7 +16155,7 @@ msgstr "Designador de referències predeterminat:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:48
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:51
 msgid "Number of units per package:"
@@ -16246,7 +16163,7 @@ msgstr "Nombre d'unitats per paquet:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:64
 msgid "Create component with alternate body style (DeMorgan)"
-msgstr ""
+msgstr "Crea un component amb el estil de cos alternatiu (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:67
 msgid "Create component as power symbol"
@@ -16282,7 +16199,7 @@ msgstr "Amplada de línia pre&determinada:"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:60
 msgid "D&efault pin length:"
-msgstr "Longitud del prin pr&edeterminada:"
+msgstr "Longitud pr&edeterminada del pin:"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:71
 msgid "De&fault pin number size:"
@@ -16448,7 +16365,7 @@ msgstr "Mida de paper E"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:68
 msgid "Bottom left corner"
-msgstr ""
+msgstr "Cantonada esquerra de la part inferior"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:68
 msgid "Center of the page"
@@ -16537,7 +16454,7 @@ msgstr ""
 "components esquemàtics.\n"
 "Algunes peces necessiten tornar-se a enllaçar al nom d'un símbol diferent, i "
 "alguns altres símbols\n"
-"pot ser que hagin de ser “rescatats” (clonats i reanomenats) a una nova "
+"pot ser que hagin de ser “rescatats\" (clonats i reanomenats) a una nova "
 "biblioteca.\n"
 "\n"
 "Es recomanen els següents canvis per actualitzar el projecte."
@@ -16611,7 +16528,7 @@ msgstr "Nom del &full:"
 
 #: eeschema/dialogs/dialog_sch_sheet_props_base.cpp:94
 msgid "Unique timestamp:"
-msgstr ""
+msgstr "Marca de temps única:"
 
 #: eeschema/dialogs/dialog_schematic_find.cpp:48 eeschema/hotkeys.cpp:207
 msgid "Find and Replace"
@@ -16709,47 +16626,47 @@ msgstr "Edita el camp %s"
 
 #: eeschema/erc.cpp:89
 msgid "Input Pin.........."
-msgstr "Pin d'entrada...................."
+msgstr "Pin d'entrada........................."
 
 #: eeschema/erc.cpp:90
 msgid "Output Pin........."
-msgstr "Pin de sortida..................."
+msgstr "Pin de sortida........................"
 
 #: eeschema/erc.cpp:91
 msgid "Bidirectional Pin.."
-msgstr "Pin bidireccional................"
+msgstr "Pin bidireccional....................."
 
 #: eeschema/erc.cpp:92
 msgid "Tri-State Pin......"
-msgstr "Pin triestat....................."
+msgstr "Pin triestat.........................."
 
 #: eeschema/erc.cpp:93
 msgid "Passive Pin........"
-msgstr "Pin passiu......................."
+msgstr "Pin passiu............................"
 
 #: eeschema/erc.cpp:94
 msgid "Unspecified Pin...."
-msgstr "Pin no especificat..............."
+msgstr "Pin no especificat...................."
 
 #: eeschema/erc.cpp:95
 msgid "Power Input Pin...."
-msgstr "Pin d'entrada d'alimentació......"
+msgstr "Pin d'entrada d'alimentació..........."
 
 #: eeschema/erc.cpp:96
 msgid "Power Output Pin..."
-msgstr "Pin de sortida de l'alimentació..."
+msgstr "Pin de sortida d'alimentació.........."
 
 #: eeschema/erc.cpp:97
 msgid "Open Collector....."
-msgstr "Col·lector obert.................."
+msgstr "Col·lector obert......................"
 
 #: eeschema/erc.cpp:98
 msgid "Open Emitter......."
-msgstr "Emissor obert...................."
+msgstr "Emissor obert........................."
 
 #: eeschema/erc.cpp:99
 msgid "No Connection......"
-msgstr "No connexió......................"
+msgstr "Sense connectar......................."
 
 #: eeschema/erc.cpp:105
 msgid "Input Pin"
@@ -16777,11 +16694,11 @@ msgstr "Pin no especificat"
 
 #: eeschema/erc.cpp:111
 msgid "Power Input Pin"
-msgstr "Pin d'entrada de l'alimentació"
+msgstr "Pin d'entrada d'alimentació"
 
 #: eeschema/erc.cpp:112
 msgid "Power Output Pin"
-msgstr "Pin de sortida de l'alimentació"
+msgstr "Pin de sortida d'alimentació"
 
 #: eeschema/erc.cpp:113
 msgid "Open Collector"
@@ -16793,7 +16710,7 @@ msgstr "Emissor obert"
 
 #: eeschema/erc.cpp:115
 msgid "No Connection"
-msgstr "No connexió"
+msgstr "Sense connectar"
 
 #: eeschema/erc.cpp:211
 msgid "Duplicate sheet name"
@@ -16837,7 +16754,7 @@ msgstr "El pin %s (%s) del component %s està connectat a "
 #: eeschema/erc.cpp:362
 #, c-format
 msgid "pin %s (%s) of component %s (net %d)."
-msgstr ""
+msgstr "pin %s (%s) del component %s (xarxa %d)."
 
 #: eeschema/erc.cpp:534
 msgid "ERC report"
@@ -16897,7 +16814,7 @@ msgstr "No s'ha pogut desar el fitxer de còpia de seguretat «%s»"
 #: eeschema/files-io.cpp:112
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:51
-#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:61
+#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:60
 #, c-format
 msgid "Failed to create file '%s'"
 msgstr "Ha fallat la creació del fitxer «%s»"
@@ -17336,7 +17253,7 @@ msgstr "Camp"
 #: eeschema/lib_field.cpp:595 eeschema/libedit.cpp:510
 #: eeschema/template_fieldnames.cpp:48
 msgid "Datasheet"
-msgstr ""
+msgstr "Full de dades"
 
 #: eeschema/lib_field.cpp:604
 #, c-format
@@ -17348,12 +17265,12 @@ msgstr "Camp%d"
 msgid "Field %s %s"
 msgstr "Camp %s %s"
 
-#: eeschema/lib_pin.cpp:155
+#: eeschema/lib_pin.cpp:156
 #: eeschema/widgets/widget_eeschema_color_config.cpp:72
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/lib_pin.cpp:2196
+#: eeschema/lib_pin.cpp:2217
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
@@ -17406,7 +17323,7 @@ msgstr "Rectangle de (%s, %s) a (%s, %s)"
 msgid "Text only had %d parameters of the required 8"
 msgstr "El text únicament tenia %d paràmetres dels 8 requerits"
 
-#: eeschema/lib_text.cpp:490 eeschema/sch_text.cpp:603
+#: eeschema/lib_text.cpp:490 eeschema/sch_text.cpp:609
 #, c-format
 msgid "Graphic Text %s"
 msgstr "Text gràfic %s"
@@ -17437,7 +17354,7 @@ msgstr ""
 
 #: eeschema/libedit.cpp:168
 msgid "The selected component is not in the active library."
-msgstr "El component seleccionat no està en la biblioteca activa."
+msgstr "El component seleccionat no està a la biblioteca activa."
 
 #: eeschema/libedit.cpp:170
 msgid "Do you want to change the active library?"
@@ -17912,7 +17829,7 @@ msgstr "Obre un projecte d'esquemàtic recentment obert"
 
 #: eeschema/menubar.cpp:101
 msgid "Imp&ort Schematic Sheet Content"
-msgstr "Imp&orta el contingut de la fulla de l’esquemàtic"
+msgstr "Imp&orta el contingut de la fulla de l'esquemàtic"
 
 #: eeschema/menubar.cpp:102
 msgid ""
@@ -18173,7 +18090,7 @@ msgstr "De&sa la biblioteca actual\tCtrl+S"
 
 #: eeschema/menubar_libedit.cpp:77
 msgid "Save the current active library"
-msgstr "Desa la biblioteca activa actualment"
+msgstr "Desa la biblioteca activa actual"
 
 #: eeschema/menubar_libedit.cpp:83
 msgid "Save Current Library &As"
@@ -18181,7 +18098,7 @@ msgstr "&Anomena i desa la biblioteca actual"
 
 #: eeschema/menubar_libedit.cpp:84
 msgid "Save current active library as..."
-msgstr "Anomena i desa la biblioteca activa actualment..."
+msgstr "Anomena i desa la biblioteca activa actual…"
 
 #: eeschema/menubar_libedit.cpp:93
 msgid "Create &PNG File from Screen"
@@ -18624,7 +18541,7 @@ msgstr "Elimina l'entrada del bus"
 
 #: eeschema/pin_shape.cpp:41
 msgid "Inverted"
-msgstr ""
+msgstr "Invers"
 
 #: eeschema/pin_shape.cpp:44
 msgid "Clock"
@@ -18632,7 +18549,7 @@ msgstr "Rellotge"
 
 #: eeschema/pin_shape.cpp:47
 msgid "Inverted clock"
-msgstr ""
+msgstr "Rellotge invers"
 
 #: eeschema/pin_shape.cpp:50
 msgid "Input low"
@@ -18648,11 +18565,11 @@ msgstr "Sortida baixa"
 
 #: eeschema/pin_shape.cpp:59
 msgid "Falling edge clock"
-msgstr ""
+msgstr "Flanc de baixada de rellotge"
 
 #: eeschema/pin_shape.cpp:62
 msgid "NonLogic"
-msgstr ""
+msgstr "No lògic"
 
 #: eeschema/pin_type.cpp:53
 msgid "Unspecified"
@@ -18778,23 +18695,23 @@ msgstr ""
 msgid "Item %s found in sheet %s"
 msgstr "L'element %s s'ha trobat al full %s"
 
-#: eeschema/sch_component.cpp:1543
+#: eeschema/sch_component.cpp:1542
 msgid "Power symbol"
 msgstr "Símbol d'alimentació"
 
-#: eeschema/sch_component.cpp:1551
+#: eeschema/sch_component.cpp:1550
 msgid "Alias of"
 msgstr "Àlies de"
 
-#: eeschema/sch_component.cpp:1559
+#: eeschema/sch_component.cpp:1558
 msgid "<Unknown>"
 msgstr "<Desconegut>"
 
-#: eeschema/sch_component.cpp:1565
+#: eeschema/sch_component.cpp:1564
 msgid "Key Words"
 msgstr "Paraules clau"
 
-#: eeschema/sch_component.cpp:1809
+#: eeschema/sch_component.cpp:1808
 #, c-format
 msgid "Component %s, %s"
 msgstr "Component %s, %s"
@@ -18863,58 +18780,57 @@ msgstr "%8.8lX/"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Pin del full jeràrquic %s"
 
-#: eeschema/sch_text.cpp:708
+#: eeschema/sch_text.cpp:714
 msgid "Graphic Text"
 msgstr "Text gràfic"
 
-#: eeschema/sch_text.cpp:712
+#: eeschema/sch_text.cpp:718
 #: eeschema/widgets/widget_eeschema_color_config.cpp:61
 msgid "Label"
 msgstr "Etiqueta"
 
-#: eeschema/sch_text.cpp:716
+#: eeschema/sch_text.cpp:722
 msgid "Global Label"
 msgstr "Etiqueta global"
 
-#: eeschema/sch_text.cpp:720
+#: eeschema/sch_text.cpp:726
 msgid "Hierarchical Label"
 msgstr "Etiqueta jeràrquica"
 
-#: eeschema/sch_text.cpp:724
+#: eeschema/sch_text.cpp:730
 msgid "Hierarchical Sheet Pin"
 msgstr "Pin del full jeràrquic"
 
-#: eeschema/sch_text.cpp:740
+#: eeschema/sch_text.cpp:746
 msgid "Vertical up"
 msgstr "Vertical amunt"
 
-#: eeschema/sch_text.cpp:744
+#: eeschema/sch_text.cpp:750
 msgid "Horizontal invert"
 msgstr "Inversió horitzontal"
 
-#: eeschema/sch_text.cpp:748
+#: eeschema/sch_text.cpp:754
 msgid "Vertical down"
 msgstr "Vertical avall"
 
-#: eeschema/sch_text.cpp:982
+#: eeschema/sch_text.cpp:988
 #, c-format
 msgid "Label %s"
 msgstr "Etiqueta %s"
 
-#: eeschema/sch_text.cpp:1426
+#: eeschema/sch_text.cpp:1432
 #, c-format
 msgid "Global Label %s"
 msgstr "Etiqueta global %s"
 
-#: eeschema/sch_text.cpp:1767
+#: eeschema/sch_text.cpp:1773
 #, c-format
 msgid "Hierarchical Label %s"
 msgstr "Etiqueta jeràrquica %s"
 
 #: eeschema/sch_validators.cpp:80
-#, fuzzy
 msgid "reference designator"
-msgstr "Designador de la referència"
+msgstr "designador de la referència"
 
 #: eeschema/sch_validators.cpp:81
 msgid "value"
@@ -18925,9 +18841,8 @@ msgid "footprint"
 msgstr "empremta"
 
 #: eeschema/sch_validators.cpp:83
-#, fuzzy
 msgid "data sheet"
-msgstr "Afegeix un full"
+msgstr "full de dades"
 
 #: eeschema/sch_validators.cpp:84
 msgid "user defined"
@@ -18948,11 +18863,11 @@ msgstr ""
 
 #: eeschema/sch_validators.cpp:102
 msgid "tab"
-msgstr ""
+msgstr "tabulador"
 
 #: eeschema/sch_validators.cpp:104
 msgid "space"
-msgstr ""
+msgstr "espai"
 
 #: eeschema/sch_validators.cpp:111
 #, c-format
@@ -18980,9 +18895,8 @@ msgid "The %s field cannot contain leading and/or trailing white space."
 msgstr ""
 
 #: eeschema/sch_validators.cpp:132
-#, fuzzy
 msgid "Field Validation Error"
-msgstr "Error d'escriptura de fitxer"
+msgstr "Error de validació de camp"
 
 #: eeschema/schedit.cpp:265
 msgid "There are no undefined labels in this sheet to clean up."
@@ -19259,7 +19173,7 @@ msgstr "Crea un nou component des d'un dels actuals"
 
 #: eeschema/tool_lib.cpp:138
 msgid "Update current component in current library"
-msgstr "Actualitza el component a la biblioteca actual"
+msgstr "Actualitza el component actual a la biblioteca actual"
 
 #: eeschema/tool_lib.cpp:141
 msgid "Import component"
@@ -19299,7 +19213,7 @@ msgstr "Mostra com a peça normal \"De Morgan\""
 
 #: eeschema/tool_lib.cpp:185 eeschema/tool_viewlib.cpp:103
 msgid "Show as \"De Morgan\" convert part"
-msgstr "Mostra com a peça de conversió ”De Morgan\""
+msgstr "Mostra com a peça de conversió \"De Morgan\""
 
 #: eeschema/tool_lib.cpp:189
 msgid "Show the associated datasheet or document"
@@ -19421,7 +19335,7 @@ msgstr "Unitat %c"
 
 #: eeschema/tool_viewlib.cpp:219
 msgid "Close schematic component viewer"
-msgstr "Tanca el visualitzador del component de l'esquemàtic"
+msgstr "Tanca el visualitzador del component esquemàtic"
 
 #: eeschema/tool_viewlib.cpp:248
 msgid "Open Eeschema manual"
@@ -20175,149 +20089,106 @@ msgid "failed to create 3D configuration directory"
 msgstr ""
 
 #: 3d-viewer/3d_cache/3d_cache.cpp:554
-#, fuzzy
 msgid "config directory"
-msgstr "Directori destí"
+msgstr "directori de configuració"
 
 #: 3d-viewer/3d_cache/3d_cache.cpp:589
 msgid "failed to create 3D cache directory"
 msgstr ""
 
 #: 3d-viewer/3d_cache/3d_cache.cpp:591
-#, fuzzy
 msgid "cache directory"
-msgstr "Directori destí"
+msgstr "directori de memòria cau"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:97
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:160
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:99
 msgid "(DEFAULT)"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:98
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:161
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:100
 msgid "${PROJDIR}"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:100
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:162
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:102
 msgid "Current project directory"
 msgstr "Directori actual del projecte"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:167
-msgid "Legacy 3D environment path"
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:174
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:175
+msgid "${KIPRJMOD}"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:265
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:332
 msgid "[3D File Resolver] No such path; ensure the environment var is defined"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:328
-msgid "[3D File Resolver] No such path; ensure KISYS3DMOD is correctly defined"
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:403
+msgid "[3D File Resolver] No such path"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:363
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:438
 msgid "[3D File Resolver] No such path; ensure the path alias is defined"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:433
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:457
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:487
-msgid "This alias: "
-msgstr "Aquest àlies:"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:436
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:463
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:490
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:509
-msgid "This path: "
-msgstr "Aquest cami:"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:439
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:460
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:493
-msgid "Existing alias: "
-msgstr ""
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:442
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:466
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:496
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:512
-msgid "Existing path: "
-msgstr ""
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:444
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:474
-msgid "Bad alias (duplicate path)"
-msgstr ""
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:469
-msgid "This full path: "
-msgstr ""
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:472
-msgid "Existing full path: "
-msgstr ""
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:498
-msgid "Bad alias (common path)"
-msgstr ""
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:506
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:503
 msgid "Alias: "
 msgstr "Àlies:"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:514
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:506
+msgid "This path: "
+msgstr "Aquest camí:"
+
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:509
+msgid "Existing path: "
+msgstr ""
+
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:511
 msgid "Bad alias (duplicate name)"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:535
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:642
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:530
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:636
 msgid "3D configuration directory is unknown"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:554
-#, fuzzy
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:549
 msgid "no 3D configuration file"
-msgstr "Llegeix el fitxer de configuració de les dreceres de teclat:"
+msgstr "cap fitxer de configuració 3D"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:567
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:666
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:686
-#, fuzzy
-msgid "Could not open configuration file"
-msgstr "Carrega un fitxer de configuració de dreceres de teclat existent"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:645
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:658
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:562
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:667
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:689
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:727
-#, fuzzy
-msgid "Write 3D search path list"
-msgstr "Llista dels camins de cerca actuals"
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
+msgid "Could not open configuration file"
+msgstr "No s'ha pogut obrir el fitxer de configuració"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:657
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:639
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:659
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:668
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:690
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:715
+msgid "Write 3D search path list"
+msgstr "Escriu la llista dels camins a la cerca 3D"
+
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:658
 msgid ""
 "3D search path list is empty;\n"
 "continue to write empty file?"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:726
-#, fuzzy
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:714
 msgid "Problems writing configuration file"
-msgstr "Carrega un fitxer de configuració de dreceres de teclat existent"
+msgstr "Problemes en escriure el fitxer de configuració"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:856
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:898
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:878
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:920
 msgid "bad Hollerith string on line"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:869
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:891
 msgid "missing opening quote mark in config file"
 msgstr ""
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:882
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:914
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:904
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:936
 msgid "invalid entry (unexpected end of line)"
 msgstr ""
 
@@ -20325,44 +20196,42 @@ msgstr ""
 msgid "All Files (*.*)|*.*"
 msgstr "Tots els fitxers (*.*)|*.*"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:108
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:110
 msgid "[BUG] No valid resolver; data will not be updated"
 msgstr ""
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:109
-#, fuzzy
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:111
 msgid "Update 3D search path list"
-msgstr "Llista dels camins de cerca actuals"
+msgstr "Actualitza la llista dels camins a la cerca 3D"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:169
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:209
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:250
-#, fuzzy
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:171
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:211
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:252
 msgid "No entry selected"
-msgstr "Cap xarxa seleccionada."
+msgstr "Cap entrada seleccionada"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:169
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:176
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:171
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:178
 msgid "Delete alias entry"
 msgstr "Elimina l'entrada de l'àlies"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:175
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:215
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:256
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:177
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:217
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:258
 msgid ""
 "Multiple entries selected; please\n"
 "select only one entry"
 msgstr ""
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:209
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:216
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:211
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:218
 msgid "Move alias up"
-msgstr "Mou amunt l'alies"
+msgstr "Mou amunt l'àlies"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:250
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:257
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:252
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:259
 msgid "Move alias down"
-msgstr "Mou avall l'alies"
+msgstr "Mou avall l'àlies"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:58
 msgid "Add Alias"
@@ -20372,11 +20241,11 @@ msgstr "Afegeix un àlies"
 msgid "Remove Alias"
 msgstr "Suprimeix l'àlies"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:47
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:48
 msgid "Select 3D Model"
 msgstr "Selecciona el model 3D"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:139
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:140
 msgid "Paths:"
 msgstr "Camins:"
 
@@ -20415,9 +20284,8 @@ msgid "specified path is a directory"
 msgstr ""
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:361
-#, fuzzy
 msgid "no such file"
-msgstr " [cap fitxer]"
+msgstr "no existeix el fitxer"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:489
 msgid "problems encountered reading cache file"
@@ -20707,7 +20575,7 @@ msgstr "Quadrícula 3D de 5 mm"
 
 #: 3d-viewer/3d_toolbar.cpp:243
 msgid "3D Grid 2.5 mm"
-msgstr "Quadrícula 3D de 2.5 mm"
+msgstr "Quadrícula 3D de 2,5 mm"
 
 #: 3d-viewer/3d_toolbar.cpp:244
 msgid "3D Grid 1 mm"
@@ -20802,9 +20670,8 @@ msgid "Show None"
 msgstr "Oculta tot"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.h:52
-#, fuzzy
 msgid "3D Search Path Configuration"
-msgstr "Configuració dels camins"
+msgstr "Configuració dels camins a la cerca 3D"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.h:79
 msgid "3D Display Options"
@@ -21092,7 +20959,7 @@ msgstr ""
 
 #: gerbview/export_to_pcbnew.cpp:173
 msgid "None of the Gerber layers contain any data"
-msgstr ""
+msgstr "Cap de les capes Gerber conté cap dada"
 
 #: gerbview/export_to_pcbnew.cpp:180
 msgid "Board file name:"
@@ -21178,7 +21045,7 @@ msgstr "D-Codes"
 #: gerbview/gerbview_frame.cpp:484
 #, c-format
 msgid "Layer %d not in use"
-msgstr ""
+msgstr "Capa %d sense utilitzar"
 
 #: gerbview/gerbview_frame.cpp:494
 msgid "(with X2 Attributes)"
@@ -21234,10 +21101,12 @@ msgstr "Carrega un fitxer &Gerber"
 msgid ""
 "Load a new Gerber file on the current layer. Previous data will be deleted"
 msgstr ""
+"Carrega un fitxer Gerber nou en la capa actual. Les dades anteriors seran "
+"eliminades"
 
 #: gerbview/menubar.cpp:72
 msgid "Load &EXCELLON Drill File"
-msgstr "Carrega el fitxer de perforació &EXCELLON"
+msgstr "Carrega un fitxer de perforació &EXCELLON"
 
 #: gerbview/menubar.cpp:73
 msgid "Load excellon drill file"
@@ -21301,7 +21170,7 @@ msgstr "Llista i edita D-Codes"
 
 #: gerbview/menubar.cpp:192
 msgid "&Show Source"
-msgstr "Mo&stra el font"
+msgstr "Mo&stra el codi font"
 
 #: gerbview/menubar.cpp:193
 msgid "Show source file for the current layer"
@@ -21380,6 +21249,8 @@ msgstr ""
 #: gerbview/toolbars_gerber.cpp:70
 msgid "Show/hide frame reference and select paper size for printing"
 msgstr ""
+"Mostra o oculta la referència del marc i selecciona la mida del paper per a "
+"la impressió"
 
 #: gerbview/toolbars_gerber.cpp:74
 msgid "Print layers"
@@ -21387,7 +21258,7 @@ msgstr "Imprimeix les capes"
 
 #: gerbview/toolbars_gerber.cpp:101
 msgid "No tool"
-msgstr "Sense eina"
+msgstr "Cap eina"
 
 #: gerbview/toolbars_gerber.cpp:105
 msgid "Tool "
@@ -21647,7 +21518,7 @@ msgstr ""
 #: new/sch_sweet_parser.cpp:903
 #, c-format
 msgid "no pins with signal %s"
-msgstr ""
+msgstr "sense pins amb el senyal %s"
 
 #: new/sch_sweet_parser.cpp:915
 #, c-format
@@ -21864,7 +21735,7 @@ msgstr "Ω·m"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:328
 msgid "External layer traces"
-msgstr "Traces de la capa externa"
+msgstr "Traços de la capa externa"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:336
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:434
@@ -21914,7 +21785,7 @@ msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:426
 msgid "Internal layer traces"
-msgstr "Traces de la capa interna"
+msgstr "Traços de la capa interna"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:537
 msgid "Voltage > 500V:"
@@ -22008,6 +21879,17 @@ msgid ""
 "*  A7 - External Component lead termination, with conformal coating (any "
 "elevation)"
 msgstr ""
+"*  B1 - Conductors interns\n"
+"*  B2 - Conductors externs, sense revestiment, des del nivell del mar fins a "
+"3050 m\n"
+"*  B3 - Conductors externs, sense revestiment, per sobre de 3050 m\n"
+"*  B4 - Conductors externs, amb revestiment permanent de polímer (qualsevol "
+"elevació)\n"
+"*  A5 - Conductors externs, amb revestiment de conformació per sobre del "
+"muntatge (qualsevol elevació)\n"
+"*  A6 - Començament o terminació del component extern, sense revestiment\n"
+"*  A7 - Començament o terminació del component extern, amb revestiment de "
+"conformació (qualsevol elevació)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:614
 msgid "Electrical Spacing"
@@ -22246,19 +22128,19 @@ msgstr "1%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1179
 msgid "0.5%"
-msgstr "0.5%"
+msgstr "0,5%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1179
 msgid "0.25%"
-msgstr "0.25%"
+msgstr "0,25%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1179
 msgid "0.1%"
-msgstr "0.1%"
+msgstr "0,1%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1179
 msgid "0.05%"
-msgstr "0.05%"
+msgstr "0,05%"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1181
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1210
@@ -22291,7 +22173,7 @@ msgstr "Codis dels colors"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1252
 msgid "Note: Values are minimal values"
-msgstr "Canvi de la llista dels reguladors de tensió"
+msgstr "Nota: Els valors són els valors mínims"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1271
 msgid "Class 1"
@@ -22319,7 +22201,7 @@ msgstr "Classe 6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1283
 msgid "Lines width"
-msgstr ""
+msgstr "Amplada de les línies"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1284
 msgid "Min clearance"
@@ -22327,7 +22209,7 @@ msgstr "Marge de seguretat mín."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1285
 msgid "Via: (diam - drill)"
-msgstr ""
+msgstr "Vía: (diàmetre - perforació)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1286
 msgid "Plated Pad: (diam - drill)"
@@ -22335,7 +22217,7 @@ msgstr "Pad metal·litzat: (diàmetre - perforació)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1287
 msgid "NP Pad: (diam - drill)"
-msgstr ""
+msgstr "Pad NP: (diàmetre - perforació)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1306
 msgid "Board Classes"
@@ -22408,6 +22290,8 @@ msgid ""
 "If you specify the maximum current, then the trace widths will be calculated "
 "to suit."
 msgstr ""
+"Si s'especifica el corrent màxim, aleshores es calcularan les amplades dels "
+"traços per adaptar-se."
 
 #: pcb_calculator/tracks_width_versus_current.cpp:451
 msgid ""
@@ -22415,10 +22299,13 @@ msgid ""
 "will be calculated. The width for the other trace to also handle this "
 "current will then be calculated."
 msgstr ""
+"Si s'especifica una de les amplades dels traços, es calcula el corrent màxim "
+"que pot gestionar. A continuació, es calcula l'amplada dels altres traços "
+"perquè també gestionin aquest corrent."
 
 #: pcb_calculator/tracks_width_versus_current.cpp:455
 msgid "The controlling value is shown in bold."
-msgstr ""
+msgstr "El valor de control es mostra en negreta."
 
 #: pcb_calculator/tracks_width_versus_current.cpp:456
 msgid ""
@@ -22426,7 +22313,7 @@ msgid ""
 "(internal), temperature rises up to 100 deg C, and widths of up to 400mil "
 "(10mm)."
 msgstr ""
-"Els càlculs són vàlids per a corrents de fins a 35 A (extern) o 17.5 A "
+"Els càlculs són vàlids per a corrents de fins a 35 A (extern) o 17,5 A "
 "(intern), augments de temperatura de fins a 100 ºC, i amplades de fins a 400 "
 "mil (10 mm)."
 
@@ -22452,7 +22339,7 @@ msgstr "gruix i amplada en mils"
 
 #: pcb_calculator/tracks_width_versus_current.cpp:468
 msgid "0.024 for internal traces or 0.048 for external traces"
-msgstr "0.024 per a les traces internes o 0.048 per a les traces externes"
+msgstr "0,024 per als traços interns o 0,048 per als traços externs"
 
 #: pcb_calculator/transline_dlg_funct.cpp:66
 msgid "Relative Dielectric Constants"
@@ -22950,7 +22837,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:378
 msgid "Repeat parameters:"
-msgstr ""
+msgstr "Paràmetres de la repetició:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:388
 msgid "Repeat count"
@@ -22990,7 +22877,7 @@ msgstr "Gruix de la línia (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:529
 msgid "Set to Default"
-msgstr "Estableix al valor per defecte"
+msgstr "Estableix al valor predeterminat"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:538
 msgid "Page Margins"
@@ -23235,23 +23122,23 @@ msgstr ""
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:107
 msgid "Left Top paper corner"
-msgstr ""
+msgstr "Cantonada esquerra de la part superior del paper"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:108
 msgid "Right Bottom page corner"
-msgstr ""
+msgstr "Cantonada dreta de la part inferior de la pàgina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:109
 msgid "Left Bottom page corner"
-msgstr ""
+msgstr "Cantonada esquerra de la part inferior de la pàgina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:110
 msgid "Right Top page corner"
-msgstr ""
+msgstr "Cantonada dreta de la part superior de la pàgina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:111
 msgid "Left Top page corner"
-msgstr ""
+msgstr "Cantonada esquerra de la part superior de la pàgina"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:118
 msgid " Origin of coordinates displayed to the status bar"
@@ -23306,7 +23193,7 @@ msgid ""
 "from %s : %s"
 msgstr ""
 "ERROR d'E/S: %s\n"
-"des de %s : %s"
+"des de %s: %s"
 
 #: include/richio.h:78
 #, c-format
@@ -23320,3 +23207,117 @@ msgstr ""
 "«%s»\n"
 "línia %d  desplaçament %d\n"
 "de %s : %s"
+
+#~ msgid "Bad value for footprints orientation"
+#~ msgstr "Valor incorrecte per a l’orientació de l’empremta"
+
+#~ msgid "New orientation (0.1 degree resolution)"
+#~ msgstr "Nova orientació (amb resolució de 0,1 graus)"
+
+#~ msgid "Filter to select footprints by reference"
+#~ msgstr "Filtre per seleccionar les empremtes per referència"
+
+#~ msgid "Include Locked Footprints"
+#~ msgstr "Inclou les empremtes bloquejades"
+
+#~ msgid "Record Macro 0"
+#~ msgstr "Enregistra la macro 0"
+
+#~ msgid "Call Macro 0"
+#~ msgstr "Crida la macro 0"
+
+#~ msgid "Record Macro 1"
+#~ msgstr "Enregistra la macro 1"
+
+#~ msgid "Call Macro 1"
+#~ msgstr "Crida la macro 1"
+
+#~ msgid "Record Macro 2"
+#~ msgstr "Enregistra la macro 2"
+
+#~ msgid "Call Macro 2"
+#~ msgstr "Crida la macro 2"
+
+#~ msgid "Record Macro 3"
+#~ msgstr "Enregistra la macro 3"
+
+#~ msgid "Call Macro 3"
+#~ msgstr "Crida la macro 3"
+
+#~ msgid "Record Macro 4"
+#~ msgstr "Enregistra la macro 4"
+
+#~ msgid "Call Macro 4"
+#~ msgstr "Crida la macro 4"
+
+#~ msgid "Record Macro 5"
+#~ msgstr "Enregistra la macro 5"
+
+#~ msgid "Call Macro 5"
+#~ msgstr "Crida la macro 5"
+
+#~ msgid "Record Macro 6"
+#~ msgstr "Enregistra la macro 6"
+
+#~ msgid "Call Macro 6"
+#~ msgstr "Crida la macro 6"
+
+#~ msgid "Record Macro 7"
+#~ msgstr "Enregistra la macro 7"
+
+#~ msgid "Call Macro 7"
+#~ msgstr "Crida la macro 7"
+
+#~ msgid "Record Macro 8"
+#~ msgstr "Enregistra la macro 8"
+
+#~ msgid "Call Macro 8"
+#~ msgstr "Crida la macro 8"
+
+#~ msgid "Record Macro 9"
+#~ msgstr "Enregistra la macro 9"
+
+#~ msgid "Call Macro 9"
+#~ msgstr "Crida la macro 9"
+
+#~ msgid "Macro %d recorded"
+#~ msgstr "Macro %d enregistrada"
+
+#~ msgid "Call macro %d"
+#~ msgstr "Crida la macro %d"
+
+#~ msgid "&Save macros"
+#~ msgstr "De&sa les macros"
+
+#~ msgid "Save macros to file"
+#~ msgstr "Desa les macros al fitxer"
+
+#~ msgid "&Read macros"
+#~ msgstr "Llegeix les mac&ros"
+
+#~ msgid "Read macros from file"
+#~ msgstr "Llegeix les macros del fitxer"
+
+#~ msgid "Ma&cros"
+#~ msgstr "Ma&cros"
+
+#~ msgid "Orient All Footprints"
+#~ msgstr "Orienta totes les empremtes"
+
+#~ msgid "Save Macros File"
+#~ msgstr "Desa el fitxer de les macros"
+
+#~ msgid "Read Macros File"
+#~ msgstr "Llegeix el fitxer de les macros"
+
+#~ msgid "Footprints Orientation"
+#~ msgstr "Orientació de les empremtes"
+
+#~ msgid "KiCad recorded macros (*.mcr)|*.mcr"
+#~ msgstr "Macros enregistrades de KiCad (*.mcr)|*.mcr"
+
+#~ msgid "Assign Footprint"
+#~ msgstr "Assigna l'empremta"
+
+#~ msgid "This alias: "
+#~ msgstr "Aquest àlies:"
