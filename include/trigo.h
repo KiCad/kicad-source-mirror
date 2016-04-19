@@ -201,9 +201,9 @@ inline double RAD2DECIDEG( double rad ) { return rad * 1800.0 / M_PI; }
 /// Normalize angle to be in the -360.0 .. 360.0:
 template <class T> inline void NORMALIZE_ANGLE_360( T &Angle )
 {
-    while( Angle < -3600 )
+    while( Angle <= -3600 )
         Angle += 3600;
-    while( Angle > 3600 )
+    while( Angle >= 3600 )
         Angle -= 3600;
 }
 

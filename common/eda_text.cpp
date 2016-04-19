@@ -88,6 +88,13 @@ EDA_TEXT::~EDA_TEXT()
 }
 
 
+void EDA_TEXT::SetOrientation( double aOrientation )
+{
+    m_Orient = aOrientation;
+    NORMALIZE_ANGLE_360( m_Orient );
+}
+
+
 int EDA_TEXT::LenSize( const wxString& aLine ) const
 {
     basic_gal.SetItalic( m_Italic );

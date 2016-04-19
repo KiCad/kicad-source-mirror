@@ -193,12 +193,14 @@ void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
         aColor2 = c;
     }
 
+    // Draw the background
     DrawGraphicText( aClipBox, aDC, aPos, aColor1, aText, aOrient, aSize,
                      aH_justify, aV_justify, aWidth, aItalic, aBold,
                      aCallback, aPlotter );
 
+    // Draw the text
     DrawGraphicText( aClipBox, aDC, aPos, aColor2, aText, aOrient, aSize,
-                     aH_justify, aV_justify, aWidth / 4, aItalic, aBold,
+                     aH_justify, aV_justify, aWidth/4, aItalic, aBold,
                      aCallback, aPlotter );
 }
 

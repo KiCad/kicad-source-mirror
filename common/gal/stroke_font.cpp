@@ -260,10 +260,18 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
     // Compute the text size
     VECTOR2D textSize = computeTextLineSize( aText );
+    double half_thickness = m_gal->GetLineWidth()/2;
+
+    // First adjust: the text X position is corrected by half_thickness
+    // because when the text with thickness is draw, its full size is textSize,
+    // but the position of lines is half_thickness to textSize - half_thickness
+    // so we must translate the coordinates by half_thickness on the X axis
+    // to place the text inside the 0 to textSize X area.
+    m_gal->Translate( VECTOR2D( half_thickness, 0 ) );
 
     m_gal->Save();
 
-    // Adjust the text position to the given alignment
+    // Adjust the text position to the given horizontal justification
     switch( m_horizontalJustify )
     {
     case GR_TEXT_HJUSTIFY_CENTER:
@@ -289,7 +297,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
         // In case of mirrored text invert the X scale of points and their X direction
         // (m_glyphSize.x) and start drawing from the position where text normally should end
         // (textSize.x)
-        xOffset = textSize.x;
+        xOffset = textSize.x - m_gal->GetLineWidth();
         glyphSize.x = -m_glyphSize.x;
     }
     else

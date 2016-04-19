@@ -237,15 +237,13 @@ TEXTE_PCB* PCB_EDIT_FRAME::CreateTextePcb( wxDC* aDC, TEXTE_PCB* aText )
 
 void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
-    int angle    = 900;
-
     if( TextePcb == NULL )
         return;
 
     // Erase previous text:
     TextePcb->Draw( m_canvas, DC, GR_XOR );
 
-    TextePcb->SetOrientation( TextePcb->GetOrientation() + angle );
+    TextePcb->SetOrientation( TextePcb->GetOrientation() + 900 );
 
     // Redraw text in new position:
     TextePcb->Draw( m_canvas, DC, GR_XOR );
