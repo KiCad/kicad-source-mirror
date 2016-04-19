@@ -650,6 +650,7 @@ INPUT                  = Documentation/development/coding-style-policy.md \
                          Documentation/development/road-map-r5.md \
                          Documentation/development/road-map.md \
                          Documentation/development/compiling.md \
+                         Documentation/development/ui-policy.md \
                          kicad \
                          pcbnew \
                          cvpcb \

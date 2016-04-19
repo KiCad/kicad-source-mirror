@@ -27,7 +27,7 @@ DOXYFILE_ENCODING      = UTF-8
 # identify the project. Note that if you do not use Doxywizard you need
 # to put quotes around the project name if it contains spaces.
 
-PROJECT_NAME           = "KiCad Developer's Resource Documentation"
+PROJECT_NAME           = "KiCad Developer's Resource"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number.
 # This could be handy for archiving the generated documentation or
@@ -650,7 +650,8 @@ INPUT                  = coding-style-policy.md \
                          stable-release-policy.md \
                          road-map-r5.md \
                          road-map.md \
-                         compiling.md
+                         compiling.md \
+                         ui-policy.md
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
