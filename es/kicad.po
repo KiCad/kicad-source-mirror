@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-18 10:56+0200\n"
-"PO-Revision-Date: 2016-04-18 10:58+0200\n"
+"POT-Creation-Date: 2016-04-19 14:39+0200\n"
+"PO-Revision-Date: 2016-04-19 14:39+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -523,7 +523,7 @@ msgstr "Activar/Desactivar proyección ortográfica"
 #: eeschema/menubar_libedit.cpp:273 eeschema/tool_viewlib.cpp:264
 #: gerbview/menubar.cpp:243 kicad/menubar.cpp:426
 #: pagelayout_editor/menubar.cpp:169 pcbnew/menubar_modedit.cpp:355
-#: pcbnew/menubar_pcbframe.cpp:674 pcbnew/tool_modview.cpp:203
+#: pcbnew/menubar_pcbframe.cpp:656 pcbnew/tool_modview.cpp:203
 msgid "&File"
 msgstr "&Archivo"
 
@@ -1259,44 +1259,56 @@ msgstr "La suite completa KiCad EDA se pone a disposición bajo la"
 msgid "GNU General Public License (GPL) version 3 or any later version"
 msgstr "Licencia Pública General (GPL) versión 3 o posterior"
 
-#: common/dialog_about/dialog_about.cpp:115
+#: common/dialog_about/AboutDialog_main.cpp:406
+msgid "Others"
+msgstr "Otras"
+
+#: common/dialog_about/AboutDialog_main.cpp:421
+msgid "Icons by"
+msgstr "Iconos por"
+
+#: common/dialog_about/AboutDialog_main.cpp:436
+msgid "3D models by"
+msgstr "3D modelos por"
+
+#: common/dialog_about/dialog_about.cpp:116
 msgid "Information"
 msgstr "Información"
 
-#: common/dialog_about/dialog_about.cpp:118
+#: common/dialog_about/dialog_about.cpp:119
 msgid "Developers"
 msgstr "Desarrolladores"
 
-#: common/dialog_about/dialog_about.cpp:119
+#: common/dialog_about/dialog_about.cpp:120
 msgid "Doc Writers"
 msgstr "Escritores de la documentación"
 
-#: common/dialog_about/dialog_about.cpp:121
+#: common/dialog_about/dialog_about.cpp:122
 msgid "Artists"
 msgstr "Artistas"
 
-#: common/dialog_about/dialog_about.cpp:122
+#: common/dialog_about/dialog_about.cpp:123
 msgid "Translators"
 msgstr "Traductores"
 
-#: common/dialog_about/dialog_about.cpp:124
+#: common/dialog_about/dialog_about.cpp:125
 msgid "Packagers"
 msgstr "Empaquetadores"
 
-#: common/dialog_about/dialog_about.cpp:127
+#: common/dialog_about/dialog_about.cpp:128
 msgid "License"
 msgstr "Licencia"
 
-#: common/dialog_about/dialog_about.cpp:436
+#: common/dialog_about/dialog_about.cpp:437
 msgid "Could not open clipboard to write version information."
 msgstr ""
 "No puede abrirse el portapapeles para guardar la información de versión."
 
-#: common/dialog_about/dialog_about.cpp:437
+#: common/dialog_about/dialog_about.cpp:438
 msgid "Clipboard Error"
 msgstr "Error de portapapeles"
 
-#: common/dialog_about/dialog_about.cpp:538
+#: common/dialog_about/dialog_about.cpp:539
 msgid "Copied..."
 msgstr "Copiada..."
 
@@ -2462,62 +2474,58 @@ msgid "Geda PCB footprint library file (*.fp)|*.fp"
 msgstr "Archivo de librería de huellas de Geda PCB (*.fp)|*.fp"
 
 #: common/wildcards_and_files_ext.cpp:85
-msgid "KiCad recorded macros (*.mcr)|*.mcr"
-msgstr "Macros de KiCad (*.mcr)|*.mcr"
-
-#: common/wildcards_and_files_ext.cpp:86
 msgid "Component-footprint link file (*.cmp)|*cmp"
 msgstr "Archivo de vínculo Componente-Huella (*.cmp)|*cmp"
 
-#: common/wildcards_and_files_ext.cpp:87
+#: common/wildcards_and_files_ext.cpp:86
 msgid "Page layout descr file (*.kicad_wks)|*kicad_wks"
 msgstr "Archivo de diseño de hoja (*.kicad_wks)|*kicad_wks"
 
-#: common/wildcards_and_files_ext.cpp:89
+#: common/wildcards_and_files_ext.cpp:88
 msgid "All files (*)|*"
 msgstr "Todos los archivos (*)|*"
 
-#: common/wildcards_and_files_ext.cpp:92
+#: common/wildcards_and_files_ext.cpp:91
 msgid "KiCad cmp/footprint link files (*.cmp)|*.cmp"
 msgstr "Archivo de vínculo cmp/huella de KiCad (*.cmp)|*.cmp"
 
-#: common/wildcards_and_files_ext.cpp:95
+#: common/wildcards_and_files_ext.cpp:94
 msgid "Drill files (*.drl)|*.drl;*.DRL"
 msgstr "Archivo de taladrado (*.drl)|*.drl;*.DRL"
 
-#: common/wildcards_and_files_ext.cpp:96
+#: common/wildcards_and_files_ext.cpp:95
 msgid "SVG files (*.svg)|*.svg;*.SVG"
 msgstr "Archivo SVG (*.svg)|*.svg;*.SVG"
 
-#: common/wildcards_and_files_ext.cpp:97
+#: common/wildcards_and_files_ext.cpp:96
 msgid "HTML files (*.html)|*.htm;*.html"
 msgstr "Archivo HTML (*.html)|*.htm;*.html"
 
-#: common/wildcards_and_files_ext.cpp:98
+#: common/wildcards_and_files_ext.cpp:97
 msgid "Portable document format files (*.pdf)|*.pdf"
 msgstr "Archivo PDF (*.pdf)|*.pdf"
 
-#: common/wildcards_and_files_ext.cpp:99
+#: common/wildcards_and_files_ext.cpp:98
 msgid "PostScript files (.ps)|*.ps"
 msgstr "Archivo PostScript (.ps)|*.ps"
 
-#: common/wildcards_and_files_ext.cpp:100
+#: common/wildcards_and_files_ext.cpp:99
 msgid "Report files (*.rpt)|*.rpt"
 msgstr "Informe (*.rpt)|*.rpt"
 
-#: common/wildcards_and_files_ext.cpp:101
+#: common/wildcards_and_files_ext.cpp:100
 msgid "Footprint place files (*.pos)|*.pos"
 msgstr "Archivo de posición de huellas (*.pos)|*.pos"
 
-#: common/wildcards_and_files_ext.cpp:102
+#: common/wildcards_and_files_ext.cpp:101
 msgid "Vrml and x3d files (*.wrl *.x3d)|*.wrl;*.x3d"
 msgstr "Archivos VRML y x3d (*.wrl *.x3d)|*.wrl;*.x3d"
 
-#: common/wildcards_and_files_ext.cpp:103
+#: common/wildcards_and_files_ext.cpp:102
 msgid "IDFv3 component files (*.idf)|*.idf"
 msgstr "Archivo de componentes IDFv3 (*.idf)|*.idf"
 
-#: common/wildcards_and_files_ext.cpp:104
+#: common/wildcards_and_files_ext.cpp:103
 msgid "Text files (*.txt)|*.txt"
 msgstr "Archivo de texto (*.txt)|*.txt"
 
@@ -2695,7 +2703,7 @@ msgid "Show outlines in sketch mode"
 msgstr "Mostrar contornos en modo boceto"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:406 pcbnew/hotkeys.cpp:187
-#: pcbnew/moduleframe.cpp:693 pcbnew/pcbframe.cpp:661
+#: pcbnew/moduleframe.cpp:693 pcbnew/pcbframe.cpp:650
 msgid "3D Viewer"
 msgstr "Visualizador 3D"
 
@@ -2845,7 +2853,7 @@ msgstr "Proyecto: '%s'"
 
 #: cvpcb/cvpcb_mainframe.cpp:756 eeschema/libedit.cpp:61
 #: eeschema/schframe.cpp:1364 kicad/prjconfig.cpp:332
-#: pcbnew/moduleframe.cpp:768 pcbnew/pcbframe.cpp:991
+#: pcbnew/moduleframe.cpp:768 pcbnew/pcbframe.cpp:980
 msgid " [Read Only]"
 msgstr "[Solo lectura]"
 
@@ -3069,7 +3077,7 @@ msgstr "Abrir el manual de CvPcb"
 #: eeschema/menubar_libedit.cpp:259 eeschema/tool_viewlib.cpp:252
 #: gerbview/menubar.cpp:228 kicad/menubar.cpp:412
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_modedit.cpp:343
-#: pcbnew/menubar_pcbframe.cpp:663 pcbnew/tool_modview.cpp:191
+#: pcbnew/menubar_pcbframe.cpp:645 pcbnew/tool_modview.cpp:191
 msgid "&Getting Started in KiCad"
 msgstr "&Comenzando con KiCad"
 
@@ -3099,7 +3107,7 @@ msgstr "&Guardar"
 #: eeschema/menubar_libedit.cpp:278 eeschema/tool_viewlib.cpp:267
 #: gerbview/menubar.cpp:246 kicad/menubar.cpp:430
 #: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_modedit.cpp:361
-#: pcbnew/menubar_pcbframe.cpp:683 pcbnew/tool_modview.cpp:206
+#: pcbnew/menubar_pcbframe.cpp:665 pcbnew/tool_modview.cpp:206
 msgid "&Help"
 msgstr "A&yuda"
 
@@ -5805,7 +5813,7 @@ msgstr "Editar el campo %s"
 msgid "Read Project File"
 msgstr "Abrir archivo proyecto"
 
-#: eeschema/eeschema_config.cpp:486 pcbnew/pcbnew_config.cpp:300
+#: eeschema/eeschema_config.cpp:486 pcbnew/pcbnew_config.cpp:291
 msgid "Save Project File"
 msgstr "Guardar archivo de proyecto"
 
@@ -6379,12 +6387,12 @@ msgid "Autoplace Fields"
 msgstr "Emplazamiento automático de campos"
 
 #: eeschema/hotkeys.cpp:226 eeschema/menubar.cpp:428
-#: pcbnew/menubar_pcbframe.cpp:614 pcbnew/dialogs/dialog_update_pcb_base.h:55
+#: pcbnew/menubar_pcbframe.cpp:596 pcbnew/dialogs/dialog_update_pcb_base.h:55
 msgid "Update PCB from Schematics"
 msgstr "Actualizar placa desde esquema"
 
 #: eeschema/hotkeys.cpp:329 pagelayout_editor/hotkeys.cpp:114
-#: pcbnew/hotkeys.cpp:350
+#: pcbnew/hotkeys.cpp:303
 msgid "Common"
 msgstr "Común"
 
@@ -7498,19 +7506,19 @@ msgstr "&Opciones del Editor de esquemas"
 msgid "Set Eeschema preferences"
 msgstr "Configurar las preferencias de Eeschema"
 
-#: eeschema/menubar.cpp:397 pcbnew/menubar_pcbframe.cpp:600
+#: eeschema/menubar.cpp:397 pcbnew/menubar_pcbframe.cpp:582
 msgid "&Save Preferences"
 msgstr "&Guardar preferencias"
 
-#: eeschema/menubar.cpp:398 pcbnew/menubar_pcbframe.cpp:601
+#: eeschema/menubar.cpp:398 pcbnew/menubar_pcbframe.cpp:583
 msgid "Save application preferences"
 msgstr "Guardar las preferencias de la aplicación"
 
-#: eeschema/menubar.cpp:403 pcbnew/menubar_pcbframe.cpp:605
+#: eeschema/menubar.cpp:403 pcbnew/menubar_pcbframe.cpp:587
 msgid "Load Prefe&rences"
 msgstr "Cargar prefe&rencias"
 
-#: eeschema/menubar.cpp:404 pcbnew/menubar_pcbframe.cpp:606
+#: eeschema/menubar.cpp:404 pcbnew/menubar_pcbframe.cpp:588
 msgid "Load application preferences"
 msgstr "Cargar preferencias de la aplicación"
 
@@ -7522,7 +7530,7 @@ msgstr "&Importar y exportar"
 msgid "Import and export settings"
 msgstr "Importar y exportar configuración"
 
-#: eeschema/menubar.cpp:432 pcbnew/menubar_pcbframe.cpp:615
+#: eeschema/menubar.cpp:432 pcbnew/menubar_pcbframe.cpp:597
 msgid "Updates the PCB design with the current schematic (forward annotation)."
 msgstr ""
 "Actualiza el diseño de la placa con el esquema actual (anotación hacia "
@@ -7595,33 +7603,33 @@ msgstr "Abrir el manual de usuario de Eeschema"
 
 #: eeschema/menubar.cpp:513 eeschema/menubar_libedit.cpp:268
 #: kicad/menubar.cpp:421 pcbnew/menubar_modedit.cpp:350
-#: pcbnew/menubar_pcbframe.cpp:669
+#: pcbnew/menubar_pcbframe.cpp:651
 msgid "&About KiCad"
 msgstr "&Acerca de KiCad"
 
 #: eeschema/menubar.cpp:519 eeschema/menubar_libedit.cpp:274
-#: pcbnew/menubar_modedit.cpp:356 pcbnew/menubar_pcbframe.cpp:675
+#: pcbnew/menubar_modedit.cpp:356 pcbnew/menubar_pcbframe.cpp:657
 msgid "&Edit"
 msgstr "&Editar"
 
 #: eeschema/menubar.cpp:520 eeschema/menubar_libedit.cpp:275
 #: eeschema/tool_viewlib.cpp:266 pcbnew/menubar_modedit.cpp:357
-#: pcbnew/menubar_pcbframe.cpp:676 pcbnew/tool_modview.cpp:205
+#: pcbnew/menubar_pcbframe.cpp:658 pcbnew/tool_modview.cpp:205
 msgid "&View"
 msgstr "&Ver"
 
 #: eeschema/menubar.cpp:521 eeschema/menubar_libedit.cpp:276
-#: pcbnew/menubar_modedit.cpp:358 pcbnew/menubar_pcbframe.cpp:677
+#: pcbnew/menubar_modedit.cpp:358 pcbnew/menubar_pcbframe.cpp:659
 msgid "&Place"
 msgstr "A&ñadir"
 
 #: eeschema/menubar.cpp:522 eeschema/menubar_libedit.cpp:277
-#: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:679
+#: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:661
 msgid "P&references"
 msgstr "P&referencias"
 
 #: eeschema/menubar.cpp:523 kicad/menubar.cpp:429
-#: pcbnew/menubar_pcbframe.cpp:681
+#: pcbnew/menubar_pcbframe.cpp:663
 msgid "&Tools"
 msgstr "&Herramientas"
 
@@ -7723,7 +7731,7 @@ msgid "Open the Eeschema Manual"
 msgstr "Abrir el manual de Eeschema"
 
 #: eeschema/menubar_libedit.cpp:260 eeschema/tool_viewlib.cpp:253
-#: pcbnew/menubar_modedit.cpp:344 pcbnew/menubar_pcbframe.cpp:664
+#: pcbnew/menubar_modedit.cpp:344 pcbnew/menubar_pcbframe.cpp:646
 #: pcbnew/tool_modview.cpp:192
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 msgstr "Abrir la guía para principiantes \"Getting Started in KiCad\""
@@ -8604,7 +8612,7 @@ msgstr "No encontrado"
 msgid "The following libraries were not found:"
 msgstr "No se han encontrado las siguientes librerías:"
 
-#: eeschema/schframe.cpp:624 pcbnew/pcbframe.cpp:586
+#: eeschema/schframe.cpp:624 pcbnew/pcbframe.cpp:575
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -8933,7 +8941,7 @@ msgstr "Generar listado de redes"
 
 #: eeschema/tool_sch.cpp:162
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:129
-#: pcbnew/hotkeys.cpp:352
+#: pcbnew/hotkeys.cpp:305
 msgid "Footprint Editor"
 msgstr "Editor de huellas"
 
@@ -9597,7 +9605,7 @@ msgid "No file loaded on the active layer %d"
 msgstr "No se ha cargado un archivo en la capa activa %d"
 
 #: gerbview/events_called_functions.cpp:319 gerbview/gerbview_frame.cpp:143
-#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:404 pcbnew/pcbframe.cpp:919
+#: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:398 pcbnew/pcbframe.cpp:908
 msgid "Visibles"
 msgstr "Visibles"
 
@@ -9616,7 +9624,6 @@ msgid "No room to load file"
 msgstr "No hay espacio para cargar el archivo"
 
 #: gerbview/excellon_read_drill_file.cpp:199 pcbnew/pcbnew_config.cpp:227
-#: pcbnew/pcbnew_config.cpp:503
 #, c-format
 msgid "File %s not found"
 msgstr "No se ha encontrado el archivo %s"
@@ -19748,110 +19755,9 @@ msgstr "Modo de presentación de pistas"
 msgid "Add Footprint"
 msgstr "Añadir huella"
 
-#: pcbnew/hotkeys.cpp:229
-msgid "Record Macro 0"
-msgstr "Grabar Macro 0"
-
-#: pcbnew/hotkeys.cpp:231
-msgid "Call Macro 0"
-msgstr "Llamar Macro 0"
-
-#: pcbnew/hotkeys.cpp:233
-msgid "Record Macro 1"
-msgstr "Grabar Macro 1"
-
-#: pcbnew/hotkeys.cpp:235
-msgid "Call Macro 1"
-msgstr "Llamar Macro 1"
-
-#: pcbnew/hotkeys.cpp:237
-msgid "Record Macro 2"
-msgstr "Grabar Macro 2"
-
-#: pcbnew/hotkeys.cpp:239
-msgid "Call Macro 2"
-msgstr "Llamar Macro 2"
-
-#: pcbnew/hotkeys.cpp:241
-msgid "Record Macro 3"
-msgstr "Grabar Macro 3"
-
-#: pcbnew/hotkeys.cpp:243
-msgid "Call Macro 3"
-msgstr "Llamar Macro 3"
-
-#: pcbnew/hotkeys.cpp:245
-msgid "Record Macro 4"
-msgstr "Grabar Macro 4"
-
-#: pcbnew/hotkeys.cpp:247
-msgid "Call Macro 4"
-msgstr "Llamar Macro 4"
-
-#: pcbnew/hotkeys.cpp:249
-msgid "Record Macro 5"
-msgstr "Grabar Macro 5"
-
-#: pcbnew/hotkeys.cpp:251
-msgid "Call Macro 5"
-msgstr "Llamar Macro 5"
-
-#: pcbnew/hotkeys.cpp:253
-msgid "Record Macro 6"
-msgstr "Grabar Macro 6"
-
-#: pcbnew/hotkeys.cpp:255
-msgid "Call Macro 6"
-msgstr "Llamar Macro 6"
-
-#: pcbnew/hotkeys.cpp:257
-msgid "Record Macro 7"
-msgstr "Grabar Macro 7"
-
-#: pcbnew/hotkeys.cpp:259
-msgid "Call Macro 7"
-msgstr "Llamar Macro 7"
-
-#: pcbnew/hotkeys.cpp:261
-msgid "Record Macro 8"
-msgstr "Grabar Macro 8"
-
-#: pcbnew/hotkeys.cpp:263
-msgid "Call Macro 8"
-msgstr "Llamar Macro 8"
-
-#: pcbnew/hotkeys.cpp:265
-msgid "Record Macro 9"
-msgstr "Grabar Macro 9"
-
-#: pcbnew/hotkeys.cpp:267
-msgid "Call Macro 9"
-msgstr "Llamar Macro 9"
-
-#: pcbnew/hotkeys.cpp:351
+#: pcbnew/hotkeys.cpp:304
 msgid "Board Editor"
 msgstr "Editor de placa"
-
-#: pcbnew/hotkeys_board_editor.cpp:63
-#, c-format
-msgid "Recording macro %d"
-msgstr "Grabando macro %d"
-
-#: pcbnew/hotkeys_board_editor.cpp:70
-#, c-format
-msgid "Macro %d recorded"
-msgstr "Se ha grabado la macro %d"
-
-# Pendiente de contexto
-#: pcbnew/hotkeys_board_editor.cpp:82
-#, c-format
-msgid "Call macro %d"
-msgstr "Cargar macro %d"
-
-#: pcbnew/hotkeys_board_editor.cpp:160
-#, c-format
-msgid "Add key [%c] in macro %d"
-msgstr "Añadir tecla [%c] a la macro %d"
 
 #: pcbnew/import_dxf/dialog_dxf_import.cpp:137
 msgid "Open File"
@@ -20533,12 +20439,12 @@ msgstr "Opcione&s"
 msgid "Change the footprint editor settings."
 msgstr "Cambiar las opciones del editor de huellas."
 
-#: pcbnew/menubar_modedit.cpp:338 pcbnew/menubar_pcbframe.cpp:658
+#: pcbnew/menubar_modedit.cpp:338 pcbnew/menubar_pcbframe.cpp:640
 #: pcbnew/tool_modview.cpp:186
 msgid "Pcbnew &Manual"
 msgstr "&Manual de Pcbnew"
 
-#: pcbnew/menubar_modedit.cpp:339 pcbnew/menubar_pcbframe.cpp:659
+#: pcbnew/menubar_modedit.cpp:339 pcbnew/menubar_pcbframe.cpp:641
 msgid "Open the Pcbnew Manual"
 msgstr "Abrir el manual de Pcbnew"
 
@@ -21059,95 +20965,71 @@ msgstr "Definir el espaciado/ancho global para los pares diferenciales."
 msgid "Save dimension preferences"
 msgstr "Guardar preferencias de dimensiones"
 
-#: pcbnew/menubar_pcbframe.cpp:583
-msgid "&Save macros"
-msgstr "Guardar macro&s"
-
-#: pcbnew/menubar_pcbframe.cpp:584
-msgid "Save macros to file"
-msgstr "Guardar macros a archivo"
-
-#: pcbnew/menubar_pcbframe.cpp:588
-msgid "&Read macros"
-msgstr "Lee&r macros"
-
-#: pcbnew/menubar_pcbframe.cpp:589
-msgid "Read macros from file"
-msgstr "Leer macros desde archivo"
-
-#: pcbnew/menubar_pcbframe.cpp:593
-msgid "Ma&cros"
-msgstr "Ma&cros"
-
-#: pcbnew/menubar_pcbframe.cpp:594
-msgid "Macros save/read operations"
-msgstr "Operación de guardado/lectura de macros"
-
-#: pcbnew/menubar_pcbframe.cpp:621
+#: pcbnew/menubar_pcbframe.cpp:603
 msgid "&Netlist"
 msgstr "Lista de re&des"
 
-#: pcbnew/menubar_pcbframe.cpp:622
+#: pcbnew/menubar_pcbframe.cpp:604
 msgid "Read the netlist and update board connectivity"
 msgstr "Leer la lista de redes y actualizar la conectividad de la placa"
 
-#: pcbnew/menubar_pcbframe.cpp:626
+#: pcbnew/menubar_pcbframe.cpp:608
 msgid "&Layer Pair"
 msgstr "&Par de capas"
 
-#: pcbnew/menubar_pcbframe.cpp:626
+#: pcbnew/menubar_pcbframe.cpp:608
 msgid "Change the active layer pair"
 msgstr "Cambiar el par activo de capas"
 
-#: pcbnew/menubar_pcbframe.cpp:630
+#: pcbnew/menubar_pcbframe.cpp:612
 msgid "&DRC"
 msgstr "&DCR"
 
-#: pcbnew/menubar_pcbframe.cpp:631 pcbnew/tool_pcb.cpp:273
+#: pcbnew/menubar_pcbframe.cpp:613 pcbnew/tool_pcb.cpp:273
 msgid "Perform design rules check"
 msgstr "Comprobación de las reglas de diseño."
 
-#: pcbnew/menubar_pcbframe.cpp:634
+#: pcbnew/menubar_pcbframe.cpp:616
 msgid "&FreeRoute"
 msgstr "&Freeroute"
 
-#: pcbnew/menubar_pcbframe.cpp:635
+#: pcbnew/menubar_pcbframe.cpp:617
 msgid "Fast access to the web based FreeROUTE advanced router"
 msgstr "Aceso rápido al enrutador avanzado Freeroute."
 
-#: pcbnew/menubar_pcbframe.cpp:640
+#: pcbnew/menubar_pcbframe.cpp:622
 msgid "&Scripting Console"
 msgstr "Consola de &scripts"
 
-#: pcbnew/menubar_pcbframe.cpp:641
+#: pcbnew/menubar_pcbframe.cpp:623
 msgid "Show/Hide the Python scripting console"
 msgstr "Mostrar/ocultar la consola de scripts de Python"
 
-#: pcbnew/menubar_pcbframe.cpp:648 pcbnew/menubar_pcbframe.cpp:682
+#: pcbnew/menubar_pcbframe.cpp:630 pcbnew/menubar_pcbframe.cpp:664
 msgid "&Design Rules"
 msgstr "Reglas de &diseño"
 
-#: pcbnew/menubar_pcbframe.cpp:649
+#: pcbnew/menubar_pcbframe.cpp:631
 msgid "Open the design rules editor"
 msgstr "Abrir el Editor de reglas de diseño"
 
-#: pcbnew/menubar_pcbframe.cpp:652
+#: pcbnew/menubar_pcbframe.cpp:634
 msgid "&Layers Setup"
 msgstr "Con&figurar capas"
 
-#: pcbnew/menubar_pcbframe.cpp:652
+#: pcbnew/menubar_pcbframe.cpp:634
 msgid "Enable and set layer properties"
 msgstr "Activar y ajustar las propiedades de la capa"
 
-#: pcbnew/menubar_pcbframe.cpp:670
+#: pcbnew/menubar_pcbframe.cpp:652
 msgid "Display the KiCad About dialog"
 msgstr "Muestra el diálogo Acerca de KiCad"
 
-#: pcbnew/menubar_pcbframe.cpp:678
+#: pcbnew/menubar_pcbframe.cpp:660
 msgid "Ro&ute"
 msgstr "Enr&utar"
 
-#: pcbnew/menubar_pcbframe.cpp:680
+#: pcbnew/menubar_pcbframe.cpp:662
 msgid "D&imensions"
 msgstr "D&imensiones"
 
@@ -21517,7 +21399,7 @@ msgstr ""
 msgid "Component '%s' footprint ID '%s' is not valid.\n"
 msgstr "El componente '%s' tiene un ID de huella '%s' no válido.\n"
 
-#: pcbnew/netlist.cpp:310
+#: pcbnew/netlist.cpp:309
 #, c-format
 msgid ""
 "Component '%s' footprint '%s' was not found in any libraries in the "
@@ -22147,16 +22029,16 @@ msgstr ""
 "\"%s\"\n"
 "debería verificarlo y editarlo (ejecutar un test DRC)."
 
-#: pcbnew/pcbframe.cpp:622
+#: pcbnew/pcbframe.cpp:611
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "¡No puede eliminarse el archivo de respaldo automático '%s'!"
 
-#: pcbnew/pcbframe.cpp:995
+#: pcbnew/pcbframe.cpp:984
 msgid " [new file]"
 msgstr " [nuevo archivo]"
 
-#: pcbnew/pcbframe.cpp:1092
+#: pcbnew/pcbframe.cpp:1081
 msgid ""
 "Cannot update the PCB, because the Kicad is opened in stand-alone mode. In "
 "order to create/update PCBs from schematics, you need to launch Kicad shell "
@@ -22189,14 +22071,6 @@ msgstr ""
 #: pcbnew/pcbnew_config.cpp:90 pcbnew/tool_pcb.cpp:795
 msgid "Hide Microwave Toolbar"
 msgstr "Ocultar la barra de herramientas de Microondas"
-
-#: pcbnew/pcbnew_config.cpp:446
-msgid "Save Macros File"
-msgstr "Guardar archivo de macros"
-
-#: pcbnew/pcbnew_config.cpp:493
-msgid "Read Macros File"
-msgstr "Cargar archivo de macros"
 
 #: pcbnew/plot_board_layers.cpp:116 pcbnew/plot_board_layers.cpp:301
 #, c-format
@@ -24030,6 +23904,106 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "KiCad recorded macros (*.mcr)|*.mcr"
+#~ msgstr "Macros de KiCad (*.mcr)|*.mcr"
+
+#~ msgid "Record Macro 0"
+#~ msgstr "Grabar Macro 0"
+
+#~ msgid "Call Macro 0"
+#~ msgstr "Llamar Macro 0"
+
+#~ msgid "Record Macro 1"
+#~ msgstr "Grabar Macro 1"
+
+#~ msgid "Call Macro 1"
+#~ msgstr "Llamar Macro 1"
+
+#~ msgid "Record Macro 2"
+#~ msgstr "Grabar Macro 2"
+
+#~ msgid "Call Macro 2"
+#~ msgstr "Llamar Macro 2"
+
+#~ msgid "Record Macro 3"
+#~ msgstr "Grabar Macro 3"
+
+#~ msgid "Call Macro 3"
+#~ msgstr "Llamar Macro 3"
+
+#~ msgid "Record Macro 4"
+#~ msgstr "Grabar Macro 4"
+
+#~ msgid "Call Macro 4"
+#~ msgstr "Llamar Macro 4"
+
+#~ msgid "Record Macro 5"
+#~ msgstr "Grabar Macro 5"
+
+#~ msgid "Call Macro 5"
+#~ msgstr "Llamar Macro 5"
+
+#~ msgid "Record Macro 6"
+#~ msgstr "Grabar Macro 6"
+
+#~ msgid "Call Macro 6"
+#~ msgstr "Llamar Macro 6"
+
+#~ msgid "Record Macro 7"
+#~ msgstr "Grabar Macro 7"
+
+#~ msgid "Call Macro 7"
+#~ msgstr "Llamar Macro 7"
+
+#~ msgid "Record Macro 8"
+#~ msgstr "Grabar Macro 8"
+
+#~ msgid "Call Macro 8"
+#~ msgstr "Llamar Macro 8"
+
+#~ msgid "Record Macro 9"
+#~ msgstr "Grabar Macro 9"
+
+#~ msgid "Call Macro 9"
+#~ msgstr "Llamar Macro 9"
+
+#~ msgid "Recording macro %d"
+#~ msgstr "Grabando macro %d"
+
+#~ msgid "Macro %d recorded"
+#~ msgstr "Se ha grabado la macro %d"
+
+# Pendiente de contexto
+#~ msgid "Call macro %d"
+#~ msgstr "Cargar macro %d"
+
+#~ msgid "Add key [%c] in macro %d"
+#~ msgstr "Añadir tecla [%c] a la macro %d"
+
+#~ msgid "&Save macros"
+#~ msgstr "Guardar macro&s"
+
+#~ msgid "Save macros to file"
+#~ msgstr "Guardar macros a archivo"
+
+#~ msgid "&Read macros"
+#~ msgstr "Lee&r macros"
+
+#~ msgid "Read macros from file"
+#~ msgstr "Leer macros desde archivo"
+
+#~ msgid "Ma&cros"
+#~ msgstr "Ma&cros"
+
+#~ msgid "Macros save/read operations"
+#~ msgstr "Operación de guardado/lectura de macros"
+
+#~ msgid "Save Macros File"
+#~ msgstr "Guardar archivo de macros"
+
+#~ msgid "Read Macros File"
+#~ msgstr "Cargar archivo de macros"
 
 #~ msgid "Legacy 3D environment path"
 #~ msgstr "Ruta del antiguo entorno 3D"
@@ -29564,9 +29538,6 @@ msgstr "Importar archivo DXF"
 
 #~ msgid "Layer 32"
 #~ msgstr "Capa 32"
-
-#~ msgid "Others"
-#~ msgstr "Otras"
 
 #~ msgid "D codes id."
 #~ msgstr "DCodes id."
