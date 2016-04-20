@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2016-2017 Lubomir Rintel <lkundrak@v3.sk> -->
+<!-- Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors. -->
+<component type="desktop">
+  <id>kicad.desktop</id>
+  <name>KiCad</name>
+  <project_license>GPL-2.0+</project_license>
+  <metadata_license>CC0-1.0</metadata_license>
+  <summary>EDA Suite</summary>
+
+  <keywords>
+    <keyword>KiCad</keyword>
+    <keyword>EDA</keyword>
+    <keyword>PCB</keyword>
+    <keyword>Schema</keyword>
+    <keyword>PcbNew</keyword>
+    <keyword>Eeschema</keyword>
+  </keywords>
+
+  <description>
+    <p>A Cross Platform and Open Source Electronics Design Automation Suite.</p>
+    <p>The programs handle Schematic Capture, and PCB Layout with Gerber output.</p>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <image width="1024" height="576">http://kicad-pcb.org/img/screenshots/appstream/kicad.png</image>
+    </screenshot>
+
+    <screenshot>
+      <caption>Eeschema Schematic Editor</caption>
+      <image width="1024" height="576">http://kicad-pcb.org/img/screenshots/appstream/eeschema.png</image>
+    </screenshot>
+
+    <screenshot>
+      <caption>PcbNew PCB Layout</caption>
+      <image width="1024" height="576">http://kicad-pcb.org/img/screenshots/appstream/pcbnew.png</image>
+    </screenshot>
+
+    <screenshot>
+      <caption>PcbNew 3D Viewer</caption>
+      <image width="1024" height="576">http://kicad-pcb.org/img/screenshots/appstream/3dviewer.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">http://kicad-pcb.org/</url>
+  <url type="bugtracker">http://kicad-pcb.org/help/report-a-bug/</url>
+  <update_contact>kicad-developers@lists.launchpad.net</update_contact>
+  <developer_name>The KiCad Developers</developer_name>
+</component>
