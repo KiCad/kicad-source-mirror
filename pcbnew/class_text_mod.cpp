@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,6 +123,7 @@ void TEXTE_MODULE::Move( const wxPoint& aMoveVector )
     SetLocalCoord();
 }
 
+
 void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
 {
     if( source == NULL )
@@ -201,11 +202,6 @@ bool TEXTE_MODULE::HitTest( const wxPoint& aPosition ) const
 }
 
 
-/*
- * Function GetBoundingBox (virtual)
- * returns the bounding box of this Text (according to text and footprint
- * orientation)
- */
 const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 {
     double   angle = GetDrawRotation();
@@ -218,18 +214,10 @@ const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 }
 
 
-/**
- * Function Draw
- * Draw the text according to the footprint pos and orient
- * @param panel = draw panel, Used to know the clip box
- * @param DC = Current Device Context
- * @param offset = draw offset (usually wxPoint(0,0)
- * @param draw_mode = GR_OR, GR_XOR..
- */
-void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
-                         const wxPoint& offset )
+void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
+                         const wxPoint& aOffset )
 {
-    if( panel == NULL )
+    if( aPanel == NULL )
         return;
 
     /* parent must *not* be NULL (a footprint text without a footprint
@@ -238,20 +226,11 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
 
     BOARD* brd = GetBoard( );
     EDA_COLOR_T color = brd->GetLayerColor( GetLayer() );
-
-    /* For reference and value suppress the element if the layer it is
-     * on is on a disabled side, user text also has standard layer
-     * hiding.
-     * If the whole module side is disabled this isn't even called */
     LAYER_ID text_layer = GetLayer();
 
-    if( (IsFrontLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE )) ||
-        (IsBackLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE )) )
-        return;
-
-    // text which are not ref or value are shown only if the layer is visible
-    // ref or value have a specific display option
-    if( GetType() == TEXT_is_DIVERS && ! brd->IsLayerVisible( m_Layer ) )
+    if( !brd->IsLayerVisible( m_Layer )
+      || (IsFrontLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_FR_VISIBLE ))
+      || (IsBackLayer( text_layer ) && !brd->IsElementVisible( MOD_TEXT_BK_VISIBLE )) )
         return;
 
     // Invisible texts are still drawn (not plotted) in MOD_TEXT_INVISIBLE
@@ -260,16 +239,16 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     {
         if( !brd->IsElementVisible( MOD_TEXT_INVISIBLE ) )
             return;
+
         color = brd->GetVisibleElementColor( MOD_TEXT_INVISIBLE );
     }
 
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)panel->GetDisplayOptions();
+    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)aPanel->GetDisplayOptions();
 
     // shade text if high contrast mode is active
-    if( ( draw_mode & GR_ALLOW_HIGHCONTRAST ) && displ_opts &&
-        displ_opts->m_ContrastModeDisplay )
+    if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts && displ_opts->m_ContrastModeDisplay )
     {
-        LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
+        LAYER_ID curr_layer = ( (PCB_SCREEN*) aPanel->GetScreen() )->m_Active_Layer;
 
         if( !IsOnLayer( curr_layer ) )
             ColorTurnToDarkDarkGray( &color );
@@ -281,15 +260,14 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( displ_opts && displ_opts->m_DisplayModTextFill == SKETCH )
         width = -width;
 
-    GRSetDrawMode( DC, draw_mode );
-    wxPoint pos = m_Pos - offset;
+    GRSetDrawMode( aDC, aDrawMode );
+    wxPoint pos = m_Pos - aOffset;
 
     // Draw the text anchor point
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
     {
         EDA_COLOR_T anchor_color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
-        GRDrawAnchor( panel->GetClipBox(), DC, pos.x, pos.y,
-                      DIM_ANCRE_TEXTE, anchor_color );
+        GRDrawAnchor( aPanel->GetClipBox(), aDC, pos.x, pos.y, DIM_ANCRE_TEXTE, anchor_color );
     }
 
     // Draw the text proper, with the right attributes
@@ -300,20 +278,19 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     if( m_Mirror )
         size.x = -size.x;
 
-    DrawGraphicText( panel->GetClipBox(), DC, pos, color, GetShownText(), orient,
+    DrawGraphicText( aPanel->GetClipBox(), aDC, pos, color, GetShownText(), orient,
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 
     // Enable these line to draw the bounding box (debug test purpose only)
 #if 0
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
+        GRRect( aPanel->GetClipBox(), aDC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
 
-/* Draws a line from the TEXTE_MODULE origin to parent MODULE origin.
-*/
+
 void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
                                   wxDC*           aDC,
                                   GR_DRAWMODE     aDrawMode,
@@ -330,8 +307,7 @@ void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
             0, UMBILICAL_COLOR);
 }
 
-/* Return text rotation for drawings and plotting
- */
+
 double TEXTE_MODULE::GetDrawRotation() const
 {
     MODULE* module = (MODULE*) m_Parent;
@@ -489,9 +465,6 @@ unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer ) const
 }
 
 
-/**
- * Macro-expansion for text in library modules
- */
 wxString TEXTE_MODULE::GetShownText() const
 {
     /* First order optimization: no % means that no processing is
@@ -507,8 +480,7 @@ wxString TEXTE_MODULE::GetShownText() const
     wxString newbuf;
     const MODULE *module = static_cast<MODULE*>( GetParent() );
 
-    for( wxString::const_iterator it = m_Text.begin();
-            it != m_Text.end(); ++it )
+    for( wxString::const_iterator it = m_Text.begin(); it != m_Text.end(); ++it )
     {
         // Process '%' and copy everything else
         if( *it != '%' )
@@ -518,6 +490,7 @@ wxString TEXTE_MODULE::GetShownText() const
             /* Look at the next character (if is it there) and append
              * its expansion */
             ++it;
+
             if( it != m_Text.end() )
             {
                 switch( char(*it) )
@@ -545,7 +518,6 @@ wxString TEXTE_MODULE::GetShownText() const
                 break; // The string is over and we can't ++ anymore
         }
     }
+
     return newbuf;
 }
-
-

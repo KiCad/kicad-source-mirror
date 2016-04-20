@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,10 +132,19 @@ public:
     void SetLocalCoord();
 
     /* drawing functions */
-    void Draw( EDA_DRAW_PANEL* panel,
-               wxDC*           DC,
+
+    /**
+     * Function Draw
+     * Draw the text according to the footprint pos and orient
+     * @param aPanel = draw panel, Used to know the clip box
+     * @param aDC = Current Device Context
+     * @param aOffset = draw offset (usually wxPoint(0,0)
+     * @param aDrawMode = GR_OR, GR_XOR..
+     */
+    void Draw( EDA_DRAW_PANEL* aPanel,
+               wxDC*           aDC,
                GR_DRAWMODE     aDrawMode,
-               const wxPoint&  offset = ZeroOffset );
+               const wxPoint&  aOffset = ZeroOffset );
 
     /**
      * Function DrawUmbilical
