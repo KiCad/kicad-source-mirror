@@ -272,7 +272,7 @@ static bool validateLongEntry( const wxTextEntry& entry,
     if( !entry.GetValue().ToLong( &dest ) )
     {
         wxString err;
-        err.Printf( _("Bad integral value for %s: %s"), description, entry.GetValue() );
+        err.Printf( _("Bad numeric value for %s: %s"), description, entry.GetValue() );
         errors.Add( err );
         ok = false;
      }

@@ -171,8 +171,8 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
     // the user may change this later with a call to SetProjectDir()
 
     S3D_ALIAS lpath;
-    lpath.m_alias = _( "${KIPRJMOD}" );
-    lpath.m_pathvar = _( "${KIPRJMOD}" );
+    lpath.m_alias = "${KIPRJMOD}";
+    lpath.m_pathvar = "${KIPRJMOD}";
     lpath.m_pathexp = m_curProjDir;
     m_Paths.push_back( lpath );
     wxFileName fndummy;
@@ -329,7 +329,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         if( !( m_errflags & ERRFLG_ENVPATH ) )
         {
             m_errflags |= ERRFLG_ENVPATH;
-            wxString errmsg = _( "[3D File Resolver] No such path; ensure the environment var is defined" );
+            wxString errmsg = "[3D File Resolver] No such path; ensure the environment var is defined";
             errmsg.append( "\n" );
             errmsg.append( tname );
             wxLogMessage( "%s\n", errmsg.ToUTF8() );
@@ -400,7 +400,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             // this can happen if the file was intended to be relative to
             // ${KISYS3DMOD} but ${KISYS3DMOD} not set or incorrect.
             m_errflags |= ERRFLG_RELPATH;
-            wxString errmsg = _( "[3D File Resolver] No such path" );
+            wxString errmsg = "[3D File Resolver] No such path";
             errmsg.append( "\n" );
             errmsg.append( tname );
             wxLogTrace( MASK_3D_RESOLVER, "%s\n", errmsg.ToUTF8() );
@@ -435,7 +435,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     if( !( m_errflags & ERRFLG_ALIAS ) )
     {
         m_errflags |= ERRFLG_ALIAS;
-        wxString errmsg = _( "[3D File Resolver] No such path; ensure the path alias is defined" );
+        wxString errmsg = "[3D File Resolver] No such path; ensure the path alias is defined";
         errmsg.append( "\n" );
         errmsg.append( tname.substr( 1 ) );
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", errmsg.ToUTF8() );
@@ -471,10 +471,10 @@ bool S3D_FILENAME_RESOLVER::addPath( const S3D_ALIAS& aPath )
         // legacy KISYS3DMOD variable
         if( aPath.m_pathvar.compare( wxT( "${KISYS3DMOD}" ) ) )
         {
-            wxString msg = _T( "The given path does not exist" );
+            wxString msg = _( "The given path does not exist" );
             msg.append( wxT( "\n" ) );
             msg.append( tpath.m_pathvar );
-            wxMessageBox( msg, _T( "3D model search path" ) );
+            wxMessageBox( msg, _( "3D model search path" ) );
         }
 
         tpath.m_pathexp.clear();
@@ -527,7 +527,7 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "3D configuration directory is unknown" );
+        wxString errmsg = "3D configuration directory is unknown";
         ostr << " * " << errmsg.ToUTF8();
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
         return false;
@@ -546,7 +546,7 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "no 3D configuration file" );
+        wxString errmsg = "no 3D configuration file";
         ostr << " * " << errmsg.ToUTF8() << " '";
         ostr << cfgname.ToUTF8() << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
@@ -559,7 +559,7 @@ bool S3D_FILENAME_RESOLVER::readPathList( void )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "Could not open configuration file" );
+        wxString errmsg = "Could not open configuration file";
         ostr << " * " << errmsg.ToUTF8() << " '" << cfgname.ToUTF8() << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
         return false;
@@ -875,7 +875,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "bad Hollerith string on line" );
+        wxString errmsg = "bad Hollerith string on line";
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
 
@@ -888,7 +888,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "missing opening quote mark in config file" );
+        wxString errmsg = "missing opening quote mark in config file";
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
 
@@ -901,7 +901,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "invalid entry (unexpected end of line)" );
+        wxString errmsg = "invalid entry (unexpected end of line)";
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
 
@@ -917,7 +917,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "bad Hollerith string on line" );
+        wxString errmsg = "bad Hollerith string on line";
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
 
@@ -933,7 +933,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "invalid entry (unexpected end of line)" );
+        wxString errmsg = "invalid entry (unexpected end of line)";
         ostr << " * " << errmsg.ToUTF8() << "\n'" << aString << "'";
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
 

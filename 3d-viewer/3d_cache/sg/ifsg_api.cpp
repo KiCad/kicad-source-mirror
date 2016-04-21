@@ -486,7 +486,7 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
         delete np;
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "problems encountered reading cache file" );
+        wxString errmsg = "problems encountered reading cache file";
         ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
         ostr << aFileName << "'";
         wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );

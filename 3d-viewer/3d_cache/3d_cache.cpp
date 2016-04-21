@@ -437,7 +437,7 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
     if( m_CacheDir.empty() )
     {
-        wxString errmsg = _( "cannot load cached model; config directory unknown" );
+        wxString errmsg = "cannot load cached model; config directory unknown";
         wxLogTrace( MASK_3D_CACHE, " * [3D model] %s\n", errmsg.ToUTF8() );
 
         return false;
@@ -447,7 +447,7 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
     if( !wxFileName::FileExists( fname ) )
     {
-        wxString errmsg = _( "cannot open file" );
+        wxString errmsg = "cannot open file";
         wxLogTrace( MASK_3D_CACHE, " * [3D model] %s '%s'\n",
             errmsg.ToUTF8(), fname.ToUTF8() );
         return false;
@@ -508,7 +508,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
     if( m_CacheDir.empty() )
     {
-        wxString errmsg = _( "cannot load cached model; config directory unknown" );
+        wxString errmsg = "cannot load cached model; config directory unknown";
         wxLogTrace( MASK_3D_CACHE, " * [3D model] %s\n", errmsg.ToUTF8() );
 
         return false;
@@ -586,9 +586,9 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            wxString errmsg = _( "failed to create 3D cache directory" );
+            wxString errmsg = "failed to create 3D cache directory";
             ostr << " * " << errmsg.ToUTF8() << "\n";
-            errmsg = _( "cache directory" );
+            errmsg = "cache directory";
             ostr << " * " << errmsg.ToUTF8() << " '";
             ostr << cfgdir.GetPath().ToUTF8() << "'";
             wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
@@ -645,7 +645,7 @@ wxString S3D_CACHE::Get3DConfigDir( bool createDefault )
     if( !cfgpath.DirExists() )
     {
         std::ostringstream ostr;
-        wxString errmsg = _( "failed to create 3D configuration directory" );
+        wxString errmsg = "failed to create 3D configuration directory";
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * " << errmsg.ToUTF8();
         wxLogTrace( MASK_3D_CACHE, "%s\n", ostr.str().c_str() );
