@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-18 23:27+0200\n"
-"PO-Revision-Date: 2016-04-18 21:15+0200\n"
+"POT-Creation-Date: 2016-04-21 10:05+0200\n"
+"PO-Revision-Date: 2016-04-21 10:07+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -621,7 +621,7 @@ msgid "Select Templates Directory"
 msgstr "Seleziona la cartella modelli"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:26
-msgid "Templates path"
+msgid "Template path"
 msgstr "Percorso modelli"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
@@ -732,11 +732,11 @@ msgstr ""
 msgid "Project Template Selector"
 msgstr "Selettore modelli di progetto"
 
-#: pcbnew/class_text_mod.cpp:366
+#: pcbnew/class_text_mod.cpp:342
 msgid "Ref."
 msgstr "Rif."
 
-#: pcbnew/class_text_mod.cpp:366 pcbnew/footprint_wizard_frame.cpp:282
+#: pcbnew/class_text_mod.cpp:342 pcbnew/footprint_wizard_frame.cpp:282
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:31
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
@@ -752,7 +752,7 @@ msgstr "Rif."
 msgid "Value"
 msgstr "Valore"
 
-#: pcbnew/class_text_mod.cpp:366 pcbnew/class_text_mod.cpp:373
+#: pcbnew/class_text_mod.cpp:342 pcbnew/class_text_mod.cpp:349
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:21 eeschema/lib_text.cpp:51
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
@@ -761,7 +761,7 @@ msgstr "Valore"
 msgid "Text"
 msgstr "Testo"
 
-#: pcbnew/class_text_mod.cpp:370 pcbnew/class_module.cpp:627
+#: pcbnew/class_text_mod.cpp:346 pcbnew/class_module.cpp:627
 #: pcbnew/loadcmp.cpp:435 pcbnew/loadcmp.cpp:499 pcbnew/class_pad.cpp:637
 #: pcbnew/class_edge_mod.cpp:260 eeschema/template_fieldnames.cpp:45
 #: eeschema/onrightclick.cpp:436 eeschema/sch_component.cpp:1560
@@ -769,7 +769,7 @@ msgstr "Testo"
 msgid "Footprint"
 msgstr "Impronta"
 
-#: pcbnew/class_text_mod.cpp:376 pcbnew/class_marker_pcb.cpp:97
+#: pcbnew/class_text_mod.cpp:352 pcbnew/class_marker_pcb.cpp:97
 #: pcbnew/class_zone.cpp:582 pcbnew/class_track.cpp:1154
 #: pcbnew/class_track.cpp:1181 pcbnew/class_track.cpp:1230
 #: pcbnew/class_drawsegment.cpp:366 pcbnew/dialogs/dialog_layers_setup.cpp:346
@@ -783,7 +783,7 @@ msgstr "Impronta"
 msgid "Type"
 msgstr "Tipo"
 
-#: pcbnew/class_text_mod.cpp:379 pcbnew/class_pcb_text.cpp:143
+#: pcbnew/class_text_mod.cpp:355 pcbnew/class_pcb_text.cpp:143
 #: eeschema/lib_pin.cpp:2010
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1008
 #: gerbview/class_gerber_draw_item.cpp:572
@@ -791,7 +791,7 @@ msgstr "Tipo"
 msgid "No"
 msgstr "No"
 
-#: pcbnew/class_text_mod.cpp:381 pcbnew/class_pcb_text.cpp:145
+#: pcbnew/class_text_mod.cpp:357 pcbnew/class_pcb_text.cpp:145
 #: eeschema/lib_pin.cpp:2008
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1006
@@ -800,14 +800,14 @@ msgstr "No"
 msgid "Yes"
 msgstr "Sì"
 
-#: pcbnew/class_text_mod.cpp:383
+#: pcbnew/class_text_mod.cpp:359
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:105
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:120
 msgid "Display"
 msgstr "Mostra"
 
-#: pcbnew/class_text_mod.cpp:386 pcbnew/class_pcb_layer_widget.cpp:237
+#: pcbnew/class_text_mod.cpp:362 pcbnew/class_pcb_layer_widget.cpp:237
 #: pcbnew/class_zone.cpp:628 pcbnew/layer_widget.cpp:542
 #: pcbnew/class_track.cpp:1164 pcbnew/class_track.cpp:1191
 #: pcbnew/class_drawsegment.cpp:408 pcbnew/class_module.cpp:579
@@ -821,15 +821,15 @@ msgstr "Mostra"
 msgid "Layer"
 msgstr "Strato"
 
-#: pcbnew/class_text_mod.cpp:389
+#: pcbnew/class_text_mod.cpp:365
 msgid " Yes"
 msgstr " Sì"
 
-#: pcbnew/class_text_mod.cpp:391
+#: pcbnew/class_text_mod.cpp:367
 msgid " No"
 msgstr " No"
 
-#: pcbnew/class_text_mod.cpp:393 pcbnew/modedit_onclick.cpp:292
+#: pcbnew/class_text_mod.cpp:369 pcbnew/modedit_onclick.cpp:292
 #: pcbnew/class_pcb_text.cpp:143 pcbnew/class_pcb_text.cpp:145
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:100
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
@@ -839,21 +839,21 @@ msgstr " No"
 msgid "Mirror"
 msgstr "Capovolgi"
 
-#: pcbnew/class_text_mod.cpp:396 pcbnew/class_drawsegment.cpp:379
+#: pcbnew/class_text_mod.cpp:372 pcbnew/class_drawsegment.cpp:379
 #: pcbnew/class_drawsegment.cpp:397 pcbnew/class_module.cpp:604
 #: pcbnew/class_pcb_text.cpp:148 pcbnew/class_pad.cpp:688
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:924
 msgid "Angle"
 msgstr "Angolo"
 
-#: pcbnew/class_text_mod.cpp:399 pcbnew/class_pcb_text.cpp:151
+#: pcbnew/class_text_mod.cpp:375 pcbnew/class_pcb_text.cpp:151
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:66
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
 msgid "Thickness"
 msgstr "Spessore"
 
-#: pcbnew/class_text_mod.cpp:402 pcbnew/class_track.cpp:1169
+#: pcbnew/class_text_mod.cpp:378 pcbnew/class_track.cpp:1169
 #: pcbnew/class_track.cpp:1196 pcbnew/class_drawsegment.cpp:410
 #: pcbnew/class_pcb_text.cpp:154
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:52
@@ -862,23 +862,23 @@ msgstr "Spessore"
 msgid "Width"
 msgstr "Larghezza"
 
-#: pcbnew/class_text_mod.cpp:405 pcbnew/class_pcb_text.cpp:157
+#: pcbnew/class_text_mod.cpp:381 pcbnew/class_pcb_text.cpp:157
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:59 pcbnew/class_pad.cpp:662
 #: eeschema/lib_field.cpp:752
 msgid "Height"
 msgstr "Altezza"
 
-#: pcbnew/class_text_mod.cpp:417
+#: pcbnew/class_text_mod.cpp:393
 #, c-format
 msgid "Reference %s"
 msgstr "Riferimento %s"
 
-#: pcbnew/class_text_mod.cpp:421
+#: pcbnew/class_text_mod.cpp:397
 #, c-format
 msgid "Value %s of %s"
 msgstr "Valore %s di %s"
 
-#: pcbnew/class_text_mod.cpp:425
+#: pcbnew/class_text_mod.cpp:401
 #, c-format
 msgid "Text \"%s\" on %s of %s"
 msgstr "Testo \"%s\" su %s di %s"
@@ -2556,8 +2556,8 @@ msgstr "Conteggio componente: %d."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:291
 #: pcbnew/exporters/gen_modules_placefile.cpp:332
-msgid "Componment Placement File generation OK."
-msgstr "Generazione fine piazzamento componenti OK."
+msgid "Component Placement File generation OK."
+msgstr "Generazione file piazzamento componenti OK."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:308
 #: pcbnew/dialogs/dialog_SVG_print.cpp:312 pcbnew/dialogs/dialog_plot.cpp:806
@@ -5015,7 +5015,7 @@ msgstr "Percorso netlist"
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:96
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:98
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:135
-#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83 common/eda_text.cpp:416
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83 common/eda_text.cpp:423
 #: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:764
 #: eeschema/libedit.cpp:498
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
@@ -6331,11 +6331,11 @@ msgstr "Non valida"
 msgid "Validating libraries %d/%d"
 msgstr "Validazione librerie %d/%d"
 
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:190
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:192
 msgid "No layer selected, Please select the text layer"
 msgstr "Nessuno strato selezionato. Selezionare uno strato di testo."
 
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:257
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:259
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:259
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
@@ -6374,8 +6374,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array.cpp:275
 #, c-format
-msgid "Bad integral value for %s: %s"
-msgstr "Errato valore intero per %s: %s"
+msgid "Bad numeric value for %s: %s"
+msgstr "Errato valore numerico per %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:298
 msgid "horizontal count"
@@ -7645,7 +7645,7 @@ msgstr "Invisibile"
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:96
-#: common/eda_text.cpp:417 eeschema/sch_text.cpp:764
+#: common/eda_text.cpp:424 eeschema/sch_text.cpp:764
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
@@ -13626,7 +13626,7 @@ msgstr "Impostazioni globali di piste e via"
 msgid "Export SVG file"
 msgstr "Esporta file SVG "
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:70
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:72
 #: eeschema/dialogs/dialog_edit_label.cpp:167
 msgid "Text Properties"
 msgstr "Proprietà testo"
@@ -14504,7 +14504,7 @@ msgstr "Non in rame"
 msgid "Colors"
 msgstr "Colori"
 
-#: common/eda_text.cpp:418 eeschema/sch_text.cpp:764
+#: common/eda_text.cpp:425 eeschema/sch_text.cpp:764
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
@@ -14513,7 +14513,7 @@ msgstr "Colori"
 msgid "Bold"
 msgstr "Grassetto"
 
-#: common/eda_text.cpp:419
+#: common/eda_text.cpp:426
 msgid "Bold+Italic"
 msgstr "Grassetto+corsivo"
 
@@ -20942,35 +20942,17 @@ msgstr "Tempo di costruzione %.3f s"
 msgid "Load 3D Shapes"
 msgstr "Carica forme 3D"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:440 3d-viewer/3d_cache/3d_cache.cpp:511
-msgid "cannot load cached model; config directory unknown"
-msgstr ""
-"impossibile caricare il modello in cache; cartella di configurazione "
-"sconosciuta"
-
-#: 3d-viewer/3d_cache/3d_cache.cpp:450
-msgid "cannot open file"
-msgstr "impossibile aprire il file"
-
 #: 3d-viewer/3d_cache/3d_cache.cpp:523
 msgid "path exists but is not a regular file"
 msgstr "il percorso esiste ma non è un file normale"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:552 3d-viewer/3d_cache/3d_cache.cpp:648
+#: 3d-viewer/3d_cache/3d_cache.cpp:552
 msgid "failed to create 3D configuration directory"
 msgstr "fallita la creazione della cartella di configurazione 3D"
 
 #: 3d-viewer/3d_cache/3d_cache.cpp:554
 msgid "config directory"
 msgstr "cartella di configurazione"
-
-#: 3d-viewer/3d_cache/3d_cache.cpp:589
-msgid "failed to create 3D cache directory"
-msgstr "fallita creazione cartella della cache 3D"
-
-#: 3d-viewer/3d_cache/3d_cache.cpp:591
-msgid "cache directory"
-msgstr "cartella della cache"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:99
 msgid "(DEFAULT)"
@@ -20984,26 +20966,13 @@ msgstr "${PROJDIR}"
 msgid "Current project directory"
 msgstr "cartella del progetto corrente"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:174
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:175
-msgid "${KIPRJMOD}"
-msgstr "${KIPRJMOD}"
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:474
+msgid "The given path does not exist"
+msgstr "Il percorso dato non esiste"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:332
-msgid "[3D File Resolver] No such path; ensure the environment var is defined"
-msgstr ""
-"[Risolutore file 3D] percorso inesistente; assicurarsi che la variable "
-"ambiente sia definita"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:403
-msgid "[3D File Resolver] No such path"
-msgstr "[Risolutore file 3D] percorso inesistente"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:438
-msgid "[3D File Resolver] No such path; ensure the path alias is defined"
-msgstr ""
-"[Risolutore file 3D] percorso inesistente; assicurarsi che l'alias del "
-"percorso sia definito"
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:477
+msgid "3D model search path"
+msgstr "Percorso di ricerca modelli 3D"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:503
 msgid "Alias: "
@@ -21021,20 +20990,9 @@ msgstr "Percorso esistente:"
 msgid "Bad alias (duplicate name)"
 msgstr "Alias errato (nome duplicato)"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:530
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:636
 msgid "3D configuration directory is unknown"
 msgstr "cartella di configurazione 3D sconosciuta"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:549
-msgid "no 3D configuration file"
-msgstr "nessun file di configurazione 3D"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:562
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:667
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
-msgid "Could not open configuration file"
-msgstr "Impossibile aprire il file di configurazione"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:639
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:659
@@ -21052,23 +21010,14 @@ msgstr ""
 "L'elenco percorsi di ricerca 3D è vuoto;\n"
 "continuare e scrivere il file vuoto?"
 
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:667
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
+msgid "Could not open configuration file"
+msgstr "Impossibile aprire il file di configurazione"
+
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:714
 msgid "Problems writing configuration file"
 msgstr "Problemi durante la scrittura del file di configurazione"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:878
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:920
-msgid "bad Hollerith string on line"
-msgstr "errata stringa Hollerith sulla linea"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:891
-msgid "missing opening quote mark in config file"
-msgstr "virgoletta di apertura mancante nel file di configurazione"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:904
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:936
-msgid "invalid entry (unexpected end of line)"
-msgstr "voce non valida (fine riga inaspettato)"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:50
 msgid "All Files (*.*)|*.*"
@@ -21166,10 +21115,6 @@ msgstr "il percorso specificato è una cartella"
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:361
 msgid "no such file"
 msgstr "file inesistente"
-
-#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:489
-msgid "problems encountered reading cache file"
-msgstr "problemi riscontrati durante la lettura del file di cache"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Realistic mode"
