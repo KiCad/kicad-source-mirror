@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-19 14:39+0200\n"
-"PO-Revision-Date: 2016-04-19 14:39+0200\n"
+"POT-Creation-Date: 2016-04-21 09:34+0200\n"
+"PO-Revision-Date: 2016-04-21 09:37+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -16,34 +16,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:440 3d-viewer/3d_cache/3d_cache.cpp:511
-msgid "cannot load cached model; config directory unknown"
-msgstr ""
-"no puede cargarse el módulo en caché; carpeta de configuración desconocida"
-
-#: 3d-viewer/3d_cache/3d_cache.cpp:450
-msgid "cannot open file"
-msgstr "no puede abrirse el archivo"
-
 #: 3d-viewer/3d_cache/3d_cache.cpp:523
 msgid "path exists but is not a regular file"
 msgstr "la ruta existe pero no es un archivo común"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:552 3d-viewer/3d_cache/3d_cache.cpp:648
+#: 3d-viewer/3d_cache/3d_cache.cpp:552
 msgid "failed to create 3D configuration directory"
 msgstr "no ha podido crearse la carpeta de configuración 3D"
 
 #: 3d-viewer/3d_cache/3d_cache.cpp:554
 msgid "config directory"
 msgstr "carpeta de configuración"
-
-#: 3d-viewer/3d_cache/3d_cache.cpp:589
-msgid "failed to create 3D cache directory"
-msgstr "no ha podido crearse la carpeta de caché 3D"
-
-#: 3d-viewer/3d_cache/3d_cache.cpp:591
-msgid "cache directory"
-msgstr "carpeta de caché"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:99
 msgid "(DEFAULT)"
@@ -57,26 +40,13 @@ msgstr "${PROJDIR}"
 msgid "Current project directory"
 msgstr "Carpeta del proyecto activo"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:174
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:175
-msgid "${KIPRJMOD}"
-msgstr "${KIPRJMOD}"
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:474
+msgid "The given path does not exist"
+msgstr "La ruta especificada no existe"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:332
-msgid "[3D File Resolver] No such path; ensure the environment var is defined"
-msgstr ""
-"[3D File Resolver] No existe la ruta; asegúrese de que se ha definido la "
-"variable de entorno"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:403
-msgid "[3D File Resolver] No such path"
-msgstr "[3D File Resolver] No existe la ruta"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:438
-msgid "[3D File Resolver] No such path; ensure the path alias is defined"
-msgstr ""
-"[3D File Resolver] No existe la ruta; asegúrese de que se ha definido el "
-"alias de la ruta"
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:477
+msgid "3D model search path"
+msgstr "Ruta de búsqueda de modelos 3D"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:503
 msgid "Alias: "
@@ -94,20 +64,9 @@ msgstr "Ruta existente: "
 msgid "Bad alias (duplicate name)"
 msgstr "Alias no válido (nombre duplicado)"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:530
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:636
 msgid "3D configuration directory is unknown"
 msgstr "La carpeta de configuración 3D es desconocida"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:549
-msgid "no 3D configuration file"
-msgstr "no existe el archivo de configuración 3D"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:562
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:667
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
-msgid "Could not open configuration file"
-msgstr "No puede abrirse el archivo de configuración"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:639
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:659
@@ -125,23 +84,14 @@ msgstr ""
 "La lista de rutas de búsqueda 3D está vacía;\n"
 "¿desea escribir un archivo vacío?"
 
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:667
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
+msgid "Could not open configuration file"
+msgstr "No puede abrirse el archivo de configuración"
+
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:714
 msgid "Problems writing configuration file"
 msgstr "Problemas al escribir el archivo de configuración"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:878
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:920
-msgid "bad Hollerith string on line"
-msgstr "cadena Hollerith no válida en la línea"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:891
-msgid "missing opening quote mark in config file"
-msgstr "no existe marca de apertura en el archivo de configuración"
-
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:904
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:936
-msgid "invalid entry (unexpected end of line)"
-msgstr "entrada no válida (fin de línea inesperado)"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:50
 msgid "All Files (*.*)|*.*"
@@ -314,10 +264,6 @@ msgstr "la ruta especificada es una carpeta"
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:361
 msgid "no such file"
 msgstr "no existe el archivo"
-
-#: 3d-viewer/3d_cache/sg/ifsg_api.cpp:489
-msgid "problems encountered reading cache file"
-msgstr "se han encontrado problemas al leer el archivo de caché"
 
 #: 3d-viewer/3d_canvas.cpp:399
 msgid "Zoom +"
@@ -897,7 +843,7 @@ msgstr "Logotipo para el bloque título (archivo .kicad_wks)"
 msgid "Format"
 msgstr "Formato"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:135 common/eda_text.cpp:416
+#: bitmap2component/bitmap2cmp_gui_base.cpp:135 common/eda_text.cpp:423
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
@@ -1993,7 +1939,7 @@ msgstr "No se ha encontrado el archivo de documentación '%s'"
 msgid "Unknown MIME type for doc file <%s>"
 msgstr "Tipo MIME desconocido del archivo <%s>"
 
-#: common/eda_text.cpp:417
+#: common/eda_text.cpp:424
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
@@ -2004,7 +1950,7 @@ msgstr "Tipo MIME desconocido del archivo <%s>"
 msgid "Italic"
 msgstr "Cursiva"
 
-#: common/eda_text.cpp:418
+#: common/eda_text.cpp:425
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
@@ -2013,7 +1959,7 @@ msgstr "Cursiva"
 msgid "Bold"
 msgstr "Negrita"
 
-#: common/eda_text.cpp:419
+#: common/eda_text.cpp:426
 msgid "Bold+Italic"
 msgstr "Negrita+Cursiva"
 
@@ -2925,7 +2871,7 @@ msgstr "Variables de entorno disponibles para rutas relativas:"
 #: eeschema/lib_field.cpp:759 eeschema/onrightclick.cpp:426
 #: eeschema/sch_component.cpp:1542 eeschema/template_fieldnames.cpp:42
 #: eeschema/widgets/widget_eeschema_color_config.cpp:76
-#: pcbnew/class_edge_mod.cpp:261 pcbnew/class_text_mod.cpp:366
+#: pcbnew/class_edge_mod.cpp:261 pcbnew/class_text_mod.cpp:342
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:42
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:59
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
@@ -4035,14 +3981,14 @@ msgstr "Utilizado únicamente para los campos Huella y Hoja de datos."
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:145
-#: pcbnew/class_text_mod.cpp:381
+#: pcbnew/class_text_mod.cpp:357
 msgid "Yes"
 msgstr "Sí"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1008
 #: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:143
-#: pcbnew/class_text_mod.cpp:379
+#: pcbnew/class_text_mod.cpp:355
 msgid "No"
 msgstr "No"
 
@@ -4109,7 +4055,7 @@ msgstr "Invertir X"
 #: gerbview/class_gerber_draw_item.cpp:574
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:79
 #: pcbnew/class_pcb_text.cpp:143 pcbnew/class_pcb_text.cpp:145
-#: pcbnew/class_text_mod.cpp:393
+#: pcbnew/class_text_mod.cpp:369
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:100
 #: pcbnew/modedit_onclick.cpp:292
@@ -4407,7 +4353,7 @@ msgid "Hierarchical Sheet Pin Properties."
 msgstr "Propiedades del pin de hoja jerárquica."
 
 #: eeschema/dialogs/dialog_edit_label.cpp:167
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:70
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:72
 msgid "Text Properties"
 msgstr "Propiedades del texto"
 
@@ -4684,7 +4630,7 @@ msgid "Show page limi&ts"
 msgstr "Mos&trar límites de página"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:120
-#: pcbnew/class_text_mod.cpp:383
+#: pcbnew/class_text_mod.cpp:359
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:105
 msgid "Display"
@@ -5024,7 +4970,7 @@ msgstr "Número"
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
 #: pcbnew/class_drawsegment.cpp:366 pcbnew/class_marker_pcb.cpp:97
-#: pcbnew/class_text_mod.cpp:376 pcbnew/class_track.cpp:1154
+#: pcbnew/class_text_mod.cpp:352 pcbnew/class_track.cpp:1154
 #: pcbnew/class_track.cpp:1181 pcbnew/class_track.cpp:1230
 #: pcbnew/class_zone.cpp:582 pcbnew/dialogs/dialog_layers_setup.cpp:346
 msgid "Type"
@@ -5038,7 +4984,7 @@ msgstr "Posición"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28 eeschema/lib_text.cpp:51
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:113
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:67
-#: pcbnew/class_text_mod.cpp:366 pcbnew/class_text_mod.cpp:373
+#: pcbnew/class_text_mod.cpp:342 pcbnew/class_text_mod.cpp:349
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:21
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:28
 msgid "Text"
@@ -6565,7 +6511,7 @@ msgstr "Campo"
 #: eeschema/lib_field.cpp:588 eeschema/onrightclick.cpp:436
 #: eeschema/sch_component.cpp:1560 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:627
-#: pcbnew/class_pad.cpp:637 pcbnew/class_text_mod.cpp:370
+#: pcbnew/class_pad.cpp:637 pcbnew/class_text_mod.cpp:346
 #: pcbnew/loadcmp.cpp:435 pcbnew/loadcmp.cpp:499
 msgid "Footprint"
 msgstr "Huella"
@@ -6587,14 +6533,14 @@ msgstr "Campo %s %s"
 
 #: eeschema/lib_field.cpp:749 pcbnew/class_drawsegment.cpp:410
 #: pcbnew/class_pad.cpp:659 pcbnew/class_pcb_text.cpp:154
-#: pcbnew/class_text_mod.cpp:402 pcbnew/class_track.cpp:1169
+#: pcbnew/class_text_mod.cpp:378 pcbnew/class_track.cpp:1169
 #: pcbnew/class_track.cpp:1196 pcbnew/dialogs/dialog_design_rules_base.cpp:322
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:52
 msgid "Width"
 msgstr "Ancho"
 
 #: eeschema/lib_field.cpp:752 pcbnew/class_pad.cpp:662
-#: pcbnew/class_pcb_text.cpp:157 pcbnew/class_text_mod.cpp:405
+#: pcbnew/class_pcb_text.cpp:157 pcbnew/class_text_mod.cpp:381
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:59
 msgid "Height"
 msgstr "Alto"
@@ -9208,7 +9154,7 @@ msgstr "Eje AB"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163
 #: pcbnew/class_drawsegment.cpp:408 pcbnew/class_module.cpp:579
 #: pcbnew/class_pad.cpp:653 pcbnew/class_pcb_layer_widget.cpp:237
-#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:386
+#: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:362
 #: pcbnew/class_track.cpp:1164 pcbnew/class_track.cpp:1191
 #: pcbnew/class_zone.cpp:628 pcbnew/dialogs/dialog_dimension_editor_base.cpp:89
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:115
@@ -10139,8 +10085,8 @@ msgid "Select Templates Directory"
 msgstr "Seleccionar la carpeta de plantillas"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:26
-msgid "Templates path"
-msgstr "Ruta a las plantillas"
+msgid "Template path"
+msgstr "Ruta de plantillas"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:39
 msgid "Validate"
@@ -10759,7 +10705,7 @@ msgid "Comment"
 msgstr "Comentario"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:325
-#: pcbnew/class_pcb_text.cpp:151 pcbnew/class_text_mod.cpp:399
+#: pcbnew/class_pcb_text.cpp:151 pcbnew/class_text_mod.cpp:375
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:66
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 msgid "Thickness"
@@ -11726,7 +11672,7 @@ msgstr "Z"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:924
 #: pcbnew/class_drawsegment.cpp:379 pcbnew/class_drawsegment.cpp:397
 #: pcbnew/class_module.cpp:604 pcbnew/class_pad.cpp:688
-#: pcbnew/class_pcb_text.cpp:148 pcbnew/class_text_mod.cpp:396
+#: pcbnew/class_pcb_text.cpp:148 pcbnew/class_text_mod.cpp:372
 msgid "Angle"
 msgstr "Ángulo"
 
@@ -13287,29 +13233,29 @@ msgstr "Texto de la placa"
 msgid "Pcb Text \"%s\" on %s"
 msgstr "Texto \"%s\" en %s de la placa"
 
-#: pcbnew/class_text_mod.cpp:366
+#: pcbnew/class_text_mod.cpp:342
 msgid "Ref."
 msgstr "Ref."
 
-#: pcbnew/class_text_mod.cpp:389
+#: pcbnew/class_text_mod.cpp:365
 msgid " Yes"
 msgstr " Sí"
 
-#: pcbnew/class_text_mod.cpp:391
+#: pcbnew/class_text_mod.cpp:367
 msgid " No"
 msgstr " No"
 
-#: pcbnew/class_text_mod.cpp:417
+#: pcbnew/class_text_mod.cpp:393
 #, c-format
 msgid "Reference %s"
 msgstr "Referencia %s"
 
-#: pcbnew/class_text_mod.cpp:421
+#: pcbnew/class_text_mod.cpp:397
 #, c-format
 msgid "Value %s of %s"
 msgstr "Valor %s de %s"
 
-#: pcbnew/class_text_mod.cpp:425
+#: pcbnew/class_text_mod.cpp:401
 #, c-format
 msgid "Text \"%s\" on %s of %s"
 msgstr "Texto %s en %s de %s"
@@ -13986,8 +13932,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array.cpp:275
 #, c-format
-msgid "Bad integral value for %s: %s"
-msgstr "Valor entero incorrecto para %s: %s"
+msgid "Bad numeric value for %s: %s"
+msgstr "Valor númerico erróneo para %s: %s"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:298
 msgid "horizontal count"
@@ -15197,7 +15143,7 @@ msgstr ""
 "Se ha forzado a la capa de serigrafía frontal. Por favor, corríjalo."
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:259
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:257
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:259
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr ""
 "El grosor del texto es demasiado grande para el tamaño del texto. Será "
@@ -17959,7 +17905,7 @@ msgstr ""
 "Este pad se encuentra volteado en la placa.\n"
 "Las capas frontal y trasera serán intercambiadas."
 
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:190
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:192
 msgid "No layer selected, Please select the text layer"
 msgstr "No hay capa seleccionada, por favor, seleccione la capa de texto"
 
@@ -17977,7 +17923,7 @@ msgstr "Justificado:"
 
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:112
 msgid "Orientation (deg):"
-msgstr ""
+msgstr "Orientación (deg):"
 
 #: pcbnew/dialogs/dialog_plot.cpp:583
 msgid "HPGL pen size constrained."
@@ -19246,8 +19192,9 @@ msgstr "Número de componentes: %d"
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:291
 #: pcbnew/exporters/gen_modules_placefile.cpp:332
-msgid "Componment Placement File generation OK."
-msgstr "Se ha generado correctamente el archivo de posicionamiento."
+msgid "Component Placement File generation OK."
+msgstr ""
+"El archivo de emplazamiento de componentes se ha generado correctamente."
 
 #: pcbnew/exporters/gen_modules_placefile.cpp:317
 #, c-format
@@ -23904,6 +23851,60 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid "cannot load cached model; config directory unknown"
+#~ msgstr ""
+#~ "no puede cargarse el módulo en caché; carpeta de configuración desconocida"
+
+#~ msgid "cannot open file"
+#~ msgstr "no puede abrirse el archivo"
+
+#~ msgid "failed to create 3D cache directory"
+#~ msgstr "no ha podido crearse la carpeta de caché 3D"
+
+#~ msgid "cache directory"
+#~ msgstr "carpeta de caché"
+
+#~ msgid "${KIPRJMOD}"
+#~ msgstr "${KIPRJMOD}"
+
+#~ msgid ""
+#~ "[3D File Resolver] No such path; ensure the environment var is defined"
+#~ msgstr ""
+#~ "[3D File Resolver] No existe la ruta; asegúrese de que se ha definido la "
+#~ "variable de entorno"
+
+#~ msgid "[3D File Resolver] No such path"
+#~ msgstr "[3D File Resolver] No existe la ruta"
+
+#~ msgid "[3D File Resolver] No such path; ensure the path alias is defined"
+#~ msgstr ""
+#~ "[3D File Resolver] No existe la ruta; asegúrese de que se ha definido el "
+#~ "alias de la ruta"
+
+#~ msgid "no 3D configuration file"
+#~ msgstr "no existe el archivo de configuración 3D"
+
+#~ msgid "bad Hollerith string on line"
+#~ msgstr "cadena Hollerith no válida en la línea"
+
+#~ msgid "missing opening quote mark in config file"
+#~ msgstr "no existe marca de apertura en el archivo de configuración"
+
+#~ msgid "invalid entry (unexpected end of line)"
+#~ msgstr "entrada no válida (fin de línea inesperado)"
+
+#~ msgid "problems encountered reading cache file"
+#~ msgstr "se han encontrado problemas al leer el archivo de caché"
+
+#~ msgid "Templates path"
+#~ msgstr "Ruta a las plantillas"
+
+#~ msgid "Bad integral value for %s: %s"
+#~ msgstr "Valor entero incorrecto para %s: %s"
+
+#~ msgid "Componment Placement File generation OK."
+#~ msgstr "Se ha generado correctamente el archivo de posicionamiento."
 
 #~ msgid "KiCad recorded macros (*.mcr)|*.mcr"
 #~ msgstr "Macros de KiCad (*.mcr)|*.mcr"
