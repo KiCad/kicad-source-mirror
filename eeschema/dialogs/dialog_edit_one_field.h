@@ -153,11 +153,7 @@ public:
 
     ~DIALOG_SCH_EDIT_ONE_FIELD() {}
 
-    void UpdateField( SCH_FIELD* aField )
-    {
-        aField->SetText( m_text );
-        updateText( aField );
-    }
+    void UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath );
 };
 
 #endif    // DIALOG_EDIT_ONE_FIELD_H_
