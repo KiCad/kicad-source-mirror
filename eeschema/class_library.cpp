@@ -48,7 +48,7 @@
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
 
-#define duplicate_name_msg  \
+#define DUPLICATE_NAME_MSG  \
     _(  "Library '%s' has duplicate entry name '%s'.\n" \
         "This may cause some unexpected behavior when loading components into a schematic." )
 
@@ -457,17 +457,13 @@ LIB_ALIAS* PART_LIB::GetPreviousEntry( const wxString& aName )
 
 bool PART_LIB::Load( wxString& aErrorMsg )
 {
-    FILE*          file;
-    char*          line;
-    wxString       msg;
-
     if( fileName.GetFullPath().IsEmpty() )
     {
         aErrorMsg = _( "The component library file name is not set." );
         return false;
     }
 
-    file = wxFopen( fileName.GetFullPath(), wxT( "rt" ) );
+    FILE* file = wxFopen( fileName.GetFullPath(), wxT( "rt" ) );
 
     if( file == NULL )
     {
@@ -486,7 +482,7 @@ bool PART_LIB::Load( wxString& aErrorMsg )
     // There is no header if this is a symbol library.
     if( type == LIBRARY_TYPE_EESCHEMA )
     {
-        line = reader.Line();
+        char* line = reader.Line();
 
         header = FROM_UTF8( line );
 
@@ -546,7 +542,7 @@ bool PART_LIB::Load( wxString& aErrorMsg )
 
     while( reader.ReadLine() )
     {
-        line = reader.Line();
+        char * line = reader.Line();
 
         if( type == LIBRARY_TYPE_EESCHEMA && strnicmp( line, "$HEADER", 7 ) == 0 )
         {
@@ -559,6 +555,8 @@ bool PART_LIB::Load( wxString& aErrorMsg )
             continue;
         }
 
+        wxString msg;
+
         if( strnicmp( line, "DEF", 3 ) == 0 )
         {
             // Read one DEF/ENDDEF part entry from library:
@@ -570,9 +568,7 @@ bool PART_LIB::Load( wxString& aErrorMsg )
                 // the potential conflict.
                 if( FindEntry( part->GetName() ) != NULL )
                 {
-                    wxString msg = duplicate_name_msg;
-
-                    wxLogWarning( msg,
+                    wxLogWarning( DUPLICATE_NAME_MSG,
                                   GetChars( fileName.GetName() ),
                                   GetChars( part->GetName() ) );
                 }
@@ -604,9 +600,7 @@ void PART_LIB::LoadAliases( LIB_PART* aPart )
     {
         if( FindEntry( aPart->m_aliases[i]->GetName() ) != NULL )
         {
-            wxString msg = duplicate_name_msg;
-
-            wxLogError( msg,
+            wxLogError( DUPLICATE_NAME_MSG,
                         GetChars( fileName.GetName() ),
                         GetChars( aPart->m_aliases[i]->GetName() ) );
         }

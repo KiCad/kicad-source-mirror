@@ -2274,8 +2274,6 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     unsigned       i;
     wxPoint        bestPosition;
     wxString       msg;
-    D_PAD*         pad;
-    MODULE*        footprint;
     std::vector<MODULE*> newFootprints;
 
     if( !IsEmpty() )
@@ -2303,6 +2301,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     for( i = 0;  i < aNetlist.GetCount();  i++ )
     {
         COMPONENT* component = aNetlist.GetComponent( i );
+        MODULE* footprint;
 
         if( aReporter )
         {
@@ -2466,7 +2465,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             continue;
 
         // At this point, the component footprint is updated.  Now update the nets.
-        for( pad = footprint->Pads();  pad;  pad = pad->Next() )
+        for( D_PAD* pad = footprint->Pads();  pad;  pad = pad->Next() )
         {
             COMPONENT_NET net = component->GetNet( pad->GetPadName() );
 
@@ -2564,9 +2563,9 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
         D_PAD*      pad = NULL;
         D_PAD*      previouspad = NULL;
 
-        for( unsigned ii = 0; ii < padlist.size(); ii++ )
+        for( unsigned kk = 0; kk < padlist.size(); kk++ )
         {
-            pad = padlist[ii];
+            pad = padlist[kk];
 
             if( pad->GetNetname().IsEmpty() )
                 continue;

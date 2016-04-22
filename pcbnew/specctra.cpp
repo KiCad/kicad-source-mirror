@@ -259,9 +259,9 @@ void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR, boost::ba
 }
 
 
-void SPECCTRA_DB::LoadSESSION( const wxString& filename ) throw( IO_ERROR, boost::bad_pointer )
+void SPECCTRA_DB::LoadSESSION( const wxString& aFilename ) throw( IO_ERROR, boost::bad_pointer )
 {
-    FILE_LINE_READER    reader( filename );
+    FILE_LINE_READER reader( aFilename );
 
     PushReader( &reader );
 
@@ -3444,11 +3444,11 @@ void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IO_ERR
 }
 
 
-void SPECCTRA_DB::ExportSESSION( wxString filename )
+void SPECCTRA_DB::ExportSESSION( wxString aFilename )
 {
     if( session )
     {
-        FILE_OUTPUTFORMATTER    formatter( filename, wxT( "wt" ), quote_char[0] );
+        FILE_OUTPUTFORMATTER formatter( aFilename, wxT( "wt" ), quote_char[0] );
 
         session->Format( &formatter, 0 );
     }

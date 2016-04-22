@@ -444,7 +444,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
 
     // Walk the NET_OUTs and create tracks and vias anew.
     NET_OUTS& net_outs = session->route->net_outs;
-    for( NET_OUTS::iterator net=net_outs.begin();  net!=net_outs.end();  ++net )
+    for( NET_OUTS::iterator net = net_outs.begin(); net!=net_outs.end(); ++net )
     {
         int         netCode = 0;
 
@@ -452,10 +452,10 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
         if( net->net_id.size() )
         {
             wxString netName = FROM_UTF8( net->net_id.c_str() );
+            NETINFO_ITEM* netinfo = aBoard->FindNet( netName );
 
-            NETINFO_ITEM* net = aBoard->FindNet( netName );
-            if( net )
-                netCode = net->GetNet();
+            if( netinfo )
+                netCode = netinfo->GetNet();
             else  // else netCode remains 0
             {
                 // int breakhere = 1;
@@ -463,7 +463,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
         }
 
         WIRES& wires = net->wires;
-        for( unsigned i=0;  i<wires.size();  ++i )
+        for( unsigned i = 0; i<wires.size(); ++i )
         {
             WIRE*   wire  = &wires[i];
             DSN_T   shape = wire->shape->Type();

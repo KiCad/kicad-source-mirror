@@ -39,8 +39,6 @@ static const wxString HOSTNAME( wxT( "localhost" ) );
 #define IPC_BUF_SIZE 4096
 static char client_ipc_buffer[IPC_BUF_SIZE];
 
-static wxSocketServer* server;
-
 
 /**********************************/
 /* Routines related to the server */
@@ -59,7 +57,7 @@ wxSocketServer* CreateServer( wxWindow* window, int service, bool local )
     if( local )
         addr.Hostname( HOSTNAME );
 
-    server = new wxSocketServer( addr );
+    wxSocketServer* server = new wxSocketServer( addr );
 
     if( server )
     {

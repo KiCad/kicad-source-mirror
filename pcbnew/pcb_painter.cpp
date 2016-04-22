@@ -439,7 +439,6 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 {
-    VECTOR2D    size;
     VECTOR2D    position( aPad->GetPosition() );
     PAD_SHAPE_T shape;
     double      m, n;
@@ -569,6 +568,8 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     m_gal->Rotate( -aPad->GetOrientation() * M_PI / 1800.0 );
 
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
+    VECTOR2D    size;
+
     if( aLayer == ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ) )
     {
         // Drawing hole: has same shape as PAD_CIRCLE or PAD_OVAL
@@ -901,12 +902,12 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
-    const CPolyLine* outline = aZone->Outline();
-    for( int i = 0; i < outline->GetCornersCount(); ++i )
+    const CPolyLine* polygon = aZone->Outline();
+    for( int i = 0; i < polygon->GetCornersCount(); ++i )
     {
-        corners.push_back( VECTOR2D( outline->GetPos( i ) ) );
+        corners.push_back( VECTOR2D( polygon->GetPos( i ) ) );
 
-        if( outline->IsEndContour( i ) )
+        if( polygon->IsEndContour( i ) )
         {
             // The last point for closing the polyline
             corners.push_back( corners[0] );
