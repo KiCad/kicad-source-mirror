@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-21 09:34+0200\n"
-"PO-Revision-Date: 2016-04-21 09:37+0200\n"
+"POT-Creation-Date: 2016-04-22 12:53+0200\n"
+"PO-Revision-Date: 2016-04-22 12:54+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -459,7 +459,7 @@ msgstr "Mover arriba"
 
 #: 3d-viewer/3d_toolbar.cpp:118
 msgid "Move down"
-msgstr "Bajar"
+msgstr "Mover abajo"
 
 #: 3d-viewer/3d_toolbar.cpp:122
 msgid "Enable/Disable orthographic projection"
@@ -3284,60 +3284,60 @@ msgstr ""
 msgid "Cannot add duplicate alias '%s' to library '%s'."
 msgstr "No puede añadirse el alias '%s' a la librería '%s' al estar duplicado."
 
-#: eeschema/class_library.cpp:466
+#: eeschema/class_library.cpp:462
 msgid "The component library file name is not set."
 msgstr "No se ha indicado el nombre del archivo de la librería de componentes."
 
-#: eeschema/class_library.cpp:474
+#: eeschema/class_library.cpp:470
 msgid "The file could not be opened."
 msgstr "No puede abrirse el archivo."
 
-#: eeschema/class_library.cpp:482
+#: eeschema/class_library.cpp:478
 msgid "The file is empty!"
 msgstr "¡El archivo está vacío!"
 
-#: eeschema/class_library.cpp:505
+#: eeschema/class_library.cpp:501
 msgid "The file is NOT an Eeschema library!"
 msgstr "¡El archivo no es una librería de Eeschema!"
 
-#: eeschema/class_library.cpp:511
+#: eeschema/class_library.cpp:507
 msgid "The file header is missing version and time stamp information."
 msgstr ""
 "El encabezamiento del archivo no dispone de la información de versión y "
 "fecha."
 
-#: eeschema/class_library.cpp:555
+#: eeschema/class_library.cpp:551
 msgid "An error occurred attempting to read the header."
 msgstr "A ocurrido un error al intentar leer el encabezamiento."
 
-#: eeschema/class_library.cpp:584
+#: eeschema/class_library.cpp:580
 #, c-format
 msgid "Library '%s' component load error %s."
 msgstr ""
 "Al cargar el componente desde la librería '%s' ha ocurrido el error %s."
 
-#: eeschema/class_library.cpp:656
+#: eeschema/class_library.cpp:650
 #, c-format
 msgid "Could not open component document library file '%s'."
 msgstr ""
 "No puede abrirse el archivo de librería '%s' de documentación del componente."
 
-#: eeschema/class_library.cpp:663
+#: eeschema/class_library.cpp:657
 #, c-format
 msgid "Part document library file '%s' is empty."
 msgstr "El archivo de documentación '%s' está vacío."
 
-#: eeschema/class_library.cpp:671
+#: eeschema/class_library.cpp:665
 #, c-format
 msgid "File '%s' is not a valid component library document file."
 msgstr "El archivo '%s' no es un documento de librería de componentes válido."
 
-#: eeschema/class_library.cpp:1068
+#: eeschema/class_library.cpp:1062
 #, c-format
 msgid "Unable to load project's '%s' file"
 msgstr "No es posible cargar el archivo de proyecto '%s'"
 
-#: eeschema/class_library.cpp:1159
+#: eeschema/class_library.cpp:1153
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
@@ -3346,7 +3346,7 @@ msgstr ""
 "No se ha podido cargar la librería '%s'. Error:\n"
 "%s"
 
-#: eeschema/class_library.cpp:1184
+#: eeschema/class_library.cpp:1178
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -12413,7 +12413,7 @@ msgstr "Zoom "
 msgid "Block Operation"
 msgstr "Operación en bloques"
 
-#: pcbnew/board_netlist_updater.cpp:123 pcbnew/class_board.cpp:2328
+#: pcbnew/board_netlist_updater.cpp:123 pcbnew/class_board.cpp:2327
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Añadiendo del nuevo componente \"%s:%s\" la huella \"%s\".\n"
@@ -12429,7 +12429,7 @@ msgid "Cannot add component %s due to missing footprint %s.\n"
 msgstr ""
 "No puede añadirse el componente %s ya que no se encuentra la huella %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:161 pcbnew/class_board.cpp:2337
+#: pcbnew/board_netlist_updater.cpp:161 pcbnew/class_board.cpp:2336
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
@@ -12441,7 +12441,7 @@ msgstr ""
 msgid "Change component %s footprint from %s to %s.\n"
 msgstr "Cambiar huella del componente %s de %s a %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:196 pcbnew/class_board.cpp:2370
+#: pcbnew/board_netlist_updater.cpp:196 pcbnew/class_board.cpp:2369
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Reemplazando del componente \"%s:%s\" la huella \"%s\" con \"%s\".\n"
@@ -12452,7 +12452,7 @@ msgid "Cannot change component %s footprint due to missing footprint %s.\n"
 msgstr ""
 "No puede modificarse el componente %s ya que no se encuentra la huella %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:233 pcbnew/class_board.cpp:2381
+#: pcbnew/board_netlist_updater.cpp:233 pcbnew/class_board.cpp:2380
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
@@ -12464,7 +12464,7 @@ msgstr ""
 msgid "Change component %s reference to %s.\n"
 msgstr "Cambiar la referencia del componente %s a %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:266 pcbnew/class_board.cpp:2420
+#: pcbnew/board_netlist_updater.cpp:266 pcbnew/class_board.cpp:2419
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
 msgstr "Cambiando del componente \"%s:%s\" la referencia a \"%s\".\n"
@@ -12474,12 +12474,12 @@ msgstr "Cambiando del componente \"%s:%s\" la referencia a \"%s\".\n"
 msgid "Change component %s value from %s to %s.\n"
 msgstr "Cambiar el valor del componente %s de %s a %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:290 pcbnew/class_board.cpp:2436
+#: pcbnew/board_netlist_updater.cpp:290 pcbnew/class_board.cpp:2435
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Cambiando del componente \"%s:%s\" el valor de \"%s\" a \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:307 pcbnew/class_board.cpp:2453
+#: pcbnew/board_netlist_updater.cpp:307 pcbnew/class_board.cpp:2452
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Cambiando la ruta del componente de \"%s:%s\" a \"%s\".\n"
@@ -12489,7 +12489,7 @@ msgstr "Cambiando la ruta del componente de \"%s:%s\" a \"%s\".\n"
 msgid "Disconnect component %s pin %s.\n"
 msgstr "Desconectar del componente %s el pin %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:349 pcbnew/class_board.cpp:2477
+#: pcbnew/board_netlist_updater.cpp:349 pcbnew/class_board.cpp:2476
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr ""
@@ -12510,7 +12510,7 @@ msgstr "Reconectar del componente %s el pin %s desde la red %s a la red %s.\n"
 msgid "Connect component %s pin %s to net %s.\n"
 msgstr "Conectar del componente %s el pin %s a la red %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:403 pcbnew/class_board.cpp:2493
+#: pcbnew/board_netlist_updater.cpp:403 pcbnew/class_board.cpp:2492
 #, c-format
 msgid ""
 "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
@@ -12523,7 +12523,7 @@ msgstr ""
 msgid "Remove component %s."
 msgstr "Eliminar el componente %s."
 
-#: pcbnew/board_netlist_updater.cpp:454 pcbnew/class_board.cpp:2542
+#: pcbnew/board_netlist_updater.cpp:454 pcbnew/class_board.cpp:2541
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Eliminando el componente no utilizado \"%s:%s\".\n"
@@ -12533,7 +12533,7 @@ msgstr "Eliminando el componente no utilizado \"%s:%s\".\n"
 msgid "Remove single pad net %s."
 msgstr "Eliminar la red de un único pad %s."
 
-#: pcbnew/board_netlist_updater.cpp:527 pcbnew/class_board.cpp:2602
+#: pcbnew/board_netlist_updater.cpp:527 pcbnew/class_board.cpp:2601
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Eliminar la red \"%s\" de un solo pad en \"%s\" pad '%s'\n"
@@ -12648,18 +12648,18 @@ msgstr "Conexiones"
 msgid "Unconnected"
 msgstr "No conectado"
 
-#: pcbnew/class_board.cpp:2310
+#: pcbnew/class_board.cpp:2309
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Comprobando la huella del componente de la red \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2657
+#: pcbnew/class_board.cpp:2656
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr ""
 "No se ha encontrado del componente '%s' el pad '%s' en la huella '%s'\n"
 
-#: pcbnew/class_board.cpp:2675
+#: pcbnew/class_board.cpp:2674
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
 msgstr "Zona de cobre (red '%s'): la red no tiene pads conectados."
@@ -13873,7 +13873,7 @@ msgstr "Arbitraria"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:226
 msgid "H, V, and 45 deg only"
-msgstr "H, V y 45 grados solo"
+msgstr "H, V y 45º únicamente"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Outline style:"
@@ -17512,7 +17512,7 @@ msgstr "Opciones de contorno:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:46
 msgid "H, V and 45 deg"
-msgstr "H, V y 45 grados"
+msgstr "H, V y 45º"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:48
 msgid "Zone Edges Orient"
@@ -22877,7 +22877,7 @@ msgstr "Mueve el/los elemento/s seleccionado/s una distancia exacta."
 
 #: pcbnew/tools/common_actions.cpp:117
 msgid "Create array"
-msgstr "Crear matrix"
+msgstr "Crear matriz"
 
 #: pcbnew/tools/common_actions.cpp:121
 msgid "Rotates selected item(s)"
