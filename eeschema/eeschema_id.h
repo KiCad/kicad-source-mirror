@@ -209,7 +209,11 @@ enum id_eeschema_frm
     ID_LIBEDIT_EXPORT_BODY_BUTT,
     ID_LIBEDIT_DELETE_ITEM_BUTT,
 
+    /* Change orientation command ID */
     ID_LIBEDIT_ROTATE_ITEM,
+    ID_LIBEDIT_MIRROR_X,
+    ID_LIBEDIT_MIRROR_Y,
+    ID_LIBEDIT_ORIENT_NORMAL,
 
     /* Library editor context menu IDs */
     ID_LIBEDIT_EDIT_PIN,

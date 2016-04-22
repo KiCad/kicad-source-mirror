@@ -507,6 +507,12 @@ private:
     void OnRotateItem( wxCommandEvent& aEvent );
 
     /**
+     * Function OnOrient
+     * Handles the ID_LIBEDIT_MIRROR_X and ID_LIBEDIT_MIRROR_Y events.
+     */
+    void OnOrient( wxCommandEvent& aEvent );
+
+    /**
      * Function deleteItem
      * deletes the currently selected draw item.
      * @param aDC The device context to draw upon when removing item.

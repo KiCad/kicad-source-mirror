@@ -311,6 +311,8 @@ static EDA_HOTKEY* libEdit_Hotkey_List[] =
     &HkCreatePin,
     &HkInsertPin,
     &HkMoveLibItem,
+    &HkMirrorX,
+    &HkMirrorY,
     NULL
 };
 
@@ -781,6 +783,17 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 Process_Special_Functions( cmd );
             }
         }
+        break;
+    case HK_MIRROR_Y:                       // Mirror Y
+        m_drawItem = LocateItemUsingCursor( aPosition );
+        cmd.SetId( ID_LIBEDIT_MIRROR_Y );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
+    case HK_MIRROR_X:                       // Mirror X
+        m_drawItem = LocateItemUsingCursor( aPosition );
+        cmd.SetId( ID_LIBEDIT_MIRROR_X );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
     }
 

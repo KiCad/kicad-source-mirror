@@ -150,6 +150,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     LIB_EDIT_FRAME::Process_Special_Functions )
 
+    EVT_MENU_RANGE( ID_LIBEDIT_MIRROR_X, ID_LIBEDIT_ORIENT_NORMAL,
+                    LIB_EDIT_FRAME::OnOrient )
     // Update user interface elements.
     EVT_UPDATE_UI( ExportPartId, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( CreateNewLibAndSavePartId, LIB_EDIT_FRAME::OnUpdateEditingPart )
@@ -871,7 +873,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->SetAutoPanRequest( false );
         GetScreen()->m_BlockLocate.SetCommand( BLOCK_COPY );
         m_canvas->MoveCursorToCrossHair();
-        HandleBlockPlace( &dc );
+        HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_SELECT_ITEMS_BLOCK:
@@ -1194,6 +1196,31 @@ void LIB_EDIT_FRAME::OnRotateItem( wxCommandEvent& aEvent )
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_lastDrawItem = NULL;
+}
+
+
+void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
+{
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
+    SCH_SCREEN* screen = GetScreen();
+    // Allows block rotate operation on hot key.
+    if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    {
+        if( aEvent.GetId() == ID_LIBEDIT_MIRROR_X )
+        {
+            m_canvas->MoveCursorToCrossHair();
+            screen->m_BlockLocate.SetMessageBlock( this );
+            screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_X );
+            HandleBlockEnd( &dc );
+        }
+        else if( aEvent.GetId() == ID_LIBEDIT_MIRROR_Y )
+        {
+            m_canvas->MoveCursorToCrossHair();
+            screen->m_BlockLocate.SetMessageBlock( this );
+            screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_Y );
+            HandleBlockEnd( &dc );
+        }
+    }
 }
 
 
