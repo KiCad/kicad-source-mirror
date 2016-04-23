@@ -437,9 +437,9 @@ void WIDGET_HOTKEY_LIST::OnSize( wxSizeEvent& aEvent )
 
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     {
-        wxWindow* view = GetView();
-        view->Refresh();
-        view->Update();
+        wxWindow* win_view = GetView();
+        win_view->Refresh();
+        win_view->Update();
     }
 #endif
 

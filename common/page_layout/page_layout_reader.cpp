@@ -438,8 +438,9 @@ void PAGE_LAYOUT_READER_PARSER::readPngdata( WORKSHEET_DATAITEM_BITMAP * aItem )
     tmp += "EndData";
 
     wxString msg;
-    STRING_LINE_READER reader( tmp, wxT("Png kicad_wks data") );
-    if( ! aItem->m_ImageBitmap->LoadData( reader, msg ) )
+    STRING_LINE_READER str_reader( tmp, wxT("Png kicad_wks data") );
+
+    if( ! aItem->m_ImageBitmap->LoadData( str_reader, msg ) )
     {
         wxLogMessage(msg);
     }

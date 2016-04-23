@@ -295,7 +295,6 @@ int ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC,
  */
 time_t GetNewTimeStamp();
 
-EDA_COLOR_T DisplayColorFrame( wxWindow* parent, int OldColor );
 int GetCommandOptions( const int argc, const char** argv,
                        const char* stringtst, const char** optarg,
                        int* optind );

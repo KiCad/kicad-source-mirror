@@ -33,6 +33,9 @@
 
 #include "widget_eeschema_color_config.h"
 
+// See selcolor.cpp:
+extern EDA_COLOR_T DisplayColorFrame( wxWindow* aParent, EDA_COLOR_T aOldColor );
+
 // Specify the width and height of every (color-displaying / bitmap) button
 const int BUTT_SIZE_X = 16;
 const int BUTT_SIZE_Y = 16;
@@ -215,7 +218,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 
     wxCHECK_RET( colorButton != NULL, wxT( "Client data not set for color button." ) );
 
-    EDA_COLOR_T color = DisplayColorFrame( this, colorButton->m_Layer );
+    EDA_COLOR_T color = DisplayColorFrame( this, currentColors[colorButton->m_Layer] );
 
     if( color < 0 || currentColors[ colorButton->m_Layer ] == color )
         return;

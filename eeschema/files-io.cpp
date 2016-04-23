@@ -429,9 +429,9 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
                     sheet->SetName( tmp );
 
                 sheet->SetFileName( wxString::Format( wxT( "file%8.8lX.sch" ), (long) newtimestamp ) );
-                SCH_SCREEN* screen = new SCH_SCREEN( &Kiway() );
-                screen->SetMaxUndoItems( m_UndoRedoCountMax );
-                sheet->SetScreen( screen );
+                SCH_SCREEN* new_screen = new SCH_SCREEN( &Kiway() );
+                new_screen->SetMaxUndoItems( m_UndoRedoCountMax );
+                sheet->SetScreen( new_screen );
                 sheet->GetScreen()->SetFileName( sheet->GetFileName() );
             }
             // clear annotation and init new time stamp for the new components
@@ -447,7 +447,7 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
             bs = nextbs;
         }
     }
-    
+
     OnModify();
 
     // redraw base screen (ROOT) if necessary
