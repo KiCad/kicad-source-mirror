@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Mar 28 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -31,7 +31,6 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	bSizerdirBrowse = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_outputDirectoryName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_outputDirectoryName->SetMaxLength( 0 ); 
 	m_outputDirectoryName->SetToolTip( _("Target directory for plot files. Can be absolute or relative to the board file location.") );
 	m_outputDirectoryName->SetMinSize( wxSize( 350,-1 ) );
 	
@@ -52,11 +51,17 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	wxBoxSizer* bSizerOptions;
 	bSizerOptions = new wxBoxSizer( wxHORIZONTAL );
 	
+	wxString m_rbFormatChoices[] = { _("Ascii"), _("CSV") };
+	int m_rbFormatNChoices = sizeof( m_rbFormatChoices ) / sizeof( wxString );
+	m_rbFormat = new wxRadioBox( this, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, m_rbFormatNChoices, m_rbFormatChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbFormat->SetSelection( 0 );
+	bSizerOptions->Add( m_rbFormat, 0, wxALL, 5 );
+	
 	wxString m_radioBoxUnitsChoices[] = { _("Inches"), _("mm") };
 	int m_radioBoxUnitsNChoices = sizeof( m_radioBoxUnitsChoices ) / sizeof( wxString );
 	m_radioBoxUnits = new wxRadioBox( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, m_radioBoxUnitsNChoices, m_radioBoxUnitsChoices, 1, wxRA_SPECIFY_COLS );
 	m_radioBoxUnits->SetSelection( 0 );
-	bSizerOptions->Add( m_radioBoxUnits, 1, wxALL, 5 );
+	bSizerOptions->Add( m_radioBoxUnits, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_radioBoxFilesCountChoices[] = { _("One file per side"), _("One file for board") };
 	int m_radioBoxFilesCountNChoices = sizeof( m_radioBoxFilesCountChoices ) / sizeof( wxString );
@@ -104,8 +109,6 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnClose ) );
-	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnInitDialog ) );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_sdbSizerButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOKButton ), NULL, this );
 }
@@ -113,8 +116,6 @@ DIALOG_GEN_MODULE_POSITION_BASE::DIALOG_GEN_MODULE_POSITION_BASE( wxWindow* pare
 DIALOG_GEN_MODULE_POSITION_BASE::~DIALOG_GEN_MODULE_POSITION_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnClose ) );
-	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnInitDialog ) );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_sdbSizerButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GEN_MODULE_POSITION_BASE::OnOKButton ), NULL, this );
 	

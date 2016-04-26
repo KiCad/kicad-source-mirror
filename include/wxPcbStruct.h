@@ -793,11 +793,12 @@ public:
      * @param aSide = 0 to list footprints on BACK side,
      *                1 to list footprints on FRONT side
      *                2 to list footprints on both sides
+     * @param aFormatCSV = true to use a comma separated file (CSV) format; defautl = false
      * @return the number of footprints found on aSide side,
      *    or -1 if the file could not be created
      */
     int DoGenFootprintsPositionFile( const wxString& aFullFileName, bool aUnitsMM,
-                                      bool aForceSmdItems, int aSide );
+                                      bool aForceSmdItems, int aSide, bool aFormatCSV = false );
 
     /**
      * Function GenFootprintsReport

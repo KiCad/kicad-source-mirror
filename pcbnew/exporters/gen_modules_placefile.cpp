@@ -50,7 +50,7 @@
 
 #include <dialog_gen_module_position_file_base.h>
 /*
- * The format of the kicad place file is:
+ * The ASCII format of the kicad place file is:
  *      ### Module positions - created on 04/12/2012 15:24:24 ###
  *      ### Printed by Pcbnew version pcbnew (2012-11-30 BZR 3828)-testing
  *      ## Unit = inches, Angle = deg.
@@ -68,8 +68,9 @@
  *      ## End
  */
 
-#define PLACEFILE_UNITS_KEY wxT( "PlaceFileUnits" )
-#define PLACEFILE_OPT_KEY   wxT( "PlaceFileOpts" )
+#define PLACEFILE_UNITS_KEY  wxT( "PlaceFileUnits" )
+#define PLACEFILE_OPT_KEY    wxT( "PlaceFileOpts" )
+#define PLACEFILE_FORMAT_KEY wxT( "PlaceFileFormat" )
 
 
 #define PCB_BACK_SIDE 0
@@ -113,6 +114,7 @@ private:
 
     static int m_unitsOpt;
     static int m_fileOpt;
+    static int m_fileFormat;
 
 	void initDialog();
     void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
@@ -146,6 +148,7 @@ private:
 // Static members to remember choices
 int DIALOG_GEN_MODULE_POSITION::m_unitsOpt = 0;
 int DIALOG_GEN_MODULE_POSITION::m_fileOpt = 0;
+int DIALOG_GEN_MODULE_POSITION::m_fileFormat = 0;
 
 // Use standard board side name. do not translate them,
 // they are keywords in place file
@@ -157,11 +160,13 @@ void DIALOG_GEN_MODULE_POSITION::initDialog()
     m_config = Kiface().KifaceSettings();
     m_config->Read( PLACEFILE_UNITS_KEY, &m_unitsOpt, 1 );
     m_config->Read( PLACEFILE_OPT_KEY, &m_fileOpt, 0 );
+    m_config->Read( PLACEFILE_FORMAT_KEY, &m_fileFormat, 0 );
 
     // Output directory
     m_outputDirectoryName->SetValue( m_plotOpts.GetOutputDirectory() );
     m_radioBoxUnits->SetSelection( m_unitsOpt );
     m_radioBoxFilesCount->SetSelection( m_fileOpt );
+    m_rbFormat->SetSelection( m_fileFormat );
 
     m_sdbSizerButtonsOK->SetDefault();
 }
@@ -199,9 +204,12 @@ void DIALOG_GEN_MODULE_POSITION::OnOKButton( wxCommandEvent& event )
 {
     m_unitsOpt = m_radioBoxUnits->GetSelection();
     m_fileOpt = m_radioBoxFilesCount->GetSelection();
+    m_fileFormat = m_rbFormat->GetSelection();
+
 
     m_config->Write( PLACEFILE_UNITS_KEY, m_unitsOpt );
     m_config->Write( PLACEFILE_OPT_KEY, m_fileOpt );
+    m_config->Write( PLACEFILE_FORMAT_KEY, m_fileFormat );
 
     // Set output directory and replace backslashes with forward ones
     // (Keep unix convention in cfg files)
@@ -210,10 +218,11 @@ void DIALOG_GEN_MODULE_POSITION::OnOKButton( wxCommandEvent& event )
     dirStr.Replace( wxT( "\\" ), wxT( "/" ) );
 
     m_plotOpts.SetOutputDirectory( dirStr );
-
     m_parent->SetPlotSettings( m_plotOpts );
 
     CreateFiles();
+
+    // the dialog is not closed here.
 }
 
 
@@ -223,11 +232,13 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     wxFileName  fn;
     wxString    msg;
     bool singleFile = OneFileOnly();
+    bool useCSVfmt = m_fileFormat == 1;
     int fullcount = 0;
 
     // Count the footprints to place, do not yet create a file
     int fpcount = m_parent->DoGenFootprintsPositionFile( wxEmptyString, UnitsMM(),
-                                                         ForceAllSmd(), PCB_BOTH_SIDES );
+                                                         ForceAllSmd(), PCB_BOTH_SIDES,
+                                                         useCSVfmt );
     if( fpcount == 0)
     {
         wxMessageBox( _( "No footprint for automated placement." ) );
@@ -235,7 +246,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     }
 
     // Create output directory if it does not exist (also transform it in
-    // absolute form). Bail if it fails
+    // absolute path). Bail if it fails
     wxFileName  outputDir = wxFileName::DirName( m_plotOpts.GetOutputDirectory() );
     wxString    boardFilename = m_parent->GetBoard()->GetFileName();
 
@@ -264,10 +275,17 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     else
         fn.SetName( fn.GetName() + wxT( "-" ) + frontSideName );
 
-    fn.SetExt( FootprintPlaceFileExtension );
+
+    if( useCSVfmt )
+    {
+        fn.SetName( fn.GetName() + wxT( "-" ) + FootprintPlaceFileExtension );
+        fn.SetExt( wxT( "csv" ) );
+    }
+    else
+        fn.SetExt( FootprintPlaceFileExtension );
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
-                                                     ForceAllSmd(), side );
+                                                     ForceAllSmd(), side, useCSVfmt );
     if( fpcount < 0 )
     {
         msg.Printf( _( "Unable to create '%s'." ), GetChars( fn.GetFullPath() ) );
@@ -298,10 +316,17 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
     fn = brd->GetFileName();
     fn.SetPath( outputDir.GetPath() );
     fn.SetName( fn.GetName() + wxT( "-" ) + backSideName );
-    fn.SetExt( wxT( "pos" ) );
+
+    if( useCSVfmt )
+    {
+        fn.SetName( fn.GetName() + wxT( "-" ) + FootprintPlaceFileExtension );
+        fn.SetExt( wxT( "csv" ) );
+    }
+    else
+        fn.SetExt( FootprintPlaceFileExtension );
 
     fpcount = m_parent->DoGenFootprintsPositionFile( fn.GetFullPath(), UnitsMM(),
-                                                    ForceAllSmd(), side );
+                                                    ForceAllSmd(), side, useCSVfmt );
 
     if( fpcount < 0 )
     {
@@ -390,7 +415,8 @@ void PCB_EDIT_FRAME::GenFootprintsPositionFile( wxCommandEvent& event )
  */
 int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
                                                  bool aUnitsMM,
-                                                 bool aForceSmdItems, int aSide )
+                                                 bool aForceSmdItems, int aSide,
+                                                 bool aFormatCSV )
 {
     MODULE*     footprint;
 
@@ -477,58 +503,99 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO   toggle;
 
-    // Write file header
-    fprintf( file, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
-
-    wxString Title = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
-    fprintf( file, "### Printed by Pcbnew version %s\n", TO_UTF8( Title ) );
-
-    fputs( unit_text, file );
-
-    fputs( "## Side : ", file );
-
-    if( aSide == PCB_BACK_SIDE )
-        fputs( TO_UTF8( backSideName ), file );
-    else if( aSide == PCB_FRONT_SIDE )
-        fputs( TO_UTF8( frontSideName ), file );
-    else
-        fputs( "All", file );
-
-    fputs( "\n", file );
-
-    fprintf(file, "%-*s  %-*s  %-*s  %9.9s  %9.9s  %8.8s  %s\n",
-            int(lenRefText), "# Ref",
-            int(lenValText), "Val",
-            int(lenPkgText), "Package",
-            "PosX", "PosY", "Rot", "Side" );
-
-    for( int ii = 0; ii < footprintCount; ii++ )
+    if( aFormatCSV )
     {
-        wxPoint  footprint_pos;
-        footprint_pos  = list[ii].m_Module->GetPosition();
-        footprint_pos -= File_Place_Offset;
+        wxChar csv_sep = ',';
 
-        LAYER_NUM layer = list[ii].m_Module->GetLayer();
-        wxASSERT( layer==F_Cu || layer==B_Cu );
+        // Set first line:;
+        fprintf( file, "Ref%cVal%cPackage%cPosX%cPosY%cRot%cSide\n",
+                 csv_sep, csv_sep, csv_sep, csv_sep, csv_sep, csv_sep );
 
-        const wxString& ref = list[ii].m_Reference;
-        const wxString& val = list[ii].m_Value;
-        const wxString& pkg = list[ii].m_Module->GetFPID().GetFootprintName();
+        for( int ii = 0; ii < footprintCount; ii++ )
+        {
+            wxPoint  footprint_pos;
+            footprint_pos  = list[ii].m_Module->GetPosition();
+            footprint_pos -= File_Place_Offset;
 
-        fprintf(file, "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
-                lenRefText, TO_UTF8( ref ),
-                lenValText, TO_UTF8( val ),
-                lenPkgText, TO_UTF8( pkg ),
-                footprint_pos.x * conv_unit,
-                // Keep the coordinates in the first quadrant,
-                // (i.e. change y sign
-                -footprint_pos.y * conv_unit,
-                list[ii].m_Module->GetOrientation() / 10.0,
-                (layer == F_Cu ) ? TO_UTF8( frontSideName ) : TO_UTF8( backSideName ));
+            LAYER_NUM layer = list[ii].m_Module->GetLayer();
+            wxASSERT( layer == F_Cu || layer == B_Cu );
+
+            wxString line = list[ii].m_Reference;
+            line << csv_sep;
+            line << list[ii].m_Value;
+            line << csv_sep;
+            line << wxString( list[ii].m_Module->GetFPID().GetFootprintName() );
+            line << csv_sep;
+
+            line << wxString::Format( "%f%c%f%c%f",
+                                    footprint_pos.x * conv_unit, csv_sep,
+                                    // Keep the Y axis oriented from bottom to top,
+                                    // ( change y coordinate sign )
+                                    -footprint_pos.y * conv_unit, csv_sep,
+                                    list[ii].m_Module->GetOrientation() / 10.0 );
+            line << csv_sep;
+
+            line << ( (layer == F_Cu ) ? frontSideName : backSideName );
+            line << '\n';
+
+            fputs( TO_UTF8( line ), file );
+        }
     }
+    else
+    {
+        // Write file header
+        fprintf( file, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
 
-    // Write EOF
-    fputs( "## End\n", file );
+        wxString Title = Pgm().App().GetAppName() + wxT( " " ) + GetBuildVersion();
+        fprintf( file, "### Printed by Pcbnew version %s\n", TO_UTF8( Title ) );
+
+        fputs( unit_text, file );
+
+        fputs( "## Side : ", file );
+
+        if( aSide == PCB_BACK_SIDE )
+            fputs( TO_UTF8( backSideName ), file );
+        else if( aSide == PCB_FRONT_SIDE )
+            fputs( TO_UTF8( frontSideName ), file );
+        else
+            fputs( "All", file );
+
+        fputs( "\n", file );
+
+        fprintf(file, "%-*s  %-*s  %-*s  %9.9s  %9.9s  %8.8s  %s\n",
+                int(lenRefText), "# Ref",
+                int(lenValText), "Val",
+                int(lenPkgText), "Package",
+                "PosX", "PosY", "Rot", "Side" );
+
+        for( int ii = 0; ii < footprintCount; ii++ )
+        {
+            wxPoint  footprint_pos;
+            footprint_pos  = list[ii].m_Module->GetPosition();
+            footprint_pos -= File_Place_Offset;
+
+            LAYER_NUM layer = list[ii].m_Module->GetLayer();
+            wxASSERT( layer == F_Cu || layer == B_Cu );
+
+            const wxString& ref = list[ii].m_Reference;
+            const wxString& val = list[ii].m_Value;
+            const wxString& pkg = list[ii].m_Module->GetFPID().GetFootprintName();
+
+            fprintf(file, "%-*s  %-*s  %-*s  %9.4f  %9.4f  %8.4f  %s\n",
+                    lenRefText, TO_UTF8( ref ),
+                    lenValText, TO_UTF8( val ),
+                    lenPkgText, TO_UTF8( pkg ),
+                    footprint_pos.x * conv_unit,
+                    // Keep the coordinates in the first quadrant,
+                    // (i.e. change y sign
+                    -footprint_pos.y * conv_unit,
+                    list[ii].m_Module->GetOrientation() / 10.0,
+                    (layer == F_Cu ) ? TO_UTF8( frontSideName ) : TO_UTF8( backSideName ));
+        }
+
+        // Write EOF
+        fputs( "## End\n", file );
+    }
 
     fclose( file );
     return footprintCount;

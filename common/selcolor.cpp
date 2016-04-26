@@ -77,7 +77,7 @@ EDA_COLOR_T DisplayColorFrame( wxWindow* aParent, EDA_COLOR_T aOldColor )
 
 
 CHOOSE_COLOR_DLG::CHOOSE_COLOR_DLG( wxWindow* aParent, EDA_COLOR_T aOldColor ) :
-    wxDialog( aParent, -1, _( "Colors" ), wxDefaultPosition, wxDefaultSize,
+    wxDialog( aParent, wxID_ANY, _( "Colors" ), wxDefaultPosition, wxDefaultSize,
               wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     m_color = aOldColor;
@@ -85,6 +85,8 @@ CHOOSE_COLOR_DLG::CHOOSE_COLOR_DLG( wxWindow* aParent, EDA_COLOR_T aOldColor ) :
     init_Dialog();
     // Resize the dialog
     GetSizer()->SetSizeHints( this );
+
+    Centre();
 }
 
 void CHOOSE_COLOR_DLG::init_Dialog()
