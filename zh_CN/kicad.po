@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-24 16:25+0800\n"
-"PO-Revision-Date: 2016-04-25 10:03+0800\n"
+"PO-Revision-Date: 2016-04-27 00:07+0800\n"
 "Last-Translator: \n"
 "Language-Team: ocrobot team <togker@gmail.com>\n"
 "Language: zh_CN\n"
@@ -72,7 +72,7 @@ msgstr "缩放: %3.1f"
 
 #: 3d-viewer/3d_canvas.cpp:653
 msgid "3D Image File Name:"
-msgstr "3D图片文件名："
+msgstr "3D图形文件名："
 
 #: 3d-viewer/3d_canvas.cpp:709
 msgid "Failed to copy image to clipboard"
@@ -85,17 +85,17 @@ msgstr "无法保存文件"
 #: 3d-viewer/3d_draw.cpp:618
 #, c-format
 msgid "Build time %.3f s"
-msgstr ""
+msgstr "构建时间 %.3f s"
 
 #: 3d-viewer/3d_draw.cpp:661 3d-viewer/3d_draw_board_body.cpp:218
 #: 3d-viewer/3d_draw_board_body.cpp:505
 #, c-format
 msgid "Build layer %s"
-msgstr ""
+msgstr "构建层%s"
 
 #: 3d-viewer/3d_draw.cpp:987
 msgid "Load 3D Shapes"
-msgstr ""
+msgstr "加载3D图形"
 
 #: 3d-viewer/3d_draw_board_body.cpp:194 3d-viewer/3d_draw_board_body.cpp:471
 msgid ""
@@ -117,19 +117,19 @@ msgstr "背景颜色，顶层"
 
 #: 3d-viewer/3d_frame.cpp:793
 msgid "Silk Screen Color"
-msgstr ""
+msgstr "丝印颜色"
 
 #: 3d-viewer/3d_frame.cpp:817 3d-viewer/3d_toolbar.cpp:216
 msgid "Solder Mask Color"
-msgstr ""
+msgstr "阻焊颜色"
 
 #: 3d-viewer/3d_frame.cpp:840
 msgid "Copper Color"
-msgstr ""
+msgstr "铜层颜色"
 
 #: 3d-viewer/3d_frame.cpp:866 3d-viewer/3d_toolbar.cpp:225
 msgid "Board Body Color"
-msgstr ""
+msgstr "基板板材颜色"
 
 #: 3d-viewer/3d_frame.cpp:887 3d-viewer/3d_toolbar.cpp:219
 msgid "Solder Paste Color"
@@ -141,7 +141,7 @@ msgstr "重新载入电路板"
 
 #: 3d-viewer/3d_toolbar.cpp:58
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "复制3D图形到剪切板"
 
 #: 3d-viewer/3d_toolbar.cpp:64
 msgid "Set display options, and some layers visibility"
@@ -271,19 +271,19 @@ msgstr ""
 
 #: 3d-viewer/3d_toolbar.cpp:175
 msgid "Render Textures"
-msgstr ""
+msgstr "渲染纹理"
 
 #: 3d-viewer/3d_toolbar.cpp:176
 msgid "Apply a grid/cloud textures to board, solder mask and silk screen"
-msgstr ""
+msgstr "应用网格/云纹理到基板，阻焊和丝印"
 
 #: 3d-viewer/3d_toolbar.cpp:180
 msgid "Render Smooth Normals"
-msgstr ""
+msgstr "平滑显示"
 
 #: 3d-viewer/3d_toolbar.cpp:184
 msgid "Use Model Normals"
-msgstr ""
+msgstr "模型显示"
 
 #: 3d-viewer/3d_toolbar.cpp:188
 msgid "Render Material Properties"
@@ -291,35 +291,35 @@ msgstr ""
 
 #: 3d-viewer/3d_toolbar.cpp:192
 msgid "Show Model Bounding Boxes"
-msgstr ""
+msgstr "显示模型外框"
 
 #: 3d-viewer/3d_toolbar.cpp:200
 msgid "Choose Colors"
-msgstr ""
+msgstr "选择颜色"
 
 #: 3d-viewer/3d_toolbar.cpp:204 eeschema/dialogs/dialog_color_config.cpp:193
 msgid "Background Color"
-msgstr ""
+msgstr "背景颜色"
 
 #: 3d-viewer/3d_toolbar.cpp:207
 msgid "Background Top Color"
-msgstr ""
+msgstr "顶层背景颜色"
 
 #: 3d-viewer/3d_toolbar.cpp:210
 msgid "Background Bottom Color"
-msgstr ""
+msgstr "底层背景颜色"
 
 #: 3d-viewer/3d_toolbar.cpp:213
 msgid "Silkscreen Color"
-msgstr ""
+msgstr "丝印颜色"
 
 #: 3d-viewer/3d_toolbar.cpp:222
 msgid "Copper/Surface Finish Color"
-msgstr ""
+msgstr "铜层/表面颜色"
 
 #: 3d-viewer/3d_toolbar.cpp:228
 msgid "Show 3D &Axis"
-msgstr ""
+msgstr "显示 3D &坐标"
 
 #: 3d-viewer/3d_toolbar.cpp:233
 msgid "3D Grid"
@@ -347,87 +347,87 @@ msgstr "3D网格   1mm"
 
 #: 3d-viewer/3d_toolbar.cpp:254
 msgid "Show Board Bod&y"
-msgstr ""
+msgstr "显示电路板(&Y)"
 
 #: 3d-viewer/3d_toolbar.cpp:257
 msgid "Show Copper &Thickness"
-msgstr ""
+msgstr "显示沉铜厚度(&T)"
 
 #: 3d-viewer/3d_toolbar.cpp:260
 msgid "Show 3D M&odels"
-msgstr ""
+msgstr "显示 3D 模型(&o)"
 
 #: 3d-viewer/3d_toolbar.cpp:263
 msgid "Show Zone &Filling"
-msgstr ""
+msgstr "显示铺铜(&F)"
 
 #: 3d-viewer/3d_toolbar.cpp:269
 msgid "Show &Layers"
-msgstr ""
+msgstr "显示层(&L)"
 
 #: 3d-viewer/3d_toolbar.cpp:272
 msgid "Show &Adhesive Layers"
-msgstr ""
+msgstr "显示红胶层(&A)"
 
 #: 3d-viewer/3d_toolbar.cpp:275
 msgid "Show &Silkscreen Layers"
-msgstr ""
+msgstr "显示丝印层(&S)"
 
 #: 3d-viewer/3d_toolbar.cpp:278
 msgid "Show Solder &Mask Layers"
-msgstr ""
+msgstr "显示阻焊层(&M)"
 
 #: 3d-viewer/3d_toolbar.cpp:281
 msgid "Show Solder &Paste Layers"
-msgstr ""
+msgstr "显示锡膏层(&P)"
 
 #: 3d-viewer/3d_toolbar.cpp:286
 msgid "Show &Comments and Drawing Layers"
-msgstr ""
+msgstr "显示注释和绘图层(&C)"
 
 #: 3d-viewer/3d_toolbar.cpp:289
 msgid "Show &Eco Layers"
-msgstr ""
+msgstr "显示Eco层(&C)"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:30
 msgid "Realistic mode"
-msgstr ""
+msgstr "原始模式"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:36
 msgid "Show copper thickness"
-msgstr ""
+msgstr "显示沉铜厚度"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:42
 msgid "Show 3D Models"
-msgstr ""
+msgstr "显示 3D 模型"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:48 pcbnew/tool_pcb.cpp:366
 msgid "Show filled areas in zones"
-msgstr ""
+msgstr "显示此区域中的覆铜"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:54
 msgid "Show silkscreen layers"
-msgstr ""
+msgstr "显示丝印层"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:60
 msgid "Show solder mask layers"
-msgstr ""
+msgstr "显示阻焊层"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:66
 msgid "Show solder paste layers"
-msgstr ""
+msgstr "显示锡膏层"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:72
 msgid "Show adhesive layers"
-msgstr ""
+msgstr "显示红胶层"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:78
 msgid "Show comments and drawings layers"
-msgstr ""
+msgstr "显示注释和绘图层"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:84
 msgid "Show ECO layers"
-msgstr ""
+msgstr "显示 ECO 层"
 
 #: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:93
 msgid "Show All"
@@ -440,16 +440,16 @@ msgstr "全不显示"
 #: bitmap2component/bitmap2cmp_gui.cpp:270 eeschema/edit_bitmap.cpp:103
 #: pagelayout_editor/pl_editor_frame.cpp:635
 msgid "Choose Image"
-msgstr ""
+msgstr "选择图片"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:271 eeschema/edit_bitmap.cpp:104
 #: pagelayout_editor/pl_editor_frame.cpp:636
 msgid "Image Files "
-msgstr ""
+msgstr "图像文件"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:486
 msgid "Create a logo file"
-msgstr ""
+msgstr "创建 logo 文件"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:505
 #: bitmap2component/bitmap2cmp_gui.cpp:543
@@ -457,19 +457,19 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui.cpp:617
 #, c-format
 msgid "File '%s' could not be created."
-msgstr ""
+msgstr "文件 '%s' 无法被创建。"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:523
 msgid "Create a Postscript file"
-msgstr ""
+msgstr "创建PostScript文件"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:561
 msgid "Create a component library file for Eeschema"
-msgstr ""
+msgstr "创建一个 Eeschema 的元件库文件"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:598
 msgid "Create a footprint file for Pcbnew"
-msgstr ""
+msgstr "创建一个 Pcbnew 的封装文件"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:24
 msgid "Original Picture"
@@ -481,7 +481,7 @@ msgstr "灰度图片"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
-msgstr ""
+msgstr "黑&&白图片"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
 msgid "Bitmap Info:"
@@ -564,26 +564,26 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Eeschema (.lib file)"
-msgstr ""
+msgstr "Eeschema (.lib 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Pcbnew (.kicad_mod file)"
-msgstr ""
+msgstr "Pcbnew (.kicad_mod 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Postscript (.ps file)"
-msgstr ""
+msgstr "Postscript (.ps 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Logo for title block (.kicad_wks file)"
-msgstr ""
+msgstr "标题栏Logo (.kicad_wks 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:131
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:90
 #: pcbnew/dialogs/dialog_plot_base.cpp:247
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:187
 msgid "Format"
-msgstr ""
+msgstr "格式"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:135 common/eda_text.cpp:377
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
@@ -605,7 +605,7 @@ msgstr "普通"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:135 gerbview/class_GERBER.cpp:359
 msgid "Negative"
-msgstr ""
+msgstr "负"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:137
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:112
@@ -633,24 +633,24 @@ msgstr ""
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:348
 msgid "Front silk screen"
-msgstr ""
+msgstr "顶层丝印"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:354
 msgid "Front solder mask"
-msgstr ""
+msgstr "顶层阻焊"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid "User layer Eco1"
-msgstr ""
+msgstr "用户层Eco1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:150
 msgid "User Layer Eco2"
-msgstr ""
+msgstr "用户层Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:152
 msgid "Board Layer for Outline:"
-msgstr ""
+msgstr "基板轮廓层"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:154
 msgid ""
@@ -666,12 +666,12 @@ msgstr "自定义网格"
 #: common/base_screen.cpp:194
 #, c-format
 msgid "Grid: %.4f mm (%.2f mils)"
-msgstr ""
+msgstr "网格: %.4f mm (%.2f mils)"
 
 #: common/base_screen.cpp:197
 #, c-format
 msgid "Grid: %.2f mils (%.4f mm)"
-msgstr ""
+msgstr "网格: %.2f mils (%.4f mm)"
 
 #: common/base_units.cpp:160
 msgid " mils"
@@ -691,7 +691,7 @@ msgstr ""
 
 #: common/base_units.cpp:253
 msgid " deg"
-msgstr ""
+msgstr "度"
 
 #: common/basicframe.cpp:140
 msgid ""
@@ -716,46 +716,46 @@ msgstr ""
 #: common/basicframe.cpp:465
 #, c-format
 msgid "Executable file (%s)|%s"
-msgstr ""
+msgstr "可执行文件 (%s)|%s"
 
 #: common/basicframe.cpp:468
 msgid "Select Preferred Editor"
-msgstr ""
+msgstr "选择首选编辑器"
 
 #: common/basicframe.cpp:494
 msgid "Copy &Version Information"
-msgstr ""
+msgstr "复制版本信息(&V)"
 
 #: common/basicframe.cpp:495
 msgid "Copy the version string to clipboard to send with bug reports"
-msgstr ""
+msgstr "复制版本字符串到剪切板并发送错误报告"
 
 #: common/basicframe.cpp:548
 msgid "Could not open clipboard to write version information."
-msgstr ""
+msgstr "无法打开剪切板插入版本信息"
 
 #: common/basicframe.cpp:549
 msgid "Clipboard Error"
-msgstr ""
+msgstr "剪贴板错误"
 
 #: common/basicframe.cpp:623
 msgid "Version Information (copied to the clipboard)"
-msgstr ""
+msgstr "版本信息（复制到剪贴板）"
 
 #: common/basicframe.cpp:647
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
-msgstr ""
+msgstr "你没有文件夹的写入权限<%s>."
 
 #: common/basicframe.cpp:652
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
-msgstr ""
+msgstr "你没有写入权限来保存 <%s> 文件到 <%s>文件夹."
 
 #: common/basicframe.cpp:657
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
-msgstr ""
+msgstr "你没有写入权限来保存 <%s> 文件."
 
 #: common/basicframe.cpp:689
 #, c-format
@@ -770,7 +770,7 @@ msgstr ""
 #: common/basicframe.cpp:717
 #, c-format
 msgid "Could not create backup file <%s>"
-msgstr ""
+msgstr "无法创建备份文件 <%s>"
 
 #: common/basicframe.cpp:725
 msgid "The auto save file could not be renamed to the board file name."
@@ -778,11 +778,11 @@ msgstr ""
 
 #: common/block_commande.cpp:68
 msgid "Block Move"
-msgstr "块移动"
+msgstr "区块移动"
 
 #: common/block_commande.cpp:72
 msgid "Block Drag"
-msgstr "块拖动"
+msgstr "区块拖动"
 
 #: common/block_commande.cpp:76
 msgid "Drag item"
@@ -790,19 +790,19 @@ msgstr "拖动项目"
 
 #: common/block_commande.cpp:80
 msgid "Block Copy"
-msgstr "块复制"
+msgstr "区块复制"
 
 #: common/block_commande.cpp:84
 msgid "Block Delete"
-msgstr "块删除"
+msgstr "区块删除"
 
 #: common/block_commande.cpp:88
 msgid "Block Save"
-msgstr "块保存"
+msgstr "区块保存"
 
 #: common/block_commande.cpp:92
 msgid "Block Paste"
-msgstr "块粘贴"
+msgstr "区块粘贴"
 
 #: common/block_commande.cpp:96
 msgid "Win Zoom"
@@ -810,15 +810,15 @@ msgstr "块区域放大显示"
 
 #: common/block_commande.cpp:100
 msgid "Block Rotate"
-msgstr "块旋转"
+msgstr "区块旋转"
 
 #: common/block_commande.cpp:104
 msgid "Block Flip"
-msgstr "块翻转"
+msgstr "区块翻转"
 
 #: common/block_commande.cpp:109
 msgid "Block Mirror"
-msgstr "块镜像"
+msgstr "区块镜像"
 
 #: common/class_marker_base.cpp:203
 msgid "Marker Info"
