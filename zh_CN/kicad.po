@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-24 16:25+0800\n"
-"PO-Revision-Date: 2016-04-27 00:07+0800\n"
+"PO-Revision-Date: 2016-04-28 00:01+0800\n"
 "Last-Translator: \n"
 "Language-Team: ocrobot team <togker@gmail.com>\n"
 "Language: zh_CN\n"
@@ -856,7 +856,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:63
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:141
 msgid "deg"
-msgstr ""
+msgstr "度"
 
 #: common/common.cpp:414
 #, c-format
@@ -866,12 +866,12 @@ msgstr ""
 #: common/common.cpp:432
 #, c-format
 msgid "Output directory '%s' created.\n"
-msgstr ""
+msgstr "输出目录 '%s' 创建.\n"
 
 #: common/common.cpp:441
 #, c-format
 msgid "Cannot create output directory '%s'.\n"
-msgstr ""
+msgstr "无法创建输出目录 '%s'..\n"
 
 #: common/confirm.cpp:75 common/pgm_base.cpp:856
 #: eeschema/dialogs/dialog_color_config.cpp:277 eeschema/symbedit.cpp:111
@@ -953,47 +953,47 @@ msgstr ""
 
 #: common/dialog_about/dialog_about.cpp:84
 msgid "Information"
-msgstr ""
+msgstr "资讯"
 
 #: common/dialog_about/dialog_about.cpp:87
 msgid "Developers"
-msgstr ""
+msgstr "开发者"
 
 #: common/dialog_about/dialog_about.cpp:88
 msgid "Doc Writers"
-msgstr ""
+msgstr "文档作者"
 
 #: common/dialog_about/dialog_about.cpp:90
 msgid "Artists"
-msgstr ""
+msgstr "美工"
 
 #: common/dialog_about/dialog_about.cpp:91
 msgid "Translators"
-msgstr ""
+msgstr "翻译"
 
 #: common/dialog_about/dialog_about.cpp:93
 msgid "Packagers"
-msgstr ""
+msgstr "打包"
 
 #: common/dialog_about/dialog_about.cpp:96
 msgid "License"
-msgstr ""
+msgstr "授权"
 
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
-msgstr ""
+msgstr "标题"
 
 #: common/dialog_about/dialog_about_base.cpp:37
 msgid "Copyright Info"
-msgstr ""
+msgstr "版权信息"
 
 #: common/dialog_about/dialog_about_base.cpp:41
 msgid "Build Version Info"
-msgstr ""
+msgstr "创建版本信息"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr ""
+msgstr "库版本信息"
 
 #: common/dialogs/dialog_display_info_HTML_base.cpp:22 common/zoom.cpp:300
 #: eeschema/dialogs/dialog_annotate_base.cpp:212
@@ -1016,7 +1016,7 @@ msgstr "关闭"
 
 #: common/dialogs/dialog_env_var_config.cpp:105
 msgid "Invalid Input"
-msgstr ""
+msgstr "输入无效"
 
 #: common/dialogs/dialog_env_var_config.cpp:119
 msgid "Environment variable name cannot be empty."
@@ -1103,7 +1103,7 @@ msgstr "名称"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:39
 msgid "Path"
-msgstr ""
+msgstr "文件路径"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:59
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
@@ -1117,7 +1117,7 @@ msgstr "添加"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:60
 msgid "Add a new entry to the table."
-msgstr ""
+msgstr "添加新的条目进入表格"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:64
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
@@ -1134,7 +1134,7 @@ msgstr "删除"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:65
 msgid "Remove the selectect entry from the table."
-msgstr ""
+msgstr "从表格中移除所选条目"
 
 #: common/dialogs/dialog_exit_base.cpp:34
 msgid "Save the changes before closing?"
@@ -1220,7 +1220,7 @@ msgstr "确认更改"
 
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:19
 msgid "Select a row and press a new key combination to alter the binding."
-msgstr ""
+msgstr "选择一行，然后按新的组合键来更改绑定。"
 
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:39 eeschema/hotkeys.cpp:124
 #: pagelayout_editor/hotkeys.cpp:89 pcbnew/hotkeys.cpp:193
@@ -1229,15 +1229,15 @@ msgstr "撤销操作"
 
 #: common/dialogs/dialog_image_editor.cpp:130
 msgid "Incorrect scale number"
-msgstr ""
+msgstr "不正确的比例数"
 
 #: common/dialogs/dialog_image_editor.cpp:138
 msgid "Scale is too small for this image"
-msgstr ""
+msgstr "此图比例太小"
 
 #: common/dialogs/dialog_image_editor.cpp:143
 msgid "Scale is too large for this image"
-msgstr ""
+msgstr "此图比例太大"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33 eeschema/hotkeys.cpp:168
 msgid "Mirror X"
@@ -1257,26 +1257,26 @@ msgstr "旋转"
 
 #: common/dialogs/dialog_image_editor_base.cpp:42
 msgid "Grey"
-msgstr ""
+msgstr "灰色"
 
 #: common/dialogs/dialog_image_editor_base.cpp:45
 msgid "Half Size"
-msgstr ""
+msgstr "一半大小"
 
 #: common/dialogs/dialog_image_editor_base.cpp:49
 msgid "Undo Last"
-msgstr ""
+msgstr "撤消最后的编辑"
 
 #: common/dialogs/dialog_image_editor_base.cpp:52
 msgid "Image Scale:"
-msgstr ""
+msgstr "图像比例:"
 
 #: common/dialogs/dialog_list_selector_base.cpp:19
 #: common/dialogs/wx_html_report_panel_base.cpp:34
 #: eeschema/dialogs/dialog_choose_component_base.cpp:22
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:31
 msgid "Filter:"
-msgstr ""
+msgstr "过滤器:"
 
 #: common/dialogs/dialog_list_selector_base.cpp:21
 msgid ""
@@ -1286,7 +1286,7 @@ msgstr ""
 
 #: common/dialogs/dialog_list_selector_base.cpp:28
 msgid "Items:"
-msgstr ""
+msgstr "项目:"
 
 #: common/dialogs/dialog_list_selector_base.cpp:37
 #: common/dialogs/wx_html_report_panel_base.cpp:14
@@ -1301,55 +1301,55 @@ msgstr "信息: "
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A4 210x297mm"
-msgstr ""
+msgstr "A4 210x297mm"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "A3 297x420mm"
-msgstr ""
+msgstr "A3 297x420mm"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "A2 420x594mm"
-msgstr ""
+msgstr "A2 420x594mm"
 
 #: common/dialogs/dialog_page_settings.cpp:66
 msgid "A1 594x841mm"
-msgstr ""
+msgstr "A1 594x841mm"
 
 #: common/dialogs/dialog_page_settings.cpp:67
 msgid "A0 841x1189mm"
-msgstr ""
+msgstr "A0 841x1189mm"
 
 #: common/dialogs/dialog_page_settings.cpp:68
 msgid "A 8.5x11in"
-msgstr ""
+msgstr "A 8.5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:69
 msgid "B 11x17in"
-msgstr ""
+msgstr "B 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:70
 msgid "C 17x22in"
-msgstr ""
+msgstr "C 17x22in"
 
 #: common/dialogs/dialog_page_settings.cpp:71
 msgid "D 22x34in"
-msgstr ""
+msgstr "D 22x34in"
 
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "E 34x44in"
-msgstr ""
+msgstr "E 34x44in"
 
 #: common/dialogs/dialog_page_settings.cpp:73
 msgid "USLetter 8.5x11in"
-msgstr ""
+msgstr "USLetter 8.5x11in"
 
 #: common/dialogs/dialog_page_settings.cpp:74
 msgid "USLegal 8.5x14in"
-msgstr ""
+msgstr "USLegal 8.5x14in"
 
 #: common/dialogs/dialog_page_settings.cpp:75
 msgid "USLedger 11x17in"
-msgstr ""
+msgstr "USLedger 11x17in"
 
 #: common/dialogs/dialog_page_settings.cpp:76
 msgid "User (Custom)"
@@ -1374,6 +1374,10 @@ msgid ""
 "%.1f - %.1f %s!\n"
 "Select another custom paper size?"
 msgstr ""
+"选择自定义纸张尺寸\n"
+"超出允许范围限制\n"
+"%.1f - %.1f %s!\n"
+"选择另一种自定义纸张尺寸?"
 
 #: common/dialogs/dialog_page_settings.cpp:471
 msgid "Warning!"
@@ -1400,31 +1404,31 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings_base.cpp:25
 msgid "Paper"
-msgstr ""
+msgstr "纸张"
 
 #: common/dialogs/dialog_page_settings_base.cpp:36
 msgid "dummy text"
-msgstr ""
+msgstr "虚拟文字"
 
 #: common/dialogs/dialog_page_settings_base.cpp:42
 #: pcbnew/dialogs/dialog_orient_footprints_base.cpp:22
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:131
 msgid "Orientation:"
-msgstr ""
+msgstr "方向:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:52
 msgid "Custom Size:"
-msgstr ""
+msgstr "自定义尺寸："
 
 #: common/dialogs/dialog_page_settings_base.cpp:62
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:77
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:76
 msgid "Height:"
-msgstr ""
+msgstr "高:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:68
 msgid "Custom paper height."
-msgstr ""
+msgstr "自定义纸张高度."
 
 #: common/dialogs/dialog_page_settings_base.cpp:78
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:65
@@ -1432,19 +1436,19 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:25
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:86
 msgid "Width:"
-msgstr ""
+msgstr "宽度:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:84
 msgid "Custom paper width."
-msgstr ""
+msgstr "自定义纸张宽度."
 
 #: common/dialogs/dialog_page_settings_base.cpp:94
 msgid "Layout Preview"
-msgstr ""
+msgstr "布局预览"
 
 #: common/dialogs/dialog_page_settings_base.cpp:113
 msgid "Title Block Parameters"
-msgstr ""
+msgstr "标题栏属性"
 
 #: common/dialogs/dialog_page_settings_base.cpp:123
 #, c-format
@@ -1463,7 +1467,7 @@ msgstr "发布日期"
 #: common/dialogs/dialog_page_settings_base.cpp:153
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:112
 msgid "<<<"
-msgstr ""
+msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:159
 #: common/dialogs/dialog_page_settings_base.cpp:184
@@ -1563,15 +1567,15 @@ msgstr "所有"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:42
 msgid "Warnings"
-msgstr ""
+msgstr "警告信息"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:47 gerbview/readgerb.cpp:182
 msgid "Errors"
-msgstr ""
+msgstr "错误"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:52
 msgid "Infos"
-msgstr ""
+msgstr "更多信息"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:57
 msgid "Actions"
@@ -1579,7 +1583,7 @@ msgstr ""
 
 #: common/dialogs/wx_html_report_panel_base.cpp:62
 msgid "Save report to file..."
-msgstr ""
+msgstr "保存报告到文件..."
 
 #: common/draw_frame.cpp:164 common/draw_frame.cpp:481
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
@@ -1617,22 +1621,22 @@ msgstr "剪贴板"
 #: common/dsnlexer.cpp:360 common/dsnlexer.cpp:368
 #, c-format
 msgid "Expecting '%s'"
-msgstr ""
+msgstr "预期 '%s'"
 
 #: common/dsnlexer.cpp:376 common/dsnlexer.cpp:392
 #, c-format
 msgid "Unexpected '%s'"
-msgstr ""
+msgstr "非预期 '%s'"
 
 #: common/dsnlexer.cpp:384
 #, c-format
 msgid "%s is a duplicate"
-msgstr ""
+msgstr "%s 是一个副本"
 
 #: common/dsnlexer.cpp:437
 #, c-format
 msgid "need a NUMBER for '%s'"
-msgstr ""
+msgstr "'%s' 需要一个数字"
 
 #: common/dsnlexer.cpp:709 common/dsnlexer.cpp:769
 msgid "Un-terminated delimited string"
@@ -1682,16 +1686,16 @@ msgstr "粗体+斜体"
 
 #: common/footprint_info.cpp:324 common/footprint_info.cpp:345
 msgid "Errors were encountered loading footprints"
-msgstr ""
+msgstr "加载封装出错"
 
 #: common/footprint_info.cpp:343
 msgid "Load Error"
-msgstr ""
+msgstr "加载错误"
 
 #: common/fp_lib_table.cpp:373
 #, c-format
 msgid "'%s' is a duplicate footprint library nickName"
-msgstr ""
+msgstr "'%s' 是一个重复的封装库别称"
 
 #: common/fp_lib_table.cpp:620
 #, c-format
@@ -1705,20 +1709,20 @@ msgstr ""
 
 #: common/fpid.cpp:185 common/fpid.cpp:202
 msgid "Illegal character found in FPID string"
-msgstr ""
+msgstr "在FPID字符串中找到非法字符"
 
 #: common/fpid.cpp:306
 msgid "Illegal character found in logical library name"
-msgstr ""
+msgstr "在逻辑库中发现非法字符"
 
 #: common/fpid.cpp:323 new/sch_lpid.cpp:440
 msgid "Illegal character found in revision"
-msgstr ""
+msgstr "修订中发现非法字符"
 
 #: common/gestfich.cpp:233
 #, c-format
 msgid "Command <%s> could not found"
-msgstr ""
+msgstr "命令 <%s> 无法找到"
 
 #: common/gestfich.cpp:376
 #, c-format
@@ -1726,15 +1730,17 @@ msgid ""
 "Problem while running the PDF viewer\n"
 "Command is '%s'"
 msgstr ""
+"运行 PDF 阅读器时错误\n"
+"命令是 '%s'"
 
 #: common/gestfich.cpp:384
 #, c-format
 msgid "Unable to find a PDF viewer for <%s>"
-msgstr ""
+msgstr "无法为 <%s> 找到一个 PDF 阅读器"
 
 #: common/grid_tricks.cpp:113
 msgid "Cut\tCTRL+X"
-msgstr ""
+msgstr "剪切\tCtrl+X"
 
 #: common/grid_tricks.cpp:113
 msgid "Clear selected cells pasting original contents to clipboard"
@@ -1742,15 +1748,15 @@ msgstr ""
 
 #: common/grid_tricks.cpp:114
 msgid "Copy\tCTRL+C"
-msgstr ""
+msgstr "复制\tCtrl+C"
 
 #: common/grid_tricks.cpp:114
 msgid "Copy selected cells to clipboard"
-msgstr ""
+msgstr "复制选中项到剪贴板"
 
 #: common/grid_tricks.cpp:115
 msgid "Paste\tCTRL+V"
-msgstr ""
+msgstr "粘贴\tCtrl+V"
 
 #: common/grid_tricks.cpp:115
 msgid "Paste clipboard cells to matrix at current cell"
@@ -1758,28 +1764,28 @@ msgstr ""
 
 #: common/grid_tricks.cpp:116
 msgid "Select All\tCTRL+A"
-msgstr ""
+msgstr "全选\tCTRL+A"
 
 #: common/grid_tricks.cpp:116
 msgid "Select all cells"
-msgstr ""
+msgstr "选择所有单元格"
 
 #: common/hotkeys_basic.cpp:464 common/hotkeys_basic.cpp:493
 #: common/hotkeys_basic.cpp:497
 msgid "Hotkeys List"
-msgstr ""
+msgstr "快捷键列表"
 
 #: common/hotkeys_basic.cpp:757
 msgid "Read Hotkey Configuration File:"
-msgstr ""
+msgstr "读取快捷键配置文件:"
 
 #: common/hotkeys_basic.cpp:788
 msgid "Write Hotkey Configuration File:"
-msgstr ""
+msgstr "写入快捷键配置文件："
 
 #: common/hotkeys_basic.cpp:817
 msgid "&List Current Keys"
-msgstr ""
+msgstr "列出当前快捷键(&L)"
 
 #: common/hotkeys_basic.cpp:818
 msgid "Displays the current hotkeys list and corresponding commands"
@@ -1787,52 +1793,52 @@ msgstr ""
 
 #: common/hotkeys_basic.cpp:823
 msgid "&Edit Hotkeys"
-msgstr ""
+msgstr "设置快捷键(&E)"
 
 #: common/hotkeys_basic.cpp:824
 msgid "Call the hotkeys editor"
-msgstr ""
+msgstr "拨打热键编辑器"
 
 #: common/hotkeys_basic.cpp:831
 msgid "E&xport Hotkeys"
-msgstr ""
+msgstr "导出快捷键(&X)"
 
 #: common/hotkeys_basic.cpp:832
 msgid "Create a hotkey configuration file to export the current hotkeys"
-msgstr ""
+msgstr "创建一个快捷键配置文件导出当前快捷键"
 
 #: common/hotkeys_basic.cpp:837
 msgid "&Import Hotkeys"
-msgstr ""
+msgstr "导入快捷键设置(&I)"
 
 #: common/hotkeys_basic.cpp:838
 msgid "Load an existing hotkey configuration file"
-msgstr ""
+msgstr "加载现有的快捷键配置文件"
 
 #: common/hotkeys_basic.cpp:843
 msgid "&Hotkeys"
-msgstr ""
+msgstr "快捷键(&H)"
 
 #: common/hotkeys_basic.cpp:844
 msgid "Hotkeys configuration and preferences"
-msgstr ""
+msgstr "快捷键配置与偏好"
 
 #: common/page_layout/page_layout_reader.cpp:820
 #, c-format
 msgid "The file <%s> was not fully read"
-msgstr ""
+msgstr "文件 <%s> 无法全部读取"
 
 #: common/pcbcommon.cpp:47
 msgid "No layers"
-msgstr ""
+msgstr "没有图层"
 
 #: common/pcbcommon.cpp:67
 msgid "Internal"
-msgstr ""
+msgstr "内部"
 
 #: common/pcbcommon.cpp:70
 msgid "Non-copper"
-msgstr ""
+msgstr "非覆铜"
 
 #: common/pgm_base.cpp:109 pcbnew/dialogs/dialog_design_rules_base.cpp:59
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:102
@@ -1953,22 +1959,22 @@ msgstr ""
 
 #: common/pgm_base.cpp:858
 msgid "Do not show this message again."
-msgstr ""
+msgstr "不要再显示该信息。"
 
 #: common/project.cpp:247
 #, c-format
 msgid "Unable to find '%s' template config file."
-msgstr ""
+msgstr "无法找到 '%s' 模板配置文件."
 
 #: common/project.cpp:270
 #, c-format
 msgid "Cannot create prj file '%s' (Directory not writable)"
-msgstr ""
+msgstr "无法创建 prj file '%s' (目录不可写)"
 
 #: common/richio.cpp:197
 #, c-format
 msgid "Unable to open filename '%s' for reading"
-msgstr ""
+msgstr "无法打开文件名 '%s' 来阅读"
 
 #: common/richio.cpp:241 common/richio.cpp:338
 msgid "Maximum line length exceeded"
@@ -1986,7 +1992,7 @@ msgstr "无法打开或保存文件 '%s'"
 #: common/richio.cpp:588 pcbnew/legacy_plugin.cpp:3268
 #, c-format
 msgid "error writing to file '%s'"
-msgstr ""
+msgstr "写入 '%s' 文件时错误"
 
 #: common/richio.cpp:609
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
@@ -2202,21 +2208,21 @@ msgstr ""
 
 #: cvpcb/autosel.cpp:288
 msgid "CvPcb Warning"
-msgstr ""
+msgstr "CvPcb 警告"
 
 #: cvpcb/cfg.cpp:79 cvpcb/dialogs/dialog_config_equfiles.cpp:52
 #, c-format
 msgid "Project file: '%s'"
-msgstr ""
+msgstr "工程文件: '%s'"
 
 #: cvpcb/cfg.cpp:84
 #, c-format
 msgid "Project file '%s' is not writable"
-msgstr ""
+msgstr "工程文件 '%s' 不可写"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:75
 msgid "Footprint Viewer"
-msgstr ""
+msgstr "封装浏览器"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:180 pcbnew/basepcbframe.cpp:466
 #: pcbnew/tool_pcb.cpp:338
@@ -2226,35 +2232,35 @@ msgstr ""
 #: cvpcb/class_DisplayFootprintsFrame.cpp:184 eeschema/tool_lib.cpp:232
 #: pcbnew/tool_modedit.cpp:216 pcbnew/tool_pcb.cpp:341
 msgid "Units in inches"
-msgstr ""
+msgstr "设置单位为英寸"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:188 eeschema/tool_lib.cpp:236
 #: pcbnew/tool_modedit.cpp:220 pcbnew/tool_pcb.cpp:344
 msgid "Units in millimeters"
-msgstr ""
+msgstr "设置单位为毫米"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:192 eeschema/tool_lib.cpp:240
 #: eeschema/tool_sch.cpp:285 gerbview/toolbars_gerber.cpp:167
 #: pcbnew/tool_pcb.cpp:347
 msgid "Change cursor shape"
-msgstr ""
+msgstr "改变光标形状"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:197 pcbnew/basepcbframe.cpp:476
 #: pcbnew/tool_pcb.cpp:377
 msgid "Show pads in outline mode"
-msgstr ""
+msgstr "大纲模式中显示焊盘"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:201
 msgid "Show texts in line mode"
-msgstr ""
+msgstr "线路模式中显示文字"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:205
 msgid "Show outlines in line mode"
-msgstr ""
+msgstr "线路模式中显示大纲"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:220
 msgid "Display options"
-msgstr ""
+msgstr "显示选项"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:225
 msgid "Zoom in (F1)"
@@ -2278,20 +2284,20 @@ msgstr "3D显示(Alt+3)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:250
 msgid "Show texts in filled mode"
-msgstr ""
+msgstr "填充模式中显示文字"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:251
 msgid "Show texts in sketch mode"
-msgstr ""
+msgstr "草稿模式中显示文字"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:265
 msgid "Show outlines in filled mode"
-msgstr ""
+msgstr "填充模式中显示大纲"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:266
 #: pcbnew/dialogs/dialog_display_options_base.cpp:70
 msgid "Show outlines in sketch mode"
-msgstr ""
+msgstr "草稿模式中显示大纲"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:401 pcbnew/hotkeys.cpp:187
 #: pcbnew/moduleframe.cpp:691 pcbnew/pcbframe.cpp:656
@@ -2318,6 +2324,8 @@ msgid ""
 "Component to Footprint links modified.\n"
 "Save before exit ?"
 msgstr ""
+"元件到封装链接修改.\n"
+"保存并退出？"
 
 #: cvpcb/cvframe.cpp:373
 msgid "Delete selections"
