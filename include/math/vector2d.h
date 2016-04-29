@@ -355,21 +355,16 @@ VECTOR2<T>& VECTOR2<T>::operator-=( const T& aScalar )
 }
 
 
+/**
+ * Rotate a VECTOR2 by aAngle.
+ * @param aAngle = rotation angle in radians
+ */
 template <class T>
 VECTOR2<T> VECTOR2<T>::Rotate( double aAngle ) const
 {
-    // fast calculation of some rotations, very frequently found
+    // Avoid 0 radian rotation, case very frequently found
     if( aAngle == 0.0 )
         return VECTOR2<T> ( T( x ), T( y ) );
-
-    if( aAngle == 90.0 )
-        return VECTOR2<T> ( T( -y ), T( x ) );
-
-    if( aAngle == -90.0 )
-        return VECTOR2<T> ( T( y ), T( -x ) );
-
-    if( aAngle == 180.0 || aAngle == -180.0 )
-        return VECTOR2<T> ( T( -x ), T( -y ) );
 
     double  sa  = sin( aAngle );
     double  ca  = cos( aAngle );

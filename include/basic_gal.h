@@ -135,7 +135,7 @@ public:
      */
     virtual void Rotate( double aAngle )
     {
-        m_transform.m_rotAngle = aAngle * M_PI/1800;
+        m_transform.m_rotAngle = aAngle;
         m_transform.m_rotCenter = m_transform.m_moveOffset;
     }
 

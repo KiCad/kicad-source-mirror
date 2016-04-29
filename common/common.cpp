@@ -180,7 +180,7 @@ wxString GetUnitsLabel( EDA_UNITS_T aUnit )
         break;
 
     case DEGREES:
-        wxASSERT( false );
+        label = _( "degrees" );
         break;
     }
 

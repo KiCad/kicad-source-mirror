@@ -168,7 +168,8 @@ void DrawGraphicText( EDA_RECT* aClipBox,
     basic_gal.m_DC = aDC;
     basic_gal.m_Color = aColor;
     basic_gal.SetClipBox( aClipBox );
-    basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient );
+
+    basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient * M_PI/1800 );
 }
 
 void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
