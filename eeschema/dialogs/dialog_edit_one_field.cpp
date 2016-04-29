@@ -222,11 +222,8 @@ DIALOG_LIB_EDIT_ONE_FIELD::DIALOG_LIB_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 {
     m_fieldId = aField->GetId();
 
-    LIB_PART* part = aField->GetParent();
-
-    wxASSERT_MSG( part, wxT( "LIB_FIELD has no LIB_PART as parent." ) );
-
-    m_isPower = part->IsPower();
+    // When in the library editor, power components can be renamed.
+    m_isPower = false;
     init();
 }
 
