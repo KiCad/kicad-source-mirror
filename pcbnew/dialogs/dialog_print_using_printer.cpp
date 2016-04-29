@@ -226,8 +226,6 @@ void DIALOG_PRINT_USING_PRINTER::initValues( )
         for( seq.Rewind();  seq;  ++seq )
         {
             LAYER_ID layer = *seq;
-
-            wxString layerKey;
             bool     option;
 
             layerKey.Printf( OPTKEY_LAYERBASE, layer );

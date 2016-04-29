@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,7 +167,6 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     }
     else
     {
-        wxFileName filename = aFullFileName;
         filenamesList.Add( aFullFileName );
         currentPath = filename.GetPath();
         m_mruPath = currentPath;
@@ -178,7 +177,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
-        wxFileName filename = filenamesList[ii];
+        filename = filenamesList[ii];
 
         if( !filename.IsAbsolute() )
             filename.SetPath( currentPath );
@@ -252,7 +251,6 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
     }
     else
     {
-        wxFileName filename = aFullFileName;
         filenamesList.Add( aFullFileName );
         currentPath = filename.GetPath();
         m_mruPath = currentPath;
@@ -263,7 +261,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
-        wxFileName filename = filenamesList[ii];
+        filename = filenamesList[ii];
 
         if( !filename.IsAbsolute() )
             filename.SetPath( currentPath );

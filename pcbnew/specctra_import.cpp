@@ -446,7 +446,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
     NET_OUTS& net_outs = session->route->net_outs;
     for( NET_OUTS::iterator net = net_outs.begin(); net!=net_outs.end(); ++net )
     {
-        int         netCode = 0;
+        int netoutCode = 0;
 
         // page 143 of spec says wire's net_id is optional
         if( net->net_id.size() )
@@ -455,7 +455,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
             NETINFO_ITEM* netinfo = aBoard->FindNet( netName );
 
             if( netinfo )
-                netCode = netinfo->GetNet();
+                netoutCode = netinfo->GetNet();
             else  // else netCode remains 0
             {
                 // int breakhere = 1;
@@ -496,7 +496,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
                     }
                     */
 
-                    TRACK* track = makeTRACK( path, pt, netCode );
+                    TRACK* track = makeTRACK( path, pt, netoutCode );
                     aBoard->Add( track );
                 }
             }
@@ -512,10 +512,10 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
             if( net->net_id.size() )
             {
                 wxString netName = FROM_UTF8( net->net_id.c_str() );
+                NETINFO_ITEM* netvia = aBoard->FindNet( netName );
 
-                NETINFO_ITEM* net = aBoard->FindNet( netName );
-                if( net )
-                    netCode = net->GetNet();
+                if( netvia )
+                    netCode = netvia->GetNet();
 
                 // else netCode remains 0
             }

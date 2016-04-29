@@ -158,7 +158,7 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::Init()
         EDA_COLOR_T layerColor = board->GetLayerColor( layer );
         imageList->Add( makeLayerBitmap( layerColor ) );
 
-        wxString msg = board->GetLayerName( layer );
+        msg = board->GetLayerName( layer );
         msg.Trim();
 
         int itemIndex = m_LayerSelectionCtrl->InsertItem(
