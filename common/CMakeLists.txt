@@ -61,6 +61,7 @@ set( GAL_SRCS
     gal/opengl/vertex_manager.cpp
     gal/opengl/gpu_manager.cpp
     gal/opengl/opengl_compositor.cpp
+    gal/opengl/utils.cpp
 
     # Cairo GAL
     gal/cairo/cairo_gal.cpp
