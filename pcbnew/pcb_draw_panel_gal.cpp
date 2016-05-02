@@ -382,18 +382,16 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
         LAYER_NUM layer = GAL_LAYER_ORDER[i];
         wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
 
+        // Set layer display dependencies & targets
         if( IsCopperLayer( layer ) )
         {
-            // Copper layers are required for netname layers
             m_view->SetRequired( GetNetnameLayer( layer ), layer );
             m_view->SetLayerTarget( layer, KIGFX::TARGET_CACHED );
         }
         else if( IsNetnameLayer( layer ) )
         {
-            // Netnames are drawn only when scale is sufficient (level of details)
-            // so there is no point in caching them
-            m_view->SetLayerTarget( layer, KIGFX::TARGET_NONCACHED );
             m_view->SetLayerDisplayOnly( layer );
+            m_view->SetLayerTarget( layer, KIGFX::TARGET_CACHED );
         }
     }
 

@@ -1,0 +1,42 @@
+Creating bitmap fonts for GAL
+=============================
+Maciej Suminski <maciej.suminski@cern.ch>
+12.04.2016
+
+To create a new bitmap font atlas for Graphics Abstraction Layer, follow these steps:
+
+ * Download Bitmap Font Generator [1] (runs well under wine)
+ * Load default configuration stored in font.bmfc
+ * Adjust settings as needed
+ * Be sure that all glyphs fit into one page (you can check if in 'Visualize' you can move to another page (menu View))
+ * Export font atlas as .PNG file, and font description as XML file
+ * Run ./fnt2struct.py bitmap_font.fnt
+ * Run ./png2struct.py bitmap_font_0.png
+ * Copy bitmap_font_desc.c to common/gal/opengl/bitmap_font_desc.c
+ * Copy bitmap_font_0.png to common/gal/opengl/bitmap_font_img.c
+
+Recommended export options:
+    Texture size: 1024x1024 (should be supported by majority GPUs)
+    Bit depth: 8
+    Font descriptor: XML
+    Textures: png
+
+To match as closely as possible the newstroke_font glyph set,
+mark the following character subsets in Bitmap Font Generator right panel:
+    Latin + Latin Supplement
+    Latin Extended A
+    Latin Extended B
+    IPA Extensions
+    Greek and Coptic
+    Cyrillic
+    Latin Extended Additional
+    Greek Extended
+    General Punctuation
+    Subscripts and Superscripts
+    Currency Symbols
+    Number Forms
+    Mathematical Operators
+    Geometric Shapes
+
+References:
+    1. http://www.angelcode.com/products/bmfont/

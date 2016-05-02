@@ -313,7 +313,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             m_gal->SetGlyphSize( VECTOR2D( textSize * 0.7, textSize * 0.7 ) );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-            m_gal->StrokeText( netName, textPosition, textOrientation );
+            m_gal->BitmapText( netName, textPosition, textOrientation );
         }
     }
     else if( IsCopperLayer( aLayer ) )
@@ -518,9 +518,10 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 // Use a smaller text size to handle interline, pen size..
                 tsize *= 0.7;
                 VECTOR2D namesize( tsize, tsize );
+
                 m_gal->SetGlyphSize( namesize );
                 m_gal->SetLineWidth( namesize.x / 12.0 );
-                m_gal->StrokeText( aPad->GetShortNetname(), textpos, 0.0 );
+                m_gal->BitmapText( aPad->GetShortNetname(), textpos, 0.0 );
             }
 
             if( m_pcbSettings.m_padNumbers )
@@ -537,7 +538,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( numsize );
                 m_gal->SetLineWidth( numsize.x / 12.0 );
-                m_gal->StrokeText( aPad->GetPadName(), textpos, 0.0 );
+                m_gal->BitmapText( aPad->GetPadName(), textpos, 0.0 );
             }
 
             m_gal->Restore();

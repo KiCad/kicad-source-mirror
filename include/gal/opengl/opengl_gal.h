@@ -124,6 +124,10 @@ public:
     virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
                             const VECTOR2D& controlPointB, const VECTOR2D& endPoint );
 
+    /// @copydoc GAL::BitmapText()
+    virtual void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
+                             double aRotationAngle );
+
     // --------------
     // Screen methods
     // --------------
@@ -263,6 +267,8 @@ private:
     wxEvtHandler*           paintListener;
     static int              instanceCounter;
 
+    GLuint fontTexture;                             ///< Bitmap font texture handle
+
     // Vertex buffer objects related fields
     typedef std::map< unsigned int, boost::shared_ptr<VERTEX_ITEM> > GROUPS_MAP;
     GROUPS_MAP              groups;                 ///< Stores informations about VBO objects (groups)
@@ -283,6 +289,8 @@ private:
 
     // Internal flags
     bool                    isFramebufferInitialized;   ///< Are the framebuffers initialized?
+    static bool             isBitmapFontLoaded;         ///< Is the bitmap font texture loaded?
+    bool                    isBitmapFontInitialized;    ///< Is the shader set to use bitmap fonts?
     bool                    isGrouping;                 ///< Was a group started?
 
     // Polygon tesselation

@@ -27,6 +27,7 @@
  */
 
 #include <gal/opengl/opengl_gal.h>
+#include <gal/opengl/utils.h>
 #include <gal/definitions.h>
 
 #include <macros.h>
@@ -41,11 +42,15 @@
 
 using namespace KIGFX;
 
+#include "bitmap_font_img.c"
+#include "bitmap_font_desc.c"
+
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
 
 wxGLContext* OPENGL_GAL::glContext = NULL;
 int OPENGL_GAL::instanceCounter = 0;
+bool OPENGL_GAL::isBitmapFontLoaded = false;
 
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                         wxEvtHandler* aPaintListener, const wxString& aName ) :
@@ -71,6 +76,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     // Initialize the flags
     isFramebufferInitialized = false;
+    isBitmapFontInitialized  = false;
     isGrouping               = false;
     groupCounter             = 0;
 
@@ -125,7 +131,11 @@ OPENGL_GAL::~OPENGL_GAL()
 
     if( --instanceCounter == 0 )
     {
+        glDeleteTextures( 1, &fontTexture );
+        isBitmapFontLoaded = false;
+
         delete OPENGL_GAL::glContext;
+        glContext = NULL;
     }
 
     gluDeleteTess( tesselator );
@@ -201,9 +211,6 @@ void OPENGL_GAL::BeginDrawing()
     SetFillColor( fillColor );
     SetStrokeColor( strokeColor );
 
-    // Unbind buffers - set compositor for direct drawing
-    compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
-
     // Remove all previously stored items
     nonCachedManager.Clear();
     overlayManager.Clear();
@@ -211,6 +218,40 @@ void OPENGL_GAL::BeginDrawing()
     cachedManager.BeginDrawing();
     nonCachedManager.BeginDrawing();
     overlayManager.BeginDrawing();
+
+    if( !isBitmapFontInitialized )
+    {
+        // Keep bitmap font texture always bound to the second texturing unit
+        const GLint FONT_TEXTURE_UNIT = 2;
+
+        if( !isBitmapFontLoaded )
+        {
+            glActiveTexture( GL_TEXTURE0 + FONT_TEXTURE_UNIT );
+            glGenTextures( 1, &fontTexture );
+            glBindTexture( GL_TEXTURE_2D, fontTexture );
+            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+            glTexImage2D( GL_TEXTURE_2D, 0, GL_RED, bitmap_font.width, bitmap_font.height,
+                        0, GL_RED, GL_UNSIGNED_BYTE, bitmap_font.pixels );
+            checkGlError( "loading bitmap font" );
+
+            glActiveTexture( GL_TEXTURE0 );
+
+            isBitmapFontLoaded = true;
+        }
+
+        // Set shader parameter
+        GLint ufm_fontTexture = shader.AddParameter( "fontTexture" );
+        shader.Use();
+        shader.SetParameter( ufm_fontTexture, (int) FONT_TEXTURE_UNIT );
+        shader.Deactivate();
+        checkGlError( "setting bitmap font sampler as shader parameter" );
+
+        isBitmapFontInitialized = true;
+    }
+
+    // Unbind buffers - set compositor for direct drawing
+    compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
 #ifdef __WXDEBUG__
     prof_end( &totalRealTime );
@@ -631,6 +672,125 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
     }
 
     DrawPolyline( pointList );
+}
+
+
+void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
+                             double aRotationAngle )
+{
+    wxASSERT_MSG( !IsTextMirrored(), "No support for mirrored text using bitmap fonts." );
+
+    const float TEX_X = bitmap_font.width;
+    const float TEX_Y = bitmap_font.height;
+
+    const int length = aText.length();
+    double cur_x = 0.0;
+
+    // Compute text size, so it can be properly justified
+    VECTOR2D textSize( 0.0, 0.0 );
+
+    for( int i = 0; i < length; ++i )
+    {
+        const bitmap_glyph& glyph = bitmap_chars[aText[i]];
+        textSize.x += ( glyph.x_off + glyph.width );
+        textSize.y = std::max( (unsigned int)( textSize.y ), glyph.y_off * 2 + glyph.height );
+    }
+
+    const double SCALE = GetGlyphSize().y / textSize.y * 2.0;
+
+    Save();
+
+    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+    currentManager->Translate( aPosition.x, aPosition.y, layerDepth );
+    currentManager->Rotate( aRotationAngle, 0.0f, 0.0f, -1.0f );
+    currentManager->Scale( SCALE, SCALE, 0 );
+
+    switch( GetHorizontalJustify() )
+    {
+    case GR_TEXT_HJUSTIFY_CENTER:
+        Translate( VECTOR2D( -textSize.x / 2.0, 0 ) );
+        break;
+
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        //if( !IsTextMirrored() )
+            Translate( VECTOR2D( -textSize.x, 0 ) );
+        break;
+
+    case GR_TEXT_HJUSTIFY_LEFT:
+        //if( IsTextMirrored() )
+            //Translate( VECTOR2D( -textSize.x, 0 ) );
+        break;
+    }
+
+    switch( GetVerticalJustify() )
+    {
+    case GR_TEXT_VJUSTIFY_TOP:
+        Translate( VECTOR2D( 0, -textSize.y ) );
+        break;
+
+    case GR_TEXT_VJUSTIFY_CENTER:
+        Translate( VECTOR2D( 0, -textSize.y / 2.0 ) );
+        break;
+
+    case GR_TEXT_VJUSTIFY_BOTTOM:
+        break;
+    }
+
+    /* Glyph:
+     * v0    v1
+     *   +--+
+     *   | /|
+     *   |/ |
+     *   +--+
+     * v2    v3
+     */
+
+    for( int i = 0; i < length; ++i )
+    {
+        const unsigned long c = aText[i];
+
+        wxASSERT_MSG( c < bitmap_chars_count, wxT( "Missing character in bitmap font atlas." ) );
+
+        if( c >= bitmap_chars_count )
+            continue;
+
+        wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
+
+        const bitmap_glyph& glyph = bitmap_chars[aText[i]];
+        const float x = glyph.x;
+        const float y = glyph.y;
+        const float xoff = glyph.x_off;
+        const float yoff = glyph.y_off;
+        const float w = glyph.width;
+        const float h = glyph.height;
+
+        currentManager->Reserve( 6 );
+
+        cur_x += xoff / 2;
+
+        currentManager->Shader( SHADER_FONT, x / TEX_X, y / TEX_Y );
+        currentManager->Vertex( cur_x,       yoff, 0 );             // v0
+
+        currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, y / TEX_Y );
+        currentManager->Vertex( cur_x + w,   yoff, 0 );             // v1
+
+        currentManager->Shader( SHADER_FONT, x / TEX_X, ( y + h ) / TEX_Y );
+        currentManager->Vertex( cur_x,       yoff + h, 0 );         // v2
+
+
+        currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, y / TEX_Y );
+        currentManager->Vertex( cur_x + w,  yoff, 0 );              // v1
+
+        currentManager->Shader( SHADER_FONT, x / TEX_X, ( y + h ) / TEX_Y );
+        currentManager->Vertex( cur_x,      yoff + h, 0 );          // v2
+
+        currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, ( y + h ) / TEX_Y );
+        currentManager->Vertex( cur_x + w,  yoff + h, 0 );          // v3
+
+        cur_x += w + xoff / 2;
+    }
+
+    Restore();
 }
 
 
@@ -1170,6 +1330,17 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
         {
             error( "Cannot link the shaders!" );
             return;
+        }
+
+        int maxTextureSize;
+
+        glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
+
+        if( maxTextureSize < (int) bitmap_font.width || maxTextureSize < (int) bitmap_font.height )
+        {
+            // TODO implement software texture scaling
+            // for bitmap fonts and use a higher resolution texture?
+            error( "Requested texture size is not supported" );
         }
 
         m_tested = true;

@@ -1,0 +1,59 @@
+# AngelCode Bitmap Font Generator configuration file
+fileVersion=1
+
+# font settings
+fontName=Ubuntu Mono
+fontFile=
+charSet=0
+fontSize=55
+aa=2
+scaleH=100
+useSmoothing=1
+isBold=0
+isItalic=0
+useUnicode=1
+disableBoxChars=1
+outputInvalidCharGlyph=0
+dontIncludeKerningPairs=0
+useHinting=1
+renderFromOutline=1
+useClearType=1
+
+# character alignment
+paddingDown=0
+paddingUp=0
+paddingRight=0
+paddingLeft=0
+spacingHoriz=1
+spacingVert=1
+useFixedHeight=0
+forceZero=0
+
+# output file
+outWidth=1024
+outHeight=1024
+outBitDepth=8
+fontDescFormat=1
+fourChnlPacked=0
+textureFormat=png
+textureCompression=0
+alphaChnl=1
+redChnl=0
+greenChnl=0
+blueChnl=0
+invA=0
+invR=0
+invG=0
+invB=0
+
+# outline
+outlineThickness=0
+
+# selected chars
+chars=0-0,8-9,13,29,32-126,160-591,658,900-902,904-906,908,910-929,931-974,1024-1119,1122-1123,1138-1141
+chars=1162-1273,7808-7813,7922-7923,7936-7957,7960-7965,7968-8005,8008-8013,8016-8023,8025,8027,8029,8031
+chars=8032-8061,8064-8116,8118-8132,8134-8147,8150-8155,8157-8175,8178-8180,8182-8190,8211-8213,8216-8218
+chars=8220-8222,8224-8226,8230,8240,8249-8250,8260,8304,8308-8313,8320-8329,8364,8366,8372,8377,8531-8542
+chars=8706,8710,8719,8721-8722,8725,8729-8730,8734,8747,8776,8800,8804-8805,9674
+
+# imported icon images

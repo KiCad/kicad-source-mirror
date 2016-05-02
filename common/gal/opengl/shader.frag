@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Fragment shader
@@ -30,9 +30,11 @@
 const float SHADER_LINE                 = 1.0;
 const float SHADER_FILLED_CIRCLE        = 2.0;
 const float SHADER_STROKED_CIRCLE       = 3.0;
+const float SHADER_FONT                 = 4.0;
 
 varying vec4 shaderParams;
 varying vec2 circleCoords;
+uniform sampler2D fontTexture;
 
 void filledCircle( vec2 aCoord )
 {
@@ -66,6 +68,15 @@ void main()
     else if( shaderParams[0] == SHADER_STROKED_CIRCLE )
     {
         strokedCircle( circleCoords, shaderParams[2], shaderParams[3] );
+    }
+    else if( shaderParams[0] == SHADER_FONT )
+    {
+        vec4 texel = texture2D( fontTexture, vec2( shaderParams[1], shaderParams[2] ) );
+
+        if(texel.r < 0.01)
+            discard;
+        else
+            gl_FragColor = vec4(gl_Color.r, gl_Color.g, gl_Color.b, texel.r);
     }
     else
     {

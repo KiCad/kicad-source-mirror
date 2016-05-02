@@ -289,6 +289,21 @@ public:
     }
 
     /**
+     * @brief Draws a text using a bitmap font. It should be faster than StrokeText(),
+     * but can be used only for non-Gerber elements.
+     *
+     * @param aText is the text to be drawn.
+     * @param aPosition is the text position in world coordinates.
+     * @param aRotationAngle is the text rotation angle.
+     */
+    virtual void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
+                             double aRotationAngle )
+    {
+        // Fallback: use stroke font
+        StrokeText( aText, aPosition, aRotationAngle );
+    }
+
+    /**
      * @brief Compute the X and Y size of a given text. The text is expected to be
      * a only one line text.
      *

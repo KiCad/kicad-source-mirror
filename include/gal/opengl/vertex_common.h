@@ -43,6 +43,7 @@ enum SHADER_MODE
     SHADER_LINE,
     SHADER_FILLED_CIRCLE,
     SHADER_STROKED_CIRCLE,
+    SHADER_FONT
 };
 
 typedef struct
