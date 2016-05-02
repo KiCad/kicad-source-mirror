@@ -299,6 +299,18 @@ void OPENGL_GAL::EndDrawing()
 }
 
 
+void OPENGL_GAL::BeginUpdate()
+{
+    cachedManager.Map();
+}
+
+
+void OPENGL_GAL::EndUpdate()
+{
+    cachedManager.Unmap();
+}
+
+
 void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     const VECTOR2D  startEndVector = aEndPoint - aStartPoint;

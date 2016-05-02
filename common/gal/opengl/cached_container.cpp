@@ -33,6 +33,8 @@
 #include <gal/opengl/vertex_manager.h>
 #include <gal/opengl/vertex_item.h>
 #include <gal/opengl/shader.h>
+#include <gal/opengl/utils.h>
+
 #include <confirm.h>
 #include <list>
 #include <cassert>
@@ -45,7 +47,8 @@
 using namespace KIGFX;
 
 CACHED_CONTAINER::CACHED_CONTAINER( unsigned int aSize ) :
-    VERTEX_CONTAINER( aSize ), m_item( NULL )
+    VERTEX_CONTAINER( aSize ), m_item( NULL ), m_isMapped( false ),
+    m_isInitialized( false ), m_glBufferHandle( -1 )
 {
     // In the beginning there is only free space
     m_freeChunks.insert( CHUNK( aSize, 0 ) );
@@ -54,6 +57,18 @@ CACHED_CONTAINER::CACHED_CONTAINER( unsigned int aSize ) :
     m_chunkSize = 0;
     m_chunkOffset = 0;
     m_itemSize = 0;
+}
+
+
+CACHED_CONTAINER::~CACHED_CONTAINER()
+{
+    if( m_isMapped )
+        Unmap();
+
+    if( m_isInitialized )
+    {
+        glDeleteBuffers( 1, &m_glBufferHandle );
+    }
 }
 
 
@@ -103,6 +118,7 @@ void CACHED_CONTAINER::FinishItem()
 VERTEX* CACHED_CONTAINER::Allocate( unsigned int aSize )
 {
     assert( m_item != NULL );
+    assert( m_isMapped );
 
     if( m_failed )
         return NULL;
@@ -181,7 +197,7 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
     // a large amount of memory when there is no use for it
     if( m_freeSpace > ( 0.75 * m_currentSize ) && m_currentSize > m_initialSize )
     {
-        resizeContainer( 0.5 * m_currentSize );
+        defragmentResize( 0.5 * m_currentSize );
     }
 #endif
 }
@@ -189,6 +205,10 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
 
 void CACHED_CONTAINER::Clear()
 {
+    Map();
+    glInvalidateBufferData( GL_ARRAY_BUFFER );
+    Unmap();
+
     m_freeSpace = m_currentSize;
     m_failed = false;
 
@@ -207,9 +227,51 @@ void CACHED_CONTAINER::Clear()
 }
 
 
+void CACHED_CONTAINER::Map()
+{
+    assert( !IsMapped() );
+
+    if( !m_isInitialized )
+        init();
+
+    glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
+    m_vertices = static_cast<VERTEX*>( glMapBuffer( GL_ARRAY_BUFFER, GL_READ_WRITE ) );
+    checkGlError( "mapping vertices buffer" );
+
+    m_isMapped = true;
+}
+
+
+void CACHED_CONTAINER::Unmap()
+{
+    assert( IsMapped() );
+
+    glUnmapBuffer( GL_ARRAY_BUFFER );
+    checkGlError( "unmapping vertices buffer" );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    m_vertices = NULL;
+    checkGlError( "unbinding vertices buffer" );
+
+    m_isMapped = false;
+}
+
+
+void CACHED_CONTAINER::init()
+{
+    glGenBuffers( 1, &m_glBufferHandle );
+    glBindBuffer( GL_COPY_WRITE_BUFFER, m_glBufferHandle );
+    glBufferData( GL_COPY_WRITE_BUFFER, m_currentSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
+    glBindBuffer( GL_COPY_WRITE_BUFFER, 0 );
+    checkGlError( "allocating video memory for cached container" );
+
+    m_isInitialized = true;
+}
+
+
 unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
 {
     assert( aSize > 0 );
+    assert( m_isMapped );
 
 #if CACHED_CONTAINER_TEST > 2
     wxLogDebug( wxT( "Resize 0x%08lx from %d to %d" ), (long) m_item, m_itemSize, aSize );
@@ -224,12 +286,12 @@ unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
         if( aSize < m_freeSpace + m_currentSize )
         {
             // Yes: exponential growing
-            result = resizeContainer( m_currentSize * 2 );
+            result = defragmentResize( m_currentSize * 2 );
         }
         else
         {
             // No: grow to the nearest greater power of 2
-            result = resizeContainer( pow( 2, ceil( log2( m_currentSize * 2 + aSize ) ) ) );
+            result = defragmentResize( pow( 2, ceil( log2( m_currentSize * 2 + aSize ) ) ) );
         }
 
         if( !result )
@@ -243,7 +305,7 @@ unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
     {
         // In the case when there is enough space to store the vertices,
         // but the free space is not continous we should defragment the container
-        if( !defragment() )
+        if( !defragmentResize( m_currentSize ) )
             return UINT_MAX;
 
         // Update the current offset
@@ -288,69 +350,9 @@ unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
     m_freeSpace -= aSize;
     // mergeFreeChunks();   // veery slow and buggy
 
+    m_item->setOffset( newChunkOffset );
+
     return newChunkOffset;
-}
-
-
-bool CACHED_CONTAINER::defragment( VERTEX* aTarget )
-{
-#if CACHED_CONTAINER_TEST > 0
-    wxLogDebug( wxT( "Defragmenting" ) );
-
-    prof_counter totalTime;
-    prof_start( &totalTime );
-#endif
-
-    if( aTarget == NULL )
-    {
-        // No target was specified, so we have to reallocate our own space
-        int size = m_currentSize * sizeof( VERTEX );
-        aTarget = static_cast<VERTEX*>( malloc( size ) );
-
-        if( aTarget == NULL )
-        {
-            DisplayError( NULL, wxString::Format(
-                          wxT( "CACHED_CONTAINER::defragment: Run out of memory (malloc %d bytes)" ),
-                          size ) );
-            return false;
-        }
-    }
-
-    int newOffset = 0;
-    ITEMS::iterator it, it_end;
-
-    for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
-    {
-        VERTEX_ITEM* item = *it;
-        int itemOffset    = item->GetOffset();
-        int itemSize      = item->GetSize();
-
-        // Move an item to the new container
-        memcpy( &aTarget[newOffset], &m_vertices[itemOffset], itemSize * VertexSize );
-
-        // Update new offset
-        item->setOffset( newOffset );
-
-        // Move to the next free space
-        newOffset += itemSize;
-    }
-
-    free( m_vertices );
-    m_vertices = aTarget;
-
-    // Now there is only one big chunk of free memory
-    m_freeChunks.clear();
-    wxASSERT( m_freeSpace > 0 );
-    m_freeChunks.insert( CHUNK( m_freeSpace, m_currentSize - m_freeSpace ) );
-
-#if CACHED_CONTAINER_TEST > 0
-    prof_end( &totalTime );
-
-    wxLogDebug( wxT( "Defragmented the container storing %d vertices / %.1f ms" ),
-                m_currentSize - m_freeSpace, totalTime.msecs() );
-#endif
-
-    return true;
 }
 
 
@@ -415,64 +417,71 @@ void CACHED_CONTAINER::mergeFreeChunks()
 }
 
 
-bool CACHED_CONTAINER::resizeContainer( unsigned int aNewSize )
+bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
 {
 #if CACHED_CONTAINER_TEST > 0
     wxLogDebug( wxT( "Resizing container from %d to %d" ), m_currentSize, aNewSize );
 #endif
 
-    VERTEX* newContainer;
+    // No shrinking if we cannot fit all the data
+    if( aNewSize < m_currentSize && usedSpace() > aNewSize )
+        return false;
 
-    if( aNewSize < m_currentSize )
+#if CACHED_CONTAINER_TEST > 0
+    wxLogDebug( wxT( "Defragmenting" ) );
+    prof_counter totalTime;
+    prof_start( &totalTime );
+#endif
+
+    GLuint newBuffer;
+
+    Unmap();
+    glGenBuffers( 1, &newBuffer );
+    glBindBuffer( GL_COPY_WRITE_BUFFER, newBuffer );
+    glBufferData( GL_COPY_WRITE_BUFFER, aNewSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
+    glBindBuffer( GL_COPY_READ_BUFFER, m_glBufferHandle );
+    checkGlError( "resizing vertex buffer" );
+
+    int newOffset = 0;
+    ITEMS::iterator it, it_end;
+
+    for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
     {
-        // Shrinking container
-        // Sanity check, no shrinking if we cannot fit all the data
-        if( usedSpace() > aNewSize )
-            return false;
+        VERTEX_ITEM* item = *it;
+        int itemOffset    = item->GetOffset();
+        int itemSize      = item->GetSize();
 
-        int size = aNewSize * sizeof( VERTEX );
-        newContainer = static_cast<VERTEX*>( malloc( size ) );
+        // Move an item to the new container
+        glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
+                itemOffset * VertexSize, newOffset * VertexSize, itemSize * VertexSize );
 
-        if( newContainer == NULL )
-        {
-            DisplayError( NULL, wxString::Format(
-                          wxT( "CACHED_CONTAINER::resizeContainer:\n"
-                               "Run out of memory (malloc %d bytes)" ),
-                          size ) );
-            return false;
-        }
+        // Update new offset
+        item->setOffset( newOffset );
 
-        // Defragment directly to the new, smaller container
-        defragment( newContainer );
-
-        // We have to correct freeChunks after defragmentation
-        m_freeChunks.clear();
-        wxASSERT( aNewSize - usedSpace() > 0 );
-        m_freeChunks.insert( CHUNK( aNewSize - usedSpace(), usedSpace() ) );
-    }
-    else
-    {
-        // Enlarging container
-        int size = aNewSize * sizeof( VERTEX );
-        newContainer = static_cast<VERTEX*>( realloc( m_vertices, size ) );
-
-        if( newContainer == NULL )
-        {
-            DisplayError( NULL, wxString::Format(
-                          wxT( "CACHED_CONTAINER::resizeContainer:\n"
-                               "Run out of memory (realloc from %d to %d bytes)" ),
-                          m_currentSize * sizeof( VERTEX ), size ) );
-            return false;
-        }
-
-        // Add an entry for the new memory chunk at the end of the container
-        m_freeChunks.insert( CHUNK( aNewSize - m_currentSize, m_currentSize ) );
+        // Move to the next free space
+        newOffset += itemSize;
     }
 
-    m_vertices = newContainer;
+    glBindBuffer( GL_COPY_WRITE_BUFFER, 0 );
+    glBindBuffer( GL_COPY_READ_BUFFER, 0 );
+    glDeleteBuffers( 1, &m_glBufferHandle );
+    m_glBufferHandle = newBuffer;
+    checkGlError( "switching buffers during defragmentation" );
+    Map();
 
-    m_freeSpace   += ( aNewSize - m_currentSize );
+#if CACHED_CONTAINER_TEST > 0
+    prof_end( &totalTime );
+
+    wxLogDebug( wxT( "Defragmented the container storing %d vertices / %.1f ms" ),
+                m_currentSize - m_freeSpace, totalTime.msecs() );
+#endif
+
+    m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;
+
+    // Now there is only one big chunk of free memory
+    m_freeChunks.clear();
+    m_freeChunks.insert( CHUNK( m_freeSpace, m_currentSize - m_freeSpace ) );
 
     return true;
 }

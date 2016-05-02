@@ -49,6 +49,19 @@ public:
     virtual ~VERTEX_CONTAINER();
 
     /**
+     * Function Map()
+     * prepares the container for vertices updates.
+     */
+    virtual void Map() {}
+
+    /**
+     * Function Unmap()
+     * finishes the vertices updates stage.
+     */
+    virtual void Unmap()
+    {}
+
+    /**
      * Function SetItem()
      * sets the item in order to modify or finishes its current modifications.
      * @param aItem is the item or NULL in case of finishing the item.

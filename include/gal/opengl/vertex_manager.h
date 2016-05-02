@@ -59,6 +59,18 @@ public:
     VERTEX_MANAGER( bool aCached );
 
     /**
+     * Function Map()
+     * maps vertex buffer.
+     */
+    void Map();
+
+    /**
+     * Function Unmap()
+     * unmaps vertex buffer.
+     */
+    void Unmap();
+
+    /**
      * Function Reserve()
      * allocates space for vertices, so it will be used with subsequent Vertex() calls.
      *

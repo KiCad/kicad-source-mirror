@@ -79,6 +79,12 @@ public:
     /// @brief End the drawing, needs to be called for every new frame.
     virtual void EndDrawing() {};
 
+    /// @brief Enables item update mode.
+    virtual void BeginUpdate() {}
+
+    /// @brief Disables item update mode.
+    virtual void EndUpdate() {}
+
     /**
      * @brief Draw a line.
      *

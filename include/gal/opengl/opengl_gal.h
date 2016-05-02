@@ -34,6 +34,7 @@
 #include <gal/opengl/shader.h>
 #include <gal/opengl/vertex_manager.h>
 #include <gal/opengl/vertex_item.h>
+#include <gal/opengl/cached_container.h>
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/opengl_compositor.h>
 
@@ -94,6 +95,12 @@ public:
 
     /// @copydoc GAL::EndDrawing()
     virtual void EndDrawing();
+
+    /// @copydoc GAL::BeginUpdate()
+    virtual void BeginUpdate();
+
+    /// @copydoc GAL::EndUpdate()
+    virtual void EndUpdate();
 
     /// @copydoc GAL::DrawLine()
     virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );

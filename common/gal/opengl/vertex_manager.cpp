@@ -49,6 +49,18 @@ VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
 }
 
 
+void VERTEX_MANAGER::Map()
+{
+    m_container->Map();
+}
+
+
+void VERTEX_MANAGER::Unmap()
+{
+    m_container->Unmap();
+}
+
+
 bool VERTEX_MANAGER::Reserve( unsigned int aSize )
 {
     assert( m_reservedSpace == 0 && m_reserved == NULL );

@@ -422,9 +422,11 @@ void VIEW::UpdateLayerColor( int aLayer )
 
     r.SetMaximum();
 
+    m_gal->BeginUpdate();
     updateItemsColor visitor( aLayer, m_painter, m_gal );
     m_layers[aLayer].items->Query( r, visitor );
     MarkTargetDirty( m_layers[aLayer].target );
+    m_gal->EndUpdate();
 }
 
 
@@ -433,6 +435,7 @@ void VIEW::UpdateAllLayersColor()
     BOX2I r;
 
     r.SetMaximum();
+    m_gal->BeginUpdate();
 
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
@@ -446,6 +449,7 @@ void VIEW::UpdateAllLayersColor()
         l->items->Query( r, visitor );
     }
 
+    m_gal->EndUpdate();
     MarkDirty();
 }
 
@@ -482,8 +486,11 @@ void VIEW::ChangeLayerDepth( int aLayer, int aDepth )
 
     r.SetMaximum();
 
+    m_gal->BeginUpdate();
     changeItemsDepth visitor( aLayer, aDepth, m_gal );
     m_layers[aLayer].items->Query( r, visitor );
+    m_gal->EndUpdate();
+
     MarkTargetDirty( m_layers[aLayer].target );
 }
 
@@ -1009,6 +1016,8 @@ void VIEW::RecacheAllItems( bool aImmediately )
     prof_start( &totalRealTime );
 #endif /* __WXDEBUG__ */
 
+    m_gal->BeginUpdate();
+
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
         VIEW_LAYER* l = &( ( *i ).second );
@@ -1022,6 +1031,8 @@ void VIEW::RecacheAllItems( bool aImmediately )
             MarkTargetDirty( l->target );
         }
     }
+
+    m_gal->EndUpdate();
 
 #ifdef __WXDEBUG__
     prof_end( &totalRealTime );

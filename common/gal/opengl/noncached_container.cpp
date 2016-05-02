@@ -29,6 +29,7 @@
  */
 
 #include <gal/opengl/noncached_container.h>
+#include <cstring>
 #include <cstdlib>
 
 using namespace KIGFX;
@@ -36,11 +37,14 @@ using namespace KIGFX;
 NONCACHED_CONTAINER::NONCACHED_CONTAINER( unsigned int aSize ) :
     VERTEX_CONTAINER( aSize ), m_freePtr( 0 )
 {
+    m_vertices = static_cast<VERTEX*>( malloc( aSize * sizeof( VERTEX ) ) );
+    memset( m_vertices, 0x00, aSize * sizeof( VERTEX ) );
 }
 
 
 NONCACHED_CONTAINER::~NONCACHED_CONTAINER()
 {
+    free( m_vertices );
 }
 
 

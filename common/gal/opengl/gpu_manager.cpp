@@ -69,7 +69,6 @@ GPU_MANAGER::~GPU_MANAGER()
 void GPU_MANAGER::SetShader( SHADER& aShader )
 {
     m_shader = &aShader;
-
     m_shaderAttrib = m_shader->GetAttribute( "attrShaderParams" );
 
     if( m_shaderAttrib == -1 )
@@ -82,7 +81,7 @@ void GPU_MANAGER::SetShader( SHADER& aShader )
 // Cached manager
 GPU_CACHED_MANAGER::GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer ) :
     GPU_MANAGER( aContainer ), m_buffersInitialized( false ), m_indicesPtr( NULL ),
-    m_verticesBuffer( 0 ), m_indicesBuffer( 0 ), m_indicesSize( 0 ), m_indicesCapacity( 0 )
+    m_indicesBuffer( 0 ), m_indicesSize( 0 ), m_indicesCapacity( 0 )
 {
     // Allocate the biggest possible buffer for indices
     resizeIndices( aContainer->GetSize() );
@@ -94,23 +93,7 @@ GPU_CACHED_MANAGER::~GPU_CACHED_MANAGER()
     if( m_buffersInitialized )
     {
         glBindBuffer( GL_ARRAY_BUFFER, 0 );
-        glDeleteBuffers( 1, &m_verticesBuffer );
         glDeleteBuffers( 1, &m_indicesBuffer );
-    }
-}
-
-
-void GPU_CACHED_MANAGER::Initialize()
-{
-    wxASSERT( !m_buffersInitialized );
-
-    if( !m_buffersInitialized )
-    {
-        glGenBuffers( 1, &m_indicesBuffer );
-        checkGlError( "generating vertices buffer" );
-        glGenBuffers( 1, &m_verticesBuffer );
-        checkGlError( "generating vertices buffer" );
-        m_buffersInitialized = true;
     }
 }
 
@@ -119,8 +102,15 @@ void GPU_CACHED_MANAGER::BeginDrawing()
 {
     wxASSERT( !m_isDrawing );
 
+    if( !m_buffersInitialized )
+    {
+        glGenBuffers( 1, &m_indicesBuffer );
+        checkGlError( "generating vertices buffer" );
+        m_buffersInitialized = true;
+    }
+
     if( m_container->IsDirty() )
-        uploadToGpu();
+        resizeIndices( m_container->GetSize() );
 
     // Number of vertices to be drawn in the EndDrawing()
     m_indicesSize = 0;
@@ -160,6 +150,11 @@ void GPU_CACHED_MANAGER::EndDrawing()
 
     wxASSERT( m_isDrawing );
 
+    CACHED_CONTAINER* cached = static_cast<CACHED_CONTAINER*>( m_container );
+
+    if( cached->IsMapped() )
+        cached->Unmap();
+
     if( m_indicesSize == 0 )
     {
         m_isDrawing = false;
@@ -171,7 +166,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
     glEnableClientState( GL_COLOR_ARRAY );
 
     // Bind vertices data buffers
-    glBindBuffer( GL_ARRAY_BUFFER, m_verticesBuffer );
+    glBindBuffer( GL_ARRAY_BUFFER, cached->GetBufferHandle() );
     glVertexPointer( CoordStride, GL_FLOAT, VertexSize, 0 );
     glColorPointer( ColorStride, GL_UNSIGNED_BYTE, VertexSize, (GLvoid*) ColorOffset );
 
@@ -185,7 +180,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_indicesBuffer );
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, m_indicesSize * sizeof(int),
-            (GLvoid*) m_indices.get(), GL_STATIC_DRAW );
+            (GLvoid*) m_indices.get(), GL_DYNAMIC_DRAW );
 
     glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, 0 );
 
@@ -216,38 +211,6 @@ void GPU_CACHED_MANAGER::EndDrawing()
 }
 
 
-void GPU_CACHED_MANAGER::uploadToGpu()
-{
-#ifdef __WXDEBUG__
-    prof_counter totalTime;
-    prof_start( &totalTime );
-#endif /* __WXDEBUG__  */
-
-    if( !m_buffersInitialized )
-        Initialize();
-
-    int bufferSize    = m_container->GetSize();
-    GLfloat* vertices = (GLfloat*) m_container->GetAllVertices();
-
-    // Upload vertices coordinates and shader types to GPU memory
-    glBindBuffer( GL_ARRAY_BUFFER, m_verticesBuffer );
-    checkGlError( "binding vertices buffer" );
-    glBufferData( GL_ARRAY_BUFFER, bufferSize * VertexSize, vertices, GL_STATIC_DRAW );
-    checkGlError( "transferring vertices" );
-    glBindBuffer( GL_ARRAY_BUFFER, 0 );
-    checkGlError( "unbinding vertices buffer" );
-
-    // Allocate the biggest possible buffer for indices
-    resizeIndices( bufferSize );
-
-#ifdef __WXDEBUG__
-    prof_end( &totalTime );
-    wxLogTrace( "GAL_PROFILE",
-                wxT( "Uploading %d vertices to GPU / %.1f ms" ), bufferSize, totalTime.msecs() );
-#endif /* __WXDEBUG__ */
-}
-
-
 void GPU_CACHED_MANAGER::resizeIndices( unsigned int aNewSize )
 {
     if( aNewSize > m_indicesCapacity )
@@ -262,12 +225,6 @@ void GPU_CACHED_MANAGER::resizeIndices( unsigned int aNewSize )
 GPU_NONCACHED_MANAGER::GPU_NONCACHED_MANAGER( VERTEX_CONTAINER* aContainer ) :
     GPU_MANAGER( aContainer )
 {
-}
-
-
-void GPU_NONCACHED_MANAGER::Initialize()
-{
-    // Nothing has to be intialized
 }
 
 

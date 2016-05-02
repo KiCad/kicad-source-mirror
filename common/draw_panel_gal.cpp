@@ -152,7 +152,11 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     KIGFX::PCB_RENDER_SETTINGS* settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_painter->GetSettings() );
 
     m_viewControls->UpdateScrollbars();
+
+    m_gal->BeginUpdate();
     m_view->UpdateItems();
+    m_gal->EndUpdate();
+
     m_gal->BeginDrawing();
     m_gal->ClearScreen( settings->GetBackgroundColor() );
 

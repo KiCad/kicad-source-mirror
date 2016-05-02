@@ -48,12 +48,6 @@ public:
     virtual ~GPU_MANAGER();
 
     /**
-     * @brief Initializes everything needed to use vertex buffer objects (should be called when
-     * there is an OpenGL context available).
-     */
-    virtual void Initialize() = 0;
-
-    /**
      * Function BeginDrawing()
      * Prepares the stored data to be drawn.
      */
@@ -109,9 +103,6 @@ public:
     GPU_CACHED_MANAGER( VERTEX_CONTAINER* aContainer );
     ~GPU_CACHED_MANAGER();
 
-    ///> @copydoc GPU_MANAGER::Initialize()
-    virtual void Initialize();
-
     ///> @copydoc GPU_MANAGER::BeginDrawing()
     virtual void BeginDrawing();
 
@@ -124,14 +115,13 @@ public:
     ///> @copydoc GPU_MANAGER::EndDrawing()
     virtual void EndDrawing();
 
-protected:
-    /**
-     * Function uploadToGpu
-     * Rebuilds vertex buffer object using stored VERTEX_ITEMs and sends it to the graphics card
-     * memory.
-     */
-    virtual void uploadToGpu();
+    ///> Maps vertex buffer stored in GPU memory.
+    void Map();
 
+    ///> Unmaps vertex buffer.
+    void Unmap();
+
+protected:
     ///> Resizes the indices buffer to aNewSize if necessary
     void resizeIndices( unsigned int aNewSize );
 
@@ -143,9 +133,6 @@ protected:
 
     ///> Pointer to the first free cell in the indices buffer
     GLuint* m_indicesPtr;
-
-    ///> Handle to vertices buffer
-    GLuint  m_verticesBuffer;
 
     ///> Handle to indices buffer
     GLuint  m_indicesBuffer;
@@ -162,9 +149,6 @@ class GPU_NONCACHED_MANAGER : public GPU_MANAGER
 {
 public:
     GPU_NONCACHED_MANAGER( VERTEX_CONTAINER* aContainer );
-
-    ///> @copydoc GPU_MANAGER::Initialize()
-    virtual void Initialize();
 
     ///> @copydoc GPU_MANAGER::BeginDrawing()
     virtual void BeginDrawing();
