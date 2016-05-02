@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +38,7 @@
 #include <msgpanel.h>
 
 class BOARD;
+class EDA_DRAW_FRAME;
 class TOOL_DISPATCHER;
 
 namespace KIGFX
@@ -165,6 +167,27 @@ public:
      */
     double GetLegacyZoom() const;
 
+    /**
+     * Function GetParentEDAFrame()
+     * Returns parent EDA_DRAW_FRAME, if available or NULL otherwise.
+     */
+    EDA_DRAW_FRAME* GetParentEDAFrame() const
+    {
+        return m_edaFrame;
+    }
+
+    /**
+     * Function SaveGalSettings()
+     * Stores GAL related settings in the configuration storage.
+     */
+    virtual bool SaveGalSettings();
+
+    /**
+     * Function LoadGalSettings()
+     * Loads GAL related settings from the configuration storage.
+     */
+    virtual bool LoadGalSettings();
+
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
@@ -177,6 +200,9 @@ protected:
 
     /// Pointer to the parent window
     wxWindow*                m_parent;
+
+    /// Parent EDA_DRAW_FRAME (if available)
+    EDA_DRAW_FRAME*          m_edaFrame;
 
     /// Last timestamp when the panel was refreshed
     wxLongLong               m_lastRefresh;
@@ -214,6 +240,9 @@ protected:
     /// Flag to indicate that focus should be regained on the next mouse event. It is a workaround
     /// for cases when the panel loses keyboard focus, so it does not react to hotkeys anymore.
     bool                     m_lostFocus;
+
+    /// Grid style setting string
+    static const wxChar GRID_STYLE_CFG[];
 };
 
 #endif
