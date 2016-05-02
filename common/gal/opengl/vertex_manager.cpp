@@ -49,7 +49,7 @@ VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
 }
 
 
-void VERTEX_MANAGER::Reserve( unsigned int aSize )
+bool VERTEX_MANAGER::Reserve( unsigned int aSize )
 {
     assert( m_reservedSpace == 0 && m_reserved == NULL );
 
@@ -66,14 +66,16 @@ void VERTEX_MANAGER::Reserve( unsigned int aSize )
             show_err = false;
         }
 
-        return;
+        return false;
     }
 
     m_reservedSpace = aSize;
+
+    return true;
 }
 
 
-void VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ )
+bool VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ )
 {
     // flag to avoid hanging by calling DisplayError too many times:
     static bool show_err = true;
@@ -102,14 +104,16 @@ void VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ )
             show_err = false;
         }
 
-        return;
+        return false;
     }
 
     putVertex( *newVertex, aX, aY, aZ );
+
+    return true;
 }
 
 
-void VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize )
+bool VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize )
 {
     // flag to avoid hanging by calling DisplayError too many times:
     static bool show_err = true;
@@ -125,7 +129,7 @@ void VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize )
             show_err = false;
         }
 
-        return;
+        return false;
     }
 
     // Put vertices in already allocated memory chunk
@@ -133,6 +137,8 @@ void VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize )
     {
         putVertex( newVertex[i], aVertices[i].x, aVertices[i].y, aVertices[i].z );
     }
+
+    return true;
 }
 
 

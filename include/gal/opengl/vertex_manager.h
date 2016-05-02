@@ -63,8 +63,9 @@ public:
      * allocates space for vertices, so it will be used with subsequent Vertex() calls.
      *
      * @param aSize is the number of vertices that should be available in the reserved space.
+     * @return True if successful, false otherwise.
      */
-    void Reserve( unsigned int aSize );
+    bool Reserve( unsigned int aSize );
 
     /**
      * Function Vertex()
@@ -74,10 +75,11 @@ public:
      * matrix applied.
      *
      * @param aVertex contains vertex coordinates.
+     * @return True if successful, false otherwise.
      */
-    inline void Vertex( const VERTEX& aVertex )
+    inline bool Vertex( const VERTEX& aVertex )
     {
-        Vertex( aVertex.x, aVertex.y, aVertex.z );
+        return Vertex( aVertex.x, aVertex.y, aVertex.z );
     }
 
     /**
@@ -88,8 +90,9 @@ public:
      * @param aX is the X coordinate of the new vertex.
      * @param aY is the Y coordinate of the new vertex.
      * @param aZ is the Z coordinate of the new vertex.
+     * @return True if successful, false otherwise.
      */
-    void Vertex( GLfloat aX, GLfloat aY, GLfloat aZ );
+    bool Vertex( GLfloat aX, GLfloat aY, GLfloat aZ );
 
     /**
      * Function Vertices()
@@ -101,8 +104,9 @@ public:
      *
      * @param aVertices contains vertices to be added
      * @param aSize is the number of vertices to be added.
+     * @return True if successful, false otherwise.
      */
-    void Vertices( const VERTEX aVertices[], unsigned int aSize );
+    bool Vertices( const VERTEX aVertices[], unsigned int aSize );
 
     /**
      * Function Color()
