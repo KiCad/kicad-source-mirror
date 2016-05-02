@@ -261,6 +261,7 @@ private:
     static wxGLContext*     glContext;              ///< OpenGL context of wxWidgets
     wxEvtHandler*           mouseListener;
     wxEvtHandler*           paintListener;
+    static int              instanceCounter;
 
     // Vertex buffer objects related fields
     typedef std::map< unsigned int, boost::shared_ptr<VERTEX_ITEM> > GROUPS_MAP;

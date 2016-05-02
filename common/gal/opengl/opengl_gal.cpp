@@ -42,7 +42,9 @@ using namespace KIGFX;
 
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
+
 wxGLContext* OPENGL_GAL::glContext = NULL;
+int OPENGL_GAL::instanceCounter = 0;
 
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                         wxEvtHandler* aPaintListener, const wxString& aName ) :
@@ -59,6 +61,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     // Check if OpenGL requirements are met
     runTest();
+    ++instanceCounter;
 
     // Make VBOs use shaders
     cachedManager.SetShader( shader );
@@ -118,6 +121,11 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 OPENGL_GAL::~OPENGL_GAL()
 {
     glFlush();
+
+    if( --instanceCounter == 0 )
+    {
+        delete OPENGL_GAL::glContext;
+    }
 
     gluDeleteTess( tesselator );
     ClearCache();
