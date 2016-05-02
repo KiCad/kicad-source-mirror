@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -29,6 +29,7 @@
  */
 
 #include <gal/opengl/opengl_compositor.h>
+#include <gal/opengl/utils.h>
 
 #include <stdexcept>
 #include <cassert>
@@ -36,11 +37,9 @@
 using namespace KIGFX;
 
 OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
-    m_initialized( false ), m_current( 0 ), m_currentFbo( DIRECT_RENDERING )
+    m_initialized( false ), m_curBuffer( 0 ),
+    m_mainFbo( 0 ), m_depthBuffer( 0 ), m_curFbo( DIRECT_RENDERING )
 {
-    // Avoid not initialized members:
-    m_framebuffer = 0;
-    m_depthBuffer = 0;
 }
 
 
@@ -58,24 +57,25 @@ void OPENGL_COMPOSITOR::Initialize()
 
     // We need framebuffer objects for drawing the screen contents
     // Generate framebuffer and a depth buffer
-    glGenFramebuffersEXT( 1, &m_framebuffer );
-    glBindFramebufferEXT( GL_FRAMEBUFFER, m_framebuffer );
-    m_currentFbo = m_framebuffer;
+    glGenFramebuffersEXT( 1, &m_mainFbo );
+    checkGlError( "generating framebuffer" );
+    bindFb( m_mainFbo );
 
     // Allocate memory for the depth buffer
     // Attach the depth buffer to the framebuffer
     glGenRenderbuffersEXT( 1, &m_depthBuffer );
+    checkGlError( "generating renderbuffer" );
     glBindRenderbufferEXT( GL_RENDERBUFFER_EXT, m_depthBuffer );
+    checkGlError( "binding renderbuffer" );
 
-    // Use here a size of 24 bits for the depth buffer, 8 bits for the stencil buffer
-    // this is required later for anti-aliasing
     glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT16, m_width, m_height );
+    checkGlError( "creating renderbuffer storage" );
     glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT,
                                   GL_RENDERBUFFER_EXT, m_depthBuffer );
+    checkGlError( "attaching renderbuffer" );
 
     // Unbind the framebuffer, so by default all the rendering goes directly to the display
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, DIRECT_RENDERING );
-    m_currentFbo = DIRECT_RENDERING;
+    bindFb( DIRECT_RENDERING );
 
     m_initialized = true;
 }
@@ -95,16 +95,24 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 {
     assert( m_initialized );
 
-    unsigned int maxBuffers;
+    int maxBuffers, maxTextureSize;
 
     // Get the maximum number of buffers
     glGetIntegerv( GL_MAX_COLOR_ATTACHMENTS, (GLint*) &maxBuffers );
 
-    if( usedBuffers() >= maxBuffers )
+    if( (int) usedBuffers() >= maxBuffers )
     {
-        throw std::runtime_error("Cannot create more framebuffers. OpenGL rendering "
+        throw std::runtime_error( "Cannot create more framebuffers. OpenGL rendering "
                         "backend requires at least 3 framebuffers. You may try to update/change "
-                        "your graphic drivers.");
+                        "your graphic drivers." );
+    }
+
+    glGetIntegerv( GL_MAX_TEXTURE_SIZE, (GLint*) &maxTextureSize );
+
+    if( maxTextureSize < (int) m_width || maxTextureSize < (int) m_height )
+    {
+        throw std::runtime_error( "Requested texture size is not supported. "
+                                   "Could not create a buffer." );
     }
 
     // GL_COLOR_ATTACHMENTn are consecutive integers
@@ -113,18 +121,20 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 
     // Generate the texture for the pixel storage
     glGenTextures( 1, &textureTarget );
+    checkGlError( "generating framebuffer texture target" );
     glBindTexture( GL_TEXTURE_2D, textureTarget );
+    checkGlError( "binding framebuffer texture target" );
 
     // Set texture parameters
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA,
                   GL_UNSIGNED_BYTE, NULL );
+    checkGlError( "creating framebuffer texture" );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 
     // Bind the texture to the specific attachment point, clear and rebind the screen
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebuffer );
-    m_currentFbo = m_framebuffer;
+    bindFb( m_mainFbo );
     glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, attachmentPoint,
                                GL_TEXTURE_2D, textureTarget, 0 );
 
@@ -140,34 +150,34 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-            throw std::runtime_error(  "The framebuffer attachment points are incomplete." );
+            throw std::runtime_error( "The framebuffer attachment points are incomplete." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
-            throw std::runtime_error(  "The framebuffer does not have at least one "
+            throw std::runtime_error( "The framebuffer does not have at least one "
                     "image attached to it." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
-            throw std::runtime_error(  "The framebuffer read buffer is incomplete." );
+            throw std::runtime_error( "The framebuffer read buffer is incomplete." );
             break;
 
         case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
-            throw std::runtime_error(  "The combination of internal formats of the attached "
+            throw std::runtime_error( "The combination of internal formats of the attached "
                     "images violates an implementation-dependent set of restrictions." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
-            throw std::runtime_error(  "GL_RENDERBUFFER_SAMPLES is not the same for "
+            throw std::runtime_error( "GL_RENDERBUFFER_SAMPLES is not the same for "
                     "all attached renderbuffers" );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
-            throw std::runtime_error(  "Framebuffer incomplete layer targets errors." );
+            throw std::runtime_error( "Framebuffer incomplete layer targets errors." );
             break;
 
         default:
-            throw std::runtime_error(  "Cannot create the framebuffer." );
+            throw std::runtime_error( "Cannot create the framebuffer." );
             break;
         }
 
@@ -177,8 +187,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
     ClearBuffer();
 
     // Return to direct rendering (we were asked only to create a buffer, not switch to one)
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, DIRECT_RENDERING );
-    m_currentFbo = DIRECT_RENDERING;
+    bindFb( DIRECT_RENDERING );
 
     // Store the new buffer
     OPENGL_BUFFER buffer = { textureTarget, attachmentPoint };
@@ -190,24 +199,18 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 
 void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 {
-    if( aBufferHandle > usedBuffers() )
-        return;
+    assert( m_initialized );
+    assert( aBufferHandle <= usedBuffers() );
 
-    // Change the rendering destination to the selected attachment point
-    if( aBufferHandle == DIRECT_RENDERING )
-    {
-        m_currentFbo = DIRECT_RENDERING;
-    }
-    else if( m_currentFbo != m_framebuffer )
-    {
-        glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebuffer );
-        m_currentFbo = m_framebuffer;
-    }
+    // Either unbind the FBO for direct rendering, or bind the one with target textures
+    bindFb( aBufferHandle == DIRECT_RENDERING ? DIRECT_RENDERING : m_mainFbo );
 
-    if( m_currentFbo != DIRECT_RENDERING )
+    // Switch the target texture
+    if( m_curFbo != DIRECT_RENDERING )
     {
-        m_current = aBufferHandle - 1;
-        glDrawBuffer( m_buffers[m_current].attachmentPoint );
+        m_curBuffer = aBufferHandle - 1;
+        glDrawBuffer( m_buffers[m_curBuffer].attachmentPoint );
+        checkGlError( "setting draw buffer" );
     }
 }
 
@@ -227,8 +230,7 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
     assert( aBufferHandle != 0 && aBufferHandle <= usedBuffers() );
 
     // Switch to the main framebuffer and blit the scene
-    glBindFramebufferEXT( GL_FRAMEBUFFER, DIRECT_RENDERING );
-    m_currentFbo = DIRECT_RENDERING;
+    bindFb( DIRECT_RENDERING );
 
     // Depth test has to be disabled to make transparency working
     glDisable( GL_DEPTH_TEST );
@@ -268,23 +270,33 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 }
 
 
+void OPENGL_COMPOSITOR::bindFb( unsigned int aFb ) {
+    // Currently there are only 2 valid FBOs
+    assert( aFb == DIRECT_RENDERING || aFb == m_mainFbo );
+
+    if( m_curFbo != aFb )
+    {
+        glBindFramebufferEXT( GL_FRAMEBUFFER, aFb );
+        checkGlError( "switching framebuffer" );
+        m_curFbo = aFb;
+    }
+}
+
+
 void OPENGL_COMPOSITOR::clean()
 {
     assert( m_initialized );
 
-    glBindFramebufferEXT( GL_FRAMEBUFFER, DIRECT_RENDERING );
-    m_currentFbo = DIRECT_RENDERING;
+    bindFb( DIRECT_RENDERING );
 
-    OPENGL_BUFFERS::const_iterator it;
-
-    for( it = m_buffers.begin(); it != m_buffers.end(); ++it )
+    for( OPENGL_BUFFERS::const_iterator it = m_buffers.begin(); it != m_buffers.end(); ++it )
     {
         glDeleteTextures( 1, &it->textureTarget );
     }
 
     m_buffers.clear();
 
-    glDeleteFramebuffersEXT( 1, &m_framebuffer );
+    glDeleteFramebuffersEXT( 1, &m_mainFbo );
     glDeleteRenderbuffersEXT( 1, &m_depthBuffer );
 
     m_initialized = false;
