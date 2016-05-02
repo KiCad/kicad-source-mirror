@@ -75,74 +75,6 @@ public:
     void Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle );
 
     /**
-     * @brief Set the glyph size.
-     *
-     * @param aGlyphSize is the glyph size.
-     */
-    inline void SetGlyphSize( const VECTOR2D aGlyphSize )
-    {
-        m_glyphSize = aGlyphSize;
-    }
-
-    /**
-     * @return the current glyph size.
-     */
-    VECTOR2D GetGlyphSize() const
-    {
-        return m_glyphSize;
-    }
-
-    /**
-     * @brief Set a bold property of current font.
-     *
-     * @param aBold tells if the font should be bold or not.
-     */
-    inline void SetBold( const bool aBold )
-    {
-        m_bold = aBold;
-    }
-
-    /**
-     * @brief Set an italic property of current font.
-     *
-     * @param aItalic tells if the font should be italic or not.
-     */
-    inline void SetItalic( const bool aItalic )
-    {
-        m_italic = aItalic;
-    }
-
-    /**
-     * @brief Set a mirrored property of text.
-     *
-     * @param aMirrored tells if the text should be mirrored or not.
-     */
-    inline void SetMirrored( const bool aMirrored )
-    {
-        m_mirrored = aMirrored;
-    }
-
-    /**
-     * @brief Set the horizontal justify for text drawing.
-     *
-     * @param aHorizontalJustify is the horizontal justify value.
-     */
-    inline void SetHorizontalJustify( const EDA_TEXT_HJUSTIFY_T aHorizontalJustify )
-    {
-        m_horizontalJustify = aHorizontalJustify;
-    }
-
-    /**
-     * @brief Set the vertical justify for text drawing.
-     *
-     * @param aVerticalJustify is the vertical justify value.
-     */
-    inline void SetVerticalJustify( const EDA_TEXT_VJUSTIFY_T aVerticalJustify )
-    {
-        m_verticalJustify = aVerticalJustify;
-    }
-
-    /**
      * Function SetGAL
      * Changes Graphics Abstraction Layer used for drawing items for a new one.
      * @param aGal is the new GAL instance.
@@ -194,13 +126,6 @@ private:
     GAL*                m_gal;                  ///< Pointer to the GAL
     GLYPH_LIST          m_glyphs;               ///< Glyph list
     std::vector<BOX2D>  m_glyphBoundingBoxes;   ///< Bounding boxes of the glyphs
-    VECTOR2D            m_glyphSize;            ///< Size of the glyphs
-    EDA_TEXT_HJUSTIFY_T m_horizontalJustify;    ///< Horizontal justification
-    EDA_TEXT_VJUSTIFY_T m_verticalJustify;      ///< Vertical justification
-    bool                m_bold;
-    bool                m_italic;
-    bool                m_mirrored;
-    bool                m_overbar;              ///< Properties of text
 
     /**
      * @brief Compute the X and Y size of a given text. The text is expected to be
@@ -216,7 +141,7 @@ private:
      * This is the distance between the text base line and the overbar.
      * @return the relative position of the overbar axis.
      */
-    double   computeOverbarVerticalPosition() const;
+    double computeOverbarVerticalPosition() const;
 
     /**
      * @brief Returns a single line height using current settings.

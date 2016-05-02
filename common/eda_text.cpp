@@ -97,8 +97,8 @@ void EDA_TEXT::SetOrientation( double aOrientation )
 
 int EDA_TEXT::LenSize( const wxString& aLine ) const
 {
-    basic_gal.SetItalic( m_Italic );
-    basic_gal.SetBold( m_Bold );
+    basic_gal.SetFontItalic( m_Italic );
+    basic_gal.SetFontBold( m_Bold );
     basic_gal.SetGlyphSize( VECTOR2D( m_Size ) );
 
     VECTOR2D tsize = basic_gal.GetTextLineSize( aLine );

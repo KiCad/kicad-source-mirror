@@ -314,41 +314,114 @@ public:
      */
     virtual void SetTextAttributes( const EDA_TEXT* aText );
 
-    /// @copydoc STROKE_FONT::SetGlyphSize()
+    /**
+     * @brief Set the font glyph size.
+     *
+     * @param aGlyphSize is the new font glyph size.
+     */
     inline void SetGlyphSize( const VECTOR2D aGlyphSize )
     {
-        strokeFont.SetGlyphSize( aGlyphSize );
+        textProperties.m_glyphSize = aGlyphSize;
     }
 
-    /// @copydoc STROKE_FONT::SetBold()
-    inline void SetBold( const bool aBold )
+    /**
+     * @return the current font glyph size.
+     */
+    const VECTOR2D& GetGlyphSize() const
     {
-        strokeFont.SetBold( aBold );
+        return textProperties.m_glyphSize;
     }
 
-    /// @copydoc STROKE_FONT::SetItalic()
-    inline void SetItalic( const bool aItalic )
+    /**
+     * @brief Set bold property of current font.
+     *
+     * @param aBold tells if the font should be bold or not.
+     */
+    inline void SetFontBold( const bool aBold )
     {
-        strokeFont.SetItalic( aItalic );
+        textProperties.m_bold = aBold;
     }
 
-    /// @copydoc STROKE_FONT::SetMirrored()
-    inline void SetMirrored( const bool aMirrored )
+    /**
+     * @brief Returns true if current font has 'bold' attribute enabled.
+     */
+    inline bool IsFontBold() const
     {
-        strokeFont.SetMirrored( aMirrored );
+        return textProperties.m_bold;
     }
 
-    /// @copydoc STROKE_FONT::SetHorizontalJustify()
+    /**
+     * @brief Set italic property of current font.
+     *
+     * @param aItalic tells if the font should be italic or not.
+     */
+    inline void SetFontItalic( const bool aItalic )
+    {
+        textProperties.m_italic = aItalic;
+    }
+
+    /**
+     * @brief Returns true if current font has 'italic' attribute enabled.
+     */
+    inline bool IsFontItalic() const
+    {
+        return textProperties.m_italic;
+    }
+
+    /**
+     * @brief Set a mirrored property of text.
+     *
+     * @param aMirrored tells if the text should be mirrored or not.
+     */
+    inline void SetTextMirrored( const bool aMirrored )
+    {
+        textProperties.m_mirrored = aMirrored;
+    }
+
+    /**
+     * @brief Returns true if text should displayed mirrored.
+     */
+    inline bool IsTextMirrored() const
+    {
+        return textProperties.m_mirrored;
+    }
+
+    /**
+     * @brief Set the horizontal justify for text drawing.
+     *
+     * @param aHorizontalJustify is the horizontal justify value.
+     */
     inline void SetHorizontalJustify( const EDA_TEXT_HJUSTIFY_T aHorizontalJustify )
     {
-        strokeFont.SetHorizontalJustify( aHorizontalJustify );
+        textProperties.m_horizontalJustify = aHorizontalJustify;
     }
 
-    /// @copydoc STROKE_FONT::SetVerticalJustify()
+    /**
+     * @brief Returns current text horizontal justification setting.
+     */
+    inline EDA_TEXT_HJUSTIFY_T GetHorizontalJustify() const
+    {
+        return textProperties.m_horizontalJustify;
+    }
+
+    /**
+     * @brief Set the vertical justify for text drawing.
+     *
+     * @param aVerticalJustify is the vertical justify value.
+     */
     inline void SetVerticalJustify( const EDA_TEXT_VJUSTIFY_T aVerticalJustify )
     {
-        strokeFont.SetVerticalJustify( aVerticalJustify );
+        textProperties.m_verticalJustify = aVerticalJustify;
     }
+
+    /**
+     * @brief Returns current text vertical justification setting.
+     */
+    inline EDA_TEXT_VJUSTIFY_T GetVerticalJustify() const
+    {
+        return textProperties.m_verticalJustify;
+    }
+
 
     // --------------
     // Transformation
@@ -929,6 +1002,16 @@ protected:
     /// Depth level on which the grid is drawn
     static const int GRID_DEPTH;
 
+private:
+    struct TEXT_PROPERTIES
+    {
+        VECTOR2D            m_glyphSize;            ///< Size of the glyphs
+        EDA_TEXT_HJUSTIFY_T m_horizontalJustify;    ///< Horizontal justification
+        EDA_TEXT_VJUSTIFY_T m_verticalJustify;      ///< Vertical justification
+        bool                m_bold;
+        bool                m_italic;
+        bool                m_mirrored;
+    } textProperties;
 };
 }    // namespace KIGFX
 

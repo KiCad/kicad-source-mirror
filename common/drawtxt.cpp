@@ -87,8 +87,8 @@ int Clamp_Text_PenSize( int aPenSize, wxSize aSize, bool aBold )
 
 int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, bool aBold )
 {
-    basic_gal.SetItalic( aItalic );
-    basic_gal.SetBold( aBold );
+    basic_gal.SetFontItalic( aItalic );
+    basic_gal.SetFontBold( aBold );
     basic_gal.SetGlyphSize( VECTOR2D( aSize ) );
 
     VECTOR2D tsize = basic_gal.GetTextLineSize( aText );
