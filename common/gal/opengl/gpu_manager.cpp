@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,8 +31,9 @@
 #include <gal/opengl/cached_container.h>
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/shader.h>
+#include <gal/opengl/utils.h>
+
 #include <typeinfo>
-#include <wx/msgdlg.h>
 #include <confirm.h>
 #ifdef PROFILE
 #include <profile.h>
@@ -105,8 +106,10 @@ void GPU_CACHED_MANAGER::Initialize()
 
     if( !m_buffersInitialized )
     {
-        glGenBuffers( 1, &m_verticesBuffer );
         glGenBuffers( 1, &m_indicesBuffer );
+        checkGlError( "generating vertices buffer" );
+        glGenBuffers( 1, &m_verticesBuffer );
+        checkGlError( "generating vertices buffer" );
         m_buffersInitialized = true;
     }
 }
@@ -206,14 +209,14 @@ void GPU_CACHED_MANAGER::uploadToGpu()
 
     // Upload vertices coordinates and shader types to GPU memory
     glBindBuffer( GL_ARRAY_BUFFER, m_verticesBuffer );
+    checkGlError( "binding vertices buffer" );
     glBufferData( GL_ARRAY_BUFFER, bufferSize * VertexSize, vertices, GL_STATIC_DRAW );
+    checkGlError( "transferring vertices" );
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    checkGlError( "unbinding vertices buffer" );
 
     // Allocate the biggest possible buffer for indices
     resizeIndices( bufferSize );
-
-    if( glGetError() != GL_NO_ERROR )
-        DisplayError( NULL, wxT( "Error during data upload to the GPU memory" ) );
 
 #ifdef PROFILE
     prof_end( &totalTime );
