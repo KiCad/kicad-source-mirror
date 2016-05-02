@@ -36,9 +36,6 @@
 #include <map>
 #include <set>
 
-// Debug messages verbosity level
-// #define CACHED_CONTAINER_TEST 1
-
 namespace KIGFX
 {
 class VERTEX_ITEM;

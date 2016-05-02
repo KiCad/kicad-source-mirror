@@ -145,7 +145,7 @@ VERTEX* CACHED_CONTAINER::Allocate( unsigned int aSize )
     // The content has to be updated
     m_dirty = true;
 
-#if CACHED_CONTAINER_TEST > 1
+#if CACHED_CONTAINER_TEST > 0
     test();
 #endif
 #if CACHED_CONTAINER_TEST > 2
@@ -181,7 +181,7 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
 
     m_items.erase( aItem );
 
-#if CACHED_CONTAINER_TEST > 1
+#if CACHED_CONTAINER_TEST > 0
     test();
 #endif
 
@@ -356,10 +356,10 @@ void CACHED_CONTAINER::mergeFreeChunks()
     if( m_freeChunks.size() <= 1 ) // There are no chunks that can be merged
         return;
 
-#if CACHED_CONTAINER_TEST > 0
+#ifdef __WXDEBUG__
     prof_counter totalTime;
     prof_start( &totalTime );
-#endif
+#endif /* __WXDEBUG__ */
 
     // Reversed free chunks map - this one stores chunk size with its offset as the key
     std::list<CHUNK> freeChunks;
@@ -401,12 +401,12 @@ void CACHED_CONTAINER::mergeFreeChunks()
     // Add the last one
     m_freeChunks.insert( std::make_pair( size, offset ) );
 
-#if CACHED_CONTAINER_TEST > 0
+#ifdef __WXDEBUG__
     prof_end( &totalTime );
 
     wxLogDebug( wxT( "Merged free chunks / %.1f ms" ), totalTime.msecs() );
-#endif
-#if CACHED_CONTAINER_TEST > 1
+#endif /* __WXDEBUG__ */
+#if CACHED_CONTAINER_TEST > 0
     test();
 #endif
 }
@@ -414,19 +414,17 @@ void CACHED_CONTAINER::mergeFreeChunks()
 
 bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
 {
-#if CACHED_CONTAINER_TEST > 0
-    wxLogDebug( wxT( "Resizing container from %d to %d" ), m_currentSize, aNewSize );
-#endif
+    wxLogTrace( "GAL_CACHED_CONTAINER",
+            wxT( "Resizing container from %d to %d" ), m_currentSize, aNewSize );
 
     // No shrinking if we cannot fit all the data
     if( aNewSize < m_currentSize && usedSpace() > aNewSize )
         return false;
 
-#if CACHED_CONTAINER_TEST > 0
-    wxLogDebug( wxT( "Defragmenting" ) );
+#ifdef __WXDEBUG__
     prof_counter totalTime;
     prof_start( &totalTime );
-#endif
+#endif /* __WXDEBUG__ */
 
     GLuint newBuffer;
 
@@ -442,6 +440,8 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
     if( ( m_freeChunks.size() == 0 )
         || ( m_freeChunks.size() == 1 && m_freeChunks.begin()->second == usedSpace() ) )
     {
+        assert( aNewSize != m_currentSize );
+
         glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
                 0, 0, usedSpace() * VertexSize );
     }
@@ -475,12 +475,13 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
     checkGlError( "switching buffers during defragmentation" );
     Map();
 
-#if CACHED_CONTAINER_TEST > 0
+#ifdef __WXDEBUG__
     prof_end( &totalTime );
 
-    wxLogDebug( wxT( "Defragmented the container storing %d vertices / %.1f ms" ),
+    wxLogTrace( "GAL_CACHED_CONTAINER",
+            wxT( "Defragmented container storing %d vertices / %.1f ms" ),
                 m_currentSize - m_freeSpace, totalTime.msecs() );
-#endif
+#endif /* __WXDEBUG__ */
 
     m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;
@@ -505,6 +506,7 @@ void CACHED_CONTAINER::addFreeChunk( unsigned int aOffset, unsigned int aSize )
 
 void CACHED_CONTAINER::showFreeChunks()
 {
+#ifdef __WXDEBUG__
     FREE_CHUNK_MAP::iterator it;
 
     wxLogDebug( wxT( "Free chunks:" ) );
@@ -518,11 +520,13 @@ void CACHED_CONTAINER::showFreeChunks()
         wxLogDebug( wxT( "[0x%08x-0x%08x] (size %d)" ),
                     offset, offset + size - 1, size );
     }
+#endif /* __WXDEBUG__ */
 }
 
 
 void CACHED_CONTAINER::showUsedChunks()
 {
+#ifdef __WXDEBUG__
     ITEMS::iterator it;
 
     wxLogDebug( wxT( "Used chunks:" ) );
@@ -537,11 +541,13 @@ void CACHED_CONTAINER::showUsedChunks()
         wxLogDebug( wxT( "[0x%08x-0x%08x] @ 0x%08lx (size %d)" ),
                     offset, offset + size - 1, (long) item, size );
     }
+#endif /* __WXDEBUG__ */
 }
 
 
 void CACHED_CONTAINER::test()
 {
+#ifdef __WXDEBUG__
     // Free space check
     unsigned int freeSpace = 0;
     FREE_CHUNK_MAP::iterator itf;
@@ -552,14 +558,20 @@ void CACHED_CONTAINER::test()
     assert( freeSpace == m_freeSpace );
 
     // Used space check
-    /*unsigned int usedSpace = 0;
+    unsigned int usedSpace = 0;
     ITEMS::iterator itr;
     for( itr = m_items.begin(); itr != m_items.end(); ++itr )
         usedSpace += ( *itr )->GetSize();
-    usedSpace += m_itemSize;    // Add the current chunk size
 
-    assert( ( freeSpace + usedSpace ) == m_currentSize );*/
+    // If we have a chunk assigned, then there must be an item edited
+    assert( m_chunkSize == 0 || m_item );
 
-    // Overlapping check TBD
+    // Currently reserved chunk is also counted as used
+    usedSpace += m_chunkSize;
+
+    assert( ( m_freeSpace + usedSpace ) == m_currentSize );
+
+    // Overlapping check TODO
+#endif /* __WXDEBUG__ */
 }
 
