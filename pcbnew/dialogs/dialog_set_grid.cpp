@@ -1,11 +1,7 @@
-/**
- * @file dialog_set_grid.cpp
- * @brief Manage user grid.
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,49 +21,48 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <fctsys.h>
-#include <macros.h>
-#include <common.h>
-#include <base_units.h>
-#include <macros.h>
+/**
+ * @file dialog_set_grid.cpp
+ * @brief Manage user grid.
+ */
 
-#include <pcbnew.h>
-#include <pcbnew_id.h>
 #include <dialog_set_grid_base.h>
-#include <invoke_pcb_dialog.h>
+
+#include <base_units.h>
+#include <convert_to_biu.h>
+#include <common.h>
+
+#include <wxBasePcbFrame.h>
+#include <class_drawpanel.h>
+#include <class_draw_panel_gal.h>
 
 #include <gal/graphics_abstraction_layer.h>
-#include <class_draw_panel_gal.h>
-#include <tool/tool_manager.h>
 #include <tools/common_actions.h>
+#include <tool/tool_manager.h>
+
+#include <limits.h>
 
 // Max values for grid size
-#define MAX_GRID_SIZE ( 50.0 * IU_PER_MM )
-#define MIN_GRID_SIZE ( 0.001 * IU_PER_MM )
+static const double MAX_GRID_SIZE =  50.0 * IU_PER_MM;
+static const double MIN_GRID_SIZE = 0.001 * IU_PER_MM;
 
 // Min/Max value for grid offset
-#define MAX_GRID_OFFSET ((double)INT_MAX/2)
+static const double MAX_GRID_OFFSET = INT_MAX / 2.0;
 
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
 public:
-
     /// This has no dependencies on calling wxFrame derivative, such as PCB_BASE_FRAME.
-    DIALOG_SET_GRID( wxFrame* aCaller, EDA_UNITS_T* aGridUnits, EDA_UNITS_T aBoardUnits,
-        wxRealPoint* aUserSize, wxPoint* aOrigin,
-        int* aFastGrid1, int* aFastGrid2, const wxArrayString& aGridChoices );
+    DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& aGridChoices );
+
+    bool TransferDataFromWindow();
+    bool TransferDataToWindow();
 
 private:
     void            OnResetGridOrgClick( wxCommandEvent& event );
-    void            OnCancelClick( wxCommandEvent& event );
-    void            OnOkClick( wxCommandEvent& event );
 
-    EDA_UNITS_T&    m_callers_grid_units;
-    EDA_UNITS_T     m_callers_board_units;
-    wxRealPoint&    m_callers_user_size;
-    wxPoint&        m_callers_origin;
-    int&            m_callers_fast_grid1;
-    int&            m_callers_fast_grid2;
+    PCB_BASE_FRAME* m_parent;
+    wxArrayString   m_fast_grid_opts;
 
     void            setGridUnits( EDA_UNITS_T units );
     EDA_UNITS_T     getGridUnits();
@@ -80,28 +75,21 @@ private:
 
     void            setGridForFastSwitching( const wxArrayString& aGrids, int aGrid1, int aGrid2 );
     void            getGridForFastSwitching( int& aGrid1, int& aGrid2 );
+
+    void            setGridStyle( KIGFX::GRID_STYLE aStyle );
+    KIGFX::GRID_STYLE getGridStyle() const;
 };
 
 
-DIALOG_SET_GRID::DIALOG_SET_GRID( wxFrame* aCaller, EDA_UNITS_T* aGridUnits, EDA_UNITS_T aBoardUnits,
-        wxRealPoint* aUserSize, wxPoint* aOrigin, int* aFastGrid1, int* aFastGrid2, const wxArrayString& aGridChoices ):
-    DIALOG_SET_GRID_BASE( aCaller ),
-    m_callers_grid_units( *aGridUnits ),
-    m_callers_board_units( aBoardUnits ),
-    m_callers_user_size( *aUserSize ),
-    m_callers_origin( *aOrigin ),
-    m_callers_fast_grid1( *aFastGrid1 ),
-    m_callers_fast_grid2( *aFastGrid2 )
+DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& aGridChoices ):
+    DIALOG_SET_GRID_BASE( aParent ),
+    m_parent( aParent ),
+    m_fast_grid_opts( aGridChoices )
 {
-    m_TextPosXUnits->SetLabel( GetUnitsLabel( m_callers_board_units ) );
-    m_TextPosYUnits->SetLabel( GetUnitsLabel( m_callers_board_units ) );
-
     m_sdbSizer1OK->SetDefault();      // set OK button as default response to 'Enter' key
 
-    setGridUnits( m_callers_grid_units );
-    setGridSize( m_callers_user_size );
-    setGridOrigin( m_callers_origin );
-    setGridForFastSwitching( aGridChoices, m_callers_fast_grid1, m_callers_fast_grid2 );
+    m_TextPosXUnits->SetLabel( GetUnitsLabel( m_parent->m_UserGridUnit ) );
+    m_TextPosYUnits->SetLabel( GetUnitsLabel( m_parent->m_UserGridUnit ) );
 
     GetSizer()->SetSizeHints( this );
     Fit();
@@ -109,9 +97,88 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( wxFrame* aCaller, EDA_UNITS_T* aGridUnits, EDA
 }
 
 
+bool DIALOG_SET_GRID::TransferDataFromWindow()
+{
+    // Validate new settings
+    wxRealPoint gridSize;
+    if( !getGridSize( gridSize ) )
+    {
+        wxMessageBox( wxString::Format( _( "Incorrect grid size "
+                        "(size must be >= %.3f mm and <= %.3f mm)" ),
+                        MIN_GRID_SIZE/IU_PER_MM, MAX_GRID_SIZE/IU_PER_MM ) );
+
+        return false;
+    }
+
+    wxPoint gridOrigin;
+    if( !getGridOrigin( gridOrigin ) )
+    {
+        wxMessageBox( wxString::Format( _( "Incorrect grid origin "
+                        "(coordinates must be >= %.3f mm and <= %.3f mm)" ),
+                        -MAX_GRID_OFFSET/IU_PER_MM, MAX_GRID_OFFSET/IU_PER_MM ) );
+
+        return false;
+    }
+
+    int fastGrid1, fastGrid2;
+    getGridForFastSwitching( fastGrid1, fastGrid2 );
+
+    EDA_UNITS_T units = getGridUnits();
+
+    // Apply the new settings
+
+     // Because grid origin is saved in board, show as modified
+    m_parent->OnModify();
+    m_parent->SetGridOrigin( gridOrigin );
+    m_parent->m_UserGridUnit = units;
+    m_parent->m_UserGridSize = gridSize;
+    m_parent->m_FastGrid1 = fastGrid1;
+    m_parent->m_FastGrid2 = fastGrid2;
+
+    // User grid
+    BASE_SCREEN* screen = m_parent->GetScreen();
+    screen->AddGrid( gridSize, units, ID_POPUP_GRID_USER );
+
+    // If the user grid is the current option, recall SetGrid()
+    // to force new values put in list as current grid value
+    if( screen->GetGridCmdId() == ID_POPUP_GRID_USER )
+        screen->SetGrid( ID_POPUP_GRID_USER );
+
+    // Notify GAL
+    TOOL_MANAGER* mgr = m_parent->GetToolManager();
+
+    if( mgr && m_parent->IsGalCanvasActive() )
+    {
+        mgr->RunAction( "common.Control.gridPreset", true,
+                screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
+
+        TOOL_EVENT gridOriginUpdate = COMMON_ACTIONS::gridSetOrigin.MakeEvent();
+        gridOriginUpdate.SetParameter( new VECTOR2D( gridOrigin ) );
+        mgr->ProcessEvent( gridOriginUpdate );
+    }
+
+    m_parent->GetGalCanvas()->GetGAL()->SetGridStyle( getGridStyle() );
+    m_parent->GetCanvas()->Refresh();
+
+    return wxDialog::TransferDataFromWindow();
+}
+
+
+bool DIALOG_SET_GRID::TransferDataToWindow()
+{
+    setGridUnits( m_parent->m_UserGridUnit );
+    setGridSize( m_parent->m_UserGridSize );
+    setGridOrigin( m_parent->GetGridOrigin() );
+    setGridForFastSwitching( m_fast_grid_opts, m_parent->m_FastGrid1, m_parent->m_FastGrid2 );
+    setGridStyle( m_parent->GetGalCanvas()->GetGAL()->GetGridStyle() );
+
+    return wxDialog::TransferDataToWindow();
+}
+
+
 void DIALOG_SET_GRID::setGridUnits( EDA_UNITS_T aUnits )
 {
-    m_UnitGrid->SetSelection( aUnits != INCHES  );
+    m_UnitGrid->SetSelection( aUnits != INCHES );
 }
 
 
@@ -136,15 +203,12 @@ void DIALOG_SET_GRID::setGridSize( const wxRealPoint& grid )
 bool DIALOG_SET_GRID::getGridSize( wxRealPoint& aGrisSize )
 {
     wxRealPoint grid;
-    m_callers_grid_units = getGridUnits();
-    double grid_unit_to_iu = m_callers_grid_units == INCHES ? IU_PER_MILS*1000 : IU_PER_MM;
-
     wxString val = m_OptGridSizeX->GetValue();
-
+    double grid_unit_to_iu = ( getGridUnits() == INCHES ? IU_PER_MILS * 1000 : IU_PER_MM );
     double tmp;
 
     if( !val.ToDouble( &tmp ) ||
-        tmp*grid_unit_to_iu < MIN_GRID_SIZE || tmp*grid_unit_to_iu > MAX_GRID_SIZE )
+        tmp * grid_unit_to_iu < MIN_GRID_SIZE || tmp * grid_unit_to_iu > MAX_GRID_SIZE )
     {
         return false;
     }
@@ -167,22 +231,33 @@ bool DIALOG_SET_GRID::getGridSize( wxRealPoint& aGrisSize )
 
 bool DIALOG_SET_GRID::getGridOrigin( wxPoint& aGridOrigin )
 {
-    double tmp;
+    double x, y;
 
-    tmp = DoubleValueFromString( g_UserUnit, m_GridOriginXCtrl->GetValue() );
+    const wxString& x_str = m_GridOriginXCtrl->GetValue();
+
+    if( !x_str.ToDouble( &x ) )
+        return false;
+
+    x = DoubleValueFromString( g_UserUnit, x_str );
 
     // Some error checking here is a good thing.
-    if( tmp < -MAX_GRID_OFFSET || tmp > MAX_GRID_OFFSET )
+    if( x < -MAX_GRID_OFFSET || x > MAX_GRID_OFFSET )
         return false;
 
-    aGridOrigin.x = KiROUND( tmp );
 
-    tmp = DoubleValueFromString( g_UserUnit, m_GridOriginYCtrl->GetValue() );
+    const wxString& y_str = m_GridOriginYCtrl->GetValue();
 
-    if( tmp < -MAX_GRID_OFFSET || tmp > MAX_GRID_OFFSET )
+    if( !y_str.ToDouble( &y ) )
         return false;
 
-    aGridOrigin.y = KiROUND( tmp );
+    y = DoubleValueFromString( g_UserUnit, y_str );
+
+    if( y < -MAX_GRID_OFFSET || y > MAX_GRID_OFFSET )
+        return false;
+
+
+    aGridOrigin.x = KiROUND( x );
+    aGridOrigin.y = KiROUND( y );
 
     return true;
 }
@@ -212,90 +287,26 @@ void DIALOG_SET_GRID::getGridForFastSwitching( int& aGrid1, int& aGrid2 )
 }
 
 
+void DIALOG_SET_GRID::setGridStyle( KIGFX::GRID_STYLE aStyle )
+{
+    m_Style->SetSelection( aStyle != KIGFX::GRID_STYLE_DOTS );
+}
+
+
+KIGFX::GRID_STYLE DIALOG_SET_GRID::getGridStyle() const
+{
+    return m_Style->GetSelection() == 0 ? KIGFX::GRID_STYLE_DOTS : KIGFX::GRID_STYLE_LINES;
+}
+
+
 void DIALOG_SET_GRID::OnResetGridOrgClick( wxCommandEvent& event )
 {
     setGridOrigin( wxPoint( 0, 0 ) );
 }
 
 
-void DIALOG_SET_GRID::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
-}
-
-
-void DIALOG_SET_GRID::OnOkClick( wxCommandEvent& event )
-{
-    bool success  = getGridSize( m_callers_user_size );
-
-    if( !success )
-    {
-        wxMessageBox( wxString::Format( _( "Incorrect grid size (size must be >= %.3f mm and <= %.3f mm)"),
-            MIN_GRID_SIZE/IU_PER_MM, MAX_GRID_SIZE/IU_PER_MM ) );
-        return;
-    }
-
-    success = getGridOrigin( m_callers_origin );
-
-    if( !success )
-    {
-        wxMessageBox( wxString::Format( _( "Incorrect grid origin (coordinates must be >= %.3f mm and <= %.3f mm)" ),
-            -MAX_GRID_OFFSET/IU_PER_MM, MAX_GRID_OFFSET/IU_PER_MM ) );
-        return;
-    }
-
-    getGridForFastSwitching( m_callers_fast_grid1, m_callers_fast_grid2 );
-
-    EndModal( wxID_OK );
-}
-
-
-#include <class_drawpanel.h>
-#include <wxBasePcbFrame.h>
-
 bool PCB_BASE_FRAME::InvokeDialogGrid()
 {
-    wxPoint grid_origin = GetGridOrigin();
-
-    DIALOG_SET_GRID dlg( this, &m_UserGridUnit, g_UserUnit, &m_UserGridSize,
-        &grid_origin, &m_FastGrid1, &m_FastGrid2,
-        m_gridSelectBox->GetStrings() );
-
-    int ret = dlg.ShowModal();
-
-    if( ret == wxID_OK )
-    {
-        if( GetGridOrigin() != grid_origin && IsType( FRAME_PCB ) )
-            OnModify();     // because grid origin is saved in board, show as modified
-
-        SetGridOrigin( grid_origin );
-
-        BASE_SCREEN* screen = GetScreen();
-
-        screen->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
-
-        // If the user grid is the current option, recall SetGrid()
-        // to force new values put in list as current grid value
-        if( screen->GetGridCmdId() == ID_POPUP_GRID_USER )
-            screen->SetGrid( ID_POPUP_GRID_USER );
-
-        // Notify GAL
-        TOOL_MANAGER* mgr = GetToolManager();
-
-        if( mgr && IsGalCanvasActive() )
-        {
-            mgr->RunAction( "common.Control.gridPreset", true,
-                    screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
-
-            TOOL_EVENT gridOriginUpdate = COMMON_ACTIONS::gridSetOrigin.MakeEvent();
-            gridOriginUpdate.SetParameter( new VECTOR2D( grid_origin ) );
-            mgr->ProcessEvent( gridOriginUpdate );
-        }
-
-        m_canvas->Refresh();
-
-        return true;
-    }
-
-    return false;
+    DIALOG_SET_GRID dlg( this, m_gridSelectBox->GetStrings() );
+    return dlg.ShowModal();
 }

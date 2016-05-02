@@ -859,6 +859,14 @@ public:
     }
 
     /**
+     * @brief Returns the current grid drawing style.
+     */
+    virtual GRID_STYLE GetGridStyle() const
+    {
+        return gridStyle;
+    }
+
+    /**
      * @brief Compute the point position in world coordinates from given screen coordinates.
      *
      * @param aPoint the pointposition in screen coordinates.
