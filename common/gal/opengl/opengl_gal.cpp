@@ -694,22 +694,9 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 {
     wxASSERT_MSG( !IsTextMirrored(), "No support for mirrored text using bitmap fonts." );
 
-    const float TEX_X = bitmap_font.width;
-    const float TEX_Y = bitmap_font.height;
-
-    const int length = aText.length();
-    double cur_x = 0.0;
 
     // Compute text size, so it can be properly justified
-    VECTOR2D textSize( 0.0, 0.0 );
-
-    for( int i = 0; i < length; ++i )
-    {
-        const bitmap_glyph& glyph = bitmap_chars[aText[i]];
-        textSize.x += ( glyph.x_off + glyph.width );
-        textSize.y = std::max( (unsigned int)( textSize.y ), glyph.y_off * 2 + glyph.height );
-    }
-
+    VECTOR2D textSize = computeBitmapTextSize( aText );
     const double SCALE = GetGlyphSize().y / textSize.y * 2.0;
 
     Save();
@@ -759,9 +746,9 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
      * v2    v3
      */
 
-    for( int i = 0; i < length; ++i )
+    for( unsigned int i = 0; i < aText.length(); ++i )
     {
-        const unsigned long c = aText[i];
+        const unsigned int c = aText[i];
 
         wxASSERT_MSG( c < bitmap_chars_count, wxT( "Missing character in bitmap font atlas." ) );
 
@@ -770,38 +757,13 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
         wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
 
-        const bitmap_glyph& glyph = bitmap_chars[aText[i]];
-        const float x = glyph.x;
-        const float y = glyph.y;
-        const float xoff = glyph.x_off;
-        const float yoff = glyph.y_off;
-        const float w = glyph.width;
-        const float h = glyph.height;
-
-        currentManager->Reserve( 6 );
-
-        cur_x += xoff / 2;
-
-        currentManager->Shader( SHADER_FONT, x / TEX_X, y / TEX_Y );
-        currentManager->Vertex( cur_x,       yoff, 0 );             // v0
-
-        currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, y / TEX_Y );
-        currentManager->Vertex( cur_x + w,   yoff, 0 );             // v1
-
-        currentManager->Shader( SHADER_FONT, x / TEX_X, ( y + h ) / TEX_Y );
-        currentManager->Vertex( cur_x,       yoff + h, 0 );         // v2
 
 
-        currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, y / TEX_Y );
-        currentManager->Vertex( cur_x + w,  yoff, 0 );              // v1
 
-        currentManager->Shader( SHADER_FONT, x / TEX_X, ( y + h ) / TEX_Y );
-        currentManager->Vertex( cur_x,      yoff + h, 0 );          // v2
+        drawBitmapChar( c );
 
-        currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, ( y + h ) / TEX_Y );
-        currentManager->Vertex( cur_x + w,  yoff + h, 0 );          // v3
 
-        cur_x += w + xoff / 2;
+
     }
 
     Restore();
@@ -1179,6 +1141,61 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
     currentManager->Vertex( 0.0f, outerRadius * 2.0f, layerDepth );                     // v2
 
     Restore();
+}
+
+
+void OPENGL_GAL::drawBitmapChar( const unsigned long aChar )
+{
+    const float TEX_X = bitmap_font.width;
+    const float TEX_Y = bitmap_font.height;
+
+    const bitmap_glyph& glyph = bitmap_chars[aChar];
+    const float x = glyph.x;
+    const float y = glyph.y;
+    const float xoff = glyph.x_off;
+    const float yoff = glyph.y_off;
+    const float w = glyph.width;
+    const float h = glyph.height;
+
+    currentManager->Reserve( 6 );
+
+    Translate( VECTOR2D( xoff / 2, 0 ) );
+
+    currentManager->Shader( SHADER_FONT, x / TEX_X, y / TEX_Y );
+    currentManager->Vertex( 0,  yoff, 0 );             // v0
+
+    currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, y / TEX_Y );
+    currentManager->Vertex( w,  yoff, 0 );             // v1
+
+    currentManager->Shader( SHADER_FONT, x / TEX_X, ( y + h ) / TEX_Y );
+    currentManager->Vertex( 0,  yoff + h, 0 );         // v2
+
+
+    currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, y / TEX_Y );
+    currentManager->Vertex( w,  yoff, 0 );              // v1
+
+    currentManager->Shader( SHADER_FONT, x / TEX_X, ( y + h ) / TEX_Y );
+    currentManager->Vertex( 0,  yoff + h, 0 );          // v2
+
+    currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, ( y + h ) / TEX_Y );
+    currentManager->Vertex( w,  yoff + h, 0 );          // v3
+
+    Translate( VECTOR2D( w + xoff / 2, 0 ) );
+}
+
+
+VECTOR2D OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
+{
+    VECTOR2D textSize( 0, 0 );
+
+    for( unsigned int i = 0; i < aText.length(); ++i )
+    {
+        const bitmap_glyph& glyph = bitmap_chars[aText[i]];
+        textSize.x += ( glyph.x_off + glyph.width );
+        textSize.y = std::max( (unsigned int)( textSize.y ), glyph.y_off * 2 + glyph.height );
+    }
+
+    return textSize;
 }
 
 

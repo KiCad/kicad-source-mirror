@@ -345,6 +345,22 @@ private:
      */
     void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
 
+    /**
+     * @brief Draws a single character using bitmap font.
+     * Its main purpose is to be used in BitmapText() function.
+     *
+     * @param aCharacter is the character to be drawn.
+     */
+    void drawBitmapChar( const unsigned long aChar );
+
+    /**
+     * @brief Computes a size of text drawn using bitmap font with current text setting applied.
+     *
+     * @param aText is the text to be drawn.
+     * @return Text size expressed in world coordinates.
+     */
+    VECTOR2D computeBitmapTextSize( const wxString& aText ) const;
+
     // Event handling
     /**
      * @brief This is the OnPaint event handler.
