@@ -176,7 +176,7 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     const VECTOR2D& glyphSize = m_gal->GetGlyphSize();
 
     // align the 1st line of text
-    switch( m_gal->GetHorizontalJustify() )
+    switch( m_gal->GetVerticalJustify() )
     {
     case GR_TEXT_VJUSTIFY_TOP:
         m_gal->Translate( VECTOR2D( 0, glyphSize.y ) );
@@ -211,7 +211,7 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     }
 
     m_gal->SetIsStroke( true );
-    m_gal->SetIsFill( false );
+    //m_gal->SetIsFill( false );
 
     if( m_gal->IsFontBold() )
         m_gal->SetLineWidth( m_gal->GetLineWidth() * BOLD_FACTOR );
