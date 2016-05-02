@@ -254,9 +254,9 @@ void CACHED_CONTAINER::Unmap()
 void CACHED_CONTAINER::init()
 {
     glGenBuffers( 1, &m_glBufferHandle );
-    glBindBuffer( GL_COPY_WRITE_BUFFER, m_glBufferHandle );
-    glBufferData( GL_COPY_WRITE_BUFFER, m_currentSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
-    glBindBuffer( GL_COPY_WRITE_BUFFER, 0 );
+    glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
+    glBufferData( GL_ARRAY_BUFFER, m_currentSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
     checkGlError( "allocating video memory for cached container" );
 
     m_isInitialized = true;
@@ -410,6 +410,8 @@ void CACHED_CONTAINER::mergeFreeChunks()
 
 bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
 {
+    assert( IsMapped() );
+
     wxLogTrace( "GAL_CACHED_CONTAINER",
             wxT( "Resizing container from %d to %d" ), m_currentSize, aNewSize );
 
@@ -424,11 +426,10 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
 
     GLuint newBuffer;
 
-    Unmap();
     glGenBuffers( 1, &newBuffer );
     glBindBuffer( GL_COPY_WRITE_BUFFER, newBuffer );
     glBufferData( GL_COPY_WRITE_BUFFER, aNewSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
-    glBindBuffer( GL_COPY_READ_BUFFER, m_glBufferHandle );
+    glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     checkGlError( "resizing vertex buffer" );
 
     // Special case: the container is either already defragmented or filled up to its capacity,
@@ -438,7 +439,7 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
     {
         assert( aNewSize != m_currentSize );
 
-        glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
+        glCopyBufferSubData( GL_ARRAY_BUFFER, GL_COPY_WRITE_BUFFER,
                 0, 0, usedSpace() * VertexSize );
     }
     else
@@ -453,7 +454,7 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
             int itemSize      = item->GetSize();
 
             // Move an item to the new container
-            glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
+            glCopyBufferSubData( GL_ARRAY_BUFFER, GL_COPY_WRITE_BUFFER,
                     itemOffset * VertexSize, newOffset * VertexSize, itemSize * VertexSize );
 
             // Update new offset
@@ -464,10 +465,14 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
         }
     }
 
+    // Cleanup
     glBindBuffer( GL_COPY_WRITE_BUFFER, 0 );
-    glBindBuffer( GL_COPY_READ_BUFFER, 0 );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glDeleteBuffers( 1, &m_glBufferHandle );
+
+    // Switch to the new vertex buffer
     m_glBufferHandle = newBuffer;
+    glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );
     checkGlError( "switching buffers during defragmentation" );
     Map();
 
