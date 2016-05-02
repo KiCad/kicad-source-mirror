@@ -451,7 +451,7 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
         if( borderHit )
         {
             m_state = AUTO_PANNING;
-            m_panTimer.Start( (int) ( 1000.0 / 60.0 ) );
+            m_panTimer.Start( (int) ( 250.0 / 60.0 ) );
 
             return true;
         }
