@@ -909,7 +909,7 @@ protected:
     STROKE_FONT        strokeFont;
 
     /// Compute the scaling factor for the world->screen matrix
-    inline void ComputeWorldScale()
+    inline void computeWorldScale()
     {
         worldScale = screenDPI * worldUnitLength * zoomFactor;
     }

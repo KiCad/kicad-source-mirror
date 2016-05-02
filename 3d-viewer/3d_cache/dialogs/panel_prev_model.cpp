@@ -235,7 +235,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     preview = new wxPanel( this, -1 );
     preview->SetMinSize( wxSize( 320, 200 ) );
     preview->SetBackgroundColour( wxColor( 0, 0, 0 ));
-    vboxPrev->Add( preview, 1, wxEXPAND | wxALIGN_CENTER | wxLEFT | wxRIGHT, 5 );
+    vboxPrev->Add( preview, 1, wxEXPAND | wxLEFT | wxRIGHT, 5 );
     // buttons:
     wxButton* vFront = new wxButton( this, ID_3D_FRONT, wxT( "F" ) );
     wxButton* vBack = new wxButton( this, ID_3D_BACK, wxT( "B" ) );

@@ -143,7 +143,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         return;
 
     m_drawing = true;
-    KIGFX::PCB_RENDER_SETTINGS *settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_painter->GetSettings() );
+    KIGFX::PCB_RENDER_SETTINGS* settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_painter->GetSettings() );
 
     m_viewControls->UpdateScrollbars();
     m_view->UpdateItems();

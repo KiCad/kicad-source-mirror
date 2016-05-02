@@ -51,7 +51,7 @@ GAL::GAL() :
     SetLayerDepth( 0.0 );
     SetFlip( false, false );
     SetLineWidth( 1.0 );
-    ComputeWorldScale();
+    computeWorldScale();
 
     // Set grid defaults
     SetGridVisibility( true );
@@ -95,7 +95,7 @@ VECTOR2D GAL::GetTextLineSize( const UTF8& aText ) const
 
 void GAL::ComputeWorldScreenMatrix()
 {
-    ComputeWorldScale();
+    computeWorldScale();
 
     worldScreenMatrix.SetIdentity();
 
