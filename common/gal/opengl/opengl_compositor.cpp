@@ -68,9 +68,9 @@ void OPENGL_COMPOSITOR::Initialize()
     glBindRenderbufferEXT( GL_RENDERBUFFER_EXT, m_depthBuffer );
     checkGlError( "binding renderbuffer" );
 
-    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT16, m_width, m_height );
+    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8, m_width, m_height );
     checkGlError( "creating renderbuffer storage" );
-    glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT,
+    glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_STENCIL_ATTACHMENT,
                                   GL_RENDERBUFFER_EXT, m_depthBuffer );
     checkGlError( "attaching renderbuffer" );
 
@@ -220,7 +220,7 @@ void OPENGL_COMPOSITOR::ClearBuffer()
     assert( m_initialized );
 
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
 
 

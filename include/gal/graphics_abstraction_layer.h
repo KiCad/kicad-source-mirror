@@ -837,7 +837,7 @@ public:
     }
 
     ///> @brief Draw the grid
-    void DrawGrid();
+    virtual void DrawGrid();
 
     /**
      * Function GetGridPoint()

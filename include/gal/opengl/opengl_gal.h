@@ -135,6 +135,9 @@ public:
     virtual void BitmapText( const wxString& aText, const VECTOR2D& aPosition,
                              double aRotationAngle );
 
+    /// @copydoc GAL::DrawGrid()
+    virtual void DrawGrid();
+
     // --------------
     // Screen methods
     // --------------
@@ -257,9 +260,6 @@ public:
         /// Intersect points, that have to be freed after tessellation
         std::deque< boost::shared_array<GLdouble> >& intersectPoints;
     } TessParams;
-
-protected:
-    virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
 
 private:
     /// Super class definition

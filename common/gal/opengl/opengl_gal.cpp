@@ -802,6 +802,107 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 }
 
 
+void OPENGL_GAL::DrawGrid()
+{
+    if( !gridVisibility )
+        return;
+
+    int gridScreenSizeDense = KiROUND( gridSize.x * worldScale );
+    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
+
+    // Check if the grid would not be too dense
+    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridDrawThreshold )
+        return;
+
+    SetTarget( TARGET_NONCACHED );
+    compositor.SetBuffer( mainBuffer );
+
+    // Draw the grid
+    // For the drawing the start points, end points and increments have
+    // to be calculated in world coordinates
+    VECTOR2D worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
+    VECTOR2D worldEndPoint = screenWorldMatrix * VECTOR2D( screenSize );
+
+    // Compute grid variables
+    int gridStartX = KiROUND( worldStartPoint.x / gridSize.x );
+    int gridEndX = KiROUND( worldEndPoint.x / gridSize.x );
+    int gridStartY = KiROUND( worldStartPoint.y / gridSize.y );
+    int gridEndY = KiROUND( worldEndPoint.y / gridSize.y );
+
+    assert( gridEndX >= gridStartX );
+    assert( gridEndY >= gridStartY );
+
+    // Correct the index, else some lines are not correctly painted
+    gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
+    gridStartY -= std::abs( gridOrigin.y / gridSize.y ) + 1;
+    gridEndX += std::abs( gridOrigin.x / gridSize.x ) + 1;
+    gridEndY += std::abs( gridOrigin.y / gridSize.y ) + 1;
+
+    glDisable( GL_DEPTH_TEST );
+    glDisable( GL_TEXTURE_2D );
+
+    if( gridStyle == GRID_STYLE_DOTS )
+    {
+        glEnable( GL_STENCIL_TEST );
+        glStencilFunc( GL_ALWAYS, 1, 1 );
+        glStencilOp( GL_KEEP, GL_KEEP, GL_INCR );
+        glColor4d( 0.0, 0.0, 0.0, 0.0 );
+    }
+    else
+    {
+        glColor4d( gridColor.r, gridColor.g, gridColor.b, 1.0 );
+    }
+
+    // Vertical lines
+    for( int j = gridStartY; j < gridEndY; j += 1 )
+    {
+        if( j % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
+            glLineWidth( 2.0 );
+        else
+            glLineWidth( 1.0 );
+
+        if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
+            || gridScreenSizeDense > gridDrawThreshold )
+        {
+            glBegin( GL_LINES );
+            glVertex2d( gridStartX * gridSize.x, j * gridSize.y + gridOrigin.y );
+            glVertex2d( gridEndX * gridSize.x, j * gridSize.y + gridOrigin.y );
+            glEnd();
+        }
+    }
+
+    if( gridStyle == GRID_STYLE_DOTS )
+    {
+        glStencilFunc( GL_NOTEQUAL, 0, 1 );
+        glColor4d( gridColor.r, gridColor.g, gridColor.b, 1.0 );
+    }
+
+    // Horizontal lines
+    for( int i = gridStartX; i < gridEndX; i += 1 )
+    {
+        if( i % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
+            glLineWidth( 2.0 );
+        else
+            glLineWidth( 1.0 );
+
+        if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
+            || gridScreenSizeDense > gridDrawThreshold )
+        {
+            glBegin( GL_LINES );
+            glVertex2d( i * gridSize.x + gridOrigin.x, gridStartY * gridSize.y );
+            glVertex2d( i * gridSize.x + gridOrigin.x, gridEndY * gridSize.y );
+            glEnd();
+        }
+    }
+
+    if( gridStyle == GRID_STYLE_DOTS )
+        glDisable( GL_STENCIL_TEST );
+
+    glEnable( GL_DEPTH_TEST );
+    glEnable( GL_TEXTURE_2D );
+}
+
+
 void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
 {
     screenSize = VECTOR2I( aWidth, aHeight );
@@ -842,7 +943,7 @@ void OPENGL_GAL::ClearScreen( const COLOR4D& aColor )
     // Clear screen
     compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
     glClearColor( aColor.r, aColor.g, aColor.b, aColor.a );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
 
 
@@ -1018,28 +1119,6 @@ void OPENGL_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
     VECTOR2D screenCursor = worldScreenMatrix * aCursorPosition;
 
     cursorPosition = screenWorldMatrix * VECTOR2D( screenCursor.x, screenSize.y - screenCursor.y );
-}
-
-
-void OPENGL_GAL::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
-{
-    compositor.SetBuffer( mainBuffer );
-
-    // We do not need a very precise comparison here (the lineWidth is set by GAL::DrawGrid())
-    if( fabs( lineWidth - 2.0 * gridLineWidth / worldScale ) < 0.1 )
-        glLineWidth( 1.0 );
-    else
-        glLineWidth( 2.0 );
-
-    glColor4d( gridColor.r, gridColor.g, gridColor.b, gridColor.a );
-
-    glBegin( GL_LINES );
-    glVertex3d( aStartPoint.x, aStartPoint.y, layerDepth );
-    glVertex3d( aEndPoint.x, aEndPoint.y, layerDepth );
-    glEnd();
-
-    // Restore the default color, so textures will be drawn properly
-    glColor4d( 1.0, 1.0, 1.0, 1.0 );
 }
 
 
