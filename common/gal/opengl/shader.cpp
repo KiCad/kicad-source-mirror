@@ -130,7 +130,7 @@ int SHADER::AddParameter( const std::string& aParameterName )
     if( location != -1 )
         parameterLocation.push_back( location );
 
-    return location;
+    return parameterLocation.size() - 1;
 }
 
 
