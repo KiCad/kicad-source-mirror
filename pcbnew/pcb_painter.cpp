@@ -93,9 +93,14 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
     // Netnames for copper layers
     for( LSEQ cu = LSET::AllCuMask().CuStack();  cu;  ++cu )
     {
+        const COLOR4D lightLabel( 0.8, 0.8, 0.8, 0.7 );
+        const COLOR4D darkLabel = lightLabel.Inverted();
         LAYER_ID layer = *cu;
 
-        m_layerColors[GetNetnameLayer( layer )] = COLOR4D( 0.8, 0.8, 0.8, 0.7 );
+        if( m_layerColors[layer].GetBrightness() > 0.5 )
+            m_layerColors[GetNetnameLayer( layer )] = darkLabel;
+        else
+            m_layerColors[GetNetnameLayer( layer )] = lightLabel;
     }
 
     update();
@@ -297,15 +302,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             double textOrientation = -atan( line.y / line.x );
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );
 
-            // Set a proper color for the label
-            const COLOR4D& color = m_pcbSettings.GetColor( aTrack, aTrack->GetLayer() );
-            const COLOR4D labelColor = m_pcbSettings.GetColor( NULL, aLayer );
-
-            if( color.GetBrightness() > 0.5 )
-                m_gal->SetStrokeColor( labelColor.Inverted() );
-            else
-                m_gal->SetStrokeColor( labelColor );
-
+            m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
             m_gal->SetLineWidth( width / 10.0 );
             m_gal->SetFontBold( false );
             m_gal->SetFontItalic( false );
@@ -490,15 +487,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m_gal->SetFontBold( false );
             m_gal->SetFontItalic( false );
             m_gal->SetTextMirrored( false );
-
-            // Set a proper color for the label
-            const COLOR4D& color  = m_pcbSettings.GetColor( aPad, aPad->GetLayer() );
-            const COLOR4D labelColor = m_pcbSettings.GetColor( NULL, aLayer );
-
-            if( color.GetBrightness() > 0.5 )
-                m_gal->SetStrokeColor( labelColor.Inverted() );
-            else
-                m_gal->SetStrokeColor( labelColor );
+            m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
 
             VECTOR2D textpos( 0.0, 0.0);
 

@@ -411,6 +411,7 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, EDA_COLOR_T aColor )
         KIGFX::VIEW* view = myframe->GetGalCanvas()->GetView();
         view->GetPainter()->GetSettings()->ImportLegacyColors( myframe->GetBoard()->GetColorsSettings() );
         view->UpdateLayerColor( aLayer );
+        view->UpdateLayerColor( GetNetnameLayer( aLayer ) );
     }
 
     myframe->GetCanvas()->Refresh();
