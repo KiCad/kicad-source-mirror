@@ -143,14 +143,15 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         return;
 
     m_drawing = true;
+    KIGFX::PCB_RENDER_SETTINGS *settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_painter->GetSettings() );
 
     m_viewControls->UpdateScrollbars();
     m_view->UpdateItems();
     m_gal->BeginDrawing();
-    m_gal->ClearScreen( m_painter->GetSettings()->GetBackgroundColor() );
+    m_gal->ClearScreen( settings->GetBackgroundColor() );
 
-    KIGFX::COLOR4D gridColor = static_cast<KIGFX::PCB_RENDER_SETTINGS*> (m_painter->GetSettings())->GetLayerColor( ITEM_GAL_LAYER ( GRID_VISIBLE ) );
-    m_gal->SetGridColor ( gridColor );
+    KIGFX::COLOR4D gridColor = settings->GetLayerColor( ITEM_GAL_LAYER( GRID_VISIBLE ) );
+    m_gal->SetGridColor( gridColor );
 
     if( m_view->IsDirty() )
     {

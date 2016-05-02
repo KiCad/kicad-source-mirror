@@ -41,7 +41,7 @@
 using namespace KIGFX;
 
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
-const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
+static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
 wxGLContext* OPENGL_GAL::glContext = NULL;
 
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
@@ -144,8 +144,7 @@ void OPENGL_GAL::BeginDrawing()
     glViewport( 0, 0, (GLsizei) screenSize.x * scaleFactor, (GLsizei) screenSize.y * scaleFactor );
 
     // Create the screen transformation
-    glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y,
-             -depthRange.x, -depthRange.y );
+    glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y, -depthRange.x, -depthRange.y );
 
     if( !isFramebufferInitialized )
     {
@@ -298,7 +297,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
         currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
         /* Draw a triangle that contains the circle, then shade it leaving only the circle.
-         *  Parameters given to setShader are indices of the triangle's vertices
+         *  Parameters given to Shader() are indices of the triangle's vertices
          *  (if you want to understand more, check the vertex shader source [shader.vert]).
          *  Shader uses this coordinates to determine if fragments are inside the circle or not.
          *       v2
@@ -311,7 +310,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
                                 aCenterPoint.y - aRadius, layerDepth );
 
         currentManager->Shader( SHADER_FILLED_CIRCLE, 2.0 );
-        currentManager->Vertex( aCenterPoint.x + aRadius * sqrt( 3.0f ),             // v1
+        currentManager->Vertex( aCenterPoint.x + aRadius * sqrt( 3.0f),             // v1
                                 aCenterPoint.y - aRadius, layerDepth );
 
         currentManager->Shader( SHADER_FILLED_CIRCLE, 3.0 );
@@ -325,7 +324,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         /* Draw a triangle that contains the circle, then shade it leaving only the circle.
-         *  Parameters given to setShader are indices of the triangle's vertices
+         *  Parameters given to Shader() are indices of the triangle's vertices
          *  (if you want to understand more, check the vertex shader source [shader.vert]).
          *  and the line width. Shader uses this coordinates to determine if fragments are
          *  inside the circle or not.
@@ -923,7 +922,7 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
     currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
     /* Draw a triangle that contains the semicircle, then shade it to leave only
-     * the semicircle. Parameters given to setShader are indices of the triangle's vertices
+     * the semicircle. Parameters given to Shader() are indices of the triangle's vertices
      * (if you want to understand more, check the vertex shader source [shader.vert]).
      * Shader uses these coordinates to determine if fragments are inside the semicircle or not.
      *       v2
@@ -956,7 +955,7 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
     currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
     /* Draw a triangle that contains the semicircle, then shade it to leave only
-     * the semicircle. Parameters given to setShader are indices of the triangle's vertices
+     * the semicircle. Parameters given to Shader() are indices of the triangle's vertices
      * (if you want to understand more, check the vertex shader source [shader.vert]), the
      * radius and the line width. Shader uses these coordinates to determine if fragments are
      * inside the semicircle or not.
