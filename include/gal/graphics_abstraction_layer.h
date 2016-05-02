@@ -912,7 +912,7 @@ public:
      */
     inline void AdvanceDepth()
     {
-        layerDepth -= 0.001;
+        layerDepth -= 0.05;
     }
 
     /**
