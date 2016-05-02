@@ -194,7 +194,7 @@ public:
      *
      * @param aIsFillEnabled is true, when the graphics objects should be filled, else false.
      */
-    inline virtual void SetIsFill( bool aIsFillEnabled )
+    virtual void SetIsFill( bool aIsFillEnabled )
     {
         isFillEnabled = aIsFillEnabled;
     }
@@ -204,7 +204,7 @@ public:
      *
      * @param aIsStrokeEnabled is true, if the outline of an object should be stroked.
      */
-    inline virtual void SetIsStroke( bool aIsStrokeEnabled )
+    virtual void SetIsStroke( bool aIsStrokeEnabled )
     {
         isStrokeEnabled = aIsStrokeEnabled;
     }
@@ -214,7 +214,7 @@ public:
      *
      * @param aColor is the color for filling.
      */
-    inline virtual void SetFillColor( const COLOR4D& aColor )
+    virtual void SetFillColor( const COLOR4D& aColor )
     {
         fillColor = aColor;
     }
@@ -224,7 +224,7 @@ public:
      *
      * @param aColor is the color for stroking the outline.
      */
-    inline virtual void SetStrokeColor( const COLOR4D& aColor )
+    virtual void SetStrokeColor( const COLOR4D& aColor )
     {
         strokeColor = aColor;
     }
@@ -244,7 +244,7 @@ public:
      *
      * @param aLineWidth is the line width.
      */
-    inline virtual void SetLineWidth( double aLineWidth )
+    virtual void SetLineWidth( double aLineWidth )
     {
         lineWidth = aLineWidth;
     }
@@ -264,7 +264,7 @@ public:
      *
      * @param aLayerDepth the layer depth for the objects.
      */
-    inline virtual void SetLayerDepth( double aLayerDepth )
+    virtual void SetLayerDepth( double aLayerDepth )
     {
         assert( aLayerDepth <= depthRange.y );
         assert( aLayerDepth >= depthRange.x );
@@ -288,7 +288,7 @@ public:
      * @param aPosition is the text position in world coordinates.
      * @param aRotationAngle is the text rotation angle.
      */
-    inline virtual void StrokeText( const wxString& aText, const VECTOR2D& aPosition,
+    virtual void StrokeText( const wxString& aText, const VECTOR2D& aPosition,
                                     double aRotationAngle )
     {
         strokeFont.Draw( aText, aPosition, aRotationAngle );
@@ -853,7 +853,7 @@ public:
      *
      * @param aGridStyle is the new style for grid.
      */
-    inline virtual void SetGridStyle( GRID_STYLE aGridStyle )
+    virtual void SetGridStyle( GRID_STYLE aGridStyle )
     {
         gridStyle = aGridStyle;
     }
