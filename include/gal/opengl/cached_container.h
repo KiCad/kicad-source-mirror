@@ -107,9 +107,17 @@ protected:
     unsigned int        m_chunkSize;
     unsigned int        m_chunkOffset;
 
+    ///> Flag saying if vertex buffer is currently mapped
     bool m_isMapped;
+
+    ///> Flag saying if the vertex buffer is initialized
     bool m_isInitialized;
+
+    ///> Vertex buffer handle
     unsigned int m_glBufferHandle;
+
+    ///> Flag saying whether it is safe to use glCopyBufferSubData
+    bool m_useCopyBuffer;
 
     /**
      * Function init()
@@ -138,6 +146,7 @@ protected:
      * @return false in case of failure (e.g. memory shortage)
      */
     bool defragmentResize( unsigned int aNewSize );
+    bool defragmentResizeMemcpy( unsigned int aNewSize );
 
     /**
      * Function mergeFreeChunks()
