@@ -204,10 +204,6 @@ void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
 
 void CACHED_CONTAINER::Clear()
 {
-    Map();
-    glInvalidateBufferData( GL_ARRAY_BUFFER );
-    Unmap();
-
     m_freeSpace = m_currentSize;
     m_failed = false;
 
