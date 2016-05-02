@@ -127,6 +127,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
 OPENGL_GAL::~OPENGL_GAL()
 {
+    SetCurrent( *OPENGL_GAL::glContext );
     glFlush();
 
     if( --instanceCounter == 0 )
