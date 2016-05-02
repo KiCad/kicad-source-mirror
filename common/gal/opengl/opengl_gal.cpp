@@ -229,10 +229,11 @@ void OPENGL_GAL::BeginDrawing()
             glActiveTexture( GL_TEXTURE0 + FONT_TEXTURE_UNIT );
             glGenTextures( 1, &fontTexture );
             glBindTexture( GL_TEXTURE_2D, fontTexture );
-            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
             glTexImage2D( GL_TEXTURE_2D, 0, GL_RED, bitmap_font.width, bitmap_font.height,
-                        0, GL_RED, GL_UNSIGNED_BYTE, bitmap_font.pixels );
+                          0, GL_RED, GL_UNSIGNED_BYTE, bitmap_font.pixels );
+            glGenerateMipmap( GL_TEXTURE_2D );
+            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
             checkGlError( "loading bitmap font" );
 
             glActiveTexture( GL_TEXTURE0 );
