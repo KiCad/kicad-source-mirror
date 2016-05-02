@@ -294,6 +294,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
     if( isFillEnabled )
     {
+        currentManager->Reserve( 3 );
         currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
         /* Draw a triangle that contains the circle, then shade it leaving only the circle.
@@ -320,6 +321,7 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 
     if( isStrokeEnabled )
     {
+        currentManager->Reserve( 3 );
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         /* Draw a triangle that contains the circle, then shade it leaving only the circle.
@@ -394,6 +396,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         // Triangle fan
         for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
         {
+            currentManager->Reserve( 3 );
             currentManager->Vertex( 0.0, 0.0, 0.0 );
             currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, 0.0 );
             alpha += alphaIncrement;
@@ -402,6 +405,8 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
 
         // The last missing triangle
         const VECTOR2D endPoint( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
+
+        currentManager->Reserve( 3 );
         currentManager->Vertex( 0.0, 0.0, 0.0 );
         currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, 0.0 );
         currentManager->Vertex( endPoint.x,    endPoint.y,     0.0 );
@@ -434,6 +439,7 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
     // Fill the rectangle
     if( isFillEnabled )
     {
+        currentManager->Reserve( 6 );
         currentManager->Shader( SHADER_NONE );
         currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
 
@@ -868,6 +874,8 @@ void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
     glm::vec4 vector = currentManager->GetTransformation() *
                        glm::vec4( -startEndVector.y * scale, startEndVector.x * scale, 0.0, 0.0 );
 
+    currentManager->Reserve( 6 );
+
     // Line width is maintained by the vertex shader
     currentManager->Shader( SHADER_LINE, vector.x, vector.y, lineWidth );
     currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );    // v0
@@ -909,6 +917,8 @@ void OPENGL_GAL::drawFilledSemiCircle( const VECTOR2D& aCenterPoint, double aRad
                                        double aAngle )
 {
     Save();
+
+    currentManager->Reserve( 3 );
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
     currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 
@@ -940,6 +950,8 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
     double outerRadius = aRadius + ( lineWidth / 2 );
 
     Save();
+
+    currentManager->Reserve( 3 );
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0f );
     currentManager->Rotate( aAngle, 0.0f, 0.0f, 1.0f );
 

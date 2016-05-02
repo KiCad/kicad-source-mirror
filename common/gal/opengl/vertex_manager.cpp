@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@
 using namespace KIGFX;
 
 VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
-    m_noTransform( true ), m_transform( 1.0f )
+    m_noTransform( true ), m_transform( 1.0f ), m_reserved( NULL ), m_reservedSpace( 0 )
 {
     m_container.reset( VERTEX_CONTAINER::MakeContainer( aCached ) );
     m_gpu.reset( GPU_MANAGER::MakeManager( m_container.get() ) );
@@ -49,13 +49,50 @@ VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
 }
 
 
-void VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ ) const
+void VERTEX_MANAGER::Reserve( unsigned int aSize )
+{
+    assert( m_reservedSpace == 0 && m_reserved == NULL );
+
+    // flag to avoid hanging by calling DisplayError too many times:
+    static bool show_err = true;
+
+    m_reserved = m_container->Allocate( aSize );
+
+    if( m_reserved == NULL )
+    {
+        if( show_err )
+        {
+            DisplayError( NULL, wxT( "VERTEX_MANAGER::Reserve: Vertex allocation error" ) );
+            show_err = false;
+        }
+
+        return;
+    }
+
+    m_reservedSpace = aSize;
+}
+
+
+void VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ )
 {
     // flag to avoid hanging by calling DisplayError too many times:
     static bool show_err = true;
 
     // Obtain the pointer to the vertex in the currently used container
-    VERTEX* newVertex = m_container->Allocate( 1 );
+    VERTEX* newVertex;
+
+    if( m_reservedSpace > 0 )
+    {
+        newVertex = m_reserved++;
+        --m_reservedSpace;
+
+        if( m_reservedSpace == 0 )
+            m_reserved = NULL;
+    }
+    else
+    {
+        newVertex = m_container->Allocate( 1 );
+    }
 
     if( newVertex == NULL )
     {
@@ -72,7 +109,7 @@ void VERTEX_MANAGER::Vertex( GLfloat aX, GLfloat aY, GLfloat aZ ) const
 }
 
 
-void VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize ) const
+void VERTEX_MANAGER::Vertices( const VERTEX aVertices[], unsigned int aSize )
 {
     // flag to avoid hanging by calling DisplayError too many times:
     static bool show_err = true;

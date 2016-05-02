@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -59,6 +59,14 @@ public:
     VERTEX_MANAGER( bool aCached );
 
     /**
+     * Function Reserve()
+     * allocates space for vertices, so it will be used with subsequent Vertex() calls.
+     *
+     * @param aSize is the number of vertices that should be available in the reserved space.
+     */
+    void Reserve( unsigned int aSize );
+
+    /**
      * Function Vertex()
      * adds a vertex with the given coordinates to the currently set item. Color & shader
      * parameters stored in aVertex are ignored, instead color & shader set by Color() and
@@ -67,7 +75,7 @@ public:
      *
      * @param aVertex contains vertex coordinates.
      */
-    inline void Vertex( const VERTEX& aVertex ) const
+    inline void Vertex( const VERTEX& aVertex )
     {
         Vertex( aVertex.x, aVertex.y, aVertex.z );
     }
@@ -81,7 +89,7 @@ public:
      * @param aY is the Y coordinate of the new vertex.
      * @param aZ is the Z coordinate of the new vertex.
      */
-    void Vertex( GLfloat aX, GLfloat aY, GLfloat aZ ) const;
+    void Vertex( GLfloat aX, GLfloat aY, GLfloat aZ );
 
     /**
      * Function Vertices()
@@ -94,7 +102,7 @@ public:
      * @param aVertices contains vertices to be added
      * @param aSize is the number of vertices to be added.
      */
-    void Vertices( const VERTEX aVertices[], unsigned int aSize ) const;
+    void Vertices( const VERTEX aVertices[], unsigned int aSize );
 
     /**
      * Function Color()
@@ -340,6 +348,12 @@ protected:
     GLubyte                 m_color[ColorStride];
     /// Currently used shader and its parameters
     GLfloat                 m_shader[ShaderStride];
+
+    /// Currently reserved chunk to store vertices
+    VERTEX*                 m_reserved;
+
+    /// Currently available reserved space
+    unsigned int            m_reservedSpace;
 };
 
 } // namespace KIGFX
