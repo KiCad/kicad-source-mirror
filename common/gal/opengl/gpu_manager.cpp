@@ -160,6 +160,12 @@ void GPU_CACHED_MANAGER::EndDrawing()
 
     wxASSERT( m_isDrawing );
 
+    if( m_indicesSize == 0 )
+    {
+        m_isDrawing = false;
+        return;
+    }
+
     // Prepare buffers
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_COLOR_ARRAY );
@@ -178,7 +184,8 @@ void GPU_CACHED_MANAGER::EndDrawing()
     }
 
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_indicesBuffer );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, m_indicesSize * sizeof(int), (GLvoid*) m_indices.get(), GL_DYNAMIC_DRAW );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, m_indicesSize * sizeof(int),
+            (GLvoid*) m_indices.get(), GL_STATIC_DRAW );
 
     glDrawElements( GL_TRIANGLES, m_indicesSize, GL_UNSIGNED_INT, 0 );
 
@@ -289,6 +296,9 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
     prof_counter totalRealTime;
     prof_start( &totalRealTime );
 #endif /* __WXDEBUG__ */
+
+    if( m_container->GetSize() == 0 )
+        return;
 
     VERTEX*  vertices       = m_container->GetAllVertices();
     GLfloat* coordinates    = (GLfloat*) ( vertices );
