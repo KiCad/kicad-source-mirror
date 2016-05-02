@@ -34,9 +34,9 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <painter.h>
 
-#ifdef PROFILE
+#ifdef __WXDEBUG__
 #include <profile.h>
-#endif /* PROFILE  */
+#endif /* __WXDEBUG__  */
 
 using namespace KIGFX;
 
@@ -774,10 +774,10 @@ void VIEW::ClearTargets()
 
 void VIEW::Redraw()
 {
-#ifdef PROFILE
+#ifdef __WXDEBUG__
     prof_counter totalRealTime;
     prof_start( &totalRealTime );
-#endif /* PROFILE */
+#endif /* __WXDEBUG__ */
 
     VECTOR2D screenSize = m_gal->GetScreenPixelSize();
     BOX2I    rect( ToWorld( VECTOR2D( 0, 0 ) ),
@@ -791,11 +791,10 @@ void VIEW::Redraw()
     markTargetClean( TARGET_NONCACHED );
     markTargetClean( TARGET_OVERLAY );
 
-#ifdef PROFILE
+#ifdef __WXDEBUG__
     prof_end( &totalRealTime );
-
-    wxLogDebug( wxT( "Redraw: %.1f ms" ), totalRealTime.msecs() );
-#endif /* PROFILE */
+    wxLogTrace( "GAL_PROFILE", wxT( "VIEW::Redraw(): %.1f ms" ), totalRealTime.msecs() );
+#endif /* __WXDEBUG__ */
 }
 
 
@@ -1005,10 +1004,10 @@ void VIEW::RecacheAllItems( bool aImmediately )
 
     r.SetMaximum();
 
-#ifdef PROFILE
+#ifdef __WXDEBUG__
     prof_counter totalRealTime;
     prof_start( &totalRealTime );
-#endif /* PROFILE */
+#endif /* __WXDEBUG__ */
 
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
@@ -1024,12 +1023,11 @@ void VIEW::RecacheAllItems( bool aImmediately )
         }
     }
 
-#ifdef PROFILE
+#ifdef __WXDEBUG__
     prof_end( &totalRealTime );
-
-    wxLogDebug( wxT( "RecacheAllItems::immediately: %u %.1f ms" ),
+    wxLogTrace( "GAL_PROFILE", wxT( "RecacheAllItems::immediately: %u %.1f ms" ),
                 aImmediately, totalRealTime.msecs() );
-#endif /* PROFILE */
+#endif /* __WXDEBUG__ */
 }
 
 

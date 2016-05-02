@@ -29,10 +29,11 @@
 #include <gal/opengl/opengl_gal.h>
 #include <gal/definitions.h>
 
-#include <wx/log.h>
 #include <macros.h>
+
 #ifdef __WXDEBUG__
 #include <profile.h>
+#include <wx/log.h>
 #endif /* __WXDEBUG__ */
 
 #include <limits>
@@ -137,6 +138,11 @@ void OPENGL_GAL::BeginDrawing()
     if( !IsShownOnScreen() )
         return;
 
+#ifdef __WXDEBUG__
+    prof_counter totalRealTime;
+    prof_start( &totalRealTime );
+#endif /* __WXDEBUG__ */
+
     SetCurrent( *glContext );
     clientDC = new wxClientDC( this );
 
@@ -205,11 +211,22 @@ void OPENGL_GAL::BeginDrawing()
     cachedManager.BeginDrawing();
     nonCachedManager.BeginDrawing();
     overlayManager.BeginDrawing();
+
+#ifdef __WXDEBUG__
+    prof_end( &totalRealTime );
+    wxLogTrace( "GAL_PROFILE",
+                wxT( "OPENGL_GAL::BeginDrawing(): %.1f ms" ), totalRealTime.msecs() );
+#endif /* __WXDEBUG__ */
 }
 
 
 void OPENGL_GAL::EndDrawing()
 {
+#ifdef __WXDEBUG__
+    prof_counter totalRealTime;
+    prof_start( &totalRealTime );
+#endif /* __WXDEBUG__ */
+
     // Cached & non-cached containers are rendered to the same buffer
     compositor.SetBuffer( mainBuffer );
     nonCachedManager.EndDrawing();
@@ -231,6 +248,11 @@ void OPENGL_GAL::EndDrawing()
     SwapBuffers();
 
     delete clientDC;
+
+#ifdef __WXDEBUG__
+    prof_end( &totalRealTime );
+    wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::EndDrawing(): %.1f ms" ), totalRealTime.msecs() );
+#endif /* __WXDEBUG__ */
 }
 
 

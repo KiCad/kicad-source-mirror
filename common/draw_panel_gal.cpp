@@ -45,9 +45,10 @@
 
 #include <boost/foreach.hpp>
 
-#ifdef __WXDEBUG__
+#ifdef PROFILE
 #include <profile.h>
-#endif /* __WXDEBUG__ */
+#endif /* PROFILE */
+
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
@@ -142,6 +143,11 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     if( m_drawing )
         return;
 
+#ifdef PROFILE
+    prof_counter totalRealTime;
+    prof_start( &totalRealTime );
+#endif /* PROFILE */
+
     m_drawing = true;
     KIGFX::PCB_RENDER_SETTINGS* settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_painter->GetSettings() );
 
@@ -166,6 +172,11 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
     m_gal->EndDrawing();
+
+#ifdef PROFILE
+    prof_end( &totalRealTime );
+    wxLogDebug( wxT( "EDA_DRAW_PANEL_GAL::onPaint(): %.1f ms" ), totalRealTime.msecs() );
+#endif /* PROFILE */
 
     m_lastRefresh = wxGetLocalTimeMillis();
     m_drawing = false;
