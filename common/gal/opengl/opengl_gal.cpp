@@ -285,7 +285,6 @@ void OPENGL_GAL::EndDrawing()
     compositor.DrawBuffer( overlayBuffer );
     blitCursor();
 
-    glFlush();
     SwapBuffers();
 
     delete clientDC;
