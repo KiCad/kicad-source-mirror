@@ -24,7 +24,7 @@
 
 #include <confirm.h>
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <cassert>
 
 int checkGlError( const std::string& aInfo )
