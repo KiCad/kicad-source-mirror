@@ -93,7 +93,7 @@ protected:
      * @param aSize is the number of vertices to be stored.
      * @return offset of the new chunk.
      */
-    virtual unsigned int reallocate( unsigned int aSize );
+    unsigned int reallocate( unsigned int aSize );
 
     /**
      * Function defragment()
@@ -154,16 +154,16 @@ private:
         return aChunk.second;
     }
 
+    /**
+     * Function addFreeChunk
+     * Adds a chunk marked as free.
+     */
+    void addFreeChunk( unsigned int aOffset, unsigned int aSize );
+
     /// Debug & test functions
-#if CACHED_CONTAINER_TEST > 0
     void showFreeChunks();
-    void showReservedChunks();
+    void showUsedChunks();
     void test();
-#else
-    inline void showFreeChunks() {}
-    inline void showReservedChunks() {}
-    inline void test() {}
-#endif /* CACHED_CONTAINER_TEST */
 };
 } // namespace KIGFX
 

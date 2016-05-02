@@ -63,7 +63,7 @@ public:
 
     /**
      * Function Allocate()
-     * returns allocated space (possibly resizing the reserved memory chunk or allocating a new
+     * returns allocated space (possibly resizing the used memory chunk or allocating a new
      * chunk if it was not stored before) for the given number of vertices associated with the
      * current item (set by SetItem()). The newly allocated space is added at the end of the chunk
      * used by the current item and may serve to store new vertices.
@@ -159,11 +159,11 @@ protected:
     bool            m_dirty;
 
     /**
-     * Function reservedSpace()
-     * returns size of the reserved memory space.
-     * @return Size of the reserved memory space (expressed as a number of vertices).
+     * Function usedSpace()
+     * returns size of the used memory space.
+     * @return Size of the used memory space (expressed as a number of vertices).
      */
-    inline unsigned int reservedSpace()
+    inline unsigned int usedSpace() const
     {
         return m_currentSize - m_freeSpace;
     }
