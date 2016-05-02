@@ -135,10 +135,10 @@ void EDA_3D_FRAME::CreateMenuBar()
     menuBar->Append( fileMenu, _( "&File" ) );
 
     AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_PNG,
-                 _( "Create Image (png format)" ),
+                 _( "Create Image (PNG format)" ),
                  KiBitmap( export_xpm ) );
     AddMenuItem( fileMenu, ID_MENU_SCREENCOPY_JPEG,
-                 _( "Create Image (jpeg format)" ),
+                 _( "Create Image (JPEG format)" ),
                  KiBitmap( export_xpm ) );
 
     fileMenu->AppendSeparator();

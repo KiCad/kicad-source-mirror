@@ -40,7 +40,7 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( 
 	wxStaticBoxSizer* sbSizerViewOpt;
 	sbSizerViewOpt = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pan and Zoom") ), wxVERTICAL );
 	
-	m_IsZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Do not center and warp cusor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_IsZoomNoCenter = new wxCheckBox( this, wxID_ANY, _("Do not center and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_IsZoomNoCenter->SetToolTip( _("Keep the cursor at its current location when zooming") );
 	
 	sbSizerViewOpt->Add( m_IsZoomNoCenter, 0, wxEXPAND|wxALL, 5 );

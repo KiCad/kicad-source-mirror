@@ -55,8 +55,8 @@ void PL_EDITOR_FRAME::Process_Config( wxCommandEvent& event )
 
         GetMenuBar()->SetLabel( ID_MENU_SWITCH_BGCOLOR,
                                 GetDrawBgColor() == WHITE ?
-                                _( "&BackGround Black" ) :
-                                _( "&BackGround White" ) );
+                                _( "&Background Black" ) :
+                                _( "&Background White" ) );
         m_canvas->Refresh();
         break;
 

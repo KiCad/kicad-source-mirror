@@ -118,7 +118,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     AddMenuItem( preferencesMenu,
                  ID_MENU_SWITCH_BGCOLOR,
                  GetDrawBgColor() == WHITE ?
-                 _( "&BackGround Black" ) : _( "&BackGround White" ),
+                 _( "&Background Black" ) : _( "&Background White" ),
                  wxEmptyString, KiBitmap( palette_xpm ) );
 
     AddMenuItem( preferencesMenu,

@@ -112,7 +112,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	m_MinThicknessValueTitle = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Minimum width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MinThicknessValueTitle->Wrap( -1 );
-	m_MinThicknessValueTitle->SetToolTip( _("Minimun thickness of filled areas.") );
+	m_MinThicknessValueTitle->SetToolTip( _("Minimum thickness of filled areas.") );
 	
 	bSizerSettings->Add( m_MinThicknessValueTitle, 0, wxRIGHT|wxLEFT, 5 );
 	
