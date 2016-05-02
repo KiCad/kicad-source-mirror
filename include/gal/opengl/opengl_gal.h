@@ -350,8 +350,20 @@ private:
      * Its main purpose is to be used in BitmapText() function.
      *
      * @param aCharacter is the character to be drawn.
+     * @return Width of the drawn glyph.
      */
-    void drawBitmapChar( const unsigned long aChar );
+    int drawBitmapChar( unsigned long aChar );
+
+    /**
+     * @brief Draws an overbar over the currently drawn text.
+     * Its main purpose is to be used in BitmapText() function.
+     * This method requires appropriate scaling to be applied (as is done in BitmapText() function).
+     * The current X coordinate will be the overbar ending.
+     *
+     * @param aLength is the width of the overbar.
+     * @param aHeight is the height for the overbar.
+     */
+    void drawBitmapOverbar( double aLength, double aHeight );
 
     /**
      * @brief Computes a size of text drawn using bitmap font with current text setting applied.

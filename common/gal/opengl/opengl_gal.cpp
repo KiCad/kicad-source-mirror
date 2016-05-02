@@ -699,6 +699,11 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     // Compute text size, so it can be properly justified
     VECTOR2D textSize = computeBitmapTextSize( aText );
     const double SCALE = GetGlyphSize().y / textSize.y * 2.0;
+    int tildas = 0;
+    bool overbar = false;
+
+    int overbarLength = 0;
+    double overbarHeight = textSize.y;
 
     Save();
 
@@ -728,10 +733,12 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     {
     case GR_TEXT_VJUSTIFY_TOP:
         Translate( VECTOR2D( 0, -textSize.y ) );
+        overbarHeight = 0;
         break;
 
     case GR_TEXT_VJUSTIFY_CENTER:
         Translate( VECTOR2D( 0, -textSize.y / 2.0 ) );
+        overbarHeight = 0; //textSize.y;
         break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:
@@ -758,14 +765,38 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
         wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
 
+        // Handle overbar
+        if( c == '~' )
+        {
+            overbar = !overbar;
+            ++tildas;
+            continue;
+        }
+        else if( tildas > 0 )
+        {
+            if( tildas % 2 == 1 )
+            {
+                if( overbar )                   // Overbar begins
+                    overbarLength = 0;
+                else if( overbarLength > 0 )    // Overbar finishes
+                    drawBitmapOverbar( overbarLength, overbarHeight );
 
+                --tildas;
+            }
 
+            // Draw tilda characters if there are any remaining
+            for( int i = 0; i < tildas / 2; ++i )
+                overbarLength += drawBitmapChar( '~' );
 
-        drawBitmapChar( c );
+            tildas = 0;
+        }
 
-
-
+        overbarLength += drawBitmapChar( c );
     }
+
+    // Handle the case when overbar is active till the end of the drawn text
+    if( overbar )
+        drawBitmapOverbar( overbarLength, overbarHeight );
 
     Restore();
 }
@@ -1145,55 +1176,120 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
 }
 
 
-void OPENGL_GAL::drawBitmapChar( const unsigned long aChar )
+int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
 {
     const float TEX_X = bitmap_font.width;
     const float TEX_Y = bitmap_font.height;
 
-    const bitmap_glyph& glyph = bitmap_chars[aChar];
-    const float x = glyph.x;
-    const float y = glyph.y;
-    const float xoff = glyph.x_off;
-    const float yoff = glyph.y_off;
-    const float w = glyph.width;
-    const float h = glyph.height;
+    const bitmap_glyph& GLYPH = bitmap_chars[aChar];
+    const float X = GLYPH.x;
+    const float Y = GLYPH.y;
+    const float XOFF = GLYPH.x_off;
+    const float YOFF = GLYPH.y_off;
+    const float W = GLYPH.width;
+    const float H = GLYPH.height;
+
+    Translate( VECTOR2D( XOFF / 2, 0 ) );
 
     currentManager->Reserve( 6 );
 
-    Translate( VECTOR2D( xoff / 2, 0 ) );
+    currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
+    currentManager->Vertex( 0,  YOFF, 0 );             // v0
 
-    currentManager->Shader( SHADER_FONT, x / TEX_X, y / TEX_Y );
-    currentManager->Vertex( 0,  yoff, 0 );             // v0
+    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
+    currentManager->Vertex( W,  YOFF, 0 );             // v1
 
-    currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, y / TEX_Y );
-    currentManager->Vertex( w,  yoff, 0 );             // v1
-
-    currentManager->Shader( SHADER_FONT, x / TEX_X, ( y + h ) / TEX_Y );
-    currentManager->Vertex( 0,  yoff + h, 0 );         // v2
+    currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
+    currentManager->Vertex( 0,  YOFF + H, 0 );         // v2
 
 
-    currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, y / TEX_Y );
-    currentManager->Vertex( w,  yoff, 0 );              // v1
+    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
+    currentManager->Vertex( W,  YOFF, 0 );              // v1
 
-    currentManager->Shader( SHADER_FONT, x / TEX_X, ( y + h ) / TEX_Y );
-    currentManager->Vertex( 0,  yoff + h, 0 );          // v2
+    currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
+    currentManager->Vertex( 0,  YOFF + H, 0 );          // v2
 
-    currentManager->Shader( SHADER_FONT, ( x + w ) / TEX_X, ( y + h ) / TEX_Y );
-    currentManager->Vertex( w,  yoff + h, 0 );          // v3
+    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, ( Y + H ) / TEX_Y );
+    currentManager->Vertex( W,  YOFF + H, 0 );          // v3
 
-    Translate( VECTOR2D( w + xoff / 2, 0 ) );
+    Translate( VECTOR2D( W + XOFF / 2, 0 ) );
+
+    return GLYPH.width + GLYPH.x_off;
+}
+
+
+void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
+{
+    const float TEX_X = bitmap_font.width;
+    const float TEX_Y = bitmap_font.height;
+
+    // Margin is to shave off the blurry part of the character
+    const int MARGIN = 2;
+
+    // To draw an overbar, simply stretch an underscore character (_)
+    const bitmap_glyph& GLYPH = bitmap_chars['_'];
+    const float X = GLYPH.x + MARGIN;
+    const float Y = GLYPH.y + MARGIN;
+    const float W = GLYPH.width - 2 * MARGIN;
+    const float H = GLYPH.height - 2 * MARGIN;
+
+    assert( W > 0 && H > 0 );
+
+    Save();
+    Translate( VECTOR2D( -aLength, -aHeight ) );
+
+    currentManager->Reserve( 6 );
+
+    currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
+    currentManager->Vertex( 0, 0, 0 );                      // v0
+
+    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
+    currentManager->Vertex( aLength, 0 , 0 );                // v1
+
+    currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
+    currentManager->Vertex( 0, H + 2 * MARGIN, 0 );          // v2
+
+
+    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
+    currentManager->Vertex( aLength, 0 , 0 );                // v1
+
+    currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
+    currentManager->Vertex( 0, H + 2 * MARGIN, 0 );         // v2
+
+    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, ( Y + H ) / TEX_Y );
+    currentManager->Vertex( aLength, H + 2 * MARGIN, 0 );    // v3
+
+    Restore();
 }
 
 
 VECTOR2D OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
 {
     VECTOR2D textSize( 0, 0 );
+    bool wasTilda = false;
 
     for( unsigned int i = 0; i < aText.length(); ++i )
     {
-        const bitmap_glyph& glyph = bitmap_chars[aText[i]];
-        textSize.x += ( glyph.x_off + glyph.width );
-        textSize.y = std::max( (unsigned int)( textSize.y ), glyph.y_off * 2 + glyph.height );
+        // Remove overbar control characters
+        if( aText[i] == '~' )
+        {
+            if( !wasTilda )
+            {
+                // Only double tildas are counted as characters, so skip it as it might
+                // be an overbar control character
+                wasTilda = true;
+                continue;
+            }
+            else
+            {
+                // Double tilda detected, reset the state and process as a normal character
+                wasTilda = false;
+            }
+        }
+
+        const bitmap_glyph& GLYPH = bitmap_chars[aText[i]];
+        textSize.x += ( GLYPH.x_off + GLYPH.width );
+        textSize.y = std::max( (unsigned int)( textSize.y ), GLYPH.y_off * 2 + GLYPH.height );
     }
 
     return textSize;
