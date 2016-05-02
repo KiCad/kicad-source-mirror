@@ -109,7 +109,6 @@ protected:
     ///> Properties of currently modified chunk & item
     unsigned int        m_chunkSize;
     unsigned int        m_chunkOffset;
-    unsigned int        m_itemSize;
 
     bool m_isMapped;
     bool m_isInitialized;
@@ -125,12 +124,13 @@ protected:
     /**
      * Function reallocate()
      * resizes the chunk that stores the current item to the given size. The current item has
-     * its offset adjusted after the call.
+     * its offset adjusted after the call, and the new chunk parameters are stored
+     * in m_chunkOffset and m_chunkSize.
      *
-     * @param aSize is the number of vertices to be stored.
-     * @return size of the new chunk (might be bigger than requested).
+     * @param aSize is the requested chunk size.
+     * @return true in case of success, false otherwise
      */
-    unsigned int reallocate( unsigned int aSize );
+    bool reallocate( unsigned int aSize );
 
     /**
      * Function defragmentResize()
