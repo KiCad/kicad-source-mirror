@@ -430,24 +430,36 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
     glBindBuffer( GL_COPY_READ_BUFFER, m_glBufferHandle );
     checkGlError( "resizing vertex buffer" );
 
-    int newOffset = 0;
-    ITEMS::iterator it, it_end;
 
-    for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
+    // Special case: the container is either already defragmented or filled up to its capacity,
+    // so we just resize it and move the current data
+    if( ( m_freeChunks.size() == 0 )
+        || ( m_freeChunks.size() == 1 && m_freeChunks.begin()->second == usedSpace() ) )
     {
-        VERTEX_ITEM* item = *it;
-        int itemOffset    = item->GetOffset();
-        int itemSize      = item->GetSize();
-
-        // Move an item to the new container
         glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
-                itemOffset * VertexSize, newOffset * VertexSize, itemSize * VertexSize );
+                0, 0, usedSpace() * VertexSize );
+    }
+    else
+    {
+        int newOffset = 0;
+        ITEMS::iterator it, it_end;
 
-        // Update new offset
-        item->setOffset( newOffset );
+        for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
+        {
+            VERTEX_ITEM* item = *it;
+            int itemOffset    = item->GetOffset();
+            int itemSize      = item->GetSize();
 
-        // Move to the next free space
-        newOffset += itemSize;
+            // Move an item to the new container
+            glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER,
+                    itemOffset * VertexSize, newOffset * VertexSize, itemSize * VertexSize );
+
+            // Update new offset
+            item->setOffset( newOffset );
+
+            // Move to the next free space
+            newOffset += itemSize;
+        }
     }
 
     glBindBuffer( GL_COPY_WRITE_BUFFER, 0 );
