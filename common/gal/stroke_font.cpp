@@ -211,7 +211,7 @@ void STROKE_FONT::Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRo
     }
 
     m_gal->SetIsStroke( true );
-    //m_gal->SetIsFill( false );
+    m_gal->SetIsFill( false );
 
     if( m_gal->IsFontBold() )
         m_gal->SetLineWidth( m_gal->GetLineWidth() * BOLD_FACTOR );
