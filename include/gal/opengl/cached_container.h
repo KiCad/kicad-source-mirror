@@ -124,10 +124,11 @@ protected:
 
     /**
      * Function reallocate()
-     * resizes the chunk that stores the current item to the given size.
+     * resizes the chunk that stores the current item to the given size. The current item has
+     * its offset adjusted after the call.
      *
      * @param aSize is the number of vertices to be stored.
-     * @return offset of the new chunk.
+     * @return size of the new chunk (might be bigger than requested).
      */
     unsigned int reallocate( unsigned int aSize );
 

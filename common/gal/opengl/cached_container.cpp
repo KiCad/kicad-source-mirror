@@ -126,12 +126,8 @@ VERTEX* CACHED_CONTAINER::Allocate( unsigned int aSize )
     if( m_itemSize + aSize > m_chunkSize )
     {
         // There is not enough space in the currently reserved chunk, so we have to resize it
-
-        // Reserve a bigger memory chunk for the current item and
-        // make it multiple of 3 to store triangles
-        m_chunkSize = ( 2 * m_itemSize ) + aSize + ( 3 - aSize % 3 );
-        // Save the current size before reallocating
-        m_chunkOffset = reallocate( m_chunkSize );
+        m_chunkSize = reallocate( m_itemSize + aSize );
+        m_chunkOffset = m_item->GetOffset();
 
         if( m_chunkOffset > m_currentSize )
         {
@@ -142,6 +138,7 @@ VERTEX* CACHED_CONTAINER::Allocate( unsigned int aSize )
 
     VERTEX* reserved = &m_vertices[m_chunkOffset + m_itemSize];
     m_itemSize += aSize;
+
     // Now the item officially possesses the memory chunk
     m_item->setSize( m_itemSize );
 
@@ -340,19 +337,10 @@ unsigned int CACHED_CONTAINER::reallocate( unsigned int aSize )
 
     // Remove the allocated chunk from the free space pool
     m_freeChunks.erase( newChunk );
-
-    // If there is some space left, return it to the pool - add an entry for it
-    if( newChunkSize > aSize )
-    {
-        m_freeChunks.insert( CHUNK( newChunkSize - aSize, newChunkOffset + aSize ) );
-    }
-
-    m_freeSpace -= aSize;
-    // mergeFreeChunks();   // veery slow and buggy
-
+    m_freeSpace -= newChunkSize;
     m_item->setOffset( newChunkOffset );
 
-    return newChunkOffset;
+    return newChunkSize;
 }
 
 
