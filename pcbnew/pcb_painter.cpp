@@ -565,7 +565,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
     m_gal->Save();
     m_gal->Translate( VECTOR2D( aPad->GetPosition() ) );
-    m_gal->Rotate( -aPad->GetOrientation() * M_PI / 1800.0 );
+    m_gal->Rotate( -aPad->GetOrientationRadians() );
 
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
     VECTOR2D    size;
@@ -771,7 +771,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         if( module )
         {
             m_gal->Translate( module->GetPosition() );
-            m_gal->Rotate( -module->GetOrientation() * M_PI / 1800.0 );
+            m_gal->Rotate( -module->GetOrientationRadians() );
         }
         else
         {
@@ -812,7 +812,6 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
-    double   orientation = aText->GetOrientation() * M_PI / 1800.0;
 
     if( m_pcbSettings.m_sketchMode[aLayer] )
     {
@@ -829,7 +828,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, orientation );
+    m_gal->StrokeText( shownText, position, aText->GetOrientationRadians() );
 }
 
 
@@ -841,7 +840,6 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
     VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
-    double   orientation = aText->GetDrawRotation() * M_PI / 1800.0;
 
     if( m_pcbSettings.m_sketchMode[aLayer] )
     {
@@ -858,7 +856,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, orientation );
+    m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians() );
 
     // Draw the umbilical line
     if( aText->IsSelected() && aText->GetType() != TEXTE_MODULE::TEXT_is_DIVERS )
@@ -989,11 +987,10 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
     // Draw text
     TEXTE_PCB& text = aDimension->Text();
     VECTOR2D position( text.GetTextPosition().x, text.GetTextPosition().y );
-    double   orientation = text.GetOrientation() * M_PI / 1800.0;
 
     m_gal->SetLineWidth( text.GetThickness() );
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( text.GetShownText(), position, orientation );
+    m_gal->StrokeText( text.GetShownText(), position, text.GetOrientationRadians() );
 }
 
 

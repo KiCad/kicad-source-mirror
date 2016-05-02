@@ -316,7 +316,7 @@ double TEXTE_MODULE::GetDrawRotation() const
     if( module )
         rotation += module->GetOrientation();
 
-    // For angle = -90 .. 90 deg
+    // Keep angle between -90 .. 90 deg. Otherwise the text is not easy to read
     while( rotation > 900 )
         rotation -= 1800;
 
@@ -368,7 +368,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), msg, DARKGREEN ) );
 
-    msg.Printf( wxT( "%.1f" ), m_Orient / 10.0 );
+    msg.Printf( wxT( "%.1f" ), GetOrientationDegrees() );
     aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
 
     msg = ::CoordinateToString( m_Thickness );

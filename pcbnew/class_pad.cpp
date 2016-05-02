@@ -676,14 +676,14 @@ void D_PAD::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM>& aList )
         aList.push_back( MSG_PANEL_ITEM( _( "Drill X / Y" ), Line, RED ) );
     }
 
-    double module_orient = module ? module->GetOrientation() : 0;
+    double module_orient_degrees = module ? module->GetOrientationDegrees() : 0;
 
-    if( module_orient )
+    if( module_orient_degrees != 0.0 )
         Line.Printf( wxT( "%3.1f(+%3.1f)" ),
-                     ( m_Orient - module_orient ) / 10.0,
-                     module_orient / 10.0 );
+                     GetOrientationDegrees() - module_orient_degrees,
+                     module_orient_degrees );
     else
-        Line.Printf( wxT( "%3.1f" ), m_Orient / 10.0 );
+        Line.Printf( wxT( "%3.1f" ), GetOrientationDegrees() );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), Line, LIGHTBLUE ) );
 

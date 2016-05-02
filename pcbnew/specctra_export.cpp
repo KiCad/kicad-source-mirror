@@ -741,13 +741,9 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
             pin->padstack_id = padstack->padstack_id;
 
-            int angle = pad->GetOrientation() - aModule->GetOrientation();    // tenths of degrees
-
-            if( angle )
-            {
-                NORMALIZE_ANGLE_POS( angle );
-                pin->SetRotation( angle / 10.0 );
-            }
+            double angle = pad->GetOrientationDegrees() - aModule->GetOrientationDegrees();
+            NORMALIZE_ANGLE_DEGREES_POS( angle );
+            pin->SetRotation( angle );
 
             wxPoint pos( pad->GetPos0() );
 
@@ -1865,7 +1861,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             comp->places.push_back( place );
 
-            place->SetRotation( module->GetOrientation()/10.0 );
+            place->SetRotation( module->GetOrientationDegrees() );
             place->SetVertex( mapPt( module->GetPosition() ) );
             place->component_id = componentId;
             place->part_number  = TO_UTF8( module->GetValue() );
@@ -1873,9 +1869,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             // module is flipped from bottom side, set side to T_back
             if( module->GetFlag() )
             {
-                int angle = 1800 - module->GetOrientation();
-                NORMALIZE_ANGLE_POS( angle );
-                place->SetRotation( angle / 10.0 );
+                double angle = 180.0 - module->GetOrientationDegrees();
+                NORMALIZE_ANGLE_DEGREES_POS( angle );
+                place->SetRotation( angle );
 
                 place->side = T_back;
             }

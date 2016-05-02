@@ -121,6 +121,7 @@ public:
      * the footprint rotation is taken in account
      */
     double GetDrawRotation() const;
+    double GetDrawRotationRadians() const { return GetDrawRotation() * M_PI/1800; }
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const;

@@ -199,10 +199,17 @@ public:
     void SetOrientation( double aAngle );
 
     /**
+     * Set orientation in degrees
+     */
+    void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation*10.0 ); }
+
+    /**
      * Function GetOrientation
      * returns the rotation angle of the pad in tenths of degrees, but soon degrees.
      */
     double GetOrientation() const { return m_Orient; }
+    double GetOrientationDegrees() const   { return m_Orient/10.0; }
+    double GetOrientationRadians() const   { return m_Orient*M_PI/1800; }
 
     void SetDrillShape( PAD_DRILL_SHAPE_T aDrillShape )
         { m_drillShape = aDrillShape; }
