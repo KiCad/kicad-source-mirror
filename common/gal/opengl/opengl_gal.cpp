@@ -1062,18 +1062,28 @@ unsigned int OPENGL_GAL::getNewGroupNumber()
 
 bool OPENGL_GAL::runTest()
 {
-    wxDialog dlgtest( GetParent(), -1, wxT( "opengl test" ), wxPoint( 50, 50 ),
-                      wxDLG_UNIT( GetParent(), wxSize( 50, 50 ) ) );
-    OPENGL_TEST* test = new OPENGL_TEST( &dlgtest, this );
+    static bool tested = false;
+    static bool testResult = false;
+    std::string errorMessage = "OpenGL test failed";
 
-    dlgtest.Raise();         // on Linux, on some windows managers (Unity for instance) this is needed to actually show the dialog
-    dlgtest.ShowModal();
-    bool result = test->IsOk();
+    if( !tested )
+    {
+        wxDialog dlgtest( GetParent(), -1, wxT( "opengl test" ), wxPoint( 50, 50 ),
+                        wxDLG_UNIT( GetParent(), wxSize( 50, 50 ) ) );
+        OPENGL_TEST* test = new OPENGL_TEST( &dlgtest, this );
 
-    if( !result )
-        throw std::runtime_error( test->GetError() );
+        dlgtest.Raise();         // on Linux, on some windows managers (Unity for instance) this is needed to actually show the dialog
+        dlgtest.ShowModal();
+        testResult = test->IsOk();
 
-    return result;
+        if( !testResult )
+            errorMessage = test->GetError();
+    }
+
+    if( !testResult )
+        throw std::runtime_error( errorMessage );
+
+    return testResult;
 }
 
 
