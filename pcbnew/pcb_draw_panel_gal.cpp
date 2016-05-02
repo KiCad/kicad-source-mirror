@@ -109,7 +109,7 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aGalType )
     // Load display options (such as filled/outline display of items).
     // Can be made only if the parent window is an EDA_DRAW_FRAME (or a derived class)
     // which is not always the case (namely when it is used from a wxDialog like the pad editor)
-    EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( aParentWindow );
+    EDA_DRAW_FRAME* frame = GetParentEDAFrame();
 
     if( frame )
     {

@@ -52,6 +52,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize )
 {
     m_parent     = aParentWindow;
+    m_edaFrame   = dynamic_cast<EDA_DRAW_FRAME*>( aParentWindow );
     m_gal        = NULL;
     m_backend    = GAL_TYPE_NONE;
     m_view       = NULL;
@@ -104,8 +105,6 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     m_drawing = false;
     m_drawingEnabled = false;
     Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
-
-    m_edaFrame = dynamic_cast<EDA_DRAW_FRAME*>( aParentWindow );
 
     LoadGalSettings();
 }
@@ -373,7 +372,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
 bool EDA_DRAW_PANEL_GAL::SaveGalSettings()
 {
-    if( !m_edaFrame )
+    if( !m_edaFrame || !m_gal )
         return false;
 
     wxConfigBase* cfg = Kiface().KifaceSettings();
@@ -391,7 +390,7 @@ bool EDA_DRAW_PANEL_GAL::SaveGalSettings()
 
 bool EDA_DRAW_PANEL_GAL::LoadGalSettings()
 {
-    if( !m_edaFrame )
+    if( !m_edaFrame || !m_gal )
         return false;
 
     wxConfigBase* cfg = Kiface().KifaceSettings();
