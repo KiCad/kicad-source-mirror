@@ -348,5 +348,5 @@ void TOOL_DISPATCHER::updateUI()
     // but at the moment I cannot think of a better one..
     EDA_DRAW_FRAME* frame = static_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
     frame->UpdateStatusBar();
-    frame->UpdateMsgPanel();
+    //frame->UpdateMsgPanel();
 }
