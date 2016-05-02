@@ -763,7 +763,7 @@ unsigned int TRACK::ViewGetLOD( int aLayer ) const
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
-        return ( 20000000 / ( m_Width + 1 ) );
+        return ( 40000000 / ( m_Width + 1 ) );
     }
 
     // Other layers are shown without any conditions
