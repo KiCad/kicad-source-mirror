@@ -16,10 +16,11 @@ To create a new bitmap font atlas for Graphics Abstraction Layer, follow these s
  * Copy bitmap_font_0.png to common/gal/opengl/bitmap_font_img.c
 
 Recommended export options:
-    Texture size: 1024x1024 (should be supported by majority GPUs)
+    Texture size: 1024x1024 or 2048x2048 (should be supported by majority GPUs)
     Bit depth: 8
     Font descriptor: XML
     Textures: png
+    Layout spacing: 2 (both horizontal and vertical)
 
 To match as closely as possible the newstroke_font glyph set,
 mark the following character subsets in Bitmap Font Generator right panel:
