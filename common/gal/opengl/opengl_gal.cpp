@@ -183,6 +183,8 @@ void OPENGL_GAL::BeginDrawing()
     // Disable 2D Textures
     glDisable( GL_TEXTURE_2D );
 
+    glShadeModel( GL_FLAT );
+
     // Enable the depth buffer
     glEnable( GL_DEPTH_TEST );
     glDepthFunc( GL_LESS );
