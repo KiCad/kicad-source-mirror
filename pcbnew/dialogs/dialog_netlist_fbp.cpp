@@ -96,12 +96,12 @@ DIALOG_NETLIST_FBP::DIALOG_NETLIST_FBP( wxWindow* parent, wxWindowID id, const w
 	bRightSizerButtons->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonFPTest = new wxButton( this, ID_TEST_NETLIST, _("Test Footprints"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonFPTest->SetToolTip( _("Read the current neltist file and list missing and extra footprints") );
+	m_buttonFPTest->SetToolTip( _("Read the current netlist file and list missing and extra footprints") );
 	
 	bRightSizerButtons->Add( m_buttonFPTest, 0, wxEXPAND|wxALL, 5 );
 	
 	m_buttonRebild = new wxButton( this, ID_COMPILE_RATSNEST, _("Rebuild Board Connectivity"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonRebild->SetToolTip( _("Rebuild the full ratsnest (usefull after a manual pad netname edition)") );
+	m_buttonRebild->SetToolTip( _("Rebuild the full ratsnest (useful after a manual pad netname edition)") );
 	
 	bRightSizerButtons->Add( m_buttonRebild, 0, wxEXPAND|wxALL, 5 );
 	

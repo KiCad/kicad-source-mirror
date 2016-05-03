@@ -80,7 +80,7 @@ void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
         Pgm().ReadPdfBrowserInfos();
         wxFileName fn = Pgm().GetPdfBrowserName();
 
-        wxFileDialog dlg( this, _( "Select Preferred Pdf Browser" ), fn.GetPath(),
+        wxFileDialog dlg( this, _( "Select Preferred PDF Browser" ), fn.GetPath(),
                           fn.GetFullPath(), wildcard,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 

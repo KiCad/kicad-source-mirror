@@ -931,7 +931,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity( wxString* aErrorMsg )
         if( viadia < minViaDia )
         {
             result = false;
-            msg.Printf( _( "%s: <b>Via Diameter</b> &lt; <b>Minimun Via Diameter</b><br>" ),
+            msg.Printf( _( "%s: <b>Via Diameter</b> &lt; <b>Minimum Via Diameter</b><br>" ),
                         GetChars( m_grid->GetRowLabelValue( row ) ) );
             errorMsg += msg;
         }

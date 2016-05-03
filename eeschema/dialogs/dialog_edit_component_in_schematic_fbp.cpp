@@ -182,7 +182,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	int m_StyleRadioBoxNChoices = sizeof( m_StyleRadioBoxChoices ) / sizeof( wxString );
 	m_StyleRadioBox = new wxRadioBox( fieldsSizer->GetStaticBox(), wxID_ANY, _("Style:"), wxDefaultPosition, wxDefaultSize, m_StyleRadioBoxNChoices, m_StyleRadioBoxChoices, 1, wxRA_SPECIFY_COLS );
 	m_StyleRadioBox->SetSelection( 3 );
-	m_StyleRadioBox->SetToolTip( _("The style of the currently selected field's text in the schemati") );
+	m_StyleRadioBox->SetToolTip( _("The style of the currently selected field's text in the schematic") );
 	
 	bSizerStyle->Add( m_StyleRadioBox, 1, wxEXPAND|wxALL, 5 );
 	

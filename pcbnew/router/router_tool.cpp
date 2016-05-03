@@ -99,7 +99,7 @@ static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackVi
 static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT,
     TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_POSTURE ),
     _( "Switch Track Posture" ),
-    _( "Switches posture of the currenly routed track." ),
+    _( "Switches posture of the currently routed track." ),
     change_entry_orient_xpm );
 
 static TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimensions",

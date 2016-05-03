@@ -835,7 +835,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Read the current neltist file and list missing and extra footprints</property>
+                                        <property name="tooltip">Read the current netlist file and list missing and extra footprints</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>
@@ -923,7 +923,7 @@
                                         <property name="style"></property>
                                         <property name="subclass"></property>
                                         <property name="toolbar_pane">0</property>
-                                        <property name="tooltip">Rebuild the full ratsnest (usefull after a manual pad netname edition)</property>
+                                        <property name="tooltip">Rebuild the full ratsnest (useful after a manual pad netname edition)</property>
                                         <property name="validator_data_type"></property>
                                         <property name="validator_style">wxFILTER_NONE</property>
                                         <property name="validator_type">wxDefaultValidator</property>

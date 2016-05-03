@@ -743,7 +743,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
         if( g_Drc_On && m_drc->Drc( zone, icorner ) == BAD_DRC )      // we can't validate the closing edge
         {
             DisplayError( this,
-                          _( "DRC error: closing this area creates a drc error with an other area" ) );
+                          _( "DRC error: closing this area creates a DRC error with an other area" ) );
             m_canvas->MoveCursorToCrossHair();
             return false;
         }

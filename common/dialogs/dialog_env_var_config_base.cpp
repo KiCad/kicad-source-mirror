@@ -62,7 +62,7 @@ DIALOG_ENV_VAR_CONFIG_BASE::DIALOG_ENV_VAR_CONFIG_BASE( wxWindow* parent, wxWind
 	brightSizer->Add( m_buttonAdd, 0, wxALL|wxEXPAND, 5 );
 	
 	m_buttonDelete = new wxButton( this, wxID_ANY, _("Delete"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonDelete->SetToolTip( _("Remove the selectect entry from the table.") );
+	m_buttonDelete->SetToolTip( _("Remove the selected entry from the table.") );
 	
 	brightSizer->Add( m_buttonDelete, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	

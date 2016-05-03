@@ -2217,7 +2217,7 @@
                                                         <property name="style">wxRA_SPECIFY_COLS</property>
                                                         <property name="subclass"></property>
                                                         <property name="toolbar_pane">0</property>
-                                                        <property name="tooltip">The style of the currently selected field&apos;s text in the schemati</property>
+                                                        <property name="tooltip">The style of the currently selected field&apos;s text in the schematic</property>
                                                         <property name="validator_data_type"></property>
                                                         <property name="validator_style">wxFILTER_NONE</property>
                                                         <property name="validator_type">wxDefaultValidator</property>
