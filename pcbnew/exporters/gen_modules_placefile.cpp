@@ -288,7 +288,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
 
     if( singleFile  )
     {
-        m_reporter->Report( _( "Componment Placement File generation OK." ), REPORTER::RPT_ACTION );
+        m_reporter->Report( _( "Component Placement File generation OK." ), REPORTER::RPT_ACTION );
         return true;
     }
 
@@ -329,7 +329,7 @@ bool DIALOG_GEN_MODULE_POSITION::CreateFiles()
         m_reporter->Report( msg, REPORTER::RPT_INFO );
     }
 
-    m_reporter->Report( _( "Componment Placement File generation OK." ), REPORTER::RPT_ACTION );
+    m_reporter->Report( _( "Component Placement File generation OK." ), REPORTER::RPT_ACTION );
 
     return true;
 }
