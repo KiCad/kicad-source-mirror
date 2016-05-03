@@ -300,7 +300,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             const wxString& netName = aTrack->GetShortNetname();
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
             double textOrientation = -atan( line.y / line.x );
-            double textSize = std::min( static_cast<double>( width ), length / netName.length() );
+            double textSize = width;
 
             m_gal->SetIsStroke( true );
             m_gal->SetIsFill( false );
@@ -450,9 +450,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         // Is anything that we can display enabled?
         if( m_pcbSettings.m_netNamesOnPads || m_pcbSettings.m_padNumbers )
         {
-            // Min char count to calculate string size
-            const int MIN_CHAR_COUNT = 3;
-
             bool displayNetname = ( m_pcbSettings.m_netNamesOnPads &&
                                     !aPad->GetNetname().empty() );
             VECTOR2D padsize = VECTOR2D( aPad->GetSize() );
@@ -506,7 +503,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             if( displayNetname )
             {
                 // calculate the size of net name text:
-                double tsize = padsize.x / aPad->GetShortNetname().Length();
+                double tsize = 1.5 * padsize.x / aPad->GetShortNetname().Length();
                 tsize = std::min( tsize, size );
                 // Use a smaller text size to handle interline, pen size..
                 tsize *= 0.7;
@@ -522,7 +519,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 textpos.y = -textpos.y;
                 aPad->StringPadName( buffer );
                 int len = buffer.Length();
-                double tsize = padsize.x / std::max( len, MIN_CHAR_COUNT );
+                double tsize = 1.5 * padsize.x / len;
                 tsize = std::min( tsize, size );
                 // Use a smaller text size to handle interline, pen size..
                 tsize *= 0.7;

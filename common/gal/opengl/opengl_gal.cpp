@@ -1373,7 +1373,7 @@ std::pair<VECTOR2D, int> OPENGL_GAL::computeBitmapTextSize( const wxString& aTex
         const bitmap_glyph& GLYPH = bitmap_chars[aText[i]];
         textSize.x += ( GLYPH.x_off + GLYPH.width );
         textSize.y = std::max( (unsigned int)( textSize.y ), GLYPH.height + GLYPH.y_off );
-        commonOffset= std::min( GLYPH.y_off, commonOffset );
+        commonOffset = std::min( GLYPH.y_off, commonOffset );
     }
 
     textSize.y -= commonOffset;
