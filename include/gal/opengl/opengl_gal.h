@@ -369,9 +369,10 @@ private:
      * @brief Computes a size of text drawn using bitmap font with current text setting applied.
      *
      * @param aText is the text to be drawn.
-     * @return Text size expressed in world coordinates.
+     * @return Pair containing text bounding box and common Y axis offset. The values are expressed
+     * as a number of pixels on the bitmap font texture and need to be scaled before drawing.
      */
-    VECTOR2D computeBitmapTextSize( const wxString& aText ) const;
+    std::pair<VECTOR2D, int> computeBitmapTextSize( const wxString& aText ) const;
 
     // Event handling
     /**

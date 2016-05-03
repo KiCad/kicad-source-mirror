@@ -697,8 +697,10 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 
 
     // Compute text size, so it can be properly justified
-    VECTOR2D textSize = computeBitmapTextSize( aText );
-    const double SCALE = GetGlyphSize().y / textSize.y * 2.0;
+    std::pair<VECTOR2D, int> bbox = computeBitmapTextSize( aText );
+    VECTOR2D textSize = bbox.first;
+    int commonOffset = bbox.second;
+    const double SCALE = GetGlyphSize().y / textSize.y;
     int tildas = 0;
     bool overbar = false;
 
@@ -711,6 +713,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     currentManager->Translate( aPosition.x, aPosition.y, layerDepth );
     currentManager->Rotate( aRotationAngle, 0.0f, 0.0f, -1.0f );
     currentManager->Scale( SCALE, SCALE, 0 );
+    currentManager->Translate( 0, -commonOffset, 0 );
 
     switch( GetHorizontalJustify() )
     {
@@ -733,12 +736,12 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     {
     case GR_TEXT_VJUSTIFY_TOP:
         Translate( VECTOR2D( 0, -textSize.y ) );
-        overbarHeight = 0;
+        overbarHeight = -textSize.y / 2.0;
         break;
 
     case GR_TEXT_VJUSTIFY_CENTER:
         Translate( VECTOR2D( 0, -textSize.y / 2.0 ) );
-        overbarHeight = 0; //textSize.y;
+        overbarHeight = 0;
         break;
 
     case GR_TEXT_VJUSTIFY_BOTTOM:
@@ -1342,9 +1345,10 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 }
 
 
-VECTOR2D OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
+std::pair<VECTOR2D, int> OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
 {
     VECTOR2D textSize( 0, 0 );
+    int commonOffset = std::numeric_limits<int>::max();
     bool wasTilda = false;
 
     for( unsigned int i = 0; i < aText.length(); ++i )
@@ -1368,10 +1372,13 @@ VECTOR2D OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
 
         const bitmap_glyph& GLYPH = bitmap_chars[aText[i]];
         textSize.x += ( GLYPH.x_off + GLYPH.width );
-        textSize.y = std::max( (unsigned int)( textSize.y ), GLYPH.y_off * 2 + GLYPH.height );
+        textSize.y = std::max( (unsigned int)( textSize.y ), GLYPH.height + GLYPH.y_off );
+        commonOffset= std::min( GLYPH.y_off, commonOffset );
     }
 
-    return textSize;
+    textSize.y -= commonOffset;
+
+    return std::make_pair( textSize, commonOffset );
 }
 
 
