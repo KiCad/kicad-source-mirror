@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad zh_CN\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-04-24 16:25+0800\n"
-"PO-Revision-Date: 2016-05-03 14:31+0800\n"
+"PO-Revision-Date: 2016-05-04 00:09+0800\n"
 "Last-Translator: 郝弘毅 <togker@gmail.com>\n"
 "Language-Team: ocrobot team <togker@gmail.com>\n"
 "Language: zh_CN\n"
@@ -3244,7 +3244,7 @@ msgstr "提示"
 
 #: eeschema/dialogs/dialog_color_config.cpp:68
 msgid "No connect symbol"
-msgstr ""
+msgstr "无连接符号"
 
 #: eeschema/dialogs/dialog_color_config.cpp:73 eeschema/libedit.cpp:500
 msgid "Body"
@@ -3252,7 +3252,7 @@ msgstr "主体"
 
 #: eeschema/dialogs/dialog_color_config.cpp:74
 msgid "Body background"
-msgstr ""
+msgstr "主体背景"
 
 #: eeschema/dialogs/dialog_color_config.cpp:75 eeschema/lib_pin.cpp:255
 msgid "Pin"
@@ -3264,7 +3264,7 @@ msgstr "引脚编号"
 
 #: eeschema/dialogs/dialog_color_config.cpp:77
 msgid "Pin name"
-msgstr "引脚名称:"
+msgstr "引脚名称"
 
 #: eeschema/dialogs/dialog_color_config.cpp:78
 #: eeschema/dialogs/dialog_rescue_each.cpp:107 eeschema/lib_field.cpp:574
@@ -3280,24 +3280,24 @@ msgstr "索引"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:113
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:24
 msgid "Fields"
-msgstr "域"
+msgstr "字段"
 
 #: eeschema/dialogs/dialog_color_config.cpp:85
 #: eeschema/dialogs/dialog_color_config.cpp:104
 msgid "Sheet"
-msgstr "图"
+msgstr "表格"
 
 #: eeschema/dialogs/dialog_color_config.cpp:86
 msgid "Sheet file name"
-msgstr ""
+msgstr "表文件名"
 
 #: eeschema/dialogs/dialog_color_config.cpp:87
 msgid "Sheet name"
-msgstr ""
+msgstr "表格名称"
 
 #: eeschema/dialogs/dialog_color_config.cpp:88
 msgid "Sheet label"
-msgstr ""
+msgstr "表格标签"
 
 #: eeschema/dialogs/dialog_color_config.cpp:89
 msgid "Hierarchical label"
@@ -3332,7 +3332,7 @@ msgstr "元件层"
 
 #: eeschema/dialogs/dialog_color_config.cpp:105
 msgid "Miscellaneous"
-msgstr "其他约定"
+msgstr "其他"
 
 #: eeschema/dialogs/dialog_color_config.cpp:191
 msgid "White"
@@ -3348,6 +3348,9 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
+"一些项目的颜色与背景色相似。\n"
+"他们将不容易在屏幕上看见。\n"
+"你确定要使用这些颜色？"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:72
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.h:114
@@ -3971,15 +3974,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_label.cpp:151
 msgid "Global Label Properties"
-msgstr ""
+msgstr "全局标签属性"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:155
 msgid "Hierarchical Label Properties"
-msgstr ""
+msgstr "层次标签属性"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:159
 msgid "Label Properties"
-msgstr ""
+msgstr "标签属性"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:163
 msgid "Hierarchical Sheet Pin Properties."
@@ -4015,20 +4018,20 @@ msgstr "大小(&S)"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:53 eeschema/lib_pin.cpp:168
 msgid "Up"
-msgstr " 向上"
+msgstr "向上"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:56 eeschema/lib_pin.cpp:169
 msgid "Down"
-msgstr " 向下"
+msgstr "向下"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:72
 msgid "O&rientation"
-msgstr ""
+msgstr "方向"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:78
 msgid "St&yle"
-msgstr "样式(&Y)"
+msgstr "样式"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:30 eeschema/lib_pin.cpp:183
@@ -4199,7 +4202,7 @@ msgstr "隐藏"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:53
 msgid "&Measurement units:"
-msgstr "测量单位(&M):"
+msgstr "计量单位(&M):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:65
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:36
@@ -4225,7 +4228,7 @@ msgstr "mils(密耳，千分之一英寸)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:78
 msgid "&Default bus thickness:"
-msgstr "默认总线厚度(&D):"
+msgstr "默认总线粗细(&D):"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:89
 msgid "D&efault line thickness:"
@@ -4238,21 +4241,21 @@ msgstr "默认文本大小(&F):"
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:111
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:93
 msgid "&Horizontal pitch of repeated items:"
-msgstr ""
+msgstr "重复项目的水平间距(&H)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:122
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:104
 msgid "&Vertical pitch of repeated items:"
-msgstr ""
+msgstr "重复项目的垂直间距(&V)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:133
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:129
 msgid "&Increment of repeated labels:"
-msgstr ""
+msgstr "重复标签增量(&I)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:143
 msgid "&Auto-save time interval"
-msgstr "自动保存-时间间隔(&A)"
+msgstr "自动保存  时间间隔(&A)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:150
 msgid "minutes"
@@ -4262,7 +4265,7 @@ msgstr "分钟"
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:139
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:182
 msgid "Ma&ximum undo items (0 = unlimited):"
-msgstr "最大撤销项目(&X) (0 = 无限制):"
+msgstr "最大撤销项目(0=无限制)(&X) :"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:161
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:146
@@ -4310,12 +4313,12 @@ msgstr "显示网格(&S)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:190
 msgid "Sho&w hidden pins"
-msgstr "显示隐藏 的引脚(&W)"
+msgstr "显示隐藏的引脚(&W)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:193
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:165
 msgid "Ce&nter and warp cursor on zoom"
-msgstr ""
+msgstr "缩放时光标在中心位置(&N)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:198
 msgid "&Use middle mouse button to pan"
@@ -4324,16 +4327,16 @@ msgstr "使用鼠标中键平移(&U)"
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:199
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:172
 msgid "Use middle mouse button dragging to pan"
-msgstr ""
+msgstr "使用鼠标中键拖动来平移"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:203
 msgid "&Limit panning to scroll size"
-msgstr ""
+msgstr "限制平移滚动的大小"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:204
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:177
 msgid "Middle mouse button panning limited by current scrollbar size"
-msgstr ""
+msgstr "使用鼠标中键平移受限于当前的滚动条的大小"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:208
 msgid "Pan while moving ob&ject"
@@ -4345,7 +4348,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:214
 msgid "Show page limi&ts"
-msgstr ""
+msgstr "显示页面限制(&T)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:227
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:95
@@ -4355,11 +4358,11 @@ msgstr "基本选项"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:229
 msgid "User defined field names for schematic components. "
-msgstr ""
+msgstr "用户自定义字段名的原理图组件。"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:240
 msgid "Field Settings"
-msgstr ""
+msgstr "字段设置"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:242
 msgid "&Name"
@@ -4386,31 +4389,31 @@ msgstr "删除(&D)"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:272
 msgid "Template Field Names"
-msgstr ""
+msgstr "模板字段名称"
 
 #: eeschema/dialogs/dialog_erc.cpp:213
 msgid "Marker not found"
-msgstr "DRC标记 没有找到"
+msgstr "标记未找到"
 
 #: eeschema/dialogs/dialog_erc.cpp:337
 msgid "No error or warning"
-msgstr ""
+msgstr "没有错误或警告"
 
 #: eeschema/dialogs/dialog_erc.cpp:342
 msgid "Generate warning"
-msgstr ""
+msgstr "生成警告"
 
 #: eeschema/dialogs/dialog_erc.cpp:347
 msgid "Generate error"
-msgstr ""
+msgstr "生成错误"
 
 #: eeschema/dialogs/dialog_erc.cpp:451
 msgid "Annotation required!"
-msgstr ""
+msgstr "需要注释！"
 
 #: eeschema/dialogs/dialog_erc.cpp:556
 msgid "ERC File"
-msgstr ""
+msgstr "ERC文件"
 
 #: eeschema/dialogs/dialog_erc.cpp:557
 msgid "Electronic rule check file (.erc)|*.erc"
@@ -4454,7 +4457,7 @@ msgstr "ERC"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:113
 msgid "Initialize to Default"
-msgstr ""
+msgstr "初始化为默认值"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:34
 msgid "&Width:"
@@ -4612,7 +4615,7 @@ msgstr "右对齐"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:105
 msgid "Horizontal Justify"
-msgstr ""
+msgstr "水平对齐"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:109
 msgid "Align bottom"
@@ -4624,7 +4627,7 @@ msgstr "顶部对齐"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:111
 msgid "Vertical Justify"
-msgstr ""
+msgstr "垂直对齐"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:22
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:97
@@ -4640,6 +4643,8 @@ msgid ""
 "This is the component name in library,\n"
 "and also the default component value when loaded in the schematic."
 msgstr ""
+"这是在库中的组件名称\n"
+"同时加载原理图时会加载其默认元件值。"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:44
 msgid "Default reference designator:"
@@ -4708,11 +4713,11 @@ msgstr "引脚间距(&P):"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:119
 msgid "100"
-msgstr ""
+msgstr "100"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:119
 msgid "50"
-msgstr ""
+msgstr "50"
 
 #: eeschema/dialogs/dialog_netlist.cpp:295
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
