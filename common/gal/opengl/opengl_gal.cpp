@@ -302,7 +302,9 @@ void OPENGL_GAL::EndDrawing()
 
 void OPENGL_GAL::BeginUpdate()
 {
-    SetCurrent( *OPENGL_GAL::glContext );
+    if( IsShownOnScreen() )
+        SetCurrent( *OPENGL_GAL::glContext );
+
     cachedManager.Map();
 }
 
