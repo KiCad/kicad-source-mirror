@@ -302,6 +302,8 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             double textOrientation = -atan( line.y / line.x );
             double textSize = std::min( static_cast<double>( width ), length / netName.length() );
 
+            m_gal->SetIsStroke( true );
+            m_gal->SetIsFill( false );
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
             m_gal->SetLineWidth( width / 10.0 );
             m_gal->SetFontBold( false );
@@ -488,8 +490,10 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m_gal->SetFontItalic( false );
             m_gal->SetTextMirrored( false );
             m_gal->SetStrokeColor( m_pcbSettings.GetColor( NULL, aLayer ) );
+            m_gal->SetIsStroke( true );
+            m_gal->SetIsFill( false );
 
-            VECTOR2D textpos( 0.0, 0.0);
+            VECTOR2D textpos( 0.0, 0.0 );
 
             // Divide the space, to display both pad numbers and netnames
             // and set the Y text position to display 2 lines
