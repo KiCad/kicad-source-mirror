@@ -29,6 +29,7 @@
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <class_zone.h>
+#include <collectors.h>
 #include <wxPcbStruct.h>
 #include <kiway.h>
 #include <class_draw_panel_gal.h>
@@ -81,23 +82,20 @@ bool EDIT_TOOL::Init()
         return false;
     }
 
-    // Vector storing track & via types, used for specifying 'Properties' menu entry condition
-    m_tracksViasType.push_back( PCB_TRACE_T );
-    m_tracksViasType.push_back( PCB_VIA_T );
-
     // Add context menu entries that are displayed when selection tool is active
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::rotate, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
-                                            || SELECTION_CONDITIONS::OnlyTypes( m_tracksViasType ) );
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
+    CONDITIONAL_MENU& menu = m_selectionTool->GetMenu();
+    menu.AddItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( COMMON_ACTIONS::rotate, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( COMMON_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( COMMON_ACTIONS::remove, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( COMMON_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 )
+                      || SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+    menu.AddItem( COMMON_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( COMMON_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( COMMON_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
 
     // Footprint actions
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::editFootprintInFpEditor,
+    menu.AddItem( COMMON_ACTIONS::editFootprintInFpEditor,
                                         SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T ) &&
                                         SELECTION_CONDITIONS::Count( 1 ) );
 
@@ -360,7 +358,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         return 0;
 
     // Tracks & vias are treated in a special way:
-    if( ( SELECTION_CONDITIONS::OnlyTypes( m_tracksViasType ) )( selection ) )
+    if( ( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) )( selection ) )
     {
         DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection );
 

@@ -118,6 +118,15 @@ public:
     static SELECTION_CONDITION OnlyTypes( const std::vector<KICAD_T>& aTypes );
 
     /**
+     * Function OnlyTypes
+     * Creates a functor that tests if the selected items are *only* of given types.
+     * @param aType is an array containing types that are searched. It has to be ended with
+     * KICAD_T::EOT as end marker.
+     * @return Functor testing if selected items are exclusively of the requested types.
+     */
+    static SELECTION_CONDITION OnlyTypes( const KICAD_T aTypes[] );
+
+    /**
      * Function Count
      * Creates a functor that tests if the number of selected items is equal to the value given as
      * parameter.
@@ -159,6 +168,7 @@ private:
 
     ///> Helper function used by OnlyTypes()
     static bool onlyTypesFunc( const SELECTION& aSelection, const std::vector<KICAD_T>& aTypes );
+    static bool onlyTypesFuncArr( const SELECTION& aSelection, const KICAD_T aTypes[] );
 
     ///> Helper function used by Count()
     static bool countFunc( const SELECTION& aSelection, int aNumber );

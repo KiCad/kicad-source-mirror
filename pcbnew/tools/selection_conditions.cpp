@@ -82,6 +82,12 @@ SELECTION_CONDITION SELECTION_CONDITIONS::OnlyTypes( const std::vector<KICAD_T>&
 }
 
 
+SELECTION_CONDITION SELECTION_CONDITIONS::OnlyTypes( const KICAD_T aTypes[] )
+{
+    return boost::bind( &SELECTION_CONDITIONS::onlyTypesFuncArr, _1, aTypes );
+}
+
+
 SELECTION_CONDITION SELECTION_CONDITIONS::Count( int aNumber )
 {
     return boost::bind( &SELECTION_CONDITIONS::countFunc, _1, aNumber );
@@ -214,6 +220,35 @@ bool SELECTION_CONDITIONS::onlyTypesFunc( const SELECTION& aSelection, const std
                 valid = true;
                 break;
             }
+        }
+
+        if( !valid )
+            return false;
+    }
+
+    return true;
+}
+
+
+bool SELECTION_CONDITIONS::onlyTypesFuncArr( const SELECTION& aSelection, const KICAD_T aTypes[] )
+{
+    if( aSelection.Empty() )
+        return false;
+
+    for( int i = 0; i < aSelection.Size(); ++i )
+    {
+        bool valid = false;
+        const KICAD_T* type = aTypes;
+
+        while( *type != EOT )
+        {
+            if( aSelection.Item<EDA_ITEM>( i )->Type() == *type )
+            {
+                valid = true;
+                break;
+            }
+
+            ++type;
         }
 
         if( !valid )
