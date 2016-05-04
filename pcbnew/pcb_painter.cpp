@@ -816,6 +816,8 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     }
 
     m_gal->SetStrokeColor( color );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
     m_gal->StrokeText( shownText, position, aText->GetOrientationRadians() );
 }
@@ -842,6 +844,8 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
     }
 
     m_gal->SetStrokeColor( color );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
     m_gal->StrokeText( shownText, position, aText->GetDrawRotationRadians() );
 
