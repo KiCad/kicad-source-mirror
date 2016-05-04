@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -230,6 +230,7 @@ public:
     static TOOL_ACTION gridNext;
     static TOOL_ACTION gridPrev;
     static TOOL_ACTION gridSetOrigin;
+    static TOOL_ACTION gridResetOrigin;
     static TOOL_ACTION gridPreset;
 
     // Track & via size control

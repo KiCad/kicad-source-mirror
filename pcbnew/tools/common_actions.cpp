@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -329,6 +329,10 @@ TOOL_ACTION COMMON_ACTIONS::gridPrev( "common.Control.gridPrev",
 
 TOOL_ACTION COMMON_ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SET_GRID_ORIGIN ),
+        "", "" );
+
+TOOL_ACTION COMMON_ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_GRID_ORIGIN ),
         "", "" );
 
 TOOL_ACTION COMMON_ACTIONS::gridPreset( "common.Control.gridPreset",

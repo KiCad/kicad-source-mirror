@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -80,6 +80,7 @@ public:
     int GridNext( const TOOL_EVENT& aEvent );
     int GridPrev( const TOOL_EVENT& aEvent );
     int GridSetOrigin( const TOOL_EVENT& aEvent );
+    int GridResetOrigin( const TOOL_EVENT& aEvent );
     int GridPreset( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
