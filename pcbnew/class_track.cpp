@@ -1138,7 +1138,7 @@ void TRACK::GetMsgPanelInfoBase_Common( std::vector< MSG_PANEL_ITEM >& aList )
     msg = wxT( ". . " );
 
     if( GetState( TRACK_LOCKED ) )
-        msg[0] = 'F';
+        msg[0] = 'L';
 
     if( GetState( TRACK_AR ) )
         msg[2] = 'A';
