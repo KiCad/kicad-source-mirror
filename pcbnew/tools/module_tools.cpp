@@ -311,7 +311,10 @@ int MODULE_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
             m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
 
             BOOST_FOREACH( D_PAD* pad, pads )
+            {
                 pad->SetPadName( wxString::Format( wxT( "%s%d" ), padPrefix.c_str(), padNumber++ ) );
+                pad->ViewUpdate();
+            }
 
             break;
         }
