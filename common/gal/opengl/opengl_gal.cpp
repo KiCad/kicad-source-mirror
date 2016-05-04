@@ -1499,18 +1499,9 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
             error( (const char*) glewGetErrorString( err ) );
             return;
         }
-        else
-        {
-            wxLogDebug( wxString( wxT( "Status: Using GLEW " ) ) +
-                        FROM_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
-        }
 
         // Check the OpenGL version (minimum 2.1 is required)
-        if( GLEW_VERSION_2_1 )
-        {
-            wxLogInfo( wxT( "OpenGL 2.1 supported." ) );
-        }
-        else
+        if( !GLEW_VERSION_2_1 )
         {
             error( "OpenGL 2.1 or higher is required!" );
             return;
