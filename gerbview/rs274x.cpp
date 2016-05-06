@@ -1003,9 +1003,9 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
 
         AM_PRIMITIVE prim( m_GerbMetric );
         prim.primitive_id = (AM_PRIMITIVE_ID) primitive_type;
-        int i;
+        int ii;
 
-        for( i = 0; i < paramCount && *text && *text != '*'; ++i )
+        for( ii = 0; ii < paramCount && *text && *text != '*'; ++ii )
         {
             prim.params.push_back( AM_PARAM() );
 
@@ -1019,11 +1019,11 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
             param.ReadParam( text );
         }
 
-        if( i < paramCount )
+        if( ii < paramCount )
         {
             // maybe some day we can throw an exception and track a line number
             msg.Printf( wxT( "RS274X: read macro descr type %d: read %d parameters, insufficient parameters\n" ),
-                        prim.primitive_id, i );
+                        prim.primitive_id, ii );
             ReportMessage( msg );
 
         }
@@ -1039,7 +1039,7 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
 
             paramCount = (int) prim.params[1].GetValue( 0 ) * 2 + 1;
 
-            for( int i = 0; i < paramCount && *text != '*'; ++i )
+            for( int jj = 0; jj < paramCount && *text != '*'; ++jj )
             {
                 prim.params.push_back( AM_PARAM() );
 

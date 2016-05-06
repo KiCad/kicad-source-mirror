@@ -274,9 +274,9 @@ void LAYER_WIDGET::OnLeftDownLayers( wxMouseEvent& event )
 }
 
 
-void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& event )
+void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& aEvent )
 {
-    wxBitmapButton* eventSource = (wxBitmapButton*) event.GetEventObject();
+    wxBitmapButton* eventSource = (wxBitmapButton*) aEvent.GetEventObject();
 
     wxString colorTxt = eventSource->GetName();
 

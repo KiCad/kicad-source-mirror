@@ -768,8 +768,8 @@ DATATYPE RTREE_QUAL::NearestNeighbor( const ELEMTYPE a_point[NUMDIMS],
     // free memory used for remaining NNNodes in nodeList
     for( iterator iter = nodeList.begin(); iter != nodeList.end(); ++iter )
     {
-        NNNode* node = *iter;
-        free(node);
+        NNNode* nnode = *iter;
+        free(nnode);
     }
 
     *a_squareDistance = closestNode->minDist;

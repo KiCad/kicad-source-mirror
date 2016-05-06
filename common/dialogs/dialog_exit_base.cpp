@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -33,7 +33,7 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_TextInfo = new wxStaticText( this, wxID_ANY, _("Save the changes before closing?"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextInfo->Wrap( -1 );
-	m_TextInfo->SetFont( wxFont( 8, 74, 90, 92, false, wxT("MS Shell Dlg 2") ) );
+	m_TextInfo->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("MS Shell Dlg 2") ) );
 	
 	bSizerMessages->Add( m_TextInfo, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -85,7 +85,6 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	// Connect Events
 	m_buttonSaveAndExit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnSaveAndExit ), NULL, this );
 	m_buttonExitNoSave->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnExitNoSave ), NULL, this );
-	m_buttonCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnCancel ), NULL, this );
 }
 
 DIALOG_EXIT_BASE::~DIALOG_EXIT_BASE()
@@ -93,6 +92,5 @@ DIALOG_EXIT_BASE::~DIALOG_EXIT_BASE()
 	// Disconnect Events
 	m_buttonSaveAndExit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnSaveAndExit ), NULL, this );
 	m_buttonExitNoSave->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnExitNoSave ), NULL, this );
-	m_buttonCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXIT_BASE::OnCancel ), NULL, this );
 	
 }

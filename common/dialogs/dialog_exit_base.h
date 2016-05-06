@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,7 +51,6 @@ class DIALOG_EXIT_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSaveAndExit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExitNoSave( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

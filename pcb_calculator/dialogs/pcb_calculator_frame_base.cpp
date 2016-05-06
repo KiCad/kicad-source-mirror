@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  1 2016)
+// C++ code generated with wxFormBuilder (version May  2 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -63,7 +63,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_RegulFormula = new wxStaticText( sbSizerRegFormula->GetStaticBox(), wxID_ANY, _("Vout = Vref * (R1 + R2) / R2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RegulFormula->Wrap( -1 );
-	m_RegulFormula->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_RegulFormula->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	sbSizerRegFormula->Add( m_RegulFormula, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -242,7 +242,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelRegulators->SetSizer( bSizerMainReg );
 	m_panelRegulators->Layout();
 	bSizerMainReg->Fit( m_panelRegulators );
-	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), false );
+	m_Notebook->AddPage( m_panelRegulators, _("Regulators"), true );
 	m_panelTrackWidth = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerTrackWidth;
 	bSizerTrackWidth = new wxBoxSizer( wxHORIZONTAL );
@@ -261,7 +261,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_staticTextCurrent = new wxStaticText( sbSizerTW_Prms->GetStaticBox(), wxID_ANY, _("Current"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCurrent->Wrap( -1 );
-	m_staticTextCurrent->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
+	m_staticTextCurrent->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
 	fgSizerTWprms->Add( m_staticTextCurrent, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxALIGN_RIGHT, 5 );
 	
@@ -335,7 +335,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_staticTextExtWidth = new wxStaticText( sbSizerTW_Result->GetStaticBox(), wxID_ANY, _("Trace width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextExtWidth->Wrap( -1 );
-	m_staticTextExtWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
+	m_staticTextExtWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
 	fgSizerTW_Results->Add( m_staticTextExtWidth, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT|wxRIGHT, 5 );
 	
@@ -433,7 +433,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_staticTextIntWidth = new wxStaticText( sbSizerTW_Result1->GetStaticBox(), wxID_ANY, _("Trace width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextIntWidth->Wrap( -1 );
-	m_staticTextIntWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 90, false, wxEmptyString ) );
+	m_staticTextIntWidth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
 	fgSizerTW_Results1->Add( m_staticTextIntWidth, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 	
@@ -552,7 +552,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_staticTextElectricalSpacing = new wxStaticText( m_panelElectricalSpacing, wxID_ANY, _("Note: Values are minimal values (from IPC 2221)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextElectricalSpacing->Wrap( -1 );
-	m_staticTextElectricalSpacing->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 93, 92, false, wxEmptyString ) );
+	m_staticTextElectricalSpacing->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bElectricalSpacingSizerRight->Add( m_staticTextElectricalSpacing, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -1171,7 +1171,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	m_panelAttenuators->SetSizer( sbSizerAtt );
 	m_panelAttenuators->Layout();
 	sbSizerAtt->Fit( m_panelAttenuators );
-	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), true );
+	m_Notebook->AddPage( m_panelAttenuators, _("RF Attenuators"), false );
 	m_panelColorCode = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerPanelColorCode;
 	bSizerPanelColorCode = new wxBoxSizer( wxHORIZONTAL );
@@ -1251,7 +1251,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	
 	m_staticTextBrdClass = new wxStaticText( m_panelBoardClass, wxID_ANY, _("Note: Values are minimal values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBrdClass->Wrap( -1 );
-	m_staticTextBrdClass->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 93, 92, false, wxEmptyString ) );
+	m_staticTextBrdClass->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	brdclsSizerRight->Add( m_staticTextBrdClass, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	

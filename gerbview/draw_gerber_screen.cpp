@@ -247,8 +247,6 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
 
-        EDA_COLOR_T color = gerbFrame->GetLayerColor( layer );
-
         // Force black and white draw mode on request:
         if( aPrintBlackAndWhite )
             gerbFrame->SetLayerColor( layer, gerbFrame->GetDrawBgColor() == BLACK ? WHITE : BLACK );
@@ -302,12 +300,12 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( gerber->m_ImageNegative )
         {
             // Draw background negative (i.e. in graphic layer color) for negative images.
-            EDA_COLOR_T color = gerbFrame->GetLayerColor( layer );
+            EDA_COLOR_T neg_color = gerbFrame->GetLayerColor( layer );
 
             GRSetDrawMode( &layerDC, GR_COPY );
             GRFilledRect( &drawBox, plotDC, drawBox.GetX(), drawBox.GetY(),
                           drawBox.GetRight(), drawBox.GetBottom(),
-                          0, color, color );
+                          0, neg_color, neg_color );
 
             GRSetDrawMode( plotDC, GR_COPY );
             doBlit = true;
@@ -322,6 +320,8 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
         if( aDrawMode == GR_OR && !gerber->HasNegativeItems() )
             layerdrawMode = GR_OR;
+
+        EDA_COLOR_T item_color = gerbFrame->GetLayerColor( layer );
 
         // Now we can draw the current layer to the bitmap buffer
         // When needed, the previous bitmap is already copied to the screen buffer.
@@ -340,7 +340,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         }
 
         if( aPrintBlackAndWhite )
-            gerbFrame->SetLayerColor( layer, color );
+            gerbFrame->SetLayerColor( layer, item_color );
     }
 
     if( doBlit && useBufferBitmap )     // Blit is used only if aDrawMode >= 0

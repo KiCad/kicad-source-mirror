@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr  9 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -539,7 +539,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextWarning = new wxStaticText( m_localSettingsPanel, wxID_ANY, _("Set fields to 0 to use parent or global values"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWarning->Wrap( -1 );
-	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticTextWarning->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerClearance->Add( m_staticTextWarning, 0, wxALL, 5 );
 	
@@ -574,7 +574,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 	
 	m_staticTextWarningPadFlipped = new wxStaticText( this, wxID_ANY, _("Warning:\nThis pad is flipped on board.\nBack and front layers will be swapped."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextWarningPadFlipped->Wrap( -1 );
-	m_staticTextWarningPadFlipped->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticTextWarningPadFlipped->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	m_MainSizer->Add( m_staticTextWarningPadFlipped, 0, wxALL, 5 );
 	

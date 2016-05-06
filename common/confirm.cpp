@@ -51,7 +51,6 @@ public:
 
 private:
     void OnSaveAndExit( wxCommandEvent& event ) { EndModal( wxID_YES ); }
-    void OnCancel( wxCommandEvent& event ) { EndModal( wxID_CANCEL ); }
     void OnExitNoSave( wxCommandEvent& event ) { EndModal( wxID_NO ); }
 };
 
@@ -61,6 +60,8 @@ int DisplayExitDialog( wxWindow* parent, const wxString& aMessage )
     DIALOG_EXIT dlg( parent, aMessage );
 
     int ret = dlg.ShowModal();
+
+    // Returns wxID_YES, wxID_NO, or wxID_CANCEL
     return ret;
 }
 
