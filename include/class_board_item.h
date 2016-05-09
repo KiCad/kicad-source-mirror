@@ -199,7 +199,17 @@ public:
      */
     virtual bool IsLocked() const
     {
-        return false;   // only MODULEs can be locked at this time.
+        // only MODULEs & TRACKs can be locked at this time.
+        return false;
+    }
+
+    /**
+     * Function SetLocked
+     * modifies 'lock' status for of the item.
+     */
+    virtual void SetLocked( bool aLocked )
+    {
+        // only MODULEs & TRACKs can be locked at this time.
     }
 
     /**

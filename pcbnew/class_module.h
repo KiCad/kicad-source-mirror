@@ -238,9 +238,9 @@ public:
 #define MODULE_PADS_LOCKED  0x08        ///< In autoplace: module waiting for autoplace
 
 
-    bool IsLocked() const
+    bool IsLocked() const override
     {
-        return (m_ModuleStatus & MODULE_is_LOCKED) != 0;
+        return ( m_ModuleStatus & MODULE_is_LOCKED ) != 0;
     }
 
     /**
@@ -248,7 +248,7 @@ public:
      * sets the MODULE_is_LOCKED bit in the m_ModuleStatus
      * @param isLocked When true means turn on locked status, else unlock
      */
-    void SetLocked( bool isLocked )
+    void SetLocked( bool isLocked ) override
     {
         if( isLocked )
             m_ModuleStatus |= MODULE_is_LOCKED;

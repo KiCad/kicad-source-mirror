@@ -290,6 +290,11 @@ public:
     static TOOL_ACTION panLeft;
     static TOOL_ACTION panRight;
 
+    // Locking
+    static TOOL_ACTION toggleLock;
+    static TOOL_ACTION lock;
+    static TOOL_ACTION unlock;
+
     // Miscellaneous
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION pickerTool;
@@ -301,7 +306,6 @@ public:
     static TOOL_ACTION highlightNetCursor;
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION crossProbeSchToPcb;
-    static TOOL_ACTION toggleLockModule;
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION showHelp;
     static TOOL_ACTION toBeDone;
