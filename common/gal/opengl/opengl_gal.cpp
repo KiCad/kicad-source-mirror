@@ -130,8 +130,12 @@ OPENGL_GAL::~OPENGL_GAL()
     gluDeleteTess( tesselator );
     ClearCache();
 
-    if( IsShown() )
+#ifdef __LINUX__
+    if( IsShownOnScreen() )
         SetCurrent( *OPENGL_GAL::glContext );
+#else
+    SetCurrent( *OPENGL_GAL::glContext );
+#endif
 
     glFlush();
 
