@@ -116,6 +116,13 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
 
 EDA_3D_CANVAS::~EDA_3D_CANVAS()
 {
+#ifdef __LINUX__
+    if( IsShownOnScreen() )
+        SetCurrent( *m_glRC );
+#else
+    SetCurrent( *m_glRC );
+#endif
+
     ClearLists();
     m_init = false;
     delete m_glRC;
