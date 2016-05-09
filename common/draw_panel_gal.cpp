@@ -99,12 +99,20 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     // on updated viewport data.
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
-    // Set up timer that prevents too frequent redraw commands
-    m_refreshTimer.SetOwner( this );
     m_pendingRefresh = false;
     m_drawing = false;
     m_drawingEnabled = false;
-    Connect( wxEVT_TIMER, wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
+
+    // Set up timer that prevents too frequent redraw commands
+    m_refreshTimer.SetOwner( this );
+    Connect( m_refreshTimer.GetId(), wxEVT_TIMER,
+            wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
+
+    // Set up timer to execute OnShow() method when the window appears on the screen
+    m_onShowTimer.SetOwner( this );
+    Connect( m_onShowTimer.GetId(), wxEVT_TIMER,
+            wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onShowTimer ), NULL, this );
+    m_onShowTimer.Start( 10 );
 
     LoadGalSettings();
 }
@@ -153,10 +161,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     KIGFX::PCB_RENDER_SETTINGS* settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_painter->GetSettings() );
 
     m_viewControls->UpdateScrollbars();
-
-    m_gal->BeginUpdate();
     m_view->UpdateItems();
-    m_gal->EndUpdate();
 
     m_gal->BeginDrawing();
     m_gal->ClearScreen( settings->GetBackgroundColor() );
@@ -442,7 +447,7 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 {
     if( !m_drawingEnabled )
     {
-        if( m_gal->IsInitialized() )
+        if( m_gal && m_gal->IsInitialized() )
         {
             m_drawing = false;
             m_pendingRefresh = true;
@@ -452,7 +457,7 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
         else
         {
             // Try again soon
-            m_refreshTimer.Start( 100, true );
+            m_refreshTimer.StartOnce( 100 );
             return;
         }
     }
@@ -460,5 +465,16 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
     wxPaintEvent redrawEvent;
     wxPostEvent( this, redrawEvent );
 }
+
+
+void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
+{
+    if( IsShownOnScreen() )
+    {
+        m_onShowTimer.Stop();
+        OnShow();
+    }
+}
+
 
 const wxChar EDA_DRAW_PANEL_GAL::GRID_STYLE_CFG[] = wxT( "GridStyle" );

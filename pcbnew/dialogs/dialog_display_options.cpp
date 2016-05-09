@@ -175,7 +175,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     KIGFX::PCB_RENDER_SETTINGS* settings =
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->LoadDisplayOptions( displ_opts );
-    view->RecacheAllItems( true );
+    view->RecacheAllItems();
 
     m_Parent->GetCanvas()->Refresh();
 

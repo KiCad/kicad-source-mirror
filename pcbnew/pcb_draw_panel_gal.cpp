@@ -165,18 +165,6 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
 
     // Display settings
     UseColorScheme( aBoard->GetColorsSettings() );
-
-    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
-
-    if( frame )
-    {
-        SetTopLayer( frame->GetActiveLayer() );
-        DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) frame->GetDisplayOptions();
-        static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
-            m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
-    }
-
-    m_view->RecacheAllItems( true );
 }
 
 
@@ -360,6 +348,22 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList )
 
     txt.Printf( wxT( "%d" ), board->GetRatsnest()->GetUnconnectedCount() );
     aList.push_back( MSG_PANEL_ITEM( _( "Unconnected" ), txt, BLUE ) );
+}
+
+
+void PCB_DRAW_PANEL_GAL::OnShow()
+{
+    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParent() );
+
+    if( frame )
+    {
+        SetTopLayer( frame->GetActiveLayer() );
+        DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*) frame->GetDisplayOptions();
+        static_cast<KIGFX::PCB_RENDER_SETTINGS*>(
+            m_view->GetPainter()->GetSettings() )->LoadDisplayOptions( displ_opts );
+    }
+
+    m_view->RecacheAllItems();
 }
 
 

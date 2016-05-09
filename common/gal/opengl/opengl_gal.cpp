@@ -127,20 +127,25 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
 OPENGL_GAL::~OPENGL_GAL()
 {
-    SetCurrent( *OPENGL_GAL::glContext );
+    gluDeleteTess( tesselator );
+    ClearCache();
+
+    if( IsShown() )
+        SetCurrent( *OPENGL_GAL::glContext );
+
     glFlush();
 
     if( --instanceCounter == 0 )
     {
-        glDeleteTextures( 1, &fontTexture );
-        isBitmapFontLoaded = false;
+        if( isBitmapFontLoaded )
+        {
+            glDeleteTextures( 1, &fontTexture );
+            isBitmapFontLoaded = false;
+        }
 
         delete OPENGL_GAL::glContext;
         glContext = NULL;
     }
-
-    gluDeleteTess( tesselator );
-    ClearCache();
 }
 
 
@@ -302,9 +307,7 @@ void OPENGL_GAL::EndDrawing()
 
 void OPENGL_GAL::BeginUpdate()
 {
-    if( IsShownOnScreen() )
-        SetCurrent( *OPENGL_GAL::glContext );
-
+    SetCurrent( *OPENGL_GAL::glContext );
     cachedManager.Map();
 }
 
