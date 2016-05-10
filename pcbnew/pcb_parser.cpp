@@ -175,7 +175,7 @@ int PCB_PARSER::parseVersion() throw( IO_ERROR, PARSE_ERROR )
     if( NextTok() != T_version )
         Expecting( GetTokenText( T_version ) );
 
-    int pcb_version = parseInt( FromUTF8() );
+    int pcb_version = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
 
     NeedRIGHT();
 
@@ -565,7 +565,7 @@ void PCB_PARSER::parseHeader() throw( IO_ERROR, PARSE_ERROR )
     T tok = NextTok();
     if( tok == T_version )
     {
-        m_requiredVersion = parseInt( FromUTF8() );
+        m_requiredVersion = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
         m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
         NeedRIGHT();
 
@@ -1774,7 +1774,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             // Theoretically a module nested in a PCB could declare its own version, though
             // as of writing this comment we don't do that. Just in case, take the greater
             // version.
-            int this_version = parseInt( FromUTF8() );
+            int this_version = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
             NeedRIGHT();
             m_requiredVersion = std::max( m_requiredVersion, this_version );
             m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
