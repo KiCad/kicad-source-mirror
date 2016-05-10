@@ -25,7 +25,7 @@
 #ifndef __DRAWING_TOOL_H
 #define __DRAWING_TOOL_H
 
-#include <tool/tool_interactive.h>
+#include <tools/pcb_tool.h>
 #include <boost/optional.hpp>
 
 namespace KIGFX
@@ -43,7 +43,7 @@ class DRAWSEGMENT;
  * Tool responsible for drawing graphical elements like lines, arcs, circles, etc.
  */
 
-class DRAWING_TOOL : public TOOL_INTERACTIVE
+class DRAWING_TOOL : public PCB_TOOL
 {
 public:
     DRAWING_TOOL();

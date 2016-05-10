@@ -49,8 +49,8 @@
 #include <class_module.h>
 
 DRAWING_TOOL::DRAWING_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveDrawing" ), m_view( NULL ),
-    m_controls( NULL ), m_board( NULL ), m_frame( NULL ), m_editModules( false ), m_lineWidth( 1 )
+    PCB_TOOL( "pcbnew.InteractiveDrawing" ), m_view( NULL ),
+    m_controls( NULL ), m_board( NULL ), m_frame( NULL ), m_lineWidth( 1 )
 {
 }
 

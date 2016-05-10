@@ -27,7 +27,7 @@
 #define __EDIT_TOOL_H
 
 #include <math/vector2d.h>
-#include <tool/tool_interactive.h>
+#include <tools/pcb_tool.h>
 #include <view/view_group.h>
 
 class BOARD_ITEM;
@@ -45,7 +45,7 @@ class VIEW_GROUP;
  * using the pcbnew.InteractiveSelection tool.
  */
 
-class EDIT_TOOL : public TOOL_INTERACTIVE
+class EDIT_TOOL : public PCB_TOOL
 {
 public:
     EDIT_TOOL();
@@ -114,17 +114,6 @@ public:
      */
     int CreateArray( const TOOL_EVENT& aEvent );
 
-    /**
-     * Function EditModules()
-     *
-     * Toggles edit module mode. When enabled, one may select parts of modules individually
-     * (graphics, pads, etc.), so they can be modified.
-     * @param aEnabled decides if the mode should be enabled.
-     */
-    void EditModules( bool aEnabled )
-    {
-        m_editModules = aEnabled;
-    }
 
     ///> Sets up handlers for various events.
     void SetTransitions();

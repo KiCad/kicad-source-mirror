@@ -27,7 +27,7 @@
 #define __SELECTION_TOOL_H
 
 #include <math/vector2d.h>
-#include <tool/tool_interactive.h>
+#include <tools/pcb_tool.h>
 #include <tool/context_menu.h>
 #include <class_undoredo_container.h>
 
@@ -111,7 +111,7 @@ enum SELECTION_LOCK_FLAGS
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */
-class SELECTION_TOOL : public TOOL_INTERACTIVE
+class SELECTION_TOOL : public PCB_TOOL
 {
 public:
     SELECTION_TOOL();

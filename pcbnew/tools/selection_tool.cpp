@@ -68,8 +68,8 @@ public:
 
 
 SELECTION_TOOL::SELECTION_TOOL() :
-        TOOL_INTERACTIVE( "pcbnew.InteractiveSelection" ),
-        m_frame( NULL ), m_additive( false ), m_multiple( false ), m_editModules( false ),
+        PCB_TOOL( "pcbnew.InteractiveSelection" ),
+        m_frame( NULL ), m_additive( false ), m_multiple( false ),
         m_locked( true ), m_menu( this ), m_contextMenu( NULL ), m_selectMenu( NULL ),
         m_zoomMenu( NULL ), m_gridMenu( NULL )
 {

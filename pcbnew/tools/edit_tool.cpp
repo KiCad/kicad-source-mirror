@@ -57,7 +57,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_properties.h>
 
 EDIT_TOOL::EDIT_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
+    PCB_TOOL( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
     m_dragging( false ), m_editModules( false ), m_undoInhibit( 0 ),
     m_updateFlag( KIGFX::VIEW_ITEM::NONE )
 {
