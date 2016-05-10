@@ -132,8 +132,15 @@ public:
     // Virtual function
     const EDA_RECT GetBoundingBox() const;
 
-    bool IsLocked() const override { return GetState( TRACK_LOCKED ); }
-    void SetLocked( bool aLocked ) override { return SetState( TRACK_LOCKED, aLocked ); }
+    bool IsLocked() const // override
+    {
+        return GetState( TRACK_LOCKED );
+    }
+
+    void SetLocked( bool aLocked ) // override
+    {
+        return SetState( TRACK_LOCKED, aLocked );
+    }
 
     /**
      * Function GetBestInsertPoint
