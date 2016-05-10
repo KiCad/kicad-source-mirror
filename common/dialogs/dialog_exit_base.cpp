@@ -33,7 +33,7 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	
 	m_TextInfo = new wxStaticText( this, wxID_ANY, _("Save the changes before closing?"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextInfo->Wrap( -1 );
-	m_TextInfo->SetFont( wxFont( 8, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("MS Shell Dlg 2") ) );
+	m_TextInfo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerMessages->Add( m_TextInfo, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	

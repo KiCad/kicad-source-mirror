@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,7 +268,8 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
         DisplayError( this, msg ); return;
     }
 
-    SetLocaleTo_C_standard(); // No pesky decimal separators in gencad
+    // Switch the locale to standard C (needed to print floating point numbers)
+    LOCALE_IO toggle;
 
     // Update some board data, to ensure a reliable gencad export
     GetBoard()->ComputeBoundingBox();
@@ -323,7 +324,6 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     CreateRoutesSection( file, pcb );
 
     fclose( file );
-    SetLocaleTo_Default();  // revert to the current locale
 
     // Undo the footprints modifications (flipped footprints)
     for( module = pcb->m_Modules; module; module = module->Next() )

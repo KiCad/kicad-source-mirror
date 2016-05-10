@@ -218,6 +218,7 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         wxString msg;
         wxString filename = GetCurrFileName();
+
         if( filename.IsEmpty() )
             msg = _("Save changes in a new file before closing?");
         else
@@ -251,7 +252,6 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
             if( !SavePageLayoutDescrFile( filename ) )
             {
-                wxString msg;
                 msg.Printf( _("Unable to create <%s>"), GetChars( filename ) );
                 wxMessageBox( msg );
             }
@@ -722,7 +722,6 @@ WORKSHEET_DATAITEM* PL_EDITOR_FRAME::Locate( const wxPoint& aPosition )
 
         for( unsigned ii = 0; ii < list.size(); ++ii )
         {
-            wxString    text;
             drawitem = list[ii];
             text = drawitem->GetParent()->m_Name;
 

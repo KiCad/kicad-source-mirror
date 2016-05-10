@@ -4,7 +4,7 @@
  * Copyright (C) 2009-2013  Lorenzo Mercantonio
  * Copyright (C) 2014  Cirilo Bernado
  * Copyright (C) 2013 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1329,13 +1329,13 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
     model_vrml = &model3d;
     std::ofstream output_file;
 
+    // Switch the locale to standard C (needed to print floating point numbers)
+    LOCALE_IO toggle;
+
     try
     {
         output_file.exceptions( std::ofstream::failbit );
         output_file.open( TO_UTF8( aFullFileName ), std::ios_base::out );
-
-        // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-        SetLocaleTo_C_standard();
 
         // Begin with the usual VRML boilerplate
         wxString fn = aFullFileName;
@@ -1403,7 +1403,6 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
     // End of work
     output_file.exceptions( std::ios_base::goodbit );
     output_file.close();
-    SetLocaleTo_Default();       // revert to the current  locale
 
     return ok;
 }
