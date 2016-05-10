@@ -203,6 +203,7 @@ set( COMMON_SRCS
     class_plotter.cpp
     class_undoredo_container.cpp
     colors.cpp
+    commit.cpp
     common.cpp
     common_plot_functions.cpp
     common_plotHPGL_functions.cpp
