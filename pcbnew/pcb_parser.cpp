@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2015 KiCad Developers, see change_log.txt for contributors.
- * @author Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +59,8 @@ using namespace PCB_KEYS_T;
 
 void PCB_PARSER::init()
 {
+    m_tooRecent = false;
+    m_requiredVersion = 0;
     m_layerIndices.clear();
     m_layerMasks.clear();
 
@@ -166,6 +167,43 @@ bool PCB_PARSER::parseBool() throw( PARSE_ERROR )
         Expecting( "yes or no" );
 
     return false;
+}
+
+
+int PCB_PARSER::parseVersion() throw( IO_ERROR, PARSE_ERROR )
+{
+    if( NextTok() != T_version )
+        Expecting( GetTokenText( T_version ) );
+
+    int pcb_version = parseInt( FromUTF8() );
+
+    NeedRIGHT();
+
+    return pcb_version;
+}
+
+
+wxString PCB_PARSER::GetRequiredVersion()
+{
+    int year, month, day;
+
+    year = m_requiredVersion / 10000;
+    month = ( m_requiredVersion / 100 ) - ( year * 100 );
+    day = m_requiredVersion - ( year * 10000 ) - ( month * 100 );
+
+    // wx throws an assertion, not a catchable exception, when the date is invalid.
+    // User input shouldn't give wx asserts, so check manually and throw a proper
+    // error instead
+    if( day <= 0 || month <= 0 || month > 12 ||
+            day > wxDateTime::GetNumberOfDays( (wxDateTime::Month)( month - 1 ), year ) )
+    {
+        wxString err;
+        err.Printf( _( "cannot interpret date code %d" ), m_requiredVersion );
+        THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
+
+    wxDateTime date( day, (wxDateTime::Month)( month - 1 ), year, 0, 0, 0, 0 );
+    return date.FormatDate();
 }
 
 
@@ -411,7 +449,23 @@ BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-BOARD* PCB_PARSER::parseBOARD() throw( IO_ERROR, PARSE_ERROR )
+BOARD* PCB_PARSER::parseBOARD() throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR )
+{
+    try
+    {
+        return parseBOARD_unchecked();
+    }
+    catch( const PARSE_ERROR& parse_error )
+    {
+        if( m_tooRecent )
+            throw FUTURE_FORMAT_ERROR( parse_error, GetRequiredVersion() );
+        else
+            throw;
+    }
+}
+
+
+BOARD* PCB_PARSER::parseBOARD_unchecked() throw( IO_ERROR, PARSE_ERROR )
 {
     T token;
 
@@ -506,24 +560,34 @@ void PCB_PARSER::parseHeader() throw( IO_ERROR, PARSE_ERROR )
     wxCHECK_RET( CurTok() == T_kicad_pcb,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a header." ) );
 
-    T token;
-
     NeedLEFT();
-    token = NextTok();
 
-    if( token != T_version )
-        Expecting( GetTokenText( T_version ) );
+    T tok = NextTok();
+    if( tok == T_version )
+    {
+        m_requiredVersion = parseInt( FromUTF8() );
+        m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
+        NeedRIGHT();
 
-    // Get the file version.
-    m_board->SetFileFormatVersionAtLoad( parseInt( GetTokenText( T_version ) ) );
+        // Skip the host name and host build version information.
+        NeedLEFT();
+        NeedSYMBOL();
+        NeedSYMBOL();
+        NeedSYMBOL();
+        NeedRIGHT();
+    }
+    else
+    {
+        m_requiredVersion = SEXPR_BOARD_FILE_VERSION;
+        m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
 
-    // Skip the host name and host build version information.
-    NeedRIGHT();
-    NeedLEFT();
-    NeedSYMBOL();
-    NeedSYMBOL();
-    NeedSYMBOL();
-    NeedRIGHT();
+        // Skip the host name and host build version information.
+        NeedSYMBOL();
+        NeedSYMBOL();
+        NeedRIGHT();
+    }
+
+    m_board->SetFileFormatVersionAtLoad( m_requiredVersion );
 }
 
 
@@ -1651,7 +1715,25 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 }
 
 
-MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERROR, PARSE_ERROR )
+MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments )
+        throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR )
+{
+    try
+    {
+        return parseMODULE_unchecked( aInitialComments );
+    }
+    catch( const PARSE_ERROR& parse_error )
+    {
+        if( m_tooRecent )
+            throw FUTURE_FORMAT_ERROR( parse_error, GetRequiredVersion() );
+        else
+            throw;
+    }
+}
+
+
+MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
+        throw( IO_ERROR, PARSE_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_module, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as MODULE." ) );
@@ -1665,7 +1747,11 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
 
     module->SetInitialComments( aInitialComments );
 
-    NeedSYMBOLorNUMBER();
+    token = NextTok();
+
+    if( !IsSymbol( token ) && token != T_NUMBER )
+        Expecting( "symbol|number" );
+
     name = FromUTF8();
 
     if( !name.IsEmpty() && fpid.Parse( FromUTF8() ) >= 0 )
@@ -1683,6 +1769,18 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments ) throw( IO_ERR
 
         switch( token )
         {
+        case T_version:
+        {
+            // Theoretically a module nested in a PCB could declare its own version, though
+            // as of writing this comment we don't do that. Just in case, take the greater
+            // version.
+            int this_version = parseInt( FromUTF8() );
+            NeedRIGHT();
+            m_requiredVersion = std::max( m_requiredVersion, this_version );
+            m_tooRecent = ( m_requiredVersion > SEXPR_BOARD_FILE_VERSION );
+            break;
+        }
+
         case T_locked:
             module->SetLocked( true );
             break;

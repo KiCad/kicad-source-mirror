@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
- *
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,19 +98,14 @@ static const wxString ModImportFileWildcard( _( "GPcb foot print files (*)|*" ) 
 #define EXPORT_IMPORT_LASTPATH_KEY wxT( "import_last_path" )
 
 
-MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
+/**
+ * Prompt the user for a module file to open.
+ * @param aParent - parent window for the dialog
+ * @param aLastPath - last opened path
+ */
+static wxFileName prompt_for_module( wxWindow* aParent, const wxString& aLastPath )
 {
-    // use the clipboard for this in the future?
-
-    // Some day it might be useful save the last library type selected along with the path.
     static int lastFilterIndex = 0;
-
-    wxString        lastOpenedPathForLoading = m_mruPath;
-    wxConfigBase*   config = Kiface().KifaceSettings();
-
-    if( config )
-        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
-
     wxString wildCard;
 
     wildCard << wxGetTranslation( KiCadFootprintLibFileWildcard ) << wxChar( '|' )
@@ -119,159 +113,204 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
              << wxGetTranslation( ModImportFileWildcard ) << wxChar( '|' )
              << wxGetTranslation( GedaPcbFootprintLibFileWildcard );
 
-    wxFileDialog dlg( this, FMT_IMPORT_MODULE,
-                      lastOpenedPathForLoading, wxEmptyString,
-                      wildCard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog dlg( aParent, FMT_IMPORT_MODULE, aLastPath, wxEmptyString, wildCard,
+            wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
     dlg.SetFilterIndex( lastFilterIndex );
 
     if( dlg.ShowModal() == wxID_CANCEL )
-        return NULL;
-
+        return wxFileName();
+    
     lastFilterIndex = dlg.GetFilterIndex();
 
-    FILE* fp = wxFopen( dlg.GetPath(), wxT( "rt" ) );
+    return wxFileName( dlg.GetPath() );
+}
+
+
+/**
+ * Read a file to detect the type.
+ * @param aFile - open file to be read. File pointer will be closed.
+ * @param aFileName - file name to be read
+ * @param aName - wxString to receive the module name iff type is LEGACY
+ */
+static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFileName, wxString* aName )
+{
+    FILE_LINE_READER freader( aFile, aFileName.GetFullPath() );
+    WHITESPACE_FILTER_READER reader( freader );
+    IO_MGR::PCB_FILE_T file_type;
+
+    wxASSERT( aName );
+
+    reader.ReadLine();
+    char* line = reader.Line();
+
+    if( !strnicmp( line, "(module", strlen( "(module" ) ) )
+    {
+        file_type = IO_MGR::KICAD;
+        *aName = aFileName.GetName();
+    }
+    else if( !strnicmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
+    {
+        file_type = IO_MGR::LEGACY;
+        while( reader.ReadLine() )
+        {
+            if( !strnicmp( line, "$MODULE", strlen( "$MODULE" ) ) )
+            {
+                *aName = FROM_UTF8( StrPurge( line + strlen( "$MODULE" ) ) );
+                break;
+            }
+        }
+    }
+    else if( !strnicmp( line, "Element", strlen( "Element" ) ) )
+    {
+        file_type = IO_MGR::GEDA_PCB;
+        *aName = aFileName.GetName();
+    }
+    else
+    {
+        file_type = IO_MGR::FILE_TYPE_NONE;
+    }
+
+    return file_type;
+}
+
+
+/**
+ * Parse a footprint using a PLUGIN.
+ * @param aFileName - file name to parse
+ * @param aFileType - type of the file
+ * @param aName - name of the footprint
+ */
+static MODULE* parse_module_with_plugin(
+        const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFileType,
+        const wxString& aName )
+{
+    wxString path;
+
+    switch( aFileType )
+    {
+    case IO_MGR::GEDA_PCB:
+        path = aFileName.GetPath();
+        break;
+    case IO_MGR::LEGACY:
+        path = aFileName.GetFullPath();
+        break;
+    default:
+        wxFAIL_MSG( wxT( "unexpected IO_MGR::PCB_FILE_T" ) );
+    }
+
+    PLUGIN::RELEASER pi( IO_MGR::PluginFind( aFileType ) );
+
+    return pi->FootprintLoad( path, aName );
+}
+
+
+/**
+ * Parse a KICAD footprint.
+ * @param aFileName - file name to parse
+ */
+static MODULE* parse_module_kicad( const wxFileName& aFileName )
+{
+    wxString fcontents;
+    PCB_IO   pcb_io;
+    wxFFile  f( aFileName.GetFullPath() );
+
+    if( !f.IsOpened() )
+        return NULL;
+
+    f.ReadAll( &fcontents );
+
+    return dynamic_cast<MODULE*>( pcb_io.Parse( fcontents ) );
+}
+
+
+/**
+ * Try to load a footprint, returning NULL if the file couldn't be accessed.
+ * @param aFileName - file name to load
+ * @param aFileType - type of the file to load
+ * @param aName - footprint name
+ */
+MODULE* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFileType,
+        const wxString& aName )
+{
+    MODULE* module;
+
+    switch( aFileType )
+    {
+    case IO_MGR::GEDA_PCB:
+    case IO_MGR::LEGACY:
+        module = parse_module_with_plugin( aFileName, aFileType, aName );
+        break;
+
+    case IO_MGR::KICAD:
+        module = parse_module_kicad( aFileName );
+        break;
+
+    default:
+        wxFAIL_MSG( wxT( "unexpected IO_MGR::PCB_FILE_T" ) );
+        module = NULL;
+    }
+
+    return module;
+}
+
+
+MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
+{
+    wxString        lastOpenedPathForLoading = m_mruPath;
+    wxConfigBase*   config = Kiface().KifaceSettings();
+
+    if( config )
+        config->Read( EXPORT_IMPORT_LASTPATH_KEY, &lastOpenedPathForLoading );
+
+    wxFileName fn = prompt_for_module( this, lastOpenedPathForLoading );
+
+    if( !fn.IsOk() )
+        return NULL;
+
+    FILE* fp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
 
     if( !fp )
     {
-        wxString msg = wxString::Format( FMT_FILE_NOT_FOUND, GetChars( dlg.GetPath() ) );
+        wxString msg = wxString::Format( FMT_FILE_NOT_FOUND, GetChars( fn.GetFullPath() ) );
         DisplayError( this, msg );
         return NULL;
     }
 
     if( config )    // Save file path
     {
-        lastOpenedPathForLoading = wxPathOnly( dlg.GetPath() );
+        lastOpenedPathForLoading = fn.GetPath();
         config->Write( EXPORT_IMPORT_LASTPATH_KEY, lastOpenedPathForLoading );
     }
 
     wxString    moduleName;
+    IO_MGR::PCB_FILE_T fileType = detect_file_type( fp, fn.GetFullPath(), &moduleName );
 
-    bool        isGeda   = false;
-    bool        isLegacy = false;
-
+    if( fileType == IO_MGR::FILE_TYPE_NONE )
     {
-        FILE_LINE_READER         freader( fp, dlg.GetPath() );   // I own fp, and will close it.
-        WHITESPACE_FILTER_READER reader( freader );              // skip blank lines
-
-        reader.ReadLine();
-        char* line = reader.Line();
-
-        if( !strnicmp( line, "(module", 7 ) )
-        {
-            // isKicad = true;
-        }
-        else if( !strnicmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
-        {
-            isLegacy = true;
-
-            while( reader.ReadLine() )
-            {
-                if( !strnicmp( line, "$MODULE", 7 ) )
-                {
-                    moduleName = FROM_UTF8( StrPurge( line + sizeof( "$MODULE" ) -1 ) );
-                    break;
-                }
-            }
-        }
-        else if( !strnicmp( line, "Element", 7 ) )
-        {
-            isGeda = true;
-        }
-        else
-        {
-            DisplayError( this, FMT_NOT_MODULE );
-            return NULL;
-        }
-
-        // fp is closed here by ~FILE_LINE_READER()
+        DisplayError( this, FMT_NOT_MODULE );
+        return NULL;
     }
 
-    MODULE*   module;
+    MODULE*    module;
+    wxString   errMessage;
 
-    if( isGeda )
+    try
     {
-        try
+        module = try_load_footprint( fn, fileType, moduleName );
+
+        if( !module )
         {
-            wxFileName fn = dlg.GetPath();
-            PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::GEDA_PCB ) );
-
-            moduleName = fn.GetName();
-            module = pi->FootprintLoad( fn.GetPath(), moduleName );
-
-            if( !module )
-            {
-                wxString msg = wxString::Format(
-                    FMT_MOD_NOT_FOUND, GetChars( moduleName ), GetChars( fn.GetPath() ) );
-
-                DisplayError( this, msg );
-                return NULL;
-            }
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayError( this, ioe.errorText );
+            wxString msg = wxString::Format(
+                    FMT_MOD_NOT_FOUND, GetChars( moduleName ), GetChars( fn.GetFullPath() ) );
+            DisplayError( this, msg );
             return NULL;
         }
     }
-    else if( isLegacy )
+    catch( const IO_ERROR& ioe )
     {
-        try
-        {
-            PLUGIN::RELEASER pi( IO_MGR::PluginFind( IO_MGR::LEGACY ) );
-
-            module = pi->FootprintLoad( dlg.GetPath(), moduleName );
-
-            if( !module )
-            {
-                wxString msg = wxString::Format(
-                    FMT_MOD_NOT_FOUND, GetChars( moduleName ), GetChars( dlg.GetPath() ) );
-
-                DisplayError( this, msg );
-                return NULL;
-            }
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayError( this, ioe.errorText );
-            return NULL;
-        }
-    }
-    else    //  if( isKicad )
-    {
-        try
-        {
-            // This technique was chosen to create an example of how reading
-            // the s-expression format from clipboard could be done.
-
-            wxString    fcontents;
-            PCB_IO      pcb_io;
-            wxFFile     f( dlg.GetPath() );
-
-            if( !f.IsOpened() )
-            {
-                wxString msg = wxString::Format( FMT_BAD_PATH, GetChars( dlg.GetPath() ) );
-
-                DisplayError( this, msg );
-                return NULL;
-            }
-
-            f.ReadAll( &fcontents );
-
-            module = dyn_cast<MODULE*>( pcb_io.Parse( fcontents ) );
-
-            if( !module )
-            {
-                wxString msg = wxString::Format( FMT_BAD_PATH, GetChars( dlg.GetPath() ) );
-
-                DisplayError( this, msg );
-                return NULL;
-            }
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            DisplayError( this, ioe.errorText );
-            return NULL;
-        }
+        DisplayError( this, ioe.errorText );
+        return NULL;
     }
 
     // Insert footprint in list
