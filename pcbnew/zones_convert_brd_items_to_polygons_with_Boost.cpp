@@ -1,6 +1,3 @@
-/**
- * @file zones_convert_brd_items_to_polygons_with_Boost.cpp
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -73,6 +70,12 @@
 #include <geometry/shape_file_io.h>
 
 #include <boost/foreach.hpp>
+
+/* DEBUG OPTION:
+ * To emit zone data to a file when filling zones for the debugging purposes,
+ * set this 'true' and build.
+ */
+static const bool g_DumpZonesWhenFilling = false;
 
 extern void BuildUnconnectedThermalStubsPolygonList( SHAPE_POLY_SET& aCornerBuffer,
                                                      BOARD* aPcb, ZONE_CONTAINER* aZone,
