@@ -1,12 +1,8 @@
-/**
- * @file pcbnew/dialogs/dialog_general_options.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,7 +97,6 @@ void DIALOG_DISPLAY_OPTIONS::init()
 
     m_Show_Page_Limits->SetValue( m_Parent->ShowPageLimits() );
 
-    m_OptDisplayViaHole->SetSelection( displ_opts->m_DisplayViaMode );
     m_OptDisplayModTexts->SetValue( displ_opts->m_DisplayModTextFill == SKETCH );
     m_OptDisplayModOutlines->SetValue( displ_opts->m_DisplayModEdgeFill == SKETCH );
     m_OptDisplayPadClearence->SetValue( displ_opts->m_DisplayPadIsol );
@@ -127,8 +122,6 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     m_Parent->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 
     displ_opts->m_DisplayPcbTrackFill = not m_OptDisplayTracks->GetValue();
-
-    displ_opts->m_DisplayViaMode = (VIA_DISPLAY_MODE_T) m_OptDisplayViaHole->GetSelection();
 
     switch ( m_OptDisplayTracksClearance->GetSelection() )
     {

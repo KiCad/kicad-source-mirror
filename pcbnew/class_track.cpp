@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -845,60 +845,35 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
         GRCircle( panel->GetClipBox(), aDC, m_Start + aOffset, inner_radius, 0, color );
     }
 
-    // Draw the via hole if the display option allows it
-    if( displ_opts->m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
+    if( fillvia )
     {
-        // Display all drill holes requested or Display non default holes requested
-        bool show_hole = displ_opts->m_DisplayViaMode == ALL_VIA_HOLE_SHOW;
+        bool blackpenstate = false;
 
-        if( !show_hole )
+        if( screen->m_IsPrinting )
         {
-            NETINFO_ITEM* net = GetNet();
-            int drill_class_value = 0;
-            if( net )
-            {
-                if( GetViaType() == VIA_MICROVIA )
-                    drill_class_value = net->GetMicroViaDrillSize();
-                else
-                    drill_class_value = net->GetViaDrillSize();
-            }
-
-            show_hole = GetDrillValue() != drill_class_value;
+            blackpenstate = GetGRForceBlackPenState();
+            GRForceBlackPen( false );
+            color = WHITE;
+        }
+        else
+        {
+            color = BLACK;     // or DARKGRAY;
         }
 
-        if( show_hole )
-        {
-            if( fillvia )
-            {
-                bool blackpenstate = false;
+        if( (aDrawMode & GR_XOR) == 0)
+            GRSetDrawMode( aDC, GR_COPY );
 
-                if( screen->m_IsPrinting )
-                {
-                    blackpenstate = GetGRForceBlackPenState();
-                    GRForceBlackPen( false );
-                    color = WHITE;
-                }
-                else
-                {
-                    color = BLACK;     // or DARKGRAY;
-                }
+        if( aDC->LogicalToDeviceXRel( drill_radius ) > MIN_DRAW_WIDTH )  // Draw hole if large enough.
+            GRFilledCircle( panel->GetClipBox(), aDC, m_Start.x + aOffset.x,
+                            m_Start.y + aOffset.y, drill_radius, 0, color, color );
 
-                if( (aDrawMode & GR_XOR) == 0)
-                    GRSetDrawMode( aDC, GR_COPY );
-
-                if( aDC->LogicalToDeviceXRel( drill_radius ) > MIN_DRAW_WIDTH )  // Draw hole if large enough.
-                    GRFilledCircle( panel->GetClipBox(), aDC, m_Start.x + aOffset.x,
-                                    m_Start.y + aOffset.y, drill_radius, 0, color, color );
-
-                if( screen->m_IsPrinting )
-                    GRForceBlackPen( blackpenstate );
-            }
-            else
-            {
-                if( drill_radius < inner_radius )         // We can show the via hole
-                    GRCircle( panel->GetClipBox(), aDC, m_Start + aOffset, drill_radius, 0, color );
-            }
-        }
+        if( screen->m_IsPrinting )
+            GRForceBlackPen( blackpenstate );
+    }
+    else
+    {
+        if( drill_radius < inner_radius )         // We can show the via hole
+            GRCircle( panel->GetClipBox(), aDC, m_Start + aOffset, drill_radius, 0, color );
     }
 
     if( ShowClearance( displ_opts, this ) )

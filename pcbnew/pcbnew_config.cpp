@@ -337,10 +337,6 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayPolarCoords" ),
                                                         &displ_opts->m_DisplayPolarCood, false ) );
         // Display options and modes:
-        m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ViaHoleDisplayMode" ),
-                                                       (int*) &displ_opts->m_DisplayViaMode,
-                                                       VIA_SPECIAL_HOLE_SHOW, VIA_HOLE_NOT_SHOW,
-                                                       OPT_VIA_HOLE_END - 1 ) );
         m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ShowNetNamesMode" ),
                                                        &displ_opts->m_DisplayNetNamesMode, 3, 0, 3 ) );
         m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayTrackFilled" ),

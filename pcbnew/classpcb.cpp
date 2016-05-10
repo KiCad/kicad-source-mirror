@@ -211,7 +211,6 @@ DISPLAY_OPTIONS::DISPLAY_OPTIONS()
     m_DisplayModTextFill      = FILLED;
     m_DisplayPcbTrackFill     = FILLED;   // false = sketch , true = filled
     m_ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
-    m_DisplayViaMode          = VIA_HOLE_NOT_SHOW;
 
     m_DisplayPolarCood        = false;  /* false = display absolute coordinates,
                                          * true = display polar cordinates */
