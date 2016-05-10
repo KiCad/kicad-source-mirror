@@ -367,10 +367,9 @@ currently known issues when building KiCad on any platform.
 As of version 5 of [GNU GCC][], using the default configuration of downloading, patching, and
 building of Boost 1.54 will cause the KiCad build to fail.  Therefore a newer version of Boost
 must be used to build KiCad.  If your system has Boost 1.56 or greater installed, you job is
-straight forward.  Configure your KiCad build using `-DKICAD_SKIP_BOOST=ON`.  If your system
-does not have Boost 1.56 or greater installed, you will have to download and [build Boost][]
-from source.  If you are building Boost on windows using [MinGW][] you will have to apply the
-Boost patches in the KiCad source [patches folder][].
+straight forward.  If your system does not have Boost 1.56 or greater installed, you will have
+to download and [build Boost][] from source.  If you are building Boost on windows using [MinGW][]
+you will have to apply the Boost patches in the KiCad source [patches folder][].
 
 
 [download]: http://kicad-pcb.org/download/
