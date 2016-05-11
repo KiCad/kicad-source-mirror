@@ -277,13 +277,7 @@ public:
     ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
     void Remove( BOARD_ITEM* aBoardItem ) override;
 
-    /**
-     * Function DuplicateAndAddItem
-     * duplicates  an item, and add it to the board list.
-     * @param aItem The item to duplicate.
-     * @return BOARD_ITEM* \a the new item which was added.
-     */
-    BOARD_ITEM* DuplicateAndAddItem( const BOARD_ITEM* aItem );
+    BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem, bool aAddToBoard = false );
 
     /**
      * Function GetRatsnest()

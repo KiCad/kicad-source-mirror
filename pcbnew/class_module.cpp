@@ -1110,8 +1110,9 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
-BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
-                                         bool aIncrementPadNumbers )
+BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
+                               bool aIncrementPadNumbers,
+                               bool aAddToModule )
 {
     BOARD_ITEM* new_item = NULL;
     D_PAD* new_pad = NULL;
@@ -1122,7 +1123,9 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
     {
         new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
 
-        Pads().PushBack( new_pad );
+        if( aAddToModule )
+            Pads().PushBack( new_pad );
+
         new_item = new_pad;
         break;
     }
@@ -1137,7 +1140,9 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         {
             TEXTE_MODULE* new_text = new TEXTE_MODULE( *old_text );
 
-            GraphicalItems().PushBack( new_text );
+            if( aAddToModule )
+                GraphicalItems().PushBack( new_text );
+
             new_item = new_text;
         }
         break;
@@ -1148,7 +1153,9 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         EDGE_MODULE* new_edge = new EDGE_MODULE(
                 *static_cast<const EDGE_MODULE*>(aItem) );
 
-        GraphicalItems().PushBack( new_edge );
+        if( aAddToModule )
+            GraphicalItems().PushBack( new_edge );
+
         new_item = new_edge;
         break;
     }

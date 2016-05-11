@@ -714,7 +714,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         // TODO move DuplicateAndAddItem() to BOARD_ITEM_CONTAINER? dunno..
         if( m_editModules )
-            new_item = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
+            new_item = editFrame->GetBoard()->m_Modules->Duplicate( item, increment, true );
         else
         {
 #if 0
@@ -723,7 +723,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             // so zones are not duplicated
             if( item->Type() != PCB_ZONE_AREA_T )
 #endif
-            new_item = editFrame->GetBoard()->DuplicateAndAddItem( item );
+            new_item = editFrame->GetBoard()->Duplicate( item, true );
         }
 
         if( new_item )

@@ -81,13 +81,12 @@ void ARRAY_CREATOR::Invoke()
                 {
                     // increment pad numbers if do any renumbering
                     // (we will number again later according to the numbering scheme if set)
-                    new_item = module->DuplicateAndAddItem(
-                            item, array_opts->ShouldNumberItems() );
+                    new_item = module->Duplicate( item, array_opts->ShouldNumberItems(), true );
                 }
                 else
                 {
                     // PCB items keep the same numbering
-                    new_item = getBoard()->DuplicateAndAddItem( item );
+                   new_item = getBoard()->Duplicate( item, true );
 
                     // @TODO: we should merge zones. This is a bit tricky, because
                     // the undo command needs saving old area, if it is merged.

@@ -2770,7 +2770,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 }
 
 
-BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem )
+BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem,
+                              bool aAddToBoard )
 {
     BOARD_ITEM* new_item = NULL;
 
@@ -2799,7 +2800,10 @@ BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem )
     }
 
     if( new_item )
-        Add( new_item );
+    {
+        if( aAddToBoard )
+            Add( new_item );
+    }
 
     return new_item;
 }

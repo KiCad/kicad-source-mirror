@@ -520,12 +520,13 @@ public:
     void SetPlacementCost90( int aCost )    { m_CntRot90 = aCost; }
 
     /**
-     * Function DuplicateAndAddItem
-     * Duplicate a given item within the module
+     * Function Duplicate
+     * Duplicate a given item within the module, without adding to the board
      * @return the new item, or NULL if the item could not be duplicated
      */
-    BOARD_ITEM* DuplicateAndAddItem( const BOARD_ITEM* item,
-                                     bool aIncrementPadNumbers );
+    BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem,
+                           bool aIncrementPadNumbers,
+                           bool aAddToModule = false );
 
     /**
      * Function Add3DModel
