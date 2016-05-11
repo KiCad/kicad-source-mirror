@@ -162,9 +162,11 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
                                KiBitmap( unit_mm_xpm ),
                                _( "Set units to millimeters" ), wxITEM_CHECK );
 
+#ifndef __APPLE__
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiBitmap( cursor_shape_xpm ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
+#endif // !__APPLE__
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, wxEmptyString,
