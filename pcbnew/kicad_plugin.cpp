@@ -1745,7 +1745,13 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
             throw;
     }
 
-    wxASSERT( board );
+    if( !board )
+    {
+        // The parser loaded something that was valid, but wasn't a board.
+        THROW_PARSE_ERROR( _( "this file does not contain a PCB" ),
+                m_parser->CurSource(), m_parser->CurLine(),
+                m_parser->CurLineNumber(), m_parser->CurOffset() );
+    }
 
     // Give the filename to the board if it's new
     if( !aAppendToMe )
