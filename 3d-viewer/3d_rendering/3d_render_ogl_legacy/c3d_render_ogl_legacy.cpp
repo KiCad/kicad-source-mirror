@@ -657,28 +657,19 @@ bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
     glPixelStorei( GL_UNPACK_ALIGNMENT, 4 );
 
     // Initialize the open GL texture to draw the filled semi-circle of the segments
-    CIMAGE *circleImage = new CIMAGE( SIZE_OF_CIRCLE_TEXTURE, SIZE_OF_CIRCLE_TEXTURE );
-    if( !circleImage )
-        return false;
+    CIMAGE circleImage( SIZE_OF_CIRCLE_TEXTURE, SIZE_OF_CIRCLE_TEXTURE );
 
-    circleImage->CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 2) - 0, (SIZE_OF_CIRCLE_TEXTURE / 2) - 0, (SIZE_OF_CIRCLE_TEXTURE / 2) - 4, 0xFF );
-    //circleImage->CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1, (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1, (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 2, 0xFF );
+    circleImage.CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 2) - 0, (SIZE_OF_CIRCLE_TEXTURE / 2) - 0, (SIZE_OF_CIRCLE_TEXTURE / 2) - 4, 0xFF );
+    //circleImage.CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1, (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1, (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 2, 0xFF );
 
-    CIMAGE *bluredCircle = new CIMAGE( *circleImage );
-    circleImage->EfxFilter( bluredCircle, FILTER_GAUSSIAN_BLUR2 );
+    CIMAGE bluredCircle( circleImage );
+    circleImage.EfxFilter( &bluredCircle, FILTER_GAUSSIAN_BLUR2 );
 
-    m_ogl_circle_texture = OGL_LoadTexture( *circleImage );
+    m_ogl_circle_texture = OGL_LoadTexture( circleImage );
 
-    circleImage->SaveAsPNG("circleImage.png");
-    delete circleImage;
-    circleImage = 0;
+    circleImage.SaveAsPNG("circleImage.png");
 
-    if( bluredCircle )
-    {
-        bluredCircle->SaveAsPNG("circleImage_blured.png");
-        delete bluredCircle;
-        bluredCircle = 0;
-    }
+    bluredCircle.SaveAsPNG("circleImage_blured.png");
 
     m_is_opengl_initialized = true;
     return true;
