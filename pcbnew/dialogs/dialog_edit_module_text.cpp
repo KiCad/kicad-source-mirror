@@ -72,6 +72,7 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
     m_dc     = aDC;
     m_module = NULL;
     m_currentText = aTextMod;
+    m_OrientValue = 0;
 
     m_OrientValidator.SetRange( -90.0, 90.0 );
     m_OrientValueCtrl->SetValidator( m_OrientValidator );

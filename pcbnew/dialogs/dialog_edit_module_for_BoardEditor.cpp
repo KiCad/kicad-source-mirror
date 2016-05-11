@@ -82,6 +82,11 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     m_NoteBook->SetSelection( m_page );
     m_sdbSizerStdButtonsOK->SetDefault();
 
+    m_ReferenceCopy = NULL;
+    m_ValueCopy = NULL;
+    m_LastSelected3DShapeIndex = 0;
+    m_OrientValue = 0;
+
     GetSizer()->SetSizeHints( this );
     Centre();
     Layout();

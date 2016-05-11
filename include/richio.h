@@ -195,7 +195,7 @@ struct PARSE_ERROR : public IO_ERROR
     virtual ~PARSE_ERROR() throw ( /*none*/ ){}
 
 protected:
-    PARSE_ERROR(): IO_ERROR() {}
+    PARSE_ERROR(): IO_ERROR(), lineNumber( 0 ), byteIndex( 0 ) {}
 };
 
 
