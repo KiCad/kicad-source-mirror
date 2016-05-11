@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-07 11:05+0300\n"
-"PO-Revision-Date: 2016-05-10 18:32+0300\n"
+"PO-Revision-Date: 2016-05-11 08:08+0300\n"
 "Last-Translator: Baranovskiy Konstantin <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
 "Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
@@ -80,7 +80,7 @@ msgstr "Плохой псевдоним (дублирует имя)"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:636
 msgid "3D configuration directory is unknown"
-msgstr "Каталог конфигурации 3D неизвестна"
+msgstr "Каталог конфигурации 3D неизвестен"
 
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:639
 #: 3d-viewer/3d_cache/3d_filename_resolver.cpp:659
@@ -10439,7 +10439,7 @@ msgstr "Удалить каталог"
 
 #: kicad/tree_project_frame.cpp:689 kicad/tree_project_frame.cpp:704
 msgid "Delete the Directory and its content"
-msgstr "Удалить каталог и всё её содержимое"
+msgstr "Удалить каталог и всё его содержимое"
 
 #: kicad/tree_project_frame.cpp:695
 msgid "&Edit in a text editor"
@@ -19868,7 +19868,7 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"Запись/изменение legacy библиотек (.mod файлы) не разрешены\n"
+"Запись/изменение legacy библиотек (.mod файлы) не разрешены.\n"
 "Сохраните текущую библиотеку в новом .pretty формате\n"
 "и обновите вашу таблицу библиотек посад.мест\n"
 "для сохранения вашего посад.места(из .kicad_mod файла) в каталоге .pretty "
