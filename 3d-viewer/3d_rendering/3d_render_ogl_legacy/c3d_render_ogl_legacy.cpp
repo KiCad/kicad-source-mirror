@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -437,14 +437,13 @@ static SFVEC3F light = SFVEC3F();
 
 void C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving )
 {
+    (void) aIsMoving;
+
     // Initialize openGL
     if( !m_is_opengl_initialized )
     {
         if( !initializeOpenGL() )
             return;
-        aIsMoving = true;
-
-
 
         A = sphere;
         B = cube;
