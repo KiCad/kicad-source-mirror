@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 Jean-Pierre Charras
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ bool PCB_CALCULATOR_FRAME::ReadDataFile()
     if( file == NULL )
         return false;
 
-    // Switch the locale to standard C (needed to read/write floating point numbers
+    // Switch the locale to standard C (needed to read/write floating point numbers)
     LOCALE_IO   toggle;
 
     PCB_CALCULATOR_DATAFILE * datafile = new PCB_CALCULATOR_DATAFILE( &m_RegulatorList );
@@ -86,10 +86,11 @@ bool PCB_CALCULATOR_FRAME::ReadDataFile()
 
 bool PCB_CALCULATOR_FRAME::WriteDataFile()
 {
-    // Switch the locale to standard C (needed to read/write floating point numbers
+    // Switch the locale to standard C (needed to read/write floating point numbers)
     LOCALE_IO   toggle;
 
-    std::auto_ptr<PCB_CALCULATOR_DATAFILE> datafile( new PCB_CALCULATOR_DATAFILE( &m_RegulatorList ) );
+    std::unique_ptr<PCB_CALCULATOR_DATAFILE>
+                datafile( new PCB_CALCULATOR_DATAFILE( &m_RegulatorList ) );
 
     try
     {
@@ -188,7 +189,6 @@ void PCB_CALCULATOR_DATAFILE_PARSER::Parse( PCB_CALCULATOR_DATAFILE* aDataList )
     T token;
     while( ( token = NextTok() ) != T_EOF)
     {
-
         if( token == T_LEFT )
         {
             token = NextTok();

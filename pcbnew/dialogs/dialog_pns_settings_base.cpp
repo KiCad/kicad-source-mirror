@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -109,7 +109,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	
 	m_lowLabel = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("low"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lowLabel->Wrap( -1 );
-	m_lowLabel->SetFont( wxFont( 8, 70, 90, 90, false, wxEmptyString ) );
+	m_lowLabel->SetFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
 	bSliderLabels->Add( m_lowLabel, 0, 0, 5 );
 	
@@ -118,7 +118,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	
 	m_highLabel = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("high"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_highLabel->Wrap( -1 );
-	m_highLabel->SetFont( wxFont( 8, 70, 90, 90, false, wxEmptyString ) );
+	m_highLabel->SetFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
 	bSliderLabels->Add( m_highLabel, 0, 0, 5 );
 	

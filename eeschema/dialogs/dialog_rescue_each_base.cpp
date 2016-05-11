@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,7 +22,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Symbols to update:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
-	m_staticText5->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText5->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerMain->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -31,7 +31,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Instances of this symbol:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	m_staticText4->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText4->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerMain->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -46,7 +46,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Cached Part:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer6->Add( m_staticText2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -63,7 +63,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	
 	m_staticText3 = new wxStaticText( this, wxID_ANY, _("Library Part:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
-	m_staticText3->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText3->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer7->Add( m_staticText3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -107,7 +107,7 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_RESCUE_EACH_BASE::OnDialogResize ) );
-	this->Connect( wxID_ANY, wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_RESCUE_EACH_BASE::OnConflictSelect ) );
+	m_ListOfConflicts->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_RESCUE_EACH_BASE::OnConflictSelect ), NULL, this );
 	m_componentViewOld->Connect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_RESCUE_EACH_BASE::OnHandleCachePreviewRepaint ), NULL, this );
 	m_componentViewNew->Connect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_RESCUE_EACH_BASE::OnHandleLibraryPreviewRepaint ), NULL, this );
 	m_btnNeverShowAgain->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_RESCUE_EACH_BASE::OnNeverShowClick ), NULL, this );
@@ -118,7 +118,7 @@ DIALOG_RESCUE_EACH_BASE::~DIALOG_RESCUE_EACH_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_RESCUE_EACH_BASE::OnDialogResize ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_RESCUE_EACH_BASE::OnConflictSelect ) );
+	m_ListOfConflicts->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_RESCUE_EACH_BASE::OnConflictSelect ), NULL, this );
 	m_componentViewOld->Disconnect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_RESCUE_EACH_BASE::OnHandleCachePreviewRepaint ), NULL, this );
 	m_componentViewNew->Disconnect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_RESCUE_EACH_BASE::OnHandleLibraryPreviewRepaint ), NULL, this );
 	m_btnNeverShowAgain->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_RESCUE_EACH_BASE::OnNeverShowClick ), NULL, this );

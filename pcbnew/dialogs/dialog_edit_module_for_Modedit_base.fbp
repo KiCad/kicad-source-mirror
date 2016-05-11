@@ -178,7 +178,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Properties</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -268,6 +268,7 @@
                                             <property name="minimum_size"></property>
                                             <property name="name">PropLeftSizer</property>
                                             <property name="orient">wxVERTICAL</property>
+                                            <property name="parent">1</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="0">
@@ -1570,6 +1571,7 @@
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbSizerAutoplace</property>
                                                     <property name="orient">wxHORIZONTAL</property>
+                                                    <property name="parent">1</property>
                                                     <property name="permission">none</property>
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="0">
@@ -1988,6 +1990,7 @@
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sbSizer8</property>
                                                     <property name="orient">wxVERTICAL</property>
+                                                    <property name="parent">1</property>
                                                     <property name="permission">none</property>
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="0">
@@ -3372,7 +3375,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">3D Settings</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="0">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -3462,6 +3465,7 @@
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizer4</property>
                                             <property name="orient">wxVERTICAL</property>
+                                            <property name="parent">1</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="0">

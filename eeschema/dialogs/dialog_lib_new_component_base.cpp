@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,7 +21,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_staticText8 = new wxStaticText( this, wxID_ANY, _("General Settings"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
-	m_staticText8->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText8->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer16->Add( m_staticText8, 0, wxALL, 5 );
 	
@@ -38,7 +38,6 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	fgSizer31->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 100,-1 ), 0 );
-	m_textName->SetMaxLength( 0 ); 
 	fgSizer31->Add( m_textName, 1, wxALL|wxEXPAND, 3 );
 	
 	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Default reference designator:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -84,7 +83,7 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	
 	m_staticText11 = new wxStaticText( this, wxID_ANY, _("General Pin Settings"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
-	m_staticText11->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText11->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizer18->Add( m_staticText11, 0, wxALL, 5 );
 	
