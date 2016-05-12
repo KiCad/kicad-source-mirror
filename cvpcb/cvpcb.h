@@ -31,9 +31,6 @@
 // Define print format to display a schematic component line
 #define CMP_FORMAT wxT( "%3d %8s - %16s : %s" )
 
-#define FILTERFOOTPRINTKEY "FilterFootprint"
-
-
 extern const wxString EquFileExtension;
 extern const wxString EquFilesWildcard;
 

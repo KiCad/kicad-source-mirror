@@ -61,11 +61,19 @@
 static const wxString traceScrollSettings( wxT( "KicadScrollSettings" ) );
 
 
-// Configuration entry names.
+///@{
+/// \ingroup config
+
+/// Nonzero iff fullscreen cursor is to be used (suffix)
 static const wxString CursorShapeEntryKeyword( wxT( "CursorShape" ) );
+/// Nonzero to show grid (suffix)
 static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
+/// Grid color ID (suffix)
 static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
+/// Most recently used grid size (suffix)
 static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
+
+///@}
 
 /**
  * Integer to set the maximum number of undo items on the stack. If zero,

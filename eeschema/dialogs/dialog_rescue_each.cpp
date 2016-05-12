@@ -289,7 +289,7 @@ void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
 
     if( resp == wxID_YES )
     {
-        m_Config->Write( RESCUE_NEVER_SHOW_KEY, true );
+        m_Config->Write( RescueNeverShowEntry, true );
         m_Rescuer->m_chosen_candidates.clear();
         Close();
     }

@@ -29,12 +29,16 @@
 #ifndef PCBPLOT_H
 #define PCBPLOT_H
 
-/* Shared Config keys for plot and print */
+///@{
+/// \ingroup config
+
 #define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )
 #define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
 #define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
 #define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
 #define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
 #define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
+
+///@}
 
 #endif  // ifndef PCBPLOT_H

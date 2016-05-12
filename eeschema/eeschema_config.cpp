@@ -494,10 +494,13 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
     prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDITOR, GetProjectFileParametersList() );
 }
 
+///@{
+/// \ingroup config
 
-static const wxChar AutoplaceFieldsEntry[] =        wxT( "AutoplaceFields" );
-static const wxChar AutoplaceJustifyEntry[] =       AUTOPLACE_JUSTIFY_KEY;
-static const wxChar AutoplaceAlignEntry[] =         AUTOPLACE_ALIGN_KEY;
+const wxChar RescueNeverShowEntry[] =               wxT( "RescueNeverShow" );
+const wxChar AutoplaceFieldsEntry[] =               wxT( "AutoplaceFields" );
+const wxChar AutoplaceJustifyEntry[] =              wxT( "AutoplaceJustify" );
+const wxChar AutoplaceAlignEntry[] =                wxT( "AutoplaceAlign" );
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
@@ -521,6 +524,13 @@ static const wxChar FindStringHistoryEntry[] =      wxT( "FindStringHistoryList%
 static const wxChar ReplaceStringHistoryEntry[] =   wxT( "ReplaceStringHistoryList%d" );
 static const wxChar FieldNamesEntry[] =             wxT( "FieldNames" );
 static const wxChar SimulatorCommandEntry[] =       wxT( "SimCmdLine" );
+static const wxString ShowPageLimitsEntry =         "ShowPageLimits";
+static const wxString UnitsEntry =                  "Units";
+static const wxString PrintMonochromeEntry =        "PrintMonochrome";
+static const wxString PrintSheetRefEntry =          "PrintSheetReferenceAndTitleBlock";
+static const wxString RepeatStepXEntry =            "RepeatStepX";
+static const wxString RepeatStepYEntry =            "RepeatStepY";
+static const wxString RepeatLabelIncrementEntry =   "RepeatLabelIncrement";
 
 // Library editor wxConfig entry names.
 static const wxChar lastLibExportPathEntry[] =      wxT( "LastLibraryExportPath" );
@@ -533,33 +543,34 @@ static const wxChar pinRepeatStepEntry[] =          wxT( "LibeditPinRepeatStep" 
 static const wxChar repeatLibStepXEntry[] =         wxT( "LibeditRepeatStepX" );
 static const wxChar repeatLibStepYEntry[] =         wxT( "LibeditRepeatStepY" );
 
+///@}
 
 PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings()
 {
     if( !m_configSettings.empty() )
         return m_configSettings;
 
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "ShowPageLimits" ),
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, ShowPageLimitsEntry,
                                                     &m_showPageLimits, true ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
+    m_configSettings.push_back( new PARAM_CFG_INT( true, UnitsEntry,
                                                    (int*)&g_UserUnit, MILLIMETRES ) );
 
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintMonochrome" ),
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintMonochromeEntry,
                                                     &m_printMonochrome, true ) );
-    m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PrintSheetReferenceAndTitleBlock" ),
+    m_configSettings.push_back( new PARAM_CFG_BOOL( true, PrintSheetRefEntry,
                                                     &m_printSheetReference, true ) );
 
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RepeatStepX" ),
+    m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatStepXEntry,
                                                       &m_repeatStep.x,
                                                       DEFAULT_REPEAT_OFFSET_X,
                                                       -REPEAT_OFFSET_MAX,
                                                       REPEAT_OFFSET_MAX ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RepeatStepY" ),
+    m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatStepYEntry,
                                                       &m_repeatStep.y,
                                                       DEFAULT_REPEAT_OFFSET_Y,
                                                       -REPEAT_OFFSET_MAX,
                                                       REPEAT_OFFSET_MAX ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RepeatLabelIncrement" ),
+    m_configSettings.push_back( new PARAM_CFG_INT( true, RepeatLabelIncrementEntry,
                                                       &m_repeatDeltaLabel,
                                                       DEFAULT_REPEAT_LABEL_INC, -10, +10 ) );
     return m_configSettings;

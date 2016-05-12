@@ -54,10 +54,16 @@
 #define FRAME_MIN_SIZE_Y 300
 
 
-// option key to close CvPcb after saving files
-static const wxString KeepCvpcbOpenEntry( wxT( "KeepCvpcbOpen" ) );
-static const wxString FootprintDocFileEntry( wxT( "footprints_doc_file" ) );
+///@{
+/// \ingroup config
 
+/// Nonzero iff cvpcb should be kept open after saving files
+static const wxString KeepCvpcbOpenEntry = "KeepCvpcbOpen";
+
+static const wxString FootprintDocFileEntry = "footprints_doc_file";
+
+static const wxString FilterFootprintEntry = "FilterFootprint";
+///@}
 
 BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
 
@@ -210,7 +216,7 @@ void CVPCB_MAINFRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( KeepCvpcbOpenEntry, &m_keepCvpcbOpen, true );
     aCfg->Read( FootprintDocFileEntry, &m_DocModulesFileName,
                 DEFAULT_FOOTPRINTS_LIST_FILENAME );
-    aCfg->Read( FILTERFOOTPRINTKEY, &m_filteringOptions, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
+    aCfg->Read( FilterFootprintEntry, &m_filteringOptions, FOOTPRINTS_LISTBOX::UNFILTERED_FP_LIST );
 }
 
 
@@ -220,7 +226,7 @@ void CVPCB_MAINFRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( KeepCvpcbOpenEntry, m_keepCvpcbOpen );
     aCfg->Write( FootprintDocFileEntry, m_DocModulesFileName );
-    aCfg->Write( FILTERFOOTPRINTKEY, m_filteringOptions );
+    aCfg->Write( FilterFootprintEntry, m_filteringOptions );
 }
 
 

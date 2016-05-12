@@ -130,7 +130,7 @@ DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( wxWindow* aParent,
     // Load setting for cache rescue
     m_config = Kiface().KifaceSettings();
     bool rescueNeverShow = false;
-    m_config->Read( RESCUE_NEVER_SHOW_KEY, &rescueNeverShow, false );
+    m_config->Read( RescueNeverShowEntry, &rescueNeverShow, false );
     m_cbRescue->SetValue( !rescueNeverShow );
 
     wxString msg = wxString::Format( _(
@@ -250,7 +250,7 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
         *m_callers_lib_names = list;
     }
 
-    m_config->Write( RESCUE_NEVER_SHOW_KEY, ! m_cbRescue->GetValue() );
+    m_config->Write( RescueNeverShowEntry, ! m_cbRescue->GetValue() );
 
     EndModal( wxID_OK );
 }
