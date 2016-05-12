@@ -143,7 +143,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
-    if( !hoverSelection( selection ) )
+    if( !hoverSelection() )
         return 0;
 
     Activate();
@@ -354,7 +354,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !hoverSelection( selection, false ) )
+    if( !hoverSelection( false ) )
         return 0;
 
     // Tracks & vias are treated in a special way:
@@ -428,7 +428,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !hoverSelection( selection ) || m_selectionTool->CheckLock() == SELECTION_LOCKED )
+    if( !hoverSelection() || m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
     wxPoint rotatePoint = getModificationPoint( selection );
@@ -478,7 +478,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !hoverSelection( selection ) || m_selectionTool->CheckLock() == SELECTION_LOCKED )
+    if( !hoverSelection() || m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
     wxPoint flipPoint = getModificationPoint( selection );
@@ -523,7 +523,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( !hoverSelection( selection ) || m_selectionTool->CheckLock() == SELECTION_LOCKED )
+    if( !hoverSelection() || m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
     // Get a copy of the selected items set
@@ -616,7 +616,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     // Shall the selection be cleared at the end?
     bool unselect = selection.Empty();
 
-    if( !hoverSelection( selection ) || m_selectionTool->CheckLock() == SELECTION_LOCKED )
+    if( !hoverSelection() || m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
     wxPoint translation;
@@ -678,7 +678,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     const SELECTION& selection = selTool->GetSelection();
 
     // Be sure that there is at least one item that we can modify
-    if( !hoverSelection( selection ) )
+    if( !hoverSelection() )
         return 0;
 
     // we have a selection to work on now, so start the tool process
@@ -843,7 +843,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     const SELECTION& selection = selTool->GetSelection();
 
     // pick up items under the cursor if needed
-    if( !hoverSelection( selection ) )
+    if( !hoverSelection() )
         return 0;
 
     // we have a selection to work on now, so start the tool process
@@ -913,9 +913,11 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION& aSelection )
 }
 
 
-bool EDIT_TOOL::hoverSelection( const SELECTION& aSelection, bool aSanitize )
+bool EDIT_TOOL::hoverSelection( bool aSanitize )
 {
-    if( aSelection.Empty() )                        // Try to find an item that could be modified
+    const SELECTION& selection = m_selectionTool->GetSelection();
+
+    if( selection.Empty() )                        // Try to find an item that could be modified
     {
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
 
@@ -929,11 +931,12 @@ bool EDIT_TOOL::hoverSelection( const SELECTION& aSelection, bool aSanitize )
     if( aSanitize )
         m_selectionTool->SanitizeSelection();
 
-    if( aSelection.Empty() )        // TODO is it necessary?
+    if( selection.Empty() )        // TODO is it necessary?
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-    return !aSelection.Empty();
+    return !selection.Empty();
 }
+
 
 void EDIT_TOOL::processUndoBuffer( const PICKED_ITEMS_LIST* aLastChange )
 {
@@ -1007,7 +1010,7 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
     const SELECTION& selection = m_selectionTool->GetSelection();
     bool unselect = selection.Empty();
 
-    if( !hoverSelection( selection ) )
+    if( !hoverSelection() )
         return 0;
 
     MODULE* mod = uniqueSelected<MODULE>();

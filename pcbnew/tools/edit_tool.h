@@ -161,8 +161,8 @@ private:
     wxPoint getModificationPoint( const SELECTION& aSelection );
 
     ///> If there are no items currently selected, it tries to choose the item that is under
-    ///> the cursor or displays a disambiguation menu if there are multpile items.
-    bool hoverSelection( const SELECTION& aSelection, bool aSanitize = true );
+    ///> the cursor or displays a disambiguation menu if there are multiple items.
+    bool hoverSelection( bool aSanitize = true );
 
     ///> Processes the current undo buffer since the last change. If the last change does not occur
     ///> in the current buffer, then the whole list is processed.
