@@ -66,8 +66,21 @@ static const wxString CursorShapeEntryKeyword( wxT( "CursorShape" ) );
 static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
 static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
 static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
-static const wxString MaxUndoItemsEntry(wxT( "MaxUndoItems" ) );
 
+/**
+ * Integer to set the maximum number of undo items on the stack. If zero,
+ * undo items are unlimited.
+ *
+ * Present as:
+ *
+ * - SchematicFrameDevelMaxUndoItems (file: eeschema)
+ * - LibeditFrameDevelMaxUndoItems (file: eeschema)
+ * - PcbFrameDevelMaxUndoItems (file: pcbnew)
+ * - ModEditFrameDevelMaxUndoItems (file: pcbnew)
+ *
+ * \ingroup develconfig
+ */
+static const wxString MaxUndoItemsEntry(wxT( "DevelMaxUndoItems" ) );
 
 BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )

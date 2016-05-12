@@ -1,7 +1,3 @@
-/**
- * @file eeschema_config.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -23,6 +19,10 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file eeschema_config.cpp
  */
 
 #include <fctsys.h>
@@ -307,7 +307,6 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.SetRepeatVertical( GetRepeatStep().y );
     dlg.SetRepeatLabel( GetRepeatDeltaLabel() );
     dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
-    dlg.SetMaxUndoItems( GetScreen()->GetMaxUndoItems() );
     dlg.SetRefIdSeparator( LIB_PART::GetSubpartIdSeparator(),
                            LIB_PART::GetSubpartFirstId() );
 
@@ -362,7 +361,6 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     SetRepeatDeltaLabel( dlg.GetRepeatLabel() );
 
     SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
-    GetScreen()->SetMaxUndoItems( dlg.GetMaxUndoItems() );
     SetGridVisibility( dlg.GetShowGrid() );
     m_showAllPins = dlg.GetShowHiddenPins();
     m_canvas->SetEnableMiddleButtonPan( dlg.GetEnableMiddleButtonPan() );
@@ -782,7 +780,6 @@ void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.SetPinLength( GetDefaultPinLength() );
     dlg.SetPinNumSize( m_textPinNumDefaultSize );
     dlg.SetPinNameSize( m_textPinNameDefaultSize );
-    dlg.SetMaxUndoItems( GetScreen()->GetMaxUndoItems() );
 
     dlg.SetShowGrid( IsGridVisible() );
     dlg.Layout();
@@ -802,7 +799,6 @@ void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     SetRepeatPinStep( dlg.GetPinRepeatStep() );
     SetRepeatStep( dlg.GetItemRepeatStep() );
     SetRepeatDeltaLabel( dlg.GetRepeatLabelInc() );
-    GetScreen()->SetMaxUndoItems( dlg.GetMaxUndoItems() );
 
     SaveSettings( config() );  // save values shared by eeschema applications.
 

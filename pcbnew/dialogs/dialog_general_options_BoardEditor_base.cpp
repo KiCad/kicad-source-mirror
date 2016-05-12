@@ -75,13 +75,6 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	
 	fgSizer1->Add( m_SaveTime, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_stMaxUndoItems = new wxStaticText( this, wxID_ANY, _("Ma&ximum undo items:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMaxUndoItems->Wrap( -1 );
-	fgSizer1->Add( m_stMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_spinMaxUndoItems = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65536, 1 );
-	fgSizer1->Add( m_spinMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
 	m_staticTextRotationAngle = new wxStaticText( this, wxID_ANY, _("&Rotation angle:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotationAngle->Wrap( -1 );
 	fgSizer1->Add( m_staticTextRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );

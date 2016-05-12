@@ -63,8 +63,6 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_MaxShowLinks;
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;
-		wxStaticText* m_stMaxUndoItems;
-		wxSpinCtrl* m_spinMaxUndoItems;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_RotationAngle;
 		wxCheckBox* m_DrcOn;
