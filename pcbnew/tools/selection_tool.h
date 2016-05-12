@@ -137,18 +137,6 @@ public:
      */
     const SELECTION& GetSelection();
 
-    /**
-     * Function EditModules()
-     *
-     * Toggles edit module mode. When enabled, one may select parts of modules individually
-     * (graphics, pads, etc.), so they can be modified.
-     * @param aEnabled decides if the mode should be enabled.
-     */
-    inline void EditModules( bool aEnabled )
-    {
-        m_editModules = aEnabled;
-    }
-
     inline CONDITIONAL_MENU& GetMenu()
     {
         return m_menu;
@@ -338,9 +326,6 @@ private:
 
     /// Flag saying if multiple selection mode is active.
     bool m_multiple;
-
-    /// Edit module mode flag.
-    bool m_editModules;
 
     /// Can other tools modify locked items.
     bool m_locked;
