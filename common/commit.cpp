@@ -79,7 +79,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
             if( m_changedItems.find( parent ) != m_changedItems.end() )
                 return *this; // item already modifed once
 
-            makeEntry( aItem, CHT_MODIFY, true );
+            makeEntry( parent, CHT_MODIFY, true );
             return *this;
         }
 
@@ -91,7 +91,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 
 void COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, CHANGE_TYPE aChangeType )
 {
-    for( int i = 0; i < aItems.GetCount(); i++ )
+    for( unsigned int i = 0; i < aItems.GetCount(); i++ )
         Stage( aItems.GetPickedItem( i ), aChangeType );
 }
 
