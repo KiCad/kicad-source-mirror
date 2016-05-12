@@ -341,9 +341,9 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode ) thro
         via->SetLayerPair( topLayer, botLayer );
     }
 
-    if( via )
-        via->SetNetCode( aNetCode );
+    wxASSERT( via );
 
+    via->SetNetCode( aNetCode );
     return via;
 }
 
