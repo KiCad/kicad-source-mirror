@@ -42,6 +42,7 @@
 #include <class_title_block.h>
 #include <class_zone_settings.h>
 #include <pcb_plot_params.h>
+#include <board_item_container.h>
 
 
 class PCB_BASE_FRAME;
@@ -162,7 +163,7 @@ DECL_VEC_FOR_SWIG(TRACKS, TRACK*)
  * Class BOARD
  * holds information pertinent to a Pcbnew printed circuit board.
  */
-class BOARD : public BOARD_ITEM
+class BOARD : public BOARD_ITEM_CONTAINER
 {
     friend class PCB_EDIT_FRAME;
 
@@ -215,7 +216,7 @@ private:
     // The default copy constructor & operator= are inadequate,
     // either write one or do not use it at all
     BOARD( const BOARD& aOther ) :
-        BOARD_ITEM( aOther ), m_NetInfo( this )
+        BOARD_ITEM_CONTAINER( aOther ), m_NetInfo( this )
     {
         assert( false );
     }
@@ -270,38 +271,11 @@ public:
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
 
-    /**
-     * Function Add
-     * adds the given item to this BOARD and takes ownership of its memory.
-     * @param aBoardItem The item to add to this board.
-     * @param aControl An int which can vary how the item is added.
-     */
-    void Add( BOARD_ITEM* aBoardItem, int aControl = 0 );
+    ///> @copydoc BOARD_ITEM_CONTAINER::Add()
+    void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_INSERT ) override;
 
-#define ADD_APPEND 1        ///< aControl flag for Add( aControl ), appends not inserts
-
-    /**
-     * Function Delete
-     * removes the given single item from this BOARD and deletes its memory.
-     * @param aBoardItem The item to remove from this board and delete
-     */
-    void Delete( BOARD_ITEM* aBoardItem )
-    {
-        // developers should run DEBUG versions and fix such calls with NULL
-        wxASSERT( aBoardItem );
-
-        if( aBoardItem )
-            delete Remove( aBoardItem );
-    }
-
-
-    /**
-     * Function Remove
-     * removes \a aBoardItem from this BOARD and returns it to caller without deleting it.
-     * @param aBoardItem The item to remove from this board.
-     * @return BOARD_ITEM* \a aBoardItem which was passed in.
-     */
-    BOARD_ITEM* Remove( BOARD_ITEM* aBoardItem );
+    ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
+    void Remove( BOARD_ITEM* aBoardItem ) override;
 
     /**
      * Function DuplicateAndAddItem

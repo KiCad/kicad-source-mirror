@@ -67,7 +67,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 
 BOARD::BOARD() :
-    BOARD_ITEM( (BOARD_ITEM*) NULL, PCB_T ),
+    BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
     m_NetInfo( this ),
     m_paper( PAGE_INFO::A4 )
 {
@@ -858,7 +858,7 @@ bool BOARD::IsModuleLayerVisible( LAYER_ID layer )
 }
 
 
-void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
+void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 {
     if( aBoardItem == NULL )
     {
@@ -883,7 +883,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
-        if( aControl & ADD_APPEND )
+        if( aMode == ADD_APPEND )
         {
             m_Track.PushBack( (TRACK*) aBoardItem );
         }
@@ -897,7 +897,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         break;
 
     case PCB_ZONE_T:
-        if( aControl & ADD_APPEND )
+        if( aMode == ADD_APPEND )
             m_Zone.PushBack( (SEGZONE*) aBoardItem );
         else
             m_Zone.PushFront( (SEGZONE*) aBoardItem );
@@ -905,7 +905,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         break;
 
     case PCB_MODULE_T:
-        if( aControl & ADD_APPEND )
+        if( aMode == ADD_APPEND )
             m_Modules.PushBack( (MODULE*) aBoardItem );
         else
             m_Modules.PushFront( (MODULE*) aBoardItem );
@@ -915,14 +915,11 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         m_Status_Pcb = 0;
         break;
 
-    case PCB_MODULE_EDGE_T:
-        assert( false );        // TODO Orson: I am just checking if it is supposed to be here
-
     case PCB_DIMENSION_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
-        if( aControl & ADD_APPEND )
+        if( aMode == ADD_APPEND )
             m_Drawings.PushBack( aBoardItem );
         else
             m_Drawings.PushFront( aBoardItem );
@@ -946,7 +943,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 }
 
 
-BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
+void BOARD::Remove( BOARD_ITEM* aBoardItem )
 {
     // find these calls and fix them!  Don't send me no stinking' NULL.
     wxASSERT( aBoardItem );
@@ -959,6 +956,7 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
         m_NetInfo.RemoveNet( item );
         break;
     }
+
     case PCB_MARKER_T:
 
         // find the item in the vector, then remove it
@@ -1001,7 +999,6 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     case PCB_DIMENSION_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
-    case PCB_MODULE_EDGE_T:
     case PCB_TARGET_T:
         m_Drawings.Remove( aBoardItem );
         break;
@@ -1012,8 +1009,6 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     }
 
     m_ratsnest->Remove( aBoardItem );
-
-    return aBoardItem;
 }
 
 

@@ -36,6 +36,7 @@
 #include <dlist.h>
 #include <layers_id_colors_and_visibility.h>       // ALL_LAYERS definition.
 #include <class_board_item.h>
+#include <board_item_container.h>
 #include <fpid.h>
 
 #include <class_text_mod.h>
@@ -75,7 +76,7 @@ enum MODULE_ATTR_T
 };
 
 
-class MODULE : public BOARD_ITEM
+class MODULE : public BOARD_ITEM_CONTAINER
 {
 public:
     MODULE( BOARD* parent );
@@ -94,35 +95,11 @@ public:
     MODULE* Next() const { return static_cast<MODULE*>( Pnext ); }
     MODULE* Back() const { return static_cast<MODULE*>( Pback ); }
 
-    /**
-     * Function Add
-     * adds the given item to this MODULE and takes ownership of its memory.
-     * @param aBoardItem The item to add to this board.
-     * @param doAppend If true, then append, else insert.
-     */
-    void Add( BOARD_ITEM* aBoardItem, bool doAppend = true );
+    ///> @copydoc BOARD_ITEM_CONTAINER::Add()
+    void Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode = ADD_INSERT ) override;
 
-    /**
-     * Function Delete
-     * removes the given single item from this MODULE and deletes its memory.
-     * @param aBoardItem The item to remove from this module and delete
-     */
-    void Delete( BOARD_ITEM* aBoardItem )
-    {
-        // developers should run DEBUG versions and fix such calls with NULL
-        wxASSERT( aBoardItem );
-
-        if( aBoardItem )
-            delete Remove( aBoardItem );
-    }
-
-    /**
-     * Function Remove
-     * removes \a aBoardItem from this MODULE and returns it to caller without deleting it.
-     * @param aBoardItem The item to remove from this module.
-     * @return BOARD_ITEM* \a aBoardItem which was passed in.
-     */
-    BOARD_ITEM* Remove( BOARD_ITEM* aBoardItem );
+    ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
+    void Remove( BOARD_ITEM* aBoardItem ) override;
 
     /**
      * Function ClearAllNets

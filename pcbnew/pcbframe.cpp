@@ -489,6 +489,12 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 }
 
 
+BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
+{
+    return m_Pcb;
+}
+
+
 void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     PCB_BASE_FRAME::SetPageSettings( aPageSettings );

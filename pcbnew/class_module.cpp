@@ -50,7 +50,7 @@
 
 
 MODULE::MODULE( BOARD* parent ) :
-    BOARD_ITEM( (BOARD_ITEM*) parent, PCB_MODULE_T ),
+    BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_MODULE_T ),
     m_initial_comments( 0 )
 {
     m_Attributs    = MOD_DEFAULT;
@@ -79,7 +79,7 @@ MODULE::MODULE( BOARD* parent ) :
 
 
 MODULE::MODULE( const MODULE& aModule ) :
-    BOARD_ITEM( aModule )
+    BOARD_ITEM_CONTAINER( aModule )
 {
     m_Pos = aModule.m_Pos;
     m_fpid = aModule.m_fpid;
@@ -256,7 +256,7 @@ void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 }
 
 
-void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
+void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 {
     switch( aBoardItem->Type() )
     {
@@ -267,14 +267,14 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
         // no break
 
     case PCB_MODULE_EDGE_T:
-        if( doAppend )
+        if( aMode == ADD_APPEND )
             m_Drawings.PushBack( aBoardItem );
         else
             m_Drawings.PushFront( aBoardItem );
         break;
 
     case PCB_PAD_T:
-        if( doAppend )
+        if( aMode == ADD_APPEND )
             m_Pads.PushBack( static_cast<D_PAD*>( aBoardItem ) );
         else
             m_Pads.PushFront( static_cast<D_PAD*>( aBoardItem ) );
@@ -292,10 +292,11 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
     }
 
     aBoardItem->SetParent( this );
+    SetLastEditTime();
 }
 
 
-BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
+void MODULE::Remove( BOARD_ITEM* aBoardItem )
 {
     switch( aBoardItem->Type() )
     {
@@ -306,10 +307,12 @@ BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
         // no break
 
     case PCB_MODULE_EDGE_T:
-        return m_Drawings.Remove( aBoardItem );
+        m_Drawings.Remove( aBoardItem );
+        break;
 
     case PCB_PAD_T:
-        return m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
+        m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
+        break;
 
     default:
     {
@@ -319,8 +322,6 @@ BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
         wxFAIL_MSG( msg );
     }
     }
-
-    return NULL;
 }
 
 

@@ -350,6 +350,12 @@ FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 }
 
 
+BOARD_ITEM_CONTAINER* FOOTPRINT_EDIT_FRAME::GetModel() const
+{
+    return GetBoard()->m_Modules;
+}
+
+
 const wxString FOOTPRINT_EDIT_FRAME::getLibPath()
 {
     try

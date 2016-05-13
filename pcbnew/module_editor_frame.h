@@ -54,6 +54,9 @@ public:
      */
     static const wxChar* GetFootprintEditorFrameName();
 
+    ///> @copydoc PCB_BASE_FRAME::GetModel()
+    BOARD_ITEM_CONTAINER* GetModel() const override;
+
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const;           // overload PCB_BASE_FRAME, get parent's
     void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );  // overload
 

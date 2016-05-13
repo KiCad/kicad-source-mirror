@@ -39,6 +39,7 @@
 /*  Forward declarations of classes. */
 class PCB_SCREEN;
 class BOARD;
+class BOARD_ITEM_CONTAINER;
 class TEXTE_PCB;
 class MODULE;
 class TRACK;
@@ -915,6 +916,9 @@ public:
 
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard );
+
+    ///> @copydoc PCB_BASE_EDIT_FRAME::GetModel()
+    BOARD_ITEM_CONTAINER* GetModel() const override;
 
     ///> @copydoc PCB_BASE_FRAME::SetPageSettings()
     void SetPageSettings( const PAGE_INFO& aPageSettings ); // overload

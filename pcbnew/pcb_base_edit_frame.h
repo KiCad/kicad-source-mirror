@@ -27,6 +27,8 @@
 
 #include <wxBasePcbFrame.h>
 
+class BOARD_ITEM_CONTAINER;
+
 /**
  * Common, abstract interface for edit frames.
  */
@@ -41,6 +43,12 @@ public:
     {}
 
     virtual ~PCB_BASE_EDIT_FRAME() {};
+
+    /**
+     * Function GetModel()
+     * returns the primary data model.
+     */
+    virtual BOARD_ITEM_CONTAINER* GetModel() const = 0;
 
     /**
      * Function CreateNewLibrary
