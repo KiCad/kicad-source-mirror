@@ -7,28 +7,14 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-07 11:05+0300\n"
-"PO-Revision-Date: 2016-05-11 08:08+0300\n"
+"PO-Revision-Date: 2016-05-14 11:00+0300\n"
 "Last-Translator: Baranovskiy Konstantin <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian KiCad Translation Team: Andrey Fedorushkov, Eldar "
-"Khayrullin, Igor Plyatov <andrf@mail.ru>\n"
+"Language-Team: Russian\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;_HKI\n"
-"X-Poedit-Basepath: ../../kicad-source-mirror\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.8.7.1\n"
-"X-Poedit-SearchPath-0: 3d-viewer\n"
-"X-Poedit-SearchPath-1: bitmap2component\n"
-"X-Poedit-SearchPath-2: common\n"
-"X-Poedit-SearchPath-3: cvpcb\n"
-"X-Poedit-SearchPath-4: eeschema\n"
-"X-Poedit-SearchPath-5: gerbview\n"
-"X-Poedit-SearchPath-6: kicad\n"
-"X-Poedit-SearchPath-7: pagelayout_editor\n"
-"X-Poedit-SearchPath-8: pcb_calculator\n"
-"X-Poedit-SearchPath-9: pcbnew\n"
+"X-Generator: vim 7.4\n"
 
 #: 3d-viewer/3d_cache/3d_cache.cpp:523
 msgid "path exists but is not a regular file"
@@ -1776,7 +1762,7 @@ msgstr "Организация:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:246
 msgid "Comment1"
-msgstr "Децимальный номер:"
+msgstr "Обозначение и код документа:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:271
 msgid "Comment2"
@@ -2821,7 +2807,7 @@ msgstr "Файл проекта: '%s'"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:99
 msgid "No editor defined in Kicad. Please chose it"
-msgstr "Не выбран редактор в Kicad. Пожалуйста выберите его"
+msgstr "Не выбран редактор в Kicad. Пожалуйста, выберите его"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:253
 msgid "Equ files:"
@@ -7138,8 +7124,8 @@ msgid ""
 "'%s' was created by a more recent version of Eeschema and may not load "
 "correctly. Please consider updating!"
 msgstr ""
-"'%s' создан новой версией Eeschema и не будет загружен корректно. Пожалуйста "
-"подумайте об обновлении KiCad!"
+"'%s' создан новой версией Eeschema и не будет загружен корректно. "
+"Пожалуйста, подумайте об обновлении KiCad!"
 
 #: eeschema/load_one_schematic_file.cpp:139
 msgid ""
@@ -10508,7 +10494,7 @@ msgstr "Нижний правый"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:255
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:310
 msgid "Lower Left"
-msgstr "Верхний левый"
+msgstr "Нижний левый"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:72
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:273
@@ -10922,23 +10908,23 @@ msgstr "Левый верхний угол листа"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:108
 msgid "Right Bottom page corner"
-msgstr "Правый нижний угол листа"
+msgstr "Правый нижний базовый угол"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:109
 msgid "Left Bottom page corner"
-msgstr "Левый нижний угол листа"
+msgstr "Левый нижний базовый угол"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:110
 msgid "Right Top page corner"
-msgstr "Правый верхний угол листа"
+msgstr "Правый верхний базовый угол"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:111
 msgid "Left Top page corner"
-msgstr "Левый верхний угол листа"
+msgstr "Левый верхний базовый угол"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:118
 msgid " Origin of coordinates displayed to the status bar"
-msgstr "Начало координат отображаемое в строке состояния"
+msgstr "Начало координат, отображаемое в строке состояния"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:131
 msgid "Page 1"
@@ -18570,7 +18556,7 @@ msgstr "Добро пожаловать в Мастер загрузки биб�
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:35
 msgid "Please select the URL for the 3D libraries to download"
-msgstr "Пожалуйста выберите URL для загрузки 3D библиотек"
+msgstr "Пожалуйста, выберите URL для загрузки 3D библиотек"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:39
 msgid "http://github.com/KiCad"
@@ -18591,7 +18577,7 @@ msgid ""
 "Please choose another one."
 msgstr ""
 "Не удаётся записать это в выбранный каталог.\n"
-"Пожалуйста выберите другой."
+"Пожалуйста, выберите другой."
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:111
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:106
@@ -18682,11 +18668,11 @@ msgid ""
 msgstr ""
 "Добро пожаловать в Мастер добавления библиотек посадочных мест!\n"
 "\n"
-"Пожалуйста выберите источник для добавления библиотек:"
+"Пожалуйста, выберите источник для добавления библиотек:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:38
 msgid "Files on my computer"
-msgstr "Файлы на моем компьютере"
+msgstr "Файлы на моём компьютере"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:46
 msgid "Github repository"
@@ -18702,15 +18688,15 @@ msgstr "Сохранить локальную копию в:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:121
 msgid "Select files or folders to add:"
-msgstr "Выбрать файлы или каталог для добавления:"
+msgstr "Выбор файлов или каталогов для добавления:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:180
 msgid "Review and confirm the changes to the libraries:"
-msgstr "Проверить и подтвердить изменения в библиотеках:"
+msgstr "Проверьте и подтвердите изменения в библиотеках:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:200
 msgid "Where do you wish the new libraries to be added:"
-msgstr "Куда вы желаете добавить новые библиотеки:"
+msgstr "Куда желаете добавить новые библиотеки:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:204
 msgid "To global library configuration (visible by all projects)"
@@ -19882,7 +19868,7 @@ msgid ""
 "before deleting a footprint"
 msgstr ""
 "Изменение legacy библиотек (.mod файлы) не разрешено\n"
-"Пожалуйста сохраните текущую библиотеку в новом .pretty формате\n"
+"Пожалуйста, сохраните текущую библиотеку в новом .pretty формате\n"
 "и обновите вашу таблицу библиотек посад.мест\n"
 "перед удалением посад.места"
 
