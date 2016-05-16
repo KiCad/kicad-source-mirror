@@ -304,6 +304,7 @@ bool WRLPROC::ReadName( std::string& aName )
     while( m_bufpos < ssize && m_buf[m_bufpos] > 0x20 )
     {
         if( '[' == m_buf[m_bufpos] || '{' == m_buf[m_bufpos]
+            || ']' == m_buf[m_bufpos] || '}' == m_buf[m_bufpos]
             || '.' == m_buf[m_bufpos] || '#' == m_buf[m_bufpos]
             || ',' == m_buf[m_bufpos] )
         {
