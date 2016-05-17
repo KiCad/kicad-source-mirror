@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-13 10:14+0200\n"
-"PO-Revision-Date: 2016-05-13 10:20+0200\n"
+"POT-Creation-Date: 2016-05-17 10:37+0200\n"
+"PO-Revision-Date: 2016-05-17 10:41+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -1073,6 +1073,126 @@ msgstr "Invertir bloque"
 #: common/class_marker_base.cpp:203
 msgid "Marker Info"
 msgstr "Información de marcador"
+
+#: common/colors.cpp:39 eeschema/widgets/widget_eeschema_color_config.cpp:192
+msgid "Black"
+msgstr "Negro"
+
+#: common/colors.cpp:40
+msgid "Gray 1"
+msgstr "Gris 1"
+
+#: common/colors.cpp:41
+msgid "Gray 2"
+msgstr "Gris 2"
+
+#: common/colors.cpp:42
+msgid "Gray 3"
+msgstr "Gris 3"
+
+#: common/colors.cpp:43 eeschema/widgets/widget_eeschema_color_config.cpp:191
+msgid "White"
+msgstr "Blanco"
+
+#: common/colors.cpp:44
+msgid "L.Yellow"
+msgstr "Amarillo C."
+
+#: common/colors.cpp:45
+msgid "Blue 1"
+msgstr "Azul 1"
+
+#: common/colors.cpp:46
+msgid "Green 1"
+msgstr "Verde 1"
+
+#: common/colors.cpp:47
+msgid "Cyan 1"
+msgstr "Cian 1"
+
+#: common/colors.cpp:48
+msgid "Red 1"
+msgstr "Rojo 1"
+
+#: common/colors.cpp:49
+msgid "Magenta 1"
+msgstr "Magenta 1"
+
+#: common/colors.cpp:50
+msgid "Brown 1"
+msgstr "Marrón 1"
+
+#: common/colors.cpp:51
+msgid "Blue 2"
+msgstr "Azul 2"
+
+#: common/colors.cpp:52
+msgid "Green 2"
+msgstr "Verde 2"
+
+#: common/colors.cpp:53
+msgid "Cyan 2"
+msgstr "Cian 2"
+
+#: common/colors.cpp:54
+msgid "Red 2"
+msgstr "Rojo 2"
+
+#: common/colors.cpp:55
+msgid "Magenta 2"
+msgstr "Magenta 2"
+
+#: common/colors.cpp:56
+msgid "Brown 2"
+msgstr "Marrón 2"
+
+#: common/colors.cpp:57
+msgid "Blue 3"
+msgstr "Azul 3"
+
+#: common/colors.cpp:58
+msgid "Green 3"
+msgstr "Verde 3"
+
+#: common/colors.cpp:59
+msgid "Cyan 3"
+msgstr "Cian 3"
+
+#: common/colors.cpp:60
+msgid "Red 3"
+msgstr "Rojo 3"
+
+#: common/colors.cpp:61
+msgid "Magenta 3"
+msgstr "Magenta 3"
+
+#: common/colors.cpp:62
+msgid "Yellow 3"
+msgstr "Amarillo 3"
+
+#: common/colors.cpp:63
+msgid "Blue 4"
+msgstr "Azul 4"
+
+#: common/colors.cpp:64
+msgid "Green 4"
+msgstr "Verde 4"
+
+#: common/colors.cpp:65
+msgid "Cyan 4"
+msgstr "Cian 4"
+
+#: common/colors.cpp:66
+msgid "Red 4"
+msgstr "Rojo 4"
+
+#: common/colors.cpp:67
+msgid "Magenta 4"
+msgstr "Magenta 4"
+
+#: common/colors.cpp:68
+msgid "Yellow 4"
+msgstr "Amarillo 4"
 
 #: common/common.cpp:152
 msgid "\""
@@ -2873,8 +2993,8 @@ msgstr "Variables de entorno disponibles para rutas relativas:"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:191
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:185
-#: eeschema/dialogs/dialog_rescue_each.cpp:111 eeschema/lib_field.cpp:581
-#: eeschema/lib_field.cpp:759 eeschema/onrightclick.cpp:426
+#: eeschema/dialogs/dialog_rescue_each.cpp:111 eeschema/lib_field.cpp:592
+#: eeschema/lib_field.cpp:770 eeschema/onrightclick.cpp:426
 #: eeschema/sch_component.cpp:1542 eeschema/template_fieldnames.cpp:42
 #: eeschema/widgets/widget_eeschema_color_config.cpp:79
 #: pcbnew/class_edge_mod.cpp:261 pcbnew/class_text_mod.cpp:342
@@ -5019,7 +5139,7 @@ msgstr "Común a todos los estilos de cuerpo"
 msgid "Invisible"
 msgstr "Invisible"
 
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/lib_field.cpp:746
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/lib_field.cpp:757
 #: eeschema/lib_pin.cpp:2005 eeschema/sch_text.cpp:773
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
 msgid "Style"
@@ -5569,7 +5689,7 @@ msgstr "Sïmbolo"
 msgid "Action"
 msgstr "Acción"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/lib_field.cpp:574
+#: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/lib_field.cpp:585
 #: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1538
 #: eeschema/template_fieldnames.cpp:39
 #: eeschema/widgets/widget_eeschema_color_config.cpp:78
@@ -6497,12 +6617,12 @@ msgstr "'%s' - Se ha exportado correctamente"
 msgid "Error creating '%s'"
 msgstr "Error al crear '%s'"
 
-#: eeschema/lib_field.cpp:72 eeschema/lib_field.cpp:756
+#: eeschema/lib_field.cpp:72 eeschema/lib_field.cpp:767
 #: eeschema/template_fieldnames.cpp:55
 msgid "Field"
 msgstr "Campo"
 
-#: eeschema/lib_field.cpp:588 eeschema/onrightclick.cpp:436
+#: eeschema/lib_field.cpp:599 eeschema/onrightclick.cpp:436
 #: eeschema/sch_component.cpp:1560 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:629
 #: pcbnew/class_pad.cpp:637 pcbnew/class_text_mod.cpp:346
@@ -6510,22 +6630,22 @@ msgstr "Campo"
 msgid "Footprint"
 msgstr "Huella"
 
-#: eeschema/lib_field.cpp:595 eeschema/libedit.cpp:510
+#: eeschema/lib_field.cpp:606 eeschema/libedit.cpp:510
 #: eeschema/template_fieldnames.cpp:48
 msgid "Datasheet"
 msgstr "Hoja de datos"
 
-#: eeschema/lib_field.cpp:604
+#: eeschema/lib_field.cpp:615
 #, c-format
 msgid "Field%d"
 msgstr "Campo%d"
 
-#: eeschema/lib_field.cpp:667
+#: eeschema/lib_field.cpp:678
 #, c-format
 msgid "Field %s %s"
 msgstr "Campo %s %s"
 
-#: eeschema/lib_field.cpp:749 pcbnew/class_drawsegment.cpp:410
+#: eeschema/lib_field.cpp:760 pcbnew/class_drawsegment.cpp:410
 #: pcbnew/class_pad.cpp:659 pcbnew/class_pcb_text.cpp:154
 #: pcbnew/class_text_mod.cpp:378 pcbnew/class_track.cpp:1144
 #: pcbnew/class_track.cpp:1171 pcbnew/dialogs/dialog_design_rules_base.cpp:322
@@ -6533,7 +6653,7 @@ msgstr "Campo %s %s"
 msgid "Width"
 msgstr "Ancho"
 
-#: eeschema/lib_field.cpp:752 pcbnew/class_pad.cpp:662
+#: eeschema/lib_field.cpp:763 pcbnew/class_pad.cpp:662
 #: pcbnew/class_pcb_text.cpp:157 pcbnew/class_text_mod.cpp:381
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:59
 msgid "Height"
@@ -9052,14 +9172,6 @@ msgstr "Cuadrícula"
 #: eeschema/widgets/widget_eeschema_color_config.cpp:105
 msgid "Miscellaneous"
 msgstr "Otros"
-
-#: eeschema/widgets/widget_eeschema_color_config.cpp:191
-msgid "White"
-msgstr "Blanco"
-
-#: eeschema/widgets/widget_eeschema_color_config.cpp:192
-msgid "Black"
-msgstr "Negro"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:274
 msgid ""
