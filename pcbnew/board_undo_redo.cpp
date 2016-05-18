@@ -120,40 +120,13 @@ using namespace std::placeholders;
 
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
-    static std::vector<BOARD_ITEM*> itemsList;
+    static std::list<BOARD_ITEM*> itemsList;
 
     if( aItem == NULL ) // Build list
     {
         // Count items to store in itemsList:
-        int icnt = 0;
         BOARD_ITEM* item;
-
-        // Count tracks:
-        for( item = aPcb->m_Track; item != NULL; item = item->Next() )
-            icnt++;
-
-        // Count modules:
-        for( item = aPcb->m_Modules; item != NULL; item = item->Next() )
-            icnt++;
-
-        // Count drawings
-        for( item = aPcb->m_Drawings; item != NULL; item = item->Next() )
-            icnt++;
-
-        // Count zones outlines
-        icnt +=  aPcb->GetAreaCount();
-
-        // Count zones segm (now obsolete):
-        for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
-             icnt++;
-
-        NETINFO_LIST& netInfo = aPcb->GetNetInfo();
-
-        icnt += netInfo.GetNetCount();
-
-        // Build candidate list:
         itemsList.clear();
-        itemsList.reserve(icnt);
 
         // Store items in list:
         // Append tracks:
@@ -176,11 +149,14 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
         for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
             itemsList.push_back( item );
 
+        NETINFO_LIST& netInfo = aPcb->GetNetInfo();
+
         for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
             itemsList.push_back( *i );
 
         // Sort list
-        std::sort( itemsList.begin(), itemsList.end() );
+        itemsList.sort();
+
         return false;
     }
 
