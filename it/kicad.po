@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-16 23:43+0200\n"
-"PO-Revision-Date: 2016-05-17 00:01+0200\n"
+"POT-Creation-Date: 2016-05-19 12:52+0200\n"
+"PO-Revision-Date: 2016-05-19 12:52+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -745,8 +745,8 @@ msgstr "Rif."
 #: eeschema/onrightclick.cpp:426 eeschema/sch_component.cpp:1542
 #: eeschema/widgets/widget_eeschema_color_config.cpp:79
 #: eeschema/dialogs/dialog_rescue_each.cpp:111
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:191
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:185
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:196
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:190
 #: eeschema/lib_field.cpp:592 eeschema/lib_field.cpp:770
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
 msgid "Value"
@@ -785,7 +785,7 @@ msgstr "Tipo"
 
 #: pcbnew/class_text_mod.cpp:355 pcbnew/class_pcb_text.cpp:143
 #: eeschema/lib_pin.cpp:2010
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1008
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1015
 #: gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573
 msgid "No"
@@ -794,7 +794,7 @@ msgstr "No"
 #: pcbnew/class_text_mod.cpp:357 pcbnew/class_pcb_text.cpp:145
 #: eeschema/lib_pin.cpp:2008
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1006
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1013
 #: gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573
 msgid "Yes"
@@ -5871,7 +5871,7 @@ msgstr "L'impronta %s è stata trovata, ma è bloccata"
 #: pcbnew/edit.cpp:898 pcbnew/edit.cpp:917
 #, c-format
 msgid "The parent (%s) of the pad is locked"
-msgstr "La piazzola di origine (%s) è bloccata"
+msgstr "Il genitore (%s) della piazzola è bloccato"
 
 #: pcbnew/edit.cpp:1434 pcbnew/edit.cpp:1436
 msgid "Add tracks"
@@ -8104,8 +8104,8 @@ msgstr "File netlist:"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:327
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:330
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:188
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:182
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:193
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:187
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 msgid "Name"
@@ -10143,11 +10143,11 @@ msgstr "Spazio raggi piazzole termiche:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:540
 msgid "Set fields to 0 to use parent or global values"
-msgstr "Imposta campi a 0 per usare valori globali o derivati"
+msgstr "Imposta campi a 0 per usare valori globali o dei genitori"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:553
 msgid "Local Clearance and Settings"
-msgstr "Impostazioni singole"
+msgstr "Impostazioni e isolamento locali"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:575
 msgid ""
@@ -14264,123 +14264,123 @@ msgstr "Impossibile trovare il file di modello configurazione \"%s\"."
 msgid "Cannot create prj file '%s' (Directory not writable)"
 msgstr "Impossibile creare il file progetto \"%s\" (cartella non scrivibile)"
 
-#: common/colors.cpp:37 eeschema/widgets/widget_eeschema_color_config.cpp:192
+#: common/colors.cpp:39 eeschema/widgets/widget_eeschema_color_config.cpp:192
 msgid "Black"
 msgstr "Nero"
 
-#: common/colors.cpp:38
+#: common/colors.cpp:40
 msgid "Gray 1"
 msgstr "Grigio 1"
 
-#: common/colors.cpp:39
+#: common/colors.cpp:41
 msgid "Gray 2"
 msgstr "Grigio 2"
 
-#: common/colors.cpp:40
+#: common/colors.cpp:42
 msgid "Gray 3"
 msgstr "Grigio 3"
 
-#: common/colors.cpp:41 eeschema/widgets/widget_eeschema_color_config.cpp:191
+#: common/colors.cpp:43 eeschema/widgets/widget_eeschema_color_config.cpp:191
 msgid "White"
 msgstr "Bianco"
 
-#: common/colors.cpp:42
+#: common/colors.cpp:44
 msgid "L.Yellow"
 msgstr "Giallo C."
 
-#: common/colors.cpp:43
+#: common/colors.cpp:45
 msgid "Blue 1"
 msgstr "Blu 1"
 
-#: common/colors.cpp:44
+#: common/colors.cpp:46
 msgid "Green 1"
 msgstr "Verde 1"
 
-#: common/colors.cpp:45
+#: common/colors.cpp:47
 msgid "Cyan 1"
 msgstr "Ciano 1"
 
-#: common/colors.cpp:46
+#: common/colors.cpp:48
 msgid "Red 1"
 msgstr "Rosso 1"
 
-#: common/colors.cpp:47
+#: common/colors.cpp:49
 msgid "Magenta 1"
 msgstr "Magenta 1"
 
-#: common/colors.cpp:48
+#: common/colors.cpp:50
 msgid "Brown 1"
 msgstr "Marrone 1"
 
-#: common/colors.cpp:49
+#: common/colors.cpp:51
 msgid "Blue 2"
 msgstr "Blu 2"
 
-#: common/colors.cpp:50
+#: common/colors.cpp:52
 msgid "Green 2"
 msgstr "Verde 2"
 
-#: common/colors.cpp:51
+#: common/colors.cpp:53
 msgid "Cyan 2"
 msgstr "Ciano 2"
 
-#: common/colors.cpp:52
+#: common/colors.cpp:54
 msgid "Red 2"
 msgstr "Rosso 2"
 
-#: common/colors.cpp:53
+#: common/colors.cpp:55
 msgid "Magenta 2"
 msgstr "Magenta 2"
 
-#: common/colors.cpp:54
+#: common/colors.cpp:56
 msgid "Brown 2"
 msgstr "Marrone 2"
 
-#: common/colors.cpp:55
+#: common/colors.cpp:57
 msgid "Blue 3"
 msgstr "Blu 3"
 
-#: common/colors.cpp:56
+#: common/colors.cpp:58
 msgid "Green 3"
 msgstr "Verde 3"
 
-#: common/colors.cpp:57
+#: common/colors.cpp:59
 msgid "Cyan 3"
 msgstr "Ciano 3"
 
-#: common/colors.cpp:58
+#: common/colors.cpp:60
 msgid "Red 3"
 msgstr "Rosso 3"
 
-#: common/colors.cpp:59
+#: common/colors.cpp:61
 msgid "Magenta 3"
 msgstr "Magenta 3"
 
-#: common/colors.cpp:60
+#: common/colors.cpp:62
 msgid "Yellow 3"
 msgstr "Giallo 3"
 
-#: common/colors.cpp:61
+#: common/colors.cpp:63
 msgid "Blue 4"
 msgstr "Blu 4"
 
-#: common/colors.cpp:62
+#: common/colors.cpp:64
 msgid "Green 4"
 msgstr "Verde 4"
 
-#: common/colors.cpp:63
+#: common/colors.cpp:65
 msgid "Cyan 4"
 msgstr "Ciano 4"
 
-#: common/colors.cpp:64
+#: common/colors.cpp:66
 msgid "Red 4"
 msgstr "Rosso 4"
 
-#: common/colors.cpp:65
+#: common/colors.cpp:67
 msgid "Magenta 4"
 msgstr "Magenta 4"
 
-#: common/colors.cpp:66
+#: common/colors.cpp:68
 msgid "Yellow 4"
 msgstr "Giallo 4"
 
@@ -15503,7 +15503,7 @@ msgstr "Messaggi d'errore:"
 #: eeschema/sch_collectors.cpp:432
 #, c-format
 msgid "Child item %s of parent item %s found in sheet %s"
-msgstr "Elemento derivato %s dall'elemento %s trovato nel foglio %s"
+msgstr "Elemento figlio %s dell'elemento genitore %s trovato nel foglio %s"
 
 #: eeschema/sch_collectors.cpp:439
 #, c-format
@@ -17545,7 +17545,7 @@ msgid ""
 "schematic hierarchy."
 msgstr ""
 "I cambiamenti di foglio non possono essere eseguiti dato che il foglio di "
-"destinazione ha già il foglio  <%s> o uno dei suoi sottofogli come genitore "
+"destinazione ha già il foglio <%s> o uno dei suoi sottofogli come genitore "
 "da qualche parte nella gerarchia dello schema."
 
 #: eeschema/lib_export.cpp:51
@@ -18166,8 +18166,8 @@ msgid "Show in Browser"
 msgstr "Mostra nell'esploratore"
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:123
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:854
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:680
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:861
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:686
 msgid ""
 "If your datasheet is given as an http:// link, then pressing this button "
 "should bring it up in your webbrowser."
@@ -18698,7 +18698,7 @@ msgstr ""
 "Per le porte logiche, questa è la conversione \"De Morgan\""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:649
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:655
 msgid "Chip Name"
 msgstr "Nome componente"
 
@@ -19389,7 +19389,7 @@ msgstr "Assegna documentazione (PDF) al componente"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:150
 msgid "Copy Document from Parent"
-msgstr "Copia documento dal derivato"
+msgstr "Copia documento dal genitore"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:153
 msgid "Browse Files"
@@ -19425,39 +19425,39 @@ msgstr ""
 "I nomi delle impronte possono usare caratteri jolly.\n"
 "(come sm* per cercare impronte che iniziano con sm)"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:225
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:230
 #, c-format
 msgid "Component '%s' found in library '%s'"
 msgstr "Componente \"%s\" trovato nella libreria \"%s\""
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:231
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:236
 #, c-format
 msgid "Component '%s' not found in any library"
 msgstr "Componente \"%s\" non trovato in nessuna libreria"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:247
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:252
 msgid "However, some candidates are found:"
 msgstr "Comunque, alcuni candidati sono stati trovati:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:253
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:258
 #, c-format
 msgid "'%s' found in library '%s'"
 msgstr "\"%s\" trovato nella libreria \"%s\""
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:315
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:320
 msgid "No Component Name!"
 msgstr "Nessun nome al componente"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:324
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:329
 #, c-format
 msgid "Component '%s' not found!"
 msgstr "Componente \"%s\" non trovato!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:398
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:403
 msgid "Illegal reference. A reference must start with a letter"
 msgstr "Riferimento errato. Un riferimento deve cominciare con una lettera."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:424
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:429
 #, c-format
 msgid ""
 "The field name <%s> does not have a value and is not defined in the field "
@@ -19468,27 +19468,27 @@ msgstr ""
 "e saranno rimossi dal componente. Si desidera rimuovere questo e gli altri "
 "campi vuoti?"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:431
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:436
 msgid "Remove Fields"
 msgstr "Elimina campo"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:852
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:678
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:859
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:684
 msgid "Show Datasheet"
 msgstr "Mostra datasheet"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:859
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:685
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:866
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:691
 msgid "Browse Footprints"
 msgstr "Scorri impronte"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:861
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:687
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:868
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:693
 msgid "Open the footprint browser to choose a footprint and assign it."
 msgstr "Apre il navigatore delle impronte per sceglierne una ed assegnarla."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:867
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:693
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:874
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:699
 msgid "Used only for fields Footprint and Datasheet."
 msgstr "Usato solo per campi impronte e datasheet."
 
@@ -19587,11 +19587,11 @@ msgstr ""
 msgid "Plugin Info:"
 msgstr "Info plugin:"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:244
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:249
 msgid "Illegal reference.  References must start with a letter."
 msgstr "Riferimento errato. Un riferimento deve cominciare con una lettera."
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:260
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:265
 #, c-format
 msgid ""
 "A new name is entered for this component\n"
