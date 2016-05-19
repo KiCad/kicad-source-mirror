@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-19 12:52+0200\n"
-"PO-Revision-Date: 2016-05-19 12:56+0200\n"
+"PO-Revision-Date: 2016-05-19 13:01+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -19295,7 +19295,7 @@ msgstr "Mostra numero piedino"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:37
 msgid "Show or hide pin numbers"
-msgstr "Mostra o nascondi numero piedino"
+msgstr "Mostrare o nascondere il numero del piedino"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:41
 msgid "Show pin name"
@@ -19303,7 +19303,7 @@ msgstr "Mostra nome piedino"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:43
 msgid "Show or hide pin names"
-msgstr "Mostra o nascondi nome piedino"
+msgstr "Mostrare o nascondere il nome del piedino"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:47
 msgid "Place pin names inside"
@@ -19314,9 +19314,8 @@ msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
-"Spunta questa opzione per inserire il nome piedino dentro il corpo e il "
-"numero fuori.\n"
-"Se non selezionata verranno entrambi posizionati fuori."
+"Spuntare questa opzione per inserire il nome piedino dentro il corpo e il numero fuori.\n"
+"Se non viene selezionata verranno entrambi posizionati fuori."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:65
 msgid "Number of Units"
