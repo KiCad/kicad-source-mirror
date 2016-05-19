@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-19 12:52+0200\n"
-"PO-Revision-Date: 2016-05-19 12:52+0200\n"
+"PO-Revision-Date: 2016-05-19 12:56+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -19325,11 +19325,11 @@ msgstr "Numero di parti"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:67
 msgid ""
 "Enter the number of units for a component that contains more than one unit"
-msgstr "Inserisci il numero di parti a componenti che ne contengono più di una"
+msgstr "Inserire il numero di parti per un componente che ne contiene più di una"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:80
 msgid "Pin Name Position Offset"
-msgstr "Scostamento nome piedino:"
+msgstr "Scostamento nome piedino"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:82
 msgid ""
