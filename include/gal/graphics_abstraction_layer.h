@@ -66,8 +66,11 @@ public:
     GAL();
     virtual ~GAL();
 
-   /// @brief Returns the initalization status for the canvas.
+    /// @brief Returns the initalization status for the canvas.
     virtual bool IsInitialized() const { return true; }
+
+    /// @brief Returns true if the GAL canvas is visible on the screen.
+    virtual bool IsVisible() const { return true; }
 
     // ---------------
     // Drawing methods

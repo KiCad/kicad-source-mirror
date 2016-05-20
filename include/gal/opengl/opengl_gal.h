@@ -83,8 +83,13 @@ public:
 
     virtual ~OPENGL_GAL();
 
-   /// @copydoc GAL::IsInitialized()
+    /// @copydoc GAL::IsInitialized()
     virtual bool IsInitialized() const { return IsShownOnScreen(); }
+
+    ///> @copydoc GAL::IsVisible()
+    bool IsVisible() const override {
+        return IsShownOnScreen();
+    }
 
     // ---------------
     // Drawing methods
