@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-14 12:53+0300\n"
-"PO-Revision-Date: 2016-05-20 20:43+0300\n"
-"Last-Translator: Baranovskiy Konstantin <baranovskiykonstantin@gmail.com>\n"
+"POT-Creation-Date: 2016-05-21 15:37+0300\n"
+"PO-Revision-Date: 2016-05-21 15:48+0300\n"
+"Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: vim 7.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SearchPath-0: 3d-viewer\n"
 "X-Poedit-SearchPath-1: bitmap2component\n"
 "X-Poedit-SearchPath-2: common\n"
@@ -1055,6 +1055,126 @@ msgstr "Отразить блок"
 msgid "Marker Info"
 msgstr "Информация о маркере"
 
+#: common/colors.cpp:39 eeschema/widgets/widget_eeschema_color_config.cpp:192
+msgid "Black"
+msgstr "Черный"
+
+#: common/colors.cpp:40
+msgid "Gray 1"
+msgstr "Серый 1"
+
+#: common/colors.cpp:41
+msgid "Gray 2"
+msgstr "Серый 2"
+
+#: common/colors.cpp:42
+msgid "Gray 3"
+msgstr "Серый 3"
+
+#: common/colors.cpp:43 eeschema/widgets/widget_eeschema_color_config.cpp:191
+msgid "White"
+msgstr "Белый"
+
+#: common/colors.cpp:44
+msgid "L.Yellow"
+msgstr "Светло-жёлтый"
+
+#: common/colors.cpp:45
+msgid "Blue 1"
+msgstr "Синий 1"
+
+#: common/colors.cpp:46
+msgid "Green 1"
+msgstr "Зелёный 1"
+
+#: common/colors.cpp:47
+msgid "Cyan 1"
+msgstr "Бирюзовый 1"
+
+#: common/colors.cpp:48
+msgid "Red 1"
+msgstr "Красный 1"
+
+#: common/colors.cpp:49
+msgid "Magenta 1"
+msgstr "Пурпурный 1"
+
+#: common/colors.cpp:50
+msgid "Brown 1"
+msgstr "Коричневый 1"
+
+#: common/colors.cpp:51
+msgid "Blue 2"
+msgstr "Синий 2"
+
+#: common/colors.cpp:52
+msgid "Green 2"
+msgstr "Зелёный 2"
+
+#: common/colors.cpp:53
+msgid "Cyan 2"
+msgstr "Бирюзовый 2"
+
+#: common/colors.cpp:54
+msgid "Red 2"
+msgstr "Красный 2"
+
+#: common/colors.cpp:55
+msgid "Magenta 2"
+msgstr "Пурпурный 2"
+
+#: common/colors.cpp:56
+msgid "Brown 2"
+msgstr "Коричневый 2"
+
+#: common/colors.cpp:57
+msgid "Blue 3"
+msgstr "Синий 3"
+
+#: common/colors.cpp:58
+msgid "Green 3"
+msgstr "Зелёный 3"
+
+#: common/colors.cpp:59
+msgid "Cyan 3"
+msgstr "Бирюзовый 3"
+
+#: common/colors.cpp:60
+msgid "Red 3"
+msgstr "Красный 3"
+
+#: common/colors.cpp:61
+msgid "Magenta 3"
+msgstr "Пурпурный 3"
+
+#: common/colors.cpp:62
+msgid "Yellow 3"
+msgstr "Жёлтый 3"
+
+#: common/colors.cpp:63
+msgid "Blue 4"
+msgstr "Синий 4"
+
+#: common/colors.cpp:64
+msgid "Green 4"
+msgstr "Зелёный 4"
+
+#: common/colors.cpp:65
+msgid "Cyan 4"
+msgstr "Бирюзовый 4"
+
+#: common/colors.cpp:66
+msgid "Red 4"
+msgstr "Красный 4"
+
+#: common/colors.cpp:67
+msgid "Magenta 4"
+msgstr "Пурпурный 4"
+
+#: common/colors.cpp:68
+msgid "Yellow 4"
+msgstr "Жёлтый 4"
+
 #: common/common.cpp:152
 msgid "\""
 msgstr "\""
@@ -1368,8 +1488,8 @@ msgstr "Помощь по переменным окружения"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:38
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:188
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:182
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:193
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:187
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:327
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:330
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180 eeschema/lib_pin.cpp:1990
@@ -2800,10 +2920,10 @@ msgid "Available environment variables for relative paths:"
 msgstr "Доступные переменные окружения для относительных путей:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:191
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:185
-#: eeschema/dialogs/dialog_rescue_each.cpp:111 eeschema/lib_field.cpp:581
-#: eeschema/lib_field.cpp:759 eeschema/onrightclick.cpp:426
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:196
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:190
+#: eeschema/dialogs/dialog_rescue_each.cpp:111 eeschema/lib_field.cpp:592
+#: eeschema/lib_field.cpp:770 eeschema/onrightclick.cpp:426
 #: eeschema/sch_component.cpp:1542 eeschema/template_fieldnames.cpp:42
 #: eeschema/widgets/widget_eeschema_color_config.cpp:79 pcbnew/class_edge_mod.cpp:261
 #: pcbnew/class_text_mod.cpp:342
@@ -3784,39 +3904,39 @@ msgstr ""
 msgid "Edit"
 msgstr "Править"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:225
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:230
 #, c-format
 msgid "Component '%s' found in library '%s'"
 msgstr "Компонент '%s' найден в библиотеке '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:231
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:236
 #, c-format
 msgid "Component '%s' not found in any library"
 msgstr "Компонент '%s' не найден в библиотеках."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:247
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:252
 msgid "However, some candidates are found:"
 msgstr "Тем не менее, некоторые кандидаты найдены:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:253
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:258
 #, c-format
 msgid "'%s' found in library '%s'"
 msgstr "'%s' найден в библиотеке '%s'."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:315
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:320
 msgid "No Component Name!"
 msgstr "Нет имени компонента!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:324
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:329
 #, c-format
 msgid "Component '%s' not found!"
 msgstr "Компонент '%s' не найден!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:398
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:403
 msgid "Illegal reference. A reference must start with a letter"
 msgstr "Неправильное обозначение. Обозначение должно начинаться с буквы"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:424
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:429
 #, c-format
 msgid ""
 "The field name <%s> does not have a value and is not defined in the field template "
@@ -3827,17 +3947,17 @@ msgstr ""
 "быть не должно и они будут удалены из компонента. Желаете удалить это и все остальные "
 "пустые поля?"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:431
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:436
 msgid "Remove Fields"
 msgstr "Удалить поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:852
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:678
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:859
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:684
 msgid "Show Datasheet"
 msgstr "Показать документацию"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:854
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:680
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:861
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:686
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:123
 msgid ""
 "If your datasheet is given as an http:// link, then pressing this button should bring "
@@ -3846,22 +3966,22 @@ msgstr ""
 "Если ваша документация доступна по ссылке http://, то нажав эту кнопку можно "
 "просмотреть её в браузере."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:859
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:685
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:866
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:691
 msgid "Browse Footprints"
 msgstr "Обзор посад.мест"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:861
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:687
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:868
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:693
 msgid "Open the footprint browser to choose a footprint and assign it."
 msgstr "Открыть обозреватель посад.мест для выбора посад.места и его назначения."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:867
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:693
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:874
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:699
 msgid "Used only for fields Footprint and Datasheet."
 msgstr "Используется только для полей посад.места и документации."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1006
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1013
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:145
@@ -3869,7 +3989,7 @@ msgstr "Используется только для полей посад.ме�
 msgid "Yes"
 msgstr "Да"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1008
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1015
 #: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_text_mod.cpp:355
@@ -3962,7 +4082,7 @@ msgstr ""
 "Для логических элементов это преобразование по законам де Моргана"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:649
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:655
 msgid "Chip Name"
 msgstr "Имя компонента"
 
@@ -4300,11 +4420,11 @@ msgstr "Пассивный"
 msgid "S&hape"
 msgstr "Форма"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:244
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:249
 msgid "Illegal reference.  References must start with a letter."
 msgstr "Неправильное обозначение. Обозначения должны начинаться с буквы."
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:260
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:265
 #, c-format
 msgid ""
 "A new name is entered for this component\n"
@@ -4869,7 +4989,7 @@ msgstr "Общий для всех начертаний"
 msgid "Invisible"
 msgstr "Невидимый"
 
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/lib_field.cpp:746
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/lib_field.cpp:757
 #: eeschema/lib_pin.cpp:2005 eeschema/sch_text.cpp:773
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
 msgid "Style"
@@ -5402,7 +5522,7 @@ msgstr "Символ"
 msgid "Action"
 msgstr "Действие"
 
-#: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/lib_field.cpp:574
+#: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/lib_field.cpp:585
 #: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1538
 #: eeschema/template_fieldnames.cpp:39
 #: eeschema/widgets/widget_eeschema_color_config.cpp:78
@@ -6305,34 +6425,34 @@ msgstr "'%s' - Экспорт OK"
 msgid "Error creating '%s'"
 msgstr "Ошибка при создании '%s'"
 
-#: eeschema/lib_field.cpp:72 eeschema/lib_field.cpp:756
+#: eeschema/lib_field.cpp:72 eeschema/lib_field.cpp:767
 #: eeschema/template_fieldnames.cpp:55
 msgid "Field"
 msgstr "Поле"
 
-#: eeschema/lib_field.cpp:588 eeschema/onrightclick.cpp:436
+#: eeschema/lib_field.cpp:599 eeschema/onrightclick.cpp:436
 #: eeschema/sch_component.cpp:1560 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:629 pcbnew/class_pad.cpp:637
 #: pcbnew/class_text_mod.cpp:346 pcbnew/loadcmp.cpp:435 pcbnew/loadcmp.cpp:499
 msgid "Footprint"
 msgstr "Посад.место"
 
-#: eeschema/lib_field.cpp:595 eeschema/libedit.cpp:510
+#: eeschema/lib_field.cpp:606 eeschema/libedit.cpp:510
 #: eeschema/template_fieldnames.cpp:48
 msgid "Datasheet"
 msgstr "Документация"
 
-#: eeschema/lib_field.cpp:604
+#: eeschema/lib_field.cpp:615
 #, c-format
 msgid "Field%d"
 msgstr "Поле%d"
 
-#: eeschema/lib_field.cpp:667
+#: eeschema/lib_field.cpp:678
 #, c-format
 msgid "Field %s %s"
 msgstr "Поле %s %s"
 
-#: eeschema/lib_field.cpp:749 pcbnew/class_drawsegment.cpp:410 pcbnew/class_pad.cpp:659
+#: eeschema/lib_field.cpp:760 pcbnew/class_drawsegment.cpp:410 pcbnew/class_pad.cpp:659
 #: pcbnew/class_pcb_text.cpp:154 pcbnew/class_text_mod.cpp:378
 #: pcbnew/class_track.cpp:1144 pcbnew/class_track.cpp:1171
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:322
@@ -6340,7 +6460,7 @@ msgstr "Поле %s %s"
 msgid "Width"
 msgstr "Ширина"
 
-#: eeschema/lib_field.cpp:752 pcbnew/class_pad.cpp:662 pcbnew/class_pcb_text.cpp:157
+#: eeschema/lib_field.cpp:763 pcbnew/class_pad.cpp:662 pcbnew/class_pcb_text.cpp:157
 #: pcbnew/class_text_mod.cpp:381 pcbnew/dialogs/dialog_edit_module_text_base.cpp:59
 msgid "Height"
 msgstr "Высота"
@@ -8824,14 +8944,6 @@ msgstr "Сетка"
 #: eeschema/widgets/widget_eeschema_color_config.cpp:105
 msgid "Miscellaneous"
 msgstr "Разное"
-
-#: eeschema/widgets/widget_eeschema_color_config.cpp:191
-msgid "White"
-msgstr "Белый"
-
-#: eeschema/widgets/widget_eeschema_color_config.cpp:192
-msgid "Black"
-msgstr "Черный"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:274
 msgid ""
