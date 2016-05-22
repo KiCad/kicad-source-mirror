@@ -240,9 +240,9 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::LoadPCB( const wxString& filename ) throw( IO_ERROR, boost::bad_pointer )
+void SPECCTRA_DB::LoadPCB( const wxString& aFilename ) throw( IO_ERROR, boost::bad_pointer )
 {
-    FILE_LINE_READER    reader( filename );
+    FILE_LINE_READER reader( aFilename );
 
     PushReader( &reader );
 
@@ -3430,14 +3430,14 @@ void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::ExportPCB( wxString filename, bool aNameChange ) throw( IO_ERROR )
+void SPECCTRA_DB::ExportPCB( wxString aFilename, bool aNameChange ) throw( IO_ERROR )
 {
     if( pcb )
     {
-        FILE_OUTPUTFORMATTER    formatter( filename, wxT( "wt" ), quote_char[0] );
+        FILE_OUTPUTFORMATTER    formatter( aFilename, wxT( "wt" ), quote_char[0] );
 
         if( aNameChange )
-            pcb->pcbname = TO_UTF8( filename );
+            pcb->pcbname = TO_UTF8( aFilename );
 
         pcb->Format( &formatter, 0 );
     }

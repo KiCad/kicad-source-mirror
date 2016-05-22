@@ -37,11 +37,7 @@ unsigned GetRunningMicroSecs()
     FILETIME    now;
 
     GetSystemTimeAsFileTime( &now );
-
-    typedef unsigned long long UINT64;
-
-    UINT64 t = (UINT64(now.dwHighDateTime) << 32) + now.dwLowDateTime;
-
+    unsigned long long t = (UINT64(now.dwHighDateTime) << 32) + now.dwLowDateTime;
     t /= 10;
 
     return unsigned( t );

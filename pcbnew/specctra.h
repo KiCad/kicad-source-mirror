@@ -3902,10 +3902,10 @@ public:
      * A design file is nearly a full description of a PCB (seems to be
      * missing only the silkscreen stuff).
      *
-     * @param filename The name of the dsn file to load.
+     * @param aFilename The name of the dsn file to load.
      * @throw IO_ERROR if there is a lexer or parser error.
      */
-    void LoadPCB( const wxString& filename ) throw( IO_ERROR, boost::bad_pointer );
+    void LoadPCB( const wxString& aFilename ) throw( IO_ERROR, boost::bad_pointer );
 
     /**
      * Function LoadSESSION
