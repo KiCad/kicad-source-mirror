@@ -327,6 +327,7 @@ set( BMAPS_MID
     lang_ru
     lang_sk
     lang_sl
+    lang_lt
     language
     layers_manager
     leave_sheet

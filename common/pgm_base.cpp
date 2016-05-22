@@ -267,6 +267,14 @@ static LANGUAGE_DESCR s_Languages[] =
         ID_LANGUAGE_BULGARIAN,
         lang_bg_xpm,
         _( "Bulgarian" )
+    },
+
+    // Lithuanian language
+    {
+        wxLANGUAGE_LITHUANIAN,
+        ID_LANGUAGE_LITHUANIAN,
+        lang_lt_xpm,
+        _( "Lithuanian" )
     }
 };
 
