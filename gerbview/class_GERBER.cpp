@@ -467,13 +467,23 @@ const wxString GERBER_IMAGE_LIST::GetDisplayName( int aIdx )
     if( gerber && IsUsed(aIdx ) )
     {
         wxFileName fn( gerber->m_FileName );
+        wxString filename = fn.GetFullName();
+
+        // if the filename is too long, display a shortened name:
+        const int maxlen = 30;
+
+        if( filename.Length() > maxlen )
+        {
+            wxString shortenedfn = filename.Left(2) + "..." + filename.Right(maxlen-5);
+            filename = shortenedfn;
+        }
 
         if( gerber->m_FileFunction )
         {
             if( gerber->m_FileFunction->IsCopper() )
             {
                 name.Printf( "%d %s (%s, %s, %s)", aIdx + 1,
-                             fn.GetFullName().GetData(),
+                             filename.GetData(),
                              GetChars( gerber->m_FileFunction->GetFileType() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerId() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerSide() ) );
@@ -481,7 +491,7 @@ const wxString GERBER_IMAGE_LIST::GetDisplayName( int aIdx )
             else
             {
                 name.Printf( "%d %s (%s, %s)", aIdx + 1,
-                             fn.GetFullName().GetData(),
+                             filename.GetData(),
                              GetChars( gerber->m_FileFunction->GetFileType() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerId() ) );
             }
