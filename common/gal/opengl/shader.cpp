@@ -127,8 +127,10 @@ int SHADER::AddParameter( const std::string& aParameterName )
 {
     GLint location = glGetUniformLocation( programNumber, aParameterName.c_str() );
 
-    if( location != -1 )
+    if( location >= 0 )
         parameterLocation.push_back( location );
+    else
+        throw std::runtime_error( "Could not find shader uniform: " + aParameterName );
 
     return parameterLocation.size() - 1;
 }
@@ -136,12 +138,16 @@ int SHADER::AddParameter( const std::string& aParameterName )
 
 void SHADER::SetParameter( int parameterNumber, float value ) const
 {
+    assert( (unsigned) parameterNumber < parameterLocation.size() );
+
     glUniform1f( parameterLocation[parameterNumber], value );
 }
 
 
 void SHADER::SetParameter( int parameterNumber, int value ) const
 {
+    assert( (unsigned) parameterNumber < parameterLocation.size() );
+
     glUniform1i( parameterLocation[parameterNumber], value );
 }
 
