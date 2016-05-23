@@ -90,7 +90,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 
     m_SelLayerBox = new GBR_LAYER_BOX_SELECTOR( m_mainToolBar,
                                 ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
-                                wxDefaultPosition, wxSize( 150, -1 ), 0,NULL);
+                                wxDefaultPosition, wxDefaultSize, 0,NULL);
     m_SelLayerBox->Resync();
 
     m_mainToolBar->AddControl( m_SelLayerBox );
@@ -114,7 +114,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     m_mainToolBar->AddControl( m_DCodeSelector );
 
     m_TextInfo = new wxTextCtrl( m_mainToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                                 wxSize(150,-1), wxTE_READONLY );
+                                 wxDefaultSize, wxTE_READONLY );
     m_mainToolBar->AddControl( m_TextInfo );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes

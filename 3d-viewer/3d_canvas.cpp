@@ -699,7 +699,7 @@ void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
 
     unsigned char*       pixelbuffer = (unsigned char*) malloc( viewport.x * viewport.y * 3 );
     unsigned char*       alphabuffer = (unsigned char*) malloc( viewport.x * viewport.y );
-    wxImage image( viewport.x, viewport.y );
+    wxImage image_3d( viewport.x, viewport.y );
 
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadBuffer( GL_BACK_LEFT );
@@ -710,10 +710,10 @@ void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
                   viewport.x, viewport.y,
                   GL_ALPHA, GL_UNSIGNED_BYTE, alphabuffer );
 
-    image.SetData( pixelbuffer );
-    image.SetAlpha( alphabuffer );
-    image = image.Mirror( false );
-    wxBitmap bitmap( image );
+    image_3d.SetData( pixelbuffer );
+    image_3d.SetAlpha( alphabuffer );
+    image_3d = image_3d.Mirror( false );
+    wxBitmap bitmap( image_3d );
 
     if( event.GetId() == ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {

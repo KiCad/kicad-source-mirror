@@ -460,20 +460,28 @@ const wxString GERBER_IMAGE_LIST::GetDisplayName( int aIdx )
     if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() )
         gerber = m_GERBER_List[aIdx];
 
+    // if a file is loaded, build the name:
+    // <id> <short filename> <X2 FileFunction info> if a X2 FileFunction info is found
+    // or (if no FileFunction info)
+    // <id> <short filename> *
     if( gerber && IsUsed(aIdx ) )
     {
+        wxFileName fn( gerber->m_FileName );
+
         if( gerber->m_FileFunction )
         {
             if( gerber->m_FileFunction->IsCopper() )
             {
-                name.Printf( _( "Layer %d (%s, %s, %s)" ), aIdx + 1,
+                name.Printf( "%d %s (%s, %s, %s)", aIdx + 1,
+                             fn.GetFullName().GetData(),
                              GetChars( gerber->m_FileFunction->GetFileType() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerId() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerSide() ) );
             }
             else
             {
-                name.Printf( _( "Layer %d (%s, %s)" ), aIdx + 1,
+                name.Printf( "%d %s (%s, %s)", aIdx + 1,
+                             fn.GetFullName().GetData(),
                              GetChars( gerber->m_FileFunction->GetFileType() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerId() ) );
             }

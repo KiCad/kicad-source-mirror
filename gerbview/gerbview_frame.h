@@ -438,9 +438,11 @@ public:
      * Function syncLayerBox
      * updates the currently "selected" layer within m_SelLayerBox
      * The currently active layer, as defined by the return value of
-     * getActiveLayer().  And updates the colored icon in the toolbar.
+     * getActiveLayer().
+     * @param aRebuildLayerBox = true to rebuild the layer box
+     *  false to just updates the selection.
      */
-    void                syncLayerBox();
+    void                syncLayerBox( bool aRebuildLayerBox = false );
 
     /**
      * Function UpdateTitleAndInfo

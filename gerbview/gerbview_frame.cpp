@@ -313,10 +313,12 @@ void GERBVIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 void GERBVIEW_FRAME::ReFillLayerWidget()
 {
     m_LayersManager->ReFill();
+    m_SelLayerBox->Resync();
 
     wxAuiPaneInfo&  lyrs = m_auimgr.GetPane( m_LayersManager );
 
     wxSize          bestz = m_LayersManager->GetBestSize();
+    bestz.x += 5;   // gives a little margin
 
     lyrs.MinSize( bestz );
     lyrs.BestSize( bestz );
@@ -384,9 +386,11 @@ void GERBVIEW_FRAME::syncLayerWidget()
 }
 
 
-void GERBVIEW_FRAME::syncLayerBox()
+void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
 {
-    m_SelLayerBox->Resync();
+    if( aRebuildLayerBox )
+        m_SelLayerBox->Resync();
+
     m_SelLayerBox->SetSelection( getActiveLayer() );
 
     int             dcodeSelected = -1;
