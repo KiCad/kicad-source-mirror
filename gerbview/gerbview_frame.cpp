@@ -456,9 +456,9 @@ void GERBVIEW_FRAME::Liste_D_Codes()
                          );
 
             if( !pt_D_code->m_Defined )
-                Line += wxT( "(not used)" );
+                Line += wxT( "(not defined) " );
 
-            if( !pt_D_code->m_InUse )
+            if( pt_D_code->m_InUse )
                 Line += wxT( "(in use)" );
 
             list.Add( Line );
@@ -485,7 +485,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
         text.Printf( wxT( "GerbView %s" ), GetChars( GetBuildVersion() ) );
         SetTitle( text );
         SetStatusText( wxEmptyString, 0 );
-        text.Printf( _( "Layer %d not in use" ), getActiveLayer() + 1 );
+        text.Printf( _( "Drawing layer %d not in use" ), getActiveLayer() + 1 );
         m_TextInfo->SetValue( text );
         ClearMsgPanel();
         return;

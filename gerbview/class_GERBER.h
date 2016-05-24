@@ -277,12 +277,12 @@ public:
      * returns a pointer to the D_CODE within this GERBER for the given
      * \a aDCODE.
      * @param aDCODE The numeric value of the D_CODE to look up.
-     * @param createIfNoExist If true, then create the D_CODE if it does not
-     *                        exist.
+     * @param aCreateIfNoExist If true, then create the D_CODE if it does not
+     *                         exist in list.
      * @return D_CODE* - the one implied by the given \a aDCODE, or NULL
      *            if the requested \a aDCODE is out of range.
      */
-    D_CODE*         GetDCODE( int aDCODE, bool createIfNoExist = true );
+    D_CODE*         GetDCODE( int aDCODE, bool aCreateIfNoExist = true );
 
     /**
      * Function FindApertureMacro

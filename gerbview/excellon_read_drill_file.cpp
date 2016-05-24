@@ -8,8 +8,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2014 Jean-Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 Jean-Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,13 +81,13 @@
 
 #include <html_messagebox.h>
 
-// Default format for dimensions
+// Default format for dimensions: they are the default values, not the actual values
 // number of digits in mantissa:
-static int fmtMantissaMM = 3;
-static int fmtMantissaInch = 4;
+static const int fmtMantissaMM = 3;
+static const int fmtMantissaInch = 4;
 // number of digits, integer part:
-static int fmtIntegerMM = 3;
-static int fmtIntegerInch = 2;
+static const int fmtIntegerMM = 3;
+static const int fmtIntegerInch = 2;
 
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
@@ -192,8 +192,9 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 
     ClearMessageList();
 
-    /* Read the gerber file */
+    // Read the Excellon drill file:
     FILE * file = wxFopen( aFullFileName, wxT( "rt" ) );
+
     if( file == NULL )
     {
         msg.Printf( _( "File %s not found" ), GetChars( aFullFileName ) );
@@ -211,7 +212,7 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     // Display errors list
     if( m_Messages.size() > 0 )
     {
-        HTML_MESSAGE_BOX dlg( this, _( "Files not found" ) );
+        HTML_MESSAGE_BOX dlg( this, _( "Error reading EXCELLON drill file" ) );
         dlg.ListSet( m_Messages );
         dlg.ShowModal();
     }
@@ -221,7 +222,9 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 bool EXCELLON_IMAGE::Read_EXCELLON_File( FILE * aFile,
                                         const wxString & aFullFileName )
 {
-    /* Set the gerber scale: */
+    wxASSERT( aFile );
+
+    // Set the default parmeter values:
     ResetDefaultValues();
 
     m_FileName = aFullFileName;
@@ -230,13 +233,8 @@ bool EXCELLON_IMAGE::Read_EXCELLON_File( FILE * aFile,
     LOCALE_IO toggleIo;
 
     // FILE_LINE_READER will close the file.
-    if( m_Current_File == NULL )
-    {
-        wxMessageBox( wxT("NULL!"), m_FileName );
-        return false;
-    }
-
     FILE_LINE_READER excellonReader( m_Current_File, m_FileName );
+
     while( true )
     {
         if( excellonReader.ReadLine() == 0 )
@@ -313,20 +311,17 @@ bool EXCELLON_IMAGE::Read_EXCELLON_File( FILE * aFile,
 bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
 {
     EXCELLON_CMD* cmd = NULL;
-    int           iprm;
-    double        dprm;
-    D_CODE*       dcode;
     wxString      msg;
 
     // Search command in list
-    EXCELLON_CMD* candidate;
-
     for( unsigned ii = 0; ; ii++ )
     {
-        candidate = &excellonHeaderCmdList[ii];
+        EXCELLON_CMD* candidate = &excellonHeaderCmdList[ii];
         int len = candidate->m_Name.size();
+
         if( len == 0 )                                                  // End of list reached
             break;
+
         if( candidate->m_Name.compare( 0, len, text, len ) == 0 )       // found.
         {
             cmd   = candidate;
@@ -463,41 +458,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         break;
 
     case DRILL_TOOL_INFORMATION:
-
-        // Read a tool definition like T1C0.02:
-        // or T1F00S00C0.02 or T1C0.02F00S00
-        // Read tool number:
-        iprm = ReadInt( text, false );
-
-        // Skip Feed rate and Spindle speed, if any here
-        while( *text && ( *text == 'F' || *text == 'S' ) )
-        {
-            text++;
-            ReadInt( text, false );
-        }
-
-        // Read tool shape
-        if( *text != 'C' )
-            ReportMessage( wxString:: Format(
-                           _( "Tool definition <%c> not supported" ), *text ) );
-        if( *text )
-            text++;
-
-        //read tool diameter:
-        dprm = ReadDouble( text, false );
-        m_Has_DCode = true;
-
-        // Initialize Dcode to handle this Tool
-        dcode = GetDCODE( iprm + FIRST_DCODE );     // Remember: dcodes are >= FIRST_DCODE
-        if( dcode == NULL )
-            break;
-        // conv_scale = scaling factor from inch to Internal Unit
-        double conv_scale = IU_PER_MILS * 1000;
-        if( m_GerbMetric )
-            conv_scale /= 25.4;
-
-        dcode->m_Size.x = dcode->m_Size.y = KiROUND( dprm * conv_scale );
-        dcode->m_Shape  = APT_CIRCLE;
+        readToolInformation( text );
         break;
     }
 
@@ -508,10 +469,63 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
 }
 
 
+bool EXCELLON_IMAGE::readToolInformation( char*& aText )
+{
+    // Read a tool definition like T1C0.02 or T1F00S00C0.02 or T1C0.02F00S00
+    // and enter the TCODE param in list (using the D_CODE param management, which
+    // is similar to TCODE params.
+    if( *aText == 'T' )     // This is the beginning of the definition
+        aText++;
+
+    // Read tool number:
+    int iprm = ReadInt( aText, false );
+
+    // Skip Feed rate and Spindle speed, if any here
+    while( *aText && ( *aText == 'F' || *aText == 'S' ) )
+    {
+        aText++;
+        ReadInt( aText, false );
+    }
+
+    // Read tool shape
+    if( ! *aText )
+        ReportMessage( wxString:: Format(
+                       _( "Tool definition shape not found" ) ) );
+    else if( *aText != 'C' )
+        ReportMessage( wxString:: Format(
+                       _( "Tool definition '%c' not supported" ), *aText ) );
+    if( *aText )
+        aText++;
+
+    //read tool diameter:
+    double dprm = ReadDouble( aText, false );
+    m_Has_DCode = true;
+
+    // Initialize Dcode to handle this Tool
+    // Remember: dcodes are >= FIRST_DCODE
+    D_CODE* dcode = GetDCODE( iprm + FIRST_DCODE );
+
+    if( dcode == NULL )
+        return false;
+
+    // conv_scale = scaling factor from inch to Internal Unit
+    double conv_scale = IU_PER_MILS * 1000;
+
+    if( m_GerbMetric )
+        conv_scale /= 25.4;
+
+    dcode->m_Size.x = dcode->m_Size.y = KiROUND( dprm * conv_scale );
+    dcode->m_Shape  = APT_CIRCLE;
+    dcode->m_Defined  = true;
+
+    return true;
+}
+
 bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
 {
     D_CODE*  tool;
     GERBER_DRAW_ITEM * gbritem;
+
     while( true )
     {
         switch( *text )
@@ -528,15 +542,18 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                 break;
             case 0:     // E.O.L: execute command
                 tool = GetDCODE( m_Current_Tool, false );
+
                 if( !tool )
                 {
                     wxString msg;
-                    msg.Printf( _( "Tool <%d> not defined" ), m_Current_Tool );
+                    msg.Printf( _( "Tool %d not defined" ), m_Current_Tool );
                     ReportMessage( msg );
                     return false;
                 }
+
                 gbritem = new GERBER_DRAW_ITEM( GetParent()->GetGerberLayout(), this );
                 GetParent()->GetGerberLayout()->m_Drawings.Append( gbritem );
+
                 if( m_SlotOn )  // Oval hole
                 {
                     fillLineGBRITEM( gbritem,
@@ -551,6 +568,7 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                                     m_CurrentPos,
                                     tool->m_Size, false );
                 }
+
                 StepAndRepeatItem( *gbritem );
                 m_PreviousPos = m_CurrentPos;
                 return true;
@@ -568,18 +586,35 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
 
 bool EXCELLON_IMAGE::Select_Tool( char*& text )
 {
+    // Select the tool from the command line Tn, with n = 1 ... TOOLS_MAX_COUNT - 1
+    // Because some drill file have an embedded TCODE definition (like T1C.008F0S0)
+    // in tool selection command, if the tool is not defined in list,
+    // and the definition is embedded, it will be entered in list
+    char * startline = text;    // the tool id starts here.
     int tool_id = TCodeNumber( text );
 
+    // T0 is legal, but is not a selection tool. it is a special command
     if( tool_id >= 0 )
     {
-        tool_id += FIRST_DCODE;     // Remember: dcodes are >= FIRST_DCODE
-        if( tool_id > (TOOLS_MAX_COUNT - 1) )
-            tool_id = TOOLS_MAX_COUNT - 1;
-        m_Current_Tool = tool_id;
-        D_CODE* pt_Dcode = GetDCODE( tool_id , false );
-        if( pt_Dcode )
-            pt_Dcode->m_InUse = true;
+        int dcode_id = tool_id + FIRST_DCODE;     // Remember: dcodes are >= FIRST_DCODE
+
+        if( dcode_id > (TOOLS_MAX_COUNT - 1) )
+            dcode_id = TOOLS_MAX_COUNT - 1;
+
+        m_Current_Tool = dcode_id;
+        D_CODE* currDcode = GetDCODE( dcode_id , false );
+
+        if( currDcode == NULL && tool_id > 0 )   // if the definition is embedded, enter it
+        {
+            text = startline;   // text starts at the beginning of the command
+            readToolInformation( text );
+            currDcode = GetDCODE( dcode_id , false );
+        }
+
+        if( currDcode )
+            currDcode->m_InUse = true;
     }
+
     while( *text )
         text++;
 
@@ -678,8 +713,8 @@ void EXCELLON_IMAGE::SelectUnits( bool aMetric )
      *  Five digit 10 micron resolution (000.00)
      *  Six digit 10 micron resolution (0000.00)
      *  Six digit micron resolution (000.000)
-     */
-    /* Inches: Default fmt = 2.4 for X and Y axis: 6 digits with  0.0001 resolution
+     *
+     * Inches: Default fmt = 2.4 for X and Y axis: 6 digits with  0.0001 resolution
      * metric: Default fmt = 3.3 for X and Y axis: 6 digits, 1 micron resolution
      */
     if( aMetric )
