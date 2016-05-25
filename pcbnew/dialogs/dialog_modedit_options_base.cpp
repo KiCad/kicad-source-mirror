@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version May 10 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,7 +21,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	m_staticText281 = new wxStaticText( this, wxID_ANY, _("On new graphic item creation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText281->Wrap( -1 );
-	m_staticText281->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText281->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerUpper->Add( m_staticText281, 0, wxALL, 5 );
 	
@@ -36,19 +36,17 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_EdgeModEWidthTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_OptModuleGrLineWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptModuleGrLineWidth->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_OptModuleGrLineWidth, 0, wxEXPAND|wxALL, 5 );
 	
 	m_staticTextGrLineUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextGrLineUnit->Wrap( -1 );
 	fgSizer1->Add( m_staticTextGrLineUnit, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("Text line width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextModWidthTitle = new wxStaticText( this, wxID_ANY, _("&Text line width"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextModWidthTitle->Wrap( -1 );
 	fgSizer1->Add( m_TextModWidthTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_OptModuleTextWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptModuleTextWidth->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_OptModuleTextWidth, 0, wxEXPAND|wxALL, 5 );
 	
 	m_staticTextTextWidthUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -60,7 +58,6 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_TextModSizeVTitle, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_OptModuleTextVSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptModuleTextVSize->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_OptModuleTextVSize, 0, wxEXPAND|wxALL, 5 );
 	
 	m_staticTextTextVSizeUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -72,7 +69,6 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	fgSizer1->Add( m_TextModSizeHTitle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_OptModuleTextHSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptModuleTextHSize->SetMaxLength( 0 ); 
 	fgSizer1->Add( m_OptModuleTextHSize, 0, wxEXPAND|wxALL, 5 );
 	
 	m_staticTextTextHSizeUnit = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -87,7 +83,7 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	m_staticText28 = new wxStaticText( this, wxID_ANY, _("Default values on new footprint creation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText28->Wrap( -1 );
-	m_staticText28->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText28->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerUpper->Add( m_staticText28, 0, wxALL, 5 );
 	
@@ -163,35 +159,6 @@ DIALOG_MODEDIT_OPTIONS_BASE::DIALOG_MODEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	
 	bSizerUpper->Add( fgSizer2, 0, wxEXPAND|wxLEFT, 20 );
-	
-	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerUpper->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
-	
-	m_stGeneral = new wxStaticText( this, wxID_ANY, _("General options:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stGeneral->Wrap( -1 );
-	m_stGeneral->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
-	
-	bSizerUpper->Add( m_stGeneral, 0, wxALL, 5 );
-	
-	wxFlexGridSizer* fgGeneral;
-	fgGeneral = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgGeneral->AddGrowableCol( 1 );
-	fgGeneral->SetFlexibleDirection( wxBOTH );
-	fgGeneral->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
-	m_stMaxUndoItems = new wxStaticText( this, wxID_ANY, _("Ma&ximum undo items (0 = unlimited):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMaxUndoItems->Wrap( -1 );
-	fgGeneral->Add( m_stMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_spinMaxUndoItems = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65536, 0 );
-	fgGeneral->Add( m_spinMaxUndoItems, 0, wxALL|wxEXPAND, 5 );
-	
-	m_stMaxUndoItemsUnit = new wxStaticText( this, wxID_ANY, _("actions"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMaxUndoItemsUnit->Wrap( -1 );
-	fgGeneral->Add( m_stMaxUndoItemsUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	
-	bSizerUpper->Add( fgGeneral, 0, wxEXPAND|wxLEFT, 20 );
 	
 	
 	bSizerMain->Add( bSizerUpper, 1, wxALL|wxEXPAND, 5 );

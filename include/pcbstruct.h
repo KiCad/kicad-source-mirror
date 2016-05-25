@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,15 +29,6 @@
 
 #ifndef PCBSTRUCT_H_
 #define PCBSTRUCT_H_
-
-
-/// Values for m_DisplayViaMode member:
-enum VIA_DISPLAY_MODE_T {
-    VIA_HOLE_NOT_SHOW = 0,
-    VIA_SPECIAL_HOLE_SHOW,
-    ALL_VIA_HOLE_SHOW,
-    OPT_VIA_HOLE_END
-};
 
 
 /**
@@ -81,10 +72,6 @@ public:
 
     /// How trace clearances are displayed.  @see TRACE_CLEARANCE_DISPLAY_MODE_T.
     TRACE_CLEARANCE_DISPLAY_MODE_T  m_ShowTrackClearanceMode;
-
-    VIA_DISPLAY_MODE_T m_DisplayViaMode;  /* 0 do not show via hole,
-                                           * 1 show via hole for non default value
-                                           * 2 show all via hole */
 
     bool m_DisplayPolarCood;
     int  m_DisplayZonesMode;

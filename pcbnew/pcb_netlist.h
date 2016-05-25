@@ -104,7 +104,7 @@ class COMPONENT
     FPID           m_altFpid;
 
     /// The #MODULE loaded for #m_fpid.
-    std::auto_ptr< MODULE > m_footprint;
+    std::unique_ptr< MODULE > m_footprint;
 
     /// Set to true if #m_fpid was changed when the footprint link file was read.
     bool           m_footprintChanged;

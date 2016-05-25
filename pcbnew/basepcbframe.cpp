@@ -56,9 +56,6 @@
 #include <math/vector2d.h>
 #include <trigo.h>
 #include <pcb_painter.h>
-#include <worksheet_viewitem.h>
-#include <ratsnest_data.h>
-#include <ratsnest_viewitem.h>
 
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -976,7 +973,7 @@ void PCB_BASE_FRAME::UseGalCanvas( bool aEnable )
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::GAL_SWITCH );
 
-        galCanvas->GetView()->RecacheAllItems( true );
+        galCanvas->GetView()->RecacheAllItems();
         galCanvas->SetEventDispatcher( m_toolDispatcher );
         galCanvas->StartDrawing();
     }

@@ -1,9 +1,8 @@
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -565,8 +564,13 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
         }
         else if( id == wxID_APPLY )
         {
+            // Dialogs that provide Apply buttons should make sure data is valid before
+            // allowing a transfer, as there is no other way to indicate failure
+            // (i.e. the dialog can't refuse to close as it might with OK, because it
+            // isn't closing anyway)
+
             if( Validate() )
-                TransferDataFromWindow();
+                wxASSERT( TransferDataFromWindow() );
         }
         else if( id == GetEscapeId() ||
                  (id == wxID_CANCEL && GetEscapeId() == wxID_ANY) )

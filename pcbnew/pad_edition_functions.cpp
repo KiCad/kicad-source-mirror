@@ -83,6 +83,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->SetOffset( mp.GetOffset() );
     aPad->SetDrillSize( mp.GetDrillSize() );
     aPad->SetDrillShape( mp.GetDrillShape() );
+    aPad->SetRoundRectRadiusRatio( mp.GetRoundRectRadiusRatio() );
 
     switch( mp.GetShape() )
     {

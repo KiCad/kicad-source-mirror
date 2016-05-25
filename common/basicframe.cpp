@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,8 @@
 #include <pgm_base.h>
 #include <wxstruct.h>
 
+#include <wx/display.h>
+
 
 /// The default auto save interval is 10 minutes.
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
@@ -46,15 +48,24 @@
 
 const wxChar traceAutoSave[] = wxT( "KicadAutoSave" );
 
+///@{
+/// \ingroup config
+
 /// Configuration file entry name for auto save interval.
-static const wxChar entryAutoSaveInterval[] = wxT( "AutoSaveInterval" );
+static const wxString entryAutoSaveInterval = "AutoSaveInterval";
 
 /// Configuration file entry for wxAuiManger perspective.
-static const wxChar entryPerspective[] = wxT( "Perspective" );
+static const wxString entryPerspective = "Perspective";
 
 /// Configuration file entry for most recently used path.
-static const wxChar entryMruPath[] = wxT( "MostRecentlyUsedPath" );
+static const wxString entryMruPath = "MostRecentlyUsedPath";
 
+static const wxString entryPosY = "Pos_y";   ///< Y position of frame, in pixels (suffix)
+static const wxString entryPosX = "Pos_x";   ///< X position of frame, in pixels (suffix)
+static const wxString entrySizeY = "Size_y"; ///< Height of frame, in pixels (suffix)
+static const wxString entrySizeX = "Size_x"; ///< Width of frame, in pixels (suffix)
+static const wxString entryMaximized = "Maximized";  ///< Nonzero iff frame is maximized (suffix)
+///@}
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
@@ -218,25 +229,39 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     wxString baseCfgName = ConfigBaseName();
 
-    wxString text = baseCfgName + wxT( "Pos_x" );
+    wxString text = baseCfgName + entryPosX;
     aCfg->Read( text, &m_FramePos.x );
 
-    text = baseCfgName + wxT( "Pos_y" );
+    text = baseCfgName + entryPosY;
     aCfg->Read( text, &m_FramePos.y );
 
-    text = baseCfgName + wxT( "Size_x" );
+    text = baseCfgName + entrySizeX;
     aCfg->Read( text, &m_FrameSize.x, 600 );
 
-    text = baseCfgName + wxT( "Size_y" );
+    text = baseCfgName + entrySizeY;
     aCfg->Read( text, &m_FrameSize.y, 400 );
 
-    text = baseCfgName + wxT( "Maximized" );
+    text = baseCfgName + entryMaximized;
     aCfg->Read( text, &maximized, 0 );
 
     if( m_hasAutoSave )
     {
         text = baseCfgName + entryAutoSaveInterval;
         aCfg->Read( text, &m_autoSaveInterval, DEFAULT_AUTO_SAVE_INTERVAL );
+    }
+
+    // Ensure the window is on a connected display, and is visible.
+    // (at least a corner of the frame must be visible on screen)
+    // Sometimes, if a window was moved on an auxiliary display, and when this
+    // display is no more available, it is not the case.
+    wxRect rect( m_FramePos, m_FrameSize );
+
+    if( wxDisplay::GetFromPoint( rect.GetTopLeft() ) == wxNOT_FOUND &&
+        wxDisplay::GetFromPoint( rect.GetTopRight() ) == wxNOT_FOUND &&
+        wxDisplay::GetFromPoint( rect.GetBottomLeft() ) == wxNOT_FOUND &&
+        wxDisplay::GetFromPoint( rect.GetBottomRight() ) == wxNOT_FOUND )
+    {
+        m_FramePos = wxDefaultPosition;
     }
 
     // Ensure Window title bar is visible
@@ -441,7 +466,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 
 void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
 {
-    // Ask for the current editor and instruct GetEditorName() to not show 
+    // Ask for the current editor and instruct GetEditorName() to not show
     // unless we pass false as argument.
     wxString editorname = Pgm().GetEditorName( false );
 

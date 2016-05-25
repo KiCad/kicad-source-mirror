@@ -188,8 +188,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         screen->SetCurItem( NULL );
         SetRepeatItem( NULL );
 
-        if( screen->TestDanglingEnds() )
-            m_canvas->Refresh();
+        screen->TestDanglingEnds();
+        m_canvas->Refresh();
 
         break;
 

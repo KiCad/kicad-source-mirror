@@ -80,13 +80,17 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <boost/bind.hpp>
 
-// Keys used in read/write config
-#define OPTKEY_DEFAULT_LINEWIDTH_VALUE  wxT( "PlotLineWidth_mm" )
-#define PCB_MAGNETIC_PADS_OPT           wxT( "PcbMagPadOpt" )
-#define PCB_MAGNETIC_TRACKS_OPT         wxT( "PcbMagTrackOpt" )
-#define SHOW_MICROWAVE_TOOLS            wxT( "ShowMicrowaveTools" )
-#define SHOW_LAYER_MANAGER_TOOLS        wxT( "ShowLayerManagerTools" )
-#define SHOW_PAGE_LIMITS_KEY            wxT( "ShowPageLimits" )
+///@{
+/// \ingroup config
+
+static const wxString PlotLineWidthEntry =      "PlotLineWidth_mm";
+static const wxString MagneticPadsEntry =       "PcbMagPadOpt";
+static const wxString MagneticTracksEntry =     "PcbMagTrackOpt";
+static const wxString ShowMicrowaveEntry =      "ShowMicrowaveTools";
+static const wxString ShowLayerManagerEntry =   "ShowLayerManagerTools";
+static const wxString ShowPageLimitsEntry =     "ShowPageLimits";
+
+///@}
 
 
 BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
@@ -724,7 +728,7 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     double dtmp;
-    aCfg->Read( OPTKEY_DEFAULT_LINEWIDTH_VALUE, &dtmp, 0.1 ); // stored in mm
+    aCfg->Read( PlotLineWidthEntry, &dtmp, 0.1 ); // stored in mm
 
     if( dtmp < 0.01 )
         dtmp = 0.01;
@@ -734,11 +738,11 @@ void PCB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     g_DrawDefaultLineThickness = Millimeter2iu( dtmp );
 
-    aCfg->Read( PCB_MAGNETIC_PADS_OPT, &g_MagneticPadOption );
-    aCfg->Read( PCB_MAGNETIC_TRACKS_OPT, &g_MagneticTrackOption );
-    aCfg->Read( SHOW_MICROWAVE_TOOLS, &m_show_microwave_tools );
-    aCfg->Read( SHOW_LAYER_MANAGER_TOOLS, &m_show_layer_manager_tools );
-    aCfg->Read( SHOW_PAGE_LIMITS_KEY, &m_showPageLimits );
+    aCfg->Read( MagneticPadsEntry, &g_MagneticPadOption );
+    aCfg->Read( MagneticTracksEntry, &g_MagneticTrackOption );
+    aCfg->Read( ShowMicrowaveEntry, &m_show_microwave_tools );
+    aCfg->Read( ShowLayerManagerEntry, &m_show_layer_manager_tools );
+    aCfg->Read( ShowPageLimitsEntry, &m_showPageLimits );
 }
 
 
@@ -749,12 +753,12 @@ void PCB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
     // This value is stored in mm )
-    aCfg->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE, MM_PER_IU * g_DrawDefaultLineThickness );
-    aCfg->Write( PCB_MAGNETIC_PADS_OPT, (long) g_MagneticPadOption );
-    aCfg->Write( PCB_MAGNETIC_TRACKS_OPT, (long) g_MagneticTrackOption );
-    aCfg->Write( SHOW_MICROWAVE_TOOLS, (long) m_show_microwave_tools );
-    aCfg->Write( SHOW_LAYER_MANAGER_TOOLS, (long)m_show_layer_manager_tools );
-    aCfg->Write( SHOW_PAGE_LIMITS_KEY, m_showPageLimits );
+    aCfg->Write( PlotLineWidthEntry, MM_PER_IU * g_DrawDefaultLineThickness );
+    aCfg->Write( MagneticPadsEntry, (long) g_MagneticPadOption );
+    aCfg->Write( MagneticTracksEntry, (long) g_MagneticTrackOption );
+    aCfg->Write( ShowMicrowaveEntry, (long) m_show_microwave_tools );
+    aCfg->Write( ShowLayerManagerEntry, (long)m_show_layer_manager_tools );
+    aCfg->Write( ShowPageLimitsEntry, m_showPageLimits );
 }
 
 

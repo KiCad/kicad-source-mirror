@@ -645,12 +645,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = Documentation/development/coding-style-policy.md \
-                         Documentation/development/stable-release-policy.md \
-                         Documentation/development/road-map-r5.md \
-                         Documentation/development/road-map.md \
-                         Documentation/development/compiling.md \
-                         Documentation/development/ui-policy.md \
+INPUT                  = Documentation/development \
                          kicad \
                          pcbnew \
                          cvpcb \
@@ -679,8 +674,7 @@ INPUT_ENCODING         = UTF-8
 # *.hxx *.hpp *.h++ *.idl *.odl *.cs *.php *.php3 *.inc *.m *.mm *.dox *.py
 # *.f90 *.f *.for *.vhd *.vhdl
 
-FILE_PATTERNS          = *.h \
-                         *.cpp
+FILE_PATTERNS          = *.h *.cpp *.md
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories
 # should be searched for input files as well. Possible values are YES and NO.

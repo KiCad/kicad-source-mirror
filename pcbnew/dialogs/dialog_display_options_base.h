@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version May 10 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -20,9 +20,9 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/radiobox.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/radiobox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -39,13 +39,11 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 	protected:
 		enum
 		{
-			ID_VIAS_HOLES = 1000,
-			ID_SHOW_CLEARANCE
+			ID_SHOW_CLEARANCE = 1000
 		};
 		
 		wxCheckBox* m_OptDisplayTracks;
 		wxCheckBox* m_OptDisplayVias;
-		wxRadioBox* m_OptDisplayViaHole;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxRadioBox* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayModOutlines;

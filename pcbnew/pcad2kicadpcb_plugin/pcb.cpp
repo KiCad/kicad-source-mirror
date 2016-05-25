@@ -684,7 +684,7 @@ void PCB::Parse( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, wxString aActu
 
         if( aNode )
         {
-            m_defaultMeasurementUnit = aNode->GetNodeContent();
+            m_defaultMeasurementUnit = aNode->GetNodeContent().Lower();
             m_defaultMeasurementUnit.Trim( true );
             m_defaultMeasurementUnit.Trim( false );
         }

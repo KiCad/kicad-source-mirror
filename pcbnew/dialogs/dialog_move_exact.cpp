@@ -182,9 +182,9 @@ void DIALOG_MOVE_EXACT::OnOkClick( wxCommandEvent& event )
     {
         // save the settings
         m_options.polarCoords = m_polarCoords->GetValue();
-        m_xEntry->GetValue().ToDouble( &m_options.entry1 );
-        m_yEntry->GetValue().ToDouble( &m_options.entry2 );
-        m_rotEntry->GetValue().ToDouble( &m_options.entryRotation );
+        m_options.entry1 = DoubleValueFromString( UNSCALED_UNITS, m_xEntry->GetValue() );
+        m_options.entry2 = DoubleValueFromString( UNSCALED_UNITS, m_yEntry->GetValue() );
+        m_options.entryRotation = DoubleValueFromString( UNSCALED_UNITS, m_rotEntry->GetValue() );
 
         event.Skip();
     }

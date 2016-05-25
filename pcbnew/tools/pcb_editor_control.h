@@ -33,6 +33,7 @@ namespace KIGFX {
 
 class PCB_EDIT_FRAME;
 class ZONE_CONTEXT_MENU;
+class LOCK_CONTEXT_MENU;
 
 /**
  * Class PCB_EDITOR_CONTROL
@@ -76,8 +77,14 @@ public:
      */
     int PlaceModule( const TOOL_EVENT& aEvent );
 
-    ///> (Un)locks module.
-    int ToggleLockModule( const TOOL_EVENT& aEvent );
+    ///> Toggles 'lock' property for selected items.
+    int ToggleLockSelected( const TOOL_EVENT& aEvent );
+
+    ///> Locks selected items.
+    int LockSelected( const TOOL_EVENT& aEvent );
+
+    ///> Unlocks selected items.
+    int UnlockSelected( const TOOL_EVENT& aEvent );
 
     ///> Notifies eeschema about the selected item.
     int CrossProbePcbToSch( const TOOL_EVENT& aEvent );
@@ -107,10 +114,16 @@ private:
     ///> Flag to ignore a single crossprobe message from eeschema.
     bool m_probingSchToPcb;
 
+    ///> How to modify a property for selected items.
+    enum MODIFY_MODE { ON, OFF, TOGGLE };
+
+    int modifyLockSelected( MODIFY_MODE aMode );
+
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP;
 
     ZONE_CONTEXT_MENU* m_zoneMenu;
+    LOCK_CONTEXT_MENU* m_lockMenu;
 };
 
 #endif

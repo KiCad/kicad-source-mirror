@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
+ * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +69,8 @@ class PCB_PARSER : public PCB_LEXER
     LAYER_ID_MAP        m_layerIndices;     ///< map layer name to it's index
     LSET_MAP            m_layerMasks;       ///< map layer names to their masks
     std::vector<int>    m_netCodes;         ///< net codes mapping for boards being loaded
+    bool                m_tooRecent;        ///< true if version parses as later than supported
+    int                 m_requiredVersion;  ///< set to the KiCad format version this board requires
 
     ///> Converts net code using the mapping table if available,
     ///> otherwise returns unchanged net code if < 0 or if is is out of range
@@ -113,12 +116,20 @@ class PCB_PARSER : public PCB_LEXER
     DIMENSION*      parseDIMENSION() throw( IO_ERROR, PARSE_ERROR );
 
     /**
-     * Function parseModule
+     * Function parseMODULE
      * @param aInitialComments may be a pointer to a heap allocated initial comment block
      *   or NULL.  If not NULL, then caller has given ownership of a wxArrayString to
      *   this function and care must be taken to delete it even on exception.
      */
-    MODULE*         parseMODULE( wxArrayString* aInitialComments = 0 ) throw( IO_ERROR, PARSE_ERROR );
+    MODULE*         parseMODULE( wxArrayString* aInitialComments = 0 )
+                        throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR );
+
+    /**
+     * Function parseMODULE_unchecked
+     * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
+     */
+    MODULE*         parseMODULE_unchecked( wxArrayString* aInitialComments = 0 )
+                        throw( IO_ERROR, PARSE_ERROR );
     TEXTE_MODULE*   parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR );
     EDGE_MODULE*    parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR );
     D_PAD*          parseD_PAD( MODULE* aParent = NULL ) throw( IO_ERROR, PARSE_ERROR );
@@ -126,7 +137,13 @@ class PCB_PARSER : public PCB_LEXER
     VIA*            parseVIA() throw( IO_ERROR, PARSE_ERROR );
     ZONE_CONTAINER* parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR );
     PCB_TARGET*     parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR );
-    BOARD*          parseBOARD() throw( IO_ERROR, PARSE_ERROR );
+    BOARD*          parseBOARD() throw( IO_ERROR, PARSE_ERROR, FUTURE_FORMAT_ERROR );
+
+    /**
+     * Function parseBOARD_unchecked
+     * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
+     */
+    BOARD*          parseBOARD_unchecked() throw( IO_ERROR, PARSE_ERROR );
 
 
     /**
@@ -252,6 +269,11 @@ class PCB_PARSER : public PCB_LEXER
 
     bool parseBool() throw( PARSE_ERROR );
 
+    /**
+     * Parse a format version tag like (version 20160417) return the version.
+     * Expects to start on 'version', and eats the closing paren.
+     */
+    int parseVersion() throw( IO_ERROR, PARSE_ERROR );
 
 public:
 
@@ -284,6 +306,21 @@ public:
     }
 
     BOARD_ITEM* Parse() throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Return whether a version number, if any was parsed, was too recent
+     */
+    bool IsTooRecent()
+    {
+        return m_tooRecent;
+    }
+
+    /**
+     * Return a string representing the version of kicad required to open this
+     * file. Not particularly meaningful if IsTooRecent() returns false.
+     */
+    wxString GetRequiredVersion();
+
 };
 
 

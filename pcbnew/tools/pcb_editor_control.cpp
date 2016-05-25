@@ -81,8 +81,22 @@ private:
 };
 
 
+class LOCK_CONTEXT_MENU : public CONTEXT_MENU
+{
+public:
+    LOCK_CONTEXT_MENU()
+    {
+        SetIcon( locked_xpm );
+        Add( COMMON_ACTIONS::lock );
+        Add( COMMON_ACTIONS::unlock );
+        Add( COMMON_ACTIONS::toggleLock );
+    }
+};
+
+
 PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
-    TOOL_INTERACTIVE( "pcbnew.EditorControl" ), m_frame( NULL ), m_zoneMenu( NULL )
+    TOOL_INTERACTIVE( "pcbnew.EditorControl" ),
+    m_frame( NULL ), m_zoneMenu( NULL ), m_lockMenu( NULL )
 {
     m_placeOrigin = new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
                                                 KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
@@ -94,6 +108,7 @@ PCB_EDITOR_CONTROL::~PCB_EDITOR_CONTROL()
 {
     delete m_placeOrigin;
     delete m_zoneMenu;
+    delete m_lockMenu;
 }
 
 
@@ -120,6 +135,11 @@ bool PCB_EDITOR_CONTROL::Init()
         m_zoneMenu->SetTool( this );
         selTool->GetMenu().AddMenu( m_zoneMenu, _( "Zones" ), false,
                                     SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
+
+        m_lockMenu = new LOCK_CONTEXT_MENU;
+        m_lockMenu->SetTool( this );
+        selTool->GetMenu().AddMenu( m_lockMenu, _( "Locking" ), false,
+                                    SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     }
 
     return true;
@@ -319,26 +339,61 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ToggleLockModule( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::ToggleLockSelected( const TOOL_EVENT& aEvent )
+{
+    return modifyLockSelected( TOGGLE );
+}
+
+
+int PCB_EDITOR_CONTROL::LockSelected( const TOOL_EVENT& aEvent )
+{
+    return modifyLockSelected( ON );
+}
+
+
+int PCB_EDITOR_CONTROL::UnlockSelected( const TOOL_EVENT& aEvent )
+{
+    return modifyLockSelected( OFF );
+}
+
+
+int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 {
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selTool->GetSelection();
-    bool clearSelection = selection.Empty();
 
-    if( clearSelection )
+    if( selection.Empty() )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+
+    bool modified = false;
 
     for( int i = 0; i < selection.Size(); ++i )
     {
-        if( selection.Item<BOARD_ITEM>( i )->Type() == PCB_MODULE_T )
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+        bool prevState = item->IsLocked();
+
+        switch( aMode )
         {
-            MODULE* module = selection.Item<MODULE>( i );
-            module->SetLocked( !module->IsLocked() );
+            case ON:
+                item->SetLocked( true );
+                break;
+
+            case OFF:
+                item->SetLocked( false );
+                break;
+
+            case TOGGLE:
+                item->SetLocked( !prevState );
+                break;
         }
+
+        // Check if we really modified an item
+        if( !modified && prevState != item->IsLocked() )
+            modified = true;
     }
 
-    if( clearSelection )
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    if( modified )
+        m_frame->OnModify();
 
     return 0;
 }
@@ -780,7 +835,9 @@ void PCB_EDITOR_CONTROL::SetTransitions()
     Go( &PCB_EDITOR_CONTROL::PlaceModule,        COMMON_ACTIONS::placeModule.MakeEvent() );
 
     // Other
-    Go( &PCB_EDITOR_CONTROL::ToggleLockModule,    COMMON_ACTIONS::toggleLockModule.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,  COMMON_ACTIONS::toggleLock.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::LockSelected,        COMMON_ACTIONS::lock.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::UnlockSelected,      COMMON_ACTIONS::unlock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  SELECTION_TOOL::SelectedEvent );
     Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb,  COMMON_ACTIONS::crossProbeSchToPcb.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,         COMMON_ACTIONS::drillOrigin.MakeEvent() );

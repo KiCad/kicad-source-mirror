@@ -570,6 +570,11 @@ bool SHAPE_LINE_CHAIN::Parse( std::stringstream& aStream )
 
     m_points.clear();
     aStream >> n_pts;
+
+    // Rough sanity check, just make sure the loop bounds aren't absolutely outlandish
+    if( n_pts < 0 || n_pts > int( aStream.str().size() ) )
+        return false;
+
     aStream >> m_closed;
 
     for( int i = 0; i < n_pts; i++ )

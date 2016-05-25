@@ -863,8 +863,8 @@ void CPolyLine::Hatch()
             }
             else
             {
-                double  dy      = pointbuffer[ip + 1].y - pointbuffer[ip].y;
-                double  slope   = dy / dx;
+                double dy = pointbuffer[ip + 1].y - pointbuffer[ip].y;
+                slope = dy / dx;
 
                 if( dx > 0 )
                     dx = hatch_line_len;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -437,14 +437,13 @@ static SFVEC3F light = SFVEC3F();
 
 void C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving )
 {
+    (void) aIsMoving;
+
     // Initialize openGL
     if( !m_is_opengl_initialized )
     {
         if( !initializeOpenGL() )
             return;
-        aIsMoving = true;
-
-
 
         A = sphere;
         B = cube;
@@ -657,28 +656,19 @@ bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
     glPixelStorei( GL_UNPACK_ALIGNMENT, 4 );
 
     // Initialize the open GL texture to draw the filled semi-circle of the segments
-    CIMAGE *circleImage = new CIMAGE( SIZE_OF_CIRCLE_TEXTURE, SIZE_OF_CIRCLE_TEXTURE );
-    if( !circleImage )
-        return false;
+    CIMAGE circleImage( SIZE_OF_CIRCLE_TEXTURE, SIZE_OF_CIRCLE_TEXTURE );
 
-    circleImage->CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 2) - 0, (SIZE_OF_CIRCLE_TEXTURE / 2) - 0, (SIZE_OF_CIRCLE_TEXTURE / 2) - 4, 0xFF );
-    //circleImage->CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1, (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1, (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 2, 0xFF );
+    circleImage.CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 2) - 0, (SIZE_OF_CIRCLE_TEXTURE / 2) - 0, (SIZE_OF_CIRCLE_TEXTURE / 2) - 4, 0xFF );
+    //circleImage.CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1, (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1, (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 2, 0xFF );
 
-    CIMAGE *bluredCircle = new CIMAGE( *circleImage );
-    circleImage->EfxFilter( bluredCircle, FILTER_GAUSSIAN_BLUR2 );
+    CIMAGE bluredCircle( circleImage );
+    circleImage.EfxFilter( &bluredCircle, FILTER_GAUSSIAN_BLUR2 );
 
-    m_ogl_circle_texture = OGL_LoadTexture( *circleImage );
+    m_ogl_circle_texture = OGL_LoadTexture( circleImage );
 
-    circleImage->SaveAsPNG("circleImage.png");
-    delete circleImage;
-    circleImage = 0;
+    circleImage.SaveAsPNG("circleImage.png");
 
-    if( bluredCircle )
-    {
-        bluredCircle->SaveAsPNG("circleImage_blured.png");
-        delete bluredCircle;
-        bluredCircle = 0;
-    }
+    bluredCircle.SaveAsPNG("circleImage_blured.png");
 
     m_is_opengl_initialized = true;
     return true;

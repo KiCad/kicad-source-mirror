@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,7 +97,13 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 {
     m_PolarDisplay->SetSelection( m_Parent->m_DisplayOptions.m_DisplayPolarCood ? 1 : 0 );
     m_BoxUnits->SetSelection( g_UserUnit ? 1 : 0 );
+
+    // Cursor shape cannot be implemented on OS X
+#ifdef __APPLE__
+    m_CursorShape->Hide();
+#else
     m_CursorShape->SetSelection( m_Parent->GetCursorShape() ? 1 : 0 );
+#endif // __APPLE__
 
     // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
     m_OptDisplayLines->SetSelection( m_Parent->m_DisplayOptions.m_DisplayLinesFill ? 1 : 0 );
@@ -138,7 +144,10 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
     m_Parent->m_DisplayOptions.m_DisplayPolarCood =
         (m_PolarDisplay->GetSelection() == 0) ? false : true;
     g_UserUnit  = (m_BoxUnits->GetSelection() == 0) ? INCHES : MILLIMETRES;
+
+#ifndef __APPLE__
     m_Parent->SetCursorShape( m_CursorShape->GetSelection() );
+#endif // !__APPLE__
 
     if( m_OptDisplayLines->GetSelection() == 1 )
         m_Parent->m_DisplayOptions.m_DisplayLinesFill = true;

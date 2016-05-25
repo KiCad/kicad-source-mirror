@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,13 +51,12 @@ const int COGL_ATT_LIST::m_openGL_AttributesList[] = {
     WX_GL_STENCIL_SIZE,     1,
     WX_GL_SAMPLE_BUFFERS,   1,  // Enable multisampling support (antialiasing).
     WX_GL_SAMPLES,          0,  // Disable AA for the start.
-    0                           // NULL termination
+    0, 0                        // NULL termination
 };
 
 
 int COGL_ATT_LIST::m_openGL_AttributesList_toUse[
-    sizeof( COGL_ATT_LIST::m_openGL_AttributesList ) /
-    sizeof( COGL_ATT_LIST::m_openGL_AttributesList[0] ) ] = { 0 };
+    DIM( COGL_ATT_LIST::m_openGL_AttributesList ) ] = { 0 };
 
 
 const int *COGL_ATT_LIST::GetAttributesList( bool aUseAntiAliasing )

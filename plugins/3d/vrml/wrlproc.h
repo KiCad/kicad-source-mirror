@@ -87,7 +87,7 @@ public:
     bool ReadGlob( std::string& aGlob );
     // read a VRML name; is similar to ReadGlob except that it enforces
     // name checking rules, does not allow a comma at the end, and
-    // stops when a left brace or bracket is found.
+    // stops when a left/right brace or bracket is found.
     bool ReadName( std::string& aName );
     bool DiscardNode( void );               // discard node data in a matched '{}' set
     bool DiscardList( void );               // discard list data in a matched '[]' set

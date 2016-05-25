@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,13 +21,13 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_userMessage = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_userMessage->Wrap( 1 );
-	m_userMessage->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_userMessage->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bupperSizer->Add( m_userMessage, 0, wxALL, 5 );
 	
 	m_staticTextScope = new wxStaticText( this, wxID_ANY, _("Scope"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextScope->Wrap( -1 );
-	m_staticTextScope->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticTextScope->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bupperSizer->Add( m_staticTextScope, 0, wxALL, 6 );
 	
@@ -60,7 +60,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_staticTextOrder = new wxStaticText( this, wxID_ANY, _("Annotation Order"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOrder->Wrap( -1 );
-	m_staticTextOrder->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticTextOrder->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bupperSizer->Add( m_staticTextOrder, 0, wxALL, 6 );
 	
@@ -108,7 +108,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_staticTextAnnotateAlgo = new wxStaticText( this, wxID_ANY, _("Annotation Choice"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextAnnotateAlgo->Wrap( -1 );
-	m_staticTextAnnotateAlgo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticTextAnnotateAlgo->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerAnnotAlgo->Add( m_staticTextAnnotateAlgo, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -165,7 +165,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	
 	m_staticTextDlgOpts = new wxStaticText( this, wxID_ANY, _("Dialog"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextDlgOpts->Wrap( -1 );
-	m_staticTextDlgOpts->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticTextDlgOpts->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	bSizerDldOptions->Add( m_staticTextDlgOpts, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	

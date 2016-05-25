@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2011-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,9 +73,9 @@ enum drill_G_code_t {
 // Helper struct to analyse Excellon commands
 struct EXCELLON_CMD
 {
-    std::string m_Name;      // key string
-    int    m_Code;      // internal code, used as id in functions
-    int    m_asParams;  // 0 = no param, -1 = skip params, 1 = read params
+    std::string m_Name;     // key string
+    int    m_Code;          // internal code, used as id in functions
+    int    m_asParams;      // 0 = no param, -1 = skip params, 1 = read params
 };
 
 
@@ -94,7 +94,7 @@ private:
         READ_PROGRAM_STATE          // When we are in this state, we are reading drill data
     };
     excellon_state m_State;         // state of excellon file analysis
-    bool           m_SlotOn;        // true during an oval driil definition
+    bool           m_SlotOn;        // true during an oblong drill definition
 
 public: EXCELLON_IMAGE( GERBVIEW_FRAME* aParent, int layer ) :
         GERBER_IMAGE( aParent, layer )
@@ -121,9 +121,14 @@ private:
     bool Execute_EXCELLON_G_Command( char*& text );
     bool Execute_Drill_Command( char*& text );
 
-    int TCodeNumber( char*& Text )
+    /** Read a tool definition like T1C0.02 or T1F00S00C0.02 or T1C0.02F00S00
+     * and enter params in TCODE list
+     */
+    bool readToolInformation( char*& aText );
+
+    int TCodeNumber( char*& aText )
     {
-        return DCodeNumber( Text );
+        return DCodeNumber( aText );
     }
 
 

@@ -386,6 +386,7 @@ bool PNS_OPTIMIZER::checkColliding( PNS_ITEM* aItem, bool aUpdateCache )
 
     return static_cast<bool>( m_world->CheckColliding( aItem ) );
 
+#if 0
     // something is wrong with the cache, need to investigate.
     m_cache.Query( aItem->Shape(), m_world->GetMaxClearance(), v, false );
 
@@ -408,6 +409,7 @@ bool PNS_OPTIMIZER::checkColliding( PNS_ITEM* aItem, bool aUpdateCache )
     }
 
     return false;
+#endif
 }
 
 

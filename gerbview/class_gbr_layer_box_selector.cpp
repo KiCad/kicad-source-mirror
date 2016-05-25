@@ -40,12 +40,13 @@
 
 void GBR_LAYER_BOX_SELECTOR::Resync()
 {
+    #define BM_SIZE 14
     Freeze();
     Clear();
 
     for( int layerid = 0; layerid < GERBER_DRAWLAYERS_COUNT; ++layerid )
     {
-        wxBitmap    layerbmp( 14, 14 );
+        wxBitmap    layerbmp( BM_SIZE, BM_SIZE );
         wxString    layername;
 
         if( !IsLayerEnabled( layerid ) )
@@ -58,6 +59,11 @@ void GBR_LAYER_BOX_SELECTOR::Resync()
 
         Append( layername, layerbmp, (void*)(intptr_t) layerid );
     }
+
+    // Ensure the width of the widget is enough to show the text and the icon
+    SetMinSize( wxSize( -1, -1 ) );
+    int minwidth = GetBestSize().x + BM_SIZE + 10;
+    SetMinSize( wxSize( minwidth, -1 ) );
 
     Thaw();
 }

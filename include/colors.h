@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,7 +137,7 @@ struct StructColors
     unsigned char   m_Red;
     EDA_COLOR_T     m_Numcolor;
 
-    const wxChar*   m_Name;
+    const wxChar*   m_ColorName;
     EDA_COLOR_T     m_LightColor;
 };
 
@@ -177,7 +177,7 @@ inline const wxChar *ColorGetName( EDA_COLOR_T aColor )
 {
     EDA_COLOR_T base = ColorGetBase( aColor );
     wxASSERT( base > UNSPECIFIED_COLOR && base < NBCOLORS );
-    return g_ColorRefs[base].m_Name;
+    return g_ColorRefs[base].m_ColorName;
 }
 
 inline void ColorSetBrush( wxBrush *aBrush, EDA_COLOR_T aColor )

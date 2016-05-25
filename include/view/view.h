@@ -463,10 +463,8 @@ public:
     /**
      * Function RecacheAllItems()
      * Rebuilds GAL display lists.
-     * @param aForceNow decides if every item should be instantly recached. Otherwise items are
-     * going to be recached when they become visible.
      */
-    void RecacheAllItems( bool aForceNow = false );
+    void RecacheAllItems();
 
     /**
      * Function IsDynamic()

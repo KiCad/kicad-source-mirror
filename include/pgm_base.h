@@ -140,7 +140,7 @@ public:
      *          been set.
      */
     VTBL_ENTRY const wxString& GetEditorName( bool aCanShowFileChooser = true );
-    
+
     /**
      * Shows a dialog that instructs the user to select a new preferred editor.
      * @param   aDefaultEditor Default full path for the default editor this dialog should

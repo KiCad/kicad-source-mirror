@@ -188,6 +188,12 @@ public:
      */
     virtual bool LoadGalSettings();
 
+    /**
+     * Function OnShow()
+     * Called when the window is shown for the first time.
+     */
+    virtual void OnShow() {}
+
 protected:
     void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
@@ -195,6 +201,7 @@ protected:
     void onEnter( wxEvent& aEvent );
     void onLostFocus( wxFocusEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
+    void onShowTimer( wxTimerEvent& aEvent );
 
     static const int MinRefreshPeriod = 17;             ///< 60 FPS.
 
@@ -218,6 +225,9 @@ protected:
 
     /// Timer responsible for preventing too frequent refresh
     wxTimer                  m_refreshTimer;
+
+    /// Timer used to execute OnShow() when the window finally appears on the screen.
+    wxTimer                  m_onShowTimer;
 
     /// Interface for drawing objects on a 2D-surface
     KIGFX::GAL*              m_gal;

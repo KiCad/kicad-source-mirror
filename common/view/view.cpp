@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -695,8 +696,8 @@ struct VIEW::unlinkItem
 
 struct VIEW::recacheItem
 {
-    recacheItem( VIEW* aView, GAL* aGal, int aLayer, bool aImmediately ) :
-        view( aView ), gal( aGal ), layer( aLayer ), immediately( aImmediately )
+    recacheItem( VIEW* aView, GAL* aGal, int aLayer ) :
+        view( aView ), gal( aGal ), layer( aLayer )
     {
     }
 
@@ -708,21 +709,8 @@ struct VIEW::recacheItem
         if( group >= 0 )
             gal->DeleteGroup( group );
 
-        if( immediately )
-        {
-            group = gal->BeginGroup();
-            aItem->setGroup( layer, group );
-
-            if( !view->m_painter->Draw( aItem, layer ) )
-                aItem->ViewDraw( layer, gal ); // Alternative drawing method
-
-            gal->EndGroup();
-        }
-        else
-        {
-            aItem->ViewUpdate( VIEW_ITEM::ALL );
-            aItem->setGroup( layer, -1 );
-        }
+        aItem->setGroup( layer, -1 );
+        aItem->ViewUpdate( VIEW_ITEM::ALL );
 
         return true;
     }
@@ -730,7 +718,6 @@ struct VIEW::recacheItem
     VIEW* view;
     GAL* gal;
     int layer;
-    bool immediately;
 };
 
 
@@ -1005,18 +992,11 @@ bool VIEW::areRequiredLayersEnabled( int aLayerId ) const
 }
 
 
-void VIEW::RecacheAllItems( bool aImmediately )
+void VIEW::RecacheAllItems()
 {
     BOX2I r;
 
     r.SetMaximum();
-
-#ifdef __WXDEBUG__
-    prof_counter totalRealTime;
-    prof_start( &totalRealTime );
-#endif /* __WXDEBUG__ */
-
-    m_gal->BeginUpdate();
 
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
@@ -1024,27 +1004,17 @@ void VIEW::RecacheAllItems( bool aImmediately )
 
         if( IsCached( l->id ) )
         {
-            m_gal->SetTarget( l->target );
-            m_gal->SetLayerDepth( l->renderingOrder );
-            recacheItem visitor( this, m_gal, l->id, aImmediately );
+            recacheItem visitor( this, m_gal, l->id );
             l->items->Query( r, visitor );
-            MarkTargetDirty( l->target );
         }
     }
-
-    m_gal->EndUpdate();
-
-#ifdef __WXDEBUG__
-    prof_end( &totalRealTime );
-    wxLogTrace( "GAL_PROFILE", wxT( "RecacheAllItems::immediately: %u %.1f ms" ),
-                aImmediately, totalRealTime.msecs() );
-#endif /* __WXDEBUG__ */
 }
 
 
 void VIEW::UpdateItems()
 {
-    // Update items that need this
+    m_gal->BeginUpdate();
+
     BOOST_FOREACH( VIEW_ITEM* item, m_needsUpdate )
     {
         assert( item->viewRequiredUpdate() != VIEW_ITEM::NONE );
@@ -1052,6 +1022,7 @@ void VIEW::UpdateItems()
         invalidateItem( item, item->viewRequiredUpdate() );
     }
 
+    m_gal->EndUpdate();
     m_needsUpdate.clear();
 }
 

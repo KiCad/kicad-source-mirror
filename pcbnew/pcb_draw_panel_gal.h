@@ -80,6 +80,9 @@ public:
     ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
     void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList );
 
+    ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
+    void OnShow() override;
+
 protected:
     ///> Reassigns layer order to the initial settings.
     void setDefaultLayerOrder();

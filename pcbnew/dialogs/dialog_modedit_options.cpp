@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,8 +106,6 @@ void DIALOG_MODEDIT_OPTIONS::initValues()
     m_choiceLayerValue->SetSelection( sel );
     sel = m_brdSettings.m_ValueDefaultVisibility ? 0 : 1;
     m_choiceVisibleValue->SetSelection( sel );
-
-    m_spinMaxUndoItems->SetValue( m_parent->GetScreen()->GetMaxUndoItems() );
 }
 
 
@@ -133,8 +131,6 @@ void DIALOG_MODEDIT_OPTIONS::OnOkClick( wxCommandEvent& event )
     m_brdSettings.m_ValueDefaultVisibility = sel != 1;
 
     m_parent->SetDesignSettings( m_brdSettings );
-
-    m_parent->GetScreen()->SetMaxUndoItems( m_spinMaxUndoItems->GetValue() );
 
     EndModal( wxID_OK );
 }

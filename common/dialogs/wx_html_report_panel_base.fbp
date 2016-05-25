@@ -84,13 +84,14 @@
                 <property name="minimum_size"></property>
                 <property name="name">m_box</property>
                 <property name="orient">wxVERTICAL</property>
+                <property name="parent">1</property>
                 <property name="permission">protected</property>
                 <event name="OnUpdateUI"></event>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND|wxALL</property>
                     <property name="proportion">1</property>
-                    <object class="wxFlexGridSizer" expanded="0">
+                    <object class="wxFlexGridSizer" expanded="1">
                         <property name="cols">1</property>
                         <property name="flexible_direction">wxBOTH</property>
                         <property name="growablecols">0</property>

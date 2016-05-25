@@ -350,6 +350,8 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
             m_toolMgr->ProcessEvent( SelectedEvent );
         }
     }
+
+    m_frame->GetGalCanvas()->ForceRefresh();
 }
 
 

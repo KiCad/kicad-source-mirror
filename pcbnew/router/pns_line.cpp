@@ -580,8 +580,8 @@ void PNS_LINE::DragSegment ( const VECTOR2I& aP, int aIndex, int aSnappingThresh
     s_next = path.CSegment( index + 1 );
     dragged = path.CSegment( index );
 
-    bool lockEndpointA = true;
-    bool lockEndpointB = true;
+    const bool lockEndpointA = true;
+    const bool lockEndpointB = true;
 
     if( aIndex == 0 )
     {

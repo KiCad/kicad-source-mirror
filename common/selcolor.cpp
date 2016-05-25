@@ -152,7 +152,7 @@ void CHOOSE_COLOR_DLG::init_Dialog()
         if( m_color == buttcolor )
             focusedButton = bitmapButton;
 
-        wxStaticText* label = new wxStaticText( this, -1, ColorGetName( buttcolor ),
+        wxStaticText* label = new wxStaticText( this, -1, wxGetTranslation( ColorGetName( buttcolor ) ),
                                         wxDefaultPosition, wxDefaultSize, 0 );
         FlexColumnBoxSizer->Add( label, 1,
                                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |

@@ -125,8 +125,8 @@ public:
         :m_screen( aScreen ), m_component( aComponent )
     {
         m_component->GetFields( m_fields, /* aVisibleOnly */ true );
-        Kiface().KifaceSettings()->Read( AUTOPLACE_JUSTIFY_KEY, &m_allow_rejustify, true );
-        Kiface().KifaceSettings()->Read( AUTOPLACE_ALIGN_KEY, &m_align_to_grid, false );
+        Kiface().KifaceSettings()->Read( AutoplaceJustifyEntry, &m_allow_rejustify, true );
+        Kiface().KifaceSettings()->Read( AutoplaceAlignEntry, &m_align_to_grid, false );
 
         m_comp_bbox = m_component->GetBodyBoundingBox();
         m_fbox_size = ComputeFBoxSize( /* aDynamic */ true );

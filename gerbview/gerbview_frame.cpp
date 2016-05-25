@@ -313,10 +313,12 @@ void GERBVIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 void GERBVIEW_FRAME::ReFillLayerWidget()
 {
     m_LayersManager->ReFill();
+    m_SelLayerBox->Resync();
 
     wxAuiPaneInfo&  lyrs = m_auimgr.GetPane( m_LayersManager );
 
     wxSize          bestz = m_LayersManager->GetBestSize();
+    bestz.x += 5;   // gives a little margin
 
     lyrs.MinSize( bestz );
     lyrs.BestSize( bestz );
@@ -384,9 +386,11 @@ void GERBVIEW_FRAME::syncLayerWidget()
 }
 
 
-void GERBVIEW_FRAME::syncLayerBox()
+void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
 {
-    m_SelLayerBox->Resync();
+    if( aRebuildLayerBox )
+        m_SelLayerBox->Resync();
+
     m_SelLayerBox->SetSelection( getActiveLayer() );
 
     int             dcodeSelected = -1;
@@ -452,9 +456,9 @@ void GERBVIEW_FRAME::Liste_D_Codes()
                          );
 
             if( !pt_D_code->m_Defined )
-                Line += wxT( "(not used)" );
+                Line += wxT( "(not defined) " );
 
-            if( !pt_D_code->m_InUse )
+            if( pt_D_code->m_InUse )
                 Line += wxT( "(in use)" );
 
             list.Add( Line );
@@ -481,7 +485,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
         text.Printf( wxT( "GerbView %s" ), GetChars( GetBuildVersion() ) );
         SetTitle( text );
         SetStatusText( wxEmptyString, 0 );
-        text.Printf( _( "Layer %d not in use" ), getActiveLayer() + 1 );
+        text.Printf( _( "Drawing layer %d not in use" ), getActiveLayer() + 1 );
         m_TextInfo->SetValue( text );
         ClearMsgPanel();
         return;

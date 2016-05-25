@@ -212,7 +212,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     case ID_SORT_GBR_LAYERS:
         g_GERBER_List.SortImagesByZOrder( myframe->GetItemsList() );
         myframe->ReFillLayerWidget();
-        myframe->syncLayerBox();
+        myframe->syncLayerBox( true );
         myframe->GetCanvas()->Refresh();
         break;
     }

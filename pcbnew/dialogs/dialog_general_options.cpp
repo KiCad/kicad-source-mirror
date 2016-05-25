@@ -64,14 +64,18 @@ void DIALOG_GENERALOPTIONS::init()
     /* Set display options */
     m_PolarDisplay->SetSelection( displ_opts->m_DisplayPolarCood ? 1 : 0 );
     m_UnitsSelection->SetSelection( g_UserUnit ? 1 : 0 );
+
+    // Cursor shape cannot be implemented on OS X
+#ifdef __APPLE__
+    m_CursorShape->Hide();
+#else
     m_CursorShape->SetSelection( GetParent()->GetCursorShape() ? 1 : 0 );
+#endif // __APPLE__
 
 
     wxString rotationAngle;
     rotationAngle = AngleToStringDegrees( (double)GetParent()->GetRotationAngle() );
     m_RotationAngle->SetValue( rotationAngle );
-
-    m_spinMaxUndoItems->SetValue( GetParent()->GetScreen()->GetMaxUndoItems() );
 
     wxString timevalue;
     timevalue << GetParent()->GetAutoSaveInterval() / 60;
@@ -93,7 +97,6 @@ void DIALOG_GENERALOPTIONS::init()
     m_Track_DoubleSegm_Ctrl->SetValue( g_TwoSegmentTrackBuild );
     m_MagneticPadOptCtrl->SetSelection( g_MagneticPadOption );
     m_MagneticTrackOptCtrl->SetSelection( g_MagneticTrackOption );
-    m_DumpZonesWhenFilling->SetValue ( g_DumpZonesWhenFilling );
 }
 
 
@@ -115,11 +118,11 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     if( ii != g_UserUnit )
         GetParent()->ReCreateAuxiliaryToolbar();
 
+#ifndef __APPLE__
     GetParent()->SetCursorShape( m_CursorShape->GetSelection() );
+#endif // !__APPLE__
     GetParent()->SetAutoSaveInterval( m_SaveTime->GetValue() * 60 );
     GetParent()->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
-
-    GetParent()->GetScreen()->SetMaxUndoItems( m_spinMaxUndoItems->GetValue() );
 
     /* Updating the combobox to display the active layer. */
     displ_opts->m_MaxLinksShowed = m_MaxShowLinks->GetValue();
@@ -146,7 +149,6 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
     g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
     g_MagneticTrackOption = m_MagneticTrackOptCtrl->GetSelection();
-    g_DumpZonesWhenFilling = m_DumpZonesWhenFilling->GetValue();
 
     EndModal( wxID_OK );
 }

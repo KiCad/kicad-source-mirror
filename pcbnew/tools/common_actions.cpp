@@ -399,9 +399,17 @@ TOOL_ACTION COMMON_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbS
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION COMMON_ACTIONS::toggleLockModule( "pcbnew.EditorControl.toggleLockModule",
+TOOL_ACTION COMMON_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         AS_GLOBAL, 'L',
-        "", "" );
+        "Toggle lock", "" );
+
+TOOL_ACTION COMMON_ACTIONS::lock( "pcbnew.EditorControl.lock",
+        AS_GLOBAL, 0,
+        _( "Lock" ), "" );
+
+TOOL_ACTION COMMON_ACTIONS::unlock( "pcbnew.EditorControl.unlock",
+        AS_GLOBAL, 0,
+        _( "Unlock" ), "" );
 
 TOOL_ACTION COMMON_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         AS_GLOBAL, 0,

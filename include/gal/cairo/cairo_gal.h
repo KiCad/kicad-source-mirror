@@ -85,6 +85,11 @@ public:
 
     virtual ~CAIRO_GAL();
 
+    ///> @copydoc GAL::IsVisible()
+    bool IsVisible() const override {
+        return IsShownOnScreen();
+    }
+
     // ---------------
     // Drawing methods
     // ---------------

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version May 10 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,7 +24,6 @@ class DIALOG_SHIM;
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/choice.h>
-#include <wx/spinctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -67,11 +66,6 @@ class DIALOG_MODEDIT_OPTIONS_BASE : public DIALOG_SHIM
 		wxChoice* m_choiceLayerValue;
 		wxStaticText* m_staticTextValVisibility;
 		wxChoice* m_choiceVisibleValue;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_stGeneral;
-		wxStaticText* m_stMaxUndoItems;
-		wxSpinCtrl* m_spinMaxUndoItems;
-		wxStaticText* m_stMaxUndoItemsUnit;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

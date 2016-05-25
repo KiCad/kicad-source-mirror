@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version May 10 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -135,17 +135,6 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	
 	fgSizer->Add( 0, 0, 0, 0, 5 );
-	
-	m_stMaxUndoItems = new wxStaticText( this, wxID_ANY, _("Ma&ximum undo items (0 = unlimited):"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMaxUndoItems->Wrap( -1 );
-	fgSizer->Add( m_stMaxUndoItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
-	m_spinMaxUndoItems = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65536, 0 );
-	fgSizer->Add( m_spinMaxUndoItems, 0, wxALL|wxEXPAND, 5 );
-	
-	m_stMaxUndoItemsUnit = new wxStaticText( this, wxID_ANY, _("actions"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stMaxUndoItemsUnit->Wrap( -1 );
-	fgSizer->Add( m_stMaxUndoItemsUnit, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizer3->Add( fgSizer, 0, wxEXPAND, 0 );

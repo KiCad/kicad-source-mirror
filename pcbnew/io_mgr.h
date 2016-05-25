@@ -5,7 +5,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,8 @@ public:
 
         // ALTIUM,
         // etc.
+
+        FILE_TYPE_NONE
     };
 
     /**

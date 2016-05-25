@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,17 +21,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __CVPCB_H__
-#define __CVPCB_H__
+/**
+ * @file i18n_utility.h
+ * @brief Some functions to handle hotkeys in KiCad
+ */
 
-// config for footprints doc file access
-#define DEFAULT_FOOTPRINTS_LIST_FILENAME wxT( "footprints_doc/footprints.pdf" )
+#ifndef  I18N_UTILITY_H
+#define  I18N_UTILITY_H
 
-// Define print format to display a schematic component line
-#define CMP_FORMAT wxT( "%3d %8s - %16s : %s" )
+// A define to allow translation of strings which must be stored in English (for instance
+// because they are used both as keywords and as messages in dialogs
+// We do not want to use the _( x ) usual macro from wxWidgets, which calls wxGetTranslation(),
+// because the English string is used in key file configuration
+// The translated string is used only when displaying the help window.
+// Therefore translation tools have to use the "_" and the "_HKI" prefix to extract
+// strings to translate
+#define _HKI( x ) wxT( x )
 
-extern const wxString EquFileExtension;
-extern const wxString EquFilesWildcard;
-
-
-#endif /* __CVPCB_H__ */
+#endif // I18N_UTILITY_H

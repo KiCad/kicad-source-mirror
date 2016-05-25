@@ -191,14 +191,23 @@ void SCH_BITMAP::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset
 {
     wxPoint pos = m_Pos + aOffset;
 
-    GRSetDrawMode( aDC, aDrawMode );
-
     if( aColor < 0 )    // Use normal drawing function
     {
+        // https://bugs.launchpad.net/kicad/+bug/1529163
+        // "Moving images in eeschema on OS X uses
+        //  wrong position and shows image flipped"
+        //
+        // Original fix was to only GRSetDrawMode if aColor >= 0, but this made
+        // moving SCH_BITMAP work poorly on other platforms.
+#ifndef __WXMAC__
+        GRSetDrawMode( aDC, aDrawMode );
+#endif
+
         m_Image->DrawBitmap( aPanel, aDC, pos );
     }
     else    // draws bounding box only (used to move items)
     {
+        GRSetDrawMode( aDC, aDrawMode );
         // To draw the rect, pos is the upper left corner position
         wxSize size = m_Image->GetSize();
         pos.x -= size.x / 2;

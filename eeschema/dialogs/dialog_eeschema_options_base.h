@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version May 10 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -43,15 +43,15 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 {
 	DECLARE_EVENT_TABLE()
 	private:
-
+		
 		// Private event handlers
 		void _wxFB_OnSize( wxSizeEvent& event ){ OnSize( event ); }
 		void _wxFB_OnChooseUnits( wxCommandEvent& event ){ OnChooseUnits( event ); }
 		void _wxFB_OnMiddleBtnPanEnbl( wxCommandEvent& event ){ OnMiddleBtnPanEnbl( event ); }
 		void _wxFB_OnAddButtonClick( wxCommandEvent& event ){ OnAddButtonClick( event ); }
 		void _wxFB_OnDeleteButtonClick( wxCommandEvent& event ){ OnDeleteButtonClick( event ); }
-
-
+		
+	
 	protected:
 		enum
 		{
@@ -60,7 +60,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 			wxID_ADD_FIELD,
 			wxID_DELETE_FIELD
 		};
-
+		
 		wxNotebook* m_notebook;
 		wxPanel* m_panel5;
 		wxStaticText* m_staticText3;
@@ -93,9 +93,6 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText7;
 		wxSpinCtrl* m_spinTextSize;
 		wxStaticText* m_staticTextSizeUnits;
-		wxStaticText* m_stMaxUndoItems;
-		wxSpinCtrl* m_spinMaxUndoItems;
-		wxStaticText* m_staticText22;
 		wxStaticText* m_staticText221;
 		wxSpinCtrl* m_spinAutoSaveInterval;
 		wxStaticText* m_staticText23;
@@ -122,20 +119,20 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnChooseUnits( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMiddleBtnPanEnbl( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteButtonClick( wxCommandEvent& event ) { event.Skip(); }
-
-
+		
+	
 	public:
-
-		DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EESCHEMA_OPTIONS_BASE();
-
+	
 };
 
 #endif //__DIALOG_EESCHEMA_OPTIONS_BASE_H__

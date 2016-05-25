@@ -85,8 +85,6 @@ CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     // Allocate memory for pixel storage
     allocateBitmaps();
-
-    initSurface();
 }
 
 

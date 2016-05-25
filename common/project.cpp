@@ -306,7 +306,7 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList,
 void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName,
         const PARAM_CFG_ARRAY& aParams, const wxString& aFileName )
 {
-    std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName, aFileName ) );
+    std::unique_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName, aFileName ) );
 
     if( !cfg.get() )
     {
@@ -334,14 +334,14 @@ void PROJECT::ConfigSave( const SEARCH_STACK& aSList, const wxString& aGroupName
 
     cfg->SetPath( wxT( "/" ) );
 
-    // cfg is deleted here by std::auto_ptr, that saves the *.pro file to disk
+    // cfg is deleted here by std::unique_ptr, that saves the *.pro file to disk
 }
 
 
 bool PROJECT::ConfigLoad( const SEARCH_STACK& aSList, const wxString&  aGroupName,
         const PARAM_CFG_ARRAY& aParams, const wxString& aForeignProjectFileName )
 {
-    std::auto_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName, aForeignProjectFileName ) );
+    std::unique_ptr<wxConfigBase> cfg( configCreate( aSList, aGroupName, aForeignProjectFileName ) );
 
     if( !cfg.get() )
     {

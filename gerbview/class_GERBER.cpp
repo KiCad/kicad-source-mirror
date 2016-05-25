@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,14 +122,14 @@ GERBER_DRAW_ITEM * GERBER_IMAGE::GetItemsList()
     return m_Parent->GetItemsList();
 }
 
-D_CODE* GERBER_IMAGE::GetDCODE( int aDCODE, bool create )
+D_CODE* GERBER_IMAGE::GetDCODE( int aDCODE, bool aCreateIfNoExist )
 {
     unsigned ndx = aDCODE - FIRST_DCODE;
 
     if( ndx < (unsigned) DIM( m_Aperture_List ) )
     {
         // lazily create the D_CODE if it does not exist.
-        if( create )
+        if( aCreateIfNoExist )
         {
             if( m_Aperture_List[ndx] == NULL )
                 m_Aperture_List[ndx] = new D_CODE( ndx + FIRST_DCODE );
@@ -137,6 +137,7 @@ D_CODE* GERBER_IMAGE::GetDCODE( int aDCODE, bool create )
 
         return m_Aperture_List[ndx];
     }
+
     return NULL;
 }
 
@@ -460,29 +461,47 @@ const wxString GERBER_IMAGE_LIST::GetDisplayName( int aIdx )
     if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() )
         gerber = m_GERBER_List[aIdx];
 
+    // if a file is loaded, build the name:
+    // <id> <short filename> <X2 FileFunction info> if a X2 FileFunction info is found
+    // or (if no FileFunction info)
+    // <id> <short filename> *
     if( gerber && IsUsed(aIdx ) )
     {
+        wxFileName fn( gerber->m_FileName );
+        wxString filename = fn.GetFullName();
+
+        // if the filename is too long, display a shortened name:
+        const int maxlen = 30;
+
+        if( filename.Length() > maxlen )
+        {
+            wxString shortenedfn = filename.Left(2) + "..." + filename.Right(maxlen-5);
+            filename = shortenedfn;
+        }
+
         if( gerber->m_FileFunction )
         {
             if( gerber->m_FileFunction->IsCopper() )
             {
-                name.Printf( _( "Layer %d (%s, %s, %s)" ), aIdx + 1,
+                name.Printf( "%d %s (%s, %s, %s)", aIdx + 1,
+                             filename.GetData(),
                              GetChars( gerber->m_FileFunction->GetFileType() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerId() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerSide() ) );
             }
             else
             {
-                name.Printf( _( "Layer %d (%s, %s)" ), aIdx + 1,
+                name.Printf( "%d %s (%s, %s)", aIdx + 1,
+                             filename.GetData(),
                              GetChars( gerber->m_FileFunction->GetFileType() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerId() ) );
             }
         }
         else
-            name.Printf( _( "Layer %d *" ), aIdx + 1 );
+            name.Printf( _( "%d %s" ), aIdx + 1, filename.GetData() );
     }
     else
-        name.Printf( _( "Layer %d" ), aIdx + 1 );
+        name.Printf( _( "Graphic layer %d" ), aIdx + 1 );
 
     return name;
 }

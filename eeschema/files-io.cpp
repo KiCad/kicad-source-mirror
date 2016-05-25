@@ -312,7 +312,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // Only do this if RescueNeverShow was not set.
         wxConfigBase *config = Kiface().KifaceSettings();
         bool rescueNeverShow = false;
-        config->Read( RESCUE_NEVER_SHOW_KEY, &rescueNeverShow, false );
+        config->Read( RescueNeverShowEntry, &rescueNeverShow, false );
 
         if( !rescueNeverShow )
         {

@@ -164,3 +164,5 @@ controls so text should be quoted with single quotes ''.  e.g.:
 [wxwidgets-doc]:http://docs.wxwidgets.org/3.0/
 [wxdialog-setescapeid]:http://docs.wxwidgets.org/3.0/classwx_dialog.html#a585869988e308f549128a6a065f387c6
 [wxwidgets-sizers]:http://docs.wxwidgets.org/3.0/overview_sizer.html
+[wxwidgets-validator]:http://docs.wxwidgets.org/3.0/overview_validator.html
+[kicad-src-dialog-shim]:http://bazaar.launchpad.net/~kicad-product-committers/kicad/product/view/head:/common/dialog_shim.cpp
