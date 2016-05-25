@@ -34,7 +34,7 @@
 #include <trigo.h>
 
 #include <gerbview_frame.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <convert_to_biu.h>
 
 #define DCODE_DEFAULT_SIZE Millimeter2iu( 0.1 )

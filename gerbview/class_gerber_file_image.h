@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010-2013 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,22 +50,22 @@ class D_CODE;
  *  in GERBER_ITEM items, when instancied.
  *
  *  In GerbView, to handle these parameters, there are 2 classes:
- *  GERBER_IMAGE : the main class containing most of parameters and data to plot a graphic layer
+ *  GERBER_FILE_IMAGE : the main class containing most of parameters and data to plot a graphic layer
  *  Some of them can change along the file
- *  There is one GERBER_IMAGE per file and one graphic layer per file or GERBER_IMAGE
+ *  There is one GERBER_FILE_IMAGE per file and one graphic layer per file or GERBER_FILE_IMAGE
  *  GerbView does not read and merge 2 gerber file in one graphic layer:
  *  I believe this is not possible due to the constraints in Image parameters.
  *  GERBER_LAYER : containing the subset of parameters that is layer speficic
- *  A GERBER_IMAGE must include one GERBER_LAYER to define all parameters to plot a file.
- *  But a GERBER_IMAGE can use more than one GERBER_LAYER.
+ *  A GERBER_FILE_IMAGE must include one GERBER_LAYER to define all parameters to plot a file.
+ *  But a GERBER_FILE_IMAGE can use more than one GERBER_LAYER.
  */
 
-class GERBER_IMAGE;
+class GERBER_FILE_IMAGE;
 class X2_ATTRIBUTE_FILEFUNCTION;
 
 class GERBER_LAYER
 {
-    friend class GERBER_IMAGE;
+    friend class GERBER_FILE_IMAGE;
 public:
 
     // These parameters are layer specfic:
@@ -88,13 +88,13 @@ private:
 };
 
 /**
- * Class GERBER_IMAGE
+ * Class GERBER_FILE_IMAGE
  * holds the Image data and parameters for one gerber file
  * and layer parameters (TODO: move them in GERBER_LAYER class
  */
-class GERBER_IMAGE
+class GERBER_FILE_IMAGE
 {
-    GERBVIEW_FRAME*    m_Parent;                            // the parent GERBVIEW_FRAME (used to display messages...)
+    GERBVIEW_FRAME*    m_parent;                            // the parent GERBVIEW_FRAME (used to display messages...)
     D_CODE*            m_Aperture_List[TOOLS_MAX_COUNT];    ///< Dcode (Aperture) List for this layer (max 999)
     bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
 
@@ -164,19 +164,19 @@ private:
                                                                 // 1 = have negative items found
 
 public:
-    GERBER_IMAGE( GERBVIEW_FRAME* aParent, int layer );
-    virtual ~GERBER_IMAGE();
-    void Clear_GERBER_IMAGE();
+    GERBER_FILE_IMAGE( GERBVIEW_FRAME* aParent, int layer );
+    virtual ~GERBER_FILE_IMAGE();
+    void Clear_GERBER_FILE_IMAGE();
     int  UsedDcodeNumber();
     virtual void ResetDefaultValues();
 
     /**
      * Function GetParent
-     * @return the GERBVIEW_FRAME parent of this GERBER_IMAGE
+     * @return the GERBVIEW_FRAME parent of this GERBER_FILE_IMAGE
      */
     GERBVIEW_FRAME* GetParent() const
     {
-        return m_Parent;
+        return m_parent;
     }
 
     /**
@@ -313,30 +313,30 @@ public:
 };
 
 /**
- * @brief GERBER_IMAGE_LIST is a helper class to handle a list of GERBER_IMAGE files
+ * @brief GERBER_FILE_IMAGE_LIST is a helper class to handle a list of GERBER_FILE_IMAGE files
  * which are loaded and can be displayed
  * there are 32 images max which can be loaded
  */
-class GERBER_IMAGE_LIST
+class GERBER_FILE_IMAGE_LIST
 {
     // the list of loaded images (1 image = 1 gerber file)
-    std::vector<GERBER_IMAGE*> m_GERBER_List;
+    std::vector<GERBER_FILE_IMAGE*> m_GERBER_List;
 
 public:
-    GERBER_IMAGE_LIST();
-    ~GERBER_IMAGE_LIST();
+    GERBER_FILE_IMAGE_LIST();
+    ~GERBER_FILE_IMAGE_LIST();
 
     //Accessor
-    GERBER_IMAGE* GetGbrImage( int aIdx );
+    GERBER_FILE_IMAGE* GetGbrImage( int aIdx );
 
     /**
-     * Add a GERBER_IMAGE* at index aIdx
+     * Add a GERBER_FILE_IMAGE* at index aIdx
      * or at the first free location if aIdx < 0
      * @param aGbrImage = the image to add
      * @param aIdx = the location to use ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
      * @return true if the index used, or -1 if no room to add image
      */
-    int AddGbrImage( GERBER_IMAGE* aGbrImage, int aIdx );
+    int AddGbrImage( GERBER_FILE_IMAGE* aGbrImage, int aIdx );
 
 
     /**
@@ -378,6 +378,6 @@ public:
 };
 
 
-extern GERBER_IMAGE_LIST g_GERBER_List;
+extern GERBER_FILE_IMAGE_LIST g_GERBER_List;
 
 #endif  // ifndef _CLASS_GERBER_H_

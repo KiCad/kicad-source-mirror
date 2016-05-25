@@ -36,7 +36,7 @@
 #include <gerbview_frame.h>
 #include <kicad_device_context.h>
 #include <gerbview_id.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <dialog_helpers.h>
 #include <class_DCodeSelectionbox.h>
 #include <class_gerbview_layer_widget.h>
@@ -221,7 +221,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
 {
-    GERBER_IMAGE* gerber_image = g_GERBER_List.GetGbrImage( getActiveLayer() );
+    GERBER_FILE_IMAGE* gerber_image = g_GERBER_List.GetGbrImage( getActiveLayer() );
 
     if( gerber_image )
     {
@@ -253,7 +253,7 @@ void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
 void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
 {
     int     layer = getActiveLayer();
-    GERBER_IMAGE* gerber_layer = g_GERBER_List.GetGbrImage( layer );
+    GERBER_FILE_IMAGE* gerber_layer = g_GERBER_List.GetGbrImage( layer );
 
     if( gerber_layer )
     {

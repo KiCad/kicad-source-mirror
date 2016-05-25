@@ -25,7 +25,7 @@
 #include <fctsys.h>
 #include <common.h>
 
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <base_units.h>
 
 
@@ -69,7 +69,7 @@ int scaletoIU( double aCoord, bool isMetric )
 }
 
 
-wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
+wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text )
 {
     wxPoint pos;
     int     type_coord = 0, current_coord, nbdigits;
@@ -169,7 +169,7 @@ wxPoint GERBER_IMAGE::ReadXYCoord( char*& Text )
  * These coordinates are relative, so if coordinate is absent, it's value
  * defaults to 0
  */
-wxPoint GERBER_IMAGE::ReadIJCoord( char*& Text )
+wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
 {
     wxPoint pos( 0, 0 );
 

@@ -27,7 +27,7 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <dialog_helpers.h>
 
 /* Process the command triggered by the left button of the mouse
@@ -41,7 +41,7 @@ void GERBVIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 
     if( DrawStruct == NULL )
     {
-        GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( getActiveLayer() );
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( getActiveLayer() );
 
         if( gerber )
             gerber->DisplayImageInfo( );

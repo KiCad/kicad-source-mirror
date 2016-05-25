@@ -231,10 +231,10 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
         // To plot mirror, we reverse the x axis, and modify the plot x origin
         dc->SetAxisOrientation( false, false );
 
-        /* Plot offset x is moved by the x plot area size in order to have
-         * the old draw area in the new draw area, because the draw origin has not moved
-         * (this is the upper left corner) but the X axis is reversed, therefore the plotting area
-         * is the x coordinate values from  - PlotAreaSize.x to 0 */
+        /* Change plot offset in order to have the draw area at the same location.
+         * The plot origin X is just moved from 0 to PlotAreaSizeInPixels.x.
+         * just set offset x at PlotAreaSizeInPixels.x.
+         */
         int x_dc_offset = PlotAreaSizeInPixels.x;
         x_dc_offset = KiROUND( x_dc_offset  * userscale );
         dc->SetDeviceOrigin( x_dc_offset, 0 );

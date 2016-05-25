@@ -1,5 +1,5 @@
 /**
- * @file class_GERBER.cpp
+ * @file class_gerber_file_image.cpp
  * a GERBER class handle for a given layer info about used D_CODES and how the layer is drawn
  */
 
@@ -34,7 +34,7 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <class_X2_gerber_attributes.h>
 
 #include <algorithm>
@@ -87,9 +87,9 @@ void GERBER_LAYER::ResetDefaultValues()
 }
 
 
-GERBER_IMAGE::GERBER_IMAGE( GERBVIEW_FRAME* aParent, int aLayer )
+GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( GERBVIEW_FRAME* aParent, int aLayer )
 {
-    m_Parent = aParent;
+    //m_parent = aParent;
     m_GraphicLayer = aLayer;        // Graphic layer Number
 
     m_Selected_Tool = FIRST_DCODE;
@@ -102,7 +102,7 @@ GERBER_IMAGE::GERBER_IMAGE( GERBVIEW_FRAME* aParent, int aLayer )
 }
 
 
-GERBER_IMAGE::~GERBER_IMAGE()
+GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 {
     for( unsigned ii = 0; ii < DIM( m_Aperture_List ); ii++ )
     {
@@ -116,12 +116,12 @@ GERBER_IMAGE::~GERBER_IMAGE()
  * Function GetItemsList
  * returns the first GERBER_DRAW_ITEM * item of the items list
  */
-GERBER_DRAW_ITEM * GERBER_IMAGE::GetItemsList()
+GERBER_DRAW_ITEM * GERBER_FILE_IMAGE::GetItemsList()
 {
-    return m_Parent->GetItemsList();
+    return m_parent->GetItemsList();
 }
 
-D_CODE* GERBER_IMAGE::GetDCODE( int aDCODE, bool aCreateIfNoExist )
+D_CODE* GERBER_FILE_IMAGE::GetDCODE( int aDCODE, bool aCreateIfNoExist )
 {
     unsigned ndx = aDCODE - FIRST_DCODE;
 
@@ -141,7 +141,7 @@ D_CODE* GERBER_IMAGE::GetDCODE( int aDCODE, bool aCreateIfNoExist )
 }
 
 
-APERTURE_MACRO* GERBER_IMAGE::FindApertureMacro( const APERTURE_MACRO& aLookup )
+APERTURE_MACRO* GERBER_FILE_IMAGE::FindApertureMacro( const APERTURE_MACRO& aLookup )
 {
     APERTURE_MACRO_SET::iterator iter = m_aperture_macros.find( aLookup );
 
@@ -155,7 +155,7 @@ APERTURE_MACRO* GERBER_IMAGE::FindApertureMacro( const APERTURE_MACRO& aLookup )
 }
 
 
-void GERBER_IMAGE::ResetDefaultValues()
+void GERBER_FILE_IMAGE::ResetDefaultValues()
 {
     m_InUse         = false;
     m_GBRLayerParams.ResetDefaultValues();
@@ -216,7 +216,7 @@ void GERBER_IMAGE::ResetDefaultValues()
  * return true if at least one item must be drawn in background color
  * used to optimize screen refresh
  */
-bool GERBER_IMAGE::HasNegativeItems()
+bool GERBER_FILE_IMAGE::HasNegativeItems()
 {
     if( m_hasNegativeItems < 0 )    // negative items are not yet searched: find them if any
     {
@@ -240,7 +240,7 @@ bool GERBER_IMAGE::HasNegativeItems()
     return m_hasNegativeItems == 1;
 }
 
-int GERBER_IMAGE::UsedDcodeNumber()
+int GERBER_FILE_IMAGE::UsedDcodeNumber()
 {
     int count = 0;
 
@@ -255,7 +255,7 @@ int GERBER_IMAGE::UsedDcodeNumber()
 }
 
 
-void GERBER_IMAGE::InitToolTable()
+void GERBER_FILE_IMAGE::InitToolTable()
 {
     for( int count = 0; count < TOOLS_MAX_COUNT; count++ )
     {
@@ -276,9 +276,9 @@ void GERBER_IMAGE::InitToolTable()
  * for instance when reading a Gerber file
  * @param aMessage = the straing to add in list
  */
-void GERBER_IMAGE::ReportMessage( const wxString aMessage )
+void GERBER_FILE_IMAGE::ReportMessage( const wxString aMessage )
 {
-    m_Parent->ReportMessage( aMessage );
+    m_parent->ReportMessage( aMessage );
 }
 
 
@@ -287,9 +287,9 @@ void GERBER_IMAGE::ReportMessage( const wxString aMessage )
  * Clear the message list
  * Call it before reading a Gerber file
  */
-void GERBER_IMAGE::ClearMessageList()
+void GERBER_FILE_IMAGE::ClearMessageList()
 {
-    m_Parent->ClearMessageList();
+    m_parent->ClearMessageList();
 }
 
 
@@ -301,7 +301,7 @@ void GERBER_IMAGE::ClearMessageList()
  * (i.e when m_XRepeatCount or m_YRepeatCount are > 1)
  * @param aItem = the item to repeat
  */
-void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
+void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
 {
     if( GetLayerParams().m_XRepeatCount < 2 &&
         GetLayerParams().m_YRepeatCount < 2 )
@@ -323,7 +323,7 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
             move_vector.y = scaletoIU( jj * GetLayerParams().m_StepForRepeat.y,
                                    GetLayerParams().m_StepForRepeatMetric );
             dupItem->MoveXY( move_vector );
-            m_Parent->GetGerberLayout()->m_Drawings.Append( dupItem );
+            m_parent->GetGerberLayout()->m_Drawings.Append( dupItem );
         }
     }
 }
@@ -337,34 +337,34 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
  * These parameters are valid for the entire file, and must set only once
  * (If more than once, only the last value is used)
  */
-void GERBER_IMAGE::DisplayImageInfo( void )
+void GERBER_FILE_IMAGE::DisplayImageInfo( void )
 {
     wxString msg;
 
-    m_Parent->ClearMsgPanel();
+    m_parent->ClearMsgPanel();
 
     // Display Image name (Image specific)
-    m_Parent->AppendMsgPanel( _( "Image name" ), m_ImageName, CYAN );
+    m_parent->AppendMsgPanel( _( "Image name" ), m_ImageName, CYAN );
 
     // Display graphic layer number used to draw this Image
     // (not a Gerber parameter but is also image specific)
     msg.Printf( wxT( "%d" ), m_GraphicLayer + 1 );
-    m_Parent->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
+    m_parent->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
 
     // Display Image rotation (Image specific)
     msg.Printf( wxT( "%d" ), m_ImageRotation );
-    m_Parent->AppendMsgPanel( _( "Img Rot." ), msg, CYAN );
+    m_parent->AppendMsgPanel( _( "Img Rot." ), msg, CYAN );
 
     // Display Image polarity (Image specific)
     msg = m_ImageNegative ? _("Negative") : _("Normal");
-    m_Parent->AppendMsgPanel( _( "Polarity" ), msg, BROWN );
+    m_parent->AppendMsgPanel( _( "Polarity" ), msg, BROWN );
 
     // Display Image justification and offset for justification (Image specific)
     msg = m_ImageJustifyXCenter ? _("Center") : _("Normal");
-    m_Parent->AppendMsgPanel( _( "X Justify" ), msg, DARKRED );
+    m_parent->AppendMsgPanel( _( "X Justify" ), msg, DARKRED );
 
     msg = m_ImageJustifyYCenter ? _("Center") : _("Normal");
-    m_Parent->AppendMsgPanel( _( "Y Justify" ), msg, DARKRED );
+    m_parent->AppendMsgPanel( _( "Y Justify" ), msg, DARKRED );
 
     if( g_UserUnit == INCHES )
         msg.Printf( wxT( "X=%f Y=%f" ), (double) m_ImageJustifyOffset.x/10000,
@@ -372,11 +372,11 @@ void GERBER_IMAGE::DisplayImageInfo( void )
     else
         msg.Printf( wxT( "X=%f Y=%f" ), (double) m_ImageJustifyOffset.x*2.54/1000,
                                     (double) m_ImageJustifyOffset.y*2.54/1000 );
-    m_Parent->AppendMsgPanel( _( "Image Justify Offset" ), msg, DARKRED );
+    m_parent->AppendMsgPanel( _( "Image Justify Offset" ), msg, DARKRED );
 }
 
-// GERBER_IMAGE_LIST is a helper class to handle a list of GERBER_IMAGE files
-GERBER_IMAGE_LIST::GERBER_IMAGE_LIST()
+// GERBER_FILE_IMAGE_LIST is a helper class to handle a list of GERBER_FILE_IMAGE files
+GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST()
 {
     m_GERBER_List.reserve( GERBER_DRAWLAYERS_COUNT );
 
@@ -384,7 +384,7 @@ GERBER_IMAGE_LIST::GERBER_IMAGE_LIST()
         m_GERBER_List.push_back( NULL );
 }
 
-GERBER_IMAGE_LIST::~GERBER_IMAGE_LIST()
+GERBER_FILE_IMAGE_LIST::~GERBER_FILE_IMAGE_LIST()
 {
     ClearList();
 
@@ -395,7 +395,7 @@ GERBER_IMAGE_LIST::~GERBER_IMAGE_LIST()
     }
 }
 
-GERBER_IMAGE* GERBER_IMAGE_LIST::GetGbrImage( int aIdx )
+GERBER_FILE_IMAGE* GERBER_FILE_IMAGE_LIST::GetGbrImage( int aIdx )
 {
     if( (unsigned)aIdx < m_GERBER_List.size() )
         return m_GERBER_List[aIdx];
@@ -404,12 +404,12 @@ GERBER_IMAGE* GERBER_IMAGE_LIST::GetGbrImage( int aIdx )
 }
 
 /**
- * creates a new, empty GERBER_IMAGE* at index aIdx
+ * creates a new, empty GERBER_FILE_IMAGE* at index aIdx
  * or at the first free location if aIdx < 0
  * @param aIdx = the location to use ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
  * @return true if the index used, or -1 if no room to add image
  */
-int GERBER_IMAGE_LIST::AddGbrImage( GERBER_IMAGE* aGbrImage, int aIdx )
+int GERBER_FILE_IMAGE_LIST::AddGbrImage( GERBER_FILE_IMAGE* aGbrImage, int aIdx )
 {
     int idx = aIdx;
 
@@ -433,14 +433,14 @@ int GERBER_IMAGE_LIST::AddGbrImage( GERBER_IMAGE* aGbrImage, int aIdx )
 
 // remove all loaded data in list, but do not delete empty images
 // (can be reused)
-void GERBER_IMAGE_LIST::ClearList()
+void GERBER_FILE_IMAGE_LIST::ClearList()
 {
     for( unsigned layer = 0; layer < m_GERBER_List.size(); ++layer )
         ClearImage( layer );
 }
 
 // remove the loaded data of image aIdx, but do not delete it
-void GERBER_IMAGE_LIST::ClearImage( int aIdx )
+void GERBER_FILE_IMAGE_LIST::ClearImage( int aIdx )
 {
     if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() && m_GERBER_List[aIdx] )
     {
@@ -451,11 +451,11 @@ void GERBER_IMAGE_LIST::ClearImage( int aIdx )
 }
 
 // Build a name for image aIdx which can be used in layers manager
-const wxString GERBER_IMAGE_LIST::GetDisplayName( int aIdx )
+const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx )
 {
     wxString name;
 
-    GERBER_IMAGE* gerber = NULL;
+    GERBER_FILE_IMAGE* gerber = NULL;
 
     if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() )
         gerber = m_GERBER_List[aIdx];
@@ -506,7 +506,7 @@ const wxString GERBER_IMAGE_LIST::GetDisplayName( int aIdx )
 }
 
 // return true if image is used (loaded and not cleared)
-bool GERBER_IMAGE_LIST::IsUsed( int aIdx )
+bool GERBER_FILE_IMAGE_LIST::IsUsed( int aIdx )
 {
     if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() )
         return m_GERBER_List[aIdx] != NULL && m_GERBER_List[aIdx]->m_InUse;
@@ -517,7 +517,7 @@ bool GERBER_IMAGE_LIST::IsUsed( int aIdx )
 // Helper function, for std::sort.
 // Sort loaded images by Z order priority, if they have the X2 FileFormat info
 // returns true if the first argument (ref) is ordered before the second (test).
-static bool sortZorder( const GERBER_IMAGE* const& ref, const GERBER_IMAGE* const& test )
+static bool sortZorder( const GERBER_FILE_IMAGE* const& ref, const GERBER_FILE_IMAGE* const& test )
 {
     if( !ref && !test )
         return false;        // do not change order: no criteria to sort items
@@ -543,7 +543,7 @@ static bool sortZorder( const GERBER_IMAGE* const& ref, const GERBER_IMAGE* cons
     return ref->m_FileFunction->GetZSubOrder() > test->m_FileFunction->GetZSubOrder();
 }
 
-void GERBER_IMAGE_LIST::SortImagesByZOrder( GERBER_DRAW_ITEM* aDrawList )
+void GERBER_FILE_IMAGE_LIST::SortImagesByZOrder( GERBER_DRAW_ITEM* aDrawList )
 {
     std::sort( m_GERBER_List.begin(), m_GERBER_List.end(), sortZorder );
 
@@ -572,4 +572,4 @@ void GERBER_IMAGE_LIST::SortImagesByZOrder( GERBER_DRAW_ITEM* aDrawList )
 
 
 // The global image list:
-GERBER_IMAGE_LIST g_GERBER_List;
+GERBER_FILE_IMAGE_LIST g_GERBER_List;

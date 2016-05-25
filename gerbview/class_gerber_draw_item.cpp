@@ -35,10 +35,10 @@
 #include <gerbview_frame.h>
 
 #include <class_gerber_draw_item.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 
 
-GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_IMAGE* aGerberparams ) :
+GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_FILE_IMAGE* aGerberparams ) :
     EDA_ITEM( (EDA_ITEM*)aParent, TYPE_GERBER_DRAW_ITEM )
 {
     m_imageParams = aGerberparams;
@@ -223,7 +223,7 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
     if( (m_DCode < FIRST_DCODE) || (m_DCode > LAST_DCODE) )
         return NULL;
 
-    GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( m_Layer );
+    GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( m_Layer );
 
     if( gerber == NULL )
         return NULL;

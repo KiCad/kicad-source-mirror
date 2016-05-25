@@ -80,13 +80,13 @@ struct EXCELLON_CMD
 
 
 /* EXCELLON_IMAGE handle a drill image
- *  It is derived from GERBER_IMAGE because there is a lot of likeness
+ *  It is derived from GERBER_FILE_IMAGE because there is a lot of likeness
  *  between EXCELLON files and GERBER files
  *  DCode aperture are also similat to T Codes.
- *  So we can reuse GERBER_IMAGE to handle EXCELLON_IMAGE with very few new functions
+ *  So we can reuse GERBER_FILE_IMAGE to handle EXCELLON_IMAGE with very few new functions
  */
 
-class EXCELLON_IMAGE : public GERBER_IMAGE
+class EXCELLON_IMAGE : public GERBER_FILE_IMAGE
 {
 private:
     enum excellon_state {
@@ -97,7 +97,7 @@ private:
     bool           m_SlotOn;        // true during an oblong drill definition
 
 public: EXCELLON_IMAGE( GERBVIEW_FRAME* aParent, int layer ) :
-        GERBER_IMAGE( aParent, layer )
+        GERBER_FILE_IMAGE( aParent, layer )
     {
         m_State  = READ_HEADER_STATE;
         m_SlotOn = false;
@@ -108,7 +108,7 @@ public: EXCELLON_IMAGE( GERBVIEW_FRAME* aParent, int layer ) :
 
     virtual void ResetDefaultValues()
     {
-        GERBER_IMAGE::ResetDefaultValues();
+        GERBER_FILE_IMAGE::ResetDefaultValues();
         SelectUnits( false );
     }
 

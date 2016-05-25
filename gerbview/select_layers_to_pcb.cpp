@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 
 #include <select_layers_to_pcb.h>
 

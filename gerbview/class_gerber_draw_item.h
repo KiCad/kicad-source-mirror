@@ -34,7 +34,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <gr_basic.h>
 
-class GERBER_IMAGE;
+class GERBER_FILE_IMAGE;
 class GBR_LAYOUT;
 class D_CODE;
 class MSG_PANEL_ITEM;
@@ -82,7 +82,7 @@ public:
                                             // 0 for items that do not use DCodes (polygons)
                                             // or when unknown and normal values are 10 to 999
                                             // values 0 to 9 can be used for special purposes
-    GERBER_IMAGE* m_imageParams;            /* main GERBER info for this item
+    GERBER_FILE_IMAGE* m_imageParams;            /* main GERBER info for this item
                                              * Note: some params stored in this class are common
                                              * to the whole gerber file (i.e) the whole graphic
                                              * layer and some can change when reaging the file,
@@ -104,7 +104,7 @@ private:
     double      m_lyrRotation;              // Fine rotation, from OR parameter, in degrees
 
 public:
-    GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_IMAGE* aGerberparams );
+    GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_FILE_IMAGE* aGerberparams );
     GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource );
     ~GERBER_DRAW_ITEM();
 

@@ -32,7 +32,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <trigo.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <class_X2_gerber_attributes.h>
 
 #include <cmath>
@@ -407,7 +407,7 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
 
 /* Read the Gnn sequence and returns the value nn.
  */
-int GERBER_IMAGE::GCodeNumber( char*& Text )
+int GERBER_FILE_IMAGE::GCodeNumber( char*& Text )
 {
     int   ii = 0;
     char* text;
@@ -430,7 +430,7 @@ int GERBER_IMAGE::GCodeNumber( char*& Text )
 
 /* Get the sequence Dnn and returns the value nn
  */
-int GERBER_IMAGE::DCodeNumber( char*& Text )
+int GERBER_FILE_IMAGE::DCodeNumber( char*& Text )
 {
     int   ii = 0;
     char* text;
@@ -450,7 +450,7 @@ int GERBER_IMAGE::DCodeNumber( char*& Text )
 }
 
 
-bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
+bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
 {
 //    D( printf( "%22s: G_CODE<%d>\n", __func__, G_command ); )
 
@@ -550,9 +550,9 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
         break;
 
     case GC_TURN_OFF_POLY_FILL:
-        if( m_Exposure && m_Parent->GetGerberLayout()->m_Drawings )    // End of polygon
+        if( m_Exposure && m_parent->GetGerberLayout()->m_Drawings )    // End of polygon
         {
-            GERBER_DRAW_ITEM * gbritem = m_Parent->GetGerberLayout()->m_Drawings.GetLast();
+            GERBER_DRAW_ITEM * gbritem = m_parent->GetGerberLayout()->m_Drawings.GetLast();
             StepAndRepeatItem( *gbritem );
         }
         m_Exposure = false;
@@ -575,15 +575,15 @@ bool GERBER_IMAGE::Execute_G_Command( char*& text, int G_command )
 }
 
 
-bool GERBER_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
+bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 {
     wxSize            size( 15, 15 );
 
     APERTURE_T        aperture = APT_CIRCLE;
     GERBER_DRAW_ITEM* gbritem;
-    GBR_LAYOUT*       layout = m_Parent->GetGerberLayout();
+    GBR_LAYOUT*       layout = m_parent->GetGerberLayout();
 
-    int activeLayer = m_Parent->getActiveLayer();
+    int activeLayer = m_parent->getActiveLayer();
 
     int      dcode = 0;
     D_CODE*  tool  = NULL;

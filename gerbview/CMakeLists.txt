@@ -28,7 +28,7 @@ set( GERBVIEW_SRCS
     class_DCodeSelectionbox.cpp
     class_gbr_screen.cpp
     class_gbr_layout.cpp
-    class_GERBER.cpp
+    class_gerber_file_image.cpp
     class_gerber_draw_item.cpp
     class_gerbview_layer_widget.cpp
     class_gbr_layer_box_selector.cpp

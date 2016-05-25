@@ -37,7 +37,7 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <layer_widget.h>
 #include <class_gerbview_layer_widget.h>
 

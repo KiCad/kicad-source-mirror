@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHOR.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 #include <base_units.h>
 
 #include <gerbview.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <class_X2_gerber_attributes.h>
 
 extern int ReadInt( char*& text, bool aSkipSeparator = true );
@@ -128,7 +128,7 @@ static int ReadXCommand( char*& text )
 }
 
 
-bool GERBER_IMAGE::ReadRS274XCommand( char* buff, char*& text )
+bool GERBER_FILE_IMAGE::ReadRS274XCommand( char* buff, char*& text )
 {
     bool ok = true;
     int  code_command;
@@ -181,7 +181,7 @@ exit:
 }
 
 
-bool GERBER_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& text )
+bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& text )
 {
     int      code;
     int      seq_len;    // not used, just provided
@@ -884,7 +884,7 @@ static char* GetNextLine(  char *aBuff, char* aText, FILE* aFile  )
 }
 
 
-bool GERBER_IMAGE::ReadApertureMacro( char *buff,
+bool GERBER_FILE_IMAGE::ReadApertureMacro( char *buff,
                                 char*&    text,
                                 FILE*     gerber_file )
 {

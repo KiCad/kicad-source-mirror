@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-// Set this to 1 if you want to test PostScript printing under MSW.
-#define wxTEST_POSTSCRIPT_IN_MSW 1
-
 #include <fctsys.h>
 
 #include <kiface_i.h>
@@ -37,7 +34,7 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <pcbplot.h>
 
 static double s_ScaleList[] =
@@ -91,13 +88,7 @@ public:
 };
 
 
-/*******************************************************/
 void GERBVIEW_FRAME::ToPrinter( wxCommandEvent& event )
-/*******************************************************/
-
-/* Virtual function:
- * Display the print dialog
- */
 {
     if( s_printData == NULL )  // First print
         s_printData = new wxPrintData();
@@ -119,10 +110,8 @@ void GERBVIEW_FRAME::ToPrinter( wxCommandEvent& event )
 }
 
 
-/*************************************************************************************/
 DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent ) :
     DIALOG_PRINT_USING_PRINTER_BASE( parent )
-/*************************************************************************************/
 {
     m_Parent = parent;
     m_Config = Kiface().KifaceSettings();
@@ -139,9 +128,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent )
 }
 
 
-/************************************************************************/
 void DIALOG_PRINT_USING_PRINTER::InitValues( )
-/************************************************************************/
 {
     SetFocus();
     wxString msg;
@@ -234,6 +221,7 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerSetFromListSelection()
 {
     int page_count = 0;
     std::bitset <GERBER_DRAWLAYERS_COUNT> layerMask;
+
     for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
         if( m_BoxSelectLayer[ii]->IsChecked() && m_BoxSelectLayer[ii]->IsEnabled() )
@@ -264,6 +252,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         m_Config->Write( OPTKEY_PRINT_PAGE_FRAME, s_Parameters.m_Print_Sheet_Ref);
         m_Config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
         wxString layerKey;
+
         for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
         {
             layerKey.Printf( OPTKEY_LAYERBASE, layer );
@@ -271,7 +260,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         }
     }
 
-    EndModal( 0 );
+    event.Skip();
 }
 
 
@@ -297,6 +286,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters()
             DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very large value" ) );
         m_FineAdjustXscaleOpt->GetValue().ToDouble( &s_Parameters.m_XScaleAdjust );
     }
+
     if( m_FineAdjustYscaleOpt )
     {
         // Test for a reasonnable scale value
@@ -311,8 +301,10 @@ void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
 {
     double scale = s_ScaleList[m_ScaleOption->GetSelection()];
     bool enable = (scale == 1.0);
+
     if( m_FineAdjustXscaleOpt )
         m_FineAdjustXscaleOpt->Enable(enable);
+
     if( m_FineAdjustYscaleOpt )
         m_FineAdjustYscaleOpt->Enable(enable);
 }

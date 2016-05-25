@@ -42,7 +42,7 @@
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <hotkeys.h>
-#include <class_GERBER.h>
+#include <class_gerber_file_image.h>
 #include <dialog_helpers.h>
 #include <class_DCodeSelectionbox.h>
 #include <class_gerbview_layer_widget.h>
@@ -360,7 +360,7 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 
     for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; ++i )
     {
-        GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
         if( gerber == NULL || gerber->m_FileName.IsEmpty() )
             return layer;
@@ -390,7 +390,7 @@ void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
     m_SelLayerBox->SetSelection( getActiveLayer() );
 
     int             dcodeSelected = -1;
-    GERBER_IMAGE*   gerber = g_GERBER_List.GetGbrImage( getActiveLayer() );
+    GERBER_FILE_IMAGE*   gerber = g_GERBER_List.GetGbrImage( getActiveLayer() );
 
     if( gerber )
         dcodeSelected = gerber->m_Selected_Tool;
@@ -417,7 +417,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
     for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
-        GERBER_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
         if( gerber == NULL )
             continue;
@@ -472,7 +472,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
-    GERBER_IMAGE*   gerber = g_GERBER_List.GetGbrImage(  getActiveLayer() );
+    GERBER_FILE_IMAGE*   gerber = g_GERBER_List.GetGbrImage(  getActiveLayer() );
     wxString        text;
 
     // Display the gerber filename
