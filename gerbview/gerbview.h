@@ -41,11 +41,6 @@
 /// List of page sizes
 extern const wxChar* g_GerberPageSizeList[8];
 
-// Type of photoplotter action:
-#define GERB_ACTIVE_DRAW 1      // Activate light (lower pen)
-#define GERB_STOP_DRAW   2      // Extinguish light (lift pen)
-#define GERB_FLASH       3      // Flash
-
 // number fo draw layers in Gerbview
 #define GERBER_DRAWLAYERS_COUNT 32
 

@@ -30,8 +30,6 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
-#include <common.h>
 #include <gestfich.h>
 
 #include <gerbview.h>

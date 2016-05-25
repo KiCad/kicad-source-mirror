@@ -248,14 +248,14 @@ public:
      * Function ReadRS274XCommand
      * reads a single RS274X command terminated with a %
      */
-    bool ReadRS274XCommand( char aBuff[GERBER_BUFZ], char* & text );
+    bool ReadRS274XCommand( char *aBuff, char* & text );
 
     /**
      * Function ExecuteRS274XCommand
      * executes 1 command
      */
-    bool ExecuteRS274XCommand( int command, char aBuff[GERBER_BUFZ],
-                               char* & text );
+    bool ExecuteRS274XCommand( int command, char* aBuff,
+                               char*& text );
 
 
     /**
@@ -268,7 +268,7 @@ public:
      * @param gerber_file Which file to read from for continuation.
      * @return bool - true if a macro was read in successfully, else false.
      */
-    bool ReadApertureMacro( char aBuff[GERBER_BUFZ], char* & text,
+    bool ReadApertureMacro( char *aBuff, char* & text,
                             FILE * gerber_file );
 
 

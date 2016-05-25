@@ -38,17 +38,17 @@
  * %TF.FileFunction,Copper,L1,Top*%
  *
  * Currently:
- *  .FileFunction .FileFunction Identifies the file's function in the PCB.
- * Other Standard Attributes, not yet used in Gerbview:
- *  .Part Identifies the part the file represents, e.g. a single PCB
- *  .MD5 Sets the MD5 file signature or checksum.
+ * .FileFunction .FileFunction Identifies the file's function in the PCB.
+ *  Other Standard Attributes, not yet used in Gerbview:
+ * .Part Identifies the part the file represents, e.g. a single PCB
+ * .MD5 Sets the MD5 file signature or checksum.
  */
 
 #include <wx/arrstr.h>
 
 /**
  * class X2_ATTRIBUTE
- * The attribute value consists of a number of substrings separated by a ","
+ * The attribute value consists of a number of substrings separated by a comma
 */
 
 class X2_ATTRIBUTE

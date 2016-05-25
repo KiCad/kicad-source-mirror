@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
 #include <fctsys.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <pcbstruct.h>
 #include <macros.h>
 #include <class_gbr_layer_box_selector.h>
 
@@ -41,7 +40,6 @@
 #include <class_GERBER.h>
 #include <layer_widget.h>
 #include <class_gerbview_layer_widget.h>
-#include <class_X2_gerber_attributes.h>
 
 
 /*

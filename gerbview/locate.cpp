@@ -32,7 +32,6 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_gerber_draw_item.h>
 
 
 /* localize a gerber item and return a pointer to it.

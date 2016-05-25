@@ -31,10 +31,8 @@
 
 #include <common.h>
 #include <colors_selection.h>
-#include <layers_id_colors_and_visibility.h>
 #include <gerbview_frame.h>
 #include <class_GERBER.h>
-#include <class_X2_gerber_attributes.h>
 
 #include <class_gbr_layer_box_selector.h>
 

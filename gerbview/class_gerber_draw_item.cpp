@@ -31,11 +31,9 @@
 #include <common.h>
 #include <trigo.h>
 #include <class_drawpanel.h>
-#include <macros.h>
 #include <msgpanel.h>
-
-#include <gerbview.h>
 #include <gerbview_frame.h>
+
 #include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 

@@ -28,14 +28,12 @@
 
 #include <fctsys.h>
 #include <common.h>
-#include <kicad_device_context.h>
 #include <id.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_drawpanel.h>
 #include <hotkeys.h>
-#include <gerbview_id.h>
 
 
 /* How to add a new hotkey:

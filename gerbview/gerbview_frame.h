@@ -118,7 +118,7 @@ public:
     {
         GERBER_DRAW_ITEM* item = GetGerberLayout()->m_Drawings;
 
-        return (GERBER_DRAW_ITEM*) item;
+        return item;
     }
 
     /**
@@ -525,10 +525,8 @@ public:
      */
     bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
-    GERBER_DRAW_ITEM*   GerberGeneralLocateAndDisplay();
     GERBER_DRAW_ITEM*   Locate( const wxPoint& aPosition, int typeloc );
 
-    void                Process_Settings( wxCommandEvent& event );
     void                Process_Config( wxCommandEvent& event );
     void                InstallGerberOptionsDialog( wxCommandEvent& event );
 
@@ -618,9 +616,7 @@ public:
      * @return true if file was opened successfully.
      */
     bool                LoadGerberFiles( const wxString& aFileName );
-    int                 ReadGerberFile( FILE* File, bool Append );
-    bool                Read_GERBER_File( const wxString&   GERBER_FullFileName,
-                                          const wxString&   D_Code_FullFileName );
+    bool                Read_GERBER_File( const wxString&   GERBER_FullFileName );
 
     /**
      * function LoadDrllFiles
@@ -638,7 +634,6 @@ public:
     /**
      * Set Size Items (Lines, Flashes) from DCodes List
      */
-    void                CopyDCodesSizeToItems();
     void                Liste_D_Codes();
 
     // PCB handling

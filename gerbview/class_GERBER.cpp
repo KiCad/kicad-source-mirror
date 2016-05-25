@@ -30,7 +30,6 @@
 #include <fctsys.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
 #include <macros.h>
 
 #include <gerbview.h>
@@ -307,8 +306,8 @@ void GERBER_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
     if( GetLayerParams().m_XRepeatCount < 2 &&
         GetLayerParams().m_YRepeatCount < 2 )
         return; // Nothing to repeat
+
     // Duplicate item:
-    wxString msg;
     for( int ii = 0; ii < GetLayerParams().m_XRepeatCount; ii++ )
     {
         for( int jj = 0; jj < GetLayerParams().m_YRepeatCount; jj++ )

@@ -33,7 +33,6 @@
 #include <id.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <gestfich.h>
 #include <config_params.h>
 #include <colors_selection.h>
 
@@ -49,7 +48,6 @@
 void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
 {
     int      id = event.GetId();
-    wxString FullFileName;
 
     switch( id )
     {

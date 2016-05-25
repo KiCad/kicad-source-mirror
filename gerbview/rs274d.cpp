@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,8 +32,6 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <trigo.h>
-#include <macros.h>
-#include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 #include <class_X2_gerber_attributes.h>
 

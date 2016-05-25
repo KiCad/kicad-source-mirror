@@ -30,13 +30,12 @@
 
 
 #include <kiface_i.h>
-#include <menus_helpers.h>
 #include <pgm_base.h>
 
-#include "gerbview.h"
 #include "gerbview_frame.h"
 #include "gerbview_id.h"
 #include "hotkeys.h"
+#include <menus_helpers.h>
 
 
 void GERBVIEW_FRAME::ReCreateMenuBar()

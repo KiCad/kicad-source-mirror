@@ -24,14 +24,11 @@
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
-#include <common.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <gerbview_id.h>
 #include <class_GERBER.h>
 #include <dialog_helpers.h>
-#include <class_DCodeSelectionbox.h>
 
 /* Process the command triggered by the left button of the mouse
  * currently: just display info in the message panel.

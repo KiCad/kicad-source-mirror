@@ -26,7 +26,6 @@
 #include <common.h>
 #include <confirm.h>
 #include <kicad_string.h>
-#include <gestfich.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_GERBER.h>
@@ -36,8 +35,7 @@
 
 /* Read a gerber file, RS274D, RS274X or RS274X2 format.
  */
-bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
-                                           const wxString& D_Code_FullFileName )
+bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
 {
     int      G_command = 0;        // command number for G commands like G04
     int      D_commande = 0;       // command number for D commands like D02

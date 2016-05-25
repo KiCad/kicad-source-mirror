@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,9 @@
  * @brief Handle colors used to draw all items or layers.
  */
 
-#ifndef _COLORS_DESIGN_SETTING_H
-#define _COLORS_DESIGN_SETTING_H
+#ifndef COLORS_DESIGN_SETTING_H
+#define COLORS_DESIGN_SETTING_H
+#include <colors.h>     // definition of EDA_COLOR_T
 #include <layers_id_colors_and_visibility.h>
 
 
@@ -86,4 +87,4 @@ public:
     void SetAllColorsAs( EDA_COLOR_T aColor);
 };
 
-#endif  //  _COLORS_DESIGN_SETTING_H
+#endif  //  COLORS_DESIGN_SETTING_H

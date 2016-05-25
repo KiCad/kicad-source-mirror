@@ -29,10 +29,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
-#include <gestfich.h>
 
-#include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
 #include <class_gerbview_layer_widget.h>
@@ -186,7 +183,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
         setActiveLayer( layer, false );
 
-        if( Read_GERBER_File( filename.GetFullPath(), filename.GetFullPath() ) )
+        if( Read_GERBER_File( filename.GetFullPath() ) )
         {
             UpdateFileHistory( m_lastFileName );
 

@@ -33,12 +33,9 @@
 #include <common.h>
 #include <confirm.h>
 #include <macros.h>
-#include <kicad_string.h>
-#include <gestfich.h>
 #include <trigo.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 #include <select_layers_to_pcb.h>
 #include <build_version.h>
@@ -49,8 +46,6 @@
 extern const wxString GetPCBDefaultLayerName( LAYER_NUM aLayerNumber );
 
 #define TO_PCB_UNIT( x ) ( x / IU_PER_MM)
-
-#define TRACK_TYPE  0
 
 /* A helper class to export a Gerber set of files to Pcbnew
  */

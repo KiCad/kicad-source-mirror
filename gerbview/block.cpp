@@ -31,16 +31,8 @@
 #include <fctsys.h>
 #include <common.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
-#include <gr_basic.h>
-
-#include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
-
-#include <wx/debug.h>
-
-#define BLOCK_COLOR BROWN
 
 
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
@@ -211,7 +203,7 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
     /* Move items in block */
     for( GERBER_DRAW_ITEM* item = GetItemsList(); item; item = item->Next() )
     {
-        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+        GERBER_DRAW_ITEM* gerb_item = item;
 
         if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
             gerb_item->MoveAB( delta );

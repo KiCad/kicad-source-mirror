@@ -27,16 +27,12 @@
  */
 
 #include <fctsys.h>
-#include <common.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 
-#include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 #include <class_gerbview_layer_widget.h>
-#include <class_gbr_layout.h>
 
 bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
 {

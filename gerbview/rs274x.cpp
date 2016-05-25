@@ -37,7 +37,7 @@
 
 extern int ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
-extern bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file );
+extern bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file );
 
 
 #define CODE( x, y ) ( ( (x) << 8 ) + (y) )
@@ -128,7 +128,7 @@ static int ReadXCommand( char*& text )
 }
 
 
-bool GERBER_IMAGE::ReadRS274XCommand( char buff[GERBER_BUFZ], char*& text )
+bool GERBER_IMAGE::ReadRS274XCommand( char* buff, char*& text )
 {
     bool ok = true;
     int  code_command;
@@ -181,9 +181,7 @@ exit:
 }
 
 
-bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
-                                   char buff[GERBER_BUFZ],
-                                   char*&    text )
+bool GERBER_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& text )
 {
     int      code;
     int      seq_len;    // not used, just provided
@@ -807,7 +805,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
             }
 
             dcode->m_Shape = APT_MACRO;
-            dcode->SetMacro( (APERTURE_MACRO*) pam );
+            dcode->SetMacro( pam );
         }
         break;
 
@@ -824,7 +822,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 }
 
 
-bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
+bool GetEndOfBlock( char* buff, char*& text, FILE* gerber_file )
 {
     for( ; ; )
     {
@@ -860,7 +858,7 @@ bool GetEndOfBlock( char buff[GERBER_BUFZ], char*& text, FILE* gerber_file )
  * @param aFile = the opened GERBER file to read
  * @return a pointer to the beginning of the next line or NULL if end of file
 */
-static char* GetNextLine(  char aBuff[GERBER_BUFZ], char* aText, FILE* aFile  )
+static char* GetNextLine(  char *aBuff, char* aText, FILE* aFile  )
 {
     for( ; ; )
     {
@@ -886,7 +884,7 @@ static char* GetNextLine(  char aBuff[GERBER_BUFZ], char* aText, FILE* aFile  )
 }
 
 
-bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
+bool GERBER_IMAGE::ReadApertureMacro( char *buff,
                                 char*&    text,
                                 FILE*     gerber_file )
 {

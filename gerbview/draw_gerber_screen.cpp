@@ -37,8 +37,6 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <colors_selection.h>
-#include <class_gerber_draw_item.h>
 #include <class_GERBER.h>
 #include <printout_controler.h>
 
