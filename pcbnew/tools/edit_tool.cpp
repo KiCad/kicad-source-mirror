@@ -715,7 +715,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     // we have a selection to work on now, so start the tool process
 
-    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     editFrame->OnModify();
 
     // prevent other tools making undo points while the duplicate is going on
@@ -723,8 +723,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // the original
     incUndoInhibit();
 
+    // TODO remove the following when undo buffer handles UR_NEW
     if( m_editModules )
-        editFrame->SaveCopyInUndoList( editFrame->GetBoard()->m_Modules, UR_MODEDIT );
+        editFrame->SaveCopyInUndoList( editFrame->GetBoard()->m_Modules, UR_CHANGED );
 
     std::vector<BOARD_ITEM*> old_items;
 
@@ -776,6 +777,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     }
 
     // record the new items as added
+    // TODO remove m_editModules condition when undo buffer handles UR_NEW)
     if( !m_editModules && !selection.Empty() )
     {
         editFrame->SaveCopyInUndoList( selection.items, UR_NEW );
@@ -1007,9 +1009,6 @@ void EDIT_TOOL::processPickedList( const PICKED_ITEMS_LIST* aList )
         {
         case UR_CHANGED:
             ratsnest->Update( updItem );
-            // fall through
-
-        case UR_MODEDIT:
             updItem->ViewUpdate( KIGFX::VIEW_ITEM::ALL );
             break;
 

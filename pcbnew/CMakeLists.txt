@@ -190,7 +190,6 @@ set( PCBNEW_CLASS_SRCS
     array_creator.cpp
     attribut.cpp
     board_items_to_polygon_shape_transform.cpp
-    board_undo_redo.cpp
     board_netlist_updater.cpp
     block.cpp
     block_module_editor.cpp
@@ -237,7 +236,6 @@ set( PCBNEW_CLASS_SRCS
     modedit.cpp
     modedit_onclick.cpp
     modeditoptions.cpp
-    modedit_undo_redo.cpp
     moduleframe.cpp
     modules.cpp
     move-drag_pads.cpp
@@ -266,6 +264,7 @@ set( PCBNEW_CLASS_SRCS
     toolbars_update_user_interface.cpp
     tracepcb.cpp
     tr_modif.cpp
+    undo_redo.cpp
     xchgmod.cpp
     zones_convert_brd_items_to_polygons_with_Boost.cpp
     zones_convert_to_polygons_aux_functions.cpp

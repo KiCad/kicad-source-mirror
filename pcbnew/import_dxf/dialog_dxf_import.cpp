@@ -245,7 +245,7 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
     {
         const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
 
-        aCaller->SaveCopyInUndoList( aModule, UR_MODEDIT );
+        aCaller->SaveCopyInUndoList( aModule, UR_CHANGED );
         aCaller->OnModify();
 
         std::list<BOARD_ITEM*>::const_iterator it, itEnd;

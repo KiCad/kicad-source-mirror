@@ -651,7 +651,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     break;
 
     case ID_POPUP_PCB_DELETE_PAD:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         DeletePad( (D_PAD*) GetScreen()->GetCurItem(), false );
         SetCurItem( NULL );
         m_canvas->MoveCursorToCrossHair();
@@ -674,13 +674,13 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         m_canvas->MoveCursorToCrossHair();
         Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
         break;
 
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         // Calls the global change dialog:
         DlgGlobalChange_PadSettings( (D_PAD*) GetScreen()->GetCurItem() );
         m_canvas->MoveCursorToCrossHair();
@@ -707,7 +707,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_TEXTMODULE:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         DeleteTextModule( static_cast<TEXTE_MODULE*>( GetScreen()->GetCurItem() ) );
         SetCurItem( NULL );
         m_canvas->MoveCursorToCrossHair();
@@ -765,7 +765,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_EDGE:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         m_canvas->MoveCursorToCrossHair();
         RemoveStruct( GetScreen()->GetCurItem() );
         SetCurItem( NULL );
@@ -774,7 +774,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_MODULE_ROTATE:
     case ID_MODEDIT_MODULE_MIRROR:
     case ID_MODEDIT_MODULE_MOVE_EXACT:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         Transform( (MODULE*) GetScreen()->GetCurItem(), id );
         m_canvas->Refresh();
         break;
@@ -870,7 +870,7 @@ void FOOTPRINT_EDIT_FRAME::moveExact()
 
     if( ret == wxID_OK )
     {
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
+        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
 
         BOARD_ITEM* item = GetScreen()->GetCurItem();
 

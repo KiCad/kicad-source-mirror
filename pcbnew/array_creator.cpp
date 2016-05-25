@@ -59,7 +59,7 @@ void ARRAY_CREATOR::Invoke()
         if( isModuleEditor )
         {
             // modedit saves everything upfront
-            m_parent.SaveCopyInUndoList( getBoard()->m_Modules, UR_MODEDIT );
+            m_parent.SaveCopyInUndoList( getBoard()->m_Modules, UR_CHANGED );
         }
 
         for ( int i = 0; i < numItems; ++i )

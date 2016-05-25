@@ -768,11 +768,7 @@ void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
         PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
 
         frame->OnModify();
-
-        if( moduleEdge )
-            frame->SaveCopyInUndoList( getModel<BOARD>()->m_Modules, UR_MODEDIT );
-        else
-            frame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+        frame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
 

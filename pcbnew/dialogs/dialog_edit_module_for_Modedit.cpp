@@ -465,7 +465,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
         return;
     }
 
-    m_parent->SaveCopyInUndoList( m_currentModule, UR_MODEDIT );
+    m_parent->SaveCopyInUndoList( m_currentModule, UR_CHANGED );
     m_currentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
     switch( m_AttributsCtrl->GetSelection() )

@@ -226,7 +226,7 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
             return false;;
     }
 
-    m_parent->SaveCopyInUndoList( m_module, UR_MODEDIT );
+    m_parent->SaveCopyInUndoList( m_module, UR_CHANGED );
     m_module->SetLastEditTime();
 
     wxString msg;

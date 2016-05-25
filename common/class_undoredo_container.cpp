@@ -153,10 +153,6 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
         case UR_LIBEDIT:            /* Libedit save always a copy of the current item
                                      *  So, the picker is always owner of the picked item
                                      */
-        case UR_MODEDIT:            /* Specific to the module editor (modedit creates a full
-                                     * copy of the current module when changed),
-                                     * and the picker is owner of this item
-                                     */
             delete wrapper.GetItem();
             break;
 

@@ -158,7 +158,7 @@ int MODULE_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) )
         {
             m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
 
             m_board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
             pad->SetParent( m_board->m_Modules );
@@ -308,7 +308,7 @@ int MODULE_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         {
             // Accept changes
             m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
 
             for( D_PAD* pad : pads )
             {
@@ -476,7 +476,7 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) )
         {
             m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( currentModule, UR_MODEDIT );
+            m_frame->SaveCopyInUndoList( currentModule, UR_CHANGED );
 
             m_board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
             currentModule->SetLastEditTime();

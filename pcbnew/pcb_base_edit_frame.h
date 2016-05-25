@@ -69,26 +69,62 @@ public:
      */
     virtual void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem ) = 0;
 
+    // Undo buffer handling
+
+    /**
+     * Function SaveCopyInUndoList
+     * Creates a new entry in undo list of commands.
+     * add a picker to handle aItemToCopy
+     * @param aItemToCopy = the board item modified by the command to undo
+     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
+     * @param aTransformPoint = the reference point of the transformation, for
+     *                          commands like move
+     */
+    void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy, UNDO_REDO_T aTypeCommand,
+                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
+
+    /**
+     * Function SaveCopyInUndoList
+     * Creates a new entry in undo list of commands.
+     * add a list of pickers to handle a list of items
+     * @param aItemsList = the list of items modified by the command to undo
+     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
+     * @param aTransformPoint = the reference point of the transformation,
+     *                          for commands like move
+     */
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO_T aTypeCommand,
+                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
     /**
      * Function RestoreCopyFromRedoList
      *  Redo the last edition:
-     *  - Save the current data in Undo list
-     *  - Get an old version of the data from Redo list
+     *  - Save the current board in Undo list
+     *  - Get an old version of the board from Redo list
+     *  @return none
      */
-    virtual void RestoreCopyFromRedoList( wxCommandEvent& aEvent ) = 0;
+    void RestoreCopyFromRedoList( wxCommandEvent& aEvent );
 
     /**
      * Function RestoreCopyFromUndoList
      *  Undo the last edition:
      *  - Save the current board in Redo list
-     *  - Get an old version of the data from Undo list
+     *  - Get an old version of the board from Undo list
+     *  @return none
      */
-    virtual void RestoreCopyFromUndoList( wxCommandEvent& aEvent ) = 0;
+    void RestoreCopyFromUndoList( wxCommandEvent& aEvent );
 
-    int GetRotationAngle() const { return m_rotationAngle; }
-    void SetRotationAngle( int aRotationAngle );
-
-    bool PostCommandMenuEvent( int evt_type );
+    /**
+     * Function PutDataInPreviousState
+     * Used in undo or redo command.
+     * Put data pointed by List in the previous state, i.e. the state memorized by List
+     * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
+     * @param aRedoCommand = a bool: true for redo, false for undo
+     * @param aRebuildRatsnet = a bool: true to rebuild ratsnest (normal use), false
+     * to just retrieve last state (used in abort commands that do not need to
+     * rebuild ratsnest)
+     */
+    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
+                                 bool               aRedoCommand,
+                                 bool               aRebuildRatsnet = true );
 
     /**
      * Function UndoRedoBlocked
@@ -107,6 +143,20 @@ public:
     {
         m_undoRedoBlocked = aBlock;
     }
+
+    /**
+     * Function GetRotationAngle()
+     * Returns the angle used for rotate operations.
+     */
+    int GetRotationAngle() const { return m_rotationAngle; }
+
+    /**
+     * Function SetRotationAngle()
+     * Sets the angle used for rotate operations.
+     */
+    void SetRotationAngle( int aRotationAngle );
+
+    bool PostCommandMenuEvent( int evt_type );
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void UseGalCanvas( bool aEnable );

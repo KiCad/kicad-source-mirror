@@ -85,7 +85,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
             if( line )
             {
                 m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
                 line->SetParent( m_board->m_Modules );
                 line->SetLocalCoord();
                 m_board->m_Modules->GraphicalItems().PushFront( line );
@@ -142,7 +142,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
             if( circle )
             {
                 m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
                 circle->SetParent( m_board->m_Modules );
                 circle->SetLocalCoord();
                 m_board->m_Modules->GraphicalItems().PushFront( circle );
@@ -189,7 +189,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
             if( arc )
             {
                 m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
                 arc->SetParent( m_board->m_Modules );
                 arc->SetLocalCoord();
                 m_board->m_Modules->GraphicalItems().PushFront( arc );
@@ -236,10 +236,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
     DIMENSION* dimension = NULL;
     int maxThickness;
-
-    // if one day it is possible to draw dimensions in the footprint editor,
-    // then hereby I'm letting you know that this tool does not handle UR_MODEDIT undo yet
-    assert( !m_editModules );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -516,7 +512,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             if( m_editModules )
             {
                 assert( m_board->m_Modules );
-                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
                 m_board->m_Modules->SetLastEditTime();
 
                 for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
@@ -608,7 +604,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     {
         if( evt->IsClick( BUT_LEFT ) )
         {
-            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
             m_board->m_Modules->SetLastEditTime();
 
             // set the new relative internal local coordinates of footprint items
@@ -763,7 +759,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                             l->SetEnd( aGraphic->GetStart() );
                             l->SetLocalCoord();
 
-                            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
                             m_board->m_Modules->SetLastEditTime();
                             m_board->m_Modules->GraphicalItems().PushFront( l );
 
@@ -1031,10 +1027,6 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     ZONE_CONTAINER* zone = NULL;
     DRAWSEGMENT line45;
     DRAWSEGMENT* helperLine = NULL;  // we will need more than one helper line
-
-    // if one day it is possible to draw zones in the footprint editor,
-    // then hereby I'm letting you know that this tool does not handle UR_MODEDIT undo yet
-    assert( !m_editModules );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -1334,7 +1326,7 @@ int DRAWING_TOOL::placeTextModule()
                 text->ClearFlags();
 
                 // Module has to be saved before any modification is made
-                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_MODEDIT );
+                m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
                 m_board->m_Modules->SetLastEditTime();
                 m_board->m_Modules->GraphicalItems().PushFront( text );
 
