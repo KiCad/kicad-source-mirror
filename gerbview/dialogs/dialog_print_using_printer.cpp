@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2016 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ private:
     void OnPrintButtonClick( wxCommandEvent& event );
     void OnScaleSelectionClick( wxCommandEvent& event );
 
-    void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
+    void OnButtonCloseClick( wxCommandEvent& event ) { Close(); }
     void SetPrintParameters();
     void InitValues();
 
@@ -260,7 +260,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
         }
     }
 
-    event.Skip();
+    EndModal( 0 );
 }
 
 
@@ -279,21 +279,36 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters()
     int idx = m_ScaleOption->GetSelection();
     s_Parameters.m_PrintScale = s_ScaleList[idx];
 
-    if( m_FineAdjustXscaleOpt )
+    // Test for a reasonnable scale value
+    bool ok = true;
+    double scaleX;
+    m_FineAdjustXscaleOpt->GetValue().ToDouble( &scaleX );
+
+    double scaleY;
+    m_FineAdjustYscaleOpt->GetValue().ToDouble( &scaleY );
+
+    if( scaleX > MAX_SCALE || scaleY > MAX_SCALE )
     {
-        if( s_Parameters.m_XScaleAdjust > MAX_SCALE ||
-            s_Parameters.m_YScaleAdjust > MAX_SCALE )
-            DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very large value" ) );
-        m_FineAdjustXscaleOpt->GetValue().ToDouble( &s_Parameters.m_XScaleAdjust );
+        DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very large value" ) );
+        ok = false;
     }
 
-    if( m_FineAdjustYscaleOpt )
+    if( scaleX < MIN_SCALE || scaleY < MIN_SCALE )
     {
-        // Test for a reasonnable scale value
-        if( s_Parameters.m_XScaleAdjust < MIN_SCALE ||
-            s_Parameters.m_YScaleAdjust < MIN_SCALE )
-            DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very small value" ) );
-        m_FineAdjustYscaleOpt->GetValue().ToDouble( &s_Parameters.m_YScaleAdjust );
+        DisplayInfoMessage( NULL, _( "Warning: Scale option set to a very small value" ) );
+        ok = false;
+    }
+
+    if( ok )
+    {
+        s_Parameters.m_XScaleAdjust = scaleX;
+        s_Parameters.m_YScaleAdjust = scaleY;
+    }
+    else
+    {
+        // Update actual fine scale value
+        m_FineAdjustXscaleOpt->SetValue( wxString::Format( "%f", s_Parameters.m_XScaleAdjust ) );
+        m_FineAdjustYscaleOpt->SetValue( wxString::Format( "%f", s_Parameters.m_YScaleAdjust ) );
     }
 }
 

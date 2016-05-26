@@ -103,6 +103,7 @@
                         <property name="minimum_size"></property>
                         <property name="name">sbLayersSizer</property>
                         <property name="orient">wxVERTICAL</property>
+                        <property name="parent">1</property>
                         <property name="permission">none</property>
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="1">
@@ -120,10 +121,11 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Layers:</property>
+                                        <property name="label">Graphic layers:</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_leftLayersBoxSizer</property>
                                         <property name="orient">wxVERTICAL</property>
+                                        <property name="parent">1</property>
                                         <property name="permission">protected</property>
                                         <event name="OnUpdateUI"></event>
                                     </object>
@@ -134,10 +136,11 @@
                                     <property name="proportion">1</property>
                                     <object class="wxStaticBoxSizer" expanded="1">
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Layers:</property>
+                                        <property name="label">Graphic layers:</property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_rightLayersBoxSizer</property>
                                         <property name="orient">wxVERTICAL</property>
+                                        <property name="parent">1</property>
                                         <property name="permission">protected</property>
                                         <event name="OnUpdateUI"></event>
                                     </object>
@@ -614,6 +617,7 @@
                                 <property name="minimum_size"></property>
                                 <property name="name">sbOptionsSizer</property>
                                 <property name="orient">wxVERTICAL</property>
+                                <property name="parent">1</property>
                                 <property name="permission">none</property>
                                 <event name="OnUpdateUI"></event>
                                 <object class="sizeritem" expanded="1">
@@ -1133,7 +1137,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick">OnButtonCancelClick</event>
+                                <event name="OnButtonClick">OnButtonCloseClick</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>

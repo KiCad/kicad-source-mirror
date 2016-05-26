@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,12 +22,12 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxBoxSizer* bleftSizer;
 	bleftSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_leftLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers:") ), wxVERTICAL );
+	m_leftLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Graphic layers:") ), wxVERTICAL );
 	
 	
 	bleftSizer->Add( m_leftLayersBoxSizer, 1, wxALL, 5 );
 	
-	m_rightLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Layers:") ), wxVERTICAL );
+	m_rightLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Graphic layers:") ), wxVERTICAL );
 	
 	
 	bleftSizer->Add( m_rightLayersBoxSizer, 1, wxALL, 5 );
@@ -52,7 +52,6 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	bmiddleLeftSizer->Add( m_FineAdjustXscaleTitle, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_FineAdjustXscaleOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_FineAdjustXscaleOpt->SetMaxLength( 0 ); 
 	m_FineAdjustXscaleOpt->SetToolTip( _("Set X scale adjust for exact scale plotting") );
 	
 	bmiddleLeftSizer->Add( m_FineAdjustXscaleOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -62,7 +61,6 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	bmiddleLeftSizer->Add( m_FineAdjustYscaleTitle, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_FineAdjustYscaleOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_FineAdjustYscaleOpt->SetMaxLength( 0 ); 
 	m_FineAdjustYscaleOpt->SetToolTip( _("Set Y scale adjust for exact scale plotting") );
 	
 	bmiddleLeftSizer->Add( m_FineAdjustYscaleOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
@@ -76,7 +74,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxStaticBoxSizer* sbOptionsSizer;
 	sbOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
 	
-	m_Print_Mirror = new wxCheckBox( this, wxID_ANY, _("Mirror"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Print_Mirror = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Mirror"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbOptionsSizer->Add( m_Print_Mirror, 0, wxALL, 5 );
 	
 	
@@ -122,7 +120,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	m_buttonOption->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPageSetup ), NULL, this );
 	m_buttonPreview->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPrintButtonClick ), NULL, this );
-	m_buttonQuit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnButtonCancelClick ), NULL, this );
+	m_buttonQuit->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnButtonCloseClick ), NULL, this );
 }
 
 DIALOG_PRINT_USING_PRINTER_BASE::~DIALOG_PRINT_USING_PRINTER_BASE()
@@ -133,6 +131,6 @@ DIALOG_PRINT_USING_PRINTER_BASE::~DIALOG_PRINT_USING_PRINTER_BASE()
 	m_buttonOption->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPageSetup ), NULL, this );
 	m_buttonPreview->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnPrintButtonClick ), NULL, this );
-	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnButtonCancelClick ), NULL, this );
+	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_BASE::OnButtonCloseClick ), NULL, this );
 	
 }

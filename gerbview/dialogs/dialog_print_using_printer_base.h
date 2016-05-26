@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -65,7 +65,7 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 		virtual void OnPageSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPrintPreview( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPrintButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
