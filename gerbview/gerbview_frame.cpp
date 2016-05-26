@@ -231,17 +231,21 @@ double GERBVIEW_FRAME::BestZoom()
 
     EDA_RECT bbox = GetGerberLayout()->ComputeBoundingBox();
 
-    // gives a minimal value to zoom, if no item in list
+    // gives a size to bbox (current page size), if no item in list
     if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
-        return ZOOM_FACTOR( 200.0 );
+    {
+        wxSize pagesize = m_paper.GetSizeMils();
+        bbox.SetSize( wxSize( Mils2iu( pagesize.x ), Mils2iu( pagesize.y ) ) );
+    }
 
     wxSize  size = m_canvas->GetClientSize();
 
-    double  x   = (double) bbox.GetWidth() / (double) size.x;
-    double  y   = (double) bbox.GetHeight() / (double) size.y;
+    double  x   = (double) bbox.GetWidth() * 1.1 / (double) size.x;
+    double  y   = (double) bbox.GetHeight() * 1.1 / (double) size.y;
+    double  best_zoom = std::max( x, y );
+
     SetScrollCenterPosition( bbox.Centre() );
 
-    double  best_zoom = std::max( x, y );
     return best_zoom;
 }
 
@@ -260,9 +264,7 @@ void GERBVIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( m_showBorderAndTitleBlock )
     {
         wxString pageType;
-
         aCfg->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
-
         pageInfo.SetType( pageType );
     }
 
