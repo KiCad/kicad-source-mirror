@@ -82,11 +82,11 @@ public:
                                             // 0 for items that do not use DCodes (polygons)
                                             // or when unknown and normal values are 10 to 999
                                             // values 0 to 9 can be used for special purposes
-    GERBER_FILE_IMAGE* m_imageParams;            /* main GERBER info for this item
+    GERBER_FILE_IMAGE* m_GerberImageFile;   /* Gerber file image source of this item
                                              * Note: some params stored in this class are common
                                              * to the whole gerber file (i.e) the whole graphic
-                                             * layer and some can change when reaging the file,
-                                             * so they are stored inside this item there is no
+                                             * layer and some can change when reading the file,
+                                             * so they are stored inside this item if there is no
                                              * redundancy for these parameters
                                              */
 private:

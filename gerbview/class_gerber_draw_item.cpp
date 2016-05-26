@@ -38,10 +38,10 @@
 #include <class_gerber_file_image.h>
 
 
-GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_FILE_IMAGE* aGerberparams ) :
+GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_FILE_IMAGE* aGerberImageFile ) :
     EDA_ITEM( (EDA_ITEM*)aParent, TYPE_GERBER_DRAW_ITEM )
 {
-    m_imageParams = aGerberparams;
+    m_GerberImageFile = aGerberImageFile;
     m_Layer         = 0;
     m_Shape         = GBR_SEGMENT;
     m_Flashed       = false;
@@ -53,7 +53,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_FILE_IMAGE* aGer
     m_mirrorB       = false;
     m_drawScale.x   = m_drawScale.y = 1.0;
     m_lyrRotation   = 0;
-    if( m_imageParams )
+    if( m_GerberImageFile )
         SetLayerParameters();
 }
 
@@ -62,7 +62,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_FILE_IMAGE* aGer
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     EDA_ITEM( aSource )
 {
-    m_imageParams = aSource.m_imageParams;
+    m_GerberImageFile = aSource.m_GerberImageFile;
     m_Shape = aSource.m_Shape;
 
     m_Flags     = aSource.m_Flags;
@@ -105,15 +105,15 @@ wxPoint GERBER_DRAW_ITEM::GetABPosition( const wxPoint& aXYPosition ) const
      * For instance: Rotation must be made after or before mirroring ?
      * Note: if something is changed here, GetYXPosition must reflect changes
      */
-    wxPoint abPos = aXYPosition + m_imageParams->m_ImageJustifyOffset;
+    wxPoint abPos = aXYPosition + m_GerberImageFile->m_ImageJustifyOffset;
 
     if( m_swapAxis )
         std::swap( abPos.x, abPos.y );
 
-    abPos  += m_layerOffset + m_imageParams->m_ImageOffset;
+    abPos  += m_layerOffset + m_GerberImageFile->m_ImageOffset;
     abPos.x = KiROUND( abPos.x * m_drawScale.x );
     abPos.y = KiROUND( abPos.y * m_drawScale.y );
-    double rotation = m_lyrRotation * 10 + m_imageParams->m_ImageRotation * 10;
+    double rotation = m_lyrRotation * 10 + m_GerberImageFile->m_ImageRotation * 10;
 
     if( rotation )
         RotatePoint( &abPos, -rotation );
@@ -140,36 +140,36 @@ wxPoint GERBER_DRAW_ITEM::GetXYPosition( const wxPoint& aABPosition ) const
     if( !m_mirrorB )
         xyPos.y = -xyPos.y;
 
-    double rotation = m_lyrRotation * 10 + m_imageParams->m_ImageRotation * 10;
+    double rotation = m_lyrRotation * 10 + m_GerberImageFile->m_ImageRotation * 10;
 
     if( rotation )
         RotatePoint( &xyPos, rotation );
 
     xyPos.x = KiROUND( xyPos.x / m_drawScale.x );
     xyPos.y = KiROUND( xyPos.y / m_drawScale.y );
-    xyPos  -= m_layerOffset + m_imageParams->m_ImageOffset;
+    xyPos  -= m_layerOffset + m_GerberImageFile->m_ImageOffset;
 
     if( m_swapAxis )
         std::swap( xyPos.x, xyPos.y );
 
-    return xyPos - m_imageParams->m_ImageJustifyOffset;
+    return xyPos - m_GerberImageFile->m_ImageJustifyOffset;
 }
 
 
 void GERBER_DRAW_ITEM::SetLayerParameters()
 {
-    m_UnitsMetric = m_imageParams->m_GerbMetric;
-    m_swapAxis    = m_imageParams->m_SwapAxis;     // false if A = X, B = Y;
+    m_UnitsMetric = m_GerberImageFile->m_GerbMetric;
+    m_swapAxis    = m_GerberImageFile->m_SwapAxis;     // false if A = X, B = Y;
 
     // true if A =Y, B = Y
-    m_mirrorA     = m_imageParams->m_MirrorA;      // true: mirror / axe A
-    m_mirrorB     = m_imageParams->m_MirrorB;      // true: mirror / axe B
-    m_drawScale   = m_imageParams->m_Scale;        // A and B scaling factor
-    m_layerOffset = m_imageParams->m_Offset;       // Offset from OF command
+    m_mirrorA     = m_GerberImageFile->m_MirrorA;      // true: mirror / axe A
+    m_mirrorB     = m_GerberImageFile->m_MirrorB;      // true: mirror / axe B
+    m_drawScale   = m_GerberImageFile->m_Scale;        // A and B scaling factor
+    m_layerOffset = m_GerberImageFile->m_Offset;       // Offset from OF command
 
     // Rotation from RO command:
-    m_lyrRotation = m_imageParams->m_LocalRotation;
-    m_LayerNegative = m_imageParams->GetLayerParams().m_LayerNegative;
+    m_lyrRotation = m_GerberImageFile->m_LocalRotation;
+    m_LayerNegative = m_GerberImageFile->GetLayerParams().m_LayerNegative;
 }
 
 
@@ -223,14 +223,10 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
     if( (m_DCode < FIRST_DCODE) || (m_DCode > LAST_DCODE) )
         return NULL;
 
-    GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( m_Layer );
-
-    if( gerber == NULL )
+    if( m_GerberImageFile == NULL )
         return NULL;
 
-    D_CODE* d_code = gerber->GetDCODE( m_DCode, false );
-
-    return d_code;
+    return m_GerberImageFile->GetDCODE( m_DCode, false );
 }
 
 
@@ -278,7 +274,7 @@ bool GERBER_DRAW_ITEM::Save( FILE* aFile ) const
 
 bool GERBER_DRAW_ITEM::HasNegativeItems()
 {
-    bool isClear = m_LayerNegative ^ m_imageParams->m_ImageNegative;
+    bool isClear = m_LayerNegative ^ m_GerberImageFile->m_ImageNegative;
 
     // if isClear is true, this item has negative shape
     // but if isClear is true, and if this item use an aperture macro definition,
@@ -336,7 +332,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
      *   color other than the background color, else use the background color
      *   when drawing so that an erasure happens.
      */
-    bool isDark = !(m_LayerNegative ^ m_imageParams->m_ImageNegative);
+    bool isDark = !(m_LayerNegative ^ m_GerberImageFile->m_ImageNegative);
 
     if( !isDark )
     {

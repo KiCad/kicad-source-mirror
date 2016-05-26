@@ -43,6 +43,7 @@
 #include <gerbview_id.h>
 #include <hotkeys.h>
 #include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 #include <dialog_helpers.h>
 #include <class_DCodeSelectionbox.h>
 #include <class_gerbview_layer_widget.h>

@@ -34,6 +34,7 @@
 #include <class_drawpanel.h>
 #include <class_gbr_layout.h>
 #include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 
 GBR_LAYOUT::GBR_LAYOUT()
 {
