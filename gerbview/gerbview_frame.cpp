@@ -228,13 +228,12 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
 double GERBVIEW_FRAME::BestZoom()
 {
-    GERBER_DRAW_ITEM* item = GetGerberLayout()->m_Drawings;
-
-    // gives a minimal value to zoom, if no item in list
-    if( item == NULL  )
-        return ZOOM_FACTOR( 350.0 );
 
     EDA_RECT bbox = GetGerberLayout()->ComputeBoundingBox();
+
+    // gives a minimal value to zoom, if no item in list
+    if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
+        return ZOOM_FACTOR( 200.0 );
 
     wxSize  size = m_canvas->GetClientSize();
 

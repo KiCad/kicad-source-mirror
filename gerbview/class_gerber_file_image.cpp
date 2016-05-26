@@ -89,7 +89,7 @@ void GERBER_LAYER::ResetDefaultValues()
 
 GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( GERBVIEW_FRAME* aParent, int aLayer )
 {
-    //m_parent = aParent;
+    m_parent = aParent;
     m_GraphicLayer = aLayer;        // Graphic layer Number
 
     m_Selected_Tool = FIRST_DCODE;
@@ -118,7 +118,7 @@ GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
  */
 GERBER_DRAW_ITEM * GERBER_FILE_IMAGE::GetItemsList()
 {
-    return m_parent->GetItemsList();
+    return m_Drawings;
 }
 
 D_CODE* GERBER_FILE_IMAGE::GetDCODE( int aDCODE, bool aCreateIfNoExist )
@@ -323,7 +323,7 @@ void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
             move_vector.y = scaletoIU( jj * GetLayerParams().m_StepForRepeat.y,
                                    GetLayerParams().m_StepForRepeatMetric );
             dupItem->MoveXY( move_vector );
-            m_parent->GetGerberLayout()->m_Drawings.Append( dupItem );
+            m_Drawings.Append( dupItem );
         }
     }
 }

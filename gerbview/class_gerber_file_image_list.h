@@ -114,10 +114,9 @@ public:
 
     /**
      * Sort loaded images by Z order priority, if they have the X2 FileFormat info
-     * @param aDrawList: the draw list associated to the gerber images
      * (SortImagesByZOrder updates the graphic layer of these items)
      */
-    void SortImagesByZOrder( GERBER_DRAW_ITEM* aDrawList );
+    void SortImagesByZOrder();
 };
 
 

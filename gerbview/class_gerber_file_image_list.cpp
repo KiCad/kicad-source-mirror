@@ -204,7 +204,7 @@ static bool sortZorder( const GERBER_FILE_IMAGE* const& ref, const GERBER_FILE_I
     return ref->m_FileFunction->GetZSubOrder() > test->m_FileFunction->GetZSubOrder();
 }
 
-void GERBER_FILE_IMAGE_LIST::SortImagesByZOrder( GERBER_DRAW_ITEM* aDrawList )
+void GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
 {
     std::sort( m_GERBER_List.begin(), m_GERBER_List.end(), sortZorder );
 
@@ -216,18 +216,13 @@ void GERBER_FILE_IMAGE_LIST::SortImagesByZOrder( GERBER_DRAW_ITEM* aDrawList )
 
     for( unsigned layer = 0; layer < m_GERBER_List.size(); ++layer )
     {
-        if( m_GERBER_List[layer] )
-        {
-            tab_lyr[m_GERBER_List[layer]->m_GraphicLayer] = layer;
-            m_GERBER_List[layer]->m_GraphicLayer = layer ;
-        }
-    }
+        GERBER_FILE_IMAGE* gerber = m_GERBER_List[layer];
 
-    // update the graphic layer in items to draw
-    for( GERBER_DRAW_ITEM* item = aDrawList; item; item = item->Next() )
-    {
-        int layer = item->GetLayer();
-        item->SetLayer( tab_lyr[layer] );
+        if( !gerber )
+            continue;
+
+        tab_lyr[gerber->m_GraphicLayer] = layer;
+        gerber->m_GraphicLayer = layer ;
     }
 }
 

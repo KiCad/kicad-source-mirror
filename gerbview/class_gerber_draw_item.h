@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 <Jean-Pierre Charras>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 <Jean-Pierre Charras>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,8 +90,6 @@ public:
                                              * redundancy for these parameters
                                              */
 private:
-    int m_Layer;
-
     // These values are used to draw this item, according to gerber layers parameters
     // Because they can change inside a gerber image, they are stored here
     // for each item
@@ -104,7 +102,7 @@ private:
     double      m_lyrRotation;              // Fine rotation, from OR parameter, in degrees
 
 public:
-    GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_FILE_IMAGE* aGerberparams );
+    GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberparams );
     GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource );
     ~GERBER_DRAW_ITEM();
 
@@ -123,16 +121,7 @@ public:
      * Function GetLayer
      * returns the layer this item is on.
      */
-    int GetLayer() const { return m_Layer; }
-
-    /**
-     * Function SetLayer
-     * sets the layer this item is on.
-     * @param aLayer The layer number.
-     * is virtual because some items (in fact: class DIMENSION)
-     * have a slightly different initialization
-     */
-    void SetLayer( int aLayer )  { m_Layer = aLayer; }
+    int GetLayer() const;
 
     bool GetLayerPolarity()
     {
@@ -216,10 +205,8 @@ public:
     const EDA_RECT GetBoundingBox() const;  // Virtual
 
     /* Display on screen: */
-    void Draw( EDA_DRAW_PANEL*         aPanel,
-               wxDC*                   aDC,
-               GR_DRAWMODE             aDrawMode,
-               const wxPoint&aOffset );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+               GR_DRAWMODE aDrawMode, const wxPoint&aOffset );
 
     /**
      * Function ConvertSegmentToPolygon
@@ -233,8 +220,7 @@ public:
      * Function DrawGbrPoly
      * a helper function used to draw the polygon stored in m_PolyCorners
      */
-    void DrawGbrPoly( EDA_RECT* aClipBox,
-                      wxDC* aDC, EDA_COLOR_T aColor,
+    void DrawGbrPoly( EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColor,
                       const wxPoint& aOffset, bool aFilledShape );
 
     /* divers */

@@ -31,6 +31,7 @@
 #include <confirm.h>
 
 #include <gerbview_frame.h>
+#include <class_gerber_file_image.h>
 #include <class_gerber_file_image_list.h>
 #include <class_gerbview_layer_widget.h>
 
@@ -45,7 +46,15 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
             return false;
     }
 
-    GetGerberLayout()->m_Drawings.DeleteAll();
+    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+    {
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
+        gerber->m_Drawings.DeleteAll();
+    }
 
     g_GERBER_List.ClearList();
 
@@ -72,18 +81,10 @@ void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
 
     SetCurItem( NULL );
 
-    GERBER_DRAW_ITEM* item = GetGerberLayout()->m_Drawings;
-    GERBER_DRAW_ITEM * next;
+    GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
-    for( ; item; item = next )
-    {
-        next = item->Next();
-
-        if( item->GetLayer() != layer )
-            continue;
-
-        item->DeleteStructure();
-    }
+    if( gerber )    // gerber == NULL should not occur
+        gerber->m_Drawings.DeleteAll();
 
     g_GERBER_List.ClearImage( layer );
 

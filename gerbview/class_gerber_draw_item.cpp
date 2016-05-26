@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 <Jean-Pierre Charras>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 <Jean-Pierre Charras>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,11 +38,10 @@
 #include <class_gerber_file_image.h>
 
 
-GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GBR_LAYOUT* aParent, GERBER_FILE_IMAGE* aGerberImageFile ) :
-    EDA_ITEM( (EDA_ITEM*)aParent, TYPE_GERBER_DRAW_ITEM )
+GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
+    EDA_ITEM( (EDA_ITEM*)NULL, TYPE_GERBER_DRAW_ITEM )
 {
     m_GerberImageFile = aGerberImageFile;
-    m_Layer         = 0;
     m_Shape         = GBR_SEGMENT;
     m_Flashed       = false;
     m_DCode         = 0;
@@ -72,7 +71,6 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     m_Start         = aSource.m_Start;
     m_End           = aSource.m_End;
     m_Size          = aSource.m_Size;
-    m_Layer         = aSource.m_Layer;
     m_Shape         = aSource.m_Shape;
     m_Flashed       = aSource.m_Flashed;
     m_DCode         = aSource.m_DCode;
@@ -96,6 +94,13 @@ GERBER_DRAW_ITEM::~GERBER_DRAW_ITEM()
 GERBER_DRAW_ITEM* GERBER_DRAW_ITEM::Copy() const
 {
     return new GERBER_DRAW_ITEM( *this );
+}
+
+
+int GERBER_DRAW_ITEM::GetLayer() const
+{
+    // returns the layer this item is on, or 0 if the m_GerberImageFile is NULL.
+    return m_GerberImageFile ? m_GerberImageFile->m_GraphicLayer : 0;
 }
 
 
@@ -612,7 +617,7 @@ void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os ) const
 
     " shape=\"" << m_Shape << '"' <<
     " addr=\"" << std::hex << this << std::dec << '"' <<
-    " layer=\"" << m_Layer << '"' <<
+    " layer=\"" << GetLayer() << '"' <<
     " size=\"" << m_Size << '"' <<
     " flags=\"" << m_Flags << '"' <<
     " status=\"" << GetStatus() << '"' <<

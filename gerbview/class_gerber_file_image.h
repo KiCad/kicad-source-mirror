@@ -101,6 +101,8 @@ class GERBER_FILE_IMAGE
     GERBER_LAYER       m_GBRLayerParams; // hold params for the current gerber layer
 
 public:
+    DLIST<GERBER_DRAW_ITEM> m_Drawings;                         // linked list of Gerber Items to draw
+
     bool               m_InUse;                                 // true if this image is currently in use
                                                                 // (a file is loaded in it)
     wxString           m_FileName;                              // Full File Name for this layer

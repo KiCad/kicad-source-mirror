@@ -33,6 +33,8 @@
 #include <class_drawpanel.h>
 #include <gerbview_frame.h>
 #include <class_gerber_draw_item.h>
+#include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 
 
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
@@ -200,13 +202,21 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
     /* Calculate displacement vectors. */
     delta = GetScreen()->m_BlockLocate.GetMoveVector();
 
-    /* Move items in block */
-    for( GERBER_DRAW_ITEM* item = GetItemsList(); item; item = item->Next() )
+    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
-        GERBER_DRAW_ITEM* gerb_item = item;
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
-        if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
-            gerb_item->MoveAB( delta );
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
+        /* Move items in block */
+        for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item; item = item->Next() )
+        {
+            GERBER_DRAW_ITEM* gerb_item = item;
+
+            if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
+                gerb_item->MoveAB( delta );
+        }
     }
 
     m_canvas->Refresh( true );
