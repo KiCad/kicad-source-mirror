@@ -428,10 +428,13 @@ void GRMixedLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
                   int aWidth, EDA_COLOR_T aColor )
 {
+    if( aLines.empty() )
+        return;
+
     GRSetColorPen( aDC, aColor, aWidth );
 
     if( aClipBox )
-        aClipBox->Inflate(aWidth/2);
+        aClipBox->Inflate( aWidth / 2 );
 
 #if defined( __WXMAC__ ) && defined( USE_WX_GRAPHICS_CONTEXT )
     wxGCDC *gcdc = wxDynamicCast( aDC, wxGCDC );
