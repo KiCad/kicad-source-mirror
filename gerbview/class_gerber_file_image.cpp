@@ -89,7 +89,7 @@ void GERBER_LAYER::ResetDefaultValues()
 
 GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( GERBVIEW_FRAME* aParent, int aLayer )
 {
-    //m_parent = aParent;
+    m_parent = aParent;
     m_GraphicLayer = aLayer;        // Graphic layer Number
 
     m_Selected_Tool = FIRST_DCODE;

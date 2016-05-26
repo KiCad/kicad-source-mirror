@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  5 2015)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
+#include "dialog_shim.h"
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
@@ -18,6 +21,7 @@
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -27,12 +31,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DLG_3D_PATH_CONFIG_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DLG_3D_PATH_CONFIG_BASE : public wxDialog 
+class DLG_3D_PATH_CONFIG_BASE : public DIALOG_SHIM
 {
 	private:
 	
 	protected:
 		wxGrid* m_Aliases;
+		wxStaticLine* m_staticline1;
 		wxButton* m_btnAddAlias;
 		wxButton* m_btnDelAlias;
 		wxButton* m_btnMoveUp;
@@ -49,7 +54,7 @@ class DLG_3D_PATH_CONFIG_BASE : public wxDialog
 	
 	public:
 		
-		DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Search Path Configuration"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE ); 
+		DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("3D Search Path Configuration"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 555,144 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DLG_3D_PATH_CONFIG_BASE();
 	
 };
