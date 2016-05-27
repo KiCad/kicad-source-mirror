@@ -43,39 +43,6 @@
 #include <build_version.h>
 
 
-/// Extend LIB_ENV_VAR list with the directory from which I came, prepending it.
-static void set_lib_env_var( const wxString& aAbsoluteArgv0 )
-{
-    // POLICY CHOICE 2: Keep same path, so that installer MAY put the
-    // "subsidiary DSOs" in the same directory as the kiway top process modules.
-    // A subsidiary shared library is one that is not a top level DSO, but rather
-    // some shared library that a top level DSO needs to even be loaded.  It is
-    // a static link to a shared object from a top level DSO.
-
-    // This directory POLICY CHOICE 2 is not the only dir in play, since LIB_ENV_VAR
-    // has numerous path options in it, as does DSO searching on linux, windows, and OSX.
-    // See "man ldconfig" on linux. What's being done here is for quick installs
-    // into a non-standard place, and especially for Windows users who may not
-    // know what the PATH environment variable is or how to set it.
-
-    wxFileName  fn( aAbsoluteArgv0 );
-
-    wxString    ld_path( LIB_ENV_VAR );
-    wxString    my_path   = fn.GetPath();
-    wxString    new_paths = PrePendPath( ld_path, my_path );
-
-    wxSetEnv( ld_path, new_paths );
-
-#if defined(DEBUG)
-    {
-        wxString    test;
-        wxGetEnv( ld_path, &test );
-        printf( "LIB_ENV_VAR:'%s'\n", TO_UTF8( test ) );
-    }
-#endif
-}
-
-
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_i.h>
 KIFACE_I& Kiface()
@@ -107,10 +74,6 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
         wxLogError( wxT( "No meaningful argv[0]" ) );
         return false;
     }
-
-    // Set LIB_ENV_VAR *before* loading the KIFACE DSOs, in case they have hard
-    // dependencies on subsidiary DSOs below it.
-    set_lib_env_var( absoluteArgv0 );
 
     if( !initPgm() )
         return false;
