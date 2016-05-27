@@ -49,6 +49,7 @@
 
 #include <boost/version.hpp>
 #include <typeinfo>
+#include <wx/display.h>
 
 /// The default auto save interval is 10 minutes.
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
@@ -253,6 +254,20 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
         aCfg->Read( text, &m_autoSaveInterval, DEFAULT_AUTO_SAVE_INTERVAL );
     }
 
+    // Ensure the window is on a connected display, and is visible.
+    // (at least a corner of the frame must be visible on screen)
+    // Sometimes, if a window was moved on an auxiliary display, and when this
+    // display is no more available, it is not the case.
+    wxRect rect( m_FramePos, m_FrameSize );
+
+    if( wxDisplay::GetFromPoint( rect.GetTopLeft() ) == wxNOT_FOUND &&
+        wxDisplay::GetFromPoint( rect.GetTopRight() ) == wxNOT_FOUND &&
+        wxDisplay::GetFromPoint( rect.GetBottomLeft() ) == wxNOT_FOUND &&
+        wxDisplay::GetFromPoint( rect.GetBottomRight() ) == wxNOT_FOUND )
+    {
+        m_FramePos = wxDefaultPosition;
+    }
+
     // Ensure Window title bar is visible
 #if defined( __WXMAC__ )
     // for macOSX, the window must be below system (macOSX) toolbar
@@ -455,7 +470,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 
 void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
 {
-    // Ask for the current editor and instruct GetEditorName() to not show 
+    // Ask for the current editor and instruct GetEditorName() to not show
     // unless we pass false as argument.
     wxString editorname = Pgm().GetEditorName( false );
 
