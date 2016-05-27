@@ -38,6 +38,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 #include <printout_controler.h>
 
 
@@ -60,7 +61,7 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
     PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*) aData;
 
     // Find the layer to be printed
-    int page = printParameters->m_Flags;    // contains the page number (not necessarily layer number)
+    int page = printParameters->m_Flags;    // contains the page number (not necessarily graphic layer number)
     int layer = 0;
 
     // Find the layer number for the printed page (search through the mask and count bits)
@@ -157,57 +158,66 @@ void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, GR_DRAWMODE aDrawMode )
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    for( GERBER_DRAW_ITEM* item = GetItemsList(); item != NULL; item = item->Next() )
+    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
-        if( IsLayerVisible( item->GetLayer() ) == false )
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+
+        if( gerber == NULL )    // Graphic layer not yet used
             continue;
 
-        if( item->m_DCode <= 0 )
+        if( IsLayerVisible( layer ) == false )
             continue;
 
-        if( item->m_Flashed || item->m_Shape == GBR_ARC )
+        for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item != NULL; item = item->Next() )
         {
-            pos = item->m_Start;
+
+            if( item->m_DCode <= 0 )
+                continue;
+
+            if( item->m_Flashed || item->m_Shape == GBR_ARC )
+            {
+                pos = item->m_Start;
+            }
+            else
+            {
+                pos.x = (item->m_Start.x + item->m_End.x) / 2;
+                pos.y = (item->m_Start.y + item->m_End.y) / 2;
+            }
+
+            pos = item->GetABPosition( pos );
+
+            Line.Printf( wxT( "D%d" ), item->m_DCode );
+
+            if( item->GetDcodeDescr() )
+                width = item->GetDcodeDescr()->GetShapeDim( item );
+            else
+                width = std::min( item->m_Size.x, item->m_Size.y );
+
+            orient = TEXT_ORIENT_HORIZ;
+
+            if( item->m_Flashed )
+            {
+                // A reasonable size for text is width/3 because most of time this text has 3 chars.
+                width /= 3;
+            }
+            else        // this item is a line
+            {
+                wxPoint delta = item->m_Start - item->m_End;
+
+                if( abs( delta.x ) < abs( delta.y ) )
+                    orient = TEXT_ORIENT_VERT;
+
+                // A reasonable size for text is width/2 because text needs margin below and above it.
+                // a margin = width/4 seems good
+                width /= 2;
+            }
+
+            int color = GetVisibleElementColor( DCODES_VISIBLE );
+
+            DrawGraphicText( m_canvas->GetClipBox(), aDC, pos, (EDA_COLOR_T) color, Line,
+                             orient, wxSize( width, width ),
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                             0, false, false );
         }
-        else
-        {
-            pos.x = (item->m_Start.x + item->m_End.x) / 2;
-            pos.y = (item->m_Start.y + item->m_End.y) / 2;
-        }
-
-        pos = item->GetABPosition( pos );
-
-        Line.Printf( wxT( "D%d" ), item->m_DCode );
-
-        if( item->GetDcodeDescr() )
-            width = item->GetDcodeDescr()->GetShapeDim( item );
-        else
-            width = std::min( item->m_Size.x, item->m_Size.y );
-
-        orient = TEXT_ORIENT_HORIZ;
-
-        if( item->m_Flashed )
-        {
-            // A reasonable size for text is width/3 because most of time this text has 3 chars.
-            width /= 3;
-        }
-        else        // this item is a line
-        {
-            wxPoint delta = item->m_Start - item->m_End;
-
-            if( abs( delta.x ) < abs( delta.y ) )
-                orient = TEXT_ORIENT_VERT;
-
-            // A reasonable size for text is width/2 because text needs margin below and above it.
-            // a margin = width/4 seems good
-            width /= 2;
-        }
-
-        int color = GetVisibleElementColor( DCODES_VISIBLE );
-
-        DrawGraphicText( m_canvas->GetClipBox(), aDC, pos, (EDA_COLOR_T) color, Line,
-                         orient, wxSize( width, width ),
-                         GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                         0, false, false );
     }
 }

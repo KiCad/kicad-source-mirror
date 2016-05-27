@@ -33,7 +33,6 @@
 #include <macros.h>
 #include <class_drawpanel.h>
 
-#include <pcbplot.h>
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerbview_dialog_display_options_frame_base.h>

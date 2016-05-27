@@ -37,6 +37,7 @@
 #include <kicad_device_context.h>
 #include <gerbview_id.h>
 #include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 #include <dialog_helpers.h>
 #include <class_DCodeSelectionbox.h>
 #include <class_gerbview_layer_widget.h>
@@ -58,7 +59,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     // Menu Files:
     EVT_MENU( wxID_FILE, GERBVIEW_FRAME::Files_io )
     EVT_MENU( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
-    EVT_MENU( ID_GEN_PLOT, GERBVIEW_FRAME::ToPlotter )
     EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW, GERBVIEW_FRAME::ExportDataInPcbnewFormat )
 
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, GERBVIEW_FRAME::OnGbrFileHistory )

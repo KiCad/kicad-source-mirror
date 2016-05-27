@@ -69,6 +69,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 #include <class_excellon.h>
 #include <kicad_string.h>
 #include <class_X2_gerber_attributes.h>
@@ -87,16 +88,16 @@ static const int fmtIntegerInch = 2;
 
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
+
+// See ds274d.cpp:
 extern void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                                  APERTURE_T        aAperture,
                                  int               Dcode_index,
-                                 int               aLayer,
                                  const wxPoint&    aPos,
                                  wxSize            aSize,
                                  bool              aLayerNegative );
 void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               int               Dcode_index,
-                              int               aLayer,
                               const wxPoint&    aStart,
                               const wxPoint&    aEnd,
                               wxSize            aPenSize,
@@ -547,22 +548,19 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                     return false;
                 }
 
-                gbritem = new GERBER_DRAW_ITEM( GetParent()->GetGerberLayout(), this );
-                GetParent()->GetGerberLayout()->m_Drawings.Append( gbritem );
+                gbritem = new GERBER_DRAW_ITEM( this );
+                m_Drawings.Append( gbritem );
 
                 if( m_SlotOn )  // Oval hole
                 {
-                    fillLineGBRITEM( gbritem,
-                                    tool->m_Num_Dcode, GetParent()->getActiveLayer(),
+                    fillLineGBRITEM( gbritem, tool->m_Num_Dcode,
                                     m_PreviousPos, m_CurrentPos,
                                     tool->m_Size, false );
                 }
                 else
                 {
-                    fillFlashedGBRITEM( gbritem, tool->m_Shape,
-                                    tool->m_Num_Dcode, GetParent()->getActiveLayer(),
-                                    m_CurrentPos,
-                                    tool->m_Size, false );
+                    fillFlashedGBRITEM( gbritem, tool->m_Shape, tool->m_Num_Dcode,
+                                    m_CurrentPos, tool->m_Size, false );
                 }
 
                 StepAndRepeatItem( *gbritem );

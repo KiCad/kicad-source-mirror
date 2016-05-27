@@ -37,6 +37,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 #include <select_layers_to_pcb.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
@@ -219,33 +220,45 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
 
     // create an image of gerber data
     // First: non copper layers:
-    GERBER_DRAW_ITEM* gerb_item = m_gerbview_frame->GetItemsList();
-    int pcbCopperLayerMax = 31;
+    const int pcbCopperLayerMax = 31;
 
-    for( ; gerb_item; gerb_item = gerb_item->Next() )
+    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
-        int layer = gerb_item->GetLayer();
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
         LAYER_NUM pcb_layer_number = aLayerLookUpTable[layer];
 
         if( !IsPcbLayer( pcb_layer_number ) )
             continue;
 
-        if( pcb_layer_number > pcbCopperLayerMax )
+        if( pcb_layer_number <= pcbCopperLayerMax ) // copper layer
+            continue;
+
+        GERBER_DRAW_ITEM* gerb_item = gerber->GetItemsList();
+
+        for( ; gerb_item; gerb_item = gerb_item->Next() )
             export_non_copper_item( gerb_item, pcb_layer_number );
     }
 
     // Copper layers
-    gerb_item = m_gerbview_frame->GetItemsList();
-
-    for( ; gerb_item; gerb_item = gerb_item->Next() )
+    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
-        int layer = gerb_item->GetLayer();
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
         LAYER_NUM pcb_layer_number = aLayerLookUpTable[layer];
 
         if( pcb_layer_number < 0 || pcb_layer_number > pcbCopperLayerMax )
             continue;
 
-        else
+        GERBER_DRAW_ITEM* gerb_item = gerber->GetItemsList();
+
+        for( ; gerb_item; gerb_item = gerb_item->Next() )
             export_copper_item( gerb_item, pcb_layer_number );
     }
 

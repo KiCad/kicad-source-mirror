@@ -32,9 +32,11 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
+#include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 
 
-/* localize a gerber item and return a pointer to it.
+/* locate a gerber item and return a pointer to it.
  * Display info about this item
  */
 GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc )
@@ -47,30 +49,39 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
         ref = GetNearestGridPosition( ref );
 
     int layer = getActiveLayer();
+    GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
     // Search first on active layer
-    GERBER_DRAW_ITEM* gerb_item = GetItemsList();
+    GERBER_DRAW_ITEM* gerb_item;
 
-    for( ; gerb_item; gerb_item = gerb_item->Next() )
+    if( gerber )    // A not used graphic layer can be selected. So gerber can be NULL
     {
-        if( gerb_item->GetLayer()!= layer )
-            continue;
-
-        if( gerb_item->HitTest( ref ) )
-        {
-            found = true;
-            break;
-        }
-    }
-
-    if( !found ) // Search on all layers
-    {
-        for( gerb_item = GetItemsList(); gerb_item; gerb_item = gerb_item->Next() )
+        for( gerb_item = gerber->GetItemsList(); gerb_item; gerb_item = gerb_item->Next() )
         {
             if( gerb_item->HitTest( ref ) )
             {
                 found = true;
                 break;
+            }
+        }
+    }
+
+    if( !found ) // Search on all layers
+    {
+        for( layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+        {
+            gerber = g_GERBER_List.GetGbrImage( layer );
+
+            if( gerber == NULL )    // Graphic layer not yet used
+                continue;
+
+            for( gerb_item = gerber->GetItemsList(); gerb_item; gerb_item = gerb_item->Next() )
+            {
+                if( gerb_item->HitTest( ref ) )
+                {
+                    found = true;
+                    break;
+                }
             }
         }
     }

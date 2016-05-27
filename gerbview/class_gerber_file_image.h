@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _CLASS_GERBER_H_
-#define _CLASS_GERBER_H_
+#ifndef CLASS_GERBER_FILE_IMAGE_H
+#define CLASS_GERBER_FILE_IMAGE_H
 
 #include <vector>
 #include <set>
@@ -101,6 +101,8 @@ class GERBER_FILE_IMAGE
     GERBER_LAYER       m_GBRLayerParams; // hold params for the current gerber layer
 
 public:
+    DLIST<GERBER_DRAW_ITEM> m_Drawings;                         // linked list of Gerber Items to draw
+
     bool               m_InUse;                                 // true if this image is currently in use
                                                                 // (a file is loaded in it)
     wxString           m_FileName;                              // Full File Name for this layer
@@ -312,72 +314,4 @@ public:
     void DisplayImageInfo( void );
 };
 
-/**
- * @brief GERBER_FILE_IMAGE_LIST is a helper class to handle a list of GERBER_FILE_IMAGE files
- * which are loaded and can be displayed
- * there are 32 images max which can be loaded
- */
-class GERBER_FILE_IMAGE_LIST
-{
-    // the list of loaded images (1 image = 1 gerber file)
-    std::vector<GERBER_FILE_IMAGE*> m_GERBER_List;
-
-public:
-    GERBER_FILE_IMAGE_LIST();
-    ~GERBER_FILE_IMAGE_LIST();
-
-    //Accessor
-    GERBER_FILE_IMAGE* GetGbrImage( int aIdx );
-
-    /**
-     * Add a GERBER_FILE_IMAGE* at index aIdx
-     * or at the first free location if aIdx < 0
-     * @param aGbrImage = the image to add
-     * @param aIdx = the location to use ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
-     * @return true if the index used, or -1 if no room to add image
-     */
-    int AddGbrImage( GERBER_FILE_IMAGE* aGbrImage, int aIdx );
-
-
-    /**
-     * remove all loaded data in list
-     */
-    void ClearList();
-
-    /**
-     * remove the loaded data of image aIdx
-     * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
-     */
-    void ClearImage( int aIdx );
-
-    /**
-     * @return a name for image aIdx which can be used in layers manager
-     * and layer selector
-     * if a file is loaded, the name is:
-     * "<aIdx+1> <short filename> <X2 FileFunction info> if a X2 FileFunction info is found"
-     * or (if no FileFunction info)
-     * "<aIdx+1> <short filename> *"
-     * if no file loaded, the name is:
-     *  "Layer n"  with n = aIdx+1
-     * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
-     */
-    const wxString GetDisplayName( int aIdx );
-
-    /**
-     * @return true if image is used (loaded and with items)
-     * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
-     */
-    bool IsUsed( int aIdx );
-
-    /**
-     * Sort loaded images by Z order priority, if they have the X2 FileFormat info
-     * @param aDrawList: the draw list associated to the gerber images
-     * (SortImagesByZOrder updates the graphic layer of these items)
-     */
-    void SortImagesByZOrder( GERBER_DRAW_ITEM* aDrawList );
-};
-
-
-extern GERBER_FILE_IMAGE_LIST g_GERBER_List;
-
-#endif  // ifndef _CLASS_GERBER_H_
+#endif  // ifndef CLASS_GERBER_FILE_IMAGE_H

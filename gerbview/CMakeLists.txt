@@ -29,6 +29,7 @@ set( GERBVIEW_SRCS
     class_gbr_screen.cpp
     class_gbr_layout.cpp
     class_gerber_file_image.cpp
+    class_gerber_file_image_list.cpp
     class_gerber_draw_item.cpp
     class_gerbview_layer_widget.cpp
     class_gbr_layer_box_selector.cpp
@@ -48,7 +49,6 @@ set( GERBVIEW_SRCS
     menubar.cpp
     onleftclick.cpp
     onrightclick.cpp
-    pcbplot.cpp
     printout_control.cpp
     readgerb.cpp
     rs274_read_XY_and_IJ_coordinates.cpp

@@ -34,6 +34,7 @@
 #include <class_drawpanel.h>
 #include <class_gbr_layout.h>
 #include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 
 GBR_LAYOUT::GBR_LAYOUT()
 {
@@ -50,8 +51,16 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox()
 {
     EDA_RECT bbox;
 
-    for( GERBER_DRAW_ITEM* gerb_item = m_Drawings; gerb_item; gerb_item = gerb_item->Next() )
-        bbox.Merge( gerb_item->GetBoundingBox() );
+    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+    {
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
+        for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item; item = item->Next() )
+            bbox.Merge( item->GetBoundingBox() );
+    }
 
     SetBoundingBox( bbox );
     return bbox;
@@ -134,6 +143,8 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     // in non transparent modes, the last layer drawn mask mask previously drawn layer
     for( int layer = GERBER_DRAWLAYERS_COUNT-1; !end; --layer )
     {
+        EDA_COLOR_T layer_color = gerbFrame->GetLayerColor( layer );
+
         int active_layer = gerbFrame->getActiveLayer();
 
         if( layer == active_layer ) // active layer will be drawn after other layers
@@ -227,11 +238,9 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( aDrawMode == GR_OR && !gerber->HasNegativeItems() )
             layerdrawMode = GR_OR;
 
-        EDA_COLOR_T item_color = gerbFrame->GetLayerColor( layer );
-
         // Now we can draw the current layer to the bitmap buffer
         // When needed, the previous bitmap is already copied to the screen buffer.
-        for( GERBER_DRAW_ITEM* item = gerbFrame->GetItemsList(); item; item = item->Next() )
+        for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item; item = item->Next() )
         {
             if( item->GetLayer() != layer )
                 continue;
@@ -246,7 +255,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         }
 
         if( aPrintBlackAndWhite )
-            gerbFrame->SetLayerColor( layer, item_color );
+            gerbFrame->SetLayerColor( layer, layer_color );
     }
 
     if( doBlit && useBufferBitmap )     // Blit is used only if aDrawMode >= 0
