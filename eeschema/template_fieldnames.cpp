@@ -35,20 +35,20 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
     // (mandatory fields)
     switch( aFieldNdx )
     {
-        case  REFERENCE:
-            return _( "Reference" );   // The component reference, R1, C1, etc.
+    case  REFERENCE:
+        return _( "Reference" );   // The component reference, R1, C1, etc.
 
-        case  VALUE:
-            return _( "Value" );       // The component value + name
+    case  VALUE:
+        return _( "Value" );       // The component value + name
 
-        case  FOOTPRINT:
-            return _( "Footprint" );   // The footprint for use with Pcbnew
+    case  FOOTPRINT:
+        return _( "Footprint" );   // The footprint for use with Pcbnew
 
-        case  DATASHEET:
-            return _( "Datasheet" );   // Link to a datasheet for component
+    case  DATASHEET:
+        return _( "Datasheet" );   // Link to a datasheet for component
 
-        default:
-            break;
+    default:
+        break;
     }
 
     // Other fields are use fields, give a default name:

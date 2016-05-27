@@ -78,6 +78,17 @@ void LIB_FIELD::Init( int id )
     // less dependent on field ids and more dependent on names.
     // Plus assumptions are made in the field editors.
     m_name = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
+
+    switch( id )
+    {
+    case DATASHEET:
+    case FOOTPRINT:
+        // by contrast, VALUE and REFERENCE are are always constructed as
+        // initially visible, and template fieldsnames' initial visibility
+        // is controlled by the template fieldname configuration record.
+        SetVisible( false );
+        break;
+    }
 }
 
 
@@ -563,7 +574,7 @@ void LIB_FIELD::Rotate()
 }
 
 
-wxString LIB_FIELD::GetName(bool aTranslate) const
+wxString LIB_FIELD::GetName( bool aTranslate ) const
 {
     wxString name;
 
