@@ -199,11 +199,20 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
     if( m_footprintList.IsEmpty() )
         return;
 
+    // On some plateforms (OSX) the focus is lost when the viewers (fp and 3D viewers)
+    // are opened and refreshed when a new footprint is selected.
+    // If the listbox has the focus before selecting a new footprint, it will be forced
+    // after selection.
+    bool hasFocus = HasFocus();
+
     // If the footprint view window is displayed, update the footprint.
     if( GetParent()->GetFpViewerFrame() )
         GetParent()->CreateScreenCmp();
 
     GetParent()->DisplayStatus();
+
+    if( hasFocus )
+        SetFocus();
 }
 
 
