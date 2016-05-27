@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -664,6 +664,15 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 }
 
 
+int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
+{
+    getModel<BOARD>()->SetGridOrigin( wxPoint( 0, 0 ) );
+    m_gridOrigin->SetPosition( VECTOR2D( 0, 0 ) );
+
+    return 0;
+}
+
+
 int PCBNEW_CONTROL::GridPreset( const TOOL_EVENT& aEvent )
 {
     long idx = aEvent.Parameter<long>();
@@ -982,6 +991,7 @@ void PCBNEW_CONTROL::SetTransitions()
     Go( &PCBNEW_CONTROL::GridNext,           COMMON_ACTIONS::gridNext.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridPrev,           COMMON_ACTIONS::gridPrev.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridSetOrigin,      COMMON_ACTIONS::gridSetOrigin.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridResetOrigin,    COMMON_ACTIONS::gridResetOrigin.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridPreset,         COMMON_ACTIONS::gridPreset.MakeEvent() );
 
     // Miscellaneous
