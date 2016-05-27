@@ -35,7 +35,19 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_gerber_file_image.h>
-#include <pcbplot.h>
+#include <class_gerber_file_image_list.h>
+
+///@{
+/// \ingroup config
+
+#define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )
+#define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
+#define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
+#define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
+#define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
+#define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
+
+///@}
 
 static double s_ScaleList[] =
 { 0, 0.5, 0.7, 0.999, 1.0, 1.4, 2.0, 3.0, 4.0 };

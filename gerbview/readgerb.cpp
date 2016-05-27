@@ -29,6 +29,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 
 #include <html_messagebox.h>
 #include <macros.h>

@@ -106,14 +106,12 @@
  * @param aLayerNegative = true if the current layer is negative
  */
 void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
-                                 APERTURE_T        aAperture,
-                                 int               Dcode_index,
-                                 int         aLayer,
-                                 const wxPoint&    aPos,
-                                 wxSize            aSize,
-                                 bool              aLayerNegative )
+                          APERTURE_T        aAperture,
+                          int               Dcode_index,
+                          const wxPoint&    aPos,
+                          wxSize            aSize,
+                          bool              aLayerNegative )
 {
-    aGbrItem->SetLayer( aLayer );
     aGbrItem->m_Size  = aSize;
     aGbrItem->m_Start = aPos;
     aGbrItem->m_End   = aGbrItem->m_Start;
@@ -160,13 +158,11 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  */
 void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
                               int               Dcode_index,
-                              int         aLayer,
                               const wxPoint&    aStart,
                               const wxPoint&    aEnd,
                               wxSize            aPenSize,
                               bool              aLayerNegative  )
 {
-    aGbrItem->SetLayer( aLayer );
     aGbrItem->m_Flashed = false;
 
     aGbrItem->m_Size = aPenSize;
@@ -209,7 +205,7 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  *                      false when arc is inside one quadrant
  * @param aLayerNegative = true if the current layer is negative
  */
-static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aLayer,
+static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
                              const wxPoint& aStart, const wxPoint& aEnd,
                              const wxPoint& aRelCenter, wxSize aPenSize,
                              bool aClockwise, bool aMultiquadrant,
@@ -218,7 +214,6 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index, int aL
     wxPoint center, delta;
 
     aGbrItem->m_Shape = GBR_ARC;
-    aGbrItem->SetLayer( aLayer );
     aGbrItem->m_Size  = aPenSize;
     aGbrItem->m_Flashed = false;
 
@@ -343,12 +338,11 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
     /* in order to calculate arc parameters, we use fillArcGBRITEM
      * so we muse create a dummy track and use its geometric parameters
      */
-    static GERBER_DRAW_ITEM dummyGbrItem( NULL, NULL );
-    static const int drawlayer = 0;
+    static GERBER_DRAW_ITEM dummyGbrItem( NULL );
 
     aGbrItem->SetLayerPolarity( aLayerNegative );
 
-    fillArcGBRITEM(  &dummyGbrItem, 0, drawlayer,
+    fillArcGBRITEM(  &dummyGbrItem, 0,
                      aStart, aEnd, rel_center, wxSize(0, 0),
                      aClockwise, aMultiquadrant, aLayerNegative );
 
@@ -550,9 +544,9 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         break;
 
     case GC_TURN_OFF_POLY_FILL:
-        if( m_Exposure && m_parent->GetGerberLayout()->m_Drawings )    // End of polygon
+        if( m_Exposure && GetItemsList() )    // End of polygon
         {
-            GERBER_DRAW_ITEM * gbritem = m_parent->GetGerberLayout()->m_Drawings.GetLast();
+            GERBER_DRAW_ITEM * gbritem = m_Drawings.GetLast();
             StepAndRepeatItem( *gbritem );
         }
         m_Exposure = false;
@@ -581,15 +575,10 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
     APERTURE_T        aperture = APT_CIRCLE;
     GERBER_DRAW_ITEM* gbritem;
-    GBR_LAYOUT*       layout = m_parent->GetGerberLayout();
-
-    int activeLayer = m_parent->getActiveLayer();
 
     int      dcode = 0;
     D_CODE*  tool  = NULL;
     wxString msg;
-
-//    D( printf( "%22s: D_CODE<%d>\n", __func__, D_commande ); )
 
     if( D_commande >= FIRST_DCODE )  // This is a "Set tool" command
     {
@@ -619,10 +608,9 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             if( !m_Exposure )   // Start a new polygon outline:
             {
                 m_Exposure = true;
-                gbritem    = new GERBER_DRAW_ITEM( layout, this );
-                layout->m_Drawings.Append( gbritem );
+                gbritem    = new GERBER_DRAW_ITEM( this );
+                m_Drawings.Append( gbritem );
                 gbritem->m_Shape = GBR_POLYGON;
-                gbritem->SetLayer( activeLayer );
                 gbritem->m_Flashed = false;
             }
 
@@ -630,7 +618,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             {
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
-                gbritem = layout->m_Drawings.GetLast();
+                gbritem = m_Drawings.GetLast();
 
                 //               D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
                 //                          m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
@@ -643,7 +631,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 break;
 
             default:
-                gbritem = layout->m_Drawings.GetLast();
+                gbritem = m_Drawings.GetLast();
 
 //                D( printf( "Add poly edge %d,%d to %d,%d fill %d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y,
@@ -663,9 +651,9 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             break;
 
         case 2:     // code D2: exposure OFF (i.e. "move to")
-            if( m_Exposure && layout->m_Drawings )    // End of polygon
+            if( m_Exposure && GetItemsList() )    // End of polygon
             {
-                gbritem = layout->m_Drawings.GetLast();
+                gbritem = m_Drawings.GetLast();
                 StepAndRepeatItem( *gbritem );
             }
             m_Exposure    = false;
@@ -695,13 +683,13 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             switch( m_Iterpolation )
             {
             case GERB_INTERPOL_LINEAR_1X:
-                gbritem = new GERBER_DRAW_ITEM( layout, this );
-                layout->m_Drawings.Append( gbritem );
+                gbritem = new GERBER_DRAW_ITEM( this );
+                m_Drawings.Append( gbritem );
 
 //                D( printf( "Add line %d,%d to %d,%d\n",
 //                           m_PreviousPos.x, m_PreviousPos.y,
 //                            m_CurrentPos.x, m_CurrentPos.y ); )
-                fillLineGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
+                fillLineGBRITEM( gbritem, dcode, m_PreviousPos,
                                  m_CurrentPos, size, GetLayerParams().m_LayerNegative );
                 StepAndRepeatItem( *gbritem );
                 break;
@@ -714,14 +702,10 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
-                gbritem = new GERBER_DRAW_ITEM( layout, this );
-                layout->m_Drawings.Append( gbritem );
+                gbritem = new GERBER_DRAW_ITEM( this );
+                m_Drawings.Append( gbritem );
 
-//                D( printf( "Add arc %d,%d to %d,%d center %d, %d interpol %d 360_enb %d\n",
-//                           m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
-//                           m_CurrentPos.y, m_IJPos.x,
-//                            m_IJPos.y, m_Iterpolation, m_360Arc_enbl ); )
-                fillArcGBRITEM( gbritem, dcode, activeLayer, m_PreviousPos,
+                fillArcGBRITEM( gbritem, dcode, m_PreviousPos,
                                 m_CurrentPos, m_IJPos, size,
                                 ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
                                 false : true, m_360Arc_enbl, GetLayerParams().m_LayerNegative );
@@ -752,10 +736,9 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 aperture = tool->m_Shape;
             }
 
-            gbritem = new GERBER_DRAW_ITEM( layout, this );
-            layout->m_Drawings.Append( gbritem );
-            fillFlashedGBRITEM( gbritem, aperture,
-                                dcode, activeLayer, m_CurrentPos,
+            gbritem = new GERBER_DRAW_ITEM( this );
+            m_Drawings.Append( gbritem );
+            fillFlashedGBRITEM( gbritem, aperture, dcode, m_CurrentPos,
                                 size, GetLayerParams().m_LayerNegative );
             StepAndRepeatItem( *gbritem );
             m_PreviousPos = m_CurrentPos;

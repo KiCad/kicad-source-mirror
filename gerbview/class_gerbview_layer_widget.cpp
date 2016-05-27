@@ -37,7 +37,7 @@
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 #include <layer_widget.h>
 #include <class_gerbview_layer_widget.h>
 
@@ -208,7 +208,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         break;
 
     case ID_SORT_GBR_LAYERS:
-        g_GERBER_List.SortImagesByZOrder( myframe->GetItemsList() );
+        g_GERBER_List.SortImagesByZOrder();
         myframe->ReFillLayerWidget();
         myframe->syncLayerBox( true );
         myframe->GetCanvas()->Refresh();

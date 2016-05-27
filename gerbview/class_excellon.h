@@ -93,6 +93,7 @@ private:
         READ_HEADER_STATE,          // When we are in this state, we are reading header
         READ_PROGRAM_STATE          // When we are in this state, we are reading drill data
     };
+
     excellon_state m_State;         // state of excellon file analysis
     bool           m_SlotOn;        // true during an oblong drill definition
 

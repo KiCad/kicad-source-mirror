@@ -110,16 +110,6 @@ public:
         return m_gerberLayout;
     }
 
-    /**
-     * Function GetItemsList
-     * @return the first GERBER_DRAW_ITEM * item of the items list
-     */
-    GERBER_DRAW_ITEM* GetItemsList()
-    {
-        GERBER_DRAW_ITEM* item = GetGerberLayout()->m_Drawings;
-
-        return item;
-    }
 
     /**
      * Function GetGerberLayoutBoundingBox
@@ -577,13 +567,6 @@ public:
      * @param DC A device context to draw on.
      */
     void                Block_Move( wxDC* DC );
-
-    /**
-     * Function ToPlotter
-     * Open a dialog frame to create plot and drill files
-     * relative to the current board
-     */
-    void                ToPlotter( wxCommandEvent& event );
 
     /**
      * Function ToPrinter

@@ -55,8 +55,6 @@ private:
     std::bitset <GERBER_DRAWLAYERS_COUNT> m_printLayersMask; // When printing: the list of layers to print
 public:
 
-    DLIST<GERBER_DRAW_ITEM> m_Drawings;     // linked list of Gerber Items to draw
-
     GBR_LAYOUT();
     ~GBR_LAYOUT();
 

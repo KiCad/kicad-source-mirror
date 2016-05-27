@@ -111,10 +111,9 @@ GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) :
 
     // Set the working grid size to a reasonable value (in 1/10000 inch)
     SetGrid( DMIL_GRID( 500 ) );
+    SetZoom( ZOOM_FACTOR( 350 ) );  // a default value for zoom
 
-    m_Active_Layer       = B_Cu;      // default active layer = bottom layer
-
-    SetZoom( ZOOM_FACTOR( 350 ) );            // a default value for zoom
+    m_Active_Layer       = 0;       // default active layer = first graphic layer
 
     InitDataPoints( aPageSizeIU );
 }

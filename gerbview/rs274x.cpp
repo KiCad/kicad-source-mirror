@@ -584,8 +584,9 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
 
         else
             GetLayerParams().m_LayerNegative = false;
-        DBG( printf( "%22s: LAYER_POLARITY m_LayerNegative=%s\n", __func__,
-                   GetLayerParams().m_LayerNegative ? "true" : "false" ); )
+
+//        DBG( printf( "%22s: LAYER_POLARITY m_LayerNegative=%s\n", __func__,
+//                   GetLayerParams().m_LayerNegative ? "true" : "false" ); )
         break;
 
     case INCLUDE_FILE:
