@@ -113,7 +113,12 @@ private:
      *   bad data into a field, and this value can be used to deny a row change.
      */
     bool copyPanelToSelectedField();
-    void setRowItem( int aFieldNdx, const LIB_FIELD& aField );
+
+    void setRowItem( int aFieldNdx, const wxString& aName, const wxString& aValue );
+    void setRowItem( int aFieldNdx, const LIB_FIELD& aField )
+    {
+        setRowItem( aFieldNdx, aField.GetName(), aField.GetText() );
+    }
 
     /**
      * Function updateDisplay
@@ -408,6 +413,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::showButtonHandler( wxCommandEvent& even
         if( frame->ShowModal( &fpid, this ) )
         {
             fieldValueTextCtrl->SetValue( fpid );
+            setRowItem( fieldNdx, m_FieldsBuf[fieldNdx].GetName( false ), fpid );
         }
 
         frame->Destroy();
@@ -576,7 +582,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::initBuffers()
 }
 
 
-void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const LIB_FIELD& aField )
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const wxString& aName, const wxString& aValue )
 {
     wxASSERT( aFieldNdx >= 0 );
 
@@ -590,8 +596,8 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::setRowItem( int aFieldNdx, const LIB_FI
         fieldListCtrl->SetItem( ndx, COLUMN_TEXT, wxEmptyString );
     }
 
-    fieldListCtrl->SetItem( aFieldNdx, COLUMN_FIELD_NAME, aField.GetName() );
-    fieldListCtrl->SetItem( aFieldNdx, COLUMN_TEXT, aField.GetText() );
+    fieldListCtrl->SetItem( aFieldNdx, COLUMN_FIELD_NAME, aName );
+    fieldListCtrl->SetItem( aFieldNdx, COLUMN_TEXT, aValue );
 
     // recompute the column widths here, after setting texts
     fieldListCtrl->SetColumnWidth( COLUMN_FIELD_NAME, wxLIST_AUTOSIZE );

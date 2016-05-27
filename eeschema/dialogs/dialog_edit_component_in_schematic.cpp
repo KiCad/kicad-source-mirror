@@ -106,7 +106,12 @@ private:
 
     void copyPanelToOptions();
 
-    void setRowItem( int aFieldNdx, const SCH_FIELD& aField );
+    void setRowItem( int aFieldNdx, const wxString& aName, const wxString& aValue );
+
+    void setRowItem( int aFieldNdx, const SCH_FIELD& aField )
+    {
+        setRowItem( aFieldNdx, aField.GetName( false ), aField.GetText() );
+    }
 
     // event handlers
     void OnCloseDialog( wxCloseEvent& event );
@@ -537,6 +542,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::showButtonHandler( wxCommandEvent& even
         {
             // DBG( printf( "%s: %s\n", __func__, TO_UTF8( fpid ) ); )
             fieldValueTextCtrl->SetValue( fpid );
+
+            setRowItem( fieldNdx, m_FieldsBuf[fieldNdx].GetName( false ), fpid );
         }
 
         frame->Destroy();
@@ -762,7 +769,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const SCH_FIELD& aField )
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const wxString& aName, const wxString& aValue )
 {
     wxASSERT( aFieldNdx >= 0 );
 
@@ -776,8 +783,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const SCH_FI
         fieldListCtrl->SetItem( ndx, 1, wxEmptyString );
     }
 
-    fieldListCtrl->SetItem( aFieldNdx, 0, aField.GetName( false ) );
-    fieldListCtrl->SetItem( aFieldNdx, 1, aField.GetText() );
+    fieldListCtrl->SetItem( aFieldNdx, 0, aName );
+    fieldListCtrl->SetItem( aFieldNdx, 1, aValue );
 
     // recompute the column widths here, after setting texts
     fieldListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
