@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -23,9 +23,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bSizerFiledsList = new wxBoxSizer( wxVERTICAL );
 	
 	fieldListCtrl = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_VRULES );
-	fieldListCtrl->SetMinSize( wxSize( 220,-1 ) );
-	
-	bSizerFiledsList->Add( fieldListCtrl, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
+	bSizerFiledsList->Add( fieldListCtrl, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 6 );
 	
 	addFieldButton = new wxButton( this, wxID_ANY, _("Add Field"), wxDefaultPosition, wxDefaultSize, 0 );
 	addFieldButton->SetToolTip( _("Add a new custom field") );
@@ -68,7 +66,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bSizerJustify->Add( m_FieldVJustifyCtrl, 1, wxEXPAND|wxALL, 5 );
 	
 	
-	fieldEditBoxSizer->Add( bSizerJustify, 1, wxEXPAND|wxBOTTOM, 5 );
+	fieldEditBoxSizer->Add( bSizerJustify, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerAspect;
 	bSizerAspect = new wxBoxSizer( wxHORIZONTAL );
@@ -96,7 +94,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	bSizerAspect->Add( m_StyleRadioBox, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
-	fieldEditBoxSizer->Add( bSizerAspect, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	fieldEditBoxSizer->Add( bSizerAspect, 1, wxALL|wxEXPAND|wxTOP, 5 );
 	
 	wxBoxSizer* fieldNameBoxSizer;
 	fieldNameBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -124,13 +122,13 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	m_show_datasheet_button = new wxButton( this, wxID_ANY, _("Show in Browser"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_show_datasheet_button->SetToolTip( _("If your datasheet is given as an http:// link, then pressing this button should bring it up in your webbrowser.") );
 	
-	fieldNameBoxSizer->Add( m_show_datasheet_button, 0, wxBOTTOM|wxEXPAND, 5 );
+	fieldNameBoxSizer->Add( m_show_datasheet_button, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 	
 	
 	fieldEditBoxSizer->Add( fieldNameBoxSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizerPosSize;
-	fgSizerPosSize = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgSizerPosSize = new wxFlexGridSizer( 3, 3, 5, 5 );
 	fgSizerPosSize->AddGrowableCol( 1 );
 	fgSizerPosSize->SetFlexibleDirection( wxBOTH );
 	fgSizerPosSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -143,25 +141,25 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	textSizeTextCtrl->SetMaxLength( 0 ); 
 	textSizeTextCtrl->SetToolTip( _("The vertical height of the currently selected field's text in the schematic") );
 	
-	fgSizerPosSize->Add( textSizeTextCtrl, 0, wxEXPAND|wxBOTTOM, 5 );
+	fgSizerPosSize->Add( textSizeTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_staticTextUnitSize = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitSize->Wrap( -1 );
-	fgSizerPosSize->Add( m_staticTextUnitSize, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPosSize->Add( m_staticTextUnitSize, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	posXLabel = new wxStaticText( this, wxID_ANY, _("PosX"), wxDefaultPosition, wxDefaultSize, 0 );
+	posXLabel = new wxStaticText( this, wxID_ANY, _("X Position"), wxDefaultPosition, wxDefaultSize, 0 );
 	posXLabel->Wrap( -1 );
 	fgSizerPosSize->Add( posXLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	posXTextCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	posXTextCtrl->SetMaxLength( 0 ); 
-	fgSizerPosSize->Add( posXTextCtrl, 0, wxEXPAND|wxTOP, 5 );
+	fgSizerPosSize->Add( posXTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_staticTextUnitPosX = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitPosX->Wrap( -1 );
-	fgSizerPosSize->Add( m_staticTextUnitPosX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPosSize->Add( m_staticTextUnitPosX, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
-	posYLabel = new wxStaticText( this, wxID_ANY, _("PosY"), wxDefaultPosition, wxDefaultSize, 0 );
+	posYLabel = new wxStaticText( this, wxID_ANY, _("Y Position"), wxDefaultPosition, wxDefaultSize, 0 );
 	posYLabel->Wrap( -1 );
 	fgSizerPosSize->Add( posYLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -169,14 +167,14 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	posYTextCtrl->SetMaxLength( 0 ); 
 	posYTextCtrl->SetToolTip( _("The Y coordinate of the text relative to the component") );
 	
-	fgSizerPosSize->Add( posYTextCtrl, 0, wxEXPAND, 5 );
+	fgSizerPosSize->Add( posYTextCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_staticTextUnitPosY = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnitPosY->Wrap( -1 );
-	fgSizerPosSize->Add( m_staticTextUnitPosY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerPosSize->Add( m_staticTextUnitPosY, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	fieldEditBoxSizer->Add( fgSizerPosSize, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	fieldEditBoxSizer->Add( fgSizerPosSize, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerFieldsSetup->Add( fieldEditBoxSizer, 2, wxEXPAND, 5 );
@@ -194,11 +192,12 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	stdDialogButtonSizer->AddButton( stdDialogButtonSizerCancel );
 	stdDialogButtonSizer->Realize();
 	
-	mainSizer->Add( stdDialogButtonSizer, 0, wxALL|wxEXPAND, 8 );
+	mainSizer->Add( stdDialogButtonSizer, 0, wxALL|wxEXPAND, 6 );
 	
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::OnCloseDialog ) );
