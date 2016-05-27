@@ -119,7 +119,7 @@ install_prerequisites()
 
         for p in ${prerequisite_list}
         do
-            sudo apt-get install $p || exit 1
+            sudo apt-get install -y $p || exit 1
         done
 
         # Only install the scripting prerequisites if required.
@@ -133,7 +133,7 @@ install_prerequisites()
 
             for sp in ${scripting_prerequisites}
             do
-                sudo apt-get install $sp || exit 1
+                sudo apt-get install -y $sp || exit 1
             done
         fi
 
