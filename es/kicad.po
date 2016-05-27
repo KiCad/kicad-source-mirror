@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-17 10:37+0200\n"
-"PO-Revision-Date: 2016-05-17 10:41+0200\n"
+"POT-Creation-Date: 2016-05-23 13:42+0200\n"
+"PO-Revision-Date: 2016-05-23 13:44+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -957,7 +957,7 @@ msgstr " \""
 msgid " deg"
 msgstr "grad"
 
-#: common/basicframe.cpp:135
+#: common/basicframe.cpp:137
 msgid ""
 "The program cannot be closed\n"
 "A quasi-modal dialog window is currently open, please close it first."
@@ -965,7 +965,7 @@ msgstr ""
 "El programa no puede cerrarse\n"
 "Hay abierto un diálogo cuasi-modal, por favor, ciérrelo primero."
 
-#: common/basicframe.cpp:422
+#: common/basicframe.cpp:438
 #, c-format
 msgid ""
 "Html or pdf help file \n"
@@ -978,29 +978,29 @@ msgstr ""
 " o\n"
 "'%s' "
 
-#: common/basicframe.cpp:439
+#: common/basicframe.cpp:455
 #, c-format
 msgid "Help file '%s' could not be found."
 msgstr "No puede encontrase el archivo de ayuda '%s'."
 
-#: common/basicframe.cpp:495
+#: common/basicframe.cpp:511
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "No tiene permiso de escritura para la carpeta <%s>."
 
-#: common/basicframe.cpp:500
+#: common/basicframe.cpp:516
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr ""
 "No tiene permiso de escritura para guardar el archivo <%s> en la carpeta <"
 "%s>."
 
-#: common/basicframe.cpp:505
+#: common/basicframe.cpp:521
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "No tiene permiso de escritura para guardar el archivo <%s>."
 
-#: common/basicframe.cpp:537
+#: common/basicframe.cpp:553
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -1015,12 +1015,12 @@ msgstr ""
 "no se guardo de forma apropiada. ¿Desea recuperar las últimas ediciones que "
 "realizó?"
 
-#: common/basicframe.cpp:565
+#: common/basicframe.cpp:581
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "No puede crearse el archivo de copia de seguridad <%s>"
 
-#: common/basicframe.cpp:573
+#: common/basicframe.cpp:589
 msgid "The auto save file could not be renamed to the board file name."
 msgstr ""
 "El archivo de guardado automático no ha podido ser renombrado con el nombre "
@@ -1249,7 +1249,7 @@ msgstr "Ha sido creada la carpeta de salida '%s'.\n"
 msgid "Cannot create output directory '%s'.\n"
 msgstr "No puede crearse la carpeta de salida '%s'.\n"
 
-#: common/confirm.cpp:74 common/pgm_base.cpp:882 eeschema/symbedit.cpp:111
+#: common/confirm.cpp:74 common/pgm_base.cpp:890 eeschema/symbedit.cpp:111
 #: eeschema/widgets/widget_eeschema_color_config.cpp:277
 msgid "Warning"
 msgstr "Aviso"
@@ -1524,8 +1524,8 @@ msgstr "Variable de entorno Ayuda"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:38
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:188
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:182
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:193
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:187
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:327
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:330
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:180 eeschema/lib_pin.cpp:1990
@@ -2337,36 +2337,40 @@ msgstr "日本人"
 msgid "Bulgarian"
 msgstr "български"
 
-#: common/pgm_base.cpp:339
+#: common/pgm_base.cpp:277
+msgid "Lithuanian"
+msgstr "Lietuvių kalba"
+
+#: common/pgm_base.cpp:347
 msgid "No default editor found, you must choose it"
 msgstr "Editor no encontrado, debe configurar uno."
 
-#: common/pgm_base.cpp:359
+#: common/pgm_base.cpp:367
 msgid "Executable file (*.exe)|*.exe"
 msgstr "Archivo ejecutale (*.exe)|*.exe"
 
-#: common/pgm_base.cpp:361
+#: common/pgm_base.cpp:369
 msgid "Executable file (*)|*"
 msgstr "Archivo ejecutable (*)|*"
 
-#: common/pgm_base.cpp:371
+#: common/pgm_base.cpp:379
 msgid "Select Preferred Editor"
 msgstr "Seleccionar el editor preferido"
 
-#: common/pgm_base.cpp:392
+#: common/pgm_base.cpp:400
 #, c-format
 msgid "%s is already running, Continue?"
 msgstr "%s ya se está ejecutando, ¿continuar?"
 
-#: common/pgm_base.cpp:799
+#: common/pgm_base.cpp:807
 msgid "Language"
 msgstr "Idioma"
 
-#: common/pgm_base.cpp:800
+#: common/pgm_base.cpp:808
 msgid "Select application language (only for testing!)"
 msgstr "Elegir el idioma de la aplicación (¡solo para comprobar!)"
 
-#: common/pgm_base.cpp:875
+#: common/pgm_base.cpp:883
 msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
@@ -2374,7 +2378,7 @@ msgstr ""
 "¡Atención! Alguna de las rutas que ha definido ya han sido definidas\n"
 "de forma externa al proceso actual y serán sobreescritas temporalmente."
 
-#: common/pgm_base.cpp:877
+#: common/pgm_base.cpp:885
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -2388,7 +2392,7 @@ msgstr ""
 "ignoradas. Si su intención no es esa, renombre o elimine las\n"
 "entradas conflictivas en las variables de entorno de su sistema."
 
-#: common/pgm_base.cpp:884
+#: common/pgm_base.cpp:892
 msgid "Do not show this message again."
 msgstr "No mostrar este mensaje de nuevo."
 
@@ -2991,8 +2995,8 @@ msgid "Available environment variables for relative paths:"
 msgstr "Variables de entorno disponibles para rutas relativas:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:191
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:185
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:196
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:190
 #: eeschema/dialogs/dialog_rescue_each.cpp:111 eeschema/lib_field.cpp:592
 #: eeschema/lib_field.cpp:770 eeschema/onrightclick.cpp:426
 #: eeschema/sch_component.cpp:1542 eeschema/template_fieldnames.cpp:42
@@ -4027,39 +4031,39 @@ msgstr ""
 msgid "Edit"
 msgstr "Editar"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:225
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:230
 #, c-format
 msgid "Component '%s' found in library '%s'"
 msgstr "Se ha encontrado el componente '%s' en la librería '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:231
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:236
 #, c-format
 msgid "Component '%s' not found in any library"
 msgstr "No se ha encontrado el componente '%s' en la librería"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:247
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:252
 msgid "However, some candidates are found:"
 msgstr "En cambio, se han encontrado algunos candidatos:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:253
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:258
 #, c-format
 msgid "'%s' found in library '%s'"
 msgstr "Se ha encrontrado '%s' en la librería '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:315
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:320
 msgid "No Component Name!"
 msgstr "¡Falta el nombre del componente!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:324
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:329
 #, c-format
 msgid "Component '%s' not found!"
 msgstr "¡No se ha encontrado el componente '%s'!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:398
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:403
 msgid "Illegal reference. A reference must start with a letter"
 msgstr "Referencia ilegal. Una referencia debe comenzar por una letra"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:424
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:429
 #, c-format
 msgid ""
 "The field name <%s> does not have a value and is not defined in the field "
@@ -4070,17 +4074,17 @@ msgstr ""
 "de campos. Los campos de valor nulo son inválidos y serán eliminados del "
 "componente. ¿Desea elminar tanto este como los demás campos sin definir?"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:431
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:436
 msgid "Remove Fields"
 msgstr "Eliminar campos"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:852
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:678
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:859
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:684
 msgid "Show Datasheet"
 msgstr "Mostrar hoja de datos"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:854
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:680
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:861
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:686
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:123
 msgid ""
 "If your datasheet is given as an http:// link, then pressing this button "
@@ -4089,22 +4093,22 @@ msgstr ""
 "Si la hoja de datos se introduce como un enlace http://, al presionar este "
 "botón se mostrará en el navegador web."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:859
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:685
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:866
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:691
 msgid "Browse Footprints"
 msgstr "Explorar huellas"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:861
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:687
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:868
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:693
 msgid "Open the footprint browser to choose a footprint and assign it."
 msgstr "Abrir el explorador de huellas para elegir y asignar una."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:867
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:693
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:874
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:699
 msgid "Used only for fields Footprint and Datasheet."
 msgstr "Utilizado únicamente para los campos Huella y Hoja de datos."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1006
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1013
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:145
@@ -4112,7 +4116,7 @@ msgstr "Utilizado únicamente para los campos Huella y Hoja de datos."
 msgid "Yes"
 msgstr "Sí"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1008
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1015
 #: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:572
 #: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_text_mod.cpp:355
@@ -4211,7 +4215,7 @@ msgstr ""
 "Para puertas lógicas, esta es conversión \"De Morgan\""
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:70
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:649
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:655
 msgid "Chip Name"
 msgstr "Nombre del componente"
 
@@ -4554,11 +4558,11 @@ msgstr "Pasivo"
 msgid "S&hape"
 msgstr "F&orma"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:244
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:249
 msgid "Illegal reference.  References must start with a letter."
 msgstr "Referencia ilegal. La referencia debe comenzar con una letra."
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:260
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:265
 #, c-format
 msgid ""
 "A new name is entered for this component\n"
@@ -22226,11 +22230,11 @@ msgstr "Afinar longitud de par diferencial"
 msgid "Tune Diff Pair Skew"
 msgstr "Afinar desvío de par diferencial"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:596
+#: pcbnew/router/pns_diff_pair_placer.cpp:598
 msgid "Can't start a differential pair  in the middle of nowhere."
 msgstr "No puede iniciarse un par diferencial en medio de nada."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:605
+#: pcbnew/router/pns_diff_pair_placer.cpp:607
 msgid ""
 "Unable to find complementary differential pair net. Make sure the names of "
 "the nets belonging to a differential pair end with either _N/_P or +/-."
@@ -22239,13 +22243,13 @@ msgstr ""
 "que los nombres de las redes que pertenecen al mismo par terminan en _N/_P o "
 "+/-."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:622
+#: pcbnew/router/pns_diff_pair_placer.cpp:624
 msgid "Current track/via gap setting violates design rules for this net."
 msgstr ""
 "La selección del espaciado de la pista/vía activa viola las reglas de diseño "
 "de esta red."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:629
+#: pcbnew/router/pns_diff_pair_placer.cpp:631
 msgid "Current track width setting violates design rules."
 msgstr "La selección del ancho de pista actual viola las reglas de diseño."
 
