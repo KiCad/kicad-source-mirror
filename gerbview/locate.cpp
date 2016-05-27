@@ -52,7 +52,7 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
     GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
     // Search first on active layer
-    GERBER_DRAW_ITEM* gerb_item;
+    GERBER_DRAW_ITEM* gerb_item = NULL;
 
     if( gerber )    // A not used graphic layer can be selected. So gerber can be NULL
     {
@@ -83,10 +83,13 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
                     break;
                 }
             }
+
+            if( found )
+                break;
         }
     }
 
-    if( found )
+    if( found && gerb_item )
     {
         MSG_PANEL_ITEMS items;
         gerb_item->GetMsgPanelInfo( items );
