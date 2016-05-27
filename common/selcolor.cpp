@@ -144,7 +144,6 @@ void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
     wxBoxSizer*             MainBoxSizer  = NULL;
     wxFlexGridSizer*        FlexColumnBoxSizer = NULL;
     wxBitmapButton*         BitmapButton = NULL;
-    wxStaticText*           Label = NULL;
     wxStaticLine*           Line  = NULL;
     wxStdDialogButtonSizer* StdDialogButtonSizer = NULL;
     wxButton* Button = NULL;
@@ -215,9 +214,10 @@ void WinEDA_SelColorFrame::Init_Dialog( int aOldColor )
             BitmapButton->SetFocus();
         }
 
-        Label = new wxStaticText( this, -1, ColorGetName( buttcolor ),
-                                  wxDefaultPosition, wxDefaultSize, 0 );
-        FlexColumnBoxSizer->Add( Label, 1,
+        wxStaticText* label = new wxStaticText( this, -1,
+                                                wxGetTranslation( ColorGetName( buttcolor ) ),
+                                                wxDefaultPosition, wxDefaultSize, 0 );
+        FlexColumnBoxSizer->Add( label, 1,
                                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
                                  wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     }

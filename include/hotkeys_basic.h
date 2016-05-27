@@ -37,7 +37,7 @@
 // The translated string is used only when displaying the help window.
 // Therefore translation tools have to use the "_" and the "_HKI" prefix to extract
 // strings to translate
-#define _HKI( x ) wxT( x )
+#include <i18n_utility.h>       // _HKI definition
 
 class EDA_BASE_FRAME;
 
