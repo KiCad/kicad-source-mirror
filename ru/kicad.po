@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-21 15:37+0300\n"
-"PO-Revision-Date: 2016-05-21 15:48+0300\n"
+"POT-Creation-Date: 2016-05-27 20:24+0300\n"
+"PO-Revision-Date: 2016-05-27 20:35+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -170,15 +170,15 @@ msgstr "Путь"
 msgid "Description"
 msgstr "Описание"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:58
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:61
 msgid "Add Alias"
 msgstr "Добавить псевдоним"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:61
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:64
 msgid "Remove Alias"
 msgstr "Удалить псевдоним"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:64
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:67
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:133
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:38
@@ -188,14 +188,14 @@ msgstr "Удалить псевдоним"
 msgid "Move Up"
 msgstr "Сдвинуть вверх"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:67 3d-viewer/3d_canvas.cpp:454
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:70 3d-viewer/3d_canvas.cpp:454
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 msgid "Move Down"
 msgstr "Сдвинуть вниз"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:70
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:73
 #: common/dialog_about/dialog_about_base.cpp:73
 #: eeschema/dialogs/dialog_netlist_base.cpp:129
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
@@ -203,7 +203,7 @@ msgstr "Сдвинуть вниз"
 msgid "OK"
 msgstr "OK"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:73
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:76
 #: common/dialogs/dialog_exit_base.cpp:69 common/selcolor.cpp:174
 #: eeschema/dialogs/dialog_netlist_base.cpp:49
 #: eeschema/dialogs/dialog_netlist_base.cpp:133 eeschema/libedit_onrightclick.cpp:70
@@ -239,7 +239,7 @@ msgid "Scale"
 msgstr "Масштаб"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:140
-#: gerbview/class_gerber_draw_item.cpp:564
+#: gerbview/class_gerber_draw_item.cpp:563
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:350 pcbnew/class_module.cpp:606
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "Rotation"
@@ -475,7 +475,7 @@ msgstr "Вкл./Выкл. ортогональную проекцию"
 
 #: 3d-viewer/3d_toolbar.cpp:135 eeschema/menubar.cpp:518
 #: eeschema/menubar_libedit.cpp:273 eeschema/tool_viewlib.cpp:264
-#: gerbview/menubar.cpp:243 kicad/menubar.cpp:426 pagelayout_editor/menubar.cpp:169
+#: gerbview/menubar.cpp:242 kicad/menubar.cpp:426 pagelayout_editor/menubar.cpp:169
 #: pcbnew/menubar_modedit.cpp:355 pcbnew/menubar_pcbframe.cpp:656
 #: pcbnew/tool_modview.cpp:203
 msgid "&File"
@@ -497,7 +497,7 @@ msgstr "Копировать 3D изображение в буфер обмен�
 msgid "&Exit"
 msgstr "Выход"
 
-#: 3d-viewer/3d_toolbar.cpp:154 cvpcb/menubar.cpp:132 gerbview/menubar.cpp:244
+#: 3d-viewer/3d_toolbar.cpp:154 cvpcb/menubar.cpp:132 gerbview/menubar.cpp:243
 #: kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:170
 msgid "&Preferences"
 msgstr "Настройки"
@@ -761,8 +761,8 @@ msgstr "0000"
 msgid "pixels"
 msgstr "пикселей"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:78 common/common.cpp:156
-#: common/common.cpp:214 common/dialogs/dialog_page_settings.cpp:471
+#: bitmap2component/bitmap2cmp_gui_base.cpp:78 common/common.cpp:152
+#: common/common.cpp:210 common/dialogs/dialog_page_settings.cpp:471
 #: common/draw_frame.cpp:510 eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:44
 #: pagelayout_editor/pl_editor_frame.cpp:467 pcb_calculator/UnitSelector.cpp:38
 #: pcb_calculator/UnitSelector.cpp:70 pcbnew/dialogs/dialog_create_array_base.cpp:50
@@ -846,9 +846,10 @@ msgstr "Формат"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:90
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/libedit.cpp:498
-#: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:764 gerbview/class_GERBER.cpp:359
-#: gerbview/class_GERBER.cpp:363 gerbview/class_GERBER.cpp:366
-#: pcbnew/class_module.cpp:612 pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
+#: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:764
+#: gerbview/class_gerber_file_image.cpp:359 gerbview/class_gerber_file_image.cpp:363
+#: gerbview/class_gerber_file_image.cpp:366 pcbnew/class_module.cpp:612
+#: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:135
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:93
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
@@ -857,7 +858,7 @@ msgstr "Формат"
 msgid "Normal"
 msgstr "Нормально"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:135 gerbview/class_GERBER.cpp:359
+#: bitmap2component/bitmap2cmp_gui_base.cpp:135 gerbview/class_gerber_file_image.cpp:359
 msgid "Negative"
 msgstr "Негативно"
 
@@ -945,7 +946,7 @@ msgstr " \""
 msgid " deg"
 msgstr " °"
 
-#: common/basicframe.cpp:135
+#: common/basicframe.cpp:137
 msgid ""
 "The program cannot be closed\n"
 "A quasi-modal dialog window is currently open, please close it first."
@@ -953,7 +954,7 @@ msgstr ""
 "Не удалось закрыть программу\n"
 "Открыто модальное диалоговое окно, закройте его сначала."
 
-#: common/basicframe.cpp:422
+#: common/basicframe.cpp:438
 #, c-format
 msgid ""
 "Html or pdf help file \n"
@@ -966,27 +967,27 @@ msgstr ""
 "или\n"
 "'%s' найти не удалось."
 
-#: common/basicframe.cpp:439
+#: common/basicframe.cpp:455
 #, c-format
 msgid "Help file '%s' could not be found."
 msgstr "Не удалось найти файл руководства пользователя '%s'."
 
-#: common/basicframe.cpp:495
+#: common/basicframe.cpp:511
 #, c-format
 msgid "You do not have write permissions to folder <%s>."
 msgstr "У Вас нет прав на запись в каталог <%s>."
 
-#: common/basicframe.cpp:500
+#: common/basicframe.cpp:516
 #, c-format
 msgid "You do not have write permissions to save file <%s> to folder <%s>."
 msgstr "У Вас нет прав на запись для сохранения файла <%s> в каталог <%s>."
 
-#: common/basicframe.cpp:505
+#: common/basicframe.cpp:521
 #, c-format
 msgid "You do not have write permissions to save file <%s>."
 msgstr "У Вас нет прав на запись для сохранения файла <%s>."
 
-#: common/basicframe.cpp:537
+#: common/basicframe.cpp:553
 #, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
@@ -998,12 +999,12 @@ msgstr ""
 "При последнем редактировании файл '%s'\n"
 "не был корректно сохранён. Хотите восстановить последние изменения?"
 
-#: common/basicframe.cpp:565
+#: common/basicframe.cpp:581
 #, c-format
 msgid "Could not create backup file <%s>"
 msgstr "Не удалось создать файл резервной копии <%s>"
 
-#: common/basicframe.cpp:573
+#: common/basicframe.cpp:589
 msgid "The auto save file could not be renamed to the board file name."
 msgstr "Файл автосохранения не может быть переименован в файл платы."
 
@@ -1175,20 +1176,20 @@ msgstr "Пурпурный 4"
 msgid "Yellow 4"
 msgstr "Жёлтый 4"
 
-#: common/common.cpp:152
+#: common/common.cpp:148
 msgid "\""
 msgstr "\""
 
-#: common/common.cpp:183 common/dialogs/dialog_page_settings.cpp:471
+#: common/common.cpp:179 common/dialogs/dialog_page_settings.cpp:471
 #: pagelayout_editor/pl_editor_frame.cpp:463
 msgid "inches"
 msgstr "дюймы"
 
-#: common/common.cpp:187
+#: common/common.cpp:183
 msgid "millimeters"
 msgstr "мм"
 
-#: common/common.cpp:191 eeschema/dialogs/dialog_edit_label_base.cpp:57
+#: common/common.cpp:187 eeschema/dialogs/dialog_edit_label_base.cpp:57
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:139
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:151
@@ -1199,37 +1200,37 @@ msgstr "мм"
 msgid "units"
 msgstr "ед.изм."
 
-#: common/common.cpp:195 pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:96
+#: common/common.cpp:191 pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:96
 msgid "degrees"
 msgstr "°"
 
-#: common/common.cpp:210
+#: common/common.cpp:206
 msgid "in"
 msgstr "\""
 
-#: common/common.cpp:221 pcbnew/dialogs/dialog_create_array_base.cpp:220
+#: common/common.cpp:217 pcbnew/dialogs/dialog_create_array_base.cpp:220
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:63
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:135
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:145
 msgid "deg"
 msgstr "°"
 
-#: common/common.cpp:426
+#: common/common.cpp:422
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Не удаётся создать путь '%s' абсолютным по отношению к '%s'."
 
-#: common/common.cpp:444
+#: common/common.cpp:440
 #, c-format
 msgid "Output directory '%s' created.\n"
 msgstr "Каталог '%s' создан.\n"
 
-#: common/common.cpp:453
+#: common/common.cpp:449
 #, c-format
 msgid "Cannot create output directory '%s'.\n"
 msgstr "Не удалось создать выходной каталог '%s'.\n"
 
-#: common/confirm.cpp:74 common/pgm_base.cpp:882 eeschema/symbedit.cpp:111
+#: common/confirm.cpp:74 common/pgm_base.cpp:890 eeschema/symbedit.cpp:111
 #: eeschema/widgets/widget_eeschema_color_config.cpp:277
 msgid "Warning"
 msgstr "Предупреждение"
@@ -1387,7 +1388,7 @@ msgstr "Копировать информацию о версии"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:128
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:109
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:107
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:113
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:107
 #: pcbnew/dialogs/dialog_find_base.cpp:45 pcbnew/dialogs/dialog_gendrill_base.cpp:186
@@ -1929,7 +1930,7 @@ msgstr "Все"
 msgid "Warnings"
 msgstr "Предупреждения"
 
-#: common/dialogs/wx_html_report_panel_base.cpp:47 gerbview/readgerb.cpp:182
+#: common/dialogs/wx_html_report_panel_base.cpp:47 gerbview/readgerb.cpp:181
 msgid "Errors"
 msgstr "Ошибки"
 
@@ -2284,36 +2285,40 @@ msgstr "Японский"
 msgid "Bulgarian"
 msgstr "Болгарский"
 
-#: common/pgm_base.cpp:339
+#: common/pgm_base.cpp:277
+msgid "Lithuanian"
+msgstr "Литовский"
+
+#: common/pgm_base.cpp:347
 msgid "No default editor found, you must choose it"
 msgstr "Редактор по умолчанию не найден, нужно выбрать его"
 
-#: common/pgm_base.cpp:359
+#: common/pgm_base.cpp:367
 msgid "Executable file (*.exe)|*.exe"
 msgstr "Исполняемый файл (*.exe)|*.exe"
 
-#: common/pgm_base.cpp:361
+#: common/pgm_base.cpp:369
 msgid "Executable file (*)|*"
 msgstr "Исполняемый файл (*)|*"
 
-#: common/pgm_base.cpp:371
+#: common/pgm_base.cpp:379
 msgid "Select Preferred Editor"
 msgstr "Выбор предпочитаемого редактора"
 
-#: common/pgm_base.cpp:392
+#: common/pgm_base.cpp:400
 #, c-format
 msgid "%s is already running, Continue?"
 msgstr "%s уже запущен, продолжить?"
 
-#: common/pgm_base.cpp:799
+#: common/pgm_base.cpp:807
 msgid "Language"
 msgstr "Язык"
 
-#: common/pgm_base.cpp:800
+#: common/pgm_base.cpp:808
 msgid "Select application language (only for testing!)"
 msgstr "Выбрать язык для приложения (только для тестирования!)"
 
-#: common/pgm_base.cpp:875
+#: common/pgm_base.cpp:883
 msgid ""
 "Warning!  Some of paths you have configured have been defined \n"
 "externally to the running process and will be temporarily overwritten."
@@ -2321,7 +2326,7 @@ msgstr ""
 "Предупреждение! Некоторые пути, сконфигурированные вами, были определены \n"
 "внешне рабочему процессу и будут временно перезаписаны."
 
-#: common/pgm_base.cpp:877
+#: common/pgm_base.cpp:885
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -2336,7 +2341,7 @@ msgstr ""
 "либо удалите внешние определения переменных окружения\n"
 "из вашей системы."
 
-#: common/pgm_base.cpp:884
+#: common/pgm_base.cpp:892
 msgid "Do not show this message again."
 msgstr "Больше не показывать данное сообщение."
 
@@ -2571,7 +2576,7 @@ msgstr "Y"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:153
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:60
-#: gerbview/class_GERBER.cpp:363 gerbview/class_GERBER.cpp:366
+#: gerbview/class_gerber_file_image.cpp:363 gerbview/class_gerber_file_image.cpp:366
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
@@ -3016,7 +3021,7 @@ msgid "Save footprint association in schematic component footprint fields"
 msgstr "Сохранить связь посад.места в поле посад.места схемного компонента"
 
 #: cvpcb/menubar.cpp:74 eeschema/dialogs/dialog_erc_base.cpp:101
-#: eeschema/menubar.cpp:168 gerbview/menubar.cpp:146 kicad/menubar.cpp:282
+#: eeschema/menubar.cpp:168 gerbview/menubar.cpp:145 kicad/menubar.cpp:282
 #: pagelayout_editor/menubar.cpp:111 pcbnew/menubar_pcbframe.cpp:278
 msgid "&Close"
 msgstr "Закрыть"
@@ -3072,23 +3077,23 @@ msgid "Open CvPcb Manual"
 msgstr "Открыть руководство CvPcb"
 
 #: cvpcb/menubar.cpp:120 eeschema/menubar.cpp:506 eeschema/menubar_libedit.cpp:259
-#: eeschema/tool_viewlib.cpp:252 gerbview/menubar.cpp:228 kicad/menubar.cpp:412
+#: eeschema/tool_viewlib.cpp:252 gerbview/menubar.cpp:227 kicad/menubar.cpp:412
 #: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_modedit.cpp:343
 #: pcbnew/menubar_pcbframe.cpp:645 pcbnew/tool_modview.cpp:191
 msgid "&Getting Started in KiCad"
 msgstr "Начало работы с KiCad"
 
-#: cvpcb/menubar.cpp:121 eeschema/menubar.cpp:507 gerbview/menubar.cpp:229
+#: cvpcb/menubar.cpp:121 eeschema/menubar.cpp:507 gerbview/menubar.cpp:228
 #: kicad/menubar.cpp:413 pagelayout_editor/menubar.cpp:155
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Открыть руководство для начинающих \"Начало работы с KiCad\""
 
-#: cvpcb/menubar.cpp:126 gerbview/menubar.cpp:238 pagelayout_editor/menubar.cpp:164
+#: cvpcb/menubar.cpp:126 gerbview/menubar.cpp:237 pagelayout_editor/menubar.cpp:164
 msgid "&About Kicad"
 msgstr "О Kicad"
 
 #: cvpcb/menubar.cpp:127 eeschema/menubar.cpp:514 eeschema/menubar_libedit.cpp:269
-#: gerbview/menubar.cpp:239 kicad/menubar.cpp:422 pagelayout_editor/menubar.cpp:165
+#: gerbview/menubar.cpp:238 kicad/menubar.cpp:422 pagelayout_editor/menubar.cpp:165
 #: pcbnew/menubar_modedit.cpp:351
 msgid "About KiCad"
 msgstr "О KiCad"
@@ -3099,7 +3104,7 @@ msgid "&Save"
 msgstr "Сохранить"
 
 #: cvpcb/menubar.cpp:133 eeschema/menubar.cpp:524 eeschema/menubar_libedit.cpp:278
-#: eeschema/tool_viewlib.cpp:267 gerbview/menubar.cpp:246 kicad/menubar.cpp:430
+#: eeschema/tool_viewlib.cpp:267 gerbview/menubar.cpp:245 kicad/menubar.cpp:430
 #: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_modedit.cpp:361
 #: pcbnew/menubar_pcbframe.cpp:665 pcbnew/tool_modview.cpp:206
 msgid "&Help"
@@ -3983,15 +3988,15 @@ msgstr "Используется только для полей посад.ме�
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1013
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:572
-#: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:145
+#: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:571
+#: gerbview/class_gerber_draw_item.cpp:572 pcbnew/class_pcb_text.cpp:145
 #: pcbnew/class_text_mod.cpp:357
 msgid "Yes"
 msgstr "Да"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1015
-#: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:572
-#: gerbview/class_gerber_draw_item.cpp:573 pcbnew/class_pcb_text.cpp:143
+#: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:571
+#: gerbview/class_gerber_draw_item.cpp:572 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_text_mod.cpp:355
 msgid "No"
 msgstr "Нет"
@@ -4055,8 +4060,8 @@ msgid "Mirror |"
 msgstr "По горизонтали"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
-#: gerbview/class_gerber_draw_item.cpp:574
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:79 pcbnew/class_pcb_text.cpp:143
+#: gerbview/class_gerber_draw_item.cpp:573
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:77 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_pcb_text.cpp:145 pcbnew/class_text_mod.cpp:369
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:100 pcbnew/modedit_onclick.cpp:292
@@ -4941,7 +4946,7 @@ msgstr "Номер"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:187 eeschema/lib_draw_item.cpp:65
 #: eeschema/lib_pin.cpp:1999 eeschema/libedit.cpp:507 eeschema/sch_text.cpp:791
-#: gerbview/class_gerber_draw_item.cpp:549
+#: gerbview/class_gerber_draw_item.cpp:548
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
@@ -5114,7 +5119,7 @@ msgid "50"
 msgstr "50"
 
 #: eeschema/dialogs/dialog_netlist.cpp:295
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
 #: pcbnew/dialogs/dialog_drc_base.cpp:25
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:82
 msgid "Options:"
@@ -5384,7 +5389,7 @@ msgstr ""
 "толщина установлена в 0."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:101
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:73
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:112
@@ -5392,7 +5397,7 @@ msgid "Color"
 msgstr "Цвет"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:101
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:73
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:112
@@ -5435,7 +5440,7 @@ msgstr "Чертить все листы"
 
 #: eeschema/dialogs/dialog_print_using_printer.cpp:249
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:47
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:102
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:100
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:237
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:51
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:138
@@ -5481,8 +5486,8 @@ msgid "Page Setup"
 msgstr "Настройки страницы"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:50
-#: gerbview/dialogs/dialog_print_using_printer.cpp:390
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:105
+#: gerbview/dialogs/dialog_print_using_printer.cpp:409
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:103
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:54
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:502
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
@@ -6039,40 +6044,40 @@ msgstr "Основной лист"
 msgid "Fit on Screen"
 msgstr "Масштаб по экрану"
 
-#: eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:62 pagelayout_editor/hotkeys.cpp:72
+#: eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:60 pagelayout_editor/hotkeys.cpp:72
 #: pcbnew/basepcbframe.cpp:843 pcbnew/hotkeys.cpp:159 pcbnew/hotkeys.cpp:161
 #: pcbnew/tools/common_actions.cpp:210
 msgid "Zoom Auto"
 msgstr "Авто масштаб"
 
-#: eeschema/hotkeys.cpp:93 gerbview/hotkeys.cpp:63 pagelayout_editor/hotkeys.cpp:73
+#: eeschema/hotkeys.cpp:93 gerbview/hotkeys.cpp:61 pagelayout_editor/hotkeys.cpp:73
 #: pcbnew/hotkeys.cpp:164
 msgid "Zoom Center"
 msgstr "По центру"
 
-#: eeschema/hotkeys.cpp:98 eeschema/hotkeys.cpp:100 gerbview/hotkeys.cpp:64
+#: eeschema/hotkeys.cpp:98 eeschema/hotkeys.cpp:100 gerbview/hotkeys.cpp:62
 #: pagelayout_editor/hotkeys.cpp:75 pcbnew/hotkeys.cpp:168 pcbnew/hotkeys.cpp:170
 msgid "Zoom Redraw"
 msgstr "Перерисовать"
 
-#: eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108 gerbview/hotkeys.cpp:66
+#: eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108 gerbview/hotkeys.cpp:64
 #: pagelayout_editor/hotkeys.cpp:77 pcbnew/hotkeys.cpp:175 pcbnew/hotkeys.cpp:177
 #: pcbnew/tools/common_actions.cpp:190
 msgid "Zoom In"
 msgstr "Увеличить"
 
-#: eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115 gerbview/hotkeys.cpp:65
+#: eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115 gerbview/hotkeys.cpp:63
 #: pagelayout_editor/hotkeys.cpp:76 pcbnew/hotkeys.cpp:182 pcbnew/hotkeys.cpp:184
 #: pcbnew/tools/common_actions.cpp:194
 msgid "Zoom Out"
 msgstr "Уменьшить"
 
-#: eeschema/hotkeys.cpp:118 gerbview/hotkeys.cpp:67 kicad/menubar.cpp:139
+#: eeschema/hotkeys.cpp:118 gerbview/hotkeys.cpp:65 kicad/menubar.cpp:139
 #: pagelayout_editor/hotkeys.cpp:78 pcbnew/hotkeys.cpp:189
 msgid "Help (this window)"
 msgstr "Помощь (данное окно)"
 
-#: eeschema/hotkeys.cpp:119 gerbview/hotkeys.cpp:69 pagelayout_editor/hotkeys.cpp:70
+#: eeschema/hotkeys.cpp:119 gerbview/hotkeys.cpp:67 pagelayout_editor/hotkeys.cpp:70
 #: pcbnew/hotkeys.cpp:128
 msgid "Reset Local Coordinates"
 msgstr "Сбросить локальные координаты"
@@ -6280,7 +6285,7 @@ msgstr "Редактор библиотек"
 msgid "Add Pin"
 msgstr "Добавить вывод"
 
-#: eeschema/lib_arc.cpp:95 gerbview/class_gerber_draw_item.cpp:186
+#: eeschema/lib_arc.cpp:95 gerbview/class_gerber_draw_item.cpp:189
 #: pcbnew/class_board_item.cpp:44 pcbnew/class_drawsegment.cpp:377
 msgid "Arc"
 msgstr "Дуга"
@@ -6332,7 +6337,7 @@ msgstr "Точка %d кривой Безье — координата X не з
 msgid "Bezier point %d Y position not defined"
 msgstr "Точка %d кривой Безье — координата Y не задана"
 
-#: eeschema/lib_circle.cpp:53 gerbview/class_gerber_draw_item.cpp:189
+#: eeschema/lib_circle.cpp:53 gerbview/class_gerber_draw_item.cpp:192
 #: pcbnew/class_board_item.cpp:45 pcbnew/class_drawsegment.cpp:373
 #: pcbnew/class_pad.cpp:885
 msgid "Circle"
@@ -7983,7 +7988,7 @@ msgstr "Установить вход в шину \\"
 msgid "Delete Bus Entry"
 msgstr "Удалить вход в шину"
 
-#: eeschema/pin_shape.cpp:38 gerbview/class_gerber_draw_item.cpp:183
+#: eeschema/pin_shape.cpp:38 gerbview/class_gerber_draw_item.cpp:186
 #: pcbnew/class_board_item.cpp:42 pcbnew/dialogs/dialog_copper_zones_base.cpp:236
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
@@ -8936,7 +8941,7 @@ msgid "ERC error"
 msgstr "Ошибка ERС"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:96
-#: gerbview/class_gerbview_layer_widget.cpp:110 pcbnew/class_pcb_layer_widget.cpp:74
+#: gerbview/class_gerbview_layer_widget.cpp:108 pcbnew/class_pcb_layer_widget.cpp:74
 #: pcbnew/tools/selection_tool.cpp:116
 msgid "Grid"
 msgstr "Сетка"
@@ -8955,76 +8960,66 @@ msgstr ""
 "задний фон и они не будут видны на экране.\n"
 "Вы уверены что хотите использовать эти цвета?"
 
-#: gerbview/class_GERBER.cpp:347
-msgid "Image name"
-msgstr "Имя образа:"
-
-#: gerbview/class_GERBER.cpp:352
-msgid "Graphic layer"
-msgstr "Графический слой"
-
-#: gerbview/class_GERBER.cpp:356
-msgid "Img Rot."
-msgstr "Повернуто"
-
-#: gerbview/class_GERBER.cpp:360 gerbview/class_gerber_draw_item.cpp:568
-msgid "Polarity"
-msgstr "Полярность"
-
-#: gerbview/class_GERBER.cpp:364
-msgid "X Justify"
-msgstr "Выровнять по X"
-
-#: gerbview/class_GERBER.cpp:367
-msgid "Y Justify"
-msgstr "Выровнять по Y"
-
-#: gerbview/class_GERBER.cpp:375
-msgid "Image Justify Offset"
-msgstr "Выровнять смещение изображения"
-
-#: gerbview/class_GERBER.cpp:469
-#, c-format
-msgid "Layer %d (%s, %s, %s)"
-msgstr "Слой %d (%s, %s, %s)"
-
-#: gerbview/class_GERBER.cpp:476
-#, c-format
-msgid "Layer %d (%s, %s)"
-msgstr "Слой %d (%s, %s)"
-
-#: gerbview/class_GERBER.cpp:482
-#, c-format
-msgid "Layer %d *"
-msgstr "Слой %d *"
-
-#: gerbview/class_GERBER.cpp:485 gerbview/select_layers_to_pcb.cpp:183
-#, c-format
-msgid "Layer %d"
-msgstr "Слой %d"
-
-#: gerbview/class_gerber_draw_item.cpp:553
+#: gerbview/class_gerber_draw_item.cpp:552
 msgid "D Code"
 msgstr "D-коды"
 
-#: gerbview/class_gerber_draw_item.cpp:557
+#: gerbview/class_gerber_draw_item.cpp:556
 msgid "Graphic Layer"
 msgstr "Слой графики"
 
-#: gerbview/class_gerber_draw_item.cpp:567
+#: gerbview/class_gerber_draw_item.cpp:566
 msgid "Clear"
 msgstr "Светлый"
 
-#: gerbview/class_gerber_draw_item.cpp:567
+#: gerbview/class_gerber_draw_item.cpp:566
 msgid "Dark"
 msgstr "Темный"
 
-#: gerbview/class_gerber_draw_item.cpp:578
+#: gerbview/class_gerber_draw_item.cpp:567 gerbview/class_gerber_file_image.cpp:360
+msgid "Polarity"
+msgstr "Полярность"
+
+#: gerbview/class_gerber_draw_item.cpp:577
 msgid "AB axis"
 msgstr "AB оси"
 
-#: gerbview/class_gerbview_layer_widget.cpp:89
-#: gerbview/dialogs/dialog_print_using_printer.cpp:163
+#: gerbview/class_gerber_file_image.cpp:347
+msgid "Image name"
+msgstr "Имя образа:"
+
+#: gerbview/class_gerber_file_image.cpp:352
+msgid "Graphic layer"
+msgstr "Графический слой"
+
+#: gerbview/class_gerber_file_image.cpp:356
+msgid "Img Rot."
+msgstr "Повернуто"
+
+#: gerbview/class_gerber_file_image.cpp:364
+msgid "X Justify"
+msgstr "Выровнять по X"
+
+#: gerbview/class_gerber_file_image.cpp:367
+msgid "Y Justify"
+msgstr "Выровнять по Y"
+
+#: gerbview/class_gerber_file_image.cpp:375
+msgid "Image Justify Offset"
+msgstr "Выровнять смещение изображения"
+
+#: gerbview/class_gerber_file_image_list.cpp:161
+#, c-format
+msgid "%d %s"
+msgstr "%d %s"
+
+#: gerbview/class_gerber_file_image_list.cpp:164
+#, c-format
+msgid "Graphic layer %d"
+msgstr "Слой графики %d"
+
+#: gerbview/class_gerbview_layer_widget.cpp:87
+#: gerbview/dialogs/dialog_print_using_printer.cpp:162
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163 pcbnew/class_drawsegment.cpp:408
 #: pcbnew/class_pad.cpp:653 pcbnew/class_pcb_layer_widget.cpp:237
 #: pcbnew/class_pcb_text.cpp:140 pcbnew/class_text_mod.cpp:362
@@ -9035,48 +9030,48 @@ msgstr "AB оси"
 msgid "Layer"
 msgstr "Слой"
 
-#: gerbview/class_gerbview_layer_widget.cpp:90 pcbnew/class_pcb_layer_widget.cpp:238
+#: gerbview/class_gerbview_layer_widget.cpp:88 pcbnew/class_pcb_layer_widget.cpp:238
 #: pcbnew/layer_widget.cpp:565
 msgid "Render"
 msgstr "Отображать"
 
-#: gerbview/class_gerbview_layer_widget.cpp:110 pcbnew/class_pcb_layer_widget.cpp:74
+#: gerbview/class_gerbview_layer_widget.cpp:108 pcbnew/class_pcb_layer_widget.cpp:74
 msgid "Show the (x,y) grid dots"
 msgstr "Показать точки сетки"
 
-#: gerbview/class_gerbview_layer_widget.cpp:111
+#: gerbview/class_gerbview_layer_widget.cpp:109
 msgid "DCodes"
 msgstr "D-коды"
 
-#: gerbview/class_gerbview_layer_widget.cpp:111
+#: gerbview/class_gerbview_layer_widget.cpp:109
 msgid "Show DCodes identification"
 msgstr "Показать идентификаторы D-кодов"
 
-#: gerbview/class_gerbview_layer_widget.cpp:112
+#: gerbview/class_gerbview_layer_widget.cpp:110
 msgid "Neg. Obj."
 msgstr "Нег.об."
 
-#: gerbview/class_gerbview_layer_widget.cpp:113
+#: gerbview/class_gerbview_layer_widget.cpp:111
 msgid "Show negative objects in this color"
 msgstr "Показать негативные объекты этим цветом"
 
-#: gerbview/class_gerbview_layer_widget.cpp:153
+#: gerbview/class_gerbview_layer_widget.cpp:151
 msgid "Show All Layers"
 msgstr "Показать все слои"
 
-#: gerbview/class_gerbview_layer_widget.cpp:156
+#: gerbview/class_gerbview_layer_widget.cpp:154
 msgid "Hide All Layers But Active"
 msgstr "Скрыть все слои кроме активного"
 
-#: gerbview/class_gerbview_layer_widget.cpp:159
+#: gerbview/class_gerbview_layer_widget.cpp:157
 msgid "Always Hide All Layers But Active"
 msgstr "Всегда скрывать все слои кроме активного"
 
-#: gerbview/class_gerbview_layer_widget.cpp:162
+#: gerbview/class_gerbview_layer_widget.cpp:160
 msgid "Hide All Layers"
 msgstr "Скрыть все слои"
 
-#: gerbview/class_gerbview_layer_widget.cpp:166
+#: gerbview/class_gerbview_layer_widget.cpp:164
 msgid "Sort Layers if X2 Mode"
 msgstr "Сортировка слоёв в X2 режиме"
 
@@ -9129,44 +9124,47 @@ msgstr "Сохранить выбор"
 msgid "Get Stored Choice"
 msgstr "Получить сохранённый выбор"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:107
+#: gerbview/dialogs/dialog_print_using_printer.cpp:110
 #: pagelayout_editor/events_functions.cpp:517
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:114
 msgid "Error Init Printer info"
 msgstr "Ошибка инициализации принтера"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:297
+#: gerbview/dialogs/dialog_print_using_printer.cpp:304
 #: pcbnew/dialogs/dialog_plot.cpp:755 pcbnew/dialogs/dialog_print_using_printer.cpp:364
 msgid "Warning: Scale option set to a very large value"
 msgstr "Предупреждение: параметр масштаба установлен в очень большое значение"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:305
+#: gerbview/dialogs/dialog_print_using_printer.cpp:310
 #: pcbnew/dialogs/dialog_plot.cpp:751 pcbnew/dialogs/dialog_print_using_printer.cpp:374
 msgid "Warning: Scale option set to a very small value"
 msgstr "Предупреждение: параметр масштаба установлен в очень маленькое значение"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:340
+#: gerbview/dialogs/dialog_print_using_printer.cpp:359
 #: pcbnew/dialogs/dialog_plot.cpp:814 pcbnew/dialogs/dialog_print_using_printer.cpp:441
 msgid "No layer selected"
 msgstr "Слой не выбран"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:354
+#: gerbview/dialogs/dialog_print_using_printer.cpp:373
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:171
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:446
 msgid "Print Preview"
 msgstr "Просмотр"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:396
+#: gerbview/dialogs/dialog_print_using_printer.cpp:415
 msgid "There was a problem printing"
 msgstr "Проблема с печатью"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:20
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:25
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:30
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:45
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:20
 msgid "Layers:"
 msgstr "Слои:"
+
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:25
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:30
+msgid "Graphic layers:"
+msgstr "Слои графики:"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
@@ -9231,33 +9229,33 @@ msgstr "Приблиз. масштаб"
 msgid "X Scale Adjust"
 msgstr "Установить масштаб по X"
 
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:56
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:55
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:61
 msgid "Set X scale adjust for exact scale plotting"
 msgstr "Установка точного масштаба по оси X"
 
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:60
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:59
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:65
 msgid "Y Scale Adjust"
 msgstr "Установить масштаб по Y"
 
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:66
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:64
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:71
 msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Установка точного масштаба по оси Y"
 
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:87
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:36
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:114
 msgid "Print Mode"
 msgstr "Режим печати"
 
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:89
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:87
 msgid "Choose if you want to print sheets in color, or force the black and white mode."
 msgstr ""
 "Установить, если желаете печать листы в цвете, или принудительный черно-белый режим."
 
-#: gerbview/dialogs/dialog_print_using_printer_base.cpp:99
+#: gerbview/dialogs/dialog_print_using_printer_base.cpp:97
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:48
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:135
 msgid "Page Options"
@@ -9269,8 +9267,8 @@ msgid "Select Layer:"
 msgstr "Выбор слоя:"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:154
-#: gerbview/select_layers_to_pcb.cpp:222 gerbview/select_layers_to_pcb.cpp:338
-#: gerbview/select_layers_to_pcb.cpp:377
+#: gerbview/select_layers_to_pcb.cpp:223 gerbview/select_layers_to_pcb.cpp:339
+#: gerbview/select_layers_to_pcb.cpp:378
 msgid "Do not export"
 msgstr "Не экспортировать"
 
@@ -9403,345 +9401,349 @@ msgstr "Лист"
 msgid "Use touchpad to pan"
 msgstr "Использовать сенсорную панель для панорамирования"
 
-#: gerbview/events_called_functions.cpp:269
+#: gerbview/events_called_functions.cpp:267
 msgid "No editor defined. Please select one"
 msgstr "Не выбран редактор. Выберите один"
 
-#: gerbview/events_called_functions.cpp:275
+#: gerbview/events_called_functions.cpp:273
 #, c-format
 msgid "No file loaded on the active layer %d"
 msgstr "Не загружен файл на активном слое %d"
 
-#: gerbview/events_called_functions.cpp:319 gerbview/gerbview_frame.cpp:143
+#: gerbview/events_called_functions.cpp:317 gerbview/gerbview_frame.cpp:140
 #: pcbnew/moduleframe.cpp:289 pcbnew/pcbframe.cpp:402 pcbnew/pcbframe.cpp:912
 msgid "Visibles"
 msgstr "Видимость"
 
-#: gerbview/events_called_functions.cpp:382 gerbview/menubar.cpp:156
-#: gerbview/menubar.cpp:158 pcbnew/pcbnew_config.cpp:80 pcbnew/tool_pcb.cpp:809
+#: gerbview/events_called_functions.cpp:380 gerbview/menubar.cpp:155
+#: gerbview/menubar.cpp:157 pcbnew/pcbnew_config.cpp:80 pcbnew/tool_pcb.cpp:809
 msgid "Hide &Layers Manager"
 msgstr "Скрыть менеджер слоёв"
 
-#: gerbview/events_called_functions.cpp:382 gerbview/menubar.cpp:158
+#: gerbview/events_called_functions.cpp:380 gerbview/menubar.cpp:157
 #: pcbnew/pcbnew_config.cpp:80 pcbnew/tool_pcb.cpp:809
 msgid "Show &Layers Manager"
 msgstr "Показать менеджер слоёв"
 
-#: gerbview/excellon_read_drill_file.cpp:189
+#: gerbview/excellon_read_drill_file.cpp:186
 msgid "No room to load file"
 msgstr "Нет места для загрузки файла"
 
-#: gerbview/excellon_read_drill_file.cpp:199 pcbnew/pcbnew_config.cpp:227
+#: gerbview/excellon_read_drill_file.cpp:197 pcbnew/pcbnew_config.cpp:227
 #, c-format
 msgid "File %s not found"
 msgstr "Файл %s не найден"
 
-#: gerbview/excellon_read_drill_file.cpp:214
-msgid "Files not found"
-msgstr "Файл не найден"
+#: gerbview/excellon_read_drill_file.cpp:212
+msgid "Error reading EXCELLON drill file"
+msgstr "Ошибка чтения файла сверловки EXCELLON"
 
-#: gerbview/excellon_read_drill_file.cpp:388
+#: gerbview/excellon_read_drill_file.cpp:380
 msgid "METRIC command has no parameter"
 msgstr "METRIC команда на имеет параметров"
 
-#: gerbview/excellon_read_drill_file.cpp:406
+#: gerbview/excellon_read_drill_file.cpp:398
 msgid "INCH command has no parameter"
 msgstr "INCH команда не имеет параметров"
 
-#: gerbview/excellon_read_drill_file.cpp:434
+#: gerbview/excellon_read_drill_file.cpp:426
 msgid "ICI command has no parameter"
 msgstr "ICI команда на имеет параметров"
 
-#: gerbview/excellon_read_drill_file.cpp:444
+#: gerbview/excellon_read_drill_file.cpp:436
 msgid "ICI command has incorrect parameter"
 msgstr "ICI команда не имеет параметров"
 
-#: gerbview/excellon_read_drill_file.cpp:482
-#, c-format
-msgid "Tool definition <%c> not supported"
-msgstr "Определение инструмента <%c> не поддерживается"
+#: gerbview/excellon_read_drill_file.cpp:490
+msgid "Tool definition shape not found"
+msgstr "Форма определения инструмента не найдена"
 
-#: gerbview/excellon_read_drill_file.cpp:534
+#: gerbview/excellon_read_drill_file.cpp:493
 #, c-format
-msgid "Tool <%d> not defined"
-msgstr "Инструмент <%d> не определен"
+msgid "Tool definition '%c' not supported"
+msgstr "Определение инструмента '%c' не поддерживается"
 
-#: gerbview/excellon_read_drill_file.cpp:661
+#: gerbview/excellon_read_drill_file.cpp:546
+#, c-format
+msgid "Tool %d not defined"
+msgstr "Инструмент %d не определён"
+
+#: gerbview/excellon_read_drill_file.cpp:690
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
 msgstr "Неизвестный Excellon G код: &lt;%s&gt;"
 
-#: gerbview/export_to_pcbnew.cpp:173
+#: gerbview/export_to_pcbnew.cpp:169
 msgid "None of the Gerber layers contain any data"
 msgstr "Нет слоёв, содержащих данные."
 
-#: gerbview/export_to_pcbnew.cpp:180
+#: gerbview/export_to_pcbnew.cpp:176
 msgid "Board file name:"
 msgstr "Имя файла платы:"
 
-#: gerbview/export_to_pcbnew.cpp:216
+#: gerbview/export_to_pcbnew.cpp:212
 #, c-format
 msgid "Cannot create file '%s'"
 msgstr "Не удалось создать файл '%s'"
 
-#: gerbview/files.cpp:46
+#: gerbview/files.cpp:43
 msgid "Gerber files"
 msgstr "Gerber файлы"
 
-#: gerbview/files.cpp:60
+#: gerbview/files.cpp:57
 msgid "Drill files"
 msgstr "Файлы сверловки"
 
-#: gerbview/files.cpp:121
+#: gerbview/files.cpp:118
 msgid "Gerber files (.g* .lgr .pho)"
 msgstr "Файлы Gerber (.g* .lgr .pho)"
 
-#: gerbview/files.cpp:127
+#: gerbview/files.cpp:124
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
 msgstr "Верхний слой (*.GTL)|*.GTL;*.gtl|"
 
-#: gerbview/files.cpp:128
+#: gerbview/files.cpp:125
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
 msgstr "Нижний слой (*.GBL)|*.GBL;*.gbl|"
 
-#: gerbview/files.cpp:129
+#: gerbview/files.cpp:126
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
 msgstr "Паяльная маска снизу (*.GBS)|*.GBS;*.gbs|"
 
-#: gerbview/files.cpp:130
+#: gerbview/files.cpp:127
 msgid "Top solder resist (*.GTS)|*.GTS;*.gts|"
 msgstr "Паяльная маска сверху (*.GTS)|*.GTS;*.gts|"
 
-#: gerbview/files.cpp:131
+#: gerbview/files.cpp:128
 msgid "Bottom overlay (*.GBO)|*.GBO;*.gbo|"
 msgstr "Шелкография снизу (*.GBO)|*.GBO;*.gbo|"
 
-#: gerbview/files.cpp:132
+#: gerbview/files.cpp:129
 msgid "Top overlay (*.GTO)|*.GTO;*.gto|"
 msgstr "Шелкография сверху (*.GTO)|*.GTO;*.gto|"
 
-#: gerbview/files.cpp:133
+#: gerbview/files.cpp:130
 msgid "Bottom paste (*.GBP)|*.GBP;*.gbp|"
 msgstr "Паяльная паста снизу (*.GBP)|*.GBP;*.gbp|"
 
-#: gerbview/files.cpp:134
+#: gerbview/files.cpp:131
 msgid "Top paste (*.GTP)|*.GTP;*.gtp|"
 msgstr "Паяльная паста сверху (*.GTP)|*.GTP;*.gtp|"
 
-#: gerbview/files.cpp:135
+#: gerbview/files.cpp:132
 msgid "Keep-out layer (*.GKO)|*.GKO;*.gko|"
 msgstr "Слой запретных зон (*.GKO)|*.GKO;*.gko|"
 
-#: gerbview/files.cpp:136
+#: gerbview/files.cpp:133
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 msgstr "Механические слои (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
-#: gerbview/files.cpp:137
+#: gerbview/files.cpp:134
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
 msgstr "Главный слой конт.пл. сверху (*.GPT)|*.GPT;*.gpt|"
 
-#: gerbview/files.cpp:138
+#: gerbview/files.cpp:135
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 msgstr "Главный слой конт.пл. снизу (*.GPB)|*.GPB;*.gpb|"
 
-#: gerbview/files.cpp:150
+#: gerbview/files.cpp:147
 msgid "Open Gerber File"
 msgstr "Открыть файл Gerber"
 
-#: gerbview/files.cpp:239
+#: gerbview/files.cpp:236
 msgid "Open Drill File"
 msgstr "Открыть файл сверловки"
 
-#: gerbview/gerbview_frame.cpp:465
+#: gerbview/gerbview_frame.cpp:467
 msgid "D Codes"
 msgstr "D коды"
 
-#: gerbview/gerbview_frame.cpp:484
+#: gerbview/gerbview_frame.cpp:486
 #, c-format
-msgid "Layer %d not in use"
-msgstr "Слой %d не используется"
+msgid "Drawing layer %d not in use"
+msgstr "Слой рисунков %d не используется"
 
-#: gerbview/gerbview_frame.cpp:490 pcbnew/import_dxf/dialog_dxf_import_base.cpp:24
+#: gerbview/gerbview_frame.cpp:496 pcbnew/import_dxf/dialog_dxf_import_base.cpp:24
 msgid "File:"
 msgstr "Файл:"
 
-#: gerbview/gerbview_frame.cpp:494
+#: gerbview/gerbview_frame.cpp:500
 msgid "(with X2 Attributes)"
 msgstr "(с X2 атрибутами)"
 
-#: gerbview/gerbview_frame.cpp:501
+#: gerbview/gerbview_frame.cpp:507
 #, c-format
 msgid "Image name: '%s'  Layer name: '%s'"
 msgstr "Название образа: '%s' Название слоя: '%s'"
 
-#: gerbview/gerbview_frame.cpp:514
+#: gerbview/gerbview_frame.cpp:520
 msgid "X2 attr"
 msgstr "X2 атрибуты"
 
-#: gerbview/hotkeys.cpp:68 pcbnew/hotkeys.cpp:223
+#: gerbview/hotkeys.cpp:66 pcbnew/hotkeys.cpp:223
 msgid "Switch Units"
 msgstr "Сменить единицы измерения"
 
-#: gerbview/hotkeys.cpp:71
+#: gerbview/hotkeys.cpp:69
 msgid "Gbr Lines Display Mode"
 msgstr "Режим отображения Gbr линий"
 
-#: gerbview/hotkeys.cpp:72
+#: gerbview/hotkeys.cpp:70
 msgid "Gbr Flashed Display Mode"
 msgstr "Режим отображения Gbr подсветки"
 
-#: gerbview/hotkeys.cpp:73
+#: gerbview/hotkeys.cpp:71
 msgid "Gbr Polygons Display Mode"
 msgstr "Режим отображения Gbr полигонов"
 
-#: gerbview/hotkeys.cpp:74
+#: gerbview/hotkeys.cpp:72
 msgid "Gbr Negative Obj Display Mode"
 msgstr "Режим отображения Gbr негативных объектов"
 
-#: gerbview/hotkeys.cpp:75
+#: gerbview/hotkeys.cpp:73
 msgid "DCodes Display Mode"
 msgstr "Режим отображения Gbr D-кодов"
 
-#: gerbview/hotkeys.cpp:77 pcbnew/hotkeys.cpp:91
+#: gerbview/hotkeys.cpp:75 pcbnew/hotkeys.cpp:91
 msgid "Switch to Next Layer"
 msgstr "Перейти на следующий слой"
 
-#: gerbview/hotkeys.cpp:78 pcbnew/hotkeys.cpp:93
+#: gerbview/hotkeys.cpp:76 pcbnew/hotkeys.cpp:93
 msgid "Switch to Previous Layer"
 msgstr "Перейти на предыдущий слой"
 
-#: gerbview/hotkeys.cpp:96
+#: gerbview/hotkeys.cpp:94
 msgid "Gerbview Hotkeys"
 msgstr "Горячие клавиши Gerbview"
 
-#: gerbview/init_gbr_drawlayers.cpp:48
+#: gerbview/init_gbr_drawlayers.cpp:45
 msgid "Current data will be lost?"
 msgstr "Текущие данные будут утеряны?"
 
-#: gerbview/init_gbr_drawlayers.cpp:72
+#: gerbview/init_gbr_drawlayers.cpp:77
 #, c-format
 msgid "Clear layer %d?"
 msgstr "Очистить слой %d?"
 
-#: gerbview/menubar.cpp:65
+#: gerbview/menubar.cpp:64
 msgid "Load &Gerber File"
 msgstr "Загрузить Gerber файл"
 
-#: gerbview/menubar.cpp:66 gerbview/toolbars_gerber.cpp:62
+#: gerbview/menubar.cpp:65 gerbview/toolbars_gerber.cpp:62
 msgid "Load a new Gerber file on the current layer. Previous data will be deleted"
 msgstr "Загрузить новый Gerber-файл в текущий слой. Предыдущие данные будут удалены"
 
-#: gerbview/menubar.cpp:72
+#: gerbview/menubar.cpp:71
 msgid "Load &EXCELLON Drill File"
 msgstr "Загрузить файл сверловки EXCELLON"
 
-#: gerbview/menubar.cpp:73
+#: gerbview/menubar.cpp:72
 msgid "Load excellon drill file"
 msgstr "Загрузить файл сверловки EXCELLON"
 
-#: gerbview/menubar.cpp:91
+#: gerbview/menubar.cpp:90
 msgid "Open &Recent Gerber File"
 msgstr "Открыть недавний файл Gerber"
 
-#: gerbview/menubar.cpp:92
+#: gerbview/menubar.cpp:91
 msgid "Open a recent opened Gerber file"
 msgstr "Отрыть недавно открытые Gerber файлы"
 
-#: gerbview/menubar.cpp:106
+#: gerbview/menubar.cpp:105
 msgid "Open Recent Dri&ll File"
 msgstr "Открыть недавние файлы сверловки"
 
-#: gerbview/menubar.cpp:107
+#: gerbview/menubar.cpp:106
 msgid "Open a recent opened drill file"
 msgstr "Отрыть недавно открытые файлы сверловки"
 
-#: gerbview/menubar.cpp:116
+#: gerbview/menubar.cpp:115
 msgid "Clear &All"
 msgstr "Очистить всё"
 
-#: gerbview/menubar.cpp:117
+#: gerbview/menubar.cpp:116
 msgid "Clear all layers. All data will be deleted"
 msgstr "Очистить все слои. Все данные будут удалены"
 
-#: gerbview/menubar.cpp:126
+#: gerbview/menubar.cpp:125
 msgid "E&xport to Pcbnew"
 msgstr "Экспорт в Pcbnew"
 
-#: gerbview/menubar.cpp:127
+#: gerbview/menubar.cpp:126
 msgid "Export data in Pcbnew format"
 msgstr "Экспорт данных в формате Pcbnew"
 
-#: gerbview/menubar.cpp:136 pagelayout_editor/menubar.cpp:101
+#: gerbview/menubar.cpp:135 pagelayout_editor/menubar.cpp:101
 #: pcbnew/menubar_modedit.cpp:141 pcbnew/menubar_pcbframe.cpp:241
 msgid "&Print"
 msgstr "Печать"
 
-#: gerbview/menubar.cpp:137
+#: gerbview/menubar.cpp:136
 msgid "Print gerber"
 msgstr "Печать Gerber"
 
-#: gerbview/menubar.cpp:147
+#: gerbview/menubar.cpp:146
 msgid "Close GerbView"
 msgstr "Закрыть GerbView"
 
-#: gerbview/menubar.cpp:168
+#: gerbview/menubar.cpp:167
 msgid "&Options"
 msgstr "Параметры"
 
-#: gerbview/menubar.cpp:169
+#: gerbview/menubar.cpp:168
 msgid "Set options to draw items"
 msgstr "Установка параметров для отображения"
 
-#: gerbview/menubar.cpp:185
+#: gerbview/menubar.cpp:184
 msgid "&List DCodes"
 msgstr "Список D-кодов"
 
-#: gerbview/menubar.cpp:186
+#: gerbview/menubar.cpp:185
 msgid "List and edit D-codes"
 msgstr "Показать и редактировать D-коды"
 
-#: gerbview/menubar.cpp:192
+#: gerbview/menubar.cpp:191
 msgid "&Show Source"
 msgstr "Показать содержимое файла"
 
-#: gerbview/menubar.cpp:193
+#: gerbview/menubar.cpp:192
 msgid "Show source file for the current layer"
 msgstr "Показать содержимое файла для текущего слоя"
 
-#: gerbview/menubar.cpp:202
+#: gerbview/menubar.cpp:201
 msgid "&Clear Layer"
 msgstr "Очистить слой"
 
-#: gerbview/menubar.cpp:203
+#: gerbview/menubar.cpp:202
 msgid "Clear current layer"
 msgstr "Очистить текущий слой"
 
-#: gerbview/menubar.cpp:212 pagelayout_editor/menubar.cpp:132
+#: gerbview/menubar.cpp:211 pagelayout_editor/menubar.cpp:132
 msgid "&Text Editor"
 msgstr "Текстовый редактор"
 
-#: gerbview/menubar.cpp:213 pagelayout_editor/menubar.cpp:133
+#: gerbview/menubar.cpp:212 pagelayout_editor/menubar.cpp:133
 msgid "Select your preferred text editor"
 msgstr "Выбор предпочитаемого редактора текстов"
 
-#: gerbview/menubar.cpp:222
+#: gerbview/menubar.cpp:221
 msgid "Gerbview &Manual"
 msgstr "Руководство Gerbview"
 
-#: gerbview/menubar.cpp:223
+#: gerbview/menubar.cpp:222
 msgid "Open the GerbView Manual"
 msgstr "Открыть руководство GerbView"
 
-#: gerbview/menubar.cpp:245
+#: gerbview/menubar.cpp:244
 msgid "&Miscellaneous"
 msgstr "Разное"
 
-#: gerbview/readgerb.cpp:69
+#: gerbview/readgerb.cpp:68
 #, c-format
 msgid "File <%s> not found"
 msgstr "Файл <%s> не найден"
 
-#: gerbview/readgerb.cpp:192
+#: gerbview/readgerb.cpp:191
 msgid ""
 "Warning: this file has no D-Code definition\n"
 "It is perhaps an old RS274D file\n"
@@ -9751,19 +9753,24 @@ msgstr ""
 "Возможно, что это файл RS274D старого формата\n"
 "Поэтому размер элементов не определен"
 
-#: gerbview/rs274x.cpp:444
+#: gerbview/rs274x.cpp:442
 msgid "RS274X: Command \"IR\" rotation value not allowed"
 msgstr "RS274X: Команда \"IR\" недопустимое значение угла поворота"
 
-#: gerbview/rs274x.cpp:535
+#: gerbview/rs274x.cpp:533
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
 msgstr "RS274X: Команда KNOCKOUT проигнорирована GerbView"
 
-#: gerbview/rs274x.cpp:597
+#: gerbview/rs274x.cpp:596
 msgid "Too many include files!!"
 msgstr "Слишком много вложенных файлов!"
 
-#: gerbview/select_layers_to_pcb.cpp:424
+#: gerbview/select_layers_to_pcb.cpp:184
+#, c-format
+msgid "Layer %d"
+msgstr "Слой %d"
+
+#: gerbview/select_layers_to_pcb.cpp:425
 msgid "The exported board has not enough copper layers to handle selected inner layers"
 msgstr ""
 "Экспортируемая плата не имеет нужного количества слоёв для обработки выбранных "
@@ -12201,37 +12208,37 @@ msgstr "Удалён компонент %s"
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Удаление неиспользуемого компонента \"%s:%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:522
+#: pcbnew/board_netlist_updater.cpp:521
 #, c-format
 msgid "Remove single pad net %s."
 msgstr "Удалена цепь %s с одной конт.пл."
 
-#: pcbnew/board_netlist_updater.cpp:527 pcbnew/class_board.cpp:2601
+#: pcbnew/board_netlist_updater.cpp:526 pcbnew/class_board.cpp:2601
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Удалить цепь \"%s\" с одним конт.пл. на \"%s\" конт.пл. '%s'\n"
 
-#: pcbnew/board_netlist_updater.cpp:591
+#: pcbnew/board_netlist_updater.cpp:590
 #, c-format
 msgid "Component %s pad %s not found in footprint %s\n"
 msgstr "Компонент %s конт.пл. %s не найдена в посад.месте %s\n"
 
-#: pcbnew/board_netlist_updater.cpp:612
+#: pcbnew/board_netlist_updater.cpp:611
 #, c-format
 msgid "Copper zone (net name %s): net has no pads connected."
 msgstr "Медная зона (цепь %s): цепь не имеет подключённых конт.пл."
 
-#: pcbnew/board_netlist_updater.cpp:640
+#: pcbnew/board_netlist_updater.cpp:639
 #, c-format
 msgid "Processing component \"%s:%s:%s\".\n"
 msgstr "Обрабатывается компонент \"%s:%s:%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:697
+#: pcbnew/board_netlist_updater.cpp:696
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Всего предупреждений: %d, ошибок: %d."
 
-#: pcbnew/board_netlist_updater.cpp:706
+#: pcbnew/board_netlist_updater.cpp:705
 msgid ""
 "Errors occured during the netlist update. Unless you fix them, your board will not be "
 "consistent with the schematics."
@@ -12239,7 +12246,7 @@ msgstr ""
 "Произошла ошибка при обновлении списка цепей. Пока Вы не исправите ошибку печатная "
 "плата не будет соответствовать схеме."
 
-#: pcbnew/board_netlist_updater.cpp:712
+#: pcbnew/board_netlist_updater.cpp:711
 msgid "Netlist update successful!"
 msgstr "Список цепей обновлён успешно!"
 
@@ -21559,11 +21566,11 @@ msgstr "Настроить длину диф.пары"
 msgid "Tune Diff Pair Skew"
 msgstr "Настроить перекос диф.пары"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:596
+#: pcbnew/router/pns_diff_pair_placer.cpp:598
 msgid "Can't start a differential pair  in the middle of nowhere."
 msgstr "Не могу начать трассировку диф.пары."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:605
+#: pcbnew/router/pns_diff_pair_placer.cpp:607
 msgid ""
 "Unable to find complementary differential pair net. Make sure the names of the nets "
 "belonging to a differential pair end with either _N/_P or +/-."
@@ -21571,13 +21578,13 @@ msgstr ""
 "Не удалось найти второй проводник диф.пары. Проверьте, что имена цепей диф.пары "
 "заканчиваются на _N/_P или +/-."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:622
+#: pcbnew/router/pns_diff_pair_placer.cpp:624
 msgid "Current track/via gap setting violates design rules for this net."
 msgstr ""
 "Текущая настройка зазора дорожки/перех.отв. нарушает правила проектирования для "
 "данной цепи."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:629
+#: pcbnew/router/pns_diff_pair_placer.cpp:631
 msgid "Current track width setting violates design rules."
 msgstr "Текущая настройка ширины дорожки нарушает правила проектирования."
 
@@ -22660,7 +22667,7 @@ msgstr "Старт заливки зоны..."
 msgid "Updating ratsnest..."
 msgstr "Обновление связей..."
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.h:52
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.h:57
 msgid "3D Search Path Configuration"
 msgstr "Конфигурация путей поиска 3D"
 
