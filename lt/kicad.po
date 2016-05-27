@@ -589,12 +589,12 @@ msgstr "Pervadinti failą"
 #: kicad/mainframe.cpp:249
 #, c-format
 msgid "%s closed [pid=%d]\n"
-msgstr ""
+msgstr "%s užverta [pid=%d]\n"
 
 #: kicad/mainframe.cpp:270
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
-msgstr ""
+msgstr "%s %s atverta [pid=%ld]\n"
 
 #: kicad/mainframe.cpp:441
 msgid "Text file ("
@@ -3599,7 +3599,7 @@ msgstr "Apskritimas"
 #: pcbnew/menubar_modedit.cpp:281 pcbnew/menubar_pcbframe.cpp:412
 #: eeschema/menubar_libedit.cpp:220
 msgid "&Line or Polygon"
-msgstr ""
+msgstr "Atkarpa arba daugiakampis"
 
 #: pcbnew/menubar_modedit.cpp:287 pcbnew/menubar_pcbframe.cpp:405
 #: eeschema/menubar_libedit.cpp:213
@@ -6805,7 +6805,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:155
 #: pcbnew/dialogs/dialog_graphic_item_properties_for_Modedit.cpp:167
 msgid "Line Segment Properties"
-msgstr ""
+msgstr "Atkarpos savybęs"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:192
 msgid ""
@@ -7384,7 +7384,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1160
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1192
 msgid "jumper"
-msgstr ""
+msgstr "trumpiklis"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:294
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:323
@@ -8206,13 +8206,13 @@ msgstr "sutalpinti į lapą"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 0.5"
-msgstr ""
+msgstr "Mastelis 2:1"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 0.7"
-msgstr ""
+msgstr "Mastelis 1:0,7"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
@@ -8228,25 +8228,25 @@ msgstr "Tikslus mastelis 1"
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 1.4"
-msgstr ""
+msgstr "Mastelis 1:1,4"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 2"
-msgstr ""
+msgstr "Mastelis 1:2"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 3"
-msgstr ""
+msgstr "Mastelis 1:3"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 4"
-msgstr ""
+msgstr "Mastelis 1:4"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:51
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:24
@@ -9346,15 +9346,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 1"
-msgstr ""
+msgstr "Mastelis 1:1"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 8"
-msgstr ""
+msgstr "Mastelis 1:8"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
 msgid "Scale 16"
-msgstr ""
+msgstr "Mastelis 1:16"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:22
 msgid "&Delete redundant vias"
@@ -10610,7 +10610,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:409
 msgid "Select all Layers"
-msgstr ""
+msgstr "Parinkti visus sluoksnius"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:413
 msgid "Deselect all Layers"
@@ -11289,11 +11289,11 @@ msgstr "Kiekis vertikaliai:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:43
 msgid "Horizontal spacing:"
-msgstr ""
+msgstr "Intervalas horizontaliai:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:54
 msgid "Vertical spacing:"
-msgstr ""
+msgstr "Intervalas vertikaliai:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:65
 msgid "Horizontal offset:"
@@ -12509,7 +12509,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:68
 msgid "Auto-end Track"
-msgstr ""
+msgstr "Automatiškai užbaigti takelį"
 
 #: pcbnew/router/router_tool.cpp:68
 msgid "Automagically finishes currently routed track."
@@ -12775,7 +12775,7 @@ msgstr "Įspėjimas"
 
 #: common/confirm.cpp:94
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: common/confirm.cpp:114
 msgid "Confirmation"
@@ -13362,7 +13362,7 @@ msgstr ""
 
 #: common/richio.cpp:303
 msgid "Line length exceeded"
-msgstr ""
+msgstr "Eilutė per ilga"
 
 #: common/richio.cpp:569
 #, c-format
@@ -13379,7 +13379,7 @@ msgstr ""
 
 #: common/pcbcommon.cpp:67
 msgid "Internal"
-msgstr ""
+msgstr "Vidinis"
 
 #: common/pcbcommon.cpp:70
 msgid "Non-copper"
@@ -13486,7 +13486,7 @@ msgstr "Vertėjai"
 
 #: common/dialog_about/dialog_about.cpp:93
 msgid "License"
-msgstr ""
+msgstr "Licenzija"
 
 #: common/dialog_about/AboutDialog_main.cpp:133
 msgid ""
@@ -13583,7 +13583,7 @@ msgstr "Klaidos"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:52
 msgid "Infos"
-msgstr ""
+msgstr "Informacija"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:57
 msgid "Actions"
@@ -14095,7 +14095,7 @@ msgstr ""
 
 #: eeschema/libedit_onrightclick.cpp:220
 msgid "Line End"
-msgstr ""
+msgstr "Užbaigti atkarpą"
 
 #: eeschema/libedit_onrightclick.cpp:224
 msgid "Edit Line Options"
@@ -15062,7 +15062,7 @@ msgstr "Bibliotekos peržiūra"
 
 #: eeschema/menubar.cpp:434
 msgid "&Rescue Old Components"
-msgstr ""
+msgstr "Gelbėti senus komponentus"
 
 #: eeschema/menubar.cpp:435
 msgid "Find old components in the project and rename/rescue them"
@@ -16365,11 +16365,11 @@ msgstr "Rastrinis vaizdas"
 
 #: eeschema/tool_sch.cpp:277
 msgid "Set unit to inch"
-msgstr ""
+msgstr "Matavimo vienetai - coliai"
 
 #: eeschema/tool_sch.cpp:281
 msgid "Set unit to mm"
-msgstr ""
+msgstr "Matavimo vienetai - mm"
 
 #: eeschema/tool_sch.cpp:290 eeschema/schframe.cpp:777
 msgid "Show hidden pins"
@@ -17057,7 +17057,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:284
 msgid "Rescue Components"
-msgstr ""
+msgstr "Gelbėti komponentus"
 
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:36
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:65
@@ -19046,27 +19046,27 @@ msgstr "Sutalpinti į lapą"
 
 #: 3d-viewer/3d_toolbar.cpp:83
 msgid "Rotate X <-"
-msgstr ""
+msgstr "Pasukti X <-"
 
 #: 3d-viewer/3d_toolbar.cpp:87
 msgid "Rotate X ->"
-msgstr ""
+msgstr "Pasukti X ->"
 
 #: 3d-viewer/3d_toolbar.cpp:92
 msgid "Rotate Y <-"
-msgstr ""
+msgstr "Pasukti Y <-"
 
 #: 3d-viewer/3d_toolbar.cpp:96
 msgid "Rotate Y ->"
-msgstr ""
+msgstr "Pasukti Y ->"
 
 #: 3d-viewer/3d_toolbar.cpp:101
 msgid "Rotate Z <-"
-msgstr ""
+msgstr "Pasukti Z <-"
 
 #: 3d-viewer/3d_toolbar.cpp:105
 msgid "Rotate Z ->"
-msgstr ""
+msgstr "Pasukti Z ->"
 
 #: 3d-viewer/3d_toolbar.cpp:109
 msgid "Move left"
@@ -19869,11 +19869,11 @@ msgstr ""
 
 #: gerbview/toolbars_gerber.cpp:159
 msgid "Set units to inches"
-msgstr ""
+msgstr "Nustato colinius matavimo vienetus"
 
 #: gerbview/toolbars_gerber.cpp:163
 msgid "Set units to millimeters"
-msgstr ""
+msgstr "Nustato metrinius matavimo vienetus"
 
 #: gerbview/toolbars_gerber.cpp:172
 msgid "Show spots in sketch mode"
@@ -20443,7 +20443,7 @@ msgstr "L"
 #: pcb_calculator/transline_ident.cpp:357
 #: pcb_calculator/transline_ident.cpp:390
 msgid "Line Length"
-msgstr ""
+msgstr "Atkarpos ilgis"
 
 #: pcb_calculator/transline_ident.cpp:191
 #: pcb_calculator/transline_ident.cpp:223
@@ -21790,7 +21790,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:500
 msgid "Line Thickness (mm)"
-msgstr ""
+msgstr "Atkarpos plotis (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:529
 msgid "Set to Default"
