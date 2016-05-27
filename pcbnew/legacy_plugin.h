@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,9 +30,11 @@
 #include <string>
 #include <layers_id_colors_and_visibility.h>
 
+// FOOTPRINT_LIBRARY_HEADER_CNT gives the number of characters to compare to detect
+// a footprint library. A few variants may have been used, and so we can only be
+// sure that the header contains "PCBNEW-LibModule-V", not "PCBNEW-LibModule-V1".
 #define FOOTPRINT_LIBRARY_HEADER       "PCBNEW-LibModule-V1"
-#define FOOTPRINT_LIBRARY_HEADER_CNT   18
-
+#define FOOTPRINT_LIBRARY_HEADER_CNT    18
 
 class PCB_TARGET;
 class MODULE;
@@ -77,7 +79,8 @@ public:
         return wxT( "brd" );
     }
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL );
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
+            const PROPERTIES* aProperties = NULL );
 
     /* we let go of "save" support when the number of CU layers were expanded from 16 to 32.
     void Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties = NULL );
@@ -92,7 +95,7 @@ public:
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL);
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                    const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL );
 
     bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
 

@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
- *
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -418,7 +417,8 @@ void PCB_IO::Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* a
 }
 
 
-BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput ) throw( PARSE_ERROR, IO_ERROR )
+BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput )
+    throw( FUTURE_FORMAT_ERROR, PARSE_ERROR, IO_ERROR )
 {
     std::string input = TO_UTF8( aClipboardSourceInput );
 
@@ -426,7 +426,17 @@ BOARD_ITEM* PCB_IO::Parse( const wxString& aClipboardSourceInput ) throw( PARSE_
 
     m_parser->SetLineReader( &reader );
 
-    return m_parser->Parse();
+    try
+    {
+        return m_parser->Parse();
+    }
+    catch( const PARSE_ERROR& parse_error )
+    {
+        if( m_parser->IsTooRecent() )
+            throw FUTURE_FORMAT_ERROR( parse_error, m_parser->GetRequiredVersion() );
+        else
+            throw;
+    }
 }
 
 
@@ -1713,7 +1723,20 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
     m_parser->SetLineReader( &reader );
     m_parser->SetBoard( aAppendToMe );
 
-    BOARD* board = dyn_cast<BOARD*>( m_parser->Parse() );
+    BOARD* board;
+
+    try
+    {
+        board = dynamic_cast<BOARD*>( m_parser->Parse() );
+    }
+    catch( const PARSE_ERROR& parse_error )
+    {
+        if( m_parser->IsTooRecent() )
+            throw FUTURE_FORMAT_ERROR( parse_error, m_parser->GetRequiredVersion() );
+        else
+            throw;
+    }
+
     wxASSERT( board );
 
     // Give the filename to the board if it's new

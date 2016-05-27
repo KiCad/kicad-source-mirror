@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,10 +109,11 @@ public:
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL );
 
-    wxArrayString FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL);
+    wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
+            const PROPERTIES* aProperties = NULL );
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                           const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL );
 
     void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
                         const PROPERTIES* aProperties = NULL );
@@ -153,7 +155,7 @@ public:
     void SetOutputFormatter( OUTPUTFORMATTER* aFormatter ) { m_out = aFormatter; }
 
     BOARD_ITEM* Parse( const wxString& aClipboardSourceInput )
-        throw( PARSE_ERROR, IO_ERROR );
+        throw( FUTURE_FORMAT_ERROR, PARSE_ERROR, IO_ERROR );
 
 protected:
 
