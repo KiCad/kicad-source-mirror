@@ -438,7 +438,6 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
 void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 {
-    VECTOR2D    position( aPad->GetPosition() );
     PAD_SHAPE_T shape;
     double      m, n;
     double      orientation = aPad->GetOrientation();
@@ -447,6 +446,8 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
     {
+        VECTOR2D    position( aPad->ShapePos() );
+
         // Is anything that we can display enabled?
         if( m_pcbSettings.m_netNamesOnPads || m_pcbSettings.m_padNumbers )
         {
@@ -491,7 +492,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m_gal->SetIsFill( false );
 
             // Set the text position to the pad shape position (the pad position is not the best place)
-            VECTOR2D textpos( double( aPad->ShapePos().x ), double( aPad->ShapePos().y ) );
+            VECTOR2D textpos( 0.0, 0.0 );
 
             // Divide the space, to display both pad numbers and netnames
             // and set the Y text position to display 2 lines

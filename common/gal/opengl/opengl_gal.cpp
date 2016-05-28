@@ -146,10 +146,9 @@ OPENGL_GAL::~OPENGL_GAL()
             glDeleteTextures( 1, &fontTexture );
             isBitmapFontLoaded = false;
         }
-#ifndef __WIN32__   // FIXME: crashes on W7 - 32 bits
+
         delete OPENGL_GAL::glContext;
         glContext = NULL;
-#endif
     }
 }
 
