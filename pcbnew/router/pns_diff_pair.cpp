@@ -22,6 +22,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cmath>
 #include <limits>
 
 #include <geometry/shape.h>

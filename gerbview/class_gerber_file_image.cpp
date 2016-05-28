@@ -38,6 +38,7 @@
 #include <class_X2_gerber_attributes.h>
 
 #include <algorithm>
+#include <map>
 
 
 /**

@@ -27,6 +27,8 @@
 
 #include <boost/algorithm/string/join.hpp>
 #include <queue>
+#include <list>
+#include <map>
 
 /* Avoid wxWidgets bug #16906 -- http://trac.wxwidgets.org/ticket/16906
  *

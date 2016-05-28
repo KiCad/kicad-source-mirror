@@ -29,6 +29,7 @@
 #include <deque>
 #include <typeinfo>
 #include <map>
+#include <list>
 
 #include <tool/tool_base.h>
 

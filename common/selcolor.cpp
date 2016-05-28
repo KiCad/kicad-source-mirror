@@ -32,6 +32,8 @@
 
 #include <wx/statline.h>
 
+#include <algorithm>
+
 
 enum colors_id {
     ID_COLOR_BLACK = 2000 // colors_id = ID_COLOR_BLACK a ID_COLOR_BLACK + NBCOLORS-1

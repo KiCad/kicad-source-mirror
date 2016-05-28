@@ -35,6 +35,8 @@
 #include <class_gerber_file_image_list.h>
 #include <class_X2_gerber_attributes.h>
 
+#include <map>
+
 
 // GERBER_FILE_IMAGE_LIST is a helper class to handle a list of GERBER_FILE_IMAGE files
 GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST()

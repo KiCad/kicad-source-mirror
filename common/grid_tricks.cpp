@@ -29,6 +29,8 @@
 #include <wx/arrstr.h>
 #include <wx/clipbrd.h>
 
+#include <algorithm>
+
 
  // It works for table data on clipboard for an Excell spreadsheet,
 // why not us too for now.

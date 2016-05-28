@@ -40,6 +40,9 @@
 #include <colors.h>
 #include <wx/colour.h>
 
+#include <algorithm>
+
+
 #define BUTT_SIZE_X             20
 #define BUTT_SIZE_Y             18
 #define BUTT_VOID               4

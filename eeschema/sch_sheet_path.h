@@ -33,6 +33,8 @@
 
 #include <base_struct.h>
 
+#include <map>
+
 
 /** Info about complex hierarchies handling:
  * A hierarchical schematic uses sheets (hierarchical sheets) included in a

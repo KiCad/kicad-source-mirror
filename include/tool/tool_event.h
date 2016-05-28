@@ -27,6 +27,7 @@
 
 #include <cstdio>
 #include <deque>
+#include <iterator>
 
 #include <math/vector2d.h>
 #include <cassert>

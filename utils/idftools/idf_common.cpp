@@ -24,6 +24,7 @@
  */
 
 
+#include <algorithm>
 #include <list>
 #include <string>
 #include <iostream>

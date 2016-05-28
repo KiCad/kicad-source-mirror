@@ -37,6 +37,8 @@
 
 #include <project.h>
 
+#include <map>
+
 class LINE_READER;
 class OUTPUTFORMATTER;
 

@@ -39,6 +39,8 @@
 #include <boost/unordered_map.hpp>
 #include <boost/foreach.hpp>
 
+#include <deque>
+
 class BOARD;
 class BOARD_ITEM;
 class BOARD_CONNECTED_ITEM;

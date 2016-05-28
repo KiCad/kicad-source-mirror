@@ -24,6 +24,8 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_convex.h>
 
+#include <cmath>
+
 #include "pns_line.h"
 #include "pns_diff_pair.h"
 #include "pns_node.h"

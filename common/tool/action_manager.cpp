@@ -30,6 +30,7 @@
 #include <hotkeys_basic.h>
 #include <boost/foreach.hpp>
 #include <boost/range/adaptor/map.hpp>
+#include <cctype>
 #include <cassert>
 
 ACTION_MANAGER::ACTION_MANAGER( TOOL_MANAGER* aToolManager ) :

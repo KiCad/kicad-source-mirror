@@ -21,6 +21,7 @@
  *
  */
 
+#include <cmath>
 #include <limits>
 #include <transline.h>
 #include <units.h>

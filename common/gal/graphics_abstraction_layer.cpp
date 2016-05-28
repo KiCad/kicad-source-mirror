@@ -29,6 +29,8 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/definitions.h>
 
+#include <cmath>
+
 using namespace KIGFX;
 
 
