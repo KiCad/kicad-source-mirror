@@ -364,9 +364,7 @@ protected:
 };
 
 
-#if !defined(PGM_KICAD_H_)                  // PGM_KICAD has an alternate
 /// The global Program "get" accessor.
 extern PGM_BASE& Pgm();
-#endif
 
 #endif  // PGM_BASE_H_

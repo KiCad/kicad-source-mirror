@@ -47,7 +47,7 @@
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 {
     wxString fn = GetFileFromHistory( event.GetId(),
-                    _( "KiCad project file" ), &Pgm().GetFileHistory() );
+                    _( "KiCad project file" ), &PgmTop().GetFileHistory() );
 
     if( fn.size() )
     {

@@ -119,7 +119,7 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 
 wxConfigBase* KICAD_MANAGER_FRAME::config()
 {
-    wxConfigBase* ret = Pgm().PgmSettings();
+    wxConfigBase* ret = PgmTop().PgmSettings();
     wxASSERT( ret );
     return ret;
 }
@@ -181,13 +181,13 @@ void KICAD_MANAGER_FRAME::ReCreateTreePrj()
 
 const SEARCH_STACK& KICAD_MANAGER_FRAME::sys_search()
 {
-    return Pgm().SysSearch();
+    return PgmTop().SysSearch();
 }
 
 
 wxString KICAD_MANAGER_FRAME::help_name()
 {
-    return Pgm().GetHelpFileName();
+    return PgmTop().GetHelpFileName();
 }
 
 
@@ -212,7 +212,7 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     {
         int px, py;
 
-        UpdateFileHistory( GetProjectFileName(), &Pgm().GetFileHistory() );
+        UpdateFileHistory( GetProjectFileName(), &PgmTop().GetFileHistory() );
 
         if( !IsIconized() )   // save main frame position and size
         {

@@ -161,7 +161,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
 
     // Write settings to project file
     // was: wxGetApp().WriteProjectConfig( aPrjFullFileName, GeneralGroupName, s_KicadManagerParams );
-    Prj().ConfigSave( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+    Prj().ConfigSave( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 
     // Ensure a "stub" for a schematic root sheet and a board exist.
     // It will avoid messages from the schematic editor or the board editor to create a new file
@@ -324,7 +324,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
         m_MessagesBox->Clear();
     }
 
-    Prj().ConfigLoad( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+    Prj().ConfigLoad( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 
     title = wxT( "KiCad " ) + GetBuildVersion() +  wxT( ' ' ) + prj_filename;
 
@@ -336,7 +336,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
     SetTitle( title );
 
     if( !prj_filename.IsSameAs( nameless_prj ) )
-        UpdateFileHistory( prj_filename, &Pgm().GetFileHistory() );
+        UpdateFileHistory( prj_filename, &PgmTop().GetFileHistory() );
 
     m_LeftWin->ReCreateTreePrj();
 
@@ -385,7 +385,7 @@ void KICAD_MANAGER_FRAME::OnSaveProject( wxCommandEvent& event )
 
     // was: wxGetApp().WriteProjectConfig( m_ProjectFileName.GetFullPath(),
     //          GeneralGroupName, s_KicadManagerParams );
-    Prj().ConfigSave( Pgm().SysSearch(), GeneralGroupName, s_KicadManagerParams );
+    Prj().ConfigSave( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 }
 
 

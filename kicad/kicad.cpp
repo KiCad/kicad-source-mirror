@@ -58,7 +58,14 @@ KIFACE_I& Kiface()
 
 static PGM_KICAD program;
 
-PGM_KICAD& Pgm()
+
+PGM_BASE& Pgm()
+{
+    return program;
+}
+
+
+PGM_KICAD& PgmTop()
 {
     return program;
 }

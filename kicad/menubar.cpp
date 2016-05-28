@@ -201,7 +201,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Before deleting, remove the menus managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history)
     if( openRecentMenu )
-        Pgm().GetFileHistory().RemoveMenu( openRecentMenu );
+        PgmTop().GetFileHistory().RemoveMenu( openRecentMenu );
 
     // Delete all existing menus
     while( menuBar->GetMenuCount() )
@@ -220,8 +220,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // File history
     openRecentMenu = new wxMenu();
-    Pgm().GetFileHistory().UseMenu( openRecentMenu );
-    Pgm().GetFileHistory().AddFilesToMenu( );
+    PgmTop().GetFileHistory().UseMenu( openRecentMenu );
+    PgmTop().GetFileHistory().AddFilesToMenu( );
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY,
                  _( "Open &Recent" ),

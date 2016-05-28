@@ -72,6 +72,7 @@ protected:
 };
 
 
-extern PGM_KICAD&  Pgm();
+extern PGM_KICAD& PgmTop();
+
 
 #endif  // PGM_KICAD_H_
