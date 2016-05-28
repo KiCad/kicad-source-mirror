@@ -410,7 +410,7 @@ protected:
             }
 
             if( collision != COLLIDE_NONE )
-                colliding.push_back( (SIDE_AND_COLL){ side, collision } );
+                colliding.push_back( { side, collision } );
         }
 
         return colliding;
