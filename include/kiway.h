@@ -445,7 +445,15 @@ extern KIWAY Kiway;     // provided by single_top.cpp and kicad.cpp
 typedef     KIFACE*  KIFACE_GETTER_FUNC( int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
 
 /// No name mangling.  Each KIFACE (DSO/DLL) will implement this once.
-extern "C" KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
+extern "C" {
+
+#if defined(BUILD_KIWAY_DLL)
+MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
+#else
+KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
+#endif
+
+}
 
 
 #endif  // KIWAY_H_
