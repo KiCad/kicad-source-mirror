@@ -47,8 +47,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <algorithm>
-#include <libgen.h>
-#include <unistd.h>
 #include <boost/ptr_container/ptr_map.hpp>
 
 #include <idf_helpers.h>
