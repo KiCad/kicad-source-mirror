@@ -35,7 +35,7 @@
 
 #include <boost/foreach.hpp>
 
-using namespace KIGFX;
+namespace KIGFX {
 
 RATSNEST_VIEWITEM::RATSNEST_VIEWITEM( RN_DATA* aData ) :
         EDA_ITEM( NOT_USED ), m_data( aData )
@@ -117,4 +117,6 @@ void RATSNEST_VIEWITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
     aLayers[0] = ITEM_GAL_LAYER( RATSNEST_VISIBLE );
+}
+
 }
