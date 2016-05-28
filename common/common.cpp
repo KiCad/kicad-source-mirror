@@ -64,14 +64,12 @@ EDA_COLOR_T    g_GhostColor;
  * is thrown, or not.
  */
 
-int LOCALE_IO::m_c_count = 0;
+std::atomic<unsigned int> LOCALE_IO::m_c_count(0);
 
 LOCALE_IO::LOCALE_IO()
 {
-    wxASSERT_MSG( m_c_count >= 0, wxT( "LOCALE_IO::m_c_count mismanaged." ) );
-
     // use thread safe, atomic operation
-    if( __sync_fetch_and_add( &m_c_count, 1 ) == 0 )
+    if( m_c_count++ == 0 )
     {
         // Store the user locale name, to restore this locale later, in dtor
         m_user_locale = setlocale( LC_ALL, 0 );
@@ -83,13 +81,11 @@ LOCALE_IO::LOCALE_IO()
 LOCALE_IO::~LOCALE_IO()
 {
     // use thread safe, atomic operation
-    if( __sync_sub_and_fetch( &m_c_count, 1 ) == 0 )
+    if( --m_c_count == 0 )
     {
         // revert to the user locale
         setlocale( LC_ALL, m_user_locale.c_str() );
     }
-
-    wxASSERT_MSG( m_c_count >= 0, wxT( "LOCALE_IO::m_c_count mismanaged." ) );
 }
 
 

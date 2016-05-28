@@ -42,6 +42,8 @@
 #include <richio.h>
 #include <colors.h>
 
+#include <atomic>
+
 
 class wxAboutDialogInfo;
 class SEARCH_STACK;
@@ -199,7 +201,7 @@ private:
     void setUserLocale( const char* aUserLocale );
 
     // allow for nesting of LOCALE_IO instantiations
-    static int  m_c_count;
+    static std::atomic<unsigned int> m_c_count;
 
     // The locale in use before switching to the "C" locale
     // (the locale can be set by user, and is not always the system locale)
