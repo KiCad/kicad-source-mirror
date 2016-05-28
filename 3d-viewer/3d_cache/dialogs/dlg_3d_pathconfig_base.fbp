@@ -41,10 +41,10 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
-            <property name="minimum_size"></property>
+            <property name="minimum_size">600,150</property>
             <property name="name">DLG_3D_PATH_CONFIG_BASE</property>
             <property name="pos"></property>
-            <property name="size">555,144</property>
+            <property name="size">619,160</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">3D Search Path Configuration</property>
@@ -90,7 +90,7 @@
             <event name="OnUpdateUI"></event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
-                <property name="name">bSizer1</property>
+                <property name="name">bSizerMain</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
@@ -98,8 +98,8 @@
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxBoxSizer" expanded="1">
-                        <property name="minimum_size"></property>
-                        <property name="name">bSizer3</property>
+                        <property name="minimum_size">-1,-1</property>
+                        <property name="name">bSizerGrid</property>
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">
@@ -133,7 +133,7 @@
                                 <property name="col_label_values">&quot;Alias&quot; &quot;Path&quot; &quot;Description&quot;</property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                 <property name="cols">3</property>
-                                <property name="column_sizes"></property>
+                                <property name="column_sizes">80,300,120</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="default_pane">0</property>
@@ -164,7 +164,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">-1,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_Aliases</property>
                                 <property name="pane_border">1</property>
@@ -330,11 +330,11 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="flag">wxALIGN_CENTER_HORIZONTAL|wxRIGHT|wxLEFT</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
-                        <property name="name">bSizer2</property>
+                        <property name="name">bSizerButtons</property>
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">none</property>
                         <object class="sizeritem" expanded="1">

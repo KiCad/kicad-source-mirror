@@ -30,14 +30,21 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
     DLG_3D_PATH_CONFIG_BASE( aParent ), m_resolver( aResolver )
 {
     m_Aliases->EnableEditing( true );
+
+    // Gives a min width to each column, when the user drags a column
     m_Aliases->SetColMinimalWidth( 0, 80 );
     m_Aliases->SetColMinimalWidth( 1, 300 );
     m_Aliases->SetColMinimalWidth( 2, 120 );
     m_Aliases->SetColMinimalAcceptableWidth( 80 );
 
+    // Set column sizes to this min value
+	m_Aliases->SetColSize( 0, 80 );
+	m_Aliases->SetColSize( 1, 300 );
+	m_Aliases->SetColSize( 2, 120 );
+
     if( m_resolver )
     {
-        // prohibit these characters in teh alias names: []{}()%~<>"='`;:.,&?/\|$
+        // prohibit these characters in the alias names: []{}()%~<>"='`;:.,&?/\|$
         m_aliasValidator.SetStyle( wxFILTER_EXCLUDE_CHAR_LIST );
         m_aliasValidator.SetCharExcludes( wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" ) );
 
@@ -96,8 +103,8 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
         m_Aliases->AutoSize();
     }
 
-    Fit();
-    SetMinSize( GetSize() );
+    GetSizer()->SetSizeHints( this );
+	Centre();
 
     return;
 }
@@ -158,7 +165,6 @@ void DLG_3D_PATH_CONFIG::OnAddAlias( wxCommandEvent& event )
     }
 
     event.Skip();
-    return;
 }
 
 

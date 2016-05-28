@@ -64,7 +64,7 @@ DIALOG_3D_VIEW_OPTIONS::DIALOG_3D_VIEW_OPTIONS( EDA_3D_FRAME* parent )
 
     initDialog();
 
-    SetDefaultItem( (wxWindow*) m_sdbSizerOK );
+    SetDefaultItem( m_sdbSizerOK );
 	Layout();
     GetSizer()->SetSizeHints( this );
 	Centre();
