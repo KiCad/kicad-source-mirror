@@ -45,7 +45,7 @@ static volatile bool s_initialized;
 static MUTEX s_lock;        // for s_initialized
 
 // Assume that on these platforms libcurl uses OpenSSL
-#if defined(__linux__) || defined(_WIN32)
+#if defined(__linux__) || defined(__MINGW32__)
 
 #include <openssl/crypto.h>
 
