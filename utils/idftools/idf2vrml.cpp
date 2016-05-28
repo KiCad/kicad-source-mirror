@@ -31,6 +31,11 @@
  *  would be more likely if we used a 1:1 scale.
  */
 
+#include <wx/app.h>
+#include <wx/cmdline.h>
+#include <wx/log.h>
+#include <wx/string.h>
+#include <wx/filename.h>
 
 #include <iostream>
 #include <iomanip>
@@ -58,15 +63,97 @@
 #define MIN_ANG 0.01
 #endif
 
-extern char* optarg;
-extern int   optopt;
+class IDF2VRML : public wxAppConsole
+{
+public:
+    virtual bool OnInit();
+    virtual int OnRun();
+    virtual void OnInitCmdLine(wxCmdLineParser& parser);
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
 
-using namespace std;
+private:
+    double m_ScaleFactor;
+    bool   m_Compact;
+    bool   m_NoOutlineSubs;
+    wxString m_filename;
+};
+
+static const wxCmdLineEntryDesc cmdLineDesc[] =
+{
+    { wxCMD_LINE_OPTION, "f", NULL, "input file name",
+        wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY },
+    { wxCMD_LINE_OPTION, "s", NULL, "scale factor",
+        wxCMD_LINE_VAL_DOUBLE, wxCMD_LINE_PARAM_OPTIONAL },
+    { wxCMD_LINE_SWITCH, "k", NULL, "produce KiCad-friendly VRML output; default is compact VRML",
+        wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+    { wxCMD_LINE_SWITCH, "d", NULL, "suppress substitution of default outlines",
+        wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+    { wxCMD_LINE_SWITCH, "z", NULL, "suppress rendering of zero-height outlines",
+        wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+    { wxCMD_LINE_SWITCH, "m", NULL, "print object mapping to stdout for debugging",
+        wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+    { wxCMD_LINE_SWITCH, "h", NULL, "display this message",
+        wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+    { wxCMD_LINE_NONE }
+};
+
+
+wxIMPLEMENT_APP( IDF2VRML );
+
+bool nozeroheights;
+bool showObjectMapping;
+
+bool IDF2VRML::OnInit()
+{
+    m_ScaleFactor = 1.0;
+    m_Compact = true;
+    m_NoOutlineSubs = false;
+    nozeroheights = false;
+    showObjectMapping = false;
+
+    if( !wxAppConsole::OnInit() )
+        return false;
+
+    return true;
+}
+
+
+void IDF2VRML::OnInitCmdLine( wxCmdLineParser& parser )
+{
+    parser.SetDesc( cmdLineDesc );
+    parser.SetSwitchChars( "-" );
+    return;
+}
+
+
+bool IDF2VRML::OnCmdLineParsed( wxCmdLineParser& parser )
+{
+    if( parser.Found( "k" ) )
+        m_Compact = false;
+
+    double scale;
+
+    if( parser.Found( "s", &scale ) )
+        m_ScaleFactor = scale;
+
+    wxString fname;
+
+    if( parser.Found( "f", &fname ) )
+        m_filename = fname;
+
+    if( parser.Found( "d" ) )
+        m_NoOutlineSubs = true;
+
+    if( parser.Found( "z" ) )
+        nozeroheights = true;
+
+    if( parser.Found( "m" ) )
+        showObjectMapping = true;
+
+    return true;
+}
+
 using namespace boost;
-
-#define CLEANUP do { \
-setlocale( LC_ALL, "C" ); \
-} while( 0 );
 
 // define colors
 struct VRML_COLOR
@@ -126,22 +213,7 @@ VRML_IDS* GetColor( boost::ptr_map<const std::string, VRML_IDS>& cmap,
                       int& index, const std::string& uid );
 
 
-void PrintUsage( void )
-{
-    cout << "-\nUsage: idf2vrml -f input_file.emn -s scale_factor {-k} {-d} {-z} {-m}\n";
-    cout << "flags:\n";
-    cout << "       -k: produce KiCad-friendly VRML output; default is compact VRML\n";
-    cout << "       -d: suppress substitution of default outlines\n";
-    cout << "       -z: suppress rendering of zero-height outlines\n";
-    cout << "       -m: print object mapping to stdout for debugging purposes\n";
-    cout << "example to produce a model for use by KiCad: idf2vrml -f input.emn -s 0.3937008 -k\n\n";
-    return;
-}
-
-bool nozeroheights;
-bool showObjectMapping;
-
-int main( int argc, char **argv )
+int IDF2VRML::OnRun()
 {
     // IDF implicitly requires the C locale
     setlocale( LC_ALL, "C" );
@@ -156,138 +228,53 @@ int main( int argc, char **argv )
     //      a KiCad friendly output then we must avoid DEF+USE;
     //      otherwise we employ DEF+USE to minimize file size
 
-    std::string inputFilename;
-    double scaleFactor = 1.0;
-    bool   compact = true;
-    bool   nooutlinesubs = false;
-    int    ichar;
-
-    nozeroheights = false;
-    showObjectMapping = false;
-
-    while( ( ichar = getopt( argc, argv, ":f:s:kdzm" ) ) != -1 )
+    if( m_ScaleFactor < 0.001 || m_ScaleFactor > 10.0 )
     {
-        switch( ichar )
-        {
-        case 'f':
-            inputFilename = optarg;
-            break;
-
-        case 's':
-            do
-            {
-                errno = 0;
-                char* cp = NULL;
-                scaleFactor = strtod( optarg, &cp );
-
-                if( errno || cp == optarg )
-                {
-                    cerr << "* invalid scale factor: '" << optarg << "'\n";
-                    return -1;
-                }
-
-                if( scaleFactor < 0.001 || scaleFactor > 10 )
-                {
-                    cerr << "* scale factor out of range (" << scaleFactor << "); range is 0.001 to 10.0\n";
-                    return -1;
-                }
-
-            } while( 0 );
-            break;
-
-        case 'k':
-            compact = false;
-            break;
-
-        case 'd':
-            nooutlinesubs = true;
-            break;
-
-        case 'z':
-            nozeroheights = true;
-            break;
-
-        case 'm':
-            showObjectMapping = true;
-            break;
-
-        case ':':
-            cerr << "* Missing parameter to option '-" << ((char) optopt) << "'\n";
-            PrintUsage();
-            return -1;
-            break;
-
-        default:
-            cerr << "* Unexpected option: '-";
-
-            if( ichar == '?' )
-                cerr << ((char) optopt) << "'\n";
-            else
-                cerr << ((char) ichar) << "'\n";
-
-            PrintUsage();
-            return -1;
-            break;
-        }
-    }
-
-    if( inputFilename.empty() )
-    {
-        cerr << "* no IDF filename supplied\n";
-        PrintUsage();
+        wxLogMessage("scale factor out of range (%d); range is 0.001 to 10.0", m_ScaleFactor);
         return -1;
     }
 
     IDF3_BOARD pcb( IDF3::CAD_ELEC );
 
-    cout << "** Reading file: " << inputFilename << "\n";
+    wxLogMessage( "Reading file: '%s'", m_filename );
 
-    if( !pcb.ReadFile( FROM_UTF8( inputFilename.c_str() ), nooutlinesubs ) )
+    if( !pcb.ReadFile( m_filename, m_NoOutlineSubs ) )
     {
-        cerr << "** Failed to read IDF data:\n";
-        cerr << pcb.GetError() << "\n\n";
-
+        wxLogMessage( "Failed to read IDF data: %s", pcb.GetError() );
         return -1;
     }
 
     // set the scale and output precision ( scale 1 == precision 5)
-    pcb.SetUserScale( scaleFactor );
+    pcb.SetUserScale( m_ScaleFactor );
 
-    if( scaleFactor < 0.01 )
+    if( m_ScaleFactor < 0.01 )
         pcb.SetUserPrecision( 8 );
-    else if( scaleFactor < 0.1 )
+    else if( m_ScaleFactor < 0.1 )
         pcb.SetUserPrecision( 7 );
-    else if( scaleFactor < 1.0 )
+    else if( m_ScaleFactor < 1.0 )
         pcb.SetUserPrecision( 6 );
-    else if( scaleFactor < 10.0 )
+    else if( m_ScaleFactor < 10.0 )
         pcb.SetUserPrecision( 5 );
     else
         pcb.SetUserPrecision( 4 );
 
     // Create the VRML file and write the header
-    char* bnp = (char*) malloc( inputFilename.size() + 1 );
-    strcpy( bnp, inputFilename.c_str() );
-
-    std::string fname = basename( bnp );
-    free( bnp );
-    std::string::iterator itf = fname.end();
-    *(--itf) = 'l';
-    *(--itf) = 'r';
-    *(--itf) = 'w';
-
-    cout << "Writing file: '" << fname << "'\n";
+    wxFileName fname( m_filename );
+    fname.SetExt( "wrl" );
+    fname.Normalize();
+    wxLogMessage( "Writing file: '%s'", fname.GetFullName() );
 
     std::ofstream ofile;
-    ofile.open( fname.c_str(), std::ios_base::out );
+    ofile.open( fname.GetFullPath().ToUTF8(), std::ios_base::out );
 
-    ofile << fixed; // do not use exponents in VRML output
+    ofile << std::fixed; // do not use exponents in VRML output
     WriteHeader( pcb, ofile );
 
     // STEP 1: Render the PCB alone
     MakeBoard( pcb, ofile );
 
     // STEP 2: Render the components
-    MakeComponents( pcb, ofile, compact );
+    MakeComponents( pcb, ofile, m_Compact );
 
     // STEP 3: Render the OTHER outlines
     MakeOtherOutlines( pcb, ofile );
@@ -339,8 +326,7 @@ bool MakeBoard( IDF3_BOARD& board, std::ofstream& file )
 
     if( board.GetBoardOutlinesSize() < 1 )
     {
-        ERROR_IDF << "\n";
-        cerr << "* Cannot proceed; no board outline in IDF object\n";
+        wxLogMessage( "Cannot proceed; no board outline in IDF object" );
         return false;
     }
 
@@ -434,14 +420,13 @@ bool PopulateVRML( VRML_LAYER& model, const std::list< IDF_OUTLINE* >* items, bo
 
         if( nvcont < 0 )
         {
-            ERROR_IDF << "\n";
-            cerr << "* cannot create an outline\n";
+            wxLogMessage( "Cannot create an outline" );
             return false;
         }
 
         if( (*scont)->size() < 1 )
         {
-            ERROR_IDF << "invalid contour: no vertices\n";
+            wxLogMessage( "Invalid contour: no vertices" );
             return false;
         }
 
@@ -479,7 +464,7 @@ bool AddSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg )
         {
             if( iseg != 0 )
             {
-                ERROR_IDF << "adding a circle to an existing vertex list\n";
+                wxLogMessage( "Adding a circle to an existing vertex list" );
                 return false;
             }
 
@@ -509,7 +494,7 @@ bool WriteTriangles( std::ofstream& file, VRML_IDS* vID, VRML_LAYER* layer, bool
 
     if( compact && !vID->objectName.empty() )
     {
-        file << "translation " << setprecision( precision ) << vID->dX;
+        file << "translation " << std::setprecision( precision ) << vID->dX;
         file << " " << vID->dY << " ";
 
         if( vID->bottom )
@@ -522,14 +507,14 @@ bool WriteTriangles( std::ofstream& file, VRML_IDS* vID, VRML_LAYER* layer, bool
             tx = cos( M_PI2 - vID->dA / 2.0 );
             ty = sin( M_PI2 - vID->dA / 2.0 );
 
-            file << "rotation " << setprecision( precision );
+            file << "rotation " << std::setprecision( precision );
             file << tx << " " << ty << " 0 ";
-            file << setprecision(5) << M_PI << "\n";
+            file << std::setprecision(5) << M_PI << "\n";
         }
         else
         {
             file << vID->dZ << "\n";
-            file << "rotation 0 0 1 " << setprecision(5) << vID->dA << "\n";
+            file << "rotation 0 0 1 " << std::setprecision(5) << vID->dA << "\n";
         }
 
         file << "children [\n";
@@ -567,7 +552,7 @@ bool WriteTriangles( std::ofstream& file, VRML_IDS* vID, VRML_LAYER* layer, bool
     file << "material Material {\n";
 
     // material definition
-    file << "diffuseColor " << setprecision(3) << color->diff[0] << " ";
+    file << "diffuseColor " << std::setprecision(3) << color->diff[0] << " ";
     file << color->diff[1] << " " << color->diff[2] << "\n";
     file << "specularColor " << color->spec[0] << " " << color->spec[1];
     file << " " << color->spec[2] << "\n";
@@ -589,16 +574,16 @@ bool WriteTriangles( std::ofstream& file, VRML_IDS* vID, VRML_LAYER* layer, bool
     {
         if( !layer->WriteVertices( top_z, file, precision ) )
         {
-            cerr << "* errors writing planar vertices to " << vID->objectName << "\n";
-            cerr << "** " << layer->GetError() << "\n";
+            wxLogMessage( "Errors writing planar vertices to %s\n%s",
+                vID->objectName, layer->GetError() );
         }
     }
     else
     {
         if( !layer->Write3DVertices( top_z, bottom_z, file, precision ) )
         {
-            cerr << "* errors writing 3D vertices to " << vID->objectName << "\n";
-            cerr << "** " << layer->GetError() << "\n";
+            wxLogMessage( "Errors writing 3D vertices to %s\n%s",
+                vID->objectName, layer->GetError() );
         }
     }
 
@@ -884,7 +869,7 @@ VRML_IDS* GetColor( boost::ptr_map<const std::string, VRML_IDS>& cmap, int& inde
         id->objectName = ostr.str();
 
         if( showObjectMapping )
-            cout << "* " << ostr.str() << " = '" << uid << "'\n";
+            wxLogMessage( "* %s = '%s'", ostr.str(), uid );
 
         cmap.insert( uid, id );
 
