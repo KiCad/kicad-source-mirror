@@ -98,7 +98,7 @@ static const wxCmdLineEntryDesc cmdLineDesc[] =
 };
 
 
-wxIMPLEMENT_APP( IDF2VRML );
+wxIMPLEMENT_APP_CONSOLE( IDF2VRML );
 
 bool nozeroheights;
 bool showObjectMapping;
