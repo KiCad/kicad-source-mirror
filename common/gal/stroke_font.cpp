@@ -255,14 +255,15 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
     VECTOR2D textSize = computeTextLineSize( aText );
     double half_thickness = m_gal->GetLineWidth()/2;
 
+    // Context needs to be saved before any transformations
+    m_gal->Save();
+
     // First adjust: the text X position is corrected by half_thickness
     // because when the text with thickness is draw, its full size is textSize,
     // but the position of lines is half_thickness to textSize - half_thickness
     // so we must translate the coordinates by half_thickness on the X axis
     // to place the text inside the 0 to textSize X area.
     m_gal->Translate( VECTOR2D( half_thickness, 0 ) );
-
-    m_gal->Save();
 
     // Adjust the text position to the given horizontal justification
     switch( m_gal->GetHorizontalJustify() )
