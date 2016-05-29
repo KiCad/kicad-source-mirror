@@ -658,9 +658,9 @@ bool WIZARD_FPLIB_TABLE::downloadGithubLibsFromList( wxArrayString& aUrlList,
 
             for( unsigned i = 0;  i < footprints.size();  ++i )
             {
-                std::auto_ptr<MODULE> m( src->FootprintLoad( libsrc_name, footprints[i] ) );
+                std::unique_ptr<MODULE> m( src->FootprintLoad( libsrc_name, footprints[i] ) );
                 dst->FootprintSave( libdst_name, m.get() );
-                // m is deleted here by auto_ptr.
+                // m is deleted here by unique_ptr.
             }
         }
         catch( const IO_ERROR& ioe )

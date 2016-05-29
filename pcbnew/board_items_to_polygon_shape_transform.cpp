@@ -758,9 +758,6 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                 // the pad position is NOT the shape position
     wxSize  copper_thickness;
 
-    int     dx = aPad.GetSize().x / 2;
-    int     dy = aPad.GetSize().y / 2;
-
     double  delta = 3600.0 / aCircleToSegmentsCount; // rot angle in 0.1 degree
 
     /* Keep in account the polygon outline thickness
@@ -777,6 +774,9 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     if( aCopperThickness < 0 )
         aCopperThickness = 0;
+
+    int     dx = aPad.GetSize().x / 2;
+    int     dy = aPad.GetSize().y / 2;
 
     copper_thickness.x = std::min( dx, aCopperThickness );
     copper_thickness.y = std::min( dy, aCopperThickness );
@@ -870,8 +870,8 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
             // Oval pad support along the lines of round and rectangular pads
             std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
 
-            int     dx = (aPad.GetSize().x / 2) + aThermalGap;     // Cutout radius x
-            int     dy = (aPad.GetSize().y / 2) + aThermalGap;     // Cutout radius y
+            dx = (aPad.GetSize().x / 2) + aThermalGap;     // Cutout radius x
+            dy = (aPad.GetSize().y / 2) + aThermalGap;     // Cutout radius y
 
             wxPoint shape_offset;
 
@@ -1023,8 +1023,8 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
             std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
 
-            int dx = (aPad.GetSize().x / 2) + aThermalGap;         // Cutout radius x
-            int dy = (aPad.GetSize().y / 2) + aThermalGap;         // Cutout radius y
+            dx = (aPad.GetSize().x / 2) + aThermalGap;         // Cutout radius x
+            dy = (aPad.GetSize().y / 2) + aThermalGap;         // Cutout radius y
 
             // The first point of polygon buffer is left lower corner, second the crosspoint of
             // thermal spoke sides, the third is upper right corner and the rest are rounding
