@@ -252,8 +252,6 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         }
         else
         {
-            FPID fpid;
-
             wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
                          wxString::Format( wxT( "Could not parse FPID string '%s'." ),
                                            GetChars( moduleName ) ) );
@@ -553,14 +551,14 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
 
         for( unsigned i = 0;  i < mods.size();  ++i )
         {
-            std::auto_ptr<MODULE> m( cur->FootprintLoad( curLibPath, mods[i] ) );
+            std::unique_ptr<MODULE> m( cur->FootprintLoad( curLibPath, mods[i] ) );
             dst->FootprintSave( dstLibPath, m.get() );
 
             msg = wxString::Format( _( "Footprint '%s' saved" ),
                                     GetChars( mods[i] ) );
             SetStatusText( msg );
 
-            // m is deleted here by auto_ptr.
+            // m is deleted here by unique_ptr.
         }
     }
     catch( const IO_ERROR& ioe )

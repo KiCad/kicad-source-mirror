@@ -767,9 +767,9 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
      * v2    v3
      */
 
-    for( unsigned int i = 0; i < aText.length(); ++i )
+    for( unsigned int ii = 0; ii < aText.length(); ++ii )
     {
-        const unsigned int c = aText[i];
+        const unsigned int c = aText[ii];
 
         wxASSERT_MSG( c < bitmap_chars_count, wxT( "Missing character in bitmap font atlas." ) );
 
@@ -798,7 +798,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
             }
 
             // Draw tilda characters if there are any remaining
-            for( int i = 0; i < tildas / 2; ++i )
+            for( int jj = 0; jj < tildas / 2; ++jj )
                 overbarLength += drawBitmapChar( '~' );
 
             tildas = 0;

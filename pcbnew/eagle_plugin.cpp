@@ -149,11 +149,11 @@ public:
     /// return the contents of the XPATH as a single string
     string Contents()
     {
-        typedef std::vector<TRIPLET>::const_iterator CITER;
+        typedef std::vector<TRIPLET>::const_iterator CITER_TRIPLET;
 
         string ret;
 
-        for( CITER it = p.begin();  it != p.end();  ++it )
+        for( CITER_TRIPLET it = p.begin();  it != p.end();  ++it )
         {
             if( it != p.begin() )
                 ret += '.';
@@ -1191,8 +1191,8 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
     if( !aAppendToMe )
         m_board->SetFileName( aFileName );
 
-    // delete on exception, iff I own m_board, according to aAppendToMe
-    auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
+    // delete on exception, if I own m_board, according to aAppendToMe
+    unique_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
     try
     {
@@ -1806,9 +1806,9 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
 
         m_xpath->Value( e.name.c_str() );
 
-        string key = makeKey( e.library, e.package );
+        string pkg_key = makeKey( e.library, e.package );
 
-        MODULE_CITER mi = m_templates.find( key );
+        MODULE_CITER mi = m_templates.find( pkg_key );
 
         if( mi == m_templates.end() )
         {
@@ -1832,9 +1832,9 @@ void EAGLE_PLUGIN::loadElements( CPTREE& aElements )
         // update the nets within the pads of the clone
         for( D_PAD* pad = m->Pads();  pad;  pad = pad->Next() )
         {
-            string key  = makeKey( e.name, TO_UTF8( pad->GetPadName() ) );
+            string pn_key  = makeKey( e.name, TO_UTF8( pad->GetPadName() ) );
 
-            NET_MAP_CITER ni = m_pads_to_nets.find( key );
+            NET_MAP_CITER ni = m_pads_to_nets.find( pn_key );
             if( ni != m_pads_to_nets.end() )
             {
                 const ENET* enet = &ni->second;
@@ -2124,7 +2124,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
 
 MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const string& aPkgName ) const
 {
-    std::auto_ptr<MODULE>   m( new MODULE( m_board ) );
+    std::unique_ptr<MODULE>   m( new MODULE( m_board ) );
 
     m->SetFPID( FPID( aPkgName ) );
 

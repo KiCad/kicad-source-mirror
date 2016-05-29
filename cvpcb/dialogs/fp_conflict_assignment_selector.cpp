@@ -127,7 +127,7 @@ void DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::OnItemClicked( wxMouseEvent& event 
     else
     {
         minpx = maxpx;
-        int maxpx = minpx + m_listFp->GetColumnWidth( 3 );
+        maxpx = minpx + m_listFp->GetColumnWidth( 3 );
 
         if( pos.x > minpx && pos.x < maxpx )
         {

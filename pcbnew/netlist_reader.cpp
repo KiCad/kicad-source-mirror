@@ -83,13 +83,13 @@ NETLIST_READER* NETLIST_READER::GetNetlistReader( NETLIST*        aNetlist,
 {
     wxASSERT( aNetlist != NULL );
 
-    std::auto_ptr< FILE_LINE_READER > file_rdr(new FILE_LINE_READER( aNetlistFileName ) );
+    std::unique_ptr< FILE_LINE_READER > file_rdr(new FILE_LINE_READER( aNetlistFileName ) );
 
     NETLIST_FILE_T type = GuessNetlistFileType( file_rdr.get() );
     file_rdr->Rewind();
 
     // The component footprint link reader is NULL if no file name was specified.
-    std::auto_ptr<CMP_READER>  cmp_rdr( aCompFootprintFileName.IsEmpty() ?
+    std::unique_ptr<CMP_READER>  cmp_rdr( aCompFootprintFileName.IsEmpty() ?
             NULL :
             new CMP_READER( new FILE_LINE_READER( aCompFootprintFileName ) ) );
 

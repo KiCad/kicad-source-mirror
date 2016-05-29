@@ -75,7 +75,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
 
     try
     {
-        std::auto_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
+        std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
             &netlist, aNetlistFileName, aCmpFileName ) );
 
         if( !netlistReader.get() )
