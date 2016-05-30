@@ -201,8 +201,6 @@ FILE_LINE_READER::FILE_LINE_READER( const wxString& aFileName,
         THROW_IO_ERROR( msg );
     }
 
-    setvbuf( fp, NULL, _IOFBF, BUFSIZ * 8 );
-
     source  = aFileName;
     lineNum = aStartingLineNumber;
 }
@@ -216,12 +214,6 @@ FILE_LINE_READER::FILE_LINE_READER( FILE* aFile, const wxString& aFileName,
     iOwn( doOwn ),
     fp( aFile )
 {
-    if( doOwn && ftell( aFile ) == 0L )
-    {
-#ifndef __WXMAC__
-        setvbuf( fp, NULL, _IOFBF, BUFSIZ * 8 );
-#endif
-    }
     source  = aFileName;
     lineNum = aStartingLineNumber;
 }
