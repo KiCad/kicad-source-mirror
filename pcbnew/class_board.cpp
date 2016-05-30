@@ -869,18 +869,15 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
     switch( aBoardItem->Type() )
     {
     case PCB_NETINFO_T:
-        aBoardItem->SetParent( this );
         m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem );
 
     // this one uses a vector
     case PCB_MARKER_T:
-        aBoardItem->SetParent( this );
         m_markers.push_back( (MARKER_PCB*) aBoardItem );
         break;
 
     // this one uses a vector
     case PCB_ZONE_AREA_T:
-        aBoardItem->SetParent( this );
         m_ZoneDescriptorList.push_back( (ZONE_CONTAINER*) aBoardItem );
         break;
 
@@ -897,7 +894,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
             m_Track.Insert( (TRACK*) aBoardItem, insertAid );
         }
 
-        aBoardItem->SetParent( this );
         break;
 
     case PCB_ZONE_T:
@@ -906,7 +902,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         else
             m_Zone.PushFront( (SEGZONE*) aBoardItem );
 
-        aBoardItem->SetParent( this );
         break;
 
     case PCB_MODULE_T:
@@ -914,8 +909,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
             m_Modules.PushBack( (MODULE*) aBoardItem );
         else
             m_Modules.PushFront( (MODULE*) aBoardItem );
-
-        aBoardItem->SetParent( this );
 
         // Because the list of pads has changed, reset the status
         // This indicate the list of pad and nets must be recalculated before use
@@ -934,7 +927,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         else
             m_Drawings.PushFront( aBoardItem );
 
-        aBoardItem->SetParent( this );
         break;
 
     // other types may use linked list
@@ -944,10 +936,12 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
             msg.Printf( wxT( "BOARD::Add() needs work: BOARD_ITEM type (%d) not handled" ),
                         aBoardItem->Type() );
             wxFAIL_MSG( msg );
+            return;
         }
         break;
     }
 
+    aBoardItem->SetParent( this );
     m_ratsnest->Add( aBoardItem );
 }
 
