@@ -46,7 +46,6 @@ set(3D-VIEWER_SRCS
     vrml_v1_modelparser.cpp
     vrml_v2_modelparser.cpp
     x3dmodelparser.cpp
-    CImage.cpp
     ${DIR_3D_PLUGINS}/pluginldr.cpp
     ${DIR_3D_PLUGINS}/3d/pluginldr3D.cpp
     3d_cache/3d_cache_wrapper.cpp

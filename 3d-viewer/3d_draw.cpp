@@ -58,7 +58,7 @@
 #include <3d_draw_basic_functions.h>
 #include "3d_rendering/3d_render_ogl_legacy/ogl_legacy_utils.h"
 
-#include <CImage.h>
+#include <cimage.h>
 #include <reporter.h>
 
 

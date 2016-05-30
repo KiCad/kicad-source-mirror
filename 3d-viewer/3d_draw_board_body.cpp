@@ -60,7 +60,7 @@
 #include <geometry/shape_file_io.h>
 
 
-#include <CImage.h>
+#include <cimage.h>
 #include <reporter.h>
 
 // An option for all operations on polygons:
