@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=MimeType
-MimeType=application/x-kicad-project
-Icon=kicad
-Patterns=*.pro
-Comment=KiCad Project
-Comment[fr]=Projet KiCad

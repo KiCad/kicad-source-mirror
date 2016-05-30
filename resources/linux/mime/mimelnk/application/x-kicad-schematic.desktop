@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=MimeType
-MimeType=application/x-kicad-schematic
-Icon=eeschema
-Patterns=*.sch
-Comment=KiCad Schematic
-Comment[fr]=Schéma électronique KiCad

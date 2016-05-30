@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=MimeType
-MimeType=application/x-kicad-pcb
-Icon=pcbnew
-Patterns=*.kicad_pcb
-
-Comment=KiCad Printed Circuit Board
-#Comment[fr]=Schéma électronique KiCad

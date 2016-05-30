@@ -721,16 +721,9 @@ if( UNIX AND NOT APPLE )
 
     # Set paths
     set( UNIX_MIME_DIR resources/linux/mime )
-    set( UNIX_MIMELNK_FILES ${UNIX_MIME_DIR}/mimelnk )
     set( UNIX_MIME_FILES ${UNIX_MIME_DIR}/mime )
     set( UNIX_ICON_FILES ${UNIX_MIME_DIR}/icons )
     set( UNIX_APPLICATIONS_FILES ${UNIX_MIME_DIR}/applications )
-
-    # Install Mimelnk directory
-    install( DIRECTORY ${UNIX_MIMELNK_FILES}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share
-        COMPONENT resources
-        )
 
     # Install Mime directory
     install( DIRECTORY ${UNIX_ICON_FILES}
