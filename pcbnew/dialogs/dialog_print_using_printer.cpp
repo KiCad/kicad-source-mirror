@@ -298,6 +298,9 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerSetFromListSelection()
         s_Parameters.m_Flags = 0;
     else
         s_Parameters.m_Flags = 1;
+        
+    if( PrintUsingSinglePage() )
+        page_count = 1;
 
     s_Parameters.m_PageCount = page_count;
 
