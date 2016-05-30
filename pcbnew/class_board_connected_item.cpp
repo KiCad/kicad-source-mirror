@@ -41,13 +41,6 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype 
 }
 
 
-BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) :
-    BOARD_ITEM( aItem ), m_netinfo( aItem.m_netinfo ), m_Subnet( aItem.m_Subnet ),
-    m_ZoneSubnet( aItem.m_ZoneSubnet )
-{
-}
-
-
 bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 {
     // if aNetCode < 0 ( typically NETINFO_LIST::FORCE_ORPHANED )

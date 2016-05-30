@@ -64,34 +64,6 @@ DRAWSEGMENT::~DRAWSEGMENT()
 }
 
 
-const DRAWSEGMENT& DRAWSEGMENT::operator = ( const DRAWSEGMENT& rhs )
-{
-    // skip the linked list stuff, and parent
-
-    m_Type         = rhs.m_Type;
-    m_Layer        = rhs.m_Layer;
-    m_Width        = rhs.m_Width;
-    m_Start        = rhs.m_Start;
-    m_End          = rhs.m_End;
-    m_Shape        = rhs.m_Shape;
-    m_Angle        = rhs.m_Angle;
-    m_TimeStamp    = rhs.m_TimeStamp;
-    m_BezierC1     = rhs.m_BezierC1;
-    m_BezierC2     = rhs.m_BezierC1;
-    m_BezierPoints = rhs.m_BezierPoints;
-
-    return *this;
-}
-
-
-void DRAWSEGMENT::Copy( DRAWSEGMENT* source )
-{
-    if( source == NULL )    // who would do this?
-        return;
-
-    *this = *source;    // operator = ()
-}
-
 void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     switch( m_Shape )

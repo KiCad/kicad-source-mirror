@@ -212,6 +212,19 @@ private:
      */
     void chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACKS* aList );
 
+    // The default copy constructor & operator= are inadequate,
+    // either write one or do not use it at all
+    BOARD( const BOARD& aOther ) :
+        BOARD_ITEM( aOther ), m_NetInfo( this )
+    {
+        assert( false );
+    }
+
+    BOARD& operator=( const BOARD& aOther )
+    {
+        assert( false );
+    }
+
 public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
