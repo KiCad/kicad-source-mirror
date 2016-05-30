@@ -8,8 +8,8 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
     m_currentText = aTextMod;
     m_OrientValue = 0;
 
-    m_OrientValidator.SetRange( -90.0, 90.0 );
+    m_OrientValidator.SetRange( -180.0, 180.0 );
     m_OrientValueCtrl->SetValidator( m_OrientValidator );
     m_OrientValidator.SetWindow( m_OrientValueCtrl );
 
@@ -150,10 +150,6 @@ bool DialogEditModuleText::TransferDataToWindow()
     PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->GetThickness() );
 
     double text_orient = m_currentText->GetTextAngle();
-    NORMALIZE_ANGLE_90( text_orient );
-
-    if( text_orient != 0.0 )
-        m_Orient->SetSelection( 1 );
 
     if( !m_currentText->IsVisible() )
         m_Show->SetSelection( 1 );
@@ -166,15 +162,22 @@ bool DialogEditModuleText::TransferDataToWindow()
         break;
 
     case 900:
+    case -2700:
         m_Orient->SetSelection( 1 );
         break;
 
     case -900:
+    case 2700:
         m_Orient->SetSelection( 2 );
         break;
 
-    default:
+    case -1800:
+    case 1800:
         m_Orient->SetSelection( 3 );
+        break;
+
+    default:
+        m_Orient->SetSelection( 4 );
         custom_orientation = true;
         break;
     }
@@ -279,6 +282,10 @@ bool DialogEditModuleText::TransferDataFromWindow()
         m_currentText->SetTextAngle( -900 );
         break;
 
+    case 3:
+        m_currentText->SetTextAngle( 1800 );
+        break;
+
     default:
         custom_orientation = true;
         m_currentText->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
@@ -301,8 +308,13 @@ bool DialogEditModuleText::TransferDataFromWindow()
         m_Orient->SetSelection( 2 );
         break;
 
-    default:
+    case -1800:
+    case 1800:
         m_Orient->SetSelection( 3 );
+        break;
+
+    default:
+        m_Orient->SetSelection( 4 );
         m_currentText->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
         custom_orientation = true;
         break;
@@ -354,6 +366,10 @@ void DialogEditModuleText::ModuleOrientEvent( wxCommandEvent& event )
         m_OrientValue = -90.0;
         break;
 
+    case 3:
+        m_OrientValue = 180.0;
+        break;
+
     default:
         custom_orientation = true;
         break;
@@ -362,4 +378,3 @@ void DialogEditModuleText::ModuleOrientEvent( wxCommandEvent& event )
     m_OrientValidator.TransferToWindow();
     m_OrientValueCtrl->Enable( custom_orientation );
 }
-

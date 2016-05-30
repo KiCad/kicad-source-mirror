@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Apr 24 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -115,13 +115,13 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	
 	bSizer4->Add( bSizer5, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	wxString m_OrientChoices[] = { _("0.0"), _("+90.0"), _("-90.0"), _("Other") };
+	wxString m_OrientChoices[] = { _("0.0"), _("+90.0"), _("-90.0"), _("180.0"), _("Other") };
 	int m_OrientNChoices = sizeof( m_OrientChoices ) / sizeof( wxString );
 	m_Orient = new wxRadioBox( this, wxID_ANY, _("Orientation"), wxDefaultPosition, wxDefaultSize, m_OrientNChoices, m_OrientChoices, 1, wxRA_SPECIFY_COLS );
 	m_Orient->SetSelection( 2 );
 	bSizer4->Add( m_Orient, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextRotation = new wxStaticText( this, wxID_ANY, _("Rotation (-90.0 to 90.0)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotation = new wxStaticText( this, wxID_ANY, _("Rotation (-180.0 to 180.0)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotation->Wrap( -1 );
 	bSizer4->Add( m_staticTextRotation, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 	
