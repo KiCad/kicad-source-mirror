@@ -12,10 +12,10 @@
 		<comment xml:lang="fr">Schéma électronique KiCad</comment>
 		<glob pattern="*.sch"/>
 	</mime-type>
-	<mime-type type="application/x-kicad-pcbnew">
+	<mime-type type="application/x-kicad-pcb">
 		<sub-class-of type="text/plain"/>
-		<comment>KiCad PCB</comment>
+		<comment>KiCad Printed Circuit Board</comment>
 		<comment xml:lang="fr">Circuit imprimé KiCad</comment>
-		<glob pattern="*.brd"/>
+		<glob pattern="*.kicad_pcb"/>
 	</mime-type>
 </mime-info>
