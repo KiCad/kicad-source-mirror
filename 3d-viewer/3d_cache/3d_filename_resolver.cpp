@@ -975,7 +975,6 @@ bool S3D_FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& h
         return false;
 
     wxString filename = aFileName;
-    wxString lpath;
     size_t pos0 = aFileName.find( ':' );
 
     // ensure that the file separators suit the current platform
@@ -1008,22 +1007,13 @@ bool S3D_FILENAME_RESOLVER::ValidateFileName( const wxString& aFileName, bool& h
         if( pos0 == 0 )
             return false;
 
-        lpath = filename.substr( 0, pos0 );
+        wxString lpath = filename.substr( 0, pos0 );
 
         if( wxString::npos != lpath.find_first_of( wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" ) ) )
             return false;
 
         hasAlias = true;
-
-        lpath = aFileName.substr( pos0 + 1 );
     }
-    else
-    {
-        lpath = aFileName;
-    }
-
-    if( wxString::npos != lpath.find_first_of( wxFileName::GetForbiddenChars() ) )
-        return false;
 
     return true;
 }
