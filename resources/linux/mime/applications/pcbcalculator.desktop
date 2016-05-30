@@ -1,10 +1,10 @@
 [Desktop Entry]
-Categories=Development;Electronics;
-Comment=Calculator for various electronics related computations
-Exec=pcb_calculator
-GenericName=EDA Suite
+Version=1.0
+Terminal=false
 Icon=pcbcalculator
-MimeType=application/x-pcbcalculator-project;
-Name=Pcb Calculator
 Type=Application
-Name[en_US]=Pcb Calculator
+Categories=Development;Electronics;
+Exec=pcb_calculator
+Name=PCB Calculator
+GenericName=PCB Calculator
+Comment=Calculator for various electronics-related computations

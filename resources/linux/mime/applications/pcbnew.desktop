@@ -1,10 +1,11 @@
 [Desktop Entry]
-Categories=Development;Electronics;
-Comment=Layout a printed circuit board
-Exec=pcbnew %f
-GenericName=EDA Suite
+Version=1.0
+Terminal=false
 Icon=pcbnew
-MimeType=application/x-pcbnew-pcb;
-Name=Pcbnew
 Type=Application
-Name[en_US]=Pcbnew
+Categories=Development;Electronics;
+Exec=pcbnew %f
+MimeType=application/x-kicad-pcb;
+Name=Pcbnew (Standalone)
+GenericName=PCB layout
+Comment=KiCad printed circuit board layout (standalone)

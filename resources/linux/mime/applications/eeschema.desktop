@@ -1,11 +1,13 @@
 [Desktop Entry]
-Categories=Development;Electronics;
-Comment=Design an electronic schematic
-Comment[fr]=Dessiner des schémas électroniques
-Exec=eeschema %f
-GenericName=Electronic schematic design
-GenericName[fr]=Saisie de schéma électronique
+Version=1.0
+Terminal=false
 Icon=eeschema
-MimeType=application/x-eeschema-schematic;
-Name=Eeschema
 Type=Application
+Categories=Development;Electronics;
+Exec=eeschema %f
+MimeType=application/x-kicad-schematic;
+Name=Eeschema (Standalone)
+GenericName=Electronic schematic capture
+GenericName[fr]=Saisie de schéma électronique
+Comment=KiCad electronic schematic design (standalone)
+Comment[fr]=Dessiner des schémas électroniques (Standalone)

@@ -1,10 +1,11 @@
 [Desktop Entry]
-Categories=Development;Electronics;
-Comment=View gerber files
-Exec=gerbview
-GenericName=EDA Suite
+Version=1.0
+Terminal=false
 Icon=gerbview
-MimeType=application/x-gerbview-project;
-Name=GerbView
 Type=Application
-Name[en_US]=GerbView
+Categories=Development;Electronics;
+Exec=gerbview
+MimeType=application/x-gerber;application/x-excellon
+Name=GerbView
+GenericName=Gerber File Viewer
+Comment=View Gerber files
