@@ -499,6 +499,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     }
 
     wxPrintDialogData printDialogData( *s_PrintData );
+    printDialogData.SetMaxPage( s_Parameters.m_PageCount );
 
     wxPrinter         printer( &printDialogData );
 
