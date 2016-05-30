@@ -7,4 +7,6 @@ Categories=Development;Electronics;
 Exec=bitmap2component
 Name=Bitmap to Component Converter
 GenericName=Bitmap to Component Converter
+GenericName[it]=Convertitore da bitmap a componente
 Comment=Create a component from a bitmap for use with KiCad
+Comment[it]=Crea un componente KiCad da un'immagine bitmap

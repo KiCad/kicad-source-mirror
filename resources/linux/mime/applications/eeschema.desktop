@@ -9,5 +9,7 @@ MimeType=application/x-kicad-schematic;
 Name=Eeschema (Standalone)
 GenericName=Electronic schematic capture
 GenericName[fr]=Saisie de schéma électronique
+GenericName[it]=Disegno di schemi elettrici
 Comment=KiCad electronic schematic design (standalone)
 Comment[fr]=Dessiner des schémas électroniques (Standalone)
+Comment[it]=Progettazione di schemi elettrici (Standalone)
