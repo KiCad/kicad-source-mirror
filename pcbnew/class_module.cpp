@@ -222,13 +222,6 @@ MODULE& MODULE::operator=( const MODULE& aOther )
 }
 
 
-    /**
-     * Function ClearAllNets
-     * Clear (i.e. force the ORPHANED dummy net info) the net info which
-     * depends on a given board for all pads of the footprint.
-     * This is needed when a footprint is copied between the fp editor and
-     * the board editor for instance, because net info become fully broken
-     */
 void MODULE::ClearAllNets()
 {
     // Force the ORPHANED dummy net info for all pads.
@@ -238,10 +231,6 @@ void MODULE::ClearAllNets()
 }
 
 
-/* Draw the anchor cross (vertical)
- * Must be done after the pads, because drawing the hole will erase overwrite
- * every thing already drawn.
- */
 void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         int dim_ancre, GR_DRAWMODE draw_mode )
 {
@@ -499,9 +488,6 @@ const EDA_RECT MODULE::GetBoundingBox() const
 }
 
 
-/* Virtual function, from EDA_ITEM.
- * display module info on MsgPanel
- */
 void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     int      nbpad;
@@ -885,11 +871,6 @@ const BOX2I MODULE::ViewBBox() const
 }
 
 
-/* Test for validity of the name in a library of the footprint
- * ( no spaces, dir separators ... )
- * return true if the given name is valid
- * static function
- */
 bool MODULE::IsLibNameValid( const wxString & aName )
 {
     const wxChar * invalids = StringLibNameInvalidChars( false );
@@ -901,13 +882,6 @@ bool MODULE::IsLibNameValid( const wxString & aName )
 }
 
 
-/* Test for validity of the name of a footprint to be used in a footprint library
- * ( no spaces, dir separators ... )
- * param bool aUserReadable = false to get the list of invalid chars
- *        true to get a readable form (i.e ' ' = 'space' '\t'= 'tab')
- * return a constant string giving the list of invalid chars in lib name
- * static function
- */
 const wxChar* MODULE::StringLibNameInvalidChars( bool aUserReadable )
 {
     static const wxChar invalidChars[] = wxT("%$\t \"\\/");

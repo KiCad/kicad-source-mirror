@@ -381,9 +381,16 @@ public:
     void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         GR_DRAWMODE draw_mode );
 
+    /**
+     * Function DrawAncre
+     * Draw the anchor cross (vertical)
+     * Must be done after the pads, because drawing the hole will erase overwrite
+     * every thing already drawn.
+     */
     void DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC,
                     const wxPoint& offset, int dim_ancre, GR_DRAWMODE draw_mode );
 
+    ///> @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool HitTest( const wxPoint& aPosition ) const;
