@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-31 08:15+0200\n"
-"PO-Revision-Date: 2016-05-31 14:40+0200\n"
+"PO-Revision-Date: 2016-05-31 16:30+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -15677,7 +15677,7 @@ msgstr "Mostra come unità normale \"De Morgan\""
 
 #: eeschema/tool_viewlib.cpp:103 eeschema/tool_lib.cpp:185
 msgid "Show as \"De Morgan\" convert part"
-msgstr "Mostra come unità converita \"De Morgan\""
+msgstr "Mostra come unità convertita \"De Morgan\""
 
 #: eeschema/tool_viewlib.cpp:116
 msgid "View component documents"
