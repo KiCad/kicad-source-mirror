@@ -84,6 +84,8 @@ public:
 
     ~MODULE();
 
+    MODULE& operator=( const MODULE& aOther );
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return PCB_MODULE_T == aItem->Type();
@@ -91,8 +93,6 @@ public:
 
     MODULE* Next() const { return static_cast<MODULE*>( Pnext ); }
     MODULE* Back() const { return static_cast<MODULE*>( Pback ); }
-
-    void Copy( MODULE* Module );        // Copy structure
 
     /**
      * Function Add

@@ -83,7 +83,6 @@ MODULE::MODULE( const MODULE& aModule ) :
 {
     m_Pos = aModule.m_Pos;
     m_fpid = aModule.m_fpid;
-    m_Layer  = aModule.m_Layer;
     m_Attributs = aModule.m_Attributs;
     m_ModuleStatus = aModule.m_ModuleStatus;
     m_Orient = aModule.m_Orient;
@@ -105,35 +104,27 @@ MODULE::MODULE( const MODULE& aModule ) :
     // Copy reference and value.
     m_Reference = new TEXTE_MODULE( *aModule.m_Reference );
     m_Reference->SetParent( this );
-
     m_Value = new TEXTE_MODULE( *aModule.m_Value );
     m_Value->SetParent( this );
 
     // Copy auxiliary data: Pads
     for( D_PAD* pad = aModule.m_Pads;  pad;  pad = pad->Next() )
     {
-        D_PAD* newpad = new D_PAD( *pad );
-        assert( newpad->GetNet() == pad->GetNet() );
-        newpad->SetParent( this );
-        m_Pads.PushBack( newpad );
+        Add( new D_PAD( *pad ) );
     }
 
     // Copy auxiliary data: Drawings
     for( BOARD_ITEM* item = aModule.m_Drawings;  item;  item = item->Next() )
     {
-        BOARD_ITEM* newItem;
-
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
         case PCB_MODULE_EDGE_T:
-            newItem = static_cast<BOARD_ITEM*>( item->Clone() );
-            newItem->SetParent( this );
-            m_Drawings.PushBack( newItem );
+            Add( static_cast<BOARD_ITEM*>( item->Clone() ) );
             break;
 
         default:
-            wxLogMessage( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
+            wxLogMessage( wxT( "Class MODULE copy constructor internal error: unknown type" ) );
             break;
         }
     }
@@ -160,6 +151,76 @@ MODULE::~MODULE()
     delete m_Value;
     delete m_initial_comments;
 }
+
+
+MODULE& MODULE::operator=( const MODULE& aOther )
+{
+    BOARD_ITEM::operator=( aOther );
+
+    m_Pos           = aOther.m_Pos;
+    m_fpid          = aOther.m_fpid;
+    m_Attributs     = aOther.m_Attributs;
+    m_ModuleStatus  = aOther.m_ModuleStatus;
+    m_Orient        = aOther.m_Orient;
+    m_BoundaryBox   = aOther.m_BoundaryBox;
+    m_CntRot90      = aOther.m_CntRot90;
+    m_CntRot180     = aOther.m_CntRot180;
+    m_LastEditTime  = aOther.m_LastEditTime;
+    m_Link          = aOther.m_Link;
+    m_Path          = aOther.m_Path; //is this correct behavior?
+
+    m_LocalClearance                = aOther.m_LocalClearance;
+    m_LocalSolderMaskMargin         = aOther.m_LocalSolderMaskMargin;
+    m_LocalSolderPasteMargin        = aOther.m_LocalSolderPasteMargin;
+    m_LocalSolderPasteMarginRatio   = aOther.m_LocalSolderPasteMarginRatio;
+    m_ZoneConnection                = aOther.m_ZoneConnection;
+    m_ThermalWidth                  = aOther.m_ThermalWidth;
+    m_ThermalGap                    = aOther.m_ThermalGap;
+
+    // Copy reference and value
+    *m_Reference = *aOther.m_Reference;
+    m_Reference->SetParent( this );
+    *m_Value = *aOther.m_Value;
+    m_Value->SetParent( this );
+
+    // Copy auxiliary data: Pads
+    m_Pads.DeleteAll();
+
+    for( D_PAD* pad = aOther.m_Pads;  pad;  pad = pad->Next() )
+    {
+        Add( new D_PAD( *pad ) );
+    }
+
+    // Copy auxiliary data: Drawings
+    m_Drawings.DeleteAll();
+
+    for( BOARD_ITEM* item = aOther.m_Drawings;  item;  item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_EDGE_T:
+            Add( static_cast<BOARD_ITEM*>( item->Clone() ) );
+            break;
+
+        default:
+            wxLogMessage( wxT( "MODULE::operator=() internal error: unknown type" ) );
+            break;
+        }
+    }
+
+    // Copy auxiliary data: 3D_Drawings info
+    m_3D_Drawings.clear();
+    m_3D_Drawings = aOther.m_3D_Drawings;
+    m_Doc         = aOther.m_Doc;
+    m_KeyWord     = aOther.m_KeyWord;
+
+    // Ensure auxiliary data is up to date
+    CalculateBoundingBox();
+
+    return *this;
+}
+
 
     /**
      * Function ClearAllNets
@@ -192,85 +253,6 @@ void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                       dim_ancre,
                       g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE ) );
     }
-}
-
-
-void MODULE::Copy( MODULE* aModule )
-{
-    m_Pos           = aModule->m_Pos;
-    m_Layer         = aModule->m_Layer;
-    m_fpid          = aModule->m_fpid;
-    m_Attributs     = aModule->m_Attributs;
-    m_ModuleStatus  = aModule->m_ModuleStatus;
-    m_Orient        = aModule->m_Orient;
-    m_BoundaryBox   = aModule->m_BoundaryBox;
-    m_CntRot90      = aModule->m_CntRot90;
-    m_CntRot180     = aModule->m_CntRot180;
-    m_LastEditTime  = aModule->m_LastEditTime;
-    m_Link          = aModule->m_Link;
-    m_Path          = aModule->m_Path; //is this correct behavior?
-    SetTimeStamp( GetNewTimeStamp() );
-
-    m_LocalClearance                = aModule->m_LocalClearance;
-    m_LocalSolderMaskMargin         = aModule->m_LocalSolderMaskMargin;
-    m_LocalSolderPasteMargin        = aModule->m_LocalSolderPasteMargin;
-    m_LocalSolderPasteMarginRatio   = aModule->m_LocalSolderPasteMarginRatio;
-    m_ZoneConnection                = aModule->m_ZoneConnection;
-    m_ThermalWidth                  = aModule->m_ThermalWidth;
-    m_ThermalGap                    = aModule->m_ThermalGap;
-
-    // Copy reference and value.
-    m_Reference->Copy( aModule->m_Reference );
-    m_Value->Copy( aModule->m_Value );
-
-    // Copy auxiliary data: Pads
-    m_Pads.DeleteAll();
-
-    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
-    {
-        D_PAD* newpad = new D_PAD( this );
-        newpad->Copy( pad );
-        m_Pads.PushBack( newpad );
-    }
-
-    // Copy auxiliary data: Drawings
-    m_Drawings.DeleteAll();
-
-    for( BOARD_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
-        {
-            TEXTE_MODULE* textm = new TEXTE_MODULE( this );
-            textm->Copy( static_cast<TEXTE_MODULE*>( item ) );
-            m_Drawings.PushBack( textm );
-            break;
-        }
-
-        case PCB_MODULE_EDGE_T:
-        {
-            EDGE_MODULE * edge;
-            edge = new EDGE_MODULE( this );
-            edge->Copy( (EDGE_MODULE*) item );
-            m_Drawings.PushBack( edge );
-            break;
-        }
-
-        default:
-            wxLogMessage( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
-            break;
-        }
-    }
-
-    // Copy auxiliary data: 3D_Drawings info
-    m_3D_Drawings.clear();
-    m_3D_Drawings = aModule->m_3D_Drawings;
-    m_Doc         = aModule->m_Doc;
-    m_KeyWord     = aModule->m_KeyWord;
-
-    // Ensure auxiliary data is up to date
-    CalculateBoundingBox();
 }
 
 

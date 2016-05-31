@@ -65,13 +65,7 @@ EDA_ITEM::EDA_ITEM( KICAD_T idType )
 EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
 {
     initVars();
-    m_StructType = base.m_StructType;
-    m_Parent     = base.m_Parent;
-    m_Flags      = base.m_Flags;
-
-    // A copy of an item cannot have the same time stamp as the original item.
-    SetTimeStamp( GetNewTimeStamp() );
-    m_Status     = base.m_Status;
+    *this = base;
 }
 
 
@@ -224,23 +218,23 @@ bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
     return false;
 }
 
-#ifdef USE_EDA_ITEM_OP_EQ   // see base_struct.h for explanations
 EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 {
-    if( &aItem != this )
-    {
-        m_Image = aItem.m_Image;
-        m_StructType = aItem.m_StructType;
-        m_Parent = aItem.m_Parent;
-        m_Flags = aItem.m_Flags;
-        m_TimeStamp = aItem.m_TimeStamp;
-        m_Status = aItem.m_Status;
-        m_forceVisible = aItem.m_forceVisible;
-    }
+    // do not call initVars()
+
+    m_StructType = aItem.m_StructType;
+    m_Flags      = aItem.m_Flags;
+    m_Status     = aItem.m_Status;
+    m_Parent     = aItem.m_Parent;
+    m_forceVisible = aItem.m_forceVisible;
+
+    // A copy of an item cannot have the same time stamp as the original item.
+    SetTimeStamp( GetNewTimeStamp() );
+
+    // do not copy list related fields (Pnext, Pback, m_List)
 
     return *this;
 }
-#endif
 
 const BOX2I EDA_ITEM::ViewBBox() const
 {

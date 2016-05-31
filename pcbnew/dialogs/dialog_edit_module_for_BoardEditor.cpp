@@ -325,10 +325,10 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     }
 
-    m_ReferenceCopy = new TEXTE_MODULE( NULL );
-    m_ValueCopy     = new TEXTE_MODULE( NULL );
-    m_ReferenceCopy->Copy( &m_CurrentModule->Reference() );
-    m_ValueCopy->Copy( &m_CurrentModule->Value() );
+    m_ReferenceCopy = new TEXTE_MODULE( m_CurrentModule->Reference() );
+    m_ReferenceCopy->SetParent( m_CurrentModule );
+    m_ValueCopy = new TEXTE_MODULE( m_CurrentModule->Value() );
+    m_ValueCopy->SetParent( m_CurrentModule );
     m_ReferenceCtrl->SetValue( m_ReferenceCopy->GetText() );
     m_ValueCtrl->SetValue( m_ValueCopy->GetText() );
 
@@ -634,8 +634,10 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
     }
 
     // Init Fields (should be first, because they can be moved or/and flipped later):
-    m_CurrentModule->Reference().Copy( m_ReferenceCopy );
-    m_CurrentModule->Value().Copy( m_ValueCopy );
+    TEXTE_MODULE& reference = m_CurrentModule->Reference();
+    reference = *m_ReferenceCopy;
+    TEXTE_MODULE& value = m_CurrentModule->Value();
+    value = *m_ValueCopy;
 
     // Initialize masks clearances
     m_CurrentModule->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );

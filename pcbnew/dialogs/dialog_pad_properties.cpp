@@ -117,9 +117,9 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_dummyPad   = new D_PAD( (MODULE*) NULL );
 
     if( aPad )
-        m_dummyPad->Copy( aPad );
+        *m_dummyPad = *aPad;
     else    // We are editing a "master" pad, i.e. a template to create new pads
-        m_dummyPad->Copy( m_padMaster );
+        *m_dummyPad = *m_padMaster;
 
     // Show the X and Y axis. It is usefull because pad shape can have an offset
     // or be a complex shape.

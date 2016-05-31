@@ -207,91 +207,35 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
     switch( Type() )
     {
     case PCB_MODULE_T:
-    {
-        MODULE* tmp = (MODULE*) aImage->Clone();
-        ( (MODULE*) aImage )->Copy( (MODULE*) this );
-        ( (MODULE*) this )->Copy( tmp );
-        delete tmp;
-    }
+        std::swap( *((MODULE*) this), *((MODULE*) aImage) );
         break;
 
     case PCB_ZONE_AREA_T:
-    {
-        ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) aImage->Clone();
-        ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) this );
-        ( (ZONE_CONTAINER*) this )->Copy( tmp );
-        delete tmp;
-    }
+        std::swap( *((ZONE_CONTAINER*) this), *((ZONE_CONTAINER*) aImage) );
         break;
 
     case PCB_LINE_T:
-        std::swap( *((DRAWSEGMENT*)this), *((DRAWSEGMENT*)aImage) );
+        std::swap( *((DRAWSEGMENT*) this), *((DRAWSEGMENT*) aImage) );
         break;
 
     case PCB_TRACE_T:
+        std::swap( *((TRACK*) this), *((TRACK*) aImage) );
+        break;
+
     case PCB_VIA_T:
-    {
-        TRACK* track = (TRACK*) this;
-        TRACK* image = (TRACK*) aImage;
-
-        std::swap(track->m_Layer, image->m_Layer );
-
-        // swap start, end, width and shape for track and image.
-        wxPoint exchp = track->GetStart();
-        track->SetStart( image->GetStart() );
-        image->SetStart( exchp );
-        exchp = track->GetEnd();
-        track->SetEnd( image->GetEnd() );
-        image->SetEnd( exchp );
-
-        int atmp = track->GetWidth();
-        track->SetWidth( image->GetWidth() );
-        image->SetWidth( atmp );
-
-        if( Type() == PCB_VIA_T )
-        {
-            VIA *via = static_cast<VIA*>( this );
-            VIA *viaimage = static_cast<VIA*>( aImage );
-
-            VIATYPE_T viatmp = via->GetViaType();
-            via->SetViaType( viaimage->GetViaType() );
-            viaimage->SetViaType( viatmp );
-
-            int drilltmp = via->GetDrillValue();
-
-            if( via->IsDrillDefault() )
-                drilltmp = -1;
-
-            int itmp = viaimage->GetDrillValue();
-
-            if( viaimage->IsDrillDefault() )
-                itmp = -1;
-
-            std::swap(itmp, drilltmp );
-
-            if( drilltmp > 0 )
-                via->SetDrill( drilltmp );
-            else
-                via->SetDrillDefault();
-
-            if( itmp > 0 )
-                viaimage->SetDrill( itmp );
-            else
-                viaimage->SetDrillDefault();
-        }
-    }
+        std::swap( *((VIA*) this), *((VIA*) aImage) );
         break;
 
     case PCB_TEXT_T:
-        std::swap( *((TEXTE_PCB*)this), *((TEXTE_PCB*)aImage) );
+        std::swap( *((TEXTE_PCB*) this), *((TEXTE_PCB*) aImage) );
         break;
 
     case PCB_TARGET_T:
-        std::swap( *((PCB_TARGET*)this), *((PCB_TARGET*)aImage) );
+        std::swap( *((PCB_TARGET*) this), *((PCB_TARGET*) aImage) );
         break;
 
     case PCB_DIMENSION_T:
-        std::swap( *((DIMENSION*)this), *((DIMENSION*)aImage) );
+        std::swap( *((DIMENSION*) this), *((DIMENSION*) aImage) );
         break;
 
     case PCB_ZONE_T:
@@ -417,7 +361,7 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
             }
 
             if( !found )
-                commandToUndo->PushItem( ITEM_PICKER(item, UR_CHANGED ) );
+                commandToUndo->PushItem( ITEM_PICKER( item, UR_CHANGED ) );
             else
                 continue;
 
@@ -572,6 +516,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 MODULE* oldModule = static_cast<MODULE*>( item );
                 oldModule->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
+
             view->Remove( item );
             ratsnest->Remove( item );
 
@@ -583,11 +528,12 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
                 newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                newModule->RunOnChildren( std::bind( &BOARD_ITEM::ClearFlags, _1, EDA_ITEM_ALL_FLAGS ));
             }
+
             view->Add( item );
             ratsnest->Add( item );
-
-            item->ClearFlags( SELECTED );
+            item->ClearFlags();
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
         }
         break;

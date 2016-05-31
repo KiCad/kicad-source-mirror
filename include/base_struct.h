@@ -482,17 +482,11 @@ public:
      */
     static bool Sort( const EDA_ITEM* aLeft, const EDA_ITEM* aRight ) { return *aLeft < *aRight; }
 
-#if 0
     /**
      * Operator assignment
      * is used to assign the members of \a aItem to another object.
-     *
-     * @warning This is still a work in progress and not ready for prime time.  Do not use
-     *          as there is a known issue with wxString buffers.
      */
-    virtual EDA_ITEM& operator=( const EDA_ITEM& aItem );
-    #define USE_EDA_ITEM_OP_EQ
-#endif
+    EDA_ITEM& operator=( const EDA_ITEM& aItem );
 
     /// @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const;

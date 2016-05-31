@@ -165,10 +165,10 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
 
     m_DocCtrl->SetValue( m_currentModule->GetDescription() );
     m_KeywordCtrl->SetValue( m_currentModule->GetKeywords() );
-    m_referenceCopy = new TEXTE_MODULE( NULL );
-    m_valueCopy = new TEXTE_MODULE( NULL );
-    m_referenceCopy->Copy( &m_currentModule->Reference() );
-    m_valueCopy->Copy( &m_currentModule->Value() );
+    m_referenceCopy = new TEXTE_MODULE( m_currentModule->Reference() );
+    m_referenceCopy->SetParent( m_currentModule );
+    m_valueCopy = new TEXTE_MODULE( m_currentModule->Value() );
+    m_valueCopy->SetParent( m_currentModule );
     m_ReferenceCtrl->SetValue( m_referenceCopy->GetText() );
     m_ValueCtrl->SetValue( m_valueCopy->GetText() );
     m_FootprintNameCtrl->SetValue( m_currentModule->GetFPID().Format() );
@@ -493,8 +493,10 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
         m_currentModule->SetFPID( FPID( footprintName ) );
 
     // Init Fields:
-    m_currentModule->Reference().Copy( m_referenceCopy );
-    m_currentModule->Value().Copy( m_valueCopy );
+    TEXTE_MODULE& reference = m_currentModule->Reference();
+    reference = *m_referenceCopy;
+    TEXTE_MODULE& value = m_currentModule->Value();
+    value = *m_valueCopy;
 
     // Initialize masks clearances
     m_currentModule->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );

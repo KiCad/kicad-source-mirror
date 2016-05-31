@@ -108,8 +108,7 @@ void PCB_EDIT_FRAME::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* aZone )
 
 void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
 {
-    ZONE_CONTAINER* newZone = new ZONE_CONTAINER( GetBoard() );
-    newZone->Copy( aZone );
+    ZONE_CONTAINER* newZone = new ZONE_CONTAINER( *aZone );
     newZone->UnFill();
     ZONE_SETTINGS zoneSettings;
     zoneSettings << *aZone;
