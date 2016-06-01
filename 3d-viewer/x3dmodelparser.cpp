@@ -46,9 +46,7 @@
  * "KI_TRACE_X3D_PARSER".  See the wxWidgets documentation on wxLogTrace for
  * more information.
  */
-#if defined(DEBUG)
 static const wxChar* traceX3DParser = wxT( "KI_TRACE_X3D_PARSER" );
-#endif
 
 
 X3D_MODEL_PARSER::X3D_MODEL_PARSER( S3D_MASTER* aMaster ) :
