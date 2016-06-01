@@ -419,8 +419,8 @@ if( KICAD_SCRIPTING_MODULES )
         3d-viewer
         pcbcommon
         pnsrouter
-        common
         pcad2kicadpcb
+        common
         lib_dxf
         idf3
         polygon
@@ -583,8 +583,8 @@ target_link_libraries( pcbnew_kiface
     3d-viewer
     pcbcommon
     pnsrouter
-    common
     pcad2kicadpcb
+    common
     polygon
     bitmaps
     gal
