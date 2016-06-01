@@ -132,20 +132,14 @@ public:
      */
     const wxUint32 GetPackedPadName() const { return m_NumPadName; }
 
-    /*!
-     * Function IncrementItemReference
-     * Implementation of the generic "reference" incrementing interface
-     * Increments the numeric suffix, filling any sequence gaps and skipping
-     * pads that aren't connectable
-     */
-    bool IncrementItemReference(); // override
-
     /**
      * Function IncrementPadName
      *
      * Increments the pad name to the next available name in the module.
      *
      * @param aSkipUnconnectable skips any pads that are not connectable (for example NPTH)
+     * @param aFillSequenceGaps if true, the next reference in a sequence
+     * like A1,A3,A4 will be A2. If false, it will be A5.
      * @return pad name incremented
      */
     bool IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps );

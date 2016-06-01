@@ -413,13 +413,6 @@ void D_PAD::SetPadName( const wxString& name )
 }
 
 
-bool D_PAD::IncrementItemReference()
-{
-    // Take the next available pad number
-    return IncrementPadName( true, true );
-}
-
-
 bool D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
 {
     bool skip = aSkipUnconnectable && ( GetAttribute() == PAD_ATTRIB_HOLE_NOT_PLATED );

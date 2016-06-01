@@ -450,25 +450,6 @@ public:
     TEXTE_MODULE& Value() const       { return *m_Value; }
     TEXTE_MODULE& Reference() const   { return *m_Reference; }
 
-    /*!
-     * Function IncrementItemReference
-     * Implementation of the generic "reference" incrementing interface
-     * Increments the numeric suffix, filling any sequence gaps
-     */
-    bool IncrementItemReference(); //override
-
-    /**
-     * Function IncrementReference
-     * Increments the module's reference, if possible. A reference with
-     * a numerical suffix and an optional alphabetical prefix can be
-     * incremented: "A1" and "1" can be, "B" can't.
-     *
-     * @param aFillSequenceGaps if true, the next reference in a sequence
-     * like A1,A3,A4 will be A2. If false, it will be A5.
-     * @return true if the reference was incremented.
-     */
-    bool IncrementReference( bool aFillSequenceGaps );
-
     /**
      * Function FindPadByName
      * returns a D_PAD* with a matching name.  Note that names may not be

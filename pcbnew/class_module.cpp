@@ -1167,12 +1167,13 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
                                          bool aIncrementPadNumbers )
 {
     BOARD_ITEM* new_item = NULL;
+    D_PAD* new_pad = NULL;
 
     switch( aItem->Type() )
     {
     case PCB_PAD_T:
     {
-        D_PAD* new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
+        new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
 
         Pads().PushBack( new_pad );
         new_item = new_pad;
@@ -1216,9 +1217,9 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         break;
     }
 
-    if( aIncrementPadNumbers && new_item )
+    if( aIncrementPadNumbers && new_pad )
     {
-        new_item->IncrementItemReference();
+        new_pad->IncrementPadName( true, true );
     }
 
     return new_item;
@@ -1261,35 +1262,6 @@ wxString MODULE::GetReferencePrefix() const
     prefix = prefix.Mid( 0, strIndex );
 
     return prefix;
-}
-
-
-bool MODULE::IncrementItemReference()
-{
-    // Take the next available module number
-    return IncrementReference( true );
-}
-
-
-bool MODULE::IncrementReference( bool aFillSequenceGaps )
-{
-    BOARD* board = GetBoard();
-
-    if( !board )
-        return false;
-
-    bool success = false;
-    const wxString prefix = GetReferencePrefix();
-    const wxString newReference = board->GetNextModuleReferenceWithPrefix(
-            prefix, aFillSequenceGaps );
-
-    if( !newReference.IsEmpty() )
-    {
-        SetReference( newReference );
-        success = true;
-    }
-
-    return success;
 }
 
 

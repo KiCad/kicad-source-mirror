@@ -866,9 +866,6 @@ void PCB_EDIT_FRAME::Block_Duplicate( bool aIncrement )
 
         newitem = (BOARD_ITEM*)item->Clone();
 
-        if( aIncrement )
-            newitem->IncrementItemReference();
-
         if( item->Type() == PCB_MODULE_T )
             m_Pcb->m_Status_Pcb = 0;
 

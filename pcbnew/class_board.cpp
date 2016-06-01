@@ -2682,8 +2682,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 }
 
 
-BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem,
-                                        bool aIncrementReferences )
+BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem )
 {
     BOARD_ITEM* new_item = NULL;
 
@@ -2712,49 +2711,9 @@ BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem,
     }
 
     if( new_item )
-    {
-        if( aIncrementReferences )
-            new_item->IncrementItemReference();
-
         Add( new_item );
-    }
 
     return new_item;
-}
-
-
-wxString BOARD::GetNextModuleReferenceWithPrefix( const wxString& aPrefix,
-                                                  bool aFillSequenceGaps )
-{
-    wxString nextRef;
-
-    std::set<int> usedNumbers;
-
-    for( MODULE* module = m_Modules; module; module = module->Next() )
-    {
-        const wxString ref = module->GetReference();
-        wxString remainder;
-
-        // ONly interested in modules with the right prefix
-        if( !ref.StartsWith( aPrefix, &remainder ) )
-            continue;
-
-        // the suffix must be a number
-        if( !remainder.IsNumber() )
-            continue;
-
-        long number;
-        if( remainder.ToCLong( &number ) )
-            usedNumbers.insert( number );
-    }
-
-    if( usedNumbers.size() )
-    {
-        int nextNum = getNextNumberInSequence( usedNumbers, aFillSequenceGaps );
-        nextRef = wxString::Format( wxT( "%s%i" ), aPrefix, nextNum );
-    }
-
-    return nextRef;
 }
 
 
