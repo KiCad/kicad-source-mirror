@@ -235,7 +235,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
     DIMENSION* dimension = NULL;
-    int width, maxThickness;
+    int maxThickness;
 
     // if one day it is possible to draw dimensions in the footprint editor,
     // then hereby I'm letting you know that this tool does not handle UR_MODEDIT undo yet
@@ -322,7 +322,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                         dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
                         dimension->Text().SetSize( m_board->GetDesignSettings().m_PcbTextSize );
 
-                        width = m_board->GetDesignSettings().m_PcbTextWidth;
+                        int width = m_board->GetDesignSettings().m_PcbTextWidth;
                         maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
 
                         if( width > maxThickness )
@@ -453,8 +453,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
 
     // Build the undo list & add items to the current view
-    std::list<BOARD_ITEM*>::const_iterator it, itEnd;
-    for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
+    for( auto it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
     {
         KICAD_T type = (*it)->Type();
         assert( type == PCB_LINE_T || type == PCB_TEXT_T );

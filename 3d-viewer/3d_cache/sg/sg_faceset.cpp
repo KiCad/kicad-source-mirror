@@ -638,8 +638,8 @@ bool SGFACESET::WriteCache( std::ofstream& aFile, SGNODE* parentNode )
     if( NULL != m_RColors )
         items[i] = true;
 
-    for( int i = 0; i < NITEMS; ++i )
-        aFile.write( (char*)&items[i], sizeof(bool) );
+    for( int jj = 0; jj < NITEMS; ++jj )
+        aFile.write( (char*)&items[jj], sizeof(bool) );
 
     if( items[0] )
         m_Coords->WriteCache( aFile, this );

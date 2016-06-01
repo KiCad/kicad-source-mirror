@@ -1109,9 +1109,9 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 
     sort( moduleList.begin(), moduleList.end(), Tri_PlaceModules );
 
-    for( unsigned ii = 0; ii < moduleList.size(); ii++ )
+    for( unsigned kk = 0; kk < moduleList.size(); kk++ )
     {
-        Module = moduleList[ii];
+        Module = moduleList[kk];
         Module->SetFlag( 0 );
 
         if( !Module->NeedsPlaced() )

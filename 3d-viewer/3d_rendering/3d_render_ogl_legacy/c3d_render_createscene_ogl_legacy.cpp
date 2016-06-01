@@ -185,16 +185,15 @@ void C3D_RENDER_OGL_LEGACY::reload()
     // Add layers maps (except B_Mask and F_Mask)
     // /////////////////////////////////////////////////////////////////////////
     printf("Add layers maps...\n");
-    for( MAP_CONTAINER_2D::const_iterator ii = m_settings.GetMapLayers().begin();
-         ii != m_settings.GetMapLayers().end();
-         ii++ )
+    for( MAP_CONTAINER_2D::const_iterator it = m_settings.GetMapLayers().begin();
+         it != m_settings.GetMapLayers().end(); it++ )
     {
-        LAYER_ID layer_id = static_cast<LAYER_ID>(ii->first);
+        LAYER_ID layer_id = static_cast<LAYER_ID>(it->first);
 
         if( !m_settings.Is3DLayerEnabled( layer_id ) )
             continue;
 
-        const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(ii->second);
+        const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(it->second);
         const LIST_OBJECT2D listObject2d = container2d->GetList();
 
         if( listObject2d.size() == 0 )
@@ -277,8 +276,7 @@ void C3D_RENDER_OGL_LEGACY::reload()
         m_triangles[layer_id] = layerTriangles;
 
         for( LIST_OBJECT2D::const_iterator itemOnLayer = listObject2d.begin();
-             itemOnLayer != listObject2d.end();
-             itemOnLayer++ )
+             itemOnLayer != listObject2d.end(); itemOnLayer++ )
         {
             const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
 
@@ -328,8 +326,7 @@ void C3D_RENDER_OGL_LEGACY::reload()
                     contournPoints.clear();
                     contournPoints.reserve( nr_sides_per_circle + 2 );
                     int    delta       = 3600 / nr_sides_per_circle;
-                    int ii;
-                    for( ii = 0; ii < 3600; ii += delta )
+                    for( int ii = 0; ii < 3600; ii += delta )
                     {
                         const SFVEC2F rotatedDir = glm::rotate( SFVEC2F( 0.0f, 1.0f ),  (float)ii  * 2.0f * 3.14f / 3600.0f );
                         contournPoints.push_back(   SFVEC2F( center.x - rotatedDir.y * radius, center.y + rotatedDir.x * radius ) );
