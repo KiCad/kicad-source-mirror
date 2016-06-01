@@ -46,7 +46,9 @@
  * "KI_TRACE_X3D_PARSER".  See the wxWidgets documentation on wxLogTrace for
  * more information.
  */
+#if defined(DEBUG)
 static const wxChar* traceX3DParser = wxT( "KI_TRACE_X3D_PARSER" );
+#endif
 
 
 X3D_MODEL_PARSER::X3D_MODEL_PARSER( S3D_MASTER* aMaster ) :
@@ -98,9 +100,9 @@ bool X3D_MODEL_PARSER::Load( const wxString& aFilename )
         childs.push_back( m_model );
 
         wxXmlNode* node = *node_it;
-        wxXmlAttribute* prop = node->GetAttributes();
 
-        wxLogTrace( traceX3DParser, wxT( "Transform: %s %s" ), prop->GetName(), prop->GetValue() );
+        wxLogTrace( traceX3DParser, wxT( "Transform: %s %s" ),
+                    node->GetAttributes()->GetName(), node->GetAttributes()->GetValue() );
 
         readTransform( node );
 
@@ -145,9 +147,7 @@ void X3D_MODEL_PARSER::GetNodeProperties( wxXmlNode* aNode, PROPERTY_MAP& aProps
 {
     wxXmlAttribute* prop;
 
-    for( prop = aNode->GetAttributes();
-         prop != NULL;
-         prop = prop->GetNext() )
+    for( prop = aNode->GetAttributes(); prop != NULL; prop = prop->GetNext() )
     {
         aProps[ prop->GetName() ] = prop->GetValue();
     }
@@ -163,8 +163,7 @@ void X3D_MODEL_PARSER::readTransform( wxXmlNode* aTransformNode )
     GetChildsByName( aTransformNode, wxT( "Material" ), childnodes );
 
     for( NODE_LIST::iterator node = childnodes.begin();
-         node != childnodes.end();
-         node++ )
+         node != childnodes.end(); node++ )
     {
         readMaterial( *node );
     }
@@ -180,8 +179,7 @@ void X3D_MODEL_PARSER::readTransform( wxXmlNode* aTransformNode )
     GetChildsByName( aTransformNode, wxT( "IndexedFaceSet" ), childnodes );
 
     for( NODE_LIST::iterator node = childnodes.begin();
-         node != childnodes.end();
-         node++ )
+         node != childnodes.end(); node++ )
     {
         readIndexedFaceSet( *node, properties );
     }
