@@ -87,7 +87,7 @@ void ARRAY_CREATOR::Invoke()
                 else
                 {
                     // PCB items keep the same numbering
-                    new_item = getBoard()->DuplicateAndAddItem( item, false );
+                    new_item = getBoard()->DuplicateAndAddItem( item );
 
                     // @TODO: we should merge zones. This is a bit tricky, because
                     // the undo command needs saving old area, if it is merged.
@@ -96,11 +96,8 @@ void ARRAY_CREATOR::Invoke()
                 if( new_item )
                 {
                     array_opts->TransformItem( ptN, new_item, rotPoint );
-
                     prePushAction( new_item );
-
                     newItemsList.PushItem( new_item );  // For undo list
-
                     postPushAction( new_item );
                 }
 

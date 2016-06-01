@@ -127,16 +127,16 @@ protected:
      * This function is shared between pcbnew and modedit, as it is virtually
      * the same
      * @param aItem the item to duplicate
-     * @aIncrement increment item reference (module ref, pad number, etc,
-     * if appropriate)
+     * @param aIncrement (has meaning only for pads in footprint editor):
+     * increment pad name if appropriate
      */
     void duplicateItem( BOARD_ITEM* aItem, bool aIncrement );
 
     /**
      * Function duplicateItems
      * Find and duplicate the currently selected items
-     * @param aIncrement increment item reference (module ref, pad number, etc,
-     * if appropriate)
+     * @param aIncrement (has meaning only for pads in footprint editor):
+     * increment pad name if appropriate
      *
      * @note The implementer should find the selected item (and do processing
      * like finding parents when relevant, and then call

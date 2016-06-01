@@ -299,7 +299,7 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         break;
 
     case BLOCK_COPY:                // Copy
-    case BLOCK_COPY_AND_INCREMENT:  // Copy and increment references
+    case BLOCK_COPY_AND_INCREMENT:  // Copy and increment pad names
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
         CopyMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector(),
@@ -457,7 +457,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement )
         module->Pads().PushFront( NewPad );
 
         if( aIncrement )
-            NewPad->IncrementItemReference();
+            NewPad->IncrementPadName( true, true );
     }
 
     BOARD_ITEM* newItem;
@@ -473,9 +473,6 @@ void CopyMarkedItems( MODULE* module, wxPoint offset, bool aIncrement )
         newItem->SetParent( module );
         newItem->SetFlags( SELECTED );
         module->GraphicalItems().PushFront( newItem );
-
-        if( aIncrement )
-            newItem->IncrementItemReference();
     }
 
     MoveMarkedItems( module, offset );
