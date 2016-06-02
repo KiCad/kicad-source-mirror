@@ -47,46 +47,43 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
 {
     wxCHECK_RET( aData != NULL, wxT( "aData cannot be NULL." ) );
 
-    // Save current draw options, because print mode has specific options:
-    GBR_DISPLAY_OPTIONS imgDisplayOptions = m_DisplayOptions;
-    std::bitset <GERBER_DRAWLAYERS_COUNT> printLayersMask = GetGerberLayout()->GetPrintableLayers();
-
-    // Set draw options for printing:
-    m_DisplayOptions.m_DisplayFlashedItemsFill = true;
-    m_DisplayOptions.m_DisplayLinesFill = true;
-    m_DisplayOptions.m_DisplayPolygonsFill = true;
-    m_DisplayOptions.m_DisplayDCodes = false;
-    m_DisplayOptions.m_IsPrinting = true;
-
     PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*) aData;
 
-    // Find the layer to be printed
-    int page = printParameters->m_Flags;    // contains the page number (not necessarily graphic layer number)
-    int layer = 0;
+    // Build a suitable draw options for printing:
+    GBR_DISPLAY_OPTIONS displayOptions;
+    displayOptions.m_DisplayFlashedItemsFill = true;
+    displayOptions.m_DisplayLinesFill = true;
+    displayOptions.m_DisplayPolygonsFill = true;
+    displayOptions.m_DisplayDCodes = false;
+    displayOptions.m_IsPrinting = true;
+    displayOptions.m_ForceBlackAndWhite = printParameters->m_Print_Black_and_White;
+    displayOptions.m_NegativeDrawColor = GetDrawBgColor();
+    displayOptions.m_BgDrawColor = GetDrawBgColor();
 
-    // Find the layer number for the printed page (search through the mask and count bits)
-    while( page > 0 )
-    {
-        if( printLayersMask[layer++] )
-            --page;
-    }
-    --layer;
+    // Find the graphic layer to be printed
+    int page_number = printParameters->m_Flags;    // contains the page number (not necessarily graphic layer number)
 
-    std::bitset <GERBER_DRAWLAYERS_COUNT> printCurrLayerMask;
-    printCurrLayerMask.reset();
-    printCurrLayerMask.set( layer );
-    GetGerberLayout()->SetPrintableLayers( printCurrLayerMask );
+    // Find the graphic layer number for the printed page (search through the mask and count bits)
+    std::vector<int> printList = GetGerberLayout()->GetPrintableLayers();
+
+    if( printList.size() < 1 )
+        return;
+
+    int graphiclayer = printList[page_number-1];
+
+    // In Gerbview, only one graphic layer is printed by page.
+    // So we temporary set the graphic layer list to print with only onle layer id
+    GetGerberLayout()->ClearPrintableLayers();
+    GetGerberLayout()->AddLayerToPrintableList( graphiclayer );
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
-    bool printBlackAndWhite = printParameters->m_Print_Black_and_White;
 
     GetGerberLayout()->Draw( m_canvas, aDC, (GR_DRAWMODE) 0,
-                             wxPoint( 0, 0 ), printBlackAndWhite );
+                             wxPoint( 0, 0 ), &displayOptions );
 
     m_canvas->SetPrintMirrored( false );
 
-    // Restore draw options:
-    GetGerberLayout()->SetPrintableLayers( printLayersMask );
-    m_DisplayOptions = imgDisplayOptions;
+    // Restore the list of printable graphic layers list:
+    GetGerberLayout()->SetPrintableLayers( printList );
 }
 
 
@@ -117,15 +114,20 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
 
     // Draw according to the current setting.  This needs to be GR_COPY or GR_OR.
-    GetGerberLayout()->Draw( m_canvas, DC, drawMode, wxPoint( 0, 0 ) );
+    m_DisplayOptions.m_NegativeDrawColor = GetNegativeItemsColor();
+    m_DisplayOptions.m_BgDrawColor = GetDrawBgColor();
+    GetGerberLayout()->Draw( m_canvas, DC, drawMode, wxPoint( 0, 0 ), &m_DisplayOptions );
+
+    if( m_DisplayOptions.m_DisplayDCodes )
+    {
+        EDA_COLOR_T dcode_color = GetVisibleElementColor( DCODES_VISIBLE );
+        GetGerberLayout()->DrawItemsDCodeID( m_canvas, DC, GR_COPY, dcode_color );
+    }
 
     // Draw the "background" now, i.e. grid and axis after gerber layers
     // because most of time the actual background is erased by successive drawings of each gerber
     // layer mainly in COPY mode
     m_canvas->DrawBackGround( DC );
-
-    if( IsElementVisible( DCODES_VISIBLE ) )
-        DrawItemsDCodeID( DC, GR_COPY );
 
     DrawWorkSheet( DC, screen, 0, IU_PER_MILS, wxEmptyString );
 
@@ -146,78 +148,4 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     // Display the filename and the layer name (found in the gerber files, if any)
     // relative to the active layer
     UpdateTitleAndInfo();
-}
-
-
-void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, GR_DRAWMODE aDrawMode )
-{
-    wxPoint     pos;
-    int         width;
-    double      orient;
-    wxString    Line;
-
-    GRSetDrawMode( aDC, aDrawMode );
-
-    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
-    {
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
-
-        if( gerber == NULL )    // Graphic layer not yet used
-            continue;
-
-        if( IsLayerVisible( layer ) == false )
-            continue;
-
-        for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item != NULL; item = item->Next() )
-        {
-
-            if( item->m_DCode <= 0 )
-                continue;
-
-            if( item->m_Flashed || item->m_Shape == GBR_ARC )
-            {
-                pos = item->m_Start;
-            }
-            else
-            {
-                pos.x = (item->m_Start.x + item->m_End.x) / 2;
-                pos.y = (item->m_Start.y + item->m_End.y) / 2;
-            }
-
-            pos = item->GetABPosition( pos );
-
-            Line.Printf( wxT( "D%d" ), item->m_DCode );
-
-            if( item->GetDcodeDescr() )
-                width = item->GetDcodeDescr()->GetShapeDim( item );
-            else
-                width = std::min( item->m_Size.x, item->m_Size.y );
-
-            orient = TEXT_ORIENT_HORIZ;
-
-            if( item->m_Flashed )
-            {
-                // A reasonable size for text is width/3 because most of time this text has 3 chars.
-                width /= 3;
-            }
-            else        // this item is a line
-            {
-                wxPoint delta = item->m_Start - item->m_End;
-
-                if( abs( delta.x ) < abs( delta.y ) )
-                    orient = TEXT_ORIENT_VERT;
-
-                // A reasonable size for text is width/2 because text needs margin below and above it.
-                // a margin = width/4 seems good
-                width /= 2;
-            }
-
-            int color = GetVisibleElementColor( DCODES_VISIBLE );
-
-            DrawGraphicText( m_canvas->GetClipBox(), aDC, pos, (EDA_COLOR_T) color, Line,
-                             orient, wxSize( width, width ),
-                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                             0, false, false );
-        }
-    }
 }

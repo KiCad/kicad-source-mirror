@@ -39,6 +39,7 @@
 #include <gerbview.h>                       // GERBER_DRAWLAYERS_COUNT
 #include <class_title_block.h>
 #include <class_gerber_draw_item.h>
+#include <class_gbr_display_options.h>
 
 #include <gr_basic.h>
 
@@ -52,7 +53,8 @@ private:
     EDA_RECT            m_BoundingBox;
     TITLE_BLOCK         m_titles;
     wxPoint             m_originAxisPosition;
-    std::bitset <GERBER_DRAWLAYERS_COUNT> m_printLayersMask; // When printing: the list of layers to print
+    std::vector<int>    m_printLayersList;  // When printing: the list of graphic layers Id to print
+
 public:
 
     GBR_LAYOUT();
@@ -97,45 +99,72 @@ public:
     /**
      * Function Draw.
      * Redraw the CLASS_GBR_LAYOUT items but not cursors, axis or grid.
-     * @param aPanel = the panel relative to the board
+     * @param aPanel = the draw canvas
      * @param aDC = the current device context
      * @param aDrawMode = GR_COPY, GR_OR ... (not always used)
      * @param aOffset = an draw offset value
-     * @param aPrintBlackAndWhite = true to force black and white insdeat of color
-     *        useful only to print/plot gebview layers
+     * @param aDisplayOptions = a GBR_DISPLAY_OPTIONS for draw/print display opts
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset,
-               bool aPrintBlackAndWhite = false );
+               GBR_DISPLAY_OPTIONS* aDisplayOptions );
+
+    /**
+     * Function DrawItemsDCodeID
+     * Draw the DCode value (if exists) corresponding to gerber item
+     * (polygons do not have a DCode)
+     * @param aPanel = the draw canvas
+     * @param aDC = the current device context
+     * @param aDrawMode = GR_COPY, GR_OR ...
+     * @param aDrawColor = the color of dcode texts
+     */
+    void DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                           GR_DRAWMODE aDrawMode, EDA_COLOR_T aDrawColor );
+
+
     /**
      * Function SetPrintableLayers
      * changes the list of printable layers
      * @param aLayerMask = The new bit-mask of printable layers
      */
-    void SetPrintableLayers( const std::bitset <GERBER_DRAWLAYERS_COUNT>& aLayerMask  )
+    void SetPrintableLayers( const std::vector<int>& aLayerList  )
     {
-        m_printLayersMask = aLayerMask;
+        m_printLayersList = aLayerList;
     }
 
     /**
      * Function GetPrintableLayers
      * @return the bit-mask of printable layers
      */
-    std::bitset <GERBER_DRAWLAYERS_COUNT> GetPrintableLayers()
+    std::vector<int> GetPrintableLayers()
     {
-        return m_printLayersMask;
+        return m_printLayersList;
     }
+
+    /**
+     * Function ClearPrintableLayers
+     */
+    void ClearPrintableLayers()
+    {
+        m_printLayersList.clear();
+    }
+
+    /**
+     * Function AddLayerToPrintableList
+     */
+    void AddLayerToPrintableList( int aLayer)
+    {
+        m_printLayersList.push_back( aLayer );
+    }
+
 
      /**
      * Function IsLayerPrintable
      * tests whether a given layer is visible
      * @param aLayer = The layer to be tested
-     * @return bool - true if the layer is visible.
+     * @return bool - true if the layer is in print list.
      */
-    bool    IsLayerPrintable( int aLayer ) const
-    {
-        return m_printLayersMask[ aLayer ];
-    }
+    bool    IsLayerPrintable( int aLayer ) const;
 
 #if defined(DEBUG)
     void    Show( int nestLevel, std::ostream& os ) const;  // overload

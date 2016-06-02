@@ -105,6 +105,9 @@ public:
 
     bool               m_InUse;                                 // true if this image is currently in use
                                                                 // (a file is loaded in it)
+    bool               m_IsVisible;                             // true if the draw layer is visible and must be drawn
+                                                                // false if it must be not drawn
+    EDA_COLOR_T        m_PositiveDrawColor;                     // The color used to draw positive items
     wxString           m_FileName;                              // Full File Name for this layer
     wxString           m_ImageName;                             // Image name, from IN <name>* command
     bool               m_IsX2_file;                             // true if a X2 gerber attribute was found in file
@@ -171,6 +174,8 @@ public:
     void Clear_GERBER_FILE_IMAGE();
     int  UsedDcodeNumber();
     virtual void ResetDefaultValues();
+
+    EDA_COLOR_T GetPositiveDrawColor() const { return m_PositiveDrawColor; }
 
     /**
      * Function GetParent

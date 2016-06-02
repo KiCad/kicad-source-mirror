@@ -57,43 +57,8 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
 }
 
 
-// Copy constructor
-GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
-    EDA_ITEM( aSource )
-{
-    m_GerberImageFile = aSource.m_GerberImageFile;
-    m_Shape = aSource.m_Shape;
-
-    m_Flags     = aSource.m_Flags;
-    SetTimeStamp( aSource.m_TimeStamp );
-
-    SetStatus( aSource.GetStatus() );
-    m_Start         = aSource.m_Start;
-    m_End           = aSource.m_End;
-    m_Size          = aSource.m_Size;
-    m_Shape         = aSource.m_Shape;
-    m_Flashed       = aSource.m_Flashed;
-    m_DCode         = aSource.m_DCode;
-    m_PolyCorners   = aSource.m_PolyCorners;
-    m_UnitsMetric   = aSource.m_UnitsMetric;
-    m_LayerNegative = aSource.m_LayerNegative;
-    m_swapAxis      = aSource.m_swapAxis;
-    m_mirrorA       = aSource.m_mirrorA;
-    m_mirrorB       = aSource.m_mirrorB;
-    m_layerOffset   = aSource.m_layerOffset;
-    m_drawScale     = aSource.m_drawScale;
-    m_lyrRotation   = aSource.m_lyrRotation;
-}
-
-
 GERBER_DRAW_ITEM::~GERBER_DRAW_ITEM()
 {
-}
-
-
-GERBER_DRAW_ITEM* GERBER_DRAW_ITEM::Copy() const
-{
-    return new GERBER_DRAW_ITEM( *this );
 }
 
 
@@ -272,11 +237,6 @@ void GERBER_DRAW_ITEM::MoveXY( const wxPoint& aMoveVector )
 }
 
 
-bool GERBER_DRAW_ITEM::Save( FILE* aFile ) const
-{
-    return true;
-}
-
 bool GERBER_DRAW_ITEM::HasNegativeItems()
 {
     bool isClear = m_LayerNegative ^ m_GerberImageFile->m_ImageNegative;
@@ -306,7 +266,7 @@ bool GERBER_DRAW_ITEM::HasNegativeItems()
 
 
 void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                             const wxPoint& aOffset )
+                             const wxPoint& aOffset, GBR_DISPLAY_OPTIONS* aDrawOptions )
 {
     // used when a D_CODE is not found. default D_CODE to draw a flashed item
     static D_CODE dummyD_CODE( 0 );
@@ -316,22 +276,18 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     int           halfPenWidth;
     static bool   show_err;
     D_CODE*       d_codeDescr = GetDcodeDescr();
-    GERBVIEW_FRAME* gerbFrame = (GERBVIEW_FRAME*) aPanel->GetParent();
 
     if( d_codeDescr == NULL )
         d_codeDescr = &dummyD_CODE;
 
-    if( gerbFrame->IsLayerVisible( GetLayer() ) == false )
-        return;
-
-    color = gerbFrame->GetLayerColor( GetLayer() );
+    color = m_GerberImageFile->GetPositiveDrawColor();
 
     if( aDrawMode & GR_HIGHLIGHT )
         ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
 
     ColorApplyHighlightFlag( &color );
 
-    alt_color = gerbFrame->GetNegativeItemsColor();
+    alt_color = aDrawOptions->m_NegativeDrawColor;
 
     /* isDark is true if flash is positive and should use a drawing
      *   color other than the background color, else use the background color
@@ -347,12 +303,12 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    isFilled = gerbFrame->DisplayLinesSolidMode();
+    isFilled = aDrawOptions->m_DisplayLinesFill;
 
     switch( m_Shape )
     {
     case GBR_POLYGON:
-        isFilled = gerbFrame->DisplayPolygonsSolidMode();
+        isFilled = aDrawOptions->m_DisplayPolygonsFill;
 
         if( !isDark )
             isFilled = true;
@@ -411,7 +367,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     case GBR_SPOT_OVAL:
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
-        isFilled = gerbFrame->DisplayFlashedItemsSolidMode();
+        isFilled = aDrawOptions->m_DisplayFlashedItemsFill;
         d_codeDescr->DrawFlashedShape( this, aPanel->GetClipBox(), aDC, color, alt_color,
                                        m_Start, isFilled );
         break;

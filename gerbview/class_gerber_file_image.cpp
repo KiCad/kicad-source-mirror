@@ -92,6 +92,8 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( GERBVIEW_FRAME* aParent, int aLayer )
 {
     m_parent = aParent;
     m_GraphicLayer = aLayer;        // Graphic layer Number
+    m_IsVisible    = true;          // must be drawn
+    m_PositiveDrawColor  = WHITE;   // The color used to draw positive items for this image
 
     m_Selected_Tool = FIRST_DCODE;
     m_FileFunction = NULL;          // file function parameters

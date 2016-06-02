@@ -231,24 +231,18 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 
 int DIALOG_PRINT_USING_PRINTER::SetLayerSetFromListSelection()
 {
-    int page_count = 0;
-    std::bitset <GERBER_DRAWLAYERS_COUNT> layerMask;
+    std::vector<int> layerList;
 
     for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
     {
         if( m_BoxSelectLayer[ii]->IsChecked() && m_BoxSelectLayer[ii]->IsEnabled() )
-        {
-            page_count++;
-            layerMask[ii] = true;
-        }
-        else
-            layerMask[ii] = false;
+            layerList.push_back( ii );
     }
 
-    m_Parent->GetGerberLayout()->SetPrintableLayers( layerMask );
-    s_Parameters.m_PageCount = page_count;
+    m_Parent->GetGerberLayout()->SetPrintableLayers( layerList );
+    s_Parameters.m_PageCount = layerList.size();
 
-    return page_count;
+    return s_Parameters.m_PageCount;
 }
 
 
@@ -354,7 +348,7 @@ bool DIALOG_PRINT_USING_PRINTER::PreparePrintPrms()
 
     // If no layer selected, we have no plot. prompt user if it happens
     // because he could think there is a bug in Pcbnew:
-    if( m_Parent->GetGerberLayout()->GetPrintableLayers().none() )
+    if( m_Parent->GetGerberLayout()->GetPrintableLayers().size() == 0 )
     {
         DisplayError( this, _( "No layer selected" ) );
         return false;

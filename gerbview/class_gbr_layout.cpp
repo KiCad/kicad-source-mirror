@@ -38,7 +38,6 @@
 
 GBR_LAYOUT::GBR_LAYOUT()
 {
-    m_printLayersMask.set();
 }
 
 
@@ -46,6 +45,16 @@ GBR_LAYOUT::~GBR_LAYOUT()
 {
 }
 
+bool GBR_LAYOUT::IsLayerPrintable( int aLayer ) const
+{
+    for( unsigned ii = 0; ii < m_printLayersList.size(); ++ii )
+    {
+        if( m_printLayersList[ii] == aLayer )
+            return true;
+    }
+
+    return false;
+}
 
 EDA_RECT GBR_LAYOUT::ComputeBoundingBox()
 {
@@ -69,7 +78,7 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox()
 
 // Redraw All GerbView layers, using a buffered mode or not
 void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                       const wxPoint& aOffset, bool aPrintBlackAndWhite )
+                       const wxPoint& aOffset, GBR_DISPLAY_OPTIONS* aDisplayOptions )
 {
     GERBVIEW_FRAME* gerbFrame = (GERBVIEW_FRAME*) aPanel->GetParent();
 
@@ -79,9 +88,6 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     // at least when aDrawMode = GR_COPY or aDrawMode = GR_OR
     // If aDrawMode = UNSPECIFIED_DRAWMODE, items are drawn to the main screen, and therefore
     // artifacts can happen with negative items or negative images
-
-    wxColour bgColor = MakeColour( gerbFrame->GetDrawBgColor() );
-    wxBrush  bgBrush( bgColor, wxBRUSHSTYLE_SOLID );
 
     int      bitmapWidth, bitmapHeight;
     wxDC*    plotDC = aDC;
@@ -115,6 +121,8 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     wxPoint dev_org = aDC->GetDeviceOrigin();
     wxPoint logical_org = aDC->GetLogicalOrigin( );
 
+    wxColour bgColor = MakeColour( aDisplayOptions->m_BgDrawColor );
+    wxBrush  bgBrush( bgColor, wxBRUSHSTYLE_SOLID );
 
     if( useBufferBitmap )
     {
@@ -139,12 +147,10 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 
     bool end = false;
 
-    // Draw layers from bottom to top, and active layer last
-    // in non transparent modes, the last layer drawn mask mask previously drawn layer
+    // Draw graphic layers from bottom to top, and the active layer is on the top of others.
+    // In non transparent modes, the last layer drawn masks others layers
     for( int layer = GERBER_DRAWLAYERS_COUNT-1; !end; --layer )
     {
-        EDA_COLOR_T layer_color = gerbFrame->GetLayerColor( layer );
-
         int active_layer = gerbFrame->getActiveLayer();
 
         if( layer == active_layer ) // active layer will be drawn after other layers
@@ -156,17 +162,24 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
             layer = active_layer;
         }
 
-        if( !gerbFrame->IsLayerVisible( layer ) )
-            continue;
-
         GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
 
-        // Force black and white draw mode on request:
-        if( aPrintBlackAndWhite )
-            gerbFrame->SetLayerColor( layer, gerbFrame->GetDrawBgColor() == BLACK ? WHITE : BLACK );
+        if( aDisplayOptions->m_IsPrinting )
+            gerber->m_IsVisible = IsLayerPrintable( layer );
+        else
+            gerber->m_IsVisible = gerbFrame->IsLayerVisible( layer );
+
+        if( !gerber->m_IsVisible )
+            continue;
+
+        gerber->m_PositiveDrawColor = gerbFrame->GetLayerColor( layer );
+
+       // Force black and white draw mode on request:
+        if( aDisplayOptions->m_ForceBlackAndWhite )
+            gerber->m_PositiveDrawColor = ( aDisplayOptions->m_BgDrawColor == BLACK ) ? WHITE : BLACK;
 
         if( useBufferBitmap )
         {
@@ -217,7 +230,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( gerber->m_ImageNegative )
         {
             // Draw background negative (i.e. in graphic layer color) for negative images.
-            EDA_COLOR_T neg_color = gerbFrame->GetLayerColor( layer );
+            EDA_COLOR_T neg_color = gerber->GetPositiveDrawColor();
 
             GRSetDrawMode( &layerDC, GR_COPY );
             GRFilledRect( &drawBox, plotDC, drawBox.GetX(), drawBox.GetY(),
@@ -250,12 +263,9 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
             if( dcode_highlight && dcode_highlight == item->m_DCode )
                 DrawModeAddHighlight( &drawMode);
 
-            item->Draw( aPanel, plotDC, drawMode, wxPoint(0,0) );
+            item->Draw( aPanel, plotDC, drawMode, wxPoint(0,0), aDisplayOptions );
             doBlit = true;
         }
-
-        if( aPrintBlackAndWhite )
-            gerbFrame->SetLayerColor( layer, layer_color );
     }
 
     if( doBlit && useBufferBitmap )     // Blit is used only if aDrawMode >= 0
@@ -303,5 +313,77 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         screenDC.SelectObject( wxNullBitmap );
         delete layerBitmap;
         delete screenBitmap;
+    }
+}
+
+
+void GBR_LAYOUT::DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                   GR_DRAWMODE aDrawMode, EDA_COLOR_T aDrawColor )
+{
+    wxPoint     pos;
+    int         width;
+    wxString    Line;
+
+    GRSetDrawMode( aDC, aDrawMode );
+
+    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+    {
+        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
+        if( ! gerber->m_IsVisible )
+            continue;
+
+        for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item != NULL; item = item->Next() )
+        {
+
+            if( item->m_DCode <= 0 )
+                continue;
+
+            if( item->m_Flashed || item->m_Shape == GBR_ARC )
+            {
+                pos = item->m_Start;
+            }
+            else
+            {
+                pos.x = (item->m_Start.x + item->m_End.x) / 2;
+                pos.y = (item->m_Start.y + item->m_End.y) / 2;
+            }
+
+            pos = item->GetABPosition( pos );
+
+            Line.Printf( wxT( "D%d" ), item->m_DCode );
+
+            if( item->GetDcodeDescr() )
+                width = item->GetDcodeDescr()->GetShapeDim( item );
+            else
+                width = std::min( item->m_Size.x, item->m_Size.y );
+
+            double orient = TEXT_ORIENT_HORIZ;
+
+            if( item->m_Flashed )
+            {
+                // A reasonable size for text is width/3 because most of time this text has 3 chars.
+                width /= 3;
+            }
+            else        // this item is a line
+            {
+                wxPoint delta = item->m_Start - item->m_End;
+
+                if( abs( delta.x ) < abs( delta.y ) )
+                    orient = TEXT_ORIENT_VERT;
+
+                // A reasonable size for text is width/2 because text needs margin below and above it.
+                // a margin = width/4 seems good
+                width /= 2;
+            }
+
+            DrawGraphicText( aPanel->GetClipBox(), aDC, pos, aDrawColor, Line,
+                             orient, wxSize( width, width ),
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                             0, false, false );
+        }
     }
 }

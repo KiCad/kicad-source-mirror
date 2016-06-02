@@ -38,6 +38,7 @@ class GERBER_FILE_IMAGE;
 class GBR_LAYOUT;
 class D_CODE;
 class MSG_PANEL_ITEM;
+class GBR_DISPLAY_OPTIONS;
 
 
 /* Shapes id for basic shapes ( .m_Shape member ) */
@@ -103,16 +104,7 @@ private:
 
 public:
     GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberparams );
-    GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource );
     ~GERBER_DRAW_ITEM();
-
-    /**
-     * Function Copy
-     * will copy this object
-     * the corresponding type.
-     * @return - GERBER_DRAW_ITEM*
-     */
-    GERBER_DRAW_ITEM* Copy() const;
 
     GERBER_DRAW_ITEM* Next() const { return static_cast<GERBER_DRAW_ITEM*>( Pnext ); }
     GERBER_DRAW_ITEM* Back() const { return static_cast<GERBER_DRAW_ITEM*>( Pback ); }
@@ -206,7 +198,7 @@ public:
 
     /* Display on screen: */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               GR_DRAWMODE aDrawMode, const wxPoint&aOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint&aOffset, GBR_DISPLAY_OPTIONS* aDrawOptions );
 
     /**
      * Function ConvertSegmentToPolygon
@@ -256,13 +248,6 @@ public:
     {
         return wxT( "GERBER_DRAW_ITEM" );
     }
-
-    /**
-     * Function Save.
-     * currently: no nothing, but must be defined to meet requirements
-     * of the basic class
-     */
-    bool Save( FILE* aFile ) const;
 
     /**
      * Function UnLink
