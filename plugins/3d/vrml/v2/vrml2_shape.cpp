@@ -490,22 +490,11 @@ SGNODE* WRL2SHAPE::TranslateToSG( SGNODE* aParent )
     if( NULL != appearance )
         pApp = appearance->TranslateToSG( pShape );
 
-    if( ( NULL != appearance && NULL == pApp ) || NULL == pGeom )
+    if( NULL != appearance && NULL == pApp )
     {
-        if( pGeom )
-        {
-            IFSG_FACESET tmp( false );
-            tmp.Attach( pGeom );
-            tmp.Destroy();
-        }
-
-        if( pApp )
-        {
-            IFSG_APPEARANCE tmp( false );
-            tmp.Attach( pApp );
-            tmp.Destroy();
-        }
-
+        IFSG_FACESET tmp( false );
+        tmp.Attach( pGeom );
+        tmp.Destroy();
         shNode.Destroy();
         return NULL;
     }
