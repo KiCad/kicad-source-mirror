@@ -96,6 +96,14 @@ public:
     bool Link();
 
     /**
+     * @brief Returns true if shaders are linked correctly.
+     */
+    bool IsLinked() const
+    {
+        return isShaderLinked;
+    }
+
+    /**
      * @brief Use the shader.
      */
     inline void Use()

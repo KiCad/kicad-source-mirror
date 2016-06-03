@@ -53,6 +53,7 @@ static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_
 wxGLContext* OPENGL_GAL::glMainContext = NULL;
 GLuint OPENGL_GAL::fontTexture = 0;
 bool OPENGL_GAL::isBitmapFontLoaded = false;
+SHADER* OPENGL_GAL::shader = NULL;
 
 
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
@@ -69,6 +70,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     {
         glMainContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
         glPrivContext = glMainContext;
+        shader = new SHADER();
     }
     else
     {
@@ -79,9 +81,9 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     runTest();
 
     // Make VBOs use shaders
-    cachedManager.SetShader( shader );
-    nonCachedManager.SetShader( shader );
-    overlayManager.SetShader( shader );
+    cachedManager.SetShader( *shader );
+    nonCachedManager.SetShader( *shader );
+    overlayManager.SetShader( *shader );
 
     // Initialize the flags
     isFramebufferInitialized = false;
@@ -151,6 +153,7 @@ OPENGL_GAL::~OPENGL_GAL()
             isBitmapFontLoaded = false;
         }
 
+        delete shader;
         glMainContext = NULL;
     }
 
@@ -266,10 +269,10 @@ void OPENGL_GAL::BeginDrawing()
         }
 
         // Set shader parameter
-        GLint ufm_fontTexture = shader.AddParameter( "fontTexture" );
-        shader.Use();
-        shader.SetParameter( ufm_fontTexture, (int) FONT_TEXTURE_UNIT );
-        shader.Deactivate();
+        GLint ufm_fontTexture = shader->AddParameter( "fontTexture" );
+        shader->Use();
+        shader->SetParameter( ufm_fontTexture, (int) FONT_TEXTURE_UNIT );
+        shader->Deactivate();
         checkGlError( "setting bitmap font sampler as shader parameter" );
 
         isBitmapFontInitialized = true;
@@ -1529,13 +1532,13 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
             error( "Vertex buffer objects are not supported!" );
 
         // Prepare shaders
-        else if( !m_gal->shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
+        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
             error( "Cannot compile vertex shader!" );
 
-        else if( !m_gal->shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
+        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
             error( "Cannot compile fragment shader!" );
 
-        else if( !m_gal->shader.Link() )
+        else if( !m_gal->shader->IsLinked() && !m_gal->shader->Link() )
             error( "Cannot link the shaders!" );
 
         // Check if video card supports textures big enough to fit font atlas
