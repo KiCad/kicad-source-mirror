@@ -38,7 +38,7 @@
 
 #include <class_board.h>
 
-#include <dialog_print_using_printer_BASE.h>
+#include <dialog_print_using_printer_base.h>
 
 
 #define PEN_WIDTH_MAX_VALUE ( KiROUND( 5 * IU_PER_MM ) )
