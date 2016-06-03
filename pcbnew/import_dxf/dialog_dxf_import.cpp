@@ -264,7 +264,6 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
                 converted = new EDGE_MODULE( aModule );
                 *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
                 aModule->Add( converted );
-                static_cast<EDGE_MODULE*>( converted )->SetLocalCoord();
                 delete item;
                 break;
             }
@@ -274,7 +273,6 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
                 converted = new TEXTE_MODULE( aModule );
                 *static_cast<TEXTE_PCB*>( converted ) = *static_cast<TEXTE_PCB*>( item );
                 aModule->Add( converted );
-                static_cast<TEXTE_MODULE*>( converted )->SetLocalCoord();
                 delete item;
                 break;
             }
