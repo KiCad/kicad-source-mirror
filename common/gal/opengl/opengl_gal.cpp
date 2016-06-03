@@ -40,6 +40,7 @@
 #include <limits>
 #include <boost/bind.hpp>
 
+
 using namespace KIGFX;
 
 #include "bitmap_font_img.c"
@@ -51,6 +52,7 @@ static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_
 wxGLContext* OPENGL_GAL::glContext = NULL;
 int OPENGL_GAL::instanceCounter = 0;
 bool OPENGL_GAL::isBitmapFontLoaded = false;
+
 
 OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
                         wxEvtHandler* aPaintListener, const wxString& aName ) :
@@ -164,7 +166,6 @@ void OPENGL_GAL::BeginDrawing()
 #endif /* __WXDEBUG__ */
 
     SetCurrent( *glContext );
-    clientDC = new wxClientDC( this );
 
 #ifdef RETINA_OPENGL_PATCH
     const float scaleFactor = GetBackingScaleFactor();
@@ -299,8 +300,6 @@ void OPENGL_GAL::EndDrawing()
     blitCursor();
 
     SwapBuffers();
-
-    delete clientDC;
 
 #ifdef __WXDEBUG__
     prof_end( &totalRealTime );

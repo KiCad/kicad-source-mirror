@@ -52,6 +52,7 @@ namespace KIGFX
 {
 class SHADER;
 
+
 /**
  * @brief Class OpenGL_GAL is the OpenGL implementation of the Graphics Abstraction Layer.
  *
@@ -62,7 +63,6 @@ class SHADER;
 class OPENGL_GAL : public GAL, public wxGLCanvas
 {
 public:
-
     /**
      * @brief Constructor OPENGL_GAL
      *
@@ -273,7 +273,6 @@ private:
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
 
-    wxClientDC*             clientDC;               ///< Drawing context
     static wxGLContext*     glContext;              ///< OpenGL context of wxWidgets
     wxEvtHandler*           mouseListener;
     wxEvtHandler*           paintListener;
