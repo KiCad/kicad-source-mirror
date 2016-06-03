@@ -95,19 +95,20 @@ C3D_MODEL_VIEWER::C3D_MODEL_VIEWER( wxWindow *aParent,
     m_BiuTo3Dunits = 1.0;
 
     // Explicitly create a new rendering context instance for this canvas.
-    m_glRC = new wxGLContext( this );
+    m_glRC = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
 }
 
 
 C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER()
 {
+    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC );
+
     wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER" ) );
 
     delete m_ogl_3dmodel;
     m_ogl_3dmodel = NULL;
 
-    delete m_glRC;
-    m_glRC = NULL;
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
 }
 
 
