@@ -51,7 +51,6 @@ static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
 
 wxGLContext* OPENGL_GAL::glMainContext = NULL;
-int OPENGL_GAL::instanceCounter = 0;
 GLuint OPENGL_GAL::fontTexture = 0;
 bool OPENGL_GAL::isBitmapFontLoaded = false;
 
@@ -78,7 +77,6 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     // Check if OpenGL requirements are met
     runTest();
-    ++instanceCounter;
 
     // Make VBOs use shaders
     cachedManager.SetShader( shader );
@@ -144,13 +142,16 @@ OPENGL_GAL::~OPENGL_GAL()
     ClearCache();
     glFlush();
 
-    if( --instanceCounter == 0 )
+    // Are destroying the last GAL instance?
+    if( glPrivContext == glMainContext )
     {
         if( isBitmapFontLoaded )
         {
             glDeleteTextures( 1, &fontTexture );
             isBitmapFontLoaded = false;
         }
+
+        glMainContext = NULL;
     }
 
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );

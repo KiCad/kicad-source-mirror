@@ -277,7 +277,6 @@ private:
     wxGLContext*            glPrivContext;      ///< Canvas-specific OpenGL context
     wxEvtHandler*           mouseListener;
     wxEvtHandler*           paintListener;
-    static int              instanceCounter;
 
     static GLuint fontTexture;                  ///< Bitmap font texture handle (shared)
 
