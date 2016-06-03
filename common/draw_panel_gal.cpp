@@ -126,7 +126,10 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
 EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 {
+    StopDrawing();
     SaveGalSettings();
+
+    assert( !m_drawing );
 
     delete m_painter;
     delete m_viewControls;
@@ -288,7 +291,6 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
     m_drawingEnabled = false;
     Disconnect( wxEVT_PAINT, wxPaintEventHandler( EDA_DRAW_PANEL_GAL::onPaint ), NULL, this );
     m_pendingRefresh = false;
-    m_drawing = true;
     m_refreshTimer.Stop();
 }
 

@@ -29,6 +29,7 @@
 #include <gal/opengl/opengl_gal.h>
 #include <gal/opengl/utils.h>
 #include <gal/definitions.h>
+#include <gl_context_mgr.h>
 
 #include <macros.h>
 
@@ -49,8 +50,9 @@ using namespace KIGFX;
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
 
-wxGLContext* OPENGL_GAL::glContext = NULL;
+wxGLContext* OPENGL_GAL::glMainContext = NULL;
 int OPENGL_GAL::instanceCounter = 0;
+GLuint OPENGL_GAL::fontTexture = 0;
 bool OPENGL_GAL::isBitmapFontLoaded = false;
 
 
@@ -64,8 +66,15 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     nonCachedManager( false ),
     overlayManager( false )
 {
-    if( glContext == NULL )
-        glContext = new wxGLContext( this );
+    if( glMainContext == NULL )
+    {
+        glMainContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
+        glPrivContext = glMainContext;
+    }
+    else
+    {
+        glPrivContext = GL_CONTEXT_MANAGER::Get().CreateCtx( this, glMainContext );
+    }
 
     // Check if OpenGL requirements are met
     runTest();
@@ -129,16 +138,10 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
 OPENGL_GAL::~OPENGL_GAL()
 {
+    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext );
+
     gluDeleteTess( tesselator );
     ClearCache();
-
-#ifdef __LINUX__
-    if( IsShownOnScreen() )
-        SetCurrent( *OPENGL_GAL::glContext );
-#else
-    SetCurrent( *OPENGL_GAL::glContext );
-#endif
-
     glFlush();
 
     if( --instanceCounter == 0 )
@@ -148,10 +151,9 @@ OPENGL_GAL::~OPENGL_GAL()
             glDeleteTextures( 1, &fontTexture );
             isBitmapFontLoaded = false;
         }
-
-        delete OPENGL_GAL::glContext;
-        glContext = NULL;
     }
+
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 }
 
 
@@ -165,7 +167,7 @@ void OPENGL_GAL::BeginDrawing()
     prof_start( &totalRealTime );
 #endif /* __WXDEBUG__ */
 
-    SetCurrent( *glContext );
+    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext );
 
 #ifdef RETINA_OPENGL_PATCH
     const float scaleFactor = GetBackingScaleFactor();
@@ -237,6 +239,7 @@ void OPENGL_GAL::BeginDrawing()
         // Keep bitmap font texture always bound to the second texturing unit
         const GLint FONT_TEXTURE_UNIT = 2;
 
+        // Either load the font atlas to video memory, or simply bind it to a texture unit
         if( !isBitmapFontLoaded )
         {
             glActiveTexture( GL_TEXTURE0 + FONT_TEXTURE_UNIT );
@@ -252,6 +255,12 @@ void OPENGL_GAL::BeginDrawing()
             glActiveTexture( GL_TEXTURE0 );
 
             isBitmapFontLoaded = true;
+        }
+        else
+        {
+            glActiveTexture( GL_TEXTURE0 + FONT_TEXTURE_UNIT );
+            glBindTexture( GL_TEXTURE_2D, fontTexture );
+            glActiveTexture( GL_TEXTURE0 );
         }
 
         // Set shader parameter
@@ -300,6 +309,7 @@ void OPENGL_GAL::EndDrawing()
     blitCursor();
 
     SwapBuffers();
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 
 #ifdef __WXDEBUG__
     prof_end( &totalRealTime );
@@ -310,7 +320,7 @@ void OPENGL_GAL::EndDrawing()
 
 void OPENGL_GAL::BeginUpdate()
 {
-    SetCurrent( *OPENGL_GAL::glContext );
+    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext );
     cachedManager.Map();
 }
 
@@ -318,6 +328,7 @@ void OPENGL_GAL::BeginUpdate()
 void OPENGL_GAL::EndUpdate()
 {
     cachedManager.Unmap();
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 }
 
 
@@ -1454,7 +1465,7 @@ bool OPENGL_GAL::runTest()
     {
         wxDialog dlgtest( GetParent(), -1, wxT( "opengl test" ), wxPoint( 50, 50 ),
                         wxDLG_UNIT( GetParent(), wxSize( 50, 50 ) ) );
-        OPENGL_TEST* test = new OPENGL_TEST( &dlgtest, this );
+        OPENGL_TEST* test = new OPENGL_TEST( &dlgtest, this, glPrivContext );
 
         dlgtest.Raise();         // on Linux, on some windows managers (Unity for instance) this is needed to actually show the dialog
         dlgtest.ShowModal();
@@ -1471,10 +1482,10 @@ bool OPENGL_GAL::runTest()
 }
 
 
-OPENGL_GAL::OPENGL_TEST::OPENGL_TEST( wxDialog* aParent, OPENGL_GAL* aGal ) :
+OPENGL_GAL::OPENGL_TEST::OPENGL_TEST( wxDialog* aParent, OPENGL_GAL* aGal, wxGLContext* aContext ) :
     wxGLCanvas( aParent, wxID_ANY, glAttributes, wxDefaultPosition,
                 wxDefaultSize, 0, wxT( "GLCanvas" ) ),
-    m_parent( aParent ), m_gal( aGal ), m_tested( false ), m_result( false )
+    m_parent( aParent ), m_gal( aGal ), m_context( aContext ), m_tested( false ), m_result( false )
 {
     m_timeoutTimer.SetOwner( this );
     Connect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::OPENGL_TEST::Render ) );
@@ -1497,7 +1508,7 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
         Disconnect( wxEVT_PAINT, wxPaintEventHandler( OPENGL_GAL::OPENGL_TEST::Render ) );
         CallAfter( boost::bind( &wxDialog::EndModal, m_parent, wxID_NONE ) );
 
-        SetCurrent( *OPENGL_GAL::glContext );
+        GL_CONTEXT_MANAGER::Get().LockCtx( m_context, this );
         GLenum err = glewInit();
 
         if( GLEW_OK != err )
@@ -1536,6 +1547,7 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
             error( "Requested texture size is not supported" );
         }
 
+        GL_CONTEXT_MANAGER::Get().UnlockCtx( m_context );
         m_tested = true;
     }
 }

@@ -273,12 +273,13 @@ private:
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
 
-    static wxGLContext*     glContext;              ///< OpenGL context of wxWidgets
+    static wxGLContext*     glMainContext;      ///< Parent OpenGL context
+    wxGLContext*            glPrivContext;      ///< Canvas-specific OpenGL context
     wxEvtHandler*           mouseListener;
     wxEvtHandler*           paintListener;
     static int              instanceCounter;
 
-    GLuint fontTexture;                             ///< Bitmap font texture handle
+    static GLuint fontTexture;                  ///< Bitmap font texture handle (shared)
 
     // Vertex buffer objects related fields
     typedef std::map< unsigned int, boost::shared_ptr<VERTEX_ITEM> > GROUPS_MAP;
@@ -415,7 +416,7 @@ private:
     class OPENGL_TEST: public wxGLCanvas
     {
     public:
-        OPENGL_TEST( wxDialog* aParent, OPENGL_GAL* aGal );
+        OPENGL_TEST( wxDialog* aParent, OPENGL_GAL* aGal, wxGLContext* aContext );
 
         void Render( wxPaintEvent& aEvent );
         void OnTimeout( wxTimerEvent& aEvent );
@@ -430,6 +431,7 @@ private:
 
         wxDialog* m_parent;
         OPENGL_GAL* m_gal;
+        wxGLContext* m_context;
         bool m_tested;
         bool m_result;
         std::string m_error;

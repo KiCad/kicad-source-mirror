@@ -35,6 +35,7 @@
 #include "common_ogl/ogl_utils.h"
 #include <wx/dcclient.h>
 #include "convert_to_biu.h"
+#include <gl_context_mgr.h>
 
 #define UNITS3D_TO_UNITSPCB (IU_PER_MM)
 
@@ -202,7 +203,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     // "Makes the OpenGL state that is represented by the OpenGL rendering
     //  context context current, i.e. it will be used by all subsequent OpenGL calls.
     //  This function may only be called when the window is shown on screen"
-    SetCurrent( *m_glRC );
+    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC );
 
     // Set the OpenGL viewport according to the client size of this canvas.
     // This is done here rather than in a wxSizeEvent handler because our
@@ -311,6 +312,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     //  front-buffer and vice versa, so that the output of the previous OpenGL
     //  commands is displayed on the window."
     SwapBuffers();
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
 
     event.Skip();
 }
