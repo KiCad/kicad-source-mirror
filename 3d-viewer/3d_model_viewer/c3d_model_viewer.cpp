@@ -109,6 +109,7 @@ C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER()
     m_ogl_3dmodel = NULL;
 
     GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+    GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glRC );
 }
 
 

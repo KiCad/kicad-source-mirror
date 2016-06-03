@@ -42,6 +42,23 @@ wxGLContext* GL_CONTEXT_MANAGER::CreateCtx( wxGLCanvas* aCanvas, const wxGLConte
 }
 
 
+void GL_CONTEXT_MANAGER::DestroyCtx( wxGLContext* aContext )
+{
+    assert( m_glCtx != aContext );
+
+    if( m_glContexts.count( aContext ) && m_glCtx != aContext )
+    {
+        m_glContexts.erase( aContext );
+        delete aContext;
+    }
+    else
+    {
+        // Do not delete currently used or unknown GL contexts
+        assert( false );
+    }
+}
+
+
 void GL_CONTEXT_MANAGER::DeleteAll()
 {
     for( auto& ctx : m_glContexts )

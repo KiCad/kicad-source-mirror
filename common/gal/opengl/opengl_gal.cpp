@@ -155,6 +155,7 @@ OPENGL_GAL::~OPENGL_GAL()
     }
 
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
+    GL_CONTEXT_MANAGER::Get().DestroyCtx( glPrivContext );
 }
 
 

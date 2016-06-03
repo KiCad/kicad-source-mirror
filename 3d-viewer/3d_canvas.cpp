@@ -127,6 +127,7 @@ EDA_3D_CANVAS::~EDA_3D_CANVAS()
         delete m_model_parsers_list[i];
 
     GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+    GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glRC );
 }
 
 

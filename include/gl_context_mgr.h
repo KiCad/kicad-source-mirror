@@ -48,6 +48,14 @@ public:
     wxGLContext* CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther = NULL );
 
     /**
+     * Function DestroyCtx
+     * destroys a managed OpenGL context. The context to be removed has to be created using
+     * GL_CONTEXT_MANAGER::CreateCtx() first.
+     * @param aContext is the OpenGL context to be destroyed. It will not be managed anymore.
+     */
+    void DestroyCtx( wxGLContext* aContext );
+
+    /**
      * Function DeleteAll
      * destroys all managed OpenGL contexts. This method should be called in the
      * final deinitialization routine.
