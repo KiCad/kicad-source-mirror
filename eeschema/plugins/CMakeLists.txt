@@ -5,6 +5,7 @@
 
 set( xsl_lst
     bom2csv.xsl
+    bom2grouped_csv.xsl
     netlist_form_cadstar-RINF.xsl
     netlist_form_cadstar.xsl
     netlist_form_OrcadPcb2.xsl

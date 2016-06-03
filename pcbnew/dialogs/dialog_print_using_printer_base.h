@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -31,9 +31,9 @@ class DIALOG_SHIM;
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_PRINT_USING_PRINTER_base
+/// Class DIALOG_PRINT_USING_PRINTER_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PRINT_USING_PRINTER_base : public DIALOG_SHIM
+class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -78,8 +78,8 @@ class DIALOG_PRINT_USING_PRINTER_base : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_PRINT_USING_PRINTER_base();
+		DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_PRINT_USING_PRINTER_BASE();
 	
 };
 

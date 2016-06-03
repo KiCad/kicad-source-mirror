@@ -55,12 +55,13 @@
 
     <!-- the table entries -->
     <xsl:template match="components/comp">
-        <xsl:value-of select="@ref"/><xsl:text>,</xsl:text>
-        <xsl:value-of select="value"/><xsl:text>,</xsl:text>
-        <xsl:value-of select="footprint"/><xsl:text>,</xsl:text>
-        <xsl:value-of select="datasheet"/>
-        <xsl:apply-templates select="fields"/>
-        <xsl:text>&nl;</xsl:text>
+        <xsl:text>"</xsl:text>
+        <xsl:value-of select="@ref"/><xsl:text>","</xsl:text>
+        <xsl:value-of select="value"/><xsl:text>","</xsl:text>
+        <xsl:value-of select="footprint"/><xsl:text>","</xsl:text>
+        <xsl:value-of select="datasheet"/><xsl:text>","</xsl:text>
+        <xsl:apply-templates select="fields"/><xsl:text>","</xsl:text>
+        <xsl:text>"&nl;</xsl:text>
     </xsl:template>
 
     <!-- table entries with dynamic table head -->

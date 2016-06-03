@@ -38,7 +38,7 @@
 
 #include <class_board.h>
 
-#include <dialog_print_using_printer_base.h>
+#include <dialog_print_using_printer_BASE.h>
 
 
 #define PEN_WIDTH_MAX_VALUE ( KiROUND( 5 * IU_PER_MM ) )
@@ -64,10 +64,10 @@ static PRINT_PARAMETERS  s_Parameters;
 
 
 /**
- * Dialog to print schematic. Class derived from DIALOG_PRINT_USING_PRINTER_base
+ * Dialog to print schematic. Class derived from DIALOG_PRINT_USING_PRINTER_BASE
  *  created by wxFormBuilder
  */
-class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_base
+class DIALOG_PRINT_USING_PRINTER : public DIALOG_PRINT_USING_PRINTER_BASE
 {
 public:
     DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent );
@@ -141,7 +141,7 @@ void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
 
 
 DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent ) :
-    DIALOG_PRINT_USING_PRINTER_base( parent )
+    DIALOG_PRINT_USING_PRINTER_BASE( parent )
 {
     m_parent = parent;
     m_config = Kiface().KifaceSettings();
@@ -298,7 +298,7 @@ int DIALOG_PRINT_USING_PRINTER::SetLayerSetFromListSelection()
         s_Parameters.m_Flags = 0;
     else
         s_Parameters.m_Flags = 1;
-        
+
     if( PrintUsingSinglePage() )
         page_count = 1;
 
@@ -351,8 +351,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters( )
     s_Parameters.m_DrillShapeOpt =
         (PRINT_PARAMETERS::DrillShapeOptT) m_Drill_Shape_Opt->GetSelection();
 
-    if( m_PagesOption )
-        s_Parameters.m_OptionPrintPage = m_PagesOption->GetSelection() != 0;
+    s_Parameters.m_OptionPrintPage = m_PagesOption->GetSelection() != 0;
 
     SetLayerSetFromListSelection();
 

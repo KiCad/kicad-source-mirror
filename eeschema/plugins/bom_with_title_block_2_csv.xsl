@@ -1,26 +1,19 @@
 <!--
-    @package
     EESCHEMA BOM plugin. Creates BOM CSV files from the project net file.
     Based on Stefan Helmert bom2csv.xsl
 
     Note:
-        The project infomation (i.e title, company and revision) is taken from and the root sheet.
+        The project infomation (i.e title, company and revision) is taken from the root sheet.
 
     Arthur:
         Ronald Sousa HashDefineElectronics.com
-
-    Usage:
-        on Windows:
-            xsltproc -o "%O.csv" "C:\Program Files (x86)\KiCad\bin\plugins\bom2csv.xsl" "%I"
-        on Linux:
-            xsltproc -o "%O.csv" /usr/local/lib/kicad/plugins/bom2csv.xsl "%I"
 
     Ouput Example:
         Source,
         Kicad Rev,  working director and file source
         Generated Date, date this file was generated
 
-        Title, the project's tile
+        Title, the project's title
         Company, the project's company
         Rev, the project's revision
         Date Source, project's issue date
@@ -28,7 +21,13 @@
         Comment, This is comment 2
         Comment, This is comment 3
         Comment, This is comment 4
+-->
+<!--
+    @package
+    Command line:
+        xsltproc -o "%O.csv" "pathToFile/bom2csv.xsl" "%I"
 
+    Output format
         Reference, Value, Fields[n], Library, Library Ref
         U1, PIC32MX, Fields[n], KicadLib, PIC
 -->

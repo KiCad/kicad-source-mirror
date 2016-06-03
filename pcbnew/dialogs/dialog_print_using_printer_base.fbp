@@ -42,7 +42,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size">-1,-1</property>
-            <property name="name">DIALOG_PRINT_USING_PRINTER_base</property>
+            <property name="name">DIALOG_PRINT_USING_PRINTER_BASE</property>
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
@@ -103,6 +103,7 @@
                         <property name="minimum_size"></property>
                         <property name="name">sbLayersSizer</property>
                         <property name="orient">wxVERTICAL</property>
+                        <property name="parent">1</property>
                         <property name="permission">none</property>
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="1">
@@ -124,6 +125,7 @@
                                         <property name="minimum_size"></property>
                                         <property name="name">m_CopperLayersBoxSizer</property>
                                         <property name="orient">wxVERTICAL</property>
+                                        <property name="parent">1</property>
                                         <property name="permission">protected</property>
                                         <event name="OnUpdateUI"></event>
                                     </object>
@@ -138,6 +140,7 @@
                                         <property name="minimum_size"></property>
                                         <property name="name">m_TechnicalLayersBoxSizer</property>
                                         <property name="orient">wxVERTICAL</property>
+                                        <property name="parent">1</property>
                                         <property name="permission">protected</property>
                                         <event name="OnUpdateUI"></event>
                                     </object>
@@ -702,6 +705,7 @@
                                 <property name="minimum_size"></property>
                                 <property name="name">sbOptionsSizer</property>
                                 <property name="orient">wxVERTICAL</property>
+                                <property name="parent">1</property>
                                 <property name="permission">none</property>
                                 <event name="OnUpdateUI"></event>
                                 <object class="sizeritem" expanded="1">
