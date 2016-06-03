@@ -1,0 +1,70 @@
+%TF.GerberVersion,J4*%
+%TF.Part,Single*%
+%TF.FileFunction,Other,BugReportExample*%
+
+%FSLAX26Y26*%
+%MOIN*%
+
+%LPD*%
+
+%SRX1Y1I0J0*%
+
+
+G04 ===================================================*
+G04 Aperture Macros*
+G04 AMHALFCIRCLE draws a half circle by drawing a full circle and then
+G04  a rectangular negative object overlapping the other half circle
+G04 ===================================================*
+%AMHALFCIRCLE*
+1,1,1,0,0,0,0*
+2,0,1,0,0,-.5,0,0*%
+
+
+
+
+G04 ===================================================*
+G04 Aperture Definitions*
+G04 ===================================================*
+%ADD10HALFCIRCLE*%
+%ADD20HALFCIRCLE*%
+%ADD30HALFCIRCLE*%
+
+
+
+G04 ===================================================*
+G04 Program*
+G04 ===================================================*
+
+G01*
+
+G04 ---------------------------------------------------*
+G04 The following code should produce similar outputs. *
+G04 That is, 2 half circles side by side.  However,    *
+G04 only the flashes done with D10 are correct. With   *
+G04 the D20, the second aperture flash erases the first*
+G04 which should not happen according to the gerber    *
+G04 file format specifications.  The only difference   *
+G04 between the D10 and D20 flashes are the Y coords.  *
+G04 and the order of the flash statements.             *
+G04 Note: D30 shows one flash (one aperture macro).    *
+G04                                                    *
+G04 See section 4.12.2 of the Ucamco Gerber Format     *
+G04 Specification document for more details on aperture*
+G04 macro exposure modifiers.                          *
+G04 ---------------------------------------------------*
+
+
+D10*
+X500000Y2000000D03*
+X0Y2000000D03*
+
+
+D20*
+X0Y0D03*
+X500000Y0D03*
+
+D30*
+X1500000Y1000000D03*
+
+
+M02*

@@ -34,6 +34,7 @@ set( GERBVIEW_SRCS
     class_gerbview_layer_widget.cpp
     class_gbr_layer_box_selector.cpp
     class_X2_gerber_attributes.cpp
+    clear_gbr_drawlayers.cpp
     controle.cpp
     dcode.cpp
     draw_gerber_screen.cpp
@@ -44,7 +45,7 @@ set( GERBVIEW_SRCS
     gerbview_config.cpp
     gerbview_frame.cpp
     hotkeys.cpp
-    init_gbr_drawlayers.cpp
+    clear_gbr_drawlayers.cpp
     locate.cpp
     menubar.cpp
     onleftclick.cpp

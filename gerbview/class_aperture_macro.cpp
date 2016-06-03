@@ -91,7 +91,7 @@ bool AM_PRIMITIVE::mapExposure( GERBER_DRAW_ITEM* aParent )
             break;
 
         default:
-        case 1:     // exposure always OON
+        case 1:     // exposure always ON
             exposure = true;
             break;
 

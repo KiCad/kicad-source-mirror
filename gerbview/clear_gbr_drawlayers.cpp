@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,8 @@
  */
 
 /**
- * @file init_gbr_drawlayers.cpp
+ * @file clear_gbr_drawlayers.cpp
+ * @brief erase a given or all draw layers, an free memory relative to the cleared layer(s)
  */
 
 #include <fctsys.h>
