@@ -179,9 +179,6 @@ protected:
     /// Flag bits for editing and other uses.
     STATUS_FLAGS  m_Flags;
 
-    // Link to an copy of the item use to save the item's state for undo/redo feature.
-    EDA_ITEM*     m_Image;
-
 private:
 
     void initVars();
@@ -261,8 +258,6 @@ public:
     void SetFlags( STATUS_FLAGS aMask ) { m_Flags |= aMask; }
     void ClearFlags( STATUS_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
     STATUS_FLAGS GetFlags() const { return m_Flags; }
-
-    void SetImage( EDA_ITEM* aItem ) { m_Image = aItem; }
 
     /**
      * Function SetForceVisible

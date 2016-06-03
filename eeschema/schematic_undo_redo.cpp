@@ -102,7 +102,7 @@
 
 
 /* Used if undo / redo command:
- *  swap data between Item and its copy, pointed by its .m_Image member
+ * swap data between Item and its copy, pointed by its picked item link member
  * swapped data is data modified by edition, so not all values are swapped
  */
 

@@ -76,7 +76,6 @@ void EDA_ITEM::initVars()
     Pback       = NULL;     // Linked list: Link (previous struct)
     m_Parent    = NULL;     // Linked list: Link (parent struct)
     m_List      = NULL;     // I am not on any list yet
-    m_Image     = NULL;     // Link to an image copy for undelete or abort command
     m_Flags     = 0;        // flags for editions and other
     SetTimeStamp( 0 );      // Time stamp used for logical links
     m_Status    = 0;
