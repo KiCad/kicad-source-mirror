@@ -31,6 +31,7 @@
 #include <common.h>
 #include <macros.h>
 #include <trigo.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <gr_basic.h>
 
 #include <gerbview.h>
@@ -57,22 +58,17 @@ static wxPoint mapPt( double x, double y, bool isMetric )
     return ret;
 }
 
-/**
- * Function mapExposure
- * translates the first parameter from an aperture macro into a current
- * exposure setting.
- * @param aParent = a GERBER_DRAW_ITEM that handle:
- *    ** m_Exposure A dynamic setting which can change throughout the
- *          reading of the gerber file, and it indicates whether the current tool
- *          is lit or not.
- *    ** m_ImageNegative A dynamic setting which can change throughout the reading
- *          of the gerber file, and it indicates whether the current D codes are to
- *          be interpreted as erasures or not.
- * @return true to draw with current color, false to draw with alt color (erase)
- */
-bool AM_PRIMITIVE::mapExposure( GERBER_DRAW_ITEM* aParent )
+
+bool AM_PRIMITIVE::IsAMPrimitiveExposureOn(GERBER_DRAW_ITEM* aParent) const
 {
-    bool exposure;
+    /*
+     * Some but not all primitives use the first parameter as an exposure control.
+     * Others are always ON.
+     * In a aperture macro shape, a basic primitive with exposure off is a hole in the shape
+     * it is NOT a negative shape
+    */
+    wxASSERT( params.size() && params[0].IsImmediate() );
+
     switch( primitive_id )
     {
     case AMP_CIRCLE:
@@ -81,70 +77,38 @@ bool AM_PRIMITIVE::mapExposure( GERBER_DRAW_ITEM* aParent )
     case AMP_LINE_CENTER:
     case AMP_LINE_LOWER_LEFT:
     case AMP_OUTLINE:
-    case AMP_THERMAL:
     case AMP_POLYGON:
-        // All have an exposure parameter and can return true or false
-        switch( GetExposure(aParent) )
-        {
-        case 0:     // exposure always OFF
-            exposure = false;
-            break;
-
-        default:
-        case 1:     // exposure always ON
-            exposure = true;
-            break;
-
-        case 2:     // reverse exposure
-            exposure = !aParent->GetLayerPolarity();
-        }
+        // All have an exposure parameter and can return a value (0 or 1)
+        return params[0].GetValue( aParent->GetDcodeDescr() ) != 0;
         break;
 
-    case AMP_MOIRE:
+    case AMP_THERMAL:   // Exposure is always on
+    case AMP_MOIRE:     // Exposure is always on
     case AMP_EOF:
     case AMP_UNKNOWN:
     default:
-        return true;    // All have no exposure parameter and must return true (no change for exposure)
+        return 1;       // All have no exposure parameter and are always 0N return true
         break;
     }
-
-    return exposure ^ aParent->m_GerberImageFile->m_ImageNegative;
 }
 
 
-/**
- * Function GetExposure
- * returns the first parameter in integer form.  Some but not all primitives
- * use the first parameter as an exposure control.
- */
-int AM_PRIMITIVE::GetExposure(GERBER_DRAW_ITEM* aParent) const
-{
-    // No D_CODE* for GetValue()
-    wxASSERT( params.size() && params[0].IsImmediate() );
-    return (int) params[0].GetValue( aParent->GetDcodeDescr() );
-}
-
-/**
- * Function DrawBasicShape
- * Draw the primitive shape for flashed items.
- */
 void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
-                                   EDA_RECT* aClipBox,
-                                   wxDC* aDC,
-                                   EDA_COLOR_T aColor, EDA_COLOR_T aAltColor,
-                                   wxPoint aShapePos,
-                                   bool aFilledShape )
+                                   SHAPE_POLY_SET& aShapeBuffer,
+                                   wxPoint aShapePos )
 {
+    #define TO_POLY_SHAPE { aShapeBuffer.NewOutline(); \
+                            for( unsigned jj = 0; jj < polybuffer.size(); jj++ )\
+                                aShapeBuffer.Append( polybuffer[jj].x, polybuffer[jj].y );}
+
+    const int seg_per_circle = 64;   // Number of segments to approximate a circle
+    // Draw the primitive shape for flashed items.
     static std::vector<wxPoint> polybuffer;     // create a static buffer to avoid a lot of memory reallocation
     polybuffer.clear();
 
     wxPoint curPos = aShapePos;
     D_CODE* tool   = aParent->GetDcodeDescr();
     double rotation;
-    if( mapExposure( aParent ) == false )
-    {
-        std::swap( aColor, aAltColor );
-    }
 
     switch( primitive_id )
     {
@@ -158,16 +122,18 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         curPos += mapPt( params[2].GetValue( tool ), params[3].GetValue( tool ), m_GerbMetric );
         curPos = aParent->GetABPosition( curPos );
         int radius = scaletoIU( params[1].GetValue( tool ), m_GerbMetric ) / 2;
-        if( !aFilledShape )
-            GRCircle( aClipBox, aDC, curPos, radius, 0, aColor );
-        else
-            GRFilledCircle( aClipBox, aDC, curPos, radius, aColor );
+
+        TransformCircleToPolygon( aShapeBuffer, curPos, radius, seg_per_circle );
     }
     break;
 
     case AMP_LINE2:
     case AMP_LINE20:        // Line with rectangle ends. (Width, start and end pos + rotation)
     {
+        /* Vector Line, Primitive Code 20.
+         * A vector line is a rectangle defined by its line width, start and end points.
+         * The line ends are rectangular.
+        */
         /* Generated by an aperture macro declaration like:
          * "2,1,0.3,0,0, 0.5, 1.0,-135*"
          * type (2), exposure, width, start.x, start.y, end.x, end.y, rotation
@@ -190,13 +156,15 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
             polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
 
-        GRClosedPoly( aClipBox, aDC,
-                      polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
+        TO_POLY_SHAPE;
     }
     break;
 
     case AMP_LINE_CENTER:
     {
+        /* Center Line, Primitive Code 21
+         * A center line primitive is a rectangle defined by its width, height, and center point
+         */
         /* Generated by an aperture macro declaration like:
          * "21,1,0.3,0.03,0,0,-135*"
          * type (21), exposure, ,width, height, center pos.x, center pos.y, rotation
@@ -206,6 +174,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
 
         // shape rotation:
         rotation = params[5].GetValue( tool ) * 10.0;
+
         if( rotation != 0 )
         {
             for( unsigned ii = 0; ii < polybuffer.size(); ii++ )
@@ -219,8 +188,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
             polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
 
-        GRClosedPoly( aClipBox, aDC,
-                      polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
+        TO_POLY_SHAPE;
     }
     break;
 
@@ -248,8 +216,7 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
             polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
 
-        GRClosedPoly( aClipBox, aDC,
-                      polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
+        TO_POLY_SHAPE;
     }
     break;
 
@@ -259,39 +226,44 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
          * "7, 0,0,1.0,0.3,0.01,-13*"
          * type (7), center.x , center.y, outside diam, inside diam, crosshair thickness, rotation
          * type is not stored in parameters list, so the first parameter is center.x
+         *
+         * The thermal primitive is a ring (annulus) interrupted by four gaps. Exposure is always on.
          */
+        std::vector<wxPoint> subshape_poly;
         curPos += mapPt( params[0].GetValue( tool ), params[1].GetValue( tool ), m_GerbMetric );
-        ConvertShapeToPolygon( aParent, polybuffer );
+        ConvertShapeToPolygon( aParent, subshape_poly );
 
         // shape rotation:
         rotation = params[5].GetValue( tool ) * 10.0;
 
-        // Because a thermal shape has 4 identical sub-shapes, only one is created in polybuffer.
+        // Because a thermal shape has 4 identical sub-shapes, only one is created in subshape_poly.
         // We must draw 4 sub-shapes rotated by 90 deg
-        std::vector<wxPoint> subshape_poly;
         for( int ii = 0; ii < 4; ii++ )
         {
-            subshape_poly = polybuffer;
+            polybuffer = subshape_poly;
             double sub_rotation = rotation + 900 * ii;
-            for( unsigned jj = 0; jj < subshape_poly.size(); jj++ )
-                RotatePoint( &subshape_poly[jj], -sub_rotation );
+
+            for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
+                RotatePoint( &polybuffer[jj], -sub_rotation );
 
             // Move to current position:
-            for( unsigned jj = 0; jj < subshape_poly.size(); jj++ )
+            for( unsigned jj = 0; jj < polybuffer.size(); jj++ )
             {
-                subshape_poly[jj] += curPos;
-                subshape_poly[jj] = aParent->GetABPosition( subshape_poly[jj] );
+                polybuffer[jj] += curPos;
+                polybuffer[jj] = aParent->GetABPosition( polybuffer[jj] );
             }
 
-            GRClosedPoly( aClipBox, aDC,
-                          subshape_poly.size(), &subshape_poly[0], true, aAltColor,
-                          aAltColor );
+            TO_POLY_SHAPE;
         }
     }
     break;
 
-    case AMP_MOIRE:     // A cross hair with n concentric circles
+    case AMP_MOIRE:
     {
+        /* Moiré, Primitive Code 6
+         * The moiré primitive is a cross hair centered on concentric rings (annuli).
+         * Exposure is always on.
+         */
         curPos += mapPt( params[0].GetValue( tool ), params[1].GetValue( tool ),
                          m_GerbMetric );
 
@@ -309,21 +281,14 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         wxPoint center = aParent->GetABPosition( curPos );
         // adjust outerDiam by this on each nested circle
         int diamAdjust = (gap + penThickness); //*2;     //Should we use * 2 ?
+
         for( int i = 0; i < numCircles; ++i, outerDiam -= diamAdjust )
         {
             if( outerDiam <= 0 )
                 break;
-            if( !aFilledShape )
-            {
-                // draw the border of the pen's path using two circles, each as narrow as possible
-                GRCircle( aClipBox, aDC, center, outerDiam / 2, 0, aColor );
-                GRCircle( aClipBox, aDC, center, outerDiam / 2 - penThickness, 0, aColor );
-            }
-            else    // Filled mode
-            {
-                GRCircle( aClipBox, aDC, center,
-                          (outerDiam - penThickness) / 2, penThickness, aColor );
-            }
+
+            TransformRingToPolygon( aShapeBuffer, center,
+                                    (outerDiam - penThickness) / 2, seg_per_circle, penThickness );
         }
 
         // Draw the cross:
@@ -339,13 +304,21 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
             polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
 
-        GRClosedPoly( aClipBox, aDC,
-                      polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
+        TO_POLY_SHAPE;
     }
-    break;
+        break;
 
     case AMP_OUTLINE:
     {
+        /* Outline, Primitive Code 4
+         * An outline primitive is an area enclosed by an n-point polygon defined by its start point and n
+         * subsequent points. The outline must be closed, i.e. the last point must be equal to the start
+         * point. There must be at least one subsequent point (to close the outline).
+         * The outline of the primitive is actually the contour (see 2.6) that consists of linear segments
+         * only, so it must conform to all the requirements described for contours.
+         * Warning: Make no mistake: n is the number of subsequent points, being the number of
+         * vertices of the outline or one less than the number of coordinate pairs.
+        */
         /* Generated by an aperture macro declaration like:
          * "4,1,3,0.0,0.0,0.0,0.5,0.5,0.5,0.5,0.0,-25"
          * type(4), exposure, corners count, corner1.x, corner.1y, ..., rotation
@@ -376,12 +349,15 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
             polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
 
-        GRClosedPoly( aClipBox, aDC,
-                      polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
+        TO_POLY_SHAPE;
     }
-    break;
+        break;
 
-    case AMP_POLYGON:   // Is a regular polygon
+    case AMP_POLYGON:
+        /* Polygon, Primitive Code 5
+         * A polygon primitive is a regular polygon defined by the number of vertices n, the center point
+         * and the diameter of the circumscribed circle
+        */
         /* Generated by an aperture macro declaration like:
          * "5,1,0.6,0,0,0.5,25"
          * type(5), exposure, vertices count, pox.x, pos.y, diameter, rotation
@@ -399,8 +375,9 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
             polybuffer[ii] += curPos;
             polybuffer[ii] = aParent->GetABPosition( polybuffer[ii] );
         }
-        GRClosedPoly( aClipBox, aDC,
-                      polybuffer.size(), &polybuffer[0], aFilledShape, aColor, aColor );
+
+        TO_POLY_SHAPE;
+
         break;
 
     case AMP_EOF:
@@ -718,43 +695,54 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 }
 
 
-/**
+/*
  * Function DrawApertureMacroShape
  * Draw the primitive shape for flashed items.
  * When an item is flashed, this is the shape of the item
  */
 void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent,
                                              EDA_RECT* aClipBox, wxDC* aDC,
-                                             EDA_COLOR_T aColor, EDA_COLOR_T aAltColor,
+                                             EDA_COLOR_T aColor,
                                              wxPoint aShapePos, bool aFilledShape )
 {
+    SHAPE_POLY_SET shapeBuffer;
+    SHAPE_POLY_SET holeBuffer;
+    bool hasHole = false;
+
     for( AM_PRIMITIVES::iterator prim_macro = primitives.begin();
          prim_macro != primitives.end(); ++prim_macro )
     {
-        prim_macro->DrawBasicShape( aParent, aClipBox, aDC,
-                                    aColor, aAltColor,
-                                    aShapePos,
-                                    aFilledShape );
-    }
-}
+        if( prim_macro->IsAMPrimitiveExposureOn( aParent ) )
+            prim_macro->DrawBasicShape( aParent, shapeBuffer, aShapePos );
+        else
+        {
+            prim_macro->DrawBasicShape( aParent, holeBuffer, aShapePos );
 
-/* Function HasNegativeItems
- * return true if this macro has at least one aperture primitives
- * that must be drawn in background color
- * used to optimize screen refresh
- */
-bool APERTURE_MACRO::HasNegativeItems( GERBER_DRAW_ITEM* aParent )
-{
-    for( AM_PRIMITIVES::iterator prim_macro = primitives.begin();
-         prim_macro != primitives.end(); ++prim_macro )
+            if( holeBuffer.OutlineCount() )     // we have a new hole in shape: remove the hole
+            {
+                shapeBuffer.BooleanSubtract( holeBuffer, SHAPE_POLY_SET::PM_FAST );
+                holeBuffer.RemoveAllContours();
+                hasHole = true;
+            }
+        }
+    }
+
+    if( shapeBuffer.OutlineCount() == 0 )
+        return;
+
+    // If a hole is defined inside a polygon, we must fracture the polygon
+    // to be able to drawn it (i.e link holes by overlapping edges)
+    if( hasHole )
+        shapeBuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+    for( int ii = 0; ii < shapeBuffer.OutlineCount(); ii++ )
     {
-        if( prim_macro->mapExposure( aParent ) == false )   // = is negative
-            return true;
+        SHAPE_LINE_CHAIN& poly = shapeBuffer.Outline( ii );
+
+        GRClosedPoly( aClipBox, aDC,
+                      poly.PointCount(), (wxPoint*)&poly.Point( 0 ), aFilledShape, aColor, aColor );
     }
-
-    return false;
 }
-
 
 /** GetShapeDim
  * Calculate a value that can be used to evaluate the size of text

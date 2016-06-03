@@ -152,7 +152,6 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 
 void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
                                 EDA_RECT* aClipBox, wxDC* aDC, EDA_COLOR_T aColor,
-                                EDA_COLOR_T aAltColor,
                                 wxPoint aShapePos, bool aFilledShape )
 {
     int radius;
@@ -160,7 +159,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
     switch( m_Shape )
     {
     case APT_MACRO:
-        GetMacro()->DrawApertureMacroShape( aParent, aClipBox, aDC, aColor, aAltColor,
+        GetMacro()->DrawApertureMacroShape( aParent, aClipBox, aDC, aColor,
                                             aShapePos, aFilledShape);
         break;
 

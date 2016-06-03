@@ -36,6 +36,8 @@
 #include <base_struct.h>
 #include <class_am_param.h>
 
+class SHAPE_POLY_SET;
+
 /*
  *  An aperture macro defines a complex shape and is a list of aperture primitives.
  *  Each aperture primitive defines a simple shape (circle, rect, regular polygon...)
@@ -52,6 +54,10 @@
  *  21,1,$1-$3,$2-$3,0-$1/2-$4,0-$2/2-$4,0*
  *  For the aperture primitive, parameters $1 to $3 will be defined in ADD command,
  *  and $4 is defined inside the macro
+ *
+ *  Each basic shape can be a positive shape or a negative shape.
+ *  a negative shape is "local" to the whole shape.
+ *  It must be seen like a hole in the shape, and not like a standard negative object.
  */
 
 /**
@@ -100,42 +106,16 @@ public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
     ~AM_PRIMITIVE() {}
 
     /**
-     * Function GetExposure
-     * returns the first parameter in integer form.  Some but not all primitives
-     * use the first parameter as an exposure control.
+     * Function IsAMPrimitiveExposureOn
+     * @return true if the first parameter is not 0 (it can be only 0 or 1).
+     * Some but not all primitives use the first parameter as an exposure control.
+     * Others are always ON.
+     * In a aperture macro shape, a basic primitive with exposure off is a hole in the shape
+     * it is NOT a negative shape
      */
-    int  GetExposure( GERBER_DRAW_ITEM* aParent ) const;
-
-    /**
-     * Function mapExposure
-     * translates the first parameter from an aperture macro into a current
-     * exposure setting.
-     * @param aParent = a GERBER_DRAW_ITEM that handle:
-     *    ** m_Exposure A dynamic setting which can change throughout the
-     *          reading of the gerber file, and it indicates whether the current tool
-     *          is lit or not.
-     *    ** m_ImageNegative A dynamic setting which can change throughout the reading
-     *          of the gerber file, and it indicates whether the current D codes are to
-     *          be interpreted as erasures or not.
-     * @return true to draw with current color, false to draw with alt color (erase)
-     */
-    bool mapExposure( GERBER_DRAW_ITEM* aParent );
+    bool  IsAMPrimitiveExposureOn( GERBER_DRAW_ITEM* aParent ) const;
 
     /* Draw functions: */
-
-    /**
-     * Function DrawBasicShape
-     * Draw the primitive shape for flashed items.
-     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
-     * @param aClipBox = DC clip box (NULL is no clip)
-     * @param aDC = device context
-     * @param aColor = the normal color to use
-     * @param aAltColor = the color used to draw with "reverse" exposure mode (used in aperture macros only)
-     * @param aShapePos = the actual shape position
-     * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
-     */
-    void DrawBasicShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                         EDA_COLOR_T aColor, EDA_COLOR_T aAltColor, wxPoint aShapePos, bool aFilledShape );
 
     /** GetShapeDim
      * Calculate a value that can be used to evaluate the size of text
@@ -149,6 +129,15 @@ public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
      */
     int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
 
+    /**
+     * Function drawBasicShape
+     * Draw (in fact generate the actual polygonal shape of) the primitive shape of an aperture macro instance.
+     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
+     * @param aShapeBuffer = a SHAPE_POLY_SET to put the shape converted to a polygon
+     * @param aShapePos = the actual shape position
+     */
+    void DrawBasicShape( GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET& aShapeBuffer,
+                         wxPoint aShapePos );
 private:
 
     /**
@@ -201,13 +190,12 @@ struct APERTURE_MACRO
      * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
      * @param aClipBox = DC clip box (NULL is no clip)
      * @param aDC = device context
-     * @param aColor = the normal color to use
-     * @param aAltColor = the color used to draw with "reverse" exposure mode (used in aperture macros only)
+     * @param aColor = the color of shape
      * @param aShapePos = the actual shape position
      * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
     void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
-                                 EDA_COLOR_T aColor, EDA_COLOR_T aAltColor, wxPoint aShapePos, bool aFilledShape );
+                                 EDA_COLOR_T aColor, wxPoint aShapePos, bool aFilledShape );
 
     /**
      * Function GetShapeDim
@@ -222,16 +210,6 @@ struct APERTURE_MACRO
      * @return a dimension, or -1 if no dim to calculate
      */
     int  GetShapeDim( GERBER_DRAW_ITEM* aParent );
-
-    /**
-     * Function HasNegativeItems
-     * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
-     * @return true if this macro has at least one shape (using aperture primitives)
-     *    must be drawn in background color
-     * used to optimize screen refresh (when no items are in background color
-     * refresh can be faster)
-     */
-    bool HasNegativeItems( GERBER_DRAW_ITEM* aParent );
 };
 
 

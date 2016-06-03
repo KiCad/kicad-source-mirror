@@ -41,7 +41,7 @@
  * @param aRadius = the radius of the circle
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
  * Note: the polygon is inside the circle, so if you want to have the polygon
- * outside the circle, you should give aRadius calculated with a corrrection factor
+ * outside the circle, you should give aRadius calculated with a correction factor
  */
 void TransformCircleToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                wxPoint aCenter, int aRadius,

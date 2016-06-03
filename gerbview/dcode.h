@@ -165,13 +165,11 @@ public:
      * @param aClipBox = DC clip box (NULL is no clip)
      * @param aDC = device context
      * @param aColor = the normal color to use
-     * @param aAltColor = the color used to draw with "reverse" exposure mode (used in
-     *                    aperture macros only)
      * @param aShapePos = the actual shape position
      * @param aFilledShape = true to draw in filled mode, false to draw in sketch mode
      */
     void DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
-                           wxDC* aDC, EDA_COLOR_T aColor, EDA_COLOR_T aAltColor,
+                           wxDC* aDC, EDA_COLOR_T aColor,
                            wxPoint aShapePos, bool aFilledShape );
 
     /**

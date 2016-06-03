@@ -242,26 +242,7 @@ bool GERBER_DRAW_ITEM::HasNegativeItems()
     bool isClear = m_LayerNegative ^ m_GerberImageFile->m_ImageNegative;
 
     // if isClear is true, this item has negative shape
-    // but if isClear is true, and if this item use an aperture macro definition,
-    // we must see if this aperture macro uses a negative shape.
-    if( isClear )
-        return true;
-
-    // see for a macro def
-    D_CODE* dcodeDescr = GetDcodeDescr();
-
-    if( dcodeDescr == NULL )
-        return false;
-
-    if( m_Shape ==  GBR_SPOT_MACRO )
-    {
-        APERTURE_MACRO* macro = dcodeDescr->GetMacro();
-
-        if( macro )     // macro == NULL should not occurs
-            return macro->HasNegativeItems( this );
-    }
-
-    return false;
+    return isClear;
 }
 
 
@@ -270,7 +251,6 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
 {
     // used when a D_CODE is not found. default D_CODE to draw a flashed item
     static D_CODE dummyD_CODE( 0 );
-    EDA_COLOR_T   color, alt_color;
     bool          isFilled;
     int           radius;
     int           halfPenWidth;
@@ -280,14 +260,12 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     if( d_codeDescr == NULL )
         d_codeDescr = &dummyD_CODE;
 
-    color = m_GerberImageFile->GetPositiveDrawColor();
+    EDA_COLOR_T color = m_GerberImageFile->GetPositiveDrawColor();
 
     if( aDrawMode & GR_HIGHLIGHT )
         ColorChangeHighlightFlag( &color, !(aDrawMode & GR_AND) );
 
     ColorApplyHighlightFlag( &color );
-
-    alt_color = aDrawOptions->m_NegativeDrawColor;
 
     /* isDark is true if flash is positive and should use a drawing
      *   color other than the background color, else use the background color
@@ -298,7 +276,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     if( !isDark )
     {
         // draw in background color ("negative" color)
-        std::swap( color, alt_color );
+        color = aDrawOptions->m_NegativeDrawColor;
     }
 
     GRSetDrawMode( aDC, aDrawMode );
@@ -368,7 +346,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDra
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
         isFilled = aDrawOptions->m_DisplayFlashedItemsFill;
-        d_codeDescr->DrawFlashedShape( this, aPanel->GetClipBox(), aDC, color, alt_color,
+        d_codeDescr->DrawFlashedShape( this, aPanel->GetClipBox(), aDC, color,
                                        m_Start, isFilled );
         break;
 
