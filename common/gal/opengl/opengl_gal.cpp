@@ -1501,53 +1501,32 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
         GLenum err = glewInit();
 
         if( GLEW_OK != err )
-        {
             error( (const char*) glewGetErrorString( err ) );
-            return;
-        }
 
         // Check the OpenGL version (minimum 2.1 is required)
-        if( !GLEW_VERSION_2_1 )
-        {
+        else if( !GLEW_VERSION_2_1 )
             error( "OpenGL 2.1 or higher is required!" );
-            return;
-        }
 
         // Framebuffers have to be supported
-        if( !GLEW_EXT_framebuffer_object )
-        {
+        else if( !GLEW_EXT_framebuffer_object )
             error( "Framebuffer objects are not supported!" );
-            return;
-        }
 
         // Vertex buffer has to be supported
-        if( !GLEW_ARB_vertex_buffer_object )
-        {
+        else if( !GLEW_ARB_vertex_buffer_object )
             error( "Vertex buffer objects are not supported!" );
-            return;
-        }
 
         // Prepare shaders
-        if( !m_gal->shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
-        {
+        else if( !m_gal->shader.LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
             error( "Cannot compile vertex shader!" );
-            return;
-        }
 
-        if( !m_gal->shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
-        {
+        else if( !m_gal->shader.LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
             error( "Cannot compile fragment shader!" );
-            return;
-        }
 
-        if( !m_gal->shader.Link() )
-        {
+        else if( !m_gal->shader.Link() )
             error( "Cannot link the shaders!" );
-            return;
-        }
 
+        // Check if video card supports textures big enough to fit font atlas
         int maxTextureSize;
-
         glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
 
         if( maxTextureSize < (int) bitmap_font.width || maxTextureSize < (int) bitmap_font.height )
