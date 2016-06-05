@@ -559,7 +559,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
     {
         wxString msg;
         msg.Printf( wxT( "G%0.2d command not handled" ), G_command );
-        ReportMessage( msg );
+        AddMessageToList( msg );
         return false;
     }
     }
@@ -620,10 +620,6 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             case GERB_INTERPOL_ARC_POS:
                 gbritem = m_Drawings.GetLast();
 
-                //               D( printf( "Add arc poly %d,%d to %d,%d fill %d interpol %d 360_enb %d\n",
-                //                          m_PreviousPos.x, m_PreviousPos.y, m_CurrentPos.x,
-                //                          m_CurrentPos.y, m_PolygonFillModeState,
-//                           m_Iterpolation, m_360Arc_enbl ); )
                 fillArcPOLY( gbritem, m_PreviousPos,
                              m_CurrentPos, m_IJPos,
                              ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ? false : true,
@@ -632,10 +628,6 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
 
             default:
                 gbritem = m_Drawings.GetLast();
-
-//                D( printf( "Add poly edge %d,%d to %d,%d fill %d\n",
-//                           m_PreviousPos.x, m_PreviousPos.y,
-//                           m_CurrentPos.x, m_CurrentPos.y, m_Iterpolation ); )
 
                 gbritem->m_Start = m_PreviousPos;       // m_Start is used as temporary storage
                 if( gbritem->m_PolyCorners.size() == 0 )
@@ -686,9 +678,6 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 gbritem = new GERBER_DRAW_ITEM( this );
                 m_Drawings.Append( gbritem );
 
-//                D( printf( "Add line %d,%d to %d,%d\n",
-//                           m_PreviousPos.x, m_PreviousPos.y,
-//                            m_CurrentPos.x, m_CurrentPos.y ); )
                 fillLineGBRITEM( gbritem, dcode, m_PreviousPos,
                                  m_CurrentPos, size, GetLayerParams().m_LayerNegative );
                 StepAndRepeatItem( *gbritem );
@@ -715,7 +704,7 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
             default:
                 msg.Printf( wxT( "RS274D: DCODE Command: interpol error (type %X)" ),
                             m_Iterpolation );
-                ReportMessage( msg );
+                AddMessageToList( msg );
                 break;
             }
 

@@ -97,8 +97,8 @@ private:
     excellon_state m_State;         // state of excellon file analysis
     bool           m_SlotOn;        // true during an oblong drill definition
 
-public: EXCELLON_IMAGE( GERBVIEW_FRAME* aParent, int layer ) :
-        GERBER_FILE_IMAGE( aParent, layer )
+public: EXCELLON_IMAGE( int layer ) :
+        GERBER_FILE_IMAGE( layer )
     {
         m_State  = READ_HEADER_STATE;
         m_SlotOn = false;
@@ -114,7 +114,14 @@ public: EXCELLON_IMAGE( GERBVIEW_FRAME* aParent, int layer ) :
     }
 
 
-    bool Read_EXCELLON_File( FILE* aFile, const wxString& aFullFileName );
+    /**
+     * Read and load a drill (EXCELLON format) file.
+     * @param aFullFileName = the full filename of the Gerber file
+     * when the file cannot be loaded
+     * Warning and info messages are stored in m_Messages
+     * @return bool if OK, false if the gerber file was not loaded
+     */
+    bool LoadFile( const wxString& aFullFileName );
 
 private:
     bool Execute_HEADER_Command( char*& text );

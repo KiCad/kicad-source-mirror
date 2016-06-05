@@ -215,7 +215,16 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         for( unsigned i=0;  i<limit;  ++i, ++layer )
         {
             setActiveLayer( layer );
-            LoadGerberFiles( aFileSet[i] );
+
+            // Try to guess the type of file by its ext
+            // if it is .drl (Kicad files), it is a drill file
+            wxFileName fn( aFileSet[i] );
+            wxString ext = fn.GetExt();
+
+            if( ext == "drl" )
+                LoadExcellonFiles( aFileSet[i] );
+            else
+                LoadGerberFiles( aFileSet[i] );
         }
     }
 
@@ -424,7 +433,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
         if( gerber == NULL )
             continue;
 
-        if( gerber->UsedDcodeNumber() == 0 )
+        if( gerber->GetDcodesCount() == 0 )
             continue;
 
         if( layer == curr_layer )
@@ -501,7 +510,7 @@ void GERBVIEW_FRAME::UpdateTitleAndInfo()
 
     SetTitle( text );
 
-    gerber->DisplayImageInfo();
+    gerber->DisplayImageInfo( this );
 
     // Display Image Name and Layer Name (from the current gerber data):
     text.Printf( _( "Image name: '%s'  Layer name: '%s'" ),

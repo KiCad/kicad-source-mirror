@@ -31,6 +31,7 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <macros.h>
+#include <convert_to_biu.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -88,9 +89,8 @@ void GERBER_LAYER::ResetDefaultValues()
 }
 
 
-GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( GERBVIEW_FRAME* aParent, int aLayer )
+GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer )
 {
-    m_parent = aParent;
     m_GraphicLayer = aLayer;        // Graphic layer Number
     m_IsVisible    = true;          // must be drawn
     m_PositiveDrawColor  = WHITE;   // The color used to draw positive items for this image
@@ -215,6 +215,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
         m_FilesList[ii] = NULL;
 }
 
+
 /* Function HasNegativeItems
  * return true if at least one item must be drawn in background color
  * used to optimize screen refresh
@@ -243,7 +244,7 @@ bool GERBER_FILE_IMAGE::HasNegativeItems()
     return m_hasNegativeItems == 1;
 }
 
-int GERBER_FILE_IMAGE::UsedDcodeNumber()
+int GERBER_FILE_IMAGE::GetDcodesCount()
 {
     int count = 0;
 
@@ -270,29 +271,6 @@ void GERBER_FILE_IMAGE::InitToolTable()
     }
 
     m_aperture_macros.clear();
-}
-
-
-/**
- * Function ReportMessage
- * Add a message (a string) in message list
- * for instance when reading a Gerber file
- * @param aMessage = the straing to add in list
- */
-void GERBER_FILE_IMAGE::ReportMessage( const wxString aMessage )
-{
-    m_parent->ReportMessage( aMessage );
-}
-
-
-/**
- * Function ClearMessageList
- * Clear the message list
- * Call it before reading a Gerber file
- */
-void GERBER_FILE_IMAGE::ClearMessageList()
-{
-    m_parent->ClearMessageList();
 }
 
 
@@ -340,40 +318,41 @@ void GERBER_FILE_IMAGE::StepAndRepeatItem( const GERBER_DRAW_ITEM& aItem )
  * These parameters are valid for the entire file, and must set only once
  * (If more than once, only the last value is used)
  */
-void GERBER_FILE_IMAGE::DisplayImageInfo( void )
+void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
 {
     wxString msg;
 
-    m_parent->ClearMsgPanel();
+    aMainFrame->ClearMsgPanel();
 
     // Display Image name (Image specific)
-    m_parent->AppendMsgPanel( _( "Image name" ), m_ImageName, CYAN );
+    aMainFrame->AppendMsgPanel( _( "Image name" ), m_ImageName, CYAN );
 
     // Display graphic layer number used to draw this Image
     // (not a Gerber parameter but is also image specific)
     msg.Printf( wxT( "%d" ), m_GraphicLayer + 1 );
-    m_parent->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
+    aMainFrame->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
 
     // Display Image rotation (Image specific)
     msg.Printf( wxT( "%d" ), m_ImageRotation );
-    m_parent->AppendMsgPanel( _( "Img Rot." ), msg, CYAN );
+    aMainFrame->AppendMsgPanel( _( "Img Rot." ), msg, CYAN );
 
     // Display Image polarity (Image specific)
     msg = m_ImageNegative ? _("Negative") : _("Normal");
-    m_parent->AppendMsgPanel( _( "Polarity" ), msg, BROWN );
+    aMainFrame->AppendMsgPanel( _( "Polarity" ), msg, BROWN );
 
     // Display Image justification and offset for justification (Image specific)
     msg = m_ImageJustifyXCenter ? _("Center") : _("Normal");
-    m_parent->AppendMsgPanel( _( "X Justify" ), msg, DARKRED );
+    aMainFrame->AppendMsgPanel( _( "X Justify" ), msg, DARKRED );
 
     msg = m_ImageJustifyYCenter ? _("Center") : _("Normal");
-    m_parent->AppendMsgPanel( _( "Y Justify" ), msg, DARKRED );
+    aMainFrame->AppendMsgPanel( _( "Y Justify" ), msg, DARKRED );
 
     if( g_UserUnit == INCHES )
-        msg.Printf( wxT( "X=%f Y=%f" ), (double) m_ImageJustifyOffset.x/10000,
-                                    (double) m_ImageJustifyOffset.y/10000 );
+        msg.Printf( wxT( "X=%f Y=%f" ), Iu2Mils( m_ImageJustifyOffset.x ) / 1000.0,
+                                        Iu2Mils( m_ImageJustifyOffset.y ) / 1000.0 );
     else
-        msg.Printf( wxT( "X=%f Y=%f" ), (double) m_ImageJustifyOffset.x*2.54/1000,
-                                    (double) m_ImageJustifyOffset.y*2.54/1000 );
-    m_parent->AppendMsgPanel( _( "Image Justify Offset" ), msg, DARKRED );
+        msg.Printf( wxT( "X=%f Y=%f" ), Iu2Millimeter( m_ImageJustifyOffset.x ),
+                                        Iu2Millimeter( m_ImageJustifyOffset.y ) );
+
+    aMainFrame->AppendMsgPanel( _( "Image Justify Offset" ), msg, DARKRED );
 }

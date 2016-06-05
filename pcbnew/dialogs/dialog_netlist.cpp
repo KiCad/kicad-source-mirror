@@ -424,7 +424,7 @@ bool DIALOG_NETLIST::verifyFootprints( const wxString&         aNetlistFilename,
             return false;
         }
 
-        std::auto_ptr< NETLIST_READER > nlr( netlistReader );
+        std::unique_ptr< NETLIST_READER > nlr( netlistReader );
         netlistReader->LoadNetlist();
     }
     catch( const IO_ERROR& ioe )

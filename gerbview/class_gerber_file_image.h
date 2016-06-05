@@ -94,7 +94,6 @@ private:
  */
 class GERBER_FILE_IMAGE
 {
-    GERBVIEW_FRAME*    m_parent;                            // the parent GERBVIEW_FRAME (used to display messages...)
     D_CODE*            m_Aperture_List[TOOLS_MAX_COUNT];    ///< Dcode (Aperture) List for this layer (max 999)
     bool               m_Exposure;                          ///< whether an aperture macro tool is flashed on or off
 
@@ -160,6 +159,7 @@ public:
     APERTURE_MACRO_SET m_aperture_macros;                       ///< a collection of APERTURE_MACROS, sorted by name
 
 private:
+    wxArrayString      m_messagesList;                          // A list of messages created when reading a file
     int                m_hasNegativeItems;                      // true if the image is negative or has some negative items
                                                                 // Used to optimize drawing, because when there are no
                                                                 // negative items screen refresh does not need
@@ -169,22 +169,30 @@ private:
                                                                 // 1 = have negative items found
 
 public:
-    GERBER_FILE_IMAGE( GERBVIEW_FRAME* aParent, int layer );
+    GERBER_FILE_IMAGE( int layer );
     virtual ~GERBER_FILE_IMAGE();
+
     void Clear_GERBER_FILE_IMAGE();
-    int  UsedDcodeNumber();
+
+    /**
+     * Read and load a gerber file.
+     * @param aFullFileName = the full filename of the Gerber file
+     * when the file cannot be loaded
+     * Warning and info messages are stored in m_messagesList
+     * @return bool if OK, false if the gerber file was not loaded
+     */
+    bool LoadGerberFile( const wxString& aFullFileName );
+
+    const wxArrayString& GetMessages() const { return m_messagesList; }
+
+    /**
+     * @return the count of Dcode tools in used by the image
+     */
+    int GetDcodesCount();
+
     virtual void ResetDefaultValues();
 
     EDA_COLOR_T GetPositiveDrawColor() const { return m_PositiveDrawColor; }
-
-    /**
-     * Function GetParent
-     * @return the GERBVIEW_FRAME parent of this GERBER_FILE_IMAGE
-     */
-    GERBVIEW_FRAME* GetParent() const
-    {
-        return m_parent;
-    }
 
     /**
      * Function GetItemsList
@@ -210,19 +218,23 @@ public:
     bool HasNegativeItems();
 
     /**
-     * Function ReportMessage
-     * Add a message (a string) in message list
-     * for instance when reading a Gerber file
-     * @param aMessage = the straing to add in list
-     */
-    void    ReportMessage( const wxString aMessage );
-
-    /**
      * Function ClearMessageList
      * Clear the message list
      * Call it before reading a Gerber file
      */
-    void    ClearMessageList();
+    void    ClearMessageList()
+    {
+        m_messagesList.Clear();
+    }
+
+    /**
+     * Function AddMessageToList
+     * Add a message to the message list
+     */
+    void    AddMessageToList( const wxString& aMessage )
+    {
+        m_messagesList.Add( aMessage );
+    }
 
     /**
      * Function InitToolTable
@@ -315,8 +327,9 @@ public:
      * has knowledge about the frame and how and where to put status information
      * about this object into the frame's message panel.
      * Display info about Image Parameters.
+     * @param aMainFrame = the GERBVIEW_FRAME to display messages
      */
-    void DisplayImageInfo( void );
+    void DisplayImageInfo( GERBVIEW_FRAME* aMainFrame );
 };
 
 #endif  // ifndef CLASS_GERBER_FILE_IMAGE_H

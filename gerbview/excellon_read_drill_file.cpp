@@ -157,6 +157,44 @@ static EXCELLON_CMD excellon_G_CmdList[] =
 };
 
 
+bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
+{
+    wxString msg;
+    int layerId = getActiveLayer();      // current layer used in GerbView
+    EXCELLON_IMAGE* drill_Layer = (EXCELLON_IMAGE*) g_GERBER_List.GetGbrImage( layerId );
+
+    if( drill_Layer == NULL )
+    {
+        drill_Layer = new EXCELLON_IMAGE( layerId );
+        layerId = g_GERBER_List.AddGbrImage( drill_Layer, layerId );
+    }
+
+    if( layerId < 0 )
+    {
+        DisplayError( this, _( "No room to load file" ) );
+        return false;
+    }
+
+    // Read the Excellon drill file:
+    bool success = drill_Layer->LoadFile( aFullFileName );
+
+    if( !success )
+    {
+        msg.Printf( _( "File %s not found" ), GetChars( aFullFileName ) );
+        DisplayError( this, msg );
+        return false;
+    }
+
+    // Display errors list
+    if( drill_Layer->GetMessages().size() > 0 )
+    {
+        HTML_MESSAGE_BOX dlg( this, _( "Error reading EXCELLON drill file" ) );
+        dlg.ListSet( drill_Layer->GetMessages() );
+        dlg.ShowModal();
+    }
+    return success;
+}
+
 /*
  * Read a EXCELLON file.
  * Gerber classes are used because there is likeness between Gerber files
@@ -169,63 +207,19 @@ static EXCELLON_CMD excellon_G_CmdList[] =
  *   integer 2.4 format in imperial units,
  *   integer 3.2 or 3.3 format (metric units).
  */
-bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
+
+bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
 {
-    wxString msg;
-    int layerId = getActiveLayer();      // current layer used in GerbView
-    EXCELLON_IMAGE* drill_Layer = (EXCELLON_IMAGE*) g_GERBER_List.GetGbrImage( layerId );
-
-    if( drill_Layer == NULL )
-    {
-        drill_Layer = new EXCELLON_IMAGE( this, layerId );
-        layerId = g_GERBER_List.AddGbrImage( drill_Layer, layerId );
-    }
-
-    if( layerId < 0 )
-    {
-        DisplayError( this, _( "No room to load file" ) );
-        return false;
-    }
-
-    ClearMessageList();
-
-    // Read the Excellon drill file:
-    FILE * file = wxFopen( aFullFileName, wxT( "rt" ) );
-
-    if( file == NULL )
-    {
-        msg.Printf( _( "File %s not found" ), GetChars( aFullFileName ) );
-        DisplayError( this, msg );
-        return false;
-    }
-
-    wxString path = wxPathOnly( aFullFileName );
-
-    if( path != wxEmptyString )
-        wxSetWorkingDirectory( path );
-
-    bool success = drill_Layer->Read_EXCELLON_File( file, aFullFileName );
-
-    // Display errors list
-    if( m_Messages.size() > 0 )
-    {
-        HTML_MESSAGE_BOX dlg( this, _( "Error reading EXCELLON drill file" ) );
-        dlg.ListSet( m_Messages );
-        dlg.ShowModal();
-    }
-    return success;
-}
-
-bool EXCELLON_IMAGE::Read_EXCELLON_File( FILE * aFile,
-                                        const wxString & aFullFileName )
-{
-    wxASSERT( aFile );
-
     // Set the default parmeter values:
     ResetDefaultValues();
+    ClearMessageList();
+
+    m_Current_File = wxFopen( aFullFileName, wxT( "rt" ) );
+
+    if( m_Current_File == NULL )
+        return false;
 
     m_FileName = aFullFileName;
-    m_Current_File = aFile;
 
     LOCALE_IO toggleIo;
 
@@ -284,8 +278,7 @@ bool EXCELLON_IMAGE::Read_EXCELLON_File( FILE * aFile,
             {
                 wxString msg;
                 msg.Printf( wxT( "Unexpected symbol &lt;%c&gt;" ), *text );
-                if( GetParent() )
-                    GetParent()->ReportMessage( msg );
+                AddMessageToList( msg );
             }
                 break;
             }   // End switch
@@ -330,7 +323,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
     if( !cmd )
     {
         msg.Printf( wxT( "Unknown Excellon command &lt;%s&gt;" ), text );
-        ReportMessage( msg );
+        AddMessageToList( msg );
         while( *text )
             text++;
 
@@ -377,7 +370,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         SelectUnits( true );
         if( *text != ',' )
         {
-            ReportMessage( _( "METRIC command has no parameter" ) );
+            AddMessageToList( _( "METRIC command has no parameter" ) );
             break;
         }
         text++;     // skip separator
@@ -395,7 +388,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         SelectUnits( false );
         if( *text != ',' )
         {
-            ReportMessage( _( "INCH command has no parameter" ) );
+            AddMessageToList( _( "INCH command has no parameter" ) );
             break;
         }
         text++;     // skip separator
@@ -423,7 +416,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
     case DRILL_INCREMENTALHEADER:
         if( *text != ',' )
         {
-            ReportMessage( _( "ICI command has no parameter" ) );
+            AddMessageToList( _( "ICI command has no parameter" ) );
             break;
         }
         text++;     // skip separator
@@ -433,7 +426,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         else if( strnicmp( text, "ON", 2 ) == 0 )
             m_Relative = true;
         else
-            ReportMessage( _( "ICI command has incorrect parameter" ) );
+            AddMessageToList( _( "ICI command has incorrect parameter" ) );
         break;
 
     case DRILL_TOOL_CHANGE_STOP:
@@ -486,10 +479,10 @@ bool EXCELLON_IMAGE::readToolInformation( char*& aText )
 
     // Read tool shape
     if( ! *aText )
-        ReportMessage( wxString:: Format(
+        AddMessageToList( wxString:: Format(
                        _( "Tool definition shape not found" ) ) );
     else if( *aText != 'C' )
-        ReportMessage( wxString:: Format(
+        AddMessageToList( wxString:: Format(
                        _( "Tool definition '%c' not supported" ), *aText ) );
     if( *aText )
         aText++;
@@ -544,7 +537,7 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                 {
                     wxString msg;
                     msg.Printf( _( "Tool %d not defined" ), m_Current_Tool );
-                    ReportMessage( msg );
+                    AddMessageToList( msg );
                     return false;
                 }
 
@@ -688,7 +681,7 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
     {
         wxString msg;
         msg.Printf( _( "Unknown Excellon G Code: &lt;%s&gt;" ), GetChars(FROM_UTF8(gcmd)) );
-        ReportMessage( msg );
+        AddMessageToList( msg );
         while( *text )
             text++;
         return false;
