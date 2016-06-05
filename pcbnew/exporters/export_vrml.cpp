@@ -45,7 +45,7 @@
 #include <class_zone.h>
 #include <class_edge_mod.h>
 #include <class_pcb_text.h>
-#include <convert_from_iu.h>
+#include <convert_to_biu.h>
 
 #include "../3d-viewer/modelparsers.h"
 

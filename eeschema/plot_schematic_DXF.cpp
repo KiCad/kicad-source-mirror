@@ -115,7 +115,8 @@ bool DIALOG_PLOT_SCHEMATIC::PlotOneSheetDXF( const wxString&    aFileName,
     const PAGE_INFO&   pageInfo = aScreen->GetPageSettings();
     plotter->SetPageSettings( pageInfo );
     plotter->SetColorMode( getModeColor() );
-    plotter->SetViewport( aPlotOffset, IU_PER_DECIMILS, aScale, false );
+    // Currently, plot units are in decimil
+    plotter->SetViewport( aPlotOffset, IU_PER_MILS/10, aScale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-DXF" ) );

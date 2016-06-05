@@ -36,7 +36,6 @@
 #include <idf_parser.h>
 #include <3d_struct.h>
 #include <build_version.h>
-#include <convert_from_iu.h>
 
 #ifndef PCBNEW
 #define PCBNEW                  // needed to define the right value of Millimeter2iu(x)

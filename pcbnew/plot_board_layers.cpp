@@ -868,7 +868,7 @@ static void initializePlotter( PLOTTER *aPlotter, BOARD * aBoard,
        most of that taken from the options */
     aPlotter->SetPageSettings( *sheet_info );
 
-    aPlotter->SetViewport( offset, IU_PER_DECIMILS, compound_scale,
+    aPlotter->SetViewport( offset, IU_PER_MILS/10, compound_scale,
                            aPlotOpts->GetMirror() );
     // has meaning only for gerber plotter. Must be called only after SetViewport
     aPlotter->SetGerberCoordinatesFormat( aPlotOpts->GetGerberPrecision() );

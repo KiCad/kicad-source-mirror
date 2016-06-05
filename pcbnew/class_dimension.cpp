@@ -231,7 +231,7 @@ void DIMENSION::UpdateHeight()
 
 void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 {
-    const int   arrowz = DMils2iu( 500 );           // size of arrows
+    const int   arrowz = Mils2iu( 50 );             // size of arrows
     int         ii;
     int         measure, deltax, deltay;            // value of the measure on X and Y axes
     int         arrow_up_X  = 0, arrow_up_Y = 0;    // coordinates of arrow line /

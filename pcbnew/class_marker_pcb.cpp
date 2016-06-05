@@ -41,7 +41,7 @@
 
 
 /// Adjust the actual size of markers, when using default shape
-#define SCALING_FACTOR      DMils2iu( 30 )
+#define SCALING_FACTOR      Mils2iu( 3 )
 
 
 MARKER_PCB::MARKER_PCB( BOARD_ITEM* aParent ) :

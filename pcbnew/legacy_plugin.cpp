@@ -238,7 +238,7 @@ static inline char* ReadLine( LINE_READER* rdr, const char* caller )
 
 
 
-using namespace std;    // auto_ptr
+using namespace std;    // unique_ptr
 
 
 static EDA_TEXT_HJUSTIFY_T horizJustify( const char* horizontal )
@@ -401,7 +401,7 @@ BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
         m_board->SetFileName( aFileName );
 
     // delete on exception, iff I own m_board, according to aAppendToMe
-    auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
+    unique_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
     FILE_LINE_READER    reader( aFileName );
 
@@ -433,7 +433,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         if( TESTLINE( "$MODULE" ) )
         {
-            auto_ptr<MODULE>    module( new MODULE( m_board ) );
+            unique_ptr<MODULE>    module( new MODULE( m_board ) );
 
             FPID        fpid;
             std::string fpName = StrPurge( line + SZ( "$MODULE" ) );
@@ -1386,7 +1386,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 
 void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 {
-    auto_ptr<D_PAD> pad( new D_PAD( aModule ) );
+    unique_ptr<D_PAD> pad( new D_PAD( aModule ) );
     char*           line;
     char*           saveptr;
 
@@ -1644,7 +1644,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
         THROW_IO_ERROR( m_error );
     }
 
-    auto_ptr<EDGE_MODULE> dwg( new EDGE_MODULE( aModule, shape ) );    // a drawing
+    unique_ptr<EDGE_MODULE> dwg( new EDGE_MODULE( aModule, shape ) );    // a drawing
 
     const char* data;
 
@@ -1942,7 +1942,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
         $EndDRAWSEGMENT
     */
 
-    auto_ptr<DRAWSEGMENT>   dseg( new DRAWSEGMENT( m_board ) );
+    unique_ptr<DRAWSEGMENT>   dseg( new DRAWSEGMENT( m_board ) );
 
     char*   line;
     char*   saveptr;
@@ -2406,7 +2406,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
     // create an empty NETCLASS without a name, but do not add it to the BOARD
     // yet since that would bypass duplicate netclass name checking within the BOARD.
-    // store it temporarily in an auto_ptr until successfully inserted into the BOARD
+    // store it temporarily in an unique_ptr until successfully inserted into the BOARD
     // just before returning.
     NETCLASSPTR nc = boost::make_shared<NETCLASS>( wxEmptyString );
 
@@ -2475,7 +2475,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
                 // Must have been a name conflict, this is a bad board file.
                 // User may have done a hand edit to the file.
 
-                // auto_ptr will delete nc on this code path
+                // unique_ptr will delete nc on this code path
 
                 m_error.Printf( _( "duplicate NETCLASS name '%s'" ), nc->GetName().GetData() );
                 THROW_IO_ERROR( m_error );
@@ -2491,7 +2491,7 @@ void LEGACY_PLUGIN::loadNETCLASS()
 
 void LEGACY_PLUGIN::loadZONE_CONTAINER()
 {
-    auto_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
+    unique_ptr<ZONE_CONTAINER> zc( new ZONE_CONTAINER( m_board ) );
 
     CPolyLine::HATCH_STYLE outline_hatch = CPolyLine::NO_HATCH;
     bool    sawCorner = false;
@@ -2760,7 +2760,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
 void LEGACY_PLUGIN::loadDIMENSION()
 {
-    auto_ptr<DIMENSION> dim( new DIMENSION( m_board ) );
+    unique_ptr<DIMENSION> dim( new DIMENSION( m_board ) );
 
     char*   line;
     char*   saveptr;
@@ -3079,7 +3079,7 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
     // mm to nanometers.  The deci-mil legacy files have no such "Units" marker
     // so we must assume the file is in deci-mils until told otherwise.
 
-    diskToBiu = IU_PER_DECIMILS;    // BIUs are nanometers
+    diskToBiu = IU_PER_MILS / 10;    // BIUs are nanometers
 }
 
 
@@ -3310,7 +3310,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
         // test first for the $MODULE, even before reading because of INDEX bug.
         if( TESTLINE( "$MODULE" ) )
         {
-            auto_ptr<MODULE>    module( new MODULE( m_owner->m_board ) );
+            unique_ptr<MODULE>    module( new MODULE( m_owner->m_board ) );
 
             std::string         footprintName = StrPurge( line + SZ( "$MODULE" ) );
 

@@ -45,9 +45,9 @@
 #include <pcbnew_id.h>
 
 
-#define ZOOM_FACTOR( x )       ( x * IU_PER_DECIMILS )
-#define DMIL_GRID( x )         wxRealPoint( x * IU_PER_DECIMILS,\
-                                            x * IU_PER_DECIMILS )
+#define ZOOM_FACTOR( x )       ( x * IU_PER_MILS / 10 )
+#define DMIL_GRID( x )         wxRealPoint( x * IU_PER_MILS / 10,\
+                                            x * IU_PER_MILS / 10 )
 #define MM_GRID( x )           wxRealPoint( x * IU_PER_MM,\
                                             x * IU_PER_MM )
 

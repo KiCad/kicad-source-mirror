@@ -109,59 +109,6 @@ void WX_UNIT_TEXT::SetValue( double aValue )
 }
 
 
-/*boost::optional<double> WX_UNIT_TEXT::GetValue( EDA_UNITS_T aUnit ) const
-{
-    if( aUnit == m_units )
-        return GetValue();  // no conversion needed
-
-    switch( m_units )
-    {
-    case MILLIMETRES:
-        switch( aUnit )
-        {
-        case INCHES:
-            iu = Mils2iu( GetValue() * 1000.0 );
-            break;
-
-        case UNSCALED_UNITS:
-            iu = GetValue();
-            break;
-        }
-        break;
-
-    case INCHES:
-        switch( aUnit )
-        {
-        case MILLIMETRES:
-            return Mils2mm( GetValue() * 1000.0 );
-            break;
-
-        case UNSCALED_UNITS:
-            return Mils2iu( GetValue() * 1000.0 );
-            break;
-        }
-        break;
-
-    case UNSCALED_UNITS:
-        switch( aUnit )
-        {
-        case MILLIMETRES:
-            return Iu2Mils( GetValue() ) / 1000.0;
-            break;
-
-//        case INCHES:
-//            return
-//            break;
-        }
-        break;
-    }
-
-    assert( false );        // seems that there are some conversions missing
-
-    return 0.0;
-}*/
-
-
 boost::optional<double> WX_UNIT_TEXT::GetValue() const
 {
     wxString text = m_inputValue->GetValue();

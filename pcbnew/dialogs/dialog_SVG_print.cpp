@@ -34,7 +34,7 @@
 #include <wxBasePcbFrame.h>
 #include <class_pcb_screen.h>
 #include <base_units.h>
-#include <convert_from_iu.h>
+#include <convert_to_biu.h>
 #include <wildcards_and_files_ext.h>
 #include <macros.h>
 #include <reporter.h>

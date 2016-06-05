@@ -208,7 +208,8 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
     HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
 
     plotter->SetPageSettings( aPageInfo );
-    plotter->SetViewport( aPlot0ffset, IU_PER_DECIMILS, aScale, false );
+    // Currently, plot units are in decimil
+    plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-HPGL" ) );

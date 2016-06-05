@@ -188,6 +188,7 @@ void DIALOG_PLOT_SCHEMATIC::setupPlotPagePDF( PLOTTER * aPlotter, SCH_SCREEN* aS
     double  scaley  = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
     double  scale   = std::min( scalex, scaley );
     aPlotter->SetPageSettings( plotPage );
-    aPlotter->SetViewport( wxPoint( 0, 0 ), IU_PER_DECIMILS, scale, false );
+    // Currently, plot units are in decimil
+    aPlotter->SetViewport( wxPoint( 0, 0 ), IU_PER_MILS/10, scale, false );
 }
 

@@ -33,8 +33,8 @@
 #include <gerbview_id.h>
 
 
-#define DMIL_GRID( x ) wxRealPoint( x * IU_PER_DECIMILS,\
-                                    x * IU_PER_DECIMILS )
+#define MIL_GRID( x ) wxRealPoint( x * IU_PER_MILS,\
+                                    x * IU_PER_MILS)
 #define MM_GRID( x )   wxRealPoint( x * IU_PER_MM,\
                                     x * IU_PER_MM )
 
@@ -45,46 +45,46 @@
 */
 static const double gbrZoomList[] =
 {
-    ZOOM_FACTOR( 0.5 ),
-    ZOOM_FACTOR( 0.75 ),
+    ZOOM_FACTOR( 0.05 ),
+    ZOOM_FACTOR( 0.075 ),
+    ZOOM_FACTOR( 0.1 ),
+    ZOOM_FACTOR( 0.15 ),
+    ZOOM_FACTOR( 0.2 ),
+    ZOOM_FACTOR( 0.3 ),
+    ZOOM_FACTOR( 0.45 ),
+    ZOOM_FACTOR( 0.7 ),
     ZOOM_FACTOR( 1.0 ),
     ZOOM_FACTOR( 1.5 ),
-    ZOOM_FACTOR( 2.0 ),
-    ZOOM_FACTOR( 3.0 ),
-    ZOOM_FACTOR( 4.5 ),
-    ZOOM_FACTOR( 7.0 ),
-    ZOOM_FACTOR( 10.0 ),
+    ZOOM_FACTOR( 2.2 ),
+    ZOOM_FACTOR( 3.5 ),
+    ZOOM_FACTOR( 5.0 ),
+    ZOOM_FACTOR( 8.0 ),
+    ZOOM_FACTOR( 11.0 ),
     ZOOM_FACTOR( 15.0 ),
-    ZOOM_FACTOR( 22.0 ),
+    ZOOM_FACTOR( 20.0 ),
     ZOOM_FACTOR( 35.0 ),
     ZOOM_FACTOR( 50.0 ),
-    ZOOM_FACTOR( 80.0 ),
-    ZOOM_FACTOR( 110.0 ),
-    ZOOM_FACTOR( 150.0 ),
-    ZOOM_FACTOR( 200.0 ),
-    ZOOM_FACTOR( 350.0 ),
-    ZOOM_FACTOR( 500.0 ),
-    ZOOM_FACTOR( 1000.0 ),
-    ZOOM_FACTOR( 2000.0 )
+    ZOOM_FACTOR( 100.0 ),
+    ZOOM_FACTOR( 200.0 )
 };
 
 
 // Default grid sizes for PCB editor screens.
 static GRID_TYPE gbrGridList[] =
 {
-    // predefined grid list in 0.0001 inches
-    { ID_POPUP_GRID_LEVEL_1000,     DMIL_GRID( 1000 )  },
-    { ID_POPUP_GRID_LEVEL_500,      DMIL_GRID( 500 )   },
-    { ID_POPUP_GRID_LEVEL_250,      DMIL_GRID( 250 )   },
-    { ID_POPUP_GRID_LEVEL_200,      DMIL_GRID( 200 )   },
-    { ID_POPUP_GRID_LEVEL_100,      DMIL_GRID( 100 )   },
-    { ID_POPUP_GRID_LEVEL_50,       DMIL_GRID( 50 )    },
-    { ID_POPUP_GRID_LEVEL_25,       DMIL_GRID( 25 )    },
-    { ID_POPUP_GRID_LEVEL_20,       DMIL_GRID( 20 )    },
-    { ID_POPUP_GRID_LEVEL_10,       DMIL_GRID( 10 )    },
-    { ID_POPUP_GRID_LEVEL_5,        DMIL_GRID( 5 )     },
-    { ID_POPUP_GRID_LEVEL_2,        DMIL_GRID( 2 )     },
-    { ID_POPUP_GRID_LEVEL_1,        DMIL_GRID( 1 )     },
+    // predefined grid list in mils
+    { ID_POPUP_GRID_LEVEL_1000,     MIL_GRID( 100 )    },
+    { ID_POPUP_GRID_LEVEL_500,      MIL_GRID( 50 )     },
+    { ID_POPUP_GRID_LEVEL_250,      MIL_GRID( 25 )     },
+    { ID_POPUP_GRID_LEVEL_200,      MIL_GRID( 20 )     },
+    { ID_POPUP_GRID_LEVEL_100,      MIL_GRID( 10 )     },
+    { ID_POPUP_GRID_LEVEL_50,       MIL_GRID( 5 )      },
+    { ID_POPUP_GRID_LEVEL_25,       MIL_GRID( 2.5 )    },
+    { ID_POPUP_GRID_LEVEL_20,       MIL_GRID( 2 )      },
+    { ID_POPUP_GRID_LEVEL_10,       MIL_GRID( 1 )      },
+    { ID_POPUP_GRID_LEVEL_5,        MIL_GRID( 0.5 )    },
+    { ID_POPUP_GRID_LEVEL_2,        MIL_GRID( 0.2 )    },
+    { ID_POPUP_GRID_LEVEL_1,        MIL_GRID( 0.1 )    },
 
     // predefined grid list in mm
     { ID_POPUP_GRID_LEVEL_5MM,      MM_GRID( 5.0 )     },
@@ -109,8 +109,8 @@ GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) :
     for( unsigned i = 0; i < DIM( gbrGridList );  ++i )
         AddGrid( gbrGridList[i] );
 
-    // Set the working grid size to a reasonable value (in 1/10000 inch)
-    SetGrid( DMIL_GRID( 500 ) );
+    // Set the working grid size to a reasonable value
+    SetGrid( MIL_GRID( 50 ) );
     SetZoom( ZOOM_FACTOR( 350 ) );  // a default value for zoom
 
     m_Active_Layer       = 0;       // default active layer = first graphic layer

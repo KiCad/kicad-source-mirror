@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,6 @@
   #define IU_PER_MM        1e6     // Pcbnew IU is 1 nanometer.
  #endif
  #define IU_PER_MILS       (IU_PER_MM * 0.0254)
- #define IU_PER_DECIMILS   (IU_PER_MM * 0.00254)
 
 /// Convert mils to PCBNEW internal units (iu).
 inline int Mils2iu( int mils )
@@ -55,17 +54,9 @@ inline int Mils2iu( int mils )
     return int( x < 0 ? x - 0.5 : x + 0.5 );
 }
 
-/// Convert deci-mils to PCBNEW internal units (iu).
-inline int DMils2iu( int dmils )
-{
-    double x = dmils * IU_PER_DECIMILS;
-    return int( x < 0 ? x - 0.5 : x + 0.5 );
-}
-
 #elif defined (PL_EDITOR)
 #define IU_PER_MM           1e3 // internal units in micron (should be enough)
 #define IU_PER_MILS       (IU_PER_MM * 0.0254)
-#define IU_PER_DECIMILS   (IU_PER_MM * 0.00254)
 /// Convert mils to page layout editor internal units (iu).
 inline int Mils2iu( int mils )
 {
@@ -73,15 +64,7 @@ inline int Mils2iu( int mils )
     return int( x < 0 ? x - 0.5 : x + 0.5 );
 }
 
-/// Convert deci-mils to page layout editor internal units (iu).
-inline int DMils2iu( int dmils )
-{
-    double x = dmils * IU_PER_DECIMILS;
-    return int( x < 0 ? x - 0.5 : x + 0.5 );
-}
-
-#else            // Eeschema and anything else.
-#define IU_PER_DECIMILS     0.1
+#elif defined (EESCHEMA)            // Eeschema
 #define IU_PER_MILS         1.0
 #define IU_PER_MM           (IU_PER_MILS / 0.0254)
 
@@ -89,7 +72,15 @@ inline int Mils2iu( int mils )
 {
     return mils;
 }
+#else
+// Here, we do not know the value of internal units: do not define
+// conversion functions (They do not have meaning
+#define UNKNOWN_IU
 #endif
+
+#ifndef UNKNOWN_IU
+// Other definitions used in a few files
+#define MM_PER_IU (1/IU_PER_MM)
 
 /// Convert mm to internal units (iu).
 inline int Millimeter2iu( double mm )
@@ -97,5 +88,17 @@ inline int Millimeter2iu( double mm )
     return (int) ( mm < 0 ? mm * IU_PER_MM - 0.5 : mm * IU_PER_MM + 0.5);
 }
 
+/// Convert mm to internal units (iu).
+inline double Iu2Millimeter( int iu )
+{
+    return iu / IU_PER_MM;
+}
+
+/// Convert mm to internal units (iu).
+inline double Iu2Mils( int iu )
+{
+    return iu / IU_PER_MILS;
+}
+#endif
 
 #endif  // CONVERT_TO_BIU_H_

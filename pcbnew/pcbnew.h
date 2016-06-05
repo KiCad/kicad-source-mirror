@@ -33,7 +33,7 @@
 #include <fctsys.h>         // wxWidgets include.
 #include <base_struct.h>    // IS_DRAGGED and IN_EDIT definitions.
 #include <dlist.h>
-#include <convert_to_biu.h> // to define DMils2iu() conversion function
+#include <convert_to_biu.h> // to define Mils2iu() conversion function
 #include <layers_id_colors_and_visibility.h>
 
 // Arcs are approximated by segments: define the number of segments per 360 deg (KiCad uses 0.1
@@ -59,9 +59,9 @@ enum ENDPOINT_T {
 #define DIM_ANCRE_MODULE 3       // Anchor size (footprint center)
 
 
-#define TEXTS_MIN_SIZE  DMils2iu( 50 )      ///< Minimum text size in Pcbnew units value (50 * 0.0001 mils)
-#define TEXTS_MAX_SIZE  DMils2iu( 10000 )   ///< Maximum text size in Pcbnew units value (1 inch) )
-#define TEXTS_MAX_WIDTH DMils2iu( 5000 )    ///< Maximum text width in Pcbnew units value (0.5 inches)
+#define TEXTS_MIN_SIZE  Mils2iu( 5 )        ///< Minimum text size in Pcbnew units value (5 mils)
+#define TEXTS_MAX_SIZE  Mils2iu( 1000 )     ///< Maximum text size in Pcbnew units value (1 inch) )
+#define TEXTS_MAX_WIDTH Mils2iu( 500 )      ///< Maximum text width in Pcbnew units value (0.5 inches)
 #define MIN_DRAW_WIDTH  1                   ///< Minimum trace drawing width in pixels.
 
 

@@ -45,7 +45,6 @@
 #include <class_board.h>
 #include <class_drawsegment.h>
 #include <class_pcb_text.h>
-#include <convert_from_iu.h>
 #include <drw_base.h>
 
 // minimum bulge value before resorting to a line segment;

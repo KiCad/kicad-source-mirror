@@ -29,7 +29,7 @@
 
 #include <dialog_dxf_import.h>
 #include <kiface_i.h>
-#include <convert_from_iu.h>
+#include <convert_to_biu.h>
 #include <class_pcb_layer_box_selector.h>
 
 #include <class_board.h>

@@ -220,9 +220,8 @@ static std::string fmt_mask( LSET aSet )
 // These are the export origin (the auxiliary axis)
 static int GencadOffsetX, GencadOffsetY;
 
-/* GerbTool chokes on units different than INCH so this is the conversion
- *  factor */
-const static double SCALE_FACTOR = 10000.0 * IU_PER_DECIMILS;
+// GerbTool chokes on units different than INCH so this is the conversion factor
+const static double SCALE_FACTOR = 1000.0 * IU_PER_MILS;
 
 
 /* Two helper functions to calculate coordinates of modules in gencad values
@@ -782,7 +781,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 
         if( net->GetNetname() == wxEmptyString ) // dummy netlist (no connection)
         {
-            wxString msg; msg << wxT( "NoConnection" ) << NbNoConn++;
+            msg.Printf( "NoConnection%d", NbNoConn++ );
         }
 
         if( net->GetNet() <= 0 )  // dummy netlist (no connection)
@@ -1243,8 +1242,12 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
                     break;
                 }
 
+                case S_POLYGON:
+                    // Not exported (TODO)
+                    break;
+
                 default:
-                    DisplayError( NULL, wxT( "Type Edge Module invalid." ) );
+                    DisplayError( NULL, wxString::Format( "Type Edge Module %d invalid.", PtStruct->Type() ) );
                     break;
                 }
             }

@@ -41,7 +41,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <polygon_test_point_inside.h>
-#include <convert_from_iu.h>
+#include <convert_to_biu.h>
 #include <boost/foreach.hpp>
 #include <convert_basic_shapes_to_polygon.h>
 
@@ -53,9 +53,9 @@ D_PAD::D_PAD( MODULE* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
     m_NumPadName          = 0;
-    m_Size.x = m_Size.y   = DMils2iu( 600 ); // Default pad size 60 mils.
-    m_Drill.x = m_Drill.y = DMils2iu( 300 ); // Default drill size 30 mils.
-    m_Orient              = 0;               // Pad rotation in 1/10 degrees.
+    m_Size.x = m_Size.y   = Mils2iu( 60 );  // Default pad size 60 mils.
+    m_Drill.x = m_Drill.y = Mils2iu( 30 );  // Default drill size 30 mils.
+    m_Orient              = 0;              // Pad rotation in 1/10 degrees.
     m_LengthPadToDie      = 0;
 
     if( m_Parent  &&  m_Parent->Type() == PCB_MODULE_T )

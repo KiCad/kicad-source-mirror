@@ -156,7 +156,9 @@ void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 
     wxPoint plot_offset;
     const double scale = 1.0;
-    plotter->SetViewport( plot_offset, IU_PER_DECIMILS, scale, false );
+
+    // Currently, plot units are in decimil
+    plotter->SetViewport( plot_offset, IU_PER_MILS/10, scale, false );
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-SVG" ) );

@@ -31,7 +31,6 @@
 #include <common.h>
 #include <confirm.h>
 #include <macros.h>
-#include <convert_from_iu.h>
 #include <trigo.h>
 #include <3d_struct.h>
 #include <class_title_block.h>
@@ -346,7 +345,7 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
 
     T token;
 
-    std::auto_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
+    std::unique_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
 
     NeedSYMBOLorNUMBER();
     n3D->SetShape3DName( FromUTF8() );
@@ -419,7 +418,7 @@ BOARD_ITEM* PCB_PARSER::Parse() throw( IO_ERROR, PARSE_ERROR )
     // MODULEs can be prefixed with an initial block of single line comments and these
     // are kept for Format() so they round trip in s-expression form.  BOARDs might
     // eventually do the same, but currently do not.
-    std::auto_ptr<wxArrayString> initial_comments( ReadCommentLines() );
+    std::unique_ptr<wxArrayString> initial_comments( ReadCommentLines() );
 
     token = CurTok();
 
@@ -1323,7 +1322,7 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
         // Must have been a name conflict, this is a bad board file.
         // User may have done a hand edit to the file.
 
-        // auto_ptr will delete nc on this code path
+        // unique_ptr will delete nc on this code path
 
         wxString error;
         error.Printf( _( "duplicate NETCLASS name '%s' in file <%s> at line %d, offset %d" ),
@@ -1341,7 +1340,7 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
     wxPoint pt;
-    std::auto_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
+    std::unique_ptr< DRAWSEGMENT > segment( new DRAWSEGMENT( NULL ) );
 
     switch( CurTok() )
     {
@@ -1502,7 +1501,7 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    std::auto_ptr<TEXTE_PCB> text( new TEXTE_PCB( m_board ) );
+    std::unique_ptr<TEXTE_PCB> text( new TEXTE_PCB( m_board ) );
     NeedSYMBOLorNUMBER();
 
     text->SetText( FromUTF8() );
@@ -1570,7 +1569,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
 
     T token;
 
-    std::auto_ptr<DIMENSION> dimension( new DIMENSION( NULL ) );
+    std::unique_ptr<DIMENSION> dimension( new DIMENSION( NULL ) );
 
     dimension->SetValue( parseBoardUnits( "dimension value" ) );
     NeedLEFT();
@@ -1743,7 +1742,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     T        token;
     FPID     fpid;
 
-    std::auto_ptr<MODULE> module( new MODULE( m_board ) );
+    std::unique_ptr<MODULE> module( new MODULE( m_board ) );
 
     module->SetInitialComments( aInitialComments );
 
@@ -1956,7 +1955,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         case T_pad:
             {
                 D_PAD*  pad = parseD_PAD( module.get() );
-                wxPoint pt = pad->GetPos0();
+                pt = pad->GetPos0();
 
                 RotatePoint( &pt, module->GetOrientation() );
                 pad->SetPosition( pt + module->GetPosition() );
@@ -1993,7 +1992,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 
     T token = NextTok();
 
-    std::auto_ptr<TEXTE_MODULE> text( new TEXTE_MODULE( NULL ) );
+    std::unique_ptr<TEXTE_MODULE> text( new TEXTE_MODULE( NULL ) );
 
     switch( token )
     {
@@ -2078,7 +2077,7 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    std::auto_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
+    std::unique_ptr< EDGE_MODULE > segment( new EDGE_MODULE( NULL ) );
 
     switch( CurTok() )
     {
@@ -2244,7 +2243,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent ) throw( IO_ERROR, PARSE_ERROR )
     wxSize  sz;
     wxPoint pt;
 
-    std::auto_ptr< D_PAD > pad( new D_PAD( aParent ) );
+    std::unique_ptr< D_PAD > pad( new D_PAD( aParent ) );
 
     NeedSYMBOLorNUMBER();
     pad->SetPadName( FromUTF8() );
@@ -2498,7 +2497,7 @@ TRACK* PCB_PARSER::parseTRACK() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    std::auto_ptr< TRACK > track( new TRACK( m_board ) );
+    std::unique_ptr< TRACK > track( new TRACK( m_board ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2564,7 +2563,7 @@ VIA* PCB_PARSER::parseVIA() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    std::auto_ptr< VIA > via( new VIA( m_board ) );
+    std::unique_ptr< VIA > via( new VIA( m_board ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -2656,7 +2655,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
     // bigger scope since each filled_polygon is concatenated in here
     SHAPE_POLY_SET pts;
 
-    std::auto_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
+    std::unique_ptr< ZONE_CONTAINER > zone( new ZONE_CONTAINER( m_board ) );
 
     zone->SetPriority( 0 );
 
@@ -3014,7 +3013,7 @@ PCB_TARGET* PCB_PARSER::parsePCB_TARGET() throw( IO_ERROR, PARSE_ERROR )
     wxPoint pt;
     T token;
 
-    std::auto_ptr< PCB_TARGET > target( new PCB_TARGET( NULL ) );
+    std::unique_ptr< PCB_TARGET > target( new PCB_TARGET( NULL ) );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {

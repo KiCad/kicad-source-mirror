@@ -53,7 +53,7 @@
 #include <module_editor_frame.h>
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
-#include <convert_from_iu.h>
+#include <convert_to_biu.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>

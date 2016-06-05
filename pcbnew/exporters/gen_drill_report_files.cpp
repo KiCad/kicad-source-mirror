@@ -79,7 +79,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
     case PLOT_FORMAT_GERBER:
         offset  = GetOffset();
         plotter = new GERBER_PLOTTER();
-        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+        plotter->SetViewport( offset, IU_PER_MILS/10, scale, false );
         plotter->SetGerberCoordinatesFormat( 5 );   // format x.5 unit = mm
         break;
 
@@ -90,7 +90,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         hpgl_plotter->SetPenNumber( plot_opts.GetHPGLPenNum() );
         hpgl_plotter->SetPenSpeed( plot_opts.GetHPGLPenSpeed() );
         plotter->SetPageSettings( page_info );
-        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+        plotter->SetViewport( offset, IU_PER_MILS/10, scale, false );
     }
         break;
 
@@ -133,7 +133,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
             plotter = new PS_PLOTTER;
 
         plotter->SetPageSettings( pageA4 );
-        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+        plotter->SetViewport( offset, IU_PER_MILS/10, scale, false );
     }
         break;
 
@@ -142,7 +142,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
         plotter = dxf_plotter;
         plotter->SetPageSettings( page_info );
-        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+        plotter->SetViewport( offset, IU_PER_MILS/10, scale, false );
     }
         break;
 
@@ -151,7 +151,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
         SVG_PLOTTER* svg_plotter = new SVG_PLOTTER;
         plotter = svg_plotter;
         plotter->SetPageSettings( page_info );
-        plotter->SetViewport( offset, IU_PER_DECIMILS, scale, false );
+        plotter->SetViewport( offset, IU_PER_MILS/10, scale, false );
     }
         break;
     }
