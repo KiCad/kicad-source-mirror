@@ -41,7 +41,7 @@ const wxChar NETCLASS::Default[] = wxT( "Default" );
 
 // Initial values for netclass initialization
 const int NETCLASS::DEFAULT_CLEARANCE  = Millimeter2iu( 0.2 ); // track to track and track to pads clearance
-const int NETCLASS::DEFAULT_VIA_DIAMETER  = Millimeter2iu( 0.6 );
+const int NETCLASS::DEFAULT_VIA_DIAMETER  = Millimeter2iu( 0.8 );
 const int NETCLASS::DEFAULT_VIA_DRILL  = Millimeter2iu( 0.4 );
 const int NETCLASS::DEFAULT_UVIA_DIAMETER = Millimeter2iu( 0.3 );
 const int NETCLASS::DEFAULT_UVIA_DRILL = Millimeter2iu( 0.1 );
