@@ -532,9 +532,12 @@ bool ROUTER_TOOL::finishInteractive()
     m_router->StopRouting();
 
     // Save the recent changes in the undo buffer
-    m_frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
-    m_router->ClearUndoBuffer();
-    m_frame->OnModify();
+    if( m_router->GetUndoBuffer().GetCount() > 0 )
+    {
+        m_frame->SaveCopyInUndoList( m_router->GetUndoBuffer(), UR_UNSPECIFIED );
+        m_router->ClearUndoBuffer();
+        m_frame->OnModify();
+    }
 
     m_ctls->SetAutoPan( false );
     m_ctls->ForceCursorPosition( false );
