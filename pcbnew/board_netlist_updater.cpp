@@ -677,7 +677,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     if( m_deleteSinglePadNets )
         deleteSinglePadNets();
 
-  	if ( !m_isDryRun )
+    if ( !m_isDryRun )
     {
         m_frame->SaveCopyInUndoList( *m_undoList, UR_UNSPECIFIED, wxPoint(0, 0) );
         m_frame->OnModify();

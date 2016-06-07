@@ -50,7 +50,7 @@ static inline wxString FROM_UTF8( const char* cstring )
     if( line.IsEmpty() )  // happens when cstring is not a valid UTF8 sequence
         line = wxConvCurrent->cMB2WC( cstring );    // try to use locale conversion
 
-        return line;
+    return line;
 }
 
 

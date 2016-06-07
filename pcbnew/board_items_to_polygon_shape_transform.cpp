@@ -230,11 +230,10 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
 
             if( outline->GetLayer() != aLayer )
                 break;
-                outline->TransformShapeWithClearanceToPolygon( aCornerBuffer,
-                                                        0,
-                                                        aCircleToSegmentsCount,
-                                                        aCorrectionFactor );
-                break;
+
+            outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, 0,
+                                                    aCircleToSegmentsCount, aCorrectionFactor );
+            break;
 
             default:
                 break;
