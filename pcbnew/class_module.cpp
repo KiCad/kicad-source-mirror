@@ -919,9 +919,14 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 
 unsigned int MODULE::ViewGetLOD( int aLayer ) const
 {
-    // Currently there is only one layer, so there is nothing to check
-//    if( aLayer == ITEM_GAL_LAYER( ANCHOR_VISIBLE ) )
+    int layer = ( m_Layer == F_Cu ) ? MOD_FR_VISIBLE :
+                ( m_Layer == B_Cu ) ? MOD_BK_VISIBLE : ANCHOR_VISIBLE;
+
+    // Currently it is only for anchor layer
+    if( m_view->IsLayerVisible( ITEM_GAL_LAYER( layer ) ) )
         return 30;
+
+    return std::numeric_limits<unsigned int>::max();
 }
 
 
