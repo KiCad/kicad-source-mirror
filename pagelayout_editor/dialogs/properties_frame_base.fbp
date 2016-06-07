@@ -42,7 +42,7 @@
             <property name="minimum_size"></property>
             <property name="name">PANEL_PROPERTIES_BASE</property>
             <property name="pos"></property>
-            <property name="size">315,782</property>
+            <property name="size">324,782</property>
             <property name="subclass"></property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -386,7 +386,7 @@
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
-                                                            <property name="maxlength"></property>
+                                                            <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
@@ -836,7 +836,7 @@
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
-                                                    <property name="maxlength"></property>
+                                                    <property name="maxlength">0</property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
                                                     <property name="minimum_size"></property>
@@ -1579,7 +1579,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -1764,7 +1764,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -2043,7 +2043,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -2228,7 +2228,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -2658,7 +2658,7 @@
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
                                             <property name="maximum_size"></property>
-                                            <property name="maxlength"></property>
+                                            <property name="maxlength">0</property>
                                             <property name="min_size"></property>
                                             <property name="minimize_button">0</property>
                                             <property name="minimum_size"></property>
@@ -2940,7 +2940,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size">-1,-1</property>
@@ -3125,7 +3125,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -3517,7 +3517,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -3702,7 +3702,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -4085,7 +4085,7 @@
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
-                                                            <property name="maxlength"></property>
+                                                            <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
@@ -4445,7 +4445,7 @@
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
-                                                            <property name="maxlength"></property>
+                                                            <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
@@ -4632,7 +4632,7 @@
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
-                                                    <property name="maxlength"></property>
+                                                    <property name="maxlength">0</property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
                                                     <property name="minimum_size"></property>
@@ -4990,7 +4990,7 @@
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
-                                                            <property name="maxlength"></property>
+                                                            <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
@@ -5175,7 +5175,7 @@
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
-                                                            <property name="maxlength"></property>
+                                                            <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
@@ -5371,7 +5371,7 @@
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
-                                                            <property name="maxlength"></property>
+                                                            <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
@@ -5556,7 +5556,7 @@
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
-                                                            <property name="maxlength"></property>
+                                                            <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
@@ -5932,7 +5932,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -6117,7 +6117,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -6313,7 +6313,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -6498,7 +6498,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -6957,7 +6957,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -7142,7 +7142,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -7338,7 +7338,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -7523,7 +7523,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>

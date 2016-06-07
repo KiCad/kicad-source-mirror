@@ -681,7 +681,7 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
 
     m_startSnapPoint = getViewControls()->GetCursorPosition();
 
-    std::auto_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( board, aMode ) );
+    std::unique_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( board, aMode ) );
     SetContextMenu( ctxMenu.get() );
 
     // Main loop: keep receiving events

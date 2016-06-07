@@ -816,7 +816,7 @@ void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
         BOOST_FOREACH( PNS_OBSTACLE& obs, obstacles )
         {
             int clearance = aNode->GetClearance( item, obs.m_item );
-            std::auto_ptr<PNS_ITEM> tmp( obs.m_item->Clone() );
+            std::unique_ptr<PNS_ITEM> tmp( obs.m_item->Clone() );
             tmp->Mark( MK_VIOLATION );
             DisplayItem( tmp.get(), -1, clearance );
             aRemoved.push_back( obs.m_item );

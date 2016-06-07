@@ -487,7 +487,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
      */
     TestDuplicateSheetNames( true );
 
-    std::auto_ptr<NETLIST_OBJECT_LIST> objectsConnectedList( m_parent->BuildNetListBase() );
+    std::unique_ptr<NETLIST_OBJECT_LIST> objectsConnectedList( m_parent->BuildNetListBase() );
 
     // Reset the connection type indicator
     objectsConnectedList->ResetConnectionsType();

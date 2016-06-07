@@ -575,8 +575,9 @@ EDIMENSION::EDIMENSION( CPTREE& aDimension )
     y3      = attribs.get<double>( "y3" );
     layer   = attribs.get<int>( "layer" );
 
-    opt_string dimensionType = attribs.get_optional<string>( "dtype" );
-    if(!dimensionType)
+    opt_string dimType = attribs.get_optional<string>( "dtype" );
+
+    if(!dimType)
     {
         // default type is parallel
     }

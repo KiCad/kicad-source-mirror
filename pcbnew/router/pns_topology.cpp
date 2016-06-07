@@ -98,7 +98,7 @@ bool PNS_TOPOLOGY::LeadingRatLine( const PNS_LINE* aTrack, SHAPE_LINE_CHAIN& aRa
     if( !track.PointCount() )
         return false;
 
-    std::auto_ptr<PNS_NODE> tmpNode( m_world->Branch() );
+    std::unique_ptr<PNS_NODE> tmpNode( m_world->Branch() );
     tmpNode->Add( &track );
 
     PNS_JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2012-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@
 
 #include <set>
 
-//#include <pgm_base.h>
 #include <kiface_i.h>
 #include <search_stack.h>
 #include <pcb_netlist.h>
@@ -181,7 +180,8 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
 }
 
 
-FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname, const MODULE* aFootprint, bool aOverwrite )
+FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
+                                    const MODULE* aFootprint, bool aOverwrite )
 {
     const ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
@@ -193,9 +193,10 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname, con
 
         wxString fpname = aFootprint->GetFPID().GetFootprintName();
 
-        std::auto_ptr<MODULE>   m( row->plugin->FootprintLoad( row->GetFullURI( true ), fpname, row->GetProperties() ) );
+        std::unique_ptr<MODULE> footprint( row->plugin->FootprintLoad( row->GetFullURI( true ),
+                                           fpname, row->GetProperties() ) );
 
-        if( m.get() )
+        if( footprint.get() )
             return SAVE_SKIPPED;
     }
 

@@ -124,7 +124,7 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
     if( !prepareForNetlist() )
         return false;
 
-    std::auto_ptr<NETLIST_OBJECT_LIST> connectedItemsList( BuildNetListBase() );
+    std::unique_ptr<NETLIST_OBJECT_LIST> connectedItemsList( BuildNetListBase() );
 
     bool success = WriteNetListFile( connectedItemsList.release(), aFormat,
                                      aFullFileName, aNetlistOptions, aReporter );
@@ -170,7 +170,7 @@ void NETLIST_OBJECT_LIST::SortListbySheet()
 NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase()
 {
     // I own this list until I return it to the new owner.
-    std::auto_ptr<NETLIST_OBJECT_LIST> ret( new NETLIST_OBJECT_LIST() );
+    std::unique_ptr<NETLIST_OBJECT_LIST> ret( new NETLIST_OBJECT_LIST() );
 
     // Creates the flattened sheet list:
     SCH_SHEET_LIST aSheets( g_RootSheet );

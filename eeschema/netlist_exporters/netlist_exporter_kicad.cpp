@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,27 +33,11 @@
 
 bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
-#if 0
-    // Prepare list of nets generation
-    for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
-        m_masterList->GetItem( ii )->m_Flag = 0;
-
-    std::auto_ptr<XNODE> xroot( makeRoot() );
-
     try
     {
         FILE_OUTPUTFORMATTER formatter( aOutFileName );
-
-        xroot->Format( &formatter, 0 );
-    }
-#else
-    try
-    {
-        FILE_OUTPUTFORMATTER formatter( aOutFileName );
-
         Format( &formatter, GNL_ALL );
     }
-#endif
 
     catch( const IO_ERROR& ioe )
     {
@@ -71,7 +55,7 @@ void NETLIST_EXPORTER_KICAD::Format( OUTPUTFORMATTER* aOut, int aCtl )
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
         m_masterList->GetItem( ii )->m_Flag = 0;
 
-    std::auto_ptr<XNODE> xroot( makeRoot( aCtl ) );
+    std::unique_ptr<XNODE> xroot( makeRoot( aCtl ) );
 
     xroot->Format( aOut, 0 );
 }
