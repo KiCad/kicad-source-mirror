@@ -217,7 +217,8 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
             if( !found )
             {
                 // Create a clean copy of the parent module
-                MODULE* clone = new MODULE( *static_cast<MODULE*>( item ) );
+                MODULE* orig = static_cast<MODULE*>( item );
+                MODULE* clone = new MODULE( *orig );
                 clone->SetParent( GetBoard() );
 
                 // Clear current flags (which can be temporary set by a current edit command)
@@ -233,6 +234,8 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                 ITEM_PICKER picker( item, UR_CHANGED );
                 picker.SetLink( clone );
                 commandToUndo->PushItem( picker );
+
+                orig->SetLastEditTime();
             }
             else
             {
