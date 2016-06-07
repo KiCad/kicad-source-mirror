@@ -44,7 +44,7 @@ public:
     friend class CACHED_CONTAINER;
     friend class VERTEX_MANAGER;
 
-    VERTEX_ITEM( const VERTEX_MANAGER& aManager );
+    explicit VERTEX_ITEM( const VERTEX_MANAGER& aManager );
     virtual ~VERTEX_ITEM();
 
     /**

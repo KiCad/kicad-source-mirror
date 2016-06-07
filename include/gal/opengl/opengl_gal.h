@@ -285,12 +285,12 @@ private:
     GROUPS_MAP              groups;                 ///< Stores informations about VBO objects (groups)
     unsigned int            groupCounter;           ///< Counter used for generating keys for groups
     VERTEX_MANAGER*         currentManager;         ///< Currently used VERTEX_MANAGER (for storing VERTEX_ITEMs)
-    VERTEX_MANAGER          cachedManager;          ///< Container for storing cached VERTEX_ITEMs
-    VERTEX_MANAGER          nonCachedManager;       ///< Container for storing non-cached VERTEX_ITEMs
-    VERTEX_MANAGER          overlayManager;         ///< Container for storing overlaid VERTEX_ITEMs
+    VERTEX_MANAGER*         cachedManager;          ///< Container for storing cached VERTEX_ITEMs
+    VERTEX_MANAGER*         nonCachedManager;       ///< Container for storing non-cached VERTEX_ITEMs
+    VERTEX_MANAGER*         overlayManager;         ///< Container for storing overlaid VERTEX_ITEMs
 
     // Framebuffer & compositing
-    OPENGL_COMPOSITOR       compositor;             ///< Handles multiple rendering targets
+    OPENGL_COMPOSITOR*      compositor;             ///< Handles multiple rendering targets
     unsigned int            mainBuffer;             ///< Main rendering target
     unsigned int            overlayBuffer;          ///< Auxiliary rendering target (for menus etc.)
     RENDER_TARGET           currentTarget;          ///< Current rendering target

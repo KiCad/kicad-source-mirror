@@ -61,10 +61,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
     mouseListener( aMouseListener ),
-    paintListener( aPaintListener ),
-    cachedManager( true ),
-    nonCachedManager( false ),
-    overlayManager( false )
+    paintListener( aPaintListener )
 {
     if( glMainContext == NULL )
     {
@@ -81,9 +78,14 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     runTest();
 
     // Make VBOs use shaders
-    cachedManager.SetShader( *shader );
-    nonCachedManager.SetShader( *shader );
-    overlayManager.SetShader( *shader );
+    cachedManager = new VERTEX_MANAGER( true );
+    cachedManager->SetShader( *shader );
+    nonCachedManager = new VERTEX_MANAGER( false );
+    nonCachedManager->SetShader( *shader );
+    overlayManager = new VERTEX_MANAGER( false );
+    overlayManager->SetShader( *shader );
+
+    compositor = new OPENGL_COMPOSITOR;
 
     // Initialize the flags
     isFramebufferInitialized = false;
@@ -132,7 +134,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 
-    currentManager = &nonCachedManager;
+    currentManager = nonCachedManager;
 }
 
 
@@ -140,9 +142,14 @@ OPENGL_GAL::~OPENGL_GAL()
 {
     GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext );
 
+    glFlush();
     gluDeleteTess( tesselator );
     ClearCache();
-    glFlush();
+
+    delete compositor;
+    delete cachedManager;
+    delete nonCachedManager;
+    delete overlayManager;
 
     // Are destroying the last GAL instance?
     if( glPrivContext == glMainContext )
@@ -191,9 +198,9 @@ void OPENGL_GAL::BeginDrawing()
     if( !isFramebufferInitialized )
     {
         // Prepare rendering target buffers
-        compositor.Initialize();
-        mainBuffer = compositor.CreateBuffer();
-        overlayBuffer = compositor.CreateBuffer();
+        compositor->Initialize();
+        mainBuffer = compositor->CreateBuffer();
+        overlayBuffer = compositor->CreateBuffer();
 
         isFramebufferInitialized = true;
     }
@@ -232,12 +239,12 @@ void OPENGL_GAL::BeginDrawing()
     SetStrokeColor( strokeColor );
 
     // Remove all previously stored items
-    nonCachedManager.Clear();
-    overlayManager.Clear();
+    nonCachedManager->Clear();
+    overlayManager->Clear();
 
-    cachedManager.BeginDrawing();
-    nonCachedManager.BeginDrawing();
-    overlayManager.BeginDrawing();
+    cachedManager->BeginDrawing();
+    nonCachedManager->BeginDrawing();
+    overlayManager->BeginDrawing();
 
     if( !isBitmapFontInitialized )
     {
@@ -279,7 +286,7 @@ void OPENGL_GAL::BeginDrawing()
     }
 
     // Unbind buffers - set compositor for direct drawing
-    compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
+    compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
 #ifdef __WXDEBUG__
     prof_end( &totalRealTime );
@@ -297,20 +304,20 @@ void OPENGL_GAL::EndDrawing()
 #endif /* __WXDEBUG__ */
 
     // Cached & non-cached containers are rendered to the same buffer
-    compositor.SetBuffer( mainBuffer );
-    nonCachedManager.EndDrawing();
-    cachedManager.EndDrawing();
+    compositor->SetBuffer( mainBuffer );
+    nonCachedManager->EndDrawing();
+    cachedManager->EndDrawing();
 
     // Overlay container is rendered to a different buffer
-    compositor.SetBuffer( overlayBuffer );
-    overlayManager.EndDrawing();
+    compositor->SetBuffer( overlayBuffer );
+    overlayManager->EndDrawing();
 
     // Be sure that the framebuffer is not colorized (happens on specific GPU&drivers combinations)
     glColor4d( 1.0, 1.0, 1.0, 1.0 );
 
     // Draw the remaining contents, blit the rendering targets to the screen, swap the buffers
-    compositor.DrawBuffer( mainBuffer );
-    compositor.DrawBuffer( overlayBuffer );
+    compositor->DrawBuffer( mainBuffer );
+    compositor->DrawBuffer( overlayBuffer );
     blitCursor();
 
     SwapBuffers();
@@ -326,13 +333,13 @@ void OPENGL_GAL::EndDrawing()
 void OPENGL_GAL::BeginUpdate()
 {
     GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext );
-    cachedManager.Map();
+    cachedManager->Map();
 }
 
 
 void OPENGL_GAL::EndUpdate()
 {
-    cachedManager.Unmap();
+    cachedManager->Unmap();
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 }
 
@@ -843,7 +850,7 @@ void OPENGL_GAL::DrawGrid()
         return;
 
     SetTarget( TARGET_NONCACHED );
-    compositor.SetBuffer( mainBuffer );
+    compositor->SetBuffer( mainBuffer );
 
     // Draw the grid
     // For the drawing the start points, end points and increments have
@@ -942,7 +949,7 @@ void OPENGL_GAL::ResizeScreen( int aWidth, int aHeight )
 #endif
 
     // Resize framebuffers
-    compositor.Resize( aWidth * scaleFactor, aHeight * scaleFactor );
+    compositor->Resize( aWidth * scaleFactor, aHeight * scaleFactor );
     isFramebufferInitialized = false;
 
     wxGLCanvas::SetSize( aWidth, aHeight );
@@ -969,7 +976,7 @@ void OPENGL_GAL::Flush()
 void OPENGL_GAL::ClearScreen( const COLOR4D& aColor )
 {
     // Clear screen
-    compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
+    compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
     glClearColor( aColor.r, aColor.g, aColor.b, aColor.a );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
@@ -1027,7 +1034,7 @@ int OPENGL_GAL::BeginGroup()
 {
     isGrouping = true;
 
-    boost::shared_ptr<VERTEX_ITEM> newItem( new VERTEX_ITEM( cachedManager ) );
+    boost::shared_ptr<VERTEX_ITEM> newItem( new VERTEX_ITEM( *cachedManager ) );
     int groupNumber = getNewGroupNumber();
     groups.insert( std::make_pair( groupNumber, newItem ) );
 
@@ -1037,26 +1044,26 @@ int OPENGL_GAL::BeginGroup()
 
 void OPENGL_GAL::EndGroup()
 {
-    cachedManager.FinishItem();
+    cachedManager->FinishItem();
     isGrouping = false;
 }
 
 
 void OPENGL_GAL::DrawGroup( int aGroupNumber )
 {
-    cachedManager.DrawItem( *groups[aGroupNumber] );
+    cachedManager->DrawItem( *groups[aGroupNumber] );
 }
 
 
 void OPENGL_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
 {
-    cachedManager.ChangeItemColor( *groups[aGroupNumber], aNewColor );
+    cachedManager->ChangeItemColor( *groups[aGroupNumber], aNewColor );
 }
 
 
 void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
 {
-    cachedManager.ChangeItemDepth( *groups[aGroupNumber], aDepth );
+    cachedManager->ChangeItemDepth( *groups[aGroupNumber], aDepth );
 }
 
 
@@ -1070,7 +1077,7 @@ void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 void OPENGL_GAL::ClearCache()
 {
     groups.clear();
-    cachedManager.Clear();
+    cachedManager->Clear();
 }
 
 
@@ -1092,15 +1099,15 @@ void OPENGL_GAL::SetTarget( RENDER_TARGET aTarget )
     {
     default:
     case TARGET_CACHED:
-        currentManager = &cachedManager;
+        currentManager = cachedManager;
         break;
 
     case TARGET_NONCACHED:
-        currentManager = &nonCachedManager;
+        currentManager = nonCachedManager;
         break;
 
     case TARGET_OVERLAY:
-        currentManager = &overlayManager;
+        currentManager = overlayManager;
         break;
     }
 
@@ -1117,7 +1124,7 @@ RENDER_TARGET OPENGL_GAL::GetTarget() const
 void OPENGL_GAL::ClearTarget( RENDER_TARGET aTarget )
 {
     // Save the current state
-    unsigned int oldTarget = compositor.GetBuffer();
+    unsigned int oldTarget = compositor->GetBuffer();
 
     switch( aTarget )
     {
@@ -1125,18 +1132,18 @@ void OPENGL_GAL::ClearTarget( RENDER_TARGET aTarget )
     default:
     case TARGET_CACHED:
     case TARGET_NONCACHED:
-        compositor.SetBuffer( mainBuffer );
+        compositor->SetBuffer( mainBuffer );
         break;
 
     case TARGET_OVERLAY:
-        compositor.SetBuffer( overlayBuffer );
+        compositor->SetBuffer( overlayBuffer );
         break;
     }
 
-    compositor.ClearBuffer();
+    compositor->ClearBuffer();
 
     // Restore the previous state
-    compositor.SetBuffer( oldTarget );
+    compositor->SetBuffer( oldTarget );
 }
 
 
@@ -1426,7 +1433,7 @@ void OPENGL_GAL::blitCursor()
     if( !isCursorEnabled )
         return;
 
-    compositor.SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
+    compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
     VECTOR2D cursorBegin  = cursorPosition - cursorSize / ( 2 * worldScale );
     VECTOR2D cursorEnd    = cursorPosition + cursorSize / ( 2 * worldScale );
