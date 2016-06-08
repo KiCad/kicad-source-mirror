@@ -633,7 +633,7 @@ void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
     gluTessBeginPolygon( tesselator, &params );
     gluTessBeginContour( tesselator );
 
-    boost::shared_array<GLdouble> points( new GLdouble[3 * aPointList.size()] );
+    std::unique_ptr<GLdouble[]> points( new GLdouble[ 3 * aPointList.size() ] );
     int v = 0;
 
     for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin(); it != aPointList.end(); ++it )
@@ -666,7 +666,7 @@ void OPENGL_GAL::DrawPolygon( const VECTOR2D aPointList[], int aListSize )
     gluTessBeginPolygon( tesselator, &params );
     gluTessBeginContour( tesselator );
 
-    boost::shared_array<GLdouble> points( new GLdouble[3 * aListSize] );
+    std::unique_ptr<GLdouble[]> points( new GLdouble[3 * aListSize] );
     int v = 0;
     const VECTOR2D* ptr = aPointList;
 
