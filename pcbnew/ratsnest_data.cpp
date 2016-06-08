@@ -710,11 +710,12 @@ std::list<RN_NODE_PTR> RN_NET::GetNodes( const BOARD_CONNECTED_ITEM* aItem ) con
 
     case PCB_ZONE_AREA_T:
     {
-        ZONE_DATA_MAP::const_iterator it = m_zones.find( static_cast<const ZONE_CONTAINER*>( aItem ) );
+        ZONE_DATA_MAP::const_iterator itz = m_zones.find( static_cast<const ZONE_CONTAINER*>( aItem ) );
 
-        if( it != m_zones.end() )
+        if( itz != m_zones.end() )
         {
-            const std::deque<RN_POLY>& polys = it->second.m_Polygons;
+            const std::deque<RN_POLY>& polys = itz->second.m_Polygons;
+
             for( std::deque<RN_POLY>::const_iterator it = polys.begin(); it != polys.end(); ++it )
                 nodes.push_back( it->GetNode() );
         }

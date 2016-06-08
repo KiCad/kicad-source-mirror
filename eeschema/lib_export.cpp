@@ -59,12 +59,12 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 
     m_mruPath = fn.GetPath();
 
-    std::auto_ptr<PART_LIB> lib;
+    std::unique_ptr<PART_LIB> lib;
 
     try
     {
-        std::auto_ptr<PART_LIB> new_lib( PART_LIB::LoadLibrary( fn.GetFullPath() ) );
-        lib = new_lib;
+        std::unique_ptr<PART_LIB> new_lib( PART_LIB::LoadLibrary( fn.GetFullPath() ) );
+        lib = std::move( new_lib );
     }
     catch( const IO_ERROR& ioe )
     {

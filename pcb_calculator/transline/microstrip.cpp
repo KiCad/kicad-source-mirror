@@ -4,7 +4,7 @@
  * Copyright (C) 2001 Gopal Narayanan <gopal@astro.umass.edu>
  * Copyright (C) 2002 Claudio Girardi <claudio.girardi@ieee.org>
  * Copyright (C) 2005, 2006 Stefan Jahn <stefan@lkcc.org>
- * Modified for Kicad: 2015 jean-pierre.charras
+ * Modified for Kicad: 2015 Jean-Pierre Charras <jp.charras at wanadoo.fr>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -69,11 +69,11 @@ MICROSTRIP::MICROSTRIP() : TRANSLINE()
  */
 double MICROSTRIP::Z0_homogeneous( double u )
 {
-    double f, Z0;
+    double freq, Z0_value;
 
-    f  = 6.0 + (2.0 * M_PI - 6.0) * exp( -pow( 30.666 / u, 0.7528 ) );
-    Z0 = ( ZF0 / (2.0 * M_PI) ) * log( f / u + sqrt( 1.0 + 4.0 / (u * u) ) );
-    return Z0;
+    freq  = 6.0 + (2.0 * M_PI - 6.0) * exp( -pow( 30.666 / u, 0.7528 ) );
+    Z0_value = ( ZF0 / (2.0 * M_PI) ) * log( freq / u + sqrt( 1.0 + 4.0 / (u * u) ) );
+    return Z0_value;
 }
 
 
@@ -386,28 +386,19 @@ void MICROSTRIP::attenuation()
  */
 void MICROSTRIP::mur_eff_ms()
 {
-    double mureff;
-
-    mureff = (2.0 * mur) / ( (1.0 + mur) + ( (1.0 - mur) * pow( ( 1.0 + (10.0 * h / w) ), -0.5 ) ) );
-
-    mur_eff = mureff;
+    mur_eff = (2.0 * mur) / ( (1.0 + mur) + ( (1.0 - mur) * pow( ( 1.0 + (10.0 * h / w) ), -0.5 ) ) );
 }
 
 
-/*
- * synth_width - calculate width given Z0 and e_r
- */
+// synth_width - calculate width given Z0 and e_r
 double MICROSTRIP::synth_width()
 {
     double e_r, a, b;
-    double w_h, w;
+    double w_h, width;
 
+    e_r = 0;//er;
 
-    e_r = er;
-
-
-    a =
-        ( (Z0 / ZF0 / 2 /
+    a = ( (Z0 / ZF0 / 2 /
            M_PI) * sqrt( (e_r + 1) / 2. ) ) + ( (e_r - 1) / (e_r + 1) * ( 0.23 + (0.11 / e_r) ) );
     b = ZF0 / 2 * M_PI / ( Z0 * sqrt( e_r ) );
 
@@ -417,23 +408,16 @@ double MICROSTRIP::synth_width()
     }
     else
     {
-        w_h =
-            (2. /
-             M_PI) *
-            ( b - 1. -
+        w_h = (2. / M_PI) * ( b - 1. -
              log( (2 * b) - 1. ) + ( (e_r - 1) / (2 * e_r) ) * (log( b - 1. ) + 0.39 - 0.61 / e_r) );
     }
 
     if( h > 0.0 )
-    {
-        w = w_h * h;
-        return w;
-    }
+        width = w_h * h;
     else
-    {
-        w = 0;
-    }
-    return w;
+        width = 0;
+
+    return width;
 }
 
 

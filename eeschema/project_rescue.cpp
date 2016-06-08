@@ -317,7 +317,7 @@ class RESCUE_CACHE_CANDIDATE: public RESCUE_CANDIDATE
     LIB_PART* m_cache_candidate;
     LIB_PART* m_lib_candidate;
 
-    static std::auto_ptr<PART_LIB> m_rescue_lib;
+    static std::unique_ptr<PART_LIB> m_rescue_lib;
     static wxFileName m_library_fn;
 
 public:
@@ -403,10 +403,10 @@ public:
         m_library_fn.SetName( fn.GetName() );
         m_library_fn.SetExt( wxT( "lib" ) );
 
-        std::auto_ptr<PART_LIB> rescue_lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA,
+        std::unique_ptr<PART_LIB> rescue_lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA,
                         fn.GetFullPath() ) );
 
-        m_rescue_lib = rescue_lib;
+        m_rescue_lib = std::move( rescue_lib );
     }
 
     virtual bool PerformAction( RESCUER* aRescuer )
@@ -441,7 +441,7 @@ public:
     }
 };
 
-std::auto_ptr<PART_LIB> RESCUE_CACHE_CANDIDATE::m_rescue_lib;
+std::unique_ptr<PART_LIB> RESCUE_CACHE_CANDIDATE::m_rescue_lib;
 wxFileName RESCUE_CACHE_CANDIDATE::m_library_fn;
 
 RESCUER::RESCUER( SCH_EDIT_FRAME& aEditFrame, PROJECT& aProject )
