@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-gerber">
+    <sub-class-of type="text/plain"/>
+    <comment>Gerber File</comment>
+    <glob pattern="*.gbr"/>
+  </mime-type>
+  <mime-type type="application/x-excellon">
+    <sub-class-of type="text/plain"/>
+    <comment>Excellon drill file</comment>
+    <glob pattern="*.drl"/>
+    <magic priority="50">
+      <match value="M48" type="string" offset="0"/>
+    </magic>
+  </mime-type>
+</mime-info>
