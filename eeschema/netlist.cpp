@@ -635,7 +635,7 @@ void NETLIST_OBJECT_LIST::sheetLabelConnect( NETLIST_OBJECT* SheetLabel )
 
         // Propagate Netcode having all the objects of the same Netcode.
         if( ObjetNet->GetNet() )
-            propageNetCode( ObjetNet->GetNet(), SheetLabel->GetNet(), IS_WIRE );
+            propagateNetCode( ObjetNet->GetNet(), SheetLabel->GetNet(), IS_WIRE );
         else
             ObjetNet->SetNet( SheetLabel->GetNet() );
     }
@@ -677,7 +677,7 @@ void NETLIST_OBJECT_LIST::connectBusLabels()
                         LabelInTst->SetNet( Label->GetNet() );
                     else
                         // Merge the 2 net codes, they are connected.
-                        propageNetCode( LabelInTst->GetNet(), Label->GetNet(), IS_WIRE );
+                        propagateNetCode( LabelInTst->GetNet(), Label->GetNet(), IS_WIRE );
                 }
             }
         }
@@ -685,7 +685,7 @@ void NETLIST_OBJECT_LIST::connectBusLabels()
 }
 
 
-void NETLIST_OBJECT_LIST::propageNetCode( int aOldNetCode, int aNewNetCode, bool aIsBus )
+void NETLIST_OBJECT_LIST::propagateNetCode( int aOldNetCode, int aNewNetCode, bool aIsBus )
 {
     if( aOldNetCode == aNewNetCode )
         return;
@@ -747,7 +747,7 @@ void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus
                     if( item->GetNet() == 0 )
                         item->SetNet( netCode );
                     else
-                        propageNetCode( item->GetNet(), netCode, IS_WIRE );
+                        propagateNetCode( item->GetNet(), netCode, IS_WIRE );
                 }
                 break;
 
@@ -799,7 +799,7 @@ void NETLIST_OBJECT_LIST::pointToPointConnect( NETLIST_OBJECT* aRef, bool aIsBus
                     if( item->m_BusNetCode == 0 )
                         item->m_BusNetCode = netCode;
                     else
-                        propageNetCode( item->m_BusNetCode, netCode, IS_BUS );
+                        propagateNetCode( item->m_BusNetCode, netCode, IS_BUS );
                 }
                 break;
             }
@@ -836,14 +836,14 @@ void NETLIST_OBJECT_LIST::segmentToPointConnect( NETLIST_OBJECT* aJonction,
             if( aIsBus == IS_WIRE )
             {
                 if( segment->GetNet() )
-                    propageNetCode( segment->GetNet(), aJonction->GetNet(), aIsBus );
+                    propagateNetCode( segment->GetNet(), aJonction->GetNet(), aIsBus );
                 else
                     segment->SetNet( aJonction->GetNet() );
             }
             else
             {
                 if( segment->m_BusNetCode )
-                    propageNetCode( segment->m_BusNetCode, aJonction->m_BusNetCode, aIsBus );
+                    propagateNetCode( segment->m_BusNetCode, aJonction->m_BusNetCode, aIsBus );
                 else
                     segment->m_BusNetCode = aJonction->m_BusNetCode;
             }
@@ -887,7 +887,7 @@ void NETLIST_OBJECT_LIST::labelConnect( NETLIST_OBJECT* aLabelRef )
                 continue;
 
             if( item->GetNet() )
-                propageNetCode( item->GetNet(), aLabelRef->GetNet(), IS_WIRE );
+                propagateNetCode( item->GetNet(), aLabelRef->GetNet(), IS_WIRE );
             else
                 item->SetNet( aLabelRef->GetNet() );
         }
