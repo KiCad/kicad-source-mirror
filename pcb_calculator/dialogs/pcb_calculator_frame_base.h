@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  2 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -42,6 +42,7 @@ class UNIT_SELECTOR_THICKNESS;
 #include <wx/statline.h>
 #include <wx/grid.h>
 #include <wx/radiobox.h>
+#include <wx/bmpbuttn.h>
 #include <wx/notebook.h>
 #include <wx/frame.h>
 
@@ -200,10 +201,10 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_phys_prm3_label;
 		wxTextCtrl* m_Phys_prm3_Value;
 		UNIT_SELECTOR_LEN* m_choiceUnit_Param3;
-		wxStaticBitmap* m_bitmapAnalyse;
+		wxBitmapButton* m_bpButtonAnalyze;
 		wxButton* m_AnalyseButton;
 		wxButton* m_SynthetizeButton;
-		wxStaticBitmap* m_bitmapSynthetize;
+		wxBitmapButton* m_bpButtonSynthetize;
 		wxStaticText* m_elec_prm1_label;
 		wxTextCtrl* m_Elec_prm1_Value;
 		UNIT_SELECTOR_RESISTOR* m_choiceUnit_ElecPrm1;
@@ -240,7 +241,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxTextCtrl* m_ZoutValueCtrl;
 		wxStaticText* m_attZoutUnit;
 		wxButton* m_buttonAlcAtt;
-		wxStaticBitmap* m_bitmapAnalyse1;
+		wxBitmapButton* m_bpButtonCalcAtt;
 		wxStaticText* m_attenuatorR1Label;
 		wxTextCtrl* m_Att_R1_Value;
 		wxStaticText* m_attR1Unit;

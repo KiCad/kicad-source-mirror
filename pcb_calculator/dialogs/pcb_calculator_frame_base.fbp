@@ -270,7 +270,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Regulators</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -12898,11 +12898,11 @@
                                                             <property name="name">bSizerButtons</property>
                                                             <property name="orient">wxHORIZONTAL</property>
                                                             <property name="permission">none</property>
-                                                            <object class="sizeritem" expanded="0">
+                                                            <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                                                                 <property name="proportion">0</property>
-                                                                <object class="wxStaticBitmap" expanded="0">
+                                                                <object class="wxBitmapButton" expanded="1">
                                                                     <property name="BottomDockable">1</property>
                                                                     <property name="LeftDockable">1</property>
                                                                     <property name="RightDockable">1</property>
@@ -12913,24 +12913,29 @@
                                                                     <property name="aui_row"></property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
-                                                                    <property name="bitmap">Load From File; ../bitmaps/arrow_bottom.xpm</property>
+                                                                    <property name="bitmap">Load From File; ..\bitmaps\arrow_bottom.xpm</property>
                                                                     <property name="caption"></property>
                                                                     <property name="caption_visible">1</property>
                                                                     <property name="center_pane">0</property>
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
+                                                                    <property name="disabled"></property>
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
+                                                                    <property name="focus"></property>
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
+                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
+                                                                    <property name="label">Analyze</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -12938,7 +12943,7 @@
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="moveable">1</property>
-                                                                    <property name="name">m_bitmapAnalyse</property>
+                                                                    <property name="name">m_bpButtonAnalyze</property>
                                                                     <property name="pane_border">1</property>
                                                                     <property name="pane_position"></property>
                                                                     <property name="pane_size"></property>
@@ -12946,14 +12951,21 @@
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
                                                                     <property name="resize">Resizable</property>
+                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
+                                                                    <property name="style">wxBU_AUTODRAW</property>
                                                                     <property name="subclass"></property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
+                                                                    <property name="validator_data_type"></property>
+                                                                    <property name="validator_style">wxFILTER_NONE</property>
+                                                                    <property name="validator_type">wxDefaultValidator</property>
+                                                                    <property name="validator_variable"></property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnButtonClick">OnTranslineAnalyse</event>
                                                                     <event name="OnChar"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
@@ -12981,7 +12993,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxRIGHT</property>
+                                                                <property name="flag">wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxButton" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -13069,7 +13081,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxLEFT</property>
+                                                                <property name="flag">wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxButton" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -13155,11 +13167,11 @@
                                                                     <event name="OnUpdateUI"></event>
                                                                 </object>
                                                             </object>
-                                                            <object class="sizeritem" expanded="0">
+                                                            <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT</property>
+                                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                                                                 <property name="proportion">0</property>
-                                                                <object class="wxStaticBitmap" expanded="0">
+                                                                <object class="wxBitmapButton" expanded="1">
                                                                     <property name="BottomDockable">1</property>
                                                                     <property name="LeftDockable">1</property>
                                                                     <property name="RightDockable">1</property>
@@ -13170,24 +13182,29 @@
                                                                     <property name="aui_row"></property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
-                                                                    <property name="bitmap">Load From File; ../bitmaps/arrow_top.xpm</property>
+                                                                    <property name="bitmap">Load From File; ..\bitmaps\arrow_top.xpm</property>
                                                                     <property name="caption"></property>
                                                                     <property name="caption_visible">1</property>
                                                                     <property name="center_pane">0</property>
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
+                                                                    <property name="disabled"></property>
                                                                     <property name="dock">Dock</property>
                                                                     <property name="dock_fixed">0</property>
                                                                     <property name="docking">Left</property>
                                                                     <property name="enabled">1</property>
                                                                     <property name="fg"></property>
                                                                     <property name="floatable">1</property>
+                                                                    <property name="focus"></property>
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
+                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
+                                                                    <property name="label">Synthetize</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -13195,7 +13212,7 @@
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="moveable">1</property>
-                                                                    <property name="name">m_bitmapSynthetize</property>
+                                                                    <property name="name">m_bpButtonSynthetize</property>
                                                                     <property name="pane_border">1</property>
                                                                     <property name="pane_position"></property>
                                                                     <property name="pane_size"></property>
@@ -13203,14 +13220,21 @@
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
                                                                     <property name="resize">Resizable</property>
+                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
+                                                                    <property name="style">wxBU_AUTODRAW</property>
                                                                     <property name="subclass"></property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
+                                                                    <property name="validator_data_type"></property>
+                                                                    <property name="validator_style">wxFILTER_NONE</property>
+                                                                    <property name="validator_type">wxDefaultValidator</property>
+                                                                    <property name="validator_variable"></property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnButtonClick">OnTranslineSynthetize</event>
                                                                     <event name="OnChar"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
@@ -15262,7 +15286,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">RF Attenuators</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
@@ -16437,11 +16461,11 @@
                                                             <event name="OnUpdateUI"></event>
                                                         </object>
                                                     </object>
-                                                    <object class="sizeritem" expanded="0">
+                                                    <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                                        <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
                                                         <property name="proportion">0</property>
-                                                        <object class="wxStaticBitmap" expanded="0">
+                                                        <object class="wxBitmapButton" expanded="1">
                                                             <property name="BottomDockable">1</property>
                                                             <property name="LeftDockable">1</property>
                                                             <property name="RightDockable">1</property>
@@ -16452,24 +16476,29 @@
                                                             <property name="aui_row"></property>
                                                             <property name="best_size"></property>
                                                             <property name="bg"></property>
-                                                            <property name="bitmap">Load From File; ../bitmaps/arrow_bottom.xpm</property>
+                                                            <property name="bitmap">Load From File; ..\bitmaps\arrow_bottom.xpm</property>
                                                             <property name="caption"></property>
                                                             <property name="caption_visible">1</property>
                                                             <property name="center_pane">0</property>
                                                             <property name="close_button">1</property>
                                                             <property name="context_help"></property>
                                                             <property name="context_menu">1</property>
+                                                            <property name="default">0</property>
                                                             <property name="default_pane">0</property>
+                                                            <property name="disabled"></property>
                                                             <property name="dock">Dock</property>
                                                             <property name="dock_fixed">0</property>
                                                             <property name="docking">Left</property>
                                                             <property name="enabled">1</property>
                                                             <property name="fg"></property>
                                                             <property name="floatable">1</property>
+                                                            <property name="focus"></property>
                                                             <property name="font"></property>
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
+                                                            <property name="hover"></property>
                                                             <property name="id">wxID_ANY</property>
+                                                            <property name="label">Calculate</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -16477,7 +16506,7 @@
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size"></property>
                                                             <property name="moveable">1</property>
-                                                            <property name="name">m_bitmapAnalyse1</property>
+                                                            <property name="name">m_bpButtonCalcAtt</property>
                                                             <property name="pane_border">1</property>
                                                             <property name="pane_position"></property>
                                                             <property name="pane_size"></property>
@@ -16485,14 +16514,21 @@
                                                             <property name="pin_button">1</property>
                                                             <property name="pos"></property>
                                                             <property name="resize">Resizable</property>
+                                                            <property name="selected"></property>
                                                             <property name="show">1</property>
                                                             <property name="size"></property>
+                                                            <property name="style">wxBU_AUTODRAW</property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
                                                             <property name="tooltip"></property>
+                                                            <property name="validator_data_type"></property>
+                                                            <property name="validator_style">wxFILTER_NONE</property>
+                                                            <property name="validator_type">wxDefaultValidator</property>
+                                                            <property name="validator_variable"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
+                                                            <event name="OnButtonClick">OnCalculateAttenuator</event>
                                                             <event name="OnChar"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
