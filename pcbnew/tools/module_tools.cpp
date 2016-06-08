@@ -158,16 +158,10 @@ int MODULE_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) )
         {
             m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( m_board->m_Modules, UR_CHANGED );
+            m_frame->SaveCopyInUndoList( pad, UR_NEW );
 
             m_board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
-            pad->SetParent( m_board->m_Modules );
-            m_board->m_Modules->SetLastEditTime();
-            m_board->m_Modules->Pads().PushBack( pad );
-
-            // Set the relative pad position
-            // ( pad position for module orient, 0, and relative to the module position)
-            pad->SetLocalCoord();
+            m_frame->GetModel()->Add( pad );
 
             // Take the next available pad number
             pad->IncrementPadName( true, true );
@@ -479,7 +473,6 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
             m_frame->SaveCopyInUndoList( currentModule, UR_CHANGED );
 
             m_board->m_Status_Pcb = 0;    // I have no clue why, but it is done in the legacy view
-            currentModule->SetLastEditTime();
 
             // MODULE::RunOnChildren is infeasible here: we need to create copies of items, do not
             // directly modify them
@@ -487,9 +480,7 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
             for( D_PAD* pad = pastedModule->Pads(); pad; pad = pad->Next() )
             {
                 D_PAD* clone = static_cast<D_PAD*>( pad->Clone() );
-
                 currentModule->Add( clone );
-                clone->SetLocalCoord();
                 m_view->Add( clone );
             }
 
@@ -503,7 +494,6 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
                     // Do not add reference/value - convert them to the common type
                     text->SetType( TEXTE_MODULE::TEXT_is_DIVERS );
                     currentModule->Add( text );
-                    text->SetLocalCoord();
 
                     // Whyyyyyyyyyyyyyyyyyyyyyy?! All other items conform to rotation performed
                     // on its parent module, but texts are so independent..
@@ -512,7 +502,6 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
                 else if( EDGE_MODULE* edge = dyn_cast<EDGE_MODULE*>( clone ) )
                 {
                     currentModule->Add( edge );
-                    edge->SetLocalCoord();
                 }
 
                 m_view->Add( clone );

@@ -292,9 +292,9 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( !modified )
                 {
-                    // Save items, so changes can be undone
                     editFrame->OnModify();
                     editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+
                     controls->ForceCursorPosition( false );
                     m_original = *m_editedPoint;    // Save the original position
                     controls->SetAutoPan( true );
@@ -720,11 +720,12 @@ void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
 {
     EDA_ITEM* item = m_editPoints->GetParent();
     const SELECTION& selection = m_selectionTool->GetSelection();
+    PCB_BASE_EDIT_FRAME* frame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     if( item->Type() == PCB_ZONE_AREA_T )
     {
-        getEditFrame<PCB_BASE_FRAME>()->OnModify();
-        getEditFrame<PCB_BASE_FRAME>()->SaveCopyInUndoList( selection.items, UR_CHANGED );
+        frame->OnModify();
+        frame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         CPolyLine* outline = zone->Outline();
@@ -765,15 +766,14 @@ void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
     else if( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T )
     {
         bool moduleEdge = item->Type() == PCB_MODULE_EDGE_T;
-        PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
-
-        frame->OnModify();
-        frame->SaveCopyInUndoList( selection.items, UR_CHANGED );
 
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
 
         if( segment->GetShape() == S_SEGMENT )
         {
+            ITEM_PICKER old_segment( segment, UR_CHANGED );
+            old_segment.SetLink( segment->Clone() );
+
             SEG seg( segment->GetStart(), segment->GetEnd() );
             VECTOR2I nearestPoint = seg.NearestPoint( aBreakPoint );
 
@@ -786,9 +786,9 @@ void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
             if( moduleEdge )
             {
                 EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( segment );
-                assert( segment->GetParent()->Type() == PCB_MODULE_T );
+                assert( edge->Type() == PCB_MODULE_EDGE_T );
+                assert( edge->GetParent()->Type() == PCB_MODULE_T );
                 newSegment = new EDGE_MODULE( *edge );
-                edge->SetLocalCoord();
             }
             else
             {
@@ -799,16 +799,13 @@ void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
             newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
             newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
 
-            if( moduleEdge )
-            {
-                static_cast<EDGE_MODULE*>( newSegment )->SetLocalCoord();
-                getModel<BOARD>()->m_Modules->Add( newSegment );
-            }
-            else
-            {
-                getModel<BOARD>()->Add( newSegment );
-            }
+            PICKED_ITEMS_LIST changes;
+            changes.PushItem( old_segment );
+            changes.PushItem( ITEM_PICKER( newSegment, UR_NEW ) );
+            frame->OnModify();
+            frame->SaveCopyInUndoList( changes, UR_UNSPECIFIED );
 
+            frame->GetModel()->Add( newSegment );
             getView()->Add( newSegment );
         }
     }
@@ -833,6 +830,7 @@ void POINT_EDITOR::removeCorner( EDIT_POINT* aPoint )
             {
                 frame->OnModify();
                 frame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+
                 outline->DeleteCorner( i );
                 setEditedPoint( NULL );
                 break;

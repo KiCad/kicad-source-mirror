@@ -533,10 +533,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-    // Save them
-    for( unsigned int i = 0; i < selectedItems.GetCount(); ++i )
-        selectedItems.SetPickedItemStatus( UR_DELETED, i );
-
     editFrame->OnModify();
     editFrame->SaveCopyInUndoList( selectedItems, UR_DELETED );
 
@@ -588,38 +584,10 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
             case TEXTE_MODULE::TEXT_is_DIVERS:    // suppress warnings
                 break;
         }
-
-        if( m_editModules )
-        {
-            MODULE* module = static_cast<MODULE*>( aItem->GetParent() );
-            module->SetLastEditTime();
-            board->m_Status_Pcb = 0; // it is done in the legacy view
-            aItem->DeleteStructure();
-        }
-
-        return;
     }
 
     case PCB_PAD_T:
     case PCB_MODULE_EDGE_T:
-    {
-        MODULE* module = static_cast<MODULE*>( aItem->GetParent() );
-        module->SetLastEditTime();
-
-        board->m_Status_Pcb = 0; // it is done in the legacy view
-
-
-        if( !m_editModules )
-        {
-            getView()->Remove( aItem );
-            board->Remove( aItem );
-        }
-
-        aItem->DeleteStructure();
-
-        return;
-    }
-
     case PCB_LINE_T:                // a segment not on copper layers
     case PCB_TEXT_T:                // a text on a layer
     case PCB_TRACE_T:               // a track segment (segment on a copper layer)
@@ -637,7 +605,7 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     }
 
     getView()->Remove( aItem );
-    board->Remove( aItem );
+    getEditFrame<PCB_EDIT_FRAME>()->GetModel()->Remove( aItem );
 }
 
 
@@ -723,10 +691,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // the original
     incUndoInhibit();
 
-    // TODO remove the following when undo buffer handles UR_NEW
-    if( m_editModules )
-        editFrame->SaveCopyInUndoList( editFrame->GetBoard()->m_Modules, UR_CHANGED );
-
     std::vector<BOARD_ITEM*> old_items;
 
     for( int i = 0; i < selection.Size(); ++i )
@@ -748,6 +712,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         BOARD_ITEM* new_item = NULL;
 
+        // TODO move DuplicateAndAddItem() to BOARD_ITEM_CONTAINER? dunno..
         if( m_editModules )
             new_item = editFrame->GetBoard()->m_Modules->DuplicateAndAddItem( item, increment );
         else
@@ -777,8 +742,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     }
 
     // record the new items as added
-    // TODO remove m_editModules condition when undo buffer handles UR_NEW)
-    if( !m_editModules && !selection.Empty() )
+    if( !selection.Empty() )
     {
         editFrame->SaveCopyInUndoList( selection.items, UR_NEW );
 

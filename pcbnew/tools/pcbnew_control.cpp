@@ -771,7 +771,6 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     int open_ctl;
     wxString fileName;
     PICKED_ITEMS_LIST undoListPicker;
-    ITEM_PICKER picker( NULL, UR_NEW );
 
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
     BOARD* board = getModel<BOARD>();
@@ -839,8 +838,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
             continue;
         }
 
-        picker.SetItem( track );
-        undoListPicker.PushItem( picker );
+        undoListPicker.PushItem( ITEM_PICKER( track, UR_NEW ) );
         view->Add( track );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, track );
     }
@@ -849,11 +847,11 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
 
     for( ; module; module = module->Next() )
     {
-        picker.SetItem( module );
-        undoListPicker.PushItem( picker );
+        undoListPicker.PushItem( ITEM_PICKER( module, UR_NEW ) );
 
         module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
         view->Add( module );
+
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, module );
     }
 
@@ -861,8 +859,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
 
     for( ; drawing; drawing = drawing->Next() )
     {
-        picker.SetItem( drawing );
-        undoListPicker.PushItem( picker );
+        undoListPicker.PushItem( ITEM_PICKER( drawing, UR_NEW ) );
         view->Add( drawing );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, drawing );
     }
@@ -870,8 +867,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     for( ZONE_CONTAINER* zone = board->GetArea( zonescount ); zone;
          zone = board->GetArea( zonescount ) )
     {
-        picker.SetItem( zone );
-        undoListPicker.PushItem( picker );
+        undoListPicker.PushItem( ITEM_PICKER( zone, UR_NEW ) );
         zonescount++;
         view->Add( zone );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, zone );

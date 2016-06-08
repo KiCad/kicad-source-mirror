@@ -360,12 +360,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
 
-    if( m_editModules )
-        collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::ModuleItems,
-                           wxPoint( aWhere.x, aWhere.y ), guide );
-    else
-        collector.Collect( getModel<BOARD>(), GENERAL_COLLECTOR::AllBoardItems,
-                           wxPoint( aWhere.x, aWhere.y ), guide );
+    collector.Collect( getModel<BOARD>(),
+        m_editModules ? GENERAL_COLLECTOR::ModuleItems : GENERAL_COLLECTOR::AllBoardItems,
+        wxPoint( aWhere.x, aWhere.y ), guide );
 
     bool anyCollected = collector.GetCount() != 0;
 

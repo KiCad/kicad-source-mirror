@@ -34,7 +34,7 @@ namespace KIGFX
     class VIEW_CONTROLS;
 }
 class BOARD;
-class PCB_EDIT_FRAME;
+class PCB_BASE_EDIT_FRAME;
 class DRAWSEGMENT;
 
 /**
@@ -157,20 +157,6 @@ private:
     int drawZone( bool aKeepout );
 
     /**
-     * Function placeTextModule()
-     * Displays a dialog that allows to input text and its settings and then lets the user decide
-     * where to place the text in module .
-     */
-    int placeTextModule();
-
-    /**
-     * Function placeTextPcb()
-     * Displays a dialog that allows to input text and its settings and then lets the user decide
-     * where to place the text in board editor.
-     */
-    int placeTextPcb();
-
-    /**
      * Function make45DegLine()
      * Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin stays the same,
      * the end of the aSegment is modified according to the current cursor position.
@@ -185,7 +171,7 @@ private:
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
-    PCB_EDIT_FRAME* m_frame;
+    PCB_BASE_EDIT_FRAME* m_frame;
 
     /// Edit module mode flag
     bool m_editModules;

@@ -298,13 +298,13 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             }
             else
             {
+                m_frame->OnModify();
+                m_frame->SaveCopyInUndoList( module, UR_NEW );
+
                 // Place the selected module
                 module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
                 view->Add( module );
                 module->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
-                m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( module, UR_NEW );
 
                 // Remove from preview
                 preview.Remove( module );
@@ -454,12 +454,12 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
             assert( target->GetSize() > 0 );
             assert( target->GetWidth() > 0 );
 
+            m_frame->OnModify();
+            m_frame->SaveCopyInUndoList( target, UR_NEW );
+
             view->Add( target );
             board->Add( target );
             target->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( target, UR_NEW );
 
             preview.Remove( target );
 
