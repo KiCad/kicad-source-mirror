@@ -905,7 +905,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 
     // Account for scrollbars
     wxSize  scrollbarSizeDU = m_canvas->GetSize() - m_canvas->GetClientSize();
-    wxSize  scrollbarSizeIU = scrollbarSizeDU * scale;
+    wxSize  scrollbarSizeIU = scrollbarSizeDU * (1 / scale);
     wxPoint centerAdjustedIU = aCenterPositionIU + scrollbarSizeIU / 2;
 
     // The upper left corner of the client rectangle in internal units.
