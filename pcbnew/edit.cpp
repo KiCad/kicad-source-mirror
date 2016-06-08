@@ -1429,6 +1429,10 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetToolID( id, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
 
+    case ID_ZOOM_SELECTION:
+        SetToolID( id, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
+        break;
+
     case ID_TRACK_BUTT:
         if( g_Drc_On )
             SetToolID( id, wxCURSOR_PENCIL, _( "Add tracks" ) );
@@ -1546,6 +1550,7 @@ void PCB_EDIT_FRAME::moveExact()
     m_canvas->MoveCursorToCrossHair();
 }
 
+
 void PCB_EDIT_FRAME::duplicateItems( bool aIncrement )
 {
     BOARD_ITEM* item = GetScreen()->GetCurItem();
@@ -1561,6 +1566,7 @@ void PCB_EDIT_FRAME::duplicateItems( bool aIncrement )
 
     PCB_BASE_EDIT_FRAME::duplicateItem( item, aIncrement );
 }
+
 
 void PCB_BASE_EDIT_FRAME::duplicateItem( BOARD_ITEM* aItem, bool aIncrement )
 {

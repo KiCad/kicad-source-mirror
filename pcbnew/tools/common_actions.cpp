@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -490,6 +491,10 @@ TOOL_ACTION COMMON_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
         AS_GLOBAL, 0,
         "", "", NULL, AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::zoomTool( "pcbnew.Control.zoomTool",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_SELECTION ),
+        _( "Zoom to selection" ), "", NULL, AF_ACTIVATE );
+
 TOOL_ACTION COMMON_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
@@ -711,6 +716,9 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_NO_TOOL_SELECTED:
         return COMMON_ACTIONS::selectionTool.MakeEvent();
+
+    case ID_ZOOM_SELECTION:
+        return COMMON_ACTIONS::zoomTool.MakeEvent();
 
     case ID_PCB_DELETE_ITEM_BUTT:
     case ID_MODEDIT_DELETE_TOOL:

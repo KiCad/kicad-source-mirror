@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,6 +185,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     {
     case ID_MAIN_MENUBAR:
     case ID_NO_TOOL_SELECTED:
+    case ID_ZOOM_SELECTION:
         break;
 
     case ID_PCB_MUWAVE_TOOL_SELF_CMD:

@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +28,7 @@
 #include <tool/tool_manager.h>
 
 #include <tools/selection_tool.h>
+#include <tools/zoom_tool.h>
 #include <tools/picker_tool.h>
 #include <tools/edit_tool.h>
 #include <tools/drawing_tool.h>
@@ -42,6 +44,7 @@
 void registerAllTools( TOOL_MANAGER *aToolManager )
 {
     aToolManager->RegisterTool( new SELECTION_TOOL );
+    aToolManager->RegisterTool( new ZOOM_TOOL );
     aToolManager->RegisterTool( new PICKER_TOOL );
     aToolManager->RegisterTool( new ROUTER_TOOL );
     aToolManager->RegisterTool( new LENGTH_TUNER_TOOL );

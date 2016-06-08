@@ -799,14 +799,18 @@ wxString EDA_DRAW_FRAME::LengthDoubleToString( double aValue, bool aConvertToMil
 }
 
 
-bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition )
+bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
+       int aExplicitCommand )
 {
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
     if( ( block->GetCommand() != BLOCK_IDLE ) || ( block->GetState() != STATE_NO_BLOCK ) )
         return false;
 
-    block->SetCommand( (BLOCK_COMMAND_T) BlockCommand( aKey ) );
+    if( aExplicitCommand == 0 )
+        block->SetCommand( (BLOCK_COMMAND_T) BlockCommand( aKey ) );
+    else
+        block->SetCommand( (BLOCK_COMMAND_T) aExplicitCommand );
 
     if( block->GetCommand() == 0 )
         return false;

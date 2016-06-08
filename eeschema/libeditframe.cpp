@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,6 +118,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Right vertical toolbar.
     EVT_TOOL( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnSelectTool )
+    EVT_TOOL( ID_ZOOM_SELECTION, LIB_EDIT_FRAME::OnSelectTool )
     EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                     LIB_EDIT_FRAME::OnSelectTool )
 
@@ -171,6 +172,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganNormal )
     EVT_UPDATE_UI( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganConvert )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_ZOOM_SELECTION, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                          LIB_EDIT_FRAME::OnUpdateEditingPart )
 END_EVENT_TABLE()
@@ -1100,6 +1102,10 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     {
     case ID_NO_TOOL_SELECTED:
         SetToolID( id, m_canvas->GetDefaultCursor(), wxEmptyString );
+        break;
+
+    case ID_ZOOM_SELECTION:
+        SetToolID( id, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         break;
 
     case ID_LIBEDIT_PIN_BUTT:

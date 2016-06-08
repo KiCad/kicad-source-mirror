@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,9 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
                             _( "Deselect current tool" ), wxITEM_CHECK );
+
+    m_drawToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
+                            _( "Zoom to selection" ), wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, KiBitmap( pin_xpm ),
                             HELP_ADD_PIN, wxITEM_CHECK  );

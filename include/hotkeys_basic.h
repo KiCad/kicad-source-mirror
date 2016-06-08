@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -243,6 +243,7 @@ enum common_hotkey_id_commnand {
     HK_ZOOM_REDRAW,
     HK_ZOOM_CENTER,
     HK_ZOOM_AUTO,
+    HK_ZOOM_SELECTION,
     HK_UNDO,
     HK_REDO,
     HK_COMMON_END

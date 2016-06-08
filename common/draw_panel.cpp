@@ -1323,7 +1323,9 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                     m_minDragEventCount++;
                 else
                 {
-                    if( !GetParent()->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos ) )
+                    auto cmd = (GetParent()->GetToolId() == ID_ZOOM_SELECTION) ? BLOCK_ZOOM : 0;
+
+                    if( !GetParent()->HandleBlockBegin( &DC, cmd_type, m_CursorStartPos, cmd ) )
                     {
                         // should not occur: error
                         GetParent()->DisplayToolMsg(

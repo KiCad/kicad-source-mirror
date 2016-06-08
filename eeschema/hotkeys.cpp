@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,6 +208,7 @@ static EDA_HOTKEY HkFindReplace( _HKI( "Find and Replace" ), HK_FIND_REPLACE,
                                  'F' + GR_KB_CTRL + GR_KB_ALT, wxID_REPLACE );
 static EDA_HOTKEY HkFindNextDrcMarker( _HKI( "Find Next DRC Marker" ), HK_FIND_NEXT_DRC_MARKER,
                                        WXK_F5 + GR_KB_SHIFT, EVT_COMMAND_FIND_DRC_MARKER );
+static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, '@', ID_ZOOM_SELECTION );
 
 // Special keys for library editor:
 static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
@@ -234,6 +235,7 @@ static EDA_HOTKEY* common_Hotkey_List[] =
     &HkZoomRedraw,
     &HkZoomCenter,
     &HkZoomAuto,
+    &HkZoomSelection,
     &HkResetLocalCoord,
     &HkEdit,
     &HkDelete,
@@ -454,6 +456,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_REDRAW:
     case HK_ZOOM_CENTER:
     case HK_ZOOM_AUTO:
+    case HK_ZOOM_SELECTION:
     case HK_LEAVE_SHEET:
     case HK_DELETE_NODE:
     case HK_MOVEBLOCK_TO_DRAGBLOCK:          // Switch to drag mode, when block moving

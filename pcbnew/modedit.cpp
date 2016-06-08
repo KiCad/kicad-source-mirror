@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -944,6 +944,10 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
     switch( id )
     {
     case ID_NO_TOOL_SELECTED:
+        break;
+
+    case ID_ZOOM_SELECTION:
+        SetToolID( id, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         break;
 
     case ID_MODEDIT_LINE_TOOL:

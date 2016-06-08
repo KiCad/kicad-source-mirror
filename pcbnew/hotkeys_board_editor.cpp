@@ -239,6 +239,10 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         evt_type = ID_POPUP_ZOOM_CENTER;
         break;
 
+    case HK_ZOOM_SELECTION:
+        evt_type = ID_ZOOM_SELECTION;
+        break;
+
     case HK_ADD_MODULE:
         evt_type = ID_PCB_MODULE_BUTT;
         break;

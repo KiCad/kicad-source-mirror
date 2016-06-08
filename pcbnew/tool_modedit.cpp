@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -160,6 +160,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
                             wxEmptyString, wxITEM_CHECK );
+
+    m_drawToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
+                            _( "Zoom to selection" ), wxITEM_CHECK );
 
     m_drawToolBar->AddSeparator();
     m_drawToolBar->AddTool( ID_MODEDIT_PAD_TOOL, wxEmptyString, KiBitmap( pad_xpm ),

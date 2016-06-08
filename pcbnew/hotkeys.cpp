@@ -98,6 +98,7 @@ static EDA_HOTKEY HkSavefile( _HKI( "Save Board" ), HK_SAVE_BOARD, 'S' + GR_KB_C
 static EDA_HOTKEY HkSavefileAs( _HKI( "Save Board As" ), HK_SAVE_BOARD_AS, 'S' + GR_KB_CTRL + GR_KB_SHIFT );
 static EDA_HOTKEY HkLoadfile( _HKI( "Load Board" ), HK_LOAD_BOARD, 'L' + GR_KB_CTRL );
 static EDA_HOTKEY HkFindItem( _HKI( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
+static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, '@', ID_ZOOM_SELECTION );
 static EDA_HOTKEY HkBackspace( _HKI( "Delete Track Segment" ), HK_BACK_SPACE, WXK_BACK );
 static EDA_HOTKEY HkAddNewTrack( _HKI( "Add New Track" ), HK_ADD_NEW_TRACK, 'X' );
 static EDA_HOTKEY HkAddThroughVia( _HKI( "Add Through Via" ), HK_ADD_THROUGH_VIA, 'V' );
@@ -229,7 +230,7 @@ static EDA_HOTKEY HkAddModule( _HKI( "Add Footprint" ), HK_ADD_MODULE, 'O' );
 EDA_HOTKEY* common_Hotkey_List[] =
 {
     &HkHelp,        &HkZoomIn,          &HkZoomOut,
-    &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,      &Hk3DViewer,
+    &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,      &HkZoomSelection, &Hk3DViewer,
     &HkSwitchUnits, &HkResetLocalCoord, &HkSetGridOrigin, &HkResetGridOrigin,
     &HkUndo,        &HkRedo,
     &HkMouseLeftClick,
