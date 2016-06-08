@@ -156,7 +156,7 @@ public:
         m_ConnectionType = aFlg;
     }
 
-    NET_CONNECTION_T GetConnectionType()
+    NET_CONNECTION_T GetConnectionType() const
     {
         return m_ConnectionType;
     }

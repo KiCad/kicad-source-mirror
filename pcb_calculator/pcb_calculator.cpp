@@ -61,17 +61,7 @@ static struct IFACE : public KIFACE_I
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
-        switch( aClassId )
-        {
-        default:
-            {
-                PCB_CALCULATOR_FRAME* frame = new PCB_CALCULATOR_FRAME( aKiway, aParent );
-                return frame;
-            }
-            break;
-        }
-
-        return NULL;
+        return new PCB_CALCULATOR_FRAME( aKiway, aParent );
     }
 
     /**

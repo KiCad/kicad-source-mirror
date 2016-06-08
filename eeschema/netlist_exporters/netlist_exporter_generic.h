@@ -80,13 +80,6 @@ protected:
     XNODE* node( const wxString& aName, const wxString& aTextualContent = wxEmptyString );
 
     /**
-     * Function writeGENERICListOfNets
-     * writes out nets (ranked by Netcode), and elements that are
-     * connected as part of that net.
-     */
-    bool writeListOfNets( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
-
-    /**
      * Function makeGenericRoot
      * builds the entire document tree for the generic export.  This is factored
      * out here so we can write the tree in either S-expression file format

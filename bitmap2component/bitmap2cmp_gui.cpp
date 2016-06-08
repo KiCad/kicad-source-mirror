@@ -672,15 +672,7 @@ static struct IFACE : public KIFACE_I
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
-        switch( aClassId )
-        {
-
-        default:
-            {
-                KIWAY_PLAYER* frame = new BM2CMP_FRAME( aKiway, aParent );
-                return frame;
-            }
-        }
+        return new BM2CMP_FRAME( aKiway, aParent );
     }
 
     /**
