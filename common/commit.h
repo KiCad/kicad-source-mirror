@@ -27,10 +27,10 @@
 
 #include <set>
 #include <vector>
-#include <base_struct.h>
 
+#include <class_undoredo_container.h>
 
-class PICKED_ITEMS_LIST;
+class EDA_ITEM;
 
 /**
  * Class COMMIT
@@ -74,10 +74,14 @@ public:
     }
 
     ///> Adds a change of the item aItem of type aChangeType to the change list.
-    virtual COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType );
+    COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType );
 
+    ///> Adds a change of an item with its copy done before the change has occurred.
+    COMMIT& Stage( EDA_ITEM* aItem, EDA_ITEM* aCopy );
 
-    void Stage( const PICKED_ITEMS_LIST& aItems, CHANGE_TYPE aChangeType );
+    COMMIT& Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType );
+
+    COMMIT& Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag = UR_UNSPECIFIED );
 
     ///> Executes the changes.
     virtual void Push( const wxString& aMessage ) = 0;
@@ -88,13 +92,16 @@ public:
 protected:
     struct COMMIT_LINE
     {
-        EDA_ITEM *m_item;
-        EDA_ITEM *m_copy;
+        EDA_ITEM* m_item;
+        EDA_ITEM* m_copy;
         CHANGE_TYPE m_type;
     };
 
-    virtual void makeEntry( EDA_ITEM* aItem, CHANGE_TYPE type, bool saveCopy );
+    virtual void makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy = NULL );
+
     virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const = 0;
+
+    CHANGE_TYPE convert( UNDO_REDO_T aType ) const;
 
     bool m_committed;
 
