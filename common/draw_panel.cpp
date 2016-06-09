@@ -1152,12 +1152,14 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
         INSTALL_UNBUFFERED_DC( dc, this );
         CrossHairOff( &dc );
+        SetCursor( wxCURSOR_SIZING );
     }
 
     if( event.ButtonUp( wxMOUSE_BTN_MIDDLE ) && m_enableMiddleButtonPan )
     {
         INSTALL_UNBUFFERED_DC( dc, this );
         CrossHairOn( &dc );
+        SetCursor( (wxStockCursor) m_currentCursor );
     }
 
     if( event.MiddleIsDown() && m_enableMiddleButtonPan )
