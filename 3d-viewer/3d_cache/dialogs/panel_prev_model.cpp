@@ -131,10 +131,11 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
             aParent->FindWindowByLabel( wxT( "3D_MODEL_SELECTOR" ), aParent );
 
     wxFloatingPointValidator< float > valScale( 4 );
-    valScale.SetRange( 0.0001, 9999 );
+    valScale.SetRange( 0.0001, 9999.0 );
     wxFloatingPointValidator< float > valRotate( 2 );
     valRotate.SetRange( -180.0, 180.0 );
-    wxFloatingPointValidator< float > valOffset( 6 );
+    wxFloatingPointValidator< float > valOffset( 4 );
+    valOffset.SetRange( -9999.0, 9999.0 );
 
     wxStaticBoxSizer* vbScale = new wxStaticBoxSizer( wxVERTICAL, this, _( "Scale" )  );
     wxStaticBoxSizer* vbRotate = new wxStaticBoxSizer( wxVERTICAL, this, _( "Rotation" ) );
@@ -165,16 +166,16 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     hbS2->Add( yscale, 0, wxALL, 2 );
     hbS3->Add( txtS3, 0, wxALL, 2 );
     hbS3->Add( zscale, 0, wxALL, 2 );
-    vbScale->Add( hbS1, 0, wxEXPAND | wxALL, 2 );
-    vbScale->Add( hbS2, 0, wxEXPAND | wxALL, 2 );
-    vbScale->Add( hbS3, 0, wxEXPAND | wxALL, 2 );
+    vbScale->Add( hbS1, 0, wxEXPAND | wxALL, 0 );
+    vbScale->Add( hbS2, 0, wxEXPAND | wxALL, 0 );
+    vbScale->Add( hbS3, 0, wxEXPAND | wxALL, 0 );
 
     wxBoxSizer* hbR1 = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* hbR2 = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* hbR3 = new wxBoxSizer( wxHORIZONTAL );
-    wxStaticText* txtR1 = new wxStaticText( modRotate, ID_ROTX, wxT( "X:" ) );
-    wxStaticText* txtR2 = new wxStaticText( modRotate, ID_ROTY, wxT( "Y:" ) );
-    wxStaticText* txtR3 = new wxStaticText( modRotate, ID_ROTZ, wxT( "Z:" ) );
+    wxStaticText* txtR1 = new wxStaticText( modRotate, -1, wxT( "X:" ) );
+    wxStaticText* txtR2 = new wxStaticText( modRotate, -1, wxT( "Y:" ) );
+    wxStaticText* txtR3 = new wxStaticText( modRotate, -1, wxT( "Z:" ) );
     xrot = new wxTextCtrl( modRotate, ID_ROTX, "0.0", wxDefaultPosition, wxDefaultSize,
         wxTE_PROCESS_ENTER, valRotate );
     yrot = new wxTextCtrl( modRotate, ID_ROTY, "0.0", wxDefaultPosition, wxDefaultSize,
@@ -190,9 +191,9 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     hbR2->Add( yrot, 0, wxALL, 2 );
     hbR3->Add( txtR3, 0, wxALL, 2 );
     hbR3->Add( zrot, 0, wxALL, 2 );
-    vbRotate->Add( hbR1, 0, wxEXPAND | wxALL, 2 );
-    vbRotate->Add( hbR2, 0, wxEXPAND | wxALL, 2 );
-    vbRotate->Add( hbR3, 0, wxEXPAND | wxALL, 2 );
+    vbRotate->Add( hbR1, 0, wxEXPAND | wxALL, 0 );
+    vbRotate->Add( hbR2, 0, wxEXPAND | wxALL, 0 );
+    vbRotate->Add( hbR3, 0, wxEXPAND | wxALL, 0 );
 
     wxBoxSizer* hbO1 = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* hbO2 = new wxBoxSizer( wxHORIZONTAL );
@@ -206,18 +207,18 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
         wxTE_PROCESS_ENTER, valOffset );
     zoff = new wxTextCtrl( modOffset, ID_OFFZ, "0.0", wxDefaultPosition, wxDefaultSize,
         wxTE_PROCESS_ENTER, valOffset );
-    xoff->SetMaxLength( 9 );
-    yoff->SetMaxLength( 9 );
-    zoff->SetMaxLength( 9 );
+    xoff->SetMaxLength( 10 );
+    yoff->SetMaxLength( 10 );
+    zoff->SetMaxLength( 10 );
     hbO1->Add( txtO1, 0, wxALL, 2 );
     hbO1->Add( xoff, 0, wxALL, 2 );
     hbO2->Add( txtO2, 0, wxALL, 2 );
     hbO2->Add( yoff, 0, wxALL, 2 );
     hbO3->Add( txtO3, 0, wxALL, 2 );
     hbO3->Add( zoff, 0, wxALL, 2 );
-    vbOffset->Add( hbO1, 0, wxEXPAND | wxALL, 2 );
-    vbOffset->Add( hbO2, 0, wxEXPAND | wxALL, 2 );
-    vbOffset->Add( hbO3, 0, wxEXPAND | wxALL, 2 );
+    vbOffset->Add( hbO1, 0, wxEXPAND | wxALL, 0 );
+    vbOffset->Add( hbO2, 0, wxEXPAND | wxALL, 0 );
+    vbOffset->Add( hbO3, 0, wxEXPAND | wxALL, 0 );
 
     // hbox holding orientation data and preview
     wxBoxSizer* hbox = new wxBoxSizer( wxHORIZONTAL );
@@ -226,14 +227,13 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     // vbox holding the preview and view buttons
     wxBoxSizer* vboxPrev = new wxBoxSizer( wxVERTICAL );
 
-    vboxOrient->Add( vbScale, 0, wxALL, 5 );
-    vboxOrient->Add( vbRotate, 0, wxALL, 5 );
-    vboxOrient->Add( vbOffset, 0, wxALL, 5 );
-    vboxOrient->AddSpacer( 20 );
+    vboxOrient->Add( vbScale, 0, wxEXPAND | wxALL, 1 );
+    vboxOrient->Add( vbRotate, 0, wxEXPAND | wxALL, 1 );
+    vboxOrient->Add( vbOffset, 0, wxEXPAND | wxALL, 1 );
 
     // add preview items
     preview = new wxPanel( this, -1 );
-    preview->SetMinSize( wxSize( 320, 200 ) );
+    preview->SetMinSize( wxSize( 400, 250 ) );
     preview->SetBackgroundColour( wxColor( 0, 0, 0 ));
     vboxPrev->Add( preview, 1, wxEXPAND | wxLEFT | wxRIGHT, 5 );
     // buttons:
@@ -267,8 +267,8 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     vboxPrev->Hide( hbBT, true );
     vboxPrev->Hide( hbBB, true );
 
-    hbox->Add( vboxOrient, 0, wxALL, 5 );
-    hbox->Add( vboxPrev, 1, wxEXPAND );
+    hbox->Add( vboxOrient, 0, wxEXPAND | wxALL, 0 );
+    hbox->Add( vboxPrev, 1, wxEXPAND | wxALL, 12 );
     vbox->Add( hbox, 1, wxEXPAND );
 
     mainBox->Add( vbox, 1, wxEXPAND | wxALL, 5 );
