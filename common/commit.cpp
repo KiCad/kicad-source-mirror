@@ -25,7 +25,6 @@
 #include <commit.h>
 #include <class_undoredo_container.h>
 
-#include <boost/foreach.hpp>
 
 COMMIT::COMMIT()
 {
@@ -37,7 +36,7 @@ COMMIT::~COMMIT()
 {
     if( !m_committed )
     {
-        BOOST_FOREACH( COMMIT_LINE& ent, m_changes )
+        for( COMMIT_LINE& ent : m_changes )
         {
             if( ent.m_copy )
                 delete ent.m_copy;
@@ -86,6 +85,17 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
         default:
             assert( false );
     }
+}
+
+
+COMMIT& COMMIT::Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType )
+{
+    for( EDA_ITEM* item : container )
+    {
+        Stage( item, aChangeType );
+    }
+
+    return *this;
 }
 
 

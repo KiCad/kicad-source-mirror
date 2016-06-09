@@ -29,7 +29,6 @@
 #include <vector>
 #include <base_struct.h>
 
-#include <boost/foreach.hpp>
 
 class PICKED_ITEMS_LIST;
 
@@ -77,13 +76,6 @@ public:
     ///> Adds a change of the item aItem of type aChangeType to the change list.
     virtual COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType );
 
-    void Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType )
-    {
-        BOOST_FOREACH( EDA_ITEM* item, container )
-        {
-            Stage( item, aChangeType );
-        }
-    }
 
     void Stage( const PICKED_ITEMS_LIST& aItems, CHANGE_TYPE aChangeType );
 
