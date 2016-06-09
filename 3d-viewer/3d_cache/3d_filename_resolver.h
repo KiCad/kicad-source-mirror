@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,12 +99,12 @@ private:
     bool writePathList( void );
 
     /**
-     * Function resolveVirtualEnv
-     * extracts the ${ENV_VAR} component of aFileName and puts a
-     * resolved path in aFullPath if the ${ENV_VAR} exists in the
-     * alias list and the referenced file exists.
+     * Function checkEnvVarPath
+     * checks the ${ENV_VAR} component of a path and adds
+     * it to the resolver's path list if it is not yet in
+     * the list
      */
-    bool resolveVirtualEnv( const wxString& aFileName, wxString& aFullPath );
+    void checkEnvVarPath( const wxString& aPath );
 
 public:
     S3D_FILENAME_RESOLVER();

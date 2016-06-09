@@ -54,7 +54,8 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
         size_t listsize = rpaths->size();
         size_t listidx = 0;
 
-        while( rI != rE && (*rI).m_alias.StartsWith( "${" ) )
+        while( rI != rE && ( (*rI).m_alias.StartsWith( "${" )
+            || (*rI).m_alias.StartsWith( "$(" ) ) )
         {
             ++listidx;
             ++rI;

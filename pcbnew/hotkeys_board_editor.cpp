@@ -494,13 +494,14 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     case HK_CANVAS_LEGACY:
         evt_type = ID_MENU_CANVAS_LEGACY;
         break;
+
     case HK_ZONE_FILL_OR_REFILL:
         evt_type = ID_POPUP_PCB_FILL_ALL_ZONES;
         break;
+
     case HK_ZONE_REMOVE_FILLED:
         evt_type = ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES;
         break;
-
     }
 
     if( evt_type != 0 )

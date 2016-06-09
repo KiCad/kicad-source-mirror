@@ -285,7 +285,7 @@ void S3D_PLUGIN_MANAGER::listPlugins( const wxString& aPath,
     // Per definition a loadable "xxx.bundle" is similar to an "xxx.app" app
     // bundle being a folder with some special content in it. We obviously don't
     // want to have that here for our loadable module, so just use ".so".
-    nameFilter.Append( wxT( ".so" ) );
+    nameFilter.Append( ".so" );
 #endif
 
     wxString lp = wd.GetNameWithSep();
@@ -316,7 +316,13 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
     if( aPath.empty() || !wxFileName::FileExists( aPath ) )
         return;
 
-    wxFileName path( aPath );
+    wxFileName path;
+
+    if( aPath.StartsWith( "${" ) || aPath.StartsWith( "$(" ) )
+        path.Assign( ExpandEnvVarSubstitutions( aPath ) );
+    else
+        path.Assign( aPath );
+
     path.Normalize();
 
     // determine if the path is already in the list
@@ -355,7 +361,13 @@ void S3D_PLUGIN_MANAGER::checkPluginPath( const wxString& aPath,
         aPath.ToUTF8() );
     #endif
 
-    wxFileName path( wxFileName::DirName( aPath ) );
+    wxFileName path;
+
+    if( aPath.StartsWith( "${" ) || aPath.StartsWith( "$(" ) )
+        path.Assign( ExpandEnvVarSubstitutions( aPath ), "" );
+    else
+        path.Assign( aPath, "" );
+
     path.Normalize();
 
     if( !wxFileName::DirExists( path.GetFullPath() ) )
