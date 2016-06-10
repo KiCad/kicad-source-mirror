@@ -275,6 +275,7 @@ private:
 
     static wxGLContext*     glMainContext;      ///< Parent OpenGL context
     wxGLContext*            glPrivContext;      ///< Canvas-specific OpenGL context
+    static int              instanceCounter;    ///< GL GAL instance counter
     wxEvtHandler*           mouseListener;
     wxEvtHandler*           paintListener;
 
