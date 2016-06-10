@@ -88,6 +88,9 @@ private:
     ///> Currently bound GL context.
     wxGLContext* m_glCtx;
 
+    ///> The canvas that uses the current GL context.
+    wxGLCanvas* m_glCanvas;
+
     ///> Lock to prevent unexpected GL context switching.
     MUTEX m_glCtxMutex;
 
