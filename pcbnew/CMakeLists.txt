@@ -8,7 +8,9 @@ add_dependencies( pnsrouter pcbcommon )
 
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
-    find_package( SWIG REQUIRED )
+
+    # SWIG 3.0 or later require for C++11 support.
+    find_package( SWIG 3.0 REQUIRED )
     include( ${SWIG_USE_FILE} )
 
     # Infrequently needed headers go at end of search paths, append to INC_AFTER
