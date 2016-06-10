@@ -272,7 +272,7 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
     unsigned int itemSize = m_item->GetSize();
 
 #if CACHED_CONTAINER_TEST > 2
-    wxLogDebug( wxT( "Resize 0x%08lx from %d to %d" ), (long) m_item, itemSize, aSize );
+    wxLogDebug( wxT( "Resize %p from %d to %d" ), m_item, itemSize, aSize );
 #endif
 
     // Is there enough space to store vertices?
@@ -651,8 +651,8 @@ void CACHED_CONTAINER::showUsedChunks()
         unsigned int size   = item->GetSize();
         assert( size > 0 );
 
-        wxLogDebug( wxT( "[0x%08x-0x%08x] @ 0x%08lx (size %d)" ),
-                    offset, offset + size - 1, (long) item, size );
+        wxLogDebug( wxT( "[0x%08x-0x%08x] @ 0x%p (size %d)" ),
+                    offset, offset + size - 1, item, size );
     }
 #endif /* __WXDEBUG__ */
 }
