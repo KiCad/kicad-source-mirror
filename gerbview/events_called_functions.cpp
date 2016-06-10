@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +103,8 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
                     GERBVIEW_FRAME::Process_Special_Functions )
 
     // Option toolbar
+    //EVT_TOOL( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::Process_Special_Functions ) // mentioned below
+    EVT_TOOL( ID_ZOOM_SELECTION, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, GERBVIEW_FRAME::OnSelectOptionToolbar )
@@ -114,6 +116,8 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
                     GERBVIEW_FRAME::OnSelectDisplayMode )
 
+    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::OnUpdateSelectTool )
+    EVT_UPDATE_UI( ID_ZOOM_SELECTION, GERBVIEW_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnUpdateCoordType )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
                    GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode )
@@ -187,6 +191,10 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_NO_TOOL_SELECTED:
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        break;
+
+    case ID_ZOOM_SELECTION:
+        SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
@@ -386,3 +394,9 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     }
 }
 
+
+void GERBVIEW_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetEventObject() == m_optionsToolBar )
+        aEvent.Check( GetToolId() == aEvent.GetId() );
+}

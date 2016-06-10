@@ -147,6 +147,17 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
     m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
+    // TODO: these can be moved to the 'proper' vertical toolbar if and when there are
+    // actual tools to put there. That, or I'll get around to implementing configurable
+    // toolbars.
+    m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
+                               wxEmptyString, wxITEM_CHECK );
+
+    m_optionsToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
+                               _( "Zoom to selection" ), wxITEM_CHECK );
+
+    m_optionsToolBar->AddSeparator();
+
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Turn grid off" ), wxITEM_CHECK );
 

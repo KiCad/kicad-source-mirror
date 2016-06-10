@@ -197,6 +197,7 @@ public:
     void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    void    OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     double  BestZoom();
     void    UpdateStatusBar();
 

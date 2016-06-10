@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 <Jean-Pierre Charras>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,6 +62,7 @@ static EDA_HOTKEY   HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 
 static EDA_HOTKEY   HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
 static EDA_HOTKEY   HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static EDA_HOTKEY   HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static EDA_HOTKEY   HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, '@', ID_ZOOM_SELECTION );
 static EDA_HOTKEY   HkHelp( _HKI( "Help (this window)" ), HK_HELP, '?' );
 static EDA_HOTKEY   HkSwitchUnits( _HKI( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
 static EDA_HOTKEY   HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
@@ -79,7 +80,7 @@ static EDA_HOTKEY   HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Laye
 EDA_HOTKEY* gerbviewHotkeyList[] = {
     &HkHelp,
     &HkZoomIn,                      &HkZoomOut,         &HkZoomRedraw,  &HkZoomCenter,
-    &HkZoomAuto,    &HkSwitchUnits, &HkResetLocalCoord,
+    &HkZoomAuto,    &HkZoomSelection, &HkSwitchUnits, &HkResetLocalCoord,
     &HkLinesDisplayMode, &HkFlashedDisplayMode, &HkPolygonDisplayMode,
     &HkDCodesDisplayMode, &HkNegativeObjDisplayMode,
     &HkSwitch2NextCopperLayer,
