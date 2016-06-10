@@ -299,7 +299,16 @@ void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName
     // and the dialog field editor was used
     if( !frame )
     {
-        frame = Kiway.Player( FRAME_SCH, true );
+        try
+        {
+            frame = Kiway.Player( FRAME_SCH, true );
+        }
+        catch( IO_ERROR err )
+        {
+            wxMessageBox( _( "Eeschema failed to load:\n" ) + err.errorText,
+                          _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+            return;
+        }
     }
 
     if( !frame->IsShown() ) // the frame exists, (created by the dialog field editor)
@@ -334,7 +343,17 @@ void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
 
     if( !frame )
     {
-        frame = Kiway.Player( FRAME_SCH_LIB_EDITOR, true );
+        try
+        {
+            frame = Kiway.Player( FRAME_SCH_LIB_EDITOR, true );
+        }
+        catch( IO_ERROR err )
+        {
+            wxMessageBox( _( "Component library editor failed to load:\n" ) + err.errorText,
+                          _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+            return;
+        }
+
         // frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
         frame->Show( true );
     }
@@ -349,7 +368,18 @@ void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
 {
-    KIWAY_PLAYER* frame = Kiway.Player( FRAME_PCB, true );
+    KIWAY_PLAYER* frame;
+
+    try
+    {
+        frame = Kiway.Player( FRAME_PCB, true );
+    }
+    catch( IO_ERROR err )
+    {
+        wxMessageBox( _( "Pcbnew failed to load:\n" ) + err.errorText, _( "KiCad Error" ),
+                      wxOK | wxICON_ERROR, this );
+        return;
+    }
 
     // a pcb frame can be already existing, but not yet used.
     // this is the case when running the footprint editor, or the footprint viewer first
@@ -386,7 +416,17 @@ void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
 
     if( !frame )
     {
-        frame = Kiway.Player( FRAME_PCB_MODULE_EDITOR, true );
+        try
+        {
+            frame = Kiway.Player( FRAME_PCB_MODULE_EDITOR, true );
+        }
+        catch( IO_ERROR err )
+        {
+            wxMessageBox( _( "Footprint library editor failed to load:\n" ) + err.errorText,
+                          _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
+            return;
+        }
+
 //        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
         frame->Show( true );
     }
