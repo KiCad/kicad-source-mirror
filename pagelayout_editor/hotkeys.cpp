@@ -213,6 +213,11 @@ bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
+    case HK_ZOOM_SELECTION:
+        cmd.SetId( ID_ZOOM_SELECTION );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
     case HK_RESET_LOCAL_COORD:      // Reset the relative coord
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
