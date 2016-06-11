@@ -1,11 +1,7 @@
-/**
- * @file toolbars_pl_editor.cpp
- * @brief Build tool bars
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -25,6 +21,11 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file toolbars_pl_editor.cpp
+ * @brief Build tool bars
  */
 
 #include <fctsys.h>
@@ -86,6 +87,14 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
 
     msg = AddHotkeyName( _( "Zoom auto" ), PlEditorHokeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
+
+    // Zoom-to-selection
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
+                            wxEmptyString, wxITEM_CHECK );
+
+    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
+                            _( "Zoom to selection" ), wxITEM_CHECK );
 
     // Display mode switch
     m_mainToolBar->AddSeparator();

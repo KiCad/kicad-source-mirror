@@ -1,11 +1,8 @@
-/**
- * @file pagelayout_editor/events_functions.cpp
- * @brief page layout editor command event functions.
- */
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +21,11 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file pagelayout_editor/events_functions.cpp
+ * @brief page layout editor command event functions.
  */
 
 #include <fctsys.h>
@@ -88,7 +90,9 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( wxID_PREVIEW, PL_EDITOR_FRAME::ToPrinter )
     EVT_TOOL( ID_SHEET_SET, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
-    EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode )
+    // EVT_TOOL( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnSelectTitleBlockDisplayMode ) // mentioned below
+    EVT_TOOL( ID_NO_TOOL_SELECTED, PL_EDITOR_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_ZOOM_SELECTION, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_CHOICE( ID_SELECT_COORDINATE_ORIGIN, PL_EDITOR_FRAME::OnSelectCoordOriginCorner)
     EVT_CHOICE( ID_SELECT_PAGE_NUMBER, PL_EDITOR_FRAME::Process_Special_Functions)
 
@@ -98,6 +102,8 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
                     PL_EDITOR_FRAME::Process_Special_Functions )
 
+    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, PL_EDITOR_FRAME::OnUpdateSelectTool )
+    EVT_UPDATE_UI( ID_ZOOM_SELECTION, PL_EDITOR_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_SHOW_REAL_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode )
     EVT_UPDATE_UI( ID_SHOW_PL_EDITOR_MODE, PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode )
 
@@ -120,6 +126,10 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
     case ID_NO_TOOL_SELECTED:
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
+        break;
+
+    case ID_ZOOM_SELECTION:
+        SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         break;
 
     case ID_SELECT_PAGE_NUMBER:
@@ -586,4 +596,11 @@ void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& even
 void PL_EDITOR_FRAME::OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event )
 {
     event.Check( WORKSHEET_DATAITEM::m_SpecialMode == true );
+}
+
+
+void PL_EDITOR_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetEventObject() == m_mainToolBar )
+        aEvent.Check( GetToolId() == aEvent.GetId() );
 }

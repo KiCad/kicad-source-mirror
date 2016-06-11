@@ -1,11 +1,8 @@
-/**
- * @file pl_editor_frame.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +21,10 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file pl_editor_frame.h
  */
 
 #ifndef  _PL_EDITOR_FRAME_H
@@ -229,6 +230,43 @@ public:
 
     void OnUpdateTitleBlockDisplayNormalMode( wxUpdateUIEvent& event );
     void OnUpdateTitleBlockDisplaySpecialMode( wxUpdateUIEvent& event );
+    void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
+
+    /**
+     * Function BlockCommand
+     * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
+     * the \a aKey (ALT, SHIFT ALT ..)
+     */
+    virtual int         BlockCommand( EDA_KEY key );
+
+    /**
+     * Function HandleBlockPlace
+     * handles the block place command.
+     */
+    virtual void        HandleBlockPlace( wxDC* DC );
+
+    /**
+     * Function HandleBlockEnd( )
+     * handles the end of a block command,
+     * It is called at the end of the definition of the area of a block.
+     * Depending on the current block command, this command is executed
+     * or parameters are initialized to prepare a call to HandleBlockPlace
+     * in GetScreen()->m_BlockLocate
+     *
+     * @return false if no item selected, or command finished,
+     *         true if some items found and HandleBlockPlace must be called later.
+     */
+    virtual bool        HandleBlockEnd( wxDC* DC );
+
+    /**
+     * Function Block_Move
+     * moves all items within the selected block.
+     * New location is determined by the current offset from the selected
+     * block's original location.
+     *
+     * @param DC A device context to draw on.
+     */
+    void                Block_Move( wxDC* DC );
 
     /**
      * Function OnQuit

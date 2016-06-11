@@ -28,6 +28,7 @@ set( PL_EDITOR_SRCS
     hotkeys.cpp
     menubar.cpp
     toolbars_pl_editor.cpp
+    block.cpp
     )
 
 set( PL_EDITOR_EXTRA_SRCS

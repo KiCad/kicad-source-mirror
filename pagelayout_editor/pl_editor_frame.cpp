@@ -1,11 +1,8 @@
-/**
- * @file pl_editor_frame.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +21,10 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file pl_editor_frame.cpp
  */
 
 #include <fctsys.h>
@@ -71,7 +72,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_propertiesFrameWidth = 200;
 
     if( m_canvas )
-        m_canvas->SetEnableBlockCommands( false );
+        m_canvas->SetEnableBlockCommands( true );
 
     // Give an icon
     wxIcon icon;

@@ -88,13 +88,28 @@ public:
 
     /** The function to draw a WS_DRAW_ITEM
      */
-    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC ) = 0;
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC)
+    {
+        wxPoint offset( 0, 0 );
+        DrawWsItem( aClipBox, aDC, offset, UNSPECIFIED_DRAWMODE, UNSPECIFIED_COLOR );
+    }
+
+    /// More advanced version of DrawWsItem. This is what must be
+    /// defined in the derived type.
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) = 0;
 
     /**
      * Abstract function: should exist for derived items
      * return true if the point aPosition is on the item
      */
     virtual bool HitTest( const wxPoint& aPosition) const = 0;
+
+    /**
+     * Abstract function: should exist for derived items
+     * return true if the rect aRect intersects on the item
+     */
+    virtual bool HitTest( const EDA_RECT& aRect ) const = 0;
 
     /**
      * Abstract function: should exist for derived items
@@ -143,13 +158,20 @@ public:
 
     /** The function to draw a WS_DRAW_ITEM_LINE
      */
-    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     /**
      * Virtual function
      * return true if the point aPosition is on the line
      */
     virtual bool HitTest( const wxPoint& aPosition) const;
+
+    /**
+     * Virtual function
+     * return true if the rect aRect intersects on the item
+     */
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
@@ -193,13 +215,20 @@ public:
 
     /** The function to draw a WS_DRAW_ITEM_POLYGON
      */
-    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     /**
      * Virtual function
      * return true if the point aPosition is inside one polygon
      */
     virtual bool HitTest( const wxPoint& aPosition) const;
+
+    /**
+     * Virtual function
+     * return true if the rect aRect intersects on the item
+     */
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
@@ -221,13 +250,20 @@ public:
 
     /** The function to draw a WS_DRAW_ITEM_RECT
      */
-    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     /**
      * Virtual function
      * return true if the point aPosition is on one edge of the rectangle
      */
     virtual bool HitTest( const wxPoint& aPosition) const;
+
+    /**
+     * Virtual function
+     * return true if the rect aRect intersects on the item
+     */
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
@@ -255,7 +291,8 @@ public:
 
     /** The function to draw a WS_DRAW_ITEM_TEXT
      */
-    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     // Accessors:
     int GetPenWidth() { return GetThickness(); }
@@ -265,6 +302,12 @@ public:
      * return true if the point aPosition is on the text
      */
     virtual bool HitTest( const wxPoint& aPosition) const;
+
+    /**
+     * Virtual function
+     * return true if the rect aRect intersects on the item
+     */
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
@@ -293,13 +336,20 @@ public:
 
     /** The function to draw a WS_DRAW_ITEM_BITMAP
      */
-    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC );
+    virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
     /**
      * Virtual function
      * return true if the point aPosition is on bitmap
      */
     virtual bool HitTest( const wxPoint& aPosition) const;
+
+    /**
+     * Virtual function
+     * return true if the rect aRect intersects on the item
+     */
+    virtual bool HitTest( const EDA_RECT& aRect ) const;
 
     /**
      * return true if the point aPosition is on the reference point of this item.
@@ -455,6 +505,11 @@ public:
             return m_graphicList[m_idx];
         else
             return NULL;
+    }
+
+    void GetAllItems( std::vector<WS_DRAW_ITEM_BASE*>* aList )
+    {
+        *aList = m_graphicList;
     }
 
     /**
