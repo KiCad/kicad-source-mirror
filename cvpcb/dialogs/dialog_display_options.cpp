@@ -1,11 +1,7 @@
-/**
- * @file  cvpcb/dialogs/dialog_display_options.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +19,10 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file  cvpcb/dialogs/dialog_display_options.cpp
  */
 
 #include <fctsys.h>
@@ -79,9 +79,6 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
     m_ShowPadSketch->SetValue( not displ_opts->m_DisplayPadFill );
     m_ShowPadNum->SetValue( displ_opts->m_DisplayPadNum );
     m_IsZoomNoCenter->SetValue( m_Parent->GetCanvas()->GetEnableZoomNoCenter() );
-    m_IsMiddleButtonPan->SetValue( m_Parent->GetCanvas()->GetEnableMiddleButtonPan() );
-    m_IsMiddleButtonPanLimited->SetValue( m_Parent->GetCanvas()->GetMiddleButtonPanLimited() );
-    m_IsMiddleButtonPanLimited->Enable( m_IsMiddleButtonPan->GetValue() );
 }
 
 
@@ -99,8 +96,6 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
     displ_opts->m_DisplayPadNum  = m_ShowPadNum->GetValue();
     displ_opts->m_DisplayPadFill = not m_ShowPadSketch->GetValue();
     m_Parent->GetCanvas()->SetEnableZoomNoCenter( m_IsZoomNoCenter->GetValue() );
-    m_Parent->GetCanvas()->SetEnableMiddleButtonPan( m_IsMiddleButtonPan->GetValue() );
-    m_Parent->GetCanvas()->SetMiddleButtonPanLimited( m_IsMiddleButtonPanLimited->GetValue() );
     m_Parent->GetCanvas()->Refresh();
 }
 

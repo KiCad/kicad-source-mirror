@@ -1,14 +1,7 @@
-/**
- * @file  cvpcb/dialogs/dialog_display_options.h
- */
-
-#ifndef _DIALOG_DISPLAY_OPTIONS_H_
-#define _DIALOG_DISPLAY_OPTIONS_H_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +20,13 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+/**
+ * @file  cvpcb/dialogs/dialog_display_options.h
+ */
+
+#ifndef _DIALOG_DISPLAY_OPTIONS_H_
+#define _DIALOG_DISPLAY_OPTIONS_H_
 
 #include <dialog_display_options_base.h>
 
@@ -52,10 +52,6 @@ private:
     void OnApplyClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
-    void OnMiddleBtnPanEnbl( wxCommandEvent& event )
-    {
-        m_IsMiddleButtonPanLimited->Enable( m_IsMiddleButtonPan->GetValue() );
-    }
 };
 
 #endif      // _DIALOG_DISPLAY_OPTIONS_H_

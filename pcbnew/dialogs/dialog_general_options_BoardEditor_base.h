@@ -52,7 +52,6 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 			wxID_TRACKS45,
 			wxID_SEGMENTS45,
 			wxID_MAGNETIC_TRACKS,
-			wxID_MIDDLEBUTTONPAN,
 			wxID_AUTOPAN
 		};
 		
@@ -75,8 +74,6 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxRadioBox* m_MagneticPadOptCtrl;
 		wxRadioBox* m_MagneticTrackOptCtrl;
 		wxCheckBox* m_ZoomCenterOpt;
-		wxCheckBox* m_MiddleButtonPANOpt;
-		wxCheckBox* m_OptMiddleButtonPanLimited;
 		wxCheckBox* m_MousewheelPANOpt;
 		wxCheckBox* m_AutoPANOpt;
 		wxStaticLine* m_staticline1;
@@ -85,7 +82,6 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnMiddleBtnPanEnbl( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		

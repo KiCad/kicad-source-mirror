@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -312,10 +312,8 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 
     dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_showAllPins );
-    dlg.SetEnableMiddleButtonPan( m_canvas->GetEnableMiddleButtonPan() );
     dlg.SetEnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
     dlg.SetEnableZoomNoCenter( m_canvas->GetEnableZoomNoCenter() );
-    dlg.SetMiddleButtonPanLimited( m_canvas->GetMiddleButtonPanLimited() );
     dlg.SetEnableAutoPan( m_canvas->GetEnableAutoPan() );
     dlg.SetEnableHVBusOrientation( GetForceHVLines() );
     dlg.SetShowPageLimits( m_showPageLimits );
@@ -363,10 +361,8 @@ void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
     SetGridVisibility( dlg.GetShowGrid() );
     m_showAllPins = dlg.GetShowHiddenPins();
-    m_canvas->SetEnableMiddleButtonPan( dlg.GetEnableMiddleButtonPan() );
     m_canvas->SetEnableMousewheelPan( dlg.GetEnableMousewheelPan() );
     m_canvas->SetEnableZoomNoCenter( dlg.GetEnableZoomNoCenter() );
-    m_canvas->SetMiddleButtonPanLimited( dlg.GetMiddleButtonPanLimited() );
     m_canvas->SetEnableAutoPan( dlg.GetEnableAutoPan() );
     SetForceHVLines( dlg.GetEnableHVBusOrientation() );
     m_showPageLimits = dlg.GetShowPageLimits();

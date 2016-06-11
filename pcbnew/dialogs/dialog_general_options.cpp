@@ -90,9 +90,6 @@ void DIALOG_GENERALOPTIONS::init()
     m_Segments_45_Only_Ctrl->SetValue( g_Segments_45_Only );
     m_ZoomCenterOpt->SetValue( ! GetParent()->GetCanvas()->GetEnableZoomNoCenter() );
     m_MousewheelPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableMousewheelPan() );
-    m_MiddleButtonPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableMiddleButtonPan() );
-    m_OptMiddleButtonPanLimited->SetValue( GetParent()->GetCanvas()->GetMiddleButtonPanLimited() );
-    m_OptMiddleButtonPanLimited->Enable( m_MiddleButtonPANOpt->GetValue() );
     m_AutoPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableAutoPan() );
     m_Track_DoubleSegm_Ctrl->SetValue( g_TwoSegmentTrackBuild );
     m_MagneticPadOptCtrl->SetSelection( g_MagneticPadOption );
@@ -142,8 +139,6 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
 
     GetParent()->GetCanvas()->SetEnableZoomNoCenter( ! m_ZoomCenterOpt->GetValue() );
     GetParent()->GetCanvas()->SetEnableMousewheelPan( m_MousewheelPANOpt->GetValue() );
-    GetParent()->GetCanvas()->SetEnableMiddleButtonPan( m_MiddleButtonPANOpt->GetValue() );
-    GetParent()->GetCanvas()->SetMiddleButtonPanLimited( m_OptMiddleButtonPanLimited->GetValue() );
     GetParent()->GetCanvas()->SetEnableAutoPan( m_AutoPANOpt->GetValue() );
 
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();

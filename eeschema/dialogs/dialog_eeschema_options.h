@@ -280,47 +280,6 @@ public:
     }
 
     /**
-     * Function SetEnableMiddleButtonPan
-     * Sets the current MiddleButtonPan value in the dialog
-     *
-     * @param enable The boolean value to set the MiddleButtonPan value in the dialog
-     */
-    void SetEnableMiddleButtonPan( bool enable )
-    {
-        m_checkEnableMiddleButtonPan->SetValue( enable );
-        m_checkMiddleButtonPanLimited->Enable( enable );
-    }
-
-    /**
-     * Function GetEnableMiddleButtonPan
-     * Returns the current MiddleButtonPan setting from the dialog
-     */
-    bool GetEnableMiddleButtonPan( void )
-    {
-        return m_checkEnableMiddleButtonPan->GetValue();
-    }
-
-    /**
-     * Function SetMiddleButtonPanLimited
-     * Sets the MiddleButtonPanLimited value in the dialog
-     *
-     * @param enable The boolean value to set the MiddleButtonPanLimted value in the dialog
-     */
-    void SetMiddleButtonPanLimited( bool enable )
-    {
-        m_checkMiddleButtonPanLimited->SetValue( enable );
-    }
-
-    /**
-     * Function GetMiddleButtonPanLimited
-     * Returns the MiddleButtonPanLimited setting from the dialog
-     */
-    bool GetMiddleButtonPanLimited( void )
-    {
-        return m_checkMiddleButtonPanLimited->GetValue();
-    }
-
-    /**
      * Function SetEnableMousewheelPan
      * Sets the MousewheelPan setting in the dialog
      *
@@ -424,12 +383,6 @@ public:
      *
      */
     TEMPLATE_FIELDNAMES GetTemplateFields( void );
-
-private:
-    void OnMiddleBtnPanEnbl( wxCommandEvent& event )
-    {
-        m_checkMiddleButtonPanLimited->Enable( GetEnableMiddleButtonPan() );
-    }
 };
 
 #endif // __dialog_eeschema_options__
