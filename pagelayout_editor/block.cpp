@@ -40,8 +40,6 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
 static void DrawMovingItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
 
-static PL_EDITOR_FRAME* block_frame = NULL;
-
 
 int PL_EDITOR_FRAME::BlockCommand( EDA_KEY key )
 {
@@ -110,7 +108,6 @@ bool PL_EDITOR_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( m_canvas->IsMouseCaptured() )
 
-        block_frame = this;
         switch( GetScreen()->m_BlockLocate.GetCommand() )
         {
         case BLOCK_MOVE:            /* Move */
@@ -131,7 +128,6 @@ bool PL_EDITOR_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( ! nextcmd )
     {
-        block_frame = NULL;
         GetScreen()->ClearBlockCommand();
         m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
                                    false );
@@ -149,13 +145,14 @@ static void DrawMovingItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     // Get items
     WS_DRAW_ITEM_LIST drawList;
     auto screen = static_cast<PL_EDITOR_SCREEN*>( aPanel->GetScreen() );
+    auto frame = static_cast<PL_EDITOR_FRAME*>( aPanel->GetParent() );
     drawList.SetPenSize( 0 );
     drawList.SetMilsToIUfactor( IU_PER_MILS );
     drawList.SetSheetNumber( screen->m_ScreenNumber );
     drawList.SetSheetCount( screen->m_NumberOfScreens );
-    drawList.SetFileName( block_frame->GetCurrFileName() );
-    drawList.SetSheetName( block_frame->GetScreenDesc() );
-    drawList.BuildWorkSheetGraphicList( block_frame->GetPageSettings(), block_frame->GetTitleBlock(), RED, RED );
+    drawList.SetFileName( frame->GetCurrFileName() );
+    drawList.SetSheetName( frame->GetScreenDesc() );
+    drawList.BuildWorkSheetGraphicList( frame->GetPageSettings(), frame->GetTitleBlock(), RED, RED );
     std::vector<WS_DRAW_ITEM_BASE*> items;
     drawList.GetAllItems( &items );
 
