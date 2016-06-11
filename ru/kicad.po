@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-10 21:17+0300\n"
-"PO-Revision-Date: 2016-06-10 21:36+0300\n"
+"PO-Revision-Date: 2016-06-11 15:31+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -13032,7 +13032,7 @@ msgstr "Полная длина"
 
 #: pcbnew/class_track.cpp:1040
 msgid "Pad To Die Length"
-msgstr "Длина до конт.пл."
+msgstr "Длина от конт.пл. до чипа"
 
 #: pcbnew/class_track.cpp:1048
 msgid "NC Name"
@@ -17296,7 +17296,7 @@ msgstr "Смещение Y:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:171
 msgid "Pad to die length:"
-msgstr "Длина до конт.пл.:"
+msgstr "Длина от конт.пл. до чипа:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:173
 msgid "Wire length from pad to die on chip ( used to calculate actual track length)"
