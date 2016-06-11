@@ -40,6 +40,23 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
 static void DrawMovingItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
 
+static void ConfigureDrawList( WS_DRAW_ITEM_LIST* aDrawList,
+        PL_EDITOR_SCREEN* aScreen, PL_EDITOR_FRAME* aFrame );
+
+
+static void ConfigureDrawList( WS_DRAW_ITEM_LIST* aDrawList,
+        PL_EDITOR_SCREEN* aScreen, PL_EDITOR_FRAME* aFrame )
+{
+    aDrawList->SetPenSize( 0 );
+    aDrawList->SetMilsToIUfactor( IU_PER_MILS );
+    aDrawList->SetSheetNumber( aScreen->m_ScreenNumber );
+    aDrawList->SetSheetCount( aScreen->m_NumberOfScreens );
+    aDrawList->SetFileName( aFrame->GetCurrFileName() );
+    aDrawList->SetSheetName( aFrame->GetScreenDesc() );
+    aDrawList->BuildWorkSheetGraphicList( aFrame->GetPageSettings(),
+            aFrame->GetTitleBlock(), RED, RED );
+}
+
 
 int PL_EDITOR_FRAME::BlockCommand( EDA_KEY key )
 {
@@ -142,18 +159,13 @@ bool PL_EDITOR_FRAME::HandleBlockEnd( wxDC* DC )
 
 static void DrawMovingItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
-    // Get items
-    WS_DRAW_ITEM_LIST drawList;
     auto screen = static_cast<PL_EDITOR_SCREEN*>( aPanel->GetScreen() );
     auto frame = static_cast<PL_EDITOR_FRAME*>( aPanel->GetParent() );
-    drawList.SetPenSize( 0 );
-    drawList.SetMilsToIUfactor( IU_PER_MILS );
-    drawList.SetSheetNumber( screen->m_ScreenNumber );
-    drawList.SetSheetCount( screen->m_NumberOfScreens );
-    drawList.SetFileName( frame->GetCurrFileName() );
-    drawList.SetSheetName( frame->GetScreenDesc() );
-    drawList.BuildWorkSheetGraphicList( frame->GetPageSettings(), frame->GetTitleBlock(), RED, RED );
+
+    // Get items
     std::vector<WS_DRAW_ITEM_BASE*> items;
+    WS_DRAW_ITEM_LIST drawList;
+    ConfigureDrawList( &drawList, screen, frame );
     drawList.GetAllItems( &items );
 
     // Draw items
@@ -190,6 +202,8 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
 void PL_EDITOR_FRAME::Block_Move( wxDC* DC )
 {
+    auto screen = static_cast<PL_EDITOR_SCREEN*>( GetScreen() );
+
     wxPoint delta;
     wxPoint oldpos;
 
@@ -205,16 +219,9 @@ void PL_EDITOR_FRAME::Block_Move( wxDC* DC )
     delta = GetScreen()->m_BlockLocate.GetMoveVector();
 
     // Get the items
-    WS_DRAW_ITEM_LIST drawList;
-    auto screen = static_cast<PL_EDITOR_SCREEN*>( GetScreen() );
-    drawList.SetPenSize( 0 );
-    drawList.SetMilsToIUfactor( IU_PER_MILS );
-    drawList.SetSheetNumber( screen->m_ScreenNumber );
-    drawList.SetSheetCount( screen->m_NumberOfScreens );
-    drawList.SetFileName( GetCurrFileName() );
-    drawList.SetSheetName( GetScreenDesc() );
-    drawList.BuildWorkSheetGraphicList( GetPageSettings(), GetTitleBlock(), RED, RED );
     std::vector<WS_DRAW_ITEM_BASE*> items;
+    WS_DRAW_ITEM_LIST drawList;
+    ConfigureDrawList( &drawList, screen, this );
     drawList.GetAllItems( &items );
 
     // Move items in block
