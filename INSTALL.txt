@@ -161,10 +161,6 @@ Required for Windows platform.
 -DwxWidgets_USE_DEBUG=ON
 Can be used only with -DCMAKE_BUILD_TYPE=Debug
 
--DKICAD_KEEPCASE=ON
-Build the KiCad with no component name conversion to uppercase (if you want your
-ADuC.../Si.../bq... components named as just so).
-
 -DCMAKE_CXX_FLAGS=<some extra flags>
 Extra flags for the c++ compiler for your system required.
 

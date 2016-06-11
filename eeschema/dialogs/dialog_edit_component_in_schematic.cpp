@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -319,7 +319,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     {
         DisplayError( NULL, _( "No Component Name!" ) );
     }
-    else if( Cmp_KEEPCASE( newname, m_cmp->m_part_name ) )
+    else if( newname != m_cmp->m_part_name )
     {
         PART_LIBS* libs = Prj().SchLibs();
 

@@ -123,11 +123,6 @@ KiCad has many build options that can be configured to build different options d
 the availability of support for each option on a given platform.  This section documents
 these options and their default values.
 
-## Case Sensitivity ## {#case_sensitive_opt}
-
-The KICAD_KEEPCASE option allows you to build KiCad so that the string matching for component
-names is case sensitive of case insensitive.  This option is enabled by default.
-
 ## Advanced Graphics Context ## {#graphics_context_opt}
 
 The USE_WX_GRAPHICS_CONTEXT option replaces wxDC with wxGraphicsContext for graphics rendering.

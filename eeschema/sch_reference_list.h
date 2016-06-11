@@ -142,7 +142,7 @@ public:
 
     int CompareValue( const SCH_REFERENCE& item ) const
     {
-        return Cmp_KEEPCASE( m_Value->GetText(), item.m_Value->GetText() );
+        return m_Value->GetText().Cmp( item.m_Value->GetText() );
     }
 
     int CompareRef( const SCH_REFERENCE& item ) const
@@ -152,7 +152,7 @@ public:
 
     int CompareLibName( const SCH_REFERENCE& item ) const
     {
-        return Cmp_KEEPCASE( m_RootCmp->GetPartName(), item.m_RootCmp->GetPartName() );
+        return m_RootCmp->GetPartName().Cmp( item.m_RootCmp->GetPartName() );
     }
 
     /**

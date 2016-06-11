@@ -45,19 +45,6 @@ class LIB_PART;
 class LIB_FIELD;
 
 
-/// Compiler controlled string compare function, either case independent or not:
-inline int Cmp_KEEPCASE( const wxString& aString1, const wxString& aString2 )
-{
-#ifdef KICAD_KEEPCASE
-    // case specificity, the normal behavior:
-    return aString1.Cmp( aString2 );
-#else
-    // case independence (only for guys who want that: not recommended)
-    return aString1.CmpNoCase( aString2 );
-#endif
-}
-
-
 typedef std::vector<LIB_ALIAS*>         LIB_ALIASES;
 typedef boost::shared_ptr<LIB_PART>     PART_SPTR;      ///< shared pointer to LIB_PART
 typedef boost::weak_ptr<LIB_PART>       PART_REF;       ///< weak pointer to LIB_PART

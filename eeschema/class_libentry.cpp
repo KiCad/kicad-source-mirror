@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ const wxString LIB_ALIAS::GetLibraryName()
 
 bool LIB_ALIAS::IsRoot() const
 {
-    return Cmp_KEEPCASE( name, shared->GetName() ) == 0;
+    return name == shared->GetName();
 }
 
 
@@ -152,19 +152,19 @@ bool LIB_ALIAS::SaveDoc( OUTPUTFORMATTER& aFormatter )
 
 bool LIB_ALIAS::operator==( const wxChar* aName ) const
 {
-    return Cmp_KEEPCASE( name, aName ) == 0;
+    return name == aName;
 }
 
 
 bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 )
 {
-    return Cmp_KEEPCASE( aItem1.GetName(), aItem2.GetName() ) < 0;
+    return aItem1.GetName() < aItem2.GetName();
 }
 
 
 int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2 )
 {
-    return Cmp_KEEPCASE( aItem1->GetName(), aItem2->GetName() );
+    return aItem1->GetName().Cmp( aItem2->GetName() );
 }
 
 
@@ -1734,7 +1734,7 @@ bool LIB_PART::HasAlias( const wxString& aName ) const
 
     for( size_t i = 0; i < m_aliases.size(); i++ )
     {
-        if( Cmp_KEEPCASE( aName, m_aliases[i]->GetName() ) == 0 )
+        if( aName == m_aliases[i]->GetName() )
             return true;
     }
 
@@ -1786,7 +1786,7 @@ void LIB_PART::RemoveAlias( const wxString& aName )
 
     for( it = m_aliases.begin(); it != m_aliases.end(); it++ )
     {
-        if( Cmp_KEEPCASE( aName, (*it)->GetName() ) == 0 )
+        if( aName == (*it)->GetName() )
         {
             m_aliases.erase( it );
             break;
@@ -1858,7 +1858,7 @@ LIB_ALIAS* LIB_PART::GetAlias( const wxString& aName )
 
     for( size_t i = 0; i < m_aliases.size(); i++ )
     {
-        if( Cmp_KEEPCASE( aName, m_aliases[i]->GetName() ) == 0 )
+        if( aName == m_aliases[i]->GetName() )
             return m_aliases[i];
     }
 
