@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2013 CERN
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
@@ -154,6 +155,11 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                  _( "&Getting Started in KiCad" ),
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
+
+    AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
+                 _( "&List Hotkeys" ),
+                 _( "Displays the current hotkeys list and corresponding commands" ),
+                 KiBitmap( hotkeys_xpm ) );
 
     // Separator
     helpMenu->AppendSeparator();

@@ -646,6 +646,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
+    AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
+                 _( "&List Hotkeys" ),
+                 _( "Displays the current hotkeys list and corresponding commands" ),
+                 KiBitmap( hotkeys_xpm ) );
+
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About KiCad" ),
