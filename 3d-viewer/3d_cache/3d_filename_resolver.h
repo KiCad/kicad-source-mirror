@@ -54,8 +54,6 @@ class S3D_FILENAME_RESOLVER
 private:
     wxString m_ConfigDir;           // 3D configuration directory
     std::list< S3D_ALIAS > m_Paths; // list of base paths to search from
-    // mapping of (short) file names to resolved names
-    std::map< wxString, wxString, S3D::rsort_wxString > m_NameMap;
     int m_errflags;
     PGM_BASE* m_pgm;
     wxString m_curProjDir;
@@ -192,6 +190,14 @@ public:
      * If the path contains an alias then hasAlias is set true.
      */
     bool ValidateFileName( const wxString& aFileName, bool& hasAlias );
+
+    /**
+     * Function GetKicadPaths
+     * returns a list of path environment variables local to Kicad;
+     * this list always includes KISYS3DMOD even if it is not
+     * defined locally.
+     */
+    bool GetKicadPaths( std::list< wxString >& paths );
 };
 
 #endif  // FILENAME_RESOLVER_3D_H

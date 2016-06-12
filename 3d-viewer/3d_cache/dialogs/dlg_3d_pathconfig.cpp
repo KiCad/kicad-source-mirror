@@ -23,6 +23,8 @@
 
 
 #include <wx/msgdlg.h>
+#include <pgm_base.h>
+#include <html_messagebox.h>
 #include "3d_cache/dialogs/dlg_3d_pathconfig.h"
 #include "3d_cache/3d_filename_resolver.h"
 
@@ -42,8 +44,16 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
 	m_Aliases->SetColSize( 1, 300 );
 	m_Aliases->SetColSize( 2, 120 );
 
+    m_EnvVars->SetColMinimalWidth( 0, 80 );
+    m_EnvVars->SetColMinimalWidth( 1, 300 );
+    m_EnvVars->SetColMinimalAcceptableWidth( 80 );
+    m_EnvVars->SetColSize( 0, 80 );
+    m_EnvVars->SetColSize( 1, 300 );
+
     if( m_resolver )
     {
+        updateEnvVars();
+
         // prohibit these characters in the alias names: []{}()%~<>"='`;:.,&?/\|$
         m_aliasValidator.SetStyle( wxFILTER_EXCLUDE_CHAR_LIST );
         m_aliasValidator.SetCharExcludes( wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" ) );
@@ -287,6 +297,76 @@ void DLG_3D_PATH_CONFIG::OnAliasMoveDown( wxCommandEvent& event )
         m_Aliases->SetCellValue( ni, 2, al0.m_description );
         m_Aliases->SelectRow( ni, false );
     }
+
+    event.Skip();
+}
+
+
+void DLG_3D_PATH_CONFIG::OnConfigEnvVar( wxCommandEvent& event )
+{
+    Pgm().ConfigurePaths( this );
+    updateEnvVars();
+    event.Skip();
+}
+
+
+void DLG_3D_PATH_CONFIG::updateEnvVars( void )
+{
+    if( !m_resolver )
+        return;
+
+    std::list< wxString > epaths;
+
+    m_resolver->GetKicadPaths( epaths );
+    size_t nitems = epaths.size();
+    size_t nrows = m_EnvVars->GetNumberRows();
+
+    if( nrows > nitems )
+    {
+        size_t ni = nrows - nitems;
+        m_EnvVars->DeleteRows( 0, ni );
+    }
+    else if( nrows < nitems )
+    {
+        size_t ni = nitems - nrows;
+        m_EnvVars->InsertRows( 0, ni );
+    }
+
+    int j = 0;
+
+    for( auto i : epaths )
+    {
+        wxString val = ExpandEnvVarSubstitutions( i );
+        m_EnvVars->SetCellValue( j, 0, i );
+        m_EnvVars->SetCellValue( j, 1, val );
+        m_EnvVars->SetReadOnly( j, 0, true );
+        m_EnvVars->SetReadOnly( j, 1, true );
+        wxGridCellAttr* ap = m_EnvVars->GetOrCreateCellAttr( j, 0 );
+        ap->SetReadOnly( true );
+        ap->SetBackgroundColour( *wxLIGHT_GREY );
+        m_EnvVars->SetRowAttr( j, ap );
+        ++j;
+    }
+
+    m_EnvVars->AutoSize();
+
+    return;
+}
+
+
+void DLG_3D_PATH_CONFIG::OnHelp( wxCommandEvent& event )
+{
+    wxString msg = _( "Enter the name and path for each 3D alias variable.  KiCad "
+                      "environment variables and their values are shown for "
+                      "reference only and cannot be edited. " );
+    msg << "<br><br><b>";
+    msg << _( "Alias names may not contain any of the characters " );
+    msg << "{}[]()%~<>\"='`;:.,&?/\\|$";
+    msg << "</b>";
+
+    HTML_MESSAGE_BOX dlg( GetParent(), _( "Environment Variable Help" ) );
+    dlg.AddHTML_Text( msg );
+    dlg.ShowModal();
 
     event.Skip();
 }
