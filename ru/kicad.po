@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-10 21:17+0300\n"
-"PO-Revision-Date: 2016-06-11 15:31+0300\n"
+"PO-Revision-Date: 2016-06-12 21:24+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -10942,7 +10942,7 @@ msgstr "дюйм"
 
 #: pcb_calculator/UnitSelector.cpp:75
 msgid "oz/ft^2"
-msgstr "oz/ft^2"
+msgstr "унций/фут²"
 
 #: pcb_calculator/UnitSelector.cpp:104
 msgid "GHz"
@@ -11154,7 +11154,7 @@ msgstr "Удельное сопротивление"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:305
 msgid "Ohm-meter"
-msgstr "Ом-метр"
+msgstr "Ом/м"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:328
 msgid "External layer traces"
@@ -11205,7 +11205,7 @@ msgstr "dummy"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:379
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:468
 msgid "mm ^ 2"
-msgstr "кв.мм."
+msgstr "мм²"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:383
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:472
@@ -11402,7 +11402,7 @@ msgstr "Rho"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:671
 msgid "Specific resistance in ohms * meters"
-msgstr "Удельное сопротивления в Ом/метр"
+msgstr "Удельное сопротивления в Ом/м"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:681
 #: pcb_calculator/transline_ident.cpp:171 pcb_calculator/transline_ident.cpp:208
@@ -14986,7 +14986,7 @@ msgstr "Позиция по Y:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
 msgid "meter"
-msgstr "метр"
+msgstr "м"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:98
 msgid "0.1 Inch"
@@ -19238,11 +19238,11 @@ msgstr "Переключить на предыдущую ширину дорож
 
 #: pcbnew/hotkeys.cpp:212
 msgid "Switch Grid To Fast Grid1"
-msgstr "Переключить сетку на быструю Grid1"
+msgstr "Переключить сетку на быструю Сетка 1"
 
 #: pcbnew/hotkeys.cpp:215
 msgid "Switch Grid To Fast Grid2"
-msgstr "Переключить сетку на быструю Grid2"
+msgstr "Переключить сетку на быструю Сетка 2"
 
 #: pcbnew/hotkeys.cpp:218
 msgid "Switch Grid To Next"
