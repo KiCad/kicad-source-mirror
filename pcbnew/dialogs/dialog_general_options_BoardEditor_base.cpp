@@ -102,11 +102,6 @@ DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE::DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE( 
 	
 	bMiddleRightBoxSizer->Add( m_ShowGlobalRatsnest, 0, wxALL, 5 );
 	
-	m_ShowModuleRatsnest = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_RATSNEST_MODULE, _("S&how footprint ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ShowModuleRatsnest->SetToolTip( _("Shows (or not) the local ratsnest relative to a footprint, when moving it.\nThis ratsnest is useful to place a footprint.") );
-	
-	bMiddleRightBoxSizer->Add( m_ShowModuleRatsnest, 0, wxALL, 5 );
-	
 	m_TrackAutodel = new wxCheckBox( bMiddleRightBoxSizer->GetStaticBox(), wxID_TRACK_AUTODEL, _("&Delete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackAutodel->SetToolTip( _("Enable/disable the automatic track deletion when recreating a track.") );
 	

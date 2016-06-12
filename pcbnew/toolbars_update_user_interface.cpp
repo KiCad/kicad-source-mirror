@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2012-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,17 +147,6 @@ void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
                                         GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) ?
                                         _( "Hide board ratsnest" ) :
                                         _( "Show board ratsnest" ) );
-}
-
-
-void PCB_EDIT_FRAME::OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent )
-{
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)GetDisplayOptions();
-    aEvent.Check( displ_opts->m_Show_Module_Ratsnest );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
-                                        displ_opts->m_Show_Module_Ratsnest ?
-                                        _( "Hide footprint ratsnest" ) :
-                                        _( "Show footprint ratsnest" ) );
 }
 
 

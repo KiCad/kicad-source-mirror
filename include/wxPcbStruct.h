@@ -259,7 +259,6 @@ public:
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
     void OnUpdateDrcEnable( wxUpdateUIEvent& aEvent );
     void OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent );
-    void OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent );
     void OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent );
     void OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent );

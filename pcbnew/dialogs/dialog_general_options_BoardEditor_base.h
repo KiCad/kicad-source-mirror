@@ -47,7 +47,6 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 			wxID_CURSOR_SHAPE,
 			wxID_DRC_ONOFF,
 			wxID_GENERAL_RATSNEST,
-			wxID_RATSNEST_MODULE,
 			wxID_TRACK_AUTODEL,
 			wxID_TRACKS45,
 			wxID_SEGMENTS45,
@@ -66,7 +65,6 @@ class DIALOG_GENERALOPTIONS_BOARDEDITOR_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_RotationAngle;
 		wxCheckBox* m_DrcOn;
 		wxCheckBox* m_ShowGlobalRatsnest;
-		wxCheckBox* m_ShowModuleRatsnest;
 		wxCheckBox* m_TrackAutodel;
 		wxCheckBox* m_Track_45_Only_Ctrl;
 		wxCheckBox* m_Segments_45_Only_Ctrl;

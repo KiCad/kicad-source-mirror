@@ -353,10 +353,6 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_RATSNEST, wxEmptyString,
                                KiBitmap( general_ratsnest_xpm ),
                                _( "Show board ratsnest" ), wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST, wxEmptyString,
-                               KiBitmap( local_ratsnest_xpm ),
-                               _( "Show footprint ratsnest when moving" ),
-                               wxITEM_CHECK );
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_AUTO_DEL_TRACK, wxEmptyString,
@@ -750,10 +746,6 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             Compile_Ratsnest( NULL, true );
 
         m_canvas->Refresh();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
-        displ_opts->m_Show_Module_Ratsnest = state; // TODO: see if we can use the visibility list
         break;
 
     case ID_TB_OPTIONS_AUTO_DEL_TRACK:

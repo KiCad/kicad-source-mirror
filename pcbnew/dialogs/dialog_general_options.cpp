@@ -83,7 +83,6 @@ void DIALOG_GENERALOPTIONS::init()
     m_MaxShowLinks->SetValue( displ_opts->m_MaxLinksShowed );
 
     m_DrcOn->SetValue( g_Drc_On );
-    m_ShowModuleRatsnest->SetValue( displ_opts->m_Show_Module_Ratsnest );
     m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible( RATSNEST_VISIBLE ) );
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
@@ -132,7 +131,6 @@ void DIALOG_GENERALOPTIONS::OnOkClick( wxCommandEvent& event )
         GetParent()->OnModify();
     }
 
-    displ_opts->m_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     g_Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
     g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();

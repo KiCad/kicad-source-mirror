@@ -734,7 +734,6 @@ boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
         return COMMON_ACTIONS::appendBoard.MakeEvent();
 
     case ID_PCB_SHOW_1_RATSNEST_BUTT:
-    case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
         return COMMON_ACTIONS::toBeDone.MakeEvent();
     }
 
