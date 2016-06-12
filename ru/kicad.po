@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-10 21:17+0300\n"
-"PO-Revision-Date: 2016-06-12 21:24+0300\n"
+"POT-Creation-Date: 2016-06-12 21:26+0300\n"
+"PO-Revision-Date: 2016-06-12 21:27+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -391,7 +391,7 @@ msgid "Set display options, and some layers visibility"
 msgstr "Параметры отображения и видимости слоёв"
 
 #: 3d-viewer/3d_toolbar.cpp:68 common/zoom.cpp:248 eeschema/tool_viewlib.cpp:75
-#: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:78
+#: gerbview/toolbars_gerber.cpp:77 pagelayout_editor/toolbars_pl_editor.cpp:79
 #: pcbnew/footprint_wizard_frame.cpp:610 pcbnew/tool_modedit.cpp:123
 #: pcbnew/tool_modview.cpp:79 eeschema/help_common_strings.h:43
 #: pcbnew/help_common_strings.h:19
@@ -399,7 +399,7 @@ msgid "Zoom in"
 msgstr "Увеличить масштаб"
 
 #: 3d-viewer/3d_toolbar.cpp:71 common/zoom.cpp:250 eeschema/tool_viewlib.cpp:80
-#: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:81
+#: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:82
 #: pcbnew/footprint_wizard_frame.cpp:615 pcbnew/tool_modedit.cpp:126
 #: pcbnew/tool_modview.cpp:84 eeschema/help_common_strings.h:44
 #: pcbnew/help_common_strings.h:20
@@ -407,7 +407,7 @@ msgid "Zoom out"
 msgstr "Уменьшить масштаб"
 
 #: 3d-viewer/3d_toolbar.cpp:75 common/zoom.cpp:252 eeschema/tool_viewlib.cpp:85
-#: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:84
+#: gerbview/toolbars_gerber.cpp:83 pagelayout_editor/toolbars_pl_editor.cpp:85
 #: pcbnew/footprint_wizard_frame.cpp:620 pcbnew/tool_modedit.cpp:129
 #: pcbnew/tool_modview.cpp:89
 msgid "Redraw view"
@@ -461,10 +461,10 @@ msgstr "Сдвинуть вниз"
 msgid "Enable/Disable orthographic projection"
 msgstr "Вкл./Выкл. ортогональную проекцию"
 
-#: 3d-viewer/3d_toolbar.cpp:135 eeschema/menubar.cpp:518
-#: eeschema/menubar_libedit.cpp:273 eeschema/tool_viewlib.cpp:264
-#: gerbview/menubar.cpp:242 kicad/menubar.cpp:426 pagelayout_editor/menubar.cpp:169
-#: pcbnew/menubar_modedit.cpp:355 pcbnew/menubar_pcbframe.cpp:656
+#: 3d-viewer/3d_toolbar.cpp:135 eeschema/menubar.cpp:524
+#: eeschema/menubar_libedit.cpp:279 eeschema/tool_viewlib.cpp:264
+#: gerbview/menubar.cpp:248 kicad/menubar.cpp:432 pagelayout_editor/menubar.cpp:175
+#: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:661
 #: pcbnew/tool_modview.cpp:203
 msgid "&File"
 msgstr "Файл"
@@ -485,8 +485,8 @@ msgstr "Копировать 3D изображение в буфер обмен�
 msgid "&Exit"
 msgstr "Выход"
 
-#: 3d-viewer/3d_toolbar.cpp:154 cvpcb/menubar.cpp:132 gerbview/menubar.cpp:243
-#: kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:170
+#: 3d-viewer/3d_toolbar.cpp:154 cvpcb/menubar.cpp:132 gerbview/menubar.cpp:249
+#: kicad/menubar.cpp:434 pagelayout_editor/menubar.cpp:176
 msgid "&Preferences"
 msgstr "Настройки"
 
@@ -647,7 +647,7 @@ msgstr "Показать толщину меди"
 msgid "Show 3D Models"
 msgstr "Показать 3D модели"
 
-#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:48 pcbnew/tool_pcb.cpp:369
+#: 3d-viewer/dialogs/dialog_3D_view_option_base.cpp:48 pcbnew/tool_pcb.cpp:365
 msgid "Show filled areas in zones"
 msgstr "Показать заливку в зонах"
 
@@ -684,12 +684,12 @@ msgid "Show None"
 msgstr "Скрыть всё"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:270 eeschema/edit_bitmap.cpp:103
-#: pagelayout_editor/pl_editor_frame.cpp:635
+#: pagelayout_editor/pl_editor_frame.cpp:636
 msgid "Choose Image"
 msgstr "Выбор изображения"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:271 eeschema/edit_bitmap.cpp:104
-#: pagelayout_editor/pl_editor_frame.cpp:636
+#: pagelayout_editor/pl_editor_frame.cpp:637
 msgid "Image Files "
 msgstr "Файлы изображений"
 
@@ -752,7 +752,7 @@ msgstr "пикселей"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78 common/common.cpp:148
 #: common/common.cpp:206 common/dialogs/dialog_page_settings.cpp:471
 #: common/draw_frame.cpp:510 eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:44
-#: pagelayout_editor/pl_editor_frame.cpp:467 pcb_calculator/UnitSelector.cpp:38
+#: pagelayout_editor/pl_editor_frame.cpp:468 pcb_calculator/UnitSelector.cpp:38
 #: pcb_calculator/UnitSelector.cpp:70 pcbnew/dialogs/dialog_create_array_base.cpp:50
 #: pcbnew/dialogs/dialog_create_array_base.cpp:61
 #: pcbnew/dialogs/dialog_create_array_base.cpp:72
@@ -1169,7 +1169,7 @@ msgid "\""
 msgstr "\""
 
 #: common/common.cpp:175 common/dialogs/dialog_page_settings.cpp:471
-#: pagelayout_editor/pl_editor_frame.cpp:463
+#: pagelayout_editor/pl_editor_frame.cpp:464
 msgid "inches"
 msgstr "дюймы"
 
@@ -1479,8 +1479,8 @@ msgstr "Помощь по переменным окружения"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:193
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:187
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:327
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:330
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:316
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:319
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:1990
 #: eeschema/libedit.cpp:477 pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:34
@@ -1505,7 +1505,7 @@ msgstr "Добавить новую запись в таблицу."
 #: common/dialogs/dialog_env_var_config_base.cpp:64
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:189
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:231
-#: pagelayout_editor/events_functions.cpp:573 pagelayout_editor/onrightclick.cpp:103
+#: pagelayout_editor/events_functions.cpp:583 pagelayout_editor/onrightclick.cpp:103
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:62
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:55 pcbnew/dialogs/dialog_netlist_fbp.cpp:63
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:71 pcbnew/onrightclick.cpp:641
@@ -1556,7 +1556,7 @@ msgid "Select by Browser"
 msgstr "Выбор обозревателем"
 
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:18
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:249
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:248
 msgid "Double-click to edit"
 msgstr "Двойной щелчок ЛКМ для редактирования"
 
@@ -1936,7 +1936,7 @@ msgstr "Сохранить отчёт в файл..."
 
 #: common/draw_frame.cpp:189 common/draw_frame.cpp:506
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:31
-#: pagelayout_editor/pl_editor_frame.cpp:117
+#: pagelayout_editor/pl_editor_frame.cpp:118
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:60
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:33
@@ -2130,43 +2130,35 @@ msgstr "Считать файл конфигурации горячих клав
 msgid "Write Hotkey Configuration File:"
 msgstr "Записать файл конфигурации горячих клавиш:"
 
-#: common/hotkeys_basic.cpp:811
-msgid "&List Current Keys"
-msgstr "Список текущих клавиш"
-
-#: common/hotkeys_basic.cpp:812
-msgid "Displays the current hotkeys list and corresponding commands"
-msgstr "Отображает текущий список горячих клавиш и соответствующих команд"
-
-#: common/hotkeys_basic.cpp:817
+#: common/hotkeys_basic.cpp:810
 msgid "&Edit Hotkeys"
 msgstr "Редактор горячих клавиш"
 
-#: common/hotkeys_basic.cpp:818
+#: common/hotkeys_basic.cpp:811
 msgid "Call the hotkeys editor"
 msgstr "Вызвать редактор горячих клавиш"
 
-#: common/hotkeys_basic.cpp:825 eeschema/menubar.cpp:409
+#: common/hotkeys_basic.cpp:818 eeschema/menubar.cpp:409
 msgid "E&xport Hotkeys"
 msgstr "Экспорт горячих клавиши"
 
-#: common/hotkeys_basic.cpp:826 eeschema/menubar.cpp:410
+#: common/hotkeys_basic.cpp:819 eeschema/menubar.cpp:410
 msgid "Create a hotkey configuration file to export the current hotkeys"
 msgstr "Создать файл конфигурации горячих клавиш для экспорта текущих горячих клавиш"
 
-#: common/hotkeys_basic.cpp:831 eeschema/menubar.cpp:415
+#: common/hotkeys_basic.cpp:824 eeschema/menubar.cpp:415
 msgid "&Import Hotkeys"
 msgstr "Импорт горячих клавиш"
 
-#: common/hotkeys_basic.cpp:832 eeschema/menubar.cpp:416
+#: common/hotkeys_basic.cpp:825 eeschema/menubar.cpp:416
 msgid "Load an existing hotkey configuration file"
 msgstr "Загрузить существующий файл конфигурации горячих клавиш"
 
-#: common/hotkeys_basic.cpp:837
+#: common/hotkeys_basic.cpp:830
 msgid "&Hotkeys"
 msgstr "Горячие клавиши"
 
-#: common/hotkeys_basic.cpp:838
+#: common/hotkeys_basic.cpp:831
 msgid "Hotkeys configuration and preferences"
 msgstr "Настройка горячих клавиш и предпочтения"
 
@@ -2407,7 +2399,7 @@ msgstr "ошибка записи в файл '%s'"
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER ошибка записи"
 
-#: common/selcolor.cpp:82 eeschema/dialogs/dialog_eeschema_options_base.cpp:301
+#: common/selcolor.cpp:82 eeschema/dialogs/dialog_eeschema_options_base.cpp:290
 msgid "Colors"
 msgstr "Цвета"
 
@@ -2610,7 +2602,7 @@ msgid "Center"
 msgstr "Центр"
 
 #: common/zoom.cpp:254 eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
-#: pagelayout_editor/toolbars_pl_editor.cpp:87 pcbnew/footprint_wizard_frame.cpp:625
+#: pagelayout_editor/toolbars_pl_editor.cpp:88 pcbnew/footprint_wizard_frame.cpp:625
 #: pcbnew/tool_modedit.cpp:133 pcbnew/tool_modview.cpp:94
 msgid "Zoom auto"
 msgstr "Авто масштаб"
@@ -2685,7 +2677,7 @@ msgid "Change cursor shape"
 msgstr "Изменить форму курсора"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:201 pcbnew/basepcbframe.cpp:482
-#: pcbnew/tool_pcb.cpp:380
+#: pcbnew/tool_pcb.cpp:376
 msgid "Show pads in outline mode"
 msgstr "Показать конт.пл. в контурном режиме"
 
@@ -2739,7 +2731,7 @@ msgid "Show outlines in sketch mode"
 msgstr "Показать границы в контурном режиме"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:408 pcbnew/hotkeys.cpp:188
-#: pcbnew/moduleframe.cpp:696 pcbnew/pcbframe.cpp:656
+#: pcbnew/moduleframe.cpp:696 pcbnew/pcbframe.cpp:653
 msgid "3D Viewer"
 msgstr "Просмотрщик 3D"
 
@@ -2885,7 +2877,7 @@ msgid "Project: '%s'"
 msgstr "Проект: '%s'"
 
 #: cvpcb/cvpcb_mainframe.cpp:762 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1366
-#: kicad/prjconfig.cpp:332 pcbnew/moduleframe.cpp:771 pcbnew/pcbframe.cpp:986
+#: kicad/prjconfig.cpp:332 pcbnew/moduleframe.cpp:771 pcbnew/pcbframe.cpp:983
 msgid " [Read Only]"
 msgstr " [Только чтение]"
 
@@ -2999,7 +2991,7 @@ msgstr "Показать номер конт.пл."
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:41
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:84
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:156
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:151
 msgid "Pan and Zoom"
 msgstr "Панорама и масштаб"
 
@@ -3009,21 +3001,11 @@ msgid "Do not center and warp cursor on zoom"
 msgstr "Не центрировать по курсору при масштабировании"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:44
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:260
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:259
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:87
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:159
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:154
 msgid "Keep the cursor at its current location when zooming"
 msgstr "Сохранять курсор в текущем положении при масштабировании"
-
-#: cvpcb/dialogs/dialog_display_options_base.cpp:48
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:91
-msgid "Use middle mouse button to pan"
-msgstr "Использовать среднюю кнопку мыши для панорамирования"
-
-#: cvpcb/dialogs/dialog_display_options_base.cpp:51
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:94
-msgid "Limit panning to scroll size"
-msgstr "Ограничить панорамирование размером прокрутки"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -3047,7 +3029,7 @@ msgstr "Сохранить связь посад.места в поле поса
 
 #: cvpcb/menubar.cpp:74 eeschema/dialogs/dialog_erc_base.cpp:101
 #: eeschema/menubar.cpp:168 gerbview/menubar.cpp:145 kicad/menubar.cpp:282
-#: pagelayout_editor/menubar.cpp:111 pcbnew/menubar_pcbframe.cpp:278
+#: pagelayout_editor/menubar.cpp:112 pcbnew/menubar_pcbframe.cpp:278
 msgid "&Close"
 msgstr "Закрыть"
 
@@ -3059,16 +3041,16 @@ msgstr "Закрыть CvPcb"
 msgid "Footprint Li&braries"
 msgstr "Менеджер библиотек посад.мест"
 
-#: cvpcb/menubar.cpp:81 pcbnew/menubar_modedit.cpp:312 pcbnew/menubar_pcbframe.cpp:493
+#: cvpcb/menubar.cpp:81 pcbnew/menubar_modedit.cpp:311 pcbnew/menubar_pcbframe.cpp:493
 msgid "Configure footprint libraries"
 msgstr "Конфигурация библиотек посад.мест"
 
-#: cvpcb/menubar.cpp:87 kicad/menubar.cpp:309 pcbnew/menubar_modedit.cpp:318
+#: cvpcb/menubar.cpp:87 kicad/menubar.cpp:309 pcbnew/menubar_modedit.cpp:317
 #: pcbnew/menubar_pcbframe.cpp:499
 msgid "Configure Pa&ths"
 msgstr "Настройка путей"
 
-#: cvpcb/menubar.cpp:88 kicad/menubar.cpp:310 pcbnew/menubar_modedit.cpp:319
+#: cvpcb/menubar.cpp:88 kicad/menubar.cpp:310 pcbnew/menubar_modedit.cpp:318
 #: pcbnew/menubar_pcbframe.cpp:500
 msgid "Edit path configuration environment variables"
 msgstr "Редактировать настройки путей переменных окружения"
@@ -3103,23 +3085,23 @@ msgstr "Открыть руководство CvPcb"
 
 #: cvpcb/menubar.cpp:120 eeschema/menubar.cpp:506 eeschema/menubar_libedit.cpp:259
 #: eeschema/tool_viewlib.cpp:252 gerbview/menubar.cpp:227 kicad/menubar.cpp:412
-#: pagelayout_editor/menubar.cpp:154 pcbnew/menubar_modedit.cpp:343
+#: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_modedit.cpp:342
 #: pcbnew/menubar_pcbframe.cpp:645 pcbnew/tool_modview.cpp:191
 msgid "&Getting Started in KiCad"
 msgstr "Начало работы с KiCad"
 
 #: cvpcb/menubar.cpp:121 eeschema/menubar.cpp:507 gerbview/menubar.cpp:228
-#: kicad/menubar.cpp:413 pagelayout_editor/menubar.cpp:155
+#: kicad/menubar.cpp:413 pagelayout_editor/menubar.cpp:156
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Открыть руководство для начинающих \"Начало работы с KiCad\""
 
-#: cvpcb/menubar.cpp:126 gerbview/menubar.cpp:237 pagelayout_editor/menubar.cpp:164
+#: cvpcb/menubar.cpp:126 gerbview/menubar.cpp:243 pagelayout_editor/menubar.cpp:170
 msgid "&About Kicad"
 msgstr "О Kicad"
 
-#: cvpcb/menubar.cpp:127 eeschema/menubar.cpp:514 eeschema/menubar_libedit.cpp:269
-#: gerbview/menubar.cpp:238 kicad/menubar.cpp:422 pagelayout_editor/menubar.cpp:165
-#: pcbnew/menubar_modedit.cpp:351
+#: cvpcb/menubar.cpp:127 eeschema/menubar.cpp:520 eeschema/menubar_libedit.cpp:275
+#: gerbview/menubar.cpp:244 kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:171
+#: pcbnew/menubar_modedit.cpp:355
 msgid "About KiCad"
 msgstr "О KiCad"
 
@@ -3128,10 +3110,10 @@ msgstr "О KiCad"
 msgid "&Save"
 msgstr "Сохранить"
 
-#: cvpcb/menubar.cpp:133 eeschema/menubar.cpp:524 eeschema/menubar_libedit.cpp:278
-#: eeschema/tool_viewlib.cpp:267 gerbview/menubar.cpp:245 kicad/menubar.cpp:430
-#: pagelayout_editor/menubar.cpp:171 pcbnew/menubar_modedit.cpp:361
-#: pcbnew/menubar_pcbframe.cpp:665 pcbnew/tool_modview.cpp:206
+#: cvpcb/menubar.cpp:133 eeschema/menubar.cpp:530 eeschema/menubar_libedit.cpp:284
+#: eeschema/tool_viewlib.cpp:267 gerbview/menubar.cpp:251 kicad/menubar.cpp:436
+#: pagelayout_editor/menubar.cpp:177 pcbnew/menubar_modedit.cpp:365
+#: pcbnew/menubar_pcbframe.cpp:670 pcbnew/tool_modview.cpp:206
 msgid "&Help"
 msgstr "Справка"
 
@@ -4574,17 +4556,17 @@ msgstr ""
 msgid "Check for cache/library conflicts when loading schematic"
 msgstr "Проверка конфликтов кэша/библиотеки при загрузке схемы"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:43
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:42
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:36
 msgid "&Grid size:"
 msgstr "Шаг сетки:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:52
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:63
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:74
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:152
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:163
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:184
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:51
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:62
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:73
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:151
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:162
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:183
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:45
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:56
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:67
@@ -4596,186 +4578,168 @@ msgstr "Шаг сетки:"
 msgid "mils"
 msgstr "мил"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:56
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:55
 msgid "&Bus thickness:"
 msgstr "Толщина шины:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:67
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:66
 msgid "&Line thickness:"
 msgstr "Толщина линии:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:78
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:77
 msgid "&Part ID notation:"
 msgstr "Индекс обозначения части:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:271
 msgid "A"
 msgstr "A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
 msgid ".A"
 msgstr ".A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
 msgid "-A"
 msgstr "-A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
 msgid "_A"
 msgstr "_A"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
 msgid ".1"
 msgstr ".1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
 msgid "-1"
 msgstr "-1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:82
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
 msgid "_1"
 msgstr "_1"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:100
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:99
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:148
 msgid "&Show grid"
 msgstr "Показать сетку"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:103
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:102
 msgid "&Restrict buses and wires to H and V orientation"
 msgstr "Ограничить шины и проводники в ортогональной ориентации"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:106
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:105
 msgid "S&how hidden pins"
 msgstr "Показать скрытые выводы"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:109
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:108
 msgid "Show page limi&ts"
 msgstr "Показать границы страницы"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:120 pcbnew/class_text_mod.cpp:359
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:119 pcbnew/class_text_mod.cpp:359
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:85
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:105
 msgid "Display"
 msgstr "Отображение"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:133
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:132
 msgid "&Measurement units:"
 msgstr "Единицы измерения:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:145
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:144
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:93
 msgid "&Horizontal pitch of repeated items:"
 msgstr "Гориз. шаг повторения элементов:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:156
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:155
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:104
 msgid "&Vertical pitch of repeated items:"
 msgstr "Верт. шаг повторения элементов:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:167
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:166
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:129
 msgid "&Increment of repeated labels:"
 msgstr "Инкремент повторения меток:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:177
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:176
 msgid "Def&ault text size:"
 msgstr "Размер текста по умолчанию:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:188
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:187
 msgid "&Auto-save time interval"
 msgstr "Интервал времени автосохранения"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:195
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:194
 msgid "minutes"
 msgstr "минут"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:208
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:207
 msgid "A&utomatically place component fields"
 msgstr "Автоматически разместить поля компонентов"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:211
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:210
 msgid "A&llow field autoplace to change justification"
 msgstr "Разрешить при авторазмещении поля изменять выравнивание"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:214
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:213
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
 msgstr "Всегда выравнивать авторазмещенные поля по сетке 50 мил"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:224
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:223
 msgid "Editing"
 msgstr "Редактирование"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:245
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:244
 msgid "Hotkeys:"
 msgstr "Горячие клавиши:"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:259
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:258
 msgid "Cen&ter and warp cursor on zoom"
 msgstr "Центрировать по курсору при масштабировании"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:264
-msgid "&Use middle mouse button to pan"
-msgstr "Использовать среднюю кнопку мыши для панорамирования"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:265
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:164
-msgid "Use middle mouse button dragging to pan"
-msgstr "Использовать среднюю кнопку мыши для панорамирования"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:269
-msgid "&Limit panning to scroll size"
-msgstr "Ограничить панорамирование размером прокрутки"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:270
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:169
-msgid "Middle mouse button panning limited by current scrollbar size"
-msgstr "Панорамирование средней кнопкой мыши ограничено размером полосы прокрутки"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:274
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:263
 msgid "Use touchpa&d to pan"
 msgstr "Использовать сенсорную панель для панорамирования"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:275
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:98
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:174
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:264
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:92
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:159
 msgid "Use touchpad to pan canvas"
 msgstr "Использовать сенсорную панель для панорамирования холста"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:279
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:178
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:268
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:163
 msgid "&Pan while moving object"
 msgstr "Панорамирование при перемещении объекта"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:289
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:278
 msgid "Controls"
 msgstr "Управление"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:303
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:292
 msgid "User defined field names for schematic components. "
 msgstr "Заданные пользователем имена полей для компонентов схемы."
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:328
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:317
 msgid "Default Value"
 msgstr "Значение по умолчанию"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:329 eeschema/lib_pin.cpp:2012
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:318 eeschema/lib_pin.cpp:2012
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:103
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:125
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:154
 msgid "Visible"
 msgstr "Видимый"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:351
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:340
 msgid "&Add"
 msgstr "Добавить"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:354
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:343
 msgid "De&lete"
 msgstr "Удалить"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:367
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:356
 msgid "Default Fields"
 msgstr "Поля по умолчанию"
 
@@ -5055,7 +5019,7 @@ msgid "Vertical Justify"
 msgstr "Верт. выравнивание"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:22
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:95
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.h:89
 msgid "General Settings"
 msgstr "Общие настройки"
 
@@ -5719,7 +5683,7 @@ msgid "Replace &All"
 msgstr "Заменить всё"
 
 #: eeschema/edit_bitmap.cpp:115 eeschema/edit_bitmap.cpp:125
-#: pagelayout_editor/pl_editor_frame.cpp:646 pagelayout_editor/pl_editor_frame.cpp:653
+#: pagelayout_editor/pl_editor_frame.cpp:647 pagelayout_editor/pl_editor_frame.cpp:654
 #, c-format
 msgid "Couldn't load image from <%s>"
 msgstr "Не удалось загрузить изображение из <%s>"
@@ -5733,7 +5697,7 @@ msgstr "Правка %s поля"
 msgid "Read Project File"
 msgstr "Читать файл проекта"
 
-#: eeschema/eeschema_config.cpp:484 pcbnew/pcbnew_config.cpp:291
+#: eeschema/eeschema_config.cpp:480 pcbnew/pcbnew_config.cpp:291
 msgid "Save Project File"
 msgstr "Сохранить файл проекта"
 
@@ -6069,40 +6033,40 @@ msgstr "Основной лист"
 msgid "Fit on Screen"
 msgstr "Масштаб по экрану"
 
-#: eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:60 pagelayout_editor/hotkeys.cpp:72
+#: eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:60 pagelayout_editor/hotkeys.cpp:74
 #: pcbnew/basepcbframe.cpp:843 pcbnew/hotkeys.cpp:160 pcbnew/hotkeys.cpp:162
 #: pcbnew/tools/common_actions.cpp:211
 msgid "Zoom Auto"
 msgstr "Авто масштаб"
 
-#: eeschema/hotkeys.cpp:93 gerbview/hotkeys.cpp:61 pagelayout_editor/hotkeys.cpp:73
+#: eeschema/hotkeys.cpp:93 gerbview/hotkeys.cpp:61 pagelayout_editor/hotkeys.cpp:75
 #: pcbnew/hotkeys.cpp:165
 msgid "Zoom Center"
 msgstr "По центру"
 
 #: eeschema/hotkeys.cpp:98 eeschema/hotkeys.cpp:100 gerbview/hotkeys.cpp:62
-#: pagelayout_editor/hotkeys.cpp:75 pcbnew/hotkeys.cpp:169 pcbnew/hotkeys.cpp:171
+#: pagelayout_editor/hotkeys.cpp:77 pcbnew/hotkeys.cpp:169 pcbnew/hotkeys.cpp:171
 msgid "Zoom Redraw"
 msgstr "Перерисовать"
 
 #: eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108 gerbview/hotkeys.cpp:64
-#: pagelayout_editor/hotkeys.cpp:77 pcbnew/hotkeys.cpp:176 pcbnew/hotkeys.cpp:178
+#: pagelayout_editor/hotkeys.cpp:79 pcbnew/hotkeys.cpp:176 pcbnew/hotkeys.cpp:178
 #: pcbnew/tools/common_actions.cpp:191
 msgid "Zoom In"
 msgstr "Увеличить"
 
 #: eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115 gerbview/hotkeys.cpp:63
-#: pagelayout_editor/hotkeys.cpp:76 pcbnew/hotkeys.cpp:183 pcbnew/hotkeys.cpp:185
+#: pagelayout_editor/hotkeys.cpp:78 pcbnew/hotkeys.cpp:183 pcbnew/hotkeys.cpp:185
 #: pcbnew/tools/common_actions.cpp:195
 msgid "Zoom Out"
 msgstr "Уменьшить"
 
 #: eeschema/hotkeys.cpp:118 gerbview/hotkeys.cpp:66 kicad/menubar.cpp:139
-#: pagelayout_editor/hotkeys.cpp:78 pcbnew/hotkeys.cpp:190
+#: pagelayout_editor/hotkeys.cpp:81 pcbnew/hotkeys.cpp:190
 msgid "Help (this window)"
 msgstr "Помощь (данное окно)"
 
-#: eeschema/hotkeys.cpp:119 gerbview/hotkeys.cpp:68 pagelayout_editor/hotkeys.cpp:70
+#: eeschema/hotkeys.cpp:119 gerbview/hotkeys.cpp:68 pagelayout_editor/hotkeys.cpp:72
 #: pcbnew/hotkeys.cpp:129
 msgid "Reset Local Coordinates"
 msgstr "Сбросить локальные координаты"
@@ -6111,20 +6075,20 @@ msgstr "Сбросить локальные координаты"
 msgid "Leave Sheet"
 msgstr "Покинуть лист"
 
-#: eeschema/hotkeys.cpp:124 pagelayout_editor/hotkeys.cpp:89 pcbnew/hotkeys.cpp:194
+#: eeschema/hotkeys.cpp:124 pagelayout_editor/hotkeys.cpp:92 pcbnew/hotkeys.cpp:194
 msgid "Undo"
 msgstr "Отмена"
 
-#: eeschema/hotkeys.cpp:128 eeschema/hotkeys.cpp:130 pagelayout_editor/hotkeys.cpp:90
+#: eeschema/hotkeys.cpp:128 eeschema/hotkeys.cpp:130 pagelayout_editor/hotkeys.cpp:93
 #: pcbnew/hotkeys.cpp:198 pcbnew/hotkeys.cpp:200
 msgid "Redo"
 msgstr "Повтор"
 
-#: eeschema/hotkeys.cpp:135 pagelayout_editor/hotkeys.cpp:67 pcbnew/hotkeys.cpp:67
+#: eeschema/hotkeys.cpp:135 pagelayout_editor/hotkeys.cpp:69 pcbnew/hotkeys.cpp:67
 msgid "Mouse Left Click"
 msgstr "Щелчок левой кнопкой мыши"
 
-#: eeschema/hotkeys.cpp:136 pagelayout_editor/hotkeys.cpp:68 pcbnew/hotkeys.cpp:69
+#: eeschema/hotkeys.cpp:136 pagelayout_editor/hotkeys.cpp:70 pcbnew/hotkeys.cpp:69
 msgid "Mouse Left Double Click"
 msgstr "Двойной щелчок левой кнопкой мыши"
 
@@ -6240,7 +6204,7 @@ msgstr "Переместить блок -> Перетащить блок"
 msgid "Repeat Last Item"
 msgstr "Повторить последнее действие"
 
-#: eeschema/hotkeys.cpp:200 pagelayout_editor/hotkeys.cpp:85
+#: eeschema/hotkeys.cpp:200 pagelayout_editor/hotkeys.cpp:88
 msgid "Delete Item"
 msgstr "Удалить элемент"
 
@@ -6261,7 +6225,8 @@ msgstr "Искать следующий элемент"
 msgid "Find Next DRC Marker"
 msgstr "Искать следующий DRC маркер"
 
-#: eeschema/hotkeys.cpp:211 gerbview/hotkeys.cpp:65 pcbnew/hotkeys.cpp:101
+#: eeschema/hotkeys.cpp:211 gerbview/hotkeys.cpp:65 pagelayout_editor/hotkeys.cpp:80
+#: pcbnew/hotkeys.cpp:101
 msgid "Zoom to Selection"
 msgstr "Увеличить выбранное"
 
@@ -6298,7 +6263,7 @@ msgstr "Авторазместить поля"
 msgid "Update PCB from Schematics"
 msgstr "Обновить плату из схемы"
 
-#: eeschema/hotkeys.cpp:333 pagelayout_editor/hotkeys.cpp:114 pcbnew/hotkeys.cpp:304
+#: eeschema/hotkeys.cpp:333 pagelayout_editor/hotkeys.cpp:117 pcbnew/hotkeys.cpp:304
 msgid "Common"
 msgstr "Общее"
 
@@ -6992,8 +6957,9 @@ msgstr "Нет компонента для сохранения."
 
 #: eeschema/libeditframe.cpp:1108 eeschema/schedit.cpp:533 eeschema/tool_lib.cpp:65
 #: eeschema/tool_sch.cpp:194 gerbview/events_called_functions.cpp:197
-#: gerbview/toolbars_gerber.cpp:157 pcbnew/edit.cpp:1433 pcbnew/modedit.cpp:950
-#: pcbnew/tool_modedit.cpp:165 pcbnew/tool_pcb.cpp:430
+#: gerbview/toolbars_gerber.cpp:157 pagelayout_editor/events_functions.cpp:132
+#: pagelayout_editor/toolbars_pl_editor.cpp:97 pcbnew/edit.cpp:1433
+#: pcbnew/modedit.cpp:950 pcbnew/tool_modedit.cpp:165 pcbnew/tool_pcb.cpp:426
 #: pcbnew/tools/common_actions.cpp:496 pcbnew/tools/zoom_tool.cpp:49
 msgid "Zoom to selection"
 msgstr "Увеличить выбранное"
@@ -7255,17 +7221,17 @@ msgid "Close Eeschema"
 msgstr "Закрыть Eeschema"
 
 #: eeschema/menubar.cpp:176 eeschema/menubar_libedit.cpp:118
-#: pcbnew/menubar_modedit.cpp:158 pcbnew/menubar_pcbframe.cpp:283
+#: pcbnew/menubar_modedit.cpp:157 pcbnew/menubar_pcbframe.cpp:283
 msgid "&Undo"
 msgstr "Отмена"
 
 #: eeschema/menubar.cpp:181 eeschema/menubar_libedit.cpp:127
-#: pcbnew/menubar_modedit.cpp:164 pcbnew/menubar_pcbframe.cpp:286
+#: pcbnew/menubar_modedit.cpp:163 pcbnew/menubar_pcbframe.cpp:286
 msgid "&Redo"
 msgstr "Повтор"
 
 #: eeschema/menubar.cpp:188 eeschema/menubar_libedit.cpp:140
-#: pcbnew/menubar_modedit.cpp:171 pcbnew/menubar_pcbframe.cpp:290
+#: pcbnew/menubar_modedit.cpp:170 pcbnew/menubar_pcbframe.cpp:290
 msgid "&Delete"
 msgstr "Удалить"
 
@@ -7278,25 +7244,25 @@ msgid "Import Footprint Selection"
 msgstr "Импорт выбора посад.места"
 
 #: eeschema/menubar.cpp:227 eeschema/menubar_libedit.cpp:161
-#: eeschema/tool_viewlib.cpp:225 pcbnew/menubar_modedit.cpp:216
+#: eeschema/tool_viewlib.cpp:225 pcbnew/menubar_modedit.cpp:215
 #: pcbnew/menubar_pcbframe.cpp:334 pcbnew/tool_modview.cpp:157
 msgid "Zoom &In"
 msgstr "Увеличить"
 
 #: eeschema/menubar.cpp:231 eeschema/menubar_libedit.cpp:165
-#: eeschema/tool_viewlib.cpp:229 pcbnew/menubar_modedit.cpp:220
+#: eeschema/tool_viewlib.cpp:229 pcbnew/menubar_modedit.cpp:219
 #: pcbnew/menubar_pcbframe.cpp:338 pcbnew/tool_modview.cpp:161
 msgid "Zoom &Out"
 msgstr "Уменьшить"
 
 #: eeschema/menubar.cpp:235 eeschema/menubar_libedit.cpp:169
-#: eeschema/tool_viewlib.cpp:233 pcbnew/menubar_modedit.cpp:224
+#: eeschema/tool_viewlib.cpp:233 pcbnew/menubar_modedit.cpp:223
 #: pcbnew/menubar_pcbframe.cpp:342 pcbnew/tool_modview.cpp:165
 msgid "&Fit on Screen"
 msgstr "Масштаб по экрану"
 
 #: eeschema/menubar.cpp:239 eeschema/menubar_libedit.cpp:176
-#: eeschema/tool_viewlib.cpp:238 pcbnew/menubar_modedit.cpp:229
+#: eeschema/tool_viewlib.cpp:238 pcbnew/menubar_modedit.cpp:228
 #: pcbnew/menubar_pcbframe.cpp:347 pcbnew/tool_modview.cpp:170
 msgid "&Redraw"
 msgstr "Перерисовать"
@@ -7490,33 +7456,45 @@ msgstr "Руководство Eeschema"
 msgid "Open Eeschema Manual"
 msgstr "Открыть руководство Eeschema"
 
-#: eeschema/menubar.cpp:513 eeschema/menubar_libedit.cpp:268 kicad/menubar.cpp:421
-#: pcbnew/menubar_modedit.cpp:350 pcbnew/menubar_pcbframe.cpp:651
+#: eeschema/menubar.cpp:512 eeschema/menubar_libedit.cpp:265 gerbview/menubar.cpp:233
+#: kicad/menubar.cpp:418 pagelayout_editor/menubar.cpp:160
+#: pcbnew/menubar_modedit.cpp:347 pcbnew/menubar_pcbframe.cpp:650
+msgid "&List Hotkeys"
+msgstr "Список горячих клавиш"
+
+#: eeschema/menubar.cpp:513 eeschema/menubar_libedit.cpp:266 gerbview/menubar.cpp:234
+#: kicad/menubar.cpp:419 pagelayout_editor/menubar.cpp:161
+#: pcbnew/menubar_modedit.cpp:348 pcbnew/menubar_pcbframe.cpp:651
+msgid "Displays the current hotkeys list and corresponding commands"
+msgstr "Отображает текущий список горячих клавиш и соответствующих команд"
+
+#: eeschema/menubar.cpp:519 eeschema/menubar_libedit.cpp:274 kicad/menubar.cpp:427
+#: pcbnew/menubar_modedit.cpp:354 pcbnew/menubar_pcbframe.cpp:656
 msgid "&About KiCad"
 msgstr "О KiСad"
 
-#: eeschema/menubar.cpp:519 eeschema/menubar_libedit.cpp:274
-#: pcbnew/menubar_modedit.cpp:356 pcbnew/menubar_pcbframe.cpp:657
+#: eeschema/menubar.cpp:525 eeschema/menubar_libedit.cpp:280
+#: pcbnew/menubar_modedit.cpp:360 pcbnew/menubar_pcbframe.cpp:662
 msgid "&Edit"
 msgstr "Правка"
 
-#: eeschema/menubar.cpp:520 eeschema/menubar_libedit.cpp:275
-#: eeschema/tool_viewlib.cpp:266 pcbnew/menubar_modedit.cpp:357
-#: pcbnew/menubar_pcbframe.cpp:658 pcbnew/tool_modview.cpp:205
+#: eeschema/menubar.cpp:526 eeschema/menubar_libedit.cpp:281
+#: eeschema/tool_viewlib.cpp:266 pcbnew/menubar_modedit.cpp:361
+#: pcbnew/menubar_pcbframe.cpp:663 pcbnew/tool_modview.cpp:205
 msgid "&View"
 msgstr "Просмотр"
 
-#: eeschema/menubar.cpp:521 eeschema/menubar_libedit.cpp:276
-#: pcbnew/menubar_modedit.cpp:358 pcbnew/menubar_pcbframe.cpp:659
+#: eeschema/menubar.cpp:527 eeschema/menubar_libedit.cpp:282
+#: pcbnew/menubar_modedit.cpp:362 pcbnew/menubar_pcbframe.cpp:664
 msgid "&Place"
 msgstr "Разместить"
 
-#: eeschema/menubar.cpp:522 eeschema/menubar_libedit.cpp:277
-#: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:661
+#: eeschema/menubar.cpp:528 eeschema/menubar_libedit.cpp:283
+#: pcbnew/menubar_modedit.cpp:363 pcbnew/menubar_pcbframe.cpp:666
 msgid "P&references"
 msgstr "Настройки"
 
-#: eeschema/menubar.cpp:523 kicad/menubar.cpp:429 pcbnew/menubar_pcbframe.cpp:663
+#: eeschema/menubar.cpp:529 kicad/menubar.cpp:435 pcbnew/menubar_pcbframe.cpp:668
 msgid "&Tools"
 msgstr "Инструменты"
 
@@ -7589,17 +7567,17 @@ msgstr "Графический текст"
 msgid "&Rectangle"
 msgstr "Прямоугольник"
 
-#: eeschema/menubar_libedit.cpp:206 pcbnew/menubar_modedit.cpp:276
+#: eeschema/menubar_libedit.cpp:206 pcbnew/menubar_modedit.cpp:275
 #: pcbnew/menubar_pcbframe.cpp:412
 msgid "&Circle"
 msgstr "Окружность"
 
-#: eeschema/menubar_libedit.cpp:213 pcbnew/menubar_modedit.cpp:287
+#: eeschema/menubar_libedit.cpp:213 pcbnew/menubar_modedit.cpp:286
 #: pcbnew/menubar_pcbframe.cpp:409
 msgid "&Arc"
 msgstr "Дуга"
 
-#: eeschema/menubar_libedit.cpp:220 pcbnew/menubar_modedit.cpp:281
+#: eeschema/menubar_libedit.cpp:220 pcbnew/menubar_modedit.cpp:280
 #: pcbnew/menubar_pcbframe.cpp:416
 msgid "&Line or Polygon"
 msgstr "Линия или полигон"
@@ -7617,7 +7595,7 @@ msgid "Open the Eeschema Manual"
 msgstr "Открыть руководство Eeschema"
 
 #: eeschema/menubar_libedit.cpp:260 eeschema/tool_viewlib.cpp:253
-#: pcbnew/menubar_modedit.cpp:344 pcbnew/menubar_pcbframe.cpp:646
+#: pcbnew/menubar_modedit.cpp:343 pcbnew/menubar_pcbframe.cpp:646
 #: pcbnew/tool_modview.cpp:192
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
 msgstr "Открыть руководство для начинающих \"Начало работы с KiCad\""
@@ -7643,7 +7621,7 @@ msgstr "Информационные сообщения:"
 msgid "Error messages:"
 msgstr "Сообщения об ошибках:"
 
-#: eeschema/netlist.cpp:79
+#: eeschema/netlist.cpp:68
 msgid ""
 "Exporting the netlist requires a completely\n"
 "annotated schematic."
@@ -7651,15 +7629,15 @@ msgstr ""
 "Экспорт списка цепей требует полностью\n"
 "обозначенной схемы."
 
-#: eeschema/netlist.cpp:89
+#: eeschema/netlist.cpp:78
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Ошибка: дубликат имени листа. Продолжить?"
 
-#: eeschema/netlist.cpp:183
+#: eeschema/netlist.cpp:172
 msgid "No Objects"
 msgstr "Нет объектов"
 
-#: eeschema/netlist.cpp:187
+#: eeschema/netlist.cpp:176
 #, c-format
 msgid "Net count = %d"
 msgstr "Количество цепей = %d"
@@ -8489,7 +8467,7 @@ msgstr "Не найдено"
 msgid "The following libraries were not found:"
 msgstr "Следующие библиотеки не найдены:"
 
-#: eeschema/schframe.cpp:626 pcbnew/pcbframe.cpp:581
+#: eeschema/schframe.cpp:626 pcbnew/pcbframe.cpp:578
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -8776,7 +8754,7 @@ msgstr "Открыть проект схемы"
 msgid "Save schematic project"
 msgstr "Сохранить проект схемы"
 
-#: eeschema/tool_sch.cpp:70 pagelayout_editor/toolbars_pl_editor.cpp:61
+#: eeschema/tool_sch.cpp:70 pagelayout_editor/toolbars_pl_editor.cpp:62
 msgid "Page settings"
 msgstr "Настройки страницы"
 
@@ -8882,7 +8860,7 @@ msgstr "Задать текущую библиотеку"
 msgid "Select library to be displayed"
 msgstr "Выбор библиотеки для просмотра"
 
-#: eeschema/tool_viewlib.cpp:218 pcbnew/menubar_modedit.cpp:150
+#: eeschema/tool_viewlib.cpp:218 pcbnew/menubar_modedit.cpp:149
 #: pcbnew/tool_modview.cpp:150
 msgid "Cl&ose"
 msgstr "Закрыть"
@@ -9171,7 +9149,7 @@ msgid "Get Stored Choice"
 msgstr "Получить сохранённый выбор"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:110
-#: pagelayout_editor/events_functions.cpp:517
+#: pagelayout_editor/events_functions.cpp:527
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:114
 msgid "Error Init Printer info"
 msgstr "Ошибка инициализации принтера"
@@ -9442,8 +9420,8 @@ msgstr "Полный размер без ограничений"
 msgid "Page"
 msgstr "Лист"
 
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:97
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:173
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:91
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:158
 msgid "Use touchpad to pan"
 msgstr "Использовать сенсорную панель для панорамирования"
 
@@ -9457,17 +9435,17 @@ msgid "No file loaded on the active layer %d"
 msgstr "Не загружен файл на активном слое %d"
 
 #: gerbview/events_called_functions.cpp:325 gerbview/gerbview_frame.cpp:140
-#: pcbnew/moduleframe.cpp:292 pcbnew/pcbframe.cpp:404 pcbnew/pcbframe.cpp:914
+#: pcbnew/moduleframe.cpp:292 pcbnew/pcbframe.cpp:401 pcbnew/pcbframe.cpp:911
 msgid "Visibles"
 msgstr "Видимость"
 
 #: gerbview/events_called_functions.cpp:388 gerbview/menubar.cpp:155
-#: gerbview/menubar.cpp:157 pcbnew/pcbnew_config.cpp:80 pcbnew/tool_pcb.cpp:813
+#: gerbview/menubar.cpp:157 pcbnew/pcbnew_config.cpp:80 pcbnew/tool_pcb.cpp:805
 msgid "Hide &Layers Manager"
 msgstr "Скрыть менеджер слоёв"
 
 #: gerbview/events_called_functions.cpp:388 gerbview/menubar.cpp:157
-#: pcbnew/pcbnew_config.cpp:80 pcbnew/tool_pcb.cpp:813
+#: pcbnew/pcbnew_config.cpp:80 pcbnew/tool_pcb.cpp:805
 msgid "Show &Layers Manager"
 msgstr "Показать менеджер слоёв"
 
@@ -9710,8 +9688,8 @@ msgstr "Экспорт в Pcbnew"
 msgid "Export data in Pcbnew format"
 msgstr "Экспорт данных в формате Pcbnew"
 
-#: gerbview/menubar.cpp:135 pagelayout_editor/menubar.cpp:101
-#: pcbnew/menubar_modedit.cpp:141 pcbnew/menubar_pcbframe.cpp:241
+#: gerbview/menubar.cpp:135 pagelayout_editor/menubar.cpp:102
+#: pcbnew/menubar_modedit.cpp:140 pcbnew/menubar_pcbframe.cpp:241
 msgid "&Print"
 msgstr "Печать"
 
@@ -9755,11 +9733,11 @@ msgstr "Очистить слой"
 msgid "Clear current layer"
 msgstr "Очистить текущий слой"
 
-#: gerbview/menubar.cpp:211 pagelayout_editor/menubar.cpp:132
+#: gerbview/menubar.cpp:211 pagelayout_editor/menubar.cpp:133
 msgid "&Text Editor"
 msgstr "Текстовый редактор"
 
-#: gerbview/menubar.cpp:212 pagelayout_editor/menubar.cpp:133
+#: gerbview/menubar.cpp:212 pagelayout_editor/menubar.cpp:134
 msgid "Select your preferred text editor"
 msgstr "Выбор предпочитаемого редактора текстов"
 
@@ -9771,7 +9749,7 @@ msgstr "Руководство Gerbview"
 msgid "Open the GerbView Manual"
 msgstr "Открыть руководство GerbView"
 
-#: gerbview/menubar.cpp:244
+#: gerbview/menubar.cpp:250
 msgid "&Miscellaneous"
 msgstr "Разное"
 
@@ -10161,7 +10139,7 @@ msgstr "Горячие клавиши менеджера проектов KiCad"
 msgid "&Open Project"
 msgstr "Открыть проект"
 
-#: kicad/menubar.cpp:218 kicad/menubar.cpp:476
+#: kicad/menubar.cpp:218 kicad/menubar.cpp:482
 msgid "Open existing project"
 msgstr "Открыть существующий проект"
 
@@ -10185,11 +10163,11 @@ msgstr "Новый проект из шаблона"
 msgid "Create a new project from a template"
 msgstr "Создать новый проект из шаблона"
 
-#: kicad/menubar.cpp:248 kicad/menubar.cpp:467
+#: kicad/menubar.cpp:248 kicad/menubar.cpp:473
 msgid "Create new project"
 msgstr "Создать новый проект"
 
-#: kicad/menubar.cpp:257 kicad/menubar.cpp:481
+#: kicad/menubar.cpp:257 kicad/menubar.cpp:487
 msgid "Save current project"
 msgstr "Сохранить текущий проект"
 
@@ -10293,19 +10271,19 @@ msgstr "Руководство KiCad"
 msgid "Open KiCad user manual"
 msgstr "Открыть руководство пользователя KiCad"
 
-#: kicad/menubar.cpp:427
+#: kicad/menubar.cpp:433
 msgid "&Browse"
 msgstr "Просмотр"
 
-#: kicad/menubar.cpp:471
+#: kicad/menubar.cpp:477
 msgid "Create new project from template"
 msgstr "Создать новый проект из шаблона"
 
-#: kicad/menubar.cpp:489
+#: kicad/menubar.cpp:495
 msgid "Archive all project files"
 msgstr "Архивировать все файлы проекта"
 
-#: kicad/menubar.cpp:497
+#: kicad/menubar.cpp:503
 msgid "Refresh project tree"
 msgstr "Обновить дерево проекта"
 
@@ -10665,91 +10643,91 @@ msgstr "Не удалось записать <%s>"
 msgid "File <%s> written"
 msgstr "Записан файл <%s>"
 
-#: pagelayout_editor/files.cpp:173 pagelayout_editor/pl_editor_frame.cpp:244
+#: pagelayout_editor/files.cpp:173 pagelayout_editor/pl_editor_frame.cpp:245
 msgid "Create file"
 msgstr "Создать файл"
 
-#: pagelayout_editor/files.cpp:191 pagelayout_editor/pl_editor_frame.cpp:255
+#: pagelayout_editor/files.cpp:191 pagelayout_editor/pl_editor_frame.cpp:256
 #: pcbnew/exporters/export_gencad.cpp:266
 #, c-format
 msgid "Unable to create <%s>"
 msgstr "Не удалось создать <%s>"
 
-#: pagelayout_editor/hotkeys.cpp:79 pagelayout_editor/onrightclick.cpp:97
+#: pagelayout_editor/hotkeys.cpp:82 pagelayout_editor/onrightclick.cpp:97
 #: pcbnew/hotkeys.cpp:118 pcbnew/dialogs/dialog_move_exact_base.h:69
 msgid "Move Item"
 msgstr "Переместить элемент"
 
-#: pagelayout_editor/hotkeys.cpp:80 pagelayout_editor/onrightclick.cpp:111
+#: pagelayout_editor/hotkeys.cpp:83 pagelayout_editor/onrightclick.cpp:111
 #: pcbnew/hotkeys.cpp:113
 msgid "Place Item"
 msgstr "Разместить элемент"
 
-#: pagelayout_editor/hotkeys.cpp:81 pagelayout_editor/onrightclick.cpp:83
+#: pagelayout_editor/hotkeys.cpp:84 pagelayout_editor/onrightclick.cpp:83
 msgid "Move Start Point"
 msgstr "Переместить начальную точку"
 
-#: pagelayout_editor/hotkeys.cpp:83 pagelayout_editor/onrightclick.cpp:91
+#: pagelayout_editor/hotkeys.cpp:86 pagelayout_editor/onrightclick.cpp:91
 msgid "Move End Point"
 msgstr "Переместить конечную точку"
 
-#: pagelayout_editor/hotkeys.cpp:119
+#: pagelayout_editor/hotkeys.cpp:122
 msgid "Page Layout Editor"
 msgstr "Редактор макета страницы"
 
-#: pagelayout_editor/menubar.cpp:62
+#: pagelayout_editor/menubar.cpp:63
 msgid "&New Page Layout Design"
 msgstr "Новый проект макета страницы"
 
-#: pagelayout_editor/menubar.cpp:65
+#: pagelayout_editor/menubar.cpp:66
 msgid "Load Page Layout &File"
 msgstr "Загрузить файл макета страницы"
 
-#: pagelayout_editor/menubar.cpp:68
+#: pagelayout_editor/menubar.cpp:69
 msgid "Load &Default Page Layout"
 msgstr "Загрузить макет страницы по умолчанию"
 
-#: pagelayout_editor/menubar.cpp:85
+#: pagelayout_editor/menubar.cpp:86
 msgid "Open &Recent Page Layout File"
 msgstr "Открыть недавний файл макета страницы"
 
-#: pagelayout_editor/menubar.cpp:91
+#: pagelayout_editor/menubar.cpp:92
 msgid "&Save Page Layout Design"
 msgstr "Сохранить проект макета страницы"
 
-#: pagelayout_editor/menubar.cpp:96
+#: pagelayout_editor/menubar.cpp:97
 msgid "Save Page Layout Design &As"
 msgstr "Сохранить проект макета страницы как"
 
-#: pagelayout_editor/menubar.cpp:103
+#: pagelayout_editor/menubar.cpp:104
 msgid "Print Pre&view"
 msgstr "Предварительный просмотр"
 
-#: pagelayout_editor/menubar.cpp:112
+#: pagelayout_editor/menubar.cpp:113
 msgid "&Close Page Layout Editor"
 msgstr "Закрыть редактор макета страницы"
 
-#: pagelayout_editor/menubar.cpp:121 pagelayout_editor/pl_editor_config.cpp:58
+#: pagelayout_editor/menubar.cpp:122 pagelayout_editor/pl_editor_config.cpp:58
 msgid "&Background Black"
 msgstr "Тёмный фон"
 
-#: pagelayout_editor/menubar.cpp:121 pagelayout_editor/pl_editor_config.cpp:59
+#: pagelayout_editor/menubar.cpp:122 pagelayout_editor/pl_editor_config.cpp:59
 msgid "&Background White"
 msgstr "Светлый фон"
 
-#: pagelayout_editor/menubar.cpp:126 pagelayout_editor/pl_editor_config.cpp:66
+#: pagelayout_editor/menubar.cpp:127 pagelayout_editor/pl_editor_config.cpp:66
 msgid "Hide &Grid"
 msgstr "Скрыть сетку"
 
-#: pagelayout_editor/menubar.cpp:126 pagelayout_editor/pl_editor_config.cpp:67
+#: pagelayout_editor/menubar.cpp:127 pagelayout_editor/pl_editor_config.cpp:67
 msgid "Show &Grid"
 msgstr "Показать сетку"
 
-#: pagelayout_editor/menubar.cpp:148
+#: pagelayout_editor/menubar.cpp:149
 msgid "Page Layout Editor &Manual"
 msgstr "Руководство Page Layout Editor"
 
-#: pagelayout_editor/menubar.cpp:149
+#: pagelayout_editor/menubar.cpp:150
 msgid "Open the Page Layout Editor Manual"
 msgstr "Открыть руководство Page Layout Editor"
 
@@ -10783,30 +10761,30 @@ msgstr "pl_editor уже запущен. Продолжить?"
 msgid "Error when loading file <%s>"
 msgstr "Ошибка при загрузке файла <%s>"
 
-#: pagelayout_editor/pl_editor_frame.cpp:114
+#: pagelayout_editor/pl_editor_frame.cpp:115
 msgid "coord origin: Right Bottom page corner"
 msgstr "Начало координат: верхний правый угол листа"
 
-#: pagelayout_editor/pl_editor_frame.cpp:139
+#: pagelayout_editor/pl_editor_frame.cpp:140
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:293
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:227
 msgid "Properties"
 msgstr "Свойства"
 
-#: pagelayout_editor/pl_editor_frame.cpp:146
+#: pagelayout_editor/pl_editor_frame.cpp:147
 msgid "Design"
 msgstr "Проект"
 
-#: pagelayout_editor/pl_editor_frame.cpp:200
+#: pagelayout_editor/pl_editor_frame.cpp:201
 #, c-format
 msgid "Error when loading file '%s'"
 msgstr "Ошибка при загрузке файла '%s'"
 
-#: pagelayout_editor/pl_editor_frame.cpp:223
+#: pagelayout_editor/pl_editor_frame.cpp:224
 msgid "Save changes in a new file before closing?"
 msgstr "Сохранить изменения в новом файле перед закрытием?"
 
-#: pagelayout_editor/pl_editor_frame.cpp:225
+#: pagelayout_editor/pl_editor_frame.cpp:226
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -10817,54 +10795,54 @@ msgstr ""
 "<%s>\n"
 "перед закрытием?"
 
-#: pagelayout_editor/pl_editor_frame.cpp:456
+#: pagelayout_editor/pl_editor_frame.cpp:457
 #, c-format
 msgid "Page size: width %.4g height %.4g"
 msgstr "Размер листа: ширина %.4g высота %.4g"
 
-#: pagelayout_editor/pl_editor_frame.cpp:501
+#: pagelayout_editor/pl_editor_frame.cpp:502
 #, c-format
 msgid "coord origin: %s"
 msgstr "Начало координат: %s"
 
-#: pagelayout_editor/pl_editor_frame.cpp:730
+#: pagelayout_editor/pl_editor_frame.cpp:731
 msgid "(start or end point)"
 msgstr "(начальная или конечная точка)"
 
-#: pagelayout_editor/pl_editor_frame.cpp:734
+#: pagelayout_editor/pl_editor_frame.cpp:735
 msgid "(start point)"
 msgstr "(начальная точка)"
 
-#: pagelayout_editor/pl_editor_frame.cpp:737
+#: pagelayout_editor/pl_editor_frame.cpp:738
 msgid "(end point)"
 msgstr "(конечная точка)"
 
-#: pagelayout_editor/pl_editor_frame.cpp:746 pcbnew/controle.cpp:231
+#: pagelayout_editor/pl_editor_frame.cpp:747 pcbnew/controle.cpp:231
 #: pcbnew/modedit.cpp:130
 msgid "Selection Clarification"
 msgstr "Уточнение выбора"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:51
+#: pagelayout_editor/toolbars_pl_editor.cpp:52
 msgid "New page layout design"
 msgstr "Новый проект макета страницы"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:54
+#: pagelayout_editor/toolbars_pl_editor.cpp:55
 msgid "Load a page layout file. Previous data will be deleted"
 msgstr "Загрузить файл макета страницы. Предыдущие данные будут удалены"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:57
+#: pagelayout_editor/toolbars_pl_editor.cpp:58
 msgid "Save page layout design"
 msgstr "Сохранить проект макета страницы"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:64
+#: pagelayout_editor/toolbars_pl_editor.cpp:65
 msgid "Print page layout"
 msgstr "Печать макета страницы"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:68
+#: pagelayout_editor/toolbars_pl_editor.cpp:69
 msgid "Delete selected item"
 msgstr "Удалить выбранный элемент"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:94
+#: pagelayout_editor/toolbars_pl_editor.cpp:103
 msgid ""
 "Show title block like it will be displayed in applications\n"
 "texts with format are replaced by the full text"
@@ -10872,7 +10850,7 @@ msgstr ""
 "Показать штамп так как он будет выглядеть в приложении\n"
 "текст с форматом заменяется полным текстом"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:99
+#: pagelayout_editor/toolbars_pl_editor.cpp:108
 msgid ""
 "Show title block in edit mode: texts are shown as is:\n"
 "texts with format are displayed with no change"
@@ -10880,39 +10858,39 @@ msgstr ""
 "Показать штамп в режиме редактирования: текст отображается в виде:\n"
 "текст с форматом отображается без изменений"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:107
+#: pagelayout_editor/toolbars_pl_editor.cpp:116
 msgid "Left Top paper corner"
 msgstr "Левый верхний угол листа"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:108
+#: pagelayout_editor/toolbars_pl_editor.cpp:117
 msgid "Right Bottom page corner"
 msgstr "Правый нижний базовый угол"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:109
+#: pagelayout_editor/toolbars_pl_editor.cpp:118
 msgid "Left Bottom page corner"
 msgstr "Левый нижний базовый угол"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:110
+#: pagelayout_editor/toolbars_pl_editor.cpp:119
 msgid "Right Top page corner"
 msgstr "Правый верхний базовый угол"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:111
+#: pagelayout_editor/toolbars_pl_editor.cpp:120
 msgid "Left Top page corner"
 msgstr "Левый верхний базовый угол"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:118
+#: pagelayout_editor/toolbars_pl_editor.cpp:127
 msgid " Origin of coordinates displayed to the status bar"
 msgstr "Начало координат, отображаемое в строке состояния"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:131
+#: pagelayout_editor/toolbars_pl_editor.cpp:140
 msgid "Page 1"
 msgstr "Первый лист"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:132
+#: pagelayout_editor/toolbars_pl_editor.cpp:141
 msgid "Other pages"
 msgstr "Последующие листы"
 
-#: pagelayout_editor/toolbars_pl_editor.cpp:139
+#: pagelayout_editor/toolbars_pl_editor.cpp:148
 msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
@@ -14290,8 +14268,8 @@ msgid "Show or hide net names on pads and/or tracks"
 msgstr "Показать или скрыть имена цепей на конт.пл. и/или дорожках"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:45
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:139
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:147
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:134
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:142
 msgid "Never"
 msgstr "Никогда"
 
@@ -14308,8 +14286,8 @@ msgid "New and edited tracks with via area"
 msgstr "Новая и редактированная дорожка с областью перех.отв."
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:45
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:139
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:147
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:134
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:142
 msgid "Always"
 msgstr "Всегда"
 
@@ -15561,41 +15539,29 @@ msgid "Show (or not) the full rastnest."
 msgstr "Показать (или нет) все связи."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:105
-msgid "S&how footprint ratsnest"
-msgstr "Показать связи посад.места"
-
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:106
-msgid ""
-"Shows (or not) the local ratsnest relative to a footprint, when moving it.\n"
-"This ratsnest is useful to place a footprint."
-msgstr ""
-"Показывает (или нет) локальные связи посад.места при его перемещении.\n"
-"Показ локальных связей полезен при расстановке посад.мест."
-
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:110
 msgid "&Delete unconnected tracks"
 msgstr "Удалить не подсоединённые дорожки"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:111
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:106
 msgid "Enable/disable the automatic track deletion when recreating a track."
 msgstr "Вкл./Выкл. автоматического удаления дорожек при их пересоздании."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:115
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:110
 msgid "&Limit tracks to 45 degrees"
 msgstr "Ограничить дорожки только под 45°"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:116
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:111
 msgid ""
 "If enabled, force tracks directions to H, V or 45 degrees, when creating a track."
 msgstr ""
 "Если включено, то при создании дорожек допустимы направления только ортогонально или "
 "45°."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:120
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:115
 msgid "L&imit graphic lines to 45 degrees"
 msgstr "Ограничить графические линии только под 45°"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:121
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:116
 msgid ""
 "If enabled, force segments directions to H, V or 45 degrees, when creating a segment "
 "on technical layers."
@@ -15603,11 +15569,11 @@ msgstr ""
 "Если включено, то при создании сегментов на технических слоях допустимы направления "
 "только ортогонально или 45°."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:125
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:120
 msgid "&Use double segmented tracks"
 msgstr "Использовать дорожки со сдвоенными сегментами"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:126
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:121
 msgid ""
 "If enabled, uses two track segments, with 45 degrees angle between them when creating "
 "a new track "
@@ -15615,43 +15581,35 @@ msgstr ""
 "Если включено, то при создании новой дорожки использует два сегмента дорожки с углом "
 "в 45° между ними "
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:139
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:147
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:134
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:142
 msgid "When creating tracks"
 msgstr "При создании дорожки"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:141
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:136
 msgid "Magnetic Pads"
 msgstr "Притягивающая конт.пл."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:143
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:138
 msgid "control the capture of the pcb cursor when the mouse cursor enters a pad area"
 msgstr ""
 "управление захватом курсора разводки при нахождении курсора мыши в области конт.пл."
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:149
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:144
 msgid "Magnetic Tracks"
 msgstr "Притягивающая дорожка"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:151
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:146
 msgid "Control the capture of the pcb cursor when the mouse cursor enters a track"
 msgstr ""
 "Управление захватом (притяжением) курсора к центру дорожки при нахождении курсора на "
 "дорожке"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:158
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:153
 msgid "Ce&nter and warp cursor on zoom"
 msgstr "Центрировать по курсору при масштабировании"
 
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:163
-msgid "Use middle mouse &button to pan"
-msgstr "Использовать среднюю кнопку мыши для панорамирования"
-
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:168
-msgid "Limi&t panning to scroll size"
-msgstr "Ограничить панорамирование размером прокрутки"
-
-#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:179
+#: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:164
 msgid "Allows auto pan when creating a track, or moving an item."
 msgstr "Разрешает автопанорамирование при создании дорожек и перемещении элементов."
 
@@ -18621,7 +18579,7 @@ msgstr "Предупреждение: Отображение зон выключ
 msgid "Add keepout"
 msgstr "Добавить область запрета"
 
-#: pcbnew/edit.cpp:1469 pcbnew/menubar_pcbframe.cpp:427 pcbnew/tool_pcb.cpp:473
+#: pcbnew/edit.cpp:1469 pcbnew/menubar_pcbframe.cpp:427 pcbnew/tool_pcb.cpp:469
 #: pcbnew/tools/common_actions.cpp:389 pcbnew/tools/pcb_editor_control.cpp:426
 msgid "Add layer alignment target"
 msgstr "Добавить миру для совмещения слоёв"
@@ -18639,24 +18597,24 @@ msgstr "Установка начальных координат сетки"
 msgid "Add graphic line"
 msgstr "Добавить графическую линию"
 
-#: pcbnew/edit.cpp:1485 pcbnew/menubar_modedit.cpp:287 pcbnew/menubar_pcbframe.cpp:409
-#: pcbnew/tool_modedit.cpp:179 pcbnew/tool_pcb.cpp:463 pcbnew/tools/drawing_tool.cpp:183
+#: pcbnew/edit.cpp:1485 pcbnew/menubar_modedit.cpp:286 pcbnew/menubar_pcbframe.cpp:409
+#: pcbnew/tool_modedit.cpp:179 pcbnew/tool_pcb.cpp:459 pcbnew/tools/drawing_tool.cpp:183
 #: pcbnew/tools/drawing_tool.cpp:203
 msgid "Add graphic arc"
 msgstr "Добавить графическую дугу"
 
-#: pcbnew/edit.cpp:1489 pcbnew/menubar_modedit.cpp:276 pcbnew/menubar_pcbframe.cpp:412
-#: pcbnew/tool_modedit.cpp:176 pcbnew/tool_pcb.cpp:460 pcbnew/tools/drawing_tool.cpp:136
+#: pcbnew/edit.cpp:1489 pcbnew/menubar_modedit.cpp:275 pcbnew/menubar_pcbframe.cpp:412
+#: pcbnew/tool_modedit.cpp:176 pcbnew/tool_pcb.cpp:456 pcbnew/tools/drawing_tool.cpp:136
 #: pcbnew/tools/drawing_tool.cpp:156
 msgid "Add graphic circle"
 msgstr "Добавить графическую окружность"
 
-#: pcbnew/edit.cpp:1501 pcbnew/menubar_pcbframe.cpp:423 pcbnew/tool_pcb.cpp:470
+#: pcbnew/edit.cpp:1501 pcbnew/menubar_pcbframe.cpp:423 pcbnew/tool_pcb.cpp:466
 #: pcbnew/tools/drawing_tool.cpp:253
 msgid "Add dimension"
 msgstr "Добавить размерную линию"
 
-#: pcbnew/edit.cpp:1509 pcbnew/tool_pcb.cpp:435 pcbnew/tools/pcb_editor_control.cpp:808
+#: pcbnew/edit.cpp:1509 pcbnew/tool_pcb.cpp:431 pcbnew/tools/pcb_editor_control.cpp:808
 msgid "Highlight net"
 msgstr "Подсветка цепи"
 
@@ -18926,7 +18884,7 @@ msgstr "Выбрать предыдущую страницу параметро�
 msgid "Select next parameters page"
 msgstr "Выбрать следующую страницу параметров"
 
-#: pcbnew/footprint_wizard_frame.cpp:607 pcbnew/menubar_modedit.cpp:237
+#: pcbnew/footprint_wizard_frame.cpp:607 pcbnew/menubar_modedit.cpp:236
 #: pcbnew/tool_modview.cpp:76 pcbnew/tool_modview.cpp:178
 msgid "Show footprint in 3D viewer"
 msgstr "Показать посад.место в просмотрщике 3D"
@@ -19700,233 +19658,233 @@ msgstr "Посад.место '%s' сохранено"
 msgid "Footprint library '%s' saved as '%s'."
 msgstr "Библиотека посад.мест '%s' сохранена как '%s'."
 
-#: pcbnew/menubar_modedit.cpp:67
+#: pcbnew/menubar_modedit.cpp:66
 msgid "Set Acti&ve Library"
 msgstr "Задать активную библиотеку"
 
-#: pcbnew/menubar_modedit.cpp:68 pcbnew/tool_modedit.cpp:55
+#: pcbnew/menubar_modedit.cpp:67 pcbnew/tool_modedit.cpp:55
 msgid "Select active library"
 msgstr "Выбрать активную библиотеку"
 
-#: pcbnew/menubar_modedit.cpp:74
+#: pcbnew/menubar_modedit.cpp:73
 msgid "&New Footprint"
 msgstr "Новое посад.место"
 
-#: pcbnew/menubar_modedit.cpp:74
+#: pcbnew/menubar_modedit.cpp:73
 msgid "Create new footprint"
 msgstr "Создать новое посад.место"
 
-#: pcbnew/menubar_modedit.cpp:82
+#: pcbnew/menubar_modedit.cpp:81
 msgid "&Import Footprint From File"
 msgstr "Импорт посад.места из файла"
 
-#: pcbnew/menubar_modedit.cpp:83
+#: pcbnew/menubar_modedit.cpp:82
 msgid "Import footprint from an existing file"
 msgstr "Импорт посад.места из существующего файла"
 
-#: pcbnew/menubar_modedit.cpp:88
+#: pcbnew/menubar_modedit.cpp:87
 msgid "Load Footprint From Current Li&brary"
 msgstr "Загрузить посад.место из текущей библиотеки"
 
-#: pcbnew/menubar_modedit.cpp:89
+#: pcbnew/menubar_modedit.cpp:88
 msgid "Open a footprint from library"
 msgstr "Открыть посад.место из библиотеки"
 
-#: pcbnew/menubar_modedit.cpp:94
+#: pcbnew/menubar_modedit.cpp:93
 msgid "Load Footprint From &Current Board"
 msgstr "Загрузить посад.место с текущей платы"
 
-#: pcbnew/menubar_modedit.cpp:95
+#: pcbnew/menubar_modedit.cpp:94
 msgid "Load a footprint from the current board"
 msgstr "Загрузить посад.место с текущей платы"
 
-#: pcbnew/menubar_modedit.cpp:100
+#: pcbnew/menubar_modedit.cpp:99
 msgid "&Load Footprint"
 msgstr "Загрузить посад.место"
 
-#: pcbnew/menubar_modedit.cpp:101
+#: pcbnew/menubar_modedit.cpp:100
 msgid "Load footprint"
 msgstr "Загрузить посад.место"
 
-#: pcbnew/menubar_modedit.cpp:107
+#: pcbnew/menubar_modedit.cpp:106
 msgid "Save &Current Library As..."
 msgstr "Сохранить текущую библиотеку как..."
 
-#: pcbnew/menubar_modedit.cpp:108
+#: pcbnew/menubar_modedit.cpp:107
 msgid "Save entire current library under a new name."
 msgstr "Сохранить текущую библиотеку под новым именем."
 
-#: pcbnew/menubar_modedit.cpp:112
+#: pcbnew/menubar_modedit.cpp:111
 msgid "&Save Footprint in Active Library"
 msgstr "Сохранить посад.место в активной библиотеке"
 
-#: pcbnew/menubar_modedit.cpp:116 pcbnew/tool_modedit.cpp:58
+#: pcbnew/menubar_modedit.cpp:115 pcbnew/tool_modedit.cpp:58
 msgid "Save footprint in active library"
 msgstr "Сохранить посад.место в активной библиотеке"
 
-#: pcbnew/menubar_modedit.cpp:121
+#: pcbnew/menubar_modedit.cpp:120
 msgid "S&ave Footprint in New Library"
 msgstr "Сохранить посад.место в новой библиотеке"
 
-#: pcbnew/menubar_modedit.cpp:122
+#: pcbnew/menubar_modedit.cpp:121
 msgid "Create a new library and save current footprint into it"
 msgstr "Создать новую библиотеку и сохранить в ней текущее посад.место"
 
-#: pcbnew/menubar_modedit.cpp:127
+#: pcbnew/menubar_modedit.cpp:126
 msgid "&Export Footprint"
 msgstr "Экспорт посад.места"
 
-#: pcbnew/menubar_modedit.cpp:128
+#: pcbnew/menubar_modedit.cpp:127
 msgid "Save currently loaded footprint into file"
 msgstr "Сохранить текущее загруженное посад.место в файл"
 
-#: pcbnew/menubar_modedit.cpp:133
+#: pcbnew/menubar_modedit.cpp:132
 msgid "&Import DXF File"
 msgstr "Импорт DXF файла"
 
-#: pcbnew/menubar_modedit.cpp:134 pcbnew/menubar_pcbframe.cpp:195
+#: pcbnew/menubar_modedit.cpp:133 pcbnew/menubar_pcbframe.cpp:195
 msgid "Import a 2D Drawing DXF file to Pcbnew on the Drawings layer"
 msgstr "Импорт 2D чертежа DXF на слой чертежа платы в Pcbnew"
 
-#: pcbnew/menubar_modedit.cpp:142
+#: pcbnew/menubar_modedit.cpp:141
 msgid "Print current footprint"
 msgstr "Печать текущего посад.места"
 
-#: pcbnew/menubar_modedit.cpp:151
+#: pcbnew/menubar_modedit.cpp:150
 msgid "Close footprint editor"
 msgstr "Закрыть редактор посад.мест"
 
-#: pcbnew/menubar_modedit.cpp:160
+#: pcbnew/menubar_modedit.cpp:159
 msgid "Undo last action"
 msgstr "Отменить последнюю операцию"
 
-#: pcbnew/menubar_modedit.cpp:166
+#: pcbnew/menubar_modedit.cpp:165
 msgid "Redo last action"
 msgstr "Вернуть последнюю операцию"
 
-#: pcbnew/menubar_modedit.cpp:171
+#: pcbnew/menubar_modedit.cpp:170
 msgid "Delete objects with eraser"
 msgstr "Удалить объекты с ластиком"
 
-#: pcbnew/menubar_modedit.cpp:179
+#: pcbnew/menubar_modedit.cpp:178
 msgid "Edit &Properties"
 msgstr "Редактировать свойства"
 
-#: pcbnew/menubar_modedit.cpp:180
+#: pcbnew/menubar_modedit.cpp:179
 msgid "Edit footprint properties"
 msgstr "Изменить свойства посад.места"
 
-#: pcbnew/menubar_modedit.cpp:188
+#: pcbnew/menubar_modedit.cpp:187
 msgid "&User Grid Size"
 msgstr "Пользовательский шаг сетки"
 
-#: pcbnew/menubar_modedit.cpp:188
+#: pcbnew/menubar_modedit.cpp:187
 msgid "Adjust user grid"
 msgstr "Настройка шага пользовательской сетки"
 
-#: pcbnew/menubar_modedit.cpp:193
+#: pcbnew/menubar_modedit.cpp:192
 msgid "&Size and Width"
 msgstr "Размеры и ширина"
 
-#: pcbnew/menubar_modedit.cpp:194
+#: pcbnew/menubar_modedit.cpp:193
 msgid "Adjust width for texts and drawings"
 msgstr "Настройка толщины линий и текста"
 
-#: pcbnew/menubar_modedit.cpp:199
+#: pcbnew/menubar_modedit.cpp:198
 msgid "&Pad Setting"
 msgstr "Установки для конт.пл."
 
-#: pcbnew/menubar_modedit.cpp:199
+#: pcbnew/menubar_modedit.cpp:198
 msgid "Edit settings for new pads"
 msgstr "Редактировать установки для новых конт.пл."
 
-#: pcbnew/menubar_modedit.cpp:236 pcbnew/menubar_pcbframe.cpp:353
+#: pcbnew/menubar_modedit.cpp:235 pcbnew/menubar_pcbframe.cpp:353
 msgid "&3D Viewer"
 msgstr "Просмотрщик 3D"
 
-#: pcbnew/menubar_modedit.cpp:243 pcbnew/menubar_pcbframe.cpp:364
+#: pcbnew/menubar_modedit.cpp:242 pcbnew/menubar_pcbframe.cpp:364
 msgid "&Switch Canvas to Legacy"
 msgstr "Переключить на устаревшее отображение"
 
-#: pcbnew/menubar_modedit.cpp:247 pcbnew/menubar_pcbframe.cpp:368
+#: pcbnew/menubar_modedit.cpp:246 pcbnew/menubar_pcbframe.cpp:368
 msgid "Switch the canvas implementation to Legacy"
 msgstr "Переключить реализацию отображения на устаревшее"
 
-#: pcbnew/menubar_modedit.cpp:250 pcbnew/menubar_pcbframe.cpp:371
+#: pcbnew/menubar_modedit.cpp:249 pcbnew/menubar_pcbframe.cpp:371
 msgid "Switch Canvas to Open&GL"
 msgstr "Переключить на отображение в OpenGL"
 
-#: pcbnew/menubar_modedit.cpp:254 pcbnew/menubar_pcbframe.cpp:375
+#: pcbnew/menubar_modedit.cpp:253 pcbnew/menubar_pcbframe.cpp:375
 msgid "Switch the canvas implementation to OpenGL"
 msgstr "Переключить реализацию отображения через OpenGL"
 
-#: pcbnew/menubar_modedit.cpp:257 pcbnew/menubar_pcbframe.cpp:378
+#: pcbnew/menubar_modedit.cpp:256 pcbnew/menubar_pcbframe.cpp:378
 msgid "Switch Canvas to &Cairo"
 msgstr "Переключить на отображение в Cairo"
 
-#: pcbnew/menubar_modedit.cpp:261 pcbnew/menubar_pcbframe.cpp:382
+#: pcbnew/menubar_modedit.cpp:260 pcbnew/menubar_pcbframe.cpp:382
 msgid "Switch the canvas implementation to Cairo"
 msgstr "Переключить реализацию отображения через Cairo"
 
-#: pcbnew/menubar_modedit.cpp:269
+#: pcbnew/menubar_modedit.cpp:268
 msgid "&Pad"
 msgstr "Конт.пл."
 
-#: pcbnew/menubar_modedit.cpp:269 pcbnew/modedit.cpp:980
+#: pcbnew/menubar_modedit.cpp:268 pcbnew/modedit.cpp:980
 msgid "Add pad"
 msgstr "Добавить конт.пл."
 
-#: pcbnew/menubar_modedit.cpp:282 pcbnew/menubar_pcbframe.cpp:417
-#: pcbnew/tool_modedit.cpp:173 pcbnew/tool_pcb.cpp:457
+#: pcbnew/menubar_modedit.cpp:281 pcbnew/menubar_pcbframe.cpp:417
+#: pcbnew/tool_modedit.cpp:173 pcbnew/tool_pcb.cpp:453
 msgid "Add graphic line or polygon"
 msgstr "Добавить графическую линию или полигон"
 
-#: pcbnew/menubar_modedit.cpp:292
+#: pcbnew/menubar_modedit.cpp:291
 msgid "&Text"
 msgstr "Текст "
 
-#: pcbnew/menubar_modedit.cpp:292
+#: pcbnew/menubar_modedit.cpp:291
 msgid "Add graphic text"
 msgstr "Добавить графический текст"
 
-#: pcbnew/menubar_modedit.cpp:299
+#: pcbnew/menubar_modedit.cpp:298
 msgid "A&nchor"
 msgstr "Привязка"
 
-#: pcbnew/menubar_modedit.cpp:300
+#: pcbnew/menubar_modedit.cpp:299
 msgid "Place footprint reference anchor"
 msgstr "Разместить точку привязки посад.места"
 
-#: pcbnew/menubar_modedit.cpp:308 pcbnew/menubar_pcbframe.cpp:489
+#: pcbnew/menubar_modedit.cpp:307 pcbnew/menubar_pcbframe.cpp:489
 msgid "&Footprint Libraries Wizard"
 msgstr "Мастер добавления библиотек посад.мест"
 
-#: pcbnew/menubar_modedit.cpp:308 pcbnew/menubar_pcbframe.cpp:489
+#: pcbnew/menubar_modedit.cpp:307 pcbnew/menubar_pcbframe.cpp:489
 msgid "Add footprint libraries with wizard"
 msgstr "Добавить библиотеки посад.мест с помощью мастера"
 
-#: pcbnew/menubar_modedit.cpp:312 pcbnew/menubar_pcbframe.cpp:493
+#: pcbnew/menubar_modedit.cpp:311 pcbnew/menubar_pcbframe.cpp:493
 msgid "Footprint Li&braries Manager"
 msgstr "Менеджер библиотек посад.мест"
 
-#: pcbnew/menubar_modedit.cpp:324
+#: pcbnew/menubar_modedit.cpp:323
 msgid "&Settings"
 msgstr "Настройки"
 
-#: pcbnew/menubar_modedit.cpp:324
+#: pcbnew/menubar_modedit.cpp:323
 msgid "Change the footprint editor settings."
 msgstr "Изменить настройки редактора посад.мест."
 
-#: pcbnew/menubar_modedit.cpp:338 pcbnew/menubar_pcbframe.cpp:640
+#: pcbnew/menubar_modedit.cpp:337 pcbnew/menubar_pcbframe.cpp:640
 #: pcbnew/tool_modview.cpp:186
 msgid "Pcbnew &Manual"
 msgstr "Руководство Pcbnew"
 
-#: pcbnew/menubar_modedit.cpp:339 pcbnew/menubar_pcbframe.cpp:641
+#: pcbnew/menubar_modedit.cpp:338 pcbnew/menubar_pcbframe.cpp:641
 msgid "Open the Pcbnew Manual"
 msgstr "Открыть руководство Pcbnew"
 
-#: pcbnew/menubar_modedit.cpp:360
+#: pcbnew/menubar_modedit.cpp:364
 msgid "Di&mensions"
 msgstr "Размеры"
 
@@ -20185,7 +20143,7 @@ msgstr "Архивировать или добавить посад.места �
 msgid "Close Pcbnew"
 msgstr "Закрыть Pcbnew"
 
-#: pcbnew/menubar_pcbframe.cpp:290 pcbnew/tool_modedit.cpp:191 pcbnew/tool_pcb.cpp:477
+#: pcbnew/menubar_pcbframe.cpp:290 pcbnew/tool_modedit.cpp:191 pcbnew/tool_pcb.cpp:473
 msgid "Delete items"
 msgstr "Удалить элементы"
 
@@ -20239,7 +20197,7 @@ msgstr "Просмотр списка цепей (с именами и иден�
 msgid "&Footprint"
 msgstr "Посад.место"
 
-#: pcbnew/menubar_pcbframe.cpp:391 pcbnew/tool_pcb.cpp:443
+#: pcbnew/menubar_pcbframe.cpp:391 pcbnew/tool_pcb.cpp:439
 #: pcbnew/tools/common_actions.cpp:393
 msgid "Add footprints"
 msgstr "Добавить посад.места"
@@ -20248,7 +20206,7 @@ msgstr "Добавить посад.места"
 msgid "&Track"
 msgstr "Дорожка"
 
-#: pcbnew/menubar_pcbframe.cpp:396 pcbnew/tool_pcb.cpp:446
+#: pcbnew/menubar_pcbframe.cpp:396 pcbnew/tool_pcb.cpp:442
 msgid "Add tracks and vias"
 msgstr "Добавить дорожки и перех.отв."
 
@@ -20256,7 +20214,7 @@ msgstr "Добавить дорожки и перех.отв."
 msgid "&Zone"
 msgstr "Зона"
 
-#: pcbnew/menubar_pcbframe.cpp:399 pcbnew/tool_pcb.cpp:449
+#: pcbnew/menubar_pcbframe.cpp:399 pcbnew/tool_pcb.cpp:445
 msgid "Add filled zones"
 msgstr "Добавить зоны"
 
@@ -20264,7 +20222,7 @@ msgstr "Добавить зоны"
 msgid "&Keepout Area"
 msgstr "Область запрета"
 
-#: pcbnew/menubar_pcbframe.cpp:402 pcbnew/tool_pcb.cpp:453
+#: pcbnew/menubar_pcbframe.cpp:402 pcbnew/tool_pcb.cpp:449
 msgid "Add keepout areas"
 msgstr "Добавить области запрета"
 
@@ -20272,7 +20230,7 @@ msgstr "Добавить области запрета"
 msgid "Te&xt"
 msgstr "Текст"
 
-#: pcbnew/menubar_pcbframe.cpp:405 pcbnew/tool_pcb.cpp:466
+#: pcbnew/menubar_pcbframe.cpp:405 pcbnew/tool_pcb.cpp:462
 msgid "Add text on copper layers or graphic text"
 msgstr "Добавить текст на слой меди или графический текст"
 
@@ -20288,7 +20246,7 @@ msgstr "Мира для совмещения слоёв"
 msgid "Drill and &Place Offset"
 msgstr "Смещение для сверловки и размещения"
 
-#: pcbnew/menubar_pcbframe.cpp:434 pcbnew/tool_pcb.cpp:482
+#: pcbnew/menubar_pcbframe.cpp:434 pcbnew/tool_pcb.cpp:478
 msgid "Place the origin point for drill and place files"
 msgstr "Разместить начало координат в файлах сверловки и размещения"
 
@@ -20296,7 +20254,7 @@ msgstr "Разместить начало координат в файлах с�
 msgid "&Grid Origin"
 msgstr "Начальные координаты сетки"
 
-#: pcbnew/menubar_pcbframe.cpp:439 pcbnew/tool_modedit.cpp:195 pcbnew/tool_pcb.cpp:487
+#: pcbnew/menubar_pcbframe.cpp:439 pcbnew/tool_modedit.cpp:195 pcbnew/tool_pcb.cpp:483
 msgid "Set the origin point for the grid"
 msgstr "Установка начальной точки для сетки"
 
@@ -20360,7 +20318,7 @@ msgstr "Показать менеджер слоёв"
 msgid "Hide Microwa&ve Toolbar"
 msgstr "Скрыть панель инструментов СВЧ"
 
-#: pcbnew/menubar_pcbframe.cpp:519 pcbnew/pcbnew_config.cpp:90 pcbnew/tool_pcb.cpp:802
+#: pcbnew/menubar_pcbframe.cpp:519 pcbnew/pcbnew_config.cpp:90 pcbnew/tool_pcb.cpp:794
 msgid "Show Microwave Toolbar"
 msgstr "Показать СВЧ панель инструментов"
 
@@ -20472,7 +20430,7 @@ msgstr "Консоль скриптов"
 msgid "Show/Hide the Python scripting console"
 msgstr "Показать/Скрыть консоль скриптов Python"
 
-#: pcbnew/menubar_pcbframe.cpp:630 pcbnew/menubar_pcbframe.cpp:664
+#: pcbnew/menubar_pcbframe.cpp:630 pcbnew/menubar_pcbframe.cpp:669
 msgid "&Design Rules"
 msgstr "Правила проектирования"
 
@@ -20488,15 +20446,15 @@ msgstr "Настройка слоёв"
 msgid "Enable and set layer properties"
 msgstr "Установки и свойства слоёв"
 
-#: pcbnew/menubar_pcbframe.cpp:652
+#: pcbnew/menubar_pcbframe.cpp:657
 msgid "Display the KiCad About dialog"
 msgstr "Показать диалоговое окно о KiCad"
 
-#: pcbnew/menubar_pcbframe.cpp:660
+#: pcbnew/menubar_pcbframe.cpp:665
 msgid "Ro&ute"
 msgstr "Трассировать"
 
-#: pcbnew/menubar_pcbframe.cpp:662
+#: pcbnew/menubar_pcbframe.cpp:667
 msgid "D&imensions"
 msgstr "Размеры"
 
@@ -21480,16 +21438,16 @@ msgstr ""
 "\"%s\"\n"
 "ты должен проверить и редактировать её (запустить тест DRC)."
 
-#: pcbnew/pcbframe.cpp:617
+#: pcbnew/pcbframe.cpp:614
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Файл автосохранения '%s' не может быть удалён!"
 
-#: pcbnew/pcbframe.cpp:990
+#: pcbnew/pcbframe.cpp:987
 msgid " [new file]"
 msgstr " [новый файл]"
 
-#: pcbnew/pcbframe.cpp:1087
+#: pcbnew/pcbframe.cpp:1084
 msgid ""
 "Cannot update the PCB, because the Kicad is opened in stand-alone mode. In order to "
 "create/update PCBs from schematics, you need to launch Kicad shell and create a PCB "
@@ -21519,7 +21477,7 @@ msgstr ""
 "информации смотрите раздел \"Таблица библиотек посадочных мест\" документации CvPcb "
 "или Pcbnew."
 
-#: pcbnew/pcbnew_config.cpp:90 pcbnew/tool_pcb.cpp:802
+#: pcbnew/pcbnew_config.cpp:90 pcbnew/tool_pcb.cpp:794
 msgid "Hide Microwave Toolbar"
 msgstr "Скрыть СВЧ панель инструментов"
 
@@ -22025,7 +21983,7 @@ msgstr "Показать текст в контурном режиме"
 msgid "Show Edges Sketch"
 msgstr "Показать контуры в контурном режиме"
 
-#: pcbnew/tool_modedit.cpp:246 pcbnew/tool_pcb.cpp:393
+#: pcbnew/tool_modedit.cpp:246 pcbnew/tool_pcb.cpp:389
 msgid "Enable high contrast display mode"
 msgstr "Разрешить контрастный режим"
 
@@ -22121,55 +22079,51 @@ msgstr "Разрешить проверку правил проектирова�
 msgid "Show board ratsnest"
 msgstr "Показать связи платы"
 
-#: pcbnew/tool_pcb.cpp:358
-msgid "Show footprint ratsnest when moving"
-msgstr "Показать связи посад.места при перемещении"
-
-#: pcbnew/tool_pcb.cpp:364
+#: pcbnew/tool_pcb.cpp:360
 msgid "Enable automatic track deletion"
 msgstr "Вкл. авто удаление дорожки"
 
-#: pcbnew/tool_pcb.cpp:372
+#: pcbnew/tool_pcb.cpp:368
 msgid "Do not show filled areas in zones"
 msgstr "Не показывать заливку в зонах"
 
-#: pcbnew/tool_pcb.cpp:375
+#: pcbnew/tool_pcb.cpp:371
 msgid "Show outlines of filled areas only in zones"
 msgstr "Показать контур только залитых областей в зонах"
 
-#: pcbnew/tool_pcb.cpp:384 pcbnew/toolbars_update_user_interface.cpp:180
+#: pcbnew/tool_pcb.cpp:380 pcbnew/toolbars_update_user_interface.cpp:169
 msgid "Show vias in outline mode"
 msgstr "Показать перех.отв. в контурном режиме"
 
-#: pcbnew/tool_pcb.cpp:388 pcbnew/toolbars_update_user_interface.cpp:191
+#: pcbnew/tool_pcb.cpp:384 pcbnew/toolbars_update_user_interface.cpp:180
 msgid "Show tracks in outline mode"
 msgstr "Показать дорожки в контурном режиме"
 
-#: pcbnew/tool_pcb.cpp:439
+#: pcbnew/tool_pcb.cpp:435
 msgid "Display local ratsnest"
 msgstr "Отображать локальные связи"
 
-#: pcbnew/tool_pcb.cpp:510
+#: pcbnew/tool_pcb.cpp:506
 msgid "Create line of specified length for microwave applications"
 msgstr "Создать линию заданной длины для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:515
+#: pcbnew/tool_pcb.cpp:511
 msgid "Create gap of specified length for microwave applications"
 msgstr "Создать зазор заданной длины для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:522
+#: pcbnew/tool_pcb.cpp:518
 msgid "Create stub of specified length for microwave applications"
 msgstr "Создать неоднородность заданной длины для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:527
+#: pcbnew/tool_pcb.cpp:523
 msgid "Create stub (arc) of specified length for microwave applications"
 msgstr "Создать неоднородность (дугу) заданной длины для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:532
+#: pcbnew/tool_pcb.cpp:528
 msgid "Create a polynomial shape for microwave applications"
 msgstr "Создать полиномиальную форму для СВЧ приложений"
 
-#: pcbnew/tool_pcb.cpp:585
+#: pcbnew/tool_pcb.cpp:581
 msgid ""
 "Auto track width: when starting on an existing track use its width\n"
 "otherwise, use current width setting"
@@ -22178,37 +22132,37 @@ msgstr ""
 "ширину,\n"
 "иначе использовать текущую установку ширины"
 
-#: pcbnew/tool_pcb.cpp:630
+#: pcbnew/tool_pcb.cpp:626
 #, c-format
 msgid "Track: %.3f mm (%.2f mils)"
 msgstr "Дорожка: %.3f мм (%.2f мил)"
 
-#: pcbnew/tool_pcb.cpp:633
+#: pcbnew/tool_pcb.cpp:629
 #, c-format
 msgid "Track: %.2f mils (%.3f mm)"
 msgstr "Дорожка: %.2f мил (%.3f мм)"
 
-#: pcbnew/tool_pcb.cpp:668
+#: pcbnew/tool_pcb.cpp:664
 #, c-format
 msgid "Via: %.2f mm (%.1f mils)"
 msgstr "Перех.отв.: %.2f мм (%.1f мил)"
 
-#: pcbnew/tool_pcb.cpp:671
+#: pcbnew/tool_pcb.cpp:667
 #, c-format
 msgid "Via: %.1f mils (%.2f mm)"
 msgstr "Перех.отв.: %.1f мил (%.2f мм)"
 
-#: pcbnew/tool_pcb.cpp:684
+#: pcbnew/tool_pcb.cpp:680
 #, c-format
 msgid "%.2f mm (%.1f mils)"
 msgstr "%.2f мм (%.1f мил)"
 
-#: pcbnew/tool_pcb.cpp:687
+#: pcbnew/tool_pcb.cpp:683
 #, c-format
 msgid "%.1f mils (%.2f mm)"
 msgstr "%.1f мил (%.2f мм)"
 
-#: pcbnew/tool_pcb.cpp:712
+#: pcbnew/tool_pcb.cpp:708
 msgid "+/- to switch"
 msgstr "+/- для переключения"
 
@@ -22220,35 +22174,27 @@ msgstr "Запретить проверку правил проектирова�
 msgid "Hide board ratsnest"
 msgstr "Скрыть связи платы"
 
-#: pcbnew/toolbars_update_user_interface.cpp:159
-msgid "Hide footprint ratsnest"
-msgstr "Скрыть связи посад.места"
-
-#: pcbnew/toolbars_update_user_interface.cpp:160
-msgid "Show footprint ratsnest"
-msgstr "Показать связи посад.места"
-
-#: pcbnew/toolbars_update_user_interface.cpp:169
+#: pcbnew/toolbars_update_user_interface.cpp:158
 msgid "Disable auto delete old track"
 msgstr "Запретить автоудаление старых дорожек"
 
-#: pcbnew/toolbars_update_user_interface.cpp:170
+#: pcbnew/toolbars_update_user_interface.cpp:159
 msgid "Enable auto delete old track"
 msgstr "Разрешить автоудаление старых дорожек"
 
-#: pcbnew/toolbars_update_user_interface.cpp:181
+#: pcbnew/toolbars_update_user_interface.cpp:170
 msgid "Show vias in fill mode"
 msgstr "Показать перех.отв. в режиме заливки"
 
-#: pcbnew/toolbars_update_user_interface.cpp:192
+#: pcbnew/toolbars_update_user_interface.cpp:181
 msgid "Show tracks in fill mode"
 msgstr "Показать дорожки в режиме заливки"
 
-#: pcbnew/toolbars_update_user_interface.cpp:202
+#: pcbnew/toolbars_update_user_interface.cpp:191
 msgid "Normal contrast display mode"
 msgstr "Нормальный режим отображения"
 
-#: pcbnew/toolbars_update_user_interface.cpp:203
+#: pcbnew/toolbars_update_user_interface.cpp:192
 msgid "High contrast display mode"
 msgstr "Контрастный режим отображения"
 
@@ -22757,7 +22703,7 @@ msgstr "Редактор изображений"
 msgid "Page Settings"
 msgstr "Настройки страницы"
 
-#: cvpcb/dialogs/dialog_display_options_base.h:63
+#: cvpcb/dialogs/dialog_display_options_base.h:60
 #: pcbnew/dialogs/dialog_display_options_base.h:70
 msgid "Display Options"
 msgstr "Параметры отображения"
@@ -22783,7 +22729,7 @@ msgstr "Текстовый редактор"
 msgid "Field Properties"
 msgstr "Свойства поля"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.h:133
+#: eeschema/dialogs/dialog_eeschema_options_base.h:129
 msgid "Schematic Editor Options"
 msgstr "Параметры редактора схем"
 
@@ -22983,7 +22929,7 @@ msgstr "\"Не подключено\""
 msgid "Page Borders"
 msgstr "Рамка страницы"
 
-#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.h:66
+#: gerbview/dialogs/gerbview_dialog_display_options_frame_base.h:63
 msgid "Gerbview Options"
 msgstr "Параметры Gerbview"
 
