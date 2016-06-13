@@ -405,7 +405,7 @@ SGNODE* WRL2MATERIAL::TranslateToSG( SGNODE* aParent )
     float ambr = ambientIntensity * diffuseColor.x;
     float ambg = ambientIntensity * diffuseColor.y;
     float ambb = ambientIntensity * diffuseColor.z;
-    matNode.SetAmbient( ambr, ambb, ambg );
+    matNode.SetAmbient( ambr, ambg, ambb );
     matNode.SetShininess( shininess );
     matNode.SetTransparency( transparency );
     m_sgNode = matNode.GetRawPtr();
