@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  2 2016)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -20,9 +20,9 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -37,24 +37,25 @@ class DLG_3D_PATH_CONFIG_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxGrid* m_EnvVars;
+		wxButton* m_btnEnvCfg;
+		wxStaticLine* m_staticline2;
 		wxGrid* m_Aliases;
-		wxStaticLine* m_staticline1;
 		wxButton* m_btnAddAlias;
 		wxButton* m_btnDelAlias;
 		wxButton* m_btnMoveUp;
 		wxButton* m_btnMoveDown;
-		wxButton* m_btnEnvCfg;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer2;
 		wxButton* m_sdbSizer2OK;
 		wxButton* m_sdbSizer2Cancel;
 		wxButton* m_sdbSizer2Help;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnConfigEnvVar( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddAlias( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDelAlias( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAliasMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAliasMoveDown( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnConfigEnvVar( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelp( wxCommandEvent& event ) { event.Skip(); }
 		
 	

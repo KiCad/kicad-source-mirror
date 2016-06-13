@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  2 2016)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -48,7 +48,16 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	bSizer5->Add( m_EnvVars, 0, wxALL, 5 );
 	
 	
-	bSizerMain->Add( bSizer5, 1, wxEXPAND, 5 );
+	bSizer5->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_btnEnvCfg = new wxButton( this, wxID_ANY, _("Config Env"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer5->Add( m_btnEnvCfg, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	
+	bSizerMain->Add( bSizer5, 0, wxEXPAND, 5 );
+	
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerMain->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
 	
 	wxBoxSizer* bSizerGrid;
 	bSizerGrid = new wxBoxSizer( wxHORIZONTAL );
@@ -89,9 +98,6 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizerMain->Add( bSizerGrid, 1, wxEXPAND, 5 );
 	
-	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
-	
 	wxBoxSizer* bSizerButtons;
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 	
@@ -107,11 +113,11 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	m_btnMoveDown = new wxButton( this, wxID_ANY, _("Move Down"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_btnMoveDown, 0, wxALL, 5 );
 	
-	m_btnEnvCfg = new wxButton( this, wxID_ANY, _("Config Env"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerButtons->Add( m_btnEnvCfg, 0, wxALL, 5 );
-	
 	
 	bSizerMain->Add( bSizerButtons, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerMain->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
 	m_sdbSizer2 = new wxStdDialogButtonSizer();
 	m_sdbSizer2OK = new wxButton( this, wxID_OK );
@@ -122,7 +128,7 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	m_sdbSizer2->AddButton( m_sdbSizer2Help );
 	m_sdbSizer2->Realize();
 	
-	bSizerMain->Add( m_sdbSizer2, 1, wxALIGN_CENTER, 5 );
+	bSizerMain->Add( m_sdbSizer2, 0, wxALIGN_CENTER|wxALIGN_RIGHT|wxALL, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
@@ -131,22 +137,22 @@ DLG_3D_PATH_CONFIG_BASE::DLG_3D_PATH_CONFIG_BASE( wxWindow* parent, wxWindowID i
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	m_btnEnvCfg->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnConfigEnvVar ), NULL, this );
 	m_btnAddAlias->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnAddAlias ), NULL, this );
 	m_btnDelAlias->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnDelAlias ), NULL, this );
 	m_btnMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnAliasMoveUp ), NULL, this );
 	m_btnMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnAliasMoveDown ), NULL, this );
-	m_btnEnvCfg->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnConfigEnvVar ), NULL, this );
 	m_sdbSizer2Help->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnHelp ), NULL, this );
 }
 
 DLG_3D_PATH_CONFIG_BASE::~DLG_3D_PATH_CONFIG_BASE()
 {
 	// Disconnect Events
+	m_btnEnvCfg->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnConfigEnvVar ), NULL, this );
 	m_btnAddAlias->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnAddAlias ), NULL, this );
 	m_btnDelAlias->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnDelAlias ), NULL, this );
 	m_btnMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnAliasMoveUp ), NULL, this );
 	m_btnMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnAliasMoveDown ), NULL, this );
-	m_btnEnvCfg->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnConfigEnvVar ), NULL, this );
 	m_sdbSizer2Help->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DLG_3D_PATH_CONFIG_BASE::OnHelp ), NULL, this );
 	
 }

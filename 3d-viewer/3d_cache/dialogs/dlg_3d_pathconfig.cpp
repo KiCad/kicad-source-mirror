@@ -31,6 +31,17 @@
 DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver ) :
     DLG_3D_PATH_CONFIG_BASE( aParent ), m_resolver( aResolver )
 {
+    initDialog();
+
+    GetSizer()->SetSizeHints( this );
+	Centre();
+
+    return;
+}
+
+
+void DLG_3D_PATH_CONFIG::initDialog()
+{
     m_Aliases->EnableEditing( true );
 
     // Gives a min width to each column, when the user drags a column
@@ -113,11 +124,6 @@ DLG_3D_PATH_CONFIG::DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER
 
         m_Aliases->AutoSize();
     }
-
-    GetSizer()->SetSizeHints( this );
-	Centre();
-
-    return;
 }
 
 
@@ -320,6 +326,7 @@ void DLG_3D_PATH_CONFIG::updateEnvVars( void )
     m_resolver->GetKicadPaths( epaths );
     size_t nitems = epaths.size();
     size_t nrows = m_EnvVars->GetNumberRows();
+    bool resize = nrows != nitems;  // true after adding/removing env vars
 
     if( nrows > nitems )
     {
@@ -350,15 +357,20 @@ void DLG_3D_PATH_CONFIG::updateEnvVars( void )
 
     m_EnvVars->AutoSize();
 
+    // Resizing the full dialog is sometimes needed for a clean display
+    // i.e. when adding/removing Kicad environment variables
+    if( resize )
+        GetSizer()->SetSizeHints( this );
+
     return;
 }
 
 
 void DLG_3D_PATH_CONFIG::OnHelp( wxCommandEvent& event )
 {
-    wxString msg = _( "Enter the name and path for each 3D alias variable.  KiCad "
+    wxString msg = _( "Enter the name and path for each 3D alias variable.<br>KiCad "
                       "environment variables and their values are shown for "
-                      "reference only and cannot be edited. " );
+                      "reference only and cannot be edited." );
     msg << "<br><br><b>";
     msg << _( "Alias names may not contain any of the characters " );
     msg << "{}[]()%~<>\"='`;:.,&?/\\|$";

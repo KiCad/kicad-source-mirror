@@ -37,6 +37,8 @@ private:
     wxString m_curdir;
     wxTextValidator m_aliasValidator;
 
+    void initDialog();
+
     void OnAddAlias( wxCommandEvent& event );
     void OnDelAlias( wxCommandEvent& event );
     void OnAliasMoveUp( wxCommandEvent& event );
