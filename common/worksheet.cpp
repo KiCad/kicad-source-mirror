@@ -197,7 +197,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                 break;
 
             case 'Y':
-                msg = m_titleBlock->GetCompany();
+                msg += m_titleBlock->GetCompany();
                 break;
 
             case 'T':
