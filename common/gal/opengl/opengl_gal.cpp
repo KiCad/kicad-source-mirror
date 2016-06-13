@@ -162,7 +162,7 @@ OPENGL_GAL::~OPENGL_GAL()
     if( glPrivContext != glMainContext )
         GL_CONTEXT_MANAGER::Get().DestroyCtx( glPrivContext );
 
-    // Are destroying the last GAL instance?
+    // Are we destroying the last GAL instance?
     if( instanceCounter == 0 )
     {
         GL_CONTEXT_MANAGER::Get().LockCtx( glMainContext );
@@ -177,6 +177,7 @@ OPENGL_GAL::~OPENGL_GAL()
 
         GL_CONTEXT_MANAGER::Get().UnlockCtx( glMainContext );
         GL_CONTEXT_MANAGER::Get().DestroyCtx( glMainContext );
+        glMainContext = NULL;
     }
 
 }
