@@ -741,8 +741,8 @@ void S3D_FILENAME_RESOLVER::checkEnvVarPath( const wxString& aPath )
 
     // check if the alias exists; if not then add it to the end of the
     // env var section of the path list
-    std::list< S3D_ALIAS >::const_iterator sPL = m_Paths.begin();
-    std::list< S3D_ALIAS >::const_iterator ePL = m_Paths.end();
+    auto sPL = m_Paths.begin();
+    auto ePL = m_Paths.end();
 
     while( sPL != ePL )
     {
