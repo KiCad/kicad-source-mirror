@@ -58,7 +58,6 @@ void GL_CONTEXT_MANAGER::DestroyCtx( wxGLContext* aContext )
     if( m_glCtx == aContext )
     {
         m_glCtx = NULL;
-        m_glCanvas = NULL;
     }
 }
 
@@ -79,12 +78,8 @@ void GL_CONTEXT_MANAGER::LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas )
     m_glCtxMutex.lock();
     wxGLCanvas* canvas = aCanvas ? aCanvas : m_glContexts.at( aContext );
 
-    if( aContext != m_glCtx || canvas != m_glCanvas )
-    {
-        canvas->SetCurrent( *aContext );
-        m_glCanvas = canvas;
-        m_glCtx = aContext;
-    }
+    canvas->SetCurrent( *aContext );
+    m_glCtx = aContext;
 }
 
 
@@ -95,6 +90,7 @@ void GL_CONTEXT_MANAGER::UnlockCtx( wxGLContext* aContext )
     if( m_glCtx == aContext )
     {
         m_glCtxMutex.unlock();
+        m_glCtx = NULL;
     }
     else
     {
@@ -104,7 +100,7 @@ void GL_CONTEXT_MANAGER::UnlockCtx( wxGLContext* aContext )
 
 
 GL_CONTEXT_MANAGER::GL_CONTEXT_MANAGER()
-    : m_glCtx( NULL ), m_glCanvas( NULL )
+    : m_glCtx( NULL )
 {
 }
 

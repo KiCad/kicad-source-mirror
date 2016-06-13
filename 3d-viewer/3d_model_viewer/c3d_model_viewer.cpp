@@ -101,7 +101,7 @@ C3D_MODEL_VIEWER::C3D_MODEL_VIEWER( wxWindow *aParent,
 
 C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER()
 {
-    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC );
+    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
     wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER" ) );
 
@@ -205,7 +205,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     // "Makes the OpenGL state that is represented by the OpenGL rendering
     //  context context current, i.e. it will be used by all subsequent OpenGL calls.
     //  This function may only be called when the window is shown on screen"
-    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC );
+    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
     // Set the OpenGL viewport according to the client size of this canvas.
     // This is done here rather than in a wxSizeEvent handler because our

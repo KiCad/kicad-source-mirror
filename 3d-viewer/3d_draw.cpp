@@ -302,7 +302,7 @@ void EDA_3D_CANVAS::Redraw()
     // Display build time at the end of build
     unsigned strtime = GetRunningMicroSecs();
 
-    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC );
+    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
     // Set the OpenGL viewport according to the client size of this canvas.
     // This is done here rather than in a wxSizeEvent handler because our

@@ -143,7 +143,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 
 OPENGL_GAL::~OPENGL_GAL()
 {
-    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext );
+    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
 
     --instanceCounter;
     glFlush();
@@ -165,7 +165,7 @@ OPENGL_GAL::~OPENGL_GAL()
     // Are we destroying the last GAL instance?
     if( instanceCounter == 0 )
     {
-        GL_CONTEXT_MANAGER::Get().LockCtx( glMainContext );
+        GL_CONTEXT_MANAGER::Get().LockCtx( glMainContext, this );
 
         if( isBitmapFontLoaded )
         {
@@ -193,7 +193,7 @@ void OPENGL_GAL::BeginDrawing()
     prof_start( &totalRealTime );
 #endif /* __WXDEBUG__ */
 
-    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext );
+    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
 
 #ifdef RETINA_OPENGL_PATCH
     const float scaleFactor = GetBackingScaleFactor();
@@ -346,7 +346,7 @@ void OPENGL_GAL::EndDrawing()
 
 void OPENGL_GAL::BeginUpdate()
 {
-    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext );
+    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
     cachedManager->Map();
 }
 

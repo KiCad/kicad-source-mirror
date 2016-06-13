@@ -117,7 +117,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
 
 EDA_3D_CANVAS::~EDA_3D_CANVAS()
 {
-    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC );
+    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
     ClearLists();
     m_init = false;
