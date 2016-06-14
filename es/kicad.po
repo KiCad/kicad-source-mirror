@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-13 12:01+0200\n"
-"PO-Revision-Date: 2016-06-13 12:12+0200\n"
+"POT-Creation-Date: 2016-06-14 14:35+0200\n"
+"PO-Revision-Date: 2016-06-14 14:38+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -85,28 +85,28 @@ msgstr "Problemas al escribir el archivo de configuración"
 msgid "All Files (*.*)|*.*"
 msgstr "Todos los archivos (*.*)|*.*"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:128
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:134
 msgid "[BUG] No valid resolver; data will not be updated"
 msgstr "[BUG] Resolver inválido; no se actualizarán los datos"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:129
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:135
 msgid "Update 3D search path list"
 msgstr "Actualizar lista de rutas de búsqueda 3D"
-
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:188
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:228
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:269
-msgid "No entry selected"
-msgstr "No se ha seleccionado ninguna entrada"
-
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:188
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:195
-msgid "Delete alias entry"
-msgstr "Eliminar entrada de alias"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:194
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:234
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:275
+msgid "No entry selected"
+msgstr "No se ha seleccionado ninguna entrada"
+
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:194
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:201
+msgid "Delete alias entry"
+msgstr "Eliminar entrada de alias"
+
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:200
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:240
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:281
 msgid ""
 "Multiple entries selected; please\n"
 "select only one entry"
@@ -114,31 +114,30 @@ msgstr ""
 "Múltiples entradas seleccionadas; por favor\n"
 "seleccione solamente una"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:228
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:235
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:234
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:241
 msgid "Move alias up"
 msgstr "Subir alias"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:269
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:276
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:275
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:282
 msgid "Move alias down"
 msgstr "Bajar alias"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:359
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:371
 msgid ""
-"Enter the name and path for each 3D alias variable.  KiCad environment "
-"variables and their values are shown for reference only and cannot be "
-"edited. "
+"Enter the name and path for each 3D alias variable.<br>KiCad environment "
+"variables and their values are shown for reference only and cannot be edited."
 msgstr ""
-"Introduzca nombre y ruta de cada variable de alias 3D. Las variables de "
-"entorno de KiCad y sus valores se muestran como referencia únicamente y no "
-"pueden ser editadas. "
+"Introduzca el nombre y la ruta de cada una de las variables alias 3D.<br>Las "
+"variables de entorno de KiCad y sus valores se muestran únicamente como "
+"referencia y no son editables."
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:363
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:375
 msgid "Alias names may not contain any of the characters "
 msgstr "Los nombres de alias no deben contener ninguno de los caracteres "
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:367
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:379
 #: common/dialogs/dialog_env_var_config.cpp:282
 msgid "Environment Variable Help"
 msgstr "Variable de entorno Ayuda"
@@ -148,18 +147,22 @@ msgid "Env Var"
 msgstr "Variable de entorno"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:36
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:73
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:82
 #: common/dialogs/dialog_env_var_config_base.cpp:39
 msgid "Path"
 msgstr "Ruta"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:72
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:53
+msgid "Config Env"
+msgstr "Conf Ent"
+
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:81
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:202
 #: eeschema/libedit.cpp:488 eeschema/viewlibs.cpp:307
 msgid "Alias"
 msgstr "Alias"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:74
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:83
 #: common/dialog_about/AboutDialog_main.cpp:129
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
@@ -170,15 +173,15 @@ msgstr "Alias"
 msgid "Description"
 msgstr "Descripción"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:98
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:104
 msgid "Add Alias"
 msgstr "Añadir alias"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:101
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:107
 msgid "Remove Alias"
 msgstr "Eliminar alias"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:104
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:110
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:133
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:38
@@ -188,16 +191,12 @@ msgstr "Eliminar alias"
 msgid "Move Up"
 msgstr "Subir"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:107
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:113
 #: 3d-viewer/3d_canvas.cpp:451 cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:72
 msgid "Move Down"
 msgstr "Bajar"
-
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:110
-msgid "Config Env"
-msgstr ""
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:48
 msgid "Select 3D Model"
@@ -14927,7 +14926,7 @@ msgstr "Problemas / Marcadores"
 msgid "A list of unconnected pads, right click for popup menu"
 msgstr "Una lista de pads sin conectar, botón derecho para menú contextual"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:309
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:313
 msgid ""
 "Use this attribute for most non SMD components\n"
 "Components with this option are not put in the footprint position list file"
@@ -14936,8 +14935,8 @@ msgstr ""
 "Los componentes con esta opción no aparecerán en el archivo de posicionado "
 "de huellas."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:312
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:163
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:316
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:167
 msgid ""
 "Use this attribute for SMD components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -14946,7 +14945,7 @@ msgstr ""
 "Solo los componentes con esta opción aparecerán en el archivo de posicionado "
 "de huellas."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:315
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:319
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
 "(like a old ISA PC bus connector)"
@@ -14954,7 +14953,7 @@ msgstr ""
 "Utilice este atributo para componentes \"virtuales\" dibujados en la placa\n"
 "(como, por ejemplo, un antiguo conector de BUS ISA)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:346
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:350
 msgid ""
 "Component can be freely moved and auto placed. User can arbitrarily select "
 "and edit component's pads."
@@ -14963,7 +14962,7 @@ msgstr ""
 "usuario puede seleccionar y editar los pads del componente de forma "
 "arbitraria."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:348
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:352
 msgid ""
 "Component can be freely moved and auto placed, but its pads cannot be "
 "selected or edited."
@@ -14971,14 +14970,14 @@ msgstr ""
 "El componente puede moverse libremente y ser colocado automáticamente, pero "
 "sus pads no pueden ser seleccionados o editados."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:350
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:354
 msgid "Component is locked: it cannot be freely moved or auto placed."
 msgstr ""
 "El componente está bloqueado: no puede moverse libremente ni ser colocado "
 "automáticamente."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:527
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:393
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:531
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:397
 msgid "Invalid filename: "
 msgstr "Nombre de archivo no válido: "
 
@@ -15196,11 +15195,11 @@ msgstr "Editar nombre de archivo"
 msgid "3D Settings"
 msgstr "Opciones 3D"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:161
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:165
 msgid "Use this attribute for most non SMD components"
 msgstr "Utilice este atributo para la mayoría de los componentes no SMD"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:165
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:169
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board (like a old ISA "
 "PC bus connector)"
@@ -15208,18 +15207,18 @@ msgstr ""
 "Utilice este atributo para componentes \"virtuales\" dibujados en la placa "
 "(como, por ejemplo, un antiguo conector de BUS ISA)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:188
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:192
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr ""
 "Activar atajos de teclado para comandos de movimiento y el Auto Emplazamiento"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:189
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:193
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr ""
 "Desactivar atajos de teclado para comandos de movimiento y el Auto "
 "Emplazamiento"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:508
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:512
 #, c-format
 msgid ""
 "Error:\n"
@@ -23487,7 +23486,7 @@ msgstr "plugin incompatible (no se encuentra la función 'GetVersion')"
 msgid "missing function 'GetVersion'"
 msgstr "no se encuentra la función 'GetVersion'"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.h:63
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.h:64
 msgid "3D Search Path Configuration"
 msgstr "Configuración de las rutas de búsqueda 3D"
 
@@ -24023,6 +24022,15 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importar archivo DXF"
+
+#~ msgid ""
+#~ "Enter the name and path for each 3D alias variable.  KiCad environment "
+#~ "variables and their values are shown for reference only and cannot be "
+#~ "edited. "
+#~ msgstr ""
+#~ "Introduzca nombre y ruta de cada variable de alias 3D. Las variables de "
+#~ "entorno de KiCad y sus valores se muestran como referencia únicamente y "
+#~ "no pueden ser editadas. "
 
 #~ msgid "&List Current Keys"
 #~ msgstr "&Mostrar atajos de teclado"
