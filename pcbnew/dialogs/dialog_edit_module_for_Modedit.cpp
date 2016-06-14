@@ -89,8 +89,6 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
 
 DIALOG_MODULE_MODULE_EDITOR::~DIALOG_MODULE_MODULE_EDITOR()
 {
-    m_page = m_NoteBook->GetSelection();
-
     for( unsigned ii = 0; ii < m_shapes3D_list.size(); ii++ )
         delete m_shapes3D_list[ii];
 
@@ -99,6 +97,12 @@ DIALOG_MODULE_MODULE_EDITOR::~DIALOG_MODULE_MODULE_EDITOR()
     // free the memory used by all models, otherwise models which were
     // browsed but not used would consume memory
     Prj().Get3DCacheManager()->FlushCache( false );
+
+    // the GL canvas has to be visible before it is destroyed
+    m_page = m_NoteBook->GetSelection();
+    m_NoteBook->SetSelection( 1 );
+    delete m_PreviewPane;
+    m_PreviewPane = NULL;   // just in case, to avoid double-free
 
     delete m_referenceCopy;
     delete m_valueCopy;

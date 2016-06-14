@@ -96,8 +96,6 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
 
 DIALOG_MODULE_BOARD_EDITOR::~DIALOG_MODULE_BOARD_EDITOR()
 {
-    m_page = m_NoteBook->GetSelection();
-
     for( unsigned ii = 0; ii < m_Shapes3D_list.size(); ii++ )
         delete m_Shapes3D_list[ii];
 
@@ -106,6 +104,12 @@ DIALOG_MODULE_BOARD_EDITOR::~DIALOG_MODULE_BOARD_EDITOR()
     // free the memory used by all models, otherwise models which were
     // browsed but not used would consume memory
     Prj().Get3DCacheManager()->FlushCache( false );
+
+    // the GL canvas has to be visible before it is destroyed
+    m_page = m_NoteBook->GetSelection();
+    m_NoteBook->SetSelection( 1 );
+    delete m_PreviewPane;
+    m_PreviewPane = NULL;   // just in case, to avoid double-free
 
     delete m_ReferenceCopy;
     delete m_ValueCopy;
