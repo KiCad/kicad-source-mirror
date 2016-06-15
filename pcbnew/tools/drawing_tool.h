@@ -121,17 +121,6 @@ public:
      */
     int SetAnchor( const TOOL_EVENT& aEvent );
 
-    /**
-     * Function EditModules()
-     * Toggles edit module mode. When enabled, one may select parts of modules individually
-     * (graphics, pads, etc.), so they can be modified.
-     * @param aEnabled decides if the mode should be enabled.
-     */
-    void EditModules( bool aEnabled )
-    {
-        m_editModules = aEnabled;
-    }
-
     ///> Sets up handlers for various events.
     void SetTransitions();
 
@@ -172,9 +161,6 @@ private:
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
     PCB_BASE_EDIT_FRAME* m_frame;
-
-    /// Edit module mode flag
-    bool m_editModules;
 
     /// Stores the current line width for multisegment drawing.
     unsigned int m_lineWidth;

@@ -132,9 +132,6 @@ private:
     ///> of edit reference point).
     VECTOR2I m_cursor;
 
-    /// Edit module mode flag
-    bool m_editModules;
-
     /// Counter of undo inhibitions. When zero, undo is not inhibited.
     int m_undoInhibit;
 
