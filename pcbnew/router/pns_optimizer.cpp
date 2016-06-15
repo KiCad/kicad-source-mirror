@@ -315,7 +315,7 @@ void LINE_RESTRICTIONS::Build( PNS_NODE* aWorld, PNS_LINE* aOriginLine, const SH
 
     for( int i = 0; i < n; i++ )
     {
-        const VECTOR2I &v = l.CPoint( i ), v_next;
+        const VECTOR2I &v = l.CPoint( i );
         RVERTEX r( false, 0xff );
 
         if( aRestrictedAreaEnable )
