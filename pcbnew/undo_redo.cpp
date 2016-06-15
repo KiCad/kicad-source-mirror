@@ -549,7 +549,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     // Rebuild pointers and ratsnest that can be changed.
     if( reBuild_ratsnest )
     {
-        Compile_Ratsnest( NULL, true );
 
         if( IsGalCanvasActive() )
         {
@@ -558,7 +557,10 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             else
                 ratsnest->Recalculate();
         }
-
+        else
+        {
+            Compile_Ratsnest( NULL, true );
+        }
     }
 }
 
