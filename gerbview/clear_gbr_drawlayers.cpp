@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -47,21 +47,9 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
             return false;
     }
 
-    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
-    {
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
-
-        if( gerber == NULL )    // Graphic layer not yet used
-            continue;
-
-        gerber->m_Drawings.DeleteAll();
-    }
-
-    g_GERBER_List.ClearList();
+    g_GERBER_List.DeleteAllImages();
 
     GetGerberLayout()->SetBoundingBox( EDA_RECT() );
-
-    SetScreen( new GBR_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     setActiveLayer( 0 );
     m_LayersManager->UpdateLayerIcons();
@@ -82,15 +70,9 @@ void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
 
     SetCurItem( NULL );
 
-    GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+    g_GERBER_List.DeleteImage( layer );
 
-    if( gerber )    // gerber == NULL should not occur
-        gerber->m_Drawings.DeleteAll();
-
-    g_GERBER_List.ClearImage( layer );
-
-    GetScreen()->SetModify();
-    m_canvas->Refresh();
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
+    m_canvas->Refresh();
 }

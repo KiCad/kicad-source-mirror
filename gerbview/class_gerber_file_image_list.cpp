@@ -47,16 +47,12 @@ GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST()
         m_GERBER_List.push_back( NULL );
 }
 
+
 GERBER_FILE_IMAGE_LIST::~GERBER_FILE_IMAGE_LIST()
 {
-    ClearList();
-
-    for( unsigned layer = 0; layer < m_GERBER_List.size(); ++layer )
-    {
-        delete m_GERBER_List[layer];
-        m_GERBER_List[layer] = NULL;
-    }
+    DeleteAllImages();
 }
+
 
 GERBER_FILE_IMAGE* GERBER_FILE_IMAGE_LIST::GetGbrImage( int aIdx )
 {
@@ -66,11 +62,10 @@ GERBER_FILE_IMAGE* GERBER_FILE_IMAGE_LIST::GetGbrImage( int aIdx )
     return NULL;
 }
 
-/**
- * creates a new, empty GERBER_FILE_IMAGE* at index aIdx
+/* creates a new, empty GERBER_FILE_IMAGE* at index aIdx
  * or at the first free location if aIdx < 0
- * @param aIdx = the location to use ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
- * @return true if the index used, or -1 if no room to add image
+ * aIdx = the index of graphic layer to use, or -1 to uses the first free graphic layer
+ * return the index actually used, or -1 if no room to add image
  */
 int GERBER_FILE_IMAGE_LIST::AddGbrImage( GERBER_FILE_IMAGE* aGbrImage, int aIdx )
 {
@@ -80,7 +75,7 @@ int GERBER_FILE_IMAGE_LIST::AddGbrImage( GERBER_FILE_IMAGE* aGbrImage, int aIdx 
     {
         for( idx = 0; idx < (int)m_GERBER_List.size(); idx++ )
         {
-            if( !IsUsed( idx ) )
+            if( m_GERBER_List[idx] == NULL )
                 break;
         }
     }
@@ -94,23 +89,24 @@ int GERBER_FILE_IMAGE_LIST::AddGbrImage( GERBER_FILE_IMAGE* aGbrImage, int aIdx 
 }
 
 
-// remove all loaded data in list, but do not delete empty images
-// (can be reused)
-void GERBER_FILE_IMAGE_LIST::ClearList()
+void GERBER_FILE_IMAGE_LIST::DeleteAllImages()
 {
-    for( unsigned layer = 0; layer < m_GERBER_List.size(); ++layer )
-        ClearImage( layer );
+    for( unsigned idx = 0; idx < m_GERBER_List.size(); ++idx )
+        DeleteImage( idx );
 }
 
-// remove the loaded data of image aIdx, but do not delete it
-void GERBER_FILE_IMAGE_LIST::ClearImage( int aIdx )
+
+void GERBER_FILE_IMAGE_LIST::DeleteImage( int aIdx )
 {
-    if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() && m_GERBER_List[aIdx] )
-    {
-        m_GERBER_List[aIdx]->InitToolTable();
-        m_GERBER_List[aIdx]->ResetDefaultValues();
-        m_GERBER_List[aIdx]->m_InUse = false;
-    }
+    // Ensure the index is valid:
+    if( aIdx < 0 || aIdx >= int( m_GERBER_List.size() ) )
+        return;
+
+    // delete image aIdx
+    GERBER_FILE_IMAGE* gbr_image = GetGbrImage( aIdx );
+
+    delete gbr_image;
+    m_GERBER_List[ aIdx ] = NULL;
 }
 
 // Build a name for image aIdx which can be used in layers manager
@@ -127,7 +123,7 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx )
     // <id> <short filename> <X2 FileFunction info> if a X2 FileFunction info is found
     // or (if no FileFunction info)
     // <id> <short filename> *
-    if( gerber && IsUsed(aIdx ) )
+    if( gerber )
     {
         wxFileName fn( gerber->m_FileName );
         wxString filename = fn.GetFullName();
@@ -168,14 +164,7 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx )
     return name;
 }
 
-// return true if image is used (loaded and not cleared)
-bool GERBER_FILE_IMAGE_LIST::IsUsed( int aIdx )
-{
-    if( aIdx >= 0 && aIdx < (int)m_GERBER_List.size() )
-        return m_GERBER_List[aIdx] != NULL && m_GERBER_List[aIdx]->m_InUse;
 
-    return false;
-}
 
 // Helper function, for std::sort.
 // Sort loaded images by Z order priority, if they have the X2 FileFormat info

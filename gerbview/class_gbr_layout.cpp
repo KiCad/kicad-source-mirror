@@ -59,6 +59,7 @@ bool GBR_LAYOUT::IsLayerPrintable( int aLayer ) const
 EDA_RECT GBR_LAYOUT::ComputeBoundingBox()
 {
     EDA_RECT bbox;
+    bool first_item = true;
 
     for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
     {
@@ -68,7 +69,15 @@ EDA_RECT GBR_LAYOUT::ComputeBoundingBox()
             continue;
 
         for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item; item = item->Next() )
-            bbox.Merge( item->GetBoundingBox() );
+        {
+            if( first_item )
+            {
+                bbox = item->GetBoundingBox();
+                first_item = false;
+            }
+            else
+                bbox.Merge( item->GetBoundingBox() );
+        }
     }
 
     SetBoundingBox( bbox );

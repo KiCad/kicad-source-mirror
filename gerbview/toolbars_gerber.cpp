@@ -319,7 +319,7 @@ void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 
 void GERBVIEW_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 {
-    if(  m_SelLayerBox && (m_SelLayerBox->GetSelection() != getActiveLayer()) )
+    if( m_SelLayerBox->GetSelection() != getActiveLayer() )
     {
         m_SelLayerBox->SetSelection( getActiveLayer() );
     }

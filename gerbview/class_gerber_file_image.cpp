@@ -107,6 +107,8 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer )
 
 GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 {
+    m_Drawings.DeleteAll();
+
     for( unsigned ii = 0; ii < DIM( m_Aperture_List ); ii++ )
     {
         delete m_Aperture_List[ii];

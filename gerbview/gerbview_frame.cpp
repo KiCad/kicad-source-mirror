@@ -247,11 +247,11 @@ double GERBVIEW_FRAME::BestZoom()
         bbox.SetSize( wxSize( Mils2iu( pagesize.x ), Mils2iu( pagesize.y ) ) );
     }
 
+    // Compute best zoom:
     wxSize  size = m_canvas->GetClientSize();
-
-    double  x   = (double) bbox.GetWidth() * 1.1 / (double) size.x;
-    double  y   = (double) bbox.GetHeight() * 1.1 / (double) size.y;
-    double  best_zoom = std::max( x, y );
+    double  x   = (double) bbox.GetWidth() / (double) size.x;
+    double  y   = (double) bbox.GetHeight() / (double) size.y;
+    double  best_zoom = std::max( x, y ) * 1.1;
 
     SetScrollCenterPosition( bbox.Centre() );
 
@@ -373,10 +373,10 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
     {
         GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
 
-        if( gerber == NULL || gerber->m_FileName.IsEmpty() )
+        if( gerber == NULL )    // this graphic layer is available: use it
             return layer;
 
-        ++layer;
+        ++layer;                // try next graphic layer
 
         if( layer >= GERBER_DRAWLAYERS_COUNT )
             layer = 0;

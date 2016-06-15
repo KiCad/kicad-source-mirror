@@ -144,8 +144,4 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     m_canvas->DrawCrossHair( DC );
-
-    // Display the filename and the layer name (found in the gerber files, if any)
-    // relative to the active layer
-    UpdateTitleAndInfo();
 }

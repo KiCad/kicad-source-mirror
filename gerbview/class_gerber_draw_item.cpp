@@ -207,8 +207,15 @@ const EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
 
     bbox.Inflate( m_Size.x / 2, m_Size.y / 2 );
 
-    bbox.SetOrigin( GetABPosition( bbox.GetOrigin() ) );
-    bbox.SetEnd( GetABPosition( bbox.GetEnd() ) );
+    // calculate the corners coordinates in current gerber axis orientations
+    wxPoint org = GetABPosition( bbox.GetOrigin() );
+    wxPoint end = GetABPosition( bbox.GetEnd() );
+
+    // Set the corners position:
+    bbox.SetOrigin( org );
+    bbox.SetEnd( end );
+    bbox.Normalize();
+
     return bbox;
 }
 
