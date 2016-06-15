@@ -61,8 +61,7 @@ void DRC::ShowDialog()
         m_drcDialog = new DIALOG_DRC_CONTROL( this, m_mainWindow );
         updatePointers();
 
-        m_drcDialog->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
-        m_drcDialog->m_RptFilenameCtrl->SetValue( m_rptFilename );
+        m_drcDialog->SetRptSettings( m_doCreateRptFile, m_rptFilename);
     }
     else
         updatePointers();
@@ -78,8 +77,7 @@ void DRC::DestroyDialog( int aReason )
         if( aReason == wxID_OK )
         {
             // if user clicked OK, save his choices in this DRC object.
-            m_doCreateRptFile = m_drcDialog->m_CreateRptCtrl->GetValue();
-            m_rptFilename     = m_drcDialog->m_RptFilenameCtrl->GetValue();
+            m_drcDialog->GetRptSettings( &m_doCreateRptFile, m_rptFilename);
         }
 
         m_drcDialog->Destroy();
