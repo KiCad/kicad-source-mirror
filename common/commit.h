@@ -89,6 +89,11 @@ public:
     ///> Revertes the commit by restoring the modifed items state.
     virtual void Revert() = 0;
 
+    bool Empty() const
+    {
+        return m_changes.empty();
+    }
+
 protected:
     struct COMMIT_LINE
     {
@@ -97,13 +102,18 @@ protected:
         CHANGE_TYPE m_type;
     };
 
+    // Should be called in Push() & Revert() methods
+    void clear()
+    {
+        m_changedItems.clear();
+        m_changes.clear();
+    }
+
     virtual void makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy = NULL );
 
     virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const = 0;
 
     CHANGE_TYPE convert( UNDO_REDO_T aType ) const;
-
-    bool m_committed;
 
     std::set<EDA_ITEM*> m_changedItems;
     std::vector<COMMIT_LINE> m_changes;

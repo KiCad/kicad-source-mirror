@@ -27,19 +27,15 @@
 
 COMMIT::COMMIT()
 {
-    m_committed = false;
 }
 
 
 COMMIT::~COMMIT()
 {
-    if( !m_committed )
+    for( COMMIT_LINE& ent : m_changes )
     {
-        for( COMMIT_LINE& ent : m_changes )
-        {
-            if( ent.m_copy )
-                delete ent.m_copy;
-        }
+        if( ent.m_copy )
+            delete ent.m_copy;
     }
 }
 
