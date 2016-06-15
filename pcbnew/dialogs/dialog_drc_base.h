@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,6 +51,7 @@ class DRCLISTBOX;
 class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 {
 	private:
+		wxPanel* m_panelUnconnectedBox;
 	
 	protected:
 		wxStaticText* m_ClearanceTitle;
@@ -60,6 +61,8 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxStaticText* m_ViaMinUnit;
 		wxStaticText* m_MicroViaMinTitle;
 		wxStaticText* m_MicroViaMinUnit;
+		wxCheckBox* m_CreateRptCtrl;
+		wxTextCtrl* m_RptFilenameCtrl;
 		wxButton* m_BrowseButton;
 		wxStaticText* m_staticText6;
 		wxTextCtrl* m_Messages;
@@ -70,7 +73,6 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextErrMsg;
 		wxNotebook* m_Notebook;
 		wxPanel* m_panelClearanceListBox;
-		wxPanel* m_panelUnconnectedBox;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -99,8 +101,6 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_SetTrackMinWidthCtrl;
 		wxTextCtrl* m_SetViaMinSizeCtrl;
 		wxTextCtrl* m_SetMicroViakMinSizeCtrl;
-		wxCheckBox* m_CreateRptCtrl;
-		wxTextCtrl* m_RptFilenameCtrl;
 		DRCLISTBOX* m_ClearanceListBox;
 		DRCLISTBOX* m_UnconnectedListBox;
 		
