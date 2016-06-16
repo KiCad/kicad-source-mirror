@@ -107,18 +107,98 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                 {
                     ITEM_PICKER itemWrapper( boardItem, UR_DELETED );
                     undoList.PushItem( itemWrapper );
-                    board->Remove( boardItem );
-                } else {
-                    board->m_Modules->Remove( boardItem );
                 }
 
-                if(boardItem->Type() == PCB_MODULE_T )
+                switch( boardItem->Type() )
                 {
-                    MODULE* mod = static_cast<MODULE*>( boardItem );
-                    mod->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+                case PCB_MODULE_T:
+                {
+                    // There are no modules inside a module yet
+                    assert( !m_editModules );
+
+                    MODULE* module = static_cast<MODULE*>( boardItem );
+                    module->ClearFlags();
+                    module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+
+                    view->Remove( module );
+                    board->Remove( module );
+
+                    // Clear flags to indicate, that the ratsnest, list of nets & pads are not valid anymore
+                    board->m_Status_Pcb = 0;
+                }
+                break;
+
+                // Module items
+                case PCB_PAD_T:
+                case PCB_MODULE_EDGE_T:
+                case PCB_MODULE_TEXT_T:
+                {
+                    // Do not allow footprint text removal when not editing a module
+                    if( !m_editModules )
+                        break;
+
+                    bool remove = true;
+
+                    if( boardItem->Type() == PCB_MODULE_TEXT_T )
+                    {
+                        TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( boardItem );
+
+                        switch( text->GetType() )
+                        {
+                            case TEXTE_MODULE::TEXT_is_REFERENCE:
+                                //DisplayError( frame, _( "Cannot delete component reference." ) );
+                                remove = false;
+                                break;
+
+                            case TEXTE_MODULE::TEXT_is_VALUE:
+                                //DisplayError( frame, _( "Cannot delete component value." ) );
+                                remove = false;
+                                break;
+
+                            case TEXTE_MODULE::TEXT_is_DIVERS:    // suppress warnings
+                                break;
+
+                            default:
+                                assert( false );
+                                break;
+                        }
+                    }
+
+                    if( remove )
+                    {
+                        view->Remove( boardItem );
+
+                        MODULE* module = static_cast<MODULE*>( boardItem->GetParent() );
+                        module->Remove( boardItem );
+                        module->SetLastEditTime();
+                        board->m_Status_Pcb = 0; // it is done in the legacy view
+
+                        // Footprint editor saves a full copy of the footprint in the undo buffer,
+                        // so we have to actually delete the text/drawing/pad to avoid memleaks
+                        boardItem->DeleteStructure();
+                    }
+
+                    break;
                 }
 
-                view->Remove( boardItem );
+                case PCB_LINE_T:                // a segment not on copper layers
+                case PCB_TEXT_T:                // a text on a layer
+                case PCB_TRACE_T:               // a track segment (segment on a copper layer)
+                case PCB_VIA_T:                 // a via (like track segment on a copper layer)
+                case PCB_DIMENSION_T:           // a dimension (graphic item)
+                case PCB_TARGET_T:              // a target (graphic item)
+                case PCB_MARKER_T:              // a marker used to show something
+                case PCB_ZONE_T:                // SEG_ZONE items are now deprecated
+                case PCB_ZONE_AREA_T:
+                    view->Remove( boardItem );
+                    board->Remove( boardItem );
+                    //ratsnest->Remove( boardItem );    // currently done by BOARD::Remove()
+                    break;
+
+                default:                        // other types do not need to (or should not) be handled
+                    assert( false );
+                    break;
+                }
                 break;
             }
 
