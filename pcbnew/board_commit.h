@@ -30,18 +30,22 @@
 class BOARD_ITEM;
 class PICKED_ITEMS_LIST;
 class PCB_TOOL;
+class PCB_BASE_FRAME;
+class TOOL_MANAGER;
 
 class BOARD_COMMIT : public COMMIT
 {
 public:
     BOARD_COMMIT( PCB_TOOL* aTool );
+    BOARD_COMMIT( PCB_BASE_FRAME* aFrame );
     virtual ~BOARD_COMMIT();
 
     virtual void Push( const wxString& aMessage );
     virtual void Revert();
 
 private:
-    PCB_TOOL* m_tool;
+    TOOL_MANAGER* m_toolMgr;
+    bool m_editModules;
     virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const;
 };
 

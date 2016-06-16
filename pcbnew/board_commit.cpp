@@ -30,14 +30,21 @@
 #include <view/view.h>
 #include <board_commit.h>
 
-#include <boost/foreach.hpp>
 #include <boost/bind.hpp>
 
 #include <tools/pcb_tool.h>
 
 BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL* aTool )
 {
-    m_tool = aTool;
+    m_toolMgr = aTool->GetManager();
+    m_editModules = aTool->EditingModules();
+}
+
+
+BOARD_COMMIT::BOARD_COMMIT( PCB_BASE_FRAME* aFrame )
+{
+    m_toolMgr = aFrame->GetToolManager();
+    m_editModules = aFrame->IsType( FRAME_PCB_MODULE_EDITOR );
 }
 
 
@@ -50,29 +57,29 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
 {
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST undoList;
-    TOOL_MANAGER* toolMgr = m_tool->GetManager();
-    KIGFX::VIEW* view = toolMgr->GetView();
-    BOARD* board = (BOARD*) toolMgr->GetModel();
-    PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) toolMgr->GetEditFrame();
+    KIGFX::VIEW* view = m_toolMgr->GetView();
+    BOARD* board = (BOARD*) m_toolMgr->GetModel();
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
     RN_DATA* ratsnest = board->GetRatsnest();
 
-    bool editModules = m_tool->EditingModules();
+    if( Empty() )
+        return;
 
-    // Module items need to be saved in the undo buffer before modification
-    if( editModules )
+    for( COMMIT_LINE& ent : m_changes )
     {
-        frame->SaveCopyInUndoList( board->m_Modules, UR_CHANGED );
-    }
+        // Module items need to be saved in the undo buffer before modification
+        if( m_editModules )
+        {
+            frame->SaveCopyInUndoList( static_cast<BOARD_ITEM*>( ent.m_copy ), UR_CHANGED );
+        }
 
-    BOOST_FOREACH( COMMIT_LINE& ent, m_changes )
-    {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
 
         switch( ent.m_type )
         {
             case CHT_ADD:
             {
-                if( !editModules )
+                if( !m_editModules )
                 {
                     ITEM_PICKER itemWrapper( boardItem, UR_NEW );
                     undoList.PushItem( itemWrapper );
@@ -90,12 +97,13 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                 }
 
                 view->Add( boardItem );
+                //ratsnest->Add( boardItem );       // TODO currently done by BOARD::Add()
                 break;
             }
 
             case CHT_REMOVE:
             {
-                if( !editModules )
+                if( !m_editModules )
                 {
                     ITEM_PICKER itemWrapper( boardItem, UR_DELETED );
                     undoList.PushItem( itemWrapper );
@@ -116,7 +124,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
 
             case CHT_MODIFY:
             {
-                if( !editModules )
+                if( !m_editModules )
                 {
                     ITEM_PICKER itemWrapper( boardItem, UR_CHANGED );
                     itemWrapper.SetLink( ent.m_copy );
@@ -140,13 +148,13 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
         }
     }
 
-    if( !editModules )
+    if( !m_editModules )
         frame->SaveCopyInUndoList( undoList, UR_UNSPECIFIED );
 
     frame->OnModify();
     ratsnest->Recalculate();
 
-    m_committed = true;
+    clear();
 }
 
 
