@@ -176,21 +176,19 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 
 void BOARD_COMMIT::Revert()
 {
-    #if 0
     PICKED_ITEMS_LIST undoList;
     KIGFX::VIEW* view = m_toolMgr->GetView();
-    BOARD *board = (BOARD*) m_toolMgr->GetModel();
-    PCB_EDIT_FRAME *frame = (PCB_EDIT_FRAME*) m_toolMgr->GetEditFrame();
+    BOARD* board = (BOARD*) m_toolMgr->GetModel();
 
-
-    BOOST_FOREACH( COMMIT_LINE& ent, m_changes )
+    for( COMMIT_LINE& ent : m_changes )
     {
-        BOARD_ITEM *item = static_cast<BOARD_ITEM *> (ent.m_item);
-        BOARD_ITEM *copy = static_cast<BOARD_ITEM *> (ent.m_copy);
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( ent.m_item );
+        BOARD_ITEM* copy = static_cast<BOARD_ITEM*>( ent.m_copy );
 
-        if(ent.m_type == CHT_MODIFY)
+        switch( ent.m_type )
         {
-            printf("revert %p\n", item );
+        case CHT_MODIFY:
+        {
             RN_DATA *ratsnest = board->GetRatsnest();
 
             if( item->Type() == PCB_MODULE_T )
@@ -198,9 +196,9 @@ void BOARD_COMMIT::Revert()
                 MODULE* oldModule = static_cast<MODULE*>( item );
                 oldModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
-            view->Remove( item );
-            ratsnest->Remove( static_cast<BOARD_ITEM*> ( item ) );
 
+            view->Remove( item );
+            ratsnest->Remove( static_cast<BOARD_ITEM*>( item ) );
             item->SwapData( copy );
 
             // Update all pads/drawings/texts, as they become invalid
@@ -210,14 +208,19 @@ void BOARD_COMMIT::Revert()
                 MODULE* newModule = static_cast<MODULE*>( item );
                 newModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
             }
+
             view->Add( item );
             ratsnest->Add( item );
-
             item->ClearFlags( SELECTED );
+            break;
+        }
 
+        default:
+            assert( false );    // not implemented
             break;
         }
     }
-    #endif
+
+    clear();
 }
 
