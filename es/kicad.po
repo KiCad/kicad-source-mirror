@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-14 14:35+0200\n"
-"PO-Revision-Date: 2016-06-14 14:38+0200\n"
+"POT-Creation-Date: 2016-06-16 09:30+0200\n"
+"PO-Revision-Date: 2016-06-16 09:31+0200\n"
 "Last-Translator: Iñigo Figuero <ifs@elektroquark.com>\n"
 "Language-Team: KiCad Team <ifs@elektroquark.com>\n"
 "Language: es_ES\n"
@@ -221,7 +221,7 @@ msgid "Scale"
 msgstr "Escala"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:141
-#: gerbview/class_gerber_draw_item.cpp:497
+#: gerbview/class_gerber_draw_item.cpp:504
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:350
 #: pcbnew/class_module.cpp:606
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
@@ -843,9 +843,9 @@ msgstr "Formato"
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:90
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/libedit.cpp:498
 #: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:764
-#: gerbview/class_gerber_file_image.cpp:340
-#: gerbview/class_gerber_file_image.cpp:344
-#: gerbview/class_gerber_file_image.cpp:347 pcbnew/class_module.cpp:612
+#: gerbview/class_gerber_file_image.cpp:342
+#: gerbview/class_gerber_file_image.cpp:346
+#: gerbview/class_gerber_file_image.cpp:349 pcbnew/class_module.cpp:612
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:135
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:93
@@ -856,7 +856,7 @@ msgid "Normal"
 msgstr "Normal"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:135
-#: gerbview/class_gerber_file_image.cpp:340
+#: gerbview/class_gerber_file_image.cpp:342
 msgid "Negative"
 msgstr "Negativo"
 
@@ -2677,8 +2677,8 @@ msgstr "Y"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:153
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:60
-#: gerbview/class_gerber_file_image.cpp:344
-#: gerbview/class_gerber_file_image.cpp:347
+#: gerbview/class_gerber_file_image.cpp:346
+#: gerbview/class_gerber_file_image.cpp:349
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
@@ -4144,15 +4144,15 @@ msgstr "Utilizado únicamente para los campos Huella y Hoja de datos."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1013
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:505
-#: gerbview/class_gerber_draw_item.cpp:506 pcbnew/class_pcb_text.cpp:145
+#: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:512
+#: gerbview/class_gerber_draw_item.cpp:513 pcbnew/class_pcb_text.cpp:145
 #: pcbnew/class_text_mod.cpp:357
 msgid "Yes"
 msgstr "Sí"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1015
-#: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:505
-#: gerbview/class_gerber_draw_item.cpp:506 pcbnew/class_pcb_text.cpp:143
+#: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:512
+#: gerbview/class_gerber_draw_item.cpp:513 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_text_mod.cpp:355
 msgid "No"
 msgstr "No"
@@ -4217,7 +4217,7 @@ msgid "Mirror |"
 msgstr "Invertir X"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
-#: gerbview/class_gerber_draw_item.cpp:507
+#: gerbview/class_gerber_draw_item.cpp:514
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
 #: pcbnew/class_pcb_text.cpp:143 pcbnew/class_pcb_text.cpp:145
 #: pcbnew/class_text_mod.cpp:369
@@ -4931,7 +4931,7 @@ msgstr "Generar error"
 msgid "Annotation required!"
 msgstr "¡Se necesita anotar los componentes!"
 
-#: eeschema/dialogs/dialog_erc.cpp:580 pcbnew/drc.cpp:284
+#: eeschema/dialogs/dialog_erc.cpp:580 pcbnew/drc.cpp:282
 msgid "Finished"
 msgstr "Finalizado"
 
@@ -5107,7 +5107,7 @@ msgstr "Número"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1999
 #: eeschema/libedit.cpp:507 eeschema/sch_text.cpp:791
-#: gerbview/class_gerber_draw_item.cpp:482
+#: gerbview/class_gerber_draw_item.cpp:489
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
@@ -9230,61 +9230,61 @@ msgstr ""
 "fondo y no se verán en la pantalla.\n"
 "¿Está seguro de que quiere utilizar esos colores?"
 
-#: gerbview/class_gerber_draw_item.cpp:486
+#: gerbview/class_gerber_draw_item.cpp:493
 msgid "D Code"
 msgstr "Código D"
 
-#: gerbview/class_gerber_draw_item.cpp:490
+#: gerbview/class_gerber_draw_item.cpp:497
 msgid "Graphic Layer"
 msgstr "Capa gráfica"
 
-#: gerbview/class_gerber_draw_item.cpp:500
+#: gerbview/class_gerber_draw_item.cpp:507
 msgid "Clear"
 msgstr "Limpiar"
 
-#: gerbview/class_gerber_draw_item.cpp:500
+#: gerbview/class_gerber_draw_item.cpp:507
 msgid "Dark"
 msgstr "Oscuro"
 
-#: gerbview/class_gerber_draw_item.cpp:501
-#: gerbview/class_gerber_file_image.cpp:341
+#: gerbview/class_gerber_draw_item.cpp:508
+#: gerbview/class_gerber_file_image.cpp:343
 msgid "Polarity"
 msgstr "Polaridad"
 
-#: gerbview/class_gerber_draw_item.cpp:511
+#: gerbview/class_gerber_draw_item.cpp:518
 msgid "AB axis"
 msgstr "Eje AB"
 
-#: gerbview/class_gerber_file_image.cpp:328
+#: gerbview/class_gerber_file_image.cpp:330
 msgid "Image name"
 msgstr "Nombre de la imagen"
 
-#: gerbview/class_gerber_file_image.cpp:333
+#: gerbview/class_gerber_file_image.cpp:335
 msgid "Graphic layer"
 msgstr "Capa gráfica"
 
-#: gerbview/class_gerber_file_image.cpp:337
+#: gerbview/class_gerber_file_image.cpp:339
 msgid "Img Rot."
 msgstr "Girar imagen"
 
-#: gerbview/class_gerber_file_image.cpp:345
+#: gerbview/class_gerber_file_image.cpp:347
 msgid "X Justify"
 msgstr "Justificar X"
 
-#: gerbview/class_gerber_file_image.cpp:348
+#: gerbview/class_gerber_file_image.cpp:350
 msgid "Y Justify"
 msgstr "Justificar Y"
 
-#: gerbview/class_gerber_file_image.cpp:357
+#: gerbview/class_gerber_file_image.cpp:359
 msgid "Image Justify Offset"
 msgstr "Desplazamiento en la justificación de la imagen"
 
-#: gerbview/class_gerber_file_image_list.cpp:163
+#: gerbview/class_gerber_file_image_list.cpp:159
 #, c-format
 msgid "%d %s"
 msgstr "%d %s"
 
-#: gerbview/class_gerber_file_image_list.cpp:166
+#: gerbview/class_gerber_file_image_list.cpp:162
 #, c-format
 msgid "Graphic layer %d"
 msgstr "Capa gráfica %d"
@@ -9353,7 +9353,7 @@ msgstr "Ordenar capas en modo X2"
 msgid "Current data will be lost?"
 msgstr "¿Se perderán los datos actuales?"
 
-#: gerbview/clear_gbr_drawlayers.cpp:78
+#: gerbview/clear_gbr_drawlayers.cpp:66
 #, c-format
 msgid "Clear layer %d?"
 msgstr "¿Borrar la capa %d?"
@@ -14822,20 +14822,25 @@ msgstr "Mostrar elementos gráficos en como bocetos"
 msgid "Show page limits"
 msgstr "Mostrar límites de hoja"
 
-#: pcbnew/dialogs/dialog_drc.cpp:178 pcbnew/dialogs/dialog_drc.cpp:241
+#: pcbnew/dialogs/dialog_drc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:258
 #, c-format
 msgid "Report file \"%s\" created"
 msgstr "Se ha creado el informe \"%s\""
 
-#: pcbnew/dialogs/dialog_drc.cpp:180 pcbnew/dialogs/dialog_drc.cpp:242
+#: pcbnew/dialogs/dialog_drc.cpp:196 pcbnew/dialogs/dialog_drc.cpp:259
 msgid "Disk File Report Completed"
 msgstr "Archivo de informe de disco completado"
 
-#: pcbnew/dialogs/dialog_drc.cpp:262
+#: pcbnew/dialogs/dialog_drc.cpp:201 pcbnew/dialogs/dialog_drc.cpp:264
+#, c-format
+msgid "Unable to create report file '%s' "
+msgstr "No puede crearse el archivo de informe '%s'"
+
+#: pcbnew/dialogs/dialog_drc.cpp:283
 msgid "DRC report files (.rpt)|*.rpt"
 msgstr "Informe de DCR (.rpt)|*.rpt"
 
-#: pcbnew/dialogs/dialog_drc.cpp:268
+#: pcbnew/dialogs/dialog_drc.cpp:289
 msgid "Save DRC Report File"
 msgstr "Guardar informe de DRC"
 
@@ -19046,81 +19051,81 @@ msgstr ""
 "El grosor del texto es demasiado grande para el tamaño del texto. Se "
 "estrechará."
 
-#: pcbnew/drc.cpp:179
+#: pcbnew/drc.cpp:177
 msgid "Compile ratsnest...\n"
 msgstr "Compilar redes...\n"
 
-#: pcbnew/drc.cpp:195
+#: pcbnew/drc.cpp:193
 msgid "Aborting\n"
 msgstr "Cancelando\n"
 
-#: pcbnew/drc.cpp:208
+#: pcbnew/drc.cpp:206
 msgid "Pad clearances...\n"
 msgstr "Márgenes de pads...\n"
 
-#: pcbnew/drc.cpp:218
+#: pcbnew/drc.cpp:216
 msgid "Track clearances...\n"
 msgstr "Márgenes de pistas...\n"
 
-#: pcbnew/drc.cpp:228
+#: pcbnew/drc.cpp:226
 msgid "Fill zones...\n"
 msgstr "Zonas de relleno...\n"
 
-#: pcbnew/drc.cpp:238
+#: pcbnew/drc.cpp:236
 msgid "Test zones...\n"
 msgstr "Comprobar zonas...\n"
 
-#: pcbnew/drc.cpp:249
+#: pcbnew/drc.cpp:247
 msgid "Unconnected pads...\n"
 msgstr "Pads sin conectar...\n"
 
-#: pcbnew/drc.cpp:261
+#: pcbnew/drc.cpp:259
 msgid "Keepout areas ...\n"
 msgstr "Áreas restringidas...\n"
 
-#: pcbnew/drc.cpp:271
+#: pcbnew/drc.cpp:269
 msgid "Test texts...\n"
 msgstr "Comprobar textos...\n"
 
-#: pcbnew/drc.cpp:322
+#: pcbnew/drc.cpp:320
 #, c-format
 msgid "NETCLASS: '%s' has Clearance:%s which is less than global:%s"
 msgstr "CLASE DE RED: '%s' tiene un margen de %s menor que el global de %s"
 
-#: pcbnew/drc.cpp:338
+#: pcbnew/drc.cpp:336
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un ancho de pista de %s menor que el global de %s"
 
-#: pcbnew/drc.cpp:353
+#: pcbnew/drc.cpp:351
 #, c-format
 msgid "NETCLASS: '%s' has Via Dia:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un diámetro de vía de %s menor que el global de %s"
 
-#: pcbnew/drc.cpp:368
+#: pcbnew/drc.cpp:366
 #, c-format
 msgid "NETCLASS: '%s' has Via Drill:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un taladro de vía de %s que es menor que el global "
 "de %s"
 
-#: pcbnew/drc.cpp:383
+#: pcbnew/drc.cpp:381
 #, c-format
 msgid "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un diámetro de microvía de %s que es menor que el "
 "global de %s"
 
-#: pcbnew/drc.cpp:398
+#: pcbnew/drc.cpp:396
 #, c-format
 msgid "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"
 msgstr ""
 "CLASE DE RED: '%s' tiene un taladro de microvía de %s que es menor que el "
 "global de %s"
 
-#: pcbnew/drc.cpp:491
+#: pcbnew/drc.cpp:489
 msgid "Track clearances"
 msgstr "Márgenes de pista"
 
