@@ -307,7 +307,8 @@ void GERBVIEW_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 {
     int layer = getActiveLayer();
-    GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+    GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
+    GERBER_FILE_IMAGE* gerber = images->GetGbrImage( layer );
     int selected = ( gerber ) ? gerber->m_Selected_Tool : 0;
 
     if( m_DCodeSelector && m_DCodeSelector->GetSelectedDCodeId() != selected )

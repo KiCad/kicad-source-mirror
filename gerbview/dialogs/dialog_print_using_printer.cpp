@@ -155,15 +155,16 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     }
 
     s_Parameters.m_PageSetupData = s_pageSetupData;
+    GERBER_FILE_IMAGE_LIST* images = m_Parent->GetGerberLayout()->GetImagesList();
 
     // Create layer list
-    for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
+    for( unsigned ii = 0; ii < images->ImagesMaxCount(); ++ii )
     {
         msg = _( "Layer" );
         msg << wxT( " " ) << ii + 1;
         m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
 
-        if( g_GERBER_List.GetGbrImage( ii ) == NULL )     // Nothing loaded on this draw layer
+        if( images->GetGbrImage( ii ) == NULL )     // Nothing loaded on this draw layer
             m_BoxSelectLayer[ii]->Enable( false );
 
         if( ii < 16 )

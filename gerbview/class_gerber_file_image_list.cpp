@@ -38,6 +38,10 @@
 #include <map>
 
 
+// The global image list:
+GERBER_FILE_IMAGE_LIST s_GERBER_List;
+
+
 // GERBER_FILE_IMAGE_LIST is a helper class to handle a list of GERBER_FILE_IMAGE files
 GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST()
 {
@@ -51,6 +55,12 @@ GERBER_FILE_IMAGE_LIST::GERBER_FILE_IMAGE_LIST()
 GERBER_FILE_IMAGE_LIST::~GERBER_FILE_IMAGE_LIST()
 {
     DeleteAllImages();
+}
+
+
+GERBER_FILE_IMAGE_LIST& GERBER_FILE_IMAGE_LIST::GetImagesList()
+{
+    return s_GERBER_List;
 }
 
 
@@ -217,6 +227,3 @@ void GERBER_FILE_IMAGE_LIST::SortImagesByZOrder()
     }
 }
 
-
-// The global image list:
-GERBER_FILE_IMAGE_LIST g_GERBER_List;

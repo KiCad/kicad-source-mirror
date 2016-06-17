@@ -369,16 +369,16 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 {
     int layer = aLayer;
 
-    for( int i = 0; i < GERBER_DRAWLAYERS_COUNT; ++i )
+    for( unsigned i = 0; i < ImagesMaxCount(); ++i )
     {
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        const GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
 
         if( gerber == NULL )    // this graphic layer is available: use it
             return layer;
 
         ++layer;                // try next graphic layer
 
-        if( layer >= GERBER_DRAWLAYERS_COUNT )
+        if( layer >= (int)ImagesMaxCount() )
             layer = 0;
     }
 
@@ -400,8 +400,8 @@ void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
 
     m_SelLayerBox->SetSelection( getActiveLayer() );
 
-    int             dcodeSelected = -1;
-    GERBER_FILE_IMAGE*   gerber = g_GERBER_List.GetGbrImage( getActiveLayer() );
+    int dcodeSelected = -1;
+    GERBER_FILE_IMAGE*   gerber = GetGbrImage( getActiveLayer() );
 
     if( gerber )
         dcodeSelected = gerber->m_Selected_Tool;
@@ -422,13 +422,12 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     D_CODE*         pt_D_code;
     wxString        Line;
     wxArrayString   list;
-    double          scale = g_UserUnit == INCHES ? IU_PER_MILS * 1000 :
-                            IU_PER_MM;
+    double          scale = g_UserUnit == INCHES ? IU_PER_MILS * 1000 : IU_PER_MM;
     int       curr_layer = getActiveLayer();
 
-    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+    for( int layer = 0; layer < (int)ImagesMaxCount(); ++layer )
     {
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
 
         if( gerber == NULL )
             continue;
@@ -444,6 +443,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
         list.Add( Line );
 
         const char* units = g_UserUnit == INCHES ? "\"" : "mm";
+
         for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
         {
             pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE, false );
@@ -483,7 +483,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
-    GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage(  getActiveLayer() );
+    GERBER_FILE_IMAGE* gerber = GetGbrImage( getActiveLayer() );
     wxString text;
 
     // Display the gerber filename
@@ -848,3 +848,14 @@ const wxString GERBVIEW_FRAME::GetZoomLevelIndicator() const
 {
     return EDA_DRAW_FRAME::GetZoomLevelIndicator();
 }
+
+GERBER_FILE_IMAGE* GERBVIEW_FRAME::GetGbrImage( int aIdx ) const
+{
+    return m_gerberLayout->GetImagesList()->GetGbrImage( aIdx );
+}
+
+unsigned GERBVIEW_FRAME::ImagesMaxCount() const
+{
+    return m_gerberLayout->GetImagesList()->ImagesMaxCount();
+}
+

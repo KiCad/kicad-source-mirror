@@ -69,7 +69,10 @@ public:
     ~GERBER_FILE_IMAGE_LIST();
 
     //Accessor
+    static GERBER_FILE_IMAGE_LIST& GetImagesList();
     GERBER_FILE_IMAGE* GetGbrImage( int aIdx );
+
+    unsigned ImagesMaxCount() { return m_GERBER_List.size(); }
 
     /**
      * Add a GERBER_FILE_IMAGE* at index aIdx
@@ -111,8 +114,5 @@ public:
      */
     void SortImagesByZOrder();
 };
-
-
-extern GERBER_FILE_IMAGE_LIST g_GERBER_List;
 
 #endif  // ifndef CLASS_GERBER_FILE_IMAGE_LIST_H

@@ -1,10 +1,3 @@
-/**
- * @file excellon_read_drill_file.cpp
- *  Functions to read drill files (EXCELLON format) created by Pcbnew
- *  These files use only a subset of EXCELLON commands.
- */
-
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -61,6 +54,13 @@
   * T1F00S00C0.2 or T1C0.02F00S00 ... Feed Rate and Spindle Speed of Tool 1
   * Feed Rate and Spindle Speed are just skipped because they are not used in a viewer
   */
+
+/**
+ * @file excellon_read_drill_file.cpp
+ *  Functions to read drill files (EXCELLON format) created by Pcbnew
+ *  These files use only a subset of EXCELLON commands.
+ */
+
 
 #include <fctsys.h>
 #include <common.h>
@@ -161,12 +161,13 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 {
     wxString msg;
     int layerId = getActiveLayer();      // current layer used in GerbView
-    EXCELLON_IMAGE* drill_Layer = (EXCELLON_IMAGE*) g_GERBER_List.GetGbrImage( layerId );
+    GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
+    EXCELLON_IMAGE* drill_Layer = (EXCELLON_IMAGE*) images->GetGbrImage( layerId );
 
     if( drill_Layer == NULL )
     {
         drill_Layer = new EXCELLON_IMAGE( layerId );
-        layerId = g_GERBER_List.AddGbrImage( drill_Layer, layerId );
+        layerId = images->AddGbrImage( drill_Layer, layerId );
     }
 
     if( layerId < 0 )

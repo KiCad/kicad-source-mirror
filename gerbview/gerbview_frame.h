@@ -46,6 +46,8 @@ class DCODE_SELECTION_BOX;
 class GERBER_LAYER_WIDGET;
 class GBR_LAYER_BOX_SELECTOR;
 class GERBER_DRAW_ITEM;
+class GERBER_FILE_IMAGE;
+class GERBER_FILE_IMAGE_LIST;
 
 
 /**
@@ -81,6 +83,18 @@ public:
         wxASSERT( m_gerberLayout );
         return m_gerberLayout;
     }
+
+    /**
+     * Accessors to GERBER_FILE_IMAGE_LIST and GERBER_FILE_IMAGE data
+     */
+    GERBER_FILE_IMAGE_LIST* GetImagesList() const
+    {
+        return m_gerberLayout->GetImagesList();
+    }
+
+    GERBER_FILE_IMAGE* GetGbrImage( int aIdx ) const;
+
+    unsigned ImagesMaxCount() const;    ///< The max number of file images
 
 
     /**
@@ -165,7 +179,7 @@ private:
 
     bool            m_show_layer_manager_tools;
 
-    // An array sting to store warning messages when reaging a gerber file.
+    // An array sting to store warning messages when reading a gerber file.
     wxArrayString   m_Messages;
 
 public:
@@ -535,11 +549,8 @@ public:
      * moves all tracks and segments within the selected block.
      * New location is determined by the current offset from the selected
      * block's original location.
-     * Defined separately in Pcbnew and GerbView
-     *
-     * @param DC A device context to draw on.
      */
-    void                Block_Move( wxDC* DC );
+    void                Block_Move();
 
     /**
      * Function ToPrinter

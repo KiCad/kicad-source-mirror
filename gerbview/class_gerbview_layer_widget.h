@@ -77,6 +77,8 @@ class GERBER_LAYER_WIDGET : public LAYER_WIDGET
      */
     virtual bool useAlternateBitmap(int aRow);
 
+    GERBER_FILE_IMAGE_LIST* GetImagesList();
+
 public:
 
     /**
@@ -103,6 +105,7 @@ public:
     void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
     void OnRenderColorChange( int aId, EDA_COLOR_T aColor );
     void OnRenderEnable( int aId, bool isEnabled );
+
     /**
      * Function SetLayersManagerTabsText
      * Update the layer manager tabs labels

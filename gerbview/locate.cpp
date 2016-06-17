@@ -49,7 +49,8 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
         ref = GetNearestGridPosition( ref );
 
     int layer = getActiveLayer();
-    GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+    GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
+    GERBER_FILE_IMAGE* gerber = images->GetGbrImage( layer );
 
     // Search first on active layer
     GERBER_DRAW_ITEM* gerb_item = NULL;
@@ -68,9 +69,9 @@ GERBER_DRAW_ITEM* GERBVIEW_FRAME::Locate( const wxPoint& aPosition, int aTypeloc
 
     if( !found ) // Search on all layers
     {
-        for( layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+        for( layer = 0; layer < (int)images->ImagesMaxCount(); ++layer )
         {
-            gerber = g_GERBER_List.GetGbrImage( layer );
+            gerber = images->GetGbrImage( layer );
 
             if( gerber == NULL )    // Graphic layer not yet used
                 continue;
