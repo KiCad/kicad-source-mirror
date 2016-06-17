@@ -29,6 +29,7 @@
  */
 
 
+#include <draw_frame.h>
 #include <dialog_hotkeys_editor.h>
 #include <gestfich.h>
 #include <kiway.h>
@@ -330,9 +331,7 @@ void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName
 void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 {
     wxFileName fn( GetProjectFileName() );
-
     fn.SetExt( SchematicFileExtension );
-
     RunEeschema( fn.GetFullPath() );
 }
 
