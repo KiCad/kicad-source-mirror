@@ -156,10 +156,11 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 {
     int layercount = 0;
 
+    GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
     // Count the Gerber layers which are actually currently used
-    for( LAYER_NUM ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
+    for( LAYER_NUM ii = 0; ii < (LAYER_NUM)images->ImagesMaxCount(); ++ii )
     {
-        if( g_GERBER_List.GetGbrImage( ii ) )
+        if( images->GetGbrImage( ii ) )
             layercount++;
     }
 
@@ -221,10 +222,11 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
     // create an image of gerber data
     // First: non copper layers:
     const int pcbCopperLayerMax = 31;
+    GERBER_FILE_IMAGE_LIST* images = m_gerbview_frame->GetGerberLayout()->GetImagesList();
 
-    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+    for( unsigned layer = 0; layer < images->ImagesMaxCount(); ++layer )
     {
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        GERBER_FILE_IMAGE* gerber = images->GetGbrImage( layer );
 
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
@@ -244,9 +246,9 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
     }
 
     // Copper layers
-    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+    for( unsigned layer = 0; layer < images->ImagesMaxCount(); ++layer )
     {
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        GERBER_FILE_IMAGE* gerber = images->GetGbrImage( layer );
 
         if( gerber == NULL )    // Graphic layer not yet used
             continue;

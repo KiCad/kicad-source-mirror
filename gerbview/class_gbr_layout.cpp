@@ -45,6 +45,13 @@ GBR_LAYOUT::~GBR_LAYOUT()
 {
 }
 
+// Accessor to the list of gerber files (and drill files) images
+GERBER_FILE_IMAGE_LIST* GBR_LAYOUT::GetImagesList()
+{
+    return &GERBER_FILE_IMAGE_LIST::GetImagesList();
+}
+
+
 bool GBR_LAYOUT::IsLayerPrintable( int aLayer ) const
 {
     for( unsigned ii = 0; ii < m_printLayersList.size(); ++ii )
@@ -56,14 +63,15 @@ bool GBR_LAYOUT::IsLayerPrintable( int aLayer ) const
     return false;
 }
 
+
 EDA_RECT GBR_LAYOUT::ComputeBoundingBox()
 {
     EDA_RECT bbox;
     bool first_item = true;
 
-    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+    for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
     {
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
 
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
@@ -171,7 +179,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
             layer = active_layer;
         }
 
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
 
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
@@ -335,9 +343,9 @@ void GBR_LAYOUT::DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+    for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
     {
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
 
         if( gerber == NULL )    // Graphic layer not yet used
             continue;

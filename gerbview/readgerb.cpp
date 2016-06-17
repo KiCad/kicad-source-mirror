@@ -41,12 +41,13 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     wxString msg;
 
     int layer = getActiveLayer();
-    GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+    GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
+    GERBER_FILE_IMAGE* gerber = images->GetGbrImage( layer );
 
     if( gerber == NULL )
     {
         gerber = new GERBER_FILE_IMAGE( layer );
-        g_GERBER_List.AddGbrImage( gerber, layer );
+        images->AddGbrImage( gerber, layer );
     }
 
     /* Read the gerber file */

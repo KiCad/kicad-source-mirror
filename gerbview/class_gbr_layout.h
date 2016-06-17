@@ -43,6 +43,8 @@
 
 #include <gr_basic.h>
 
+class GERBER_FILE_IMAGE_LIST;
+
 /**
  * Class GBR_LAYOUT
  * holds list of GERBER_DRAW_ITEM currently loaded.
@@ -59,6 +61,10 @@ public:
 
     GBR_LAYOUT();
     ~GBR_LAYOUT();
+
+    // Accessor to the GERBER_FILE_IMAGE_LIST,
+    // which handles the list of gerber files (and drill files) images loaded
+    GERBER_FILE_IMAGE_LIST* GetImagesList();
 
     const wxPoint&      GetAuxOrigin() const
     {

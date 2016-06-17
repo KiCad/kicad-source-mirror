@@ -36,9 +36,9 @@
 #include <class_gerber_file_image.h>
 #include <class_gerber_file_image_list.h>
 
-
-static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                                     bool erase );
+// Call back function used in block command
+static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                     const wxPoint& aPosition, bool erase );
 
 
 int GERBVIEW_FRAME::BlockCommand( EDA_KEY key )
@@ -82,7 +82,7 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
-        Block_Move( DC );
+        Block_Move();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
@@ -177,16 +177,14 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
     if( screen->m_BlockLocate.GetMoveVector().x || screen->m_BlockLocate.GetMoveVector().y )
     {
-        screen->m_BlockLocate.Draw( aPanel,
-                                    aDC,
+        screen->m_BlockLocate.Draw( aPanel, aDC,
                                     screen->m_BlockLocate.GetMoveVector(),
-                                    g_XorMode,
-                                    Color );
+                                    g_XorMode, Color );
     }
 }
 
 
-void GERBVIEW_FRAME::Block_Move( wxDC* DC )
+void GERBVIEW_FRAME::Block_Move()
 {
     wxPoint delta;
     wxPoint oldpos;
@@ -201,10 +199,11 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
 
     /* Calculate displacement vectors. */
     delta = GetScreen()->m_BlockLocate.GetMoveVector();
+    GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
 
-    for( int layer = 0; layer < GERBER_DRAWLAYERS_COUNT; ++layer )
+    for( unsigned layer = 0; layer < images->ImagesMaxCount(); ++layer )
     {
-        GERBER_FILE_IMAGE* gerber = g_GERBER_List.GetGbrImage( layer );
+        GERBER_FILE_IMAGE* gerber = images->GetGbrImage( layer );
 
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
