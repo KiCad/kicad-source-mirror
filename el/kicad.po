@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-12 19:47+0200\n"
-"PO-Revision-Date: 2016-06-12 20:24+0200\n"
+"POT-Creation-Date: 2016-06-18 16:49+0200\n"
+"PO-Revision-Date: 2016-06-18 16:59+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language: el\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
+"X-Poedit-Basepath: /home/m/ll/mount_point/KiCad-GR-LL-notes/"
 "sources_bazaar_official/kicad\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: el\n"
@@ -785,7 +785,7 @@ msgstr ""
 msgid "Read Project File"
 msgstr "Ανάγνωση Αρχείου Έργου"
 
-#: pcbnew/pcbnew_config.cpp:227 gerbview/excellon_read_drill_file.cpp:183
+#: pcbnew/pcbnew_config.cpp:227 gerbview/excellon_read_drill_file.cpp:184
 #, c-format
 msgid "File %s not found"
 msgstr "Το αρχείο %s δεν βρέθηκε"
@@ -1041,7 +1041,7 @@ msgstr "Σύντμηση"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
 #: common/dialog_about/AboutDialog_main.cpp:129
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:40
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:83
 msgid "Description"
 msgstr "Περιγραφή"
 
@@ -1227,15 +1227,15 @@ msgstr "Αποτύπωμα"
 #: eeschema/libedit.cpp:507 eeschema/lib_draw_item.cpp:65
 #: eeschema/lib_pin.cpp:1999 eeschema/sch_text.cpp:791
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
-#: gerbview/class_gerber_draw_item.cpp:482
+#: gerbview/class_gerber_draw_item.cpp:489
 msgid "Type"
 msgstr "Τύπος"
 
 #: pcbnew/class_text_mod.cpp:355 pcbnew/class_pcb_text.cpp:143
 #: eeschema/lib_pin.cpp:2010
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1015
-#: gerbview/class_gerber_draw_item.cpp:505
-#: gerbview/class_gerber_draw_item.cpp:506
+#: gerbview/class_gerber_draw_item.cpp:512
+#: gerbview/class_gerber_draw_item.cpp:513
 msgid "No"
 msgstr "Όχι"
 
@@ -1243,8 +1243,8 @@ msgstr "Όχι"
 #: eeschema/lib_pin.cpp:2008
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1013
-#: gerbview/class_gerber_draw_item.cpp:505
-#: gerbview/class_gerber_draw_item.cpp:506
+#: gerbview/class_gerber_draw_item.cpp:512
+#: gerbview/class_gerber_draw_item.cpp:513
 msgid "Yes"
 msgstr "Ναι"
 
@@ -1263,9 +1263,9 @@ msgstr "Εμφάνιση"
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:89
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:111
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:140
-#: gerbview/class_gerbview_layer_widget.cpp:87
+#: gerbview/class_gerbview_layer_widget.cpp:88
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163
-#: gerbview/dialogs/dialog_print_using_printer.cpp:162
+#: gerbview/dialogs/dialog_print_using_printer.cpp:163
 msgid "Layer"
 msgstr "Επίπεδo"
 
@@ -1282,7 +1282,7 @@ msgstr " Όχι"
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
-#: gerbview/class_gerber_draw_item.cpp:507
+#: gerbview/class_gerber_draw_item.cpp:514
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
 msgid "Mirror"
 msgstr "Καθρέφτισμα"
@@ -1662,89 +1662,89 @@ msgstr "Δεν επιτρέπονται κείμενα στο Επίπεδο Ο�
 msgid "Dimension not allowed on Copper or Edge Cut layers"
 msgstr "Δεν επιτρέπονται διαστάσεις σε επίπεδα Χαλκού ή Ορίων"
 
-#: pcbnew/drc.cpp:179
+#: pcbnew/drc.cpp:177
 msgid "Compile ratsnest...\n"
 msgstr "Υπολογισμός φωλιάς συνδέσεων...\n"
 
-#: pcbnew/drc.cpp:195
+#: pcbnew/drc.cpp:193
 msgid "Aborting\n"
 msgstr "Γίνεται ακύρωση\n"
 
-#: pcbnew/drc.cpp:208
+#: pcbnew/drc.cpp:206
 msgid "Pad clearances...\n"
 msgstr "Διάκενα εδρών...\n"
 
-#: pcbnew/drc.cpp:218
+#: pcbnew/drc.cpp:216
 msgid "Track clearances...\n"
 msgstr "Διάκενα δρόμου...\n"
 
-#: pcbnew/drc.cpp:228
+#: pcbnew/drc.cpp:226
 msgid "Fill zones...\n"
 msgstr "Γέμισμα ζωνών...\n"
 
-#: pcbnew/drc.cpp:238
+#: pcbnew/drc.cpp:236
 msgid "Test zones...\n"
 msgstr "Δοκιμή ζωνών...\n"
 
-#: pcbnew/drc.cpp:249
+#: pcbnew/drc.cpp:247
 msgid "Unconnected pads...\n"
 msgstr "Μη συνδεδεμένες έδρες...\n"
 
-#: pcbnew/drc.cpp:261
+#: pcbnew/drc.cpp:259
 msgid "Keepout areas ...\n"
 msgstr "Καθαρές Περιοχές...\n"
 
-#: pcbnew/drc.cpp:271
+#: pcbnew/drc.cpp:269
 msgid "Test texts...\n"
 msgstr "Δοκιμαστικά κείμενα...\n"
 
-#: pcbnew/drc.cpp:284 eeschema/dialogs/dialog_erc.cpp:580
+#: pcbnew/drc.cpp:282 eeschema/dialogs/dialog_erc.cpp:580
 msgid "Finished"
 msgstr "Ολοκληρώθηκε"
 
-#: pcbnew/drc.cpp:322
+#: pcbnew/drc.cpp:320
 #, c-format
 msgid "NETCLASS: '%s' has Clearance:%s which is less than global:%s"
 msgstr ""
 "ΚΛΑΣΗ ΔΙΚΤΥΟΥ: Το '%s' έχει διάκενο:%s το οποίο είναι λιγότερο από το γενικό:"
 "%s"
 
-#: pcbnew/drc.cpp:338
+#: pcbnew/drc.cpp:336
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
 msgstr ""
 "ΚΛΑΣΗ ΔΙΚΤΥΟΥ: Το '%s' έχει πλάτος δρόμου:%s το οποίο είναι λιγότερο από το "
 "γενικό:%s"
 
-#: pcbnew/drc.cpp:353
+#: pcbnew/drc.cpp:351
 #, c-format
 msgid "NETCLASS: '%s' has Via Dia:%s which is less than global:%s"
 msgstr ""
 "ΚΛΑΣΗ ΔΙΚΤΥΟΥ: Το '%s' έχει διάμετρο via:%s η οποία είναι λιγότερη από την "
 "καθολική:%s"
 
-#: pcbnew/drc.cpp:368
+#: pcbnew/drc.cpp:366
 #, c-format
 msgid "NETCLASS: '%s' has Via Drill:%s which is less than global:%s"
 msgstr ""
 "ΚΛΑΣΗ ΔΙΚΤΥΟΥ: Το '%s' έχει διάτρηση via:%s η οποία είναι λιγότερη από τη "
 "καθολική:%s"
 
-#: pcbnew/drc.cpp:383
+#: pcbnew/drc.cpp:381
 #, c-format
 msgid "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s"
 msgstr ""
 "ΚΛΑΣΗ ΔΙΚΤΥΟΥ: Το '%s' έχει διάμετρο μ/via:%s η οποία είναι λιγότερη από την "
 "καθολική:%s"
 
-#: pcbnew/drc.cpp:398
+#: pcbnew/drc.cpp:396
 #, c-format
 msgid "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"
 msgstr ""
 "ΚΛΑΣΗ ΔΙΚΤΥΟΥ: Το '%s' έχει διάτρηση μ/via:%s η οποία είναι λιγότερη από την "
 "καθολική:%s"
 
-#: pcbnew/drc.cpp:491
+#: pcbnew/drc.cpp:489
 msgid "Track clearances"
 msgstr "Διάκενα δρόμου"
 
@@ -1914,12 +1914,12 @@ msgstr "Προβολή αποτυπώματος και προέλευσης κε
 
 #: pcbnew/class_pcb_layer_widget.cpp:74 pcbnew/tools/selection_tool.cpp:116
 #: eeschema/widgets/widget_eeschema_color_config.cpp:96
-#: gerbview/class_gerbview_layer_widget.cpp:108
+#: gerbview/class_gerbview_layer_widget.cpp:109
 msgid "Grid"
 msgstr "Πλέγμα"
 
 #: pcbnew/class_pcb_layer_widget.cpp:74
-#: gerbview/class_gerbview_layer_widget.cpp:108
+#: gerbview/class_gerbview_layer_widget.cpp:109
 msgid "Show the (x,y) grid dots"
 msgstr "Εμφάνιση των κουκκίδων του πλέγματος (x,y)"
 
@@ -1981,7 +1981,7 @@ msgid "Hide All Copper Layers"
 msgstr "Απόκρυψη Όλων των Επιπέδων Χαλκού"
 
 #: pcbnew/class_pcb_layer_widget.cpp:238 pcbnew/layer_widget.cpp:568
-#: gerbview/class_gerbview_layer_widget.cpp:88
+#: gerbview/class_gerbview_layer_widget.cpp:89
 msgid "Render"
 msgstr "Εμφανίσεις"
 
@@ -3746,7 +3746,7 @@ msgstr "Κατάσταση"
 
 #: pcbnew/class_module.cpp:606
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
-#: gerbview/class_gerber_draw_item.cpp:497
+#: gerbview/class_gerber_draw_item.cpp:504
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:141
 msgid "Rotation"
 msgstr "Περιστροφή"
@@ -3765,9 +3765,9 @@ msgstr "Περιστροφή"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:90
-#: gerbview/class_gerber_file_image.cpp:340
-#: gerbview/class_gerber_file_image.cpp:344
-#: gerbview/class_gerber_file_image.cpp:347 common/eda_text.cpp:423
+#: gerbview/class_gerber_file_image.cpp:342
+#: gerbview/class_gerber_file_image.cpp:346
+#: gerbview/class_gerber_file_image.cpp:349 common/eda_text.cpp:423
 msgid "Normal"
 msgstr "Κανονικό"
 
@@ -4105,7 +4105,6 @@ msgstr "Πολύπλοκο σχήμα"
 #: eeschema/dialogs/dialog_netlist_base.cpp:129
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
 #: common/dialog_about/dialog_about_base.cpp:73
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:76
 msgid "OK"
 msgstr "OK"
 
@@ -4118,7 +4117,6 @@ msgstr "OK"
 #: gerbview/onrightclick.cpp:81
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182
 #: common/selcolor.cpp:176 common/dialogs/dialog_exit_base.cpp:69
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:79
 msgid "Cancel"
 msgstr "Άκυρο"
 
@@ -5463,8 +5461,8 @@ msgstr "Σμίκρυνση"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:153
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:60
-#: gerbview/class_gerber_file_image.cpp:344
-#: gerbview/class_gerber_file_image.cpp:347 common/zoom.cpp:246
+#: gerbview/class_gerber_file_image.cpp:346
+#: gerbview/class_gerber_file_image.cpp:349 common/zoom.cpp:246
 msgid "Center"
 msgstr "Κέντρο"
 
@@ -5835,7 +5833,7 @@ msgstr "Προεπισκόπηση"
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:505
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:50
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:103
-#: gerbview/dialogs/dialog_print_using_printer.cpp:403
+#: gerbview/dialogs/dialog_print_using_printer.cpp:404
 #: pcbnew/dialogs/dialog_print_using_printer_base.h:81
 #: pcbnew/dialogs/dialog_print_for_modedit_base.h:61
 #: eeschema/dialogs/dialog_print_using_printer_base.h:56
@@ -6586,7 +6584,7 @@ msgstr "Διαγραφή επιλεγμένης σειράς"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:133
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:38
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:70
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:110
 msgid "Move Up"
 msgstr "Μετακίνηση Επάνω"
 
@@ -6598,7 +6596,7 @@ msgstr "Μετακίνηση της επιλεγμένης σειράς επάν
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:151
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:47
 #: 3d-viewer/3d_canvas.cpp:451
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:73
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:113
 msgid "Move Down"
 msgstr "Μετακίνηση Κάτω"
 
@@ -6622,7 +6620,7 @@ msgstr "<< Προσθήκη Επιλογής"
 msgid "Option Specific Help:"
 msgstr "Βοήθεια Σχετική με το Πρόσθετο:"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:309
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:313
 msgid ""
 "Use this attribute for most non SMD components\n"
 "Components with this option are not put in the footprint position list file"
@@ -6632,8 +6630,8 @@ msgstr ""
 "Εξαρτήματα με αυτή την επιλογή δεν τοποθετούνται στο αρχείο λίστας θέσεων "
 "αποτυπωμάτων."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:312
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:163
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:316
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:167
 msgid ""
 "Use this attribute for SMD components.\n"
 "Only components with this option are put in the footprint position list file"
@@ -6642,7 +6640,7 @@ msgstr ""
 "Μόνο εξαρτήματα με αυτή την επιλογή τοποθετούνται στο αρχείο λίστας θέσεων "
 "αποτυπωμάτων."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:315
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:319
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
 "(like a old ISA PC bus connector)"
@@ -6650,7 +6648,7 @@ msgstr ""
 "Χρησιμοποιήστε αυτή την ιδιότητα για τα \"εικονικά\" εξαρτήματα που είναι "
 "σχεδιασμένα στην πλακέτα (όπως ένας παλιός σύνδεσμος δίαυλου ISA PC)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:346
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:350
 msgid ""
 "Component can be freely moved and auto placed. User can arbitrarily select "
 "and edit component's pads."
@@ -6659,7 +6657,7 @@ msgstr ""
 "χρήστης μπορεί ελεύθερα να επιλέξει και να επεξεργαστεί τις έδρες του "
 "αποτυπώματος."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:348
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:352
 msgid ""
 "Component can be freely moved and auto placed, but its pads cannot be "
 "selected or edited."
@@ -6667,14 +6665,14 @@ msgstr ""
 "Το εξάρτημα μπορεί να μετακινηθεί ελεύθερα και να τοποθετηθεί αυτόματα, αλλά "
 "ο χρήστης δεν μπορεί να επιλέξει και να επεξεργαστεί τις έδρες του."
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:350
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:354
 msgid "Component is locked: it cannot be freely moved or auto placed."
 msgstr ""
 "Το εξάρτημα είναι κλειδωμένο: δεν μπορεί να μετακινηθεί ελεύθερα ή να "
 "τοποθετηθεί αυτόματα"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:527
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:393
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:531
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:397
 msgid "Invalid filename: "
 msgstr "Μη έγκυρο όνομα αρχείου:"
 
@@ -7033,7 +7031,7 @@ msgstr "Συνέβη ένα σφάλμα κατά την δημιουργία π
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:171
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:448
-#: gerbview/dialogs/dialog_print_using_printer.cpp:367
+#: gerbview/dialogs/dialog_print_using_printer.cpp:368
 msgid "Print Preview"
 msgstr "Προεπισκόπηση εκτύπωσης"
 
@@ -7605,20 +7603,21 @@ msgstr "Δρόμος 12"
 msgid "Global Design Rules"
 msgstr "Γενικοί Κανόνες Σχεδίασης"
 
-#: pcbnew/dialogs/dialog_drc.cpp:178 pcbnew/dialogs/dialog_drc.cpp:241
+#: pcbnew/dialogs/dialog_drc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:261
 #, c-format
 msgid "Report file \"%s\" created"
 msgstr "Δημιουργήθηκε το αρχείο αναφοράς \"%s\""
 
-#: pcbnew/dialogs/dialog_drc.cpp:180 pcbnew/dialogs/dialog_drc.cpp:242
+#: pcbnew/dialogs/dialog_drc.cpp:196 pcbnew/dialogs/dialog_drc.cpp:262
 msgid "Disk File Report Completed"
 msgstr "Ολοκλήρωση αναφοράς αρχείου δίσκου"
 
-#: pcbnew/dialogs/dialog_drc.cpp:262
-msgid "DRC report files (.rpt)|*.rpt"
-msgstr "Αρχεία αναφοράς ΕΚΣ (.rpt)|*.rpt"
+#: pcbnew/dialogs/dialog_drc.cpp:201 pcbnew/dialogs/dialog_drc.cpp:267
+#, c-format
+msgid "Unable to create report file '%s' "
+msgstr "Αδυναμία δημιουργίας αρχείου αναφοράς '%s'"
 
-#: pcbnew/dialogs/dialog_drc.cpp:268
+#: pcbnew/dialogs/dialog_drc.cpp:285
 msgid "Save DRC Report File"
 msgstr "Αποθήκευση Αρχείου Αναφοράς ΕΚΣ"
 
@@ -7652,7 +7651,7 @@ msgstr "x:"
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:39
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:53
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:67
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:86
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:85
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:28
 #: common/widgets/widget_hotkey_list.cpp:387
 msgid "Reset"
@@ -7673,11 +7672,11 @@ msgstr "Περιστροφή αντικειμένου:"
 msgid "deg"
 msgstr "μοίρες"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:161
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:165
 msgid "Use this attribute for most non SMD components"
 msgstr "Χρήση αυτής της ιδιότητας για τα περισσότερα μη SMD εξαρτήματα"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:165
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:169
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board (like a old ISA "
 "PC bus connector)"
@@ -7685,19 +7684,19 @@ msgstr ""
 "Χρήση αυτής της ιδιότητας για τα \"εικονικά\" εξαρτήματα που είναι "
 "σχεδιασμένα στην πλακέτα (όπως ένας παλιός σύνδεσμος δίαυλου ISA PC)"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:188
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:192
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr ""
 "Ενεργοποίηση εντολών μετακίνησης με πλήκτρα συντόμευσης και αυτόματης "
 "τοποθέτησης"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:189
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:193
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr ""
 "Απενεργοποίηση εντολών μετακίνησης με πλήκτρα συντόμευσης και αυτόματης "
 "τοποθέτησης"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:508
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:512
 #, c-format
 msgid ""
 "Error:\n"
@@ -11193,13 +11192,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot.cpp:751
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:376
-#: gerbview/dialogs/dialog_print_using_printer.cpp:304
+#: gerbview/dialogs/dialog_print_using_printer.cpp:305
 msgid "Warning: Scale option set to a very small value"
 msgstr "Προειδοποίηση: Η κλίμακα έχει οριστεί σε πολύ μικρή τιμή"
 
 #: pcbnew/dialogs/dialog_plot.cpp:755
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:366
-#: gerbview/dialogs/dialog_print_using_printer.cpp:298
+#: gerbview/dialogs/dialog_print_using_printer.cpp:299
 msgid "Warning: Scale option set to a very large value"
 msgstr "Προειδοποίηση: Η κλίμακα έχει οριστεί σε πολύ μεγάλη τιμή"
 
@@ -11210,7 +11209,7 @@ msgstr "Το αρχείο σχεδιογράφησης '%s' δημιουργήθ
 
 #: pcbnew/dialogs/dialog_plot.cpp:814
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:443
-#: gerbview/dialogs/dialog_print_using_printer.cpp:353
+#: gerbview/dialogs/dialog_print_using_printer.cpp:354
 msgid "No layer selected"
 msgstr "Δεν επιλέχθηκε επίπεδο"
 
@@ -12962,7 +12961,7 @@ msgstr "Αρχείο τεκμηρίωσης '%s' OK"
 
 #: eeschema/libedit.cpp:488 eeschema/viewlibs.cpp:307
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:202
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:38
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:81
 msgid "Alias"
 msgstr "Συνώνυμο"
 
@@ -18107,7 +18106,7 @@ msgstr "Αρχειοθέτηση όλων των αρχείων έργων"
 msgid "Refresh project tree"
 msgstr "Ανανέωση του δέντρου έργου"
 
-#: kicad/tree_project_frame.cpp:215
+#: kicad/tree_project_frame.cpp:220
 #, c-format
 msgid ""
 "Current project directory:\n"
@@ -18116,95 +18115,95 @@ msgstr ""
 "Τρέχων φάκελος έργου:\n"
 "%s"
 
-#: kicad/tree_project_frame.cpp:216
+#: kicad/tree_project_frame.cpp:221
 msgid "Create New Directory"
 msgstr "Δημιουργία Νέου Φακέλου"
 
-#: kicad/tree_project_frame.cpp:677 kicad/tree_project_frame.cpp:684
+#: kicad/tree_project_frame.cpp:682 kicad/tree_project_frame.cpp:689
 msgid "New D&irectory"
 msgstr "Νέος &Φάκελος"
 
-#: kicad/tree_project_frame.cpp:678 kicad/tree_project_frame.cpp:685
+#: kicad/tree_project_frame.cpp:683 kicad/tree_project_frame.cpp:690
 msgid "Create a New Directory"
 msgstr "Δημιουργία Νέου Φακέλου"
 
-#: kicad/tree_project_frame.cpp:688
+#: kicad/tree_project_frame.cpp:693
 msgid "&Delete Directory"
 msgstr "&Διαγραφή Φακέλου"
 
-#: kicad/tree_project_frame.cpp:689 kicad/tree_project_frame.cpp:704
+#: kicad/tree_project_frame.cpp:694 kicad/tree_project_frame.cpp:709
 msgid "Delete the Directory and its content"
 msgstr "Διαγραφή του Φακέλου και των περιεχομένων του"
 
-#: kicad/tree_project_frame.cpp:695
+#: kicad/tree_project_frame.cpp:700
 msgid "&Edit in a text editor"
 msgstr "&Επεξεργασία με έναν επεξεργαστή κειμένου"
 
-#: kicad/tree_project_frame.cpp:696
+#: kicad/tree_project_frame.cpp:701
 msgid "Open the file in a Text Editor"
 msgstr "Άνοιγμα του αρχείου με έναν επεξεργαστή κειμένου"
 
-#: kicad/tree_project_frame.cpp:699
+#: kicad/tree_project_frame.cpp:704
 msgid "&Rename file"
 msgstr "&Μετονομασία αρχείου"
 
-#: kicad/tree_project_frame.cpp:700
+#: kicad/tree_project_frame.cpp:705
 msgid "Rename file"
 msgstr "Μετονομασία αρχείου"
 
-#: kicad/tree_project_frame.cpp:703
+#: kicad/tree_project_frame.cpp:708
 msgid "&Delete File"
 msgstr "&Διαγραφή αρχείου"
 
-#: kicad/tree_project_frame.cpp:753
+#: kicad/tree_project_frame.cpp:758
 #, c-format
 msgid "Change filename: '%s'"
 msgstr "Αλλαγή ονόματος αρχείου: '%s'"
 
-#: kicad/tree_project_frame.cpp:756
+#: kicad/tree_project_frame.cpp:761
 msgid "Change filename"
 msgstr "Αλλαγή ονόματος αρχείου"
 
-#: kicad/mainframe.cpp:245
+#: kicad/mainframe.cpp:246
 #, c-format
 msgid "%s closed [pid=%d]\n"
 msgstr "%s κλειστό [pid=%d]\n"
 
-#: kicad/mainframe.cpp:276
+#: kicad/mainframe.cpp:277
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ανοιχτό [pid=%ld]\n"
 
-#: kicad/mainframe.cpp:308
+#: kicad/mainframe.cpp:309
 msgid "Eeschema failed to load:\n"
 msgstr "Αποτυχία φόρτωσης του Eeschema:\n"
 
-#: kicad/mainframe.cpp:309 kicad/mainframe.cpp:353 kicad/mainframe.cpp:379
-#: kicad/mainframe.cpp:426
+#: kicad/mainframe.cpp:310 kicad/mainframe.cpp:352 kicad/mainframe.cpp:378
+#: kicad/mainframe.cpp:425
 msgid "KiCad Error"
 msgstr "Σφάλμα KiCad"
 
-#: kicad/mainframe.cpp:352
+#: kicad/mainframe.cpp:351
 msgid "Component library editor failed to load:\n"
 msgstr "Αποτυχία φόρτωσης του επεξεργαστή βιβλιοθήκης εξαρτημάτων:\n"
 
-#: kicad/mainframe.cpp:379
+#: kicad/mainframe.cpp:378
 msgid "Pcbnew failed to load:\n"
 msgstr "Αποτυχία φόρτωσης του Pcbnew:\n"
 
-#: kicad/mainframe.cpp:425
+#: kicad/mainframe.cpp:424
 msgid "Footprint library editor failed to load:\n"
 msgstr "Αποτυχία φόρτωσης του επεξεργαστή βιβλιοθήκης αποτυπωμάτων:\n"
 
-#: kicad/mainframe.cpp:487
+#: kicad/mainframe.cpp:486
 msgid "Text file ("
 msgstr "Αρχείο κειμένου ("
 
-#: kicad/mainframe.cpp:490
+#: kicad/mainframe.cpp:489
 msgid "Load File to Edit"
 msgstr "Φόρτωση αρχείου για επεξεργασία"
 
-#: kicad/mainframe.cpp:543
+#: kicad/mainframe.cpp:542
 #, c-format
 msgid ""
 "Project name:\n"
@@ -18414,25 +18413,25 @@ msgstr "Δεν έχει οριστεί επεξεργαστής. Παρακαλ�
 msgid "No file loaded on the active layer %d"
 msgstr "Δεν φορτώθηκε αρχείο στο ενεργό επίπεδο %d"
 
-#: gerbview/export_to_pcbnew.cpp:169
+#: gerbview/export_to_pcbnew.cpp:170
 msgid "None of the Gerber layers contain any data"
 msgstr "Κανένα από τα επίπεδα Gerber δεν περιέχει δεδομένα"
 
-#: gerbview/export_to_pcbnew.cpp:176
+#: gerbview/export_to_pcbnew.cpp:177
 msgid "Board file name:"
 msgstr "Όνομα αρχείου πλακέτας:"
 
-#: gerbview/export_to_pcbnew.cpp:212
+#: gerbview/export_to_pcbnew.cpp:213
 #, c-format
 msgid "Cannot create file '%s'"
 msgstr "Αδυναμία δημιουργίας του αρχείου '%s'"
 
-#: gerbview/class_gerber_file_image_list.cpp:163
+#: gerbview/class_gerber_file_image_list.cpp:169
 #, c-format
 msgid "%d %s"
 msgstr "%d %s"
 
-#: gerbview/class_gerber_file_image_list.cpp:166
+#: gerbview/class_gerber_file_image_list.cpp:172
 #, c-format
 msgid "Graphic layer %d"
 msgstr "Επίπεδο γραφικών %d"
@@ -18560,18 +18559,18 @@ msgstr "RS274X: Το GerbView αγνόησε την εντολή KNOCKOUT"
 msgid "Too many include files!!"
 msgstr "Πάρα πολλά αρχεία συμπερίληψης!!"
 
-#: gerbview/select_layers_to_pcb.cpp:184
+#: gerbview/select_layers_to_pcb.cpp:186
 #, c-format
 msgid "Layer %d"
 msgstr "Επίπεδο %d"
 
-#: gerbview/select_layers_to_pcb.cpp:223 gerbview/select_layers_to_pcb.cpp:339
-#: gerbview/select_layers_to_pcb.cpp:378
+#: gerbview/select_layers_to_pcb.cpp:225 gerbview/select_layers_to_pcb.cpp:341
+#: gerbview/select_layers_to_pcb.cpp:380
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:154
 msgid "Do not export"
 msgstr "Να μη γίνει εξαγωγή"
 
-#: gerbview/select_layers_to_pcb.cpp:425
+#: gerbview/select_layers_to_pcb.cpp:421
 msgid ""
 "The exported board has not enough copper layers to handle selected inner "
 "layers"
@@ -18601,39 +18600,39 @@ msgstr "Όνομα εικόνας: '%s'  Όνομα επιπέδου: '%s'"
 msgid "X2 attr"
 msgstr "ιδιότητα X2"
 
-#: gerbview/class_gerbview_layer_widget.cpp:109
+#: gerbview/class_gerbview_layer_widget.cpp:110
 msgid "DCodes"
 msgstr "DCodes"
 
-#: gerbview/class_gerbview_layer_widget.cpp:109
+#: gerbview/class_gerbview_layer_widget.cpp:110
 msgid "Show DCodes identification"
 msgstr "Προβολή της ταυτότητας των DCodes"
 
-#: gerbview/class_gerbview_layer_widget.cpp:110
+#: gerbview/class_gerbview_layer_widget.cpp:111
 msgid "Neg. Obj."
 msgstr "Αρν. Αντ."
 
-#: gerbview/class_gerbview_layer_widget.cpp:111
+#: gerbview/class_gerbview_layer_widget.cpp:112
 msgid "Show negative objects in this color"
 msgstr "Προβολή αρνητικών αντικειμένων σε αυτό το χρώμα"
 
-#: gerbview/class_gerbview_layer_widget.cpp:151
+#: gerbview/class_gerbview_layer_widget.cpp:152
 msgid "Show All Layers"
 msgstr "Προβολή όλων των επιπέδων"
 
-#: gerbview/class_gerbview_layer_widget.cpp:154
+#: gerbview/class_gerbview_layer_widget.cpp:155
 msgid "Hide All Layers But Active"
 msgstr "Απόκρυψη Όλων των Επιπέδων Εκτός Ενεργού"
 
-#: gerbview/class_gerbview_layer_widget.cpp:157
+#: gerbview/class_gerbview_layer_widget.cpp:158
 msgid "Always Hide All Layers But Active"
 msgstr "Πάντα Απόκρυψη Όλων των Επιπέδων Εκτός Ενεργού"
 
-#: gerbview/class_gerbview_layer_widget.cpp:160
+#: gerbview/class_gerbview_layer_widget.cpp:161
 msgid "Hide All Layers"
 msgstr "Απόκρυψη όλων των επιπέδων"
 
-#: gerbview/class_gerbview_layer_widget.cpp:164
+#: gerbview/class_gerbview_layer_widget.cpp:165
 msgid "Sort Layers if X2 Mode"
 msgstr "Ταξινόμηση Επιπέδων αν Λειτουργία X2"
 
@@ -18734,79 +18733,79 @@ msgstr "Απόκρυψη διαχειριστή επιπέδων"
 msgid "Show layers manager"
 msgstr "Εμφάνιση διαχειριστή επιπέδων"
 
-#: gerbview/excellon_read_drill_file.cpp:174
+#: gerbview/excellon_read_drill_file.cpp:175
 msgid "No room to load file"
 msgstr "Δεν υπάρχει χώρος για φόρτωση αρχείου"
 
-#: gerbview/excellon_read_drill_file.cpp:191
+#: gerbview/excellon_read_drill_file.cpp:192
 msgid "Error reading EXCELLON drill file"
 msgstr "Σφάλμα ανάγνωσης αρχείου διάτρησης EXCELLON"
 
-#: gerbview/excellon_read_drill_file.cpp:373
+#: gerbview/excellon_read_drill_file.cpp:374
 msgid "METRIC command has no parameter"
 msgstr "Η εντολή METRIC δεν έχει καμία παράμετρο"
 
-#: gerbview/excellon_read_drill_file.cpp:391
+#: gerbview/excellon_read_drill_file.cpp:392
 msgid "INCH command has no parameter"
 msgstr "Η εντολή INCH δεν έχει καμία παράμετρο"
 
-#: gerbview/excellon_read_drill_file.cpp:419
+#: gerbview/excellon_read_drill_file.cpp:420
 msgid "ICI command has no parameter"
 msgstr "Η εντολή ICI δεν έχει καμία παράμετρο"
 
-#: gerbview/excellon_read_drill_file.cpp:429
+#: gerbview/excellon_read_drill_file.cpp:430
 msgid "ICI command has incorrect parameter"
 msgstr "Η εντολή ICI έχει λάθος παράμετρο"
 
-#: gerbview/excellon_read_drill_file.cpp:483
+#: gerbview/excellon_read_drill_file.cpp:484
 msgid "Tool definition shape not found"
 msgstr "Δεν βρέθηκε σχήμα ορισμού εργαλείου"
 
-#: gerbview/excellon_read_drill_file.cpp:486
+#: gerbview/excellon_read_drill_file.cpp:487
 #, c-format
 msgid "Tool definition '%c' not supported"
 msgstr "Δεν υποστηρίζεται ο ορισμός εργαλείου '%c'"
 
-#: gerbview/excellon_read_drill_file.cpp:539
+#: gerbview/excellon_read_drill_file.cpp:540
 #, c-format
 msgid "Tool %d not defined"
 msgstr "Το εργαλείο %d δεν έχει οριστεί"
 
-#: gerbview/excellon_read_drill_file.cpp:683
+#: gerbview/excellon_read_drill_file.cpp:684
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
 msgstr "Άγνωστος Excellon G Code: &lt;%s&gt;"
 
-#: gerbview/class_gerber_file_image.cpp:328
+#: gerbview/class_gerber_file_image.cpp:330
 msgid "Image name"
 msgstr "Όνομα εικόνας"
 
-#: gerbview/class_gerber_file_image.cpp:333
+#: gerbview/class_gerber_file_image.cpp:335
 msgid "Graphic layer"
 msgstr "Επίπεδο γραφικών"
 
-#: gerbview/class_gerber_file_image.cpp:337
+#: gerbview/class_gerber_file_image.cpp:339
 msgid "Img Rot."
 msgstr "Περιστ. εικ."
 
-#: gerbview/class_gerber_file_image.cpp:340
+#: gerbview/class_gerber_file_image.cpp:342
 msgid "Negative"
 msgstr "Αρνητικό"
 
-#: gerbview/class_gerber_file_image.cpp:341
-#: gerbview/class_gerber_draw_item.cpp:501
+#: gerbview/class_gerber_file_image.cpp:343
+#: gerbview/class_gerber_draw_item.cpp:508
 msgid "Polarity"
 msgstr "Πολικότητα"
 
-#: gerbview/class_gerber_file_image.cpp:345
+#: gerbview/class_gerber_file_image.cpp:347
 msgid "X Justify"
 msgstr "Στοίχιση Χ"
 
-#: gerbview/class_gerber_file_image.cpp:348
+#: gerbview/class_gerber_file_image.cpp:350
 msgid "Y Justify"
 msgstr "Στοίχιση Ψ"
 
-#: gerbview/class_gerber_file_image.cpp:357
+#: gerbview/class_gerber_file_image.cpp:359
 msgid "Image Justify Offset"
 msgstr "Στοίχιση μετατόπισης εικόνας"
 
@@ -18882,21 +18881,21 @@ msgstr "Άνοιγμα Αρχείου Διατρήσεων"
 msgid "Current data will be lost?"
 msgstr "Όλα τα τρέχοντα δεδομένα θα χαθούν;"
 
-#: gerbview/clear_gbr_drawlayers.cpp:78
+#: gerbview/clear_gbr_drawlayers.cpp:66
 #, c-format
 msgid "Clear layer %d?"
 msgstr "Να γίνει εκκαθάριση του επιπέδου %d;"
 
-#: gerbview/readgerb.cpp:57
+#: gerbview/readgerb.cpp:58
 #, c-format
 msgid "File <%s> not found"
 msgstr "Το αρχείο <%s> δεν βρέθηκε"
 
-#: gerbview/readgerb.cpp:65 common/dialogs/wx_html_report_panel_base.cpp:47
+#: gerbview/readgerb.cpp:66 common/dialogs/wx_html_report_panel_base.cpp:47
 msgid "Errors"
 msgstr "Σφάλματα"
 
-#: gerbview/readgerb.cpp:75
+#: gerbview/readgerb.cpp:76
 msgid ""
 "Warning: this file has no D-Code definition\n"
 "It is perhaps an old RS274D file\n"
@@ -18906,23 +18905,23 @@ msgstr ""
 "Είναι πιθανώς παλιό αρχείο RS274D.\n"
 "Ως αποτέλεσμα, το μέγεθος των αντικειμένων δεν έχει οριστεί."
 
-#: gerbview/class_gerber_draw_item.cpp:486
+#: gerbview/class_gerber_draw_item.cpp:493
 msgid "D Code"
 msgstr "D Code"
 
-#: gerbview/class_gerber_draw_item.cpp:490
+#: gerbview/class_gerber_draw_item.cpp:497
 msgid "Graphic Layer"
 msgstr "Επίπεδο Γραφικών"
 
-#: gerbview/class_gerber_draw_item.cpp:500
+#: gerbview/class_gerber_draw_item.cpp:507
 msgid "Clear"
 msgstr "Εκκαθάριση"
 
-#: gerbview/class_gerber_draw_item.cpp:500
+#: gerbview/class_gerber_draw_item.cpp:507
 msgid "Dark"
 msgstr "Σκοτεινό"
 
-#: gerbview/class_gerber_draw_item.cpp:511
+#: gerbview/class_gerber_draw_item.cpp:518
 msgid "AB axis"
 msgstr "Άξονας AB"
 
@@ -18986,52 +18985,52 @@ msgstr "Σελίδα"
 msgid "Select Layer:"
 msgstr "Επιλογή επιπέδου:"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:31
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:30
 msgid "Layers selection:"
 msgstr "Επιλογή επιπέδων:"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:56
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:55
 msgid "Copper layers count:"
 msgstr "Αριθμός επιπέδων χαλκού:"
 
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:59
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:60
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:61
 msgid "2 Layers"
 msgstr "2 Επίπεδα"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:62
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:61
 msgid "4 Layers"
 msgstr "4 Επίπεδα"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:63
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:62
 msgid "6 Layers"
 msgstr "6 Επίπεδα"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:64
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:63
 msgid "8 Layers"
 msgstr "8 Επίπεδα"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:65
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:64
 msgid "10 Layers"
 msgstr "10 Επίπεδα"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:66
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:65
 msgid "12 Layers"
 msgstr "12 Επίπεδα"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:67
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:66
 msgid "14 Layers"
 msgstr "14 Επίπεδα"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:68
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:67
 msgid "16 Layers"
 msgstr "16 Επίπεδα"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:80
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:79
 msgid "Store Choice"
 msgstr "Αποθήκευση Επιλογής"
 
-#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:83
+#: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:82
 msgid "Get Stored Choice"
 msgstr "Λήψη Αποθηκευμένης Επιλογής"
 
@@ -19048,7 +19047,7 @@ msgstr ""
 "Επιλέξτε αν θέλετε να εκτυπωθούν τα φύλλα έγχρωμα ή να εξαναγκάσετε "
 "ασπρόμαυρη λειτουργία."
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:409
+#: gerbview/dialogs/dialog_print_using_printer.cpp:410
 msgid "There was a problem printing"
 msgstr "Υπήρξε σφάλμα εκτύπωσης"
 
@@ -19822,7 +19821,8 @@ msgid "Items:"
 msgstr "Αντικείμενα:"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:39
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:39
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:36
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:82
 msgid "Path"
 msgstr "Διαδρομή"
 
@@ -20153,6 +20153,7 @@ msgstr ""
 "επιθυμείτε τη δημιουργία των δικών σας φακέλων προτύπων."
 
 #: common/dialogs/dialog_env_var_config.cpp:282
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:379
 msgid "Environment Variable Help"
 msgstr "Βοήθεια Μεταβλητών Περιβάλλοντος"
 
@@ -20760,43 +20761,43 @@ msgstr "φάκελος ρυθμίσεων"
 msgid "All Files (*.*)|*.*"
 msgstr "Όλα τα Αρχεία (*.*)|*.*"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:533
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:470
 msgid "The given path does not exist"
 msgstr "Η διαδρομή δεν υπάρχει"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:536
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:473
 msgid "3D model search path"
 msgstr "Διαδρομή αναζήτησης 3Δ μοντέλων"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:562
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:499
 msgid "Alias: "
 msgstr "Συνώνυμο:"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:565
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:502
 msgid "This path: "
 msgstr "Αυτη η διαδρομή:"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:568
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:505
 msgid "Existing path: "
 msgstr "Υπάρχουσα διαδρομή:"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:570
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:507
 msgid "Bad alias (duplicate name)"
 msgstr "Λάθος συνώνυμο (το όνομα έχει ξαναοριστεί)"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:695
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:632
 msgid "3D configuration directory is unknown"
 msgstr "Άγνωστος φάκελος ρυθμίσεων 3Δ"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:698
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:719
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:728
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:750
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:775
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:635
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:656
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:665
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:687
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:712
 msgid "Write 3D search path list"
 msgstr "Εγγραφή λίστας αναζήτησης διαδρομής 3Δ"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:718
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:655
 msgid ""
 "3D search path list is empty;\n"
 "continue to write empty file?"
@@ -20804,37 +20805,37 @@ msgstr ""
 "Η λίστα αναζήτησης διαδρομής 3Δ είναι άδεια;\n"
 "αποθήκευση άδειου αρχείου;"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:727
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:747
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:664
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:684
 msgid "Could not open configuration file"
 msgstr "Αδυναμία ανοίγματος αρχείου ρυθμίσεων"
 
-#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:774
+#: 3d-viewer/3d_cache/3d_filename_resolver.cpp:711
 msgid "Problems writing configuration file"
 msgstr "Προβλήματα κατά την εγγραφή αρχείου ρυθμίσεων"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:118
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:134
 msgid "[BUG] No valid resolver; data will not be updated"
 msgstr "[ΣΦΑΛΜΑ] Δεν υπάρχει έγκυρη επίλυση, τα δεδομένα δεν θα ανανεωθούν"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:119
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:135
 msgid "Update 3D search path list"
 msgstr "Ανανέωση λίστας αναζήτησης διαδρομής 3Δ"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:178
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:218
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:259
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:194
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:234
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:275
 msgid "No entry selected"
 msgstr "Δεν επιλέχθηκε καμία εγγραφή"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:178
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:185
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:194
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:201
 msgid "Delete alias entry"
 msgstr "Διαγραφή εγγραφής συνώνυμου"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:184
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:224
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:265
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:200
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:240
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:281
 msgid ""
 "Multiple entries selected; please\n"
 "select only one entry"
@@ -20842,15 +20843,30 @@ msgstr ""
 "Επιλέχθηκαν πολλές εγγραφές, \n"
 "επιλέξτε μόνο μία εγγραφή"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:218
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:225
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:234
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:241
 msgid "Move alias up"
 msgstr "Μετακίνηση συνώνυμου επάνω"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:259
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:266
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:275
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:282
 msgid "Move alias down"
 msgstr "Μετακίνηση συνώνυμου κάτω"
+
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:371
+msgid ""
+"Enter the name and path for each 3D alias variable.<br>KiCad environment "
+"variables and their values are shown for reference only and cannot be edited."
+msgstr ""
+"Εισάγετε το όνομα και τη διαδρομή για κάθε συνώνυμο μεταβλητής 3Δ.<br> Οι "
+"μεταβλητές περιβάλλοντος του KiCad και οι τιμές τους εμφανίζονται μόνο για "
+"αναφορά και δεν μπορούν να τροποποιηθούν."
+
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig.cpp:375
+msgid "Alias names may not contain any of the characters "
+msgstr ""
+"Τα ονόματα των συνώνυμων δεν μπορούν να περιέχουν οποιοδήποτε από τους "
+"χαρακτήρες"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:48
 msgid "Select 3D Model"
@@ -20860,11 +20876,19 @@ msgstr "Επιλογή Μοντέλου 3Δ"
 msgid "Paths:"
 msgstr "Διαδρομές:"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:64
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:35
+msgid "Env Var"
+msgstr "Μετ Παρ"
+
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:53
+msgid "Config Env"
+msgstr "Ρυθμ Περ"
+
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:104
 msgid "Add Alias"
 msgstr "Προσθήκη Συνώνυμου"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:67
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:107
 msgid "Remove Alias"
 msgstr "Αφαίρεση Συνώνυμου"
 
@@ -21363,9 +21387,12 @@ msgstr "Περί"
 msgid "3D Display Options"
 msgstr "Επιλογές 3Δ Εμφάνισης"
 
-#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.h:57
+#: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.h:64
 msgid "3D Search Path Configuration"
 msgstr "Ρυθμίσεις Διαδρομής Αναζήτησης 3Δ"
+
+#~ msgid "DRC report files (.rpt)|*.rpt"
+#~ msgstr "Αρχεία αναφοράς ΕΚΣ (.rpt)|*.rpt"
 
 #~ msgid "Hide footprint ratsnest"
 #~ msgstr "Απόκρυψη φωλιάς συνδέσεων αποτυπώματος"
