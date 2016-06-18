@@ -176,12 +176,20 @@ void DIALOG_PRINT_USING_PRINTER::initValues( )
     {
         LAYER_ID layer = *seq;
 
-        m_BoxSelectLayer[layer] = new wxCheckBox( this, -1, board->GetLayerName( layer ) );
-
         if( IsCopperLayer( layer ) )
+        {
+            m_BoxSelectLayer[layer] = new wxCheckBox(
+                                            m_CopperLayersBoxSizer->GetStaticBox(),
+                                            wxID_ANY, board->GetLayerName( layer ) );
             m_CopperLayersBoxSizer->Add( m_BoxSelectLayer[layer], 0, wxGROW | wxALL, 1 );
+        }
         else
+        {
+            m_BoxSelectLayer[layer] = new wxCheckBox(
+                                            m_TechnicalLayersBoxSizer->GetStaticBox(),
+                                            wxID_ANY, board->GetLayerName( layer ) );
             m_TechnicalLayersBoxSizer->Add( m_BoxSelectLayer[layer], 0, wxGROW | wxALL, 1 );
+        }
 
         layerKey.Printf( OPTKEY_LAYERBASE, layer );
 
