@@ -395,12 +395,6 @@ void LAYERS_MAP_DIALOG::OnSelectLayer( wxCommandEvent& event )
 }
 
 
-void LAYERS_MAP_DIALOG::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
-}
-
-
 void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
 {
     /* Make some test about copper layers:
@@ -427,5 +421,6 @@ void LAYERS_MAP_DIALOG::OnOkClick( wxCommandEvent& event )
         _("The exported board has not enough copper layers to handle selected inner layers") );
         return;
     }
+
     EndModal( wxID_OK );
 }

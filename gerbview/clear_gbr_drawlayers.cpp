@@ -47,7 +47,7 @@ bool GERBVIEW_FRAME::Clear_DrawLayers( bool query )
             return false;
     }
 
-    GetGerberLayout()->GetImagesList()->DeleteAllImages();
+    GetImagesList()->DeleteAllImages();
 
     GetGerberLayout()->SetBoundingBox( EDA_RECT() );
 
@@ -70,7 +70,7 @@ void GERBVIEW_FRAME::Erase_Current_DrawLayer( bool query )
 
     SetCurItem( NULL );
 
-    GetGerberLayout()->GetImagesList()->DeleteImage( layer );
+    GetImagesList()->DeleteImage( layer );
 
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();

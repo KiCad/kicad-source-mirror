@@ -41,8 +41,8 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     wxString msg;
 
     int layer = getActiveLayer();
-    GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
-    GERBER_FILE_IMAGE* gerber = images->GetGbrImage( layer );
+    GERBER_FILE_IMAGE_LIST* images = GetImagesList();
+    GERBER_FILE_IMAGE* gerber = GetGbrImage( layer );
 
     if( gerber == NULL )
     {

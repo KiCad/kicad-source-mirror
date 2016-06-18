@@ -60,7 +60,6 @@ private:
     void OnBrdLayersCountSelection( wxCommandEvent& event );
     void OnSelectLayer( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
 
     void OnStoreSetup( wxCommandEvent& event );
     void OnGetSetup( wxCommandEvent& event );

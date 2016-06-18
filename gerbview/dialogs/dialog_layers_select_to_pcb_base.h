@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/sizer.h>
 #include <wx/gdicmn.h>
@@ -40,7 +42,6 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 		void _wxFB_OnStoreSetup( wxCommandEvent& event ){ OnStoreSetup( event ); }
 		void _wxFB_OnGetSetup( wxCommandEvent& event ){ OnGetSetup( event ); }
 		void _wxFB_OnResetClick( wxCommandEvent& event ){ OnResetClick( event ); }
-		void _wxFB_OnCancelClick( wxCommandEvent& event ){ OnCancelClick( event ); }
 		void _wxFB_OnOkClick( wxCommandEvent& event ){ OnOkClick( event ); }
 		
 	
@@ -74,7 +75,6 @@ class LAYERS_MAP_DIALOG_BASE : public DIALOG_SHIM
 		virtual void OnStoreSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGetSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnResetClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

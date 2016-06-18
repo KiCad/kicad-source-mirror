@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -14,7 +14,6 @@ BEGIN_EVENT_TABLE( LAYERS_MAP_DIALOG_BASE, DIALOG_SHIM )
 	EVT_BUTTON( ID_STORE_CHOICE, LAYERS_MAP_DIALOG_BASE::_wxFB_OnStoreSetup )
 	EVT_BUTTON( ID_GET_PREVIOUS_CHOICE, LAYERS_MAP_DIALOG_BASE::_wxFB_OnGetSetup )
 	EVT_BUTTON( ID_RESET_CHOICE, LAYERS_MAP_DIALOG_BASE::_wxFB_OnResetClick )
-	EVT_BUTTON( wxID_CANCEL, LAYERS_MAP_DIALOG_BASE::_wxFB_OnCancelClick )
 	EVT_BUTTON( wxID_OK, LAYERS_MAP_DIALOG_BASE::_wxFB_OnOkClick )
 END_EVENT_TABLE()
 
@@ -41,7 +40,7 @@ LAYERS_MAP_DIALOG_BASE::LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id,
 	
 	sbSizerLayersTable->Add( m_flexLeftColumnBoxSizer, 1, wxEXPAND, 5 );
 	
-	m_staticlineSep = new wxStaticLine( this, ID_M_STATICLINESEP, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	m_staticlineSep = new wxStaticLine( sbSizerLayersTable->GetStaticBox(), ID_M_STATICLINESEP, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	sbSizerLayersTable->Add( m_staticlineSep, 0, wxEXPAND | wxALL, 5 );
 	
 	
