@@ -15,15 +15,16 @@ class DIALOG_SHIM;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/sizer.h>
-#include <wx/statbox.h>
+#include <wx/stattext.h>
 #include <wx/gdicmn.h>
-#include <wx/checkbox.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/checklst.h>
+#include <wx/sizer.h>
+#include <wx/checkbox.h>
+#include <wx/statbox.h>
 #include <wx/radiobox.h>
-#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -47,8 +48,10 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 			wxID_PRINT_ALL
 		};
 		
-		wxStaticBoxSizer* m_CopperLayersBoxSizer;
-		wxStaticBoxSizer* m_TechnicalLayersBoxSizer;
+		wxStaticText* m_staticText4;
+		wxCheckListBox* m_CopperLayersList;
+		wxStaticText* m_staticText5;
+		wxCheckListBox* m_TechnicalLayersList;
 		wxCheckBox* m_Exclude_Edges_Pcb;
 		wxRadioBox* m_ScaleOption;
 		wxStaticText* m_FineAdjustXscaleTitle;
@@ -78,7 +81,7 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 739,373 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PRINT_USING_PRINTER_BASE();
 	
 };

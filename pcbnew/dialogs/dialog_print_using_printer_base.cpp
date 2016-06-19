@@ -22,15 +22,33 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	wxBoxSizer* bleftSizer;
 	bleftSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_CopperLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Copper Layers:") ), wxVERTICAL );
+	wxBoxSizer* bSizer6;
+	bSizer6 = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText4 = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Copper Layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText4->Wrap( -1 );
+	bSizer6->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxArrayString m_CopperLayersListChoices;
+	m_CopperLayersList = new wxCheckListBox( sbLayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_CopperLayersListChoices, 0 );
+	bSizer6->Add( m_CopperLayersList, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bleftSizer->Add( m_CopperLayersBoxSizer, 1, wxALL, 5 );
+	bleftSizer->Add( bSizer6, 1, wxEXPAND, 5 );
 	
-	m_TechnicalLayersBoxSizer = new wxStaticBoxSizer( new wxStaticBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Technical Layers:") ), wxVERTICAL );
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText5 = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _("Technical layers:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText5->Wrap( -1 );
+	bSizer7->Add( m_staticText5, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	wxArrayString m_TechnicalLayersListChoices;
+	m_TechnicalLayersList = new wxCheckListBox( sbLayersSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_TechnicalLayersListChoices, 0 );
+	bSizer7->Add( m_TechnicalLayersList, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bleftSizer->Add( m_TechnicalLayersBoxSizer, 1, wxALL, 5 );
+	bleftSizer->Add( bSizer7, 1, wxEXPAND, 5 );
 	
 	
 	sbLayersSizer->Add( bleftSizer, 1, wxEXPAND, 5 );
@@ -54,7 +72,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	m_FineAdjustXscaleTitle = new wxStaticText( this, wxID_ANY, _("X Scale Adjust"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustXscaleTitle->Wrap( -1 );
-	bmiddleLeftSizer->Add( m_FineAdjustXscaleTitle, 0, wxRIGHT|wxLEFT, 5 );
+	bmiddleLeftSizer->Add( m_FineAdjustXscaleTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_FineAdjustXscaleOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustXscaleOpt->SetToolTip( _("Set X scale adjust for exact scale plotting") );
@@ -63,7 +81,7 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	m_FineAdjustYscaleTitle = new wxStaticText( this, wxID_ANY, _("Y Scale Adjust"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustYscaleTitle->Wrap( -1 );
-	bmiddleLeftSizer->Add( m_FineAdjustYscaleTitle, 0, wxRIGHT|wxLEFT, 5 );
+	bmiddleLeftSizer->Add( m_FineAdjustYscaleTitle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_FineAdjustYscaleOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_FineAdjustYscaleOpt->SetToolTip( _("Set Y scale adjust for exact scale plotting") );
@@ -151,7 +169,6 @@ DIALOG_PRINT_USING_PRINTER_BASE::DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* pare
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
