@@ -60,7 +60,9 @@ private:
     PCB_PLOT_PARAMS* m_callers_params;
     wxConfigBase*   m_config;
     LSET            m_printMaskLayer;
-    wxCheckBox*     m_boxSelectLayer[LAYER_ID_COUNT];
+    // the list of existing board layers in wxCheckListBox, with the
+    // board layers id:
+    std::pair<wxCheckListBox*, int> m_boxSelectLayer[LAYER_ID_COUNT];
     bool            m_printBW;
     wxString        m_outputDirectory;
     bool            m_printMirror;
@@ -122,6 +124,8 @@ DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( wxTopLevelWindow* aParent, BOARD* aBoard, PC
     memset( m_boxSelectLayer, 0, sizeof( m_boxSelectLayer ) );
 
     initDialog();
+
+    GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();
 }
@@ -157,34 +161,27 @@ void DIALOG_SVG_PRINT::initDialog()
     for(  ;  seq;  ++seq )
     {
         LAYER_ID layer = *seq;
-
-        // The layers in m_boxSelectLayer[] are in LAYER_ID order.  This may be
-        // different than the order on screen.
-        m_boxSelectLayer[layer] = new wxCheckBox( this, -1, m_board->GetLayerName( layer ) );
-
-        if( s_SelectedLayers[layer] )
-            m_boxSelectLayer[layer]->SetValue( true );
+        int checkIndex;
 
         if( IsCopperLayer( layer ) )
-            m_CopperLayersBoxSizer->Add( m_boxSelectLayer[layer], 0, wxGROW | wxALL, 1 );
-        else
-            m_TechnicalBoxSizer->Add( m_boxSelectLayer[layer], 0, wxGROW | wxALL, 1 );
-    }
-
-    if( m_config )
-    {
-        wxString layerKey;
-
-        for( seq.Rewind();  seq;  ++seq )
         {
+            checkIndex = m_CopperLayersList->Append( m_board->GetLayerName( layer ) );
+            m_boxSelectLayer[layer] = std::make_pair( m_CopperLayersList, checkIndex );
+        }
+        else
+        {
+            checkIndex = m_TechnicalLayersList->Append( m_board->GetLayerName( layer ) );
+            m_boxSelectLayer[layer] = std::make_pair( m_TechnicalLayersList, checkIndex );
+        }
+
+        if( m_config )
+        {
+            wxString layerKey;
+            layerKey.Printf( OPTKEY_LAYERBASE, layer );
             bool option;
 
-            LAYER_NUM layer = *seq;
-
-            layerKey.Printf( OPTKEY_LAYERBASE, layer );
-
-            if( m_config->Read( layerKey, &option ) )
-                m_boxSelectLayer[layer]->SetValue( option );
+            if( m_config && m_config->Read( layerKey, &option ) )
+                m_boxSelectLayer[layer].first->Check( checkIndex, option );
         }
     }
 }
@@ -194,10 +191,12 @@ LSET DIALOG_SVG_PRINT::getCheckBoxSelectedLayers() const
 {
     LSET ret;
 
-    // the layers in m_boxSelectLayer[] are in LAYER_ID order.
-    for( unsigned layer=0; layer<DIM(m_boxSelectLayer);  ++layer )
+    for( unsigned layer = 0; layer < DIM(m_boxSelectLayer);  ++layer )
     {
-        if( m_boxSelectLayer[layer] && m_boxSelectLayer[layer]->GetValue() )
+        if( !m_boxSelectLayer[layer].first )
+            continue;
+
+        if( m_boxSelectLayer[layer].first->IsChecked( m_boxSelectLayer[layer].second ) )
             ret.set( layer );
     }
 
@@ -431,11 +430,12 @@ void DIALOG_SVG_PRINT::OnCloseWindow( wxCloseEvent& event )
 
             for( unsigned layer = 0; layer < DIM(m_boxSelectLayer);  ++layer )
             {
-                if( !m_boxSelectLayer[layer] )
+                if( !m_boxSelectLayer[layer].first )
                     continue;
 
                 layerKey.Printf( OPTKEY_LAYERBASE, layer );
-                m_config->Write( layerKey, m_boxSelectLayer[layer]->IsChecked() );
+                m_config->Write( layerKey,
+                        m_boxSelectLayer[layer].first->IsChecked( m_boxSelectLayer[layer].second ) );
             }
         }
     }

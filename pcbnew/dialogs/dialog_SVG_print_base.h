@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  6 2014)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -24,6 +24,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/checklst.h>
 #include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/checkbox.h>
@@ -48,8 +49,10 @@ class DIALOG_SVG_PRINT_base : public DIALOG_SHIM
 		wxStaticText* m_staticTextDir;
 		wxTextCtrl* m_outputDirectoryName;
 		wxButton* m_browseButton;
-		wxStaticBoxSizer* m_CopperLayersBoxSizer;
-		wxStaticBoxSizer* m_TechnicalBoxSizer;
+		wxStaticText* m_staticTextCopperLayers;
+		wxCheckListBox* m_CopperLayersList;
+		wxStaticText* m_staticTextTechLayers;
+		wxCheckListBox* m_TechnicalLayersList;
 		wxStaticText* m_TextPenWidth;
 		wxTextCtrl* m_DialogDefaultPenSize;
 		wxRadioBox* m_ModeColorOption;
@@ -70,7 +73,7 @@ class DIALOG_SVG_PRINT_base : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export SVG file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 507,451 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export SVG file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 637,454 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SVG_PRINT_base();
 	
 };
