@@ -61,6 +61,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
     BOARD* board = (BOARD*) m_toolMgr->GetModel();
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
     RN_DATA* ratsnest = board->GetRatsnest();
+    std::set<EDA_ITEM*> savedModules;
 
     if( Empty() )
         return;
@@ -70,10 +71,29 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
         // Module items need to be saved in the undo buffer before modification
         if( m_editModules )
         {
-            frame->SaveCopyInUndoList( static_cast<BOARD_ITEM*>( ent.m_copy ), UR_CHANGED );
-        }
+            // Be sure that we are storing a module
+            if( ent.m_item->Type() != PCB_MODULE_T )
+                ent.m_item = ent.m_item->GetParent();
 
-        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
+            // We have not saved the module yet, so let's create an entry
+            if( savedModules.count( ent.m_item ) == 0 )
+            {
+                if( !ent.m_copy )
+                {
+                    assert( ent.m_type != CHT_MODIFY );     // too late to make a copy..
+                    ent.m_copy = ent.m_item->Clone();
+                }
+
+                assert( ent.m_item->Type() == PCB_MODULE_T );
+                assert( ent.m_copy->Type() == PCB_MODULE_T );
+
+                ITEM_PICKER itemWrapper( ent.m_item, UR_CHANGED );
+                itemWrapper.SetLink( ent.m_copy );
+                undoList.PushItem( itemWrapper );
+                frame->SaveCopyInUndoList( undoList, UR_CHANGED );
+                savedModules.insert( ent.m_item );
+            }
+        }
 
         switch( ent.m_type )
         {
