@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,7 +154,12 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
 
 TREE_PROJECT_FRAME::~TREE_PROJECT_FRAME()
 {
-    delete m_watcher;
+    if( m_watcher )
+    {
+        m_watcher->RemoveAll();
+        m_watcher->SetOwner( NULL );
+        delete m_watcher;
+    }
 }
 
 
@@ -212,8 +217,8 @@ void TREE_PROJECT_FRAME::OnCreateNewDirectory( wxCommandEvent& event )
             curr_dir += wxFileName::GetPathSeparator();
     }
 
-    wxString    msg = wxString::Format( _( "Current project directory:\n%s" ), GetChars( prj_dir ) );
-    wxString    subdir = wxGetTextFromUser( msg, _( "Create New Directory" ), curr_dir );
+    wxString  msg = wxString::Format( _( "Current project directory:\n%s" ), GetChars( prj_dir ) );
+    wxString  subdir = wxGetTextFromUser( msg, _( "Create New Directory" ), curr_dir );
 
     if( subdir.IsEmpty() )
         return;
@@ -884,6 +889,7 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
                 root_id = subdirs_id.top();
                 subdirs_id.pop();
                 kid = m_TreeProject->GetFirstChild( root_id, cookie );
+
                 if( ! kid.IsOk() )
                     continue;
             }
@@ -903,6 +909,7 @@ wxTreeItemId TREE_PROJECT_FRAME::findSubdirTreeItem( const wxString& aSubDir )
             if( itemData->IsPopulated() )
                 subdirs_id.push( kid );
         }
+
         kid = m_TreeProject->GetNextChild( root_id, cookie );
     }
 
@@ -992,9 +999,15 @@ void TREE_PROJECT_FRAME::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
 void TREE_PROJECT_FRAME::FileWatcherReset()
 {
     // Prepare file watcher:
-    delete m_watcher;
-    m_watcher = new wxFileSystemWatcher();
-    m_watcher->SetOwner( this );
+    if( m_watcher )
+    {
+        m_watcher->RemoveAll();
+    }
+    else
+    {
+        m_watcher = new wxFileSystemWatcher();
+        m_watcher->SetOwner( this );
+    }
 
     // Add directories which should be monitored.
     // under windows, we add the curr dir and all subdirs
@@ -1033,6 +1046,7 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
                 root_id = subdirs_id.top();
                 subdirs_id.pop();
                 kid = m_TreeProject->GetFirstChild( root_id, cookie );
+
                 if( !kid.IsOk() )
                     continue;
             }
@@ -1045,7 +1059,7 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
             // we can see wxString under a debugger, not a wxFileName
             wxString path = itemData->GetFileName();
 
-            DBG(printf( "%s: add '%s'\n", __func__, TO_UTF8( path ) );)
+            wxLogDebug( "%s: add '%s'\n", __func__, TO_UTF8( path ) );
 
             if( wxFileName::IsDirReadable( path ) )     // linux whines about watching protected dir
             {
@@ -1065,13 +1079,15 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
 #if defined(DEBUG) && 1
     wxArrayString paths;
     m_watcher->GetWatchedPaths( &paths );
-    printf( "%s: watched paths:\n", __func__ );
+    wxLogDebug( "%s: watched paths:", __func__ );
+
     for( unsigned ii = 0; ii < paths.GetCount(); ii++ )
-        printf( " %s\n", TO_UTF8( paths[ii] ) );
+        wxLogDebug( " %s\n", TO_UTF8( paths[ii] ) );
 #endif
 }
 
-void KICAD_MANAGER_FRAME::OnChangeWatchedPaths(wxCommandEvent& aEvent )
+
+void KICAD_MANAGER_FRAME::OnChangeWatchedPaths( wxCommandEvent& aEvent )
 {
     m_LeftWin->FileWatcherReset();
 }
