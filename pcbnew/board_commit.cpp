@@ -272,6 +272,8 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 
 void BOARD_COMMIT::Revert()
 {
+    assert( false );        // the code below has not been tested
+
     PICKED_ITEMS_LIST undoList;
     KIGFX::VIEW* view = m_toolMgr->GetView();
     BOARD* board = (BOARD*) m_toolMgr->GetModel();
@@ -308,6 +310,7 @@ void BOARD_COMMIT::Revert()
             view->Add( item );
             ratsnest->Add( item );
             item->ClearFlags( SELECTED );
+            delete copy;
             break;
         }
 
