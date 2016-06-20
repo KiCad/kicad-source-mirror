@@ -97,8 +97,13 @@ public:
 protected:
     struct COMMIT_LINE
     {
+        ///> Main item that is added/deleted/modified
         EDA_ITEM* m_item;
+
+        ///> Optional copy of the item
         EDA_ITEM* m_copy;
+
+        ///> Modification type
         CHANGE_TYPE m_type;
     };
 
