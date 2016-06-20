@@ -41,6 +41,7 @@
 #include <wxBasePcbFrame.h>
 #include <base_units.h>
 #include <wx/numformatter.h>
+#include <board_commit.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -207,11 +208,13 @@ bool DialogEditModuleText::TransferDataToWindow()
 
 bool DialogEditModuleText::TransferDataFromWindow()
 {
+    BOARD_COMMIT commit( m_parent );
+
     if( !Validate() || !DialogEditModuleText_base::TransferDataFromWindow() )
         return false;
 
     if( m_module )
-        m_parent->SaveCopyInUndoList( m_module, UR_CHANGED );
+        commit.Modify( m_currentText );
 
 #ifndef USE_WX_OVERLAY
     if( m_dc )     //Erase old text on screen
@@ -325,7 +328,7 @@ bool DialogEditModuleText::TransferDataFromWindow()
     m_parent->Refresh();
 #endif
 
-    m_parent->OnModify();
+    commit.Push( _( "Modify module text" ) );
 
     if( m_module )
         m_module->SetLastEditTime();

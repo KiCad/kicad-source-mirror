@@ -44,6 +44,7 @@
 #include <class_board_design_settings.h>
 #include <base_units.h>
 #include <wx/valnum.h>
+#include <board_commit.h>
 
 #include <class_board.h>
 #include <class_drawsegment.h>
@@ -227,7 +228,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
-    m_parent->SaveCopyInUndoList( m_item, UR_CHANGED );
+    BOARD_COMMIT commit( m_parent );
+    commit.Modify( m_item );
 
     wxString msg;
 
@@ -264,7 +266,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         m_item->SetAngle( m_AngleValue * 10.0 );
     }
 
-    m_parent->OnModify();
+    commit.Push( _( "Modify drawing properties" ) );
 
     if( m_DC )
         m_item->Draw( m_parent->GetCanvas(), m_DC, GR_OR );

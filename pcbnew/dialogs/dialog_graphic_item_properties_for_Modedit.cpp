@@ -43,6 +43,7 @@
 #include <module_editor_frame.h>
 #include <base_units.h>
 #include <wx/valnum.h>
+#include <board_commit.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -212,6 +213,9 @@ void DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::OnLayerChoice( wxCommandEvent& even
 
 bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
 {
+    BOARD_COMMIT commit( m_parent );
+    commit.Modify( m_module );
+
     if( !DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
@@ -223,14 +227,10 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
          * confirmation is requested */
         if( !IsOK( NULL,
                    _( "The graphic item will be on a copper layer. This is very dangerous. Are you sure?" ) ) )
-            return false;;
+            return false;
     }
 
-    m_parent->SaveCopyInUndoList( m_module, UR_CHANGED );
-    m_module->SetLastEditTime();
-
     wxString msg;
-
     wxPoint coord;
 
     msg = m_Center_StartXCtrl->GetValue();
@@ -262,7 +262,8 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::TransferDataFromWindow()
         m_item->SetAngle( m_AngleValue * 10.0 );
     }
 
-    m_parent->OnModify();
+    commit.Push( _( "Modify module graphic item" ) );
+
     m_parent->SetMsgPanel( m_item );
 
     return true;

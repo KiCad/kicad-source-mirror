@@ -34,6 +34,7 @@
 #include <dialog_helpers.h>
 #include <base_units.h>
 #include <gr_basic.h>
+#include <board_commit.h>
 
 #include <class_board.h>
 #include <class_mire.h>
@@ -128,12 +129,14 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& event )
  */
 void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
 {
+    BOARD_COMMIT commit( m_Parent );
+    commit.Modify( m_Target );
+
     if( m_DC )
         m_Target->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
 
     // Save old item in undo list, if is is not currently edited (will be later if so)
-    if( m_Target->GetFlags() == 0 )
-        m_Parent->SaveCopyInUndoList( m_Target, UR_CHANGED );
+    bool pushCommit = ( m_Target->GetFlags() == 0 );
 
     if( m_Target->GetFlags() != 0 )         // other edition in progress (MOVE, NEW ..)
         m_Target->SetFlags( IN_EDIT );      // set flag in edit to force
@@ -150,7 +153,9 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
     if( m_DC )
         m_Target->Draw( m_Parent->GetCanvas(), m_DC, ( m_Target->IsMoving() ) ? GR_XOR : GR_OR );
 
-    m_Parent->OnModify();
+    if( pushCommit )
+        commit.Push( _( "Modified alignment target" ) );
+
     EndModal( 1 );
 }
 

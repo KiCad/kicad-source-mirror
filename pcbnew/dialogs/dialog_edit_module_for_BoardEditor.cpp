@@ -41,6 +41,7 @@
 #include <wxPcbStruct.h>
 #include <base_units.h>
 #include <project.h>
+#include <board_commit.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -610,6 +611,9 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
     wxPoint  modpos;
     wxString msg;
 
+    BOARD_COMMIT commit( m_Parent );
+    commit.Modify( m_CurrentModule );
+
     if( !Validate() || !DIALOG_MODULE_BOARD_EDITOR_BASE::TransferDataFromWindow() ||
         !m_PanelProperties->TransferDataFromWindow() )
     {
@@ -622,10 +626,6 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
         wxMessageBox( _( "Error: invalid or missing 3D parameter" ) );
         return false;
     }
-
-    if( m_CurrentModule->GetFlags() == 0 )    // this is a simple edition, we
-                                              // must create an undo entry
-        m_Parent->SaveCopyInUndoList( m_CurrentModule, UR_CHANGED );
 
     if( m_DC )
     {
@@ -741,7 +741,9 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
 
     m_CurrentModule->CalculateBoundingBox();
 
-    m_Parent->OnModify();
+    // This is a simple edition, we must create an undo entry
+    if( m_CurrentModule->GetFlags() == 0 )
+        commit.Push( _( "Modify module properties" ) );
 
     SetReturnCode( PRM_EDITOR_EDIT_OK );
 

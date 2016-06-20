@@ -43,6 +43,7 @@
 #include <macros.h>
 #include <validators.h>
 #include <kicad_string.h>
+#include <board_commit.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -440,6 +441,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 {
+    BOARD_COMMIT commit( m_parent );
     wxString msg;
 
     // First, test for invalid chars in module name
@@ -465,7 +467,8 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
         return;
     }
 
-    m_parent->SaveCopyInUndoList( m_currentModule, UR_CHANGED );
+    commit.Modify( m_currentModule );
+
     m_currentModule->SetLocked( m_AutoPlaceCtrl->GetSelection() == 1 );
 
     switch( m_AttributsCtrl->GetSelection() )
@@ -522,7 +525,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
 
     m_currentModule->CalculateBoundingBox();
 
-    m_parent->OnModify();
+    commit.Push( _( "Modify module properties" ) );
 
     EndModal( 1 );
 }

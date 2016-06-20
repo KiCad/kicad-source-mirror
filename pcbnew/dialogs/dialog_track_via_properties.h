@@ -28,6 +28,8 @@
 #include <layers_id_colors_and_visibility.h>
 
 struct SELECTION;
+class COMMIT;
+
 class PCB_BASE_FRAME;
 
 class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE
@@ -36,7 +38,7 @@ public:
     DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent, const SELECTION& aItems );
 
     ///> Applies values from the dialog to the selected items.
-    bool Apply();
+    bool Apply( COMMIT& aCommit );
 
 private:
     void onClose( wxCloseEvent& aEvent );
