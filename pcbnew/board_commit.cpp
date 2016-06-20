@@ -68,6 +68,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
 
     for( COMMIT_LINE& ent : m_changes )
     {
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
+
         // Module items need to be saved in the undo buffer before modification
         if( m_editModules )
         {
@@ -91,7 +93,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                 itemWrapper.SetLink( ent.m_copy );
                 undoList.PushItem( itemWrapper );
                 frame->SaveCopyInUndoList( undoList, UR_CHANGED );
+
                 savedModules.insert( ent.m_item );
+                static_cast<MODULE*>( ent.m_item )->SetLastEditTime();
             }
         }
 
@@ -101,23 +105,23 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
             {
                 if( !m_editModules )
                 {
-                    ITEM_PICKER itemWrapper( boardItem, UR_NEW );
-                    undoList.PushItem( itemWrapper );
+                    undoList.PushItem( ITEM_PICKER( boardItem, UR_NEW ) );
                     board->Add( boardItem );
+                    //ratsnest->Add( boardItem );       // TODO currently done by BOARD::Add()
+
+                    if( boardItem->Type() == PCB_MODULE_T )
+                    {
+                        MODULE* mod = static_cast<MODULE*>( boardItem );
+                        mod->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                    }
                 }
                 else
                 {
+                    assert( boardItem->Type() != PCB_MODULE_T );
                     board->m_Modules->Add( boardItem );
                 }
 
-                if( boardItem->Type() == PCB_MODULE_T )
-                {
-                    MODULE* mod = static_cast<MODULE*>( boardItem );
-                    mod->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
-                }
-
                 view->Add( boardItem );
-                //ratsnest->Add( boardItem );       // TODO currently done by BOARD::Add()
                 break;
             }
 
@@ -125,29 +129,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
             {
                 if( !m_editModules )
                 {
-                    ITEM_PICKER itemWrapper( boardItem, UR_DELETED );
-                    undoList.PushItem( itemWrapper );
+                    undoList.PushItem( ITEM_PICKER( boardItem, UR_DELETED ) );
                 }
 
                 switch( boardItem->Type() )
                 {
-                case PCB_MODULE_T:
-                {
-                    // There are no modules inside a module yet
-                    assert( !m_editModules );
-
-                    MODULE* module = static_cast<MODULE*>( boardItem );
-                    module->ClearFlags();
-                    module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
-
-                    view->Remove( module );
-                    board->Remove( module );
-
-                    // Clear flags to indicate, that the ratsnest, list of nets & pads are not valid anymore
-                    board->m_Status_Pcb = 0;
-                }
-                break;
-
                 // Module items
                 case PCB_PAD_T:
                 case PCB_MODULE_EDGE_T:
@@ -189,18 +175,16 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                         view->Remove( boardItem );
 
                         MODULE* module = static_cast<MODULE*>( boardItem->GetParent() );
-                        module->Remove( boardItem );
-                        module->SetLastEditTime();
-                        board->m_Status_Pcb = 0; // it is done in the legacy view
+                        assert( module && module->Type() == PCB_MODULE_T );
+                        module->Delete( boardItem );
 
-                        // Footprint editor saves a full copy of the footprint in the undo buffer,
-                        // so we have to actually delete the text/drawing/pad to avoid memleaks
-                        boardItem->DeleteStructure();
+                        board->m_Status_Pcb = 0; // it is done in the legacy view (ratsnest perhaps?)
                     }
 
                     break;
                 }
 
+                // Board items
                 case PCB_LINE_T:                // a segment not on copper layers
                 case PCB_TEXT_T:                // a text on a layer
                 case PCB_TRACE_T:               // a track segment (segment on a copper layer)
@@ -215,6 +199,23 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                     //ratsnest->Remove( boardItem );    // currently done by BOARD::Remove()
                     break;
 
+                case PCB_MODULE_T:
+                {
+                    // There are no modules inside a module yet
+                    assert( !m_editModules );
+
+                    MODULE* module = static_cast<MODULE*>( boardItem );
+                    module->ClearFlags();
+                    module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+
+                    view->Remove( module );
+                    board->Remove( module );
+
+                    // Clear flags to indicate, that the ratsnest, list of nets & pads are not valid anymore
+                    board->m_Status_Pcb = 0;
+                }
+                break;
+
                 default:                        // other types do not need to (or should not) be handled
                     assert( false );
                     break;
@@ -227,15 +228,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                 if( !m_editModules )
                 {
                     ITEM_PICKER itemWrapper( boardItem, UR_CHANGED );
+                    assert( ent.m_copy );
                     itemWrapper.SetLink( ent.m_copy );
                     undoList.PushItem( itemWrapper );
-                }
-
-                if( boardItem->Type() == PCB_MODULE_T )
-                {
-                    MODULE* mod = static_cast<MODULE*>( boardItem );
-                    //mod->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
-                    mod->RunOnChildren( boost::bind( &RN_DATA::Update, ratsnest, _1 ) );
                 }
 
                 boardItem->ViewUpdate( KIGFX::VIEW_ITEM::ALL );
@@ -244,6 +239,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
             }
 
             default:
+                assert( false );
                 break;
         }
     }
@@ -323,4 +319,3 @@ void BOARD_COMMIT::Revert()
 
     clear();
 }
-
