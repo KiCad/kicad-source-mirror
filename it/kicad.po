@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-20 20:10+0200\n"
-"PO-Revision-Date: 2016-06-20 20:10+0200\n"
+"PO-Revision-Date: 2016-06-21 00:10+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -19418,7 +19418,7 @@ msgstr "Proprietà etichetta gerarchica"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:159
 msgid "Label Properties"
-msgstr "Proprietà etichettà"
+msgstr "Proprietà etichetta"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:163
 msgid "Hierarchical Sheet Pin Properties."
