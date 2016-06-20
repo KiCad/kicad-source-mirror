@@ -37,6 +37,12 @@ if (len(lines)<4000):
 txt = ""
 
 for l in lines:
+    if l.startswith("if _swig_python_version_info >= (2, 7, 0):"):     # ok with swig version >= 3.0.10
+        l = l.replace("_swig_python_version_info >= (2, 7, 0)","False")
+        doneOk = True
+    elif l.startswith("elif _swig_python_version_info >= (2, 6, 0):"):  # needed with swig version >= 3.0.10
+        l = l.replace("_swig_python_version_info >= (2, 6, 0)","False")
+        doneOk = True
     if l.startswith("if version_info >= (2, 7, 0):"):     # ok with swig version >= 3.0.9
         l = l.replace("version_info >= (2, 7, 0)","False")
         doneOk = True
