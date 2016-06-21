@@ -537,12 +537,15 @@ bool EXCELLON_IMAGE::Execute_Drill_Command( char*& text )
                 }
                 gbritem = new GERBER_DRAW_ITEM( GetParent()->GetGerberLayout(), this );
                 GetParent()->GetGerberLayout()->m_Drawings.Append( gbritem );
-                if( m_SlotOn )  // Oval hole
+                if( m_SlotOn )  // Oblong hole
                 {
                     fillLineGBRITEM( gbritem,
                                     tool->m_Num_Dcode, GetParent()->getActiveLayer(),
                                     m_PreviousPos, m_CurrentPos,
                                     tool->m_Size, false );
+                    // the hole is made: reset the slot on command (G85)
+                    // (it is needed for each oblong hole)
+                    m_SlotOn = false;
                 }
                 else
                 {
