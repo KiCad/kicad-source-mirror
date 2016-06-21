@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
@@ -177,69 +177,28 @@ extern EDA_COLOR_T  g_GhostColor;
 
 
 /**
- * Function SetLocaleTo_C_standard
- *  because KiCad is internationalized, switch internalization to "C" standard
- *  i.e. uses the . (dot) as separator in print/read float numbers
- *  (some countries (France, Germany ..) use , (comma) as separator)
- *  This function must be called before read or write ascii files using float
- *  numbers in data the SetLocaleTo_C_standard function must be called after
- *  reading or writing the file
- *
- *  This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
- *  but could make more easier an optional use of locale in KiCad
- */
-void SetLocaleTo_C_standard();
-
-/**
- * Function SetLocaleTo_Default
- *  because KiCad is internationalized, switch internalization to default
- *  to use the default separator in print/read float numbers
- *  (. (dot) but some countries (France, Germany ..) use , (comma) as
- *   separator)
- *  This function must be called after a call to SetLocaleTo_C_standard
- *
- *  This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
- *  but could make more easier an optional use of locale in KiCad
- */
-void SetLocaleTo_Default();
-
-
-/**
  * Class LOCALE_IO
  * is a class that can be instantiated within a scope in which you are expecting
- * exceptions to be thrown.  Its constructor calls SetLocaleTo_C_Standard().
+ * exceptions to be thrown.  Its constructor set a "C" laguage locale option,
+ * to read/print files with fp numbers.
  * Its destructor insures that the default locale is restored if an exception
  * is thrown, or not.
  */
 class LOCALE_IO
 {
 public:
-    LOCALE_IO()
-    {
-        wxASSERT_MSG( C_count >= 0, wxT( "LOCALE_IO::C_count mismanaged." ) );
-
-        // use thread safe, atomic operation
-        if( __sync_fetch_and_add( &C_count, 1 ) == 0 )
-        {
-            // printf( "setting C locale.\n" );
-            SetLocaleTo_C_standard();
-        }
-    }
-
-    ~LOCALE_IO()
-    {
-        // use thread safe, atomic operation
-        if( __sync_sub_and_fetch( &C_count, 1 ) == 0 )
-        {
-            // printf( "restoring default locale.\n" );
-            SetLocaleTo_Default();
-        }
-
-        wxASSERT_MSG( C_count >= 0, wxT( "LOCALE_IO::C_count mismanaged." ) );
-    }
+    LOCALE_IO();
+    ~LOCALE_IO();
 
 private:
-    static int  C_count;    // allow for nesting of LOCALE_IO instantiations
+    void setUserLocale( const char* aUserLocale );
+
+    // allow for nesting of LOCALE_IO instantiations
+    static int  m_c_count;
+
+    // The locale in use before switching to the "C" locale
+    // (the locale can be set by user, and is not always the system locale)
+    std::string m_user_locale;
 };
 
 

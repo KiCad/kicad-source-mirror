@@ -538,7 +538,8 @@ bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName, bool aUseThou,
 {
     IDF3_BOARD idfBoard( IDF3::CAD_ELEC );
 
-    SetLocaleTo_C_standard();
+    // Switch the locale to standard C (needed to print floating point numbers)
+    LOCALE_IO toggle;
 
     bool ok = true;
     double scale = MM_PER_IU;   // we must scale internal units to mm for IDF
@@ -603,8 +604,6 @@ bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName, bool aUseThou,
         wxMessageBox( msg );
         ok = false;
     }
-
-    SetLocaleTo_Default();
 
     return ok;
 }

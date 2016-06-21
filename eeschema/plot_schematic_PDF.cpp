@@ -64,6 +64,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
     wxString msg;
     wxFileName plotFileName;
     REPORTER& reporter = m_MessagesBox->Reporter();
+    LOCALE_IO toggle;       // Switch the locale to standard C
 
     // First page handling is different
     bool first_page = true;
@@ -106,7 +107,6 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
                 }
 
                 // Open the plotter and do the first page
-                SetLocaleTo_C_standard();
                 setupPlotPagePDF( plotter, screen );
                 plotter->StartPlot();
                 first_page = false;
@@ -150,7 +150,6 @@ void DIALOG_PLOT_SCHEMATIC::restoreEnvironment( PDF_PLOTTER* aPlotter,
 {
     aPlotter->EndPlot();
     delete aPlotter;
-    SetLocaleTo_Default();
 
     // Restore the previous sheet
     m_parent->SetCurrentSheet( aOldsheetpath );

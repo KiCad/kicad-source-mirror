@@ -268,7 +268,8 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
         DisplayError( this, msg ); return;
     }
 
-    SetLocaleTo_C_standard(); // No pesky decimal separators in gencad
+    // Switch the locale to standard C (needed to print floating point numbers)
+    LOCALE_IO toggle;
 
     // Update some board data, to ensure a reliable gencad export
     GetBoard()->ComputeBoundingBox();
@@ -323,7 +324,6 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     CreateRoutesSection( file, pcb );
 
     fclose( file );
-    SetLocaleTo_Default();  // revert to the current locale
 
     // Undo the footprints modifications (flipped footprints)
     for( module = pcb->m_Modules; module; module = module->Next() )

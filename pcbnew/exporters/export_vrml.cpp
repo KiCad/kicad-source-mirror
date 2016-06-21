@@ -1334,8 +1334,8 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         output_file.exceptions( std::ofstream::failbit );
         output_file.open( TO_UTF8( aFullFileName ), std::ios_base::out );
 
-        // Switch the locale to standard C (needed to print floating point numbers like 1.3)
-        SetLocaleTo_C_standard();
+        // Switch the locale to standard C (needed to print floating point numbers)
+        LOCALE_IO toggle;
 
         // Begin with the usual VRML boilerplate
         wxString fn = aFullFileName;
@@ -1403,7 +1403,6 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
     // End of work
     output_file.exceptions( std::ios_base::goodbit );
     output_file.close();
-    SetLocaleTo_Default();       // revert to the current  locale
 
     return ok;
 }

@@ -344,6 +344,7 @@ const wxString& PGM_BASE::GetEditorName( bool aCanShowFileChooser )
     return m_editor_name;
 }
 
+
 const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEditor )
 {
     // Create a mask representing the executable files in the current platform
@@ -503,9 +504,6 @@ bool PGM_BASE::initPgm()
     SetLanguage( true );
 
     loadCommonSettings();
-
-    // Set locale option for separator used in float numbers
-    SetLocaleTo_Default();
 
 #ifdef __WXMAC__
     // Always show filters on Open dialog to be able to choose plugin
@@ -695,20 +693,14 @@ bool PGM_BASE::SetLanguage( bool first_time )
     double dtst = 0.5;
     wxString msg;
 
-    extern bool g_DisableFloatingPointLocalNotation;    // See common.cpp
-
-    g_DisableFloatingPointLocalNotation = false;
-
     msg << dtst;
     double result;
     msg.ToDouble( &result );
 
-    if( result != dtst )  // string to double encode/decode does not work! Bug detected
-    {
+    if( result != dtst )
+        // string to double encode/decode does not work! Bug detected:
         // Disable floating point localization:
-        g_DisableFloatingPointLocalNotation = true;
-        SetLocaleTo_C_standard( );
-    }
+        setlocale( LC_ALL, "C" );
 
     if( !m_locale->IsLoaded( dictionaryName ) )
         m_locale->AddCatalog( dictionaryName );
