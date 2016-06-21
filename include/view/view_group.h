@@ -131,6 +131,7 @@ public:
     inline virtual void SetLayer( int aLayer )
     {
         m_layer = aLayer;
+        ViewUpdate();
     }
 
     /**
