@@ -277,8 +277,9 @@ void BOARD_COMMIT::Revert()
     BOARD* board = (BOARD*) m_toolMgr->GetModel();
     RN_DATA* ratsnest = board->GetRatsnest();
 
-    for( COMMIT_LINE& ent : m_changes )
+    for( auto it = m_changes.rbegin(); it != m_changes.rend(); ++it )
     {
+        COMMIT_LINE& ent = *it;
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( ent.m_item );
         BOARD_ITEM* copy = static_cast<BOARD_ITEM*>( ent.m_copy );
 
