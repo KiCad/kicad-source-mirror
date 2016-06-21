@@ -133,9 +133,6 @@ private:
     ///> of edit reference point).
     VECTOR2I m_cursor;
 
-    /// Counter of undo inhibitions. When zero, undo is not inhibited.
-    int m_undoInhibit;
-
     ///> The required update flag for modified items
     KIGFX::VIEW_ITEM::VIEW_UPDATE_FLAGS m_updateFlag;
 
@@ -158,47 +155,6 @@ private:
     ///> If there are no items currently selected, it tries to choose the item that is under
     ///> the cursor or displays a disambiguation menu if there are multiple items.
     bool hoverSelection( bool aSanitize = true );
-
-    ///> Processes the current undo buffer since the last change. If the last change does not occur
-    ///> in the current buffer, then the whole list is processed.
-    void processUndoBuffer( const PICKED_ITEMS_LIST* aLastChange );
-
-    ///> Updates items stored in the list.
-    void processPickedList( const PICKED_ITEMS_LIST* aList );
-
-    /**
-     * Increments the undo inhibit counter. This will indicate that tools
-     * should not create an undo point, as another tool is doing it already,
-     * and considers that its operation is atomic, even if it calls another one
-     * (for example a duplicate calls a move).
-     */
-    inline void incUndoInhibit()
-    {
-        m_undoInhibit++;
-    }
-
-    /**
-     * Decrements the inhibit counter. An assert is raised if the counter drops
-     * below zero.
-     */
-    inline void decUndoInhibit()
-    {
-        m_undoInhibit--;
-
-        wxASSERT_MSG( m_undoInhibit >= 0, wxT( "Undo inhibit count decremented past zero" ) );
-    }
-
-    /**
-     * Report if the tool manager has been told at least once that undo
-     * points should not be created. This can be ignored if the undo point
-     * is still required.
-     *
-     * @return true if undo are inhibited
-     */
-    inline bool isUndoInhibited() const
-    {
-        return m_undoInhibit > 0;
-    }
 
     int editFootprintInFpEditor( const TOOL_EVENT& aEvent );
 

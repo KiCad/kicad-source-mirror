@@ -60,7 +60,7 @@ using namespace std::placeholders;
 
 EDIT_TOOL::EDIT_TOOL() :
     PCB_TOOL( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
-    m_dragging( false ), m_undoInhibit( 0 ), m_updateFlag( KIGFX::VIEW_ITEM::NONE )
+    m_dragging( false ), m_updateFlag( KIGFX::VIEW_ITEM::NONE )
 {
 }
 
@@ -114,9 +114,6 @@ bool EDIT_TOOL::invokeInlineRouter()
 {
     TRACK* track = uniqueSelected<TRACK>();
     VIA* via = uniqueSelected<VIA>();
-
-    if( isUndoInhibited() )
-        return false;
 
     if( track || via )
     {
@@ -247,9 +244,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     controls->SetAutoPan( true );
                     m_dragging = true;
-
-                    // Do not save intermediate modifications when an item is dragged
-                    incUndoInhibit();
                 }
             }
 
@@ -327,9 +321,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             lockOverride = false;
         }
     } while( ( evt = Wait() ) ); //Should be assignment not equality test
-
-    if( m_dragging )
-        decUndoInhibit();
 
     m_dragging = false;
     m_offset.x = 0;
@@ -419,7 +410,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         item->Rotate( rotatePoint, editFrame->GetRotationAngle() );
     }
 
-    if( !isUndoInhibited() )
+    if( !m_dragging )
         m_commit->Push( _( "Rotate" ) );
 
     if( unselect )
@@ -451,7 +442,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         item->Flip( flipPoint );
     }
 
-    if( !isUndoInhibited() )
+    if( !m_dragging )
         m_commit->Push( _( "Flip" ) );
 
     if( unselect )
@@ -521,8 +512,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
 
-        if( !isUndoInhibited() )
-            m_commit->Push( _( "Move exact" ) );
+        m_commit->Push( _( "Move exact" ) );
 
         if( unselect )
             m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -550,11 +540,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     // we have a selection to work on now, so start the tool process
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
-    // prevent other tools making undo points while the duplicate is going on
-    // so that if you cancel, you don't get a duplicate object hiding over
-    // the original
-    incUndoInhibit();
 
     std::vector<BOARD_ITEM*> old_items;
 
@@ -610,9 +595,6 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         TOOL_EVENT evt = COMMON_ACTIONS::editActivate.MakeEvent();
         Main( evt );
     }
-
-    // and re-enable undos
-    decUndoInhibit();
 
     return 0;
 };
