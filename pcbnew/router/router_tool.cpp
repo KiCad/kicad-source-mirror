@@ -534,8 +534,6 @@ bool ROUTER_TOOL::finishInteractive()
 {
     m_router->StopRouting();
 
-    m_frame->OnModify();
-
     m_ctls->SetAutoPan( false );
     m_ctls->ForceCursorPosition( false );
     highlightNet( false );
@@ -740,7 +738,6 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 
 void ROUTER_TOOL::performDragging()
 {
-    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
     VIEW_CONTROLS* ctls = getViewControls();
 
     if( m_startItem && m_startItem->IsLocked() )
@@ -786,9 +783,6 @@ void ROUTER_TOOL::performDragging()
 
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
-
-    if( modified )
-        frame->OnModify();
 
     m_startItem = NULL;
 
@@ -850,9 +844,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
-
-    if( modified )
-        frame->OnModify();
 
     ctls->SetAutoPan( false );
     ctls->ShowCursor( false );

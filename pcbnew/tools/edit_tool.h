@@ -30,6 +30,7 @@
 #include <tools/pcb_tool.h>
 #include <view/view_group.h>
 
+class BOARD_COMMIT;
 class BOARD_ITEM;
 class SELECTION_TOOL;
 
@@ -135,9 +136,6 @@ private:
     /// Counter of undo inhibitions. When zero, undo is not inhibited.
     int m_undoInhibit;
 
-    ///> Removes and frees a single BOARD_ITEM.
-    void remove( BOARD_ITEM* aItem );
-
     ///> The required update flag for modified items
     KIGFX::VIEW_ITEM::VIEW_UPDATE_FLAGS m_updateFlag;
 
@@ -216,6 +214,8 @@ private:
         BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
         return dyn_cast<T*>( item );
     }
+
+    std::unique_ptr<BOARD_COMMIT> m_commit;
 };
 
 #endif

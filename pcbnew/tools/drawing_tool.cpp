@@ -40,6 +40,7 @@
 #include <tool/tool_manager.h>
 #include <router/direction.h>
 #include <ratsnest_data.h>
+#include <board_commit.h>
 
 #include <class_board.h>
 #include <class_edge_mod.h>
@@ -75,6 +76,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     boost::optional<VECTOR2D> startingPoint;
+    BOARD_COMMIT commit( m_frame );
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_LINE_TOOL : ID_PCB_ADD_LINE_BUTT,
                         wxCURSOR_PENCIL, _( "Add graphic line" ) );
@@ -83,10 +85,8 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     {
         if( line )
         {
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( line, UR_NEW );
-
-            parent->Add( line );
+            commit.Add( line );
+            commit.Push( _( "Draw a line segment" ) );
             startingPoint = line->GetEnd();
         }
         else
@@ -107,6 +107,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
+    BOARD_COMMIT commit( m_frame );
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_CIRCLE_TOOL : ID_PCB_CIRCLE_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic circle" ) );
@@ -115,10 +116,8 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     {
         if( circle )
         {
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( circle, UR_NEW );
-
-            m_frame->GetModel()->Add( circle );
+            commit.Add( circle );
+            commit.Push( _( "Draw a circle" ) );
         }
 
         circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
@@ -134,6 +133,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* arc = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
+    BOARD_COMMIT commit( m_frame );
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_ARC_TOOL : ID_PCB_ARC_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic arc" ) );
@@ -142,10 +142,8 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     {
         if( arc )
         {
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( arc, UR_NEW );
-
-            m_frame->GetModel()->Add( arc );
+            commit.Add( arc );
+            commit.Push( _( "Draw an arc" ) );
         }
 
         arc = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
@@ -161,6 +159,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM* text = NULL;
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
+    BOARD_COMMIT commit( m_frame );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -185,11 +184,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             if( text )
             {
                 // Delete the old text and have another try
-                m_frame->GetModel()->Delete( text );        // it was already added by CreateTextPcb()
+                delete text;
                 text = NULL;
 
                 preview.Clear();
-                preview.ViewUpdate();
 
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
@@ -225,6 +223,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 if( m_editModules )
                 {
                     TEXTE_MODULE* textMod = new TEXTE_MODULE( (MODULE*) m_frame->GetModel() );
+
+                    textMod->SetLayer( m_frame->GetActiveLayer() );
                     textMod->SetSize( dsnSettings.m_ModuleTextSize );
                     textMod->SetThickness( dsnSettings.m_ModuleTextWidth );
                     textMod->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
@@ -232,15 +232,34 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     DialogEditModuleText textDialog( m_frame, textMod, NULL );
                     bool placing = textDialog.ShowModal() && ( textMod->GetText().Length() > 0 );
 
-                    if( placing )
+                    if( !placing )
                         text = textMod;
                     else
                         delete textMod;
                 }
                 else
                 {
-                    assert( !m_editModules );
-                    text = static_cast<PCB_EDIT_FRAME*>( m_frame )->CreateTextePcb( NULL );
+                    TEXTE_PCB* textPcb = new TEXTE_PCB( m_frame->GetModel() );
+                    // TODO we have to set IS_NEW, otherwise InstallTextPCB.. creates an undo entry :| LEGACY_CLEANUP
+                    textPcb->SetFlags( IS_NEW );
+
+                    LAYER_ID layer = m_frame->GetActiveLayer();
+                    textPcb->SetLayer( layer );
+
+                    // Set the mirrored option for layers on the BACK side of the board
+                    if( IsBackLayer( layer ) )
+                        textPcb->SetMirrored( true );
+
+                    textPcb->SetSize( dsnSettings.m_PcbTextSize );
+                    textPcb->SetThickness( dsnSettings.m_PcbTextWidth );
+                    textPcb->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+                    getEditFrame<PCB_EDIT_FRAME>()->InstallTextPCBOptionsFrame( textPcb, NULL );
+
+                    if( textPcb->GetText().IsEmpty() )
+                        delete textPcb;
+                    else
+                        text = textPcb;
                 }
 
                 if( text == NULL )
@@ -258,21 +277,11 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 //assert( text->GetSize().x > 0 && text->GetSize().y > 0 );
 
                 text->ClearFlags();
-                m_view->Add( text );
-
-                m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( text, UR_NEW );
-
-                if( m_editModules )
-                {
-                    m_frame->GetModel()->Add( text );
-                }
-                else
-                {
-                    // m_board->Add( text );        // it is already added by CreateTextePcb()
-                }
-
                 preview.Remove( text );
+
+                commit.Add( text );
+                commit.Push( _( "Place a text" ) );
+
                 m_controls->CaptureCursor( false );
                 m_controls->SetAutoPan( false );
                 m_controls->ShowCursor( true );
@@ -306,6 +315,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 {
     DIMENSION* dimension = NULL;
+    BOARD_COMMIT commit( m_frame );
     int maxThickness;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
@@ -338,7 +348,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             if( step != SET_ORIGIN )    // start from the beginning
             {
                 preview.Clear();
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
                 delete dimension;
                 step = SET_ORIGIN;
@@ -422,13 +431,11 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                         assert( dimension->GetOrigin() != dimension->GetEnd() );
                         assert( dimension->GetWidth() > 0 );
 
-                        m_frame->OnModify();
-                        m_frame->SaveCopyInUndoList( dimension, UR_NEW );
-
-                        m_view->Add( dimension );
-                        m_board->Add( dimension );
-
                         preview.Remove( dimension );
+
+                        commit.Add( dimension );
+                        commit.Push( _( "Draw a dimension" ) );
+
                     }
                 }
                 break;
@@ -517,6 +524,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
+    BOARD_COMMIT commit( m_frame );
 
     // Build the undo list & add items to the current view
     for( auto it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
@@ -554,6 +562,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 
         else if( evt->Category() == TC_COMMAND )
         {
+            // TODO it should be handled by EDIT_TOOL, so add items and select?
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
                 for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
@@ -616,20 +625,10 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                     item = converted;
                 }
 
-                ITEM_PICKER itemWrapper( item, UR_NEW );
-                picklist.PushItem( itemWrapper );
+                commit.Add( item );
             }
 
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( picklist, UR_NEW );
-
-            for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(); it != preview.End(); ++it )
-            {
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
-                parent->Add( item );
-                m_view->Add( item );
-            }
-
+            commit.Push( _( "Place a DXF drawing" ) );
             break;
         }
     }
@@ -664,15 +663,15 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         if( evt->IsClick( BUT_LEFT ) )
         {
             MODULE* module = (MODULE*) m_frame->GetModel();
-
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( module, UR_CHANGED );
+            BOARD_COMMIT commit( m_frame );
+            commit.Modify( module );
 
             // set the new relative internal local coordinates of footprint items
             VECTOR2I cursorPos = m_controls->GetCursorPosition();
             wxPoint moveVector = module->GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
             module->MoveAnchorPosition( moveVector );
-            module->ViewUpdate();
+
+            commit.Push( _( "Move the footprint reference anchor" ) );
 
             // Usually, we do not need to change twice the anchor position,
             // so deselect the active tool
@@ -818,23 +817,13 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                         *static_cast<DRAWSEGMENT*>( l ) = line45;
                         l->SetEnd( aGraphic->GetStart() );
 
-                        m_frame->OnModify();
-                        m_frame->SaveCopyInUndoList( l, UR_NEW );
-
-                        parent->Add( l );
-                        m_view->Add( l );
+                        BOARD_COMMIT commit( m_frame );
+                        commit.Add( l );
+                        commit.Push( _( "Draw a line" ) );
                     }
 
                     delete aGraphic;
                     aGraphic = NULL;
-                }
-                else
-                {
-                    assert( aGraphic->GetLength() > 0 );
-                    assert( aGraphic->GetWidth() > 0 );
-
-                    m_view->Add( aGraphic );
-                    aGraphic->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                 }
 
                 preview.Clear();
@@ -922,7 +911,6 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
         if( evt->IsCancel() || evt->IsActivate() )
         {
             preview.Clear();
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             delete aGraphic;
             aGraphic = NULL;
             break;
@@ -1071,6 +1059,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     ZONE_CONTAINER* zone = NULL;
     DRAWSEGMENT line45;
     DRAWSEGMENT* helperLine = NULL;  // we will need more than one helper line
+    BOARD_COMMIT commit( m_frame );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     KIGFX::VIEW_GROUP preview( m_view );
@@ -1154,17 +1143,11 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     zone->Outline()->CloseLastContour();
                     zone->Outline()->RemoveNullSegments();
 
-                    m_frame->OnModify();
-                    m_frame->SaveCopyInUndoList( zone, UR_NEW );
-
-                    m_board->Add( zone );
-                    m_view->Add( zone );
-
                     if( !aKeepout )
                         static_cast<PCB_EDIT_FRAME*>( m_frame )->Fill_Zone( zone );
 
-                    zone->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-                    m_board->GetRatsnest()->Update( zone );
+                    commit.Add( zone );
+                    commit.Push( _( "Draw a zone" ) );
 
                     zone = NULL;
                 }

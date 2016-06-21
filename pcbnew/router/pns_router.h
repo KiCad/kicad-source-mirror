@@ -144,7 +144,7 @@ public:
     void SwitchLayer( int layer );
 
     void ToggleViaPlacement();
-    void SetOrthoMode ( bool aEnable );
+    void SetOrthoMode( bool aEnable );
 
     int GetCurrentLayer() const;
     const std::vector<int> GetCurrentNets() const;
@@ -211,8 +211,7 @@ public:
 
     ITEM* QueryItemByParent( const BOARD_ITEM* aItem ) const;
 
-
-    void SetFailureReason ( const wxString& aReason ) { m_failureReason = aReason; }
+    void SetFailureReason( const wxString& aReason ) { m_failureReason = aReason; }
     const wxString& FailureReason() const { return m_failureReason; }
 
     PLACEMENT_ALGO* Placer() { return m_placer.get(); }
@@ -270,7 +269,6 @@ private:
     bool m_violation;
 
     ROUTING_SETTINGS m_settings;
-    ///> Stores list of modified items in the current operation
     SIZES_SETTINGS m_sizes;
     ROUTER_MODE m_mode;
 

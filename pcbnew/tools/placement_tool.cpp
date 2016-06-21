@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@
 #include <wxPcbStruct.h>
 #include <class_board.h>
 #include <ratsnest_data.h>
+#include <board_commit.h>
 
 #include <confirm.h>
 
@@ -75,38 +76,33 @@ int PLACEMENT_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() > 1 )
+    if( selection.Size() <= 1 )
+        return 0;
+
+    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    commit.Stage( selection.items, UR_CHANGED );
+
+    // Compute the highest point of selection - it will be the edge of alignment
+    int top = selection.Item<BOARD_ITEM>( 0 )->GetBoundingBox().GetY();
+
+    for( int i = 1; i < selection.Size(); ++i )
     {
-        PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-        RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+        int currentTop = selection.Item<BOARD_ITEM>( i )->GetBoundingBox().GetY();
 
-        editFrame->OnModify();
-        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
-
-        // Compute the highest point of selection - it will be the edge of alignment
-        int top = selection.Item<BOARD_ITEM>( 0 )->GetBoundingBox().GetY();
-
-        for( int i = 1; i < selection.Size(); ++i )
-        {
-            int currentTop = selection.Item<BOARD_ITEM>( i )->GetBoundingBox().GetY();
-
-            if( top > currentTop )      // Y decreases when going up
-                top = currentTop;
-        }
-
-        // Move the selected items
-        for( int i = 0; i < selection.Size(); ++i )
-        {
-            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
-            int difference = top - item->GetBoundingBox().GetY();
-
-            item->Move( wxPoint( 0, difference ) );
-            item->ViewUpdate();
-            ratsnest->Update( item );
-        }
-
-        getModel<BOARD>()->GetRatsnest()->Recalculate();
+        if( top > currentTop )      // Y decreases when going up
+            top = currentTop;
     }
+
+    // Move the selected items
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+        int difference = top - item->GetBoundingBox().GetY();
+
+        item->Move( wxPoint( 0, difference ) );
+    }
+
+    commit.Push( _( "Align to top" ) );
 
     return 0;
 }
@@ -116,38 +112,33 @@ int PLACEMENT_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() > 1 )
+    if( selection.Size() <= 1 )
+        return 0;
+
+    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    commit.Stage( selection.items, UR_CHANGED );
+
+    // Compute the lowest point of selection - it will be the edge of alignment
+    int bottom = selection.Item<BOARD_ITEM>( 0 )->GetBoundingBox().GetBottom();
+
+    for( int i = 1; i < selection.Size(); ++i )
     {
-        PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-        RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+        int currentBottom = selection.Item<BOARD_ITEM>( i )->GetBoundingBox().GetBottom();
 
-        editFrame->OnModify();
-        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
-
-        // Compute the lowest point of selection - it will be the edge of alignment
-        int bottom = selection.Item<BOARD_ITEM>( 0 )->GetBoundingBox().GetBottom();
-
-        for( int i = 1; i < selection.Size(); ++i )
-        {
-            int currentBottom = selection.Item<BOARD_ITEM>( i )->GetBoundingBox().GetBottom();
-
-            if( bottom < currentBottom )      // Y increases when going down
-                bottom = currentBottom;
-        }
-
-        // Move the selected items
-        for( int i = 0; i < selection.Size(); ++i )
-        {
-            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
-            int difference = bottom - item->GetBoundingBox().GetBottom();
-
-            item->Move( wxPoint( 0, difference ) );
-            item->ViewUpdate();
-            ratsnest->Update( item );
-        }
-
-        getModel<BOARD>()->GetRatsnest()->Recalculate();
+        if( bottom < currentBottom )      // Y increases when going down
+            bottom = currentBottom;
     }
+
+    // Move the selected items
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+        int difference = bottom - item->GetBoundingBox().GetBottom();
+
+        item->Move( wxPoint( 0, difference ) );
+    }
+
+    commit.Push( _( "Align to bottom" ) );
 
     return 0;
 }
@@ -157,38 +148,33 @@ int PLACEMENT_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() > 1 )
+    if( selection.Size() <= 1 )
+        return 0;
+
+    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    commit.Stage( selection.items, UR_CHANGED );
+
+    // Compute the leftmost point of selection - it will be the edge of alignment
+    int left = selection.Item<BOARD_ITEM>( 0 )->GetBoundingBox().GetX();
+
+    for( int i = 1; i < selection.Size(); ++i )
     {
-        PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-        RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+        int currentLeft = selection.Item<BOARD_ITEM>( i )->GetBoundingBox().GetX();
 
-        editFrame->OnModify();
-        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
-
-        // Compute the leftmost point of selection - it will be the edge of alignment
-        int left = selection.Item<BOARD_ITEM>( 0 )->GetBoundingBox().GetX();
-
-        for( int i = 1; i < selection.Size(); ++i )
-        {
-            int currentLeft = selection.Item<BOARD_ITEM>( i )->GetBoundingBox().GetX();
-
-            if( left > currentLeft )      // X decreases when going left
-                left = currentLeft;
-        }
-
-        // Move the selected items
-        for( int i = 0; i < selection.Size(); ++i )
-        {
-            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
-            int difference = left - item->GetBoundingBox().GetX();
-
-            item->Move( wxPoint( difference, 0 ) );
-            item->ViewUpdate();
-            ratsnest->Update( item );
-        }
-
-        getModel<BOARD>()->GetRatsnest()->Recalculate();
+        if( left > currentLeft )      // X decreases when going left
+            left = currentLeft;
     }
+
+    // Move the selected items
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+        int difference = left - item->GetBoundingBox().GetX();
+
+        item->Move( wxPoint( difference, 0 ) );
+    }
+
+    commit.Push( _( "Align to left" ) );
 
     return 0;
 }
@@ -198,38 +184,33 @@ int PLACEMENT_TOOL::AlignRight( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() > 1 )
+    if( selection.Size() <= 1 )
+        return 0;
+
+    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    commit.Stage( selection.items, UR_CHANGED );
+
+    // Compute the rightmost point of selection - it will be the edge of alignment
+    int right = selection.Item<BOARD_ITEM>( 0 )->GetBoundingBox().GetRight();
+
+    for( int i = 1; i < selection.Size(); ++i )
     {
-        PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-        RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+        int currentRight = selection.Item<BOARD_ITEM>( i )->GetBoundingBox().GetRight();
 
-        editFrame->OnModify();
-        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
-
-        // Compute the rightmost point of selection - it will be the edge of alignment
-        int right = selection.Item<BOARD_ITEM>( 0 )->GetBoundingBox().GetRight();
-
-        for( int i = 1; i < selection.Size(); ++i )
-        {
-            int currentRight = selection.Item<BOARD_ITEM>( i )->GetBoundingBox().GetRight();
-
-            if( right < currentRight )      // X increases when going right
-                right = currentRight;
-        }
-
-        // Move the selected items
-        for( int i = 0; i < selection.Size(); ++i )
-        {
-            BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
-            int difference = right - item->GetBoundingBox().GetRight();
-
-            item->Move( wxPoint( difference, 0 ) );
-            item->ViewUpdate();
-            ratsnest->Update( item );
-        }
-
-        getModel<BOARD>()->GetRatsnest()->Recalculate();
+        if( right < currentRight )      // X increases when going right
+            right = currentRight;
     }
+
+    // Move the selected items
+    for( int i = 0; i < selection.Size(); ++i )
+    {
+        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
+        int difference = right - item->GetBoundingBox().GetRight();
+
+        item->Move( wxPoint( difference, 0 ) );
+    }
+
+    commit.Push( _( "Align to right" ) );
 
     return 0;
 }
@@ -251,44 +232,39 @@ int PLACEMENT_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() > 1 )
+    if( selection.Size() <= 1 )
+        return 0;
+
+    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    commit.Stage( selection.items, UR_CHANGED );
+
+    // Prepare a list, so the items can be sorted by their X coordinate
+    std::list<BOARD_ITEM*> itemsList;
+    for( int i = 0; i < selection.Size(); ++i )
+        itemsList.push_back( selection.Item<BOARD_ITEM>( i ) );
+
+    // Sort items by X coordinate
+    itemsList.sort( compareX );
+
+    // Expected X coordinate for the next item (=minX)
+    int position = (*itemsList.begin())->GetBoundingBox().Centre().x;
+
+    // X coordinate for the last item
+    const int maxX = (*itemsList.rbegin())->GetBoundingBox().Centre().x;
+
+    // Distance between items
+    const int distance = ( maxX - position ) / ( itemsList.size() - 1 );
+
+    for( BOARD_ITEM* item : itemsList )
     {
-        PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-        RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+        int difference = position - item->GetBoundingBox().Centre().x;
 
-        editFrame->OnModify();
-        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+        item->Move( wxPoint( difference, 0 ) );
 
-        // Prepare a list, so the items can be sorted by their X coordinate
-        std::list<BOARD_ITEM*> itemsList;
-        for( int i = 0; i < selection.Size(); ++i )
-            itemsList.push_back( selection.Item<BOARD_ITEM>( i ) );
-
-        // Sort items by X coordinate
-        itemsList.sort( compareX );
-
-        // Expected X coordinate for the next item (=minX)
-        int position = (*itemsList.begin())->GetBoundingBox().Centre().x;
-
-        // X coordinate for the last item
-        const int maxX = (*itemsList.rbegin())->GetBoundingBox().Centre().x;
-
-        // Distance between items
-        const int distance = ( maxX - position ) / ( itemsList.size() - 1 );
-
-        for( BOARD_ITEM* item : itemsList )
-        {
-            int difference = position - item->GetBoundingBox().Centre().x;
-
-            item->Move( wxPoint( difference, 0 ) );
-            item->ViewUpdate();
-            ratsnest->Update( item );
-
-            position += distance;
-        }
-
-        getModel<BOARD>()->GetRatsnest()->Recalculate();
+        position += distance;
     }
+
+    commit.Push( _( "Distribute horizontally" ) );
 
     return 0;
 }
@@ -298,44 +274,39 @@ int PLACEMENT_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() > 1 )
+    if( selection.Size() <= 1 )
+        return 0;
+
+    BOARD_COMMIT commit( getEditFrame<PCB_BASE_FRAME>() );
+    commit.Stage( selection.items, UR_CHANGED );
+
+    // Prepare a list, so the items can be sorted by their Y coordinate
+    std::list<BOARD_ITEM*> itemsList;
+    for( int i = 0; i < selection.Size(); ++i )
+        itemsList.push_back( selection.Item<BOARD_ITEM>( i ) );
+
+    // Sort items by Y coordinate
+    itemsList.sort( compareY );
+
+    // Expected Y coordinate for the next item (=minY)
+    int position = (*itemsList.begin())->GetBoundingBox().Centre().y;
+
+    // Y coordinate for the last item
+    const int maxY = (*itemsList.rbegin())->GetBoundingBox().Centre().y;
+
+    // Distance between items
+    const int distance = ( maxY - position ) / ( itemsList.size() - 1 );
+
+    for( BOARD_ITEM* item : itemsList )
     {
-        PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
-        RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+        int difference = position - item->GetBoundingBox().Centre().y;
 
-        editFrame->OnModify();
-        editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+        item->Move( wxPoint( 0, difference ) );
 
-        // Prepare a list, so the items can be sorted by their Y coordinate
-        std::list<BOARD_ITEM*> itemsList;
-        for( int i = 0; i < selection.Size(); ++i )
-            itemsList.push_back( selection.Item<BOARD_ITEM>( i ) );
-
-        // Sort items by Y coordinate
-        itemsList.sort( compareY );
-
-        // Expected Y coordinate for the next item (=minY)
-        int position = (*itemsList.begin())->GetBoundingBox().Centre().y;
-
-        // Y coordinate for the last item
-        const int maxY = (*itemsList.rbegin())->GetBoundingBox().Centre().y;
-
-        // Distance between items
-        const int distance = ( maxY - position ) / ( itemsList.size() - 1 );
-
-        for( BOARD_ITEM* item : itemsList )
-        {
-            int difference = position - item->GetBoundingBox().Centre().y;
-
-            item->Move( wxPoint( 0, difference ) );
-            item->ViewUpdate();
-            ratsnest->Update( item );
-
-            position += distance;
-        }
-
-        getModel<BOARD>()->GetRatsnest()->Recalculate();
+        position += distance;
     }
+
+    commit.Push( _( "Distribute vertically" ) );
 
     return 0;
 }

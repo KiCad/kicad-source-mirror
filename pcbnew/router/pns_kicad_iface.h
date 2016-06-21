@@ -30,6 +30,7 @@ class PNS_PCBNEW_RULE_RESOLVER;
 class PNS_PCBNEW_DEBUG_DECORATOR;
 
 class BOARD;
+class BOARD_COMMIT;
 namespace KIGFX
 {
     class VIEW;
@@ -75,6 +76,7 @@ private:
     BOARD* m_board;
     PICKED_ITEMS_LIST m_undoBuffer;
     PCB_EDIT_FRAME* m_frame;
+    BOARD_COMMIT* m_commit;
 };
 
 #endif

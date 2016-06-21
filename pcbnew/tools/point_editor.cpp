@@ -34,6 +34,7 @@ using namespace std::placeholders;
 #include "common_actions.h"
 #include "selection_tool.h"
 #include "point_editor.h"
+#include <board_commit.h>
 
 #include <wxPcbStruct.h>
 #include <class_edge_mod.h>
@@ -259,6 +260,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         m_editedPoint = NULL;
         bool modified = false;
 
+        BOARD_COMMIT commit( editFrame );
+
         // Main loop: keep receiving events
         while( OPT_TOOL_EVENT evt = Wait() )
         {
@@ -292,8 +295,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( !modified )
                 {
-                    editFrame->OnModify();
-                    editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
+                    commit.Stage( selection.items, UR_CHANGED );
 
                     controls->ForceCursorPosition( false );
                     m_original = *m_editedPoint;    // Save the original position
@@ -302,6 +304,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
 
                 bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
+
                 if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
                     setAltConstraint( enableAltConstraint );
 
@@ -314,10 +317,9 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                 updateItem();
                 updatePoints();
-
-                m_editPoints->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
 
+            // TODO necessary?
             else if( evt->IsAction( &COMMON_ACTIONS::pointEditorUpdate ) )
             {
                 updatePoints();
@@ -327,7 +329,13 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 controls->SetAutoPan( false );
                 setAltConstraint( false );
-                modified = false;
+
+                if( modified )
+                {
+                    commit.Push( _( "Drag a line ending" ) );
+                    modified = false;
+                }
+
                 m_toolMgr->PassEvent();
             }
 
@@ -335,9 +343,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( modified )      // Restore the last change
                 {
-                    wxCommandEvent dummy;
-                    editFrame->RestoreCopyFromUndoList( dummy );
-
+                    commit.Revert();
                     updatePoints();
                     modified = false;
                 }
@@ -357,7 +363,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         if( m_editPoints )
         {
             finishItem();
-            item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             view->Remove( m_editPoints.get() );
             m_editPoints.reset();
         }
@@ -615,6 +620,8 @@ void POINT_EDITOR::updatePoints()
     default:
         break;
     }
+
+    m_editPoints->ViewUpdate();
 }
 
 
@@ -719,16 +726,15 @@ EDIT_POINT POINT_EDITOR::get45DegConstrainer() const
 void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
 {
     EDA_ITEM* item = m_editPoints->GetParent();
-    const SELECTION& selection = m_selectionTool->GetSelection();
     PCB_BASE_EDIT_FRAME* frame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    BOARD_COMMIT commit( frame );
 
     if( item->Type() == PCB_ZONE_AREA_T )
     {
-        frame->OnModify();
-        frame->SaveCopyInUndoList( selection.items, UR_CHANGED );
-
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         CPolyLine* outline = zone->Outline();
+
+        commit.Modify( zone );
 
         // Handle the last segment, so other segments can be easily handled in a loop
         unsigned int nearestIdx = outline->GetCornersCount() - 1, nextNearestIdx = 0;
@@ -761,6 +767,8 @@ void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
             nearestPoint = ( sideOrigin + sideEnd ) / 2;
 
         outline->InsertCorner( nearestIdx, nearestPoint.x, nearestPoint.y );
+
+        commit.Push( _( "Add a zone corner" ) );
     }
 
     else if( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T )
@@ -771,8 +779,8 @@ void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
 
         if( segment->GetShape() == S_SEGMENT )
         {
-            ITEM_PICKER old_segment( segment, UR_CHANGED );
-            old_segment.SetLink( segment->Clone() );
+            BOARD_COMMIT commit( frame );
+            commit.Modify( segment );
 
             SEG seg( segment->GetStart(), segment->GetEnd() );
             VECTOR2I nearestPoint = seg.NearestPoint( aBreakPoint );
@@ -799,14 +807,8 @@ void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
             newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
             newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
 
-            PICKED_ITEMS_LIST changes;
-            changes.PushItem( old_segment );
-            changes.PushItem( ITEM_PICKER( newSegment, UR_NEW ) );
-            frame->OnModify();
-            frame->SaveCopyInUndoList( changes, UR_UNSPECIFIED );
-
-            frame->GetModel()->Add( newSegment );
-            getView()->Add( newSegment );
+            commit.Add( newSegment );
+            commit.Push( _( "Split segment" ) );
         }
     }
 }
@@ -818,21 +820,20 @@ void POINT_EDITOR::removeCorner( EDIT_POINT* aPoint )
 
     if( item->Type() == PCB_ZONE_AREA_T )
     {
-        const SELECTION& selection = m_selectionTool->GetSelection();
         PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+        BOARD_COMMIT commit( frame );
 
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         CPolyLine* outline = zone->Outline();
+        commit.Modify( zone );
 
         for( int i = 0; i < outline->GetCornersCount(); ++i )
         {
             if( VECTOR2I( outline->GetPos( i ) ) == aPoint->GetPosition() )
             {
-                frame->OnModify();
-                frame->SaveCopyInUndoList( selection.items, UR_CHANGED );
-
                 outline->DeleteCorner( i );
                 setEditedPoint( NULL );
+                commit.Push( _( "Remove a zone corner" ) );
                 break;
             }
         }
