@@ -446,8 +446,8 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
-                                                    <event name="OnTextEnter">OnParameterChanged</event>
+                                                    <event name="OnText">OnParameterChanged</event>
+                                                    <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>
                                                     <event name="OnUpdateUI"></event>
@@ -626,8 +626,8 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
-                                                    <event name="OnTextEnter">OnParameterChanged</event>
+                                                    <event name="OnText">OnParameterChanged</event>
+                                                    <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>
                                                     <event name="OnUpdateUI"></event>
@@ -806,8 +806,8 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
-                                                    <event name="OnTextEnter">OnParameterChanged</event>
+                                                    <event name="OnText">OnParameterChanged</event>
+                                                    <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>
                                                     <event name="OnUpdateUI"></event>
@@ -1072,8 +1072,8 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
-                                                    <event name="OnTextEnter">OnParameterChanged</event>
+                                                    <event name="OnText">OnParameterChanged</event>
+                                                    <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>
                                                     <event name="OnUpdateUI"></event>
@@ -1338,8 +1338,8 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
-                                                    <event name="OnTextEnter">OnParameterChanged</event>
+                                                    <event name="OnText">OnParameterChanged</event>
+                                                    <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>
                                                     <event name="OnUpdateUI"></event>
@@ -1604,8 +1604,8 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
-                                                    <event name="OnTextEnter">OnParameterChanged</event>
+                                                    <event name="OnText">OnParameterChanged</event>
+                                                    <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>
                                                     <event name="OnUpdateUI"></event>
@@ -1870,8 +1870,8 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
-                                                    <event name="OnTextEnter">OnParameterChanged</event>
+                                                    <event name="OnText">OnParameterChanged</event>
+                                                    <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>
                                                     <event name="OnUpdateUI"></event>
@@ -3937,8 +3937,8 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
-                                                    <event name="OnTextEnter">OnParameterChanged</event>
+                                                    <event name="OnText">OnParameterChanged</event>
+                                                    <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>
                                                     <event name="OnUpdateUI"></event>
@@ -4203,8 +4203,8 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
-                                                    <event name="OnTextEnter">OnParameterChanged</event>
+                                                    <event name="OnText">OnParameterChanged</event>
+                                                    <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>
                                                     <event name="OnUpdateUI"></event>
@@ -4399,6 +4399,7 @@
                                             <property name="minimum_size"></property>
                                             <property name="name">m_circPadNumberingSizer</property>
                                             <property name="orient">wxVERTICAL</property>
+                                            <property name="parent">1</property>
                                             <property name="permission">protected</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="1">
