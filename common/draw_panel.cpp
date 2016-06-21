@@ -124,7 +124,10 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_panScrollbarLimits = false;
     m_enableAutoPan = true;
     m_ignoreMouseEvents = false;
-    m_ignoreNextLeftButtonRelease = false;
+    // Be sure a mouse release button event will be ignored when creating the canvas
+    // if the mouse click was not made inside the canvas (can happen sometimes, when
+    // launching an editor from a double click made in an other frame)
+    m_ignoreNextLeftButtonRelease = true;
 
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;

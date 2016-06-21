@@ -30,6 +30,7 @@
 
 #include <fctsys.h>
 #include <pgm_kicad.h>
+#include <draw_frame.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <confirm.h>
@@ -325,9 +326,7 @@ void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName
 void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 {
     wxFileName fn( GetProjectFileName() );
-
     fn.SetExt( SchematicFileExtension );
-
     RunEeschema( fn.GetFullPath() );
 }
 

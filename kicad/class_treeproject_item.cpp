@@ -189,7 +189,12 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         if( fullFileName == frame->SchFileName() )
         {
             // the project's schematic is opened using the *.kiface as part of this process.
-            frame->RunEeschema( fullFileName );
+            // We do not call frame->RunEeschema( fullFileName ),
+            // because after the double click, for some reason,
+            // the tree project frame is brought to the foreground after Eeschema is called from here.
+            // Instead, we post an event, equivalent to click on the eeschema tool in command frame
+            wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, ID_TO_SCH );
+            wxPostEvent( frame, evt );
         }
         else
         {
@@ -203,7 +208,12 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* prjframe )
         if( fullFileName == frame->PcbFileName() || fullFileName == frame->PcbLegacyFileName() )
         {
             // the project's BOARD is opened using the *.kiface as part of this process.
-            frame->RunPcbNew( fullFileName );
+            // We do not call frame->RunPcbNew( fullFileName ),
+            // because after the double click, for some reason,
+            // the tree project frame is brought to the foreground after PcbNew is called from here.
+            // Instead, we post an event, equivalent to simple click on the pcb editor tool in command frame
+            wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, ID_TO_PCB );
+            wxPostEvent( frame, evt );
         }
         else
         {
