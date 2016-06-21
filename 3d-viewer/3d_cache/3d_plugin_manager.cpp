@@ -133,7 +133,8 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     #endif
 
     #ifndef _WIN32  // suppress 'kicad' subdir since it is redundant on MSWin
-    fn.Assign( wxStandardPaths::Get().GetPluginsDir() );
+    fn.Assign( wxStandardPaths::Get().GetPluginsDir(), "" );
+    fn.RemoveLastDir();
     fn.AppendDir( wxT( "kicad" ) );
     #else
         fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
@@ -148,8 +149,13 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     checkPluginPath( wxT( "/opt/kicad/lib/kicad/plugins/3d" ), searchpaths );
 
     // note: GetUserDataDir() gives '.pcbnew' rather than '.kicad' since it uses the exe name;
-    fn.Assign( wxStandardPaths::Get().GetUserDataDir() );
+    fn.Assign( wxStandardPaths::Get().GetUserDataDir(), "" );
+    fn.RemoveLastDir();
+    #ifdef _WIN32
+    fn.AppendDir( wxT( "kicad" ) );
+    #else
     fn.AppendDir( wxT( ".kicad" ) );
+    #endif
     fn.AppendDir( wxT( "plugins" ) );
     fn.AppendDir( wxT( "3d" ) );
     checkPluginPath( fn.GetPathWithSep(), searchpaths );
