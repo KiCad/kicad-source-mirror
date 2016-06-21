@@ -2778,11 +2778,6 @@ BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem,
     switch( aItem->Type() )
     {
     case PCB_MODULE_T:
-    {
-        MODULE* new_module = new MODULE( *static_cast<const MODULE*>( aItem ) );
-        new_item = new_module;
-        break;
-    }
     case PCB_TEXT_T:
     case PCB_LINE_T:
     case PCB_TRACE_T:
@@ -2799,11 +2794,8 @@ BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem,
         break;
     }
 
-    if( new_item )
-    {
-        if( aAddToBoard )
-            Add( new_item );
-    }
+    if( new_item && aAddToBoard )
+        Add( new_item );
 
     return new_item;
 }
