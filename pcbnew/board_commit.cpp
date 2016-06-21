@@ -272,11 +272,10 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 
 void BOARD_COMMIT::Revert()
 {
-    assert( false );        // the code below has not been tested
-
     PICKED_ITEMS_LIST undoList;
     KIGFX::VIEW* view = m_toolMgr->GetView();
     BOARD* board = (BOARD*) m_toolMgr->GetModel();
+    RN_DATA* ratsnest = board->GetRatsnest();
 
     for( COMMIT_LINE& ent : m_changes )
     {
@@ -285,10 +284,7 @@ void BOARD_COMMIT::Revert()
 
         switch( ent.m_type )
         {
-        case CHT_MODIFY:
-        {
-            RN_DATA *ratsnest = board->GetRatsnest();
-
+        case CHT_ADD:
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* oldModule = static_cast<MODULE*>( item );
@@ -296,29 +292,58 @@ void BOARD_COMMIT::Revert()
             }
 
             view->Remove( item );
-            ratsnest->Remove( static_cast<BOARD_ITEM*>( item ) );
+            ratsnest->Remove( item );
+            break;
+
+        case CHT_REMOVE:
+            if( item->Type() == PCB_MODULE_T )
+            {
+                MODULE* newModule = static_cast<MODULE*>( item );
+                newModule->RunOnChildren( boost::bind( &EDA_ITEM::ClearFlags, _1, SELECTED ) );
+                newModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+            }
+
+            view->Add( item );
+            ratsnest->Add( item );
+            break;
+
+        case CHT_MODIFY:
+        {
+            if( item->Type() == PCB_MODULE_T )
+            {
+                MODULE* oldModule = static_cast<MODULE*>( item );
+                oldModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+            }
+
+            view->Remove( item );
+            ratsnest->Remove( item );
+
             item->SwapData( copy );
+
+            item->ClearFlags( SELECTED );
 
             // Update all pads/drawings/texts, as they become invalid
             // for the VIEW after SwapData() called for modules
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
+                newModule->RunOnChildren( boost::bind( &EDA_ITEM::ClearFlags, _1, SELECTED ) );
                 newModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
             }
 
             view->Add( item );
             ratsnest->Add( item );
-            item->ClearFlags( SELECTED );
             delete copy;
             break;
         }
 
         default:
-            assert( false );    // not implemented
+            assert( false );
             break;
         }
     }
+
+    ratsnest->Recalculate();
 
     clear();
 }
