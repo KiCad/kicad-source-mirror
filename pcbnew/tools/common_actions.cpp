@@ -138,6 +138,10 @@ TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
         _( "Properties..." ), _( "Displays item properties dialog" ), editor_xpm );
 
+TOOL_ACTION COMMON_ACTIONS::editModifiedSelection( "pcbnew.InteractiveEdit.ModifiedSelection",
+        AS_GLOBAL, 0,
+        "", "" );
+
 
 // Drawing tool actions
 TOOL_ACTION COMMON_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
@@ -564,10 +568,6 @@ TOOL_ACTION COMMON_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDr
         "", "" );
 
 // Point editor
-TOOL_ACTION COMMON_ACTIONS::pointEditorUpdate( "pcbnew.PointEditor.update",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
-
 TOOL_ACTION COMMON_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",
         AS_GLOBAL, 0,
         _( "Create corner" ), _( "Create corner" ), add_corner_xpm );

@@ -248,7 +248,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
 
             selection.group->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-            m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
+            m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
         }
 
         // Dispatch TOOL_ACTIONs
@@ -379,7 +379,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Display properties dialog provided by the legacy canvas frame
         editFrame->OnEditItemRequest( NULL, item );
 
-        m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
+        m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
         item->SetFlags( flags );
     }
 
@@ -417,7 +417,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
     // TODO selectionModified
-    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
+    m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
 
     return 0;
 }
@@ -448,7 +448,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( unselect )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
+    m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
 
     return 0;
 }
@@ -517,7 +517,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         if( unselect )
             m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-        m_toolMgr->RunAction( COMMON_ACTIONS::pointEditorUpdate, true );
+        m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
     }
 
     return 0;

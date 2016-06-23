@@ -319,8 +319,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 updatePoints();
             }
 
-            // TODO necessary?
-            else if( evt->IsAction( &COMMON_ACTIONS::pointEditorUpdate ) )
+            else if( evt->IsAction( &COMMON_ACTIONS::editModifiedSelection ) )
             {
                 updatePoints();
             }
