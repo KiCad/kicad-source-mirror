@@ -529,7 +529,8 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
             h_ref += wxT( " " );
             tokenizer.GetNextToken();               // Skip old reference
             h_ref += tokenizer.GetNextToken();      // Add part selection
-            // Ann the part selection
+
+            // Add the part selection
             m_PathsAndReferences[ii] = h_ref;
             notInArray = false;
         }

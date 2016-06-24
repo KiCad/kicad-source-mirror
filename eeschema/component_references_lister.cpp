@@ -373,7 +373,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
         }
 
         // Annotation of one part per package components (trivial case).
-        if( componentFlatList[ii].GetLibComponent()->GetUnitCount() <= 1 )
+        if( componentFlatList[ii].GetLibPart()->GetUnitCount() <= 1 )
         {
             if( componentFlatList[ii].m_IsNew )
             {
@@ -392,7 +392,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
         }
 
         // Annotation of multi-unit parts ( n units per part ) (complex case)
-        NumberOfUnits = componentFlatList[ii].GetLibComponent()->GetUnitCount();
+        NumberOfUnits = componentFlatList[ii].GetLibPart()->GetUnitCount();
 
         if( componentFlatList[ii].m_IsNew )
         {
@@ -540,7 +540,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
         // Error if unit number selected does not exist ( greater than the  number of
         // parts in the component ).  This can happen if a component has changed in a
         // library after a previous annotation.
-        if( std::max( componentFlatList[ii].GetLibComponent()->GetUnitCount(), 1 )
+        if( std::max( componentFlatList[ii].GetLibPart()->GetUnitCount(), 1 )
           < componentFlatList[ii].m_Unit )
         {
             if( componentFlatList[ii].m_NumRef >= 0 )
@@ -552,7 +552,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
                         GetChars( componentFlatList[ii].GetRef() ),
                         GetChars( tmp ),
                         componentFlatList[ii].m_Unit,
-                        componentFlatList[ii].GetLibComponent()->GetUnitCount() );
+                        componentFlatList[ii].GetLibPart()->GetUnitCount() );
 
             if( aMessageList )
                 aMessageList->Add( msg );
@@ -609,8 +609,8 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
 
         /* Test error if units are different but number of parts per package
          * too high (ex U3 ( 1 part) and we find U3B this is an error) */
-        if(  componentFlatList[ii].GetLibComponent()->GetUnitCount()
-          != componentFlatList[ii + 1].GetLibComponent()->GetUnitCount()  )
+        if(  componentFlatList[ii].GetLibPart()->GetUnitCount()
+          != componentFlatList[ii + 1].GetLibPart()->GetUnitCount()  )
         {
             if( componentFlatList[ii].m_NumRef >= 0 )
                 tmp << componentFlatList[ii].m_NumRef;
@@ -694,13 +694,13 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
 }
 
 
-SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART*      aLibComponent,
+SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibPart,
                               SCH_SHEET_PATH& aSheetPath )
 {
-    wxASSERT( aComponent != NULL && aLibComponent != NULL );
+    wxASSERT( aComponent != NULL && aLibPart != NULL );
 
     m_RootCmp   = aComponent;
-    m_Entry     = aLibComponent;
+    m_Entry     = aLibPart;
     m_Unit      = aComponent->GetUnitSelection( &aSheetPath );
     m_SheetPath = aSheetPath;
     m_IsNew     = false;
@@ -712,7 +712,8 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART*      aLibComp
     if( aComponent->GetRef( &aSheetPath ).IsEmpty() )
         aComponent->SetRef( &aSheetPath, wxT( "DefRef?" ) );
 
-    SetRef( aComponent->GetRef( &aSheetPath ) );
+    wxString ref = aComponent->GetRef( &aSheetPath );
+    SetRef( ref );
 
     m_NumRef = -1;
 

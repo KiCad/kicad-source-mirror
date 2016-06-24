@@ -66,7 +66,7 @@ class SCH_REFERENCE
     bool           m_IsNew;             ///< True if not yet annotated.
     int            m_SheetNum;          ///< The sheet number for the reference.
     time_t         m_TimeStamp;         ///< The time stamp for the reference.
-    EDA_TEXT*      m_Value;             ///< The component value of the refernce.  It is the
+    EDA_TEXT*      m_Value;             ///< The component value of the reference.  It is the
                                         ///< same for all instances.
     int            m_NumRef;            ///< The numeric part of the reference designator.
     int            m_Flag;
@@ -90,12 +90,12 @@ public:
         m_SheetNum     = 0;
     }
 
-    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART*      aLibComponent,
+    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent,
                    SCH_SHEET_PATH& aSheetPath );
 
     SCH_COMPONENT* GetComp() const          { return m_RootCmp; }
 
-    LIB_PART*      GetLibComponent() const  { return m_Entry; }
+    LIB_PART*      GetLibPart() const       { return m_Entry; }
 
     SCH_SHEET_PATH GetSheetPath() const     { return m_SheetPath; }
 
@@ -437,6 +437,25 @@ public:
      * @param aMinValue The minimum value for the current search.
      */
     int GetLastReference( int aIndex, int aMinValue );
+
+#if defined(DEBUG)
+    void Show( const char* aPrefix = "" )
+    {
+        printf( "%s\n", aPrefix );
+
+        for( unsigned i=0; i<componentFlatList.size();  ++i )
+        {
+            SCH_REFERENCE& schref = componentFlatList[i];
+
+            printf( " [%-2d] ref:%-8s num:%-3d lib_part:%s\n",
+                i,
+                schref.m_Ref.c_str(),
+                schref.m_NumRef,
+                TO_UTF8( schref.GetLibPart()->GetName() )
+                );
+        }
+    }
+#endif
 
 private:
     /* sort functions used to sort componentFlatList

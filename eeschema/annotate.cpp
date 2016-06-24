@@ -187,14 +187,14 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly )
 {
     // build the screen list
-    SCH_SHEET_LIST SheetList( g_RootSheet );
-    SCH_REFERENCE_LIST ComponentsList;
+    SCH_SHEET_LIST      sheetList( g_RootSheet );
+    SCH_REFERENCE_LIST  componentsList;
 
     // Build the list of components
     if( !aOneSheetOnly )
-        SheetList.GetComponents( Prj().SchLibs(), ComponentsList );
+        sheetList.GetComponents( Prj().SchLibs(), componentsList );
     else
-        m_CurrentSheet->GetComponents( Prj().SchLibs(), ComponentsList );
+        m_CurrentSheet->GetComponents( Prj().SchLibs(), componentsList );
 
-    return ComponentsList.CheckAnnotation( aMessageList );
+    return componentsList.CheckAnnotation( aMessageList );
 }
