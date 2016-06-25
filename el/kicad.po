@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-18 16:49+0200\n"
-"PO-Revision-Date: 2016-06-18 16:59+0200\n"
+"POT-Creation-Date: 2016-06-25 18:07+0200\n"
+"PO-Revision-Date: 2016-06-25 18:10+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language: el\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: /home/m/ll/mount_point/KiCad-GR-LL-notes/"
+"X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_bazaar_official/kicad\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: el\n"
@@ -650,7 +650,7 @@ msgstr "Παράμετρος"
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:56
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:40
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:42
-#: eeschema/template_fieldnames.cpp:42 eeschema/sch_component.cpp:1542
+#: eeschema/template_fieldnames.cpp:42 eeschema/sch_component.cpp:1543
 #: eeschema/lib_field.cpp:592 eeschema/lib_field.cpp:770
 #: eeschema/onrightclick.cpp:426 eeschema/dialogs/dialog_rescue_each.cpp:111
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:190
@@ -1036,7 +1036,7 @@ msgstr "Σύντμηση"
 
 #: pcbnew/librairi.cpp:823 pcbnew/dialogs/dialog_fp_lib_table.cpp:210
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
-#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1563
+#: eeschema/libedit.cpp:508 eeschema/sch_component.cpp:1564
 #: eeschema/viewlibs.cpp:308
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
@@ -1215,7 +1215,7 @@ msgstr "Κείμενο"
 #: pcbnew/class_text_mod.cpp:346 pcbnew/loadcmp.cpp:433 pcbnew/loadcmp.cpp:497
 #: pcbnew/class_pad.cpp:630 pcbnew/class_edge_mod.cpp:260
 #: pcbnew/class_module.cpp:629 eeschema/template_fieldnames.cpp:45
-#: eeschema/sch_component.cpp:1560 eeschema/lib_field.cpp:599
+#: eeschema/sch_component.cpp:1561 eeschema/lib_field.cpp:599
 #: eeschema/onrightclick.cpp:436
 msgid "Footprint"
 msgstr "Αποτύπωμα"
@@ -1280,7 +1280,7 @@ msgstr " Όχι"
 #: pcbnew/class_text_mod.cpp:369 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_pcb_text.cpp:145 pcbnew/modedit_onclick.cpp:292
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:115
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
 #: gerbview/class_gerber_draw_item.cpp:514
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
@@ -1440,7 +1440,7 @@ msgstr ""
 "αποτυπωμάτων."
 
 #: pcbnew/loadcmp.cpp:434 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
-#: eeschema/sch_component.cpp:1552
+#: eeschema/sch_component.cpp:1553
 msgid "Library"
 msgstr "Βιβλιοθήκη"
 
@@ -5720,19 +5720,19 @@ msgid "Bottom/Back Layer"
 msgstr "Κάτω/Πίσω Επίπεδο"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "fit in page"
 msgstr "Προσαρμογή στη σελίδα"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 0.5"
 msgstr "Κλίμακα 0.5"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 0.7"
 msgstr "Κλίμακα 0.5"
@@ -5742,25 +5742,25 @@ msgid "Scale 1"
 msgstr "Κλίμακα 1"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 1.4"
 msgstr "Κλίμακα 1.4"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 2"
 msgstr "Κλίμακα 2"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 3"
 msgstr "Κλίμακα 3"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Scale 4"
 msgstr "Κλίμακα 4"
@@ -5774,36 +5774,36 @@ msgid "Scale 16"
 msgstr "Κλίμακα 16"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:24
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:51
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:69
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:46
 msgid "Approx. Scale:"
 msgstr "Κλίμακα (προσέγγ.):"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:73
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:127
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:89
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:101
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
 msgid "Color"
 msgstr "Χρώμα"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:73
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:127
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:89
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:101
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
 msgid "Black and white"
 msgstr "Ασπρόμαυρο"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:36
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:111
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:129
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
 msgid "Print Mode"
 msgstr "Λειτουργία εκτύπωσης"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:38
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:113
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:77
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:131
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:93
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:105
 msgid ""
 "Choose if you want to draw the sheet like it appears on screen,\n"
@@ -5815,13 +5815,13 @@ msgstr ""
 "ασπρόμαυροι εκτυπωτές"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:48
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:132
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:150
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:97
 msgid "Page Options"
 msgstr "Προτιμήσεις σελίδας"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:51
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:135
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:153
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:47
 #: eeschema/dialogs/dialog_print_using_printer.cpp:249
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:100
@@ -5829,12 +5829,12 @@ msgid "Preview"
 msgstr "Προεπισκόπηση"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:54
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:138
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:505
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:156
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:489
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:50
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:103
 #: gerbview/dialogs/dialog_print_using_printer.cpp:404
-#: pcbnew/dialogs/dialog_print_using_printer_base.h:81
+#: pcbnew/dialogs/dialog_print_using_printer_base.h:84
 #: pcbnew/dialogs/dialog_print_for_modedit_base.h:61
 #: eeschema/dialogs/dialog_print_using_printer_base.h:56
 #: gerbview/dialogs/dialog_print_using_printer_base.h:73
@@ -5843,10 +5843,10 @@ msgstr "Εκτύπωση"
 
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:56
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:159
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:186
 #: pcbnew/dialogs/dialog_update_pcb.cpp:126
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:113
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:129
 #: pcbnew/dialogs/dialog_plot_base.cpp:358
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:95
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:107
@@ -5899,7 +5899,7 @@ msgstr "Διπλό Ψευδώνυμο: '%s' στις σειρές %d και %d"
 msgid "Please Delete or Modify One"
 msgstr "Διαγράψτε ή Αλλάξτε Ένα"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:215
+#: pcbnew/dialogs/dialog_SVG_print.cpp:214
 #: pcbnew/dialogs/dialog_gendrill.cpp:295 pcbnew/dialogs/dialog_plot.cpp:304
 #: pcbnew/exporters/gen_modules_placefile.cpp:180
 #: pcbnew/exporters/gen_modules_placefile.cpp:610
@@ -5907,14 +5907,14 @@ msgstr "Διαγράψτε ή Αλλάξτε Ένα"
 msgid "Select Output Directory"
 msgstr "Επιλογή Φακέλου Εξόδου"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:222
+#: pcbnew/dialogs/dialog_SVG_print.cpp:221
 #: pcbnew/dialogs/dialog_gendrill.cpp:302
 #: pcbnew/exporters/gen_modules_placefile.cpp:187
 msgid "Use a relative path? "
 msgstr "Χρήση σχετικής διαδρομή;"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:223
-#: pcbnew/dialogs/dialog_SVG_print.cpp:234
+#: pcbnew/dialogs/dialog_SVG_print.cpp:222
+#: pcbnew/dialogs/dialog_SVG_print.cpp:233
 #: pcbnew/dialogs/dialog_gendrill.cpp:303
 #: pcbnew/dialogs/dialog_gendrill.cpp:314 pcbnew/dialogs/dialog_plot.cpp:317
 #: pcbnew/dialogs/dialog_plot.cpp:324
@@ -5925,7 +5925,7 @@ msgstr "Χρήση σχετικής διαδρομή;"
 msgid "Plot Output Directory"
 msgstr "Φάκελος Εξόδου Σχεδιογράφησης"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:233
+#: pcbnew/dialogs/dialog_SVG_print.cpp:232
 #: pcbnew/exporters/gen_modules_placefile.cpp:196
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
@@ -5933,18 +5933,18 @@ msgstr ""
 "Αδυναμία δημιουργίας σχετικής διαδρομής (το σύστημα προορισμού είναι "
 "διαφορετικό από το σύστημα του αρχείου πλακέτας)!"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:275
+#: pcbnew/dialogs/dialog_SVG_print.cpp:274
 #: eeschema/dialogs/dialog_plot_schematic.cpp:348
 #, c-format
 msgid "Could not write plot files to folder '%s'."
 msgstr "Δεν ήταν δυνατή η εγγραφή αρχείων σχεδιογράφησης στον φάκελο '%s'."
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:306
+#: pcbnew/dialogs/dialog_SVG_print.cpp:305
 #, c-format
 msgid "Plot: '%s' OK."
 msgstr "Σχεδιογράφηση: '%s ' ΟΚ"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:312 pcbnew/dialogs/dialog_plot.cpp:806
+#: pcbnew/dialogs/dialog_SVG_print.cpp:311 pcbnew/dialogs/dialog_plot.cpp:806
 #: pcbnew/exporters/gen_modules_placefile.cpp:333
 #, c-format
 msgid "Unable to create file '%s'."
@@ -6095,7 +6095,7 @@ msgstr ""
 "διαδρομή ή σχετική με την τοποθεσία του κεντρικού σχηματικού αρχείου."
 
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:39
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:35
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:34
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:34
 msgid "Browse..."
@@ -6213,7 +6213,7 @@ msgstr "Λέξεις-κλειδιά"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:30
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
-#: eeschema/template_fieldnames.cpp:39 eeschema/sch_component.cpp:1538
+#: eeschema/template_fieldnames.cpp:39 eeschema/sch_component.cpp:1539
 #: eeschema/lib_field.cpp:585 eeschema/onrightclick.cpp:431
 #: eeschema/dialogs/dialog_rescue_each.cpp:110
 #: eeschema/widgets/widget_eeschema_color_config.cpp:78
@@ -7030,7 +7030,7 @@ msgid "An error occurred initializing the printer information."
 msgstr "Συνέβη ένα σφάλμα κατά την δημιουργία πληροφοριών εκτυπωτή."
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:171
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:448
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:432
 #: gerbview/dialogs/dialog_print_using_printer.cpp:368
 msgid "Print Preview"
 msgstr "Προεπισκόπηση εκτύπωσης"
@@ -7040,7 +7040,7 @@ msgid "Print Footprint"
 msgstr "Εκτύπωση Αποτυπώματος"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:230
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:511
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:495
 msgid "There was a problem printing."
 msgstr "Υπήρξε σφάλμα κατά την εκτύπωση."
 
@@ -7094,7 +7094,7 @@ msgid "Default pen size:"
 msgstr "Προκαθορισμένο μέγεθος πένας:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:111
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:84
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:102
 #: pcbnew/dialogs/dialog_plot_base.cpp:168
 msgid ""
 "Pen size used to draw items that have no pen size specified.\n"
@@ -7912,107 +7912,106 @@ msgid "3D Shape Name"
 msgstr "Όνομα 3Δ Σχήματος"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:20
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:45
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:44
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:20
 msgid "Layers:"
 msgstr "Επίπεδα:"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:25
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:47
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:28
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:49
 msgid "Copper Layers:"
 msgstr "Επίπεδα χαλκού:"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:30
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:52
-msgid "Technical Layers:"
-msgstr "Μηχανολογικά επίπεδα:"
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:42
+msgid "Technical layers:"
+msgstr "Τεχνικά επίπεδα:"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:38
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:56
 msgid "Exclude Edges_Pcb Layer"
 msgstr "Αποκλεισμός επιπέδου Edges_Pcb"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:39
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:57
 msgid "Exclude contents of Edges_Pcb layer from all other layers"
 msgstr ""
 "Αποκλεισμός των περιεχομένων του επιπέδου Edges_Pcb από όλα τα άλλα επίπεδα"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Approx. Scale 1"
 msgstr "Προσεγγιστική κλίμακα 1"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Accurate Scale 1"
 msgstr "Ακριβής κλίμακα 1"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:55
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:73
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:50
 msgid "X Scale Adjust"
 msgstr "Προσαρμογή κλίμακας Χ"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:60
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:78
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:55
 msgid "Set X scale adjust for exact scale plotting"
 msgstr "Ορισμός προσαρμογής κλίμακας Χ για σχεδιογράφηση ακριβούς κλίμακας"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:64
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:82
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:59
 msgid "Y Scale Adjust"
 msgstr "Προσαρμογή Κλίμακας Ψ"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:69
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:87
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:64
 msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Ορισμός προσαρμογής κλίμακας Ψ για σχεδιογράφηση ακριβούς κλίμακας"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:80
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:98
 #: pcbnew/dialogs/dialog_drc_base.cpp:25
 #: eeschema/dialogs/dialog_netlist.cpp:295
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
 msgid "Options:"
 msgstr "Επιλογές:"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:82
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:63
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:100
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:80
 msgid "Default pen size"
 msgstr "Προκαθορισμένο μέγεθος πένας"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:91
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
 msgid "Print frame ref"
 msgstr "Εκτύπωση αναφορών πλαισίου"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:93
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:111
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:30
 msgid "Print (or not) the Frame references."
 msgstr "Εκτύπωση (ή μη) των αναφορών Πλαισίου."
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:103
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:121
 msgid "No drill mark"
 msgstr "Δεν υπάρχει σημάδι διάτρησης"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:103
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:121
 msgid "Small mark"
 msgstr "Μικρό σημάδι"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:103
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:121
 msgid "Real drill"
 msgstr "Πραγματική διάτρηση"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:105
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:123
 msgid "Pads Drill Opt"
 msgstr "Επιλογές διατρήσεων έδρας"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:123
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
 msgid "1 Page per Layer"
 msgstr "1 σελίδα ανά επίπεδο"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:123
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
 msgid "Single page"
 msgstr "Μονή σελίδα"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:125
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:143
 msgid "Page Print"
 msgstr "Εκτύπωση σελίδας"
 
@@ -9647,7 +9646,7 @@ msgstr ""
 "πλάτος ζώνης."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:460
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:496
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:480
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:227
 msgid "No layer selected."
 msgstr "Δεν επιλέχθηκε επίπεδο."
@@ -9853,7 +9852,7 @@ msgstr "Αρχική τιμή αρίθμησης εδρών:"
 msgid "Circular Array"
 msgstr "Συστοιχία σε Κύκλο"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:30
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:29
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
@@ -9862,11 +9861,15 @@ msgstr ""
 "προκαθορισμένα ονόματα αρχείων\n"
 "Μπορεί να χρησιμοποιηθεί μόνο κατά την εκτύπωση του τρέχοντος φύλλου"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:61
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:63
+msgid "Technical Layers:"
+msgstr "Μηχανολογικά επίπεδα:"
+
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:78
 msgid "Print SVG options:"
 msgstr "Προτιμήσεις εκτύπωσης SVG:"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:65
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:82
 msgid ""
 "Selection of the pen size used to draw items which have no pen size "
 "specified."
@@ -9874,55 +9877,55 @@ msgstr ""
 "Επιλογή μεγέθους πένας που χρησιμοποιείται στη σχεδίαση αντικειμένων για τα "
 "οποίοα δεν έχει οριστεί μέγεθος πένας."
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:75
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:91
 msgid "Print mode"
 msgstr "Λειτουργία εκτύπωσης"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:97
 msgid "Full page with  frame ref"
 msgstr "Πλήρης σελίδα με αναφορές πλαισίου"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:97
 msgid "Current page size"
 msgstr "Μέγεθος τρέχουσας σελίδας"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:97
 msgid "Board area only"
 msgstr "Μόνο περιοχή πλακέτας"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:83
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:99
 msgid "SVG Page Size"
 msgstr "Μέγεθος Σελίδας SVG"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:87
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:103
 msgid "Print board edges"
 msgstr "Εκτύπωση ορίων πλακέτας"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:89
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:105
 msgid "Print (or not) the edges layer on others layers"
 msgstr "Εκτύπωση (ή μη) του επιπέδου ορίων πάνω στα άλλα επίπεδα"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:93
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:109
 msgid "Print mirrored"
 msgstr "Καθρεφτισμένη εκτύπωση "
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:94
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:110
 msgid "Print the layer(s) horizontally mirrored"
 msgstr "Εκτύπωση των επιπέδων οριζόντια καθρεφτισμένα"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:120
 msgid "One file per layer"
 msgstr "Ένα αρχείο ανά επίπεδο"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:120
 msgid "All in one file"
 msgstr "Όλα σε ένα αρχείο"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:106
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:122
 msgid "File option:"
 msgstr "Ρύθμιση αρχείου:"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:110
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:126
 #: pcbnew/dialogs/dialog_plot_base.cpp:351
 #: pcbnew/dialogs/dialog_plot_base.h:130
 msgid "Plot"
@@ -11191,13 +11194,13 @@ msgstr ""
 "Δεν ήταν δυνατή η εγγραφή των αρχείων σχεδιογράφησης στον φάκελο \"%s\"."
 
 #: pcbnew/dialogs/dialog_plot.cpp:751
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:376
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:360
 #: gerbview/dialogs/dialog_print_using_printer.cpp:305
 msgid "Warning: Scale option set to a very small value"
 msgstr "Προειδοποίηση: Η κλίμακα έχει οριστεί σε πολύ μικρή τιμή"
 
 #: pcbnew/dialogs/dialog_plot.cpp:755
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:366
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:350
 #: gerbview/dialogs/dialog_print_using_printer.cpp:299
 msgid "Warning: Scale option set to a very large value"
 msgstr "Προειδοποίηση: Η κλίμακα έχει οριστεί σε πολύ μεγάλη τιμή"
@@ -11208,7 +11211,7 @@ msgid "Plot file '%s' created."
 msgstr "Το αρχείο σχεδιογράφησης '%s' δημιουργήθηκε."
 
 #: pcbnew/dialogs/dialog_plot.cpp:814
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:443
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:427
 #: gerbview/dialogs/dialog_print_using_printer.cpp:354
 msgid "No layer selected"
 msgstr "Δεν επιλέχθηκε επίπεδο"
@@ -11265,7 +11268,7 @@ msgstr "Νέο όνομα αποτυπώματος (FPID)"
 msgid "Apply"
 msgstr "Εφαρμογή"
 
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:114
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:115
 #: gerbview/dialogs/dialog_print_using_printer.cpp:110
 msgid "Error Init Printer info"
 msgstr "Πληροφορίες σφάλματος αρχικοποίησης εκτυπωτή"
@@ -14642,29 +14645,29 @@ msgstr "Διπλή χρονική σφραγίδα (%s) για %s%d και %s%d"
 msgid "Field %s"
 msgstr "Πεδίο %s"
 
-#: eeschema/sch_component.cpp:1542
+#: eeschema/sch_component.cpp:1543
 msgid "Power symbol"
 msgstr "Σύμβολο ισχύος"
 
-#: eeschema/sch_component.cpp:1547
+#: eeschema/sch_component.cpp:1548
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
 #: eeschema/widgets/widget_eeschema_color_config.cpp:103
 msgid "Component"
 msgstr "Εξάρτημα"
 
-#: eeschema/sch_component.cpp:1550
+#: eeschema/sch_component.cpp:1551
 msgid "Alias of"
 msgstr "Συνώνυμο του"
 
-#: eeschema/sch_component.cpp:1558
+#: eeschema/sch_component.cpp:1559
 msgid "<Unknown>"
 msgstr "<Άγνωστο>"
 
-#: eeschema/sch_component.cpp:1564
+#: eeschema/sch_component.cpp:1565
 msgid "Key Words"
 msgstr "Λέξεις Κλειδιά"
 
-#: eeschema/sch_component.cpp:1808
+#: eeschema/sch_component.cpp:1809
 #, c-format
 msgid "Component %s, %s"
 msgstr "Εξάρτημα %s, %s"
@@ -18771,7 +18774,7 @@ msgstr "Δεν υποστηρίζεται ο ορισμός εργαλείου '
 msgid "Tool %d not defined"
 msgstr "Το εργαλείο %d δεν έχει οριστεί"
 
-#: gerbview/excellon_read_drill_file.cpp:684
+#: gerbview/excellon_read_drill_file.cpp:687
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
 msgstr "Άγνωστος Excellon G Code: &lt;%s&gt;"
@@ -20745,15 +20748,15 @@ msgstr "Εμφάνιση Όλων"
 msgid "Show None"
 msgstr "Εμφάνιση Κανενός"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:525
+#: 3d-viewer/3d_cache/3d_cache.cpp:526
 msgid "path exists but is not a regular file"
 msgstr "η διαδρομή ισχύει αλλά δεν είναι κανονικό αρχείο"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:560
+#: 3d-viewer/3d_cache/3d_cache.cpp:561
 msgid "failed to create 3D configuration directory"
 msgstr "αδυναμία δημιουργίας φακέλου για ρυθμίσεις 3Δ"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:562
+#: 3d-viewer/3d_cache/3d_cache.cpp:563
 msgid "config directory"
 msgstr "φάκελος ρυθμίσεων"
 
@@ -21072,7 +21075,7 @@ msgstr "Επιλογές Εκκαθάρισης"
 msgid "Dimension Properties"
 msgstr "Ιδιότητες Διαστάσεων"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.h:73
+#: pcbnew/dialogs/dialog_SVG_print_base.h:76
 msgid "Export SVG file"
 msgstr "Εξαγωγή Αρχείου SVG"
 
