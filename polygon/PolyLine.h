@@ -422,6 +422,7 @@ public:
     /**
      * Function NormalizeAreaOutlines
      * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
+     * Removes null segments.
      * @param aNewPolygonList = a std::vector<CPolyLine*> reference where to store new CPolyLine
      * needed by the normalization
      * @return the polygon count (always >= 1, because there is at least one polygon)
