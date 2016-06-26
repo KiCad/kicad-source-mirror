@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-19 19:09+0300\n"
-"PO-Revision-Date: 2016-06-19 19:17+0300\n"
+"POT-Creation-Date: 2016-06-26 11:19+0300\n"
+"PO-Revision-Date: 2016-06-26 11:19+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -29,15 +29,15 @@ msgstr ""
 "X-Poedit-SearchPath-8: pcb_calculator\n"
 "X-Poedit-SearchPath-9: pcbnew\n"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:525
+#: 3d-viewer/3d_cache/3d_cache.cpp:526
 msgid "path exists but is not a regular file"
 msgstr "путь существует, но не является обычным файлом"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:560
+#: 3d-viewer/3d_cache/3d_cache.cpp:561
 msgid "failed to create 3D configuration directory"
 msgstr "не удалось создать каталог конфигурации 3D"
 
-#: 3d-viewer/3d_cache/3d_cache.cpp:562
+#: 3d-viewer/3d_cache/3d_cache.cpp:563
 msgid "config directory"
 msgstr "каталог конфигурации"
 
@@ -178,7 +178,7 @@ msgstr "Псевдоним"
 #: common/dialog_about/AboutDialog_main.cpp:129
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163 eeschema/libedit.cpp:508
-#: eeschema/sch_component.cpp:1563 eeschema/viewlibs.cpp:308
+#: eeschema/sch_component.cpp:1564 eeschema/viewlibs.cpp:308
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:210 pcbnew/librairi.cpp:823
 msgid "Description"
@@ -1389,12 +1389,12 @@ msgstr "OK"
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:53
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:125
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:107
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:113
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:129
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:107
 #: pcbnew/dialogs/dialog_find_base.cpp:45 pcbnew/dialogs/dialog_gendrill_base.cpp:186
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:95 pcbnew/dialogs/dialog_plot_base.cpp:358
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:159
 #: pcbnew/dialogs/dialog_update_pcb.cpp:126 pcbnew/dialogs/dialog_update_pcb_base.cpp:56
 msgid "Close"
 msgstr "Закрыть"
@@ -2966,7 +2966,7 @@ msgstr "Доступные переменные окружения для отн
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:190
 #: eeschema/dialogs/dialog_rescue_each.cpp:111 eeschema/lib_field.cpp:592
 #: eeschema/lib_field.cpp:770 eeschema/onrightclick.cpp:426
-#: eeschema/sch_component.cpp:1542 eeschema/template_fieldnames.cpp:42
+#: eeschema/sch_component.cpp:1543 eeschema/template_fieldnames.cpp:42
 #: eeschema/widgets/widget_eeschema_color_config.cpp:79 pcbnew/class_edge_mod.cpp:261
 #: pcbnew/class_text_mod.cpp:342
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:42
@@ -4029,7 +4029,7 @@ msgid "No"
 msgstr "Нет"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
-#: eeschema/sch_component.cpp:1547 eeschema/widgets/widget_eeschema_color_config.cpp:103
+#: eeschema/sch_component.cpp:1548 eeschema/widgets/widget_eeschema_color_config.cpp:103
 msgid "Component"
 msgstr "Компонент"
 
@@ -4091,7 +4091,7 @@ msgstr "По горизонтали"
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:77 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_pcb_text.cpp:145 pcbnew/class_text_mod.cpp:369
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:97 pcbnew/modedit_onclick.cpp:292
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:115 pcbnew/modedit_onclick.cpp:292
 msgid "Mirror"
 msgstr "Отражение"
 
@@ -5130,7 +5130,7 @@ msgstr "50"
 #: eeschema/dialogs/dialog_netlist.cpp:295
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
 #: pcbnew/dialogs/dialog_drc_base.cpp:25
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:80
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:98
 msgid "Options:"
 msgstr "Параметры:"
 
@@ -5208,7 +5208,7 @@ msgid "Browse Plugins"
 msgstr "Обзор плагинов"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:171
-#: pcbnew/dialogs/dialog_SVG_print.cpp:215 pcbnew/dialogs/dialog_gendrill.cpp:295
+#: pcbnew/dialogs/dialog_SVG_print.cpp:214 pcbnew/dialogs/dialog_gendrill.cpp:295
 #: pcbnew/dialogs/dialog_plot.cpp:304 pcbnew/exporters/gen_modules_placefile.cpp:180
 #: pcbnew/exporters/gen_modules_placefile.cpp:610
 msgid "Select Output Directory"
@@ -5225,7 +5225,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:186
 #: eeschema/dialogs/dialog_plot_schematic.cpp:194
-#: pcbnew/dialogs/dialog_SVG_print.cpp:223 pcbnew/dialogs/dialog_SVG_print.cpp:234
+#: pcbnew/dialogs/dialog_SVG_print.cpp:222 pcbnew/dialogs/dialog_SVG_print.cpp:233
 #: pcbnew/dialogs/dialog_gendrill.cpp:303 pcbnew/dialogs/dialog_gendrill.cpp:314
 #: pcbnew/dialogs/dialog_plot.cpp:317 pcbnew/dialogs/dialog_plot.cpp:324
 #: pcbnew/exporters/gen_modules_placefile.cpp:188
@@ -5240,7 +5240,7 @@ msgstr ""
 "различные)!"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:348
-#: pcbnew/dialogs/dialog_SVG_print.cpp:275
+#: pcbnew/dialogs/dialog_SVG_print.cpp:274
 #, c-format
 msgid "Could not write plot files to folder '%s'."
 msgstr "Не удалось записать файлы чертежа в каталог '%s'."
@@ -5261,7 +5261,7 @@ msgstr ""
 "расположению основного файла схемы."
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:34
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:35
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:34
 #: pcbnew/dialogs/dialog_gen_module_position_file_base.cpp:39
 #: pcbnew/dialogs/dialog_plot_base.cpp:54
 msgid "Browse..."
@@ -5399,17 +5399,17 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:101
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:73
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:89
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:127
 msgid "Color"
 msgstr "Цвет"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:101
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:83
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:73
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:89
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:34
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:127
 msgid "Black and white"
 msgstr "Черно-белый"
 
@@ -5419,9 +5419,9 @@ msgid "Mode"
 msgstr "Режим"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:105
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:77
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:93
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:38
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:113
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:131
 msgid ""
 "Choose if you want to draw the sheet like it appears on screen,\n"
 "or in black and white mode, better to print it when using  black and white printers"
@@ -5435,7 +5435,7 @@ msgstr "Чертить форматную рамку"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:111
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:30
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:93
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:111
 msgid "Print (or not) the Frame references."
 msgstr "Печатать (или нет) рамку листа"
 
@@ -5452,7 +5452,7 @@ msgstr "Чертить все листы"
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:100
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:237
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:51
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:135
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:153
 msgid "Preview"
 msgstr "Просмотр"
 
@@ -5498,12 +5498,12 @@ msgstr "Настройки страницы"
 #: gerbview/dialogs/dialog_print_using_printer.cpp:404
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:103
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:54
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:505
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:138
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:489
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:156
 #: eeschema/dialogs/dialog_print_using_printer_base.h:56
 #: gerbview/dialogs/dialog_print_using_printer_base.h:73
 #: pcbnew/dialogs/dialog_print_for_modedit_base.h:61
-#: pcbnew/dialogs/dialog_print_using_printer_base.h:81
+#: pcbnew/dialogs/dialog_print_using_printer_base.h:84
 msgid "Print"
 msgstr "Печать"
 
@@ -5537,7 +5537,7 @@ msgid "Action"
 msgstr "Действие"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/lib_field.cpp:585
-#: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1538
+#: eeschema/onrightclick.cpp:431 eeschema/sch_component.cpp:1539
 #: eeschema/template_fieldnames.cpp:39
 #: eeschema/widgets/widget_eeschema_color_config.cpp:78
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:26
@@ -6450,7 +6450,7 @@ msgid "Field"
 msgstr "Поле"
 
 #: eeschema/lib_field.cpp:599 eeschema/onrightclick.cpp:436
-#: eeschema/sch_component.cpp:1560 eeschema/template_fieldnames.cpp:45
+#: eeschema/sch_component.cpp:1561 eeschema/template_fieldnames.cpp:45
 #: pcbnew/class_edge_mod.cpp:260 pcbnew/class_module.cpp:629 pcbnew/class_pad.cpp:630
 #: pcbnew/class_text_mod.cpp:346 pcbnew/loadcmp.cpp:433 pcbnew/loadcmp.cpp:497
 msgid "Footprint"
@@ -8188,28 +8188,28 @@ msgstr "Элемент %s компонента %s найден на листе %
 msgid "Item %s found in sheet %s"
 msgstr "Элемент %s найден на листе %s"
 
-#: eeschema/sch_component.cpp:1542
+#: eeschema/sch_component.cpp:1543
 msgid "Power symbol"
 msgstr "Символ питания"
 
-#: eeschema/sch_component.cpp:1550
+#: eeschema/sch_component.cpp:1551
 msgid "Alias of"
 msgstr "Оригинал"
 
-#: eeschema/sch_component.cpp:1552 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
+#: eeschema/sch_component.cpp:1553 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
 #: pcbnew/loadcmp.cpp:434
 msgid "Library"
 msgstr "Библиотека"
 
-#: eeschema/sch_component.cpp:1558
+#: eeschema/sch_component.cpp:1559
 msgid "<Unknown>"
 msgstr "<Неизвестно>"
 
-#: eeschema/sch_component.cpp:1564
+#: eeschema/sch_component.cpp:1565
 msgid "Key Words"
 msgstr "Ключевые слова"
 
-#: eeschema/sch_component.cpp:1808
+#: eeschema/sch_component.cpp:1809
 #, c-format
 msgid "Component %s, %s"
 msgstr "Компонент %s, %s"
@@ -9170,28 +9170,28 @@ msgstr "Получить сохранённый выбор"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:110
 #: pagelayout_editor/events_functions.cpp:527
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:114
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:115
 msgid "Error Init Printer info"
 msgstr "Ошибка инициализации принтера"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:299
-#: pcbnew/dialogs/dialog_plot.cpp:755 pcbnew/dialogs/dialog_print_using_printer.cpp:366
+#: pcbnew/dialogs/dialog_plot.cpp:755 pcbnew/dialogs/dialog_print_using_printer.cpp:350
 msgid "Warning: Scale option set to a very large value"
 msgstr "Предупреждение: параметр масштаба установлен в очень большое значение"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:305
-#: pcbnew/dialogs/dialog_plot.cpp:751 pcbnew/dialogs/dialog_print_using_printer.cpp:376
+#: pcbnew/dialogs/dialog_plot.cpp:751 pcbnew/dialogs/dialog_print_using_printer.cpp:360
 msgid "Warning: Scale option set to a very small value"
 msgstr "Предупреждение: параметр масштаба установлен в очень маленькое значение"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:354
-#: pcbnew/dialogs/dialog_plot.cpp:814 pcbnew/dialogs/dialog_print_using_printer.cpp:443
+#: pcbnew/dialogs/dialog_plot.cpp:814 pcbnew/dialogs/dialog_print_using_printer.cpp:427
 msgid "No layer selected"
 msgstr "Слой не выбран"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:368
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:171
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:448
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:432
 msgid "Print Preview"
 msgstr "Просмотр"
 
@@ -9200,7 +9200,7 @@ msgid "There was a problem printing"
 msgstr "Проблема с печатью"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:20
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:45
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:44
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:20
 msgid "Layers:"
 msgstr "Слои:"
@@ -9212,85 +9212,85 @@ msgstr "Слои графики:"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 msgid "fit in page"
 msgstr "по размеру страницы"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 msgid "Scale 0.5"
 msgstr "Масштаб 0,5"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 msgid "Scale 0.7"
 msgstr "Масштаб 0,7"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 msgid "Approx. Scale 1"
 msgstr "Приблиз. масштаб 1"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 msgid "Accurate Scale 1"
 msgstr "Точный масштаб 1"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 msgid "Scale 1.4"
 msgstr "Масштаб 1,4"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 msgid "Scale 2"
 msgstr "Масштаб 2"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 msgid "Scale 3"
 msgstr "Масштаб 3"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:44
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:22
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:67
 msgid "Scale 4"
 msgstr "Масштаб 4"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:46
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:24
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:51
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:69
 msgid "Approx. Scale:"
 msgstr "Приблиз. масштаб"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:50
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:55
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:73
 msgid "X Scale Adjust"
 msgstr "Установить масштаб по X"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:55
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:60
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:78
 msgid "Set X scale adjust for exact scale plotting"
 msgstr "Установка точного масштаба по оси X"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:59
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:64
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:82
 msgid "Y Scale Adjust"
 msgstr "Установить масштаб по Y"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:64
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:69
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:87
 msgid "Set Y scale adjust for exact scale plotting"
 msgstr "Установка точного масштаба по оси Y"
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:85
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:36
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:111
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:129
 msgid "Print Mode"
 msgstr "Режим печати"
 
@@ -9301,7 +9301,7 @@ msgstr ""
 
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:97
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:48
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:132
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:150
 msgid "Page Options"
 msgstr "Параметры страницы"
 
@@ -13202,28 +13202,28 @@ msgstr "Список цепей схемы"
 msgid "Delete NET?"
 msgstr "Удалить цепь?"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:222 pcbnew/dialogs/dialog_gendrill.cpp:302
+#: pcbnew/dialogs/dialog_SVG_print.cpp:221 pcbnew/dialogs/dialog_gendrill.cpp:302
 #: pcbnew/exporters/gen_modules_placefile.cpp:187
 msgid "Use a relative path? "
 msgstr "Использовать относительный путь?"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:233
+#: pcbnew/dialogs/dialog_SVG_print.cpp:232
 #: pcbnew/exporters/gen_modules_placefile.cpp:196
 msgid "Cannot make path relative (target volume different from board file volume)!"
 msgstr "Не удалось сделать путь относительным (том назначения и том платы различные)!"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:306
+#: pcbnew/dialogs/dialog_SVG_print.cpp:305
 #, c-format
 msgid "Plot: '%s' OK."
 msgstr "Черчение: '%s' OK."
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:312 pcbnew/dialogs/dialog_plot.cpp:806
+#: pcbnew/dialogs/dialog_SVG_print.cpp:311 pcbnew/dialogs/dialog_plot.cpp:806
 #: pcbnew/exporters/gen_modules_placefile.cpp:333
 #, c-format
 msgid "Unable to create file '%s'."
 msgstr "Не удаётся создать файл '%s'."
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:30
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:29
 msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
@@ -13231,79 +13231,78 @@ msgstr ""
 "Введите имя файла, если не желаете использовать имя файла по умолчанию\n"
 "Может использоваться при печати только текущего листа"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:47
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:25
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:49
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Copper Layers:"
 msgstr "Слои меди:"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:52
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:30
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:63
 msgid "Technical Layers:"
 msgstr "Технические слои:"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:61
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:78
 msgid "Print SVG options:"
 msgstr "Параметры вывода SVG:"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:63
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:82
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:80
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:100
 msgid "Default pen size"
 msgstr "Размер пера по умолчанию"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:65
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:82
 msgid "Selection of the pen size used to draw items which have no pen size specified."
 msgstr ""
 "Выбор толщины пера, используемой для черчения при не установленной толщине в элементе."
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:75
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:91
 msgid "Print mode"
 msgstr "Режим печати"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:97
 msgid "Full page with  frame ref"
 msgstr "Печать рамки листа"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:97
 msgid "Current page size"
 msgstr "Текущий размер страницы"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:81
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:97
 msgid "Board area only"
 msgstr "Только область платы"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:83
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:99
 msgid "SVG Page Size"
 msgstr "Размер страницы SVG"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:87
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:103
 msgid "Print board edges"
 msgstr "Печать контура платы"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:89
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:105
 msgid "Print (or not) the edges layer on others layers"
 msgstr "Печать (или нет) слоя контура платы на других слоях"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:93
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:109
 msgid "Print mirrored"
 msgstr "Печать зеркально"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:94
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:110
 msgid "Print the layer(s) horizontally mirrored"
 msgstr "Печать слоя(слоёв) зеркально по гориз."
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:120
 msgid "One file per layer"
 msgstr "Один файл на слой"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:104
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:120
 msgid "All in one file"
 msgstr "Все в одном файле"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:106
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:122
 msgid "File option:"
 msgstr "Параметры файла:"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.cpp:110 pcbnew/dialogs/dialog_plot_base.cpp:351
+#: pcbnew/dialogs/dialog_SVG_print_base.cpp:126 pcbnew/dialogs/dialog_plot_base.cpp:351
 #: pcbnew/dialogs/dialog_plot_base.h:130
 msgid "Plot"
 msgstr "Чертить"
@@ -13384,7 +13383,7 @@ msgstr "Ширина моста терморазгрузки меньше мин
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:460
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:227
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:496
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:480
 msgid "No layer selected."
 msgstr "Слой не выбран."
 
@@ -16052,7 +16051,7 @@ msgstr "Размер пера по умолчанию:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:111
 #: pcbnew/dialogs/dialog_plot_base.cpp:168
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:84
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:102
 msgid ""
 "Pen size used to draw items that have no pen size specified.\n"
 "Used mainly to draw items in sketch mode."
@@ -18050,7 +18049,7 @@ msgid "Print Footprint"
 msgstr "Печать посад.мест"
 
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:230
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:511
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:495
 msgid "There was a problem printing."
 msgstr "Возникла проблема печати."
 
@@ -18066,43 +18065,47 @@ msgstr "Масштаб 8"
 msgid "Scale 16"
 msgstr "Масштаб 16"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:38
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:42
+msgid "Technical layers:"
+msgstr "Технические слои:"
+
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:56
 msgid "Exclude Edges_Pcb Layer"
 msgstr "Исключить слой контура платы"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:39
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:57
 msgid "Exclude contents of Edges_Pcb layer from all other layers"
 msgstr "Исключить содержимое слоя контура платы со всех остальных слоёв"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:91
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:109
 msgid "Print frame ref"
 msgstr "Печать рамки листа"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:103
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:121
 msgid "No drill mark"
 msgstr "Не метить сверла"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:103
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:121
 msgid "Small mark"
 msgstr "Малая метка"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:103
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:121
 msgid "Real drill"
 msgstr "Реальное сверло"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:105
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:123
 msgid "Pads Drill Opt"
 msgstr "Параметры сверла конт.пл."
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:123
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
 msgid "1 Page per Layer"
 msgstr "По странице на слой"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:123
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:141
 msgid "Single page"
 msgstr "Одна страница"
 
-#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:125
+#: pcbnew/dialogs/dialog_print_using_printer_base.cpp:143
 msgid "Page Print"
 msgstr "Печать страницы"
 
@@ -22970,7 +22973,7 @@ msgstr "Параметры стабилизатора"
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
-#: pcbnew/dialogs/dialog_SVG_print_base.h:73
+#: pcbnew/dialogs/dialog_SVG_print_base.h:76
 msgid "Export SVG file"
 msgstr "Экспорт SVG файла"
 
