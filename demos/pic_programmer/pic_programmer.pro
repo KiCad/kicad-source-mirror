@@ -1,4 +1,4 @@
-update=17/05/2015 17:14:38
+update=25/06/2016 14:56:28
 last_client=kicad
 [common]
 NetDir=
@@ -33,5 +33,6 @@ ModuleOutlineThickness=0.381
 version=1
 LibDir=
 [eeschema/libraries]
-LibName1=libs/pic_programmer_schlib
-LibName2=power
+LibName1=device
+LibName2=libs/pic_programmer_schlib
+LibName3=power
