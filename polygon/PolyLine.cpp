@@ -77,8 +77,8 @@ CPolyLine::~CPolyLine()
  int CPolyLine::RemoveNullSegments()
 {
     int removed = 0;
-
     unsigned startcountour = 0;
+
     for( unsigned icnt = 1; icnt < m_CornersList.GetCornersCount(); icnt ++ )
     {
         unsigned last = icnt-1;
@@ -107,17 +107,15 @@ CPolyLine::~CPolyLine()
 }
 
 
-/**
- * Function NormalizeAreaOutlines
- * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
- * @param aNewPolygonList = a std::vector<CPolyLine*> reference where to store new CPolyLine
+/* Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
+ * and removes null segments.
+ * param aNewPolygonList = a std::vector<CPolyLine*> reference where to store new CPolyLine
  * needed by the normalization
- * @return the polygon count (always >= 1, because there is at least one polygon)
+ * return the polygon count (always >= 1, because there is at least one polygon)
  * There are new polygons only if the polygon count  is > 1
  */
 int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
 {
-
     SHAPE_POLY_SET polySet = ConvertPolyListToPolySet( m_CornersList );
 
     // We are expecting only one main outline, but this main outline can have holes
@@ -162,6 +160,7 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
         pnew.Polygon( 0 ) = polySet.CPolygon( ii );
 
         polyline->m_CornersList = ConvertPolySetToPolyList( pnew );
+        polyline->RemoveNullSegments();
     }
 
     return polySet.OutlineCount();
@@ -282,6 +281,10 @@ void CPolyLine::RemoveContour( int icont )
 
 CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
 {
+    // Null segments create serious issues in calculations.
+    // remove them:
+    RemoveNullSegments();
+
     CPolyLine* newPoly = new CPolyLine;
 
     if( !aDistance )
@@ -299,11 +302,11 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
 
         for( unsigned int index = startIndex; index <= endIndex; index++ )
         {
-            int         x1, y1, nx, ny;
-            long long   xa, ya, xb, yb;
-
-            x1  = m_CornersList[index].x;
-            y1  = m_CornersList[index].y;
+            // Current vertex
+            int     x1  = m_CornersList[index].x;
+            int     y1  = m_CornersList[index].y;
+            double  xa, ya;     // Previous vertex
+            double  xb, yb;     // Next vertex
 
             if( index == startIndex )
             {
@@ -327,28 +330,28 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
                 yb  = m_CornersList[index + 1].y - y1;
             }
 
-            unsigned int    lena        = KiROUND( hypot( xa, ya ) );
-            unsigned int    lenb        = KiROUND( hypot( xb, yb ) );
-            unsigned int    distance    = aDistance;
+            double  lena = hypot( xa, ya );
+            double  lenb = hypot( xb, yb );
+            double      distance    = aDistance;
 
             // Chamfer one half of an edge at most
             if( 0.5 * lena < distance )
-                distance = int( 0.5 * lena );
+                distance = 0.5 * lena;
 
             if( 0.5 * lenb < distance )
-                distance = int( 0.5 * lenb );
+                distance = 0.5 * lenb;
 
-            nx  = KiROUND( (distance * xa) / hypot( xa, ya ) );
-            ny  = KiROUND( (distance * ya) / hypot( xa, ya ) );
+            int nx1  = KiROUND( distance * xa / lena );
+            int ny1  = KiROUND( distance * ya / lena );
 
             if( index == startIndex )
-                newPoly->Start( GetLayer(), x1 + nx, y1 + ny, GetHatchStyle() );
+                newPoly->Start( GetLayer(), x1 + nx1, y1 + ny1, GetHatchStyle() );
             else
-                newPoly->AppendCorner( x1 + nx, y1 + ny );
+                newPoly->AppendCorner( x1 + nx1, y1 + ny1 );
 
-            nx  = KiROUND( (distance * xb) / hypot( xb, yb ) );
-            ny  = KiROUND( (distance * yb) / hypot( xb, yb ) );
-            newPoly->AppendCorner( x1 + nx, y1 + ny );
+            int nx2  = KiROUND( distance * xb / lenb );
+            int ny2  = KiROUND( distance * yb / lenb );
+            newPoly->AppendCorner( x1 + nx2, y1 + ny2 );
         }
 
         newPoly->CloseLastContour();
@@ -360,6 +363,10 @@ CPolyLine* CPolyLine::Chamfer( unsigned int aDistance )
 
 CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
 {
+    // Null segments create serious issues in calculations.
+    // remove them:
+    RemoveNullSegments();
+
     CPolyLine* newPoly = new CPolyLine;
 
     if( !aRadius )
@@ -377,13 +384,11 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
 
         for( unsigned int index = startIndex; index <= endIndex; index++ )
         {
-            int         x1, y1; // Current vertex
-            long long   xa, ya; // Previous vertex
-            long long   xb, yb; // Next vertex
-            double      nx, ny;
-
-            x1  = m_CornersList[index].x;
-            y1  = m_CornersList[index].y;
+            // Current vertex
+            int     x1  = m_CornersList[index].x;
+            int     y1  = m_CornersList[index].y;
+            double  xa, ya; // Previous vertex
+            double  xb, yb; // Next vertex
 
             if( index == startIndex )
             {
@@ -464,8 +469,8 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
             if( xa * yb - ya * xb <= 0 )
                 deltaAngle *= -1;
 
-            nx  = xc + xs;
-            ny  = yc + ys;
+            double nx  = xc + xs;
+            double ny  = yc + ys;
 
             if( index == startIndex )
                 newPoly->Start( GetLayer(), KiROUND( nx ), KiROUND( ny ), GetHatchStyle() );
