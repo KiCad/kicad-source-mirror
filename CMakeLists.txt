@@ -468,7 +468,9 @@ find_package( GLM 0.9.5.1 REQUIRED )
 #
 # Find CURL library, required for github plugin
 #
-find_package( CURL REQUIRED )
+if( BUILD_GITHUB_PLUGIN )
+    find_package( CURL REQUIRED )
+endif()
 
 #
 # Find Cairo library, required
