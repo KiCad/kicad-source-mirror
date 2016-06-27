@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -346,8 +346,8 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     // for horizontal segments the uppermost and the lowest point
     if( colinear )
     {
-        static std::vector <wxPoint*> candidates;
-        candidates.clear();
+        std::vector <wxPoint*> candidates;
+        candidates.reserve( 4 );
         candidates.push_back( &m_start );
         candidates.push_back( &m_end );
         candidates.push_back( &aLine->m_start );
