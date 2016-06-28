@@ -396,7 +396,7 @@ double MICROSTRIP::synth_width()
     double e_r, a, b;
     double w_h, width;
 
-    e_r = 0;//er;
+    e_r = er;
 
     a = ( (Z0 / ZF0 / 2 /
            M_PI) * sqrt( (e_r + 1) / 2. ) ) + ( (e_r - 1) / (e_r + 1) * ( 0.23 + (0.11 / e_r) ) );
