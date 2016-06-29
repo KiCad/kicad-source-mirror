@@ -30,7 +30,7 @@
 #define _DRC_STUFF_H
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #define OK_DRC  0
 #define BAD_DRC 1
@@ -289,7 +289,7 @@ private:
 
     //-----<single "item" tests>-----------------------------------------
 
-    bool doNetClass( boost::shared_ptr<NETCLASS> aNetClass, wxString& msg );
+    bool doNetClass( std::shared_ptr<NETCLASS> aNetClass, wxString& msg );
 
     /**
      * Function doPadToPadsDrc

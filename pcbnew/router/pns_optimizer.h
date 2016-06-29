@@ -22,7 +22,7 @@
 #define __PNS_OPTIMIZER_H
 
 #include <boost/unordered_map.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <geometry/shape_index_list.h>
 #include <geometry/shape_line_chain.h>

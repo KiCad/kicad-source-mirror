@@ -781,7 +781,7 @@ void SELECTION_TOOL::clearSelection()
 BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 {
     BOARD_ITEM* current = NULL;
-    boost::shared_ptr<BRIGHT_BOX> brightBox;
+    std::shared_ptr<BRIGHT_BOX> brightBox;
     CONTEXT_MENU menu;
 
     int limit = std::min( 10, aCollector->GetCount() );

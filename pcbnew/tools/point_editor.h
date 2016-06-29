@@ -25,10 +25,11 @@
 #ifndef __POINT_EDITOR_H
 #define __POINT_EDITOR_H
 
-#include <boost/shared_ptr.hpp>
-
 #include <tool/tool_interactive.h>
 #include "edit_points.h"
+
+#include <memory>
+
 
 class SELECTION_TOOL;
 
@@ -69,10 +70,10 @@ private:
     EDIT_POINT m_original;
 
     ///> Currently available edit points.
-    boost::shared_ptr<EDIT_POINTS> m_editPoints;
+    std::shared_ptr<EDIT_POINTS> m_editPoints;
 
     // Alternative constraint, enabled while a modifier key is held
-    boost::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_altConstraint;
+    std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_altConstraint;
 
     // EDIT_POINT for alternative constraint mode
     EDIT_POINT m_altConstrainer;

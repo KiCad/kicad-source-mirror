@@ -171,7 +171,7 @@ public:
       * Function GetNetClass
       * returns the NETCLASS for this item.
       */
-     boost::shared_ptr<NETCLASS> GetNetClass() const;
+    std::shared_ptr<NETCLASS> GetNetClass() const;
 
     /**
      * Function GetNetClassName

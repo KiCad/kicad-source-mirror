@@ -33,8 +33,9 @@
 #include <cairo.h>
 
 #include <gal/graphics_abstraction_layer.h>
-#include <boost/smart_ptr/shared_ptr.hpp>
 #include <wx/dcbuffer.h>
+
+#include <memory>
 
 #if defined(__WXMSW__)
 #define SCREEN_DEPTH 24
@@ -274,7 +275,7 @@ private:
     typedef GAL super;
 
     // Compositing variables
-    boost::shared_ptr<CAIRO_COMPOSITOR> compositor; ///< Object for layers compositing
+    std::shared_ptr<CAIRO_COMPOSITOR> compositor;   ///< Object for layers compositing
     unsigned int            mainBuffer;             ///< Handle to the main buffer
     unsigned int            overlayBuffer;          ///< Handle to the overlay buffer
     RENDER_TARGET           currentTarget;          ///< Current rendering target

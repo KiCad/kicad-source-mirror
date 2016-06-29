@@ -37,7 +37,7 @@
 #include <gal/opengl/vertex_common.h>
 #include <gal/color4d.h>
 #include <stack>
-#include <boost/smart_ptr/shared_ptr.hpp>
+#include <memory>
 #include <wx/log.h>
 
 namespace KIGFX
@@ -349,9 +349,9 @@ protected:
     void putVertex( VERTEX& aTarget, GLfloat aX, GLfloat aY, GLfloat aZ ) const;
 
     /// Container for vertices, may be cached or noncached
-    boost::shared_ptr<VERTEX_CONTAINER> m_container;
+    std::shared_ptr<VERTEX_CONTAINER> m_container;
     /// GPU manager for data transfers and drawing operations
-    boost::shared_ptr<GPU_MANAGER>      m_gpu;
+    std::shared_ptr<GPU_MANAGER>      m_gpu;
 
     /// State machine variables
     /// True in case there is no need to transform vertices

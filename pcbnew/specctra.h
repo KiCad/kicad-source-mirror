@@ -31,11 +31,12 @@
 
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_set.html
 #include <boost/ptr_container/ptr_set.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <fctsys.h>
 #include <specctra_lexer.h>
 #include <pcbnew.h>
+
+#include <memory>
 
 // all outside the DSN namespace:
 class BOARD;
@@ -3815,7 +3816,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * Function exportNETCLASS
      * exports \a aNetClass to the DSN file.
      */
-    void exportNETCLASS( boost::shared_ptr<NETCLASS> aNetClass, BOARD* aBoard );
+    void exportNETCLASS( std::shared_ptr<NETCLASS> aNetClass, BOARD* aBoard );
 
     //-----</FromBOARD>------------------------------------------------------
 

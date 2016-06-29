@@ -36,7 +36,6 @@
 #include <sch_field.h>
 #include <transform.h>
 #include <general.h>
-#include <boost/weak_ptr.hpp>
 #include <vector>
 #include <lib_draw_item.h>
 
@@ -51,9 +50,9 @@ class SCH_COLLECTOR;
 
 
 /// A container for several SCH_FIELD items
-typedef std::vector<SCH_FIELD>      SCH_FIELDS;
+typedef std::vector<SCH_FIELD>    SCH_FIELDS;
 
-typedef boost::weak_ptr<LIB_PART>   PART_REF;
+typedef std::weak_ptr<LIB_PART>   PART_REF;
 
 
 /**

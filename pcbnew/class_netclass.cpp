@@ -23,8 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/make_shared.hpp>
-
 #include <fctsys.h>
 #include <common.h>
 #include <kicad_string.h>
@@ -81,7 +79,7 @@ NETCLASS::~NETCLASS()
 
 NETCLASSES::NETCLASSES()
 {
-    m_Default = boost::make_shared<NETCLASS>( NETCLASS::Default );
+    m_Default = std::make_shared<NETCLASS>( NETCLASS::Default );
 }
 
 
@@ -125,7 +123,7 @@ NETCLASSPTR NETCLASSES::Remove( const wxString& aNetName )
 
     if( found != m_NetClasses.end() )
     {
-        boost::shared_ptr<NETCLASS> netclass = found->second;
+        std::shared_ptr<NETCLASS> netclass = found->second;
         m_NetClasses.erase( found );
         return netclass;
     }

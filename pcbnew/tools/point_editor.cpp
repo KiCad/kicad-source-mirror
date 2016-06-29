@@ -22,7 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/make_shared.hpp>
 #include <functional>
 using namespace std::placeholders;
 
@@ -71,9 +70,9 @@ enum DIMENSION_POINTS
 class EDIT_POINTS_FACTORY
 {
 public:
-    static boost::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem, KIGFX::GAL* aGal )
+    static std::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem, KIGFX::GAL* aGal )
     {
-        boost::shared_ptr<EDIT_POINTS> points = boost::make_shared<EDIT_POINTS>( aItem );
+        std::shared_ptr<EDIT_POINTS> points = std::make_shared<EDIT_POINTS>( aItem );
 
         // Generate list of edit points basing on the item type
         switch( aItem->Type() )

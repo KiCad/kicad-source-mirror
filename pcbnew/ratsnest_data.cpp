@@ -41,7 +41,6 @@
 
 #include <boost/range/adaptor/map.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/make_shared.hpp>
 #include <functional>
 using namespace std::placeholders;
 
@@ -184,9 +183,9 @@ static std::vector<RN_EDGE_MST_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
                 // Do a copy of edge, but make it RN_EDGE_MST. In contrary to RN_EDGE,
                 // RN_EDGE_MST saves both source and target node and does not require any other
                 // edges to exist for getting source/target nodes
-                RN_EDGE_MST_PTR newEdge = boost::make_shared<RN_EDGE_MST>( dt->GetSourceNode(),
-                                                                           dt->GetTargetNode(),
-                                                                           dt->GetWeight() );
+                RN_EDGE_MST_PTR newEdge = std::make_shared<RN_EDGE_MST>( dt->GetSourceNode(),
+                                                                         dt->GetTargetNode(),
+                                                                         dt->GetWeight() );
                 mst->push_back( newEdge );
                 ++mstSize;
             }
@@ -294,7 +293,7 @@ const RN_NODE_PTR& RN_LINKS::AddNode( int aX, int aY )
     RN_NODE_SET::iterator node;
     bool wasNewElement;
 
-    boost::tie( node, wasNewElement ) = m_nodes.emplace( boost::make_shared<RN_NODE>( aX, aY ) );
+    boost::tie( node, wasNewElement ) = m_nodes.emplace( std::make_shared<RN_NODE>( aX, aY ) );
 
     return *node;
 }
@@ -317,7 +316,7 @@ RN_EDGE_MST_PTR RN_LINKS::AddConnection( const RN_NODE_PTR& aNode1, const RN_NOD
                                          unsigned int aDistance )
 {
     assert( aNode1 != aNode2 );
-    RN_EDGE_MST_PTR edge = boost::make_shared<RN_EDGE_MST>( aNode1, aNode2, aDistance );
+    RN_EDGE_MST_PTR edge = std::make_shared<RN_EDGE_MST>( aNode1, aNode2, aDistance );
     m_edges.push_back( edge );
 
     return edge;
@@ -340,7 +339,7 @@ void RN_NET::compute()
             RN_LINKS::RN_NODE_SET::iterator last = ++boardNodes.begin();
 
             // There can be only one possible connection, but it is missing
-            m_rnEdges->push_back( boost::make_shared<RN_EDGE_MST>( *boardNodes.begin(), *last ) );
+            m_rnEdges->push_back( std::make_shared<RN_EDGE_MST>( *boardNodes.begin(), *last ) );
         }
 
         // Set tags to nodes as connected

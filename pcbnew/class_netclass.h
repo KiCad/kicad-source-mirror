@@ -33,11 +33,12 @@
 
 #include <set>
 #include <map>
-#include <boost/shared_ptr.hpp>
 
 #include <wx/string.h>
 
 #include <richio.h>
+
+#include <memory>
 
 
 class LINE_READER;
@@ -206,7 +207,7 @@ public:
 #endif
 };
 
-typedef boost::shared_ptr<NETCLASS> NETCLASSPTR;
+typedef std::shared_ptr<NETCLASS> NETCLASSPTR;
 
 /**
  * Class NETCLASSES

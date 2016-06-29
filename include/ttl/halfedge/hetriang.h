@@ -50,8 +50,7 @@
 #include <iostream>
 #include <fstream>
 #include <ttl/ttl_util.h>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <layers_id_colors_and_visibility.h>
 
 class BOARD_CONNECTED_ITEM;
@@ -69,9 +68,9 @@ namespace hed
 // Helper typedefs
 class NODE;
 class EDGE;
-typedef boost::shared_ptr<NODE> NODE_PTR;
-typedef boost::shared_ptr<EDGE> EDGE_PTR;
-typedef boost::weak_ptr<EDGE> EDGE_WEAK_PTR;
+typedef std::shared_ptr<NODE> NODE_PTR;
+typedef std::shared_ptr<EDGE> EDGE_PTR;
+typedef std::weak_ptr<EDGE> EDGE_WEAK_PTR;
 typedef std::vector<NODE_PTR> NODES_CONTAINER;
 
 /**

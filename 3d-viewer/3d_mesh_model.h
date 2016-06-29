@@ -31,7 +31,6 @@
 #define __3D_MESH_MODEL_H__
 
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <vector>
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
@@ -39,10 +38,11 @@
 #include "3d_material.h"
 #include "3d_rendering/3d_render_raytracing/shapes3D/cbbox.h"
 
+
 class S3D_MESH;
 
 /** A smart pointer to an S3D_MESH object */
-typedef boost::shared_ptr<S3D_MESH> S3D_MESH_PTR;
+typedef std::shared_ptr<S3D_MESH> S3D_MESH_PTR;
 
 /** A container of smar S3D_MESH object pointers */
 typedef std::vector<S3D_MESH_PTR> S3D_MESH_PTRS;
