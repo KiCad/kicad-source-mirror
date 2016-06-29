@@ -57,7 +57,8 @@
 #include "tools/pcbnew_control.h"
 #include "tools/common_actions.h"
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 
 #define NEXT_PART       1

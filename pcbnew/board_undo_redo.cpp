@@ -23,7 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
@@ -569,7 +570,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* oldModule = static_cast<MODULE*>( item );
-                oldModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+                oldModule->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
             view->Remove( item );
             ratsnest->Remove( item );
@@ -581,7 +582,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
-                newModule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
             }
             view->Add( item );
             ratsnest->Add( item );
@@ -598,7 +599,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* module = static_cast<MODULE*>( item );
-                module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+                module->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
 
             view->Remove( item );
@@ -612,7 +613,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* module = static_cast<MODULE*>( item );
-                module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1) );
+                module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1) );
             }
             view->Add( item );
 

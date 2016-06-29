@@ -21,7 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 #include <fctsys.h>
 #include <class_drawpanel.h>
@@ -207,7 +208,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
                 itemPicker.SetItem( item );
                 pickersList.PushItem( itemPicker );
                 static_cast<MODULE*>( item )->RunOnChildren(
-                        boost::bind( &KIGFX::VIEW_ITEM::ViewRelease, _1 ) );
+                        std::bind( &KIGFX::VIEW_ITEM::ViewRelease, _1 ) );
                 ratsnest->Remove( item );
                 item->ViewRelease();
                 item->UnLink();

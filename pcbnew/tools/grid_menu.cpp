@@ -28,15 +28,16 @@
 #include <class_base_screen.h>
 #include <tools/common_actions.h>
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 {
     BASE_SCREEN* screen = aParent->GetScreen();
 
     SetIcon( grid_select_xpm );
-    SetMenuHandler( boost::bind( &GRID_MENU::EventHandler, this, _1 ) );
-    SetUpdateHandler( boost::bind( &GRID_MENU::Update, this ) );
+    SetMenuHandler( std::bind( &GRID_MENU::EventHandler, this, _1 ) );
+    SetUpdateHandler( std::bind( &GRID_MENU::Update, this ) );
 
     wxArrayString gridsList;
     screen->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );

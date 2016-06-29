@@ -79,7 +79,7 @@ struct SELECTION
 
     /// Runs a function on all selected items.
     template <typename T>
-    void ForAll( boost::function<void (T*)> aFunction ) const
+    void ForAll( std::function<void (T*)> aFunction ) const
     {
         for( unsigned int i = 0; i < items.GetCount(); ++i )
             aFunction( Item<T>( i ) );

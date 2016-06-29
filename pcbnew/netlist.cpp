@@ -27,7 +27,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
+
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
@@ -105,7 +107,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
         // Remove old modules
         for( MODULE* module = board->m_Modules; module; module = module->Next() )
         {
-            module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+            module->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             view->Remove( module );
         }
     }
@@ -140,7 +142,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     // Reload modules
     for( MODULE* module = board->m_Modules; module; module = module->Next() )
     {
-        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+        module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
         view->Add( module );
         module->ViewUpdate();
     }

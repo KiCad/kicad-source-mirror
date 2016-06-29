@@ -23,7 +23,8 @@
  */
 
 #include <boost/make_shared.hpp>
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
@@ -141,7 +142,7 @@ public:
                     }
 
                     points->Line( i ).SetConstraint( new EC_SNAPLINE( points->Line( i ),
-                            boost::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
+                            std::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
                 }
 
                 // The last missing line, connecting the last and the first polygon point
@@ -150,7 +151,7 @@ public:
 
                 points->Line( points->LinesSize() - 1 ).SetConstraint(
                         new EC_SNAPLINE( points->Line( points->LinesSize() - 1 ),
-                        boost::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
+                        std::bind( &KIGFX::GAL::GetGridPoint, aGal, _1 ) ) );
                 break;
             }
 
@@ -213,7 +214,7 @@ bool POINT_EDITOR::Init()
     m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::pointEditorAddCorner,
                                         POINT_EDITOR::addCornerCondition );
     m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::pointEditorRemoveCorner,
-                                        boost::bind( &POINT_EDITOR::removeCornerCondition, this, _1 ) );
+                                        std::bind( &POINT_EDITOR::removeCornerCondition, this, _1 ) );
 
     return true;
 }

@@ -22,7 +22,8 @@
 
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 #include "class_draw_panel_gal.h"
 #include "class_board.h"
@@ -121,7 +122,7 @@ public:
     CONTEXT_TRACK_WIDTH_MENU()
         : CONTEXT_TRACK_VIA_SIZE_MENU( true, true ), m_board( NULL )
     {
-        SetMenuHandler( boost::bind( &CONTEXT_TRACK_WIDTH_MENU::EventHandler, this, _1 ) );
+        SetMenuHandler( std::bind( &CONTEXT_TRACK_WIDTH_MENU::EventHandler, this, _1 ) );
     }
 
     void SetBoard( BOARD* aBoard )

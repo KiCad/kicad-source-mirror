@@ -25,14 +25,14 @@
 #ifndef SELECTION_CONDITIONS_H_
 #define SELECTION_CONDITIONS_H_
 
-#include <boost/function.hpp>
+#include <functional>
 #include <core/typeinfo.h>
 #include <vector>
 
 struct SELECTION;
 
 ///> Functor type that checks a specific condition for selected items.
-typedef boost::function<bool (const SELECTION&)> SELECTION_CONDITION;
+typedef std::function<bool (const SELECTION&)> SELECTION_CONDITION;
 
 SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
                                 const SELECTION_CONDITION& aConditionB );

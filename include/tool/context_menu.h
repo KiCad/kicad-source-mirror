@@ -28,7 +28,7 @@
 
 #include <map>
 #include <list>
-#include <boost/function.hpp>
+#include <functional>
 
 #include <wx/menu.h>
 #include <tool/tool_action.h>
@@ -126,8 +126,8 @@ public:
     void UpdateAll();
 
     // Helper typedefs
-    typedef boost::function<OPT_TOOL_EVENT(const wxMenuEvent&)> MENU_HANDLER;
-    typedef boost::function<void()> UPDATE_HANDLER;
+    typedef std::function<OPT_TOOL_EVENT(const wxMenuEvent&)> MENU_HANDLER;
+    typedef std::function<void()> UPDATE_HANDLER;
 
     /**
      * Function SetMenuHandler()
@@ -192,7 +192,7 @@ private:
     void runEventHandlers( const wxMenuEvent& aMenuEvent, OPT_TOOL_EVENT& aToolEvent );
 
     ///> Runs a function on the menu and all its submenus.
-    void runOnSubmenus( boost::function<void(CONTEXT_MENU*)> aFunction );
+    void runOnSubmenus( std::function<void(CONTEXT_MENU*)> aFunction );
 
     ///> Flag indicating that the menu title was set up.
     bool m_titleSet;

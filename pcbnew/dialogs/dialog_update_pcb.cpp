@@ -10,7 +10,8 @@
 #include <class_board.h>
 #include <ratsnest_data.h>
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST *aNetlist ) :
     DIALOG_UPDATE_PCB_BASE ( aParent ),
@@ -44,7 +45,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
         // Remove old modules
         for( MODULE* module = board->m_Modules; module; module = module->Next() )
         {
-            module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+            module->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             view->Remove( module );
         }
 
@@ -92,7 +93,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     // Reload modules
     for( MODULE* module = board->m_Modules; module; module = module->Next() )
     {
-        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+        module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
         view->Add( module );
         module->ViewUpdate();
     }

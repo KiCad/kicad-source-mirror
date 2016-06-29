@@ -26,7 +26,8 @@
 #include "selection_tool.h"
 #include <class_board_connected_item.h>
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 
 bool SELECTION_CONDITIONS::NotEmpty( const SELECTION& aSelection )
@@ -54,55 +55,55 @@ bool SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
 
 SELECTION_CONDITION SELECTION_CONDITIONS::SameNet( bool aAllowUnconnected )
 {
-    return boost::bind( &SELECTION_CONDITIONS::sameNetFunc, _1, aAllowUnconnected );
+    return std::bind( &SELECTION_CONDITIONS::sameNetFunc, _1, aAllowUnconnected );
 }
 
 
 SELECTION_CONDITION SELECTION_CONDITIONS::SameLayer()
 {
-    return boost::bind( &SELECTION_CONDITIONS::sameLayerFunc, _1 );
+    return std::bind( &SELECTION_CONDITIONS::sameLayerFunc, _1 );
 }
 
 
 SELECTION_CONDITION SELECTION_CONDITIONS::HasType( KICAD_T aType )
 {
-    return boost::bind( &SELECTION_CONDITIONS::hasTypeFunc, _1, aType );
+    return std::bind( &SELECTION_CONDITIONS::hasTypeFunc, _1, aType );
 }
 
 
 SELECTION_CONDITION SELECTION_CONDITIONS::OnlyType( KICAD_T aType )
 {
-    return boost::bind( &SELECTION_CONDITIONS::onlyTypeFunc, _1, aType );
+    return std::bind( &SELECTION_CONDITIONS::onlyTypeFunc, _1, aType );
 }
 
 
 SELECTION_CONDITION SELECTION_CONDITIONS::OnlyTypes( const std::vector<KICAD_T>& aTypes )
 {
-    return boost::bind( &SELECTION_CONDITIONS::onlyTypesFunc, _1, aTypes );
+    return std::bind( &SELECTION_CONDITIONS::onlyTypesFunc, _1, aTypes );
 }
 
 
 SELECTION_CONDITION SELECTION_CONDITIONS::OnlyTypes( const KICAD_T aTypes[] )
 {
-    return boost::bind( &SELECTION_CONDITIONS::onlyTypesFuncArr, _1, aTypes );
+    return std::bind( &SELECTION_CONDITIONS::onlyTypesFuncArr, _1, aTypes );
 }
 
 
 SELECTION_CONDITION SELECTION_CONDITIONS::Count( int aNumber )
 {
-    return boost::bind( &SELECTION_CONDITIONS::countFunc, _1, aNumber );
+    return std::bind( &SELECTION_CONDITIONS::countFunc, _1, aNumber );
 }
 
 
 SELECTION_CONDITION SELECTION_CONDITIONS::MoreThan( int aNumber )
 {
-    return boost::bind( &SELECTION_CONDITIONS::moreThanFunc, _1, aNumber );
+    return std::bind( &SELECTION_CONDITIONS::moreThanFunc, _1, aNumber );
 }
 
 
 SELECTION_CONDITION SELECTION_CONDITIONS::LessThan( int aNumber )
 {
-    return boost::bind( &SELECTION_CONDITIONS::lessThanFunc, _1, aNumber );
+    return std::bind( &SELECTION_CONDITIONS::lessThanFunc, _1, aNumber );
 }
 
 
@@ -280,12 +281,12 @@ bool SELECTION_CONDITIONS::lessThanFunc( const SELECTION& aSelection, int aNumbe
 SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
                                 const SELECTION_CONDITION& aConditionB )
 {
-    return boost::bind( &SELECTION_CONDITIONS::orFunc, aConditionA, aConditionB, _1 );
+    return std::bind( &SELECTION_CONDITIONS::orFunc, aConditionA, aConditionB, _1 );
 }
 
 
 SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
                                 const SELECTION_CONDITION& aConditionB )
 {
-    return boost::bind( &SELECTION_CONDITIONS::andFunc, aConditionA, aConditionB, _1 );
+    return std::bind( &SELECTION_CONDITIONS::andFunc, aConditionA, aConditionB, _1 );
 }

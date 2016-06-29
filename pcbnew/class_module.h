@@ -41,7 +41,7 @@
 #include <PolyLine.h>
 #include "zones.h"
 
-#include <boost/function.hpp>
+#include <functional>
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -551,7 +551,7 @@ public:
      * Invokes a function on all BOARD_ITEMs that belong to the module (pads, drawings, texts).
      * @param aFunction is the function to be invoked.
      */
-    void RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction );
+    void RunOnChildren( std::function<void (BOARD_ITEM*)> aFunction );
 
     /// @copydoc VIEW_ITEM::ViewUpdate()
     void ViewUpdate( int aUpdateFlags = KIGFX::VIEW_ITEM::ALL );

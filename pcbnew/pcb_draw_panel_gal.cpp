@@ -36,7 +36,8 @@
 #include <class_track.h>
 #include <wxBasePcbFrame.h>
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 const LAYER_NUM GAL_LAYER_ORDER[] =
 {
@@ -145,7 +146,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( const BOARD* aBoard )
     // Load modules and its additional elements
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
     {
-        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, m_view, _1 ) );
+        module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, m_view, _1 ) );
         m_view->Add( module );
     }
 

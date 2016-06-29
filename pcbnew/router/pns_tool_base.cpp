@@ -22,7 +22,8 @@
 
 #include <boost/foreach.hpp>
 #include <boost/optional.hpp>
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 #include "class_draw_panel_gal.h"
 #include "class_board.h"

@@ -28,15 +28,16 @@
 #include <class_base_screen.h>
 #include <tools/common_actions.h>
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 {
     BASE_SCREEN* screen = aParent->GetScreen();
 
     SetIcon( zoom_selection_xpm );
-    SetMenuHandler( boost::bind( &ZOOM_MENU::EventHandler, this, _1 ) );
-    SetUpdateHandler( boost::bind( &ZOOM_MENU::Update, this ) );
+    SetMenuHandler( std::bind( &ZOOM_MENU::EventHandler, this, _1 ) );
+    SetUpdateHandler( std::bind( &ZOOM_MENU::Update, this ) );
 
     //int zoom = screen->GetZoom();
     int maxZoomIds = std::min( ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START,

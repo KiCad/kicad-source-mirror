@@ -23,7 +23,8 @@
  */
 
 #include <boost/foreach.hpp>
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 #include <wxPcbStruct.h>
 

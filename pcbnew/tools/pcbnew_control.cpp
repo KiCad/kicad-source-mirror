@@ -48,7 +48,8 @@
 #include <pcb_painter.h>
 #include <origin_viewitem.h>
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 
 // files.cpp
@@ -651,7 +652,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 
         // TODO it will not check the toolbar button in module editor, as it uses a different ID..
         m_frame->SetToolID( ID_PCB_PLACE_GRID_COORD_BUTT, wxCURSOR_PENCIL, _( "Adjust grid origin" ) );
-        picker->SetClickHandler( boost::bind( setOrigin, getView(), m_frame, m_gridOrigin, _1 ) );
+        picker->SetClickHandler( std::bind( setOrigin, getView(), m_frame, m_gridOrigin, _1 ) );
         picker->Activate();
         Wait();
     }
@@ -756,7 +757,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     // TODO it will not check the toolbar button in the module editor, as it uses a different ID..
     m_frame->SetToolID( ID_PCB_DELETE_ITEM_BUTT, wxCURSOR_PENCIL, _( "Delete item" ) );
     picker->SetSnapping( false );
-    picker->SetClickHandler( boost::bind( deleteItem, m_toolMgr, _1 ) );
+    picker->SetClickHandler( std::bind( deleteItem, m_toolMgr, _1 ) );
     picker->Activate();
     Wait();
 
@@ -850,7 +851,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
         picker.SetItem( module );
         undoListPicker.PushItem( picker );
 
-        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+        module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
         view->Add( module );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, module );
     }

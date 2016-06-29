@@ -853,7 +853,7 @@ EDA_ITEM* MODULE::Clone() const
 }
 
 
-void MODULE::RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction )
+void MODULE::RunOnChildren( std::function<void (BOARD_ITEM*)> aFunction )
 {
     try
     {
@@ -866,7 +866,7 @@ void MODULE::RunOnChildren( boost::function<void (BOARD_ITEM*)> aFunction )
         aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
         aFunction( static_cast<BOARD_ITEM*>( m_Value ) );
     }
-    catch( boost::bad_function_call& e )
+    catch( std::bad_function_call& e )
     {
         DisplayError( NULL, wxT( "Error running MODULE::RunOnChildren" ) );
     }

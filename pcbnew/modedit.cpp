@@ -63,7 +63,8 @@
 #include <footprint_wizard_frame.h>
 #include <pcbnew_config.h>
 
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 
 // Functions defined in block_module_editor, but used here
@@ -463,7 +464,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 if( pcbframe->IsGalCanvasActive() )
                 {
                     KIGFX::VIEW* view = pcbframe->GetGalCanvas()->GetView();
-                    source_module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
+                    source_module->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, 
+                                                                  std::placeholders::_1 ) );
                     view->Remove( source_module );
                 }
 
@@ -497,7 +499,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 ratsnest->Recalculate();
 
                 KIGFX::VIEW* view = pcbframe->GetGalCanvas()->GetView();
-                newmodule->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                newmodule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, 
+                                                       std::placeholders::_1 ) );
                 view->Add( newmodule );
                 pcbframe->GetGalCanvas()->ForceRefresh();
             }

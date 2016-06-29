@@ -44,7 +44,8 @@
 
 #include <cassert>
 #include <boost/foreach.hpp>
-#include <boost/bind.hpp>
+#include <functional>
+using namespace std::placeholders;
 
 #include "common_actions.h"
 #include "selection_tool.h"
@@ -370,9 +371,10 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             editFrame->SaveCopyInUndoList( selection.items, UR_CHANGED );
             dlg.Apply();
 
-            selection.ForAll<KIGFX::VIEW_ITEM>( boost::bind( &KIGFX::VIEW_ITEM::ViewUpdate, _1,
-                                                             KIGFX::VIEW_ITEM::ALL ) );
-            selection.ForAll<BOARD_ITEM>( boost::bind( &RN_DATA::Update, ratsnest, _1 ) );
+            selection.ForAll<KIGFX::VIEW_ITEM>( std::bind( &KIGFX::VIEW_ITEM::ViewUpdate, 
+                                          std::placeholders::_1, KIGFX::VIEW_ITEM::ALL ) );
+            selection.ForAll<BOARD_ITEM>( std::bind( &RN_DATA::Update, ratsnest, 
+                                                                 std::placeholders::_1 ) );
             ratsnest->Recalculate();
         }
     }
@@ -559,7 +561,7 @@ void EDIT_TOOL::remove( BOARD_ITEM* aItem )
     {
         MODULE* module = static_cast<MODULE*>( aItem );
         module->ClearFlags();
-        module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, getView(), _1 ) );
+        module->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, getView(), std::placeholders::_1 ) );
 
         // Module itself is deleted after the switch scope is finished
         // list of pads is rebuild by BOARD::BuildListOfNets()
@@ -763,8 +765,8 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         {
             if( new_item->Type() == PCB_MODULE_T )
             {
-                static_cast<MODULE*>( new_item )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
-                        getView(), _1 ) );
+                static_cast<MODULE*>( new_item )->RunOnChildren( std::bind( &KIGFX::VIEW::Add,
+                        getView(), std::placeholders::_1 ) );
             }
 
             editFrame->GetGalCanvas()->GetView()->Add( new_item );
@@ -850,8 +852,8 @@ private:
         KIGFX::VIEW* view = m_parent.GetToolManager()->GetView();
         if( new_item->Type() == PCB_MODULE_T)
         {
-            static_cast<MODULE*>( new_item )->RunOnChildren(
-                    boost::bind( &KIGFX::VIEW::Add, view, _1 ) );
+            static_cast<MODULE*>(new_item)->RunOnChildren(
+                std::bind(&KIGFX::VIEW::Add, view, std::placeholders::_1));
         }
 
         m_parent.GetGalCanvas()->GetView()->Add( new_item );
@@ -1014,8 +1016,8 @@ void EDIT_TOOL::processPickedList( const PICKED_ITEMS_LIST* aList )
 
         case UR_DELETED:
             if( updItem->Type() == PCB_MODULE_T )
-                static_cast<MODULE*>( updItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove,
-                                                                             view, _1 ) );
+                static_cast<MODULE*>( updItem )->RunOnChildren( std::bind( &KIGFX::VIEW::Remove,
+                                                                 view, std::placeholders::_1 ) );
 
             view->Remove( updItem );
             //ratsnest->Remove( updItem );  // this is done in BOARD::Remove
@@ -1023,8 +1025,8 @@ void EDIT_TOOL::processPickedList( const PICKED_ITEMS_LIST* aList )
 
         case UR_NEW:
             if( updItem->Type() == PCB_MODULE_T )
-                static_cast<MODULE*>( updItem )->RunOnChildren( boost::bind( &KIGFX::VIEW::Add,
-                                                                             view, _1 ) );
+                static_cast<MODULE*>( updItem )->RunOnChildren( std::bind( &KIGFX::VIEW::Add,
+                                                                 view, std::placeholders::_1 ) );
 
             view->Add( updItem );
             //ratsnest->Add( updItem );     // this is done in BOARD::Add
