@@ -62,9 +62,6 @@ public:
 
     // deleted operators
     IFSG_NODE( const IFSG_NODE& aParent ) = delete;
-    IFSG_NODE( IFSG_NODE& aParent ) = delete;
-    IFSG_NODE( volatile const IFSG_NODE& aParent ) = delete;
-    IFSG_NODE( volatile IFSG_NODE& aParent ) = delete;
     IFSG_NODE& operator= ( const IFSG_NODE& ) = delete;
 
     /**
