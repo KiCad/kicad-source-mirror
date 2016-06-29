@@ -42,7 +42,6 @@
 #include <class_module.h>
 #include <polygon_test_point_inside.h>
 #include <convert_to_biu.h>
-#include <boost/foreach.hpp>
 #include <convert_basic_shapes_to_polygon.h>
 
 
@@ -976,7 +975,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
     static const LAYER_ID layers_mech[] = { F_Mask, B_Mask, F_Paste, B_Paste,
         F_Adhes, B_Adhes, F_SilkS, B_SilkS, Dwgs_User, Eco1_User, Eco2_User };
 
-    BOOST_FOREACH( LAYER_ID each_layer, layers_mech )
+    for( LAYER_ID each_layer : layers_mech )
     {
         if( IsOnLayer( each_layer ) )
             aLayers[aCount++] = each_layer;

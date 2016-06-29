@@ -43,7 +43,6 @@
 #include <confirm.h>
 
 #include <cassert>
-#include <boost/foreach.hpp>
 #include <functional>
 using namespace std::placeholders;
 
@@ -976,7 +975,7 @@ void EDIT_TOOL::processUndoBuffer( const PICKED_ITEMS_LIST* aLastChange )
     const std::vector<PICKED_ITEMS_LIST*>& undoList = editFrame->GetScreen()->m_UndoList.m_CommandsList;
     bool process = false;
 
-    BOOST_FOREACH( const PICKED_ITEMS_LIST* list, undoList )
+    for( const PICKED_ITEMS_LIST* list : undoList )
     {
         if( process )
             processPickedList( list );
@@ -988,7 +987,7 @@ void EDIT_TOOL::processUndoBuffer( const PICKED_ITEMS_LIST* aLastChange )
     // then the undo list must have been completely altered, so process everything
     if( !process )
     {
-        BOOST_FOREACH( const PICKED_ITEMS_LIST* list, undoList )
+        for( const PICKED_ITEMS_LIST* list : undoList )
             processPickedList( list );
     }
 }

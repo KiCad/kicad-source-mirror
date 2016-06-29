@@ -39,8 +39,6 @@
 #include <sch_line.h>
 #include <class_netlist_object.h>
 
-#include <boost/foreach.hpp>
-
 
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     SCH_ITEM( NULL, SCH_LINE_T )
@@ -380,7 +378,7 @@ bool SCH_LINE::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
 
     if( GetLayer() == LAYER_WIRE )
     {
-        BOOST_FOREACH( DANGLING_END_ITEM item, aItemList )
+        for( DANGLING_END_ITEM item : aItemList )
         {
             if( item.GetItem() == this )
                 continue;

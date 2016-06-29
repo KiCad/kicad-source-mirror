@@ -35,7 +35,6 @@
 #include <pcbnew_id.h>
 
 #include <boost/optional.hpp>
-#include <boost/foreach.hpp>
 
 ///> Stores information about a mouse button state
 struct TOOL_DISPATCHER::BUTTON_STATE
@@ -131,14 +130,14 @@ TOOL_DISPATCHER::TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr ) :
 
 TOOL_DISPATCHER::~TOOL_DISPATCHER()
 {
-    BOOST_FOREACH( BUTTON_STATE* st, m_buttons )
+    for( BUTTON_STATE* st : m_buttons )
         delete st;
 }
 
 
 void TOOL_DISPATCHER::ResetState()
 {
-    BOOST_FOREACH( BUTTON_STATE* st, m_buttons )
+    for( BUTTON_STATE* st : m_buttons )
         st->Reset();
 }
 

@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
 #include <base_units.h> // God forgive me doing this...
@@ -128,14 +127,14 @@ int PNS_DP_MEANDER_PLACER::origPathLength() const
     int totalP = 0;
     int totalN = 0;
 
-    BOOST_FOREACH( const PNS_ITEM* item, m_tunedPathP.CItems() )
+    for( const PNS_ITEM* item : m_tunedPathP.CItems() )
     {
         if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
             totalP += l->CLine().Length();
 
     }
 
-    BOOST_FOREACH( const PNS_ITEM* item, m_tunedPathN.CItems() )
+    for( const PNS_ITEM* item : m_tunedPathN.CItems() )
     {
         if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
             totalN += l->CLine().Length();
@@ -206,13 +205,13 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
     m_result.SetBaselineOffset( offset );
 
-    BOOST_FOREACH( const PNS_ITEM* item, m_tunedPathP.CItems() )
+    for( const PNS_ITEM* item : m_tunedPathP.CItems() )
     {
         if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
             Router()->DisplayDebugLine( l->CLine(), 5, 10000 );
     }
 
-    BOOST_FOREACH( const PNS_ITEM* item, m_tunedPathN.CItems() )
+    for( const PNS_ITEM* item : m_tunedPathN.CItems() )
     {
         if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
             Router()->DisplayDebugLine( l->CLine(), 5, 10000 );
@@ -220,7 +219,7 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
     int curIndexP = 0, curIndexN = 0;
 
-    BOOST_FOREACH( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& sp, coupledSegments )
+    for( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& sp : coupledSegments )
     {
         SEG base = baselineSegment( sp );
 
@@ -267,7 +266,7 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
         tunedP.Clear();
         tunedN.Clear();
 
-        BOOST_FOREACH( PNS_MEANDER_SHAPE* m, m_result.Meanders() )
+        for( PNS_MEANDER_SHAPE* m : m_result.Meanders() )
         {
             if( m->Type() != MT_EMPTY )
             {

@@ -266,7 +266,7 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
     if( aFootprintName.IsEmpty() )
         return NULL;
 
-    BOOST_FOREACH( FOOTPRINT_INFO& fp, m_list )
+    for( FOOTPRINT_INFO& fp : m_list )
     {
         FPID fpid;
 

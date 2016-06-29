@@ -21,8 +21,6 @@
 #include <cstdio>
 #include <vector>
 
-#include <boost/foreach.hpp>
-
 #include <view/view.h>
 #include <view/view_item.h>
 #include <view/view_group.h>
@@ -701,7 +699,7 @@ BOARD* PNS_ROUTER::GetBoard()
 
 void PNS_ROUTER::eraseView()
 {
-    BOOST_FOREACH( BOARD_ITEM* item, m_hiddenItems )
+    for( BOARD_ITEM* item : m_hiddenItems )
     {
         item->ViewSetVisible( true );
     }
@@ -735,7 +733,7 @@ void PNS_ROUTER::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance 
 
 void PNS_ROUTER::DisplayItems( const PNS_ITEMSET& aItems )
 {
-    BOOST_FOREACH( const PNS_ITEM* item, aItems.CItems() )
+    for( const PNS_ITEM* item : aItems.CItems() )
         DisplayItem( item );
 }
 
@@ -796,7 +794,7 @@ void PNS_ROUTER::moveDragging( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
                                  PNS_NODE::ITEM_VECTOR& aRemoved )
 {
-    BOOST_FOREACH( PNS_ITEM* item, aCurrent.Items() )
+    for( PNS_ITEM* item : aCurrent.Items() )
     {
         PNS_NODE::OBSTACLES obstacles;
 
@@ -813,7 +811,7 @@ void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
             }
         }
 
-        BOOST_FOREACH( PNS_OBSTACLE& obs, obstacles )
+        for( PNS_OBSTACLE& obs : obstacles )
         {
             int clearance = aNode->GetClearance( item, obs.m_item );
             std::unique_ptr<PNS_ITEM> tmp( obs.m_item->Clone() );
@@ -838,12 +836,12 @@ void PNS_ROUTER::updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent )
 
     aNode->GetUpdatedItems( removed, added );
 
-    BOOST_FOREACH( PNS_ITEM* item, added )
+    for( PNS_ITEM* item : added )
     {
         DisplayItem( item );
     }
 
-    BOOST_FOREACH( PNS_ITEM* item, removed )
+    for( PNS_ITEM* item : removed )
     {
         BOARD_CONNECTED_ITEM* parent = item->Parent();
 
@@ -878,7 +876,7 @@ void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     m_placer->Move( aP, aEndItem );
     PNS_ITEMSET current = m_placer->Traces();
 
-    BOOST_FOREACH( const PNS_ITEM* item, current.CItems() )
+    for( const PNS_ITEM* item : current.CItems() )
     {
         if( !item->OfKind( PNS_ITEM::LINE ) )
             continue;
@@ -914,7 +912,7 @@ void PNS_ROUTER::CommitRouting( PNS_NODE* aNode )
         }
     }
 
-    BOOST_FOREACH( PNS_ITEM* item, added )
+    for( PNS_ITEM* item : added )
     {
         BOARD_CONNECTED_ITEM* newBI = NULL;
 
@@ -1004,7 +1002,7 @@ void PNS_ROUTER::StopRouting()
         std::vector<int> nets;
         m_placer->GetModifiedNets( nets );
 
-        BOOST_FOREACH ( int n, nets )
+        for( int n : nets )
         {
             // Update the ratsnest with new changes
             m_board->GetRatsnest()->Recalculate( n );

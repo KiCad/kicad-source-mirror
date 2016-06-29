@@ -22,7 +22,6 @@
 #define __PNS_ITEMSET_H
 
 #include <vector>
-#include <boost/foreach.hpp>
 
 #include "pns_item.h"
 
@@ -118,7 +117,7 @@ public:
     {
         int n = 0;
 
-        BOOST_FOREACH( PNS_ITEM* item, m_items )
+        for( PNS_ITEM* item : m_items )
         {
             if( item->Kind() & aKindMask )
                 n++;
@@ -205,7 +204,7 @@ public:
     {
         int n = 0;
 
-        BOOST_FOREACH( const PNS_ITEM* item, m_items )
+        for( const PNS_ITEM* item : m_items )
         {
             if( item->OfKind( kind ) )
             {

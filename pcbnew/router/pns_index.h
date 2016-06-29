@@ -24,7 +24,6 @@
 #include <layers_id_colors_and_visibility.h>
 #include <map>
 
-#include <boost/foreach.hpp>
 #include <boost/range/adaptor/map.hpp>
 
 #include <list>

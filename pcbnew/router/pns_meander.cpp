@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/foreach.hpp>
-
 #include <base_units.h> // God forgive me doing this...
 #include <colors.h>
 
@@ -578,7 +576,7 @@ void PNS_MEANDERED_LINE::AddMeander( PNS_MEANDER_SHAPE* aShape )
 
 void PNS_MEANDERED_LINE::Clear()
 {
-    BOOST_FOREACH( PNS_MEANDER_SHAPE* m, m_meanders )
+    for( PNS_MEANDER_SHAPE* m : m_meanders )
     {
         delete m;
     }

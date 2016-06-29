@@ -20,7 +20,6 @@
 
 #include <wx/numdlg.h>
 
-#include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 #include <functional>
 using namespace std::placeholders;

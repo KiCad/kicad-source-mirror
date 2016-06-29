@@ -145,7 +145,7 @@ public:
 
     PNS_VIA* Via()
     {
-        BOOST_FOREACH( PNS_ITEM* item, m_linkedItems.Items() )
+        for( PNS_ITEM* item : m_linkedItems.Items() )
         {
             if( item->OfKind( VIA ) )
                 return static_cast<PNS_VIA*>( item );
@@ -208,7 +208,7 @@ public:
         if( aJoint.IsLocked() )
             m_locked = true;
 
-        BOOST_FOREACH( PNS_ITEM* item, aJoint.LinkList() )
+        for( PNS_ITEM* item : aJoint.LinkList() )
         {
             m_linkedItems.Add( item );
         }

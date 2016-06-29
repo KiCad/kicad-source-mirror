@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
 #include <geometry/shape_line_chain.h>

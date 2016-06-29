@@ -35,7 +35,6 @@
 #include <common.h>
 #include <richio.h>
 #include <plot_common.h>
-#include <boost/foreach.hpp>
 
 #include <eeschema_config.h>
 #include <general.h>
@@ -264,7 +263,7 @@ bool SCH_BUS_ENTRY_BASE::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>&
     bool start_is_wire = false;
     bool end_is_wire = false;
 
-    BOOST_FOREACH( DANGLING_END_ITEM& each_item, aItemList )
+    for( DANGLING_END_ITEM& each_item : aItemList )
     {
         if( each_item.GetItem() == this )
             continue;

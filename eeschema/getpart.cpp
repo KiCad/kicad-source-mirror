@@ -49,8 +49,6 @@
 #include <component_tree_search_container.h>
 #include <dialog_get_component.h>
 
-#include <boost/foreach.hpp>
-
 
 wxString SCH_BASE_FRAME::SelectComponentFromLibBrowser( const SCHLIB_FILTER* aFilter,
                                                         LIB_ALIAS* aPreselectedAlias,
@@ -133,7 +131,7 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilte
 
     if( !loaded )
     {
-        BOOST_FOREACH( PART_LIB& lib, *libs )
+        for( PART_LIB& lib : *libs )
         {
             search_container.AddLibrary( lib );
         }

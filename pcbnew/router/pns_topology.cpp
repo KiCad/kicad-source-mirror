@@ -68,7 +68,7 @@ const PNS_TOPOLOGY::JOINT_SET PNS_TOPOLOGY::ConnectedJoints( PNS_JOINT* aStart )
         PNS_JOINT* current = searchQueue.front();
         searchQueue.pop_front();
 
-        BOOST_FOREACH( PNS_ITEM* item, current->LinkList() )
+        for( PNS_ITEM* item : current->LinkList() )
         {
             if( item->OfKind( PNS_ITEM::SEGMENT ) )
             {
@@ -136,9 +136,9 @@ PNS_ITEM* PNS_TOPOLOGY::NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor,
 
     m_world->AllItemsInNet( aStart->Net(), disconnected );
 
-    BOOST_FOREACH( const PNS_JOINT* jt, ConnectedJoints( aStart ) )
+    for( const PNS_JOINT* jt : ConnectedJoints( aStart ) )
     {
-        BOOST_FOREACH( PNS_ITEM* link, jt->LinkList() )
+        for( PNS_ITEM* link : jt->LinkList() )
         {
             if( disconnected.find( link ) != disconnected.end() )
                 disconnected.erase( link );
@@ -148,7 +148,7 @@ PNS_ITEM* PNS_TOPOLOGY::NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor,
     int best_dist = INT_MAX;
     PNS_ITEM* best = NULL;
 
-    BOOST_FOREACH( PNS_ITEM* item, disconnected )
+    for( PNS_ITEM* item : disconnected )
     {
         if( item->OfKind( aKindMask ) )
         {
@@ -188,7 +188,7 @@ bool PNS_TOPOLOGY::followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& 
         PNS_ITEM* via = NULL;
         PNS_SEGMENT* next_seg = NULL;
 
-        BOOST_FOREACH( PNS_ITEM* link, jt->Links().Items() )
+        for( PNS_ITEM* link : jt->Links().Items() )
         {
             if( link->OfKind( PNS_ITEM::VIA ) )
                 via = link;
@@ -346,7 +346,7 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
 
     if( ( refSeg = dyn_cast<PNS_SEGMENT*>( aStart ) ) != NULL )
     {
-        BOOST_FOREACH( PNS_ITEM* item, coupledItems )
+        for( PNS_ITEM* item : coupledItems )
         {
             if( PNS_SEGMENT* s = dyn_cast<PNS_SEGMENT*>( item ) )
             {
@@ -419,7 +419,7 @@ const std::set<PNS_ITEM*> PNS_TOPOLOGY::AssembleCluster( PNS_ITEM* aStart, int a
 
         m_world->QueryColliding( top, obstacles, PNS_ITEM::ANY, -1, false, 0 );
 
-        BOOST_FOREACH( PNS_OBSTACLE& obs, obstacles )
+        for( PNS_OBSTACLE& obs : obstacles )
         {
             if( visited.find( obs.m_item ) == visited.end() && obs.m_item->Layers().Overlaps( aLayer ) && !( obs.m_item->Marker() & MK_HEAD ) )
             {

@@ -42,8 +42,6 @@
 #include <class_library.h>
 #include <wildcards_and_files_ext.h>
 
-#include <boost/foreach.hpp>
-
 
 void LIB_EDIT_FRAME::LoadOneSymbol()
 {
@@ -114,7 +112,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     LIB_PART*   first = lib->GetFirstEntry()->GetPart();
     LIB_ITEMS&  drawList = first->GetDrawItemList();
 
-    BOOST_FOREACH( LIB_ITEM& item, drawList )
+    for( LIB_ITEM& item : drawList )
     {
         if( item.Type() == LIB_FIELD_T )
             continue;
@@ -217,7 +215,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
             LIB_ITEMS& drawList = part->GetDrawItemList();
 
-            BOOST_FOREACH( LIB_ITEM& item, drawList )
+            for( LIB_ITEM& item : drawList )
             {
                 if( item.Type() == LIB_FIELD_T )
                     continue;

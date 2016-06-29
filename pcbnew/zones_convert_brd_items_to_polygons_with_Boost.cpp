@@ -69,8 +69,6 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_file_io.h>
 
-#include <boost/foreach.hpp>
-
 /* DEBUG OPTION:
  * To emit zone data to a file when filling zones for the debugging purposes,
  * set this 'true' and build.

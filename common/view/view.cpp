@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/foreach.hpp>
 
 #include <base_struct.h>
 #include <layers_id_colors_and_visibility.h>
@@ -66,7 +65,7 @@ VIEW::VIEW( bool aIsDynamic ) :
 
 VIEW::~VIEW()
 {
-    BOOST_FOREACH( LAYER_MAP::value_type& l, m_layers )
+    for( LAYER_MAP::value_type& l : m_layers )
         delete l.second.items;
 }
 
@@ -576,7 +575,7 @@ void VIEW::UpdateAllLayersOrder()
 {
     sortLayers();
 
-    BOOST_FOREACH( LAYER_MAP::value_type& l, m_layers )
+    for( LAYER_MAP::value_type& l : m_layers )
     {
         ChangeLayerDepth( l.first, l.second.renderingOrder );
     }
@@ -612,7 +611,7 @@ struct VIEW::drawItem
 
 void VIEW::redrawRect( const BOX2I& aRect )
 {
-    BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
+    for( VIEW_LAYER* l : m_orderedLayers )
     {
         if( l->visible && IsTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
         {
@@ -727,7 +726,7 @@ void VIEW::Clear()
 
     r.SetMaximum();
 
-    BOOST_FOREACH( VIEW_ITEM* item, m_needsUpdate )
+    for( VIEW_ITEM* item : m_needsUpdate )
         item->clearUpdateFlags();
 
     m_needsUpdate.clear();
@@ -1015,7 +1014,7 @@ void VIEW::UpdateItems()
 {
     m_gal->BeginUpdate();
 
-    BOOST_FOREACH( VIEW_ITEM* item, m_needsUpdate )
+    for( VIEW_ITEM* item : m_needsUpdate )
     {
         assert( item->viewRequiredUpdate() != VIEW_ITEM::NONE );
 
@@ -1054,7 +1053,7 @@ const BOX2I VIEW::CalculateExtents()
     BOX2I fullScene;
     fullScene.SetMaximum();
 
-    BOOST_FOREACH( VIEW_LAYER* l, m_orderedLayers )
+    for( VIEW_LAYER* l : m_orderedLayers )
     {
         l->items->Query( fullScene, v );
     }

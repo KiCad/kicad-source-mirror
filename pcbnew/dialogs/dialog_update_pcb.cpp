@@ -113,7 +113,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
         if( !newFootprints.empty() )
         {
-            BOOST_FOREACH( MODULE* footprint, newFootprints )
+            for( MODULE* footprint : newFootprints )
             {
                 toolManager->RunAction( COMMON_ACTIONS::selectItem, true, footprint );
             }

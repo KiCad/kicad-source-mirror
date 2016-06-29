@@ -108,7 +108,7 @@ void PNS_MEANDER_PLACER_BASE::tuneLineLength( PNS_MEANDERED_LINE& aTuned, int aE
     int remaining = aElongation;
     bool finished = false;
 
-    BOOST_FOREACH( PNS_MEANDER_SHAPE* m, aTuned.Meanders() )
+    for( PNS_MEANDER_SHAPE* m : aTuned.Meanders() )
     {
         if( m->Type() != MT_CORNER )
         {
@@ -140,7 +140,7 @@ void PNS_MEANDER_PLACER_BASE::tuneLineLength( PNS_MEANDERED_LINE& aTuned, int aE
     remaining = aElongation;
     int meanderCount = 0;
 
-    BOOST_FOREACH(PNS_MEANDER_SHAPE* m, aTuned.Meanders())
+    for(PNS_MEANDER_SHAPE* m : aTuned.Meanders())
     {
         if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
         {
@@ -159,7 +159,7 @@ void PNS_MEANDER_PLACER_BASE::tuneLineLength( PNS_MEANDERED_LINE& aTuned, int aE
 
     if( balance >= 0 )
     {
-        BOOST_FOREACH( PNS_MEANDER_SHAPE* m, aTuned.Meanders() )
+        for( PNS_MEANDER_SHAPE* m : aTuned.Meanders() )
         {
             if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
             {

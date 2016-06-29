@@ -24,7 +24,6 @@
  */
 #include <limits>
 
-#include <boost/foreach.hpp>
 #include <functional>
 using namespace std::placeholders;
 
@@ -670,7 +669,7 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 
     ratsnest->GetConnectedItems( item, itemsList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
 
-    BOOST_FOREACH( BOARD_CONNECTED_ITEM* i, itemsList )
+    for( BOARD_CONNECTED_ITEM* i : itemsList )
         select( i );
 
     // Inform other potentially interested tools
@@ -695,7 +694,7 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
     clearSelection();
     ratsnest->GetNetItems( netCode, itemsList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
 
-    BOOST_FOREACH( BOARD_CONNECTED_ITEM* i, itemsList )
+    for( BOARD_CONNECTED_ITEM* i : itemsList )
         select( i );
 
     // Inform other potentially interested tools
@@ -1194,7 +1193,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         {
             aCollector.Empty();
 
-            BOOST_FOREACH( BOARD_ITEM* item, preferred )
+            for( BOARD_ITEM* item : preferred )
                 aCollector.Append( item );
             return;
         }
@@ -1364,7 +1363,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
 
     if( (unsigned) aCollector.GetCount() > rejected.size() )  // do not remove everything
     {
-        BOOST_FOREACH( BOARD_ITEM* item, rejected )
+        for( BOARD_ITEM* item : rejected )
         {
             aCollector.Remove( item );
         }
@@ -1405,7 +1404,7 @@ bool SELECTION_TOOL::SanitizeSelection()
 
     if( !rejected.empty() )
     {
-        BOOST_FOREACH( BOARD_ITEM* item, rejected )
+        for( BOARD_ITEM* item : rejected )
             unselect( item );
 
         // Inform other potentially interested tools
@@ -1414,7 +1413,7 @@ bool SELECTION_TOOL::SanitizeSelection()
 
     if( !added.empty() )
     {
-        BOOST_FOREACH( BOARD_ITEM* item, added )
+        for( BOARD_ITEM* item : added )
             select( item );
 
         // Inform other potentially interested tools

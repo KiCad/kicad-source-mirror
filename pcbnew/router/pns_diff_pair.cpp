@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/foreach.hpp>
-
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
@@ -281,7 +279,7 @@ const PNS_DIFF_PAIR PNS_DP_GATEWAY::Entry() const
 void PNS_DP_GATEWAYS::BuildOrthoProjections( PNS_DP_GATEWAYS& aEntries,
         const VECTOR2I& aCursorPos, int aOrthoScore )
 {
-    BOOST_FOREACH( PNS_DP_GATEWAY g, aEntries.Gateways() )
+    for( PNS_DP_GATEWAY g : aEntries.Gateways() )
     {
         VECTOR2I midpoint( ( g.AnchorP() + g.AnchorN() ) / 2 );
         SEG guide_s( midpoint, midpoint + VECTOR2I( 1, 0 ) );
@@ -304,7 +302,7 @@ void PNS_DP_GATEWAYS::BuildOrthoProjections( PNS_DP_GATEWAYS& aEntries,
 
         targets.BuildForCursor( proj );
 
-        BOOST_FOREACH( PNS_DP_GATEWAY t, targets.Gateways() )
+        for( PNS_DP_GATEWAY t : targets.Gateways() )
         {
             t.SetPriority( aOrthoScore );
             m_gateways.push_back( t );
@@ -318,9 +316,9 @@ bool PNS_DP_GATEWAYS::FitGateways( PNS_DP_GATEWAYS& aEntry, PNS_DP_GATEWAYS& aTa
 {
     std::vector<DP_CANDIDATE> candidates;
 
-    BOOST_FOREACH( PNS_DP_GATEWAY g_entry, aEntry.Gateways() )
+    for( PNS_DP_GATEWAY g_entry : aEntry.Gateways() )
     {
-        BOOST_FOREACH( PNS_DP_GATEWAY g_target, aTarget.Gateways() )
+        for( PNS_DP_GATEWAY g_target : aTarget.Gateways() )
         {
             for( int attempt = 0; attempt < 2; attempt++ )
             {
@@ -346,7 +344,7 @@ bool PNS_DP_GATEWAYS::FitGateways( PNS_DP_GATEWAYS& aEntry, PNS_DP_GATEWAYS& aTa
     DP_CANDIDATE best;
     bool found = false;
 
-    BOOST_FOREACH( DP_CANDIDATE c, candidates )
+    for( DP_CANDIDATE c : candidates )
     {
         if( c.score > bestScore )
         {
@@ -530,7 +528,7 @@ void PNS_DP_GATEWAYS::BuildForCursor( const VECTOR2I& aCursorPos )
 
 void PNS_DP_GATEWAYS::buildEntries( const VECTOR2I& p0_p, const VECTOR2I& p0_n )
 {
-    BOOST_FOREACH( PNS_DP_GATEWAY &g, m_gateways )
+    for( PNS_DP_GATEWAY &g : m_gateways )
     {
         if( !g.HasEntryLines() )
         {

@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
 #include <colors.h>
@@ -532,7 +531,7 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aI
     double bestDist = std::numeric_limits<double>::max();
     bool found = false;
 
-    BOOST_FOREACH( PNS_ITEM* item, items )
+    for( PNS_ITEM* item : items )
     {
         if( item->Kind() == aItem->Kind() )
         {

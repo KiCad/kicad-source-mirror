@@ -54,8 +54,6 @@
 
 #include <menus_helpers.h>
 
-#include <boost/foreach.hpp>
-
 
 /* This method guarantees unique IDs for the library this run of Eeschema
  * which prevents ID conflicts and eliminates the need to recompile every
@@ -336,7 +334,7 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
     PART_LIBS* libs = Prj().SchLibs();
 
-    BOOST_FOREACH( const PART_LIB& lib, *libs )
+    for( const PART_LIB& lib : *libs )
     {
         if( lib.IsModified() )
         {

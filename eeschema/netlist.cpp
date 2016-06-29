@@ -45,7 +45,6 @@
 #include <sch_sheet.h>
 #include <algorithm>
 #include <invoke_sch_dialog.h>
-#include <boost/foreach.hpp>
 
 #define IS_WIRE false
 #define IS_BUS true

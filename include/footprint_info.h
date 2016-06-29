@@ -31,7 +31,6 @@
 
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/foreach.hpp>
 
 #include <ki_mutex.h>
 #include <kicad_string.h>

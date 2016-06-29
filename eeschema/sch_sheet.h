@@ -31,7 +31,6 @@
 #define SCH_SHEEET_H
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/foreach.hpp>
 #include <sch_text.h>
 
 
@@ -505,7 +504,7 @@ public:
     {
         m_pos += aMoveVector;
 
-        BOOST_FOREACH( SCH_SHEET_PIN& pin, m_pins )
+        for( SCH_SHEET_PIN& pin : m_pins )
         {
             pin.Move( aMoveVector );
         }

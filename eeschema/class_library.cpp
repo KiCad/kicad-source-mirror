@@ -43,8 +43,6 @@
 #include <general.h>
 #include <class_library.h>
 
-#include <boost/foreach.hpp>
-
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
 
@@ -896,7 +894,7 @@ wxArrayString PART_LIBS::GetLibraryNames( bool aSorted )
     wxArrayString cacheNames;
     wxArrayString names;
 
-    BOOST_FOREACH( PART_LIB& lib, *this )
+    for( PART_LIB& lib : *this )
     {
         if( lib.IsCache() && aSorted )
             cacheNames.Add( lib.GetName() );
@@ -919,7 +917,7 @@ LIB_PART* PART_LIBS::FindLibPart( const wxString& aPartName, const wxString& aLi
 {
     LIB_PART* part = NULL;
 
-    BOOST_FOREACH( PART_LIB& lib, *this )
+    for( PART_LIB& lib : *this )
     {
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
@@ -938,7 +936,7 @@ LIB_ALIAS* PART_LIBS::FindLibraryEntry( const wxString& aEntryName, const wxStri
 {
     LIB_ALIAS* entry = NULL;
 
-    BOOST_FOREACH( PART_LIB& lib, *this )
+    for( PART_LIB& lib : *this )
     {
         if( !!aLibraryName && lib.GetName() != aLibraryName )
             continue;
@@ -954,7 +952,7 @@ LIB_ALIAS* PART_LIBS::FindLibraryEntry( const wxString& aEntryName, const wxStri
 
 void PART_LIBS::FindLibraryEntries( const wxString& aEntryName, std::vector<LIB_ALIAS*>& aEntries )
 {
-    BOOST_FOREACH( PART_LIB& lib, *this )
+    for( PART_LIB& lib : *this )
     {
         LIB_ALIAS* entry = lib.FindEntry( aEntryName );
 
@@ -970,7 +968,7 @@ void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_ALIAS*>& aCandidates,
                                         const wxString& aEntryName,
                                         const wxString& aLibraryName )
 {
-    BOOST_FOREACH( PART_LIB& lib, *this )
+    for( PART_LIB& lib : *this )
     {
         if( !!aLibraryName && lib.GetName() != aLibraryName )
             continue;

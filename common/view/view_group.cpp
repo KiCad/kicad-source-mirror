@@ -36,7 +36,6 @@
 #include <view/view.h>
 #include <painter.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <boost/foreach.hpp>
 #include <layers_id_colors_and_visibility.h>
 
 using namespace KIGFX;
@@ -91,7 +90,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal ) const
     PAINTER* painter = m_view->GetPainter();
 
     // Draw all items immediately (without caching)
-    BOOST_FOREACH( VIEW_ITEM* item, m_items )
+    for( VIEW_ITEM* item : m_items )
     {
         aGal->PushDepth();
 
@@ -125,7 +124,7 @@ void VIEW_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
 
 void VIEW_GROUP::FreeItems()
 {
-    BOOST_FOREACH( VIEW_ITEM* item, m_items )
+    for( VIEW_ITEM* item : m_items )
     {
         delete item;
     }

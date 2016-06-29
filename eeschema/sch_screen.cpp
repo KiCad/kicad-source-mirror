@@ -54,7 +54,6 @@
 #include <sch_text.h>
 #include <lib_pin.h>
 
-#include <boost/foreach.hpp>
 
 #define EESCHEMA_FILE_STAMP   "EESchema"
 
@@ -493,7 +492,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
                  SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION ) < 0 )
         return false;
 
-    BOOST_FOREACH( const PART_LIB& lib, *Prj().SchLibs() )
+    for( const PART_LIB& lib : *Prj().SchLibs() )
     {
         if( fprintf( aFile, "LIBS:%s\n", TO_UTF8( lib.GetName() ) ) < 0 )
             return false;

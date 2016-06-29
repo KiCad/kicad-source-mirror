@@ -50,6 +50,8 @@
  *      2. Round to a 50-mil grid coordinate if desired
  */
 
+#include <boost/range/adaptor/reversed.hpp>
+
 #include <schframe.h>
 #include <hotkeys_basic.h>
 #include <sch_component.h>
@@ -59,7 +61,6 @@
 #include <class_libentry.h>
 #include <eeschema_config.h>
 #include <kiface_i.h>
-#include <boost/foreach.hpp>
 #include <vector>
 #include <algorithm>
 
@@ -187,7 +188,7 @@ protected:
         int max_field_width = 0;
         int total_height = 0;
 
-        BOOST_FOREACH( SCH_FIELD* field, m_fields )
+        for( SCH_FIELD* field : m_fields )
         {
             int field_width;
             int field_height;
@@ -248,7 +249,7 @@ protected:
         std::vector<LIB_PIN*> pins;
         m_component->GetPins( pins );
 
-        BOOST_FOREACH( LIB_PIN* each_pin, pins )
+        for( LIB_PIN* each_pin : pins )
         {
             if( !each_pin->IsVisible() && !m_power_symbol )
                 continue;
@@ -277,7 +278,7 @@ protected:
 
                 std::vector<SCH_FIELD*> fields;
                 comp->GetFields( fields, /* aVisibleOnly */ true );
-                BOOST_FOREACH( SCH_FIELD* field, fields )
+                for( SCH_FIELD* field : fields )
                     aItems.push_back( field );
             }
             aItems.push_back( item );
@@ -293,7 +294,7 @@ protected:
     std::vector<SCH_ITEM*> filtered_colliders( const EDA_RECT& aRect )
     {
         std::vector<SCH_ITEM*> filtered;
-        BOOST_FOREACH( SCH_ITEM* item, m_colliders )
+        for( SCH_ITEM* item : m_colliders )
         {
             EDA_RECT item_box;
             if( SCH_COMPONENT* item_comp = dynamic_cast<SCH_COMPONENT*>( item ) )
@@ -389,12 +390,12 @@ protected:
         std::vector<SIDE_AND_COLL> colliding;
 
         // Iterate over all sides and find the ones that collide
-        BOOST_FOREACH( SIDE side, sides )
+        for( SIDE side : sides )
         {
             EDA_RECT box( field_box_placement( side ), m_fbox_size );
 
             COLLISION collision = COLLIDE_NONE;
-            BOOST_FOREACH( SCH_ITEM* collider, filtered_colliders( box ) )
+            for( SCH_ITEM* collider : filtered_colliders( box ) )
             {
                 SCH_LINE* line = dynamic_cast<SCH_LINE*>( collider );
                 if( line && !side.x )
@@ -432,7 +433,7 @@ protected:
         while( it != aSides.end() )
         {
             bool collide = false;
-            BOOST_FOREACH( SIDE_AND_COLL collision, aCollidingSides )
+            for( SIDE_AND_COLL collision : aCollidingSides )
             {
                 if( collision.side == it->side && collision.collision == aCollision )
                     collide = true;
@@ -473,12 +474,12 @@ protected:
             side = choose_side_filtered( sides, colliding_sides, COLLIDE_H_WIRES, side );
         }
 
-        BOOST_REVERSE_FOREACH( SIDE_AND_NPINS& each_side, sides )
+        for( SIDE_AND_NPINS& each_side : sides | boost::adaptors::reversed )
         {
             if( !each_side.pins ) return each_side.side;
         }
 
-        BOOST_FOREACH( SIDE_AND_NPINS& each_side, sides )
+        for( SIDE_AND_NPINS& each_side : sides )
         {
             if( each_side.pins <= side.pins )
             {
@@ -545,7 +546,7 @@ protected:
         // Find the offset of the wires for proper positioning
         int offset = 0;
 
-        BOOST_FOREACH( SCH_ITEM* item, colliders )
+        for( SCH_ITEM* item : colliders )
         {
             SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
             if( !line )

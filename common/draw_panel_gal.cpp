@@ -39,7 +39,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 
-#include <boost/foreach.hpp>
 
 #ifdef PROFILE
 #include <profile.h>
@@ -95,7 +94,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE
     };
 
-    BOOST_FOREACH( wxEventType eventType, events )
+    for( wxEventType eventType : events )
     {
         Connect( eventType, wxEventHandler( EDA_DRAW_PANEL_GAL::onEvent ),
                  NULL, m_eventDispatcher );
@@ -260,7 +259,7 @@ void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 
     if( m_eventDispatcher )
     {
-        BOOST_FOREACH( wxEventType type, eventTypes )
+        for( wxEventType type : eventTypes )
         {
             m_parent->Connect( type, wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
                                NULL, m_eventDispatcher );
@@ -268,7 +267,7 @@ void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
     }
     else
     {
-        BOOST_FOREACH( wxEventType type, eventTypes )
+        for( wxEventType type : eventTypes )
         {
             // While loop is used to be sure that all event handlers are removed.
             while( m_parent->Disconnect( type,

@@ -22,8 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/foreach.hpp>
-
 #include <gal/graphics_abstraction_layer.h>
 #include "edit_points.h"
 
@@ -74,7 +72,7 @@ int EDIT_POINTS::GetContourStartIdx( int aPointIdx ) const
 {
     int lastIdx = 0;
 
-    BOOST_FOREACH( int idx, m_contours )
+    for( int idx : m_contours )
     {
         if( idx >= aPointIdx )
             return lastIdx;
@@ -88,7 +86,7 @@ int EDIT_POINTS::GetContourStartIdx( int aPointIdx ) const
 
 int EDIT_POINTS::GetContourEndIdx( int aPointIdx ) const
 {
-    BOOST_FOREACH( int idx, m_contours )
+    for( int idx : m_contours )
     {
         if( idx >= aPointIdx )
             return idx;
@@ -100,7 +98,7 @@ int EDIT_POINTS::GetContourEndIdx( int aPointIdx ) const
 
 bool EDIT_POINTS::IsContourStart( int aPointIdx ) const
 {
-    BOOST_FOREACH( int idx, m_contours )
+    for( int idx : m_contours )
     {
         if( idx + 1 == aPointIdx )
             return true;
@@ -116,7 +114,7 @@ bool EDIT_POINTS::IsContourStart( int aPointIdx ) const
 
 bool EDIT_POINTS::IsContourEnd( int aPointIdx ) const
 {
-    BOOST_FOREACH( int idx, m_contours )
+    for( int idx : m_contours )
     {
         if( idx == aPointIdx )
             return true;
@@ -215,10 +213,10 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
 
     float size = m_view->ToWorld( EDIT_POINT::POINT_SIZE );
 
-    BOOST_FOREACH( const EDIT_POINT& point, m_points )
+    for( const EDIT_POINT& point : m_points )
         aGal->DrawRectangle( point.GetPosition() - size / 2, point.GetPosition() + size / 2 );
 
-    BOOST_FOREACH( const EDIT_LINE& line, m_lines )
+    for( const EDIT_LINE& line : m_lines )
     {
         aGal->DrawCircle( line.GetPosition(), size / 2 );
     }

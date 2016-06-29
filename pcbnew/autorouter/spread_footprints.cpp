@@ -35,7 +35,6 @@
  */
 
 #include <algorithm>
-#include <boost/foreach.hpp>
 
 #include <fctsys.h>
 #include <convert_to_biu.h>
@@ -194,7 +193,7 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
     // calculate also the area needed by these footprints
     std::vector <MODULE*> footprintList;
 
-    BOOST_FOREACH( MODULE* footprint, *aFootprints )
+    for( MODULE* footprint : *aFootprints )
     {
         footprint->CalculateBoundingBox();
 
@@ -221,7 +220,7 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
     undoList.m_Status = UR_CHANGED;
     ITEM_PICKER        picker( NULL, UR_CHANGED );
 
-    BOOST_FOREACH( MODULE* footprint, footprintList )
+    for( MODULE* footprint : footprintList )
     {
         // Undo: add copy of the footprint to undo list
         picker.SetItem( footprint );

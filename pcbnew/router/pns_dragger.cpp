@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/foreach.hpp>
-
 #include "pns_dragger.h"
 #include "pns_shove.h"
 #include "pns_router.h"
@@ -86,7 +84,7 @@ bool PNS_DRAGGER::startDragVia( const VECTOR2D& aP, PNS_VIA* aVia )
     if( !jt )
         return false;
 
-    BOOST_FOREACH( PNS_ITEM* item, jt->LinkList() )
+    for( PNS_ITEM* item : jt->LinkList() )
     {
         if( item->OfKind( PNS_ITEM::SEGMENT ) )
         {
@@ -193,7 +191,7 @@ void PNS_DRAGGER::dumbDragVia( PNS_VIA* aVia, PNS_NODE* aNode, const VECTOR2I& a
     m_lastNode->Remove( aVia );
     m_lastNode->Add( m_draggedVia );
 
-    BOOST_FOREACH( PNS_ITEM* item, m_origViaConnections.Items() )
+    for( PNS_ITEM* item : m_origViaConnections.Items() )
     {
         if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
         {

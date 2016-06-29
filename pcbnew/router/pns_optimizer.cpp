@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/foreach.hpp>
-
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_convex.h>
@@ -271,7 +269,7 @@ int LINE_RESTRICTIONS::allowedAngles( PNS_NODE* aWorld, const PNS_LINE* aLine, c
 
     int n_dirs = 0;
 
-    BOOST_FOREACH( const PNS_ITEM* item, jt->Links().CItems() )
+    for( const PNS_ITEM* item : jt->Links().CItems() )
     {
         if( item->OfKind( PNS_ITEM::VIA ) || item->OfKind( PNS_ITEM::SOLID ) )
             return 0xff;
@@ -814,7 +812,7 @@ PNS_ITEM* PNS_OPTIMIZER::findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP 
     if( !jt )
         return NULL;
 
-    BOOST_FOREACH( PNS_ITEM* item, jt->LinkList() )
+    for( PNS_ITEM* item : jt->LinkList() )
     {
         if( item->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID ) )
             return item;
@@ -852,7 +850,7 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
 
     for( int p = 1; p <= p_end; p++ )
     {
-        BOOST_FOREACH( SHAPE_LINE_CHAIN & l, breakouts ) {
+        for( SHAPE_LINE_CHAIN & l : breakouts ) {
 
             for( int diag = 0; diag < 2; diag++ )
             {
@@ -900,7 +898,7 @@ int PNS_OPTIMIZER::smartPadsSingle( PNS_LINE* aLine, PNS_ITEM* aPad, bool aEnd, 
     bool found = false;
     int p_best = -1;
 
-    BOOST_FOREACH( RtVariant& vp, variants )
+    for( RtVariant& vp : variants )
     {
         PNS_LINE tmp( *aLine, vp.second );
         int cost = PNS_COST_ESTIMATOR::CornerCost( vp.second );

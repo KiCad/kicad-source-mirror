@@ -36,7 +36,6 @@
 #include <schframe.h>
 #include <plot_common.h>
 #include <msgpanel.h>
-#include <boost/foreach.hpp>
 
 #include <general.h>
 #include <class_library.h>
@@ -666,7 +665,7 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 
 void SCH_COMPONENT::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly )
 {
-    BOOST_FOREACH( SCH_FIELD& each_field, m_Fields )
+    for( SCH_FIELD& each_field : m_Fields )
     {
         if( !aVisibleOnly || ( each_field.IsVisible() && !each_field.IsVoid() ) )
             aVector.push_back( &each_field );
@@ -1671,7 +1670,7 @@ bool SCH_COMPONENT::IsPinDanglingStateChanged( std::vector<DANGLING_END_ITEM> &a
 
     wxPoint pin_position = GetPinPhysicalPosition( aLibPins[aPin] );
 
-    BOOST_FOREACH( DANGLING_END_ITEM& each_item, aItemList )
+    for( DANGLING_END_ITEM& each_item : aItemList )
     {
         // Some people like to stack pins on top of each other in a symbol to indicate
         // internal connection. While technically connected, it is not particularly useful
@@ -1727,7 +1726,7 @@ bool SCH_COMPONENT::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aIte
 
 bool SCH_COMPONENT::IsDangling() const
 {
-    BOOST_FOREACH( bool each, m_isDangling )
+    for( bool each : m_isDangling )
     {
         if( each )
             return true;

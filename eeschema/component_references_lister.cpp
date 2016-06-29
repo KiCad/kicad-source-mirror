@@ -39,8 +39,6 @@
 #include <sch_reference_list.h>
 #include <sch_component.h>
 
-#include <boost/foreach.hpp>
-
 
 //#define USE_OLD_ALGO
 
@@ -332,7 +330,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId,
 
         // Check whether this component is in aLockedUnitMap.
         SCH_REFERENCE_LIST* lockedList = NULL;
-        BOOST_FOREACH( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair, aLockedUnitMap )
+        for( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair : aLockedUnitMap )
         {
             unsigned n_refs = pair.second.GetCount();
             for( unsigned thisRefI = 0; thisRefI < n_refs; ++thisRefI )

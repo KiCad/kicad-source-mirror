@@ -394,7 +394,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
         return;
     }
 
-    BOOST_FOREACH( const FOOTPRINT_INFO& footprint, fp_info_list.GetList() )
+    for( const FOOTPRINT_INFO& footprint : fp_info_list.GetList() )
     {
         m_footprintList->Append( footprint.GetFootprintName() );
     }

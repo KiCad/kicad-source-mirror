@@ -41,8 +41,6 @@
 #include <class_library.h>
 #include <dialogs/dialog_plot_schematic.h>
 
-#include <boost/foreach.hpp>
-
 
 void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 {

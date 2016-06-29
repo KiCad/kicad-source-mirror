@@ -127,7 +127,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
         SpreadFootprints( &newFootprints, false, false );
         if( !newFootprints.empty() )
         {
-            BOOST_FOREACH( MODULE* footprint, newFootprints )
+            for( MODULE* footprint : newFootprints )
             {
                 m_toolManager->RunAction( COMMON_ACTIONS::selectItem, true, footprint );
             }

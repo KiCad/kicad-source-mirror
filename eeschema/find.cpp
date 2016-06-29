@@ -52,8 +52,6 @@
 
 #include <kicad_device_context.h>
 
-#include <boost/foreach.hpp>
-
 #include <dialogs/dialog_schematic_find.h>
 
 

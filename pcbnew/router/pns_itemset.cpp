@@ -18,8 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/foreach.hpp>
-
 #include "pns_itemset.h"
 #include "pns_line.h"
 
@@ -53,7 +51,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterLayers( int aStart, int aEnd, bool aInvert )
     else
         l = PNS_LAYERSET( aStart, aEnd );
 
-    BOOST_FOREACH( const ENTRY& ent, m_items )
+    for( const ENTRY& ent : m_items )
     {
         if( ent.item->Layers().Overlaps( l ) ^ aInvert )
         {
@@ -71,7 +69,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterKinds( int aKindMask, bool aInvert )
 {
     ENTRIES newItems;
 
-    BOOST_FOREACH( const ENTRY& ent, m_items )
+    for( const ENTRY& ent : m_items )
     {
         if( ent.item->OfKind( aKindMask ) ^ aInvert )
         {
@@ -89,7 +87,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterMarker( int aMarker, bool aInvert )
 {
     ENTRIES newItems;
 
-    BOOST_FOREACH( const ENTRY& ent, m_items )
+    for( const ENTRY& ent : m_items )
     {
         if( ent.item->Marker() & aMarker )
         {
@@ -107,7 +105,7 @@ PNS_ITEMSET& PNS_ITEMSET::FilterNet( int aNet, bool aInvert )
 {
     ENTRIES newItems;
 
-    BOOST_FOREACH( const ENTRY& ent, m_items )
+    for( const ENTRY& ent : m_items )
     {
         if( ( ent.item->Net() == aNet ) ^ aInvert )
         {
@@ -125,7 +123,7 @@ PNS_ITEMSET& PNS_ITEMSET::ExcludeItem( const PNS_ITEM* aItem )
 {
     ENTRIES newItems;
 
-    BOOST_FOREACH( const ENTRY& ent, m_items )
+    for( const ENTRY& ent : m_items )
     {
         if( ent.item != aItem )
 

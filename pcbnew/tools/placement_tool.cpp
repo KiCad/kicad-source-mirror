@@ -32,7 +32,6 @@
 #include <ratsnest_data.h>
 
 #include <confirm.h>
-#include <boost/foreach.hpp>
 
 PLACEMENT_TOOL::PLACEMENT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL ), m_placementMenu( NULL )
@@ -277,7 +276,7 @@ int PLACEMENT_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
         // Distance between items
         const int distance = ( maxX - position ) / ( itemsList.size() - 1 );
 
-        BOOST_FOREACH( BOARD_ITEM* item, itemsList )
+        for( BOARD_ITEM* item : itemsList )
         {
             int difference = position - item->GetBoundingBox().Centre().x;
 
@@ -324,7 +323,7 @@ int PLACEMENT_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
         // Distance between items
         const int distance = ( maxY - position ) / ( itemsList.size() - 1 );
 
-        BOOST_FOREACH( BOARD_ITEM* item, itemsList )
+        for( BOARD_ITEM* item : itemsList )
         {
             int difference = position - item->GetBoundingBox().Centre().y;
 

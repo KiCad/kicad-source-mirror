@@ -28,7 +28,6 @@
 #include <stack>
 #include <algorithm>
 
-#include <boost/foreach.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 #include <boost/range/adaptor/map.hpp>
@@ -434,7 +433,7 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, "" );      // deactivate the active tool
     ProcessEvent( evt );
 
-    BOOST_FOREACH( TOOL_BASE* tool, m_toolState | boost::adaptors::map_keys )
+    for( TOOL_BASE* tool : m_toolState | boost::adaptors::map_keys )
     {
         tool->Reset( aReason );
         tool->SetTransitions();
@@ -490,7 +489,7 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
     // iterate over all registered tools
-    BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
+    for( TOOL_ID toolId : m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
 
@@ -518,13 +517,13 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         }
     }
 
-    BOOST_FOREACH( TOOL_STATE* st, m_toolState | boost::adaptors::map_values )
+    for( TOOL_STATE* st : m_toolState | boost::adaptors::map_values )
     {
         // no state handler in progress - check if there are any transitions (defined by
         // Go() method that match the event.
         if( !st->pendingWait && !st->transitions.empty() )
         {
-            BOOST_FOREACH( TRANSITION& tr, st->transitions )
+            for( TRANSITION& tr : st->transitions )
             {
                 if( tr.first.Matches( aEvent ) )
                 {
@@ -584,7 +583,7 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 
 void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 {
-    BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
+    for( TOOL_ID toolId : m_activeTools )
     {
         TOOL_STATE* st = m_toolIdIndex[toolId];
 

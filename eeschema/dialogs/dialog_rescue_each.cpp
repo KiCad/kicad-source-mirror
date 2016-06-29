@@ -31,7 +31,6 @@
 #include <class_libentry.h>
 #include <set>
 #include <vector>
-#include <boost/foreach.hpp>
 #include <project_rescue.h>
 #include <eeschema_config.h>
 
@@ -127,7 +126,7 @@ bool DIALOG_RESCUE_EACH::TransferDataToWindow()
 void DIALOG_RESCUE_EACH::PopulateConflictList()
 {
     wxVector<wxVariant> data;
-    BOOST_FOREACH( RESCUE_CANDIDATE& each_candidate, m_Rescuer->m_all_candidates )
+    for( RESCUE_CANDIDATE& each_candidate : m_Rescuer->m_all_candidates )
     {
         data.clear();
         data.push_back( wxVariant( true ) );
@@ -151,7 +150,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
     RESCUE_CANDIDATE& selected_part = m_Rescuer->m_all_candidates[row];
 
     wxVector<wxVariant> data;
-    BOOST_FOREACH( SCH_COMPONENT* each_component, *m_Rescuer->GetComponents() )
+    for( SCH_COMPONENT* each_component : *m_Rescuer->GetComponents() )
     {
         if( each_component->GetPartName() != selected_part.GetRequestedName() )
             continue;

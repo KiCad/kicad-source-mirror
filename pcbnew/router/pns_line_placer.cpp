@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/foreach.hpp>
 #include <boost/optional.hpp>
 
 #include <colors.h>
@@ -121,7 +120,7 @@ bool PNS_LINE_PLACER::handleSelfIntersections()
 
     // if there is more than one intersection, find the one that is
     // closest to the beginning of the tail.
-    BOOST_FOREACH( SHAPE_LINE_CHAIN::INTERSECTION i, ips )
+    for( SHAPE_LINE_CHAIN::INTERSECTION i : ips )
     {
         if( i.our.Index() < n )
         {
@@ -971,13 +970,13 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE& aLatest )
         int removedCount = 0;
         int total = 0;
 
-        BOOST_FOREACH( PNS_LINE& line, lines )
+        for( PNS_LINE& line : lines )
         {
             total++;
 
             if( !( line.ContainsSegment( seg ) ) && line.SegmentCount() )
             {
-                BOOST_FOREACH( PNS_SEGMENT *ss, *line.LinkedSegments() )
+                for( PNS_SEGMENT *ss : *line.LinkedSegments() )
                     toErase.insert( ss );
 
                 removedCount++;
@@ -987,7 +986,7 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE& aLatest )
         TRACE( 0, "total segs removed: %d/%d\n", removedCount % total );
     }
 
-    BOOST_FOREACH( PNS_SEGMENT *s, toErase )
+    for( PNS_SEGMENT *s : toErase )
         aNode->Remove( s );
 
     aNode->Remove( &aLatest );

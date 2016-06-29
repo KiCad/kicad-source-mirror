@@ -45,7 +45,6 @@
 #include <algorithm>
 #include <fstream>
 #include <limits>
-#include <boost/foreach.hpp>
 #include <class_board_connected_item.h>
 #include <memory>
 
@@ -60,7 +59,7 @@ void NODE::updateLayers()
 {
     assert( m_layers.none() );
 
-    BOOST_FOREACH( const BOARD_CONNECTED_ITEM* item, m_parents )
+    for( const BOARD_CONNECTED_ITEM* item : m_parents )
         m_layers |= item->GetLayerSet();
 }
 
@@ -329,7 +328,7 @@ bool TRIANGULATION::removeLeadingEdgeFromList( EDGE_PTR& aLeadingEdge )
 
 void TRIANGULATION::cleanAll()
 {
-    BOOST_FOREACH( EDGE_PTR& edge, m_leadingEdges )
+    for( EDGE_PTR& edge : m_leadingEdges )
         edge->SetNextEdgeInFace( EDGE_PTR() );
 }
 

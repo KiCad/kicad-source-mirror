@@ -34,7 +34,6 @@
 #include <wildcards_and_files_ext.h>
 
 #include <cctype>
-#include <boost/foreach.hpp>
 #include <map>
 
 
@@ -183,7 +182,7 @@ static LIB_PART* find_component( wxString aName, PART_LIBS* aLibs, bool aCached 
 {
     LIB_PART *part = NULL;
 
-    BOOST_FOREACH( PART_LIB& each_lib, *aLibs )
+    for( PART_LIB& each_lib : *aLibs )
     {
         if( aCached && !each_lib.IsCache() )
             continue;
@@ -208,7 +207,7 @@ void RESCUER::RemoveDuplicates()
             it != m_all_candidates.end(); )
     {
         bool seen_already = false;
-        BOOST_FOREACH( wxString& name_seen, names_seen )
+        for( wxString& name_seen : names_seen )
         {
             if( name_seen == it->GetRequestedName() )
             {
@@ -248,7 +247,7 @@ public:
         typedef std::map<wxString, RESCUE_CASE_CANDIDATE> candidate_map_t;
         candidate_map_t candidate_map;
 
-        BOOST_FOREACH( SCH_COMPONENT* each_component, *( aRescuer.GetComponents() ) )
+        for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
             wxString part_name( each_component->GetPartName() );
 
@@ -266,7 +265,7 @@ public:
         }
 
         // Now, dump the map into aCandidates
-        BOOST_FOREACH( const candidate_map_t::value_type& each_pair, candidate_map )
+        for( const candidate_map_t::value_type& each_pair : candidate_map )
         {
             aCandidates.push_back( new RESCUE_CASE_CANDIDATE( each_pair.second ) );
         }
@@ -298,7 +297,7 @@ public:
 
     virtual bool PerformAction( RESCUER* aRescuer )
     {
-        BOOST_FOREACH( SCH_COMPONENT* each_component, *aRescuer->GetComponents() )
+        for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
         {
             if( each_component->GetPartName() != m_requested_name ) continue;
             each_component->SetPartName( m_new_name );
@@ -334,7 +333,7 @@ public:
 
         wxString part_name_suffix = aRescuer.GetPartNameSuffix();
 
-        BOOST_FOREACH( SCH_COMPONENT* each_component, *( aRescuer.GetComponents() ) )
+        for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
             wxString part_name( each_component->GetPartName() );
 
@@ -356,7 +355,7 @@ public:
         }
 
         // Now, dump the map into aCandidates
-        BOOST_FOREACH( const candidate_map_t::value_type& each_pair, candidate_map )
+        for( const candidate_map_t::value_type& each_pair : candidate_map )
         {
             aCandidates.push_back( new RESCUE_CACHE_CANDIDATE( each_pair.second ) );
         }
@@ -416,7 +415,7 @@ public:
         new_part.RemoveAllAliases();
         RESCUE_CACHE_CANDIDATE::m_rescue_lib.get()->AddPart( &new_part );
 
-        BOOST_FOREACH( SCH_COMPONENT* each_component, *aRescuer->GetComponents() )
+        for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
         {
             if( each_component->GetPartName() != m_requested_name ) continue;
             each_component->SetPartName( m_new_name );
@@ -479,7 +478,7 @@ void RESCUER::LogRescue( SCH_COMPONENT *aComponent, const wxString &aOldName,
 
 bool RESCUER::DoRescues()
 {
-    BOOST_FOREACH( RESCUE_CANDIDATE* each_candidate, m_chosen_candidates )
+    for( RESCUE_CANDIDATE* each_candidate : m_chosen_candidates )
     {
         if( ! each_candidate->PerformAction( this ) )
             return false;
@@ -490,7 +489,7 @@ bool RESCUER::DoRescues()
 
 void RESCUER::UndoRescues()
 {
-    BOOST_FOREACH( RESCUE_LOG& each_logitem, m_rescue_log )
+    for( RESCUE_LOG& each_logitem : m_rescue_log )
     {
         each_logitem.component->SetPartName( each_logitem.old_name );
         each_logitem.component->ClearFlags();
