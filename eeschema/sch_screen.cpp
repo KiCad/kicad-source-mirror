@@ -425,20 +425,19 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
 bool SCH_SCREEN::SchematicCleanUp()
 {
-    SCH_ITEM* item, * testItem;
     bool      modified = false;
 
-    item = m_drawList.begin();
-
-    for( ; item; item = item->Next() )
+    for( SCH_ITEM* item = m_drawList.begin() ; item; item = item->Next() )
     {
         if( ( item->Type() != SCH_LINE_T ) && ( item->Type() != SCH_JUNCTION_T ) )
             continue;
 
-        testItem = item->Next();
+        bool restart;
 
-        while( testItem )
+        for( SCH_ITEM* testItem = item->Next(); testItem; testItem = restart ? m_drawList.begin() : testItem->Next() )
         {
+            restart = false;
+
             if( ( item->Type() == SCH_LINE_T ) && ( testItem->Type() == SCH_LINE_T ) )
             {
                 SCH_LINE* line = (SCH_LINE*) item;
@@ -448,12 +447,8 @@ bool SCH_SCREEN::SchematicCleanUp()
                     // Keep the current flags, because the deleted segment can be flagged.
                     item->SetFlags( testItem->GetFlags() );
                     DeleteItem( testItem );
-                    testItem = m_drawList.begin();
+                    restart = true;
                     modified = true;
-                }
-                else
-                {
-                    testItem = testItem->Next();
                 }
             }
             else if ( ( ( item->Type() == SCH_JUNCTION_T )
@@ -464,17 +459,9 @@ bool SCH_SCREEN::SchematicCleanUp()
                     // Keep the current flags, because the deleted segment can be flagged.
                     item->SetFlags( testItem->GetFlags() );
                     DeleteItem( testItem );
-                    testItem = m_drawList.begin();
+                    restart = true;
                     modified = true;
                 }
-                else
-                {
-                    testItem = testItem->Next();
-                }
-            }
-            else
-            {
-                testItem = testItem->Next();
             }
         }
     }
