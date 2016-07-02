@@ -81,8 +81,7 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
     m_NoteBook->SetSelection( m_page );
 
     m_sdbSizerStdButtonsOK->SetDefault();
-    GetSizer()->SetSizeHints( this );
-    Centre();
+
     Layout();
 }
 

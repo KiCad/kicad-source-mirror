@@ -93,6 +93,17 @@ private:
     void OnScaleSelectionClick( wxCommandEvent& event );
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
+
+    void OnInitDlg( wxInitDialogEvent& event )
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+        event.Skip();
+    }
+
     void SetPrintParameters( );
     void SetPenWidth();
     void initValues( );
@@ -153,10 +164,6 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent )
     /* Problems with modal on wx-2.9 - Anyway preview is standard for OSX */
    m_buttonPreview->Hide();
 #endif
-
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
-    Center();
 }
 
 
