@@ -107,6 +107,11 @@ void DIALOG_SHIM::FinishDialogSettings()
     // SetSizeHints fixes the minimal size of sizers in the dialog
     // (SetSizeHints calls Fit(), so no need to call it)
     GetSizer()->SetSizeHints( this );
+
+    wxSizeEvent event;
+    event.SetSize( GetSize() );
+    wxPostEvent( this, event );
+
     // the default position, when calling the first time the dlg
     Center();
 }
