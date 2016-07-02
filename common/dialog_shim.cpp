@@ -99,6 +99,17 @@ DIALOG_SHIM::~DIALOG_SHIM()
     delete m_qmodal_parent_disabler;    // usually NULL by now
 }
 
+void DIALOG_SHIM::FinishDialogSettings()
+{
+    // must be called from the constructor of derived classes,
+    // when all widgets are initialized, and therefore their size fixed
+
+    // SetSizeHints fixes the minimal size of sizers in the dialog
+    // (SetSizeHints calls Fit(), so no need to call it)
+    GetSizer()->SetSizeHints( this );
+    // the default position, when calling the first time the dlg
+    Center();
+}
 
 // our hashtable is an implementation secret, don't need or want it in a header file
 #include <hashtables.h>

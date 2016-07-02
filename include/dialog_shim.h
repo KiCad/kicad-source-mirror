@@ -91,6 +91,19 @@ public:
 
 protected:
 
+    /**
+     * In all dialogs, we must call the same functions to fix minimal
+     * dlg size, the default position and some others to fix a few issues
+     * depending on Windows Managers
+     * this helper function does these calls.
+     *
+     * FinishDialogSettings must be called from the constructor of derived classes,
+     * when all widgets are initialized, and therefore their size fixed.
+     * If TransferDataToWindow() is used to initialize widgets, at end of TransferDataToWindow,
+     * or better at end of a wxInitDialogEvent handler
+     */
+    void FinishDialogSettings();
+
     std::string m_hash_key;     // alternate for class_map when classname re-used.
 
     // variables for quasi-modal behavior support, only used by a few derivatives.

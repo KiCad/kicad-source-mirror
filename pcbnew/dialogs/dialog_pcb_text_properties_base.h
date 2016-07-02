@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2016)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,9 +22,9 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/sizer.h>
 #include <wx/bmpcbox.h>
 #include <wx/choice.h>
-#include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -62,10 +62,14 @@ class DIALOG_PCB_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_orientationLabel;
 		wxTextCtrl* m_ThicknessCtrl;
 		wxTextCtrl* m_OrientCtrl;
-		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_StandardSizer;
 		wxButton* m_StandardSizerOK;
 		wxButton* m_StandardSizerCancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		
