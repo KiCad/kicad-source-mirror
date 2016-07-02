@@ -50,7 +50,7 @@
 #include <fp_lib_table.h>
 #include <fpid.h>
 #include <class_module.h>
-#include <boost/thread.hpp>
+#include <thread>
 #include <html_messagebox.h>
 
 
@@ -213,7 +213,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
         LOCALE_IO   top_most_nesting;
 
         // Something which will not invoke a thread copy constructor, one of many ways obviously:
-        typedef boost::ptr_vector< boost::thread >  MYTHREADS;
+        typedef std::vector< std::thread >  MYTHREADS;
 
         MYTHREADS threads;
 
@@ -234,7 +234,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* a
             else
             {
                 // Delegate the job to a temporary thread created here.
-                threads.push_back( new boost::thread( &FOOTPRINT_LIST::loader_job,
+                threads.push_back( std::thread( &FOOTPRINT_LIST::loader_job,
                         this, &nicknames[i], jobz ) );
             }
 
