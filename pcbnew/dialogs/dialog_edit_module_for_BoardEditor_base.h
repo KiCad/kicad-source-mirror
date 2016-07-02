@@ -115,6 +115,7 @@ class DIALOG_MODULE_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerStdButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnEditReference( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditValue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ModuleOrientEvent( wxCommandEvent& event ) { event.Skip(); }

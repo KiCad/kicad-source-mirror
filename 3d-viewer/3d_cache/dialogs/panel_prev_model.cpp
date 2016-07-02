@@ -290,7 +290,6 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     }
 
     SetSizerAndFit( mainBox );
-    Centre();
 
     return;
 }
