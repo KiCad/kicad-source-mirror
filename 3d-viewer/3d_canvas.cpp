@@ -53,6 +53,9 @@
 #include <textures/text_pcb.h>
 
 
+static const double DELTA_MOVE_STEP = 0.7;
+
+
 /*
  * EDA_3D_CANVAS implementation
  */
@@ -168,7 +171,7 @@ void EDA_3D_CANVAS::OnChar( wxKeyEvent& event )
 void EDA_3D_CANVAS::SetView3D( int keycode )
 {
     int    ii;
-    double delta_move = 0.7 * GetPrm3DVisu().m_Zoom;
+    double delta_move = DELTA_MOVE_STEP * GetPrm3DVisu().m_Zoom;
 
     switch( keycode )
     {
@@ -283,18 +286,27 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
 
 void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 {
-    double delta = 0.05 * GetPrm3DVisu().m_Zoom * event.GetWheelRotation();
+    double delta = DELTA_MOVE_STEP * GetPrm3DVisu().m_Zoom;
+    if ( GetPrm3DVisu().GetFlag( FL_MOUSEWHEEL_PANNING ) )
+        delta *= 0.05 * event.GetWheelRotation();
+    else
+        if ( event.GetWheelRotation() < 0 )
+            delta = -delta;
 
-    if( event.ShiftDown() || GetPrm3DVisu().GetFlag( FL_MOUSEWHEEL_PANNING ) )
+    if( GetPrm3DVisu().GetFlag( FL_MOUSEWHEEL_PANNING ) )
     {
         if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL )
             m_draw3dOffset.x -= delta;
         else
             m_draw3dOffset.y -= delta;
     }
-    else if( event.ControlDown() )
+    else if( event.ShiftDown() )
     {
         m_draw3dOffset.y -= delta;
+    }
+    else if( event.ControlDown() )
+    {
+        m_draw3dOffset.x += delta;
     }
     else
     {
