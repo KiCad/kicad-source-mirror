@@ -991,12 +991,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     else if( wheelRotation > 0 )
     {
         if( event.ShiftDown() && !event.ControlDown() )
-        {
-            if( axis == 0 )
-                cmd.SetId( ID_PAN_UP );
-            else
-                cmd.SetId( ID_PAN_RIGHT );
-        }
+            cmd.SetId( ID_PAN_UP );
         else if( event.ControlDown() && !event.ShiftDown() )
             cmd.SetId( ID_PAN_LEFT );
         else if( offCenterReq )
@@ -1007,12 +1002,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     else if( wheelRotation < 0 )
     {
         if( event.ShiftDown() && !event.ControlDown() )
-        {
-            if( axis == 0 )
-                cmd.SetId( ID_PAN_DOWN );
-            else
-                cmd.SetId( ID_PAN_LEFT );
-        }
+            cmd.SetId( ID_PAN_DOWN );
         else if( event.ControlDown() && !event.ShiftDown() )
             cmd.SetId( ID_PAN_RIGHT );
         else if( offCenterReq )
