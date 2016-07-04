@@ -83,7 +83,6 @@ private:
 
         // Now all widgets have the size fixed, call FinishDialogSettings
         FinishDialogSettings();
-        event.Skip();
     }
 };
 

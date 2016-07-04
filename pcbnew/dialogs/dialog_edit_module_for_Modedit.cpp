@@ -122,6 +122,7 @@ void DIALOG_MODULE_MODULE_EDITOR::initModeditProperties()
     m_lastSelected3DShapeIndex = -1;
 
     // Init 3D shape list
+    m_3D_ShapeNameListBox->Clear();
     S3D_MASTER* draw3D = m_currentModule->Models();
     wxString origPath;
     wxString alias;
