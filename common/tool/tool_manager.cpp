@@ -522,7 +522,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
         }
     }
 
-    for( TOOL_STATE* st : m_toolState | boost::adaptors::map_values )
+    for( TOOL_STATE* st : ( m_toolState | boost::adaptors::map_values ) )
     {
         // no state handler in progress - check if there are any transitions (defined by
         // Go() method that match the event.
@@ -536,10 +536,10 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     if( st->cofunc )
                         st->Push();
 
+                    st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( tr.second );
+
                     // as the state changes, the transition table has to be set up again
                     st->transitions.clear();
-
-                    st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( tr.second );
 
                     // got match? Run the handler.
                     st->cofunc->Call( aEvent );
