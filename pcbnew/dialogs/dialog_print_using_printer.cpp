@@ -97,7 +97,7 @@ private:
     void OnInitDlg( wxInitDialogEvent& event )
     {
         // Call the default wxDialog handler of a wxInitDialogEvent
-        event.Skip();
+        TransferDataToWindow();
 
         // Now all widgets have the size fixed, call FinishDialogSettings
         FinishDialogSettings();
