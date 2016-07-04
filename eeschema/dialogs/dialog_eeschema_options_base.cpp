@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -205,6 +205,11 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	bSizer2->Add( m_checkMiddleButtonPanLimited, 0, wxTOP|wxRIGHT|wxLEFT, 3 );
 	
+	m_checkEnableMousewheelPan = new wxCheckBox( m_panel1, xwID_ANY, _("Use touchpa&d to pan"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkEnableMousewheelPan->SetToolTip( _("Use touchpad to pan canvas") );
+	
+	bSizer2->Add( m_checkEnableMousewheelPan, 0, wxLEFT|wxRIGHT|wxTOP, 3 );
+	
 	m_checkAutoPan = new wxCheckBox( m_panel1, wxID_ANY, _("Pan while moving ob&ject"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_checkAutoPan, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 	
@@ -239,21 +244,21 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	wxStaticBoxSizer* fieldSizer;
 	fieldSizer = new wxStaticBoxSizer( new wxStaticBox( m_panel2, wxID_ANY, _("Field Settings") ), wxVERTICAL );
 	
-	fieldNameLabel = new wxStaticText( m_panel2, wxID_ANY, _("&Name"), wxDefaultPosition, wxDefaultSize, 0 );
+	fieldNameLabel = new wxStaticText( fieldSizer->GetStaticBox(), wxID_ANY, _("&Name"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldNameLabel->Wrap( -1 );
 	fieldSizer->Add( fieldNameLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	fieldNameTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	fieldNameTextCtrl = new wxTextCtrl( fieldSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	fieldSizer->Add( fieldNameTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	fieldDefaultValueLabel = new wxStaticText( m_panel2, wxID_ANY, _("D&efault Value"), wxDefaultPosition, wxDefaultSize, 0 );
+	fieldDefaultValueLabel = new wxStaticText( fieldSizer->GetStaticBox(), wxID_ANY, _("D&efault Value"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldDefaultValueLabel->Wrap( -1 );
 	fieldSizer->Add( fieldDefaultValueLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 	
-	fieldDefaultValueTextCtrl = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
+	fieldDefaultValueTextCtrl = new wxTextCtrl( fieldSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	fieldSizer->Add( fieldDefaultValueTextCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
-	fieldVisibleCheckbox = new wxCheckBox( m_panel2, wxID_ANY, _("&Visible"), wxDefaultPosition, wxDefaultSize, 0 );
+	fieldVisibleCheckbox = new wxCheckBox( fieldSizer->GetStaticBox(), wxID_ANY, _("&Visible"), wxDefaultPosition, wxDefaultSize, 0 );
 	fieldSizer->Add( fieldVisibleCheckbox, 0, wxALL, 5 );
 	
 	

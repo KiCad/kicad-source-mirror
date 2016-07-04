@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2007-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ static const int CURSOR_SIZE = 12; ///< Cursor size in pixels
 
 // keys to store options in config:
 #define ENBL_ZOOM_NO_CENTER_KEY         wxT( "ZoomNoCenter" )
+#define ENBL_MOUSEWHEEL_PAN_KEY         wxT( "MousewheelPAN" )
 #define ENBL_MIDDLE_BUTT_PAN_KEY        wxT( "MiddleButtonPAN" )
 #define MIDDLE_BUTT_PAN_LIMITED_KEY     wxT( "MiddleBtnPANLimited" )
 #define ENBL_AUTO_PAN_KEY               wxT( "AutoPAN" )
@@ -96,11 +97,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 {
     wxASSERT( parent );
 
-#ifndef USE_OSX_MAGNIFY_EVENT
     ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
-#else
-    ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
-#endif
     DisableKeyboardScrolling();
 
     m_scrollIncrementX = std::min( size.x / 8, 10 );
@@ -119,6 +116,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_ClipBox.SetY( 0 );
     m_canStartBlock = -1;       // Command block can start if >= 0
     m_abortRequest = false;
+    m_enableMousewheelPan = false;
     m_enableMiddleButtonPan = true;
     m_enableZoomNoCenter = false;
     m_panScrollbarLimits = false;
@@ -136,6 +134,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
     if( cfg )
     {
+        cfg->Read( ENBL_MOUSEWHEEL_PAN_KEY, &m_enableMousewheelPan, false );
         cfg->Read( ENBL_MIDDLE_BUTT_PAN_KEY, &m_enableMiddleButtonPan, true );
         cfg->Read( ENBL_ZOOM_NO_CENTER_KEY, &m_enableZoomNoCenter, false );
         cfg->Read( MIDDLE_BUTT_PAN_LIMITED_KEY, &m_panScrollbarLimits, false );
@@ -165,6 +164,7 @@ EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
 
     if( cfg )
     {
+        cfg->Write( ENBL_MOUSEWHEEL_PAN_KEY, m_enableMousewheelPan );
         cfg->Write( ENBL_MIDDLE_BUTT_PAN_KEY, m_enableMiddleButtonPan );
         cfg->Write( ENBL_ZOOM_NO_CENTER_KEY, m_enableZoomNoCenter );
         cfg->Write( MIDDLE_BUTT_PAN_LIMITED_KEY, m_panScrollbarLimits );
@@ -437,7 +437,7 @@ void EDA_DRAW_PANEL::OnScroll( wxScrollWinEvent& event )
     // so we skip these events.
     // Note they are here just in case, because they are not actually used
     // in Kicad
-#if wxCHECK_VERSION( 3, 1, 0 ) || !wxCHECK_VERSION( 2, 9, 5 ) || !defined (__WINDOWS__)
+#if wxCHECK_VERSION( 3, 1, 0 ) || !wxCHECK_VERSION( 2, 9, 5 ) || ( !defined (__WINDOWS__) && !defined (__WXMAC__) )
     int maxX = unitsX - csizeX;
     int maxY = unitsY - csizeY;
 
@@ -645,6 +645,15 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
                 wxT( "Clip box: (%d, %d, %d, %d), Draw extents (%d, %d, %d, %d)" ),
                 m_ClipBox.GetX(), m_ClipBox.GetY(), m_ClipBox.GetRight(), m_ClipBox.GetBottom(),
                 DC->MinX(), DC->MinY(), DC->MaxX(), DC->MaxY() );
+}
+
+
+void EDA_DRAW_PANEL::SetEnableMousewheelPan( bool aEnable )
+{
+    m_enableMousewheelPan = aEnable;
+
+    if( GetParent()->IsGalCanvasActive() )
+        GetParent()->GetGalCanvas()->GetViewControls()->EnableMousewheelPan( aEnable );
 }
 
 
@@ -965,9 +974,21 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
     offCenterReq = offCenterReq || m_enableZoomNoCenter;
 
     int axis = event.GetWheelAxis();
+    int wheelRotation = event.GetWheelRotation();
 
-    // This is a zoom in or out command
-    if( event.GetWheelRotation() > 0 )
+    if( m_enableMousewheelPan )
+    {
+        wxPoint newStart = GetViewStart();
+        if( axis == wxMOUSE_WHEEL_HORIZONTAL )
+            newStart.x += wheelRotation;
+        else
+            newStart.y -= wheelRotation;
+
+        wxPoint center = GetScreenCenterLogicalPosition();
+        GetParent()->SetScrollCenterPosition( center );
+        Scroll( newStart );
+    }
+    else if( wheelRotation > 0 )
     {
         if( event.ShiftDown() && !event.ControlDown() )
         {
@@ -983,7 +1004,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
         else
             cmd.SetId( ID_POPUP_ZOOM_IN );
     }
-    else if( event.GetWheelRotation() < 0 )
+    else if( wheelRotation < 0 )
     {
         if( event.ShiftDown() && !event.ControlDown() )
         {
@@ -1000,7 +1021,8 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
             cmd.SetId( ID_POPUP_ZOOM_OUT );
     }
 
-    GetEventHandler()->ProcessEvent( cmd );
+    if( cmd.GetId() )
+        GetEventHandler()->ProcessEvent( cmd );
     event.Skip();
 }
 
