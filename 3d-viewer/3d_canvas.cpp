@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,9 @@
 #include <textures/text_pcb.h>
 
 
+static const double DELTA_MOVE_STEP = 0.7;
+
+
 /*
  * EDA_3D_CANVAS implementation
  */
@@ -86,7 +89,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
     m_init   = false;
     m_reportWarnings = true;
     m_shadow_init = false;
-    // set an invalide value to not yet initialized indexes managing
+    // set an invalid value to not yet initialized indexes managing
     // textures created to enhance 3D rendering
     m_text_pcb = m_text_silk = INVALID_INDEX;
     m_text_fake_shadow_front = INVALID_INDEX;
@@ -144,8 +147,7 @@ void EDA_3D_CANVAS::ClearLists( int aGlList )
         m_glLists[ii] = 0;
     }
 
-    // When m_text_fake_shadow_??? is set to INVALID_INDEX, textures are no yet
-    // created.
+    // When m_text_fake_shadow_??? is set to INVALID_INDEX, textures are not yet created.
     if( m_text_fake_shadow_front != INVALID_INDEX )
         glDeleteTextures( 1, &m_text_fake_shadow_front );
 
@@ -169,7 +171,7 @@ void EDA_3D_CANVAS::OnChar( wxKeyEvent& event )
 void EDA_3D_CANVAS::SetView3D( int keycode )
 {
     int    ii;
-    double delta_move = 0.7 * GetPrm3DVisu().m_Zoom;
+    double delta_move = DELTA_MOVE_STEP * GetPrm3DVisu().m_Zoom;
 
     switch( keycode )
     {
@@ -284,19 +286,27 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
 
 void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 {
-    if( event.ShiftDown() )
+    double delta = DELTA_MOVE_STEP * GetPrm3DVisu().m_Zoom;
+    if ( GetPrm3DVisu().GetFlag( FL_MOUSEWHEEL_PANNING ) )
+        delta *= 0.05 * event.GetWheelRotation();
+    else
+        if ( event.GetWheelRotation() < 0 )
+            delta = -delta;
+
+    if( GetPrm3DVisu().GetFlag( FL_MOUSEWHEEL_PANNING ) )
     {
-        if( event.GetWheelRotation() < 0 )
-            SetView3D( WXK_UP );    // move up
+        if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL )
+            m_draw3dOffset.x -= delta;
         else
-            SetView3D( WXK_DOWN );  // move down
+            m_draw3dOffset.y -= delta;
+    }
+    else if( event.ShiftDown() )
+    {
+        m_draw3dOffset.y -= delta;
     }
     else if( event.ControlDown() )
     {
-        if( event.GetWheelRotation() > 0 )
-            SetView3D( WXK_RIGHT ); // move right
-        else
-            SetView3D( WXK_LEFT );  // move left
+        m_draw3dOffset.x += delta;
     }
     else
     {
@@ -310,10 +320,10 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
         else
             GetPrm3DVisu().m_Zoom *= 1.4;
 
-        DisplayStatus();
-        Refresh( false );
     }
 
+    DisplayStatus();
+    Refresh( false );
     GetPrm3DVisu().m_Beginx = event.GetX();
     GetPrm3DVisu().m_Beginy = event.GetY();
 }
@@ -327,7 +337,9 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
     GetPrm3DVisu().m_Zoom /= magnification;
 
     if( GetPrm3DVisu().m_Zoom <= 0.01 )
+    {
         GetPrm3DVisu().m_Zoom = 0.01;
+    }
 
     DisplayStatus();
     Refresh( false );
@@ -376,8 +388,6 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 }
 
 
-/* Construct and display a popup menu when the right button is clicked.
- */
 void EDA_3D_CANVAS::OnRightClick( wxMouseEvent& event )
 {
     wxPoint     pos;
@@ -563,7 +573,7 @@ GLuint load_and_generate_texture( tsImage *image )
     return texture;
 }
 
-/* Initialize broad parameters for OpenGL */
+
 void EDA_3D_CANVAS::InitGL()
 {
     if( !m_init )
@@ -579,7 +589,7 @@ void EDA_3D_CANVAS::InitGL()
         m_ZTop = 10.0;
 
         glDisable( GL_CULL_FACE );      // show back faces
-        glEnable( GL_DEPTH_TEST );      // Enable z-buferring
+        glEnable( GL_DEPTH_TEST );      // Enable z-buffering
         glEnable( GL_ALPHA_TEST );
         glEnable( GL_LINE_SMOOTH );
 //        glEnable(GL_POLYGON_SMOOTH);  // creates issues with some graphic cards
@@ -600,7 +610,6 @@ void EDA_3D_CANVAS::InitGL()
 }
 
 
-/* Initialize OpenGL light sources. */
 void EDA_3D_CANVAS::SetLights()
 {
     // activate light. the source is above the xy plane, at source_pos
