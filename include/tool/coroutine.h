@@ -35,6 +35,7 @@
 #include <boost/context/fcontext.hpp>
 #else
 #include <boost/context/execution_context.hpp>
+#include <boost/context/protected_fixedsize_stack.hpp>
 #endif
 
 /**
@@ -191,7 +192,7 @@ public:
         m_callee = new context_type( boost::context::make_fcontext( sp, m_stackSize, callerStub ) );
 #else
         m_callee = new context_type( std::allocator_arg_t(),
-                    boost::context::fixedsize_stack( c_defaultStackSize ), &COROUTINE::callerStub );
+                    boost::context::protected_fixedsize_stack( c_defaultStackSize ), &COROUTINE::callerStub );
 #endif
 
 #if BOOST_VERSION <= 106000
