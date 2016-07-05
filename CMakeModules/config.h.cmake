@@ -69,9 +69,6 @@
 /// When defined, build the GITHUB_PLUGIN for pcbnew.
 #cmakedefine BUILD_GITHUB_PLUGIN
 
-/// When defined, use KIWAY and KIFACE DSOs
-#cmakedefine USE_KIWAY_DLLS
-
 /// A file extension with a leading '.' is a suffix, and this one is used on
 /// top level program modules which implement the KIFACE.
 #define KIFACE_SUFFIX                   wxT( "@KIFACE_SUFFIX@" )

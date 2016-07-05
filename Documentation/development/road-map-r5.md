@@ -34,20 +34,6 @@ This section defines the tasks that affect all or most of KiCad or do not
 fit under as specific part of the code such as the board editor or the
 schematic editor.
 
-## Create Schematic Code Shared Object. ## {#v5_kiway}
-**Goal:**
-
-Merge common schematic code into to a separate shared object to allow access
-to schematic objects by third party code and Python support.
-
-**Task:**
-
-**Dependencies:**
-- None
-
-**Status:**
-- No Progress.
-
 ## User Interface Modernization ## {#v5_wxaui}
 **Goal:**
 
@@ -70,56 +56,28 @@ Create perspectives to allow users to arrange dockable windows as they prefer.
   shortcuts for any tool or action.
 
 **Dependencies:**
-- [wxWidgets 3](#wxwidgets3)
+- None
 
 **Status:**
 - No progress.
 
-## Regular Expression Library Search ## {#v5_gen_lib_reg_ex}
+## Search Tree Control ## {#v5_re_search_control}
 
 **Goal:**
-Add regular expression and wildcard searching to component and footprint
-library search dialogs.
+Create a user interface element that allows searching through a list of
+items in a tree control for library searching.
 
 **Task:**
-- Add implementation to component and footprint search dialogs.
+- Create hybrid tree control with search text control for displaying filtered
+  objects (both symbol and footprint libraries) in a parent window.
 
 **Dependencies:**
 - None
 
 **Status:**
 - Initial container searching code completed.
-- Searching implemented in component library search dialog.
-- Needs to be added to footprint library search dialog in CvPcb and Pcbnew.
-
-# Build Tools # {#v5_build_tools}
-This section covers build tools for both the KiCad source as well as the
-custom dependency builds required to build KiCad.
-
-## Create Separate Build Dependency Project ## {#v5_depends_prj}
-**Goal:**
-
-Move the library dependencies and their patches into a separate project to
-developers to build and install them as required instead of requiring them
-at build time.  Give developers the flexibility to build and/or install
-library dependencies as they see fit.  Remove them from the KiCad source code
-to reduce the build footprint.
-
-**Task:**
-- Create a separate project to build all external dependency libraries that are
-  currently build from source (Boost, OpenSSL, etc).
-- Use CMake to create a package configuration file for each library so the
-  KiCad find package can pull in header paths, library dependencies, compile
-  flags, and link flags to build KiCad.
-- Use CMake find package to pull external dependencies.
-- Remove all build from source dependencies for KiCad source code.
-
-**Dependencies:**
-- None
-
-**Status:**
-- In progress.
-
+- Wildcard and regular expression container searching completed.
+- Control code in progress.
 
 # Common Library # {#v5_common_lib}
 This section covers the source code shared between all of the KiCad
@@ -143,16 +101,16 @@ to the new framework and remove the legacy framework tools.
 **Status**
 - In progress
 
-## Linux Printing Improvements ## {#v5_linux_print}
+## Printing Improvements ## {#v5_print}
 **Goal:**
 
-Bring printing on Linux up to par with printing on Windows.
+Make printing quality consistent across platforms.
 
 **Task:**
-- Resolve Linux printing issues.
+- Resolve printing issues on all platforms.
 
 **Dependencies**
-- [wxWidgets 3](#wxwidgets3)
+- None
 
 **Status**
 - No progress.
@@ -175,20 +133,20 @@ Provide an object introspection system using properties.
 **Status:**
 - No progress.
 
-## Dynamic Library Plugin ## {#v5_plugin_base}
+## 3D Viewer Dynamic Library Plugin ## {#v5_plugin_base}
 **Goal:**
 
-Create a base library plugin for handling external file I/O.  This will allow
-plugins to be provided that are external to the project such as providing solid
-model file support (STEP, IGES, etc.) using OpenCascade without making it a
-project dependency.
+Create a base library plugin for handling external file I/O for the 3D viewer.
+This will allow plugins to be provided that are external to the project such
+as providing solid model file support (STEP, IGES, etc.) using OpenCascade
+without making it a project dependency.
 
 **Task:**
 - Create a plugin to handle dynamically registered plugins for loading and
   saving file formats.
 - This object should be flexible enough to be extended for handling all file
   plugin types including schematic, board, footprint library, component
-  library, etc.
+  library, etc. (optional)
 - See [blueprint](https://blueprints.launchpad.net/kicad/+spec/pluggable-file-io)
   on Launchpad for more information.
 
@@ -196,11 +154,7 @@ project dependency.
 - None
 
 **Status:**
-- No progress.
-
-
-# KiCad: Application Launcher # {#v5_kicad}
-This section applies to the source code for the KiCad application launcher.
+- 3D plugin code complete and legacy formats implemented.
 
 
 # Eeschema: Schematic Editor # {#v5_eeschema}
@@ -210,35 +164,25 @@ This section applies to the source code for the Eeschema schematic editor.
 **Goal:**
 
 Clean up the code related to the schematic object(s) into a coherent object for
-managing and manipulating the schematic.
+managing and manipulating the schematic that can be used by third party tools
+and Python scripting.
 
 **Task:**
-- Move most if not all of the code from SCH_SCREEN to the new SCHEMATIC object.
+- Move handling of root sheet object to SCHEMATIC object.
+- Move SCH_SCREENS code into SCH_OBJECT.
+- Build and maintain schematic hierarchy in SCHEMATIC object rather than
+  recreating on the fly every time the hierarchical information is required.
+- Optionally build and maintain netlist during editing for extended editing
+  features.
 - Add any missing functionality to the SCHEMATIC object.
 
 **Dependencies:**
-- None
+- [Schematic and Component Library Plugin](#v5_sch_plugin)
 
 **Status:**
 - In progress.
 
-## Hierarchical Sheet Design ## {#v5_hierarchy_fix}
-**Goal:**
-
-Create a more robust sheet instance design rather than recreating them on the
-fly every time sheet information is required.
-
-**Task:**
-- Choose a data structure to contain the sheet hierarchy.
-- Create helper class to manipulate the hierarchy data structure.
-
-**Dependencies:**
-- None
-
-**Status:**
-- In progress.
-
-## Schematic and Component Library Plugin ## {#v5_sch_plugin}
+## Schematic and Component Library I/O Manager Plugin ## {#v5_sch_plugin}
 **Goal:**
 Create a plugin manager for loading and saving schematics and component
 libraries similar to the board plugin manager.
@@ -249,44 +193,18 @@ libraries similar to the board plugin manager.
   plugin.
 
 **Dependencies:**
-- [Dynamic library plugin](#v5_plugin_base)
-
-**Status:**
-- No progress.
-
-## Graphics Abstraction Layer Conversion ## {#v5_sch_gal}
-**Goal:**
-
-Take advantage of advanced graphics rendering in Eeschema.
-
-**Task:**
-- Port graphics rendering to GAL.
-
-**Dependencies:**
 - None
 
 **Status:**
-- No progress.
+- I/O manager and plugin objects are complete.
+- Legacy schematic file parser almost ready to commit.
 
-## Port Editing Tools ## {#v5_sch_tool_framework}
-**Goal:**
-
-Use standard tool framework across all applications.
-
-**Task:**
-- Rewrite editing tools using the new tool framework.
-
-**Dependencies:**
-- [GAL port](#v5_sch_gal).
-
-**Status:**
-- Initial Discussion..
 
 ## S-Expression File Format ## {#v5_sch_sexpr}
 **Goal:**
 
 Make schematic file format more readable, add new features, and take advantage
-of the s-expression capability used in Pcbnew.
+of the s-expression parser and formatter capability used in Pcbnew.
 
 **Task:**
 - Finalize feature set and file format.
@@ -296,7 +214,7 @@ of the s-expression capability used in Pcbnew.
 - Add new s-expression file format to plugin.
 
 **Dependencies:**
-- [Dynamic library plugin](#v5_plugin_base).
+- [Schematic and component I/O manager plugin](#v5_sch_plugin)
 
 **Status:**
 - File format document nearly complete.
@@ -312,34 +230,41 @@ to make component library files more readable.
 
 **Dependencies:**
 - [S-expression file format](#v5_sch_sexpr).
+  [Schematic and component I/O manager plugin](#v5_sch_plugin)
 
 **Status:**
-- Initial SWEET library written.
+- Initial SWEET library file format document  written.
 
 ## Component Library Editor Usability Improvements ## {#v5_lib_editor_usability}
 **Goal:**
 
-Make editing components with multiple units and/or alternate graphical
-representations easier.
+Make editing schematic symbol libraries easier to manage.
 
 **Task:**
 - Determine usability improvements in the library editor for components with
   multiple units and/or alternate graphical representations.
-- Implement said usability improvements.
+- Replace current library/symbols selection process with new hybrid tree search
+  widget in new window pain for selection libraries and symbols.  Provide drag
+  and drop symbol copy/move between libraries.
+- Allow editing of symbol libraries not defined in footprint library table(s)
+  using the file/path dialog to open a library.
 
 **Dependencies:**
-- None.
+- [Search Tree Control](#v5_re_search_control)
 
 **Status:**
-- No progress.
+- Determined alternate UI designs using new hybrid search tree control.
 
 ## Component and Netlist Attributes ## {#v5_netlist_attributes}
 **Goal:**
+
 Provide a method of passing information to other tools via the net list.
 
 **Task:**
 - Add virtual components and attributes to netlist to define properties that
   can be used by other tools besides the board editor.
+- Attributes (properties) are automatically included as part of the new file
+  format.
 
 **Dependencies:**
 - [S-expression schematic file format](#v5_sch_sexpr).
@@ -347,23 +272,9 @@ Provide a method of passing information to other tools via the net list.
 **Status:**
 - No progress.
 
-## Net Highlighting ## {#v5_sch_net_highlight}
-**Goal:**
-Highlight wires, buses, and junctions when corresponding net in Pcbnew is selected.
-
-**Task:**
-- Add communications link to handle net selection from Pcbnew.
-- Implement highlight algorithm for net objects.
-- Highlight objects connected to net selected in Pcbnew.
-
-**Dependencies:**
-- [GAL port, maybe](#v5_sch_gal).
-
-**Status:**
-- No progress.
-
 ## Move Common Schematic Code into a Shared Object ## {#v5_sch_shared_object}
 **Goal:**
+
 Refactor all schematic object code so that it can be built into a shared object
 for use by the schematic editor, Python module, and linked into third party
 programs.
@@ -372,7 +283,7 @@ programs.
 - Split schematic object code from schematic and component editor code.
 - Generate shared object from schematic object code.
 - Update build configuration to build schematic and component editors
-against new schematic shared object.
+  against new schematic shared object.
 
 **Dependencies:**
 - None
@@ -382,6 +293,7 @@ against new schematic shared object.
 
 ## ERC Improvements ## {#v5_sch_erc_improvements}
 **Goal:**
+
 Improve the coverage and useability of the electrical rules checker (ERC).
 
 **Task:**
@@ -401,6 +313,7 @@ This section covers the source code of the footprint assignment tool CvPcb.
 ## Improved Footprint Search Tool ## {#v5_cvpcb_search}
 
 **Goal:**
+
 Provide advanced search features such as wild card and regular expression
 searches using the type as you go feature of the current search dialog.
 
@@ -410,25 +323,37 @@ searches using the type as you go feature of the current search dialog.
 - Add search dialog to CvPcb to search container of footprint names.
 
 **Dependencies:**
-- None
+- [Search Tree Control](#v5_re_search_control)
 
 **Status:**
 - Pattern matching added to search container objects.
 
-## Add Progress Dialog on Start Up ## {#v5_cvpcb_progress}
-
+# Circuit Simulation # {#simulation}
 **Goal:**
-Provide user feedback when loading footprint libraries are loading after
-start up.
+
+Provide quality circuit simulation capabilities similar to commercial products.
 
 **Task:**
-- Create a progress dialog to show the percentage of libraries loaded.
+- Evaluate and select simulation library (spice, gnucap, qucs, etc).
+- Evaluate and select plotting library with wxWidgets support.
+- Confirm current spice netlist export is up to the task and add missing
+  support for simulations.
+- Use plotting library to handle simulator output in a consistent manor similar
+  to LTSpice.
+- Develop a tool that allows fine tuning of components on the fly.
+- Use plugin for the simulation code to allow support of different simulation
+  libraries.
+- Create dialogs for configuring of simulation of Spice primitive components
+  such as voltage sources, current sources, etc.
+- Create dialog(s) for configuration of simulation types transient, DC operating
+  point, AC analysis, etc.
 
 **Dependencies:**
 - None
 
 **Status:**
-- No Progress
+- No progress.
+
 
 # Pcbnew: Circuit Board Editor # {#v5_pcbnew}
 This section covers the source code of the board editing application Pcbnew.
@@ -439,6 +364,8 @@ This section covers the source code of the board editing application Pcbnew.
 Unify all board editing tools under a single framework.
 
 **Task:**
+- Drop footprint edit mode.
+- Port auto-router to GAL.
 - Complete porting of all board editing tools to new tool framework so they
   are available in the OpenGL and Cairo canvases.
 - Remove all duplicate legacy editing tools.
@@ -449,29 +376,10 @@ Unify all board editing tools under a single framework.
 **Status:**
 - Initial porting work in progress.
 
-## Linked Objects ## {#v5_pcb_linked_objects}
-**Goal:**
-
-Provide a way to allow external objects such as footprints to be externally
-linked in the board file so that changes in the footprint are automatically
-updated.  This will allow a one to many object relationship which can pave
-the way for reusable board modules.
-
-**Task:**
-- Add externally and internally linked objects to the file format to allow for
-  footprints and/or other board objects to be shared (one to many relationship)
-  instead of only supporting embedded objects (one to one relationship) that
-  can only be edited in place.
-
-**Dependencies:**
-- None.
-
-**Status:**
-- No progress.
-
 ## Modeling ## {#v5_modeling}
 
 **Goal:**
+
 Provide improved solid modeling support for KiCad including the file formats
 available in OpenCascade.
 
@@ -479,89 +387,61 @@ available in OpenCascade.
 - Improve low level code design.
 - Design plugin architecture to handle loading and saving 3D models.
 - Back port existing 3D formats (IDF and S3D) to plugin
-- Add STEP 3D modeling capability.
-- Add IGES 3D modeling capability.
 
 **Dependencies:**
 - [Dynamic library plugin](#v5_plugin_base).
 
 **Status:**
-- 3D Viewer work in progress.  There is also now and external tool [KiCadStepUp]
-  (http://sourceforge.net/projects/kicadstepup/) which allows [FreeCAD]
-  (http://www.freecadweb.org/) to create parametric models from KiCad board
-  files.
+- Completed.
 
 ## Push and Shove Router Improvements ## {#v5_ps_router_improvements}
 
 **Goal:**
-Add features such as microwave tools to the P&S router.
+
+Add finishing touches to push and shove router.
 
 **Task:**
+- Microwave tools to be added as parametrized shapes generated by Python
+  scripts.
 - Determine which features are feasible.
-- Look at the recently opened FreeRouter code at
-  http://www.freerouting.net/fen/download/file.php?id=146 for inspiration.
+- Factor out KiCad-specific code from PNS_ROUTER class.
+- Delete and backspace in idle mode
+- Differential pair clearance fixes.
+- Differential pair optimizer improvements (recognize differential pairs)
+- Persistent differential pair gap/width setting.
+- Walk around in drag mode.
+- Optimize trace being dragged too. (currently no optimization)
+- Backspace to erase last routed segment.
+- Auto-finish traces (if time permits)
+- Additional optimization pass for spring back algorithm using area-minimization
+  strategy. (improves tightness of routing)
+- Restrict optimization area to view port (if user wants to)
+- Support 45 degree tuning meanders.
+- Respect trace/via locking!
+- Keep out zone support.
 
 **Dependencies:**
 - None
 
 **Status:**
-- No Progress.
+- Feature feasibility determined.
+- In Progress.
 
-## Pin and Part Swapping ## {#v5_pcb_drc}
-**Goal:**
-
-Allow Pcbnew to perform pin and/or part swapping during layout so the user
-does not have to do it in Eeschema and re-import the net list.
-
-**Task:**
-- Provide forward and back annotation between the schematic and board editors.
-- Define netlist file format changes required to handle pin/part swapping.
-- Update netlist file formatter and parser to handle file format changes.
-- Develop a netlist comparison engine that will produce a netlist diff that
-  can be passed between the schematic and board editors.
-- Create pin/part swap dialog to manipulate swappable pins and parts.
-- Add support to handle net label back annotation changes.
-
-**Dependencies:**
-- [S-expression schematic file format](#v5_sch_sexpr).
-- [Convert to a single process application](#v5_kiway).
-
-**Status:**
-- No progress.
-
-## Intelligent Selection Tool ## {#v5_pcb_selection_tool}
+## Selection Filtering ## {#v5_pcb_selection_filtering}
 **Goal:**
 
 Make the selection tool easier for the user to determine which object(s) are
-being selected.
+being selected by filtering.
 
 **Task:**
-- Determine and define the actual desired behavior.
-- Improve ambiguous selections when multiple items are under the cursor or in
-  the selection bounding box.
-
-**Dependencies:**
-- Tool framework.
-- Unified geometry library.
-
-**Status:**
-- Initial design committed to product branch.
-
-## Clipboard Support ## {#v5_fp_edit_clipboard}
-**Goal:**
-
-Provide clipboard cut and paste for footprint management in the footprint
-editor.
-
-**Task:**
-- Clipboard cut and paste to and from clipboard of footprints in footprint
-  editor.
+- Provide filtered object selection by adding a third tab to the layer manager
+  or possibly some other UI element to provide filtered selection options.
 
 **Dependencies:**
 - None
 
 **Status:**
-- No progress.
+- Initial design concept discussed.
 
 ## Design Rule Check (DRC) Improvements. ## {#v5_drc_improvements}
 **Goal:**
@@ -571,10 +451,8 @@ Create additional DRC tests for improved error checking.
 **Task:**
 - Replace geometry code with [unified geometry library](#v5_geometry_lib).
 - Remove floating point code from clearance calculations to prevent rounding
-errors.
+  errors.
 - Add checks for component, silk screen, and mask clearances.
-- Add checks for vias in zones for proper connections without having to add
-traces.
 - Add checks for keep out zones.
 - Remove DRC related limitations such as no arc or text on copper layers.
 - Add option for saving and loading DRC options.
@@ -583,7 +461,7 @@ traces.
 - [Unified geometry library.](#v5_geometry_lib)
 
 **Progress:**
-- Planning
+- In progress.
 
 ## Segment End Point Snapping. ## {#v5_segment_snapping}
 **Goal:**
@@ -611,24 +489,9 @@ GAL rendering.
 **Progress:**
 - Initial discussion.
 
-## Keepout Zones. ## {#v5_keepout_zones}
-**Goal:**
-
-Add support for keepout zones on boards and footprints.
-
-**Task:**
-- Add keepout support to zone classes.
-- Add keepout zone support to board editor.
-- Add keepout zone support to library editor.
-
-**Dependencies:**
-- [DRC Improvements.](#v5_drc_improvements)
-
-**Progress:**
-- Planning
-
 ## Net Highlighting ## {#v5_pcb_net_highlight}
 **Goal:**
+
 Highlight rats nest links and/or traces when corresponding net in Eeschema is selected.
 
 **Task:**
@@ -642,8 +505,9 @@ Highlight rats nest links and/or traces when corresponding net in Eeschema is se
 **Status:**
 - No progress.
 
-## Complex Pad Shapes "" {#v5_pcb_complex_pads}
+## Complex Pad Shapes ## {#v5_pcb_complex_pads}
 **Goal:**
+
 Add capability to create complex pad shapes from existing primitives such as arcs,
 segments, and circles or polygons.
 
@@ -660,24 +524,6 @@ segments, and circles or polygons.
 **Progress:**
 - In progress.
 
-
-# GerbView: Gerber File Viewer # {#v5_gerbview}
-
-This section covers the source code for the GerbView gerber file viewer.
-
-## Graphics Abstraction Layer ## {#v5_gerbview_gal}
-**Goal:**
-
-Graphics rendering unification.
-
-**Task:**
-- Port graphics rendering layer to GAL.
-
-**Dependencies:**
-- None.
-
-**Status**
-- No progress.
 
 # Documentation # {#v5_documentation}
 This section defines the tasks for both the user and developer documentation.
@@ -724,7 +570,7 @@ involved with the project.
 - None.
 
 **Status:**
-- In progress.  Most of the developer documentation has been convert to
+- In progress.  Most of the developer documentation has been converted to
   [Doxygen markdown](http://www.stack.nl/~dimitri/doxygen/manual/markdown.html)
   and the [output][kicad-docs] is rebuilt automatically when a commit is
   made to the KiCad repo.

@@ -28,72 +28,11 @@ related to coding or documentation.  It is a catch all for issues such as
 developer and user relations, dissemination of information on websites,
 policies, etc.
 
-## Stable Release ## {#stable_release}
-**Goal:**
-
-Provide a lightweight stable release mechanism that is robust enough to meet
-the requirements of Linux packagers and corporate users but avoid the burden
-of back porting fixes to a maintenance branch to avoid the additional work for
-developers.
-
-**Task:**
-- Devise a process to have some type of reasonably stable release protocol
-  to provide "stable" releases for Linux distribution packagers and corporate
-  users.
-- Document "stable" release procedure.
-
-**Dependencies:**
-- None
-
-**Status:**
-- Completed.  See the [KiCad Stable Release Policy]() for mor information.
-
-
-## Website Improvements ## {#website_improvements}
-**Goal:**
-
-Make the website at www.kicad-pcb.org as the definitive resource for both
-users and developers which will provide a single point of reference instead
-of the many separate websites currently in used.
-
-**Task:**
-- Define the content and design of the website.
-- Implement the new design.
-
-**Dependencies:**
-- None
-
-**Status:**
-- Completed.  See the [KiCad Website source repository](https://github.com/KiCad/kicad-website)
-  for the new website [Asciidoc](http://www.methods.co.nz/asciidoc/) source.
-
 
 # General # {#general}
 This section defines the tasks that affect all or most of KiCad or do not
 fit under as specific part of the code such as the board editor or the
 schematic editor.
-
-## Convert to a Single Process Application. ## {#kiway}
-**Goal:**
-
-Merge common schematic and board code into to separate dynamic objects to allow
-Eeschema and Pcbnew to run under a single process.
-
-**Task:**
-- Convert the majority core code in Eeschema and Pcbnew into dynamic libraries.
-- Provide a robust method for communicating between code running under a single
-  process.
-- Revise the schematic editor and board editor main windows run under a single
-  process instead of multiple stand alone applications.
-- Design a method for passing information between the dynamic libraries running
-  under the same process.
-- Remove inter-process communications between Eeschema and Pcbnew.
-
-**Dependencies:**
-- None
-
-**Status:**
-- Completed.
 
 ## User Interface Modernization ## {#wxaui}
 **Goal:**
@@ -127,49 +66,6 @@ Create perspectives to allow users to arrange dockable windows as they prefer.
 This section covers build tools for both the KiCad source as well as the
 custom dependency builds required to build KiCad.
 
-## Create Separate Build Dependency Project ## {#depends_prj}
-**Goal:**
-
-Move the library dependencies and their patches into a separate project to
-developers to build and install them as required instead of requiring them
-at build time.  Give developers the flexibility to build and/or install
-library dependencies as they see fit.  Remove them from the KiCad source code
-to reduce the build footprint.
-
-**Task:**
-- Create a separate project to build all external dependency libraries that are
-  currently build from source (Boost, OpenSSL, etc).
-- Use CMake to create a package configuration file for each library so the
-  KiCad find package can pull in header paths, library dependencies, compile
-  flags, and link flags to build KiCad.
-- Use CMake find package to pull external dependencies.
-- Remove all build from source dependencies for KiCad source code.
-
-**Dependencies:**
-- None
-
-**Status:**
-- In progress.
-
-## Platform Binary Installers ## {#installers}
-**Goal:**
-
-Provide quality installers for all supported platforms.
-
-**Task:**
-- Bring OSX installer up to the level of the Window's and Linux installers.
-- Possible use of CPack to build platform specific installers as long as they
-  are of the same or better quality than the current independent installers.
-
-**Dependencies**
-- None
-
-**Status**
-- Completed for both stable release and nightly builds.  See the [package
-  download page](http://kicad-pcb.org/download/) at the [KiCad Website][
-  kicad-website].
-
-
 # Common Library # {#common_lib}
 This section covers the source code shared between all of the KiCad
 applications
@@ -192,151 +88,12 @@ to the new framework and remove the legacy framework tools.
 **Status**
 - No progress
 
-## Unified Geometry Library ## {#geometry_lib}
-**Goal:**
-
-Select a single geometry library so that all applications share a common
-base for 2D objects.  Remove any redundant geometry libraries and code to
-clean up code base.
-
-**Task:**
-- Select the best geometry library (Boost, etc.) for the task.
-- Port all legacy geometry code to the selected library.
-- Remove any unused geometry library code.
-
-**Dependencies:**
-- Completed.  The Boost polygon library was dropped in favor of the [Clipper
-  polygon library](http://www.angusj.com/delphi/clipper.php)
-
-**Status:**
-- In progress as part of push and shove router.
-
-## Conversion to wxWidgets 3 ## {#wxwidgets3}
-**Goal:**
-
-Stop supporting the version 2 branch of wxWidgets so that newer features
-provided by version 3 can be utilized.
-
-**Task:**
-- Make wxWidgets 3 a build requirement.
-- Remove all wxWidgets 2 specific code.
-
-**Dependencies:**
-- wxWidgets 3 is widely available on Linux distributions.
-
-**Status:**
-- Completed.  Build now requires 3.0.0 or greater.
-
-## Linux Printing Improvements ## {#linux_print}
-**Goal:**
-
-Bring printing on Linux up to par with printing on Windows.
-
-**Task:**
-- Resolve Linux printing issues.
-
-**Dependencies**
-- [wxWidgets 3](#wxwidgets3)
-
-**Status**
-- No progress.
-
-## Object Properties and Introspection ## {#object_props}
-**Goal:**
-
-Provide an object introspection system using properties.
-
-**Task:**
-- Select existing or develop property system.
-- Add definable properties to base objects.
-- Create introspection framework for manipulating object properties.
-- Serialization of properties to and from files and/or other I/O structures.
-- Create tool to edit property name/type/value table.
-
-**Dependencies:**
-- None
-
-**Status:**
-- No progress.
-
-## Dynamic Library Plugin ## {#plugin_base}
-**Goal:**
-
-Create a base library plugin for handling external file I/O.  This will allow
-plugins to be provided that are external to the project such as providing solid
-model file support (STEP, IGES, etc.) using OpenCascade without making it a
-project dependency.
-
-**Task:**
-- Create a plugin to handle dynamically registered plugins for loading and
-  saving file formats.
-- This object should be flexible enough to be extended for handling all file
-  plugin types including schematic, board, footprint library, component
-  library, etc.
-- See [blueprint](https://blueprints.launchpad.net/kicad/+spec/pluggable-file-io)
-  on Launchpad for more information.
-
-**Dependencies:**
-- None
-
-**Status:**
-- No progress.
-
-
 # KiCad: Application Launcher # {#kicad}
 This section applies to the source code for the KiCad application launcher.
 
 
 # Eeschema: Schematic Editor # {#eeschema}
 This section applies to the source code for the Eeschema schematic editor.
-
-## Coherent SCHEMATIC Object ## {#sch_object}
-**Goal:**
-
-Clean up the code related to the schematic object(s) into a coherent object for
-managing and manipulating the schematic.
-
-**Task:**
-- Move most if not all of the code from SCH_SCREEN to the new SCHEMATIC object.
-- Add any missing functionality to the SCHEMATIC object.
-
-**Dependencies:**
-- None
-
-**Status:**
-- In progress.
-
-## Hierarchical Sheet Design ## {#hierarchy_fix}
-**Goal:**
-
-Create a more robust sheet instance design rather than recreating them on the
-fly every time sheet information is required.
-
-**Task:**
-- Choose a data structure to contain the sheet hierarchy.
-- Create helper class to manipulate the hierarchy data structure.
-
-**Dependencies:**
-- None
-
-**Status:**
-- In progress.
-
-## Schematic and Component Library Plugin ## {#sch_plugin}
-**Goal:**
-Create a plugin manager for loading and saving schematics and component
-libraries similar to the board plugin manager.
-
-**Task:**
-- Design plugin manager for schematics and component libraries.
-- Port the current schematic and component library file formats to use the
-  plugin.
-
-**Dependencies:**
-- [Dynamic library plugin](#plugin_base)
-
-**Status:**
-- No progress.
 
 ## Graphics Abstraction Layer Conversion ## {#sch_gal}
 **Goal:**
@@ -366,64 +123,17 @@ Use standard tool framework across all applications.
 **Status:**
 - No progress.
 
-## S-Expression File Format ## {#sch_sexpr}
+## Allow Use of System Fonts ## {#sch_sys_fonts}
 **Goal:**
 
-Make schematic file format more readable, add new features, and take advantage
-of the s-expression capability used in Pcbnew.
+Currently the schematic editor uses the stroke drawn fonts which aren't really
+necessary for accurated printing of schematics.  Allow the use of system fonts
+for schematic text.
 
 **Task:**
-- Finalize feature set and file format.
-- Discuss the possibility of dropping the unit-less proposal temporarily to get
-  the s-expression file format and SWEET library format implemented without
-  completely rewriting Eeschema.
-- Add new s-expression file format to plugin.
-
-**Dependencies:**
-- [Dynamic library plugin](#plugin_base).
-
-**Status:**
-- File format document nearly complete.
-
-## Implement Sweet Component Libraries ## {#sch_sweet}
-**Goal:**
-
-Make component library design more robust and feature rich.  Use s-expressions
-to make component library files more readable.
-
-**Task:**
-- Use sweet component file format for component libraries.
-
-**Dependencies:**
-- [S-expression file format](#sch_sexpr).
-
-**Status:**
-- Initial SWEET library written.
-
-## Component Library Editor Improvements ## {#lib_editor_usability}
-**Goal:**
-
-Make editing components with multiple units and/or alternate graphical
-representations easier.
-
-**Task:**
-- Determine usability improvements in the library editor for components with
-  multiple units and/or alternate graphical representations.
-- Implement said useability improvements.
-
-**Dependencies:**
-- None.
-
-**Status:**
-- No progress.
-
-## Component and Netlist Attributes ## {#netlist_attributes}
-**Goal:**
-Provide a method of passing information to other tools via the net list.
-
-**Task:**
-- Add virtual components and attributes to netlist to define properties that
-  can be used by other tools besides the board editor.
+- Determine which library for font handling makes the most sense, wxWidgets or
+  freetype.
+- Add support for selecting text object fonts.
 
 **Dependencies:**
 - [S-expression schematic file format](#sch_sexpr).
@@ -431,63 +141,30 @@ Provide a method of passing information to other tools via the net list.
 **Status:**
 - No progress.
 
-## Net Highlighting ## {#sch_net_highlight}
-**Goal:**
-Highlight wires, buses, and junctions when corresponding net in Pcbnew is selected.
-
-**Task:**
-- Add communications link to handle net selection from Pcbnew.
-- Implement highlight algorithm for net objects.
-- Highlight objects connected to net selected in Pcbnew.
-
-**Dependencies:**
-- [GAL port, maybe](#sch_gal).
-
-**Status:**
-- No progress.
-
 # CvPcb: Footprint Association Tool # {#cvpcb}
 This section covers the source code of the footprint assignment tool CvPcb.
-
-## Footprint Assignment Tool ##
-**Goal:**
-
-Merge the footprint assignment functionality of CvPcb into Eeschema so
-footprints can be assigned inside the schematic editor eliminating the need
-to launch an separate program.
-
-**Task:**
-- Merge footprint assignment capability into Pcbnew shared library.
-- Remove CvPcb as a stand alone tool.
-- Add functionality to both the schematic and board editors so users can assign
-  footprints as they prefer.
-
-**Dependencies:**
-- [Convert to a single process application](#kiway).
-
-**Status:**
-- Completed.  CvPcb is now launched as a child window of Eeschema and the
-  intermediate component assignment file (*.cmp) has been eliminated.
-
 
 # Pcbnew: Circuit Board Editor # {#pcbnew}
 This section covers the source code of the board editing application Pcbnew.
 
-## Tool Framework ## {#pcb_tool_framework}
+## Model Export ## {#model_export}
+
 **Goal:**
 
-Unify all board editing tools under a single framework.
+Provide improved solid modeling export to the file formats available in
+OpenCascade.
 
 **Task:**
-- Complete porting of all board editing tools to new tool framework so they
-  are available in the OpenGL and Cairo canvases.
-- Remove all duplicate legacy editing tools.
+- Add STEP 3D modeling capability.
+- Add IGES 3D modeling capability.
+- Add any other file formats supported by OpenCascade that make sense for
+  KiCad.
 
 **Dependencies:**
-- In progress.
+- None
 
 **Status:**
-- Initial porting work in progress.
+- None
 
 ## Linked Objects ## {#pcb_linked_objects}
 **Goal:**
@@ -508,59 +185,6 @@ way for real board modules.
 
 **Status:**
 - No progress.
-
-## Modeling ## {#modeling}
-**Goal:**
-
-Provide improved solid modeling support for KiCad including the file formats
-available in OpenCascade.
-
-**Task:**
-- Design plugin architecture to handle loading and saving 3D models.
-- Back port existing 3D formats (IDF and S3D) to plugin
-- Add STEP 3D modeling capability.
-- Add IGES 3D modeling capability.
-
-**Dependencies:**
-- [Dynamic library plugin](#plugin_base).
-
-**Status:**
-- 3D Viewer work in progress.  There is also now and external tool [KiCadStepUp]
-  (http://sourceforge.net/projects/kicadstepup/) which allows [FreeCAD]
-  (http://www.freecadweb.org/) to create parametric models from KiCad board
-  files.
-
-## Push and Shove Router Improvements ## {#ps_router_improvements}
-**Goal:**
-Add features such as matched length and microwave tools to the P&S router.
-
-**Task:**
-- Determine which features are feasible.
-- Look at the recently opened FreeRouter code at
-  http://www.freerouting.net/fen/download/file.php?id=146 for inspiration.
-
-**Dependencies:**
-- None
-
-**Status:**
-- Match trace length implemented.
-
-## Layer Improvements ## {#pcb_layers}
-**Goal:**
-
-Increase the number of usable technical and user defined layers in Pcbnew.
-
-**Task:**
-- Extend the number of copper and mechanical layers.
-- Develop a type safe flag set template or adapt something already available.
-- Refactor Pcbnew code to use new flag and remove the 32 layer limitation.
-- Extend the board file format to handle the additional layers.
-
-**Dependencies:**
-- None
-
-**Status:**
-- Work complete on 32 copper and 32 technical layers is complete.
 
 ## Pin and Part Swapping ## {#pcb_drc}
 **Goal:**
@@ -584,24 +208,6 @@ does not have to do it in Eeschema and re-import the net list.
 **Status:**
 - No progress.
 
-## Intelligent Selection Tool ## {#pcb_selection_tool}
-**Goal:**
-
-Make the selection tool easier for the user to determine which object(s) are
-being selected.
-
-**Task:**
-- Determine and define the actual desired behavior.
-- Improve ambiguous selections when multiple items are under the cursor or in
-  the selection bounding box.
-
-**Dependencies:**
-- Tool framework.
-- Unified geometry library.
-
-**Status:**
-- Initial design committed to product branch.
-
 ## Clipboard Support ## {#fp_edit_clipboard}
 **Goal:**
 
@@ -616,26 +222,6 @@ Provide clipboard cut and paste for footprints..
 
 **Status:**
 - No progress.
-
-## Design Rule Check (DRC) Improvements. ## {#drc_improvements}
-**Goal:**
-
-Create additional DRC tests for improved error checking.
-
-**Task:**
-- Replace geometry code with [unified geometry library](#geometry_lib).
-- Remove floating point code from clearance calculations to prevent rounding
-  errors.
-- Add checks for component, silk screen, and mask clearances.
-- Add checks for keep out zones.
-- Remove DRC related limitations such as no arc or text on copper layers.
-- Add option for saving and loading DRC options.
-
-**Dependencies:**
-- [Unified geometry library.](#geometry_lib)
-
-**Progress:**
-- Planning
 
 ## Segment End Point Snapping. ## {#segment_snapping}
 **Goal:**
@@ -680,32 +266,81 @@ Add support for keepout zones on boards and footprints.
 - Planning
 
 
-## Gerber File Attributes ## {#gerber_attributes}
-**Goal:**
-
-Add file attributes to gerber files for defining layer stacks.  See
-[this](http://www.ucamco.com/files/downloads/file/5/Extending_the_Gerber_Format_with_Attributes.pdf)
-document and [this](http://www.ucamco.com/files/downloads/file/22/Kick_Starting_a_Revolution_IPC-2581_Meets_Gerber.pdf)
-document for more information.
-
-**Task:**
-- Implement gerber file attributes as an optional setting when plotting gerber
-  files.
-
-**Dependencies:**
-- None
-
-**Progress:**
-- Done both in Pcbnew and Gerbview.
-
 ## Net Highlighting ## {#pcb_net_highlight}
 **Goal:**
+
 Highlight rats nest links and/or traces when corresponding net in Eeschema is selected.
 
 **Task:**
 - Add communications link to handle net selection from Eeschema.
 - Implement highlight algorithm for objects connected to the selected net.
 - Highlight objects connected to net selected in Eeschema
+
+**Dependencies:**
+- None.
+
+**Status:**
+- No progress.
+
+## Hatched Zone Filling ## {#pcb_hatched_zones}
+**Goal:**
+
+Currently Pcbnew only supports solid zone files.  Add option to fill zones
+with hatching.
+
+**Task:**
+- Determine zone fill method, required filling code, and file format requirements.
+- Add hatch option and hatch configuration to zone dialog.
+
+**Dependencies:**
+- None.
+
+**Status:**
+- No progress.
+
+
+## Board Stack Up Impedance Calculator ## {#pcb_impedance_calc}
+**Goal:**
+
+Provide a calculator to compute trace impedances using a full board stackup.
+Maybe this should be included in the PCB calculator application.
+
+**Task:**
+- Design a trace impedance calculator that includes full board stackup.
+
+**Dependencies:**
+- None.
+
+**Status:**
+- No progress.
+
+## Net Class Improvements ## {#pcb_net_class_improvements}
+**Goal:**
+
+Add support for route impedance, color selection, etc in net class object.
+
+**Task:**
+- Determine parameters to add to net class object.
+- Implement file parser and formatter changes to support net class object
+  changes.
+- Implement tools to work with new net class parameters.
+- Create UI elements to configure new net class parameters.
+- Update the render tab UI code to view traces by net class.
+
+**Dependencies:**
+- None.
+
+**Status:**
+- No progress.
+
+## Ratsnest Improvements ## {#pcb_ratsnest_improvements}
+**Goal:**
+
+Add support for per net color and visibility settings.
+
+**Task:**
+- Implement UI code to configure ratsnest color and visibility.
+- Update ratsnest code to handle per net color and visibility.
 
 **Dependencies:**
 - None.
@@ -735,41 +370,6 @@ Graphics rendering unification.
 # Documentation # {#documentation}
 This section defines the tasks for both the user and developer documentation.
 
-## Conversion to Markup/down Format ## {#doc_format}
-**Goal:**
-
-Make documentation more VCS friendly and separate document content and
-formatting for more uniform formatting across all user documentation.
-
-**Task:**
-- Convert the documentation to a mark up/down language to reduce the VCS
-  footprint, to be able to actually use the VCS to see what changed, and
-  improve the formatting consistency.
-
-**Dependencies:**
-- None
-
-**Status:**
-- Completed.  The documentation has been converted from ODT to [Asciidoc]
-  [asciidoc].  The [documentation](http://kicad-pcb.org/help/documentation/)
-  can be found on the [KiCad website][kicad-website].
-
-## Grammar Check ## {#doc_grammar}
-**Goal:**
-
-Improve user documentation readability and make life easier to for translators.
-
-**Task:**
-- Review and revise all of the English documentation so that it is update with
-  the current functionality of the code.
-- Translate the update documentation into other languages.
-
-**Dependencies:**
-- None
-
-**Status:**
-- No progress.
-
 ## Maintenance ## {#doc_maintenance}
 **Task:**
 - Keep screen shots current with the source changes.
@@ -779,28 +379,6 @@ Improve user documentation readability and make life easier to for translators.
 
 **Status:**
 - No progress.
-
-## Convert Developer Documentation to Markup/down Format ## {#dev_doc_format}
-**Goal:**
-
-Improve developers documentation to make life easier for new developers to get
-involved with the project.
-
-**Task:**
-- Convert platform build instructions from plain text to new format to be
-  merged with the developer documentation.
-- Convert how to contribute to KiCad instructions from plain text to the new
-  format to merged with the developer documentation.
-
-**Dependencies:**
-- None.
-
-**Status:**
-- In progress.  Most of the developer documentation has been convert to
-  [Doxygen markdown](http://www.stack.nl/~dimitri/doxygen/manual/markdown.html)
-  and the [output][kicad-docs] is rebuilt automatically when a commit is
-  made to the KiCad repo.
-
 
 # Unit Testing # {#unittest}
 **Goal:**
@@ -820,30 +398,6 @@ capabilities.
 **Status:**
 - In progress.
 
-
-# Circuit Simulation # {#simulation}
-**Goal:**
-
-Provide quality circuit simulation capabilities similar to commercial products.
-
-**Task:**
-- Evaluate and select simulation library (spice, gnucap, qucs, etc).
-- Evaluate and select plotting library with wxWidgets support.
-- Confirm current spice netlist export is up to the task and add missing
-  support for simulations.
-- Use plotting library to handle simulator output in a consistent manor similar
-  to LTSpice.
-- Develop a tool that allows fine tuning of components on the fly.
-- Use plugin for the simulation code to allow support of different simulation
-  libraries.
-- Create a library of simulation components such as voltage source, current
-  source, current probe, etc.
-
-**Dependencies:**
-- [Dynamic library plugin](#plugin_base).
-
-**Status:**
-- No progress.
 
 [kicad-website]:http://kicad-pcb.org/
 [kicad-docs]:http://ci.kicad-pcb.org/job/kicad-doxygen/ws/Documentation/doxygen/html/index.html
