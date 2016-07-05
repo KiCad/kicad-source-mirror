@@ -571,8 +571,17 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Rebuild the new pad list (for drc and ratsnet control ...)
     GetBoard()->m_Status_Pcb = 0;
 
-    // Update info shown by the horizontal toolbars
+    // Update current netclass:NETCLASS::Default alwaysxists
     SetCurrentNetClass( NETCLASS::Default );
+
+    // Rebuild list of nets (full ratsnest rebuild)
+    {
+        wxBusyCursor dummy;    // Displays an Hourglass while building connectivity
+        Compile_Ratsnest( NULL, true );
+        GetBoard()->GetRatsnest()->ProcessBoard();
+    }
+
+    // Update info shown by the horizontal toolbars
     ReFillLayerWidget();
     ReCreateLayerBox();
 
@@ -591,13 +600,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     // Display the loaded board:
     Zoom_Automatique( false );
-
-    // Compile ratsnest and displays net info
-    {
-        wxBusyCursor dummy;    // Displays an Hourglass while building connectivity
-        Compile_Ratsnest( NULL, true );
-        GetBoard()->GetRatsnest()->ProcessBoard();
-    }
 
     SetMsgPanel( GetBoard() );
 
