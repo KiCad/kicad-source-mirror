@@ -859,7 +859,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( FILE_LINE_READER& aReader )
 
     const char* line = aReader.Line();
 
-    wxASSERT( strCompare( "$Bitmap", line, &line ) );
+    wxCHECK( strCompare( "$Bitmap", line, &line ), NULL );
 
     line = aReader.ReadLine();
 
@@ -936,7 +936,7 @@ SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( FILE_LINE_READER& aReader )
 
     const char* line = aReader.Line();
 
-    wxASSERT( strCompare( "Connection", line, &line ) );
+    wxCHECK( strCompare( "Connection", line, &line ), NULL );
 
     wxString name;
 
@@ -958,7 +958,7 @@ SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( FILE_LINE_READER& aReader )
 
     const char* line = aReader.Line();
 
-    wxASSERT( strCompare( "NoConn", line, &line ) );
+    wxCHECK( strCompare( "NoConn", line, &line ), NULL );
 
     wxString name;
 
@@ -980,7 +980,7 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( FILE_LINE_READER& aReader )
 
     const char* line = aReader.Line();
 
-    wxASSERT( strCompare( "Wire", line, &line ) );
+    wxCHECK( strCompare( "Wire", line, &line ), NULL );
 
     if( strCompare( "Wire", line, &line ) )
         wire->SetLayer( LAYER_WIRE );
@@ -1014,7 +1014,7 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( FILE_LINE_READER& aReader )
 {
     const char* line = aReader.Line();
 
-    wxASSERT( strCompare( "Entry", line, &line ) );
+    wxCHECK( strCompare( "Entry", line, &line ), NULL );
 
     std::auto_ptr< SCH_BUS_ENTRY_BASE > busEntry;
 
@@ -1059,7 +1059,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
 {
     const char*   line = aReader.Line();
 
-    wxASSERT( strCompare( "Text", line, &line ) );
+    wxCHECK( strCompare( "Text", line, &line ), NULL );
 
     std::auto_ptr< SCH_TEXT> text;
 
@@ -1141,7 +1141,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
 {
     const char* line = aReader.Line();
 
-    wxASSERT( strCompare( "$Comp", line, &line ) );
+    wxCHECK( strCompare( "$Comp", line, &line ), NULL );
 
     std::auto_ptr< SCH_COMPONENT > component( new SCH_COMPONENT() );
 
