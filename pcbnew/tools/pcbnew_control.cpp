@@ -36,6 +36,7 @@
 
 #include <confirm.h>
 #include <hotkeys_basic.h>
+#include <properties.h>
 #include <io_mgr.h>
 
 #include <pcbnew_id.h>

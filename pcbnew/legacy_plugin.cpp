@@ -68,6 +68,7 @@
 
 #include <kicad_string.h>
 #include <macros.h>
+#include <properties.h>
 #include <zones.h>
 
 #include <class_board.h>

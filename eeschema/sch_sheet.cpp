@@ -134,6 +134,18 @@ int SCH_SHEET::GetScreenCount() const
 }
 
 
+SCH_SHEET* SCH_SHEET::GetRootSheet()
+{
+    SCH_SHEET* sheet = dynamic_cast< SCH_SHEET* >( GetParent() );
+
+    if( sheet == NULL )
+        return this;
+
+    // Recurse until a sheet is found with no parent which is the root sheet.
+    return sheet->GetRootSheet();
+}
+
+
 bool SCH_SHEET::Save( FILE* aFile ) const
 {
     if( fprintf( aFile, "$Sheet\n" ) == EOF
@@ -765,6 +777,7 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
     bool success = true;
 
     SCH_SCREEN* screen = NULL;
+
     if( !m_screen )
     {
         g_RootSheet->SearchHierarchy( m_fileName, &screen );
@@ -789,9 +802,16 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
                 {
                     if( bs->Type() == SCH_SHEET_T )
                     {
-                        SCH_SHEET* sheetstruct = (SCH_SHEET*) bs;
+                        SCH_SHEET* sheet = (SCH_SHEET*) bs;
 
-                        if( !sheetstruct->Load( aFrame ) )
+                        // Set the parent to this sheet.  This effectively creates a method
+                        // to find the root sheet from any sheet so a pointer to the root
+                        // sheet does not need to be stored globally.  Note: this is not the
+                        // same as a hierarchy.  Complex hierarchies can have multiple copies
+                        // of a sheet.  This only provides a simple tree to find the root sheet.
+                        sheet->SetParent( this );
+
+                        if( !sheet->Load( aFrame ) )
                             success = false;
                     }
 

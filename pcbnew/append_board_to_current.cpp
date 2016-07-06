@@ -29,6 +29,7 @@
 
 #include <fctsys.h>
 #include <confirm.h>
+#include <properties.h>
 #include <wxPcbStruct.h>
 #include <pcbnew.h>
 #include <io_mgr.h>

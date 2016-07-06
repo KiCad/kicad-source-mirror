@@ -43,21 +43,6 @@
 #define FMT_NOTFOUND        _( "Plugin type '%s' is not found." )
 
 
-// is there a better place for this function?
-bool PROPERTIES::Value( const char* aName, UTF8* aFetchedValue ) const
-{
-    PROPERTIES::const_iterator it = find( aName );
-
-    if( it != end() )
-    {
-        if( aFetchedValue )
-            *aFetchedValue = it->second;
-        return true;
-    }
-    return false;
-}
-
-
 // Some day plugins might be in separate DLL/DSOs, simply because of numbers of them
 // and code size.  Until then, use the simplest method:
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 jean-pierre.charras jp.charras at wanadoo.fr
- * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,8 @@ private:
     int       m_ppi;                // the bitmap definition. the default is 300PPI
 
 
-public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
+public:
+    BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
 
     BITMAP_BASE( const BITMAP_BASE& aSchBitmap );
 
@@ -73,6 +74,11 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
     double GetPixelScaleFactor() { return m_pixelScaleFactor; }
     void SetPixelScaleFactor( double aSF ) { m_pixelScaleFactor = aSF; }
     wxImage* GetImageData() { return m_image; }
+    void SetImage( wxImage* aImage )
+    {
+        delete m_image;
+        m_image = aImage;
+    }
 
     /*
      * Function RebuildBitmap
@@ -80,6 +86,12 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
      * must be called after a m_image change
      */
     void RebuildBitmap() { *m_bitmap = wxBitmap( *m_image ); }
+
+    void SetBitmap( wxBitmap* aBitMap )
+    {
+        delete m_bitmap;
+        m_bitmap = aBitMap;
+    }
 
     /**
      * Function ImportData

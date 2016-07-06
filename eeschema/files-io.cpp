@@ -2,9 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,9 +45,14 @@
 #include <wildcards_and_files_ext.h>
 #include <project_rescue.h>
 #include <eeschema_config.h>
+#include <sch_legacy_plugin.h>
 
 
-bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName, bool aCreateBackupFile )
+//#define USE_SCH_LEGACY_IO_PLUGIN
+
+
+bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
+                                 bool aCreateBackupFile )
 {
     wxString msg;
     wxFileName schematicFileName;
@@ -204,7 +209,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         return false;
     }
 
-    // save any currently open and modified project files.
+    // Save any currently open and modified project files.
     for( SCH_SCREEN* screen = screenList.GetFirst(); screen; screen = screenList.GetNext() )
     {
         if( screen->IsModify() )
@@ -295,13 +300,39 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
     else
     {
+#ifdef USE_SCH_IO_MANAGER
+        delete g_RootSheet;   // Delete the current project.
+        g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
+
+        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+
+        try
+        {
+            g_RootSheet = pi->Load( fullFileName, &Kiway() );
+            m_CurrentSheet->clear();
+            m_CurrentSheet->push_back( g_RootSheet );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error loading schematic file '%s'.\n%s" ),
+                        GetChars( fullFileName ), GetChars( ioe.errorText ) );
+            DisplayError( this, msg );
+
+            msg.Printf( _( "Failed to load '%s'" ), GetChars( fullFileName ) );
+
+            AppendMsgPanel( wxEmptyString, msg, CYAN );
+            Zoom_Automatique( false );
+
+            return false;
+        }
+#else
         g_RootSheet->SetScreen( NULL );
 
         DBG( printf( "%s: loading schematic %s\n", __func__, TO_UTF8( fullFileName ) );)
 
         bool diag = g_RootSheet->Load( this );
         (void) diag;
-
+#endif
         SetScreen( m_CurrentSheet->LastScreen() );
 
         GetScreen()->ClrModify();
@@ -327,7 +358,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
-
     m_canvas->Refresh( true );
 
     return true;

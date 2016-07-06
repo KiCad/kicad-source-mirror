@@ -69,6 +69,9 @@
 /// When defined, build the GITHUB_PLUGIN for pcbnew.
 #cmakedefine BUILD_GITHUB_PLUGIN
 
+/// When defined, Eeschema is built with I/O manager plugin.
+#cmakedefine USE_SCH_IO_MANAGER
+
 /// A file extension with a leading '.' is a suffix, and this one is used on
 /// top level program modules which implement the KIFACE.
 #define KIFACE_SUFFIX                   wxT( "@KIFACE_SUFFIX@" )

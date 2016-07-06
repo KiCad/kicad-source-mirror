@@ -61,12 +61,7 @@ class NETLIST_OBJECT_LIST;
  */
 class SCH_SHEET_PIN : public SCH_HIERLABEL
 {
-private:
-    int m_number;       ///< Label number use for saving sheet label to file.
-                        ///< Sheet label numbering begins at 2.
-                        ///< 0 is reserved for the sheet name.
-                        ///< 1 is reserve for the sheet file name.
-
+public:
     /**
      * Defines the edge of the sheet that the sheet pin is positioned
      * SHEET_LEFT_SIDE = 0: pin on left side
@@ -84,6 +79,13 @@ private:
         SHEET_BOTTOM_SIDE,
         SHEET_UNDEFINED_SIDE
     };
+
+private:
+    int m_number;       ///< Label number use for saving sheet label to file.
+                        ///< Sheet label numbering begins at 2.
+                        ///< 0 is reserved for the sheet name.
+                        ///< 1 is reserve for the sheet file name.
+
     SHEET_SIDE m_edge;
 
 public:
@@ -286,6 +288,19 @@ public:
     wxSize GetSize() { return m_size; }
 
     void SetSize( const wxSize& aSize ) { m_size = aSize; }
+
+    /**
+     * Function GetRootSheet
+     *
+     * returns the root sheet of this SCH_SHEET object.
+     *
+     * The root (top level) sheet can be found by walking up the parent links until the only
+     * sheet that has no parent is found.  The root sheet can be found from any sheet without
+     * having to maintain a global root sheet pointer.
+     *
+     * @return a SCH_SHEET pointer to the root sheet.
+     */
+    SCH_SHEET* GetRootSheet();
 
     /**
      * Function SetScreen

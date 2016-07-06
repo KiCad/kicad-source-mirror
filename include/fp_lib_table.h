@@ -31,6 +31,7 @@
 #include <map>
 #include <io_mgr.h>
 #include <project.h>
+#include <properties.h>
 #include <boost/interprocess/exceptions.hpp>
 
 #define FP_LATE_ENVVAR  1           ///< late=1/early=0 environment variable expansion

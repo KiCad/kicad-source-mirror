@@ -65,6 +65,7 @@ Load() TODO's
 #include <trigo.h>
 #include <macros.h>
 #include <kicad_string.h>
+#include <properties.h>
 #include <wx/filename.h>
 
 #include <class_board.h>

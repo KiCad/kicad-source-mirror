@@ -145,11 +145,14 @@ set( EESCHEMA_SRCS
     sch_collectors.cpp
     sch_component.cpp
     sch_field.cpp
+    sch_io_mgr.cpp
     sch_item_struct.cpp
     sch_junction.cpp
+    sch_legacy_plugin.cpp
     sch_line.cpp
     sch_marker.cpp
     sch_no_connect.cpp
+    sch_plugin.cpp
     sch_screen.cpp
     sch_sheet.cpp
     sch_sheet_path.cpp

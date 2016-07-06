@@ -47,6 +47,7 @@ class NETLIST_OBJECT_LIST;
 class LIB_PART;
 class PART_LIBS;
 class SCH_COLLECTOR;
+class SCH_SCREEN;
 
 
 /// A container for several SCH_FIELD items
@@ -188,6 +189,8 @@ public:
     void SetConvert( int aConvert );
 
     wxString GetPrefix() const { return m_prefix; }
+
+    void SetPrefix( const wxString& aPrefix ) { m_prefix = aPrefix; }
 
     TRANSFORM& GetTransform() const { return const_cast< TRANSFORM& >( m_transform ); }
 

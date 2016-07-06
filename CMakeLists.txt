@@ -41,6 +41,10 @@ option( KICAD_SCRIPTING_WXPYTHON
     "Build wxPython implementation for wx interface building in Python and py.shell (default OFF)."
     )
 
+option( USE_SCH_IO_MANAGER
+    "Build Eeschema with the I/O manager for handling schematic and symbol library I/O. (default OFF)"
+    )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )

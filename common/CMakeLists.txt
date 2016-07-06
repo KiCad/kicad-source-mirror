@@ -241,6 +241,7 @@ set( COMMON_SRCS
     netlist_keywords.cpp
     prependpath.cpp
     project.cpp
+    properties.cpp
     ptree.cpp
     reporter.cpp
     richio.cpp
