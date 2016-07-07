@@ -45,9 +45,8 @@
 #include <class_sch_screen.h>
 
 
-#define SCH_PARSE_ERROR( text, reader, pos )                       \
-    THROW_PARSE_ERROR( wxString::FromUTF8( text ),                 \
-                       reader.GetSource(), reader.Line(),          \
+#define SCH_PARSE_ERROR( text, reader, pos )                         \
+    THROW_PARSE_ERROR( text, reader.GetSource(), reader.Line(),      \
                        reader.LineNumber(), pos - reader.Line() )
 
 
@@ -572,8 +571,10 @@ void SCH_LEGACY_PLUGIN::loadFile( const wxString& aFileName, SCH_SCREEN* aScreen
             return;
     }
 
-
-    THROW_IO_ERROR( "'$EndSCHEMATC' not found" );
+    // Unfortunately schematic files prior to version 2 are not terminated with $EndSCHEMATC
+    // so checking for it's existance will fail so just exit here and take our chances. :(
+    if( m_version > 1 )
+        THROW_IO_ERROR( "'$EndSCHEMATC' not found" );
 }
 
 
@@ -1067,10 +1068,16 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
         text.reset( new SCH_TEXT );
     else if( strCompare( "Label", line, &line ) )
         text.reset( new SCH_LABEL );
-    else if( strCompare( "GLabel", line, &line ) )
-        text.reset( new SCH_GLOBALLABEL );
     else if( strCompare( "HLabel", line, &line ) )
         text.reset( new SCH_HIERLABEL );
+    else if( strCompare( "GLabel", line, &line ) )
+    {
+        // Prior to version 2, the SCH_GLOBALLABEL object did not exist.
+        if( m_version == 1 )
+            text.reset( new SCH_HIERLABEL );
+        else
+            text.reset( new SCH_GLOBALLABEL );
+    }
     else
         SCH_PARSE_ERROR( "unknown Text type", aReader, line );
 
@@ -1103,13 +1110,20 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
             SCH_PARSE_ERROR( _( "invalid label type" ), aReader, line );
     }
 
-    // Parse the italics indicator.
-    if( strCompare( "Italic", line, &line ) )
-        text->SetItalic( true );
-    else if( !strCompare( "~", line, &line ) )
-        SCH_PARSE_ERROR( _( "expected 'Italics' or '~'" ), aReader, line );
+    int thickness = 0;
 
-    int thickness = parseInt( aReader, line );
+    // The following tokens do not exist in version 1 schematic files.
+    if( m_version > 1 )
+    {
+        if( strCompare( "Italic", line, &line ) )
+            text->SetItalic( true );
+        else if( !strCompare( "~", line, &line ) )
+            SCH_PARSE_ERROR( _( "expected 'Italics' or '~'" ), aReader, line );
+
+        // The thickness token does not exist in older versions of the schematic file format
+        // so calling parseInt will not work here.
+        thickness = parseInt( aReader, line, &line );
+    }
 
     text->SetBold( thickness != 0 );
     text->SetThickness( thickness != 0 ? GetPenSizeForBold( size ) : 0 );
@@ -1242,7 +1256,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
         {
             int index = parseInt( aReader, line, &line );
 
-            wxString text, name, textAttrs;
+            wxString text, name;
 
             parseQuotedString( text, aReader, line, &line, true );
 
@@ -1252,15 +1266,6 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             pos.y = parseInt( aReader, line, &line );
             int size = parseInt( aReader, line, &line );
             int attributes = parseHex( aReader, line, &line );
-            char hjustify = parseChar( aReader, line, &line );
-
-            parseUnquotedString( textAttrs, aReader, line, &line );
-
-            // The name of the field is optional.
-            parseQuotedString( name, aReader, line, &line, true );
-
-            if( name.IsEmpty() )
-                name = TEMPLATE_FIELDNAME::GetDefaultFieldName( index );
 
             if( index >= component->GetFieldCount() )
             {
@@ -1277,58 +1282,71 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
                 SCH_FIELD field( wxPoint( 0, 0 ), -1, component.get(), name );
                 component->AddField( field );
             }
-            else
+
+            // Prior to version 2 of the schematic file format, none of the following existed.
+            if( m_version > 1 )
             {
-                component->GetField( index )->SetName( name );
+                wxString textAttrs;
+                char hjustify = parseChar( aReader, line, &line );
+
+                parseUnquotedString( textAttrs, aReader, line, &line );
+
+                // The name of the field is optional.
+                parseQuotedString( name, aReader, line, &line, true );
+
+                if( hjustify == 'L' )
+                    component->GetField( index )->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+                else if( hjustify == 'R' )
+                    component->GetField( index )->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                else if( hjustify != 'C' )
+                    SCH_PARSE_ERROR( _( "component field text horizontal justification must be "
+                                        "L, R, or C" ), aReader, line );
+
+                // We are guaranteed to have a least one character here for older file formats
+                // otherwise an exception would have been raised..
+                if( textAttrs[0] == 'T' )
+                    component->GetField( index )->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+                else if( textAttrs[0] == 'B' )
+                    component->GetField( index )->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+                else if( textAttrs[0] != 'C' )
+                    SCH_PARSE_ERROR( _( "component field text vertical justification must be "
+                                        "B, T, or C" ), aReader, line );
+
+                // Newer file formats include the bold and italics text attribute.
+                if( textAttrs.Length() != 3 )
+                    SCH_PARSE_ERROR( _( "component field text attributes must be 3 characters wide" ),
+                                     aReader, line );
+
+                if( textAttrs[1] == 'I' )
+                    component->GetField( index )->SetItalic( true );
+                else if( textAttrs[1] != 'N' )
+                    SCH_PARSE_ERROR( _( "component field text italics indicator must be I or N" ),
+                                     aReader, line );
+
+                if( textAttrs[2] == 'B' )
+                    component->GetField( index )->SetBold( true );
+                else if( textAttrs[2] != 'N' )
+                    SCH_PARSE_ERROR( _( "component field text bold indicator must be B or N" ),
+                                     aReader, line );
             }
 
             component->GetField( index )->SetText( text );
+            component->GetField( index )->SetTextPosition( pos );
+            component->GetField( index )->SetAttributes( attributes );
+            component->GetField( index )->SetSize( wxSize( size, size ) );
 
             if( orientation == 'H' )
                 component->GetField( index )->SetOrientation( TEXT_ORIENT_HORIZ );
             else if( orientation == 'V' )
                 component->GetField( index )->SetOrientation( TEXT_ORIENT_VERT );
             else
-                SCH_PARSE_ERROR( _( "component field orientation must be H or V" ), aReader, line );
-
-            if( hjustify == 'L' )
-                component->GetField( index )->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-            else if( hjustify == 'R' )
-                component->GetField( index )->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            else if( hjustify != 'C' )
-                SCH_PARSE_ERROR( _( "component field text horizontal justification must be "
-                                    "L, R, or C" ), aReader, line );
-
-            component->GetField( index )->SetTextPosition( pos );
-            component->GetField( index )->SetAttributes( attributes );
-            component->GetField( index )->SetSize( wxSize( size, size ) );
-
-            // We are guaranteed to have a least one character here for older file formats
-            // otherwise an exception would have been raised..
-            if( textAttrs[0] == 'T' )
-                component->GetField( index )->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
-            else if( textAttrs[0] == 'B' )
-                component->GetField( index )->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            else if( textAttrs[0] != 'C' )
-                SCH_PARSE_ERROR( _( "component field text vertical justification must be "
-                                    "B, T, or C" ), aReader, line );
-
-            // Newer file formats include the bold and italics text attribute.
-            if( textAttrs.Length() != 3 )
-                SCH_PARSE_ERROR( _( "component field text attributes must be 3 characters wide" ),
+                SCH_PARSE_ERROR( _( "component field orientation must be H or V" ),
                                  aReader, line );
 
-            if( textAttrs[1] == 'I' )
-                component->GetField( index )->SetItalic( true );
-            else if( textAttrs[1] != 'N' )
-                SCH_PARSE_ERROR( _( "component field text italics indicator must be I or N" ),
-                                 aReader, line );
+            if( name.IsEmpty() )
+                name = TEMPLATE_FIELDNAME::GetDefaultFieldName( index );
 
-            if( textAttrs[2] == 'B' )
-                component->GetField( index )->SetBold( true );
-            else if( textAttrs[2] != 'N' )
-                SCH_PARSE_ERROR( _( "component field text bold indicator must be B or N" ),
-                                 aReader, line );
+            component->GetField( index )->SetName( name );
         }
         else if( strCompare( "$EndComp", line ) )
             return component.release();

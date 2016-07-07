@@ -319,8 +319,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             DisplayError( this, msg );
 
             msg.Printf( _( "Failed to load '%s'" ), GetChars( fullFileName ) );
-
             AppendMsgPanel( wxEmptyString, msg, CYAN );
+
+            // When g_RootSheet is NULL, create a dummy root sheet and screen.
+            CreateScreens();
             Zoom_Automatique( false );
 
             return false;
