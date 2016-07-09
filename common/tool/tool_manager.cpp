@@ -490,9 +490,12 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
     // iterate over all registered tools
-    BOOST_FOREACH( TOOL_ID toolId, m_activeTools )
+    for( std::deque<TOOL_ID>::iterator it = m_activeTools.begin();
+            it != m_activeTools.end(); /* iteration is done inside */)
     {
-        TOOL_STATE* st = m_toolIdIndex[toolId];
+        std::deque<TOOL_ID>::iterator curIt = it;
+        TOOL_STATE* st = m_toolIdIndex[*it];
+        ++it;       // it might be overwritten, if the tool is removed the m_activeTools deque
 
         // the tool state handler is waiting for events (i.e. called Wait() method)
         if( st->pendingWait )
@@ -508,7 +511,10 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 st->waitEvents.clear();
 
                 if( st->cofunc && !st->cofunc->Resume() )
-                    finishTool( st ); // The couroutine has finished
+                {
+                    if( finishTool( st, false ) ) // The couroutine has finished
+                        it = m_activeTools.erase( curIt );
+                }
 
                 // If the tool did not request to propagate
                 // the event to other tools, we should stop it now
@@ -636,8 +642,10 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 }
 
 
-void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
+bool TOOL_MANAGER::finishTool( TOOL_STATE* aState, bool aDeactivate )
 {
+    bool shouldDeactivate = false;
+
     // Reset VIEW_CONTROLS only if the most recent tool is finished
     if( m_activeTools.empty() || m_activeTools.front() == aState->theTool->GetId() )
         m_viewControls->Reset();
@@ -649,10 +657,17 @@ void TOOL_MANAGER::finishTool( TOOL_STATE* aState )
                                                         aState->theTool->GetId() );
 
         if( tool != m_activeTools.end() )
-            m_activeTools.erase( tool );
+        {
+            shouldDeactivate = true;
+
+            if( aDeactivate )
+                m_activeTools.erase( tool );
+        }
     }
 
     aState->theTool->SetTransitions();
+
+    return shouldDeactivate;
 }
 
 

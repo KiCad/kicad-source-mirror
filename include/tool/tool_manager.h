@@ -389,8 +389,11 @@ private:
      * Deactivates a tool and does the necessary clean up.
      *
      * @param aState is the state variable of the tool to be stopped.
+     * @param aDeactivate decides if the tool should be removed from the active tools set.
+     * @return True if the tool should be deactivated (note it does not necessarily  mean it has
+     * been deactivated, aDeactivate parameter decides).
      */
-    void finishTool( TOOL_STATE* aState );
+    bool finishTool( TOOL_STATE* aState, bool aDeactivate = true );
 
     /**
      * Function isRegistered()
