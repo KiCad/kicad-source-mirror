@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-01 20:09+0300\n"
-"PO-Revision-Date: 2016-07-01 20:09+0300\n"
+"POT-Creation-Date: 2016-07-10 16:12+0300\n"
+"PO-Revision-Date: 2016-07-10 16:37+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -242,7 +242,7 @@ msgstr "Поворот"
 msgid "Offset (inches)"
 msgstr "Смещение (дюймы)"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:599
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:598
 msgid "[INFO] invalid scale values; setting all to 1.0"
 msgstr "[ИНФО] неверное значение масштаба; установить всё в 1.0"
 
@@ -846,8 +846,8 @@ msgstr "Формат"
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:135
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:93
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:68
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:96 pcbnew/muonde.cpp:859
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:71
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:99 pcbnew/muonde.cpp:859
 msgid "Normal"
 msgstr "Нормально"
 
@@ -1792,7 +1792,7 @@ msgstr "Пользовательский размер:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:62
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:75
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:74
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:77
 msgid "Height:"
 msgstr "Высота:"
 
@@ -1802,7 +1802,7 @@ msgstr "Пользовательская высота листа."
 
 #: common/dialogs/dialog_page_settings_base.cpp:78
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:64
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:43
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:46
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:25
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:86
 msgid "Width:"
@@ -2034,7 +2034,7 @@ msgstr "Неизвестный MIME-тип для файла документа�
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:764
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:109
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:109
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:96
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:99
 msgid "Italic"
 msgstr "Курсив"
 
@@ -2616,7 +2616,7 @@ msgstr "Y"
 #: gerbview/class_gerber_file_image.cpp:346 gerbview/class_gerber_file_image.cpp:349
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:84
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
 #: pcbnew/tools/common_actions.cpp:207
 msgid "Center"
 msgstr "Центр"
@@ -4193,7 +4193,7 @@ msgstr "Переместить выбранное дополнительное �
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
 #: eeschema/lib_pin.cpp:115 pagelayout_editor/dialogs/properties_frame_base.cpp:84
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
 msgid "Left"
 msgstr "Влево"
 
@@ -4201,7 +4201,7 @@ msgstr "Влево"
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
 #: eeschema/lib_pin.cpp:114 pagelayout_editor/dialogs/properties_frame_base.cpp:84
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:102
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
 msgid "Right"
 msgstr "Вправо"
 
@@ -4258,7 +4258,7 @@ msgstr "Полужирный курсив"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:82
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:85
 msgid "Style:"
 msgstr "Стиль:"
 
@@ -4376,7 +4376,7 @@ msgid "Hierarchical Sheet Pin Properties."
 msgstr "Свойства вывода иерархического листа"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:167
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:72
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.h:76
 msgid "Text Properties"
 msgstr "Свойства текста"
 
@@ -5498,12 +5498,12 @@ msgstr "Настройки страницы"
 #: gerbview/dialogs/dialog_print_using_printer.cpp:404
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:103
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:54
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:489
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:495
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:156
 #: eeschema/dialogs/dialog_print_using_printer_base.h:56
 #: gerbview/dialogs/dialog_print_using_printer_base.h:73
 #: pcbnew/dialogs/dialog_print_for_modedit_base.h:61
-#: pcbnew/dialogs/dialog_print_using_printer_base.h:84
+#: pcbnew/dialogs/dialog_print_using_printer_base.h:85
 msgid "Print"
 msgstr "Печать"
 
@@ -5898,54 +5898,54 @@ msgstr "Глобальная метка '%s' (лист '%s')"
 msgid "Local label '%s' (sheet '%s')"
 msgstr "Локальная метка '%s' (лист '%s')"
 
-#: eeschema/files-io.cpp:68
+#: eeschema/files-io.cpp:73
 msgid "Schematic Files"
 msgstr "Файлы схемы"
 
-#: eeschema/files-io.cpp:98
+#: eeschema/files-io.cpp:103
 #, c-format
 msgid "Could not save backup of file '%s'"
 msgstr "Не удалось сохранить резервную копию файла '%s'"
 
-#: eeschema/files-io.cpp:112 eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
+#: eeschema/files-io.cpp:117 eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:51
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:60
 #, c-format
 msgid "Failed to create file '%s'"
 msgstr "Не удалось создать файл '%s'"
 
-#: eeschema/files-io.cpp:141
+#: eeschema/files-io.cpp:146
 #, c-format
 msgid "File %s saved"
 msgstr "Файл %s сохранён"
 
-#: eeschema/files-io.cpp:146
+#: eeschema/files-io.cpp:151
 msgid "File write operation failed."
 msgstr "Операция записи файла не удалась."
 
-#: eeschema/files-io.cpp:200
+#: eeschema/files-io.cpp:205
 #, c-format
 msgid "Schematic file '%s' is already open."
 msgstr "Файл схемы '%s' уже открыт."
 
-#: eeschema/files-io.cpp:213
+#: eeschema/files-io.cpp:218
 msgid "The current schematic has been modified.  Do you wish to save the changes?"
 msgstr "Текущая схема была изменена. Желаете сохранить изменения?"
 
-#: eeschema/files-io.cpp:215 pcbnew/files.cpp:428
+#: eeschema/files-io.cpp:220 pcbnew/files.cpp:428
 msgid "Save and Load"
 msgstr "Сохранить и загрузить"
 
-#: eeschema/files-io.cpp:216 pcbnew/files.cpp:429
+#: eeschema/files-io.cpp:221 pcbnew/files.cpp:429
 msgid "Load Without Saving"
 msgstr "Загрузить без сохранения"
 
-#: eeschema/files-io.cpp:246
+#: eeschema/files-io.cpp:251
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Файл схемы '%s' не существует. Создать его?"
 
-#: eeschema/files-io.cpp:268
+#: eeschema/files-io.cpp:273
 #, c-format
 msgid ""
 "Ready\n"
@@ -5954,11 +5954,25 @@ msgstr ""
 "Готово\n"
 "Каталог проекта: '%s'\n"
 
-#: eeschema/files-io.cpp:352
+#: eeschema/files-io.cpp:317
+#, c-format
+msgid ""
+"Error loading schematic file '%s'.\n"
+"%s"
+msgstr ""
+"Ошибка загрузки файла схемы '%s'.\n"
+"%s"
+
+#: eeschema/files-io.cpp:321
+#, c-format
+msgid "Failed to load '%s'"
+msgstr "Не удалось загрузить '%s'"
+
+#: eeschema/files-io.cpp:384
 msgid "Import Schematic"
 msgstr "Импорт схемы"
 
-#: eeschema/files-io.cpp:464
+#: eeschema/files-io.cpp:496
 msgid ""
 "This operation cannot be undone. Besides, take into account that hierarchical sheets "
 "will not be appended.\n"
@@ -5969,7 +5983,7 @@ msgstr ""
 "\n"
 "Желаете сохранить текущий документ перед началом операции?"
 
-#: eeschema/files-io.cpp:488
+#: eeschema/files-io.cpp:520
 #, c-format
 msgid "Directory '%s' is not writable"
 msgstr "Каталог '%s' доступен только для чтения"
@@ -7023,7 +7037,7 @@ msgid "Import"
 msgstr "Импорт"
 
 #: eeschema/libeditframe.cpp:1169 eeschema/schedit.cpp:609 pcbnew/edit.cpp:1505
-#: pcbnew/modedit.cpp:994 pcbnew/tools/pcbnew_control.cpp:758
+#: pcbnew/modedit.cpp:994 pcbnew/tools/pcbnew_control.cpp:759
 #: eeschema/help_common_strings.h:48
 msgid "Delete item"
 msgstr "Удалить элемент"
@@ -8219,6 +8233,136 @@ msgstr "Компонент %s, %s"
 msgid "Field %s"
 msgstr "Поле %s"
 
+#: eeschema/sch_io_mgr.cpp:31 eeschema/sch_plugin.cpp:27 pcbnew/io_mgr.cpp:42
+#: pcbnew/plugin.cpp:29
+#, c-format
+msgid "Plugin '%s' does not implement the '%s' function."
+msgstr "Расширение '%s' не содержит '%s' функцию."
+
+#: eeschema/sch_io_mgr.cpp:32 pcbnew/io_mgr.cpp:43
+#, c-format
+msgid "Plugin type '%s' is not found."
+msgstr "Расширение типа '%s' не найдено."
+
+#: eeschema/sch_io_mgr.cpp:82
+#, c-format
+msgid "Unknown SCH_FILE_T value: %d"
+msgstr "Неизвестное SCH_FILE_T значение: %d"
+
+#: eeschema/sch_legacy_plugin.cpp:109 eeschema/sch_legacy_plugin.cpp:154
+#: eeschema/sch_legacy_plugin.cpp:202 eeschema/sch_legacy_plugin.cpp:248
+#: eeschema/sch_legacy_plugin.cpp:288 eeschema/sch_legacy_plugin.cpp:300
+#: eeschema/sch_legacy_plugin.cpp:351 eeschema/sch_legacy_plugin.cpp:364
+#: eeschema/sch_legacy_plugin.cpp:383 eeschema/sch_legacy_plugin.cpp:784
+msgid "unexpected end of line"
+msgstr "неожиданный конец строки"
+
+#: eeschema/sch_legacy_plugin.cpp:251
+msgid "expected single character token"
+msgstr "ожидался одно символьный токен"
+
+#: eeschema/sch_legacy_plugin.cpp:311
+msgid "expected unquoted string"
+msgstr "ожидалась строка без кавычек"
+
+#: eeschema/sch_legacy_plugin.cpp:369
+msgid "expecting opening quote"
+msgstr "ожидается открытая кавычка"
+
+#: eeschema/sch_legacy_plugin.cpp:406
+msgid "expected quoted string"
+msgstr "ожидалась строка с кавычками"
+
+#: eeschema/sch_legacy_plugin.cpp:409
+msgid "no closing quote for string found"
+msgstr "не найдена закрывающая кавычка в строке"
+
+#: eeschema/sch_legacy_plugin.cpp:587
+#, c-format
+msgid "'%s' does not appear to be an Eeschema file"
+msgstr "'%s' не является файлом Eeschema"
+
+#: eeschema/sch_legacy_plugin.cpp:615
+msgid "Missing 'EELAYER END'"
+msgstr "Отсутствует 'EELAYER END'"
+
+#: eeschema/sch_legacy_plugin.cpp:634
+msgid "invalid page size"
+msgstr "неверный размер страницы"
+
+#: eeschema/sch_legacy_plugin.cpp:660 eeschema/sch_legacy_plugin.cpp:922
+#: eeschema/sch_legacy_plugin.cpp:930
+msgid "unexpected end of file"
+msgstr "неожиданный конец файла"
+
+#: eeschema/sch_legacy_plugin.cpp:716
+msgid "missing 'EndDescr'"
+msgstr "отсутствует 'EndDescr'"
+
+#: eeschema/sch_legacy_plugin.cpp:808
+msgid "invalid sheet pin type"
+msgstr "неверный тип вывода листа"
+
+#: eeschema/sch_legacy_plugin.cpp:829
+msgid "invalid sheet pin side"
+msgstr "неверная сторона вывода листа"
+
+#: eeschema/sch_legacy_plugin.cpp:851
+msgid "missing '$EndSheet`"
+msgstr "отсутствует '$EndSheet`"
+
+#: eeschema/sch_legacy_plugin.cpp:889
+msgid "Unexpected end of file"
+msgstr "Неожиданный конец файла"
+
+#: eeschema/sch_legacy_plugin.cpp:1110
+msgid "invalid label type"
+msgstr "неверный тип метки"
+
+#: eeschema/sch_legacy_plugin.cpp:1121
+msgid "expected 'Italics' or '~'"
+msgstr "ожидалось 'Italics' или '~'"
+
+#: eeschema/sch_legacy_plugin.cpp:1302
+msgid "component field text horizontal justification must be L, R, or C"
+msgstr "горизонтальное выравнивание текстового поля компонента должно быть L, R или C"
+
+#: eeschema/sch_legacy_plugin.cpp:1312
+msgid "component field text vertical justification must be B, T, or C"
+msgstr "вертикальное выравнивание текстового поля компонента должно быть B, T или C"
+
+#: eeschema/sch_legacy_plugin.cpp:1317
+msgid "component field text attributes must be 3 characters wide"
+msgstr "атрибуты текстового поля компонента должны быть 3 символа в ширину"
+
+#: eeschema/sch_legacy_plugin.cpp:1323
+msgid "component field text italics indicator must be I or N"
+msgstr "признак курсива текстового поля компонента должен быть I или N"
+
+#: eeschema/sch_legacy_plugin.cpp:1329
+msgid "component field text bold indicator must be B or N"
+msgstr "признак полужирный текстового поля компонента должен быть B или N"
+
+#: eeschema/sch_legacy_plugin.cpp:1343
+msgid "component field orientation must be H or V"
+msgstr "ориентация поля компонента должна быть H или V"
+
+#: eeschema/sch_legacy_plugin.cpp:1371
+msgid "invalid component X1 transform value"
+msgstr "неверное значение преобразования компонента X1"
+
+#: eeschema/sch_legacy_plugin.cpp:1376
+msgid "invalid component Y1 transform value"
+msgstr "неверное значение преобразования компонента Y1"
+
+#: eeschema/sch_legacy_plugin.cpp:1381
+msgid "invalid component X2 transform value"
+msgstr "неверное значение преобразования компонента X2"
+
+#: eeschema/sch_legacy_plugin.cpp:1386
+msgid "invalid component Y2 transform value"
+msgstr "неверное значение преобразования компонента Y2"
+
 #: eeschema/sch_line.cpp:458
 msgid "Vert."
 msgstr "Верт."
@@ -8251,19 +8395,47 @@ msgstr "%s линия на неопределённом слое из (%s,%s) в
 msgid "Electronics Rule Check Error"
 msgstr "Ошибка проверки электрических правил"
 
-#: eeschema/sch_sheet.cpp:837
+#: eeschema/sch_plugin.cpp:123
+msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
+msgstr "Включить лог <b>отладки</b> для функций Symbol*() в этом SCH_PLUGIN."
+
+#: eeschema/sch_plugin.cpp:127
+msgid "Regular expression <b>symbol name</b> filter."
+msgstr "Регулярное выражение фильтра <b>имени символа</b>."
+
+#: eeschema/sch_plugin.cpp:131 pcbnew/plugin.cpp:128
+msgid ""
+"Enable transaction logging. The mere presence of this option turns on the logging, no "
+"need to set a Value."
+msgstr ""
+"Включить лог транзакций. Установка этой опции включает журналирование, не требует "
+"установки Значения."
+
+#: eeschema/sch_plugin.cpp:136 pcbnew/plugin.cpp:133
+msgid "User name for <b>login</b> to some special library server."
+msgstr "Имя пользователя для <b>входа</b> на сервер библиотек."
+
+#: eeschema/sch_plugin.cpp:140 pcbnew/plugin.cpp:137
+msgid "Password for <b>login</b> to some special library server."
+msgstr "Пароль для <b>входа</b> на сервер библиотек."
+
+#: eeschema/sch_plugin.cpp:148
+msgid "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
+msgstr "Введите символ python, который реализует функции SCH_PLUGIN::Symbol*()."
+
+#: eeschema/sch_sheet.cpp:857
 msgid "Sheet Name"
 msgstr "Имя листа"
 
-#: eeschema/sch_sheet.cpp:838
+#: eeschema/sch_sheet.cpp:858
 msgid "File Name"
 msgstr "Имя файла"
 
-#: eeschema/sch_sheet.cpp:843
+#: eeschema/sch_sheet.cpp:863
 msgid "Time Stamp"
 msgstr "Временная метка"
 
-#: eeschema/sch_sheet.cpp:1056
+#: eeschema/sch_sheet.cpp:1076
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Иерархический лист %s"
@@ -9170,28 +9342,28 @@ msgstr "Получить сохранённый выбор"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:110
 #: pagelayout_editor/events_functions.cpp:527
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:115
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:125
 msgid "Error Init Printer info"
 msgstr "Ошибка инициализации принтера"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:299
-#: pcbnew/dialogs/dialog_plot.cpp:755 pcbnew/dialogs/dialog_print_using_printer.cpp:350
+#: pcbnew/dialogs/dialog_plot.cpp:755 pcbnew/dialogs/dialog_print_using_printer.cpp:356
 msgid "Warning: Scale option set to a very large value"
 msgstr "Предупреждение: параметр масштаба установлен в очень большое значение"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:305
-#: pcbnew/dialogs/dialog_plot.cpp:751 pcbnew/dialogs/dialog_print_using_printer.cpp:360
+#: pcbnew/dialogs/dialog_plot.cpp:751 pcbnew/dialogs/dialog_print_using_printer.cpp:366
 msgid "Warning: Scale option set to a very small value"
 msgstr "Предупреждение: параметр масштаба установлен в очень маленькое значение"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:354
-#: pcbnew/dialogs/dialog_plot.cpp:814 pcbnew/dialogs/dialog_print_using_printer.cpp:427
+#: pcbnew/dialogs/dialog_plot.cpp:814 pcbnew/dialogs/dialog_print_using_printer.cpp:433
 msgid "No layer selected"
 msgstr "Слой не выбран"
 
 #: gerbview/dialogs/dialog_print_using_printer.cpp:368
-#: pcbnew/dialogs/dialog_print_for_modedit.cpp:171
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:432
+#: pcbnew/dialogs/dialog_print_for_modedit.cpp:181
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:438
 msgid "Print Preview"
 msgstr "Просмотр"
 
@@ -12066,8 +12238,8 @@ msgstr "Относительная проницаемость окружающе
 msgid "Cable Length"
 msgstr "Длина кабеля"
 
-#: pcbnew/append_board_to_current.cpp:91 pcbnew/files.cpp:517
-#: pcbnew/tools/pcbnew_control.cpp:824
+#: pcbnew/append_board_to_current.cpp:92 pcbnew/files.cpp:517
+#: pcbnew/tools/pcbnew_control.cpp:825
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -13383,7 +13555,7 @@ msgstr "Ширина моста терморазгрузки меньше мин
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:460
 #: pcbnew/dialogs/dialog_keepout_area_properties.cpp:227
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:480
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:486
 msgid "No layer selected."
 msgstr "Слой не выбран."
 
@@ -13409,7 +13581,7 @@ msgstr "Радиус скругления"
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:87
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:30
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:51
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:107
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:110
 msgid "Layer:"
@@ -13424,7 +13596,7 @@ msgid "Net Filtering"
 msgstr "Фильтр по цепям"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:63
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:55
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:58
 msgid "Display:"
 msgstr "Показать:"
 
@@ -14360,21 +14532,21 @@ msgstr "Показать графические элементы в контур
 msgid "Show page limits"
 msgstr "Показать границы страницы"
 
-#: pcbnew/dialogs/dialog_drc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:261
+#: pcbnew/dialogs/dialog_drc.cpp:192 pcbnew/dialogs/dialog_drc.cpp:259
 #, c-format
 msgid "Report file \"%s\" created"
 msgstr "Файл отчёта \"%s\" создан"
 
-#: pcbnew/dialogs/dialog_drc.cpp:196 pcbnew/dialogs/dialog_drc.cpp:262
+#: pcbnew/dialogs/dialog_drc.cpp:194 pcbnew/dialogs/dialog_drc.cpp:260
 msgid "Disk File Report Completed"
 msgstr "Создание файл отчёта на диске завершено"
 
-#: pcbnew/dialogs/dialog_drc.cpp:201 pcbnew/dialogs/dialog_drc.cpp:267
+#: pcbnew/dialogs/dialog_drc.cpp:199 pcbnew/dialogs/dialog_drc.cpp:265
 #, c-format
 msgid "Unable to create report file '%s' "
 msgstr "Не удалось создать файл отчёта '%s' "
 
-#: pcbnew/dialogs/dialog_drc.cpp:285
+#: pcbnew/dialogs/dialog_drc.cpp:283
 msgid "Save DRC Report File"
 msgstr "Сохранить отчёт DRC"
 
@@ -14829,7 +15001,7 @@ msgstr ""
 "Принудительно назначен верхний слой шелкографии. Пожалуйста, исправьте."
 
 #: pcbnew/dialogs/dialog_edit_module_text.cpp:260
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:259
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:265
 msgid "The text thickness is too large for the text size. It will be clamped"
 msgstr "Толщина линии текста больше размера текста. Текст может быть нечитаем"
 
@@ -15832,7 +16004,7 @@ msgid "Current Text Dimensions"
 msgstr "Текущие размеры текста"
 
 #: pcbnew/dialogs/dialog_global_modules_fields_edition_base.cpp:86
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:108
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:111
 msgid "Thickness:"
 msgstr "Толщина:"
 
@@ -17237,13 +17409,13 @@ msgid "Rounded Rectangle"
 msgstr "Скруглённый прямоугольник"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:81
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:47
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:50
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:130
 msgid "Position X:"
 msgstr "Позиция X:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:92
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:78
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:81
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:142
 msgid "Position Y:"
 msgstr "Позиция Y:"
@@ -17491,7 +17663,7 @@ msgstr ""
 "Конт.пл. будет перевёрнута на плате.\n"
 "Нижний и верхний слои будут поменяны местами."
 
-#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:192
+#: pcbnew/dialogs/dialog_pcb_text_properties.cpp:198
 msgid "No layer selected, Please select the text layer"
 msgstr "Слой не выбран, пожалуйста выберите текстовый слой"
 
@@ -17499,15 +17671,15 @@ msgstr "Слой не выбран, пожалуйста выберите тек
 msgid "Enter the text placed on selected layer."
 msgstr "Введите текст, который нужно разместить на выбранном слое."
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:68 pcbnew/muonde.cpp:859
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:71 pcbnew/muonde.cpp:859
 msgid "Mirrored"
 msgstr "Зеркально"
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:86
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:89
 msgid "Justification:"
 msgstr "Выравнивание:"
 
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:112
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:115
 msgid "Orientation (deg):"
 msgstr "Ориентация ( ° ):"
 
@@ -18040,16 +18212,16 @@ msgstr "низкий"
 msgid "high"
 msgstr "высокий"
 
-#: pcbnew/dialogs/dialog_print_for_modedit.cpp:87
+#: pcbnew/dialogs/dialog_print_for_modedit.cpp:97
 msgid "An error occurred initializing the printer information."
 msgstr "Произошла ошибка при инициализации информации принтера."
 
-#: pcbnew/dialogs/dialog_print_for_modedit.cpp:225
+#: pcbnew/dialogs/dialog_print_for_modedit.cpp:235
 msgid "Print Footprint"
 msgstr "Печать посад.мест"
 
-#: pcbnew/dialogs/dialog_print_for_modedit.cpp:230
-#: pcbnew/dialogs/dialog_print_using_printer.cpp:495
+#: pcbnew/dialogs/dialog_print_for_modedit.cpp:240
+#: pcbnew/dialogs/dialog_print_using_printer.cpp:501
 msgid "There was a problem printing."
 msgstr "Возникла проблема печати."
 
@@ -18541,17 +18713,17 @@ msgstr "NETCLASS: '%s' имеет сверло перех.микроотв.:%s �
 msgid "Track clearances"
 msgstr "Зазоры дорожки"
 
-#: pcbnew/eagle_plugin.cpp:1755
+#: pcbnew/eagle_plugin.cpp:1756
 #, c-format
 msgid "<package> name: '%s' duplicated in eagle <library>: '%s'"
 msgstr "<package> наименование:'%s' дублирован в eagle <библиотеке>:'%s'"
 
-#: pcbnew/eagle_plugin.cpp:1816
+#: pcbnew/eagle_plugin.cpp:1817
 #, c-format
 msgid "No '%s' package in library '%s'"
 msgstr "Посадочного места '%s' нет в библиотеке '%s'"
 
-#: pcbnew/eagle_plugin.cpp:3020
+#: pcbnew/eagle_plugin.cpp:3021
 #, c-format
 msgid "File '%s' is not readable."
 msgstr "Файл '%s' не удаётся прочитать."
@@ -18612,7 +18784,7 @@ msgstr "Добавить миру для совмещения слоёв"
 msgid "Adjust zero"
 msgstr "Подстройка нуля"
 
-#: pcbnew/edit.cpp:1477 pcbnew/tools/pcbnew_control.cpp:654
+#: pcbnew/edit.cpp:1477 pcbnew/tools/pcbnew_control.cpp:655
 msgid "Adjust grid origin"
 msgstr "Установка начальных координат сетки"
 
@@ -18832,17 +19004,17 @@ msgstr ""
 "Этот файл создан старой версией Pcbnew.\n"
 "При сохранении файла он будет записан в новом формате."
 
-#: pcbnew/files.cpp:651
+#: pcbnew/files.cpp:653
 #, c-format
 msgid "Warning: unable to create backup file '%s'"
 msgstr "Предупреждение: не удалось создать резервную копию файла '%s'"
 
-#: pcbnew/files.cpp:678 pcbnew/files.cpp:773
+#: pcbnew/files.cpp:680 pcbnew/files.cpp:775
 #, c-format
 msgid "No access rights to write to file '%s'"
 msgstr "Нет права записи в файл '%s'"
 
-#: pcbnew/files.cpp:719 pcbnew/files.cpp:799
+#: pcbnew/files.cpp:721 pcbnew/files.cpp:801
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -18851,22 +19023,22 @@ msgstr ""
 "Ошибка сохранения платы '%s':\n"
 "%s"
 
-#: pcbnew/files.cpp:725
+#: pcbnew/files.cpp:727
 #, c-format
 msgid "Failed to create '%s'"
 msgstr "Не удалось создать '%s'"
 
-#: pcbnew/files.cpp:751
+#: pcbnew/files.cpp:753
 #, c-format
 msgid "Backup file: '%s'"
 msgstr "Файл резервной копии: '%s' "
 
-#: pcbnew/files.cpp:753
+#: pcbnew/files.cpp:755
 #, c-format
 msgid "Wrote board file: '%s'"
 msgstr "Записан файл платы: '%s'"
 
-#: pcbnew/files.cpp:808
+#: pcbnew/files.cpp:810
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -19294,17 +19466,7 @@ msgstr "Текущая плата будет утеряна и эту опера
 msgid "Current Footprint will be lost and this operation cannot be undone. Continue ?"
 msgstr "Текущее посад.место будет утеряно и эту операцию нельзя отменить. Продолжить?"
 
-#: pcbnew/io_mgr.cpp:42 pcbnew/plugin.cpp:27
-#, c-format
-msgid "Plugin '%s' does not implement the '%s' function."
-msgstr "Расширение '%s' не содержит '%s' функцию."
-
-#: pcbnew/io_mgr.cpp:43
-#, c-format
-msgid "Plugin type '%s' is not found."
-msgstr "Расширение типа '%s' не найдено."
-
-#: pcbnew/io_mgr.cpp:129
+#: pcbnew/io_mgr.cpp:114
 #, c-format
 msgid "Unknown PCB_FILE_T value: %d"
 msgstr "Неизвестное PCB_FILE_T значение: %d"
@@ -19352,12 +19514,12 @@ msgstr "Путь к библиотеке посад.мест '%s' не суще�
 msgid "library '%s' has no footprint '%s' to delete"
 msgstr "в библиотеке '%s' нет посад.места '%s' для удаления"
 
-#: pcbnew/kicad_plugin.cpp:1245 pcbnew/legacy_plugin.cpp:96
+#: pcbnew/kicad_plugin.cpp:1245 pcbnew/legacy_plugin.cpp:97
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "неизвестный тип конт.пл.: %d"
 
-#: pcbnew/kicad_plugin.cpp:1258 pcbnew/legacy_plugin.cpp:97
+#: pcbnew/kicad_plugin.cpp:1258 pcbnew/legacy_plugin.cpp:98
 #, c-format
 msgid "unknown pad attribute: %d"
 msgstr "неизвестный атрибут конт.пл.: %d"
@@ -19432,7 +19594,7 @@ msgstr "Не удалось разобрать имя цепи в секции �
 msgid "Cannot find component '%s' in footprint filter section of netlist."
 msgstr "Не удалось найти компонент '%s' в секции фильтра посад.мест в списке цепей."
 
-#: pcbnew/legacy_plugin.cpp:94
+#: pcbnew/legacy_plugin.cpp:95
 #, c-format
 msgid ""
 "File '%s' is format version: %d.\n"
@@ -19443,27 +19605,27 @@ msgstr ""
 "Поддерживается формат только версии <= %d.\n"
 "Обновите Pcbnew для загрузки этого файла."
 
-#: pcbnew/legacy_plugin.cpp:95
+#: pcbnew/legacy_plugin.cpp:96
 #, c-format
 msgid "unknown graphic type: %d"
 msgstr "неизвестный тип графики: %d"
 
-#: pcbnew/legacy_plugin.cpp:734
+#: pcbnew/legacy_plugin.cpp:735
 #, c-format
 msgid "Unknown sheet type '%s' on line:%d"
 msgstr "Неизвестный тип листа '%s' в строке:%d"
 
-#: pcbnew/legacy_plugin.cpp:1430
+#: pcbnew/legacy_plugin.cpp:1431
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: '%s'"
 msgstr "Неизвестная форма конт.пл. '%c=0x%02x' в строке: %d в посад.месте: '%s'"
 
-#: pcbnew/legacy_plugin.cpp:2478
+#: pcbnew/legacy_plugin.cpp:2479
 #, c-format
 msgid "duplicate NETCLASS name '%s'"
 msgstr "дубликат имена класса цепи '%s'"
 
-#: pcbnew/legacy_plugin.cpp:3005 pcbnew/legacy_plugin.cpp:3042
+#: pcbnew/legacy_plugin.cpp:3006 pcbnew/legacy_plugin.cpp:3043
 #, c-format
 msgid ""
 "invalid float number in file: '%s'\n"
@@ -19472,7 +19634,7 @@ msgstr ""
 "неверное число с плавающей точкой в файле: '%s'\n"
 "строка: %d, смещение: %d"
 
-#: pcbnew/legacy_plugin.cpp:3014 pcbnew/legacy_plugin.cpp:3050
+#: pcbnew/legacy_plugin.cpp:3015 pcbnew/legacy_plugin.cpp:3051
 #, c-format
 msgid ""
 "missing float number in file: '%s'\n"
@@ -19481,12 +19643,12 @@ msgstr ""
 "отсутствует число с плавающей точкой в файле: '%s'\n"
 "строка: %d, смещение: %d"
 
-#: pcbnew/legacy_plugin.cpp:3266
+#: pcbnew/legacy_plugin.cpp:3267
 #, c-format
 msgid "File '%s' is empty or is not a legacy library"
 msgstr "Файл '%s' пустой или не является библиотекой"
 
-#: pcbnew/legacy_plugin.cpp:3473
+#: pcbnew/legacy_plugin.cpp:3474
 #, c-format
 msgid "library '%s' cannot be deleted"
 msgstr "библиотеку '%s' не удалось удалить"
@@ -21510,31 +21672,15 @@ msgstr "Скрыть СВЧ панель инструментов"
 msgid "Your BOARD has a bad layer number for footprint %s"
 msgstr "Ваша плата содержит неверное число слоёв для посад.места %s"
 
-#: pcbnew/plugin.cpp:118
+#: pcbnew/plugin.cpp:120
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PLUGIN."
 msgstr "Включить лог <b>отладки</b> для функций Footprint*() в этом плагине."
 
-#: pcbnew/plugin.cpp:122
+#: pcbnew/plugin.cpp:124
 msgid "Regular expression <b>footprint name</b> filter."
 msgstr "Регулярное выражение фильтра <b>имени посад.места</b>."
 
-#: pcbnew/plugin.cpp:126
-msgid ""
-"Enable transaction logging. The mere presence of this option turns on the logging, no "
-"need to set a Value."
-msgstr ""
-"Включить лог транзакций. Установка этой опции включает журналирование, не требует "
-"установки Значения."
-
-#: pcbnew/plugin.cpp:131
-msgid "User name for <b>login</b> to some special library server."
-msgstr "Имя пользователя для <b>входа</b> на сервер библиотек."
-
-#: pcbnew/plugin.cpp:135
-msgid "Password for <b>login</b> to some special library server."
-msgstr "Пароль для <b>входа</b> на сервер библиотек."
-
-#: pcbnew/plugin.cpp:143
+#: pcbnew/plugin.cpp:145
 msgid "Enter the python module which implements the PLUGIN::Footprint*() functions."
 msgstr "Ввод python-модуль, который реализует функцию PLUGIN::Footprint*()."
 
@@ -22544,11 +22690,11 @@ msgstr "Содержимое буфера обмена ошибочно"
 msgid "Locking"
 msgstr "Блокировка"
 
-#: pcbnew/tools/pcbnew_control.cpp:741
+#: pcbnew/tools/pcbnew_control.cpp:742
 msgid "Are you sure you want to delete item?"
 msgstr "Вы уверены, что хотите удалить элемент?"
 
-#: pcbnew/tools/pcbnew_control.cpp:924
+#: pcbnew/tools/pcbnew_control.cpp:925
 msgid "Not available in OpenGL/Cairo canvases."
 msgstr "Не доступно при отображении в OpenGL/Cairo."
 
@@ -22997,8 +23143,8 @@ msgstr "Свойства размерной линии"
 msgid "DRC Control"
 msgstr "Контроль DRC"
 
-#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:132
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:115
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.h:133
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.h:116
 msgid "Footprint Properties"
 msgstr "Свойства посад.места"
 
