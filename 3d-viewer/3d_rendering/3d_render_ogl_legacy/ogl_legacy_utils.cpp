@@ -209,7 +209,7 @@ void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment, unsigned int aNrSidesPer
     const SFVEC2F end_minus_start = aSegment.GetEnd_minus_Start();
     const float radius = aSegment.GetRadius();
     const float width  = aSegment.GetWidth();
-    const float lenght = aSegment.GetLenght();
+    const float length = aSegment.GetLength();
 
     glTranslatef( start.x, start.y, 0.0f );
 
@@ -219,41 +219,41 @@ void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment, unsigned int aNrSidesPer
     }
 
     glPushMatrix();
-    glTranslatef( lenght, 0.0, 0.0f );
+    glTranslatef( length, 0.0, 0.0f );
     glScalef( width, width, 1.0f );
     OGL_draw_half_open_cylinder( aNrSidesPerCircle );
     glPopMatrix ();
 
     glBegin( GL_QUADS );
     glNormal3f( 0.0,-1.0, 0.0 );
-    glVertex3f( lenght,-radius, 1.0 );
+    glVertex3f( length,-radius, 1.0 );
     glVertex3f( 0.0,   -radius, 1.0 );
     glVertex3f( 0.0,   -radius, 0.0 );
-    glVertex3f( lenght,-radius, 0.0 );
+    glVertex3f( length,-radius, 0.0 );
     glEnd();
 
     glBegin( GL_QUADS );
     glNormal3f( 0.0,  1.0, 0.0 );
-    glVertex3f( lenght, radius, 0.0 );
+    glVertex3f( length, radius, 0.0 );
     glVertex3f( 0.0,    radius, 0.0 );
     glVertex3f( 0.0,    radius, 1.0 );
-    glVertex3f( lenght, radius, 1.0 );
+    glVertex3f( length, radius, 1.0 );
     glEnd();
 
     glBegin( GL_QUADS );
     glNormal3f( 0.0, 0.0, 1.0 );
-    glVertex3f( lenght, radius, 1.0 );
+    glVertex3f( length, radius, 1.0 );
     glVertex3f( 0.0,    radius, 1.0 );
     glVertex3f( 0.0,   -radius, 1.0 );
-    glVertex3f( lenght,-radius, 1.0 );
+    glVertex3f( length,-radius, 1.0 );
     glEnd();
 
     glBegin( GL_QUADS );
     glNormal3f( 0.0, 0.0,-1.0 );
-    glVertex3f( lenght,-radius, 0.0 );
+    glVertex3f( length,-radius, 0.0 );
     glVertex3f( 0.0,   -radius, 0.0 );
     glVertex3f( 0.0,    radius, 0.0 );
-    glVertex3f( lenght, radius, 0.0 );
+    glVertex3f( length, radius, 0.0 );
     glEnd();
 
     glScalef( width, width, 1.0f );

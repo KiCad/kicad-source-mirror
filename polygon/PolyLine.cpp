@@ -750,7 +750,7 @@ void CPolyLine::Hatch()
     else
         spacing = m_hatchPitch * 2;
 
-    // set the "length" of hatch lines (the lenght on horizontal axis)
+    // set the "length" of hatch lines (the length on horizontal axis)
     double  hatch_line_len = m_hatchPitch;
 
     // To have a better look, give a slope depending on the layer

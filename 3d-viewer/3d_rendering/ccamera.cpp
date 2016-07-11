@@ -83,7 +83,7 @@ void CCAMERA::rebuildProjection()
 {
     m_frustum.ratio = (float) m_windowSize.x / m_windowSize.y;
     m_frustum.nearD = 0.01f;
-    m_frustum.farD = glm::length( m_camera_pos_init ) * 2.0f;                   // Consider that we can render double the lenght, review if that is OK...
+    m_frustum.farD = glm::length( m_camera_pos_init ) * 2.0f;                   // Consider that we can render double the length, review if that is OK...
 
     switch( m_projectionType )
     {

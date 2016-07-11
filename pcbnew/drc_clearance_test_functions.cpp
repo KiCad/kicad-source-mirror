@@ -137,7 +137,7 @@ bool convex2pointDRC( wxPoint* aTref, int aTrefCount, wxPoint aPcompare, int aDi
 bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 {
     TRACK*    track;
-    wxPoint   delta;           // lenght on X and Y axis of segments
+    wxPoint   delta;           // length on X and Y axis of segments
     LSET layerMask;
     int       net_code_ref;
     wxPoint   shape_pos;
@@ -530,7 +530,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                     // Compute the segment orientation (angle) en 0,1 degre
                     double angle = ArcTangente( delta.y, delta.x );
 
-                    // Compute the segment lenght: delta.x = lenght after rotation
+                    // Compute the segment length: delta.x = length after rotation
                     RotatePoint( &delta, angle );
 
                     /* Comute the reference segment coordinates relatives to a

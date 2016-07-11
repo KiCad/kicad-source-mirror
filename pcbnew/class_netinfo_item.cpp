@@ -82,8 +82,8 @@ void NETINFO_ITEM::Draw( EDA_DRAW_PANEL* panel,
 void NETINFO_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString  txt;
-    double    lengthnet = 0.0;      // This  is the lenght of tracks on pcb
-    double    lengthPadToDie = 0.0; // this is the lenght of internal ICs connections
+    double    lengthnet = 0.0;      // This  is the length of tracks on pcb
+    double    lengthPadToDie = 0.0; // this is the length of internal ICs connections
 
     aList.push_back( MSG_PANEL_ITEM( _( "Net Name" ), GetNetname(), RED ) );
 
@@ -158,7 +158,7 @@ RATSNEST_ITEM::RATSNEST_ITEM()
     m_Status   = 0;         // state
     m_PadStart = NULL;      // pointer to the starting pad
     m_PadEnd   = NULL;      // pointer to ending pad
-    m_Lenght   = 0;         // length of the line (temporary used in some
+    m_Length   = 0;         // length of the line (temporary used in some
                             // calculations)
 }
 

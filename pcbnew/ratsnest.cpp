@@ -112,7 +112,7 @@ void MIN_SPAN_TREE_PADS::AddTreeToRatsnest( std::vector<RATSNEST_ITEM>* aRatsnes
 
         net.SetNet( netcode );
         net.m_Status   = CH_ACTIF | CH_VISIBLE;
-        net.m_Lenght   = GetDist(ii);
+        net.m_Length   = GetDist(ii);
         net.m_PadStart = padsBuffer[ii];
         net.m_PadEnd   = padsBuffer[ GetWhoTo(ii) ];
 
@@ -359,7 +359,7 @@ static int tst_links_between_blocks( NETINFO_ITEM*          aNetinfo,
         // than the previous candidate:
         if( best_link == NULL )  // no candidate
             best_link = link;
-        else if( best_link->m_Lenght > link->m_Lenght )  // It is a better candidate.
+        else if( best_link->m_Length > link->m_Length )  // It is a better candidate.
             best_link = link;
     }
 
@@ -681,7 +681,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
      */
     RATSNEST_ITEM local_rats;
 
-    local_rats.m_Lenght = INT_MAX;
+    local_rats.m_Length = INT_MAX;
     local_rats.m_Status = 0;
     bool addRats = false;
 
@@ -706,7 +706,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
 
             addRats = false;
             current_net_code    = pad_ref->GetNetCode();
-            local_rats.m_Lenght = INT_MAX;
+            local_rats.m_Length = INT_MAX;
         }
 
         pad_pos = pad_ref->GetPosition() - g_Offset_Module;
@@ -726,12 +726,12 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
             distance = abs( pad_externe->GetPosition().x - pad_pos.x ) +
                        abs( pad_externe->GetPosition().y - pad_pos.y );
 
-            if( distance < local_rats.m_Lenght )
+            if( distance < local_rats.m_Length )
             {
                 local_rats.m_PadStart = pad_ref;
                 local_rats.m_PadEnd   = pad_externe;
                 local_rats.SetNet( pad_ref->GetNetCode() );
-                local_rats.m_Lenght = distance;
+                local_rats.m_Length = distance;
                 local_rats.m_Status = 0;
 
                 addRats = true;

@@ -84,7 +84,7 @@ public:
     wxPoint m_Start;
     wxPoint m_End;
     wxSize  m_Size;
-    int     m_lenght;       // full length trace.
+    int     m_length;       // full length trace.
     int     m_Width;        // Trace width.
     // A flag set to true when mu-wave inductor is being created
     bool    m_Flag;
@@ -101,7 +101,7 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                               const wxPoint& aPosition, bool aErase )
 {
     /* Calculate the orientation and size of the box containing the inductor:
-     * the box is a rectangle with height = lenght/2
+     * the box is a rectangle with height = length/2
      * the shape is defined by a rectangle, nor necessary horizontal or vertical
      */
     GRSetDrawMode( aDC, GR_XOR );
@@ -246,20 +246,20 @@ MODULE* CreateMicrowaveInductor( PCB_EDIT_FRAME* aPcbFrame, wxString& aErrorMess
 
     wxPoint pt = s_inductor_pattern.m_End - s_inductor_pattern.m_Start;
     int     min_len = KiROUND( EuclideanNorm( pt ) );
-    s_inductor_pattern.m_lenght = min_len;
+    s_inductor_pattern.m_length = min_len;
 
     // Enter the desired length.
-    msg = StringFromValue( g_UserUnit, s_inductor_pattern.m_lenght );
+    msg = StringFromValue( g_UserUnit, s_inductor_pattern.m_length );
     wxTextEntryDialog dlg( NULL, wxEmptyString, _( "Length of Trace:" ), msg );
 
     if( dlg.ShowModal() != wxID_OK )
         return NULL; // canceled by user
 
     msg = dlg.GetValue();
-    s_inductor_pattern.m_lenght = ValueFromString( g_UserUnit, msg );
+    s_inductor_pattern.m_length = ValueFromString( g_UserUnit, msg );
 
     // Control values (ii = minimum length)
-    if( s_inductor_pattern.m_lenght < min_len )
+    if( s_inductor_pattern.m_length < min_len )
     {
         aErrorMessage = _( "Requested length < minimum length" );
         return NULL;
@@ -268,7 +268,7 @@ MODULE* CreateMicrowaveInductor( PCB_EDIT_FRAME* aPcbFrame, wxString& aErrorMess
     // Calculate the elements.
     std::vector <wxPoint> buffer;
     ll = BuildCornersList_S_Shape( buffer, s_inductor_pattern.m_Start,
-                                   s_inductor_pattern.m_End, s_inductor_pattern.m_lenght,
+                                   s_inductor_pattern.m_End, s_inductor_pattern.m_length,
                                    s_inductor_pattern.m_Width );
 
     if( !ll )
@@ -396,7 +396,7 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
  * @param  aBuffer =  a buffer where to store points (ends of segments)
  * @param  aStartPoint = starting point of the path
  * @param  aEndPoint = ending point of the path
- * @param  aLength = full lenght of the path
+ * @param  aLength = full length of the path
  * @param  aWidth = segment width
  */
 int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
@@ -413,7 +413,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
  * The equations are (assuming the area size of the entire shape is Size:
  * Size.x = 2 * radius + segm_len
  * Size.y = (segm_count + 2 ) * 2 * radius + 2 * stubs_len
- * s_inductor_pattern.m_lenght = 2 * delta // connections to the coil
+ * s_inductor_pattern.m_length = 2 * delta // connections to the coil
  *             + (segm_count-2) * segm_len      // length of the strands except 1st and last
  *             + (segm_count) * (PI * radius)   // length of rounded
  * segm_len + / 2 - radius * 2)                 // length of 1st and last bit
@@ -448,7 +448,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     double  angle    = -ArcTangente( pt.y, pt.x );
     int     min_len  = KiROUND( EuclideanNorm( pt ) );
     int     segm_len = 0;           // length of segments
-    int     full_len;               // full len of shape (sum of lenght of all segments + arcs)
+    int     full_len;               // full len of shape (sum of length of all segments + arcs)
 
 
     /* Note: calculations are made for a vertical coil (more easy calculations)
@@ -467,7 +467,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
 
     int segm_count;     // number of full len segments
                         // the half size segments (first and last segment) are not counted here
-    int stubs_len = 0;  // lenght of first or last segment (half size of others segments)
+    int stubs_len = 0;  // length of first or last segment (half size of others segments)
 
     for( segm_count = 0; ; segm_count++ )
     {

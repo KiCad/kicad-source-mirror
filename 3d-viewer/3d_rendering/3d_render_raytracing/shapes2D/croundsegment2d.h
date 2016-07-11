@@ -61,7 +61,7 @@ public:
     float GetRadius() const { return m_radius; }
     float GetRadiusSquared() const { return m_radius_squared; }
     float GetWidth()  const { return m_width; }
-    float GetLenght() const { return m_segment.m_Length; }
+    float GetLength() const { return m_segment.m_Length; }
 
     const SFVEC2F &GetStart() const { return m_segment.m_Start; }
     const SFVEC2F &GetEnd() const { return m_segment.m_End; }

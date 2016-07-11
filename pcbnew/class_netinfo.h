@@ -76,7 +76,7 @@ public:
     int    m_Status;    // State: see previous defines (CH_ ...)
     D_PAD* m_PadStart;  // pointer to the starting pad
     D_PAD* m_PadEnd;    // pointer to ending pad
-    int    m_Lenght;    // length of the line (used in some calculations)
+    int    m_Length;    // length of the line (used in some calculations)
 
     RATSNEST_ITEM();
 

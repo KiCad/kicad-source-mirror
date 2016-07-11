@@ -420,7 +420,7 @@ int PCB_EDIT_FRAME::DoGenFootprintsPositionFile( const wxString& aFullFileName,
 {
     MODULE*     footprint;
 
-    // Minimal text lenghts:
+    // Minimal text lengths:
     int lenRefText = 8;
     int lenValText = 8;
     int lenPkgText = 16;

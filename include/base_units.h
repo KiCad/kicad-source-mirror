@@ -91,7 +91,7 @@ wxString CoordinateToString( int aValue, bool aConvertToMils = false );
 wxString AngleToStringDegrees( double aAngle );
 
 /**
- * Function LenghtDoubleToString
+ * Function LengthDoubleToString
  * is a helper to convert the \a double length \a aValue to a string in inches,
  * millimeters, or unscaled units according to the current user units setting.
  *
