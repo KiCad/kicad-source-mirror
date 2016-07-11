@@ -312,11 +312,6 @@ double DoubleValueFromString( EDA_UNITS_T aUnits, const wxString& aTextValue )
     // Convert the period in decimal point
     buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
 
-    // An ugly fix needed by WxWidgets 2.9.1 that sometimes
-    // back to a point as separator, although the separator is the comma
-    // TODO: remove this line if WxWidgets 2.9.2 fixes this issue
-    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
-
     // Find the end of the numeric part
     unsigned brk_point = 0;
 
