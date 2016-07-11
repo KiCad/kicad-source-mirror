@@ -69,6 +69,9 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     KIGFX::VIEW*    view = GetGalCanvas()->GetView();
     BOARD*          board = GetBoard();
     std::vector<MODULE*> newFootprints;
+    // keep trace of the initial baord area, if we want to place new footprints
+    // outside the existinag board
+    EDA_RECT bbox = GetBoard()->ComputeBoundingBox( false );
 
     netlist.SetIsDryRun( aIsDryRun );
     netlist.SetFindByTimeStamp( aSelectByTimeStamp );
@@ -124,7 +127,8 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
 
     if( IsGalCanvasActive() )
     {
-        SpreadFootprints( &newFootprints, false, false );
+        SpreadFootprints( &newFootprints, false, false, GetCrossHairPosition() );
+
         if( !newFootprints.empty() )
         {
             for( MODULE* footprint : newFootprints )
@@ -133,6 +137,17 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
             }
             m_toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
         }
+    }
+    else
+    {
+        wxPoint placementAreaPosition;
+
+        // Place area to the left side of the board.
+        // if the board is empty, the bbox position is (0,0)
+        placementAreaPosition.x = bbox.GetEnd().x + Millimeter2iu( 10 );
+        placementAreaPosition.y = bbox.GetOrigin().y;
+
+        SpreadFootprints( &newFootprints, false, false, placementAreaPosition );
     }
 
     OnModify();

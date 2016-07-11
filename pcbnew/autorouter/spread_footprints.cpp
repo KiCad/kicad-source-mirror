@@ -172,12 +172,13 @@ static bool sortFootprintsbySheetPath( MODULE* ref, MODULE* compare );
  */
 void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
                                        bool aMoveFootprintsOutsideBoardOnly,
-                                       bool aCheckForBoardEdges )
+                                       bool aCheckForBoardEdges,
+                                       wxPoint aSpreadAreaPosition )
 {
     EDA_RECT bbox = GetBoard()->ComputeBoundingBox( true );
-    bool     edgesExist = ( bbox.GetWidth() || bbox.GetHeight() );
+    bool     edgesExist = bbox.GetWidth() || bbox.GetHeight();
     // if aFootprintsOutsideBoardOnly is true, and if board outline exists,
-    // wue have to filter footprints to move:
+    // we have to filter footprints to move:
     bool outsideBrdFilter = aMoveFootprintsOutsideBoardOnly && edgesExist;
 
     // no edges exist
@@ -234,16 +235,20 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
     double subsurface;
     double placementsurface = 0.0;
 
-    wxPoint placementAreaPosition = GetCrossHairPosition();
+    // put the placement area position on mouse cursor.
+    // this position will be adjusted later
+    wxPoint placementAreaPosition = aSpreadAreaPosition;
 
     // We sometimes do not want to move footprints inside an existing board.
-    // move the placement area position outside the board bounding box
+    // Therefore, move the placement area position outside the board bounding box
     // to the left of the board
-    if( edgesExist && aCheckForBoardEdges )
+    if( aCheckForBoardEdges && edgesExist )
     {
         if( placementAreaPosition.x < bbox.GetEnd().x &&
             placementAreaPosition.y < bbox.GetEnd().y )
         {
+            // the placement area could overlap the board
+            // move its position to a safe location
             placementAreaPosition.x = bbox.GetEnd().x;
             placementAreaPosition.y = bbox.GetOrigin().y;
         }

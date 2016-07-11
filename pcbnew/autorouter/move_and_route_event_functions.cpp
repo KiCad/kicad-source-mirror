@@ -146,7 +146,8 @@ void PCB_EDIT_FRAME::OnPlaceOrRouteFootprints( wxCommandEvent& event )
             for( ; footprint != NULL; footprint = footprint->Next() )
                 footprintList.push_back( footprint );
 
-            SpreadFootprints( &footprintList, id == ID_POPUP_PCB_SPREAD_NEW_MODULES, true );
+            SpreadFootprints( &footprintList, id == ID_POPUP_PCB_SPREAD_NEW_MODULES,
+                              true, GetCrossHairPosition() );
         }
         break;
 

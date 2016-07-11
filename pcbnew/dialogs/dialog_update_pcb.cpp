@@ -109,7 +109,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     if( m_frame->IsGalCanvasActive() )
     {
-        m_frame->SpreadFootprints( &newFootprints, false, false );
+        m_frame->SpreadFootprints( &newFootprints, false, false, m_frame->GetCrossHairPosition() );
 
         if( !newFootprints.empty() )
         {

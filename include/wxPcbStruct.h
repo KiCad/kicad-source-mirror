@@ -1582,14 +1582,17 @@ public:
      * @param aFootprints: a list of footprints to be spread out.
      * @param aMoveFootprintsOutsideBoardOnly: true to move only
      *        footprints outside the board outlines
-     *        (they are outside if the position of a footprint is outside
-     *        the board outlines bounding box).
+     *        (they are outside if the position of a footprint anchor is outside
+     *        the board outlines bounding box). It imply the board outlines exist
      * @param aCheckForBoardEdges: true to try to place footprints outside of
-     *        board edges.
+     *        board edges, if aSpreadAreaPosition is incorrectly chosen.
+     * @param aSpreadAreaPosition the position of the upper left corner of the
+     *        area used to spread footprints
      */
     void SpreadFootprints( std::vector<MODULE*>* aFootprints,
                            bool                  aMoveFootprintsOutsideBoardOnly,
-                           bool                  aCheckForBoardEdges );
+                           bool                  aCheckForBoardEdges,
+                           wxPoint               aSpreadAreaPosition );
 
     /**
      * Function AutoPlaceModule
