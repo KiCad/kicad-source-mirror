@@ -6,7 +6,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2016 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 
 #include <dialog_image_editor.h>
 
+
 DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem )
     : DIALOG_IMAGE_EDITOR_BASE( aParent )
 {
@@ -40,7 +41,7 @@ DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem 
     m_lastImage = NULL;
     m_buttonUndoLast->Enable( false );
     wxString msg;
-    msg.Printf( wxT("%f"), m_workingImage->m_Scale );
+    msg.Printf( wxT( "%f" ), m_workingImage->GetScale() );
     m_textCtrlScale->SetValue( msg );
 
     GetSizer()->SetSizeHints( this );
@@ -52,6 +53,7 @@ DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem 
     SetFocus();
 }
 
+
 void DIALOG_IMAGE_EDITOR::OnUndoLastChange( wxCommandEvent& event )
 {
     BITMAP_BASE * tmp = m_workingImage;
@@ -61,6 +63,7 @@ void DIALOG_IMAGE_EDITOR::OnUndoLastChange( wxCommandEvent& event )
     m_lastImage = NULL;
     m_panelDraw->Refresh();
 }
+
 
 void DIALOG_IMAGE_EDITOR::OnMirrorX_click( wxCommandEvent& event )
 {
@@ -72,6 +75,7 @@ void DIALOG_IMAGE_EDITOR::OnMirrorX_click( wxCommandEvent& event )
     m_panelDraw->Refresh();
 }
 
+
 void DIALOG_IMAGE_EDITOR::OnMirrorY_click( wxCommandEvent& event )
 {
     delete m_lastImage;
@@ -81,6 +85,7 @@ void DIALOG_IMAGE_EDITOR::OnMirrorY_click( wxCommandEvent& event )
     m_panelDraw->Refresh();
 }
 
+
 void DIALOG_IMAGE_EDITOR::OnRotateClick( wxCommandEvent& event )
 {
     delete m_lastImage;
@@ -89,6 +94,7 @@ void DIALOG_IMAGE_EDITOR::OnRotateClick( wxCommandEvent& event )
     m_workingImage->Rotate( false );
     m_panelDraw->Refresh();
 }
+
 
 void DIALOG_IMAGE_EDITOR::OnGreyScaleConvert( wxCommandEvent& event )
 {
@@ -101,6 +107,7 @@ void DIALOG_IMAGE_EDITOR::OnGreyScaleConvert( wxCommandEvent& event )
     m_panelDraw->Refresh();
 }
 
+
 void DIALOG_IMAGE_EDITOR::OnHalfSize( wxCommandEvent& event )
 {
     delete m_lastImage;
@@ -109,10 +116,11 @@ void DIALOG_IMAGE_EDITOR::OnHalfSize( wxCommandEvent& event )
     wxSize psize = m_workingImage->GetSizePixels();
     wxImage& image = *m_workingImage->GetImageData();
 
-    image = image.Scale(psize.x/2, psize.y/2, wxIMAGE_QUALITY_HIGH);
+    image = image.Scale( psize.x/2, psize.y/2, wxIMAGE_QUALITY_HIGH );
     m_workingImage->RebuildBitmap();
     m_panelDraw->Refresh();
 }
+
 
 /* Test params values correctness
  * Currently scale value must give an actual image
@@ -124,6 +132,7 @@ bool DIALOG_IMAGE_EDITOR::CheckValues()
     #define MAX_SIZE 6000
     double tmp;
     wxString msg = m_textCtrlScale->GetValue();
+
     // Test number correctness
     if( ! msg.ToDouble( &tmp ) )
     {
@@ -133,12 +142,14 @@ bool DIALOG_IMAGE_EDITOR::CheckValues()
 
     // Test value  correctness
     wxSize psize = m_workingImage->GetSizePixels();
-    if ( (psize.x * tmp) < MIN_SIZE ||  (psize.y * tmp) < MIN_SIZE )
+
+    if( (psize.x * tmp) < MIN_SIZE ||  (psize.y * tmp) < MIN_SIZE )
     {
         wxMessageBox( _("Scale is too small for this image" ) );
         return false;
     }
-    if ( (psize.x * tmp) > MAX_SIZE ||  (psize.y * tmp) > MAX_SIZE )
+
+    if( (psize.x * tmp) > MAX_SIZE ||  (psize.y * tmp) > MAX_SIZE )
     {
         wxMessageBox( _("Scale is too large for this image" ) );
         return false;
@@ -147,17 +158,21 @@ bool DIALOG_IMAGE_EDITOR::CheckValues()
     return true;
 }
 
+
 void DIALOG_IMAGE_EDITOR::OnOK_Button( wxCommandEvent& aEvent )
 {
     if( CheckValues() )
         EndModal( wxID_OK );
+
     return;
 }
+
 
 void DIALOG_IMAGE_EDITOR::OnCancel_Button( wxCommandEvent& aEvent )
 {
     EndModal( wxID_CANCEL );
 }
+
 
 void DIALOG_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 {
@@ -167,13 +182,15 @@ void DIALOG_IMAGE_EDITOR::OnRedrawPanel( wxPaintEvent& event )
 
     double scale = 1.0 / m_workingImage->GetScalingFactor();
     dc.SetUserScale( scale, scale );
-    m_workingImage->DrawBitmap( NULL, &dc, wxPoint(0,0) );
+    m_workingImage->DrawBitmap( NULL, &dc, wxPoint( 0, 0 ) );
 }
 
-void DIALOG_IMAGE_EDITOR::TransfertToImage(BITMAP_BASE* aItem )
+
+void DIALOG_IMAGE_EDITOR::TransfertToImage( BITMAP_BASE* aItem )
 {
     wxString msg = m_textCtrlScale->GetValue();
-    msg.ToDouble( &m_workingImage->m_Scale );
+    double scale = 1.0;
+    msg.ToDouble( &scale );
+    m_workingImage->SetScale( scale );
     aItem->ImportData( m_workingImage );
 }
-

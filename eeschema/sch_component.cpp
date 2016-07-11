@@ -61,7 +61,7 @@
  * convert a wxString to UTF8 and replace any control characters with a ~,
  * where a control character is one of the first ASCII values up to ' ' 32d.
  */
-static std::string toUTFTildaText( const wxString& txt )
+std::string toUTFTildaText( const wxString& txt )
 {
     std::string ret = TO_UTF8( txt );
 

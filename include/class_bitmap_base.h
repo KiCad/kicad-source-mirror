@@ -43,10 +43,9 @@ class PLOTTER;
  */
 class BITMAP_BASE
 {
-public:
-    double    m_Scale;              // The scaling factor of the bitmap
-                                    // With m_pixelScaleFactor, controls the actual draw size
 private:
+    double    m_scale;              // The scaling factor of the bitmap
+                                    // With m_pixelScaleFactor, controls the actual draw size
     wxImage*  m_image;              // the raw image data (png format)
     wxBitmap* m_bitmap;             // the bitmap used to draw/plot image
     double    m_pixelScaleFactor;   // The scaling factor of the bitmap
@@ -71,7 +70,7 @@ public:
     /*
      * Accessors:
      */
-    double GetPixelScaleFactor() { return m_pixelScaleFactor; }
+    double GetPixelScaleFactor() const { return m_pixelScaleFactor; }
     void SetPixelScaleFactor( double aSF ) { m_pixelScaleFactor = aSF; }
     wxImage* GetImageData() { return m_image; }
     void SetImage( wxImage* aImage )
@@ -79,6 +78,9 @@ public:
         delete m_image;
         m_image = aImage;
     }
+
+    double GetScale() const { return m_scale; }
+    void SetScale( double aScale ) { m_scale = aScale; }
 
     /*
      * Function RebuildBitmap
@@ -102,17 +104,17 @@ public:
     /**
      * Function GetScalingFactor
      * @return the scaling factor from pixel size to actual draw size
-     * this scaling factor  depend on m_pixelScaleFactor and m_Scale
+     * this scaling factor  depend on m_pixelScaleFactor and m_scale
      * m_pixelScaleFactor gives the scaling factor between a pixel size and
      * the internal schematic units
-     * m_Scale is an user dependant value, and gives the "zoom" value
-     *  m_Scale = 1.0 = original size of bitmap.
-     *  m_Scale < 1.0 = the bitmap is drawn smaller than its original size.
-     *  m_Scale > 1.0 = the bitmap is drawn bigger than its original size.
+     * m_scale is an user dependant value, and gives the "zoom" value
+     *  m_scale = 1.0 = original size of bitmap.
+     *  m_scale < 1.0 = the bitmap is drawn smaller than its original size.
+     *  m_scale > 1.0 = the bitmap is drawn bigger than its original size.
      */
     double GetScalingFactor() const
     {
-        return m_pixelScaleFactor * m_Scale;
+        return m_pixelScaleFactor * m_scale;
     }
 
 
@@ -120,7 +122,7 @@ public:
      * Function GetSize
      * @return the actual size (in user units, not in pixels) of the image
      */
-    wxSize   GetSize() const;
+    wxSize GetSize() const;
 
     /**
      * Function GetSizePixels
@@ -131,7 +133,7 @@ public:
         if( m_image )
             return wxSize( m_image->GetWidth(), m_image->GetHeight() );
         else
-            return wxSize(0,0);
+            return wxSize( 0, 0 );
     }
 
     /**
@@ -153,7 +155,7 @@ public:
      */
     const EDA_RECT GetBoundingBox() const;
 
-    void  DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos );
+    void DrawBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos );
 
     /**
      * Function ReadImageFile
@@ -165,7 +167,7 @@ public:
      * @param aFullFilename The full filename of the image file to read.
      * @return bool - true if success reading else false.
      */
-    bool     ReadImageFile( const wxString& aFullFilename );
+    bool ReadImageFile( const wxString& aFullFilename );
 
     /**
      * writes the bitmap data to aFile
@@ -174,7 +176,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool     SaveData( FILE* aFile ) const;
+    bool SaveData( FILE* aFile ) const;
 
     /**
      * writes the bitmap data to an array string
@@ -182,7 +184,7 @@ public:
      * If the hexadecimal data is converted to binary it gives exactly a .png image data
      * @param aPngStrings The wxArrayString to write to.
      */
-    void     SaveData( wxArrayString& aPngStrings ) const;
+    void SaveData( wxArrayString& aPngStrings ) const;
 
     /**
      * Load an image data saved by SaveData (png, in Hexadecimal form)
@@ -191,7 +193,7 @@ public:
      *                    png bimap data.
      * @return true if the bitmap loaded successfully.
      */
-    bool     LoadData( LINE_READER& aLine, wxString& aErrorMsg );
+    bool LoadData( LINE_READER& aLine, wxString& aErrorMsg );
 
 
     /**
@@ -201,14 +203,14 @@ public:
      * @param aVertically = false to mirror horizontally
      *                      or true to mirror vertically
      */
-    void     Mirror( bool aVertically );
+    void Mirror( bool aVertically );
 
     /**
      * Function Rotate
      * Rotate image CW or CCW.
      * @param aRotateCCW = true to rotate CCW
      */
-    void     Rotate( bool aRotateCCW );
+    void Rotate( bool aRotateCCW );
 
     /**
      * Function PlotImage
@@ -219,8 +221,8 @@ public:
      * @param aDefaultColor = the color used to plot the rectangle when bitmap is not supported
      * @param aDefaultPensize = the pen size used to plot the rectangle when bitmap is not supported
      */
-    void     PlotImage( PLOTTER* aPlotter, const wxPoint& aPos,
-		        EDA_COLOR_T aDefaultColor, int aDefaultPensize );
+    void PlotImage( PLOTTER* aPlotter, const wxPoint& aPos,
+                    EDA_COLOR_T aDefaultColor, int aDefaultPensize );
 };
 
 

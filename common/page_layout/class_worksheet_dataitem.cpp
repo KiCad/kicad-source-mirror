@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras <jp.charras at wanadoo.fr>.
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -74,6 +74,7 @@ EDA_COLOR_T WORKSHEET_DATAITEM::m_Color = RED;              // the default color
 EDA_COLOR_T WORKSHEET_DATAITEM::m_AltColor = RED;           // an alternate color to draw items
 EDA_COLOR_T WORKSHEET_DATAITEM::m_SelectedColor = BROWN;   // the color to draw selected items
 
+
 // The constructor:
 WORKSHEET_DATAITEM::WORKSHEET_DATAITEM( WS_ItemType aType )
 {
@@ -83,6 +84,7 @@ WORKSHEET_DATAITEM::WORKSHEET_DATAITEM( WS_ItemType aType )
     m_IncrementLabel = 1;
     m_LineWidth = 0;
 }
+
 
 // move item to aPosition
 // starting point is moved to aPosition
@@ -99,6 +101,7 @@ void WORKSHEET_DATAITEM::MoveToUi( wxPoint aPosition )
     MoveTo( pos_mm );
 }
 
+
 void WORKSHEET_DATAITEM::MoveTo( DPOINT aPosition )
 {
     DPOINT vector = aPosition - GetStartPos();
@@ -107,6 +110,7 @@ void WORKSHEET_DATAITEM::MoveTo( DPOINT aPosition )
     MoveStartPointTo( aPosition );
     MoveEndPointTo( endpos );
 }
+
 
 /* move the starting point of the item to a new position
  * aPosition = the new position of the starting point, in mm
@@ -120,27 +124,28 @@ void WORKSHEET_DATAITEM::MoveStartPointTo( DPOINT aPosition )
     // aPosition is the position relative to the right top paper corner
     switch( m_Pos.m_Anchor )
     {
-        case RB_CORNER:
-            position = m_RB_Corner - aPosition;
-            break;
+    case RB_CORNER:
+        position = m_RB_Corner - aPosition;
+        break;
 
-        case RT_CORNER:
-            position.x = m_RB_Corner.x - aPosition.x;
-            position.y = aPosition.y - m_LT_Corner.y;
-            break;
+    case RT_CORNER:
+        position.x = m_RB_Corner.x - aPosition.x;
+        position.y = aPosition.y - m_LT_Corner.y;
+        break;
 
-        case LB_CORNER:
-            position.x = aPosition.x - m_LT_Corner.x;
-            position.y = m_RB_Corner.y - aPosition.y;
-            break;
+    case LB_CORNER:
+        position.x = aPosition.x - m_LT_Corner.x;
+        position.y = m_RB_Corner.y - aPosition.y;
+        break;
 
-        case LT_CORNER:
-            position = aPosition - m_LT_Corner;
-            break;
+    case LT_CORNER:
+        position = aPosition - m_LT_Corner;
+        break;
     }
 
     m_Pos.m_Pos = position;
 }
+
 
 /* move the starting point of the item to a new position
  * aPosition = the new position of the starting point in graphic units
@@ -153,6 +158,7 @@ void WORKSHEET_DATAITEM::MoveStartPointToUi( wxPoint aPosition )
 
     MoveStartPointTo( pos_mm );
 }
+
 
 /**
  * move the ending point of the item to a new position
@@ -169,37 +175,38 @@ void WORKSHEET_DATAITEM::MoveEndPointTo( DPOINT aPosition )
     // aPosition is the position relative to the right top paper corner
     switch( m_End.m_Anchor )
     {
-        case RB_CORNER:
-            position = m_RB_Corner - aPosition;
-            break;
+    case RB_CORNER:
+        position = m_RB_Corner - aPosition;
+        break;
 
-        case RT_CORNER:
-            position.x = m_RB_Corner.x - aPosition.x;
-            position.y = aPosition.y - m_LT_Corner.y;
-            break;
+    case RT_CORNER:
+        position.x = m_RB_Corner.x - aPosition.x;
+        position.y = aPosition.y - m_LT_Corner.y;
+        break;
 
-        case LB_CORNER:
-            position.x = aPosition.x - m_LT_Corner.x;
-            position.y = m_RB_Corner.y - aPosition.y;
-            break;
+    case LB_CORNER:
+        position.x = aPosition.x - m_LT_Corner.x;
+        position.y = m_RB_Corner.y - aPosition.y;
+        break;
 
-        case LT_CORNER:
-            position = aPosition - m_LT_Corner;
-            break;
+    case LT_CORNER:
+        position = aPosition - m_LT_Corner;
+        break;
     }
 
     // Modify m_End only for items having 2 coordinates
     switch( GetType() )
     {
-        case WS_SEGMENT:
-        case WS_RECT:
-            m_End.m_Pos = position;
-            break;
+    case WS_SEGMENT:
+    case WS_RECT:
+        m_End.m_Pos = position;
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 }
+
 
 /* move the ending point of the item to a new position
  * has meaning only for items defined by 2 points
@@ -214,6 +221,7 @@ void WORKSHEET_DATAITEM::MoveEndPointToUi( wxPoint aPosition )
 
     MoveEndPointTo( pos_mm );
 }
+
 
 const DPOINT WORKSHEET_DATAITEM::GetStartPos( int ii ) const
 {
@@ -245,18 +253,21 @@ const DPOINT WORKSHEET_DATAITEM::GetStartPos( int ii ) const
     return pos;
 }
 
+
 const wxPoint WORKSHEET_DATAITEM::GetStartPosUi( int ii ) const
 {
     DPOINT pos = GetStartPos( ii );
     pos = pos * m_WSunits2Iu;
-    return wxPoint( KiROUND(pos.x), KiROUND(pos.y) );
+    return wxPoint( KiROUND( pos.x ), KiROUND( pos.y ) );
 }
+
 
 const DPOINT WORKSHEET_DATAITEM::GetEndPos( int ii ) const
 {
     DPOINT pos;
     pos.x = m_End.m_Pos.x + ( m_IncrementVector.x * ii );
     pos.y = m_End.m_Pos.y + ( m_IncrementVector.y * ii );
+
     switch( m_End.m_Anchor )
     {
         case RB_CORNER:      // right bottom corner
@@ -281,11 +292,12 @@ const DPOINT WORKSHEET_DATAITEM::GetEndPos( int ii ) const
     return pos;
 }
 
+
 const wxPoint WORKSHEET_DATAITEM::GetEndPosUi( int ii ) const
 {
     DPOINT pos = GetEndPos( ii );
     pos = pos * m_WSunits2Iu;
-    return wxPoint( KiROUND(pos.x), KiROUND(pos.y) );
+    return wxPoint( KiROUND( pos.x ), KiROUND( pos.y ) );
 }
 
 
@@ -307,20 +319,23 @@ bool WORKSHEET_DATAITEM::IsInsidePage( int ii ) const
     return true;
 }
 
+
 const wxString WORKSHEET_DATAITEM::GetClassName() const
 {
     wxString name;
+
     switch( GetType() )
     {
-        case WS_TEXT: name = wxT("Text"); break;
-        case WS_SEGMENT: name = wxT("Line"); break;
-        case WS_RECT: name = wxT("Rect"); break;
-        case WS_POLYPOLYGON: name = wxT("Poly"); break;
-        case WS_BITMAP: name = wxT("Bitmap"); break;
+        case WS_TEXT: name = wxT( "Text" ); break;
+        case WS_SEGMENT: name = wxT( "Line" ); break;
+        case WS_RECT: name = wxT( "Rect" ); break;
+        case WS_POLYPOLYGON: name = wxT( "Poly" ); break;
+        case WS_BITMAP: name = wxT( "Bitmap" ); break;
     }
 
     return name;
 }
+
 
 /* return 0 if the item has no specific option for page 1
  * 1  if the item is only on page 1
@@ -337,6 +352,7 @@ int WORKSHEET_DATAITEM::GetPage1Option()
     return 0;
 }
 
+
 /* Set the option for page 1
  * aChoice = 0 if the item has no specific option for page 1
  * > 0  if the item is only on page 1
@@ -346,10 +362,10 @@ void WORKSHEET_DATAITEM::SetPage1Option( int aChoice )
 {
     ClearFlags( PAGE1OPTION );
 
-    if( aChoice > 0)
+    if( aChoice > 0 )
         SetFlags( PAGE1OPTION_PAGE1ONLY );
 
-    else if( aChoice < 0)
+    else if( aChoice < 0 )
         SetFlags( PAGE1OPTION_NOTONPAGE1 );
 
 }
@@ -361,8 +377,9 @@ WORKSHEET_DATAITEM_POLYPOLYGON::WORKSHEET_DATAITEM_POLYPOLYGON() :
     m_Orient = 0.0;
 }
 
+
 const DPOINT WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPosition( unsigned aIdx,
-                                                         int aRepeat ) const
+                                                                int aRepeat ) const
 {
     DPOINT pos = m_Corners[aIdx];
 
@@ -371,6 +388,7 @@ const DPOINT WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPosition( unsigned aIdx,
     pos += GetStartPos( aRepeat );
     return pos;
 }
+
 
 void WORKSHEET_DATAITEM_POLYPOLYGON::SetBoundingBox()
 {
@@ -405,6 +423,7 @@ void WORKSHEET_DATAITEM_POLYPOLYGON::SetBoundingBox()
     }
 }
 
+
 bool WORKSHEET_DATAITEM_POLYPOLYGON::IsInsidePage( int ii ) const
 {
     DPOINT pos = GetStartPos( ii );
@@ -422,13 +441,15 @@ bool WORKSHEET_DATAITEM_POLYPOLYGON::IsInsidePage( int ii ) const
     return true;
 }
 
+
 const wxPoint WORKSHEET_DATAITEM_POLYPOLYGON::GetCornerPositionUi( unsigned aIdx,
-                                                            int aRepeat ) const
+                                                                   int aRepeat ) const
 {
     DPOINT pos = GetCornerPosition( aIdx, aRepeat );
     pos = pos * m_WSunits2Iu;
     return wxPoint( int(pos.x), int(pos.y) );
 }
+
 
 WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxString& aTextBase ) :
     WORKSHEET_DATAITEM( WS_TEXT )
@@ -441,12 +462,14 @@ WORKSHEET_DATAITEM_TEXT::WORKSHEET_DATAITEM_TEXT( const wxString& aTextBase ) :
     m_LineWidth = 0.0;      // 0.0 means use default value
 }
 
+
 void WORKSHEET_DATAITEM_TEXT::TransfertSetupToGraphicText( WS_DRAW_ITEM_TEXT* aGText )
 {
     aGText->SetHorizJustify( m_Hjustify ) ;
     aGText->SetVertJustify( m_Vjustify );
     aGText->SetOrientation( m_Orient * 10 );    // graphic text orient unit = 0.1 degree
 }
+
 
 void WORKSHEET_DATAITEM_TEXT::IncrementLabel( int aIncr )
 {
@@ -462,6 +485,7 @@ void WORKSHEET_DATAITEM_TEXT::IncrementLabel( int aIncr )
     else
         m_FullText << (wxChar) ( aIncr + lbchar );
 }
+
 
 // Replace the '\''n' sequence by EOL
 // and the sequence  '\''\' by only one '\' in m_FullText
@@ -499,6 +523,7 @@ bool WORKSHEET_DATAITEM_TEXT::ReplaceAntiSlashSequence()
 
     return multiline;
 }
+
 
 void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
 {
@@ -540,6 +565,7 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
     }
 }
 
+
 /* set the pixel scale factor of the bitmap
  * this factor depend on the application internal unit
  * and the PPI bitmap factor
@@ -557,21 +583,22 @@ void WORKSHEET_DATAITEM_BITMAP::SetPixelScaleFactor()
     }
 }
 
+
 /* return the PPI of the bitmap
  */
 int WORKSHEET_DATAITEM_BITMAP::GetPPI() const
 {
     if( m_ImageBitmap )
-        return m_ImageBitmap->GetPPI() / m_ImageBitmap->m_Scale;
+        return m_ImageBitmap->GetPPI() / m_ImageBitmap->GetScale();
 
     return 300;
 }
+
 
 /*adjust the PPI of the bitmap
  */
 void WORKSHEET_DATAITEM_BITMAP::SetPPI( int aBitmapPPI )
 {
     if( m_ImageBitmap )
-        m_ImageBitmap->m_Scale = (double) m_ImageBitmap->GetPPI() / aBitmapPPI;
+        m_ImageBitmap->SetScale( (double) m_ImageBitmap->GetPPI() / aBitmapPPI );
 }
-

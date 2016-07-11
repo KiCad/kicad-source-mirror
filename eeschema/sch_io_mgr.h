@@ -28,6 +28,7 @@
 
 
 class SCH_SHEET;
+class SCH_SCREEN;
 class SCH_PLUGIN;
 class KIWAY;
 class LIB_PART;
@@ -155,7 +156,7 @@ public:
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     static void Save( SCH_FILE_T aFileType, const wxString& aFileName,
-                      SCH_SHEET* aSchematic, const PROPERTIES* aProperties = NULL );
+                      SCH_SCREEN* aSchematic, KIWAY* aKiway, const PROPERTIES* aProperties = NULL );
 };
 
 
@@ -248,7 +249,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
-    virtual void Save( const wxString& aFileName, SCH_SHEET* aSchematic,
+    virtual void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
                        const PROPERTIES* aProperties = NULL );
 
     /**

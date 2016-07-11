@@ -46,7 +46,7 @@
 
 BITMAP_BASE::BITMAP_BASE( const wxPoint& pos )
 {
-    m_Scale  = 1.0;                 // 1.0 = original bitmap size
+    m_scale  = 1.0;                 // 1.0 = original bitmap size
     m_bitmap = NULL;
     m_image  = NULL;
     m_ppi    = 300;                 // the bitmap definition. the default is 300PPI
@@ -57,7 +57,7 @@ BITMAP_BASE::BITMAP_BASE( const wxPoint& pos )
 
 BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
 {
-    m_Scale = aSchBitmap.m_Scale;
+    m_scale = aSchBitmap.m_scale;
     m_ppi   = aSchBitmap.m_ppi;
     m_pixelScaleFactor = aSchBitmap.m_pixelScaleFactor;
     m_image = new wxImage( *aSchBitmap.m_image );
@@ -73,7 +73,7 @@ void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
 {
     *m_image  = *aItem->m_image;
     *m_bitmap = *aItem->m_bitmap;
-    m_Scale   = aItem->m_Scale;
+    m_scale   = aItem->m_scale;
     m_ppi     = aItem->m_ppi;
     m_pixelScaleFactor = aItem->m_pixelScaleFactor;
 }
@@ -189,9 +189,11 @@ bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
         // each byte = 2 hexadecimal digits and a space between 2 bytes
         // and put it in memory stream buffer
         int len = strlen( line );
+
         for( ; len > 0; len -= 3, line += 3 )
         {
             int value = 0;
+
             if( sscanf( line, "%X", &value ) == 1 )
                 stream.PutC( (char) value );
             else

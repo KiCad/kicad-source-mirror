@@ -54,6 +54,8 @@ SCH_PLUGIN* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     {
     case SCH_LEGACY:
         return new SCH_LEGACY_PLUGIN();
+    case SCH_KICAD:
+        return NULL;
     }
 
     return NULL;
@@ -147,14 +149,14 @@ SCH_SHEET* SCH_IO_MGR::Load( SCH_FILE_T aFileType, const wxString& aFileName, KI
 
 
 void SCH_IO_MGR::Save( SCH_FILE_T aFileType, const wxString& aFileName,
-                       SCH_SHEET* aSchematic, const PROPERTIES* aProperties )
+                       SCH_SCREEN* aSchematic, KIWAY* aKiway, const PROPERTIES* aProperties )
 {
     // release the SCH_PLUGIN even if an exception is thrown.
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( FindPlugin( aFileType ) );
 
     if( (SCH_PLUGIN*) pi )  // test pi->plugin
     {
-        pi->Save( aFileName, aSchematic, aProperties );  // virtual
+        pi->Save( aFileName, aSchematic, aKiway, aProperties );  // virtual
         return;
     }
 

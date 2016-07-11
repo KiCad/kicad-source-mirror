@@ -24,12 +24,16 @@
 
 #include <wx/mstream.h>
 #include <wx/filename.h>
+#include <wx/tokenzr.h>
 
 #include <drawtxt.h>
+#include <kiway.h>
+#include <kicad_string.h>
 #include <richio.h>
 #include <core/typeinfo.h>
 
 #include <general.h>
+#include <class_library.h>
 #include <lib_field.h>
 #include <sch_bus_entry.h>
 #include <sch_marker.h>
@@ -460,7 +464,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway,
     if( aAppendToMe == NULL )
     {
         // Clean up any allocated memory if an exception occurs loading the schematic.
-        std::auto_ptr< SCH_SHEET > newSheet( new SCH_SHEET );
+        std::unique_ptr< SCH_SHEET > newSheet( new SCH_SHEET );
         newSheet->SetFileName( aFileName );
         m_rootSheet = newSheet.get();
         loadHierarchy( newSheet.get() );
@@ -719,7 +723,7 @@ void SCH_LEGACY_PLUGIN::loadPageSettings( FILE_LINE_READER& aReader, SCH_SCREEN*
 
 SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( FILE_LINE_READER& aReader )
 {
-    std::auto_ptr< SCH_SHEET > sheet( new SCH_SHEET() );
+    std::unique_ptr< SCH_SHEET > sheet( new SCH_SHEET() );
 
     sheet->SetTimeStamp( GetNewTimeStamp() );
 
@@ -771,7 +775,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( FILE_LINE_READER& aReader )
             }
             else                                   // Sheet pin.
             {
-                std::auto_ptr< SCH_SHEET_PIN > sheetPin( new SCH_SHEET_PIN( sheet.get() ) );
+                std::unique_ptr< SCH_SHEET_PIN > sheetPin( new SCH_SHEET_PIN( sheet.get() ) );
 
                 sheetPin->SetNumber( fieldId );
 
@@ -856,7 +860,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( FILE_LINE_READER& aReader )
 
 SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( FILE_LINE_READER& aReader )
 {
-    std::auto_ptr< SCH_BITMAP > bitmap( new SCH_BITMAP );
+    std::unique_ptr< SCH_BITMAP > bitmap( new SCH_BITMAP );
 
     const char* line = aReader.Line();
 
@@ -877,7 +881,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( FILE_LINE_READER& aReader )
         else if( strCompare( "Scale", line, &line ) )
         {
             /// @todo Make m_scale private and add accessors.
-            bitmap->m_Image->m_Scale = parseDouble( aReader, line, &line );
+            bitmap->GetImage()->SetScale( parseDouble( aReader, line, &line ) );
         }
         else if( strCompare( "Data", line, &line ) )
         {
@@ -897,8 +901,8 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( FILE_LINE_READER& aReader )
                     wxImage* image = new wxImage();
                     wxMemoryInputStream istream( stream );
                     image->LoadFile( istream, wxBITMAP_TYPE_PNG );
-                    bitmap->m_Image->SetImage( image );
-                    bitmap->m_Image->SetBitmap( new wxBitmap( *image ) );
+                    bitmap->GetImage()->SetImage( image );
+                    bitmap->GetImage()->SetBitmap( new wxBitmap( *image ) );
                     break;
                 }
 
@@ -933,7 +937,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( FILE_LINE_READER& aReader )
 
 SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( FILE_LINE_READER& aReader )
 {
-    std::auto_ptr< SCH_JUNCTION > junction( new SCH_JUNCTION );
+    std::unique_ptr< SCH_JUNCTION > junction( new SCH_JUNCTION );
 
     const char* line = aReader.Line();
 
@@ -955,7 +959,7 @@ SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( FILE_LINE_READER& aReader )
 
 SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( FILE_LINE_READER& aReader )
 {
-    std::auto_ptr< SCH_NO_CONNECT > no_connect( new SCH_NO_CONNECT );
+    std::unique_ptr< SCH_NO_CONNECT > no_connect( new SCH_NO_CONNECT );
 
     const char* line = aReader.Line();
 
@@ -977,7 +981,7 @@ SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( FILE_LINE_READER& aReader )
 
 SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( FILE_LINE_READER& aReader )
 {
-    std::auto_ptr< SCH_LINE > wire( new SCH_LINE );
+    std::unique_ptr< SCH_LINE > wire( new SCH_LINE );
 
     const char* line = aReader.Line();
 
@@ -1017,7 +1021,7 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( FILE_LINE_READER& aReader )
 
     wxCHECK( strCompare( "Entry", line, &line ), NULL );
 
-    std::auto_ptr< SCH_BUS_ENTRY_BASE > busEntry;
+    std::unique_ptr< SCH_BUS_ENTRY_BASE > busEntry;
 
     if( strCompare( "Wire", line, &line ) )
     {
@@ -1062,7 +1066,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
 
     wxCHECK( strCompare( "Text", line, &line ), NULL );
 
-    std::auto_ptr< SCH_TEXT> text;
+    std::unique_ptr< SCH_TEXT> text;
 
     if( strCompare( "Notes", line, &line ) )
         text.reset( new SCH_TEXT );
@@ -1157,7 +1161,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
 
     wxCHECK( strCompare( "$Comp", line, &line ), NULL );
 
-    std::auto_ptr< SCH_COMPONENT > component( new SCH_COMPONENT() );
+    std::unique_ptr< SCH_COMPONENT > component( new SCH_COMPONENT() );
 
     line = aReader.ReadLine();
 
@@ -1394,4 +1398,464 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
     SCH_PARSE_ERROR( "invalid component line", aReader, line );
 
     return NULL;  // Prevents compiler warning.  Should never get here.
+}
+
+
+void SCH_LEGACY_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aScreen, KIWAY* aKiway,
+                              const PROPERTIES* aProperties )
+{
+    wxCHECK_RET( aScreen != NULL, "NULL SCH_SCREEN object." );
+    wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
+
+    init( aKiway, aProperties );
+
+    wxFileName fn = aFileName;
+
+    // File names should be absolute.  Don't assume everything relative to the project path
+    // works properly.
+    wxASSERT( fn.IsAbsolute() );
+
+    FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
+
+    m_out = &formatter;     // no ownership
+
+    Format( aScreen );
+}
+
+
+void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
+{
+    wxCHECK_RET( aScreen != NULL, "NULL SCH_SCREEN* object." );
+    wxCHECK_RET( m_kiway != NULL, "NULL KIWAY* object." );
+
+    // Write the header
+    m_out->Print( 0, "%s %s %d\n", "EESchema", SCHEMATIC_HEAD_STRING, EESCHEMA_VERSION );
+
+    // Write the project libraries.
+    for( const PART_LIB& lib : *m_kiway->Prj().SchLibs() )
+        m_out->Print( 0, "LIBS:%s\n", TO_UTF8( lib.GetName() ) );
+
+    // This section is not used, but written for file compatibility
+    m_out->Print( 0, "EELAYER %d %d\n", LAYERSCH_ID_COUNT, 0 );
+    m_out->Print( 0, "EELAYER END\n" );
+
+    /* Write page info, ScreenNumber and NumberOfScreen; not very meaningful for
+     * SheetNumber and Sheet Count in a complex hierarchy, but useful in
+     * simple hierarchy and flat hierarchy.  Used also to search the root
+     * sheet ( ScreenNumber = 1 ) within the files
+     */
+    const TITLE_BLOCK& tb = aScreen->GetTitleBlock();
+    const PAGE_INFO& page = aScreen->GetPageSettings();
+
+    m_out->Print( 0, "$Descr %s %d %d%s\n", TO_UTF8( page.GetType() ),
+                  page.GetWidthMils(),
+                  page.GetHeightMils(),
+                  !page.IsCustom() && page.IsPortrait() ? " portrait" : "" );
+    m_out->Print( 0, "encoding utf-8\n" );
+    m_out->Print( 0, "Sheet %d %d\n", aScreen->m_ScreenNumber, aScreen->m_NumberOfScreens );
+    m_out->Print( 0, "Title %s\n",    EscapedUTF8( tb.GetTitle() ).c_str() );
+    m_out->Print( 0, "Date %s\n",     EscapedUTF8( tb.GetDate() ).c_str() );
+    m_out->Print( 0, "Rev %s\n",      EscapedUTF8( tb.GetRevision() ).c_str() );
+    m_out->Print( 0, "Comp %s\n",     EscapedUTF8( tb.GetCompany() ).c_str() );
+    m_out->Print( 0, "Comment1 %s\n", EscapedUTF8( tb.GetComment1() ).c_str() );
+    m_out->Print( 0, "Comment2 %s\n", EscapedUTF8( tb.GetComment2() ).c_str() );
+    m_out->Print( 0, "Comment3 %s\n", EscapedUTF8( tb.GetComment3() ).c_str() );
+    m_out->Print( 0, "Comment4 %s\n", EscapedUTF8( tb.GetComment4() ).c_str() );
+    m_out->Print( 0, "$EndDescr\n" );
+
+    for( SCH_ITEM* item = aScreen->GetDrawItems(); item; item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case SCH_COMPONENT_T:
+            saveComponent( dynamic_cast< SCH_COMPONENT* >( item ) );
+            break;
+        case SCH_BITMAP_T:
+            saveBitmap( dynamic_cast< SCH_BITMAP* >( item ) );
+            break;
+        case SCH_SHEET_T:
+            saveSheet( dynamic_cast< SCH_SHEET* >( item ) );
+            break;
+        case SCH_JUNCTION_T:
+            saveJunction( dynamic_cast< SCH_JUNCTION* >( item ) );
+            break;
+        case SCH_NO_CONNECT_T:
+            saveNoConnect( dynamic_cast< SCH_NO_CONNECT* >( item ) );
+            break;
+        case SCH_BUS_WIRE_ENTRY_T:
+        case SCH_BUS_BUS_ENTRY_T:
+            saveBusEntry( dynamic_cast< SCH_BUS_ENTRY_BASE* >( item ) );
+            break;
+        case SCH_LINE_T:
+            saveLine( dynamic_cast< SCH_LINE* >( item ) );
+            break;
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
+            saveText( dynamic_cast< SCH_TEXT* >( item ) );
+            break;
+        default:
+            wxASSERT( "Unexpected schematic object type in SCH_LEGACY_PLUGIN::Format()" );
+        }
+    }
+
+    m_out->Print( 0, "$EndSCHEMATC\n" );
+}
+
+
+void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
+{
+    std::string     name1;
+    std::string     name2;
+    wxArrayString   reference_fields;
+
+    static wxString delimiters( wxT( " " ) );
+
+    // This is redundant with the AR entries below, but it makes the files backwards-compatible.
+    if( aComponent->GetPathsAndReferences().GetCount() > 0 )
+    {
+        reference_fields = wxStringTokenize( aComponent->GetPathsAndReferences()[0], delimiters );
+        name1 = toUTFTildaText( reference_fields[1] );
+    }
+    else
+    {
+        if( aComponent->GetField( REFERENCE )->GetText().IsEmpty() )
+            name1 = toUTFTildaText( aComponent->GetPrefix() );
+        else
+            name1 = toUTFTildaText( aComponent->GetField( REFERENCE )->GetText() );
+    }
+
+    wxString part_name = aComponent->GetPartName();
+
+    if( part_name.size() )
+    {
+        name2 = toUTFTildaText( part_name );
+    }
+    else
+    {
+        name2 = "_NONAME_";
+    }
+
+    m_out->Print( 0, "$Comp\n" );
+    m_out->Print( 0, "L %s %s\n", name2.c_str(), name1.c_str() );
+
+    // Generate unit number, convert and time stamp
+    m_out->Print( 0, "U %d %d %8.8lX\n", aComponent->GetUnit(), aComponent->GetConvert(),
+                    (unsigned long)aComponent->GetTimeStamp() );
+
+    // Save the position
+    m_out->Print( 0, "P %d %d\n", aComponent->GetPosition().x, aComponent->GetPosition().y );
+
+    /* If this is a complex hierarchy; save hierarchical references.
+     * but for simple hierarchies it is not necessary.
+     * the reference inf is already saved
+     * this is useful for old Eeschema version compatibility
+     */
+    if( aComponent->GetPathsAndReferences().GetCount() > 1 )
+    {
+        for( unsigned int ii = 0; ii <  aComponent->GetPathsAndReferences().GetCount(); ii++ )
+        {
+            /*format:
+             * AR Path="/140/2" Ref="C99"   Part="1"
+             * where 140 is the uid of the containing sheet
+             * and 2 is the timestamp of this component.
+             * (timestamps are actually 8 hex chars)
+             * Ref is the conventional component reference for this 'path'
+             * Part is the conventional component part selection for this 'path'
+             */
+            reference_fields = wxStringTokenize( aComponent->GetPathsAndReferences()[ii],
+                                                 delimiters );
+
+            m_out->Print( 0, "AR Path=\"%s\" Ref=\"%s\"  Part=\"%s\" \n",
+                          TO_UTF8( reference_fields[0] ),
+                          TO_UTF8( reference_fields[1] ),
+                          TO_UTF8( reference_fields[2] ) );
+        }
+    }
+
+    // update the ugly field index, which I would like to see go away someday soon.
+    for( int i = 0;  i < aComponent->GetFieldCount();  ++i )
+        aComponent->GetField( i )->SetId( i );
+
+    // Fixed fields:
+    // Save mandatory fields even if they are blank,
+    // because the visibility, size and orientation are set from libary editor.
+    for( unsigned i = 0;  i < MANDATORY_FIELDS;  ++i )
+        saveField( aComponent->GetField( i ) );
+
+    // User defined fields:
+    // The *policy* about which user defined fields are part of a symbol is now
+    // only in the dialog editors.  No policy should be enforced here, simply
+    // save all the user defined fields, they are present because a dialog editor
+    // thought they should be.  If you disagree, go fix the dialog editors.
+    for( int i = MANDATORY_FIELDS;  i < aComponent->GetFieldCount();  ++i )
+        saveField( aComponent->GetField( i ) );
+
+    // Unit number, position, box ( old standard )
+    m_out->Print( 0, "\t%-4d %-4d %-4d\n", aComponent->GetUnit(), aComponent->GetPosition().x,
+                  aComponent->GetPosition().y );
+
+    TRANSFORM transform = aComponent->GetTransform();
+
+    m_out->Print( 0, "\t%-4d %-4d %-4d %-4d\n",
+                  transform.x1, transform.y1, transform.x2, transform.y2 );
+    m_out->Print( 0, "$EndComp\n" );
+}
+
+
+void SCH_LEGACY_PLUGIN::saveField( SCH_FIELD* aField )
+{
+    char hjustify = 'C';
+
+    if( aField->GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+        hjustify = 'L';
+    else if( aField->GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+        hjustify = 'R';
+
+    char vjustify = 'C';
+
+    if( aField->GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
+        vjustify = 'B';
+    else if( aField->GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
+        vjustify = 'T';
+
+    m_out->Print( 0, "F %d %s %c %-3d %-3d %-3d %4.4X %c %c%c%c",
+                  aField->GetId(),
+                  EscapedUTF8( aField->GetText() ).c_str(),     // wraps in quotes too
+                  aField->GetOrientation() == TEXT_ORIENT_HORIZ ? 'H' : 'V',
+                  aField->GetLibPosition().x, aField->GetLibPosition().y,
+                  aField->GetSize().x,
+                  aField->GetAttributes(),
+                  hjustify, vjustify,
+                  aField->IsItalic() ? 'I' : 'N',
+                  aField->IsBold() ? 'B' : 'N' );
+
+    // Save field name, if the name is user definable
+    if( aField->GetId() >= FIELD1 )
+    {
+        m_out->Print( 0, " %s", EscapedUTF8( aField->GetName() ).c_str() );
+    }
+
+    m_out->Print( 0, "\n" );
+}
+
+
+void SCH_LEGACY_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap )
+{
+    wxCHECK_RET( aBitmap != NULL, "SCH_BITMAP* is NULL" );
+
+    wxImage* image = aBitmap->GetImage()->GetImageData();
+
+    wxCHECK_RET( image != NULL, "wxImage* is NULL" );
+
+    m_out->Print( 0, "$Bitmap\n" );
+    m_out->Print( 0, "Pos %-4d %-4d\n", aBitmap->GetPosition().x, aBitmap->GetPosition().y );
+    m_out->Print( 0, "Scale %f\n", aBitmap->GetImage()->GetScale() );
+    m_out->Print( 0, "Data\n" );
+
+    wxMemoryOutputStream stream;
+
+    image->SaveFile( stream, wxBITMAP_TYPE_PNG );
+
+    // Write binary data in hexadecimal form (ASCII)
+    wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
+    char*           begin  = (char*) buffer->GetBufferStart();
+
+    for( int ii = 0; begin <= buffer->GetBufferEnd(); begin++, ii++ )
+    {
+        if( ii >= 32 )
+        {
+            ii = 0;
+
+            m_out->Print( 0, "\n" );
+        }
+
+        m_out->Print( 0, "%2.2X ", *begin & 0xFF );
+    }
+
+    m_out->Print( 0, "\nEndData\n" );
+    m_out->Print( 0, "$EndBitmap\n" );
+}
+
+
+void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
+{
+    wxCHECK_RET( aSheet != NULL, "SCH_SHEET* is NULL" );
+
+    m_out->Print( 0, "$Sheet\n" );
+    m_out->Print( 0, "S %-4d %-4d %-4d %-4d\n", aSheet->GetPosition().x, aSheet->GetPosition().y,
+                  aSheet->GetSize().x, aSheet->GetSize().y );
+
+    m_out->Print( 0, "U %8.8lX\n", (unsigned long) aSheet->GetTimeStamp() );
+
+    if( !aSheet->GetName().IsEmpty() )
+        m_out->Print( 0, "F0 %s %d\n", EscapedUTF8( aSheet->GetName() ).c_str(),
+                      aSheet->GetSheetNameSize() );
+
+    if( !aSheet->GetFileName().IsEmpty() )
+        m_out->Print( 0, "F1 %s %d\n", EscapedUTF8( aSheet->GetFileName() ).c_str(),
+                      aSheet->GetFileNameSize() );
+
+    for( const SCH_SHEET_PIN& pin : aSheet->GetPins() )
+    {
+        int type, side;
+
+        if( pin.GetText().IsEmpty() )
+            break;
+
+        switch( pin.GetEdge() )
+        {
+        default:
+        case SCH_SHEET_PIN::SHEET_LEFT_SIDE:
+            side = 'L';
+            break;
+
+        case SCH_SHEET_PIN::SHEET_RIGHT_SIDE:
+            side = 'R';
+            break;
+
+        case SCH_SHEET_PIN::SHEET_TOP_SIDE:
+            side = 'T';
+            break;
+
+        case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE:
+            side = 'B';
+            break;
+        }
+
+        switch( pin.GetShape() )
+        {
+        case NET_INPUT:
+            type = 'I'; break;
+
+        case NET_OUTPUT:
+            type = 'O'; break;
+
+        case NET_BIDI:
+            type = 'B'; break;
+
+        case NET_TRISTATE:
+            type = 'T'; break;
+
+        default:
+        case NET_UNSPECIFIED:
+            type = 'U'; break;
+        }
+
+        m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n", pin.GetNumber(),
+                      EscapedUTF8( pin.GetText() ).c_str(),     // supplies wrapping quotes
+                      type, side, pin.GetPosition().x, pin.GetPosition().y,
+                      pin.GetSize().x );
+    }
+
+    m_out->Print( 0, "$EndSheet\n" );
+}
+
+
+void SCH_LEGACY_PLUGIN::saveJunction( SCH_JUNCTION* aJunction )
+{
+    wxCHECK_RET( aJunction != NULL, "SCH_JUNCTION* is NULL" );
+
+    m_out->Print( 0, "Connection ~ %-4d %-4d\n",
+                  aJunction->GetPosition().x, aJunction->GetPosition().y );
+}
+
+
+void SCH_LEGACY_PLUGIN::saveNoConnect( SCH_NO_CONNECT* aNoConnect )
+{
+    wxCHECK_RET( aNoConnect != NULL, "SCH_NOCONNECT* is NULL" );
+
+    m_out->Print( 0, "NoConn ~ %-4d %-4d\n", aNoConnect->GetPosition().x,
+                  aNoConnect->GetPosition().y );
+}
+
+
+void SCH_LEGACY_PLUGIN::saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry )
+{
+    wxCHECK_RET( aBusEntry != NULL, "SCH_BUS_ENTRY_BASE* is NULL" );
+
+    if( aBusEntry->GetLayer() == LAYER_WIRE )
+        m_out->Print( 0, "Entry Wire Line\n\t%-4d %-4d %-4d %-4d\n",
+                      aBusEntry->GetPosition().x, aBusEntry->GetPosition().y,
+                      aBusEntry->m_End().x, aBusEntry->m_End().y );
+    else
+        m_out->Print( 0, "Entry Bus Bus\n\t%-4d %-4d %-4d %-4d\n",
+                      aBusEntry->GetPosition().x, aBusEntry->GetPosition().y,
+                      aBusEntry->m_End().x, aBusEntry->m_End().y );
+}
+
+
+void SCH_LEGACY_PLUGIN::saveLine( SCH_LINE* aLine )
+{
+    wxCHECK_RET( aLine != NULL, "SCH_LINE* is NULL" );
+
+    const char* layer = "Notes";
+    const char* width = "Line";
+
+    if( aLine->GetLayer() == LAYER_WIRE )
+        layer = "Wire";
+    else if( aLine->GetLayer() == LAYER_BUS )
+        layer = "Bus";
+
+    m_out->Print( 0, "Wire %s %s\n", layer, width );
+    m_out->Print( 0, "\t%-4d %-4d %-4d %-4d\n", aLine->GetStartPoint().x, aLine->GetStartPoint().y,
+                  aLine->GetEndPoint().x, aLine->GetEndPoint().y );
+}
+
+
+void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
+{
+    wxCHECK_RET( aText != NULL, "SCH_TEXT* is NULL" );
+
+    const char* italics  = "~";
+    const char* textType = "Notes";
+
+    if( aText->IsItalic() )
+        italics = "Italic";
+
+    wxString text = aText->GetText();
+
+    LAYERSCH_ID layer = aText->GetLayer();
+
+    if( layer == LAYER_NOTES || layer == LAYER_LOCLABEL )
+    {
+        if( layer == LAYER_NOTES )
+        {
+            // For compatibility reasons, the text must be saved in only one text line
+            // so replace all EOLs with \\n
+            text.Replace( wxT( "\n" ), wxT( "\\n" ) );
+
+            // Here we should have no CR or LF character in line
+            // This is not always the case if a multiline text was copied (using a copy/paste
+            // function) from a text that uses E.O.L characters that differs from the current
+            // EOL format.  This is mainly the case under Linux using LF symbol when copying
+            // a text from Windows (using CRLF symbol) so we must just remove the extra CR left
+            // (or LF left under MacOSX)
+            for( unsigned ii = 0; ii < text.Len();  )
+            {
+                if( text[ii] == 0x0A || text[ii] == 0x0D )
+                    text.erase( ii, 1 );
+                else
+                    ii++;
+            }
+        }
+        else
+        {
+            textType = "Label";
+        }
+
+        m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %d\n%s\n", textType,
+                      aText->GetPosition().x, aText->GetPosition().y, aText->GetOrientation(),
+                      aText->GetSize().x, italics, aText->GetThickness(), TO_UTF8( text ) );
+    }
+    else if( layer == LAYER_GLOBLABEL || layer == LAYER_HIERLABEL )
+    {
+        textType = ( layer == LAYER_GLOBLABEL ) ? "GLabel" : "HLabel";
+
+        m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
+                      aText->GetPosition().x, aText->GetPosition().y, aText->GetOrientation(),
+                      aText->GetSize().x, SheetLabelType[aText->GetShape()], italics,
+                      aText->GetThickness(), TO_UTF8( text ) );
+    }
 }

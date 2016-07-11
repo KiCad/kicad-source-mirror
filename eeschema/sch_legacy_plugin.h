@@ -37,6 +37,7 @@ class SCH_LINE;
 class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
 class SCH_COMPONENT;
+class SCH_FIELD;
 class PROPERTIES;
 
 
@@ -70,8 +71,10 @@ public:
     SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
                      SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
 
-    void Save( const wxString& aFileName, SCH_SHEET* aSheet,
-               const PROPERTIES* aProperties = NULL ) {}
+    void Save( const wxString& aFileName, SCH_SCREEN* aScreen, KIWAY* aKiway,
+               const PROPERTIES* aProperties = NULL );
+
+    void Format( SCH_SCREEN* aScreen );
 
     //-----</PLUGIN IMPLEMENTATION>---------------------------------------------
 
@@ -92,14 +95,24 @@ private:
     SCH_TEXT* loadText( FILE_LINE_READER& aReader );
     SCH_COMPONENT* loadComponent( FILE_LINE_READER& aReader );
 
-protected:
+    void saveComponent( SCH_COMPONENT* aComponent );
+    void saveField( SCH_FIELD* aField );
+    void saveBitmap( SCH_BITMAP* aBitmap );
+    void saveSheet( SCH_SHEET* aSheet );
+    void saveJunction( SCH_JUNCTION* aJunction );
+    void saveNoConnect( SCH_NO_CONNECT* aNoConnect );
+    void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry );
+    void saveLine( SCH_LINE* aLine );
+    void saveText( SCH_TEXT* aText );
 
+protected:
     int               m_version;    ///< Version of file being loaded.
     wxString          m_error;      ///< For throwing exceptions
     wxString          m_path;       ///< Root project path for loading child sheets.
     const PROPERTIES* m_props;      ///< Passed via Save() or Load(), no ownership, may be NULL.
     KIWAY*            m_kiway;      ///< Required for path to legacy component libraries.
     SCH_SHEET*        m_rootSheet;  ///< The root sheet of the schematic being loaded..
+    FILE_OUTPUTFORMATTER* m_out;    ///< The output formatter for saving SCH_SCREEN objects.
 
     /// initialize PLUGIN like a constructor would.
     void init( KIWAY* aKiway, const PROPERTIES* aProperties = NULL );

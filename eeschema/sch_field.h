@@ -188,6 +188,8 @@ public:
 
     bool IsReplaceable() const { return true; }
 
+    wxPoint GetLibPosition() const { return m_Pos; }
+
     wxPoint GetPosition() const;
 
     void SetPosition( const wxPoint& aPosition );

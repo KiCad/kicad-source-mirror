@@ -387,7 +387,7 @@ void PAGE_LAYOUT_READER_PARSER::parseBitmap( WORKSHEET_DATAITEM_BITMAP * aItem )
             break;
 
         case T_scale:
-            aItem->m_ImageBitmap->m_Scale = parseDouble();
+            aItem->m_ImageBitmap->SetScale( parseDouble() );
             NeedRIGHT();
             break;
 

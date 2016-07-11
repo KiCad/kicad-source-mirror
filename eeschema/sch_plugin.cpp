@@ -50,7 +50,7 @@ SCH_SHEET* SCH_PLUGIN::Load( const wxString& aFileName, KIWAY* aKiway, SCH_SHEET
 }
 
 
-void SCH_PLUGIN::Save( const wxString& aFileName, SCH_SHEET* aSchematic,
+void SCH_PLUGIN::Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
                        const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.

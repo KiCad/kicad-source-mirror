@@ -56,6 +56,9 @@ typedef std::vector<SCH_FIELD>    SCH_FIELDS;
 typedef std::weak_ptr<LIB_PART>   PART_REF;
 
 
+extern std::string toUTFTildaText( const wxString& txt );
+
+
 /**
  * Class SCH_COMPONENT
  * describes a real schematic component
@@ -141,6 +144,8 @@ public:
     {
         return wxT( "SCH_COMPONENT" );
     }
+
+    const wxArrayString& GetPathsAndReferences() const { return m_PathsAndReferences; }
 
     /**
      * Virtual function IsMovableFromAnchorPoint
@@ -309,7 +314,7 @@ public:
      * Function GetFieldCount
      * returns the number of fields in this component.
      */
-    int GetFieldCount() const { return (int) m_Fields.size(); }
+    int GetFieldCount() const { return (int)m_Fields.size(); }
 
     /**
      * Function GetFieldsAutoplaced

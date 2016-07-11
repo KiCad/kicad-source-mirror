@@ -37,11 +37,8 @@
 
 class SCH_BITMAP : public SCH_ITEM
 {
-    wxPoint      m_Pos;                 // XY coordinates of center of the bitmap
-
-public:
-    BITMAP_BASE* m_Image;               // the BITMAP_BASE item
-
+    wxPoint      m_pos;                 // XY coordinates of center of the bitmap
+    BITMAP_BASE* m_image;               // the BITMAP_BASE item
 
 public:
     SCH_BITMAP( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -50,7 +47,7 @@ public:
 
     ~SCH_BITMAP()
     {
-        delete m_Image;
+        delete m_image;
     }
 
     SCH_ITEM& operator=( const SCH_ITEM& aItem );
@@ -58,8 +55,15 @@ public:
     /*
      * Accessors:
      */
-    double GetPixelScaleFactor() { return m_Image->GetPixelScaleFactor(); }
-    void SetPixelScaleFactor( double aSF ) { m_Image->SetPixelScaleFactor( aSF ); }
+    double GetPixelScaleFactor() const { return m_image->GetPixelScaleFactor(); }
+    void SetPixelScaleFactor( double aSF ) { m_image->SetPixelScaleFactor( aSF ); }
+
+    BITMAP_BASE* GetImage()
+    {
+        wxCHECK_MSG( m_image != NULL, NULL, "Invalid SCH_BITMAP initialization, m_image is NULL." );
+
+        return m_image;
+    }
 
     /**
      * Function GetScalingFactor
@@ -74,7 +78,7 @@ public:
      */
     double GetScalingFactor() const
     {
-        return m_Image->GetScalingFactor();
+        return m_image->GetScalingFactor();
     }
 
 
@@ -112,7 +116,7 @@ public:
 
     void Move( const wxPoint& aMoveVector )
     {
-        m_Pos += aMoveVector;
+        m_pos += aMoveVector;
     }
 
 
@@ -128,9 +132,9 @@ public:
 
     BITMAP_DEF GetMenuImage() const { return image_xpm; }
 
-    wxPoint GetPosition() const { return m_Pos; }
+    wxPoint GetPosition() const { return m_pos; }
 
-    void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
 
