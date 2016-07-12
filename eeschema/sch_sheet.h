@@ -568,8 +568,7 @@ public:
 
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const;
 
-    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
-                                 const KICAD_T scanTypes[] );
+    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     wxString GetSelectMenuText() const;
 

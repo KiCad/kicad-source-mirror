@@ -68,24 +68,24 @@ static bool ShowClearance( DISPLAY_OPTIONS* aDisplOpts, const TRACK* aTrack )
 TRACK* GetTrack( TRACK* aStartTrace, const TRACK* aEndTrace,
         const wxPoint& aPosition, LSET aLayerMask )
 {
-    for( TRACK *PtSegm = aStartTrace; PtSegm != NULL; PtSegm = PtSegm->Next() )
+    for( TRACK* seg = aStartTrace;  seg;  seg = seg->Next() )
     {
-        if( PtSegm->GetState( IS_DELETED | BUSY ) == 0 )
+        if( seg->GetState( IS_DELETED | BUSY ) == 0 )
         {
-            if( aPosition == PtSegm->GetStart() )
+            if( aPosition == seg->GetStart() )
             {
-                if( ( aLayerMask & PtSegm->GetLayerSet() ).any() )
-                    return PtSegm;
+                if( ( aLayerMask & seg->GetLayerSet() ).any() )
+                    return seg;
             }
 
-            if( aPosition == PtSegm->GetEnd() )
+            if( aPosition == seg->GetEnd() )
             {
-                if( ( aLayerMask & PtSegm->GetLayerSet() ).any() )
-                    return PtSegm;
+                if( ( aLayerMask & seg->GetLayerSet() ).any() )
+                    return seg;
             }
         }
 
-        if( PtSegm == aEndTrace )
+        if( seg == aEndTrace )
             break;
     }
 
@@ -363,15 +363,14 @@ void VIA::Flip( const wxPoint& aCentre )
 
 
 // see class_track.h
-SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
-                            const KICAD_T scanTypes[] )
+SEARCH_RESULT TRACK::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T stype = *scanTypes;
 
     // If caller wants to inspect my type
     if( stype == Type() )
     {
-        if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
+        if( SEARCH_QUIT == inspector( this, testData ) )
             return SEARCH_QUIT;
     }
 
@@ -1365,7 +1364,7 @@ TRACK* TRACK::GetTrack( TRACK* aStartTrace, TRACK* aEndTrace, ENDPOINT_T aEndPoi
 
     while( nextSegment || previousSegment )
     {
-        // Terminate the search in the direction if the netcode mismatches
+        // Terminate the search in the direction if the netcode mis-matches
         if( aSameNetOnly )
         {
             if( nextSegment && (nextSegment->GetNetCode() != GetNetCode()) )

@@ -761,8 +761,7 @@ void MODULE::Add3DModel( S3D_MASTER* a3DModel )
 
 
 // see class_module.h
-SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
-                             const KICAD_T scanTypes[] )
+SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;
     SEARCH_RESULT  result = SEARCH_CONTINUE;
@@ -780,7 +779,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
         switch( stype )
         {
         case PCB_MODULE_T:
-            result = inspector->Inspect( this, testData );  // inspect me
+            result = inspector( this, testData );  // inspect me
             ++p;
             break;
 
@@ -790,12 +789,12 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
             break;
 
         case PCB_MODULE_TEXT_T:
-            result = inspector->Inspect( m_Reference, testData );
+            result = inspector( m_Reference, testData );
 
             if( result == SEARCH_QUIT )
                 break;
 
-            result = inspector->Inspect( m_Value, testData );
+            result = inspector( m_Value, testData );
 
             if( result == SEARCH_QUIT )
                 break;

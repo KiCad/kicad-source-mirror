@@ -531,8 +531,7 @@ public:
      */
     void Add3DModel( S3D_MASTER* a3DModel );
 
-    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
-                         const KICAD_T scanTypes[] );
+    SEARCH_RESULT Visit( INSPECTOR inspector,  void* testData, const KICAD_T scanTypes[] ) override;
 
     wxString GetClass() const
     {

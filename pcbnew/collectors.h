@@ -337,13 +337,11 @@ public:
         return NULL;
     }
 
-
     /**
      * Function GetPrimaryCount
      * @return int - The number if items which met the primary search criteria
      */
     int GetPrimaryCount() { return m_PrimaryLength; }
-
 
     /**
      * Function Inspect
@@ -355,8 +353,7 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    SEARCH_RESULT Inspect( EDA_ITEM* testItem, const void* testData );
-
+    SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData )  override;
 
     /**
      * Function Collect
@@ -595,7 +592,6 @@ public:
  */
 class PCB_TYPE_COLLECTOR : public COLLECTOR
 {
-
 public:
 
     /**
@@ -612,7 +608,6 @@ public:
         return NULL;
     }
 
-
     /**
      * Function Inspect
      * is the examining function within the INSPECTOR which is passed to the
@@ -623,8 +618,7 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    SEARCH_RESULT Inspect( EDA_ITEM* testItem, const void* testData );
-
+    SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData ) override;
 
     /**
      * Function Collect

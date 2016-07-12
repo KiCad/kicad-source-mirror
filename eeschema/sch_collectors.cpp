@@ -199,7 +199,7 @@ const KICAD_T SCH_COLLECTOR::OrientableItems[] = {
 };
 
 
-SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestData )
+SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
     if( aItem->Type() != LIB_PIN_T && !aItem->HitTest( m_RefPos ) )
         return SEARCH_CONTINUE;
@@ -239,7 +239,7 @@ void SCH_COLLECTOR::Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[],
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
     SetRefPos( aPosition );
 
-    EDA_ITEM::IterateForward( aItem, this, NULL, m_ScanTypes );
+    EDA_ITEM::IterateForward( aItem, m_inspector, NULL, m_ScanTypes );
 }
 
 
@@ -474,7 +474,7 @@ bool SCH_FIND_COLLECTOR::ReplaceItem( SCH_SHEET_PATH* aSheetPath )
 }
 
 
-SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestData )
+SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
     wxPoint position;
 
@@ -524,7 +524,7 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
     if( aSheetPath )
     {
         m_sheetPath = aSheetPath;
-        EDA_ITEM::IterateForward( aSheetPath->LastDrawList(), this, NULL, m_ScanTypes );
+        EDA_ITEM::IterateForward( aSheetPath->LastDrawList(), m_inspector, NULL, m_ScanTypes );
     }
     else
     {
@@ -533,7 +533,7 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
         for( unsigned i = 0; i < schematic.size(); i++ )
         {
             m_sheetPath = &schematic[i];
-            EDA_ITEM::IterateForward( m_sheetPath->LastDrawList(), this, NULL, m_ScanTypes );
+            EDA_ITEM::IterateForward( m_sheetPath->LastDrawList(), m_inspector, NULL, m_ScanTypes );
         }
     }
 
@@ -550,7 +550,7 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
 }
 
 
-SEARCH_RESULT SCH_TYPE_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestData )
+SEARCH_RESULT SCH_TYPE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
 {
     // The Vist() function only visits the testItem if its type was in the
     // the scanList, so therefore we can collect anything given to us here.
@@ -566,5 +566,5 @@ void SCH_TYPE_COLLECTOR::Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[] )
 
     SetScanTypes( aFilterList );
 
-    EDA_ITEM::IterateForward( aItem, this, NULL, m_ScanTypes );
+    EDA_ITEM::IterateForward( aItem, m_inspector, NULL, m_ScanTypes );
 }

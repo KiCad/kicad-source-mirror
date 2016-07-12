@@ -107,10 +107,10 @@ EDA_ITEM* EDA_ITEM::Clone() const
 }
 
 
-SEARCH_RESULT EDA_ITEM::IterateForward( EDA_ITEM*     listStart,
-                                        INSPECTOR*    inspector,
-                                        const void*   testData,
-                                        const KICAD_T scanTypes[] )
+SEARCH_RESULT EDA_ITEM::IterateForward( EDA_ITEM*       listStart,
+                                        INSPECTOR       inspector,
+                                        void*           testData,
+                                        const KICAD_T   scanTypes[] )
 {
     EDA_ITEM* p = listStart;
 
@@ -126,8 +126,7 @@ SEARCH_RESULT EDA_ITEM::IterateForward( EDA_ITEM*     listStart,
 
 // see base_struct.h
 // many classes inherit this method, be careful:
-SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR* inspector, const void* testData,
-                               const KICAD_T scanTypes[] )
+SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T stype;
 
@@ -140,7 +139,7 @@ SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR* inspector, const void* testData,
         // If caller wants to inspect my type
         if( stype == Type() )
         {
-            if( SEARCH_QUIT == inspector->Inspect( this, testData ) )
+            if( SEARCH_QUIT == inspector( this, testData ) )
                 return SEARCH_QUIT;
 
             break;

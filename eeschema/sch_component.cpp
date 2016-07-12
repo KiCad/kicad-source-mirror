@@ -1812,7 +1812,7 @@ wxString SCH_COMPONENT::GetSelectMenuText() const
 }
 
 
-SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData,
+SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
                                     const KICAD_T aFilterTypes[] )
 {
     KICAD_T     stype;
@@ -1822,7 +1822,7 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData
         // If caller wants to inspect component type or and component children types.
         if( stype == Type() )
         {
-            if( SEARCH_QUIT == aInspector->Inspect( this, aTestData ) )
+            if( SEARCH_QUIT == aInspector( this, aTestData ) )
                 return SEARCH_QUIT;
         }
 
@@ -1832,23 +1832,23 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData
             // Test the bounding boxes of fields if they are visible and not empty.
             for( int ii = 0; ii < GetFieldCount(); ii++ )
             {
-                if( SEARCH_QUIT == aInspector->Inspect( GetField( ii ), (void*) this ) )
+                if( SEARCH_QUIT == aInspector( GetField( ii ), (void*) this ) )
                     return SEARCH_QUIT;
             }
             break;
 
         case SCH_FIELD_LOCATE_REFERENCE_T:
-            if( SEARCH_QUIT == aInspector->Inspect( GetField( REFERENCE ), (void*) this ) )
+            if( SEARCH_QUIT == aInspector( GetField( REFERENCE ), (void*) this ) )
                 return SEARCH_QUIT;
             break;
 
         case SCH_FIELD_LOCATE_VALUE_T:
-            if( SEARCH_QUIT == aInspector->Inspect( GetField( VALUE ), (void*) this ) )
+            if( SEARCH_QUIT == aInspector( GetField( VALUE ), (void*) this ) )
                 return SEARCH_QUIT;
             break;
 
         case SCH_FIELD_LOCATE_FOOTPRINT_T:
-            if( SEARCH_QUIT == aInspector->Inspect( GetField( FOOTPRINT ), (void*) this ) )
+            if( SEARCH_QUIT == aInspector( GetField( FOOTPRINT ), (void*) this ) )
                 return SEARCH_QUIT;
             break;
 
@@ -1862,7 +1862,7 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData
 
                 for( size_t i = 0;  i < pins.size();  i++ )
                 {
-                    if( SEARCH_QUIT == aInspector->Inspect( pins[ i ], (void*) this ) )
+                    if( SEARCH_QUIT == aInspector( pins[ i ], (void*) this ) )
                         return SEARCH_QUIT;
                 }
             }

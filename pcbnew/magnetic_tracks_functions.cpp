@@ -214,9 +214,9 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
         if( !currTrack )
         {
-            LSET layer_mask( layer );
+            LSET layers( layer );
 
-            TRACK* track = m_Pcb->GetTrack( m_Pcb->m_Track, pos, layer_mask );
+            TRACK* track = m_Pcb->GetVisibleTrack( m_Pcb->m_Track, pos, layers );
 
             if( !track || track->Type() != PCB_TRACE_T )
             {

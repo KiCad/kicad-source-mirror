@@ -215,9 +215,7 @@ public:
      */
     wxString ShowWidth() const;
 
-    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
-                         const KICAD_T scanTypes[] );
-
+    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     virtual bool HitTest( const wxPoint& aPosition ) const;
 
@@ -250,7 +248,7 @@ public:
 
     /**
      * Function GetTrack
-     * return the trace segment connected to the segment at \a aEndPoint from \a
+     * returns the trace segment connected to the segment at \a aEndPoint from \a
      * aStartTrace to \a aEndTrace.
      *
      * @param aStartTrace A pointer to the TRACK object to begin searching.

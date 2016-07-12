@@ -114,7 +114,7 @@ public:
      * @return SEARCH_RESULT #SEARCH_QUIT if the iterator is to stop the scan,
      *                       else #SEARCH_CONTINUE;
      */
-    SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData = NULL );
+    SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) override;
 
     /**
      * Function Collect

@@ -148,11 +148,11 @@ const KICAD_T GENERAL_COLLECTOR::Zones[] = {
  * that it finds and does not do any displaying.
  *
  * @param testItem An EDA_ITEM to examine.
- * @param testData The const void* testData, not used here.
+ * @param testData not used here.
  * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
  *   else SCAN_CONTINUE;
  */
-SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData )
+SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM* item   = (BOARD_ITEM*) testItem;
     MODULE*     module = NULL;
@@ -459,10 +459,7 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
     // the Inspect() function.
     SetRefPos( aRefPos );
 
-    // visit the board or module with the INSPECTOR (me).
-    aItem->Visit(   this,       // INSPECTOR* inspector
-                    NULL,       // const void* testData, not used here
-                    m_ScanTypes );
+    aItem->Visit( m_inspector, NULL, m_ScanTypes );
 
     SetTimeNow();               // when snapshot was taken
 
@@ -478,7 +475,7 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const KICAD_T aScanList[],
 
 
 // see collectors.h
-SEARCH_RESULT PCB_TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testData )
+SEARCH_RESULT PCB_TYPE_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     // The Vist() function only visits the testItem if its type was in the
     // the scanList, so therefore we can collect anything given to us here.
@@ -492,10 +489,5 @@ void PCB_TYPE_COLLECTOR::Collect( BOARD_ITEM* aBoard, const KICAD_T aScanList[] 
 {
     Empty();        // empty any existing collection
 
-    // visit the board with the INSPECTOR (me).
-    aBoard->Visit(      this,       // INSPECTOR* inspector
-                        NULL,       // const void* testData,
-                        aScanList );
+    aBoard->Visit( m_inspector, NULL, aScanList );
 }
-
-//EOF

@@ -69,7 +69,7 @@ public:
      * @return the parent track or via of this connected point,
      * or null if the parent is a pad
      */
-    TRACK * GetTrack() const
+    TRACK* GetTrack() const
     {
         return m_item->Type() != PCB_PAD_T ? (TRACK*) m_item : NULL ;
     }

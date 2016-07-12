@@ -92,7 +92,7 @@ const KICAD_T LIB_COLLECTOR::RotatableItems[] = {
 };
 
 
-SEARCH_RESULT LIB_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestData )
+SEARCH_RESULT LIB_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
 {
     LIB_ITEM* item = (LIB_ITEM*) aItem;
 
@@ -125,7 +125,7 @@ void LIB_COLLECTOR::Collect( LIB_ITEMS& aItems, const KICAD_T aFilterList[],
 
     for( size_t i = 0;  i < aItems.size();  i++ )
     {
-        if( SEARCH_QUIT == aItems[i].Visit( this, NULL, m_ScanTypes ) )
+        if( SEARCH_QUIT == aItems[i].Visit( m_inspector, NULL, m_ScanTypes ) )
             break;
     }
 }

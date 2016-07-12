@@ -135,7 +135,7 @@ public:
         return NULL;
     }
 
-    SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData = NULL );
+    SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) override;
 
     /**
      * Function Collect
@@ -350,7 +350,7 @@ public:
      */
     bool ReplaceItem( SCH_SHEET_PATH* aSheetPath = NULL );
 
-    SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData = NULL );
+    SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) override;
 
     /**
      * Update the replace string without changing anything else.
@@ -392,7 +392,7 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */
-    SEARCH_RESULT Inspect( EDA_ITEM* testItem, const void* testData );
+    SEARCH_RESULT Inspect( EDA_ITEM* testItem, void* testData ) override;
 
     /**
      * Function Collect

@@ -52,9 +52,11 @@ class EDA_ITEM;
  * Later, after collection, the user can iterate through all the objects
  * in the remembered collection using GetCount() and the [int] operator.
  */
-class COLLECTOR : public INSPECTOR
+class COLLECTOR
 {
 protected:
+    INSPECTOR_FUNC  m_inspector;
+
     /// Which object types to scan
     const KICAD_T* m_ScanTypes;
 
@@ -71,13 +73,17 @@ protected:
     time_t m_TimeAtCollection;
 
 public:
-    COLLECTOR()
+    COLLECTOR() :
+        // Inspect() is virtual so calling it from a class common inspector preserves polymorphism.
+        m_inspector( [=] ( EDA_ITEM* aItem, void* aTestData ) { return Inspect( aItem, aTestData ); } )
     {
         m_ScanTypes = 0;
         m_TimeAtCollection = 0;
     }
 
     virtual ~COLLECTOR() {}
+
+    virtual SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) = 0;
 
     /**
      * Function IsValidIndex
@@ -276,8 +282,7 @@ public:
         Empty();        // empty the collection
 
         // visit the board with the INSPECTOR (me).
-        container->Visit(   this,       // INSPECTOR* inspector
-                            NULL,       // const void* testData,
+        container->Visit(   inspector, &aRefPos,
                             m_ScanTypes);
         SetTimeNow();                   // when it was taken
     }

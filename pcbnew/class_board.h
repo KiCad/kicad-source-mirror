@@ -909,8 +909,7 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *  else SCAN_CONTINUE, and determined by the inspector.
      */
-    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
-                         const KICAD_T scanTypes[] );
+    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     /**
      * Function FindModuleByReference
@@ -1300,17 +1299,19 @@ public:
     void GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNetCode = -1 );
 
     /**
-     * Function GetTrack
-     * find the segment of \a aTrace at \a aPosition on \a aLayer if \a Layer is visible.
+     * Function GetVisibleTrack
+     * finds the neighboring visible segment of \a aTrace at \a aPosition that is
+     * on a layer in \a aLayerSet.
      * Traces that are flagged as deleted or busy are ignored.
      *
-     * @param aTrace A pointer to the TRACK object to search.
+     * @param aStartingTrace is the first TRACK to test, testing continues to end of m_Track list from
+     *   this starting point.
      * @param aPosition A wxPoint object containing the position to test.
-     * @param aLayerMask A layer or layers to mask the hit test.  Use -1 to ignore
-     *                   layer mask.
+     * @param aLayerSet A set of layers; returned TRACK must be on one of these.
+     *     May pass a full set to request any layer.
      * @return A TRACK object pointer if found otherwise NULL.
      */
-    TRACK* GetTrack( TRACK* aTrace, const wxPoint& aPosition, LSET aLayerMask ) const;
+    TRACK* GetVisibleTrack( TRACK* aStartingTrace, const wxPoint& aPosition, LSET aLayerSet ) const;
 
     /**
      * Function MarkTrace
