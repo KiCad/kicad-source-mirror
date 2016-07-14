@@ -61,10 +61,9 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS::DIALOG_GRAPHIC_ITEMS_OPTIONS( PCB_BASE_FRAME* pare
     m_brdSettings = m_parent->GetDesignSettings();
     initValues(  );
 
-    m_sdbSizer1OK->SetDefault();
-    GetSizer()->SetSizeHints( this );
+    m_sdbSizerOK->SetDefault();
 
-    Centre();
+    FixOSXCancelButtonIssue();
 }
 
 DIALOG_GRAPHIC_ITEMS_OPTIONS::~DIALOG_GRAPHIC_ITEMS_OPTIONS()

@@ -595,9 +595,11 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
             // allowing a transfer, as there is no other way to indicate failure
             // (i.e. the dialog can't refuse to close as it might with OK, because it
             // isn't closing anyway)
-
             if( Validate() )
-                wxASSERT( TransferDataFromWindow() );
+            {
+                bool success = TransferDataFromWindow();
+                (void) success;
+            }
         }
         else if( id == GetEscapeId() ||
                  (id == wxID_CANCEL && GetEscapeId() == wxID_ANY) )
