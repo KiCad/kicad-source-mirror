@@ -51,6 +51,9 @@ static const double MAX_GRID_OFFSET = INT_MAX / 2.0;
 
 class DIALOG_SET_GRID : public DIALOG_SET_GRID_BASE
 {
+    PCB_BASE_FRAME* m_parent;
+    wxArrayString   m_fast_grid_opts;
+
 public:
     /// This has no dependencies on calling wxFrame derivative, such as PCB_BASE_FRAME.
     DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& aGridChoices );
@@ -59,10 +62,15 @@ public:
     bool TransferDataToWindow();
 
 private:
-    void            OnResetGridOrgClick( wxCommandEvent& event );
+    void OnResetGridOrgClick( wxCommandEvent& event );
+    void OnInitDlg( wxInitDialogEvent& event )
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
 
-    PCB_BASE_FRAME* m_parent;
-    wxArrayString   m_fast_grid_opts;
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
 
     void            setGridUnits( EDA_UNITS_T units );
     EDA_UNITS_T     getGridUnits();
@@ -86,14 +94,12 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& 
     m_parent( aParent ),
     m_fast_grid_opts( aGridChoices )
 {
-    m_sdbSizer1OK->SetDefault();      // set OK button as default response to 'Enter' key
+    m_sdbSizerOK->SetDefault();         // set OK button as default response to 'Enter' key
 
     m_TextPosXUnits->SetLabel( GetUnitsLabel( m_parent->m_UserGridUnit ) );
     m_TextPosYUnits->SetLabel( GetUnitsLabel( m_parent->m_UserGridUnit ) );
 
-    GetSizer()->SetSizeHints( this );
-    Fit();
-    Centre();
+    FixOSXCancelButtonIssue();
 }
 
 

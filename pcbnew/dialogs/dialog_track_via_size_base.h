@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  9 2015)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -19,6 +22,7 @@
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -28,7 +32,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_TRACK_VIA_SIZE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_TRACK_VIA_SIZE_BASE : public wxDialog 
+class DIALOG_TRACK_VIA_SIZE_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -42,6 +46,7 @@ class DIALOG_TRACK_VIA_SIZE_BASE : public wxDialog
 		wxStaticText* m_staticText7;
 		wxTextCtrl* m_viaDrillText;
 		wxStaticText* m_viaDrillLabel;
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
@@ -54,7 +59,7 @@ class DIALOG_TRACK_VIA_SIZE_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_TRACK_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Track width and via size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 303,168 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_TRACK_VIA_SIZE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Track width and via size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 303,187 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_TRACK_VIA_SIZE_BASE();
 	
 };

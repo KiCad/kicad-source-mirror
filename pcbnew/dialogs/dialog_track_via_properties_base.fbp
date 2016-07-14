@@ -46,7 +46,7 @@
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU</property>
-            <property name="subclass">; </property>
+            <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Track &amp; Via Properties</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
@@ -103,6 +103,7 @@
                         <property name="minimum_size"></property>
                         <property name="name">m_sbTrackSizer</property>
                         <property name="orient">wxHORIZONTAL</property>
+                        <property name="parent">1</property>
                         <property name="permission">protected</property>
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="0">
@@ -1811,6 +1812,7 @@
                         <property name="minimum_size"></property>
                         <property name="name">m_sbViaSizer</property>
                         <property name="orient">wxHORIZONTAL</property>
+                        <property name="parent">1</property>
                         <property name="permission">protected</property>
                         <event name="OnUpdateUI"></event>
                         <object class="sizeritem" expanded="1">

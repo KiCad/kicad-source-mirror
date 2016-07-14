@@ -112,6 +112,21 @@ void DIALOG_SHIM::FinishDialogSettings()
     Center();
 }
 
+void DIALOG_SHIM::FixOSXCancelButtonIssue()
+{
+#ifdef  __WXMAC__
+    // A ugly hack to fix an issue on OSX: ctrl+c closes the dialog instead of
+    // copying a text if a  button with wxID_CANCEL is used in a wxStdDialogButtonSizer
+    // created by wxFormBuilder: the label is &Cancel, and this accelerator key has priority
+    // to copy text standard accelerator, and the dlg is closed when trying to copy text
+    wxButton* button = dynamic_cast< wxButton* > ( wxWindow::FindWindowById( wxID_CANCEL, this ) );
+
+    if( button )
+        button->SetLabel( _( "Cancel" ) );
+#endif
+}
+
+
 // our hashtable is an implementation secret, don't need or want it in a header file
 #include <hashtables.h>
 #include <base_struct.h>        // EDA_RECT

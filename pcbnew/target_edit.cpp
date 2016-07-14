@@ -111,9 +111,10 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME
     // OK button on return key.
     SetDefaultItem( m_sdbSizerButtsOK );
 
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
-    Centre();
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

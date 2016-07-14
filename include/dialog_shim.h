@@ -108,6 +108,16 @@ protected:
      */
     void FinishDialogSettings();
 
+    /** A ugly hack to fix an issue on OSX:
+     * when typing ctrl+c in a wxTextCtrl inside a dialog, it is closed instead of
+     * copying a text if a button with wxID_CANCEL is used in a wxStdDialogButtonSizer,
+     * when the dlg is created by wxFormBuilder:
+     * the label is &Cancel, and this accelerator key has priority
+     * to copy text standard accelerator, and the dlg is closed when trying to copy text
+     * this function do nothing on other platforms
+     */
+    void FixOSXCancelButtonIssue();
+
     std::string m_hash_key;     // alternate for class_map when classname re-used.
 
     // variables for quasi-modal behavior support, only used by a few derivatives.

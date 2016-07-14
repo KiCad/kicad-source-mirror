@@ -166,9 +166,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     m_StdButtonsOK->SetDefault();
 
-    GetSizer()->SetSizeHints( this );
-    Layout();
-    Fit();
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 
     // Pressing ENTER when any of the text input fields is active applies changes
     Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( DIALOG_TRACK_VIA_PROPERTIES::onOkClick ), NULL, this );
