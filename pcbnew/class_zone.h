@@ -347,9 +347,9 @@ public:
      * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
      * all intersecting points with the horizontal infinite line and polygons to fill are calculated
      * a list of SEGZONE items is built, line per line
-     * @return number of segments created
+     * @return true if success, false on error
      */
-    int FillZoneAreasWithSegments();
+    bool FillZoneAreasWithSegments();
 
     /**
      * Function UnFill
