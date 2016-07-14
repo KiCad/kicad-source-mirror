@@ -134,13 +134,6 @@ bool ZONE_CONTAINER::BuildFilledSolidAreasPolygons( BOARD* aPcb, SHAPE_POLY_SET*
 }
 
 
-// Helper sort function to fill zones by horizontal segments:
-// It is used to sort intersection points by x coordinate value.
-static bool SortByXValues( const int& a, const int &b )
-{
-    return a < b;
-}
-
 /** Helper function fillPolygonWithHorizontalSegments
  * fills a polygon with horizontal segments.
  * It can be used for any angle, if the zone outline to fill is rotated by this angle
@@ -165,7 +158,7 @@ bool ZONE_CONTAINER::FillZoneAreasWithSegments()
     // Using a user selectable grid size is for future Kicad versions.
     // For now the area is fully filled.
     int mingrid_size = Millimeter2iu( 0.05 );
-    int grid_size = std::max ( mingrid_size, m_ZoneMinThickness ;
+    int grid_size = std::max( mingrid_size, m_ZoneMinThickness );
     // Make segments slightly overlapping to ensure a good full filling
     grid_size -= grid_size/20;
 
@@ -287,7 +280,7 @@ bool fillPolygonWithHorizontalSegments( const SHAPE_LINE_CHAIN& aPolygon,
 
         // Sort intersection points by increasing x value:
         // So 2 consecutive points are the ends of a segment
-        sort( x_coordinates.begin(), x_coordinates.end(), SortByXValues );
+        sort( x_coordinates.begin(), x_coordinates.end() );
 
         // An even number of coordinates is expected, because a segment has 2 ends.
         // An if this algorithm always works, it must always find an even count.
