@@ -81,13 +81,10 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
     if( m_currentText )
         m_module = (MODULE*) m_currentText->GetParent();
 
-    m_sdbSizer1OK->SetDefault();
-
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
-
-    Centre();
+    m_sdbSizerOK->SetDefault();
     SetFocus();
+
+    FixOSXCancelButtonIssue();
 }
 
 

@@ -45,12 +45,21 @@ private:
     void onCancelClick( wxCommandEvent& aEvent );
     void onOkClick( wxCommandEvent& aEvent );
 
+    void OnInitDlg( wxInitDialogEvent& event )
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
+
     ///> Checks if the dialog values are correct.
     bool check() const;
 
     ///> Sets wxTextCtrl to the value stored in boost::optional<T> or "<...>" if it is not available.
     template<typename T>
-    void setCommonVal( const boost::optional<T>& aVal, wxTextCtrl* aTxtCtrl, WX_UNIT_BINDER& aBinder )
+        void setCommonVal( const boost::optional<T>& aVal, wxTextCtrl* aTxtCtrl, WX_UNIT_BINDER& aBinder )
     {
         if( aVal )
             aBinder.SetValue( *aVal );

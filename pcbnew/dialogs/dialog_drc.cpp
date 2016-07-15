@@ -51,6 +51,9 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent ) :
 
     InitValues();
 
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
 

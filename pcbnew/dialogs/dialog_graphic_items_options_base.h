@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -57,11 +57,12 @@ class DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_OptModuleTextHSize;
 		wxStaticText* m_DefaultPenSizeTitle;
 		wxTextCtrl* m_DefaultPenSizeCtrl;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		

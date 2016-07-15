@@ -119,11 +119,11 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	int m_OrientNChoices = sizeof( m_OrientChoices ) / sizeof( wxString );
 	m_Orient = new wxRadioBox( this, wxID_ANY, _("Orientation"), wxDefaultPosition, wxDefaultSize, m_OrientNChoices, m_OrientChoices, 1, wxRA_SPECIFY_COLS );
 	m_Orient->SetSelection( 2 );
-	bSizer4->Add( m_Orient, 1, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_Orient, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticTextRotation = new wxStaticText( this, wxID_ANY, _("Rotation (-90.0 to 90.0)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotation->Wrap( -1 );
-	bSizer4->Add( m_staticTextRotation, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
+	bSizer4->Add( m_staticTextRotation, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 	
 	m_OrientValueCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_OrientValueCtrl, 0, wxALL|wxEXPAND, 5 );
@@ -137,40 +137,33 @@ DialogEditModuleText_base::DialogEditModuleText_base( wxWindow* parent, wxWindow
 	
 	bMainSizer->Add( bSizer9, 1, wxALL|wxEXPAND, 5 );
 	
-	
-	bMainSizer->Add( 0, 0, 0, wxEXPAND, 5 );
-	
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bMainSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	bMainSizer->Add( m_staticline2, 0, wxEXPAND|wxALL, 5 );
 	
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
 	
-	bMainSizer->Add( 0, 0, 0, wxEXPAND|wxTOP, 5 );
-	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
-	
-	bMainSizer->Add( m_sdbSizer1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
-	
-	
-	bMainSizer->Add( 0, 0, 0, wxBOTTOM|wxEXPAND, 5 );
+	bMainSizer->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	
 	// Connect Events
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DialogEditModuleText_base::OnInitDlg ) );
 	m_Orient->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogEditModuleText_base::ModuleOrientEvent ), NULL, this );
-	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogEditModuleText_base::OnOkClick ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogEditModuleText_base::OnOkClick ), NULL, this );
 }
 
 DialogEditModuleText_base::~DialogEditModuleText_base()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DialogEditModuleText_base::OnInitDlg ) );
 	m_Orient->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DialogEditModuleText_base::ModuleOrientEvent ), NULL, this );
-	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogEditModuleText_base::OnOkClick ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogEditModuleText_base::OnOkClick ), NULL, this );
 	
 }
