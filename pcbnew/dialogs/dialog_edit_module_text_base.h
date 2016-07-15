@@ -61,18 +61,19 @@ class DialogEditModuleText_base : public DIALOG_SHIM
 		wxStaticText* m_staticTextRotation;
 		wxTextCtrl* m_OrientValueCtrl;
 		wxStaticLine* m_staticline2;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void ModuleOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,401 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DialogEditModuleText_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 589,351 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DialogEditModuleText_base();
 	
 };

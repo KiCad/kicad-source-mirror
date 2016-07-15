@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DialogEditModuleText_base</property>
             <property name="pos"></property>
-            <property name="size">500,401</property>
+            <property name="size">589,351</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Footprint Text Properties</property>
@@ -67,7 +67,7 @@
             <event name="OnHibernate"></event>
             <event name="OnIconize"></event>
             <event name="OnIdle"></event>
-            <event name="OnInitDialog"></event>
+            <event name="OnInitDialog">OnInitDlg</event>
             <event name="OnKeyDown"></event>
             <event name="OnKeyUp"></event>
             <event name="OnKillFocus"></event>
@@ -267,20 +267,20 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxBoxSizer" expanded="0">
+                    <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bSizer9</property>
                         <property name="orient">wxVERTICAL</property>
                         <property name="permission">none</property>
-                        <object class="sizeritem" expanded="0">
+                        <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxBoxSizer" expanded="0">
+                            <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizer10</property>
                                 <property name="orient">wxHORIZONTAL</property>
@@ -1521,11 +1521,11 @@
                                         </object>
                                     </object>
                                 </object>
-                                <object class="sizeritem" expanded="0">
+                                <object class="sizeritem" expanded="1">
                                     <property name="border">5</property>
                                     <property name="flag">wxBOTTOM|wxEXPAND|wxRIGHT</property>
                                     <property name="proportion">2</property>
-                                    <object class="wxBoxSizer" expanded="0">
+                                    <object class="wxBoxSizer" expanded="1">
                                         <property name="minimum_size"></property>
                                         <property name="name">bSizer4</property>
                                         <property name="orient">wxVERTICAL</property>
@@ -1724,7 +1724,7 @@
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
                                             <property name="flag">wxALL|wxEXPAND</property>
-                                            <property name="proportion">1</property>
+                                            <property name="proportion">0</property>
                                             <object class="wxRadioBox" expanded="0">
                                                 <property name="BottomDockable">1</property>
                                                 <property name="LeftDockable">1</property>
@@ -1813,7 +1813,7 @@
                                         </object>
                                         <object class="sizeritem" expanded="0">
                                             <property name="border">5</property>
-                                            <property name="flag">wxEXPAND|wxLEFT|wxTOP</property>
+                                            <property name="flag">wxEXPAND|wxTOP|wxLEFT</property>
                                             <property name="proportion">0</property>
                                             <object class="wxStaticText" expanded="0">
                                                 <property name="BottomDockable">1</property>
@@ -1993,17 +1993,7 @@
                 </object>
                 <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
-                    <property name="proportion">0</property>
-                    <object class="spacer" expanded="0">
-                        <property name="height">0</property>
-                        <property name="permission">protected</property>
-                        <property name="width">0</property>
-                    </object>
-                </object>
-                <object class="sizeritem" expanded="0">
-                    <property name="border">5</property>
-                    <property name="flag">wxEXPAND | wxALL</property>
+                    <property name="flag">wxEXPAND|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxStaticLine" expanded="0">
                         <property name="BottomDockable">1</property>
@@ -2084,17 +2074,7 @@
                 </object>
                 <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxTOP</property>
-                    <property name="proportion">0</property>
-                    <object class="spacer" expanded="0">
-                        <property name="height">0</property>
-                        <property name="permission">protected</property>
-                        <property name="width">0</property>
-                    </object>
-                </object>
-                <object class="sizeritem" expanded="0">
-                    <property name="border">5</property>
-                    <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
+                    <property name="flag">wxEXPAND|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxStdDialogButtonSizer" expanded="0">
                         <property name="Apply">0</property>
@@ -2106,7 +2086,7 @@
                         <property name="Save">0</property>
                         <property name="Yes">0</property>
                         <property name="minimum_size"></property>
-                        <property name="name">m_sdbSizer1</property>
+                        <property name="name">m_sdbSizer</property>
                         <property name="permission">protected</property>
                         <event name="OnApplyButtonClick"></event>
                         <event name="OnCancelButtonClick"></event>
@@ -2116,16 +2096,6 @@
                         <event name="OnOKButtonClick">OnOkClick</event>
                         <event name="OnSaveButtonClick"></event>
                         <event name="OnYesButtonClick"></event>
-                    </object>
-                </object>
-                <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
-                    <property name="flag">wxBOTTOM|wxEXPAND</property>
-                    <property name="proportion">0</property>
-                    <object class="spacer" expanded="1">
-                        <property name="height">0</property>
-                        <property name="permission">protected</property>
-                        <property name="width">0</property>
                     </object>
                 </object>
             </object>

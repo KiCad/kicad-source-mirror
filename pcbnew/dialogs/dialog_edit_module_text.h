@@ -54,6 +54,15 @@ protected:
 
 private:
     void ModuleOrientEvent( wxCommandEvent& event );
+
+    void OnInitDlg( wxInitDialogEvent& event )
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
 };
 
 #endif /* DIALOG_EDIT_MODULE_TEXT_H */
