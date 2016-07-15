@@ -114,7 +114,11 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
 
     // Update sizes and sizers:
     m_MessageWindow->MsgPanelSetMinSize( wxSize( -1, 150 ) );
-    GetSizer()->SetSizeHints( this );
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 DIALOG_NETLIST::~DIALOG_NETLIST()

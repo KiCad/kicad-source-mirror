@@ -61,6 +61,14 @@ private:
     void            OnResetGridOrgClick( wxCommandEvent& event );
     void            OnCancelClick( wxCommandEvent& event );
     void            OnOkClick( wxCommandEvent& event );
+    void OnInitDlg( wxInitDialogEvent& event )
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
 
     EDA_UNITS_T&    m_callers_grid_units;
     EDA_UNITS_T     m_callers_board_units;
@@ -96,16 +104,14 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( wxFrame* aCaller, EDA_UNITS_T* aGridUnits, EDA
     m_TextPosXUnits->SetLabel( GetUnitsLabel( m_callers_board_units ) );
     m_TextPosYUnits->SetLabel( GetUnitsLabel( m_callers_board_units ) );
 
-    m_sdbSizer1OK->SetDefault();      // set OK button as default response to 'Enter' key
+    m_sdbSizerOK->SetDefault();      // set OK button as default response to 'Enter' key
 
     setGridUnits( m_callers_grid_units );
     setGridSize( m_callers_user_size );
     setGridOrigin( m_callers_origin );
     setGridForFastSwitching( aGridChoices, m_callers_fast_grid1, m_callers_fast_grid2 );
 
-    GetSizer()->SetSizeHints( this );
-    Fit();
-    Centre();
+    FixOSXCancelButtonIssue();
 }
 
 

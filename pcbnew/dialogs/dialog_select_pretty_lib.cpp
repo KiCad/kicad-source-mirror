@@ -43,7 +43,11 @@ DIALOG_SELECT_PRETTY_LIB::DIALOG_SELECT_PRETTY_LIB( wxWindow* parent,
         m_dirCtrl->SetPath( aDefaultPath );
 
     m_sdbSizerOK->SetDefault();
-    GetSizer()->SetSizeHints( this );
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

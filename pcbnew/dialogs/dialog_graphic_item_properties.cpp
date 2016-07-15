@@ -82,8 +82,11 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_EDIT_FRAME* 
     m_brdSettings = m_parent->GetDesignSettings();
     initDlg();
     Layout();
-    GetSizer()->SetSizeHints( this );
-    Centre();
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

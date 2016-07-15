@@ -359,6 +359,8 @@ DIALOG_LAYERS_SETUP::DIALOG_LAYERS_SETUP( wxTopLevelWindow* aParent, BOARD* aBoa
 
     m_sdbSizerOK->SetFocus();
     m_sdbSizerOK->SetDefault();
+
+    FixOSXCancelButtonIssue();
 }
 
 void DIALOG_LAYERS_SETUP::OnSize( wxSizeEvent& event )

@@ -45,8 +45,10 @@ DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( wxWindow* aParent, BOARD_DESIGN_SE
     m_trackWidthText->SetSelection( -1, -1 );
     m_stdButtonsOK->SetDefault();
 
-    GetSizer()->SetSizeHints( this );
-    Centre();
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 
     // Pressing ENTER when any of the text input fields is active applies changes
     Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( DIALOG_TRACK_VIA_SIZE::onOkClick ), NULL, this );

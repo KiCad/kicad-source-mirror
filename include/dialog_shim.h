@@ -1,6 +1,3 @@
-#ifndef DIALOG_SHIM_
-#define DIALOG_SHIM_
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -24,6 +21,9 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+#ifndef DIALOG_SHIM_
+#define DIALOG_SHIM_
 
 #include <wx/dialog.h>
 #include <hashtables.h>
@@ -90,6 +90,33 @@ public:
     bool Enable( bool enable ); // override wxDialog::Enable virtual
 
 protected:
+
+    /**
+     * In all dialogs, we must call the same functions to fix minimal
+     * dlg size, the default position and perhaps some others to fix a few issues
+     * depending on Windows Managers
+     * this helper function does these calls.
+     *
+     * FinishDialogSettings must be called from derived classes,
+     * when all widgets are initialized, and therefore their size fixed.
+     * If TransferDataToWindow() is used to initialize widgets, at end of TransferDataToWindow,
+     * or better at end of a wxInitDialogEvent handler
+     *
+     * In any case, the best way is to call it in a wxInitDialogEvent handler
+     * after calling TransfertDataToWindow(), which is the default
+     * wxInitDialogEvent handler wxDialog
+     */
+    void FinishDialogSettings();
+
+    /** A ugly hack to fix an issue on OSX:
+     * when typing ctrl+c in a wxTextCtrl inside a dialog, it is closed instead of
+     * copying a text if a button with wxID_CANCEL is used in a wxStdDialogButtonSizer,
+     * when the dlg is created by wxFormBuilder:
+     * the label is &Cancel, and this accelerator key has priority
+     * to copy text standard accelerator, and the dlg is closed when trying to copy text
+     * this function do nothing on other platforms
+     */
+    void FixOSXCancelButtonIssue();
 
     std::string m_hash_key;     // alternate for class_map when classname re-used.
 

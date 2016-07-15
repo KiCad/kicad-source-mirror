@@ -45,6 +45,7 @@
 #include <class_text_mod.h>
 #include <class_board.h>
 
+#include <class_pcb_layer_box_selector.h>
 #include <dialog_edit_module_text.h>
 
 
@@ -75,12 +76,12 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
 
     initDlg();
 
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
 
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
+    FixOSXCancelButtonIssue();
 
-    Centre();
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
