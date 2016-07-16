@@ -126,6 +126,13 @@ private:
     void showButtonHandler( wxCommandEvent& event );
     void OnTestChipName( wxCommandEvent& event );
     void OnSelectChipName( wxCommandEvent& event );
+	void OnInitDlg( wxInitDialogEvent& event )
+    {
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
 
     SCH_FIELD* findField( const wxString& aFieldName );
 
@@ -204,9 +211,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     stdDialogButtonSizerOK->SetDefault();
 
     FixOSXCancelButtonIssue();
-
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
 }
 
 
