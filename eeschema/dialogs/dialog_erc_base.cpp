@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -91,14 +91,14 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bbuttonsSizer;
 	bbuttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_buttondelmarkers = new wxButton( m_PanelERC, ID_ERASE_DRC_MARKERS, _("&Delete Markers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttondelmarkers = new wxButton( m_PanelERC, ID_ERASE_DRC_MARKERS, _("Delete Markers"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttondelmarkers, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonERC = new wxButton( m_PanelERC, ID_ERC_CMP, _("&Run"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonERC = new wxButton( m_PanelERC, ID_ERC_CMP, _("Run"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonERC->SetDefault(); 
 	bbuttonsSizer->Add( m_buttonERC, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonClose = new wxButton( m_PanelERC, wxID_CANCEL, _("&Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonClose = new wxButton( m_PanelERC, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bbuttonsSizer->Add( m_buttonClose, 0, wxALL|wxEXPAND, 5 );
 	
 	

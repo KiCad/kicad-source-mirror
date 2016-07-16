@@ -277,6 +277,7 @@
                                                     <property name="minimum_size"></property>
                                                     <property name="name">sdiagSizer</property>
                                                     <property name="orient">wxVERTICAL</property>
+                                                    <property name="parent">1</property>
                                                     <property name="permission">none</property>
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="sizeritem" expanded="1">
@@ -409,7 +410,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -583,7 +584,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -757,7 +758,7 @@
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
-                                                                    <property name="maxlength"></property>
+                                                                    <property name="maxlength">0</property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
                                                                     <property name="minimum_size"></property>
@@ -1113,7 +1114,7 @@
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
-                                                            <property name="maxlength"></property>
+                                                            <property name="maxlength">0</property>
                                                             <property name="min_size"></property>
                                                             <property name="minimize_button">0</property>
                                                             <property name="minimum_size">-1,-1</property>
@@ -1382,7 +1383,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">ID_ERASE_DRC_MARKERS</property>
-                                                    <property name="label">&amp;Delete Markers</property>
+                                                    <property name="label">Delete Markers</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -1470,7 +1471,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">ID_ERC_CMP</property>
-                                                    <property name="label">&amp;Run</property>
+                                                    <property name="label">Run</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
@@ -1558,7 +1559,7 @@
                                                     <property name="gripper">0</property>
                                                     <property name="hidden">0</property>
                                                     <property name="id">wxID_CANCEL</property>
-                                                    <property name="label">&amp;Close</property>
+                                                    <property name="label">Close</property>
                                                     <property name="max_size"></property>
                                                     <property name="maximize_button">0</property>
                                                     <property name="maximum_size"></property>
