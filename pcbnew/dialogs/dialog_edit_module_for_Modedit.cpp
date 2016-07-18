@@ -83,6 +83,8 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
     m_sdbSizerStdButtonsOK->SetDefault();
 
     Layout();
+
+    FixOSXCancelButtonIssue();
 }
 
 

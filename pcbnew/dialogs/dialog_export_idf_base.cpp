@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -60,7 +60,14 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	bSizer4->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_IDF_Xref = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_IDF_Xref->SetMaxLength( 8 ); 
+	#ifdef __WXGTK__
+	if ( !m_IDF_Xref->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_IDF_Xref->SetMaxLength( 8 );
+	}
+	#else
+	m_IDF_Xref->SetMaxLength( 8 );
+	#endif
 	bSizer4->Add( m_IDF_Xref, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
@@ -74,7 +81,14 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	bSizer5->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_IDF_Yref = new wxTextCtrl( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_IDF_Yref->SetMaxLength( 8 ); 
+	#ifdef __WXGTK__
+	if ( !m_IDF_Yref->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_IDF_Yref->SetMaxLength( 8 );
+	}
+	#else
+	m_IDF_Yref->SetMaxLength( 8 );
+	#endif
 	bSizer5->Add( m_IDF_Yref, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
@@ -98,14 +112,14 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerIDFFile->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
 	
-	bSizerIDFFile->Add( m_sdbSizer1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	bSizerIDFFile->Add( m_sdbSizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	this->SetSizer( bSizerIDFFile );

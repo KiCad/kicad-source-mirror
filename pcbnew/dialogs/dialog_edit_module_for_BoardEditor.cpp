@@ -88,6 +88,8 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     m_OrientValue = 0;
 
     Layout();
+
+    FixOSXCancelButtonIssue();
 }
 
 

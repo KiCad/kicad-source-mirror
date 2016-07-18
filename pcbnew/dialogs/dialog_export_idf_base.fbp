@@ -1205,7 +1205,7 @@
                         <property name="Save">0</property>
                         <property name="Yes">0</property>
                         <property name="minimum_size"></property>
-                        <property name="name">m_sdbSizer1</property>
+                        <property name="name">m_sdbSizer</property>
                         <property name="permission">protected</property>
                         <event name="OnApplyButtonClick"></event>
                         <event name="OnCancelButtonClick"></event>
