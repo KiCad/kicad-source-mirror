@@ -44,9 +44,6 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     m_choiceUnits->SetFocus();
     m_sdbSizerOK->SetDefault();
 
-    // Dialog should not shrink beyond it's minimal size.
-    GetSizer()->SetSizeHints( this );
-
     // wxformbuilder doesn't seem to let us set minimal sizes. Copy the default
     // sizes into the minimal sizes, then, and autosize:
     for( int i = 0; i < m_fieldGrid->GetNumberCols(); ++i )
@@ -76,6 +73,11 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( SCH_EDIT_FRAME* parent ) :
     }
 
     Layout();
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

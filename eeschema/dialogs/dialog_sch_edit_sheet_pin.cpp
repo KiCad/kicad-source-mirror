@@ -48,6 +48,12 @@ DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( wxWindow* parent ) :
     m_textName->SetFocus();
     m_sdbSizerOK->SetDefault();
 
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
+
     // On some windows manager (Unity, XFCE), this dialog is
     // not always raised, depending on this dialog is run.
     // Force it to be raised
