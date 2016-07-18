@@ -39,9 +39,6 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
     m_choiceUnits->SetFocus();
     m_sdbSizerOK->SetDefault();
 
-    // Dialog should not shrink beyond it's minimal size.
-    GetSizer()->SetSizeHints( this );
-
     wxListItem col0;
     col0.SetId( 0 );
     col0.SetText( _( "Field Name" ) );
@@ -76,6 +73,11 @@ DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :
 
     fieldDefaultValueTextCtrl->Connect( wxEVT_KILL_FOCUS,
             wxFocusEventHandler( DIALOG_EESCHEMA_OPTIONS::OnEditControlKillFocus ), NULL, this );
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

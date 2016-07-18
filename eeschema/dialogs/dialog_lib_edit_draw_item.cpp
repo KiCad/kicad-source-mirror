@@ -37,6 +37,11 @@ DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( wxWindow* parent,
     // Required under wxGTK if we want to dismiss the dialog with the ESC key
     SetFocus();
     m_sdbSizer1OK->SetDefault();
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

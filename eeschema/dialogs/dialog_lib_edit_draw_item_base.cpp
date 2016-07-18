@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct  8 2012)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -21,7 +21,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("General"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	m_staticText1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	dlgBorderSizer->Add( m_staticText1, 0, wxALIGN_LEFT, 3 );
 	
@@ -39,7 +39,6 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	bSizer3->Add( 0, 0, 1, wxEXPAND, 3 );
 	
 	m_textWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textWidth->SetMaxLength( 0 ); 
 	bSizer3->Add( m_textWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_staticWidthUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -51,7 +50,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	
 	m_staticTextSharing = new wxStaticText( this, ID_M_STATICTEXTSHARING, _("Sharing"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSharing->Wrap( -1 );
-	m_staticTextSharing->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticTextSharing->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	dlgBorderSizer->Add( m_staticTextSharing, 0, wxTOP|wxBOTTOM, 5 );
 	
@@ -84,7 +83,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	
 	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Fill Style"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	m_staticText4->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText4->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	
 	dlgBorderSizer->Add( m_staticText4, 0, wxALIGN_LEFT|wxBOTTOM, 3 );
 	

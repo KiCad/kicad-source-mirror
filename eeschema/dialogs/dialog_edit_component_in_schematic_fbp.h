@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -85,6 +85,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnTestChipName( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectChipName( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SetInitCmp( wxCommandEvent& event ) { event.Skip(); }

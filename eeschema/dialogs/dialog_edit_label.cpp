@@ -110,12 +110,10 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     m_CurrentText = aTextItem;
     InitDialog();
 
-    GetSizer()->SetSizeHints( this );
-    Layout();
-    Fit();
-    SetMinSize( GetBestSize() );
+    FixOSXCancelButtonIssue();
 
-    Centre();
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

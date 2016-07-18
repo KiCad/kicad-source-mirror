@@ -49,8 +49,10 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
 
     initDlg();
 
-    GetSizer()->SetSizeHints( this );
-    Center();
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

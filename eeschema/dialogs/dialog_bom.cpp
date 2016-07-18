@@ -218,8 +218,10 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     m_config = Kiface().KifaceSettings();
     installPluginsList();
 
-    GetSizer()->Fit( this );
-    Centre();
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 DIALOG_BOM::~DIALOG_BOM()

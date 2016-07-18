@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version May 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -229,7 +229,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel1->SetSizer( p1mainSizer );
 	m_panel1->Layout();
 	p1mainSizer->Fit( m_panel1 );
-	m_notebook->AddPage( m_panel1, _("General Options"), false );
+	m_notebook->AddPage( m_panel1, _("General Options"), true );
 	m_panel2 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panel2->SetToolTip( _("User defined field names for schematic components. ") );
 	
@@ -274,7 +274,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel2->SetSizer( bSizer6 );
 	m_panel2->Layout();
 	bSizer6->Fit( m_panel2 );
-	m_notebook->AddPage( m_panel2, _("Template Field Names"), true );
+	m_notebook->AddPage( m_panel2, _("Template Field Names"), false );
 	
 	bOptionsSizer->Add( m_notebook, 1, wxALL|wxEXPAND, 5 );
 	
