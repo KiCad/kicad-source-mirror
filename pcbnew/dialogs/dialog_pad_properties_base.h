@@ -162,6 +162,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void PadTypeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadShapeSelection( wxCommandEvent& event ) { event.Skip(); }

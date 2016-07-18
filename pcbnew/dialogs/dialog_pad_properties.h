@@ -119,6 +119,15 @@ private:
     /// Update the graphical pad shown in the panel.
     void OnValuesChanged( wxCommandEvent& event );
 
+    void OnInitDlg( wxInitDialogEvent& event )
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
+
     /// Updates the different parameters for the component being edited.
     /// Automatically fired from the OK button click.
     bool TransferDataFromWindow();

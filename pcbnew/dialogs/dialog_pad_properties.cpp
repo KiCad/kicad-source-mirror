@@ -148,10 +148,10 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     }
 
     initValues();
-    TransferDataToWindow();
+
+    FixOSXCancelButtonIssue();
 
     m_sdbSizerOK->SetDefault();
-    GetSizer()->SetSizeHints( this );
 
     m_PadNumCtrl->SetFocus();
     m_canUpdate = true;
