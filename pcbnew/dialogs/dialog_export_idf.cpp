@@ -106,13 +106,12 @@ public:
             m_IDF_Yref->Enable( true );
         }
 
-        wxWindow* button = FindWindowByLabel( wxT( "OK" ) );
+        m_sdbSizerOK->SetDefault();
 
-        if( button )
-            SetDefaultItem( button );
+        FixOSXCancelButtonIssue();
 
-        GetSizer()->SetSizeHints( this );
-        Centre();
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
     }
 
     ~DIALOG_EXPORT_IDF3()

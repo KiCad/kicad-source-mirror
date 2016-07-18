@@ -60,9 +60,12 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
     m_Parent = parent;
 
     init();
-
     m_sdbSizerOK->SetDefault();
-    GetSizer()->SetSizeHints( this );
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 void DIALOG_DISPLAY_OPTIONS::init()

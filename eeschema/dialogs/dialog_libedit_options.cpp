@@ -42,6 +42,11 @@ DIALOG_LIBEDIT_OPTIONS::DIALOG_LIBEDIT_OPTIONS( LIB_EDIT_FRAME* parent ) :
     SetRepeatLabelInc( Parent()->GetRepeatDeltaLabel() );
     SetItemRepeatStep( Parent()->GetRepeatStep() );
     SetPinRepeatStep( Parent()->GetRepeatPinStep() );
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 void DIALOG_LIBEDIT_OPTIONS::SetGridSizes( const GRIDS& grid_sizes, int grid_id )

@@ -71,8 +71,11 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     m_NoteBook->SetSelection( m_page );
 
     m_sdbSizerStdButtonsOK->SetDefault();
-    GetSizer()->SetSizeHints( this );
-    Centre();
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

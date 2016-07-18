@@ -198,10 +198,13 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     initValues();
 
     m_sdbSizer1OK->SetDefault();
-    GetSizer()->SetSizeHints( this );
-
     m_PadNumCtrl->SetFocus();
     m_canUpdate = true;
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
