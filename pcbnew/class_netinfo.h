@@ -30,15 +30,14 @@
  *  Classes to handle info on nets
  */
 
-#ifndef __CLASSES_NETINFO__
-#define __CLASSES_NETINFO__
+#ifndef CLASS_NETINFO_
+#define CLASS_NETINFO_
 
-
+#include <macros.h>
 #include <gr_basic.h>
 #include <class_netclass.h>
 #include <class_board_item.h>
-#include <boost/unordered_map.hpp>
-#include <hashtables.h>
+
 
 
 class wxDC;
@@ -46,7 +45,6 @@ class wxPoint;
 class LINE_READER;
 class EDA_DRAW_PANEL;
 class EDA_DRAW_FRAME;
-class NETINFO_ITEM;
 class D_PAD;
 class BOARD;
 class BOARD_ITEM;
@@ -117,363 +115,7 @@ public:
 };
 
 
-class NETINFO_MAPPING
-{
-public:
-    NETINFO_MAPPING()
-    {
-        m_board = NULL;
-    }
-
-
-    /**
-     * Function SetBoard
-     * Sets a BOARD object that is used to prepare the net code map.
-     */
-    void SetBoard( const BOARD* aBoard )
-    {
-        m_board = aBoard;
-        Update();
-    }
-
-    /**
-     * Function Update
-     * Prepares a mapping for net codes so they can be saved as consecutive numbers.
-     * To retrieve a mapped net code, use translateNet() function after calling this.
-     */
-    void Update();
-
-    /**
-     * Function Translate
-     * Translates net number according to the map prepared by Update() function. It
-     * allows to have items stored with consecutive net codes.
-     * @param aNetCode is an old net code.
-     * @return Net code that follows the mapping.
-     */
-    int Translate( int aNetCode ) const;
-
-#ifndef SWIG
-    ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
-    ///> std::pair<int/wxString, NETINFO_ITEM*>
-    class iterator
-    {
-    public:
-        iterator( std::map<int, int>::const_iterator aIter, const NETINFO_MAPPING* aMapping ) :
-            m_iterator( aIter ), m_mapping( aMapping )
-        {
-        }
-
-        /// pre-increment operator
-        const iterator& operator++()
-        {
-            ++m_iterator;
-
-            return *this;
-        }
-
-        /// post-increment operator
-        iterator operator++( int )
-        {
-            iterator ret = *this;
-            ++m_iterator;
-
-            return ret;
-        }
-
-        NETINFO_ITEM* operator*() const;
-
-        NETINFO_ITEM* operator->() const;
-
-        bool operator!=( const iterator& aOther ) const
-        {
-            return m_iterator != aOther.m_iterator;
-        }
-
-        bool operator==( const iterator& aOther ) const
-        {
-            return m_iterator == aOther.m_iterator;
-        }
-
-    private:
-        std::map<int, int>::const_iterator m_iterator;
-        const NETINFO_MAPPING* m_mapping;
-    };
-
-    /**
-     * Function begin()
-     * Returns iterator to the first entry in the mapping.
-     * NOTE: The entry is a pointer to the original NETINFO_ITEM object, this it contains
-     * not mapped net code.
-     */
-    iterator begin() const
-    {
-        return iterator( m_netMapping.begin(), this );
-    }
-
-    /**
-     * Function end()
-     * Returns iterator to the last entry in the mapping.
-     * NOTE: The entry is a pointer to the original NETINFO_ITEM object, this it contains
-     * not mapped net code.
-     */
-    iterator end() const
-    {
-        return iterator( m_netMapping.end(), this );
-    }
-#endif
-
-    /**
-     * Function GetSize
-     * @return Number of mapped nets (i.e. not empty nets for a given BOARD object).
-     */
-    int GetSize() const
-    {
-        return m_netMapping.size();
-    }
-
-private:
-    ///> Board for which mapping is prepared
-    const BOARD* m_board;
-
-    ///> Map that allows saving net codes with consecutive numbers (for compatibility reasons)
-    std::map<int, int> m_netMapping;
-};
-
-
-/**
- * Class NETINFO_LIST
- * is a container class for NETINFO_ITEM elements, which are the nets.  That makes
- * this class a container for the nets.
- */
-class NETINFO_LIST
-{
-    friend class BOARD;
-
-public:
-    NETINFO_LIST( BOARD* aParent );
-    ~NETINFO_LIST();
-
-    /**
-     * Function GetItem
-     * @param aNetCode = netcode to identify a given NETINFO_ITEM
-     * @return NETINFO_ITEM* - by \a aNetCode, or NULL if not found
-     */
-    NETINFO_ITEM* GetNetItem( int aNetCode ) const
-    {
-        NETCODES_MAP::const_iterator result = m_netCodes.find( aNetCode );
-
-        if( result != m_netCodes.end() )
-            return (*result).second;
-
-        return NULL;
-    }
-
-    /**
-     * Function GetItem
-     * @param aNetName = net name to identify a given NETINFO_ITEM
-     * @return NETINFO_ITEM* - by \a aNetName, or NULL if not found
-     */
-    NETINFO_ITEM* GetNetItem( const wxString& aNetName ) const
-    {
-        NETNAMES_MAP::const_iterator result = m_netNames.find( aNetName );
-
-        if( result != m_netNames.end() )
-            return (*result).second;
-
-        return NULL;
-    }
-
-    /**
-     * Function GetNetCount
-     * @return the number of nets ( always >= 1 )
-     * because the first net is the "not connected" net and always exists
-     */
-    unsigned GetNetCount() const { return m_netNames.size(); }
-
-    /**
-     * Function AppendNet
-     * adds \a aNewElement to the end of the net list. Negative net code means it is going to be
-     * auto-assigned.
-     */
-    void AppendNet( NETINFO_ITEM* aNewElement );
-
-    /**
-     * Function RemoveNet
-     * Removes a new from the net list.
-     */
-    void RemoveNet( NETINFO_ITEM* aNet );
-    /**
-     * Function GetPadCount
-     * @return the number of pads in board
-     */
-    unsigned GetPadCount() const  { return m_PadsFullList.size(); }
-
-    /**
-     * Function GetPads
-     * returns a list of all the pads (so long as buildPadsFullList() has
-     * been recently called).  Returned list contains non-owning pointers.
-     * @return std::vector<D_PAD*>& - a full list of pads
-    std::vector<D_PAD*>& GetPads()
-    {
-        return m_PadsFullList;
-    }
-     */
-
-    /**
-     * Function GetPad
-     * @return the pad idx from m_PadsFullList
-     */
-    D_PAD* GetPad( unsigned aIdx ) const
-    {
-        if( aIdx < m_PadsFullList.size() )
-            return m_PadsFullList[aIdx];
-        else
-            return NULL;
-    }
-
-    bool DeletePad( D_PAD* aPad )
-    {
-        std::vector<D_PAD*>::iterator it  = m_PadsFullList.begin();
-        std::vector<D_PAD*>::iterator end = m_PadsFullList.end();
-
-        for( ; it != end;  ++it )
-        {
-            if( *it == aPad )
-            {
-                m_PadsFullList.erase( it );
-                return true;
-            }
-        }
-        return false;
-    }
-
-    ///> Constant that holds the "unconnected net" number (typically 0)
-    ///> all items "connected" to this net are actually not connected items
-    static const int UNCONNECTED;
-
-    ///> Constant that forces initialization of a netinfo item to the NETINFO_ITEM ORPHANED
-    ///> (typically -1) when calling SetNetCode od board connected items
-    static const int ORPHANED;
-
-    ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
-    ///> board storing net list available.
-    static NETINFO_ITEM ORPHANED_ITEM;
-
-#if defined(DEBUG)
-    void Show() const;
-#endif
-
-    typedef boost::unordered_map<const wxString, NETINFO_ITEM*, WXSTRING_HASH> NETNAMES_MAP;
-    typedef boost::unordered_map<const int, NETINFO_ITEM*> NETCODES_MAP;
-
-#ifndef SWIG
-    ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
-    ///> std::pair<int/wxString, NETINFO_ITEM*>
-    class iterator
-    {
-    public:
-        iterator( NETNAMES_MAP::const_iterator aIter ) : m_iterator( aIter )
-        {
-        }
-
-        /// pre-increment operator
-        const iterator& operator++()
-        {
-            ++m_iterator;
-
-            return *this;
-        }
-
-        /// post-increment operator
-        iterator operator++( int )
-        {
-            iterator ret = *this;
-            ++m_iterator;
-
-            return ret;
-        }
-
-        NETINFO_ITEM* operator*() const
-        {
-            return m_iterator->second;
-        }
-
-        NETINFO_ITEM* operator->() const
-        {
-            return m_iterator->second;
-        }
-
-        bool operator!=( const iterator& aOther ) const
-        {
-            return m_iterator != aOther.m_iterator;
-        }
-
-        bool operator==( const iterator& aOther ) const
-        {
-            return m_iterator == aOther.m_iterator;
-        }
-
-    private:
-        NETNAMES_MAP::const_iterator m_iterator;
-    };
-
-    iterator begin() const
-    {
-        return iterator( m_netNames.begin() );
-    }
-
-    iterator end() const
-    {
-        return iterator( m_netNames.end() );
-    }
-#endif
-
-    BOARD* GetParent() const
-    {
-        return m_Parent;
-    }
-
-private:
-    /**
-     * Function clear
-     * deletes the list of nets (and free memory)
-     */
-    void clear();
-
-    /**
-     * Function buildListOfNets
-     * builds or rebuilds the list of NETINFO_ITEMs
-     * The list is sorted by names.
-     */
-    void buildListOfNets();
-
-    /**
-     * Function buildPadsFullList
-     * creates the pad list, and initializes:
-     *   m_Pads (list of pads)
-     * set m_Status_Pcb = LISTE_PAD_OK;
-     * and clear for all pads in list the m_SubRatsnest member;
-     * clear m_Pcb->m_FullRatsnest
-     */
-    void buildPadsFullList();
-
-    /**
-     * Function getFreeNetCode
-     * returns the first available net code that is not used by any other net.
-     */
-    int getFreeNetCode();
-
-    BOARD* m_Parent;
-
-    NETNAMES_MAP m_netNames;                    ///< map for a fast look up by net names
-    NETCODES_MAP m_netCodes;                    ///< map for a fast look up by net codes
-
-    std::vector<D_PAD*> m_PadsFullList;         ///< contains all pads, sorted by pad's netname.
-                                                ///< can be used in ratsnest calculations.
-
-    int m_newNetCode;                           ///< possible value for new net code assignment
-};
-
+DECL_VEC_FOR_SWIG( D_PADS, D_PAD* )
 
 /**
  * Class NETINFO_ITEM
@@ -496,10 +138,11 @@ private:
                                 // item of the net classes list
     NETCLASSPTR m_NetClass;
 
-    BOARD* m_parent;            ///< The parent board the net belongs to.
+    BOARD*  m_parent;           ///< The parent board the net belongs to.
 
 public:
-    std::vector<D_PAD*> m_PadInNetList;    ///< List of pads connected to this net
+
+    D_PADS  m_PadInNetList;     ///< List of pads connected to this net
 
     unsigned m_RatsnestStartIdx;       /* Starting point of ratsnests of this
                                         * net (included) in a general buffer of
@@ -705,7 +348,340 @@ public:
     {
         return m_parent;
     }
+};
 
+
+#ifndef SWIG
+
+class NETINFO_MAPPING
+{
+public:
+    NETINFO_MAPPING()
+    {
+        m_board = NULL;
+    }
+
+
+    /**
+     * Function SetBoard
+     * Sets a BOARD object that is used to prepare the net code map.
+     */
+    void SetBoard( const BOARD* aBoard )
+    {
+        m_board = aBoard;
+        Update();
+    }
+
+    /**
+     * Function Update
+     * Prepares a mapping for net codes so they can be saved as consecutive numbers.
+     * To retrieve a mapped net code, use translateNet() function after calling this.
+     */
+    void Update();
+
+    /**
+     * Function Translate
+     * Translates net number according to the map prepared by Update() function. It
+     * allows to have items stored with consecutive net codes.
+     * @param aNetCode is an old net code.
+     * @return Net code that follows the mapping.
+     */
+    int Translate( int aNetCode ) const;
+
+#ifndef SWIG
+    ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
+    ///> std::pair<int/wxString, NETINFO_ITEM*>
+    class iterator
+    {
+    public:
+        iterator( std::map<int, int>::const_iterator aIter, const NETINFO_MAPPING* aMapping ) :
+            m_iterator( aIter ), m_mapping( aMapping )
+        {
+        }
+
+        /// pre-increment operator
+        const iterator& operator++()
+        {
+            ++m_iterator;
+
+            return *this;
+        }
+
+        /// post-increment operator
+        iterator operator++( int )
+        {
+            iterator ret = *this;
+            ++m_iterator;
+
+            return ret;
+        }
+
+        NETINFO_ITEM* operator*() const;
+
+        NETINFO_ITEM* operator->() const;
+
+        bool operator!=( const iterator& aOther ) const
+        {
+            return m_iterator != aOther.m_iterator;
+        }
+
+        bool operator==( const iterator& aOther ) const
+        {
+            return m_iterator == aOther.m_iterator;
+        }
+
+    private:
+        std::map<int, int>::const_iterator m_iterator;
+        const NETINFO_MAPPING* m_mapping;
+    };
+
+    /**
+     * Function begin()
+     * Returns iterator to the first entry in the mapping.
+     * NOTE: The entry is a pointer to the original NETINFO_ITEM object, this it contains
+     * not mapped net code.
+     */
+    iterator begin() const
+    {
+        return iterator( m_netMapping.begin(), this );
+    }
+
+    /**
+     * Function end()
+     * Returns iterator to the last entry in the mapping.
+     * NOTE: The entry is a pointer to the original NETINFO_ITEM object, this it contains
+     * not mapped net code.
+     */
+    iterator end() const
+    {
+        return iterator( m_netMapping.end(), this );
+    }
+#endif
+
+    /**
+     * Function GetSize
+     * @return Number of mapped nets (i.e. not empty nets for a given BOARD object).
+     */
+    int GetSize() const
+    {
+        return m_netMapping.size();
+    }
+
+private:
+    ///> Board for which mapping is prepared
+    const BOARD* m_board;
+
+    ///> Map that allows saving net codes with consecutive numbers (for compatibility reasons)
+    std::map<int, int> m_netMapping;
+};
+
+#endif  // SWIG
+
+
+#if 0
+// waiting for swig to support std::unordered_map, see
+// http://www.swig.org/Doc3.0/CPlusPlus11.html
+// section 7.3.3
+#include <hashtables.h>
+DECL_HASH_FOR_SWIG( NETNAMES_MAP, wxString,  NETINFO_ITEM* )
+DECL_HASH_FOR_SWIG( NETCODES_MAP, int,       NETINFO_ITEM* )
+#else
+// use std::map for now
+DECL_MAP_FOR_SWIG( NETNAMES_MAP, wxString,  NETINFO_ITEM* )
+DECL_MAP_FOR_SWIG( NETCODES_MAP, int,       NETINFO_ITEM* )
+#endif
+
+/**
+ * Class NETINFO_LIST
+ * is a container class for NETINFO_ITEM elements, which are the nets.  That makes
+ * this class a container for the nets.
+ */
+class NETINFO_LIST
+{
+    friend class BOARD;
+
+public:
+    NETINFO_LIST( BOARD* aParent );
+    ~NETINFO_LIST();
+
+    /**
+     * Function GetItem
+     * @param aNetCode = netcode to identify a given NETINFO_ITEM
+     * @return NETINFO_ITEM* - by \a aNetCode, or NULL if not found
+     */
+    NETINFO_ITEM* GetNetItem( int aNetCode ) const;
+
+    /**
+     * Function GetItem
+     * @param aNetName = net name to identify a given NETINFO_ITEM
+     * @return NETINFO_ITEM* - by \a aNetName, or NULL if not found
+     */
+    NETINFO_ITEM* GetNetItem( const wxString& aNetName ) const;
+
+    /**
+     * Function GetNetCount
+     * @return the number of nets ( always >= 1 )
+     * because the first net is the "not connected" net and always exists
+     */
+    unsigned GetNetCount() const { return m_netNames.size(); }
+
+    /**
+     * Function AppendNet
+     * adds \a aNewElement to the end of the net list. Negative net code means it is going to be
+     * auto-assigned.
+     */
+    void AppendNet( NETINFO_ITEM* aNewElement );
+
+    /**
+     * Function RemoveNet
+     * Removes a new from the net list.
+     */
+    void RemoveNet( NETINFO_ITEM* aNet );
+    /**
+     * Function GetPadCount
+     * @return the number of pads in board
+     */
+    unsigned GetPadCount() const                { return m_PadsFullList.size(); }
+
+    /**
+     * Function GetPads
+     * returns a list of all the pads (so long as buildPadsFullList() has
+     * been recently called).  Returned list contains non-owning pointers.
+     * @return D_PADS& - a full list of pads
+     */
+    const D_PADS& GetPads() const  { return m_PadsFullList; }
+
+    /// Return the name map, at least for python.
+    const NETNAMES_MAP& GetNets() const         { return  m_netNames; }
+
+    /**
+     * Function GetPad
+     * @return D_PAD* - the pad from m_PadsFullList or nullptr if bad @a aIdx
+     */
+    D_PAD* GetPad( unsigned aIdx ) const;
+
+    bool DeletePad( D_PAD* aPad );
+
+    ///> Constant that holds the "unconnected net" number (typically 0)
+    ///> all items "connected" to this net are actually not connected items
+    static const int UNCONNECTED;
+
+    ///> Constant that forces initialization of a netinfo item to the NETINFO_ITEM ORPHANED
+    ///> (typically -1) when calling SetNetCode od board connected items
+    static const int ORPHANED;
+
+    ///> NETINFO_ITEM meaning that there was no net assigned for an item, as there was no
+    ///> board storing net list available.
+    static NETINFO_ITEM ORPHANED_ITEM;
+
+#if defined(DEBUG)
+    void Show() const;
+#endif
+
+#ifndef SWIG
+    ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
+    ///> std::pair<int/wxString, NETINFO_ITEM*>
+    class iterator
+    {
+    public:
+        iterator( NETNAMES_MAP::const_iterator aIter ) : m_iterator( aIter )
+        {
+        }
+
+        /// pre-increment operator
+        const iterator& operator++()
+        {
+            ++m_iterator;
+            return *this;
+        }
+
+        /// post-increment operator
+        iterator operator++( int )
+        {
+            iterator ret = *this;
+            ++m_iterator;
+            return ret;
+        }
+
+        NETINFO_ITEM* operator*() const
+        {
+            return m_iterator->second;
+        }
+
+        NETINFO_ITEM* operator->() const
+        {
+            return m_iterator->second;
+        }
+
+        bool operator!=( const iterator& aOther ) const
+        {
+            return m_iterator != aOther.m_iterator;
+        }
+
+        bool operator==( const iterator& aOther ) const
+        {
+            return m_iterator == aOther.m_iterator;
+        }
+
+    private:
+        NETNAMES_MAP::const_iterator m_iterator;
+    };
+
+    iterator begin() const
+    {
+        return iterator( m_netNames.begin() );
+    }
+
+    iterator end() const
+    {
+        return iterator( m_netNames.end() );
+    }
+#endif
+
+    BOARD* GetParent() const
+    {
+        return m_Parent;
+    }
+
+private:
+    /**
+     * Function clear
+     * deletes the list of nets (and free memory)
+     */
+    void clear();
+
+    /**
+     * Function buildListOfNets
+     * builds or rebuilds the list of NETINFO_ITEMs
+     * The list is sorted by names.
+     */
+    void buildListOfNets();
+
+    /**
+     * Function buildPadsFullList
+     * creates the pad list, and initializes:
+     *   m_Pads (list of pads)
+     * set m_Status_Pcb = LISTE_PAD_OK;
+     * and clear for all pads in list the m_SubRatsnest member;
+     * clear m_Pcb->m_FullRatsnest
+     */
+    void buildPadsFullList();
+
+    /**
+     * Function getFreeNetCode
+     * returns the first available net code that is not used by any other net.
+     */
+    int getFreeNetCode();
+
+    BOARD* m_Parent;
+
+    NETNAMES_MAP m_netNames;        ///< map of <wxString, NETINFO_ITEM*>, is NETINFO_ITEM owner
+    NETCODES_MAP m_netCodes;        ///< map of <int, NETINFO_ITEM*> is NOT owner
+
+    D_PADS  m_PadsFullList;         ///< contains all pads, sorted by pad's netname.
+                                    ///< can be used in ratsnest calculations.
+
+    int m_newNetCode;               ///< possible value for new net code assignment
 };
 
 
@@ -731,4 +707,4 @@ enum StatusPcbFlags {
 };
 
 
-#endif  // __CLASSES_NETINFO__
+#endif  // CLASS_NETINFO_

@@ -176,7 +176,7 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
 }
 
 
-void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK_PTRS* aList )
+void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACKS* aList )
 {
     LSET    layer_set = aLayerSet;
 
@@ -1608,7 +1608,7 @@ TRACK* BOARD::GetVisibleTrack( TRACK* aStartingTrace, const wxPoint& aPosition,
 
 
 #if defined(DEBUG) && 0
-static void dump_tracks( const char* aName, const TRACK_PTRS& aList )
+static void dump_tracks( const char* aName, const TRACKS& aList )
 {
     printf( "%s: count=%zd\n", aName, aList.size() );
 
@@ -1634,7 +1634,7 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
                          double* aTraceLength, double* aPadToDieLength,
                          bool    aReorder )
 {
-    TRACK_PTRS trackList;
+    TRACKS trackList;
 
     if( aCount )
         *aCount = 0;
@@ -1704,8 +1704,8 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
     }
     else    // mark the chain using both ends of the initial segment
     {
-        TRACK_PTRS  from_start;
-        TRACK_PTRS  from_end;
+        TRACKS  from_start;
+        TRACKS  from_end;
 
         chainMarkedSegments( aTrace->GetStart(), layer_set, &from_start );
         chainMarkedSegments( aTrace->GetEnd(),   layer_set, &from_end );

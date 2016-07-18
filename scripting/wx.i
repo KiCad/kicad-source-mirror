@@ -166,8 +166,9 @@ public:
         wxPoint __sub__(const wxPoint& pt) {   return *self - pt;  }
 
         void Set(long x, long y) {  self->x = x;     self->y = y;  }
+
         PyObject* Get()
-    {
+        {
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->x));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->y));
@@ -199,21 +200,78 @@ public:
 
 /* they handle the conversion from/to strings */
 
-%typemap(in) wxChar {   wxString str = Py2wxString($input); $1 = str[0];   }
+%typemap(in)  wxChar {  wxString str = Py2wxString($input); $1 = str[0];   }
 %typemap(out) wxChar {  wxString str($1);      $result = wx2PyString(str); }
 
-// wxString wrappers /////////////////////////////////////////////////////////
 
-%typemap(out) wxString&
+// wxString /////////////////////////////////////////////////////////
+
+/*
+    The wxString typemaps below are sufficient to handle two cases but not
+    a third.
+
+    1) Arguments into wrapped C++ functions taking wxString as parameters can be
+    passed as python strings, not wxString. In fact you cannot create a wxString
+    from python, only in C++.
+
+    2) Wrapped C++ functions returning wxString will have that wxString
+    converted to a python unicode or string automatically.
+
+    Both of these features are a result of the wxString typemaps below. Note
+    that this philosophy is very agreeable, and is consistent with the
+    philosophy adopted by wxPython. In fact one might wish that KiCad did not
+    use wxString in any of its data structures, and merely used UTF8s, which
+    will convert automatically to and from wxString when needed.
+
+    There is another case that typemaps to not address, and no, this is not the
+    construction of wxString from python, but rather the examination of wxString
+    in situ, i.e. in a data structure within the BOARD. It does not match either
+    case above. So the class wxString {} spec block below is in here to allow
+    examination of a wxString's value when operating python interactively or
+    when printing a value in situ that was not returned from a wrapped function.
+    Remember wxString return values of functions are converted by the typemaps.
+
+    No wxString constructor is given to SWIG, since wxString contruction is
+    always done in C++, but python needs to know that it can delete a wxString
+    when necessary. And most importantly we need to see a string's contents so
+    the __str__() function must show content.
+
+*/
+
+class wxString
 {
-%#if wxUSE_UNICODE
-    $result = PyUnicode_FromWideChar($1->c_str(), $1->Len());
-%#else
-    $result = PyString_FromStringAndSize($1->c_str(), $1->Len());
-%#endif
+public:
+    // this is not C++ source, it is SWIG interface spec
+    virtual ~wxString();
+
+    %extend
+    {
+        PyObject* __str__()
+        {
+    %#if wxUSE_UNICODE
+            return PyUnicode_FromWideChar( $self->c_str(), $self->Len() );
+    %#else
+            return PyString_FromStringAndSize( $self->c_str(), $self->Len() );
+    %#endif
+        }
+    }
+
+    %pythoncode
+    {
+        def __repr__(self):     return 'wxString(\'' + self.__str__() + '\')'
+    }
+};
+
+
+// wxString typemaps
+
+%typemap(in) wxString {
+    wxString* sptr = newWxStringFromPy($input);
+    if (sptr == NULL) SWIG_fail;
+    $1 = *sptr;
+    delete sptr;
 }
 
-%apply wxString& { wxString* }
 
 %typemap(out) wxString
 {
@@ -224,6 +282,7 @@ public:
 %#endif
 }
 
+
 %typemap(varout) wxString
 {
 %#if wxUSE_UNICODE
@@ -233,11 +292,22 @@ public:
 %#endif
 }
 
+
 %typemap(in) wxString& (bool temp=false)
 {
     $1 = newWxStringFromPy($input);
     if ($1 == NULL) SWIG_fail;
     temp = true;
+}
+
+
+%typemap(out) wxString&
+{
+%#if wxUSE_UNICODE
+    $result = PyUnicode_FromWideChar($1->c_str(), $1->Len());
+%#else
+    $result = PyString_FromStringAndSize($1->c_str(), $1->Len());
+%#endif
 }
 
 %typemap(freearg) wxString&
@@ -246,20 +316,14 @@ public:
         delete $1;
 }
 
-
-%typemap(in) wxString {
-    wxString* sptr = newWxStringFromPy($input);
-    if (sptr == NULL) SWIG_fail;
-    $1 = *sptr;
-    delete sptr;
-}
-
 %typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxString& {
     $1 = PyString_Check($input) || PyUnicode_Check($input);
 }
 
+%apply wxString& { wxString* }
 
-// wxArrayString wrappers //////////////////////////////////////////////////////
+
+// wxArrayString //////////////////////////////////////////////////////
 %typemap(in) wxArrayString& (bool temp=false) {
     if (!PySequence_Check($input))
     {

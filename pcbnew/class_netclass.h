@@ -34,6 +34,7 @@
 #include <set>
 #include <map>
 
+#include <macros.h>
 #include <wx/string.h>
 
 #include <richio.h>
@@ -207,7 +208,14 @@ public:
 #endif
 };
 
+
 typedef std::shared_ptr<NETCLASS> NETCLASSPTR;
+#ifdef SWIG
+%shared_ptr( NETCLASSPTR );
+#endif
+
+DECL_MAP_FOR_SWIG( NETCLASS_MAP, wxString, NETCLASSPTR );
+
 
 /**
  * Class NETCLASSES
@@ -218,10 +226,9 @@ typedef std::shared_ptr<NETCLASS> NETCLASSPTR;
 class NETCLASSES
 {
 private:
-    typedef std::map<wxString, NETCLASSPTR> NETCLASSMAP;
 
     /// all the NETCLASSes except the default one.
-    NETCLASSMAP             m_NetClasses;
+    NETCLASS_MAP             m_NetClasses;
 
     /// the default NETCLASS.
     NETCLASSPTR             m_Default;
@@ -239,11 +246,11 @@ public:
         m_NetClasses.clear();
     }
 
-    typedef NETCLASSMAP::iterator iterator;
+    typedef NETCLASS_MAP::iterator iterator;
     iterator begin() { return m_NetClasses.begin(); }
     iterator end()   { return m_NetClasses.end(); }
 
-    typedef NETCLASSMAP::const_iterator const_iterator;
+    typedef NETCLASS_MAP::const_iterator const_iterator;
     const_iterator begin() const { return m_NetClasses.begin(); }
     const_iterator end()   const { return m_NetClasses.end(); }
 

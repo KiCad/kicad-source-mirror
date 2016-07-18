@@ -119,7 +119,7 @@ bool NETCLASSES::Add( NETCLASSPTR aNetClass )
 
 NETCLASSPTR NETCLASSES::Remove( const wxString& aNetName )
 {
-    NETCLASSMAP::iterator found = m_NetClasses.find( aNetName );
+    NETCLASS_MAP::iterator found = m_NetClasses.find( aNetName );
 
     if( found != m_NetClasses.end() )
     {
@@ -137,7 +137,7 @@ NETCLASSPTR NETCLASSES::Find( const wxString& aName ) const
     if( aName == NETCLASS::Default )
         return m_Default;
 
-    NETCLASSMAP::const_iterator found = m_NetClasses.find( aName );
+    NETCLASS_MAP::const_iterator found = m_NetClasses.find( aName );
 
     if( found == m_NetClasses.end() )
         return NETCLASSPTR();

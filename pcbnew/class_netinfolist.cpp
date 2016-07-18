@@ -69,6 +69,28 @@ void NETINFO_LIST::clear()
 }
 
 
+NETINFO_ITEM* NETINFO_LIST::GetNetItem( int aNetCode ) const
+{
+    NETCODES_MAP::const_iterator result = m_netCodes.find( aNetCode );
+
+    if( result != m_netCodes.end() )
+        return (*result).second;
+
+    return NULL;
+}
+
+
+NETINFO_ITEM* NETINFO_LIST::GetNetItem( const wxString& aNetName ) const
+{
+    NETNAMES_MAP::const_iterator result = m_netNames.find( aNetName );
+
+    if( result != m_netNames.end() )
+        return (*result).second;
+
+    return NULL;
+}
+
+
 void NETINFO_LIST::RemoveNet( NETINFO_ITEM* aNet )
 {
     for( NETCODES_MAP::iterator i = m_netCodes.begin(); i != m_netCodes.end(); ++i )
@@ -118,6 +140,32 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
     // add an entry for fast look up by a net name using a map
     m_netNames.insert( std::make_pair( aNewElement->GetNetname(), aNewElement ) );
     m_netCodes.insert( std::make_pair( aNewElement->GetNet(), aNewElement ) );
+}
+
+
+D_PAD* NETINFO_LIST::GetPad( unsigned aIdx ) const
+{
+    if( aIdx < m_PadsFullList.size() )
+        return m_PadsFullList[aIdx];
+    else
+        return NULL;
+}
+
+
+bool NETINFO_LIST::DeletePad( D_PAD* aPad )
+{
+    std::vector<D_PAD*>::iterator it  = m_PadsFullList.begin();
+    std::vector<D_PAD*>::iterator end = m_PadsFullList.end();
+
+    for( ; it != end;  ++it )
+    {
+        if( *it == aPad )
+        {
+            m_PadsFullList.erase( it );
+            return true;
+        }
+    }
+    return false;
 }
 
 

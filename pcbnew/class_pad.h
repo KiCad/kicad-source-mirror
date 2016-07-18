@@ -581,6 +581,7 @@ private:    // Private variable members:
     // Actually computed and cached on demand by the accessor
     mutable int m_boundingRadius;  ///< radius of the circle containing the pad shape
 
+#ifndef SWIG
     /// Pad name (4 char) or a long identifier (used in pad name
     /// comparisons because this is faster than string comparison)
     union
@@ -589,6 +590,7 @@ private:    // Private variable members:
         char        m_Padname[PADNAMEZ];    // zero padded at end to full size
         wxUint32    m_NumPadName;           // same number of bytes as m_Padname[]
     };
+#endif
 
     wxPoint     m_Pos;              ///< pad Position on board
 

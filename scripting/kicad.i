@@ -31,13 +31,29 @@
 %include <std_basic_string.i>
 %include <std_string.i>
 %include <std_map.i>
+%include <std_shared_ptr.i>
 
-/* ignore some constructors of EDA_ITEM that will make the build fail */
+/*
+http://www.swig.org/Doc3.0/CPlusPlus11.html
+7.3.3 Hash tables
 
-%nodefaultctor EDA_ITEM;
+The new hash tables in the STL are unordered_set, unordered_multiset,
+unordered_map, unordered_multimap. These are not available in SWIG, but in
+principle should be easily implemented by adapting the current STL containers.
+
+%include <std_unordered_map.i>
+*/
+
+// ignore some constructors of EDA_ITEM that will make the build fail
+
+%nodefaultctor      EDA_ITEM;
 %ignore EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
 %ignore EDA_ITEM::EDA_ITEM( KICAD_T idType );
 %ignore EDA_ITEM::EDA_ITEM( const EDA_ITEM& base );
+
+
+%warnfilter(401)    EDA_ITEM;
+%warnfilter(509)    UTF8;
 
 /* swig tries to wrap SetBack/SetNext on derived classes, but this method is
    private for most childs, so if we don't ignore it won't compile */
@@ -45,7 +61,7 @@
 %ignore EDA_ITEM::SetBack;
 %ignore EDA_ITEM::SetNext;
 
-/* ignore other functions that cause trouble */
+// ignore other functions that cause trouble
 
 %ignore InitKiCadAbout;
 %ignore GetCommandOptions;
@@ -55,9 +71,10 @@
 %ignore operator=;
 
 
-/* headers/imports that must be included in the _wrapper.cpp at top */
+// headers/imports that must be included in the _wrapper.cpp at top
 
 %{
+    #include <macros.h>
     #include <cstddef>
     #include <dlist.h>
     #include <base_struct.h>
@@ -75,27 +92,13 @@
     #include <convert_to_biu.h>
 %}
 
-/* all the wx wrappers for wxString, wxPoint, wxRect, wxChar .. */
+// all the wx wrappers for wxString, wxPoint, wxRect, wxChar ..
 %include <wx.i>
 
-/* exception handling */
+// header files that must be wrapped
 
-/* the IO_ERROR exception handler, not working yet... */
-/*
-%exception
-{
-  try {
-  $function
-  }
-  catch (IO_ERROR e) {
-    PyErr_SetString(PyExc_IOError,"IO error");
-    return NULL;
-  }
-}
-*/
-
-/* header files that must be wrapped */
-
+%include <macros.h>
+%include <core/typeinfo.h>
 %include <dlist.h>
 %include <base_struct.h>
 %include <class_eda_rect.h>
@@ -104,13 +107,11 @@
 %include <class_colors_design_settings.h>
 %include <class_marker_base.h>
 %include <eda_text.h>
-%include <convert_to_biu.h>
-%include <fpid.h>
 
-/* special iteration wrapper for DLIST objects */
+// special iteration wrapper for DLIST objects
 %include "dlist.i"
 
-/* std template mappings */
+// std template mappings
 %template(intVector) std::vector<int>;
 %template(str_utf8_Map) std::map< std::string,UTF8 >;
 
@@ -120,7 +121,7 @@
 // TODO: wrapper of BASE_SET (see std::bitset<LAYER_ID_COUNT> BASE_SET;)
 
 
-/* KiCad plugin handling */
+// KiCad plugin handling
 %include "kicadplugins.i"
 
 // map CPolyLine and classes used in CPolyLine:

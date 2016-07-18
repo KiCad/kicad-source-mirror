@@ -445,6 +445,7 @@ public:
     };
 
 
+#ifndef SWIG
     /**
      * Class RELEASER
      * releases a PLUGIN in the context of a potential thrown exception, through
@@ -495,6 +496,7 @@ public:
             return plugin;
         }
     };
+#endif
 };
 
 #endif // IO_MGR_H_

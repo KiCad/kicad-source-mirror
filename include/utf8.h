@@ -126,6 +126,7 @@ public:
      */
     static int uni_forward( const unsigned char* aSequence, unsigned* aResult = NULL );
 
+#ifndef SWIG
     /**
      * class uni_iter
      * is a non-muting iterator that walks through unicode code points in the UTF8 encoded
@@ -225,6 +226,7 @@ public:
     {
         return uni_iter( data() + size() );
     }
+#endif  // SWIG
 };
 
 #endif // UTF8_H_

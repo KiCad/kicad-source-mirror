@@ -59,9 +59,6 @@ class REPORTER;
 class RN_DATA;
 class SHAPE_POLY_SET;
 
-// non-owning container of item candidates when searching for items on the same track.
-typedef std::vector< TRACK* >   TRACK_PTRS;
-
 
 /**
  * Enum LAYER_T
@@ -156,6 +153,11 @@ protected:
 };
 
 
+DECL_VEC_FOR_SWIG(MARKERS, MARKER_PCB*)
+DECL_VEC_FOR_SWIG(ZONE_CONTAINERS, ZONE_CONTAINER*)
+DECL_VEC_FOR_SWIG(TRACKS, TRACK*)
+
+
 /**
  * Class BOARD
  * holds information pertinent to a Pcbnew printed circuit board.
@@ -168,14 +170,8 @@ private:
     /// the board filename
     wxString                m_fileName;
 
-    // @todo: switch to boost:ptr_vector, and change ~BOARD()
-    typedef std::vector<MARKER_PCB*> MARKERS;
-
     /// MARKER_PCBs for clearance problems, owned by pointer.
     MARKERS                 m_markers;
-
-    // @todo: switch to boost::ptr_vector, and change ~BOARD()
-    typedef std::vector<ZONE_CONTAINER*> ZONE_CONTAINERS;
 
     /// edge zone descriptors, owned by pointer.
     ZONE_CONTAINERS         m_ZoneDescriptorList;
@@ -214,7 +210,7 @@ private:
      * @param aLayerSet The allowed layers for segments to search.
      * @param aList The track list to fill with points of flagged segments.
      */
-    void chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK_PTRS* aList );
+    void chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACKS* aList );
 
 public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
@@ -778,15 +774,12 @@ public:
 
     /**
      * Function GetPads
-     * returns a list of all the pads by value.  The returned list is not
+     * returns a reference to a list of all the pads.  The returned list is not
      * sorted and contains pointers to PADS, but those pointers do not convey
      * ownership of the respective PADs.
-     * @return std::vector<D_PAD*> - a full list of pads
+     * @return D_PADS - a full list of pads
      */
-    std::vector<D_PAD*> GetPads()
-    {
-        return m_NetInfo.m_PadsFullList;
-    }
+    const D_PADS& GetPads()     { return m_NetInfo.m_PadsFullList; }
 
     void BuildListOfNets()
     {

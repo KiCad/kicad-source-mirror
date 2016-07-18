@@ -104,6 +104,8 @@ public:
     { return (x != cpt2.x) || (y != cpt2.y) || (end_contour != cpt2.end_contour); }
 };
 
+
+#ifndef SWIG
 /**
  * CPOLYGONS_LIST handle a list of contours (polygons corners).
  * Each corner is a CPolyPt item.
@@ -205,6 +207,8 @@ public:
      */
     int GetContoursCount() const;
 };
+#endif
+
 
 class CPolyLine
 {

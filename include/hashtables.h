@@ -28,32 +28,10 @@
 #include <base_struct.h>
 #include <wx/string.h>
 
-// Three strategies for providing a portable hashtable are given.
-// C++, boost, and wx, in that order.  C++ solution is no good for mingw.
-// So boost seems best for all platforms.
+// Two competing strategies for providing portable hashtables are given:
+// std C++ and boost.
 
-
-#if 0   // C++ std::unordered_map, maybe in the future
-
-#include <unordered_map>
-
-
-/// Map a C string to an integer.  Used in DSNLEXER.
-typedef std::unordered_map< std::string, int >          KEYWORD_MAP;
-
-/// Map a C string to an EDA_RECT.
-/// The key is the classname of the derived wxformbuilder dialog.
-typedef std::unordered_map< std::string, EDA_RECT >     RECT_MAP;
-
-
-#elif 1     // boost::unordered_map
-
-// fix a compile bug at line 97 of boost/detail/container_fwd.hpp
-#define BOOST_DETAIL_TEST_FORCE_CONTAINER_FWD
-
-#include <boost/unordered_map.hpp>
-
-// see http://www.boost.org/doc/libs/1_49_0/doc/html/boost/unordered_map.html
+// First some utility classes and functions common to both strategies..
 
 /// Equality test for "const char*" type used in very specialized KEYWORD_MAP below
 struct iequal_to : std::binary_function< const char*, const char*, bool >
@@ -117,6 +95,57 @@ struct WXSTRING_HASH : std::unary_function<wxString, std::size_t>
 };
 
 
+class NETINFO_ITEM;
+
+
+#if 1   // C++ std::unordered_map, trying it now
+
+#include <unordered_map>
+
+
+#ifdef SWIG
+/// Declare a std::unordered_map and also the swig %template in unison
+#define DECL_HASH_FOR_SWIG(TypeName, KeyType, ValueType) namespace std { %template(TypeName) unordered_map<KeyType, ValueType>; } typedef std::unordered_map<KeyType, ValueType> TypeName;
+#else
+/// Declare a std::unordered_map but no swig %template
+#define DECL_HASH_FOR_SWIG(TypeName, KeyType, ValueType) typedef std::unordered_map<KeyType, ValueType> TypeName;
+#endif
+
+
+
+/**
+ * Type KEYWORD_MAP
+ * is a hashtable made of a const char* and an int.  Note that use of this
+ * type outside very specific circumstances is foolish since there is no storage
+ * provided for the actual C string itself.  This type assumes use with type KEYWORD
+ * that is created by CMake and that table creates *constant* storage for C strings
+ * (and pointers to those C strings).  Here we are only interested in the C strings
+ * themselves and only the pointers are duplicated within the hashtable.
+ * If the strings were not constant and fixed, this type would not work.
+ * Also note that normally a hashtable (i.e. unordered_map) using a const char* key
+ * would simply compare the 32 bit or 64 bit pointers themselves, rather than
+ * the C strings which they are known to point to in this context.
+ * I force the latter behavior by supplying both "hash" and "equality" overloads
+ * to the hashtable (unordered_map) template.
+ * @author Dick Hollenbeck
+ */
+typedef std::unordered_map< const char*, int, fnv_1a, iequal_to >   KEYWORD_MAP;
+
+/// Map a C string to an EDA_RECT.
+/// The key is the classname of the derived wxformbuilder dialog.
+typedef std::unordered_map< std::string, EDA_RECT >     RECT_MAP;
+
+
+#elif 1     // boost::unordered_map
+
+// fix a compile bug at line 97 of boost/detail/container_fwd.hpp
+#define BOOST_DETAIL_TEST_FORCE_CONTAINER_FWD
+
+#include <boost/unordered_map.hpp>
+
+// see http://www.boost.org/doc/libs/1_49_0/doc/html/boost/unordered_map.html
+
+
 /**
  * Type KEYWORD_MAP
  * is a hashtable made of a const char* and an int.  Note that use of this
@@ -139,6 +168,9 @@ typedef boost::unordered_map< const char*, int, fnv_1a, iequal_to >     KEYWORD_
 /// Map a std::string to an EDA_RECT.
 /// The key is the classname of the derived wxformbuilder dialog.
 typedef boost::unordered_map< std::string, EDA_RECT >  RECT_MAP;
+
+typedef boost::unordered_map< const wxString, NETINFO_ITEM*, WXSTRING_HASH > NETNAMES_MAP;
+typedef boost::unordered_map< const int, NETINFO_ITEM* > NETCODES_MAP;
 
 #endif
 

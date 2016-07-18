@@ -41,6 +41,7 @@
 #include <class_eda_rect.h>
 #include <functional>
 
+
 #if defined(DEBUG)
 #include <iostream>         // needed for Show()
 extern std::ostream& operator <<( std::ostream& out, const wxSize& size );
@@ -86,17 +87,20 @@ class MSG_PANEL_ITEM;
 /**
  * Typedef INSPECTOR
  * is used to inspect and possibly collect the
- * (search) results of Iterating over a list or tree of KICAD_T objects.
+ * (search) results of iterating over a list or tree of KICAD_T objects.
  * Provide an implementation as needed to inspect EDA_ITEMs visited via
- * the EDA_ITEM::Visit() and EDA_ITEM::IterateForward().
+ * EDA_ITEM::Visit() and EDA_ITEM::IterateForward().
  * <p>
- * The lambda function is used within the EDA_ITEM::Iterate() function.
- * It is used primarily for searching, but  not limited to that.  It can also
- * collect or modify the scanned objects.
+ * FYI the std::function may hold a lambda, std::bind, pointer to func, or
+ * ptr to member function, per modern C++. It is used primarily for searching,
+ * but not limited to that.  It can also collect or modify the scanned objects.
+ * 'Capturing' lambdas are particularly convenient because they can use context
+ * and this often means @a aTestData is not used.
  *
  * @param aItem An EDA_ITEM to examine.
  * @param aTestData is arbitrary data needed by the inspector to determine
- *                  if the EDA_ITEM under test meets its match criteria.
+ *  if the EDA_ITEM under test meets its match criteria, and is often NULL
+ *  with the advent of capturing lambdas.
  * @return A #SEARCH_RESULT type #SEARCH_QUIT if the iterator function is to
  *          stop the scan, else #SEARCH_CONTINUE;
  */

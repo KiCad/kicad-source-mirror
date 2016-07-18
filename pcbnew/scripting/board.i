@@ -70,7 +70,8 @@
 // std::vector templates
 
 %template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;
-%template (RATSNEST_Vector) std::vector<RATSNEST_ITEM>;
+%template(RATSNEST_Vector)      std::vector<RATSNEST_ITEM>;
+
 
 %extend BOARD
 {
@@ -115,3 +116,16 @@
         self.SetEnd0(end)
     }
 }
+
+
+%feature("notabstract")     NETINFO_ITEM;
+
+// http://swig.10945.n7.nabble.com/std-containers-and-pointers-td3728.html
+%{
+    namespace swig {
+        template <>  struct traits<NETINFO_ITEM> {
+            typedef pointer_category category;
+            static const char* type_name() { return "NETINFO_ITEM"; }
+        };
+    }
+%}

@@ -55,7 +55,8 @@ class EDA_ITEM;
 class COLLECTOR
 {
 protected:
-    INSPECTOR_FUNC  m_inspector;
+    /// a class common bridge into the polymorphic Inspect()
+    INSPECTOR_FUNC m_inspector;
 
     /// Which object types to scan
     const KICAD_T* m_ScanTypes;
@@ -75,7 +76,7 @@ protected:
 public:
     COLLECTOR() :
         // Inspect() is virtual so calling it from a class common inspector preserves polymorphism.
-        m_inspector( [=] ( EDA_ITEM* aItem, void* aTestData ) { return Inspect( aItem, aTestData ); } )
+        m_inspector( [=] ( EDA_ITEM* aItem, void* aTestData ) { return this->Inspect( aItem, aTestData ); } )
     {
         m_ScanTypes = 0;
         m_TimeAtCollection = 0;
