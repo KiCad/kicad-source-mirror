@@ -31,15 +31,11 @@
 #ifndef CLASS_NETCLASS_H
 #define CLASS_NETCLASS_H
 
-#include <set>
-#include <map>
 
 #include <macros.h>
-#include <wx/string.h>
-
-#include <richio.h>
-
+#include <set>
 #include <memory>
+#include <richio.h>
 
 
 class LINE_READER;
@@ -209,11 +205,7 @@ public:
 };
 
 
-typedef std::shared_ptr<NETCLASS> NETCLASSPTR;
-#ifdef SWIG
-%shared_ptr( NETCLASSPTR );
-#endif
-
+DECL_SPTR_FOR_SWIG( NETCLASSPTR, NETCLASS )
 DECL_MAP_FOR_SWIG( NETCLASS_MAP, wxString, NETCLASSPTR );
 
 

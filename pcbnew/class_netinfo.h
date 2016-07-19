@@ -142,6 +142,15 @@ private:
 
 public:
 
+    D_PADS& Pads()              { return m_PadInNetList; }
+
+    /**
+     * Function GetNodesCount
+     * @return int - number of pad nodes in the net
+     */
+    int GetNodesCount() const   { return m_PadInNetList.size(); }
+
+
     D_PADS  m_PadInNetList;     ///< List of pads connected to this net
 
     unsigned m_RatsnestStartIdx;       /* Starting point of ratsnests of this
@@ -301,12 +310,6 @@ public:
     int GetNet() const { return m_NetCode; }
 
     void SetNetCode( int aNetCode ) { m_NetCode = aNetCode; }
-
-    /**
-     * Function GetNodesCount
-     * @return int - number of nodes in the net
-     */
-    int GetNodesCount() const { return m_PadInNetList.size(); }
 
     /**
      * Function GetNetname
@@ -552,7 +555,10 @@ public:
     const D_PADS& GetPads() const  { return m_PadsFullList; }
 
     /// Return the name map, at least for python.
-    const NETNAMES_MAP& GetNets() const         { return  m_netNames; }
+    const NETNAMES_MAP& NetsByName() const      { return  m_netNames; }
+
+    /// Return the netcode map, at least for python.
+    const NETCODES_MAP& NetsByNetcode() const   { return m_netCodes; }
 
     /**
      * Function GetPad

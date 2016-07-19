@@ -1328,10 +1328,38 @@ public:
      *                 set (the user is responsible of flag clearing). False
      *                 for no reorder : useful when we want just calculate the
      *                 track length in this case, flags are reset
-     * @return TRACK* The first in the chain of interesting segments.
+     * @return TRACK* - The first in the chain of interesting segments.
      */
     TRACK* MarkTrace( TRACK* aTrace, int* aCount, double* aTraceLength,
                       double* aInPackageLength, bool aReorder );
+
+    /**
+     * Function TrackInNet
+     * collects all the TRACKs and VIAs that are members of a net given by aNetCode.
+     * Used from python.
+     * @param aList is a non-owning container that is appended to with the TRACKs and VIAs,
+     *  and is not initiallly cleared.
+     * @param aNetCode gives the id of the net.
+     * @return TRACKS - which are in the net identified by @a aNetCode.
+     */
+    TRACKS TracksInNet( int aNetCode );
+
+    /**
+     * Function TrackInNetBetweenPoints
+     * collects all the TRACKs and VIAs that are members of a net given by aNetCode and that
+     * make up a path between two end points.  The end points must be carefully chosen,
+     * and are typically the locations of two neighboring pads.  The function fails if there
+     * is an intervening pad or a 3 way intersection at a track or via.
+     * Used from python.
+     * @param aStartPos must correspond to a point on the BOARD which has a TRACK end or start,
+     *  typically the location of either a via or pad.
+     * @param aEndPos must correspond to a point on the BOARD which has a TRACK end or start,
+     *  typically the location of either a via or pad.
+     * @param aNetCode gives the id of the net.
+     * @return TRACKS - non empty if success, empty if your aStartPos or aEndPos are bad or
+     *  the net is interrupted along the way by an intervening D_PAD or a 3 way path.
+     */
+    TRACKS TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint& aEndPos, int aNetCode );
 
     /**
      * Function GetFootprint

@@ -176,6 +176,212 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
 }
 
 
+TRACKS BOARD::TracksInNet( int aNetCode )
+{
+    TRACKS ret;
+
+    INSPECTOR_FUNC inspector = [aNetCode,&ret] ( EDA_ITEM* item, void* testData )
+    {
+        TRACK*  t = (TRACK*) item;
+
+        if( t->GetNetCode() == aNetCode )
+            ret.push_back( t );
+
+        return SEARCH_CONTINUE;
+    };
+
+    // visit this BOARD's TRACKs and VIAs with above TRACK INSPECTOR which
+    // appends all in aNetCode to ret.
+    Visit( inspector, NULL, GENERAL_COLLECTOR::Tracks  );
+
+    return ret;
+}
+
+
+/**
+ * Function removeTrack
+ * removes aOneToRemove from aList, which is a non-owning std::vector
+ */
+static void removeTrack( TRACKS* aList, TRACK* aOneToRemove )
+{
+    aList->erase( std::remove( aList->begin(), aList->end(), aOneToRemove ), aList->end() );
+}
+
+
+static void otherEnd( const TRACK& aTrack, const wxPoint& aNotThisEnd, wxPoint* aOtherEnd )
+{
+    if( aTrack.GetStart() == aNotThisEnd )
+    {
+        *aOtherEnd = aTrack.GetEnd();
+    }
+    else
+    {
+        wxASSERT( aTrack.GetEnd() == aNotThisEnd );
+        *aOtherEnd = aTrack.GetStart();
+    }
+}
+
+
+/**
+ * Function find_vias_and_tracks_at
+ * collects TRACKs and VIAs at aPos and returns true if any were VIAs.
+ */
+static int find_vias_and_tracks_at( TRACKS& at_next, TRACKS& in_net, LSET& lset, const wxPoint& next )
+{
+    // first find all vias (in this net) at 'next' location, and expand LSET with each
+    for( TRACKS::iterator it = in_net.begin(); it != in_net.end();  )
+    {
+        TRACK* t = *it;
+
+        if( t->Type() == PCB_VIA_T && (t->GetLayerSet() & lset).any() &&
+            ( t->GetStart() == next || t->GetEnd() == next ) )
+        {
+            lset |= t->GetLayerSet();
+            at_next.push_back( t );
+            in_net.erase( it );
+        }
+        else
+            ++it;
+    }
+
+    int track_count = 0;
+
+    // with expanded lset, find all tracks with an end on any of the layers in lset
+    for( TRACKS::iterator it = in_net.begin();  it != in_net.end();  )
+    {
+        TRACK* t = *it;
+
+        if( (t->GetLayerSet() & lset).any() &&
+            ( t->GetStart() == next || t->GetEnd() == next ) )
+        {
+            at_next.push_back( t );
+            in_net.erase( it );
+            ++track_count;
+        }
+        else
+            ++it;
+    }
+
+    return track_count;
+}
+
+
+/**
+ * Function checkConnectedTo
+ * returns if aTracksInNet contains a copper pathway to aGoal when starting with
+ * aFirstTrack.  aFirstTrack should have one end situated on aStart, and the
+ * traversal testing begins from the other end of aFirstTrack.
+ * <p>
+ * The function throws an exception instead of returning bool so that detailed
+ * information can be provided about a possible failure in the track layout.
+ *
+ * @throw IO_ERROR - if points are not connected, with text saying why.
+ */
+static void checkConnectedTo( BOARD* aBoard, TRACKS* aList, const TRACKS& aTracksInNet,
+        const wxPoint& aGoal, const wxPoint& aStart, TRACK* aFirstTrack )
+{
+    TRACKS  in_net = aTracksInNet;      // copy source list so the copy can be modified
+    wxPoint next;
+
+    otherEnd( *aFirstTrack, aStart, &next );
+
+    aList->push_back( aFirstTrack );
+    removeTrack( &in_net, aFirstTrack );
+
+    LSET lset( aFirstTrack->GetLayer() );
+
+    while( in_net.size() )
+    {
+        if( next == aGoal )
+            return;             // success
+
+        if( aBoard->GetPad( next, lset ) )
+        {
+            std::string m = StrPrintf(
+                "there is an intervening pad at:(xy %s) between start:(xy %s) and goal:(xy %s)",
+                BOARD_ITEM::FormatInternalUnits( next ).c_str(),
+                BOARD_ITEM::FormatInternalUnits( aStart ).c_str(),
+                BOARD_ITEM::FormatInternalUnits( aGoal ).c_str()
+                );
+            THROW_IO_ERROR( m );
+        }
+
+        int track_count = find_vias_and_tracks_at( *aList, in_net, lset, next );
+
+        if( track_count != 1 )
+        {
+            std::string m = StrPrintf(
+                "found %d tracks intersecting at (xy %s), exactly 2 would be acceptable.",
+                track_count,
+                BOARD_ITEM::FormatInternalUnits( next ).c_str()
+                );
+            THROW_IO_ERROR( m );
+        }
+
+        // reduce lset down to the layer that the only track at 'next' is on.
+        lset = aList->back()->GetLayerSet();
+
+        otherEnd( *aList->back(), next, &next );
+    }
+
+    std::string m = StrPrintf(
+        "not enough tracks connecting start:(xy %s) and goal:(xy %s).",
+        BOARD_ITEM::FormatInternalUnits( aStart ).c_str(),
+        BOARD_ITEM::FormatInternalUnits( aGoal ).c_str()
+        );
+    THROW_IO_ERROR( m );
+}
+
+
+TRACKS BOARD::TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint& aEndPos, int aNetCode )
+{
+    TRACKS  in_between_pts;
+    TRACKS  on_start_pad;
+    TRACKS  in_net = TracksInNet( aNetCode );   // a small subset of TRACKs and VIAs
+
+    for( auto t : in_net )
+    {
+        if( t->Type() == PCB_TRACE_T && ( t->GetStart() == aStartPos || t->GetEnd() == aStartPos )  )
+            on_start_pad.push_back( t );
+    }
+
+    IO_ERROR last_error;
+
+    for( auto t : on_start_pad )
+    {
+        // checkConnectedTo() fills in_between_pts on every attempt.  For failures
+        // this set needs to be cleared.
+        in_between_pts.clear();
+
+        try
+        {
+            checkConnectedTo( this, &in_between_pts, in_net, aEndPos, aStartPos, t );
+        }
+        catch( const IO_ERROR& ioe )    // means not connected
+        {
+            last_error = ioe;
+            continue;           // keep trying, there may be other paths leaving from aStartPos
+        }
+
+        // success, no exception means a valid connection,
+        // return this set of TRACKS without throwing.
+        return in_between_pts;
+    }
+
+    if( on_start_pad.size() == 1 )
+        throw last_error;
+    else
+    {
+        std::string m = StrPrintf(
+            "no path connecting start:(xy %s) with end:(xy %s)",
+            BOARD_ITEM::FormatInternalUnits( aStartPos ).c_str(),
+            BOARD_ITEM::FormatInternalUnits( aEndPos ).c_str()
+            );
+        THROW_IO_ERROR( m );
+    }
+}
+
+
 void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACKS* aList )
 {
     LSET    layer_set = aLayerSet;
