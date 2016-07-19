@@ -131,7 +131,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( LAYER_ID aLayer,
                         int                    aInflateValue,
                         int                    aCircleToSegmentsCount,
                         double                 aCorrectionFactor,
-                        bool                   aSkipNPTHPadsWihNoCopper )
+                        bool                   aSkipNPTHPadsWihNoCopper ) const
 {
     D_PAD* pad = Pads();
 
@@ -206,7 +206,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
                         int             aInflateValue,
                         int             aCircleToSegmentsCount,
                         double          aCorrectionFactor,
-                        int             aCircleToSegmentsCountForTexts )
+                        int             aCircleToSegmentsCountForTexts ) const
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
@@ -273,6 +273,75 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
 
 }
 
+
+// Same as function TransformGraphicShapesWithClearanceToPolygonSet but
+// this only render text
+void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
+                        LAYER_ID        aLayer,
+                        SHAPE_POLY_SET& aCornerBuffer,
+                        int             aInflateValue,
+                        int             aCircleToSegmentsCount,
+                        double          aCorrectionFactor,
+                        int             aCircleToSegmentsCountForTexts ) const
+{
+    std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
+
+    for( EDA_ITEM* item = GraphicalItems(); item != NULL; item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_MODULE_TEXT_T:
+            {
+                TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+
+                if( text->GetLayer() == aLayer && text->IsVisible() )
+                    texts.push_back( text );
+
+                break;
+            }
+
+        case PCB_MODULE_EDGE_T:
+                // This function does not render this
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    // Convert texts sur modules
+    if( Reference().GetLayer() == aLayer && Reference().IsVisible() )
+        texts.push_back( &Reference() );
+
+    if( Value().GetLayer() == aLayer && Value().IsVisible() )
+        texts.push_back( &Value() );
+
+    s_cornerBuffer = &aCornerBuffer;
+
+    // To allow optimization of circles approximated by segments,
+    // aCircleToSegmentsCountForTexts, when not 0, is used.
+    // if 0 (default value) the aCircleToSegmentsCount is used
+    s_textCircle2SegmentCount = aCircleToSegmentsCountForTexts ?
+                                aCircleToSegmentsCountForTexts : aCircleToSegmentsCount;
+
+    for( unsigned ii = 0; ii < texts.size(); ii++ )
+    {
+        TEXTE_MODULE *textmod = texts[ii];
+        s_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
+        wxSize size = textmod->GetSize();
+
+        if( textmod->IsMirrored() )
+            size.x = -size.x;
+
+        DrawGraphicText( NULL, NULL, textmod->GetTextPosition(), BLACK,
+                         textmod->GetShownText(), textmod->GetDrawRotation(), size,
+                         textmod->GetHorizJustify(), textmod->GetVertJustify(),
+                         textmod->GetThickness(), textmod->IsItalic(),
+                         true, addTextSegmToPoly );
+    }
+
+}
+
  /* Function TransformSolidAreasShapesToPolygonSet
  * Convert solid areas full shapes to polygon set
  * (the full shape is the polygon area with a thick outline)
@@ -286,7 +355,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
 void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
         SHAPE_POLY_SET& aCornerBuffer,
         int                    aCircleToSegmentsCount,
-        double                 aCorrectionFactor )
+        double                 aCorrectionFactor ) const
 {
     if( GetFilledPolysList().IsEmpty() )
         return;

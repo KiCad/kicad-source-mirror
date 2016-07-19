@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@
 #ifndef _HITINFO_H_
 #define _HITINFO_H_
 
-#include "plugins/3dapi/xv3d_types.h"
 #include "raypacket.h"
 
 //#define RAYTRACING_RAY_STATISTICS
@@ -38,15 +37,16 @@
 class COBJECT;
 
 /// Stores the hit information of a ray with a point on the surface of a object
-GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) HITINFO
+struct HITINFO
 {
     SFVEC3F m_HitNormal;                ///< (12) normal at the hit point
     float   m_tHit;                     ///< ( 4) distance
 
     const COBJECT *pHitObject;          ///< ( 4) Object that was hitted
     SFVEC2F m_UV;                       ///< ( 8) 2-D texture coordinates
+    unsigned int m_acc_node_info;       ///< ( 4) The acc stores here the node that it hits
 
-    unsigned int m_acc_node_info;       ///< ( 4) The acc should store here information (Ex: the node that it hits)
+    float m_ShadowFactor;               ///< ( 4) Shadow attenuation (1.0 no shadow, 0.0f darkness)
 
 #ifdef RAYTRACING_RAY_STATISTICS
     // Statistics
@@ -55,11 +55,11 @@ GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) HITINFO
 #endif
 };
 
-GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) HITINFO_PACKET
+
+struct HITINFO_PACKET
 {
     bool    m_hitresult;
     HITINFO m_HitInfo;
-
 };
 
 #endif // _HITINFO_H_

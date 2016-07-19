@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,8 +28,9 @@
 #include "project.h"
 #include "3d_cache/3d_info.h"
 #include "3d_cache/3d_cache.h"
-#include "3d_cache/dialogs/panel_prev_model.h"
 #include "3d_cache_dialogs.h"
+#include <3d_model_viewer/c3d_model_viewer.h>
+#include <common_ogl/cogl_att_list.h>
 
 #define ID_FILE_TREE    ( wxID_LAST + 1 )
 #define ID_SET_DIR      ( ID_FILE_TREE + 1 )
@@ -60,15 +62,13 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
 
     wxBoxSizer* bSizer0 = new wxBoxSizer( wxVERTICAL );
 
-    wxBoxSizer* bSizer1;
-    bSizer1 = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer* bSizer1 = new wxBoxSizer( wxHORIZONTAL );
 
-    wxBoxSizer* bSizer2;
-    bSizer2 = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* bSizer2 = new wxBoxSizer( wxVERTICAL );
 
     // set to NULL to avoid segfaults when m_FileTree is instantiated
     // and wxGenericDirCtrl events are posted
-    m_preview = NULL;
+    m_modelViewer = NULL;
     dirChoices = NULL;
 
     m_FileTree = new wxGenericDirCtrl( this, ID_FILE_TREE, prevModelSelectDir, wxDefaultPosition,
@@ -83,14 +83,12 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     bSizer2->Add( m_FileTree, 1, wxEXPAND | wxALL, 5 );
     bSizer1->Add( bSizer2, 1, wxEXPAND, 5 );
 
-    // m_preview must me instantiated after m_FileTree or else it will not
-    // function as desired due to the constructor depending on the existence
-    // of m_FileTree to determine the previewer's configuration
-    wxBoxSizer* previewSizer;
-    previewSizer = new wxBoxSizer( wxVERTICAL );
-    m_preview = new PANEL_PREV_3D( this, m_cache );
-    previewSizer->Add( m_preview, 1, wxEXPAND | wxALL, 5 );
-    bSizer1->Add( previewSizer, 0, wxEXPAND, 5 );
+    m_modelViewer = new C3D_MODEL_VIEWER( this,
+                                          COGL_ATT_LIST::GetAttributesList( true ),
+                                          m_cache );
+    m_modelViewer->SetMinSize( wxSize( 512, 384 ) );
+
+    bSizer1->Add( m_modelViewer, 0, wxCENTER, 5 );
 
     // create the filter list
     if( NULL != m_cache )
@@ -133,8 +131,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
 
     // Add the path choice box and config button
     wxBoxSizer* hboxDirChoice = new wxBoxSizer( wxHORIZONTAL );
-    dirChoices = new wxChoice( this, ID_SET_DIR, wxDefaultPosition,
-        wxSize( 320, 20 ) );
+    dirChoices = new wxChoice( this, ID_SET_DIR, wxDefaultPosition, wxSize( 320, 20 ) );
     dirChoices->SetMinSize( wxSize( 320, 12 ) );
 
     wxStaticText* stDirChoice = new wxStaticText( this, -1, _( "Paths:" ) );
@@ -150,6 +147,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     hSizer1->AddButton( btn_OK );
     hSizer1->AddButton( btn_Cancel );
     hSizer1->Realize();
+
     bSizer0->Add( bSizer1, 1, wxALL | wxEXPAND, 5 );
     bSizer0->Add( hboxDirChoice, 0, wxALL | wxEXPAND, 5 );
     bSizer0->Add( hSizer1, 0, wxALL | wxEXPAND, 5 );
@@ -159,6 +157,9 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     this->SetSizerAndFit( bSizer0 );
     this->Layout();
     this->Centre( wxBOTH );
+
+    m_modelViewer->Refresh();
+    m_modelViewer->SetFocus();
 }
 
 
@@ -167,26 +168,30 @@ bool DLG_SELECT_3DMODEL::TransferDataFromWindow()
     if( NULL == m_model || NULL == m_FileTree )
         return true;
 
-    m_model->scale.x = 1.0;
-    m_model->scale.y = 1.0;
-    m_model->scale.z = 1.0;
+    m_model->m_Scale.x = 1.0;
+    m_model->m_Scale.y = 1.0;
+    m_model->m_Scale.z = 1.0;
 
-    m_model->rotation.x = 0.0;
-    m_model->rotation.y = 0.0;
-    m_model->rotation.z = 0.0;
+    m_model->m_Rotation.x = 0.0;
+    m_model->m_Rotation.y = 0.0;
+    m_model->m_Rotation.z = 0.0;
 
-    m_model->offset = m_model->rotation;
-    m_model->filename.clear();
+    m_model->m_Offset = m_model->m_Rotation;
+    m_model->m_Filename.clear();
 
-    wxString fname = m_FileTree->GetFilePath();
+    wxString name = m_FileTree->GetFilePath();
 
-    if( fname.empty() )
+    if( name.empty() )
         return true;
 
     m_previousDir = m_FileTree->GetPath();
     m_previousFilterIndex = m_FileTree->GetFilterIndex();
 
-    m_preview->GetModelData( m_model );
+    // file selection mode: retrieve the filename and specify a
+    // path relative to one of the config paths
+    wxFileName fname = m_FileTree->GetFilePath();
+    fname.Normalize();
+    m_model->m_Filename = m_resolver->ShortenPath( fname.GetFullPath() );
 
     return true;
 }
@@ -194,8 +199,8 @@ bool DLG_SELECT_3DMODEL::TransferDataFromWindow()
 
 void DLG_SELECT_3DMODEL::OnSelectionChanged( wxTreeEvent& event )
 {
-    if( NULL != m_preview )
-        m_preview->UpdateModelName( m_FileTree->GetFilePath() );
+    if( m_modelViewer )
+        m_modelViewer->Set3DModel( m_FileTree->GetFilePath() );
 
     event.Skip();
     return;
@@ -204,8 +209,8 @@ void DLG_SELECT_3DMODEL::OnSelectionChanged( wxTreeEvent& event )
 
 void DLG_SELECT_3DMODEL::OnFileActivated( wxTreeEvent& event )
 {
-    if( NULL != m_preview )
-        m_preview->UpdateModelName( m_FileTree->GetFilePath() );
+    if( m_modelViewer )
+        m_modelViewer->Set3DModel( m_FileTree->GetFilePath() );
 
     event.Skip();
     SetEscapeId( wxID_OK );
@@ -217,10 +222,8 @@ void DLG_SELECT_3DMODEL::OnFileActivated( wxTreeEvent& event )
 
 void DLG_SELECT_3DMODEL::SetRootDir( wxCommandEvent& event )
 {
-    if( !m_FileTree )
-        return;
-
-    m_FileTree->SetPath( dirChoices->GetString( dirChoices->GetSelection() ) );
+    if( m_FileTree )
+        m_FileTree->SetPath( dirChoices->GetString( dirChoices->GetSelection() ) );
 
     return;
 }

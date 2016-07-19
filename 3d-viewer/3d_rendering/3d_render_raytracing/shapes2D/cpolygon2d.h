@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ typedef struct
 /// polygons. This polygon class represent a sub part of that main polygon.
 /// There is information for the contours (used to test the ray2d intersection)
 /// and a close definition of the block polygon to test if a point is inside.
-class GLM_ALIGN(CLASS_ALIGNMENT) CPOLYGONBLOCK2D : public COBJECT2D
+class  CPOLYGONBLOCK2D : public COBJECT2D
 {
 private:
     /// This is the outter part of the polygon. This list is used to test a ray
@@ -115,11 +115,14 @@ public:
 /// a ray will return allways false.
 /// This is used as a sub block extrated from polygon (pcb polygon areas) and
 /// represents an area that is full filled.
-class GLM_ALIGN(CLASS_ALIGNMENT) CDUMMYBLOCK2D : public COBJECT2D
+class  CDUMMYBLOCK2D : public COBJECT2D
 {
 
 public:
-    CDUMMYBLOCK2D(const SFVEC2F &aPbMin, const SFVEC2F &aPbMax , const BOARD_ITEM &aBoardItem );
+    CDUMMYBLOCK2D( const SFVEC2F &aPbMin,
+                   const SFVEC2F &aPbMax,
+                   const BOARD_ITEM &aBoardItem );
+
     CDUMMYBLOCK2D( const CBBOX2D &aBBox, const BOARD_ITEM &aBoardItem );
 
      // Imported from COBJECT2D
@@ -138,16 +141,24 @@ public:
  * @param aMainPath - the polygon are that was converted from the pcb board
  * @param aDstContainer - the destination container to put the created sub blocks
  * @param aBiuTo3DunitsScale - the rendering target 3d scale
- * @param aDivFactor - a division factor (in 3Dunits) to divide the polygon plane, 0.0f will use the internal polygon segm statistics
+ * @param aDivFactor - a division factor (in 3Dunits) to divide the polygon plane,
+ * 0.0f will use the internal polygon segm statistics
  */
-void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(const SHAPE_POLY_SET &aMainPath,
+void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
+        const SHAPE_POLY_SET &aMainPath,
         CGENERICCONTAINER2D &aDstContainer,
         float aBiuTo3DunitsScale,
         float aDivFactor,
         const BOARD_ITEM &aBoardItem );
 
-void Polygon_Calc_BBox_3DU(const SHAPE_POLY_SET &aPolysList, CBBOX2D &aOutBBox , float aBiuTo3DunitsScale );
-void Polygon_Convert( const KI_POLYGON &aPolygon, ClipperLib::Path &aOutPath, CBBOX2D &aOutBBox, float aBiuTo3DunitsScale );
+void Polygon_Calc_BBox_3DU( const SHAPE_POLY_SET &aPolysList,
+                            CBBOX2D &aOutBBox,
+                            float aBiuTo3DunitsScale );
+
+void Polygon_Convert( const KI_POLYGON &aPolygon,
+                      ClipperLib::Path &aOutPath,
+                      CBBOX2D &aOutBBox,
+                      float aBiuTo3DunitsScale );
 
 void Polygon2d_TestModule();
 

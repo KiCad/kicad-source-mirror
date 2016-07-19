@@ -7,7 +7,7 @@
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
-#include <3d_viewer.h>
+//#include <3d_viewer/eda_3d_viewer.h>
 
 #include <class_board.h>
 #include <class_module.h>

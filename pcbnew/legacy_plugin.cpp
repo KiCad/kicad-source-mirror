@@ -63,7 +63,7 @@
 #include <string.h>
 #include <errno.h>
 #include <wx/ffile.h>
-
+#include <wx/string.h>
 #include <legacy_plugin.h>   // implement this here
 
 #include <kicad_string.h>
@@ -80,7 +80,7 @@
 #include <class_drawsegment.h>
 #include <class_mire.h>
 #include <class_edge_mod.h>
-#include <3d_struct.h>
+#include <3d_cache/3d_info.h>
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
 #include <drawtxt.h>
@@ -1879,16 +1879,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
 void LEGACY_PLUGIN::load3D( MODULE* aModule )
 {
-    S3D_MASTER* t3D = aModule->Models();
-
-    if( !t3D->GetShape3DName().IsEmpty() )
-    {
-        S3D_MASTER* n3D = new S3D_MASTER( aModule );
-
-        aModule->Models().PushBack( n3D );
-
-        t3D = n3D;
-    }
+    S3D_INFO t3D;
 
     char*   line;
     while( ( line = READLINE( m_reader ) ) != NULL )
@@ -1897,35 +1888,38 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
         {
             char    buf[512];
             ReadDelimitedText( buf, line + SZ( "Na" ), sizeof(buf) );
-            t3D->SetShape3DName( FROM_UTF8( buf ) );
+            t3D.m_Filename = buf;
         }
 
         else if( TESTLINE( "Sc" ) )     // Scale
         {
             sscanf( line + SZ( "Sc" ), "%lf %lf %lf\n",
-                    &t3D->m_MatScale.x,
-                    &t3D->m_MatScale.y,
-                    &t3D->m_MatScale.z );
+                    &t3D.m_Scale.x,
+                    &t3D.m_Scale.y,
+                    &t3D.m_Scale.z );
         }
 
         else if( TESTLINE( "Of" ) )     // Offset
         {
             sscanf( line + SZ( "Of" ), "%lf %lf %lf\n",
-                    &t3D->m_MatPosition.x,
-                    &t3D->m_MatPosition.y,
-                    &t3D->m_MatPosition.z );
+                    &t3D.m_Offset.x,
+                    &t3D.m_Offset.y,
+                    &t3D.m_Offset.z );
         }
 
         else if( TESTLINE( "Ro" ) )     // Rotation
         {
             sscanf( line + SZ( "Ro" ), "%lf %lf %lf\n",
-                    &t3D->m_MatRotation.x,
-                    &t3D->m_MatRotation.y,
-                    &t3D->m_MatRotation.z );
+                    &t3D.m_Rotation.x,
+                    &t3D.m_Rotation.y,
+                    &t3D.m_Rotation.z );
         }
 
         else if( TESTLINE( "$EndSHAPE3D" ) )
+        {
+            aModule->Models().push_back( t3D );
             return;         // preferred exit
+        }
     }
 
     THROW_IO_ERROR( "Missing '$EndSHAPE3D'" );
@@ -3084,49 +3078,59 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 
 void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
 {
-    for( S3D_MASTER* t3D = me->Models();  t3D;  t3D = t3D->Next() )
+    std::list<S3D_INFO>::const_iterator sM = me->Models().begin();
+    std::list<S3D_INFO>::const_iterator eM = me->Models().end();
+
+    while( sM != eM )
     {
-        if( !t3D->GetShape3DName().IsEmpty() )
+        if( sM->m_Filename.empty() )
         {
-            fprintf( m_fp, "$SHAPE3D\n" );
-
-            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->GetShape3DName() ).c_str() );
-
-            fprintf(m_fp,
-#if defined(DEBUG)
-                    // use old formats for testing, just to verify compatibility
-                    // using "diff", then switch to more concise form for release builds.
-                    "Sc %lf %lf %lf\n",
-#else
-                    "Sc %.10g %.10g %.10g\n",
-#endif
-                    t3D->m_MatScale.x,
-                    t3D->m_MatScale.y,
-                    t3D->m_MatScale.z );
-
-            fprintf(m_fp,
-#if defined(DEBUG)
-                    "Of %lf %lf %lf\n",
-#else
-                    "Of %.10g %.10g %.10g\n",
-#endif
-                    t3D->m_MatPosition.x,
-                    t3D->m_MatPosition.y,
-                    t3D->m_MatPosition.z );
-
-            fprintf(m_fp,
-#if defined(DEBUG)
-                    "Ro %lf %lf %lf\n",
-#else
-                    "Ro %.10g %.10g %.10g\n",
-#endif
-                    t3D->m_MatRotation.x,
-                    t3D->m_MatRotation.y,
-                    t3D->m_MatRotation.z );
-
-            fprintf( m_fp, "$EndSHAPE3D\n" );
+            ++sM;
+            continue;
         }
+
+        fprintf( m_fp, "$SHAPE3D\n" );
+
+        fprintf( m_fp, "Na %s\n", EscapedUTF8( sM->m_Filename ).c_str() );
+
+        fprintf(m_fp,
+#if defined(DEBUG)
+            // use old formats for testing, just to verify compatibility
+            // using "diff", then switch to more concise form for release builds.
+                "Sc %lf %lf %lf\n",
+#else
+            "Sc %.10g %.10g %.10g\n",
+#endif
+                sM->m_Scale.x,
+                sM->m_Scale.y,
+                sM->m_Scale.z );
+
+        fprintf(m_fp,
+#if defined(DEBUG)
+                "Of %lf %lf %lf\n",
+#else
+            "Of %.10g %.10g %.10g\n",
+#endif
+                sM->m_Offset.x,
+                sM->m_Offset.y,
+                sM->m_Offset.z );
+
+        fprintf(m_fp,
+#if defined(DEBUG)
+                "Ro %lf %lf %lf\n",
+#else
+            "Ro %.10g %.10g %.10g\n",
+#endif
+                sM->m_Rotation.x,
+                sM->m_Rotation.y,
+                sM->m_Rotation.z );
+
+        fprintf( m_fp, "$EndSHAPE3D\n" );
+
+        ++sM;
     }
+
+    return;
 }
 
 

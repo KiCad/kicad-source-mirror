@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,13 +24,12 @@
 
 /**
  * @file  cfrustum.h
- * @brief
+ * @brief implements a frustum that is used to test ray pack tests
  */
 
 #ifndef _CFRUSTUM_H_
 #define _CFRUSTUM_H_
 
-#include "plugins/3dapi/xv3d_types.h"
 #include "shapes3D/cbbox.h"
 #include "ray.h"
 
@@ -39,13 +38,32 @@
 #if 0
 #error not implemented
 #else
-GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) CFRUSTUM
+struct CFRUSTUM
 {
-    SFVEC3F m_normals[4];
-    SFVEC3F m_point[4];
 
-    void GenerateFrustum( const RAY &topLeft, const RAY &topRight, const RAY &bottomLeft, const RAY &bottomRight );
+public:
+    /**
+     * @brief GenerateFrustum
+     * @param topLeft
+     * @param topRight
+     * @param bottomLeft
+     * @param bottomRight
+     */
+    void GenerateFrustum( const RAY &topLeft,
+                          const RAY &topRight,
+                          const RAY &bottomLeft,
+                          const RAY &bottomRight );
+
+    /**
+     * @brief Intersect - Intersects a bbox with this frustum
+     * @param aBBox: a bbox to test
+     * @return true if the bbox intersects this frustum
+     */
     bool Intersect( const CBBOX &aBBox ) const;
+
+private:
+        SFVEC3F m_normals[4];
+        SFVEC3F m_point[4];
 };
 #endif
 

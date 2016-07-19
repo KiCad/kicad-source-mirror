@@ -344,7 +344,7 @@ void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount )
 }
 
 
-void SHAPE_POLY_SET::importTree( PolyTree* tree)
+void SHAPE_POLY_SET::importTree( PolyTree* tree )
 {
     m_polys.clear();
 
@@ -353,6 +353,7 @@ void SHAPE_POLY_SET::importTree( PolyTree* tree)
         if( !n->IsHole() )
         {
             POLYGON paths;
+            paths.reserve( n->Childs.size() + 1 );
             paths.push_back( convertFromClipper( n->Contour ) );
 
             for( unsigned int i = 0; i < n->Childs.size(); i++ )

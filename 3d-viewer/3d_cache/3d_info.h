@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@gmail.com>
+ * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
@@ -39,14 +39,10 @@
 
 struct S3D_INFO
 {
-    SGPOINT scale;     ///< scaling factors for the 3D footprint shape
-    SGPOINT rotation;  ///< an X,Y,Z rotation (unit = degrees) for the 3D shape
-    SGPOINT offset;    ///< an offset (unit = inch) for the 3D shape
-    // note: the models are treated in a peculiar fashion since it is the
-    // SCALE which is applied first, followed by the ROTATION and finally
-    // the TRANSLATION/Offset (S-R-T). The usual order of operations is T-R-S.
-
-    wxString filename;  ///< The 3D shape filename in 3D library
+    SGPOINT m_Scale;        ///< scaling factors for the 3D footprint shape
+    SGPOINT m_Rotation;     ///< an X,Y,Z rotation (unit = degrees) for the 3D shape
+    SGPOINT m_Offset;       ///< an offset (unit = inch) for the 3D shape
+    wxString m_Filename;    ///< The 3D shape filename in 3D library
 };
 
 #endif // INFO_3D_H

@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,9 +30,8 @@
 #ifndef OGL_LEGACY_UTILS_H_
 #define OGL_LEGACY_UTILS_H_
 
-#include "plugins/3dapi/xv3d_types.h"
-#include "3d_render_raytracing/shapes3D/cbbox.h"
-#include "3d_render_raytracing/shapes2D/croundsegment2d.h"
+#include "../3d_render_raytracing/shapes3D/cbbox.h"
+#include "../3d_render_raytracing/shapes2D/croundsegment2d.h"
 
 /**
  * @brief OGL_draw_arrow - draw a round arrow
@@ -62,6 +61,7 @@ void OGL_draw_half_open_cylinder( unsigned int aNrSidesPerCircle );
  * @brief OGL_Draw_segment
  * @param aSegment
  */
-void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment, unsigned int aNrSidesPerCircle );
+void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment,
+                       unsigned int aNrSidesPerCircle );
 
 #endif // OGL_LEGACY_UTILS_H_

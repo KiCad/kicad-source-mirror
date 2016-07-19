@@ -34,7 +34,7 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <module_editor_frame.h>
-#include <3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer.h>
 
 #include <class_module.h>
 #include <class_pad.h>
@@ -66,6 +66,8 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
      *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_EDIT_OK for normal edition
      *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_MODEDIT for a goto editor command
      */
+
+    dlg->Close();
     dlg->Destroy();
 
 #ifdef __WXMAC__

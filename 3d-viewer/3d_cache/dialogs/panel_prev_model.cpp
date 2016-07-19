@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -21,29 +22,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <3d_model_viewer/c3d_model_viewer.h>
-#include <3d_rendering/3d_render_ogl_legacy/c_ogl_3dmodel.h>
+/**
+ * @file  panel_prev_model.cpp
+ */
+
+#include <3d_canvas/eda_3d_canvas.h>
 #include <common_ogl/cogl_att_list.h>
 #include <cstdlib>
-#include <wx/log.h>
-#include <wx/sizer.h>
+
 #include <wx/valnum.h>
-#include <wx/choice.h>
-#include <wx/filename.h>
-#include <wx/glcanvas.h>
-#include <wx/dirctrl.h>
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
+#include <wx/tglbtn.h>
 
 #include "project.h"
-#include "3d_cache.h"
-#include "3d_info.h"
-#include "3d_filename_resolver.h"
-#include "plugins/3dapi/ifsg_api.h"
 #include "panel_prev_model.h"
+#include <class_board.h>
 
 
-// ensure -360 < rotation < 360
+/**
+ * @brief checkRotation - ensure -360 < rotation < 360
+ * @param rot: in out parameter
+ */
 static void checkRotation( double& rot )
 {
     if( rot >= 360.0 )
@@ -62,7 +60,7 @@ static void checkRotation( double& rot )
 
 
 enum {
-    ID_SCALEX = wxID_LAST + 1,
+    ID_SCALEX = ID_KICAD_PANEL_PREV_MODEL_START,
     ID_SCALEY,
     ID_SCALEZ,
     ID_ROTX,
@@ -78,20 +76,23 @@ enum {
     ID_3D_FRONT,
     ID_3D_BACK,
     ID_3D_TOP,
-    ID_3D_BOTTOM
+    ID_3D_BOTTOM,
+    ID_3D_END = ID_KICAD_PANEL_PREV_MODEL_END
 };
 
+
 wxBEGIN_EVENT_TABLE( PANEL_PREV_3D, wxPanel)
-    EVT_TEXT_ENTER( ID_SCALEX, PANEL_PREV_3D::updateOrientation )
-    EVT_TEXT_ENTER( ID_SCALEY, PANEL_PREV_3D::updateOrientation )
-    EVT_TEXT_ENTER( ID_SCALEZ, PANEL_PREV_3D::updateOrientation )
-    EVT_TEXT_ENTER( ID_ROTX, PANEL_PREV_3D::updateOrientation )
-    EVT_TEXT_ENTER( ID_ROTY, PANEL_PREV_3D::updateOrientation )
-    EVT_TEXT_ENTER( ID_ROTZ, PANEL_PREV_3D::updateOrientation )
-    EVT_TEXT_ENTER( ID_OFFX, PANEL_PREV_3D::updateOrientation )
-    EVT_TEXT_ENTER( ID_OFFY, PANEL_PREV_3D::updateOrientation )
-    EVT_TEXT_ENTER( ID_OFFZ, PANEL_PREV_3D::updateOrientation )
-    EVT_BUTTON( ID_3D_ISO, PANEL_PREV_3D::View3DISO )
+    EVT_TEXT( ID_SCALEX, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT( ID_SCALEY, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT( ID_SCALEZ, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT( ID_ROTX, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT( ID_ROTY, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT( ID_ROTZ, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT( ID_OFFX, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT( ID_OFFY, PANEL_PREV_3D::updateOrientation )
+    EVT_TEXT( ID_OFFZ, PANEL_PREV_3D::updateOrientation )
+
+    EVT_TOGGLEBUTTON( ID_3D_ISO, PANEL_PREV_3D::View3DISO )
     EVT_BUTTON( ID_3D_UPDATE, PANEL_PREV_3D::View3DUpdate )
     EVT_BUTTON( ID_3D_LEFT, PANEL_PREV_3D::View3DLeft )
     EVT_BUTTON( ID_3D_RIGHT, PANEL_PREV_3D::View3DRight )
@@ -99,19 +100,24 @@ wxBEGIN_EVENT_TABLE( PANEL_PREV_3D, wxPanel)
     EVT_BUTTON( ID_3D_BACK, PANEL_PREV_3D::View3DBack )
     EVT_BUTTON( ID_3D_TOP, PANEL_PREV_3D::View3DTop )
     EVT_BUTTON( ID_3D_BOTTOM, PANEL_PREV_3D::View3DBottom )
+    EVT_CLOSE( PANEL_PREV_3D::OnCloseWindow )
 wxEND_EVENT_TABLE()
 
 
-PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
-    wxPanel( aParent, -1 ), m_ModelManager( aCacheManager )
+PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent,
+                              S3D_CACHE* aCacheManager,
+                              MODULE* aModuleCopy,
+                              std::vector<S3D_INFO> *aParentInfoList ) :
+    wxPanel( aParent, -1 )
 {
-    if( NULL != m_ModelManager )
-        m_resolver = m_ModelManager->GetResolver();
+    if( NULL != aCacheManager )
+        m_resolver = aCacheManager->GetResolver();
     else
         m_resolver = NULL;
 
-    canvas = NULL;
-    model = NULL;
+    m_currentSelectedIdx = -1;
+    m_parentInfoList = aParentInfoList;
+    m_previewPane = NULL;
     xscale = NULL;
     yscale = NULL;
     zscale = NULL;
@@ -121,54 +127,55 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     xoff = NULL;
     yoff = NULL;
     zoff = NULL;
+    currentModelFile.clear();
 
     wxBoxSizer* mainBox = new wxBoxSizer( wxVERTICAL );
     wxStaticBoxSizer* vbox = new wxStaticBoxSizer( wxVERTICAL, this, _( "3D Preview" ) );
-    m_FileTree = NULL;
-
-    if( NULL != aParent )
-        m_FileTree = (wxGenericDirCtrl*)
-            aParent->FindWindowByLabel( wxT( "3D_MODEL_SELECTOR" ), aParent );
 
     wxFloatingPointValidator< float > valScale( 4 );
-    valScale.SetRange( 0.0001, 9999.0 );
+    valScale.SetRange( 0.0001f, 9999.0f );
     wxFloatingPointValidator< float > valRotate( 2 );
-    valRotate.SetRange( -180.0, 180.0 );
+    valRotate.SetRange( -180.0f, 180.0f );
     wxFloatingPointValidator< float > valOffset( 4 );
-    valOffset.SetRange( -9999.0, 9999.0 );
+    valOffset.SetRange( -9999.0f, 9999.0f );
 
-    wxStaticBoxSizer* vbScale = new wxStaticBoxSizer( wxVERTICAL, this, _( "Scale" )  );
-    wxStaticBoxSizer* vbRotate = new wxStaticBoxSizer( wxVERTICAL, this, _( "Rotation" ) );
-    wxStaticBoxSizer* vbOffset = new wxStaticBoxSizer( wxVERTICAL, this, _( "Offset (inches)" ) );
+    wxStaticBoxSizer* vbScale  = new wxStaticBoxSizer( wxVERTICAL, this, _( "Scale" )  );
+    wxStaticBoxSizer* vbRotate = new wxStaticBoxSizer( wxVERTICAL, this, _( "Rotation (degrees)" ) );
 
-    wxStaticBox* modScale = vbScale->GetStaticBox();
+    const wxString offsetString = _( "Offset " ) + "(" + GetUnitsLabel( g_UserUnit ) + ")";
+    wxStaticBoxSizer* vbOffset = new wxStaticBoxSizer( wxVERTICAL, this, offsetString );
+
+    wxStaticBox* modScale  = vbScale->GetStaticBox();
     wxStaticBox* modRotate = vbRotate->GetStaticBox();
     wxStaticBox* modOffset = vbOffset->GetStaticBox();
 
     wxBoxSizer* hbS1 = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* hbS2 = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* hbS3 = new wxBoxSizer( wxHORIZONTAL );
+
     wxStaticText* txtS1 = new wxStaticText( modScale, -1, wxT( "X:" ) );
     wxStaticText* txtS2 = new wxStaticText( modScale, -1, wxT( "Y:" ) );
     wxStaticText* txtS3 = new wxStaticText( modScale, -1, wxT( "Z:" ) );
+
     xscale = new wxTextCtrl( modScale, ID_SCALEX, "1.0", wxDefaultPosition, wxDefaultSize,
         wxTE_PROCESS_ENTER, valScale );
     yscale = new wxTextCtrl( modScale, ID_SCALEY, "1.0", wxDefaultPosition, wxDefaultSize,
         wxTE_PROCESS_ENTER, valScale );
     zscale = new wxTextCtrl( modScale, ID_SCALEZ, "1.0", wxDefaultPosition, wxDefaultSize,
         wxTE_PROCESS_ENTER, valScale );
+
     xscale->SetMaxLength( 9 );
     yscale->SetMaxLength( 9 );
     zscale->SetMaxLength( 9 );
-    hbS1->Add( txtS1, 0, wxALL, 2 );
-    hbS1->Add( xscale, 0, wxALL, 2 );
-    hbS2->Add( txtS2, 0, wxALL, 2 );
-    hbS2->Add( yscale, 0, wxALL, 2 );
-    hbS3->Add( txtS3, 0, wxALL, 2 );
-    hbS3->Add( zscale, 0, wxALL, 2 );
-    vbScale->Add( hbS1, 0, wxEXPAND | wxALL, 0 );
-    vbScale->Add( hbS2, 0, wxEXPAND | wxALL, 0 );
-    vbScale->Add( hbS3, 0, wxEXPAND | wxALL, 0 );
+    hbS1->Add( txtS1, 0, wxALIGN_CENTER, 2 );
+    hbS1->Add( xscale, 0, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    hbS2->Add( txtS2, 0, wxALIGN_CENTER, 2 );
+    hbS2->Add( yscale, 0, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    hbS3->Add( txtS3, 0, wxALIGN_CENTER, 2 );
+    hbS3->Add( zscale, 0, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    vbScale->Add( hbS1, 1, wxEXPAND | wxLEFT | wxRIGHT, 6 );
+    vbScale->Add( hbS2, 1, wxEXPAND | wxLEFT | wxRIGHT, 6 );
+    vbScale->Add( hbS3, 1, wxEXPAND | wxLEFT | wxRIGHT, 6 );
 
     wxBoxSizer* hbR1 = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* hbR2 = new wxBoxSizer( wxHORIZONTAL );
@@ -176,24 +183,26 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     wxStaticText* txtR1 = new wxStaticText( modRotate, -1, wxT( "X:" ) );
     wxStaticText* txtR2 = new wxStaticText( modRotate, -1, wxT( "Y:" ) );
     wxStaticText* txtR3 = new wxStaticText( modRotate, -1, wxT( "Z:" ) );
+
     xrot = new wxTextCtrl( modRotate, ID_ROTX, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER, valRotate );
+                           wxTE_PROCESS_ENTER, valRotate );
     yrot = new wxTextCtrl( modRotate, ID_ROTY, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER, valRotate );
+                           wxTE_PROCESS_ENTER, valRotate );
     zrot = new wxTextCtrl( modRotate, ID_ROTZ, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER, valRotate );
+                           wxTE_PROCESS_ENTER, valRotate );
+
     xrot->SetMaxLength( 9 );
     yrot->SetMaxLength( 9 );
     zrot->SetMaxLength( 9 );
-    hbR1->Add( txtR1, 0, wxALL, 2 );
-    hbR1->Add( xrot, 0, wxALL, 2 );
-    hbR2->Add( txtR2, 0, wxALL, 2 );
-    hbR2->Add( yrot, 0, wxALL, 2 );
-    hbR3->Add( txtR3, 0, wxALL, 2 );
-    hbR3->Add( zrot, 0, wxALL, 2 );
-    vbRotate->Add( hbR1, 0, wxEXPAND | wxALL, 0 );
-    vbRotate->Add( hbR2, 0, wxEXPAND | wxALL, 0 );
-    vbRotate->Add( hbR3, 0, wxEXPAND | wxALL, 0 );
+    hbR1->Add( txtR1, 1, wxALIGN_CENTER, 2 );
+    hbR1->Add( xrot, 0, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    hbR2->Add( txtR2, 1, wxALIGN_CENTER, 2 );
+    hbR2->Add( yrot, 0, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    hbR3->Add( txtR3, 1, wxALIGN_CENTER, 2 );
+    hbR3->Add( zrot, 0, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    vbRotate->Add( hbR1, 1, wxEXPAND | wxLEFT | wxRIGHT, 6 );
+    vbRotate->Add( hbR2, 1, wxEXPAND | wxLEFT | wxRIGHT, 6 );
+    vbRotate->Add( hbR3, 1, wxEXPAND | wxLEFT | wxRIGHT, 6 );
 
     wxBoxSizer* hbO1 = new wxBoxSizer( wxHORIZONTAL );
     wxBoxSizer* hbO2 = new wxBoxSizer( wxHORIZONTAL );
@@ -201,24 +210,25 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     wxStaticText* txtO1 = new wxStaticText( modOffset, -1, wxT( "X:" ) );
     wxStaticText* txtO2 = new wxStaticText( modOffset, -1, wxT( "Y:" ) );
     wxStaticText* txtO3 = new wxStaticText( modOffset, -1, wxT( "Z:" ) );
+
     xoff = new wxTextCtrl( modOffset, ID_OFFX, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER, valOffset );
+                           wxTE_PROCESS_ENTER, valOffset );
     yoff = new wxTextCtrl( modOffset, ID_OFFY, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER, valOffset );
+                           wxTE_PROCESS_ENTER, valOffset );
     zoff = new wxTextCtrl( modOffset, ID_OFFZ, "0.0", wxDefaultPosition, wxDefaultSize,
-        wxTE_PROCESS_ENTER, valOffset );
+                           wxTE_PROCESS_ENTER, valOffset );
     xoff->SetMaxLength( 10 );
     yoff->SetMaxLength( 10 );
     zoff->SetMaxLength( 10 );
-    hbO1->Add( txtO1, 0, wxALL, 2 );
-    hbO1->Add( xoff, 0, wxALL, 2 );
-    hbO2->Add( txtO2, 0, wxALL, 2 );
-    hbO2->Add( yoff, 0, wxALL, 2 );
-    hbO3->Add( txtO3, 0, wxALL, 2 );
-    hbO3->Add( zoff, 0, wxALL, 2 );
-    vbOffset->Add( hbO1, 0, wxEXPAND | wxALL, 0 );
-    vbOffset->Add( hbO2, 0, wxEXPAND | wxALL, 0 );
-    vbOffset->Add( hbO3, 0, wxEXPAND | wxALL, 0 );
+    hbO1->Add( txtO1, 0, wxALIGN_CENTER, 2 );
+    hbO1->Add( xoff, 0, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    hbO2->Add( txtO2, 0, wxALIGN_CENTER, 2 );
+    hbO2->Add( yoff, 0, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    hbO3->Add( txtO3, 0, wxALIGN_CENTER, 2 );
+    hbO3->Add( zoff, 0, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    vbOffset->Add( hbO1, 1, wxEXPAND | wxLEFT | wxRIGHT, 6 );
+    vbOffset->Add( hbO2, 1, wxEXPAND | wxLEFT | wxRIGHT, 6 );
+    vbOffset->Add( hbO3, 1, wxEXPAND | wxLEFT | wxRIGHT, 6 );
 
     // hbox holding orientation data and preview
     wxBoxSizer* hbox = new wxBoxSizer( wxHORIZONTAL );
@@ -227,215 +237,290 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager ) :
     // vbox holding the preview and view buttons
     wxBoxSizer* vboxPrev = new wxBoxSizer( wxVERTICAL );
 
-    vboxOrient->Add( vbScale, 0, wxEXPAND | wxALL, 1 );
-    vboxOrient->Add( vbRotate, 0, wxEXPAND | wxALL, 1 );
-    vboxOrient->Add( vbOffset, 0, wxEXPAND | wxALL, 1 );
+    vboxOrient->Add( vbScale, 1, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    vboxOrient->Add( vbRotate, 1, wxEXPAND | wxLEFT | wxRIGHT, 2 );
+    vboxOrient->Add( vbOffset, 1, wxEXPAND | wxLEFT | wxRIGHT, 2 );
 
     // add preview items
-    preview = new wxPanel( this, -1 );
+    wxPanel*preview = new wxPanel( this, -1 );
     preview->SetMinSize( wxSize( 400, 250 ) );
     preview->SetBackgroundColour( wxColor( 0, 0, 0 ));
-    vboxPrev->Add( preview, 1, wxEXPAND | wxLEFT | wxRIGHT, 5 );
+    vboxPrev->Add( preview, 1, wxEXPAND | wxALL, 5 );
+
     // buttons:
-    wxButton* vFront = new wxButton( this, ID_3D_FRONT, wxT( "F" ) );
-    wxButton* vBack = new wxButton( this, ID_3D_BACK, wxT( "B" ) );
-    wxButton* vLeft = new wxButton( this, ID_3D_LEFT, wxT( "L" ) );
-    wxButton* vRight = new wxButton( this, ID_3D_RIGHT, wxT( "R" ) );
-    wxButton* vTop = new wxButton( this, ID_3D_TOP, wxT( "T" ) );
-    wxButton* vBottom = new wxButton( this, ID_3D_BOTTOM, wxT( "B" ) );
-    wxButton* vISO = new wxButton( this, ID_3D_ISO, wxT( "I" ) );
-    wxButton* vUpdate = new wxButton( this, ID_3D_UPDATE, wxT( "U" ) );
-    wxBoxSizer* hbBT = new wxBoxSizer( wxHORIZONTAL );
-    wxBoxSizer* hbBB = new wxBoxSizer( wxHORIZONTAL );
-    hbBT->Add( vISO, 0, wxCENTER | wxALL, 3 );
-    hbBT->Add( vLeft, 0, wxCENTER | wxALL, 3 );
-    hbBT->Add( vFront, 0, wxCENTER | wxALL, 3 );
-    hbBT->Add( vTop, 0, wxCENTER | wxALL, 3 );
-    hbBT->AddSpacer( 17 );
-    hbBB->Add( vUpdate, 0, wxCENTER | wxALL, 3 );
-    hbBB->Add( vRight, 0, wxCENTER | wxALL, 3 );
-    hbBB->Add( vBack, 0, wxCENTER | wxALL, 3 );
-    hbBB->Add( vBottom, 0, wxCENTER | wxALL, 3 );
-    hbBB->AddSpacer( 17 );
+    wxButton* vFront = new wxButton( this, ID_3D_FRONT );
+    vFront->SetBitmap( KiBitmap( axis3d_front_xpm ) );
+
+    wxButton* vBack = new wxButton( this, ID_3D_BACK );
+    vBack->SetBitmap( KiBitmap( axis3d_back_xpm ) );
+
+    wxButton* vLeft = new wxButton( this, ID_3D_LEFT );
+    vLeft->SetBitmap( KiBitmap( axis3d_left_xpm ) );
+
+    wxButton* vRight = new wxButton( this, ID_3D_RIGHT );
+    vRight->SetBitmap( KiBitmap( axis3d_right_xpm ) );
+
+    wxButton* vTop = new wxButton( this, ID_3D_TOP );
+    vTop->SetBitmap( KiBitmap( axis3d_top_xpm ) );
+
+    wxButton* vBottom = new wxButton( this, ID_3D_BOTTOM );
+    vBottom->SetBitmap( KiBitmap( axis3d_bottom_xpm ) );
+
+    wxToggleButton* vISO = new wxToggleButton( this, ID_3D_ISO, wxT("") );
+    vISO->SetBitmap( KiBitmap( ortho_xpm ) );
+    vISO->SetToolTip( _("Change to isometric perspective") );
+
+    wxButton* vUpdate = new wxButton( this, ID_3D_UPDATE );
+    vUpdate->SetBitmap( KiBitmap( reload_xpm ) );
+    vUpdate->SetToolTip( _("Reload board and 3D models") );
+
+    wxGridSizer* gridSizer = new wxGridSizer( 2, 4, 0, 0 );
+
+    gridSizer->Add( vISO, 0, wxEXPAND, 3 );
+    gridSizer->Add( vLeft, 0, wxEXPAND, 3 );
+    gridSizer->Add( vFront, 0, wxEXPAND, 3 );
+    gridSizer->Add( vTop, 0, wxEXPAND, 3 );
+
+    gridSizer->Add( vUpdate, 0, wxEXPAND, 3 );
+    gridSizer->Add( vRight, 0, wxEXPAND, 3 );
+    gridSizer->Add( vBack, 0, wxEXPAND, 3 );
+    gridSizer->Add( vBottom, 0, wxEXPAND, 3 );
 
     vboxPrev->AddSpacer( 7 );
-    vboxPrev->Add( hbBT, 0 );
-    vboxPrev->Add( hbBB, 0 );
+    vboxPrev->Add( gridSizer, 0, wxCENTER, 0 );
 
-    // XXX - Suppress the buttons until the Renderer code is ready.
-    // vboxPrev->Hide( preview, true );
-    vboxPrev->Hide( hbBT, true );
-    vboxPrev->Hide( hbBB, true );
-
-    hbox->Add( vboxOrient, 0, wxEXPAND | wxALL, 0 );
+    hbox->Add( vboxOrient, 0, 0, 2 );
     hbox->Add( vboxPrev, 1, wxEXPAND | wxALL, 12 );
-    vbox->Add( hbox, 1, wxEXPAND );
+    vbox->Add( hbox, 1, wxEXPAND | wxALL, 0 );
 
     mainBox->Add( vbox, 1, wxEXPAND | wxALL, 5 );
 
-    if( NULL != m_FileTree )
-    {
-        // NOTE: if/when the File Selector preview is implemented
-        // we may need to hide the orientation boxes to ensure the
-        // users have sufficient display area for the browser.
-        // hbox->Hide( vboxOrient, true );
-        // XXX -
-        // NOTE: for now we always suppress the preview and model orientation
-        // panels while in the file selector
-        //mainBox->Hide( vbox, true );
-
-        hbox->Hide( vboxOrient, true );
-        vboxPrev->Hide( hbBT, true );
-        vboxPrev->Hide( hbBB, true );
-    }
-
     SetSizerAndFit( mainBox );
 
-    return;
+    // Create a dummy board
+    m_dummyBoard = new BOARD();
+    m_dummyBoard->Add( (MODULE*)aModuleCopy );
+    m_copyModule = aModuleCopy;
+
+    // Set 3d viewer configuration for preview
+    m_settings3Dviewer = new CINFO3D_VISU();
+
+    // Create the 3D canvas
+    m_previewPane = new EDA_3D_CANVAS( preview,
+                                       COGL_ATT_LIST::GetAttributesList( true ),
+                                       m_dummyBoard,
+                                       *m_settings3Dviewer,
+                                       aCacheManager );
+
+    wxSizer* ws = new wxBoxSizer( wxHORIZONTAL );
+    ws->Add( m_previewPane, 1, wxEXPAND );
+    preview->SetSizer( ws );
+    preview->Layout();
+    ws->FitInside( preview );
+
+    m_previewPane->SetFocus(); // Need to catch mouse and keyboard events
 }
 
 
 PANEL_PREV_3D::~PANEL_PREV_3D()
 {
-    if( NULL != canvas )
-    {
-        canvas->Clear3DModel();
-        canvas->Refresh();
-        canvas->Update();
-    }
+    delete m_settings3Dviewer;
+    m_settings3Dviewer = NULL;
 
-    model = NULL;
+    delete m_dummyBoard;
+    m_dummyBoard = NULL;
 
-    return;
+    delete m_previewPane;
+    m_previewPane = NULL;
+}
+
+
+void PANEL_PREV_3D::OnCloseWindow( wxCloseEvent &event )
+{
+    if( m_previewPane )
+        m_previewPane->Close();
+
+    event.Skip();
 }
 
 
 void PANEL_PREV_3D::View3DISO( wxCommandEvent& event )
 {
-    // XXX - TO BE IMPLEMENTED
-    // std::cout << "Switch to Isometric View\n";
-    return;
+    if( m_settings3Dviewer )
+    {
+        m_settings3Dviewer->CameraGet().ToggleProjection();
+        m_previewPane->Refresh();
+        m_previewPane->SetFocus();
+    }
 }
 
 
 void PANEL_PREV_3D::View3DUpdate( wxCommandEvent& event )
 {
-    // XXX - TO BE IMPLEMENTED
-    // std::cout << "Update 3D View\n";
-
-    // update the model filename if appropriate
-    if( NULL != m_FileTree )
+    if( m_previewPane )
     {
-        wxString modelName = m_FileTree->GetFilePath();
-        UpdateModelName( modelName );
+        m_previewPane->ReloadRequest();
+        m_previewPane->Refresh();
+        m_previewPane->SetFocus();
     }
-
-    return;
 }
 
 
 void PANEL_PREV_3D::View3DLeft( wxCommandEvent& event )
 {
-    // XXX - TO BE IMPLEMENTED
-    // std::cout << "Switch to Left View\n";
-    return;
+    if( m_previewPane )
+    {
+        m_previewPane->SetView3D( 'X' );
+        m_previewPane->SetFocus();
+    }
 }
 
 
 void PANEL_PREV_3D::View3DRight( wxCommandEvent& event )
 {
-    // XXX - TO BE IMPLEMENTED
-    // std::cout << "Switch to Right View\n";
-    return;
+    if( m_previewPane )
+    {
+        m_previewPane->SetView3D( 'x' );
+        m_previewPane->SetFocus();
+    }
 }
 
 
 void PANEL_PREV_3D::View3DFront( wxCommandEvent& event )
 {
-    // XXX - TO BE IMPLEMENTED
-    // std::cout << "Switch to Front View\n";
-    return;
+    if( m_previewPane )
+    {
+        m_previewPane->SetView3D( 'Y' );
+        m_previewPane->SetFocus();
+    }
 }
 
 
 void PANEL_PREV_3D::View3DBack( wxCommandEvent& event )
 {
-    // XXX - TO BE IMPLEMENTED
-    // std::cout << "Switch to Back View\n";
-    return;
+    if( m_previewPane )
+    {
+        m_previewPane->SetView3D( 'y' );
+        m_previewPane->SetFocus();
+    }
 }
 
 
 void PANEL_PREV_3D::View3DTop( wxCommandEvent& event )
 {
-    // XXX - TO BE IMPLEMENTED
-    // std::cout << "Switch to Top View\n";
-    return;
+    if( m_previewPane )
+    {
+        m_previewPane->SetView3D( 'z' );
+        m_previewPane->SetFocus();
+    }
 }
 
 
 void PANEL_PREV_3D::View3DBottom( wxCommandEvent& event )
 {
-    // XXX - TO BE IMPLEMENTED
-    // std::cout << "Switch to Bottom View\n";
-    return;
+    if( m_previewPane )
+    {
+        m_previewPane->SetView3D( 'Z' );
+        m_previewPane->SetFocus();
+    }
 }
 
 
-void PANEL_PREV_3D::GetModelData( S3D_INFO* aModel )
+void PANEL_PREV_3D::SetModelDataIdx( int idx, bool aReloadPreviewModule )
 {
-    if( NULL == aModel )
-        return;
+    wxASSERT( m_parentInfoList != NULL );
 
-    // XXX - due to cross-platform differences in wxWidgets, extracting
-    // scale/rotation/offset only works as expected when the preview
-    // panel is not embedded in a file selector dialog. This conditional
-    // execution should be removed once the cross-platform issues are
-    // fixed.
-    if( NULL == m_FileTree )
+    if( m_parentInfoList && (idx >= 0) )
     {
-        SGPOINT scale;
-        SGPOINT rotation;
-        SGPOINT offset;
+        wxASSERT( (unsigned int)idx < (*m_parentInfoList).size() );
 
-        getOrientationVars( scale, rotation, offset );
+        if( (unsigned int)idx < (*m_parentInfoList).size() )
+        {
+            m_currentSelectedIdx = -1;  // In case that we receive events on the
+                                        // next updates, it will set first an
+                                        // invalid selection
 
-        aModel->scale = scale;
-        aModel->offset = offset;
-        aModel->rotation = rotation;
+            const S3D_INFO *aModel = (const S3D_INFO *)&((*m_parentInfoList)[idx]);
+
+            xscale->SetValue( wxString::FromDouble( aModel->m_Scale.x ) );
+            yscale->SetValue( wxString::FromDouble( aModel->m_Scale.y ) );
+            zscale->SetValue( wxString::FromDouble( aModel->m_Scale.z ) );
+
+            xrot->SetValue( wxString::FromDouble( aModel->m_Rotation.x ) );
+            yrot->SetValue( wxString::FromDouble( aModel->m_Rotation.y ) );
+            zrot->SetValue( wxString::FromDouble( aModel->m_Rotation.z ) );
+
+            switch( g_UserUnit )
+            {
+            case MILLIMETRES:
+                xoff->SetValue( wxString::FromDouble( aModel->m_Offset.x * 25.4 ) );
+                yoff->SetValue( wxString::FromDouble( aModel->m_Offset.y * 25.4 ) );
+                zoff->SetValue( wxString::FromDouble( aModel->m_Offset.z * 25.4 ) );
+                break;
+
+            case INCHES:
+                xoff->SetValue( wxString::FromDouble( aModel->m_Offset.x ) );
+                yoff->SetValue( wxString::FromDouble( aModel->m_Offset.y ) );
+                zoff->SetValue( wxString::FromDouble( aModel->m_Offset.z ) );
+                break;
+
+            case DEGREES:
+            case UNSCALED_UNITS:
+            default:
+                wxASSERT(0);
+            }
+
+            UpdateModelName( aModel->m_Filename );
+
+            if( aReloadPreviewModule && m_previewPane )
+            {
+                updateListOnModelCopy();
+
+                m_previewPane->ReloadRequest();
+                m_previewPane->Request_refresh();
+            }
+
+            m_currentSelectedIdx = idx;
+        }
     }
 
-    // return if we are not in file selection mode
-    if( NULL == m_FileTree )
-        return;
-
-    // file selection mode: retrieve the filename and specify a
-    // path relative to one of the config paths
-    wxFileName fname = m_FileTree->GetFilePath();
-    fname.Normalize();
-    aModel->filename = m_resolver->ShortenPath( fname.GetFullPath() );
+    if( m_previewPane )
+        m_previewPane->SetFocus();
 
     return;
 }
 
 
-void PANEL_PREV_3D::SetModelData( S3D_INFO const* aModel )
+void PANEL_PREV_3D::ResetModelData( bool aReloadPreviewModule )
 {
-    xscale->SetValue( wxString::FromDouble( aModel->scale.x ) );
-    yscale->SetValue( wxString::FromDouble( aModel->scale.y ) );
-    zscale->SetValue( wxString::FromDouble( aModel->scale.z ) );
+    m_currentSelectedIdx = -1;
 
-    xrot->SetValue( wxString::FromDouble( aModel->rotation.x ) );
-    yrot->SetValue( wxString::FromDouble( aModel->rotation.y ) );
-    zrot->SetValue( wxString::FromDouble( aModel->rotation.z ) );
+    xscale->SetValue( wxString::FromDouble( 1.0 ) );
+    yscale->SetValue( wxString::FromDouble( 1.0 ) );
+    zscale->SetValue( wxString::FromDouble( 1.0 ) );
 
-    xoff->SetValue( wxString::FromDouble( aModel->offset.x ) );
-    yoff->SetValue( wxString::FromDouble( aModel->offset.y ) );
-    zoff->SetValue( wxString::FromDouble( aModel->offset.z ) );
+    xrot->SetValue( wxString::FromDouble( 0.0 ) );
+    yrot->SetValue( wxString::FromDouble( 0.0 ) );
+    zrot->SetValue( wxString::FromDouble( 0.0 ) );
 
-    UpdateModelName( aModel->filename );
+    xoff->SetValue( wxString::FromDouble( 0.0 ) );
+    yoff->SetValue( wxString::FromDouble( 0.0 ) );
+    zoff->SetValue( wxString::FromDouble( 0.0 ) );
 
-    return;
+    // This will update the model on the preview board with the current list of 3d shapes
+    if( aReloadPreviewModule )
+    {
+        updateListOnModelCopy();
+
+        if( m_previewPane )
+        {
+            m_previewPane->ReloadRequest();
+            m_previewPane->Request_refresh();
+        }
+    }
+
+    if( m_previewPane )
+        m_previewPane->SetFocus();
 }
 
 
@@ -443,102 +528,48 @@ void PANEL_PREV_3D::UpdateModelName( wxString const& aModelName )
 {
     bool newModel = false;
 
-    modelInfo.filename = aModelName;
+    m_modelInfo.m_Filename = aModelName;
 
     // if the model name is a directory simply clear the current model
     if( aModelName.empty() || wxFileName::DirExists( aModelName ) )
     {
         currentModelFile.clear();
-        modelInfo.filename.clear();
+        m_modelInfo.m_Filename.clear();
     }
     else
     {
         wxString newModelFile;
-        newModelFile = m_resolver->ResolvePath( aModelName );
+
+        if( m_resolver )
+            newModelFile = m_resolver->ResolvePath( aModelName );
 
         if( !newModelFile.empty() && newModelFile.Cmp( currentModelFile ) )
             newModel = true;
 
         currentModelFile = newModelFile;
-        modelInfo.filename = currentModelFile;
     }
 
     if( currentModelFile.empty() || newModel )
     {
-        if( NULL != canvas )
-        {
-            canvas->Clear3DModel();
-            canvas->Refresh();
-            canvas->Update();
-        }
+        updateListOnModelCopy();
 
-        model = NULL;
+        if( m_previewPane )
+        {
+            m_previewPane->ReloadRequest();
+            m_previewPane->Refresh();
+        }
 
         if( currentModelFile.empty() )
             return;
     }
-
-    if( NULL != m_ModelManager )
-        model = m_ModelManager->GetModel( modelInfo.filename );
     else
-        model = NULL;
-
-    if( NULL == model )
     {
-        if( NULL != canvas )
-        {
-            canvas->Refresh();
-            canvas->Update();
-        }
-
-        return;
+        if( m_previewPane )
+            m_previewPane->Refresh();
     }
 
-    if( NULL == canvas )
-    {
-        canvas = new C3D_MODEL_VIEWER( preview,
-            COGL_ATT_LIST::GetAttributesList( true ) );
-
-        wxSizer* ws = new wxBoxSizer( wxHORIZONTAL );
-        canvas->Set3DModel( *model );
-        ws->Add( canvas, 1, wxEXPAND );
-        preview->SetSizer( ws );
-        preview->Layout();
-        ws->FitInside( preview );
-
-        // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
-        // in order to receive mouse events.  Otherwise, the user has to click somewhere on
-        // the canvas before it will respond to mouse wheel events.
-        canvas->SetFocus();
-        return;
-    }
-
-    canvas->Set3DModel( *model );
-    canvas->Refresh();
-    canvas->Update();
-    canvas->SetFocus();
-
-    return;
-}
-
-
-void PANEL_PREV_3D::UpdateWindowUI( long flags )
-{
-    /*
-     XXX -
-     NOTE: until we figure out how to ensure that a Paint Event is
-     generated for the File Selector's UI, we cannot display any
-     preview within the file browser.
-    if( wxUPDATE_UI_RECURSE == flags && m_FileDlg && m_ModelManager )
-    {
-        // check for a change in the current model file
-        S3D_INFO info;
-        modelInfo = info;
-        UpdateModelName( m_FileDlg->GetCurrentlySelectedFilename() );
-    }
-    // */
-
-    wxPanel::UpdateWindowUI( flags );
+    if( m_previewPane )
+        m_previewPane->SetFocus();
 
     return;
 }
@@ -546,33 +577,41 @@ void PANEL_PREV_3D::UpdateWindowUI( long flags )
 
 void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
 {
-    // note: process even if the canvas is NULL since the user may
-    // edit the filename to provide a valid file
+    wxTextCtrl *textCtrl = (wxTextCtrl *)event.GetEventObject();
+
+    if( textCtrl == NULL )
+        return;
+
+    if( textCtrl->GetLineLength(0) == 0 )   // This will skip the got and event with empty field
+        return;
+
+    if( textCtrl->GetLineLength(0) == 1 )
+        if( (textCtrl->GetLineText(0).compare( "." ) == 0) ||
+            (textCtrl->GetLineText(0).compare( "," ) == 0) )
+            return;
+
     SGPOINT scale;
     SGPOINT rotation;
     SGPOINT offset;
 
     getOrientationVars( scale, rotation, offset );
 
-    modelInfo.scale = scale;
-    modelInfo.offset = offset;
-    modelInfo.rotation = rotation;
+    m_modelInfo.m_Scale = scale;
+    m_modelInfo.m_Offset = offset;
+    m_modelInfo.m_Rotation = rotation;
 
-    if( NULL == canvas )
-        return;
-
-    canvas->Clear3DModel();
-
-    if( NULL != m_ModelManager )
-        model = m_ModelManager->GetModel( modelInfo.filename );
-    else
-        model = NULL;
-
-    if( model )
+    if( m_currentSelectedIdx >= 0 )
     {
-        canvas->Set3DModel( *model );
-        canvas->Refresh();
-        canvas->Update();
+        // This will update the parent list with the new data
+        (*m_parentInfoList)[m_currentSelectedIdx] = m_modelInfo;
+
+        // It will update the copy model in the preview board
+        updateListOnModelCopy();
+
+        // Since the OpenGL render does not need to be reloaded to update the
+        // shapes position, we just request to redraw again the canvas
+        if( m_previewPane )
+            m_previewPane->Refresh();
     }
 
     event.Skip();
@@ -580,7 +619,7 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
 }
 
 
-void PANEL_PREV_3D::getOrientationVars( SGPOINT& scale, SGPOINT& rotation, SGPOINT& offset )
+void PANEL_PREV_3D::getOrientationVars( SGPOINT& aScale, SGPOINT& aRotation, SGPOINT& aOffset )
 {
     if( NULL == xscale || NULL == yscale || NULL == zscale
         || NULL == xrot || NULL == yrot || NULL == zrot
@@ -589,30 +628,74 @@ void PANEL_PREV_3D::getOrientationVars( SGPOINT& scale, SGPOINT& rotation, SGPOI
         return;
     }
 
-    xscale->GetValue().ToDouble( &scale.x );
-    yscale->GetValue().ToDouble( &scale.y );
-    zscale->GetValue().ToDouble( &scale.z );
+    xscale->GetValue().ToDouble( &aScale.x );
+    yscale->GetValue().ToDouble( &aScale.y );
+    zscale->GetValue().ToDouble( &aScale.z );
 
-    if( 0.0001 > scale.x || 0.0001 > scale.y || 0.0001 > scale.z )
+    xrot->GetValue().ToDouble( &aRotation.x );
+    yrot->GetValue().ToDouble( &aRotation.y );
+    zrot->GetValue().ToDouble( &aRotation.z );
+
+    checkRotation( aRotation.x );
+    checkRotation( aRotation.y );
+    checkRotation( aRotation.z );
+
+    xoff->GetValue().ToDouble( &aOffset.x );
+    yoff->GetValue().ToDouble( &aOffset.y );
+    zoff->GetValue().ToDouble( &aOffset.z );
+
+    switch( g_UserUnit )
     {
-        wxString errmsg = _("[INFO] invalid scale values; setting all to 1.0");
-        wxLogMessage( "%s", errmsg.ToUTF8() );
+    case MILLIMETRES:
+        // Convert to Inches. Offset is stored in inches.
+        aOffset.x = aOffset.x / 25.4;
+        aOffset.y = aOffset.y / 25.4;
+        aOffset.z = aOffset.z / 25.4;
+        break;
 
-        scale.x = 1.0;
-        scale.y = 1.0;
-        scale.z = 1.0;
+    case INCHES:
+        // It is already in Inches
+        break;
+
+    case DEGREES:
+    case UNSCALED_UNITS:
+    default:
+        wxASSERT(0);
     }
 
-    xrot->GetValue().ToDouble( &rotation.x );
-    yrot->GetValue().ToDouble( &rotation.y );
-    zrot->GetValue().ToDouble( &rotation.z );
-    checkRotation( rotation.x );
-    checkRotation( rotation.y );
-    checkRotation( rotation.z );
-
-    xoff->GetValue().ToDouble( &offset.x );
-    yoff->GetValue().ToDouble( &offset.y );
-    zoff->GetValue().ToDouble( &offset.z );
-
     return;
+}
+
+
+void PANEL_PREV_3D::updateListOnModelCopy()
+{
+    bool gotAnInvalidScale = false;
+
+    for( unsigned int idx = 0; idx < m_parentInfoList->size(); ++idx )
+    {
+        SGPOINT scale = (*m_parentInfoList)[idx].m_Scale;
+
+        gotAnInvalidScale |= ( 0.0001 > scale.x || 0.0001 > scale.y || 0.0001 > scale.z );
+
+        if( 0.0001 > scale.x )
+            scale.x = 1.0;
+
+        if( 0.0001 > scale.y )
+            scale.y = 1.0;
+
+        if( 0.0001 > scale.y )
+            scale.y = 1.0;
+
+        (*m_parentInfoList)[idx].m_Scale = scale;
+    }
+
+    if( gotAnInvalidScale )
+    {
+        wxString errmsg = _("[INFO] invalid scale values; setting invalid to 1.0");
+        wxLogMessage( "%s", errmsg.ToUTF8() );
+    }
+
+    std::list<S3D_INFO>* draw3D  = &m_copyModule->Models();
+    draw3D->clear();
+    draw3D->insert( draw3D->end(), m_parentInfoList->begin(), m_parentInfoList->end() );
 }

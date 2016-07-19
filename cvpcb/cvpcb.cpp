@@ -55,8 +55,6 @@ const wxString EquFileExtension( wxT( "equ" ) );
 // Wildcard for schematic retroannotation (import footprint names in schematic):
 const wxString EquFilesWildcard( _( "Component/footprint equ files (*.equ)|*.equ" ) );
 
-KIWAY* TheKiway = NULL;
-
 namespace CV {
 
 static struct IFACE : public KIFACE_I
@@ -78,7 +76,6 @@ static struct IFACE : public KIFACE_I
         case FRAME_CVPCB:
             {
                 CVPCB_MAINFRAME* frame = new CVPCB_MAINFRAME( aKiway, aParent );
-                TheKiway = aKiway;
                 return frame;
             }
             break;

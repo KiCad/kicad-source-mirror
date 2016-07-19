@@ -261,7 +261,7 @@ public:
      */
     void TransformSolidAreasShapesToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
                                                 int             aCircleToSegmentsCount,
-                                                double          aCorrectionFactor );
+                                                double          aCorrectionFactor ) const;
     /**
      * Function BuildFilledSolidAreasPolygons
      * Build the filled solid areas data from real outlines (stored in m_Poly)

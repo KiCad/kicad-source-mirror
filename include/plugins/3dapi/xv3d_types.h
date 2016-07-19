@@ -38,15 +38,17 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-typedef glm::uvec2  SFVEC2UI;
-typedef glm::ivec2  SFVEC2I;
-typedef glm::vec2   SFVEC2F;
-typedef glm::dvec2  SFVEC2D;
-typedef glm::vec3   SFVEC3F;
-typedef glm::dvec3  SFVEC3D;
-typedef glm::vec4   SFVEC4F;
-typedef glm::uvec3  SFVEC3UI;
-typedef glm::dvec3  SFVEC3D;
+typedef glm::uvec2      SFVEC2UI;
+typedef glm::ivec2      SFVEC2I;
+typedef glm::u64vec2    SFVEC2UI64;
+typedef glm::i64vec2    SFVEC2I64;
+typedef glm::vec2       SFVEC2F;
+typedef glm::dvec2      SFVEC2D;
+typedef glm::vec3       SFVEC3F;
+typedef glm::dvec3      SFVEC3D;
+typedef glm::vec4       SFVEC4F;
+typedef glm::uvec3      SFVEC3UI;
+typedef glm::dvec3      SFVEC3D;
 
 #define CLASS_ALIGNMENT 16
 

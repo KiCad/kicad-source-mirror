@@ -4,7 +4,7 @@
  * Copyright (C) 2009-2013  Lorenzo Mercantonio
  * Copyright (C) 2014  Cirilo Bernado
  * Copyright (C) 2013 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,16 +26,20 @@
 
 
 #include <fctsys.h>
+#include "3d_cache/3d_cache.h"
+#include "3d_cache/3d_filename_resolver.h"
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
 #include <drawtxt.h>
 #include <trigo.h>
 #include <pgm_base.h>
-#include <3d_struct.h>
+#include <3d_cache/3d_info.h>
 #include <macros.h>
 #include <exception>
 #include <fstream>
 #include <iomanip>
+#include <project.h>
+#include <kiway.h>
 
 #include <pcbnew.h>
 
@@ -47,8 +51,6 @@
 #include <class_pcb_text.h>
 #include <convert_to_biu.h>
 
-#include "../3d-viewer/modelparsers.h"
-
 #include <vector>
 #include <cmath>
 #include <vrml_layer.h>
@@ -59,6 +61,7 @@
 // offset for art layers, mm (silk, paste, etc)
 #define  ART_OFFSET 0.025
 
+static S3D_FILENAME_RESOLVER* resolver;
 
 struct VRML_COLOR
 {
@@ -1198,16 +1201,27 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
     bool isFlipped = aModule->GetLayer() == B_Cu;
 
     // Export the object VRML model(s)
-    for( S3D_MASTER* vrmlm = aModule->Models();  vrmlm;  vrmlm = vrmlm->Next() )
-    {
-        if( !vrmlm->Is3DType( S3D_MASTER::FILE3D_VRML ) )
-            continue;
+    std::list<S3D_INFO>::iterator sM = aModule->Models().begin();
+    std::list<S3D_INFO>::iterator eM = aModule->Models().end();
+    wxString wrlExt;
 
-        wxFileName modelFileName = vrmlm->GetShape3DFullFilename();
-        wxFileName destFileName( a3D_Subdir, modelFileName.GetName(), modelFileName.GetExt() );
+    while( sM != eM )
+    {
+        wxFileName modelFileName = resolver->ResolvePath( sM->m_Filename );
+        wrlExt = modelFileName.GetExt();
+
+        if( wrlExt.Cmp( wxT( "wrl" ) ) && wrlExt.Cmp( wxT( "WRL" ) )
+            && wrlExt.Cmp( wxT( "x3d" ) ) && wrlExt.Cmp( wxT( "X3D" ) ) )
+        {
+            ++sM;
+            continue;
+        }
+
+        wxFileName destFileName( a3D_Subdir, modelFileName.GetName(), wrlExt );
 
         // Only copy VRML files.
-        if( modelFileName.FileExists() && modelFileName.GetExt() == wxT( "wrl" ) )
+        if( modelFileName.FileExists()
+            && ( wrlExt == wxT( "wrl" ) || wrlExt == wxT( "WRL" ) ) )
         {
             if( aExport3DFiles )
             {
@@ -1237,9 +1251,9 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
              * for footprints that are flipped
              * When flipped, axis rotation is the horizontal axis (X axis)
              */
-            double rotx = -vrmlm->m_MatRotation.x;
-            double roty = -vrmlm->m_MatRotation.y;
-            double rotz = -vrmlm->m_MatRotation.z;
+            double rotx = -sM->m_Rotation.x;
+            double roty = -sM->m_Rotation.y;
+            double rotz = -sM->m_Rotation.z;
 
             if( isFlipped )
             {
@@ -1273,9 +1287,9 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
 
             // adjust 3D shape local offset position
             // they are given in inch, so they are converted in board IU.
-            double offsetx = vrmlm->m_MatPosition.x * IU_PER_MILS * 1000.0;
-            double offsety = vrmlm->m_MatPosition.y * IU_PER_MILS * 1000.0;
-            double offsetz = vrmlm->m_MatPosition.z * IU_PER_MILS * 1000.0;
+            double offsetx = sM->m_Offset.x * IU_PER_MILS * 1000.0;
+            double offsety = sM->m_Offset.y * IU_PER_MILS * 1000.0;
+            double offsetz = sM->m_Offset.z * IU_PER_MILS * 1000.0;
 
             if( isFlipped )
                 offsetz = -offsetz;
@@ -1292,9 +1306,9 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
             aOutputFile << ( (offsetz * aModel.scale ) +
                              aModel.GetLayerZ( aModule->GetLayer() ) ) << "\n";
             aOutputFile << "  scale ";
-            aOutputFile << ( vrmlm->m_MatScale.x * aVRMLModelsToBiu ) << " ";
-            aOutputFile << ( vrmlm->m_MatScale.y * aVRMLModelsToBiu ) << " ";
-            aOutputFile << ( vrmlm->m_MatScale.z * aVRMLModelsToBiu ) << "\n";
+            aOutputFile << ( sM->m_Scale.x * aVRMLModelsToBiu ) << " ";
+            aOutputFile << ( sM->m_Scale.y * aVRMLModelsToBiu ) << " ";
+            aOutputFile << ( sM->m_Scale.z * aVRMLModelsToBiu ) << "\n";
             aOutputFile << "  children [\n    Inline {\n      url \"";
 
             if( aUseRelativePaths )
@@ -1311,6 +1325,8 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aModule
             aOutputFile << TO_UTF8( fn ) << "\"\n    } ]\n";
             aOutputFile << "  }\n";
         }
+
+        ++sM;
     }
 }
 
@@ -1322,6 +1338,8 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
 {
     BOARD*          pcb = GetBoard();
     bool            ok  = true;
+
+    resolver = Prj().Get3DCacheManager()->GetResolver();
 
     MODEL_VRML model3d;
     model3d.plainPCB = aUsePlainPCB;

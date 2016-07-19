@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 
 
 #include "ray.h"
-#include "3d_math/3d_fastmath.h"
+#include "../../3d_fastmath.h"
 #include <stdio.h>
 #include <wx/debug.h>
 
@@ -189,7 +189,9 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
 bool IntersectSegment( const SFVEC2F &aStartA, const SFVEC2F &aEnd_minus_startA,
                        const SFVEC2F &aStartB, const SFVEC2F &aEnd_minus_startB )
 {
-    float rxs = aEnd_minus_startA.x * aEnd_minus_startB.y - aEnd_minus_startA.y * aEnd_minus_startB.x;
+    float rxs = aEnd_minus_startA.x *
+                aEnd_minus_startB.y - aEnd_minus_startA.y *
+                aEnd_minus_startB.x;
 
     if( fabs(rxs) >  glm::epsilon<float>() )
     {
@@ -212,6 +214,7 @@ bool IntersectSegment( const SFVEC2F &aStartA, const SFVEC2F &aEnd_minus_startA,
 
     return false;
 }
+
 
 // !TODO: not tested
 bool RAY::IntersectSphere( const SFVEC3F &aCenter, float aRadius, float &aOutT0, float &aOutT1 ) const
@@ -271,6 +274,7 @@ bool RAY::IntersectSphere( const SFVEC3F &aCenter, float aRadius, float &aOutT0,
     return true;
 }
 
+
 RAYSEG2D::RAYSEG2D( const SFVEC2F& s, const SFVEC2F& e )
 {
     m_Start = s;
@@ -290,17 +294,21 @@ RAYSEG2D::RAYSEG2D( const SFVEC2F& s, const SFVEC2F& e )
 }
 
 
-bool RAYSEG2D::IntersectSegment( const SFVEC2F &aStart, const SFVEC2F &aEnd_minus_start, float *aOutT ) const
+bool RAYSEG2D::IntersectSegment( const SFVEC2F &aStart,
+                                 const SFVEC2F &aEnd_minus_start,
+                                 float *aOutT ) const
 {
-    float rxs = m_End_minus_start.x * aEnd_minus_start.y - m_End_minus_start.y * aEnd_minus_start.x;
+    float rxs = m_End_minus_start.x *
+                aEnd_minus_start.y - m_End_minus_start.y *
+            aEnd_minus_start.x;
 
-    if( fabs(rxs) >  glm::epsilon<float>() )
+    if( fabs( rxs ) >  glm::epsilon<float>() )
     {
-        float inv_rxs = 1.0f / rxs;
+        const float inv_rxs = 1.0f / rxs;
 
-        SFVEC2F pq = aStart - m_Start;
+        const SFVEC2F pq = aStart - m_Start;
 
-        float t = (pq.x * aEnd_minus_start.y - pq.y * aEnd_minus_start.x) * inv_rxs;
+        const float t = (pq.x * aEnd_minus_start.y - pq.y * aEnd_minus_start.x) * inv_rxs;
 
         if( (t < 0.0f) || (t > 1.0f) )
             return false;
@@ -324,7 +332,7 @@ float RAYSEG2D::DistanceToPointSquared( const SFVEC2F &aPoint ) const
 {
     SFVEC2F p = aPoint - m_Start;
 
-    float c1 = glm::dot( p, m_End_minus_start );
+    const float c1 = glm::dot( p, m_End_minus_start );
 
     if( c1 < FLT_EPSILON )
         return glm::dot( p, p );
@@ -333,8 +341,9 @@ float RAYSEG2D::DistanceToPointSquared( const SFVEC2F &aPoint ) const
         p = aPoint - m_End;
     else
     {
-        float b = c1 / m_DOT_End_minus_start;
-        SFVEC2F pb = m_Start + m_End_minus_start * b;
+        const float b = c1 / m_DOT_End_minus_start;
+        const SFVEC2F pb = m_Start + m_End_minus_start * b;
+
         p = aPoint - pb;
     }
 
@@ -342,21 +351,26 @@ float RAYSEG2D::DistanceToPointSquared( const SFVEC2F &aPoint ) const
 }
 
 
-bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter, float aRadius, float *aOutT0, float *aOutT1, SFVEC2F *aOutNormalT0, SFVEC2F *aOutNormalT1 ) const
+bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter,
+                                float aRadius,
+                                float *aOutT0,
+                                float *aOutT1,
+                                SFVEC2F *aOutNormalT0,
+                                SFVEC2F *aOutNormalT1 ) const
 {
     // This code used directly from Steve Marschner's CS667 framework
     // http://cs665pd.googlecode.com/svn/trunk/photon/sphere.cpp
 
     // Compute some factors used in computation
-    float qx = m_Start.x - aCenter.x;
-    float qy = m_Start.y - aCenter.y;
+    const float qx = m_Start.x - aCenter.x;
+    const float qy = m_Start.y - aCenter.y;
 
-    float qd = qx * m_Dir.x + qy * m_Dir.y;
-    float qq = qx * qx + qy * qy;
+    const float qd = qx * m_Dir.x + qy * m_Dir.y;
+    const float qq = qx * qx + qy * qy;
 
     // solving the quadratic equation for t at the pts of intersection
     // dd*t^2 + (2*qd)*t + (qq-r^2) = 0
-    float discriminantsqr = (qd * qd - (qq - aRadius * aRadius));
+    const float discriminantsqr = (qd * qd - (qq - aRadius * aRadius));
 
     // If the discriminant is less than zero, there is no intersection
     if( discriminantsqr < FLT_EPSILON )
@@ -365,9 +379,9 @@ bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter, float aRadius, float *aO
 
     // Otherwise check and make sure that the intersections occur on the ray (t
     // > 0) and return the closer one
-    float discriminant = sqrt(discriminantsqr);
-    float t1 = (-qd - discriminant);
-    float t2 = (-qd + discriminant);
+    const float discriminant = sqrt( discriminantsqr );
+    const float t1 = (-qd - discriminant);
+    const float t2 = (-qd + discriminant);
 
     if( (( t1 < 0.0f ) || ( t1 > m_Length ) ) &&
         (( t2 < 0.0f ) || ( t2 > m_Length ) ) )

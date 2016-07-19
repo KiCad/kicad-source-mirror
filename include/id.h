@@ -59,6 +59,7 @@
 // Define room for IDs, for each sub application
 #define ROOM_FOR_KICADMANAGER 50
 #define ROOM_FOR_3D_VIEWER 100
+#define ROOM_FOR_PANEL_PREV_MODEL 50
 
 enum main_id
 {
@@ -285,6 +286,9 @@ enum main_id
     // Change it if this count is too small.
     ID_KICAD_3D_VIEWER_START,
     ID_KICAD_3D_VIEWER_END = ID_KICAD_3D_VIEWER_START + ROOM_FOR_3D_VIEWER,
+
+    ID_KICAD_PANEL_PREV_MODEL_START,
+    ID_KICAD_PANEL_PREV_MODEL_END = ID_KICAD_PANEL_PREV_MODEL_START + ROOM_FOR_PANEL_PREV_MODEL,
 
     ID_END_LIST
 };

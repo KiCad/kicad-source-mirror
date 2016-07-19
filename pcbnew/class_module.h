@@ -32,6 +32,7 @@
 #define MODULE_H_
 
 
+#include <list>
 #include <dlist.h>
 #include <layers_id_colors_and_visibility.h>       // ALL_LAYERS definition.
 #include <class_board_item.h>
@@ -40,12 +41,12 @@
 #include <class_text_mod.h>
 #include <PolyLine.h>
 #include "zones.h"
+#include <3d_cache/3d_info.h>
 
 #include <functional>
 
 class LINE_READER;
 class EDA_3D_CANVAS;
-class S3D_MASTER;
 class EDA_DRAW_PANEL;
 class D_PAD;
 class BOARD;
@@ -154,8 +155,8 @@ public:
     DLIST<BOARD_ITEM>& GraphicalItems()         { return m_Drawings; }
     const DLIST<BOARD_ITEM>& GraphicalItems() const { return m_Drawings; }
 
-    DLIST<S3D_MASTER>& Models()                 { return m_3D_Drawings; }
-    const DLIST<S3D_MASTER>& Models() const     { return m_3D_Drawings; }
+    std::list<S3D_INFO>& Models()             { return m_3D_Drawings; }
+    const std::list<S3D_INFO>& Models() const { return m_3D_Drawings; }
 
     void SetPosition( const wxPoint& aPos );                        // was overload
     const wxPoint& GetPosition() const          { return m_Pos; }   // was overload
@@ -343,7 +344,7 @@ public:
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
                             double          aCorrectionFactor,
-                            bool            aSkipNPTHPadsWihNoCopper = false );
+                            bool            aSkipNPTHPadsWihNoCopper = false ) const;
 
     /**
      * function TransformGraphicShapesWithClearanceToPolygonSet
@@ -371,7 +372,26 @@ public:
                             int             aInflateValue,
                             int             aCircleToSegmentsCount,
                             double          aCorrectionFactor,
-                            int             aCircleToSegmentsCountForTexts = 0 );
+                            int             aCircleToSegmentsCountForTexts = 0 ) const;
+
+    /**
+     * @brief TransformGraphicTextWithClearanceToPolygonSet
+     * This function is the same as TransformGraphicShapesWithClearanceToPolygonSet
+     * but only generate text
+     * @param aLayer
+     * @param aCornerBuffer
+     * @param aInflateValue
+     * @param aCircleToSegmentsCount
+     * @param aCorrectionFactor
+     * @param aCircleToSegmentsCountForTexts
+     */
+    void TransformGraphicTextWithClearanceToPolygonSet(
+                            LAYER_ID aLayer,
+                            SHAPE_POLY_SET& aCornerBuffer,
+                            int             aInflateValue,
+                            int             aCircleToSegmentsCount,
+                            double          aCorrectionFactor,
+                            int             aCircleToSegmentsCountForTexts = 0 ) const;
 
     /**
      * Function DrawEdgesOnly
@@ -527,9 +547,9 @@ public:
      * Function Add3DModel
      * adds \a a3DModel definition to the end of the 3D model list.
      *
-     * @param a3DModel A pointer to a #S3D_MASTER to add to the list.
+     * @param a3DModel A pointer to a #S3D_INFO to add to the list.
      */
-    void Add3DModel( S3D_MASTER* a3DModel );
+    void Add3DModel( S3D_INFO* a3DModel );
 
     SEARCH_RESULT Visit( INSPECTOR inspector,  void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -640,7 +660,7 @@ public:
 private:
     DLIST<D_PAD>      m_Pads;           ///< Linked list of pads.
     DLIST<BOARD_ITEM> m_Drawings;       ///< Linked list of graphical items.
-    DLIST<S3D_MASTER> m_3D_Drawings;    ///< Linked list of 3D models.
+    std::list<S3D_INFO> m_3D_Drawings;  ///< Linked list of 3D models.
     double            m_Orient;         ///< Orientation in tenths of a degree, 900=90.0 degrees.
     wxPoint           m_Pos;            ///< Position of module on the board in internal units.
     TEXTE_MODULE*     m_Reference;      ///< Component reference designator value (U34, R18..)

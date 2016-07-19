@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 #ifndef _RAY_H_
 #define _RAY_H_
 
-#include "plugins/3dapi/xv3d_types.h"
+#include <plugins/3dapi/xv3d_types.h>
 
 
 enum RAY_CLASSIFICATION
@@ -40,7 +40,7 @@ enum RAY_CLASSIFICATION
 };
 
 
-GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) RAY
+struct RAY
 {
     SFVEC3F m_Origin;
     unsigned int rayID; ///< unique ray ID
@@ -57,16 +57,21 @@ GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) RAY
 
     void Init( const SFVEC3F& o, const SFVEC3F& d );
 
-    bool IntersectSphere( const SFVEC3F &aCenter, float aRadius, float &aOutT0, float &aOutT1 ) const;
+    bool IntersectSphere( const SFVEC3F &aCenter,
+                          float aRadius,
+                          float &aOutT0,
+                          float &aOutT1 ) const;
 
     SFVEC3F at( float t ) const { return m_Origin + m_Dir * t; }
-    SFVEC2F at2D( float t ) const { return SFVEC2F( m_Origin.x + m_Dir.x * t, m_Origin.y + m_Dir.y * t ); }
+
+    SFVEC2F at2D( float t ) const {
+        return SFVEC2F( m_Origin.x + m_Dir.x * t, m_Origin.y + m_Dir.y * t ); }
 
     void debug() const;
 };
 
 
-GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) RAY2D
+struct RAY2D
 {
     SFVEC2F m_Origin;
     SFVEC2F m_Dir;
@@ -78,7 +83,7 @@ GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) RAY2D
 };
 
 
-GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) RAYSEG2D
+struct RAYSEG2D
 {
     SFVEC2F m_Start;
     SFVEC2F m_End;
@@ -90,10 +95,19 @@ GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) RAYSEG2D
 
     RAYSEG2D( const SFVEC2F& s, const SFVEC2F& e );
 
-    bool IntersectSegment( const SFVEC2F &aStart, const SFVEC2F &aEnd_minus_start, float *aOutT ) const;
-    bool IntersectCircle( const SFVEC2F &aCenter, float aRadius, float *aOutT0, float *aOutT1, SFVEC2F *aOutNormalT0, SFVEC2F *aOutNormalT1 ) const;
+    bool IntersectSegment( const SFVEC2F &aStart,
+                           const SFVEC2F &aEnd_minus_start,
+                           float *aOutT ) const;
+
+    bool IntersectCircle( const SFVEC2F &aCenter,
+                          float aRadius,
+                          float *aOutT0,
+                          float *aOutT1,
+                          SFVEC2F *aOutNormalT0,
+                          SFVEC2F *aOutNormalT1 ) const;
 
     float DistanceToPointSquared( const SFVEC2F &aPoint ) const;
+
     /**
      * Function atNormalized - returns the position at t
      * t - value 0.0 ... 1.0
@@ -109,7 +123,7 @@ bool IntersectSegment( const SFVEC2F &aStartA, const SFVEC2F &aEnd_minus_startA,
 
 #if(GLM_ARCH != GLM_ARCH_PURE)
 /*
-GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) RAY4
+struct RAY4
 {
     glm::simdVec4 m_orgX;   ///< x coordinate of ray origin
     glm::simdVec4 m_orgy;   ///< y coordinate of ray origin

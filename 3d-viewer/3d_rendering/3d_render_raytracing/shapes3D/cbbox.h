@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@gmail.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,15 +30,14 @@
 #ifndef _CBBOX_H_
 #define _CBBOX_H_
 
-#include "plugins/3dapi/xv3d_types.h"
-#include "3d_rendering/3d_render_raytracing/ray.h"
-#include <fctsys.h>                                                             // For the DBG(
+#include "../ray.h"
+#include <fctsys.h>     // For the DBG(
 
 /**
  * Class CBBOX
  * manages a bounding box defined by two SFVEC3F min max points.
  */
-GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) CBBOX
+struct CBBOX
 {
 
 public:
@@ -54,7 +53,7 @@ public:
      * Initialize a bounding box with a given point
      * @param aPbInit a point for the bounding box initialization
      */
-    CBBOX( const SFVEC3F &aPbInit );
+    explicit CBBOX( const SFVEC3F &aPbInit );
 
     /**
      * Constructor CBBOX
@@ -76,6 +75,13 @@ public:
     void Set( const SFVEC3F &aPbMin, const SFVEC3F &aPbMax );
 
     void Set( const CBBOX &aBBox );
+
+    /**
+     * @brief Set
+     * @param aPbMin
+     * @param aPbMax
+     */
+    void Set( const SFVEC3F &aPoint );
 
     /**
      * Function Union
@@ -246,8 +252,8 @@ public:
 
 private:
 
-    SFVEC3F m_min;           ///< (12) point of the lower position of the bounding box
-    SFVEC3F m_max;           ///< (12) point of the higher position of the bounding box
+    SFVEC3F m_min;  ///< (12) point of the lower position of the bounding box
+    SFVEC3F m_max;  ///< (12) point of the higher position of the bounding box
 };
 
 #endif // CBBox_h

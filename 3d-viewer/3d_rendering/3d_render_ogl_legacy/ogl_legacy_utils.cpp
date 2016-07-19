@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,10 +28,10 @@
  */
 
 
-#include "common_ogl/openGL_includes.h"
+#include "../../common_ogl/openGL_includes.h"
 #include "ogl_legacy_utils.h"
 #include <trigo.h>
-#include <wx/debug.h>                                                           // For the wxASSERT
+#include <wx/debug.h>   // For the wxASSERT
 
 #define RADPERDEG 0.0174533
 
@@ -50,8 +50,12 @@ void OGL_draw_arrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize )
 
       if( ( vec.x != 0.0f ) || ( vec.y != 0.0f ) )
       {
-        glRotatef( atan2(vec.y, vec.x) / RADPERDEG, 0.0f, 0.0f, 1.0f );
-        glRotatef( atan2(sqrt(vec.x * vec.x + vec.y * vec.y), vec.z) / RADPERDEG, 0.0f, 1.0f, 0.0f );
+        glRotatef( atan2( vec.y, vec.x ) / RADPERDEG, 0.0f, 0.0f, 1.0f );
+        glRotatef( atan2( sqrt( vec.x * vec.x + vec.y * vec.y ), vec.z ) / RADPERDEG,
+                   0.0f,
+                   1.0f,
+                   0.0f );
+
       } else if( vec.z < 0.0f )
       {
         glRotatef( 180.0f, 1.0f, 0.0f, 0.0f );
@@ -87,8 +91,8 @@ void OGL_draw_arrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize )
       glTranslatef( 0.0f , 0.0f ,-length + 4.0f * aSize );
 
       quadObj = gluNewQuadric();
-      gluQuadricDrawStyle(quadObj, GLU_FILL );
-      gluQuadricNormals(quadObj, GLU_SMOOTH );
+      gluQuadricDrawStyle( quadObj, GLU_FILL );
+      gluQuadricNormals( quadObj, GLU_SMOOTH );
       gluCylinder( quadObj, aSize, aSize, length - 4.0 * aSize, 12, 1 );
       gluDeleteQuadric( quadObj );
 /*
@@ -154,45 +158,53 @@ void OGL_draw_half_open_cylinder( unsigned int aNrSidesPerCircle )
 {
     if( aNrSidesPerCircle > 1 )
     {
-        float radius = 0.5f;
-        int delta = 3600 / aNrSidesPerCircle;
+        const float radius = 0.5f;
+        const int delta = 3600 / aNrSidesPerCircle;
 
         // Generate bottom
         glNormal3f( 0.0f, 0.0f,-1.0f );
         glBegin( GL_TRIANGLE_FAN );
-        glVertex3f( 0.0, 0.0, 0.0 );                                            // This is the V0 of the FAN
+        glVertex3f( 0.0, 0.0, 0.0 );  // This is the V0 of the FAN
+
         for( int ii = 0; ii < 1800; ii += delta )
         {
             SFVEC2D corner = SFVEC2D( 0.0, radius );
             RotatePoint( &corner.x, &corner.y, ii );
             glVertex3f( corner.x, corner.y, 0.0 );
         }
+
         glVertex3d( 0.0, -radius, 0.0 );
         glEnd();
 
         // Generate top
         glNormal3f( 0.0f, 0.0f, 1.0f );
         glBegin( GL_TRIANGLE_FAN );
-        glVertex3f( 0.0, 0.0, 1.0 );                                            // This is the V0 of the FAN
+        glVertex3f( 0.0, 0.0, 1.0 );  // This is the V0 of the FAN
+
         for( int ii = 1800; ii > 0; ii -= delta )
         {
             SFVEC2D corner = SFVEC2D( 0.0, radius );
+
             RotatePoint( &corner.x, &corner.y, ii );
             glVertex3f( corner.x, corner.y, 1.0 );
         }
+
         glVertex3f( 0.0, radius, 1.0 );
         glEnd();
 
         // Generate contours
         glBegin( GL_QUAD_STRIP );
+
         for( int ii = 1800; ii > 0; ii -= delta )
         {
             SFVEC2D corner = SFVEC2D( 0.0, radius );
+
             RotatePoint( &corner.x, &corner.y, ii );
             glNormal3f( corner.x * 2.0f, corner.y * 2.0f, 0.0f );
             glVertex3f( corner.x, corner.y, 1.0 );
             glVertex3f( corner.x, corner.y, 0.0 );
         }
+
         glNormal3f( 0.0, 1.0f, 0.0f );
         glVertex3d( 0.0, radius, 1.0 );
         glVertex3d( 0.0, radius, 0.0 );
@@ -201,7 +213,8 @@ void OGL_draw_half_open_cylinder( unsigned int aNrSidesPerCircle )
 }
 
 
-void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment, unsigned int aNrSidesPerCircle )
+void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment,
+                       unsigned int aNrSidesPerCircle )
 {
     glPushMatrix();
 
@@ -215,14 +228,17 @@ void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment, unsigned int aNrSidesPer
 
     if( ( end_minus_start.x != 0.0f ) || ( end_minus_start.y != 0.0f ) )
     {
-      glRotatef( atan2(end_minus_start.y, end_minus_start.x) / RADPERDEG, 0.0f, 0.0f, 1.0f );
+      glRotatef( atan2( end_minus_start.y, end_minus_start.x ) / RADPERDEG,
+                 0.0f,
+                 0.0f,
+                 1.0f );
     }
 
     glPushMatrix();
     glTranslatef( length, 0.0, 0.0f );
     glScalef( width, width, 1.0f );
     OGL_draw_half_open_cylinder( aNrSidesPerCircle );
-    glPopMatrix ();
+    glPopMatrix();
 
     glBegin( GL_QUADS );
     glNormal3f( 0.0,-1.0, 0.0 );

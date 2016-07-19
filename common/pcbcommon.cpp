@@ -33,7 +33,6 @@
 
 #include <pcbcommon.h>
 #include <class_board.h>
-#include <3d_viewer.h>
 
 
 wxString LayerMaskDescribe( const BOARD *aBoard, LSET aMask )

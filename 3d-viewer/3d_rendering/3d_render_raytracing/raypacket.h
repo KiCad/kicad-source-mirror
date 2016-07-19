@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,13 +40,21 @@
 #define RAYPACKET_RAYS_PER_PACKET (RAYPACKET_DIM * RAYPACKET_DIM)
 
 
-GLM_ALIGNED_STRUCT(CLASS_ALIGNMENT) RAYPACKET
+struct RAYPACKET
 {
     CFRUSTUM    m_Frustum;
     RAY         m_ray[RAYPACKET_RAYS_PER_PACKET];
 
-    RAYPACKET( const CCAMERA &aCamera, const SFVEC2I &aWindowsPosition );
-    RAYPACKET( const CCAMERA &aCamera, const SFVEC2I &aWindowsPosition, unsigned int aPixelMultiple );
+    RAYPACKET( const CCAMERA &aCamera,
+               const SFVEC2I &aWindowsPosition );
+
+    RAYPACKET( const CCAMERA &aCamera,
+               const SFVEC2I &aWindowsPosition,
+               const SFVEC3F &aDirectionDisplacementFactor );
+
+    RAYPACKET( const CCAMERA &aCamera,
+               const SFVEC2I &aWindowsPosition,
+               unsigned int aPixelMultiple );
 };
 
 

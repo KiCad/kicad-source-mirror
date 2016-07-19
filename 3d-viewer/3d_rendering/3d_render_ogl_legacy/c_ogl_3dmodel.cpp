@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,14 +30,15 @@
 #include "c_ogl_3dmodel.h"
 #include "ogl_legacy_utils.h"
 #include "../common_ogl/ogl_utils.h"
+#include "../3d_math.h"
 #include <wx/debug.h>
 
 
-C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
+C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
+                              MATERIAL_MODE aMaterialMode )
 {
     m_ogl_idx_list_opaque = 0;
     m_ogl_idx_list_transparent = 0;
-    m_ogl_idx_list_meshes = 0;
     m_nr_meshes = 0;
     m_meshs_bbox = NULL;
 
@@ -55,7 +56,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
         m_meshs_bbox = new CBBOX[a3DModel.m_MeshesSize];
 
         // Generate m_MeshesSize auxiliar lists to render the meshes
-        GLuint m_ogl_idx_list_meshes = glGenLists( a3DModel.m_MeshesSize );
+        m_ogl_idx_list_meshes = glGenLists( a3DModel.m_MeshesSize );
 
         // Render each mesh of the model
         // /////////////////////////////////////////////////////////////////////
@@ -75,14 +76,18 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                     (mesh.m_FaceIdx != NULL) &&
                     (mesh.m_FaceIdxSize > 0) && (mesh.m_VertexSize > 0) )
                 {
-                    SFVEC4F        *pColorRGBA = NULL;
+                    SFVEC4F *pColorRGBA = NULL;
 
                     // Create the bbox for this mesh
                     // /////////////////////////////////////////////////////////
                     m_meshs_bbox[mesh_i].Reset();
 
-                    for( unsigned int vertex_i = 0; vertex_i < mesh.m_VertexSize; ++vertex_i )
+                    for( unsigned int vertex_i = 0;
+                         vertex_i < mesh.m_VertexSize;
+                         ++vertex_i )
+                    {
                         m_meshs_bbox[mesh_i].Union( mesh.m_Positions[vertex_i] );
+                    }
 
                     // Make sure we start with client state disabled
                     // /////////////////////////////////////////////////////////
@@ -107,22 +112,47 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                         if( mesh.m_MaterialIdx < a3DModel.m_MaterialsSize )
                             transparency = a3DModel.m_Materials[mesh.m_MaterialIdx].m_Transparency;
 
-                        if( transparency > FLT_EPSILON )
+                        if( (transparency > FLT_EPSILON) &&
+                            (aMaterialMode ==  MATERIAL_MODE_NORMAL) )
                         {
                             // Create a new array of RGBA colors
                             pColorRGBA = new SFVEC4F[mesh.m_VertexSize];
 
                             // Copy RGB array and add the Alpha value
                             for( unsigned int i = 0; i < mesh.m_VertexSize; ++i )
-                                pColorRGBA[i] = SFVEC4F( mesh.m_Color[i], 1.0f - transparency );
+                                pColorRGBA[i] = SFVEC4F( mesh.m_Color[i],
+                                                         1.0f - transparency );
 
                             // Load an RGBA array
                             glColorPointer( 4, GL_FLOAT, 0, pColorRGBA );
                         }
                         else
                         {
-                            // Else load the original RGB color array
-                            glColorPointer( 3, GL_FLOAT, 0, mesh.m_Color );
+                            switch( aMaterialMode )
+                            {
+                            case MATERIAL_MODE_NORMAL:
+                            case MATERIAL_MODE_DIFFUSE_ONLY:
+                                // load the original RGB color array
+                                glColorPointer( 3, GL_FLOAT, 0, mesh.m_Color );
+                                break;
+                            case MATERIAL_MODE_CAD_MODE:
+                                // Create a new array of RGBA colors
+                                pColorRGBA = new SFVEC4F[mesh.m_VertexSize];
+
+                                // Copy RGB array and add the Alpha value
+                                for( unsigned int i = 0; i < mesh.m_VertexSize; ++i )
+                                {
+                                    pColorRGBA[i] =
+                                            SFVEC4F( MaterialDiffuseToColorCAD( mesh.m_Color[i] ),
+                                                     1.0f );
+                                }
+
+                                // Load an RGBA array
+                                glColorPointer( 4, GL_FLOAT, 0, pColorRGBA );
+                                break;
+                            default:
+                                break;
+                            }
                         }
                     }
 
@@ -152,12 +182,29 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
 
                     if( mesh.m_MaterialIdx < a3DModel.m_MaterialsSize )
                     {
-                        OGL_SetMaterial( a3DModel.m_Materials[mesh.m_MaterialIdx] );
+                        switch( aMaterialMode )
+                        {
+                        case MATERIAL_MODE_NORMAL:
+                            OGL_SetMaterial( a3DModel.m_Materials[mesh.m_MaterialIdx] );
+                            break;
+                        case MATERIAL_MODE_DIFFUSE_ONLY:
+                            OGL_SetDiffuseOnlyMaterial(
+                                        a3DModel.m_Materials[mesh.m_MaterialIdx].m_Diffuse );
+                            break;
+                        case MATERIAL_MODE_CAD_MODE:
+                            OGL_SetDiffuseOnlyMaterial(
+                                        MaterialDiffuseToColorCAD(
+                                            a3DModel.m_Materials[mesh.m_MaterialIdx].m_Diffuse ) );
+                            break;
+                        default:
+                            break;
+                        }
                     }
 
                     // Draw mesh
                     // /////////////////////////////////////////////////////////
-                    glDrawElements( GL_TRIANGLES, mesh.m_FaceIdxSize, GL_UNSIGNED_INT, mesh.m_FaceIdx );
+                    glDrawElements( GL_TRIANGLES, mesh.m_FaceIdxSize,
+                                    GL_UNSIGNED_INT, mesh.m_FaceIdx );
 
                     glDisable( GL_COLOR_MATERIAL );
 
@@ -170,19 +217,22 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                     glDisableClientState( GL_NORMAL_ARRAY );
                     glDisableClientState( GL_VERTEX_ARRAY );
 
+                    glFinish();
+
                     delete [] pColorRGBA;
                 }
             }
         }// for each mesh
 
-        bool have_opaque_meshes = false;
-        bool have_transparent_meshes = false;
 
         m_ogl_idx_list_opaque = glGenLists( 1 );
 
         // Check if the generated list is valid
         if( glIsList( m_ogl_idx_list_opaque ) )
         {
+            bool have_opaque_meshes = false;
+            bool have_transparent_meshes = false;
+
             // Compile the model display list
             glNewList( m_ogl_idx_list_opaque, GL_COMPILE );
 
@@ -198,12 +248,12 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
 
                     if( material.m_Transparency == 0.0f )
                     {
-                        have_opaque_meshes = true;                              // Flag that we have at least one opaque mesh
+                        have_opaque_meshes = true; // Flag that we have at least one opaque mesh
                         glCallList( m_ogl_idx_list_meshes + mesh_i );
                     }
                     else
                     {
-                        have_transparent_meshes = true;                         // Flag that we found a transparent mesh
+                        have_transparent_meshes = true; // Flag that we found a transparent mesh
                     }
                 }
             }
@@ -212,7 +262,8 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
 
             if( !have_opaque_meshes )
             {
-                glDeleteLists( m_ogl_idx_list_opaque, 1 );                      // If we dont have opaque meshes, we can free the list
+                // If we dont have opaque meshes, we can free the list
+                glDeleteLists( m_ogl_idx_list_opaque, 1 );
                 m_ogl_idx_list_opaque = 0;
             }
 
@@ -239,8 +290,9 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
                         {
                             const SMATERIAL &material = a3DModel.m_Materials[mesh.m_MaterialIdx];
 
+                            // Render the transparent mesh if it have a transparency value
                             if( material.m_Transparency != 0.0f )
-                                glCallList( m_ogl_idx_list_meshes + mesh_i );           // Render the transparent mesh
+                                glCallList( m_ogl_idx_list_meshes + mesh_i );
                         }
                     }
 
@@ -265,6 +317,8 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel )
 
         for( unsigned int mesh_i = 0; mesh_i < a3DModel.m_MeshesSize; ++mesh_i )
             m_model_bbox.Union( m_meshs_bbox[mesh_i] );
+
+        glFinish();
     }
 }
 

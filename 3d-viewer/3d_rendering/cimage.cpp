@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@gmail.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,11 +28,11 @@
  */
 
 #include "cimage.h"
-#include <wx/image.h>                                                           // Used for save an image to disk
-#include <string.h>                                                             // For memcpy
+#include "buffers_debug.h"
+#include <string.h> // For memcpy
 
 #ifndef CLAMP
-#define CLAMP(n, min, max) {if (n < min) n=min; else if (n > max) n = max;}
+#define CLAMP(n, min, max) {if( n < min ) n=min; else if( n > max ) n = max;}
 #endif
 
 
@@ -83,12 +83,14 @@ bool CIMAGE::wrapCoords( int *aXo, int *aYo ) const
         y =  (y < 0)?0:y;
         y =  (y >= (int)(m_height - 1))?(m_height - 1):y;
         break;
+
     case WRAP_WRAP:
         x = (x < 0)?((m_width - 1)+x):x;
         x = (x >= (int)(m_width - 1))?(x - m_width):x;
         y = (y < 0)?((m_height - 1)+y):y;
         y = (y >= (int)(m_height - 1))?(y - m_height):y;
         break;
+
     default:
         break;
     }
@@ -139,6 +141,7 @@ void CIMAGE::Hline( int aXStart, int aXEnd, int aY, unsigned char aValue )
     if( aXStart > aXEnd )
     {
         int swap = aXStart;
+
         aXStart = aXEnd;
         aXEnd = swap;
     }
@@ -200,12 +203,12 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
 
     if( aOperation == COPY_RAW )
     {
-        if ( aImgA == NULL )
+        if( aImgA == NULL )
             return;
     }
     else
     {
-        if ( (aImgA == NULL) || (aImgB == NULL) )
+        if( (aImgA == NULL) || (aImgB == NULL) )
             return;
     }
 
@@ -247,7 +250,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
             aV = aImgA->m_pixels[it];
             bV = aImgB->m_pixels[it];
 
-            m_pixels[it] = abs(aV - bV);
+            m_pixels[it] = abs( aV - bV );
         }
     break;
 
@@ -321,7 +324,7 @@ void CIMAGE::CopyFull( const CIMAGE *aImgA, const CIMAGE *aImgB, E_IMAGE_OP aOpe
 // with a generic convolution matrix and get the values from there.
 // http://docs.gimp.org/nl/plug-in-convmatrix.html
 static const S_FILTER FILTERS[] =   {
-    // Hi Pass
+    // FILTER_HIPASS
     {
     {   { 0, -1, -1, -1,  0},
         {-1,  2, -4,  2, -1},
@@ -333,7 +336,7 @@ static const S_FILTER FILTERS[] =   {
         255
     },
 
-    // Blur
+    // FILTER_GAUSSIAN_BLUR
     {
     {   { 3,  5,  7,  5,  3},
         { 5,  9, 12,  9,  5},
@@ -345,19 +348,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // Blur Invert
-    {
-    {   { 0,  0,  0,  0,  0},
-        { 0,  0, -1,  0,  0},
-        { 0, -1,  0, -1,  0},
-        { 0,  0, -1,  0,  0},
-        { 0,  0,  0,  0,  0}
-    },
-        4,
-        255
-    },
-
-    // Blur
+    // FILTER_GAUSSIAN_BLUR2
     {
     {   { 1,  4,  7,  4,  1},
         { 4, 16, 26, 16,  4},
@@ -369,7 +360,19 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // Cartoon
+    // FILTER_INVERT_BLUR
+    {
+    {   { 0,  0,  0,  0,  0},
+        { 0,  0, -1,  0,  0},
+        { 0, -1,  0, -1,  0},
+        { 0,  0, -1,  0,  0},
+        { 0,  0,  0,  0,  0}
+    },
+        4,
+        255
+    },
+
+    // FILTER_CARTOON
     {
     {   {-1, -1, -1, -1,  0},
         {-1,  0,  0,  0,  0},
@@ -381,7 +384,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // Emboss
+    // FILTER_EMBOSS
     {
     {   {-1, -1, -1, -1,  0},
         {-1, -1, -1,  0,  1},
@@ -393,7 +396,7 @@ static const S_FILTER FILTERS[] =   {
         128
     },
 
-    // Sharpen
+    // FILTER_SHARPEN
     {
     {   {-1, -1, -1, -1, -1},
         {-1,  2,  2,  2, -1},
@@ -405,7 +408,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // Melt
+    // FILTER_MELT
     {
     {   { 4,  2,  6,  8,  1},
         { 1,  2,  5,  4,  2},
@@ -417,7 +420,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // Sobel Gx
+    // FILTER_SOBEL_GX
     {
     {   { 0,  0,  0,  0,  0},
         { 0, -1,  0,  1,  0},
@@ -429,7 +432,7 @@ static const S_FILTER FILTERS[] =   {
         0
     },
 
-    // Sobel Gy
+    // FILTER_SOBEL_GY
     {
     {   { 1,  2,  4,  2,  1},
         {-1, -1,  0,  1,  1},
@@ -439,14 +442,26 @@ static const S_FILTER FILTERS[] =   {
     },
         1,
         0
+    },
+
+    // FILTER_BLUR_3X3
+    {
+    {   { 0,  0,  0,  0,  0},
+        { 0,  1,  2,  1,  0},
+        { 0,  2,  4,  2,  0},
+        { 0,  1,  2,  1,  0},
+        { 0,  0,  0,  0,  0},
+    },
+        16,
+        0
     }
 };// Filters
 
 
-//!TODO: This functions can be optimized slipting it between the edges and
-//       do it without use the getpixel function.
-//       Optimization can be done to m_pixels[ix + iy * m_width]
-//       but keep in mind the parallel process of the algorithm
+// !TODO: This functions can be optimized slipting it between the edges and
+//        do it without use the getpixel function.
+//        Optimization can be done to m_pixels[ix + iy * m_width]
+//        but keep in mind the parallel process of the algorithm
 void CIMAGE::EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType )
 {
     S_FILTER filter = FILTERS[aFilterType];
@@ -454,10 +469,7 @@ void CIMAGE::EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType )
     aInImg->m_wraping = WRAP_CLAMP;
     m_wraping = WRAP_CLAMP;
 
-    #ifdef USE_OPENMP
     #pragma omp parallel for
-    #endif /* USE_OPENMP */
-
     for( int iy = 0; iy < (int)m_height; iy++)
     {
         for( int ix = 0; ix < (int)m_width; ix++ )
@@ -469,7 +481,9 @@ void CIMAGE::EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType )
                 for( int sx = 0; sx < 5; sx++ )
                 {
                     int factor = filter.kernel[sx][sy];
-                    unsigned char pixelv = aInImg->Getpixel( ix + sx - 2, iy + sy - 2 );
+                    unsigned char pixelv = aInImg->Getpixel( ix + sx - 2,
+                                                             iy + sy - 2 );
+
                     v += pixelv * factor;
                 }
             }
@@ -491,7 +505,8 @@ void CIMAGE::SetPixelsFromNormalizedFloat( const float * aNormalizedFloatArray )
     for( unsigned int i = 0; i < m_wxh; i++ )
     {
         int v = aNormalizedFloatArray[i] * 255;
-        CLAMP(v, 0, 255);
+
+        CLAMP( v, 0, 255 );
         m_pixels[i] = v;
     }
 }
@@ -499,21 +514,5 @@ void CIMAGE::SetPixelsFromNormalizedFloat( const float * aNormalizedFloatArray )
 
 void CIMAGE::SaveAsPNG( wxString aFileName ) const
 {
-    unsigned char* pixelbuffer = (unsigned char*) malloc( m_wxh * 3 );
-
-    wxImage image( m_width, m_height );
-
-    for( unsigned int i = 0; i < m_wxh; i++)
-    {
-        unsigned char v = m_pixels[i];
-        // Set RGB value with all same values intensities
-        pixelbuffer[i * 3 + 0] = v;
-        pixelbuffer[i * 3 + 1] = v;
-        pixelbuffer[i * 3 + 2] = v;
-    }
-
-    image.SetData( pixelbuffer );
-    image = image.Mirror( false );
-    image.SaveFile( aFileName + ".png", wxBITMAP_TYPE_PNG );
-    image.Destroy();
+    DBG_SaveBuffer( aFileName, m_pixels, m_width, m_height );
 }

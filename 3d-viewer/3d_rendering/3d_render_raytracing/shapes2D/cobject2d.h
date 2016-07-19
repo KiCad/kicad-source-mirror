@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@
 #ifndef _COBJECT2D_H_
 #define _COBJECT2D_H_
 
-#include "plugins/3dapi/xv3d_types.h"
 #include "cbbox2d.h"
 #include <string.h>
 
@@ -60,7 +59,7 @@ enum OBJECT2D_TYPE
 };
 
 
-class GLM_ALIGN(CLASS_ALIGNMENT) COBJECT2D
+class  COBJECT2D
 {
 protected:
     CBBOX2D          m_bbox;
@@ -78,12 +77,13 @@ public:
     /** Function Overlaps
      * @brief Test if the box overlaps the object
      * Conformance
-     * The function overlaps implements function Overlaps from the OGC Simple Feature Specification.
+     * The function overlaps implements function Overlaps from the OGC
+     * Simple Feature Specification.
      * http://www.opengeospatial.org/standards/sfa
      * a.Overlaps(b) ⇔ ( dim(I(a)) = dim(I(b)) = dim(I(a) ∩ I(b))) ∧ (a ∩ b ≠ a) ∧ (a ∩ b ≠ b)
-     * It means that the result dimension of an overlap is the same dimentions of the bounding box
-     * (so the overlap cannot be a point or a line) and one of the boxes cannot full contain the other
-     * box.
+     * It means that the result dimension of an overlap is the same dimentions
+     * of the bounding box (so the overlap cannot be a point or a line) and one
+     * of the boxes cannot full contain the other box.
      * @param aBBox - The bounding box to test
      * @return true if the BBox intersects the object or is inside it
      */
@@ -100,11 +100,14 @@ public:
     /** Function Intersect
      * @brief Intersect
      * @param aSegRay
-     * @param aOutT a value between 0.0 and 1.0 in relation to the time of the hit of the segment
+     * @param aOutT a value between 0.0 and 1.0 in relation to the time of the
+     * hit of the segment
      * @param aNormalOut
      * @return
      */
-    virtual bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const = 0;
+    virtual bool Intersect( const RAYSEG2D &aSegRay,
+                            float *aOutT,
+                            SFVEC2F *aNormalOut ) const = 0;
 
     /** Function IsBBoxInside
      * @brief Tests if the bouding is out, intersects or is complety inside
@@ -119,7 +122,7 @@ public:
 
     const SFVEC2F &GetCentroid() const { return m_centroid; }
 
-    const OBJECT2D_TYPE GetObjectType() const { return m_obj_type; }
+    OBJECT2D_TYPE GetObjectType() const { return m_obj_type; }
 };
 
 
@@ -129,9 +132,12 @@ public:
 class COBJECT2D_STATS
 {
 public:
-    void ResetStats() { memset( m_counter, 0, sizeof(unsigned int) * OBJ2D_MAX ); }
+    void ResetStats() { memset( m_counter, 0, sizeof( unsigned int ) * OBJ2D_MAX ); }
 
-    unsigned int GetCountOf( OBJECT2D_TYPE aObjType ) const { return m_counter[aObjType]; }
+    unsigned int GetCountOf( OBJECT2D_TYPE aObjType ) const
+    {
+        return m_counter[aObjType];
+    }
 
     void AddOne( OBJECT2D_TYPE aObjType ) { m_counter[aObjType]++; }
 

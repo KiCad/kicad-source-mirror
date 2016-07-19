@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,10 +32,11 @@
 #ifndef _C3D_MODEL_VIEWER_H_
 #define _C3D_MODEL_VIEWER_H_
 
-#include "3d_rendering/3d_render_ogl_legacy/c_ogl_3dmodel.h"
 #include "3d_rendering/ctrack_ball.h"
 #include <wx/glcanvas.h>
 
+class S3D_CACHE;
+class C_OGL_3DMODEL;
 
 /**
  *  Class C3D_MODEL_VIEWER
@@ -50,10 +51,12 @@ public:
     /**
      *  Creates a new 3D Canvas with a attribute list
      *  @param aParent = the parent creator of this canvas
-     *  @param aAttribList = a list of openGL options created by COGL_ATT_LIST::GetAttributesList
+     *  @param aAttribList = a list of openGL options created by
+     *  COGL_ATT_LIST::GetAttributesList
      */
     C3D_MODEL_VIEWER( wxWindow *aParent,
-                      const int *aAttribList  = 0 );
+                      const int *aAttribList  = 0,
+                      S3D_CACHE *aCacheManager = NULL );
 
     ~C3D_MODEL_VIEWER();
 
@@ -62,6 +65,12 @@ public:
      * @param a3DModel - 3d model data
      */
     void Set3DModel( const S3DMODEL &a3DModel );
+
+    /**
+     * @brief Set3DModel - Set this model to be displayed
+     * @param aModelPathName - 3d model path name
+     */
+    void Set3DModel( wxString const& aModelPathName );
 
     /**
      * @brief Clear3DModel - Unloads the displayed 3d model
@@ -91,6 +100,7 @@ private:
     void OnLeftUp( wxMouseEvent &event );
 
     void OnMiddleUp( wxMouseEvent &event );
+
     void OnMiddleDown( wxMouseEvent &event );
 
     void OnRightClick( wxMouseEvent &event );
@@ -117,9 +127,13 @@ private:
     /// Flag if open gl was initialized
     bool m_ogl_initialized;
 
-    /// factor to convert the model or any other items to keep it in relation to the +/-RANGE_SCALE_3D
+    /// factor to convert the model or any other items to keep it in relation to
+    /// the +/-RANGE_SCALE_3D
     /// (it is named same as the board render for better understanding proposes)
     double m_BiuTo3Dunits;
+
+    /// Optional cache manager
+    S3D_CACHE* m_cacheManager;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

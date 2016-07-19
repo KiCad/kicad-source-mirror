@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,12 +24,13 @@
 
 /**
  * @file  ctrack_ball.cpp
- * @brief
+ * @brief Implementation of a track ball camera. A track ball is placed in the
+ * center of the screen and rotates the camera.
  */
 
-#include "common_ogl/openGL_includes.h"
 #include "ctrack_ball.h"
 #include "trackball.h"
+#include "../3d_math.h"
 #include <wx/log.h>
 
 
@@ -38,7 +39,12 @@ CTRACK_BALL::CTRACK_BALL( float aRangeScale ) : CCAMERA( aRangeScale )
     wxLogTrace( m_logTrace, wxT( "CTRACK_BALL::CTRACK_BALL" ) );
 
     memset( m_quat, 0, sizeof( m_quat ) );
+    memset( m_quat_t0, 0, sizeof( m_quat_t0 ) );
+    memset( m_quat_t1, 0, sizeof( m_quat_t1 ) );
+
     trackball( m_quat, 0.0, 0.0, 0.0, 0.0 );
+    trackball( m_quat_t0, 0.0, 0.0, 0.0, 0.0 );
+    trackball( m_quat_t1, 0.0, 0.0, 0.0, 0.0 );
 }
 
 
@@ -50,7 +56,8 @@ void CTRACK_BALL::Drag( const wxPoint &aNewMousePosition )
 
     // "Pass the x and y coordinates of the last and current positions of
     //  the mouse, scaled so they are from (-1.0 ... 1.0)."
-    float zoom = std::min( m_zoom, 1.0f );
+    const float zoom = 1.0f;
+
     trackball( spin_quat,
                zoom * (2.0 * m_lastPosition.x - m_windowSize.x) / m_windowSize.x,
                zoom * (m_windowSize.y - 2.0 * m_lastPosition.y) / m_windowSize.y,
@@ -59,7 +66,7 @@ void CTRACK_BALL::Drag( const wxPoint &aNewMousePosition )
 
     add_quats( spin_quat, m_quat, m_quat );
 
-    GLfloat rotationMatrix[4][4];
+    float rotationMatrix[4][4];
 
     build_rotmatrix( rotationMatrix, m_quat );
 
@@ -70,17 +77,20 @@ void CTRACK_BALL::Drag( const wxPoint &aNewMousePosition )
     updateFrustum();
 }
 
-void CTRACK_BALL::SetBoardLookAtPos( const SFVEC3F &aBoardPos )
+
+void CTRACK_BALL::SetLookAtPos( const SFVEC3F &aLookAtPos )
 {
-    if( m_boardLookAt_pos != aBoardPos )
+    if( m_lookat_pos != aLookAtPos )
     {
-        m_boardLookAt_pos = -aBoardPos;
+        m_lookat_pos = aLookAtPos;
 
         updateViewMatrix();
         updateFrustum();
+
         m_parametersChanged = true;
     }
 }
+
 
 void CTRACK_BALL::Pan( const wxPoint &aNewMousePosition )
 {
@@ -89,10 +99,11 @@ void CTRACK_BALL::Pan( const wxPoint &aNewMousePosition )
     // Current zoom and an additional factor are taken into account
     // for the amount of panning.
 
-    float zoom = std::min( m_zoom, 1.0f );
-    float panFactor = m_range_scale * zoom * (zoom * 4.0f);
+    const float zoom = std::min( m_zoom, 1.0f );
+    const float panFactor = m_range_scale * zoom * (zoom * 4.0f);
+
     m_camera_pos.x -= panFactor * ( m_lastPosition.x - aNewMousePosition.x ) / m_windowSize.x;
-    m_camera_pos.y -= panFactor * (aNewMousePosition.y - m_lastPosition.y ) / m_windowSize.y;
+    m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y ) / m_windowSize.y;
 
     updateViewMatrix();
     updateFrustum();
@@ -110,8 +121,73 @@ void CTRACK_BALL::Pan( const SFVEC3F &aDeltaOffsetInc )
 }
 
 
-void CTRACK_BALL::Reset()
+void CTRACK_BALL::Pan_T1( const SFVEC3F &aDeltaOffsetInc )
 {
-    m_parametersChanged = true;
+    m_camera_pos_t1 = m_camera_pos + aDeltaOffsetInc;
 }
 
+
+void CTRACK_BALL::Reset()
+{
+    CCAMERA::Reset();
+
+    memset( m_quat, 0, sizeof( m_quat ) );
+    trackball( m_quat, 0.0, 0.0, 0.0, 0.0 );
+}
+
+
+void CTRACK_BALL::Reset_T1()
+{
+    CCAMERA::Reset_T1();
+
+    memset( m_quat_t1, 0, sizeof( m_quat_t1 ) );
+    trackball( m_quat_t1, 0.0, 0.0, 0.0, 0.0 );
+}
+
+
+void CTRACK_BALL::SetT0_and_T1_current_T()
+{
+    CCAMERA::SetT0_and_T1_current_T();
+
+    memcpy( m_quat_t0, m_quat, sizeof( m_quat ) );
+    memcpy( m_quat_t1, m_quat, sizeof( m_quat ) );
+}
+
+
+void CTRACK_BALL::Interpolate( float t )
+{
+    wxASSERT( t >= 0.0f );
+
+    // Limit t o 1.0
+    t = (t > 1.0f)?1.0f:t;
+
+    switch( m_interpolation_mode )
+    {
+    case INTERPOLATION_BEZIER:
+        t = BezierBlend( t );
+        break;
+
+    case INTERPOLATION_EASING_IN_OUT:
+        t = QuadricEasingInOut( t );
+        break;
+
+    case INTERPOLATION_LINEAR:
+    default:
+        break;
+    }
+
+    const float t0 = 1.0f - t;
+
+    m_quat[0] = m_quat_t0[0] * t0 + m_quat_t1[0] * t;
+    m_quat[1] = m_quat_t0[1] * t0 + m_quat_t1[1] * t;
+    m_quat[2] = m_quat_t0[2] * t0 + m_quat_t1[2] * t;
+    m_quat[3] = m_quat_t0[3] * t0 + m_quat_t1[3] * t;
+
+    float rotationMatrix[4][4];
+
+    build_rotmatrix( rotationMatrix, m_quat );
+
+    m_rotationMatrix = glm::make_mat4( &rotationMatrix[0][0] );
+
+    CCAMERA::Interpolate( t );
+}

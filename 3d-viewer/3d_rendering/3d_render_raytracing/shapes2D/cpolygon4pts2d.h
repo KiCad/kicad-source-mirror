@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
  *  (rectangles, trapezoids, with rotation.etc)
  *  This is a simplified version of the cpolygon2d class
  */
-class GLM_ALIGN(CLASS_ALIGNMENT) CPOLYGON4PTS2D : public COBJECT2D
+class  CPOLYGON4PTS2D : public COBJECT2D
 {
 private:
     SFVEC2F m_segments[4];

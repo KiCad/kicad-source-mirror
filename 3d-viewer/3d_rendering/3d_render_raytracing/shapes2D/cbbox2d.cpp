@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@gmail.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
  * @brief Bounding Box class implementation
  */
 
-#include "3d_math/3d_fastmath.h"
+#include "3d_fastmath.h"
 
 #include "cbbox2d.h"
 #include <fctsys.h>
@@ -106,11 +106,13 @@ void CBBOX2D::Union( const SFVEC2F &aPoint )
 
 void CBBOX2D::Union( const CBBOX2D &aBBox )
 {
-    // get the minimun value between the added bounding box and the existent bounding box
+    // get the minimun value between the added bounding box and
+    // the existent bounding box
     m_min.x =  fminf( m_min.x, aBBox.m_min.x );
     m_min.y =  fminf( m_min.y, aBBox.m_min.y );
 
-    // get the maximun value between the added bounding box and the existent bounding box
+    // get the maximun value between the added bounding box and
+    // the existent bounding box
     m_max.x =  fmaxf( m_max.x, aBBox.m_max.x );
     m_max.y =  fmaxf( m_max.y, aBBox.m_max.y );
 }
@@ -131,7 +133,7 @@ SFVEC2F CBBOX2D::GetExtent() const
 unsigned int CBBOX2D::MaxDimension() const
 {
     unsigned int result = 0;
-    SFVEC2F extent = GetExtent();
+    const SFVEC2F extent = GetExtent();
 
     if( extent.y > extent.x ) result = 1;
 
@@ -141,7 +143,8 @@ unsigned int CBBOX2D::MaxDimension() const
 
 float CBBOX2D::Perimeter() const
 {
-    SFVEC2F extent = GetExtent();
+    const SFVEC2F extent = GetExtent();
+
     return 2.0f * ( extent.x + extent.y );
 }
 
@@ -150,8 +153,8 @@ void CBBOX2D::Scale( float aScale )
 {
     wxASSERT( IsInitialized() );
 
-    SFVEC2F scaleV( aScale, aScale );
-    SFVEC2F centerV = GetCenter();
+    const SFVEC2F scaleV( aScale, aScale );
+    const SFVEC2F centerV = GetCenter();
 
     m_min = (m_min - centerV) * scaleV + centerV;
     m_max = (m_max - centerV) * scaleV + centerV;
@@ -184,18 +187,20 @@ bool CBBOX2D::Intersects( const SFVEC2F &aCenter, float aRadiusSquared ) const
 {
     float fDistSq = 0.0f;
 
-    for ( unsigned int i = 0; i < 2; i++ )
+    for( unsigned int i = 0; i < 2; i++ )
     {
         if( aCenter[i] < m_min[i] )
         {
-            float fDist = aCenter[i] - m_min[i];
+            const float fDist = aCenter[i] - m_min[i];
+
             fDistSq += fDist * fDist;
         }
         else
         {
             if( aCenter[i] > m_max[i] )
             {
-                float fDist = aCenter[i] - m_max[i];
+                const float fDist = aCenter[i] - m_max[i];
+
                 fDistSq += fDist * fDist;
             }
         }
@@ -210,8 +215,8 @@ bool CBBOX2D::Intersects( const CBBOX2D &aBBox ) const
     wxASSERT( IsInitialized() );
     wxASSERT( aBBox.IsInitialized() );
 
-    bool x = ( m_max.x >= aBBox.m_min.x ) && ( m_min.x <= aBBox.m_max.x );
-    bool y = ( m_max.y >= aBBox.m_min.y ) && ( m_min.y <= aBBox.m_max.y );
+    const bool x = ( m_max.x >= aBBox.m_min.x ) && ( m_min.x <= aBBox.m_max.x );
+    const bool y = ( m_max.y >= aBBox.m_min.y ) && ( m_min.y <= aBBox.m_max.y );
 
     return ( x && y );
 }
@@ -238,14 +243,14 @@ bool CBBOX2D::Intersect( const RAY2D &aRay, float *t ) const
 {
     wxASSERT( t );
 
-    float tx1 = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
-    float tx2 = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
+    const float tx1 = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
+    const float tx2 = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
     float tmin = glm::min( tx1, tx2 );
     float tmax = glm::max( tx1, tx2 );
 
-    float ty1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
-    float ty2 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
+    const float ty1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
+    const float ty2 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
     tmin = glm::max( tmin, glm::min( ty1, ty2 ) );
     tmax = glm::min( tmax, glm::max( ty1, ty2 ) );
@@ -261,21 +266,22 @@ bool CBBOX2D::Intersect( const RAY2D &aRay, float *t ) const
 
 bool CBBOX2D::Intersect( const RAYSEG2D &aRaySeg ) const
 {
-    float tx1 = (m_min.x - aRaySeg.m_Start.x) * aRaySeg.m_InvDir.x;
-    float tx2 = (m_max.x - aRaySeg.m_Start.x) * aRaySeg.m_InvDir.x;
+    const float tx1 = (m_min.x - aRaySeg.m_Start.x) * aRaySeg.m_InvDir.x;
+    const float tx2 = (m_max.x - aRaySeg.m_Start.x) * aRaySeg.m_InvDir.x;
 
     float tmin = glm::min( tx1, tx2 );
     float tmax = glm::max( tx1, tx2 );
 
-    float ty1 = (m_min.y - aRaySeg.m_Start.y) * aRaySeg.m_InvDir.y;
-    float ty2 = (m_max.y - aRaySeg.m_Start.y) * aRaySeg.m_InvDir.y;
+    const float ty1 = (m_min.y - aRaySeg.m_Start.y) * aRaySeg.m_InvDir.y;
+    const float ty2 = (m_max.y - aRaySeg.m_Start.y) * aRaySeg.m_InvDir.y;
 
     tmin = glm::max( tmin, glm::min( ty1, ty2 ) );
     tmax = glm::min( tmax, glm::max( ty1, ty2 ) );
 
     if( (tmax >= 0.0f) && (tmax >= tmin) )
     {
-        float t = (tmin > 0.0f)?tmin:tmax;
+        const float t = (tmin > 0.0f)?tmin:tmax;
+
         return ( t < aRaySeg.m_Length );
     }
 
@@ -288,14 +294,14 @@ bool CBBOX2D::Intersect( const RAY2D &aRay, float *aOutHitT0, float *aOutHitT1 )
     wxASSERT( aOutHitT0 );
     wxASSERT( aOutHitT1 );
 
-    float tx1 = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
-    float tx2 = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
+    const float tx1 = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
+    const float tx2 = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
     float tmin = glm::min( tx1, tx2 );
     float tmax = glm::max( tx1, tx2 );
 
-    float ty1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
-    float ty2 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
+    const float ty1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
+    const float ty2 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
     tmin = glm::max( tmin, glm::min( ty1, ty2 ) );
     tmax = glm::min( tmax, glm::max( ty1, ty2 ) );

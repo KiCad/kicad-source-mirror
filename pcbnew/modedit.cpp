@@ -34,7 +34,7 @@
 #include <gestfich.h>
 #include <pgm_base.h>
 #include <trigo.h>
-#include <3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer.h>
 #include <wxPcbStruct.h>
 #include <kicad_device_context.h>
 #include <macros.h>
@@ -193,7 +193,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();
 
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
         draw3DFrame->NewDisplay();
@@ -373,7 +373,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 updateView();
                 m_canvas->Refresh();
 
-                EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+                EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
                 if( draw3DFrame )
                     draw3DFrame->NewDisplay();
@@ -521,7 +521,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Zoom_Automatique( false );
         m_canvas->Refresh();
         {
-        EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+        EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
         if( draw3DFrame )
             draw3DFrame->NewDisplay();
@@ -583,7 +583,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Zoom_Automatique( false );
 
         {
-        EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+        EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
         if( draw3DFrame )
             draw3DFrame->NewDisplay();

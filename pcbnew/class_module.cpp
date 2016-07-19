@@ -42,7 +42,6 @@
 #include <richio.h>
 #include <filter_reader.h>
 #include <macros.h>
-#include <3d_struct.h>
 #include <msgpanel.h>
 
 #include <class_board.h>
@@ -75,8 +74,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_Reference = new TEXTE_MODULE( this, TEXTE_MODULE::TEXT_is_REFERENCE );
     m_Value = new TEXTE_MODULE( this, TEXTE_MODULE::TEXT_is_VALUE );
 
-    // Reserve one void 3D entry, to avoid problems with void list
-    m_3D_Drawings.PushBack( new S3D_MASTER( this ) );
+    m_3D_Drawings.clear();
 }
 
 
@@ -141,19 +139,7 @@ MODULE::MODULE( const MODULE& aModule ) :
     }
 
     // Copy auxiliary data: 3D_Drawings info
-    for( S3D_MASTER* item = aModule.m_3D_Drawings;  item;  item = item->Next() )
-    {
-        if( item->GetShape3DName().IsEmpty() )           // do not copy empty shapes.
-            continue;
-
-        S3D_MASTER* t3d = new S3D_MASTER( this );
-        t3d->Copy( item );
-        m_3D_Drawings.PushBack( t3d );
-    }
-
-    // Ensure there is at least one item in m_3D_Drawings.
-    if( m_3D_Drawings.GetCount() == 0 )
-        m_3D_Drawings.PushBack( new S3D_MASTER( this ) ); // push a void item
+    m_3D_Drawings = aModule.m_3D_Drawings;
 
     m_Doc     = aModule.m_Doc;
     m_KeyWord = aModule.m_KeyWord;
@@ -278,32 +264,10 @@ void MODULE::Copy( MODULE* aModule )
     }
 
     // Copy auxiliary data: 3D_Drawings info
-    m_3D_Drawings.DeleteAll();
-
-    // Ensure there is one (or more) item in m_3D_Drawings
-    m_3D_Drawings.PushBack( new S3D_MASTER( this ) ); // push a void item
-
-    for( S3D_MASTER* item = aModule->m_3D_Drawings;  item;  item = item->Next() )
-    {
-        if( item->GetShape3DName().IsEmpty() )           // do not copy empty shapes.
-            continue;
-
-        S3D_MASTER* t3d = m_3D_Drawings;
-
-        if( t3d && t3d->GetShape3DName().IsEmpty() )    // The first entry can
-        {                                               // exist, but is empty : use it.
-            t3d->Copy( item );
-        }
-        else
-        {
-            t3d = new S3D_MASTER( this );
-            t3d->Copy( item );
-            m_3D_Drawings.PushBack( t3d );
-        }
-    }
-
-    m_Doc     = aModule->m_Doc;
-    m_KeyWord = aModule->m_KeyWord;
+    m_3D_Drawings.clear();
+    m_3D_Drawings = aModule->m_3D_Drawings;
+    m_Doc         = aModule->m_Doc;
+    m_KeyWord     = aModule->m_KeyWord;
 
     // Ensure auxiliary data is up to date
     CalculateBoundingBox();
@@ -628,16 +592,12 @@ void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Attributes" ), msg, BROWN ) );
     aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), FROM_UTF8( m_fpid.Format().c_str() ), BLUE ) );
 
-    msg = _( "No 3D shape" );
+    if( m_3D_Drawings.empty() )
+        msg = _( "No 3D shape" );
+    else
+        msg = m_3D_Drawings.front().m_Filename;
+
     // Search the first active 3D shape in list
-    for( S3D_MASTER* struct3D = m_3D_Drawings; struct3D; struct3D = struct3D->Next() )
-    {
-        if( !struct3D->GetShape3DName().IsEmpty() )
-        {
-            msg = struct3D->GetShape3DName();
-            break;
-        }
-    }
 
     aList.push_back( MSG_PANEL_ITEM( _( "3D-Shape" ), msg, RED ) );
 
@@ -753,10 +713,15 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 }
 
 
-void MODULE::Add3DModel( S3D_MASTER* a3DModel )
+void MODULE::Add3DModel( S3D_INFO* a3DModel )
 {
-    a3DModel->SetParent( this );
-    m_3D_Drawings.PushBack( a3DModel );
+    if( NULL == a3DModel )
+        return;
+
+    if( !a3DModel->m_Filename.empty() )
+        m_3D_Drawings.push_back( *a3DModel );
+
+    delete a3DModel;
 }
 
 

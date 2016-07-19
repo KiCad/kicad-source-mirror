@@ -39,7 +39,7 @@
 #include <confirm.h>
 #include <wxPcbStruct.h>
 #include <dialog_helpers.h>
-#include <3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer.h>
 #include <msgpanel.h>
 #include <fp_lib_table.h>
 
@@ -675,7 +675,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
     {
@@ -693,7 +693,7 @@ void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ) );
+    draw3DFrame = new EDA_3D_VIEWER( &Kiway(), this, _( "3D Viewer" ) );
     draw3DFrame->Raise();     // Needed with some Window Managers
     draw3DFrame->Show( true );
 }
@@ -740,7 +740,7 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
 
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
         draw3DFrame->ReloadRequest();

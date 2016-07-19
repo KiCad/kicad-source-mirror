@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 
 #include "cobject2d.h"
 
-class GLM_ALIGN(CLASS_ALIGNMENT) CFILLEDCIRCLE2D : public COBJECT2D
+class  CFILLEDCIRCLE2D : public COBJECT2D
 {
 public:
     float GetRadius() const { return m_radius; }

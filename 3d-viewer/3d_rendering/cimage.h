@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@gmail.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,8 +60,15 @@ enum E_WRAP {
 enum E_FILTER {
     FILTER_HIPASS,
     FILTER_GAUSSIAN_BLUR,
-    FILTER_INVERT_BLUR,
     FILTER_GAUSSIAN_BLUR2,
+    FILTER_INVERT_BLUR,
+    FILTER_CARTOON,
+    FILTER_EMBOSS,
+    FILTER_SHARPEN,
+    FILTER_MELT,
+    FILTER_SOBEL_GX,
+    FILTER_SOBEL_GY,
+    FILTER_BLUR_3X3,
 };
 
 /// 5x5 Filter struct parameters
@@ -139,7 +146,8 @@ public:
 
     /**
      * Function CopyFull
-     * perform a copy operation, based on operation type. The result destination is the self image class
+     * perform a copy operation, based on operation type.
+     * The result destination is the self image class
      * @param aImgA an image input
      * @param aImgB an image input
      * @param aOperation operation to perform

@@ -224,10 +224,10 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
     if( mi != m_CacheMap.end() )
     {
         wxFileName fname( full3Dpath );
-        bool reload = false;
 
-        if( fname.FileExists() )
-        {
+        if( fname.FileExists() )    // Only check if file exists. If not, it will
+        {                           // use the same model in cache.
+            bool reload = false;
             wxDateTime fmdate = fname.GetModificationTime();
 
             if( fmdate != mi->second->modTime )
@@ -242,20 +242,20 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
                     reload = true;
                 }
             }
-        }
 
-        if( reload )
-        {
-            if( NULL != mi->second->sceneData )
+            if( reload )
             {
-                S3D::DestroyNode( mi->second->sceneData );
-                mi->second->sceneData = NULL;
+                if( NULL != mi->second->sceneData )
+                {
+                    S3D::DestroyNode( mi->second->sceneData );
+                    mi->second->sceneData = NULL;
+                }
+
+                if( NULL != mi->second->renderData )
+                    S3D::Destroy3DModel( &mi->second->renderData );
+
+                mi->second->sceneData = m_Plugins->Load3DModel( full3Dpath, mi->second->pluginInfo );
             }
-
-            if( NULL != mi->second->renderData )
-                S3D::Destroy3DModel( &mi->second->renderData );
-
-            mi->second->sceneData = m_Plugins->Load3DModel( full3Dpath, mi->second->pluginInfo );
         }
 
         if( NULL != aCachePtr )

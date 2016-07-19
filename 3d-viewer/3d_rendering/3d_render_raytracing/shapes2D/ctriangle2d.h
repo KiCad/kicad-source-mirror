@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@
 #include <geometry/shape_poly_set.h>
 #include <clipper.hpp>
 
-class GLM_ALIGN(CLASS_ALIGNMENT) CTRIANGLE2D : public COBJECT2D
+class  CTRIANGLE2D : public COBJECT2D
 {
 private:
     SFVEC2F p1;

@@ -178,6 +178,7 @@ set( BMAPS_MID
     contrast_mode
     create_cmp_file
     checked_ok
+    color_materials
     component_select_unit
     component_select_alternate_shape
     config
@@ -411,6 +412,7 @@ set( BMAPS_MID
     open_library
     open_project
     open_document
+    options_3drender
     options_all_tracks_and_vias
     options_all_tracks
     options_all_vias
@@ -479,6 +481,7 @@ set( BMAPS_MID
     red
     reload2
     reload
+    render_mode
     reset_text
     resize_sheet
     rescue_pcbnew

@@ -35,7 +35,7 @@
 #include <gestfich.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
-#include <3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer.h>
 #include <richio.h>
 #include <filter_reader.h>
 #include <pgm_base.h>
@@ -325,6 +325,7 @@ void PCB_EDIT_FRAME::Files_io_from_id( int id )
         GetBoard()->SetFileName( fn.GetFullPath() );
         UpdateTitle();
         ReCreateLayerBox();
+        OnModify();
         break;
     }
 
@@ -603,7 +604,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetMsgPanel( GetBoard() );
 
     // Refresh the 3D view, if any
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
         draw3DFrame->NewDisplay();

@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 /**
  * @file  ctrack_ball.h
- * @brief
+ * @brief Declaration for a track ball camera
  */
 
 #ifndef CTRACK_BALL_H
@@ -38,7 +38,7 @@ class CTRACK_BALL : public CCAMERA
 
  public:
 
-    CTRACK_BALL( float aRangeScale );
+    explicit CTRACK_BALL( float aRangeScale );
 
     void Drag( const wxPoint &aNewMousePosition );
 
@@ -46,10 +46,17 @@ class CTRACK_BALL : public CCAMERA
 
     void Pan( const SFVEC3F &aDeltaOffsetInc );
 
-    void SetBoardLookAtPos( const SFVEC3F &aBoardPos );
+    void Pan_T1( const SFVEC3F &aDeltaOffsetInc );
+
+    void SetLookAtPos( const SFVEC3F &aLookAtPos );
 
     void Reset();
 
+    void Reset_T1();
+
+    void SetT0_and_T1_current_T();
+
+    void Interpolate( float t );
 
  private:
 
@@ -57,7 +64,8 @@ class CTRACK_BALL : public CCAMERA
      *  quarternion of the trackball
      */
     double m_quat[4];
-
+    double m_quat_t0[4];
+    double m_quat_t1[4];
 };
 
 #endif // CTRACK_BALL_H

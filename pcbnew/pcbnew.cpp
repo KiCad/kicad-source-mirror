@@ -58,7 +58,6 @@
 #include <modview_frame.h>
 #include <footprint_wizard_frame.h>
 #include <gl_context_mgr.h>
-
 extern bool IsWxPythonLoaded();
 
 // Colors for layers and items
@@ -94,7 +93,6 @@ wxString    g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
  */
 DLIST<TRACK> g_CurrentTrackList;
 
-KIWAY* TheKiway = NULL;
 
 namespace PCB {
 
@@ -118,7 +116,6 @@ static struct IFACE : public KIFACE_I
         {
         case FRAME_PCB:
             frame = dynamic_cast< wxWindow* >( new PCB_EDIT_FRAME( aKiway, aParent ) );
-            TheKiway = aKiway;
 
 #if defined( KICAD_SCRIPTING )
             // give the scripting helpers access to our frame

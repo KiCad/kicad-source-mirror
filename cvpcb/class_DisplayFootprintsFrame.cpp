@@ -50,7 +50,7 @@
 #include <cvpcb_id.h>
 #include <listview_classes.h>
 
-#include <3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer.h>
 
 
 BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
@@ -149,7 +149,7 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 
 void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
 {
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
         draw3DFrame->Close( true );
@@ -387,7 +387,7 @@ bool DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
 
 void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
     {
@@ -405,7 +405,7 @@ void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, _( "3D Viewer" ) );
+    draw3DFrame = new EDA_3D_VIEWER( &Kiway(), this, _( "3D Viewer" ) );
     draw3DFrame->Raise();     // Needed with some Window Managers
     draw3DFrame->Show( true );
 }
@@ -538,7 +538,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
     GetCanvas()->Refresh();
 
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
         draw3DFrame->NewDisplay();

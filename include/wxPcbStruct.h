@@ -991,10 +991,24 @@ public:
                           double aXRef, double aYRef );
 
     /**
-     * Function ExportToIDF3
+     * Function OnExportIDF3
      * will export the current BOARD to a IDFv3 board and lib files.
      */
-    void ExportToIDF3( wxCommandEvent& event );
+    void OnExportIDF3( wxCommandEvent& event );
+
+    /**
+     * Function Export_IDF3
+     * Creates an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
+     *
+     * @param aPcb = a pointer to the board to be exported to IDF
+     * @param aFullFileName = the full filename of the export file
+     * @param aUseThou = set to true if the desired IDF unit is thou (mil)
+     * @param aXRef = the board Reference Point in mm, X value
+     * @param aYRef = the board Reference Point in mm, Y value
+     * @return true if OK
+     */
+    bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
+                      bool aUseThou, double aXRef, double aYRef );
 
     /**
      * Function ExporttoSPECCTRA

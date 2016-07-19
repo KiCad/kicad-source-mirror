@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,30 +31,38 @@
 #include <wx/debug.h>
 
 
-CROUNDSEGMENT2D::CROUNDSEGMENT2D( const SFVEC2F &aStart, const SFVEC2F &aEnd, float aWidth,
+CROUNDSEGMENT2D::CROUNDSEGMENT2D( const SFVEC2F &aStart,
+                                  const SFVEC2F &aEnd,
+                                  float aWidth,
                                   const BOARD_ITEM &aBoardItem ) :
     COBJECT2D( OBJ2D_ROUNDSEG, aBoardItem ),
     m_segment( aStart, aEnd )
 {
+    wxASSERT( aStart != aEnd );
+
     m_radius = (aWidth / 2.0f);
     m_radius_squared = m_radius * m_radius;
     m_width = aWidth;
 
-    SFVEC2F leftRadiusOffset( -m_segment.m_Dir.y * m_radius, m_segment.m_Dir.x * m_radius);
+    SFVEC2F leftRadiusOffset( -m_segment.m_Dir.y * m_radius,
+                               m_segment.m_Dir.x * m_radius );
+
     m_leftStart = aStart + leftRadiusOffset;
     m_leftEnd   = aEnd   + leftRadiusOffset;
-    m_leftEnd_minus_start = m_leftEnd - m_leftStart;
-    m_leftDir   = glm::normalize( m_leftEnd_minus_start );
+    m_leftEndMinusStart = m_leftEnd - m_leftStart;
+    m_leftDir   = glm::normalize( m_leftEndMinusStart );
 
-    SFVEC2F rightRadiusOffset( -leftRadiusOffset.x, -leftRadiusOffset.y );
+    SFVEC2F rightRadiusOffset( -leftRadiusOffset.x,
+                               -leftRadiusOffset.y );
     m_rightStart = aEnd   + rightRadiusOffset;
     m_rightEnd   = aStart + rightRadiusOffset;
-    m_rightEnd_minus_start = m_rightEnd - m_rightStart;
-    m_rightDir   = glm::normalize( m_rightEnd_minus_start );
+    m_rightEndMinusStart = m_rightEnd - m_rightStart;
+    m_rightDir   = glm::normalize( m_rightEndMinusStart );
 
     m_bbox.Reset();
     m_bbox.Set( aStart, aEnd );
-    m_bbox.Set( m_bbox.Min() - SFVEC2F( m_radius, m_radius ), m_bbox.Max() + SFVEC2F( m_radius, m_radius ) );
+    m_bbox.Set( m_bbox.Min() - SFVEC2F( m_radius, m_radius ),
+                m_bbox.Max() + SFVEC2F( m_radius, m_radius ) );
     m_bbox.ScaleNextUp();
     m_centroid = m_bbox.GetCenter();
 
@@ -82,19 +90,37 @@ bool CROUNDSEGMENT2D::Intersects( const CBBOX2D &aBBox ) const
     v[3] = SFVEC2F( aBBox.Max().x, aBBox.Min().y );
 
     // Test against the main rectangle segment
-    if( IntersectSegment( m_leftStart, m_leftEnd_minus_start, v[0], v[1] - v[0] ) ) return true;
-    if( IntersectSegment( m_leftStart, m_leftEnd_minus_start, v[1], v[2] - v[1] ) ) return true;
-    if( IntersectSegment( m_leftStart, m_leftEnd_minus_start, v[2], v[3] - v[2] ) ) return true;
-    if( IntersectSegment( m_leftStart, m_leftEnd_minus_start, v[3], v[0] - v[3] ) ) return true;
+    if( IntersectSegment( m_leftStart, m_leftEndMinusStart, v[0], v[1] - v[0] ) )
+        return true;
 
-    if( IntersectSegment( m_rightStart, m_rightEnd_minus_start, v[0], v[1] - v[0] ) ) return true;
-    if( IntersectSegment( m_rightStart, m_rightEnd_minus_start, v[1], v[2] - v[1] ) ) return true;
-    if( IntersectSegment( m_rightStart, m_rightEnd_minus_start, v[2], v[3] - v[2] ) ) return true;
-    if( IntersectSegment( m_rightStart, m_rightEnd_minus_start, v[3], v[0] - v[3] ) ) return true;
+    if( IntersectSegment( m_leftStart, m_leftEndMinusStart, v[1], v[2] - v[1] ) )
+        return true;
+
+    if( IntersectSegment( m_leftStart, m_leftEndMinusStart, v[2], v[3] - v[2] ) )
+        return true;
+
+    if( IntersectSegment( m_leftStart, m_leftEndMinusStart, v[3], v[0] - v[3] ) )
+        return true;
+
+
+    if( IntersectSegment( m_rightStart, m_rightEndMinusStart, v[0], v[1] - v[0] ) )
+        return true;
+
+    if( IntersectSegment( m_rightStart, m_rightEndMinusStart, v[1], v[2] - v[1] ) )
+        return true;
+
+    if( IntersectSegment( m_rightStart, m_rightEndMinusStart, v[2], v[3] - v[2] ) )
+        return true;
+
+    if( IntersectSegment( m_rightStart, m_rightEndMinusStart, v[3], v[0] - v[3] ) )
+        return true;
 
     // Test the two circles
-    if( aBBox.Intersects( m_segment.m_Start, m_radius_squared ) ) return true;
-    if( aBBox.Intersects( m_segment.m_End,   m_radius_squared ) ) return true;
+    if( aBBox.Intersects( m_segment.m_Start, m_radius_squared ) )
+        return true;
+
+    if( aBBox.Intersects( m_segment.m_End,   m_radius_squared ) )
+        return true;
 
     return false;
 }
@@ -107,13 +133,15 @@ bool CROUNDSEGMENT2D::Overlaps( const CBBOX2D &aBBox ) const
 }
 
 
-bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const
+bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
+                                 float *aOutT,
+                                 SFVEC2F *aNormalOut ) const
 {
     wxASSERT( aOutT );
     wxASSERT( aNormalOut );
 
-    bool start_is_inside = IsPointInside( aSegRay.m_Start );
-    bool end_is_inside = IsPointInside( aSegRay.m_End );
+    const bool start_is_inside = IsPointInside( aSegRay.m_Start );
+    const bool end_is_inside = IsPointInside( aSegRay.m_End );
 
     // If segment if inside there are no hits
     if( start_is_inside && end_is_inside )
@@ -128,7 +156,9 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F 
     SFVEC2F farHitNormal;
 
     float leftSegT;
-    bool leftSegmentHit = aSegRay.IntersectSegment( m_leftStart, m_leftEnd_minus_start, &leftSegT );
+    const bool leftSegmentHit = aSegRay.IntersectSegment( m_leftStart,
+                                                          m_leftEndMinusStart,
+                                                          &leftSegT );
 
     if( leftSegmentHit )
     {
@@ -141,7 +171,9 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F 
     }
 
     float rightSegT;
-    bool rightSegmentHit = aSegRay.IntersectSegment( m_rightStart, m_rightEnd_minus_start, &rightSegT );
+    const bool rightSegmentHit = aSegRay.IntersectSegment( m_rightStart,
+                                                           m_rightEndMinusStart,
+                                                           &rightSegT );
 
     if( rightSegmentHit )
     {
@@ -167,9 +199,9 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F 
     SFVEC2F circleStart_N0;
     SFVEC2F circleStart_N1;
 
-    bool startCircleHit = aSegRay.IntersectCircle( m_segment.m_Start, m_radius,
-                                                   &circleStart_T0, &circleStart_T1,
-                                                   &circleStart_N0, &circleStart_N1 );
+    const bool startCircleHit = aSegRay.IntersectCircle( m_segment.m_Start, m_radius,
+                                                         &circleStart_T0, &circleStart_T1,
+                                                         &circleStart_N0, &circleStart_N1 );
 
     if( startCircleHit )
     {
@@ -207,9 +239,9 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F 
     SFVEC2F circleEnd_N0;
     SFVEC2F circleEnd_N1;
 
-    bool rightCircleHit = aSegRay.IntersectCircle( m_segment.m_End, m_radius,
-                                                   &circleEnd_T0, &circleEnd_T1,
-                                                   &circleEnd_N0, &circleEnd_N1 );
+    const bool rightCircleHit = aSegRay.IntersectCircle( m_segment.m_End, m_radius,
+                                                         &circleEnd_T0, &circleEnd_T1,
+                                                         &circleEnd_N0, &circleEnd_N1 );
     if( rightCircleHit )
     {
         if( circleEnd_T0 > 0.0f )
@@ -251,9 +283,10 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F 
         }
         else
         {
-            wxASSERT( (farHitT > 0.0f) && (farHitT <= 1.0f) );
+            wxASSERT( (farHitT >= 0.0f) && (farHitT <= 1.0f) );
+
             *aOutT = farHitT;
-            *aNormalOut = farHitNormal;
+            *aNormalOut = -farHitNormal; // the normal started inside, so invert it
         }
     }
 

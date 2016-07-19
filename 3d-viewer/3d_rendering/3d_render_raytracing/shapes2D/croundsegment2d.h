@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 
 #include "cobject2d.h"
 
-class GLM_ALIGN(CLASS_ALIGNMENT) CROUNDSEGMENT2D : public COBJECT2D
+class  CROUNDSEGMENT2D : public COBJECT2D
 {
 
 friend class CROUNDSEG;
@@ -42,12 +42,12 @@ private:
 
     SFVEC2F  m_leftStart;
     SFVEC2F  m_leftEnd;
-    SFVEC2F  m_leftEnd_minus_start;
+    SFVEC2F  m_leftEndMinusStart;
     SFVEC2F  m_leftDir;
 
     SFVEC2F  m_rightStart;
     SFVEC2F  m_rightEnd;
-    SFVEC2F  m_rightEnd_minus_start;
+    SFVEC2F  m_rightEndMinusStart;
     SFVEC2F  m_rightDir;
 
     float    m_radius;
@@ -69,12 +69,12 @@ public:
 
     const SFVEC2F &GetLeftStar() const { return m_leftStart; }
     const SFVEC2F &GetLeftEnd()  const { return m_leftEnd; }
-    const SFVEC2F &GetLeftEnd_minus_Start() const { return m_leftEnd_minus_start; }
+    const SFVEC2F &GetLeftEnd_minus_Start() const { return m_leftEndMinusStart; }
     const SFVEC2F &GetLeftDir()  const { return m_leftDir; }
 
     const SFVEC2F &GetRightStar() const { return m_rightStart; }
     const SFVEC2F &GetRightEnd()  const { return m_rightEnd; }
-    const SFVEC2F &GetRightEnd_minus_Start() const { return m_rightEnd_minus_start; }
+    const SFVEC2F &GetRightEnd_minus_Start() const { return m_rightEndMinusStart; }
     const SFVEC2F &GetRightDir()  const { return m_rightDir; }
 
     // Imported from COBJECT2D
@@ -85,5 +85,23 @@ public:
     bool IsPointInside( const SFVEC2F &aPoint ) const;
 };
 
+static const float s_min_dot = (FLT_EPSILON * 4.0f) ;
+
+/**
+ * @brief Segment_is_a_circle - check if segment start and end is very close to each other
+ * should used to check if the segment should be converted to a circle instead
+ * @param aStart
+ * @param aEnd
+ * @return true is it is better to convert the segment to circle
+ */
+inline bool Is_segment_a_circle( const SFVEC2F &aStart, const SFVEC2F &aEnd )
+{
+    const SFVEC2F vec = aEnd - aStart;
+
+    return (aStart == aEnd) ||
+            // This is the same as calc the lenght squared (without the sqrt)
+            // and compare with a small value
+            ( glm::dot( vec, vec ) <= s_min_dot );
+}
 
 #endif // _CROUNDSEGMENT2D_H_

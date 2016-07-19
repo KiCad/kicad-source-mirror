@@ -41,7 +41,7 @@
 struct S3D_INFO;
 class  S3D_CACHE;
 class  S3D_FILENAME_RESOLVER;
-class  PANEL_PREV_3D;
+class  C3D_MODEL_VIEWER;
 //class  wxGenericDirCtrl;
 
 class DLG_SELECT_3DMODEL : public wxDialog
@@ -55,7 +55,7 @@ private:
     int&      m_previousFilterIndex;
 
     wxGenericDirCtrl* m_FileTree;
-    PANEL_PREV_3D*    m_preview;
+    C3D_MODEL_VIEWER* m_modelViewer;
     wxChoice*         dirChoices;
 
     void updateDirChoiceList( void );

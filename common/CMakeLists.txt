@@ -503,3 +503,4 @@ target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )
 
 add_dependencies( dsntest lib-dependencies )
 
+target_link_libraries( pcbcommon 3d-viewer )

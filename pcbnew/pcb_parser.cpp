@@ -32,7 +32,6 @@
 #include <confirm.h>
 #include <macros.h>
 #include <trigo.h>
-#include <3d_struct.h>
 #include <class_title_block.h>
 
 #include <class_board.h>
@@ -336,17 +335,16 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
 }
 
 
-S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
+S3D_INFO* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
 {
     wxCHECK_MSG( CurTok() == T_model, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as S3D_MASTER." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as S3D_INFO." ) );
 
     T token;
 
-    std::unique_ptr< S3D_MASTER > n3D( new S3D_MASTER( NULL ) );
-
+    S3D_INFO* n3D = new S3D_INFO;
     NeedSYMBOLorNUMBER();
-    n3D->SetShape3DName( FromUTF8() );
+    n3D->m_Filename = FromUTF8().ToUTF8();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -364,9 +362,9 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
             if( token != T_xyz )
                 Expecting( T_xyz );
 
-            n3D->m_MatPosition.x = parseDouble( "x value" );
-            n3D->m_MatPosition.y = parseDouble( "y value" );
-            n3D->m_MatPosition.z = parseDouble( "z value" );
+            n3D->m_Offset.x = parseDouble( "x value" );
+            n3D->m_Offset.y = parseDouble( "y value" );
+            n3D->m_Offset.z = parseDouble( "z value" );
             NeedRIGHT();
             break;
 
@@ -377,9 +375,9 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
             if( token != T_xyz )
                 Expecting( T_xyz );
 
-            n3D->m_MatScale.x = parseDouble( "x value" );
-            n3D->m_MatScale.y = parseDouble( "y value" );
-            n3D->m_MatScale.z = parseDouble( "z value" );
+            n3D->m_Scale.x = parseDouble( "x value" );
+            n3D->m_Scale.y = parseDouble( "y value" );
+            n3D->m_Scale.z = parseDouble( "z value" );
             NeedRIGHT();
             break;
 
@@ -390,9 +388,9 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
             if( token != T_xyz )
                 Expecting( T_xyz );
 
-            n3D->m_MatRotation.x = parseDouble( "x value" );
-            n3D->m_MatRotation.y = parseDouble( "y value" );
-            n3D->m_MatRotation.z = parseDouble( "z value" );
+            n3D->m_Rotation.x = parseDouble( "x value" );
+            n3D->m_Rotation.y = parseDouble( "y value" );
+            n3D->m_Rotation.z = parseDouble( "z value" );
             NeedRIGHT();
             break;
 
@@ -403,7 +401,7 @@ S3D_MASTER* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
         NeedRIGHT();
     }
 
-    return n3D.release();
+    return n3D;
 }
 
 

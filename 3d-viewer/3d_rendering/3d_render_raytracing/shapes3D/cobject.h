@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@
 #ifndef _COBJECT_H_
 #define _COBJECT_H_
 
-#include "plugins/3dapi/xv3d_types.h"
 #include "cbbox.h"
 #include "../hitinfo.h"
 #include "../cmaterial.h"
@@ -47,7 +46,7 @@ enum OBJECT3D_TYPE
     OBJ3D_MAX
 };
 
-class GLM_ALIGN(CLASS_ALIGNMENT) COBJECT
+class  COBJECT
 {
 protected:
     CBBOX   m_bbox;
@@ -57,7 +56,7 @@ protected:
 
 public:
 
-    COBJECT( OBJECT3D_TYPE aObjType );
+    explicit COBJECT( OBJECT3D_TYPE aObjType );
 
     void SetMaterial( const CMATERIAL *aMaterial ) { m_material = aMaterial; }
     const CMATERIAL *GetMaterial() const { return m_material; }
@@ -103,7 +102,9 @@ class COBJECT3D_STATS
 {
 public:
 
-    void ResetStats() { memset( m_counter, 0, sizeof(unsigned int) * OBJ3D_MAX ); }
+    void ResetStats() { memset( m_counter,
+                                0,
+                                sizeof( unsigned int ) * OBJ3D_MAX ); }
 
     unsigned int GetCountOf( OBJECT3D_TYPE aObjType ) const { return m_counter[aObjType]; }
 

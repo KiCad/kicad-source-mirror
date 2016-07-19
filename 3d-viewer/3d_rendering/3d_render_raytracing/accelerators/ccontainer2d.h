@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,14 +37,14 @@ typedef std::list<COBJECT2D *> LIST_OBJECT2D;
 typedef std::list<const COBJECT2D *> CONST_LIST_OBJECT2D;
 
 
-class GLM_ALIGN(CLASS_ALIGNMENT) CGENERICCONTAINER2D
+class  CGENERICCONTAINER2D
 {
 protected:
     CBBOX2D m_bbox;
     LIST_OBJECT2D m_objects;
 
 public:
-    CGENERICCONTAINER2D( OBJECT2D_TYPE aObjType );
+    explicit CGENERICCONTAINER2D( OBJECT2D_TYPE aObjType );
 
     virtual ~CGENERICCONTAINER2D();
 
@@ -55,7 +55,7 @@ public:
             m_objects.push_back( aObject );
             m_bbox.Union( aObject->GetBBox() );
         }
-    }// automatically releases the lock when lck goes out of scope.
+    }
 
     void Clear();
 
@@ -66,19 +66,21 @@ public:
      * @param aBBox - a bbox to make the query
      * @param aOutList - A list of objects that intersects the bbox
      */
-    virtual void GetListObjectsIntersects( const CBBOX2D & aBBox, CONST_LIST_OBJECT2D &aOutList ) const = 0;
+    virtual void GetListObjectsIntersects( const CBBOX2D & aBBox,
+                                           CONST_LIST_OBJECT2D &aOutList ) const = 0;
 
 private:
 };
 
 
-class GLM_ALIGN(CLASS_ALIGNMENT) CCONTAINER2D : public CGENERICCONTAINER2D
+class  CCONTAINER2D : public CGENERICCONTAINER2D
 {
 public:
     CCONTAINER2D();
 
     // Imported from CGENERICCONTAINER2D
-    void GetListObjectsIntersects( const CBBOX2D & aBBox, CONST_LIST_OBJECT2D &aOutList ) const;
+    void GetListObjectsIntersects( const CBBOX2D & aBBox,
+                                   CONST_LIST_OBJECT2D &aOutList ) const;
 };
 
 
@@ -86,11 +88,13 @@ struct BVH_CONTAINER_NODE_2D
 {
     CBBOX2D                 m_BBox;
     BVH_CONTAINER_NODE_2D   *m_Children[2];
-    CONST_LIST_OBJECT2D     m_LeafList;                                         ///< Store the list of objects if that node is a Leaf
+
+    /// Store the list of objects if that node is a Leaf
+    CONST_LIST_OBJECT2D     m_LeafList;
 };
 
 
-class GLM_ALIGN(CLASS_ALIGNMENT) CBVHCONTAINER2D : public CGENERICCONTAINER2D
+class  CBVHCONTAINER2D : public CGENERICCONTAINER2D
 {
 public:
     CBVHCONTAINER2D();
@@ -105,12 +109,15 @@ private:
 
     void destroy();
     void recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeParent );
-    void recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D *aNode, const CBBOX2D & aBBox, CONST_LIST_OBJECT2D &aOutList ) const;
+    void recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D *aNode,
+                                            const CBBOX2D & aBBox,
+                                            CONST_LIST_OBJECT2D &aOutList ) const;
 
 public:
 
     // Imported from CGENERICCONTAINER2D
-    void GetListObjectsIntersects( const CBBOX2D & aBBox, CONST_LIST_OBJECT2D &aOutList ) const;
+    void GetListObjectsIntersects( const CBBOX2D & aBBox,
+                                   CONST_LIST_OBJECT2D &aOutList ) const;
 };
 
 #endif // _CCONTAINER2D_H_

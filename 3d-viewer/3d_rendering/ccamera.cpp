@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,6 @@
  * @brief
  */
 
-#include <cstring>
-#include "../common_ogl/openGL_includes.h"
 #include "ccamera.h"
 #include <wx/log.h>
 
@@ -41,65 +39,131 @@
  */
 const wxChar *CCAMERA::m_logTrace = wxT( "KI_TRACE_CCAMERA" );
 
+#define MIN_ZOOM 0.10f
+#define MAX_ZOOM 1.25f
 
 CCAMERA::CCAMERA( float aRangeScale )
 {
     wxLogTrace( m_logTrace, wxT( "CCAMERA::CCAMERA" ) );
 
+    m_range_scale           = aRangeScale;
+    m_camera_pos_init       = SFVEC3F( 0.0f, 0.0f, -(aRangeScale * 2.0f ) );
+    m_board_lookat_pos_init = SFVEC3F( 0.0f );
+    m_windowSize            = SFVEC2I( 0, 0 );
+    m_projectionType        = PROJECTION_PERSPECTIVE;
+    m_interpolation_mode    = INTERPOLATION_BEZIER;
+
+    Reset();
+}
+
+
+void CCAMERA::Reset()
+{
     m_parametersChanged    = true;
-    m_projectionType       = PROJECTION_PERSPECTIVE;
     m_projectionMatrix     = glm::mat4( 1.0f );
-    m_projectionMatrix_inv = glm::mat4( 1.0f );
+    m_projectionMatrixInv  = glm::mat4( 1.0f );
     m_rotationMatrix       = glm::mat4( 1.0f );
+    m_rotationMatrixAux    = glm::mat4( 1.0f );
     m_lastPosition         = wxPoint( 0, 0 );
-    m_windowSize           = wxSize( 0, 0 );
+
     m_zoom                 = 1.0f;
-    m_range_scale          = aRangeScale;
-    m_camera_pos_init      = SFVEC3F( 0.0f, 0.0f, -aRangeScale );
+    m_zoom_t0              = 1.0f;
+    m_zoom_t1              = 1.0f;
     m_camera_pos           = m_camera_pos_init;
-    m_boardLookAt_pos      = SFVEC3F( 0.0, 0.0, 0.0 );
+    m_camera_pos_t0        = m_camera_pos_init;
+    m_camera_pos_t1        = m_camera_pos_init;
+    m_lookat_pos           = m_board_lookat_pos_init;
+    m_lookat_pos_t0        = m_board_lookat_pos_init;
+    m_lookat_pos_t1        = m_board_lookat_pos_init;
+
+    m_rotate_aux           = SFVEC3F( 0.0f );
+    m_rotate_aux_t0        = SFVEC3F( 0.0f );
+    m_rotate_aux_t1        = SFVEC3F( 0.0f );
+
+    updateRotationMatrix();
     updateViewMatrix();
-    m_viewMatrix_inverse   = glm::inverse( m_viewMatrix );
+    m_viewMatrixInverse    = glm::inverse( m_viewMatrix );
     m_scr_nX.clear();
     m_scr_nY.clear();
-    memset( &m_frustum, 0, sizeof( m_frustum ) );
+    rebuildProjection();
+}
+
+
+void CCAMERA::Reset_T1()
+{
+    m_camera_pos_t1        = m_camera_pos_init;
+    m_zoom_t1              = 1.0f;
+    m_rotate_aux_t1        = SFVEC3F( 0.0f );
+    m_lookat_pos_t1        = m_board_lookat_pos_init;
 }
 
 
 void CCAMERA::updateViewMatrix()
 {
     m_viewMatrix = glm::translate( glm::mat4( 1.0f ), m_camera_pos ) *
-                   m_rotationMatrix * glm::translate( glm::mat4( 1.0f ), m_boardLookAt_pos );
+                   m_rotationMatrix * m_rotationMatrixAux *
+                   glm::translate( glm::mat4( 1.0f ), -m_lookat_pos );
 }
 
 
-const glm::mat4 &CCAMERA::GetRotationMatrix() const
+void CCAMERA::updateRotationMatrix()
 {
-    return m_rotationMatrix;
+    m_rotationMatrixAux = glm::rotate( glm::mat4( 1.0f ),
+                                       m_rotate_aux.x,
+                                       SFVEC3F( 1.0f, 0.0f, 0.0f ) );
+
+    m_rotationMatrixAux = glm::rotate( m_rotationMatrixAux,
+                                       m_rotate_aux.y,
+                                       SFVEC3F( 0.0f, 1.0f, 0.0f ) );
+
+    m_rotationMatrixAux = glm::rotate( m_rotationMatrixAux,
+                                       m_rotate_aux.z,
+                                       SFVEC3F( 0.0f, 0.0f, 1.0f ) );
+
+    m_parametersChanged = true;
+
+    updateViewMatrix();
+    updateFrustum();
+}
+
+
+const glm::mat4 CCAMERA::GetRotationMatrix() const
+{
+    return m_rotationMatrix * m_rotationMatrixAux;
 }
 
 
 void CCAMERA::rebuildProjection()
 {
-    m_frustum.ratio = (float) m_windowSize.x / m_windowSize.y;
-    m_frustum.nearD = 0.01f;
-    m_frustum.farD = glm::length( m_camera_pos_init ) * 2.0f;                   // Consider that we can render double the length, review if that is OK...
+    if( (m_windowSize.x == 0) ||
+        (m_windowSize.y == 0) )
+        return;
+
+    m_frustum.ratio = (float) m_windowSize.x / (float)m_windowSize.y;
+
+    // Consider that we can render double the length multiplied by the 2/sqrt(2)
+    //
+    m_frustum.farD = glm::length( m_camera_pos_init ) * 2.0f * ( 2.0f * sqrtf( 2.0f ) );
 
     switch( m_projectionType )
     {
+    default:
     case PROJECTION_PERSPECTIVE:
+
+        m_frustum.nearD = 0.10f;
+
         // Ratio width / height of the window display
         m_frustum.angle = 45.0f * m_zoom;
 
 
-        m_projectionMatrix = glm::perspective( m_frustum.angle * ( glm::pi<float>() / 180.0f ),
+        m_projectionMatrix = glm::perspective( glm::radians( m_frustum.angle ),
                                                m_frustum.ratio,
                                                m_frustum.nearD,
                                                m_frustum.farD );
 
-        m_projectionMatrix_inv = glm::inverse( m_projectionMatrix );
+        m_projectionMatrixInv = glm::inverse( m_projectionMatrix );
 
-        m_frustum.tang = (float)tan( m_frustum.angle * ( glm::pi<float>() / 180.0f ) * 0.5f ) ;
+        m_frustum.tang = glm::tan( glm::radians( m_frustum.angle ) * 0.5f ) ;
 
         m_focalLen.x = ( (float)m_windowSize.y / (float)m_windowSize.x ) / m_frustum.tang;
         m_focalLen.y = 1.0f / m_frustum.tang;
@@ -111,17 +175,19 @@ void CCAMERA::rebuildProjection()
         break;
 
     case PROJECTION_ORTHO:
-        const float orthoReductionFactor = m_zoom / 400.0f;
+
+        m_frustum.nearD = 0.01f;
+
+        const float orthoReductionFactor = m_zoom / 75.0f;
 
         // Initialize Projection Matrix for Ortographic View
         m_projectionMatrix = glm::ortho( -m_windowSize.x * orthoReductionFactor,
                                           m_windowSize.x * orthoReductionFactor,
                                          -m_windowSize.y * orthoReductionFactor,
                                           m_windowSize.y * orthoReductionFactor,
-                                          m_frustum.nearD,
-                                          m_frustum.farD );
+                                          m_frustum.nearD, m_frustum.farD );
 
-        m_projectionMatrix_inv = glm::inverse( m_projectionMatrix );
+        m_projectionMatrixInv = glm::inverse( m_projectionMatrix );
 
         m_frustum.nw = m_windowSize.x * orthoReductionFactor * 2.0f;
         m_frustum.nh = m_windowSize.y * orthoReductionFactor * 2.0f;
@@ -135,20 +201,22 @@ void CCAMERA::rebuildProjection()
     m_scr_nY.resize( m_windowSize.y );
 
     // Precalc X values for camera -> ray generation
-    for( unsigned int x = 0; x < (unsigned int)m_windowSize.x; x++ )
+    for( unsigned int x = 0; x < (unsigned int)m_windowSize.x; ++x )
     {
         // Converts 0.0 .. 1.0
-        float xNormalizedDeviceCoordinates = ( ( (float)x + 0.5f ) / (m_windowSize.x - 0.0f) );
+        const float xNormalizedDeviceCoordinates = ( ( (float)x + 0.5f ) /
+                                                     (m_windowSize.x - 0.0f) );
 
         // Converts -1.0 .. 1.0
         m_scr_nX[x] = 2.0f * xNormalizedDeviceCoordinates - 1.0f;
     }
 
     // Precalc Y values for camera -> ray generation
-    for( unsigned int y = 0; y < (unsigned int)m_windowSize.y; y++ )
+    for( unsigned int y = 0; y < (unsigned int)m_windowSize.y; ++y )
     {
         // Converts 0.0 .. 1.0
-        float yNormalizedDeviceCoordinates = ( ( (float)y + 0.5f ) / (m_windowSize.y - 0.0f) );
+        const float yNormalizedDeviceCoordinates = ( ( (float)y + 0.5f ) /
+                                                     (m_windowSize.y - 0.0f) );
 
         // Converts -1.0 .. 1.0
         m_scr_nY[y] = 2.0f * yNormalizedDeviceCoordinates - 1.0f;
@@ -161,12 +229,18 @@ void CCAMERA::rebuildProjection()
 void CCAMERA::updateFrustum()
 {
     // Update matrix and vectors
-    m_viewMatrix_inverse = glm::inverse( m_viewMatrix );
+    m_viewMatrixInverse = glm::inverse( m_viewMatrix );
 
-    m_right = glm::normalize( SFVEC3F( m_viewMatrix_inverse * glm::vec4( SFVEC3F( 1.0, 0.0, 0.0 ), 0.0 ) ) );
-    m_up    = glm::normalize( SFVEC3F( m_viewMatrix_inverse * glm::vec4( SFVEC3F( 0.0, 1.0, 0.0 ), 0.0 ) ) );
-    m_dir   = glm::normalize( SFVEC3F( m_viewMatrix_inverse * glm::vec4( SFVEC3F( 0.0, 0.0, 1.0 ), 0.0 ) ) );
-    m_pos   = SFVEC3F( m_viewMatrix_inverse * glm::vec4( SFVEC3F( 0.0, 0.0, 0.0 ), 1.0 ) );
+    m_right = glm::normalize( SFVEC3F( m_viewMatrixInverse *
+                                       glm::vec4( SFVEC3F( 1.0, 0.0, 0.0 ), 0.0 ) ) );
+
+    m_up    = glm::normalize( SFVEC3F( m_viewMatrixInverse *
+                                       glm::vec4( SFVEC3F( 0.0, 1.0, 0.0 ), 0.0 ) ) );
+
+    m_dir   = glm::normalize( SFVEC3F( m_viewMatrixInverse *
+                                       glm::vec4( SFVEC3F( 0.0, 0.0, 1.0 ), 0.0 ) ) );
+
+    m_pos   = SFVEC3F( m_viewMatrixInverse * glm::vec4( SFVEC3F( 0.0, 0.0, 0.0 ), 1.0 ) );
 
 
     /*
@@ -195,188 +269,51 @@ void CCAMERA::updateFrustum()
     m_up_nY.resize( m_windowSize.y );
 
     // Precalc X values for camera -> ray generation
-    SFVEC3F right_nw = m_right * m_frustum.nw;
+    const SFVEC3F right_nw = m_right * m_frustum.nw;
 
-    for( unsigned int x = 0; x < (unsigned int)m_windowSize.x; x++ )
+    for( unsigned int x = 0; x < (unsigned int)m_windowSize.x; ++x )
         m_right_nX[x] = right_nw * m_scr_nX[x];
 
     // Precalc Y values for camera -> ray generation
-    SFVEC3F up_nh = m_up * m_frustum.nh;
+    const SFVEC3F up_nh = m_up * m_frustum.nh;
 
-    for( unsigned int y = 0; y < (unsigned int)m_windowSize.y; y++ )
-        m_up_nY[y] = m_frustum.nc + (up_nh * m_scr_nY[y]);
+    for( unsigned int y = 0; y < (unsigned int)m_windowSize.y; ++y )
+        m_up_nY[y] = up_nh * m_scr_nY[y];
 }
 
 
-void CCAMERA::MakeRay( const SFVEC2I &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const
+void CCAMERA::MakeRay( const SFVEC2I &aWindowPos,
+                       SFVEC3F &aOutOrigin,
+                       SFVEC3F &aOutDirection ) const
 {
-    aOutOrigin = m_up_nY[aWindowPos.y] +
-                 m_right_nX[aWindowPos.x];
+    //const SFVEC2I minWindowsPos = glm::min( aWindowPos, m_windowSize );
+    wxASSERT( aWindowPos.x < m_windowSize.x );
+    wxASSERT( aWindowPos.y < m_windowSize.y );
+    const SFVEC2I &minWindowsPos = aWindowPos;
 
-    aOutDirection = glm::normalize( aOutOrigin - m_pos );
+    switch( m_projectionType )
+    {
+    default:
+    case PROJECTION_PERSPECTIVE:
+        aOutOrigin = m_up_nY[minWindowsPos.y] + m_right_nX[minWindowsPos.x] + m_frustum.nc;
+        aOutDirection = glm::normalize( aOutOrigin - m_pos );
+        break;
+
+    case PROJECTION_ORTHO:
+        aOutOrigin = (m_up_nY[minWindowsPos.y] + m_right_nX[minWindowsPos.x]) * 0.5f +
+                     m_frustum.nc;
+        aOutDirection = -m_dir;
+        break;
+    }
 }
 
 
-void CCAMERA::GLdebug_Lines()
+void CCAMERA::MakeRayAtCurrrentMousePosition( SFVEC3F &aOutOrigin,
+                                              SFVEC3F &aOutDirection ) const
 {
-    SFVEC3F ntl = m_frustum.ntl;
-    SFVEC3F ntr = m_frustum.ntr;
-    SFVEC3F nbl = m_frustum.nbl;
-    SFVEC3F nbr = m_frustum.nbr;
-
-    SFVEC3F ftl = m_frustum.ftl;
-    SFVEC3F ftr = m_frustum.ftr;
-    SFVEC3F fbl = m_frustum.fbl;
-    SFVEC3F fbr = m_frustum.fbr;
-
-    glColor4f( 1.0, 1.0, 1.0, 0.7 );
-
-    glBegin(GL_LINE_LOOP);
-    //near plane
-        glVertex3f(ntl.x,ntl.y,ntl.z);
-        glVertex3f(ntr.x,ntr.y,ntr.z);
-        glVertex3f(nbr.x,nbr.y,nbr.z);
-        glVertex3f(nbl.x,nbl.y,nbl.z);
-    glEnd();
-
-    glBegin(GL_LINE_LOOP);
-    //far plane
-        glVertex3f(ftr.x,ftr.y,ftr.z);
-        glVertex3f(ftl.x,ftl.y,ftl.z);
-        glVertex3f(fbl.x,fbl.y,fbl.z);
-        glVertex3f(fbr.x,fbr.y,fbr.z);
-    glEnd();
-
-    glBegin(GL_LINE_LOOP);
-    //bottom plane
-        glVertex3f(nbl.x,nbl.y,nbl.z);
-        glVertex3f(nbr.x,nbr.y,nbr.z);
-        glVertex3f(fbr.x,fbr.y,fbr.z);
-        glVertex3f(fbl.x,fbl.y,fbl.z);
-    glEnd();
-
-    glBegin(GL_LINE_LOOP);
-    //top plane
-        glVertex3f(ntr.x,ntr.y,ntr.z);
-        glVertex3f(ntl.x,ntl.y,ntl.z);
-        glVertex3f(ftl.x,ftl.y,ftl.z);
-        glVertex3f(ftr.x,ftr.y,ftr.z);
-    glEnd();
-
-    glBegin(GL_LINE_LOOP);
-    //left plane
-        glVertex3f(ntl.x,ntl.y,ntl.z);
-        glVertex3f(nbl.x,nbl.y,nbl.z);
-        glVertex3f(fbl.x,fbl.y,fbl.z);
-        glVertex3f(ftl.x,ftl.y,ftl.z);
-    glEnd();
-
-    glBegin(GL_LINE_LOOP);
-    // right plane
-        glVertex3f(nbr.x,nbr.y,nbr.z);
-        glVertex3f(ntr.x,ntr.y,ntr.z);
-        glVertex3f(ftr.x,ftr.y,ftr.z);
-        glVertex3f(fbr.x,fbr.y,fbr.z);
-    glEnd();
-}
-
-
-void CCAMERA::GLdebug_Vectors()
-{
-    SFVEC3F right = m_pos + m_right * m_frustum.nearD;
-    SFVEC3F up    = m_pos + m_up    * m_frustum.nearD;
-    SFVEC3F dir   = m_pos - m_dir   * m_frustum.nearD;
-
-    glColor4f( 1.0, 0.0, 0.0, 1.0 );
-    glBegin( GL_LINES );
-    glVertex3fv( &m_pos.x );
-    glVertex3fv( &right.x );
-    glEnd();
-
-    glColor4f( 0.0, 1.0, 0.0, 1.0 );
-    glBegin( GL_LINES );
-    glVertex3fv( &m_pos.x );
-    glVertex3fv( &up.x );
-    glEnd();
-
-    glColor4f( 0.0, 0.0, 1.0, 1.0 );
-    glBegin( GL_LINES );
-    glVertex3fv( &m_pos.x );
-    glVertex3fv( &dir.x );
-    glEnd();
-}
-
-
-void CCAMERA::GLdebug_Planes()
-{
-    SFVEC3F ntl = m_frustum.ntl;
-    SFVEC3F ntr = m_frustum.ntr;
-    SFVEC3F nbl = m_frustum.nbl;
-    SFVEC3F nbr = m_frustum.nbr;
-
-    SFVEC3F ftl = m_frustum.ftl;
-    SFVEC3F ftr = m_frustum.ftr;
-    SFVEC3F fbl = m_frustum.fbl;
-    SFVEC3F fbr = m_frustum.fbr;
-
-    // Initialize alpha blending function.
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-    glBegin(GL_QUADS);
-
-    //near plane
-        glColor4f( 0.0, 0.0, 0.5, 0.6 );
-        glVertex3f(ntl.x,ntl.y,ntl.z);
-        glVertex3f(ntr.x,ntr.y,ntr.z);
-        glVertex3f(nbr.x,nbr.y,nbr.z);
-        glVertex3f(nbl.x,nbl.y,nbl.z);
-
-    //far plane
-        glColor4f( 0.0, 0.0, 0.5, 0.6 );
-        glVertex3f(ftr.x,ftr.y,ftr.z);
-        glVertex3f(ftl.x,ftl.y,ftl.z);
-        glVertex3f(fbl.x,fbl.y,fbl.z);
-        glVertex3f(fbr.x,fbr.y,fbr.z);
-
-    //bottom plane
-        glColor4f( 0.0, 0.5, 0.0, 0.6 );
-        glVertex3f(nbl.x,nbl.y,nbl.z);
-        glVertex3f(nbr.x,nbr.y,nbr.z);
-        glVertex3f(fbr.x,fbr.y,fbr.z);
-        glVertex3f(fbl.x,fbl.y,fbl.z);
-
-    //top plane
-        glColor4f( 0.0, 0.5, 0.0, 0.6 );
-        glVertex3f(ntr.x,ntr.y,ntr.z);
-        glVertex3f(ntl.x,ntl.y,ntl.z);
-        glVertex3f(ftl.x,ftl.y,ftl.z);
-        glVertex3f(ftr.x,ftr.y,ftr.z);
-
-    //left plane
-        glColor4f( 0.5, 0.0, 0.0, 0.6 );
-        glVertex3f(ntl.x,ntl.y,ntl.z);
-        glVertex3f(nbl.x,nbl.y,nbl.z);
-        glVertex3f(fbl.x,fbl.y,fbl.z);
-        glVertex3f(ftl.x,ftl.y,ftl.z);
-
-    // right plane
-        glColor4f( 0.5, 0.0, 0.0, 0.6 );
-        glVertex3f(nbr.x,nbr.y,nbr.z);
-        glVertex3f(ntr.x,ntr.y,ntr.z);
-        glVertex3f(ftr.x,ftr.y,ftr.z);
-        glVertex3f(fbr.x,fbr.y,fbr.z);
-
-    glEnd();
-
-    glDisable( GL_BLEND );
-/*
-    glColor3f( 0.0, 0.0, 1.0 );
-    OGL_draw_arrow( m_pos,
-                    m_frustum.nc,
-                    0.1);*/
-
-
+    MakeRay( SFVEC2I( m_lastPosition.x,
+                      m_windowSize.y - m_lastPosition.y ),
+             aOutOrigin, aOutDirection );
 }
 
 
@@ -388,7 +325,25 @@ const glm::mat4 &CCAMERA::GetProjectionMatrix() const
 
 const glm::mat4 &CCAMERA::GetProjectionMatrixInv() const
 {
-    return m_projectionMatrix_inv;
+    return m_projectionMatrixInv;
+}
+
+
+void CCAMERA::ResetXYpos()
+{
+    m_parametersChanged = true;
+    m_camera_pos.x = 0.0f;
+    m_camera_pos.y = 0.0f;
+
+    updateViewMatrix();
+    updateFrustum();
+}
+
+
+void CCAMERA::ResetXYpos_T1()
+{
+    m_camera_pos_t1.x = 0.0f;
+    m_camera_pos_t1.y = 0.0f;
 }
 
 
@@ -400,7 +355,7 @@ const glm::mat4 &CCAMERA::GetViewMatrix() const
 
 const glm::mat4 &CCAMERA::GetViewMatrix_Inv() const
 {
-    return m_viewMatrix_inverse;
+    return m_viewMatrixInverse;
 }
 
 
@@ -420,13 +375,30 @@ void CCAMERA::SetProjection( PROJECTION_TYPE aProjectionType )
 }
 
 
-void CCAMERA::SetCurWindowSize( const wxSize &aSize )
+void CCAMERA::ToggleProjection()
 {
-    if( m_windowSize != aSize )
+    if( m_projectionType == PROJECTION_ORTHO )
+        m_projectionType = PROJECTION_PERSPECTIVE;
+    else
+        m_projectionType = PROJECTION_ORTHO;
+
+    rebuildProjection();
+}
+
+
+bool CCAMERA::SetCurWindowSize( const wxSize &aSize )
+{
+    const SFVEC2I newSize = SFVEC2I( aSize.x, aSize.y );
+
+    if( m_windowSize != newSize )
     {
-        m_windowSize = aSize;
+        m_windowSize = newSize;
         rebuildProjection();
+
+        return true;
     }
+
+    return false;
 }
 
 
@@ -441,41 +413,90 @@ void CCAMERA::ZoomReset()
 }
 
 
-void CCAMERA::ZoomIn( float aFactor )
+bool CCAMERA::ZoomIn( float aFactor )
 {
-    float old_zoom = m_zoom;
-
-    m_zoom /= aFactor;
-
-    if( m_zoom <= 0.05f )
-        m_zoom = 0.05f;
-
-    m_camera_pos.z = m_zoom * m_camera_pos_init.z;
-
-    if( old_zoom != m_zoom )
+    if( m_zoom > MIN_ZOOM )
     {
-        updateViewMatrix();
-        rebuildProjection();
+        const float old_zoom = m_zoom;
+
+        m_zoom /= aFactor;
+
+        if( m_zoom <= MIN_ZOOM )
+            m_zoom = MIN_ZOOM;
+
+        m_camera_pos.z = m_zoom * m_camera_pos_init.z;
+
+        if( old_zoom != m_zoom )
+        {
+            updateViewMatrix();
+            rebuildProjection();
+
+            return true;
+        }
     }
+
+    return false;
 }
 
 
-void CCAMERA::ZoomOut( float aFactor )
+bool CCAMERA::ZoomOut( float aFactor )
 {
-    float old_zoom = m_zoom;
-
-    m_zoom *= aFactor;
-
-    if( m_zoom >= 1.5f )
-        m_zoom = 1.5f;
-
-    m_camera_pos.z = m_zoom * m_camera_pos_init.z;
-
-    if( old_zoom != m_zoom )
+    if( m_zoom < MAX_ZOOM )
     {
-        updateViewMatrix();
-        rebuildProjection();
+        const float old_zoom = m_zoom;
+
+        m_zoom *= aFactor;
+
+        if( m_zoom >= MAX_ZOOM )
+            m_zoom = MAX_ZOOM;
+
+        m_camera_pos.z = m_zoom * m_camera_pos_init.z;
+
+        if( old_zoom != m_zoom )
+        {
+            updateViewMatrix();
+            rebuildProjection();
+
+            return true;
+        }
     }
+
+    return false;
+}
+
+bool CCAMERA::ZoomIn_T1( float aFactor )
+{
+    if( m_zoom > MIN_ZOOM )
+    {
+        m_zoom_t1 = m_zoom / aFactor;
+
+        if( m_zoom_t1 <= MIN_ZOOM )
+            m_zoom_t1 = MIN_ZOOM;
+
+        m_camera_pos_t1.z = m_zoom_t1 * m_camera_pos_init.z;
+
+        return true;
+    }
+
+    return false;
+}
+
+
+bool CCAMERA::ZoomOut_T1( float aFactor )
+{
+    if( m_zoom < MAX_ZOOM )
+    {
+        m_zoom_t1 = m_zoom * aFactor;
+
+        if( m_zoom_t1 >= MAX_ZOOM )
+            m_zoom_t1 = MAX_ZOOM;
+
+        m_camera_pos_t1.z = m_zoom_t1 * m_camera_pos_init.z;
+
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -485,9 +506,80 @@ float CCAMERA::ZoomGet() const
 }
 
 
+void CCAMERA::RotateX( float aAngleInRadians )
+{
+    m_rotate_aux.x += aAngleInRadians;
+    updateRotationMatrix();
+}
+
+
+void CCAMERA::RotateY( float aAngleInRadians )
+{
+    m_rotate_aux.y += aAngleInRadians;
+    updateRotationMatrix();
+}
+
+
+void CCAMERA::RotateZ( float aAngleInRadians )
+{
+    m_rotate_aux.z += aAngleInRadians;
+    updateRotationMatrix();
+}
+
+
+void CCAMERA::RotateX_T1( float aAngleInRadians )
+{
+    m_rotate_aux_t1.x += aAngleInRadians;
+}
+
+
+void CCAMERA::RotateY_T1( float aAngleInRadians )
+{
+    m_rotate_aux_t1.y += aAngleInRadians;
+}
+
+
+void CCAMERA::RotateZ_T1( float aAngleInRadians )
+{
+    m_rotate_aux_t1.z += aAngleInRadians;
+}
+
+
+void CCAMERA::SetT0_and_T1_current_T()
+{
+    m_camera_pos_t0 = m_camera_pos;
+    m_lookat_pos_t0 = m_lookat_pos;
+    m_rotate_aux_t0 = m_rotate_aux;
+    m_zoom_t0       = m_zoom;
+
+    m_camera_pos_t1 = m_camera_pos;
+    m_lookat_pos_t1 = m_lookat_pos;
+    m_rotate_aux_t1 = m_rotate_aux;
+    m_zoom_t1       = m_zoom;
+}
+
+
+void CCAMERA::Interpolate( float t )
+{
+    wxASSERT( t >= 0.0f );
+
+    const float t0 = 1.0f - t;
+
+    m_camera_pos = m_camera_pos_t0 * t0 + m_camera_pos_t1 * t;
+    m_lookat_pos = m_lookat_pos_t0 * t0 + m_lookat_pos_t1 * t;
+    m_rotate_aux = m_rotate_aux_t0 * t0 + m_rotate_aux_t1 * t;
+    m_zoom       = m_zoom_t0       * t0 + m_zoom_t1       * t;
+
+    m_parametersChanged = true;
+
+    updateRotationMatrix();
+    rebuildProjection();
+}
+
+
 bool CCAMERA::ParametersChanged()
 {
-    bool parametersChanged = m_parametersChanged;
+    const bool parametersChanged = m_parametersChanged;
 
     m_parametersChanged = false;
 

@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,13 +30,18 @@
  */
 
 #include <iostream>
+#include "3d_rendering/3d_render_ogl_legacy/c_ogl_3dmodel.h"
 #include "c3d_model_viewer.h"
-#include "3d_rendering/3d_render_ogl_legacy/ogl_legacy_utils.h"
+#include "../3d_rendering/3d_render_ogl_legacy/ogl_legacy_utils.h"
+#include "../3d_cache/3d_cache.h"
 #include "common_ogl/ogl_utils.h"
 #include <wx/dcclient.h>
-#include "convert_to_biu.h"
+#include <base_units.h>
 #include <gl_context_mgr.h>
 
+/**
+  * Scale convertion from 3d model units to pcb units
+  */
 #define UNITS3D_TO_UNITSPCB (IU_PER_MM)
 
 /**
@@ -69,14 +74,14 @@ BEGIN_EVENT_TABLE( C3D_MODEL_VIEWER, wxGLCanvas )
 END_EVENT_TABLE()
 
 
-/// This defines the range that all coord will have to be rendered.
-/// It will use this value to convert to a normalized value between
-/// -(RANGE_SCALE_3D/2) .. +(RANGE_SCALE_3D/2)
+// This defines the range that all coord will have to be rendered.
+// It will use this value to convert to a normalized value between
+// -(RANGE_SCALE_3D/2) .. +(RANGE_SCALE_3D/2)
 #define RANGE_SCALE_3D 8.0f
 
 
-C3D_MODEL_VIEWER::C3D_MODEL_VIEWER( wxWindow *aParent,
-                                    const int *aAttribList ) :
+C3D_MODEL_VIEWER::C3D_MODEL_VIEWER(wxWindow *aParent,
+                                    const int *aAttribList , S3D_CACHE *aCacheManager) :
 
                   wxGLCanvas( aParent,
                               wxID_ANY,
@@ -84,7 +89,8 @@ C3D_MODEL_VIEWER::C3D_MODEL_VIEWER( wxWindow *aParent,
                               wxDefaultPosition,
                               wxDefaultSize,
                               wxFULL_REPAINT_ON_RESIZE ),
-                  m_trackBallCamera( RANGE_SCALE_3D * 2.0f )
+                  m_trackBallCamera( RANGE_SCALE_3D * 2.0f ),
+                  m_cacheManager(aCacheManager)
 {
     wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::C3D_MODEL_VIEWER" ) );
 
@@ -94,28 +100,30 @@ C3D_MODEL_VIEWER::C3D_MODEL_VIEWER( wxWindow *aParent,
     m_3d_model = NULL;
     m_BiuTo3Dunits = 1.0;
 
-    // Explicitly create a new rendering context instance for this canvas.
-    m_glRC = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
+    m_glRC = NULL;
 }
 
 
 C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER()
 {
-    GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
-
     wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER" ) );
 
-    delete m_ogl_3dmodel;
-    m_ogl_3dmodel = NULL;
+    if( m_glRC )
+    {
+        GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
-    GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
-    GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glRC );
+        delete m_ogl_3dmodel;
+        m_ogl_3dmodel = NULL;
+
+        GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
+        GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glRC );
+    }
 }
 
 
 void C3D_MODEL_VIEWER::Set3DModel( const S3DMODEL &a3DModel )
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::Set3DModel" ) );
+    wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::Set3DModel with a S3DMODEL" ) );
 
     // Validate a3DModel pointers
     wxASSERT( a3DModel.m_Materials != NULL );
@@ -135,16 +143,38 @@ void C3D_MODEL_VIEWER::Set3DModel( const S3DMODEL &a3DModel )
         m_3d_model = &a3DModel;
         m_reload_is_needed = true;
     }
+
+    Refresh();
 }
+
+
+void C3D_MODEL_VIEWER::Set3DModel(const wxString &aModelPathName)
+{
+    wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::Set3DModel with a wxString" ) );
+
+    if( m_cacheManager )
+    {
+        const S3DMODEL* model = m_cacheManager->GetModel( aModelPathName );
+
+        if( model )
+            Set3DModel( (const S3DMODEL &)*model );
+        else
+            Clear3DModel();
+    }
+}
+
 
 void C3D_MODEL_VIEWER::Clear3DModel()
 {
     // Delete the old model
     m_reload_is_needed = false;
+
     delete m_ogl_3dmodel;
     m_ogl_3dmodel = NULL;
 
     m_3d_model = NULL;
+
+    Refresh();
 }
 
 
@@ -168,7 +198,10 @@ void C3D_MODEL_VIEWER::ogl_initialize()
     const GLfloat ambient[]  = { 0.01f, 0.01f, 0.01f, 1.0f };
     const GLfloat diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
     const GLfloat specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    const GLfloat position[] = { 0.0f, 0.0f, 2.0f * RANGE_SCALE_3D, 0.0f }; // defines a directional light that points along the negative z-axis
+
+    // defines a directional light that points along the negative z-axis
+    const GLfloat position[] = { 0.0f, 0.0f, 2.0f * RANGE_SCALE_3D, 0.0f };
+
     const GLfloat lmodel_ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
     glLightfv( GL_LIGHT0, GL_AMBIENT,  ambient );
@@ -195,6 +228,8 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
 {
     wxPaintDC( this );
 
+    event.Skip( false );
+
     // SwapBuffer requires the window to be shown before calling
     if( !IsShownOnScreen() )
     {
@@ -205,6 +240,9 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     // "Makes the OpenGL state that is represented by the OpenGL rendering
     //  context context current, i.e. it will be used by all subsequent OpenGL calls.
     //  This function may only be called when the window is shown on screen"
+    if( m_glRC == NULL )
+        m_glRC = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
+
     GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
     // Set the OpenGL viewport according to the client size of this canvas.
@@ -226,11 +264,13 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
         wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::OnPaint m_reload_is_needed" ) );
 
         m_reload_is_needed = false;
-        m_ogl_3dmodel = new C_OGL_3DMODEL( *m_3d_model );
+        m_ogl_3dmodel = new C_OGL_3DMODEL( *m_3d_model, MATERIAL_MODE_NORMAL );
 
         // It convert a model as it was a board, so get the max size dimension of the board
         // and compute the conversion scale
-        m_BiuTo3Dunits = (double)RANGE_SCALE_3D / ((double)m_ogl_3dmodel->GetBBox().GetMaxDimension() * UNITS3D_TO_UNITSPCB);
+        m_BiuTo3Dunits = (double)RANGE_SCALE_3D /
+                         ( (double)m_ogl_3dmodel->GetBBox().GetMaxDimension() *
+                           UNITS3D_TO_UNITSPCB );
     }
 
     glViewport( 0, 0, clientSize.x, clientSize.y );
@@ -253,8 +293,8 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     glMatrixMode( GL_MODELVIEW );
     glLoadMatrixf( glm::value_ptr( m_trackBallCamera.GetViewMatrix() ) );
 
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+    glEnable( GL_LIGHTING );
+    glEnable( GL_LIGHT0 );
 
     // Render Model
     if( m_ogl_3dmodel )
@@ -263,22 +303,24 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
 
         double modelunit_to_3d_units_factor = m_BiuTo3Dunits * UNITS3D_TO_UNITSPCB;
 
-        glScaled( modelunit_to_3d_units_factor, modelunit_to_3d_units_factor, modelunit_to_3d_units_factor);
+        glScaled( modelunit_to_3d_units_factor,
+                  modelunit_to_3d_units_factor,
+                  modelunit_to_3d_units_factor );
 
         // Center model in the render viewport
         const SFVEC3F model_center = m_ogl_3dmodel->GetBBox().GetCenter();
+
         glTranslatef( -model_center.x, -model_center.y, -model_center.z );
 
-        // !TODO: draw transparent models
         m_ogl_3dmodel->Draw_opaque();
         m_ogl_3dmodel->Draw_transparent();
-        //m_ogl_3dmodel->Draw_bboxes();
 
         glPopMatrix();
     }
 
 
-    glViewport( 0, 0, clientSize.y / 8 , clientSize.y / 8 );                    // YxY squared view port
+    // YxY squared view port
+    glViewport( 0, 0, clientSize.y / 8 , clientSize.y / 8 );
     glClear( GL_DEPTH_BUFFER_BIT );
 
     glMatrixMode( GL_PROJECTION );
@@ -288,7 +330,9 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
-    const glm::mat4 TranslationMatrix = glm::translate( glm::mat4(1.0f), SFVEC3F( 0.0f, 0.0f, -RANGE_SCALE_3D ) );
+    const glm::mat4 TranslationMatrix = glm::translate( glm::mat4(1.0f),
+                                                        SFVEC3F( 0.0f, 0.0f, -RANGE_SCALE_3D ) );
+
     const glm::mat4 ViewMatrix = TranslationMatrix * m_trackBallCamera.GetRotationMatrix();
 
     glLoadMatrixf( glm::value_ptr( ViewMatrix ) );
@@ -314,9 +358,8 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     //  front-buffer and vice versa, so that the output of the previous OpenGL
     //  commands is displayed on the window."
     SwapBuffers();
-    GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
 
-    event.Skip();
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
 }
 
 
@@ -432,3 +475,4 @@ void C3D_MODEL_VIEWER::OnRightClick( wxMouseEvent &event )
 {
     event.Skip();
 }
+

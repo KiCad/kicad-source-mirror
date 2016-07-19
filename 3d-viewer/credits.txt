@@ -1,0 +1,229 @@
+﻿Credits
+=======
+
+The 3D-viewer contains parts, source code or adaptations or implementations that should give the following aknowledge:
+
+
+cbvh_packet_traversal.cpp
+-------------------------------
+
+Contains an implementation of the algorithm described in the paper:
+"Ray Tracing Deformable Scenes Using Dynamic Bounding Volume Hierarchies"
+http://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/wald07_packetbvh.pdf
+by INGO WALD, SOLOMON BOULOS, and PETER SHIRLEY from University of Utah
+
+Contains an implementation of the algorithm described in the paper:
+"Large Ray Packets for Real-time Whitted Ray Tracing" 
+http://cseweb.ucsd.edu/~ravir/whitted.pdf
+by Ryan Overbeck1, Ravi Ramamoorthi from Columbia University and William R. Mark from
+Intel Corporation and University of Texas at Austin
+
+
+
+cbvh_pbrt.h
+-----------
+
+Contains a BVH implementation from the source code of the book
+"Physically Based Rendering" (v2 and v3) http://www.pbrt.org/
+Copyright(c) 1998-2015 Matt Pharr, Greg Humphreys, and Wenzel Jakob.
+LICENSE: https://github.com/mmp/pbrt-v3/blob/master/LICENSE.txt
+
+
+
+cbbox2d.cpp
+-----------
+
+bool CBBOX2D::Intersects( const SFVEC2F &aCenter, float aRadiusSquared ) const
+Contains an algorithm implementation based on the paper:
+"On Faster Sphere-Box Overlap Testing"
+http://www.mrtc.mdh.se/projects/3Dgraphics/paperF.pdf
+Thomas Larsson, Tomas Akenine-Möller, and Eric Lengyel
+
+
+bool CBBOX2D::Intersect( const RAY2D &aRay, float *t ) const
+Contains an algorithm implementation based on the article:
+http://tavianator.com/fast-branchless-raybounding-box-intersections/
+"FAST, BRANCHLESS RAY/BOUNDING BOX INTERSECTIONS", 2011 TAVIAN BARNES
+
+
+
+cfilledcircle2d.cpp, cring2d.cpp, croundseg.cpp
+-----------------------------------------------
+
+bool CFILLEDCIRCLE2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const
+bool CRING2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const
+bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+Contains an algorithm based on:
+http://cs665pd.googlecode.com/svn/trunk/photon/sphere.cpp
+Steve Marschner's CS667 framework, email: srm at cs.cornell.edu
+
+TODO: ask author about the license of this source code.
+
+
+
+citemlayercsg2d.cpp
+-------------------
+
+bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const
+Based on ideas and implementation from
+http://homepages.paradise.net.nz/nickamy/raytracer/raytracer.htm
+Nick Chapman, email: nickamy@paradise.net.nz
+
+
+
+ctriangle2d.cpp
+---------------
+
+bool CTRIANGLE2D::IsPointInside( const SFVEC2F &aPoint ) const
+Contains an algorithm based on:
+http://totologic.blogspot.co.uk/2014/01/accurate-point-in-triangle-test.html
+2014 Cédric Jules, email: flash dot cedric at Google mail service
+
+
+
+cbbox.cpp
+---------
+
+bool CBBOX::Intersect( const RAY &aRay, float *aOutHitt0, float *aOutHitt1 ) const
+Contains an algorithm based on:
+"Physically Based Rendering" (v2) http://www.pbrt.org/
+"Physical Based Ray Tracing" (by Matt Pharr and Greg Humphrey)
+
+https://github.com/mmp/pbrt-v2/blob/master/src/core/geometry.cpp#L68
+https://github.com/mmp/pbrt-v2/blob/master/src/accelerators/bvh.cpp#L126
+LICENSE: http://www.pbrt.org/LICENSE.txt
+
+
+
+cbbox_ray.cpp
+-------------
+
+bool CBBOX::Intersect( const RAY &aRay, float *t ) const
+Based on the source code from the paper:
+
+"This source code accompanies the Journal of Graphics Tools paper:
+
+  "Fast Ray / Axis-Aligned Bounding Box Overlap Tests using Ray Slopes"
+  by Martin Eisemann, Thorsten Grosch, Stefan Müller and Marcus Magnor
+  Computer Graphics Lab, TU Braunschweig, Germany and
+  University of Koblenz-Landau, Germany
+
+  This source code is public domain, but please mention us if you use it."
+
+
+
+ccylinder.cpp
+-------------
+
+bool CVCYLINDER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+bool CVCYLINDER::IntersectP(const RAY &aRay , float aMaxDistance ) const
+Based on the source code from:
+http://www.cs.utah.edu/~lha/Code%206620%20/Ray4/Cylinder.cpp
+Linh Khanh Ha, University of Utah, email: lha sci.utah.edu
+
+TODO: Ask author about the source code license
+
+
+
+ctriangle.cpp
+-------------
+
+bool CTRIANGLE::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+Implements a triangle ray intersection based on article:
+http://www.flipcode.com/archives/Raytracing_Topics_Techniques-Part_7_Kd-Trees_and_More_Speed.shtml
+by Jacco Bikker, that implement optimizations based on Ingo Wald's thesis.
+
+
+
+cfrustum.cpp
+------------
+
+bool CFRUSTUM::Intersect( const CBBOX &aBBox ) const
+BAsed on the implementation from:
+https://github.com/nslo/raytracer/blob/2c2e0ff4bbb6082e07804ec7cf0b92673b98dcb1/src/raytracer/geom_utils.cpp#L66
+Nathan Slobody
+
+TODO: Ask author about the source code license
+
+
+
+clight.h
+--------
+
+Class CPOINTLIGHT Point light based on tutorial:
+http://ogldev.atspace.co.uk/www/tutorial20/tutorial20.html
+Etay Meiri, email: ogldev1 gmail
+
+
+
+mortoncodes.cpp
+---------------
+
+Implementes Morton Codes base on the implementation of Fabian “ryg” Giesen
+https://fgiesen.wordpress.com/2009/12/13/decoding-morton-codes/
+
+
+
+ccamera.h
+---------
+
+Frustum structure is based on the tutorial:
+http://www.lighthouse3d.com/tutorials/view-frustum-culling/
+
+
+
+cpostshader_ssao.cpp
+--------------------
+
+SSAO based on an implementation by:
+Benjamin Blundell https://github.com/OniDaito/CoffeeGL/blob/master/misc/ssao.frag
+
+Also based from a post by martinsh at:
+http://www.gamedev.net/topic/556187-the-best-ssao-ive-seen/?view=findpost&p=4632208
+
+Latter adapter for CPU shader implementation and add other features specific to KiCad implementation.
+
+
+trackball.h, trackball.cpp
+--------------------------
+
+A virtual trackball implementation
+Written by Gavin Bell for Silicon Graphics, November 1988.
+Original code from: David M. Ciemiewicz, Mark Grossman, Henry Moreton, and Paul Haeberli
+License are in the files trackball.h and trackball.cpp
+
+
+
+3d_fastmath.h
+-------------
+
+This file contains some functions from the PBRT 3 source code.
+https://github.com/mmp/pbrt-v3/blob/master/src/core/pbrt.h
+"Physically Based Rendering" (v3) http://www.pbrt.org/
+Copyright(c) 1998-2015 Matt Pharr, Greg Humphreys, and Wenzel Jakob.
+LICENSE: https://github.com/mmp/pbrt-v3/blob/master/LICENSE.txt
+
+
+
+3d_math.h
+---------
+
+inline SFVEC3F CosWeightedRandomHemisphereDirection( SFVEC3F n )
+Based on a post in:
+https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
+
+inline bool Refract( const SFVEC3F &aInVector, const SFVEC3F &aNormal, float aRin_over_Rout, SFVEC3F &aOutVector )
+https://github.com/mmp/pbrt-v3/blob/master/src/core/reflection.h
+"Physically Based Rendering" (v3) http://www.pbrt.org/
+Copyright(c) 1998-2015 Matt Pharr, Greg Humphreys, and Wenzel Jakob.
+LICENSE: https://github.com/mmp/pbrt-v3/blob/master/LICENSE.txt
+
+
+
+openmp_mutex.h
+--------------
+
+openMP mutex class based on:
+http://bisqwit.iki.fi/story/howto/openmp/
+by Joel Yliluoma, email bisqwit iki.fi
+

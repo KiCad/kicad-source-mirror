@@ -32,7 +32,7 @@
 #include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
-#include <3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer.h>
 #include <msgpanel.h>
 #include <macros.h>
 
@@ -221,7 +221,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
 FOOTPRINT_WIZARD_FRAME::~FOOTPRINT_WIZARD_FRAME()
 {
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
         draw3DFrame->Destroy();
@@ -526,7 +526,7 @@ bool FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
 
 void FOOTPRINT_WIZARD_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame )
     {
@@ -544,7 +544,7 @@ void FOOTPRINT_WIZARD_FRAME::Show3D_Frame( wxCommandEvent& event )
         return;
     }
 
-    draw3DFrame = new EDA_3D_FRAME( &Kiway(), this, wxEmptyString );
+    draw3DFrame = new EDA_3D_VIEWER( &Kiway(), this, wxEmptyString );
     Update3D_Frame( false );
     draw3DFrame->Raise();     // Needed with some Window Managers
     draw3DFrame->Show( true );
@@ -558,7 +558,7 @@ void FOOTPRINT_WIZARD_FRAME::Show3D_Frame( wxCommandEvent& event )
  */
 void FOOTPRINT_WIZARD_FRAME::Update3D_Frame( bool aForceReloadFootprint )
 {
-    EDA_3D_FRAME* draw3DFrame = Get3DViewerFrame();
+    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
     if( draw3DFrame == NULL )
         return;

@@ -43,7 +43,6 @@
 #include <pcbstruct.h>
 #include <class_draw_panel_gal.h>
 
-
 /* Forward declarations of classes. */
 class BOARD;
 class BOARD_CONNECTED_ITEM;
@@ -51,7 +50,7 @@ class MODULE;
 class TRACK;
 class D_PAD;
 class TEXTE_MODULE;
-class EDA_3D_FRAME;
+class EDA_3D_VIEWER;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 class BOARD_DESIGN_SETTINGS;
@@ -109,7 +108,7 @@ public:
     /**
      * @return a reference to the 3D viewer frame, when exists, or NULL
      */
-    EDA_3D_FRAME* Get3DViewerFrame();
+    EDA_3D_VIEWER* Get3DViewerFrame();
 
     /**
      * Function LoadFootprint

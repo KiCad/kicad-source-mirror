@@ -39,7 +39,7 @@
 #include <base_units.h>
 #include <msgpanel.h>
 
-#include <3d_viewer.h>
+#include <3d_viewer/eda_3d_viewer.h>                                            // To include VIEWER3D_FRAMENAME
 
 #include <pcbnew.h>
 #include <fp_lib_table.h>
@@ -121,10 +121,10 @@ PCB_BASE_FRAME::~PCB_BASE_FRAME()
 }
 
 
-EDA_3D_FRAME* PCB_BASE_FRAME::Get3DViewerFrame()
+EDA_3D_VIEWER* PCB_BASE_FRAME::Get3DViewerFrame()
 {
     // return the 3D viewer frame, when exists, or NULL
-    return dynamic_cast<EDA_3D_FRAME*>
+    return dynamic_cast<EDA_3D_VIEWER*>
         ( wxWindow::FindWindowByName( VIEWER3D_FRAMENAME ) );
 }
 

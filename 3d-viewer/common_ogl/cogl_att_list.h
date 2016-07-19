@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@
 #ifndef _COGL_ATT_LIST_H
 #define _COGL_ATT_LIST_H
 
-//#include "plugins/3dapi/xv3d_types.h"
 #include <macros.h>
 #include <wx/glcanvas.h>
 
@@ -46,7 +45,8 @@ class COGL_ATT_LIST
 public:
     /**
      *  Get a list of attributes to pass to wxGLCanvas
-     *  @param aUseAntiAliasing = if true try to initialize (if is supported) the list with anti aliasing capabilities
+     *  @param aUseAntiAliasing = if true try to initialize (if is supported) the
+     *  list with anti aliasing capabilities
      *  @return a list of options to be passed in the creation of a EDA_3D_CANVAS class
      */
     static const int *GetAttributesList( bool aUseAntiAliasing );
@@ -63,12 +63,12 @@ private:
      *  Only WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO are such boolean
      *  attributes.
      */
-    static const int m_openGL_AttributesList[];
+    static const int m_openGL_attributes_list[];
 
     /**
      * Attributes list that was (eventualy) changed and are passed to creation
      */
-    static int m_openGL_AttributesList_toUse[];
+    static int m_openGL_attributes_list_to_use[];
 };
 
 #endif // _COGL_ATT_LIST_H

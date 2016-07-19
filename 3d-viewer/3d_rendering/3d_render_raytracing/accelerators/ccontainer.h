@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ typedef std::list<COBJECT *> LIST_OBJECT;
 typedef std::vector<COBJECT *> VECTOR_OBJECT;
 typedef std::vector<const COBJECT *> CONST_VECTOR_OBJECT;
 
-class GLM_ALIGN(CLASS_ALIGNMENT) CGENERICCONTAINER
+class  CGENERICCONTAINER
 {
 protected:
     CBBOX       m_bbox;
@@ -62,7 +62,7 @@ public:
 
     const LIST_OBJECT &GetList() const { return m_objects; }
 
-    const void ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const;
+    void ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const;
 
     const CBBOX &GetBBox() const { return m_bbox; }
 
@@ -73,7 +73,7 @@ private:
 };
 
 
-class GLM_ALIGN(CLASS_ALIGNMENT) CCONTAINER : public CGENERICCONTAINER
+class  CCONTAINER : public CGENERICCONTAINER
 {
 public:
     bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const;
