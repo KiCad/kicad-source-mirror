@@ -86,8 +86,11 @@ public:
         tmpStr << m_YRef;
         m_VRML_Yref->SetValue( tmpStr );
         m_sdbSizer1OK->SetDefault();
-        GetSizer()->SetSizeHints( this );
-        Centre();
+
+        FixOSXCancelButtonIssue();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
 
         Connect( ID_USE_ABS_PATH, wxEVT_UPDATE_UI,
                  wxUpdateUIEventHandler( DIALOG_EXPORT_3DFILE::OnUpdateUseRelativePath ) );

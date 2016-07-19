@@ -27,10 +27,11 @@
 DIALOG_ENUM_PADS::DIALOG_ENUM_PADS( wxWindow* aParent ) :
     DIALOG_ENUM_PADS_BASE( aParent )
 {
-    // Calling SetSizeHints after all widgets are built is mandatory
-    // to set the correct size of the dialog
-    GetSizer()->SetSizeHints( this );
-    Center();
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 

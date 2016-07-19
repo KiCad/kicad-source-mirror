@@ -72,6 +72,16 @@ private:
     bool TransferDataToWindow();
     bool TransferDataFromWindow();
     void OnLayerChoice( wxCommandEvent& event );
+
+    void OnInitDlg( wxInitDialogEvent& event )
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
+
     bool Validate();
 };
 
@@ -92,11 +102,7 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_EDIT_FRAME* 
 
     m_StandardButtonsSizerOK->SetDefault();
 
-    Layout();
     FixOSXCancelButtonIssue();
-
-    // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
 }
 
 

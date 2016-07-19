@@ -1,5 +1,5 @@
 /**
- * @file dialog_pad_properties.cpp
+ * @file dialog_pad_properties.h
  * @brief dialog pad properties editor.
  */
 

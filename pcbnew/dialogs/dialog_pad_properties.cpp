@@ -121,13 +121,12 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     else    // We are editing a "master" pad, i.e. a template to create new pads
         m_dummyPad->Copy( m_padMaster );
 
-    // Show the X and Y axis. It is usefull because pads can have an offset
-    // or a complex shape. Showing the pad reference position is important
+    // Show the X and Y axis. It is usefull because pad shape can have an offset
+    // or be a complex shape.
     m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D(0.0, 0.0, 0.8, 1.0),
                                                KIGFX::ORIGIN_VIEWITEM::CROSS,
-                                               20000,
-                                               VECTOR2D( m_dummyPad->GetPosition().x,
-                                                         m_dummyPad->GetPosition().y ) );
+                                               Millimeter2iu( 0.2 ),
+                                               VECTOR2D( m_dummyPad->GetPosition() ) );
     m_axisOrigin->SetDrawAtZero( true );
 
     if( m_parent->IsGalCanvasActive() )
@@ -151,10 +150,13 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     TransferDataToWindow();
 
     m_sdbSizerOK->SetDefault();
-    GetSizer()->SetSizeHints( this );
-
     m_PadNumCtrl->SetFocus();
     m_canUpdate = true;
+
+    FixOSXCancelButtonIssue();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
@@ -880,6 +882,12 @@ void DIALOG_PAD_PROPERTIES::redraw()
 
         if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
         {
+            // gives a size to the full drawable area
+            BOX2I drawbox;
+            drawbox.Move( m_dummyPad->GetPosition() );
+            drawbox.Inflate( bbox.GetSize().x*2, bbox.GetSize().y*2 );
+            m_panelShowPadGal->GetView()->SetBoundary( drawbox );
+
             // Autozoom
             m_panelShowPadGal->GetView()->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
 
