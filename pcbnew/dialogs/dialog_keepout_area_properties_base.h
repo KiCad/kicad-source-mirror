@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -42,7 +42,6 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 	private:
 		
 		// Private event handlers
-		void _wxFB_OnCancelClick( wxCommandEvent& event ){ OnCancelClick( event ); }
 		void _wxFB_OnOkClick( wxCommandEvent& event ){ OnOkClick( event ); }
 		
 	
@@ -61,7 +60,6 @@ class DIALOG_KEEPOUT_AREA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	

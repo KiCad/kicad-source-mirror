@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -10,7 +10,6 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( DIALOG_KEEPOUT_AREA_PROPERTIES_BASE, DIALOG_SHIM )
-	EVT_BUTTON( wxID_CANCEL, DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::_wxFB_OnCancelClick )
 	EVT_BUTTON( wxID_OK, DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::_wxFB_OnOkClick )
 END_EVENT_TABLE()
 
@@ -59,13 +58,13 @@ DIALOG_KEEPOUT_AREA_PROPERTIES_BASE::DIALOG_KEEPOUT_AREA_PROPERTIES_BASE( wxWind
 	wxStaticBoxSizer* sbSizerCutoutOpts;
 	sbSizerCutoutOpts = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Keepout Options:") ), wxVERTICAL );
 	
-	m_cbTracksCtrl = new wxCheckBox( this, wxID_ANY, _("No tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbTracksCtrl = new wxCheckBox( sbSizerCutoutOpts->GetStaticBox(), wxID_ANY, _("No tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerCutoutOpts->Add( m_cbTracksCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_cbViasCtrl = new wxCheckBox( this, wxID_ANY, _("No vias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbViasCtrl = new wxCheckBox( sbSizerCutoutOpts->GetStaticBox(), wxID_ANY, _("No vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerCutoutOpts->Add( m_cbViasCtrl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
-	m_cbCopperPourCtrl = new wxCheckBox( this, wxID_ANY, _("No copper pour"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbCopperPourCtrl = new wxCheckBox( sbSizerCutoutOpts->GetStaticBox(), wxID_ANY, _("No copper pour"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerCutoutOpts->Add( m_cbCopperPourCtrl, 0, wxALL|wxEXPAND, 5 );
 	
 	

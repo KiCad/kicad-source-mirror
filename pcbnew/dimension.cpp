@@ -6,9 +6,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,9 +80,9 @@ class DIALOG_DIMENSION_EDITOR : public DIALOG_DIMENSION_EDITOR_BASE
 {
 private:
 
-    PCB_EDIT_FRAME* m_Parent;
+    PCB_EDIT_FRAME* m_parent;
     wxDC*           m_DC;
-    DIMENSION*      CurrentDimension;
+    DIMENSION*      m_currentDimension;
 
 public:
 
@@ -94,8 +94,7 @@ public:
 
 
 private:
-    void OnCancelClick( wxCommandEvent& event );
-    void OnOKClick( wxCommandEvent& event );
+    virtual void OnOKClick( wxCommandEvent& event ) override;
 };
 
 
@@ -105,10 +104,10 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
 {
     SetFocus();
 
-    m_Parent = aParent;
+    m_parent = aParent;
     m_DC = aDC;
 
-    CurrentDimension = aDimension;
+    m_currentDimension = aDimension;
 
     if( aDimension->Text().IsMirrored() )
         m_rbMirror->SetSelection( 1 );
@@ -134,14 +133,14 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
     AddUnitSymbol( *m_staticTextPosY );
 
     // Configure the layers list selector
-    if( !m_Parent->GetBoard()->IsLayerEnabled( aDimension->GetLayer() ) )
+    if( !m_parent->GetBoard()->IsLayerEnabled( aDimension->GetLayer() ) )
         // Should not happens, because one cannot select a board item on a
         // not activated layer, but ...
         m_SelLayerBox->ShowNonActivatedLayers( true );
 
     m_SelLayerBox->SetLayersHotkeys( false );
     m_SelLayerBox->SetLayerSet( LSET::AllCuMask().set( Edge_Cuts ) );
-    m_SelLayerBox->SetBoardFrame( m_Parent );
+    m_SelLayerBox->SetBoardFrame( m_parent );
     m_SelLayerBox->Resync();
 
     if( m_SelLayerBox->SetLayerSelection( aDimension->GetLayer() ) < 0 )
@@ -152,15 +151,11 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
     }
 
     m_sdbSizerBtsOK->SetDefault();
-    GetSizer()->Fit( this );
-    GetSizer()->SetSizeHints( this );
-    Centre();
-}
 
+    FixOSXCancelButtonIssue();
 
-void DIALOG_DIMENSION_EDITOR::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( -1 );
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
@@ -168,7 +163,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 {
     LAYER_ID newlayer = ToLAYER_ID( m_SelLayerBox->GetLayerSelection() );
 
-    if( !m_Parent->GetBoard()->IsLayerEnabled( newlayer ) )
+    if( !m_parent->GetBoard()->IsLayerEnabled( newlayer ) )
     {
         wxMessageBox( _( "The layer currently selected is not enabled for this board\n"
                          "You cannot use it" ) );
@@ -178,24 +173,24 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 #ifndef USE_WX_OVERLAY
     if( m_DC )     // Delete old text.
     {
-        CurrentDimension->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
+        m_currentDimension->Draw( m_parent->GetCanvas(), m_DC, GR_XOR );
     }
 #endif
 
-    m_Parent->SaveCopyInUndoList(CurrentDimension, UR_CHANGED);
+    m_parent->SaveCopyInUndoList(m_currentDimension, UR_CHANGED);
 
     if( m_Name->GetValue() != wxEmptyString )
     {
-        CurrentDimension->SetText( m_Name->GetValue() );
+        m_currentDimension->SetText( m_Name->GetValue() );
     }
 
     wxString msg;
 
     // Get new size value:
     msg = m_TxtSizeXCtrl->GetValue();
-    CurrentDimension->Text().SetWidth( ValueFromString( g_UserUnit, msg ) );
+    m_currentDimension->Text().SetWidth( ValueFromString( g_UserUnit, msg ) );
     msg = m_TxtSizeYCtrl->GetValue();
-    CurrentDimension->Text().SetHeight( ValueFromString( g_UserUnit, msg ) );
+    m_currentDimension->Text().SetHeight( ValueFromString( g_UserUnit, msg ) );
 
     // Get new position value:
     // It will be copied later in dimension, because
@@ -204,12 +199,12 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
     pos.x = ValueFromString( g_UserUnit, msg );
     msg = m_textCtrlPosY->GetValue();
     pos.y = ValueFromString( g_UserUnit, msg );
-    CurrentDimension->Text().SetTextPosition( pos );
+    m_currentDimension->Text().SetTextPosition( pos );
 
     // Get new line thickness value:
     msg = m_TxtWidthCtrl->GetValue();
     int width = ValueFromString( g_UserUnit, msg );
-    int maxthickness = Clamp_Text_PenSize( width, CurrentDimension->Text().GetSize() );
+    int maxthickness = Clamp_Text_PenSize( width, m_currentDimension->Text().GetSize() );
 
     if( width > maxthickness )
     {
@@ -219,39 +214,39 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
         width = maxthickness;
     }
 
-    CurrentDimension->SetWidth( width );
-    CurrentDimension->Text().SetThickness( width );
-    CurrentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
-    CurrentDimension->SetLayer( newlayer );
+    m_currentDimension->SetWidth( width );
+    m_currentDimension->Text().SetThickness( width );
+    m_currentDimension->Text().SetMirrored( ( m_rbMirror->GetSelection() == 1 ) ? true : false );
+    m_currentDimension->SetLayer( newlayer );
 
 #ifndef USE_WX_OVERLAY
     if( m_DC )     // Display new text
     {
-        CurrentDimension->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
+        m_currentDimension->Draw( m_parent->GetCanvas(), m_DC, GR_OR );
     }
 #else
-    m_Parent->Refresh();
+    m_parent->Refresh();
 #endif
 
-    m_Parent->OnModify();
-    EndModal( 1 );
+    m_parent->OnModify();
+    event.Skip();   // ends returning wxID_OK (default behavior)
 }
 
 
 static void AbortBuildDimension( EDA_DRAW_PANEL* Panel, wxDC* aDC )
 {
-    DIMENSION* Dimension = (DIMENSION*) Panel->GetScreen()->GetCurItem();
+    DIMENSION* dimension = (DIMENSION*) Panel->GetScreen()->GetCurItem();
 
-    if( Dimension )
+    if( dimension )
     {
-        if( Dimension->IsNew() )
+        if( dimension->IsNew() )
         {
-            Dimension->Draw( Panel, aDC, GR_XOR );
-            Dimension->DeleteStructure();
+            dimension->Draw( Panel, aDC, GR_XOR );
+            dimension->DeleteStructure();
         }
         else
         {
-            Dimension->Draw( Panel, aDC, GR_OR );
+            dimension->Draw( Panel, aDC, GR_OR );
         }
     }
 
@@ -359,9 +354,8 @@ void PCB_EDIT_FRAME::ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* a
     if( aDimension == NULL )
         return;
 
-    DIALOG_DIMENSION_EDITOR* frame = new DIALOG_DIMENSION_EDITOR( this, aDimension, aDC );
-    frame->ShowModal();
-    frame->Destroy();
+    DIALOG_DIMENSION_EDITOR dlg( this, aDimension, aDC );
+    dlg.ShowModal();
 }
 
 

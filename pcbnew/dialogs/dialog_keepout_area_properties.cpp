@@ -69,8 +69,7 @@ private:
      */
     void initDialog();
 
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
+    virtual void OnOkClick( wxCommandEvent& event ) override;
 
     /**
      * Function AcceptOptionsForKeepOut
@@ -95,7 +94,10 @@ ZONE_EDIT_T InvokeKeepoutAreaEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSe
 {
     DIALOG_KEEPOUT_AREA_PROPERTIES dlg( aCaller, aSettings );
 
-    ZONE_EDIT_T result = ZONE_EDIT_T( dlg.ShowModal() );
+    ZONE_EDIT_T result = ZONE_ABORT;
+
+    if( dlg.ShowModal() == wxID_OK )
+        result = ZONE_OK;
 
     return result;
 }
@@ -111,13 +113,10 @@ DIALOG_KEEPOUT_AREA_PROPERTIES::DIALOG_KEEPOUT_AREA_PROPERTIES( PCB_BASE_FRAME* 
     m_ptr = aSettings;
     m_zonesettings = *aSettings;
 
-    SetReturnCode( ZONE_ABORT );        // Will be changed on button OK click
-
     initDialog();
-
     m_sdbSizerButtonsOK->SetDefault();
-    GetSizer()->SetSizeHints( this );
-    Center();
+
+    FinishDialogSettings();
 }
 
 
@@ -185,18 +184,12 @@ void DIALOG_KEEPOUT_AREA_PROPERTIES::initDialog()
 }
 
 
-void DIALOG_KEEPOUT_AREA_PROPERTIES::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( ZONE_ABORT );
-}
-
-
 void DIALOG_KEEPOUT_AREA_PROPERTIES::OnOkClick( wxCommandEvent& event )
 {
     if( AcceptOptionsForKeepOut() )
     {
         *m_ptr = m_zonesettings;
-        EndModal( ZONE_OK );
+        event.Skip();       // ends returning wxID_OK (default behavior)
     }
 }
 

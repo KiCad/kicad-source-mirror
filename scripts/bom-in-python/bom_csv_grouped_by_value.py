@@ -76,7 +76,7 @@ columnset = compfields | partfields     # union
 columns = ['Item', 'Qty', 'Reference(s)', 'Value', 'LibPart', 'Footprint', 'Datasheet'] + sorted(list(columnset))
 
 # Create a new csv writer object to use as the output formatter
-out = csv.writer( f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_MINIMAL )
+out = csv.writer( f, lineterminator='\n', delimiter=',', quotechar='\"', quoting=csv.QUOTE_ALL )
 
 # override csv.writer's writerow() to support encoding conversion (initial encoding is utf8):
 def writerow( acsvwriter, columns ):
