@@ -170,12 +170,14 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxString& aPrjFullFileName,
     fn.SetExt( SchematicFileExtension );
 
     // If a <project>.sch file does not exist, create a "stub" file
+    // ( minimal schematic file )
     if( !fn.FileExists() )
     {
         wxFile file( fn.GetFullPath(), wxFile::write );
 
         if( file.IsOpened() )
-            file.Write( wxT( "EESchema Schematic File Version 2\n" ) );
+            file.Write( wxT( "EESchema Schematic File Version 2\n"
+                             "EELAYER 25 0\nEELAYER END\n$EndSCHEMATC\n" ) );
 
         // wxFile dtor will close the file
     }
