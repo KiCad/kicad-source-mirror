@@ -92,28 +92,18 @@ PART_LIB::~PART_LIB()
 }
 
 
-void PART_LIB::GetEntryNames( wxArrayString& aNames, bool aSort, bool aMakeUpperCase )
+void PART_LIB::GetEntryNames( wxArrayString& aNames )
 {
     for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  it++ )
     {
-        if( aMakeUpperCase )
-        {
-            wxString tmp = (*it).first;
-            tmp.MakeUpper();
-            aNames.Add( tmp );
-        }
-        else
-        {
-            aNames.Add( (*it).first );
-        }
+        aNames.Add( (*it).first );
     }
 
-    if( aSort )
-        aNames.Sort();
+    aNames.Sort();
 }
 
 
-void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames, bool aSort, bool aMakeUpperCase )
+void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames )
 {
     for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  it++ )
     {
@@ -123,20 +113,10 @@ void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames, bool aSort, bool a
         if( !root || !root->IsPower() )
             continue;
 
-        if( aMakeUpperCase )
-        {
-            wxString tmp = (*it).first;
-            tmp.MakeUpper();
-            aNames.Add( tmp );
-        }
-        else
-        {
-            aNames.Add( (*it).first );
-        }
+        aNames.Add( (*it).first );
     }
 
-    if( aSort )
-        aNames.Sort();
+    aNames.Sort();
 }
 
 

@@ -433,21 +433,15 @@ public:
      * Load a string array with the names of all the entries in this library.
      *
      * @param aNames - String array to place entry names into.
-     * @param aSort - Sort names if true.
-     * @param aMakeUpperCase - Force entry names to upper case.
      */
-    void GetEntryNames( wxArrayString& aNames, bool aSort = true,
-                        bool aMakeUpperCase = false );
+    void GetEntryNames( wxArrayString& aNames );
 
     /**
      * Load a string array with the names of  entries of type POWER in this library.
      *
      * @param aNames - String array to place entry names into.
-     * @param aSort - Sort names if true.
-     * @param aMakeUpperCase - Force entry names to upper case.
      */
-    void GetEntryTypePowerNames( wxArrayString& aNames, bool aSort = true,
-                        bool aMakeUpperCase = false );
+    void GetEntryTypePowerNames( wxArrayString& aNames );
 
     /**
      * Checks \a aPart for name conflict in the library.
