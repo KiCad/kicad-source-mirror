@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-07-23 11:10+0300\n"
-"PO-Revision-Date: 2016-07-23 12:19+0300\n"
+"PO-Revision-Date: 2016-07-24 09:00+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -321,11 +321,11 @@ msgstr "Время визуализации %.0f мс ( %.1f кадр/с)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:600
 msgid "Zoom +"
-msgstr "Увеличить масштаб"
+msgstr "Увеличить"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:604
 msgid "Zoom -"
-msgstr "Уменьшить масштаб"
+msgstr "Уменьшить"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:609
 msgid "Top View"
@@ -422,7 +422,7 @@ msgstr "Визуализация текущего вида используя т
 #: pcbnew/tool_modedit.cpp:123 pcbnew/tool_modview.cpp:79
 #: eeschema/help_common_strings.h:43 pcbnew/help_common_strings.h:19
 msgid "Zoom in"
-msgstr "Увеличить масштаб"
+msgstr "Увеличить"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:75 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1181
 #: common/zoom.cpp:250 eeschema/tool_viewlib.cpp:80 gerbview/toolbars_gerber.cpp:80
@@ -430,7 +430,7 @@ msgstr "Увеличить масштаб"
 #: pcbnew/tool_modedit.cpp:126 pcbnew/tool_modview.cpp:84
 #: eeschema/help_common_strings.h:44 pcbnew/help_common_strings.h:20
 msgid "Zoom out"
-msgstr "Уменьшить масштаб"
+msgstr "Уменьшить"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:79 common/zoom.cpp:252
 #: eeschema/tool_viewlib.cpp:85 gerbview/toolbars_gerber.cpp:83
@@ -955,7 +955,7 @@ msgstr "Повернуть на 45° вокруг оси Z"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1180
 msgid "Zoom in "
-msgstr "Приблизить "
+msgstr "Увеличить"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1182
 msgid "Toggle 3D models with attributes Normal (eg: THT)"
@@ -2894,7 +2894,7 @@ msgstr "Центр"
 #: pagelayout_editor/toolbars_pl_editor.cpp:88 pcbnew/footprint_wizard_frame.cpp:625
 #: pcbnew/tool_modedit.cpp:133 pcbnew/tool_modview.cpp:94
 msgid "Zoom auto"
-msgstr "Авто масштаб"
+msgstr "Автомасштаб"
 
 #: common/zoom.cpp:260
 msgid "Zoom select"
@@ -2984,11 +2984,11 @@ msgstr "Параметры отображения"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:229
 msgid "Zoom in (F1)"
-msgstr "Увеличить масштаб (F1)"
+msgstr "Увеличить (F1)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:232
 msgid "Zoom out (F2)"
-msgstr "Уменьшить масштаб (F2)"
+msgstr "Уменьшить (F2)"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:235
 msgid "Redraw view (F3)"
@@ -6347,7 +6347,7 @@ msgstr "Масштаб по экрану"
 #: pcbnew/basepcbframe.cpp:843 pcbnew/hotkeys.cpp:160 pcbnew/hotkeys.cpp:162
 #: pcbnew/tools/common_actions.cpp:211
 msgid "Zoom Auto"
-msgstr "Авто масштаб"
+msgstr "Автомасштаб"
 
 #: eeschema/hotkeys.cpp:93 gerbview/hotkeys.cpp:61 pagelayout_editor/hotkeys.cpp:75
 #: pcbnew/hotkeys.cpp:165
