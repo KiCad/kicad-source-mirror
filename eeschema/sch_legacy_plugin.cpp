@@ -492,7 +492,15 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
 
     if( !aSheet->GetScreen() )
     {
-        m_rootSheet->SearchHierarchy( aSheet->GetFileName(), &screen );
+        // SCH_SCREEN objects store the full path and file name where the SCH_SHEET object only
+        // stores the file name and extension.  Add the project path to the file name and
+        // extension to compare when calling SCH_SHEET::SearchHierarchy().
+        wxFileName fileName = aSheet->GetFileName();
+
+        if( !fileName.IsAbsolute() )
+            fileName.SetPath( m_path );
+
+        m_rootSheet->SearchHierarchy( fileName.GetFullPath(), &screen );
 
         if( screen )
         {
@@ -503,12 +511,6 @@ void SCH_LEGACY_PLUGIN::loadHierarchy( SCH_SHEET* aSheet )
         else
         {
             aSheet->SetScreen( new SCH_SCREEN( m_kiway ) );
-
-            wxFileName fileName = aSheet->GetFileName();
-
-            if( !fileName.IsAbsolute() )
-                fileName.SetPath( m_path );
-
             aSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
             loadFile( fileName.GetFullPath(), aSheet->GetScreen() );
 
