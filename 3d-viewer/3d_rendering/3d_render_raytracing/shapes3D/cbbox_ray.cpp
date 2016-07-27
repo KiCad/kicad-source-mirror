@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
- /**
+/**
  * @file cbbox_ray.cpp
  * @brief Bounding Box - Ray test intersection
  */
@@ -35,44 +35,44 @@
 
 // "This source code accompanies the Journal of Graphics Tools paper:
 //
-//  "Fast Ray / Axis-Aligned Bounding Box Overlap Tests using Ray Slopes"
-//  by Martin Eisemann, Thorsten Grosch, Stefan Müller and Marcus Magnor
-//  Computer Graphics Lab, TU Braunschweig, Germany and
-//  University of Koblenz-Landau, Germany
+// "Fast Ray / Axis-Aligned Bounding Box Overlap Tests using Ray Slopes"
+// by Martin Eisemann, Thorsten Grosch, Stefan Müller and Marcus Magnor
+// Computer Graphics Lab, TU Braunschweig, Germany and
+// University of Koblenz-Landau, Germany
 //
-//  This source code is public domain, but please mention us if you use it."
+// This source code is public domain, but please mention us if you use it."
 
 
-bool CBBOX::Intersect( const RAY &aRay, float *t ) const
+bool CBBOX::Intersect( const RAY& aRay, float* t ) const
 {
     switch( aRay.m_Classification )
     {
     case MMM:
     {
-    if( ( aRay.m_Origin.x < m_min.x ) ||
-        ( aRay.m_Origin.y < m_min.y ) ||
-        ( aRay.m_Origin.z < m_min.z )
-        || ( aRay.jbyi * m_min.x - m_max.y +  aRay.c_xy > 0)
-        || ( aRay.ibyj * m_min.y - m_max.x +  aRay.c_yx > 0)
-        || ( aRay.jbyk * m_min.z - m_max.y +  aRay.c_zy > 0)
-        || ( aRay.kbyj * m_min.y - m_max.z +  aRay.c_yz > 0)
-        || ( aRay.kbyi * m_min.x - m_max.z +  aRay.c_xz > 0)
-        || ( aRay.ibyk * m_min.z - m_max.x +  aRay.c_zx > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.y < m_min.y )
+            || ( aRay.m_Origin.z < m_min.z )
+            || ( aRay.jbyi * m_min.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_max.x + aRay.c_yx > 0)
+            || ( aRay.jbyk * m_min.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_max.z + aRay.c_yz > 0)
+            || ( aRay.kbyi * m_min.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_max.x + aRay.c_zx > 0)
+             )
+            return false;
 
         // compute the intersection distance
 
-        *t = (m_max.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_max.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
-        float t2 = (m_max.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_max.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -81,28 +81,28 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case MMP:
     {
-    if( ( aRay.m_Origin.x < m_min.x ) ||
-        ( aRay.m_Origin.y < m_min.y ) ||
-        ( aRay.m_Origin.z > m_max.z )
-        || ( aRay.jbyi * m_min.x - m_max.y +  aRay.c_xy > 0)
-        || ( aRay.ibyj * m_min.y - m_max.x +  aRay.c_yx > 0)
-        || ( aRay.jbyk * m_max.z - m_max.y +  aRay.c_zy > 0)
-        || ( aRay.kbyj * m_min.y - m_min.z +  aRay.c_yz < 0)
-        || ( aRay.kbyi * m_min.x - m_min.z +  aRay.c_xz < 0)
-        || ( aRay.ibyk * m_max.z - m_max.x +  aRay.c_zx > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.y < m_min.y )
+            || ( aRay.m_Origin.z > m_max.z )
+            || ( aRay.jbyi * m_min.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_max.x + aRay.c_yx > 0)
+            || ( aRay.jbyk * m_max.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_min.z + aRay.c_yz < 0)
+            || ( aRay.kbyi * m_min.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_max.x + aRay.c_zx > 0)
+             )
+            return false;
 
-        *t = (m_max.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_max.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
-        float t2 = (m_min.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_min.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -110,28 +110,28 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case MPM:
     {
-    if( ( aRay.m_Origin.x < m_min.x ) ||
-        ( aRay.m_Origin.y > m_max.y ) ||
-        ( aRay.m_Origin.z < m_min.z )
-        || ( aRay.jbyi * m_min.x - m_min.y +  aRay.c_xy < 0)
-        || ( aRay.ibyj * m_max.y - m_max.x +  aRay.c_yx > 0)
-        || ( aRay.jbyk * m_min.z - m_min.y +  aRay.c_zy < 0)
-        || ( aRay.kbyj * m_max.y - m_max.z +  aRay.c_yz > 0)
-        || ( aRay.kbyi * m_min.x - m_max.z +  aRay.c_xz > 0)
-        || ( aRay.ibyk * m_min.z - m_max.x +  aRay.c_zx > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.y > m_max.y )
+            || ( aRay.m_Origin.z < m_min.z )
+            || ( aRay.jbyi * m_min.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_max.x + aRay.c_yx > 0)
+            || ( aRay.jbyk * m_min.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_max.z + aRay.c_yz > 0)
+            || ( aRay.kbyi * m_min.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_max.x + aRay.c_zx > 0)
+             )
+            return false;
 
-        *t = (m_max.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_min.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
-        float t2 = (m_max.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_max.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -139,28 +139,28 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case MPP:
     {
-    if( ( aRay.m_Origin.x < m_min.x ) ||
-        ( aRay.m_Origin.y > m_max.y ) ||
-        ( aRay.m_Origin.z > m_max.z )
-        || ( aRay.jbyi * m_min.x - m_min.y +  aRay.c_xy < 0)
-        || ( aRay.ibyj * m_max.y - m_max.x +  aRay.c_yx > 0)
-        || ( aRay.jbyk * m_max.z - m_min.y +  aRay.c_zy < 0)
-        || ( aRay.kbyj * m_max.y - m_min.z +  aRay.c_yz < 0)
-        || ( aRay.kbyi * m_min.x - m_min.z +  aRay.c_xz < 0)
-        || ( aRay.ibyk * m_max.z - m_max.x +  aRay.c_zx > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.y > m_max.y )
+            || ( aRay.m_Origin.z > m_max.z )
+            || ( aRay.jbyi * m_min.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_max.x + aRay.c_yx > 0)
+            || ( aRay.jbyk * m_max.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_min.z + aRay.c_yz < 0)
+            || ( aRay.kbyi * m_min.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_max.x + aRay.c_zx > 0)
+             )
+            return false;
 
-        *t = (m_max.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_min.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
-        float t2 = (m_min.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_min.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -168,28 +168,28 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case PMM:
     {
-    if( ( aRay.m_Origin.x > m_max.x ) ||
-        ( aRay.m_Origin.y < m_min.y ) ||
-        ( aRay.m_Origin.z < m_min.z )
-        || ( aRay.jbyi * m_max.x - m_max.y +  aRay.c_xy > 0)
-        || ( aRay.ibyj * m_min.y - m_min.x +  aRay.c_yx < 0)
-        || ( aRay.jbyk * m_min.z - m_max.y +  aRay.c_zy > 0)
-        || ( aRay.kbyj * m_min.y - m_max.z +  aRay.c_yz > 0)
-        || ( aRay.kbyi * m_max.x - m_max.z +  aRay.c_xz > 0)
-        || ( aRay.ibyk * m_min.z - m_min.x +  aRay.c_zx < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y < m_min.y )
+            || ( aRay.m_Origin.z < m_min.z )
+            || ( aRay.jbyi * m_max.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_min.x + aRay.c_yx < 0)
+            || ( aRay.jbyk * m_min.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_max.z + aRay.c_yz > 0)
+            || ( aRay.kbyi * m_max.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_min.x + aRay.c_zx < 0)
+             )
+            return false;
 
-        *t = (m_min.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_max.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
-        float t2 = (m_max.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_max.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -198,28 +198,28 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case PMP:
     {
-    if( ( aRay.m_Origin.x > m_max.x ) ||
-        ( aRay.m_Origin.y < m_min.y ) ||
-        ( aRay.m_Origin.z > m_max.z )
-        || ( aRay.jbyi * m_max.x - m_max.y +  aRay.c_xy > 0)
-        || ( aRay.ibyj * m_min.y - m_min.x +  aRay.c_yx < 0)
-        || ( aRay.jbyk * m_max.z - m_max.y +  aRay.c_zy > 0)
-        || ( aRay.kbyj * m_min.y - m_min.z +  aRay.c_yz < 0)
-        || ( aRay.kbyi * m_max.x - m_min.z +  aRay.c_xz < 0)
-        || ( aRay.ibyk * m_max.z - m_min.x +  aRay.c_zx < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y < m_min.y )
+            || ( aRay.m_Origin.z > m_max.z )
+            || ( aRay.jbyi * m_max.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_min.x + aRay.c_yx < 0)
+            || ( aRay.jbyk * m_max.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_min.z + aRay.c_yz < 0)
+            || ( aRay.kbyi * m_max.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_min.x + aRay.c_zx < 0)
+             )
+            return false;
 
-        *t = (m_min.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_max.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
-        float t2 = (m_min.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_min.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -227,28 +227,28 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case PPM:
     {
-    if( ( aRay.m_Origin.x > m_max.x ) ||
-        ( aRay.m_Origin.y > m_max.y ) ||
-        ( aRay.m_Origin.z < m_min.z )
-        || ( aRay.jbyi * m_max.x - m_min.y +  aRay.c_xy < 0)
-        || ( aRay.ibyj * m_max.y - m_min.x +  aRay.c_yx < 0)
-        || ( aRay.jbyk * m_min.z - m_min.y +  aRay.c_zy < 0)
-        || ( aRay.kbyj * m_max.y - m_max.z +  aRay.c_yz > 0)
-        || ( aRay.kbyi * m_max.x - m_max.z +  aRay.c_xz > 0)
-        || ( aRay.ibyk * m_min.z - m_min.x +  aRay.c_zx < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y > m_max.y )
+            || ( aRay.m_Origin.z < m_min.z )
+            || ( aRay.jbyi * m_max.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_min.x + aRay.c_yx < 0)
+            || ( aRay.jbyk * m_min.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_max.z + aRay.c_yz > 0)
+            || ( aRay.kbyi * m_max.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_min.x + aRay.c_zx < 0)
+             )
+            return false;
 
-        *t = (m_min.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_min.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
-        float t2 = (m_max.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_max.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -256,28 +256,28 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case PPP:
     {
-    if( ( aRay.m_Origin.x > m_max.x ) ||
-        ( aRay.m_Origin.y > m_max.y ) ||
-        ( aRay.m_Origin.z > m_max.z )
-        || ( aRay.jbyi * m_max.x - m_min.y +  aRay.c_xy < 0)
-        || ( aRay.ibyj * m_max.y - m_min.x +  aRay.c_yx < 0)
-        || ( aRay.jbyk * m_max.z - m_min.y +  aRay.c_zy < 0)
-        || ( aRay.kbyj * m_max.y - m_min.z +  aRay.c_yz < 0)
-        || ( aRay.kbyi * m_max.x - m_min.z +  aRay.c_xz < 0)
-        || ( aRay.ibyk * m_max.z - m_min.x +  aRay.c_zx < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y > m_max.y )
+            || ( aRay.m_Origin.z > m_max.z )
+            || ( aRay.jbyi * m_max.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_min.x + aRay.c_yx < 0)
+            || ( aRay.jbyk * m_max.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_min.z + aRay.c_yz < 0)
+            || ( aRay.kbyi * m_max.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_min.x + aRay.c_zx < 0)
+             )
+            return false;
 
-        *t = (m_min.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_min.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
-        float t2 = (m_min.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_min.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -285,19 +285,19 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case OMM:
     {
-    if(( aRay.m_Origin.x < m_min.x ) ||
-       ( aRay.m_Origin.x > m_max.x )
-        || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.z < m_min.z)
-        || ( aRay.jbyk * m_min.z - m_max.y +  aRay.c_zy > 0)
-        || ( aRay.kbyj * m_min.y - m_max.z +  aRay.c_yz > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.z < m_min.z)
+            || ( aRay.jbyk * m_min.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_max.z + aRay.c_yz > 0)
+             )
+            return false;
 
-        *t = (m_max.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        *t = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        float t2 = (m_max.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_max.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -305,19 +305,19 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case OMP:
     {
-    if(( aRay.m_Origin.x < m_min.x ) ||
-       ( aRay.m_Origin.x > m_max.x )
-        || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.z > m_max.z)
-        || ( aRay.jbyk * m_max.z - m_max.y +  aRay.c_zy > 0)
-        || ( aRay.kbyj * m_min.y - m_min.z +  aRay.c_yz < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.z > m_max.z)
+            || ( aRay.jbyk * m_max.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_min.z + aRay.c_yz < 0)
+             )
+            return false;
 
-        *t = (m_max.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        *t = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        float t2 = (m_min.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_min.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -325,18 +325,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case OPM:
     {
-    if(( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
-        || ( aRay.m_Origin.y > m_max.y) || ( aRay.m_Origin.z < m_min.z)
-        || ( aRay.jbyk * m_min.z - m_min.y +  aRay.c_zy < 0)
-        || ( aRay.kbyj * m_max.y - m_max.z +  aRay.c_yz > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
+            || ( aRay.m_Origin.y > m_max.y) || ( aRay.m_Origin.z < m_min.z)
+            || ( aRay.jbyk * m_min.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_max.z + aRay.c_yz > 0)
+             )
+            return false;
 
-        *t = (m_min.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        *t = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        float t2 = (m_max.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_max.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -344,18 +344,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case OPP:
     {
-    if(( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
-        || ( aRay.m_Origin.y > m_max.y) || ( aRay.m_Origin.z > m_max.z)
-        || ( aRay.jbyk * m_max.z - m_min.y +  aRay.c_zy < 0)
-        || ( aRay.kbyj * m_max.y - m_min.z +  aRay.c_yz < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
+            || ( aRay.m_Origin.y > m_max.y) || ( aRay.m_Origin.z > m_max.z)
+            || ( aRay.jbyk * m_max.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_min.z + aRay.c_yz < 0)
+             )
+            return false;
 
-        *t = (m_min.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        *t = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        float t2 = (m_min.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_min.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -364,18 +364,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case MOM:
     {
-    if(( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-        || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z < m_min.z)
-        || ( aRay.kbyi * m_min.x - m_max.z +  aRay.c_xz > 0)
-        || ( aRay.ibyk * m_min.z - m_max.x +  aRay.c_zx > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+            || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z < m_min.z)
+            || ( aRay.kbyi * m_min.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_max.x + aRay.c_zx > 0)
+             )
+            return false;
 
-        *t = (m_max.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t2 = (m_max.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_max.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -384,18 +384,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case MOP:
     {
-    if(( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-        || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z > m_max.z)
-        || ( aRay.kbyi * m_min.x - m_min.z +  aRay.c_xz < 0)
-        || ( aRay.ibyk * m_max.z - m_max.x +  aRay.c_zx > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+            || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z > m_max.z)
+            || ( aRay.kbyi * m_min.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_max.x + aRay.c_zx > 0)
+             )
+            return false;
 
-        *t = (m_max.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t2 = (m_min.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_min.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -403,18 +403,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case POM:
     {
-    if(( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-        || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z < m_min.z)
-        || ( aRay.kbyi * m_max.x - m_max.z +  aRay.c_xz > 0)
-        || ( aRay.ibyk * m_min.z - m_min.x +  aRay.c_zx < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+            || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z < m_min.z)
+            || ( aRay.kbyi * m_max.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_min.x + aRay.c_zx < 0)
+             )
+            return false;
 
-        *t = (m_min.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t2 = (m_max.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_max.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -423,18 +423,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case POP:
     {
-    if(( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-        || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z > m_max.z)
-        || ( aRay.kbyi * m_max.x - m_min.z +  aRay.c_xz < 0)
-        || ( aRay.ibyk * m_max.z - m_min.x +  aRay.c_zx < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+            || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z > m_max.z)
+            || ( aRay.kbyi * m_max.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_min.x + aRay.c_zx < 0)
+             )
+            return false;
 
-        *t = (m_min.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t2 = (m_min.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        float t2 = (m_min.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-        if(t2 > *t)
+        if( t2 > *t )
             *t = t2;
 
         return true;
@@ -442,18 +442,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case MMO:
     {
-    if(( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-        || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y < m_min.y)
-        || ( aRay.jbyi * m_min.x - m_max.y +  aRay.c_xy > 0)
-        || ( aRay.ibyj * m_min.y - m_max.x +  aRay.c_yx > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+            || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y < m_min.y)
+            || ( aRay.jbyi * m_min.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_max.x + aRay.c_yx > 0)
+             )
+            return false;
 
-        *t = (m_max.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_max.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
         return true;
@@ -461,18 +461,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case MPO:
     {
-    if(( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-        || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y > m_max.y)
-        || ( aRay.jbyi * m_min.x - m_min.y +  aRay.c_xy < 0)
-        || ( aRay.ibyj * m_max.y - m_max.x +  aRay.c_yx > 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+            || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y > m_max.y)
+            || ( aRay.jbyi * m_min.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_max.x + aRay.c_yx > 0)
+             )
+            return false;
 
-        *t = (m_max.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_min.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
         return true;
@@ -481,18 +481,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case PMO:
     {
-    if(( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-        || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y < m_min.y)
-        || ( aRay.jbyi * m_max.x - m_max.y +  aRay.c_xy > 0)
-        || ( aRay.ibyj * m_min.y - m_min.x +  aRay.c_yx < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+            || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y < m_min.y)
+            || ( aRay.jbyi * m_max.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_min.x + aRay.c_yx < 0)
+             )
+            return false;
 
-        *t = (m_min.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_max.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
         return true;
@@ -500,18 +500,18 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case PPO:
     {
-    if(( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-        || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y > m_max.y)
-        || ( aRay.jbyi * m_max.x - m_min.y +  aRay.c_xy < 0)
-        || ( aRay.ibyj * m_max.y - m_min.x +  aRay.c_yx < 0)
-        )
-        return false;
+        if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+            || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y > m_max.y)
+            || ( aRay.jbyi * m_max.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_min.x + aRay.c_yx < 0)
+             )
+            return false;
 
-        *t = (m_min.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
-        float t1 = (m_min.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        float t1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-        if(t1 > *t)
+        if( t1 > *t )
             *t = t1;
 
         return true;
@@ -520,52 +520,52 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case MOO:
     {
-    if(( aRay.m_Origin.x < m_min.x)
-        || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-        || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-        )
-        return false;
+        if( ( aRay.m_Origin.x < m_min.x)
+            || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+            || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+             )
+            return false;
 
-        *t = (m_max.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
         return true;
     }
 
     case POO:
     {
-    if(( aRay.m_Origin.x > m_max.x)
-        || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-        || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-        )
-        return false;
+        if( ( aRay.m_Origin.x > m_max.x)
+            || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+            || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+             )
+            return false;
 
-        *t = (m_min.x -  aRay.m_Origin.x) *  aRay.m_InvDir.x;
+        *t = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
 
         return true;
     }
 
     case OMO:
     {
-    if(( aRay.m_Origin.y < m_min.y)
-        || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
-        || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-        )
-        return false;
+        if( ( aRay.m_Origin.y < m_min.y)
+            || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
+            || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+             )
+            return false;
 
-        *t = (m_max.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        *t = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
         return true;
     }
 
     case OPO:
     {
-    if(( aRay.m_Origin.y > m_max.y)
-        || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
-        || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-        )
-        return false;
+        if( ( aRay.m_Origin.y > m_max.y)
+            || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
+            || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+             )
+            return false;
 
-        *t = (m_min.y -  aRay.m_Origin.y) *  aRay.m_InvDir.y;
+        *t = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
         return true;
     }
@@ -573,26 +573,26 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 
     case OOM:
     {
-    if(( aRay.m_Origin.z < m_min.z)
-        || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
-        || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-        )
-        return false;
+        if( ( aRay.m_Origin.z < m_min.z)
+            || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
+            || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+             )
+            return false;
 
-        *t = (m_max.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        *t = (m_max.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
         return true;
     }
 
     case OOP:
     {
-    if(( aRay.m_Origin.z > m_max.z)
-        || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
-        || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-        )
-        return false;
+        if( ( aRay.m_Origin.z > m_max.z)
+            || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
+            || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+             )
+            return false;
 
-        *t = (m_min.z -  aRay.m_Origin.z) *  aRay.m_InvDir.z;
+        *t = (m_min.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
         return true;
     }
@@ -602,340 +602,366 @@ bool CBBOX::Intersect( const RAY &aRay, float *t ) const
 }
 
 
-bool CBBOX::Intersect( const RAY &aRay ) const
+bool CBBOX::Intersect( const RAY& aRay ) const
 {
     switch( aRay.m_Classification )
     {
     case MMM:
-        {
-        if( ( aRay.m_Origin.x < m_min.x ) ||
-            ( aRay.m_Origin.y < m_min.y ) ||
-            ( aRay.m_Origin.z < m_min.z )
-            || ( aRay.jbyi * m_min.x - m_max.y +  aRay.c_xy > 0)
-            || ( aRay.ibyj * m_min.y - m_max.x +  aRay.c_yx > 0)
-            || ( aRay.jbyk * m_min.z - m_max.y +  aRay.c_zy > 0)
-            || ( aRay.kbyj * m_min.y - m_max.z +  aRay.c_yz > 0)
-            || ( aRay.kbyi * m_min.x - m_max.z +  aRay.c_xz > 0)
-            || ( aRay.ibyk * m_min.z - m_max.x +  aRay.c_zx > 0)
-            )
+    {
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.y < m_min.y )
+            || ( aRay.m_Origin.z < m_min.z )
+            || ( aRay.jbyi * m_min.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_max.x + aRay.c_yx > 0)
+            || ( aRay.jbyk * m_min.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_max.z + aRay.c_yz > 0)
+            || ( aRay.kbyi * m_min.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_max.x + aRay.c_zx > 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
 
     case MMP:
-        {
-        if( ( aRay.m_Origin.x < m_min.x ) ||
-            ( aRay.m_Origin.y < m_min.y ) ||
-            ( aRay.m_Origin.z > m_max.z )
-            || ( aRay.jbyi * m_min.x - m_max.y +  aRay.c_xy > 0)
-            || ( aRay.ibyj * m_min.y - m_max.x +  aRay.c_yx > 0)
-            || ( aRay.jbyk * m_max.z - m_max.y +  aRay.c_zy > 0)
-            || ( aRay.kbyj * m_min.y - m_min.z +  aRay.c_yz < 0)
-            || ( aRay.kbyi * m_min.x - m_min.z +  aRay.c_xz < 0)
-            || ( aRay.ibyk * m_max.z - m_max.x +  aRay.c_zx > 0)
-            )
+    {
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.y < m_min.y )
+            || ( aRay.m_Origin.z > m_max.z )
+            || ( aRay.jbyi * m_min.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_max.x + aRay.c_yx > 0)
+            || ( aRay.jbyk * m_max.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_min.z + aRay.c_yz < 0)
+            || ( aRay.kbyi * m_min.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_max.x + aRay.c_zx > 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case MPM:
-        {
-        if( ( aRay.m_Origin.x < m_min.x ) ||
-            ( aRay.m_Origin.y > m_max.y ) ||
-            ( aRay.m_Origin.z < m_min.z )
-            || ( aRay.jbyi * m_min.x - m_min.y +  aRay.c_xy < 0)
-            || ( aRay.ibyj * m_max.y - m_max.x +  aRay.c_yx > 0)
-            || ( aRay.jbyk * m_min.z - m_min.y +  aRay.c_zy < 0)
-            || ( aRay.kbyj * m_max.y - m_max.z +  aRay.c_yz > 0)
-            || ( aRay.kbyi * m_min.x - m_max.z +  aRay.c_xz > 0)
-            || ( aRay.ibyk * m_min.z - m_max.x +  aRay.c_zx > 0)
-            )
+    {
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.y > m_max.y )
+            || ( aRay.m_Origin.z < m_min.z )
+            || ( aRay.jbyi * m_min.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_max.x + aRay.c_yx > 0)
+            || ( aRay.jbyk * m_min.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_max.z + aRay.c_yz > 0)
+            || ( aRay.kbyi * m_min.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_max.x + aRay.c_zx > 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case MPP:
-        {
-        if( ( aRay.m_Origin.x < m_min.x ) ||
-            ( aRay.m_Origin.y > m_max.y ) ||
-            ( aRay.m_Origin.z > m_max.z )
-            || ( aRay.jbyi * m_min.x - m_min.y +  aRay.c_xy < 0)
-            || ( aRay.ibyj * m_max.y - m_max.x +  aRay.c_yx > 0)
-            || ( aRay.jbyk * m_max.z - m_min.y +  aRay.c_zy < 0)
-            || ( aRay.kbyj * m_max.y - m_min.z +  aRay.c_yz < 0)
-            || ( aRay.kbyi * m_min.x - m_min.z +  aRay.c_xz < 0)
-            || ( aRay.ibyk * m_max.z - m_max.x +  aRay.c_zx > 0)
-            )
+    {
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.y > m_max.y )
+            || ( aRay.m_Origin.z > m_max.z )
+            || ( aRay.jbyi * m_min.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_max.x + aRay.c_yx > 0)
+            || ( aRay.jbyk * m_max.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_min.z + aRay.c_yz < 0)
+            || ( aRay.kbyi * m_min.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_max.x + aRay.c_zx > 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case PMM:
-        {
-        if( ( aRay.m_Origin.x > m_max.x ) ||
-            ( aRay.m_Origin.y < m_min.y ) ||
-            ( aRay.m_Origin.z < m_min.z )
-            || ( aRay.jbyi * m_max.x - m_max.y +  aRay.c_xy > 0)
-            || ( aRay.ibyj * m_min.y - m_min.x +  aRay.c_yx < 0)
-            || ( aRay.jbyk * m_min.z - m_max.y +  aRay.c_zy > 0)
-            || ( aRay.kbyj * m_min.y - m_max.z +  aRay.c_yz > 0)
-            || ( aRay.kbyi * m_max.x - m_max.z +  aRay.c_xz > 0)
-            || ( aRay.ibyk * m_min.z - m_min.x +  aRay.c_zx < 0)
-            )
+    {
+        if( ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y < m_min.y )
+            || ( aRay.m_Origin.z < m_min.z )
+            || ( aRay.jbyi * m_max.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_min.x + aRay.c_yx < 0)
+            || ( aRay.jbyk * m_min.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_max.z + aRay.c_yz > 0)
+            || ( aRay.kbyi * m_max.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_min.x + aRay.c_zx < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
 
     case PMP:
-        {
-        if( ( aRay.m_Origin.x > m_max.x ) ||
-            ( aRay.m_Origin.y < m_min.y ) ||
-            ( aRay.m_Origin.z > m_max.z )
-            || ( aRay.jbyi * m_max.x - m_max.y +  aRay.c_xy > 0)
-            || ( aRay.ibyj * m_min.y - m_min.x +  aRay.c_yx < 0)
-            || ( aRay.jbyk * m_max.z - m_max.y +  aRay.c_zy > 0)
-            || ( aRay.kbyj * m_min.y - m_min.z +  aRay.c_yz < 0)
-            || ( aRay.kbyi * m_max.x - m_min.z +  aRay.c_xz < 0)
-            || ( aRay.ibyk * m_max.z - m_min.x +  aRay.c_zx < 0)
-            )
+    {
+        if( ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y < m_min.y )
+            || ( aRay.m_Origin.z > m_max.z )
+            || ( aRay.jbyi * m_max.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_min.x + aRay.c_yx < 0)
+            || ( aRay.jbyk * m_max.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_min.z + aRay.c_yz < 0)
+            || ( aRay.kbyi * m_max.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_min.x + aRay.c_zx < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case PPM:
-        {
-        if( ( aRay.m_Origin.x > m_max.x ) ||
-            ( aRay.m_Origin.y > m_max.y ) ||
-            ( aRay.m_Origin.z < m_min.z )
-            || ( aRay.jbyi * m_max.x - m_min.y +  aRay.c_xy < 0)
-            || ( aRay.ibyj * m_max.y - m_min.x +  aRay.c_yx < 0)
-            || ( aRay.jbyk * m_min.z - m_min.y +  aRay.c_zy < 0)
-            || ( aRay.kbyj * m_max.y - m_max.z +  aRay.c_yz > 0)
-            || ( aRay.kbyi * m_max.x - m_max.z +  aRay.c_xz > 0)
-            || ( aRay.ibyk * m_min.z - m_min.x +  aRay.c_zx < 0)
-            )
+    {
+        if( ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y > m_max.y )
+            || ( aRay.m_Origin.z < m_min.z )
+            || ( aRay.jbyi * m_max.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_min.x + aRay.c_yx < 0)
+            || ( aRay.jbyk * m_min.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_max.z + aRay.c_yz > 0)
+            || ( aRay.kbyi * m_max.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_min.x + aRay.c_zx < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case PPP:
-        {
-        if( ( aRay.m_Origin.x > m_max.x ) ||
-            ( aRay.m_Origin.y > m_max.y ) ||
-            ( aRay.m_Origin.z > m_max.z )
-            || ( aRay.jbyi * m_max.x - m_min.y +  aRay.c_xy < 0)
-            || ( aRay.ibyj * m_max.y - m_min.x +  aRay.c_yx < 0)
-            || ( aRay.jbyk * m_max.z - m_min.y +  aRay.c_zy < 0)
-            || ( aRay.kbyj * m_max.y - m_min.z +  aRay.c_yz < 0)
-            || ( aRay.kbyi * m_max.x - m_min.z +  aRay.c_xz < 0)
-            || ( aRay.ibyk * m_max.z - m_min.x +  aRay.c_zx < 0)
-            )
+    {
+        if( ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y > m_max.y )
+            || ( aRay.m_Origin.z > m_max.z )
+            || ( aRay.jbyi * m_max.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_min.x + aRay.c_yx < 0)
+            || ( aRay.jbyk * m_max.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_min.z + aRay.c_yz < 0)
+            || ( aRay.kbyi * m_max.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_min.x + aRay.c_zx < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case OMM:
-        {
-        if( ( aRay.m_Origin.x < m_min.x ) ||
-            ( aRay.m_Origin.x > m_max.x )
-             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.z < m_min.z)
-             || ( aRay.jbyk * m_min.z - m_max.y +  aRay.c_zy > 0)
-             || ( aRay.kbyj * m_min.y - m_max.z +  aRay.c_yz > 0) )
+    {
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.x > m_max.x )
+            || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.z < m_min.z)
+            || ( aRay.jbyk * m_min.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_max.z + aRay.c_yz > 0) )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case OMP:
-        {
-        if(( aRay.m_Origin.x < m_min.x ) ||
-           ( aRay.m_Origin.x > m_max.x )
+    {
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.z > m_max.z)
-            || ( aRay.jbyk * m_max.z - m_max.y +  aRay.c_zy > 0)
-            || ( aRay.kbyj * m_min.y - m_min.z +  aRay.c_yz < 0)
-            )
+            || ( aRay.jbyk * m_max.z - m_max.y + aRay.c_zy > 0)
+            || ( aRay.kbyj * m_min.y - m_min.z + aRay.c_yz < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case OPM:
-        {
-        if(( aRay.m_Origin.x < m_min.x ) ||
-           ( aRay.m_Origin.x > m_max.x )
+    {
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y > m_max.y) || ( aRay.m_Origin.z < m_min.z)
-            || ( aRay.jbyk * m_min.z - m_min.y +  aRay.c_zy < 0)
-            || ( aRay.kbyj * m_max.y - m_max.z +  aRay.c_yz > 0)
-            )
+            || ( aRay.jbyk * m_min.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_max.z + aRay.c_yz > 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case OPP:
-        {
-        if(( aRay.m_Origin.x < m_min.x ) ||
-           ( aRay.m_Origin.x > m_max.x )
+    {
+        if( ( aRay.m_Origin.x < m_min.x )
+            || ( aRay.m_Origin.x > m_max.x )
             || ( aRay.m_Origin.y > m_max.y) || ( aRay.m_Origin.z > m_max.z)
-            || ( aRay.jbyk * m_max.z - m_min.y +  aRay.c_zy < 0)
-            || ( aRay.kbyj * m_max.y - m_min.z +  aRay.c_yz < 0)
-            )
+            || ( aRay.jbyk * m_max.z - m_min.y + aRay.c_zy < 0)
+            || ( aRay.kbyj * m_max.y - m_min.z + aRay.c_yz < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
 
     case MOM:
-        {
-        if(( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+    {
+        if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z < m_min.z)
-            || ( aRay.kbyi * m_min.x - m_max.z +  aRay.c_xz > 0)
-            || ( aRay.ibyk * m_min.z - m_max.x +  aRay.c_zx > 0)
-            )
+            || ( aRay.kbyi * m_min.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_max.x + aRay.c_zx > 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
 
     case MOP:
-        {
-        if(( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+    {
+        if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.z > m_max.z)
-            || ( aRay.kbyi * m_min.x - m_min.z +  aRay.c_xz < 0)
-            || ( aRay.ibyk * m_max.z - m_max.x +  aRay.c_zx > 0)
-            )
+            || ( aRay.kbyi * m_min.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_max.x + aRay.c_zx > 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case POM:
-        {
-        if(( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+    {
+        if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z < m_min.z)
-            || ( aRay.kbyi * m_max.x - m_max.z +  aRay.c_xz > 0)
-            || ( aRay.ibyk * m_min.z - m_min.x +  aRay.c_zx < 0)
-            )
+            || ( aRay.kbyi * m_max.x - m_max.z + aRay.c_xz > 0)
+            || ( aRay.ibyk * m_min.z - m_min.x + aRay.c_zx < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
 
     case POP:
-        {
-        if(( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
+    {
+        if( ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.z > m_max.z)
-            || ( aRay.kbyi * m_max.x - m_min.z +  aRay.c_xz < 0)
-            || ( aRay.ibyk * m_max.z - m_min.x +  aRay.c_zx < 0)
-            )
+            || ( aRay.kbyi * m_max.x - m_min.z + aRay.c_xz < 0)
+            || ( aRay.ibyk * m_max.z - m_min.x + aRay.c_zx < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case MMO:
-        {
-        if(( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+    {
+        if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y < m_min.y)
-            || ( aRay.jbyi * m_min.x - m_max.y +  aRay.c_xy > 0)
-            || ( aRay.ibyj * m_min.y - m_max.x +  aRay.c_yx > 0)
-            )
+            || ( aRay.jbyi * m_min.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_max.x + aRay.c_yx > 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case MPO:
-        {
-        if(( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+    {
+        if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.y > m_max.y)
-            || ( aRay.jbyi * m_min.x - m_min.y +  aRay.c_xy < 0)
-            || ( aRay.ibyj * m_max.y - m_max.x +  aRay.c_yx > 0)
-            )
+            || ( aRay.jbyi * m_min.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_max.x + aRay.c_yx > 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
 
     case PMO:
-        {
-        if(( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+    {
+        if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y < m_min.y)
-            || ( aRay.jbyi * m_max.x - m_max.y +  aRay.c_xy > 0)
-            || ( aRay.ibyj * m_min.y - m_min.x +  aRay.c_yx < 0)
-            )
+            || ( aRay.jbyi * m_max.x - m_max.y + aRay.c_xy > 0)
+            || ( aRay.ibyj * m_min.y - m_min.x + aRay.c_yx < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case PPO:
-        {
-        if(( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
+    {
+        if( ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x > m_max.x) || ( aRay.m_Origin.y > m_max.y)
-            || ( aRay.jbyi * m_max.x - m_min.y +  aRay.c_xy < 0)
-            || ( aRay.ibyj * m_max.y - m_min.x +  aRay.c_yx < 0)
-            )
+            || ( aRay.jbyi * m_max.x - m_min.y + aRay.c_xy < 0)
+            || ( aRay.ibyj * m_max.y - m_min.x + aRay.c_yx < 0)
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
 
     case MOO:
-        {
-        if(( aRay.m_Origin.x < m_min.x)
+    {
+        if( ( aRay.m_Origin.x < m_min.x)
             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-            )
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case POO:
-        {
-        if(( aRay.m_Origin.x > m_max.x)
+    {
+        if( ( aRay.m_Origin.x > m_max.x)
             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-            )
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case OMO:
-        {
-        if(( aRay.m_Origin.y < m_min.y)
+    {
+        if( ( aRay.m_Origin.y < m_min.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
             || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-            )
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case OPO:
-        {
-        if(( aRay.m_Origin.y > m_max.y)
+    {
+        if( ( aRay.m_Origin.y > m_max.y)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
             || ( aRay.m_Origin.z < m_min.z) || ( aRay.m_Origin.z > m_max.z)
-            )
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
 
     case OOM:
-        {
-        if(( aRay.m_Origin.z < m_min.z)
+    {
+        if( ( aRay.m_Origin.z < m_min.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-            )
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
 
     case OOP:
-        {
-        if(( aRay.m_Origin.z > m_max.z)
+    {
+        if( ( aRay.m_Origin.z > m_max.z)
             || ( aRay.m_Origin.x < m_min.x) || ( aRay.m_Origin.x > m_max.x)
             || ( aRay.m_Origin.y < m_min.y) || ( aRay.m_Origin.y > m_max.y)
-            )
+             )
             return false;
-            return true;
-        }
+
+        return true;
+    }
     }
 
     return false;
