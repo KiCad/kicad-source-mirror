@@ -118,6 +118,12 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
     aGbrItem->m_DCode = Dcode_index;
     aGbrItem->SetLayerPolarity( aLayerNegative );
     aGbrItem->m_Flashed = true;
+
+    D_CODE* aperture = aGbrItem->GetDcodeDescr();
+
+    if( aperture )
+        aGbrItem->m_NetAttribute = aperture->m_NetAttribute;
+
     switch( aAperture )
     {
     case APT_POLYGON:           // flashed regular polygon
@@ -172,6 +178,11 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
 
     aGbrItem->m_DCode = Dcode_index;
     aGbrItem->SetLayerPolarity( aLayerNegative );
+
+    D_CODE* aperture = aGbrItem->GetDcodeDescr();
+
+    if( aperture )
+        aGbrItem->m_NetAttribute = aperture->m_NetAttribute;
 }
 
 
@@ -216,6 +227,11 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
     aGbrItem->m_Shape = GBR_ARC;
     aGbrItem->m_Size  = aPenSize;
     aGbrItem->m_Flashed = false;
+
+    D_CODE* aperture = aGbrItem->GetDcodeDescr();
+
+    if( aperture )
+        aGbrItem->m_NetAttribute = aperture->m_NetAttribute;
 
     if( aMultiquadrant )
         center = aStart + aRelCenter;

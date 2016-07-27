@@ -516,6 +516,35 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     // Display AB axis swap (item specific)
     msg = m_swapAxis ? wxT( "A=Y B=X" ) : wxT( "A=X B=Y" );
     aList.push_back( MSG_PANEL_ITEM( _( "AB axis" ), msg, DARKRED ) );
+
+    // Display net info, if exists
+    switch( m_NetAttribute.m_TypeNetAttribute )
+    {
+        default:
+        case 0:
+            break;
+
+        case 1:     // .CN attribute
+        {
+            msg = _( "Net:" );
+            msg << " " << m_NetAttribute.m_NetAttrNetname;
+            wxString text;
+            text.Printf( _( "Pad: '%s' (Cmp: '%s')" ), GetChars( m_NetAttribute.m_NetAttrPadname ),
+                         GetChars( m_NetAttribute.m_NetAttrCmpReference ) );
+            aList.push_back( MSG_PANEL_ITEM( msg, text, CYAN ) );
+        }
+            break;
+
+        case 2:     // .N attribute
+            aList.push_back( MSG_PANEL_ITEM( _( "Net name:" ),
+                             m_NetAttribute.m_NetAttrNetname, CYAN ) );
+            break;
+
+        case 3:     // .C attribute
+            aList.push_back( MSG_PANEL_ITEM( _( "Cmp reference:" ),
+                             m_NetAttribute.m_NetAttrCmpReference, CYAN ) );
+            break;
+    }
 }
 
 

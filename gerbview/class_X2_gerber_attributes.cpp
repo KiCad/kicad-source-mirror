@@ -74,13 +74,13 @@ const wxString& X2_ATTRIBUTE::GetPrm( int aIdx)
 {
     static const wxString dummy;
 
-    if( GetPrmCount() < aIdx && aIdx >= 0 )
+    if( GetPrmCount() > aIdx && aIdx >= 0 )
         return m_Prms.Item( aIdx );
 
     return dummy;
 }
 
-// Debug function: pring using wxLogMessage le list of parameters
+// Debug function: pring using wxLogMessage the list of parameters
 void X2_ATTRIBUTE::DbgListPrms()
 {
     wxLogMessage( wxT("prms count %d"), GetPrmCount() );
