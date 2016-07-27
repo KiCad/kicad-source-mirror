@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  1 2016)
+// C++ code generated with wxFormBuilder (version Jul 24 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -109,6 +109,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxButton* m_plotButton;
 		wxButton* m_buttonDrill;
+		wxButton* m_buttonDRC;
 		wxButton* m_buttonQuit;
 		wxMenu* m_popMenu;
 		
@@ -121,6 +122,7 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		virtual void OnSetScaleOpt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Plot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void CreateDrillFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onRunDRC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPopUpLayers( wxCommandEvent& event ) { event.Skip(); }
 		

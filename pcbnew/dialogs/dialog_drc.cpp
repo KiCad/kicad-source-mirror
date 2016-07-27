@@ -41,13 +41,14 @@
  * and run DRC tests
  */
 
-DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent ) :
-    DIALOG_DRC_CONTROL_BASE( parent )
+DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
+                                        wxWindow* aParent ) :
+    DIALOG_DRC_CONTROL_BASE( aParent )
 {
     m_tester = aTester;
-    m_Parent = parent;
-    m_currentBoard = m_Parent->GetBoard();
-    m_BrdSettings = m_Parent->GetBoard()->GetDesignSettings();
+    m_brdEditor = aEditorFrame;
+    m_currentBoard = m_brdEditor->GetBoard();
+    m_BrdSettings = m_brdEditor->GetBoard()->GetDesignSettings();
 
     InitValues();
 
@@ -60,7 +61,7 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent ) :
 
 void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
 {
-    if( m_currentBoard != m_Parent->GetBoard() )
+    if( m_currentBoard != m_brdEditor->GetBoard() )
     {
         // If m_currentBoard is not the current parent board,
         // (for instance because a new board was loaded),
@@ -74,7 +75,7 @@ void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
 
     // updating data which can be modified outside the dialog (DRC parameters, units ...)
     // because the dialog is not modal
-    m_BrdSettings = m_Parent->GetBoard()->GetDesignSettings();
+    m_BrdSettings = m_brdEditor->GetBoard()->GetDesignSettings();
     DisplayDRCValues();
 }
 
@@ -129,7 +130,7 @@ void DIALOG_DRC_CONTROL::SetDrcParmeters( )
     m_BrdSettings.m_ViasMinSize = ValueFromTextCtrl( *m_SetViaMinSizeCtrl );
     m_BrdSettings.m_MicroViasMinSize = ValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl );
 
-    m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
+    m_brdEditor->GetBoard()->SetDesignSettings( m_BrdSettings );
 }
 
 
@@ -181,7 +182,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     // run all the tests, with no UI at this time.
     m_Messages->Clear();
     wxSafeYield();                          // Allows time slice to refresh the m_Messages window
-    m_Parent->GetBoard()->m_Status_Pcb = 0; // Force full connectivity and ratsnest recalculations
+    m_brdEditor->GetBoard()->m_Status_Pcb = 0; // Force full connectivity and ratsnest recalculations
     m_tester->RunTests(m_Messages);
     m_Notebook->ChangeSelection( 0 );       // display the 1at tab "...Markers ..."
 
@@ -279,7 +280,7 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
 
 void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& event )
 {
-    wxFileName fn = m_Parent->GetBoard()->GetFileName();
+    wxFileName fn = m_brdEditor->GetBoard()->GetFileName();
     fn.SetExt( ReportFileExtension );
     wxString prj_path =  Prj().GetProjectPath();
 
@@ -338,16 +339,16 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
 
         if( item )
         {
-            m_Parent->CursorGoto( item->GetPointA() );
-            m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            m_brdEditor->CursorGoto( item->GetPointA() );
+            m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
 
-            // turn control over to m_Parent, hide this DIALOG_DRC_CONTROL window,
+            // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
             // no destruction so we can preserve listbox cursor
             Show( false );
 
             // We do not want the clarification popup window.
             // when releasing the left button in the main window
-            m_Parent->SkipNextLeftButtonReleaseEvent();
+            m_brdEditor->SkipNextLeftButtonReleaseEvent();
         }
     }
 }
@@ -391,8 +392,8 @@ void DIALOG_DRC_CONTROL::OnPopupMenu( wxCommandEvent& event )
 
     if( item )
     {
-        m_Parent->CursorGoto( pos );
-        m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+        m_brdEditor->CursorGoto( pos );
+        m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
 
         Show( false );
     }
@@ -471,14 +472,14 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
         if( item )
         {
-            m_Parent->CursorGoto( item->GetPointA() );
-            m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            m_brdEditor->CursorGoto( item->GetPointA() );
+            m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
 
             Show( false );
 
             // We do not want the clarification popup window.
             // when releasing the left button in the main window
-            m_Parent->SkipNextLeftButtonReleaseEvent();
+            m_brdEditor->SkipNextLeftButtonReleaseEvent();
         }
     }
 }
@@ -507,8 +508,8 @@ void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
         const DRC_ITEM* item = m_ClearanceListBox->GetItem( selection );
         if( item )
         {
-            m_Parent->CursorGoto( item->GetPointA(), false );
-            m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            m_brdEditor->CursorGoto( item->GetPointA(), false );
+            m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
         }
     }
 
@@ -530,8 +531,8 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
         if( item )
         {
-            m_Parent->CursorGoto( item->GetPointA(), false );
-            m_Parent->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
+            m_brdEditor->CursorGoto( item->GetPointA(), false );
+            m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
         }
     }
 
@@ -541,13 +542,13 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 
 void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 {
-    m_Parent->GetCanvas()->Refresh();
+    m_brdEditor->GetCanvas()->Refresh();
 }
 
 
 void DIALOG_DRC_CONTROL::DelDRCMarkers()
 {
-    m_Parent->SetCurItem( NULL );           // clear curr item, because it could be a DRC marker
+    m_brdEditor->SetCurItem( NULL );           // clear curr item, because it could be a DRC marker
     m_ClearanceListBox->DeleteAllItems();
     m_UnconnectedListBox->DeleteAllItems();
     m_DeleteCurrentMarkerButton->Enable( false );
@@ -586,7 +587,7 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
     int count;
 
     fprintf( fp, "** Drc report for %s **\n",
-             TO_UTF8( m_Parent->GetBoard()->GetFileName() ) );
+             TO_UTF8( m_brdEditor->GetBoard()->GetFileName() ) );
 
     wxDateTime now = wxDateTime::Now();
 

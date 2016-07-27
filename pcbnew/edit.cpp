@@ -294,7 +294,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_DRC_CONTROL:
-        m_drc->ShowDialog();
+        m_drc->ShowDialog( this );
         break;
 
     case ID_GET_NETLIST:

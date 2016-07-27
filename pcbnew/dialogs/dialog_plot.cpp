@@ -813,3 +813,20 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     if( !m_plotOpts.GetLayerSelection().any() )
         DisplayError( this, _( "No layer selected" ) );
 }
+
+#include <drc_stuff.h>
+void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
+{
+    PCB_EDIT_FRAME* parent = dynamic_cast<PCB_EDIT_FRAME*>( GetParent() );
+
+    if( parent )
+    {
+        // First close an existing dialog if open
+        // (low probability, but can happen)
+        parent->GetDrcController()->DestroyDialog( wxID_OK );
+
+        // Open a new drc dialod, with the right parent frame
+        parent->GetDrcController()->ShowDialog( this );
+    }
+}
+

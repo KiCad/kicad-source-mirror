@@ -193,17 +193,17 @@ private:
     int                 m_xcliphi;
     int                 m_ycliphi;
 
-    PCB_EDIT_FRAME*     m_mainWindow;
+    PCB_EDIT_FRAME*     m_pcbEditorFrame;   ///< The pcb frame editor which owns the board
     BOARD*              m_pcb;
     DIALOG_DRC_CONTROL* m_drcDialog;
 
-    DRC_LIST            m_unconnected;  ///< list of unconnected pads, as DRC_ITEMs
+    DRC_LIST            m_unconnected;      ///< list of unconnected pads, as DRC_ITEMs
 
 
     /**
      * Function updatePointers
      * is a private helper function used to update needed pointers from the
-     * one pointer which is known not to change, m_mainWindow.
+     * one pointer which is known not to change, m_pcbEditorFrame.
      */
     void updatePointers();
 
@@ -441,8 +441,10 @@ public:
      * opens a dialog and prompts the user, then if a test run button is
      * clicked, runs the test(s) and creates the MARKERS.  The dialog is only
      * created if it is not already in existence.
+     * @param aParent is the parent window for wxWidgets. Usually the PCB editor frame
+     * but can be an other dialog
      */
-    void ShowDialog();
+    void ShowDialog( wxWindow* aParent );
 
     /**
      * Function DestroyDialog

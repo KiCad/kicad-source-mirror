@@ -68,6 +68,7 @@ private:
     void        SetPlotFormat( wxCommandEvent& event );
     void        OnSetScaleOpt( wxCommandEvent& event );
     void        CreateDrillFile( wxCommandEvent& event );
+	virtual void onRunDRC( wxCommandEvent& event ) override;
 
     // orther functions
     void        applyPlotSettings();

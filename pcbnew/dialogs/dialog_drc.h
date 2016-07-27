@@ -57,7 +57,7 @@ public:
     BOARD_DESIGN_SETTINGS  m_BrdSettings;
 
     /// Constructors
-    DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent );
+    DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent );
     ~DIALOG_DRC_CONTROL(){};
 
     /**
@@ -143,7 +143,7 @@ private:
 
     BOARD*              m_currentBoard;     // the board currently on test
     DRC*                m_tester;
-    PCB_EDIT_FRAME*     m_Parent;
+    PCB_EDIT_FRAME*     m_brdEditor;
 };
 
 #endif  // _DIALOG_DRC_H_
