@@ -53,8 +53,20 @@
 #include <wx/progdlg.h>
 
 
-void DRC::ShowDialog( wxWindow* aParent )
+void DRC::ShowDRCDialog( wxWindow* aParent )
 {
+    bool show_dlg_modal = true;
+
+    // the dialog needs a parent frame. if it is not specified, this is
+    // the PCB editor frame specified in DRC class.
+    if( aParent == NULL )
+    {
+        // if any parent is specified, the dialog is modal.
+        // if this is the default PCB editor frame, it is not modal
+        show_dlg_modal = false;
+        aParent = m_pcbEditorFrame;
+    }
+
     if( !m_drcDialog )
     {
         m_pcbEditorFrame->GetToolManager()->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -62,15 +74,21 @@ void DRC::ShowDialog( wxWindow* aParent )
         updatePointers();
 
         m_drcDialog->SetRptSettings( m_doCreateRptFile, m_rptFilename);
-    }
-    else
-        updatePointers();
 
-    m_drcDialog->Show( true );
+        if( show_dlg_modal )
+            m_drcDialog->ShowModal();
+        else
+            m_drcDialog->Show( true );
+    }
+    else    // The dialog is just not visible (because the user has double clicked on an error item)
+    {
+        updatePointers();
+        m_drcDialog->Show( true );
+    }
 }
 
 
-void DRC::DestroyDialog( int aReason )
+void DRC::DestroyDRCDialog( int aReason )
 {
     if( m_drcDialog )
     {

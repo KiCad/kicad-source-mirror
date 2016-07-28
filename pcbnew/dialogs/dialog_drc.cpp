@@ -69,7 +69,7 @@ void DIALOG_DRC_CONTROL::OnActivateDlg( wxActivateEvent& event )
         // in lists
         SetReturnCode( wxID_CANCEL );
         Close();
-        m_tester->DestroyDialog( wxID_CANCEL );
+        m_tester->DestroyDRCDialog( wxID_CANCEL );
         return;
     }
 
@@ -300,7 +300,9 @@ void DIALOG_DRC_CONTROL::OnOkClick( wxCommandEvent& event )
     SetReturnCode( wxID_OK );
     SetDrcParmeters();
 
-    m_tester->DestroyDialog( wxID_OK );
+    // The dialog can be modal or not modal.
+    // Leave the DRC caller destroy (or not) the dialog
+    m_tester->DestroyDRCDialog( wxID_OK );
 }
 
 
@@ -308,7 +310,9 @@ void DIALOG_DRC_CONTROL::OnCancelClick( wxCommandEvent& event )
 {
     SetReturnCode( wxID_CANCEL );
 
-    m_tester->DestroyDialog( wxID_CANCEL );
+    // The dialog can be modal or not modal.
+    // Leave the DRC caller destroy (or not) the dialog
+    m_tester->DestroyDRCDialog( wxID_CANCEL );
 }
 
 
@@ -342,13 +346,16 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
             m_brdEditor->CursorGoto( item->GetPointA() );
             m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
 
-            // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
-            // no destruction so we can preserve listbox cursor
-            Show( false );
+            if( !IsModal() )
+            {
+                // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
+                // no destruction so we can preserve listbox cursor
+                Show( false );
 
-            // We do not want the clarification popup window.
-            // when releasing the left button in the main window
-            m_brdEditor->SkipNextLeftButtonReleaseEvent();
+                // We do not want the clarification popup window.
+                // when releasing the left button in the main window
+                m_brdEditor->SkipNextLeftButtonReleaseEvent();
+            }
         }
     }
 }
@@ -395,7 +402,8 @@ void DIALOG_DRC_CONTROL::OnPopupMenu( wxCommandEvent& event )
         m_brdEditor->CursorGoto( pos );
         m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
 
-        Show( false );
+        if( !IsModal() )
+            Show( false );
     }
 }
 
@@ -475,11 +483,14 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
             m_brdEditor->CursorGoto( item->GetPointA() );
             m_brdEditor->GetGalCanvas()->GetView()->SetCenter( VECTOR2D( item->GetPointA() ) );
 
-            Show( false );
+            if( !IsModal() )
+            {
+                Show( false );
 
-            // We do not want the clarification popup window.
-            // when releasing the left button in the main window
-            m_brdEditor->SkipNextLeftButtonReleaseEvent();
+                // We do not want the clarification popup window.
+                // when releasing the left button in the main window
+                m_brdEditor->SkipNextLeftButtonReleaseEvent();
+            }
         }
     }
 }

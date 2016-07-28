@@ -294,7 +294,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_DRC_CONTROL:
-        m_drc->ShowDialog( this );
+        // Shows the DRC dialog in non modal mode, to allows board edition
+        // with the DRC dialog opened and showing errors.
+        m_drc->ShowDRCDialog();
         break;
 
     case ID_GET_NETLIST:

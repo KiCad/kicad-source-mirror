@@ -823,10 +823,10 @@ void DIALOG_PLOT::onRunDRC( wxCommandEvent& event )
     {
         // First close an existing dialog if open
         // (low probability, but can happen)
-        parent->GetDrcController()->DestroyDialog( wxID_OK );
+        parent->GetDrcController()->DestroyDRCDialog( wxID_OK );
 
-        // Open a new drc dialod, with the right parent frame
-        parent->GetDrcController()->ShowDialog( this );
+        // Open a new drc dialod, with the right parent frame, and in Modal Mode
+        parent->GetDrcController()->ShowDRCDialog( this );
     }
 }
 
