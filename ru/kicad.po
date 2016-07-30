@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-23 11:10+0300\n"
-"PO-Revision-Date: 2016-07-24 09:00+0300\n"
+"POT-Creation-Date: 2016-07-30 17:01+0300\n"
+"PO-Revision-Date: 2016-07-30 17:02+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1673,7 +1673,7 @@ msgstr "Отмена"
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:129
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:107
 #: pcbnew/dialogs/dialog_find_base.cpp:45 pcbnew/dialogs/dialog_gendrill_base.cpp:186
-#: pcbnew/dialogs/dialog_netlist_fbp.cpp:95 pcbnew/dialogs/dialog_plot_base.cpp:358
+#: pcbnew/dialogs/dialog_netlist_fbp.cpp:95 pcbnew/dialogs/dialog_plot_base.cpp:364
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:57
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:159
 #: pcbnew/dialogs/dialog_update_pcb.cpp:127 pcbnew/dialogs/dialog_update_pcb_base.cpp:56
@@ -5045,7 +5045,7 @@ msgstr "Формировать ошибку"
 msgid "Annotation required!"
 msgstr "Необходимо обозначить компоненты!"
 
-#: eeschema/dialogs/dialog_erc.cpp:592 pcbnew/drc.cpp:282
+#: eeschema/dialogs/dialog_erc.cpp:592 pcbnew/drc.cpp:300
 msgid "Finished"
 msgstr "Завершено"
 
@@ -5476,7 +5476,8 @@ msgstr "Обзор плагинов"
 msgid "Select Output Directory"
 msgstr "Выбор выходного каталога"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:185 pcbnew/dialogs/dialog_plot.cpp:314
+#: eeschema/dialogs/dialog_plot_schematic.cpp:185 pcbnew/dialogs/dialog_gendrill.cpp:305
+#: pcbnew/dialogs/dialog_plot.cpp:314
 #, c-format
 msgid ""
 "Do you want to use a path relative to\n"
@@ -5488,14 +5489,15 @@ msgstr ""
 #: eeschema/dialogs/dialog_plot_schematic.cpp:188
 #: eeschema/dialogs/dialog_plot_schematic.cpp:196
 #: pcbnew/dialogs/dialog_SVG_print.cpp:222 pcbnew/dialogs/dialog_SVG_print.cpp:233
-#: pcbnew/dialogs/dialog_gendrill.cpp:303 pcbnew/dialogs/dialog_gendrill.cpp:314
+#: pcbnew/dialogs/dialog_gendrill.cpp:308 pcbnew/dialogs/dialog_gendrill.cpp:315
 #: pcbnew/dialogs/dialog_plot.cpp:317 pcbnew/dialogs/dialog_plot.cpp:324
 #: pcbnew/exporters/gen_modules_placefile.cpp:188
 #: pcbnew/exporters/gen_modules_placefile.cpp:197
 msgid "Plot Output Directory"
 msgstr "Выходной каталог чертежа"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:195 pcbnew/dialogs/dialog_plot.cpp:323
+#: eeschema/dialogs/dialog_plot_schematic.cpp:195 pcbnew/dialogs/dialog_gendrill.cpp:314
+#: pcbnew/dialogs/dialog_plot.cpp:323
 msgid "Cannot make path relative (target volume different from file volume)!"
 msgstr ""
 "Не удалось сделать путь относительным (носитель назначения и носитель платы "
@@ -7268,7 +7270,7 @@ msgstr "Нет компонента для сохранения."
 #: eeschema/libeditframe.cpp:1106 eeschema/schedit.cpp:533 eeschema/tool_lib.cpp:65
 #: eeschema/tool_sch.cpp:194 gerbview/events_called_functions.cpp:197
 #: gerbview/toolbars_gerber.cpp:157 pagelayout_editor/events_functions.cpp:132
-#: pagelayout_editor/toolbars_pl_editor.cpp:97 pcbnew/edit.cpp:1433
+#: pagelayout_editor/toolbars_pl_editor.cpp:97 pcbnew/edit.cpp:1435
 #: pcbnew/modedit.cpp:953 pcbnew/tool_modedit.cpp:165 pcbnew/tool_pcb.cpp:426
 #: pcbnew/tools/common_actions.cpp:496 pcbnew/tools/zoom_tool.cpp:49
 msgid "Zoom to selection"
@@ -7282,7 +7284,7 @@ msgstr "Добавить вывод"
 msgid "Set pin options"
 msgstr "Установка параметров вывода"
 
-#: eeschema/libeditframe.cpp:1127 eeschema/schedit.cpp:573 pcbnew/edit.cpp:1493
+#: eeschema/libeditframe.cpp:1127 eeschema/schedit.cpp:573 pcbnew/edit.cpp:1495
 #: pcbnew/modedit.cpp:969 pcbnew/tools/drawing_tool.cpp:1266
 #: pcbnew/tools/drawing_tool.cpp:1393
 msgid "Add text"
@@ -7312,7 +7314,7 @@ msgstr "Установить позиция привязки"
 msgid "Import"
 msgstr "Импорт"
 
-#: eeschema/libeditframe.cpp:1169 eeschema/schedit.cpp:609 pcbnew/edit.cpp:1505
+#: eeschema/libeditframe.cpp:1169 eeschema/schedit.cpp:609 pcbnew/edit.cpp:1507
 #: pcbnew/modedit.cpp:994 pcbnew/tools/pcbnew_control.cpp:759
 #: eeschema/help_common_strings.h:48
 msgid "Delete item"
@@ -8517,7 +8519,7 @@ msgstr "Неизвестное SCH_FILE_T значение: %d"
 #: eeschema/sch_legacy_plugin.cpp:206 eeschema/sch_legacy_plugin.cpp:252
 #: eeschema/sch_legacy_plugin.cpp:292 eeschema/sch_legacy_plugin.cpp:304
 #: eeschema/sch_legacy_plugin.cpp:355 eeschema/sch_legacy_plugin.cpp:368
-#: eeschema/sch_legacy_plugin.cpp:387 eeschema/sch_legacy_plugin.cpp:788
+#: eeschema/sch_legacy_plugin.cpp:387 eeschema/sch_legacy_plugin.cpp:790
 msgid "unexpected end of line"
 msgstr "неожиданный конец строки"
 
@@ -8541,89 +8543,89 @@ msgstr "ожидалась строка с кавычками"
 msgid "no closing quote for string found"
 msgstr "не найдена закрывающая кавычка в строке"
 
-#: eeschema/sch_legacy_plugin.cpp:591
+#: eeschema/sch_legacy_plugin.cpp:593
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file"
 msgstr "'%s' не является файлом Eeschema"
 
-#: eeschema/sch_legacy_plugin.cpp:619
+#: eeschema/sch_legacy_plugin.cpp:621
 msgid "Missing 'EELAYER END'"
 msgstr "Отсутствует 'EELAYER END'"
 
-#: eeschema/sch_legacy_plugin.cpp:638
+#: eeschema/sch_legacy_plugin.cpp:640
 msgid "invalid page size"
 msgstr "неверный размер страницы"
 
-#: eeschema/sch_legacy_plugin.cpp:664 eeschema/sch_legacy_plugin.cpp:926
-#: eeschema/sch_legacy_plugin.cpp:934
+#: eeschema/sch_legacy_plugin.cpp:666 eeschema/sch_legacy_plugin.cpp:928
+#: eeschema/sch_legacy_plugin.cpp:936
 msgid "unexpected end of file"
 msgstr "неожиданный конец файла"
 
-#: eeschema/sch_legacy_plugin.cpp:720
+#: eeschema/sch_legacy_plugin.cpp:722
 msgid "missing 'EndDescr'"
 msgstr "отсутствует 'EndDescr'"
 
-#: eeschema/sch_legacy_plugin.cpp:812
+#: eeschema/sch_legacy_plugin.cpp:814
 msgid "invalid sheet pin type"
 msgstr "неверный тип вывода листа"
 
-#: eeschema/sch_legacy_plugin.cpp:833
+#: eeschema/sch_legacy_plugin.cpp:835
 msgid "invalid sheet pin side"
 msgstr "неверная сторона вывода листа"
 
-#: eeschema/sch_legacy_plugin.cpp:855
+#: eeschema/sch_legacy_plugin.cpp:857
 msgid "missing '$EndSheet`"
 msgstr "отсутствует '$EndSheet`"
 
-#: eeschema/sch_legacy_plugin.cpp:893
+#: eeschema/sch_legacy_plugin.cpp:895
 msgid "Unexpected end of file"
 msgstr "Неожиданный конец файла"
 
-#: eeschema/sch_legacy_plugin.cpp:1114
+#: eeschema/sch_legacy_plugin.cpp:1116
 msgid "invalid label type"
 msgstr "неверный тип метки"
 
-#: eeschema/sch_legacy_plugin.cpp:1125
+#: eeschema/sch_legacy_plugin.cpp:1127
 msgid "expected 'Italics' or '~'"
 msgstr "ожидалось 'Italics' или '~'"
 
-#: eeschema/sch_legacy_plugin.cpp:1306
+#: eeschema/sch_legacy_plugin.cpp:1308
 msgid "component field text horizontal justification must be L, R, or C"
 msgstr "горизонтальное выравнивание текстового поля компонента должно быть L, R или C"
 
-#: eeschema/sch_legacy_plugin.cpp:1316
+#: eeschema/sch_legacy_plugin.cpp:1318
 msgid "component field text vertical justification must be B, T, or C"
 msgstr "вертикальное выравнивание текстового поля компонента должно быть B, T или C"
 
-#: eeschema/sch_legacy_plugin.cpp:1321
+#: eeschema/sch_legacy_plugin.cpp:1323
 msgid "component field text attributes must be 3 characters wide"
 msgstr "атрибуты текстового поля компонента должны быть 3 символа в ширину"
 
-#: eeschema/sch_legacy_plugin.cpp:1327
+#: eeschema/sch_legacy_plugin.cpp:1329
 msgid "component field text italics indicator must be I or N"
 msgstr "признак курсива текстового поля компонента должен быть I или N"
 
-#: eeschema/sch_legacy_plugin.cpp:1333
+#: eeschema/sch_legacy_plugin.cpp:1335
 msgid "component field text bold indicator must be B or N"
 msgstr "признак полужирный текстового поля компонента должен быть B или N"
 
-#: eeschema/sch_legacy_plugin.cpp:1347
+#: eeschema/sch_legacy_plugin.cpp:1349
 msgid "component field orientation must be H or V"
 msgstr "ориентация поля компонента должна быть H или V"
 
-#: eeschema/sch_legacy_plugin.cpp:1375
+#: eeschema/sch_legacy_plugin.cpp:1377
 msgid "invalid component X1 transform value"
 msgstr "неверное значение преобразования компонента X1"
 
-#: eeschema/sch_legacy_plugin.cpp:1380
+#: eeschema/sch_legacy_plugin.cpp:1382
 msgid "invalid component Y1 transform value"
 msgstr "неверное значение преобразования компонента Y1"
 
-#: eeschema/sch_legacy_plugin.cpp:1385
+#: eeschema/sch_legacy_plugin.cpp:1387
 msgid "invalid component X2 transform value"
 msgstr "неверное значение преобразования компонента X2"
 
-#: eeschema/sch_legacy_plugin.cpp:1390
+#: eeschema/sch_legacy_plugin.cpp:1392
 msgid "invalid component Y2 transform value"
 msgstr "неверное значение преобразования компонента Y2"
 
@@ -9461,6 +9463,25 @@ msgstr "Полярность"
 msgid "AB axis"
 msgstr "AB оси"
 
+#: gerbview/class_gerber_draw_item.cpp:529
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:50
+msgid "Net:"
+msgstr "Цепь:"
+
+#: gerbview/class_gerber_draw_item.cpp:532
+#, c-format
+msgid "Pad: '%s' (Cmp: '%s')"
+msgstr "Конт.пл.: '%s' (Компонент: '%s')"
+
+#: gerbview/class_gerber_draw_item.cpp:539
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:45
+msgid "Net name:"
+msgstr "Имя цепи:"
+
+#: gerbview/class_gerber_draw_item.cpp:544
+msgid "Cmp reference:"
+msgstr "Обозначение компонента:"
+
 #: gerbview/class_gerber_file_image.cpp:330
 msgid "Image name"
 msgstr "Имя образа:"
@@ -10230,15 +10251,15 @@ msgstr ""
 "Возможно, что это файл RS274D старого формата\n"
 "Поэтому размер элементов не определен"
 
-#: gerbview/rs274x.cpp:442
+#: gerbview/rs274x.cpp:539
 msgid "RS274X: Command \"IR\" rotation value not allowed"
 msgstr "RS274X: Команда \"IR\" недопустимое значение угла поворота"
 
-#: gerbview/rs274x.cpp:533
+#: gerbview/rs274x.cpp:630
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
 msgstr "RS274X: Команда KNOCKOUT проигнорирована GerbView"
 
-#: gerbview/rs274x.cpp:596
+#: gerbview/rs274x.cpp:693
 msgid "Too many include files!!"
 msgstr "Слишком много вложенных файлов!"
 
@@ -13638,7 +13659,7 @@ msgstr "Список цепей схемы"
 msgid "Delete NET?"
 msgstr "Удалить цепь?"
 
-#: pcbnew/dialogs/dialog_SVG_print.cpp:221 pcbnew/dialogs/dialog_gendrill.cpp:302
+#: pcbnew/dialogs/dialog_SVG_print.cpp:221
 #: pcbnew/exporters/gen_modules_placefile.cpp:187
 msgid "Use a relative path? "
 msgstr "Использовать относительный путь?"
@@ -13739,7 +13760,7 @@ msgid "File option:"
 msgstr "Параметры файла:"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:126 pcbnew/dialogs/dialog_plot_base.cpp:351
-#: pcbnew/dialogs/dialog_plot_base.h:130
+#: pcbnew/dialogs/dialog_plot_base.h:132
 msgid "Plot"
 msgstr "Чертить"
 
@@ -13850,10 +13871,6 @@ msgstr "Радиус скругления"
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:110
 msgid "Layer:"
 msgstr "Слой:"
-
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:50
-msgid "Net:"
-msgstr "Цепь:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:61
 msgid "Net Filtering"
@@ -14796,21 +14813,21 @@ msgstr "Показать графические элементы в контур
 msgid "Show page limits"
 msgstr "Показать границы страницы"
 
-#: pcbnew/dialogs/dialog_drc.cpp:195 pcbnew/dialogs/dialog_drc.cpp:262
+#: pcbnew/dialogs/dialog_drc.cpp:196 pcbnew/dialogs/dialog_drc.cpp:263
 #, c-format
 msgid "Report file \"%s\" created"
 msgstr "Файл отчёта \"%s\" создан"
 
-#: pcbnew/dialogs/dialog_drc.cpp:197 pcbnew/dialogs/dialog_drc.cpp:263
+#: pcbnew/dialogs/dialog_drc.cpp:198 pcbnew/dialogs/dialog_drc.cpp:264
 msgid "Disk File Report Completed"
 msgstr "Создание файл отчёта на диске завершено"
 
-#: pcbnew/dialogs/dialog_drc.cpp:202 pcbnew/dialogs/dialog_drc.cpp:268
+#: pcbnew/dialogs/dialog_drc.cpp:203 pcbnew/dialogs/dialog_drc.cpp:269
 #, c-format
 msgid "Unable to create report file '%s' "
 msgstr "Не удалось создать файл отчёта '%s' "
 
-#: pcbnew/dialogs/dialog_drc.cpp:286
+#: pcbnew/dialogs/dialog_drc.cpp:287
 msgid "Save DRC Report File"
 msgstr "Сохранить отчёт DRC"
 
@@ -15749,23 +15766,18 @@ msgstr ""
 msgid "Use Netclasses values"
 msgstr "Использовать значение класса цепи"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:313
-msgid ""
-"Cannot make path relative.  The target volume is different from board file volume!"
-msgstr "Не удалось сделать путь относительным. Том назначения и том платы различные!"
-
-#: pcbnew/dialogs/dialog_gendrill.cpp:399
+#: pcbnew/dialogs/dialog_gendrill.cpp:400
 msgid "Save Drill Report File"
 msgstr "Сохранить отчёт сверловки"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:419
+#: pcbnew/dialogs/dialog_gendrill.cpp:420
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:121
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:151
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Не удалось создать %s **\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:424
+#: pcbnew/dialogs/dialog_gendrill.cpp:425
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Файл отчёта %s создан\n"
@@ -17626,10 +17638,6 @@ msgstr "Неизвестное имя цепи, изменение не выпо
 msgid "Pad number:"
 msgstr "Номер конт.пл.:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:45
-msgid "Net name:"
-msgstr "Имя цепи:"
-
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:52
 msgid "Pad type:"
 msgstr "Тип конт.пл.:"
@@ -18211,23 +18219,27 @@ msgstr "А4 принудительно"
 msgid "Generate Drill File"
 msgstr "Создать файл сверловки"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:369
+#: pcbnew/dialogs/dialog_plot_base.cpp:361
+msgid "Run DRC"
+msgstr "Запустить DRC"
+
+#: pcbnew/dialogs/dialog_plot_base.cpp:375
 msgid "Select Fab Layers"
 msgstr "Выбор слоя:"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:373
+#: pcbnew/dialogs/dialog_plot_base.cpp:379
 msgid "Select all Copper Layers"
 msgstr "Выбрать все слои меди"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:377
+#: pcbnew/dialogs/dialog_plot_base.cpp:383
 msgid "Deselect all Copper Layers"
 msgstr "Снять выбор всех слоёв меди"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:381
+#: pcbnew/dialogs/dialog_plot_base.cpp:387
 msgid "Select all Layers"
 msgstr "Выбрать все слои"
 
-#: pcbnew/dialogs/dialog_plot_base.cpp:385
+#: pcbnew/dialogs/dialog_plot_base.cpp:391
 msgid "Deselect all Layers"
 msgstr "Снять выбор всех слоёв"
 
@@ -18902,73 +18914,73 @@ msgstr ""
 msgid "The text thickness is too large for the text size.  It will be clamped"
 msgstr "Толщина текста очень большая для размера текста. Текст может быть не читаем"
 
-#: pcbnew/drc.cpp:177
+#: pcbnew/drc.cpp:195
 msgid "Compile ratsnest...\n"
 msgstr "Компиляция связей...\n"
 
-#: pcbnew/drc.cpp:193
+#: pcbnew/drc.cpp:211
 msgid "Aborting\n"
 msgstr "Прервано\n"
 
-#: pcbnew/drc.cpp:206
+#: pcbnew/drc.cpp:224
 msgid "Pad clearances...\n"
 msgstr "Зазоры конт.пл...\n"
 
-#: pcbnew/drc.cpp:216
+#: pcbnew/drc.cpp:234
 msgid "Track clearances...\n"
 msgstr "Зазоры дорожек...\n"
 
-#: pcbnew/drc.cpp:226
+#: pcbnew/drc.cpp:244
 msgid "Fill zones...\n"
 msgstr "Заливка зон...\n"
 
-#: pcbnew/drc.cpp:236
+#: pcbnew/drc.cpp:254
 msgid "Test zones...\n"
 msgstr "Тест зон...\n"
 
-#: pcbnew/drc.cpp:247
+#: pcbnew/drc.cpp:265
 msgid "Unconnected pads...\n"
 msgstr "Неподключенные конт.пл...\n"
 
-#: pcbnew/drc.cpp:259
+#: pcbnew/drc.cpp:277
 msgid "Keepout areas ...\n"
 msgstr "Области запрета...\n"
 
-#: pcbnew/drc.cpp:269
+#: pcbnew/drc.cpp:287
 msgid "Test texts...\n"
 msgstr "Тест текстов...\n"
 
-#: pcbnew/drc.cpp:320
+#: pcbnew/drc.cpp:338
 #, c-format
 msgid "NETCLASS: '%s' has Clearance:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет зазор:%s меньший, чем глобальный:%s"
 
-#: pcbnew/drc.cpp:336
+#: pcbnew/drc.cpp:354
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет ширину дорожки:%s меньшую, чем глобальная:%s"
 
-#: pcbnew/drc.cpp:351
+#: pcbnew/drc.cpp:369
 #, c-format
 msgid "NETCLASS: '%s' has Via Dia:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет диаметр перех.отв.:%s меньший, чем глобальный:%s"
 
-#: pcbnew/drc.cpp:366
+#: pcbnew/drc.cpp:384
 #, c-format
 msgid "NETCLASS: '%s' has Via Drill:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет сверло перех.отв.:%s меньшее, чем глобальное:%s"
 
-#: pcbnew/drc.cpp:381
+#: pcbnew/drc.cpp:399
 #, c-format
 msgid "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет диаметр перех.микроотв.:%s меньший, чем глобальный:%s"
 
-#: pcbnew/drc.cpp:396
+#: pcbnew/drc.cpp:414
 #, c-format
 msgid "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет сверло перех.микроотв.:%s меньшее, чем глобальное:%s"
 
-#: pcbnew/drc.cpp:489
+#: pcbnew/drc.cpp:507
 msgid "Track clearances"
 msgstr "Зазоры дорожки"
 
@@ -19003,77 +19015,77 @@ msgstr "Новая ширина:"
 msgid "Edge Width"
 msgstr "Толщина контура"
 
-#: pcbnew/edit.cpp:694 pcbnew/edit.cpp:716 pcbnew/edit.cpp:742 pcbnew/edit.cpp:770
-#: pcbnew/edit.cpp:798 pcbnew/edit.cpp:826
+#: pcbnew/edit.cpp:696 pcbnew/edit.cpp:718 pcbnew/edit.cpp:744 pcbnew/edit.cpp:772
+#: pcbnew/edit.cpp:800 pcbnew/edit.cpp:828
 #, c-format
 msgid "Footprint %s found, but it is locked"
 msgstr "Посад.место %s найдено, но оно заблокировано"
 
-#: pcbnew/edit.cpp:898 pcbnew/edit.cpp:917
+#: pcbnew/edit.cpp:900 pcbnew/edit.cpp:919
 #, c-format
 msgid "The parent (%s) of the pad is locked"
 msgstr "Родитель (%s) конт.пл. заблокирован"
 
-#: pcbnew/edit.cpp:1438 pcbnew/edit.cpp:1440
+#: pcbnew/edit.cpp:1440 pcbnew/edit.cpp:1442
 msgid "Add tracks"
 msgstr "Добавить дорожки"
 
-#: pcbnew/edit.cpp:1450 pcbnew/edit.cpp:1497 pcbnew/tools/pcb_editor_control.cpp:241
+#: pcbnew/edit.cpp:1452 pcbnew/edit.cpp:1499 pcbnew/tools/pcb_editor_control.cpp:241
 msgid "Add footprint"
 msgstr "Добавить посад.место"
 
-#: pcbnew/edit.cpp:1454 pcbnew/tools/drawing_tool.cpp:422
+#: pcbnew/edit.cpp:1456 pcbnew/tools/drawing_tool.cpp:422
 msgid "Add zones"
 msgstr "Добавить зоны"
 
-#: pcbnew/edit.cpp:1457
+#: pcbnew/edit.cpp:1459
 msgid "Warning: zone display is OFF!!!"
 msgstr "Предупреждение: Отображение зон выключено!!!"
 
-#: pcbnew/edit.cpp:1465 pcbnew/tools/drawing_tool.cpp:430
+#: pcbnew/edit.cpp:1467 pcbnew/tools/drawing_tool.cpp:430
 msgid "Add keepout"
 msgstr "Добавить область запрета"
 
-#: pcbnew/edit.cpp:1469 pcbnew/menubar_pcbframe.cpp:427 pcbnew/tool_pcb.cpp:469
+#: pcbnew/edit.cpp:1471 pcbnew/menubar_pcbframe.cpp:427 pcbnew/tool_pcb.cpp:469
 #: pcbnew/tools/common_actions.cpp:389 pcbnew/tools/pcb_editor_control.cpp:425
 msgid "Add layer alignment target"
 msgstr "Добавить миру для совмещения слоёв"
 
-#: pcbnew/edit.cpp:1473 pcbnew/tools/pcb_editor_control.cpp:735
+#: pcbnew/edit.cpp:1475 pcbnew/tools/pcb_editor_control.cpp:735
 msgid "Adjust zero"
 msgstr "Подстройка нуля"
 
-#: pcbnew/edit.cpp:1477 pcbnew/tools/pcbnew_control.cpp:655
+#: pcbnew/edit.cpp:1479 pcbnew/tools/pcbnew_control.cpp:655
 msgid "Adjust grid origin"
 msgstr "Установка начальных координат сетки"
 
-#: pcbnew/edit.cpp:1481 pcbnew/tools/drawing_tool.cpp:79
+#: pcbnew/edit.cpp:1483 pcbnew/tools/drawing_tool.cpp:79
 #: pcbnew/tools/drawing_tool.cpp:104
 msgid "Add graphic line"
 msgstr "Добавить графическую линию"
 
-#: pcbnew/edit.cpp:1485 pcbnew/menubar_modedit.cpp:286 pcbnew/menubar_pcbframe.cpp:409
+#: pcbnew/edit.cpp:1487 pcbnew/menubar_modedit.cpp:286 pcbnew/menubar_pcbframe.cpp:409
 #: pcbnew/tool_modedit.cpp:179 pcbnew/tool_pcb.cpp:459 pcbnew/tools/drawing_tool.cpp:183
 #: pcbnew/tools/drawing_tool.cpp:203
 msgid "Add graphic arc"
 msgstr "Добавить графическую дугу"
 
-#: pcbnew/edit.cpp:1489 pcbnew/menubar_modedit.cpp:275 pcbnew/menubar_pcbframe.cpp:412
+#: pcbnew/edit.cpp:1491 pcbnew/menubar_modedit.cpp:275 pcbnew/menubar_pcbframe.cpp:412
 #: pcbnew/tool_modedit.cpp:176 pcbnew/tool_pcb.cpp:456 pcbnew/tools/drawing_tool.cpp:136
 #: pcbnew/tools/drawing_tool.cpp:156
 msgid "Add graphic circle"
 msgstr "Добавить графическую окружность"
 
-#: pcbnew/edit.cpp:1501 pcbnew/menubar_pcbframe.cpp:423 pcbnew/tool_pcb.cpp:466
+#: pcbnew/edit.cpp:1503 pcbnew/menubar_pcbframe.cpp:423 pcbnew/tool_pcb.cpp:466
 #: pcbnew/tools/drawing_tool.cpp:253
 msgid "Add dimension"
 msgstr "Добавить размерную линию"
 
-#: pcbnew/edit.cpp:1509 pcbnew/tool_pcb.cpp:431 pcbnew/tools/pcb_editor_control.cpp:807
+#: pcbnew/edit.cpp:1511 pcbnew/tool_pcb.cpp:431 pcbnew/tools/pcb_editor_control.cpp:807
 msgid "Highlight net"
 msgstr "Подсветка цепи"
 
-#: pcbnew/edit.cpp:1513
+#: pcbnew/edit.cpp:1515
 msgid "Select rats nest"
 msgstr "Отобразить связи"
 
