@@ -33,6 +33,7 @@
 #include <dlist.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gr_basic.h>
+#include <attributes.h>
 #include <dcode.h>
 
 class GERBER_FILE_IMAGE;
@@ -91,9 +92,9 @@ public:
                                              * so they are stored inside this item if there is no
                                              * redundancy for these parameters
                                              */
-    NET_ATTRIBUTES     m_NetAttribute;      ///< the string given by a %TO attribute set in aperture
+    GBR_NETLIST_METADATA  m_NetAttribute;   ///< the string given by a %TO attribute set in aperture
                                             ///< (dcode). Stored in each item, because %TO is
-                                            ///< a dynamic attribute
+                                            ///< a dynamic object attribute
 
 private:
     // These values are used to draw this item, according to gerber layers parameters

@@ -358,3 +358,19 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
 
     aMainFrame->AppendMsgPanel( _( "Image Justify Offset" ), msg, DARKRED );
 }
+
+
+void GERBER_FILE_IMAGE::RemoveAttribute( X2_ATTRIBUTE& aAttribute )
+{
+    /* Called when a %TD command is found
+     * Remove the attribute specified by the %TD command.
+     * is no attribute, all current attributes specified by the %TO and the %TA
+     * commands are cleared.
+     * if a attribute name is specified (for instance %TD.CN*%) is specified,
+     * only this attribute is cleared
+     */
+    m_NetAttributeDict.ClearAttribute( &aAttribute.GetPrm( 1 ) );
+
+    if( aAttribute.GetPrm( 1 ).IsEmpty() || aAttribute.GetPrm( 1 ) == ".AperFunction" )
+        m_AperFunction.Clear();
+}

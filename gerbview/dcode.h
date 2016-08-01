@@ -70,28 +70,6 @@ enum APERTURE_DEF_HOLETYPE {
 
 struct APERTURE_MACRO;
 
-// helper class to handle a net attribute for a given D_CODE
-// net attributesare given by the %TO command following a Dn command (n >= 10)
-// This net attribute is dynamic, so it need to be also stored in each gerber item
-struct  NET_ATTRIBUTES
-{
-    int      m_TypeNetAttribute;    ///< identify %TO.N %TO.C or TO.CN net attribute
-                                    ///< 0 = no attribute, 1 = .CN, 2 =.N 3=.C
-    wxString m_NetAttrNetname;
-    wxString m_NetAttrPadname;
-    wxString m_NetAttrCmpReference;
-
-    NET_ATTRIBUTES(): m_TypeNetAttribute( 0 ) {}
-
-    void RemoveAttribute()     ///< Clear all strings
-    {
-        m_TypeNetAttribute = 0;     // no attribute
-        m_NetAttrNetname.Empty();
-        m_NetAttrPadname.Empty();
-        m_NetAttrCmpReference.Empty();
-    }
-};
-
 
 /**
  * Class D_CODE
@@ -125,7 +103,8 @@ public:
     bool                  m_InUse;          ///< false if the aperure (previously defined)
                                             ///< is not used to draw something
     bool                  m_Defined;        ///< false if the aperture is not defined in the header
-    NET_ATTRIBUTES        m_NetAttribute;   ///< the dynamic net info currently attached to the D_CODE
+    wxString              m_AperFunction;   ///< the aperture attribute (created by a %TA.AperFunction command)
+                                            ///< attached to the D_CODE
 
 
 public:

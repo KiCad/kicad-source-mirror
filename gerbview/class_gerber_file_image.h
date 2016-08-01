@@ -31,6 +31,7 @@
 #include <dcode.h>
 #include <class_gerber_draw_item.h>
 #include <class_aperture_macro.h>
+#include <attributes.h>
 
 // An useful macro used when reading gerber files;
 #define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \
@@ -61,7 +62,9 @@ class D_CODE;
  */
 
 class GERBER_FILE_IMAGE;
+class X2_ATTRIBUTE;
 class X2_ATTRIBUTE_FILEFUNCTION;
+
 
 class GERBER_LAYER
 {
@@ -158,6 +161,10 @@ public:
 
     APERTURE_MACRO_SET m_aperture_macros;                       ///< a collection of APERTURE_MACROS, sorted by name
 
+    GBR_NETLIST_METADATA m_NetAttributeDict;                    // the net attributes set by a %TO.CN, %TO.C and/or %TO.N
+                                                                // add object attribute command.
+    wxString          m_AperFunction;                           // the aperture function set by a %TA.AperFunction, xxx
+                                                                // (stores thre xxx value).
 private:
     wxArrayString      m_messagesList;                          // A list of messages created when reading a file
     int                m_hasNegativeItems;                      // true if the image is negative or has some negative items
@@ -330,6 +337,18 @@ public:
      * @param aMainFrame = the GERBVIEW_FRAME to display messages
      */
     void DisplayImageInfo( GERBVIEW_FRAME* aMainFrame );
+
+    /**
+     * Function RemoveAttribute.
+     * Called when a %TD command is found the Gerber file
+     * @param aAttribute is the X2_ATTRIBUTE which stores the full command
+     * Remove the attribute specified by the %TD command.
+     * is no attribute, all current attributes specified by the %TO and the %TA
+     * commands are cleared.
+     * if a attribute name is specified (for instance %TD.CN*%) is specified,
+     * only this attribute is cleared
+     */
+    void RemoveAttribute( X2_ATTRIBUTE& aAttribute );
 };
 
 #endif  // ifndef CLASS_GERBER_FILE_IMAGE_H

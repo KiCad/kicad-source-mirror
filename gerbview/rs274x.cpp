@@ -126,14 +126,21 @@ enum RS274X_PARAMETERS {
 static int ReadXCommand( char*& text )
 {
     int result;
+    int currbyte;
 
     if( text && *text )
-        result = *text++ << 8;
+    {
+        currbyte = *text++;
+        result = ( currbyte & 0xFF ) << 8;
+    }
     else
         return -1;
 
     if( text && *text )
-        result += *text++;
+    {
+        currbyte = *text++;
+        result += currbyte & 0xFF;
+    }
     else
         return -1;
 
@@ -426,32 +433,42 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         {
         X2_ATTRIBUTE dummy;
         dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
+
+            if( dummy.GetAttribute() == ".AperFunction" )
+            m_AperFunction = dummy.GetPrm( 1 );
         }
         break;
 
-    case NET_ATTRIBUTE:    // Command %TO ...
+    case NET_ATTRIBUTE:    // Command %TO currently %TO.CN %TO.N and %TO.C
         {
         X2_ATTRIBUTE dummy;
+
         dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
-        D_CODE* tool = GetDCODE( m_Current_Tool, false );
-        tool->m_NetAttribute.RemoveAttribute();
 
         if( dummy.GetAttribute() == ".CN" )
         {
-            tool->m_NetAttribute.m_TypeNetAttribute = 1;
-            tool->m_NetAttribute.m_NetAttrCmpReference = fromGerberString( dummy.GetPrm( 1 ) );
-            tool->m_NetAttribute.m_NetAttrPadname = fromGerberString( dummy.GetPrm( 2 ) );
-            tool->m_NetAttribute.m_NetAttrNetname = fromGerberString( dummy.GetPrm( 3 ) );
+            m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_FLASHED_PAD;
+            m_NetAttributeDict.m_ComponentRef = fromGerberString( dummy.GetPrm( 1 ) );
+            m_NetAttributeDict.m_Padname = fromGerberString( dummy.GetPrm( 2 ) );
+            m_NetAttributeDict.m_Netname = fromGerberString( dummy.GetPrm( 3 ) );
         }
         else if( dummy.GetAttribute() == ".N" )
         {
-            tool->m_NetAttribute.m_TypeNetAttribute = 2;
-            tool->m_NetAttribute.m_NetAttrNetname = fromGerberString( dummy.GetPrm( 1 ) );
+            if( m_NetAttributeDict.m_NetAttribType == GBR_NETLIST_METADATA::GBR_NETINFO_COMPONENT )
+                m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_NET_AND_CMP;
+            else
+                m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_NET;
+
+            m_NetAttributeDict.m_Netname = fromGerberString( dummy.GetPrm( 1 ) );
         }
         else if( dummy.GetAttribute() == ".C" )
         {
-            tool->m_NetAttribute.m_TypeNetAttribute = 3;
-            tool->m_NetAttribute.m_NetAttrCmpReference = fromGerberString( dummy.GetPrm( 1 ) );
+            if( m_NetAttributeDict.m_NetAttribType == GBR_NETLIST_METADATA::GBR_NETINFO_NET )
+                m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_NET_AND_CMP;
+            else
+                m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_COMPONENT;
+
+            m_NetAttributeDict.m_ComponentRef = fromGerberString( dummy.GetPrm( 1 ) );
         }
         }
         break;
@@ -460,8 +477,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         {
         X2_ATTRIBUTE dummy;
         dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
-        D_CODE* tool = GetDCODE( m_Current_Tool, false );
-        tool->m_NetAttribute.RemoveAttribute();
+        RemoveAttribute( dummy );
         }
         break;
 
@@ -739,8 +755,11 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
 
         D_CODE* dcode;
         dcode = GetDCODE( code );
+
         if( dcode == NULL )
             break;
+
+        dcode->m_AperFunction = m_AperFunction;
 
         // at this point, text points to character after the ADD<num>,
         // i.e. R in example above.  If text[0] is one of the usual

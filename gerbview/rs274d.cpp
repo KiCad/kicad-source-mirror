@@ -118,11 +118,7 @@ void fillFlashedGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
     aGbrItem->m_DCode = Dcode_index;
     aGbrItem->SetLayerPolarity( aLayerNegative );
     aGbrItem->m_Flashed = true;
-
-    D_CODE* aperture = aGbrItem->GetDcodeDescr();
-
-    if( aperture )
-        aGbrItem->m_NetAttribute = aperture->m_NetAttribute;
+    aGbrItem->m_NetAttribute = aGbrItem->m_GerberImageFile->m_NetAttributeDict;
 
     switch( aAperture )
     {
@@ -179,10 +175,7 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
     aGbrItem->m_DCode = Dcode_index;
     aGbrItem->SetLayerPolarity( aLayerNegative );
 
-    D_CODE* aperture = aGbrItem->GetDcodeDescr();
-
-    if( aperture )
-        aGbrItem->m_NetAttribute = aperture->m_NetAttribute;
+    aGbrItem->m_NetAttribute = aGbrItem->m_GerberImageFile->m_NetAttributeDict;
 }
 
 
@@ -228,10 +221,7 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
     aGbrItem->m_Size  = aPenSize;
     aGbrItem->m_Flashed = false;
 
-    D_CODE* aperture = aGbrItem->GetDcodeDescr();
-
-    if( aperture )
-        aGbrItem->m_NetAttribute = aperture->m_NetAttribute;
+    aGbrItem->m_NetAttribute = aGbrItem->m_GerberImageFile->m_NetAttributeDict;
 
     if( aMultiquadrant )
         center = aStart + aRelCenter;
@@ -361,6 +351,8 @@ static void fillArcPOLY(  GERBER_DRAW_ITEM* aGbrItem,
     fillArcGBRITEM(  &dummyGbrItem, 0,
                      aStart, aEnd, rel_center, wxSize(0, 0),
                      aClockwise, aMultiquadrant, aLayerNegative );
+
+    aGbrItem->m_NetAttribute = aGbrItem->m_GerberImageFile->m_NetAttributeDict;
 
     wxPoint   center;
     center = dummyGbrItem.m_ArcCentre;

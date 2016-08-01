@@ -484,13 +484,21 @@ void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_RECT*      aClipBox,
 void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
+    wxString text;
 
     msg = ShowGBRShape();
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, DARKCYAN ) );
 
     // Display D_Code value:
-    msg.Printf( wxT( "%d" ), m_DCode );
-    aList.push_back( MSG_PANEL_ITEM( _( "D Code" ), msg, RED ) );
+    msg.Printf( _( "D Code %d" ), m_DCode );
+    D_CODE* apertDescr = GetDcodeDescr();
+
+    if( apertDescr->m_AperFunction.IsEmpty() )
+        text = _( "No attribute" );
+    else
+        text = apertDescr->m_AperFunction;
+
+    aList.push_back( MSG_PANEL_ITEM( msg, text, RED ) );
 
     // Display graphic layer number
     msg.Printf( wxT( "%d" ), GetLayer() + 1 );
@@ -518,31 +526,36 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "AB axis" ), msg, DARKRED ) );
 
     // Display net info, if exists
-    switch( m_NetAttribute.m_TypeNetAttribute )
+    switch( m_NetAttribute.m_NetAttribType )
     {
         default:
-        case 0:
+        case GBR_NETLIST_METADATA::GBR_NETINFO_UNSPECIFIED:
             break;
 
-        case 1:     // .CN attribute
-        {
+        case GBR_NETLIST_METADATA::GBR_NETINFO_FLASHED_PAD:     // .CN attribute
             msg = _( "Net:" );
-            msg << " " << m_NetAttribute.m_NetAttrNetname;
-            wxString text;
-            text.Printf( _( "Pad: '%s' (Cmp: '%s')" ), GetChars( m_NetAttribute.m_NetAttrPadname ),
-                         GetChars( m_NetAttribute.m_NetAttrCmpReference ) );
+            msg << " " << m_NetAttribute.m_Netname;
+            text.Printf( _( "Pad: '%s' (Cmp: '%s')" ), GetChars( m_NetAttribute.m_Padname ),
+                         GetChars( m_NetAttribute.m_ComponentRef ) );
             aList.push_back( MSG_PANEL_ITEM( msg, text, CYAN ) );
-        }
             break;
 
-        case 2:     // .N attribute
-            aList.push_back( MSG_PANEL_ITEM( _( "Net name:" ),
-                             m_NetAttribute.m_NetAttrNetname, CYAN ) );
+        case GBR_NETLIST_METADATA::GBR_NETINFO_NET:     // .N attribute
+            aList.push_back( MSG_PANEL_ITEM( _( "Net:" ),
+                             m_NetAttribute.m_Netname, CYAN ) );
             break;
 
-        case 3:     // .C attribute
-            aList.push_back( MSG_PANEL_ITEM( _( "Cmp reference:" ),
-                             m_NetAttribute.m_NetAttrCmpReference, CYAN ) );
+        case GBR_NETLIST_METADATA::GBR_NETINFO_COMPONENT:     // .C attribute
+            aList.push_back( MSG_PANEL_ITEM( _( "Ref:" ),
+                             m_NetAttribute.m_ComponentRef, CYAN ) );
+            break;
+
+        case GBR_NETLIST_METADATA::GBR_NETINFO_NET_AND_CMP:     // .C and .N attribute
+            msg = _( "Net:" );
+            msg << " " << m_NetAttribute.m_Netname;
+            text =_( "Ref:" );
+            text << m_NetAttribute.m_ComponentRef;
+            aList.push_back( MSG_PANEL_ITEM( msg, text, CYAN ) );
             break;
     }
 }
