@@ -1355,7 +1355,11 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             component->GetField( index )->SetName( name );
         }
         else if( strCompare( "$EndComp", line ) )
+        {
+            // Ensure all flags (some are set by previous initializations) are reset:
+            component->ClearFlags();
             return component.release();
+        }
         else
         {
             // There are two lines that begin with a tab or spaces that includes a line with the
