@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: lt\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
 "X-Poedit-SearchPath-1: pcbnew\n"
@@ -257,7 +257,7 @@ msgstr "Paleisti \"Page Layout Editor\""
 
 #: kicad/menubar.cpp:396 kicad/commandframe.cpp:90
 msgid "Pl editor - Worksheet layout editor"
-msgstr ""
+msgstr "Pl editor - lapo formatų redaktorius"
 
 #: kicad/menubar.cpp:407
 msgid "KiCad &Manual"
@@ -506,7 +506,7 @@ msgstr ""
 
 #: kicad/commandframe.cpp:73
 msgid "Pcbnew - Printed circuit board editor"
-msgstr ""
+msgstr "Pcbnew - Spausdintinių plokščių (PCB) redaktorius"
 
 #: kicad/commandframe.cpp:76
 msgid "PCB footprint editor"
@@ -598,7 +598,7 @@ msgstr "%s %s atverta [pid=%ld]\n"
 
 #: kicad/mainframe.cpp:441
 msgid "Text file ("
-msgstr ""
+msgstr "Teksto failas ("
 
 #: kicad/mainframe.cpp:444
 msgid "Load File to Edit"
@@ -791,7 +791,7 @@ msgstr ""
 #: pcbnew/class_text_mod.cpp:424
 #, c-format
 msgid "Text \"%s\" on %s of %s"
-msgstr ""
+msgstr "Tekstas \"%s\" ant %s iš %s"
 
 #: pcbnew/pcbframe.cpp:400 pcbnew/pcbframe.cpp:899 pcbnew/moduleframe.cpp:289
 #: gerbview/gerbview_frame.cpp:143 gerbview/events_called_functions.cpp:319
@@ -855,7 +855,7 @@ msgstr "Keisti bloko dydį (vilkti vidurinį pelės klavišą)"
 #: eeschema/libedit_onrightclick.cpp:333 eeschema/onrightclick.cpp:835
 #: gerbview/onrightclick.cpp:76
 msgid "Place Block"
-msgstr ""
+msgstr "Padėti bloką"
 
 #: pcbnew/modedit_onclick.cpp:252
 msgid "Copy Block (shift + drag mouse)"
@@ -1402,7 +1402,7 @@ msgstr "Daugiakampis"
 #: pcbnew/eagle_plugin.cpp:1673
 #, c-format
 msgid "<package> name: '%s' duplicated in eagle <library>: '%s'"
-msgstr ""
+msgstr "<package> pavadinimas: '%s' dubliojasi Eagle <library>: '%s'"
 
 #: pcbnew/eagle_plugin.cpp:1730
 #, c-format
@@ -1500,7 +1500,7 @@ msgstr "&Apie Pcbnew"
 
 #: pcbnew/tool_modview.cpp:202
 msgid "About Pcbnew PCB designer"
-msgstr ""
+msgstr "Apie Pcbnew PCB designer"
 
 #: pcbnew/tool_modview.cpp:208 pcbnew/menubar_modedit.cpp:360
 #: pcbnew/menubar_pcbframe.cpp:666 eeschema/tool_viewlib.cpp:269
@@ -1534,11 +1534,11 @@ msgstr "Perėjimas per arti takelio"
 
 #: pcbnew/class_drc_item.cpp:63
 msgid "Two track ends too close"
-msgstr ""
+msgstr "Takelių galai per arti vienas kito"
 
 #: pcbnew/class_drc_item.cpp:65
 msgid "Two parallel track segments too close"
-msgstr ""
+msgstr "Du lygiagretūs takeliai per arti vienas kito"
 
 #: pcbnew/class_drc_item.cpp:67
 msgid "Tracks crossing"
@@ -1946,7 +1946,7 @@ msgstr ""
 #: pcbnew/onrightclick.cpp:403 pcbnew/onrightclick.cpp:416
 #: pcbnew/onrightclick.cpp:481 pcbnew/onrightclick.cpp:574
 msgid "Select Working Layer"
-msgstr ""
+msgstr "Darbinis sluoksnis"
 
 #: pcbnew/onrightclick.cpp:393 pcbnew/onrightclick.cpp:473
 #: pcbnew/onrightclick.cpp:521
@@ -1956,7 +1956,7 @@ msgstr "Pradėti takelį"
 #: pcbnew/onrightclick.cpp:399 pcbnew/onrightclick.cpp:477
 #: pcbnew/onrightclick.cpp:645
 msgid "Select Track Width"
-msgstr ""
+msgstr "Takelio plotis"
 
 #: pcbnew/onrightclick.cpp:405
 msgid "Select Layer Pair for Vias"
@@ -2365,7 +2365,7 @@ msgstr ""
 
 #: pcbnew/onrightclick.cpp:1058
 msgid "Use Netclass Values"
-msgstr ""
+msgstr "Naudoti grandinės klasės reikšmes"
 
 #: pcbnew/onrightclick.cpp:1059
 msgid "Use track and via sizes from their Netclass values"
@@ -2374,11 +2374,11 @@ msgstr ""
 #: pcbnew/onrightclick.cpp:1065
 #, c-format
 msgid "Track %s"
-msgstr "Takelis #%s"
+msgstr "Takelis %s"
 
 #: pcbnew/onrightclick.cpp:1068 pcbnew/onrightclick.cpp:1094
 msgid " uses NetClass"
-msgstr "naudoja NetClass"
+msgstr " naudoja NetClass"
 
 #: pcbnew/onrightclick.cpp:1086
 #, c-format
@@ -2474,7 +2474,7 @@ msgstr ""
 
 #: pcbnew/zones_by_polygon_fill_functions.cpp:175
 msgid "Updating ratsnest..."
-msgstr ""
+msgstr "Atnaujinami ryšiai ..."
 
 #: pcbnew/kicad_plugin.cpp:215
 #, c-format
@@ -2607,7 +2607,7 @@ msgstr ""
 
 #: pcbnew/drc.cpp:180
 msgid "Compile ratsnest...\n"
-msgstr ""
+msgstr "Generuoti užpildą\n"
 
 #: pcbnew/drc.cpp:196
 msgid "Aborting\n"
@@ -2721,7 +2721,7 @@ msgstr ""
 #: pcbnew/pcb_parser.cpp:856
 #, c-format
 msgid "%d is not a valid layer count"
-msgstr ""
+msgstr "%d nėra tinkamas sluoksnio numeris"
 
 #: pcbnew/pcb_parser.cpp:887
 #, c-format
@@ -3026,7 +3026,7 @@ msgstr ""
 #: pcbnew/modedit.cpp:130 pcbnew/controle.cpp:231
 #: pagelayout_editor/pl_editor_frame.cpp:747
 msgid "Selection Clarification"
-msgstr ""
+msgstr "Patikslinkite išranką"
 
 #: pcbnew/modedit.cpp:185
 msgid ""
@@ -3537,7 +3537,7 @@ msgstr ""
 
 #: pcbnew/menubar_modedit.cpp:188
 msgid "&User Grid Size"
-msgstr ""
+msgstr "Vartotojo nurodytas tinklelio žingsnis"
 
 #: pcbnew/menubar_modedit.cpp:188
 msgid "Adjust user grid"
@@ -3712,29 +3712,29 @@ msgstr "neradau %s"
 #: pcbnew/cross-probing.cpp:119
 #, c-format
 msgid "%s pin %s not found"
-msgstr ""
+msgstr "%s išvadas %s nerastas"
 
 #: pcbnew/cross-probing.cpp:124
 #, c-format
 msgid "%s pin %s found"
-msgstr ""
+msgstr "%s išvadas %s surastas"
 
 #: pcbnew/pcb_draw_panel_gal.cpp:353 pcbnew/class_board.cpp:957
 msgid "Track Segments"
-msgstr "takelio segmentų"
+msgstr "Takelio segmentai"
 
 #: pcbnew/pcb_draw_panel_gal.cpp:356 pcbnew/class_board.cpp:960
 msgid "Nodes"
-msgstr "Mazgų"
+msgstr "Mazgai"
 
 #: pcbnew/pcb_draw_panel_gal.cpp:359 pcbnew/class_board.cpp:963
 msgid "Nets"
-msgstr ""
+msgstr "Grandinės"
 
 #: pcbnew/pcb_draw_panel_gal.cpp:362 pcbnew/class_board.cpp:977
 #: pcbnew/dialogs/dialog_drc_base.cpp:184
 msgid "Unconnected"
-msgstr "Atjungti"
+msgstr "Nesujungta"
 
 #: pcbnew/move_or_drag_track.cpp:714
 msgid "Unable to drag this segment: too many segments connected"
@@ -4096,7 +4096,7 @@ msgstr ""
 
 #: pcbnew/muonde.cpp:232
 msgid "Component Value:"
-msgstr ""
+msgstr "Komponento nominalas:"
 
 #: pcbnew/muonde.cpp:587
 msgid "Gap"
@@ -4141,7 +4141,7 @@ msgstr ""
 
 #: pcbnew/muonde.cpp:812
 msgid "Symmetrical"
-msgstr ""
+msgstr "Simetriškai"
 
 #: pcbnew/muonde.cpp:812 pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:70
 msgid "Mirrored"
@@ -4197,7 +4197,7 @@ msgstr "(neaktyvus)"
 
 #: pcbnew/swap_layers.cpp:94
 msgid "Swap Layers:"
-msgstr ""
+msgstr "Sukeisti sluoksnius:"
 
 #: pcbnew/swap_layers.cpp:245 pcbnew/swap_layers.cpp:252
 #: pcbnew/swap_layers.cpp:330
@@ -4367,7 +4367,7 @@ msgstr "IPC-D-356 grandinių failas"
 
 #: pcbnew/menubar_pcbframe.cpp:168
 msgid "Generate IPC-D-356 netlist file"
-msgstr "Kurti IPC-D-356 tinklų sąrašo failą"
+msgstr "Kurti IPC-D-356 grandinių sąrašo failą"
 
 #: pcbnew/menubar_pcbframe.cpp:172
 msgid "&Component (.cmp) File"
@@ -4574,7 +4574,7 @@ msgstr "Apsauginė zona"
 
 #: pcbnew/menubar_pcbframe.cpp:401
 msgid "Te&xt"
-msgstr ""
+msgstr "Tekstas"
 
 #: pcbnew/menubar_pcbframe.cpp:419
 msgid "&Dimension"
@@ -4907,12 +4907,12 @@ msgstr "Matmuo"
 
 #: pcbnew/class_pcb_text.cpp:138
 msgid "PCB Text"
-msgstr ""
+msgstr "PCB tekstas"
 
 #: pcbnew/class_pcb_text.cpp:191
 #, c-format
 msgid "Pcb Text \"%s\" on %s"
-msgstr ""
+msgstr "PCB tekstas \"%s\" sluoksnyje %s"
 
 #: pcbnew/edgemod.cpp:213
 msgid ""
@@ -5082,7 +5082,7 @@ msgstr ""
 
 #: pcbnew/tool_modedit.cpp:229
 msgid "Show Pads Sketch"
-msgstr ""
+msgstr "Rodyti aikštelių kontūrą"
 
 #: pcbnew/tool_modedit.cpp:233
 msgid "Show Texts Sketch"
@@ -5179,7 +5179,7 @@ msgstr ""
 #: pcbnew/specctra_import.cpp:303
 #, c-format
 msgid "Unsupported via shape: %s"
-msgstr ""
+msgstr "Nepalaikomas perėjimo tipas: %s"
 
 #: pcbnew/specctra_import.cpp:359
 msgid "Session file is missing the \"session\" section"
@@ -5215,11 +5215,11 @@ msgstr ""
 
 #: pcbnew/hotkeys.cpp:72
 msgid "Switch to Copper (B.Cu) layer"
-msgstr ""
+msgstr "Perjungti į vario (B.Cu) sluoksnį"
 
 #: pcbnew/hotkeys.cpp:75
 msgid "Switch to Component (F.Cu) layer"
-msgstr ""
+msgstr "Perjungti į komponentų (F.Cu) sluoksnį"
 
 #: pcbnew/hotkeys.cpp:78
 msgid "Switch to Inner layer 1"
@@ -5247,11 +5247,11 @@ msgstr ""
 
 #: pcbnew/hotkeys.cpp:91 gerbview/hotkeys.cpp:77
 msgid "Switch to Next Layer"
-msgstr ""
+msgstr "Perjungti sekantį sluoksnį"
 
 #: pcbnew/hotkeys.cpp:93 gerbview/hotkeys.cpp:78
 msgid "Switch to Previous Layer"
-msgstr ""
+msgstr "Perjungti ankstesnį sluoksnį"
 
 #: pcbnew/hotkeys.cpp:97
 msgid "Save Board"
@@ -5680,7 +5680,7 @@ msgstr ""
 
 #: pcbnew/class_board.cpp:971
 msgid "Links"
-msgstr ""
+msgstr "Ryšiai"
 
 #: pcbnew/class_board.cpp:974
 msgid "Connections"
@@ -5868,7 +5868,7 @@ msgstr ""
 
 #: pcbnew/class_pad.cpp:867 pcbnew/dialogs/dialog_pad_properties_base.cpp:68
 msgid "Oval"
-msgstr ""
+msgstr "Ovalus"
 
 #: pcbnew/class_pad.cpp:873
 msgid "Trap"
@@ -6214,7 +6214,7 @@ msgstr ""
 
 #: pcbnew/tools/common_actions.cpp:430
 msgid "Paste items"
-msgstr ""
+msgstr "Įterpti elementus"
 
 #: pcbnew/tools/common_actions.cpp:510 pcbnew/tools/common_actions.cpp:511
 msgid "Run push & shove router (single tracks)"
@@ -6633,7 +6633,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:52
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:30
 msgid "Technical Layers:"
-msgstr ""
+msgstr "Techniniai sluoksniai"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:61
 msgid "Print SVG options:"
@@ -6694,7 +6694,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:83
 msgid "SVG Page Size"
-msgstr ""
+msgstr "SVG lapo dydis"
 
 #: pcbnew/dialogs/dialog_SVG_print_base.cpp:87
 msgid "Print board edges"
@@ -7044,15 +7044,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Front only"
-msgstr ""
+msgstr "Du sluoksniai, komponentai tik viršuje"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Back only"
-msgstr ""
+msgstr "Du sluoksniai, komponentai tik apačioje"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Two layers, parts on Front and Back"
-msgstr ""
+msgstr "Du sluoksniai, komponentai viršuje ir apačioje"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 msgid "Four layers, parts on Front only"
@@ -7940,7 +7940,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:173
 msgid "Spoke width"
-msgstr ""
+msgstr "Terminio tiltelio plotis"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:179
 msgid "Width of copper in thermal reliefs."
@@ -8054,7 +8054,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:98
 msgid "<< Append Selected Option"
-msgstr ""
+msgstr "<< Pridėti pasirinkimą"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:101
 msgid "Option Specific Help:"
@@ -8122,7 +8122,7 @@ msgstr "Nematomas"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:19
 msgid "Use polar coordinates"
-msgstr ""
+msgstr "Naudoti polines koordinates"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:28
 msgid "x:"
@@ -8165,7 +8165,7 @@ msgstr "0"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
 #: pcb_calculator/UnitSelector.cpp:38 pagelayout_editor/pl_editor_frame.cpp:467
 msgid "mm"
-msgstr " mm"
+msgstr "mm"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:39
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:53
@@ -8331,13 +8331,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:128
 msgid "Page Print"
-msgstr ""
+msgstr "Spausdinti lapą"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:135
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:48
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:99
 msgid "Page Options"
-msgstr ""
+msgstr "Lapo parametrai"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:138
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:51
@@ -8537,11 +8537,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Suppress leading zeros"
-msgstr ""
+msgstr "Nerodyti nulių priekyje"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Suppress trailing zeros"
-msgstr ""
+msgstr "Nerodyti nulių gale"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:50
 msgid "Keep zeros"
@@ -8664,7 +8664,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:140
 msgid "Through Vias:"
-msgstr ""
+msgstr "Ištisiniai perėjimai:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:144
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:175
@@ -8951,7 +8951,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:32
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:50
 msgid "Grid Reference Point:"
-msgstr ""
+msgstr "Tinklelio pradžios taškas:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:36
 msgid "Adjust automatically"
@@ -8994,7 +8994,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_gendrill.cpp:130
 #: pcbnew/dialogs/dialog_gendrill.cpp:131
 msgid "Use Netclasses values"
-msgstr ""
+msgstr "Naudoti grandinių klasių reikšmes"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:308
 msgid ""
@@ -9231,7 +9231,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:87
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:39
 msgid "Text height:"
-msgstr ""
+msgstr "Teksto aukštis:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:57
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:95
@@ -9250,7 +9250,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:79
 msgid "Text thickness:"
-msgstr ""
+msgstr "Teksto storis"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:107
 msgid "General:"
@@ -9392,7 +9392,7 @@ msgstr "Lentelė:"
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:36
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:88
 msgid "Table Name"
-msgstr ""
+msgstr "Lentelės pavadinimas"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:74
 msgid "Global Libraries"
@@ -9440,7 +9440,7 @@ msgstr "Atverti šios eilutės savybių sąrašą"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:168
 msgid "Path Substitutions"
-msgstr ""
+msgstr "Kelio pakeitimai"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:186
 msgid "Environment Variable"
@@ -9448,7 +9448,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:187
 msgid "Path Segment"
-msgstr ""
+msgstr "Kelio segmentas"
 
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:199
 msgid "This is a read-only table which shows pertinent environment variables."
@@ -9521,7 +9521,7 @@ msgstr "Dydis"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:200
 msgid "Where do you wish the new libraries to be added:"
-msgstr ""
+msgstr "Kur norite pridėti naujas biliotekas:"
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:204
 msgid "To global library configuration (visible by all projects)"
@@ -9529,7 +9529,7 @@ msgstr ""
 
 #: pcbnew/dialogs/wizard_add_fplib_base.cpp:207
 msgid "To the current project only"
-msgstr ""
+msgstr "Tik į darbinį projektą"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:22
 msgid "Current Settings:"
@@ -9634,7 +9634,7 @@ msgstr "Teksto linijos storis"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:58
 msgid "Text &height"
-msgstr ""
+msgstr "Teksto aukštis"
 
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:70
 msgid "Text &width"
@@ -10429,7 +10429,7 @@ msgstr "Tikras dydis"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:147
 msgid "Scaling:"
-msgstr ""
+msgstr "Mastelis:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:151
 msgid "Auto"
@@ -10467,7 +10467,7 @@ msgstr "Užpildytas"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:59
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:65
 msgid "Sketch"
-msgstr ""
+msgstr "Kontūras"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:167
 msgid "Default line width"
@@ -10667,7 +10667,7 @@ msgstr "Pridėti"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:74
 msgid "Add another Net Class"
-msgstr ""
+msgstr "Pridėti kitą grandinių klasę"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:79
 msgid ""
@@ -11422,7 +11422,7 @@ msgstr "Paryškinti kolizijas"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Shove"
-msgstr ""
+msgstr "Išstumdyti"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Walk around"
@@ -11455,7 +11455,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:50
 msgid "Shove vias"
-msgstr ""
+msgstr "Išstumdyti perėjimus"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid ""
@@ -11554,11 +11554,11 @@ msgstr "Teksto storis"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:61
 msgid "Text Position X"
-msgstr ""
+msgstr "Teksto X pozicija"
 
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:69
 msgid "Text Position Y"
-msgstr ""
+msgstr "Teksto Y pozicija"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
 msgid "File Name:"
@@ -11636,7 +11636,7 @@ msgstr "Galinis Y:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:101
 msgid "Use net class width"
-msgstr ""
+msgstr "Naudoti grandinės klasės plotį"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:165
 msgid "Diameter:"
@@ -11648,7 +11648,7 @@ msgstr "Grąžtas:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:192
 msgid "Use net class size"
-msgstr ""
+msgstr "Naudoti grandinės klasės dydį"
 
 #: pcbnew/dialogs/wizard_3DShape_Libs_downloader_base.cpp:25
 msgid "Welcome to the 3D shape Libraries downloader Wizard!"
@@ -11710,7 +11710,7 @@ msgstr "Bibliotekos"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:23
 msgid "User Defined Grid"
-msgstr ""
+msgstr "Vartotojo nurodytas tinklelis"
 
 #: pcbnew/dialogs/dialog_set_grid_base.cpp:63
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:70
@@ -11804,7 +11804,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:509
 #: eeschema/dialogs/dialog_eeschema_config.cpp:417
 msgid "Path type"
-msgstr ""
+msgstr "Kelio tipas"
 
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:425
 #, c-format
@@ -12125,7 +12125,7 @@ msgstr "Sukustas išvedimo failas '%s'."
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:25
 msgid "Component value"
-msgstr ""
+msgstr "Komponento nominalas"
 
 #: pcbnew/dialogs/dialog_exchange_modules_base.cpp:33
 msgid "Component reference"
@@ -12256,7 +12256,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:25
 msgid "Path base:"
-msgstr ""
+msgstr "Kelio pradžia:"
 
 #: pcbnew/dialogs/dialog_select_pretty_lib_base.cpp:29
 msgid "Select a folder"
@@ -12329,11 +12329,12 @@ msgstr ""
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 msgstr ""
+"<b>Papildomo takelio %d plotis</b> %s &lt; <b>Min takelio plotis</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1007
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
-msgstr ""
+msgstr "<b>Papildomas takelis %d plotis </b> %s &gt; <b>1 colis!</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1027
 #, c-format
@@ -12343,12 +12344,14 @@ msgstr ""
 #: pcbnew/dialogs/dialog_design_rules.cpp:1037
 #, c-format
 msgid "<b>No via drill size define in row %d</b><br>"
-msgstr ""
+msgstr "<b>Grąžtas  perėjimui nenurodytas %d eilutėje</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1047
 #, c-format
 msgid "<b>Extra Via %d Drill</b> %s &lt; <b>Min Via Drill %s</b><br>"
 msgstr ""
+"<b>Papildomo perėjimo %d grąžto diametras</b> %s &lt; <b>min. grąžto "
+"diametro %s</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1056
 #, c-format
@@ -12358,7 +12361,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_design_rules.cpp:1065
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
-msgstr ""
+msgstr "<b>Papildomo perėjimo %d dydis</b>%s &gt; <b>1 colis!</b><br>"
 
 #: pcbnew/router/pns_meander_placer.cpp:68
 #: pcbnew/router/pns_dp_meander_placer.cpp:78
@@ -12573,7 +12576,7 @@ msgstr "Trasuojama naudojant pirmo takelio plotį."
 
 #: pcbnew/router/router_tool.cpp:135
 msgid "Use net class values"
-msgstr ""
+msgstr "Naudoti grandinės klasės reikšmes"
 
 #: pcbnew/router/router_tool.cpp:136
 msgid "Use track and via sizes from the net class"
@@ -12585,7 +12588,7 @@ msgstr "Interaktyvus trasavimas"
 
 #: pcbnew/router/router_tool.cpp:216
 msgid "Select Track/Via Width"
-msgstr ""
+msgstr "Takelio / perėjimo plotis"
 
 #: pcbnew/router/router_tool.cpp:402
 msgid "Blind/buried vias have to be enabled in the design settings."
@@ -12647,7 +12650,7 @@ msgstr ""
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:42
 msgid "User defined position"
-msgstr ""
+msgstr "Vartotojo nurodyta vieta"
 
 #: pcbnew/import_dxf/dialog_dxf_import_base.cpp:44
 msgid "Place DXF origin (0,0) point:"
@@ -13041,7 +13044,7 @@ msgstr "Norimas redaktorius:"
 #: common/pgm_base.cpp:368
 #, c-format
 msgid "%s is already running, Continue?"
-msgstr ""
+msgstr "%s jau dirba. Tęsti?"
 
 #: common/pgm_base.cpp:744
 msgid "Language"
@@ -13204,7 +13207,7 @@ msgstr "Padidinti: "
 
 #: common/zoom.cpp:284
 msgid "Grid Select"
-msgstr "Parinkti tinklelį"
+msgstr "Tinklelio žingsnis"
 
 #: common/fpid.cpp:185 common/fpid.cpp:202
 msgid "Illegal character found in FPID string"
@@ -13307,7 +13310,7 @@ msgstr "Laukiu '%s'"
 #: common/dsnlexer.cpp:376 common/dsnlexer.cpp:392
 #, c-format
 msgid "Unexpected '%s'"
-msgstr ""
+msgstr "Netikėtai '%s'"
 
 #: common/dsnlexer.cpp:384
 #, c-format
@@ -13344,12 +13347,12 @@ msgstr "Pasirinktas tinklelis"
 #: common/base_screen.cpp:194
 #, c-format
 msgid "Grid: %.4f mm (%.2f mils)"
-msgstr ""
+msgstr "%.4f mm (%.2f mils)"
 
 #: common/base_screen.cpp:197
 #, c-format
 msgid "Grid: %.2f mils (%.4f mm)"
-msgstr ""
+msgstr "%.2f mils (%.4f mm)"
 
 #: common/richio.cpp:197
 #, c-format
@@ -13709,11 +13712,11 @@ msgstr ""
 
 #: common/dialogs/dialog_env_var_config_base.cpp:36
 msgid "Path"
-msgstr ""
+msgstr "Kelias"
 
 #: common/dialogs/dialog_env_var_config_base.cpp:64
 msgid "Add a new entry to the table."
-msgstr ""
+msgstr "Pridėti naują įrašą į lentelę."
 
 #: common/dialogs/dialog_env_var_config_base.cpp:69
 msgid "Remove the selectect entry from the table."
@@ -13742,11 +13745,11 @@ msgstr "Baigti darbą jo neišsaugant"
 
 #: common/dialogs/wx_html_report_panel.cpp:130
 msgid "<b>Error: </b></font><font size=2>"
-msgstr ""
+msgstr "<b>Klaida: </b></font><font size=2>"
 
 #: common/dialogs/wx_html_report_panel.cpp:132
 msgid "<b>Warning: </b></font><font size=2>"
-msgstr ""
+msgstr "<b>Ispėjimas: </b></font><font size=2>"
 
 #: common/dialogs/wx_html_report_panel.cpp:134
 msgid "<b>Info: </b>"
@@ -14297,7 +14300,7 @@ msgstr ""
 
 #: eeschema/netform.cpp:120
 msgid "Success"
-msgstr ""
+msgstr "Sėkmingai"
 
 #: eeschema/netform.cpp:127
 msgid "Info messages:"
@@ -15082,7 +15085,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:454
 msgid "Generate &Netlist File"
-msgstr "Kurti tinklų sąrašo failą"
+msgstr "Kurti grandinių sąrašo failą"
 
 #: eeschema/menubar.cpp:455
 msgid "Generate the component netlist file"
@@ -15179,7 +15182,7 @@ msgstr "3 lygių"
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:34
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
 msgid "Passive"
-msgstr ""
+msgstr "Pasyvus"
 
 #: eeschema/sch_text.cpp:1009
 #, c-format
@@ -15203,7 +15206,7 @@ msgstr "Dalis"
 #: eeschema/viewlibs.cpp:307 eeschema/libedit.cpp:488
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:202
 msgid "Alias"
-msgstr ""
+msgstr "Pseudonimas"
 
 #: eeschema/viewlibs.cpp:309 eeschema/libedit.cpp:509
 msgid "Key words"
@@ -15291,7 +15294,7 @@ msgstr ""
 
 #: eeschema/menubar_libedit.cpp:69 eeschema/tool_lib.cpp:115
 msgid "Select working library"
-msgstr ""
+msgstr "Darbinė biblioteka"
 
 #: eeschema/menubar_libedit.cpp:76
 msgid "&Save Current Library\tCtrl+S"
@@ -15339,7 +15342,7 @@ msgstr "Atšaukti paskutinį redagavimą"
 
 #: eeschema/menubar_libedit.cpp:185
 msgid "&Pin"
-msgstr ""
+msgstr "Išvadas"
 
 #: eeschema/menubar_libedit.cpp:192
 msgid "Graphic &Text"
@@ -15400,7 +15403,7 @@ msgstr "Failo pavadinimas"
 
 #: eeschema/sch_sheet.cpp:834
 msgid "Time Stamp"
-msgstr ""
+msgstr "Laiko žyma"
 
 #: eeschema/sch_sheet.cpp:1047
 #, c-format
@@ -15425,11 +15428,11 @@ msgstr "3 lygių išvadas...."
 
 #: eeschema/erc.cpp:93
 msgid "Passive Pin........"
-msgstr ""
+msgstr "Pasyvus išvadas ..."
 
 #: eeschema/erc.cpp:94
 msgid "Unspecified Pin...."
-msgstr ""
+msgstr "Nenurodytas išvadas..."
 
 #: eeschema/erc.cpp:95
 msgid "Power Input Pin...."
@@ -15469,11 +15472,11 @@ msgstr "3 lygių išvadas"
 
 #: eeschema/erc.cpp:109
 msgid "Passive Pin"
-msgstr ""
+msgstr "Pasyvus išvadas"
 
 #: eeschema/erc.cpp:110
 msgid "Unspecified Pin"
-msgstr ""
+msgstr "Nenurodytas išvadas"
 
 #: eeschema/erc.cpp:111
 msgid "Power Input Pin"
@@ -15742,22 +15745,22 @@ msgstr "taip"
 #: eeschema/sch_line.cpp:476
 #, c-format
 msgid "%s Graphic Line from (%s,%s) to (%s,%s) "
-msgstr ""
+msgstr "Grafinė linija %s nuo (%s,%s) iki (%s,%s) "
 
 #: eeschema/sch_line.cpp:480
 #, c-format
 msgid "%s Wire from (%s,%s) to (%s,%s)"
-msgstr ""
+msgstr "Laidas %s nuo (%s,%s) iki (%s,%s)"
 
 #: eeschema/sch_line.cpp:484
 #, c-format
 msgid "%s Bus from (%s,%s) to (%s,%s)"
-msgstr ""
+msgstr "%s šyna nuo (%s,%s) iki (%s,%s)"
 
 #: eeschema/sch_line.cpp:488
 #, c-format
 msgid "%s Line on Unknown Layer from (%s,%s) to (%s,%s)"
-msgstr ""
+msgstr "%s linija nežinomame sluoksnyje nuo (%s,%s) iki (%s,%s)"
 
 #: eeschema/sch_sheet_pin.cpp:500
 #, c-format
@@ -15912,12 +15915,12 @@ msgstr ""
 
 #: eeschema/tool_lib.cpp:213
 msgid "Show pin table"
-msgstr ""
+msgstr "Rodyti išvadų žiniaraštį"
 
 #: eeschema/tool_lib.cpp:229 eeschema/tool_sch.cpp:273
 #: gerbview/toolbars_gerber.cpp:151
 msgid "Turn grid off"
-msgstr ""
+msgstr "Išjungti tinklelį"
 
 #: eeschema/libeditframe.cpp:181 eeschema/hotkeys.cpp:323
 msgid "Library Editor"
@@ -16076,7 +16079,7 @@ msgstr "3 lygių"
 
 #: eeschema/lib_pin.cpp:188
 msgid "Unspecified"
-msgstr ""
+msgstr "Nenurodyta"
 
 #: eeschema/lib_pin.cpp:189
 msgid "Power input"
@@ -16132,7 +16135,7 @@ msgstr ""
 
 #: eeschema/lib_pin.cpp:255 eeschema/dialogs/dialog_color_config.cpp:75
 msgid "Pin"
-msgstr ""
+msgstr "Išvadas"
 
 #: eeschema/lib_pin.cpp:1984 eeschema/dialogs/dialog_lib_edit_pin_table.cpp:144
 msgid "Number"
@@ -16141,7 +16144,7 @@ msgstr "Numeris"
 #: eeschema/lib_pin.cpp:2269
 #, c-format
 msgid "Pin %s, %s, %s"
-msgstr ""
+msgstr "Išvadai %s, %s, %s"
 
 #: eeschema/selpart.cpp:65
 msgid "No component libraries are loaded."
@@ -16313,7 +16316,7 @@ msgstr "Išsaugoti schemos projektą"
 
 #: eeschema/tool_sch.cpp:70 pagelayout_editor/toolbars_pl_editor.cpp:61
 msgid "Page settings"
-msgstr ""
+msgstr "Lapo nustatymai"
 
 #: eeschema/tool_sch.cpp:75
 msgid "Print schematic"
@@ -16345,7 +16348,7 @@ msgstr "Užverti lapą"
 
 #: eeschema/tool_sch.cpp:151
 msgid "Generate netlist"
-msgstr "Kurti tinklų sąrašą"
+msgstr "Kurti grandinių sąrašą"
 
 #: eeschema/tool_sch.cpp:165
 msgid "Run CvPcb to associate components and footprints"
@@ -16506,6 +16509,8 @@ msgid ""
 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts "
 "with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr ""
+"<b>Sudvigubintas išvadas %s</b> \"%s\" pozijoje <b>(%.3f, %.3f)</b>, "
+"konfliktas su išvadu %s \"%s\" pozicijoje <b>(%.3f, %.3f)</b>"
 
 #: eeschema/pinedit.cpp:715 eeschema/pinedit.cpp:757
 #, c-format
@@ -16524,6 +16529,7 @@ msgstr ""
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr ""
+"<b>Išvadas %s</b> \"%s\" neatitinka tinklelio <b>(%.3f, %.3f)</b> pozicijoje"
 
 #: eeschema/pinedit.cpp:774
 msgid "No off grid or duplicate pins were found."
@@ -16818,7 +16824,7 @@ msgstr "komponentas"
 #: eeschema/find.cpp:247
 #, c-format
 msgid "pin %s"
-msgstr ""
+msgstr "išvadas %s"
 
 #: eeschema/find.cpp:251
 #, c-format
@@ -16855,7 +16861,7 @@ msgstr ""
 
 #: eeschema/libfield.cpp:57
 msgid "Component Name"
-msgstr ""
+msgstr "Komponento pavadinimas"
 
 #: eeschema/libfield.cpp:58
 msgid "Enter a name to create a new component based on this one."
@@ -16874,7 +16880,7 @@ msgstr ""
 #: eeschema/libfield.cpp:79
 #, c-format
 msgid "A %s field cannot be empty."
-msgstr ""
+msgstr "Laukas %s negali būti tuščias."
 
 #: eeschema/libfield.cpp:88
 msgid "Illegal reference. A reference must start by a letter"
@@ -17040,7 +17046,7 @@ msgstr "Sutinku"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:105
 msgid "Symbol"
-msgstr ""
+msgstr "Simbolis"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:106
 msgid "Action"
@@ -17267,7 +17273,7 @@ msgstr "Įskiepio pavadinimas"
 
 #: eeschema/dialogs/dialog_bom.cpp:458
 msgid "This name already exists. Abort"
-msgstr ""
+msgstr "Nutraukta: toks pavadinimas jau naudojamas"
 
 #: eeschema/dialogs/dialog_bom.cpp:486 eeschema/dialogs/dialog_netlist.cpp:840
 msgid "Plugin files:"
@@ -17423,7 +17429,7 @@ msgstr "Plotis:"
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:52
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:81
 msgid "Sharing"
-msgstr ""
+msgstr "Bendri išvadai"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:64
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:83
@@ -17465,7 +17471,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:44
 msgid "Page Setup"
-msgstr ""
+msgstr "Lapo nustatymas"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:84
@@ -17672,7 +17678,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_label.cpp:167
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.h:76
 msgid "Text Properties"
-msgstr ""
+msgstr "Teksto savybės"
 
 #: eeschema/dialogs/dialog_edit_label.cpp:228
 #, c-format
@@ -17792,15 +17798,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:437
 msgid "Path already in use"
-msgstr ""
+msgstr "Kelias jau naudojamas"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:33
 msgid "Pin &name:"
-msgstr ""
+msgstr "Išvado pavadi&nimas:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:41
 msgid "Pin n&umber:"
-msgstr ""
+msgstr "Išvado &numeris:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:43
 msgid "Pin number: 1 to 4 ASCII letters and/or digits"
@@ -17858,12 +17864,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_netlist_base.cpp:46
 #: eeschema/dialogs/dialog_bom_base.cpp:58
 msgid "Generate"
-msgstr "Skaičiuoti"
+msgstr "Kurti grandinių sąrašą"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:52
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add Plugin"
-msgstr ""
+msgstr "Pridėti įskiepį"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:55
 #: eeschema/dialogs/dialog_bom_base.cpp:74
@@ -17929,7 +17935,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:71
 msgid "User defined search path"
-msgstr ""
+msgstr "Vartotojo nurodytas paieškos kelias"
 
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:79
 msgid ""
@@ -18143,7 +18149,7 @@ msgstr "Lapo centre"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:74
 msgid "Pen width"
-msgstr ""
+msgstr "Plunksnos storis"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:97
 msgid "Default line thickness"
@@ -18254,7 +18260,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:35
 msgid "Show pin number"
-msgstr ""
+msgstr "Rodyti išvado numerį"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:37
 msgid "Show or hide pin numbers"
@@ -18262,7 +18268,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:41
 msgid "Show pin name"
-msgstr ""
+msgstr "Rodyti išvado pavadinimą"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:43
 msgid "Show or hide pin names"
@@ -18348,7 +18354,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:171
 msgid "Alias List"
-msgstr ""
+msgstr "Pseudonimų sąrašas"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:173
 msgid ""
@@ -18452,11 +18458,11 @@ msgstr "Fono spalva"
 
 #: eeschema/dialogs/dialog_color_config.cpp:76
 msgid "Pin number"
-msgstr ""
+msgstr "Išvado numeris"
 
 #: eeschema/dialogs/dialog_color_config.cpp:77
 msgid "Pin name"
-msgstr ""
+msgstr "Išvado pavadinimas"
 
 #: eeschema/dialogs/dialog_color_config.cpp:85
 #: eeschema/dialogs/dialog_color_config.cpp:104
@@ -18521,7 +18527,7 @@ msgstr "Bendros nuostatos"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:34
 msgid "Component &name:"
-msgstr ""
+msgstr "Komponento pavadi&nimas"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:36
 msgid ""
@@ -18571,7 +18577,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:117
 msgid "Pin name inside"
-msgstr ""
+msgstr "Išvado pavadinimas viduje"
 
 #: eeschema/dialogs/dialog_eeschema_options.cpp:51
 msgid "Default Value"
@@ -18765,7 +18771,7 @@ msgstr "raktiniai žodžiai"
 
 #: cvpcb/cvframe.cpp:657
 msgid "pin count"
-msgstr ""
+msgstr "išvadų skaičius"
 
 #: cvpcb/cvframe.cpp:665
 msgid "library"
@@ -18967,7 +18973,7 @@ msgstr ""
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:103
 msgid "Path option:"
-msgstr ""
+msgstr "Kelio tipas:"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:23
 msgid "Draw options"
@@ -18979,7 +18985,7 @@ msgstr ""
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:28
 msgid "Texts sketch mode"
-msgstr ""
+msgstr "Tekstai kontūru"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:31
 msgid "Pad sketch mode"
@@ -19236,7 +19242,7 @@ msgstr ""
 
 #: 3d-viewer/3d_toolbar.cpp:275
 msgid "Show &Silkscreen Layers"
-msgstr ""
+msgstr "Rodyti šilkografikos sluoksnius"
 
 #: 3d-viewer/3d_toolbar.cpp:278
 msgid "Show Solder &Mask Layers"
@@ -19280,7 +19286,7 @@ msgstr ""
 
 #: 3d-viewer/3d_frame.cpp:788
 msgid "Silk Screen Color"
-msgstr ""
+msgstr "Šilkografikos spalva"
 
 #: 3d-viewer/3d_frame.cpp:835
 msgid "Copper Color"
@@ -19619,7 +19625,7 @@ msgstr "Teksto redaktorius"
 
 #: gerbview/menubar.cpp:212 pagelayout_editor/menubar.cpp:133
 msgid "Select your preferred text editor"
-msgstr ""
+msgstr "Pasirinkite mėgiamą teksto rengyklę"
 
 #: gerbview/menubar.cpp:224
 msgid "Gerbview &Manual"
@@ -19865,7 +19871,7 @@ msgstr "Įrankis"
 
 #: gerbview/toolbars_gerber.cpp:155
 msgid "Turn polar coordinate on"
-msgstr ""
+msgstr "Ijungti polię koordinačių sistemą"
 
 #: gerbview/toolbars_gerber.cpp:159
 msgid "Set units to inches"
@@ -20074,7 +20080,7 @@ msgstr "0000"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:62
 msgid "pixels"
-msgstr ""
+msgstr "pikselių"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:82
 msgid "BPP:"
@@ -20113,7 +20119,7 @@ msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Pcbnew (.kicad_mod file)"
-msgstr ""
+msgstr "Pcbnew (.kicad_mod failas)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Postscript (.ps file)"
@@ -20373,7 +20379,7 @@ msgstr "T"
 #: pcb_calculator/transline_ident.cpp:345
 #: pcb_calculator/transline_ident.cpp:382
 msgid "Strip Thickness"
-msgstr ""
+msgstr "Juostelės storis"
 
 #: pcb_calculator/transline_ident.cpp:177
 #: pcb_calculator/transline_ident.cpp:347
@@ -21164,7 +21170,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:768
 msgid "Component Parameters:"
-msgstr ""
+msgstr "Komponento parametrai"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:811
 msgid "Physical Parameters"
@@ -21188,7 +21194,7 @@ msgstr "Analizuoti"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:891
 msgid "Synthetize"
-msgstr ""
+msgstr "Sintezuoti"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:904
 msgid "Electrical Parameters:"
@@ -21217,7 +21223,7 @@ msgstr "PI formos"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1043
 msgid "Tee"
-msgstr ""
+msgstr "T-tipo"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1043
 msgid "Bridged Tee"
@@ -21706,7 +21712,7 @@ msgstr "Pirmo puslapio parinktys"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 msgid "Page 1 only"
-msgstr ""
+msgstr "Tik pirmą lapą"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 msgid "Not on page 1"
@@ -21722,11 +21728,11 @@ msgstr "Išlyginti vertikaliai"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:124
 msgid "Text Width (mm)"
-msgstr ""
+msgstr "Teksto plotis (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:137
 msgid "Text Height (mm)"
-msgstr ""
+msgstr "Teksto aukštis (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:150
 msgid "Constraints:"
@@ -21762,7 +21768,7 @@ msgstr ""
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:400
 msgid "Text Increment"
-msgstr ""
+msgstr "Teksto padidėjimas"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:419
 msgid "Step X (mm)"
@@ -21782,11 +21788,11 @@ msgstr "Reikšmės pagal nutylėjimą"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:468
 msgid "Text Size X (mm)"
-msgstr ""
+msgstr "Teksto dydis X kryptimi (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:481
 msgid "Text Size Y (mm)"
-msgstr ""
+msgstr "Teksto dydis Y kryptimi (mm)"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:500
 msgid "Line Thickness (mm)"
@@ -21897,7 +21903,7 @@ msgstr "Projektavimo taisyklių kontrolė (DRC)"
 
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.h:79
 msgid "Trace length tuning"
-msgstr ""
+msgstr "Takelių ilgio paderinimas"
 
 #: pcbnew/dialogs/dialog_target_properties_base.h:61
 msgid "Target Properties"
@@ -22059,7 +22065,7 @@ msgstr "Naujas komponentas"
 
 #: eeschema/help_common_strings.h:54
 msgid "Place power port"
-msgstr "Maitinimo rpijungimas"
+msgstr "Maitinimo prijungimas"
 
 #: eeschema/help_common_strings.h:55
 msgid "Place wire"
@@ -22306,7 +22312,7 @@ msgstr ""
 
 #: include/kiway_player.h:263
 msgid "This file is already open."
-msgstr ""
+msgstr "Failas jau atvertas"
 
 #: include/richio.h:77
 #, c-format
