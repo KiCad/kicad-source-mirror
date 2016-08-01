@@ -1,14 +1,16 @@
-#!/bin/bash
+#!/bin/bash -e
 #####################################
 #
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
 # Copyright (C) 2015 Marco Ciampa <ciampix@libero.it>
-# Copyright (C) 2015 KiCAd Developers
+# Copyright (C) 2015-2016 KiCAd Developers
 #
 # License GNU GPL Version 3 or any later version.
 #
 #####################################
+
+LANG=C
 
 if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
   echo "Usage: $0 [-k] [locale]"
@@ -22,7 +24,11 @@ if [ "$1" = "-k" ] ; then
   shift
 fi
 
-SOURCEDIR=../kicad-source-mirror #Set this first!!!
+if [ -z ${SOURCEDIR} ]; then
+  SOURCEDIR=../kicad-source-mirror
+  echo "Using default SOURCEDIR=${SOURCEDIR}"
+fi
+CSVFILE=${PWD}/i18n_status.csv
 
 #Autovars
 LOCALDIR=$PWD
@@ -58,10 +64,42 @@ if [ ! "$1" = "" ] ; then
   fi
 fi
 
+echo "Writing summary to ${CSVFILE}"
+echo "LANG;TRANSLATED;FUZZY;UNTRANSLATED" > "${CSVFILE}"
+
 for i in $LINGUAS
 do
-  msgmerge --force-po $LOCALDIR/$i/kicad.po $LOCALDIR/kicad.pot -o $LOCALDIR/$i/kicad.po 2>&1 # >> /dev/null
-  msgfmt --statistics $LOCALDIR/$i/kicad.po 2>&1 >>/dev/null
+  echo "## $i"
+  msgmerge --force-po $LOCALDIR/$i/kicad.po $LOCALDIR/kicad.pot -o $LOCALDIR/$i/kicad.po 2> /dev/null
+  msgfmt --statistics $LOCALDIR/$i/kicad.po 2>&1 >>/dev/null |
+    while IFS=",." read A B C D ; do
+      echo $A
+      echo $B
+      echo $C
+      echo $D
+
+      for STRING in "$A" "$B" "$C" "$D" ; do
+        STRING=${STRING# }
+        case "$STRING" in
+        *" translated message"* )
+          TRANSLATED=${STRING% translated message*}
+          ;;
+        *" fuzzy translation"* )
+          FUZZY=${STRING% fuzzy translation*}
+          ;;
+        *" untranslated message"* )
+          UNTRANSLATED=${STRING% untranslated message*}
+          ;;
+        "" )
+          ;;
+        * )
+          echo >&2 "$0: Unknown format of \"msgfmt --statistics $LOCALDIR/$i/kicad.po \": \"$STRING\""
+          exit 1
+          ;;
+        esac
+      done
+      echo "$i;${TRANSLATED};${FUZZY};${UNTRANSLATED}">>"${CSVFILE}"
+    done
 done
 
 if [ ! "$KEEP" = "1" ]; then
