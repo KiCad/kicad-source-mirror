@@ -362,7 +362,16 @@ private:
 
     const std::string layerName( LAYER_ID aLayer ) const;
 
-    const wxString drillFileName( LAYER_PAIR aPair, bool aNPTH ) const;
+    /**
+     * @return a filename which identify the drill file function.
+     * it is the board name with the layer pair names added, and for separate
+     * (PTH and NPTH) files, "-NPH" or "-NPTH" added
+     * @param aPair = the layer pair
+     * @param aNPTH = true to generate the filename of NPTH holes
+     * @param aMerge_PTH_NPTH = true to generate the filename of a file which containd both
+     * NPH and NPTH holes
+     */
+    const wxString drillFileName( LAYER_PAIR aPair, bool aNPTH, bool aMerge_PTH_NPTH ) const;
 };
 
 #endif  //  #ifndef _GENDRILL_EXCELLON_WRITER_

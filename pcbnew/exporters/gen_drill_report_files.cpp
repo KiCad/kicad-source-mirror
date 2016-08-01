@@ -338,7 +338,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         if( pair == LAYER_PAIR( F_Cu, B_Cu ) )
         {
             out.Print( 0, "Drill file '%s' contains\n",
-                TO_UTF8( drillFileName( pair, false ) ) );
+                TO_UTF8( drillFileName( pair, false, m_merge_PTH_NPTH ) ) );
 
             out.Print( 0, "    plated through holes:\n" );
             out.Print( 0, separator );
@@ -348,7 +348,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         else    // blind/buried
         {
             out.Print( 0, "Drill file '%s' contains\n",
-                TO_UTF8( drillFileName( pair, false ) ) );
+                TO_UTF8( drillFileName( pair, false, m_merge_PTH_NPTH ) ) );
 
             out.Print( 0, "    holes connecting layer pair: '%s and %s' (%s vias):\n",
                 TO_UTF8( m_pcb->GetLayerName( ToLAYER_ID( pair.first ) ) ),
@@ -376,7 +376,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
         out.Print( 0, "Not plated through holes are merged with plated holes\n" );
     else
         out.Print( 0, "Drill file '%s' contains\n",
-                    TO_UTF8( drillFileName( LAYER_PAIR( F_Cu, B_Cu ), true ) ) );
+                    TO_UTF8( drillFileName( LAYER_PAIR( F_Cu, B_Cu ), true, m_merge_PTH_NPTH ) ) );
 
     out.Print( 0, "    unplated through holes:\n" );
     out.Print( 0, separator );

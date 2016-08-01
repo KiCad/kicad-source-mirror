@@ -105,7 +105,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
         // to be sure the NPTH file is up to date in separate files mode.
         if( GetHolesCount() > 0 || doing_npth )
         {
-            fn = drillFileName( pair, doing_npth );
+            fn = drillFileName( pair, doing_npth, m_merge_PTH_NPTH );
             fn.SetPath( aPlotDirectory );
 
             if( aGenDrill )
@@ -754,7 +754,7 @@ const std::string EXCELLON_WRITER::layerPairName( LAYER_PAIR aPair ) const
 }
 
 
-const wxString EXCELLON_WRITER::drillFileName( LAYER_PAIR aPair, bool aNPTH ) const
+const wxString EXCELLON_WRITER::drillFileName( LAYER_PAIR aPair, bool aNPTH, bool aMerge_PTH_NPTH ) const
 {
     wxASSERT( m_pcb );
 
@@ -764,7 +764,9 @@ const wxString EXCELLON_WRITER::drillFileName( LAYER_PAIR aPair, bool aNPTH ) co
         extend = "-NPTH";
     else if( aPair == LAYER_PAIR( F_Cu, B_Cu ) )
     {
-        // extend with nothing
+        if( !aMerge_PTH_NPTH )
+            extend = "-PTH";
+        // if merged, extend with nothing
     }
     else
     {
