@@ -87,7 +87,7 @@ D_PAD::D_PAD( MODULE* parent ) :
 
 LSET D_PAD::StandardMask()
 {
-    static LSET saved = LSET::AllCuMask() | LSET( 3, F_SilkS, B_Mask, F_Mask );
+    static LSET saved = LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask );
     return saved;
 }
 
@@ -108,7 +108,7 @@ LSET D_PAD::ConnSMDMask()
 
 LSET D_PAD::UnplatedHoleMask()
 {
-    static LSET saved = LSET::AllCuMask() | LSET( 3, F_SilkS, B_Mask, F_Mask );
+    static LSET saved = LSET::AllCuMask() | LSET( 2, B_Mask, F_Mask );
     return saved;
 }
 
