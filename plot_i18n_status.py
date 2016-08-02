@@ -61,7 +61,11 @@ ax.set_xticklabels(list(zip(*data))[0][1:])
 ax.yaxis.grid(True, which='both') # horizontal lines
 ax.legend((rects1[0], rects2[0], rects3[0]), ('TRANSLATED', 'FUZZY', 'UNTRANSLATED'), loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, ncol=3)
 plt.figtext(0.99, 0.96, time.strftime("%d/%m %Y"), horizontalalignment='right')
-plt.subplots_adjust(left=0.05, right=0.99, top=0.95, bottom=0.1)
+plt.subplots_adjust(left=0.07, right=0.99, top=0.95, bottom=0.12)
+
+fig.set_size_inches(12, 8)
+
+fig.savefig('i18n_status.svg')
 
 # Show the magic to the user
 plt.show()

@@ -8,3 +8,4 @@ Makefile
 CMakeFiles/*
 *.pot
 .DS_Store
+i18n_status.svg
