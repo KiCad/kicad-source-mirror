@@ -532,11 +532,13 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             {
                 if( tr.first.Matches( aEvent ) )
                 {
+                    auto func_copy = tr.second;
+
                     // if there is already a context, then store it
                     if( st->cofunc )
                         st->Push();
 
-                    st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( tr.second );
+                    st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( std::move( func_copy ) );
 
                     // as the state changes, the transition table has to be set up again
                     st->transitions.clear();
