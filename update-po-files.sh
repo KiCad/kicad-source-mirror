@@ -4,7 +4,7 @@
 # This program source code file is part of KiCad, a free EDA CAD application.
 #
 # Copyright (C) 2015 Marco Ciampa <ciampix@libero.it>
-# Copyright (C) 2015-2016 KiCAd Developers
+# Copyright (C) 2015-2016 KiCad Developers
 #
 # License GNU GPL Version 3 or any later version.
 #
@@ -12,28 +12,46 @@
 
 LANG=C
 
-if [ "$1" = "--help" ] || [ "$1" = "-h" ] ; then
-  echo "Usage: $0 [-k] [locale]"
-  echo
-  echo "Where -k means keep pot template and not delete it"
+display_help() {
+  echo "Usage: $0 [-k] [-p] [locale]"
+  echo "  -k keep pot template and not delete it"
+  echo "  -p plot the translation statistics [requires python with matplotlib]"
   exit
-fi
+}
 
-if [ "$1" = "-k" ] ; then
+# Handle command line arguments
+for i in "$@"; do
+case $i in
+  -h|--help)
+  display_help
+  shift
+  ;;
+  -k)
   KEEP=1
   shift
-fi
+  ;;
+  -p)
+  PLOT=1
+  shift
+  ;;
+  *)
+  #echo "Unknown option, see the help info below:"
+  SINGLE_LANG=$i
+  ;;
+esac
+done
 
 if [ -z ${SOURCEDIR} ]; then
   SOURCEDIR=../kicad-source-mirror
   echo "Using default SOURCEDIR=${SOURCEDIR}"
 fi
-CSVFILE=${PWD}/i18n_status.csv
 
 #Autovars
+cd $(dirname ${BASH_SOURCE[0]})
 LOCALDIR=$PWD
-LINGUAS=`cat LINGUAS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
-POTDIRS=`cat POTDIRS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
+CSVFILE=${PWD}/i18n_status.csv
+LINGUAS=`cat $LOCALDIR/LINGUAS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
+POTDIRS=`cat $LOCALDIR/POTDIRS|grep -v '^#'|grep -v '^\s*$'` #Read file without comment and empty lines
 
 cd $SOURCEDIR
 
@@ -53,14 +71,15 @@ rm $LOCALDIR/POTFILES
 validate() { echo $LINGUAS | grep -F -q -w "$1"; }
 
 #If supplied, update only the specified locale
-if [ ! "$1" = "" ] ; then
-  if ! validate "$1"; then
+if [ ! "$SINGLE_LANG" = "" ] ; then
+  if ! validate "$SINGLE_LANG"; then
     echo "Error!"
     echo "Locale argument \"$1\" not present in current locale list:"
-    for i in $LINGUAS; do echo -n "$i " ; done
+    for i in $LINGUAS; do echo -n "$i "; done
+    echo # newline
     exit 1
   else
-    LINGUAS="$1"
+    LINGUAS="$SINGLE_LANG"
   fi
 fi
 
@@ -101,6 +120,11 @@ do
       echo "$i;${TRANSLATED};${FUZZY};${UNTRANSLATED}">>"${CSVFILE}"
     done
 done
+
+if [ "$PLOT" = "1" ]; then
+  cd $LOCALDIR
+  $LOCALDIR/plot_i18n_status.py
+fi
 
 if [ ! "$KEEP" = "1" ]; then
   rm $LOCALDIR/kicad.pot
