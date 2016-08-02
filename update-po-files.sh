@@ -16,6 +16,7 @@ display_help() {
   echo "Usage: $0 [-k] [-p] [locale]"
   echo "  -k keep pot template and not delete it"
   echo "  -p plot the translation statistics [requires python with matplotlib]"
+  echo "  -s=<path> path to kicad source code"
   exit
 }
 
@@ -34,8 +35,11 @@ case $i in
   PLOT=1
   shift
   ;;
+  -s=*)
+  SOURCEDIR="${i#*=}"
+  shift
+  ;;
   *)
-  #echo "Unknown option, see the help info below:"
   SINGLE_LANG=$i
   ;;
 esac
