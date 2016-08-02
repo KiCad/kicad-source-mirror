@@ -9,3 +9,4 @@ CMakeFiles/*
 *.pot
 .DS_Store
 i18n_status.svg
+i18n_status.csv
