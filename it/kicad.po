@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-01 14:07+0200\n"
-"PO-Revision-Date: 2016-08-01 14:48+0200\n"
+"POT-Creation-Date: 2016-08-02 12:03+0200\n"
+"PO-Revision-Date: 2016-08-02 12:03+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -1947,7 +1947,7 @@ msgstr "Stato"
 
 #: pcbnew/class_module.cpp:570
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
-#: gerbview/class_gerber_draw_item.cpp:504
+#: gerbview/class_gerber_draw_item.cpp:512
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:350
 msgid "Rotation"
 msgstr "Rotazione"
@@ -2575,7 +2575,7 @@ msgstr "Sposta il blocco esattamente"
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:115
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:77
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
-#: gerbview/class_gerber_draw_item.cpp:514
+#: gerbview/class_gerber_draw_item.cpp:522
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:77
 msgid "Mirror"
 msgstr "Capovolgi"
@@ -3113,8 +3113,8 @@ msgstr "Testo C.S."
 #: pcbnew/class_pcb_text.cpp:143 pcbnew/class_text_mod.cpp:355
 #: eeschema/lib_pin.cpp:2010
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1022
-#: gerbview/class_gerber_draw_item.cpp:512
-#: gerbview/class_gerber_draw_item.cpp:513
+#: gerbview/class_gerber_draw_item.cpp:520
+#: gerbview/class_gerber_draw_item.cpp:521
 msgid "No"
 msgstr "No"
 
@@ -3122,8 +3122,8 @@ msgstr "No"
 #: eeschema/lib_pin.cpp:2008
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1020
-#: gerbview/class_gerber_draw_item.cpp:512
-#: gerbview/class_gerber_draw_item.cpp:513
+#: gerbview/class_gerber_draw_item.cpp:520
+#: gerbview/class_gerber_draw_item.cpp:521
 msgid "Yes"
 msgstr "Sì"
 
@@ -4185,7 +4185,7 @@ msgstr "(Ritaglia)"
 #: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:1999
 #: eeschema/sch_text.cpp:791 eeschema/libedit.cpp:507
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
-#: gerbview/class_gerber_draw_item.cpp:489
+#: gerbview/class_gerber_draw_item.cpp:490
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
@@ -10319,7 +10319,6 @@ msgid "Pad number:"
 msgstr "Numero piazzola:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:45
-#: gerbview/class_gerber_draw_item.cpp:539
 msgid "Net name:"
 msgstr "Nome collegamento:"
 
@@ -13068,7 +13067,9 @@ msgid "Circular Array"
 msgstr "Schieramento circolare"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:50
-#: gerbview/class_gerber_draw_item.cpp:529
+#: gerbview/class_gerber_draw_item.cpp:536
+#: gerbview/class_gerber_draw_item.cpp:544
+#: gerbview/class_gerber_draw_item.cpp:554
 msgid "Net:"
 msgstr "Collegamento:"
 
@@ -21405,7 +21406,8 @@ msgstr "Stile colore CAD"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:216
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Usa uno stile colore CAD basato sulla diffusione del colore del materiale"
+msgstr ""
+"Usa uno stile colore CAD basato sulla diffusione del colore del materiale"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:223
 msgid "OpenGL Options"
@@ -21445,7 +21447,8 @@ msgstr "Rifrazioni"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:252
 msgid "Render materials with refractions properties on final render (slow)"
-msgstr "Render dei materiali con proprietà di rifrazione sul render finale (lento)"
+msgstr ""
+"Render dei materiali con proprietà di rifrazione sul render finale (lento)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:256
 msgid "Reflections"
@@ -21453,7 +21456,8 @@ msgstr "Riflessioni"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:257
 msgid "Render materials with reflections properties on final render (slow)"
-msgstr "Render dei materiali con proprietà di riflessione sul render finale (lento)"
+msgstr ""
+"Render dei materiali con proprietà di riflessione sul render finale (lento)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:261
 msgid "Anti-aliasing"
@@ -21471,7 +21475,9 @@ msgstr "Post-elaborazione"
 msgid ""
 "Apply Screen Space Ambient Occlusion and Global Illumination reflections on "
 "final render (slow)"
-msgstr "Applica l'occlusione ambiente spazio schermo e le riflessioni sull'illuminazione globale sul render finale (lento)"
+msgstr ""
+"Applica l'occlusione ambiente spazio schermo e le riflessioni "
+"sull'illuminazione globale sul render finale (lento)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:279
 msgid "Choose Colors"
@@ -21560,7 +21566,9 @@ msgstr "Proprietà impronta -> Attributi -> Normal+Insert (p.e. componenti SMD)"
 msgid ""
 "Footprint Properties -> Attributes -> Virtual (eg: edge connectors, test "
 "points, mechanical parts)"
-msgstr "Proprietà impronta -> Attributi -> Virtuale (p.e. connettori a pettine, punti di test, parti meccaniche)"
+msgstr ""
+"Proprietà impronta -> Attributi -> Virtuale (p.e. connettori a pettine, "
+"punti di test, parti meccaniche)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:365
 msgid "Show &Layers"
@@ -21956,38 +21964,44 @@ msgid "Cannot create file '%s'"
 msgstr "Impossibile creare il file \"%s\""
 
 #: gerbview/class_gerber_draw_item.cpp:493
-msgid "D Code"
-msgstr "Codice D"
+#, c-format
+msgid "D Code %d"
+msgstr "Codice D %d"
 
 #: gerbview/class_gerber_draw_item.cpp:497
+msgid "No attribute"
+msgstr "Nessun attributo"
+
+#: gerbview/class_gerber_draw_item.cpp:505
 msgid "Graphic Layer"
 msgstr "Strato grafico"
 
-#: gerbview/class_gerber_draw_item.cpp:507
+#: gerbview/class_gerber_draw_item.cpp:515
 msgid "Clear"
 msgstr "Chiaro"
 
-#: gerbview/class_gerber_draw_item.cpp:507
+#: gerbview/class_gerber_draw_item.cpp:515
 msgid "Dark"
 msgstr "Scuro"
 
-#: gerbview/class_gerber_draw_item.cpp:508
+#: gerbview/class_gerber_draw_item.cpp:516
 #: gerbview/class_gerber_file_image.cpp:343
 msgid "Polarity"
 msgstr "Polarità"
 
-#: gerbview/class_gerber_draw_item.cpp:518
+#: gerbview/class_gerber_draw_item.cpp:526
 msgid "AB axis"
 msgstr "Asse AB"
 
-#: gerbview/class_gerber_draw_item.cpp:532
+#: gerbview/class_gerber_draw_item.cpp:538
 #, c-format
 msgid "Pad: '%s' (Cmp: '%s')"
 msgstr "Piazzola: '%s' (Cmp: '%s')"
 
-#: gerbview/class_gerber_draw_item.cpp:544
-msgid "Cmp reference:"
-msgstr "Riferimento cmp:"
+#: gerbview/class_gerber_draw_item.cpp:549
+#: gerbview/class_gerber_draw_item.cpp:556
+msgid "Ref:"
+msgstr "Rif:"
 
 #: gerbview/class_gerber_file_image.cpp:330
 msgid "Image name"
@@ -22215,15 +22229,15 @@ msgstr ""
 "La scheda esportata non ha sufficienti strati in rame per gestire gli strati "
 "interni"
 
-#: gerbview/rs274x.cpp:539
+#: gerbview/rs274x.cpp:555
 msgid "RS274X: Command \"IR\" rotation value not allowed"
 msgstr "RS274X: Comando \"IR\" valore di rotazione non consentito"
 
-#: gerbview/rs274x.cpp:630
+#: gerbview/rs274x.cpp:646
 msgid "RS274X: Command KNOCKOUT ignored by GerbView"
 msgstr "RS274X: Comando KNOCKOUT ignorato da Gerbview "
 
-#: gerbview/rs274x.cpp:693
+#: gerbview/rs274x.cpp:709
 msgid "Too many include files!!"
 msgstr "Inclusi troppi file!!"
 
