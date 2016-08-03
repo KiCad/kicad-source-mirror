@@ -143,15 +143,19 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
             for( unsigned ii = 0; ii < net->m_PadInNetList.size(); ii++ )
                 candidates.push_back( net->m_PadInNetList[ii] );
 
-            // Build the list of track candidates connected to the net:
-            TRACK* track = m_Track.GetFirst()->GetStartNetCode( netcode );
-
-            for( ; track; track = track->Next() )
+            // If we have any tracks...
+            if( m_Track.GetCount() > 0 )
             {
-                if( track->GetNetCode() != netcode )
-                    break;
+                // Build the list of track candidates connected to the net:
+                TRACK* track = m_Track.GetFirst()->GetStartNetCode( netcode );
 
-                candidates.push_back( track );
+                for( ; track; track = track->Next() )
+                {
+                    if( track->GetNetCode() != netcode )
+                        break;
+
+                    candidates.push_back( track );
+                }
             }
         }
 
@@ -307,12 +311,18 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
 
     // Build the list of track candidates connected to the net:
     TRACK* track;
-    track = aPcb->m_Track.GetFirst()->GetStartNetCode( aNetcode );
-    for( ; track; track = track->Next() )
+
+    if( aPcb->m_Track.GetCount() > 0 )
     {
-        if( track->GetNetCode() != aNetcode )
-            break;
-        Candidates.push_back( track );
+        track = aPcb->m_Track.GetFirst()->GetStartNetCode( aNetcode );
+
+        for( ; track; track = track->Next() )
+        {
+            if( track->GetNetCode() != aNetcode )
+                break;
+
+            Candidates.push_back( track );
+        }
     }
 
     if( Candidates.size() == 0 )
