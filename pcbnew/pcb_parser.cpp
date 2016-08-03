@@ -344,7 +344,7 @@ S3D_INFO* PCB_PARSER::parse3DModel() throw( PARSE_ERROR, IO_ERROR )
 
     S3D_INFO* n3D = new S3D_INFO;
     NeedSYMBOLorNUMBER();
-    n3D->m_Filename = FromUTF8().ToUTF8();
+    n3D->m_Filename = FromUTF8();
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
