@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #####################################
 #
@@ -23,7 +23,7 @@ data = []
 with open('i18n_status.csv', 'r') as csvfile:
     spamreader = csv.reader(csvfile, delimiter=';')
     for row in spamreader:
-        data.append(row) 
+        data.append(row)
 
 # Replace empyt values with zero and convert numbers to int
 for index,value in np.ndenumerate( data ):
