@@ -45,6 +45,8 @@ using namespace std::placeholders;
 
 using namespace KIGFX;
 
+// The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
+// (see ubuntu-font-licence-1.0.txt for details)
 #include "bitmap_font_img.c"
 #include "bitmap_font_desc.c"
 
