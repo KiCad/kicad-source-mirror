@@ -94,6 +94,13 @@ public:
 
     void UpdateModelName( wxString const& aModel );
 
+    /**
+     * @brief verify X,Y and Z scale factors are acceptable (> 0.001 and < 1000.0)
+     * @return false if one (or more) value is not acceptable.
+     * @param aErrorMessage is a wxString to store error messages, if any
+     */
+    bool Validate( wxString& aErrorMessage );
+
 private:
     wxString                currentModelFile;   ///< Used to check if the model file was changed
     S3D_FILENAME_RESOLVER   *m_resolver;        ///< Used to get the full path name

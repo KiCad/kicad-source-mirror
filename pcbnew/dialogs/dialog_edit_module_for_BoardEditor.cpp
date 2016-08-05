@@ -84,7 +84,7 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     m_OrientValidator.SetWindow( m_OrientValueCtrl );
 
     aParent->Prj().Get3DCacheManager()->GetResolver()->SetProgramBase( &Pgm() );
-    
+
     m_PreviewPane = new PANEL_PREV_3D( m_Panel3D,
                                        aParent->Prj().Get3DCacheManager(),
                                        m_currentModuleCopy,
@@ -538,7 +538,7 @@ void DIALOG_MODULE_BOARD_EDITOR::BrowseAndAdd3DShapeFile()
         long tmp;
         sidx.ToLong( &tmp );
 
-        if( tmp > 0 && tmp <= 0x7FFFFFFF )
+        if( tmp > 0 && tmp <= INT_MAX )
             filter = (int) tmp;
     }
 
@@ -715,6 +715,14 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
         m_CurrentModule->Flip( m_CurrentModule->GetPosition() );
 
     // This will update the S3D_INFO list into the current module
+    msg.Clear();
+
+    if( !m_PreviewPane->Validate( msg ) )   // Verify the validity of 3D parameters
+    {
+        DisplayError( this, msg );
+        return false;
+    }
+
     std::list<S3D_INFO>* draw3D = &m_CurrentModule->Models();
     draw3D->clear();
     draw3D->insert( draw3D->end(), m_shapes3D_list.begin(), m_shapes3D_list.end() );
