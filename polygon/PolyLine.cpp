@@ -420,7 +420,7 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
             double          denom   = sqrt( 2.0 / ( 1 + cosine ) - 1 );
 
             // Do nothing in case of parallel edges
-            if( std::isinf( denom ) )
+            if( !std::isfinite( denom ) )
                 continue;
 
             // Limit rounding distance to one half of an edge
