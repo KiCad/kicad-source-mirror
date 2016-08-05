@@ -428,11 +428,15 @@ TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
     return NULL;
 }
 
-
-void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
+void TOOL_MANAGER::DeactivateTool()
 {
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, "" );      // deactivate the active tool
     ProcessEvent( evt );
+}
+
+void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
+{
+    DeactivateTool();
 
     BOOST_FOREACH( TOOL_BASE* tool, m_toolState | boost::adaptors::map_keys )
     {

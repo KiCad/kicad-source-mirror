@@ -186,6 +186,12 @@ public:
     }
 
     /**
+     * Function DeactivateTool()
+     * Deactivates the currently active tool.
+     */
+    void DeactivateTool();
+
+    /**
      * Function ResetTools()
      * Resets all tools (i.e. calls their Reset() method).
      */
