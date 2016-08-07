@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-03 17:49+0300\n"
-"PO-Revision-Date: 2016-08-03 17:53+0300\n"
+"POT-Creation-Date: 2016-08-07 11:54+0300\n"
+"PO-Revision-Date: 2016-08-07 11:54+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -26,14 +26,13 @@ msgstr ""
 "X-Poedit-SearchPath-5: 3d-viewer\n"
 "X-Poedit-SearchPath-6: gerbview\n"
 "X-Poedit-SearchPath-7: bitmap2component\n"
-"X-Poedit-SearchPath-8: new\n"
-"X-Poedit-SearchPath-9: polygon\n"
-"X-Poedit-SearchPath-10: pcb_calculator\n"
-"X-Poedit-SearchPath-11: potrace\n"
-"X-Poedit-SearchPath-12: tools\n"
-"X-Poedit-SearchPath-13: pagelayout_editor\n"
-"X-Poedit-SearchPath-14: include\n"
-"X-Poedit-SearchPath-15: lib_dxf\n"
+"X-Poedit-SearchPath-8: polygon\n"
+"X-Poedit-SearchPath-9: pcb_calculator\n"
+"X-Poedit-SearchPath-10: potrace\n"
+"X-Poedit-SearchPath-11: tools\n"
+"X-Poedit-SearchPath-12: pagelayout_editor\n"
+"X-Poedit-SearchPath-13: include\n"
+"X-Poedit-SearchPath-14: lib_dxf\n"
 
 #: 3d-viewer/3d_cache/3d_cache.cpp:526
 msgid "path exists but is not a regular file"
@@ -2357,7 +2356,7 @@ msgstr "неправильный символ найден в FPID строке"
 msgid "Illegal character found in logical library name"
 msgstr "неправильный символ найден в логическом имени библиотеки"
 
-#: common/fpid.cpp:323 new/sch_lpid.cpp:440
+#: common/fpid.cpp:323
 msgid "Illegal character found in revision"
 msgstr "неправильный символ найден в ревизии"
 
@@ -10902,86 +10901,6 @@ msgstr "Изменить имя файла: '%s'"
 #: kicad/tree_project_frame.cpp:761
 msgid "Change filename"
 msgstr "Изменить имя файла"
-
-#: new/sch_lib.cpp:237
-#, c-format
-msgid "part '%s' not found in lib %s"
-msgstr "компонент '%s' не найден в библиотеке '%s'"
-
-#: new/sch_lpid.cpp:208
-msgid "Illegal character found in LPID string"
-msgstr "Недопустимый символ найден в LPID строке"
-
-#: new/sch_lpid.cpp:375
-msgid "Illegal character found in logical lib name"
-msgstr "Недопустимый символ найден в  имени логической библиотеки"
-
-#: new/sch_lpid.cpp:406
-msgid "Illegal character found in category"
-msgstr "Недопустимый символ найден в категории"
-
-#: new/sch_lpid.cpp:417
-msgid "Illegal character found in base name"
-msgstr "Недопустимый символ найден в основном имени"
-
-#: new/sch_sweet_parser.cpp:338
-msgid "invalid extends LPID"
-msgstr "неверное расширение LPID"
-
-#: new/sch_sweet_parser.cpp:354
-msgid "'extends' may not have self as any ancestor"
-msgstr "'extends' не может иметь себя как и любой предок"
-
-#: new/sch_sweet_parser.cpp:364
-msgid "max allowed extends depth exceeded"
-msgstr "превышено максимально допустимое расширение глубины"
-
-#: new/sch_sweet_parser.cpp:392
-msgid "invalid alternates LPID"
-msgstr "неверная альтернатива LPID"
-
-#: new/sch_sweet_parser.cpp:709 new/sch_sweet_parser.cpp:748
-#: new/sch_sweet_parser.cpp:761 new/sch_sweet_parser.cpp:790
-#: new/sch_sweet_parser.cpp:821
-msgid "undefined pin"
-msgstr "не определённый вывод"
-
-#: new/sch_sweet_parser.cpp:852 new/sch_sweet_parser.cpp:949
-#, c-format
-msgid "undefined pin %s"
-msgstr "не определённый вывод %s"
-
-#: new/sch_sweet_parser.cpp:862 new/sch_sweet_parser.cpp:959
-#, c-format
-msgid "pin %s already in pin_merge group %s"
-msgstr "вывод %s уже в pin_merge группе %s"
-
-#: new/sch_sweet_parser.cpp:903
-#, c-format
-msgid "no pins with signal %s"
-msgstr "нет выводов с сигналом %s"
-
-#: new/sch_sweet_parser.cpp:915
-#, c-format
-msgid "signal pin %s already in pin_merge group %s"
-msgstr "сигнальный вывод %s уже в pin_merge группе %s"
-
-#: new/sch_sweet_parser.cpp:998
-#, c-format
-msgid "Unable to find property: %s"
-msgstr "Невозможно найти свойство: %s"
-
-#: new/sweet_editor_panel.cpp:31
-msgid "Sweet"
-msgstr "Сладкий"
-
-#: new/sweet_editor_panel.cpp:42
-msgid "Visual Part"
-msgstr "Визуальная часть"
-
-#: new/sweet_editor_panel.cpp:59
-msgid "Parsing Errors"
-msgstr "Ошибки разбора"
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:28
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:218
@@ -23731,12 +23650,6 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Импорт DXF файла"
-
-#~ msgid "D Code"
-#~ msgstr "D-коды"
-
-#~ msgid "Cmp reference:"
-#~ msgstr "Обозначение компонента:"
 
 #~ msgid "The Internet forum dedicated to KiCad Russian support, including GOST support"
 #~ msgstr ""
