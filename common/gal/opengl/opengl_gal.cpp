@@ -1615,8 +1615,8 @@ void CALLBACK VertexCallback( GLvoid* aVertexPtr, void* aData )
     OPENGL_GAL::TessParams* param = static_cast<OPENGL_GAL::TessParams*>( aData );
     VERTEX_MANAGER* vboManager = param->vboManager;
 
-    if( vboManager )
-        vboManager->Vertex( vertex[0], vertex[1], vertex[2] );
+    assert( vboManager );
+    vboManager->Vertex( vertex[0], vertex[1], vertex[2] );
 }
 
 

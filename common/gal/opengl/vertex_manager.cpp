@@ -239,12 +239,9 @@ void VERTEX_MANAGER::BeginDrawing() const
 void VERTEX_MANAGER::DrawItem( const VERTEX_ITEM& aItem ) const
 {
     int size = aItem.GetSize();
+    int offset = aItem.GetOffset();
 
-    if( size > 0 )
-    {
-        int offset = aItem.GetOffset();
-        m_gpu->DrawIndices( offset, size );
-    }
+    m_gpu->DrawIndices( offset, size );
 }
 
 

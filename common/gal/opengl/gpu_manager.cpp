@@ -136,8 +136,9 @@ void GPU_CACHED_MANAGER::DrawAll()
 {
     wxASSERT( m_isDrawing );
 
-    m_indicesSize = m_container->GetSize();
     for( unsigned int i = 0; i < m_indicesSize; *m_indicesPtr++ = i++ );
+
+    m_indicesSize = m_container->GetSize();
 }
 
 
