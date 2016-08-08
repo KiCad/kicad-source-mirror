@@ -449,8 +449,7 @@ int TOOL_MANAGER::GetPriority( int aToolId ) const
 {
     int priority = 0;
 
-    for( std::deque<int>::const_iterator it = m_activeTools.begin(),
-            itEnd = m_activeTools.end(); it != itEnd; ++it )
+    for( auto it = m_activeTools.begin(), itEnd = m_activeTools.end(); it != itEnd; ++it )
     {
         if( *it == aToolId )
             return priority;
@@ -657,7 +656,7 @@ bool TOOL_MANAGER::finishTool( TOOL_STATE* aState, bool aDeactivate )
     if( !aState->Pop() )        // if there are no other contexts saved on the stack
     {
         // find the tool and deactivate it
-        std::deque<TOOL_ID>::iterator tool = std::find( m_activeTools.begin(), m_activeTools.end(),
+        auto tool = std::find( m_activeTools.begin(), m_activeTools.end(),
                                                         aState->theTool->GetId() );
 
         if( tool != m_activeTools.end() )
