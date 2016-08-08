@@ -296,23 +296,9 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
             return false;
     }
 
-    // Look for the free space chunk of at least given size
+    // Find a free space chunk >= aSize
     FREE_CHUNK_MAP::iterator newChunk = m_freeChunks.lower_bound( aSize );
-
-    if( newChunk == m_freeChunks.end() )
-    {
-        // In the case when there is enough space to store the vertices,
-        // but the free space is not continous we should defragment the container
-        if( !defragmentResize( m_currentSize ) )
-            return false;
-
-        // Update the current offset
-        m_chunkOffset = m_item->GetOffset();
-
-        // We can take the first free chunk, as there is only one after defragmentation
-        // and we can be sure that it provides enough space to store the object
-        newChunk = m_freeChunks.begin();
-    }
+    assert( newChunk != m_freeChunks.end() );
 
     // Parameters of the allocated chunk
     unsigned int newChunkSize   = getChunkSize( *newChunk );
@@ -420,7 +406,7 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
             wxT( "Resizing & defragmenting container from %d to %d" ), m_currentSize, aNewSize );
 
     // No shrinking if we cannot fit all the data
-    if( aNewSize < m_currentSize && usedSpace() > aNewSize )
+    if( usedSpace() > aNewSize )
         return false;
 
 #ifdef __WXDEBUG__
@@ -447,37 +433,36 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
     glBufferData( GL_ELEMENT_ARRAY_BUFFER, aNewSize * VertexSize, NULL, GL_DYNAMIC_DRAW );
     checkGlError( "creating buffer during defragmentation" );
 
-    // Special case: the container is either already defragmented or filled up to its capacity,
-    // so we just resize it and move the current data
-    if( ( m_freeChunks.size() == 0 )
-        || ( m_freeChunks.size() == 1 && m_freeChunks.begin()->second == usedSpace() ) )
-    {
-        assert( aNewSize != m_currentSize );
+    ITEMS::iterator it, it_end;
+    int newOffset = 0;
 
+    // Defragmentation
+    for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
+    {
+        VERTEX_ITEM* item = *it;
+        int itemOffset    = item->GetOffset();
+        int itemSize      = item->GetSize();
+
+        // Move an item to the new container
         glCopyBufferSubData( GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
-                0, 0, usedSpace() * VertexSize );
+                itemOffset * VertexSize, newOffset * VertexSize, itemSize * VertexSize );
+
+        // Update new offset
+        item->setOffset( newOffset );
+
+        // Move to the next free space
+        newOffset += itemSize;
     }
-    else
+
+    // Move the current item and place it at the end
+    if( m_item->GetSize() > 0 )
     {
-        int newOffset = 0;
-        ITEMS::iterator it, it_end;
+        glCopyBufferSubData( GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
+                m_item->GetOffset() * VertexSize, newOffset * VertexSize,
+                m_item->GetSize() * VertexSize );
 
-        for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
-        {
-            VERTEX_ITEM* item = *it;
-            int itemOffset    = item->GetOffset();
-            int itemSize      = item->GetSize();
-
-            // Move an item to the new container
-            glCopyBufferSubData( GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
-                    itemOffset * VertexSize, newOffset * VertexSize, itemSize * VertexSize );
-
-            // Update new offset
-            item->setOffset( newOffset );
-
-            // Move to the next free space
-            newOffset += itemSize;
-        }
+        m_item->setOffset( newOffset );
+        m_chunkOffset = newOffset;
     }
 
     // Cleanup
@@ -547,34 +532,33 @@ bool CACHED_CONTAINER::defragmentResizeMemcpy( unsigned int aNewSize )
     newBufferMem = static_cast<VERTEX*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY ) );
     checkGlError( "creating buffer during defragmentation" );
 
-    // Special case: the container is either already defragmented or filled up to its capacity,
-    // so we just resize it and move the current data
-    if( ( m_freeChunks.size() == 0 )
-        || ( m_freeChunks.size() == 1 && m_freeChunks.begin()->second == usedSpace() ) )
+    // Defragmentation
+    ITEMS::iterator it, it_end;
+    int newOffset = 0;
+
+    for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
     {
-        assert( aNewSize != m_currentSize );
-        memcpy( newBufferMem, m_vertices, usedSpace() * VertexSize );
+        VERTEX_ITEM* item = *it;
+        int itemOffset    = item->GetOffset();
+        int itemSize      = item->GetSize();
+
+        // Move an item to the new container
+        memcpy( &newBufferMem[newOffset], &m_vertices[itemOffset], itemSize * VertexSize );
+
+        // Update new offset
+        item->setOffset( newOffset );
+
+        // Move to the next free space
+        newOffset += itemSize;
     }
-    else
+
+    // Move the current item and place it at the end
+    if( m_item->GetSize() > 0 )
     {
-        ITEMS::iterator it, it_end;
-        int newOffset = 0;
-
-        for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
-        {
-            VERTEX_ITEM* item = *it;
-            int itemOffset    = item->GetOffset();
-            int itemSize      = item->GetSize();
-
-            // Move an item to the new container
-            memcpy( &newBufferMem[newOffset], &m_vertices[itemOffset], itemSize * VertexSize );
-
-            // Update new offset
-            item->setOffset( newOffset );
-
-            // Move to the next free space
-            newOffset += itemSize;
-        }
+        memcpy( &newBufferMem[newOffset], &m_vertices[m_item->GetOffset()],
+                m_item->GetSize() * VertexSize );
+        m_item->setOffset( newOffset );
+        m_chunkOffset = newOffset;
     }
 
     // Cleanup
