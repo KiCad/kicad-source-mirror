@@ -1,2 +1,2 @@
 [core]
-	excludesfile .bzrignore
+    excludesfile = .bzrignore
