@@ -66,7 +66,13 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     SwitchBackend( aGalType );
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
+    
+// Scrollbars broken in GAL on OSX
+#ifdef __WXMAC__
+    ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
+#else
     ShowScrollbars( wxSHOW_SB_ALWAYS, wxSHOW_SB_ALWAYS );
+#endif
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
     m_painter = new KIGFX::PCB_PAINTER( m_gal );
@@ -144,7 +150,11 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     m_drawing = true;
 
+// Scrollbars broken in GAL on OSX
+#ifndef __WXMAC__
     m_viewControls->UpdateScrollbars();
+#endif
+
     m_view->UpdateItems();
     m_gal->BeginDrawing();
     m_gal->ClearScreen( m_painter->GetSettings()->GetBackgroundColor() );
