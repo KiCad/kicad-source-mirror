@@ -151,7 +151,9 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
 {
     wxString reportName;
 
-    if( m_CreateRptCtrl->IsChecked() )      // Create a file rpt
+    bool make_report = m_CreateRptCtrl->IsChecked();
+
+    if( make_report )      // Create a rpt file
     {
         reportName = m_RptFilenameCtrl->GetValue();
 
@@ -160,16 +162,17 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
             wxCommandEvent dummy;
             OnButtonBrowseRptFileClick( dummy );
         }
-    }
 
-    reportName = makeValidFileNameReport();
+        if( !reportName.IsEmpty() )
+            reportName = makeValidFileNameReport();
+    }
 
     SetDrcParmeters();
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
-                           true,        // unconnected pdas DRC test enabled
+                           true,        // unconnected pads DRC test enabled
                            true,        // DRC test for zones enabled
                            true,        // DRC test for keepout areas enabled
-                           reportName, m_CreateRptCtrl->IsChecked() );
+                           reportName, make_report );
 
     DelDRCMarkers();
 
@@ -217,7 +220,9 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
 {
     wxString reportName;
 
-    if( m_CreateRptCtrl->IsChecked() )      // Create a file rpt
+    bool make_report = m_CreateRptCtrl->IsChecked();
+
+    if( make_report )      // Create a file rpt
     {
         reportName = m_RptFilenameCtrl->GetValue();
 
@@ -226,17 +231,18 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
             wxCommandEvent junk;
             OnButtonBrowseRptFileClick( junk );
         }
-    }
 
-    reportName = makeValidFileNameReport();
+        if( !reportName.IsEmpty() )
+            reportName = makeValidFileNameReport();
+    }
 
     SetDrcParmeters();
 
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
-                           true,        // unconnected pdas DRC test enabled
+                           true,        // unconnected pads DRC test enabled
                            true,        // DRC test for zones enabled
                            true,        // DRC test for keepout areas enabled
-                           reportName, m_CreateRptCtrl->IsChecked() );
+                           reportName, make_report );
 
     DelDRCMarkers();
 
@@ -271,22 +277,15 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_BROWSE_RPT_FILE
- */
-
 void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& event )
 {
-    wxFileName fn;
-    wxString   wildcard( _( "DRC report files (.rpt)|*.rpt" ) );
-    wxString   Ext( wxT( "rpt" ) );
+    wxFileName fn = m_Parent->GetBoard()->GetFileName();
+    fn.SetExt( ReportFileExtension );
+    wxString prj_path =  Prj().GetProjectPath();
 
-    fn = m_Parent->GetBoard()->GetFileName() + wxT( "-drc" );
-    fn.SetExt( Ext );
-
-    wxFileDialog dlg( this, _( "Save DRC Report File" ), wxEmptyString,
-                      fn.GetFullName(), wildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR );
+    wxFileDialog dlg( this, _( "Save DRC Report File" ), prj_path,
+                      fn.GetFullName(), ReportFileWildcard,
+                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
