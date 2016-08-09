@@ -24,7 +24,7 @@
  */
 
 #include <map>
-#include <deque>
+#include <list>
 #include <stack>
 #include <algorithm>
 
@@ -450,7 +450,7 @@ int TOOL_MANAGER::GetPriority( int aToolId ) const
 {
     int priority = 0;
 
-    for( std::deque<int>::const_iterator it = m_activeTools.begin(),
+    for( std::list<TOOL_ID>::const_iterator it = m_activeTools.begin(),
             itEnd = m_activeTools.end(); it != itEnd; ++it )
     {
         if( *it == aToolId )
@@ -494,12 +494,12 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
     // iterate over all registered tools
-    for( std::deque<TOOL_ID>::iterator it = m_activeTools.begin();
+    for( std::list<TOOL_ID>::iterator it = m_activeTools.begin();
             it != m_activeTools.end(); /* iteration is done inside */)
     {
-        std::deque<TOOL_ID>::iterator curIt = it;
+        std::list<TOOL_ID>::iterator curIt = it;
         TOOL_STATE* st = m_toolIdIndex[*it];
-        ++it;       // it might be overwritten, if the tool is removed the m_activeTools deque
+        ++it;       // it might be overwritten, if the tool is removed the m_activeTools list
 
         // the tool state handler is waiting for events (i.e. called Wait() method)
         if( st->pendingWait )
@@ -657,7 +657,7 @@ bool TOOL_MANAGER::finishTool( TOOL_STATE* aState, bool aDeactivate )
     if( !aState->Pop() )        // if there are no other contexts saved on the stack
     {
         // find the tool and deactivate it
-        std::deque<TOOL_ID>::iterator tool = std::find( m_activeTools.begin(), m_activeTools.end(),
+        std::list<TOOL_ID>::iterator tool = std::find( m_activeTools.begin(), m_activeTools.end(),
                                                         aState->theTool->GetId() );
 
         if( tool != m_activeTools.end() )
