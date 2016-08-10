@@ -247,19 +247,20 @@ static int find_vias_and_tracks_at( TRACKS& at_next, TRACKS& in_net, LSET& lset,
     int track_count = 0;
 
     // with expanded lset, find all tracks with an end on any of the layers in lset
-    for( TRACKS::iterator it = in_net.begin();  it != in_net.end();  )
+    for( TRACKS::iterator it = in_net.begin();  it != in_net.end(); /* iterates in the loop body */ )
     {
         TRACK* t = *it;
 
-        if( (t->GetLayerSet() & lset).any() &&
-            ( t->GetStart() == next || t->GetEnd() == next ) )
+        if( ( t->GetLayerSet() & lset ).any() && ( t->GetStart() == next || t->GetEnd() == next ) )
         {
             at_next.push_back( t );
-            in_net.erase( it );
+            it = in_net.erase( it );
             ++track_count;
         }
         else
+        {
             ++it;
+        }
     }
 
     return track_count;
