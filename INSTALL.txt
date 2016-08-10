@@ -120,6 +120,8 @@ python               >= 2.6 (optional) http://python.org/
 
 wxPython             (optional)        http://www.wxpython.org/
 
+SWIG                 >= 3.0 (optional) http://swig.org/
+
 In source-tree-build are mostly unwanted, so make a subdir called "build" and
 change to it.
 
