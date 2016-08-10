@@ -252,3 +252,24 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
 
     init();
 }
+
+
+void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath )
+{
+    wxASSERT( aField != NULL || aField->Type() != SCH_FIELD_T );
+
+    if( aField->GetId() == REFERENCE )
+    {
+        wxASSERT( aSheetPath != NULL );
+
+        SCH_COMPONENT* component = dynamic_cast< SCH_COMPONENT* >( aField->GetParent() );
+
+        wxASSERT( component != NULL );
+
+        if( component != NULL )
+            component->SetRef( aSheetPath, m_text );
+    }
+
+    aField->SetText( m_text );
+    updateText( aField );
+}
