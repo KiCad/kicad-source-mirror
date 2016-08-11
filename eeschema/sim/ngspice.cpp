@@ -248,6 +248,31 @@ bool NGSPICE::Command( const string& aCmd )
 }
 
 
+string NGSPICE::GetXAxis( SIM_TYPE aType ) const
+{
+    switch( aType )
+    {
+        case ST_AC:
+        case ST_NOISE:
+            return string( "frequency" );
+            break;
+
+        case ST_DC:
+            return string( "v-sweep" );
+            break;
+
+        case ST_TRANSIENT:
+            return string( "time" );
+            break;
+
+        default:
+            break;
+    }
+
+    return string( "" );
+}
+
+
 void NGSPICE::dump()
 {
 //    m_ngSpice_Command("run\n");

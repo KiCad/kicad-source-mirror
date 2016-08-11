@@ -42,6 +42,7 @@ public:
     bool Stop() override;
     bool IsRunning() override;
     bool Command( const std::string& aCmd ) override;
+    std::string GetXAxis( SIM_TYPE aType ) const override;
 
     std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) override;
     std::vector<double> GetRealPlot( const std::string& aName, int aMaxLen = -1 ) override;

@@ -25,6 +25,8 @@
 #ifndef SPICE_SIMULATOR_H
 #define SPICE_SIMULATOR_H
 
+#include "sim_types.h"
+
 #include <string>
 #include <vector>
 #include <complex>
@@ -47,6 +49,9 @@ public:
     virtual bool Stop() = 0;
     virtual bool IsRunning() = 0;
     virtual bool Command( const std::string& aCmd ) = 0;
+
+    ///> Returns X axis name for a given simulation type
+    virtual std::string GetXAxis( SIM_TYPE aType ) const = 0;
 
     virtual void SetReporter( SPICE_REPORTER* aReporter )
     {
