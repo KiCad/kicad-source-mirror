@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 17 2016)
+// C++ code generated with wxFormBuilder (version Jun 24 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -143,7 +143,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 410,705 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 497,719 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~DIALOG_SPICE_MODEL_BASE();
 	
 };

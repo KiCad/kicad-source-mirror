@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_SPICE_MODEL_BASE</property>
             <property name="pos"></property>
-            <property name="size">410,705</property>
+            <property name="size">497,719</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title"></property>
