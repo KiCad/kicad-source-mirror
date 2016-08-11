@@ -237,6 +237,44 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 }
 
 
+TRACE_DESC::TRACE_DESC( const wxString& aDescription )
+    : m_name( aDescription )
+{
+    for( const auto& desc : m_descMap )
+    {
+        if( m_name.EndsWith( desc.second ) )
+        {
+            m_type = desc.first;
+            m_name.Replace( desc.second, "" );
+        }
+    }
+}
+
+
+wxString TRACE_DESC::GetDescription() const
+{
+    wxString res( m_name );
+
+    for( const auto& desc : m_descMap )
+    {
+        if( m_type == desc.first )
+        {
+            res += desc.second;
+            break;
+        }
+    }
+
+    return res;
+}
+
+
+const std::map<SIM_PLOT_FLAGS, wxString> TRACE_DESC::m_descMap =
+{
+    { SPF_AC_PHASE, wxT( " (phase)" ) },
+    { SPF_AC_MAG, wxT( " (mag)" ) }
+};
+
+
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id, const wxPoint& pos,
                 const wxSize& size, long style, const wxString& name )
     : mpWindow( parent, id, pos, size, style ), m_colorIdx( 0 ),
@@ -341,8 +379,15 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
 {
     TRACE* t = NULL;
 
+    wxString name( aName );
+
+    if( aFlags == SPF_AC_MAG )
+        name += " (mag)";
+    else if( aFlags == SPF_AC_PHASE )
+        name += " (phase)";
+
     // Find previous entry, if there is one
-    auto prev = m_traces.find( aName );
+    auto prev = m_traces.find( TRACE_DESC( aName, (SIM_PLOT_FLAGS) aFlags ) );
     bool addedNewEntry = ( prev == m_traces.end() );
 
     if( addedNewEntry )
@@ -351,18 +396,18 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
         switch ( m_type )
         {
             case ST_TRANSIENT:
-                t = new TRACE_TRANSIENT( aName, aSpiceName );
+                t = new TRACE_TRANSIENT( name, aSpiceName );
                 break;
             case ST_AC:
                 //printf("makeFreqResp!\n");
-                t = new TRACE_FREQ_RESPONSE( aName, aSpiceName );
+                t = new TRACE_FREQ_RESPONSE( name, aSpiceName );
                 break;
             default:
                 assert(false);
         }
 
         t->SetPen( wxPen( generateColor(), 2, wxSOLID ) );
-        m_traces[aName] = t;
+        m_traces[TRACE_DESC( aName, (SIM_PLOT_FLAGS) aFlags )] = t;
 
         // It is a trick to keep legend & coords always on the top
         for( mpLayer* l : m_topLevel )
@@ -409,7 +454,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
 
 bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
 {
-    auto it = m_traces.find( aName );
+    auto it = m_traces.find( TRACE_DESC( aName ) );
 
     if( it != m_traces.end() )
     {
@@ -432,7 +477,7 @@ void SIM_PLOT_PANEL::DeleteAllTraces()
 {
     for( auto& t : m_traces )
     {
-        DeleteTrace( t.first );
+        DeleteTrace( t.first.GetDescription() );
     }
 
     m_traces.clear();

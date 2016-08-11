@@ -304,8 +304,8 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aNa
             if( data_mag.empty() || data_phase.empty() )
                 return false;
 
-            aPanel->AddTrace( aSpiceName, aName + " (mag)", size, data_x.data(), data_mag.data(), 0 );
-            aPanel->AddTrace( aSpiceName, aName + " (phase)", size, data_x.data(), data_phase.data(), SPF_AC_PHASE );
+            aPanel->AddTrace( aSpiceName, aName, size, data_x.data(), data_mag.data(), SPF_AC_MAG );
+            aPanel->AddTrace( aSpiceName, aName, size, data_x.data(), data_phase.data(), SPF_AC_PHASE );
         }
         break;
 
@@ -429,7 +429,7 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
             timeWritten = true;
         }
 
-        out.Write( wxString::Format( "%s%c", t.first, SEPARATOR ) );
+        out.Write( wxString::Format( "%s%c", t.first.GetDescription(), SEPARATOR ) );
 
         for( double v : trace->GetDataY() )
             out.Write( wxString::Format( "%f%c", v, SEPARATOR ) );
@@ -612,7 +612,7 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
         if( CURSOR* cursor = trace.second->GetCursor() )
         {
             const wxRealPoint coords = cursor->GetCoords();
-            long idx = m_cursors->InsertItem( SIGNAL_COL, trace.first );
+            long idx = m_cursors->InsertItem( SIGNAL_COL, trace.first.GetDescription() );
             m_cursors->SetItem( idx, X_COL, wxString::Format( "%f", coords.x ) );
             m_cursors->SetItem( idx, Y_COL, wxString::Format( "%f", coords.y ) );
         }
@@ -646,7 +646,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     if( SIM_PLOT_PANEL::IsPlottable( simType ) )
     {
         for( const auto& trace : plotPanel->GetTraces() )
-            updatePlot( trace.second->GetSpiceName(), trace.second->GetName(), plotPanel );
+            updatePlot( trace.second->GetSpiceName(), trace.first.GetName(), plotPanel );
 
         plotPanel->UpdateAll();
     }
