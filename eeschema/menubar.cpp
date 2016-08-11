@@ -497,7 +497,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Simulator
     AddMenuItem( toolsMenu,
                  ID_SIM_SHOW,
-                 _("Simula&te"), _( "Simulate the circuit" ),
+                 _("Simula&tor"), _( "Simulate the circuit" ),
                  wxNullBitmap );
 
     // Help Menu:
