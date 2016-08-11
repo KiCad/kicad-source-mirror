@@ -105,7 +105,6 @@ public:
 
     const wxString getLabel( int n )
     {
-        printf("%.10f\n", m_labeledTicks[n] );
         return formatSI ( m_labeledTicks[n], wxT("Hz"), 2 );
     }
 };
@@ -119,7 +118,6 @@ public:
 
     const wxString getLabel( int n )
     {
-        printf("%.10f\n", m_labeledTicks[n] );
         return formatSI ( m_labeledTicks[n], wxT("Hz"), 2 );
     }
 };
@@ -305,7 +303,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     switch( m_type )
     {
         case ST_AC:
-            m_axis_x = new FREQUENCY_LIN_SCALE( wxT( "Frequency" ), mpALIGN_BOTTOM );
+            m_axis_x = new FREQUENCY_LOG_SCALE( wxT( "Frequency" ), mpALIGN_BOTTOM );
             m_axis_y1 = new GAIN_SCALE( wxT( "Gain" ), mpALIGN_LEFT );
             m_axis_y2 = new PHASE_SCALE( wxT( "Phase" ), mpALIGN_RIGHT );
             m_axis_y2->SetMasterScale(m_axis_y1);
@@ -354,7 +352,9 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     m_legend = new mpInfoLegend( wxRect( 0, 40, 200, 40 ), wxTRANSPARENT_BRUSH );
     AddLayer( m_legend );
     m_topLevel.push_back( m_legend );
+    SetColourTheme(*wxBLACK, *wxWHITE, grey);
 
+    EnableDoubleBuffer(true);
     UpdateAll();
 }
 

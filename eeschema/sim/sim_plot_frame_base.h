@@ -54,15 +54,17 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxSplitterWindow* m_splitterPlot;
 		wxPanel* m_panel2;
 		wxSplitterWindow* m_splitterConsole;
-		wxPanel* m_panel4;
+		wxPanel* m_plotPanel;
 		wxNotebook* m_plotNotebook;
 		wxPanel* m_welcomePanel;
 		wxStaticText* m_staticText2;
 		wxPanel* m_panel5;
 		wxTextCtrl* m_simConsole;
-		wxPanel* m_panel31;
+		wxPanel* m_sidePanel;
+		wxBoxSizer* m_sideSizer;
 		wxListBox* m_signals;
 		wxListCtrl* m_cursors;
+		wxStaticBoxSizer* sbSizer4;
 		wxBoxSizer* m_tuneSizer;
 		
 		// Virtual event handlers, overide them in your derived class

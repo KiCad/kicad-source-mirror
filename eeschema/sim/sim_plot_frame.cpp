@@ -137,14 +137,12 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     GetSize( &w, &h );
 
-    printf("%d %d\n", w, h);
-
     m_toolBar->Realize();
 
-    Layout();
-
     m_splitterConsole->SetSashPosition( w * 0.8 );
-    m_splitterPlot->SetSashPosition( h *0.8 );
+    m_splitterPlot->SetSashPosition( h * 0.8 );
+
+    Layout();
 }
 
 
@@ -182,7 +180,7 @@ void SIM_PLOT_FRAME::StartSimulation()
 
     m_welcomePanel->Show(false);
     m_plotNotebook->Show(true);
-    m_plotNotebook->Raise();
+    m_plotNotebook->Fit();
 
     Layout();
 }
@@ -252,9 +250,12 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
 
     try
     {
-        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, aComponent );
-        m_tuneSizer->Add( tuner );
+        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_sidePanel, aComponent );
+        m_tuneSizer->Add( tuner , 0, wxALL, 5 );
         tunerList.push_back( tuner );
+        m_sidePanel->Layout();
+        m_sideSizer->Fit( m_sidePanel );
+        m_splitterPlot->Layout();
         Layout();
     }
     catch( ... )
@@ -318,7 +319,13 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
     if( updated )
     {
         updateSignalList();
+        plotPanel->Layout();
         plotPanel->Fit();
+        m_plotPanel->Layout();
+        //m_sideSizer->Fit( m_sidePanel );
+        m_splitterPlot->Layout();
+        Layout();
+
     }
 }
 
@@ -799,7 +806,7 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
                     + "=" + tuner->GetValue().ToSpiceString() );
             m_simulator->Command( command );
 
-            printf("CMD: %s\n", command.c_str() );
+//            printf("CMD: %s\n", command.c_str() );
         }
     }
 
