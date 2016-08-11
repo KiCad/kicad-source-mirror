@@ -133,7 +133,7 @@
                 <event name="OnSetFocus"></event>
                 <event name="OnSize"></event>
                 <event name="OnUpdateUI"></event>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">File</property>
                     <property name="name">m_fileMenu</property>
                     <property name="permission">protected</property>
@@ -145,7 +145,7 @@
                         <property name="id">wxID_NEW</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">New Plot</property>
-                        <property name="name">m_menuItem7</property>
+                        <property name="name">m_newPlot</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
@@ -164,7 +164,7 @@
                         <property name="id">wxID_OPEN</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Open Workbook</property>
-                        <property name="name">m_menuItem8</property>
+                        <property name="name">m_openWorkbook</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
@@ -179,7 +179,7 @@
                         <property name="id">wxID_SAVE</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Save Workbook</property>
-                        <property name="name">m_menuItem2</property>
+                        <property name="name">m_saveWorkbook</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
@@ -190,6 +190,40 @@
                         <property name="name">m_separator1</property>
                         <property name="permission">none</property>
                     </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Save as image</property>
+                        <property name="name">m_saveImage</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">menuSaveImage</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Save as .csv file</property>
+                        <property name="name">m_saveCsv</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">menuSaveCsv</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="separator" expanded="1">
+                        <property name="name">m_separator4</property>
+                        <property name="permission">none</property>
+                    </object>
                     <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
@@ -198,7 +232,7 @@
                         <property name="id">wxID_CLOSE</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Exit Simulation</property>
-                        <property name="name">m_menuItem1</property>
+                        <property name="name">m_exitSim</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
@@ -274,7 +308,7 @@
                         <event name="OnMenuSelection">menuShowGrid</event>
                         <event name="OnUpdateUI">menuShowGridUpdate</event>
                     </object>
-                    <object class="wxMenuItem" expanded="1">
+                    <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>
@@ -289,7 +323,7 @@
                         <event name="OnMenuSelection">menuShowLegend</event>
                         <event name="OnUpdateUI">menuShowLegendUpdate</event>
                     </object>
-                    <object class="wxMenuItem" expanded="1">
+                    <object class="wxMenuItem" expanded="0">
                         <property name="bitmap"></property>
                         <property name="checked">0</property>
                         <property name="enabled">1</property>

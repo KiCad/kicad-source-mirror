@@ -92,6 +92,8 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         }
 
         // Event handlers
+        void menuSaveImage( wxCommandEvent& event ) override;
+        void menuSaveCsv( wxCommandEvent& event ) override;
         void menuZoomIn( wxCommandEvent& event ) override;
         void menuZoomOut( wxCommandEvent& event ) override;
         void menuZoomFit( wxCommandEvent& event ) override;

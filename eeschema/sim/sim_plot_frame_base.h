@@ -60,6 +60,8 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuNewPlot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuOpenWorkbook( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuSaveWorkbook( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuSaveImage( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuSaveCsv( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuExit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuZoomIn( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuZoomOut( wxCommandEvent& event ) { event.Skip(); }

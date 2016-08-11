@@ -185,6 +185,58 @@ int SIM_PLOT_FRAME::getNodeNumber( const wxString& aNetName )
 }
 
 
+void SIM_PLOT_FRAME::menuSaveImage( wxCommandEvent& event )
+{
+    wxFileDialog saveDlg( this, wxT( "Save plot as image" ), "", "",
+                "PNG file (*.png)|*.png", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+    if( saveDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    CurrentPlot()->SaveScreenshot( saveDlg.GetPath(), wxBITMAP_TYPE_PNG );
+}
+
+
+void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
+{
+    const wxChar SEPARATOR = ';';
+
+    wxFileDialog saveDlg( this, wxT( "Save plot data" ), "", "",
+                "CSV file (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+    if( saveDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxFile out( saveDlg.GetPath(), wxFile::write );
+    bool timeWritten = false;
+
+    for( const auto& t : CurrentPlot()->GetTraces() )
+    {
+        const TRACE* trace = t.second;
+
+        if( !timeWritten )
+        {
+            out.Write( wxString::Format( "Time%c", SEPARATOR ) );
+
+            for( double v : trace->GetDataX() )
+                out.Write( wxString::Format( "%f%c", v, SEPARATOR ) );
+
+            out.Write( "\r\n" );
+            timeWritten = true;
+        }
+
+        out.Write( wxString::Format( "%s%c", t.first, SEPARATOR ) );
+
+        for( double v : trace->GetDataY() )
+            out.Write( wxString::Format( "%f%c", v, SEPARATOR ) );
+
+        out.Write( "\r\n" );
+    }
+
+    out.Close();
+}
+
+
 void SIM_PLOT_FRAME::menuZoomIn( wxCommandEvent& event )
 {
     CurrentPlot()->ZoomIn();
