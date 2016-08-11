@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 24 2016)
+// C++ code generated with wxFormBuilder (version Jul 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,6 +28,7 @@ class DIALOG_SHIM;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/statbox.h>
 #include <wx/listctrl.h>
 #include <wx/notebook.h>
 #include <wx/radiobox.h>
@@ -66,14 +67,13 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_icLib;
 		wxButton* m_icSelectLib;
 		wxPanel* m_power;
-		wxNotebook* m_powerNotebook;
-		wxPanel* m_pwrGeneric;
 		wxStaticText* m_staticText10;
 		wxTextCtrl* m_genDc;
 		wxStaticText* m_staticText11;
 		wxTextCtrl* m_genAcMag;
 		wxStaticText* m_staticText12;
 		wxTextCtrl* m_genAcPhase;
+		wxNotebook* m_powerNotebook;
 		wxPanel* m_pwrPulse;
 		wxStaticText* m_staticText13;
 		wxTextCtrl* m_pulseInit;
@@ -143,7 +143,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 425,630 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 410,705 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~DIALOG_SPICE_MODEL_BASE();
 	
 };

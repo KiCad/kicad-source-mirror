@@ -69,22 +69,22 @@ DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aCompo
     m_genAcMag->SetValidator( m_spiceEmptyValidator );
     m_genAcPhase->SetValidator( m_spiceEmptyValidator );
 
-    m_pulseInit->SetValidator( m_spiceValidator );
-    m_pulseNominal->SetValidator( m_spiceValidator );
+    m_pulseInit->SetValidator( m_spiceEmptyValidator );
+    m_pulseNominal->SetValidator( m_spiceEmptyValidator );
     m_pulseDelay->SetValidator( m_spiceEmptyValidator );
     m_pulseRise->SetValidator( m_spiceEmptyValidator );
     m_pulseFall->SetValidator( m_spiceEmptyValidator );
     m_pulseWidth->SetValidator( m_spiceEmptyValidator );
     m_pulsePeriod->SetValidator( m_spiceEmptyValidator );
 
-    m_sinOffset->SetValidator( m_spiceValidator );
-    m_sinAmplitude->SetValidator( m_spiceValidator );
+    m_sinOffset->SetValidator( m_spiceEmptyValidator );
+    m_sinAmplitude->SetValidator( m_spiceEmptyValidator );
     m_sinFreq->SetValidator( m_spiceEmptyValidator );
     m_sinDelay->SetValidator( m_spiceEmptyValidator );
     m_sinDampFactor->SetValidator( m_spiceEmptyValidator );
 
-    m_expInit->SetValidator( m_spiceValidator );
-    m_expPulsed->SetValidator( m_spiceValidator );
+    m_expInit->SetValidator( m_spiceEmptyValidator );
+    m_expPulsed->SetValidator( m_spiceEmptyValidator );
     m_expRiseDelay->SetValidator( m_spiceEmptyValidator );
     m_expRiseConst->SetValidator( m_spiceEmptyValidator );
     m_expFallDelay->SetValidator( m_spiceEmptyValidator );
@@ -314,43 +314,57 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
     if( aModel.IsEmpty() )
         return false;
 
-    // Variables used for generic values processing (filling out wxTextCtrls in sequence)
-    bool genericProcessing = false;
-    unsigned int genericReqParamsCount = 0;
-    std::vector<wxTextCtrl*> genericControls;
-
     wxStringTokenizer tokenizer( aModel, " ()" );
     wxString tkn = tokenizer.GetNextToken().Lower();
 
-    try
+    while( tokenizer.HasMoreTokens() )
     {
+        // Variables used for generic values processing (filling out wxTextCtrls in sequence)
+        bool genericProcessing = false;
+        unsigned int genericReqParamsCount = 0;
+        std::vector<wxTextCtrl*> genericControls;
+
         if( tkn == "dc" )
         {
-            m_powerNotebook->SetSelection( m_powerNotebook->FindPage( m_pwrGeneric ) );
-            tkn = tokenizer.GetNextToken().Lower();
-
-            // it might be an optional "dc" or "trans" directive
+            // There might be an optional "dc" or "trans" directive, skip it
             if( tkn == "dc" || tkn == "trans" )
                 tkn = tokenizer.GetNextToken().Lower();
 
             // DC value
-            m_genDc->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
-
-            if( !tokenizer.HasMoreTokens() )
-                return true;
-
-            tkn = tokenizer.GetNextToken().Lower();
-
-            if( tkn != "ac" )
+            try
+            {
+                m_genDc->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
+            }
+            catch( ... )
+            {
                 return false;
+            }
+        }
 
+
+        else if( tkn == "ac" )
+        {
             // AC magnitude
-            tkn = tokenizer.GetNextToken().Lower();
-            m_genAcMag->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
+            try
+            {
+                tkn = tokenizer.GetNextToken().Lower();
+                m_genAcMag->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
+            }
+            catch( ... )
+            {
+                return false;
+            }
 
-            // AC phase
-            tkn = tokenizer.GetNextToken().Lower();
-            m_genAcMag->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
+            // AC phase (optional)
+            try
+            {
+                tkn = tokenizer.GetNextToken().Lower();
+                m_genAcPhase->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
+            }
+            catch( ... )
+            {
+                continue;   // perhaps another directive
+            }
         }
 
 
@@ -390,15 +404,22 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
         {
             m_powerNotebook->SetSelection( m_powerNotebook->FindPage( m_pwrPwl ) );
 
-            while( tokenizer.HasMoreTokens() )
+            try
             {
-                tkn = tokenizer.GetNextToken();
-                SPICE_VALUE time( tkn );
+                while( tokenizer.HasMoreTokens() )
+                {
+                    tkn = tokenizer.GetNextToken();
+                    SPICE_VALUE time( tkn );
 
-                tkn = tokenizer.GetNextToken();
-                SPICE_VALUE value( tkn );
+                    tkn = tokenizer.GetNextToken();
+                    SPICE_VALUE value( tkn );
 
-                addPwlValue( time.ToSpiceString(), value.ToSpiceString() );
+                    addPwlValue( time.ToSpiceString(), value.ToSpiceString() );
+                }
+            }
+            catch( ... )
+            {
+                return false;
             }
         }
 
@@ -406,27 +427,34 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
         else
         {
             // Unhandled power source type
+            wxASSERT_MSG( false, "Unhandled power source type" );
             return false;
         }
 
 
         if( genericProcessing )
         {
-            for( unsigned int i = 0; i < genericControls.size(); ++i )
+            try
             {
-                // If there are no more tokens, let's check if we got at least required fields
-                if( !tokenizer.HasMoreTokens() )
-                    return ( i >= genericReqParamsCount );
+                for( unsigned int i = 0; i < genericControls.size(); ++i )
+                {
+                    // If there are no more tokens, let's check if we got at least required fields
+                    if( !tokenizer.HasMoreTokens() )
+                        return ( i >= genericReqParamsCount );
 
-                tkn = tokenizer.GetNextToken().Lower();
-                genericControls[i]->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
+                    tkn = tokenizer.GetNextToken().Lower();
+                    genericControls[i]->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
+                }
+            }
+            catch( ... )
+            {
+                return false;
             }
         }
-    }
-    catch( std::exception& e )
-    {
-        // Nothing, the dialog simply will not be filled
-        return false;
+
+        // Get the next token now, so if any of the branches catches an expection, try to
+        // process it in another branch
+        tkn = tokenizer.GetNextToken().Lower();
     }
 
     return true;
@@ -435,45 +463,52 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
 
 bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 {
-    wxString res;
+    wxString acdc, trans;
     wxWindow* page = m_powerNotebook->GetCurrentPage();
+    bool useTrans = true;       // shall we use the transient command part?
 
     // Variables for generic processing
     bool genericProcessing = false;
     unsigned int genericReqParamsCount = 0;
     std::vector<wxTextCtrl*> genericControls;
 
-    if( page == m_pwrGeneric )
+    /// DC / AC section
+    // If SPICE_VALUE can be properly constructed, then it is a valid value
+    try
     {
-        if( !m_pwrGeneric->Validate() )
-            return false;
-
-        if( empty( m_genDc ) && empty( m_genAcMag ) )
-        {
-            DisplayError( NULL, wxT( "You have to specify DC or/and AC value" ) );
-            return false;
-        }
-
         if( !empty( m_genDc ) )
-            res += wxString::Format( "dc %s", m_genDc->GetValue() );
-
-        if( !empty( m_genAcMag ) )
-        {
-            res += wxString::Format( " ac %s", m_genAcMag->GetValue() );
-
-            if( !empty( m_genAcPhase ) )
-                res += wxString::Format( " %s", m_genAcPhase->GetValue() );
-        }
+            acdc += wxString::Format( "dc %s ", SPICE_VALUE( m_genDc->GetValue() ).ToSpiceString() );
+    }
+    catch( ... )
+    {
+        DisplayError( NULL, wxT( "Invalid DC value" ) );
+        return false;
     }
 
+    try
+    {
+        if( !empty( m_genAcMag ) )
+        {
+            acdc += wxString::Format( "ac %s ", SPICE_VALUE( m_genAcMag->GetValue() ).ToSpiceString() );
 
-    else if( page == m_pwrPulse )
+            if( !empty( m_genAcPhase ) )
+                acdc += wxString::Format( "%s ", SPICE_VALUE( m_genAcPhase->GetValue() ).ToSpiceString() );
+        }
+    }
+    catch( ... )
+    {
+        DisplayError( NULL, wxT( "Invalid AC magnitude or phase" ) );
+        return false;
+    }
+
+    /// Transient section
+    if( page == m_pwrPulse )
     {
         if( !m_pwrPulse->Validate() )
             return false;
 
         genericProcessing = true;
-        res = "pulse";
+        trans += "pulse";
         genericReqParamsCount = 2;
         genericControls = { m_pulseInit, m_pulseNominal, m_pulseDelay,
             m_pulseRise, m_pulseFall, m_pulseWidth, m_pulsePeriod };
@@ -486,7 +521,7 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
             return false;
 
         genericProcessing = true;
-        res = "sin";
+        trans += "sin";
         genericReqParamsCount = 2;
         genericControls = { m_sinOffset, m_sinAmplitude, m_sinFreq, m_sinDelay, m_sinDampFactor };
     }
@@ -498,7 +533,7 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
             return false;
 
         genericProcessing = true;
-        res = "exp";
+        trans += "exp";
         genericReqParamsCount = 2;
         genericControls = { m_expInit, m_expPulsed,
             m_expRiseDelay, m_expRiseConst, m_expFallDelay, m_expFallConst };
@@ -507,21 +542,19 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 
     else if( page == m_pwrPwl )
     {
-        if( m_pwlValList->GetItemCount() == 0 )
+        if( m_pwlValList->GetItemCount() > 0 )
         {
-            DisplayError( NULL, wxT( "You have to specify at least one value" ) );
-            return false;
+            trans += "pwl(";
+
+            for( int i = 0; i < m_pwlValList->GetItemCount(); ++i )
+            {
+                trans += wxString::Format( "%s %s ", m_pwlValList->GetItemText( i, m_pwlTimeCol ),
+                                                     m_pwlValList->GetItemText( i, m_pwlValueCol ) );
+            }
+
+            trans.Trim();
+            trans += ")";
         }
-
-        res = "pwl(";
-
-        for( int i = 0; i < m_pwlValList->GetItemCount(); ++i )
-        {
-            res += wxString::Format( "%s %s ", m_pwlValList->GetItemText( i, m_pwlTimeCol ),
-                                                m_pwlValList->GetItemText( i, m_pwlValueCol ) );
-        }
-
-        res += ")";
     }
 
     if( genericProcessing )
@@ -529,7 +562,7 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
         bool finished = false;
         unsigned int paramCounter = 0;
 
-        res += "(";
+        trans += "(";
 
         for( auto textCtrl : genericControls )
         {
@@ -539,8 +572,16 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 
                 if( paramCounter < genericReqParamsCount )
                 {
+                    if( paramCounter == 0 )
+                    {
+                        // It is fine, no parameters were entered
+                        useTrans = false;
+                        break;
+                    }
+
                     DisplayError( NULL,
-                            wxString::Format( wxT( "You need to specify at least the first %d parameters" ),
+                            wxString::Format( wxT( "You need to specify at least the "
+                                    "first %d parameters for the transient source" ),
                             genericReqParamsCount ) );
 
                     return false;
@@ -548,18 +589,26 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
             }
             else if( finished )
             {
-                DisplayError( NULL, wxT( "You cannot leave interleaved blank spaces" ) );
+                DisplayError( NULL, wxT( "You cannot leave interleaved blank "
+                                        "spaces for the transient source" ) );
                 return false;
             }
 
-            res += wxString::Format( "%s ", textCtrl->GetValue() );
+            trans += wxString::Format( "%s ", textCtrl->GetValue() );
             ++paramCounter;
         }
 
-        res += ")";
+        trans.Trim();
+        trans += ")";
     }
 
-    aTarget = res;
+    aTarget = acdc;
+
+    if( useTrans )
+        aTarget += trans;
+
+    aTarget.Trim( false );
+    aTarget.Trim( true );
 
     return true;
 }
