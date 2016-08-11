@@ -31,6 +31,16 @@
 
 class SEARCH_STACK;
 
+/// Flags for Spice netlist generation (can be combined)
+enum SPICE_NETLIST_OPTIONS {
+    NET_USE_X_PREFIX = 2,               // change "U" and "IC" reference prefix to "X"
+    NET_USE_NETCODES_AS_NETNAMES = 4,   // use netcode numbers as netnames
+    NET_ADJUST_INCLUDE_PATHS = 8,       // use full paths for included files (if they are in search path)
+    NET_ADJUST_PASSIVE_VALS = 16        // reformat passive component values (e.g. 1M -> 1Meg)
+};
+
+/// @todo add NET_ADJUST_INCLUDE_PATHS & NET_ADJUST_PASSIVE_VALS checkboxes in the netlist export dialog
+
 /**
  * Class NETLIST_EXPORTER_PSPICE
  * generates a PSPICE compatible netlist
@@ -43,6 +53,7 @@ public:
     {
     }
 
+    ///> Net name to node number mapping
     typedef std::map<wxString, int> NET_INDEX_MAP;
 
     /**
@@ -63,7 +74,7 @@ public:
         return m_spiceFields;
     }
 
-    static wxString GetSpiceFieldDefVal( const wxString& aField, SCH_COMPONENT* aComponent );
+    static wxString GetSpiceFieldDefVal( const wxString& aField, SCH_COMPONENT* aComponent, int aCtl );
 
 private:
     NET_INDEX_MAP m_netMap;

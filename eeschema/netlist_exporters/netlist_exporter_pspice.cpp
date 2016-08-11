@@ -41,10 +41,6 @@
 
 bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
-    /// @todo take options into account
-    //bool aUsePrefix = aNetlistOptions & NET_USE_X_PREFIX;
-    //bool aUseNetcodeAsNetName = aNetlistOptions & NET_USE_NETCODES_AS_NETNAMES;
-
     FILE_OUTPUTFORMATTER outputFile( aOutFileName, wxT( "wt" ), '\'' );
 
     return Format( &outputFile, aNetlistOptions );
@@ -53,10 +49,12 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
 bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 {
-    int                 ret = 0;
     std::vector<int>    pinSequence;                    // numeric indices into m_SortedComponentPinList
     wxArrayString       stdPinNameArray;                // Array containing Standard Pin Names
     const wxString      delimiters( "{:,; }" );
+
+    // Netlist options
+    bool useNetcodeAsNetName = aCtl & NET_USE_NETCODES_AS_NETNAMES;
 
     // Prepare list of nets generation (not used here, but...
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
@@ -93,7 +91,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                     wxString directive( tokenizer.GetNextToken() );
 
                     // Fix paths for .include directives
-                    if( m_paths && directive.StartsWith( ".inc" ) )
+                    if( aCtl & NET_ADJUST_INCLUDE_PATHS && m_paths && directive.StartsWith( ".inc" ) )
                     {
                         wxString file( directive.AfterFirst( ' ' ) );
                         wxString path( m_paths->FindValidPath( file ) );
@@ -134,10 +132,10 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
             SCH_FIELD* spiceSeqField = comp->FindField( wxT( "Spice_Node_Sequence" ) );
 
             wxString model = spiceModel ? spiceModel->GetText()
-                : GetSpiceFieldDefVal( "Spice_Model", comp );
+                : GetSpiceFieldDefVal( "Spice_Model", comp, aCtl );
 
             wxString primType = spicePrimitiveType ? spicePrimitiveType->GetText()
-                : GetSpiceFieldDefVal( "Spice_Primitive", comp );
+                : GetSpiceFieldDefVal( "Spice_Primitive", comp, aCtl );
 
             const wxString& RefName = comp->GetRef( &sheetList[sheet_idx] );
 
@@ -146,6 +144,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
             {
                 wxString netlistEnabled = netlistEnabledField->GetText();
 
+                // Different ways of saying 'disabled' (no/false/0)
                 if( netlistEnabled.CmpNoCase( "N" ) == 0
                         || netlistEnabled.CmpNoCase( "F" ) == 0
                         || netlistEnabled == "0" )
@@ -237,24 +236,29 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                 {
                     netIdx = curNetIndex++;
                     m_netMap[netName] = netIdx;
-                } else {
+                }
+                else
+                {
                     netIdx = m_netMap[netName];
                 }
 
-// TODO remove?
-                //printf("net %s index %d\n", (const char*)netName.c_str(), netIdx);
-//                sprintPinNetName( netName , wxT( "N-%.6d" ), pin, aUseNetcodeAsNetName );
+                if( useNetcodeAsNetName )
+                {
+                    formatter->Print( 0, "%d ", netIdx );
+                }
+                else
+                {
+                    sprintPinNetName( netName , wxT( "N-%.6d" ), pin, useNetcodeAsNetName );
 
-                //Replace parenthesis with underscore to prevent parse issues with Simulators:
-//                netName.Replace( wxT( "(" ), wxT( "_" ) );
-//                netName.Replace( wxT( ")" ), wxT( "_" ) );
+                    //Replace parenthesis with underscore to prevent parse issues with simulators
+                    netName.Replace( wxT( "(" ), wxT( "_" ) );
+                    netName.Replace( wxT( ")" ), wxT( "_" ) );
 
-//                if( netName.IsEmpty() )
-//                    netName = wxT( "?" );
+                    if( netName.IsEmpty() )
+                        netName = wxT( "?" );
 
-//                ret |= fprintf( f, " %s", TO_UTF8( netName ) );
-
-                formatter->Print( 0, "%d ", netIdx );
+                    formatter->Print( 0, "%s ", TO_UTF8( netName ) );
+                }
             }
 
             formatter->Print( 0, "%s\n", (const char*) model.c_str() );
@@ -269,44 +273,19 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 
     formatter->Print( -1, ".end\n" );
 
-// TODO remove?
-#if 0
-    m_SortedComponentPinList.clear();
-
-    // Print texts starting with [+]pspice or [+]gnucap
-    nbitems = spiceCommandAtEndFile.GetCount();
-
-    if( nbitems )
-    {
-        ret |= fprintf( f, "\n" );
-        spiceCommandAtEndFile.Sort();
-
-        for( int ii = 0; ii < nbitems; ii++ )
-        {
-            spiceCommandAtEndFile[ii].Remove( 0, +BUFYPOS_LEN );
-            spiceCommandAtEndFile[ii].Trim( true );
-            spiceCommandAtEndFile[ii].Trim( false );
-            ret |= fprintf( f, "%s\n", TO_UTF8( spiceCommandAtEndFile[ii] ) );
-        }
-    }
-
-    ret |= fprintf( f, "\n.end\n" );
-    fclose( f );
-#endif
-
-    return ret >= 0;
+    return true;
 }
 
 
 wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
-        SCH_COMPONENT* aComponent )
+        SCH_COMPONENT* aComponent, int aCtl )
 {
     if( aField == "Spice_Primitive" )
     {
         const wxString& refName = aComponent->GetField( REFERENCE )->GetText();
 
         // Convert ICs to subcircuits
-        if( refName.StartsWith( "IC" ) || refName.StartsWith( "U" ) )
+        if( aCtl & NET_USE_X_PREFIX && ( refName.StartsWith( "IC" ) || refName.StartsWith( "U" ) ) )
             return wxString( "X" );
         else
             return refName.GetChar( 0 );
@@ -318,7 +297,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
         wxString value = aComponent->GetField( VALUE )->GetText();
 
         // Is it a passive component?
-        if( prim == 'C' || prim == 'L' || prim == 'R' )
+        if( aCtl & NET_ADJUST_PASSIVE_VALS && ( prim == 'C' || prim == 'L' || prim == 'R' ) )
         {
             // Regular expression to match common formats used for passive parts description
             // (e.g. 100k, 2k3, 1 uF)
@@ -338,9 +317,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
                 if( unit == "M" )
                     unit = "Meg";
 
-                wxLogDebug( "Changed passive value: %s..", value );
                 value = prefix + unit + suffix;
-                wxLogDebug( "..to: %s", value );
             }
         }
 

@@ -306,7 +306,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::EditSpiceFields( wxCommandEvent& event 
 
         if( schField->GetText().IsEmpty() )
         {
-            schField->SetText( NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( fieldName, m_cmp ) );
+            schField->SetText( NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( fieldName, m_cmp,
+                NET_USE_X_PREFIX | NET_ADJUST_INCLUDE_PATHS | NET_ADJUST_PASSIVE_VALS ) );
         }
     }
 

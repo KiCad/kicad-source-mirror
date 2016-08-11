@@ -111,9 +111,9 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_simulator->Init();
 
     NETLIST_OBJECT_LIST* net_atoms = m_schematicFrame->BuildNetListBase();
-    m_exporter = new NETLIST_EXPORTER_PSPICE( net_atoms, Prj().SchLibs(), Prj().SchSearchS() );
     STRING_FORMATTER formatter;
 
+    m_exporter = new NETLIST_EXPORTER_PSPICE( net_atoms, Prj().SchLibs(), Prj().SchSearchS() );
     m_exporter->Format( &formatter, GNL_ALL );
     m_simulator->LoadNetlist( formatter.GetString() );
     m_simulator->Run();
