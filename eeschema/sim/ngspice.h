@@ -73,6 +73,11 @@ public:
     std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override;
 
 private:
+    bool m_error;
+
+    // Performs DLL initialization, obtains function pointers
+    void init_dll();
+
     // ngspice library functions
     typedef void (*ngSpice_Init)( SendChar*, SendStat*, ControlledExit*,
                                     SendData*, SendInitData*, BGThreadRunning*, void* );

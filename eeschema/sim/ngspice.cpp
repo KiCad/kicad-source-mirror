@@ -35,23 +35,7 @@ using namespace std;
 
 NGSPICE::NGSPICE()
 {
-#ifdef __WINDOWS__
-    m_dll = new wxDynamicLibrary( "libngspice-0.dll" );
-#else
-    m_dll = new wxDynamicLibrary( wxDynamicLibrary::CanonicalizeName( "ngspice" ) );
-#endif
-
-    if( !m_dll || !m_dll->IsLoaded() )
-        throw std::runtime_error( "Missing ngspice shared library" );
-
-    // Obtain function pointers
-    m_ngSpice_Init = (ngSpice_Init) m_dll->GetSymbol( "ngSpice_Init" );
-    m_ngSpice_Circ = (ngSpice_Circ) m_dll->GetSymbol( "ngSpice_Circ" );
-    m_ngSpice_Command = (ngSpice_Command) m_dll->GetSymbol( "ngSpice_Command" );
-    m_ngGet_Vec_Info = (ngGet_Vec_Info) m_dll->GetSymbol( "ngGet_Vec_Info" );
-    m_ngSpice_AllPlots = (ngSpice_AllPlots) m_dll->GetSymbol( "ngSpice_AllPlots" );
-    m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll->GetSymbol( "ngSpice_AllVecs" );
-    m_ngSpice_Running = (ngSpice_Running) m_dll->GetSymbol( "ngSpice_running" );
+    init_dll();
 }
 
 
@@ -63,9 +47,14 @@ NGSPICE::~NGSPICE()
 
 void NGSPICE::Init()
 {
-    setlocale( LC_ALL, "C" );
-    m_ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL, &cbBGThreadRunning, this );
-    setlocale( LC_ALL, "" );
+    if( m_error )
+    {
+        delete m_dll;
+        init_dll();
+    }
+
+    Command( "reset" );
+    Command( "remcirc" );
 }
 
 
@@ -301,10 +290,33 @@ string NGSPICE::GetXAxis( SIM_TYPE aType ) const
 }
 
 
-int NGSPICE::cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id, void* user )
+void NGSPICE::init_dll()
 {
-    //printf("stat %d immed %d quit %d\n", status, !!immediate, !!exit_upon_quit);
-    return 0;
+#ifdef __WINDOWS__
+    m_dll = new wxDynamicLibrary( "libngspice-0.dll" );
+#else
+    m_dll = new wxDynamicLibrary( wxDynamicLibrary::CanonicalizeName( "ngspice" ) );
+#endif
+
+    if( !m_dll || !m_dll->IsLoaded() )
+        throw std::runtime_error( "Missing ngspice shared library" );
+
+    m_error = false;
+
+    // Obtain function pointers
+    m_ngSpice_Init = (ngSpice_Init) m_dll->GetSymbol( "ngSpice_Init" );
+    m_ngSpice_Circ = (ngSpice_Circ) m_dll->GetSymbol( "ngSpice_Circ" );
+    m_ngSpice_Command = (ngSpice_Command) m_dll->GetSymbol( "ngSpice_Command" );
+    m_ngGet_Vec_Info = (ngGet_Vec_Info) m_dll->GetSymbol( "ngGet_Vec_Info" );
+    m_ngSpice_AllPlots = (ngSpice_AllPlots) m_dll->GetSymbol( "ngSpice_AllPlots" );
+    m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll->GetSymbol( "ngSpice_AllVecs" );
+    m_ngSpice_Running = (ngSpice_Running) m_dll->GetSymbol( "ngSpice_running" ); // it is not a typo
+
+    setlocale( LC_ALL, "C" );
+    m_ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL, &cbBGThreadRunning, this );
+    // Workaround to avoid hang ups on certain errors
+    Command( "unset interactive" );
+    setlocale( LC_ALL, "" );
 }
 
 
@@ -343,6 +355,17 @@ int NGSPICE::cbBGThreadRunning( bool is_running, int id, void* user )
     if( sim->m_reporter )
         // I know the test below seems like an error, but well, it works somehow..
         sim->m_reporter->OnSimStateChange( sim, is_running ? SIM_IDLE : SIM_RUNNING );
+
+    return 0;
+}
+
+
+int NGSPICE::cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id, void* user )
+{
+    // Something went wrong, reload the dll
+    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
+    sim->m_error = true;
+    //printf("stat %d immed %d quit %d\n", status, !!immediate, !!exit_upon_quit);
 
     return 0;
 }
