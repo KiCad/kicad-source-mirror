@@ -46,6 +46,7 @@
 #include <sch_validators.h>
 
 #include <dialog_edit_component_in_schematic_fbp.h>
+#include <netlist_exporter_pspice.h>
 
 
 /**
@@ -126,13 +127,15 @@ private:
     void showButtonHandler( wxCommandEvent& event );
     void OnTestChipName( wxCommandEvent& event );
     void OnSelectChipName( wxCommandEvent& event );
-	void OnInitDlg( wxInitDialogEvent& event )
+    void OnInitDlg( wxInitDialogEvent& event )
     {
         TransferDataToWindow();
 
         // Now all widgets have the size fixed, call FinishDialogSettings
         FinishDialogSettings();
     }
+
+    void EditSpiceFields( wxCommandEvent& event );
 
     SCH_FIELD* findField( const wxString& aFieldName );
 
@@ -141,7 +144,7 @@ private:
      * update the listbox showing fields, according to the fields texts
      * must be called after a text change in fields, if this change is not an edition
      */
-    void updateDisplay( )
+    void updateDisplay()
     {
         for( unsigned ii = FIELD1;  ii<m_FieldsBuf.size(); ii++ )
             setRowItem( ii, m_FieldsBuf[ii] );
@@ -281,6 +284,33 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event
         return;
 
     chipnameTextCtrl->SetValue( chipname );
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::EditSpiceFields( wxCommandEvent& event )
+{
+    for( const auto& fieldName : NETLIST_EXPORTER_PSPICE::GetSpiceFields() )
+    {
+        SCH_FIELD* schField = findField( fieldName );
+        // @todo move everything to the bottom, so the fields are grouped and in the same order?
+
+        // Do not modify the existing value, just add missing fields with default values
+        if( schField == NULL )
+        {
+            unsigned fieldNdx = m_FieldsBuf.size();
+            SCH_FIELD newField( wxPoint(), fieldNdx, m_cmp, fieldName );
+            newField.SetOrientation( m_FieldsBuf[REFERENCE].GetOrientation() );
+            m_FieldsBuf.push_back( newField );
+            schField = &m_FieldsBuf.back();
+        }
+
+        if( schField->GetText().IsEmpty() )
+        {
+            schField->SetText( NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( fieldName, m_cmp ) );
+        }
+    }
+
+    updateDisplay();
 }
 
 

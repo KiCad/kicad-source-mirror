@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers
+ * Copyright (C) 1992-2016 KiCad Developers
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,10 +64,20 @@ public:
         return m_probes;
     }
 
+    static const std::vector<wxString>& GetSpiceFields()
+    {
+        return m_spiceFields;
+    }
+
+    static wxString GetSpiceFieldDefVal( const wxString& aField, SCH_COMPONENT* aComponent );
+
 private:
     NET_INDEX_MAP m_netMap;
     PROBE_LIST m_probes;
     SEARCH_STACK* m_paths;
+
+    // Fields that are used during netlist export & simulation
+    static const std::vector<wxString> m_spiceFields;
 };
 
 #endif
