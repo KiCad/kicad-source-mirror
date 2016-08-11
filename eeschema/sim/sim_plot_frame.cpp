@@ -88,9 +88,6 @@ TRACE_DESC::TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter, const wxSt
         SIM_PLOT_TYPE aType, const wxString& aParam )
     : m_name( aName ), m_type( aType ), m_param( aParam )
 {
-    // Spice vector generation
-    m_spiceVector = aExporter.GetSpiceVector( aName, aType, aParam );
-
     // Title generation
     m_title = wxString::Format( "%s(%s)", aParam, aName );
 
@@ -350,7 +347,8 @@ bool SIM_PLOT_FRAME::updatePlot( const TRACE_DESC& aDescriptor, SIM_PLOT_PANEL* 
         return false;
 
     SIM_TYPE simType = m_exporter->GetSimType();
-    wxString spiceVector = aDescriptor.GetSpiceVector();
+    wxString spiceVector = m_exporter->GetSpiceVector( aDescriptor.GetName(),
+            aDescriptor.GetType(), aDescriptor.GetParam() );
 
     if( !SIM_PLOT_PANEL::IsPlottable( simType ) )
     {

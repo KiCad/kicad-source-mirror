@@ -83,11 +83,6 @@ public:
         return m_type;
     }
 
-    const wxString& GetSpiceVector() const
-    {
-        return m_spiceVector;
-    }
-
 private:
     // Three basic parameters
     ///> Name of the measured net/device
@@ -102,9 +97,6 @@ private:
     // Generated data
     ///> Title displayed in the signal list/plot legend
     wxString m_title;
-
-    ///> Spice vector name
-    wxString m_spiceVector;
 };
 
 /** Implementing SIM_PLOT_FRAME_BASE */
