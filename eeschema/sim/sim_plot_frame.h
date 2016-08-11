@@ -58,9 +58,9 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void NewPlotPanel();
         void AddVoltagePlot( const wxString& aNetName );
 
-    private:
-        SIM_PLOT_PANEL* currentPlot() const;
+        SIM_PLOT_PANEL* CurrentPlot() const;
 
+    private:
         bool isSimulationRunning();
 
         /**

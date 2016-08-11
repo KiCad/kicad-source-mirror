@@ -141,11 +141,11 @@ void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 
     if( nodeNumber >= -1 )
     {
-        updatePlot( wxString::Format( "V(%d)", nodeNumber ), aNetName, currentPlot() );
+        updatePlot( wxString::Format( "V(%d)", nodeNumber ), aNetName, CurrentPlot() );
     }
 }
 
-SIM_PLOT_PANEL* SIM_PLOT_FRAME::currentPlot() const
+SIM_PLOT_PANEL* SIM_PLOT_FRAME::CurrentPlot() const
 {
     return static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() );
 }
@@ -186,31 +186,31 @@ int SIM_PLOT_FRAME::getNodeNumber( const wxString& aNetName )
 
 void SIM_PLOT_FRAME::menuZoomIn( wxCommandEvent& event )
 {
-    currentPlot()->ZoomIn();
+    CurrentPlot()->ZoomIn();
 }
 
 
 void SIM_PLOT_FRAME::menuZoomOut( wxCommandEvent& event )
 {
-    currentPlot()->ZoomOut();
+    CurrentPlot()->ZoomOut();
 }
 
 
 void SIM_PLOT_FRAME::menuZoomFit( wxCommandEvent& event )
 {
-    currentPlot()->Fit();
+    CurrentPlot()->Fit();
 }
 
 
 void SIM_PLOT_FRAME::menuShowGrid( wxCommandEvent& event )
 {
-    currentPlot()->ShowGrid( !currentPlot()->IsGridShown() );
+    CurrentPlot()->ShowGrid( !CurrentPlot()->IsGridShown() );
 }
 
 
 void SIM_PLOT_FRAME::menuShowGridState( wxUpdateUIEvent& event )
 {
-    SIM_PLOT_PANEL* plotPanel = currentPlot();
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
     event.Check( plotPanel ? plotPanel->IsGridShown() : false );
 }
@@ -219,7 +219,7 @@ void SIM_PLOT_FRAME::menuShowGridState( wxUpdateUIEvent& event )
 void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
 {
     int idx = m_signals->GetSelection();
-    SIM_PLOT_PANEL* plot = currentPlot();
+    SIM_PLOT_PANEL* plot = CurrentPlot();
 
     if( idx != wxNOT_FOUND )
     {
