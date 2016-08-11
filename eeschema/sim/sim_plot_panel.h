@@ -128,26 +128,6 @@ protected:
     CURSOR* m_cursor;
 };
 
-class TRACE_FREQ_RESPONSE : public TRACE
-{
-public:
-    TRACE_FREQ_RESPONSE( const wxString& aName ) :
-        TRACE( aName )
-    {
-        printf("makeFreqResponse!\n");
-    }
-
-};
-
-class TRACE_TRANSIENT : public TRACE
-{
-public:
-    TRACE_TRANSIENT( const wxString& aName ) :
-        TRACE( aName )
-    {
-    }
-
-};
 
 class SIM_PLOT_PANEL : public mpWindow
 {

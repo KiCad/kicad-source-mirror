@@ -362,19 +362,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
     if( addedNewEntry )
     {
         // New entry
-        switch ( m_type )
-        {
-            case ST_TRANSIENT:
-                t = new TRACE_TRANSIENT( aName );
-                break;
-            case ST_AC:
-                //printf("makeFreqResp!\n");
-                t = new TRACE_FREQ_RESPONSE( aName );
-                break;
-            default:
-                assert(false);
-        }
-
+        t = new TRACE( aName );
         t->SetPen( wxPen( generateColor(), 2, wxSOLID ) );
         m_traces[aName] = t;
 
