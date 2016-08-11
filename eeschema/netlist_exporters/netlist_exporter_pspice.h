@@ -154,4 +154,41 @@ private:
     static const std::vector<wxString> m_spiceFields;
 };
 
+
+// Helper class to handle Spice way of expressing values (e.g. 10.5m)
+class SPICE_VALUE
+{
+public:
+    enum UNIT_PREFIX
+    {
+        PFX_FEMTO   = -15,
+        PFX_PICO    = -12,
+        PFX_NANO    = -9,
+        PFX_MICRO   = -6,
+        PFX_MILI    = -3,
+        PFX_NONE    = 0,
+        PFX_KILO    = 3,
+        PFX_MEGA    = 6,
+        PFX_GIGA    = 9,
+        PFX_TERA    = 12
+    };
+
+    SPICE_VALUE( const wxString& aString );
+    SPICE_VALUE( int aInt, UNIT_PREFIX aPrefix = PFX_NONE );
+    SPICE_VALUE( double aDouble, UNIT_PREFIX aPrefix = PFX_NONE );
+
+    double ToDouble() const;
+
+    wxString ToSpiceString() const;
+
+    wxString ToString() const
+    {
+        return wxString::Format( "%f", ToDouble() );
+    }
+
+private:
+    double m_base;
+    UNIT_PREFIX m_prefix;
+};
+
 #endif

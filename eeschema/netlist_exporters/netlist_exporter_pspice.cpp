@@ -363,6 +363,91 @@ void NETLIST_EXPORTER_PSPICE::writeDirectives( OUTPUTFORMATTER* aFormatter, unsi
 }
 
 
+SPICE_VALUE::SPICE_VALUE( const wxString& aString )
+{
+    char buf[8] = { 0, };
+
+    if( sscanf( (const char*) aString.c_str(), "%lf%7s", &m_base, buf ) == 0 )
+        throw std::invalid_argument( "Invalid Spice value string" );
+
+    if( *buf == 0 )
+    {
+        m_prefix = PFX_NONE;
+        return;
+    }
+
+    for( char* bufPtr = buf; *bufPtr; ++bufPtr )
+        *bufPtr = tolower( *bufPtr );
+
+    if( !strcmp( buf, "meg" ) )
+    {
+        m_prefix = PFX_MEGA;
+    }
+    else
+    {
+        switch( buf[0] )
+        {
+            case 'f': m_prefix = PFX_FEMTO; break;
+            case 'p': m_prefix = PFX_PICO; break;
+            case 'n': m_prefix = PFX_NANO; break;
+            case 'u': m_prefix = PFX_MICRO; break;
+            case 'm': m_prefix = PFX_MILI; break;
+            case 'k': m_prefix = PFX_KILO; break;
+            case 'g': m_prefix = PFX_GIGA; break;
+            case 't': m_prefix = PFX_TERA; break;
+
+            default:
+                throw std::invalid_argument( "Invalid unit prefix" );
+        }
+    }
+}
+
+
+SPICE_VALUE::SPICE_VALUE( int aInt, UNIT_PREFIX aPrefix )
+    : m_base( aInt ), m_prefix( aPrefix )
+{
+}
+
+
+SPICE_VALUE::SPICE_VALUE( double aDouble, UNIT_PREFIX aPrefix )
+    : m_base( aDouble ), m_prefix( aPrefix )
+{
+}
+
+
+double SPICE_VALUE::ToDouble() const
+{
+    double res = m_base;
+
+    if( m_prefix != PFX_NONE )
+        res *= pow( 10, (int) m_prefix );
+
+    return res;
+}
+
+
+wxString SPICE_VALUE::ToSpiceString() const
+{
+    wxString res = wxString::Format( "%f", m_base );
+
+    switch( m_prefix )
+    {
+        case PFX_FEMTO: res += "f"; break;
+        case PFX_PICO:  res += "p"; break;
+        case PFX_NANO:  res += "n"; break;
+        case PFX_MICRO: res += "u"; break;
+        case PFX_MILI:  res += "m"; break;
+        case PFX_NONE:  break;
+        case PFX_KILO:  res += "k"; break;
+        case PFX_MEGA:  res += "Meg"; break;
+        case PFX_GIGA:  res += "G"; break;
+        case PFX_TERA:  res += "T"; break;
+    }
+
+    return res;
+}
+
+
 // Entries in the vector below have to follow the order in SPICE_FIELD enum
 const std::vector<wxString> NETLIST_EXPORTER_PSPICE::m_spiceFields = {
     "Spice_Primitive",
