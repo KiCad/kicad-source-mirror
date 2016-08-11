@@ -39,6 +39,7 @@ public:
         : mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
         m_trace( aTrace ), m_updateRequired( true ), m_coords( 0.0, 0.0 ), m_window( nullptr )
     {
+        SetDrawOutsideMargins( false );
     }
 
     void Plot( wxDC& aDC, mpWindow& aWindow ) override;
@@ -84,6 +85,14 @@ public:
             ShowName( false );
 
         }
+
+    void SetData( const std::vector<double>& aX, const std::vector<double>& aY ) override
+    {
+        if( m_cursor )
+            m_cursor->Update();
+
+        mpFXYVector::SetData( aX, aY );
+    }
 
     const std::vector<double>& GetDataX() const
     {
