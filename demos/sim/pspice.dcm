@@ -1,0 +1,16 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP R
+D Resistance
+K R DEV
+$ENDCMP
+#
+$CMP VSOURCE
+D Spice Voltage Source
+$ENDCMP
+#
+$CMP Value
+D Spice Voltage Source
+$ENDCMP
+#
+#End Doc Library
