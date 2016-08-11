@@ -29,6 +29,7 @@
 #include <wx/dynlib.h>
 #include <wx/log.h>
 #include <sstream>
+#include <stdexcept>
 
 using namespace std;
 

@@ -116,7 +116,7 @@ wxString SPICE_VALUE::ToString() const
 
 wxString SPICE_VALUE::ToSpiceString() const
 {
-    wxString res = wxString::Format( "%f", m_base );
+    wxString res = wxString::FromCDouble( m_base );
     stripZeros( res );
 
     switch( m_prefix )
