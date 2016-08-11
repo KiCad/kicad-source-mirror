@@ -48,29 +48,24 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_mainMenu->Append( m_fileMenu, _("File") ); 
 	
 	m_simulationMenu = new wxMenu();
-	wxMenuItem* m_runSimulation;
-	m_runSimulation = new wxMenuItem( m_simulationMenu, wxID_NEW, wxString( _("Run Simulation") ) , wxEmptyString, wxITEM_NORMAL );
+	m_runSimulation = new wxMenuItem( m_simulationMenu, wxID_ANY, wxString( _("Run Simulation") ) , wxEmptyString, wxITEM_NORMAL );
 	m_simulationMenu->Append( m_runSimulation );
 	
 	m_simulationMenu->AppendSeparator();
 	
-	wxMenuItem* m_addSignals;
-	m_addSignals = new wxMenuItem( m_simulationMenu, wxID_OPEN, wxString( _("Add signals...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_addSignals = new wxMenuItem( m_simulationMenu, wxID_ANY, wxString( _("Add signals...") ) , wxEmptyString, wxITEM_NORMAL );
 	m_simulationMenu->Append( m_addSignals );
 	
-	wxMenuItem* m_probeSignals;
-	m_probeSignals = new wxMenuItem( m_simulationMenu, wxID_SAVE, wxString( _("Probe from schematics") ) , wxEmptyString, wxITEM_NORMAL );
+	m_probeSignals = new wxMenuItem( m_simulationMenu, wxID_ANY, wxString( _("Probe from schematics") ) , wxEmptyString, wxITEM_NORMAL );
 	m_simulationMenu->Append( m_probeSignals );
 	
-	wxMenuItem* m_tuneValue;
 	m_tuneValue = new wxMenuItem( m_simulationMenu, wxID_ANY, wxString( _("Tune component value") ) , wxEmptyString, wxITEM_NORMAL );
 	m_simulationMenu->Append( m_tuneValue );
 	
 	m_simulationMenu->AppendSeparator();
 	
-	wxMenuItem* m_exitSim1;
-	m_exitSim1 = new wxMenuItem( m_simulationMenu, wxID_CLOSE, wxString( _("Settings...") ) , wxEmptyString, wxITEM_NORMAL );
-	m_simulationMenu->Append( m_exitSim1 );
+	m_settings = new wxMenuItem( m_simulationMenu, wxID_ANY, wxString( _("Settings...") ) , wxEmptyString, wxITEM_NORMAL );
+	m_simulationMenu->Append( m_settings );
 	
 	m_mainMenu->Append( m_simulationMenu, _("Simulation") ); 
 	
@@ -233,11 +228,6 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	this->Connect( m_saveImage->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveImage ) );
 	this->Connect( m_saveCsv->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveCsv ) );
 	this->Connect( m_exitSim->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ) );
-	this->Connect( m_runSimulation->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuNewPlot ) );
-	this->Connect( m_addSignals->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuOpenWorkbook ) );
-	this->Connect( m_probeSignals->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbook ) );
-	this->Connect( m_tuneValue->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveImage ) );
-	this->Connect( m_exitSim1->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ) );
 	this->Connect( m_zoomIn->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomIn ) );
 	this->Connect( m_zoomOut->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomOut ) );
 	this->Connect( m_zoomFit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomFit ) );
@@ -259,11 +249,6 @@ SIM_PLOT_FRAME_BASE::~SIM_PLOT_FRAME_BASE()
 	this->Disconnect( wxID_SAVE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbook ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveImage ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveCsv ) );
-	this->Disconnect( wxID_CLOSE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ) );
-	this->Disconnect( wxID_NEW, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuNewPlot ) );
-	this->Disconnect( wxID_OPEN, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuOpenWorkbook ) );
-	this->Disconnect( wxID_SAVE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbook ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveImage ) );
 	this->Disconnect( wxID_CLOSE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ) );
 	this->Disconnect( wxID_ZOOM_IN, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomIn ) );
 	this->Disconnect( wxID_ZOOM_OUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomOut ) );

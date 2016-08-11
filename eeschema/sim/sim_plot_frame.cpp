@@ -129,6 +129,12 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Connect( m_toolTune->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onTune ), NULL, this );
     Connect( m_toolSettings->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onSettings ), NULL, this );
 
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSimulate,  this, m_runSimulation->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onAddSignal, this, m_addSignals->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onProbe,     this, m_probeSignals->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onTune,      this, m_tuneValue->GetId() );
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSettings,  this, m_settings->GetId() );
+
     m_toolBar->Realize();
     m_plotNotebook->SetPageText(0, _("Welcome!") );
 }

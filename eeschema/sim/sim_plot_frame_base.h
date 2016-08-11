@@ -49,6 +49,11 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxMenuBar* m_mainMenu;
 		wxMenu* m_fileMenu;
 		wxMenu* m_simulationMenu;
+		wxMenuItem* m_runSimulation;
+		wxMenuItem* m_addSignals;
+		wxMenuItem* m_probeSignals;
+		wxMenuItem* m_tuneValue;
+		wxMenuItem* m_settings;
 		wxMenu* m_viewMenu;
 		wxBoxSizer* m_sizer1;
 		wxToolBar* m_toolBar;
