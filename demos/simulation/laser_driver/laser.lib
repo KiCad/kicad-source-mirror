@@ -1,0 +1,1 @@
+.model LASER D(Is=1e-22 Rs=6 N=1.5 Cjo=50p Xti=100 Iave=160m Vpk=5)
