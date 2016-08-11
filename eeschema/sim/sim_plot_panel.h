@@ -28,6 +28,78 @@
 
 #include <widgets/mathplot.h>
 
+class TRACE : public mpFXYVector
+{
+public:
+    TRACE( const wxString& aTitle, const wxString& aSpiceName )
+        : mpFXYVector( aTitle ), m_spiceName( aSpiceName )
+    {
+        SetContinuity( true );
+        ShowName( false );
+    }
+
+    const wxString& GetSpiceName() const
+    {
+        return m_spiceName;
+    }
+
+    const std::vector<double>& GetDataX() const
+    {
+        return m_xs;
+    }
+
+    const std::vector<double>& GetDataY() const
+    {
+        return m_ys;
+    }
+
+private:
+    wxString m_spiceName;
+};
+
+class CURSOR : public mpInfoLayer
+{
+public:
+    CURSOR( const TRACE* aTrace, mpWindow* aWindow )
+        : mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
+        m_trace( aTrace ), m_moved( false ), m_coords( 0.0, 0.0 ), m_window( aWindow )
+    {
+    }
+
+    void Plot( wxDC& aDC, mpWindow& aWindow ) override;
+
+    bool Inside( wxPoint& aPoint )
+    {
+        return ( std::abs( aPoint.x - m_window->x2p( m_coords.x ) ) <= DRAG_MARGIN )
+            && ( std::abs( aPoint.y - m_window->y2p( m_coords.y ) ) <= DRAG_MARGIN );
+    }
+
+    void Move( wxPoint aDelta ) override
+    {
+        m_moved = true;
+        mpInfoLayer::Move( aDelta );
+    }
+
+    void UpdateReference()
+    {
+        m_reference.x = m_window->x2p( m_coords.x );
+        m_reference.y = m_window->y2p( m_coords.y );
+    }
+
+    const wxRealPoint& GetCoords() const
+    {
+        return m_coords;
+    }
+
+private:
+    const TRACE* m_trace;
+    bool m_moved;
+    wxRealPoint m_coords;
+    mpWindow* m_window;
+
+    const int DRAG_MARGIN = 10;
+};
+
 class SIM_PLOT_PANEL : public mpWindow
 {
 public:
@@ -40,25 +112,6 @@ public:
                     const double* aT, const double* aY, int aFlags );
 
     void DeleteTraces();
-
-    class TRACE : public mpFXYVector
-    {
-    public:
-        TRACE( const wxString& aTitle, const wxString& aSpiceName )
-            : mpFXYVector( aTitle ), m_spiceName( aSpiceName )
-        {
-            SetContinuity( true );
-            ShowName( false );
-        }
-
-        const wxString& GetSpiceName() const
-        {
-            return m_spiceName;
-        }
-
-    private:
-        wxString m_spiceName;
-    };
 
     const std::vector<TRACE*>& GetTraces() const
     {

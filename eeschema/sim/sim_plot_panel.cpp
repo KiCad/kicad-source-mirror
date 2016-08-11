@@ -28,6 +28,67 @@
 #include <algorithm>
 #include <limits>
 
+
+void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
+{
+    if( !m_visible )
+        return;
+
+    const auto& dataX = m_trace->GetDataX();
+    const auto& dataY = m_trace->GetDataY();
+
+    if( dataX.size() <= 1 )
+        return;
+
+    if( m_moved )
+    {
+        m_coords.x = aWindow.p2x( m_dim.x );
+
+        // Find the closest point coordinates
+        auto maxXIt = std::upper_bound( dataX.begin(), dataX.end(), m_coords.x );
+        int maxIdx = maxXIt - dataX.begin();
+        int minIdx = maxIdx - 1;
+
+        // Out of bounds checks
+        if( minIdx < 0 )
+        {
+            minIdx = 0;
+            maxIdx = 1;
+            m_coords.x = dataX[0];
+        }
+        else if( maxIdx >= (int) dataX.size() )
+        {
+            maxIdx = dataX.size() - 1;
+            minIdx = maxIdx - 1;
+            m_coords.x = dataX[maxIdx];
+        }
+
+        const double leftX = dataX[minIdx];
+        const double rightX = dataX[maxIdx];
+        const double leftY = dataY[minIdx];
+        const double rightY = dataY[maxIdx];
+
+        m_coords.y = leftY + ( rightY - leftY ) / ( rightX - leftX ) * ( m_coords.x - leftX );
+        m_moved = false;
+    }
+    else
+    {
+        UpdateReference();
+    }
+
+    // Line length in horizontal and vertical dimensions
+    const int horLen = aWindow.GetScrX();
+    const int verLen = aWindow.GetScrY();
+
+    const wxPoint cursorPos( m_window->x2p( m_coords.x ), m_window->y2p( m_coords.y ) );
+
+    aDC.SetPen( wxPen( *wxBLACK, 1, m_continuous ? wxSOLID : wxLONG_DASH ) );
+
+    aDC.DrawLine( -horLen, cursorPos.y, horLen, cursorPos.y );
+    aDC.DrawLine( cursorPos.x, -verLen, cursorPos.x, verLen );
+}
+
+
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                 const wxSize& size, long style, const wxString& name )
     : mpWindow( parent, id, pos, size, style ), m_colorIdx( 0 )
