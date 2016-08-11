@@ -76,9 +76,9 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
     {
         switch( m_pasType->GetSelection() )
         {
-            case 0: m_fieldsTmp[SPICE_PRIMITIVE] = (char) SP_RESISTOR; break;
-            case 1: m_fieldsTmp[SPICE_PRIMITIVE] = (char) SP_CAPACITOR; break;
-            case 2: m_fieldsTmp[SPICE_PRIMITIVE] = (char) SP_INDUCTOR; break;
+            case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_RESISTOR; break;
+            case 1: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_CAPACITOR; break;
+            case 2: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_INDUCTOR; break;
 
             default:
                 wxASSERT_MSG( false, "Unhandled passive type" );
@@ -86,7 +86,7 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
                 break;
         }
 
-        m_fieldsTmp[SPICE_MODEL] = m_pasValue->GetValue();
+        m_fieldsTmp[SF_MODEL] = m_pasValue->GetValue();
     }
 
 
@@ -95,9 +95,9 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
     {
         switch( m_semiType->GetSelection() )
         {
-            case 0: m_fieldsTmp[SPICE_PRIMITIVE] = (char) SP_DIODE; break;
-            case 1: m_fieldsTmp[SPICE_PRIMITIVE] = (char) SP_BJT; break;
-            case 2: m_fieldsTmp[SPICE_PRIMITIVE] = (char) SP_MOSFET; break;
+            case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_DIODE; break;
+            case 1: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_BJT; break;
+            case 2: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_MOSFET; break;
 
             default:
                 wxASSERT_MSG( false, "Unhandled semiconductor type" );
@@ -105,21 +105,21 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
                 break;
         }
 
-        m_fieldsTmp[SPICE_MODEL] = m_semiModel->GetValue();
+        m_fieldsTmp[SF_MODEL] = m_semiModel->GetValue();
 
         if( !empty( m_semiLib ) )
-            m_fieldsTmp[SPICE_LIB_FILE] = m_semiLib->GetValue();
+            m_fieldsTmp[SF_LIB_FILE] = m_semiLib->GetValue();
     }
 
 
     // Integrated circuit
     else if( page == m_ic )
     {
-        m_fieldsTmp[SPICE_PRIMITIVE] = (char) SP_SUBCKT;
-        m_fieldsTmp[SPICE_MODEL] = m_icModel->GetValue();
+        m_fieldsTmp[SF_PRIMITIVE] = (char) SP_SUBCKT;
+        m_fieldsTmp[SF_MODEL] = m_icModel->GetValue();
 
         if( !empty( m_icLib ) )
-            m_fieldsTmp[SPICE_LIB_FILE] = m_icLib->GetValue();
+            m_fieldsTmp[SF_LIB_FILE] = m_icLib->GetValue();
     }
 
 
@@ -131,8 +131,8 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
         if( !generatePowerSource( model ) )
             return false;
 
-        m_fieldsTmp[SPICE_PRIMITIVE] = (char)( m_pwrType->GetSelection() ? SP_ISOURCE : SP_VSOURCE );
-        m_fieldsTmp[SPICE_MODEL] = model;
+        m_fieldsTmp[SF_PRIMITIVE] = (char)( m_pwrType->GetSelection() ? SP_ISOURCE : SP_VSOURCE );
+        m_fieldsTmp[SF_MODEL] = model;
     }
 
 
@@ -142,11 +142,11 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
         return false;
     }
 
-    m_fieldsTmp[SPICE_ENABLED] = !m_disabled->GetValue() ? "Y" : "N";        // note bool inversion
-    m_fieldsTmp[SPICE_NODE_SEQUENCE] = m_nodeSeqCheck->IsChecked() ? m_nodeSeqVal->GetValue() : "";
+    m_fieldsTmp[SF_ENABLED] = !m_disabled->GetValue() ? "Y" : "N";        // note bool inversion
+    m_fieldsTmp[SF_NODE_SEQUENCE] = m_nodeSeqCheck->IsChecked() ? m_nodeSeqVal->GetValue() : "";
 
     // Apply the settings
-    for( int i = 0; i < SPICE_FIELD_END; ++i )
+    for( int i = 0; i < SF_END; ++i )
     {
         if( m_fieldsTmp.count( (SPICE_FIELD) i ) > 0 && !m_fieldsTmp.at( i ).IsEmpty() )
         {
@@ -192,7 +192,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
     }
 
     // Analyze the component fields to fill out the dialog
-    char primitive = toupper( m_fieldsTmp[SPICE_PRIMITIVE][0] );
+    char primitive = toupper( m_fieldsTmp[SF_PRIMITIVE][0] );
 
     switch( primitive )
     {
@@ -204,7 +204,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
                     : primitive == SP_CAPACITOR ? 1
                     : primitive == SP_INDUCTOR ? 2
                     : -1 );
-            m_pasValue->SetValue( m_fieldsTmp[SPICE_MODEL] );
+            m_pasValue->SetValue( m_fieldsTmp[SF_MODEL] );
             break;
 
         case SP_DIODE:
@@ -215,33 +215,33 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
                     : primitive == SP_BJT ? 1
                     : primitive == SP_MOSFET ? 2
                     : -1 );
-            m_semiModel->SetValue( m_fieldsTmp[SPICE_MODEL] );
-            m_semiLib->SetValue( m_fieldsTmp[SPICE_LIB_FILE] );
+            m_semiModel->SetValue( m_fieldsTmp[SF_MODEL] );
+            m_semiLib->SetValue( m_fieldsTmp[SF_LIB_FILE] );
 
             if( !empty( m_semiLib ) )
             {
                 const wxString& libFile = m_semiLib->GetValue();
-                m_fieldsTmp[SPICE_LIB_FILE] = libFile;
+                m_fieldsTmp[SF_LIB_FILE] = libFile;
                 updateFromFile( m_semiModel, libFile, "model" );
             }
             break;
 
         case SP_SUBCKT:
             m_notebook->SetSelection( m_notebook->FindPage( m_ic ) );
-            m_icModel->SetValue( m_fieldsTmp[SPICE_MODEL] );
-            m_icLib->SetValue( m_fieldsTmp[SPICE_LIB_FILE] );
+            m_icModel->SetValue( m_fieldsTmp[SF_MODEL] );
+            m_icLib->SetValue( m_fieldsTmp[SF_LIB_FILE] );
 
             if( !empty( m_icLib ) )
             {
                 const wxString& libFile = m_icLib->GetValue();
-                m_fieldsTmp[SPICE_LIB_FILE] = libFile;
+                m_fieldsTmp[SF_LIB_FILE] = libFile;
                 updateFromFile( m_icModel, libFile, "subckt" );
             }
             break;
 
         case SP_VSOURCE:
         case SP_ISOURCE:
-            if( !parsePowerSource( m_fieldsTmp[SPICE_MODEL] ) )
+            if( !parsePowerSource( m_fieldsTmp[SF_MODEL] ) )
                 return false;
 
             m_notebook->SetSelection( m_notebook->FindPage( m_power ) );
@@ -253,14 +253,14 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             break;
     }
 
-    m_disabled->SetValue( !NETLIST_EXPORTER_PSPICE::StringToBool( m_fieldsTmp[SPICE_ENABLED] ) );
+    m_disabled->SetValue( !NETLIST_EXPORTER_PSPICE::StringToBool( m_fieldsTmp[SF_ENABLED] ) );
 
     // Check if node sequence is different than the default one
-    if( m_fieldsTmp[SPICE_NODE_SEQUENCE]
-            != NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_NODE_SEQUENCE, &m_component, 0 ) )
+    if( m_fieldsTmp[SF_NODE_SEQUENCE]
+            != NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SF_NODE_SEQUENCE, &m_component, 0 ) )
     {
         m_nodeSeqCheck->SetValue( true );
-        m_nodeSeqVal->SetValue( m_fieldsTmp[SPICE_NODE_SEQUENCE] );
+        m_nodeSeqVal->SetValue( m_fieldsTmp[SF_NODE_SEQUENCE] );
     }
 
     return DIALOG_SPICE_MODEL_BASE::TransferDataToWindow();

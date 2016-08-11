@@ -144,7 +144,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceField( SPICE_FIELD aField,
         SCH_COMPONENT* aComponent, unsigned aCtl )
 {
     SCH_FIELD* field = aComponent->FindField( GetSpiceFieldName( aField ) );
-    return field ? field->GetText() : GetSpiceFieldDefVal( SPICE_PRIMITIVE, aComponent, aCtl );
+    return field ? field->GetText() : GetSpiceFieldDefVal( SF_PRIMITIVE, aComponent, aCtl );
 }
 
 
@@ -153,7 +153,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
 {
     switch( aField )
     {
-    case SPICE_PRIMITIVE:
+    case SF_PRIMITIVE:
     {
         const wxString& refName = aComponent->GetField( REFERENCE )->GetText();
 
@@ -165,7 +165,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
         break;
     }
 
-    case SPICE_MODEL:
+    case SF_MODEL:
     {
         wxChar prim = aComponent->GetField( REFERENCE )->GetText().GetChar( 0 );
         wxString value = aComponent->GetField( VALUE )->GetText();
@@ -199,11 +199,11 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
         break;
     }
 
-    case SPICE_ENABLED:
+    case SF_ENABLED:
         return wxString( "Y" );
         break;
 
-    case SPICE_NODE_SEQUENCE:
+    case SF_NODE_SEQUENCE:
     {
         wxString nodeSeq;
         std::vector<LIB_PIN*> pins;
@@ -219,7 +219,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
         break;
     }
 
-    case SPICE_LIB_FILE:
+    case SF_LIB_FILE:
         // There is no default Spice library
         return wxEmptyString;
         break;
@@ -268,22 +268,15 @@ void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             spiceItem.m_parent = comp;
 
             // Obtain Spice fields
-            SCH_FIELD* fieldPrim = comp->FindField( GetSpiceFieldName( SPICE_PRIMITIVE ) );
-            SCH_FIELD* fieldModel = comp->FindField( GetSpiceFieldName( SPICE_MODEL ) );
-            SCH_FIELD* fieldEnabled = comp->FindField( GetSpiceFieldName( SPICE_ENABLED ) );
-            SCH_FIELD* fieldLibFile = comp->FindField( GetSpiceFieldName( SPICE_LIB_FILE ) );
-            SCH_FIELD* fieldSeq = comp->FindField( GetSpiceFieldName( SPICE_NODE_SEQUENCE ) );
+            SCH_FIELD* fieldLibFile = comp->FindField( GetSpiceFieldName( SF_LIB_FILE ) );
+            SCH_FIELD* fieldSeq = comp->FindField( GetSpiceFieldName( SF_NODE_SEQUENCE ) );
 
-            spiceItem.m_primitive = fieldPrim ? fieldPrim->GetText()[0]
-                : GetSpiceFieldDefVal( SPICE_PRIMITIVE, comp, aCtl )[0];
-
-            spiceItem.m_model = fieldModel ? fieldModel->GetText()
-                : GetSpiceFieldDefVal( SPICE_MODEL, comp, aCtl );
-
+            spiceItem.m_primitive = GetSpiceField( SF_PRIMITIVE, comp, aCtl )[0];
+            spiceItem.m_model = GetSpiceField( SF_MODEL, comp, aCtl );
             spiceItem.m_refName = comp->GetRef( &sheetList[sheet_idx] );
 
             // Check to see if component should be removed from Spice netlist
-            spiceItem.m_enabled = fieldEnabled ? StringToBool( fieldEnabled->GetText() ) : true;
+            spiceItem.m_enabled = StringToBool( GetSpiceField( SF_ENABLED, comp, aCtl ) );
 
             if( fieldLibFile && !fieldLibFile->GetText().IsEmpty() )
                 m_libraries.insert( fieldLibFile->GetText() );

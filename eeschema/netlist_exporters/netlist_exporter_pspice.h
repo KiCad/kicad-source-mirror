@@ -41,12 +41,12 @@ enum SPICE_NETLIST_OPTIONS {
 };
 
 enum SPICE_FIELD {
-    SPICE_PRIMITIVE,
-    SPICE_MODEL,
-    SPICE_ENABLED,
-    SPICE_NODE_SEQUENCE,
-    SPICE_LIB_FILE,
-    SPICE_FIELD_END     // sentinel
+    SF_PRIMITIVE,
+    SF_MODEL,
+    SF_ENABLED,
+    SF_NODE_SEQUENCE,
+    SF_LIB_FILE,
+    SF_END     // sentinel
 };
 
 enum SPICE_PRIMITIVE {
