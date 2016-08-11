@@ -113,6 +113,17 @@ public:
         return m_directives;
     }
 
+    static bool StringToBool( const wxString& aStr )
+    {
+        if( aStr.IsEmpty() )
+            return false;
+
+        char c = tolower( aStr[0] );
+
+        // Different ways of saying false (no/false/0)
+        return !( c == 'n' || c == 'f' || c == '0' );
+    }
+
 protected:
     virtual void writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const;
 

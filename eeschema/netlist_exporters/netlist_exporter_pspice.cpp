@@ -249,19 +249,8 @@ void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 
             spiceItem.m_refName = comp->GetRef( &sheetList[sheet_idx] );
 
-            // Check to see if component should be removed from Spice Netlist:
-            spiceItem.m_enabled = true;     // assume yes and then verify
-
-            if( fieldEnabled )
-            {
-                wxString netlistEnabled = fieldEnabled->GetText();
-
-                // Different ways of saying 'disabled' (no/false/0)
-                if( netlistEnabled.CmpNoCase( "N" ) == 0
-                        || netlistEnabled.CmpNoCase( "F" ) == 0
-                        || netlistEnabled == "0" )
-                    spiceItem.m_enabled = false;
-            }
+            // Check to see if component should be removed from Spice netlist
+                spiceItem.m_enabled = fieldEnabled ? StringToBool( fieldEnabled->GetText() ) : true;
 
             wxArrayString pinNames;
 
