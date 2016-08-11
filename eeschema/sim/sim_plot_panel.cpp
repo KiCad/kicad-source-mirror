@@ -103,9 +103,9 @@ public:
     FREQUENCY_LIN_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
         mpScaleX( name, flags, ticks ,type ) {};
 
-    const wxString getLabel( int n )
+    const wxString formatLabel( double value, int nDigits )
     {
-        return formatSI ( m_labeledTicks[n], wxT("Hz"), 2 );
+        return formatSI ( value, wxT("Hz"), std::min(nDigits, 2) );
     }
 };
 
@@ -116,9 +116,9 @@ public:
     FREQUENCY_LOG_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
         mpScaleXLog( name, flags, ticks ,type ) {};
 
-    const wxString getLabel( int n )
+    const wxString formatLabel( double value, int nDigits )
     {
-        return formatSI ( m_labeledTicks[n], wxT("Hz"), 2 );
+        return formatSI ( value, wxT("Hz"), std::min(nDigits, 2) );
     }
 };
 
@@ -129,9 +129,9 @@ public:
     TIME_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
         mpScaleX ( name, flags, ticks ,type ) {};
 
-    const wxString getLabel( int n )
+    const wxString formatLabel( double value, int nDigits )
     {
-        return formatSI ( m_labeledTicks[n], wxT("s"), 3, AbsVisibleMaxValue() );
+        return formatSI ( value, wxT("s"), std::min(nDigits, 3), AbsVisibleMaxValue() );
     }
 };
 
@@ -141,9 +141,9 @@ public:
     VOLTAGE_SCALE_X(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
         mpScaleX ( name, flags, ticks, type ) {};
 
-    const wxString getLabel( int n )
+    const wxString formatLabel( double value, int nDigits )
     {
-        return formatSI ( m_labeledTicks[n], wxT("V"), 3, AbsVisibleMaxValue() );
+        return formatSI ( value, wxT("V"), std::min(nDigits, 3), AbsVisibleMaxValue() );
     }
 };
 
@@ -153,9 +153,9 @@ public:
     GAIN_SCALE(wxString name, int flags,  bool ticks = false, unsigned int type = 0) :
         mpScaleY ( name, flags, ticks ) {};
 
-    const wxString getLabel( int n )
+    const wxString formatLabel( double value, int nDigits )
     {
-        return formatSI ( m_labeledTicks[n], wxT("dB"), 1, AbsVisibleMaxValue(), true, 0 );
+        return formatSI ( value, wxT("dB"), std::min(nDigits, 1), AbsVisibleMaxValue(), true, 0 );
     }
 };
 
@@ -165,9 +165,9 @@ public:
     PHASE_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
         mpScaleY ( name, flags, ticks ) {};
 
-    const wxString getLabel( int n )
+    const wxString formatLabel( double value, int nDigits )
     {
-        return formatSI ( m_labeledTicks[n], wxT("\u00B0"), 1, AbsVisibleMaxValue(), true, 0 );
+        return formatSI ( value, wxT("\u00B0"), std::min(nDigits, 1), AbsVisibleMaxValue(), true, 0 );
     }
 };
 
@@ -177,9 +177,9 @@ public:
     VOLTAGE_SCALE_Y(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
         mpScaleY ( name, flags, ticks ) {};
 
-    const wxString getLabel( int n )
+    const wxString formatLabel( double value, int nDigits )
     {
-        return formatSI ( m_labeledTicks[n], wxT("V"), 3, AbsVisibleMaxValue() );
+        return formatSI ( value, wxT("V"), std::min(nDigits, 3), AbsVisibleMaxValue() );
     }
 };
 
@@ -189,11 +189,12 @@ public:
     CURRENT_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
         mpScaleY ( name, flags, ticks ) {};
 
-    const wxString getLabel( int n )
+    const wxString formatLabel( double value, int nDigits )
     {
-        return formatSI ( m_labeledTicks[n], wxT("A"), 3, AbsVisibleMaxValue() );
+        return formatSI ( value, wxT("A"), std::min(nDigits, 3), AbsVisibleMaxValue() );
     }
 };
+
 void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 {
     if( !m_window )
@@ -310,13 +311,13 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
             break;
 
         case ST_DC:
-            m_axis_x = new VOLTAGE_SCALE_X( wxT( "Voltage (sweeped)" ), mpALIGN_BORDER_BOTTOM );
-            m_axis_y1 = new VOLTAGE_SCALE_Y( wxT( "Voltage (measured)" ), mpALIGN_BORDER_LEFT );
+            m_axis_x = new VOLTAGE_SCALE_X( wxT( "Voltage (sweeped)" ), mpALIGN_BOTTOM );
+            m_axis_y1 = new VOLTAGE_SCALE_Y( wxT( "Voltage (measured)" ), mpALIGN_LEFT );
             break;
 
         case ST_NOISE:
-            m_axis_x = new mpScaleX( wxT( "frequency [Hz]" ), mpALIGN_BORDER_BOTTOM );
-            m_axis_y1 = new mpScaleY( wxT( "noise [(V or A)^2/Hz]" ), mpALIGN_BORDER_LEFT );
+            m_axis_x = new FREQUENCY_LOG_SCALE( wxT( "Frequency" ), mpALIGN_BOTTOM );
+            m_axis_y1 = new mpScaleY( wxT( "noise [(V or A)^2/Hz]" ), mpALIGN_LEFT );
             break;
 
         case ST_TRANSIENT:
@@ -334,18 +335,22 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     if( m_axis_x )
     {
         m_axis_x->SetTicks( false );
+        m_axis_x->SetNameAlign ( mpALIGN_BOTTOM );
+
         AddLayer( m_axis_x );
     }
 
     if( m_axis_y1 )
     {
         m_axis_y1->SetTicks( false );
+        m_axis_y1->SetNameAlign ( mpALIGN_LEFT );
         AddLayer( m_axis_y1 );
     }
 
     if( m_axis_y2 )
     {
         m_axis_y2->SetTicks( false );
+        m_axis_y2->SetNameAlign ( mpALIGN_RIGHT );
         AddLayer( m_axis_y2 );
     }
 
