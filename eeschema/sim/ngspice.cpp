@@ -26,6 +26,7 @@
 #include "ngspice.h"
 
 #include <wx/dynlib.h>
+#include <wx/log.h>
 #include <reporter.h>
 #include <sstream>
 
@@ -56,7 +57,7 @@ NGSPICE::~NGSPICE()
 
 void NGSPICE::Init()
 {
-    m_ngSpice_Init( &cbSendChar, &cbSendStat, NULL, NULL, NULL, NULL, this);
+    m_ngSpice_Init( &cbSendChar, &cbSendStat, NULL, NULL, NULL, NULL, this );
 }
 
 
@@ -73,11 +74,10 @@ const vector<double> NGSPICE::GetPlot( const string& aName, int aMaxLen )
     }
 
     return data;
-
 }
 
 
-bool NGSPICE::LoadNetlist(const string& aNetlist)
+bool NGSPICE::LoadNetlist( const string& aNetlist )
 {
     // TODO remove the hard limit
     char* lines[16384];
@@ -90,7 +90,7 @@ bool NGSPICE::LoadNetlist(const string& aNetlist)
         ss.getline( line, sizeof(line) );
 
         lines[n++] = strdup(line);
-	    printf("l '%s'\n", line);
+        wxLogDebug( "l '%s'\n", line );
     }
 
     lines[n] = NULL;
@@ -119,18 +119,18 @@ void NGSPICE::dump()
 
     for( int i = 0; plots[i]; ++i )
     {
-        printf( "-> plot : %s\n", plots[i] );
+        wxLogDebug( "-> plot : %s\n", plots[i] );
         char** vecs = m_ngSpice_AllVecs( plots[i] );
 
         for( int j = 0; vecs[j]; j++ )
         {
-            printf( "   - vector %s\n", vecs[j] );
+            wxLogDebug( "   - vector %s\n", vecs[j] );
 
             vector_info* vi = m_ngGet_Vec_Info( vecs[j] );
 
-            printf( "       - v_type %x\n", vi->v_type );
-            printf( "       - v_flags %x\n", vi->v_flags );
-            printf( "       - v_length %d\n", vi->v_length );
+            wxLogDebug( "       - v_type %x\n", vi->v_type );
+            wxLogDebug( "       - v_flags %x\n", vi->v_flags );
+            wxLogDebug( "       - v_length %d\n", vi->v_length );
         }
     }
 }
@@ -171,7 +171,7 @@ main()
     plt::plot(t, v2,"r--");
 
     for(int i=0;i<v1.size();i++)
-        printf("%.10f\n",v2[i]);
+        wxLogDebug("%.10f\n",v2[i]);
 
     // Add graph title
     plt::title("Sample figure");
@@ -193,11 +193,11 @@ string NGSPICE::GetConsole() const {
 }
 
 
-int NGSPICE::cbSendChar( char* what, int id, void* user)
+int NGSPICE::cbSendChar( char* what, int id, void* user )
 {
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
 
-    printf("sim %p cr %p\n",sim, sim->m_consoleReporter );
+    wxLogDebug( "sim %p cr %p\n", sim, sim->m_consoleReporter );
 
     if( sim->m_consoleReporter )
         sim->m_consoleReporter->Report( what );
@@ -206,10 +206,10 @@ int NGSPICE::cbSendChar( char* what, int id, void* user)
 }
 
 
-int NGSPICE::cbSendStat( char* what, int id, void* user)
+int NGSPICE::cbSendStat( char* what, int id, void* user )
 {
-/*    NGSPICE *sim = reinterpret_cast<NGSPICE*>(user);
-    if(sim->m_consoleReporter)
-        sim->m_consoleReporter->Report(what);*/
+/*    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
+    if( sim->m_consoleReporter )
+        sim->m_consoleReporter->Report( what );*/
     return 0;
 }

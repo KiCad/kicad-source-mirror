@@ -44,81 +44,54 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
 bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 {
-    bool aUsePrefix = aCtl & NET_USE_X_PREFIX;
-
     int                 ret = 0;
-    int                 nbitems;
-    wxString            text;
-    wxArrayString       spiceCommandAtBeginFile;
-    wxArrayString       spiceCommandAtEndFile;
-    wxString            msg;
-    wxString            netName;
-
-    #define BUFYPOS_LEN 4
-    wxChar              bufnum[BUFYPOS_LEN + 1];
     std::vector<int>    pinSequence;                    // numeric indices into m_SortedComponentPinList
     wxArrayString       stdPinNameArray;                // Array containing Standard Pin Names
-    wxString            delimeters = wxT( "{:,; }" );
-    wxString            disableStr = wxT( "N" );
-
-    //std::map<wxString, int> netIndices;
+    const wxString      delimiters( "{:,; }" );
+    const wxString      disableStr( "N" );
 
     // Prepare list of nets generation (not used here, but...
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
         m_masterList->GetItem( ii )->m_Flag = 0;
 
-    // Create text list starting by [.-]pspice , or [.-]gnucap (simulator
-    // commands) and create text list starting by [+]pspice , or [+]gnucap
-    // (simulator commands)
-    bufnum[BUFYPOS_LEN] = 0;
     SCH_SHEET_LIST sheetList( g_RootSheet );
-
     std::vector<wxString> directives;
 
-    formatter->Print(0, "Kicad schematic\n");
+    formatter->Print( 0, ".title KiCad schematic\n" );
 
     m_probes.clear();
     m_netMap.clear();
+
+    // Ground net has to be always assigned to node 0
     m_netMap["GND"] = 0;
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
         for( EDA_ITEM* item = sheetList[i].LastDrawList(); item; item = item->Next() )
         {
-            size_t l1, l2;
-            wxChar ident;
-
             if( item->Type() != SCH_TEXT_T )
                 continue;
 
-            SCH_TEXT*   drawText = (SCH_TEXT*) item;
-
-            text = drawText->GetText();
+            wxString text = static_cast<SCH_TEXT*>( item )->GetText();
 
             if( text.IsEmpty() )
                 continue;
 
-            ident = text.GetChar( 0 );
-
-            if( ident == '.' )
+            if( text.GetChar( 0 ) == '.' )
             {
-                    printf("Directive found: '%s'\n", (const char *) text.c_str());
-                    directives.push_back(text);
+                wxLogDebug( "Directive found: '%s'\n", (const char *) text.c_str() );
+                directives.push_back( text );
             }
         }
     }
 
-
     m_ReferencesAlreadyFound.Clear();
-
 
     int curNetIndex = 1;
 
     for( unsigned sheet_idx = 0; sheet_idx < sheetList.size(); sheet_idx++ )
     {
-        //printf( "* Sheet Name: %s\n",
-        //                TO_UTF8( sheetList[sheet_idx].PathHumanReadable() ) );
-
+        // Process component attributes to find Spice directives
         for( EDA_ITEM* item = sheetList[sheet_idx].LastDrawList(); item; item = item->Next() )
         {
             SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, &sheetList[sheet_idx] );
@@ -131,35 +104,35 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
             // Reset NodeSeqIndex Count:
             pinSequence.clear();
 
-            SCH_FIELD*   spicePrimitiveType = comp->FindField( wxT( "Spice_Primitive" ) );
-            SCH_FIELD*   spiceModel = comp->FindField( wxT( "Spice_Model" ) );
+            SCH_FIELD* spicePrimitiveType = comp->FindField( wxT( "Spice_Primitive" ) );
+            SCH_FIELD* spiceModel = comp->FindField( wxT( "Spice_Model" ) );
 
             wxString RefName = comp->GetRef( &sheetList[sheet_idx] );
             wxString CompValue = comp->GetField( VALUE )->GetText();
 
-            wxString model("");
-            wxString primType ("X");
+            wxString model( "" );
+            wxString primType( "X" );
 
-            if(spicePrimitiveType)
-                primType = spicePrimitiveType->GetText();
-            else {
-                if (RefName.StartsWith(wxT("IC")) || RefName.StartsWith("U") )
-                    primType = wxT("X"); // subckt
-                else
-                    primType = RefName.GetChar(0);
-            }
-
-            if(spiceModel)
+            if( spicePrimitiveType )
             {
-            //    printf("model specified\n");
-                model = spiceModel->GetText();
-            } else {
-            //    printf("no model\n");
-                model = CompValue;
+                primType = spicePrimitiveType->GetText();
             }
+            else
+            {
+                // Convert ceratin modules to subcircuits
+                if( RefName.StartsWith( "IC" ) || RefName.StartsWith( "U" ) )
+                    primType = "X";
+                else
+                    primType = RefName.GetChar( 0 );
+            }
+
+            if( spiceModel )
+                model = spiceModel->GetText();
+            else
+                model = CompValue;
 
             // Check to see if component should be removed from Spice Netlist:
-            SCH_FIELD*  netlistEnabledField = comp->FindField( wxT( "Spice_Netlist_Enabled" ) );
+            SCH_FIELD* netlistEnabledField = comp->FindField( wxT( "Spice_Netlist_Enabled" ) );
 
             if( netlistEnabledField )
             {
@@ -170,7 +143,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
             }
 
             // Check if Alternative Pin Sequence is Available:
-            SCH_FIELD*  spiceSeqField = comp->FindField( wxT( "Spice_Node_Sequence" ) );
+            SCH_FIELD* spiceSeqField = comp->FindField( wxT( "Spice_Node_Sequence" ) );
 
             if( spiceSeqField )
             {
@@ -180,7 +153,6 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                 // Verify Field Exists and is not empty:
                 if( !nodeSeqIndexLineStr.IsEmpty() )
                 {
-
                     // Create an Array of Standard Pin Names from part definition:
                     stdPinNameArray.Clear();
 
@@ -195,7 +167,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                     }
 
                     // Get Alt Pin Name Array From User:
-                    wxStringTokenizer tkz( nodeSeqIndexLineStr, delimeters );
+                    wxStringTokenizer tkz( nodeSeqIndexLineStr, delimiters );
 
                     while( tkz.HasMoreTokens() )
                     {
@@ -206,15 +178,13 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                         seq = stdPinNameArray.Index(pinIndex);
 
                         if( seq != wxNOT_FOUND )
-                        {
                             pinSequence.push_back( seq );
-                        }
                     }
-
                 }
             }
 
-
+            // TODO remove?
+#if 0
             if(CompValue == wxT("SPICE_PROBE"))
             {
                 NETLIST_OBJECT* pin = m_SortedComponentPinList[0];
@@ -231,12 +201,14 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                 //if( RefName.StartsWith( wxT( "U" ) ) || RefName.StartsWith( wxT( "IC" ) ) )
                 //    RefName = wxT( "X" ) + RefName;
             }
+#endif
 
-            printf( "Ref %s primType %s model/value '%s'\n", TO_UTF8( RefName ), (const char*)primType.c_str(), (const char *)model.c_str() );
+            wxLogDebug( "Ref %s primType %s model/value '%s'\n",
+                    TO_UTF8( RefName ), (const char*) primType.c_str(), (const char*) model.c_str() );
 
             int activePinIndex = 0;
 
-            formatter->Print(0, "%s%s ", (const char *)primType.c_str(), (const char *)RefName.c_str());
+            formatter->Print( 0, "%s%s ", (const char*) primType.c_str(), (const char*) RefName.c_str() );
 
             for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
@@ -274,7 +246,8 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                 wxString netName = pin->GetNetName();
                 int netIdx;
 
-                if (m_netMap.find(netName) == m_netMap.end())
+                // Assign a node number (associated with net)
+                if( m_netMap.find( netName ) == m_netMap.end() )
                 {
                     netIdx = curNetIndex++;
                     m_netMap[netName] = netIdx;
@@ -282,6 +255,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                     netIdx = m_netMap[netName];
                 }
 
+// TODO remove?
                 //printf("net %s index %d\n", (const char*)netName.c_str(), netIdx);
 //                sprintPinNetName( netName , wxT( "N-%.6d" ), pin, aUseNetcodeAsNetName );
 
@@ -294,25 +268,22 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 
 //                ret |= fprintf( f, " %s", TO_UTF8( netName ) );
 
-                formatter->Print(0, "%d ", netIdx );
+                formatter->Print( 0, "%d ", netIdx );
             }
 
-            formatter->Print(0, "%s\n",(const char *) model.c_str());
-
-
+            formatter->Print( 0, "%s\n", (const char*) model.c_str() );
         }
-
-
     }
 
-    for( auto dir : directives )
+    // Print out all directives found in the text fields on the schematics
+    for( auto& dir : directives )
     {
-        formatter->Print(0, "%s\n", (const char *)dir.c_str());
-
+        formatter->Print( 0, "%s\n", (const char*) dir.c_str() );
     }
 
-    formatter->Print(0, ".end\n");
+    formatter->Print( -1, ".end\n" );
 
+// TODO remove?
 #if 0
     m_SortedComponentPinList.clear();
 
@@ -335,9 +306,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 
     ret |= fprintf( f, "\n.end\n" );
     fclose( f );
-
 #endif
-
 
     return ret >= 0;
 }

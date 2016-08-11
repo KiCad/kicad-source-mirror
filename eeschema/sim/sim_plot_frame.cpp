@@ -1,41 +1,32 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2016 CERN
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #include <schframe.h>
-#include <fctsys.h>
-#include <kiface_i.h>
-#include <pgm_base.h>
-#include <gr_basic.h>
-#include <class_drawpanel.h>
-#include <gestfich.h>
-#include <confirm.h>
-#include <base_units.h>
-#include <msgpanel.h>
-#include <html_messagebox.h>
-
-#include <general.h>
-#include <eeschema_id.h>
-#include <netlist.h>
-#include <lib_pin.h>
-#include <class_library.h>
-#include <schframe.h>
-#include <sch_component.h>
-
-#include <dialog_helpers.h>
-#include <libeditframe.h>
-#include <viewlib_frame.h>
-#include <hotkeys.h>
-#include <eeschema_config.h>
-#include <sch_sheet.h>
-#include <sch_sheet_path.h>
-
-#include <invoke_sch_dialog.h>
-#include <dialogs/dialog_schematic_find.h>
-
-#include <wx/display.h>
-#include <build_version.h>
-#include <wildcards_and_files_ext.h>
-
-#include <netlist_exporter_kicad.h>
 #include <kiway.h>
 
+#include <netlist_exporter_kicad.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
 
 #include <reporter.h>
@@ -52,10 +43,9 @@
 class SIM_REPORTER : public REPORTER
 {
 public:
-    SIM_REPORTER( wxRichTextCtrl* console )
+    SIM_REPORTER( wxRichTextCtrl* aConsole )
     {
-        m_console = console;
-
+        m_console = aConsole;
     }
 
     ~SIM_REPORTER()
@@ -64,7 +54,7 @@ public:
 
     virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED )
     {
-        m_console->WriteText(aText);
+        m_console->WriteText( aText );
         m_console->Newline();
         return *this;
     }
@@ -112,7 +102,7 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_exporter->Format( &formatter, GNL_ALL );
     //m_plotPanel->DeleteTraces();
 
-    printf("*******************\n%s\n", (const char *)formatter.GetString().c_str());
+    wxLogDebug( "*******************\n%s\n", (const char *)formatter.GetString().c_str() );
 
     m_simulator->LoadNetlist( formatter.GetString() );
     m_simulator->Command("run\n");

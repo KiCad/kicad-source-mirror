@@ -47,8 +47,6 @@ public:
 
     static SPICE_SIMULATOR* CreateInstance( const std::string& aName );
 
-    typedef void (*ConsoleCallback)( bool isError, const std::string& message, void* userData );
-
     virtual void Init() = 0;
     virtual bool LoadNetlist( const std::string& aNetlist ) = 0;
     virtual bool Command( const std::string& aCmd ) = 0;
@@ -58,7 +56,7 @@ public:
         m_consoleReporter = aReporter;
     }
 
-    virtual const std::vector<double> GetPlot( const std::string& aName, int aMaxLen = -1) = 0;
+    virtual const std::vector<double> GetPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
 
 protected:
     REPORTER* m_consoleReporter;

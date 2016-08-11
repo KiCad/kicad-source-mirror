@@ -1,58 +1,33 @@
-#include <schframe.h>
-#include <fctsys.h>
-#include <kiface_i.h>
-#include <pgm_base.h>
-#include <gr_basic.h>
-#include <class_drawpanel.h>
-#include <gestfich.h>
-#include <confirm.h>
-#include <base_units.h>
-#include <msgpanel.h>
-#include <html_messagebox.h>
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2016 CERN
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
-#include <general.h>
-#include <eeschema_id.h>
-#include <netlist.h>
-#include <lib_pin.h>
-#include <class_library.h>
-#include <schframe.h>
-#include <sch_component.h>
-
-#include <dialog_helpers.h>
-#include <libeditframe.h>
-#include <viewlib_frame.h>
-#include <hotkeys.h>
-#include <eeschema_config.h>
-#include <sch_sheet.h>
-#include <sch_sheet_path.h>
-
-#include <invoke_sch_dialog.h>
-#include <dialogs/dialog_schematic_find.h>
-
-#include <wx/display.h>
-#include <build_version.h>
-#include <wildcards_and_files_ext.h>
-
-#include <netlist_exporter_kicad.h>
 #include <kiway.h>
-
-#include <netlist_exporters/netlist_exporter_pspice.h>
-
-#include <sim/sim_plot_frame.h>
+#include <schframe.h>
+#include "sim_plot_frame.h"
 
 void SCH_EDIT_FRAME::OnSimulationRun( wxCommandEvent& event )
 {
-    #if 0
-
-    NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
-    NETLIST_EXPORTER_PSPICE exporter( net_atoms, Prj().SchLibs() );
-    STRING_FORMATTER formatter;
-
-    exporter.Format( &formatter, GNL_ALL );
-
-    printf("*******************\n%s\n", (const char *)formatter.GetString().c_str());
-    #endif
-
     SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
 
     if( !simFrame )
@@ -60,7 +35,6 @@ void SCH_EDIT_FRAME::OnSimulationRun( wxCommandEvent& event )
         simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, true );
         simFrame->Show( true );
     }
-
 
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( simFrame->IsIconized() )
@@ -72,8 +46,12 @@ void SCH_EDIT_FRAME::OnSimulationRun( wxCommandEvent& event )
     simFrame->StartSimulation();
 }
 
+
 void SCH_EDIT_FRAME::OnSimulationStop( wxCommandEvent& event )
-{}
+{
+}
+
 
 void SCH_EDIT_FRAME::OnSimulationAddProbe( wxCommandEvent& event )
-{}
+{
+}
