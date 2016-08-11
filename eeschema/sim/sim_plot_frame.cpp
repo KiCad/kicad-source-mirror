@@ -677,7 +677,17 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
 
     const long SIGNAL_COL = m_cursors->AppendColumn( wxT( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
     const long X_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelX(), wxLIST_FORMAT_LEFT, size.x / 4 );
-    const long Y_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelY1(), wxLIST_FORMAT_LEFT, size.x / 4 );
+
+    wxString labelY1 = CurrentPlot()->GetLabelY1();
+    wxString labelY2 = CurrentPlot()->GetLabelY2();
+    wxString labelY;
+
+    if( !labelY2.IsEmpty() )
+        labelY = labelY1 + " / " + labelY2;
+    else
+        labelY = labelY1;
+
+    const long Y_COL = m_cursors->AppendColumn( labelY, wxLIST_FORMAT_LEFT, size.x / 4 );
 
     // Update cursor values
     for( const auto& trace : CurrentPlot()->GetTraces() )
