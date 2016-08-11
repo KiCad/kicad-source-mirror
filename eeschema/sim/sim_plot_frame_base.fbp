@@ -206,7 +206,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">View</property>
                     <property name="name">m_viewMenu</property>
                     <property name="permission">protected</property>
@@ -790,7 +790,7 @@
                                                 <event name="OnPaint"></event>
                                                 <event name="OnRightDClick"></event>
                                                 <event name="OnRightDown"></event>
-                                                <event name="OnRightUp"></event>
+                                                <event name="OnRightUp">onSignalRClick</event>
                                                 <event name="OnSetFocus"></event>
                                                 <event name="OnSize"></event>
                                                 <event name="OnUpdateUI"></event>

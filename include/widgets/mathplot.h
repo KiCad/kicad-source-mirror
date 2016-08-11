@@ -1267,11 +1267,13 @@ class WXDLLIMPEXP_MATHPLOT mpFXYVector : public mpFXY
           */
         mpFXYVector(wxString name = wxEmptyString, int flags = mpALIGN_NE);
 
+        virtual ~mpFXYVector() {}
+
         /** Changes the internal data: the set of points to draw.
           Both vectors MUST be of the same length. This method DOES NOT refresh the mpWindow; do it manually.
          * @sa Clear
          */
-        void SetData( const std::vector<double> &xs,const std::vector<double> &ys);
+        virtual void SetData( const std::vector<double> &xs,const std::vector<double> &ys);
 
         /** Clears all the data, leaving the layer empty.
          * @sa SetData

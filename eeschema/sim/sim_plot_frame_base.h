@@ -69,6 +69,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuShowGrid( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuShowGridState( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSignalRClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onSimulate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPlaceProbe( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTune( wxCommandEvent& event ) { event.Skip(); }

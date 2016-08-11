@@ -99,6 +99,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 
         // Event handlers
         void onSignalDblClick( wxCommandEvent& event ) override;
+        void onSignalRClick( wxMouseEvent& event ) override;
         void onSimulate( wxCommandEvent& event ) override;
         void onPlaceProbe( wxCommandEvent& event ) override;
 
@@ -111,6 +112,27 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         SCH_EDIT_FRAME* m_schematicFrame;
         NETLIST_EXPORTER_PSPICE* m_exporter;
         SPICE_SIMULATOR* m_simulator;
+
+        // Right click context menu for signals in the listbox
+        class SIGNAL_CONTEXT_MENU : public wxMenu
+        {
+            public:
+                SIGNAL_CONTEXT_MENU( const wxString& aSignal, SIM_PLOT_FRAME* aPlotFrame );
+
+            private:
+                void onMenuEvent( wxMenuEvent& aEvent );
+
+                const wxString& m_signal;
+                SIM_PLOT_FRAME* m_plotFrame;
+
+                enum SIGNAL_CONTEXT_MENU_EVENTS
+                {
+                    SHOW_SIGNAL,
+                    HIDE_SIGNAL,
+                    SHOW_CURSOR,
+                    HIDE_CURSOR
+                };
+        };
 };
 
 wxDEFINE_EVENT( wxEVT_SIM_REPORT, wxCommandEvent );

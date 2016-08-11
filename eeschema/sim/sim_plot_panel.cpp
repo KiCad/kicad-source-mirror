@@ -43,7 +43,7 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     if( dataX.size() <= 1 )
         return;
 
-    if( m_moved )
+    if( m_updateRequired )
     {
         m_coords.x = aWindow.p2x( m_dim.x );
 
@@ -72,7 +72,7 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
         const double rightY = dataY[maxIdx];
 
         m_coords.y = leftY + ( rightY - leftY ) / ( rightX - leftX ) * ( m_coords.x - leftX );
-        m_moved = false;
+        m_updateRequired = false;
     }
     else
     {
@@ -156,12 +156,17 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
 
 bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
 {
-    auto trace = m_traces.find( aName );
+    auto it = m_traces.find( aName );
 
-    if( trace != m_traces.end() )
+    if( it != m_traces.end() )
     {
-        m_traces.erase( trace );
-        DelLayer( trace->second, true, true );
+        m_traces.erase( it );
+        TRACE* trace = it->second;
+
+        if( CURSOR* cursor = trace->GetCursor() )
+            DelLayer( cursor, true );
+
+        DelLayer( trace, true, true );
 
         return true;
     }
@@ -174,7 +179,7 @@ void SIM_PLOT_PANEL::DeleteAllTraces()
 {
     for( auto& t : m_traces )
     {
-        DelLayer( t.second, true );
+        DeleteTrace( t.first );
     }
 
     m_traces.clear();
@@ -193,6 +198,36 @@ bool SIM_PLOT_PANEL::IsGridShown() const
 {
     assert( m_axis_x->GetTicks() == m_axis_y->GetTicks() );
     return !m_axis_x->GetTicks();
+}
+
+
+bool SIM_PLOT_PANEL::HasCursorEnabled( const wxString& aName ) const
+{
+    TRACE* t = GetTrace( aName );
+
+    return t ? t->HasCursor() : false;
+}
+
+
+void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
+{
+    TRACE* t = GetTrace( aName );
+
+    if( t == nullptr || t->HasCursor() == aEnable )
+        return;
+
+    if( aEnable )
+    {
+        CURSOR* c = new CURSOR( t );
+        t->SetCursor( c );
+        AddLayer( c );
+    }
+    else
+    {
+        CURSOR* c = t->GetCursor();
+        t->SetCursor( NULL );
+        DelLayer( c, true );
+    }
 }
 
 

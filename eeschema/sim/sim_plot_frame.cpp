@@ -235,6 +235,24 @@ void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
 }
 
 
+void SIM_PLOT_FRAME::onSignalRClick( wxMouseEvent& event )
+{
+    int idx = m_signals->HitTest( event.GetPosition() );
+
+    if( idx != wxNOT_FOUND )
+        m_signals->SetSelection( idx );
+
+    idx = m_signals->GetSelection();
+
+    if( idx != wxNOT_FOUND )
+    {
+        const wxString& netName = m_signals->GetString( idx );
+        SIGNAL_CONTEXT_MENU ctxMenu( netName, this );
+        m_signals->PopupMenu( &ctxMenu );
+    }
+}
+
+
 void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 {
     if( isSimulationRunning() )
@@ -291,6 +309,8 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
         for( const auto& trace : plotPanel->GetTraces() )
             updatePlot( trace.second->GetSpiceName(), trace.second->GetName(), plotPanel );
+
+        plotPanel->UpdateAll();
     }
 }
 
@@ -301,3 +321,56 @@ void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
     m_simConsole->Newline();
     m_simConsole->MoveEnd();        /// @todo does not work..
 }
+
+
+SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSignal,
+        SIM_PLOT_FRAME* aPlotFrame )
+    : m_signal( aSignal ), m_plotFrame( aPlotFrame )
+{
+    SIM_PLOT_PANEL* plot = m_plotFrame->CurrentPlot();
+
+    if( plot->IsShown( m_signal ) )
+    {
+        Append( HIDE_SIGNAL, wxT( "Hide signal" ) );
+
+        TRACE* trace = plot->GetTrace( m_signal );
+
+        if( trace->HasCursor() )
+            Append( HIDE_CURSOR, wxT( "Hide cursor" ) );
+        else
+            Append( SHOW_CURSOR, wxT( "Show cursor" ) );
+    }
+    else
+    {
+        Append( SHOW_SIGNAL, wxT( "Show signal" ) );
+    }
+
+    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ), NULL, this );
+}
+
+
+void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
+{
+    SIM_PLOT_PANEL* plot = m_plotFrame->CurrentPlot();
+
+    switch( aEvent.GetId() )
+    {
+        case SHOW_SIGNAL:
+            m_plotFrame->AddVoltagePlot( m_signal );
+            break;
+
+            break;
+        case HIDE_SIGNAL:
+            plot->DeleteTrace( m_signal );
+            break;
+
+        case SHOW_CURSOR:
+            plot->EnableCursor( m_signal, true );
+            break;
+
+        case HIDE_CURSOR:
+            plot->EnableCursor( m_signal, false );
+            break;
+    }
+}
+

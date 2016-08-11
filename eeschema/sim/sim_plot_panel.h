@@ -29,45 +29,23 @@
 #include <widgets/mathplot.h>
 #include <map>
 
-class TRACE : public mpFXYVector
-{
-public:
-    TRACE( const wxString& aName, const wxString& aSpiceName )
-        : mpFXYVector( aName ), m_spiceName( aSpiceName )
-    {
-        SetContinuity( true );
-        ShowName( false );
-    }
-
-    const wxString& GetSpiceName() const
-    {
-        return m_spiceName;
-    }
-
-    const std::vector<double>& GetDataX() const
-    {
-        return m_xs;
-    }
-
-    const std::vector<double>& GetDataY() const
-    {
-        return m_ys;
-    }
-
-private:
-    wxString m_spiceName;
-};
+class TRACE;
 
 class CURSOR : public mpInfoLayer
 {
 public:
     CURSOR( const TRACE* aTrace )
         : mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
-        m_trace( aTrace ), m_moved( false ), m_coords( 0.0, 0.0 ), m_window( nullptr )
+        m_trace( aTrace ), m_updateRequired( false ), m_coords( 0.0, 0.0 ), m_window( nullptr )
     {
     }
 
     void Plot( wxDC& aDC, mpWindow& aWindow ) override;
+
+    void Update()
+    {
+        m_updateRequired = true;
+    }
 
     bool Inside( wxPoint& aPoint )
     {
@@ -80,7 +58,7 @@ public:
 
     void Move( wxPoint aDelta ) override
     {
-        m_moved = true;
+        Update();
         mpInfoLayer::Move( aDelta );
     }
 
@@ -100,12 +78,67 @@ public:
 
 private:
     const TRACE* m_trace;
-    bool m_moved;
+    bool m_updateRequired;
     wxRealPoint m_coords;
     mpWindow* m_window;
 
     const int DRAG_MARGIN = 10;
 };
+
+
+class TRACE : public mpFXYVector
+{
+public:
+    TRACE( const wxString& aName, const wxString& aSpiceName )
+        : mpFXYVector( aName ), m_spiceName( aSpiceName ), m_cursor( nullptr )
+    {
+        SetContinuity( true );
+        ShowName( false );
+    }
+
+    void SetData( const std::vector<double>& aXs, const std::vector<double>& aYs )
+    {
+        mpFXYVector::SetData( aXs, aYs );
+
+        if( m_cursor )
+            m_cursor->Update();
+    }
+
+    const wxString& GetSpiceName() const
+    {
+        return m_spiceName;
+    }
+
+    const std::vector<double>& GetDataX() const
+    {
+        return m_xs;
+    }
+
+    const std::vector<double>& GetDataY() const
+    {
+        return m_ys;
+    }
+
+    bool HasCursor() const
+    {
+        return m_cursor != nullptr;
+    }
+
+    void SetCursor( CURSOR* aCursor )
+    {
+        m_cursor = aCursor;
+    }
+
+    CURSOR* GetCursor() const
+    {
+        return m_cursor;
+    }
+
+private:
+    wxString m_spiceName;
+    CURSOR* m_cursor;
+};
+
 
 class SIM_PLOT_PANEL : public mpWindow
 {
@@ -120,21 +153,32 @@ public:
 
     bool DeleteTrace( const wxString& aName );
 
+    void DeleteAllTraces();
+
     bool IsShown( const wxString& aName ) const
     {
         return ( m_traces.count( aName ) != 0 );
     }
-
-    void DeleteAllTraces();
 
     const std::map<wxString, TRACE*>& GetTraces() const
     {
         return m_traces;
     }
 
+    TRACE* GetTrace( const wxString& aName ) const
+    {
+        auto trace = m_traces.find( aName );
+
+        return trace == m_traces.end() ? NULL : trace->second;
+    }
+
     void ShowGrid( bool aEnable = true );
 
     bool IsGridShown() const;
+
+    bool HasCursorEnabled( const wxString& aName ) const;
+
+    void EnableCursor( const wxString& aName, bool aEnable );
 
 private:
     wxColour generateColor();
