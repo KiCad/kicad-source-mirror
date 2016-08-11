@@ -42,6 +42,16 @@ public:
         return m_simCommand;
     }
 
+    bool SetSimCommand( const wxString& aCommand )
+    {
+        bool res = parseCommand( aCommand );
+
+        if( res )
+            m_simCommand = aCommand;
+
+        return res;
+    }
+
     int GetNetlistOptions() const
     {
         return m_netlistOpts;
@@ -64,6 +74,13 @@ private:
         OCTAVE,
         LINEAR
     };
+
+    /**
+     * @brief Parses a Spice directive.
+     * @param aCommand is the directive to be parsed (e.g. ".tran 10n 1000n").
+     * @return bool if the directive was parsed correctly.
+     */
+    bool parseCommand( const wxString& aCommand );
 
     void onLoadDirectives( wxCommandEvent& event ) override
     {

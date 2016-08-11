@@ -26,8 +26,17 @@
 #include <sim/netlist_exporter_pspice_sim.h>
 #include <confirm.h>
 
+#include <wx/tokenzr.h>
+
 /// @todo ngspice offers more types of analysis,
 //so there are a few tabs missing (e.g. pole-zero, distortion, sensitivity)
+
+// Helper function to shorten conditions
+static bool empty( const wxTextEntryBase* aCtrl )
+{
+    return aCtrl->GetValue().IsEmpty();
+}
+
 
 DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent )
     : DIALOG_SIM_SETTINGS_BASE( aParent ), m_exporter( nullptr ), m_spiceEmptyValidator( true )
@@ -94,7 +103,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
         if( m_dcEnable1->IsChecked() )
         {
-            if( m_dcSource1->GetValue().IsEmpty() )
+            if( empty( m_dcSource1 ) )
             {
                 DisplayError( this, wxT( "You need to select DC source (sweep 1)" ) );
                 return false;
@@ -122,7 +131,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
         if( m_dcEnable2->IsChecked() )
         {
-            if( m_dcSource2->GetValue().IsEmpty() )
+            if( empty( m_dcSource2 ) )
             {
                 DisplayError( this, wxT( "You need to select DC source (sweep 2)" ) );
                 return false;
@@ -157,13 +166,12 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     {
         const NETLIST_EXPORTER_PSPICE::NET_INDEX_MAP& netMap = m_exporter->GetNetIndexMap();
 
-        if( m_noiseMeas->GetValue().IsEmpty() || m_noiseSrc->GetValue().IsEmpty() ||
-                m_noisePointsNumber->IsEmpty() || m_noiseFreqStart->IsEmpty() ||
-                m_noiseFreqStop->IsEmpty() )
+        if( empty( m_noiseMeas ) || empty( m_noiseSrc ) || empty( m_noisePointsNumber )
+                || empty( m_noiseFreqStart ) || empty( m_noiseFreqStop ) )
             return false;
 
-        wxString ref = m_noiseRef->GetValue().IsEmpty() ? wxString()
-            : wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
+        wxString ref = empty( m_noiseRef )
+            ? wxString() : wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
 
         m_simCommand = wxString::Format( ".noise v(%d%s) v%s %s %s %s %s",
             netMap.at( m_noiseMeas->GetValue() ), ref,
@@ -187,8 +195,8 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( !m_pgTransient->Validate() )
             return false;
 
-        wxString initial =
-            m_transInitial->IsEmpty() ? "" : SPICE_VALUE( m_transInitial->GetValue() ).ToSpiceString();
+        wxString initial = empty( m_transInitial )
+            ? "" : SPICE_VALUE( m_transInitial->GetValue() ).ToSpiceString();
 
         m_simCommand = wxString::Format( ".tran %s %s %s",
             SPICE_VALUE( m_transStep->GetValue() ).ToSpiceString(),
@@ -217,8 +225,11 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
 {
     /// @todo one day it could interpret the sim command and fill out appropriate fields..
-    if( m_customTxt->IsEmpty() )
+    if( empty( m_customTxt ) )
         loadDirectives();
+
+    if( m_simCommand.IsEmpty() && !empty( m_customTxt ) )
+        return parseCommand( m_customTxt->GetValue() );
 
     return true;
 }
@@ -281,6 +292,95 @@ int DIALOG_SIM_SETTINGS::ShowModal()
     }
 
     return DIALOG_SIM_SETTINGS_BASE::ShowModal();
+}
+
+
+bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
+{
+    if( aCommand.IsEmpty() )
+        return false;
+
+    wxStringTokenizer tokenizer( aCommand, " " );
+    wxString tkn = tokenizer.GetNextToken().Lower();
+
+    try {
+        if( tkn == ".ac" )
+        {
+            m_simPages->SetSelection( m_simPages->FindPage( m_pgAC ) );
+
+            tkn = tokenizer.GetNextToken().Lower();
+
+            if( tkn == "dec" )
+                m_acScale->SetSelection( 0 );
+            if( tkn == "oct" )
+                m_acScale->SetSelection( 1 );
+            if( tkn == "lin" )
+                m_acScale->SetSelection( 2 );
+            else
+                return false;
+
+            m_acPointsNumber->SetValue( tokenizer.GetNextToken() );
+            m_acFreqStart->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+            m_acFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+
+            // Check required fields
+            if( empty( m_acPointsNumber ) || empty( m_acFreqStart ) || empty( m_acFreqStop ) )
+                return false;
+        }
+
+        else if( tkn == ".dc" )
+        {
+            m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );
+
+            m_dcSource1->SetValue( tokenizer.GetNextToken() );
+            m_dcStart1->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+            m_dcStop1->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+            m_dcIncr1->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+
+            // Check the 'Enabled' field, if all values are filled
+            m_dcEnable1->SetValue( !empty( m_dcSource1 ) && !empty( m_dcStart1 )
+                    && !empty( m_dcStop1 ) && !empty( m_dcIncr1 ) );
+
+            m_dcSource2->SetValue( tokenizer.GetNextToken() );
+            m_dcStart2->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+            m_dcStop2->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+            m_dcIncr2->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+
+            // Check the 'Enabled' field, if all values are filled
+            m_dcEnable2->SetValue( !empty( m_dcSource2 ) && !empty( m_dcStart2 )
+                    && !empty( m_dcStop2 ) && !empty( m_dcIncr2 ) );
+
+            // Check if the directive is complete
+            if( !m_dcEnable1->IsChecked() || !m_dcEnable2->IsChecked() )
+                return false;
+        }
+
+        else if( tkn == ".tran" )
+        {
+            m_simPages->SetSelection( m_simPages->FindPage( m_pgTransient ) );
+
+            m_transStep->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+            m_transFinal->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+            m_transInitial->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+
+            // Check required fields
+            if( empty( m_transStep ) || empty( m_transFinal ) )
+                return false;
+        }
+
+        // Custom directives
+        else if( !empty( m_customTxt ) )
+        {
+            m_simPages->SetSelection( m_simPages->FindPage( m_pgCustom ) );
+        }
+    }
+    catch( ... )
+    {
+        // Nothing really bad has happened
+        return false;
+    }
+
+    return true;
 }
 
 
