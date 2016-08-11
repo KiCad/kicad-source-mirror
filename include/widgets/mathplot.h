@@ -728,7 +728,16 @@ public:
             m_minV = std::min(minV, m_minV);
             m_maxV = std::max(maxV, m_maxV);
         }
+
+        printf("Extend min %.10f max %.10f\n", m_minV, m_maxV);
+
+        if (m_minV == m_maxV)
+        {
+            m_minV = -1.0;
+            m_maxV = 1.0;
     }
+    }
+
 
     double AbsMaxValue() const
     {
@@ -1503,6 +1512,8 @@ protected:
 };
 
 
+#if 0
+
 class WXDLLIMPEXP_MATHPLOT mpFSemiLogXVector : public mpFXYVector
 {
     public:
@@ -1520,6 +1531,7 @@ class WXDLLIMPEXP_MATHPLOT mpFSemiLogXVector : public mpFXYVector
 
         DECLARE_DYNAMIC_CLASS(mpFSemiLogXVector)
 };
+#endif
 
 //-----------------------------------------------------------------------------
 // mpText - provided by Val Greene

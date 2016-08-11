@@ -1110,11 +1110,15 @@ void mpScaleXLog::recalculateTicks ( wxDC & dc, mpWindow & w )
 
     double visibleDecades =  log( maxVvis / minVvis ) / log(10);
 
-    //printf("visibleD %.1f %.1f %.1f\n", visibleDecades, maxVvis, minVvis);
+    printf("visibleD %f %f\n", minDecade, maxDecade);
     double d;
 
     m_tickValues.clear();
     m_labeledTicks.clear();
+
+    if ( minDecade == 0.0 )
+        return;
+
 
     for ( d= minDecade; d<=maxDecade; d *= 10.0)
     {
@@ -2944,13 +2948,14 @@ double log10( double x)
     return log(x)/log(10.0);
 }
 
+#if 0
 mpFSemiLogXVector::mpFSemiLogXVector(wxString name, int flags ) :
 mpFXYVector ( name, flags )
 {}
 
 
 IMPLEMENT_DYNAMIC_CLASS(mpFSemiLogXVector, mpFXYVector)
-
+#endif
 
 void mpFXYVector::Rewind()
 {

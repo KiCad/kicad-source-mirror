@@ -90,8 +90,14 @@ private:
 class TRACE : public mpFXYVector
 {
 public:
-    TRACE( const wxString& aSpiceName ) :
-        m_spiceName( aSpiceName ), m_cursor( nullptr ) {};
+    TRACE( const wxString& aName, const wxString& aSpiceName ) :
+        mpFXYVector ( aName ), m_spiceName( aSpiceName ), m_cursor( nullptr )
+        {
+            SetContinuity( true );
+            SetDrawOutsideMargins( false );
+            ShowName( false );
+
+        }
 
     const wxString& GetSpiceName() const
     {
@@ -128,15 +134,13 @@ protected:
     CURSOR* m_cursor;
 };
 
-class TRACE_FREQ_RESPONSE : public TRACE, public mpFSemiLogXVector
+class TRACE_FREQ_RESPONSE : public TRACE
 {
 public:
-    TRACE_FREQ_RESPONSE( const wxString& aName, const wxString& aSpiceName )
-        : mpFSemiLogXVector( aName ), TRACE( aSpiceName )
+    TRACE_FREQ_RESPONSE( const wxString& aName, const wxString& aSpiceName ) :
+        TRACE( aName, aSpiceName )
     {
-        mpFSemiLogXVector::SetContinuity( true );
-        mpFSemiLogXVector::SetDrawOutsideMargins( false );
-        mpFSemiLogXVector::ShowName( false );
+        printf("makeFreqResponse!\n");
     }
 
 };
@@ -144,18 +148,16 @@ public:
 class TRACE_TRANSIENT : public TRACE
 {
 public:
-    TRACE_TRANSIENT( const wxString& aName, const wxString& aSpiceName ) : 
-        TRACE( aSpiceName )
+    TRACE_TRANSIENT( const wxString& aName, const wxString& aSpiceName ) :
+        TRACE( aName, aSpiceName )
     {
-        mpFXYVector::SetName ( aName ); // hack
-        SetContinuity( true );
-        SetDrawOutsideMargins( false );
-        ShowName( false );
     }
 
 };
 
-
+enum SIM_PLOT_FLAGS {
+    SPF_AC_PHASE = 0x1
+};
 
 class SIM_PLOT_PANEL : public mpWindow
 {

@@ -76,7 +76,7 @@ static wxString formatSI ( double x, const wxString& unit, int decimalDigits, do
         if (maxValue != 0.0)
            rangeHit = fabs(maxValue) >= r_cur && fabs(maxValue) < r_cur * 1000.0 ;
        else
-           rangeHit = fabs(x) >= maxValue && fabs(x) < maxValue * 1000.0 ;
+           rangeHit = fabs(x) >= r_cur && fabs(x) < r_cur * 1000.0 ;
 
         if( (!lockSuffix && rangeHit) || (lockSuffix && suffix == powers[i].suffix ) )
         {
@@ -105,6 +105,7 @@ public:
 
     const wxString getLabel( int n )
     {
+        printf("%.10f\n", m_labeledTicks[n] );
         return formatSI ( m_labeledTicks[n], wxT("Hz"), 2 );
     }
 };
@@ -270,7 +271,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
             m_axis_y1 = new mpScaleY( wxT( "noise [(V or A)^2/Hz]" ), mpALIGN_BORDER_LEFT );
             break;
 
-#endif
+            #endif
 
         case ST_TRANSIENT:
             m_axis_x = new TIME_SCALE( wxT( "Time" ), mpALIGN_BOTTOM );
@@ -340,6 +341,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
 {
     TRACE* t = NULL;
 
+
     // Find previous entry, if there is one
     auto prev = m_traces.find( aName );
     bool addedNewEntry = ( prev == m_traces.end() );
@@ -353,17 +355,36 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
                 t = new TRACE_TRANSIENT( aName, aSpiceName );
                 break;
             case ST_AC:
+                //printf("makeFreqResp!\n");
                 t = new TRACE_FREQ_RESPONSE( aName, aSpiceName );
                 break;
             default:
                 assert(false);
         }
 
-        assert(m_axis_x);
-        assert(m_axis_y1);
+        printf("points : %d\n", aPoints );
 
-        t->SetData( std::vector<double>( aT, aT + aPoints ), std::vector<double>( aY, aY + aPoints ) );
-        t->SetScale ( m_axis_x, m_axis_y1 );
+        std::vector<double> tmp(aY, aY + aPoints);
+
+        if( m_type == ST_AC )
+        {
+            if( aFlags & SPF_AC_PHASE)
+            {
+                for(int i = 0; i < aPoints; i++ )
+                    tmp[i] = tmp[i] * 180.0 / M_PI;
+            } else {
+                for(int i = 0; i < aPoints; i++ )
+                    tmp[i] = 20 * log( tmp[i] ) / log(10.0);
+            }
+        }
+
+        t->SetData( std::vector<double>( aT, aT + aPoints ), tmp );
+
+        if( aFlags & SPF_AC_PHASE )
+            t->SetScale ( m_axis_x, m_axis_y2 );
+        else
+            t->SetScale ( m_axis_x, m_axis_y1 );
+
         t->SetPen( wxPen( generateColor(), 2, wxSOLID ) );
         m_traces[aName] = t;
 

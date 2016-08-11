@@ -305,7 +305,7 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aNa
                 return false;
 
             aPanel->AddTrace( aSpiceName, aName + " (mag)", size, data_x.data(), data_mag.data(), 0 );
-            aPanel->AddTrace( aSpiceName, aName + " (phase)", size, data_x.data(), data_phase.data(), 0 );
+            aPanel->AddTrace( aSpiceName, aName + " (phase)", size, data_x.data(), data_phase.data(), SPF_AC_PHASE );
         }
         break;
 
@@ -668,10 +668,14 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
     if( !m_simulator )
         return;
 
+        aEvent.Discard();
+        
     if( IsSimulationRunning() )
         StopSimulation();
 
     m_simConsole->Clear();
+
+    printf("SimUpdate\n");
 
     // Apply tuned values
     if( SIM_PLOT_PANEL* plotPanel = CurrentPlot() )

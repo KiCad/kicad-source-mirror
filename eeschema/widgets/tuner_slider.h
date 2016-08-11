@@ -94,6 +94,7 @@ private:
     SCH_COMPONENT* m_component;
 
     SPICE_VALUE m_min, m_max, m_value;
+    bool m_changed;
 };
 
 #endif /* TUNER_SLIDER_H */

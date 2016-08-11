@@ -36,6 +36,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aParent, SCH_COMPONENT* aComponent )
     const wxString compName = aComponent->GetField( REFERENCE )->GetText();
     m_name->SetLabel( compName );
     m_value = SPICE_VALUE( aComponent->GetField( VALUE )->GetText() );
+    m_changed = false;
 
     // Generate Spice component name
     char prim = NETLIST_EXPORTER_PSPICE::GetSpiceField( SPICE_PRIMITIVE, aComponent, 0 )[0];
@@ -142,6 +143,7 @@ void TUNER_SLIDER::onSliderChanged( wxScrollEvent& event )
     m_value = m_min + ( m_max - m_min ) * SPICE_VALUE( m_slider->GetValue() / 100.0 );
     updateValueText();
     updateComponentValue();
+    m_changed = true;
 }
 
 
@@ -166,6 +168,7 @@ void TUNER_SLIDER::onValueTextEnter( wxCommandEvent& event )
     {
         SPICE_VALUE newCur( m_valueText->GetValue() );
         SetValue( newCur );
+        m_changed = true;
     }
     catch( std::exception& e )
     {
@@ -192,5 +195,10 @@ void TUNER_SLIDER::onMinTextEnter( wxCommandEvent& event )
 
 void TUNER_SLIDER::onSimTimer( wxTimerEvent& event )
 {
-    wxQueueEvent( GetParent(), new wxCommandEvent( EVT_SIM_UPDATE ) );
+    if(m_changed)
+    {
+        printf("Slider Ch\n");
+        wxQueueEvent( GetParent(), new wxCommandEvent( EVT_SIM_UPDATE ) );
+        m_changed = false;
+    }
 }
