@@ -267,9 +267,7 @@ void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner )
 
     m_plots[plotPanel].m_tuners.remove( aTuner );
     aTuner->Destroy();
-    Layout();
-    Layout();
-    Layout();
+    m_sidePanel->Layout();
 }
 
 
