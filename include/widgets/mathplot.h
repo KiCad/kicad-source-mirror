@@ -775,7 +775,7 @@ protected:
     int m_flags; //!< Flag for axis alignment
     bool m_ticks; //!< Flag to toggle between ticks or grid
     double m_minV, m_maxV;
-    double m_rangeSet;
+    bool m_rangeSet;
     int m_maxLabelHeight;
     int m_maxLabelWidth;
 

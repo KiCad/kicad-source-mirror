@@ -536,6 +536,8 @@ mpFXY::mpFXY(wxString name, int flags)
     SetName(name);
     m_flags = flags;
     m_type = mpLAYER_PLOT;
+    m_scaleX = NULL;
+    m_scaleY = NULL;
 }
 
 void mpFXY::UpdateViewBoundary(wxCoord xnew, wxCoord ynew)
@@ -764,7 +766,6 @@ void mpScaleX::recalculateTicks ( wxDC & dc, mpWindow & w )
 
     double minErr = 1000000000000.0;
     double bestStep;
-    int bestCount;
         for(int i = 10; i <= 20; i+=2)
         {
             double step = fabs(maxVvis - minVvis) / (double) i;
@@ -779,7 +780,6 @@ void mpScaleX::recalculateTicks ( wxDC & dc, mpWindow & w )
             {
                 minErr = err;
                 bestStep = stepInt;
-                bestCount = i;
             }
             //printf("step %d %.3f %.3f best %.3f\n",i, step, stepInt, bestStep);
         }
@@ -981,7 +981,6 @@ void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
 
     double minErr = 1000000000000.0;
     double bestStep;
-    int bestCount;
         for(int i = 10; i <= 20; i+=2)
         {
             double step = fabs(maxVvis - minVvis) / (double) i;
@@ -996,7 +995,6 @@ void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
             {
                 minErr = err;
                 bestStep = stepInt;
-                bestCount = i;
             }
             //printf("step %d %.3f %.3f best %.3f\n",i, step, stepInt, bestStep);
         }
