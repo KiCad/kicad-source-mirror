@@ -124,7 +124,7 @@ void SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
     SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, wxID_ANY );
 
     m_plotNotebook->AddPage( plot,
-            wxString::Format( wxT( "Plot%lu" ), m_plotNotebook->GetPageCount() + 1 ), true );
+            wxString::Format( wxT( "Plot%u" ), (unsigned int) m_plotNotebook->GetPageCount() + 1 ), true );
 }
 
 

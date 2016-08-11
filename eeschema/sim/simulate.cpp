@@ -39,6 +39,8 @@ void SCH_EDIT_FRAME::OnSimulate( wxCommandEvent& event )
     simFrame->SetSchFrame( this );
 }
 
+// I apologize for the following lines, but this is more or less what wxWidgets
+// authors suggest (http://docs.wxwidgets.org/trunk/classwx_cursor.html)
 
 static const unsigned char cursor_probe[] = {
    0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x70,
@@ -66,4 +68,29 @@ static const unsigned char cursor_probe_mask[] {
    0x7c, 0x07, 0x00, 0x00, 0x3c, 0x00, 0x00, 0x00, 0x1c, 0x00, 0x00, 0x00,
    0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 };
 
-const wxCursor SCH_EDIT_FRAME::CURSOR_PROBE( (const char*) cursor_probe, 31, 32, 0, 31, (const char*) cursor_probe_mask );
+#ifdef __WXMSW__
+struct CURSOR_PROBE_INIT
+{
+public:
+    static wxImage& GetProbeImage()
+    {
+        static wxImage* probe_image = NULL;
+
+        if( probe_image == NULL )
+        {
+            wxBitmap probe_bitmap( (const char*) cursor_probe, 32, 32 );
+            wxBitmap probe_mask_bitmap( (const char*) cursor_probe_mask, 32, 32 );
+            probe_bitmap.SetMask( new wxMask( probe_mask_bitmap ) );
+            probe_image = new wxImage( probe_bitmap.ConvertToImage() );
+            probe_image->SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_X, 0 );
+            probe_image->SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_Y, 31 );
+        }
+
+        return *probe_image;
+    }
+};
+
+const wxCursor SCH_EDIT_FRAME::CURSOR_PROBE( CURSOR_PROBE_INIT::GetProbeImage() );
+#elif defined(__WXGTK__) or defined(__WXMOTIF__)
+const wxCursor SCH_EDIT_FRAME::CURSOR_PROBE( (const char*) cursor_probe, 32, 32, 0, 31, (const char*) cursor_probe_mask );
+#endif

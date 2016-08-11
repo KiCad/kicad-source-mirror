@@ -30,13 +30,15 @@
 #include <wx/log.h>
 #include <sstream>
 
-// TODO cmake modules to add include directory for ngspice
-
 using namespace std;
 
 NGSPICE::NGSPICE()
 {
+#ifdef __WINDOWS__
+    m_dll = new wxDynamicLibrary( "libngspice-0.dll" );
+#else
     m_dll = new wxDynamicLibrary( "libngspice.so" );
+#endif
     assert( m_dll );
 
     // Obtain function pointers

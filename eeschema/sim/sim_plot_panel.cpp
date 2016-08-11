@@ -100,6 +100,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     : mpWindow( parent, id, pos, size, style ), m_colorIdx( 0 ),
         m_axis_x( nullptr ), m_axis_y1( nullptr ), m_axis_y2( nullptr ), m_type( aType )
 {
+    EnableDoubleBuffer( true );
     SetMargins( 10, 10, 10, 10 );
     LimitView( true );
 
