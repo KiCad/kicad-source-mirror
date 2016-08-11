@@ -172,13 +172,13 @@ SPICE_VALUE SPICE_VALUE::operator-( const SPICE_VALUE& aOther ) const
     if( prefixDiff > 0 )
     {
         // Switch to the aOther prefix
-        res.m_base = m_prefix * std::pow( 10, prefixDiff ) - aOther.m_prefix;
+        res.m_base = m_base * std::pow( 10, prefixDiff ) - aOther.m_base;
         res.m_prefix = aOther.m_prefix;
     }
     else if( prefixDiff < 0 )
     {
         // Use the current prefix
-        res.m_base = m_prefix - aOther.m_prefix * std::pow( 10, -prefixDiff );
+        res.m_base = m_base - aOther.m_base * std::pow( 10, -prefixDiff );
         res.m_prefix = m_prefix;
     }
     else
