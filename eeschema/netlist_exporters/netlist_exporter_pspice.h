@@ -113,7 +113,13 @@ public:
 
     bool Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl );
 
-    void ProcessNetlist( unsigned aCtl );
+    /**
+     * @brief Processes the netlist to create net mapping and a list of SPICE_ITEMs.
+     * It is automatically called by WriteNetlist(), but might be used separately,
+     * if only net mapping and the list of SPICE_ITEMs are required.
+     * @return True if successful.
+     */
+    bool ProcessNetlist( unsigned aCtl );
 
     const NET_INDEX_MAP& GetNetIndexMap() const
     {

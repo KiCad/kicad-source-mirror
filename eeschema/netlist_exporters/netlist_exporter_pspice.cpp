@@ -52,7 +52,8 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
     // Netlist options
     const bool useNetcodeAsNetName = aCtl & NET_USE_NETCODES_AS_NETNAMES;
 
-    ProcessNetlist( aCtl );
+    if( !ProcessNetlist( aCtl ) )
+        return false;
 
     aFormatter->Print( 0, ".title KiCad schematic\n" );
 
@@ -234,10 +235,12 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
 }
 
 
-void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
+bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 {
     const wxString      delimiters( "{:,; }" );
     SCH_SHEET_LIST      sheetList( g_RootSheet );
+    // Set of reference names, to check for duplications
+    std::set<wxString>  refNames;
 
     // Prepare list of nets generation (not used here, but...
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
@@ -274,6 +277,16 @@ void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             spiceItem.m_primitive = GetSpiceField( SF_PRIMITIVE, comp, aCtl )[0];
             spiceItem.m_model = GetSpiceField( SF_MODEL, comp, aCtl );
             spiceItem.m_refName = comp->GetRef( &sheetList[sheet_idx] );
+
+            // Duplicate references will result in simulation errors
+            if( refNames.count( spiceItem.m_refName ) )
+            {
+                DisplayError( NULL, wxT( "There are duplicate components. "
+                            "You need to annotate schematics first." ) );
+                return false;
+            }
+
+            refNames.insert( spiceItem.m_refName );
 
             // Check to see if component should be removed from Spice netlist
             spiceItem.m_enabled = StringToBool( GetSpiceField( SF_ENABLED, comp, aCtl ) );
@@ -326,6 +339,8 @@ void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             m_spiceItems.push_back( spiceItem );
         }
     }
+
+    return true;
 }
 
 

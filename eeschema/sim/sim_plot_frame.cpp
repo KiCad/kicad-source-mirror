@@ -150,11 +150,16 @@ void SIM_PLOT_FRAME::StartSimulation()
 
     updateNetlistExporter();
     m_exporter->SetSimCommand( m_settingsDlg.GetSimCommand() );
-    m_exporter->Format( &formatter, m_settingsDlg.GetNetlistOptions() );
+
+    if( !m_exporter->Format( &formatter, m_settingsDlg.GetNetlistOptions() ) )
+    {
+        DisplayError( this, wxT( "There were errors during netlist export, aborted." ) );
+        return;
+    }
 
     if( m_exporter->GetSimType() == ST_UNKNOWN )
     {
-        DisplayInfoMessage( this, wxT( "You need to select the simulation settings first" ) );
+        DisplayInfoMessage( this, wxT( "You need to select the simulation settings first." ) );
         return;
     }
 
@@ -647,8 +652,15 @@ void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 {
+    // Initial processing is required to e.g. display a list of power sources
     updateNetlistExporter();
-    m_exporter->ProcessNetlist( NET_ALL_FLAGS );
+
+    if( !m_exporter->ProcessNetlist( NET_ALL_FLAGS ) )
+    {
+        DisplayError( this, wxT( "There were errors during netlist export, aborted." ) );
+        return;
+    }
+
     m_settingsDlg.SetNetlistExporter( m_exporter.get() );
     m_settingsDlg.ShowModal();
 }
@@ -660,7 +672,7 @@ void SIM_PLOT_FRAME::onAddSignal( wxCommandEvent& event )
 
     if( !plotPanel || !m_exporter || plotPanel->GetType() != m_exporter->GetSimType() )
     {
-        DisplayInfoMessage( this, wxT( "You need to run simulation first" ) );
+        DisplayInfoMessage( this, wxT( "You need to run simulation first." ) );
         return;
     }
 
