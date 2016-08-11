@@ -120,8 +120,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Connect( EVT_SIM_FINISHED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
     Connect( EVT_SIM_CURSOR_UPDATE, wxCommandEventHandler( SIM_PLOT_FRAME::onCursorUpdate ), NULL, this );
 
-
-    m_toolSimulate = m_toolBar->AddTool( ID_SIM_RUN, _("Run Simulation"), KiBitmap( sim_run_xpm ), _("Run Simulation"), wxITEM_NORMAL );
+    m_toolSimulate = m_toolBar->AddTool( ID_SIM_RUN, _("Run/Stop Simulation"), KiBitmap( sim_run_xpm ), _("Run Simulation"), wxITEM_NORMAL );
     m_toolAddSignals = m_toolBar->AddTool( ID_SIM_ADD_SIGNALS, _("Add Signals"), KiBitmap( sim_add_signal_xpm ), _("Add signals to plot"), wxITEM_NORMAL );
     m_toolProbe = m_toolBar->AddTool( ID_SIM_PROBE,  _("Probe"), KiBitmap( sim_probe_xpm ),_("Probe signals on the schematic"), wxITEM_NORMAL );
     m_toolTune = m_toolBar->AddTool( ID_SIM_TUNE, _("Tune"), KiBitmap( sim_tune_xpm ), _("Tune component values"), wxITEM_NORMAL );
@@ -730,14 +729,14 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onSimStarted( wxCommandEvent& aEvent )
 {
-    //m_simulateBtn->SetLabel( wxT( "Stop" ) );
+    m_toolBar->SetToolNormalBitmap( ID_SIM_RUN, KiBitmap( sim_stop_xpm ) );
     SetCursor( wxCURSOR_ARROWWAIT );
 }
 
 
 void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 {
-    //m_simulateBtn->SetLabel( wxT( "Simulate" ) );
+    m_toolBar->SetToolNormalBitmap( ID_SIM_RUN, KiBitmap( sim_run_xpm ) );
     SetCursor( wxCURSOR_ARROW );
 
     SIM_TYPE simType = m_exporter->GetSimType();
