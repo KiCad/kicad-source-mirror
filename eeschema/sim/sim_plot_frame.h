@@ -98,15 +98,17 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void menuShowGridState( wxUpdateUIEvent& event ) override;
 
         // Event handlers
+        void onPlotChanged( wxNotebookEvent& event ) override;
+
         void onSignalDblClick( wxCommandEvent& event ) override;
         void onSignalRClick( wxMouseEvent& event ) override;
-        void onCursorsUpdate( wxUpdateUIEvent& event ) override;
 
         void onSimulate( wxCommandEvent& event ) override;
         void onPlaceProbe( wxCommandEvent& event ) override;
 
         void onClose( wxCloseEvent& aEvent );
 
+        void onCursorUpdate( wxCommandEvent& aEvent );
         void onSimStarted( wxCommandEvent& aEvent );
         void onSimFinished( wxCommandEvent& aEvent );
         void onSimReport( wxCommandEvent& aEvent );

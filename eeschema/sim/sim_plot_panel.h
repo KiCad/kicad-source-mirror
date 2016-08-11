@@ -204,4 +204,6 @@ private:
     //mpInfoCoords* m_coords;
 };
 
+wxDECLARE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );
+
 #endif

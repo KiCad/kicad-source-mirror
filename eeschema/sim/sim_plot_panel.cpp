@@ -73,6 +73,9 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 
         m_coords.y = leftY + ( rightY - leftY ) / ( rightX - leftX ) * ( m_coords.x - leftX );
         m_updateRequired = false;
+
+        // Notify the parent window about the changes
+        wxQueueEvent( aWindow.GetParent(), new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
     }
     else
     {
@@ -228,6 +231,9 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
         t->SetCursor( NULL );
         DelLayer( c, true );
     }
+
+    // Notify the parent window about the changes
+    wxQueueEvent( GetParent(), new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
 }
 
 
@@ -252,3 +258,5 @@ wxColour SIM_PLOT_PANEL::generateColor()
     /// @todo generate shades to avoid repeating colors
     return wxColour( colors[m_colorIdx++ % colorCount] );
 }
+
+wxDEFINE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );

@@ -86,6 +86,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Connect( EVT_SIM_REPORT, wxCommandEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
     Connect( EVT_SIM_STARTED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimStarted ), NULL, this );
     Connect( EVT_SIM_FINISHED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
+    Connect( EVT_SIM_CURSOR_UPDATE, wxCommandEventHandler( SIM_PLOT_FRAME::onCursorUpdate ), NULL, this );
 
     NewPlotPanel();
 }
@@ -216,6 +217,12 @@ void SIM_PLOT_FRAME::menuShowGridState( wxUpdateUIEvent& event )
 }
 
 
+void SIM_PLOT_FRAME::onPlotChanged( wxNotebookEvent& event )
+{
+    wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+}
+
+
 void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
 {
     int idx = m_signals->GetSelection();
@@ -253,29 +260,6 @@ void SIM_PLOT_FRAME::onSignalRClick( wxMouseEvent& event )
 }
 
 
-void SIM_PLOT_FRAME::onCursorsUpdate( wxUpdateUIEvent& event )
-{
-    wxSize size = m_cursors->GetClientSize();
-    m_cursors->ClearAll();
-
-    const long SIGNAL_COL = m_cursors->AppendColumn( wxT( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
-    const long X_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelX(), wxLIST_FORMAT_LEFT, size.x / 4 );
-    const long Y_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelY(), wxLIST_FORMAT_LEFT, size.x / 4 );
-
-    // Update cursor values
-    for( const auto& trace : CurrentPlot()->GetTraces() )
-    {
-        if( CURSOR* cursor = trace.second->GetCursor() )
-        {
-            const wxRealPoint coords = cursor->GetCoords();
-            long idx = m_cursors->InsertItem( SIGNAL_COL, trace.first );
-            m_cursors->SetItem( idx, X_COL, wxString::Format( "%f", coords.x ) );
-            m_cursors->SetItem( idx, Y_COL, wxString::Format( "%f", coords.y ) );
-        }
-    }
-}
-
-
 void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 {
     if( isSimulationRunning() )
@@ -301,6 +285,29 @@ void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
         m_simulator->Stop();
 
     Destroy();
+}
+
+
+void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
+{
+    wxSize size = m_cursors->GetClientSize();
+    m_cursors->ClearAll();
+
+    const long SIGNAL_COL = m_cursors->AppendColumn( wxT( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
+    const long X_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelX(), wxLIST_FORMAT_LEFT, size.x / 4 );
+    const long Y_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelY(), wxLIST_FORMAT_LEFT, size.x / 4 );
+
+    // Update cursor values
+    for( const auto& trace : CurrentPlot()->GetTraces() )
+    {
+        if( CURSOR* cursor = trace.second->GetCursor() )
+        {
+            const wxRealPoint coords = cursor->GetCoords();
+            long idx = m_cursors->InsertItem( SIGNAL_COL, trace.first );
+            m_cursors->SetItem( idx, X_COL, wxString::Format( "%f", coords.x ) );
+            m_cursors->SetItem( idx, Y_COL, wxString::Format( "%f", coords.y ) );
+        }
+    }
 }
 
 
@@ -377,6 +384,7 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
     {
         case SHOW_SIGNAL:
             m_plotFrame->AddVoltagePlot( m_signal );
+            plot->Fit();
             break;
 
             break;
