@@ -48,6 +48,8 @@ public:
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
 
+    int ShowModal() override;
+
 private:
     enum SCALE_TYPE
     {

@@ -64,6 +64,8 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
     private:
         bool isSimulationRunning();
 
+        void updateNetlistExporter();
+
         /**
          * @brief Updates plot in a particular SIM_PLOT_PANEL. If the panel does not contain
          * the plot, it will be added.

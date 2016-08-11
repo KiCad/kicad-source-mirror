@@ -27,8 +27,7 @@
 #include <eeschema_id.h>
 #include <kiway.h>
 
-#include <netlist_exporter_kicad.h>
-#include <netlist_exporters/netlist_exporter_pspice.h>
+#include "netlist_exporter_pspice_sim.h"
 
 #include "sim_plot_frame.h"
 #include "sim_plot_panel.h"
@@ -74,73 +73,6 @@ private:
 };
 
 
-/// Special netlist exporter flavor that allows to override simulation commands
-class NETLIST_EXPORTER_PSPICE_SIM : public NETLIST_EXPORTER_PSPICE
-{
-public:
-    NETLIST_EXPORTER_PSPICE_SIM( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs,
-            SEARCH_STACK* aPaths = NULL ) :
-        NETLIST_EXPORTER_PSPICE( aMasterList, aLibs, aPaths )
-    {
-    }
-
-    void SetSimCommand( const wxString& aCmd )
-    {
-        m_simCommand = aCmd;
-    }
-
-    const wxString& GetSimCommand() const
-    {
-        return m_simCommand;
-    }
-
-    void ClearSimCommand()
-    {
-        m_simCommand.Clear();
-    }
-
-protected:
-    virtual void writeDirectives( OUTPUTFORMATTER* aFormatter, int aCtl ) const
-    {
-        if( m_simCommand.IsEmpty() )
-        {
-            // Fallback to the default behavior
-            NETLIST_EXPORTER_PSPICE::writeDirectives( aFormatter, aCtl );
-        }
-
-        // Dump all directives, but simulation commands
-        for( const auto& dir : GetDirectives() )
-        {
-            if( !isSimCommand( dir ) )
-                aFormatter->Print( 0, "%s\n", (const char*) dir.c_str() );
-        }
-
-        // Finish with our custom simulation command
-        aFormatter->Print( 0, "%s\n", (const char*) m_simCommand.c_str() );
-    }
-
-private:
-    bool isSimCommand( const wxString& aCmd ) const
-    {
-        const std::vector<wxString> simCmds = {
-            ".ac", ".dc", ".disto", ".noise", ".op", ".pz", ".sens", ".tf", ".tran", ".pss"
-        };
-
-        wxString lcaseCmd = aCmd.Lower();
-
-        for( const auto& c : simCmds )
-        {
-            if( lcaseCmd.StartsWith( c ) )
-                return true;
-        }
-
-        return false;
-    }
-
-    wxString m_simCommand;
-};
-
-
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     : SIM_PLOT_FRAME_BASE( aParent ), m_settingsDlg( this )
 {
@@ -163,6 +95,8 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 
 void SIM_PLOT_FRAME::StartSimulation()
 {
+    STRING_FORMATTER formatter;
+
     m_simConsole->Clear();
 
     // TODO check if there is a valid simulation command
@@ -172,13 +106,9 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_simulator->SetReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
 
-    NETLIST_OBJECT_LIST* net_atoms = m_schematicFrame->BuildNetListBase();
-    STRING_FORMATTER formatter;
-
-    m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( net_atoms,
-                                                        Prj().SchLibs(), Prj().SchSearchS() ) );
+    updateNetlistExporter();
     m_exporter->SetSimCommand( m_simCommand );
-    m_exporter->Format( &formatter, GNL_ALL );
+    m_exporter->Format( &formatter, NET_ALL_FLAGS );
 
     m_simulator->LoadNetlist( formatter.GetString() );
     m_simulator->Run();
@@ -219,6 +149,13 @@ SIM_PLOT_PANEL* SIM_PLOT_FRAME::CurrentPlot() const
 bool SIM_PLOT_FRAME::isSimulationRunning()
 {
     return m_simulator ? m_simulator->IsRunning() : false;
+}
+
+
+void SIM_PLOT_FRAME::updateNetlistExporter()
+{
+    m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( m_schematicFrame->BuildNetListBase(),
+        Prj().SchLibs(), Prj().SchSearchS() ) );
 }
 
 
@@ -415,12 +352,13 @@ void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 {
-    // TODO set exporter
+    updateNetlistExporter();
+    m_exporter->ProcessNetlist( NET_ALL_FLAGS );
+
+    m_settingsDlg.SetNetlistExporter( m_exporter.get() );
 
     if( m_settingsDlg.ShowModal() == wxID_OK )
         m_simCommand = m_settingsDlg.GetSimCommand();
-
-    wxLogDebug( "sim command = %s", m_simCommand );     // TODO remove
 }
 
 

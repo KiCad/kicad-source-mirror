@@ -23,7 +23,7 @@
  */
 
 #include "dialog_sim_settings.h"
-#include <wx/log.h>
+#include <sim/netlist_exporter_pspice_sim.h>
 
 /// @todo ngspice offers more types of analysis,
 //so there are a few tabs missing (e.g. pole-zero, distortion, sensitivity)
@@ -167,6 +167,68 @@ bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
 }
 
 
+int DIALOG_SIM_SETTINGS::ShowModal()
+{
+    // Fill out comboboxes that allow to select nets
+    // Map comoboxes to their current values
+    std::map<wxComboBox*, wxString> cmbNet = {
+        { m_noiseMeas, m_noiseMeas->GetStringSelection() },
+        { m_noiseRef, m_noiseRef->GetStringSelection() }
+    };
+
+    for( auto c : cmbNet )
+        c.first->Clear();
+
+    for( auto net : m_exporter->GetNetIndexMap() )
+    {
+        for( auto c : cmbNet )
+            c.first->Append( net.first );
+    }
+
+    // Try to restore the previous selection, if possible
+    for( auto c : cmbNet )
+    {
+        int idx = c.first->FindString( c.second );
+
+        if( idx != wxNOT_FOUND )
+                c.first->SetSelection( idx );
+    }
+
+
+    // Fill out comboboxes that allow to select power sources
+    std::map<wxComboBox*, wxString> cmbSrc = {
+        { m_dcSource1, m_dcSource1->GetStringSelection() },
+        { m_dcSource2, m_dcSource2->GetStringSelection() },
+        { m_noiseSrc, m_noiseSrc->GetStringSelection() },
+    };
+
+    for( auto c : cmbSrc )
+        c.first->Clear();
+
+    for( auto item : m_exporter->GetSpiceItems() )
+    {
+        if( item.m_primitive == 'V' )
+        {
+            for( auto c : cmbSrc )
+                c.first->Append( item.m_refName );
+        }
+    }
+
+    // Try to restore the previous selection, if possible
+    for( auto c : cmbSrc )
+    {
+        int idx = c.first->FindString( c.second );
+
+        if( idx != wxNOT_FOUND )
+                c.first->SetSelection( idx );
+    }
+
+    return DIALOG_SIM_SETTINGS_BASE::ShowModal();
+}
+
+
 void DIALOG_SIM_SETTINGS::onLoadDirectives( wxCommandEvent& event )
 {
+    if( m_exporter )
+        m_customTxt->SetValue( m_exporter->GetSheetSimCommand() );
 }
