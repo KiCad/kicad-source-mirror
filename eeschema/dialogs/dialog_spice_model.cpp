@@ -249,7 +249,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             break;
 
         default:
-            wxASSERT_MSG( false, "Unhandled Spice primitive type" );
+            //wxASSERT_MSG( false, "Unhandled Spice primitive type" );
             break;
     }
 
