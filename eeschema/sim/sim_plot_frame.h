@@ -68,10 +68,10 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
          * the plot, it will be added.
          * @param aSpiceName is the plot name in the format accepted by the current simulator instance
          * (for NGSPICE it is e.g. "V(1)").
-         * @param aTitle is the name used in the legend.
+         * @param aName is the name used in the legend.
          * @param aPanel is the panel that should receive the update.
          */
-        void updatePlot( const wxString& aSpiceName, const wxString& aTitle, SIM_PLOT_PANEL* aPanel );
+        void updatePlot( const wxString& aSpiceName, const wxString& aName, SIM_PLOT_PANEL* aPanel );
 
         /**
          * @brief Returns node number for a given net.

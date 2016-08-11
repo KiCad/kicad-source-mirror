@@ -27,12 +27,13 @@
 #define __SIM_PLOT_PANEL_H
 
 #include <widgets/mathplot.h>
+#include <map>
 
 class TRACE : public mpFXYVector
 {
 public:
-    TRACE( const wxString& aTitle, const wxString& aSpiceName )
-        : mpFXYVector( aTitle ), m_spiceName( aSpiceName )
+    TRACE( const wxString& aName, const wxString& aSpiceName )
+        : mpFXYVector( aName ), m_spiceName( aSpiceName )
     {
         SetContinuity( true );
         ShowName( false );
@@ -108,12 +109,19 @@ public:
 
     ~SIM_PLOT_PANEL();
 
-    void AddTrace( const wxString& aSpiceName, const wxString& aTitle, int aPoints,
+    bool AddTrace( const wxString& aSpiceName, const wxString& aName, int aPoints,
                     const double* aT, const double* aY, int aFlags );
 
-    void DeleteTraces();
+    bool DeleteTrace( const wxString& aName );
 
-    const std::vector<TRACE*>& GetTraces() const
+    bool IsShown( const wxString& aName ) const
+    {
+        return ( m_traces.count( aName ) != 0 );
+    }
+
+    void DeleteAllTraces();
+
+    const std::map<wxString, TRACE*>& GetTraces() const
     {
         return m_traces;
     }
@@ -128,7 +136,7 @@ private:
     unsigned int m_colorIdx;
 
     // Traces to be plotted
-    std::vector<TRACE*> m_traces;
+    std::map<wxString, TRACE*> m_traces;
 
     mpScaleX* m_axis_x;
     mpScaleY* m_axis_y;

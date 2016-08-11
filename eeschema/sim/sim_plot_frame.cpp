@@ -157,7 +157,7 @@ bool SIM_PLOT_FRAME::isSimulationRunning()
 }
 
 
-void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aTitle, SIM_PLOT_PANEL* aPanel )
+void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aName, SIM_PLOT_PANEL* aPanel )
 {
     auto data_y = m_simulator->GetPlot( (const char*) aSpiceName.c_str() );
     auto data_t = m_simulator->GetPlot( "time" );
@@ -165,7 +165,7 @@ void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aTi
     if( data_y.empty() || data_t.empty() )
         return;
 
-    aPanel->AddTrace( aSpiceName, aTitle, data_t.size(), data_t.data(), data_y.data(), 0 );
+    aPanel->AddTrace( aSpiceName, aName, data_t.size(), data_t.data(), data_y.data(), 0 );
 }
 
 
@@ -219,11 +219,18 @@ void SIM_PLOT_FRAME::menuShowGridState( wxUpdateUIEvent& event )
 void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
 {
     int idx = m_signals->GetSelection();
+    SIM_PLOT_PANEL* plot = currentPlot();
 
     if( idx != wxNOT_FOUND )
     {
-        AddVoltagePlot( m_signals->GetString( idx ) );
-        currentPlot()->Fit();
+        const wxString& netName = m_signals->GetString( idx );
+
+        if( plot->IsShown( netName ) )
+            plot->DeleteTrace( netName );
+        else
+            AddVoltagePlot( netName );
+
+        plot->Fit();
     }
 }
 
@@ -283,7 +290,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         SIM_PLOT_PANEL* plotPanel = static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetPage( i ) );
 
         for( const auto& trace : plotPanel->GetTraces() )
-            updatePlot( trace->GetSpiceName(), trace->GetName(), plotPanel );
+            updatePlot( trace.second->GetSpiceName(), trace.second->GetName(), plotPanel );
     }
 }
 

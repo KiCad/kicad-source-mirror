@@ -118,21 +118,21 @@ SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
 }
 
 
-void SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aTitle, int aPoints,
+bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName, int aPoints,
                                 const double* aT, const double* aY, int aFlags )
 {
     TRACE* t = NULL;
 
     // Find previous entry, if there is one
-    auto it = std::find_if( m_traces.begin(), m_traces.end(),
-            [&](const TRACE* t) { return t->GetName() == aTitle; });
+    auto prev = m_traces.find( aName );
+    bool addedNewEntry = ( prev == m_traces.end() );
 
-    if( it == m_traces.end() )
+    if( addedNewEntry )
     {
         // New entry
-        t = new TRACE( aTitle, aSpiceName );
+        t = new TRACE( aName, aSpiceName );
         t->SetPen( wxPen( generateColor(), 1, wxSOLID ) );
-        m_traces.push_back( t );
+        m_traces[aName] = t;
 
         // It is a trick to keep legend always on the top
         DelLayer( m_legend );
@@ -141,19 +141,37 @@ void SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aTitl
     }
     else
     {
-        t = *it;
+        t = prev->second;
     }
 
     t->SetData( std::vector<double>( aT, aT + aPoints ), std::vector<double>( aY, aY + aPoints ) );
     UpdateAll();
+
+    return addedNewEntry;
 }
 
 
-void SIM_PLOT_PANEL::DeleteTraces()
+bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
 {
-    for( TRACE* t : m_traces )
+    auto trace = m_traces.find( aName );
+
+    if( trace != m_traces.end() )
     {
-        DelLayer( t, true );
+        m_traces.erase( trace );
+        DelLayer( trace->second, true, true );
+
+        return true;
+    }
+
+    return false;
+}
+
+
+void SIM_PLOT_PANEL::DeleteAllTraces()
+{
+    for( auto& t : m_traces )
+    {
+        DelLayer( t.second, true );
     }
 
     m_traces.clear();
