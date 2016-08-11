@@ -134,8 +134,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     m_toolBar->Realize();
     m_plotNotebook->SetPageText(0, _("Welcome!") );
-
-    //relayout();
 }
 
 
@@ -171,12 +169,6 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_simulator->LoadNetlist( formatter.GetString() );
     m_simulator->Run();
 
-    if ( m_welcomePanel )
-    {
-        m_plotNotebook->DeletePage( 0 );
-        m_welcomePanel = nullptr;
-    }
-
     Layout();
 }
 
@@ -197,6 +189,12 @@ bool SIM_PLOT_FRAME::IsSimulationRunning()
 SIM_PLOT_PANEL* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
 {
     SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, wxID_ANY );
+
+    if( m_welcomePanel )
+    {
+        m_plotNotebook->DeletePage( 0 );
+        m_welcomePanel = nullptr;
+    }
 
     m_plotNotebook->AddPage( plot, wxString::Format( wxT( "Plot%u" ),
             (unsigned int) m_plotNotebook->GetPageCount() + 1 ), true );
@@ -286,7 +284,7 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
     // Create a new plot if the current one displays a different type
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
-    if( plotPanel == nullptr || plotPanel->GetType() != simType )
+    if( !plotPanel || plotPanel->GetType() != simType )
         plotPanel = NewPlotPanel( simType );
 
     TRACE_DESC descriptor( *m_exporter, aName, aType, aParam );
@@ -313,6 +311,7 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
         updateSignalList();
     }
 }
+
 
 void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName )
 {
@@ -440,7 +439,7 @@ void SIM_PLOT_FRAME::updateTuners()
 
     m_tuneSizer->Clear();
 
-    for( auto tuner : m_plots[plotPanel].m_tuners )
+    for( auto& tuner : m_plots[plotPanel].m_tuners )
     {
         m_tuneSizer->Add( tuner );
         tuner->Show();
@@ -598,7 +597,27 @@ void SIM_PLOT_FRAME::menuShowCoordsUpdate( wxUpdateUIEvent& event )
 }
 #endif
 
-void SIM_PLOT_FRAME::onPlotChanged( wxNotebookEvent& event )
+
+void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
+{
+    int idx = event.GetSelection();
+
+    if( idx == wxNOT_FOUND )
+        return;
+
+    SIM_PLOT_PANEL* plotPanel = dynamic_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetPage( idx ) );
+
+    if( !plotPanel )
+        return;
+
+    m_plots.erase( plotPanel );
+    updateSignalList();
+    updateTuners();
+    updateCursors();
+}
+
+
+void SIM_PLOT_FRAME::onPlotChanged( wxAuiNotebookEvent& event )
 {
     updateSignalList();
     updateTuners();
@@ -697,13 +716,17 @@ void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
 void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
 {
     wxSize size = m_cursors->GetClientSize();
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
     m_cursors->ClearAll();
 
-    const long SIGNAL_COL = m_cursors->AppendColumn( wxT( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
-    const long X_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelX(), wxLIST_FORMAT_LEFT, size.x / 4 );
+    if( !plotPanel )
+        return;
 
-    wxString labelY1 = CurrentPlot()->GetLabelY1();
-    wxString labelY2 = CurrentPlot()->GetLabelY2();
+    const long SIGNAL_COL = m_cursors->AppendColumn( wxT( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
+    const long X_COL = m_cursors->AppendColumn( plotPanel->GetLabelX(), wxLIST_FORMAT_LEFT, size.x / 4 );
+
+    wxString labelY1 = plotPanel->GetLabelY1();
+    wxString labelY2 = plotPanel->GetLabelY2();
     wxString labelY;
 
     if( !labelY2.IsEmpty() )
@@ -714,7 +737,7 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
     const long Y_COL = m_cursors->AppendColumn( labelY, wxLIST_FORMAT_LEFT, size.x / 4 );
 
     // Update cursor values
-    for( const auto& trace : CurrentPlot()->GetTraces() )
+    for( const auto& trace : plotPanel->GetTraces() )
     {
         if( CURSOR* cursor = trace.second->GetCursor() )
         {
@@ -746,7 +769,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
-    if( plotPanel == nullptr || plotPanel->GetType() != simType )
+    if( !plotPanel || plotPanel->GetType() != simType )
         plotPanel = NewPlotPanel( simType );
 
     // If there are any signals plotted, update them
@@ -784,7 +807,7 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
     // Apply tuned values
     if( SIM_PLOT_PANEL* plotPanel = CurrentPlot() )
     {
-        for( auto tuner : m_plots[plotPanel].m_tuners )
+        for( auto& tuner : m_plots[plotPanel].m_tuners )
         {
             /// @todo no ngspice hardcoding
             std::string command( "alter @" + tuner->GetSpiceName()
@@ -804,6 +827,13 @@ void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
     std::cout << aEvent.GetString() << std::endl;
     m_simConsole->AppendText( aEvent.GetString() + "\n" );
     m_simConsole->SetInsertionPointEnd();
+}
+
+
+SIM_PLOT_FRAME::PLOT_INFO::~PLOT_INFO()
+{
+    for( auto& t : m_tuners )
+        t->Destroy();
 }
 
 

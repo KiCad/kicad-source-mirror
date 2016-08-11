@@ -200,7 +200,8 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         //void menuShowCoordsUpdate( wxUpdateUIEvent& event ) override;
 
         // Event handlers
-        void onPlotChanged( wxNotebookEvent& event ) override;
+        void onPlotChanged( wxAuiNotebookEvent& event ) override;
+        void onPlotClose( wxAuiNotebookEvent& event ) override;
 
         void onSignalDblClick( wxCommandEvent& event ) override;
         void onSignalRClick( wxMouseEvent& event ) override;
@@ -232,9 +233,15 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         typedef std::map<wxString, TRACE_DESC> TRACE_MAP;
         typedef std::list<TUNER_SLIDER*> TUNER_LIST;
 
-        struct PLOT_INFO
+        class PLOT_INFO
         {
+        public:
+            ~PLOT_INFO();
+
+            ///> List of component value tuners
             TUNER_LIST m_tuners;
+
+            ///> Map of the traces displayed on the plot
             TRACE_MAP m_traces;
         };
 

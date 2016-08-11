@@ -27,7 +27,7 @@ class KIWAY_PLAYER;
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
-#include <wx/notebook.h>
+#include <wx/aui/auibook.h>
 #include <wx/textctrl.h>
 #include <wx/splitter.h>
 #include <wx/listbox.h>
@@ -58,7 +58,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxSplitterWindow* m_splitterConsole;
 		wxPanel* m_plotPanel;
 		wxBoxSizer* m_sizer5;
-		wxNotebook* m_plotNotebook;
+		wxAuiNotebook* m_plotNotebook;
 		wxPanel* m_welcomePanel;
 		wxBoxSizer* m_sizer8;
 		wxStaticText* m_staticText2;
@@ -86,7 +86,8 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuShowGridUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void menuShowLegend( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuShowLegendUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onPlotChanged( wxNotebookEvent& event ) { event.Skip(); }
+		virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
+		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSignalRClick( wxMouseEvent& event ) { event.Skip(); }
 		
