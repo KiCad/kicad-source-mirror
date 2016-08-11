@@ -27,9 +27,15 @@
 #include <stdexcept>
 #include <cmath>
 
+#include <wx/textentry.h>
+#include <confirm.h>
+
 SPICE_VALUE::SPICE_VALUE( const wxString& aString )
 {
     char buf[8] = { 0, };
+
+    if( aString.IsEmpty() )
+        throw std::invalid_argument( "Spice value cannot be empty" );
 
     if( sscanf( (const char*) aString.c_str(), "%lf%7s", &m_base, buf ) == 0 )
         throw std::invalid_argument( "Invalid Spice value string" );
@@ -220,4 +226,37 @@ void SPICE_VALUE::stripZeros( wxString& aString )
 
     if( aString.EndsWith( '.' ) || aString.EndsWith( ',' ) )
         aString.RemoveLast();
+}
+
+
+bool SPICE_VALIDATOR::Validate( wxWindow* aParent )
+{
+    wxTextEntry* const text = GetTextEntry();
+
+    if( !text )
+        return false;
+
+    if( text->IsEmpty() )
+    {
+        if( m_emptyAllowed )
+            return true;
+
+        DisplayError( aParent, wxString::Format( wxT( "Fill required fields" ) ) );
+        return false;
+    }
+
+    try
+    {
+        // If SPICE_VALUE can be constructed, then it is a valid Spice value
+        SPICE_VALUE val( text->GetValue() );
+    }
+    catch( ... )
+    {
+        DisplayError( aParent,
+                wxString::Format( wxT( "'%s' is not a valid Spice value" ), text->GetValue() ) );
+
+        return false;
+    }
+
+    return true;
 }

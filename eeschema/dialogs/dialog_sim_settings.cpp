@@ -24,36 +24,35 @@
 
 #include "dialog_sim_settings.h"
 #include <sim/netlist_exporter_pspice_sim.h>
+#include <confirm.h>
 
 /// @todo ngspice offers more types of analysis,
 //so there are a few tabs missing (e.g. pole-zero, distortion, sensitivity)
 
 DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent )
-    : DIALOG_SIM_SETTINGS_BASE( aParent ), m_exporter( nullptr )
+    : DIALOG_SIM_SETTINGS_BASE( aParent ), m_exporter( nullptr ), m_spiceEmptyValidator( true )
 {
-    m_posFloatValidator.SetMin( 0 );
-    m_posFloatValidator.SetPrecision( 6 );
     m_posIntValidator.SetMin( 1 );
 
     m_acPointsNumber->SetValidator( m_posIntValidator );
-    m_acFreqStart->SetValidator( m_posFloatValidator );
-    m_acFreqStop->SetValidator( m_posFloatValidator );
+    m_acFreqStart->SetValidator( m_spiceValidator );
+    m_acFreqStop->SetValidator( m_spiceValidator );
 
-    m_dcStart1->SetValidator( m_posFloatValidator );
-    m_dcStop1->SetValidator( m_posFloatValidator );
-    m_dcIncr1->SetValidator( m_posFloatValidator );
+    m_dcStart1->SetValidator( m_spiceValidator );
+    m_dcStop1->SetValidator( m_spiceValidator );
+    m_dcIncr1->SetValidator( m_spiceValidator );
 
-    m_dcStart2->SetValidator( m_posFloatValidator );
-    m_dcStop2->SetValidator( m_posFloatValidator );
-    m_dcIncr2->SetValidator( m_posFloatValidator );
+    m_dcStart2->SetValidator( m_spiceValidator );
+    m_dcStop2->SetValidator( m_spiceValidator );
+    m_dcIncr2->SetValidator( m_spiceValidator );
 
     m_noisePointsNumber->SetValidator( m_posIntValidator );
-    m_noiseFreqStart->SetValidator( m_posFloatValidator );
-    m_noiseFreqStop->SetValidator( m_posFloatValidator );
+    m_noiseFreqStart->SetValidator( m_spiceValidator );
+    m_noiseFreqStop->SetValidator( m_spiceValidator );
 
-    m_transStep->SetValidator( m_posFloatValidator );
-    m_transFinal->SetValidator( m_posFloatValidator );
-    m_transInitial->SetValidator( m_posFloatValidator );
+    m_transStep->SetValidator( m_spiceValidator );
+    m_transFinal->SetValidator( m_spiceValidator );
+    m_transInitial->SetValidator( m_spiceEmptyValidator );
 
     m_sdbSizerOK->SetDefault();
     updateNetlistOpts();
@@ -70,12 +69,14 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     // AC analysis
     if( page == m_pgAC )
     {
-        if( m_acPointsNumber->IsEmpty() || m_acFreqStart->IsEmpty() || m_acFreqStop->IsEmpty() )
+        if( !m_pgAC->Validate() )
             return false;
 
         m_simCommand = wxString::Format( ".ac %s %s %s %s",
             scaleToString( m_acScale->GetSelection() ),
-            m_acPointsNumber->GetValue(), m_acFreqStart->GetValue(), m_acFreqStop->GetValue() );
+            m_acPointsNumber->GetValue(),
+            SPICE_VALUE( m_acFreqStart->GetValue() ).ToSpiceString(),
+            SPICE_VALUE( m_acFreqStop->GetValue() ).ToSpiceString() );
     }
 
 
@@ -84,30 +85,67 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     {
         // At least one source has to be enabled
         if( !m_dcEnable1->IsChecked() && !m_dcEnable1->IsChecked() )
+        {
+            DisplayError( this, wxT( "You need to enable at least one source" ) );
             return false;
+        }
 
         wxString simCmd = wxString( ".dc " );
 
         if( m_dcEnable1->IsChecked() )
         {
-            if( m_dcSource1->GetValue().IsEmpty() || m_dcStart1->IsEmpty() ||
-                    m_dcStop1->IsEmpty() || m_dcIncr1->IsEmpty() )
+            if( m_dcSource1->GetValue().IsEmpty() )
+            {
+                DisplayError( this, wxT( "You need to select DC source (sweep 1)" ) );
+                return false;
+            }
+
+            /// @todo for some reason it does not trigger the assigned SPICE_VALIDATOR,
+            // hence try..catch below
+            if( !m_dcStart1->Validate() || !m_dcStop1->Validate() || !m_dcIncr1->Validate() )
                 return false;
 
-            simCmd += wxString::Format( "v%s %s %s %s",
-               m_dcSource1->GetValue(), m_dcStart1->GetValue(),
-               m_dcStop1->GetValue(), m_dcIncr1->GetValue() );
+            try
+            {
+                simCmd += wxString::Format( "v%s %s %s %s",
+                    m_dcSource1->GetValue(),
+                    SPICE_VALUE( m_dcStart1->GetValue() ).ToSpiceString(),
+                    SPICE_VALUE( m_dcStop1->GetValue() ).ToSpiceString(),
+                    SPICE_VALUE( m_dcIncr1->GetValue() ).ToSpiceString() );
+            }
+            catch( std::exception& e )
+            {
+                DisplayError( this, e.what() );
+                return false;
+            }
         }
 
         if( m_dcEnable2->IsChecked() )
         {
-            if( m_dcSource2->GetValue().IsEmpty() || m_dcStart2->IsEmpty() ||
-                    m_dcStop2->IsEmpty() || m_dcIncr2->IsEmpty() )
+            if( m_dcSource2->GetValue().IsEmpty() )
+            {
+                DisplayError( this, wxT( "You need to select DC source (sweep 2)" ) );
+                return false;
+            }
+
+            /// @todo for some reason it does not trigger the assigned SPICE_VALIDATOR,
+            // hence try..catch below
+            if( !m_dcStart2->Validate() || !m_dcStop2->Validate() || !m_dcIncr2->Validate() )
                 return false;
 
-            simCmd += wxString::Format( "v%s %s %s %s",
-               m_dcSource2->GetValue(), m_dcStart2->GetValue(),
-               m_dcStop2->GetValue(), m_dcIncr2->GetValue() );
+            try
+            {
+                simCmd += wxString::Format( "v%s %s %s %s",
+                    m_dcSource2->GetValue(),
+                    SPICE_VALUE( m_dcStart2->GetValue() ).ToSpiceString(),
+                    SPICE_VALUE( m_dcStop2->GetValue() ).ToSpiceString(),
+                    SPICE_VALUE( m_dcIncr2->GetValue() ).ToSpiceString() );
+            }
+            catch( std::exception& e )
+            {
+                DisplayError( this, e.what() );
+                return false;
+            }
         }
 
         m_simCommand = simCmd;
@@ -130,7 +168,9 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         m_simCommand = wxString::Format( ".noise v(%d%s) v%s %s %s %s %s",
             netMap.at( m_noiseMeas->GetValue() ), ref,
             m_noiseSrc->GetValue(), scaleToString( m_noiseScale->GetSelection() ),
-            m_noisePointsNumber->GetValue(), m_noiseFreqStart->GetValue(), m_noiseFreqStop->GetValue() );
+            m_noisePointsNumber->GetValue(),
+            SPICE_VALUE( m_noiseFreqStart->GetValue() ).ToSpiceString(),
+            SPICE_VALUE( m_noiseFreqStop->GetValue() ).ToSpiceString() );
     }
 
 
@@ -144,11 +184,16 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     // Transient analysis
     else if( page == m_pgTransient )
     {
-        if( m_transStep->IsEmpty() || m_transFinal->IsEmpty() )
+        if( !m_pgTransient->Validate() )
             return false;
 
+        wxString initial =
+            m_transInitial->IsEmpty() ? "" : SPICE_VALUE( m_transInitial->GetValue() ).ToSpiceString();
+
         m_simCommand = wxString::Format( ".tran %s %s %s",
-            m_transStep->GetValue(), m_transFinal->GetValue(), m_transInitial->GetValue() );
+            SPICE_VALUE( m_transStep->GetValue() ).ToSpiceString(),
+            SPICE_VALUE( m_transFinal->GetValue() ).ToSpiceString(),
+            initial );
     }
 
 

@@ -26,6 +26,8 @@
 #define DIALOG_SIM_SETTINGS_BASE_H
 
 #include "dialog_sim_settings_base.h"
+#include <sim/spice_value.h>
+
 #include <wx/valnum.h>
 
 class NETLIST_EXPORTER_PSPICE_SIM;
@@ -94,7 +96,8 @@ private:
     int m_netlistOpts;
     NETLIST_EXPORTER_PSPICE_SIM* m_exporter;
 
-    wxFloatingPointValidator<double> m_posFloatValidator;
+    SPICE_VALIDATOR m_spiceValidator;
+    SPICE_VALIDATOR m_spiceEmptyValidator;
     wxIntegerValidator<int> m_posIntValidator;
 };
 

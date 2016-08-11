@@ -26,6 +26,7 @@
 #define SPICE_VALUE_H
 
 #include <wx/string.h>
+#include <wx/valtext.h>
 
 ///> Helper class to handle Spice way of expressing values (e.g. 10.5 Meg)
 class SPICE_VALUE
@@ -118,6 +119,27 @@ private:
     bool m_spiceStr;
 
     static void stripZeros( wxString& aString );
+};
+
+
+///> Helper class to recognize Spice formatted values
+class SPICE_VALIDATOR : public wxTextValidator
+{
+public:
+    SPICE_VALIDATOR( bool aEmptyAllowed = false )
+        : m_emptyAllowed( aEmptyAllowed )
+    {
+    }
+
+    wxObject* Clone() const override
+    {
+        return new SPICE_VALIDATOR( *this );
+    }
+
+    bool Validate( wxWindow* aParent ) override;
+
+private:
+    bool m_emptyAllowed;
 };
 
 #endif /* SPICE_VALUE_H */
