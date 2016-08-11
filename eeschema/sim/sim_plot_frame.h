@@ -92,6 +92,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void onPlaceProbe( wxCommandEvent& event ) override;
 
         void onClose( wxCloseEvent& aEvent );
+        void onIdle( wxIdleEvent& aEvent );
         void onSimReport( wxThreadEvent& aEvent );
         void onSimFinished( wxThreadEvent& aEvent );
 

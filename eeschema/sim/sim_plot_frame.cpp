@@ -101,6 +101,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
     Connect( wxEVT_SIM_REPORT, wxThreadEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
     Connect( wxEVT_SIM_FINISHED, wxThreadEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
+    Connect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME::onIdle ), NULL, this );
 
     NewPlotPanel();
 }
@@ -256,15 +257,9 @@ void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
 void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 {
     if( isSimulationRunning() )
-    {
         StopSimulation();
-        m_simulateBtn->SetLabel( wxT( "Simulate" ) );
-    }
     else
-    {
         StartSimulation();
-        m_simulateBtn->SetLabel( wxT( "Stop" ) );
-    }
 }
 
 
@@ -312,6 +307,15 @@ void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
     }
 
     Destroy();
+}
+
+
+void SIM_PLOT_FRAME::onIdle( wxIdleEvent& aEvent )
+{
+    if( isSimulationRunning() )
+        m_simulateBtn->SetLabel( wxT( "Stop" ) );
+    else
+        m_simulateBtn->SetLabel( wxT( "Simulate" ) );
 }
 
 
