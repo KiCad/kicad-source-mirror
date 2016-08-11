@@ -195,6 +195,7 @@ public:
     }
 };
 
+
 void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 {
     if( !m_window )
@@ -274,7 +275,7 @@ bool CURSOR::Inside( wxPoint& aPoint )
         return false;
 
     return ( std::abs( aPoint.x - m_window->x2p( m_trace->x2s( m_coords.x ) ) ) <= DRAG_MARGIN )
-        && ( std::abs( aPoint.y - m_window->y2p( m_trace->y2s( m_coords.y ) ) ) <= DRAG_MARGIN );
+        || ( std::abs( aPoint.y - m_window->y2p( m_trace->y2s( m_coords.y ) ) ) <= DRAG_MARGIN );
 }
 
 
@@ -495,6 +496,8 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
     if( aEnable )
     {
         CURSOR* c = new CURSOR( t );
+        int plotCenter = GetMarginLeft() + ( GetXScreen() - GetMarginLeft() - GetMarginRight() ) / 2;
+        c->Move( wxPoint( plotCenter, 0 ) );
         t->SetCursor( c );
         AddLayer( c );
     }
