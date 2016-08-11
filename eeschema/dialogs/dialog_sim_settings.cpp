@@ -31,8 +31,8 @@
 DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent )
     : DIALOG_SIM_SETTINGS_BASE( aParent ), m_exporter( nullptr )
 {
-    m_posFloatValidator.SetMin( 0 + std::numeric_limits<double>::epsilon() );
-    m_posFloatValidator.SetPrecision( 3 );
+    m_posFloatValidator.SetMin( 0 );
+    m_posFloatValidator.SetPrecision( 6 );
     m_posIntValidator.SetMin( 1 );
 
     m_acPointsNumber->SetValidator( m_posIntValidator );
