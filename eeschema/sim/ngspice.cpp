@@ -217,26 +217,24 @@ vector<double> NGSPICE::GetPhasePlot( const string& aName, int aMaxLen )
 
 bool NGSPICE::LoadNetlist( const string& aNetlist )
 {
-    // TODO remove the hard limit
-    char* lines[16384];
+    vector<char*> lines;
     stringstream ss( aNetlist );
-    int n = 0;
 
-    while( !ss.eof() && n < 16384 )
+    while( !ss.eof() )
     {
         char line[1024];
-        ss.getline( line, sizeof(line) );
-        lines[n++] = strdup(line);
-
+        ss.getline( line, sizeof( line ) );
+        lines.push_back( strdup( line ) );
     }
-    lines[n] = NULL;
+
+    lines.push_back( nullptr );
 
     setlocale( LC_ALL, "C" );
-    m_ngSpice_Circ( lines );
+    m_ngSpice_Circ( lines.data() );
     setlocale( LC_ALL, "" );
 
-    for(int i = 0; i < n; i++)
-        delete lines[i];
+    for( auto line : lines )
+        delete line;
 
     return true;
 }
