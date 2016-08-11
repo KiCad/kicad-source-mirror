@@ -69,7 +69,6 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         virtual void onSimReport( wxThreadEvent& aEvent );
         virtual void onSimFinished( wxThreadEvent& aEvent );
 
-        SIM_PLOT_PANEL* m_currentPlot;
         SCH_EDIT_FRAME* m_schematicFrame;
         NETLIST_EXPORTER_PSPICE* m_exporter;
         SPICE_SIMULATOR* m_simulator;

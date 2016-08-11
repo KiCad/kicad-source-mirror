@@ -98,7 +98,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 {
     m_exporter = NULL;
     m_simulator = NULL;
-    m_currentPlot = NULL;
     m_pyConsole = NULL;
     m_simThread = NULL;
 
@@ -197,8 +196,8 @@ void SIM_PLOT_FRAME::StopSimulation()
 void SIM_PLOT_FRAME::NewPlot()
 {
     SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( this, wxID_ANY );
-    m_plotNotebook->AddPage( plot, wxT( "Plot1" ), true );
-    m_currentPlot = plot;
+    m_plotNotebook->AddPage( plot,
+            wxString::Format( wxT( "Plot%lu" ), m_plotNotebook->GetPageCount() + 1 ), true );
 }
 
 
