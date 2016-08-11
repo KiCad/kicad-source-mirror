@@ -689,14 +689,18 @@ class WXDLLIMPEXP_MATHPLOT mpProfile : public mpLayer
 class WXDLLIMPEXP_MATHPLOT mpScaleBase : public mpLayer
 {
 public:
-    mpScaleBase () { m_rangeSet = false; };
+    mpScaleBase () { m_rangeSet = false; m_nameFlags = mpALIGN_BORDER_BOTTOM; };
     virtual ~mpScaleBase () {};
+
+    virtual bool IsHorizontal() = 0;
 
     bool HasBBox() { return FALSE; }
 
     /** Set X axis alignment.
       @param align alignment (choose between mpALIGN_BORDER_BOTTOM, mpALIGN_BOTTOM, mpALIGN_CENTER, mpALIGN_TOP, mpALIGN_BORDER_TOP */
     void SetAlign(int align) { m_flags = align; };
+
+    void SetNameAlign ( int align ) { m_nameFlags = align; }
 
     /** Set X axis ticks or grid
       @param ticks TRUE to plot axis ticks, FALSE to plot grid. */
@@ -760,23 +764,63 @@ public:
     virtual double TransformToPlot ( double x ) { return 0.0; };
     virtual double TransformFromPlot (double xplot ){ return 0.0; };
 
+
+
 protected:
 
+    void updateTickLabels( wxDC & dc, mpWindow & w );
+    void computeLabelExtents ( wxDC & dc, mpWindow & w );
 
+    virtual int getLabelDecimalDigits(int maxDigits);
     virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV) {};
     virtual void recalculateTicks ( wxDC & dc, mpWindow & w ) {};
-    virtual int tickCount() const { return 0; }
-    virtual int labelCount() const { return 0; }
-    virtual const wxString getLabel( int n ) { return wxT(""); }
-    virtual double getTickPos( int n ) { return 0.0; }
-    virtual double getLabelPos( int n ) { return 0.0; }
+
+    int tickCount() const
+    {
+        return m_tickValues.size();
+    }
+
+    virtual int labelCount() const
+    {
+        return m_tickLabels.size();
+    }
+
+    virtual const wxString formatLabel( double value, int nDigits ) { return wxT(""); }
+
+    virtual double getTickPos( int n )
+    {
+        return m_tickValues [n];
+    }
+
+    virtual double getLabelPos( int n )
+    {
+        return m_tickLabels[n].pos;
+    }
+
+    virtual const wxString getLabel( int n )
+    {
+        return m_tickLabels[n].label;
+    }
+
+
+    struct TickLabel {
+        TickLabel( double pos_=0.0, const wxString& label_ = wxT("") ) :
+            pos ( pos_ ),
+            label ( label_ ) {};
+        double pos;
+        wxString label;
+        int pixelPos;
+        bool visible;
+    };
+
 
     std::vector<double> m_tickValues;
-    std::vector<double> m_labeledTicks;
+    std::vector<TickLabel> m_tickLabels;
 
     double m_offset, m_scale;
     double m_absVisibleMaxV;
     int m_flags; //!< Flag for axis alignment
+    int m_nameFlags;
     bool m_ticks; //!< Flag to toggle between ticks or grid
     double m_minV, m_maxV;
     bool m_rangeSet;
@@ -796,6 +840,7 @@ class WXDLLIMPEXP_MATHPLOT mpScaleXBase : public mpScaleBase
         mpScaleXBase(wxString name = wxT("X"), int flags = mpALIGN_CENTER, bool ticks = true, unsigned int type = mpX_NORMAL);
         virtual ~mpScaleXBase () {};
 
+        virtual bool IsHorizontal() { return true; }
         /** Layer plot handler.
           This implementation will plot the ruler adjusted to the visible area. */
         virtual void Plot(wxDC & dc, mpWindow & w);
@@ -828,14 +873,8 @@ class WXDLLIMPEXP_MATHPLOT mpScaleX : public mpScaleXBase
         virtual double TransformToPlot ( double x );
         virtual double TransformFromPlot (double xplot );
     protected:
-        void computeLabelExtents ( wxDC & dc, mpWindow & w );
 
         virtual void recalculateTicks ( wxDC & dc, mpWindow & w );
-        virtual int tickCount() const;
-        virtual int labelCount() const;
-        virtual const wxString getLabel( int n );
-        virtual double getTickPos( int n );
-        virtual double getLabelPos( int n );
 
 
         double n0, dig, step, labelStep, end;
@@ -863,11 +902,11 @@ class WXDLLIMPEXP_MATHPLOT mpScaleXLog : public mpScaleXBase
     protected:
 
         void recalculateTicks ( wxDC & dc, mpWindow & w );
-        int tickCount() const;
-        int labelCount() const;
-        const wxString getLabel( int n );
-        double getTickPos( int n );
-        double getLabelPos( int n );
+        //int tickCount() const;
+        //int labelCount() const;
+        //const wxString getLabel( int n );
+        //double getTickPos( int n );
+        //double getLabelPos( int n );
 
 
         void computeLabelExtents ( wxDC & dc, mpWindow & w );
@@ -892,6 +931,8 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpScaleBase
           @param flags Set position of the scale respect to the window.
           @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid */
         mpScaleY(wxString name = wxT("Y"), int flags = mpALIGN_CENTER, bool ticks = true);
+
+        virtual bool IsHorizontal() { return false; }
 
         /** Layer plot handler.
           This implementation will plot the ruler adjusted to the visible area.
@@ -928,11 +969,11 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpScaleBase
     protected:
         virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV);
         virtual void recalculateTicks ( wxDC & dc, mpWindow & w );
-        virtual int tickCount() const;
-        virtual int labelCount() const;
-        virtual const wxString getLabel( int n );
-        virtual double getTickPos( int n );
-        virtual double getLabelPos( int n );
+        //virtual int tickCount() const;
+        //virtual int labelCount() const;
+        //virtual const wxString getLabel( int n );
+        //virtual double getTickPos( int n );
+        //virtual double getLabelPos( int n );
         void computeLabelExtents ( wxDC & dc, mpWindow & w );
         void computeSlaveTicks ( mpWindow& w );
         mpScaleY * m_masterScale;
@@ -940,8 +981,6 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpScaleBase
 //        double m_minV, m_maxV;
         int m_maxLabelHeight;
         int m_maxLabelWidth;
-        std::vector<double> m_tickValues;
-        std::vector<double> m_labeledTicks;
 
         int m_flags; //!< Flag for axis alignment
         bool m_ticks; //!< Flag to toggle between ticks or grid
