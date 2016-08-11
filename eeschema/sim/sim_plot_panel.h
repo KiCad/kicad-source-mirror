@@ -33,7 +33,7 @@ class SIM_PLOT_PAINTER : public mglDraw
 {
 public:
     SIM_PLOT_PAINTER( const SIM_PLOT_PANEL* aParent )
-        : m_parent( aParent )
+        : m_parent( aParent ), m_lightColorIdx( 0 ), m_darkColorIdx( 0 )
     {
     }
 
@@ -45,8 +45,14 @@ public:
 
     int Draw( mglGraph* aGraph ) override;
 
+    enum COLOR_TYPE { LIGHT, DARK };
+
+    ///> Generates a new, unique color for plotting curves
+    wxString GenerateColor( COLOR_TYPE aType );
+
 private:
     const SIM_PLOT_PANEL* m_parent;
+    int m_lightColorIdx, m_darkColorIdx;
 };
 
 
@@ -59,7 +65,7 @@ public:
     ~SIM_PLOT_PANEL();
 
     struct TRACE {
-        wxString name;
+        wxString name, style;
         mglData x, y;
     };
 

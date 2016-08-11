@@ -68,6 +68,7 @@ void SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
     TRACE trace;
 
     trace.name = aName;
+    trace.style = wxString( '-' ) + m_painter.GenerateColor( SIM_PLOT_PAINTER::DARK );
     trace.x.Set( aT, aPoints );
     trace.y.Set( aY, aPoints );
     m_traces.push_back( trace );
@@ -141,12 +142,54 @@ int SIM_PLOT_PAINTER::Draw( mglGraph* aGraph )
     // Draw traces
     for( auto t : traces )
     {
-        aGraph->AddLegend( (const char*) t.name.c_str(), "" );
-        aGraph->Plot( t.y, "-" );
+        aGraph->AddLegend( (const char*) t.name.c_str(), t.style );
+        aGraph->Plot( t.y, t.style );
     }
 
     if( traces.size() )
-        aGraph->Legend( 1, "-#" );
+        aGraph->Legend( 1, "-#" );  // legend entries horizontally + draw a box around legend
 
     return 0;
+}
+
+
+wxString SIM_PLOT_PAINTER::GenerateColor( COLOR_TYPE aType )
+{
+    const char colors[] = "rgbcmylenupq";
+    const unsigned int colorsNumber = sizeof( colors ) - 1;
+
+    // Safe defaults
+    char color = 'k';       // black
+    int shade = 5;
+
+    switch( aType )
+    {
+        case LIGHT:
+            color = colors[m_lightColorIdx % colorsNumber];
+            shade = 5 + m_lightColorIdx / colorsNumber;
+            ++m_lightColorIdx;
+
+            if( shade == 10 )
+            {
+                // Reached the color limit
+                shade = 5;
+                m_lightColorIdx = 0;
+            }
+            break;
+
+        case DARK:
+            color = toupper( colors[m_darkColorIdx % colorsNumber] );
+            shade = 5 - m_darkColorIdx / colorsNumber;
+            ++m_darkColorIdx;
+
+            if( shade == 0 )
+            {
+                // Reached the color limit
+                shade = 5;
+                m_darkColorIdx = 0;
+            }
+            break;
+    }
+
+    return wxString::Format( "{%c%d}", color, shade );
 }
