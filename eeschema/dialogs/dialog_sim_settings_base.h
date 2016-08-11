@@ -103,6 +103,8 @@ class DIALOG_SIM_SETTINGS_BASE : public wxDialog
 		wxStaticText* m_staticText18;
 		wxTextCtrl* m_customTxt;
 		wxButton* m_loadDirectives;
+		wxCheckBox* m_fixPassiveVals;
+		wxCheckBox* m_fixIncludePaths;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;

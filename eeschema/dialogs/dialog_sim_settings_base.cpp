@@ -377,6 +377,13 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	
 	bSizer1->Add( m_simPages, 1, wxEXPAND | wxALL, 5 );
 	
+	m_fixPassiveVals = new wxCheckBox( this, wxID_ANY, wxT("Adjust passive component values (e.g. M -> Meg; 100 nF -> 100n)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer1->Add( m_fixPassiveVals, 0, wxALL, 5 );
+	
+	m_fixIncludePaths = new wxCheckBox( this, wxID_ANY, wxT("Add full path for .include library directives"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fixIncludePaths->SetValue(true); 
+	bSizer1->Add( m_fixIncludePaths, 0, wxALL, 5 );
+	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
 	m_sdbSizer1->AddButton( m_sdbSizer1OK );

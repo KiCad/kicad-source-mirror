@@ -40,6 +40,11 @@ public:
         return m_simCommand;
     }
 
+    int GetNetlistOptions() const
+    {
+        return m_netlistOpts;
+    }
+
     void SetNetlistExporter( NETLIST_EXPORTER_PSPICE_SIM* aExporter )
     {
         m_exporter = aExporter;
@@ -79,7 +84,10 @@ private:
         return wxEmptyString;
     }
 
+    void updateNetlistOpts();
+
     wxString m_simCommand;
+    int m_netlistOpts;
     NETLIST_EXPORTER_PSPICE_SIM* m_exporter;
 
     wxFloatingPointValidator<double> m_posFloatValidator;

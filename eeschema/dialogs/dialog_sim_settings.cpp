@@ -54,6 +54,8 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent )
     m_transStep->SetValidator( m_posFloatValidator );
     m_transFinal->SetValidator( m_posFloatValidator );
     m_transInitial->SetValidator( m_posFloatValidator );
+
+    updateNetlistOpts();
 }
 
 
@@ -160,6 +162,8 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         return false;
     }
 
+    updateNetlistOpts();
+
     return true;
 }
 
@@ -235,4 +239,16 @@ void DIALOG_SIM_SETTINGS::onLoadDirectives( wxCommandEvent& event )
 {
     if( m_exporter )
         m_customTxt->SetValue( m_exporter->GetSheetSimCommand() );
+}
+
+
+void DIALOG_SIM_SETTINGS::updateNetlistOpts()
+{
+    m_netlistOpts = NET_ALL_FLAGS;
+
+    if( !m_fixPassiveVals->IsChecked() )
+        m_netlistOpts &= ~NET_ADJUST_PASSIVE_VALS;
+
+    if( !m_fixIncludePaths->IsChecked() )
+        m_netlistOpts &= ~NET_ADJUST_INCLUDE_PATHS;
 }

@@ -105,8 +105,8 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_simulator->Init();
 
     updateNetlistExporter();
-    m_exporter->SetSimCommand( m_simCommand );
-    m_exporter->Format( &formatter, NET_ALL_FLAGS );
+    m_exporter->SetSimCommand( m_settingsDlg.GetSimCommand() );
+    m_exporter->Format( &formatter, m_settingsDlg.GetNetlistOptions() );
 
     m_simulator->LoadNetlist( formatter.GetString() );
     m_simulator->Run();
@@ -431,11 +431,8 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 {
     updateNetlistExporter();
     m_exporter->ProcessNetlist( NET_ALL_FLAGS );
-
     m_settingsDlg.SetNetlistExporter( m_exporter.get() );
-
-    if( m_settingsDlg.ShowModal() == wxID_OK )
-        m_simCommand = m_settingsDlg.GetSimCommand();
+    m_settingsDlg.ShowModal();
 }
 
 

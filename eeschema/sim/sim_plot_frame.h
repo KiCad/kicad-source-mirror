@@ -124,7 +124,6 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         SCH_EDIT_FRAME* m_schematicFrame;
         std::unique_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
         std::unique_ptr<SPICE_SIMULATOR> m_simulator;
-        wxString m_simCommand;
 
         // Trick to preserve settings between runs
         DIALOG_SIM_SETTINGS m_settingsDlg;
