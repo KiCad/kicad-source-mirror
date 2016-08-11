@@ -871,6 +871,7 @@ void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
         return;
 
     wxQueueEvent( m_schematicFrame, new wxCommandEvent( wxEVT_TOOL, ID_SIM_PROBE ) );
+    m_schematicFrame->Raise();
 }
 
 
@@ -880,6 +881,7 @@ void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
         return;
 
     wxQueueEvent( m_schematicFrame, new wxCommandEvent( wxEVT_TOOL, ID_SIM_TUNE ) );
+    m_schematicFrame->Raise();
 }
 
 
