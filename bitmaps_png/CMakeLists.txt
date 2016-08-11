@@ -512,6 +512,12 @@ set( BMAPS_MID
     select_w_layer
     shape_3d
     sheetset
+    sim_run
+    sim_stop
+    sim_tune
+    sim_probe
+    sim_add_signal
+    sim_settings
     setcolor_3d_bg
     setcolor_silkscreen
     setcolor_soldermask

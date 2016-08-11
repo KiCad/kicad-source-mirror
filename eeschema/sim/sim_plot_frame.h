@@ -195,8 +195,8 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void menuShowGridUpdate( wxUpdateUIEvent& event ) override;
         void menuShowLegend( wxCommandEvent& event ) override;
         void menuShowLegendUpdate( wxUpdateUIEvent& event ) override;
-        void menuShowCoords( wxCommandEvent& event ) override;
-        void menuShowCoordsUpdate( wxUpdateUIEvent& event ) override;
+        //void menuShowCoords( wxCommandEvent& event ) override;
+        //void menuShowCoordsUpdate( wxUpdateUIEvent& event ) override;
 
         // Event handlers
         void onPlotChanged( wxNotebookEvent& event ) override;
@@ -204,11 +204,11 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void onSignalDblClick( wxCommandEvent& event ) override;
         void onSignalRClick( wxMouseEvent& event ) override;
 
-        void onSimulate( wxCommandEvent& event ) override;
-        void onSettings( wxCommandEvent& event ) override;
-        void onAddSignal( wxCommandEvent& event ) override;
-        void onProbe( wxCommandEvent& event ) override;
-        void onTune( wxCommandEvent& event ) override;
+        void onSimulate( wxCommandEvent& event );
+        void onSettings( wxCommandEvent& event );
+        void onAddSignal( wxCommandEvent& event );
+        void onProbe( wxCommandEvent& event );
+        void onTune( wxCommandEvent& event );
 
         void onClose( wxCloseEvent& aEvent );
 
@@ -217,6 +217,12 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void onSimReport( wxCommandEvent& aEvent );
         void onSimStarted( wxCommandEvent& aEvent );
         void onSimFinished( wxCommandEvent& aEvent );
+
+        wxToolBarToolBase* m_toolSimulate;
+		wxToolBarToolBase* m_toolAddSignals;
+		wxToolBarToolBase* m_toolProbe;
+		wxToolBarToolBase* m_toolTune;
+		wxToolBarToolBase* m_toolSettings;
 
         SCH_EDIT_FRAME* m_schematicFrame;
         std::unique_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;

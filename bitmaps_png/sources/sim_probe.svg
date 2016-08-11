@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="sim_tune.svg">
+  <metadata
+     id="metadata50">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1000"
+     id="namedview48"
+     showgrid="true"
+     inkscape:zoom="22.961539"
+     inkscape:cx="22.847263"
+     inkscape:cy="14.370314"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="true"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3006"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <style
+       id="style3201"
+       type="text/css">
+    .fil0 {fill:#00923F}
+   </style>
+    <style
+       id="style3282"
+       type="text/css">
+    .str0 {stroke:#DA251D;stroke-width:0.0762}
+    .fil0 {fill:#DA251D}
+   </style>
+    <style
+       id="style3363"
+       type="text/css">
+    .fil0 {fill:#28166F}
+   </style>
+    <style
+       id="style3448"
+       type="text/css">
+    .str0 {stroke:#28166F;stroke-width:0.0762}
+    .str1 {stroke:#28166F;stroke-width:2.8222}
+    .fil1 {fill:none}
+    .fil0 {fill:#28166F}
+   </style>
+  </defs>
+  <g
+     style="fill-rule:evenodd"
+     id="g3469"
+     transform="matrix(0.24461259,0,0,0.22640667,-97.21454,-8.3068908)">
+    <g
+       id="Layer_x0020_1">
+      <metadata
+         id="CorelCorpID_0Corel-Layer" />
+      <polygon
+         id="polygon3452"
+         points="479.386,49.1497 468.164,67.1189 461.483,62.0725 475.843,46.3793 "
+         class="fil0 str0"
+         style="fill:#28166f;stroke:#28166f;stroke-width:0.0762" />
+      <polygon
+         id="polygon3454"
+         points="409.114,129.032 418.351,109.564 433.894,121.304 417.417,135.398 "
+         class="fil0 str0"
+         style="fill:#28166f;stroke:#28166f;stroke-width:0.0762" />
+      <rect
+         id="rect3456"
+         ry="0.79079998"
+         rx="0.79079998"
+         height="36.848999"
+         width="7.9926"
+         transform="matrix(1.485,1.12165,-1.21627,1.61027,464.721,51.9919)"
+         class="fil0 str0"
+         x="0"
+         y="0"
+         style="fill:#28166f;stroke:#28166f;stroke-width:0.0762" />
+      <rect
+         id="rect3458"
+         ry="1.6112"
+         rx="1.6112"
+         height="3.4238"
+         width="11.6812"
+         transform="matrix(1.80799,1.36561,-1.36561,1.80799,416.388,106.365)"
+         class="fil0 str0"
+         x="0"
+         y="0"
+         style="fill:#28166f;stroke:#28166f;stroke-width:0.0762" />
+      <polygon
+         id="polygon3460"
+         points="415.651,125.526 405.196,139.368 400.984,148.426 408.418,142.645 419.076,128.535 "
+         class="fil0 str0"
+         style="fill:#28166f;stroke:#28166f;stroke-width:0.0762" />
+      <path
+         id="path3462"
+         d="m 476.138,50.2632 c 6.9706,-10.9547 21.8672,-11.2504 20.0427,3.4745 -2.3011,18.57 -50.7341,55.7184 -26.4633,74.9809 4.1502,3.1639 15.5463,9.4991 27.8104,7.409"
+         class="fil1 str1"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#28166f;stroke-width:2.82220006" />
+    </g>
+  </g>
+</svg>
