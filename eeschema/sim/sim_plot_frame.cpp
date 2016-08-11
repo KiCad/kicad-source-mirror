@@ -145,6 +145,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     m_toolBar->Realize();
     m_plotNotebook->SetPageText( 0, _( "Welcome!" ) );
+    m_simulator.reset( SPICE_SIMULATOR::CreateInstance( "ngspice" ) );
 }
 
 
@@ -157,6 +158,12 @@ void SIM_PLOT_FRAME::StartSimulation()
 {
     STRING_FORMATTER formatter;
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
+    if( !m_simulator )
+    {
+        DisplayError( this, wxT( "Could not create simulator instance" ) );
+        return;
+    }
 
     m_simConsole->Clear();
     updateNetlistExporter();
@@ -175,12 +182,6 @@ void SIM_PLOT_FRAME::StartSimulation()
         DisplayInfoMessage( this, wxT( "You need to select the simulation settings first." ) );
         return;
     }
-
-    /// @todo is it necessary to recreate simulator every time?
-    m_simulator.reset( SPICE_SIMULATOR::CreateInstance( "ngspice" ) );
-
-    if( !m_simulator )
-        return;
 
     m_simulator->SetReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
