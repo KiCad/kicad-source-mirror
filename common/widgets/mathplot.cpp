@@ -1136,7 +1136,6 @@ IMPLEMENT_DYNAMIC_CLASS(mpWindow, wxWindow)
     EVT_MENU( mpID_ZOOM_IN,   mpWindow::OnZoomIn)
     EVT_MENU( mpID_ZOOM_OUT,  mpWindow::OnZoomOut)
     EVT_MENU( mpID_LOCKASPECT,mpWindow::OnLockAspect)
-    EVT_MENU( mpID_HELP_MOUSE,mpWindow::OnMouseHelp)
 END_EVENT_TABLE()
 
 mpWindow::mpWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long flag )
@@ -1615,16 +1614,6 @@ void mpWindow::OnShowPopupMenu(wxMouseEvent &event)
 void mpWindow::OnLockAspect(wxCommandEvent& WXUNUSED(event))
 {
     LockAspect( !m_lockaspect );
-}
-
-void mpWindow::OnMouseHelp(wxCommandEvent& WXUNUSED(event))
-{
-    wxMessageBox(_("Supported Mouse commands:\n \
-                - Left button down + Mark area: Rectangular zoom\n \
-                - Middle button down + Move: Pan (Move)\n \
-                - Wheel: Vertical scroll\n \
-                - Wheel + SHIFT: Horizontal scroll\n \
-                - Wheel + CTRL: Zoom in/out"),_("wxMathPlot help"),wxOK,this);
 }
 
 void mpWindow::OnFit(wxCommandEvent& WXUNUSED(event))

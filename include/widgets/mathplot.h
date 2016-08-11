@@ -116,7 +116,6 @@ enum
     mpID_ZOOM_OUT,      //!< Zoom out
     mpID_CENTER,        //!< Center view on click position
     mpID_LOCKASPECT,    //!< Lock x/y scaling aspect
-    mpID_HELP_MOUSE     //!< Shows information about the mouse commands
 };
 
 //-----------------------------------------------------------------------------
@@ -1168,7 +1167,6 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
         void OnZoomIn        (wxCommandEvent   &event); //!< Context menu handler
         void OnZoomOut       (wxCommandEvent   &event); //!< Context menu handler
         void OnLockAspect    (wxCommandEvent   &event); //!< Context menu handler
-        void OnMouseHelp     (wxCommandEvent   &event); //!< Context menu handler
         void OnMouseWheel    (wxMouseEvent     &event); //!< Mouse handler for the wheel
         void OnMouseMove     (wxMouseEvent     &event); //!< Mouse handler for mouse motion (for pan)
         void OnMouseLeftDown (wxMouseEvent     &event); //!< Mouse left click (for rect zoom)
