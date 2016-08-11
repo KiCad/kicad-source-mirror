@@ -668,14 +668,10 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
     if( !m_simulator )
         return;
 
-        aEvent.Discard();
-        
     if( IsSimulationRunning() )
         StopSimulation();
 
     m_simConsole->Clear();
-
-    printf("SimUpdate\n");
 
     // Apply tuned values
     if( SIM_PLOT_PANEL* plotPanel = CurrentPlot() )

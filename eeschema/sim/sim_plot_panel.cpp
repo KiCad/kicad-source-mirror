@@ -341,7 +341,6 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
 {
     TRACE* t = NULL;
 
-
     // Find previous entry, if there is one
     auto prev = m_traces.find( aName );
     bool addedNewEntry = ( prev == m_traces.end() );
@@ -362,29 +361,6 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
                 assert(false);
         }
 
-        printf("points : %d\n", aPoints );
-
-        std::vector<double> tmp(aY, aY + aPoints);
-
-        if( m_type == ST_AC )
-        {
-            if( aFlags & SPF_AC_PHASE)
-            {
-                for(int i = 0; i < aPoints; i++ )
-                    tmp[i] = tmp[i] * 180.0 / M_PI;
-            } else {
-                for(int i = 0; i < aPoints; i++ )
-                    tmp[i] = 20 * log( tmp[i] ) / log(10.0);
-            }
-        }
-
-        t->SetData( std::vector<double>( aT, aT + aPoints ), tmp );
-
-        if( aFlags & SPF_AC_PHASE )
-            t->SetScale ( m_axis_x, m_axis_y2 );
-        else
-            t->SetScale ( m_axis_x, m_axis_y1 );
-
         t->SetPen( wxPen( generateColor(), 2, wxSOLID ) );
         m_traces[aName] = t;
 
@@ -392,7 +368,7 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
         for( mpLayer* l : m_topLevel )
             DelLayer( l );
 
-        AddLayer( (mpLayer *) t );
+        AddLayer( (mpLayer*) t );
 
         for( mpLayer* l : m_topLevel )
             AddLayer( l );
@@ -401,6 +377,29 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
     {
         t = prev->second;
     }
+
+    std::vector<double> tmp( aY, aY + aPoints );
+
+    if( m_type == ST_AC )
+    {
+        if( aFlags & SPF_AC_PHASE )
+        {
+            for(int i = 0; i < aPoints; i++ )
+                tmp[i] = tmp[i] * 180.0 / M_PI;
+        }
+        else
+        {
+            for(int i = 0; i < aPoints; i++ )
+                tmp[i] = 20 * log( tmp[i] ) / log( 10.0 );
+        }
+    }
+
+    t->SetData( std::vector<double>( aT, aT + aPoints ), tmp );
+
+    if( aFlags & SPF_AC_PHASE )
+        t->SetScale( m_axis_x, m_axis_y2 );
+    else
+        t->SetScale( m_axis_x, m_axis_y1 );
 
     UpdateAll();
 

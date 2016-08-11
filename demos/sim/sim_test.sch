@@ -49,14 +49,12 @@ L VSOURCE V1
 U 1 1 57336052
 P 4400 4050
 F 0 "V1" H 4528 4096 50  0000 L CNN
-F 1 "0.2 AC 1 SIN(0 1 2)" H 4528 4005 50  0000 L CNN
+F 1 "5V" H 4528 4005 50  0000 L CNN
 F 2 "" H 4400 4050 50  0000 C CNN
 F 3 "" H 4400 4050 50  0000 C CNN
 F 4 "Value" H 4400 4050 60  0001 C CNN "Fieldname"
-F 5 "V" H 4400 4050 60  0001 C CNN "SpicePrimitive"
-F 6 "1 2" H 4100 4250 60  0001 C CNN "SpicePinMapping"
 	1    4400 4050
-	1    0    0    -1  
+	-1   0    0    1   
 $EndComp
 $Comp
 L GND #PWR1
@@ -82,8 +80,6 @@ F 0 "R1" V 4443 3700 50  0000 C CNN
 F 1 "10k" V 4534 3700 50  0000 C CNN
 F 2 "" V 4580 3700 50  0000 C CNN
 F 3 "" H 4650 3700 50  0000 C CNN
-F 4 "1 2" H 4650 3700 60  0001 C CNN "SpiceMapping"
-F 5 "R" V 4650 3700 60  0001 C CNN "SpicePrimitive"
 	1    4650 3700
 	0    1    1    0   
 $EndComp
@@ -101,8 +97,10 @@ F 0 "D1" H 5100 3485 50  0000 C CNN
 F 1 "1N4148" H 5100 3576 50  0000 C CNN
 F 2 "" H 5100 3700 50  0000 C CNN
 F 3 "" H 5100 3700 50  0000 C CNN
-F 4 "D" H 5100 3700 60  0001 C CNN "SpicePrimitive"
-F 5 "1 2" H 5100 3700 60  0001 C CNN "SpiceMapping"
+F 4 "D" H 5100 3700 60  0001 C CNN "Spice_Primitive"
+F 5 "1n914" H 5100 3700 60  0001 C CNN "Spice_Model"
+F 6 "Y" H 5100 3700 60  0001 C CNN "Spice_Netlist_Enabled"
+F 7 "/home/orson/workspace/kicad/demos/sim/diodes.lib" H 5100 3700 60  0001 C CNN "Spice_Lib_File"
 	1    5100 3700
 	-1   0    0    1   
 $EndComp
@@ -114,8 +112,6 @@ F 0 "C1" H 5515 4046 50  0000 L CNN
 F 1 "100n" H 5515 3955 50  0000 L CNN
 F 2 "" H 5438 3850 50  0000 C CNN
 F 3 "" H 5400 4000 50  0000 C CNN
-F 4 "C" H 5400 4000 60  0001 C CNN "SpicePrimitive"
-F 5 "1 2" H 5400 4000 60  0001 C CNN "SpiceMapping"
 	1    5400 4000
 	1    0    0    -1  
 $EndComp
@@ -124,11 +120,9 @@ L R R2
 U 1 1 573362F7
 P 5750 4000
 F 0 "R2" H 5680 3954 50  0000 R CNN
-F 1 "100k" H 5680 4045 50  0000 R CNN
+F 1 "1Meg" H 5680 4045 50  0000 R CNN
 F 2 "" V 5680 4000 50  0000 C CNN
 F 3 "" H 5750 4000 50  0000 C CNN
-F 4 "1 2" H 5750 4000 60  0001 C CNN "SpiceMapping"
-F 5 "R" V 5750 4000 60  0001 C CNN "SpicePrimitive"
 	1    5750 4000
 	-1   0    0    1   
 $EndComp
@@ -144,6 +138,17 @@ Wire Wire Line
 Wire Wire Line
 	5750 4300 5750 4150
 Connection ~ 5400 4300
-Text Notes 4500 3200 0    60   ~ 0
-.include diodes.lib\n.tran 1m 1000m 1m 10m
+Text Notes 4300 3150 0    60   ~ 0
+.op
+$Comp
+L +12V #PWR?
+U 1 1 5787B2A9
+P 6650 3300
+F 0 "#PWR?" H 6650 3150 50  0001 C CNN
+F 1 "+12V" H 6665 3473 50  0000 C CNN
+F 2 "" H 6650 3300 50  0000 C CNN
+F 3 "" H 6650 3300 50  0000 C CNN
+	1    6650 3300
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
