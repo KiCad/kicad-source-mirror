@@ -251,14 +251,21 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     }
 
     // Line length in horizontal and vertical dimensions
-    const int horLen = aWindow.GetScrX();
-    const int verLen = aWindow.GetScrY();
-
     const wxPoint cursorPos( aWindow.x2p( m_trace->x2s( m_coords.x ) ),
                              aWindow.y2p( m_trace->y2s( m_coords.y ) ) );
+
+    wxCoord leftPx   = m_drawOutsideMargins ? 0 : aWindow.GetMarginLeft();
+    wxCoord rightPx  = m_drawOutsideMargins ? aWindow.GetScrX() : aWindow.GetScrX() - aWindow.GetMarginRight();
+    wxCoord topPx    = m_drawOutsideMargins ? 0 : aWindow.GetMarginTop();
+    wxCoord bottomPx = m_drawOutsideMargins ? aWindow.GetScrY() : aWindow.GetScrY() - aWindow.GetMarginBottom();
+
     aDC.SetPen( wxPen( *wxWHITE, 1, m_continuous ? wxSOLID : wxLONG_DASH ) );
-    aDC.DrawLine( -horLen, cursorPos.y, horLen, cursorPos.y );
-    aDC.DrawLine( cursorPos.x, -verLen, cursorPos.x, verLen );
+
+    if( topPx < cursorPos.y && cursorPos.y < bottomPx )
+        aDC.DrawLine( leftPx, cursorPos.y, rightPx, cursorPos.y );
+
+    if( leftPx < cursorPos.x && cursorPos.x < rightPx )
+        aDC.DrawLine( cursorPos.x, topPx, cursorPos.x, bottomPx );
 }
 
 
