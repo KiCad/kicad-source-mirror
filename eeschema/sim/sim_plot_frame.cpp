@@ -501,14 +501,14 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
             m_signals->Append( net.first );
     }
 
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
+    if( plotPanel == nullptr || plotPanel->GetType() != simType )
+        return;
+
     // If there are any signals plotted, update them
     if( SIM_PLOT_PANEL::IsPlottable( simType ) )
     {
-        SIM_PLOT_PANEL* plotPanel = CurrentPlot();
-
-        if( plotPanel == nullptr )
-            return;
-
         for( const auto& trace : plotPanel->GetTraces() )
             updatePlot( trace.second->GetSpiceName(), trace.second->GetName(), plotPanel );
 
