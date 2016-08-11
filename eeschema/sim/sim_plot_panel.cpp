@@ -109,9 +109,12 @@ int SIM_PLOT_PAINTER::Draw( mglGraph* aGraph )
 {
     const std::vector<SIM_PLOT_PANEL::TRACE>& traces = m_parent->m_traces;
     const std::pair<double, double>& axisRangeX = m_parent->m_axisRangeX;
-    std::pair<double, double> axisRangeY = m_parent->m_axisRangeY;
+    const std::pair<double, double>& axisRangeY = m_parent->m_axisRangeY;
 
     aGraph->Clf();
+    //aGraph->SetPlotFactor( 1.5 );
+    //aGraph->LoadFont( "termes" );
+    aGraph->SetFontSize( 1.5 );
 
     // Axis settings
     // Use autorange values if possible
@@ -123,9 +126,8 @@ int SIM_PLOT_PAINTER::Draw( mglGraph* aGraph )
     if( axisRangeY.first < axisRangeY.second )
     {
         // Increase the Y axis range, so it is easy to read the extreme values
-        axisRangeY.first -= axisRangeY.second * 0.1;
-        axisRangeY.second += axisRangeY.second * 0.1;
-        aGraph->SetRange( 'y', axisRangeY.first, axisRangeY.second );
+        double range = axisRangeY.second - axisRangeY.first;
+        aGraph->SetRange( 'y', axisRangeY.first - 0.1 * range, axisRangeY.second + 0.1 * range );
     }
     else
     {
@@ -147,7 +149,10 @@ int SIM_PLOT_PAINTER::Draw( mglGraph* aGraph )
     }
 
     if( traces.size() )
+    {
+        aGraph->SetFontSize( 2.5 );
         aGraph->Legend( 1, "-#" );  // legend entries horizontally + draw a box around legend
+    }
 
     return 0;
 }
