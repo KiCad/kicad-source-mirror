@@ -39,6 +39,8 @@ public:
     void Init() override;
     bool LoadNetlist( const std::string& aNetlist ) override;
     bool Run() override;
+    bool Stop() override;
+    bool IsRunning() override;
     bool Command( const std::string& aCmd ) override;
     const std::vector<double> GetPlot( const std::string& aName, int aMaxLen = -1 ) override;
 
@@ -50,8 +52,9 @@ private:
     typedef int (*ngSpice_Circ)(char** circarray);
     typedef int (*ngSpice_Command)(char* command);
     typedef pvector_info (*ngGet_Vec_Info)(char* vecname);
-    typedef char** (*ngSpice_AllVecs)(char* plotname);
     typedef char** (*ngSpice_AllPlots)(void);
+    typedef char** (*ngSpice_AllVecs)(char* plotname);
+    typedef bool (*ngSpice_Running)(void);
 
     ngSpice_Init m_ngSpice_Init;
     ngSpice_Circ m_ngSpice_Circ;
@@ -59,11 +62,13 @@ private:
     ngGet_Vec_Info m_ngGet_Vec_Info;
     ngSpice_AllPlots m_ngSpice_AllPlots;
     ngSpice_AllVecs m_ngSpice_AllVecs;
+    ngSpice_Running m_ngSpice_Running;
 
     wxDynamicLibrary* m_dll;
 
     static int cbSendChar( char* what, int id, void* user );
     static int cbSendStat( char* what, int id, void* user );
+    static int cbBGThreadRunning( bool is_running, int id, void* user );
 
     void dump();
 };

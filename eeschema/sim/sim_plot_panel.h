@@ -79,6 +79,8 @@ public:
         return m_traces;
     }
 
+    void ResetAxisRanges();
+
 private:
     SIM_PLOT_PAINTER m_painter;
 
@@ -87,8 +89,6 @@ private:
 
     // Axis ranges determined by the added traces data
     std::pair<double, double> m_axisRangeX, m_axisRangeY;
-
-    void resetRanges();
 
     friend class SIM_PLOT_PAINTER;
 };

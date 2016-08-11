@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,47 +22,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SPICE_SIMULATOR_H
-#define SPICE_SIMULATOR_H
+#ifndef SPICE_REPORTER_H
+#define SPICE_REPORTER_H
 
-#include <string>
-#include <vector>
+#include <reporter.h>
 
-class SPICE_REPORTER;
+class SPICE_SIMULATOR;
 
-enum SIM_TRACE_TYPE
+enum SIM_STATE
 {
-    SIM_AC_MAG = 0x1,
-    SIM_AC_PHASE = 0x2,
-    SIM_TR_VOLTAGE = 0x4,
-    SIM_TR_CURRENT = 0x8,
-    SIM_TR_FFT = 0x10
+    SIM_IDLE,
+    SIM_RUNNING
 };
 
-class SPICE_SIMULATOR
+/**
+ * @brief Interface to receive simulation updates from SPICE_SIMULATOR class.
+ */
+class SPICE_REPORTER : public REPORTER
 {
 public:
-    SPICE_SIMULATOR() : m_reporter( NULL ) {}
-    virtual ~SPICE_SIMULATOR() {}
-
-    static SPICE_SIMULATOR* CreateInstance( const std::string& aName );
-
-    virtual void Init() = 0;
-    virtual bool LoadNetlist( const std::string& aNetlist ) = 0;
-    virtual bool Run() = 0;
-    virtual bool Stop() = 0;
-    virtual bool IsRunning() = 0;
-    virtual bool Command( const std::string& aCmd ) = 0;
-
-    virtual void SetReporter( SPICE_REPORTER* aReporter )
+    virtual ~SPICE_REPORTER()
     {
-        m_reporter = aReporter;
     }
 
-    virtual const std::vector<double> GetPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
-
-protected:
-    SPICE_REPORTER* m_reporter;
+    virtual void OnSimStateChange( SPICE_SIMULATOR* aObject, SIM_STATE aNewState ) = 0;
 };
 
-#endif /* SPICE_SIMULATOR_H */
+#endif /* SPICE_REPORTER_H */

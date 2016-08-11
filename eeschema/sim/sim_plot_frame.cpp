@@ -30,13 +30,12 @@
 #include <netlist_exporter_kicad.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
 
-#include <reporter.h>
-
 #include "sim_plot_frame.h"
 #include "sim_plot_panel.h"
 #include "spice_simulator.h"
+#include "spice_reporter.h"
 
-class SIM_THREAD_REPORTER : public REPORTER
+class SIM_THREAD_REPORTER : public SPICE_REPORTER
 {
 public:
     SIM_THREAD_REPORTER( SIM_PLOT_FRAME* aParent )
@@ -44,48 +43,34 @@ public:
     {
     }
 
-    virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED )
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override
     {
-        wxThreadEvent* event = new wxThreadEvent( wxEVT_SIM_REPORT );
-        event->SetPayload( aText );
+        wxCommandEvent* event = new wxCommandEvent( wxEVT_SIM_REPORT );
+        event->SetString( aText );
         wxQueueEvent( m_parent, event );
         return *this;
     }
 
-private:
-    SIM_PLOT_FRAME* m_parent;
-};
-
-
-class SIM_THREAD : public wxThread
-{
-public:
-    SIM_THREAD( SIM_PLOT_FRAME* aParent, SPICE_SIMULATOR* aSimulator )
-        : m_parent( aParent ), m_sim( aSimulator )
-    {}
-
-    ~SIM_THREAD()
+    void OnSimStateChange( SPICE_SIMULATOR* aObject, SIM_STATE aNewState ) override
     {
-        wxCriticalSectionLocker lock( m_parent->m_simThreadCS );
+        wxCommandEvent* event = NULL;
 
-        // Let know the parent that the pointer is not valid anymore
-        m_parent->m_simThread = NULL;
+        switch( aNewState )
+        {
+            case SIM_IDLE:
+                event = new wxCommandEvent( wxEVT_SIM_FINISHED );
+                break;
+
+            case SIM_RUNNING:
+                event = new wxCommandEvent( wxEVT_SIM_STARTED );
+                break;
+        }
+
+        wxQueueEvent( m_parent, event );
     }
 
 private:
-    // Thread routine
-    ExitCode Entry()
-    {
-        assert( m_sim );
-
-        m_sim->Run();
-        wxQueueEvent( m_parent, new wxThreadEvent( wxEVT_SIM_FINISHED ) );
-
-        return (ExitCode) 0;
-    }
-
     SIM_PLOT_FRAME* m_parent;
-    SPICE_SIMULATOR* m_sim;
 };
 
 
@@ -96,12 +81,11 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     m_exporter = NULL;
     m_simulator = NULL;
-    m_simThread = NULL;
 
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
-    Connect( wxEVT_SIM_REPORT, wxThreadEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
-    Connect( wxEVT_SIM_FINISHED, wxThreadEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
-    Connect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME::onIdle ), NULL, this );
+    Connect( wxEVT_SIM_REPORT, wxCommandEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
+    Connect( wxEVT_SIM_STARTED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimStarted ), NULL, this );
+    Connect( wxEVT_SIM_FINISHED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
 
     NewPlotPanel();
 }
@@ -109,9 +93,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
 SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
-    // m_simThread should be already destroyed by onClose()
-    assert( m_simThread == NULL );
-
     delete m_exporter;
     delete m_simulator;
 }
@@ -126,7 +107,7 @@ void SIM_PLOT_FRAME::StartSimulation()
 
     /// @todo is it necessary to recreate simulator every time?
     m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
-    m_simulator->SetConsoleReporter( new SIM_THREAD_REPORTER( this ) );
+    m_simulator->SetReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
 
     NETLIST_OBJECT_LIST* net_atoms = m_schematicFrame->BuildNetListBase();
@@ -135,58 +116,13 @@ void SIM_PLOT_FRAME::StartSimulation()
 
     m_exporter->Format( &formatter, GNL_ALL );
     m_simulator->LoadNetlist( formatter.GetString() );
-
-    // Execute the simulation in a separate thread
-    {
-        wxCriticalSectionLocker lock( m_simThreadCS );
-
-        assert( m_simThread == NULL );
-        m_simThread = new SIM_THREAD( this, m_simulator );
-
-        if( m_simThread->Run() != wxTHREAD_NO_ERROR )
-        {
-            wxLogError( "Can't create the simulator thread!" );
-            delete m_simThread;
-        }
-    }
-}
-
-
-void SIM_PLOT_FRAME::PauseSimulation()
-{
-    wxCriticalSectionLocker lock( m_simThreadCS );
-
-    if( m_simThread )
-    {
-        if( m_simThread->Pause() != wxTHREAD_NO_ERROR )
-            wxLogError( "Cannot pause the simulation thread" );
-    }
-}
-
-
-void SIM_PLOT_FRAME::ResumeSimulation()
-{
-    wxCriticalSectionLocker lock( m_simThreadCS );
-
-    if( m_simThread )
-    {
-        if( m_simThread->Resume() != wxTHREAD_NO_ERROR )
-            wxLogError( "Cannot resume the simulation thread" );
-    }
+    m_simulator->Run();
 }
 
 
 void SIM_PLOT_FRAME::StopSimulation()
 {
-    wxCriticalSectionLocker lock( m_simThreadCS );
-
-    if( m_simThread )
-    {
-        // we could use m_simThread->Delete() if there was a way to run the simulation
-        // in parts, so the thread would be able to call TestDestroy()
-        if( m_simThread->Kill() != wxTHREAD_NO_ERROR )
-            wxLogError( "Cannot delete the simulation thread" );
-    }
+    m_simulator->Stop();
 }
 
 
@@ -212,9 +148,7 @@ void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 
 bool SIM_PLOT_FRAME::isSimulationRunning()
 {
-    wxCriticalSectionLocker lock( m_simThreadCS );
-
-    return ( m_simThread != NULL );
+    return m_simulator ? m_simulator->IsRunning() : false;
 }
 
 
@@ -275,65 +209,29 @@ void SIM_PLOT_FRAME::onPlaceProbe( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
 {
-    {
-        wxCriticalSectionLocker lock( m_simThreadCS );
-
-        if( m_simThread )
-        {
-            if( m_simThread->Delete() != wxTHREAD_NO_ERROR )
-                wxLogError( "Cannot delete the simulation thread" );
-        }
-    }
-
-    int timeout = 10;
-
-    while( 1 )
-    {
-        // Wait until the thread is finished
-        {
-            wxCriticalSectionLocker lock( m_simThreadCS );
-
-            if( m_simThread == NULL )
-                break;
-        }
-
-        wxThread::This()->Sleep( 1 );
-
-        if( --timeout == 0 )
-        {
-            m_simThread->Kill();        // no mercy
-            break;
-        }
-    }
+    if( isSimulationRunning() )
+        m_simulator->Stop();
 
     Destroy();
 }
 
 
-void SIM_PLOT_FRAME::onIdle( wxIdleEvent& aEvent )
+void SIM_PLOT_FRAME::onSimStarted( wxCommandEvent& aEvent )
 {
-    if( isSimulationRunning() )
-        m_simulateBtn->SetLabel( wxT( "Stop" ) );
-    else
-        m_simulateBtn->SetLabel( wxT( "Simulate" ) );
+    m_simulateBtn->SetLabel( wxT( "Stop" ) );
+    SetCursor( wxCURSOR_ARROWWAIT );
 }
 
 
-void SIM_PLOT_FRAME::onSimReport( wxThreadEvent& aEvent )
+void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 {
-    m_simConsole->WriteText( aEvent.GetPayload<wxString>() );
-    m_simConsole->Newline();
-}
-
-
-void SIM_PLOT_FRAME::onSimFinished( wxThreadEvent& aEvent )
-{
-    const auto& netMapping = m_exporter->GetNetIndexMap();
+    m_simulateBtn->SetLabel( wxT( "Simulate" ) );
+    SetCursor( wxCURSOR_ARROW );
 
     // Fill the signals listbox
     m_signals->Clear();
 
-    for( const auto& net : netMapping )
+    for( const auto& net : m_exporter->GetNetIndexMap() )
     {
         if( net.first != "GND" )
             m_signals->Append( net.first );
@@ -343,8 +241,17 @@ void SIM_PLOT_FRAME::onSimFinished( wxThreadEvent& aEvent )
     for( unsigned int i = 0; i < m_plotNotebook->GetPageCount(); ++i )
     {
         SIM_PLOT_PANEL* plotPanel = static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetPage( i ) );
+        plotPanel->ResetAxisRanges();
 
         for( const auto& trace : plotPanel->GetTraces() )
             updatePlot( trace.spiceName, trace.title, plotPanel );
     }
+}
+
+
+void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
+{
+    m_simConsole->AppendText( aEvent.GetString() );
+    m_simConsole->Newline();
+    m_simConsole->MoveEnd();        /// @todo does not work..
 }

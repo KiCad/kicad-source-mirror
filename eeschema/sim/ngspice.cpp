@@ -24,10 +24,10 @@
  */
 
 #include "ngspice.h"
+#include "spice_reporter.h"
 
 #include <wx/dynlib.h>
 #include <wx/log.h>
-#include <reporter.h>
 #include <sstream>
 
 // TODO cmake modules to add include directory for ngspice
@@ -46,6 +46,7 @@ NGSPICE::NGSPICE()
     m_ngGet_Vec_Info = (ngGet_Vec_Info) m_dll->GetSymbol( "ngGet_Vec_Info" );
     m_ngSpice_AllPlots = (ngSpice_AllPlots) m_dll->GetSymbol( "ngSpice_AllPlots" );
     m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll->GetSymbol( "ngSpice_AllVecs" );
+    m_ngSpice_Running = (ngSpice_Running) m_dll->GetSymbol( "ngSpice_running" );
 }
 
 
@@ -57,7 +58,7 @@ NGSPICE::~NGSPICE()
 
 void NGSPICE::Init()
 {
-    m_ngSpice_Init( &cbSendChar, &cbSendStat, NULL, NULL, NULL, NULL, this );
+    m_ngSpice_Init( &cbSendChar, &cbSendStat, NULL, NULL, NULL, &cbBGThreadRunning, this );
 }
 
 
@@ -105,14 +106,25 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
 
 bool NGSPICE::Run()
 {
-    return Command( "run\n" );
+    return Command( "bg_run" );
+}
+
+
+bool NGSPICE::Stop()
+{
+    return Command( "bg_halt" );
+}
+
+
+bool NGSPICE::IsRunning()
+{
+    return m_ngSpice_Running();
 }
 
 
 bool NGSPICE::Command( const string& aCmd )
 {
-    m_ngSpice_Command( (char*)( aCmd + string( "\n" ) ).c_str() );
-    dump();
+    m_ngSpice_Command( (char*) aCmd.c_str() );
 
     return true;
 }
@@ -197,8 +209,8 @@ int NGSPICE::cbSendChar( char* what, int id, void* user )
 {
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
 
-    if( sim->m_consoleReporter )
-        sim->m_consoleReporter->Report( what );
+    if( sim->m_reporter )
+        sim->m_reporter->Report( what );
 
     return 0;
 }
@@ -209,5 +221,18 @@ int NGSPICE::cbSendStat( char* what, int id, void* user )
 /*    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
     if( sim->m_consoleReporter )
         sim->m_consoleReporter->Report( what );*/
+
+    return 0;
+}
+
+
+int NGSPICE::cbBGThreadRunning( bool is_running, int id, void* user )
+{
+    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
+
+    if( sim->m_reporter )
+        // I know the test below seems like an error, but well, it works somehow..
+        sim->m_reporter->OnSimStateChange( sim, is_running ? SIM_IDLE : SIM_RUNNING );
+
     return 0;
 }

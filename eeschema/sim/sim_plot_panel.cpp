@@ -32,7 +32,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& 
     : wxMathGL( parent, id, pos, size, style, name ), m_painter( this )
 {
     AutoResize = true;
-    resetRanges();
+    ResetAxisRanges();
     SetDraw( &m_painter );
 }
 
@@ -105,12 +105,12 @@ void SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aTitl
 void SIM_PLOT_PANEL::DeleteTraces()
 {
     m_traces.clear();
-    resetRanges();
+    ResetAxisRanges();
     Update();
 }
 
 
-void SIM_PLOT_PANEL::resetRanges()
+void SIM_PLOT_PANEL::ResetAxisRanges()
 {
     // Set ranges to inverted values, so when there is a new plot added, it will
     // overridden with correct values
