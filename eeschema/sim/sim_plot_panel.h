@@ -61,9 +61,9 @@ private:
 class CURSOR : public mpInfoLayer
 {
 public:
-    CURSOR( const TRACE* aTrace, mpWindow* aWindow )
+    CURSOR( const TRACE* aTrace )
         : mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
-        m_trace( aTrace ), m_moved( false ), m_coords( 0.0, 0.0 ), m_window( aWindow )
+        m_trace( aTrace ), m_moved( false ), m_coords( 0.0, 0.0 ), m_window( nullptr )
     {
     }
 
@@ -71,6 +71,9 @@ public:
 
     bool Inside( wxPoint& aPoint )
     {
+        if( !m_window )
+            return false;
+
         return ( std::abs( aPoint.x - m_window->x2p( m_coords.x ) ) <= DRAG_MARGIN )
             && ( std::abs( aPoint.y - m_window->y2p( m_coords.y ) ) <= DRAG_MARGIN );
     }
@@ -83,6 +86,9 @@ public:
 
     void UpdateReference()
     {
+        if( !m_window )
+            return;
+
         m_reference.x = m_window->x2p( m_coords.x );
         m_reference.y = m_window->y2p( m_coords.y );
     }

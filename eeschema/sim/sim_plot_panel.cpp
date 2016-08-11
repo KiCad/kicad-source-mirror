@@ -31,6 +31,9 @@
 
 void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 {
+    if( !m_window )
+        m_window = &aWindow;
+
     if( !m_visible )
         return;
 
@@ -80,7 +83,7 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     const int horLen = aWindow.GetScrX();
     const int verLen = aWindow.GetScrY();
 
-    const wxPoint cursorPos( m_window->x2p( m_coords.x ), m_window->y2p( m_coords.y ) );
+    const wxPoint cursorPos( aWindow.x2p( m_coords.x ), aWindow.y2p( m_coords.y ) );
 
     aDC.SetPen( wxPen( *wxBLACK, 1, m_continuous ? wxSOLID : wxLONG_DASH ) );
 
