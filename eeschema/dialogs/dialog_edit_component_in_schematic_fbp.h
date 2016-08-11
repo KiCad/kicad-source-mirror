@@ -89,7 +89,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP : public DIALOG_SHIM
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void OnTestChipName( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectChipName( wxCommandEvent& event ) { event.Skip(); }
-		virtual void EditSpiceFields( wxCommandEvent& event ) { event.Skip(); }
+		virtual void EditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SetInitCmp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnListItemDeselected( wxListEvent& event ) { event.Skip(); }
 		virtual void OnListItemSelected( wxListEvent& event ) { event.Skip(); }

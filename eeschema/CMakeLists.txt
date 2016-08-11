@@ -186,6 +186,8 @@ set( EESCHEMA_SRCS
     sim/netlist_exporter_pspice_sim.cpp
     dialogs/dialog_sim_settings.cpp
     dialogs/dialog_sim_settings_base.cpp
+    dialogs/dialog_spice_model.cpp
+    dialogs/dialog_spice_model_base.cpp
 
     netlist_exporters/netlist_exporter.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp

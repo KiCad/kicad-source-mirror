@@ -45,7 +45,20 @@ enum SPICE_FIELD {
     SPICE_MODEL,
     SPICE_ENABLED,
     SPICE_NODE_SEQUENCE,
-    SPICE_LIB_FILE
+    SPICE_LIB_FILE,
+    SPICE_FIELD_END     // sentinel
+};
+
+enum SPICE_PRIMITIVE {
+    SP_RESISTOR     = 'R',
+    SP_CAPACITOR    = 'C',
+    SP_INDUCTOR     = 'L',
+    SP_DIODE        = 'D',
+    SP_BJT          = 'Q',
+    SP_MOSFET       = 'M',
+    SP_SUBCKT       = 'X',
+    SP_VSOURCE      = 'V',
+    SP_ISOURCE      = 'I'
 };
 
 /// @todo add NET_ADJUST_INCLUDE_PATHS & NET_ADJUST_PASSIVE_VALS checkboxes in the netlist export dialog

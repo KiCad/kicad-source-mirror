@@ -46,6 +46,7 @@
 #include <sch_validators.h>
 
 #include <dialog_edit_component_in_schematic_fbp.h>
+#include <dialog_spice_model.h>
 #include <netlist_exporter_pspice.h>
 
 
@@ -135,7 +136,7 @@ private:
         FinishDialogSettings();
     }
 
-    void EditSpiceFields( wxCommandEvent& event );
+    void EditSpiceModel( wxCommandEvent& event ) override;
 
     SCH_FIELD* findField( const wxString& aFieldName );
 
@@ -287,31 +288,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::EditSpiceFields( wxCommandEvent& event )
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::EditSpiceModel( wxCommandEvent& event )
 {
-    for( const auto& fieldName : NETLIST_EXPORTER_PSPICE::GetSpiceFields() )
-    {
-        SCH_FIELD* schField = findField( fieldName );
-        // @todo move everything to the bottom, so the fields are grouped and in the same order?
+    setSelectedFieldNdx( 0 );
+    DIALOG_SPICE_MODEL dialog( this, *m_cmp, m_FieldsBuf );
 
-        // Do not modify the existing value, just add missing fields with default values
-        if( schField == NULL )
-        {
-            unsigned fieldNdx = m_FieldsBuf.size();
-            SCH_FIELD newField( wxPoint(), fieldNdx, m_cmp, fieldName );
-            newField.SetOrientation( m_FieldsBuf[REFERENCE].GetOrientation() );
-            m_FieldsBuf.push_back( newField );
-            schField = &m_FieldsBuf.back();
-        }
-
-        if( schField->GetText().IsEmpty() )
-        {
-            schField->SetText( NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( fieldName, m_cmp,
-                NET_USE_X_PREFIX | NET_ADJUST_INCLUDE_PATHS | NET_ADJUST_PASSIVE_VALS ) );
-        }
-    }
-
-    updateDisplay();
+    if( dialog.ShowModal() == wxID_OK )
+        updateDisplay();
 }
 
 
