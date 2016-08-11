@@ -120,6 +120,10 @@ void SIM_PLOT_FRAME::StartSimulation()
 
     /// @todo is it necessary to recreate simulator every time?
     m_simulator.reset( SPICE_SIMULATOR::CreateInstance( "ngspice" ) );
+
+    if( !m_simulator )
+        return;
+
     m_simulator->SetReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
     m_simulator->LoadNetlist( formatter.GetString() );

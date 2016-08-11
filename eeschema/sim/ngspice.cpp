@@ -39,7 +39,9 @@ NGSPICE::NGSPICE()
 #else
     m_dll = new wxDynamicLibrary( "libngspice.so" );
 #endif
-    assert( m_dll );
+
+    if( !m_dll || !m_dll->IsLoaded() )
+        throw std::runtime_error( "Missing ngspice shared library" );
 
     // Obtain function pointers
     m_ngSpice_Init = (ngSpice_Init) m_dll->GetSymbol( "ngSpice_Init" );

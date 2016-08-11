@@ -24,8 +24,19 @@
 
 #include "ngspice.h"
 
+#include <confirm.h>
+
 SPICE_SIMULATOR* SPICE_SIMULATOR::CreateInstance( const std::string& )
 {
-    return new NGSPICE;
+    try
+    {
+        return new NGSPICE;
+    }
+    catch( std::exception& e )
+    {
+        DisplayError( NULL, e.what() );
+    }
+
+    return NULL;
 }
 
