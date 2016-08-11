@@ -91,7 +91,7 @@ wxBitmap mpLayer::GetColourSquare(int side)
 {
     wxBitmap square(side, side, -1);
     wxColour filler = m_pen.GetColour();
-    wxBrush brush(filler, wxSOLID);
+    wxBrush brush(filler, wxBRUSHSTYLE_SOLID );
     wxMemoryDC dc;
     dc.SelectObject(square);
     dc.SetBackground(brush);
@@ -1236,14 +1236,14 @@ void mpScaleXBase::Plot(wxDC & dc, mpWindow & w)
                     else
                         dc.DrawLine( p, orgy, p, orgy+4);
                 } else { // draw grid dotted lines
-                    m_pen.SetStyle(wxDOT);
+                    m_pen.SetStyle(wxPENSTYLE_DOT);
                     dc.SetPen(m_pen);
                     if ((m_flags == mpALIGN_BOTTOM) && !m_drawOutsideMargins) {
                         //printf("d1");
-                        m_pen.SetStyle(wxDOT);
+                        m_pen.SetStyle(wxPENSTYLE_DOT);
                         dc.SetPen(m_pen);
                         dc.DrawLine( p, orgy+4, p, minYpx );
-                        m_pen.SetStyle(wxSOLID);
+                        m_pen.SetStyle(wxPENSTYLE_SOLID );
                         dc.SetPen(m_pen);
                         dc.DrawLine( p, orgy+4, p, orgy-4 );
                     } else {
@@ -1255,13 +1255,13 @@ void mpScaleXBase::Plot(wxDC & dc, mpWindow & w)
                             dc.DrawLine( p, minYpx, p, maxYpx ); //0/*-w.GetScrY()*/, p, w.GetScrY() );
                         }
                     }
-                    m_pen.SetStyle(wxSOLID);
+                    m_pen.SetStyle(wxPENSTYLE_SOLID );
                     dc.SetPen(m_pen);
                 }
             }
         }
 
-        m_pen.SetStyle(wxSOLID);
+        m_pen.SetStyle(wxPENSTYLE_SOLID );
         dc.SetPen(m_pen);
         dc.DrawLine( startPx, minYpx, endPx, minYpx );
         dc.DrawLine( startPx, maxYpx, endPx, maxYpx );
@@ -1419,7 +1419,7 @@ void mpScaleY::Plot(wxDC & dc, mpWindow & w)
                 } else {
                     dc.DrawLine( orgx-4, p, orgx+4, p);
 
-                    m_pen.SetStyle(wxDOT);
+                    m_pen.SetStyle(wxPENSTYLE_DOT);
                     dc.SetPen( m_pen);
                     if ((m_flags == mpALIGN_LEFT) && !m_drawOutsideMargins) {
                         dc.DrawLine( orgx-4, p, endPx, p);
@@ -1432,7 +1432,7 @@ void mpScaleY::Plot(wxDC & dc, mpWindow & w)
                             //dc.DrawLine( orgx-4/*-w.GetScrX()*/, p, w.GetScrX(), p);
                         }
                     }
-                    m_pen.SetStyle(wxSOLID);
+                    m_pen.SetStyle(wxPENSTYLE_SOLID );
                     dc.SetPen( m_pen);
                 }
                 // Print ticks labels
@@ -1671,7 +1671,7 @@ void mpWindow::OnMouseMove(wxMouseEvent     &event)
         if (event.m_leftDown) {
             if (m_movingInfoLayer == NULL) {
                 wxClientDC dc(this);
-                wxPen pen(m_fgColour, 1, wxDOT);
+                wxPen pen(m_fgColour, 1, wxPENSTYLE_DOT);
                 dc.SetPen(pen);
                 dc.SetBrush(*wxTRANSPARENT_BRUSH);
                 dc.DrawRectangle(m_mouseLClick.x, m_mouseLClick.y, event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y);
@@ -2265,7 +2265,7 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
     if(m_zooming)
     {
-        wxPen pen(m_fgColour, 1, wxDOT);
+        wxPen pen(m_fgColour, 1, wxPENSTYLE_DOT);
         trgDc->SetPen(pen);
         trgDc->SetBrush(*wxTRANSPARENT_BRUSH);
         trgDc->DrawRectangle(m_zoomRect);
@@ -2684,7 +2684,8 @@ void mpWindow::GetBoundingBox(double* bbox)
     bbox[3] = m_maxY;
 }
 
-bool mpWindow::SaveScreenshot(const wxString& filename, int type, wxSize imageSize, bool fit)
+bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type,
+                               wxSize imageSize, bool fit )
 {
     int sizeX, sizeY;
     int bk_scrX, bk_scrY;

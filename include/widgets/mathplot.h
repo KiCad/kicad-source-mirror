@@ -1301,7 +1301,8 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
           @param type image type to be saved: see wxImage output file types for flags
           @param imageSize Set a size for the output image. Default is the same as the screen size
           @param fit Decide whether to fit the plot into the size*/
-        bool SaveScreenshot(const wxString& filename, int type = wxBITMAP_TYPE_BMP, wxSize imageSize = wxDefaultSize, bool fit = false);
+        bool SaveScreenshot(const wxString& filename, wxBitmapType type = wxBITMAP_TYPE_BMP,
+                            wxSize imageSize = wxDefaultSize, bool fit = false);
 
         /** This value sets the zoom steps whenever the user clicks "Zoom in/out" or performs zoom with the mouse wheel.
          *  It must be a number above unity. This number is used for zoom in, and its inverse for zoom out. Set to 1.5 by default. */
