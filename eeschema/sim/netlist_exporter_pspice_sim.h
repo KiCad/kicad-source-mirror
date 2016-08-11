@@ -26,6 +26,7 @@
 #define NETLIST_EXPORTER_PSPICE_SIM_H
 
 #include <netlist_exporters/netlist_exporter_pspice.h>
+#include "sim_types.h"
 
 /// Special netlist exporter flavor that allows to override simulation commands
 class NETLIST_EXPORTER_PSPICE_SIM : public NETLIST_EXPORTER_PSPICE
@@ -52,13 +53,21 @@ public:
         m_simCommand.Clear();
     }
 
+    SIM_TYPE GetSimType();
+
     wxString GetSheetSimCommand();
+
+    static bool IsSimCommand( const wxString& aCmd )
+    {
+        return CommandToSimType( aCmd ) != ST_UNKNOWN;
+    }
+
+    static SIM_TYPE CommandToSimType( const wxString& aCmd );
 
 protected:
     void writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const override;
 
 private:
-    static bool isSimCommand( const wxString& aCmd );
 
     ///> Overridden simulation command
     wxString m_simCommand;

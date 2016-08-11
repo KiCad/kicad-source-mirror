@@ -23,6 +23,7 @@
  */
 
 #include "netlist_exporter_pspice_sim.h"
+#include "sim_types.h"
 
 wxString NETLIST_EXPORTER_PSPICE_SIM::GetSheetSimCommand()
 {
@@ -32,11 +33,36 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSheetSimCommand()
 
     for( const auto& dir : GetDirectives() )
     {
-        if( isSimCommand( dir ) )
+        if( IsSimCommand( dir ) )
             simCmd += wxString::Format( "%s\r\n", dir );
     }
 
     return simCmd;
+}
+
+
+SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::GetSimType()
+{
+    return CommandToSimType( m_simCommand.IsEmpty() ? GetSheetSimCommand() : m_simCommand );
+}
+
+
+SIM_TYPE NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( const wxString& aCmd )
+{
+    const std::map<wxString, SIM_TYPE> simCmds = {
+        { ".ac", ST_AC }, { ".dc", ST_DC }, { ".disto", ST_DISTORTION }, { ".noise", ST_NOISE },
+        { ".op", ST_OP }, { ".pz", ST_POLE_ZERO }, { ".sens", ST_SENSITIVITY }, { ".tf", ST_TRANS_FUNC },
+        { ".tran", ST_TRANSIENT }
+    };
+    wxString lcaseCmd = aCmd.Lower();
+
+    for( const auto& c : simCmds )
+    {
+        if( lcaseCmd.StartsWith( c.first ) )
+            return c.second;
+    }
+
+    return ST_UNKNOWN;
 }
 
 
@@ -51,29 +77,10 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
     // Dump all directives, but simulation commands
     for( const auto& dir : GetDirectives() )
     {
-        if( !isSimCommand( dir ) )
+        if( !IsSimCommand( dir ) )
             aFormatter->Print( 0, "%s\n", (const char*) dir.c_str() );
     }
 
     // Finish with our custom simulation command
     aFormatter->Print( 0, "%s\n", (const char*) m_simCommand.c_str() );
 }
-
-
-bool NETLIST_EXPORTER_PSPICE_SIM::isSimCommand( const wxString& aCmd )
-{
-    const std::vector<wxString> simCmds = {
-        ".ac", ".dc", ".disto", ".noise", ".op", ".pz", ".sens", ".tf", ".tran", ".pss"
-    };
-
-    wxString lcaseCmd = aCmd.Lower();
-
-    for( const auto& c : simCmds )
-    {
-        if( lcaseCmd.StartsWith( c ) )
-            return true;
-    }
-
-    return false;
-}
-
