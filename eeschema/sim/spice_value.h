@@ -56,11 +56,13 @@ public:
     SPICE_VALUE( int aInt, UNIT_PREFIX aPrefix = PFX_NONE )
         : m_base( aInt ), m_prefix( aPrefix ), m_spiceStr( false )
     {
+        Normalize();
     }
 
     SPICE_VALUE( double aDouble, UNIT_PREFIX aPrefix = PFX_NONE )
         : m_base( aDouble ), m_prefix( aPrefix ), m_spiceStr( false )
     {
+        Normalize();
     }
 
     void Normalize();
