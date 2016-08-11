@@ -231,7 +231,7 @@ class WXDLLIMPEXP_MATHPLOT mpLayer : public wxObject
         /** Get layer name.
           @return Name
           */
-        wxString       GetName() const { return m_name; }
+        const wxString& GetName() const { return m_name; }
 
         /** Get font set for this layer.
           @return Font
@@ -716,7 +716,7 @@ class WXDLLIMPEXP_MATHPLOT mpScaleX : public mpLayer
 
         /** Get X axis Label format (used for mpX_NORMAL draw mode).
           @return The format string */
-        const wxString& SetLabelFormat() { return m_labelFormat; };
+        const wxString& GetLabelFormat() { return m_labelFormat; };
 
     protected:
         int m_flags; //!< Flag for axis alignment
@@ -769,7 +769,7 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpLayer
 
         /** Get Y axis Label format.
           @return The format string */
-        const wxString& SetLabelFormat() { return m_labelFormat; };
+        const wxString& GetLabelFormat() { return m_labelFormat; };
 
     protected:
         int m_flags; //!< Flag for axis alignment
