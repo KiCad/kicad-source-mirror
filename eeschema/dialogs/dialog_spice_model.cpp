@@ -619,9 +619,17 @@ void DIALOG_SPICE_MODEL::updateFromFile( wxComboBox* aComboBox,
 {
     wxString curValue = aComboBox->GetValue();
     const wxString keyword( aKeyword.Lower() );
+    wxFileName filePath( aFilePath );
+
+    if( !filePath.Exists() )
+    {
+        // Look for the file in the project path
+        filePath.SetPath( Prj().GetProjectPath() );
+    }
+
     wxTextFile file;
 
-    if( !file.Open( aFilePath ) )
+    if( !file.Open( filePath.GetFullPath() ) )
         return;
 
     aComboBox->Clear();
