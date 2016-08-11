@@ -16,7 +16,7 @@ DIALOG_SIGNAL_LIST_BASE::DIALOG_SIGNAL_LIST_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
-	m_signals = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_MULTIPLE|wxLB_NEEDED_SB|wxLB_SORT ); 
+	m_signals = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT ); 
 	bSizer6->Add( m_signals, 1, wxALL|wxEXPAND, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();

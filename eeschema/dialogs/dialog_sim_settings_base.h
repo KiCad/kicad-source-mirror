@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Jun 24 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -115,7 +115,7 @@ class DIALOG_SIM_SETTINGS_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Simulation settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 445,677 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Simulation settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 450,700 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~DIALOG_SIM_SETTINGS_BASE();
 	
 };

@@ -99,19 +99,19 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 	
 	public:
 		
-		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation Workbook"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1280,900 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
+		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation Workbook"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1000,700 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
 		
 		~SIM_PLOT_FRAME_BASE();
 		
 		void m_splitterPlotOnIdle( wxIdleEvent& )
 		{
-			m_splitterPlot->SetSashPosition( 0 );
+			m_splitterPlot->SetSashPosition( 700 );
 			m_splitterPlot->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterPlotOnIdle ), NULL, this );
 		}
 		
 		void m_splitterConsoleOnIdle( wxIdleEvent& )
 		{
-			m_splitterConsole->SetSashPosition( 0 );
+			m_splitterConsole->SetSashPosition( 500 );
 			m_splitterConsole->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterConsoleOnIdle ), NULL, this );
 		}
 	

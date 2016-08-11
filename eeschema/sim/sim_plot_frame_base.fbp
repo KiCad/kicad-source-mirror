@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">SIM_PLOT_FRAME_BASE</property>
             <property name="pos"></property>
-            <property name="size">1280,900</property>
+            <property name="size">1000,700</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass">KIWAY_PLAYER; kiway_player.h</property>
             <property name="title">Simulation Workbook</property>
@@ -88,7 +88,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="1">
+            <object class="wxMenuBar" expanded="0">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
@@ -133,7 +133,7 @@
                 <event name="OnSetFocus"></event>
                 <event name="OnSize"></event>
                 <event name="OnUpdateUI"></event>
-                <object class="wxMenu" expanded="1">
+                <object class="wxMenu" expanded="0">
                     <property name="label">File</property>
                     <property name="name">m_fileMenu</property>
                     <property name="permission">protected</property>
@@ -240,7 +240,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="1">
+                <object class="wxMenu" expanded="0">
                     <property name="label">Simulation</property>
                     <property name="name">m_simulationMenu</property>
                     <property name="permission">protected</property>
@@ -552,7 +552,7 @@
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
                         <property name="sashgravity">0.8</property>
-                        <property name="sashpos">0</property>
+                        <property name="sashpos">700</property>
                         <property name="sashsize">-1</property>
                         <property name="show">1</property>
                         <property name="size"></property>
@@ -720,7 +720,7 @@
                                             <property name="pos"></property>
                                             <property name="resize">Resizable</property>
                                             <property name="sashgravity">0.8</property>
-                                            <property name="sashpos">0</property>
+                                            <property name="sashpos">500</property>
                                             <property name="sashsize">-1</property>
                                             <property name="show">1</property>
                                             <property name="size"></property>
@@ -839,11 +839,11 @@
                                                         <property name="name">m_sizer5</property>
                                                         <property name="orient">wxHORIZONTAL</property>
                                                         <property name="permission">protected</property>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxEXPAND | wxALL</property>
                                                             <property name="proportion">1</property>
-                                                            <object class="wxAuiNotebook" expanded="1">
+                                                            <object class="wxAuiNotebook" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -929,7 +929,7 @@
                                                                 <event name="OnSetFocus"></event>
                                                                 <event name="OnSize"></event>
                                                                 <event name="OnUpdateUI"></event>
-                                                                <object class="auinotebookpage" expanded="1">
+                                                                <object class="auinotebookpage" expanded="0">
                                                                     <property name="bitmap"></property>
                                                                     <property name="label">a page</property>
                                                                     <property name="select">0</property>
@@ -1154,8 +1154,8 @@
                                                     </object>
                                                 </object>
                                             </object>
-                                            <object class="splitteritem" expanded="0">
-                                                <object class="wxPanel" expanded="0">
+                                            <object class="splitteritem" expanded="1">
+                                                <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
                                                     <property name="RightDockable">1</property>
@@ -1229,7 +1229,7 @@
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
                                                     <event name="OnUpdateUI"></event>
-                                                    <object class="wxBoxSizer" expanded="0">
+                                                    <object class="wxBoxSizer" expanded="1">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">m_sizer13</property>
                                                         <property name="orient">wxVERTICAL</property>
@@ -1333,8 +1333,8 @@
                                 </object>
                             </object>
                         </object>
-                        <object class="splitteritem" expanded="0">
-                            <object class="wxPanel" expanded="0">
+                        <object class="splitteritem" expanded="1">
+                            <object class="wxPanel" expanded="1">
                                 <property name="BottomDockable">1</property>
                                 <property name="LeftDockable">1</property>
                                 <property name="RightDockable">1</property>
@@ -1408,12 +1408,12 @@
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
-                                <object class="wxBoxSizer" expanded="0">
+                                <object class="wxBoxSizer" expanded="1">
                                     <property name="minimum_size"></property>
                                     <property name="name">m_sideSizer</property>
                                     <property name="orient">wxVERTICAL</property>
                                     <property name="permission">protected</property>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
@@ -1516,7 +1516,7 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
@@ -1636,11 +1636,11 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxStaticBoxSizer" expanded="0">
+                                        <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
                                             <property name="label">Tune</property>
                                             <property name="minimum_size"></property>

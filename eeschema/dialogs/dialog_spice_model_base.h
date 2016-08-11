@@ -143,7 +143,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 497,719 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,768 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~DIALOG_SPICE_MODEL_BASE();
 	
 };

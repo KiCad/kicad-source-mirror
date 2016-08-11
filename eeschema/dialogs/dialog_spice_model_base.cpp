@@ -47,7 +47,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_passive->SetSizer( fgSizer1 );
 	m_passive->Layout();
 	fgSizer1->Fit( m_passive );
-	m_notebook->AddPage( m_passive, _("Passive"), true );
+	m_notebook->AddPage( m_passive, _("Passive"), false );
 	m_semiconductor = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -438,7 +438,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_power->SetSizer( bSizer4 );
 	m_power->Layout();
 	bSizer4->Fit( m_power );
-	m_notebook->AddPage( m_power, _("Source"), false );
+	m_notebook->AddPage( m_power, _("Source"), true );
 	
 	bSizer1->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	

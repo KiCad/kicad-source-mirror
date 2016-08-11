@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_SIM_SETTINGS_BASE</property>
             <property name="pos"></property>
-            <property name="size">445,677</property>
+            <property name="size">450,700</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>
             <property name="subclass"></property>
             <property name="title">Simulation settings</property>
@@ -1014,6 +1014,7 @@
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizer21</property>
                                             <property name="orient">wxVERTICAL</property>
+                                            <property name="parent">1</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="0">
@@ -1830,6 +1831,7 @@
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizer2</property>
                                             <property name="orient">wxVERTICAL</property>
+                                            <property name="parent">1</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="0">

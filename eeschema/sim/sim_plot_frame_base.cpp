@@ -170,7 +170,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_panel5->SetSizer( m_sizer13 );
 	m_panel5->Layout();
 	m_sizer13->Fit( m_panel5 );
-	m_splitterConsole->SplitHorizontally( m_plotPanel, m_panel5, 0 );
+	m_splitterConsole->SplitHorizontally( m_plotPanel, m_panel5, 500 );
 	m_sizer11->Add( m_splitterConsole, 1, wxEXPAND, 5 );
 	
 	
@@ -212,7 +212,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_sidePanel->SetSizer( m_sideSizer );
 	m_sidePanel->Layout();
 	m_sideSizer->Fit( m_sidePanel );
-	m_splitterPlot->SplitVertically( m_panel2, m_sidePanel, 0 );
+	m_splitterPlot->SplitVertically( m_panel2, m_sidePanel, 700 );
 	m_sizer1->Add( m_splitterPlot, 1, wxEXPAND, 5 );
 	
 	
