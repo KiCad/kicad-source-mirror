@@ -45,7 +45,7 @@ public:
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override
     {
-        wxCommandEvent* event = new wxCommandEvent( wxEVT_SIM_REPORT );
+        wxCommandEvent* event = new wxCommandEvent( EVT_SIM_REPORT );
         event->SetString( aText );
         wxQueueEvent( m_parent, event );
         return *this;
@@ -58,11 +58,11 @@ public:
         switch( aNewState )
         {
             case SIM_IDLE:
-                event = new wxCommandEvent( wxEVT_SIM_FINISHED );
+                event = new wxCommandEvent( EVT_SIM_FINISHED );
                 break;
 
             case SIM_RUNNING:
-                event = new wxCommandEvent( wxEVT_SIM_STARTED );
+                event = new wxCommandEvent( EVT_SIM_STARTED );
                 break;
         }
 
@@ -83,9 +83,9 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_simulator = NULL;
 
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
-    Connect( wxEVT_SIM_REPORT, wxCommandEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
-    Connect( wxEVT_SIM_STARTED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimStarted ), NULL, this );
-    Connect( wxEVT_SIM_FINISHED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
+    Connect( EVT_SIM_REPORT, wxCommandEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
+    Connect( EVT_SIM_STARTED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimStarted ), NULL, this );
+    Connect( EVT_SIM_FINISHED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
 
     NewPlotPanel();
 }
@@ -394,3 +394,6 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
     }
 }
 
+wxDEFINE_EVENT( EVT_SIM_REPORT, wxCommandEvent );
+wxDEFINE_EVENT( EVT_SIM_STARTED, wxCommandEvent );
+wxDEFINE_EVENT( EVT_SIM_FINISHED, wxCommandEvent );

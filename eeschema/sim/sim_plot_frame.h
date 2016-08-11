@@ -137,8 +137,8 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         };
 };
 
-wxDEFINE_EVENT( wxEVT_SIM_REPORT, wxCommandEvent );
-wxDEFINE_EVENT( wxEVT_SIM_STARTED, wxCommandEvent );
-wxDEFINE_EVENT( wxEVT_SIM_FINISHED, wxCommandEvent );
+wxDECLARE_EVENT( EVT_SIM_REPORT, wxCommandEvent );
+wxDECLARE_EVENT( EVT_SIM_STARTED, wxCommandEvent );
+wxDECLARE_EVENT( EVT_SIM_FINISHED, wxCommandEvent );
 
 #endif // __sim_plot_frame__
