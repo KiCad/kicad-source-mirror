@@ -67,6 +67,9 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     // AC analysis
     if( page == m_pgAC )
     {
+        if( m_acPointsNumber->IsEmpty() || m_acFreqStart->IsEmpty() || m_acFreqStop->IsEmpty() )
+            return false;
+
         m_simCommand = wxString::Format( ".ac %s %s %s %s",
             scaleToString( m_acScale->GetSelection() ),
             m_acPointsNumber->GetValue(), m_acFreqStart->GetValue(), m_acFreqStop->GetValue() );
@@ -84,7 +87,8 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
         if( m_dcEnable1->IsChecked() )
         {
-            if( m_dcSource1->GetValue().IsEmpty() )
+            if( m_dcSource1->GetValue().IsEmpty() || m_dcStart1->IsEmpty() ||
+                    m_dcStop1->IsEmpty() || m_dcIncr1->IsEmpty() )
                 return false;
 
             simCmd += wxString::Format( "%s %s %s %s",
@@ -94,7 +98,8 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
         if( m_dcEnable2->IsChecked() )
         {
-            if( m_dcSource2->GetValue().IsEmpty() )
+            if( m_dcSource2->GetValue().IsEmpty() || m_dcStart2->IsEmpty() ||
+                    m_dcStop2->IsEmpty() || m_dcIncr2->IsEmpty() )
                 return false;
 
             simCmd += wxString::Format( "%s %s %s %s",
@@ -109,7 +114,9 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     // Noise analysis
     else if( page == m_pgNoise )
     {
-        if( m_noiseMeas->GetValue().IsEmpty() || m_noiseSrc->GetValue().IsEmpty() )
+        if( m_noiseMeas->GetValue().IsEmpty() || m_noiseSrc->GetValue().IsEmpty() ||
+                m_noisePointsNumber->IsEmpty() || m_noiseFreqStart->IsEmpty() ||
+                m_noiseFreqStop->IsEmpty() )
             return false;
 
         // TODO missing node number
@@ -130,6 +137,9 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     // Transient analysis
     else if( page == m_pgTransient )
     {
+        if( m_transStep->IsEmpty() || m_transFinal->IsEmpty() )
+            return false;
+
         m_simCommand = wxString::Format( ".trans %s %s %s",
             m_transStep->GetValue(), m_transFinal->GetValue(), m_transInitial->GetValue() );
     }
