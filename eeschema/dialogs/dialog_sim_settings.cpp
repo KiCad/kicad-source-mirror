@@ -216,6 +216,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         return false;
     }
 
+    m_simCommand.Trim();
     updateNetlistOpts();
 
     return true;
@@ -319,36 +320,43 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
             else
                 return false;
 
+            // If the fields below are empty, it will be caught by the exception handler
             m_acPointsNumber->SetValue( tokenizer.GetNextToken() );
             m_acFreqStart->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
             m_acFreqStop->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-
-            // Check required fields
-            if( empty( m_acPointsNumber ) || empty( m_acFreqStart ) || empty( m_acFreqStop ) )
-                return false;
         }
 
         else if( tkn == ".dc" )
         {
             m_simPages->SetSelection( m_simPages->FindPage( m_pgDC ) );
 
-            m_dcSource1->SetValue( tokenizer.GetNextToken() );
-            m_dcStart1->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-            m_dcStop1->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-            m_dcIncr1->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+            tkn = tokenizer.GetNextToken();
 
-            // Check the 'Enabled' field, if all values are filled
-            m_dcEnable1->SetValue( !empty( m_dcSource1 ) && !empty( m_dcStart1 )
-                    && !empty( m_dcStop1 ) && !empty( m_dcIncr1 ) );
+            if( !tkn.IsEmpty() )
+            {
+                m_dcSource1->SetValue( tkn );
+                m_dcStart1->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+                m_dcStop1->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+                m_dcIncr1->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
 
-            m_dcSource2->SetValue( tokenizer.GetNextToken() );
-            m_dcStart2->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-            m_dcStop2->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-            m_dcIncr2->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+                // Check the 'Enabled' field, if all values are filled
+                m_dcEnable1->SetValue( !empty( m_dcSource1 ) && !empty( m_dcStart1 )
+                        && !empty( m_dcStop1 ) && !empty( m_dcIncr1 ) );
+            }
 
-            // Check the 'Enabled' field, if all values are filled
-            m_dcEnable2->SetValue( !empty( m_dcSource2 ) && !empty( m_dcStart2 )
-                    && !empty( m_dcStop2 ) && !empty( m_dcIncr2 ) );
+            tkn = tokenizer.GetNextToken();
+
+            if( !tkn.IsEmpty() )
+            {
+                m_dcSource2->SetValue( tkn );
+                m_dcStart2->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+                m_dcStop2->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+                m_dcIncr2->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
+
+                // Check the 'Enabled' field, if all values are filled
+                m_dcEnable2->SetValue( !empty( m_dcSource2 ) && !empty( m_dcStart2 )
+                        && !empty( m_dcStop2 ) && !empty( m_dcIncr2 ) );
+            }
 
             // Check if the directive is complete
             if( !m_dcEnable1->IsChecked() || !m_dcEnable2->IsChecked() )
@@ -359,13 +367,15 @@ bool DIALOG_SIM_SETTINGS::parseCommand( const wxString& aCommand )
         {
             m_simPages->SetSelection( m_simPages->FindPage( m_pgTransient ) );
 
+            // If the fields below are empty, it will be caught by the exception handler
             m_transStep->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
             m_transFinal->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
-            m_transInitial->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
 
-            // Check required fields
-            if( empty( m_transStep ) || empty( m_transFinal ) )
-                return false;
+            // Initial time is an optional field
+            tkn = tokenizer.GetNextToken();
+
+            if( !tkn.IsEmpty() )
+                m_transInitial->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
         }
 
         // Custom directives
