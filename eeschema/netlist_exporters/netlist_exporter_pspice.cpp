@@ -67,12 +67,12 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
         {
             // Case of Alt Sequence definition with Unused/Invalid Node index:
             // Valid used Node Indexes are in the set
-            // {0,1,2,...m_SortedComponentPinList.size()-1}
+            // {0,1,2,...m_item.m_pin.size()-1}
             if( !item.m_pinSequence.empty() )
             {
                 // All Vector values must be less <= max package size
                 // And Total Vector size should be <= package size
-                if( ( (unsigned) item.m_pinSequence[ii] < m_SortedComponentPinList.size() )
+                if( ( (unsigned) item.m_pinSequence[ii] < item.m_pins.size() )
                     && ( ii < item.m_pinSequence.size() ) )
                 {
                     // Case of Alt Pin Sequence in control good Index:
