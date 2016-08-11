@@ -154,8 +154,11 @@ protected:
     virtual void writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const;
 
 private:
-    // Spice directives found in the processed schematic sheet
+    ///> Spice directives found in the processed schematic sheet
     std::vector<wxString> m_directives;
+
+    ///> Libraries used by the simulated circuit
+    std::set<wxString> m_libraries;
 
     NET_INDEX_MAP m_netMap;
 

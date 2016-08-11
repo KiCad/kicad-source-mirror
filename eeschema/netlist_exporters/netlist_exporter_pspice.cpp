@@ -56,6 +56,18 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
 
     aFormatter->Print( 0, ".title KiCad schematic\n" );
 
+    // Write .include directives
+    for( auto lib : m_libraries )
+    {
+        if( ( aCtl & NET_ADJUST_INCLUDE_PATHS ) && m_paths )
+        {
+            // Look for the library in known search locations
+            lib = m_paths->FindValidPath( lib );
+        }
+
+        aFormatter->Print( 0, ".include %s\n", (const char*) lib.c_str() );
+    }
+
     for( const auto& item : m_spiceItems )
     {
         aFormatter->Print( 0, "%c%s ", item.m_primitive, (const char*) item.m_refName.c_str() );
@@ -203,9 +215,12 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
         // There is no default Spice library
         return wxEmptyString;
         break;
+
+    default:
+        wxASSERT_MSG( false, "Missing default value definition for a Spice field" );
+        break;
     }
 
-    wxASSERT_MSG( false, "Missing default value definition for a Spice field" );
 
     return wxString( "<unknown>" );
 }
@@ -220,15 +235,14 @@ void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
         m_masterList->GetItem( ii )->m_Flag = 0;
 
-    UpdateDirectives( aCtl );
-
     m_netMap.clear();
-
-    // 0 is reserved for "GND"
-    m_netMap["GND"] = 0;
+    m_netMap["GND"] = 0;        // 0 is reserved for "GND"
     int netIdx = 1;
 
+    m_libraries.clear();
     m_ReferencesAlreadyFound.Clear();
+
+    UpdateDirectives( aCtl );
 
     for( unsigned sheet_idx = 0; sheet_idx < sheetList.size(); sheet_idx++ )
     {
@@ -249,6 +263,7 @@ void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             SCH_FIELD* fieldPrim = comp->FindField( GetSpiceFieldName( SPICE_PRIMITIVE ) );
             SCH_FIELD* fieldModel = comp->FindField( GetSpiceFieldName( SPICE_MODEL ) );
             SCH_FIELD* fieldEnabled = comp->FindField( GetSpiceFieldName( SPICE_ENABLED ) );
+            SCH_FIELD* fieldLibFile = comp->FindField( GetSpiceFieldName( SPICE_LIB_FILE ) );
             SCH_FIELD* fieldSeq = comp->FindField( GetSpiceFieldName( SPICE_NODE_SEQUENCE ) );
 
             spiceItem.m_primitive = fieldPrim ? fieldPrim->GetText()[0]
@@ -260,7 +275,10 @@ void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             spiceItem.m_refName = comp->GetRef( &sheetList[sheet_idx] );
 
             // Check to see if component should be removed from Spice netlist
-                spiceItem.m_enabled = fieldEnabled ? StringToBool( fieldEnabled->GetText() ) : true;
+            spiceItem.m_enabled = fieldEnabled ? StringToBool( fieldEnabled->GetText() ) : true;
+
+            if( fieldLibFile && !fieldLibFile->GetText().IsEmpty() )
+                m_libraries.insert( fieldLibFile->GetText() );
 
             wxArrayString pinNames;
 
@@ -336,12 +354,12 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                 {
                     wxString directive( tokenizer.GetNextToken() );
 
-                    // Fix paths for .include directives
-                    if( aCtl & NET_ADJUST_INCLUDE_PATHS && m_paths && directive.StartsWith( ".inc" ) )
+                    if( directive.StartsWith( ".inc" ) )
                     {
-                        wxString file( directive.AfterFirst( ' ' ) );
-                        wxString path( m_paths->FindValidPath( file ) );
-                        m_directives.push_back( wxString( ".include " ) + path );
+                        wxString lib = directive.AfterFirst( ' ' );
+
+                        if( !lib.IsEmpty() )
+                            m_libraries.insert( lib );
                     }
                     else
                     {
@@ -453,5 +471,6 @@ const std::vector<wxString> NETLIST_EXPORTER_PSPICE::m_spiceFields = {
     "Spice_Primitive",
     "Spice_Model",
     "Spice_Netlist_Enabled",
-    "Spice_Node_Sequence"
+    "Spice_Node_Sequence",
+    "Spice_Lib_File"
 };
