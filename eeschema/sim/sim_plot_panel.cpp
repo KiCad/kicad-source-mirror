@@ -299,7 +299,13 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     }
     else
     {
+        m_updateRef = true;
+    }
+
+    if( m_updateRef )
+    {
         UpdateReference();
+        m_updateRef = false;
     }
 
     // Line length in horizontal and vertical dimensions
@@ -548,8 +554,8 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
     if( aEnable )
     {
         CURSOR* c = new CURSOR( t );
-        //int plotCenter = GetMarginLeft() + ( GetXScreen() - GetMarginLeft() - GetMarginRight() ) / 2;
-        //c->Move( wxPoint( plotCenter, 0 ) );
+        int plotCenter = GetMarginLeft() + ( GetXScreen() - GetMarginLeft() - GetMarginRight() ) / 2;
+        c->SetX( plotCenter );
         t->SetCursor( c );
         AddLayer( c );
     }

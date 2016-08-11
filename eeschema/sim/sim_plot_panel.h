@@ -37,12 +37,20 @@ class CURSOR : public mpInfoLayer
 public:
     CURSOR( const TRACE* aTrace )
         : mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
-        m_trace( aTrace ), m_updateRequired( true ), m_coords( 0.0, 0.0 ), m_window( nullptr )
+        m_trace( aTrace ), m_updateRequired( true ), m_updateRef( false ),
+        m_coords( 0.0, 0.0 ), m_window( nullptr )
     {
         SetDrawOutsideMargins( false );
     }
 
     void Plot( wxDC& aDC, mpWindow& aWindow ) override;
+
+    void SetX( int aX )
+    {
+        m_reference.x = 0;
+        m_updateRef = true;
+        Move( wxPoint( aX, 0 ) );
+    }
 
     void Update()
     {
@@ -66,7 +74,7 @@ public:
 
 private:
     const TRACE* m_trace;
-    bool m_updateRequired;
+    bool m_updateRequired, m_updateRef;
     wxRealPoint m_coords;
     mpWindow* m_window;
 
