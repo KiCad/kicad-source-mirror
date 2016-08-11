@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -95,6 +96,8 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const VECTOR2I& 
         m_points.erase( m_points.begin() + aStartIndex + 1, m_points.begin() + aEndIndex + 1 );
         m_points[aStartIndex] = aP;
     }
+
+    m_bbox_memo_valid = false;
 }
 
 
@@ -108,6 +111,8 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
 
     m_points.erase( m_points.begin() + aStartIndex, m_points.begin() + aEndIndex + 1 );
     m_points.insert( m_points.begin() + aStartIndex, aLine.m_points.begin(), aLine.m_points.end() );
+
+    m_bbox_memo_valid = false;
 }
 
 
@@ -120,6 +125,7 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
         aStartIndex += PointCount();
 
     m_points.erase( m_points.begin() + aStartIndex, m_points.begin() + aEndIndex + 1 );
+    m_bbox_memo_valid = false;
 }
 
 
@@ -139,6 +145,8 @@ int SHAPE_LINE_CHAIN::Distance( const VECTOR2I& aP ) const
 
 int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
 {
+    m_bbox_memo_valid = false;
+
     int ii = -1;
     int min_dist = 2;
 

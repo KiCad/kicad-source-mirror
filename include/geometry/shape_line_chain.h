@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -49,6 +50,12 @@ private:
     typedef std::vector<VECTOR2I>::iterator point_iter;
     typedef std::vector<VECTOR2I>::const_iterator point_citer;
 
+    // SHAPE_LINE_CHAIN::BBox is a hotspot for loading data.
+    // Here we memoize it to avoid having to recompute the bounding box too many times
+    BOX2I m_bbox_memo;
+    int   m_bbox_clearance_memo;
+    bool  m_bbox_memo_valid;
+
 public:
     /**
      * Struct INTERSECTION
@@ -72,14 +79,17 @@ public:
      * Initializes an empty line chain.
      */
     SHAPE_LINE_CHAIN() :
-        SHAPE( SH_LINE_CHAIN ), m_closed( false )
+        SHAPE( SH_LINE_CHAIN ), m_bbox_memo_valid( false ), m_closed( false )
     {}
 
     /**
      * Copy Constructor
      */
     SHAPE_LINE_CHAIN( const SHAPE_LINE_CHAIN& aShape ) :
-        SHAPE( SH_LINE_CHAIN ), m_points( aShape.m_points ), m_closed( aShape.m_closed )
+        SHAPE( SH_LINE_CHAIN ),
+        m_bbox_memo( aShape.m_bbox_memo ), m_bbox_clearance_memo( aShape.m_bbox_clearance_memo ),
+        m_bbox_memo_valid( aShape.m_bbox_memo_valid ), m_points( aShape.m_points ),
+        m_closed( false )
     {}
 
     /**
@@ -87,7 +97,8 @@ public:
      * Initializes a 2-point line chain (a single segment)
      */
     SHAPE_LINE_CHAIN( const VECTOR2I& aA, const VECTOR2I& aB ) :
-        SHAPE( SH_LINE_CHAIN ), m_closed( false )
+        SHAPE( SH_LINE_CHAIN ),
+        m_bbox_memo_valid( false ), m_closed( false )
     {
         m_points.resize( 2 );
         m_points[0] = aA;
@@ -95,7 +106,7 @@ public:
     }
 
     SHAPE_LINE_CHAIN( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) :
-        SHAPE( SH_LINE_CHAIN ), m_closed( false )
+        SHAPE( SH_LINE_CHAIN ), m_bbox_memo_valid( false ), m_closed( false )
     {
         m_points.resize( 3 );
         m_points[0] = aA;
@@ -104,7 +115,7 @@ public:
     }
 
     SHAPE_LINE_CHAIN( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC, const VECTOR2I& aD ) :
-        SHAPE( SH_LINE_CHAIN ), m_closed( false )
+        SHAPE( SH_LINE_CHAIN ), m_bbox_memo_valid( false ), m_closed( false )
     {
         m_points.resize( 4 );
         m_points[0] = aA;
@@ -116,7 +127,7 @@ public:
 
     SHAPE_LINE_CHAIN( const VECTOR2I* aV, int aCount ) :
         SHAPE( SH_LINE_CHAIN ),
-        m_closed( false )
+        m_bbox_memo_valid( false ), m_closed( false )
     {
         m_points.resize( aCount );
 
@@ -137,6 +148,7 @@ public:
     {
         m_points.clear();
         m_closed = false;
+        m_bbox_memo_valid = false;
     }
 
     /**
@@ -263,13 +275,34 @@ public:
     /// @copydoc SHAPE::BBox()
     const BOX2I BBox( int aClearance = 0 ) const
     {
-        BOX2I bbox;
-        bbox.Compute( m_points );
+        // Sorry for const-stripping, if you have a prettier way to memoize this
+        // feel free.
+        return const_cast<SHAPE_LINE_CHAIN *>( this )->BBoxMemoized( aClearance );
+    }
 
-        if( aClearance != 0 )
-            bbox.Inflate( aClearance );
+    /**
+     * Compute the bounding box if necessary, or return a memoized copy if not.
+     */
+    const BOX2I BBoxMemoized( int aClearance = 0 )
+    {
+        if( m_bbox_memo_valid && m_bbox_clearance_memo == aClearance )
+        {
+            return m_bbox_memo;
+        }
+        else
+        {
+            BOX2I bbox;
+            bbox.Compute( m_points );
 
-        return bbox;
+            if( aClearance != 0 )
+                bbox.Inflate( aClearance );
+
+            m_bbox_memo = bbox;
+            m_bbox_clearance_memo = aClearance;
+            m_bbox_memo_valid = true;
+
+            return bbox;
+        }
     }
 
     /**
@@ -328,6 +361,7 @@ public:
     {
         VECTOR2I v( aX, aY );
         Append( v, aAllowDuplication );
+        m_bbox_memo_valid = false;
     }
 
     /**
@@ -372,11 +406,14 @@ public:
             m_points.push_back( p );
             m_bbox.Merge( p );
         }
+
+        m_bbox_memo_valid = false;
     }
 
     void Insert( int aVertex, const VECTOR2I& aP )
     {
         m_points.insert( m_points.begin() + aVertex, aP );
+        m_bbox_memo_valid = false;
     }
 
     /**
@@ -577,6 +614,8 @@ public:
     {
         for( std::vector<VECTOR2I>::iterator i = m_points.begin(); i != m_points.end(); ++i )
             (*i) += aVector;
+
+        m_bbox_memo_valid = false;
     }
 
     bool IsSolid() const
