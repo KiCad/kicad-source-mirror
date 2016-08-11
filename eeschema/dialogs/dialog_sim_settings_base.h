@@ -105,9 +105,9 @@ class DIALOG_SIM_SETTINGS_BASE : public wxDialog
 		wxButton* m_loadDirectives;
 		wxCheckBox* m_fixPassiveVals;
 		wxCheckBox* m_fixIncludePaths;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onLoadDirectives( wxCommandEvent& event ) { event.Skip(); }

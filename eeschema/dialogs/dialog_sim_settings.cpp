@@ -55,6 +55,7 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent )
     m_transFinal->SetValidator( m_posFloatValidator );
     m_transInitial->SetValidator( m_posFloatValidator );
 
+    m_sdbSizerOK->SetDefault();
     updateNetlistOpts();
 }
 
