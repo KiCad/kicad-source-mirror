@@ -1,122 +1,142 @@
-#include "sharedspice.h"
-#include <cstdio>
-#include <sstream>
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2016 CERN
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include "ngspice.h"
 
 #include <wx/dynlib.h>
-
-#include <string>
-#include <vector>
-
-#include "spice_simulator.h"
-
 #include <reporter.h>
+#include <sstream>
+
+// TODO cmake modules to add include directory for ngspice
 
 using namespace std;
 
-
-class NGSPICE : public SPICE_SIMULATOR {
-
-public:
-    NGSPICE();
-    virtual ~NGSPICE();
-
-    void Init();
-    bool LoadNetlist(const string& netlist);
-    bool Command(const string& cmd);
-
-    string GetConsole() const;
-
-    const vector<double> GetPlot( std::string name, int max_len = -1);
-
-    void dump();
-
-private:
-
-
-
-    typedef void (*ngSpice_Init)(SendChar*, SendStat*, ControlledExit*,
-             SendData*, SendInitData*, BGThreadRunning*, void*);
-
-    typedef int (*ngSpice_Circ)(char** circarray);
-    typedef int (*ngSpice_Command)(char* command);
-    typedef pvector_info (*ngGet_Vec_Info)(char* vecname);
-    typedef char** (*ngSpice_AllVecs)(char* plotname);
-    typedef char** (*ngSpice_AllPlots)(void);
-
-
-    ngSpice_Init m_ngSpice_Init;
-    ngSpice_Circ m_ngSpice_Circ;
-    ngSpice_Command m_ngSpice_Command;
-    ngGet_Vec_Info m_ngGet_Vec_Info;
-    ngSpice_AllPlots m_ngSpice_AllPlots;
-    ngSpice_AllVecs m_ngSpice_AllVecs;
-
-    wxDynamicLibrary *m_dll;
-
-    static int cbSendChar( char* what, int id, void* user)
-    {
-        NGSPICE *sim = reinterpret_cast<NGSPICE*>(user);
-
-        printf("sim %p cr %p\n",sim, sim->m_consoleReporter );
-        if(sim->m_consoleReporter)
-            sim->m_consoleReporter->Report(what);
-        return 0;
-    }
-
-    static int cbSendStat( char* what, int id, void* user)
-    {
-    /*    NGSPICE *sim = reinterpret_cast<NGSPICE*>(user);
-        if(sim->m_consoleReporter)
-            sim->m_consoleReporter->Report(what);*/
-        return 0;
-    }
-
-};
-
-
-
-
 NGSPICE::NGSPICE()
 {
-    m_dll = new wxDynamicLibrary("/home/twl/projects_sw/ngspice-26/src/.libs/libngspice.so.0.0.0"); //, wxDL_LAZY);
+    m_dll = new wxDynamicLibrary( "libngspice.so" );
+    assert( m_dll );
 
-    printf("DLL at %p\n", m_dll);
-
-    assert(m_dll);
-
-    m_ngSpice_Init = (ngSpice_Init) m_dll->GetSymbol("ngSpice_Init");
-    printf("Init @ %p\n", m_ngSpice_Init);
-
-
-    m_ngSpice_Circ = (ngSpice_Circ) m_dll->GetSymbol("ngSpice_Circ");
-    m_ngSpice_Command = (ngSpice_Command) m_dll->GetSymbol("ngSpice_Command");
-    m_ngGet_Vec_Info = (ngGet_Vec_Info) m_dll->GetSymbol("ngGet_Vec_Info");
-    m_ngSpice_AllPlots = (ngSpice_AllPlots) m_dll->GetSymbol("ngSpice_AllPlots");
-    m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll->GetSymbol("ngSpice_AllVecs");
-
-
+    // Obtain function pointers
+    m_ngSpice_Init = (ngSpice_Init) m_dll->GetSymbol( "ngSpice_Init" );
+    m_ngSpice_Circ = (ngSpice_Circ) m_dll->GetSymbol( "ngSpice_Circ" );
+    m_ngSpice_Command = (ngSpice_Command) m_dll->GetSymbol( "ngSpice_Command" );
+    m_ngGet_Vec_Info = (ngGet_Vec_Info) m_dll->GetSymbol( "ngGet_Vec_Info" );
+    m_ngSpice_AllPlots = (ngSpice_AllPlots) m_dll->GetSymbol( "ngSpice_AllPlots" );
+    m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll->GetSymbol( "ngSpice_AllVecs" );
 }
+
+
+NGSPICE::~NGSPICE()
+{
+    delete m_dll;
+}
+
 
 void NGSPICE::Init()
 {
     m_ngSpice_Init( &cbSendChar, &cbSendStat, NULL, NULL, NULL, NULL, this);
 }
 
-const vector<double> NGSPICE::GetPlot( std::string name, int max_len )
+
+const vector<double> NGSPICE::GetPlot( const string& aName, int aMaxLen )
 {
     vector<double> data;
 
-    vector_info *vi = m_ngGet_Vec_Info((char*)name.c_str());
+    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
-    if(vi->v_realdata)
-        for(int i = 0; i<vi->v_length;i++)
-            data.push_back(vi->v_realdata[i]);
+    if( vi->v_realdata )
+    {
+        for( int i = 0; i < vi->v_length; i++ )
+            data.push_back( vi->v_realdata[i] );
+    }
 
     return data;
 
 }
 
 
+bool NGSPICE::LoadNetlist(const string& aNetlist)
+{
+    // TODO remove the hard limit
+    char* lines[16384];
+    stringstream ss( aNetlist );
+    int n = 0;
+
+    while( !ss.eof() && n < 16384 )
+    {
+        char line[1024];
+        ss.getline( line, sizeof(line) );
+
+        lines[n++] = strdup(line);
+	    printf("l '%s'\n", line);
+    }
+
+    lines[n] = NULL;
+    m_ngSpice_Circ( lines );
+
+    for(int i = 0; i < n; i++)
+        delete lines[i];
+
+    return true;
+}
+
+
+bool NGSPICE::Command( const string& aCmd )
+{
+    m_ngSpice_Command( (char*)( aCmd + string( "\n" ) ).c_str() );
+    dump();
+
+    return true;
+}
+
+
+void NGSPICE::dump()
+{
+//    m_ngSpice_Command("run\n");
+    char** plots = m_ngSpice_AllPlots();
+
+    for( int i = 0; plots[i]; ++i )
+    {
+        printf( "-> plot : %s\n", plots[i] );
+        char** vecs = m_ngSpice_AllVecs( plots[i] );
+
+        for( int j = 0; vecs[j]; j++ )
+        {
+            printf( "   - vector %s\n", vecs[j] );
+
+            vector_info* vi = m_ngGet_Vec_Info( vecs[j] );
+
+            printf( "       - v_type %x\n", vi->v_type );
+            printf( "       - v_flags %x\n", vi->v_flags );
+            printf( "       - v_length %d\n", vi->v_length );
+        }
+    }
+}
+
+
+#if 0
 static string loadFile(const string& filename)
 {
 
@@ -128,77 +148,7 @@ static string loadFile(const string& filename)
     return buf;
 }
 
-bool NGSPICE::LoadNetlist(const string& netlist)
-{
-    char *lines[16384];
-    stringstream ss(netlist);
-    int n = 0;
 
-    while(!ss.eof())
-    {
-        char line[1024];
-        ss.getline(line, 1024);
-
-        lines[n++] = strdup(line);
-	    printf("l '%s'\n", line);
-    }
-    lines[n]= NULL;
-
-    printf("netlist contains %d lines\n", n);
-    m_ngSpice_Circ(lines);
-
-    for(int i = 0; i < n; i++)
-        delete lines[i];
-
-    return true;
-}
-
-
-bool NGSPICE::Command(const string& cmd )
-{
-    m_ngSpice_Command( (char*)(cmd + string("\n")).c_str());
-    dump();
-    return true;
-}
-
-
-void NGSPICE::dump()
-{
-//    m_ngSpice_Command("run\n");
-    char **plots = m_ngSpice_AllPlots();
-
-    for(int i = 0; plots[i]; i++)
-    {
-        printf("-> plot : %s\n", plots[i]);
-        char **vecs = m_ngSpice_AllVecs(plots[i]);
-
-        for(int j = 0; vecs[j]; j++)
-        {
-            printf("   - vector %s\n", vecs[j]);
-
-            vector_info *vi = m_ngGet_Vec_Info(vecs[j]);
-
-            printf("       - v_type %x\n", vi->v_type);
-            printf("       - v_flags %x\n", vi->v_flags);
-            printf("       - v_length %d\n", vi->v_length);
-
-
-        }
-
-    }
-
-
-}
-
-
-
-NGSPICE::~NGSPICE()
-{
-    printf("Killing ngspice\n");
-    delete m_dll;
-}
-
-#if 0
 main()
 {
     NGSPICE spice;
@@ -238,16 +188,28 @@ main()
 
 
 
-std::string NGSPICE::GetConsole() const {
+string NGSPICE::GetConsole() const {
     return "";
 }
 
-SPICE_SIMULATOR::~SPICE_SIMULATOR()
-{
 
+int NGSPICE::cbSendChar( char* what, int id, void* user)
+{
+    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
+
+    printf("sim %p cr %p\n",sim, sim->m_consoleReporter );
+
+    if( sim->m_consoleReporter )
+        sim->m_consoleReporter->Report( what );
+
+    return 0;
 }
 
-SPICE_SIMULATOR *SPICE_SIMULATOR::CreateInstance( const std::string name )
+
+int NGSPICE::cbSendStat( char* what, int id, void* user)
 {
-    return new NGSPICE;
+/*    NGSPICE *sim = reinterpret_cast<NGSPICE*>(user);
+    if(sim->m_consoleReporter)
+        sim->m_consoleReporter->Report(what);*/
+    return 0;
 }

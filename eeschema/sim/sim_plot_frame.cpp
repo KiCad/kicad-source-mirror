@@ -44,18 +44,22 @@
 #include "sim_plot_panel.h"
 #include "spice_simulator.h"
 
+#ifdef KICAD_SCRIPTING
+ #include <python_scripting.h>
+#endif
+
 
 class SIM_REPORTER : public REPORTER
 {
 public:
-    SIM_REPORTER( wxRichTextCtrl *console )
+    SIM_REPORTER( wxRichTextCtrl* console )
     {
         m_console = console;
+
     }
 
-    ~SIM_REPORTER( )
+    ~SIM_REPORTER()
     {
-
     }
 
     virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED )
@@ -66,35 +70,37 @@ public:
     }
 
 private:
-    wxRichTextCtrl *m_console;
-
+    wxRichTextCtrl* m_console;
 };
 
 
-SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY *aKiway, wxWindow* parent )
-    : SIM_PLOT_FRAME_BASE( aKiway, parent )
+SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
+    : SIM_PLOT_FRAME_BASE( aKiway, aParent )
 {
     m_exporter = NULL;
     m_simulator = NULL;
     m_currentPlot = NULL;
+    m_pyConsole = NULL;
 
     NewPlot();
+    TogglePythonConsole();
 }
+
 
 SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
-
 }
+
 
 void SIM_PLOT_FRAME::StartSimulation()
 {
-    if(m_exporter)
+    if( m_exporter )
         delete m_exporter;
 
-    if(m_simulator)
+    if( m_simulator )
         delete m_simulator;
 
-    m_simulator = SPICE_SIMULATOR::CreateInstance("ngspice");
+    m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
     m_simulator->SetConsoleReporter( new SIM_REPORTER( m_simConsole ) );
     m_simulator->Init();
     //m_simulator->SetConsoleReporter( , this );
@@ -131,9 +137,10 @@ void SIM_PLOT_FRAME::StartSimulation()
     //m_simulator->Command("quit\n");
 }
 
+
 void SIM_PLOT_FRAME::NewPlot()
 {
-    SIM_PLOT_PANEL *plot = new SIM_PLOT_PANEL ( this, wxID_ANY );
-    m_plotNotebook->AddPage ( plot, wxT("Plot1"), true );
+    SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( this, wxID_ANY );
+    m_plotNotebook->AddPage( plot, wxT( "Plot1" ), true );
     m_currentPlot = plot;
 }

@@ -20,34 +20,32 @@ class SIM_PLOT_PANEL;
 /** Implementing SIM_PLOT_FRAME_BASE */
 class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 {
-	public:
-		/** Constructor */
-		SIM_PLOT_FRAME(KIWAY *aKiway, wxWindow* parent );
-		~SIM_PLOT_FRAME();
+    public:
+        /** Constructor */
+        SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent );
+        ~SIM_PLOT_FRAME();
 
+        void SetSchFrame( SCH_EDIT_FRAME* schFrame )
+        {
+            m_schematicFrame = schFrame;
+        }
 
+        void StartSimulation();
 
-		void SetSchFrame( SCH_EDIT_FRAME* schFrame )
-		{
-			m_schematicFrame = schFrame;
-		}
+        void NewPlot();
 
-		void StartSimulation();
+        void TogglePythonConsole();
 
-		void NewPlot();
+    private:
+        virtual void onNewPlot( wxCommandEvent& event ) { NewPlot(); }
 
+        SIM_PLOT_PANEL* m_currentPlot;
+        SCH_EDIT_FRAME* m_schematicFrame;
+        NETLIST_EXPORTER_PSPICE* m_exporter;
+        SPICE_SIMULATOR* m_simulator;
+        wxWindow* m_pyConsole;
 
-
-	private:
-
-		virtual void onNewPlot( wxCommandEvent& event ) { NewPlot(); }
-
-		SIM_PLOT_PANEL *m_currentPlot;
-		SCH_EDIT_FRAME *m_schematicFrame;
-		NETLIST_EXPORTER_PSPICE *m_exporter;
-		SPICE_SIMULATOR *m_simulator;
-
-	//// end generated class members
+    //// end generated class members
 };
 
 #endif // __sim_plot_frame__

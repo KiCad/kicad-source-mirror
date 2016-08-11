@@ -180,6 +180,7 @@ set( EESCHEMA_SRCS
     sim/sim_plot_frame_base.cpp
     sim/sim_plot_frame.cpp
     sim/sim_plot_panel.cpp
+    sim/spice_simulator.cpp
     sim/ngspice.cpp
 
     netlist_exporters/netlist_exporter.cpp
