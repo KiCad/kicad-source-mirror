@@ -52,8 +52,6 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxPanel* m_panel7;
 		wxStaticText* m_staticText2;
 		wxListBox* m_signals;
-		wxStaticText* m_staticText21;
-		wxListBox* m_signals1;
 		wxButton* m_simulateBtn;
 		wxButton* m_probeBtn;
 		wxButton* m_tuneBtn;

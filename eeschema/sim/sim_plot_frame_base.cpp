@@ -94,14 +94,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	bSizer7->Add( m_staticText2, 0, wxALL|wxEXPAND, 5 );
 	
 	m_signals = new wxListBox( m_panel7, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE|wxLB_SORT ); 
-	bSizer7->Add( m_signals, 0, wxALL|wxEXPAND, 5 );
-	
-	m_staticText21 = new wxStaticText( m_panel7, wxID_ANY, _("Parameters"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
-	m_staticText21->Wrap( -1 );
-	bSizer7->Add( m_staticText21, 0, wxALL|wxEXPAND, 5 );
-	
-	m_signals1 = new wxListBox( m_panel7, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_MULTIPLE|wxLB_SORT ); 
-	bSizer7->Add( m_signals1, 0, wxALL|wxEXPAND, 5 );
+	bSizer7->Add( m_signals, 1, wxALL|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 1, 0, 0, 0 );
