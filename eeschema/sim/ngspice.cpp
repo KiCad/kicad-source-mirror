@@ -88,9 +88,7 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
     {
         char line[1024];
         ss.getline( line, sizeof(line) );
-
         lines[n++] = strdup(line);
-        wxLogDebug( "l '%s'\n", line );
     }
 
     lines[n] = NULL;
@@ -125,18 +123,18 @@ void NGSPICE::dump()
 
     for( int i = 0; plots[i]; ++i )
     {
-        wxLogDebug( "-> plot : %s\n", plots[i] );
+        wxLogDebug( "-> plot : %s", plots[i] );
         char** vecs = m_ngSpice_AllVecs( plots[i] );
 
         for( int j = 0; vecs[j]; j++ )
         {
-            wxLogDebug( "   - vector %s\n", vecs[j] );
+            wxLogDebug( "   - vector %s", vecs[j] );
 
             vector_info* vi = m_ngGet_Vec_Info( vecs[j] );
 
-            wxLogDebug( "       - v_type %x\n", vi->v_type );
-            wxLogDebug( "       - v_flags %x\n", vi->v_flags );
-            wxLogDebug( "       - v_length %d\n", vi->v_length );
+            wxLogDebug( "       - v_type %x", vi->v_type );
+            wxLogDebug( "       - v_flags %x", vi->v_flags );
+            wxLogDebug( "       - v_length %d", vi->v_length );
         }
     }
 }
@@ -202,8 +200,6 @@ string NGSPICE::GetConsole() const {
 int NGSPICE::cbSendChar( char* what, int id, void* user )
 {
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
-
-    wxLogDebug( "sim %p cr %p\n", sim, sim->m_consoleReporter );
 
     if( sim->m_consoleReporter )
         sim->m_consoleReporter->Report( what );

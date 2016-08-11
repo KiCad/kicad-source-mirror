@@ -28,8 +28,6 @@ static SIM_PLOT_PANEL* panel = NULL;
 
 static int drawPlotFunc( mglGraph* aGraph )
 {
-    printf( "DrawPlot [%lu traces]!\n", panel->m_traces.size() );
-
     aGraph->Clf();
     //aGraph->SetRanges(-10e-3,10e-3,-2,2);
     aGraph->Axis( "x" );
