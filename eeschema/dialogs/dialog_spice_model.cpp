@@ -585,8 +585,9 @@ void DIALOG_SPICE_MODEL::updateFromFile( wxComboBox* aComboBox,
         {
             wxString data = line.Mid( idx );
             data = data.AfterFirst( ' ' );
+            data.Trim( false );
             data = data.BeforeFirst( ' ' );
-            data = data.Trim();
+            data.Trim();
 
             if( !data.IsEmpty() )
                 aComboBox->Append( data );
