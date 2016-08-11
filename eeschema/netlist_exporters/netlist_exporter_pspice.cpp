@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "netlist_exporter_pspice.h"
 #include <fctsys.h>
 #include <build_version.h>
 #include <confirm.h>
@@ -34,8 +35,9 @@
 #include <netlist.h>
 #include <sch_reference_list.h>
 #include <class_netlist_object.h>
+
 #include <wx/tokenzr.h>
-#include "netlist_exporter_pspice.h"
+#include <wx/regex.h>
 
 bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
@@ -316,18 +318,48 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
 {
     if( aField == "Spice_Primitive" )
     {
-        wxString RefName = aComponent->GetField( REFERENCE )->GetText();
+        const wxString& refName = aComponent->GetField( REFERENCE )->GetText();
 
         // Convert ICs to subcircuits
-        if( RefName.StartsWith( "IC" ) || RefName.StartsWith( "U" ) )
+        if( refName.StartsWith( "IC" ) || refName.StartsWith( "U" ) )
             return wxString( "X" );
         else
-            return RefName.GetChar( 0 );
+            return refName.GetChar( 0 );
     }
 
     if( aField == "Spice_Model" )
     {
-        return aComponent->GetField( VALUE )->GetText();
+        wxChar prim = aComponent->GetField( REFERENCE )->GetText().GetChar( 0 );
+        wxString value = aComponent->GetField( VALUE )->GetText();
+
+        // Is it a passive component?
+        if( prim == 'C' || prim == 'L' || prim == 'R' )
+        {
+            // Regular expression to match common formats used for passive parts description
+            // (e.g. 100k, 2k3, 1 uF)
+            wxRegEx passiveVal( "^([0-9\\. ]+)([fFpPnNuUmMkKgGtT]|M(e|E)(g|G))?([fFhH]|ohm)?([-1-9 ]*)$" );
+
+            if( passiveVal.Matches( value ) )
+            {
+                wxString prefix( passiveVal.GetMatch( value, 1 ) );
+                wxString unit( passiveVal.GetMatch( value, 2 ) );
+                wxString suffix( passiveVal.GetMatch( value, 6 ) );
+
+                prefix.Trim(); prefix.Trim( false );
+                unit.Trim(); unit.Trim( false );
+                suffix.Trim(); suffix.Trim( false );
+
+                // Make 'mega' units comply with the Spice expectations
+                if( unit == "M" )
+                    unit = "Meg";
+
+                wxLogDebug( "Changed passive value: %s..", value );
+                value = prefix + unit + suffix;
+                wxLogDebug( "..to: %s", value );
+            }
+        }
+
+        return value;
     }
 
     if( aField == "Spice_Netlist_Enabled" )
