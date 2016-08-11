@@ -37,6 +37,8 @@ NGSPICE::NGSPICE()
 {
 #ifdef __WINDOWS__
     m_dll = new wxDynamicLibrary( "libngspice-0.dll" );
+#elif __APPLE__
+    m_dll = new wxDynamicLibrary( "libngspice.dylib" );
 #else
     m_dll = new wxDynamicLibrary( "libngspice.so" );
 #endif

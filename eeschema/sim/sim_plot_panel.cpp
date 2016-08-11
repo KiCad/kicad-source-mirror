@@ -332,8 +332,8 @@ bool CURSOR::Inside( wxPoint& aPoint )
     if( !m_window )
         return false;
 
-    return ( std::abs( aPoint.x - m_window->x2p( m_trace->x2s( m_coords.x ) ) ) <= DRAG_MARGIN )
-        || ( std::abs( aPoint.y - m_window->y2p( m_trace->y2s( m_coords.y ) ) ) <= DRAG_MARGIN );
+    return ( std::abs( (double) aPoint.x - m_window->x2p( m_trace->x2s( m_coords.x ) ) ) <= DRAG_MARGIN )
+        || ( std::abs( (double) aPoint.y - m_window->y2p( m_trace->y2s( m_coords.y ) ) ) <= DRAG_MARGIN );
 }
 
 
