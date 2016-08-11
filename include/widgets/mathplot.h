@@ -612,6 +612,8 @@ class WXDLLIMPEXP_MATHPLOT mpFXY : public mpLayer
 
         virtual void SetScale(mpScaleBase *scaleX, mpScaleBase *scaleY);
 
+        void UpdateScales();
+
         double s2x(double plotCoordX) const;
         double s2y(double plotCoordY) const;
 
@@ -740,6 +742,10 @@ public:
         }
     }
 
+    void ResetDataRange()
+    {
+        m_rangeSet = 0;
+    }
 
     double AbsMaxValue() const
     {

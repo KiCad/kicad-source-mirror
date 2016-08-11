@@ -453,6 +453,19 @@ bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
 
         DelLayer( trace, true, true );
 
+        // Reset scales
+        if( m_axis_x )
+            m_axis_x->ResetDataRange();
+
+        if( m_axis_y1 )
+            m_axis_y1->ResetDataRange();
+
+        if( m_axis_y2 )
+            m_axis_y2->ResetDataRange();
+
+        for( auto t : m_traces )
+            t.second->UpdateScales();
+
         return true;
     }
 

@@ -3600,15 +3600,17 @@ void mpFXY::SetScale ( mpScaleBase *scaleX, mpScaleBase *scaleY )
     m_scaleY = scaleY;
 
     //printf("SetScales : %p %p\n", scaleX, scaleY);
+    UpdateScales();
+}
 
+
+void mpFXY::UpdateScales()
+{
     if(m_scaleX)
-    {
         m_scaleX->ExtendDataRange(GetMinX(), GetMaxX());
-    }
+
     if(m_scaleY)
-    {
         m_scaleY->ExtendDataRange(GetMinY(), GetMaxY());
-    }
 }
 
 
