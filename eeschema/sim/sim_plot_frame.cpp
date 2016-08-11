@@ -167,6 +167,7 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_simulator->SetReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
     m_simulator->LoadNetlist( formatter.GetString() );
+    applyTuners();
     m_simulator->Run();
 
     Layout();
@@ -229,23 +230,22 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
         return;
 
     const wxString& componentName = aComponent->GetField( REFERENCE )->GetText();
-    auto& tunerList = m_plots[plotPanel].m_tuners;
 
     // Do not add multiple instances for the same component
-    auto tunerIt = std::find_if( tunerList.begin(), tunerList.end(), [&]( const TUNER_SLIDER* t )
+    auto tunerIt = std::find_if( m_tuners.begin(), m_tuners.end(), [&]( const TUNER_SLIDER* t )
         {
             return t->GetComponentName() == componentName;
         }
     );
 
-    if( tunerIt != tunerList.end() )
+    if( tunerIt != m_tuners.end() )
         return;     // We already have it
 
     try
     {
         TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_sidePanel, aComponent );
         m_tuneSizer->Add( tuner );
-        tunerList.push_back( tuner );
+        m_tuners.push_back( tuner );
         m_sidePanel->Layout();
     }
     catch( ... )
@@ -257,12 +257,7 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
 
 void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner )
 {
-    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
-
-    if( !plotPanel )
-        return;
-
-    m_plots[plotPanel].m_tuners.remove( aTuner );
+    m_tuners.remove( aTuner );
     aTuner->Destroy();
     m_sidePanel->Layout();
 }
@@ -427,31 +422,21 @@ void SIM_PLOT_FRAME::updateSignalList()
 }
 
 
-void SIM_PLOT_FRAME::updateTuners()
-{
-    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
-
-    if( !plotPanel )
-        return;
-
-    for( unsigned int i = 0; i < m_tuneSizer->GetItemCount(); ++i )
-        m_tuneSizer->Hide( i );
-
-    m_tuneSizer->Clear();
-
-    for( auto& tuner : m_plots[plotPanel].m_tuners )
-    {
-        m_tuneSizer->Add( tuner );
-        tuner->Show();
-    }
-
-    Layout();
-}
-
-
 void SIM_PLOT_FRAME::updateCursors()
 {
     wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+}
+
+
+void SIM_PLOT_FRAME::applyTuners()
+{
+    for( auto& tuner : m_tuners )
+    {
+        /// @todo no ngspice hardcoding
+        std::string command( "alter @" + tuner->GetSpiceName()
+                + "=" + tuner->GetValue().ToSpiceString() );
+        m_simulator->Command( command );
+    }
 }
 
 
@@ -612,7 +597,6 @@ void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
 
     m_plots.erase( plotPanel );
     updateSignalList();
-    updateTuners();
     updateCursors();
 }
 
@@ -620,7 +604,6 @@ void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )
 void SIM_PLOT_FRAME::onPlotChanged( wxAuiNotebookEvent& event )
 {
     updateSignalList();
-    updateTuners();
     updateCursors();
 }
 
@@ -803,21 +786,8 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
         StopSimulation();
 
     m_simConsole->Clear();
-
-    // Apply tuned values
-    if( SIM_PLOT_PANEL* plotPanel = CurrentPlot() )
-    {
-        for( auto& tuner : m_plots[plotPanel].m_tuners )
-        {
-            /// @todo no ngspice hardcoding
-            std::string command( "alter @" + tuner->GetSpiceName()
-                    + "=" + tuner->GetValue().ToSpiceString() );
-            m_simulator->Command( command );
-
-//            printf("CMD: %s\n", command.c_str() );
-        }
-    }
-
+    // Do not export netlist, it is already stored in the simulator
+    applyTuners();
     m_simulator->Run();
 }
 
@@ -827,13 +797,6 @@ void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
     std::cout << aEvent.GetString() << std::endl;
     m_simConsole->AppendText( aEvent.GetString() + "\n" );
     m_simConsole->SetInsertionPointEnd();
-}
-
-
-SIM_PLOT_FRAME::PLOT_INFO::~PLOT_INFO()
-{
-    for( auto& t : m_tuners )
-        t->Destroy();
 }
 
 

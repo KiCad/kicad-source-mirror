@@ -168,14 +168,14 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void updateSignalList();
 
         /**
-         * @brief Fills the tuners area with the ones related to the current plot.
-         */
-        void updateTuners();
-
-        /**
          * @brief Updates the cursor values list.
          */
         void updateCursors();
+
+        /**
+         * @brief Applies component values specified using tunder sliders to the current netlist.
+         */
+        void applyTuners();
 
         SIM_PLOT_TYPE GetXAxisType( SIM_TYPE aType ) const;
 
@@ -231,21 +231,18 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         std::unique_ptr<SPICE_SIMULATOR> m_simulator;
 
         typedef std::map<wxString, TRACE_DESC> TRACE_MAP;
-        typedef std::list<TUNER_SLIDER*> TUNER_LIST;
 
-        class PLOT_INFO
+        struct PLOT_INFO
         {
-        public:
-            ~PLOT_INFO();
-
-            ///> List of component value tuners
-            TUNER_LIST m_tuners;
-
             ///> Map of the traces displayed on the plot
             TRACE_MAP m_traces;
         };
 
+        ///> Map of plot panels and associated data
         std::map<SIM_PLOT_PANEL*, PLOT_INFO> m_plots;
+
+        ///> List of currently displayed tuners
+        std::list<TUNER_SLIDER*> m_tuners;
 
         // Trick to preserve settings between runs
         DIALOG_SIM_SETTINGS m_settingsDlg;
