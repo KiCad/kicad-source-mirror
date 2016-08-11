@@ -205,15 +205,43 @@ void SIM_PLOT_FRAME::menuZoomFit( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::menuShowGrid( wxCommandEvent& event )
 {
-    CurrentPlot()->ShowGrid( !CurrentPlot()->IsGridShown() );
+    SIM_PLOT_PANEL* plot = CurrentPlot();
+    plot->ShowGrid( !plot->IsGridShown() );
 }
 
 
-void SIM_PLOT_FRAME::menuShowGridState( wxUpdateUIEvent& event )
+void SIM_PLOT_FRAME::menuShowGridUpdate( wxUpdateUIEvent& event )
 {
-    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+    SIM_PLOT_PANEL* plot = CurrentPlot();
+    event.Check( plot ? plot->IsGridShown() : false );
+}
 
-    event.Check( plotPanel ? plotPanel->IsGridShown() : false );
+
+void SIM_PLOT_FRAME::menuShowLegend( wxCommandEvent& event )
+{
+    SIM_PLOT_PANEL* plot = CurrentPlot();
+    plot->ShowLegend( !plot->IsLegendShown() );
+}
+
+
+void SIM_PLOT_FRAME::menuShowLegendUpdate( wxUpdateUIEvent& event )
+{
+    SIM_PLOT_PANEL* plot = CurrentPlot();
+    event.Check( plot ? plot->IsLegendShown() : false );
+}
+
+
+void SIM_PLOT_FRAME::menuShowCoords( wxCommandEvent& event )
+{
+    SIM_PLOT_PANEL* plot = CurrentPlot();
+    plot->ShowCoords( !plot->IsCoordsShown() );
+}
+
+
+void SIM_PLOT_FRAME::menuShowCoordsUpdate( wxUpdateUIEvent& event )
+{
+    SIM_PLOT_PANEL* plot = CurrentPlot();
+    event.Check( plot ? plot->IsCoordsShown() : false );
 }
 
 

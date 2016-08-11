@@ -182,9 +182,40 @@ public:
         return trace == m_traces.end() ? NULL : trace->second;
     }
 
-    void ShowGrid( bool aEnable = true );
+    void ShowGrid( bool aEnable )
+    {
+        m_axis_x->SetTicks( !aEnable );
+        m_axis_y->SetTicks( !aEnable );
+        UpdateAll();
+    }
 
-    bool IsGridShown() const;
+    bool IsGridShown() const
+    {
+        assert( m_axis_x->GetTicks() == m_axis_y->GetTicks() );
+        return !m_axis_x->GetTicks();
+    }
+
+    void ShowLegend( bool aEnable )
+    {
+        m_legend->SetVisible( aEnable );
+        UpdateAll();
+    }
+
+    bool IsLegendShown() const
+    {
+        return m_legend->IsVisible();
+    }
+
+    void ShowCoords( bool aEnable )
+    {
+        m_coords->SetVisible( aEnable );
+        UpdateAll();
+    }
+
+    bool IsCoordsShown() const
+    {
+        return m_coords->IsVisible();
+    }
 
     bool HasCursorEnabled( const wxString& aName ) const;
 
@@ -201,7 +232,9 @@ private:
     mpScaleX* m_axis_x;
     mpScaleY* m_axis_y;
     mpInfoLegend* m_legend;
-    //mpInfoCoords* m_coords;
+    mpInfoCoords* m_coords;
+
+    std::vector<mpLayer*> m_topLevel;
 };
 
 wxDECLARE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );

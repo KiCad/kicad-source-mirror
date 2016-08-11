@@ -110,11 +110,13 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& 
     m_axis_y->SetTicks( false );
     AddLayer( m_axis_y );
 
-    m_legend = new mpInfoLegend( wxRect( 0, 0, 40, 40 ), wxWHITE_BRUSH );
-    AddLayer( m_legend );
+    m_coords = new mpInfoCoords( wxRect( 0, 0, 100, 40 ), wxWHITE_BRUSH );
+    AddLayer( m_coords );
+    m_topLevel.push_back( m_coords );
 
-    //m_coords = new mpInfoCoords( wxRect( 80, 20, 10, 10 ), wxWHITE_BRUSH );
-    //AddLayer( m_coords );
+    m_legend = new mpInfoLegend( wxRect( 0, 40, 40, 40 ), wxWHITE_BRUSH );
+    AddLayer( m_legend );
+    m_topLevel.push_back( m_legend );
 }
 
 
@@ -140,10 +142,14 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aName
         t->SetPen( wxPen( generateColor(), 1, wxSOLID ) );
         m_traces[aName] = t;
 
-        // It is a trick to keep legend always on the top
-        DelLayer( m_legend );
+        // It is a trick to keep legend & coords always on the top
+        for( mpLayer* l : m_topLevel )
+            DelLayer( l );
+
         AddLayer( t );
-        AddLayer( m_legend );
+
+        for( mpLayer* l : m_topLevel )
+            AddLayer( l );
     }
     else
     {
@@ -186,21 +192,6 @@ void SIM_PLOT_PANEL::DeleteAllTraces()
     }
 
     m_traces.clear();
-}
-
-
-void SIM_PLOT_PANEL::ShowGrid( bool aEnable )
-{
-    m_axis_x->SetTicks( !aEnable );
-    m_axis_y->SetTicks( !aEnable );
-    UpdateAll();
-}
-
-
-bool SIM_PLOT_PANEL::IsGridShown() const
-{
-    assert( m_axis_x->GetTicks() == m_axis_y->GetTicks() );
-    return !m_axis_x->GetTicks();
 }
 
 

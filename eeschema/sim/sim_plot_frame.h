@@ -91,13 +91,17 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
             Close();
         }
 
+        // Event handlers
         void menuZoomIn( wxCommandEvent& event ) override;
         void menuZoomOut( wxCommandEvent& event ) override;
         void menuZoomFit( wxCommandEvent& event ) override;
         void menuShowGrid( wxCommandEvent& event ) override;
-        void menuShowGridState( wxUpdateUIEvent& event ) override;
+        void menuShowGridUpdate( wxUpdateUIEvent& event ) override;
+        void menuShowLegend( wxCommandEvent& event ) override;
+        void menuShowLegendUpdate( wxUpdateUIEvent& event ) override;
+        void menuShowCoords( wxCommandEvent& event ) override;
+        void menuShowCoordsUpdate( wxUpdateUIEvent& event ) override;
 
-        // Event handlers
         void onPlotChanged( wxNotebookEvent& event ) override;
 
         void onSignalDblClick( wxCommandEvent& event ) override;
