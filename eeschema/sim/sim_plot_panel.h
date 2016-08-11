@@ -32,7 +32,7 @@ class SIM_PLOT_PANEL;
 class SIM_PLOT_PAINTER : public mglDraw
 {
 public:
-    SIM_PLOT_PAINTER( SIM_PLOT_PANEL* aParent )
+    SIM_PLOT_PAINTER( const SIM_PLOT_PANEL* aParent )
         : m_parent( aParent )
     {
     }
@@ -46,7 +46,7 @@ public:
     int Draw( mglGraph* aGraph ) override;
 
 private:
-    SIM_PLOT_PANEL* m_parent;
+    const SIM_PLOT_PANEL* m_parent;
 };
 
 
@@ -63,13 +63,21 @@ public:
         mglData x, y;
     };
 
-    std::vector<TRACE> m_traces;
-
     void AddTrace( const wxString& name, int n_points, double *t, double *x, int flags = 0 );
     void DeleteTraces();
 
 private:
     SIM_PLOT_PAINTER m_painter;
+
+    // Traces to be plotted
+    std::vector<TRACE> m_traces;
+
+    // Axis ranges determined by the added traces data
+    std::pair<double, double> m_axisRangeX, m_axisRangeY;
+
+    void resetRanges();
+
+    friend class SIM_PLOT_PAINTER;
 };
 
 #endif

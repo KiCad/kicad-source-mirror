@@ -24,11 +24,14 @@
 
 #include "sim_plot_panel.h"
 
+#include <limits>
+
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                 const wxSize& size, long style, const wxString& name )
     : wxMathGL( parent, id, pos, size, style, name ), m_painter( this )
 {
     AutoResize = true;
+    resetRanges();
     SetDraw( &m_painter );
 }
 
@@ -38,16 +41,46 @@ SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
 }
 
 
+template<typename T>
+static std::pair<T, T> find_minmax( const T* aArray, unsigned int aSize )
+{
+    std::pair<T, T> result( std::numeric_limits<T>::max(), std::numeric_limits<T>::min() );
+    const T* ptr = aArray;
+
+    for( unsigned int i = 0; i < aSize; ++i )
+    {
+        if( *ptr < result.first )
+            result.first = *ptr;
+
+        if( *ptr > result.second )
+            result.second = *ptr;
+
+        ++ptr;
+    }
+
+    return result;
+}
+
+
 void SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
-                                double* aT, double* aX, int aFlags )
+                                double* aT, double* aY, int aFlags )
 {
     TRACE trace;
 
     trace.name = aName;
     trace.x.Set( aT, aPoints );
-    trace.y.Set( aX, aPoints );
-
+    trace.y.Set( aY, aPoints );
     m_traces.push_back( trace );
+
+    // Update axis ranges
+    std::pair<double, double> traceRangeT = find_minmax( aT, aPoints );
+    m_axisRangeX.first = std::min( traceRangeT.first, m_axisRangeX.first );
+    m_axisRangeX.second = std::max( traceRangeT.second, m_axisRangeX.second );
+
+    std::pair<double, double> traceRangeY = find_minmax( aY, aPoints );
+    m_axisRangeY.first = std::min( traceRangeY.first, m_axisRangeY.first );
+    m_axisRangeY.second = std::max( traceRangeY.second, m_axisRangeY.second );
+
     Update();
 }
 
@@ -55,38 +88,65 @@ void SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
 void SIM_PLOT_PANEL::DeleteTraces()
 {
     m_traces.clear();
+    resetRanges();
     Update();
+}
+
+
+void SIM_PLOT_PANEL::resetRanges()
+{
+    // Set ranges to inverted values, so when there is a new plot added, it will
+    // overridden with correct values
+    m_axisRangeX.first = std::numeric_limits<double>::max();
+    m_axisRangeX.second = std::numeric_limits<double>::min();
+    m_axisRangeY.first = std::numeric_limits<double>::max();
+    m_axisRangeY.second = std::numeric_limits<double>::min();
 }
 
 
 int SIM_PLOT_PAINTER::Draw( mglGraph* aGraph )
 {
     const std::vector<SIM_PLOT_PANEL::TRACE>& traces = m_parent->m_traces;
+    const std::pair<double, double>& axisRangeX = m_parent->m_axisRangeX;
+    std::pair<double, double> axisRangeY = m_parent->m_axisRangeY;
 
     aGraph->Clf();
 
-    //aGraph->SetRanges(-10e-3,10e-3,-2,2);
-    aGraph->Axis( "x" );
-    aGraph->Label( 'x', "Time", 0 );
-    //aGraph->SetRange( 'x', 0, 10e-3 );
+    // Axis settings
+    // Use autorange values if possible
+    if( axisRangeX.first < axisRangeX.second )
+        aGraph->SetRange( 'x', axisRangeX.first, axisRangeX.second );
+    else
+        aGraph->SetRange( 'x', 0, 1 );
 
-    aGraph->Axis( "y" );
-    aGraph->Label( 'y', "Voltage", 0 );
-    //aGraph->SetRange( 'y', -1.5, 1.5 );
-
-    for( auto t : traces )
+    if( axisRangeY.first < axisRangeY.second )
     {
-        aGraph->AddLegend( (const char*) t.name.c_str(), "" );
-        aGraph->Plot( t.y );
+        // Increase the Y axis range, so it is easy to read the extreme values
+        axisRangeY.first -= axisRangeY.second * 0.1;
+        axisRangeY.second += axisRangeY.second * 0.1;
+        aGraph->SetRange( 'y', axisRangeY.first, axisRangeY.second );
     }
+    else
+    {
+        aGraph->SetRange( 'y', 0, 1 );
+    }
+
+    aGraph->Axis( "xy" );
+    aGraph->Label( 'x', "Time [s]", 0 );
+    aGraph->Label( 'y', "Voltage [V]", 0 );
 
     aGraph->Box();
     aGraph->Grid();
 
+    // Draw traces
+    for( auto t : traces )
+    {
+        aGraph->AddLegend( (const char*) t.name.c_str(), "" );
+        aGraph->Plot( t.y, "-" );
+    }
+
     if( traces.size() )
         aGraph->Legend( 1, "-#" );
-
-    aGraph->SetAutoRanges( 0, 0, 0, 0 );
 
     return 0;
 }
