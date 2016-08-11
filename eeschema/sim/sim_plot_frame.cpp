@@ -128,7 +128,7 @@ void SIM_PLOT_FRAME::StopSimulation()
 
 void SIM_PLOT_FRAME::NewPlotPanel()
 {
-    SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( this, wxID_ANY );
+    SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( m_plotNotebook, wxID_ANY );
 
     m_plotNotebook->AddPage( plot,
             wxString::Format( wxT( "Plot%lu" ), m_plotNotebook->GetPageCount() + 1 ), true );

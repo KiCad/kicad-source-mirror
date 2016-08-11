@@ -23,13 +23,12 @@ class KIWAY_PLAYER;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/aui/auibook.h>
-#include <wx/sizer.h>
-#include <wx/panel.h>
+#include <wx/notebook.h>
 #include <wx/stattext.h>
 #include <wx/listbox.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
 #include <wx/richtext/richtextctrl.h>
 #include <wx/frame.h>
 
@@ -47,10 +46,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxMenuBar* m_mainMenu;
 		wxMenu* m_fileMenu;
 		wxMenu* m_viewMenu;
-		wxPanel* m_panel31;
-		wxPanel* m_panel61;
-		wxAuiNotebook* m_plotNotebook;
-		wxPanel* m_panel7;
+		wxNotebook* m_plotNotebook;
 		wxStaticText* m_staticText2;
 		wxListBox* m_signals;
 		wxStaticText* m_staticText21;
@@ -58,7 +54,6 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxButton* m_simulateBtn;
 		wxButton* m_probeBtn;
 		wxButton* m_tuneBtn;
-		wxPanel* m_panel3;
 		wxRichTextCtrl* m_simConsole;
 		
 		// Virtual event handlers, overide them in your derived class
@@ -71,9 +66,9 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuZoomFit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuShowGrid( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuShowGridState( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onPlotChanged( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSignalRClick( wxMouseEvent& event ) { event.Skip(); }
-		virtual void onCursorsUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onSimulate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPlaceProbe( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTune( wxCommandEvent& event ) { event.Skip(); }
