@@ -167,8 +167,10 @@ void   mpInfoLayer::Plot(wxDC & dc, mpWindow & w)
 #ifdef MATHPLOT_DO_LOGGING
             // wxLogMessage(_("mpInfoLayer::Plot() screen size has changed from %d x %d to %d x %d"), m_winX, m_winY, scrx, scry);
 #endif
-            if (m_winX != 1) m_dim.x = (int) floor((double)(m_dim.x*scrx/m_winX));
-            if (m_winY != 1) {
+            if (m_winX > 1)
+                m_dim.x = (int) floor((double)(m_dim.x*scrx/m_winX));
+
+            if (m_winY > 1) {
                 m_dim.y = (int) floor((double)(m_dim.y*scry/m_winY));
                 UpdateReference();
             }
@@ -236,8 +238,10 @@ void mpInfoCoords::Plot(wxDC & dc, mpWindow & w)
 #ifdef MATHPLOT_DO_LOGGING
             // wxLogMessage(_("mpInfoLayer::Plot() screen size has changed from %d x %d to %d x %d"), m_winX, m_winY, scrx, scry);
 #endif
-            if (m_winX != 1) m_dim.x = (int) floor((double)(m_dim.x*scrx/m_winX));
-            if (m_winY != 1) {
+            if (m_winX > 1)
+                m_dim.x = (int) floor((double)(m_dim.x*scrx/m_winX));
+
+            if (m_winY > 1) {
                 m_dim.y = (int) floor((double)(m_dim.y*scry/m_winY));
                 UpdateReference();
             }
@@ -290,8 +294,10 @@ void mpInfoLegend::Plot(wxDC & dc, mpWindow & w)
 #ifdef MATHPLOT_DO_LOGGING
             // wxLogMessage(_("mpInfoLayer::Plot() screen size has changed from %d x %d to %d x %d"), m_winX, m_winY, scrx, scry);
 #endif
-            if (m_winX != 1) m_dim.x = (int) floor((double)(m_dim.x*scrx/m_winX));
-            if (m_winY != 1) {
+            if (m_winX > 1)
+                m_dim.x = (int) floor((double)(m_dim.x*scrx/m_winX));
+
+            if (m_winY > 1) {
                 m_dim.y = (int) floor((double)(m_dim.y*scry/m_winY));
                 UpdateReference();
             }
