@@ -1108,7 +1108,6 @@ void mpScaleXLog::recalculateTicks ( wxDC & dc, mpWindow & w )
 
     double visibleDecades =  log( maxVvis / minVvis ) / log(10);
 
-    printf("visibleD %f %f\n", minDecade, maxDecade);
     double d;
 
     m_tickValues.clear();

@@ -733,13 +733,11 @@ public:
             m_maxV = std::max(maxV, m_maxV);
         }
 
-        printf("Extend min %.10f max %.10f\n", m_minV, m_maxV);
-
         if (m_minV == m_maxV)
         {
             m_minV = -1.0;
             m_maxV = 1.0;
-    }
+        }
     }
 
 
