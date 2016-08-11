@@ -134,7 +134,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
     // Print out all directives found in the text fields on the schematics
     writeDirectives( aFormatter, aCtl );
 
-    aFormatter->Print( -1, ".end\n" );
+    aFormatter->Print( 0, ".end\n" );
 
     return true;
 }
