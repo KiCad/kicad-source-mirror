@@ -42,13 +42,14 @@ enum SIM_TRACE_TYPE
 class SPICE_SIMULATOR {
 
 public:
-    SPICE_SIMULATOR() {}
+    SPICE_SIMULATOR() : m_consoleReporter( NULL ) {}
     virtual ~SPICE_SIMULATOR() {}
 
     static SPICE_SIMULATOR* CreateInstance( const std::string& aName );
 
     virtual void Init() = 0;
     virtual bool LoadNetlist( const std::string& aNetlist ) = 0;
+    virtual bool Run() = 0;
     virtual bool Command( const std::string& aCmd ) = 0;
 
     virtual void SetConsoleReporter( REPORTER* aReporter )

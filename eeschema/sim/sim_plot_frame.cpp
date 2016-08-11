@@ -40,27 +40,56 @@
 #endif
 
 
-class SIM_REPORTER : public REPORTER
+class SIM_THREAD_REPORTER : public REPORTER
 {
 public:
-    SIM_REPORTER( wxRichTextCtrl* aConsole )
-    {
-        m_console = aConsole;
-    }
-
-    ~SIM_REPORTER()
+    SIM_THREAD_REPORTER( SIM_PLOT_FRAME* aParent )
+        : m_parent( aParent )
     {
     }
 
     virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED )
     {
-        m_console->WriteText( aText );
-        m_console->Newline();
+        wxThreadEvent* event = new wxThreadEvent( wxEVT_SIM_REPORT );
+        event->SetPayload( aText );
+        wxQueueEvent( m_parent, event );
         return *this;
     }
 
 private:
-    wxRichTextCtrl* m_console;
+    SIM_PLOT_FRAME* m_parent;
+};
+
+
+class SIM_THREAD : public wxThread
+{
+public:
+    SIM_THREAD( SIM_PLOT_FRAME* aParent, SPICE_SIMULATOR* aSimulator )
+        : m_parent( aParent ), m_sim( aSimulator )
+    {}
+
+    ~SIM_THREAD()
+    {
+        wxCriticalSectionLocker lock( m_parent->m_simThreadCS );
+
+        // Let know the parent that the pointer is not valid anymore
+        m_parent->m_simThread = NULL;
+    }
+
+private:
+    // Thread routine
+    ExitCode Entry()
+    {
+        assert( m_sim );
+
+        m_sim->Run();
+        wxQueueEvent( m_parent, new wxThreadEvent( wxEVT_SIM_FINISHED ) );
+
+        return (ExitCode) 0;
+    }
+
+    SIM_PLOT_FRAME* m_parent;
+    SPICE_SIMULATOR* m_sim;
 };
 
 
@@ -71,29 +100,36 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_simulator = NULL;
     m_currentPlot = NULL;
     m_pyConsole = NULL;
+    m_simThread = NULL;
+
+    Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
+    Connect( wxEVT_SIM_REPORT, wxThreadEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
+    Connect( wxEVT_SIM_FINISHED, wxThreadEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
 
     NewPlot();
-    TogglePythonConsole();
 }
 
 
 SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
+    // m_simThread should be already destroyed by onClose()
+    assert( m_simThread == NULL );
+
+    delete m_exporter;
+    delete m_simulator;
 }
 
 
 void SIM_PLOT_FRAME::StartSimulation()
 {
-    if( m_exporter )
-        delete m_exporter;
+    delete m_exporter;
+    delete m_simulator;
 
-    if( m_simulator )
-        delete m_simulator;
+    m_simConsole->Clear();
 
     m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
-    m_simulator->SetConsoleReporter( new SIM_REPORTER( m_simConsole ) );
+    m_simulator->SetConsoleReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
-    //m_simulator->SetConsoleReporter( , this );
 
     NETLIST_OBJECT_LIST* net_atoms = m_schematicFrame->BuildNetListBase();
     m_exporter = new NETLIST_EXPORTER_PSPICE ( net_atoms, Prj().SchLibs() );
@@ -102,29 +138,59 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_exporter->Format( &formatter, GNL_ALL );
     //m_plotPanel->DeleteTraces();
 
-    wxLogDebug( "*******************\n%s\n", (const char *)formatter.GetString().c_str() );
-
     m_simulator->LoadNetlist( formatter.GetString() );
-    m_simulator->Command("run\n");
 
-    auto mapping = m_exporter->GetNetIndexMap();
-//    auto data_t = m_simulator->GetPlot("time");
-
-    for(auto name : m_exporter->GetProbeList())
+    // Execute the simulation in a separate thread
     {
-        char spiceName[1024];
+        wxCriticalSectionLocker lock( m_simThreadCS );
 
-        sprintf(spiceName,"V(%d)", mapping[name] );
-        //printf("probe %s->%s\n", (const char *) name.c_str(), spiceName);
-    //    auto data_y = m_simulator->GetPlot(spiceName);
+        assert( m_simThread == NULL );
+        m_simThread = new SIM_THREAD( this, m_simulator );
 
-        //printf("%d - %d data points\n", data_t.size(), data_y.size() );
-    //    m_plotPanel->AddTrace(wxT("V(") + name + wxT(")"), data_t.size(), data_t.data(), data_y.data(), 0);
+        if( m_simThread->Run() != wxTHREAD_NO_ERROR )
+        {
+            wxLogError( "Can't create the simulator thread!" );
+            delete m_simThread;
+        }
     }
+}
 
-    delete m_simulator;
-    m_simulator = NULL;
-    //m_simulator->Command("quit\n");
+
+void SIM_PLOT_FRAME::PauseSimulation()
+{
+    wxCriticalSectionLocker lock( m_simThreadCS );
+
+    if( m_simThread )
+    {
+        if( m_simThread->Pause() != wxTHREAD_NO_ERROR )
+            wxLogError( "Cannot pause the simulation thread" );
+    }
+}
+
+
+void SIM_PLOT_FRAME::ResumeSimulation()
+{
+    wxCriticalSectionLocker lock( m_simThreadCS );
+
+    if( m_simThread )
+    {
+        if( m_simThread->Resume() != wxTHREAD_NO_ERROR )
+            wxLogError( "Cannot resume the simulation thread" );
+    }
+}
+
+
+void SIM_PLOT_FRAME::StopSimulation()
+{
+    wxCriticalSectionLocker lock( m_simThreadCS );
+
+    if( m_simThread )
+    {
+        // we could use m_simThread->Delete() if there was a way to run the simulation
+        // in parts, so the thread would be able to call TestDestroy()
+        if( m_simThread->Kill() != wxTHREAD_NO_ERROR )
+            wxLogError( "Cannot delete the simulation thread" );
+    }
 }
 
 
@@ -133,4 +199,69 @@ void SIM_PLOT_FRAME::NewPlot()
     SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( this, wxID_ANY );
     m_plotNotebook->AddPage( plot, wxT( "Plot1" ), true );
     m_currentPlot = plot;
+}
+
+
+void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
+{
+    {
+        wxCriticalSectionLocker lock( m_simThreadCS );
+
+        if( m_simThread )
+        {
+            if( m_simThread->Delete() != wxTHREAD_NO_ERROR )
+                wxLogError( "Cannot delete the simulation thread" );
+        }
+    }
+
+    int timeout = 10;
+
+    while( 1 )
+    {
+        // Wait until the thread is finished
+        {
+            wxCriticalSectionLocker lock( m_simThreadCS );
+
+            if( m_simThread == NULL )
+                break;
+        }
+
+        wxThread::This()->Sleep( 1 );
+
+        if( --timeout == 0 )
+        {
+            m_simThread->Kill();        // no mercy
+            break;
+        }
+    }
+
+    Destroy();
+}
+
+
+void SIM_PLOT_FRAME::onSimReport( wxThreadEvent& aEvent )
+{
+    m_simConsole->WriteText( aEvent.GetPayload<wxString>() );
+    m_simConsole->Newline();
+}
+
+
+void SIM_PLOT_FRAME::onSimFinished( wxThreadEvent& aEvent )
+{
+    wxLogDebug( "Simulation finished" );
+
+    auto mapping = m_exporter->GetNetIndexMap();
+    //    auto data_t = m_simulator->GetPlot( "time" );
+
+    for( auto name : m_exporter->GetProbeList() )
+    {
+        char spiceName[1024];
+
+        snprintf( spiceName, sizeof( spiceName ), "V(%d)", mapping[name] );
+        //wxLogDebug( "probe %s->%s\n", (const char *) name.c_str(), spiceName );
+        //    auto data_y = m_simulator->GetPlot( spiceName );
+
+        //wxLogDebug( "%d - %d data points\n", data_t.size(), data_y.size() );
+        //    m_plotPanel->AddTrace(wxT("V(") + name + wxT(")"), data_t.size(), data_t.data(), data_y.data(), 0);
+    }
 }

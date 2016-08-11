@@ -38,6 +38,7 @@ public:
 
     void Init();
     bool LoadNetlist( const std::string& aNetlist );
+    bool Run();
     bool Command( const std::string& aCmd );
 
     std::string GetConsole() const;

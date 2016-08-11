@@ -103,6 +103,12 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
 }
 
 
+bool NGSPICE::Run()
+{
+    return Command( "run\n" );
+}
+
+
 bool NGSPICE::Command( const string& aCmd )
 {
     m_ngSpice_Command( (char*)( aCmd + string( "\n" ) ).c_str() );
