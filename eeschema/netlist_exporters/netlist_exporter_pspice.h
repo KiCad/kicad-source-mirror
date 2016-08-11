@@ -130,6 +130,11 @@ public:
         return m_spiceFields[(int) aField];
     }
 
+    /**
+     * @brief Retrieves either the requested field value or the default value.
+     */
+    static wxString GetSpiceField( SPICE_FIELD aField, SCH_COMPONENT* aComponent, unsigned aCtl );
+
     static wxString GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_COMPONENT* aComponent, unsigned aCtl );
 
     void UpdateDirectives( unsigned aCtl );

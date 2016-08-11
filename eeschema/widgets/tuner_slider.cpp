@@ -38,9 +38,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aParent, SCH_COMPONENT* aComponent )
     m_value = SPICE_VALUE( aComponent->GetField( VALUE )->GetText() );
 
     // Generate Spice component name
-    SCH_FIELD* fieldPrim = aComponent->FindField( NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( SPICE_PRIMITIVE ) );
-    char prim = fieldPrim ? fieldPrim->GetText()[0]
-        : NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_PRIMITIVE, m_component, 0 )[0];
+    char prim = NETLIST_EXPORTER_PSPICE::GetSpiceField( SPICE_PRIMITIVE, aComponent, 0 )[0];
     m_spiceName = wxString( prim + compName ).Lower();
 
     // Call Set*() methods to update fields and slider

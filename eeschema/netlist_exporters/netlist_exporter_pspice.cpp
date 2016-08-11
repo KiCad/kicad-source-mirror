@@ -140,6 +140,14 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
 }
 
 
+wxString NETLIST_EXPORTER_PSPICE::GetSpiceField( SPICE_FIELD aField,
+        SCH_COMPONENT* aComponent, unsigned aCtl )
+{
+    SCH_FIELD* field = aComponent->FindField( GetSpiceFieldName( aField ) );
+    return field ? field->GetText() : GetSpiceFieldDefVal( SPICE_PRIMITIVE, aComponent, aCtl );
+}
+
+
 wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
         SCH_COMPONENT* aComponent, unsigned aCtl )
 {
