@@ -818,39 +818,21 @@ void mpScaleX::recalculateTicks ( wxDC & dc, mpWindow & w )
     updateTickLabels( dc, w );
 }
 
-int countDecimalDigits ( double x )
-{
-    int k = (int) ( ( x - floor(x)) * 1000000000.0 );
-    int n = 0;
 
-    while(k && ((k % 10) == 0 || (k % 10) == 9))
-    {
-        k /= 10;
-    }
-
-    n = 0;
-
-    while (k != 0)
-    {
-        n++;
-        k /= 10;
-    }
-
-    return n;
-}
-
-
+#if 0
 int mpScaleBase::getLabelDecimalDigits(int maxDigits)
 {
     int m = 0;
+
     for( auto l: m_tickLabels )
     {
-        m = std::max ( countDecimalDigits ( l.pos ), m );
+        int k = countDecimalDigits ( l.pos );
+        m = std::max ( k, m );
     }
 
     return std::min(m, maxDigits);
 }
-
+#endif
 
 void mpScaleBase::computeLabelExtents ( wxDC & dc, mpWindow & w )
 {
@@ -871,25 +853,14 @@ void mpScaleBase::computeLabelExtents ( wxDC & dc, mpWindow & w )
 
 void mpScaleBase::updateTickLabels( wxDC & dc, mpWindow & w )
 {
-    int sigDigits = 0;
 
-    for ( auto l : m_tickLabels )
-        sigDigits = std::max( sigDigits, countDecimalDigits( l.pos ) );
-
-    //printf("sigDigits: %d\n",sigDigits);
-
-    for ( auto &l : m_tickLabels )
-    {
-        l.label = formatLabel ( l.pos, sigDigits );
-        l.visible = true;
-    }
-
+    formatLabels();
     computeLabelExtents(dc, w);
 
-    int gap = IsHorizontal() ? m_maxLabelWidth + 10 : m_maxLabelHeight + 5;
+//    int gap = IsHorizontal() ? m_maxLabelWidth + 10 : m_maxLabelHeight + 5;
 
-    if ( m_tickLabels.size() <= 2)
-        return;
+    //if ( m_tickLabels.size() <= 2)
+    //    return;
 
 /*
     fixme!
@@ -1006,11 +977,14 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
 
                     double m;
 
+                    m_absVisibleMaxV = 0;
+
                     for (unsigned int i = 0; i < m_masterScale->m_tickValues.size(); i++)
                     {
                         m = TransformFromPlot ( m_masterScale->TransformToPlot(m_masterScale->m_tickValues[i]) );
                         m_tickValues.push_back(m);
                         m_tickLabels.push_back( TickLabel (m) );
+                        m_absVisibleMaxV = std::max(m_absVisibleMaxV, fabs(m));
                     }
 
 }
@@ -1034,6 +1008,7 @@ void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
     //printf("vdr %.10f %.10f\n", minVvis, maxVvis);
 
     m_absVisibleMaxV = std::max(std::abs(minVvis), std::abs(maxVvis));
+
 
     m_tickValues.clear();
     m_tickLabels.clear();
@@ -1412,24 +1387,13 @@ void mpScaleY::Plot(wxDC & dc, mpWindow & w)
         // Draw line
         dc.DrawLine( orgx, minYpx, orgx, maxYpx);
 
-        // To cut the axis line when draw outside margin is false, use this code
-        /* if (m_drawOutsideMargins == true)
-           dc.DrawLine( orgx, 0, orgx, extend);
-           else
-           dc.DrawLine( orgx, w.GetMarginTop(), orgx, w.GetScrY() - w.GetMarginBottom()); */
-
-        const double dig  = floor( log( 128.0 / w.GetScaleY() ) / mpLN10 );
-        //const double step = exp( mpLN10 * dig);
-        //const double end  = w.GetPosY() + (double)extend / w.GetScaleY();
 
         wxCoord tx, ty;
         wxString s;
         wxString fmt;
-        int tmp = (int)dig;
         int n=0;
 
 
-        tmp=65536;
         int labelW = 0;
         // Before staring cycle, calculate label height
         int labelHeigth = 0;
@@ -1724,6 +1688,7 @@ void mpWindow::OnMouseMove(wxMouseEvent     &event)
             }
             UpdateAll();
         } else {
+            #if 0
             wxLayerList::iterator li;
             for (li = m_layers.begin(); li != m_layers.end(); li++) {
                 if ((*li)->IsInfo() && (*li)->IsVisible()) {
@@ -1733,6 +1698,7 @@ void mpWindow::OnMouseMove(wxMouseEvent     &event)
                     RefreshRect(tmpLyr->GetRectangle());
                 }
             }
+            #endif
             /* if (m_coordTooltip) {
                wxString toolTipContent;
                toolTipContent.Printf(_("X = %f\nY = %f"), p2x(event.GetX()), p2y(event.GetY()));

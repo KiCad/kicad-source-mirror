@@ -764,6 +764,18 @@ public:
     virtual double TransformToPlot ( double x ) { return 0.0; };
     virtual double TransformFromPlot (double xplot ){ return 0.0; };
 
+    struct TickLabel {
+        TickLabel( double pos_=0.0, const wxString& label_ = wxT("") ) :
+            pos ( pos_ ),
+            label ( label_ ) {};
+        double pos;
+        wxString label;
+        int pixelPos;
+        bool visible;
+    };
+
+    std::vector<TickLabel>& TickLabels() { return m_tickLabels; };
+
 
 
 protected:
@@ -771,7 +783,7 @@ protected:
     void updateTickLabels( wxDC & dc, mpWindow & w );
     void computeLabelExtents ( wxDC & dc, mpWindow & w );
 
-    virtual int getLabelDecimalDigits(int maxDigits);
+    //virtual int getLabelDecimalDigits(int maxDigits);
     virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV) {};
     virtual void recalculateTicks ( wxDC & dc, mpWindow & w ) {};
 
@@ -786,6 +798,7 @@ protected:
     }
 
     virtual const wxString formatLabel( double value, int nDigits ) { return wxT(""); }
+    virtual void formatLabels( ) { };
 
     virtual double getTickPos( int n )
     {
@@ -802,16 +815,6 @@ protected:
         return m_tickLabels[n].label;
     }
 
-
-    struct TickLabel {
-        TickLabel( double pos_=0.0, const wxString& label_ = wxT("") ) :
-            pos ( pos_ ),
-            label ( label_ ) {};
-        double pos;
-        wxString label;
-        int pixelPos;
-        bool visible;
-    };
 
 
     std::vector<double> m_tickValues;

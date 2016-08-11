@@ -45,10 +45,13 @@ static wxString formatFloat (double x, int nDigits)
     return rv;
 }
 
-static wxString formatSI ( double x, const wxString& unit, int decimalDigits, double maxValue = 0.0, bool lockSuffix = false, char suffix = 0 )
+static void getSISuffix ( double x, const wxString& unit, int& power, wxString& suffix )
 {
     const int n_powers = 11;
-    const struct { double exponent; char suffix; } powers[] = {
+    const struct {
+        double exponent;
+        char suffix;
+    } powers[] = {
         {-18,'a'},
         {-15,'f'},
         {-12,'p'},
@@ -63,62 +66,109 @@ static wxString formatSI ( double x, const wxString& unit, int decimalDigits, do
         {15, 'P'}
     };
 
-    if ( x== 0.0)
-    {
-        return wxT("0") + unit;
-    }
+    power = 0;
+    suffix = unit;
+
+    if (x == 0.0)
+        return;
 
     for ( int i = 0; i <n_powers - 1;i++)
     {
         double r_cur = pow(10, powers[i].exponent);
-        bool rangeHit;
 
-        if (maxValue != 0.0)
-           rangeHit = fabs(maxValue) >= r_cur && fabs(maxValue) < r_cur * 1000.0 ;
-       else
-           rangeHit = fabs(x) >= r_cur && fabs(x) < r_cur * 1000.0 ;
-
-        if( (!lockSuffix && rangeHit) || (lockSuffix && suffix == powers[i].suffix ) )
+        if( fabs(x) >= r_cur && fabs(x) < r_cur * 1000.0 )
         {
-            double v = x / r_cur;
-            wxString rv;
-
-            rv = formatFloat ( v, decimalDigits );
-
-            if(powers[i].suffix)
-                rv += powers[i].suffix;
-            rv += unit;
-
-            return rv;
+            power = powers[i].exponent;
+            if ( powers[i].suffix )
+                suffix = wxString(powers[i].suffix) + unit;
+            else
+                suffix = unit;
+            return;
         }
     }
 
-    return wxT("?");
+}
+
+static int countDecimalDigits ( double x, int maxDigits )
+{
+    int64_t k = (int) ( ( x - floor(x)) * pow ( 10.0, (double) maxDigits ));
+    int n = 0;
+
+    while(k && ((k % 10LL) == 0LL || (k % 10LL) == 9LL))
+    {
+        k /= 10LL;
+    }
+
+    n = 0;
+
+    while (k != 0LL)
+    {
+        n++;
+        k /= 10LL;
+    }
+
+    return n;
 }
 
 
-class FREQUENCY_LIN_SCALE : public mpScaleX
+static void formatSILabels( mpScaleBase *scale, const wxString& aUnit, int nDigits )
 {
-public:
-    FREQUENCY_LIN_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
-        mpScaleX( name, flags, ticks ,type ) {};
+    double maxVis = scale->AbsVisibleMaxValue();
 
-    const wxString formatLabel( double value, int nDigits )
+    wxString suffix;
+    int power, digits = 0;
+
+    getSISuffix( maxVis, aUnit, power, suffix);
+
+    double sf = pow(10.0, power);
+
+    for ( auto &l : scale->TickLabels() )
     {
-        return formatSI ( value, wxT("Hz"), std::min(nDigits, 2) );
-    }
-};
+        int k = countDecimalDigits( l.pos / sf, nDigits );
 
+        digits = std::max(digits, k);
+    }
+
+    for ( auto &l : scale->TickLabels() )
+    {
+        l.label = formatFloat ( l.pos / sf, digits ) + suffix;
+        l.visible = true;
+    }
+}
 
 class FREQUENCY_LOG_SCALE : public mpScaleXLog
 {
 public:
-    FREQUENCY_LOG_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
-        mpScaleXLog( name, flags, ticks ,type ) {};
+    FREQUENCY_LOG_SCALE(wxString name, int flags) :
+        mpScaleXLog( name, flags ) {};
 
-    const wxString formatLabel( double value, int nDigits )
+    void formatLabels()
     {
-        return formatSI ( value, wxT("Hz"), std::min(nDigits, 2) );
+        const wxString unit = wxT("Hz");
+        wxString suffix;
+        int power;
+
+        for ( auto &l : TickLabels() )
+        {
+            getSISuffix( l.pos, unit, power, suffix);
+            double sf = pow(10.0, power);
+            int k = countDecimalDigits( l.pos / sf, 3 );
+
+            l.label = formatFloat ( l.pos / sf, k ) + suffix;
+            l.visible = true;
+        }
+    }
+};
+
+class FREQUENCY_LIN_SCALE : public mpScaleX
+{
+public:
+    FREQUENCY_LIN_SCALE(wxString name, int flags) :
+        mpScaleX( name, flags, false , 0 ) {};
+
+    void formatLabels()
+    {
+        formatSILabels( this, wxT("Hz"), 3 );
     }
 };
 
@@ -126,72 +176,74 @@ public:
 class TIME_SCALE : public mpScaleX
 {
 public:
-    TIME_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
-        mpScaleX ( name, flags, ticks ,type ) {};
+    TIME_SCALE(wxString name, int flags) :
+        mpScaleX ( name, flags, false, 0) {};
 
-    const wxString formatLabel( double value, int nDigits )
+    void formatLabels()
     {
-        return formatSI ( value, wxT("s"), std::min(nDigits, 3), AbsVisibleMaxValue() );
+        formatSILabels( this, wxT("s"), 3 );
     }
 };
 
 class VOLTAGE_SCALE_X : public mpScaleX
 {
 public:
-    VOLTAGE_SCALE_X(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
-        mpScaleX ( name, flags, ticks, type ) {};
+    VOLTAGE_SCALE_X(wxString name, int flags) :
+        mpScaleX ( name, flags, false, 0 ) {};
 
-    const wxString formatLabel( double value, int nDigits )
+    void formatLabels()
     {
-        return formatSI ( value, wxT("V"), std::min(nDigits, 3), AbsVisibleMaxValue() );
+        formatSILabels( this, wxT("V"), 3 );
     }
 };
 
 class GAIN_SCALE : public mpScaleY
 {
 public:
-    GAIN_SCALE(wxString name, int flags,  bool ticks = false, unsigned int type = 0) :
-        mpScaleY ( name, flags, ticks ) {};
+    GAIN_SCALE( wxString name, int flags ) :
+        mpScaleY ( name, flags, false) {};
 
-    const wxString formatLabel( double value, int nDigits )
+    void formatLabels()
     {
-        return formatSI ( value, wxT("dB"), std::min(nDigits, 1), AbsVisibleMaxValue(), true, 0 );
+        formatSILabels( this, wxT("dB"), 3 );
     }
+
 };
 
 class PHASE_SCALE : public mpScaleY
 {
 public:
-    PHASE_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
-        mpScaleY ( name, flags, ticks ) {};
+    PHASE_SCALE(wxString name, int flags) :
+        mpScaleY ( name, flags, false ) {};
 
-    const wxString formatLabel( double value, int nDigits )
+    void formatLabels()
     {
-        return formatSI ( value, wxT("\u00B0"), std::min(nDigits, 1), AbsVisibleMaxValue(), true, 0 );
+        formatSILabels( this, wxT("\u00B0"), 3 );
     }
 };
 
 class VOLTAGE_SCALE_Y : public mpScaleY
 {
 public:
-    VOLTAGE_SCALE_Y(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
-        mpScaleY ( name, flags, ticks ) {};
+    VOLTAGE_SCALE_Y(wxString name, int flags) :
+        mpScaleY ( name, flags, false ) {};
 
-    const wxString formatLabel( double value, int nDigits )
+    void formatLabels()
     {
-        return formatSI ( value, wxT("V"), std::min(nDigits, 3), AbsVisibleMaxValue() );
+        formatSILabels( this, wxT("V"), 3 );
     }
+
 };
 
 class CURRENT_SCALE : public mpScaleY
 {
 public:
-    CURRENT_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
-        mpScaleY ( name, flags, ticks ) {};
+    CURRENT_SCALE(wxString name, int flags ) :
+        mpScaleY ( name, flags, false ) {};
 
-    const wxString formatLabel( double value, int nDigits )
+    void formatLabels()
     {
-        return formatSI ( value, wxT("A"), std::min(nDigits, 3), AbsVisibleMaxValue() );
+        formatSILabels( this, wxT("A"), 3 );
     }
 };
 
