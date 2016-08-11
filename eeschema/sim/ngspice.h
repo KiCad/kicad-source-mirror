@@ -25,7 +25,7 @@
 #ifndef NGSPICE_H
 #define NGSPICE_H
 
-#include "sharedspice.h"
+#include <ngspice/sharedspice.h>
 #include "spice_simulator.h"
 
 class wxDynamicLibrary;
