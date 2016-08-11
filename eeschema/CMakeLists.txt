@@ -182,6 +182,7 @@ set( EESCHEMA_SRCS
     sim/sim_plot_frame.cpp
     sim/sim_plot_panel.cpp
     sim/spice_simulator.cpp
+    sim/spice_value.cpp
     sim/ngspice.cpp
     sim/netlist_exporter_pspice_sim.cpp
     dialogs/dialog_signal_list.cpp

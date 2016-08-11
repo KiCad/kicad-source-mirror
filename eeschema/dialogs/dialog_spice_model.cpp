@@ -23,7 +23,9 @@
  */
 
 #include "dialog_spice_model.h"
+
 #include <netlist_exporters/netlist_exporter_pspice.h>
+#include <sim/spice_value.h>
 
 #include <wx/tokenzr.h>
 
