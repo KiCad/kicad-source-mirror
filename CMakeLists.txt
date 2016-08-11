@@ -59,6 +59,7 @@ endif()
 
 option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
 
+option( KICAD_SPICE "Build Kicad with internal Spice simulator." OFF )
 
 # This can be set to a custom name to brag about a particular branch in the "About" dialog:
 set( KICAD_REPO_NAME "product" CACHE STRING "Name of the tree from which this build came." )
@@ -98,7 +99,7 @@ endif()
 
 
 # Add option to add user directories for linker, if any
-LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
+LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} /usr/local/lib )
 
 if( UNIX )
     set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specific KiCad config files" )
@@ -436,7 +437,9 @@ add_definitions( -DWX_COMPATIBILITY )
 # See line 41 of CMakeModules/FindwxWidgets.cmake
 set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} --static=no )
 
-find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
+find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc richtext REQUIRED )
+
+
 
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
@@ -516,6 +519,10 @@ set( INC_AFTER
     ${CMAKE_BINARY_DIR}
     )
 
+
+#if ( KICAD_SPICE )
+#    find_package(MathGL2 2.3.4 COMPONENTS wx REQUIRED )
+#endif ()
 
 # Find Python and other scripting resources
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )

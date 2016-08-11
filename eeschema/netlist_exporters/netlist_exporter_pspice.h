@@ -45,6 +45,9 @@ public:
      * writes to specified output file
      */
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
+
+    bool Format( OUTPUTFORMATTER* aOutputFormatter, int aCtl );
+
 };
 
 #endif

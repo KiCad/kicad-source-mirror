@@ -7,6 +7,7 @@ include_directories(
     ./widgets
     ../common
     ../common/dialogs
+    ./ngspice
     ${INC_AFTER}
     )
 
@@ -175,6 +176,9 @@ set( EESCHEMA_SRCS
     transform.cpp
     viewlib_frame.cpp
     viewlibs.cpp
+    sim/simulate.cpp
+    sim/dialog_simulate_plot.cpp
+    sim/ngspice.cpp
 
     netlist_exporters/netlist_exporter.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp
@@ -241,12 +245,19 @@ add_executable( eeschema WIN32 MACOSX_BUNDLE
 set_source_files_properties( ../common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_SCH;PGM_DATA_FILE_EXT=\"sch\";BUILD_KIWAY_DLL"
     )
+
+if (KICAD_SPICE)
+    set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} mgl mgl-wx)
+else()
+    set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} )
+endif()
+
 target_link_libraries( eeschema
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
     common
     bitmaps
-    ${wxWidgets_LIBRARIES}
+    ${EESCHEMA_LINK_LIBS}
     )
 
 # the DSO (KIFACE) housing the main eeschema code:
@@ -259,9 +270,9 @@ target_link_libraries( eeschema_kiface
     bitmaps
     polygon
     gal
-    ${wxWidgets_LIBRARIES}
+    ${EESCHEMA_LINK_LIBS}
     ${GDI_PLUS_LIBRARIES}
-    )
+)
 set_target_properties( eeschema_kiface PROPERTIES
     # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
     # _eeschema.so, _eeschema.dll, or _eeschema.kiface

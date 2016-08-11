@@ -27,6 +27,8 @@
 #include <build_version.h>
 #include <confirm.h>
 
+#include <map>
+
 #include <schframe.h>
 #include <netlist.h>
 #include <sch_reference_list.h>
@@ -36,9 +38,13 @@
 
 bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
-    FILE* f = NULL;
-    bool aUsePrefix = aNetlistOptions & NET_USE_X_PREFIX;
-    bool aUseNetcodeAsNetName = aNetlistOptions & NET_USE_NETCODES_AS_NETNAMES;
+    return false;
+}
+
+
+bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
+{
+    bool aUsePrefix = aCtl & NET_USE_X_PREFIX;
 
     int                 ret = 0;
     int                 nbitems;
@@ -55,30 +61,22 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
     wxString            delimeters = wxT( "{:,; }" );
     wxString            disableStr = wxT( "N" );
 
-    if( ( f = wxFopen( aOutFileName, wxT( "wt" ) ) ) == NULL )
-    {
-        msg.Printf( _( "Failed to create file '%s'" ),
-                    GetChars( aOutFileName ) );
-        DisplayError( NULL, msg );
-        return false;
-    }
-
-    ret |= fprintf( f, "* %s\n\n", TO_UTF8( aOutFileName ) );
-    ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n",
-                    NETLIST_HEAD_STRING, TO_UTF8( DateAndTime() ) );
+    std::map<wxString, int> netIndices;
 
     // Prepare list of nets generation (not used here, but...
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
         m_masterList->GetItem( ii )->m_Flag = 0;
-
-    ret |= fprintf( f, "* To exclude a component from the Spice Netlist add [Spice_Netlist_Enabled] user FIELD set to: N\n" );
-    ret |= fprintf( f, "* To reorder the component spice node sequence add [Spice_Node_Sequence] user FIELD and define sequence: 2,1,0\n" );
 
     // Create text list starting by [.-]pspice , or [.-]gnucap (simulator
     // commands) and create text list starting by [+]pspice , or [+]gnucap
     // (simulator commands)
     bufnum[BUFYPOS_LEN] = 0;
     SCH_SHEET_LIST sheetList( g_RootSheet );
+
+    std::vector<wxString> directives;
+    std::vector<wxString> probeNets;
+
+    netIndices["GND"] = 0;
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
@@ -99,72 +97,24 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
             ident = text.GetChar( 0 );
 
-            if( ident != '.' && ident != '-' && ident != '+' )
-                continue;
-
-            text.Remove( 0, 1 );    // Remove the first char.
-            text.Remove( 6 );       // text contains 6 char.
-            text.MakeLower();
-
-            if( text != wxT( "pspice" ) && text != wxT( "gnucap" ) )
-                continue;
-
-            text = drawText->GetText().Mid( 7 );
-            l1 = text.Length();
-            text.Trim( false );
-            l2 = text.Length();
-
-            if( l1 == l2 )
-                continue;           // no whitespace after ident text
-
+            if( ident == '.' )
             {
-                // Put the Y position as an ascii string, for sort by vertical
-                // position, using usual sort string by alphabetic value
-                int ypos = drawText->GetPosition().y;
-
-                for( int ii = 0; ii < BUFYPOS_LEN; ii++ )
-                {
-                    bufnum[BUFYPOS_LEN - 1 - ii] = (ypos & 63) + ' ';
-                    ypos >>= 6;
-                }
-
-                // First BUFYPOS_LEN char are the Y position.
-                msg.Printf( wxT( "%s %s" ), bufnum, text.GetData() );
-
-                if( ident == '+' )
-                    spiceCommandAtEndFile.Add( msg );
-                else
-                    spiceCommandAtBeginFile.Add( msg );
+                    printf("Directive found: '%s'\n", (const char *) text.c_str());
+                    directives.push_back(text);
             }
         }
     }
 
-    // Print texts starting by [.-]pspice , ou [.-]gnucap (of course, without
-    // the Y position string)
-    nbitems = spiceCommandAtBeginFile.GetCount();
-
-    if( nbitems )
-    {
-        spiceCommandAtBeginFile.Sort();
-
-        for( int ii = 0; ii < nbitems; ii++ )
-        {
-            spiceCommandAtBeginFile[ii].Remove( 0, BUFYPOS_LEN );
-            spiceCommandAtBeginFile[ii].Trim( true );
-            spiceCommandAtBeginFile[ii].Trim( false );
-            ret |= fprintf( f, "%s\n", TO_UTF8( spiceCommandAtBeginFile[ii] ) );
-        }
-    }
-    ret |= fprintf( f, "\n" );
-
-    //  Create component list
 
     m_ReferencesAlreadyFound.Clear();
 
+
+    int curNetIndex = 1;
+
     for( unsigned sheet_idx = 0; sheet_idx < sheetList.size(); sheet_idx++ )
     {
-        ret |= fprintf( f, "* Sheet Name: %s\n",
-                        TO_UTF8( sheetList[sheet_idx].PathHumanReadable() ) );
+        //printf( "* Sheet Name: %s\n",
+        //                TO_UTF8( sheetList[sheet_idx].PathHumanReadable() ) );
 
         for( EDA_ITEM* item = sheetList[sheet_idx].LastDrawList(); item; item = item->Next() )
         {
@@ -177,6 +127,33 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
             // Reset NodeSeqIndex Count:
             pinSequence.clear();
+
+            SCH_FIELD*   spicePrimitiveType = comp->FindField( wxT( "Spice_Primitive" ) );
+            SCH_FIELD*   spiceModel = comp->FindField( wxT( "Spice_Model" ) );
+
+            wxString RefName = comp->GetRef( &sheetList[sheet_idx] );
+            wxString CompValue = comp->GetField( VALUE )->GetText();
+
+            wxString model("");
+            wxString primType ("X");
+
+            if(spicePrimitiveType)
+                primType = spicePrimitiveType->GetText();
+            else {
+                if (RefName.StartsWith(wxT("IC")) || RefName.StartsWith("U") )
+                    primType = wxT("X"); // subckt
+                else
+                    primType = RefName.GetChar(0);
+            }
+
+            if(spiceModel)
+            {
+            //    printf("model specified\n");
+                model = spiceModel->GetText();
+            } else {
+            //    printf("no model\n");
+                model = CompValue;
+            }
 
             // Check to see if component should be removed from Spice Netlist:
             SCH_FIELD*  netlistEnabledField = comp->FindField( wxT( "Spice_Netlist_Enabled" ) );
@@ -234,20 +211,29 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
                 }
             }
 
-            //Get Standard Reference Designator:
-            wxString RefName = comp->GetRef( &sheetList[sheet_idx] );
+
+            if(CompValue == wxT("SPICE_PROBE"))
+            {
+                NETLIST_OBJECT* pin = m_SortedComponentPinList[0];
+
+                printf("Probe net: %s\n", (const char*) pin->GetNetName().c_str() );
+
+                probeNets.push_back(pin->GetNetName());
+                continue;
+            }
 
             //Conditionally add Prefix only for devices that begin with U or IC:
             if( aUsePrefix )
             {
-                if( RefName.StartsWith( wxT( "U" ) ) || RefName.StartsWith( wxT( "IC" ) ) )
-                    RefName = wxT( "X" ) + RefName;
+                //if( RefName.StartsWith( wxT( "U" ) ) || RefName.StartsWith( wxT( "IC" ) ) )
+                //    RefName = wxT( "X" ) + RefName;
             }
 
-            ret |= fprintf( f, "%s ", TO_UTF8( RefName ) );
+            printf( "Ref %s primType %s model/value '%s'\n", TO_UTF8( RefName ), (const char*)primType.c_str(), (const char *)model.c_str() );
 
-            // Write pin list:
             int activePinIndex = 0;
+
+            formatter->Print(0, "%s%s ", (const char *)primType.c_str(), (const char *)RefName.c_str());
 
             for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
@@ -282,56 +268,41 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
                 if( !pin )
                     continue;
 
-                sprintPinNetName( netName , wxT( "N-%.6d" ), pin, aUseNetcodeAsNetName );
+                wxString netName = pin->GetNetName();
+                int netIdx;
+
+                if (netIndices.find(netName) == netIndices.end())
+                {
+                    netIdx = curNetIndex++;
+                    netIndices[netName] = netIdx;
+                } else {
+                    netIdx = netIndices[netName];
+                }
+
+                //printf("net %s index %d\n", (const char*)netName.c_str(), netIdx);
+//                sprintPinNetName( netName , wxT( "N-%.6d" ), pin, aUseNetcodeAsNetName );
 
                 //Replace parenthesis with underscore to prevent parse issues with Simulators:
-                netName.Replace( wxT( "(" ), wxT( "_" ) );
-                netName.Replace( wxT( ")" ), wxT( "_" ) );
+//                netName.Replace( wxT( "(" ), wxT( "_" ) );
+//                netName.Replace( wxT( ")" ), wxT( "_" ) );
 
-                if( netName.IsEmpty() )
-                    netName = wxT( "?" );
+//                if( netName.IsEmpty() )
+//                    netName = wxT( "?" );
 
-                ret |= fprintf( f, " %s", TO_UTF8( netName ) );
+//                ret |= fprintf( f, " %s", TO_UTF8( netName ) );
+
+                formatter->Print(0, "%d ", netIdx );
             }
 
-            // Get Component Value Name:
-            wxString CompValue = comp->GetField( VALUE )->GetText();
+            formatter->Print(0, "%s\n",(const char *) model.c_str());
 
-            // Check if Override Model Name is Provided:
-            SCH_FIELD* spiceModelField = comp->FindField( wxT( "spice_model" ) );
 
-            if( spiceModelField )
-            {
-                // Get Model Name String:
-                wxString ModelNameStr = spiceModelField->GetText();
-
-                // Verify Field Exists and is not empty:
-                if( !ModelNameStr.IsEmpty() )
-                    CompValue = ModelNameStr;
-            }
-
-            // Print Component Value:
-            ret |= fprintf( f, " %s\t\t",TO_UTF8( CompValue ) );
-
-            // Show Seq Spec on same line as component using line-comment ";":
-            for( unsigned ii = 0; ii < pinSequence.size(); ++ii )
-            {
-                if( ii == 0 )
-                    ret |= fprintf( f, ";Node Sequence Spec.<" );
-
-                ret |= fprintf( f, "%s", TO_UTF8( stdPinNameArray.Item( pinSequence[ii] ) ) );
-
-                if( ii < pinSequence.size()-1 )
-                    ret |= fprintf( f, "," );
-                else
-                    ret |= fprintf( f, ">" );
-            }
-
-            // Next Netlist line record:
-            ret |= fprintf( f, "\n" );
         }
+
+
     }
 
+#if 0
     m_SortedComponentPinList.clear();
 
     // Print texts starting with [+]pspice or [+]gnucap
@@ -353,6 +324,9 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 
     ret |= fprintf( f, "\n.end\n" );
     fclose( f );
+
+#endif
+
 
     return ret >= 0;
 }
