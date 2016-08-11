@@ -28,6 +28,7 @@
 #include <confirm.h>
 
 #include <map>
+#include <search_stack.h>
 
 #include <schframe.h>
 #include <netlist.h>
@@ -79,8 +80,25 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 
             if( text.GetChar( 0 ) == '.' )
             {
-                wxLogDebug( "Directive found: '%s'\n", (const char *) text.c_str() );
-                directives.push_back( text );
+                wxStringTokenizer tokenizer( text, "\r\n" );
+
+                while( tokenizer.HasMoreTokens() )
+                {
+                    wxString directive( tokenizer.GetNextToken() );
+                    wxLogDebug( "Directive found: '%s'\n", (const char *) directive.c_str() );
+
+                    // Fix paths for .include directives
+                    if( m_paths && directive.StartsWith( ".inc" ) )
+                    {
+                        wxString file( directive.AfterFirst( ' ' ) );
+                        wxString path( m_paths->FindValidPath( file ) );
+                        directives.push_back( wxString( ".include " ) + path );
+                    }
+                    else
+                    {
+                        directives.push_back( directive );
+                    }
+                }
             }
         }
     }

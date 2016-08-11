@@ -29,6 +29,8 @@
 #include "netlist_exporter.h"
 #include <map>
 
+class SEARCH_STACK;
+
 /**
  * Class NETLIST_EXPORTER_PSPICE
  * generates a PSPICE compatible netlist
@@ -36,8 +38,8 @@
 class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER
 {
 public:
-    NETLIST_EXPORTER_PSPICE( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs ) :
-        NETLIST_EXPORTER( aMasterList, aLibs )
+    NETLIST_EXPORTER_PSPICE( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs, SEARCH_STACK* aPaths = NULL ) :
+        NETLIST_EXPORTER( aMasterList, aLibs ), m_paths( aPaths )
     {
     }
 
@@ -62,12 +64,10 @@ public:
         return m_probes;
     }
 
-
-
 private:
     NetIndexMap m_netMap;
     ProbeList m_probes;
-
+    SEARCH_STACK* m_paths;
 };
 
 #endif
