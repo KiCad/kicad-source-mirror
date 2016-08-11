@@ -144,7 +144,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceField( SPICE_FIELD aField,
         SCH_COMPONENT* aComponent, unsigned aCtl )
 {
     SCH_FIELD* field = aComponent->FindField( GetSpiceFieldName( aField ) );
-    return field ? field->GetText() : GetSpiceFieldDefVal( SF_PRIMITIVE, aComponent, aCtl );
+    return field ? field->GetText() : GetSpiceFieldDefVal( aField, aComponent, aCtl );
 }
 
 
