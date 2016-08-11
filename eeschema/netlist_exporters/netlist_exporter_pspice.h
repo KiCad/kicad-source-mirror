@@ -48,8 +48,13 @@ enum SPICE_NETLIST_OPTIONS {
 class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER
 {
 public:
-    NETLIST_EXPORTER_PSPICE( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs, SEARCH_STACK* aPaths = NULL ) :
+    NETLIST_EXPORTER_PSPICE( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs,
+            SEARCH_STACK* aPaths = NULL ) :
         NETLIST_EXPORTER( aMasterList, aLibs ), m_paths( aPaths )
+    {
+    }
+
+    virtual ~NETLIST_EXPORTER_PSPICE()
     {
     }
 
@@ -62,7 +67,7 @@ public:
      */
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
 
-    bool Format( OUTPUTFORMATTER* aOutputFormatter, int aCtl );
+    bool Format( OUTPUTFORMATTER* aFormatter, int aCtl );
 
     const NET_INDEX_MAP& GetNetIndexMap() const
     {
@@ -76,11 +81,25 @@ public:
 
     static wxString GetSpiceFieldDefVal( const wxString& aField, SCH_COMPONENT* aComponent, int aCtl );
 
+    void UpdateDirectives( int aCtl );
+
+    const std::vector<wxString> GetDirectives() const
+    {
+        return m_directives;
+    }
+
+protected:
+    virtual void writeDirectives( OUTPUTFORMATTER* aFormatter, int aCtl ) const;
+
 private:
+    // Spice directives found in the processed schematic sheet
+    std::vector<wxString> m_directives;
+
     NET_INDEX_MAP m_netMap;
+
     SEARCH_STACK* m_paths;
 
-    // Fields that are used during netlist export & simulation
+    // Component fields that are processed during netlist export & simulation
     static const std::vector<wxString> m_spiceFields;
 };
 

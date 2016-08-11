@@ -99,9 +99,6 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& 
                 const wxSize& size, long style, const wxString& name )
     : mpWindow( parent, id, pos, size, style ), m_colorIdx( 0 )
 {
-    //SetMargins( 10, 10, 10, 10 );
-    LockAspect();
-
     m_axis_x = new mpScaleX( wxT( "T [s]" ) );
     m_axis_x->SetTicks( false );
     AddLayer( m_axis_x );

@@ -74,13 +74,77 @@ private:
 };
 
 
+/// Special netlist exporter flavor that allows to override simulation commands
+class NETLIST_EXPORTER_PSPICE_SIM : public NETLIST_EXPORTER_PSPICE
+{
+public:
+    NETLIST_EXPORTER_PSPICE_SIM( NETLIST_OBJECT_LIST* aMasterList, PART_LIBS* aLibs,
+            SEARCH_STACK* aPaths = NULL ) :
+        NETLIST_EXPORTER_PSPICE( aMasterList, aLibs, aPaths )
+    {
+    }
+
+    void SetSimCommand( const wxString& aCmd )
+    {
+        m_simCommand = aCmd;
+    }
+
+    const wxString& GetSimCommand() const
+    {
+        return m_simCommand;
+    }
+
+    void ClearSimCommand()
+    {
+        m_simCommand.Clear();
+    }
+
+protected:
+    virtual void writeDirectives( OUTPUTFORMATTER* aFormatter, int aCtl ) const
+    {
+        if( m_simCommand.IsEmpty() )
+        {
+            // Fallback to the default behavior
+            NETLIST_EXPORTER_PSPICE::writeDirectives( aFormatter, aCtl );
+        }
+
+        // Dump all directives, but simulation commands
+        for( const auto& dir : GetDirectives() )
+        {
+            if( !isSimCommand( dir ) )
+                aFormatter->Print( 0, "%s\n", (const char*) dir.c_str() );
+        }
+
+        // Finish with our custom simulation command
+        aFormatter->Print( 0, "%s\n", (const char*) m_simCommand.c_str() );
+    }
+
+private:
+    bool isSimCommand( const wxString& aCmd ) const
+    {
+        const std::vector<wxString> simCmds = {
+            ".ac", ".dc", ".disto", ".noise", ".op", ".pz", ".sens", ".tf", ".tran", ".pss"
+        };
+
+        wxString lcaseCmd = aCmd.Lower();
+
+        for( const auto& c : simCmds )
+        {
+            if( lcaseCmd.StartsWith( c ) )
+                return true;
+        }
+
+        return false;
+    }
+
+    wxString m_simCommand;
+};
+
+
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
-    : SIM_PLOT_FRAME_BASE( aParent )
+    : SIM_PLOT_FRAME_BASE( aParent ), m_settingsDlg( this )
 {
     SetKiway( this, aKiway );
-
-    m_exporter = NULL;
-    m_simulator = NULL;
 
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
     Connect( EVT_SIM_REPORT, wxCommandEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
@@ -94,28 +158,28 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
 SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
-    delete m_exporter;
-    delete m_simulator;
 }
 
 
 void SIM_PLOT_FRAME::StartSimulation()
 {
-    delete m_exporter;
-    delete m_simulator;
-
     m_simConsole->Clear();
 
+    // TODO check if there is a valid simulation command
+
     /// @todo is it necessary to recreate simulator every time?
-    m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
+    m_simulator.reset( SPICE_SIMULATOR::CreateInstance( "ngspice" ) );
     m_simulator->SetReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
 
     NETLIST_OBJECT_LIST* net_atoms = m_schematicFrame->BuildNetListBase();
     STRING_FORMATTER formatter;
 
-    m_exporter = new NETLIST_EXPORTER_PSPICE( net_atoms, Prj().SchLibs(), Prj().SchSearchS() );
+    m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( net_atoms,
+                                                        Prj().SchLibs(), Prj().SchSearchS() ) );
+    m_exporter->SetSimCommand( m_simCommand );
     m_exporter->Format( &formatter, GNL_ALL );
+
     m_simulator->LoadNetlist( formatter.GetString() );
     m_simulator->Run();
 }
@@ -346,6 +410,17 @@ void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
         StopSimulation();
     else
         StartSimulation();
+}
+
+
+void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
+{
+    // TODO set exporter
+
+    if( m_settingsDlg.ShowModal() == wxID_OK )
+        m_simCommand = m_settingsDlg.GetSimCommand();
+
+    wxLogDebug( "sim command = %s", m_simCommand );     // TODO remove
 }
 
 

@@ -107,22 +107,23 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_cursors = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL );
 	bSizer7->Add( m_cursors, 1, wxALL|wxEXPAND, 5 );
 	
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 1, 0, 0, 0 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_simulateBtn = new wxButton( this, wxID_ANY, _("Simulate"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_simulateBtn, 0, wxALL, 5 );
+	bSizer4->Add( m_simulateBtn, 1, wxALL, 5 );
+	
+	m_settingsBtn = new wxButton( this, wxID_ANY, _("Settings"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_settingsBtn, 1, wxALL, 5 );
 	
 	m_probeBtn = new wxButton( this, wxID_ANY, _("Probe"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_probeBtn, 0, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_probeBtn, 1, wxALL, 5 );
 	
 	m_tuneBtn = new wxButton( this, wxID_ANY, _("Tune"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_tuneBtn, 0, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( m_tuneBtn, 1, wxALL, 5 );
 	
 	
-	bSizer7->Add( fgSizer1, 0, wxALL|wxEXPAND, 5 );
+	bSizer7->Add( bSizer4, 0, 0, 5 );
 	
 	
 	bSizer5->Add( bSizer7, 1, wxEXPAND, 5 );
@@ -161,6 +162,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_signals->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSignalDblClick ), NULL, this );
 	m_signals->Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::onSignalRClick ), NULL, this );
 	m_simulateBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSimulate ), NULL, this );
+	m_settingsBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSettings ), NULL, this );
 	m_probeBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onPlaceProbe ), NULL, this );
 	m_tuneBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onTune ), NULL, this );
 }
@@ -187,6 +189,7 @@ SIM_PLOT_FRAME_BASE::~SIM_PLOT_FRAME_BASE()
 	m_signals->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSignalDblClick ), NULL, this );
 	m_signals->Disconnect( wxEVT_RIGHT_UP, wxMouseEventHandler( SIM_PLOT_FRAME_BASE::onSignalRClick ), NULL, this );
 	m_simulateBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSimulate ), NULL, this );
+	m_settingsBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSettings ), NULL, this );
 	m_probeBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onPlaceProbe ), NULL, this );
 	m_tuneBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onTune ), NULL, this );
 	

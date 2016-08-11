@@ -176,12 +176,15 @@ set( EESCHEMA_SRCS
     transform.cpp
     viewlib_frame.cpp
     viewlibs.cpp
+
     sim/simulate.cpp
     sim/sim_plot_frame_base.cpp
     sim/sim_plot_frame.cpp
     sim/sim_plot_panel.cpp
     sim/spice_simulator.cpp
     sim/ngspice.cpp
+    dialogs/dialog_sim_settings.cpp
+    dialogs/dialog_sim_settings_base.cpp
 
     netlist_exporters/netlist_exporter.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp

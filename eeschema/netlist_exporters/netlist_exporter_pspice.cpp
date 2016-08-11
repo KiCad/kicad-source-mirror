@@ -47,11 +47,12 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 }
 
 
-bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
+bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, int aCtl )
 {
     std::vector<int>    pinSequence;                    // numeric indices into m_SortedComponentPinList
     wxArrayString       stdPinNameArray;                // Array containing Standard Pin Names
     const wxString      delimiters( "{:,; }" );
+    SCH_SHEET_LIST      sheetList( g_RootSheet );
 
     // Netlist options
     bool useNetcodeAsNetName = aCtl & NET_USE_NETCODES_AS_NETNAMES;
@@ -60,52 +61,14 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
         m_masterList->GetItem( ii )->m_Flag = 0;
 
-    SCH_SHEET_LIST sheetList( g_RootSheet );
-    std::vector<wxString> directives;
-
-    formatter->Print( 0, ".title KiCad schematic\n" );
+    aFormatter->Print( 0, ".title KiCad schematic\n" );
 
     m_netMap.clear();
 
     // Ground net has to be always assigned to node 0
     m_netMap["GND"] = 0;
 
-    for( unsigned i = 0; i < sheetList.size(); i++ )
-    {
-        for( EDA_ITEM* item = sheetList[i].LastDrawList(); item; item = item->Next() )
-        {
-            if( item->Type() != SCH_TEXT_T )
-                continue;
-
-            wxString text = static_cast<SCH_TEXT*>( item )->GetText();
-
-            if( text.IsEmpty() )
-                continue;
-
-            if( text.GetChar( 0 ) == '.' )
-            {
-                wxStringTokenizer tokenizer( text, "\r\n" );
-
-                while( tokenizer.HasMoreTokens() )
-                {
-                    wxString directive( tokenizer.GetNextToken() );
-
-                    // Fix paths for .include directives
-                    if( aCtl & NET_ADJUST_INCLUDE_PATHS && m_paths && directive.StartsWith( ".inc" ) )
-                    {
-                        wxString file( directive.AfterFirst( ' ' ) );
-                        wxString path( m_paths->FindValidPath( file ) );
-                        directives.push_back( wxString( ".include " ) + path );
-                    }
-                    else
-                    {
-                        directives.push_back( directive );
-                    }
-                }
-            }
-        }
-    }
-
+    UpdateDirectives( aCtl );
     m_ReferencesAlreadyFound.Clear();
 
     int curNetIndex = 1;
@@ -192,7 +155,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 
             int activePinIndex = 0;
 
-            formatter->Print( 0, "%s%s ", (const char*) primType.c_str(), (const char*) RefName.c_str() );
+            aFormatter->Print( 0, "%s%s ", (const char*) primType.c_str(), (const char*) RefName.c_str() );
 
             for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
@@ -244,7 +207,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 
                 if( useNetcodeAsNetName )
                 {
-                    formatter->Print( 0, "%d ", netIdx );
+                    aFormatter->Print( 0, "%d ", netIdx );
                 }
                 else
                 {
@@ -257,21 +220,18 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                     if( netName.IsEmpty() )
                         netName = wxT( "?" );
 
-                    formatter->Print( 0, "%s ", TO_UTF8( netName ) );
+                    aFormatter->Print( 0, "%s ", TO_UTF8( netName ) );
                 }
             }
 
-            formatter->Print( 0, "%s\n", (const char*) model.c_str() );
+            aFormatter->Print( 0, "%s\n", (const char*) model.c_str() );
         }
     }
 
     // Print out all directives found in the text fields on the schematics
-    for( auto& dir : directives )
-    {
-        formatter->Print( 0, "%s\n", (const char*) dir.c_str() );
-    }
+    writeDirectives( aFormatter, aCtl );
 
-    formatter->Print( -1, ".end\n" );
+    aFormatter->Print( -1, ".end\n" );
 
     return true;
 }
@@ -348,6 +308,60 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
 
     return wxString( "<unknown>" );
 }
+
+
+void NETLIST_EXPORTER_PSPICE::UpdateDirectives( int aCtl )
+{
+    const SCH_SHEET_LIST& sheetList = g_RootSheet;
+
+    m_directives.clear();
+
+    for( unsigned i = 0; i < sheetList.size(); i++ )
+    {
+        for( EDA_ITEM* item = sheetList[i].LastDrawList(); item; item = item->Next() )
+        {
+            if( item->Type() != SCH_TEXT_T )
+                continue;
+
+            wxString text = static_cast<SCH_TEXT*>( item )->GetText();
+
+            if( text.IsEmpty() )
+                continue;
+
+            if( text.GetChar( 0 ) == '.' )
+            {
+                wxStringTokenizer tokenizer( text, "\r\n" );
+
+                while( tokenizer.HasMoreTokens() )
+                {
+                    wxString directive( tokenizer.GetNextToken() );
+
+                    // Fix paths for .include directives
+                    if( aCtl & NET_ADJUST_INCLUDE_PATHS && m_paths && directive.StartsWith( ".inc" ) )
+                    {
+                        wxString file( directive.AfterFirst( ' ' ) );
+                        wxString path( m_paths->FindValidPath( file ) );
+                        m_directives.push_back( wxString( ".include " ) + path );
+                    }
+                    else
+                    {
+                        m_directives.push_back( directive );
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+void NETLIST_EXPORTER_PSPICE::writeDirectives( OUTPUTFORMATTER* aFormatter, int aCtl ) const
+{
+    for( auto& dir : m_directives )
+    {
+        aFormatter->Print( 0, "%s\n", (const char*) dir.c_str() );
+    }
+}
+
 
 const std::vector<wxString> NETLIST_EXPORTER_PSPICE::m_spiceFields = {
     "Spice_Primitive",

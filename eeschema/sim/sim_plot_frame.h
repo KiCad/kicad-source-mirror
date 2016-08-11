@@ -32,11 +32,12 @@
 #include "sim_plot_frame_base.h"
 #include "kiway_player.h"
 #include <netlist_exporters/netlist_exporter_pspice.h>
+#include <dialogs/dialog_sim_settings.h>
 
 #include <wx/event.h>
 
 class SPICE_SIMULATOR;
-class NETLIST_EXPORTER_PSPICE;
+class NETLIST_EXPORTER_PSPICE_SIM;
 class SIM_PLOT_PANEL;
 
 /** Implementing SIM_PLOT_FRAME_BASE */
@@ -110,6 +111,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void onSignalRClick( wxMouseEvent& event ) override;
 
         void onSimulate( wxCommandEvent& event ) override;
+        void onSettings( wxCommandEvent& event ) override;
         void onPlaceProbe( wxCommandEvent& event ) override;
 
         void onClose( wxCloseEvent& aEvent );
@@ -120,8 +122,12 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void onSimReport( wxCommandEvent& aEvent );
 
         SCH_EDIT_FRAME* m_schematicFrame;
-        NETLIST_EXPORTER_PSPICE* m_exporter;
-        SPICE_SIMULATOR* m_simulator;
+        std::unique_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
+        std::unique_ptr<SPICE_SIMULATOR> m_simulator;
+        wxString m_simCommand;
+
+        // Trick to preserve settings between runs
+        DIALOG_SIM_SETTINGS m_settingsDlg;
 
         // Right click context menu for signals in the listbox
         class SIGNAL_CONTEXT_MENU : public wxMenu
