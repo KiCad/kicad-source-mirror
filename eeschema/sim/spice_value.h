@@ -47,7 +47,7 @@ public:
     };
 
     SPICE_VALUE()
-        : m_base( 0 ), m_prefix( PFX_NONE )
+        : m_base( 0 ), m_prefix( PFX_NONE ), m_spiceStr( false )
     {
     }
 

@@ -221,11 +221,14 @@ SPICE_VALUE SPICE_VALUE::operator/( const SPICE_VALUE& aOther ) const
 
 void SPICE_VALUE::stripZeros( wxString& aString )
 {
-    while( aString.EndsWith( '0' ) )
-        aString.RemoveLast();
+    if ( aString.Find(',') >= 0 || aString.Find('.') >= 0 )
+    {
+        while( aString.EndsWith( '0' ) )
+            aString.RemoveLast();
 
-    if( aString.EndsWith( '.' ) || aString.EndsWith( ',' ) )
-        aString.RemoveLast();
+        if( aString.EndsWith( '.' ) || aString.EndsWith( ',' ) )
+                aString.RemoveLast();
+    }
 }
 
 
