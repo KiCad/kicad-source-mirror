@@ -91,7 +91,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
                     m_dcStop1->IsEmpty() || m_dcIncr1->IsEmpty() )
                 return false;
 
-            simCmd += wxString::Format( "%s %s %s %s",
+            simCmd += wxString::Format( "v%s %s %s %s",
                m_dcSource1->GetValue(), m_dcStart1->GetValue(),
                m_dcStop1->GetValue(), m_dcIncr1->GetValue() );
         }
@@ -102,7 +102,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
                     m_dcStop2->IsEmpty() || m_dcIncr2->IsEmpty() )
                 return false;
 
-            simCmd += wxString::Format( "%s %s %s %s",
+            simCmd += wxString::Format( "v%s %s %s %s",
                m_dcSource2->GetValue(), m_dcStart2->GetValue(),
                m_dcStop2->GetValue(), m_dcIncr2->GetValue() );
         }
