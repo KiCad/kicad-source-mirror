@@ -40,7 +40,7 @@ class SCH_COMPONENT;
 class TUNER_SLIDER : public TUNER_SLIDER_BASE
 {
 public:
-    TUNER_SLIDER( SIM_PLOT_FRAME* aParent, SCH_COMPONENT* aComponent );
+    TUNER_SLIDER( SIM_PLOT_FRAME *aFrame, wxWindow* aParent, SCH_COMPONENT* aComponent );
 
     wxString GetComponentName() const
     {
@@ -95,6 +95,8 @@ private:
 
     SPICE_VALUE m_min, m_max, m_value;
     bool m_changed;
+
+    SIM_PLOT_FRAME *m_frame;
 };
 
 #endif /* TUNER_SLIDER_H */

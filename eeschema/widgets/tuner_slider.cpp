@@ -29,9 +29,9 @@
 #include <template_fieldnames.h>
 #include <netlist_exporters/netlist_exporter_pspice.h>
 
-TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aParent, SCH_COMPONENT* aComponent )
+TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_COMPONENT* aComponent )
     : TUNER_SLIDER_BASE( aParent ), m_component( aComponent ),
-    m_min( 0.0 ), m_max( 0.0 ), m_value( 0.0 )
+    m_min( 0.0 ), m_max( 0.0 ), m_value( 0.0 ), m_frame ( aFrame )
 {
     const wxString compName = aComponent->GetField( REFERENCE )->GetText();
     m_name->SetLabel( compName );
@@ -43,9 +43,14 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aParent, SCH_COMPONENT* aComponent )
     m_spiceName = wxString( prim + compName ).Lower();
 
     // Call Set*() methods to update fields and slider
-    SetMax( SPICE_VALUE( 2.0 ) * m_value );
-    SetMin( SPICE_VALUE( 0.5 ) * m_value );
-    SetValue( m_value );
+    m_max = SPICE_VALUE( 2.0 ) * m_value;
+    m_min = SPICE_VALUE( 0.5 ) * m_value;
+
+    m_minText->SetValue( m_min.ToOrigString() );
+    m_maxText->SetValue( m_max.ToOrigString() );
+
+    updateValueText();
+    updateSlider();
 
     m_simTimer.SetOwner( this );
     Connect( wxEVT_TIMER, wxTimerEventHandler( TUNER_SLIDER::onSimTimer ), NULL, this );
@@ -114,7 +119,8 @@ void TUNER_SLIDER::updateComponentValue()
 void TUNER_SLIDER::updateSlider()
 {
     assert( m_max >= m_value && m_value >= m_min );
-    m_slider->SetValue( ( ( m_value - m_min ) / ( m_max - m_min ) ).ToDouble() * 100 );
+
+    m_slider->SetValue( ( ( m_value - m_min ) / ( m_max - m_min ) ).ToDouble() * 100.0 );
 }
 
 
@@ -127,7 +133,7 @@ void TUNER_SLIDER::updateValueText()
 
 void TUNER_SLIDER::onClose( wxCommandEvent& event )
 {
-    static_cast<SIM_PLOT_FRAME*>( GetParent() )->RemoveTuner( this );
+    m_frame->RemoveTuner( this );
 }
 
 
@@ -197,8 +203,7 @@ void TUNER_SLIDER::onSimTimer( wxTimerEvent& event )
 {
     if(m_changed)
     {
-        printf("Slider Ch\n");
-        wxQueueEvent( GetParent(), new wxCommandEvent( EVT_SIM_UPDATE ) );
+        wxQueueEvent( m_frame, new wxCommandEvent( EVT_SIM_UPDATE ) );
         m_changed = false;
     }
 }
