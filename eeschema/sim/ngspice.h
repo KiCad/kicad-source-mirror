@@ -42,7 +42,12 @@ public:
     bool Stop() override;
     bool IsRunning() override;
     bool Command( const std::string& aCmd ) override;
-    const std::vector<double> GetPlot( const std::string& aName, int aMaxLen = -1 ) override;
+
+    std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) override;
+    std::vector<double> GetRealPlot( const std::string& aName, int aMaxLen = -1 ) override;
+    std::vector<double> GetImagPlot( const std::string& aName, int aMaxLen = -1 ) override;
+    std::vector<double> GetMagPlot( const std::string& aName, int aMaxLen = -1 ) override;
+    std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override;
 
 private:
     typedef void (*ngSpice_Init)( SendChar*, SendStat*, ControlledExit*,

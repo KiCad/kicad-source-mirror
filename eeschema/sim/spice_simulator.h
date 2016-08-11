@@ -27,17 +27,11 @@
 
 #include <string>
 #include <vector>
+#include <complex>
 
 class SPICE_REPORTER;
 
-enum SIM_TRACE_TYPE
-{
-    SIM_AC_MAG = 0x1,
-    SIM_AC_PHASE = 0x2,
-    SIM_TR_VOLTAGE = 0x4,
-    SIM_TR_CURRENT = 0x8,
-    SIM_TR_FFT = 0x10
-};
+typedef std::complex<double> COMPLEX;
 
 class SPICE_SIMULATOR
 {
@@ -59,7 +53,12 @@ public:
         m_reporter = aReporter;
     }
 
-    virtual const std::vector<double> GetPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<COMPLEX> GetPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<double> GetRealPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<double> GetImagPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<double> GetMagPlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+    virtual std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) = 0;
+
 
 protected:
     SPICE_REPORTER* m_reporter;

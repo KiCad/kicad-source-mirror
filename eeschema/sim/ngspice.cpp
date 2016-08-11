@@ -62,18 +62,132 @@ void NGSPICE::Init()
 }
 
 
-const vector<double> NGSPICE::GetPlot( const string& aName, int aMaxLen )
+vector<COMPLEX> NGSPICE::GetPlot( const string& aName, int aMaxLen )
 {
-    vector<double> data;
-
+    vector<COMPLEX> data;
     vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
-    if( vi && vi->v_realdata )
+    if( vi )
     {
-        data.reserve( vi->v_length );
+        int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
+        data.reserve( length );
 
-        for( int i = 0; i < vi->v_length; i++ )
-            data.push_back( vi->v_realdata[i] );
+        if( vi->v_realdata )
+        {
+            for( int i = 0; i < length; i++ )
+                data.push_back( COMPLEX( vi->v_realdata[i], 0.0 ) );
+        }
+        else if( vi->v_compdata )
+        {
+            for( int i = 0; i < length; i++ )
+                data.push_back( COMPLEX( vi->v_compdata[i].cx_real, vi->v_compdata[i].cx_imag ) );
+        }
+    }
+
+    return data;
+}
+
+
+vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
+{
+    vector<double> data;
+    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+
+    if( vi )
+    {
+        int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
+        data.reserve( length );
+
+        if( vi->v_realdata )
+        {
+            for( int i = 0; i < length; i++ )
+            {
+                data.push_back( vi->v_realdata[i] );
+            }
+        }
+        else if( vi->v_compdata )
+        {
+            for( int i = 0; i < length; i++ )
+            {
+                assert( vi->v_compdata[i].cx_imag == 0.0 );
+                data.push_back( vi->v_compdata[i].cx_real );
+            }
+        }
+    }
+
+    return data;
+}
+
+
+vector<double> NGSPICE::GetImagPlot( const string& aName, int aMaxLen )
+{
+    vector<double> data;
+    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+
+    if( vi )
+    {
+        int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
+        data.reserve( length );
+
+        if( vi->v_compdata )
+        {
+            for( int i = 0; i < length; i++ )
+            {
+                data.push_back( vi->v_compdata[i].cx_imag );
+            }
+        }
+    }
+
+    return data;
+}
+
+
+vector<double> NGSPICE::GetMagPlot( const string& aName, int aMaxLen )
+{
+    vector<double> data;
+    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+
+    if( vi )
+    {
+        int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
+        data.reserve( length );
+
+        if( vi->v_realdata )
+        {
+            for( int i = 0; i < length; i++ )
+                data.push_back( vi->v_realdata[i] );
+        }
+        else if( vi->v_compdata )
+        {
+            for( int i = 0; i < length; i++ )
+                data.push_back( hypot( vi->v_compdata[i].cx_real, vi->v_compdata[i].cx_imag ) );
+        }
+    }
+
+    return data;
+}
+
+
+vector<double> NGSPICE::GetPhasePlot( const string& aName, int aMaxLen )
+{
+    vector<double> data;
+    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+
+    if( vi )
+    {
+        int length = aMaxLen < 0 ? vi->v_length : std::min( aMaxLen, vi->v_length );
+        data.reserve( length );
+
+        if( vi->v_realdata )
+        {
+            for( int i = 0; i < length; i++ )
+                data.push_back( 0.0 );      // well, that's life
+        }
+        else if( vi->v_compdata )
+        {
+            for( int i = 0; i < length; i++ )
+                data.push_back( atan2( vi->v_compdata[i].cx_imag, vi->v_compdata[i].cx_real ) );
+        }
     }
 
     return data;
