@@ -129,6 +129,7 @@ void SIM_PLOT_FRAME::StopSimulation()
 void SIM_PLOT_FRAME::NewPlotPanel()
 {
     SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( this, wxID_ANY );
+
     m_plotNotebook->AddPage( plot,
             wxString::Format( wxT( "Plot%lu" ), m_plotNotebook->GetPageCount() + 1 ), true );
 }
@@ -180,6 +181,38 @@ int SIM_PLOT_FRAME::getNodeNumber( const wxString& aNetName )
         return -1;
 
     return it->second;
+}
+
+
+void SIM_PLOT_FRAME::menuZoomIn( wxCommandEvent& event )
+{
+    currentPlot()->ZoomIn();
+}
+
+
+void SIM_PLOT_FRAME::menuZoomOut( wxCommandEvent& event )
+{
+    currentPlot()->ZoomOut();
+}
+
+
+void SIM_PLOT_FRAME::menuZoomFit( wxCommandEvent& event )
+{
+    currentPlot()->Fit();
+}
+
+
+void SIM_PLOT_FRAME::menuShowGrid( wxCommandEvent& event )
+{
+    currentPlot()->ShowGrid( !currentPlot()->IsGridShown() );
+}
+
+
+void SIM_PLOT_FRAME::menuShowGridState( wxUpdateUIEvent& event )
+{
+    SIM_PLOT_PANEL* plotPanel = currentPlot();
+
+    event.Check( plotPanel ? plotPanel->IsGridShown() : false );
 }
 
 

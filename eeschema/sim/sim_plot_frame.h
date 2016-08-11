@@ -80,11 +80,24 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
          */
         int getNodeNumber( const wxString& aNetName );
 
-        void onNewPlot( wxCommandEvent& aEvent ) override
+        // Menu handlers
+        void menuNewPlot( wxCommandEvent& aEvent ) override
         {
             NewPlotPanel();
         }
 
+        void menuExit( wxCommandEvent& event ) override
+        {
+            Close();
+        }
+
+        void menuZoomIn( wxCommandEvent& event ) override;
+        void menuZoomOut( wxCommandEvent& event ) override;
+        void menuZoomFit( wxCommandEvent& event ) override;
+        void menuShowGrid( wxCommandEvent& event ) override;
+        void menuShowGridState( wxUpdateUIEvent& event ) override;
+
+        // Event handlers
         void onSignalDblClick( wxCommandEvent& event ) override;
         void onSimulate( wxCommandEvent& event ) override;
         void onPlaceProbe( wxCommandEvent& event ) override;

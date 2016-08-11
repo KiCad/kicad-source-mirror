@@ -13,52 +13,52 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	m_menubar1 = new wxMenuBar( 0 );
-	m_menu1 = new wxMenu();
+	m_mainMenu = new wxMenuBar( 0 );
+	m_fileMenu = new wxMenu();
 	wxMenuItem* m_menuItem7;
-	m_menuItem7 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("New Plot") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem7 );
+	m_menuItem7 = new wxMenuItem( m_fileMenu, wxID_NEW, wxString( _("New Plot") ) , wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_menuItem7 );
 	
-	m_menu1->AppendSeparator();
+	m_fileMenu->AppendSeparator();
 	
 	wxMenuItem* m_menuItem8;
-	m_menuItem8 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Open Workbook") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem8 );
+	m_menuItem8 = new wxMenuItem( m_fileMenu, wxID_OPEN, wxString( _("Open Workbook") ) , wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_menuItem8 );
 	
 	wxMenuItem* m_menuItem2;
-	m_menuItem2 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Save Workbook") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem2 );
+	m_menuItem2 = new wxMenuItem( m_fileMenu, wxID_SAVE, wxString( _("Save Workbook") ) , wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_menuItem2 );
 	
-	m_menu1->AppendSeparator();
+	m_fileMenu->AppendSeparator();
 	
 	wxMenuItem* m_menuItem1;
-	m_menuItem1 = new wxMenuItem( m_menu1, wxID_ANY, wxString( _("Exit Simulation") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu1->Append( m_menuItem1 );
+	m_menuItem1 = new wxMenuItem( m_fileMenu, wxID_CLOSE, wxString( _("Exit Simulation") ) , wxEmptyString, wxITEM_NORMAL );
+	m_fileMenu->Append( m_menuItem1 );
 	
-	m_menubar1->Append( m_menu1, _("File") ); 
+	m_mainMenu->Append( m_fileMenu, _("File") ); 
 	
-	m_menu2 = new wxMenu();
+	m_viewMenu = new wxMenu();
 	wxMenuItem* m_menuItem3;
-	m_menuItem3 = new wxMenuItem( m_menu2, wxID_ANY, wxString( _("Zoom In") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu2->Append( m_menuItem3 );
+	m_menuItem3 = new wxMenuItem( m_viewMenu, wxID_ZOOM_IN, wxString( _("Zoom In") ) , wxEmptyString, wxITEM_NORMAL );
+	m_viewMenu->Append( m_menuItem3 );
 	
 	wxMenuItem* m_menuItem4;
-	m_menuItem4 = new wxMenuItem( m_menu2, wxID_ANY, wxString( _("Zoom Out") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu2->Append( m_menuItem4 );
+	m_menuItem4 = new wxMenuItem( m_viewMenu, wxID_ZOOM_OUT, wxString( _("Zoom Out") ) , wxEmptyString, wxITEM_NORMAL );
+	m_viewMenu->Append( m_menuItem4 );
 	
 	wxMenuItem* m_menuItem5;
-	m_menuItem5 = new wxMenuItem( m_menu2, wxID_ANY, wxString( _("Fit on Screen") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu2->Append( m_menuItem5 );
+	m_menuItem5 = new wxMenuItem( m_viewMenu, wxID_ZOOM_FIT, wxString( _("Fit on Screen") ) , wxEmptyString, wxITEM_NORMAL );
+	m_viewMenu->Append( m_menuItem5 );
 	
-	m_menu2->AppendSeparator();
+	m_viewMenu->AppendSeparator();
 	
-	wxMenuItem* m_menuItem6;
-	m_menuItem6 = new wxMenuItem( m_menu2, wxID_ANY, wxString( _("Show grid") ) , wxEmptyString, wxITEM_CHECK );
-	m_menu2->Append( m_menuItem6 );
+	wxMenuItem* m_menuShowGrid;
+	m_menuShowGrid = new wxMenuItem( m_viewMenu, wxID_ANY, wxString( _("Show grid") ) , wxEmptyString, wxITEM_CHECK );
+	m_viewMenu->Append( m_menuShowGrid );
 	
-	m_menubar1->Append( m_menu2, _("View") ); 
+	m_mainMenu->Append( m_viewMenu, _("View") ); 
 	
-	this->SetMenuBar( m_menubar1 );
+	this->SetMenuBar( m_mainMenu );
 	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -154,7 +154,15 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( m_menuItem7->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onNewPlot ) );
+	this->Connect( m_menuItem7->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuNewPlot ) );
+	this->Connect( m_menuItem8->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuOpenWorkbook ) );
+	this->Connect( m_menuItem2->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbook ) );
+	this->Connect( m_menuItem1->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ) );
+	this->Connect( m_menuItem3->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomIn ) );
+	this->Connect( m_menuItem4->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomOut ) );
+	this->Connect( m_menuItem5->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomFit ) );
+	this->Connect( m_menuShowGrid->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuShowGrid ) );
+	this->Connect( m_menuShowGrid->GetId(), wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowGridState ) );
 	m_signals->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSignalDblClick ), NULL, this );
 	m_simulateBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSimulate ), NULL, this );
 	m_probeBtn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onPlaceProbe ), NULL, this );
@@ -164,7 +172,15 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 SIM_PLOT_FRAME_BASE::~SIM_PLOT_FRAME_BASE()
 {
 	// Disconnect Events
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onNewPlot ) );
+	this->Disconnect( wxID_NEW, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuNewPlot ) );
+	this->Disconnect( wxID_OPEN, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuOpenWorkbook ) );
+	this->Disconnect( wxID_SAVE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuSaveWorkbook ) );
+	this->Disconnect( wxID_CLOSE, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuExit ) );
+	this->Disconnect( wxID_ZOOM_IN, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomIn ) );
+	this->Disconnect( wxID_ZOOM_OUT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomOut ) );
+	this->Disconnect( wxID_ZOOM_FIT, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuZoomFit ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::menuShowGrid ) );
+	this->Disconnect( wxID_ANY, wxEVT_UPDATE_UI, wxUpdateUIEventHandler( SIM_PLOT_FRAME_BASE::menuShowGridState ) );
 	m_signals->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSignalDblClick ), NULL, this );
 	m_simulateBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onSimulate ), NULL, this );
 	m_probeBtn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME_BASE::onPlaceProbe ), NULL, this );

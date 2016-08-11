@@ -65,6 +65,10 @@ public:
         return m_traces;
     }
 
+    void ShowGrid( bool aEnable = true );
+
+    bool IsGridShown() const;
+
 private:
     wxColour generateColor();
 

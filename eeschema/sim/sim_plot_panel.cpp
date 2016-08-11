@@ -99,6 +99,21 @@ void SIM_PLOT_PANEL::DeleteTraces()
 }
 
 
+void SIM_PLOT_PANEL::ShowGrid( bool aEnable )
+{
+    m_axis_x->SetTicks( !aEnable );
+    m_axis_y->SetTicks( !aEnable );
+    UpdateAll();
+}
+
+
+bool SIM_PLOT_PANEL::IsGridShown() const
+{
+    assert( m_axis_x->GetTicks() == m_axis_y->GetTicks() );
+    return !m_axis_x->GetTicks();
+}
+
+
 wxColour SIM_PLOT_PANEL::generateColor()
 {
     /// @todo have a look at:

@@ -43,9 +43,9 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 	private:
 	
 	protected:
-		wxMenuBar* m_menubar1;
-		wxMenu* m_menu1;
-		wxMenu* m_menu2;
+		wxMenuBar* m_mainMenu;
+		wxMenu* m_fileMenu;
+		wxMenu* m_viewMenu;
 		wxPanel* m_panel31;
 		wxPanel* m_panel61;
 		wxAuiNotebook* m_plotNotebook;
@@ -61,7 +61,15 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxRichTextCtrl* m_simConsole;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onNewPlot( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuNewPlot( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuOpenWorkbook( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuSaveWorkbook( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuExit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuZoomIn( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuZoomOut( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuZoomFit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuShowGrid( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menuShowGridState( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSimulate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPlaceProbe( wxCommandEvent& event ) { event.Skip(); }
