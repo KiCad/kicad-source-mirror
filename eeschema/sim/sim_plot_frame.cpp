@@ -1014,7 +1014,6 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
 
 void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
 {
-    std::cout << aEvent.GetString() << std::endl;
     m_simConsole->AppendText( aEvent.GetString() + "\n" );
     m_simConsole->SetInsertionPointEnd();
 }
