@@ -248,16 +248,24 @@ void SIM_PLOT_FRAME::onSimReport( wxThreadEvent& aEvent )
 
 void SIM_PLOT_FRAME::onSimFinished( wxThreadEvent& aEvent )
 {
-    wxLogDebug( "Simulation finished" );
+    const auto& netMapping = m_exporter->GetNetIndexMap();
 
-    auto mapping = m_exporter->GetNetIndexMap();
+    // Fill the signals listbox
+    m_signals->Clear();
+
+    for( const auto& net : netMapping )
+    {
+        if( net.first != "GND" )
+            m_signals->Append( net.first );
+    }
+
     //    auto data_t = m_simulator->GetPlot( "time" );
 
-    for( auto name : m_exporter->GetProbeList() )
+    for( auto& name : m_exporter->GetProbeList() )
     {
         char spiceName[1024];
 
-        snprintf( spiceName, sizeof( spiceName ), "V(%d)", mapping[name] );
+        snprintf( spiceName, sizeof( spiceName ), "V(%d)", netMapping.at( name ) );
         //wxLogDebug( "probe %s->%s\n", (const char *) name.c_str(), spiceName );
         //    auto data_y = m_simulator->GetPlot( spiceName );
 
