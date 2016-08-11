@@ -45,6 +45,7 @@ SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
     return (SIM_PLOT_TYPE) res;
 }
 
+
 class SIM_THREAD_REPORTER : public SPICE_REPORTER
 {
 public:
@@ -117,11 +118,17 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Connect( EVT_SIM_FINISHED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
     Connect( EVT_SIM_CURSOR_UPDATE, wxCommandEventHandler( SIM_PLOT_FRAME::onCursorUpdate ), NULL, this );
 
-    m_toolSimulate = m_toolBar->AddTool( ID_SIM_RUN, _("Run/Stop Simulation"), KiBitmap( sim_run_xpm ), _("Run Simulation"), wxITEM_NORMAL );
-    m_toolAddSignals = m_toolBar->AddTool( ID_SIM_ADD_SIGNALS, _("Add Signals"), KiBitmap( sim_add_signal_xpm ), _("Add signals to plot"), wxITEM_NORMAL );
-    m_toolProbe = m_toolBar->AddTool( ID_SIM_PROBE,  _("Probe"), KiBitmap( sim_probe_xpm ),_("Probe signals on the schematic"), wxITEM_NORMAL );
-    m_toolTune = m_toolBar->AddTool( ID_SIM_TUNE, _("Tune"), KiBitmap( sim_tune_xpm ), _("Tune component values"), wxITEM_NORMAL );
-    m_toolSettings = m_toolBar->AddTool( wxID_ANY, _("Settings"), KiBitmap( sim_settings_xpm ), _("Simulation settings"), wxITEM_NORMAL );
+    // Toolbar buttons
+    m_toolSimulate = m_toolBar->AddTool( ID_SIM_RUN, _( "Run/Stop Simulation" ),
+            KiBitmap( sim_run_xpm ), _( "Run Simulation" ), wxITEM_NORMAL );
+    m_toolAddSignals = m_toolBar->AddTool( ID_SIM_ADD_SIGNALS, _( "Add Signals" ),
+            KiBitmap( sim_add_signal_xpm ), _( "Add signals to plot" ), wxITEM_NORMAL );
+    m_toolProbe = m_toolBar->AddTool( ID_SIM_PROBE,  _( "Probe" ),
+            KiBitmap( sim_probe_xpm ), _( "Probe signals on the schematic" ), wxITEM_NORMAL );
+    m_toolTune = m_toolBar->AddTool( ID_SIM_TUNE, _( "Tune" ),
+            KiBitmap( sim_tune_xpm ), _( "Tune component values" ), wxITEM_NORMAL );
+    m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Settings" ),
+            KiBitmap( sim_settings_xpm ), _( "Simulation settings" ), wxITEM_NORMAL );
 
     Connect( m_toolSimulate->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimulate ), NULL, this );
     Connect( m_toolAddSignals->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onAddSignal ), NULL, this );
@@ -129,6 +136,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Connect( m_toolTune->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onTune ), NULL, this );
     Connect( m_toolSettings->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onSettings ), NULL, this );
 
+    // Bind toolbar buttons event to existing menu event handlers, so they behave the same
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSimulate,  this, m_runSimulation->GetId() );
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onAddSignal, this, m_addSignals->GetId() );
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onProbe,     this, m_probeSignals->GetId() );
@@ -136,7 +144,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSettings,  this, m_settings->GetId() );
 
     m_toolBar->Realize();
-    m_plotNotebook->SetPageText(0, _("Welcome!") );
+    m_plotNotebook->SetPageText( 0, _( "Welcome!" ) );
 }
 
 
@@ -180,8 +188,6 @@ void SIM_PLOT_FRAME::StartSimulation()
     updateTuners();
     applyTuners();
     m_simulator->Run();
-
-    Layout();
 }
 
 
@@ -745,21 +751,6 @@ void SIM_PLOT_FRAME::menuShowLegendUpdate( wxUpdateUIEvent& event )
     SIM_PLOT_PANEL* plot = CurrentPlot();
     event.Check( plot ? plot->IsLegendShown() : false );
 }
-
-#if 0
-void SIM_PLOT_FRAME::menuShowCoords( wxCommandEvent& event )
-{
-    SIM_PLOT_PANEL* plot = CurrentPlot();
-    plot->ShowCoords( !plot->IsCoordsShown() );
-}
-
-
-void SIM_PLOT_FRAME::menuShowCoordsUpdate( wxUpdateUIEvent& event )
-{
-    SIM_PLOT_PANEL* plot = CurrentPlot();
-    event.Check( plot ? plot->IsCoordsShown() : false );
-}
-#endif
 
 
 void SIM_PLOT_FRAME::onPlotClose( wxAuiNotebookEvent& event )

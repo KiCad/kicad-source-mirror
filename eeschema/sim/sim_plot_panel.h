@@ -32,6 +32,7 @@
 
 class TRACE;
 
+///> Cursor attached to a trace to follow its values:
 class CURSOR : public mpInfoLayer
 {
 public:
@@ -86,14 +87,18 @@ class TRACE : public mpFXYVector
 {
 public:
     TRACE( const wxString& aName ) :
-        mpFXYVector( aName ), m_cursor( nullptr ), m_flags(0)
-        {
-            SetContinuity( true );
-            SetDrawOutsideMargins( false );
-            ShowName( false );
+        mpFXYVector( aName ), m_cursor( nullptr ), m_flags( 0 )
+    {
+        SetContinuity( true );
+        SetDrawOutsideMargins( false );
+        ShowName( false );
+    }
 
-        }
-
+    /**
+     * @brief Assigns new data set for the trace. aX and aY need to have the same length.
+     * @param aX are the X axis values.
+     * @param aY are the Y axis values.
+     */
     void SetData( const std::vector<double>& aX, const std::vector<double>& aY ) override
     {
         if( m_cursor )
@@ -127,7 +132,7 @@ public:
         return m_cursor;
     }
 
-    void SetFlags ( int aFlags )
+    void SetFlags( int aFlags )
     {
         m_flags = aFlags;
     }
@@ -222,26 +227,20 @@ public:
         return m_legend->IsVisible();
     }
 
-    void ShowCoords( bool aEnable )
-    {
-        m_coords->SetVisible( aEnable );
-        UpdateAll();
-    }
-
-    bool IsCoordsShown() const
-    {
-        return m_coords->IsVisible();
-    }
-
+    ///> Returns true if the trace has cursor shown.
     bool HasCursorEnabled( const wxString& aName ) const;
 
+    ///> Toggles cursor for a particular trace.
     void EnableCursor( const wxString& aName, bool aEnable );
 
+    ///> Resets scale ranges to fit the current traces
     void ResetScales();
 
 private:
+    ///> Returns a new color from the palette
     wxColour generateColor();
 
+    // Color index to get a new color from the palette
     unsigned int m_colorIdx;
 
     // Traces to be plotted
@@ -251,7 +250,6 @@ private:
     mpScaleY* m_axis_y1;
     mpScaleY* m_axis_y2;
     mpInfoLegend* m_legend;
-    mpInfoCoords* m_coords;
 
     std::vector<mpLayer*> m_topLevel;
 

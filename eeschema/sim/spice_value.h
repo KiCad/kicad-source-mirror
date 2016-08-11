@@ -51,6 +51,7 @@ public:
     {
     }
 
+    ///> Parses the string to create a Spice value (e.g. 100n)
     SPICE_VALUE( const wxString& aString );
 
     SPICE_VALUE( int aInt, UNIT_PREFIX aPrefix = PFX_NONE )
@@ -65,19 +66,35 @@ public:
         Normalize();
     }
 
+    /**
+     * @brief Normalizes the value. The unit prefix is picked so the base is (0.001 <= base < 1000).
+     */
     void Normalize();
 
     double ToDouble() const;
 
+    /**
+     * @brief Returns string value as when converting double to string (e.g. 123456.789).
+     */
     wxString ToString() const;
 
+    /**
+     * @brief Returns string value in Spice format (e.g. 123.3456789k).
+     */
     wxString ToSpiceString() const;
 
+    /**
+     * @brief Returns either a normal string or Spice format string, depending on the original
+     * value format.
+     */
     wxString ToOrigString() const
     {
         return m_spiceStr ? ToSpiceString() : ToString();
     }
 
+    /**
+     * Returns true if the object was initiated with a Spice formatted string value.
+     */
     bool IsSpiceString() const
     {
         return m_spiceStr;
@@ -120,6 +137,7 @@ private:
     ///> Was the value defined using the Spice notation?
     bool m_spiceStr;
 
+    ///> Removes redundant zeros from the end of a string.
     static void stripZeros( wxString& aString );
 };
 
@@ -141,6 +159,7 @@ public:
     bool Validate( wxWindow* aParent ) override;
 
 private:
+    ///> Is it valid to get an empty value?
     bool m_emptyAllowed;
 };
 

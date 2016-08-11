@@ -44,8 +44,6 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceVector( const wxString& aName, SIM
         return wxString::Format( "V(%d)", it->second );
     }
 
-
-    /// @todo check is Lower() is required
     else if( aType & SPT_CURRENT )
     {
         return wxString::Format( "@%s[%s]", GetSpiceDevice( aName ).Lower(),
@@ -183,5 +181,4 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
         // Finish with our custom simulation command
         aFormatter->Print( 0, "%s\n", (const char*) m_simCommand.c_str() );
     }
-
 }

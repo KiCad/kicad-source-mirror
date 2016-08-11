@@ -52,7 +52,6 @@ NGSPICE::NGSPICE()
     m_ngSpice_AllPlots = (ngSpice_AllPlots) m_dll->GetSymbol( "ngSpice_AllPlots" );
     m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll->GetSymbol( "ngSpice_AllVecs" );
     m_ngSpice_Running = (ngSpice_Running) m_dll->GetSymbol( "ngSpice_running" );
-
 }
 
 
@@ -243,7 +242,7 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
 bool NGSPICE::Run()
 {
     setlocale( LC_ALL, "C" );
-    bool rv =  Command( "bg_run" );
+    bool rv = Command( "bg_run" );  // bg_* commands execute in a separate thread
     setlocale( LC_ALL, "" );
     return rv;
 }
@@ -252,7 +251,7 @@ bool NGSPICE::Run()
 bool NGSPICE::Stop()
 {
     setlocale( LC_ALL, "C" );
-    bool rv = Command( "bg_halt" );
+    bool rv = Command( "bg_halt" ); // bg_* commands execute in a separate thread
     setlocale( LC_ALL, "" );
     return rv;
 }
@@ -301,10 +300,11 @@ string NGSPICE::GetXAxis( SIM_TYPE aType ) const
     return string( "" );
 }
 
-int NGSPICE::cbControlledExit ( int status, bool immediate, bool exit_upon_quit, int id, void *user )
+
+int NGSPICE::cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id, void* user )
 {
-        printf("stat %d immed %d quit %d\n", status, !!immediate, !!exit_upon_quit);
-        return 0;
+    //printf("stat %d immed %d quit %d\n", status, !!immediate, !!exit_upon_quit);
+    return 0;
 }
 
 

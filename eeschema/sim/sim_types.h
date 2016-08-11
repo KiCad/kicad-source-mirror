@@ -39,6 +39,7 @@ enum SIM_PLOT_TYPE {
     SPT_AC_PHASE        = 0x04,
     SPT_AC_MAG          = 0x08,
 
+    // X axis
     SPT_TIME            = 0x10,
     SPT_LIN_FREQUENCY   = 0x20,
     SPT_LOG_FREQUENCY   = 0x20,

@@ -64,30 +64,53 @@ public:
      */
     static const std::vector<wxString>& GetCurrents( SPICE_PRIMITIVE aPrimitive );
 
+    /**
+     * @brief Overrides the simulation command directive.
+     */
     void SetSimCommand( const wxString& aCmd )
     {
         m_simCommand = aCmd;
     }
 
+    /**
+     * @brief Returns the simulation command directive.
+     */
     const wxString& GetSimCommand() const
     {
         return m_simCommand;
     }
 
+    /**
+     * @brief Clears the simulation command directive.
+     */
     void ClearSimCommand()
     {
         m_simCommand.Clear();
     }
 
+    /**
+     * @brief Returns simulation type basing on the simulation command directives.
+     * Simulation directives set using SetSimCommand() have priority over the ones placed in
+     * schematic sheets.
+     */
     SIM_TYPE GetSimType();
 
+    /**
+     * @brief Returns simulation command directives placed in schematic sheets (if any).
+     */
     wxString GetSheetSimCommand();
 
+    /**
+     * @brief Determines if a directive is a simulation command.
+     */
     static bool IsSimCommand( const wxString& aCmd )
     {
         return CommandToSimType( aCmd ) != ST_UNKNOWN;
     }
 
+    /**
+     * @brief Returns simulation type basing on a simulation command directive.
+     */
     static SIM_TYPE CommandToSimType( const wxString& aCmd );
 
 protected:
@@ -95,7 +118,7 @@ protected:
 
 private:
 
-    ///> Overridden simulation command
+    ///> Custom simulation command (has priority over the schematic sheet simulation commands)
     wxString m_simCommand;
 };
 

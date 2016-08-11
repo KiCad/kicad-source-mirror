@@ -28,80 +28,88 @@
 #include <algorithm>
 #include <limits>
 
-static wxString formatFloat (double x, int nDigits)
+static wxString formatFloat( double x, int nDigits )
 {
     wxString rv, fmt;
 
-    if(nDigits)
+    if( nDigits )
     {
-        fmt = wxT("%.0Nf");
+        fmt = wxT( "%.0Nf" );
         fmt[3] = '0' + nDigits;
-    } else {
-        fmt = wxT("%.0f");
+    }
+    else
+    {
+        fmt = wxT( "%.0f" );
     }
 
-    rv.Printf(fmt, x);
+    rv.Printf( fmt, x );
 
     return rv;
 }
 
-static void getSISuffix ( double x, const wxString& unit, int& power, wxString& suffix )
+
+static void getSISuffix( double x, const wxString& unit, int& power, wxString& suffix )
 {
     const int n_powers = 11;
-    const struct {
+
+    const struct
+    {
         double exponent;
         char suffix;
-    } powers[] = {
-        {-18,'a'},
-        {-15,'f'},
-        {-12,'p'},
-        {-9,'n'},
-        {-6,'u'},
-        {-3,'m'},
-        {0, 0},
-        {3, 'k'},
-        {6, 'M'},
-        {9, 'G'},
-        {12, 'T'},
-        {15, 'P'}
+    } powers[] =
+    {
+        { -18, 'a' },
+        { -15, 'f' },
+        { -12, 'p' },
+        { -9,  'n' },
+        { -6,  'u' },
+        { -3,  'm' },
+        { 0,   0   },
+        { 3,   'k' },
+        { 6,   'M' },
+        { 9,   'G' },
+        { 12,  'T' },
+        { 14,  'P' }
     };
 
     power = 0;
     suffix = unit;
 
-    if (x == 0.0)
+    if( x == 0.0 )
         return;
 
-    for ( int i = 0; i <n_powers - 1;i++)
+    for( int i = 0; i < n_powers - 1; i++ )
     {
-        double r_cur = pow(10, powers[i].exponent);
+        double r_cur = pow( 10, powers[i].exponent );
 
-        if( fabs(x) >= r_cur && fabs(x) < r_cur * 1000.0 )
+        if( fabs( x ) >= r_cur && fabs( x ) < r_cur * 1000.0 )
         {
             power = powers[i].exponent;
-            if ( powers[i].suffix )
-                suffix = wxString(powers[i].suffix) + unit;
+
+            if( powers[i].suffix )
+                suffix = wxString( powers[i].suffix ) + unit;
             else
                 suffix = unit;
+
             return;
         }
     }
-
 }
 
-static int countDecimalDigits ( double x, int maxDigits )
+
+static int countDecimalDigits( double x, int maxDigits )
 {
-    int64_t k = (int) ( ( x - floor(x)) * pow ( 10.0, (double) maxDigits ));
+    int64_t k = (int)( ( x - floor( x ) ) * pow( 10.0, (double) maxDigits ) );
     int n = 0;
 
-    while(k && ((k % 10LL) == 0LL || (k % 10LL) == 9LL))
+    while( k && ( ( k % 10LL ) == 0LL || ( k % 10LL ) == 9LL ) )
     {
         k /= 10LL;
     }
 
     n = 0;
 
-    while (k != 0LL)
+    while( k != 0LL )
     {
         n++;
         k /= 10LL;
@@ -111,64 +119,66 @@ static int countDecimalDigits ( double x, int maxDigits )
 }
 
 
-static void formatSILabels( mpScaleBase *scale, const wxString& aUnit, int nDigits )
+static void formatSILabels( mpScaleBase* scale, const wxString& aUnit, int nDigits )
 {
     double maxVis = scale->AbsVisibleMaxValue();
 
     wxString suffix;
     int power, digits = 0;
 
-    getSISuffix( maxVis, aUnit, power, suffix);
+    getSISuffix( maxVis, aUnit, power, suffix );
 
-    double sf = pow(10.0, power);
+    double sf = pow( 10.0, power );
 
-    for ( auto &l : scale->TickLabels() )
+    for( auto &l : scale->TickLabels() )
     {
         int k = countDecimalDigits( l.pos / sf, nDigits );
 
-        digits = std::max(digits, k);
+        digits = std::max( digits, k );
     }
 
-    for ( auto &l : scale->TickLabels() )
+    for( auto &l : scale->TickLabels() )
     {
         l.label = formatFloat ( l.pos / sf, digits ) + suffix;
         l.visible = true;
     }
 }
 
+
 class FREQUENCY_LOG_SCALE : public mpScaleXLog
 {
 public:
-    FREQUENCY_LOG_SCALE(wxString name, int flags) :
+    FREQUENCY_LOG_SCALE( wxString name, int flags ) :
         mpScaleXLog( name, flags ) {};
 
     void formatLabels()
     {
-        const wxString unit = wxT("Hz");
+        const wxString unit = wxT( "Hz" );
         wxString suffix;
         int power;
 
-        for ( auto &l : TickLabels() )
+        for( auto &l : TickLabels() )
         {
-            getSISuffix( l.pos, unit, power, suffix);
-            double sf = pow(10.0, power);
+            getSISuffix( l.pos, unit, power, suffix );
+            double sf = pow( 10.0, power );
             int k = countDecimalDigits( l.pos / sf, 3 );
 
-            l.label = formatFloat ( l.pos / sf, k ) + suffix;
+            l.label = formatFloat( l.pos / sf, k ) + suffix;
             l.visible = true;
         }
     }
 };
 
+
 class FREQUENCY_LIN_SCALE : public mpScaleX
 {
 public:
-    FREQUENCY_LIN_SCALE(wxString name, int flags) :
+    FREQUENCY_LIN_SCALE( wxString name, int flags ) :
         mpScaleX( name, flags, false , 0 ) {};
 
     void formatLabels()
     {
-        formatSILabels( this, wxT("Hz"), 3 );
+        formatSILabels( this, wxT( "Hz" ), 3 );
     }
 };
 
@@ -176,74 +186,78 @@ public:
 class TIME_SCALE : public mpScaleX
 {
 public:
-    TIME_SCALE(wxString name, int flags) :
-        mpScaleX ( name, flags, false, 0) {};
+    TIME_SCALE( wxString name, int flags ) :
+        mpScaleX( name, flags, false, 0 ) {};
 
     void formatLabels()
     {
-        formatSILabels( this, wxT("s"), 3 );
+        formatSILabels( this, wxT( "s" ), 3 );
     }
 };
+
 
 class VOLTAGE_SCALE_X : public mpScaleX
 {
 public:
-    VOLTAGE_SCALE_X(wxString name, int flags) :
-        mpScaleX ( name, flags, false, 0 ) {};
+    VOLTAGE_SCALE_X( wxString name, int flags ) :
+        mpScaleX( name, flags, false, 0 ) {};
 
     void formatLabels()
     {
-        formatSILabels( this, wxT("V"), 3 );
+        formatSILabels( this, wxT( "V" ), 3 );
     }
 };
+
 
 class GAIN_SCALE : public mpScaleY
 {
 public:
     GAIN_SCALE( wxString name, int flags ) :
-        mpScaleY ( name, flags, false) {};
+        mpScaleY( name, flags, false ) {};
 
     void formatLabels()
     {
-        formatSILabels( this, wxT("dB"), 3 );
+        formatSILabels( this, wxT( "dB" ), 3 );
     }
 
 };
+
 
 class PHASE_SCALE : public mpScaleY
 {
 public:
-    PHASE_SCALE(wxString name, int flags) :
-        mpScaleY ( name, flags, false ) {};
+    PHASE_SCALE( wxString name, int flags ) :
+        mpScaleY( name, flags, false ) {};
 
     void formatLabels()
     {
-        formatSILabels( this, wxT("\u00B0"), 3 );
+        formatSILabels( this, wxT( "\u00B0" ), 3 );     // degree sign
     }
 };
+
 
 class VOLTAGE_SCALE_Y : public mpScaleY
 {
 public:
-    VOLTAGE_SCALE_Y(wxString name, int flags) :
-        mpScaleY ( name, flags, false ) {};
+    VOLTAGE_SCALE_Y( wxString name, int flags ) :
+        mpScaleY( name, flags, false ) {};
 
     void formatLabels()
     {
-        formatSILabels( this, wxT("V"), 3 );
+        formatSILabels( this, wxT( "V" ), 3 );
     }
-
 };
+
 
 class CURRENT_SCALE : public mpScaleY
 {
 public:
-    CURRENT_SCALE(wxString name, int flags ) :
-        mpScaleY ( name, flags, false ) {};
+    CURRENT_SCALE( wxString name, int flags ) :
+        mpScaleY( name, flags, false ) {};
 
     void formatLabels()
     {
-        formatSILabels( this, wxT("A"), 3 );
+        formatSILabels( this, wxT( "A" ), 3 );
     }
 };
 
@@ -366,7 +380,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
             m_axis_x = new FREQUENCY_LOG_SCALE( wxT( "Frequency" ), mpALIGN_BOTTOM );
             m_axis_y1 = new GAIN_SCALE( wxT( "Gain" ), mpALIGN_LEFT );
             m_axis_y2 = new PHASE_SCALE( wxT( "Phase" ), mpALIGN_RIGHT );
-            m_axis_y2->SetMasterScale(m_axis_y1);
+            m_axis_y2->SetMasterScale( m_axis_y1 );
             break;
 
         case ST_DC:
@@ -383,7 +397,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
             m_axis_x = new TIME_SCALE( wxT( "Time" ), mpALIGN_BOTTOM );
             m_axis_y1 = new VOLTAGE_SCALE_Y( wxT( "Voltage" ), mpALIGN_LEFT );
             m_axis_y2 = new CURRENT_SCALE( wxT( "Current" ), mpALIGN_RIGHT );
-            m_axis_y2->SetMasterScale(m_axis_y1);
+            m_axis_y2->SetMasterScale( m_axis_y1 );
             break;
 
         default:
@@ -416,9 +430,9 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     m_legend = new mpInfoLegend( wxRect( 0, 40, 200, 40 ), wxTRANSPARENT_BRUSH );
     AddLayer( m_legend );
     m_topLevel.push_back( m_legend );
-    SetColourTheme(*wxBLACK, *wxWHITE, grey);
+    SetColourTheme( *wxBLACK, *wxWHITE, grey );
 
-    EnableDoubleBuffer(true);
+    EnableDoubleBuffer( true );
     UpdateAll();
 }
 
@@ -455,20 +469,20 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
 
     if( addedNewEntry )
     {
-        if ( m_type == ST_TRANSIENT )
+        if( m_type == ST_TRANSIENT )
         {
             bool hasVoltageTraces = false;
 
             for( auto t : m_traces )
             {
-                if ( ! (t.second->GetFlags() & SPT_CURRENT ) )
+                if( !( t.second->GetFlags() & SPT_CURRENT ) )
                 {
                     hasVoltageTraces = true;
                     break;
                 }
             }
 
-            if ( !hasVoltageTraces )
+            if( !hasVoltageTraces )
                 m_axis_y2->SetMasterScale( nullptr );
             else
                 m_axis_y2->SetMasterScale( m_axis_y1 );
@@ -499,12 +513,12 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
     {
         if( aFlags & SPT_AC_PHASE )
         {
-            for(int i = 0; i < aPoints; i++ )
+            for( int i = 0; i < aPoints; i++ )
                 tmp[i] = tmp[i] * 180.0 / M_PI;                 // convert to degrees
         }
         else
         {
-            for(int i = 0; i < aPoints; i++ )
+            for( int i = 0; i < aPoints; i++ )
                 tmp[i] = 20 * log( tmp[i] ) / log( 10.0 );      // convert to dB
         }
     }
@@ -553,6 +567,7 @@ void SIM_PLOT_PANEL::DeleteAllTraces()
         DeleteTrace( t.first );
     }
 
+    m_colorIdx = 0;
     m_traces.clear();
 }
 
