@@ -247,16 +247,9 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
     try
     {
         TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_sidePanel, aComponent );
-        m_tuneSizer->Add( tuner , 0, wxALL, 5 );
+        m_tuneSizer->Add( tuner );
         tunerList.push_back( tuner );
-        //m_sidePanel->Layout();
-        //m_sideSizer->Fit( m_sidePanel );
-        //m_splitterPlot->Layout();
-        Layout();
-        Layout();
-        Layout();
-        Layout();
-        Layout();
+        m_sidePanel->Layout();
     }
     catch( ... )
     {
