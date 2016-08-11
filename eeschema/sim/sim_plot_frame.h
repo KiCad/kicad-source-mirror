@@ -63,10 +63,19 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void AddVoltagePlot( const wxString& aNetName );
 
     private:
-        virtual void onClose( wxCloseEvent& aEvent );
-        virtual void onNewPlot( wxCommandEvent& aEvent ) { NewPlot(); }
-        virtual void onSimReport( wxThreadEvent& aEvent );
-        virtual void onSimFinished( wxThreadEvent& aEvent );
+        bool isSimulationRunning();
+
+        void onNewPlot( wxCommandEvent& aEvent ) override
+        {
+            NewPlot();
+        }
+
+        void onSimulate( wxCommandEvent& event ) override;
+        void onPlaceProbe( wxCommandEvent& event ) override;
+
+        void onClose( wxCloseEvent& aEvent );
+        void onSimReport( wxThreadEvent& aEvent );
+        void onSimFinished( wxThreadEvent& aEvent );
 
         SCH_EDIT_FRAME* m_schematicFrame;
         NETLIST_EXPORTER_PSPICE* m_exporter;

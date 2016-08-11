@@ -813,8 +813,7 @@ private:
     void OnErc( wxCommandEvent& event );
     void OnCreateNetlist( wxCommandEvent& event );
     void OnUpdatePCB( wxCommandEvent& event );
-    void OnSimulationRun( wxCommandEvent& event );
-    void OnSimulationStop( wxCommandEvent& event );
+    void OnSimulate( wxCommandEvent& event );
     void OnCreateBillOfMaterials( wxCommandEvent& event );
     void OnFindItems( wxCommandEvent& event );
     void OnFindDialogClose( wxFindDialogEvent& event );

@@ -24,6 +24,7 @@
  */
 
 #include <schframe.h>
+#include <eeschema_id.h>
 #include <kiway.h>
 
 #include <netlist_exporter_kicad.h>
@@ -34,11 +35,6 @@
 #include "sim_plot_frame.h"
 #include "sim_plot_panel.h"
 #include "spice_simulator.h"
-
-#ifdef KICAD_SCRIPTING
- #include <python_scripting.h>
-#endif
-
 
 class SIM_THREAD_REPORTER : public REPORTER
 {
@@ -226,6 +222,40 @@ void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
     wxLogDebug( "%lu - %lu data points", data_t.size(), data_y.size() );
     SIM_PLOT_PANEL* plotPanel = static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() );
     plotPanel->AddTrace( aNetName, data_t.size(), data_t.data(), data_y.data(), 0 );
+}
+
+
+bool SIM_PLOT_FRAME::isSimulationRunning()
+{
+    wxCriticalSectionLocker lock( m_simThreadCS );
+
+    return ( m_simThread != NULL );
+
+}
+
+
+void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
+{
+    if( isSimulationRunning() )
+    {
+        StopSimulation();
+        m_simulateBtn->SetLabel( wxT( "Simulate" ) );
+    }
+    else
+    {
+        StartSimulation();
+        m_simulateBtn->SetLabel( wxT( "Stop" ) );
+    }
+}
+
+
+void SIM_PLOT_FRAME::onPlaceProbe( wxCommandEvent& event )
+{
+    if( m_schematicFrame == NULL )
+        return;
+
+    wxCommandEvent* placeProbe = new wxCommandEvent( wxEVT_TOOL, ID_SIM_ADD_PROBE );
+    wxQueueEvent( m_schematicFrame, placeProbe );
 }
 
 

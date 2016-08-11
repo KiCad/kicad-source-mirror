@@ -26,7 +26,7 @@
 #include <schframe.h>
 #include "sim_plot_frame.h"
 
-void SCH_EDIT_FRAME::OnSimulationRun( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnSimulate( wxCommandEvent& event )
 {
     SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, true );
     simFrame->Show( true );
@@ -36,14 +36,7 @@ void SCH_EDIT_FRAME::OnSimulationRun( wxCommandEvent& event )
         simFrame->Iconize( false );
 
     simFrame->Raise();
-
     simFrame->SetSchFrame( this );
-    simFrame->StartSimulation();
-}
-
-
-void SCH_EDIT_FRAME::OnSimulationStop( wxCommandEvent& event )
-{
 }
 
 

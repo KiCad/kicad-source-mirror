@@ -256,8 +256,7 @@ enum id_eeschema_frm
     ID_UPDATE_PCB_FROM_SCH,
     ID_UPDATE_SCH_FROM_PCB,
 
-    ID_SIM_RUN,
-    ID_SIM_STOP,
+    ID_SIM_SHOW,
     ID_SIM_ADD_PROBE
 };
 

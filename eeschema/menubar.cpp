@@ -422,25 +422,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Import and export settings" ),
                  KiBitmap( save_setup_xpm ) );
 
-
-    wxMenu* simMenu = new wxMenu;
-
-    AddMenuItem( simMenu,
-                 ID_SIM_RUN,
-                 _("Run simulation"), _( "Run simulation" ),
-                 KiBitmap( pcbnew_xpm ) );
-
-    AddMenuItem( simMenu,
-                  ID_SIM_STOP,
-                  _( "Stop simulation" ), _( "Stop simulation" ),
-                  KiBitmap( pcbnew_xpm ) );
-
-    AddMenuItem( simMenu,
-                ID_SIM_ADD_PROBE,
-                _( "Add probe" ), _( "Add probe" ),
-                KiBitmap( pcbnew_xpm ) );
-
-
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
 
@@ -511,6 +492,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Run CvPcb" ),
                  KiBitmap( cvpcb_xpm ) );
 
+    toolsMenu->AppendSeparator();
+
+    // Simulator
+    AddMenuItem( toolsMenu,
+                 ID_SIM_SHOW,
+                 _("Simula&te"), _( "Simulate the circuit" ),
+                 wxNullBitmap );
+
     // Help Menu:
     wxMenu* helpMenu = new wxMenu;
 
@@ -545,7 +534,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
-    menuBar->Append( simMenu, _( "&Simulate" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
