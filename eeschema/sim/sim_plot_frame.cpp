@@ -316,14 +316,17 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
 }
 
 
-void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName )
+void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName, bool aErase )
 {
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
-    auto& traceMap = m_plots[plotPanel].m_traces;
-    auto traceIt = traceMap.find( aPlotName );
 
-    wxASSERT( traceIt != traceMap.end() );
-    traceMap.erase( traceIt );
+    if( aErase )
+    {
+        auto& traceMap = m_plots[plotPanel].m_traces;
+        auto traceIt = traceMap.find( aPlotName );
+        wxASSERT( traceIt != traceMap.end() );
+        traceMap.erase( traceIt );
+    }
 
     wxASSERT( plotPanel->IsShown( aPlotName ) );
     plotPanel->DeleteTrace( aPlotName );
@@ -799,9 +802,22 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     // If there are any signals plotted, update them
     if( SIM_PLOT_PANEL::IsPlottable( simType ) )
     {
-        for( const auto& trace : m_plots[plotPanel].m_traces )
-            updatePlot( trace.second, plotPanel );
+        TRACE_MAP& traceMap = m_plots[plotPanel].m_traces;
 
+        for( auto it = traceMap.begin(); it != traceMap.end(); /* iteration occurs in the loop */)
+        {
+            if( !updatePlot( it->second, plotPanel ) )
+            {
+                removePlot( it->first, false );
+                it = traceMap.erase( it );       // remove a plot that does not exist anymore
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        updateSignalList();
         plotPanel->UpdateAll();
         plotPanel->ResetScales();
     }
@@ -811,6 +827,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
         for( const auto& net : m_exporter->GetNetIndexMap() )
         {
             int node = net.second;
+
             if( node > 0 )
                 m_simulator->Command( wxString::Format( "print v(%d)", node ).ToStdString() );
         }

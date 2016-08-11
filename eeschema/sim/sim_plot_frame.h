@@ -148,8 +148,9 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         /**
          * @brief Removes a plot with a specific title.
          * @param aPlotName is the full plot title (e.g. I(Net-C1-Pad1)).
+         * @param aErase decides if plot should be removed from corresponding TRACE_MAP (see m_plots).
          */
-        void removePlot( const wxString& aPlotName );
+        void removePlot( const wxString& aPlotName, bool aErase = true );
 
         void updateNetlistExporter();
 
