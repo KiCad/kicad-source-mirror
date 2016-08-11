@@ -124,7 +124,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         wxString ref = m_noiseRef->GetValue().IsEmpty() ? wxString()
             : wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
 
-        m_simCommand = wxString::Format( ".noise v(%d%s) %s %s %s %s %s",
+        m_simCommand = wxString::Format( ".noise v(%d%s) v%s %s %s %s %s",
             netMap.at( m_noiseMeas->GetValue() ), ref,
             m_noiseSrc->GetValue(), scaleToString( m_noiseScale->GetSelection() ),
             m_noisePointsNumber->GetValue(), m_noiseFreqStart->GetValue(), m_noiseFreqStop->GetValue() );
