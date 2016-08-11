@@ -87,7 +87,7 @@ void SPICE_VALUE::Normalize()
         m_prefix = (UNIT_PREFIX)( m_prefix + 3 );
     }
 
-    while( m_base != 0.0 && std::fabs( m_base ) <= 1.000 )
+    while( m_base != 0.0 && std::fabs( m_base ) < 1.000 )
     {
         m_base *= 1000.0;
         m_prefix = (UNIT_PREFIX)( m_prefix - 3 );
