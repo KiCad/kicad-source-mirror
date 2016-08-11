@@ -47,185 +47,76 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
 }
 
 
-bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, int aCtl )
+bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl )
 {
-    std::vector<int>    pinSequence;                    // numeric indices into m_SortedComponentPinList
-    wxArrayString       stdPinNameArray;                // Array containing Standard Pin Names
-    const wxString      delimiters( "{:,; }" );
-    SCH_SHEET_LIST      sheetList( g_RootSheet );
-
     // Netlist options
-    bool useNetcodeAsNetName = aCtl & NET_USE_NETCODES_AS_NETNAMES;
+    const bool useNetcodeAsNetName = aCtl & NET_USE_NETCODES_AS_NETNAMES;
 
-    // Prepare list of nets generation (not used here, but...
-    for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
-        m_masterList->GetItem( ii )->m_Flag = 0;
+    ProcessNetlist( aCtl );
 
     aFormatter->Print( 0, ".title KiCad schematic\n" );
 
-    m_netMap.clear();
-
-    // Ground net has to be always assigned to node 0
-    m_netMap["GND"] = 0;
-
-    UpdateDirectives( aCtl );
-    m_ReferencesAlreadyFound.Clear();
-
-    int curNetIndex = 1;
-
-    for( unsigned sheet_idx = 0; sheet_idx < sheetList.size(); sheet_idx++ )
+    for( const auto& item : m_spiceItems )
     {
-        // Process component attributes to find Spice directives
-        for( EDA_ITEM* item = sheetList[sheet_idx].LastDrawList(); item; item = item->Next() )
+        aFormatter->Print( 0, "%c%s ", item.m_primitive, (const char*) item.m_refName.c_str() );
+
+        // Pins to node mapping
+        int activePinIndex = 0;
+
+        for( unsigned ii = 0; ii < item.m_pins.size(); ii++ )
         {
-            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, &sheetList[sheet_idx] );
-
-            if( !comp )
-                break;
-
-            item = comp;
-
-            // Reset NodeSeqIndex Count:
-            pinSequence.clear();
-
-            // Obtain Spice fields
-            SCH_FIELD* spicePrimitiveType = comp->FindField( wxT( "Spice_Primitive" ) );
-            SCH_FIELD* spiceModel = comp->FindField( wxT( "Spice_Model" ) );
-            SCH_FIELD* netlistEnabledField = comp->FindField( wxT( "Spice_Netlist_Enabled" ) );
-            SCH_FIELD* spiceSeqField = comp->FindField( wxT( "Spice_Node_Sequence" ) );
-
-            wxString model = spiceModel ? spiceModel->GetText()
-                : GetSpiceFieldDefVal( "Spice_Model", comp, aCtl );
-
-            wxString primType = spicePrimitiveType ? spicePrimitiveType->GetText()
-                : GetSpiceFieldDefVal( "Spice_Primitive", comp, aCtl );
-
-            const wxString& RefName = comp->GetRef( &sheetList[sheet_idx] );
-
-            // Check to see if component should be removed from Spice Netlist:
-            if( netlistEnabledField )
+            // Case of Alt Sequence definition with Unused/Invalid Node index:
+            // Valid used Node Indexes are in the set
+            // {0,1,2,...m_SortedComponentPinList.size()-1}
+            if( !item.m_pinSequence.empty() )
             {
-                wxString netlistEnabled = netlistEnabledField->GetText();
-
-                // Different ways of saying 'disabled' (no/false/0)
-                if( netlistEnabled.CmpNoCase( "N" ) == 0
-                        || netlistEnabled.CmpNoCase( "F" ) == 0
-                        || netlistEnabled == "0" )
+                // All Vector values must be less <= max package size
+                // And Total Vector size should be <= package size
+                if( ( (unsigned) item.m_pinSequence[ii] < m_SortedComponentPinList.size() )
+                    && ( ii < item.m_pinSequence.size() ) )
+                {
+                    // Case of Alt Pin Sequence in control good Index:
+                    activePinIndex = item.m_pinSequence[ii];
+                }
+                else
+                {
+                    // Case of Alt Pin Sequence in control Bad Index or not using all
+                    // pins for simulation:
+                    wxASSERT_MSG( false, "Used an invalid pin number in node sequence" );
                     continue;
+                }
             }
-
-            // Check if an alternative pin sequence is available:
-            if( spiceSeqField )
+            // Case of Standard Pin Sequence in control:
+            else
             {
-                // Get the string containing the sequence of nodes:
-                wxString nodeSeqIndexLineStr = spiceSeqField->GetText();
-
-                // Verify field exists and is not empty:
-                if( !nodeSeqIndexLineStr.IsEmpty() )
-                {
-                    // Create an array of standard pin names from part definition:
-                    stdPinNameArray.Clear();
-
-                    for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
-                    {
-                        NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
-
-                        if( !pin )
-                            continue;
-
-                        stdPinNameArray.Add( pin->GetPinNumText() );
-                    }
-
-                    // Get Alt Pin Name Array From User:
-                    wxStringTokenizer tkz( nodeSeqIndexLineStr, delimiters );
-
-                    while( tkz.HasMoreTokens() )
-                    {
-                        wxString    pinIndex = tkz.GetNextToken();
-                        int         seq;
-
-                        // Find PinName In Standard List assign Standard List Index to Name:
-                        seq = stdPinNameArray.Index( pinIndex );
-
-                        if( seq != wxNOT_FOUND )
-                            pinSequence.push_back( seq );
-                    }
-                }
+                activePinIndex = ii;
             }
 
-            int activePinIndex = 0;
+            NETLIST_OBJECT* pin = item.m_pins[activePinIndex];
+            assert( pin );
+            wxString netName = pin->GetNetName();
 
-            aFormatter->Print( 0, "%s%s ", (const char*) primType.c_str(), (const char*) RefName.c_str() );
-
-            for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
+            if( useNetcodeAsNetName )
             {
-                // Case of Alt Sequence definition with Unused/Invalid Node index:
-                // Valid used Node Indexes are in the set
-                // {0,1,2,...m_SortedComponentPinList.size()-1}
-                if( pinSequence.size() )
-                {
-                    // All Vector values must be less <= max package size
-                    // And Total Vector size should be <= package size
-                    if( ( (unsigned) pinSequence[ii] < m_SortedComponentPinList.size() )
-                      && ( ii < pinSequence.size() ) )
-                    {
-                        // Case of Alt Pin Sequence in control good Index:
-                        activePinIndex = pinSequence[ii];
-                    }
-                    else
-                    {
-                        // Case of Alt Pin Sequence in control Bad Index or not using all
-                        // pins for simulation:
-                        wxASSERT_MSG( false, "Used an invalid pin number in node sequence" );
-                        continue;
-                    }
-                }
-                // Case of Standard Pin Sequence in control:
-                else
-                {
-                    activePinIndex = ii;
-                }
-
-                NETLIST_OBJECT* pin = m_SortedComponentPinList[activePinIndex];
-
-                if( !pin )
-                    continue;
-
-                wxString netName = pin->GetNetName();
-                int netIdx;
-
-                // Assign a node number (associated with net)
-                if( m_netMap.find( netName ) == m_netMap.end() )
-                {
-                    netIdx = curNetIndex++;
-                    m_netMap[netName] = netIdx;
-                }
-                else
-                {
-                    netIdx = m_netMap[netName];
-                }
-
-                if( useNetcodeAsNetName )
-                {
-                    aFormatter->Print( 0, "%d ", netIdx );
-                }
-                else
-                {
-                    sprintPinNetName( netName , wxT( "N-%.6d" ), pin, useNetcodeAsNetName );
-
-                    //Replace parenthesis with underscore to prevent parse issues with simulators
-                    netName.Replace( wxT( "(" ), wxT( "_" ) );
-                    netName.Replace( wxT( ")" ), wxT( "_" ) );
-
-                    if( netName.IsEmpty() )
-                        netName = wxT( "?" );
-
-                    aFormatter->Print( 0, "%s ", TO_UTF8( netName ) );
-                }
+                assert( m_netMap.count( netName ) );
+                aFormatter->Print( 0, "%d ", m_netMap[netName] );
             }
+            else
+            {
+                sprintPinNetName( netName , wxT( "N-%.6d" ), pin, useNetcodeAsNetName );
 
-            aFormatter->Print( 0, "%s\n", (const char*) model.c_str() );
+                //Replace parenthesis with underscore to prevent parse issues with simulators
+                netName.Replace( wxT( "(" ), wxT( "_" ) );
+                netName.Replace( wxT( ")" ), wxT( "_" ) );
+
+                if( netName.IsEmpty() )
+                    netName = wxT( "?" );
+
+                aFormatter->Print( 0, "%s ", TO_UTF8( netName ) );
+            }
         }
+
+        aFormatter->Print( 0, "%s\n", (const char*) item.m_model.c_str() );
     }
 
     // Print out all directives found in the text fields on the schematics
@@ -238,7 +129,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, int aCtl )
 
 
 wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
-        SCH_COMPONENT* aComponent, int aCtl )
+        SCH_COMPONENT* aComponent, unsigned aCtl )
 {
     if( aField == "Spice_Primitive" )
     {
@@ -310,7 +201,117 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
 }
 
 
-void NETLIST_EXPORTER_PSPICE::UpdateDirectives( int aCtl )
+void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
+{
+    const wxString      delimiters( "{:,; }" );
+    SCH_SHEET_LIST      sheetList( g_RootSheet );
+
+    // Prepare list of nets generation (not used here, but...
+    for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
+        m_masterList->GetItem( ii )->m_Flag = 0;
+
+    UpdateDirectives( aCtl );
+
+    m_netMap.clear();
+
+    // 0 is reserved for "GND"
+    m_netMap["GND"] = 0;
+    int netIdx = 1;
+
+    m_ReferencesAlreadyFound.Clear();
+
+    for( unsigned sheet_idx = 0; sheet_idx < sheetList.size(); sheet_idx++ )
+    {
+        // Process component attributes to find Spice directives
+        for( EDA_ITEM* item = sheetList[sheet_idx].LastDrawList(); item; item = item->Next() )
+        {
+            SCH_COMPONENT* comp = findNextComponentAndCreatePinList( item, &sheetList[sheet_idx] );
+
+            if( !comp )
+                break;
+
+            item = comp;
+
+            SPICE_ITEM spiceItem;
+            spiceItem.m_parent = comp;
+
+            // Obtain Spice fields
+            SCH_FIELD* fieldPrim = comp->FindField( wxT( "Spice_Primitive" ) );
+            SCH_FIELD* fieldModel = comp->FindField( wxT( "Spice_Model" ) );
+            SCH_FIELD* fieldEnabled = comp->FindField( wxT( "Spice_Netlist_Enabled" ) );
+            SCH_FIELD* fieldSeq = comp->FindField( wxT( "Spice_Node_Sequence" ) );
+
+            spiceItem.m_primitive = fieldPrim ? fieldPrim->GetText()[0]
+                : GetSpiceFieldDefVal( "Spice_Primitive", comp, aCtl )[0];
+
+            spiceItem.m_model = fieldModel ? fieldModel->GetText()
+                : GetSpiceFieldDefVal( "Spice_Model", comp, aCtl );
+
+            spiceItem.m_refName = comp->GetRef( &sheetList[sheet_idx] );
+
+            // Check to see if component should be removed from Spice Netlist:
+            spiceItem.m_enabled = true;     // assume yes and then verify
+
+            if( fieldEnabled )
+            {
+                wxString netlistEnabled = fieldEnabled->GetText();
+
+                // Different ways of saying 'disabled' (no/false/0)
+                if( netlistEnabled.CmpNoCase( "N" ) == 0
+                        || netlistEnabled.CmpNoCase( "F" ) == 0
+                        || netlistEnabled == "0" )
+                    spiceItem.m_enabled = false;
+            }
+
+            wxArrayString pinNames;
+
+            // Store pin information
+            for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
+            {
+                NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
+                assert( pin );
+                spiceItem.m_pins.push_back( pin );
+                pinNames.Add( pin->GetPinNumText() );
+
+                // Create net mapping
+                const wxString& netName = pin->GetNetName();
+                if( m_netMap.count( netName ) == 0 )
+                    m_netMap[netName] = netIdx++;
+            }
+
+            // Check if an alternative pin sequence is available:
+            if( fieldSeq )
+            {
+                // Get the string containing the sequence of nodes:
+                wxString nodeSeqIndexLineStr = fieldSeq->GetText();
+
+                // Verify field exists and is not empty:
+                if( !nodeSeqIndexLineStr.IsEmpty() )
+                {
+                    // Get Alt Pin Name Array From User:
+                    wxStringTokenizer tkz( nodeSeqIndexLineStr, delimiters );
+
+                    while( tkz.HasMoreTokens() )
+                    {
+                        wxString    pinIndex = tkz.GetNextToken();
+                        int         seq;
+
+                        // Find PinName In Standard List assign Standard List Index to Name:
+                        seq = pinNames.Index( pinIndex );
+
+                        if( seq != wxNOT_FOUND )
+                            spiceItem.m_pinSequence.push_back( seq );
+                    }
+                }
+            }
+
+            m_spiceItems.push_back( spiceItem );
+        }
+    }
+}
+
+
+void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 {
     const SCH_SHEET_LIST& sheetList = g_RootSheet;
 
@@ -354,7 +355,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( int aCtl )
 }
 
 
-void NETLIST_EXPORTER_PSPICE::writeDirectives( OUTPUTFORMATTER* aFormatter, int aCtl ) const
+void NETLIST_EXPORTER_PSPICE::writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const
 {
     for( auto& dir : m_directives )
     {

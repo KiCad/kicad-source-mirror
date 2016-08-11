@@ -36,7 +36,8 @@ enum SPICE_NETLIST_OPTIONS {
     NET_USE_X_PREFIX = 2,               // change "U" and "IC" reference prefix to "X"
     NET_USE_NETCODES_AS_NETNAMES = 4,   // use netcode numbers as netnames
     NET_ADJUST_INCLUDE_PATHS = 8,       // use full paths for included files (if they are in search path)
-    NET_ADJUST_PASSIVE_VALS = 16        // reformat passive component values (e.g. 1M -> 1Meg)
+    NET_ADJUST_PASSIVE_VALS = 16,       // reformat passive component values (e.g. 1M -> 1Meg)
+    NET_ALL_FLAGS = 0xffff
 };
 
 /// @todo add NET_ADJUST_INCLUDE_PATHS & NET_ADJUST_PASSIVE_VALS checkboxes in the netlist export dialog
@@ -58,8 +59,30 @@ public:
     {
     }
 
+    struct SPICE_ITEM
+    {
+        SCH_COMPONENT* m_parent;
+        wxChar m_primitive;
+        wxString m_model;
+        wxString m_refName;
+        bool m_enabled;
+
+        ///> Array containing Standard Pin Name
+        std::vector<NETLIST_OBJECT*> m_pins;
+
+        ///> Numeric indices into m_SortedComponentPinList
+        std::vector<int> m_pinSequence;
+    };
+
+    typedef std::list<SPICE_ITEM> SPICE_ITEM_LIST;
+
     ///> Net name to node number mapping
     typedef std::map<wxString, int> NET_INDEX_MAP;
+
+    const SPICE_ITEM_LIST& GetSpiceItems() const
+    {
+        return m_spiceItems;
+    }
 
     /**
      * Function WriteNetlist
@@ -67,7 +90,9 @@ public:
      */
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
 
-    bool Format( OUTPUTFORMATTER* aFormatter, int aCtl );
+    bool Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl );
+
+    void ProcessNetlist( unsigned aCtl );
 
     const NET_INDEX_MAP& GetNetIndexMap() const
     {
@@ -79,9 +104,9 @@ public:
         return m_spiceFields;
     }
 
-    static wxString GetSpiceFieldDefVal( const wxString& aField, SCH_COMPONENT* aComponent, int aCtl );
+    static wxString GetSpiceFieldDefVal( const wxString& aField, SCH_COMPONENT* aComponent, unsigned aCtl );
 
-    void UpdateDirectives( int aCtl );
+    void UpdateDirectives( unsigned aCtl );
 
     const std::vector<wxString> GetDirectives() const
     {
@@ -89,13 +114,15 @@ public:
     }
 
 protected:
-    virtual void writeDirectives( OUTPUTFORMATTER* aFormatter, int aCtl ) const;
+    virtual void writeDirectives( OUTPUTFORMATTER* aFormatter, unsigned aCtl ) const;
 
 private:
     // Spice directives found in the processed schematic sheet
     std::vector<wxString> m_directives;
 
     NET_INDEX_MAP m_netMap;
+
+    SPICE_ITEM_LIST m_spiceItems;
 
     SEARCH_STACK* m_paths;
 
