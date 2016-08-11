@@ -3,9 +3,9 @@
 // Purpose:         Framework for plotting in wxWindows
 // Original Author: David Schalig
 // Maintainer:      Davide Rondini
-// Contributors:    Jose Luis Blanco, Val Greene
+// Contributors:    Jose Luis Blanco, Val Greene, Maciej Suminski, Tomasz Wlostowski
 // Created:         21/07/2003
-// Last edit:       22/02/2009
+// Last edit:       05/08/2016
 // Copyright:       (c) David Schalig, Davide Rondini
 // Licence:         wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -688,147 +688,147 @@ class WXDLLIMPEXP_MATHPLOT mpProfile : public mpLayer
 
 class WXDLLIMPEXP_MATHPLOT mpScaleBase : public mpLayer
 {
-public:
-    mpScaleBase () { m_rangeSet = false; m_nameFlags = mpALIGN_BORDER_BOTTOM; };
-    virtual ~mpScaleBase () {};
+    public:
+        mpScaleBase () { m_rangeSet = false; m_nameFlags = mpALIGN_BORDER_BOTTOM; };
+        virtual ~mpScaleBase () {};
 
-    virtual bool IsHorizontal() = 0;
+        virtual bool IsHorizontal() = 0;
 
-    bool HasBBox() { return FALSE; }
+        bool HasBBox() { return FALSE; }
 
-    /** Set X axis alignment.
-      @param align alignment (choose between mpALIGN_BORDER_BOTTOM, mpALIGN_BOTTOM, mpALIGN_CENTER, mpALIGN_TOP, mpALIGN_BORDER_TOP */
-    void SetAlign(int align) { m_flags = align; };
+        /** Set X axis alignment.
+          @param align alignment (choose between mpALIGN_BORDER_BOTTOM, mpALIGN_BOTTOM, mpALIGN_CENTER, mpALIGN_TOP, mpALIGN_BORDER_TOP */
+        void SetAlign(int align) { m_flags = align; };
 
-    void SetNameAlign ( int align ) { m_nameFlags = align; }
+        void SetNameAlign ( int align ) { m_nameFlags = align; }
 
-    /** Set X axis ticks or grid
-      @param ticks TRUE to plot axis ticks, FALSE to plot grid. */
-    void SetTicks(bool enable) { m_ticks = enable; };
+        /** Set X axis ticks or grid
+          @param ticks TRUE to plot axis ticks, FALSE to plot grid. */
+        void SetTicks(bool enable) { m_ticks = enable; };
 
-    /** Get X axis ticks or grid
-      @return TRUE if plot is drawing axis ticks, FALSE if the grid is active. */
-    bool GetTicks() { return m_ticks; };
+        /** Get X axis ticks or grid
+          @return TRUE if plot is drawing axis ticks, FALSE if the grid is active. */
+        bool GetTicks() { return m_ticks; };
 
 
-    //virtual double X2p( mpWindow &w, double x ) = 0;
-    //virtual double P2x( mpWindow &w, double x ) = 0;
+        //virtual double X2p( mpWindow &w, double x ) = 0;
+        //virtual double P2x( mpWindow &w, double x ) = 0;
 
-    void SetDataRange ( double minV, double maxV )
-    {
-        m_rangeSet = true;
-        m_minV = minV;
-        m_maxV = maxV;
-    }
-
-    void GetDataRange ( double &minV, double& maxV)
-    {
-        minV = m_minV;
-        maxV = m_maxV;
-    }
-
-    void ExtendDataRange ( double minV, double maxV )
-    {
-        if(!m_rangeSet)
+        void SetDataRange ( double minV, double maxV )
         {
+            m_rangeSet = true;
             m_minV = minV;
             m_maxV = maxV;
-            m_rangeSet = true;
-        } else {
-            m_minV = std::min(minV, m_minV);
-            m_maxV = std::max(maxV, m_maxV);
         }
 
-        if (m_minV == m_maxV)
+        void GetDataRange ( double &minV, double& maxV)
         {
-            m_minV = -1.0;
-            m_maxV = 1.0;
+            minV = m_minV;
+            maxV = m_maxV;
         }
-    }
 
-    void ResetDataRange()
-    {
-        m_rangeSet = 0;
-    }
+        void ExtendDataRange ( double minV, double maxV )
+        {
+            if(!m_rangeSet)
+            {
+                m_minV = minV;
+                m_maxV = maxV;
+                m_rangeSet = true;
+            } else {
+                m_minV = std::min(minV, m_minV);
+                m_maxV = std::max(maxV, m_maxV);
+            }
 
-    double AbsMaxValue() const
-    {
-        return std::max(std::abs(m_maxV), std::abs(m_minV));
-    }
+            if (m_minV == m_maxV)
+            {
+                m_minV = -1.0;
+                m_maxV = 1.0;
+            }
+        }
 
-    double AbsVisibleMaxValue() const
-    {
+        void ResetDataRange()
+        {
+            m_rangeSet = 0;
+        }
+
+        double AbsMaxValue() const
+        {
+            return std::max(std::abs(m_maxV), std::abs(m_minV));
+        }
+
+        double AbsVisibleMaxValue() const
+        {
             return m_absVisibleMaxV;
-    }
+        }
 
-    virtual double TransformToPlot ( double x ) { return 0.0; };
-    virtual double TransformFromPlot (double xplot ){ return 0.0; };
+        virtual double TransformToPlot ( double x ) { return 0.0; };
+        virtual double TransformFromPlot (double xplot ){ return 0.0; };
 
-    struct TickLabel {
-        TickLabel( double pos_=0.0, const wxString& label_ = wxT("") ) :
-            pos ( pos_ ),
-            label ( label_ ) {};
-        double pos;
-        wxString label;
-        int pixelPos;
-        bool visible;
-    };
+        struct TickLabel {
+            TickLabel( double pos_=0.0, const wxString& label_ = wxT("") ) :
+                pos ( pos_ ),
+                label ( label_ ) {};
+            double pos;
+            wxString label;
+            int pixelPos;
+            bool visible;
+        };
 
-    std::vector<TickLabel>& TickLabels() { return m_tickLabels; };
-
-
-
-protected:
-
-    void updateTickLabels( wxDC & dc, mpWindow & w );
-    void computeLabelExtents ( wxDC & dc, mpWindow & w );
-
-    //virtual int getLabelDecimalDigits(int maxDigits);
-    virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV) {};
-    virtual void recalculateTicks ( wxDC & dc, mpWindow & w ) {};
-
-    int tickCount() const
-    {
-        return m_tickValues.size();
-    }
-
-    virtual int labelCount() const
-    {
-        return m_tickLabels.size();
-    }
-
-    virtual const wxString formatLabel( double value, int nDigits ) { return wxT(""); }
-    virtual void formatLabels( ) { };
-
-    virtual double getTickPos( int n )
-    {
-        return m_tickValues [n];
-    }
-
-    virtual double getLabelPos( int n )
-    {
-        return m_tickLabels[n].pos;
-    }
-
-    virtual const wxString getLabel( int n )
-    {
-        return m_tickLabels[n].label;
-    }
+        std::vector<TickLabel>& TickLabels() { return m_tickLabels; };
 
 
 
-    std::vector<double> m_tickValues;
-    std::vector<TickLabel> m_tickLabels;
+    protected:
 
-    double m_offset, m_scale;
-    double m_absVisibleMaxV;
-    int m_flags; //!< Flag for axis alignment
-    int m_nameFlags;
-    bool m_ticks; //!< Flag to toggle between ticks or grid
-    double m_minV, m_maxV;
-    bool m_rangeSet;
-    int m_maxLabelHeight;
-    int m_maxLabelWidth;
+        void updateTickLabels( wxDC & dc, mpWindow & w );
+        void computeLabelExtents ( wxDC & dc, mpWindow & w );
+
+        //virtual int getLabelDecimalDigits(int maxDigits);
+        virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV) {};
+        virtual void recalculateTicks ( wxDC & dc, mpWindow & w ) {};
+
+        int tickCount() const
+        {
+            return m_tickValues.size();
+        }
+
+        virtual int labelCount() const
+        {
+            return m_tickLabels.size();
+        }
+
+        virtual const wxString formatLabel( double value, int nDigits ) { return wxT(""); }
+        virtual void formatLabels( ) { };
+
+        virtual double getTickPos( int n )
+        {
+            return m_tickValues [n];
+        }
+
+        virtual double getLabelPos( int n )
+        {
+            return m_tickLabels[n].pos;
+        }
+
+        virtual const wxString getLabel( int n )
+        {
+            return m_tickLabels[n].label;
+        }
+
+
+
+        std::vector<double> m_tickValues;
+        std::vector<TickLabel> m_tickLabels;
+
+        double m_offset, m_scale;
+        double m_absVisibleMaxV;
+        int m_flags; //!< Flag for axis alignment
+        int m_nameFlags;
+        bool m_ticks; //!< Flag to toggle between ticks or grid
+        double m_minV, m_maxV;
+        bool m_rangeSet;
+        int m_maxLabelHeight;
+        int m_maxLabelWidth;
 
 };
 
@@ -850,8 +850,8 @@ class WXDLLIMPEXP_MATHPLOT mpScaleXBase : public mpScaleBase
 
         virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV);
 
-//        unsigned int m_labelType; //!< Select labels mode: mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds
-//        wxString m_labelFormat; //!< Format string used to print labels
+        //        unsigned int m_labelType; //!< Select labels mode: mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds
+        //        wxString m_labelFormat; //!< Format string used to print labels
 
         DECLARE_DYNAMIC_CLASS(mpScaleXBase)
 };
@@ -981,7 +981,7 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpScaleBase
         void computeSlaveTicks ( mpWindow& w );
         mpScaleY * m_masterScale;
 
-//        double m_minV, m_maxV;
+        //        double m_minV, m_maxV;
         int m_maxLabelHeight;
         int m_maxLabelWidth;
 
@@ -1302,7 +1302,7 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
           @param imageSize Set a size for the output image. Default is the same as the screen size
           @param fit Decide whether to fit the plot into the size*/
         bool SaveScreenshot(const wxString& filename, wxBitmapType type = wxBITMAP_TYPE_BMP,
-                            wxSize imageSize = wxDefaultSize, bool fit = false);
+                wxSize imageSize = wxDefaultSize, bool fit = false);
 
         /** This value sets the zoom steps whenever the user clicks "Zoom in/out" or performs zoom with the mouse wheel.
          *  It must be a number above unity. This number is used for zoom in, and its inverse for zoom out. Set to 1.5 by default. */
@@ -1385,7 +1385,7 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
         // void OnScroll2       (wxScrollWinEvent &event); //!< Scroll handler, will move canvas
         void OnShowPopupMenu (wxMouseEvent     &event); //!< Mouse handler, will show context menu
         void OnMouseMiddleDown(wxMouseEvent    &event); //!< Mouse handler, for detecting when the user
-                                                        //!< drags with the middle button or just "clicks" for the menu
+        //!< drags with the middle button or just "clicks" for the menu
         void OnCenter        (wxCommandEvent   &event); //!< Context menu handler
         void OnFit           (wxCommandEvent   &event); //!< Context menu handler
         void OnZoomIn        (wxCommandEvent   &event); //!< Context menu handler
@@ -1414,14 +1414,14 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
         {
             return !(m_enableLimitedView
                     && (desiredMax > m_maxX - m_marginRight / m_scaleX
-                    || desiredMin < m_minX - m_marginLeft / m_scaleX));
+                        || desiredMin < m_minX - m_marginLeft / m_scaleX));
         }
 
         bool CheckYLimits(double& desiredMax, double& desiredMin) const
         {
             return !(m_enableLimitedView
                     && (desiredMax > m_maxY + m_marginBottom / m_scaleY
-                    || desiredMin < m_minY + m_marginTop / m_scaleY));
+                        || desiredMin < m_minY + m_marginTop / m_scaleY));
         }
 
         void AdjustLimitedView();
@@ -1555,7 +1555,7 @@ class WXDLLIMPEXP_MATHPLOT mpFXYVector : public mpFXY
           */
         bool GetNextXY(double & x, double & y);
 
-public:
+    public:
         /** Returns the actual minimum X data (loaded in SetData).
         */
         double GetMinX() { return m_minX; }
@@ -1572,7 +1572,7 @@ public:
         */
         double GetMaxY() { return m_maxY; }
 
-protected:
+    protected:
         int     m_flags; //!< Holds label alignment
 
         DECLARE_DYNAMIC_CLASS(mpFXYVector)
@@ -1953,18 +1953,12 @@ class WXDLLIMPEXP_MATHPLOT mpBitmapLayer : public mpLayer
         wxBitmap     m_scaledBitmap;
         wxCoord      m_scaledBitmap_offset_x,m_scaledBitmap_offset_y;
 
-
         bool            m_validImg;
-
 
         /** The shape of the bitmap:
         */
         double  m_min_x,m_max_x,m_min_y,m_max_y;
-
-
 };
-
-
 
 /*@}*/
 
