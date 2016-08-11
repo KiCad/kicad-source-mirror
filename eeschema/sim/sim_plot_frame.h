@@ -176,10 +176,26 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
          */
         void applyTuners();
 
+        /**
+         * @brief Loads plot settings from a file.
+         * @param aPath is the file name.
+         * @return True if successful.
+         */
+        bool loadWorkbook( const wxString& aPath );
+
+        /**
+         * @brief Saves plot settings to a file.
+         * @param aPath is the file name.
+         * @return True if successful.
+         */
+        bool saveWorkbook( const wxString& aPath );
+
         SIM_PLOT_TYPE GetXAxisType( SIM_TYPE aType ) const;
 
         // Menu handlers
         void menuNewPlot( wxCommandEvent& aEvent ) override;
+        void menuOpenWorkbook( wxCommandEvent& event ) override;
+        void menuSaveWorkbook( wxCommandEvent& event ) override;
 
         void menuExit( wxCommandEvent& event ) override
         {

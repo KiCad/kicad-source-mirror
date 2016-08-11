@@ -300,9 +300,11 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
 
     if( xAxisType == SPT_LIN_FREQUENCY || xAxisType == SPT_LOG_FREQUENCY )
     {
+        int baseType = descriptor.GetType() & ~( SPT_AC_MAG | SPT_AC_PHASE );
+
         // Add two plots: magnitude & phase
-        TRACE_DESC mag_desc( *m_exporter, descriptor, descriptor.GetType() | SPT_AC_MAG );
-        TRACE_DESC phase_desc( *m_exporter, descriptor, descriptor.GetType() | SPT_AC_PHASE );
+        TRACE_DESC mag_desc( *m_exporter, descriptor, (SIM_PLOT_TYPE)( baseType | SPT_AC_MAG ) );
+        TRACE_DESC phase_desc( *m_exporter, descriptor, (SIM_PLOT_TYPE)( baseType | SPT_AC_PHASE ) );
 
         updated |= updatePlot( mag_desc, plotPanel );
         updated |= updatePlot( phase_desc, plotPanel );
@@ -481,6 +483,103 @@ void SIM_PLOT_FRAME::applyTuners()
 }
 
 
+bool SIM_PLOT_FRAME::loadWorkbook( const wxString& aPath )
+{
+    m_plots.clear();
+    m_plotNotebook->DeleteAllPages();
+
+    wxTextFile file( aPath );
+
+    if( !file.Open() )
+        return false;
+
+    long plotsCount;
+
+    if( !file.GetFirstLine().ToLong( &plotsCount ) )        // GetFirstLine instead of GetNextLine
+        return false;
+
+    for( long i = 0; i < plotsCount; ++i )
+    {
+        long plotType, tracesCount;
+
+        if( !file.GetNextLine().ToLong( &plotType ) )
+            return false;
+
+        SIM_PLOT_PANEL* plotPanel = NewPlotPanel( (SIM_TYPE) plotType );
+        m_plots[plotPanel].m_simCommand = file.GetNextLine();
+        StartSimulation();
+
+        // Perform simulation, so plots can be added with values
+        do
+        {
+            wxThread::This()->Sleep( 50 );
+        }
+        while( IsSimulationRunning() );
+
+        if( !file.GetNextLine().ToLong( &tracesCount ) )
+            return false;
+
+        for( long j = 0; j < tracesCount; ++j )
+        {
+            long traceType;
+            wxString name, param;
+
+            if( !file.GetNextLine().ToLong( &traceType ) )
+                return false;
+
+            name = file.GetNextLine();
+            param = file.GetNextLine();
+
+            if( name.IsEmpty() || param.IsEmpty() )
+                return false;
+
+            addPlot( name, (SIM_PLOT_TYPE) traceType, param );
+        }
+    }
+
+    return true;
+}
+
+
+bool SIM_PLOT_FRAME::saveWorkbook( const wxString& aPath )
+{
+    wxTextFile file( aPath );
+
+    if( file.Exists() )
+    {
+        if( !file.Open() )
+            return false;
+
+        file.Clear();
+    }
+    else
+    {
+        file.Create();
+    }
+
+    file.AddLine( wxString::Format( "%lu", m_plots.size() ) );
+
+    for( const auto& plot : m_plots )
+    {
+        file.AddLine( wxString::Format( "%d", plot.first->GetType() ) );
+        file.AddLine( plot.second.m_simCommand );
+        file.AddLine( wxString::Format( "%lu", plot.second.m_traces.size() ) );
+
+        for( const auto& trace : plot.second.m_traces )
+        {
+            file.AddLine( wxString::Format( "%d", trace.second.GetType() ) );
+            file.AddLine( trace.second.GetName() );
+            file.AddLine( trace.second.GetParam() );
+        }
+    }
+
+    bool res = file.Write();
+    file.Close();
+
+    return res;
+}
+
+
 SIM_PLOT_TYPE SIM_PLOT_FRAME::GetXAxisType( SIM_TYPE aType ) const
 {
     switch( aType )
@@ -515,6 +614,32 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
         if( prevPlot )
             m_plots[newPlot].m_simCommand = m_plots[prevPlot].m_simCommand;
     }
+}
+
+
+void SIM_PLOT_FRAME::menuOpenWorkbook( wxCommandEvent& event )
+{
+    wxFileDialog openDlg( this, wxT( "Open simulation workbook" ), "", "",
+            "Workbook file (*.wbk)|*.wbk", wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( openDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    if( !loadWorkbook( openDlg.GetPath() ) )
+        DisplayError( this, wxT( "There was an error while opening the workbook file" ) );
+}
+
+
+void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
+{
+    wxFileDialog saveDlg( this, wxT( "Save simulation workbook" ), "", "",
+                "Workbook file (*.wbk)|*.wbk", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( saveDlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    if( !saveWorkbook( saveDlg.GetPath() ) )
+        DisplayError( this, wxT( "There was an error while saving the workbook file" ) );
 }
 
 
