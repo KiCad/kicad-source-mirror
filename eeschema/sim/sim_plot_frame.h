@@ -54,7 +54,14 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void StartSimulation();
         void StopSimulation();
 
-        void NewPlotPanel( SIM_TYPE aSimType );
+        /**
+         * @brief Creates a new plot panel for a given simulation type and adds it to the main
+         * notebook.
+         * @param aSimType is requested simulation type.
+         * @return The new plot panel.
+         */
+        SIM_PLOT_PANEL* NewPlotPanel( SIM_TYPE aSimType );
+
         void AddVoltagePlot( const wxString& aNetName );
 
         SIM_PLOT_PANEL* CurrentPlot() const;
@@ -74,7 +81,11 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
          * @return True if a plot was successfully added/updated.
          */
         bool updatePlot( const wxString& aSpiceName, const wxString& aName, SIM_PLOT_PANEL* aPanel );
+
+        /**
+         * @brief Updates the list of currently plotted signals.
          */
+        void updateSignalList();
 
         /**
          * @brief Returns node number for a given net.
@@ -111,7 +122,8 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 
         void onSimulate( wxCommandEvent& event ) override;
         void onSettings( wxCommandEvent& event ) override;
-        void onPlaceProbe( wxCommandEvent& event ) override;
+        void onAddSignal( wxCommandEvent& event ) override;
+        void onProbe( wxCommandEvent& event ) override;
 
         void onClose( wxCloseEvent& aEvent );
 

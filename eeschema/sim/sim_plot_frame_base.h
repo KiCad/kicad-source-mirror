@@ -54,6 +54,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxListCtrl* m_cursors;
 		wxButton* m_simulateBtn;
 		wxButton* m_settingsBtn;
+		wxButton* m_addSignal;
 		wxButton* m_probeBtn;
 		wxButton* m_tuneBtn;
 		
@@ -78,7 +79,8 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void onSignalRClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onSimulate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSettings( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onPlaceProbe( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAddSignal( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onProbe( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTune( wxCommandEvent& event ) { event.Skip(); }
 		
 	

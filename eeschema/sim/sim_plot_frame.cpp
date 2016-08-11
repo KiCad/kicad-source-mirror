@@ -27,6 +27,7 @@
 #include <eeschema_id.h>
 #include <kiway.h>
 
+#include <dialogs/dialog_signal_list.h>
 #include "netlist_exporter_pspice_sim.h"
 
 #include "sim_plot_frame.h"
@@ -127,22 +128,39 @@ void SIM_PLOT_FRAME::StopSimulation()
 }
 
 
-void SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
+SIM_PLOT_PANEL* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
 {
     SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, wxID_ANY );
 
-    m_plotNotebook->AddPage( plot,
-            wxString::Format( wxT( "Plot%u" ), (unsigned int) m_plotNotebook->GetPageCount() + 1 ), true );
+    m_plotNotebook->AddPage( plot, wxString::Format( wxT( "Plot%u" ),
+            (unsigned int) m_plotNotebook->GetPageCount() + 1 ), true );
+
+    return plot;
 }
 
 
 void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 {
+    SIM_TYPE simType = m_exporter->GetSimType();
+
+    if( !SIM_PLOT_PANEL::IsPlottable( simType ) )
+        return; // TODO else write out in console?
+
     int nodeNumber = getNodeNumber( aNetName );
 
     if( nodeNumber >= -1 )
     {
-        updatePlot( wxString::Format( "V(%d)", nodeNumber ), aNetName, CurrentPlot() );
+        // Create a new plot if the current one displays a different type
+        SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
+        if( plotPanel == nullptr || plotPanel->GetType() != simType )
+            plotPanel = NewPlotPanel( simType );
+
+        if( updatePlot( wxString::Format( "V(%d)", nodeNumber ), aNetName, plotPanel ) )
+        {
+            updateSignalList();
+            plotPanel->Fit();
+        }
     }
 }
 
@@ -250,11 +268,23 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aNa
 }
 
 
+void SIM_PLOT_FRAME::updateSignalList()
+{
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
+    if( !plotPanel )
+        return;
+
+    // Fill the signals listbox
+    m_signals->Clear();
+
+    for( const auto& trace : plotPanel->GetTraces() )
+        m_signals->Append( trace.second->GetName() );
+}
+
+
 int SIM_PLOT_FRAME::getNodeNumber( const wxString& aNetName )
 {
-    if( !m_exporter )
-        return -1;
-
     const auto& netMapping = m_exporter->GetNetIndexMap();
     auto it = netMapping.find( aNetName );
 
@@ -267,13 +297,10 @@ int SIM_PLOT_FRAME::getNodeNumber( const wxString& aNetName )
 
 void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
 {
-    if( m_exporter )
-    {
-        SIM_TYPE type = m_exporter->GetSimType();
+    SIM_TYPE type = m_exporter->GetSimType();
 
-        if( SIM_PLOT_PANEL::IsPlottable( type ) )
-            NewPlotPanel( type );
-    }
+    if( SIM_PLOT_PANEL::IsPlottable( type ) )
+        NewPlotPanel( type );
 }
 
 
@@ -391,33 +418,25 @@ void SIM_PLOT_FRAME::menuShowCoordsUpdate( wxUpdateUIEvent& event )
 
 void SIM_PLOT_FRAME::onPlotChanged( wxNotebookEvent& event )
 {
+    updateSignalList();
+
+    // Update cursors
     wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
 }
 
 
 void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
 {
+    // Remove signal from the plot on double click
     int idx = m_signals->GetSelection();
     SIM_PLOT_PANEL* plot = CurrentPlot();
-    SIM_TYPE simType = m_exporter->GetSimType();
-
-    // Create a new plot if the current one displays a different type
-    if( SIM_PLOT_PANEL::IsPlottable( simType ) && ( plot == nullptr || plot->GetType() != simType ) )
-    {
-        NewPlotPanel( simType );
-        plot = CurrentPlot();
-    }
 
     if( idx != wxNOT_FOUND )
     {
         const wxString& netName = m_signals->GetString( idx );
-
-        if( plot->IsShown( netName ) )
-            plot->DeleteTrace( netName );
-        else
-            AddVoltagePlot( netName );
-
-        plot->Fit();
+        m_signals->Delete( idx );
+        wxASSERT( plot->IsShown( netName ) );
+        plot->DeleteTrace( netName );
     }
 }
 
@@ -458,7 +477,14 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 }
 
 
-void SIM_PLOT_FRAME::onPlaceProbe( wxCommandEvent& event )
+void SIM_PLOT_FRAME::onAddSignal( wxCommandEvent& event )
+{
+    DIALOG_SIGNAL_LIST dialog( this, m_exporter.get() );
+    dialog.ShowModal();
+}
+
+
+void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
 {
     if( m_schematicFrame == NULL )
         return;
@@ -513,20 +539,10 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     SetCursor( wxCURSOR_ARROW );
 
     SIM_TYPE simType = m_exporter->GetSimType();
-
-    // Fill the signals listbox
-    m_signals->Clear();
-
-    for( const auto& net : m_exporter->GetNetIndexMap() )
-    {
-        if( net.first != "GND" )
-            m_signals->Append( net.first );
-    }
-
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
     if( plotPanel == nullptr || plotPanel->GetType() != simType )
-        return;
+        plotPanel = NewPlotPanel( simType );
 
     // If there are any signals plotted, update them
     if( SIM_PLOT_PANEL::IsPlottable( simType ) )
@@ -591,7 +607,6 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
     {
         case SHOW_SIGNAL:
             m_plotFrame->AddVoltagePlot( m_signal );
-            plot->Fit();
             break;
 
             break;

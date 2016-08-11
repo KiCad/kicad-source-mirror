@@ -184,6 +184,8 @@ set( EESCHEMA_SRCS
     sim/spice_simulator.cpp
     sim/ngspice.cpp
     sim/netlist_exporter_pspice_sim.cpp
+    dialogs/dialog_signal_list.cpp
+    dialogs/dialog_signal_list_base.cpp
     dialogs/dialog_sim_settings.cpp
     dialogs/dialog_sim_settings_base.cpp
     dialogs/dialog_spice_model.cpp
