@@ -137,6 +137,18 @@ public:
     }
 };
 
+class VOLTAGE_SCALE_X : public mpScaleX
+{
+public:
+    VOLTAGE_SCALE_X(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
+        mpScaleX ( name, flags, ticks, type ) {};
+
+    const wxString getLabel( int n )
+    {
+        return formatSI ( m_labeledTicks[n], wxT("V"), 3, AbsVisibleMaxValue() );
+    }
+};
+
 class GAIN_SCALE : public mpScaleY
 {
 public:
@@ -161,10 +173,10 @@ public:
     }
 };
 
-class VOLTAGE_SCALE : public mpScaleY
+class VOLTAGE_SCALE_Y : public mpScaleY
 {
 public:
-    VOLTAGE_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
+    VOLTAGE_SCALE_Y(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
         mpScaleY ( name, flags, ticks ) {};
 
     const wxString getLabel( int n )
@@ -257,11 +269,11 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
         m_axis_x( nullptr ), m_axis_y1( nullptr ), m_axis_y2( nullptr ), m_type( aType )
 {
     LimitView( true );
-    SetMargins(50, 80, 50, 80);
+    SetMargins( 50, 80, 50, 80 );
 
-    wxColour grey(96, 96, 96);
-	SetColourTheme(*wxBLACK, *wxWHITE, grey);
-    EnableDoubleBuffer(true);
+    wxColour grey( 96, 96, 96 );
+    SetColourTheme( *wxBLACK, *wxWHITE, grey );
+    EnableDoubleBuffer( true );
     UpdateAll();
 
     switch( m_type )
@@ -271,13 +283,11 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
             m_axis_y1 = new GAIN_SCALE( wxT( "Gain" ), mpALIGN_LEFT );
             m_axis_y2 = new PHASE_SCALE( wxT( "Phase" ), mpALIGN_RIGHT );
             m_axis_y2->SetMasterScale(m_axis_y1);
-
             break;
-            #if 0
 
         case ST_DC:
-            m_axis_x = new mpScaleX( wxT( "voltage [V]" ), mpALIGN_BORDER_BOTTOM );
-            m_axis_y1 = new mpScaleY( wxT( "voltage [V]" ), mpALIGN_BORDER_LEFT );
+            m_axis_x = new VOLTAGE_SCALE_X( wxT( "Voltage (sweeped)" ), mpALIGN_BORDER_BOTTOM );
+            m_axis_y1 = new VOLTAGE_SCALE_Y( wxT( "Voltage (measured)" ), mpALIGN_BORDER_LEFT );
             break;
 
         case ST_NOISE:
@@ -285,11 +295,9 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
             m_axis_y1 = new mpScaleY( wxT( "noise [(V or A)^2/Hz]" ), mpALIGN_BORDER_LEFT );
             break;
 
-            #endif
-
         case ST_TRANSIENT:
             m_axis_x = new TIME_SCALE( wxT( "Time" ), mpALIGN_BOTTOM );
-            m_axis_y1 = new VOLTAGE_SCALE( wxT( "Voltage" ), mpALIGN_LEFT );
+            m_axis_y1 = new VOLTAGE_SCALE_Y( wxT( "Voltage" ), mpALIGN_LEFT );
             m_axis_y2 = new CURRENT_SCALE( wxT( "Current" ), mpALIGN_RIGHT );
             m_axis_y2->SetMasterScale(m_axis_y1);
             break;
@@ -318,14 +326,10 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     }
 
     m_legend = new mpInfoLegend( wxRect( 0, 40, 200, 40 ), wxTRANSPARENT_BRUSH );
-
     AddLayer( m_legend );
     m_topLevel.push_back( m_legend );
-    SetColourTheme(*wxBLACK, *wxWHITE, grey);
 
-    EnableDoubleBuffer(true);
     UpdateAll();
-
 }
 
 
