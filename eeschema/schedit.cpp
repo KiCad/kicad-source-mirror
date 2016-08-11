@@ -610,7 +610,8 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_SIM_ADD_PROBE:
-        SetToolID( id, wxCURSOR_BULLSEYE, _( "Add a simulator probe" ) );
+        SetToolID( id, -1, _( "Add a simulator probe" ) );
+        m_canvas->SetCursor( CURSOR_PROBE );
         break;
 
     default:

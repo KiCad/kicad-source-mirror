@@ -1382,6 +1382,8 @@ public:
 
     wxString GetNetListerCommand() const { return m_netListerCommand; }
 
+    const static wxCursor CURSOR_PROBE;
+
     DECLARE_EVENT_TABLE()
 };
 
