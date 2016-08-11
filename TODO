@@ -1,4 +1,4 @@
-fix spice netlist exporter
+TEST: fix spice netlist exporter
 view controls (zoom, pan, fit to screen)
 simulation settings
 plot settings - axis range, colors

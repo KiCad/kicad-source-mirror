@@ -41,7 +41,13 @@
 
 bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
-    return false;
+    /// @todo take options into account
+    //bool aUsePrefix = aNetlistOptions & NET_USE_X_PREFIX;
+    //bool aUseNetcodeAsNetName = aNetlistOptions & NET_USE_NETCODES_AS_NETNAMES;
+
+    FILE_OUTPUTFORMATTER outputFile( aOutFileName, wxT( "wt" ), '\'' );
+
+    return Format( &outputFile, aNetlistOptions );
 }
 
 
