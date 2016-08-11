@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,188 +30,93 @@
 
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                 const wxSize& size, long style, const wxString& name )
-    : wxMathGL( parent, id, pos, size, style, name ), m_painter( this )
+    : mpWindow( parent, id, pos, size, style ), m_colorIdx( 0 )
 {
-    AutoResize = true;
-    ResetAxisRanges();
-    SetDraw( &m_painter );
+    //SetMargins( 10, 10, 10, 10 );
+    LockAspect();
+
+    m_axis_x = new mpScaleX( wxT( "T [s]" ) );
+    m_axis_x->SetTicks( false );
+    AddLayer( m_axis_x );
+
+    m_axis_y = new mpScaleY( wxT( "U [V]" ) );
+    m_axis_y->SetTicks( false );
+    AddLayer( m_axis_y );
+
+    m_legend = new mpInfoLegend( wxRect( 0, 0, 40, 40 ), wxWHITE_BRUSH );
+    AddLayer( m_legend );
+
+    //m_coords = new mpInfoCoords( wxRect( 80, 20, 10, 10 ), wxWHITE_BRUSH );
+    //AddLayer( m_coords );
 }
 
 
 SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
 {
-}
-
-
-template<typename T>
-static std::pair<T, T> find_minmax( const T* aArray, unsigned int aSize )
-{
-    std::pair<T, T> result( std::numeric_limits<T>::max(), std::numeric_limits<T>::min() );
-    const T* ptr = aArray;
-
-    for( unsigned int i = 0; i < aSize; ++i )
-    {
-        if( *ptr < result.first )
-            result.first = *ptr;
-
-        if( *ptr > result.second )
-            result.second = *ptr;
-
-        ++ptr;
-    }
-
-    return result;
+    // ~mpWindow destroys all the added layers, so there is no need to destroy m_traces contents
 }
 
 
 void SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aTitle, int aPoints,
-                                double* aT, double* aY, int aFlags )
+                                const double* aT, const double* aY, int aFlags )
 {
+    TRACE* t = NULL;
+
     // Find previous entry, if there is one
     auto it = std::find_if( m_traces.begin(), m_traces.end(),
-            [&](const TRACE& t) { return t.title == aTitle; });
+            [&](const TRACE* t) { return t->GetName() == aTitle; });
 
     if( it == m_traces.end() )
     {
         // New entry
-        TRACE trace;
-        trace.spiceName = aSpiceName;
-        trace.title = aTitle;
-        trace.style = wxString( '-' ) + m_painter.GenerateColor( SIM_PLOT_PAINTER::DARK );
-        trace.x.Set( aT, aPoints );
-        trace.y.Set( aY, aPoints );
-        m_traces.push_back( trace );
+        t = new TRACE( aTitle, aSpiceName );
+        t->SetPen( wxPen( generateColor(), 1, wxSOLID ) );
+        m_traces.push_back( t );
+
+        // It is a trick to keep legend always on the top
+        DelLayer( m_legend );
+        AddLayer( t );
+        AddLayer( m_legend );
     }
     else
     {
-        // Update
-        TRACE& trace = *it;
-        trace.x.Set( aT, aPoints );
-        trace.y.Set( aY, aPoints );
+        t = *it;
     }
 
-    // Update axis ranges
-    std::pair<double, double> traceRangeT = find_minmax( aT, aPoints );
-    m_axisRangeX.first = std::min( traceRangeT.first, m_axisRangeX.first );
-    m_axisRangeX.second = std::max( traceRangeT.second, m_axisRangeX.second );
-
-    std::pair<double, double> traceRangeY = find_minmax( aY, aPoints );
-    m_axisRangeY.first = std::min( traceRangeY.first, m_axisRangeY.first );
-    m_axisRangeY.second = std::max( traceRangeY.second, m_axisRangeY.second );
-
-    Update();
+    t->SetData( std::vector<double>( aT, aT + aPoints ), std::vector<double>( aY, aY + aPoints ) );
+    UpdateAll();
 }
 
 
 void SIM_PLOT_PANEL::DeleteTraces()
 {
+    for( TRACE* t : m_traces )
+    {
+        DelLayer( t, true );
+    }
+
     m_traces.clear();
-    ResetAxisRanges();
-    Update();
 }
 
 
-void SIM_PLOT_PANEL::ResetAxisRanges()
+wxColour SIM_PLOT_PANEL::generateColor()
 {
-    // Set ranges to inverted values, so when there is a new plot added, it will
-    // overridden with correct values
-    m_axisRangeX.first = std::numeric_limits<double>::max();
-    m_axisRangeX.second = std::numeric_limits<double>::min();
-    m_axisRangeY.first = std::numeric_limits<double>::max();
-    m_axisRangeY.second = std::numeric_limits<double>::min();
-}
+    /// @todo have a look at:
+    /// http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html
+    /// https://github.com/Gnuplotting/gnuplot-palettes
 
+    const unsigned long colors[] = { 0x000080, 0x008000, 0x800000, 0x008080, 0x800080, 0x808000, 0x808080 };
 
-int SIM_PLOT_PAINTER::Draw( mglGraph* aGraph )
-{
-    const std::vector<SIM_PLOT_PANEL::TRACE>& traces = m_parent->m_traces;
-    const std::pair<double, double>& axisRangeX = m_parent->m_axisRangeX;
-    const std::pair<double, double>& axisRangeY = m_parent->m_axisRangeY;
+    //const unsigned long colors[] = { 0xe3cea6, 0xb4781f, 0x8adfb2, 0x2ca033, 0x999afb, 0x1c1ae3, 0x6fbffd, 0x007fff, 0xd6b2ca, 0x9a3d6a };
 
-    aGraph->Clf();
-    //aGraph->SetPlotFactor( 1.5 );
-    //aGraph->LoadFont( "termes" );
-    aGraph->SetFontSize( 1.5 );
+    // hls
+    //const unsigned long colors[] = { 0x0f1689, 0x0f7289, 0x35890f, 0x0f8945, 0x89260f, 0x890f53, 0x89820f, 0x630f89 };
 
-    // Axis settings
-    // Use autorange values if possible
-    if( axisRangeX.first < axisRangeX.second )
-        aGraph->SetRange( 'x', axisRangeX.first, axisRangeX.second );
-    else
-        aGraph->SetRange( 'x', 0, 1 );
+    // pastels, good for dark background
+    //const unsigned long colors[] = { 0x2fd8fe, 0x628dfa, 0x53d8a6, 0xa5c266, 0xb3b3b3, 0x94c3e4, 0xca9f8d, 0xac680e };
 
-    if( axisRangeY.first < axisRangeY.second )
-    {
-        // Increase the Y axis range, so it is easy to read the extreme values
-        double range = axisRangeY.second - axisRangeY.first;
-        aGraph->SetRange( 'y', axisRangeY.first - 0.1 * range, axisRangeY.second + 0.1 * range );
-    }
-    else
-    {
-        aGraph->SetRange( 'y', 0, 1 );
-    }
+    const unsigned int colorCount = sizeof(colors) / sizeof(unsigned long);
 
-    aGraph->Axis( "xy" );
-    aGraph->Label( 'x', "Time [s]", 0 );
-    aGraph->Label( 'y', "Voltage [V]", 0 );
-
-    aGraph->Box();
-    aGraph->Grid();
-
-    // Draw traces
-    for( auto t : traces )
-    {
-        aGraph->AddLegend( (const char*) t.title.c_str(), t.style );
-        aGraph->Plot( t.y, t.style );
-    }
-
-    if( traces.size() )
-    {
-        aGraph->SetFontSize( 2.5 );
-        aGraph->Legend( 1, "-#" );  // legend entries horizontally + draw a box around legend
-    }
-
-    return 0;
-}
-
-
-wxString SIM_PLOT_PAINTER::GenerateColor( COLOR_TYPE aType )
-{
-    const char colors[] = "rgbcmylenupq";
-    const unsigned int colorsNumber = sizeof( colors ) - 1;
-
-    // Safe defaults
-    char color = 'k';       // black
-    int shade = 5;
-
-    switch( aType )
-    {
-        case LIGHT:
-            color = colors[m_lightColorIdx % colorsNumber];
-            shade = 5 + m_lightColorIdx / colorsNumber;
-            ++m_lightColorIdx;
-
-            if( shade == 10 )
-            {
-                // Reached the color limit
-                shade = 5;
-                m_lightColorIdx = 0;
-            }
-            break;
-
-        case DARK:
-            color = toupper( colors[m_darkColorIdx % colorsNumber] );
-            shade = 5 - m_darkColorIdx / colorsNumber;
-            ++m_darkColorIdx;
-
-            if( shade == 0 )
-            {
-                // Reached the color limit
-                shade = 5;
-                m_darkColorIdx = 0;
-            }
-            break;
-    }
-
-    return wxString::Format( "{%c%d}", color, shade );
+    /// @todo generate shades to avoid repeating colors
+    return wxColour( colors[m_colorIdx++ % colorCount] );
 }

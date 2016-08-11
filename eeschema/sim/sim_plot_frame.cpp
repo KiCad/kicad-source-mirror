@@ -140,9 +140,13 @@ void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 
     if( nodeNumber >= -1 )
     {
-        updatePlot( wxString::Format( "V(%d)", nodeNumber ), aNetName,
-                    static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() ) );
+        updatePlot( wxString::Format( "V(%d)", nodeNumber ), aNetName, currentPlot() );
     }
+}
+
+SIM_PLOT_PANEL* SIM_PLOT_FRAME::currentPlot() const
+{
+    return static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() );
 }
 
 
@@ -184,7 +188,10 @@ void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
     int idx = m_signals->GetSelection();
 
     if( idx != wxNOT_FOUND )
+    {
         AddVoltagePlot( m_signals->GetString( idx ) );
+        currentPlot()->Fit();
+    }
 }
 
 
@@ -241,10 +248,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     for( unsigned int i = 0; i < m_plotNotebook->GetPageCount(); ++i )
     {
         SIM_PLOT_PANEL* plotPanel = static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetPage( i ) );
-        plotPanel->ResetAxisRanges();
 
         for( const auto& trace : plotPanel->GetTraces() )
-            updatePlot( trace.spiceName, trace.title, plotPanel );
+            updatePlot( trace->GetSpiceName(), trace->GetName(), plotPanel );
     }
 }
 

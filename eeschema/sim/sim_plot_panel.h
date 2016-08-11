@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,38 +26,9 @@
 #ifndef __SIM_PLOT_PANEL_H
 #define __SIM_PLOT_PANEL_H
 
-#include "mgl2/wx.h"
+#include <widgets/mathplot.h>
 
-class SIM_PLOT_PANEL;
-
-class SIM_PLOT_PAINTER : public mglDraw
-{
-public:
-    SIM_PLOT_PAINTER( const SIM_PLOT_PANEL* aParent )
-        : m_parent( aParent ), m_lightColorIdx( 0 ), m_darkColorIdx( 0 )
-    {
-    }
-
-    ~SIM_PLOT_PAINTER()
-    {
-    }
-
-    //void Click() override;
-
-    int Draw( mglGraph* aGraph ) override;
-
-    enum COLOR_TYPE { LIGHT, DARK };
-
-    ///> Generates a new, unique color for plotting curves
-    wxString GenerateColor( COLOR_TYPE aType );
-
-private:
-    const SIM_PLOT_PANEL* m_parent;
-    int m_lightColorIdx, m_darkColorIdx;
-};
-
-
-class SIM_PLOT_PANEL : public wxMathGL
+class SIM_PLOT_PANEL : public mpWindow
 {
 public:
     SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
@@ -64,33 +36,47 @@ public:
 
     ~SIM_PLOT_PANEL();
 
-    struct TRACE
-    {
-        wxString spiceName, title, style;
-        mglData x, y;
-    };
-
     void AddTrace( const wxString& aSpiceName, const wxString& aTitle, int aPoints,
-                    double* aT, double* aY, int aFlags );
+                    const double* aT, const double* aY, int aFlags );
+
     void DeleteTraces();
 
-    const std::vector<TRACE>& GetTraces() const
+    class TRACE : public mpFXYVector
+    {
+    public:
+        TRACE( const wxString& aTitle, const wxString& aSpiceName )
+            : mpFXYVector( aTitle ), m_spiceName( aSpiceName )
+        {
+            SetContinuity( true );
+            ShowName( false );
+        }
+
+        const wxString& GetSpiceName() const
+        {
+            return m_spiceName;
+        }
+
+    private:
+        wxString m_spiceName;
+    };
+
+    const std::vector<TRACE*>& GetTraces() const
     {
         return m_traces;
     }
 
-    void ResetAxisRanges();
-
 private:
-    SIM_PLOT_PAINTER m_painter;
+    wxColour generateColor();
+
+    unsigned int m_colorIdx;
 
     // Traces to be plotted
-    std::vector<TRACE> m_traces;
+    std::vector<TRACE*> m_traces;
 
-    // Axis ranges determined by the added traces data
-    std::pair<double, double> m_axisRangeX, m_axisRangeY;
-
-    friend class SIM_PLOT_PAINTER;
+    mpScaleX* m_axis_x;
+    mpScaleY* m_axis_y;
+    mpInfoLegend* m_legend;
+    //mpInfoCoords* m_coords;
 };
 
 #endif

@@ -249,18 +249,12 @@ set_source_files_properties( ../common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_SCH;PGM_DATA_FILE_EXT=\"sch\";BUILD_KIWAY_DLL"
     )
 
-#if (KICAD_SPICE)
-    set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} mgl2 mgl2-wx)
-#else()
-#    set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} )
-#endif()
-
 target_link_libraries( eeschema
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
     common
     bitmaps
-    ${EESCHEMA_LINK_LIBS}
+    ${wxWidgets_LIBRARIES}
     )
 
 # the DSO (KIFACE) housing the main eeschema code:
@@ -273,7 +267,7 @@ target_link_libraries( eeschema_kiface
     bitmaps
     polygon
     gal
-    ${EESCHEMA_LINK_LIBS}
+    ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
 )
 set_target_properties( eeschema_kiface PROPERTIES
