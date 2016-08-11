@@ -172,6 +172,7 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_simulator->SetReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
     m_simulator->LoadNetlist( formatter.GetString() );
+    updateTuners();
     applyTuners();
     m_simulator->Run();
 
@@ -260,9 +261,11 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
 }
 
 
-void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner )
+void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner, bool aErase )
 {
-    m_tuners.remove( aTuner );
+    if( aErase )
+        m_tuners.remove( aTuner );
+
     aTuner->Destroy();
     m_sidePanel->Layout();
 }
@@ -430,6 +433,32 @@ void SIM_PLOT_FRAME::updateSignalList()
 void SIM_PLOT_FRAME::updateCursors()
 {
     wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+}
+
+
+void SIM_PLOT_FRAME::updateTuners()
+{
+    const auto& spiceItems = m_exporter->GetSpiceItems();
+
+    for( auto it = m_tuners.begin(); it != m_tuners.end(); /* iteration inside the loop */ )
+    {
+        const wxString& ref = (*it)->GetComponentName();
+
+        if( std::find_if( spiceItems.begin(), spiceItems.end(), [&]( const SPICE_ITEM& item )
+                {
+                    return item.m_refName == ref;
+                }) == spiceItems.end() )
+        {
+            // The component does not exist anymore, remove the associated tuner
+            TUNER_SLIDER* tuner = *it;
+            it = m_tuners.erase( it );
+            RemoveTuner( tuner, false );
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 

@@ -63,6 +63,22 @@ enum SPICE_PRIMITIVE {
 
 /// @todo add NET_ADJUST_INCLUDE_PATHS & NET_ADJUST_PASSIVE_VALS checkboxes in the netlist export dialog
 
+struct SPICE_ITEM
+{
+    SCH_COMPONENT* m_parent;
+    wxChar m_primitive;
+    wxString m_model;
+    wxString m_refName;
+    bool m_enabled;
+
+    ///> Array containing Standard Pin Name
+    std::vector<NETLIST_OBJECT*> m_pins;
+
+    ///> Numeric indices into m_SortedComponentPinList
+    std::vector<int> m_pinSequence;
+};
+
+
 /**
  * Class NETLIST_EXPORTER_PSPICE
  * generates a PSPICE compatible netlist
@@ -79,21 +95,6 @@ public:
     virtual ~NETLIST_EXPORTER_PSPICE()
     {
     }
-
-    struct SPICE_ITEM
-    {
-        SCH_COMPONENT* m_parent;
-        wxChar m_primitive;
-        wxString m_model;
-        wxString m_refName;
-        bool m_enabled;
-
-        ///> Array containing Standard Pin Name
-        std::vector<NETLIST_OBJECT*> m_pins;
-
-        ///> Numeric indices into m_SortedComponentPinList
-        std::vector<int> m_pinSequence;
-    };
 
     typedef std::list<SPICE_ITEM> SPICE_ITEM_LIST;
 

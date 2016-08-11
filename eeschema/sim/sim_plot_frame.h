@@ -131,7 +131,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void AddCurrentPlot( const wxString& aDeviceName, const wxString& aParam );
 
         void AddTuner( SCH_COMPONENT* aComponent );
-        void RemoveTuner( TUNER_SLIDER* aTuner );
+        void RemoveTuner( TUNER_SLIDER* aTuner, bool aErase = true );
 
         SIM_PLOT_PANEL* CurrentPlot() const;
 
@@ -171,6 +171,12 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
          * @brief Updates the cursor values list.
          */
         void updateCursors();
+
+        /**
+         * @brief Filters out tuners for components that do not exist anymore.
+         * Decisions are based on the current NETLIST_EXPORTER data.
+         */
+        void updateTuners();
 
         /**
          * @brief Applies component values specified using tunder sliders to the current netlist.
