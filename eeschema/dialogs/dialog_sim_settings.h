@@ -63,7 +63,10 @@ private:
         LINEAR
     };
 
-    void onLoadDirectives( wxCommandEvent& event ) override;
+    void onLoadDirectives( wxCommandEvent& event ) override
+    {
+        loadDirectives();
+    }
 
     static wxString scaleToString( int aOption )
     {
@@ -84,6 +87,7 @@ private:
         return wxEmptyString;
     }
 
+    void loadDirectives();
     void updateNetlistOpts();
 
     wxString m_simCommand;

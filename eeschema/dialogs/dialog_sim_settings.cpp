@@ -171,6 +171,9 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 bool DIALOG_SIM_SETTINGS::TransferDataToWindow()
 {
     /// @todo one day it could interpret the sim command and fill out appropriate fields..
+    if( m_customTxt->IsEmpty() )
+        loadDirectives();
+
     return true;
 }
 
@@ -235,7 +238,7 @@ int DIALOG_SIM_SETTINGS::ShowModal()
 }
 
 
-void DIALOG_SIM_SETTINGS::onLoadDirectives( wxCommandEvent& event )
+void DIALOG_SIM_SETTINGS::loadDirectives()
 {
     if( m_exporter )
         m_customTxt->SetValue( m_exporter->GetSheetSimCommand() );
