@@ -951,6 +951,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     if( !plotPanel || plotPanel->GetType() != simType )
         plotPanel = NewPlotPanel( simType );
 
+    if( IsSimulationRunning() )
+        return;
+
     // If there are any signals plotted, update them
     if( SIM_PLOT_PANEL::IsPlottable( simType ) )
     {
