@@ -521,7 +521,7 @@ set( INC_AFTER
 
 
 #if ( KICAD_SPICE )
-#    find_package(MathGL2 2.3.4 COMPONENTS wx REQUIRED )
+#find_package(MathGL2 2.1 COMPONENTS wx REQUIRED )
 #endif ()
 
 # Find Python and other scripting resources

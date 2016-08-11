@@ -249,7 +249,7 @@ set_source_files_properties( ../common/single_top.cpp PROPERTIES
     )
 
 #if (KICAD_SPICE)
-    set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} mgl mgl-wx)
+    set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} mgl-wx mgl mgl-wx)
 #else()
 #    set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} )
 #endif()

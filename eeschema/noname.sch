@@ -126,18 +126,7 @@ F 6 "R" V 5750 4000 60  0001 C CNN "Spice_Primitive"
 	-1   0    0    1   
 $EndComp
 Text Notes 4300 4900 0    60   ~ 0
-*.tran 1u 10m\n
-$Comp
-L SPICE_PROBE U1
-U 1 1 573367CB
-P 4400 3700
-F 0 "U1" H 4400 3700 60  0001 C CNN
-F 1 "SPICE_PROBE" H 4400 3700 60  0001 C CNN
-F 2 "" H 4400 3700 60  0000 C CNN
-F 3 "" H 4400 3700 60  0000 C CNN
-	1    4400 3700
-	1    0    0    -1  
-$EndComp
+.tran 1u 10m\n
 Wire Wire Line
 	4400 4350 4400 4250
 Wire Wire Line
@@ -162,36 +151,12 @@ Wire Wire Line
 	4400 3850 4400 3700
 Wire Wire Line
 	4400 3700 4500 3700
-Connection ~ 5650 3700
-Connection ~ 4400 3700
 Text Notes 4300 4800 0    60   ~ 0
 .include diodes.lib\n
 Text Label 4400 3800 0    60   ~ 0
 in
-$Comp
-L SPICE_PROBE U?
-U 1 1 5734D78F
-P 4900 3700
-F 0 "U?" H 4900 3700 60  0001 C CNN
-F 1 "SPICE_PROBE" H 4900 3700 60  0001 C CNN
-F 2 "" H 4900 3700 60  0000 C CNN
-F 3 "" H 4900 3700 60  0000 C CNN
-	1    4900 3700
-	1    0    0    -1  
-$EndComp
-$Comp
-L SPICE_PROBE U?
-U 1 1 5734D7B3
-P 5400 3700
-F 0 "U?" H 5400 3700 60  0001 C CNN
-F 1 "SPICE_PROBE" H 5400 3700 60  0001 C CNN
-F 2 "" H 5400 3700 60  0000 C CNN
-F 3 "" H 5400 3700 60  0000 C CNN
-	1    5400 3700
-	1    0    0    -1  
-$EndComp
 Text Label 5550 3700 0    60   ~ 0
 rect
 Text Notes 4300 5000 0    60   ~ 0
-.ac dec 10 1 1Meg\n
+*.ac dec 10 1 1Meg\n
 $EndSCHEMATC

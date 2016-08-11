@@ -28,6 +28,8 @@ public:
 
     const vector<double> GetPlot( std::string name, int max_len = -1);
 
+    void dump();
+
 private:
 
 
@@ -155,13 +157,12 @@ bool NGSPICE::LoadNetlist(const string& netlist)
 bool NGSPICE::Command(const string& cmd )
 {
     m_ngSpice_Command( (char*)(cmd + string("\n")).c_str());
-
+    dump();
     return true;
 }
 
 
-#if 0
-bool NGSPICE::Run()
+void NGSPICE::dump()
 {
 //    m_ngSpice_Command("run\n");
     char **plots = m_ngSpice_AllPlots();
@@ -189,7 +190,7 @@ bool NGSPICE::Run()
 
 }
 
-#endif
+
 
 NGSPICE::~NGSPICE()
 {

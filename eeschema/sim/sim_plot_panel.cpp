@@ -12,7 +12,7 @@ static int drawPlotFunc( mglGraph *graph )
 	//graph->SetRanges(-10e-3,10e-3,-2,2);
 	graph->Axis("x");
 	graph->Label('x',"Time",0);
-	graph->AddRange('x', 0, 10e-3);
+	graph->SetRange('x', 0, 10e-3);
 
 	graph->Axis("y");
 	graph->Label('y',"Voltage",0);
@@ -47,7 +47,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow *  	parent,
 
 	AutoResize = true;
 	SetDraw( drawPlotFunc );
-	Update();
+//	Update();
 }
 
 

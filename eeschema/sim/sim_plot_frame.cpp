@@ -76,6 +76,9 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY *aKiway, wxWindow* parent )
 {
     m_exporter = NULL;
     m_simulator = NULL;
+    m_currentPlot = NULL;
+
+    NewPlot();
 }
 
 SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
@@ -101,7 +104,7 @@ void SIM_PLOT_FRAME::StartSimulation()
     STRING_FORMATTER formatter;
 
     m_exporter->Format( &formatter, GNL_ALL );
-    m_plotPanel->DeleteTraces();
+    //m_plotPanel->DeleteTraces();
 
     printf("*******************\n%s\n", (const char *)formatter.GetString().c_str());
 
@@ -109,7 +112,7 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_simulator->Command("run\n");
 
     auto mapping = m_exporter->GetNetIndexMap();
-    auto data_t = m_simulator->GetPlot("time");
+//    auto data_t = m_simulator->GetPlot("time");
 
     for(auto name : m_exporter->GetProbeList())
     {
@@ -117,14 +120,20 @@ void SIM_PLOT_FRAME::StartSimulation()
 
         sprintf(spiceName,"V(%d)", mapping[name] );
         //printf("probe %s->%s\n", (const char *) name.c_str(), spiceName);
-        auto data_y = m_simulator->GetPlot(spiceName);
+    //    auto data_y = m_simulator->GetPlot(spiceName);
 
         //printf("%d - %d data points\n", data_t.size(), data_y.size() );
-        m_plotPanel->AddTrace(wxT("V(") + name + wxT(")"), data_t.size(), data_t.data(), data_y.data(), 0);
+    //    m_plotPanel->AddTrace(wxT("V(") + name + wxT(")"), data_t.size(), data_t.data(), data_y.data(), 0);
     }
 
     delete m_simulator;
     m_simulator = NULL;
     //m_simulator->Command("quit\n");
+}
 
+void SIM_PLOT_FRAME::NewPlot()
+{
+    SIM_PLOT_PANEL *plot = new SIM_PLOT_PANEL ( this, wxID_ANY );
+    m_plotNotebook->AddPage ( plot, wxT("Plot1"), true );
+    m_currentPlot = plot;
 }
