@@ -1,0 +1,1 @@
+.model     FZT1049A  NPN IS=1.5E-12  NF=1.0  BF=600  IKF=7.5  VAF=100               ISE=0.9E-13  NE=1.25  NR=1.0  BR=150  IKR=3  VAR=15               ISC=5.0E-13  NC=1.76  RB=0.1  RE=0.018  RC=0.007               CJC=136E-12  CJE=550E-12  MJC=0.352  MJE=0.36          VJC=0.554   VJE=0.726  TF=400E-12  TR=6.9E-9

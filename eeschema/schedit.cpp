@@ -609,6 +609,18 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
         break;
 
+#ifdef KICAD_SPICE
+    case ID_SIM_PROBE:
+        SetToolID( id, -1, _( "Add a simulator probe" ) );
+        m_canvas->SetCursor( CURSOR_PROBE );
+        break;
+
+    case ID_SIM_TUNE:
+        SetToolID( id, -1, _( "Select a value to be tuned" ) );
+        m_canvas->SetCursor( CURSOR_TUNE );
+        break;
+#endif /* KICAD_SPICE */
+
     default:
         SetRepeatItem( NULL );
     }

@@ -160,7 +160,7 @@ again." );
         while( *line == ' ' )
             line++;
 
-        if( strnicmp( line, "EELAYER END", 11 ) == 0 )
+        if( strncasecmp( line, "EELAYER END", 11 ) == 0 )
             break;  // end of not used header found
     }
 
@@ -342,66 +342,66 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* aScree
 
         line = aLine->Line();
 
-        if( strnicmp( line, "$End", 4 ) == 0 )
+        if( strncasecmp( line, "$End", 4 ) == 0 )
         {
             aScreen->SetTitleBlock( tb );
             break;
         }
 
-        if( strnicmp( line, "Sheet", 2 ) == 0 )
+        if( strncasecmp( line, "Sheet", 2 ) == 0 )
             sscanf( line + 5, " %d %d",
                     &aScreen->m_ScreenNumber, &aScreen->m_NumberOfScreens );
 
-        if( strnicmp( line, "Title", 2 ) == 0 )
+        if( strncasecmp( line, "Title", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
             tb.SetTitle( FROM_UTF8( buf ) );
             continue;
         }
 
-        if( strnicmp( line, "Date", 2 ) == 0 )
+        if( strncasecmp( line, "Date", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
             tb.SetDate( FROM_UTF8( buf ) );
             continue;
         }
 
-        if( strnicmp( line, "Rev", 2 ) == 0 )
+        if( strncasecmp( line, "Rev", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
             tb.SetRevision( FROM_UTF8( buf ) );
             continue;
         }
 
-        if( strnicmp( line, "Comp", 4 ) == 0 )
+        if( strncasecmp( line, "Comp", 4 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
             tb.SetCompany( FROM_UTF8( buf ) );
             continue;
         }
 
-        if( strnicmp( line, "Comment1", 8 ) == 0 )
+        if( strncasecmp( line, "Comment1", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
             tb.SetComment1( FROM_UTF8( buf ) );
             continue;
         }
 
-        if( strnicmp( line, "Comment2", 8 ) == 0 )
+        if( strncasecmp( line, "Comment2", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
             tb.SetComment2( FROM_UTF8( buf ) );
             continue;
         }
 
-        if( strnicmp( line, "Comment3", 8 ) == 0 )
+        if( strncasecmp( line, "Comment3", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
             tb.SetComment3( FROM_UTF8( buf ) );
             continue;
         }
 
-        if( strnicmp( line, "Comment4", 8 ) == 0 )
+        if( strncasecmp( line, "Comment4", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
             tb.SetComment4( FROM_UTF8( buf ) );

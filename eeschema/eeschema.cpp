@@ -46,6 +46,7 @@
 #include <wildcards_and_files_ext.h>
 
 #include <kiway.h>
+#include <sim/sim_plot_frame.h>
 
 // The main sheet of the project
 SCH_SHEET*  g_RootSheet = NULL;
@@ -70,6 +71,8 @@ static struct IFACE : public KIFACE_I
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
+        printf("Create class %d\n", aClassId);
+
         switch( aClassId )
         {
         case FRAME_SCH:
@@ -92,6 +95,14 @@ static struct IFACE : public KIFACE_I
             }
             break;
 
+#ifdef KICAD_SPICE
+        case FRAME_SIMULATOR:
+            {
+                SIM_PLOT_FRAME* frame = new SIM_PLOT_FRAME( aKiway, aParent );
+                return frame;
+            }
+            break;
+#endif /* KICAD_SPICE */
 
         case FRAME_SCH_VIEWER:
         case FRAME_SCH_VIEWER_MODAL:
@@ -238,4 +249,3 @@ void IFACE::OnKifaceEnd()
     wxConfigSaveSetups( KifaceSettings(), cfg_params() );
     end_common();
 }
-

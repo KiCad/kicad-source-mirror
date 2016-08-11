@@ -570,5 +570,11 @@ EXTERN_BITMAP( zoom_xpm )
 EXTERN_BITMAP( tune_diff_pair_length_legend_xpm )
 EXTERN_BITMAP( tune_diff_pair_skew_legend_xpm )
 EXTERN_BITMAP( tune_single_track_length_legend_xpm )
+EXTERN_BITMAP( sim_run_xpm )
+EXTERN_BITMAP( sim_stop_xpm )
+EXTERN_BITMAP( sim_tune_xpm )
+EXTERN_BITMAP( sim_probe_xpm )
+EXTERN_BITMAP( sim_add_signal_xpm )
+EXTERN_BITMAP( sim_settings_xpm )
 
 #endif  // BITMAPS_H_

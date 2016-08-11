@@ -52,6 +52,7 @@
 #include <wildcards_and_files_ext.h>
 #include <wildcards_and_files_ext.h>
 #include <invoke_sch_dialog.h>
+#include <netlist_exporters/netlist_exporter_pspice.h>
 
 #include <eeschema_id.h>
 

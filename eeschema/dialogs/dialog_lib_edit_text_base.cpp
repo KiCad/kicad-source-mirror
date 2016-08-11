@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Jun 21 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -35,7 +35,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	m_TextValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextValue->SetMinSize( wxSize( 200,-1 ) );
 	
-	bTextValueOptsSizer->Add( m_TextValue, 1, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND, 5 );
+	bTextValueOptsSizer->Add( m_TextValue, 1, wxALL|wxEXPAND, 5 );
 	
 	m_TextValueSelectButton = new wxButton( this, wxID_ANY, _("Select"), wxDefaultPosition, wxDefaultSize, 0 );
 	bTextValueOptsSizer->Add( m_TextValueSelectButton, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -54,7 +54,7 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	bTextSizeSizer->Add( m_TextSizeText, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_TextSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bTextSizeSizer->Add( m_TextSize, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bTextSizeSizer->Add( m_TextSize, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxTOP, 5 );
 	
 	
 	bUpperBoxSizer->Add( bTextSizeSizer, 0, wxEXPAND, 5 );

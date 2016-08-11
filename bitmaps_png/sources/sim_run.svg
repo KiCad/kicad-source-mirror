@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="add_arc.svg">
+  <metadata
+     id="metadata50">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1000"
+     id="namedview48"
+     showgrid="true"
+     inkscape:zoom="22.961539"
+     inkscape:cx="21.978887"
+     inkscape:cy="14.372445"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="true"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3006"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <style
+       id="style3201"
+       type="text/css">
+    .fil0 {fill:#00923F}
+   </style>
+  </defs>
+  <g
+     style="fill-rule:evenodd"
+     id="g3212"
+     transform="matrix(0.25556099,0,0,0.25556099,-38.947924,-8.6975232)">
+    <g
+       id="Layer_x0020_1">
+      <metadata
+         id="CorelCorpID_0Corel-Layer" />
+      <polygon
+         id="polygon3205"
+         points="162.107,36.8175 245.819,85.5025 162.359,133.984 "
+         class="fil0"
+         style="fill:#00923f" />
+    </g>
+  </g>
+</svg>

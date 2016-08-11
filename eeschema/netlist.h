@@ -47,13 +47,6 @@ enum  NETLIST_TYPE_ID {
 };
 
 
-/// Options for Spice netlist generation (OR'ed bits
-enum netlistOptions {
-    NET_USE_X_PREFIX = 2,               // for Spice netlist : change "U" and "IC" reference prefix to "X"
-    NET_USE_NETCODES_AS_NETNAMES = 4    // for Spice netlist : use netcode numbers as netnames
-};
-
-
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
 
 // Max pin number per component and footprint

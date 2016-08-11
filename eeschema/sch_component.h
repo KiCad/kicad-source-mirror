@@ -39,6 +39,7 @@
 #include <vector>
 #include <lib_draw_item.h>
 
+class SCH_SCREEN;
 class SCH_SHEET_PATH;
 class LIB_ITEM;
 class LIB_PIN;

@@ -46,6 +46,10 @@
 #include <sch_validators.h>
 
 #include <dialog_edit_component_in_schematic_fbp.h>
+#ifdef KICAD_SPICE
+#include <dialog_spice_model.h>
+#include <netlist_exporter_pspice.h>
+#endif /* KICAD_SPICE */
 
 
 /**
@@ -126,13 +130,15 @@ private:
     void showButtonHandler( wxCommandEvent& event );
     void OnTestChipName( wxCommandEvent& event );
     void OnSelectChipName( wxCommandEvent& event );
-	void OnInitDlg( wxInitDialogEvent& event )
+    void OnInitDlg( wxInitDialogEvent& event )
     {
         TransferDataToWindow();
 
         // Now all widgets have the size fixed, call FinishDialogSettings
         FinishDialogSettings();
     }
+
+    void EditSpiceModel( wxCommandEvent& event ) override;
 
     SCH_FIELD* findField( const wxString& aFieldName );
 
@@ -141,7 +147,7 @@ private:
      * update the listbox showing fields, according to the fields texts
      * must be called after a text change in fields, if this change is not an edition
      */
-    void updateDisplay( )
+    void updateDisplay()
     {
         for( unsigned ii = FIELD1;  ii<m_FieldsBuf.size(); ii++ )
             setRowItem( ii, m_FieldsBuf[ii] );
@@ -187,6 +193,10 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* aParent ) :
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( aParent )
 {
+#ifndef KICAD_SPICE
+    spiceFieldsButton->Hide();
+#endif /* not KICAD_SPICE */
+
     m_parent = (SCH_EDIT_FRAME*) aParent;
 
     m_cmp = NULL;
@@ -281,6 +291,18 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event
         return;
 
     chipnameTextCtrl->SetValue( chipname );
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::EditSpiceModel( wxCommandEvent& event )
+{
+#ifdef KICAD_SPICE
+    setSelectedFieldNdx( 0 );
+    DIALOG_SPICE_MODEL dialog( this, *m_cmp, m_FieldsBuf );
+
+    if( dialog.ShowModal() == wxID_OK )
+        updateDisplay();
+#endif /* KICAD_SPICE */
 }
 
 
