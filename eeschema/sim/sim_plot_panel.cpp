@@ -452,19 +452,7 @@ bool SIM_PLOT_PANEL::DeleteTrace( const wxString& aName )
             DelLayer( cursor, true );
 
         DelLayer( trace, true, true );
-
-        // Reset scales
-        if( m_axis_x )
-            m_axis_x->ResetDataRange();
-
-        if( m_axis_y1 )
-            m_axis_y1->ResetDataRange();
-
-        if( m_axis_y2 )
-            m_axis_y2->ResetDataRange();
-
-        for( auto t : m_traces )
-            t.second->UpdateScales();
+        ResetScales();
 
         return true;
     }
@@ -514,6 +502,22 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
 
     // Notify the parent window about the changes
     wxQueueEvent( GetParent(), new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+}
+
+
+void SIM_PLOT_PANEL::ResetScales()
+{
+    if( m_axis_x )
+        m_axis_x->ResetDataRange();
+
+    if( m_axis_y1 )
+        m_axis_y1->ResetDataRange();
+
+    if( m_axis_y2 )
+        m_axis_y2->ResetDataRange();
+
+    for( auto t : m_traces )
+        t.second->UpdateScales();
 }
 
 

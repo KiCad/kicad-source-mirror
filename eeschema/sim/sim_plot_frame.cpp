@@ -759,6 +759,7 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
             updatePlot( trace.second, plotPanel );
 
         plotPanel->UpdateAll();
+        plotPanel->ResetScales();
     }
     else
     {

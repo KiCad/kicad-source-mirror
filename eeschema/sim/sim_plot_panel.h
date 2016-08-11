@@ -218,6 +218,8 @@ public:
 
     void EnableCursor( const wxString& aName, bool aEnable );
 
+    void ResetScales();
+
 private:
     wxColour generateColor();
 
