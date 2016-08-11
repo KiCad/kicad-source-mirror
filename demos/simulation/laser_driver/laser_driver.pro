@@ -29,7 +29,6 @@ version=1
 NetIExt=net
 [eeschema]
 version=1
-LibDir=../../../../kicad-library/library
 [eeschema/libraries]
 LibName1=power
 LibName2=device
