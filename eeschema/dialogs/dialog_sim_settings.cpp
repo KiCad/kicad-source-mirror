@@ -114,15 +114,19 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
     // Noise analysis
     else if( page == m_pgNoise )
     {
+        const NETLIST_EXPORTER_PSPICE::NET_INDEX_MAP& netMap = m_exporter->GetNetIndexMap();
+
         if( m_noiseMeas->GetValue().IsEmpty() || m_noiseSrc->GetValue().IsEmpty() ||
                 m_noisePointsNumber->IsEmpty() || m_noiseFreqStart->IsEmpty() ||
                 m_noiseFreqStop->IsEmpty() )
             return false;
 
-        // TODO missing node number
-        wxString ref = m_noiseRef->GetValue().IsEmpty() ? wxString() : wxString::Format( ", %d", 42 );
+        wxString ref = m_noiseRef->GetValue().IsEmpty() ? wxString()
+            : wxString::Format( ", %d", netMap.at( m_noiseRef->GetValue() ) );
+
         m_simCommand = wxString::Format( ".noise v(%d%s) %s %s %s %s %s",
-            42, ref, m_noiseSrc->GetValue(), scaleToString( m_noiseScale->GetSelection() ),
+            netMap.at( m_noiseMeas->GetValue() ), ref,
+            m_noiseSrc->GetValue(), scaleToString( m_noiseScale->GetSelection() ),
             m_noisePointsNumber->GetValue(), m_noiseFreqStart->GetValue(), m_noiseFreqStop->GetValue() );
     }
 
