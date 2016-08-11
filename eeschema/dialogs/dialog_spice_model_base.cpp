@@ -166,7 +166,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pwrGeneric->SetSizer( fgSizer6 );
 	m_pwrGeneric->Layout();
 	fgSizer6->Fit( m_pwrGeneric );
-	m_powerNotebook->AddPage( m_pwrGeneric, _("Generic"), true );
+	m_powerNotebook->AddPage( m_pwrGeneric, _("DC/AC"), true );
 	m_pwrPulse = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer7;
 	fgSizer7 = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -419,7 +419,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_power->SetSizer( bSizer4 );
 	m_power->Layout();
 	bSizer4->Fit( m_power );
-	m_notebook->AddPage( m_power, _("Power source"), false );
+	m_notebook->AddPage( m_power, _("Source"), false );
 	
 	bSizer1->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	
