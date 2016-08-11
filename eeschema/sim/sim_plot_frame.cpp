@@ -98,7 +98,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 {
     m_exporter = NULL;
     m_simulator = NULL;
-    m_pyConsole = NULL;
     m_simThread = NULL;
 
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
@@ -126,6 +125,7 @@ void SIM_PLOT_FRAME::StartSimulation()
 
     m_simConsole->Clear();
 
+    /// @todo is it necessary to recreate simulator every time?
     m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
     m_simulator->SetConsoleReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
@@ -201,6 +201,32 @@ void SIM_PLOT_FRAME::NewPlot()
 }
 
 
+void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
+{
+    if( !m_exporter )
+        return;
+
+    const auto& netMapping = m_exporter->GetNetIndexMap();
+
+    if( netMapping.count( aNetName ) == 0 )
+        return;
+
+    wxString spiceName( wxString::Format( "V(%d)", netMapping.at( aNetName ) ) );
+    auto data_y = m_simulator->GetPlot( (const char*) spiceName.c_str() );
+
+    wxLogDebug( "probe %s", spiceName );
+
+    if( data_y.empty() )
+        return;
+
+    auto data_t = m_simulator->GetPlot( "time" );
+
+    wxLogDebug( "%lu - %lu data points", data_t.size(), data_y.size() );
+    SIM_PLOT_PANEL* plotPanel = static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() );
+    plotPanel->AddTrace( aNetName, data_t.size(), data_t.data(), data_y.data(), 0 );
+}
+
+
 void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
 {
     {
@@ -258,8 +284,8 @@ void SIM_PLOT_FRAME::onSimFinished( wxThreadEvent& aEvent )
             m_signals->Append( net.first );
     }
 
-    //    auto data_t = m_simulator->GetPlot( "time" );
-
+// TODO remove?
+#if 0
     for( auto& name : m_exporter->GetProbeList() )
     {
         char spiceName[1024];
@@ -271,4 +297,5 @@ void SIM_PLOT_FRAME::onSimFinished( wxThreadEvent& aEvent )
         //wxLogDebug( "%d - %d data points\n", data_t.size(), data_y.size() );
         //    m_plotPanel->AddTrace(wxT("V(") + name + wxT(")"), data_t.size(), data_t.data(), data_y.data(), 0);
     }
+#endif
 }

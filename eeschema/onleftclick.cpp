@@ -28,9 +28,11 @@
  */
 
 #include <fctsys.h>
+#include <kiway.h>
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
 #include <schframe.h>
+#include <sim/sim_plot_frame.h>
 #include <menus_helpers.h>
 
 #include <sch_bus_entry.h>
@@ -43,6 +45,8 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_bitmap.h>
+
+#include <class_netlist_object.h>
 #include <class_library.h>      // fo class SCHLIB_FILTER to filter power parts
 
 
@@ -318,6 +322,31 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         else
         {
             addCurrentItemToList();
+        }
+        break;
+
+    case ID_SIM_ADD_PROBE:
+        {
+            const KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T };
+            item = LocateAndShowItem( aPosition, wiresAndComponents );
+
+            if( !item )
+                break;
+
+            NETLIST_OBJECT_LIST* netlist = BuildNetListBase();
+
+            for( NETLIST_OBJECT* obj : *netlist )
+            {
+                if( obj->m_Comp == item )
+                {
+                    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
+
+                    if( simFrame )
+                        simFrame->AddVoltagePlot( obj->GetNetName() );
+
+                    break;
+                }
+            }
         }
         break;
 

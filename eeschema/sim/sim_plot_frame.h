@@ -60,8 +60,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void StopSimulation();
 
         void NewPlot();
-
-        void TogglePythonConsole();
+        void AddVoltagePlot( const wxString& aNetName );
 
     private:
         virtual void onClose( wxCloseEvent& aEvent );
@@ -72,7 +71,6 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         SCH_EDIT_FRAME* m_schematicFrame;
         NETLIST_EXPORTER_PSPICE* m_exporter;
         SPICE_SIMULATOR* m_simulator;
-        wxWindow* m_pyConsole;
         SIM_THREAD* m_simThread;
         wxCriticalSection m_simThreadCS;
 

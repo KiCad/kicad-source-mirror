@@ -815,7 +815,6 @@ private:
     void OnUpdatePCB( wxCommandEvent& event );
     void OnSimulationRun( wxCommandEvent& event );
     void OnSimulationStop( wxCommandEvent& event );
-    void OnSimulationAddProbe( wxCommandEvent& event );
     void OnCreateBillOfMaterials( wxCommandEvent& event );
     void OnFindItems( wxCommandEvent& event );
     void OnFindDialogClose( wxFindDialogEvent& event );

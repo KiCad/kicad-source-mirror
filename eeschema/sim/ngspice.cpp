@@ -67,8 +67,10 @@ const vector<double> NGSPICE::GetPlot( const string& aName, int aMaxLen )
 
     vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
 
-    if( vi->v_realdata )
+    if( vi && vi->v_realdata )
     {
+        data.reserve( vi->v_length );
+
         for( int i = 0; i < vi->v_length; i++ )
             data.push_back( vi->v_realdata[i] );
     }

@@ -609,6 +609,10 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
         break;
 
+    case ID_SIM_ADD_PROBE:
+        SetToolID( id, wxCURSOR_BULLSEYE, _( "Add a simulator probe" ) );
+        break;
+
     default:
         SetRepeatItem( NULL );
     }
