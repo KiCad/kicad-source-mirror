@@ -47,9 +47,7 @@ bool DIALOG_SIGNAL_LIST::TransferDataFromWindow()
 bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
 {
     // Create a list of possible signals
-    // TODO switch( m_exporter->GetSimType() )
-    // {
-
+    /// @todo it could include separated mag & phase for AC analysis
     if( m_exporter )
     {
         // Voltage list
@@ -59,13 +57,17 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
                 m_signals->Append( wxString::Format( "V(%s)", net.first ) );
         }
 
-        for( const auto& item : m_exporter->GetSpiceItems() )
+        // For some reason, it is not possible to plot currents in any but transient analysis
+        if( m_exporter->GetSimType() == ST_TRANSIENT )
         {
-            // Add all possible currents for the primitive
-            for( const auto& current :
-                    NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
+            for( const auto& item : m_exporter->GetSpiceItems() )
             {
-                m_signals->Append( wxString::Format( "%s(%s)", current, item.m_refName ) );
+                // Add all possible currents for the primitive
+                for( const auto& current :
+                        NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
+                {
+                    m_signals->Append( wxString::Format( "%s(%s)", current, item.m_refName ) );
+                }
             }
         }
     }
