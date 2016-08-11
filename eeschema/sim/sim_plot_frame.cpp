@@ -274,7 +274,9 @@ void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner, bool aErase )
 
 SIM_PLOT_PANEL* SIM_PLOT_FRAME::CurrentPlot() const
 {
-    return static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() );
+    wxWindow* curPage = m_plotNotebook->GetCurrentPage();
+
+    return ( curPage == m_welcomePanel ) ? nullptr : static_cast<SIM_PLOT_PANEL*>( curPage );
 }
 
 
