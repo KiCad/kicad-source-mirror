@@ -99,7 +99,7 @@ TRACE_DESC::TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter, const wxSt
 
 
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
-    : SIM_PLOT_FRAME_BASE( aParent ), m_settingsDlg( this )
+    : SIM_PLOT_FRAME_BASE( aParent ), m_settingsDlg( this ), m_lastSimPlot( nullptr )
 {
     SetKiway( this, aKiway );
 
@@ -142,11 +142,13 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 void SIM_PLOT_FRAME::StartSimulation()
 {
     STRING_FORMATTER formatter;
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
     m_simConsole->Clear();
-
     updateNetlistExporter();
-    m_exporter->SetSimCommand( m_settingsDlg.GetSimCommand() );
+
+    if( plotPanel )
+        m_exporter->SetSimCommand( m_plots[plotPanel].m_simCommand );
 
     if( !m_exporter->Format( &formatter, m_settingsDlg.GetNetlistOptions() ) )
     {
@@ -192,7 +194,7 @@ bool SIM_PLOT_FRAME::IsSimulationRunning()
 
 SIM_PLOT_PANEL* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
 {
-    SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, wxID_ANY );
+    SIM_PLOT_PANEL* plotPanel = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, wxID_ANY );
 
     if( m_welcomePanel )
     {
@@ -200,10 +202,12 @@ SIM_PLOT_PANEL* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
         m_welcomePanel = nullptr;
     }
 
-    m_plotNotebook->AddPage( plot, wxString::Format( wxT( "Plot%u" ),
+    m_plotNotebook->AddPage( plotPanel, wxString::Format( wxT( "Plot%u" ),
             (unsigned int) m_plotNotebook->GetPageCount() + 1 ), true );
 
-    return plot;
+    m_plots[plotPanel] = PLOT_INFO();
+
+    return plotPanel;
 }
 
 
@@ -501,7 +505,14 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
     SIM_TYPE type = m_exporter->GetSimType();
 
     if( SIM_PLOT_PANEL::IsPlottable( type ) )
-        NewPlotPanel( type );
+    {
+        SIM_PLOT_PANEL* prevPlot = CurrentPlot();
+        SIM_PLOT_PANEL* newPlot = NewPlotPanel( type );
+
+        // If the previous plot had the same type, copy the simulation command
+        if( prevPlot )
+            m_plots[newPlot].m_simCommand = m_plots[prevPlot].m_simCommand;
+    }
 }
 
 
@@ -682,6 +693,8 @@ void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 {
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
     // Initial processing is required to e.g. display a list of power sources
     updateNetlistExporter();
 
@@ -691,8 +704,24 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
         return;
     }
 
+    if( plotPanel )
+        m_settingsDlg.SetSimCommand( m_plots[plotPanel].m_simCommand );
+
     m_settingsDlg.SetNetlistExporter( m_exporter.get() );
-    m_settingsDlg.ShowModal();
+
+    if( m_settingsDlg.ShowModal() == wxID_OK )
+    {
+        wxString newCommand = m_settingsDlg.GetSimCommand();
+        SIM_TYPE newSimType = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( newCommand );
+
+        // If it is a new simulation type, open a new plot
+        if( !plotPanel || ( plotPanel && plotPanel->GetType() != newSimType ) )
+        {
+            plotPanel = NewPlotPanel( newSimType );
+        }
+
+        m_plots[plotPanel].m_simCommand = newCommand;
+    }
 }
 
 
@@ -841,10 +870,20 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
     if( IsSimulationRunning() )
         StopSimulation();
 
-    m_simConsole->Clear();
-    // Do not export netlist, it is already stored in the simulator
-    applyTuners();
-    m_simulator->Run();
+    if( CurrentPlot() != m_lastSimPlot )
+    {
+        // We need to rerun simulation, as the simulator currently stores
+        // results for another plot
+        StartSimulation();
+    }
+    else
+    {
+        // Incremental update
+        m_simConsole->Clear();
+        // Do not export netlist, it is already stored in the simulator
+        applyTuners();
+        m_simulator->Run();
+    }
 }
 
 

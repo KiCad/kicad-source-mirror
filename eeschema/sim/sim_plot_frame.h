@@ -235,6 +235,9 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         {
             ///> Map of the traces displayed on the plot
             TRACE_MAP m_traces;
+
+            ///> Spice directive used to execute the simulation
+            wxString m_simCommand;
         };
 
         ///> Map of plot panels and associated data
@@ -266,6 +269,8 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
                 };
         };
 
+        ///> Panel that was used as the most recent one for simulations
+        SIM_PLOT_PANEL* m_lastSimPlot;
 };
 
 // Commands
