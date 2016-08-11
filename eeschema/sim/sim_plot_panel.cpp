@@ -24,45 +24,12 @@
 
 #include "sim_plot_panel.h"
 
-static SIM_PLOT_PANEL* panel = NULL;
-
-static int drawPlotFunc( mglGraph* aGraph )
-{
-    aGraph->Clf();
-    //aGraph->SetRanges(-10e-3,10e-3,-2,2);
-    aGraph->Axis( "x" );
-    aGraph->Label( 'x', "Time", 0 );
-    aGraph->SetRange( 'x', 0, 10e-3 );
-
-    aGraph->Axis( "y" );
-    aGraph->Label( 'y', "Voltage", 0 );
-    aGraph->SetRange( 'y', -1.5, 1.5 );
-
-    for( auto t : panel->m_traces )
-    {
-        aGraph->AddLegend( (const char*) t.name.c_str(), "" );
-        aGraph->Plot( t.y );
-    }
-
-    aGraph->Box();
-    aGraph->Grid();
-
-    if( panel->m_traces.size() )
-        aGraph->Legend( 1, "-#" );
-
-    return 0;
-}
-
-
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
                 const wxSize& size, long style, const wxString& name )
-    : wxMathGL( parent, id, pos, size, style, name )
+    : wxMathGL( parent, id, pos, size, style, name ), m_painter( this )
 {
-    panel = this;
-
     AutoResize = true;
-    SetDraw( drawPlotFunc );
-//    Update();
+    SetDraw( &m_painter );
 }
 
 
@@ -89,4 +56,37 @@ void SIM_PLOT_PANEL::DeleteTraces()
 {
     m_traces.clear();
     Update();
+}
+
+
+int SIM_PLOT_PAINTER::Draw( mglGraph* aGraph )
+{
+    const std::vector<SIM_PLOT_PANEL::TRACE>& traces = m_parent->m_traces;
+
+    aGraph->Clf();
+
+    //aGraph->SetRanges(-10e-3,10e-3,-2,2);
+    aGraph->Axis( "x" );
+    aGraph->Label( 'x', "Time", 0 );
+    //aGraph->SetRange( 'x', 0, 10e-3 );
+
+    aGraph->Axis( "y" );
+    aGraph->Label( 'y', "Voltage", 0 );
+    //aGraph->SetRange( 'y', -1.5, 1.5 );
+
+    for( auto t : traces )
+    {
+        aGraph->AddLegend( (const char*) t.name.c_str(), "" );
+        aGraph->Plot( t.y );
+    }
+
+    aGraph->Box();
+    aGraph->Grid();
+
+    if( traces.size() )
+        aGraph->Legend( 1, "-#" );
+
+    aGraph->SetAutoRanges( 0, 0, 0, 0 );
+
+    return 0;
 }

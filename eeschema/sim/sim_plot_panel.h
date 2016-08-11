@@ -25,8 +25,30 @@
 #ifndef __SIM_PLOT_PANEL_H
 #define __SIM_PLOT_PANEL_H
 
-#include "mgl2/canvas_wnd.h"
 #include "mgl2/wx.h"
+
+class SIM_PLOT_PANEL;
+
+class SIM_PLOT_PAINTER : public mglDraw
+{
+public:
+    SIM_PLOT_PAINTER( SIM_PLOT_PANEL* aParent )
+        : m_parent( aParent )
+    {
+    }
+
+    ~SIM_PLOT_PAINTER()
+    {
+    }
+
+    //void Click() override;
+
+    int Draw( mglGraph* aGraph ) override;
+
+private:
+    SIM_PLOT_PANEL* m_parent;
+};
+
 
 class SIM_PLOT_PANEL : public wxMathGL
 {
@@ -45,6 +67,9 @@ public:
 
     void AddTrace( const wxString& name, int n_points, double *t, double *x, int flags = 0 );
     void DeleteTraces();
+
+private:
+    SIM_PLOT_PAINTER m_painter;
 };
 
 #endif
