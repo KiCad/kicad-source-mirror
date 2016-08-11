@@ -78,6 +78,13 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 {
     SetKiway( this, aKiway );
 
+    m_schematicFrame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+
+    if( m_schematicFrame == NULL )
+        throw std::runtime_error( "There is no schematic window" );
+
+    updateNetlistExporter();
+
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
     Connect( EVT_SIM_REPORT, wxCommandEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
     Connect( EVT_SIM_STARTED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimStarted ), NULL, this );
@@ -115,7 +122,8 @@ void SIM_PLOT_FRAME::StartSimulation()
 
 void SIM_PLOT_FRAME::StopSimulation()
 {
-    m_simulator->Stop();
+    if( m_simulator )
+        m_simulator->Stop();
 }
 
 
@@ -158,8 +166,11 @@ void SIM_PLOT_FRAME::updateNetlistExporter()
 }
 
 
-void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aName, SIM_PLOT_PANEL* aPanel )
+bool SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aName, SIM_PLOT_PANEL* aPanel )
 {
+    if( !m_simulator )
+        return false;
+
     // First, handle the x axis
     wxString xAxisName;
     SIM_TYPE simType = m_exporter->GetSimType();
@@ -168,7 +179,7 @@ void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aNa
     {
         // There is no plot to be shown
         m_simulator->Command( wxString::Format( "print %s", aSpiceName ).ToStdString() );
-        return;
+        return false;
     }
 
     switch( simType )
@@ -198,7 +209,7 @@ void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aNa
     int size = data_x.size();
 
     if( data_x.empty() )
-        return;
+        return false;
 
     // Now, Y axis data
     switch( m_exporter->GetSimType() )
@@ -208,6 +219,10 @@ void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aNa
         {
             auto data_mag = m_simulator->GetMagPlot( (const char*) aSpiceName.c_str() );
             auto data_phase = m_simulator->GetPhasePlot( (const char*) aSpiceName.c_str() );
+
+            if( data_mag.empty() || data_phase.empty() )
+                return false;
+
             aPanel->AddTrace( aSpiceName, aName + " (mag)", size, data_x.data(), data_mag.data(), 0 );
             aPanel->AddTrace( aSpiceName, aName + " (phase)", size, data_x.data(), data_phase.data(), 0 );
         }
@@ -218,13 +233,20 @@ void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aNa
         case ST_TRANSIENT:
         {
             auto data_y = m_simulator->GetMagPlot( (const char*) aSpiceName.c_str() );
+
+            if( data_y.empty() )
+                return false;
+
             aPanel->AddTrace( aSpiceName, aName, size, data_x.data(), data_y.data(), 0 );
         }
         break;
 
         default:
-            return;
+            wxASSERT_MSG( false, "Unhandled plot type" );
+            return false;
     }
+
+    return true;
 }
 
 

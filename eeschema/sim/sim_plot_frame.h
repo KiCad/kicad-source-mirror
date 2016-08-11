@@ -31,12 +31,14 @@
 
 #include "sim_plot_frame_base.h"
 #include "sim_types.h"
-#include "kiway_player.h"
-#include <netlist_exporters/netlist_exporter_pspice.h>
+
+#include <kiway_player.h>
 #include <dialogs/dialog_sim_settings.h>
 
 #include <wx/event.h>
+#include <memory>
 
+class SCH_EDIT_FRAME;
 class SPICE_SIMULATOR;
 class NETLIST_EXPORTER_PSPICE_SIM;
 class SIM_PLOT_PANEL;
@@ -48,11 +50,6 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         /** Constructor */
         SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent );
         ~SIM_PLOT_FRAME();
-
-        void SetSchFrame( SCH_EDIT_FRAME* aSchFrame )
-        {
-            m_schematicFrame = aSchFrame;
-        }
 
         void StartSimulation();
         void StopSimulation();
@@ -74,8 +71,10 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
          * (for NGSPICE it is e.g. "V(1)").
          * @param aName is the name used in the legend.
          * @param aPanel is the panel that should receive the update.
+         * @return True if a plot was successfully added/updated.
          */
-        void updatePlot( const wxString& aSpiceName, const wxString& aName, SIM_PLOT_PANEL* aPanel );
+        bool updatePlot( const wxString& aSpiceName, const wxString& aName, SIM_PLOT_PANEL* aPanel );
+         */
 
         /**
          * @brief Returns node number for a given net.

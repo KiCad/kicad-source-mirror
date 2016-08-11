@@ -36,7 +36,6 @@ void SCH_EDIT_FRAME::OnSimulate( wxCommandEvent& event )
         simFrame->Iconize( false );
 
     simFrame->Raise();
-    simFrame->SetSchFrame( this );
 }
 
 // I apologize for the following lines, but this is more or less what wxWidgets
