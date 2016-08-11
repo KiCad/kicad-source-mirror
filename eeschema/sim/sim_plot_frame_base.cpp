@@ -101,43 +101,35 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	
 	this->SetMenuBar( m_mainMenu );
 	
-	wxBoxSizer* bSizer1;
-	bSizer1 = new wxBoxSizer( wxVERTICAL );
+	m_sizer1 = new wxBoxSizer( wxVERTICAL );
 	
 	m_toolBar = new wxToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_FLAT|wxTB_HORIZONTAL|wxTB_TEXT ); 
 	m_toolBar->Realize(); 
 	
-	bSizer1->Add( m_toolBar, 0, wxEXPAND, 5 );
+	m_sizer1->Add( m_toolBar, 0, wxEXPAND, 5 );
 	
 	m_splitterPlot = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
 	m_splitterPlot->SetSashGravity( 0.8 );
 	m_splitterPlot->Connect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterPlotOnIdle ), NULL, this );
 	
 	m_panel2 = new wxPanel( m_splitterPlot, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer11;
-	bSizer11 = new wxBoxSizer( wxVERTICAL );
+	m_sizer11 = new wxBoxSizer( wxVERTICAL );
 	
 	m_splitterConsole = new wxSplitterWindow( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
 	m_splitterConsole->SetSashGravity( 0.8 );
 	m_splitterConsole->Connect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterConsoleOnIdle ), NULL, this );
 	
 	m_plotPanel = new wxPanel( m_splitterConsole, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+	m_sizer5 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_plotNotebook = new wxNotebook( m_plotPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotNotebook->Hide();
 	m_plotNotebook->SetMinSize( wxSize( 400,-1 ) );
 	
-	
-	bSizer5->Add( m_plotNotebook, 3, wxEXPAND | wxALL, 5 );
-	
-	m_welcomePanel = new wxPanel( m_plotPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer8;
-	bSizer8 = new wxBoxSizer( wxVERTICAL );
+	m_welcomePanel = new wxPanel( m_plotNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_sizer8 = new wxBoxSizer( wxVERTICAL );
 	
 	
-	bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_sizer8->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer81;
 	bSizer81 = new wxBoxSizer( wxHORIZONTAL );
@@ -156,41 +148,42 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
-	bSizer8->Add( bSizer81, 0, wxEXPAND, 5 );
+	m_sizer8->Add( bSizer81, 0, wxEXPAND, 5 );
 	
 	
-	bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_sizer8->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
-	m_welcomePanel->SetSizer( bSizer8 );
+	m_welcomePanel->SetSizer( m_sizer8 );
 	m_welcomePanel->Layout();
-	bSizer8->Fit( m_welcomePanel );
-	bSizer5->Add( m_welcomePanel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_sizer8->Fit( m_welcomePanel );
+	m_plotNotebook->AddPage( m_welcomePanel, _("a page"), false );
+	
+	m_sizer5->Add( m_plotNotebook, 3, wxEXPAND | wxALL, 5 );
 	
 	
-	m_plotPanel->SetSizer( bSizer5 );
+	m_plotPanel->SetSizer( m_sizer5 );
 	m_plotPanel->Layout();
-	bSizer5->Fit( m_plotPanel );
+	m_sizer5->Fit( m_plotPanel );
 	m_panel5 = new wxPanel( m_splitterConsole, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer13;
-	bSizer13 = new wxBoxSizer( wxVERTICAL );
+	m_sizer13 = new wxBoxSizer( wxVERTICAL );
 	
 	m_simConsole = new wxTextCtrl( m_panel5, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_DONTWRAP|wxTE_MULTILINE|wxTE_READONLY );
 	m_simConsole->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	
-	bSizer13->Add( m_simConsole, 1, wxALL|wxEXPAND, 5 );
+	m_sizer13->Add( m_simConsole, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	m_panel5->SetSizer( bSizer13 );
+	m_panel5->SetSizer( m_sizer13 );
 	m_panel5->Layout();
-	bSizer13->Fit( m_panel5 );
+	m_sizer13->Fit( m_panel5 );
 	m_splitterConsole->SplitHorizontally( m_plotPanel, m_panel5, 0 );
-	bSizer11->Add( m_splitterConsole, 1, wxEXPAND, 5 );
+	m_sizer11->Add( m_splitterConsole, 1, wxEXPAND, 5 );
 	
 	
-	m_panel2->SetSizer( bSizer11 );
+	m_panel2->SetSizer( m_sizer11 );
 	m_panel2->Layout();
-	bSizer11->Fit( m_panel2 );
+	m_sizer11->Fit( m_panel2 );
 	m_sidePanel = new wxPanel( m_splitterPlot, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_sideSizer = new wxBoxSizer( wxVERTICAL );
 	
@@ -227,10 +220,10 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_sidePanel->Layout();
 	m_sideSizer->Fit( m_sidePanel );
 	m_splitterPlot->SplitVertically( m_panel2, m_sidePanel, 0 );
-	bSizer1->Add( m_splitterPlot, 1, wxEXPAND, 5 );
+	m_sizer1->Add( m_splitterPlot, 1, wxEXPAND, 5 );
 	
 	
-	this->SetSizer( bSizer1 );
+	this->SetSizer( m_sizer1 );
 	this->Layout();
 	
 	this->Centre( wxBOTH );

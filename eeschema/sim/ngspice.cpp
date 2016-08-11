@@ -53,27 +53,29 @@ NGSPICE::NGSPICE()
     m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll->GetSymbol( "ngSpice_AllVecs" );
     m_ngSpice_Running = (ngSpice_Running) m_dll->GetSymbol( "ngSpice_running" );
 
-    setlocale( LC_ALL, "C" );
 }
 
 
 NGSPICE::~NGSPICE()
 {
-    setlocale( LC_ALL, "" );
     delete m_dll;
 }
 
 
 void NGSPICE::Init()
 {
+    setlocale( LC_ALL, "C" );
     m_ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL, &cbBGThreadRunning, this );
+    setlocale( LC_ALL, "" );
 }
 
 
 vector<COMPLEX> NGSPICE::GetPlot( const string& aName, int aMaxLen )
 {
     vector<COMPLEX> data;
+    setlocale( LC_ALL, "C" );
     vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -99,7 +101,9 @@ vector<COMPLEX> NGSPICE::GetPlot( const string& aName, int aMaxLen )
 vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
 {
     vector<double> data;
+    setlocale( LC_ALL, "C" );
     vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -130,7 +134,10 @@ vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
 vector<double> NGSPICE::GetImagPlot( const string& aName, int aMaxLen )
 {
     vector<double> data;
+
+    setlocale( LC_ALL, "C" );
     vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -153,7 +160,10 @@ vector<double> NGSPICE::GetImagPlot( const string& aName, int aMaxLen )
 vector<double> NGSPICE::GetMagPlot( const string& aName, int aMaxLen )
 {
     vector<double> data;
+
+    setlocale( LC_ALL, "C" );
     vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -179,7 +189,10 @@ vector<double> NGSPICE::GetMagPlot( const string& aName, int aMaxLen )
 vector<double> NGSPICE::GetPhasePlot( const string& aName, int aMaxLen )
 {
     vector<double> data;
+
+    setlocale( LC_ALL, "C" );
     vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -209,26 +222,21 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
     stringstream ss( aNetlist );
     int n = 0;
 
-    printf("***\n");
     while( !ss.eof() && n < 16384 )
     {
         char line[1024];
         ss.getline( line, sizeof(line) );
         lines[n++] = strdup(line);
 
-        printf("%s\n", line);
     }
-    printf("***\n");
-
     lines[n] = NULL;
 
+    setlocale( LC_ALL, "C" );
     m_ngSpice_Circ( lines );
+    setlocale( LC_ALL, "" );
 
     for(int i = 0; i < n; i++)
         delete lines[i];
-
-
-    printf("Netlist load complete!\n");
 
     return true;
 }
@@ -236,25 +244,36 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
 
 bool NGSPICE::Run()
 {
-    return Command( "bg_run" );
+    setlocale( LC_ALL, "C" );
+    bool rv =  Command( "bg_run" );
+    setlocale( LC_ALL, "" );
+    return rv;
 }
 
 
 bool NGSPICE::Stop()
 {
-    return Command( "bg_halt" );
+    setlocale( LC_ALL, "C" );
+    bool rv = Command( "bg_halt" );
+    setlocale( LC_ALL, "" );
+    return rv;
 }
 
 
 bool NGSPICE::IsRunning()
 {
-    return m_ngSpice_Running();
+    setlocale( LC_ALL, "C" );
+    bool rv = m_ngSpice_Running();
+    setlocale( LC_ALL, "" );
+    return rv;
 }
 
 
 bool NGSPICE::Command( const string& aCmd )
 {
+    setlocale( LC_ALL, "C" );
     m_ngSpice_Command( (char*) aCmd.c_str() );
+    setlocale( LC_ALL, "" );
 
     return true;
 }

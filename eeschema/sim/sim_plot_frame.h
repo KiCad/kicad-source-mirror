@@ -136,6 +136,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         SIM_PLOT_PANEL* CurrentPlot() const;
 
     private:
+        void relayout();
         /**
          * @brief Adds a new plot to the current panel.
          * @param aName is the device/net name.

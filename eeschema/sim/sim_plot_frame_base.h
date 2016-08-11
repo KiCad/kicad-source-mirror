@@ -24,10 +24,10 @@ class KIWAY_PLAYER;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/toolbar.h>
-#include <wx/notebook.h>
 #include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/notebook.h>
 #include <wx/textctrl.h>
 #include <wx/splitter.h>
 #include <wx/listbox.h>
@@ -50,15 +50,20 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxMenu* m_fileMenu;
 		wxMenu* m_simulationMenu;
 		wxMenu* m_viewMenu;
+		wxBoxSizer* m_sizer1;
 		wxToolBar* m_toolBar;
 		wxSplitterWindow* m_splitterPlot;
 		wxPanel* m_panel2;
+		wxBoxSizer* m_sizer11;
 		wxSplitterWindow* m_splitterConsole;
 		wxPanel* m_plotPanel;
+		wxBoxSizer* m_sizer5;
 		wxNotebook* m_plotNotebook;
 		wxPanel* m_welcomePanel;
+		wxBoxSizer* m_sizer8;
 		wxStaticText* m_staticText2;
 		wxPanel* m_panel5;
+		wxBoxSizer* m_sizer13;
 		wxTextCtrl* m_simConsole;
 		wxPanel* m_sidePanel;
 		wxBoxSizer* m_sideSizer;

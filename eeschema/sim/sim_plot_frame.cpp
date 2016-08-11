@@ -133,16 +133,10 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Connect( m_toolTune->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onTune ), NULL, this );
     Connect( m_toolSettings->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onSettings ), NULL, this );
 
-    int w, h;
-
-    GetSize( &w, &h );
-
     m_toolBar->Realize();
+    m_plotNotebook->SetPageText(0, _("Welcome!") );
 
-    m_splitterConsole->SetSashPosition( w * 0.8 );
-    m_splitterPlot->SetSashPosition( h * 0.8 );
-
-    Layout();
+    //relayout();
 }
 
 
@@ -178,9 +172,11 @@ void SIM_PLOT_FRAME::StartSimulation()
     m_simulator->LoadNetlist( formatter.GetString() );
     m_simulator->Run();
 
-    m_welcomePanel->Show(false);
-    m_plotNotebook->Show(true);
-    m_plotNotebook->Fit();
+    if ( m_welcomePanel )
+    {
+        m_plotNotebook->DeletePage( 0 );
+        m_welcomePanel = nullptr;
+    }
 
     Layout();
 }
@@ -253,9 +249,13 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
         TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_sidePanel, aComponent );
         m_tuneSizer->Add( tuner , 0, wxALL, 5 );
         tunerList.push_back( tuner );
-        m_sidePanel->Layout();
-        m_sideSizer->Fit( m_sidePanel );
-        m_splitterPlot->Layout();
+        //m_sidePanel->Layout();
+        //m_sideSizer->Fit( m_sidePanel );
+        //m_splitterPlot->Layout();
+        Layout();
+        Layout();
+        Layout();
+        Layout();
         Layout();
     }
     catch( ... )
@@ -274,6 +274,8 @@ void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner )
 
     m_plots[plotPanel].m_tuners.remove( aTuner );
     aTuner->Destroy();
+    Layout();
+    Layout();
     Layout();
 }
 
@@ -319,16 +321,8 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
     if( updated )
     {
         updateSignalList();
-        plotPanel->Layout();
-        plotPanel->Fit();
-        m_plotPanel->Layout();
-        //m_sideSizer->Fit( m_sidePanel );
-        m_splitterPlot->Layout();
-        Layout();
-
     }
 }
-
 
 void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName )
 {
