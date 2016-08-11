@@ -28,13 +28,8 @@
 
 void SCH_EDIT_FRAME::OnSimulationRun( wxCommandEvent& event )
 {
-    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
-
-    if( !simFrame )
-    {
-        simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, true );
-        simFrame->Show( true );
-    }
+    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, true );
+    simFrame->Show( true );
 
     // On Windows, Raise() does not bring the window on screen, when iconized
     if( simFrame->IsIconized() )

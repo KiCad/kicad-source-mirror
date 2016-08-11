@@ -94,8 +94,10 @@ private:
 
 
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
-    : SIM_PLOT_FRAME_BASE( aKiway, aParent )
+    : SIM_PLOT_FRAME_BASE( aParent )
 {
+    SetKiway( this, aKiway );
+
     m_exporter = NULL;
     m_simulator = NULL;
     m_simThread = NULL;

@@ -97,7 +97,7 @@ static struct IFACE : public KIFACE_I
 
         case FRAME_SIMULATOR:
             {
-                SIM_PLOT_FRAME_BASE* frame = new SIM_PLOT_FRAME( aKiway, aParent );
+                SIM_PLOT_FRAME* frame = new SIM_PLOT_FRAME( aKiway, aParent );
                 return frame;
             }
             break;
