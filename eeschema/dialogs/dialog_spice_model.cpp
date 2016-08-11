@@ -27,6 +27,7 @@
 #include <netlist_exporters/netlist_exporter_pspice.h>
 #include <sim/spice_value.h>
 #include <confirm.h>
+#include <project.h>
 
 #include <wx/tokenzr.h>
 
@@ -263,7 +264,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             {
                 const wxString& libFile = m_semiLib->GetValue();
                 m_fieldsTmp[SF_LIB_FILE] = libFile;
-                updateFromFile( m_semiModel, libFile, "model" );
+                updateFromFile( m_semiModel, libFile, ".model" );
             }
             break;
 
@@ -276,7 +277,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             {
                 const wxString& libFile = m_icLib->GetValue();
                 m_fieldsTmp[SF_LIB_FILE] = libFile;
-                updateFromFile( m_icModel, libFile, "subckt" );
+                updateFromFile( m_icModel, libFile, ".subckt" );
             }
             break;
 
@@ -577,24 +578,25 @@ void DIALOG_SPICE_MODEL::updateFromFile( wxComboBox* aComboBox,
     aComboBox->Clear();
 
     // Process the file, looking for components
-    for( wxString line = file.GetFirstLine().Lower(); !file.Eof(); line = file.GetNextLine().Lower() )
+    for( wxString line = file.GetFirstLine().Lower(); !file.Eof(); line = file.GetNextLine() )
     {
-        int idx = line.Find( keyword );
+        wxStringTokenizer tokenizer( line, " " );
 
-        if( idx != wxNOT_FOUND )
+        while( tokenizer.HasMoreTokens() )
         {
-            wxString data = line.Mid( idx );
-            data = data.AfterFirst( ' ' );
-            data.Trim( false );
-            data = data.BeforeFirst( ' ' );
-            data.Trim();
+            wxString token = tokenizer.GetNextToken().Lower();
 
-            if( !data.IsEmpty() )
-                aComboBox->Append( data );
+            if( token == keyword )
+            {
+                token = tokenizer.GetNextToken();
+
+                if( !token.IsEmpty() )
+                    aComboBox->Append( token );
+            }
         }
     }
 
-    // Restore the previous value
+    // Restore the previous value or if there is none - pick the first one from the loaded library
     if( !curValue.IsEmpty() )
         aComboBox->SetValue( curValue );
     else if( aComboBox->GetCount() > 0 )
@@ -655,8 +657,15 @@ void DIALOG_SPICE_MODEL::onSemiSelectLib( wxCommandEvent& event )
     if( openDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    m_semiLib->SetValue( openDlg.GetPath() );
-    updateFromFile( m_semiModel, openDlg.GetPath(), "model" );
+    wxFileName libPath( openDlg.GetPath() );
+
+    // Try to convert the path to relative to project
+    if( libPath.MakeRelativeTo( Prj().GetProjectPath() ) && !libPath.GetFullPath().StartsWith( ".." ) )
+        m_semiLib->SetValue( libPath.GetFullPath() );
+    else
+        m_semiLib->SetValue( openDlg.GetPath() );
+
+    updateFromFile( m_semiModel, openDlg.GetPath(), ".model" );
 }
 
 
@@ -670,8 +679,15 @@ void DIALOG_SPICE_MODEL::onSelectIcLib( wxCommandEvent& event )
     if( openDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    m_icLib->SetValue( openDlg.GetPath() );
-    updateFromFile( m_icModel, openDlg.GetPath(), "subckt" );
+    wxFileName libPath( openDlg.GetPath() );
+
+    // Try to convert the path to relative to project
+    if( libPath.MakeRelativeTo( Prj().GetProjectPath() ) && !libPath.GetFullPath().StartsWith( ".." ) )
+        m_icLib->SetValue( libPath.GetFullPath() );
+    else
+        m_icLib->SetValue( openDlg.GetPath() );
+
+    updateFromFile( m_icModel, openDlg.GetPath(), ".subckt" );
 }
 
 

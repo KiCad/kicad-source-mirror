@@ -46,7 +46,7 @@
             <property name="pos"></property>
             <property name="size">425,630</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>
-            <property name="subclass"></property>
+            <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title"></property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
