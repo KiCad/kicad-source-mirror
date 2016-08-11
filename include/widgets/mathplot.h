@@ -140,6 +140,8 @@ typedef enum __mp_Layer_Type {
   continuity set to false (draw separate points).
   These may or may not be used by implementations.
   */
+class mpScaleBase;
+
 class WXDLLIMPEXP_MATHPLOT mpLayer : public wxObject
 {
     public:
@@ -305,6 +307,7 @@ class WXDLLIMPEXP_MATHPLOT mpLayer : public wxObject
         void SetBrush(wxBrush brush) { m_brush = brush; };
 
     protected:
+
         wxFont   m_font;    //!< Layer's font
         wxPen    m_pen;     //!< Layer's pen
         wxBrush  m_brush;       //!< Layer's brush
@@ -580,6 +583,8 @@ class WXDLLIMPEXP_MATHPLOT mpFY : public mpLayer
   Optionally implement a constructor and pass a name (label) and a label alignment
   to the constructor mpFXY::mpFXY. If the layer name is empty, no label will be plotted.
   */
+class mpScaleBase;
+
 class WXDLLIMPEXP_MATHPLOT mpFXY : public mpLayer
 {
     public:
@@ -606,6 +611,12 @@ class WXDLLIMPEXP_MATHPLOT mpFXY : public mpLayer
           */
         virtual void Plot(wxDC & dc, mpWindow & w);
 
+        virtual void SetScale ( mpScaleBase *scaleX, mpScaleBase *scaleY )
+        {
+            m_scaleX = scaleX;
+            m_scaleY = scaleY;
+        }
+
 
     protected:
         int m_flags; //!< Holds label alignment
@@ -613,6 +624,7 @@ class WXDLLIMPEXP_MATHPLOT mpFXY : public mpLayer
         // Data to calculate label positioning
         wxCoord maxDrawX, minDrawX, maxDrawY, minDrawY;
         //int drawnPoints;
+        mpScaleBase *m_scaleX, *m_scaleY;
 
         /** Update label positioning data
           @param xnew New x coordinate
@@ -670,7 +682,90 @@ class WXDLLIMPEXP_MATHPLOT mpProfile : public mpLayer
   the bottom-right hand of the ruler. The scale numbering automatically
   adjusts to view and zoom factor.
   */
-class WXDLLIMPEXP_MATHPLOT mpScaleX : public mpLayer
+
+
+class WXDLLIMPEXP_MATHPLOT mpScaleBase : public mpLayer
+{
+public:
+    mpScaleBase () {};
+    virtual ~mpScaleBase () {};
+
+    bool HasBBox() { return FALSE; }
+
+    /** Set X axis alignment.
+      @param align alignment (choose between mpALIGN_BORDER_BOTTOM, mpALIGN_BOTTOM, mpALIGN_CENTER, mpALIGN_TOP, mpALIGN_BORDER_TOP */
+    void SetAlign(int align) { m_flags = align; };
+
+    /** Set X axis ticks or grid
+      @param ticks TRUE to plot axis ticks, FALSE to plot grid. */
+    void SetTicks(bool enable) { m_ticks = enable; };
+
+    /** Get X axis ticks or grid
+      @return TRUE if plot is drawing axis ticks, FALSE if the grid is active. */
+    bool GetTicks() { return m_ticks; };
+
+
+    //virtual double X2p( mpWindow &w, double x ) = 0;
+    //virtual double P2x( mpWindow &w, double x ) = 0;
+
+    void SetDataRange ( double minV, double maxV )
+    {
+        m_minV = minV;
+        m_maxV = maxV;
+    }
+
+    void GetDataRange ( double &minV, double& maxV)
+    {
+        minV = m_minV;
+        maxV = m_maxV;
+    }
+
+    virtual double TransformToPlot ( double x ) { return 0.0; };
+    virtual double TransformFromPlot (double xplot ){ return 0.0; };
+
+protected:
+
+    virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV) {};
+    virtual void recalculateTicks ( wxDC & dc, mpWindow & w ) {};
+    virtual int tickCount() const { return 0; }
+    virtual int labelCount() const { return 0; }
+    virtual const wxString getLabel( int n ) { return wxT(""); }
+    virtual double getTickPos( int n ) { return 0.0; }
+    virtual double getLabelPos( int n ) { return 0.0; }
+
+    int m_flags; //!< Flag for axis alignment
+    bool m_ticks; //!< Flag to toggle between ticks or grid
+    double m_minV, m_maxV;
+    int m_maxLabelHeight;
+    int m_maxLabelWidth;
+
+};
+
+class WXDLLIMPEXP_MATHPLOT mpScaleXBase : public mpScaleBase
+{
+    public:
+        /** Full constructor.
+          @param name Label to plot by the ruler
+          @param flags Set the position of the scale with respect to the window.
+          @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid.
+          @param type mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds. */
+        mpScaleXBase(wxString name = wxT("X"), int flags = mpALIGN_CENTER, bool ticks = true, unsigned int type = mpX_NORMAL);
+        virtual ~mpScaleXBase () {};
+
+        /** Layer plot handler.
+          This implementation will plot the ruler adjusted to the visible area. */
+        virtual void Plot(wxDC & dc, mpWindow & w);
+
+        virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV);
+
+//        unsigned int m_labelType; //!< Select labels mode: mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds
+//        wxString m_labelFormat; //!< Format string used to print labels
+
+        DECLARE_DYNAMIC_CLASS(mpScaleXBase)
+};
+
+
+class WXDLLIMPEXP_MATHPLOT mpScaleX : public mpScaleXBase
 {
     public:
         /** Full constructor.
@@ -682,56 +777,73 @@ class WXDLLIMPEXP_MATHPLOT mpScaleX : public mpLayer
 
         /** Layer plot handler.
           This implementation will plot the ruler adjusted to the visible area. */
-        virtual void Plot(wxDC & dc, mpWindow & w);
+        //virtual void Plot(wxDC & dc, mpWindow & w);
 
-        /** Check whether this layer has a bounding box.
-          This implementation returns \a FALSE thus making the ruler invisible
-          to the plot layer bounding box calculation by mpWindow. */
-        virtual bool HasBBox() { return FALSE; }
-
-        /** Set X axis alignment.
-          @param align alignment (choose between mpALIGN_BORDER_BOTTOM, mpALIGN_BOTTOM, mpALIGN_CENTER, mpALIGN_TOP, mpALIGN_BORDER_TOP */
-        void SetAlign(int align) { m_flags = align; };
-
-        /** Set X axis ticks or grid
-          @param ticks TRUE to plot axis ticks, FALSE to plot grid. */
-        void SetTicks(bool ticks) { m_ticks = ticks; };
-
-        /** Get X axis ticks or grid
-          @return TRUE if plot is drawing axis ticks, FALSE if the grid is active. */
-        bool GetTicks() { return m_ticks; };
-
-        /** Get X axis label view mode.
-          @return mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds. */
-        unsigned int GetLabelMode() { return m_labelType; };
-
-        /** Set X axis label view mode.
-          @param mode mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds. */
-        void SetLabelMode(unsigned int mode) { m_labelType = mode; };
-
-        /** Set X axis Label format (used for mpX_NORMAL draw mode).
-          @param format The format string */
-        void SetLabelFormat(const wxString& format) { m_labelFormat = format; };
-
-        /** Get X axis Label format (used for mpX_NORMAL draw mode).
-          @return The format string */
-        const wxString& GetLabelFormat() { return m_labelFormat; };
-
+        //virtual double X2p( mpWindow &w, double x );
+        //virtual double P2x( mpWindow &w, double x );
+        virtual double TransformToPlot ( double x );
+        virtual double TransformFromPlot (double xplot );
     protected:
-        int m_flags; //!< Flag for axis alignment
-        bool m_ticks; //!< Flag to toggle between ticks or grid
-        unsigned int m_labelType; //!< Select labels mode: mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds
-        wxString m_labelFormat; //!< Format string used to print labels
+        void computeLabelExtents ( wxDC & dc, mpWindow & w );
+
+        virtual void recalculateTicks ( wxDC & dc, mpWindow & w );
+        virtual int tickCount() const;
+        virtual int labelCount() const;
+        virtual const wxString getLabel( int n );
+        virtual double getTickPos( int n );
+        virtual double getLabelPos( int n );
+
+
+        double n0, dig, step, labelStep, end;
 
         DECLARE_DYNAMIC_CLASS(mpScaleX)
 };
+
+
+class WXDLLIMPEXP_MATHPLOT mpScaleXLog : public mpScaleXBase
+{
+    public:
+        /** Full constructor.
+          @param name Label to plot by the ruler
+          @param flags Set the position of the scale with respect to the window.
+          @param ticks Select ticks or grid. Give TRUE (default) for drawing axis ticks, FALSE for drawing the grid.
+          @param type mpX_NORMAL for normal labels, mpX_TIME for time axis in hours, minutes, seconds. */
+        mpScaleXLog(wxString name = wxT("log(X)"), int flags = mpALIGN_CENTER, bool ticks = true, unsigned int type = mpX_NORMAL);
+
+        virtual double TransformToPlot ( double x );
+        virtual double TransformFromPlot (double xplot );
+        /** Layer plot handler.
+          This implementation will plot the ruler adjusted to the visible area. */
+        //virtual double X2p( mpWindow &w, double x );
+        //virtual double P2x( mpWindow &w, double x );
+    protected:
+
+        void recalculateTicks ( wxDC & dc, mpWindow & w );
+        int tickCount() const;
+        int labelCount() const;
+        const wxString getLabel( int n );
+        double getTickPos( int n );
+        double getLabelPos( int n );
+
+
+        void computeLabelExtents ( wxDC & dc, mpWindow & w );
+
+        std::vector<double> m_ticks;
+        std::vector<double> m_labeledTicks;
+
+        double dig, step, end, n0, labelStep;
+
+        DECLARE_DYNAMIC_CLASS(mpScaleXLog)
+};
+
+
 
 /** Plot layer implementing a y-scale ruler.
   If align is set to mpALIGN_CENTER, the ruler is fixed at X=0 in the coordinate system. If the align is set to mpALIGN_TOP or mpALIGN_BOTTOM, the axis is always drawn respectively at top or bottom of the window. A label is plotted at
   the top-right hand of the ruler. The scale numbering automatically
   adjusts to view and zoom factor.
   */
-class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpLayer
+class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpScaleBase
 {
     public:
         /** @param name Label to plot by the ruler
@@ -762,18 +874,29 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpLayer
           @return TRUE if plot is drawing axis ticks, FALSE if the grid is active. */
         bool GetTicks() { return m_ticks; };
 
-        /** Set Y axis Label format.
-          @param format The format string */
-        void SetLabelFormat(const wxString& format) { m_labelFormat = format; };
-
-        /** Get Y axis Label format.
-          @return The format string */
-        const wxString& GetLabelFormat() { return m_labelFormat; };
+        virtual double TransformToPlot ( double x );
+        virtual double TransformFromPlot (double xplot );
 
     protected:
+        virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV);
+        virtual void recalculateTicks ( wxDC & dc, mpWindow & w );
+        virtual int tickCount() const;
+        virtual int labelCount() const;
+        virtual const wxString getLabel( int n );
+        virtual double getTickPos( int n );
+        virtual double getLabelPos( int n );
+        void computeLabelExtents ( wxDC & dc, mpWindow & w );
+
+//        double m_minV, m_maxV;
+        int m_maxLabelHeight;
+        int m_maxLabelWidth;
+        std::vector<double> m_tickValues;
+        std::vector<double> m_labeledTicks;
+
         int m_flags; //!< Flag for axis alignment
         bool m_ticks; //!< Flag to toggle between ticks or grid
-        wxString m_labelFormat; //!< Format string used to print labels
+        //wxString m_labelFormat; //!< Format string used to print labels
+        double dig, step, end, n0, labelStep;
 
         DECLARE_DYNAMIC_CLASS(mpScaleY)
 };
@@ -969,6 +1092,8 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
          * @sa p2x,p2y,x2p */
         //     wxCoord y2p(double y, bool drawOutside = true); // { return (wxCoord) ( (m_posY-y) * m_scaleY); }
         inline wxCoord y2p(double y) { return (wxCoord) ( (m_posY-y) * m_scaleY); }
+
+
 
 
         /** Enable/disable the double-buffering of the window, eliminating the flicker (default=disabled).
@@ -1246,7 +1371,7 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
         bool        m_enableScrollBars;
         wxPoint     m_scroll;
         mpInfoLayer* m_movingInfoLayer;      //!< For moving info layers over the window area
-
+        bool        m_zooming;
         DECLARE_DYNAMIC_CLASS(mpWindow)
             DECLARE_EVENT_TABLE()
 };
@@ -1320,6 +1445,7 @@ class WXDLLIMPEXP_MATHPLOT mpFXYVector : public mpFXY
           */
         bool GetNextXY(double & x, double & y);
 
+public:
         /** Returns the actual minimum X data (loaded in SetData).
         */
         double GetMinX() { return m_minX; }
@@ -1336,9 +1462,29 @@ class WXDLLIMPEXP_MATHPLOT mpFXYVector : public mpFXY
         */
         double GetMaxY() { return m_maxY; }
 
+protected:
         int     m_flags; //!< Holds label alignment
 
         DECLARE_DYNAMIC_CLASS(mpFXYVector)
+};
+
+
+class WXDLLIMPEXP_MATHPLOT mpFSemiLogXVector : public mpFXYVector
+{
+    public:
+        /** @param name  Label
+          @param flags Label alignment, pass one of #mpALIGN_NE, #mpALIGN_NW, #mpALIGN_SW, #mpALIGN_SE.
+          */
+        mpFSemiLogXVector(wxString name = wxEmptyString, int flags = mpALIGN_NE);
+
+        virtual ~mpFSemiLogXVector() {}
+
+        /** Changes the internal data: the set of points to draw.
+          Both vectors MUST be of the same length. This method DOES NOT refresh the mpWindow; do it manually.
+         * @sa Clear
+         */
+
+        DECLARE_DYNAMIC_CLASS(mpFSemiLogXVector)
 };
 
 //-----------------------------------------------------------------------------

@@ -83,7 +83,7 @@ mpLayer::mpLayer() : m_type(mpLAYER_UNDEF)
     SetFont((wxFont&) *wxNORMAL_FONT);
     m_continuous = FALSE; // Default
     m_showName   = TRUE;  // Default
-    m_drawOutsideMargins = TRUE;
+    m_drawOutsideMargins = FALSE;
     m_visible = true;
 }
 
@@ -221,9 +221,9 @@ void mpInfoCoords::UpdateInfo(mpWindow& w, wxEvent& event)
            wxGTK instead works perfectly with it.
            Info on wxForum: http://wxforum.shadonet.com/viewtopic.php?t=3451&highlight=drawtext+eol */
 #ifdef _WINDOWS
-        m_content.Printf(wxT("x = %f y = %f"), w.p2x(mouseX), w.p2y(mouseY));
+        // FIXME m_content.Printf(wxT("x = %f y = %f"), XScale().P2x(w, mouseX), YScale().P2x(w, mouseY));
 #else
-        m_content.Printf(wxT("x = %f\ny = %f"), w.p2x(mouseX), w.p2y(mouseY));
+        // FIXME m_content.Printf(wxT("x = %f\ny = %f"), XScale().P2x(w, mouseX), YScale().P2x(w,    mouseY));
 #endif
     }
 }
@@ -360,6 +360,39 @@ void mpInfoLegend::Plot(wxDC & dc, mpWindow & w)
     }
 }
 
+#if 0
+double mpScaleXLog::X2p( mpWindow &w, double x )
+{
+    return ( x - w.GetPosX() ) * w.GetScaleX();
+}
+
+double mpScaleXLog::P2x( mpWindow &w, double x )
+{
+    return w.GetPosX() + x / w.GetScaleX();
+}
+
+
+double mpScaleX::X2p( mpWindow &w, double x )
+{
+    return ( x - w.GetPosX() ) * w.GetScaleX();
+}
+
+double mpScaleX::P2x( mpWindow &w, double x )
+{
+    return w.GetPosX() + x / w.GetScaleX();
+}
+
+double mpScaleY::X2p( mpWindow &w, double x )
+{
+    return ( w.GetPosY() - x ) * w.GetScaleY();
+}
+
+double mpScaleY::P2x( mpWindow &w, double x )
+{
+    return w.GetPosY() - x/w.GetScaleY();
+}
+#endif
+
 
 
 //-----------------------------------------------------------------------------
@@ -404,7 +437,7 @@ void mpFX::Plot(wxDC & dc, mpWindow & w)
                 // Draw the point only if you can draw outside margins or if the point is inside margins
                 if (m_drawOutsideMargins || ((iy >= minYpx) && (iy <= maxYpx)))
                     dc.DrawLine( i, iy, i, iy);
-                //             wxCoord c = w.y2p( GetY(w.p2x(i)) ); //(wxCoord) ((w.GetPosY() - GetY( (double)i / w.GetScaleX() + w.GetPosX()) ) * w.GetScaleY());
+                //             wxCoord c = YScale().X2p( GetY(XScale().P2x(i)) ); //(wxCoord) ((w.GetPosY() - GetY( (double)i / w.GetScaleX() + w.GetPosX()) ) * w.GetScaleY());
 
             }
         }
@@ -429,7 +462,7 @@ void mpFX::Plot(wxDC & dc, mpWindow & w)
                 tx = ((w.GetScrX() - w.GetMarginRight() - w.GetMarginLeft() - tx) / 2) + w.GetMarginLeft();
             else
                 tx = w.GetMarginLeft() + 8;
-            dc.DrawText( m_name, tx, w.y2p(GetY(w.p2x(tx))) ); // (wxCoord) ((w.GetPosY() - GetY( (double)tx / w.GetScaleX() + w.GetPosX())) * w.GetScaleY()) );
+            dc.DrawText( m_name, tx,  w.y2p(GetY(w.p2x(tx))) );
         }
     }
 }
@@ -469,9 +502,10 @@ void mpFY::Plot(wxDC & dc, mpWindow & w)
             for (i=0;i< w.GetScrY(); ++i)
             {
                 ix = w.x2p(GetX(w.p2y(i)));
+
                 if (m_drawOutsideMargins || ((ix >= startPx) && (ix <= endPx)))
                     dc.DrawLine(ix, i, ix, i);
-                //             wxCoord c =  w.x2p(GetX(w.p2y(i))); //(wxCoord) ((GetX( (double)i / w.GetScaleY() + w.GetPosY()) - w.GetPosX()) * w.GetScaleX());
+                //             wxCoord c =  XScale().X2p(GetX(YScale().P2x(i))); //(wxCoord) ((GetX( (double)i / w.GetScaleY() + w.GetPosY()) - w.GetPosX()) * w.GetScaleX());
                 //             dc.DrawLine(c, i, c, i);
             }
         }
@@ -541,8 +575,12 @@ void mpFXY::Plot(wxDC & dc, mpWindow & w)
             {
                 while (GetNextXY(x, y))
                 {
-                    ix = w.x2p(x);
-                    iy = w.y2p(y);
+                    double px = m_scaleX->TransformToPlot(x);
+                    double py = m_scaleY->TransformToPlot(y);
+
+                    ix = w.x2p(px);
+                    iy = w.y2p(py);
+
                     if (m_drawOutsideMargins || ((ix >= startPx) && (ix <= endPx) && (iy >= minYpx) && (iy <= maxYpx))) {
                         dc.DrawPoint(ix, iy);
                         UpdateViewBoundary(ix, iy);
@@ -553,8 +591,12 @@ void mpFXY::Plot(wxDC & dc, mpWindow & w)
             {
                 while (GetNextXY(x, y))
                 {
-                    ix = w.x2p(x);
-                    iy = w.y2p(y);
+                    double px = m_scaleX->TransformToPlot(x);
+                    double py = m_scaleY->TransformToPlot(y);
+
+                    ix = w.x2p(px);
+                    iy = w.y2p(py);
+
                     if (m_drawOutsideMargins || ((ix >= startPx) && (ix <= endPx) && (iy >= minYpx) && (iy <= maxYpx))) {
                         dc.DrawLine(ix, iy, ix, iy);
                         UpdateViewBoundary(ix, iy);
@@ -570,8 +612,17 @@ void mpFXY::Plot(wxDC & dc, mpWindow & w)
             bool    first = TRUE;
             while (GetNextXY(x, y))
             {
-                wxCoord x1 = w.x2p(x); // (wxCoord) ((x - w.GetPosX()) * w.GetScaleX());
-                wxCoord c1 = w.y2p(y); // (wxCoord) ((w.GetPosY() - y) * w.GetScaleY());
+                double px = m_scaleX->TransformToPlot(x);
+                double py = m_scaleY->TransformToPlot(y);
+
+                wxCoord x1 = w.x2p(px);
+                wxCoord c1 = w.y2p(py);
+
+                //printf("px %.10f py %.10f c1 %d\n", px, py, c1);
+
+                //wxCoord x1 = XScale().X2p(w,x); // (wxCoord) ((x - w.GetPosX()) * w.GetScaleX());
+                //wxCoord c1 = YScale().X2p(w,y); // (wxCoord) ((w.GetPosY() - y) * w.GetScaleY());
+
                 if (first)
                 {
                     first=FALSE;
@@ -688,22 +739,322 @@ void mpProfile::Plot(wxDC & dc, mpWindow & w)
 
 #define mpLN10 2.3025850929940456840179914546844
 
-IMPLEMENT_DYNAMIC_CLASS(mpScaleX, mpLayer)
+void mpScaleX::recalculateTicks ( wxDC & dc, mpWindow & w )
+{
+    const int extend = w.GetScrX(); //  /2;
 
-mpScaleX::mpScaleX(wxString name, int flags, bool ticks, unsigned int type)
+    dig  = floor( log( 128.0 / w.GetScaleX() ) / mpLN10 );
+    step = exp( mpLN10 * dig);
+    end  = w.GetPosX() + (double)extend / w.GetScaleX();
+
+    n0 = floor( (w.GetPosX() ) / step ) * step ;
+    printf("%.10f %.10f %.10f", n0, step, end);
+    computeLabelExtents( dc, w );
+
+    labelStep = ceil(((double) m_maxLabelWidth + mpMIN_X_AXIS_LABEL_SEPARATION)/(w.GetScaleX()*step))*step;
+}
+
+void mpScaleX::computeLabelExtents ( wxDC & dc, mpWindow & w )
+{
+    m_maxLabelHeight = 0;
+    m_maxLabelWidth = 0;
+    for (int n = 0; n < labelCount(); n++)
+    {
+        int tx, ty;
+        const wxString s = getLabel( n );
+
+        dc.GetTextExtent(s, &tx, &ty);
+        m_maxLabelHeight = std::max( ty, m_maxLabelHeight );
+        m_maxLabelWidth = std::max( tx, m_maxLabelWidth );
+    }
+}
+
+int mpScaleX::tickCount() const
+{
+    return (int) floor( ( end - n0 ) / step );
+}
+
+int mpScaleX::labelCount() const
+{
+    return (int) floor( ( end - n0 ) / labelStep );
+}
+
+const wxString mpScaleX::getLabel( int n )
+{
+        return wxT("L");
+}
+
+double mpScaleX::getTickPos( int n )
+{
+        return n0 + (double) n * step;
+}
+
+double mpScaleX::getLabelPos( int n )
+{
+    return n0 + (double) n * labelStep;
+}
+
+void mpScaleY::getVisibleDataRange ( mpWindow& w, double &minV, double& maxV)
+{
+    wxCoord minYpx  = m_drawOutsideMargins ? 0 : w.GetMarginTop();
+    wxCoord maxYpx  = m_drawOutsideMargins ? w.GetScrY() : w.GetScrY() - w.GetMarginBottom();
+
+    double pymin = w.p2y(minYpx);
+    double pymax = w.p2y(maxYpx);
+
+    printf("PYmin %.3f PYmax %.3f\n", pymin, pymax);
+
+    minV = TransformFromPlot(pymax);
+    maxV = TransformFromPlot(pymin);
+}
+
+void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
+{
+    const int extend = w.GetScrX(); //  /2;
+
+
+    //dig  = floor( log( 128.0 / w.GetScaleY() ) / mpLN10 );
+    //step = exp( mpLN10 * dig);
+    //end  = w.GetPosX() + (double)extend / w.GetScaleY();
+    double minV, maxV, minVvis, maxVvis;
+    GetDataRange ( minV, maxV );
+    getVisibleDataRange ( w, minVvis, maxVvis );
+
+    m_tickValues.clear();
+    m_labeledTicks.clear();
+
+
+    double minErr = 1000000000000.0;
+    double bestStep;
+    int bestCount;
+        for(int i = 10; i <= 20; i+=2)
+        {
+            double step = fabs(maxVvis - minVvis) / (double) i;
+            double base = pow(10, floor(log10(step)));
+
+            //printf("base %.3f\n", base);
+
+            double stepInt = floor(step / base) * base;
+            double err = fabs(step - stepInt);
+
+            if(err< minErr)
+            {
+                minErr = err;
+                bestStep = stepInt;
+                bestCount = i;
+            }
+            //printf("step %d %.3f %.3f best %.3f\n",i, step, stepInt, bestStep);
+        }
+
+
+    double v = floor(minVvis / bestStep) * bestStep;
+
+
+    double zeroOffset = 100000000.0;
+    printf("maxVVis %.3f\n", maxVvis);
+
+    while ( v < maxVvis )
+    {
+        m_tickValues.push_back(v);
+
+        if (fabs(v) < zeroOffset)
+            zeroOffset = fabs(v);
+
+        printf("tick %.3f\n", v);
+        v+=bestStep;
+    }
+
+    if ( zeroOffset <= bestStep )
+    {
+        for( double& t: m_tickValues )
+            t -= zeroOffset;
+    }
+
+    for( double t: m_tickValues )
+        m_labeledTicks.push_back(t);
+
+    //n0 = floor(minVvis / bestStep) * bestStep;
+    //end = n0 +
+
+    //n0 = floor( (w.GetPosX() ) / step ) * step ;
+    printf("zeroOffset:%.3f tickjs : %d\n", zeroOffset, m_tickValues.size());
+    computeLabelExtents( dc, w );
+
+    //labelStep = ceil(((double) m_maxLabelWidth + mpMIN_X_AXIS_LABEL_SEPARATION)/(w.GetScaleX()*step))*step;
+}
+
+void mpScaleY::computeLabelExtents ( wxDC & dc, mpWindow & w )
+{
+    m_maxLabelHeight = 0;
+    m_maxLabelWidth = 0;
+    for (int n = 0; n < labelCount(); n++)
+    {
+        int tx, ty;
+
+        printf("***********GetLabel %d\n", n);
+
+        const wxString s = getLabel( n );
+
+        dc.GetTextExtent(s, &tx, &ty);
+        m_maxLabelHeight = std::max( ty, m_maxLabelHeight );
+        m_maxLabelWidth = std::max( tx, m_maxLabelWidth );
+    }
+}
+
+int mpScaleY::tickCount() const
+{
+    return m_tickValues.size();
+}
+
+int mpScaleY::labelCount() const
+{
+    return m_labeledTicks.size();
+}
+
+const wxString mpScaleY::getLabel( int n )
+{
+        return wxT("L");
+}
+
+double mpScaleY::getTickPos( int n )
+{
+        return m_tickValues[n];
+}
+
+double mpScaleY::getLabelPos( int n )
+{
+    return m_labeledTicks[n];
+}
+
+
+void mpScaleXBase::getVisibleDataRange ( mpWindow& w, double &minV, double& maxV)
+{
+    wxCoord startPx = m_drawOutsideMargins ? 0 : w.GetMarginLeft();
+    wxCoord endPx   = m_drawOutsideMargins ? w.GetScrX() : w.GetScrX() - w.GetMarginRight();
+
+    //printf("getVisibleDataRange\n");
+
+    double pxmin = w.p2x(startPx);
+    double pxmax = w.p2x(endPx);
+
+    minV = TransformFromPlot(pxmin);
+    maxV = TransformFromPlot(pxmax);
+}
+
+void mpScaleXLog::recalculateTicks ( wxDC & dc, mpWindow & w )
+{
+    double minV, maxV, minVvis, maxVvis;
+    GetDataRange ( minV, maxV );
+    getVisibleDataRange ( w, minVvis, maxVvis );
+
+    double decades = log( maxV / minV ) / log(10);
+    double minDecade = pow(10, floor(log10(minV)));
+    double maxDecade = pow(10, ceil(log10(maxV)));
+
+
+    double visibleDecades =  log( maxVvis / minVvis ) / log(10);
+
+    printf("visibleD %.1f %.1f %.1f\n", visibleDecades, maxVvis, minVvis);
+    double d;
+
+    m_ticks.clear();
+    m_labeledTicks.clear();
+
+    for ( d= minDecade; d<=maxDecade; d *= 10.0)
+    {
+        printf("d %.1f\n",d );
+        m_labeledTicks.push_back( d );
+
+        for(double dd = d; dd < d * 10; dd += d)
+        {
+            if(visibleDecades < 2)
+                m_labeledTicks.push_back(dd);
+            //printf("dd %.1f\n",dd);
+            m_ticks.push_back(dd);
+        }
+    }
+
+    computeLabelExtents( dc, w );
+
+    printf("labeled ticks : %d\n", m_labeledTicks.size());
+
+    labelStep = ceil(((double) m_maxLabelWidth + mpMIN_X_AXIS_LABEL_SEPARATION)/(w.GetScaleX()*step))*step;
+}
+
+
+void mpScaleXLog::computeLabelExtents ( wxDC & dc, mpWindow & w )
+{
+    m_maxLabelHeight = 0;
+    m_maxLabelWidth = 0;
+    for (int n = 0; n < labelCount(); n++)
+    {
+        int tx, ty;
+        const wxString s = getLabel( n );
+
+        dc.GetTextExtent(s, &tx, &ty);
+        m_maxLabelHeight = std::max( ty, m_maxLabelHeight );
+        m_maxLabelWidth = std::max( tx, m_maxLabelWidth );
+    }
+}
+
+
+int mpScaleXLog::tickCount() const
+{
+    return m_ticks.size();
+}
+
+int mpScaleXLog::labelCount() const
+{
+    return m_labeledTicks.size();
+    //    return (int) floor( ( end - n0 ) / labelStep );
+}
+
+
+const wxString mpScaleXLog::getLabel( int n )
+{
+    return wxT("L");
+}
+
+double mpScaleXLog::getTickPos( int n )
+{
+    return m_ticks[n]; //n0 + (double) n * step;
+}
+
+double mpScaleXLog::getLabelPos( int n )
+{
+    return m_labeledTicks[n];
+}
+
+
+IMPLEMENT_ABSTRACT_CLASS(mpScaleXBase, mpLayer)
+IMPLEMENT_DYNAMIC_CLASS(mpScaleX, mpScaleXBase)
+IMPLEMENT_DYNAMIC_CLASS(mpScaleXLog, mpScaleXBase)
+
+mpScaleXBase::mpScaleXBase(wxString name, int flags, bool ticks, unsigned int type)
 {
     SetName(name);
     SetFont( (wxFont&) *wxSMALL_FONT);
     SetPen( (wxPen&) *wxGREY_PEN);
     m_flags = flags;
     m_ticks = ticks;
-    m_labelType = type;
+    //m_labelType = type;
     m_type = mpLAYER_AXIS;
-    m_labelFormat = wxT("");
+    //m_labelFormat = wxT("");
 }
 
-void mpScaleX::Plot(wxDC & dc, mpWindow & w)
+mpScaleX::mpScaleX(wxString name, int flags, bool ticks, unsigned int type) :
+    mpScaleXBase ( name, flags, ticks ,type ) {};
+
+
+mpScaleXLog::mpScaleXLog(wxString name, int flags, bool ticks, unsigned int type) :
+    mpScaleXBase ( name, flags, ticks ,type ) {};
+
+
+void mpScaleXBase::Plot(wxDC & dc, mpWindow & w)
 {
+    int tx, ty;
+    recalculateTicks( dc, w );
+
     if (m_visible) {
         dc.SetPen( m_pen);
         dc.SetFont( m_font);
@@ -711,7 +1062,7 @@ void mpScaleX::Plot(wxDC & dc, mpWindow & w)
 
         const int extend = w.GetScrX(); //  /2;
         if (m_flags == mpALIGN_CENTER)
-            orgy   = w.y2p(0); //(int)(w.GetPosY() * w.GetScaleY());
+            orgy   = w.y2p(0);  //(int)(w.GetPosY() * w.GetScaleY());
         if (m_flags == mpALIGN_TOP) {
             if (m_drawOutsideMargins)
                 orgy = X_BORDER_SEPARATION;
@@ -729,49 +1080,8 @@ void mpScaleX::Plot(wxDC & dc, mpWindow & w)
         if (m_flags == mpALIGN_BORDER_TOP )
             orgy = 1;//-dc.LogicalToDeviceY(0);
 
-        dc.DrawLine( 0, orgy, w.GetScrX(), orgy);
+    //    dc.DrawLine( 0, orgy, w.GetScrX(), orgy);
 
-        // To cut the axis line when draw outside margin is false, use this code
-        /*if (m_drawOutsideMargins == true)
-          dc.DrawLine( 0, orgy, w.GetScrX(), orgy);
-          else
-          dc.DrawLine( w.GetMarginLeft(), orgy, w.GetScrX() - w.GetMarginRight(), orgy); */
-
-        const double dig  = floor( log( 128.0 / w.GetScaleX() ) / mpLN10 );
-        const double step = exp( mpLN10 * dig);
-        const double end  = w.GetPosX() + (double)extend / w.GetScaleX();
-
-        wxCoord tx, ty;
-        wxString s;
-        wxString fmt;
-        int tmp = (int)dig;
-        if (m_labelType == mpX_NORMAL) {
-            if (!m_labelFormat.IsEmpty()) {
-                fmt = m_labelFormat;
-            } else {
-                if (tmp>=1) {
-                    fmt = wxT("%.f");
-                } else {
-                    tmp=8-tmp;
-                    fmt.Printf(wxT("%%.%df"), tmp >= -1 ? 2 : -tmp);
-                }
-            }
-        } else {
-            // Date and/or time axis representation
-            if (m_labelType == mpX_DATETIME) {
-                fmt = (wxT("%04.0f-%02.0f-%02.0fT%02.0f:%02.0f:%02.0f"));
-            } else if (m_labelType == mpX_DATE) {
-                fmt = (wxT("%04.0f-%02.0f-%02.0f"));
-            } else if ((m_labelType == mpX_TIME) && (end/60 < 2)) {
-                fmt = (wxT("%02.0f:%02.3f"));
-            } else {
-                fmt = (wxT("%02.0f:%02.0f:%02.0f"));
-            }
-        }
-
-        //double n = floor( (w.GetPosX() - (double)extend / w.GetScaleX()) / step ) * step ;
-        double n0 = floor( (w.GetPosX() /* - (double)(extend - w.GetMarginLeft() - w.GetMarginRight())/ w.GetScaleX() */) / step ) * step ;
-        double n = 0;
 #ifdef MATHPLOT_DO_LOGGING
         wxLogMessage(wxT("mpScaleX::Plot: dig: %f , step: %f, end: %f, n: %f"), dig, step, end, n0);
 #endif
@@ -780,11 +1090,23 @@ void mpScaleX::Plot(wxDC & dc, mpWindow & w)
         wxCoord minYpx  = m_drawOutsideMargins ? 0 : w.GetMarginTop();
         wxCoord maxYpx  = m_drawOutsideMargins ? w.GetScrY() : w.GetScrY() - w.GetMarginBottom();
 
-        tmp=-65535;
-        int labelH = 0; // Control labels heigth to decide where to put axis name (below labels or on top of axis)
-        int maxExtent = 0;
-        for (n = n0; n < end; n += step) {
-            const int p = (int)((n - w.GetPosX()) * w.GetScaleX());
+        printf("StartPx %d endPx %d ordy %d maxy %d\n", startPx, endPx, orgy, maxYpx);
+
+        int tmp=-65535;
+        int labelH = m_maxLabelHeight; // Control labels heigth to decide where to put axis name (below labels or on top of axis)
+        //int maxExtent = tc.MaxLabelWidth();
+        printf("Ticks : %d\n",labelCount());
+        for (int n = 0; n < tickCount(); n++)
+        {
+            double tp = getTickPos(n);
+
+            //double xlogmin = log10 ( m_minV );
+            //double xlogmax = log10 ( m_maxV );
+
+            double px = TransformToPlot ( tp ); //( log10 ( tp ) - xlogmin) / (xlogmax - xlogmin);
+
+            const int p = (int)(( px - w.GetPosX()) * w.GetScaleX());
+
 #ifdef MATHPLOT_DO_LOGGING
             wxLogMessage(wxT("mpScaleX::Plot: n: %f -> p = %d"), n, p);
 #endif
@@ -798,89 +1120,54 @@ void mpScaleX::Plot(wxDC & dc, mpWindow & w)
                     m_pen.SetStyle(wxDOT);
                     dc.SetPen(m_pen);
                     if ((m_flags == mpALIGN_BOTTOM) && !m_drawOutsideMargins) {
+                        //printf("d1");
+                        m_pen.SetStyle(wxDOT);
+                        dc.SetPen(m_pen);
                         dc.DrawLine( p, orgy+4, p, minYpx );
+                        m_pen.SetStyle(wxSOLID);
+                        dc.SetPen(m_pen);
+                        dc.DrawLine( p, orgy+4, p, orgy-4 );
                     } else {
                         if ((m_flags == mpALIGN_TOP) && !m_drawOutsideMargins) {
+                            //printf("d2");
                             dc.DrawLine( p, orgy-4, p, maxYpx );
                         } else {
-                            dc.DrawLine( p, 0/*-w.GetScrY()*/, p, w.GetScrY() );
+                            //printf("d3");
+                            dc.DrawLine( p, minYpx, p, maxYpx ); //0/*-w.GetScrY()*/, p, w.GetScrY() );
                         }
                     }
                     m_pen.SetStyle(wxSOLID);
                     dc.SetPen(m_pen);
                 }
-                // Write ticks labels in s string
-                if (m_labelType == mpX_NORMAL)
-                    s.Printf(fmt, n);
-                else if (m_labelType == mpX_DATETIME) {
-                    time_t when = (time_t)n;
-                    struct tm tm = *localtime(&when);
-                    s.Printf(fmt, (double)tm.tm_year+1900, (double)tm.tm_mon+1, (double)tm.tm_mday, (double)tm.tm_hour, (double)tm.tm_min, (double)tm.tm_sec);
-                } else if (m_labelType == mpX_DATE) {
-                    time_t when = (time_t)n;
-                    struct tm tm = *localtime(&when);
-                    s.Printf(fmt, (double)tm.tm_year+1900, (double)tm.tm_mon+1, (double)tm.tm_mday);
-                } else if ((m_labelType == mpX_TIME) || (m_labelType == mpX_HOURS)) {
-                    double modulus = fabs(n);
-                    double sign = n/modulus;
-                    double hh = floor(modulus/3600);
-                    double mm = floor((modulus - hh*3600)/60);
-                    double ss = modulus - hh*3600 - mm*60;
-#ifdef MATHPLOT_DO_LOGGING
-                    wxLogMessage(wxT("%02.0f Hours, %02.0f minutes, %02.0f seconds"), sign*hh, mm, ss);
-#endif // MATHPLOT_DO_LOGGING
-                    if (fmt.Len() == 20) // Format with hours has 11 chars
-                        s.Printf(fmt, sign*hh, mm, floor(ss));
-                    else
-                        s.Printf(fmt, sign*mm, ss);
-                }
-                dc.GetTextExtent(s, &tx, &ty);
-                labelH = (labelH <= ty) ? ty : labelH;
-                /*				if ((p-tx/2-tmp) > 64) { // Problem about non-regular axis labels
-                                                if ((m_flags == mpALIGN_BORDER_BOTTOM) || (m_flags == mpALIGN_TOP)) {
-                                                dc.DrawText( s, p-tx/2, orgy-4-ty);
-                                                } else {
-                                                dc.DrawText( s, p-tx/2, orgy+4);
-                                                }
-                                                tmp=p+tx/2;
-                                                }
-                                                */
-                maxExtent = (tx > maxExtent) ? tx : maxExtent; // Keep in mind max label width
             }
         }
+
+        m_pen.SetStyle(wxSOLID);
+        dc.SetPen(m_pen);
+        dc.DrawLine( startPx, minYpx, endPx, minYpx );
+        dc.DrawLine( startPx, maxYpx, endPx, maxYpx );
+
+        printf("Labels : %d\n",labelCount());
         // Actually draw labels, taking care of not overlapping them, and distributing them regularly
-        double labelStep = ceil((maxExtent + mpMIN_X_AXIS_LABEL_SEPARATION)/(w.GetScaleX()*step))*step;
-        for (n = n0; n < end; n += labelStep) {
-            const int p = (int)((n - w.GetPosX()) * w.GetScaleX());
+        for (int n = 0; n < labelCount(); n++)
+        {
+            double tp = getLabelPos(n);
+
+            //double xlogmin = log10 ( m_minV );
+            //double xlogmax = log10 ( m_maxV );
+
+            double px = TransformToPlot ( tp ); //( log10 ( tp ) - xlogmin) / (xlogmax - xlogmin);
+
+            const int p = (int)((px- w.GetPosX()) * w.GetScaleX());
+
+            printf("p %d %.1f\n", p, px);
 #ifdef MATHPLOT_DO_LOGGING
             wxLogMessage(wxT("mpScaleX::Plot: n_label = %f -> p_label = %d"), n, p);
 #endif
             if ((p >= startPx) && (p <= endPx)) {
                 // Write ticks labels in s string
-                if (m_labelType == mpX_NORMAL)
-                    s.Printf(fmt, n);
-                else if (m_labelType == mpX_DATETIME) {
-                    time_t when = (time_t)n;
-                    struct tm tm = *localtime(&when);
-                    s.Printf(fmt, (double)tm.tm_year+1900, (double)tm.tm_mon+1, (double)tm.tm_mday, (double)tm.tm_hour, (double)tm.tm_min, (double)tm.tm_sec);
-                } else if (m_labelType == mpX_DATE) {
-                    time_t when = (time_t)n;
-                    struct tm tm = *localtime(&when);
-                    s.Printf(fmt, (double)tm.tm_year+1900, (double)tm.tm_mon+1, (double)tm.tm_mday);
-                } else if ((m_labelType == mpX_TIME) || (m_labelType == mpX_HOURS)) {
-                    double modulus = fabs(n);
-                    double sign = n/modulus;
-                    double hh = floor(modulus/3600);
-                    double mm = floor((modulus - hh*3600)/60);
-                    double ss = modulus - hh*3600 - mm*60;
-#ifdef MATHPLOT_DO_LOGGING
-                    wxLogMessage(wxT("%02.0f Hours, %02.0f minutes, %02.0f seconds"), sign*hh, mm, ss);
-#endif // MATHPLOT_DO_LOGGING
-                    if (fmt.Len() == 20) // Format with hours has 11 chars
-                        s.Printf(fmt, sign*hh, mm, floor(ss));
-                    else
-                        s.Printf(fmt, sign*mm, ss);
-                }
+                wxString s = getLabel ( n );
+
                 dc.GetTextExtent(s, &tx, &ty);
                 if ((m_flags == mpALIGN_BORDER_BOTTOM) || (m_flags == mpALIGN_TOP)) {
                     dc.DrawText( s, p-tx/2, orgy-4-ty);
@@ -930,6 +1217,9 @@ void mpScaleX::Plot(wxDC & dc, mpWindow & w)
           }; */
 }
 
+
+
+
 IMPLEMENT_DYNAMIC_CLASS(mpScaleY, mpLayer)
 
 mpScaleY::mpScaleY(wxString name, int flags, bool ticks)
@@ -940,11 +1230,14 @@ mpScaleY::mpScaleY(wxString name, int flags, bool ticks)
     m_flags = flags;
     m_ticks = ticks;
     m_type = mpLAYER_AXIS;
-    m_labelFormat = wxT("");
+    //m_labelFormat = wxT("");
 }
 
 void mpScaleY::Plot(wxDC & dc, mpWindow & w)
 {
+
+printf("Plot Y-scale\n");
+    recalculateTicks(dc, w);
     if (m_visible) {
         dc.SetPen( m_pen);
         dc.SetFont( m_font);
@@ -970,9 +1263,11 @@ void mpScaleY::Plot(wxDC & dc, mpWindow & w)
         if (m_flags == mpALIGN_BORDER_LEFT )
             orgx = 1; //-dc.LogicalToDeviceX(0);
 
-
+            wxCoord endPx   = m_drawOutsideMargins ? w.GetScrX() : w.GetScrX() - w.GetMarginRight();
+            wxCoord minYpx  = m_drawOutsideMargins ? 0 : w.GetMarginTop();
+            wxCoord maxYpx  = m_drawOutsideMargins ? w.GetScrY() : w.GetScrY() - w.GetMarginBottom();
         // Draw line
-        dc.DrawLine( orgx, 0, orgx, extend);
+        dc.DrawLine( orgx, minYpx, orgx, maxYpx);
 
         // To cut the axis line when draw outside margin is false, use this code
         /* if (m_drawOutsideMargins == true)
@@ -991,14 +1286,14 @@ void mpScaleY::Plot(wxDC & dc, mpWindow & w)
         double maxScaleAbs = fabs(w.GetDesiredYmax());
         double minScaleAbs = fabs(w.GetDesiredYmin());
         double endscale = (maxScaleAbs > minScaleAbs) ? maxScaleAbs : minScaleAbs;
-        if (m_labelFormat.IsEmpty()) {
+    /*    if (m_labelFormat.IsEmpty()) {
             if ((endscale < 1e4) && (endscale > 1e-3))
                 fmt = wxT("%.2f");
             else
                 fmt = wxT("%.1e");
         } else {
             fmt = m_labelFormat;
-        }
+        }*/
         /*    if (tmp>=1)
               {*/
         //    fmt = wxT("%7.5g");
@@ -1009,12 +1304,11 @@ void mpScaleY::Plot(wxDC & dc, mpWindow & w)
         //         fmt.Printf(wxT("%%.%dg"), (tmp >= -1) ? 2 : -tmp);
         //     }
 
-        double n = floor( (w.GetPosY() - (double)(extend - w.GetMarginTop() - w.GetMarginBottom())/ w.GetScaleY()) / step ) * step ;
+        int n;
+//        double n = floor( (w.GetPosY() - (double)(extend - w.GetMarginTop() - w.GetMarginBottom())/ w.GetScaleY()) / step ) * step ;
 
         /* wxCoord startPx = m_drawOutsideMargins ? 0 : w.GetMarginLeft(); */
-        wxCoord endPx   = m_drawOutsideMargins ? w.GetScrX() : w.GetScrX() - w.GetMarginRight();
-        wxCoord minYpx  = m_drawOutsideMargins ? 0 : w.GetMarginTop();
-        wxCoord maxYpx  = m_drawOutsideMargins ? w.GetScrY() : w.GetScrY() - w.GetMarginBottom();
+
 
         tmp=65536;
         int labelW = 0;
@@ -1022,8 +1316,15 @@ void mpScaleY::Plot(wxDC & dc, mpWindow & w)
         int labelHeigth = 0;
         s.Printf(fmt,n);
         dc.GetTextExtent(s, &tx, &labelHeigth);
-        for (;n < end; n += step) {
-            const int p = (int)((w.GetPosY() - n) * w.GetScaleY());
+        for (n = 0; n < tickCount(); n++ ) {
+            printf("Tick %d\n", n);
+
+            double tp = getTickPos(n);
+
+            double py = TransformToPlot ( tp ); //( log10 ( tp ) - xlogmin) / (xlogmax - xlogmin);
+            const int p = (int)(( w.GetPosY() - py ) * w.GetScaleY());
+
+
             if ((p >= minYpx) && (p <= maxYpx)) {
                 if (m_ticks) { // Draw axis ticks
                     if (m_flags == mpALIGN_BORDER_LEFT) {
@@ -1047,7 +1348,8 @@ void mpScaleY::Plot(wxDC & dc, mpWindow & w)
                     dc.SetPen( m_pen);
                 }
                 // Print ticks labels
-                s.Printf(fmt, n);
+
+                s=getLabel(n);
                 dc.GetTextExtent(s, &tx, &ty);
 #ifdef MATHPLOT_DO_LOGGING
                 if (ty != labelHeigth) wxLogMessage(wxT("mpScaleY::Plot: ty(%f) and labelHeigth(%f) differ!"), ty, labelHeigth);
@@ -1141,6 +1443,7 @@ END_EVENT_TABLE()
 mpWindow::mpWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long flag )
     : wxWindow( parent, id, pos, size, flag, wxT("mathplot") )
 {
+    m_zooming = false;
     m_scaleX = m_scaleY = 1.0;
     m_posX   = m_posY   = 0;
     m_desiredXmin=m_desiredYmin=0;
@@ -1277,13 +1580,15 @@ void mpWindow::OnMouseMove(wxMouseEvent     &event)
         if (event.m_leftDown) {
             if (m_movingInfoLayer == NULL) {
                 wxClientDC dc(this);
-                wxPen pen(*wxBLACK, 1, wxDOT);
+                wxPen pen(m_fgColour, 1, wxDOT);
                 dc.SetPen(pen);
                 dc.SetBrush(*wxTRANSPARENT_BRUSH);
                 dc.DrawRectangle(m_mouseLClick.x, m_mouseLClick.y, event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y);
+                m_zooming = true;
             } else {
                 wxPoint moveVector(event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y);
                 m_movingInfoLayer->Move(moveVector);
+                m_zooming = false;
             }
             UpdateAll();
         } else {
@@ -1313,6 +1618,7 @@ void mpWindow::OnMouseLeftDown (wxMouseEvent &event)
 {
     m_mouseLClick.x = event.GetX();
     m_mouseLClick.y = event.GetY();
+    m_zooming = true;
 #ifdef MATHPLOT_DO_LOGGING
     wxLogMessage(_("mpWindow::OnMouseLeftDown() X = %d , Y = %d"), event.GetX(), event.GetY());/*m_mouseLClick.x, m_mouseLClick.y);*/
 #endif
@@ -1330,6 +1636,8 @@ void mpWindow::OnMouseLeftRelease (wxMouseEvent &event)
 {
     wxPoint release(event.GetX(), event.GetY());
     wxPoint press(m_mouseLClick.x, m_mouseLClick.y);
+
+    m_zooming = false;
     if (m_movingInfoLayer != NULL) {
         m_movingInfoLayer->UpdateReference();
         m_movingInfoLayer = NULL;
@@ -1357,9 +1665,22 @@ void mpWindow::Fit()
 // JL
 void mpWindow::Fit(double xMin, double xMax, double yMin, double yMax, wxCoord *printSizeX,wxCoord *printSizeY)
 {
+    double xExtra = fabs(xMax - xMin) * 0.00;
+    double yExtra = fabs(yMax - yMin) * 0.03;
+
+
+    xMin -= xExtra;
+    xMax += xExtra;
+    yMin -= yExtra;
+    yMax += yExtra;
+
+    //printf("                          ******************Fit: %.3f %.3f", xMin, xMax);
+
+
     // Save desired borders:
     m_desiredXmin=xMin; m_desiredXmax=xMax;
     m_desiredYmin=yMin; m_desiredYmax=yMax;
+//    printf("minx %.1f miny %.1f maxx %.1f maxy %.1f\n", xMin, yMin, xMax, yMax);
 
     if (printSizeX!=NULL && printSizeY!=NULL)
     {
@@ -1577,9 +1898,13 @@ void mpWindow::ZoomOut(const wxPoint& centerPoint )
     m_desiredYmax = m_posY;
     m_desiredYmin = m_posY - (m_scrY - m_marginTop - m_marginBottom) / m_scaleY; // m_desiredYmin = m_posY - m_scrY / m_scaleY;
 
+    //printf("desired xmin %.1f ymin %.1f xmax %.1f ymax %.1f l %d\n", m_desiredXmin, m_desiredYmin, m_desiredXmax, m_desiredYmax, !!m_enableLimitedView);
+    //printf("current xmin %.1f ymin %.1f xmax %.1f ymax %.1f\n", m_minX, m_minY, m_maxX, m_maxY);
+
     if(m_enableLimitedView && (m_desiredXmin < m_minX || m_desiredXmin < m_minX
                             || m_desiredXmax > m_maxX || m_desiredXmax > m_maxX))
     {
+        //printf("call fit()\n");
         Fit();
     }
 
@@ -1907,6 +2232,16 @@ bool mpWindow::UpdateBBox()
 {
     bool first = TRUE;
 
+
+    m_minX = 0.0;
+    m_maxX = 1.0;
+    m_minY = 0.0;
+    m_maxY = 1.0;
+
+    return true;
+
+    #if 0
+
     for (wxLayerList::iterator li = m_layers.begin(); li != m_layers.end(); li++)
     {
         mpLayer* f = *li;
@@ -1936,6 +2271,9 @@ bool mpWindow::UpdateBBox()
         }
         //node = node->GetNext();
     }
+
+    #endif
+
 #ifdef MATHPLOT_DO_LOGGING
     wxLogDebug(wxT("[mpWindow::UpdateBBox] Bounding box: Xmin = %f, Xmax = %f, Ymin = %f, YMax = %f"), m_minX, m_maxX, m_minY, m_maxY);
 #endif // MATHPLOT_DO_LOGGING
@@ -2383,6 +2721,57 @@ mpFXYVector::mpFXYVector(wxString name, int flags ) : mpFXY(name,flags)
     m_maxY  = 1;
     m_type = mpLAYER_PLOT;
 }
+
+double mpScaleX::TransformToPlot ( double x )
+{
+    return (x - m_minV) / (m_maxV - m_minV);
+}
+
+double mpScaleX::TransformFromPlot ( double xplot )
+{
+    return  xplot * (m_maxV - m_minV) + m_minV;
+}
+
+double mpScaleY::TransformToPlot ( double x )
+{
+    return (x - m_minV) / (m_maxV - m_minV);
+}
+
+double mpScaleY::TransformFromPlot ( double xplot )
+{
+    return  xplot * (m_maxV - m_minV) + m_minV;
+}
+
+
+
+double mpScaleXLog::TransformToPlot ( double x )
+{
+    double xlogmin = log10 ( m_minV );
+    double xlogmax = log10 ( m_maxV );
+
+    return ( log10 ( x ) - xlogmin) / (xlogmax - xlogmin);
+}
+
+double mpScaleXLog::TransformFromPlot ( double xplot )
+{
+    double xlogmin = log10 ( m_minV );
+    double xlogmax = log10 ( m_maxV );
+
+    return pow(10.0, xplot * (xlogmax - xlogmin) + xlogmin );
+}
+
+double log10( double x)
+{
+    return log(x)/log(10.0);
+}
+
+mpFSemiLogXVector::mpFSemiLogXVector(wxString name, int flags ) :
+mpFXYVector ( name, flags )
+{}
+
+
+IMPLEMENT_DYNAMIC_CLASS(mpFSemiLogXVector, mpFXYVector)
+
 
 void mpFXYVector::Rewind()
 {
