@@ -177,7 +177,9 @@ set( EESCHEMA_SRCS
     viewlib_frame.cpp
     viewlibs.cpp
     sim/simulate.cpp
-    sim/dialog_simulate_plot.cpp
+    sim/sim_plot_frame_base.cpp
+    sim/sim_plot_frame.cpp
+    sim/sim_plot_panel.cpp
     sim/ngspice.cpp
 
     netlist_exporters/netlist_exporter.cpp
@@ -246,11 +248,11 @@ set_source_files_properties( ../common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_SCH;PGM_DATA_FILE_EXT=\"sch\";BUILD_KIWAY_DLL"
     )
 
-if (KICAD_SPICE)
+#if (KICAD_SPICE)
     set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} mgl mgl-wx)
-else()
-    set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} )
-endif()
+#else()
+#    set ( EESCHEMA_LINK_LIBS ${wxWidgets_LIBRARIES} )
+#endif()
 
 target_link_libraries( eeschema
     #singletop  # replaces common, giving us restrictive control and link warnings.

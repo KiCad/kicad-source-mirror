@@ -27,6 +27,7 @@
 #define NETLIST_EXPORTER_PSPICE_H
 
 #include "netlist_exporter.h"
+#include <map>
 
 /**
  * Class NETLIST_EXPORTER_PSPICE
@@ -40,6 +41,9 @@ public:
     {
     }
 
+    typedef std::map<wxString, int> NetIndexMap;
+    typedef std::vector<wxString> ProbeList;
+
     /**
      * Function WriteNetlist
      * writes to specified output file
@@ -47,6 +51,22 @@ public:
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
 
     bool Format( OUTPUTFORMATTER* aOutputFormatter, int aCtl );
+
+    const NetIndexMap& GetNetIndexMap ( ) const
+    {
+        return m_netMap;
+    }
+
+    const ProbeList& GetProbeList() const
+    {
+        return m_probes;
+    }
+
+
+
+private:
+    NetIndexMap m_netMap;
+    ProbeList m_probes;
 
 };
 

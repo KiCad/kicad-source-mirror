@@ -61,7 +61,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
     wxString            delimeters = wxT( "{:,; }" );
     wxString            disableStr = wxT( "N" );
 
-    std::map<wxString, int> netIndices;
+    //std::map<wxString, int> netIndices;
 
     // Prepare list of nets generation (not used here, but...
     for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
@@ -74,9 +74,12 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
     SCH_SHEET_LIST sheetList( g_RootSheet );
 
     std::vector<wxString> directives;
-    std::vector<wxString> probeNets;
 
-    netIndices["GND"] = 0;
+    formatter->Print(0, "Kicad schematic\n");
+
+    m_probes.clear();
+    m_netMap.clear();
+    m_netMap["GND"] = 0;
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
@@ -216,9 +219,9 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
             {
                 NETLIST_OBJECT* pin = m_SortedComponentPinList[0];
 
-                printf("Probe net: %s\n", (const char*) pin->GetNetName().c_str() );
+                //printf("Probe net: %s\n", (const char*) pin->GetNetName().c_str() );
 
-                probeNets.push_back(pin->GetNetName());
+                m_probes.push_back(pin->GetNetName());
                 continue;
             }
 
@@ -271,12 +274,12 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                 wxString netName = pin->GetNetName();
                 int netIdx;
 
-                if (netIndices.find(netName) == netIndices.end())
+                if (m_netMap.find(netName) == m_netMap.end())
                 {
                     netIdx = curNetIndex++;
-                    netIndices[netName] = netIdx;
+                    m_netMap[netName] = netIdx;
                 } else {
-                    netIdx = netIndices[netName];
+                    netIdx = m_netMap[netName];
                 }
 
                 //printf("net %s index %d\n", (const char*)netName.c_str(), netIdx);
@@ -301,6 +304,14 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 
 
     }
+
+    for( auto dir : directives )
+    {
+        formatter->Print(0, "%s\n", (const char *)dir.c_str());
+
+    }
+
+    formatter->Print(0, ".end\n");
 
 #if 0
     m_SortedComponentPinList.clear();

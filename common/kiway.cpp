@@ -247,6 +247,7 @@ KIWAY::FACE_T KIWAY::KifaceType( FRAME_T aFrameType )
     case FRAME_SCH_LIB_EDITOR:
     case FRAME_SCH_VIEWER:
     case FRAME_SCH_VIEWER_MODAL:
+    case FRAME_SIMULATOR:
         return FACE_SCH;
 
     case FRAME_PCB:
@@ -301,6 +302,7 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, KIWAY_PLAYER* aP
         return NULL;
     }
 
+    printf("Player %d\n", aFrameType);
     // return the previously opened window
     KIWAY_PLAYER* frame = GetPlayerFrame( aFrameType );
 
