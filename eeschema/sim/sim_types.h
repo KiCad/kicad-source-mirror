@@ -34,14 +34,15 @@ enum SIM_TYPE {
 ///> Possible plot types
 enum SIM_PLOT_TYPE {
     // Y axis
-    SPT_VOLTAGE     = 0x01,
-    SPT_CURRENT     = 0x02,
-    SPT_AC_PHASE    = 0x04,
-    SPT_AC_MAG      = 0x08,
+    SPT_VOLTAGE         = 0x01,
+    SPT_CURRENT         = 0x02,
+    SPT_AC_PHASE        = 0x04,
+    SPT_AC_MAG          = 0x08,
 
-    SPT_TIME        = 0x10,
-    SPT_FREQUENCY   = 0x20,
-    SPT_SWEEP       = 0x40
+    SPT_TIME            = 0x10,
+    SPT_LIN_FREQUENCY   = 0x20,
+    SPT_LOG_FREQUENCY   = 0x20,
+    SPT_SWEEP           = 0x40
 };
 
 #endif /* SIM_TYPES_H */

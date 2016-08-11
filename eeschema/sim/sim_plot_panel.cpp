@@ -97,11 +97,25 @@ static wxString formatSI ( double x, const wxString& unit, int decimalDigits, do
 }
 
 
-class FREQUENCY_SCALE : public mpScaleXLog
+class FREQUENCY_LIN_SCALE : public mpScaleX
 {
 public:
-    FREQUENCY_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
-        mpScaleXLog ( name, flags, ticks ,type ) {};
+    FREQUENCY_LIN_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
+        mpScaleX( name, flags, ticks ,type ) {};
+
+    const wxString getLabel( int n )
+    {
+        printf("%.10f\n", m_labeledTicks[n] );
+        return formatSI ( m_labeledTicks[n], wxT("Hz"), 2 );
+    }
+};
+
+
+class FREQUENCY_LOG_SCALE : public mpScaleXLog
+{
+public:
+    FREQUENCY_LOG_SCALE(wxString name, int flags, bool ticks = false, unsigned int type = 0) :
+        mpScaleXLog( name, flags, ticks ,type ) {};
 
     const wxString getLabel( int n )
     {
@@ -253,7 +267,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     switch( m_type )
     {
         case ST_AC:
-            m_axis_x = new FREQUENCY_SCALE( wxT( "Frequency" ), mpALIGN_BOTTOM );
+            m_axis_x = new FREQUENCY_LIN_SCALE( wxT( "Frequency" ), mpALIGN_BOTTOM );
             m_axis_y1 = new GAIN_SCALE( wxT( "Gain" ), mpALIGN_LEFT );
             m_axis_y2 = new PHASE_SCALE( wxT( "Phase" ), mpALIGN_RIGHT );
             m_axis_y2->SetMasterScale(m_axis_y1);
@@ -385,12 +399,12 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         if( aFlags & SPT_AC_PHASE )
         {
             for(int i = 0; i < aPoints; i++ )
-                tmp[i] = tmp[i] * 180.0 / M_PI;
+                tmp[i] = tmp[i] * 180.0 / M_PI;                 // convert to degrees
         }
         else
         {
             for(int i = 0; i < aPoints; i++ )
-                tmp[i] = 20 * log( tmp[i] ) / log( 10.0 );
+                tmp[i] = 20 * log( tmp[i] ) / log( 10.0 );      // convert to dB
         }
     }
 

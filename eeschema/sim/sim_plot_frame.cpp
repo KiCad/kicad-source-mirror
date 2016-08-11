@@ -266,8 +266,9 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
     TRACE_DESC descriptor( *m_exporter, aName, aType, aParam );
 
     bool updated = false;
+    SIM_PLOT_TYPE xAxisType = GetXAxisType( simType );
 
-    if( GetXAxisType( simType ) == SPT_FREQUENCY )
+    if( xAxisType == SPT_LIN_FREQUENCY || xAxisType == SPT_LOG_FREQUENCY )
     {
         // Add two plots: magnitude & phase
         TRACE_DESC mag_desc( *m_exporter, descriptor, descriptor.GetType() | SPT_AC_MAG );
@@ -412,7 +413,8 @@ SIM_PLOT_TYPE SIM_PLOT_FRAME::GetXAxisType( SIM_TYPE aType ) const
     switch( aType )
     {
         case ST_AC:
-            return SPT_FREQUENCY;
+            return SPT_LIN_FREQUENCY;
+            /// @todo SPT_LOG_FREQUENCY
 
         case ST_DC:
             return SPT_SWEEP;
