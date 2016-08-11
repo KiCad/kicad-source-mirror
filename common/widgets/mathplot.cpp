@@ -1005,7 +1005,10 @@ void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
     double zeroOffset = 100000000.0;
     //printf("maxVVis %.3f\n", maxVvis);
 
-    while ( v < maxVvis )
+    const int iterLimit = 1000;
+    int i = 0;
+
+    while ( v < maxVvis && i < iterLimit)
     {
         m_tickValues.push_back(v);
 
@@ -1014,6 +1017,12 @@ void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
 
         //printf("tick %.3f\n", v);
         v+=bestStep;
+    }
+
+    // something weird happened...
+    if ( i == iterLimit )
+    {
+        m_tickValues.clear();
     }
 
     if ( zeroOffset <= bestStep )
@@ -3625,4 +3634,3 @@ double mpFXY::y2s(double y) const
 {
     return m_scaleY->TransformToPlot( y );
 }
-
