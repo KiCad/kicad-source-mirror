@@ -70,6 +70,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
             NewPlot();
         }
 
+        void onSignalDblClick( wxCommandEvent& event ) override;
         void onSimulate( wxCommandEvent& event ) override;
         void onPlaceProbe( wxCommandEvent& event ) override;
 

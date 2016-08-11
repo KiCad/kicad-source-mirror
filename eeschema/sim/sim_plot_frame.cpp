@@ -212,14 +212,11 @@ void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
     wxString spiceName( wxString::Format( "V(%d)", netMapping.at( aNetName ) ) );
     auto data_y = m_simulator->GetPlot( (const char*) spiceName.c_str() );
 
-    wxLogDebug( "probe %s", spiceName );
-
     if( data_y.empty() )
         return;
 
     auto data_t = m_simulator->GetPlot( "time" );
 
-    wxLogDebug( "%lu - %lu data points", data_t.size(), data_y.size() );
     SIM_PLOT_PANEL* plotPanel = static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() );
     plotPanel->AddTrace( aNetName, data_t.size(), data_t.data(), data_y.data(), 0 );
 }
@@ -231,6 +228,15 @@ bool SIM_PLOT_FRAME::isSimulationRunning()
 
     return ( m_simThread != NULL );
 
+}
+
+
+void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
+{
+    int idx = m_signals->GetSelection();
+
+    if( idx != wxNOT_FOUND )
+        AddVoltagePlot( m_signals->GetString( idx ) );
 }
 
 
