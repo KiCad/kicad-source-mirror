@@ -54,7 +54,6 @@ void NGSPICE::Init()
     }
 
     Command( "reset" );
-    Command( "remcirc" );
 }
 
 
