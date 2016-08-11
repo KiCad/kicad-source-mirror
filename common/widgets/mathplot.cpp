@@ -553,6 +553,7 @@ void mpFXY::Plot(wxDC & dc, mpWindow & w)
     if (m_visible) {
         dc.SetPen( m_pen);
 
+
         double x, y;
         // Do this to reset the counters to evaluate bounding box for label positioning
         Rewind(); GetNextXY(x, y);
@@ -564,6 +565,8 @@ void mpFXY::Plot(wxDC & dc, mpWindow & w)
         wxCoord endPx   = m_drawOutsideMargins ? w.GetScrX() : w.GetScrX() - w.GetMarginRight();
         wxCoord minYpx  = m_drawOutsideMargins ? 0 : w.GetMarginTop();
         wxCoord maxYpx  = m_drawOutsideMargins ? w.GetScrY() : w.GetScrY() - w.GetMarginBottom();
+
+        dc.SetClippingRegion (startPx, minYpx, endPx - startPx + 1, maxYpx - minYpx + 1);
 
         wxCoord ix = 0, iy = 0;
 
@@ -607,6 +610,7 @@ void mpFXY::Plot(wxDC & dc, mpWindow & w)
         }
         else
         {
+            int n =0 ;
             // Old code
             wxCoord x0=0,c0=0;
             bool    first = TRUE;
@@ -614,6 +618,9 @@ void mpFXY::Plot(wxDC & dc, mpWindow & w)
             {
                 double px = m_scaleX->TransformToPlot(x);
                 double py = m_scaleY->TransformToPlot(y);
+
+                if(py >= 0.0 && py <= 1.0) n++;
+                //printf("py %.1f\n", py);
 
                 wxCoord x1 = w.x2p(px);
                 wxCoord c1 = w.y2p(py);
@@ -634,11 +641,12 @@ void mpFXY::Plot(wxDC & dc, mpWindow & w)
                     outUp = (c0 < minYpx) && (c1 < minYpx);
                     if ( !outUp && !outDown ) {
                         dc.DrawLine(x0, c0, x1, c1);
-                        UpdateViewBoundary(x1, c1);
+            //            UpdateViewBoundary(x1, c1);
                     }
                 }
                 x0=x1; c0=c1;
             }
+            //printf("n %s %d\n", (const char *) m_name.c_str(), n);
         }
 
         if (!m_name.IsEmpty() && m_showName)
@@ -678,6 +686,8 @@ void mpFXY::Plot(wxDC & dc, mpWindow & w)
             dc.DrawText( m_name, tx, ty);
         }
     }
+
+    dc.DestroyClippingRegion();
 }
 
 //-----------------------------------------------------------------------------
@@ -741,17 +751,71 @@ void mpProfile::Plot(wxDC & dc, mpWindow & w)
 
 void mpScaleX::recalculateTicks ( wxDC & dc, mpWindow & w )
 {
-    const int extend = w.GetScrX(); //  /2;
+    double minV, maxV, minVvis, maxVvis;
+    GetDataRange ( minV, maxV );
+    getVisibleDataRange ( w, minVvis, maxVvis );
 
-    dig  = floor( log( 128.0 / w.GetScaleX() ) / mpLN10 );
-    step = exp( mpLN10 * dig);
-    end  = w.GetPosX() + (double)extend / w.GetScaleX();
+    m_absVisibleMaxV = std::max(std::abs(minVvis), std::abs(maxVvis));
 
-    n0 = floor( (w.GetPosX() ) / step ) * step ;
-    //printf("%.10f %.10f %.10f", n0, step, end);
+    //printf("minV %.10f maxV %.10f %.10f %.10f\n", minV, maxV, minVvis, maxVvis);
+
+    m_tickValues.clear();
+    m_labeledTicks.clear();
+
+    double minErr = 1000000000000.0;
+    double bestStep;
+    int bestCount;
+        for(int i = 10; i <= 20; i+=2)
+        {
+            double step = fabs(maxVvis - minVvis) / (double) i;
+            double base = pow(10, floor(log10(step)));
+
+            //printf("base %.3f\n", base);
+
+            double stepInt = floor(step / base) * base;
+            double err = fabs(step - stepInt);
+
+            if(err< minErr)
+            {
+                minErr = err;
+                bestStep = stepInt;
+                bestCount = i;
+            }
+            //printf("step %d %.3f %.3f best %.3f\n",i, step, stepInt, bestStep);
+        }
+
+
+    double v = floor(minVvis / bestStep) * bestStep;
+
+    double zeroOffset = 100000000.0;
+    //printf("maxVVis %.3f\n", maxVvis);
+
+    while ( v < maxVvis )
+    {
+        m_tickValues.push_back(v);
+
+        if (fabs(v) < zeroOffset)
+            zeroOffset = fabs(v);
+
+        //printf("tick %.3f\n", v);
+        v+=bestStep;
+    }
+
+    if ( zeroOffset <= bestStep )
+    {
+        for( double& t: m_tickValues )
+            t -= zeroOffset;
+    }
+
+    for( double t: m_tickValues )
+        m_labeledTicks.push_back(t);
+
+    //n0 = floor(minVvis / bestStep) * bestStep;
+    //end = n0 +
+
+    //n0 = floor( (w.GetPosX() ) / step ) * step ;
+    //printf("zeroOffset:%.3f tickjs : %d\n", zeroOffset, m_tickValues.size());
     computeLabelExtents( dc, w );
-
-    labelStep = ceil(((double) m_maxLabelWidth + mpMIN_X_AXIS_LABEL_SEPARATION)/(w.GetScaleX()*step))*step;
 }
 
 void mpScaleX::computeLabelExtents ( wxDC & dc, mpWindow & w )
@@ -771,12 +835,12 @@ void mpScaleX::computeLabelExtents ( wxDC & dc, mpWindow & w )
 
 int mpScaleX::tickCount() const
 {
-    return (int) floor( ( end - n0 ) / step );
+    return m_tickValues.size();
 }
 
 int mpScaleX::labelCount() const
 {
-    return (int) floor( ( end - n0 ) / labelStep );
+    return m_labeledTicks.size();
 }
 
 const wxString mpScaleX::getLabel( int n )
@@ -786,12 +850,12 @@ const wxString mpScaleX::getLabel( int n )
 
 double mpScaleX::getTickPos( int n )
 {
-        return n0 + (double) n * step;
+        return m_tickValues[n];
 }
 
 double mpScaleX::getLabelPos( int n )
 {
-    return n0 + (double) n * labelStep;
+    return m_labeledTicks[n];
 }
 
 void mpScaleY::getVisibleDataRange ( mpWindow& w, double &minV, double& maxV)
@@ -818,11 +882,18 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
         double alpha, beta;
 
 
+        //printf("ComputeSlaveTicks!\n");
+
         //for(alpha = 1.0; alpha < 1.03; alpha += 0.001)
         //    for(beta = -0.05; beta < 0.05; beta += 0.001)
             {
         //        for ( double t: m_masterScale->m_tickValues )
         //        {
+
+        if( m_masterScale->m_tickValues.size() == 0)
+            return;
+
+//                    printf("NTicks %d\n", m_masterScale->m_tickValues.size());
                     double p0 = m_masterScale->TransformToPlot(m_masterScale->m_tickValues[0]);
                     double p1 = m_masterScale->TransformToPlot(m_masterScale->m_tickValues[1]);
 
@@ -833,7 +904,10 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
                     double y_slave1 =  p1 / m_scale;
 
                     double dy_slave = (y_slave1 - y_slave0);
-                    double dy_scaled = ceil( 2.0*(y_slave1 - y_slave0)) / 2.0;
+                    double exponent = floor(log10(dy_slave));
+                    double base = dy_slave/ pow(10.0, exponent);
+
+                    double dy_scaled = ceil( 2.0* base ) / 2.0 * pow (10.0, exponent );
 
                     double minvv, maxvv;
 
@@ -844,7 +918,7 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
                     m_scale = 1.0 / ( m_maxV - m_minV );
                     m_scale *= dy_slave / dy_scaled;
 
-                    printf("dy %.1f %.1f minV %.1f maxV %.1f\n", dy_slave, dy_scaled, m_minV, m_maxV);
+//                    printf("dy %.10f %.10f minV %.1f maxV %.1f\n", dy_slave, dy_scaled, m_minV, m_maxV);
 
 
                     //minvv = (p0 / m_scale - m_offset);
@@ -854,7 +928,7 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
                     //m_offset =
                     //double y0_offset = floor ( (p0 / m_scale ) / dy_scaled) * dy_scaled;
 
-                    printf("P0 %.10f minvv %.10f\n", (p0 / m_scale) - m_offset, minvv);
+                    //printf("P0 %.10f minvv %.10f\n", (p0 / m_scale) - m_offset, minvv);
 
 
                     m_tickValues.clear();
@@ -865,7 +939,7 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
                     for (int i = 0; i < m_masterScale->m_tickValues.size(); i++)
                     {
                         m = TransformFromPlot ( m_masterScale->TransformToPlot(m_masterScale->m_tickValues[i]) );
-                        printf("m %.10f\n", m);
+                    //    printf("m %.10f\n", m);
                         m_tickValues.push_back(m);
                         m_labeledTicks.push_back(m);
                         //m += dy_scaled;
@@ -881,8 +955,8 @@ void mpScaleY::computeSlaveTicks( mpWindow& w )
 
 void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
 {
-    const int extend = w.GetScrX(); //  /2;
 
+//    printf("this %p master %p\n", this, m_masterScale);
 
     if ( m_masterScale )
     {
@@ -897,6 +971,9 @@ void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
     double minV, maxV, minVvis, maxVvis;
     GetDataRange ( minV, maxV );
     getVisibleDataRange ( w, minVvis, maxVvis );
+    //printf("vdr %.10f %.10f\n", minVvis, maxVvis);
+
+    m_absVisibleMaxV = std::max(std::abs(minVvis), std::abs(maxVvis));
 
     m_tickValues.clear();
     m_labeledTicks.clear();
@@ -1036,7 +1113,7 @@ void mpScaleXLog::recalculateTicks ( wxDC & dc, mpWindow & w )
     //printf("visibleD %.1f %.1f %.1f\n", visibleDecades, maxVvis, minVvis);
     double d;
 
-    m_ticks.clear();
+    m_tickValues.clear();
     m_labeledTicks.clear();
 
     for ( d= minDecade; d<=maxDecade; d *= 10.0)
@@ -1049,7 +1126,7 @@ void mpScaleXLog::recalculateTicks ( wxDC & dc, mpWindow & w )
             if(visibleDecades < 2)
                 m_labeledTicks.push_back(dd);
             //printf("dd %.1f\n",dd);
-            m_ticks.push_back(dd);
+            m_tickValues.push_back(dd);
         }
     }
 
@@ -1079,7 +1156,7 @@ void mpScaleXLog::computeLabelExtents ( wxDC & dc, mpWindow & w )
 
 int mpScaleXLog::tickCount() const
 {
-    return m_ticks.size();
+    return m_tickValues.size();
 }
 
 int mpScaleXLog::labelCount() const
@@ -1096,7 +1173,7 @@ const wxString mpScaleXLog::getLabel( int n )
 
 double mpScaleXLog::getTickPos( int n )
 {
-    return m_ticks[n]; //n0 + (double) n * step;
+    return m_tickValues[n]; //n0 + (double) n * step;
 }
 
 double mpScaleXLog::getLabelPos( int n )
@@ -1132,6 +1209,10 @@ mpScaleXLog::mpScaleXLog(wxString name, int flags, bool ticks, unsigned int type
 void mpScaleXBase::Plot(wxDC & dc, mpWindow & w)
 {
     int tx, ty;
+
+    m_offset = -m_minV;
+    m_scale = 1.0 / ( m_maxV - m_minV );
+
     recalculateTicks( dc, w );
 
     if (m_visible) {
@@ -1667,6 +1748,11 @@ void mpWindow::OnMouseMove(wxMouseEvent     &event)
                 dc.SetBrush(*wxTRANSPARENT_BRUSH);
                 dc.DrawRectangle(m_mouseLClick.x, m_mouseLClick.y, event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y);
                 m_zooming = true;
+                m_zoomRect.x = m_mouseLClick.x;
+                m_zoomRect.y = m_mouseLClick.y;
+                m_zoomRect.width =  event.GetX() - m_mouseLClick.x;
+                m_zoomRect.height =  event.GetY() - m_mouseLClick.y;
+
             } else {
                 wxPoint moveVector(event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y);
                 m_movingInfoLayer->Move(moveVector);
@@ -2193,6 +2279,14 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     {
         (*li)->Plot(*trgDc, *this);
     };
+
+    if(m_zooming)
+    {
+        wxPen pen(m_fgColour, 1, wxDOT);
+        trgDc->SetPen(pen);
+        trgDc->SetBrush(*wxTRANSPARENT_BRUSH);
+        trgDc->DrawRectangle(m_zoomRect);
+    }
 
     // If doublebuffer, draw now to the window:
     if (m_enableDoubleBuffer)
@@ -2797,6 +2891,7 @@ IMPLEMENT_DYNAMIC_CLASS(mpFXYVector, mpFXY)
 mpFXYVector::mpFXYVector(wxString name, int flags ) : mpFXY(name,flags)
 {
     m_index = 0;
+//printf("FXYVector::FXYVector!\n");
     m_minX  = -1;
     m_maxX  = 1;
     m_minY  = -1;
@@ -2806,12 +2901,12 @@ mpFXYVector::mpFXYVector(wxString name, int flags ) : mpFXY(name,flags)
 
 double mpScaleX::TransformToPlot ( double x )
 {
-    return (x - m_minV) / (m_maxV - m_minV);
+    return (x + m_offset) * m_scale;
 }
 
 double mpScaleX::TransformFromPlot ( double xplot )
 {
-    return  xplot * (m_maxV - m_minV) + m_minV;
+    return  xplot / m_scale - m_offset;
 }
 
 
@@ -2891,6 +2986,7 @@ void mpFXYVector::SetData( const std::vector<double> &xs,const std::vector<doubl
     m_xs = xs;
     m_ys = ys;
 
+    //printf("FXYVector::setData %d %d\n", xs.size(), ys.size());
 
     // Update internal variables for the bounding box.
     if (xs.size()>0)
@@ -2912,6 +3008,9 @@ void mpFXYVector::SetData( const std::vector<double> &xs,const std::vector<doubl
             if (*it<m_minY) m_minY=*it;
             if (*it>m_maxY) m_maxY=*it;
         }
+        //printf("minX %.10f maxX %.10f\n ", m_minX, m_maxX );
+        //printf("minY %.10f maxY %.10f\n ", m_minY, m_maxY );
+
     }
     else
     {
@@ -3481,5 +3580,22 @@ that correspond to the window point (dx0,dy0) within the image "m_bitmap", and
         }
 
         dc.DrawText( m_name, tx, ty);
+    }
+}
+
+void mpFXY::SetScale ( mpScaleBase *scaleX, mpScaleBase *scaleY )
+{
+    m_scaleX = scaleX;
+    m_scaleY = scaleY;
+
+    //printf("SetScales : %p %p\n", scaleX, scaleY);
+
+    if(m_scaleX)
+    {
+        m_scaleX->ExtendDataRange(GetMinX(), GetMaxX());
+    }
+    if(m_scaleY)
+    {
+        m_scaleY->ExtendDataRange(GetMinY(), GetMaxY());
     }
 }

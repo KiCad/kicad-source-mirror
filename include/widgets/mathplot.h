@@ -611,11 +611,7 @@ class WXDLLIMPEXP_MATHPLOT mpFXY : public mpLayer
           */
         virtual void Plot(wxDC & dc, mpWindow & w);
 
-        virtual void SetScale ( mpScaleBase *scaleX, mpScaleBase *scaleY )
-        {
-            m_scaleX = scaleX;
-            m_scaleY = scaleY;
-        }
+        virtual void SetScale ( mpScaleBase *scaleX, mpScaleBase *scaleY );
 
 
     protected:
@@ -687,7 +683,7 @@ class WXDLLIMPEXP_MATHPLOT mpProfile : public mpLayer
 class WXDLLIMPEXP_MATHPLOT mpScaleBase : public mpLayer
 {
 public:
-    mpScaleBase () {};
+    mpScaleBase () { m_rangeSet = false; };
     virtual ~mpScaleBase () {};
 
     bool HasBBox() { return FALSE; }
@@ -710,6 +706,7 @@ public:
 
     void SetDataRange ( double minV, double maxV )
     {
+        m_rangeSet = true;
         m_minV = minV;
         m_maxV = maxV;
     }
@@ -720,10 +717,34 @@ public:
         maxV = m_maxV;
     }
 
+    void ExtendDataRange ( double minV, double maxV )
+    {
+        if(!m_rangeSet)
+        {
+            m_minV = minV;
+            m_maxV = maxV;
+            m_rangeSet = true;
+        } else {
+            m_minV = std::min(minV, m_minV);
+            m_maxV = std::max(maxV, m_maxV);
+        }
+    }
+
+    double AbsMaxValue() const
+    {
+        return std::max(std::abs(m_maxV), std::abs(m_minV));
+    }
+
+    double AbsVisibleMaxValue() const
+    {
+            return m_absVisibleMaxV;
+    }
+
     virtual double TransformToPlot ( double x ) { return 0.0; };
     virtual double TransformFromPlot (double xplot ){ return 0.0; };
 
 protected:
+
 
     virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV) {};
     virtual void recalculateTicks ( wxDC & dc, mpWindow & w ) {};
@@ -733,9 +754,15 @@ protected:
     virtual double getTickPos( int n ) { return 0.0; }
     virtual double getLabelPos( int n ) { return 0.0; }
 
+    std::vector<double> m_tickValues;
+    std::vector<double> m_labeledTicks;
+
+    double m_offset, m_scale;
+    double m_absVisibleMaxV;
     int m_flags; //!< Flag for axis alignment
     bool m_ticks; //!< Flag to toggle between ticks or grid
     double m_minV, m_maxV;
+    double m_rangeSet;
     int m_maxLabelHeight;
     int m_maxLabelWidth;
 
@@ -828,8 +855,6 @@ class WXDLLIMPEXP_MATHPLOT mpScaleXLog : public mpScaleXBase
 
         void computeLabelExtents ( wxDC & dc, mpWindow & w );
 
-        std::vector<double> m_ticks;
-        std::vector<double> m_labeledTicks;
 
         double dig, step, end, n0, labelStep;
 
@@ -900,8 +925,6 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpScaleBase
         int m_maxLabelWidth;
         std::vector<double> m_tickValues;
         std::vector<double> m_labeledTicks;
-
-        double m_offset, m_scale;
 
         int m_flags; //!< Flag for axis alignment
         bool m_ticks; //!< Flag to toggle between ticks or grid
@@ -1382,6 +1405,7 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
         wxPoint     m_scroll;
         mpInfoLayer* m_movingInfoLayer;      //!< For moving info layers over the window area
         bool        m_zooming;
+        wxRect m_zoomRect;
         DECLARE_DYNAMIC_CLASS(mpWindow)
             DECLARE_EVENT_TABLE()
 };
