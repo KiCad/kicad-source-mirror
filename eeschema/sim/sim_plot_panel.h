@@ -28,6 +28,7 @@
 
 #include <widgets/mathplot.h>
 #include <map>
+#include "sim_types.h"
 
 class TRACE;
 
@@ -143,19 +144,31 @@ private:
 class SIM_PLOT_PANEL : public mpWindow
 {
 public:
-    SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
+    SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = wxPanelNameStr );
 
     ~SIM_PLOT_PANEL();
 
-    const wxString& GetLabelX() const
+    SIM_TYPE GetType() const
     {
-        return m_axis_x->GetName();
+        return m_type;
     }
 
-    const wxString& GetLabelY() const
+    static bool IsPlottable( SIM_TYPE aSimType );
+
+    wxString GetLabelX() const
     {
-        return m_axis_y->GetName();
+        return m_axis_x ? m_axis_x->GetName() : "";
+    }
+
+    wxString GetLabelY1() const
+    {
+        return m_axis_y1 ? m_axis_y1->GetName() : "";
+    }
+
+    wxString GetLabelY2() const
+    {
+        return m_axis_y2 ? m_axis_y2->GetName() : "";
     }
 
     bool AddTrace( const wxString& aSpiceName, const wxString& aName, int aPoints,
@@ -185,13 +198,14 @@ public:
     void ShowGrid( bool aEnable )
     {
         m_axis_x->SetTicks( !aEnable );
-        m_axis_y->SetTicks( !aEnable );
+        m_axis_y1->SetTicks( !aEnable );
+        m_axis_y2->SetTicks( !aEnable );
         UpdateAll();
     }
 
     bool IsGridShown() const
     {
-        assert( m_axis_x->GetTicks() == m_axis_y->GetTicks() );
+        assert( m_axis_x->GetTicks() == m_axis_y1->GetTicks() );
         return !m_axis_x->GetTicks();
     }
 
@@ -230,11 +244,14 @@ private:
     std::map<wxString, TRACE*> m_traces;
 
     mpScaleX* m_axis_x;
-    mpScaleY* m_axis_y;
+    mpScaleY* m_axis_y1;
+    mpScaleY* m_axis_y2;
     mpInfoLegend* m_legend;
     mpInfoCoords* m_coords;
 
     std::vector<mpLayer*> m_topLevel;
+
+    const SIM_TYPE m_type;
 };
 
 wxDECLARE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );

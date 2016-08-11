@@ -83,8 +83,6 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Connect( EVT_SIM_STARTED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimStarted ), NULL, this );
     Connect( EVT_SIM_FINISHED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
     Connect( EVT_SIM_CURSOR_UPDATE, wxCommandEventHandler( SIM_PLOT_FRAME::onCursorUpdate ), NULL, this );
-
-    NewPlotPanel();
 }
 
 
@@ -121,9 +119,9 @@ void SIM_PLOT_FRAME::StopSimulation()
 }
 
 
-void SIM_PLOT_FRAME::NewPlotPanel()
+void SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
 {
-    SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( m_plotNotebook, wxID_ANY );
+    SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( aSimType, m_plotNotebook, wxID_ANY );
 
     m_plotNotebook->AddPage( plot,
             wxString::Format( wxT( "Plot%lu" ), m_plotNotebook->GetPageCount() + 1 ), true );
@@ -139,6 +137,7 @@ void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
         updatePlot( wxString::Format( "V(%d)", nodeNumber ), aNetName, CurrentPlot() );
     }
 }
+
 
 SIM_PLOT_PANEL* SIM_PLOT_FRAME::CurrentPlot() const
 {
@@ -161,13 +160,71 @@ void SIM_PLOT_FRAME::updateNetlistExporter()
 
 void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aName, SIM_PLOT_PANEL* aPanel )
 {
-    auto data_y = m_simulator->GetPlot( (const char*) aSpiceName.c_str() );
-    auto data_t = m_simulator->GetPlot( "time" );
+    // First, handle the x axis
+    wxString xAxisName;
+    SIM_TYPE simType = m_exporter->GetSimType();
 
-    if( data_y.empty() || data_t.empty() )
+    if( !SIM_PLOT_PANEL::IsPlottable( simType ) )
+    {
+        // There is no plot to be shown
+        m_simulator->Command( wxString::Format( "print %s", aSpiceName ).ToStdString() );
+        return;
+    }
+
+    switch( simType )
+    {
+        /// @todo x axis names should be moved to simulator iface, so they are not hardcoded for ngspice
+        case ST_AC:
+        case ST_NOISE:
+            xAxisName = "frequency";
+            break;
+
+        case ST_DC:
+            xAxisName = "v-sweep";
+            break;
+
+        case ST_TRANSIENT:
+            xAxisName = "time";
+            break;
+
+        case ST_OP:
+            break;
+
+        default:
+            break;
+    }
+
+    auto data_x = m_simulator->GetMagPlot( (const char*) xAxisName.c_str() );
+    int size = data_x.size();
+
+    if( data_x.empty() )
         return;
 
-    aPanel->AddTrace( aSpiceName, aName, data_t.size(), data_t.data(), data_y.data(), 0 );
+    // Now, Y axis data
+    switch( m_exporter->GetSimType() )
+    {
+        /// @todo x axis names should be moved to simulator iface
+        case ST_AC:
+        {
+            auto data_mag = m_simulator->GetMagPlot( (const char*) aSpiceName.c_str() );
+            auto data_phase = m_simulator->GetPhasePlot( (const char*) aSpiceName.c_str() );
+            aPanel->AddTrace( aSpiceName, aName + " (mag)", size, data_x.data(), data_mag.data(), 0 );
+            aPanel->AddTrace( aSpiceName, aName + " (phase)", size, data_x.data(), data_phase.data(), 0 );
+        }
+        break;
+
+        case ST_NOISE:
+        case ST_DC:
+        case ST_TRANSIENT:
+        {
+            auto data_y = m_simulator->GetMagPlot( (const char*) aSpiceName.c_str() );
+            aPanel->AddTrace( aSpiceName, aName, size, data_x.data(), data_y.data(), 0 );
+        }
+        break;
+
+        default:
+            return;
+    }
 }
 
 
@@ -186,10 +243,22 @@ int SIM_PLOT_FRAME::getNodeNumber( const wxString& aNetName )
 }
 
 
+void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
+{
+    if( m_exporter )
+    {
+        SIM_TYPE type = m_exporter->GetSimType();
+
+        if( SIM_PLOT_PANEL::IsPlottable( type ) )
+            NewPlotPanel( type );
+    }
+}
+
+
 void SIM_PLOT_FRAME::menuSaveImage( wxCommandEvent& event )
 {
     wxFileDialog saveDlg( this, wxT( "Save plot as image" ), "", "",
-                "PNG file (*.png)|*.png", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+                "PNG file (*.png)|*.png", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -203,7 +272,7 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
     const wxChar SEPARATOR = ';';
 
     wxFileDialog saveDlg( this, wxT( "Save plot data" ), "", "",
-                "CSV file (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+                "CSV file (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -308,6 +377,14 @@ void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
 {
     int idx = m_signals->GetSelection();
     SIM_PLOT_PANEL* plot = CurrentPlot();
+    SIM_TYPE simType = m_exporter->GetSimType();
+
+    // Create a new plot if the current one displays a different type
+    if( SIM_PLOT_PANEL::IsPlottable( simType ) && ( plot == nullptr || plot->GetType() != simType ) )
+    {
+        NewPlotPanel( simType );
+        plot = CurrentPlot();
+    }
 
     if( idx != wxNOT_FOUND )
     {
@@ -388,7 +465,7 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
 
     const long SIGNAL_COL = m_cursors->AppendColumn( wxT( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
     const long X_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelX(), wxLIST_FORMAT_LEFT, size.x / 4 );
-    const long Y_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelY(), wxLIST_FORMAT_LEFT, size.x / 4 );
+    const long Y_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelY1(), wxLIST_FORMAT_LEFT, size.x / 4 );
 
     // Update cursor values
     for( const auto& trace : CurrentPlot()->GetTraces() )
@@ -416,6 +493,8 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     m_simulateBtn->SetLabel( wxT( "Simulate" ) );
     SetCursor( wxCURSOR_ARROW );
 
+    SIM_TYPE simType = m_exporter->GetSimType();
+
     // Fill the signals listbox
     m_signals->Clear();
 
@@ -426,12 +505,28 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     }
 
     // If there are any signals plotted, update them
-    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+    if( SIM_PLOT_PANEL::IsPlottable( simType ) )
+    {
+        SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
-    for( const auto& trace : plotPanel->GetTraces() )
-        updatePlot( trace.second->GetSpiceName(), trace.second->GetName(), plotPanel );
+        if( plotPanel == nullptr )
+            return;
 
-    plotPanel->UpdateAll();
+        for( const auto& trace : plotPanel->GetTraces() )
+            updatePlot( trace.second->GetSpiceName(), trace.second->GetName(), plotPanel );
+
+        plotPanel->UpdateAll();
+    }
+    else
+    {
+        /// @todo do not make it hardcoded for ngspice
+        for( const auto& net : m_exporter->GetNetIndexMap() )
+        {
+            int node = net.second;
+            if( node > 0 )
+                m_simulator->Command( wxString::Format( "print v(%d)", node ).ToStdString() );
+        }
+    }
 }
 
 

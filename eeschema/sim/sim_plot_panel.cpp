@@ -95,17 +95,58 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 }
 
 
-SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
+SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id, const wxPoint& pos,
                 const wxSize& size, long style, const wxString& name )
-    : mpWindow( parent, id, pos, size, style ), m_colorIdx( 0 )
+    : mpWindow( parent, id, pos, size, style ), m_colorIdx( 0 ),
+        m_axis_x( nullptr ), m_axis_y1( nullptr ), m_axis_y2( nullptr ), m_type( aType )
 {
-    m_axis_x = new mpScaleX( wxT( "T [s]" ) );
-    m_axis_x->SetTicks( false );
-    AddLayer( m_axis_x );
+    SetMargins( 10, 10, 10, 10 );
 
-    m_axis_y = new mpScaleY( wxT( "U [V]" ) );
-    m_axis_y->SetTicks( false );
-    AddLayer( m_axis_y );
+    switch( m_type )
+    {
+        case ST_AC:
+            m_axis_x = new mpScaleX( wxT( "frequency [Hz]" ), mpALIGN_BORDER_BOTTOM );
+            m_axis_y1 = new mpScaleY( wxT( "magnitude [V]" ), mpALIGN_BORDER_LEFT );
+            m_axis_y2 = new mpScaleY( wxT( "phase [rad]" ), mpALIGN_BORDER_RIGHT );
+            break;
+
+        case ST_DC:
+            m_axis_x = new mpScaleX( wxT( "voltage [V]" ), mpALIGN_BORDER_BOTTOM );
+            m_axis_y1 = new mpScaleY( wxT( "voltage [V]" ), mpALIGN_BORDER_LEFT );
+            break;
+
+        case ST_NOISE:
+            m_axis_x = new mpScaleX( wxT( "frequency [Hz]" ), mpALIGN_BORDER_BOTTOM );
+            m_axis_y1 = new mpScaleY( wxT( "noise [(V or A)^2/Hz]" ), mpALIGN_BORDER_LEFT );
+            break;
+
+        case ST_TRANSIENT:
+            m_axis_x = new mpScaleX( wxT( "time [s]" ), mpALIGN_BORDER_BOTTOM );
+            m_axis_y1 = new mpScaleY( wxT( "voltage [V]" ), mpALIGN_BORDER_LEFT );
+            break;
+
+        default:
+            // suppress warnings
+            break;
+    }
+
+    if( m_axis_x )
+    {
+        m_axis_x->SetTicks( false );
+        AddLayer( m_axis_x );
+    }
+
+    if( m_axis_y1 )
+    {
+        m_axis_y1->SetTicks( false );
+        AddLayer( m_axis_y1 );
+    }
+
+    if( m_axis_y2 )
+    {
+        m_axis_y2->SetTicks( false );
+        AddLayer( m_axis_y2 );
+    }
 
     m_coords = new mpInfoCoords( wxRect( 0, 0, 100, 40 ), wxWHITE_BRUSH );
     AddLayer( m_coords );
@@ -120,6 +161,21 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& 
 SIM_PLOT_PANEL::~SIM_PLOT_PANEL()
 {
     // ~mpWindow destroys all the added layers, so there is no need to destroy m_traces contents
+}
+
+
+bool SIM_PLOT_PANEL::IsPlottable( SIM_TYPE aSimType )
+{
+    switch( aSimType )
+    {
+        case ST_AC:
+        case ST_DC:
+        case ST_TRANSIENT:
+            return true;
+
+        default:
+            return false;
+    }
 }
 
 
