@@ -75,6 +75,7 @@ private:
     static int cbSendChar( char* what, int id, void* user );
     static int cbSendStat( char* what, int id, void* user );
     static int cbBGThreadRunning( bool is_running, int id, void* user );
+    static int cbControlledExit ( int status, bool immediate, bool exit_upon_quit, int id, void *user );
 
     void dump();
 };

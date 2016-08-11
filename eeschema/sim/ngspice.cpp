@@ -52,18 +52,21 @@ NGSPICE::NGSPICE()
     m_ngSpice_AllPlots = (ngSpice_AllPlots) m_dll->GetSymbol( "ngSpice_AllPlots" );
     m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll->GetSymbol( "ngSpice_AllVecs" );
     m_ngSpice_Running = (ngSpice_Running) m_dll->GetSymbol( "ngSpice_running" );
+
+    setlocale( LC_ALL, "C" );
 }
 
 
 NGSPICE::~NGSPICE()
 {
+    setlocale( LC_ALL, "" );
     delete m_dll;
 }
 
 
 void NGSPICE::Init()
 {
-    m_ngSpice_Init( &cbSendChar, &cbSendStat, NULL, NULL, NULL, &cbBGThreadRunning, this );
+    m_ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL, &cbBGThreadRunning, this );
 }
 
 
@@ -206,18 +209,26 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
     stringstream ss( aNetlist );
     int n = 0;
 
+    printf("***\n");
     while( !ss.eof() && n < 16384 )
     {
         char line[1024];
         ss.getline( line, sizeof(line) );
         lines[n++] = strdup(line);
+
+        printf("%s\n", line);
     }
+    printf("***\n");
 
     lines[n] = NULL;
+
     m_ngSpice_Circ( lines );
 
     for(int i = 0; i < n; i++)
         delete lines[i];
+
+
+    printf("Netlist load complete!\n");
 
     return true;
 }
@@ -273,80 +284,11 @@ string NGSPICE::GetXAxis( SIM_TYPE aType ) const
     return string( "" );
 }
 
-
-void NGSPICE::dump()
+int NGSPICE::cbControlledExit ( int status, bool immediate, bool exit_upon_quit, int id, void *user )
 {
-//    m_ngSpice_Command("run\n");
-    char** plots = m_ngSpice_AllPlots();
-
-    for( int i = 0; plots[i]; ++i )
-    {
-        wxLogDebug( "-> plot : %s", plots[i] );
-        char** vecs = m_ngSpice_AllVecs( plots[i] );
-
-        for( int j = 0; vecs[j]; j++ )
-        {
-            wxLogDebug( "   - vector %s", vecs[j] );
-
-            vector_info* vi = m_ngGet_Vec_Info( vecs[j] );
-
-            wxLogDebug( "       - v_type %x", vi->v_type );
-            wxLogDebug( "       - v_flags %x", vi->v_flags );
-            wxLogDebug( "       - v_length %d", vi->v_length );
-        }
-    }
+        printf("stat %d immed %d quit %d\n", status, !!immediate, !!exit_upon_quit);
+        return 0;
 }
-
-
-#if 0
-static string loadFile(const string& filename)
-{
-
-    FILE *f=fopen(filename.c_str(),"rb");
-    char buf[10000];
-    int n = fread(buf, 1, 10000, f);
-    fclose(f);
-    buf[n] = 0;
-    return buf;
-}
-
-
-main()
-{
-    NGSPICE spice;
-    spice.Init();
-    spice.LoadNetlist(loadFile("1.ckt"));
-
-    spice.Command("tran .05 1");
-    spice.Command("save all");
-
-    spice.Run();
-    vector<double> t = spice.GetPlot("time");
-    vector<double> v1 = spice.GetPlot("V(1)");
-    vector<double> v2 = spice.GetPlot("V(2)");
-
-    // Prepare data.
-
-    // Plot line from given x and y data. Color is selected automatically.
-    plt::plot(t, v1);
-    // Plot a red dashed line from given x and y data.
-    plt::plot(t, v2,"r--");
-
-    for(int i=0;i<v1.size();i++)
-        wxLogDebug("%.10f\n",v2[i]);
-
-    // Add graph title
-    plt::title("Sample figure");
-    // Enable legend.
-    plt::legend();
-    // save figure
-    plt::show();
-
-
-//    spice.Run();
-}
-
-#endif
 
 
 int NGSPICE::cbSendChar( char* what, int id, void* user )
