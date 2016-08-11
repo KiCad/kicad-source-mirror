@@ -107,6 +107,7 @@ public:
             wxBitmap probe_mask_bitmap( (const char*) cursor_probe_mask, 32, 32 );
             probe_bitmap.SetMask( new wxMask( probe_mask_bitmap ) );
             probe_image = new wxImage( probe_bitmap.ConvertToImage() );
+            probe_image->SetMaskColour( 255, 255, 255 );
             probe_image->SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_X, 0 );
             probe_image->SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_Y, 31 );
         }
@@ -124,6 +125,7 @@ public:
             wxBitmap tune_mask_bitmap( (const char*) cursor_tune_mask, 32, 32 );
             tune_bitmap.SetMask( new wxMask( tune_mask_bitmap ) );
             tune_image = new wxImage( tune_bitmap.ConvertToImage() );
+            tune_image->SetMaskColour( 255, 255, 255 );
             tune_image->SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_X, 0 );
             tune_image->SetOption( wxIMAGE_OPTION_CUR_HOTSPOT_Y, 31 );
         }
