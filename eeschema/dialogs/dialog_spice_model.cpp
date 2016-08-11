@@ -26,6 +26,7 @@
 
 #include <netlist_exporters/netlist_exporter_pspice.h>
 #include <sim/spice_value.h>
+#include <confirm.h>
 
 #include <wx/tokenzr.h>
 
@@ -53,15 +54,46 @@ static int wxCALLBACK comparePwlValues( wxIntPtr aItem1, wxIntPtr aItem2, wxIntP
 
 
 DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, SCH_FIELDS& aFields )
-    : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ), m_fields( aFields )
+    : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ), m_fields( aFields ),
+    m_spiceEmptyValidator( true ), m_notEmptyValidator( wxFILTER_EMPTY )
 {
+    m_pasValue->SetValidator( m_spiceValidator );
+
+    m_semiType->SetValidator( m_notEmptyValidator );
+    m_semiModel->SetValidator( m_notEmptyValidator );
+
+    m_icModel->SetValidator( m_notEmptyValidator );
+
+    m_genDc->SetValidator( m_spiceEmptyValidator );
+    m_genAcMag->SetValidator( m_spiceEmptyValidator );
+    m_genAcPhase->SetValidator( m_spiceEmptyValidator );
+
+    m_pulseInit->SetValidator( m_spiceValidator );
+    m_pulseNominal->SetValidator( m_spiceValidator );
+    m_pulseDelay->SetValidator( m_spiceEmptyValidator );
+    m_pulseRise->SetValidator( m_spiceEmptyValidator );
+    m_pulseFall->SetValidator( m_spiceEmptyValidator );
+    m_pulseWidth->SetValidator( m_spiceEmptyValidator );
+    m_pulsePeriod->SetValidator( m_spiceEmptyValidator );
+
+    m_sinOffset->SetValidator( m_spiceValidator );
+    m_sinAmplitude->SetValidator( m_spiceValidator );
+    m_sinFreq->SetValidator( m_spiceEmptyValidator );
+    m_sinDelay->SetValidator( m_spiceEmptyValidator );
+    m_sinDampFactor->SetValidator( m_spiceEmptyValidator );
+
+    m_expInit->SetValidator( m_spiceValidator );
+    m_expPulsed->SetValidator( m_spiceValidator );
+    m_expRiseDelay->SetValidator( m_spiceEmptyValidator );
+    m_expRiseConst->SetValidator( m_spiceEmptyValidator );
+    m_expFallDelay->SetValidator( m_spiceEmptyValidator );
+    m_expFallConst->SetValidator( m_spiceEmptyValidator );
+
     m_pwlTimeCol = m_pwlValList->AppendColumn( "Time [s]", wxLIST_FORMAT_LEFT, 100 );
     m_pwlValueCol = m_pwlValList->AppendColumn( "Value [V/A]", wxLIST_FORMAT_LEFT, 100 );
 
     m_sdbSizerOK->SetDefault();
 }
-
-// TODO validators
 
 
 bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
@@ -74,6 +106,9 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
     // Passive
     if( page == m_passive )
     {
+        if( !m_passive->Validate() )
+            return false;
+
         switch( m_pasType->GetSelection() )
         {
             case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_RESISTOR; break;
@@ -93,6 +128,9 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
     // Semiconductor
     else if( page == m_semiconductor )
     {
+        if( !m_semiconductor->Validate() )
+            return false;
+
         switch( m_semiType->GetSelection() )
         {
             case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_DIODE; break;
@@ -115,6 +153,9 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
     // Integrated circuit
     else if( page == m_ic )
     {
+        if( !m_ic->Validate() )
+            return false;
+
         m_fieldsTmp[SF_PRIMITIVE] = (char) SP_SUBCKT;
         m_fieldsTmp[SF_MODEL] = m_icModel->GetValue();
 
@@ -292,7 +333,7 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
                 tkn = tokenizer.GetNextToken().Lower();
 
             // DC value
-            m_genDc->SetValue( SPICE_VALUE( tkn ).ToString() );
+            m_genDc->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
 
             if( !tokenizer.HasMoreTokens() )
                 return true;
@@ -304,11 +345,11 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
 
             // AC magnitude
             tkn = tokenizer.GetNextToken().Lower();
-            m_genAcMag->SetValue( SPICE_VALUE( tkn ).ToString() );
+            m_genAcMag->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
 
             // AC phase
             tkn = tokenizer.GetNextToken().Lower();
-            m_genAcMag->SetValue( SPICE_VALUE( tkn ).ToString() );
+            m_genAcMag->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
         }
 
 
@@ -356,7 +397,7 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
                 tkn = tokenizer.GetNextToken();
                 SPICE_VALUE value( tkn );
 
-                addPwlValue( time.ToString(), value.ToString() );
+                addPwlValue( time.ToSpiceString(), value.ToSpiceString() );
             }
         }
 
@@ -377,7 +418,7 @@ bool DIALOG_SPICE_MODEL::parsePowerSource( const wxString& aModel )
                     return ( i >= genericReqParamsCount );
 
                 tkn = tokenizer.GetNextToken().Lower();
-                genericControls[i]->SetValue( SPICE_VALUE( tkn ).ToString() );
+                genericControls[i]->SetValue( SPICE_VALUE( tkn ).ToSpiceString() );
             }
         }
     }
@@ -403,8 +444,14 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 
     if( page == m_pwrGeneric )
     {
-        if( empty( m_genDc ) && empty( m_genAcMag ) )
+        if( !m_pwrGeneric->Validate() )
             return false;
+
+        if( empty( m_genDc ) && empty( m_genAcMag ) )
+        {
+            DisplayError( NULL, wxT( "You have to specify DC or/and AC value" ) );
+            return false;
+        }
 
         if( !empty( m_genDc ) )
             res += wxString::Format( "dc %s", m_genDc->GetValue() );
@@ -414,13 +461,16 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
             res += wxString::Format( " ac %s", m_genAcMag->GetValue() );
 
             if( !empty( m_genAcPhase ) )
-            res += wxString::Format( " %s", m_genAcPhase->GetValue() );
+                res += wxString::Format( " %s", m_genAcPhase->GetValue() );
         }
     }
 
 
     else if( page == m_pwrPulse )
     {
+        if( !m_pwrPulse->Validate() )
+            return false;
+
         genericProcessing = true;
         res = "pulse";
         genericReqParamsCount = 2;
@@ -431,6 +481,9 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 
     else if( page == m_pwrSin )
     {
+        if( !m_pwrSin->Validate() )
+            return false;
+
         genericProcessing = true;
         res = "sin";
         genericReqParamsCount = 2;
@@ -440,6 +493,9 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 
     else if( page == m_pwrExp )
     {
+        if( !m_pwrExp->Validate() )
+            return false;
+
         genericProcessing = true;
         res = "exp";
         genericReqParamsCount = 2;
@@ -450,6 +506,12 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 
     else if( page == m_pwrPwl )
     {
+        if( m_pwlValList->GetItemCount() == 0 )
+        {
+            DisplayError( NULL, wxT( "You have to specify at least one value" ) );
+            return false;
+        }
+
         res = "pwl(";
 
         for( int i = 0; i < m_pwlValList->GetItemCount(); ++i )
@@ -463,6 +525,7 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
 
     if( genericProcessing )
     {
+        bool finished = false;
         unsigned int paramCounter = 0;
 
         res += "(";
@@ -471,10 +534,21 @@ bool DIALOG_SPICE_MODEL::generatePowerSource( wxString& aTarget ) const
         {
             if( empty( textCtrl ) )
             {
-                if( paramCounter < genericReqParamsCount )
-                    return false;
+                finished = true;
 
-                break;
+                if( paramCounter < genericReqParamsCount )
+                {
+                    DisplayError( NULL,
+                            wxString::Format( wxT( "You need to specify at least the first %d parameters" ),
+                            genericReqParamsCount ) );
+
+                    return false;
+                }
+            }
+            else if( finished )
+            {
+                DisplayError( NULL, wxT( "You cannot leave interleaved blank spaces" ) );
+                return false;
             }
 
             res += wxString::Format( "%s ", textCtrl->GetValue() );

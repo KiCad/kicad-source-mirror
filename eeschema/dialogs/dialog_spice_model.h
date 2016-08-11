@@ -26,7 +26,11 @@
 #define DIALOG_SPICE_MODEL_H
 
 #include "dialog_spice_model_base.h"
+
+#include <sim/spice_value.h>
 #include <sch_component.h>
+
+#include <wx/valnum.h>
 
 class DIALOG_SPICE_MODEL : public DIALOG_SPICE_MODEL_BASE
 {
@@ -92,6 +96,10 @@ private:
 
     ///> Column identifiers for PWL power source value list
     long m_pwlTimeCol, m_pwlValueCol;
+
+    SPICE_VALIDATOR m_spiceValidator;
+    SPICE_VALIDATOR m_spiceEmptyValidator;
+    wxTextValidator m_notEmptyValidator;
 };
 
 #endif /* DIALOG_SPICE_MODEL_H */
