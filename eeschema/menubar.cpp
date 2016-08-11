@@ -494,11 +494,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     toolsMenu->AppendSeparator();
 
+#ifdef KICAD_SPICE
     // Simulator
     AddMenuItem( toolsMenu,
                  ID_SIM_SHOW,
                  _("Simula&tor"), _( "Simulate the circuit" ),
                  wxNullBitmap );
+#endif /* KICAD_SPICE */
 
     // Help Menu:
     wxMenu* helpMenu = new wxMenu;

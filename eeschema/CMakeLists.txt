@@ -7,7 +7,6 @@ include_directories(
     ./widgets
     ../common
     ../common/dialogs
-    ./ngspice
     ${INC_AFTER}
     )
 
@@ -177,23 +176,6 @@ set( EESCHEMA_SRCS
     viewlib_frame.cpp
     viewlibs.cpp
 
-    sim/simulate.cpp
-    sim/sim_plot_frame_base.cpp
-    sim/sim_plot_frame.cpp
-    sim/sim_plot_panel.cpp
-    sim/spice_simulator.cpp
-    sim/spice_value.cpp
-    sim/ngspice.cpp
-    sim/netlist_exporter_pspice_sim.cpp
-    dialogs/dialog_signal_list.cpp
-    dialogs/dialog_signal_list_base.cpp
-    dialogs/dialog_sim_settings.cpp
-    dialogs/dialog_sim_settings_base.cpp
-    dialogs/dialog_spice_model.cpp
-    dialogs/dialog_spice_model_base.cpp
-    widgets/tuner_slider.cpp
-    widgets/tuner_slider_base.cpp
-
     netlist_exporters/netlist_exporter.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp
     netlist_exporters/netlist_exporter_generic.cpp
@@ -210,6 +192,29 @@ set( EESCHEMA_COMMON_SRCS
     ../common/class_page_info.cpp
     ../common/base_units.cpp
     )
+
+
+if( KICAD_SPICE )
+    set( EESCHEMA_SRCS 
+        ${EESCHEMA_SRCS}
+        sim/simulate.cpp
+        sim/sim_plot_frame_base.cpp
+        sim/sim_plot_frame.cpp
+        sim/sim_plot_panel.cpp
+        sim/spice_simulator.cpp
+        sim/spice_value.cpp
+        sim/ngspice.cpp
+        sim/netlist_exporter_pspice_sim.cpp
+        dialogs/dialog_signal_list.cpp
+        dialogs/dialog_signal_list_base.cpp
+        dialogs/dialog_sim_settings.cpp
+        dialogs/dialog_sim_settings_base.cpp
+        dialogs/dialog_spice_model.cpp
+        dialogs/dialog_spice_model_base.cpp
+        widgets/tuner_slider.cpp
+        widgets/tuner_slider_base.cpp
+    )
+endif()
 
 
 if( MINGW )
@@ -259,7 +264,6 @@ add_executable( eeschema WIN32 MACOSX_BUNDLE
 set_source_files_properties( ../common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_SCH;PGM_DATA_FILE_EXT=\"sch\";BUILD_KIWAY_DLL"
     )
-
 target_link_libraries( eeschema
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
@@ -280,7 +284,7 @@ target_link_libraries( eeschema_kiface
     gal
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
-)
+    )
 set_target_properties( eeschema_kiface PROPERTIES
     # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
     # _eeschema.so, _eeschema.dll, or _eeschema.kiface

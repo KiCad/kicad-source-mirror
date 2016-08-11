@@ -325,6 +325,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         break;
 
+#ifdef KICAD_SPICE
     case ID_SIM_PROBE:
         {
             const KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T };
@@ -372,6 +373,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 simFrame->AddTuner( static_cast<SCH_COMPONENT*>( item ) );
         }
         break;
+#endif /* KICAD_SPICE */
 
     default:
         SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );

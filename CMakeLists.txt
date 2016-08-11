@@ -99,7 +99,7 @@ endif()
 
 
 # Add option to add user directories for linker, if any
-LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} /usr/local/lib )
+LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
 
 if( UNIX )
     set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specific KiCad config files" )
@@ -249,6 +249,10 @@ endif()
 
 if( KICAD_SCRIPTING_WXPYTHON )
     add_definitions( -DKICAD_SCRIPTING_WXPYTHON )
+endif()
+
+if( KICAD_SPICE )
+    add_definitions( -DKICAD_SPICE )
 endif()
 
 if( USE_WX_GRAPHICS_CONTEXT OR APPLE )
@@ -437,9 +441,7 @@ add_definitions( -DWX_COMPATIBILITY )
 # See line 41 of CMakeModules/FindwxWidgets.cmake
 set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} --static=no )
 
-find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc richtext REQUIRED )
-
-
+find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
@@ -519,10 +521,6 @@ set( INC_AFTER
     ${CMAKE_BINARY_DIR}
     )
 
-
-#if ( KICAD_SPICE )
-#find_package(MathGL2 2.1 COMPONENTS wx REQUIRED )
-#endif ()
 
 # Find Python and other scripting resources
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )

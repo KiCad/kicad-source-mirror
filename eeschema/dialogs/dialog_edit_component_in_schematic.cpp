@@ -46,8 +46,10 @@
 #include <sch_validators.h>
 
 #include <dialog_edit_component_in_schematic_fbp.h>
+#ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
 #include <netlist_exporter_pspice.h>
+#endif /* KICAD_SPICE */
 
 
 /**
@@ -191,6 +193,10 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow* aParent ) :
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( aParent )
 {
+#ifndef KICAD_SPICE
+    spiceFieldsButton->Hide();
+#endif /* not KICAD_SPICE */
+
     m_parent = (SCH_EDIT_FRAME*) aParent;
 
     m_cmp = NULL;
@@ -290,11 +296,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSelectChipName( wxCommandEvent& event
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::EditSpiceModel( wxCommandEvent& event )
 {
+#ifdef KICAD_SPICE
     setSelectedFieldNdx( 0 );
     DIALOG_SPICE_MODEL dialog( this, *m_cmp, m_FieldsBuf );
 
     if( dialog.ShowModal() == wxID_OK )
         updateDisplay();
+#endif /* KICAD_SPICE */
 }
 
 
