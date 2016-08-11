@@ -548,8 +548,8 @@ void SIM_PLOT_PANEL::EnableCursor( const wxString& aName, bool aEnable )
     if( aEnable )
     {
         CURSOR* c = new CURSOR( t );
-        int plotCenter = GetMarginLeft() + ( GetXScreen() - GetMarginLeft() - GetMarginRight() ) / 2;
-        c->Move( wxPoint( plotCenter, 0 ) );
+        //int plotCenter = GetMarginLeft() + ( GetXScreen() - GetMarginLeft() - GetMarginRight() ) / 2;
+        //c->Move( wxPoint( plotCenter, 0 ) );
         t->SetCursor( c );
         AddLayer( c );
     }
