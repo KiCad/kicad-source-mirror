@@ -455,6 +455,25 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
 
     if( addedNewEntry )
     {
+        if ( m_type == ST_TRANSIENT )
+        {
+            bool hasVoltageTraces = false;
+
+            for( auto t : m_traces )
+            {
+                if ( ! (t.second->GetFlags() & SPT_CURRENT ) )
+                {
+                    hasVoltageTraces = true;
+                    break;
+                }
+            }
+
+            if ( !hasVoltageTraces )
+                m_axis_y2->SetMasterScale( nullptr );
+            else
+                m_axis_y2->SetMasterScale( m_axis_y1 );
+        }
+
         // New entry
         t = new TRACE( aName );
         t->SetPen( wxPen( generateColor(), 2, wxSOLID ) );
@@ -496,6 +515,8 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         t->SetScale( m_axis_x, m_axis_y2 );
     else
         t->SetScale( m_axis_x, m_axis_y1 );
+
+    t->SetFlags( aFlags );
 
     UpdateAll();
 

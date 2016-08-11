@@ -86,7 +86,7 @@ class TRACE : public mpFXYVector
 {
 public:
     TRACE( const wxString& aName ) :
-        mpFXYVector( aName ), m_cursor( nullptr )
+        mpFXYVector( aName ), m_cursor( nullptr ), m_flags(0)
         {
             SetContinuity( true );
             SetDrawOutsideMargins( false );
@@ -127,8 +127,19 @@ public:
         return m_cursor;
     }
 
+    void SetFlags ( int aFlags )
+    {
+        m_flags = aFlags;
+    }
+
+    int GetFlags() const
+    {
+        return m_flags;
+    }
+
 protected:
     CURSOR* m_cursor;
+    int m_flags;
 };
 
 
