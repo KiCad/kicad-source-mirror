@@ -532,9 +532,9 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
 void SIM_PLOT_FRAME::onSimReport( wxCommandEvent& aEvent )
 {
-    m_simConsole->AppendText( aEvent.GetString() );
-    m_simConsole->Newline();
-    m_simConsole->MoveEnd();        /// @todo does not work..
+    std::cout << aEvent.GetString() << std::endl;
+    m_simConsole->AppendText( aEvent.GetString() + "\n" );
+    m_simConsole->SetInsertionPointEnd();
 }
 
 

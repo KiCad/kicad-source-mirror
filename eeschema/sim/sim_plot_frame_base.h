@@ -24,12 +24,12 @@ class KIWAY_PLAYER;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/notebook.h>
+#include <wx/textctrl.h>
+#include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/listbox.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
-#include <wx/sizer.h>
-#include <wx/richtext/richtextctrl.h>
 #include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxMenu* m_fileMenu;
 		wxMenu* m_viewMenu;
 		wxNotebook* m_plotNotebook;
+		wxTextCtrl* m_simConsole;
 		wxStaticText* m_staticText2;
 		wxListBox* m_signals;
 		wxStaticText* m_staticText21;
@@ -55,7 +56,6 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxButton* m_settingsBtn;
 		wxButton* m_probeBtn;
 		wxButton* m_tuneBtn;
-		wxRichTextCtrl* m_simConsole;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void menuNewPlot( wxCommandEvent& event ) { event.Skip(); }
