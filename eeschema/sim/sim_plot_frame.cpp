@@ -102,7 +102,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     Connect( wxEVT_SIM_REPORT, wxThreadEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
     Connect( wxEVT_SIM_FINISHED, wxThreadEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
 
-    NewPlot();
+    NewPlotPanel();
 }
 
 
@@ -191,7 +191,7 @@ void SIM_PLOT_FRAME::StopSimulation()
 }
 
 
-void SIM_PLOT_FRAME::NewPlot()
+void SIM_PLOT_FRAME::NewPlotPanel()
 {
     SIM_PLOT_PANEL* plot = new SIM_PLOT_PANEL( this, wxID_ANY );
     m_plotNotebook->AddPage( plot,

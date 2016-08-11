@@ -59,7 +59,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void ResumeSimulation();
         void StopSimulation();
 
-        void NewPlot();
+        void NewPlotPanel();
         void AddVoltagePlot( const wxString& aNetName );
 
     private:
@@ -67,7 +67,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 
         void onNewPlot( wxCommandEvent& aEvent ) override
         {
-            NewPlot();
+            NewPlotPanel();
         }
 
         void onSignalDblClick( wxCommandEvent& event ) override;
