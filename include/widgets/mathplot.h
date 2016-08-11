@@ -1161,7 +1161,8 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
         void OnSize          (wxSizeEvent      &event); //!< Size handler, will update scroll bar sizes
         // void OnScroll2       (wxScrollWinEvent &event); //!< Scroll handler, will move canvas
         void OnShowPopupMenu (wxMouseEvent     &event); //!< Mouse handler, will show context menu
-        void OnMouseRightDown(wxMouseEvent     &event); //!< Mouse handler, for detecting when the user drags with the right button or just "clicks" for the menu
+        void OnMouseMiddleDown(wxMouseEvent    &event); //!< Mouse handler, for detecting when the user
+                                                        //!< drags with the middle button or just "clicks" for the menu
         void OnCenter        (wxCommandEvent   &event); //!< Context menu handler
         void OnFit           (wxCommandEvent   &event); //!< Context menu handler
         void OnZoomIn        (wxCommandEvent   &event); //!< Context menu handler
@@ -1225,11 +1226,10 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
         wxBitmap    *m_buff_bmp;            //!< For double buffering
         bool        m_enableDoubleBuffer;  //!< For double buffering
         bool        m_enableMouseNavigation;  //!< For pan/zoom with the mouse.
-        bool        m_mouseMovedAfterRightClick;
-        long        m_mouseRClick_X,m_mouseRClick_Y; //!< For the right button "drag" feature
-        int         m_mouseLClick_X, m_mouseLClick_Y; //!< Starting coords for rectangular zoom selection
+        wxPoint     m_mouseMClick;          //!< For the middle button "drag" feature
+        wxPoint     m_mouseLClick;          //!< Starting coords for rectangular zoom selection
         bool        m_enableScrollBars;
-        int         m_scrollX, m_scrollY;
+        wxPoint     m_scroll;
         mpInfoLayer* m_movingInfoLayer;      //!< For moving info layers over the window area
 
         DECLARE_DYNAMIC_CLASS(mpWindow)

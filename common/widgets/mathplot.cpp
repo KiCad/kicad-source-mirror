@@ -1122,15 +1122,14 @@ IMPLEMENT_DYNAMIC_CLASS(mpWindow, wxWindow)
     EVT_SCROLLWIN_LINEUP(mpWindow::OnScrollLineUp)
     EVT_SCROLLWIN_LINEDOWN(mpWindow::OnScrollLineDown)
     EVT_SCROLLWIN_TOP(mpWindow::OnScrollTop)
-EVT_SCROLLWIN_BOTTOM(mpWindow::OnScrollBottom)
+    EVT_SCROLLWIN_BOTTOM(mpWindow::OnScrollBottom)
 
-    EVT_MIDDLE_UP( mpWindow::OnShowPopupMenu)
-    EVT_RIGHT_DOWN( mpWindow::OnMouseRightDown) // JLB
-    EVT_RIGHT_UP ( mpWindow::OnShowPopupMenu)
-    EVT_MOUSEWHEEL( mpWindow::OnMouseWheel )   // JLB
-    EVT_MOTION( mpWindow::OnMouseMove )   // JLB
-    EVT_LEFT_DOWN( mpWindow::OnMouseLeftDown)
-EVT_LEFT_UP( mpWindow::OnMouseLeftRelease)
+    EVT_MIDDLE_DOWN(mpWindow::OnMouseMiddleDown) // JLB
+    EVT_RIGHT_UP(mpWindow::OnShowPopupMenu)
+    EVT_MOUSEWHEEL(mpWindow::OnMouseWheel )   // JLB
+    EVT_MOTION(mpWindow::OnMouseMove )   // JLB
+    EVT_LEFT_DOWN(mpWindow::OnMouseLeftDown)
+    EVT_LEFT_UP(mpWindow::OnMouseLeftRelease)
 
     EVT_MENU( mpID_CENTER,    mpWindow::OnCenter)
     EVT_MENU( mpID_FIT,       mpWindow::OnFit)
@@ -1154,7 +1153,6 @@ mpWindow::mpWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const w
     m_buff_bmp = NULL;
     m_enableDoubleBuffer        = FALSE;
     m_enableMouseNavigation     = TRUE;
-    m_mouseMovedAfterRightClick = FALSE;
     m_movingInfoLayer = NULL;
     // Set margins to 0
     m_marginTop = 0; m_marginRight = 0; m_marginBottom = 0; m_marginLeft = 0;
@@ -1167,7 +1165,7 @@ mpWindow::mpWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const w
     m_popmenu.Append( mpID_ZOOM_IN,    _("Zoom in"),     _("Zoom in plot view."));
     m_popmenu.Append( mpID_ZOOM_OUT,   _("Zoom out"),    _("Zoom out plot view."));
     m_popmenu.AppendCheckItem( mpID_LOCKASPECT, _("Lock aspect"), _("Lock horizontal and vertical zoom aspect."));
-    m_popmenu.Append( mpID_HELP_MOUSE,   _("Show mouse commands..."),    _("Show help about the mouse commands."));
+    //m_popmenu.Append( mpID_HELP_MOUSE,   _("Show mouse commands..."),    _("Show help about the mouse commands."));
 
     m_layers.clear();
     SetBackgroundColour( *wxWHITE );
@@ -1197,15 +1195,10 @@ mpWindow::~mpWindow()
 
 // Mouse handler, for detecting when the user drag with the right button or just "clicks" for the menu
 // JLB
-void mpWindow::OnMouseRightDown(wxMouseEvent     &event)
+void mpWindow::OnMouseMiddleDown(wxMouseEvent &event)
 {
-    m_mouseMovedAfterRightClick = FALSE;
-    m_mouseRClick_X = event.GetX();
-    m_mouseRClick_Y = event.GetY();
-    if (m_enableMouseNavigation)
-    {
-        SetCursor( *wxCROSS_CURSOR );
-    }
+    m_mouseMClick.x = event.GetX();
+    m_mouseMClick.y = event.GetY();
 }
 
 // Process mouse wheel events
@@ -1218,38 +1211,37 @@ void mpWindow::OnMouseWheel( wxMouseEvent &event )
         return;
     }
 
-    //     GetClientSize( &m_scrX,&m_scrY);
+    // Scroll vertically or horizontally (this is SHIFT is hold down).
+    int change = - event.GetWheelRotation(); // Opposite direction (More intuitive)!
+    double changeUnitsX = change / m_scaleX;
+    double changeUnitsY = change / m_scaleY;
 
     if (event.m_controlDown)
     {
-        wxPoint clickPt( event.GetX(),event.GetY() );
-        // CTRL key hold: Zoom in/out:
-        if (event.GetWheelRotation()>0)
-            ZoomIn( clickPt );
-        else    ZoomOut( clickPt );
+        // horizontal scroll
+        m_posX 		+= changeUnitsX;
+        m_desiredXmax 	+= changeUnitsX;
+        m_desiredXmin 	+= changeUnitsX;
+    }
+    else if(event.m_shiftDown)
+    {
+        // vertical scroll
+        m_posY 		-= changeUnitsY;
+        m_desiredYmax	-= changeUnitsY;
+        m_desiredYmax	-= changeUnitsY;
     }
     else
     {
-        // Scroll vertically or horizontally (this is SHIFT is hold down).
-        int change = - event.GetWheelRotation(); // Opposite direction (More intuitive)!
-        double changeUnitsX = change / m_scaleX;
-        double changeUnitsY = change / m_scaleY;
+        // zoom in/out
+        wxPoint clickPt( event.GetX(),event.GetY() );
 
-        if (event.m_shiftDown)
-        {
-            m_posX 		+= changeUnitsX;
-            m_desiredXmax 	+= changeUnitsX;
-            m_desiredXmin 	+= changeUnitsX;
-        }
+        if (event.GetWheelRotation() > 0)
+            ZoomIn( clickPt );
         else
-        {
-            m_posY 		-= changeUnitsY;
-            m_desiredYmax	-= changeUnitsY;
-            m_desiredYmax	-= changeUnitsY;
-        }
-
-        UpdateAll();
+            ZoomOut( clickPt );
     }
+
+    UpdateAll();
 }
 
 // If the user "drags" with the right buttom pressed, do "pan"
@@ -1262,17 +1254,15 @@ void mpWindow::OnMouseMove(wxMouseEvent     &event)
         return;
     }
 
-    if (event.m_rightDown)
+    if (event.m_middleDown)
     {
-        m_mouseMovedAfterRightClick = TRUE;  // Hides the popup menu after releasing the button!
-
         // The change:
-        int  Ax= m_mouseRClick_X - event.GetX();
-        int  Ay= m_mouseRClick_Y - event.GetY();
+        int  Ax= m_mouseMClick.x - event.GetX();
+        int  Ay= m_mouseMClick.y - event.GetY();
 
         // For the next event, use relative to this coordinates.
-        m_mouseRClick_X = event.GetX();
-        m_mouseRClick_Y = event.GetY();
+        m_mouseMClick.x = event.GetX();
+        m_mouseMClick.y = event.GetY();
 
         double   Ax_units = Ax / m_scaleX;
         double   Ay_units = -Ay / m_scaleY;
@@ -1296,9 +1286,9 @@ void mpWindow::OnMouseMove(wxMouseEvent     &event)
                 wxPen pen(*wxBLACK, 1, wxDOT);
                 dc.SetPen(pen);
                 dc.SetBrush(*wxTRANSPARENT_BRUSH);
-                dc.DrawRectangle(m_mouseLClick_X, m_mouseLClick_Y, event.GetX() - m_mouseLClick_X, event.GetY() - m_mouseLClick_Y);
+                dc.DrawRectangle(m_mouseLClick.x, m_mouseLClick.y, event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y);
             } else {
-                wxPoint moveVector(event.GetX() - m_mouseLClick_X, event.GetY() - m_mouseLClick_Y);
+                wxPoint moveVector(event.GetX() - m_mouseLClick.x, event.GetY() - m_mouseLClick.y);
                 m_movingInfoLayer->Move(moveVector);
             }
             UpdateAll();
@@ -1327,16 +1317,16 @@ void mpWindow::OnMouseMove(wxMouseEvent     &event)
 
 void mpWindow::OnMouseLeftDown (wxMouseEvent &event)
 {
-    m_mouseLClick_X = event.GetX();
-    m_mouseLClick_Y = event.GetY();
+    m_mouseLClick.x = event.GetX();
+    m_mouseLClick.y = event.GetY();
 #ifdef MATHPLOT_DO_LOGGING
-    wxLogMessage(_("mpWindow::OnMouseLeftDown() X = %d , Y = %d"), event.GetX(), event.GetY());/*m_mouseLClick_X, m_mouseLClick_Y);*/
+    wxLogMessage(_("mpWindow::OnMouseLeftDown() X = %d , Y = %d"), event.GetX(), event.GetY());/*m_mouseLClick.x, m_mouseLClick.y);*/
 #endif
     wxPoint pointClicked = event.GetPosition();
     m_movingInfoLayer = IsInsideInfoLayer(pointClicked);
     if (m_movingInfoLayer != NULL) {
 #ifdef MATHPLOT_DO_LOGGING
-        wxLogMessage(_("mpWindow::OnMouseLeftDown() started moving layer %lx"), (long int) m_movingInfoLayer);/*m_mouseLClick_X, m_mouseLClick_Y);*/
+        wxLogMessage(_("mpWindow::OnMouseLeftDown() started moving layer %lx"), (long int) m_movingInfoLayer);/*m_mouseLClick.x, m_mouseLClick.y);*/
 #endif
     }
     event.Skip();
@@ -1345,7 +1335,7 @@ void mpWindow::OnMouseLeftDown (wxMouseEvent &event)
 void mpWindow::OnMouseLeftRelease (wxMouseEvent &event)
 {
     wxPoint release(event.GetX(), event.GetY());
-    wxPoint press(m_mouseLClick_X, m_mouseLClick_Y);
+    wxPoint press(m_mouseLClick.x, m_mouseLClick.y);
     if (m_movingInfoLayer != NULL) {
         m_movingInfoLayer->UpdateReference();
         m_movingInfoLayer = NULL;
@@ -1617,18 +1607,9 @@ void mpWindow::LockAspect(bool enable)
 
 void mpWindow::OnShowPopupMenu(wxMouseEvent &event)
 {
-    // Only display menu if the user has not "dragged" the figure
-    if (m_enableMouseNavigation)
-    {
-        SetCursor( *wxSTANDARD_CURSOR );
-    }
-
-    if (!m_mouseMovedAfterRightClick)   // JLB
-    {
-        m_clickedX = event.GetX();
-        m_clickedY = event.GetY();
-        PopupMenu( &m_popmenu, event.GetX(), event.GetY());
-    }
+    m_clickedX = event.GetX();
+    m_clickedY = event.GetY();
+    PopupMenu( &m_popmenu, event.GetX(), event.GetY());
 }
 
 void mpWindow::OnLockAspect(wxCommandEvent& WXUNUSED(event))
@@ -1640,7 +1621,7 @@ void mpWindow::OnMouseHelp(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(_("Supported Mouse commands:\n \
                 - Left button down + Mark area: Rectangular zoom\n \
-                - Right button down + Move: Pan (Move)\n \
+                - Middle button down + Move: Pan (Move)\n \
                 - Wheel: Vertical scroll\n \
                 - Wheel + SHIFT: Horizontal scroll\n \
                 - Wheel + CTRL: Zoom in/out"),_("wxMathPlot help"),wxOK,this);
@@ -1662,7 +1643,7 @@ void mpWindow::OnCenter(wxCommandEvent& WXUNUSED(event))
 
 void mpWindow::OnZoomIn(wxCommandEvent& WXUNUSED(event))
 {
-    ZoomIn( wxPoint(m_mouseRClick_X,m_mouseRClick_Y) );
+    ZoomIn( wxPoint(m_mouseMClick.x,m_mouseMClick.y) );
 }
 
 void mpWindow::OnZoomOut(wxCommandEvent& WXUNUSED(event))
@@ -1794,9 +1775,9 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
           }*/
     // If scrollbars are enabled, refresh them
     if (m_enableScrollBars) {
-        /*       m_scrollX = (int) floor((m_posX - m_minX)*m_scaleX);
-                 m_scrollY = (int) floor((m_maxY - m_posY )*m_scaleY);
-                 Scroll(m_scrollX, m_scrollY);*/
+        /*       m_scroll.x = (int) floor((m_posX - m_minX)*m_scaleX);
+                 m_scroll.y = (int) floor((m_maxY - m_posY )*m_scaleY);
+                 Scroll(m_scroll.x, m_scroll.y);*/
         // Scroll(x2p(m_posX), y2p(m_posY));
         //             SetVirtualSize((int) ((m_maxX - m_minX)*m_scaleX), (int) ((m_maxY - m_minY)*m_scaleY));
         //         int centerX = (m_scrX - m_marginLeft - m_marginRight)/2; // + m_marginLeft; // c.x = m_scrX/2;
@@ -1816,18 +1797,18 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
 //         event.Skip();
 //         return;
 //     }
-// //     m_scrollX = (int) floor((m_posX - m_minX)*m_scaleX);
-// //     m_scrollY = (int) floor((m_maxY - m_posY /*- m_minY*/)*m_scaleY);
-// //     Scroll(m_scrollX, m_scrollY);
+// //     m_scroll.x = (int) floor((m_posX - m_minX)*m_scaleX);
+// //     m_scroll.y = (int) floor((m_maxY - m_posY /*- m_minY*/)*m_scaleY);
+// //     Scroll(m_scroll.x, m_scroll.y);
 //
 // //     GetClientSize( &m_scrX, &m_scrY);
 //     //Scroll(x2p(m_desiredXmin), y2p(m_desiredYmin));
 //     int pixelStep = 1;
 //     if (event.GetOrientation() == wxHORIZONTAL) {
-//         //m_desiredXmin -= (m_scrollX - event.GetPosition())/m_scaleX;
-//         //m_desiredXmax -= (m_scrollX - event.GetPosition())/m_scaleX;
-//         m_posX -= (m_scrollX - event.GetPosition())/m_scaleX;
-//         m_scrollX = event.GetPosition();
+//         //m_desiredXmin -= (m_scroll.x - event.GetPosition())/m_scaleX;
+//         //m_desiredXmax -= (m_scroll.x - event.GetPosition())/m_scaleX;
+//         m_posX -= (m_scroll.x - event.GetPosition())/m_scaleX;
+//         m_scroll.x = event.GetPosition();
 //     }
 //     Fit(m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax);
 // // /*    int pixelStep = 1;
@@ -1870,13 +1851,13 @@ void mpWindow::SetMPScrollbars(bool status)
     //     EnableScrolling(false, false);
     //     m_enableScrollBars = status;
     //     EnableScrolling(status, status);
-    /*    m_scrollX = (int) floor((m_posX - m_minX)*m_scaleX);
-          m_scrollY = (int) floor((m_posY - m_minY)*m_scaleY);*/
+    /*    m_scroll.x = (int) floor((m_posX - m_minX)*m_scaleX);
+          m_scroll.y = (int) floor((m_posY - m_minY)*m_scaleY);*/
     //     int scrollWidth = (int) floor((m_maxX - m_minX)*m_scaleX) - m_scrX;
     //     int scrollHeight = (int) floor((m_minY - m_maxY)*m_scaleY) - m_scrY;
 
-    // /*    m_scrollX = (int) floor((m_posX - m_minX)*m_scaleX);
-    //     m_scrollY = (int) floor((m_maxY - m_posY /*- m_minY*/)*m_scaleY);
+    // /*    m_scroll.x = (int) floor((m_posX - m_minX)*m_scaleX);
+    //     m_scroll.y = (int) floor((m_maxY - m_posY /*- m_minY*/)*m_scaleY);
     //     int scrollWidth = (int) floor(((m_maxX - m_minX) - (m_desiredXmax - m_desiredXmin))*m_scaleX);
     //     int scrollHeight = (int) floor(((m_maxY - m_minY) - (m_desiredYmax - m_desiredYmin))*m_scaleY);
     // #ifdef MATHPLOT_DO_LOGGING
@@ -1887,8 +1868,8 @@ void mpWindow::SetMPScrollbars(bool status)
     //                       1,
     //                       scrollWidth,
     //                       scrollHeight,
-    //                       m_scrollX,
-    //                       m_scrollY);
+    //                       m_scroll.x,
+    //                       m_scroll.y);
     // //         SetVirtualSize((int) (m_maxX - m_minX), (int) (m_maxY - m_minY));
     //     }
     //     Refresh(false);*/
