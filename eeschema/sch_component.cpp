@@ -1450,7 +1450,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         if( !(line = aLine.ReadLine()) )
             return false;
 
-        if( strnicmp( "$End", line, 4 ) != 0 )
+        if( strncasecmp( "$End", line, 4 ) != 0 )
         {
             aErrorMsg.Printf( wxT( "Component End expected at line %d, aborted" ),
                               aLine.LineNumber() );

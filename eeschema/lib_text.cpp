@@ -142,7 +142,7 @@ bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
 
     m_Size.y = m_Size.x;
 
-    if( strnicmp( tmp, "Italic", 6 ) == 0 )
+    if( strncasecmp( tmp, "Italic", 6 ) == 0 )
         m_Italic = true;
 
     if( thickness > 0 )

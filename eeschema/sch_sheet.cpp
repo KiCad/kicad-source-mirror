@@ -316,7 +316,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
         }
     }
 
-    if( strnicmp( "$End", ((char*)aLine), 4 ) != 0 )
+    if( strncasecmp( "$End", ((char*)aLine), 4 ) != 0 )
     {
         aErrorMsg.Printf( wxT( "**Eeschema file end_sheet struct error at line %d, aborted\n" ),
                           aLine.LineNumber() );

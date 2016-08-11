@@ -484,7 +484,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
     }
 
-    if( strnicmp( Name2, "Italic", 6 ) == 0 )
+    if( strncasecmp( Name2, "Italic", 6 ) == 0 )
         m_Italic = 1;
 
     return true;
@@ -947,7 +947,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
     }
 
-    if( stricmp( Name2, "Italic" ) == 0 )
+    if( strcasecmp( Name2, "Italic" ) == 0 )
         m_Italic = 1;
 
     return true;
@@ -1077,19 +1077,19 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     m_Bold = ( thickness != 0 );
     m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
 
-    if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
+    if( strcasecmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
         m_shape = NET_OUTPUT;
 
-    if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
+    if( strcasecmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
         m_shape = NET_BIDI;
 
-    if( stricmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
+    if( strcasecmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
         m_shape = NET_TRISTATE;
 
-    if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
+    if( strcasecmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
         m_shape = NET_UNSPECIFIED;
 
-    if( stricmp( Name3, "Italic" ) == 0 )
+    if( strcasecmp( Name3, "Italic" ) == 0 )
         m_Italic = 1;
 
     return true;
@@ -1521,19 +1521,19 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     m_Bold = ( thickness != 0 );
     m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
 
-    if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
+    if( strcasecmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
         m_shape = NET_OUTPUT;
 
-    if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
+    if( strcasecmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
         m_shape = NET_BIDI;
 
-    if( stricmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
+    if( strcasecmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
         m_shape = NET_TRISTATE;
 
-    if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
+    if( strcasecmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
         m_shape = NET_UNSPECIFIED;
 
-    if( stricmp( Name3, "Italic" ) == 0 )
+    if( strcasecmp( Name3, "Italic" ) == 0 )
         m_Italic = 1;
 
     return true;
