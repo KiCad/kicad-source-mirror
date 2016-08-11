@@ -90,20 +90,8 @@ private:
 class TRACE : public mpFXYVector
 {
 public:
-    TRACE( const wxString& aName, const wxString& aSpiceName )
-        : mpFXYVector( aName ), m_spiceName( aSpiceName ), m_cursor( nullptr )
-    {
-        SetContinuity( true );
-        ShowName( false );
-    }
-
-    void SetData( const std::vector<double>& aXs, const std::vector<double>& aYs )
-    {
-        mpFXYVector::SetData( aXs, aYs );
-
-        if( m_cursor )
-            m_cursor->Update();
-    }
+    TRACE( const wxString& aSpiceName ) :
+        m_spiceName( aSpiceName ), m_cursor( nullptr ) {};
 
     const wxString& GetSpiceName() const
     {
@@ -135,10 +123,38 @@ public:
         return m_cursor;
     }
 
-private:
+protected:
     wxString m_spiceName;
     CURSOR* m_cursor;
 };
+
+class TRACE_FREQ_RESPONSE : public TRACE, public mpFSemiLogXVector
+{
+public:
+    TRACE_FREQ_RESPONSE( const wxString& aName, const wxString& aSpiceName )
+        : mpFSemiLogXVector( aName ), TRACE( aSpiceName )
+    {
+        mpFSemiLogXVector::SetContinuity( true );
+        mpFSemiLogXVector::SetDrawOutsideMargins( false );
+        mpFSemiLogXVector::ShowName( false );
+    }
+
+};
+
+class TRACE_TRANSIENT : public TRACE
+{
+public:
+    TRACE_TRANSIENT( const wxString& aName, const wxString& aSpiceName ) : 
+        TRACE( aSpiceName )
+    {
+        mpFXYVector::SetName ( aName ); // hack
+        SetContinuity( true );
+        SetDrawOutsideMargins( false );
+        ShowName( false );
+    }
+
+};
+
 
 
 class SIM_PLOT_PANEL : public mpWindow
@@ -243,7 +259,7 @@ private:
     // Traces to be plotted
     std::map<wxString, TRACE*> m_traces;
 
-    mpScaleX* m_axis_x;
+    mpScaleXBase* m_axis_x;
     mpScaleY* m_axis_y1;
     mpScaleY* m_axis_y2;
     mpInfoLegend* m_legend;
