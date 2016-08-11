@@ -61,7 +61,6 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
 
     formatter->Print( 0, ".title KiCad schematic\n" );
 
-    m_probes.clear();
     m_netMap.clear();
 
     // Ground net has to be always assigned to node 0
@@ -185,26 +184,6 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* formatter, int aCtl )
                     }
                 }
             }
-
-            // TODO remove?
-#if 0
-            if(CompValue == wxT("SPICE_PROBE"))
-            {
-                NETLIST_OBJECT* pin = m_SortedComponentPinList[0];
-
-                //printf("Probe net: %s\n", (const char*) pin->GetNetName().c_str() );
-
-                m_probes.push_back(pin->GetNetName());
-                continue;
-            }
-
-            //Conditionally add Prefix only for devices that begin with U or IC:
-            if( aUsePrefix )
-            {
-                //if( RefName.StartsWith( wxT( "U" ) ) || RefName.StartsWith( wxT( "IC" ) ) )
-                //    RefName = wxT( "X" ) + RefName;
-            }
-#endif
 
             int activePinIndex = 0;
 

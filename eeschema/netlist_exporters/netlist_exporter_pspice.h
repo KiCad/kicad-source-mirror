@@ -44,7 +44,6 @@ public:
     }
 
     typedef std::map<wxString, int> NET_INDEX_MAP;
-    typedef std::vector<wxString> PROBE_LIST;
 
     /**
      * Function WriteNetlist
@@ -59,11 +58,6 @@ public:
         return m_netMap;
     }
 
-    const PROBE_LIST& GetProbeList() const
-    {
-        return m_probes;
-    }
-
     static const std::vector<wxString>& GetSpiceFields()
     {
         return m_spiceFields;
@@ -73,7 +67,6 @@ public:
 
 private:
     NET_INDEX_MAP m_netMap;
-    PROBE_LIST m_probes;
     SEARCH_STACK* m_paths;
 
     // Fields that are used during netlist export & simulation
