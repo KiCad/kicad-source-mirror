@@ -43,8 +43,8 @@ public:
     {
     }
 
-    typedef std::map<wxString, int> NetIndexMap;
-    typedef std::vector<wxString> ProbeList;
+    typedef std::map<wxString, int> NET_INDEX_MAP;
+    typedef std::vector<wxString> PROBE_LIST;
 
     /**
      * Function WriteNetlist
@@ -54,19 +54,19 @@ public:
 
     bool Format( OUTPUTFORMATTER* aOutputFormatter, int aCtl );
 
-    const NetIndexMap& GetNetIndexMap ( ) const
+    const NET_INDEX_MAP& GetNetIndexMap() const
     {
         return m_netMap;
     }
 
-    const ProbeList& GetProbeList() const
+    const PROBE_LIST& GetProbeList() const
     {
         return m_probes;
     }
 
 private:
-    NetIndexMap m_netMap;
-    ProbeList m_probes;
+    NET_INDEX_MAP m_netMap;
+    PROBE_LIST m_probes;
     SEARCH_STACK* m_paths;
 };
 
