@@ -65,6 +65,23 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
     private:
         bool isSimulationRunning();
 
+        /**
+         * @brief Updates plot in a particular SIM_PLOT_PANEL. If the panel does not contain
+         * the plot, it will be added.
+         * @param aSpiceName is the plot name in the format accepted by the current simulator instance
+         * (for NGSPICE it is e.g. "V(1)").
+         * @param aTitle is the name used in the legend.
+         * @param aPanel is the panel that should receive the update.
+         */
+        void updatePlot( const wxString& aSpiceName, const wxString& aTitle, SIM_PLOT_PANEL* aPanel );
+
+        /**
+         * @brief Returns node number for a given net.
+         * @param aNetName is the net number.
+         * @return Corresponding net number or -1 if there is no such net.
+         */
+        int getNodeNumber( const wxString& aNetName );
+
         void onNewPlot( wxCommandEvent& aEvent ) override
         {
             NewPlotPanel();

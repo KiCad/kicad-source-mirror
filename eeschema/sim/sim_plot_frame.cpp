@@ -133,8 +133,6 @@ void SIM_PLOT_FRAME::StartSimulation()
     STRING_FORMATTER formatter;
 
     m_exporter->Format( &formatter, GNL_ALL );
-    //m_plotPanel->DeleteTraces();
-
     m_simulator->LoadNetlist( formatter.GetString() );
 
     // Execute the simulation in a separate thread
@@ -201,24 +199,13 @@ void SIM_PLOT_FRAME::NewPlotPanel()
 
 void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 {
-    if( !m_exporter )
-        return;
+    int nodeNumber = getNodeNumber( aNetName );
 
-    const auto& netMapping = m_exporter->GetNetIndexMap();
-
-    if( netMapping.count( aNetName ) == 0 )
-        return;
-
-    wxString spiceName( wxString::Format( "V(%d)", netMapping.at( aNetName ) ) );
-    auto data_y = m_simulator->GetPlot( (const char*) spiceName.c_str() );
-
-    if( data_y.empty() )
-        return;
-
-    auto data_t = m_simulator->GetPlot( "time" );
-
-    SIM_PLOT_PANEL* plotPanel = static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() );
-    plotPanel->AddTrace( aNetName, data_t.size(), data_t.data(), data_y.data(), 0 );
+    if( nodeNumber >= -1 )
+    {
+        updatePlot( wxString::Format( "V(%d)", nodeNumber ), aNetName,
+                    static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() ) );
+    }
 }
 
 
@@ -227,7 +214,33 @@ bool SIM_PLOT_FRAME::isSimulationRunning()
     wxCriticalSectionLocker lock( m_simThreadCS );
 
     return ( m_simThread != NULL );
+}
 
+
+void SIM_PLOT_FRAME::updatePlot( const wxString& aSpiceName, const wxString& aTitle, SIM_PLOT_PANEL* aPanel )
+{
+    auto data_y = m_simulator->GetPlot( (const char*) aSpiceName.c_str() );
+    auto data_t = m_simulator->GetPlot( "time" );
+
+    if( data_y.empty() || data_t.empty() )
+        return;
+
+    aPanel->AddTrace( aSpiceName, aTitle, data_t.size(), data_t.data(), data_y.data(), 0 );
+}
+
+
+int SIM_PLOT_FRAME::getNodeNumber( const wxString& aNetName )
+{
+    if( !m_exporter )
+        return -1;
+
+    const auto& netMapping = m_exporter->GetNetIndexMap();
+    auto it = netMapping.find( aNetName );
+
+    if( it == netMapping.end() )
+        return -1;
+
+    return it->second;
 }
 
 
@@ -322,18 +335,12 @@ void SIM_PLOT_FRAME::onSimFinished( wxThreadEvent& aEvent )
             m_signals->Append( net.first );
     }
 
-// TODO remove?
-#if 0
-    for( auto& name : m_exporter->GetProbeList() )
+    // If there are any signals plotted, update them
+    for( unsigned int i = 0; i < m_plotNotebook->GetPageCount(); ++i )
     {
-        char spiceName[1024];
+        SIM_PLOT_PANEL* plotPanel = static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetPage( i ) );
 
-        snprintf( spiceName, sizeof( spiceName ), "V(%d)", netMapping.at( name ) );
-        //wxLogDebug( "probe %s->%s\n", (const char *) name.c_str(), spiceName );
-        //    auto data_y = m_simulator->GetPlot( spiceName );
-
-        //wxLogDebug( "%d - %d data points\n", data_t.size(), data_y.size() );
-        //    m_plotPanel->AddTrace(wxT("V(") + name + wxT(")"), data_t.size(), data_t.data(), data_y.data(), 0);
+        for( const auto& trace : plotPanel->GetTraces() )
+            updatePlot( trace.spiceName, trace.title, plotPanel );
     }
-#endif
 }

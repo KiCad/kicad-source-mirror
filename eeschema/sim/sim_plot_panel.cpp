@@ -63,18 +63,19 @@ static std::pair<T, T> find_minmax( const T* aArray, unsigned int aSize )
 }
 
 
-void SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
+void SIM_PLOT_PANEL::AddTrace( const wxString& aSpiceName, const wxString& aTitle, int aPoints,
                                 double* aT, double* aY, int aFlags )
 {
     // Find previous entry, if there is one
     auto it = std::find_if( m_traces.begin(), m_traces.end(),
-            [&](const TRACE& t) { return t.name == aName; });
+            [&](const TRACE& t) { return t.title == aTitle; });
 
     if( it == m_traces.end() )
     {
         // New entry
         TRACE trace;
-        trace.name = aName;
+        trace.spiceName = aSpiceName;
+        trace.title = aTitle;
         trace.style = wxString( '-' ) + m_painter.GenerateColor( SIM_PLOT_PAINTER::DARK );
         trace.x.Set( aT, aPoints );
         trace.y.Set( aY, aPoints );
@@ -159,7 +160,7 @@ int SIM_PLOT_PAINTER::Draw( mglGraph* aGraph )
     // Draw traces
     for( auto t : traces )
     {
-        aGraph->AddLegend( (const char*) t.name.c_str(), t.style );
+        aGraph->AddLegend( (const char*) t.title.c_str(), t.style );
         aGraph->Plot( t.y, t.style );
     }
 

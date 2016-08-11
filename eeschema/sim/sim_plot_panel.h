@@ -64,13 +64,20 @@ public:
 
     ~SIM_PLOT_PANEL();
 
-    struct TRACE {
-        wxString name, style;
+    struct TRACE
+    {
+        wxString spiceName, title, style;
         mglData x, y;
     };
 
-    void AddTrace( const wxString& name, int n_points, double *t, double *x, int flags = 0 );
+    void AddTrace( const wxString& aSpiceName, const wxString& aTitle, int aPoints,
+                    double* aT, double* aY, int aFlags );
     void DeleteTraces();
+
+    const std::vector<TRACE>& GetTraces() const
+    {
+        return m_traces;
+    }
 
 private:
     SIM_PLOT_PAINTER m_painter;
