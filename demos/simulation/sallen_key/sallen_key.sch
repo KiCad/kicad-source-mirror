@@ -1,0 +1,285 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:pspice
+LIBS:sallen_key-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L VSOURCE V1
+U 1 1 57336052
+P 6000 4700
+F 0 "V1" H 6128 4746 50  0000 L CNN
+F 1 "AC 1" H 6128 4655 50  0000 L CNN
+F 2 "" H 6000 4700 50  0000 C CNN
+F 3 "" H 6000 4700 50  0000 C CNN
+F 4 "Value" H 6000 4700 60  0001 C CNN "Fieldname"
+F 5 "V" H 6000 4700 60  0001 C CNN "Spice_Primitive"
+F 6 "1 2" H 5700 4900 60  0001 C CNN "Spice_Node_Sequence"
+	1    6000 4700
+	1    0    0    -1  
+$EndComp
+Text Notes 4300 4900 0    60   ~ 0
+*.tran 1u 10m\n
+Text Notes 4300 4800 0    60   ~ 0
+.include diodes.lib\n
+Text Label 8550 4400 0    60   ~ 0
+lowpass
+Text Notes 4300 5000 0    60   ~ 0
+.ac dec 10 1 1Meg\n
+$Comp
+L Generic_Opamp U1
+U 1 1 5788FF9F
+P 7850 4400
+F 0 "U1" H 8191 4446 50  0000 L CNN
+F 1 "AD8051" H 8191 4355 50  0000 L CNN
+F 2 "" H 7750 4300 50  0000 C CNN
+F 3 "" H 7850 4400 50  0000 C CNN
+F 4 "Value" H 7850 4400 60  0001 C CNN "Fieldname"
+F 5 "X" H 7850 4400 60  0001 C CNN "Spice_Primitive"
+F 6 "AD8051" H 7850 4400 60  0001 C CNN "Spice_Model"
+F 7 "Y" H 7850 4400 60  0001 C CNN "Spice_Netlist_Enabled"
+F 8 "/home/twl/Kicad-dev/kicad-git/eeschema/AD8051.lib" H 7850 4400 60  0001 C CNN "Spice_Lib_File"
+	1    7850 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L VSOURCE V2
+U 1 1 578900BA
+P 9650 1900
+F 0 "V2" H 9778 1946 50  0000 L CNN
+F 1 "DC 10" H 9778 1855 50  0000 L CNN
+F 2 "" H 9650 1900 50  0000 C CNN
+F 3 "" H 9650 1900 50  0000 C CNN
+F 4 "Value" H 9650 1900 60  0001 C CNN "Fieldname"
+F 5 "V" H 9650 1900 60  0001 C CNN "Spice_Primitive"
+F 6 "1 2" H 9350 2100 60  0001 C CNN "Spice_Node_Sequence"
+	1    9650 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L VSOURCE V3
+U 1 1 57890232
+P 9650 2300
+F 0 "V3" H 9778 2346 50  0000 L CNN
+F 1 "DC 10" H 9778 2255 50  0000 L CNN
+F 2 "" H 9650 2300 50  0000 C CNN
+F 3 "" H 9650 2300 50  0000 C CNN
+F 4 "Value" H 9650 2300 60  0001 C CNN "Fieldname"
+F 5 "V" H 9650 2300 60  0001 C CNN "Spice_Primitive"
+F 6 "1 2" H 9350 2500 60  0001 C CNN "Spice_Node_Sequence"
+	1    9650 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR5
+U 1 1 578902D2
+P 9400 2100
+F 0 "#PWR5" H 9400 1850 50  0001 C CNN
+F 1 "GND" H 9405 1927 50  0000 C CNN
+F 2 "" H 9400 2100 50  0000 C CNN
+F 3 "" H 9400 2100 50  0000 C CNN
+	1    9400 2100
+	1    0    0    -1  
+$EndComp
+$Comp
+L VDD #PWR6
+U 1 1 578903C0
+P 9650 1700
+F 0 "#PWR6" H 9650 1550 50  0001 C CNN
+F 1 "VDD" H 9667 1873 50  0000 C CNN
+F 2 "" H 9650 1700 50  0000 C CNN
+F 3 "" H 9650 1700 50  0000 C CNN
+	1    9650 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L VSS #PWR7
+U 1 1 578903E2
+P 9650 2500
+F 0 "#PWR7" H 9650 2350 50  0001 C CNN
+F 1 "VSS" H 9668 2673 50  0000 C CNN
+F 2 "" H 9650 2500 50  0000 C CNN
+F 3 "" H 9650 2500 50  0000 C CNN
+	1    9650 2500
+	-1   0    0    1   
+$EndComp
+$Comp
+L VDD #PWR3
+U 1 1 57890425
+P 7750 4100
+F 0 "#PWR3" H 7750 3950 50  0001 C CNN
+F 1 "VDD" H 7767 4273 50  0000 C CNN
+F 2 "" H 7750 4100 50  0000 C CNN
+F 3 "" H 7750 4100 50  0000 C CNN
+	1    7750 4100
+	1    0    0    -1  
+$EndComp
+$Comp
+L VSS #PWR4
+U 1 1 57890453
+P 7750 4700
+F 0 "#PWR4" H 7750 4550 50  0001 C CNN
+F 1 "VSS" H 7768 4873 50  0000 C CNN
+F 2 "" H 7750 4700 50  0000 C CNN
+F 3 "" H 7750 4700 50  0000 C CNN
+	1    7750 4700
+	-1   0    0    1   
+$EndComp
+$Comp
+L R R2
+U 1 1 57890691
+P 6950 4300
+F 0 "R2" V 6743 4300 50  0000 C CNN
+F 1 "1k" V 6834 4300 50  0000 C CNN
+F 2 "" V 6880 4300 50  0000 C CNN
+F 3 "" H 6950 4300 50  0000 C CNN
+F 4 "Value" H 6950 4300 60  0001 C CNN "Fieldname"
+F 5 "1 2" H 6950 4300 60  0001 C CNN "SpiceMapping"
+F 6 "R" V 6950 4300 60  0001 C CNN "Spice_Primitive"
+	1    6950 4300
+	0    1    1    0   
+$EndComp
+$Comp
+L R R1
+U 1 1 578906FF
+P 6400 4300
+F 0 "R1" V 6193 4300 50  0000 C CNN
+F 1 "1k" V 6284 4300 50  0000 C CNN
+F 2 "" V 6330 4300 50  0000 C CNN
+F 3 "" H 6400 4300 50  0000 C CNN
+F 4 "Value" H 6400 4300 60  0001 C CNN "Fieldname"
+F 5 "1 2" H 6400 4300 60  0001 C CNN "SpiceMapping"
+F 6 "R" V 6400 4300 60  0001 C CNN "Spice_Primitive"
+	1    6400 4300
+	0    1    1    0   
+$EndComp
+$Comp
+L C C1
+U 1 1 5789077D
+P 7000 4950
+F 0 "C1" H 7115 4996 50  0000 L CNN
+F 1 "100n" H 7115 4905 50  0000 L CNN
+F 2 "" H 7038 4800 50  0000 C CNN
+F 3 "" H 7000 4950 50  0000 C CNN
+F 4 "Value" H 7000 4950 60  0001 C CNN "Fieldname"
+F 5 "C" H 7000 4950 60  0001 C CNN "Spice_Primitive"
+F 6 "1 2" H 7000 4950 60  0001 C CNN "SpiceMapping"
+	1    7000 4950
+	0    1    1    0   
+$EndComp
+$Comp
+L C C2
+U 1 1 5789085B
+P 7350 4000
+F 0 "C2" H 7465 4046 50  0000 L CNN
+F 1 "100n" H 7465 3955 50  0000 L CNN
+F 2 "" H 7388 3850 50  0000 C CNN
+F 3 "" H 7350 4000 50  0000 C CNN
+F 4 "Value" H 7350 4000 60  0001 C CNN "Fieldname"
+F 5 "C" H 7350 4000 60  0001 C CNN "Spice_Primitive"
+F 6 "1 2" H 7350 4000 60  0001 C CNN "SpiceMapping"
+	1    7350 4000
+	-1   0    0    1   
+$EndComp
+$Comp
+L GND #PWR2
+U 1 1 57890B95
+P 7350 3800
+F 0 "#PWR2" H 7350 3550 50  0001 C CNN
+F 1 "GND" H 7355 3627 50  0000 C CNN
+F 2 "" H 7350 3800 50  0000 C CNN
+F 3 "" H 7350 3800 50  0000 C CNN
+	1    7350 3800
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	9650 2100 9400 2100
+Wire Wire Line
+	8150 4400 8900 4400
+Wire Wire Line
+	8350 4400 8350 4950
+Wire Wire Line
+	8350 4950 7400 4950
+Wire Wire Line
+	7400 4950 7400 4500
+Wire Wire Line
+	7400 4500 7550 4500
+Wire Wire Line
+	7550 4300 7100 4300
+Wire Wire Line
+	6550 4300 6850 4300
+Wire Wire Line
+	6850 4950 6650 4950
+Wire Wire Line
+	6650 4950 6650 4300
+Connection ~ 6800 4300
+Connection ~ 6650 4300
+Wire Wire Line
+	7150 4950 7450 4950
+Connection ~ 7400 4950
+Wire Wire Line
+	7350 4150 7350 4300
+Connection ~ 7350 4300
+Wire Wire Line
+	7350 3800 7350 3850
+Wire Wire Line
+	6250 4300 6000 4300
+Wire Wire Line
+	6000 4300 6000 4500
+Wire Wire Line
+	6000 4900 6000 5000
+$Comp
+L GND #PWR1
+U 1 1 57890E7F
+P 6000 5000
+F 0 "#PWR1" H 6000 4750 50  0001 C CNN
+F 1 "GND" H 6005 4827 50  0000 C CNN
+F 2 "" H 6000 5000 50  0000 C CNN
+F 3 "" H 6000 5000 50  0000 C CNN
+	1    6000 5000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8900 4400 8900 4450
+Connection ~ 8350 4400
+$EndSCHEMATC
