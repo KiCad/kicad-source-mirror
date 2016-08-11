@@ -26,7 +26,9 @@
 #include <schframe.h>
 #include <eeschema_id.h>
 #include <kiway.h>
+#include <confirm.h>
 
+#include <widgets/tuner_slider.h>
 #include <dialogs/dialog_signal_list.h>
 #include "netlist_exporter_pspice_sim.h"
 
@@ -87,6 +89,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     updateNetlistExporter();
 
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
+    Connect( EVT_SIM_UPDATE, wxCommandEventHandler( SIM_PLOT_FRAME::onSimUpdate ), NULL, this );
     Connect( EVT_SIM_REPORT, wxCommandEventHandler( SIM_PLOT_FRAME::onSimReport ), NULL, this );
     Connect( EVT_SIM_STARTED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimStarted ), NULL, this );
     Connect( EVT_SIM_FINISHED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimFinished ), NULL, this );
@@ -105,17 +108,20 @@ void SIM_PLOT_FRAME::StartSimulation()
 
     m_simConsole->Clear();
 
-    // TODO check if there is a valid simulation command
+    updateNetlistExporter();
+    m_exporter->SetSimCommand( m_settingsDlg.GetSimCommand() );
+    m_exporter->Format( &formatter, m_settingsDlg.GetNetlistOptions() );
+
+    if( m_exporter->GetSimType() == ST_UNKNOWN )
+    {
+        DisplayInfoMessage( this, wxT( "You need to select the simulation settings first" ) );
+        return;
+    }
 
     /// @todo is it necessary to recreate simulator every time?
     m_simulator.reset( SPICE_SIMULATOR::CreateInstance( "ngspice" ) );
     m_simulator->SetReporter( new SIM_THREAD_REPORTER( this ) );
     m_simulator->Init();
-
-    updateNetlistExporter();
-    m_exporter->SetSimCommand( m_settingsDlg.GetSimCommand() );
-    m_exporter->Format( &formatter, m_settingsDlg.GetNetlistOptions() );
-
     m_simulator->LoadNetlist( formatter.GetString() );
     m_simulator->Run();
 }
@@ -125,6 +131,12 @@ void SIM_PLOT_FRAME::StopSimulation()
 {
     if( m_simulator )
         m_simulator->Stop();
+}
+
+
+bool SIM_PLOT_FRAME::IsSimulationRunning()
+{
+    return m_simulator ? m_simulator->IsRunning() : false;
 }
 
 
@@ -165,15 +177,56 @@ void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 }
 
 
-SIM_PLOT_PANEL* SIM_PLOT_FRAME::CurrentPlot() const
+void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
 {
-    return static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() );
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
+    if( !plotPanel )
+        return;
+
+    const wxString& componentName = aComponent->GetField( REFERENCE )->GetText();
+    auto& tunerList = m_tuners[plotPanel];
+
+    // Do not add multiple instances for the same component
+    auto tunerIt = std::find_if( tunerList.begin(), tunerList.end(), [&]( const TUNER_SLIDER* t )
+        {
+            return t->GetComponentName() == componentName;
+        }
+    );
+
+    if( tunerIt != tunerList.end() )
+        return;     // We already have it
+
+    try
+    {
+        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, aComponent );
+        m_tuneSizer->Add( tuner );
+        tunerList.push_back( tuner );
+        Layout();
+    }
+    catch( ... )
+    {
+        // Sorry, no bonus
+    }
 }
 
 
-bool SIM_PLOT_FRAME::isSimulationRunning()
+void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner )
 {
-    return m_simulator ? m_simulator->IsRunning() : false;
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
+    if( !plotPanel )
+        return;
+
+    m_tuners[plotPanel].remove( aTuner );
+    aTuner->Destroy();
+    Layout();
+}
+
+
+SIM_PLOT_PANEL* SIM_PLOT_FRAME::CurrentPlot() const
+{
+    return static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetCurrentPage() );
 }
 
 
@@ -280,6 +333,28 @@ void SIM_PLOT_FRAME::updateSignalList()
 
     for( const auto& trace : plotPanel->GetTraces() )
         m_signals->Append( trace.second->GetName() );
+}
+
+
+void SIM_PLOT_FRAME::updateTuners()
+{
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
+    if( !plotPanel )
+        return;
+
+    for( unsigned int i = 0; i < m_tuneSizer->GetItemCount(); ++i )
+        m_tuneSizer->Hide( i );
+
+    m_tuneSizer->Clear();
+
+    for( auto tuner : m_tuners[plotPanel] )
+    {
+        m_tuneSizer->Add( tuner );
+        tuner->Show();
+    }
+
+    Layout();
 }
 
 
@@ -419,6 +494,7 @@ void SIM_PLOT_FRAME::menuShowCoordsUpdate( wxUpdateUIEvent& event )
 void SIM_PLOT_FRAME::onPlotChanged( wxNotebookEvent& event )
 {
     updateSignalList();
+    updateTuners();
 
     // Update cursors
     wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
@@ -461,7 +537,7 @@ void SIM_PLOT_FRAME::onSignalRClick( wxMouseEvent& event )
 
 void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 {
-    if( isSimulationRunning() )
+    if( IsSimulationRunning() )
         StopSimulation();
     else
         StartSimulation();
@@ -489,14 +565,22 @@ void SIM_PLOT_FRAME::onProbe( wxCommandEvent& event )
     if( m_schematicFrame == NULL )
         return;
 
-    wxCommandEvent* placeProbe = new wxCommandEvent( wxEVT_TOOL, ID_SIM_ADD_PROBE );
-    wxQueueEvent( m_schematicFrame, placeProbe );
+    wxQueueEvent( m_schematicFrame, new wxCommandEvent( wxEVT_TOOL, ID_SIM_PROBE ) );
+}
+
+
+void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
+{
+    if( m_schematicFrame == NULL )
+        return;
+
+    wxQueueEvent( m_schematicFrame, new wxCommandEvent( wxEVT_TOOL, ID_SIM_TUNE ) );
 }
 
 
 void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
 {
-    if( isSimulationRunning() )
+    if( IsSimulationRunning() )
         m_simulator->Stop();
 
     Destroy();
@@ -539,6 +623,10 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     SetCursor( wxCURSOR_ARROW );
 
     SIM_TYPE simType = m_exporter->GetSimType();
+
+    if( simType == ST_UNKNOWN )
+        return;
+
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
     if( plotPanel == nullptr || plotPanel->GetType() != simType )
@@ -562,6 +650,32 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
                 m_simulator->Command( wxString::Format( "print v(%d)", node ).ToStdString() );
         }
     }
+}
+
+
+void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
+{
+    if( !m_simulator )
+        return;
+
+    if( IsSimulationRunning() )
+        StopSimulation();
+
+    m_simConsole->Clear();
+
+    // Apply tuned values
+    if( SIM_PLOT_PANEL* plotPanel = CurrentPlot() )
+    {
+        for( auto tuner : m_tuners[plotPanel] )
+        {
+            /// @todo no ngspice hardcoding
+            std::string command( "alter @" + tuner->GetSpiceName()
+                    + "=" + tuner->GetValue().ToSpiceString() );
+            m_simulator->Command( command );
+        }
+    }
+
+    m_simulator->Run();
 }
 
 
@@ -624,6 +738,8 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
     }
 }
 
+wxDEFINE_EVENT( EVT_SIM_UPDATE, wxCommandEvent );
 wxDEFINE_EVENT( EVT_SIM_REPORT, wxCommandEvent );
+
 wxDEFINE_EVENT( EVT_SIM_STARTED, wxCommandEvent );
 wxDEFINE_EVENT( EVT_SIM_FINISHED, wxCommandEvent );

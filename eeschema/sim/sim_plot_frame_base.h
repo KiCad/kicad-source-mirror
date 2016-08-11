@@ -26,8 +26,8 @@ class KIWAY_PLAYER;
 #include <wx/notebook.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/listbox.h>
+#include <wx/statbox.h>
 #include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/frame.h>
@@ -48,10 +48,9 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxMenu* m_viewMenu;
 		wxNotebook* m_plotNotebook;
 		wxTextCtrl* m_simConsole;
-		wxStaticText* m_staticText2;
 		wxListBox* m_signals;
-		wxStaticText* m_staticText21;
 		wxListCtrl* m_cursors;
+		wxBoxSizer* m_tuneSizer;
 		wxButton* m_simulateBtn;
 		wxButton* m_settingsBtn;
 		wxButton* m_addSignal;

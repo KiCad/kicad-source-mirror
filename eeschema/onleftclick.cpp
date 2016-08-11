@@ -325,7 +325,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         break;
 
-    case ID_SIM_ADD_PROBE:
+    case ID_SIM_PROBE:
         {
             const KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T };
             item = LocateAndShowItem( aPosition, wiresAndComponents );
@@ -347,6 +347,29 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                     break;
                 }
             }
+        }
+        break;
+
+    case ID_SIM_TUNE:
+        {
+            const KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T };
+            item = LocateAndShowItem( aPosition, fieldsAndComponents );
+
+            if( !item )
+                return;
+
+            if( item->Type() != SCH_COMPONENT_T )
+            {
+                item = static_cast<SCH_ITEM*>( item->GetParent() );
+
+                if( item->Type() != SCH_COMPONENT_T )
+                    return;
+            }
+
+            SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
+
+            if( simFrame )
+                simFrame->AddTuner( static_cast<SCH_COMPONENT*>( item ) );
         }
         break;
 

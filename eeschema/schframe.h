@@ -1381,7 +1381,11 @@ public:
 
     wxString GetNetListerCommand() const { return m_netListerCommand; }
 
+    ///> Probe cursor, used by circuit simulator
     const static wxCursor CURSOR_PROBE;
+
+    ///> Tuner cursor, used by circuit simulator
+    const static wxCursor CURSOR_TUNE;
 
     DECLARE_EVENT_TABLE()
 };

@@ -104,19 +104,34 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("Signals"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
-	m_staticText2->Wrap( -1 );
-	bSizer7->Add( m_staticText2, 0, wxALL|wxEXPAND, 5 );
+	wxStaticBoxSizer* sbSizer1;
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Signals") ), wxVERTICAL );
 	
-	m_signals = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE|wxLB_SORT ); 
-	bSizer7->Add( m_signals, 1, wxALL|wxEXPAND, 5 );
+	m_signals = new wxListBox( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE|wxLB_SORT ); 
+	sbSizer1->Add( m_signals, 1, wxALL|wxEXPAND, 5 );
 	
-	m_staticText21 = new wxStaticText( this, wxID_ANY, _("Cursors"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText21->Wrap( -1 );
-	bSizer7->Add( m_staticText21, 0, wxALL, 5 );
 	
-	m_cursors = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL );
-	bSizer7->Add( m_cursors, 1, wxALL|wxEXPAND, 5 );
+	bSizer7->Add( sbSizer1, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizer3;
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Cursors") ), wxVERTICAL );
+	
+	m_cursors = new wxListCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_HRULES|wxLC_REPORT|wxLC_SINGLE_SEL );
+	sbSizer3->Add( m_cursors, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	bSizer7->Add( sbSizer3, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizer4;
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tune") ), wxVERTICAL );
+	
+	m_tuneSizer = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	sbSizer4->Add( m_tuneSizer, 1, wxEXPAND, 5 );
+	
+	
+	bSizer7->Add( sbSizer4, 1, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );

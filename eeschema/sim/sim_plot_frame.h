@@ -36,12 +36,18 @@
 #include <dialogs/dialog_sim_settings.h>
 
 #include <wx/event.h>
+
+#include <list>
 #include <memory>
+#include <map>
 
 class SCH_EDIT_FRAME;
+class SCH_COMPONENT;
+
 class SPICE_SIMULATOR;
 class NETLIST_EXPORTER_PSPICE_SIM;
 class SIM_PLOT_PANEL;
+class TUNER_SLIDER;
 
 /** Implementing SIM_PLOT_FRAME_BASE */
 class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
@@ -53,6 +59,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 
         void StartSimulation();
         void StopSimulation();
+        bool IsSimulationRunning();
 
         /**
          * @brief Creates a new plot panel for a given simulation type and adds it to the main
@@ -64,11 +71,13 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 
         void AddVoltagePlot( const wxString& aNetName );
 
+        void AddTuner( SCH_COMPONENT* aComponent );
+
+        void RemoveTuner( TUNER_SLIDER* aTuner );
+
         SIM_PLOT_PANEL* CurrentPlot() const;
 
     private:
-        bool isSimulationRunning();
-
         void updateNetlistExporter();
 
         /**
@@ -86,6 +95,11 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
          * @brief Updates the list of currently plotted signals.
          */
         void updateSignalList();
+
+        /**
+         * @brief Fills the tuners area with the ones related to the current plot.
+         */
+        void updateTuners();
 
         /**
          * @brief Returns node number for a given net.
@@ -124,17 +138,20 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         void onSettings( wxCommandEvent& event ) override;
         void onAddSignal( wxCommandEvent& event ) override;
         void onProbe( wxCommandEvent& event ) override;
+        void onTune( wxCommandEvent& event ) override;
 
         void onClose( wxCloseEvent& aEvent );
 
         void onCursorUpdate( wxCommandEvent& aEvent );
+        void onSimUpdate( wxCommandEvent& aEvent );
+        void onSimReport( wxCommandEvent& aEvent );
         void onSimStarted( wxCommandEvent& aEvent );
         void onSimFinished( wxCommandEvent& aEvent );
-        void onSimReport( wxCommandEvent& aEvent );
 
         SCH_EDIT_FRAME* m_schematicFrame;
         std::unique_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
         std::unique_ptr<SPICE_SIMULATOR> m_simulator;
+        std::map<SIM_PLOT_PANEL*, std::list<TUNER_SLIDER*> > m_tuners;
 
         // Trick to preserve settings between runs
         DIALOG_SIM_SETTINGS m_settingsDlg;
@@ -161,7 +178,11 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         };
 };
 
+// Commands
+wxDECLARE_EVENT( EVT_SIM_UPDATE, wxCommandEvent );
 wxDECLARE_EVENT( EVT_SIM_REPORT, wxCommandEvent );
+
+// Notifications
 wxDECLARE_EVENT( EVT_SIM_STARTED, wxCommandEvent );
 wxDECLARE_EVENT( EVT_SIM_FINISHED, wxCommandEvent );
 

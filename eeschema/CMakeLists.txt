@@ -191,6 +191,8 @@ set( EESCHEMA_SRCS
     dialogs/dialog_sim_settings_base.cpp
     dialogs/dialog_spice_model.cpp
     dialogs/dialog_spice_model_base.cpp
+    widgets/tuner_slider.cpp
+    widgets/tuner_slider_base.cpp
 
     netlist_exporters/netlist_exporter.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp
