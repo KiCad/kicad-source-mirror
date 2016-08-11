@@ -25,6 +25,8 @@
 #ifndef _REPORTER_H_
 #define _REPORTER_H_
 
+#include <wx/string.h>
+
 /**
  * @file reporter.h
  * @author Wayne Stambaugh
@@ -32,7 +34,6 @@
  *       me to write this.
  */
 
-class wxString;
 class wxTextCtrl;
 class wxHtmlListbox;
 class WX_HTML_REPORT_PANEL;
@@ -81,11 +82,8 @@ public:
     REPORTER& Report( const char* aText, SEVERITY aSeverity = RPT_UNDEFINED );
 
     REPORTER& operator <<( const wxString& aText ) { return Report( aText ); }
-
     REPORTER& operator <<( const wxChar* aText ) { return Report( wxString( aText ) ); }
-
     REPORTER& operator <<( wxChar aChar ) { return Report( wxString( aChar ) ); }
-
     REPORTER& operator <<( const char* aText ) { return Report( aText ); }
 };
 
