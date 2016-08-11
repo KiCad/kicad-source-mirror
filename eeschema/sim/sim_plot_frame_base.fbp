@@ -834,7 +834,7 @@
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
                                                     <event name="OnUpdateUI"></event>
-                                                    <object class="wxBoxSizer" expanded="1">
+                                                    <object class="wxBoxSizer" expanded="0">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">m_sizer5</property>
                                                         <property name="orient">wxHORIZONTAL</property>
@@ -877,7 +877,7 @@
                                                                 <property name="maximum_size"></property>
                                                                 <property name="min_size"></property>
                                                                 <property name="minimize_button">0</property>
-                                                                <property name="minimum_size">400,-1</property>
+                                                                <property name="minimum_size">-1,-1</property>
                                                                 <property name="moveable">1</property>
                                                                 <property name="name">m_plotNotebook</property>
                                                                 <property name="pane_border">1</property>
@@ -921,11 +921,11 @@
                                                                 <event name="OnSetFocus"></event>
                                                                 <event name="OnSize"></event>
                                                                 <event name="OnUpdateUI"></event>
-                                                                <object class="notebookpage" expanded="1">
+                                                                <object class="notebookpage" expanded="0">
                                                                     <property name="bitmap"></property>
                                                                     <property name="label">a page</property>
                                                                     <property name="select">0</property>
-                                                                    <object class="wxPanel" expanded="1">
+                                                                    <object class="wxPanel" expanded="0">
                                                                         <property name="BottomDockable">1</property>
                                                                         <property name="LeftDockable">1</property>
                                                                         <property name="RightDockable">1</property>
@@ -1146,8 +1146,8 @@
                                                     </object>
                                                 </object>
                                             </object>
-                                            <object class="splitteritem" expanded="0">
-                                                <object class="wxPanel" expanded="0">
+                                            <object class="splitteritem" expanded="1">
+                                                <object class="wxPanel" expanded="1">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
                                                     <property name="RightDockable">1</property>
@@ -1221,7 +1221,7 @@
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
                                                     <event name="OnUpdateUI"></event>
-                                                    <object class="wxBoxSizer" expanded="0">
+                                                    <object class="wxBoxSizer" expanded="1">
                                                         <property name="minimum_size"></property>
                                                         <property name="name">m_sizer13</property>
                                                         <property name="orient">wxVERTICAL</property>
@@ -1405,16 +1405,17 @@
                                     <property name="name">m_sideSizer</property>
                                     <property name="orient">wxVERTICAL</property>
                                     <property name="permission">protected</property>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxStaticBoxSizer" expanded="0">
+                                        <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
                                             <property name="label">Signals</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizer1</property>
                                             <property name="orient">wxVERTICAL</property>
+                                            <property name="parent">1</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="0">
@@ -1507,16 +1508,17 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="0">
+                                    <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxStaticBoxSizer" expanded="0">
+                                        <object class="wxStaticBoxSizer" expanded="1">
                                             <property name="id">wxID_ANY</property>
                                             <property name="label">Cursors</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizer3</property>
                                             <property name="orient">wxVERTICAL</property>
+                                            <property name="parent">1</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="0">
@@ -1626,16 +1628,17 @@
                                             </object>
                                         </object>
                                     </object>
-                                    <object class="sizeritem" expanded="1">
+                                    <object class="sizeritem" expanded="0">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxStaticBoxSizer" expanded="1">
+                                        <object class="wxStaticBoxSizer" expanded="0">
                                             <property name="id">wxID_ANY</property>
                                             <property name="label">Tune</property>
                                             <property name="minimum_size"></property>
                                             <property name="name">sbSizer4</property>
                                             <property name="orient">wxVERTICAL</property>
+                                            <property name="parent">1</property>
                                             <property name="permission">protected</property>
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="0">

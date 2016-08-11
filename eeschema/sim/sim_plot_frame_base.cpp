@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Jun 24 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -123,8 +123,6 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_sizer5 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_plotNotebook = new wxNotebook( m_plotPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_plotNotebook->SetMinSize( wxSize( 400,-1 ) );
-	
 	m_welcomePanel = new wxPanel( m_plotNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_sizer8 = new wxBoxSizer( wxVERTICAL );
 	
@@ -139,7 +137,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	
 	m_staticText2 = new wxStaticText( m_welcomePanel, wxID_ANY, _("Start the simulation by clicking the Run Simulation button"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	m_staticText2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 	m_staticText2->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
 	
 	bSizer81->Add( m_staticText2, 0, wxALIGN_RIGHT|wxALL|wxEXPAND, 5 );
@@ -169,7 +167,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_sizer13 = new wxBoxSizer( wxVERTICAL );
 	
 	m_simConsole = new wxTextCtrl( m_panel5, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_DONTWRAP|wxTE_MULTILINE|wxTE_READONLY );
-	m_simConsole->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
+	m_simConsole->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	
 	m_sizer13->Add( m_simConsole, 1, wxALL|wxEXPAND, 5 );
 	
