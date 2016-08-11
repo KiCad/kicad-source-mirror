@@ -1152,6 +1152,7 @@ mpWindow::mpWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const w
     m_buff_bmp = NULL;
     m_enableDoubleBuffer        = FALSE;
     m_enableMouseNavigation     = TRUE;
+    m_enableLimitedView         = FALSE;
     m_movingInfoLayer = NULL;
     // Set margins to 0
     m_marginTop = 0; m_marginRight = 0; m_marginBottom = 0; m_marginLeft = 0;
@@ -1218,16 +1219,12 @@ void mpWindow::OnMouseWheel( wxMouseEvent &event )
     if (event.m_controlDown)
     {
         // horizontal scroll
-        m_posX 		+= changeUnitsX;
-        m_desiredXmax 	+= changeUnitsX;
-        m_desiredXmin 	+= changeUnitsX;
+        SetXView(m_posX + changeUnitsX, m_desiredXmax + changeUnitsX, m_desiredXmin + changeUnitsX);
     }
     else if(event.m_shiftDown)
     {
         // vertical scroll
-        m_posY 		-= changeUnitsY;
-        m_desiredYmax	-= changeUnitsY;
-        m_desiredYmax	-= changeUnitsY;
+        SetYView(m_posY - changeUnitsY, m_desiredYmax - changeUnitsY, m_desiredYmin - changeUnitsY);
     }
     else
     {
@@ -1266,14 +1263,12 @@ void mpWindow::OnMouseMove(wxMouseEvent     &event)
         double   Ax_units = Ax / m_scaleX;
         double   Ay_units = -Ay / m_scaleY;
 
-        m_posX += Ax_units;
-        m_posY += Ay_units;
-        m_desiredXmax 	+= Ax_units;
-        m_desiredXmin 	+= Ax_units;
-        m_desiredYmax 	+= Ay_units;
-        m_desiredYmin 	+= Ay_units;
+        bool updateRequired = false;
+        updateRequired |= SetXView(m_posX + Ax_units, m_desiredXmax + Ax_units, m_desiredXmin + Ax_units);
+        updateRequired |= SetYView(m_posY + Ay_units, m_desiredYmax + Ay_units, m_desiredYmin + Ay_units);
 
-        UpdateAll();
+        if(updateRequired)
+            UpdateAll();
 
 #ifdef MATHPLOT_DO_LOGGING
         wxLogMessage(_("[mpWindow::OnMouseMove] Ax:%i Ay:%i m_posX:%f m_posY:%f"),Ax,Ay,m_posX,m_posY);
@@ -1482,6 +1477,32 @@ void mpWindow::DoZoomOutYCalc  (const int staticYpixel)
 }
 
 
+bool mpWindow::SetXView(double pos, double desiredMax, double desiredMin)
+{
+    if(m_enableLimitedView && (desiredMax > m_maxX || desiredMin < m_minX))
+        return false;
+
+    m_posX = pos;
+    m_desiredXmax = desiredMax;
+    m_desiredXmin = desiredMin;
+
+    return true;
+}
+
+
+bool mpWindow::SetYView(double pos, double desiredMax, double desiredMin)
+{
+    if(m_enableLimitedView && (desiredMax > m_maxY || desiredMin < m_minY))
+        return false;
+
+    m_posY = pos;
+    m_desiredYmax = desiredMax;
+    m_desiredYmin = desiredMin;
+
+    return true;
+}
+
+
 void mpWindow::ZoomIn(const wxPoint& centerPoint )
 {
     wxPoint	c(centerPoint);
@@ -1497,8 +1518,20 @@ void mpWindow::ZoomIn(const wxPoint& centerPoint )
     double prior_layer_y = p2y( c.y );
 
     // Zoom in:
-    m_scaleX = m_scaleX * zoomIncrementalFactor;
-    m_scaleY = m_scaleY * zoomIncrementalFactor;
+    const double MAX_SCALE = 1e6;
+    double newScaleX = m_scaleX * zoomIncrementalFactor;
+    double newScaleY = m_scaleY * zoomIncrementalFactor;
+
+    // Baaaaad things happen when you zoom in too much..
+    if(newScaleX <= MAX_SCALE && newScaleY <= MAX_SCALE)
+    {
+        m_scaleX = newScaleX;
+        m_scaleY = newScaleY;
+    }
+    else
+    {
+        return;
+    }
 
     // Adjust the new m_posx/y:
     m_posX = prior_layer_x - c.x / m_scaleX;
@@ -1543,6 +1576,12 @@ void mpWindow::ZoomOut(const wxPoint& centerPoint )
     m_desiredXmax = m_posX + (m_scrX - m_marginLeft - m_marginRight) / m_scaleX; // m_desiredXmax = m_posX + m_scrX / m_scaleX;
     m_desiredYmax = m_posY;
     m_desiredYmin = m_posY - (m_scrY - m_marginTop - m_marginBottom) / m_scaleY; // m_desiredYmin = m_posY - m_scrY / m_scaleY;
+
+    if(m_enableLimitedView && (m_desiredXmin < m_minX || m_desiredXmin < m_minX
+                            || m_desiredXmax > m_maxX || m_desiredXmax > m_maxX))
+    {
+        Fit();
+    }
 
 #ifdef MATHPLOT_DO_LOGGING
     wxLogMessage(_("mpWindow::ZoomOut() prior coords: (%f,%f), new coords: (%f,%f) SHOULD BE EQUAL!!"), prior_layer_x,prior_layer_y, p2x(c.x),p2y(c.y));

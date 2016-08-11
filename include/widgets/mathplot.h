@@ -1155,6 +1155,12 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
           @return reference to axis colour used in theme */
         const wxColour& GetAxesColour() { return m_axColour; };
 
+        /** Limit zooming & panning to the area used by the plots */
+        void LimitView( bool aEnable )
+        {
+            m_enableLimitedView = aEnable;
+        }
+
     protected:
         void OnPaint         (wxPaintEvent     &event); //!< Paint handler, will plot all attached layers
         void OnSize          (wxSizeEvent      &event); //!< Size handler, will update scroll bar sizes
@@ -1191,6 +1197,16 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
          */
         virtual bool UpdateBBox();
 
+        /** Applies new X view coordinates depending on the settings
+         * \return true if the changes were applied
+         */
+        virtual bool SetXView( double pos, double desiredMax, double desiredMin );
+
+        /** Applies new Y view coordinates depending on the settings
+         * \return true if the changes were applied
+         */
+        virtual bool SetYView( double pos, double desiredMax, double desiredMin );
+
         //wxList m_layers;    //!< List of attached plot layers
         wxLayerList m_layers; //!< List of attached plot layers
         wxMenu m_popmenu;   //!< Canvas' context menu
@@ -1224,6 +1240,7 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
         wxBitmap    *m_buff_bmp;            //!< For double buffering
         bool        m_enableDoubleBuffer;  //!< For double buffering
         bool        m_enableMouseNavigation;  //!< For pan/zoom with the mouse.
+        bool        m_enableLimitedView;
         wxPoint     m_mouseMClick;          //!< For the middle button "drag" feature
         wxPoint     m_mouseLClick;          //!< Starting coords for rectangular zoom selection
         bool        m_enableScrollBars;

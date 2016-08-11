@@ -101,6 +101,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
         m_axis_x( nullptr ), m_axis_y1( nullptr ), m_axis_y2( nullptr ), m_type( aType )
 {
     SetMargins( 10, 10, 10, 10 );
+    LimitView( true );
 
     switch( m_type )
     {
