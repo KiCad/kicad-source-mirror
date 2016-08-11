@@ -37,7 +37,7 @@ class CURSOR : public mpInfoLayer
 public:
     CURSOR( const TRACE* aTrace )
         : mpInfoLayer( wxRect( 0, 0, DRAG_MARGIN, DRAG_MARGIN ), wxTRANSPARENT_BRUSH ),
-        m_trace( aTrace ), m_updateRequired( false ), m_coords( 0.0, 0.0 ), m_window( nullptr )
+        m_trace( aTrace ), m_updateRequired( true ), m_coords( 0.0, 0.0 ), m_window( nullptr )
     {
     }
 
@@ -48,14 +48,7 @@ public:
         m_updateRequired = true;
     }
 
-    bool Inside( wxPoint& aPoint )
-    {
-        if( !m_window )
-            return false;
-
-        return ( std::abs( aPoint.x - m_window->x2p( m_coords.x ) ) <= DRAG_MARGIN )
-            && ( std::abs( aPoint.y - m_window->y2p( m_coords.y ) ) <= DRAG_MARGIN );
-    }
+    bool Inside( wxPoint& aPoint ) override;
 
     void Move( wxPoint aDelta ) override
     {
@@ -63,14 +56,7 @@ public:
         mpInfoLayer::Move( aDelta );
     }
 
-    void UpdateReference()
-    {
-        if( !m_window )
-            return;
-
-        m_reference.x = m_window->x2p( m_coords.x );
-        m_reference.y = m_window->y2p( m_coords.y );
-    }
+    void UpdateReference();
 
     const wxRealPoint& GetCoords() const
     {

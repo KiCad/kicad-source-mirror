@@ -583,7 +583,6 @@ class WXDLLIMPEXP_MATHPLOT mpFY : public mpLayer
   Optionally implement a constructor and pass a name (label) and a label alignment
   to the constructor mpFXY::mpFXY. If the layer name is empty, no label will be plotted.
   */
-class mpScaleBase;
 
 class WXDLLIMPEXP_MATHPLOT mpFXY : public mpLayer
 {
@@ -611,8 +610,13 @@ class WXDLLIMPEXP_MATHPLOT mpFXY : public mpLayer
           */
         virtual void Plot(wxDC & dc, mpWindow & w);
 
-        virtual void SetScale ( mpScaleBase *scaleX, mpScaleBase *scaleY );
+        virtual void SetScale(mpScaleBase *scaleX, mpScaleBase *scaleY);
 
+        double s2x(double plotCoordX) const;
+        double s2y(double plotCoordY) const;
+
+        double x2s(double x) const;
+        double y2s(double y) const;
 
     protected:
         int m_flags; //!< Holds label alignment

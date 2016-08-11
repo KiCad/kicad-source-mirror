@@ -196,7 +196,6 @@ public:
         return formatSI ( m_labeledTicks[n], wxT("A"), 3, AbsVisibleMaxValue() );
     }
 };
-
 void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 {
     if( !m_window )
@@ -213,7 +212,7 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
 
     if( m_updateRequired )
     {
-        m_coords.x = aWindow.p2x( m_dim.x );
+        m_coords.x = m_trace->s2x( aWindow.p2x( m_dim.x ) );
 
         // Find the closest point coordinates
         auto maxXIt = std::upper_bound( dataX.begin(), dataX.end(), m_coords.x );
@@ -239,6 +238,7 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
         const double leftY = dataY[minIdx];
         const double rightY = dataY[maxIdx];
 
+        // Linear interpolation
         m_coords.y = leftY + ( rightY - leftY ) / ( rightX - leftX ) * ( m_coords.x - leftX );
         m_updateRequired = false;
 
@@ -254,12 +254,31 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     const int horLen = aWindow.GetScrX();
     const int verLen = aWindow.GetScrY();
 
-    const wxPoint cursorPos( aWindow.x2p( m_coords.x ), aWindow.y2p( m_coords.y ) );
-
-    aDC.SetPen( wxPen( *wxBLACK, 1, m_continuous ? wxSOLID : wxLONG_DASH ) );
-
+    const wxPoint cursorPos( aWindow.x2p( m_trace->x2s( m_coords.x ) ),
+                             aWindow.y2p( m_trace->y2s( m_coords.y ) ) );
+    aDC.SetPen( wxPen( *wxWHITE, 1, m_continuous ? wxSOLID : wxLONG_DASH ) );
     aDC.DrawLine( -horLen, cursorPos.y, horLen, cursorPos.y );
     aDC.DrawLine( cursorPos.x, -verLen, cursorPos.x, verLen );
+}
+
+
+bool CURSOR::Inside( wxPoint& aPoint )
+{
+    if( !m_window )
+        return false;
+
+    return ( std::abs( aPoint.x - m_window->x2p( m_trace->x2s( m_coords.x ) ) ) <= DRAG_MARGIN )
+        && ( std::abs( aPoint.y - m_window->y2p( m_trace->y2s( m_coords.y ) ) ) <= DRAG_MARGIN );
+}
+
+
+void CURSOR::UpdateReference()
+{
+    if( !m_window )
+        return;
+
+    m_reference.x = m_window->x2p( m_trace->x2s( m_coords.x ) );
+    m_reference.y = m_window->y2p( m_trace->y2s( m_coords.y ) );
 }
 
 

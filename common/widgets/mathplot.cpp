@@ -3604,3 +3604,28 @@ void mpFXY::SetScale ( mpScaleBase *scaleX, mpScaleBase *scaleY )
         m_scaleY->ExtendDataRange(GetMinY(), GetMaxY());
     }
 }
+
+
+double mpFXY::s2x(double plotCoordX) const
+{
+    return m_scaleX->TransformFromPlot( plotCoordX );
+}
+
+
+double mpFXY::s2y(double plotCoordY) const
+{
+    return m_scaleY->TransformFromPlot( plotCoordY );
+}
+
+
+double mpFXY::x2s(double x) const
+{
+    return m_scaleX->TransformToPlot( x );
+}
+
+
+double mpFXY::y2s(double y) const
+{
+    return m_scaleY->TransformToPlot( y );
+}
+

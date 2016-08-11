@@ -678,8 +678,8 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
         {
             const wxRealPoint coords = cursor->GetCoords();
             long idx = m_cursors->InsertItem( SIGNAL_COL, trace.first );
-            m_cursors->SetItem( idx, X_COL, wxString::Format( "%f", coords.x ) );
-            m_cursors->SetItem( idx, Y_COL, wxString::Format( "%f", coords.y ) );
+            m_cursors->SetItem( idx, X_COL, SPICE_VALUE( coords.x ).ToSpiceString() );
+            m_cursors->SetItem( idx, Y_COL, SPICE_VALUE( coords.y ).ToSpiceString() );
         }
     }
 }
