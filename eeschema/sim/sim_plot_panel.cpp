@@ -24,6 +24,7 @@
 
 #include "sim_plot_panel.h"
 
+#include <algorithm>
 #include <limits>
 
 SIM_PLOT_PANEL::SIM_PLOT_PANEL( wxWindow* parent, wxWindowID id, const wxPoint& pos,
@@ -65,13 +66,27 @@ static std::pair<T, T> find_minmax( const T* aArray, unsigned int aSize )
 void SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
                                 double* aT, double* aY, int aFlags )
 {
-    TRACE trace;
+    // Find previous entry, if there is one
+    auto it = std::find_if( m_traces.begin(), m_traces.end(),
+            [&](const TRACE& t) { return t.name == aName; });
 
-    trace.name = aName;
-    trace.style = wxString( '-' ) + m_painter.GenerateColor( SIM_PLOT_PAINTER::DARK );
-    trace.x.Set( aT, aPoints );
-    trace.y.Set( aY, aPoints );
-    m_traces.push_back( trace );
+    if( it == m_traces.end() )
+    {
+        // New entry
+        TRACE trace;
+        trace.name = aName;
+        trace.style = wxString( '-' ) + m_painter.GenerateColor( SIM_PLOT_PAINTER::DARK );
+        trace.x.Set( aT, aPoints );
+        trace.y.Set( aY, aPoints );
+        m_traces.push_back( trace );
+    }
+    else
+    {
+        // Update
+        TRACE& trace = *it;
+        trace.x.Set( aT, aPoints );
+        trace.y.Set( aY, aPoints );
+    }
 
     // Update axis ranges
     std::pair<double, double> traceRangeT = find_minmax( aT, aPoints );
