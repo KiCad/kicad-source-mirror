@@ -36,16 +36,11 @@ public:
     NGSPICE();
     virtual ~NGSPICE();
 
-    void Init();
-    bool LoadNetlist( const std::string& aNetlist );
-    bool Run();
-    bool Command( const std::string& aCmd );
-
-    std::string GetConsole() const;
-
-    const std::vector<double> GetPlot( const std::string& aName, int aMaxLen = -1 );
-
-    void dump();
+    void Init() override;
+    bool LoadNetlist( const std::string& aNetlist ) override;
+    bool Run() override;
+    bool Command( const std::string& aCmd ) override;
+    const std::vector<double> GetPlot( const std::string& aName, int aMaxLen = -1 ) override;
 
 private:
     typedef void (*ngSpice_Init)( SendChar*, SendStat*, ControlledExit*,
@@ -69,6 +64,8 @@ private:
 
     static int cbSendChar( char* what, int id, void* user );
     static int cbSendStat( char* what, int id, void* user );
+
+    void dump();
 };
 
 #endif /* NGSPICE_H */

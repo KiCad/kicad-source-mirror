@@ -193,12 +193,6 @@ main()
 #endif
 
 
-
-string NGSPICE::GetConsole() const {
-    return "";
-}
-
-
 int NGSPICE::cbSendChar( char* what, int id, void* user )
 {
     NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
