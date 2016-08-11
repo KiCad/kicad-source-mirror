@@ -1,5 +1,4 @@
 #include "sim_plot_panel.h"
-#include <boost/foreach.hpp>
 
 static SIM_PLOT_PANEL *panel = NULL;
 
