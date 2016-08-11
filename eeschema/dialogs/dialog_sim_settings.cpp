@@ -144,7 +144,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
         if( m_transStep->IsEmpty() || m_transFinal->IsEmpty() )
             return false;
 
-        m_simCommand = wxString::Format( ".trans %s %s %s",
+        m_simCommand = wxString::Format( ".tran %s %s %s",
             m_transStep->GetValue(), m_transFinal->GetValue(), m_transInitial->GetValue() );
     }
 
