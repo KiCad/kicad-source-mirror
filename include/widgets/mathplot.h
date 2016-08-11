@@ -877,6 +877,12 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpScaleBase
         virtual double TransformToPlot ( double x );
         virtual double TransformFromPlot (double xplot );
 
+
+        void SetMasterScale( mpScaleY *masterScale )
+        {
+            m_masterScale = masterScale;
+        }
+
     protected:
         virtual void getVisibleDataRange ( mpWindow& w, double &minV, double& maxV);
         virtual void recalculateTicks ( wxDC & dc, mpWindow & w );
@@ -886,12 +892,16 @@ class WXDLLIMPEXP_MATHPLOT mpScaleY : public mpScaleBase
         virtual double getTickPos( int n );
         virtual double getLabelPos( int n );
         void computeLabelExtents ( wxDC & dc, mpWindow & w );
+        void computeSlaveTicks ( mpWindow& w );
+        mpScaleY * m_masterScale;
 
 //        double m_minV, m_maxV;
         int m_maxLabelHeight;
         int m_maxLabelWidth;
         std::vector<double> m_tickValues;
         std::vector<double> m_labeledTicks;
+
+        double m_offset, m_scale;
 
         int m_flags; //!< Flag for axis alignment
         bool m_ticks; //!< Flag to toggle between ticks or grid

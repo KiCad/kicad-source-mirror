@@ -748,7 +748,7 @@ void mpScaleX::recalculateTicks ( wxDC & dc, mpWindow & w )
     end  = w.GetPosX() + (double)extend / w.GetScaleX();
 
     n0 = floor( (w.GetPosX() ) / step ) * step ;
-    printf("%.10f %.10f %.10f", n0, step, end);
+    //printf("%.10f %.10f %.10f", n0, step, end);
     computeLabelExtents( dc, w );
 
     labelStep = ceil(((double) m_maxLabelWidth + mpMIN_X_AXIS_LABEL_SEPARATION)/(w.GetScaleX()*step))*step;
@@ -802,16 +802,94 @@ void mpScaleY::getVisibleDataRange ( mpWindow& w, double &minV, double& maxV)
     double pymin = w.p2y(minYpx);
     double pymax = w.p2y(maxYpx);
 
-    printf("PYmin %.3f PYmax %.3f\n", pymin, pymax);
+    //printf("PYmin %.3f PYmax %.3f\n", pymin, pymax);
 
     minV = TransformFromPlot(pymax);
     maxV = TransformFromPlot(pymin);
+}
+
+
+void mpScaleY::computeSlaveTicks( mpWindow& w )
+{
+        double extend;
+
+        double bestErr = 100000000.0;
+
+        double alpha, beta;
+
+
+        //for(alpha = 1.0; alpha < 1.03; alpha += 0.001)
+        //    for(beta = -0.05; beta < 0.05; beta += 0.001)
+            {
+        //        for ( double t: m_masterScale->m_tickValues )
+        //        {
+                    double p0 = m_masterScale->TransformToPlot(m_masterScale->m_tickValues[0]);
+                    double p1 = m_masterScale->TransformToPlot(m_masterScale->m_tickValues[1]);
+
+                    m_scale = 1.0 / ( m_maxV - m_minV );
+                    m_offset = -m_minV;
+
+                    double y_slave0 =  p0 / m_scale;
+                    double y_slave1 =  p1 / m_scale;
+
+                    double dy_slave = (y_slave1 - y_slave0);
+                    double dy_scaled = ceil( 2.0*(y_slave1 - y_slave0)) / 2.0;
+
+                    double minvv, maxvv;
+
+                    getVisibleDataRange( w,minvv, maxvv);
+
+                    minvv = floor(minvv / dy_scaled) * dy_scaled;
+
+                    m_scale = 1.0 / ( m_maxV - m_minV );
+                    m_scale *= dy_slave / dy_scaled;
+
+                    printf("dy %.1f %.1f minV %.1f maxV %.1f\n", dy_slave, dy_scaled, m_minV, m_maxV);
+
+
+                    //minvv = (p0 / m_scale - m_offset);
+
+                    m_offset = p0 / m_scale - minvv;
+
+                    //m_offset =
+                    //double y0_offset = floor ( (p0 / m_scale ) / dy_scaled) * dy_scaled;
+
+                    printf("P0 %.10f minvv %.10f\n", (p0 / m_scale) - m_offset, minvv);
+
+
+                    m_tickValues.clear();
+                    m_labeledTicks.clear();
+
+                    double m;
+
+                    for (int i = 0; i < m_masterScale->m_tickValues.size(); i++)
+                    {
+                        m = TransformFromPlot ( m_masterScale->TransformToPlot(m_masterScale->m_tickValues[i]) );
+                        printf("m %.10f\n", m);
+                        m_tickValues.push_back(m);
+                        m_labeledTicks.push_back(m);
+                        //m += dy_scaled;
+                    }
+
+
+                //double py = TransformToPlot
+
+                //    printf("p %.1f %.1f\n", t, y_slave);
+            //    }
+            }
 }
 
 void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
 {
     const int extend = w.GetScrX(); //  /2;
 
+
+    if ( m_masterScale )
+    {
+        computeSlaveTicks( w );
+        computeLabelExtents( dc, w );
+        return;
+    }
 
     //dig  = floor( log( 128.0 / w.GetScaleY() ) / mpLN10 );
     //step = exp( mpLN10 * dig);
@@ -849,9 +927,8 @@ void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
 
     double v = floor(minVvis / bestStep) * bestStep;
 
-
     double zeroOffset = 100000000.0;
-    printf("maxVVis %.3f\n", maxVvis);
+    //printf("maxVVis %.3f\n", maxVvis);
 
     while ( v < maxVvis )
     {
@@ -860,7 +937,7 @@ void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
         if (fabs(v) < zeroOffset)
             zeroOffset = fabs(v);
 
-        printf("tick %.3f\n", v);
+        //printf("tick %.3f\n", v);
         v+=bestStep;
     }
 
@@ -877,11 +954,13 @@ void mpScaleY::recalculateTicks ( wxDC & dc, mpWindow & w )
     //end = n0 +
 
     //n0 = floor( (w.GetPosX() ) / step ) * step ;
-    printf("zeroOffset:%.3f tickjs : %d\n", zeroOffset, m_tickValues.size());
+    //printf("zeroOffset:%.3f tickjs : %d\n", zeroOffset, m_tickValues.size());
     computeLabelExtents( dc, w );
 
     //labelStep = ceil(((double) m_maxLabelWidth + mpMIN_X_AXIS_LABEL_SEPARATION)/(w.GetScaleX()*step))*step;
 }
+
+
 
 void mpScaleY::computeLabelExtents ( wxDC & dc, mpWindow & w )
 {
@@ -891,7 +970,7 @@ void mpScaleY::computeLabelExtents ( wxDC & dc, mpWindow & w )
     {
         int tx, ty;
 
-        printf("***********GetLabel %d\n", n);
+        //printf("***********GetLabel %d\n", n);
 
         const wxString s = getLabel( n );
 
@@ -954,7 +1033,7 @@ void mpScaleXLog::recalculateTicks ( wxDC & dc, mpWindow & w )
 
     double visibleDecades =  log( maxVvis / minVvis ) / log(10);
 
-    printf("visibleD %.1f %.1f %.1f\n", visibleDecades, maxVvis, minVvis);
+    //printf("visibleD %.1f %.1f %.1f\n", visibleDecades, maxVvis, minVvis);
     double d;
 
     m_ticks.clear();
@@ -962,7 +1041,7 @@ void mpScaleXLog::recalculateTicks ( wxDC & dc, mpWindow & w )
 
     for ( d= minDecade; d<=maxDecade; d *= 10.0)
     {
-        printf("d %.1f\n",d );
+        //printf("d %.1f\n",d );
         m_labeledTicks.push_back( d );
 
         for(double dd = d; dd < d * 10; dd += d)
@@ -976,7 +1055,7 @@ void mpScaleXLog::recalculateTicks ( wxDC & dc, mpWindow & w )
 
     computeLabelExtents( dc, w );
 
-    printf("labeled ticks : %d\n", m_labeledTicks.size());
+    //printf("labeled ticks : %d\n", m_labeledTicks.size());
 
     labelStep = ceil(((double) m_maxLabelWidth + mpMIN_X_AXIS_LABEL_SEPARATION)/(w.GetScaleX()*step))*step;
 }
@@ -1090,12 +1169,12 @@ void mpScaleXBase::Plot(wxDC & dc, mpWindow & w)
         wxCoord minYpx  = m_drawOutsideMargins ? 0 : w.GetMarginTop();
         wxCoord maxYpx  = m_drawOutsideMargins ? w.GetScrY() : w.GetScrY() - w.GetMarginBottom();
 
-        printf("StartPx %d endPx %d ordy %d maxy %d\n", startPx, endPx, orgy, maxYpx);
+        //printf("StartPx %d endPx %d ordy %d maxy %d\n", startPx, endPx, orgy, maxYpx);
 
         int tmp=-65535;
         int labelH = m_maxLabelHeight; // Control labels heigth to decide where to put axis name (below labels or on top of axis)
         //int maxExtent = tc.MaxLabelWidth();
-        printf("Ticks : %d\n",labelCount());
+        //printf("Ticks : %d\n",labelCount());
         for (int n = 0; n < tickCount(); n++)
         {
             double tp = getTickPos(n);
@@ -1147,7 +1226,7 @@ void mpScaleXBase::Plot(wxDC & dc, mpWindow & w)
         dc.DrawLine( startPx, minYpx, endPx, minYpx );
         dc.DrawLine( startPx, maxYpx, endPx, maxYpx );
 
-        printf("Labels : %d\n",labelCount());
+        //printf("Labels : %d\n",labelCount());
         // Actually draw labels, taking care of not overlapping them, and distributing them regularly
         for (int n = 0; n < labelCount(); n++)
         {
@@ -1160,7 +1239,7 @@ void mpScaleXBase::Plot(wxDC & dc, mpWindow & w)
 
             const int p = (int)((px- w.GetPosX()) * w.GetScaleX());
 
-            printf("p %d %.1f\n", p, px);
+            //printf("p %d %.1f\n", p, px);
 #ifdef MATHPLOT_DO_LOGGING
             wxLogMessage(wxT("mpScaleX::Plot: n_label = %f -> p_label = %d"), n, p);
 #endif
@@ -1230,13 +1309,16 @@ mpScaleY::mpScaleY(wxString name, int flags, bool ticks)
     m_flags = flags;
     m_ticks = ticks;
     m_type = mpLAYER_AXIS;
+    m_masterScale = NULL;
     //m_labelFormat = wxT("");
 }
 
 void mpScaleY::Plot(wxDC & dc, mpWindow & w)
 {
+    m_offset = -m_minV;
+    m_scale = 1.0 / ( m_maxV - m_minV );
 
-printf("Plot Y-scale\n");
+//printf("Plot Y-scale\n");
     recalculateTicks(dc, w);
     if (m_visible) {
         dc.SetPen( m_pen);
@@ -1317,7 +1399,7 @@ printf("Plot Y-scale\n");
         s.Printf(fmt,n);
         dc.GetTextExtent(s, &tx, &labelHeigth);
         for (n = 0; n < tickCount(); n++ ) {
-            printf("Tick %d\n", n);
+            //printf("Tick %d\n", n);
 
             double tp = getTickPos(n);
 
@@ -2732,14 +2814,16 @@ double mpScaleX::TransformFromPlot ( double xplot )
     return  xplot * (m_maxV - m_minV) + m_minV;
 }
 
+
+
 double mpScaleY::TransformToPlot ( double x )
 {
-    return (x - m_minV) / (m_maxV - m_minV);
+    return (x + m_offset) * m_scale;
 }
 
 double mpScaleY::TransformFromPlot ( double xplot )
 {
-    return  xplot * (m_maxV - m_minV) + m_minV;
+    return  xplot / m_scale - m_offset;
 }
 
 
