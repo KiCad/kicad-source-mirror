@@ -28,6 +28,7 @@ class KIWAY_PLAYER;
 #include <wx/panel.h>
 #include <wx/stattext.h>
 #include <wx/listbox.h>
+#include <wx/listctrl.h>
 #include <wx/button.h>
 #include <wx/richtext/richtextctrl.h>
 #include <wx/frame.h>
@@ -52,6 +53,8 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxPanel* m_panel7;
 		wxStaticText* m_staticText2;
 		wxListBox* m_signals;
+		wxStaticText* m_staticText21;
+		wxListCtrl* m_cursors;
 		wxButton* m_simulateBtn;
 		wxButton* m_probeBtn;
 		wxButton* m_tuneBtn;
@@ -70,6 +73,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuShowGridState( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSignalRClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onCursorsUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onSimulate( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPlaceProbe( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTune( wxCommandEvent& event ) { event.Skip(); }

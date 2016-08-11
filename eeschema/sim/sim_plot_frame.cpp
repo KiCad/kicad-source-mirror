@@ -253,6 +253,29 @@ void SIM_PLOT_FRAME::onSignalRClick( wxMouseEvent& event )
 }
 
 
+void SIM_PLOT_FRAME::onCursorsUpdate( wxUpdateUIEvent& event )
+{
+    wxSize size = m_cursors->GetClientSize();
+    m_cursors->ClearAll();
+
+    const long SIGNAL_COL = m_cursors->AppendColumn( wxT( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
+    const long X_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelX(), wxLIST_FORMAT_LEFT, size.x / 4 );
+    const long Y_COL = m_cursors->AppendColumn( CurrentPlot()->GetLabelY(), wxLIST_FORMAT_LEFT, size.x / 4 );
+
+    // Update cursor values
+    for( const auto& trace : CurrentPlot()->GetTraces() )
+    {
+        if( CURSOR* cursor = trace.second->GetCursor() )
+        {
+            const wxRealPoint coords = cursor->GetCoords();
+            long idx = m_cursors->InsertItem( SIGNAL_COL, trace.first );
+            m_cursors->SetItem( idx, X_COL, wxString::Format( "%f", coords.x ) );
+            m_cursors->SetItem( idx, Y_COL, wxString::Format( "%f", coords.y ) );
+        }
+    }
+}
+
+
 void SIM_PLOT_FRAME::onSimulate( wxCommandEvent& event )
 {
     if( isSimulationRunning() )
@@ -303,15 +326,12 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     }
 
     // If there are any signals plotted, update them
-    for( unsigned int i = 0; i < m_plotNotebook->GetPageCount(); ++i )
-    {
-        SIM_PLOT_PANEL* plotPanel = static_cast<SIM_PLOT_PANEL*>( m_plotNotebook->GetPage( i ) );
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
-        for( const auto& trace : plotPanel->GetTraces() )
-            updatePlot( trace.second->GetSpiceName(), trace.second->GetName(), plotPanel );
+    for( const auto& trace : plotPanel->GetTraces() )
+        updatePlot( trace.second->GetSpiceName(), trace.second->GetName(), plotPanel );
 
-        plotPanel->UpdateAll();
-    }
+    plotPanel->UpdateAll();
 }
 
 

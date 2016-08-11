@@ -100,6 +100,8 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         // Event handlers
         void onSignalDblClick( wxCommandEvent& event ) override;
         void onSignalRClick( wxMouseEvent& event ) override;
+        void onCursorsUpdate( wxUpdateUIEvent& event ) override;
+
         void onSimulate( wxCommandEvent& event ) override;
         void onPlaceProbe( wxCommandEvent& event ) override;
 

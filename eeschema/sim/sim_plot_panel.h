@@ -148,6 +148,16 @@ public:
 
     ~SIM_PLOT_PANEL();
 
+    const wxString& GetLabelX() const
+    {
+        return m_axis_x->GetName();
+    }
+
+    const wxString& GetLabelY() const
+    {
+        return m_axis_y->GetName();
+    }
+
     bool AddTrace( const wxString& aSpiceName, const wxString& aName, int aPoints,
                     const double* aT, const double* aY, int aFlags );
 
