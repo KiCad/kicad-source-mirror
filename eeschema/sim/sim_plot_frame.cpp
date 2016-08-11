@@ -290,6 +290,24 @@ void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const 
 }
 
 
+void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName )
+{
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+    auto& traceMap = m_plots[plotPanel].m_traces;
+    auto traceIt = traceMap.find( aPlotName );
+
+    wxASSERT( traceIt != traceMap.end() );
+    traceMap.erase( traceIt );
+
+    wxASSERT( plotPanel->IsShown( aPlotName ) );
+    plotPanel->DeleteTrace( aPlotName );
+    plotPanel->Fit();
+
+    updateSignalList();
+    updateCursors();
+}
+
+
 void SIM_PLOT_FRAME::updateNetlistExporter()
 {
     m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( m_schematicFrame->BuildNetListBase(),
@@ -405,6 +423,12 @@ void SIM_PLOT_FRAME::updateTuners()
     }
 
     Layout();
+}
+
+
+void SIM_PLOT_FRAME::updateCursors()
+{
+    wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
 }
 
 
@@ -554,33 +578,17 @@ void SIM_PLOT_FRAME::onPlotChanged( wxNotebookEvent& event )
 {
     updateSignalList();
     updateTuners();
-
-    // Update cursors
-    wxQueueEvent( this, new wxCommandEvent( EVT_SIM_CURSOR_UPDATE ) );
+    updateCursors();
 }
 
 
 void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
 {
-    // Remove signal from the plot on double click
+    // Remove signal from the plot panel when double clicked
     int idx = m_signals->GetSelection();
-    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
     if( idx != wxNOT_FOUND )
-    {
-        const wxString& plotName = m_signals->GetString( idx );
-        auto& traceMap = m_plots[plotPanel].m_traces;
-
-        auto traceIt = traceMap.find( plotName );
-        wxASSERT( traceIt != traceMap.end() );
-        traceMap.erase( traceIt );
-
-        wxASSERT( plotPanel->IsShown( plotName ) );
-        plotPanel->DeleteTrace( plotName );
-        plotPanel->Fit();
-
-        m_signals->Delete( idx );
-    }
+        removePlot( m_signals->GetString( idx ) );
 }
 
 
@@ -788,7 +796,7 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
     switch( aEvent.GetId() )
     {
         case HIDE_SIGNAL:
-            plot->DeleteTrace( m_signal );
+            m_plotFrame->removePlot( m_signal );
             break;
 
         case SHOW_CURSOR:

@@ -136,18 +136,28 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         SIM_PLOT_PANEL* CurrentPlot() const;
 
     private:
+        /**
+         * @brief Adds a new plot to the current panel.
+         * @param aName is the device/net name.
+         * @param aType describes the type of plot.
+         * @param aParam is the parameter for the device/net (e.g. I, Id, V).
+         */
         void addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam );
+
+        /**
+         * @brief Removes a plot with a specific title.
+         * @param aPlotName is the full plot title (e.g. I(Net-C1-Pad1)).
+         */
+        void removePlot( const wxString& aPlotName );
 
         void updateNetlistExporter();
 
         /**
          * @brief Updates plot in a particular SIM_PLOT_PANEL. If the panel does not contain
          * the plot, it will be added.
-         * @param aName is the net/device name.
-         * @param aType is the plot type (@see SIM_PLOT_TYPES).
+         * @param aDescriptor contains the plot description.
          * @param aPanel is the panel that should receive the update.
          * @return True if a plot was successfully added/updated.
-         * TODO update description
          */
         bool updatePlot( const TRACE_DESC& aDescriptor, SIM_PLOT_PANEL* aPanel );
 
@@ -160,6 +170,11 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
          * @brief Fills the tuners area with the ones related to the current plot.
          */
         void updateTuners();
+
+        /**
+         * @brief Updates the cursor values list.
+         */
+        void updateCursors();
 
         SIM_PLOT_TYPE GetXAxisType( SIM_TYPE aType ) const;
 
