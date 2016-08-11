@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_SIM_SETTINGS_BASE</property>
             <property name="pos"></property>
-            <property name="size">439,534</property>
+            <property name="size">445,677</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>
             <property name="subclass"></property>
             <property name="title">Simulation settings</property>

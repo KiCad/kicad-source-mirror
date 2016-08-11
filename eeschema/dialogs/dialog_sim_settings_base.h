@@ -115,7 +115,7 @@ class DIALOG_SIM_SETTINGS_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Simulation settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 439,534 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Simulation settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 445,677 ), long style = wxDEFAULT_DIALOG_STYLE ); 
 		~DIALOG_SIM_SETTINGS_BASE();
 	
 };
