@@ -27,7 +27,9 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxString m_acScaleChoices[] = { wxT("Decade"), wxT("Octave"), wxT("Linear") };
 	int m_acScaleNChoices = sizeof( m_acScaleChoices ) / sizeof( wxString );
 	m_acScale = new wxRadioBox( m_pgAC, wxID_ANY, wxT("Frequency scale"), wxDefaultPosition, wxDefaultSize, m_acScaleNChoices, m_acScaleChoices, 1, wxRA_SPECIFY_COLS );
-	m_acScale->SetSelection( 0 );
+	m_acScale->SetSelection( 2 );
+	m_acScale->Hide();
+	
 	bSizer3->Add( m_acScale, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
 	
@@ -174,6 +176,8 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	
 	m_simPages->AddPage( m_pgDistortion, wxT("Distortion"), false );
 	m_pgNoise = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_pgNoise->Hide();
+	
 	wxBoxSizer* bSizer15;
 	bSizer15 = new wxBoxSizer( wxVERTICAL );
 	
@@ -269,6 +273,8 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer15->Fit( m_pgNoise );
 	m_simPages->AddPage( m_pgNoise, wxT("Noise"), false );
 	m_pgOP = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_pgOP->Hide();
+	
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
 	
