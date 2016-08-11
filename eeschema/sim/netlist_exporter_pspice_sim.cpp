@@ -41,7 +41,7 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceVector( const wxString& aName, SIM
         if( it == netMapping.end() )
             return "";
 
-        return wxString::Format( "v(%d)", it->second );
+        return wxString::Format( "V(%d)", it->second );
     }
 
 
