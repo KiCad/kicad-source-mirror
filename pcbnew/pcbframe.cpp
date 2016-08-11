@@ -609,8 +609,15 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     // Delete the auto save file if it exists.
     wxFileName fn = GetBoard()->GetFileName();
 
-    // Auto save file name is the normal file name prefixed with a '$'.
-    fn.SetName( wxT( "$" ) + fn.GetName() );
+    // Auto save file name is the normal file name prefixed with '_autosave'.
+    fn.SetName( GetAutoSaveFilePrefix() + fn.GetName() );
+
+    // When the auto save feature does not have write access to the board file path, it falls
+    // back to a platform specific user temporary file path.
+    if( !fn.IsOk() || !fn.IsDirWritable() )
+        fn.SetPath( wxFileName::GetTempDir() );
+
+    wxLogTrace( traceAutoSave, "Deleting auto save file <" + fn.GetFullPath() + ">" );
 
     // Remove the auto save file on a normal close of Pcbnew.
     if( fn.FileExists() && !wxRemoveFile( fn.GetFullPath() ) )

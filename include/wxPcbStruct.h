@@ -75,6 +75,7 @@ namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
  */
 #define PCB_EDIT_FRAME_NAME wxT( "PcbFrame" )
 
+
 class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 {
     friend struct PCB::IFACE;
@@ -226,6 +227,13 @@ public:
     virtual ~PCB_EDIT_FRAME();
 
     void OnQuit( wxCommandEvent& event );
+
+    /**
+     * Function GetAutoSaveFilePrefix
+     *
+     * @return the string to prepend to a file name for automatic save.
+     */
+    static wxString GetAutoSaveFilePrefix();
 
     /**
      * Execute a remote command send by Eeschema via a socket,

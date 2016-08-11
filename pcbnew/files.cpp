@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2011-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -62,6 +62,12 @@
 
 static const wxChar backupSuffix[]   = wxT( "-bak" );
 static const wxChar autosavePrefix[] = wxT( "_autosave-" );
+
+
+wxString PCB_EDIT_FRAME::GetAutoSaveFilePrefix()
+{
+    return wxString( autosavePrefix );
+}
 
 
 /**
@@ -807,7 +813,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
     }
 
     DisplayInfoMessage( this, wxString::Format( _( "Board copied to:\n'%s'" ),
-                                GetChars( pcbFileName.GetFullPath() ) ) );
+                                                GetChars( pcbFileName.GetFullPath() ) ) );
 
     return true;
 }
@@ -815,19 +821,40 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
 
 bool PCB_EDIT_FRAME::doAutoSave()
 {
-    wxFileName tmpFileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
-    wxFileName fn = tmpFileName;
+    wxFileName tmpFileName;
 
-    // Auto save file name is the normal file name prepended with
-    // autosaveFilePrefix string.
-    fn.SetName( wxString( autosavePrefix ) + fn.GetName() );
+    if( GetBoard()->GetFileName().IsEmpty() )
+    {
+        tmpFileName = wxFileName( wxStandardPaths::Get().GetDocumentsDir(), wxT( "noname" ),
+                                  KiCadPcbFileExtension );
+        GetBoard()->SetFileName( tmpFileName.GetFullPath() );
+    }
+    else
+    {
+        tmpFileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
+    }
 
-    wxLogTrace( traceAutoSave,
-                wxT( "Creating auto save file <" + fn.GetFullPath() ) + wxT( ">" ) );
+    wxFileName autoSaveFileName = tmpFileName;
 
-    if( !fn.IsOk() )
+    // Auto save file name is the board file name prepended with autosaveFilePrefix string.
+    autoSaveFileName.SetName( wxString( autosavePrefix ) + autoSaveFileName.GetName() );
+
+    if( !autoSaveFileName.IsOk() )
         return false;
-    else if( SavePcbFile( fn.GetFullPath(), NO_BACKUP_FILE ) )
+
+    // If the board file path is not writable, try writing to a platform specific temp file
+    // path.  If that path isn't writabe, give up.
+    if( !autoSaveFileName.IsDirWritable() )
+    {
+        autoSaveFileName.SetPath( wxFileName::GetTempDir() );
+
+        if( !autoSaveFileName.IsOk() || !autoSaveFileName.IsDirWritable() )
+            return false;
+    }
+
+    wxLogTrace( traceAutoSave, "Creating auto save file <" + autoSaveFileName.GetFullPath() + ">" );
+
+    if( SavePcbFile( autoSaveFileName.GetFullPath(), NO_BACKUP_FILE ) )
     {
         GetScreen()->SetModify();
         GetBoard()->SetFileName( tmpFileName.GetFullPath() );
