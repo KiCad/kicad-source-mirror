@@ -128,10 +128,12 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
 }
 
 
-wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
+wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
         SCH_COMPONENT* aComponent, unsigned aCtl )
 {
-    if( aField == "Spice_Primitive" )
+    switch( aField )
+    {
+    case SPICE_PRIMITIVE:
     {
         const wxString& refName = aComponent->GetField( REFERENCE )->GetText();
 
@@ -140,9 +142,10 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
             return wxString( "X" );
         else
             return refName.GetChar( 0 );
+        break;
     }
 
-    if( aField == "Spice_Model" )
+    case SPICE_MODEL:
     {
         wxChar prim = aComponent->GetField( REFERENCE )->GetText().GetChar( 0 );
         wxString value = aComponent->GetField( VALUE )->GetText();
@@ -173,14 +176,14 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
         }
 
         return value;
+        break;
     }
 
-    if( aField == "Spice_Netlist_Enabled" )
-    {
+    case SPICE_ENABLED:
         return wxString( "Y" );
-    }
+        break;
 
-    if( aField == "Spice_Node_Sequence" )
+    case SPICE_NODE_SEQUENCE:
     {
         wxString nodeSeq;
         std::vector<LIB_PIN*> pins;
@@ -193,9 +196,16 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( const wxString& aField,
         nodeSeq.Trim();
 
         return nodeSeq;
+        break;
     }
 
-    wxASSERT_MSG( "Missing default value definition for a Spice field: %s" , aField );
+    case SPICE_LIB_FILE:
+        // There is no default Spice library
+        return wxEmptyString;
+        break;
+    }
+
+    wxASSERT_MSG( false, "Missing default value definition for a Spice field" );
 
     return wxString( "<unknown>" );
 }
@@ -236,16 +246,16 @@ void NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             spiceItem.m_parent = comp;
 
             // Obtain Spice fields
-            SCH_FIELD* fieldPrim = comp->FindField( wxT( "Spice_Primitive" ) );
-            SCH_FIELD* fieldModel = comp->FindField( wxT( "Spice_Model" ) );
-            SCH_FIELD* fieldEnabled = comp->FindField( wxT( "Spice_Netlist_Enabled" ) );
-            SCH_FIELD* fieldSeq = comp->FindField( wxT( "Spice_Node_Sequence" ) );
+            SCH_FIELD* fieldPrim = comp->FindField( GetSpiceFieldName( SPICE_PRIMITIVE ) );
+            SCH_FIELD* fieldModel = comp->FindField( GetSpiceFieldName( SPICE_MODEL ) );
+            SCH_FIELD* fieldEnabled = comp->FindField( GetSpiceFieldName( SPICE_ENABLED ) );
+            SCH_FIELD* fieldSeq = comp->FindField( GetSpiceFieldName( SPICE_NODE_SEQUENCE ) );
 
             spiceItem.m_primitive = fieldPrim ? fieldPrim->GetText()[0]
-                : GetSpiceFieldDefVal( "Spice_Primitive", comp, aCtl )[0];
+                : GetSpiceFieldDefVal( SPICE_PRIMITIVE, comp, aCtl )[0];
 
             spiceItem.m_model = fieldModel ? fieldModel->GetText()
-                : GetSpiceFieldDefVal( "Spice_Model", comp, aCtl );
+                : GetSpiceFieldDefVal( SPICE_MODEL, comp, aCtl );
 
             spiceItem.m_refName = comp->GetRef( &sheetList[sheet_idx] );
 
@@ -353,6 +363,7 @@ void NETLIST_EXPORTER_PSPICE::writeDirectives( OUTPUTFORMATTER* aFormatter, unsi
 }
 
 
+// Entries in the vector below have to follow the order in SPICE_FIELD enum
 const std::vector<wxString> NETLIST_EXPORTER_PSPICE::m_spiceFields = {
     "Spice_Primitive",
     "Spice_Model",

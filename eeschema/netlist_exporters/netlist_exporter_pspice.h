@@ -40,6 +40,14 @@ enum SPICE_NETLIST_OPTIONS {
     NET_ALL_FLAGS = 0xffff
 };
 
+enum SPICE_FIELD {
+    SPICE_PRIMITIVE,
+    SPICE_MODEL,
+    SPICE_ENABLED,
+    SPICE_NODE_SEQUENCE,
+    SPICE_LIB_FILE
+};
+
 /// @todo add NET_ADJUST_INCLUDE_PATHS & NET_ADJUST_PASSIVE_VALS checkboxes in the netlist export dialog
 
 /**
@@ -104,7 +112,12 @@ public:
         return m_spiceFields;
     }
 
-    static wxString GetSpiceFieldDefVal( const wxString& aField, SCH_COMPONENT* aComponent, unsigned aCtl );
+    static const wxString& GetSpiceFieldName( SPICE_FIELD aField )
+    {
+        return m_spiceFields[(int) aField];
+    }
+
+    static wxString GetSpiceFieldDefVal( SPICE_FIELD aField, SCH_COMPONENT* aComponent, unsigned aCtl );
 
     void UpdateDirectives( unsigned aCtl );
 
