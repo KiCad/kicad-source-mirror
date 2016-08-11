@@ -37,6 +37,13 @@
 #include "spice_simulator.h"
 #include "spice_reporter.h"
 
+SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
+{
+    int res = (int) aFirst | (int) aSecond;
+
+    return (SIM_PLOT_TYPE) res;
+}
+
 class SIM_THREAD_REPORTER : public SPICE_REPORTER
 {
 public:
@@ -74,6 +81,23 @@ public:
 private:
     SIM_PLOT_FRAME* m_parent;
 };
+
+
+TRACE_DESC::TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter, const wxString& aName,
+        SIM_PLOT_TYPE aType, const wxString& aParam )
+    : m_name( aName ), m_type( aType ), m_param( aParam )
+{
+    // Spice vector generation
+    m_spiceVector = aExporter.GetSpiceVector( aName, aType, aParam );
+
+    // Title generation
+    m_title = wxString::Format( "%s(%s)", aParam, aName );
+
+    if( aType & SPT_AC_MAG )
+        m_title += " (mag)";
+    else if( aType & SPT_AC_PHASE )
+        m_title += " (phase)";
+}
 
 
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
@@ -157,27 +181,13 @@ SIM_PLOT_PANEL* SIM_PLOT_FRAME::NewPlotPanel( SIM_TYPE aSimType )
 
 void SIM_PLOT_FRAME::AddVoltagePlot( const wxString& aNetName )
 {
-    SIM_TYPE simType = m_exporter->GetSimType();
+    addPlot( aNetName, SPT_VOLTAGE, "V" );
+}
 
-    if( !SIM_PLOT_PANEL::IsPlottable( simType ) )
-        return; // TODO else write out in console?
 
-    int nodeNumber = getNodeNumber( aNetName );
-
-    if( nodeNumber >= -1 )
-    {
-        // Create a new plot if the current one displays a different type
-        SIM_PLOT_PANEL* plotPanel = CurrentPlot();
-
-        if( plotPanel == nullptr || plotPanel->GetType() != simType )
-            plotPanel = NewPlotPanel( simType );
-
-        if( updatePlot( wxString::Format( "V(%d)", nodeNumber ), aNetName, plotPanel ) )
-        {
-            updateSignalList();
-            plotPanel->Fit();
-        }
-    }
+void SIM_PLOT_FRAME::AddCurrentPlot( const wxString& aDeviceName, const wxString& aParam )
+{
+    addPlot( aDeviceName, SPT_CURRENT, aParam );
 }
 
 
@@ -195,7 +205,7 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
         return;
 
     const wxString& componentName = aComponent->GetField( REFERENCE )->GetText();
-    auto& tunerList = m_tuners[plotPanel];
+    auto& tunerList = m_plots[plotPanel].m_tuners;
 
     // Do not add multiple instances for the same component
     auto tunerIt = std::find_if( tunerList.begin(), tunerList.end(), [&]( const TUNER_SLIDER* t )
@@ -228,7 +238,7 @@ void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner )
     if( !plotPanel )
         return;
 
-    m_tuners[plotPanel].remove( aTuner );
+    m_plots[plotPanel].m_tuners.remove( aTuner );
     aTuner->Destroy();
     Layout();
 }
@@ -240,6 +250,45 @@ SIM_PLOT_PANEL* SIM_PLOT_FRAME::CurrentPlot() const
 }
 
 
+void SIM_PLOT_FRAME::addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam )
+{
+    SIM_TYPE simType = m_exporter->GetSimType();
+
+    if( !SIM_PLOT_PANEL::IsPlottable( simType ) )
+        return; // TODO else write out in console?
+
+    // Create a new plot if the current one displays a different type
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
+    if( plotPanel == nullptr || plotPanel->GetType() != simType )
+        plotPanel = NewPlotPanel( simType );
+
+    TRACE_DESC descriptor( *m_exporter, aName, aType, aParam );
+
+    bool updated = false;
+
+    if( GetXAxisType( simType ) == SPT_FREQUENCY )
+    {
+        // Add two plots: magnitude & phase
+        TRACE_DESC mag_desc( *m_exporter, descriptor, descriptor.GetType() | SPT_AC_MAG );
+        TRACE_DESC phase_desc( *m_exporter, descriptor, descriptor.GetType() | SPT_AC_PHASE );
+
+        updated |= updatePlot( mag_desc, plotPanel );
+        updated |= updatePlot( phase_desc, plotPanel );
+    }
+    else
+    {
+        updated = updatePlot( descriptor, plotPanel );
+    }
+
+    if( updated )
+    {
+        updateSignalList();
+        plotPanel->Fit();
+    }
+}
+
+
 void SIM_PLOT_FRAME::updateNetlistExporter()
 {
     m_exporter.reset( new NETLIST_EXPORTER_PSPICE_SIM( m_schematicFrame->BuildNetListBase(),
@@ -247,65 +296,51 @@ void SIM_PLOT_FRAME::updateNetlistExporter()
 }
 
 
-bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, SIM_PLOT_PANEL* aPanel )
+bool SIM_PLOT_FRAME::updatePlot( const TRACE_DESC& aDescriptor, SIM_PLOT_PANEL* aPanel )
 {
     if( !m_simulator )
         return false;
 
-    // First, handle the x axis
-    wxString xAxisName;
     SIM_TYPE simType = m_exporter->GetSimType();
+    wxString spiceVector = aDescriptor.GetSpiceVector();
 
     if( !SIM_PLOT_PANEL::IsPlottable( simType ) )
     {
         // There is no plot to be shown
-        m_simulator->Command( wxString::Format( "print %s", aSpiceName ).ToStdString() );
+        m_simulator->Command( wxString::Format( "print %s", spiceVector ).ToStdString() );
+
         return false;
     }
 
-    switch( simType )
-    {
-        /// @todo x axis names should be moved to simulator iface, so they are not hardcoded for ngspice
-        case ST_AC:
-        case ST_NOISE:
-            xAxisName = "frequency";
-            break;
+    // First, handle the x axis
+    wxString xAxisName( m_simulator->GetXAxis( simType ) );
 
-        case ST_DC:
-            xAxisName = "v-sweep";
-            break;
-
-        case ST_TRANSIENT:
-            xAxisName = "time";
-            break;
-
-        case ST_OP:
-            break;
-
-        default:
-            break;
-    }
+    if( xAxisName.IsEmpty() )
+        return false;
 
     auto data_x = m_simulator->GetMagPlot( (const char*) xAxisName.c_str() );
-    int size = data_x.size();
+    unsigned int size = data_x.size();
 
     if( data_x.empty() )
         return false;
 
+    SIM_PLOT_TYPE plotType = aDescriptor.GetType();
+    std::vector<double> data_y;
+
     // Now, Y axis data
     switch( m_exporter->GetSimType() )
     {
-        /// @todo x axis names should be moved to simulator iface
         case ST_AC:
         {
-            auto data_mag = m_simulator->GetMagPlot( (const char*) aSpiceName.c_str() );
-            auto data_phase = m_simulator->GetPhasePlot( (const char*) aSpiceName.c_str() );
+            wxASSERT_MSG( !( ( plotType & SPT_AC_MAG ) && ( plotType & SPT_AC_PHASE ) ),
+                    "Cannot set both AC_PHASE and AC_MAG bits" );
 
-            if( data_mag.empty() || data_phase.empty() )
-                return false;
-
-            aPanel->AddTrace( aSpiceName, aName, size, data_x.data(), data_mag.data(), SPF_AC_MAG );
-            aPanel->AddTrace( aSpiceName, aName, size, data_x.data(), data_phase.data(), SPF_AC_PHASE );
+            if( plotType & SPT_AC_MAG )
+                data_y = m_simulator->GetMagPlot( (const char*) spiceVector.c_str() );
+            else if( plotType & SPT_AC_PHASE )
+                data_y = m_simulator->GetPhasePlot( (const char*) spiceVector.c_str() );
+            else
+                wxASSERT_MSG( false, "Plot type missing AC_PHASE or AC_MAG bit" );
         }
         break;
 
@@ -313,18 +348,22 @@ bool SIM_PLOT_FRAME::updatePlot( const wxString& aName, SIM_PLOT_TYPE aType, SIM
         case ST_DC:
         case ST_TRANSIENT:
         {
-            auto data_y = m_simulator->GetMagPlot( (const char*) aSpiceName.c_str() );
-
-            if( data_y.empty() )
-                return false;
-
-            aPanel->AddTrace( aSpiceName, aName, size, data_x.data(), data_y.data(), 0 );
+            data_y = m_simulator->GetMagPlot( (const char*) spiceVector.c_str() );
         }
         break;
 
         default:
             wxASSERT_MSG( false, "Unhandled plot type" );
             return false;
+    }
+
+    if( data_y.size() != size )
+        return false;
+
+    if( aPanel->AddTrace( aDescriptor.GetTitle(), size,
+                data_x.data(), data_y.data(), aDescriptor.GetType() ) )
+    {
+        m_plots[aPanel].m_traces.insert( std::make_pair( aDescriptor.GetTitle(), aDescriptor ) );
     }
 
     return true;
@@ -341,8 +380,8 @@ void SIM_PLOT_FRAME::updateSignalList()
     // Fill the signals listbox
     m_signals->Clear();
 
-    for( const auto& trace : plotPanel->GetTraces() )
-        m_signals->Append( trace.second->GetName() );
+    for( const auto& trace : m_plots[plotPanel].m_traces )
+        m_signals->Append( trace.first );
 }
 
 
@@ -358,7 +397,7 @@ void SIM_PLOT_FRAME::updateTuners()
 
     m_tuneSizer->Clear();
 
-    for( auto tuner : m_tuners[plotPanel] )
+    for( auto tuner : m_plots[plotPanel].m_tuners )
     {
         m_tuneSizer->Add( tuner );
         tuner->Show();
@@ -368,15 +407,23 @@ void SIM_PLOT_FRAME::updateTuners()
 }
 
 
-int SIM_PLOT_FRAME::getNodeNumber( const wxString& aNetName )
+SIM_PLOT_TYPE SIM_PLOT_FRAME::GetXAxisType( SIM_TYPE aType ) const
 {
-    const auto& netMapping = m_exporter->GetNetIndexMap();
-    auto it = netMapping.find( aNetName );
+    switch( aType )
+    {
+        case ST_AC:
+            return SPT_FREQUENCY;
 
-    if( it == netMapping.end() )
-        return -1;
+        case ST_DC:
+            return SPT_SWEEP;
 
-    return it->second;
+        case ST_TRANSIENT:
+            return SPT_TIME;
+
+        default:
+            wxASSERT_MSG( false, "Unhandled simulation type" );
+            return (SIM_PLOT_TYPE) 0;
+    }
 }
 
 
@@ -429,7 +476,7 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
             timeWritten = true;
         }
 
-        out.Write( wxString::Format( "%s%c", t.first.GetDescription(), SEPARATOR ) );
+        out.Write( wxString::Format( "%s%c", t.first, SEPARATOR ) );
 
         for( double v : trace->GetDataY() )
             out.Write( wxString::Format( "%f%c", v, SEPARATOR ) );
@@ -515,14 +562,22 @@ void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
 {
     // Remove signal from the plot on double click
     int idx = m_signals->GetSelection();
-    SIM_PLOT_PANEL* plot = CurrentPlot();
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
     if( idx != wxNOT_FOUND )
     {
-        const wxString& netName = m_signals->GetString( idx );
+        const wxString& plotName = m_signals->GetString( idx );
+        auto& traceMap = m_plots[plotPanel].m_traces;
+
+        auto traceIt = traceMap.find( plotName );
+        wxASSERT( traceIt != traceMap.end() );
+        traceMap.erase( traceIt );
+
+        wxASSERT( plotPanel->IsShown( plotName ) );
+        plotPanel->DeleteTrace( plotName );
+        plotPanel->Fit();
+
         m_signals->Delete( idx );
-        wxASSERT( plot->IsShown( netName ) );
-        plot->DeleteTrace( netName );
     }
 }
 
@@ -565,6 +620,14 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onAddSignal( wxCommandEvent& event )
 {
+    SIM_PLOT_PANEL* plotPanel = CurrentPlot();
+
+    if( !plotPanel || !m_exporter || plotPanel->GetType() != m_exporter->GetSimType() )
+    {
+        DisplayInfoMessage( this, wxT( "You need to run simulation first" ) );
+        return;
+    }
+
     DIALOG_SIGNAL_LIST dialog( this, m_exporter.get() );
     dialog.ShowModal();
 }
@@ -612,7 +675,7 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
         if( CURSOR* cursor = trace.second->GetCursor() )
         {
             const wxRealPoint coords = cursor->GetCoords();
-            long idx = m_cursors->InsertItem( SIGNAL_COL, trace.first.GetDescription() );
+            long idx = m_cursors->InsertItem( SIGNAL_COL, trace.first );
             m_cursors->SetItem( idx, X_COL, wxString::Format( "%f", coords.x ) );
             m_cursors->SetItem( idx, Y_COL, wxString::Format( "%f", coords.y ) );
         }
@@ -645,8 +708,8 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
     // If there are any signals plotted, update them
     if( SIM_PLOT_PANEL::IsPlottable( simType ) )
     {
-        for( const auto& trace : plotPanel->GetTraces() )
-            updatePlot( trace.second->GetSpiceName(), trace.first.GetName(), plotPanel );
+        for( const auto& trace : m_plots[plotPanel].m_traces )
+            updatePlot( trace.second, plotPanel );
 
         plotPanel->UpdateAll();
     }
@@ -676,7 +739,7 @@ void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
     // Apply tuned values
     if( SIM_PLOT_PANEL* plotPanel = CurrentPlot() )
     {
-        for( auto tuner : m_tuners[plotPanel] )
+        for( auto tuner : m_plots[plotPanel].m_tuners )
         {
             /// @todo no ngspice hardcoding
             std::string command( "alter @" + tuner->GetSpiceName()
@@ -703,21 +766,14 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
 {
     SIM_PLOT_PANEL* plot = m_plotFrame->CurrentPlot();
 
-    if( plot->IsShown( m_signal ) )
-    {
-        Append( HIDE_SIGNAL, wxT( "Hide signal" ) );
+    Append( HIDE_SIGNAL, wxT( "Hide signal" ) );
 
-        TRACE* trace = plot->GetTrace( m_signal );
+    TRACE* trace = plot->GetTrace( m_signal );
 
-        if( trace->HasCursor() )
-            Append( HIDE_CURSOR, wxT( "Hide cursor" ) );
-        else
-            Append( SHOW_CURSOR, wxT( "Show cursor" ) );
-    }
+    if( trace->HasCursor() )
+        Append( HIDE_CURSOR, wxT( "Hide cursor" ) );
     else
-    {
-        Append( SHOW_SIGNAL, wxT( "Show signal" ) );
-    }
+        Append( SHOW_CURSOR, wxT( "Show cursor" ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ), NULL, this );
 }
@@ -729,11 +785,6 @@ void SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
 
     switch( aEvent.GetId() )
     {
-        case SHOW_SIGNAL:
-            m_plotFrame->AddVoltagePlot( m_signal );
-            break;
-
-            break;
         case HIDE_SIGNAL:
             plot->DeleteTrace( m_signal );
             break;

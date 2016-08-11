@@ -90,19 +90,14 @@ private:
 class TRACE : public mpFXYVector
 {
 public:
-    TRACE( const wxString& aName, const wxString& aSpiceName ) :
-        mpFXYVector( aName ), m_spiceName( aSpiceName ), m_cursor( nullptr )
+    TRACE( const wxString& aName ) :
+        mpFXYVector( aName ), m_cursor( nullptr )
         {
             SetContinuity( true );
             SetDrawOutsideMargins( false );
             ShowName( false );
 
         }
-
-    const wxString& GetSpiceName() const
-    {
-        return m_spiceName;
-    }
 
     const std::vector<double>& GetDataX() const
     {
@@ -130,15 +125,14 @@ public:
     }
 
 protected:
-    wxString m_spiceName;
     CURSOR* m_cursor;
 };
 
 class TRACE_FREQ_RESPONSE : public TRACE
 {
 public:
-    TRACE_FREQ_RESPONSE( const wxString& aName, const wxString& aSpiceName ) :
-        TRACE( aName, aSpiceName )
+    TRACE_FREQ_RESPONSE( const wxString& aName ) :
+        TRACE( aName )
     {
         printf("makeFreqResponse!\n");
     }
@@ -148,50 +142,11 @@ public:
 class TRACE_TRANSIENT : public TRACE
 {
 public:
-    TRACE_TRANSIENT( const wxString& aName, const wxString& aSpiceName ) :
-        TRACE( aName, aSpiceName )
+    TRACE_TRANSIENT( const wxString& aName ) :
+        TRACE( aName )
     {
     }
 
-};
-
-enum SIM_PLOT_FLAGS {
-    SPF_AC_PHASE = 0x01,
-    SPF_AC_MAG   = 0x02
-};
-
-class TRACE_DESC
-{
-public:
-    TRACE_DESC( const wxString& aName, SIM_PLOT_FLAGS aType )
-        : m_name( aName ), m_type( aType )
-    {
-    }
-
-    TRACE_DESC( const wxString& aDescription );
-
-    wxString GetDescription() const;
-
-    const wxString& GetName() const
-    {
-        return m_name;
-    }
-
-    SIM_PLOT_FLAGS GetType() const
-    {
-        return m_type;
-    }
-
-    bool operator<( const TRACE_DESC& aOther ) const
-    {
-        return ( m_name < aOther.m_name ) || ( m_name == aOther.m_name && m_type < aOther.m_type );
-    }
-
-private:
-    wxString m_name;
-    SIM_PLOT_FLAGS m_type;
-
-    static const std::map<SIM_PLOT_FLAGS, wxString> m_descMap;
 };
 
 class SIM_PLOT_PANEL : public mpWindow
@@ -224,8 +179,8 @@ public:
         return m_axis_y2 ? m_axis_y2->GetName() : "";
     }
 
-    bool AddTrace( const wxString& aSpiceName, const wxString& aName, int aPoints,
-                    const double* aT, const double* aY, int aFlags );
+    bool AddTrace( const wxString& aName, int aPoints,
+            const double* aX, const double* aY, SIM_PLOT_TYPE aFlags );
 
     bool DeleteTrace( const wxString& aName );
 
@@ -233,17 +188,17 @@ public:
 
     bool IsShown( const wxString& aName ) const
     {
-        return m_traces.count( TRACE_DESC( aName ) ) > 0;
+        return m_traces.count( aName ) > 0;
     }
 
-    const std::map<TRACE_DESC, TRACE*>& GetTraces() const
+    const std::map<wxString, TRACE*>& GetTraces() const
     {
         return m_traces;
     }
 
     TRACE* GetTrace( const wxString& aName ) const
     {
-        auto trace = m_traces.find( TRACE_DESC( aName ) );
+        auto trace = m_traces.find( aName );
 
         return trace == m_traces.end() ? NULL : trace->second;
     }
@@ -294,7 +249,7 @@ private:
     unsigned int m_colorIdx;
 
     // Traces to be plotted
-    std::map<TRACE_DESC, TRACE*> m_traces;
+    std::map<wxString, TRACE*> m_traces;
 
     mpScaleXBase* m_axis_x;
     mpScaleY* m_axis_y1;

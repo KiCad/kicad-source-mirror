@@ -26,6 +26,8 @@
 #define NETLIST_EXPORTER_PSPICE_SIM_H
 
 #include <netlist_exporters/netlist_exporter_pspice.h>
+#include <vector>
+
 #include "sim_types.h"
 
 /// Special netlist exporter flavor that allows to override simulation commands
@@ -37,6 +39,30 @@ public:
         NETLIST_EXPORTER_PSPICE( aMasterList, aLibs, aPaths )
     {
     }
+
+    /**
+     * @brief Returns name of Spice dataset for a specific plot.
+     * @param aName is name of the measured net or device
+     * @param aType describes the type of expected plot
+     * @param aParam is an optional parameter for devices, if absent it will return current (only
+     * for passive devices).
+     * @return Empty string if query is invalid, otherwise a plot name that
+     * can be requested from the simulator.
+     */
+    wxString GetSpiceVector( const wxString& aName, SIM_PLOT_TYPE aType,
+            const wxString& aParam = wxEmptyString ) const;
+
+    /**
+     * @brief Returns name of Spice device corresponding to a schematic component.
+     * @param aComponent is the component reference.
+     * @return Spice device name or empty string if there is no such component in the netlist.
+     */
+    wxString GetSpiceDevice( const wxString& aComponent ) const;
+
+    /**
+     * @brief Returns a list of currents that can be probed in a Spice primitive.
+     */
+    static const std::vector<wxString>& GetCurrents( SPICE_PRIMITIVE aPrimitive );
 
     void SetSimCommand( const wxString& aCmd )
     {

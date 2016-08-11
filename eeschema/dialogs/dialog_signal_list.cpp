@@ -52,10 +52,21 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
 
     if( m_exporter )
     {
+        // Voltage list
         for( const auto& net : m_exporter->GetNetIndexMap() )
         {
             if( net.first != "GND" )
-                m_signals->Append( net.first );
+                m_signals->Append( wxString::Format( "V(%s)", net.first ) );
+        }
+
+        for( const auto& item : m_exporter->GetSpiceItems() )
+        {
+            // Add all possible currents for the primitive
+            for( const auto& current :
+                    NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
+            {
+                m_signals->Append( wxString::Format( "%s(%s)", current, item.m_refName ) );
+            }
         }
     }
 
@@ -68,6 +79,24 @@ void DIALOG_SIGNAL_LIST::addSelectionToPlotFrame()
     for( unsigned int i = 0; i < m_signals->GetCount(); ++i )
     {
         if( m_signals->IsSelected( i ) )
-            m_plotFrame->AddVoltagePlot( m_signals->GetString( i ) );
+        {
+            const wxString& plotName = m_signals->GetString( i );
+
+            // Get the part in the parentheses
+            wxString name = plotName.AfterFirst( '(' ).BeforeLast( ')' );
+
+            if( plotName[0] == 'V' )
+            {
+                m_plotFrame->AddVoltagePlot( name );
+            }
+            else if( plotName[0] == 'I' )
+            {
+                m_plotFrame->AddCurrentPlot( name, plotName.BeforeFirst( '(' ) );
+            }
+            else
+            {
+                wxASSERT_MSG( false, "Unhandled plot type" );
+            }
+        }
     }
 }

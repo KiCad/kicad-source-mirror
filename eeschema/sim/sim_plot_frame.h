@@ -49,6 +49,64 @@ class NETLIST_EXPORTER_PSPICE_SIM;
 class SIM_PLOT_PANEL;
 class TUNER_SLIDER;
 
+/// @todo description
+class TRACE_DESC
+{
+public:
+    TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter, const wxString& aName,
+            SIM_PLOT_TYPE aType, const wxString& aParam );
+
+    ///> Modifies an existing TRACE_DESC simulation type
+    TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter,
+            const TRACE_DESC& aDescription, SIM_PLOT_TYPE aNewType )
+        : TRACE_DESC( aExporter, aDescription.GetName(), aNewType, aDescription.GetParam() )
+    {
+    }
+
+    const wxString& GetTitle() const
+    {
+        return m_title;
+    }
+
+    const wxString& GetName() const
+    {
+        return m_name;
+    }
+
+    const wxString& GetParam() const
+    {
+        return m_param;
+    }
+
+    SIM_PLOT_TYPE GetType() const
+    {
+        return m_type;
+    }
+
+    const wxString& GetSpiceVector() const
+    {
+        return m_spiceVector;
+    }
+
+private:
+    // Three basic parameters
+    ///> Name of the measured net/device
+    wxString m_name;
+
+    ///> Type of the signal
+    SIM_PLOT_TYPE m_type;
+
+    ///> Name of the signal parameter
+    wxString m_param;
+
+    // Generated data
+    ///> Title displayed in the signal list/plot legend
+    wxString m_title;
+
+    ///> Spice vector name
+    wxString m_spiceVector;
+};
+
 /** Implementing SIM_PLOT_FRAME_BASE */
 class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 {
@@ -70,26 +128,28 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         SIM_PLOT_PANEL* NewPlotPanel( SIM_TYPE aSimType );
 
         void AddVoltagePlot( const wxString& aNetName );
+        void AddCurrentPlot( const wxString& aDeviceName, const wxString& aParam );
 
         void AddTuner( SCH_COMPONENT* aComponent );
-
         void RemoveTuner( TUNER_SLIDER* aTuner );
 
         SIM_PLOT_PANEL* CurrentPlot() const;
 
     private:
+        void addPlot( const wxString& aName, SIM_PLOT_TYPE aType, const wxString& aParam );
+
         void updateNetlistExporter();
 
         /**
          * @brief Updates plot in a particular SIM_PLOT_PANEL. If the panel does not contain
          * the plot, it will be added.
-         * @param aSpiceName is the plot name in the format accepted by the current simulator instance
-         * (for NGSPICE it is e.g. "V(1)").
-         * @param aName is the name used in the legend.
+         * @param aName is the net/device name.
+         * @param aType is the plot type (@see SIM_PLOT_TYPES).
          * @param aPanel is the panel that should receive the update.
          * @return True if a plot was successfully added/updated.
+         * TODO update description
          */
-        bool updatePlot( const wxString& aSpiceName, const wxString& aName, SIM_PLOT_PANEL* aPanel );
+        bool updatePlot( const TRACE_DESC& aDescriptor, SIM_PLOT_PANEL* aPanel );
 
         /**
          * @brief Updates the list of currently plotted signals.
@@ -101,12 +161,7 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
          */
         void updateTuners();
 
-        /**
-         * @brief Returns node number for a given net.
-         * @param aNetName is the net number.
-         * @return Corresponding net number or -1 if there is no such net.
-         */
-        int getNodeNumber( const wxString& aNetName );
+        SIM_PLOT_TYPE GetXAxisType( SIM_TYPE aType ) const;
 
         // Menu handlers
         void menuNewPlot( wxCommandEvent& aEvent ) override;
@@ -151,7 +206,17 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
         SCH_EDIT_FRAME* m_schematicFrame;
         std::unique_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
         std::unique_ptr<SPICE_SIMULATOR> m_simulator;
-        std::map<SIM_PLOT_PANEL*, std::list<TUNER_SLIDER*> > m_tuners;
+
+        typedef std::map<wxString, TRACE_DESC> TRACE_MAP;
+        typedef std::list<TUNER_SLIDER*> TUNER_LIST;
+
+        struct PLOT_INFO
+        {
+            TUNER_LIST m_tuners;
+            TRACE_MAP m_traces;
+        };
+
+        std::map<SIM_PLOT_PANEL*, PLOT_INFO> m_plots;
 
         // Trick to preserve settings between runs
         DIALOG_SIM_SETTINGS m_settingsDlg;
@@ -170,12 +235,12 @@ class SIM_PLOT_FRAME : public SIM_PLOT_FRAME_BASE
 
                 enum SIGNAL_CONTEXT_MENU_EVENTS
                 {
-                    SHOW_SIGNAL,
                     HIDE_SIGNAL,
                     SHOW_CURSOR,
                     HIDE_CURSOR
                 };
         };
+
 };
 
 // Commands
