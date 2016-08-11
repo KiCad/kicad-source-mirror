@@ -1930,14 +1930,59 @@ void mpWindow::DoZoomOutYCalc  (const int staticYpixel)
 }
 
 
+void mpWindow::AdjustLimitedView()
+{
+    if(!m_enableLimitedView)
+        return;
+
+    const double xMin = m_minX - m_marginLeft / m_scaleX;
+    const double xMax = m_maxX - m_marginRight / m_scaleX;
+    const double yMin = m_minY + m_marginTop / m_scaleY;
+    const double yMax = m_maxY + m_marginBottom / m_scaleY;
+
+    if(m_desiredXmin < xMin)
+    {
+        double diff = xMin - m_desiredXmin;
+        m_posX += diff;
+        m_desiredXmax += diff;
+        m_desiredXmin = xMin;
+    }
+
+    if(m_desiredXmax > xMax)
+    {
+        double diff = m_desiredXmax - xMax;
+        m_posX -= diff;
+        m_desiredXmin -= diff;
+        m_desiredXmax = xMax;
+    }
+
+    if(m_desiredYmin < yMin)
+    {
+        double diff = yMin - m_desiredYmin;
+        m_posY += diff;
+        m_desiredYmax += diff;
+        m_desiredYmin = yMin;
+    }
+
+    if(m_desiredYmax > yMax)
+    {
+        double diff = m_desiredYmax - yMax;
+        m_posY -= diff;
+        m_desiredYmin -= diff;
+        m_desiredYmax = yMax;
+    }
+}
+
+
 bool mpWindow::SetXView(double pos, double desiredMax, double desiredMin)
 {
-    if(m_enableLimitedView && (desiredMax > m_maxX || desiredMin < m_minX))
-        return false;
+    //if(!CheckXLimits(desiredMax, desiredMin))
+        //return false;
 
     m_posX = pos;
     m_desiredXmax = desiredMax;
     m_desiredXmin = desiredMin;
+    AdjustLimitedView();
 
     return true;
 }
@@ -1945,12 +1990,13 @@ bool mpWindow::SetXView(double pos, double desiredMax, double desiredMin)
 
 bool mpWindow::SetYView(double pos, double desiredMax, double desiredMin)
 {
-    if(m_enableLimitedView && (desiredMax > m_maxY || desiredMin < m_minY))
-        return false;
+    //if(!CheckYLimits(desiredMax, desiredMin))
+        //return false;
 
     m_posY = pos;
     m_desiredYmax = desiredMax;
     m_desiredYmin = desiredMin;
+    AdjustLimitedView();
 
     return true;
 }
@@ -1964,6 +2010,13 @@ void mpWindow::ZoomIn(const wxPoint& centerPoint )
         GetClientSize(&m_scrX, &m_scrY);
         c.x = (m_scrX - m_marginLeft - m_marginRight)/2 + m_marginLeft; // c.x = m_scrX/2;
         c.y = (m_scrY - m_marginTop - m_marginBottom)/2 - m_marginTop; // c.y = m_scrY/2;
+    }
+    else
+    {
+        c.x = std::max(c.x, m_marginLeft);
+        c.x = std::min(c.x, m_scrX - m_marginRight);
+        c.y = std::max(c.y, m_marginTop);
+        c.y = std::min(c.y, m_scrY - m_marginBottom);
     }
 
     // Preserve the position of the clicked point:
@@ -1994,7 +2047,7 @@ void mpWindow::ZoomIn(const wxPoint& centerPoint )
     m_desiredXmax = m_posX + (m_scrX - m_marginLeft - m_marginRight) / m_scaleX; // m_desiredXmax = m_posX + m_scrX / m_scaleX;
     m_desiredYmax = m_posY;
     m_desiredYmin = m_posY - (m_scrY - m_marginTop - m_marginBottom) / m_scaleY; // m_desiredYmin = m_posY - m_scrY / m_scaleY;
-
+    AdjustLimitedView();
 
 #ifdef MATHPLOT_DO_LOGGING
     wxLogMessage(_("mpWindow::ZoomIn() prior coords: (%f,%f), new coords: (%f,%f) SHOULD BE EQUAL!!"), prior_layer_x,prior_layer_y, p2x(c.x),p2y(c.y));
@@ -2033,8 +2086,7 @@ void mpWindow::ZoomOut(const wxPoint& centerPoint )
     //printf("desired xmin %.1f ymin %.1f xmax %.1f ymax %.1f l %d\n", m_desiredXmin, m_desiredYmin, m_desiredXmax, m_desiredYmax, !!m_enableLimitedView);
     //printf("current xmin %.1f ymin %.1f xmax %.1f ymax %.1f\n", m_minX, m_minY, m_maxX, m_maxY);
 
-    if(m_enableLimitedView && (m_desiredXmin < m_minX || m_desiredXmin < m_minX
-                            || m_desiredXmax > m_maxX || m_desiredXmax > m_maxX))
+    if(!CheckXLimits(m_desiredXmax, m_desiredXmin) || !CheckYLimits(m_desiredYmax, m_desiredYmin))
     {
         //printf("call fit()\n");
         Fit();
@@ -2089,6 +2141,7 @@ void mpWindow::ZoomRect(wxPoint p0, wxPoint p1)
 #endif
 
     Fit(zoom_x_min,zoom_x_max,zoom_y_min,zoom_y_max);
+    AdjustLimitedView();
 }
 
 void mpWindow::LockAspect(bool enable)

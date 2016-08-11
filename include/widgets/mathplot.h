@@ -1406,6 +1406,22 @@ class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
         void DoZoomOutXCalc  (const int         staticXpixel);
         void DoZoomOutYCalc  (const int         staticYpixel);
 
+        bool CheckXLimits(double& desiredMax, double& desiredMin) const
+        {
+            return !(m_enableLimitedView
+                    && (desiredMax > m_maxX - m_marginRight / m_scaleX
+                    || desiredMin < m_minX - m_marginLeft / m_scaleX));
+        }
+
+        bool CheckYLimits(double& desiredMax, double& desiredMin) const
+        {
+            return !(m_enableLimitedView
+                    && (desiredMax > m_maxY + m_marginBottom / m_scaleY
+                    || desiredMin < m_minY + m_marginTop / m_scaleY));
+        }
+
+        void AdjustLimitedView();
+
         /** Recalculate global layer bounding box, and save it in m_minX,...
          * \return true if there is any valid BBox information.
          */
