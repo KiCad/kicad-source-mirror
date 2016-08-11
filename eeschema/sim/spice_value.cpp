@@ -218,6 +218,6 @@ void SPICE_VALUE::stripZeros( wxString& aString )
     while( aString.EndsWith( '0' ) )
         aString.RemoveLast();
 
-    if( aString.EndsWith( '.' ) )
+    if( aString.EndsWith( '.' ) || aString.EndsWith( ',' ) )
         aString.RemoveLast();
 }
