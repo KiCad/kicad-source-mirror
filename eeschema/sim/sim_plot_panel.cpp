@@ -331,7 +331,7 @@ void CURSOR::Plot( wxDC& aDC, mpWindow& aWindow )
     wxCoord topPx    = m_drawOutsideMargins ? 0 : aWindow.GetMarginTop();
     wxCoord bottomPx = m_drawOutsideMargins ? aWindow.GetScrY() : aWindow.GetScrY() - aWindow.GetMarginBottom();
 
-    aDC.SetPen( wxPen( *wxWHITE, 1, m_continuous ? wxSOLID : wxLONG_DASH ) );
+    aDC.SetPen( wxPen( *wxWHITE, 1, m_continuous ? wxPENSTYLE_SOLID : wxPENSTYLE_LONG_DASH ) );
 
     if( topPx < cursorPos.y && cursorPos.y < bottomPx )
         aDC.DrawLine( leftPx, cursorPos.y, rightPx, cursorPos.y );
@@ -461,7 +461,7 @@ bool SIM_PLOT_PANEL::IsPlottable( SIM_TYPE aSimType )
 bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         const double* aX, const double* aY, SIM_PLOT_TYPE aFlags )
 {
-    TRACE* t = NULL;
+    TRACE* trace = NULL;
 
     // Find previous entry, if there is one
     auto prev = m_traces.find( aName );
@@ -473,9 +473,9 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         {
             bool hasVoltageTraces = false;
 
-            for( auto t : m_traces )
+            for( auto tr : m_traces )
             {
-                if( !( t.second->GetFlags() & SPT_CURRENT ) )
+                if( !( tr.second->GetFlags() & SPT_CURRENT ) )
                 {
                     hasVoltageTraces = true;
                     break;
@@ -489,22 +489,22 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         }
 
         // New entry
-        t = new TRACE( aName );
-        t->SetPen( wxPen( generateColor(), 2, wxSOLID ) );
-        m_traces[aName] = t;
+        trace = new TRACE( aName );
+        trace->SetPen( wxPen( generateColor(), 2, wxPENSTYLE_SOLID ) );
+        m_traces[aName] = trace;
 
         // It is a trick to keep legend & coords always on the top
         for( mpLayer* l : m_topLevel )
             DelLayer( l );
 
-        AddLayer( (mpLayer*) t );
+        AddLayer( (mpLayer*) trace );
 
         for( mpLayer* l : m_topLevel )
             AddLayer( l );
     }
     else
     {
-        t = prev->second;
+        trace = prev->second;
     }
 
     std::vector<double> tmp( aY, aY + aPoints );
@@ -523,14 +523,14 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
         }
     }
 
-    t->SetData( std::vector<double>( aX, aX + aPoints ), tmp );
+    trace->SetData( std::vector<double>( aX, aX + aPoints ), tmp );
 
     if( aFlags & SPT_AC_PHASE || aFlags & SPT_CURRENT )
-        t->SetScale( m_axis_x, m_axis_y2 );
+        trace->SetScale( m_axis_x, m_axis_y2 );
     else
-        t->SetScale( m_axis_x, m_axis_y1 );
+        trace->SetScale( m_axis_x, m_axis_y1 );
 
-    t->SetFlags( aFlags );
+    trace->SetFlags( aFlags );
 
     UpdateAll();
 
