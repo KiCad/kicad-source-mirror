@@ -334,7 +334,7 @@ searches using the type as you go feature of the current search dialog.
 Provide quality circuit simulation capabilities similar to commercial products.
 
 **Task:**
-- Evaluate and select simulation library (spice, gnucap, qucs, etc).
+- Evaluate and select simulation library (ngspice, gnucap, qucs, etc).
 - Evaluate and select plotting library with wxWidgets support.
 - Confirm current spice netlist export is up to the task and add missing
   support for simulations.
@@ -352,7 +352,7 @@ Provide quality circuit simulation capabilities similar to commercial products.
 - None
 
 **Status:**
-- No progress.
+- Done ([announcement message](https://lists.launchpad.net/kicad-developers/msg25483.html))
 
 
 # Pcbnew: Circuit Board Editor # {#v5_pcbnew}
