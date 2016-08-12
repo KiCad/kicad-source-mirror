@@ -1,4 +1,6 @@
 [alias]
+	# Alias to simplify marking commits as bug fixes
+	# After commiting a change, run 'git fixes 123456' to mark the commit as a fix to bug lp:123456
 	fixes = "!f() { \
 		COMMIT_MSG=$(git log -1 --format=medium | tail -n +5 | sed -e 's/^    //'); \
 		git commit --amend -m \"${COMMIT_MSG}\n\nFixes: lp:$1\n* https://bugs.launchpad.net/kicad/+bug/$1\"; \
