@@ -154,6 +154,12 @@ Pcbnew including the wxPython console.  This option is disabled by default.
 The BUILD_GITHUB_PLUGIN option is used to control if the GitHub plug in is built.  This option is
 enabled by default.
 
+## Integrated Spice simulator ## {#spice_opt}
+
+The KICAD_SPICE option is used to control if the Spice simulator interface for eeschema is built.  When
+the options is enabled, it requires [ngspice][] to be available as a shared library.  This option is
+disabled by default.
+
 # Getting the KiCad Source Code ## {#getting_src}
 
 There are several ways to get the KiCad source.  If you want to build the stable version you
@@ -377,6 +383,7 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [Bazaar]: http://bazaar.canonical.com/en/
 [GIT]: https://git-scm.com/
 [GitHub]: https://github.com/KiCad/kicad-source-mirror
+[ngspice]: http://ngspice.sourceforge.net/
 [Doxygen]: http://www.stack.nl/~dimitri/doxygen/
 [mailing list]: https://launchpad.net/~kicad-developers
 [SWIG]: http://www.swig.org/
