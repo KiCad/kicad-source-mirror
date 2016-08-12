@@ -1,5 +1,9 @@
 add_definitions( -DEESCHEMA )
 
+if( KICAD_SPICE )
+    set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
+endif()
+
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ./dialogs
@@ -195,7 +199,7 @@ set( EESCHEMA_COMMON_SRCS
 
 
 if( KICAD_SPICE )
-    set( EESCHEMA_SRCS 
+    set( EESCHEMA_SRCS
         ${EESCHEMA_SRCS}
         sim/simulate.cpp
         sim/sim_plot_frame_base.cpp

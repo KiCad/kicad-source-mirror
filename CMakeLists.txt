@@ -502,6 +502,11 @@ if( MINGW AND USE_WX_GRAPHICS_CONTEXT )
     check_find_package_result( GDI_PLUS_FOUND "GDI+" )
 endif()
 
+# Find ngspice library, required for integrated circuit simulator
+if( KICAD_SPICE )
+    find_package( ngspice REQUIRED )
+endif()
+
 # Assist with header file searching optimization:
 # INC_BEFORE and INC_AFTER are two lists which go at the front and back of the
 # header file search lists, respectively.
