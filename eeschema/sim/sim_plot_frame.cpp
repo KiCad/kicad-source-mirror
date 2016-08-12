@@ -338,6 +338,9 @@ void SIM_PLOT_FRAME::removePlot( const wxString& aPlotName, bool aErase )
 {
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
+    if( !plotPanel )
+        return;
+
     if( aErase )
     {
         auto& traceMap = m_plots[plotPanel].m_traces;
@@ -645,6 +648,9 @@ void SIM_PLOT_FRAME::menuOpenWorkbook( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
 {
+    if( !CurrentPlot() )
+        return;
+
     wxFileDialog saveDlg( this, wxT( "Save simulation workbook" ), "", "",
                 "Workbook file (*.wbk)|*.wbk", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -658,6 +664,9 @@ void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::menuSaveImage( wxCommandEvent& event )
 {
+    if( !CurrentPlot() )
+        return;
+
     wxFileDialog saveDlg( this, wxT( "Save plot as image" ), "", "",
                 "PNG file (*.png)|*.png", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -670,6 +679,9 @@ void SIM_PLOT_FRAME::menuSaveImage( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
 {
+    if( !CurrentPlot() )
+        return;
+
     const wxChar SEPARATOR = ';';
 
     wxFileDialog saveDlg( this, wxT( "Save plot data" ), "", "",
@@ -710,40 +722,49 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::menuZoomIn( wxCommandEvent& event )
 {
-    CurrentPlot()->ZoomIn();
+    if( CurrentPlot() )
+        CurrentPlot()->ZoomIn();
 }
 
 
 void SIM_PLOT_FRAME::menuZoomOut( wxCommandEvent& event )
 {
-    CurrentPlot()->ZoomOut();
+    if( CurrentPlot() )
+        CurrentPlot()->ZoomOut();
 }
 
 
 void SIM_PLOT_FRAME::menuZoomFit( wxCommandEvent& event )
 {
-    CurrentPlot()->Fit();
+    if( CurrentPlot() )
+        CurrentPlot()->Fit();
 }
 
 
 void SIM_PLOT_FRAME::menuShowGrid( wxCommandEvent& event )
 {
     SIM_PLOT_PANEL* plot = CurrentPlot();
-    plot->ShowGrid( !plot->IsGridShown() );
+
+    if( plot )
+        plot->ShowGrid( !plot->IsGridShown() );
 }
 
 
 void SIM_PLOT_FRAME::menuShowGridUpdate( wxUpdateUIEvent& event )
 {
     SIM_PLOT_PANEL* plot = CurrentPlot();
-    event.Check( plot ? plot->IsGridShown() : false );
+
+    if( plot )
+        event.Check( plot ? plot->IsGridShown() : false );
 }
 
 
 void SIM_PLOT_FRAME::menuShowLegend( wxCommandEvent& event )
 {
     SIM_PLOT_PANEL* plot = CurrentPlot();
-    plot->ShowLegend( !plot->IsLegendShown() );
+
+    if( plot )
+        plot->ShowLegend( !plot->IsLegendShown() );
 }
 
 
