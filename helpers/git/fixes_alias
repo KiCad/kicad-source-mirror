@@ -1,0 +1,5 @@
+[alias]
+	fixes = "!f() { \
+		COMMIT_MSG=$(git log -1 --format=medium | tail -n +5 | sed -e 's/^    //'); \
+		git commit --amend -m \"${COMMIT_MSG}\n\nFixes: lp:$1\n* https://bugs.launchpad.net/kicad/+bug/$1\"; \
+	}; f"
