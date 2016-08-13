@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-13 13:05+0300\n"
-"PO-Revision-Date: 2016-08-13 14:03+0300\n"
+"PO-Revision-Date: 2016-08-13 14:07+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -9442,7 +9442,7 @@ msgstr "Вид"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:133
 msgid "Start the simulation by clicking the Run Simulation button"
-msgstr "Начать симуляцию нажав на кнопку \"Запустить моделирование\""
+msgstr "Начать симуляцию нажав на кнопку \"Запустить симуляцию\""
 
 #: eeschema/sim/sim_plot_frame_base.cpp:153
 msgid "a page"
