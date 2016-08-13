@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 11:54+0300\n"
-"PO-Revision-Date: 2016-08-07 11:54+0300\n"
+"POT-Creation-Date: 2016-08-13 13:05+0300\n"
+"PO-Revision-Date: 2016-08-13 14:03+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -199,7 +199,7 @@ msgstr "Удалить псевдоним"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:110
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:44
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:133
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:135
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:38
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:83
 #: pcbnew/dialogs/dialog_fp_lib_table_base.cpp:146
@@ -245,17 +245,25 @@ msgstr "Поворот ( ° )"
 msgid "Offset "
 msgstr "Смещение "
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:271
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:272
 msgid "Change to isometric perspective"
 msgstr "Переключиться на изометрическую перспективу"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:275
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:276
 msgid "Reload board and 3D models"
 msgstr "Перезагрузить плату и 3D модели"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:694
-msgid "[INFO] invalid scale values; setting invalid to 1.0"
-msgstr "[ИНФО] неверные значения масштаба; установка неверного в 1,0"
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:686
+msgid "Invalid X scale"
+msgstr "Неверный масштаб по X"
+
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:697
+msgid "Invalid Y scale"
+msgstr "Неверный масштаб по Y"
+
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:708
+msgid "Invalid Z scale"
+msgstr "Неверный масштаб по Z"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:153 3d-viewer/3d_cache/sg/ifsg_api.cpp:313
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:393
@@ -421,8 +429,8 @@ msgstr "Копировать 3D изображение в буфер обмен�
 msgid "Render current view using Raytracing"
 msgstr "Визуализация текущего вида используя трассировку лучей"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:72 common/zoom.cpp:248
-#: eeschema/tool_viewlib.cpp:75 gerbview/toolbars_gerber.cpp:77
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:72 common/widgets/mathplot.cpp:1761
+#: common/zoom.cpp:248 eeschema/tool_viewlib.cpp:75 gerbview/toolbars_gerber.cpp:77
 #: pagelayout_editor/toolbars_pl_editor.cpp:79 pcbnew/footprint_wizard_frame.cpp:610
 #: pcbnew/tool_modedit.cpp:123 pcbnew/tool_modview.cpp:79
 #: eeschema/help_common_strings.h:43 pcbnew/help_common_strings.h:19
@@ -430,10 +438,11 @@ msgid "Zoom in"
 msgstr "Увеличить"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:75 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1181
-#: common/zoom.cpp:250 eeschema/tool_viewlib.cpp:80 gerbview/toolbars_gerber.cpp:80
-#: pagelayout_editor/toolbars_pl_editor.cpp:82 pcbnew/footprint_wizard_frame.cpp:615
-#: pcbnew/tool_modedit.cpp:126 pcbnew/tool_modview.cpp:84
-#: eeschema/help_common_strings.h:44 pcbnew/help_common_strings.h:20
+#: common/widgets/mathplot.cpp:1762 common/zoom.cpp:250 eeschema/tool_viewlib.cpp:80
+#: gerbview/toolbars_gerber.cpp:80 pagelayout_editor/toolbars_pl_editor.cpp:82
+#: pcbnew/footprint_wizard_frame.cpp:615 pcbnew/tool_modedit.cpp:126
+#: pcbnew/tool_modview.cpp:84 eeschema/help_common_strings.h:44
+#: pcbnew/help_common_strings.h:20
 msgid "Zoom out"
 msgstr "Уменьшить"
 
@@ -492,7 +501,7 @@ msgstr "Сдвинуть вниз"
 msgid "Enable/Disable orthographic projection"
 msgstr "Вкл./Выкл. ортогональную проекцию"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:142 eeschema/menubar.cpp:524
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:142 eeschema/menubar.cpp:534
 #: eeschema/menubar_libedit.cpp:279 eeschema/tool_viewlib.cpp:264
 #: gerbview/menubar.cpp:248 kicad/menubar.cpp:432 pagelayout_editor/menubar.cpp:175
 #: pcbnew/menubar_modedit.cpp:359 pcbnew/menubar_pcbframe.cpp:661
@@ -734,7 +743,7 @@ msgstr "Показать 3D модели"
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:348 bitmap2component/bitmap2cmp_gui_base.cpp:135
 #: common/eda_text.cpp:423
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:90
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/libedit.cpp:498
@@ -812,7 +821,7 @@ msgstr "Показать дополнительные слои"
 msgid "Reset to default settings"
 msgstr "Установить настройки по умолчанию"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:397 cvpcb/menubar.cpp:133 eeschema/menubar.cpp:530
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:397 cvpcb/menubar.cpp:133 eeschema/menubar.cpp:540
 #: eeschema/menubar_libedit.cpp:284 eeschema/tool_viewlib.cpp:267
 #: gerbview/menubar.cpp:251 kicad/menubar.cpp:436 pagelayout_editor/menubar.cpp:177
 #: pcbnew/menubar_modedit.cpp:365 pcbnew/menubar_pcbframe.cpp:670
@@ -820,14 +829,14 @@ msgstr "Установить настройки по умолчанию"
 msgid "&Help"
 msgstr "Справка"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:400 eeschema/menubar.cpp:512
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:400 eeschema/menubar.cpp:522
 #: eeschema/menubar_libedit.cpp:265 gerbview/menubar.cpp:233 kicad/menubar.cpp:418
 #: pagelayout_editor/menubar.cpp:160 pcbnew/menubar_modedit.cpp:347
 #: pcbnew/menubar_pcbframe.cpp:650
 msgid "&List Hotkeys"
 msgstr "Список горячих клавиш"
 
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:401 eeschema/menubar.cpp:513
+#: 3d-viewer/3d_viewer/3d_toolbar.cpp:401 eeschema/menubar.cpp:523
 #: eeschema/menubar_libedit.cpp:266 gerbview/menubar.cpp:234 kicad/menubar.cpp:419
 #: pagelayout_editor/menubar.cpp:161 pcbnew/menubar_modedit.cpp:348
 #: pcbnew/menubar_pcbframe.cpp:651
@@ -1771,12 +1780,13 @@ msgstr ""
 
 #: common/dialogs/dialog_env_var_config_base.cpp:38
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:82
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:200
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:210
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:184
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:316
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:319
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:1990
-#: eeschema/libedit.cpp:477 pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
+#: eeschema/libedit.cpp:477 eeschema/widgets/tuner_slider_base.cpp:20
+#: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:34
 #: pcbnew/dialogs/dialog_layers_setup.cpp:342
 msgid "Name"
@@ -1788,6 +1798,7 @@ msgstr "Имя"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:225
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:38
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:87
+#: eeschema/dialogs/dialog_spice_model_base.cpp:389
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:73
 msgid "Add"
 msgstr "Добавить"
@@ -1888,7 +1899,7 @@ msgid "Mirror Y"
 msgstr "Отразить по гор."
 
 #: common/dialogs/dialog_image_editor_base.cpp:39
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:173
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:175
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:82
 #: pcbnew/modedit_onclick.cpp:289 pcbnew/onrightclick.cpp:998
 #: pcbnew/tools/common_actions.cpp:122
@@ -2302,7 +2313,7 @@ msgid "Unknown MIME type for doc file <%s>"
 msgstr "Неизвестный MIME-тип для файла документации <%s>"
 
 #: common/eda_text.cpp:424
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:90
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:764
@@ -2313,7 +2324,7 @@ msgid "Italic"
 msgstr "Курсив"
 
 #: common/eda_text.cpp:425
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:90
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:764
@@ -2697,6 +2708,39 @@ msgstr "OUTPUTSTREAM_OUTPUTFORMATTER ошибка записи"
 msgid "Colors"
 msgstr "Цвета"
 
+#: common/widgets/mathplot.cpp:1759 common/zoom.cpp:246
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:149
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:60
+#: gerbview/class_gerber_file_image.cpp:346 gerbview/class_gerber_file_image.cpp:349
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:84
+#: pagelayout_editor/dialogs/properties_frame_base.cpp:103
+#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
+#: pcbnew/tools/common_actions.cpp:207
+msgid "Center"
+msgstr "Центр"
+
+#: common/widgets/mathplot.cpp:1759
+msgid "Center plot view to this position"
+msgstr "Центрировать изображение графика в этой позиции"
+
+#: common/widgets/mathplot.cpp:1760
+msgid "Fit"
+msgstr "Вписать"
+
+#: common/widgets/mathplot.cpp:1760
+msgid "Set plot view to show all items"
+msgstr "Показать все элементы на изображении графика"
+
+#: common/widgets/mathplot.cpp:1761
+msgid "Zoom in plot view."
+msgstr "Увеличить изображение графика."
+
+#: common/widgets/mathplot.cpp:1762
+msgid "Zoom out plot view."
+msgstr "Уменьшить изображение графика."
+
 #: common/widgets/widget_hotkey_list.cpp:111
 msgid "Press a new hotkey, or press Esc to cancel..."
 msgstr "Нажмите новую горячую клавишу или Esc для отмены..."
@@ -2883,18 +2927,6 @@ msgstr "X"
 msgid "Y"
 msgstr "Y"
 
-#: common/zoom.cpp:246 eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:153
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:60
-#: gerbview/class_gerber_file_image.cpp:346 gerbview/class_gerber_file_image.cpp:349
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:84
-#: pagelayout_editor/dialogs/properties_frame_base.cpp:103
-#: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105
-#: pcbnew/tools/common_actions.cpp:207
-msgid "Center"
-msgstr "Центр"
-
 #: common/zoom.cpp:254 eeschema/tool_viewlib.cpp:90 gerbview/toolbars_gerber.cpp:86
 #: pagelayout_editor/toolbars_pl_editor.cpp:88 pcbnew/footprint_wizard_frame.cpp:625
 #: pcbnew/tool_modedit.cpp:133 pcbnew/tool_modview.cpp:94
@@ -3025,7 +3057,7 @@ msgid "Show outlines in sketch mode"
 msgstr "Показать границы в контурном режиме"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:408 pcbnew/hotkeys.cpp:188
-#: pcbnew/moduleframe.cpp:696 pcbnew/pcbframe.cpp:654
+#: pcbnew/moduleframe.cpp:696 pcbnew/pcbframe.cpp:661
 msgid "3D Viewer"
 msgstr "Просмотрщик 3D"
 
@@ -3170,8 +3202,8 @@ msgstr "Ошибка конфигурации"
 msgid "Project: '%s'"
 msgstr "Проект: '%s'"
 
-#: cvpcb/cvpcb_mainframe.cpp:762 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1366
-#: kicad/prjconfig.cpp:334 pcbnew/moduleframe.cpp:771 pcbnew/pcbframe.cpp:984
+#: cvpcb/cvpcb_mainframe.cpp:762 eeschema/libedit.cpp:61 eeschema/schframe.cpp:1372
+#: kicad/prjconfig.cpp:334 pcbnew/moduleframe.cpp:771 pcbnew/pcbframe.cpp:991
 msgid " [Read Only]"
 msgstr " [Только чтение]"
 
@@ -3218,6 +3250,7 @@ msgstr "Файлы эквивалентностей посад.место/ком
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:48
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:93
+#: eeschema/dialogs/dialog_spice_model_base.cpp:397
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:78 pcbnew/tools/common_actions.cpp:130
 msgid "Remove"
 msgstr "Удалить"
@@ -3236,9 +3269,10 @@ msgid "Available environment variables for relative paths:"
 msgstr "Доступные переменные окружения для относительных путей:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:83
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:203
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:213
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:187
-#: eeschema/dialogs/dialog_rescue_each.cpp:110 eeschema/lib_field.cpp:592
+#: eeschema/dialogs/dialog_rescue_each.cpp:110
+#: eeschema/dialogs/dialog_spice_model_base.cpp:37 eeschema/lib_field.cpp:592
 #: eeschema/lib_field.cpp:770 eeschema/onrightclick.cpp:426
 #: eeschema/sch_component.cpp:1542 eeschema/template_fieldnames.cpp:42
 #: eeschema/widgets/widget_eeschema_color_config.cpp:79 pcbnew/class_edge_mod.cpp:261
@@ -3377,14 +3411,14 @@ msgstr "Руководство CvPcb"
 msgid "Open CvPcb Manual"
 msgstr "Открыть руководство CvPcb"
 
-#: cvpcb/menubar.cpp:120 eeschema/menubar.cpp:506 eeschema/menubar_libedit.cpp:259
+#: cvpcb/menubar.cpp:120 eeschema/menubar.cpp:516 eeschema/menubar_libedit.cpp:259
 #: eeschema/tool_viewlib.cpp:252 gerbview/menubar.cpp:227 kicad/menubar.cpp:412
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_modedit.cpp:342
 #: pcbnew/menubar_pcbframe.cpp:645 pcbnew/tool_modview.cpp:191
 msgid "&Getting Started in KiCad"
 msgstr "Начало работы с KiCad"
 
-#: cvpcb/menubar.cpp:121 eeschema/menubar.cpp:507 gerbview/menubar.cpp:228
+#: cvpcb/menubar.cpp:121 eeschema/menubar.cpp:517 gerbview/menubar.cpp:228
 #: kicad/menubar.cpp:413 pagelayout_editor/menubar.cpp:156
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
 msgstr "Открыть руководство для начинающих \"Начало работы с KiCad\""
@@ -3393,7 +3427,7 @@ msgstr "Открыть руководство для начинающих \"На
 msgid "&About Kicad"
 msgstr "О Kicad"
 
-#: cvpcb/menubar.cpp:127 eeschema/menubar.cpp:520 eeschema/menubar_libedit.cpp:275
+#: cvpcb/menubar.cpp:127 eeschema/menubar.cpp:530 eeschema/menubar_libedit.cpp:275
 #: gerbview/menubar.cpp:244 kicad/menubar.cpp:428 pagelayout_editor/menubar.cpp:171
 #: pcbnew/menubar_modedit.cpp:355
 msgid "About KiCad"
@@ -3879,7 +3913,7 @@ msgstr "Имя плагина"
 msgid "This name already exists. Abort"
 msgstr "Такое наименование существует. Прервано"
 
-#: eeschema/dialogs/dialog_bom.cpp:531 eeschema/dialogs/dialog_netlist.cpp:842
+#: eeschema/dialogs/dialog_bom.cpp:531 eeschema/dialogs/dialog_netlist.cpp:843
 msgid "Plugin files:"
 msgstr "Файлы плагинов:"
 
@@ -4203,39 +4237,39 @@ msgstr ""
 msgid "Edit"
 msgstr "Править"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:237
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:247
 #, c-format
 msgid "Component '%s' found in library '%s'"
 msgstr "Компонент '%s' найден в библиотеке '%s'"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:243
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:253
 #, c-format
 msgid "Component '%s' not found in any library"
 msgstr "Компонент '%s' не найден в библиотеках."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:259
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:269
 msgid "However, some candidates are found:"
 msgstr "Тем не менее, некоторые кандидаты найдены:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:265
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:275
 #, c-format
 msgid "'%s' found in library '%s'"
 msgstr "'%s' найден в библиотеке '%s'."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:327
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:349
 msgid "No Component Name!"
 msgstr "Нет имени компонента!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:336
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:358
 #, c-format
 msgid "Component '%s' not found!"
 msgstr "Компонент '%s' не найден!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:410
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:432
 msgid "Illegal reference. A reference must start with a letter"
 msgstr "Неправильное обозначение. Обозначение должно начинаться с буквы"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:436
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:458
 #, c-format
 msgid ""
 "The field name <%s> does not have a value and is not defined in the field template "
@@ -4246,16 +4280,16 @@ msgstr ""
 "быть не должно и они будут удалены из компонента. Желаете удалить это и все остальные "
 "пустые поля?"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:443
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:465
 msgid "Remove Fields"
 msgstr "Удалить поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:866
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:888
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:686
 msgid "Show Datasheet"
 msgstr "Показать документацию"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:868
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:890
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:688
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:123
 msgid ""
@@ -4265,22 +4299,22 @@ msgstr ""
 "Если ваша документация доступна по ссылке http://, то нажав эту кнопку можно "
 "просмотреть её в браузере."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:873
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:895
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:693
 msgid "Browse Footprints"
 msgstr "Обзор посад.мест"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:875
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:897
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:695
 msgid "Open the footprint browser to choose a footprint and assign it."
 msgstr "Открыть обозреватель посад.мест для выбора посад.места и его назначения."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:881
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:903
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:701
 msgid "Used only for fields Footprint and Datasheet."
 msgstr "Используется только для полей посад.места и документации."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1020
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1042
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
 #: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:520
 #: gerbview/class_gerber_draw_item.cpp:521 pcbnew/class_pcb_text.cpp:145
@@ -4288,7 +4322,7 @@ msgstr "Используется только для полей посад.ме�
 msgid "Yes"
 msgstr "Да"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1022
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1044
 #: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:520
 #: gerbview/class_gerber_draw_item.cpp:521 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_text_mod.cpp:355
@@ -4412,11 +4446,15 @@ msgstr ""
 "Уникальный ID (временная метка) для идентификации компонента.\n"
 "Это идентификатор, альтернативный обозначения."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:104
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:103
+msgid "Edit Spice model"
+msgstr "Редактировать Spice модель"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:106
 msgid "Reset to Library Defaults"
 msgstr "Сбросить установки"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:105
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:107
 msgid ""
 "Set position and style of fields and component orientation  to default lib value.\n"
 "Fields texts are not modified."
@@ -4425,38 +4463,38 @@ msgstr ""
 "умолчанию.\n"
 "Тексты полей не изменяются."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:113
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:115
 #: eeschema/widgets/widget_eeschema_color_config.cpp:80
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:24
 msgid "Fields"
 msgstr "Поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:123
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:125
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:28
 msgid "Add Field"
 msgstr "Добавить поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:124
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:126
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:29
 msgid "Add a new custom field"
 msgstr "Добавить новое поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:128
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:130
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:33
 msgid "Delete Field"
 msgstr "Удалить поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:129
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:131
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:34
 msgid "Delete one of the optional fields"
 msgstr "Удалить одно из дополнительных полей"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:134
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:136
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:39
 msgid "Move the selected optional fields up one position"
 msgstr "Переместить выбранное дополнительное поле вверх на одну позицию"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:149
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
 #: eeschema/lib_pin.cpp:115 pagelayout_editor/dialogs/properties_frame_base.cpp:84
@@ -4464,7 +4502,7 @@ msgstr "Переместить выбранное дополнительное �
 msgid "Left"
 msgstr "Влево"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:147
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:149
 #: eeschema/dialogs/dialog_edit_label_base.cpp:70
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
 #: eeschema/lib_pin.cpp:114 pagelayout_editor/dialogs/properties_frame_base.cpp:84
@@ -4472,74 +4510,74 @@ msgstr "Влево"
 msgid "Right"
 msgstr "Вправо"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:149
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:151
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:54
 msgid "Horiz. Justify"
 msgstr "Гориз. выравнивание"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:153
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:60
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Bottom"
 msgstr "Вниз"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:153
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:60
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:103
 msgid "Top"
 msgstr "Вверх"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:157
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:62
 msgid "Vert. Justify"
 msgstr "Верт. выравнивание"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:166
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:168
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:75
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:121
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:150
 msgid "Visibility"
 msgstr "Отображение"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:168
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:170
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:77
 msgid "Show"
 msgstr "Показать"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:169
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:171
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:78
 msgid "Check if you want this field visible"
 msgstr "Установите, если хотите видеть это поле"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:174
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:176
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:83
 msgid "Check if you want this field's text rotated 90 degrees"
 msgstr "Установить для поворота текста выбранных полей на 90°"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:181
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:90
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/sch_text.cpp:764
 msgid "Bold Italic"
 msgstr "Полужирный курсив"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:185
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:92
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:85
 msgid "Style:"
 msgstr "Стиль:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:185
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:187
 msgid "The style of the currently selected field's text in the schematic"
 msgstr "Стиль текущих выбранных полей текста на схеме"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:195
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:197
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:102
 msgid "Field Name"
 msgstr "Имя поля:"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:200
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:209
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:202
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:211
 msgid ""
 "The name of the currently selected field\n"
 "Some fixed fields names are not editable"
@@ -4547,17 +4585,17 @@ msgstr ""
 "Имя выбранного поля\n"
 "Некоторые имена полей предопределены и неизменны"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:204
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:206
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:112
 msgid "Field Value"
 msgstr "Значение поля"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:215
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:122
 msgid "Show in Browser"
 msgstr "Показать в обозревателе"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:214
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:216
 msgid ""
 "If your datasheet is an http:// link or a complete file path, then it may show in "
 "your browser by pressing this button."
@@ -4565,20 +4603,20 @@ msgstr ""
 "Если ваша документация имеет ссылку http:// или полный путь, то можно просмотреть её "
 "в браузере, нажав эту кнопку."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:227
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:229
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:136
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:52 eeschema/sch_text.cpp:796
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:28 pcbnew/muonde.cpp:868
 msgid "Size"
 msgstr "Размер"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:232
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:234
 msgid "The size of the currently selected field's text in the schematic"
 msgstr "Размер текста выбранных полей на схеме"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:236
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:249
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:262
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:238
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:251
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:264
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:146
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:158
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:172
@@ -4609,19 +4647,19 @@ msgstr "Размер текста выбранных полей на схеме"
 msgid "unit"
 msgstr "ед.изм."
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:240
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:242
 msgid "PosX"
 msgstr "Поз.X"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:245
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:247
 msgid "The X coordinate of the text relative to the component"
 msgstr "Координата X текста относительно компонента"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:253
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:255
 msgid "PosY"
 msgstr "Поз.Y"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:258
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:260
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:168
 msgid "The Y coordinate of the text relative to the component"
 msgstr "Координата X текста относительно компонента"
@@ -4710,7 +4748,8 @@ msgid "Tri-State"
 msgstr "Трехстабильный"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:82
-#: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:34 eeschema/pin_type.cpp:50
+#: eeschema/dialogs/dialog_sch_edit_sheet_pin.cpp:34
+#: eeschema/dialogs/dialog_spice_model_base.cpp:50 eeschema/pin_type.cpp:50
 #: eeschema/sch_text.cpp:787
 msgid "Passive"
 msgstr "Пассивный"
@@ -5220,7 +5259,9 @@ msgstr "Длина:"
 msgid "Number"
 msgstr "Номер"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189 eeschema/lib_draw_item.cpp:65
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
+#: eeschema/dialogs/dialog_spice_model_base.cpp:27
+#: eeschema/dialogs/dialog_spice_model_base.cpp:58 eeschema/lib_draw_item.cpp:65
 #: eeschema/lib_pin.cpp:1999 eeschema/libedit.cpp:507 eeschema/sch_text.cpp:791
 #: gerbview/class_gerber_draw_item.cpp:490
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
@@ -5394,71 +5435,71 @@ msgstr "100"
 msgid "50"
 msgstr "50"
 
-#: eeschema/dialogs/dialog_netlist.cpp:295
+#: eeschema/dialogs/dialog_netlist.cpp:296
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
 #: pcbnew/dialogs/dialog_drc_base.cpp:25
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:98
 msgid "Options:"
 msgstr "Параметры:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:299
+#: eeschema/dialogs/dialog_netlist.cpp:300
 msgid "Default format"
 msgstr "Формат по умолчанию"
 
-#: eeschema/dialogs/dialog_netlist.cpp:383
+#: eeschema/dialogs/dialog_netlist.cpp:384
 msgid "Prefix references 'U' and 'IC' with 'X'"
 msgstr "Префикс обозначений 'U' и 'IC' с 'X'"
 
-#: eeschema/dialogs/dialog_netlist.cpp:388
+#: eeschema/dialogs/dialog_netlist.cpp:389
 msgid "Use net number as net name"
 msgstr "Использовать номера цепей как имена цепей"
 
-#: eeschema/dialogs/dialog_netlist.cpp:392
+#: eeschema/dialogs/dialog_netlist.cpp:393
 msgid "Simulator command:"
 msgstr "Команда симулятора:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:405
+#: eeschema/dialogs/dialog_netlist.cpp:406
 msgid "&Run Simulator"
 msgstr "Запустить симулятор"
 
-#: eeschema/dialogs/dialog_netlist.cpp:445 eeschema/dialogs/dialog_netlist_base.cpp:105
+#: eeschema/dialogs/dialog_netlist.cpp:446 eeschema/dialogs/dialog_netlist_base.cpp:105
 msgid "Netlist command:"
 msgstr "Команда списка цепей:"
 
-#: eeschema/dialogs/dialog_netlist.cpp:458
+#: eeschema/dialogs/dialog_netlist.cpp:459
 msgid "Title:"
 msgstr "Наименование изделия (и документа):"
 
-#: eeschema/dialogs/dialog_netlist.cpp:538
+#: eeschema/dialogs/dialog_netlist.cpp:539
 msgid "Save Netlist File"
 msgstr "Сохранить файл списка цепей"
 
-#: eeschema/dialogs/dialog_netlist.cpp:573
+#: eeschema/dialogs/dialog_netlist.cpp:574
 #, c-format
 msgid "%s Export"
 msgstr "%s экспорт"
 
-#: eeschema/dialogs/dialog_netlist.cpp:624
+#: eeschema/dialogs/dialog_netlist.cpp:625
 msgid "SPICE netlist file (.cir)|*.cir"
 msgstr "Файл цепей SPICE (.cir)|*.cir"
 
-#: eeschema/dialogs/dialog_netlist.cpp:629
+#: eeschema/dialogs/dialog_netlist.cpp:630
 msgid "CadStar netlist file (.frp)|*.frp"
 msgstr "Файл цепей CadStar (.frp)|*.frp"
 
-#: eeschema/dialogs/dialog_netlist.cpp:785
+#: eeschema/dialogs/dialog_netlist.cpp:786
 msgid "This plugin already exists. Abort"
 msgstr "Этот плагин уже есть. Прервано"
 
-#: eeschema/dialogs/dialog_netlist.cpp:812
+#: eeschema/dialogs/dialog_netlist.cpp:813
 msgid "Error. You must provide a command String"
 msgstr "Ошибка. Не задана командная строка"
 
-#: eeschema/dialogs/dialog_netlist.cpp:818
+#: eeschema/dialogs/dialog_netlist.cpp:819
 msgid "Error. You must provide a Title"
 msgstr "Ошибка. Не задан заголовок"
 
-#: eeschema/dialogs/dialog_netlist.cpp:876
+#: eeschema/dialogs/dialog_netlist.cpp:877
 msgid "Do not forget to choose a title for this netlist control page"
 msgstr "Не забудьте выбрать заголовок для этой закладки управления списком цепей"
 
@@ -5971,6 +6012,213 @@ msgstr "Заменить"
 msgid "Replace &All"
 msgstr "Заменить всё"
 
+#: eeschema/dialogs/dialog_spice_model_base.cpp:32
+msgid "Resistor"
+msgstr "Резистор"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:33
+msgid "Capacitor"
+msgstr "Конденсатор"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:34
+msgid "Inductor"
+msgstr "Индуктивность"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:63
+msgid "Diode"
+msgstr "Диод"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:64
+msgid "Bipolar transistor (BJT)"
+msgstr "Биполярный транзистор (BJT)"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:65
+msgid "MOSFET"
+msgstr "MOSFET"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:71
+#: eeschema/dialogs/dialog_spice_model_base.cpp:103
+msgid "Model"
+msgstr "Модель"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:81
+#: eeschema/dialogs/dialog_spice_model_base.cpp:115 eeschema/sch_component.cpp:1552
+#: pcbnew/dialogs/wizard_add_fplib_base.cpp:185 pcbnew/loadcmp.cpp:435
+msgid "Library"
+msgstr "Библиотека"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:88
+#: eeschema/dialogs/dialog_spice_model_base.cpp:122
+msgid "Select file..."
+msgstr "Выбрать файл..."
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:95
+msgid "Semiconductor"
+msgstr "Полупроводник"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:129
+msgid "Integrated circuit"
+msgstr "Интегральная схема"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:135
+msgid "DC/AC analysis"
+msgstr "Анализ DC/AC"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:143
+msgid "DC [V/A]"
+msgstr "DC [В/А]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:158
+msgid "AC magnitude [V/A]"
+msgstr "Величина AC [В/А]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:167
+msgid "AC phase [rad]"
+msgstr "Фаза AC [рад]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:183
+msgid "Transient analysis"
+msgstr "Анализ переходных процессов"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:193
+#: eeschema/dialogs/dialog_spice_model_base.cpp:305
+msgid "Initial value [V/A]"
+msgstr "Начальное значение [В/А]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:202
+#: eeschema/dialogs/dialog_spice_model_base.cpp:314
+msgid "Pulsed value [V/A]"
+msgstr "Импульсное значение [В/А]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:209
+msgid "Delay time [s]"
+msgstr "Время задержки [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:216
+msgid "Rise time [s]"
+msgstr "Время нарастания [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:223
+msgid "Fall time [s]"
+msgstr "Время спада [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:230
+msgid "Pulse width [s]"
+msgstr "Ширина импульса [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:237
+msgid "Period [s]"
+msgstr "Период [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:248
+msgid "Pulse"
+msgstr "Импульс"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:256
+msgid "DC offset [V/A]"
+msgstr "Смещение DC [В/А]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:265
+msgid "Amplitude [V/A]"
+msgstr "Амплитуда [В/А]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:272
+msgid "Frequency [Hz]"
+msgstr "Частота [Гц]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:279
+msgid "Delay [s]"
+msgstr "Задержка [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:286
+msgid "Damping factor [1/s]"
+msgstr "Коэффициент затухания [1/с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:297
+msgid "Sinusoidal"
+msgstr "Синусоидальный"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:321
+msgid "Rise delay time [s]"
+msgstr "Время задержки нарастания [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:328
+msgid "Rise time constant [s]"
+msgstr "Постоянная времени нарастания [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:335
+msgid "Fall delay time [s]"
+msgstr "Время задержки спада [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:342
+msgid "Fall time constant [s]"
+msgstr "Постоянная времени спада [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:353
+msgid "Exponential"
+msgstr "Экспоненциальный"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:355
+msgid "Piece-wise linear"
+msgstr "Кусочно-линейный"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:370
+msgid "Time [s]"
+msgstr "Время [с]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:379
+msgid "Value [V/A]"
+msgstr "Значение [В/А]"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:404
+msgid "Piece-wise Linear"
+msgstr "Кусочно-линейный"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:408
+msgid "FM"
+msgstr "FM"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:412
+msgid "AM"
+msgstr "AM"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:416
+msgid "Transient noise"
+msgstr "Переходные помехи"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:420
+msgid "Random"
+msgstr "Случайный"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:424
+msgid "External data"
+msgstr "Внешние данные"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:431
+msgid "Voltage"
+msgstr "Напряжение"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:431
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:262
+msgid "Current"
+msgstr "Ток"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:433
+msgid "Source type"
+msgstr "Тип источника"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:441
+msgid "Source"
+msgstr "Источник"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:445
+msgid "Disable component for simulation"
+msgstr "Не симулировать компонент"
+
+#: eeschema/dialogs/dialog_spice_model_base.cpp:451
+msgid "Alternate node sequence:"
+msgstr "Альтернативная последовательность узлов:"
+
 #: eeschema/edit_bitmap.cpp:115 eeschema/edit_bitmap.cpp:125
 #: pagelayout_editor/pl_editor_frame.cpp:647 pagelayout_editor/pl_editor_frame.cpp:654
 #, c-format
@@ -6192,7 +6440,6 @@ msgstr "Не удалось сохранить '%s'"
 
 #: eeschema/files-io.cpp:137 eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:48
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:51
-#: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:60
 #, c-format
 msgid "Failed to create file '%s'"
 msgstr "Не удалось создать файл '%s'"
@@ -6215,11 +6462,11 @@ msgstr "Файл схемы '%s' уже открыт."
 msgid "The current schematic has been modified.  Do you wish to save the changes?"
 msgstr "Текущая схема была изменена. Желаете сохранить изменения?"
 
-#: eeschema/files-io.cpp:241 pcbnew/files.cpp:429
+#: eeschema/files-io.cpp:241 pcbnew/files.cpp:435
 msgid "Save and Load"
 msgstr "Сохранить и загрузить"
 
-#: eeschema/files-io.cpp:242 pcbnew/files.cpp:430
+#: eeschema/files-io.cpp:242 pcbnew/files.cpp:436
 msgid "Load Without Saving"
 msgstr "Загрузить без сохранения"
 
@@ -6346,7 +6593,7 @@ msgstr "Навигатор"
 msgid "Root"
 msgstr "Основной лист"
 
-#: eeschema/hotkeys.cpp:87
+#: eeschema/hotkeys.cpp:87 eeschema/sim/sim_plot_frame_base.cpp:82
 msgid "Fit on Screen"
 msgstr "Масштаб по экрану"
 
@@ -6366,13 +6613,15 @@ msgstr "По центру"
 msgid "Zoom Redraw"
 msgstr "Перерисовать"
 
-#: eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108 gerbview/hotkeys.cpp:64
+#: eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108
+#: eeschema/sim/sim_plot_frame_base.cpp:74 gerbview/hotkeys.cpp:64
 #: pagelayout_editor/hotkeys.cpp:79 pcbnew/hotkeys.cpp:176 pcbnew/hotkeys.cpp:178
 #: pcbnew/tools/common_actions.cpp:191
 msgid "Zoom In"
 msgstr "Увеличить"
 
-#: eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115 gerbview/hotkeys.cpp:63
+#: eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115
+#: eeschema/sim/sim_plot_frame_base.cpp:78 gerbview/hotkeys.cpp:63
 #: pagelayout_editor/hotkeys.cpp:78 pcbnew/hotkeys.cpp:183 pcbnew/hotkeys.cpp:185
 #: pcbnew/tools/common_actions.cpp:195
 msgid "Zoom Out"
@@ -7764,42 +8013,50 @@ msgstr "Назначить посад.места компонентам"
 msgid "Run CvPcb"
 msgstr "Запустить CvPcb"
 
-#: eeschema/menubar.cpp:500 eeschema/menubar_libedit.cpp:253
+#: eeschema/menubar.cpp:501
+msgid "Simula&tor"
+msgstr "Симулятор"
+
+#: eeschema/menubar.cpp:501
+msgid "Simulate the circuit"
+msgstr "Симулировать схему"
+
+#: eeschema/menubar.cpp:510 eeschema/menubar_libedit.cpp:253
 #: eeschema/tool_viewlib.cpp:247
 msgid "Eeschema &Manual"
 msgstr "Руководство Eeschema"
 
-#: eeschema/menubar.cpp:501
+#: eeschema/menubar.cpp:511
 msgid "Open Eeschema Manual"
 msgstr "Открыть руководство Eeschema"
 
-#: eeschema/menubar.cpp:519 eeschema/menubar_libedit.cpp:274 kicad/menubar.cpp:427
+#: eeschema/menubar.cpp:529 eeschema/menubar_libedit.cpp:274 kicad/menubar.cpp:427
 #: pcbnew/menubar_modedit.cpp:354 pcbnew/menubar_pcbframe.cpp:656
 msgid "&About KiCad"
 msgstr "О KiСad"
 
-#: eeschema/menubar.cpp:525 eeschema/menubar_libedit.cpp:280
+#: eeschema/menubar.cpp:535 eeschema/menubar_libedit.cpp:280
 #: pcbnew/menubar_modedit.cpp:360 pcbnew/menubar_pcbframe.cpp:662
 msgid "&Edit"
 msgstr "Правка"
 
-#: eeschema/menubar.cpp:526 eeschema/menubar_libedit.cpp:281
+#: eeschema/menubar.cpp:536 eeschema/menubar_libedit.cpp:281
 #: eeschema/tool_viewlib.cpp:266 pcbnew/menubar_modedit.cpp:361
 #: pcbnew/menubar_pcbframe.cpp:663 pcbnew/tool_modview.cpp:205
 msgid "&View"
 msgstr "Просмотр"
 
-#: eeschema/menubar.cpp:527 eeschema/menubar_libedit.cpp:282
+#: eeschema/menubar.cpp:537 eeschema/menubar_libedit.cpp:282
 #: pcbnew/menubar_modedit.cpp:362 pcbnew/menubar_pcbframe.cpp:664
 msgid "&Place"
 msgstr "Разместить"
 
-#: eeschema/menubar.cpp:528 eeschema/menubar_libedit.cpp:283
+#: eeschema/menubar.cpp:538 eeschema/menubar_libedit.cpp:283
 #: pcbnew/menubar_modedit.cpp:363 pcbnew/menubar_pcbframe.cpp:666
 msgid "P&references"
 msgstr "Настройки"
 
-#: eeschema/menubar.cpp:529 kicad/menubar.cpp:435 pcbnew/menubar_pcbframe.cpp:668
+#: eeschema/menubar.cpp:539 kicad/menubar.cpp:435 pcbnew/menubar_pcbframe.cpp:668
 msgid "&Tools"
 msgstr "Инструменты"
 
@@ -8481,11 +8738,6 @@ msgstr "Символ питания"
 msgid "Alias of"
 msgstr "Оригинал"
 
-#: eeschema/sch_component.cpp:1552 pcbnew/dialogs/wizard_add_fplib_base.cpp:185
-#: pcbnew/loadcmp.cpp:435
-msgid "Library"
-msgstr "Библиотека"
-
 #: eeschema/sch_component.cpp:1558
 msgid "<Unknown>"
 msgstr "<Неизвестно>"
@@ -8922,6 +9174,14 @@ msgstr "Добавить компонент"
 msgid "Add power"
 msgstr "Добавить питание"
 
+#: eeschema/schedit.cpp:614
+msgid "Add a simulator probe"
+msgstr "Добавить пробник симулятора"
+
+#: eeschema/schedit.cpp:619
+msgid "Select a value to be tuned"
+msgstr "Выбрать значение для подстройки"
+
 #: eeschema/schframe.cpp:172 pcbnew/class_zone.cpp:847
 msgid "Not Found"
 msgstr "Не найдено"
@@ -8930,7 +9190,7 @@ msgstr "Не найдено"
 msgid "The following libraries were not found:"
 msgstr "Следующие библиотеки не найдены:"
 
-#: eeschema/schframe.cpp:626 pcbnew/pcbframe.cpp:579
+#: eeschema/schframe.cpp:632 pcbnew/pcbframe.cpp:579
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -8941,23 +9201,23 @@ msgstr ""
 "'%s'\n"
 "перед закрытием?"
 
-#: eeschema/schframe.cpp:773
+#: eeschema/schframe.cpp:779
 msgid "Draw wires and buses in any direction"
 msgstr "Рисовать проводники и шины в любом направлении"
 
-#: eeschema/schframe.cpp:774
+#: eeschema/schframe.cpp:780
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Рисовать только гориз. и верт. проводники и шины"
 
-#: eeschema/schframe.cpp:783
+#: eeschema/schframe.cpp:789
 msgid "Do not show hidden pins"
 msgstr "Не показывать скрытые выводы"
 
-#: eeschema/schframe.cpp:784 eeschema/tool_sch.cpp:295
+#: eeschema/schframe.cpp:790 eeschema/tool_sch.cpp:295
 msgid "Show hidden pins"
 msgstr "Показать скрытые выводы"
 
-#: eeschema/schframe.cpp:838
+#: eeschema/schframe.cpp:844
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone mode. In "
 "order to create/update PCBs from schematics, you need to launch Kicad shell and "
@@ -8967,15 +9227,15 @@ msgstr ""
 "Для создания/обновления печатной платы необходимо запустить KiCAD оболочку и создать "
 "проект печатной платы."
 
-#: eeschema/schframe.cpp:953
+#: eeschema/schframe.cpp:959
 msgid "Schematic"
 msgstr "Схема"
 
-#: eeschema/schframe.cpp:972
+#: eeschema/schframe.cpp:978
 msgid "New Schematic"
 msgstr "Новая схема"
 
-#: eeschema/schframe.cpp:985
+#: eeschema/schframe.cpp:991
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr ""
@@ -8983,15 +9243,15 @@ msgstr ""
 "\n"
 "Используйте Отрыть вместо Создать"
 
-#: eeschema/schframe.cpp:1006
+#: eeschema/schframe.cpp:1012
 msgid "Open Schematic"
 msgstr "Открыть схему"
 
-#: eeschema/schframe.cpp:1136
+#: eeschema/schframe.cpp:1142
 msgid "Error: not a component or no component"
 msgstr "Ошибка: не компонент или нет компонента"
 
-#: eeschema/schframe.cpp:1369
+#: eeschema/schframe.cpp:1375
 msgid " [no file]"
 msgstr " [нет файла]"
 
@@ -9075,6 +9335,126 @@ msgstr "Вы хотите преобразовать его в простой и
 #: eeschema/sheetlab.cpp:164
 msgid "No new hierarchical labels found."
 msgstr "Новые иерархические метки не найдены."
+
+#: eeschema/sim/sim_plot_frame.cpp:122
+msgid "Run/Stop Simulation"
+msgstr "Запустить/Остановить симуляцию"
+
+#: eeschema/sim/sim_plot_frame.cpp:123 eeschema/sim/sim_plot_frame_base.cpp:51
+msgid "Run Simulation"
+msgstr "Запустить симуляцию"
+
+#: eeschema/sim/sim_plot_frame.cpp:124
+msgid "Add Signals"
+msgstr "Добавить сигналы"
+
+#: eeschema/sim/sim_plot_frame.cpp:125
+msgid "Add signals to plot"
+msgstr "Добавить сигналы для отображения"
+
+#: eeschema/sim/sim_plot_frame.cpp:126
+msgid "Probe"
+msgstr "Пробник"
+
+#: eeschema/sim/sim_plot_frame.cpp:127
+msgid "Probe signals on the schematic"
+msgstr "Исследовать сигналы на схеме"
+
+#: eeschema/sim/sim_plot_frame.cpp:128 eeschema/sim/sim_plot_frame_base.cpp:201
+msgid "Tune"
+msgstr "Подстройка"
+
+#: eeschema/sim/sim_plot_frame.cpp:129
+msgid "Tune component values"
+msgstr "Подстроить значения компонентов"
+
+#: eeschema/sim/sim_plot_frame.cpp:130 pcbnew/dialogs/dialog_copper_zones_base.cpp:101
+msgid "Settings"
+msgstr "Установки"
+
+#: eeschema/sim/sim_plot_frame.cpp:131
+msgid "Simulation settings"
+msgstr "Настройки симулятора"
+
+#: eeschema/sim/sim_plot_frame.cpp:147
+msgid "Welcome!"
+msgstr "Добро пожаловать!"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:19
+msgid "New Plot"
+msgstr "Новый график"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:25
+msgid "Open Workbook"
+msgstr "Открыть работу"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:29
+msgid "Save Workbook"
+msgstr "Сохранить работу"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:35
+msgid "Save as image"
+msgstr "Сохранить как изображение"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:39
+msgid "Save as .csv file"
+msgstr "Сохранить как файл .csv"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:45
+msgid "Exit Simulation"
+msgstr "Выйти из симуляции"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:48
+msgid "File"
+msgstr "Файл"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:56
+msgid "Add signals..."
+msgstr "Добавить сигналы..."
+
+#: eeschema/sim/sim_plot_frame_base.cpp:59
+msgid "Probe from schematics"
+msgstr "Пробник из схем"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:62
+msgid "Tune component value"
+msgstr "Подстроить значение компонента"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:67
+msgid "Settings..."
+msgstr "Настройки..."
+
+#: eeschema/sim/sim_plot_frame_base.cpp:70
+msgid "Simulation"
+msgstr "Симуляция"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:88
+msgid "Show &grid"
+msgstr "Показать сетку"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:92
+msgid "Show &legend"
+msgstr "Показать надписи"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:95
+msgid "View"
+msgstr "Вид"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:133
+msgid "Start the simulation by clicking the Run Simulation button"
+msgstr "Начать симуляцию нажав на кнопку \"Запустить моделирование\""
+
+#: eeschema/sim/sim_plot_frame_base.cpp:153
+msgid "a page"
+msgstr "страница"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:184
+msgid "Signals"
+msgstr "Сигналы"
+
+#: eeschema/sim/sim_plot_frame_base.cpp:193
+msgid "Cursors"
+msgstr "Курсоры"
 
 #: eeschema/symbedit.cpp:63
 msgid "Import Symbol Drawings"
@@ -9347,6 +9727,14 @@ msgstr "О дизайнере схем Eeschema"
 #: eeschema/viewlib_frame.cpp:102 eeschema/viewlibs.cpp:134 pcbnew/modview_frame.cpp:720
 msgid "Library Browser"
 msgstr "Обозреватель библиотек"
+
+#: eeschema/widgets/tuner_slider_base.cpp:24
+msgid " X "
+msgstr " X "
+
+#: eeschema/widgets/tuner_slider_base.cpp:66
+msgid "Save"
+msgstr "Сохранить"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:61
 msgid "Wire"
@@ -9891,7 +10279,7 @@ msgid "Lines"
 msgstr "Линии"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:61
-#: pcbnew/class_board.cpp:1155 pcbnew/class_module.cpp:557
+#: pcbnew/class_board.cpp:1156 pcbnew/class_module.cpp:557
 #: pcbnew/class_netinfo_item.cpp:114 pcbnew/pcb_draw_panel_gal.cpp:336
 msgid "Pads"
 msgstr "Конт.пл."
@@ -9924,7 +10312,7 @@ msgid "No file loaded on the active layer %d"
 msgstr "Не загружен файл на активном слое %d"
 
 #: gerbview/events_called_functions.cpp:325 gerbview/gerbview_frame.cpp:140
-#: pcbnew/moduleframe.cpp:292 pcbnew/pcbframe.cpp:402 pcbnew/pcbframe.cpp:912
+#: pcbnew/moduleframe.cpp:292 pcbnew/pcbframe.cpp:402 pcbnew/pcbframe.cpp:919
 msgid "Visibles"
 msgstr "Видимость"
 
@@ -11599,10 +11987,6 @@ msgstr "Регуляторы"
 msgid "Parameters"
 msgstr "Параметры"
 
-#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:262
-msgid "Current"
-msgstr "Ток"
-
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:275
 msgid "Temperature rise"
 msgstr "Превышение температуры"
@@ -12535,7 +12919,7 @@ msgstr "Относительная проницаемость окружающе
 msgid "Cable Length"
 msgstr "Длина кабеля"
 
-#: pcbnew/append_board_to_current.cpp:92 pcbnew/files.cpp:518
+#: pcbnew/append_board_to_current.cpp:92 pcbnew/files.cpp:524
 #: pcbnew/tools/pcbnew_control.cpp:825
 #, c-format
 msgid ""
@@ -12626,7 +13010,7 @@ msgstr "Масштаб "
 msgid "Block Operation"
 msgstr "Блочные операции"
 
-#: pcbnew/board_netlist_updater.cpp:123 pcbnew/class_board.cpp:2425
+#: pcbnew/board_netlist_updater.cpp:123 pcbnew/class_board.cpp:2426
 #, c-format
 msgid "Adding new component \"%s:%s\" footprint \"%s\".\n"
 msgstr "Добавление нового компонента \"%s:%s\" с посад.местом \"%s\".\n"
@@ -12641,7 +13025,7 @@ msgstr "Добавлен компонент %s, посад.место %s.\n"
 msgid "Cannot add component %s due to missing footprint %s.\n"
 msgstr "Не удалось добавить компонент %s из-за отсутствия посад.места %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:161 pcbnew/class_board.cpp:2434
+#: pcbnew/board_netlist_updater.cpp:161 pcbnew/class_board.cpp:2435
 #, c-format
 msgid "Cannot add new component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr ""
@@ -12652,7 +13036,7 @@ msgstr ""
 msgid "Change component %s footprint from %s to %s.\n"
 msgstr "Изменён компонент %s посадочное место с %s на %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:196 pcbnew/class_board.cpp:2467
+#: pcbnew/board_netlist_updater.cpp:196 pcbnew/class_board.cpp:2468
 #, c-format
 msgid "Replacing component \"%s:%s\" footprint \"%s\" with \"%s\".\n"
 msgstr "Замена компонента \"%s:%s\" с посад.местом \"%s\" с \"%s\".\n"
@@ -12663,7 +13047,7 @@ msgid "Cannot change component %s footprint due to missing footprint %s.\n"
 msgstr ""
 "Не удалось изменить посад.место компонента %s из-за отсутствия посад.места %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:233 pcbnew/class_board.cpp:2478
+#: pcbnew/board_netlist_updater.cpp:233 pcbnew/class_board.cpp:2479
 #, c-format
 msgid "Cannot replace component \"%s:%s\" due to missing footprint \"%s\".\n"
 msgstr "Не удалось заменить компонент \"%s:%s\" из-за отсутствия посад.места \"%s\".\n"
@@ -12673,7 +13057,7 @@ msgstr "Не удалось заменить компонент \"%s:%s\" из-�
 msgid "Change component %s reference to %s.\n"
 msgstr "Изменение обозначение компонента %s на %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:266 pcbnew/class_board.cpp:2517
+#: pcbnew/board_netlist_updater.cpp:266 pcbnew/class_board.cpp:2518
 #, c-format
 msgid "Changing component \"%s:%s\" reference to \"%s\".\n"
 msgstr "Изменение компонента \"%s:%s\", ссылающегося на \"%s\".\n"
@@ -12683,12 +13067,12 @@ msgstr "Изменение компонента \"%s:%s\", ссылающего�
 msgid "Change component %s value from %s to %s.\n"
 msgstr "Изменён компонент %s значение с %s на %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:290 pcbnew/class_board.cpp:2533
+#: pcbnew/board_netlist_updater.cpp:290 pcbnew/class_board.cpp:2534
 #, c-format
 msgid "Changing component \"%s:%s\" value from \"%s\" to \"%s\".\n"
 msgstr "Изменение значения компонента \"%s:%s\" с \"%s\" на \"%s\".\n"
 
-#: pcbnew/board_netlist_updater.cpp:307 pcbnew/class_board.cpp:2550
+#: pcbnew/board_netlist_updater.cpp:307 pcbnew/class_board.cpp:2551
 #, c-format
 msgid "Changing component path \"%s:%s\" to \"%s\".\n"
 msgstr "Изменение пути компонента \"%s:%s\" на \"%s\".\n"
@@ -12698,7 +13082,7 @@ msgstr "Изменение пути компонента \"%s:%s\" на \"%s\".\
 msgid "Disconnect component %s pin %s.\n"
 msgstr "Отключён компонент %s вывод %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:349 pcbnew/class_board.cpp:2574
+#: pcbnew/board_netlist_updater.cpp:349 pcbnew/class_board.cpp:2575
 #, c-format
 msgid "Clearing component \"%s:%s\" pin \"%s\" net name.\n"
 msgstr "Очистка компонента \"%s:%s\" вывод \"%s\" имя цепи.\n"
@@ -12718,7 +13102,7 @@ msgstr "Переподсоединён компонент %s вывод %s от 
 msgid "Connect component %s pin %s to net %s.\n"
 msgstr "Подсоединён компонент %s вывод %s к цепи цепи %s.\n"
 
-#: pcbnew/board_netlist_updater.cpp:403 pcbnew/class_board.cpp:2590
+#: pcbnew/board_netlist_updater.cpp:403 pcbnew/class_board.cpp:2591
 #, c-format
 msgid "Changing component \"%s:%s\" pin \"%s\" net name from \"%s\" to \"%s\".\n"
 msgstr "Изменение компонента \"%s:%s\" вывод \"%s\" имя цепи с \"%s\" на \"%s\".\n"
@@ -12728,7 +13112,7 @@ msgstr "Изменение компонента \"%s:%s\" вывод \"%s\" им
 msgid "Remove component %s."
 msgstr "Удалён компонент %s"
 
-#: pcbnew/board_netlist_updater.cpp:454 pcbnew/class_board.cpp:2639
+#: pcbnew/board_netlist_updater.cpp:454 pcbnew/class_board.cpp:2640
 #, c-format
 msgid "Removing unused component \"%s:%s\".\n"
 msgstr "Удаление неиспользуемого компонента \"%s:%s\".\n"
@@ -12738,7 +13122,7 @@ msgstr "Удаление неиспользуемого компонента \"%
 msgid "Remove single pad net %s."
 msgstr "Удалена цепь %s с одной конт.пл."
 
-#: pcbnew/board_netlist_updater.cpp:526 pcbnew/class_board.cpp:2699
+#: pcbnew/board_netlist_updater.cpp:526 pcbnew/class_board.cpp:2700
 #, c-format
 msgid "Remove single pad net \"%s\" on \"%s\" pad '%s'\n"
 msgstr "Удалить цепь \"%s\" с одним конт.пл. на \"%s\" конт.пл. '%s'\n"
@@ -12820,50 +13204,50 @@ msgstr "Поставщик и справка"
 msgid "This is the default net class."
 msgstr "Это класс цепей по умолчанию."
 
-#: pcbnew/class_board.cpp:1158 pcbnew/class_netinfo_item.cpp:134
+#: pcbnew/class_board.cpp:1159 pcbnew/class_netinfo_item.cpp:134
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:118
 #: pcbnew/pcb_draw_panel_gal.cpp:339
 msgid "Vias"
 msgstr "Перех.отв."
 
-#: pcbnew/class_board.cpp:1161 pcbnew/pcb_draw_panel_gal.cpp:342
+#: pcbnew/class_board.cpp:1162 pcbnew/pcb_draw_panel_gal.cpp:342
 msgid "Track Segments"
 msgstr "Сегментов дорожек"
 
-#: pcbnew/class_board.cpp:1164 pcbnew/pcb_draw_panel_gal.cpp:345
+#: pcbnew/class_board.cpp:1165 pcbnew/pcb_draw_panel_gal.cpp:345
 msgid "Nodes"
 msgstr "Узлов"
 
-#: pcbnew/class_board.cpp:1167 pcbnew/pcb_draw_panel_gal.cpp:348
+#: pcbnew/class_board.cpp:1168 pcbnew/pcb_draw_panel_gal.cpp:348
 #: pcbnew/dialogs/dialog_select_net_from_list_base.h:58
 msgid "Nets"
 msgstr "Цепей"
 
-#: pcbnew/class_board.cpp:1175
+#: pcbnew/class_board.cpp:1176
 msgid "Links"
 msgstr "Связей"
 
-#: pcbnew/class_board.cpp:1178
+#: pcbnew/class_board.cpp:1179
 msgid "Connections"
 msgstr "Соединений"
 
-#: pcbnew/class_board.cpp:1181 pcbnew/dialogs/dialog_drc_base.cpp:200
+#: pcbnew/class_board.cpp:1182 pcbnew/dialogs/dialog_drc_base.cpp:200
 #: pcbnew/pcb_draw_panel_gal.cpp:351
 msgid "Unconnected"
 msgstr "Не подсоединены"
 
-#: pcbnew/class_board.cpp:2407
+#: pcbnew/class_board.cpp:2408
 #, c-format
 msgid "Checking netlist component footprint \"%s:%s:%s\".\n"
 msgstr "Проверка посад.места компонента из списка цепей \"%s:%s:%s\".\n"
 
-#: pcbnew/class_board.cpp:2754
+#: pcbnew/class_board.cpp:2755
 #, c-format
 msgid "Component '%s' pad '%s' not found in footprint '%s'\n"
 msgstr "Компонент '%s' конт.пл. '%s' не найдена в посад.месте '%s'\n"
 
-#: pcbnew/class_board.cpp:2772
+#: pcbnew/class_board.cpp:2773
 #, c-format
 msgid "Copper zone (net name '%s'): net has no pads connected."
 msgstr "Медная зона (цепь '%s'): цепь не имеет подключённых конт.пл."
@@ -13934,10 +14318,6 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:91
 msgid "Apply Filters"
 msgstr "Применить фильтр"
-
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:101
-msgid "Settings"
-msgstr "Установки"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:106
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:48 pcbnew/dialogs/dialog_drc_base.cpp:36
@@ -15200,7 +15580,7 @@ msgstr "Включить горячие клавиши команд переме
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Отключить горячие клавиши команд перемещения и авторазмещения"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:449
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:450
 #, c-format
 msgid ""
 "Error:\n"
@@ -19233,51 +19613,51 @@ msgstr "Не удалось создать '%s'"
 msgid "Create file %s\n"
 msgstr "Создать файл %s\n"
 
-#: pcbnew/files.cpp:136
+#: pcbnew/files.cpp:142
 msgid "Open Board File"
 msgstr "Открыть файл платы"
 
-#: pcbnew/files.cpp:136 pcbnew/menubar_pcbframe.cpp:106
+#: pcbnew/files.cpp:142 pcbnew/menubar_pcbframe.cpp:106
 msgid "Import Non Kicad Board File"
 msgstr "Импорт не Kicad файла платы"
 
-#: pcbnew/files.cpp:172
+#: pcbnew/files.cpp:178
 msgid "Save Board File As"
 msgstr "Сохранить файл платы как"
 
-#: pcbnew/files.cpp:195
+#: pcbnew/files.cpp:201
 msgid "Printed circuit board"
 msgstr "Печатная плата"
 
-#: pcbnew/files.cpp:276
+#: pcbnew/files.cpp:282
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Файл восстановления '%s' не найден."
 
-#: pcbnew/files.cpp:282
+#: pcbnew/files.cpp:288
 #, c-format
 msgid "OK to load recovery or backup file '%s'"
 msgstr "OK для загрузки резервного файла или файла восстановления '%s'"
 
-#: pcbnew/files.cpp:343
+#: pcbnew/files.cpp:349
 msgid "noname"
 msgstr "безымянный"
 
-#: pcbnew/files.cpp:417
+#: pcbnew/files.cpp:423
 #, c-format
 msgid "PCB file '%s' is already open."
 msgstr "Файл печатной платы '%s' уже открыт."
 
-#: pcbnew/files.cpp:427
+#: pcbnew/files.cpp:433
 msgid "The current board has been modified.  Do you wish to save the changes?"
 msgstr "Текущая плата была изменена. Желаете сохранить изменения?"
 
-#: pcbnew/files.cpp:453
+#: pcbnew/files.cpp:459
 #, c-format
 msgid "Board '%s' does not exist.  Do you wish to create it?"
 msgstr "Плата '%s' не существует. Желаете создать её?"
 
-#: pcbnew/files.cpp:548
+#: pcbnew/files.cpp:554
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -19285,17 +19665,17 @@ msgstr ""
 "Этот файл создан старой версией Pcbnew.\n"
 "При сохранении файла он будет записан в новом формате."
 
-#: pcbnew/files.cpp:654
+#: pcbnew/files.cpp:660
 #, c-format
 msgid "Warning: unable to create backup file '%s'"
 msgstr "Предупреждение: не удалось создать резервную копию файла '%s'"
 
-#: pcbnew/files.cpp:681 pcbnew/files.cpp:776
+#: pcbnew/files.cpp:687 pcbnew/files.cpp:782
 #, c-format
 msgid "No access rights to write to file '%s'"
 msgstr "Нет права записи в файл '%s'"
 
-#: pcbnew/files.cpp:722 pcbnew/files.cpp:802
+#: pcbnew/files.cpp:728 pcbnew/files.cpp:808
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -19304,22 +19684,22 @@ msgstr ""
 "Ошибка сохранения платы '%s':\n"
 "%s"
 
-#: pcbnew/files.cpp:728
+#: pcbnew/files.cpp:734
 #, c-format
 msgid "Failed to create '%s'"
 msgstr "Не удалось создать '%s'"
 
-#: pcbnew/files.cpp:754
+#: pcbnew/files.cpp:760
 #, c-format
 msgid "Backup file: '%s'"
 msgstr "Файл резервной копии: '%s' "
 
-#: pcbnew/files.cpp:756
+#: pcbnew/files.cpp:762
 #, c-format
 msgid "Wrote board file: '%s'"
 msgstr "Записан файл платы: '%s'"
 
-#: pcbnew/files.cpp:811
+#: pcbnew/files.cpp:817
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -21905,16 +22285,16 @@ msgstr ""
 "\"%s\"\n"
 "ты должен проверить и редактировать её (запустить тест DRC)."
 
-#: pcbnew/pcbframe.cpp:615
+#: pcbnew/pcbframe.cpp:622
 #, c-format
 msgid "The auto save file '%s' could not be removed!"
 msgstr "Файл автосохранения '%s' не может быть удалён!"
 
-#: pcbnew/pcbframe.cpp:988
+#: pcbnew/pcbframe.cpp:995
 msgid " [new file]"
 msgstr " [новый файл]"
 
-#: pcbnew/pcbframe.cpp:1085
+#: pcbnew/pcbframe.cpp:1092
 msgid ""
 "Cannot update the PCB, because the Kicad is opened in stand-alone mode. In order to "
 "create/update PCBs from schematics, you need to launch Kicad shell and create a PCB "
@@ -23167,7 +23547,7 @@ msgstr "Обозначить компоненты схемы"
 msgid "Bill of Material"
 msgstr "Перечень элементов"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:104
+#: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.h:106
 #: eeschema/dialogs/dialog_lib_new_component_base.h:62
 msgid "Component Properties"
 msgstr "Свойства компонента"
@@ -23375,6 +23755,10 @@ msgstr "Маркер ERC"
 #: eeschema/sch_no_connect.h:88
 msgid "No Connect"
 msgstr "\"Не подключено\""
+
+#: eeschema/sim/sim_plot_frame_base.h:102
+msgid "Simulation Workbook"
+msgstr "Симуляция работы"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.h:50
 msgid "Page Borders"
