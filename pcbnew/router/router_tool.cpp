@@ -487,7 +487,7 @@ bool ROUTER_TOOL::prepareInteractive()
 {
     int routingLayer = getStartLayer( m_startItem );
     m_frame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
-    m_frame->UndoRedoBlock ( true );
+    m_frame->UndoRedoBlock( true );
 
     // fixme: switch on invisible layer
 
@@ -524,7 +524,7 @@ bool ROUTER_TOOL::prepareInteractive()
     m_endItem = NULL;
     m_endSnapPoint = m_startSnapPoint;
 
-    m_frame->UndoRedoBlock ( false );
+    m_frame->UndoRedoBlock( false );
 
     return true;
 }
@@ -712,11 +712,12 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
             m_toolMgr->RunAction( COMMON_ACTIONS::layerToggle, true );
-        } else if (evt->IsAction ( &COMMON_ACTIONS::remove ) )
+        }
+        else if( evt->IsAction( &COMMON_ACTIONS::remove ) )
         {
             deleteTraces( m_startItem, true );
         }
-        else if (evt->IsAction ( &COMMON_ACTIONS::removeAlt ) )
+        else if( evt->IsAction( &COMMON_ACTIONS::removeAlt ) )
         {
             deleteTraces( m_startItem, false );
         }
@@ -742,9 +743,9 @@ void ROUTER_TOOL::performDragging()
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
     VIEW_CONTROLS* ctls = getViewControls();
 
-    if ( m_startItem && m_startItem->IsLocked() )
+    if( m_startItem && m_startItem->IsLocked() )
     {
-        if ( !IsOK( m_frame, _( "The item is locked. Do you want to continue?" ) ) )
+        if( !IsOK( m_frame, _( "The item is locked. Do you want to continue?" ) ) )
             return;
     }
 
@@ -764,7 +765,7 @@ void ROUTER_TOOL::performDragging()
     {
         ctls->ForceCursorPosition( false );
 
-       if( evt->IsCancel() || evt->IsActivate() )
+        if( evt->IsCancel() || evt->IsActivate() )
             break;
         else if( evt->IsMotion() )
         {
@@ -799,7 +800,7 @@ void ROUTER_TOOL::performDragging()
 
 int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
-    const BOARD_CONNECTED_ITEM *item = aEvent.Parameter<const BOARD_CONNECTED_ITEM*>();
+    const BOARD_CONNECTED_ITEM* item = aEvent.Parameter<const BOARD_CONNECTED_ITEM*>();
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
     VIEW_CONTROLS* ctls = getViewControls();
 
@@ -811,9 +812,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     m_startItem = m_router->GetWorld()->FindItemByParent( item );
 
-    if ( m_startItem && m_startItem->IsLocked() )
+    if( m_startItem && m_startItem->IsLocked() )
     {
-        if ( !IsOK( m_frame, _( "The item is locked. Do you want to continue?" ) ) )
+        if( !IsOK( m_frame, _( "The item is locked. Do you want to continue?" ) ) )
             return false;
     }
 

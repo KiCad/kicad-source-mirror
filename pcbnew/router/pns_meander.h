@@ -109,7 +109,7 @@ public:
      * @param aIsDual when true, the shape contains two meandered
      *                lines at a given offset (diff pairs)
      */
-    PNS_MEANDER_SHAPE( PNS_MEANDER_PLACER_BASE *aPlacer, int aWidth, bool aIsDual = false ) :
+    PNS_MEANDER_SHAPE( PNS_MEANDER_PLACER_BASE* aPlacer, int aWidth, bool aIsDual = false ) :
         m_placer( aPlacer ),
         m_dual( aIsDual ),
         m_width( aWidth ),
@@ -491,7 +491,7 @@ public:
      * @param aClearance clearance value
      * @return true, if the meander shape is not colliding
      */
-    bool CheckSelfIntersections ( PNS_MEANDER_SHAPE* aShape, int aClearance );
+    bool CheckSelfIntersections( PNS_MEANDER_SHAPE* aShape, int aClearance );
 
     /**
      * Function Settings()

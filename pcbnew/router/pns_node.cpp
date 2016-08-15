@@ -148,14 +148,15 @@ void PNS_NODE::unlinkParent()
 
 
 PNS_OBSTACLE_VISITOR::PNS_OBSTACLE_VISITOR( const PNS_ITEM* aItem ) :
-    m_item ( aItem ),
-    m_node ( NULL ),
+    m_item( aItem ),
+    m_node( NULL ),
     m_override( NULL ),
-    m_extraClearance ( 0 )
+    m_extraClearance( 0 )
 {
    if( aItem && aItem->Kind() == PNS_ITEM::LINE )
         m_extraClearance += static_cast<const PNS_LINE*>( aItem )->Width() / 2;
 }
+
 
 void PNS_OBSTACLE_VISITOR::SetWorld( const PNS_NODE* aNode, const PNS_NODE* aOverride )
 {
@@ -163,7 +164,8 @@ void PNS_OBSTACLE_VISITOR::SetWorld( const PNS_NODE* aNode, const PNS_NODE* aOve
     m_override = aOverride;
 }
 
-bool PNS_OBSTACLE_VISITOR::visit( PNS_ITEM *aCandidate )
+
+bool PNS_OBSTACLE_VISITOR::visit( PNS_ITEM* aCandidate )
 {
     // check if there is a more recent branch with a newer
     // (possibily modified) version of this item.
@@ -172,6 +174,7 @@ bool PNS_OBSTACLE_VISITOR::visit( PNS_ITEM *aCandidate )
 
     return false;
 }
+
 
 // function object that visits potential obstacles and performs
 // the actual collision refining
@@ -197,7 +200,7 @@ struct PNS_NODE::DEFAULT_OBSTACLE_VISITOR : public PNS_OBSTACLE_VISITOR
     int m_forceClearance;
 
     DEFAULT_OBSTACLE_VISITOR( PNS_NODE::OBSTACLES& aTab, const PNS_ITEM* aItem, int aKindMask, bool aDifferentNetsOnly ) :
-        PNS_OBSTACLE_VISITOR ( aItem ),
+        PNS_OBSTACLE_VISITOR( aItem ),
         m_tab( aTab ),
         m_kindMask( aKindMask ),
         m_limitCount( -1 ),
@@ -217,7 +220,7 @@ struct PNS_NODE::DEFAULT_OBSTACLE_VISITOR : public PNS_OBSTACLE_VISITOR
         if( !aCandidate->OfKind( m_kindMask ) )
             return true;
 
-        if ( visit(aCandidate) )
+        if( visit( aCandidate ) )
             return true;
 
         int clearance = m_extraClearance + m_node->GetClearance( aCandidate, m_item );
@@ -249,8 +252,8 @@ struct PNS_NODE::DEFAULT_OBSTACLE_VISITOR : public PNS_OBSTACLE_VISITOR
     };
 };
 
-int PNS_NODE::QueryColliding( const PNS_ITEM *aItem,
-                              PNS_OBSTACLE_VISITOR& aVisitor )
+
+int PNS_NODE::QueryColliding( const PNS_ITEM* aItem, PNS_OBSTACLE_VISITOR& aVisitor )
 {
     aVisitor.SetWorld( this, NULL );
     m_index->Query( aItem, m_maxClearance, aVisitor );
@@ -292,9 +295,8 @@ int PNS_NODE::QueryColliding( const PNS_ITEM* aItem,
 }
 
 
-PNS_NODE::OPT_OBSTACLE PNS_NODE::NearestObstacle(   const PNS_LINE* aItem,
-                                                    int aKindMask,
-                                                    const std::set<PNS_ITEM*>* aRestrictedSet )
+PNS_NODE::OPT_OBSTACLE PNS_NODE::NearestObstacle( const PNS_LINE* aItem, int aKindMask,
+                                                  const std::set<PNS_ITEM*>* aRestrictedSet )
 {
     OBSTACLES obs_list;
     bool found_isects = false;
@@ -477,7 +479,7 @@ struct HIT_VISITOR : public PNS_OBSTACLE_VISITOR
     const VECTOR2I& m_point;
 
     HIT_VISITOR( PNS_ITEMSET& aTab, const VECTOR2I& aPoint ) :
-        PNS_OBSTACLE_VISITOR ( NULL ),
+        PNS_OBSTACLE_VISITOR( NULL ),
         m_items( aTab ), m_point( aPoint )
     {}
 
@@ -502,14 +504,14 @@ const PNS_ITEMSET PNS_NODE::HitTest( const VECTOR2I& aPoint ) const
     // fixme: we treat a point as an infinitely small circle - this is inefficient.
     SHAPE_CIRCLE s( aPoint, 0 );
     HIT_VISITOR visitor( items, aPoint );
-    visitor.SetWorld(this, NULL);
+    visitor.SetWorld( this, NULL );
 
     m_index->Query( &s, m_maxClearance, visitor );
 
     if( !isRoot() )    // fixme: could be made cleaner
     {
         PNS_ITEMSET items_root;
-        visitor.SetWorld(m_root, NULL);
+        visitor.SetWorld( m_root, NULL );
         HIT_VISITOR  visitor_root( items_root, aPoint );
         m_root->m_index->Query( &s, m_maxClearance, visitor_root );
 
@@ -584,7 +586,7 @@ void PNS_NODE::addSegment( PNS_SEGMENT* aSeg, bool aAllowRedundant )
         return;
     }
 
-   if( !aAllowRedundant && findRedundantSegment ( aSeg ) )
+   if( !aAllowRedundant && findRedundantSegment( aSeg ) )
         return;
 
     aSeg->SetOwner( this );
@@ -696,7 +698,7 @@ void PNS_NODE::removeVia( PNS_VIA* aVia )
 
         for( JOINT_MAP::iterator f = range.first; f != range.second; ++f )
         {
-            if( aVia->LayersOverlap ( &f->second ) )
+            if( aVia->LayersOverlap( &f->second ) )
             {
                 m_joints.erase( f );
                 split = true;
@@ -709,7 +711,7 @@ void PNS_NODE::removeVia( PNS_VIA* aVia )
     for(PNS_ITEM* item : links)
     {
         if( item != aVia )
-            linkJoint ( p, item->Layers(), net, item );
+            linkJoint( p, item->Layers(), net, item );
     }
 
     doRemove( aVia );
@@ -859,7 +861,7 @@ void PNS_NODE::FindLineEnds( const PNS_LINE& aLine, PNS_JOINT& aA, PNS_JOINT& aB
 
 
 #if 0
-void PNS_NODE::MapConnectivity ( PNS_JOINT* aStart, std::vector<PNS_JOINT*>& aFoundJoints )
+void PNS_NODE::MapConnectivity( PNS_JOINT* aStart, std::vector<PNS_JOINT*>& aFoundJoints )
 {
     std::deque<PNS_JOINT*> searchQueue;
     std::set<PNS_JOINT*> processed;
@@ -874,7 +876,7 @@ void PNS_NODE::MapConnectivity ( PNS_JOINT* aStart, std::vector<PNS_JOINT*>& aFo
 
         for( PNS_ITEM* item : current->LinkList() )
         {
-            if ( item->OfKind( PNS_ITEM::SEGMENT ) )
+            if( item->OfKind( PNS_ITEM::SEGMENT ) )
             {
                 PNS_SEGMENT* seg = static_cast<PNS_SEGMENT *>( item );
                 PNS_JOINT* a = FindJoint( seg->Seg().A, seg );
@@ -905,7 +907,7 @@ int PNS_NODE::FindLinesBetweenJoints( PNS_JOINT& aA, PNS_JOINT& aB, std::vector<
             PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
             PNS_LINE line = AssembleLine( seg );
 
-            if ( !line.Layers().Overlaps( aB.Layers() ) )
+            if( !line.Layers().Overlaps( aB.Layers() ) )
                 continue;
 
             PNS_JOINT j_start, j_end;
@@ -1246,7 +1248,7 @@ int PNS_NODE::RemoveByMarker( int aMarker )
 
     for( PNS_INDEX::ITEM_SET::iterator i = m_index->begin(); i != m_index->end(); ++i )
     {
-        if ( (*i)->Marker() & aMarker )
+        if( (*i)->Marker() & aMarker )
         {
             garbage.push_back( *i );
         }
@@ -1263,7 +1265,7 @@ int PNS_NODE::RemoveByMarker( int aMarker )
 
 PNS_SEGMENT* PNS_NODE::findRedundantSegment( PNS_SEGMENT* aSeg )
 {
-    PNS_JOINT* jtStart = FindJoint ( aSeg->Seg().A, aSeg );
+    PNS_JOINT* jtStart = FindJoint( aSeg->Seg().A, aSeg );
 
     if( !jtStart )
         return NULL;

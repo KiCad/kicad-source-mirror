@@ -123,28 +123,31 @@ DIRECTION_45 PNS_DP_PRIMITIVE_PAIR::anchorDirection( PNS_ITEM* aItem, const VECT
 
 void PNS_DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I& aMidpoint, VECTOR2I& aDirection ) const
 {
-    assert (m_primP && m_primN);
+    assert( m_primP && m_primN );
 
     VECTOR2I aP, aN, dir, midpoint;
 
-    if ( m_primP->OfKind(PNS_ITEM::SEGMENT) && m_primN->OfKind(PNS_ITEM::SEGMENT) )
+    if ( m_primP->OfKind( PNS_ITEM::SEGMENT ) && m_primN->OfKind( PNS_ITEM::SEGMENT ) )
     {
         aP = m_primP->Anchor( 1 );
         aN = m_primN->Anchor( 1 );
         midpoint = ( aP + aN ) / 2;
-        SEG s = static_cast <PNS_SEGMENT*> (m_primP)->Seg();
+        SEG s = static_cast <PNS_SEGMENT*>( m_primP )->Seg();
+
         if ( s.B != s.A )
         {
             dir = s.B - s.A;
         }
-		else
-		{
-            dir = VECTOR2I(0, 1);
+        else
+        {
+            dir = VECTOR2I( 0, 1 );
         }
 
-        dir = dir.Resize( (aP - aN).EuclideanNorm() );
+        dir = dir.Resize( ( aP - aN ).EuclideanNorm() );
 
-    } else {
+    }
+    else
+    {
         aP = m_primP->Anchor( 0 );
         aN = m_primN->Anchor( 0 );
         midpoint = ( aP + aN ) / 2;
@@ -157,6 +160,7 @@ void PNS_DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTO
     aMidpoint = midpoint;
     aDirection = dir;
 }
+
 
 DIRECTION_45 PNS_DP_PRIMITIVE_PAIR::DirP() const
 {
@@ -189,7 +193,7 @@ static bool checkGap( const SHAPE_LINE_CHAIN &p, const SHAPE_LINE_CHAIN &n, int 
         {
             int dist = p.CSegment( i ).Distance( n.CSegment( j ) );
 
-            if( dist  < gap - 100 )
+            if( dist < gap - 100 )
                 return false;
         }
     }
@@ -347,7 +351,6 @@ bool PNS_DP_GATEWAYS::FitGateways( PNS_DP_GATEWAYS& aEntry, PNS_DP_GATEWAYS& aTa
     {
         for( const PNS_DP_GATEWAY& g_target : aTarget.Gateways() )
         {
-
             n++;
 
             for( int attempt = 0; attempt < 2; attempt++ )
@@ -394,11 +397,12 @@ bool PNS_DP_GATEWAYS::checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I&
 
 void PNS_DP_GATEWAYS::FilterByOrientation ( int aAngleMask, DIRECTION_45 aRefOrientation )
 {
-     std::remove_if( m_gateways.begin(), m_gateways.end(), [aAngleMask, aRefOrientation] ( const PNS_DP_GATEWAY& dp) {
-        DIRECTION_45 orient ( dp.AnchorP() - dp.AnchorN() );
-        return ! (orient.Angle ( aRefOrientation ) & aAngleMask );
-     }  );
+    std::remove_if( m_gateways.begin(), m_gateways.end(), [aAngleMask, aRefOrientation]( const PNS_DP_GATEWAY& dp) {
+        DIRECTION_45 orient( dp.AnchorP() - dp.AnchorN() );
+        return !( orient.Angle( aRefOrientation ) & aAngleMask );
+    } );
 }
+
 
 void PNS_DP_GATEWAYS::BuildFromPrimitivePair( PNS_DP_PRIMITIVE_PAIR aPair, bool aPreferDiagonal )
 {

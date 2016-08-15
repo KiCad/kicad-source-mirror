@@ -300,7 +300,7 @@ public:
         m_marker = aMarker;
     }
 
-    virtual void Unmark (int aMarker = -1)
+    virtual void Unmark(int aMarker = -1)
     {
         m_marker &= ~aMarker;
     }
@@ -322,7 +322,7 @@ public:
 
     virtual VECTOR2I Anchor( int n ) const
     {
-        return VECTOR2I ();
+        return VECTOR2I();
     }
 
     virtual int AnchorCount() const

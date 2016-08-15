@@ -59,12 +59,12 @@ public:
     *
     * Assign a debug decorator allowing this algo to draw extra graphics for visual debugging
     */
-    void SetDebugDecorator( PNS_DEBUG_DECORATOR *aDecorator )
+    void SetDebugDecorator( PNS_DEBUG_DECORATOR* aDecorator )
     {
         m_debugDecorator = aDecorator;
     }
 
-    PNS_DEBUG_DECORATOR *Dbg() const
+    PNS_DEBUG_DECORATOR* Dbg() const
     {
         return m_debugDecorator;
     }

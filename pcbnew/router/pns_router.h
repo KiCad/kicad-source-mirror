@@ -73,24 +73,23 @@ enum PNS_ROUTER_MODE {
  class PNS_ROUTER_IFACE
  {
  public:
-         PNS_ROUTER_IFACE() {};
-         virtual ~PNS_ROUTER_IFACE() {};
+        PNS_ROUTER_IFACE() {};
+        virtual ~PNS_ROUTER_IFACE() {};
 
-         virtual void SetRouter ( PNS_ROUTER *aRouter ) = 0;
-         virtual void SyncWorld ( PNS_NODE *aNode ) = 0;
-         virtual void AddItem ( PNS_ITEM *aItem ) = 0;
-         virtual void RemoveItem ( PNS_ITEM *aItem ) = 0;
-         virtual void DisplayItem( const PNS_ITEM* aItem, int aColor = -1, int aClearance = -1 ) = 0;
-         virtual void HideItem ( PNS_ITEM *aItem ) = 0;
-         virtual void Commit () = 0;
-//         virtual void Abort () = 0;
+        virtual void SetRouter( PNS_ROUTER* aRouter ) = 0;
+        virtual void SyncWorld( PNS_NODE* aNode ) = 0;
+        virtual void AddItem( PNS_ITEM* aItem ) = 0;
+        virtual void RemoveItem( PNS_ITEM* aItem ) = 0;
+        virtual void DisplayItem( const PNS_ITEM* aItem, int aColor = -1, int aClearance = -1 ) = 0;
+        virtual void HideItem( PNS_ITEM* aItem ) = 0;
+        virtual void Commit() = 0;
+//        virtual void Abort () = 0;
 
-         virtual void EraseView () = 0;
-         virtual void UpdateNet ( int aNetCode ) = 0;
+        virtual void EraseView() = 0;
+        virtual void UpdateNet( int aNetCode ) = 0;
 
-         virtual PNS_RULE_RESOLVER* GetRuleResolver() = 0;
-         virtual PNS_DEBUG_DECORATOR* GetDebugDecorator() = 0;
-
+        virtual PNS_RULE_RESOLVER* GetRuleResolver() = 0;
+        virtual PNS_DEBUG_DECORATOR* GetDebugDecorator() = 0;
 };
 
 class PNS_ROUTER
@@ -107,7 +106,7 @@ public:
     PNS_ROUTER();
     ~PNS_ROUTER();
 
-    void SetInterface( PNS_ROUTER_IFACE *aIface );
+    void SetInterface( PNS_ROUTER_IFACE* aIface );
     void SetMode ( PNS_ROUTER_MODE aMode );
     PNS_ROUTER_MODE Mode() const { return m_mode; }
 
@@ -136,7 +135,7 @@ public:
 
     void DisplayItem( const PNS_ITEM* aItem, int aColor = -1, int aClearance = -1 );
     void DisplayItems( const PNS_ITEMSET& aItems );
-    void DeleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack );
+    void DeleteTraces( PNS_ITEM* aStartItem, bool aWholeTrack );
     void SwitchLayer( int layer );
 
     void ToggleViaPlacement();
@@ -205,15 +204,15 @@ public:
         return m_sizes;
     }
 
-    PNS_ITEM *QueryItemByParent ( const BOARD_ITEM *aItem ) const;
+    PNS_ITEM* QueryItemByParent( const BOARD_ITEM* aItem ) const;
 
 
     void SetFailureReason ( const wxString& aReason ) { m_failureReason = aReason; }
     const wxString& FailureReason() const { return m_failureReason; }
 
-    PNS_PLACEMENT_ALGO *Placer() { return m_placer; }
+    PNS_PLACEMENT_ALGO* Placer() { return m_placer; }
 
-    PNS_ROUTER_IFACE *GetInterface() const
+    PNS_ROUTER_IFACE* GetInterface() const
     {
         return m_iface;
     }
@@ -252,7 +251,7 @@ private:
     PNS_PLACEMENT_ALGO * m_placer;
     PNS_DRAGGER* m_dragger;
     PNS_SHOVE* m_shove;
-    PNS_ROUTER_IFACE *m_iface;
+    PNS_ROUTER_IFACE* m_iface;
 
     int m_iterLimit;
     bool m_showInterSteps;

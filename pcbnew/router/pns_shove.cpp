@@ -49,7 +49,7 @@ void PNS_SHOVE::replaceItems( PNS_ITEM* aOld, PNS_ITEM* aNew )
 
     if( changed_area )
     {
-        m_affectedAreaSum = m_affectedAreaSum ? m_affectedAreaSum->Merge ( *changed_area ) : *changed_area;
+        m_affectedAreaSum = m_affectedAreaSum ? m_affectedAreaSum->Merge( *changed_area ) : *changed_area;
     }
 
     m_currentNode->Replace( aOld, aNew );
@@ -73,7 +73,7 @@ void PNS_SHOVE::sanityCheck( PNS_LINE* aOld, PNS_LINE* aNew )
 
 
 PNS_SHOVE::PNS_SHOVE( PNS_NODE* aWorld, PNS_ROUTER* aRouter ) :
-    PNS_ALGO_BASE ( aRouter )
+    PNS_ALGO_BASE( aRouter )
 {
     m_forceClearance = -1;
     m_root = aWorld;
@@ -170,7 +170,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::processHullSet( PNS_LINE& aCurrent, PNS_LINE&
             l.SetShape( path );
         }
 
-        for( int i = 0; i < std::min ( path.PointCount(), obs.PointCount() ); i++ )
+        for( int i = 0; i < std::min( path.PointCount(), obs.PointCount() ); i++ )
         {
             if( path.CPoint( i ) != obs.CPoint( i ) )
             {
@@ -289,9 +289,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ProcessSingleLine( PNS_LINE& aCurrent, PNS_LI
         }
 
         if( viaOnEnd )
-            hulls.push_back ( aCurrent.Via().Hull( clearance, w ) );
+            hulls.push_back( aCurrent.Via().Hull( clearance, w ) );
 
-        rv = processHullSet ( aCurrent, aObstacle, aShoved, hulls );
+        rv = processHullSet( aCurrent, aObstacle, aShoved, hulls );
     }
 
     if( obstacleIsHead )
@@ -463,7 +463,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE& aCurrent, PNS_ITE
 
     	PNS_WALKAROUND::WALKAROUND_STATUS status = walkaround.Route( aCurrent, walkaroundLine, false );
 
-        if ( status != PNS_WALKAROUND::DONE )
+        if( status != PNS_WALKAROUND::DONE )
             continue;
 
         walkaroundLine.ClearSegmentLinks();
@@ -491,7 +491,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE& aCurrent, PNS_ITE
 
             if( m_currentNode->CheckColliding( &lastLine, &walkaroundLine ) )
             {
-                PNS_LINE dummy ( lastLine );
+                PNS_LINE dummy( lastLine );
 
                 if( ProcessSingleLine( walkaroundLine, lastLine, dummy ) == SH_OK )
                 {
@@ -566,7 +566,7 @@ bool PNS_SHOVE::pushSpringback( PNS_NODE* aNode, const PNS_ITEMSET& aHeadItems,
     if( aAffectedArea )
     {
         if( prev_area )
-            st.m_affectedArea = prev_area->Merge ( *aAffectedArea );
+            st.m_affectedArea = prev_area->Merge( *aAffectedArea );
         else
             st.m_affectedArea = aAffectedArea;
     } else
@@ -591,7 +591,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         return SH_INCOMPLETE;
     }
 
-    if ( aVia->IsLocked() )
+    if( aVia->IsLocked() )
         return SH_TRY_WALK;
 
     if( jt->IsLocked() )
@@ -831,7 +831,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onReverseCollidingVia( PNS_LINE& aCurrent, PN
 }
 
 
-void PNS_SHOVE::unwindStack( PNS_SEGMENT *aSeg )
+void PNS_SHOVE::unwindStack( PNS_SEGMENT* aSeg )
 {
     for( std::vector<PNS_LINE>::iterator i = m_lineStack.begin(); i != m_lineStack.end() ; )
     {
@@ -957,7 +957,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
             }
             else
             {
-                st = onReverseCollidingVia ( currentLine, revVia );
+                st = onReverseCollidingVia( currentLine, revVia );
             }
 
             break;
@@ -1062,7 +1062,7 @@ OPT_BOX2I PNS_SHOVE::totalAffectedArea() const
     if( area )
     {
         if( m_affectedAreaSum )
-            area->Merge ( *m_affectedAreaSum );
+            area->Merge( *m_affectedAreaSum );
     } else
         area = m_affectedAreaSum;
 
@@ -1137,7 +1137,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
         runOptimizer( m_currentNode );
 
         if( m_newHead )
-            st = m_currentNode->CheckColliding( &(*m_newHead) ) ? SH_INCOMPLETE : SH_HEAD_MODIFIED;
+            st = m_currentNode->CheckColliding( &( *m_newHead ) ) ? SH_INCOMPLETE : SH_HEAD_MODIFIED;
         else
             st = m_currentNode->CheckColliding( &head ) ? SH_INCOMPLETE : SH_OK;
     }

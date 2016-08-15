@@ -104,9 +104,9 @@ void PNS_TOOL_BASE::Reset( RESET_REASON aReason )
 
     m_iface = new PNS_KICAD_IFACE;
 
-    m_iface->SetBoard (m_board);
+    m_iface->SetBoard( m_board );
     m_iface->SetView( getView() );
-    m_iface->SetHostFrame ( m_frame );
+    m_iface->SetHostFrame( m_frame );
 
     m_router = new PNS_ROUTER;
     m_router->SetInterface(m_iface);
@@ -216,12 +216,14 @@ void PNS_TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
     {
         snapEnabled = !aEvent.Modifier( MD_SHIFT );
         p = aEvent.Position();
-    } else {
+    }
+    else
+    {
         p = cp;
     }
 
     startItem = pickSingleItem( p );
-    m_router->EnableSnapping ( snapEnabled );
+    m_router->EnableSnapping( snapEnabled );
 
     if( !snapEnabled && startItem && !startItem->Layers().Overlaps( tl ) )
         startItem = NULL;
@@ -307,33 +309,36 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
         TRACE( 0, "%s, layer : %d", m_endItem->KindStr().c_str() % m_endItem->Layers().Start() );
 }
 
-void PNS_TOOL_BASE::deleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack )
+
+void PNS_TOOL_BASE::deleteTraces( PNS_ITEM* aStartItem, bool aWholeTrack )
 {
     PNS_NODE *node = m_router->GetWorld()->Branch();
 
     if( !aStartItem )
         return;
 
-    if ( !aWholeTrack )
+    if( !aWholeTrack )
     {
-        node->Remove ( aStartItem );
+        node->Remove( aStartItem );
     }
     else
     {
-        PNS_TOPOLOGY topo (node);
+        PNS_TOPOLOGY topo( node );
         PNS_ITEMSET path = topo.AssembleTrivialPath( aStartItem );
 
-        for ( auto ent : path.Items() )
+        for( auto ent : path.Items() )
             node->Remove( ent.item );
     }
 
     m_router->CommitRouting( node );
 }
 
+
 PNS_ROUTER *PNS_TOOL_BASE::Router() const
 {
     return m_router;
 }
+
 
 const VECTOR2I PNS_TOOL_BASE::snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment )
 {
@@ -374,8 +379,8 @@ const VECTOR2I PNS_TOOL_BASE::snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aS
             anchor = s.NearestPoint( aP );
             aSplitsSegment = true;
 
-            anchor = m_gridHelper->AlignToSegment ( aP, s );
-            aSplitsSegment = (anchor != s.A && anchor != s.B );
+            anchor = m_gridHelper->AlignToSegment( aP, s );
+            aSplitsSegment = ( anchor != s.A && anchor != s.B );
         }
 
         break;

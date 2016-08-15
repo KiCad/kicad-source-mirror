@@ -56,13 +56,11 @@ public:
     virtual ~PNS_RULE_RESOLVER() {}
 
     virtual int Clearance( const PNS_ITEM* aA, const PNS_ITEM* aB ) = 0;
-    virtual void OverrideClearance (bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0) = 0;
+    virtual void OverrideClearance( bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0 ) = 0;
     virtual void UseDpGap( bool aUseDpGap ) = 0;
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
     virtual bool DpNetPair( PNS_ITEM* aItem, int& aNetP, int& aNetN ) = 0;
-
-
 };
 
 /**
@@ -101,11 +99,11 @@ public:
 
     void SetWorld( const PNS_NODE* aNode, const PNS_NODE* aOverride = NULL );
 
-    virtual bool operator()( PNS_ITEM *aCandidate ) = 0;
+    virtual bool operator()( PNS_ITEM* aCandidate ) = 0;
 
 protected:
 
-    bool visit( PNS_ITEM *aCandidate );
+    bool visit( PNS_ITEM* aCandidate );
 
     ///> the item we are looking for collisions with
     const PNS_ITEM* m_item;
@@ -197,7 +195,7 @@ public:
                         bool            aDifferentNetsOnly = true,
                         int             aForceClearance = -1 );
 
-    int QueryColliding( const PNS_ITEM *aItem,
+    int QueryColliding( const PNS_ITEM* aItem,
                          PNS_OBSTACLE_VISITOR& aVisitor
                       );
 
@@ -290,7 +288,6 @@ public:
      */
     void Remove( PNS_LINE& aLine );
 
-
     /**
      * Function Replace()
      *
@@ -368,7 +365,7 @@ public:
 #if 0
     void MapConnectivity( PNS_JOINT* aStart, std::vector<PNS_JOINT*> & aFoundJoints );
 
-    PNS_ITEM* NearestUnconnectedItem( PNS_JOINT* aStart, int *aAnchor = NULL,
+    PNS_ITEM* NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor = NULL,
                                       int aKindMask = PNS_ITEM::ANY);
 
 #endif
@@ -391,7 +388,7 @@ public:
     int FindByMarker( int aMarker, PNS_ITEMSET& aItems );
     int RemoveByMarker( int aMarker );
 
-    PNS_ITEM* FindItemByParent( const BOARD_CONNECTED_ITEM *aParent );
+    PNS_ITEM* FindItemByParent( const BOARD_CONNECTED_ITEM* aParent );
 
     bool HasChildren() const
     {

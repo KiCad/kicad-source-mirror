@@ -50,16 +50,16 @@ public:
         return m_savedSettings;
     }
 
-    PNS_ROUTER *Router() const;
+    PNS_ROUTER* Router() const;
 
 protected:
 
-    const VECTOR2I      snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment );
+    const VECTOR2I snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment );
     virtual PNS_ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1 );
     virtual void highlightNet( bool aEnabled, int aNetcode = -1 );
     virtual void updateStartItem( TOOL_EVENT& aEvent );
     virtual void updateEndItem( TOOL_EVENT& aEvent );
-    void deleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack );
+    void deleteTraces( PNS_ITEM* aStartItem, bool aWholeTrack );
 
     MSG_PANEL_ITEMS m_panelItems;
 
@@ -76,8 +76,8 @@ protected:
     KIGFX::VIEW_CONTROLS* m_ctls;
     BOARD* m_board;
     GRID_HELPER* m_gridHelper;
-    PNS_KICAD_IFACE *m_iface;
-    PNS_ROUTER *m_router;
+    PNS_KICAD_IFACE* m_iface;
+    PNS_ROUTER* m_router;
 };
 
 #endif

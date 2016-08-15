@@ -474,25 +474,22 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aI
 {
     int netP, netN;
 
-
-    printf("world %p\n", m_world);
+    printf( "world %p\n", m_world );
 
     bool result = m_world->GetRuleResolver()->DpNetPair( aItem, netP, netN );
 
-    if(!result)
+    if( !result )
         return false;
 
     int refNet = aItem->Net();
-    int coupledNet = (refNet == netP) ? netN : netP;
+    int coupledNet = ( refNet == netP ) ? netN : netP;
 
-    printf("result %d\n", !!result);
-
-
+    printf( "result %d\n", !!result );
 
     OPT_VECTOR2I refAnchor = getDanglingAnchor( m_currentNode, aItem );
-    PNS_ITEM *primRef = aItem;
+    PNS_ITEM* primRef = aItem;
 
-    printf("refAnchor %p\n", aItem);
+    printf( "refAnchor %p\n", aItem );
 
     if( !refAnchor )
         return false;
@@ -613,7 +610,7 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 }
 
 
-void PNS_DIFF_PAIR_PLACER::initPlacement( )
+void PNS_DIFF_PAIR_PLACER::initPlacement()
 {
     m_idle = false;
     m_orthoMode = false;
@@ -642,6 +639,7 @@ void PNS_DIFF_PAIR_PLACER::initPlacement( )
     }
 }
 
+
 bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 {
     m_fitOk = false;
@@ -656,31 +654,34 @@ bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
     PNS_DP_PRIMITIVE_PAIR target;
 
-    if( findDpPrimitivePair ( aP, m_currentEndItem, target ) )
+    if( findDpPrimitivePair( aP, m_currentEndItem, target ) )
     {
         gwsTarget.BuildFromPrimitivePair( target, m_startDiagonal );
         m_snapOnTarget = true;
-    } else {
+    }
+    else
+    {
         VECTOR2I fp;
 
         if( !propagateDpHeadForces( aP, fp ) )
             return false;
 
-
         VECTOR2I midp, dirV;
-        m_prevPair->CursorOrientation(fp, midp, dirV);
+        m_prevPair->CursorOrientation( fp, midp, dirV );
 
-        VECTOR2I fpProj = SEG( midp, midp+dirV ).LineProject ( fp );
-        int lead_dist = (fpProj - fp).EuclideanNorm();
+        VECTOR2I fpProj = SEG( midp, midp + dirV ).LineProject( fp );
+        int lead_dist = ( fpProj - fp ).EuclideanNorm();
 
         gwsTarget.SetFitVias( m_placingVia, m_sizes.ViaDiameter(), viaGap() );
 
-        if (lead_dist > m_sizes.DiffPairGap() + m_sizes.DiffPairWidth() )
+        if( lead_dist > m_sizes.DiffPairGap() + m_sizes.DiffPairWidth() )
         {
             gwsTarget.BuildForCursor( fp );
-        } else {
+        }
+        else
+        {
             gwsTarget.BuildForCursor( fpProj );
-            gwsTarget.FilterByOrientation (  DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_HALF_FULL, DIRECTION_45 ( dirV ) );
+            gwsTarget.FilterByOrientation( DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_HALF_FULL, DIRECTION_45( dirV ) );
         }
 
         m_snapOnTarget = false;
@@ -692,7 +693,7 @@ bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
     bool result = gwsEntry.FitGateways( gwsEntry, gwsTarget, m_startDiagonal, m_currentTrace );
 
-    if ( result )
+    if( result )
     {
         m_currentTrace.SetNets( m_netP, m_netN );
         m_currentTrace.SetWidth( m_sizes.DiffPairWidth() );
@@ -700,8 +701,8 @@ bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
         if( m_placingVia )
         {
-            m_currentTrace.AppendVias ( makeVia ( m_currentTrace.CP().CPoint(-1), m_netP ),
-                                        makeVia ( m_currentTrace.CN().CPoint(-1), m_netN ) );
+            m_currentTrace.AppendVias ( makeVia( m_currentTrace.CP().CPoint( -1 ), m_netP ),
+                                        makeVia( m_currentTrace.CN().CPoint( -1 ), m_netN ) );
         }
 
         return true;

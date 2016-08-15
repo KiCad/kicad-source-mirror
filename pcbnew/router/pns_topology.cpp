@@ -152,7 +152,7 @@ PNS_ITEM* PNS_TOPOLOGY::NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor,
     {
         if( item->OfKind( aKindMask ) )
         {
-            for(int i = 0; i < item->AnchorCount(); i++)
+            for( int i = 0; i < item->AnchorCount(); i++ )
             {
                 VECTOR2I p = item->Anchor( i );
                 int d = ( p - aStart->Pos() ).EuclideanNorm();
@@ -234,20 +234,20 @@ const PNS_ITEMSET PNS_TOPOLOGY::AssembleTrivialPath( PNS_ITEM* aStart )
 {
     PNS_ITEMSET path;
     std::set<PNS_ITEM*> visited;
-    PNS_SEGMENT *seg;
-    PNS_VIA *via;
+    PNS_SEGMENT* seg;
+    PNS_VIA* via;
 
     seg = dyn_cast<PNS_SEGMENT*> (aStart);
 
-    if(!seg && (via = dyn_cast<PNS_VIA *>( aStart ) ) )
+    if(!seg && (via = dyn_cast<PNS_VIA*>( aStart ) ) )
     {
         PNS_JOINT *jt = m_world->FindJoint( via->Pos(), via );
 
-        if( !jt->IsNonFanoutVia () )
+        if( !jt->IsNonFanoutVia() )
             return PNS_ITEMSET();
 
-        for ( auto entry : jt->Links().Items() )
-            if ( ( seg = dyn_cast<PNS_SEGMENT*>( entry.item ) ) )
+        for( auto entry : jt->Links().Items() )
+            if( ( seg = dyn_cast<PNS_SEGMENT*>( entry.item ) ) )
                 break;
     }
 
@@ -275,8 +275,6 @@ const PNS_ITEMSET PNS_TOPOLOGY::ConnectedItems( PNS_ITEM* aStart, int aKindMask 
 {
     return PNS_ITEMSET();
 }
-
-
 
 
 bool commonParallelProjection( SEG n, SEG p, SEG &pClip, SEG& nClip );

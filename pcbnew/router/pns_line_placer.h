@@ -222,7 +222,7 @@ private:
      *
      * Initializes placement of a new line with given parameters.
      */
-    void initPlacement( );
+    void initPlacement();
 
     /**
      * Function setInitialDirection()
@@ -342,7 +342,7 @@ private:
     ///> route step, mark obstacles mode
     bool rhMarkObstacles( const VECTOR2I& aP, PNS_LINE& aNewHead );
 
-    const PNS_VIA makeVia ( const VECTOR2I& aP );
+    const PNS_VIA makeVia( const VECTOR2I& aP );
 
     bool buildInitialLine( const VECTOR2I& aP, PNS_LINE& aHead );
 

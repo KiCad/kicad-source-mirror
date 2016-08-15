@@ -93,7 +93,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                         trackLayer = boost::none;
                 }
 
-                if ( t->IsLocked() )
+                if( t->IsLocked() )
                     hasLocked = true;
                 else
                     hasUnlocked = true;
@@ -128,7 +128,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                         viaDrill = boost::none;
                 }
 
-                if ( v->IsLocked() )
+                if( v->IsLocked() )
                     hasLocked = true;
                 else
                     hasUnlocked = true;
@@ -180,11 +180,11 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_MainSizer->Hide( m_sbTrackSizer, true );
     }
 
-    if ( hasLocked && hasUnlocked )
+    if( hasLocked && hasUnlocked )
     {
          m_lockedCbox->Set3StateValue( wxCHK_UNDETERMINED );
     }
-    else if ( hasLocked )
+    else if( hasLocked )
     {
         m_lockedCbox->Set3StateValue( wxCHK_CHECKED );
     }

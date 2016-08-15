@@ -162,8 +162,8 @@ public:
 
     void dump()
     {
-        printf("-- Prim-P %p anchor [%d, %d]\n", m_primP, m_anchorP.x, m_anchorP.y);
-        printf("-- Prim-N %p anchor [%d, %d]\n", m_primN, m_anchorN.x, m_anchorN.y);
+        printf( "-- Prim-P %p anchor [%d, %d]\n", m_primP, m_anchorP.x, m_anchorP.y );
+        printf( "-- Prim-N %p anchor [%d, %d]\n", m_primN, m_anchorN.x, m_anchorN.y );
     }
 
 private:
@@ -231,7 +231,7 @@ class PNS_DP_GATEWAYS
             return m_gateways;
         }
 
-        void FilterByOrientation ( int aAngleMask, DIRECTION_45 aRefOrientation );
+        void FilterByOrientation( int aAngleMask, DIRECTION_45 aRefOrientation );
 
     private:
 
@@ -242,9 +242,9 @@ class PNS_DP_GATEWAYS
             int score;
         };
 
-        bool checkDiagonalAlignment ( const VECTOR2I& a, const VECTOR2I& b) const;
-        void buildDpContinuation ( PNS_DP_PRIMITIVE_PAIR aPair, bool aIsDiagonal );
-        void buildEntries ( const VECTOR2I& p0_p, const VECTOR2I& p0_n );
+        bool checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I& b ) const;
+        void buildDpContinuation( PNS_DP_PRIMITIVE_PAIR aPair, bool aIsDiagonal );
+        void buildEntries( const VECTOR2I& p0_p, const VECTOR2I& p0_n );
 
         int m_gap;
         int m_viaGap;
@@ -267,12 +267,12 @@ public:
     struct COUPLED_SEGMENTS {
         COUPLED_SEGMENTS ( const SEG& aCoupledP, const SEG& aParentP, int aIndexP,
                            const SEG& aCoupledN, const SEG& aParentN, int aIndexN ) :
-            coupledP ( aCoupledP ),
-            coupledN ( aCoupledN ),
-            parentP ( aParentP ),
-            parentN ( aParentN ),
-            indexP ( aIndexP ),
-            indexN ( aIndexN )
+            coupledP( aCoupledP ),
+            coupledN( aCoupledN ),
+            parentP( aParentP ),
+            parentN( aParentN ),
+            indexP( aIndexP ),
+            indexN( aIndexN )
         {}
 
         SEG coupledP;
@@ -285,7 +285,7 @@ public:
 
     typedef std::vector<COUPLED_SEGMENTS> COUPLED_SEGMENTS_VEC;
 
-    PNS_DIFF_PAIR ( ) : PNS_ITEM ( DIFF_PAIR ), m_hasVias (false)
+    PNS_DIFF_PAIR() : PNS_ITEM( DIFF_PAIR ), m_hasVias( false )
     {
         // Initialize some members, to avoid uninitialized variables.
         m_net_p = 0;
@@ -297,9 +297,9 @@ public:
         m_chamferLimit = 0;
     }
 
-    PNS_DIFF_PAIR ( int aGap ) :
-        PNS_ITEM ( DIFF_PAIR ),
-        m_hasVias (false)
+    PNS_DIFF_PAIR( int aGap ) :
+        PNS_ITEM( DIFF_PAIR ),
+        m_hasVias( false )
     {
         m_gapConstraint = aGap;
 
@@ -313,11 +313,11 @@ public:
         m_chamferLimit = 0;
     }
 
-    PNS_DIFF_PAIR ( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ):
-        PNS_ITEM ( DIFF_PAIR ),
-        m_n (aN),
-        m_p (aP),
-        m_hasVias (false)
+    PNS_DIFF_PAIR( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ):
+        PNS_ITEM( DIFF_PAIR ),
+        m_n( aN ),
+        m_p( aP ),
+        m_hasVias( false )
     {
         m_gapConstraint = aGap;
 
@@ -331,11 +331,11 @@ public:
         m_chamferLimit = 0;
     }
 
-    PNS_DIFF_PAIR ( const PNS_LINE &aLineP, const PNS_LINE &aLineN, int aGap = 0 ):
-        PNS_ITEM ( DIFF_PAIR ),
-        m_line_p ( aLineP ),
-        m_line_n ( aLineN ),
-        m_hasVias (false)
+    PNS_DIFF_PAIR( const PNS_LINE &aLineP, const PNS_LINE &aLineN, int aGap = 0 ):
+        PNS_ITEM( DIFF_PAIR ),
+        m_line_p( aLineP ),
+        m_line_n( aLineN ),
+        m_hasVias( false )
     {
         m_gapConstraint = aGap;
         m_net_p = aLineP.Net();
@@ -356,59 +356,62 @@ public:
         return aItem && DIFF_PAIR == aItem->Kind();
     }
 
-    PNS_DIFF_PAIR * Clone() const { assert(false); return NULL; }
+    PNS_DIFF_PAIR* Clone() const { assert( false ); return NULL; }
 
-    static PNS_DIFF_PAIR* AssembleDp ( PNS_LINE *aLine );
+    static PNS_DIFF_PAIR* AssembleDp( PNS_LINE *aLine );
 
-    void SetShape ( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, bool aSwapLanes = false)
+    void SetShape( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, bool aSwapLanes = false )
     {
-        if (aSwapLanes)
+        if( aSwapLanes )
         {
             m_p = aN;
             m_n = aP;
-        } else {
+        }
+        else
+        {
             m_p = aP;
             m_n = aN;
         }
     }
 
-    void SetShape ( const PNS_DIFF_PAIR& aPair )
+    void SetShape( const PNS_DIFF_PAIR& aPair )
     {
         m_p = aPair.m_p;
         m_n = aPair.m_n;
     }
 
-    void SetNets ( int aP, int aN )
+    void SetNets( int aP, int aN )
     {
         m_net_p = aP;
         m_net_n = aN;
     }
 
-    void SetWidth ( int aWidth )
+    void SetWidth( int aWidth )
     {
         m_width = aWidth;
     }
 
-    int Width()  const { return m_width; }
+    int Width() const { return m_width; }
 
-    void SetGap ( int aGap)
+    void SetGap( int aGap )
     {
         m_gap = aGap;
-        m_gapConstraint = RANGED_NUM<int> ( m_gap, 10000, 10000 );
+        m_gapConstraint = RANGED_NUM<int>( m_gap, 10000, 10000 );
     }
 
-    int Gap() const {
+    int Gap() const
+    {
         return m_gap;
     }
 
-    void AppendVias ( const PNS_VIA &aViaP, const PNS_VIA& aViaN )
+    void AppendVias( const PNS_VIA &aViaP, const PNS_VIA& aViaN )
     {
         m_hasVias = true;
         m_via_p = aViaP;
         m_via_n = aViaN;
     }
 
-    void RemoveVias ()
+    void RemoveVias()
     {
         m_hasVias = false;
     }
@@ -430,15 +433,17 @@ public:
 
     PNS_LINE& PLine()
     {
-        if ( !m_line_p.IsLinked ( ) )
-            updateLine(m_line_p, m_p, m_net_p, m_via_p );
+        if( !m_line_p.IsLinked() )
+            updateLine( m_line_p, m_p, m_net_p, m_via_p );
+
         return m_line_p;
     }
 
     PNS_LINE& NLine()
     {
-        if ( !m_line_n.IsLinked ( ) )
-            updateLine(m_line_n, m_n, m_net_n, m_via_n );
+        if( !m_line_n.IsLinked() )
+            updateLine( m_line_n, m_n, m_net_n, m_via_n );
+
         return m_line_n;
     }
 
@@ -446,10 +451,10 @@ public:
 
     double CoupledLength() const;
     double TotalLength() const;
-    double CoupledLengthFactor () const;
-    double Skew () const;
+    double CoupledLengthFactor() const;
+    double Skew() const;
 
-    void CoupledSegmentPairs ( COUPLED_SEGMENTS_VEC& aPairs ) const;
+    void CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs ) const;
 
     void Clear()
     {
@@ -457,40 +462,41 @@ public:
         m_p.Clear();
     }
 
-    void Append (const PNS_DIFF_PAIR& aOther )
+    void Append( const PNS_DIFF_PAIR& aOther )
     {
-        m_n.Append ( aOther.m_n );
-        m_p.Append ( aOther.m_p );
+        m_n.Append( aOther.m_n );
+        m_p.Append( aOther.m_p );
     }
 
     bool Empty() const
     {
-        return (m_n.SegmentCount() == 0) || (m_p.SegmentCount() == 0);
+        return ( m_n.SegmentCount() == 0 ) || ( m_p.SegmentCount() == 0 );
     }
+
     const SHAPE_LINE_CHAIN& CP() const { return m_p; }
     const SHAPE_LINE_CHAIN& CN() const { return m_n; }
 
-    bool BuildInitial ( const PNS_DP_GATEWAY& aEntry, const PNS_DP_GATEWAY& aTarget, bool aPrefDiagonal );
-    bool CheckConnectionAngle ( const PNS_DIFF_PAIR &aOther, int allowedAngles ) const;
-    int CoupledLength ( const SEG& aP, const SEG& aN ) const;
+    bool BuildInitial( const PNS_DP_GATEWAY& aEntry, const PNS_DP_GATEWAY& aTarget, bool aPrefDiagonal );
+    bool CheckConnectionAngle( const PNS_DIFF_PAIR &aOther, int allowedAngles ) const;
+    int CoupledLength( const SEG& aP, const SEG& aN ) const;
 
-    int64_t CoupledLength ( const SHAPE_LINE_CHAIN& aP, const SHAPE_LINE_CHAIN& aN ) const;
+    int64_t CoupledLength( const SHAPE_LINE_CHAIN& aP, const SHAPE_LINE_CHAIN& aN ) const;
 
-    const RANGED_NUM<int> GapConstraint() const {
+    const RANGED_NUM<int> GapConstraint() const
+    {
         return m_gapConstraint;
     }
 
 private:
-
     void updateLine( PNS_LINE &aLine, const SHAPE_LINE_CHAIN& aShape, int aNet, PNS_VIA& aVia )
     {
         aLine.SetShape( aShape );
         aLine.SetWidth( m_width );
-        aLine.SetNet(aNet);
-        aLine.SetLayer (Layers().Start());
+        aLine.SetNet( aNet );
+        aLine.SetLayer( Layers().Start() );
 
-        if(m_hasVias)
-            aLine.AppendVia ( aVia );
+        if( m_hasVias )
+            aLine.AppendVia( aVia );
     }
 
     SHAPE_LINE_CHAIN m_n, m_p;
@@ -506,6 +512,5 @@ private:
     int m_chamferLimit;
     RANGED_NUM<int> m_gapConstraint;
 };
-
 
 #endif

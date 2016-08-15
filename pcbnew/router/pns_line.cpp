@@ -281,7 +281,7 @@ void PNS_LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
 
 const SHAPE_LINE_CHAIN PNS_SEGMENT::Hull( int aClearance, int aWalkaroundThickness ) const
 {
-   return SegmentHull ( m_seg, aClearance, aWalkaroundThickness );
+   return SegmentHull( m_seg, aClearance, aWalkaroundThickness );
 }
 
 
@@ -369,7 +369,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
 
     for( i = aOrigin.SegmentCount() - d; i >= 0; i-- )
     {
-        DIRECTION_45 d_start ( aOrigin.CSegment( i ) );
+        DIRECTION_45 d_start( aOrigin.CSegment( i ) );
         VECTOR2I p_start = aOrigin.CPoint( i );
         SHAPE_LINE_CHAIN paths[2];
         DIRECTION_45 dirs[2];
@@ -420,7 +420,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
 }
 
 
-void PNS_LINE::DragCorner ( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
+void PNS_LINE::DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
 {
     SHAPE_LINE_CHAIN path;
 
@@ -532,7 +532,7 @@ VECTOR2I PNS_LINE::snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const
 }
 
 
-void PNS_LINE::DragSegment ( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
+void PNS_LINE::DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
 {
     SHAPE_LINE_CHAIN path( m_line );
     VECTOR2I target( aP );
@@ -649,15 +649,15 @@ void PNS_LINE::DragSegment ( const VECTOR2I& aP, int aIndex, int aSnappingThresh
 
             if( (ip = s1.Intersect( s_next )) )
             {
-                np.Append ( s1.A );
-                np.Append ( *ip );
-                np.Append ( s_next.B );
+                np.Append( s1.A );
+                np.Append( *ip );
+                np.Append( s_next.B );
             }
             else if( (ip = s3.Intersect( s_prev )) )
             {
-                np.Append ( s_prev.A );
-                np.Append ( *ip );
-                np.Append ( s3.B );
+                np.Append( s_prev.A );
+                np.Append( *ip );
+                np.Append( s3.B );
             }
             else if( (ip = s1.Intersect( s3 )) )
             {
@@ -801,8 +801,11 @@ void PNS_LINE::ClearSegmentLinks()
 static void extendBox( BOX2I& aBox, bool& aDefined, const VECTOR2I& aP )
 {
     if( aDefined )
-        aBox.Merge ( aP );
-    else {
+    {
+        aBox.Merge( aP );
+    }
+    else
+    {
         aBox = BOX2I( aP, VECTOR2I( 0, 0 ) );
         aDefined = true;
     }
@@ -887,11 +890,12 @@ OPT_BOX2I PNS_LINE::ChangedArea( const PNS_LINE* aOther ) const
     return OPT_BOX2I();
 }
 
+
 bool PNS_LINE::HasLockedSegments() const
 {
-    for ( const PNS_SEGMENT *seg : *m_segmentRefs )
+    for( const PNS_SEGMENT* seg : *m_segmentRefs )
     {
-        if ( seg->Marker() & MK_LOCKED )
+        if( seg->Marker() & MK_LOCKED )
             return true;
     }
     return false;

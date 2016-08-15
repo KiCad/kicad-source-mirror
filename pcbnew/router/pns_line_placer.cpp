@@ -436,7 +436,7 @@ bool PNS_LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
     PNS_WALKAROUND::WALKAROUND_STATUS stat_solids = walkaround.Route( initTrack, walkSolids );
 
     optimizer.SetEffortLevel( PNS_OPTIMIZER::MERGE_SEGMENTS );
-    optimizer.SetCollisionMask ( PNS_ITEM::SOLID );
+    optimizer.SetCollisionMask( PNS_ITEM::SOLID );
     optimizer.Optimize( &walkSolids );
 
     if( stat_solids == PNS_WALKAROUND::DONE )
@@ -724,10 +724,11 @@ bool PNS_LINE_PLACER::SetLayer( int aLayer )
     {
         return false;
     }
-    else if( !m_startItem || ( m_startItem->OfKind( PNS_ITEM::VIA ) && m_startItem->Layers().Overlaps( aLayer ) ) ) {
+    else if( !m_startItem || ( m_startItem->OfKind( PNS_ITEM::VIA ) && m_startItem->Layers().Overlaps( aLayer ) ) )
+    {
         m_currentLayer = aLayer;
-        initPlacement ( );
-        Move ( m_currentEnd, NULL );
+        initPlacement();
+        Move( m_currentEnd, NULL );
         return true;
     }
 
@@ -756,11 +757,12 @@ bool PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
     setInitialDirection( Settings().InitialDirection() );
 
-    initPlacement( );
+    initPlacement();
     return true;
 }
 
-void PNS_LINE_PLACER::initPlacement( )
+
+void PNS_LINE_PLACER::initPlacement()
 {
     m_idle = false;
 
@@ -1008,7 +1010,7 @@ void PNS_LINE_PLACER::UpdateSizes( const PNS_SIZES_SETTINGS& aSizes )
 
     if( !m_idle )
     {
-        initPlacement( );
+        initPlacement();
     }
 }
 
@@ -1028,6 +1030,7 @@ void PNS_LINE_PLACER::SetOrthoMode( bool aOrthoMode )
 {
     m_orthoMode = aOrthoMode;
 }
+
 
 bool PNS_LINE_PLACER::buildInitialLine( const VECTOR2I& aP, PNS_LINE& aHead )
 {

@@ -27,7 +27,8 @@ PNS_ROUTING_SETTINGS& PNS_ALGO_BASE::Settings() const
     return m_router->Settings();
 }
 
-PNS_LOGGER *PNS_ALGO_BASE::Logger()
+
+PNS_LOGGER* PNS_ALGO_BASE::Logger()
 {
     return NULL;
 }
