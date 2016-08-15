@@ -228,16 +228,8 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         wxMenu itemMenu;
 
         // Give a title to the selection menu. This is also a cancel menu item
-        wxMenuItem * item_title = new wxMenuItem( &itemMenu, -1, _( "Selection Clarification" ) );
-
-#ifdef __WINDOWS__
-        wxFont bold_font( *wxNORMAL_FONT );
-        bold_font.SetWeight( wxFONTWEIGHT_BOLD );
-        bold_font.SetStyle( wxFONTSTYLE_ITALIC );
-        item_title->SetFont( bold_font );
-#endif
-
-        itemMenu.Append( item_title );
+        AddMenuItem( &itemMenu, wxID_NONE, _( "Clarify Selection" ),
+                     KiBitmap( dismiss_xpm ) );
         itemMenu.AppendSeparator();
 
         int limit = std::min( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );

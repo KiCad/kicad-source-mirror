@@ -161,9 +161,9 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
                           wxT( "Select item clarification context menu size limit exceeded." ) );
 
             wxMenu selectMenu;
-            wxMenuItem* title = new wxMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ) );
 
-            selectMenu.Append( title );
+            AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ),
+                         KiBitmap( dismiss_xpm ) );
             selectMenu.AppendSeparator();
 
             for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
@@ -173,7 +173,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
                 AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, KiBitmap( xpm ) );
             }
 
-            // Set to NULL in case user aborts the clarification context menu.
+            // Set to NULL in case the user aborts the clarification context menu.
             GetScreen()->SetCurItem( NULL );
             m_canvas->SetAbortRequest( true );   // Changed to false if an item is selected
             PopupMenu( &selectMenu );

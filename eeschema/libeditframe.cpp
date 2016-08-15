@@ -1275,9 +1275,9 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
                           wxT( "Select item clarification context menu size limit exceeded." ) );
 
             wxMenu selectMenu;
-            wxMenuItem* title = new wxMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ) );
+            AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ),
+                         KiBitmap( dismiss_xpm ) );
 
-            selectMenu.Append( title );
             selectMenu.AppendSeparator();
 
             for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )

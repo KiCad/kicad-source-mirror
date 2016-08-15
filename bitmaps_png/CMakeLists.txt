@@ -216,6 +216,7 @@ set( BMAPS_MID
     delete_track
     delete
     directory
+    dismiss
     display_options
     down
     drag_module
