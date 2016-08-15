@@ -874,7 +874,7 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
     m_tickLabels.clear();
 
     double  minErr = 1000000000000.0;
-    double  bestStep;
+    double  bestStep = 1.0;
 
     for( int i = 10; i <= 20; i += 2 )
     {
@@ -886,7 +886,7 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
         double  stepInt = floor( step / base ) * base;
         double  err = fabs( step - stepInt );
 
-        if( err< minErr )
+        if( err < minErr )
         {
             minErr = err;
             bestStep = stepInt;
@@ -1134,7 +1134,7 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
 
 
     double  minErr = 1000000000000.0;
-    double  bestStep;
+    double  bestStep = 1.0;
 
     for( int i = 10; i <= 20; i += 2 )
     {
