@@ -58,6 +58,7 @@ protected:
     virtual void highlightNet( bool aEnabled, int aNetcode = -1 );
     virtual void updateStartItem( TOOL_EVENT& aEvent );
     virtual void updateEndItem( TOOL_EVENT& aEvent );
+    void deleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack );
 
     MSG_PANEL_ITEMS m_panelItems;
 

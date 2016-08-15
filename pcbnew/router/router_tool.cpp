@@ -710,12 +710,10 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
             m_toolMgr->RunAction( COMMON_ACTIONS::layerToggle, true );
         } else if (evt->IsAction ( &COMMON_ACTIONS::remove ) )
         {
-            printf("delitemcursor\n");
-            //m_router->DeleteTraces( m_startItem, true );
+            deleteTraces( m_startItem, true );
         } else if (evt->IsAction ( &COMMON_ACTIONS::removeAlt ) )
         {
-            printf("delitemcursor [alt]\n");
-            //m_router->DeleteTraces( m_startItem, false );
+            deleteTraces( m_startItem, false );
         }
 
         handleCommonEvents( *evt );

@@ -20,7 +20,6 @@
 
 #include <wx/numdlg.h>
 
-#include <boost/optional.hpp>
 #include <functional>
 using namespace std::placeholders;
 
@@ -52,10 +51,11 @@ using namespace std::placeholders;
 #include "pns_router.h"
 #include "pns_meander_placer.h" // fixme: move settings to separate header
 #include "pns_tune_status_popup.h"
+#include "pns_topology.h"
+
 #include "trace.h"
 
 using namespace KIGFX;
-using boost::optional;
 
 TOOL_ACTION PNS_TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
                                             AS_CONTEXT, 'E',
@@ -105,7 +105,7 @@ void PNS_TOOL_BASE::Reset( RESET_REASON aReason )
     m_iface->SetBoard (m_board);
     m_iface->SetView( getView() );
     m_iface->SetHostFrame ( m_frame );
-    
+
     m_router = new PNS_ROUTER;
     m_router->SetInterface(m_iface);
     m_router->ClearWorld();
@@ -306,8 +306,7 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
         TRACE( 0, "%s, layer : %d", m_endItem->KindStr().c_str() % m_endItem->Layers().Start() );
 }
 
-#if 0
-void PNS_TOOL_BASE::DeleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack )
+void PNS_TOOL_BASE::deleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack )
 {
     PNS_NODE *node = m_router->GetWorld()->Branch();
 
@@ -328,9 +327,7 @@ void PNS_TOOL_BASE::DeleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack )
     }
 
     m_router->CommitRouting( node );
-
 }
-#endif
 
 PNS_ROUTER *PNS_TOOL_BASE::Router() const
 {

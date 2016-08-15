@@ -129,6 +129,11 @@ TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
         _( "Remove" ), _( "Deletes selected item(s)" ), delete_xpm );
 
+TOOL_ACTION COMMON_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BACK_SPACE ),
+        _( "Remove (alterative)" ), _( "Deletes selected item(s)" ), delete_xpm );
+
+
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
         _( "Properties..." ), _( "Displays item properties dialog" ), editor_xpm );

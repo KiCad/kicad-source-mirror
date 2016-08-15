@@ -90,6 +90,7 @@ public:
 
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
+    static TOOL_ACTION removeAlt;
 
     // Drawing Tool
     /// Activation of the drawing tool (line)
