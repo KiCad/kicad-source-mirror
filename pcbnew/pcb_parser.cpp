@@ -1301,13 +1301,21 @@ void PCB_PARSER::parseNETCLASS() throw( IO_ERROR, PARSE_ERROR )
             nc->SetuViaDrill( parseBoardUnits( T_uvia_drill ) );
             break;
 
+        case T_diff_pair_width:
+            nc->SetDiffPairWidth( parseBoardUnits( T_diff_pair_width ) );
+            break;
+
+        case T_diff_pair_gap:
+            nc->SetDiffPairGap( parseBoardUnits( T_diff_pair_gap ) );
+            break;
+
         case T_add_net:
             NeedSYMBOLorNUMBER();
             nc->Add( FromUTF8() );
             break;
 
         default:
-            Expecting( "clearance, trace_width, via_dia, via_drill, uvia_dia, uvia_drill, or add_net" );
+            Expecting( "clearance, trace_width, via_dia, via_drill, uvia_dia, uvia_drill, diff_pair_width, diff_pair_gap or add_net" );
         }
 
         NeedRIGHT();

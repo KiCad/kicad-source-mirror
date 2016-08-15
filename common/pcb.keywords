@@ -56,6 +56,8 @@ date
 descr
 die_length
 dimension
+diff_pair_width
+diff_pair_gap
 drawings
 drill
 edge

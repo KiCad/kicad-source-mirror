@@ -58,7 +58,9 @@ enum {
     GRID_VIASIZE,
     GRID_VIADRILL,
     GRID_uVIASIZE,
-    GRID_uVIADRILL
+    GRID_uVIADRILL,
+    GRID_DIFF_PAIR_WIDTH,
+    GRID_DIFF_PAIR_GAP
 };
 
 const wxString DIALOG_DESIGN_RULES::wildCard = _( "* (Any)" );
@@ -450,6 +452,13 @@ static void class2gridRow( wxGrid* grid, int row, NETCLASSPTR nc )
 
     msg = StringFromValue( g_UserUnit, nc->GetuViaDrill() );
     grid->SetCellValue( row, GRID_uVIADRILL, msg );
+
+    msg = StringFromValue( g_UserUnit, nc->GetDiffPairGap() );
+    grid->SetCellValue( row, GRID_DIFF_PAIR_GAP, msg );
+
+    msg = StringFromValue( g_UserUnit, nc->GetDiffPairWidth() );
+    grid->SetCellValue( row, GRID_DIFF_PAIR_WIDTH, msg );
+
 }
 
 
@@ -489,6 +498,9 @@ static void gridRow2class( wxGrid* grid, int row, NETCLASSPTR nc )
     nc->SetViaDrill( MYCELL( GRID_VIADRILL ) );
     nc->SetuViaDiameter( MYCELL( GRID_uVIASIZE ) );
     nc->SetuViaDrill( MYCELL( GRID_uVIADRILL ) );
+    nc->SetDiffPairGap( MYCELL( GRID_DIFF_PAIR_GAP ) );
+    nc->SetDiffPairWidth( MYCELL( GRID_DIFF_PAIR_WIDTH ) );
+
 }
 
 
@@ -923,6 +935,18 @@ bool DIALOG_DESIGN_RULES::TestDataValidity( wxString* aErrorMsg )
                         GetChars( m_grid->GetRowLabelValue( row ) ) );
             errorMsg += msg;
         }
+
+        int dpsize = ValueFromString( g_UserUnit,
+                                      m_grid->GetCellValue( row, GRID_DIFF_PAIR_WIDTH ) );
+
+        if( dpsize < minTrackWidth )
+        {
+            result = false;
+            msg.Printf( _( "%s: <b>Differential Pair Size</b> &lt; <b>Min Track Size</b><br>" ),
+                        GetChars( m_grid->GetRowLabelValue( row ) ) );
+            errorMsg += msg;
+        }
+
 
         // Test vias
         int viadia = ValueFromString( g_UserUnit,

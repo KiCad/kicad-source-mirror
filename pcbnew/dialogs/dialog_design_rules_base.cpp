@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 23 2015)
+// C++ code generated with wxFormBuilder (version Jun 17 2015)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -29,7 +29,7 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_grid = new wxGrid( sbSizerUpper->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxSIMPLE_BORDER|wxTAB_TRAVERSAL|wxVSCROLL );
 	
 	// Grid
-	m_grid->CreateGrid( 1, 6 );
+	m_grid->CreateGrid( 1, 8 );
 	m_grid->EnableEditing( true );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
@@ -51,6 +51,8 @@ DIALOG_DESIGN_RULES_BASE::DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID
 	m_grid->SetColLabelValue( 3, _("Via Drill") );
 	m_grid->SetColLabelValue( 4, _("uVia Dia") );
 	m_grid->SetColLabelValue( 5, _("uVia Drill") );
+	m_grid->SetColLabelValue( 6, _("Diff Pair Width") );
+	m_grid->SetColLabelValue( 7, _("Diff Pair Gap") );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
 	// Rows

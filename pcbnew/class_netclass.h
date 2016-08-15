@@ -59,6 +59,8 @@ private:
     static const int DEFAULT_VIA_DIAMETER;
     static const int DEFAULT_UVIA_DIAMETER;
     static const int DEFAULT_TRACK_WIDTH;
+    static const int DEFAULT_DIFF_PAIR_WIDTH;
+    static const int DEFAULT_DIFF_PAIR_GAP;
 
 protected:
     wxString    m_Name;                 ///< Name of the net class
@@ -78,6 +80,9 @@ protected:
 
     int         m_uViaDia;              ///< microvia diameter
     int         m_uViaDrill;            ///< microvia drill hole diameter
+
+    int         m_diffPairWidth;
+    int         m_diffPairGap;
 
 public:
 
@@ -178,6 +183,12 @@ public:
 
     int     GetuViaDrill() const            { return m_uViaDrill; }
     void    SetuViaDrill( int aSize )       { m_uViaDrill = aSize; }
+
+    int     GetDiffPairWidth() const            { return m_diffPairWidth; }
+    void    SetDiffPairWidth( int aSize )       { m_diffPairWidth = aSize; }
+
+    int     GetDiffPairGap() const            { return m_diffPairGap; }
+    void    SetDiffPairGap( int aSize )       { m_diffPairGap = aSize; }
 
     /**
      * Function SetParams

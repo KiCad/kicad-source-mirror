@@ -298,9 +298,9 @@
                                                     <property name="close_button">1</property>
                                                     <property name="col_label_horiz_alignment">wxALIGN_CENTRE</property>
                                                     <property name="col_label_size">40</property>
-                                                    <property name="col_label_values">&quot;Clearance&quot; &quot;Track Width&quot; &quot;Via Dia&quot; &quot;Via Drill&quot; &quot;uVia Dia&quot; &quot;uVia Drill&quot;</property>
+                                                    <property name="col_label_values">&quot;Clearance&quot; &quot;Track Width&quot; &quot;Via Dia&quot; &quot;Via Drill&quot; &quot;uVia Dia&quot; &quot;uVia Drill&quot; &quot;Diff Pair Width&quot; &quot;Diff Pair Gap&quot;</property>
                                                     <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
-                                                    <property name="cols">6</property>
+                                                    <property name="cols">8</property>
                                                     <property name="column_sizes">100,120,84,85,81,90</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>

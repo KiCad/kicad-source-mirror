@@ -44,6 +44,8 @@ const int NETCLASS::DEFAULT_VIA_DRILL  = Millimeter2iu( 0.4 );
 const int NETCLASS::DEFAULT_UVIA_DIAMETER = Millimeter2iu( 0.3 );
 const int NETCLASS::DEFAULT_UVIA_DRILL = Millimeter2iu( 0.1 );
 const int NETCLASS::DEFAULT_TRACK_WIDTH = Millimeter2iu( 0.25 );
+const int NETCLASS::DEFAULT_DIFF_PAIR_WIDTH = Millimeter2iu( 0.2 );
+const int NETCLASS::DEFAULT_DIFF_PAIR_GAP = Millimeter2iu( 0.25 );
 
 
 NETCLASS::NETCLASS( const wxString& aName ) :
@@ -58,6 +60,8 @@ NETCLASS::NETCLASS( const wxString& aName ) :
     SetTrackWidth( DEFAULT_TRACK_WIDTH );
     SetViaDiameter( DEFAULT_VIA_DIAMETER );
     SetuViaDiameter( DEFAULT_UVIA_DIAMETER );
+    SetDiffPairGap( DEFAULT_DIFF_PAIR_GAP );
+    SetDiffPairWidth( DEFAULT_DIFF_PAIR_WIDTH );
 }
 
 
@@ -69,6 +73,9 @@ void NETCLASS::SetParams( const NETCLASS& aDefaults )
     SetViaDrill( aDefaults.GetViaDrill() );
     SetuViaDiameter( aDefaults.GetuViaDiameter() );
     SetuViaDrill( aDefaults.GetuViaDrill() );
+    SetDiffPairWidth( aDefaults.GetDiffPairWidth() );
+    SetDiffPairGap( aDefaults.GetDiffPairGap() );
+
 }
 
 
@@ -256,6 +263,10 @@ void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 
     aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FMT_IU( GetuViaDiameter() ).c_str() );
     aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FMT_IU( GetuViaDrill() ).c_str() );
+
+    aFormatter->Print( aNestLevel+1, "(diff_pair_gap %s)\n", FMT_IU( GetDiffPairGap() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(diff_pair_width %s)\n", FMT_IU( GetDiffPairWidth() ).c_str() );
+
 
     for( NETCLASS::const_iterator it = begin(); it != end(); ++it )
         aFormatter->Print( aNestLevel+1, "(add_net %s)\n", aFormatter->Quotew( *it ).c_str() );
