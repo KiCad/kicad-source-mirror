@@ -26,6 +26,8 @@
 #include "ngspice.h"
 #include "spice_reporter.h"
 
+#include <common.h>
+
 #include <sstream>
 
 using namespace std;
@@ -52,10 +54,9 @@ void NGSPICE::Init()
 
 vector<COMPLEX> NGSPICE::GetPlot( const string& aName, int aMaxLen )
 {
+    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
     vector<COMPLEX> data;
-    setlocale( LC_ALL, "C" );
     vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
-    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -80,10 +81,9 @@ vector<COMPLEX> NGSPICE::GetPlot( const string& aName, int aMaxLen )
 
 vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
 {
+    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
     vector<double> data;
-    setlocale( LC_ALL, "C" );
     vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
-    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -113,11 +113,9 @@ vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
 
 vector<double> NGSPICE::GetImagPlot( const string& aName, int aMaxLen )
 {
+    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
     vector<double> data;
-
-    setlocale( LC_ALL, "C" );
     vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
-    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -139,11 +137,9 @@ vector<double> NGSPICE::GetImagPlot( const string& aName, int aMaxLen )
 
 vector<double> NGSPICE::GetMagPlot( const string& aName, int aMaxLen )
 {
+    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
     vector<double> data;
-
-    setlocale( LC_ALL, "C" );
     vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
-    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -168,11 +164,9 @@ vector<double> NGSPICE::GetMagPlot( const string& aName, int aMaxLen )
 
 vector<double> NGSPICE::GetPhasePlot( const string& aName, int aMaxLen )
 {
+    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
     vector<double> data;
-
-    setlocale( LC_ALL, "C" );
     vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
-    setlocale( LC_ALL, "" );
 
     if( vi )
     {
@@ -197,6 +191,7 @@ vector<double> NGSPICE::GetPhasePlot( const string& aName, int aMaxLen )
 
 bool NGSPICE::LoadNetlist( const string& aNetlist )
 {
+    LOCALE_IO c_locale;       // ngspice works correctly only with C locale
     vector<char*> lines;
     stringstream ss( aNetlist );
 
@@ -209,9 +204,7 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
 
     lines.push_back( nullptr );
 
-    setlocale( LC_ALL, "C" );
     ngSpice_Circ( lines.data() );
-    setlocale( LC_ALL, "" );
 
     for( auto line : lines )
         delete line;
@@ -222,36 +215,29 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
 
 bool NGSPICE::Run()
 {
-    setlocale( LC_ALL, "C" );
-    bool rv = Command( "bg_run" );  // bg_* commands execute in a separate thread
-    setlocale( LC_ALL, "" );
-    return rv;
+    LOCALE_IO c_locale;               // ngspice works correctly only with C locale
+    return Command( "bg_run" );     // bg_* commands execute in a separate thread
 }
 
 
 bool NGSPICE::Stop()
 {
-    setlocale( LC_ALL, "C" );
-    bool rv = Command( "bg_halt" ); // bg_* commands execute in a separate thread
-    setlocale( LC_ALL, "" );
-    return rv;
+    LOCALE_IO c_locale;               // ngspice works correctly only with C locale
+    return Command( "bg_halt" );    // bg_* commands execute in a separate thread
 }
 
 
 bool NGSPICE::IsRunning()
 {
-    setlocale( LC_ALL, "C" );
-    bool rv = ngSpice_running();
-    setlocale( LC_ALL, "" );
-    return rv;
+    LOCALE_IO c_locale;               // ngspice works correctly only with C locale
+    return ngSpice_running();
 }
 
 
 bool NGSPICE::Command( const string& aCmd )
 {
-    setlocale( LC_ALL, "C" );
+    LOCALE_IO c_locale;               // ngspice works correctly only with C locale
     ngSpice_Command( (char*) aCmd.c_str() );
-    setlocale( LC_ALL, "" );
 
     return true;
 }
@@ -286,12 +272,11 @@ void NGSPICE::init()
 {
     m_error = false;
 
-    setlocale( LC_ALL, "C" );
+    LOCALE_IO c_locale;               // ngspice works correctly only with C locale
     ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL, &cbBGThreadRunning, this );
 
     // Workaround to avoid hang ups on certain errors
     Command( "unset interactive" );
-    setlocale( LC_ALL, "" );
 }
 
 
