@@ -199,7 +199,7 @@ private:
      *
      * Initializes placement of a new line with given parameters.
      */
-    void initPlacement( bool aSplitSeg = false );
+    void initPlacement( );
 
     /**
      * Function setInitialDirection()

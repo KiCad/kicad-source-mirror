@@ -83,8 +83,6 @@ PNS_ROUTER::PNS_ROUTER()
     m_view = NULL;
     m_snappingEnabled  = false;
     m_violation = false;
-//    m_gridHelper = NULL;
-
 }
 
 
@@ -141,63 +139,6 @@ const PNS_ITEMSET PNS_ROUTER::QueryHoverItems( const VECTOR2I& aP )
         return m_placer->CurrentNode()->HitTest( aP );
     }
 }
-
-
-const VECTOR2I PNS_ROUTER::SnapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment )
-{
-    VECTOR2I anchor;
-
-    if( !aItem )
-    {
-        aSplitsSegment = false;
-        return aP;
-    }
-
-    switch( aItem->Kind() )
-    {
-    case PNS_ITEM::SOLID:
-        anchor = static_cast<PNS_SOLID*>( aItem )->Pos();
-        aSplitsSegment = false;
-        break;
-
-    case PNS_ITEM::VIA:
-        anchor = static_cast<PNS_VIA*>( aItem )->Pos();
-        aSplitsSegment = false;
-        break;
-
-    case PNS_ITEM::SEGMENT:
-    {
-        PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( aItem );
-        const SEG& s = seg->Seg();
-        int w = seg->Width();
-
-        aSplitsSegment = false;
-
-        if( ( aP - s.A ).EuclideanNorm() < w / 2 )
-            anchor = s.A;
-        else if( ( aP - s.B ).EuclideanNorm() < w / 2 )
-            anchor = s.B;
-        else
-        {
-// fixme: alignment!
-            anchor = s.NearestPoint( aP );
-            aSplitsSegment = true;
-
-//            anchor = m_gridHelper->AlignToSegment ( aP, s );
-  //          aSplitsSegment = (anchor != s.A && anchor != s.B );
-
-        }
-
-        break;
-    }
-
-    default:
-        break;
-    }
-
-    return anchor;
-}
-
 
 bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {

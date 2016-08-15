@@ -222,7 +222,7 @@ private:
      *
      * Initializes placement of a new line with given parameters.
      */
-    void initPlacement( bool aSplitSeg = false );
+    void initPlacement( );
 
     /**
      * Function setInitialDirection()
@@ -390,7 +390,6 @@ private:
 
     bool m_idle;
     bool m_chainedPlacement;
-    bool m_splitSeg;
     bool m_orthoMode;
 };
 

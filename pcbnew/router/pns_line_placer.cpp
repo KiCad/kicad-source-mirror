@@ -52,7 +52,6 @@ PNS_LINE_PLACER::PNS_LINE_PLACER( PNS_ROUTER* aRouter ) :
     m_currentMode = RM_MarkObstacles;
     m_startItem = NULL;
     m_chainedPlacement = false;
-    m_splitSeg = false;
     m_orthoMode = false;
 }
 
@@ -688,26 +687,29 @@ PNS_NODE* PNS_LINE_PLACER::CurrentNode( bool aLoopsRemoved ) const
 
 void PNS_LINE_PLACER::splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, const VECTOR2I& aP )
 {
-    if( aSeg && aSeg->OfKind( PNS_ITEM::SEGMENT ) )
-    {
-        PNS_JOINT* jt = aNode->FindJoint( aP, aSeg );
+    if( !aSeg )
+        return;
 
-        if( jt && jt->LinkCount() >= 1 )
-            return;
+    if( !aSeg->OfKind( PNS_ITEM::SEGMENT ) )
+        return;
 
-        PNS_SEGMENT* s_old = static_cast<PNS_SEGMENT*>( aSeg );
-        PNS_SEGMENT* s_new[2];
+    PNS_JOINT* jt = aNode->FindJoint( aP, aSeg );
 
-        s_new[0] = s_old->Clone();
-        s_new[1] = s_old->Clone();
+    if( jt && jt->LinkCount() >= 1 )
+        return;
 
-        s_new[0]->SetEnds( s_old->Seg().A, aP );
-        s_new[1]->SetEnds( aP, s_old->Seg().B );
+    PNS_SEGMENT* s_old = static_cast<PNS_SEGMENT*>( aSeg );
+    PNS_SEGMENT* s_new[2];
 
-        aNode->Remove( s_old );
-        aNode->Add( s_new[0], true );
-        aNode->Add( s_new[1], true );
-    }
+    s_new[0] = s_old->Clone();
+    s_new[1] = s_old->Clone();
+
+    s_new[0]->SetEnds( s_old->Seg().A, aP );
+    s_new[1]->SetEnds( aP, s_old->Seg().B );
+
+    aNode->Remove( s_old );
+    aNode->Add( s_new[0], true );
+    aNode->Add( s_new[1], true );
 }
 
 
@@ -724,8 +726,7 @@ bool PNS_LINE_PLACER::SetLayer( int aLayer )
     }
     else if( !m_startItem || ( m_startItem->OfKind( PNS_ITEM::VIA ) && m_startItem->Layers().Overlaps( aLayer ) ) ) {
         m_currentLayer = aLayer;
-        m_splitSeg = false;
-        initPlacement ( m_splitSeg );
+        initPlacement ( );
         Move ( m_currentEnd, NULL );
         return true;
     }
@@ -741,11 +742,6 @@ bool PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     static int unknowNetIdx = 0;    // -10000;
     int net = -1;
 
-    bool splitSeg = false;
-
-    if( Router()->SnappingEnabled() )
-        p = Router()->SnapToItem( aStartItem, aP, splitSeg );
-
     if( !aStartItem || aStartItem->Net() < 0 )
         net = unknowNetIdx--;
     else
@@ -757,15 +753,14 @@ bool PNS_LINE_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     m_startItem = aStartItem;
     m_placingVia = false;
     m_chainedPlacement = false;
-    m_splitSeg = splitSeg;
 
     setInitialDirection( Settings().InitialDirection() );
 
-    initPlacement( m_splitSeg );
+    initPlacement( );
     return true;
 }
 
-void PNS_LINE_PLACER::initPlacement( bool aSplitSeg )
+void PNS_LINE_PLACER::initPlacement( )
 {
     m_idle = false;
 
@@ -788,8 +783,7 @@ void PNS_LINE_PLACER::initPlacement( bool aSplitSeg )
     world->KillChildren();
     PNS_NODE* rootNode = world->Branch();
 
-    if( aSplitSeg )
-        splitAdjacentSegments( rootNode, m_startItem, m_currentStart );
+    splitAdjacentSegments( rootNode, m_startItem, m_currentStart );
 
     setWorld( rootNode );
 
@@ -927,7 +921,6 @@ bool PNS_LINE_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
         m_startItem = NULL;
         m_placingVia = false;
         m_chainedPlacement = !pl.EndsWithVia();
-        m_splitSeg = false;
         initPlacement();
     }
     else
@@ -1015,7 +1008,7 @@ void PNS_LINE_PLACER::UpdateSizes( const PNS_SIZES_SETTINGS& aSizes )
 
     if( !m_idle )
     {
-        initPlacement( m_splitSeg );
+        initPlacement( );
     }
 }
 

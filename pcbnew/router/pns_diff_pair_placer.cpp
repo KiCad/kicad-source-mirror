@@ -396,7 +396,7 @@ bool PNS_DIFF_PAIR_PLACER::SetLayer( int aLayer )
     {
         m_currentLayer = aLayer;
         m_start = *m_prevPair;
-        initPlacement( false );
+        initPlacement();
         Move( m_currentEnd, NULL );
         return true;
     }
@@ -559,11 +559,6 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
     VECTOR2I p( aP );
 
-    bool split;
-
-    if( Router()->SnappingEnabled() )
-        p = Router()->SnapToItem( aStartItem, aP, split );
-
     if( !aStartItem )
     {
         Router()->SetFailureReason( _( "Can't start a differential pair "
@@ -612,13 +607,13 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     m_placingVia = false;
     m_chainedPlacement = false;
 
-    initPlacement( false );
+    initPlacement();
 
     return true;
 }
 
 
-void PNS_DIFF_PAIR_PLACER::initPlacement( bool aSplitSeg )
+void PNS_DIFF_PAIR_PLACER::initPlacement( )
 {
     m_idle = false;
     m_orthoMode = false;

@@ -54,6 +54,7 @@ public:
 
 protected:
 
+    const VECTOR2I      snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment );
     virtual PNS_ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1 );
     virtual void highlightNet( bool aEnabled, int aNetcode = -1 );
     virtual void updateStartItem( TOOL_EVENT& aEvent );
@@ -77,8 +78,6 @@ protected:
     GRID_HELPER* m_gridHelper;
     PNS_KICAD_IFACE *m_iface;
     PNS_ROUTER *m_router;
-
-
 };
 
 #endif

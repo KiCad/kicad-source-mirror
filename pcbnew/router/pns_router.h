@@ -34,7 +34,6 @@
 #include "pns_itemset.h"
 #include "pns_node.h"
 
-class GRID_HELPER;
 class PNS_DEBUG_DECORATOR;
 class PNS_NODE;
 class PNS_DIFF_PAIR_PLACER;
@@ -214,11 +213,6 @@ public:
 
     PNS_PLACEMENT_ALGO *Placer() { return m_placer; }
 
-    void SetGrid( GRID_HELPER *aGridHelper )
-    {
-        m_gridHelper = aGridHelper;
-    }
-
     PNS_ROUTER_IFACE *GetInterface() const
     {
         return m_iface;
@@ -276,8 +270,6 @@ private:
 
     wxString m_toolStatusbarName;
     wxString m_failureReason;
-
-    GRID_HELPER *m_gridHelper;
 };
 
 #endif

@@ -48,6 +48,8 @@ using namespace std::placeholders;
 #include "pns_kicad_iface.h"
 #include "pns_tool_base.h"
 #include "pns_segment.h"
+#include "pns_solid.h"
+#include "pns_via.h"
 #include "pns_router.h"
 #include "pns_meander_placer.h" // fixme: move settings to separate header
 #include "pns_tune_status_popup.h"
@@ -114,7 +116,6 @@ void PNS_TOOL_BASE::Reset( RESET_REASON aReason )
     m_router->UpdateSizes( m_savedSizes );
 
     m_gridHelper = new GRID_HELPER( m_frame );
-    m_router->SetGrid( m_gridHelper );
 }
 
 
@@ -228,7 +229,7 @@ void PNS_TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
     if( startItem && startItem->Net() >= 0 )
     {
         bool dummy;
-        VECTOR2I psnap = m_router->SnapToItem( startItem, p, dummy );
+        VECTOR2I psnap = snapToItem( startItem, p, dummy );
 
         if( snapEnabled )
         {
@@ -290,7 +291,7 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
 
     if( endItem )
     {
-        VECTOR2I cursorPos = m_router->SnapToItem( endItem, p, dummy );
+        VECTOR2I cursorPos = snapToItem( endItem, p, dummy );
         m_ctls->ForceCursorPosition( true, cursorPos );
         m_endItem = endItem;
         m_endSnapPoint = cursorPos;
@@ -332,4 +333,57 @@ void PNS_TOOL_BASE::deleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack )
 PNS_ROUTER *PNS_TOOL_BASE::Router() const
 {
     return m_router;
+}
+
+const VECTOR2I PNS_TOOL_BASE::snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment )
+{
+    VECTOR2I anchor;
+
+    if( !aItem )
+    {
+        aSplitsSegment = false;
+        return aP;
+    }
+
+    switch( aItem->Kind() )
+    {
+    case PNS_ITEM::SOLID:
+        anchor = static_cast<PNS_SOLID*>( aItem )->Pos();
+        aSplitsSegment = false;
+        break;
+
+    case PNS_ITEM::VIA:
+        anchor = static_cast<PNS_VIA*>( aItem )->Pos();
+        aSplitsSegment = false;
+        break;
+
+    case PNS_ITEM::SEGMENT:
+    {
+        PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( aItem );
+        const SEG& s = seg->Seg();
+        int w = seg->Width();
+
+        aSplitsSegment = false;
+
+        if( ( aP - s.A ).EuclideanNorm() < w / 2 )
+            anchor = s.A;
+        else if( ( aP - s.B ).EuclideanNorm() < w / 2 )
+            anchor = s.B;
+        else
+        {
+            anchor = s.NearestPoint( aP );
+            aSplitsSegment = true;
+
+            anchor = m_gridHelper->AlignToSegment ( aP, s );
+            aSplitsSegment = (anchor != s.A && anchor != s.B );
+        }
+
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return anchor;
 }
