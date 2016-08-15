@@ -261,6 +261,8 @@ int PNS_NODE::QueryColliding( const PNS_ITEM *aItem,
         aVisitor.SetWorld( m_root, this );
         m_root->m_index->Query( aItem, m_maxClearance, aVisitor );
     }
+
+    return 0;
 }
 
 

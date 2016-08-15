@@ -196,7 +196,6 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, 
     lc.Append( ( int ) p.x, ( int ) p.y );
 
 
-    PNS_DEBUG_DECORATOR *dbg = PNS_ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
     // fixme: refactor
     switch (m_placer->MeanderSettings().m_cornerStyle)
     {
