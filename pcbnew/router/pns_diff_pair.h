@@ -157,6 +157,9 @@ public:
     DIRECTION_45 DirP() const;
     DIRECTION_45 DirN() const;
 
+
+    void CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I& aMidpoint, VECTOR2I& aDirection ) const;
+
     void dump()
     {
         printf("-- Prim-P %p anchor [%d, %d]\n", m_primP, m_anchorP.x, m_anchorP.y);
@@ -222,6 +225,13 @@ class PNS_DP_GATEWAYS
         {
             return m_gateways;
         }
+
+        const std::vector<PNS_DP_GATEWAY>& CGateways() const
+        {
+            return m_gateways;
+        }
+
+        void FilterByOrientation ( int aAngleMask, DIRECTION_45 aRefOrientation );
 
     private:
 
@@ -460,7 +470,7 @@ public:
     const SHAPE_LINE_CHAIN& CP() const { return m_p; }
     const SHAPE_LINE_CHAIN& CN() const { return m_n; }
 
-    bool BuildInitial ( PNS_DP_GATEWAY& aEntry, PNS_DP_GATEWAY& aTarget, bool aPrefDiagonal );
+    bool BuildInitial ( const PNS_DP_GATEWAY& aEntry, const PNS_DP_GATEWAY& aTarget, bool aPrefDiagonal );
     bool CheckConnectionAngle ( const PNS_DIFF_PAIR &aOther, int allowedAngles ) const;
     int CoupledLength ( const SEG& aP, const SEG& aN ) const;
 

@@ -34,7 +34,7 @@
 #include "pns_router.h"
 #include "pns_solid.h"
 #include "pns_utils.h"
-
+#include "pns_debug_decorator.h"
 
 class PNS_LINE;
 
@@ -121,6 +121,42 @@ DIRECTION_45 PNS_DP_PRIMITIVE_PAIR::anchorDirection( PNS_ITEM* aItem, const VECT
         return DIRECTION_45( s->Seg().B - s->Seg().A );
 }
 
+void PNS_DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I& aMidpoint, VECTOR2I& aDirection ) const
+{
+    assert (m_primP && m_primN);
+
+    VECTOR2I aP, aN, dir, midpoint;
+
+    if ( m_primP->OfKind(PNS_ITEM::SEGMENT) && m_primN->OfKind(PNS_ITEM::SEGMENT) )
+    {
+        aP = m_primP->Anchor( 1 );
+        aN = m_primN->Anchor( 1 );
+        midpoint = ( aP + aN ) / 2;
+        SEG s = static_cast <PNS_SEGMENT*> (m_primP)->Seg();
+        if ( s.B != s.A )
+        {
+            dir = s.B - s.A;
+        }
+		else
+		{
+            dir = VECTOR2I(0, 1);
+        }
+
+        dir = dir.Resize( (aP - aN).EuclideanNorm() );
+
+    } else {
+        aP = m_primP->Anchor( 0 );
+        aN = m_primN->Anchor( 0 );
+        midpoint = ( aP + aN ) / 2;
+        dir = ( aP - aN ).Perpendicular();
+
+        if ( dir.Dot( aCursorPos - midpoint ) < 0 )
+            dir = -dir;
+    }
+
+    aMidpoint = midpoint;
+    aDirection = dir;
+}
 
 DIRECTION_45 PNS_DP_PRIMITIVE_PAIR::DirP() const
 {
@@ -131,19 +167,6 @@ DIRECTION_45 PNS_DP_PRIMITIVE_PAIR::DirP() const
 DIRECTION_45 PNS_DP_PRIMITIVE_PAIR::DirN() const
 {
     return anchorDirection( m_primN, m_anchorN );
-}
-
-
-static void drawGw( VECTOR2I p, int color )
-{
-    SHAPE_LINE_CHAIN l;
-
-    l.Append( p - VECTOR2I( -50000, -50000 ) );
-    l.Append( p + VECTOR2I( -50000, -50000 ) );
-
-    l.Clear();
-    l.Append( p - VECTOR2I( 50000, -50000 ) );
-    l.Append( p + VECTOR2I( 50000, -50000 ) );
 }
 
 
@@ -182,7 +205,7 @@ void PNS_DP_GATEWAY::Reverse()
 }
 
 
-bool PNS_DIFF_PAIR::BuildInitial( PNS_DP_GATEWAY& aEntry, PNS_DP_GATEWAY &aTarget, bool aPrefDiagonal )
+bool PNS_DIFF_PAIR::BuildInitial( const PNS_DP_GATEWAY& aEntry, const PNS_DP_GATEWAY &aTarget, bool aPrefDiagonal )
 {
     SHAPE_LINE_CHAIN p = DIRECTION_45().BuildInitialTrace ( aEntry.AnchorP(), aTarget.AnchorP(), aPrefDiagonal );
     SHAPE_LINE_CHAIN n = DIRECTION_45().BuildInitialTrace ( aEntry.AnchorN(), aTarget.AnchorN(), aPrefDiagonal );
@@ -314,45 +337,41 @@ void PNS_DP_GATEWAYS::BuildOrthoProjections( PNS_DP_GATEWAYS& aEntries,
 bool PNS_DP_GATEWAYS::FitGateways( PNS_DP_GATEWAYS& aEntry, PNS_DP_GATEWAYS& aTarget,
         bool aPrefDiagonal, PNS_DIFF_PAIR& aDp )
 {
-    std::vector<DP_CANDIDATE> candidates;
+    DP_CANDIDATE best;
 
-    for( PNS_DP_GATEWAY g_entry : aEntry.Gateways() )
+    int n = 0;
+    int bestScore = -1000;
+    bool found = false;
+
+    for( const PNS_DP_GATEWAY& g_entry : aEntry.Gateways() )
     {
-        for( PNS_DP_GATEWAY g_target : aTarget.Gateways() )
+        for( const PNS_DP_GATEWAY& g_target : aTarget.Gateways() )
         {
+
+            n++;
+
             for( int attempt = 0; attempt < 2; attempt++ )
             {
+                int score = ( attempt == 1 ? -3 : 0 );
+                score += g_entry.Priority();
+                score += g_target.Priority();
+
+                if( score < bestScore )
+                    continue;
+
                 PNS_DIFF_PAIR l( m_gap );
 
                 if( l.BuildInitial( g_entry, g_target, aPrefDiagonal ^ ( attempt ? true : false ) ) )
                 {
-                    int score = ( attempt == 1 ? -3 : 0 );
-                    score +=g_entry.Priority();
-                    score +=g_target.Priority();
-
-                    DP_CANDIDATE c;
-                    c.score = score;
-                    c.p = l.CP();
-                    c.n = l.CN();
-                    candidates.push_back( c );
+                    best.p = l.CP();
+                    best.n = l.CN();
+                    bestScore = score;
+                    found = true;
                 }
             }
         }
     }
 
-    int bestScore = -1000;
-    DP_CANDIDATE best;
-    bool found = false;
-
-    for( DP_CANDIDATE c : candidates )
-    {
-        if( c.score > bestScore )
-        {
-            bestScore = c.score;
-            best = c;
-            found = true;
-        }
-    }
 
     if( found )
     {
@@ -372,6 +391,14 @@ bool PNS_DP_GATEWAYS::checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I&
     return (dir.x == 0 && dir.y != 0) || (dir.x == dir.y) || (dir.y == 0 && dir.x != 0);
 }
 
+
+void PNS_DP_GATEWAYS::FilterByOrientation ( int aAngleMask, DIRECTION_45 aRefOrientation )
+{
+     std::remove_if( m_gateways.begin(), m_gateways.end(), [aAngleMask, aRefOrientation] ( const PNS_DP_GATEWAY& dp) {
+        DIRECTION_45 orient ( dp.AnchorP() - dp.AnchorN() );
+        return ! (orient.Angle ( aRefOrientation ) & aAngleMask );
+     }  );
+}
 
 void PNS_DP_GATEWAYS::BuildFromPrimitivePair( PNS_DP_PRIMITIVE_PAIR aPair, bool aPreferDiagonal )
 {
@@ -519,8 +546,6 @@ void PNS_DP_GATEWAYS::BuildForCursor( const VECTOR2I& aCursorPos )
                 m_gateways.push_back( PNS_DP_GATEWAY( aCursorPos + dir,
                                       aCursorPos - dir, attempt ? true : false ) );
 
-            drawGw ( aCursorPos + dir, 2 );
-            drawGw ( aCursorPos - dir, 3 );
         }
     }
 }

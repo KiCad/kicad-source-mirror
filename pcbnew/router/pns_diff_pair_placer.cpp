@@ -18,9 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/optional.hpp>
-
-#include <colors.h>
 #include <class_board.h>
 #include <class_board_item.h>
 #include <class_netinfo.h>
@@ -36,8 +33,6 @@
 #include "pns_solid.h"
 #include "pns_topology.h"
 #include "pns_debug_decorator.h"
-
-using boost::optional;
 
 PNS_DIFF_PAIR_PLACER::PNS_DIFF_PAIR_PLACER( PNS_ROUTER* aRouter ) :
     PNS_PLACEMENT_ALGO( aRouter )
@@ -486,7 +481,7 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aI
 
     if(!result)
         return false;
-        
+
     int refNet = aItem->Net();
     int coupledNet = (refNet == netP) ? netN : netP;
 
@@ -664,10 +659,6 @@ bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
     gwsEntry.BuildFromPrimitivePair( *m_prevPair, m_startDiagonal );
 
-//    m_prevPair->dump();
-
-//    printf("Entry %d\n", gwsEntry.Gateways().size());
-
     PNS_DP_PRIMITIVE_PAIR target;
 
     if( findDpPrimitivePair ( aP, m_currentEndItem, target ) )
@@ -680,10 +671,23 @@ bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         if( !propagateDpHeadForces( aP, fp ) )
             return false;
 
+
+        VECTOR2I midp, dirV;
+        m_prevPair->CursorOrientation(fp, midp, dirV);
+
+        VECTOR2I fpProj = SEG( midp, midp+dirV ).LineProject ( fp );
+        int lead_dist = (fpProj - fp).EuclideanNorm();
+
         gwsTarget.SetFitVias( m_placingVia, m_sizes.ViaDiameter(), viaGap() );
-        gwsTarget.BuildForCursor( fp );
-        gwsTarget.BuildOrthoProjections( gwsEntry, fp, m_orthoMode ? 200 : -200 );
-//        printf("Target %d\n", gwsTarget.Gateways().size());
+
+        if (lead_dist > m_sizes.DiffPairGap() + m_sizes.DiffPairWidth() )
+        {
+            gwsTarget.BuildForCursor( fp );
+        } else {
+            gwsTarget.BuildForCursor( fpProj );
+            gwsTarget.FilterByOrientation (  DIRECTION_45::ANG_STRAIGHT | DIRECTION_45::ANG_HALF_FULL, DIRECTION_45 ( dirV ) );
+        }
+
         m_snapOnTarget = false;
     }
 
@@ -691,7 +695,9 @@ bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
     m_currentTrace.SetGap( gap() );
     m_currentTrace.SetLayer( m_currentLayer );
 
-    if ( gwsEntry.FitGateways( gwsEntry, gwsTarget, m_startDiagonal, m_currentTrace ) )
+    bool result = gwsEntry.FitGateways( gwsEntry, gwsTarget, m_startDiagonal, m_currentTrace );
+
+    if ( result )
     {
         m_currentTrace.SetNets( m_netP, m_netN );
         m_currentTrace.SetWidth( m_sizes.DiffPairWidth() );
