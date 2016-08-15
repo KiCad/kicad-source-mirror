@@ -4,12 +4,12 @@
 
 find_path( NGSPICE_INCLUDE_DIR ngspice/sharedspice.h
     PATHS ${NGSPICE_ROOT_DIR} $ENV{NGSPICE_ROOT_DIR} ${NGSPICE_INCLUDE_PATH}
-    PATH_SUFFIXES src/include share/ngspice/include
+    PATH_SUFFIXES src/include share/ngspice/include share/ngspice/include/ngspice
 )
 
 find_library( NGSPICE_LIBRARY ngspice
     PATHS ${NGSPICE_ROOT_DIR} $ENV{NGSPICE_ROOT_DIR} ${NGSPICE_LIBRARY_PATH}
-    PATH_SUFFIXES src/.libs
+    PATH_SUFFIXES src/.libs lib
 )
 
 include( FindPackageHandleStandardArgs )
