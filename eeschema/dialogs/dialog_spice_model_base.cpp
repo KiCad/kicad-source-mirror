@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 24 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -20,7 +20,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_passive = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 0 );
+	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -51,7 +51,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_semiconductor = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer3->AddGrowableCol( 0 );
+	fgSizer3->AddGrowableCol( 1 );
 	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -96,7 +96,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_ic = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer4->AddGrowableCol( 0 );
+	fgSizer4->AddGrowableCol( 1 );
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -136,7 +136,8 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	wxFlexGridSizer* fgSizer6;
 	fgSizer6 = new wxFlexGridSizer( 0, 4, 0, 0 );
-	fgSizer6->AddGrowableCol( 0 );
+	fgSizer6->AddGrowableCol( 1 );
+	fgSizer6->AddGrowableCol( 3 );
 	fgSizer6->SetFlexibleDirection( wxBOTH );
 	fgSizer6->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -147,7 +148,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_genDc = new wxTextCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_genDc->SetMinSize( wxSize( 60,-1 ) );
 	
-	fgSizer6->Add( m_genDc, 0, wxALL, 5 );
+	fgSizer6->Add( m_genDc, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	fgSizer6->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -186,7 +187,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pwrPulse = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer7;
 	fgSizer7 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer7->AddGrowableCol( 0 );
+	fgSizer7->AddGrowableCol( 1 );
 	fgSizer7->SetFlexibleDirection( wxBOTH );
 	fgSizer7->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -245,11 +246,11 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pwrPulse->SetSizer( fgSizer7 );
 	m_pwrPulse->Layout();
 	fgSizer7->Fit( m_pwrPulse );
-	m_powerNotebook->AddPage( m_pwrPulse, _("Pulse"), true );
+	m_powerNotebook->AddPage( m_pwrPulse, _("Pulse"), false );
 	m_pwrSin = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer8;
 	fgSizer8 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer8->AddGrowableCol( 0 );
+	fgSizer8->AddGrowableCol( 1 );
 	fgSizer8->SetFlexibleDirection( wxBOTH );
 	fgSizer8->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -260,7 +261,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_sinOffset = new wxTextCtrl( m_pwrSin, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_sinOffset->SetMinSize( wxSize( 100,-1 ) );
 	
-	fgSizer8->Add( m_sinOffset, 0, wxALL, 5 );
+	fgSizer8->Add( m_sinOffset, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText22 = new wxStaticText( m_pwrSin, wxID_ANY, _("Amplitude [V/A]"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
@@ -298,7 +299,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pwrExp = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer9;
 	fgSizer9 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer9->AddGrowableCol( 0 );
+	fgSizer9->AddGrowableCol( 1 );
 	fgSizer9->SetFlexibleDirection( wxBOTH );
 	fgSizer9->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -350,7 +351,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pwrExp->SetSizer( fgSizer9 );
 	m_pwrExp->Layout();
 	fgSizer9->Fit( m_pwrExp );
-	m_powerNotebook->AddPage( m_pwrExp, _("Exponential"), false );
+	m_powerNotebook->AddPage( m_pwrExp, _("Exponential"), true );
 	m_pwrPwl = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pwrPwl->SetToolTip( _("Piece-wise linear") );
 	
@@ -363,7 +364,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	wxFlexGridSizer* fgSizer10;
 	fgSizer10 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer10->AddGrowableCol( 0 );
+	fgSizer10->AddGrowableCol( 1 );
 	fgSizer10->SetFlexibleDirection( wxBOTH );
 	fgSizer10->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -454,7 +455,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_nodeSeqVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_nodeSeqVal->SetMinSize( wxSize( 200,-1 ) );
 	
-	bSizer2->Add( m_nodeSeqVal, 0, wxALL, 5 );
+	bSizer2->Add( m_nodeSeqVal, 1, wxALL, 5 );
 	
 	
 	bSizer1->Add( bSizer2, 0, wxEXPAND, 5 );

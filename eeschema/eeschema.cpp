@@ -71,8 +71,6 @@ static struct IFACE : public KIFACE_I
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {
-        printf("Create class %d\n", aClassId);
-
         switch( aClassId )
         {
         case FRAME_SCH:

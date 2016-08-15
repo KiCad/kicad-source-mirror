@@ -302,7 +302,6 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, KIWAY_PLAYER* aP
         return NULL;
     }
 
-    printf("Player %d\n", aFrameType);
     // return the previously opened window
     KIWAY_PLAYER* frame = GetPlayerFrame( aFrameType );
 
