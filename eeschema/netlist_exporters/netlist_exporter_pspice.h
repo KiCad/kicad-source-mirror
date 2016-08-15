@@ -27,6 +27,7 @@
 #define NETLIST_EXPORTER_PSPICE_H
 
 #include "netlist_exporter.h"
+#include <list>
 #include <map>
 
 class SEARCH_STACK;
