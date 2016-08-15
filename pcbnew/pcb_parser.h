@@ -37,6 +37,9 @@
 #include <convert_to_biu.h>                     // IU_PER_MM
 #include <3d_cache/3d_info.h>
 
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
+
 
 class BOARD;
 class BOARD_ITEM;
