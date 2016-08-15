@@ -308,6 +308,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSegment( PNS_LINE& aCurrent, PNS_S
     PNS_LINE shovedLine( obstacleLine );
     PNS_SEGMENT tmp( *aObstacleSeg );
 
+    if( obstacleLine.HasLockedSegments() )
+        return SH_TRY_WALK;
+
     SHOVE_STATUS rv = ProcessSingleLine( aCurrent, obstacleLine, shovedLine );
 
     const double extensionWalkThreshold = 1.0;
@@ -441,11 +444,13 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE& aCurrent, PNS_ITE
     int currentRank = aCurrent.Rank();
     int nextRank;
 
+    bool success = false;
+
     for( int attempt = 0; attempt < 2; attempt++ )
     {
-
         if( attempt == 1 || Settings().JumpOverObstacles() )
         {
+
             nextRank = currentRank - 1;
             walkaround.SetSingleDirection( true );
         }
@@ -456,22 +461,24 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE& aCurrent, PNS_ITE
         }
 
 
-    	if( walkaround.Route( aCurrent, walkaroundLine, false ) != PNS_WALKAROUND::DONE )
-            return SH_INCOMPLETE;
+    	PNS_WALKAROUND::WALKAROUND_STATUS status = walkaround.Route( aCurrent, walkaroundLine, false );
+
+        if ( status != PNS_WALKAROUND::DONE )
+            continue;
 
         walkaroundLine.ClearSegmentLinks();
         walkaroundLine.Unmark();
     	walkaroundLine.Line().Simplify();
 
     	if( walkaroundLine.HasLoops() )
-            return SH_INCOMPLETE;
+            continue;
 
     	if( aCurrent.Marker() & MK_HEAD )
     	{
             walkaroundLine.Mark( MK_HEAD );
 
             if( m_multiLineMode )
-                return SH_INCOMPLETE;
+                continue;
 
             m_newHead = walkaroundLine;
         }
@@ -487,11 +494,19 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE& aCurrent, PNS_ITE
                 PNS_LINE dummy ( lastLine );
 
                 if( ProcessSingleLine( walkaroundLine, lastLine, dummy ) == SH_OK )
+                {
+                    success = true;
                     break;
-            } else
+                }
+            } else {
+                success = true;
                 break;
+            }
         }
     }
+
+    if(!success)
+        return SH_INCOMPLETE;
 
     replaceItems( &aCurrent, &walkaroundLine );
     walkaroundLine.SetRank( nextRank );
@@ -607,6 +622,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
             int segIndex;
 
             lp.first = assembleLine( seg, &segIndex );
+
+            if( lp.first.HasLockedSegments() )
+                return SH_TRY_WALK;
 
             assert( segIndex == 0 || ( segIndex == ( lp.first.SegmentCount() - 1 ) ) );
 
@@ -966,17 +984,23 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
         {
         case PNS_ITEM::SEGMENT:
             TRACE( 2, "iter %d: collide-segment ", aIter );
+
             st = onCollidingSegment( currentLine, (PNS_SEGMENT*) ni );
 
             if( st == SH_TRY_WALK )
             {
-                st = onCollidingSolid( currentLine, (PNS_SOLID*) ni );
+                st = onCollidingSolid( currentLine, ni );
             }
             break;
 
         case PNS_ITEM::VIA:
             TRACE( 2, "iter %d: shove-via ", aIter );
             st = onCollidingVia( &currentLine, (PNS_VIA*) ni );
+
+            if( st == SH_TRY_WALK )
+            {
+                st = onCollidingSolid( currentLine, ni );
+            }
             break;
 
         case PNS_ITEM::SOLID:
@@ -1131,6 +1155,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
         m_currentNode = parent;
         m_newHead = OPT_LINE();
     }
+
+    if(m_newHead)
+        m_newHead->Unmark();
 
     if( m_newHead && head.EndsWithVia() )
     {

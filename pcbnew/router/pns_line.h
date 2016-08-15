@@ -266,6 +266,7 @@ public:
     int Rank() const;
 
     bool HasLoops() const;
+    bool HasLockedSegments() const;
 
     OPT_BOX2I ChangedArea( const PNS_LINE* aOther ) const;
 

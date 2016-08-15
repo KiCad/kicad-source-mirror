@@ -47,6 +47,10 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     boost::optional<LAYER_ID> trackLayer;
     boost::optional<int> viaX, viaY, viaDiameter, viaDrill;
 
+    bool hasLocked = false;
+    bool hasUnlocked = false;
+
+
     // Look for values that are common for every item that is selected
     for( int i = 0; i < m_items.Size(); ++i )
     {
@@ -88,6 +92,12 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     if( trackLayer && *trackLayer != t->GetLayer() )
                         trackLayer = boost::none;
                 }
+
+                if ( t->IsLocked() )
+                    hasLocked = true;
+                else
+                    hasUnlocked = true;
+
                 break;
             }
 
@@ -117,6 +127,12 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     if( viaDrill && *viaDrill != v->GetDrillValue() )
                         viaDrill = boost::none;
                 }
+
+                if ( v->IsLocked() )
+                    hasLocked = true;
+                else
+                    hasUnlocked = true;
+
                 break;
             }
 
@@ -164,6 +180,19 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         m_MainSizer->Hide( m_sbTrackSizer, true );
     }
 
+    if ( hasLocked && hasUnlocked )
+    {
+         m_lockedCbox->Set3StateValue( wxCHK_UNDETERMINED );
+    }
+    else if ( hasLocked )
+    {
+        m_lockedCbox->Set3StateValue( wxCHK_CHECKED );
+    }
+    else
+    {
+        m_lockedCbox->Set3StateValue( wxCHK_UNCHECKED );
+    }
+
     m_StdButtonsOK->SetDefault();
 
     FixOSXCancelButtonIssue();
@@ -177,6 +206,10 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply()
 {
     if( !check() )
         return false;
+
+    bool changeLock = m_lockedCbox->Get3StateValue() != wxCHK_UNDETERMINED;
+    bool setLock = m_lockedCbox->Get3StateValue() == wxCHK_CHECKED;
+
 
     for( int i = 0; i < m_items.Size(); ++i )
     {
@@ -229,6 +262,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply()
                 if( layer != UNDEFINED_LAYER )
                     t->SetLayer( (LAYER_ID) layer );
 
+                if( changeLock )
+                    t->SetLocked( setLock );
+
                 break;
             }
 
@@ -264,6 +300,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply()
                     if( m_viaDrill.Valid() )
                         v->SetDrill( m_viaDrill.GetValue() );
                 }
+
+                if( changeLock )
+                    v->SetLocked( setLock );
 
                 break;
             }

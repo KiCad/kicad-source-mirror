@@ -886,3 +886,13 @@ OPT_BOX2I PNS_LINE::ChangedArea( const PNS_LINE* aOther ) const
 
     return OPT_BOX2I();
 }
+
+bool PNS_LINE::HasLockedSegments() const
+{
+    for ( const PNS_SEGMENT *seg : *m_segmentRefs )
+    {
+        if ( seg->Marker() & MK_LOCKED )
+            return true;
+    }
+    return false;
+}

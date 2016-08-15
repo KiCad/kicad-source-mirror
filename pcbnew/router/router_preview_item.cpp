@@ -118,9 +118,6 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS_ITEM* aItem )
     if( aItem->Marker() & MK_VIOLATION )
         m_color = COLOR4D( 0, 1, 0, 1 );
 
-    if( aItem->Marker() & MK_HEAD )
-        m_color.Brighten( 0.7 );
-
     ViewSetVisible( true );
     ViewUpdate( GEOMETRY | APPEARANCE );
 }

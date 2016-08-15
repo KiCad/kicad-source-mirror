@@ -370,7 +370,7 @@ const std::set<PNS_ITEM*> PNS_TOPOLOGY::AssembleCluster( PNS_ITEM* aStart, int a
 
         visited.insert( top );
 
-        m_world->QueryColliding( top, obstacles, PNS_ITEM::ANY, -1, false, 0 );
+        m_world->QueryColliding( top, obstacles, PNS_ITEM::ANY, -1, false );
 
         for( PNS_OBSTACLE& obs : obstacles )
         {
