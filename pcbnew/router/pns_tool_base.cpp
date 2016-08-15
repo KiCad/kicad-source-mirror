@@ -46,6 +46,7 @@ using namespace std::placeholders;
 
 #include <ratsnest_data.h>
 
+#include "pns_kicad_iface.h"
 #include "pns_tool_base.h"
 #include "pns_segment.h"
 #include "pns_router.h"
@@ -71,8 +72,6 @@ PNS_TOOL_BASE::PNS_TOOL_BASE( const std::string& aToolName ) :
 
     m_endItem = NULL;
 
-    m_needsSync = false;
-
     m_frame = NULL;
     m_ctls = NULL;
     m_board = NULL;
@@ -96,25 +95,26 @@ void PNS_TOOL_BASE::Reset( RESET_REASON aReason )
     if( m_gridHelper)
         delete m_gridHelper;
 
+
     m_frame = getEditFrame<PCB_EDIT_FRAME>();
     m_ctls = getViewControls();
     m_board = getModel<BOARD>();
 
-    m_router = new PNS_ROUTER;
+    m_iface = new PNS_KICAD_IFACE;
 
+    m_iface->SetBoard (m_board);
+    m_iface->SetView( getView() );
+    m_iface->SetHostFrame ( m_frame );
+    
+    m_router = new PNS_ROUTER;
+    m_router->SetInterface(m_iface);
     m_router->ClearWorld();
-    m_router->SetBoard( m_board );
     m_router->SyncWorld();
     m_router->LoadSettings( m_savedSettings );
     m_router->UpdateSizes( m_savedSizes );
 
     m_gridHelper = new GRID_HELPER( m_frame );
     m_router->SetGrid( m_gridHelper );
-
-    m_needsSync = false;
-
-    if( getView() )
-        m_router->SetView( getView() );
 }
 
 
@@ -306,3 +306,33 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
         TRACE( 0, "%s, layer : %d", m_endItem->KindStr().c_str() % m_endItem->Layers().Start() );
 }
 
+#if 0
+void PNS_TOOL_BASE::DeleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack )
+{
+    PNS_NODE *node = m_router->GetWorld()->Branch();
+
+    if( !aStartItem )
+        return;
+
+    if ( !aWholeTrack )
+    {
+        node->Remove ( aStartItem );
+    }
+    else
+    {
+        PNS_TOPOLOGY topo (node);
+        PNS_ITEMSET path = topo.AssembleTrivialPath( aStartItem );
+
+        for ( auto ent : path.Items() )
+            node->Remove( ent.item );
+    }
+
+    m_router->CommitRouting( node );
+
+}
+#endif
+
+PNS_ROUTER *PNS_TOOL_BASE::Router() const
+{
+    return m_router;
+}

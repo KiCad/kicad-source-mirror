@@ -45,45 +45,26 @@ class PNS_INDEX;
 class PNS_ROUTER;
 
 /**
- * Class PNS_CLEARANCE_FUNC
+ * Class PNS_RULE_RESOLVER
  *
- * An abstract function object, returning a required clearance between two items.
+ * An abstract function object, returning a design rule (clearance, diff pair gap, etc) required between two items.
  **/
-class PNS_CLEARANCE_FUNC
+
+class PNS_RULE_RESOLVER
 {
 public:
-    virtual ~PNS_CLEARANCE_FUNC() {}
-    virtual int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB ) = 0;
+    virtual ~PNS_RULE_RESOLVER() {}
+
+    virtual int Clearance( const PNS_ITEM* aA, const PNS_ITEM* aB ) = 0;
     virtual void OverrideClearance (bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0) = 0;
+    virtual void UseDpGap( bool aUseDpGap ) = 0;
+    virtual int DpCoupledNet( int aNet ) = 0;
+    virtual int DpNetPolarity( int aNet ) = 0;
+    virtual bool DpNetPair( PNS_ITEM* aItem, int& aNetP, int& aNetN ) = 0;
+
+
 };
 
-class PNS_PCBNEW_CLEARANCE_FUNC : public PNS_CLEARANCE_FUNC
-{
-public:
-    PNS_PCBNEW_CLEARANCE_FUNC( PNS_ROUTER *aRouter );
-    virtual ~PNS_PCBNEW_CLEARANCE_FUNC();
-
-    virtual int operator()( const PNS_ITEM* aA, const PNS_ITEM* aB );
-    virtual void OverrideClearance (bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0);
-
-    void UseDpGap( bool aUseDpGap ) { m_useDpGap = aUseDpGap; }
-
-private:
-    struct CLEARANCE_ENT {
-        int coupledNet;
-        int clearance;
-    };
-
-    PNS_ROUTER *m_router;
-
-    int localPadClearance( const PNS_ITEM* aItem ) const;
-    std::vector<CLEARANCE_ENT> m_clearanceCache;
-    int m_defaultClearance;
-    bool m_overrideEnabled;
-    int m_overrideNetA, m_overrideNetB;
-    int m_overrideClearance;
-    bool m_useDpGap;
-};
 
 /**
  * Struct PNS_OBSTACLE
@@ -157,9 +138,14 @@ public:
     }
 
     ///> Assigns a clerance resolution function object
-    void SetClearanceFunctor( PNS_CLEARANCE_FUNC* aFunc )
+    void SetRuleResolver( PNS_RULE_RESOLVER* aFunc )
     {
-        m_clearanceFunctor = aFunc;
+        m_ruleResolver = aFunc;
+    }
+
+    PNS_RULE_RESOLVER* GetRuleResolver()
+    {
+        return m_ruleResolver;
     }
 
     ///> Returns the number of joints
@@ -469,8 +455,8 @@ private:
     ///> worst case item-item clearance
     int m_maxClearance;
 
-    ///> Clearance resolution functor
-    PNS_CLEARANCE_FUNC* m_clearanceFunctor;
+    ///> Design rules resolver
+    PNS_RULE_RESOLVER* m_ruleResolver;
 
     ///> Geometric/Net index of the items
     PNS_INDEX* m_index;

@@ -687,13 +687,6 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( m_needsSync )
-        {
-            m_router->SyncWorld();
-            m_router->SetView( getView() );
-            m_needsSync = false;
-        }
-
         if( evt->IsCancel() || evt->IsActivate() )
             break; // Finish
         else if( evt->IsMotion() )
@@ -715,6 +708,14 @@ int ROUTER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
             m_toolMgr->RunAction( COMMON_ACTIONS::layerToggle, true );
+        } else if (evt->IsAction ( &COMMON_ACTIONS::remove ) )
+        {
+            printf("delitemcursor\n");
+            //m_router->DeleteTraces( m_startItem, true );
+        } else if (evt->IsAction ( &COMMON_ACTIONS::removeAlt ) )
+        {
+            printf("delitemcursor [alt]\n");
+            //m_router->DeleteTraces( m_startItem, false );
         }
 
         handleCommonEvents( *evt );
@@ -796,7 +797,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     Activate();
 
     m_router->SyncWorld();
-    m_router->SetView( getView() );
 
     m_startItem = m_router->GetWorld()->FindItemByParent( item );
 
@@ -849,4 +849,3 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     return 0;
 }
-

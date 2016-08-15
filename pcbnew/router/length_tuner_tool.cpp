@@ -279,13 +279,6 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS_ROUTER_MODE aMode )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( m_needsSync )
-        {
-            m_router->SyncWorld();
-            m_router->SetView( getView() );
-            m_needsSync = false;
-        }
-
         if( evt->IsCancel() || evt->IsActivate() )
             break; // Finish
         else if( evt->IsMotion() )

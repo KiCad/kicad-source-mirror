@@ -52,10 +52,9 @@ public:
     const PNS_ITEMSET ConnectedItems( PNS_ITEM* aStart, int aKindMask = PNS_ITEM::ANY );
     int64_t ShortestConnectionLength( PNS_ITEM* aFrom, PNS_ITEM* aTo );
 
-    const PNS_ITEMSET AssembleTrivialPath( PNS_SEGMENT* aStart );
+    const PNS_ITEMSET AssembleTrivialPath( PNS_ITEM* aStart );
     const PNS_DIFF_PAIR AssembleDiffPair( PNS_SEGMENT* aStart );
 
-    int MatchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName );
     int DpCoupledNet( int aNet );
     int DpNetPolarity( int aNet );
     const PNS_LINE DpCoupledLine( PNS_LINE* aLine );

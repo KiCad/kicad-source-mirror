@@ -157,6 +157,12 @@ public:
     DIRECTION_45 DirP() const;
     DIRECTION_45 DirN() const;
 
+    void dump()
+    {
+        printf("-- Prim-P %p anchor [%d, %d]\n", m_primP, m_anchorP.x, m_anchorP.y);
+        printf("-- Prim-N %p anchor [%d, %d]\n", m_primN, m_anchorN.x, m_anchorN.y);
+    }
+
 private:
     DIRECTION_45 anchorDirection( PNS_ITEM* aItem, const VECTOR2I& aP ) const;
 

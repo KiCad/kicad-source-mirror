@@ -79,7 +79,6 @@ void PNS_DIFF_PAIR_PLACER::setWorld( PNS_NODE* aWorld )
     m_world = aWorld;
 }
 
-
 const PNS_VIA PNS_DIFF_PAIR_PLACER::makeVia( const VECTOR2I& aP, int aNet )
 {
     const PNS_LAYERSET layers( m_sizes.GetLayerTop(), m_sizes.GetLayerBottom() );
@@ -168,7 +167,7 @@ bool PNS_DIFF_PAIR_PLACER::attemptWalk( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurrent
     PNS_WALKAROUND walkaround( aNode, Router() );
     PNS_WALKAROUND::WALKAROUND_STATUS wf1;
 
-    Router()->GetClearanceFunc()->OverrideClearance( true,
+    Router()->GetRuleResolver()->OverrideClearance( true,
             aCurrent->NetP(), aCurrent->NetN(), aCurrent->Gap() );
 
     walkaround.SetSolidsOnly( aSolidsOnly );
@@ -237,7 +236,7 @@ bool PNS_DIFF_PAIR_PLACER::attemptWalk( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurrent
         return false;
 
     aWalk.SetShape( cur.CP(), cur.CN() );
-    Router()->GetClearanceFunc()->OverrideClearance( false );
+    Router()->GetRuleResolver()->OverrideClearance( false );
 
     return true;
 }
@@ -474,64 +473,41 @@ OPT_VECTOR2I PNS_DIFF_PAIR_PLACER::getDanglingAnchor( PNS_NODE* aNode, PNS_ITEM*
 }
 
 
+
 bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aItem, PNS_DP_PRIMITIVE_PAIR& aPair )
 {
-    if( !aItem || !aItem->Parent() || !aItem->Parent()->GetNet() )
+    int netP, netN;
+
+
+    printf("world %p\n", m_world);
+
+    bool result = m_world->GetRuleResolver()->DpNetPair( aItem, netP, netN );
+
+    if(!result)
         return false;
+        
+    int refNet = aItem->Net();
+    int coupledNet = (refNet == netP) ? netN : netP;
 
-    wxString netNameP = aItem->Parent()->GetNet()->GetNetname();
-    wxString netNameN, netNameBase;
-
-    BOARD* brd = Router()->GetBoard();
-    PNS_ITEM *primRef = NULL, *primP = NULL, *primN = NULL;
-
-    int refNet;
-
-    wxString suffix;
-
-    int r = matchDpSuffix ( netNameP, suffix, netNameBase );
-
-    if( r == 0 )
-        return false;
-    else if( r == 1 )
-    {
-        primRef = primP = static_cast<PNS_SOLID*>( aItem );
-        netNameN = netNameBase + suffix;
-    }
-    else
-    {
-        primRef = primN = static_cast<PNS_SOLID*>( aItem );
-        netNameN = netNameP;
-        netNameP = netNameBase + suffix;
-    }
-
-    NETINFO_ITEM* netInfoP = brd->FindNet( netNameP );
-    NETINFO_ITEM* netInfoN = brd->FindNet( netNameN );
-
-    if( !netInfoP || !netInfoN )
-        return false;
-
-    int netP = netInfoP->GetNet();
-    int netN = netInfoN->GetNet();
-
-    if( primP )
-        refNet = netN;
-    else
-        refNet = netP;
+    printf("result %d\n", !!result);
 
 
-    std::set<PNS_ITEM*> items;
 
-    OPT_VECTOR2I refAnchor = getDanglingAnchor( m_currentNode, primRef );
+    OPT_VECTOR2I refAnchor = getDanglingAnchor( m_currentNode, aItem );
+    PNS_ITEM *primRef = aItem;
+
+    printf("refAnchor %p\n", aItem);
 
     if( !refAnchor )
         return false;
 
-    m_currentNode->AllItemsInNet( refNet, items );
+    std::set<PNS_ITEM*> coupledItems;
+
+    m_currentNode->AllItemsInNet( coupledNet, coupledItems );
     double bestDist = std::numeric_limits<double>::max();
     bool found = false;
 
-    for( PNS_ITEM* item : items )
+    for( PNS_ITEM* item : coupledItems )
     {
         if( item->Kind() == aItem->Kind() )
         {
@@ -599,7 +575,8 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
         return false;
     }
 
-    m_currentNode = Router()->GetWorld();
+    setWorld( Router()->GetWorld() );
+    m_currentNode = m_world;
 
     if( !findDpPrimitivePair( aP, aStartItem, m_start ) )
     {
@@ -612,8 +589,10 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     m_netP = m_start.PrimP()->Net();
     m_netN = m_start.PrimN()->Net();
 
+    #if 0
+	// FIXME: this also needs to be factored out but not so important right now
     // Check if the current track/via gap & track width settings are violated
-    BOARD* brd = Router()->GetBoard();
+    BOARD* brd = NULL; // FIXME Router()->GetBoard();
     NETCLASSPTR netclassP = brd->FindNet( m_netP )->GetNetClass();
     NETCLASSPTR netclassN = brd->FindNet( m_netN )->GetNetClass();
     int clearance = std::min( m_sizes.DiffPairGap(), m_sizes.DiffPairViaGap() );
@@ -630,6 +609,7 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
         Router()->SetFailureReason( _( "Current track width setting violates design rules." ) );
         return false;
     }
+    #endif
 
     m_currentStart = p;
     m_currentEnd = p;
@@ -683,6 +663,10 @@ bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
     gwsEntry.BuildFromPrimitivePair( *m_prevPair, m_startDiagonal );
 
+//    m_prevPair->dump();
+
+//    printf("Entry %d\n", gwsEntry.Gateways().size());
+
     PNS_DP_PRIMITIVE_PAIR target;
 
     if( findDpPrimitivePair ( aP, m_currentEndItem, target ) )
@@ -698,6 +682,7 @@ bool PNS_DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         gwsTarget.SetFitVias( m_placingVia, m_sizes.ViaDiameter(), viaGap() );
         gwsTarget.BuildForCursor( fp );
         gwsTarget.BuildOrthoProjections( gwsEntry, fp, m_orthoMode ? 200 : -200 );
+//        printf("Target %d\n", gwsTarget.Gateways().size());
         m_snapOnTarget = false;
     }
 
