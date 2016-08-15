@@ -32,6 +32,7 @@
  * - select scope (global/project)
  */
 
+#include <memory>
 #include <wx/wx.h>
 #include <wx/uri.h>
 #include <wx/dir.h>
