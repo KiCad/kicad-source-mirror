@@ -34,7 +34,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* 
     m_settings( aSettings ),
     m_mode( aMode )
 {
-    m_miterStyle->Enable( false );
+    m_miterStyle->Enable( true );
     m_radiusText->Enable( aMode != PNS_MODE_TUNE_DIFF_PAIR );
     //m_minAmpl.Enable ( aMode != PNS_MODE_TUNE_DIFF_PAIR_SKEW );
 
@@ -44,7 +44,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* 
     m_spacing.SetValue( m_settings.m_spacing );
     m_radiusText->SetValue( wxString::Format( wxT( "%i" ), m_settings.m_cornerRadiusPercentage ) );
 
-    m_miterStyle->SetSelection( m_settings.m_cornerType == PNS_MEANDER_SETTINGS::ROUND ? 1 : 0 );
+    m_miterStyle->SetSelection( m_settings.m_cornerStyle == MEANDER_STYLE_ROUND ? 1 : 0 );
 
     switch( aMode )
     {
@@ -97,7 +97,7 @@ void DIALOG_PNS_LENGTH_TUNING_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     if( m_settings.m_maxAmplitude < m_settings.m_minAmplitude )
         m_settings.m_maxAmplitude = m_settings.m_minAmplitude;
 
-    m_settings.m_cornerType = m_miterStyle->GetSelection() ? PNS_MEANDER_SETTINGS::CHAMFER : PNS_MEANDER_SETTINGS::ROUND;
+    m_settings.m_cornerStyle = m_miterStyle->GetSelection() ? MEANDER_STYLE_ROUND : MEANDER_STYLE_CHAMFER;
 
     EndModal( wxID_OK );
 }

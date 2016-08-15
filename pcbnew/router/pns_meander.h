@@ -40,6 +40,12 @@ enum PNS_MEANDER_TYPE {
         MT_EMPTY            // no meander (straight line)
 };
 
+///> meander corner shape
+enum PNS_MEANDER_STYLE {
+    MEANDER_STYLE_ROUND = 1,          // rounded (90 degree arc)
+    MEANDER_STYLE_CHAMFER             // chamfered (45 degree segment)
+};
+
 /**
  * Class PNS_MEANDER_SETTINGS
  *
@@ -49,12 +55,6 @@ class PNS_MEANDER_SETTINGS
 {
 public:
 
-    ///> meander corner shape
-    enum CornerType {
-        ROUND = 1,          // rounded (90 degree arc)
-        CHAMFER             // chamfered (45 degree segment)
-    };
-
     PNS_MEANDER_SETTINGS()
     {
         m_minAmplitude = 100000;
@@ -63,7 +63,7 @@ public:
         m_spacing = 600000;
         m_targetLength = 100000000;
         m_targetSkew = 0;
-        m_cornerType = ROUND;
+        m_cornerStyle = MEANDER_STYLE_ROUND;
         m_cornerRadiusPercentage = 100;
         m_lengthTolerance = 100000;
         m_cornerArcSegments = 8;
@@ -80,7 +80,7 @@ public:
     ///> desired length of the tuned line/diff pair
     int m_targetLength;
     ///> type of corners for the meandered line
-    CornerType m_cornerType;
+    PNS_MEANDER_STYLE m_cornerStyle;
     ///> rounding percentage (0 - 100)
     int m_cornerRadiusPercentage;
     ///> allowable tuning error
@@ -325,13 +325,13 @@ private:
     void forward( int aLength );
     ///> turns the turtle by aAngle
     void turn( int aAngle );
-    ///> tells the turtle to draw an arc of given radius and turn direction
-    void arc( int aRadius, bool aSide );
+    ///> tells the turtle to draw a mitered corner of given radius and turn direction
+    void miter( int aRadius, bool aSide );
     ///> tells the turtle to draw an U-like shape
     void uShape( int aSides, int aCorner, int aTop );
 
     ///> generates a 90-degree circular arc
-    SHAPE_LINE_CHAIN circleQuad( VECTOR2D aP, VECTOR2D aDir, bool aSide );
+    SHAPE_LINE_CHAIN makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool aSide );
 
     ///> reflects a point onto other side of a given segment
     VECTOR2I reflect( VECTOR2I aP, const SEG& aLine );

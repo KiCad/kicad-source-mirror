@@ -28,6 +28,7 @@
 #include "pns_meander.h"
 #include "pns_meander_placer_base.h"
 #include "pns_router.h"
+#include "pns_debug_decorator.h"
 
 const PNS_MEANDER_SETTINGS& PNS_MEANDER_SHAPE::Settings() const
 {
@@ -163,9 +164,7 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 
 int PNS_MEANDER_SHAPE::cornerRadius() const
 {
-    int cr = (int64_t) spacing() * Settings().m_cornerRadiusPercentage / 200;
-
-    return cr;
+    return (int64_t) spacing() * Settings().m_cornerRadiusPercentage / 200;
 }
 
 
@@ -181,7 +180,7 @@ int PNS_MEANDER_SHAPE::spacing( ) const
 }
 
 
-SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::circleQuad( VECTOR2D aP, VECTOR2D aDir, bool aSide )
+SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool aSide )
 {
     SHAPE_LINE_CHAIN lc;
 
@@ -193,32 +192,57 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::circleQuad( VECTOR2D aP, VECTOR2D aDir, bool
 
     VECTOR2D dir_u( aDir );
     VECTOR2D dir_v( aDir.Perpendicular( ) );
-
-    const int ArcSegments = Settings().m_cornerArcSegments;
-
-    double radius = (double) aDir.EuclideanNorm();
-    double angleStep = M_PI / 2.0 / (double) ArcSegments;
-
-    double correction = 12.0 * radius * ( 1.0 - cos( angleStep / 2.0 ) );
-
-    if( !m_dual )
-        correction = 0.0;
-    else if( radius < m_meanCornerRadius )
-        correction = 0.0;
-
     VECTOR2D p = aP;
     lc.Append( ( int ) p.x, ( int ) p.y );
 
-    VECTOR2D dir_uu = dir_u.Resize( radius - correction );
-    VECTOR2D dir_vv = dir_v.Resize( radius - correction );
 
-    VECTOR2D shift = dir_u.Resize( correction );
-
-    for( int i = ArcSegments - 1; i >= 0; i-- )
+    PNS_DEBUG_DECORATOR *dbg = PNS_ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    // fixme: refactor
+    switch (m_placer->MeanderSettings().m_cornerStyle)
     {
-        double alpha = (double) i / (double) ( ArcSegments - 1 ) * M_PI / 2.0;
-        p = aP + shift + dir_uu * cos( alpha ) + dir_vv * ( aSide ? -1.0 : 1.0 ) * ( 1.0 - sin( alpha ) );
+    case MEANDER_STYLE_ROUND:
+    {
+        const int ArcSegments = Settings().m_cornerArcSegments;
+
+        double radius = (double) aDir.EuclideanNorm();
+        double angleStep = M_PI / 2.0 / (double) ArcSegments;
+
+        double correction = 12.0 * radius * ( 1.0 - cos( angleStep / 2.0 ) );
+
+        if( !m_dual )
+            correction = 0.0;
+        else if( radius < m_meanCornerRadius )
+            correction = 0.0;
+
+        VECTOR2D dir_uu = dir_u.Resize( radius - correction );
+        VECTOR2D dir_vv = dir_v.Resize( radius - correction );
+
+        VECTOR2D shift = dir_u.Resize( correction );
+
+        for( int i = ArcSegments - 1; i >= 0; i-- )
+        {
+            double alpha = (double) i / (double) ( ArcSegments - 1 ) * M_PI / 2.0;
+            p = aP + shift + dir_uu * cos( alpha ) + dir_vv * ( aSide ? -1.0 : 1.0 ) * ( 1.0 - sin( alpha ) );
+            lc.Append( ( int ) p.x, ( int ) p.y );
+        }
+    }
+    break;
+    case MEANDER_STYLE_CHAMFER:
+    {
+        double radius = (double) aDir.EuclideanNorm();
+        double correction = 0;
+        if( m_dual && radius > m_meanCornerRadius )
+            correction = (double)(m_baselineOffset * 2) * tan ( 22.5 * M_PI / 180.0 );
+
+        VECTOR2D dir_cu = dir_u.Resize( correction );
+        VECTOR2D dir_cv = dir_v.Resize( correction );
+
+        p = aP - dir_cu;
         lc.Append( ( int ) p.x, ( int ) p.y );
+        p = aP + dir_u + (dir_v + dir_cv) * ( aSide ? -1.0 : 1.0 );
+        lc.Append( ( int ) p.x, ( int ) p.y );
+        break;
+    }
     }
 
     p = aP + dir_u + dir_v * ( aSide ? -1.0 : 1.0 );
@@ -270,7 +294,7 @@ void PNS_MEANDER_SHAPE::turn( int aAngle )
 }
 
 
-void PNS_MEANDER_SHAPE::arc( int aRadius, bool aSide )
+void PNS_MEANDER_SHAPE::miter( int aRadius, bool aSide )
 {
     if( aRadius <= 0 )
     {
@@ -279,20 +303,21 @@ void PNS_MEANDER_SHAPE::arc( int aRadius, bool aSide )
     }
 
     VECTOR2D dir = m_currentDir.Resize( (double) aRadius );
-    SHAPE_LINE_CHAIN arc = circleQuad( m_currentPos, dir, aSide );
-    m_currentPos = arc.CPoint( -1 );
+    SHAPE_LINE_CHAIN lc = makeMiterShape( m_currentPos, dir, aSide );
+
+    m_currentPos = lc.CPoint( -1 );
     m_currentDir = dir.Rotate( aSide ? -M_PI / 2.0 : M_PI / 2.0 );
 
-    m_currentTarget->Append ( arc );
+    m_currentTarget->Append ( lc );
 }
 
 
 void PNS_MEANDER_SHAPE::uShape( int aSides, int aCorner, int aTop )
 {
     forward( aSides );
-    arc( aCorner, true );
+    miter( aCorner, true );
     forward( aTop );
-    arc( aCorner, true );
+    miter( aCorner, true );
     forward( aSides );
 }
 
@@ -336,7 +361,7 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
     }
     case MT_START:
     {
-        arc( cr - offset, false );
+        miter( cr - offset, false );
         uShape( aAmpl - 2 * cr + std::abs( offset ), cr + offset, spc - 2 * cr );
         forward( std::min( cr - offset, cr + offset ) );
         forward( std::abs( offset ) );
@@ -351,7 +376,7 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
         forward( std::min( cr - offset, cr + offset ) );
         forward( std::abs( offset ) );
         uShape( aAmpl - 2 * cr + std::abs( offset ), cr + offset, spc - 2 * cr );
-        arc( cr - offset, false );
+        miter( cr - offset, false );
         break;
     }
 
@@ -367,9 +392,9 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
 
     case MT_SINGLE:
     {
-        arc( cr - offset, false );
+        miter( cr - offset, false );
         uShape( aAmpl - 2 * cr + std::abs( offset ), cr + offset, spc - 2 * cr );
-        arc( cr - offset, false );
+        miter( cr - offset, false );
         lc.Append( aP + dir_v_b + aDir.Resize ( 2 * st.m_spacing ) );
         break;
     }
