@@ -19,6 +19,7 @@
  */
 
 #include "pns_algo_base.h"
+#include "pns_debug_decorator.h"
 #include "pns_router.h"
 
 PNS_ROUTING_SETTINGS& PNS_ALGO_BASE::Settings() const

@@ -163,7 +163,7 @@ SHAPE_RECT ApproximateSegmentAsRect( const SHAPE_SEGMENT& aSeg )
                        std::abs( p1.x - p0.x ), std::abs( p1.y - p0.y ) );
 }
 
-
+#if 0
 void DrawDebugPoint( VECTOR2I aP, int aColor )
 {
     SHAPE_LINE_CHAIN l;
@@ -223,7 +223,7 @@ void DrawDebugDirs( VECTOR2D aP, int aMask, int aColor )
         }
     }
 }
-
+#endif
 
 OPT_BOX2I ChangedArea( const PNS_ITEM* aItemA, const PNS_ITEM* aItemB )
 {

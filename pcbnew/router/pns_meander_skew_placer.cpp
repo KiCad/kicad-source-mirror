@@ -28,6 +28,7 @@
 #include "pns_meander_skew_placer.h"
 
 #include "pns_router.h"
+#include "pns_debug_decorator.h"
 
 
 PNS_MEANDER_SKEW_PLACER::PNS_MEANDER_SKEW_PLACER ( PNS_ROUTER* aRouter ) :
@@ -130,13 +131,13 @@ bool PNS_MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 	for( const PNS_ITEM* item : m_tunedPathP.CItems() )
     {
         if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
-            Router()->DisplayDebugLine( l->CLine(), 5, 10000 );
+            Dbg()->AddLine( l->CLine(), 5, 10000 );
     }
 
     for( const PNS_ITEM* item : m_tunedPathN.CItems() )
     {
         if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
-            Router()->DisplayDebugLine( l->CLine(), 4, 10000 );
+            Dbg()->AddLine( l->CLine(), 4, 10000 );
     }
 
     return doMove( aP, aEndItem, m_coupledLength + m_settings.m_targetSkew );
@@ -168,4 +169,3 @@ const wxString PNS_MEANDER_SKEW_PLACER::TuningInfo() const
 
     return status;
 }
-

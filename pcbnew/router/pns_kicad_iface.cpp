@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2013-2016 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -56,6 +56,7 @@
 #include "pns_node.h"
 #include "pns_topology.h"
 #include "pns_router.h"
+#include "pns_debug_decorator.h"
 #include "router_preview_item.h"
 
 class PNS_PCBNEW_RULE_RESOLVER : public PNS_RULE_RESOLVER
@@ -248,10 +249,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( PNS_ITEM* aItem, int& aNetP, int& aNet
     wxString netNameP = aItem->Parent()->GetNet()->GetNetname();
     wxString netNameN, netNameCoupled, netNameBase;
 
-    bool refIsP = false;
     int r = matchDpSuffix ( netNameP, netNameCoupled, netNameBase );
-
-    printf("matchDpSuffix %d\n", r);
 
     if( r == 0 )
         return false;
@@ -281,22 +279,140 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( PNS_ITEM* aItem, int& aNetP, int& aNet
     return true;
 }
 
+class PNS_PCBNEW_DEBUG_DECORATOR: public PNS_DEBUG_DECORATOR
+{
+public:
+    PNS_PCBNEW_DEBUG_DECORATOR( KIGFX::VIEW *aView = NULL ): PNS_DEBUG_DECORATOR(),
+        m_view( NULL ), m_items( NULL )
+    {
+        SetView ( aView );
+    }
+
+    ~PNS_PCBNEW_DEBUG_DECORATOR()
+    {
+        Clear();
+    }
+
+    void SetView( KIGFX::VIEW *aView )
+    {
+        Clear();
+        delete m_items;
+        m_items = NULL;
+        m_view = aView;
+        if ( m_view == NULL )
+            return;
+        m_items = new KIGFX::VIEW_GROUP( m_view );
+        m_items->SetLayer( ITEM_GAL_LAYER( GP_OVERLAY ) );
+        m_view->Add( m_items );
+        m_items->ViewSetVisible( true );
+    }
+
+    void AddPoint( VECTOR2I aP, int aColor ) override
+    {
+        SHAPE_LINE_CHAIN l;
+
+        l.Append( aP - VECTOR2I( -50000, -50000 ) );
+        l.Append( aP + VECTOR2I( -50000, -50000 ) );
+
+        AddLine ( l, aColor, 10000 );
+
+        l.Clear();
+        l.Append( aP - VECTOR2I( 50000, -50000 ) );
+        l.Append( aP + VECTOR2I( 50000, -50000 ) );
+
+        AddLine( l, aColor, 10000 );
+    }
+
+    void AddBox( BOX2I aB, int aColor ) override
+    {
+        SHAPE_LINE_CHAIN l;
+
+        VECTOR2I o = aB.GetOrigin();
+        VECTOR2I s = aB.GetSize();
+
+        l.Append( o );
+        l.Append( o.x + s.x, o.y );
+        l.Append( o.x + s.x, o.y + s.y );
+        l.Append( o.x, o.y + s.y );
+        l.Append( o );
+
+        AddLine( l, aColor, 10000 );
+    }
+
+    void AddSegment( SEG aS, int aColor ) override
+    {
+        SHAPE_LINE_CHAIN l;
+
+        l.Append( aS.A );
+        l.Append( aS.B );
+
+        AddLine( l, aColor, 10000 );
+    }
+
+    void AddDirections( VECTOR2D aP, int aMask, int aColor ) override
+    {
+        BOX2I b( aP - VECTOR2I( 10000, 10000 ), VECTOR2I( 20000, 20000 ) );
+
+        AddBox( b, aColor );
+        for( int i = 0; i < 8; i++ )
+        {
+            if( ( 1 << i ) & aMask )
+            {
+                VECTOR2I v = DIRECTION_45( ( DIRECTION_45::Directions ) i ).ToVector() * 100000;
+                AddSegment( SEG( aP, aP + v ), aColor );
+            }
+        }
+    }
+
+    void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType, int aWidth ) override
+    {
+        ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( NULL, m_items );
+
+        pitem->Line( aLine, aWidth, aType );
+        m_items->Add( pitem ); // Should not be needed, as m_items has been passed as a parent group in alloc;
+        pitem->ViewSetVisible( true );
+        m_items->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );
+    }
+
+    void Clear() override
+    {
+        if (m_view && m_items)
+        {
+            m_items->FreeItems();
+            m_items->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+    }
+
+private:
+    KIGFX::VIEW* m_view;
+    KIGFX::VIEW_GROUP* m_items;
+};
+
+PNS_DEBUG_DECORATOR* PNS_KICAD_IFACE::GetDebugDecorator()
+{
+    return m_debugDecorator;
+}
+
 
 PNS_KICAD_IFACE::PNS_KICAD_IFACE ()
 {
     m_ruleResolver = nullptr;
-    m_board = NULL;
-    m_frame = NULL;
-    m_view = NULL;
+    m_board = nullptr;
+    m_frame = nullptr;
+    m_view = nullptr;
     m_previewItems = nullptr;
     m_world = nullptr;
     m_router = nullptr;
+    m_debugDecorator = nullptr;
 }
 
 PNS_KICAD_IFACE::~PNS_KICAD_IFACE ()
 {
     if( m_ruleResolver )
         delete m_ruleResolver;
+
+    if( m_debugDecorator )
+        delete m_debugDecorator;
 }
 
 
@@ -607,6 +723,9 @@ void PNS_KICAD_IFACE::SyncWorld( PNS_NODE *aWorld )
         else if( type == PCB_VIA_T )
             item = syncVia( static_cast<VIA*>( t ) );
 
+        if( t->IsLocked() )
+            item->Mark ( MK_LOCKED );
+
         if( item )
             aWorld->Add( item );
     }
@@ -634,10 +753,15 @@ void PNS_KICAD_IFACE::EraseView()
         m_previewItems->FreeItems();
         m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
     }
+
+    if(m_debugDecorator)
+        m_debugDecorator->Clear();
 }
 
 void PNS_KICAD_IFACE::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance )
 {
+    printf("DisplayItem %p\n", aItem);
+
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_previewItems );
 
     if( aColor >= 0 )
@@ -738,6 +862,7 @@ void PNS_KICAD_IFACE::Commit()
 
 void PNS_KICAD_IFACE::SetView ( KIGFX::VIEW *aView )
 {
+    printf("SetView %p\n", aView);
     if( m_previewItems )
     {
         m_previewItems->FreeItems();
@@ -749,6 +874,12 @@ void PNS_KICAD_IFACE::SetView ( KIGFX::VIEW *aView )
     m_previewItems->SetLayer( ITEM_GAL_LAYER( GP_OVERLAY ) );
     m_view->Add( m_previewItems );
     m_previewItems->ViewSetVisible( true );
+
+    if( m_debugDecorator )
+        delete m_debugDecorator;
+
+    m_debugDecorator = new PNS_PCBNEW_DEBUG_DECORATOR();
+    m_debugDecorator->SetView ( m_view );
 }
 
 void PNS_KICAD_IFACE::UpdateNet ( int aNetCode )

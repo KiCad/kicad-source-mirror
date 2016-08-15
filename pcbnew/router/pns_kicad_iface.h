@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 #ifndef __PNS_KICAD_IFACE_H
 #define __PNS_KICAD_IFACE_H
 
@@ -26,6 +26,7 @@
 #include "pns_router.h"
 
 class PNS_PCBNEW_RULE_RESOLVER;
+class PNS_PCBNEW_DEBUG_DECORATOR;
 
 
 class BOARD;
@@ -55,10 +56,12 @@ public:
     void UpdateNet ( int aNetCode );
 
     PNS_RULE_RESOLVER* GetRuleResolver();
+    PNS_DEBUG_DECORATOR* GetDebugDecorator();
 
 private:
 
     PNS_PCBNEW_RULE_RESOLVER* m_ruleResolver;
+    PNS_PCBNEW_DEBUG_DECORATOR* m_debugDecorator;
 
     PNS_ITEM* syncPad( D_PAD* aPad );
     PNS_ITEM* syncTrack( TRACK* aTrack );

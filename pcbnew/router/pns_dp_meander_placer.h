@@ -33,11 +33,9 @@
 #include "pns_meander.h"
 #include "pns_meander_placer_base.h"
 #include "pns_diff_pair.h"
+#include "pns_debug_decorator.h"
 
 class PNS_ROUTER;
-class PNS_SHOVE;
-class PNS_OPTIMIZER;
-class PNS_ROUTER_BASE;
 
 /**
  * Class PNS_DP_MEANDER_PLACER

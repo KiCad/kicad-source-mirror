@@ -35,12 +35,8 @@
 #include "pns_itemset.h"
 #include "pns_node.h"
 
-class BOARD;
-class BOARD_ITEM;
-class D_PAD;
-class TRACK;
-class VIA;
 class GRID_HELPER;
+class PNS_DEBUG_DECORATOR;
 class PNS_NODE;
 class PNS_DIFF_PAIR_PLACER;
 class PNS_PLACEMENT_ALGO;
@@ -95,6 +91,8 @@ enum PNS_ROUTER_MODE {
          virtual void UpdateNet ( int aNetCode ) = 0;
 
          virtual PNS_RULE_RESOLVER* GetRuleResolver() = 0;
+         virtual PNS_DEBUG_DECORATOR* GetDebugDecorator() = 0;
+
 };
 
 class PNS_ROUTER
@@ -140,12 +138,7 @@ public:
 
     void DisplayItem( const PNS_ITEM* aItem, int aColor = -1, int aClearance = -1 );
     void DisplayItems( const PNS_ITEMSET& aItems );
-
-    void DisplayDebugLine( const SHAPE_LINE_CHAIN& aLine, int aType = 0, int aWidth = 0 );
-    void DisplayDebugPoint( const VECTOR2I aPos, int aType = 0 );
-    void DisplayDebugBox( const BOX2I& aBox, int aType = 0, int aWidth = 0 );
     void DeleteTraces( PNS_ITEM *aStartItem, bool aWholeTrack );
-
     void SwitchLayer( int layer );
 
     void ToggleViaPlacement();
@@ -278,7 +271,6 @@ private:
     VECTOR2I m_currentEnd;
     RouterState m_state;
 
-    //BOARD* m_board;
     PNS_NODE* m_world;
     PNS_NODE* m_lastNode;
     PNS_PLACEMENT_ALGO * m_placer;

@@ -207,13 +207,13 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     for( const PNS_ITEM* item : m_tunedPathP.CItems() )
     {
         if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
-            Router()->DisplayDebugLine( l->CLine(), 5, 10000 );
+            Dbg()->AddLine( l->CLine(), 5, 10000 );
     }
 
     for( const PNS_ITEM* item : m_tunedPathN.CItems() )
     {
         if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
-            Router()->DisplayDebugLine( l->CLine(), 5, 10000 );
+            Dbg()->AddLine( l->CLine(), 5, 10000 );
     }
 
     int curIndexP = 0, curIndexN = 0;
@@ -222,7 +222,7 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     {
         SEG base = baselineSegment( sp );
 
-        DrawDebugSeg( base, 3 );
+        Dbg()->AddSegment( base, 3 );
 
         while( sp.indexP >= curIndexP )
         {

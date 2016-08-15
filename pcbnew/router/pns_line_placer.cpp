@@ -29,6 +29,7 @@
 #include "pns_utils.h"
 #include "pns_router.h"
 #include "pns_topology.h"
+#include "pns_debug_decorator.h"
 
 #include <class_board_item.h>
 
@@ -1026,7 +1027,7 @@ void PNS_LINE_PLACER::updateLeadingRatLine()
     PNS_TOPOLOGY topo( m_lastNode );
 
     if( topo.LeadingRatLine( &current, ratLine ) )
-        Router()->DisplayDebugLine( ratLine, 5, 10000 );
+        Dbg()->AddLine( ratLine, 5, 10000 );
 }
 
 

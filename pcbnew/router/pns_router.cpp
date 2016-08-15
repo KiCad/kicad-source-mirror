@@ -206,6 +206,7 @@ bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
     m_dragger = new PNS_DRAGGER( this );
     m_dragger->SetWorld( m_world );
+    m_dragger->SetDebugDecorator ( m_iface->GetDebugDecorator () );
 
     if( m_dragger->Start ( aP, aStartItem ) )
         m_state = DRAG_SEGMENT;
@@ -245,6 +246,7 @@ bool PNS_ROUTER::StartRouting( const VECTOR2I& aP, PNS_ITEM* aStartItem, int aLa
 
     m_placer->UpdateSizes ( m_sizes );
     m_placer->SetLayer( aLayer );
+    m_placer->SetDebugDecorator ( m_iface->GetDebugDecorator () );
 
     bool rv = m_placer->Start( aP, aStartItem );
 
@@ -262,28 +264,6 @@ void PNS_ROUTER::DisplayItems( const PNS_ITEMSET& aItems )
     for( const PNS_ITEM* item : aItems.CItems() )
         m_iface->DisplayItem( item );
 }
-
-void PNS_ROUTER::DisplayDebugLine( const SHAPE_LINE_CHAIN& aLine, int aType, int aWidth )
-{
-/*    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( NULL, m_previewItems );
-
-    pitem->Line( aLine, aWidth, aType );
-    m_previewItems->Add( pitem );
-    pitem->ViewSetVisible( true );
-    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );*/
-}
-
-
-void PNS_ROUTER::DisplayDebugPoint( const VECTOR2I aPos, int aType )
-{
-/*    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( NULL, m_previewItems );
-
-    pitem->Point( aPos, aType );
-    m_previewItems->Add( pitem );
-    pitem->ViewSetVisible( true );
-    m_previewItems->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY | KIGFX::VIEW_ITEM::APPEARANCE );*/
-}
-
 
 void PNS_ROUTER::Move( const VECTOR2I& aP, PNS_ITEM* endItem )
 {

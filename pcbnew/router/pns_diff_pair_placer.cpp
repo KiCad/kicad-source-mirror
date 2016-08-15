@@ -35,6 +35,7 @@
 #include "pns_diff_pair_placer.h"
 #include "pns_solid.h"
 #include "pns_topology.h"
+#include "pns_debug_decorator.h"
 
 using boost::optional;
 
@@ -826,12 +827,12 @@ void PNS_DIFF_PAIR_PLACER::updateLeadingRatLine()
 
     if( topo.LeadingRatLine( &m_currentTrace.PLine(), ratLineP ) )
     {
-        Router()->DisplayDebugLine( ratLineP, 1, 10000 );
+        Dbg()->AddLine( ratLineP, 1, 10000 );
     }
 
     if( topo.LeadingRatLine ( &m_currentTrace.NLine(), ratLineN ) )
     {
-        Router()->DisplayDebugLine( ratLineN, 3, 10000 );
+        Dbg()->AddLine( ratLineN, 3, 10000 );
     }
 }
 

@@ -21,12 +21,11 @@
 #ifndef __PNS_ALGO_BASE_H
 #define __PNS_ALGO_BASE_H
 
-#include <wx/wx.h> // for wxString
-
 #include "pns_routing_settings.h"
 
 class PNS_ROUTER;
 class PNS_LOGGER;
+class PNS_DEBUG_DECORATOR;
 
 /**
  * Class PNS_ALGO_BASE
@@ -55,7 +54,23 @@ public:
     ///> Returns the logger object, allowing to dump geometry to a file.
     virtual PNS_LOGGER* Logger();
 
+    /**
+    * Function SetDebugDecorator
+    *
+    * Assign a debug decorator allowing this algo to draw extra graphics for visual debugging
+    */
+    void SetDebugDecorator( PNS_DEBUG_DECORATOR *aDecorator )
+    {
+        m_debugDecorator = aDecorator;
+    }
+
+    PNS_DEBUG_DECORATOR *Dbg() const
+    {
+        return m_debugDecorator;
+    }
+
 private:
+    PNS_DEBUG_DECORATOR *m_debugDecorator;
     PNS_ROUTER* m_router;
 };
 

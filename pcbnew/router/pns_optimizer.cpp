@@ -298,7 +298,7 @@ int LINE_RESTRICTIONS::allowedAngles( PNS_NODE* aWorld, const PNS_LINE* aLine, c
         }
     }
 
-    DrawDebugDirs( aP, outputMask, 3 );
+    //DrawDebugDirs( aP, outputMask, 3 );
     return 0xff;
 }
 
