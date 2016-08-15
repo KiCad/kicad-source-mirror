@@ -26,32 +26,25 @@
 #include "ngspice.h"
 #include "spice_reporter.h"
 
-#include <wx/dynlib.h>
-#include <wx/log.h>
 #include <sstream>
-#include <stdexcept>
 
 using namespace std;
 
 NGSPICE::NGSPICE()
 {
-    init_dll();
+    init();
 }
 
 
 NGSPICE::~NGSPICE()
 {
-    delete m_dll;
 }
 
 
 void NGSPICE::Init()
 {
     if( m_error )
-    {
-        delete m_dll;
-        init_dll();
-    }
+        init();
 
     Command( "reset" );
 }
@@ -61,7 +54,7 @@ vector<COMPLEX> NGSPICE::GetPlot( const string& aName, int aMaxLen )
 {
     vector<COMPLEX> data;
     setlocale( LC_ALL, "C" );
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
     setlocale( LC_ALL, "" );
 
     if( vi )
@@ -89,7 +82,7 @@ vector<double> NGSPICE::GetRealPlot( const string& aName, int aMaxLen )
 {
     vector<double> data;
     setlocale( LC_ALL, "C" );
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
     setlocale( LC_ALL, "" );
 
     if( vi )
@@ -123,7 +116,7 @@ vector<double> NGSPICE::GetImagPlot( const string& aName, int aMaxLen )
     vector<double> data;
 
     setlocale( LC_ALL, "C" );
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
     setlocale( LC_ALL, "" );
 
     if( vi )
@@ -149,7 +142,7 @@ vector<double> NGSPICE::GetMagPlot( const string& aName, int aMaxLen )
     vector<double> data;
 
     setlocale( LC_ALL, "C" );
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
     setlocale( LC_ALL, "" );
 
     if( vi )
@@ -178,7 +171,7 @@ vector<double> NGSPICE::GetPhasePlot( const string& aName, int aMaxLen )
     vector<double> data;
 
     setlocale( LC_ALL, "C" );
-    vector_info* vi = m_ngGet_Vec_Info( (char*) aName.c_str() );
+    vector_info* vi = ngGet_Vec_Info( (char*) aName.c_str() );
     setlocale( LC_ALL, "" );
 
     if( vi )
@@ -217,7 +210,7 @@ bool NGSPICE::LoadNetlist( const string& aNetlist )
     lines.push_back( nullptr );
 
     setlocale( LC_ALL, "C" );
-    m_ngSpice_Circ( lines.data() );
+    ngSpice_Circ( lines.data() );
     setlocale( LC_ALL, "" );
 
     for( auto line : lines )
@@ -248,7 +241,7 @@ bool NGSPICE::Stop()
 bool NGSPICE::IsRunning()
 {
     setlocale( LC_ALL, "C" );
-    bool rv = m_ngSpice_Running();
+    bool rv = ngSpice_running();
     setlocale( LC_ALL, "" );
     return rv;
 }
@@ -257,7 +250,7 @@ bool NGSPICE::IsRunning()
 bool NGSPICE::Command( const string& aCmd )
 {
     setlocale( LC_ALL, "C" );
-    m_ngSpice_Command( (char*) aCmd.c_str() );
+    ngSpice_Command( (char*) aCmd.c_str() );
     setlocale( LC_ALL, "" );
 
     return true;
@@ -289,30 +282,13 @@ string NGSPICE::GetXAxis( SIM_TYPE aType ) const
 }
 
 
-void NGSPICE::init_dll()
+void NGSPICE::init()
 {
-#ifdef __WINDOWS__
-    m_dll = new wxDynamicLibrary( "libngspice-0.dll" );
-#else
-    m_dll = new wxDynamicLibrary( wxDynamicLibrary::CanonicalizeName( "ngspice" ) );
-#endif
-
-    if( !m_dll || !m_dll->IsLoaded() )
-        throw std::runtime_error( "Missing ngspice shared library" );
-
     m_error = false;
 
-    // Obtain function pointers
-    m_ngSpice_Init = (ngSpice_Init) m_dll->GetSymbol( "ngSpice_Init" );
-    m_ngSpice_Circ = (ngSpice_Circ) m_dll->GetSymbol( "ngSpice_Circ" );
-    m_ngSpice_Command = (ngSpice_Command) m_dll->GetSymbol( "ngSpice_Command" );
-    m_ngGet_Vec_Info = (ngGet_Vec_Info) m_dll->GetSymbol( "ngGet_Vec_Info" );
-    m_ngSpice_AllPlots = (ngSpice_AllPlots) m_dll->GetSymbol( "ngSpice_AllPlots" );
-    m_ngSpice_AllVecs = (ngSpice_AllVecs) m_dll->GetSymbol( "ngSpice_AllVecs" );
-    m_ngSpice_Running = (ngSpice_Running) m_dll->GetSymbol( "ngSpice_running" ); // it is not a typo
-
     setlocale( LC_ALL, "C" );
-    m_ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL, &cbBGThreadRunning, this );
+    ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL, &cbBGThreadRunning, this );
+
     // Workaround to avoid hang ups on certain errors
     Command( "unset interactive" );
     setlocale( LC_ALL, "" );
