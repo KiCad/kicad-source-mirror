@@ -182,17 +182,16 @@ private:
 
 class PNS_DP_GATEWAYS
 {
-
     public:
-        PNS_DP_GATEWAYS ( int aGap ):
-            m_gap(aGap), m_viaGap( aGap )
+        PNS_DP_GATEWAYS( int aGap ):
+            m_gap( aGap ), m_viaGap( aGap )
         {
             // Do not leave unitialized members, and keep static analyser quiet:
             m_viaDiameter = 0;
             m_fitVias = true;
         }
 
-        void SetGap ( int aGap )
+        void SetGap( int aGap )
         {
             m_gap = aGap;
             m_viaGap = aGap;
@@ -203,7 +202,7 @@ class PNS_DP_GATEWAYS
             m_gateways.clear();
         }
 
-        void SetFitVias ( bool aEnable, int aDiameter = 0, int aViaGap = -1 )
+        void SetFitVias( bool aEnable, int aDiameter = 0, int aViaGap = -1 )
         {
             m_fitVias = aEnable;
             m_viaDiameter = aDiameter;
@@ -214,12 +213,12 @@ class PNS_DP_GATEWAYS
         }
 
 
-        void BuildForCursor ( const VECTOR2I& aCursorPos );
-        void BuildOrthoProjections ( PNS_DP_GATEWAYS &aEntries, const VECTOR2I& aCursorPos, int aOrthoScore );
-        void BuildGeneric ( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool aBuildEntries = false, bool aViaMode = false );
+        void BuildForCursor( const VECTOR2I& aCursorPos );
+        void BuildOrthoProjections( PNS_DP_GATEWAYS &aEntries, const VECTOR2I& aCursorPos, int aOrthoScore );
+        void BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool aBuildEntries = false, bool aViaMode = false );
         void BuildFromPrimitivePair( PNS_DP_PRIMITIVE_PAIR aPair, bool aPreferDiagonal );
 
-        bool FitGateways (  PNS_DP_GATEWAYS& aEntry,  PNS_DP_GATEWAYS& aTarget, bool aPrefDiagonal, PNS_DIFF_PAIR& aDp );
+        bool FitGateways( PNS_DP_GATEWAYS& aEntry, PNS_DP_GATEWAYS& aTarget, bool aPrefDiagonal, PNS_DIFF_PAIR& aDp );
 
         std::vector<PNS_DP_GATEWAY>& Gateways()
         {
@@ -234,7 +233,6 @@ class PNS_DP_GATEWAYS
         void FilterByOrientation( int aAngleMask, DIRECTION_45 aRefOrientation );
 
     private:
-
         struct DP_CANDIDATE
         {
             SHAPE_LINE_CHAIN p, n;

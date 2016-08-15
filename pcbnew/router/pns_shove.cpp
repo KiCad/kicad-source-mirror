@@ -1290,7 +1290,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveDraggingVia( PNS_VIA* aVia, const VECTOR
     {
         if( aNewVia )
         {
-            printf("setNewV %p", m_draggedVia);
+            wxLogTrace( "PNS","setNewV %p", m_draggedVia);
             *aNewVia = m_draggedVia;
         }
 

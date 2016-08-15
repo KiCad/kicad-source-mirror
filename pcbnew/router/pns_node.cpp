@@ -1022,7 +1022,7 @@ PNS_JOINT& PNS_NODE::touchJoint( const VECTOR2I& aPos, const PNS_LAYERSET& aLaye
 
 void PNS_JOINT::Dump() const
 {
-    printf( "joint layers %d-%d, net %d, pos %s, links: %d\n", m_layers.Start(),
+    wxLogTrace( "PNS", "joint layers %d-%d, net %d, pos %s, links: %d\n", m_layers.Start(),
             m_layers.End(), m_tag.net, m_tag.pos.Format().c_str(), LinkCount() );
 }
 
@@ -1072,7 +1072,7 @@ void PNS_NODE::Dump( bool aLong )
     if( aLong )
         for( j = m_joints.begin(); j != m_joints.end(); ++j )
         {
-            printf( "joint : %s, links : %d\n",
+            wxLogTrace( "PNS", "joint : %s, links : %d\n",
                     j->second.GetPos().Format().c_str(), j->second.LinkCount() );
             PNS_JOINT::LINKED_ITEMS::const_iterator k;
 
@@ -1085,7 +1085,7 @@ void PNS_NODE::Dump( bool aLong )
                 case PNS_ITEM::SEGMENT:
                     {
                         const PNS_SEGMENT* seg = static_cast<const PNS_SEGMENT*>( m_item );
-                        printf( " -> seg %s %s\n", seg->GetSeg().A.Format().c_str(),
+                        wxLogTrace( "PNS", " -> seg %s %s\n", seg->GetSeg().A.Format().c_str(),
                                 seg->GetSeg().B.Format().c_str() );
                         break;
                     }
@@ -1107,14 +1107,14 @@ void PNS_NODE::Dump( bool aLong )
         PNS_LINE::LinkedSegments* seg_refs = l->GetLinkedSegments();
 
         if( aLong )
-            printf( "Line: %s, net %d ", l->GetLine().Format().c_str(), l->GetNet() );
+            wxLogTrace( "PNS", "Line: %s, net %d ", l->GetLine().Format().c_str(), l->GetNet() );
 
         for( std::vector<PNS_SEGMENT*>::iterator j = seg_refs->begin(); j != seg_refs->end(); ++j )
         {
-            printf( "%s ", (*j)->GetSeg().A.Format().c_str() );
+            wxLogTrace( "PNS", "%s ", (*j)->GetSeg().A.Format().c_str() );
 
             if( j + 1 == seg_refs->end() )
-                printf( "%s\n", (*j)->GetSeg().B.Format().c_str() );
+                wxLogTrace( "PNS", "%s\n", (*j)->GetSeg().B.Format().c_str() );
 
             all_segs.erase( *j );
         }
@@ -1122,7 +1122,7 @@ void PNS_NODE::Dump( bool aLong )
         lines_count++;
     }
 
-    printf( "Local joints: %d, lines : %d \n", m_joints.size(), lines_count );
+    wxLogTrace( "PNS", "Local joints: %d, lines : %d \n", m_joints.size(), lines_count );
 #endif
 }
 

@@ -196,7 +196,7 @@ void PNS_LOGGER::Save( const std::string& aFilename )
     EndGroup();
 
     FILE* f = fopen( aFilename.c_str(), "wb" );
-    printf( "Saving to '%s' [%p]\n", aFilename.c_str(), f );
+    wxLogTrace( "PNS", "Saving to '%s' [%p]\n", aFilename.c_str(), f );
     const std::string s = m_theLog.str();
     fwrite( s.c_str(), 1, s.length(), f );
     fclose( f );

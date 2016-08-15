@@ -341,14 +341,14 @@ void PNS_LINE::ShowLinks()
 {
     if( !m_segmentRefs )
     {
-        printf( "line %p: no links\n", this );
+        wxLogTrace( "PNS", "line %p: no links\n", this );
         return;
     }
 
-    printf( "line %p: %d linked segs\n", this, (int) m_segmentRefs->size() );
+    wxLogTrace( "PNS", "line %p: %d linked segs\n", this, (int) m_segmentRefs->size() );
 
     for( int i = 0; i < (int) m_segmentRefs->size(); i++ )
-        printf( "seg %d: %p\n", i, (*m_segmentRefs)[i] );
+        wxLogTrace( "PNS", "seg %d: %p\n", i, (*m_segmentRefs)[i] );
 }
 
 SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aP )

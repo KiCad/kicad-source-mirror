@@ -266,12 +266,12 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( PNS_ITEM* aItem, int& aNetP, int& aNet
         netNameP = netNameCoupled;
     }
 
-//    printf("p %s n %s base %s\n", (const char *)netNameP.c_str(), (const char *)netNameN.c_str(), (const char *)netNameBase.c_str() );
+//    wxLogTrace( "PNS","p %s n %s base %s\n", (const char *)netNameP.c_str(), (const char *)netNameN.c_str(), (const char *)netNameBase.c_str() );
 
     NETINFO_ITEM* netInfoP = m_board->FindNet( netNameP );
     NETINFO_ITEM* netInfoN = m_board->FindNet( netNameN );
 
-    //printf("ip %p in %p\n", netInfoP, netInfoN);
+    //wxLogTrace( "PNS","ip %p in %p\n", netInfoP, netInfoN);
 
     if( !netInfoP || !netInfoN )
         return false;
@@ -771,7 +771,7 @@ void PNS_KICAD_IFACE::EraseView()
 
 void PNS_KICAD_IFACE::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance )
 {
-    printf( "DisplayItem %p\n", aItem );
+    wxLogTrace( "PNS", "DisplayItem %p\n", aItem );
 
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_previewItems );
 
@@ -878,7 +878,7 @@ void PNS_KICAD_IFACE::Commit()
 
 void PNS_KICAD_IFACE::SetView( KIGFX::VIEW *aView )
 {
-    printf( "SetView %p\n", aView );
+    wxLogTrace( "PNS", "SetView %p\n", aView );
 
     if( m_previewItems )
     {
@@ -901,7 +901,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW *aView )
 
 void PNS_KICAD_IFACE::UpdateNet( int aNetCode )
 {
-    printf( "Update-net %d\n", aNetCode );
+    wxLogTrace( "PNS", "Update-net %d\n", aNetCode );
 }
 
 PNS_RULE_RESOLVER* PNS_KICAD_IFACE::GetRuleResolver()
