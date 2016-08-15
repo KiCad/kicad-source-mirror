@@ -21,7 +21,6 @@
 #include <boost/optional.hpp>
 
 #include <base_units.h> // God forgive me doing this...
-#include <colors.h>
 
 #include "trace.h"
 
