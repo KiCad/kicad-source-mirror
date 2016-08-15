@@ -40,9 +40,9 @@ class PNS_SEGMENT;
 class PNS_LINE;
 class PNS_SOLID;
 class PNS_VIA;
-class PNS_RATSNEST;
 class PNS_INDEX;
 class PNS_ROUTER;
+class PNS_NODE;
 
 /**
  * Class PNS_RULE_RESOLVER
@@ -64,7 +64,6 @@ public:
 
 
 };
-
 
 /**
  * Struct PNS_OBSTACLE
@@ -92,12 +91,33 @@ struct PNS_OBSTACLE
 };
 
 /**
- * Struct PNS_COLLISION_FILTER
- * Used to override the decision of the collision search algorithm whether two
- * items collide.
+ * Struct PNS_OBSTACLE_VISITOR
  **/
-struct PNS_COLLISION_FILTER {
-    virtual bool operator()( const PNS_ITEM *aItemA, const PNS_ITEM *aItemB ) const = 0;
+class PNS_OBSTACLE_VISITOR {
+
+public:
+
+    PNS_OBSTACLE_VISITOR( const PNS_ITEM* aItem );
+
+    void SetWorld( const PNS_NODE* aNode, const PNS_NODE* aOverride = NULL );
+
+    virtual bool operator()( PNS_ITEM *aCandidate ) = 0;
+
+protected:
+
+    bool visit( PNS_ITEM *aCandidate );
+
+    ///> the item we are looking for collisions with
+    const PNS_ITEM* m_item;
+
+    ///> node we are searching in (either root or a branch)
+    const PNS_NODE* m_node;
+
+    ///> node that overrides root entries
+    const PNS_NODE* m_override;
+
+    ///> additional clearance
+    int m_extraClearance;
 };
 
 /**
@@ -176,6 +196,10 @@ public:
                         int             aLimitCount = -1,
                         bool            aDifferentNetsOnly = true,
                         int             aForceClearance = -1 );
+
+    int QueryColliding( const PNS_ITEM *aItem,
+                         PNS_OBSTACLE_VISITOR& aVisitor
+                      );
 
     /**
      * Function NearestObstacle()
@@ -366,7 +390,6 @@ public:
 
     int FindByMarker( int aMarker, PNS_ITEMSET& aItems );
     int RemoveByMarker( int aMarker );
-    void SetCollisionFilter( PNS_COLLISION_FILTER* aFilter );
 
     PNS_ITEM* FindItemByParent( const BOARD_CONNECTED_ITEM *aParent );
 
@@ -375,8 +398,15 @@ public:
         return !m_children.empty();
     }
 
+    ///> checks if this branch contains an updated version of the m_item
+    ///> from the root branch.
+    bool Overrides( PNS_ITEM* aItem ) const
+    {
+        return m_override.find( aItem ) != m_override.end();
+    }
+
 private:
-    struct OBSTACLE_VISITOR;
+    struct DEFAULT_OBSTACLE_VISITOR;
     typedef boost::unordered_multimap<PNS_JOINT::HASH_TAG, PNS_JOINT> JOINT_MAP;
     typedef JOINT_MAP::value_type TagJointPair;
 
@@ -415,13 +445,6 @@ private:
     bool isRoot() const
     {
         return m_parent == NULL;
-    }
-
-    ///> checks if this branch contains an updated version of the m_item
-    ///> from the root branch.
-    bool overrides( PNS_ITEM* aItem ) const
-    {
-        return m_override.find( aItem ) != m_override.end();
     }
 
     PNS_SEGMENT* findRedundantSegment( PNS_SEGMENT* aSeg );
@@ -463,9 +486,6 @@ private:
 
     ///> depth of the node (number of parent nodes in the inheritance chain)
     int m_depth;
-
-    ///> optional collision filtering object
-    PNS_COLLISION_FILTER* m_collisionFilter;
 
     boost::unordered_set<PNS_ITEM*> m_garbageItems;
 };

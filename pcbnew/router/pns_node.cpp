@@ -54,7 +54,6 @@ PNS_NODE::PNS_NODE()
     m_maxClearance = 800000;    // fixme: depends on how thick traces are.
     m_ruleResolver = NULL;
     m_index = new PNS_INDEX;
-    m_collisionFilter = NULL;
 
 #ifdef DEBUG
     allocNodes.insert( this );
@@ -117,7 +116,6 @@ PNS_NODE* PNS_NODE::Branch()
     child->m_parent = this;
     child->m_ruleResolver = m_ruleResolver;
     child->m_root = isRoot() ? this : m_root;
-    child->m_collisionFilter = m_collisionFilter;
 
     // immmediate offspring of the root branch needs not copy anything.
     // For the rest, deep-copy joints, overridden item map and pointers
@@ -149,21 +147,38 @@ void PNS_NODE::unlinkParent()
 }
 
 
+PNS_OBSTACLE_VISITOR::PNS_OBSTACLE_VISITOR( const PNS_ITEM* aItem ) :
+    m_item ( aItem ),
+    m_node ( NULL ),
+    m_override( NULL ),
+    m_extraClearance ( 0 )
+{
+   if( aItem && aItem->Kind() == PNS_ITEM::LINE )
+        m_extraClearance += static_cast<const PNS_LINE*>( aItem )->Width() / 2;
+}
+
+void PNS_OBSTACLE_VISITOR::SetWorld( const PNS_NODE* aNode, const PNS_NODE* aOverride )
+{
+    m_node = aNode;
+    m_override = aOverride;
+}
+
+bool PNS_OBSTACLE_VISITOR::visit( PNS_ITEM *aCandidate )
+{
+    // check if there is a more recent branch with a newer
+    // (possibily modified) version of this item.
+    if( m_override && m_override->Overrides( aCandidate ) )
+        return true;
+
+    return false;
+}
+
 // function object that visits potential obstacles and performs
 // the actual collision refining
-struct PNS_NODE::OBSTACLE_VISITOR
+struct PNS_NODE::DEFAULT_OBSTACLE_VISITOR : public PNS_OBSTACLE_VISITOR
 {
-    ///> node we are searching in (either root or a branch)
-    PNS_NODE* m_node;
-
-    ///> node that overrides root entries
-    PNS_NODE* m_override;
-
     ///> list of encountered obstacles
     OBSTACLES& m_tab;
-
-    ///> the item we are looking for collisions with
-    const PNS_ITEM* m_item;
 
     ///> acccepted kinds of colliding items (solids, vias, segments, etc...)
     int m_kindMask;
@@ -181,20 +196,15 @@ struct PNS_NODE::OBSTACLE_VISITOR
 
     int m_forceClearance;
 
-    OBSTACLE_VISITOR( PNS_NODE::OBSTACLES& aTab, const PNS_ITEM* aItem, int aKindMask, bool aDifferentNetsOnly ) :
-        m_node( NULL ),
-        m_override( NULL ),
+    DEFAULT_OBSTACLE_VISITOR( PNS_NODE::OBSTACLES& aTab, const PNS_ITEM* aItem, int aKindMask, bool aDifferentNetsOnly ) :
+        PNS_OBSTACLE_VISITOR ( aItem ),
         m_tab( aTab ),
-        m_item( aItem ),
         m_kindMask( aKindMask ),
         m_limitCount( -1 ),
         m_matchCount( 0 ),
-        m_extraClearance( 0 ),
         m_differentNetsOnly( aDifferentNetsOnly ),
         m_forceClearance( -1 )
     {
-       if( aItem->Kind() == PNS_ITEM::LINE )
-            m_extraClearance += static_cast<const PNS_LINE*>( aItem )->Width() / 2;
     }
 
     void SetCountLimit( int aLimit )
@@ -202,39 +212,31 @@ struct PNS_NODE::OBSTACLE_VISITOR
         m_limitCount = aLimit;
     }
 
-    void SetWorld( PNS_NODE* aNode, PNS_NODE* aOverride = NULL )
+    bool operator()( PNS_ITEM* aCandidate )
     {
-        m_node = aNode;
-        m_override = aOverride;
-    }
-
-    bool operator()( PNS_ITEM* aItem )
-    {
-        if( !aItem->OfKind( m_kindMask ) )
+        if( !aCandidate->OfKind( m_kindMask ) )
             return true;
 
-        // check if there is a more recent branch with a newer
-        // (possibily modified) version of this item.
-        if( m_override && m_override->overrides( aItem ) )
+        if ( visit(aCandidate) )
             return true;
 
-        int clearance = m_extraClearance + m_node->GetClearance( aItem, m_item );
+        int clearance = m_extraClearance + m_node->GetClearance( aCandidate, m_item );
 
-        if( m_node->m_collisionFilter && (*m_node->m_collisionFilter)( aItem, m_item ) )
-            return true;
-
-        if( aItem->Kind() == PNS_ITEM::LINE )
-            clearance += static_cast<PNS_LINE*>( aItem )->Width() / 2;
+        if( aCandidate->Kind() == PNS_ITEM::LINE ) // this should never happen.
+        {
+            assert( false );
+            clearance += static_cast<PNS_LINE*>( aCandidate )->Width() / 2;
+        }
 
         if( m_forceClearance >= 0 )
             clearance = m_forceClearance;
 
-        if( !aItem->Collide( m_item, clearance, m_differentNetsOnly ) )
+        if( !aCandidate->Collide( m_item, clearance, m_differentNetsOnly ) )
             return true;
 
         PNS_OBSTACLE obs;
 
-        obs.m_item = aItem;
+        obs.m_item = aCandidate;
         obs.m_head = m_item;
         m_tab.push_back( obs );
 
@@ -247,11 +249,25 @@ struct PNS_NODE::OBSTACLE_VISITOR
     };
 };
 
+int PNS_NODE::QueryColliding( const PNS_ITEM *aItem,
+                              PNS_OBSTACLE_VISITOR& aVisitor )
+{
+    aVisitor.SetWorld( this, NULL );
+    m_index->Query( aItem, m_maxClearance, aVisitor );
+
+    // if we haven't found enough items, look in the root branch as well.
+    if( !isRoot() )
+    {
+        aVisitor.SetWorld( m_root, this );
+        m_root->m_index->Query( aItem, m_maxClearance, aVisitor );
+    }
+}
+
 
 int PNS_NODE::QueryColliding( const PNS_ITEM* aItem,
         PNS_NODE::OBSTACLES& aObstacles, int aKindMask, int aLimitCount, bool aDifferentNetsOnly, int aForceClearance )
 {
-    OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly );
+    DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly );
 
 #ifdef DEBUG
     assert( allocNodes.find( this ) != allocNodes.end() );
@@ -453,14 +469,14 @@ bool PNS_NODE::CheckColliding( const PNS_ITEM* aItemA, const PNS_ITEM* aItemB, i
 }
 
 
-struct HIT_VISITOR
+struct HIT_VISITOR : public PNS_OBSTACLE_VISITOR
 {
     PNS_ITEMSET& m_items;
     const VECTOR2I& m_point;
-    const PNS_NODE* m_world;
 
-    HIT_VISITOR( PNS_ITEMSET& aTab, const VECTOR2I& aPoint, const PNS_NODE* aWorld ) :
-        m_items( aTab ), m_point( aPoint ), m_world( aWorld )
+    HIT_VISITOR( PNS_ITEMSET& aTab, const VECTOR2I& aPoint ) :
+        PNS_OBSTACLE_VISITOR ( NULL ),
+        m_items( aTab ), m_point( aPoint )
     {}
 
     bool operator()( PNS_ITEM* aItem )
@@ -483,19 +499,21 @@ const PNS_ITEMSET PNS_NODE::HitTest( const VECTOR2I& aPoint ) const
 
     // fixme: we treat a point as an infinitely small circle - this is inefficient.
     SHAPE_CIRCLE s( aPoint, 0 );
-    HIT_VISITOR visitor( items, aPoint, this );
+    HIT_VISITOR visitor( items, aPoint );
+    visitor.SetWorld(this, NULL);
 
     m_index->Query( &s, m_maxClearance, visitor );
 
     if( !isRoot() )    // fixme: could be made cleaner
     {
         PNS_ITEMSET items_root;
-        HIT_VISITOR  visitor_root( items_root, aPoint, m_root );
+        visitor.SetWorld(m_root, NULL);
+        HIT_VISITOR  visitor_root( items_root, aPoint );
         m_root->m_index->Query( &s, m_maxClearance, visitor_root );
 
         for( PNS_ITEM* item : items_root.Items() )
         {
-            if( !overrides( item ) )
+            if( !Overrides( item ) )
                 items.Add( item );
         }
     }
@@ -1192,7 +1210,7 @@ void PNS_NODE::AllItemsInNet( int aNet, std::set<PNS_ITEM*>& aItems )
 
         if( l_root )
             for( PNS_INDEX::NET_ITEMS_LIST::iterator i = l_root->begin(); i!= l_root->end(); ++i )
-                if( !overrides( *i ) )
+                if( !Overrides( *i ) )
                     aItems.insert( *i );
     }
 }
@@ -1267,12 +1285,6 @@ PNS_SEGMENT* PNS_NODE::findRedundantSegment( PNS_SEGMENT* aSeg )
     }
 
     return NULL;
-}
-
-
-void PNS_NODE::SetCollisionFilter( PNS_COLLISION_FILTER* aFilter )
-{
-    m_collisionFilter = aFilter;
 }
 
 
