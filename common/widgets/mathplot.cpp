@@ -3332,12 +3332,6 @@ double mpScaleXLog::TransformFromPlot( double xplot )
 }
 
 
-double log10( double x )
-{
-    return log( x ) / log( 10.0 );
-}
-
-
 #if 0
 mpFSemiLogXVector::mpFSemiLogXVector( wxString name, int flags ) :
     mpFXYVector( name, flags )
