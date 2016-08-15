@@ -27,7 +27,6 @@
 #include <boost/unordered_set.hpp>
 
 #include <geometry/shape_line_chain.h>
-#include <class_undoredo_container.h>
 
 #include "pns_routing_settings.h"
 #include "pns_sizes_settings.h"
@@ -178,23 +177,6 @@ public:
     void CommitRouting( PNS_NODE* aNode );
 
     /**
-     * Returns the last changes introduced by the router (since the last time ClearLastChanges()
-     * was called or a new track has been started).
-     */
-    const PICKED_ITEMS_LIST& GetUndoBuffer() const
-    {
-        return m_undoBuffer;
-    }
-
-    /**
-     * Clears the list of recent changes, saved to be stored in the undo buffer.
-     */
-    void ClearUndoBuffer()
-    {
-        m_undoBuffer.ClearItemsList();
-    }
-
-    /**
      * Applies stored settings.
      * @see Settings()
      */
@@ -289,7 +271,6 @@ private:
 
     PNS_ROUTING_SETTINGS m_settings;
     ///> Stores list of modified items in the current operation
-    PICKED_ITEMS_LIST m_undoBuffer;
     PNS_SIZES_SETTINGS m_sizes;
     PNS_ROUTER_MODE m_mode;
 

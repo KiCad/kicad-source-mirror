@@ -300,9 +300,9 @@ public:
         m_marker = aMarker;
     }
 
-    virtual void Unmark ()
+    virtual void Unmark (int aMarker = -1)
     {
-        m_marker = 0;
+        m_marker &= ~aMarker;
     }
 
     virtual int Marker() const
@@ -328,6 +328,11 @@ public:
     virtual int AnchorCount() const
     {
         return 0;
+    }
+
+    bool IsLocked() const
+    {
+        return Marker() & MK_LOCKED;
     }
 
 private:

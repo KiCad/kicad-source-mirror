@@ -591,6 +591,9 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
         return SH_INCOMPLETE;
     }
 
+    if ( aVia->IsLocked() )
+        return SH_TRY_WALK;
+
     if( jt->IsLocked() )
         return SH_INCOMPLETE;
 
@@ -1285,18 +1288,25 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveDraggingVia( PNS_VIA* aVia, const VECTOR
 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )
     {
+        if( aNewVia )
+        {
+            printf("setNewV %p", m_draggedVia);
+            *aNewVia = m_draggedVia;
+        }
+
         pushSpringback( m_currentNode, m_draggedViaHeadSet, PNS_COST_ESTIMATOR(), m_affectedAreaSum );
     }
     else
     {
+        if( aNewVia )
+        {
+            *aNewVia = nullptr;
+        }
+
         delete m_currentNode;
         m_currentNode = parent;
     }
 
-    if( aNewVia )
-    {
-        *aNewVia = m_draggedVia;
-    }
     return st;
 }
 
