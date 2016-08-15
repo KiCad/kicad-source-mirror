@@ -231,7 +231,7 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, 
         double radius = (double) aDir.EuclideanNorm();
         double correction = 0;
         if( m_dual && radius > m_meanCornerRadius )
-            correction = (double)(m_baselineOffset * 2) * tan ( 22.5 * M_PI / 180.0 );
+            correction = (double)(-2 * abs(m_baselineOffset)) * tan ( 22.5 * M_PI / 180.0 );
 
         VECTOR2D dir_cu = dir_u.Resize( correction );
         VECTOR2D dir_cv = dir_v.Resize( correction );
