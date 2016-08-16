@@ -34,7 +34,7 @@
 /* Process the command triggered by the left button of the mouse
  * currently: just display info in the message panel.
  */
-void GERBVIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
+void GERBVIEW_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
     GERBER_DRAW_ITEM* DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
 
@@ -52,7 +52,7 @@ void GERBVIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 
 /* Called on a double click of left mouse button.
  */
-void GERBVIEW_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
+void GERBVIEW_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 {
     // Currently: no nothing
 }

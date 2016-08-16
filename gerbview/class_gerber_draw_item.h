@@ -33,7 +33,7 @@
 #include <dlist.h>
 #include <layers_id_colors_and_visibility.h>
 #include <gr_basic.h>
-#include <attributes.h>
+#include <gbr_netlist_metadata.h>
 #include <dcode.h>
 
 class GERBER_FILE_IMAGE;
@@ -92,9 +92,6 @@ public:
                                              * so they are stored inside this item if there is no
                                              * redundancy for these parameters
                                              */
-    GBR_NETLIST_METADATA  m_NetAttribute;   ///< the string given by a %TO attribute set in aperture
-                                            ///< (dcode). Stored in each item, because %TO is
-                                            ///< a dynamic object attribute
 
 private:
     // These values are used to draw this item, according to gerber layers parameters
@@ -107,6 +104,9 @@ private:
     wxRealPoint m_drawScale;                // A and B scaling factor
     wxPoint     m_layerOffset;              // Offset for A and B axis, from OF parameter
     double      m_lyrRotation;              // Fine rotation, from OR parameter, in degrees
+    GBR_NETLIST_METADATA m_netAttributes;   ///< the string given by a %TO attribute set in aperture
+                                            ///< (dcode). Stored in each item, because %TO is
+                                            ///< a dynamic object attribute
 
 public:
     GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberparams );
@@ -114,6 +114,9 @@ public:
 
     GERBER_DRAW_ITEM* Next() const { return static_cast<GERBER_DRAW_ITEM*>( Pnext ); }
     GERBER_DRAW_ITEM* Back() const { return static_cast<GERBER_DRAW_ITEM*>( Pback ); }
+
+    void SetNetAttributes( const GBR_NETLIST_METADATA& aNetAttributes );
+    const GBR_NETLIST_METADATA& GetNetAttributes()  { return m_netAttributes; }
 
     /**
      * Function GetLayer

@@ -81,7 +81,6 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
         Zoom_Automatique( false );
         m_canvas->Refresh();
         ClearMsgPanel();
-        ReFillLayerWidget();
         break;
 
     case ID_GERBVIEW_LOAD_DRILL_FILE:

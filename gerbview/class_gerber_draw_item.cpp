@@ -62,6 +62,19 @@ GERBER_DRAW_ITEM::~GERBER_DRAW_ITEM()
 }
 
 
+void GERBER_DRAW_ITEM::SetNetAttributes( const GBR_NETLIST_METADATA& aNetAttributes )
+{
+    m_netAttributes = aNetAttributes;
+
+    if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) ||
+        ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) )
+        m_GerberImageFile->m_ComponentsList.insert( std::make_pair( m_netAttributes.m_Cmpref, 0 ) );
+
+    if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
+        m_GerberImageFile->m_NetnamesList.insert( std::make_pair( m_netAttributes.m_Netname, 0 ) );
+}
+
+
 int GERBER_DRAW_ITEM::GetLayer() const
 {
     // returns the layer this item is on, or 0 if the m_GerberImageFile is NULL.
@@ -526,38 +539,34 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "AB axis" ), msg, DARKRED ) );
 
     // Display net info, if exists
-    switch( m_NetAttribute.m_NetAttribType )
+    if( m_netAttributes.m_NetAttribType == GBR_NETLIST_METADATA::GBR_NETINFO_UNSPECIFIED )
+        return;
+
+    // Build full net info:
+    wxString net_msg;
+    wxString cmp_pad_msg;
+
+    if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
     {
-        default:
-        case GBR_NETLIST_METADATA::GBR_NETINFO_UNSPECIFIED:
-            break;
-
-        case GBR_NETLIST_METADATA::GBR_NETINFO_FLASHED_PAD:     // .CN attribute
-            msg = _( "Net:" );
-            msg << " " << m_NetAttribute.m_Netname;
-            text.Printf( _( "Pad: '%s' (Cmp: '%s')" ), GetChars( m_NetAttribute.m_Padname ),
-                         GetChars( m_NetAttribute.m_ComponentRef ) );
-            aList.push_back( MSG_PANEL_ITEM( msg, text, CYAN ) );
-            break;
-
-        case GBR_NETLIST_METADATA::GBR_NETINFO_NET:     // .N attribute
-            aList.push_back( MSG_PANEL_ITEM( _( "Net:" ),
-                             m_NetAttribute.m_Netname, CYAN ) );
-            break;
-
-        case GBR_NETLIST_METADATA::GBR_NETINFO_COMPONENT:     // .C attribute
-            aList.push_back( MSG_PANEL_ITEM( _( "Ref:" ),
-                             m_NetAttribute.m_ComponentRef, CYAN ) );
-            break;
-
-        case GBR_NETLIST_METADATA::GBR_NETINFO_NET_AND_CMP:     // .C and .N attribute
-            msg = _( "Net:" );
-            msg << " " << m_NetAttribute.m_Netname;
-            text =_( "Ref:" );
-            text << m_NetAttribute.m_ComponentRef;
-            aList.push_back( MSG_PANEL_ITEM( msg, text, CYAN ) );
-            break;
+        net_msg = _( "Net:" );
+        net_msg << " " << m_netAttributes.m_Netname;
     }
+
+    if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) )
+    {
+        cmp_pad_msg.Printf( _( "Cmp: %s;  Pad: %s" ),
+                                GetChars( m_netAttributes.m_Cmpref ),
+                                GetChars( m_netAttributes.m_Padname ) );
+    }
+
+    else if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )
+    {
+        cmp_pad_msg = _( "Cmp:" );
+        cmp_pad_msg << " " << m_netAttributes.m_Cmpref;
+    }
+
+
+    aList.push_back( MSG_PANEL_ITEM( net_msg, cmp_pad_msg, CYAN ) );
 }
 
 

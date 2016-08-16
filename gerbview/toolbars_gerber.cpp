@@ -42,6 +42,8 @@
 #include <class_DCodeSelectionbox.h>
 #include <dialog_helpers.h>
 
+#include <wx/wupdlock.h>
+
 void GERBVIEW_FRAME::ReCreateHToolbar( void )
 {
     int           ii;
@@ -119,6 +121,65 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
+}
+
+void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
+{
+    wxWindowUpdateLocker dummy( this );
+
+    if( m_auxiliaryToolBar )
+    {
+        updateComponentListSelectBox();
+        updateNetnameListSelectBox();
+        updateAperAttributesSelectBox();
+
+        // combobox sizes can have changed: apply new best sizes
+        wxSize size;
+        size = m_SelComponentBox->GetBestSize();
+        size.x = std::max( size.x, 100 );
+        m_SelComponentBox->SetMinSize( size );
+
+        size = m_SelNetnameBox->GetBestSize();
+        size.x = std::max( size.x, 100 );
+        m_SelNetnameBox->SetMinSize( size );
+
+        size = m_SelAperAttributesBox->GetBestSize();
+        size.x = std::max( size.x, 100 );
+        m_SelAperAttributesBox->SetMinSize( size );
+
+        m_auimgr.Update();
+        return;
+    }
+
+    m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                           wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
+
+    // Creates box to display and choose components:
+    m_SelComponentBox = new wxChoice( m_auxiliaryToolBar,
+                                      ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
+    m_SelComponentBox->SetToolTip( _("Selected a component and highlight its graphic items") );
+    updateComponentListSelectBox();
+    m_auxiliaryToolBar->AddControl( m_SelComponentBox );
+    m_auxiliaryToolBar->AddSeparator();
+
+    // Creates choice box to display net names and highlight selected:
+    m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar,
+                                    ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
+    m_SelNetnameBox->SetToolTip( _("Selected a net name and highlight graphic items belonging to this net") );
+    m_auxiliaryToolBar->AddControl( m_SelNetnameBox );
+    updateNetnameListSelectBox();
+    m_auxiliaryToolBar->AddSeparator();
+
+    // Creates choice box to display aperture attributes and highlight selected:
+    m_SelAperAttributesBox = new wxChoice( m_auxiliaryToolBar,
+                                      ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
+    m_SelAperAttributesBox->SetToolTip( _("Selected an aperture attribute and highlight graphic items having this attribute") );
+    m_auxiliaryToolBar->AddControl( m_SelAperAttributesBox );
+    updateAperAttributesSelectBox();
+    m_auxiliaryToolBar->AddSeparator();
+
+    // after adding the buttons to the toolbar, must call Realize()
+    m_auxiliaryToolBar->Realize();
 }
 
 
@@ -232,6 +293,112 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
     m_optionsToolBar->Realize();
 }
 
+
+#define NO_SELECTION_STRING _("<No selection>")
+
+void GERBVIEW_FRAME:: updateComponentListSelectBox()
+{
+    m_SelComponentBox->Clear();
+
+    // Build the full list of component names from the partial lists stored in each file image
+    std::map<wxString, int> full_list;
+
+    for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
+    {
+        GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
+
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
+        full_list.insert( gerber->m_ComponentsList.begin(), gerber->m_ComponentsList.end() );
+    }
+
+    // Add an empty string to deselect net highlight
+    m_SelComponentBox->Append( NO_SELECTION_STRING );
+
+    // Now copy the list to the choice box
+    for( auto ii = full_list.begin(); ii != full_list.end(); ++ii )
+    {
+        m_SelComponentBox->Append( ii->first );
+    }
+
+    m_SelComponentBox->SetSelection( 0 );
+}
+
+
+void GERBVIEW_FRAME::updateNetnameListSelectBox()
+{
+    m_SelNetnameBox->Clear();
+
+    // Build the full list of netnames from the partial lists stored in each file image
+    std::map<wxString, int> full_list;
+
+    for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
+    {
+        GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
+
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
+        full_list.insert( gerber->m_NetnamesList.begin(), gerber->m_NetnamesList.end() );
+    }
+
+    // Add an empty string to deselect net highlight
+    m_SelNetnameBox->Append( NO_SELECTION_STRING );
+
+    // Now copy the list to the choice box
+    for( auto ii = full_list.begin(); ii != full_list.end(); ++ii )
+    {
+        m_SelNetnameBox->Append( ii->first );
+    }
+
+    m_SelNetnameBox->SetSelection( 0 );
+}
+
+
+void GERBVIEW_FRAME::updateAperAttributesSelectBox()
+{
+    m_SelAperAttributesBox->Clear();
+
+    // Build the full list of netnames from the partial lists stored in each file image
+    std::map<wxString, int> full_list;
+
+    for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
+    {
+        GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( layer );
+
+        if( gerber == NULL )    // Graphic layer not yet used
+            continue;
+
+        if( gerber->GetDcodesCount() == 0 )
+            continue;
+
+        for( int ii = 0; ii < TOOLS_MAX_COUNT; ii++ )
+        {
+            D_CODE* aperture = gerber->GetDCODE( ii + FIRST_DCODE, false );
+
+            if( aperture == NULL )
+                continue;
+
+            if( !aperture->m_InUse && !aperture->m_Defined )
+                continue;
+
+            if( !aperture->m_AperFunction.IsEmpty() )
+                full_list.insert( std::make_pair( aperture->m_AperFunction, 0 ) );
+        }
+    }
+
+    // Add an empty string to deselect net highlight
+    m_SelAperAttributesBox->Append( NO_SELECTION_STRING );
+
+    // Now copy the list to the choice box
+    for( auto ii = full_list.begin(); ii != full_list.end(); ++ii )
+    {
+        m_SelAperAttributesBox->Append( ii->first );
+    }
+
+    m_SelAperAttributesBox->SetSelection( 0 );
+}
 
 void GERBVIEW_FRAME::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
 {

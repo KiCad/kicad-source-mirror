@@ -25,6 +25,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <id.h>
+#include <gerbview_id.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -34,7 +35,7 @@
 /* Prepare the right-click pullup menu.
  * The menu already has a list of zoom commands.
  */
-bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
+bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
 {
     GERBER_DRAW_ITEM* currItem = (GERBER_DRAW_ITEM*) GetScreen()->GetCurItem();
     wxString    msg;
@@ -55,13 +56,13 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
         if( busy )
-            AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
+            AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                          _( "Cancel" ), KiBitmap( cancel_xpm )  );
         else
-            AddMenuItem( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
+            AddMenuItem( aPopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
                          _( "End Tool" ), KiBitmap( cursor_xpm ) );
 
-        PopMenu->AppendSeparator();
+        aPopMenu->AppendSeparator();
     }
     else
     {
@@ -69,19 +70,19 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         {
             if( BlockActive )
             {
-                AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
+                AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                              _( "Cancel Block" ), KiBitmap( cancel_xpm ) );
-                PopMenu->AppendSeparator();
-                AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK,
+                aPopMenu->AppendSeparator();
+                AddMenuItem( aPopMenu, ID_POPUP_PLACE_BLOCK,
                              _( "Place Block" ), KiBitmap( checked_ok_xpm ) );
             }
             else
             {
-                AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
+                AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                              _( "Cancel" ), KiBitmap( cancel_xpm ) );
             }
 
-            PopMenu->AppendSeparator();
+            aPopMenu->AppendSeparator();
         }
     }
 
@@ -89,7 +90,54 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         return true;
 
     if( currItem )
+    {
         GetScreen()->SetCurItem( currItem );
+        bool add_separator = false;
+
+        // Now, display a context menu
+        // to allow highlighting items which share the same attributes
+        // as the selected item (net attributes and aperture attributes)
+        const GBR_NETLIST_METADATA& net_attr = currItem->GetNetAttributes();
+
+        if( ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) ||
+            ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )
+        {
+            AddMenuItem( aPopMenu, ID_HIGHLIGHT_CMP_ITEMS,
+                         wxString::Format( _( "Highlight items of component '%s'" ),
+                                            GetChars( net_attr.m_Cmpref ) ),
+                         KiBitmap( file_footprint_xpm ) );
+            add_separator = true;
+        }
+
+        if( ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
+        {
+            AddMenuItem( aPopMenu, ID_HIGHLIGHT_NET_ITEMS,
+                         wxString::Format( _( "Highlight items of net '%s'" ),
+                                            GetChars( net_attr.m_Netname ) ),
+                         KiBitmap( general_ratsnest_xpm ) );
+            add_separator = true;
+        }
+
+        D_CODE* apertDescr = currItem->GetDcodeDescr();
+
+        if( !apertDescr->m_AperFunction.IsEmpty() )
+        {
+            AddMenuItem( aPopMenu, ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS,
+                         wxString::Format( _( "Highlight aperture type '%s'" ),
+                                            GetChars( apertDescr->m_AperFunction ) ),
+                         KiBitmap( flag_xpm ) );
+            add_separator = true;
+        }
+
+        if( add_separator )
+            aPopMenu->AppendSeparator();
+    }
+
+    AddMenuItem( aPopMenu, ID_HIGHLIGHT_REMOVE_ALL,
+                 _( "Clear highlight" ),
+                 KiBitmap( gerbview_clear_layers_xpm ) );
+
+    aPopMenu->AppendSeparator();
 
     return true;
 }

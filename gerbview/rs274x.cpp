@@ -88,15 +88,16 @@ enum RS274X_PARAMETERS {
 
     // X2 extention Net attribute info
     // Net attribute options are:
-    // TO (net attribute data): TO.CN ot TO.N or TO.C
+    // TO (net attribute data): TO.CN or TO.P TO.N or TO.C
     NET_ATTRIBUTE   = CODE( 'T', 'O' ),
 
     // X2 extention Aperture attribute TA
     APERTURE_ATTRIBUTE   = CODE( 'T', 'A' ),
 
-    // TD (delete aperture attribute): TD (delete all) or TD.CN or TD.N or TD.C ...
-    // due to not yet fully defined,
-    // TD  TD.CNr TD.N TD.C are delete all
+    // TD (delete aperture/object attribute):
+    // Delete aperture attribute added by %TA or Oblect attribute added b %TO
+    // TD (delete all) or %TD<attr name> to delete <attr name>.
+    // eg: TD.P or TD.N or TD.C ...
     REMOVE_APERTURE_ATTRIBUTE   = CODE( 'T', 'D' ),
 
     // Layer specific parameters
@@ -163,7 +164,7 @@ static const wxString fromGerberString( const wxString& aGbrString )
             unsigned value = 0;
 
             for( int jj = 0; jj < 4; jj++ )
-            {
+            {   // Convert 4 hexa digits to binary value:
                 ii++;
                 value <<= 4;
                 int digit = aGbrString[ii];
@@ -171,12 +172,12 @@ static const wxString fromGerberString( const wxString& aGbrString )
                 if( digit >= '0' && digit <= '9' )
                     digit -= '0';
                 else if( digit >= 'A' && digit <= 'F' )
-                    digit -= 'A';
+                    digit -= 'A' - 10;
                 else if( digit >= 'a' && digit <= 'f' )
-                    digit -= 'a';
+                    digit -= 'a' - 10;
                 else digit = 0;
 
-                value += digit & 0xFF;
+                value += digit & 0xF;
             }
 
             text.Append( wxUniChar( value ) );
@@ -434,41 +435,38 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         X2_ATTRIBUTE dummy;
         dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
 
-            if( dummy.GetAttribute() == ".AperFunction" )
+        if( dummy.GetAttribute() == ".AperFunction" )
+        {
             m_AperFunction = dummy.GetPrm( 1 );
+
+            // A few function values can have other parameters. Add them
+            for( int ii = 2; ii < dummy.GetPrmCount(); ii++ )
+                m_AperFunction << "," << dummy.GetPrm( ii );
+        }
         }
         break;
 
-    case NET_ATTRIBUTE:    // Command %TO currently %TO.CN %TO.N and %TO.C
+    case NET_ATTRIBUTE:    // Command %TO currently %TO.P %TO.N and %TO.C
         {
         X2_ATTRIBUTE dummy;
 
         dummy.ParseAttribCmd( m_Current_File, buff, GERBER_BUFZ, text );
 
-        if( dummy.GetAttribute() == ".CN" )
+        if( dummy.GetAttribute() == ".N" )
         {
-            m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_FLASHED_PAD;
-            m_NetAttributeDict.m_ComponentRef = fromGerberString( dummy.GetPrm( 1 ) );
-            m_NetAttributeDict.m_Padname = fromGerberString( dummy.GetPrm( 2 ) );
-            m_NetAttributeDict.m_Netname = fromGerberString( dummy.GetPrm( 3 ) );
-        }
-        else if( dummy.GetAttribute() == ".N" )
-        {
-            if( m_NetAttributeDict.m_NetAttribType == GBR_NETLIST_METADATA::GBR_NETINFO_COMPONENT )
-                m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_NET_AND_CMP;
-            else
-                m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_NET;
-
+            m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_NET;
             m_NetAttributeDict.m_Netname = fromGerberString( dummy.GetPrm( 1 ) );
         }
         else if( dummy.GetAttribute() == ".C" )
         {
-            if( m_NetAttributeDict.m_NetAttribType == GBR_NETLIST_METADATA::GBR_NETINFO_NET )
-                m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_NET_AND_CMP;
-            else
-                m_NetAttributeDict.m_NetAttribType = GBR_NETLIST_METADATA::GBR_NETINFO_COMPONENT;
-
-            m_NetAttributeDict.m_ComponentRef = fromGerberString( dummy.GetPrm( 1 ) );
+            m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_CMP;
+            m_NetAttributeDict.m_Cmpref = fromGerberString( dummy.GetPrm( 1 ) );
+        }
+        else if( dummy.GetAttribute() == ".P" )
+        {
+            m_NetAttributeDict.m_NetAttribType |= GBR_NETLIST_METADATA::GBR_NETINFO_PAD;
+            m_NetAttributeDict.m_Cmpref = fromGerberString( dummy.GetPrm( 1 ) );
+            m_NetAttributeDict.m_Padname = fromGerberString( dummy.GetPrm( 2 ) );
         }
         }
         break;

@@ -82,7 +82,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
               EDA_BASE_FRAME::OnSelectPreferredEditor )
 
     // menu Miscellaneous
-    EVT_MENU( ID_GERBVIEW_GLOBAL_DELETE, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_GERBVIEW_ERASE_CURR_LAYER, GERBVIEW_FRAME::Process_Special_Functions )
 
     // Menu Help
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
@@ -115,6 +115,17 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
                     GERBVIEW_FRAME::OnSelectDisplayMode )
+
+    // Auxiliary horizontal toolbar
+    EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_CHOICE( ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE, GERBVIEW_FRAME::Process_Special_Functions )
+
+    // Right click context menu
+    EVT_MENU( ID_HIGHLIGHT_CMP_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_HIGHLIGHT_NET_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_HIGHLIGHT_REMOVE_ALL, GERBVIEW_FRAME::Process_Special_Functions )
 
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_ZOOM_SELECTION, GERBVIEW_FRAME::OnUpdateSelectTool )
@@ -172,6 +183,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
 
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
+    GERBER_DRAW_ITEM* currItem = (GERBER_DRAW_ITEM*) GetScreen()->GetCurItem();
 
     switch( id )
     {
@@ -184,7 +196,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_GERBVIEW_GLOBAL_DELETE:
+    case ID_GERBVIEW_ERASE_CURR_LAYER:
         Erase_Current_DrawLayer( true );
         ClearMsgPanel();
         break;
@@ -218,6 +230,41 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( &dc );
+        break;
+
+    case ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE:
+    case ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE:
+    case ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE:
+            m_canvas->Refresh();
+        break;
+
+    case ID_HIGHLIGHT_CMP_ITEMS:
+        if( m_SelComponentBox->SetStringSelection( currItem->GetNetAttributes().m_Cmpref ) )
+            m_canvas->Refresh();
+        break;
+
+    case ID_HIGHLIGHT_NET_ITEMS:
+        if( m_SelNetnameBox->SetStringSelection( currItem->GetNetAttributes().m_Netname ) )
+            m_canvas->Refresh();
+        break;
+
+    case ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS:
+        {
+        D_CODE* apertDescr = currItem->GetDcodeDescr();
+        if( m_SelAperAttributesBox->SetStringSelection( apertDescr->m_AperFunction ) )
+            m_canvas->Refresh();
+        }
+        break;
+
+    case ID_HIGHLIGHT_REMOVE_ALL:
+        m_SelComponentBox->SetSelection( 0 );
+        m_SelNetnameBox->SetSelection( 0 );
+        m_SelAperAttributesBox->SetSelection( 0 );
+
+        if( GetGbrImage( getActiveLayer() ) )
+            GetGbrImage( getActiveLayer() )->m_Selected_Tool = 0;
+
+        m_canvas->Refresh();
         break;
 
     default:

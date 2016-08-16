@@ -31,7 +31,7 @@
 #include <dcode.h>
 #include <class_gerber_draw_item.h>
 #include <class_aperture_macro.h>
-#include <attributes.h>
+#include <gbr_netlist_metadata.h>
 
 // An useful macro used when reading gerber files;
 #define IsNumber( x ) ( ( ( (x) >= '0' ) && ( (x) <='9' ) )   \
@@ -165,6 +165,10 @@ public:
                                                                 // add object attribute command.
     wxString          m_AperFunction;                           // the aperture function set by a %TA.AperFunction, xxx
                                                                 // (stores thre xxx value).
+
+    std::map<wxString, int> m_ComponentsList;                   // list of components
+    std::map<wxString, int> m_NetnamesList;                     // list of net names
+
 private:
     wxArrayString      m_messagesList;                          // A list of messages created when reading a file
     int                m_hasNegativeItems;                      // true if the image is negative or has some negative items

@@ -156,13 +156,23 @@ protected:
     wxFileHistory           m_drillFileHistory;
     /// The last filename chosen to be proposed to the user
     wxString                m_lastFileName;
+
 public:
-    GBR_LAYER_BOX_SELECTOR* m_SelLayerBox;
+    wxChoice* m_SelComponentBox;                // a choice box to display and highlight component graphic items
+    wxChoice* m_SelNetnameBox;                  // a choice box to display and highlight netlist graphic items
+    wxChoice* m_SelAperAttributesBox;           // a choice box to display aperture attributes and highlight items
+    GBR_LAYER_BOX_SELECTOR* m_SelLayerBox;      // The combobox to select the current active graphic layer
+                                                // (which is drawn on top on the other layers
     DCODE_SELECTION_BOX*    m_DCodeSelector;    // a list box to select the dcode Id to highlight.
     wxTextCtrl*             m_TextInfo;         // a wxTextCtrl used to display some info about
                                                 // gerber data (format..)
     wxArrayString           m_DCodesList;       // an array string containing all decodes Id (10 to 999)
+
 private:
+    /// Auxiliary tool bar typically shown below the main tool bar at the top of the
+    /// main window.
+    wxAuiToolBar*       m_auxiliaryToolBar;
+
     // list of PARAM_CFG_xxx to read/write parameters saved in config
     PARAM_CFG_ARRAY         m_configSettings;
     COLORS_DESIGN_SETTINGS* m_colorsSettings;
@@ -179,7 +189,11 @@ private:
 
     bool            m_show_layer_manager_tools;
 
-    // An array sting to store warning messages when reading a gerber file.
+    void            updateComponentListSelectBox();
+    void            updateNetnameListSelectBox();
+    void            updateAperAttributesSelectBox();
+
+    // An array string to store warning messages when reading a gerber file.
     wxArrayString   m_Messages;
 
 public:
@@ -193,6 +207,7 @@ public:
     // Virtual basic functions:
     void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void    ReCreateHToolbar();
+    void    ReCreateAuxiliaryToolbar();
 
     /**
      * Function ReCreateVToolbar
@@ -208,9 +223,9 @@ public:
     void    ReCreateOptToolbar();
 
     void    ReCreateMenuBar();
-    void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    void    OnLeftClick( wxDC* aDC, const wxPoint& aMousePos );
+    void    OnLeftDClick( wxDC* aDC, const wxPoint& aMousePos );
+    bool    OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu );
     void    OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     double  BestZoom();
     void    UpdateStatusBar();

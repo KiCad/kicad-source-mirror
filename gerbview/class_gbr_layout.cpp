@@ -99,6 +99,23 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
 {
     GERBVIEW_FRAME* gerbFrame = (GERBVIEW_FRAME*) aPanel->GetParent();
 
+    // Collect the highlight selections
+    wxString cmpHighlight;
+
+    if( gerbFrame->m_SelComponentBox->GetSelection() > 0 )
+        cmpHighlight = gerbFrame->m_SelComponentBox->GetStringSelection();
+
+    wxString netHighlight;
+
+    if( gerbFrame->m_SelNetnameBox->GetSelection() > 0 )
+        netHighlight = gerbFrame->m_SelNetnameBox->GetStringSelection();
+
+    wxString aperAttrHighlight = gerbFrame->m_SelAperAttributesBox->GetStringSelection();
+
+    if( gerbFrame->m_SelAperAttributesBox->GetSelection() > 0 )
+        aperAttrHighlight = gerbFrame->m_SelAperAttributesBox->GetStringSelection();
+
+
     // Because Images can be negative (i.e with background filled in color) items are drawn
     // graphic layer per graphic layer, after the background is filled
     // to a temporary bitmap
@@ -278,6 +295,18 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
             GR_DRAWMODE drawMode = layerdrawMode;
 
             if( dcode_highlight && dcode_highlight == item->m_DCode )
+                DrawModeAddHighlight( &drawMode);
+
+            if( !aperAttrHighlight.IsEmpty() && item->GetDcodeDescr() &&
+                item->GetDcodeDescr()->m_AperFunction == aperAttrHighlight )
+                DrawModeAddHighlight( &drawMode);
+
+            if( !cmpHighlight.IsEmpty() &&
+                cmpHighlight == item->GetNetAttributes().m_Cmpref )
+                DrawModeAddHighlight( &drawMode);
+
+            if( !netHighlight.IsEmpty() &&
+                netHighlight == item->GetNetAttributes().m_Netname )
                 DrawModeAddHighlight( &drawMode);
 
             item->Draw( aPanel, plotDC, drawMode, wxPoint(0,0), aDisplayOptions );

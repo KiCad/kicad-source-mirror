@@ -82,7 +82,8 @@ public:
     const wxString& GetAttribute();
 
     /**
-     * @return the number of parameters read in TF command.
+     * @return the number of parameters read in %TF
+     * (or similar like %TA %TO ...) command.
      */
     int GetPrmCount() { return int( m_Prms.GetCount() ); }
 

@@ -195,38 +195,31 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Separator
     miscellaneousMenu->AppendSeparator();
 
-    // Clear layer
+    // Erase graphic layer
     AddMenuItem( miscellaneousMenu,
-                 ID_GERBVIEW_GLOBAL_DELETE,
-                 _( "&Clear Layer" ),
-                 _( "Clear current layer" ),
-                 KiBitmap( general_deletions_xpm ) );
+                 ID_GERBVIEW_ERASE_CURR_LAYER,
+                 _( "&Clear Current Layer" ),
+                 _( "Erase the graphic layer currently selected" ),
+                 KiBitmap( delete_sheet_xpm ) );
 
     // Separator
     miscellaneousMenu->AppendSeparator();
 
-    // Text editor
+    // Text editor (usefull to browse source files)
     AddMenuItem( miscellaneousMenu,
                  ID_MENU_GERBVIEW_SELECT_PREFERED_EDITOR,
                  _( "&Text Editor" ),
                  _( "Select your preferred text editor" ),
                  KiBitmap( editor_xpm ) );
 
-    // Menu Help
+    // Help menu
     wxMenu* helpMenu = new wxMenu;
 
-    // Contents
     AddMenuItem( helpMenu,
                  wxID_HELP,
                  _( "Gerbview &Manual" ),
                  _( "Open the GerbView Manual" ),
                  KiBitmap( online_help_xpm ) );
-
-    AddMenuItem( helpMenu,
-                 wxID_INDEX,
-                 _( "&Getting Started in KiCad" ),
-                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
 
     AddMenuItem( helpMenu,
                  ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,

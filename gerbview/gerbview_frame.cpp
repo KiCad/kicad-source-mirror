@@ -60,6 +60,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     EDA_DRAW_FRAME( aKiway, aParent, FRAME_GERBER, wxT( "GerbView" ),
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, GERBVIEW_FRAME_NAME )
 {
+    m_auxiliaryToolBar = NULL;
     m_colorsSettings = &g_ColorsSettings;
     m_gerberLayout = NULL;
     m_zoomLevelCoeff = ZOOM_FACTOR( 110 );   // Adjusted to roughly displays zoom level = 1
@@ -119,6 +120,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateOptToolbar();
+    ReCreateAuxiliaryToolbar();
 
     m_auimgr.SetManagedWindow( this );
 
@@ -144,6 +146,12 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     if( m_mainToolBar )
         m_auimgr.AddPane( m_mainToolBar,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
+
+    if( m_auxiliaryToolBar )    // the auxiliary horizontal toolbar, that shows component and netname lists
+    {
+        m_auimgr.AddPane( m_auxiliaryToolBar,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_auxiliaryToolBar" ) ).Top().Row( 1 ) );
+    }
 
     if( m_drawToolBar )
         m_auimgr.AddPane( m_drawToolBar,
@@ -321,6 +329,7 @@ void GERBVIEW_FRAME::ReFillLayerWidget()
 {
     m_LayersManager->ReFill();
     m_SelLayerBox->Resync();
+    ReCreateAuxiliaryToolbar();
 
     wxAuiPaneInfo&  lyrs = m_auimgr.GetPane( m_LayersManager );
 
@@ -419,7 +428,6 @@ void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
 void GERBVIEW_FRAME::Liste_D_Codes()
 {
     int             ii, jj;
-    D_CODE*         pt_D_code;
     wxString        Line;
     wxArrayString   list;
     double          scale = g_UserUnit == INCHES ? IU_PER_MILS * 1000 : IU_PER_MM;
@@ -446,7 +454,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 
         for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
         {
-            pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE, false );
+            D_CODE* pt_D_code = gerber->GetDCODE( ii + FIRST_DCODE, false );
 
             if( pt_D_code == NULL )
                 continue;
@@ -454,19 +462,20 @@ void GERBVIEW_FRAME::Liste_D_Codes()
             if( !pt_D_code->m_InUse && !pt_D_code->m_Defined )
                 continue;
 
-            Line.Printf( wxT( "tool %2.2d:   D%2.2d   V %.4f %s  H %.4f %s   %s  " ),
+            Line.Printf( wxT( "tool %2.2d:   D%2.2d   V %.4f %s  H %.4f %s   %s  attribute '%s'" ),
                          jj,
                          pt_D_code->m_Num_Dcode,
                          pt_D_code->m_Size.y / scale, units,
                          pt_D_code->m_Size.x / scale, units,
-                         D_CODE::ShowApertureType( pt_D_code->m_Shape )
+                         D_CODE::ShowApertureType( pt_D_code->m_Shape ),
+                         pt_D_code->m_AperFunction.IsEmpty()? wxT( "none" ) : GetChars( pt_D_code->m_AperFunction )
                          );
 
             if( !pt_D_code->m_Defined )
-                Line += wxT( "(not defined) " );
+                Line += wxT( " (not defined)" );
 
             if( pt_D_code->m_InUse )
-                Line += wxT( "(in use)" );
+                Line += wxT( " (in use)" );
 
             list.Add( Line );
             jj++;
