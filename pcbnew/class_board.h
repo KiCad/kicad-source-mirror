@@ -224,6 +224,7 @@ private:
     BOARD& operator=( const BOARD& aOther )
     {
         assert( false );
+        return *this;       // just to mute warning
     }
 
 public:

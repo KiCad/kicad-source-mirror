@@ -829,8 +829,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     ctls->SetAutoPan( true );
     frame->UndoRedoBlock( true );
 
-    bool modified = false;
-
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         p0 = ctls->GetCursorPosition();
@@ -845,7 +843,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
-            modified = m_router->FixRoute( p0, NULL );
+            m_router->FixRoute( p0, NULL );
             break;
         }
     }
