@@ -95,7 +95,7 @@ wxString DateAndTime();
  * Function StrLenNumCmp
  * is a routine compatible with qsort() to sort by alphabetical order.
  *
- * This function is equivalent to strncmp() or strnicmp() if \a aIgnoreCase is true
+ * This function is equivalent to strncmp() or strncasecmp() if \a aIgnoreCase is true
  * except that strings containing numbers are compared by their integer value not
  * by their ASCII code.
  *

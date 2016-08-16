@@ -194,7 +194,7 @@ void SPECCTRA_DB::readTIME( time_t* time_stamp ) throw( IO_ERROR )
     mytime.tm_mon = 0;      // remains if we don't find a month match.
     for( int m=0;  months[m];  ++m )
     {
-        if( !stricmp( months[m], ptok ) )
+        if( !strcasecmp( months[m], ptok ) )
         {
             mytime.tm_mon = m;
             break;

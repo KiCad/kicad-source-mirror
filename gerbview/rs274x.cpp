@@ -370,7 +370,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
 
     case AXIS_SELECT:       // command ASAXBY*% or %ASAYBX*%
         m_SwapAxis = false;
-        if( strnicmp( text, "AYBX", 4 ) == 0 )
+        if( strncasecmp( text, "AYBX", 4 ) == 0 )
             m_SwapAxis = true;
         break;
 
@@ -541,13 +541,13 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         break;
 
     case IMAGE_ROTATION:    // command IR0* or IR90* or IR180* or IR270*
-        if( strnicmp( text, "0*", 2 ) == 0 )
+        if( strncasecmp( text, "0*", 2 ) == 0 )
             m_ImageRotation = 0;
-        else if( strnicmp( text, "90*", 3 ) == 0 )
+        else if( strncasecmp( text, "90*", 3 ) == 0 )
             m_ImageRotation = 90;
-        else if( strnicmp( text, "180*", 4 ) == 0 )
+        else if( strncasecmp( text, "180*", 4 ) == 0 )
             m_ImageRotation = 180;
-        else if( strnicmp( text, "270*", 4 ) == 0 )
+        else if( strncasecmp( text, "270*", 4 ) == 0 )
             m_ImageRotation = 270;
         else
             AddMessageToList( _( "RS274X: Command \"IR\" rotation value not allowed" ) );
@@ -681,7 +681,7 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int command, char* buff, char*& te
         break;
 
     case IMAGE_POLARITY:
-        if( strnicmp( text, "NEG", 3 ) == 0 )
+        if( strncasecmp( text, "NEG", 3 ) == 0 )
             m_ImageNegative = true;
         else
             m_ImageNegative = false;

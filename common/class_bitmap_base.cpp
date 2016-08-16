@@ -174,7 +174,7 @@ bool BITMAP_BASE::LoadData( LINE_READER& aLine, wxString& aErrorMsg )
 
         line = aLine.Line();
 
-        if( strnicmp( line, "EndData", 4 ) == 0 )
+        if( strncasecmp( line, "EndData", 4 ) == 0 )
         {
             // all the PNG date is read.
             // We expect here m_image and m_bitmap are void

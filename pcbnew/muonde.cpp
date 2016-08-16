@@ -924,19 +924,19 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
         char* param1 = strtok( Line, " =\n\r" );
         char* param2 = strtok( NULL, " \t\n\r" );
 
-        if( strnicmp( param1, "Unit", 4 ) == 0 )
+        if( strncasecmp( param1, "Unit", 4 ) == 0 )
         {
-            if( strnicmp( param2, "inch", 4 ) == 0 )
+            if( strncasecmp( param2, "inch", 4 ) == 0 )
                 unitconv = IU_PER_MILS*1000;
 
-            if( strnicmp( param2, "mm", 2 ) == 0 )
+            if( strncasecmp( param2, "mm", 2 ) == 0 )
                 unitconv = IU_PER_MM;
         }
 
-        if( strnicmp( param1, "$ENDCOORD", 8 ) == 0 )
+        if( strncasecmp( param1, "$ENDCOORD", 8 ) == 0 )
             break;
 
-        if( strnicmp( param1, "$COORD", 6 ) == 0 )
+        if( strncasecmp( param1, "$COORD", 6 ) == 0 )
         {
             while( reader.ReadLine() )
             {
@@ -944,7 +944,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
                 param1 = strtok( Line, " \t\n\r" );
                 param2 = strtok( NULL, " \t\n\r" );
 
-                if( strnicmp( param1, "$ENDCOORD", 8 ) == 0 )
+                if( strncasecmp( param1, "$ENDCOORD", 8 ) == 0 )
                     break;
 
                 wxRealPoint coord( atof( param1 ), atof( param2 ) );
@@ -952,10 +952,10 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
             }
         }
 
-        if( strnicmp( Line, "XScale", 6 ) == 0 )
+        if( strncasecmp( Line, "XScale", 6 ) == 0 )
             ShapeScaleX = atof( param2 );
 
-        if( strnicmp( Line, "YScale", 6 ) == 0 )
+        if( strncasecmp( Line, "YScale", 6 ) == 0 )
             ShapeScaleY = atof( param2 );
     }
 

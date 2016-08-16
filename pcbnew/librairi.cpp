@@ -144,24 +144,24 @@ static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFile
     reader.ReadLine();
     char* line = reader.Line();
 
-    if( !strnicmp( line, "(module", strlen( "(module" ) ) )
+    if( !strncasecmp( line, "(module", strlen( "(module" ) ) )
     {
         file_type = IO_MGR::KICAD;
         *aName = aFileName.GetName();
     }
-    else if( !strnicmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
+    else if( !strncasecmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) )
     {
         file_type = IO_MGR::LEGACY;
         while( reader.ReadLine() )
         {
-            if( !strnicmp( line, "$MODULE", strlen( "$MODULE" ) ) )
+            if( !strncasecmp( line, "$MODULE", strlen( "$MODULE" ) ) )
             {
                 *aName = FROM_UTF8( StrPurge( line + strlen( "$MODULE" ) ) );
                 break;
             }
         }
     }
-    else if( !strnicmp( line, "Element", strlen( "Element" ) ) )
+    else if( !strncasecmp( line, "Element", strlen( "Element" ) ) )
     {
         file_type = IO_MGR::GEDA_PCB;
         *aName = aFileName.GetName();

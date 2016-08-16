@@ -72,7 +72,7 @@ const char* delims = " \t\r\n";
 static bool strCompare( const char* aString, const char* aLine, const char** aOutput = NULL )
 {
     size_t len = strlen( aString );
-    bool retv = ( strnicmp( aLine, aString, len ) == 0 ) && isspace( aLine[ len ] );
+    bool retv = ( strncasecmp( aLine, aString, len ) == 0 ) && isspace( aLine[ len ] );
 
     if( retv && aOutput )
     {
@@ -1220,7 +1220,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             const char* strCompare = "Path=";
             int         len = strlen( strCompare );
 
-            if( strnicmp( strCompare, line, len ) != 0 )
+            if( strncasecmp( strCompare, line, len ) != 0 )
                 SCH_PARSE_ERROR( "missing 'Path=' token", aReader, line );
 
             line += len;
@@ -1231,7 +1231,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             strCompare = "Ref=";
             len = strlen( strCompare );
 
-            if( strnicmp( strCompare, line, len ) != 0 )
+            if( strncasecmp( strCompare, line, len ) != 0 )
                 SCH_PARSE_ERROR( "missing 'Ref=' token", aReader, line );
 
             line+= len;
@@ -1240,7 +1240,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             strCompare = "Part=";
             len = strlen( strCompare );
 
-            if( strnicmp( strCompare, line, len ) != 0 )
+            if( strncasecmp( strCompare, line, len ) != 0 )
                 SCH_PARSE_ERROR( "missing 'Part=' token", aReader, line );
 
             line+= len;

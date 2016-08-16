@@ -58,7 +58,7 @@ void LEGACY_NETLIST_READER::LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::
             is_comment = true;
 
             if( m_loadFootprintFilters && state == 0
-              && (strnicmp( line, "{ Allowed footprints", 20 ) == 0) )
+              && (strncasecmp( line, "{ Allowed footprints", 20 ) == 0) )
             {
                 loadFootprintFilters();
                 continue;
@@ -221,7 +221,7 @@ void LEGACY_NETLIST_READER::loadFootprintFilters() throw( IO_ERROR, PARSE_ERROR 
 
     while( ( line = m_lineReader->ReadLine() ) != NULL )
     {
-        if( strnicmp( line, "$endlist", 8 ) == 0 )   // end of list for the current component
+        if( strncasecmp( line, "$endlist", 8 ) == 0 )   // end of list for the current component
         {
             wxASSERT( component != NULL );
             component->SetFootprintFilters( filters );
@@ -230,11 +230,11 @@ void LEGACY_NETLIST_READER::loadFootprintFilters() throw( IO_ERROR, PARSE_ERROR 
             continue;
         }
 
-        if( strnicmp( line, "$endfootprintlist", 4 ) == 0 )
+        if( strncasecmp( line, "$endfootprintlist", 4 ) == 0 )
             // End of this section
             return;
 
-        if( strnicmp( line, "$component", 10 ) == 0 ) // New component reference found
+        if( strncasecmp( line, "$component", 10 ) == 0 ) // New component reference found
         {
             cmpRef = FROM_UTF8( line + 11 );
             cmpRef.Trim( true );

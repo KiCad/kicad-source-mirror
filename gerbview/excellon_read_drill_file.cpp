@@ -422,9 +422,9 @@ bool EXCELLON_IMAGE::Execute_HEADER_Command( char*& text )
         }
         text++;     // skip separator
         // Parameter should be ON or OFF
-        if( strnicmp( text, "OFF", 3 ) == 0 )
+        if( strncasecmp( text, "OFF", 3 ) == 0 )
             m_Relative = false;
-        else if( strnicmp( text, "ON", 2 ) == 0 )
+        else if( strncasecmp( text, "ON", 2 ) == 0 )
             m_Relative = true;
         else
             AddMessageToList( _( "ICI command has incorrect parameter" ) );

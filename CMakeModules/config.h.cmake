@@ -39,12 +39,12 @@
 #include <iso646.h>
 #endif
 
-#if defined( HAVE_STRCASECMP )
-#define stricmp strcasecmp
+#if !defined( HAVE_STRCASECMP )
+#define strcasecmp stricmp
 #endif
 
-#if defined( HAVE_STRNCASECMP )
-#define strnicmp strncasecmp
+#if !defined( HAVE_STRNCASECMP )
+#define strncasecmp strnicmp
 #endif
 
 // Use Posix getc_unlocked() instead of getc() when it's available.
