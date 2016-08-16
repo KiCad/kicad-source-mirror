@@ -250,7 +250,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         {
             if( module )
             {
-                board->Delete( module );  // it was added by LoadModuleFromLibrary()
+                delete module;
                 module = NULL;
 
                 preview.Clear();
@@ -285,9 +285,13 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 module = m_frame->LoadModuleFromLibrary( wxEmptyString,
                                                          m_frame->Prj().PcbFootprintLibs(),
                                                          true, NULL );
+
                 if( module == NULL )
                     continue;
 
+                // Module has been added in LoadModuleFromLibrary(),
+                // so we have to remove it before committing the change     @todo LEGACY
+                board->Remove( module );
                 module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
                 // Add all the drawable parts to preview
