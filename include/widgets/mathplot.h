@@ -14,7 +14,7 @@
 #define _MP_MATHPLOT_H_
 
 /** @file mathplot.h */
-/** @mainpage wxMathPlot
+/**
   wxMathPlot is a framework for mathematical graph plotting in wxWindows.
 
   The framework is designed for convenience and ease of use.
