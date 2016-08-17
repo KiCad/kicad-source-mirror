@@ -95,7 +95,7 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer )
     m_IsVisible    = true;          // must be drawn
     m_PositiveDrawColor  = WHITE;   // The color used to draw positive items for this image
 
-    m_Selected_Tool = FIRST_DCODE;
+    m_Selected_Tool = 0;
     m_FileFunction = NULL;          // file function parameters
 
     ResetDefaultValues();
@@ -209,7 +209,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_FilesPtr        = 0;
     m_PolygonFillMode = false;
     m_PolygonFillModeState = 0;
-    m_Selected_Tool = FIRST_DCODE;
+    m_Selected_Tool = 0;
     m_Last_Pen_Command = 0;
     m_Exposure = false;
 

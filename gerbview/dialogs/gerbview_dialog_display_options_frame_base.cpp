@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 10 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -58,7 +58,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	wxString m_OptDisplayFlashedItemsChoices[] = { _("Sketch"), _("Filled") };
 	int m_OptDisplayFlashedItemsNChoices = sizeof( m_OptDisplayFlashedItemsChoices ) / sizeof( wxString );
-	m_OptDisplayFlashedItems = new wxRadioBox( this, wxID_ANY, _("Pads"), wxDefaultPosition, wxDefaultSize, m_OptDisplayFlashedItemsNChoices, m_OptDisplayFlashedItemsChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayFlashedItems = new wxRadioBox( this, wxID_ANY, _("Flashed items"), wxDefaultPosition, wxDefaultSize, m_OptDisplayFlashedItemsNChoices, m_OptDisplayFlashedItemsChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayFlashedItems->SetSelection( 1 );
 	bMiddleSizer->Add( m_OptDisplayFlashedItems, 0, wxALL|wxEXPAND, 5 );
 	

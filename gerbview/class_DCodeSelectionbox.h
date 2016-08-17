@@ -35,24 +35,28 @@
 
 class DCODE_SELECTION_BOX : public wxComboBox
 {
-private:
-    const wxArrayString* m_dcodeList;
-
 public: DCODE_SELECTION_BOX( wxAuiToolBar* aParent, wxWindowID aId,
                              const wxPoint& aLocation, const wxSize& aSize,
-                             const wxArrayString& aChoices);
+                             const wxArrayString* aChoices = NULL );
         ~DCODE_SELECTION_BOX();
 
     /**
      * Function GetSelectedDCodeId
-     * @return the current selected DCode Id or -1 if no dcode
+     * @return the current selected DCode Id or 0 if no dcode
      */
     int GetSelectedDCodeId();
+
     /**
      * Function SetDCodeSelection
-     * @param aDCodeId = the DCode Id to select or -1 to select "no dcode"
+     * @param aDCodeId = the DCode Id to select or <= 0 to select "no dcode"
      */
     void SetDCodeSelection( int aDCodeId );
+
+    /**
+     * Function AppendDCodeList
+     * @param aChoices = the DCode Id list to add to the combo box
+     */
+    void AppendDCodeList( const wxArrayString& aChoices );
 };
 
 #endif //CLASS_DCODESELECTIONBOX_H

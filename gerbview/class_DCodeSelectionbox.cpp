@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,13 +35,13 @@
 
 DCODE_SELECTION_BOX::DCODE_SELECTION_BOX( wxAuiToolBar* aParent, wxWindowID aId,
                                           const wxPoint& aLocation, const wxSize& aSize,
-                                          const wxArrayString& aChoices  ) :
+                                          const wxArrayString* aChoices ) :
     wxComboBox( aParent, aId, wxEmptyString, aLocation, aSize, 0, NULL, wxCB_READONLY )
 {
-    m_dcodeList  = &aChoices;
-    // Append aChoices here is by far faster than use aChoices inside
-    // the wxComboBox constructor
-    Append(aChoices);
+    if( aChoices )
+        // Append aChoices here is by far faster than use aChoices inside
+        // the wxComboBox constructor
+        Append( *aChoices );
 }
 
 
@@ -56,27 +56,43 @@ int DCODE_SELECTION_BOX::GetSelectedDCodeId()
 
     if( ii > 0 )
     {
-        wxString msg = (*m_dcodeList)[ii].AfterFirst( wxChar( ' ' ) );
+        // in strings displayed by the combo box, the dcode number
+        // is the second word. get it:
+        wxString msg = GetString( ii ).AfterFirst( ' ' ).BeforeFirst( ' ' );
         long id;
-        msg.ToLong(&id);
-        return id;
+
+        if( msg.ToLong(&id) )
+            return id;
     }
 
-    return -1;
+    return 0;
 }
 
 
 /* SetDCodeSelection
- * aDCodeId = the DCode Id to select or -1 to select "no dcode"
+ * aDCodeId = the DCode Id to select or <= 0 to select "no selection"
  */
 void DCODE_SELECTION_BOX::SetDCodeSelection( int aDCodeId )
 {
-    if( aDCodeId > LAST_DCODE )
-        aDCodeId = LAST_DCODE;
+    wxString msg;
 
-    int index = 0;
-    if( aDCodeId >= FIRST_DCODE )
-        index = aDCodeId - FIRST_DCODE + 1;
+    for( unsigned index = 1; index < GetCount(); ++index )
+    {
+        msg = GetString( index ).AfterFirst( ' ' ).BeforeFirst( ' ' );
+        long id;
 
-    SetSelection(index);
+        if( msg.ToLong(&id) && id == aDCodeId )
+        {
+            SetSelection( index );
+            return;
+        }
+    }
+
+    SetSelection( 0 );
+}
+
+
+void DCODE_SELECTION_BOX::AppendDCodeList( const wxArrayString& aChoices )
+{
+    Append( aChoices );
 }

@@ -417,6 +417,7 @@ void GERBVIEW_FRAME::syncLayerBox( bool aRebuildLayerBox )
 
     if( m_DCodeSelector )
     {
+        updateDCodeSelectBox();
         m_DCodeSelector->SetDCodeSelection( dcodeSelected );
         m_DCodeSelector->Enable( gerber != NULL );
     }
@@ -868,3 +869,9 @@ unsigned GERBVIEW_FRAME::ImagesMaxCount() const
     return m_gerberLayout->GetImagesList()->ImagesMaxCount();
 }
 
+
+void GERBVIEW_FRAME::unitsChangeRefresh()
+{   // Called on units change (see EDA_DRAW_FRAME)
+    EDA_DRAW_FRAME::unitsChangeRefresh();
+    updateDCodeSelectBox();
+}

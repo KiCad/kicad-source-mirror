@@ -166,7 +166,6 @@ public:
     DCODE_SELECTION_BOX*    m_DCodeSelector;    // a list box to select the dcode Id to highlight.
     wxTextCtrl*             m_TextInfo;         // a wxTextCtrl used to display some info about
                                                 // gerber data (format..)
-    wxArrayString           m_DCodesList;       // an array string containing all decodes Id (10 to 999)
 
 private:
     /// Auxiliary tool bar typically shown below the main tool bar at the top of the
@@ -192,6 +191,8 @@ private:
     void            updateComponentListSelectBox();
     void            updateNetnameListSelectBox();
     void            updateAperAttributesSelectBox();
+    void            updateDCodeSelectBox();
+    virtual void    unitsChangeRefresh() override;      // See class EDA_DRAW_FRAME
 
     // An array string to store warning messages when reading a gerber file.
     wxArrayString   m_Messages;
