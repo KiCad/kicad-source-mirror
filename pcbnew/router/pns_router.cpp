@@ -33,7 +33,6 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
 
-#include "trace.h"
 #include "pns_node.h"
 #include "pns_line_placer.h"
 #include "pns_line.h"

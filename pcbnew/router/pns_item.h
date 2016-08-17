@@ -26,8 +26,6 @@
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 
-#include "trace.h"
-
 #include "pns_layerset.h"
 
 class BOARD_CONNECTED_ITEM;

@@ -41,8 +41,6 @@
 
 #include "length_tuner_tool.h"
 
-#include "trace.h"
-
 using namespace KIGFX;
 using boost::optional;
 

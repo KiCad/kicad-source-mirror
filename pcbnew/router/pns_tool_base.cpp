@@ -55,8 +55,6 @@ using namespace std::placeholders;
 #include "pns_tune_status_popup.h"
 #include "pns_topology.h"
 
-#include "trace.h"
-
 using namespace KIGFX;
 
 TOOL_ACTION PNS_TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
@@ -185,7 +183,9 @@ PNS_ITEM* PNS_TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int a
         rv = NULL;
 
     if( rv )
-        TRACE( 0, "%s, layer : %d, tl: %d", rv->KindStr().c_str() % rv->Layers().Start() % tl );
+    {
+        wxLogTrace( "PNS", "%s, layer : %d, tl: %d", rv->KindStr().c_str(), rv->Layers().Start(), tl );
+    }
 
     return rv;
 }
@@ -307,7 +307,9 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
     }
 
     if( m_endItem )
-        TRACE( 0, "%s, layer : %d", m_endItem->KindStr().c_str() % m_endItem->Layers().Start() );
+    {
+        wxLogTrace( "PNS", "%s, layer : %d", m_endItem->KindStr().c_str(), m_endItem->Layers().Start() );
+    }
 }
 
 

@@ -54,7 +54,6 @@ using namespace std::placeholders;
 #include "router_tool.h"
 #include "pns_segment.h"
 #include "pns_router.h"
-#include "trace.h"
 
 using namespace KIGFX;
 using boost::optional;
@@ -296,7 +295,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
         switch( aEvent.KeyCode() )
         {
         case '0':
-            TRACEn( 2, "saving drag/route log...\n" );
+            wxLogTrace( "PNS", "saving drag/route log...\n" );
             m_router->DumpLog();
             break;
         }

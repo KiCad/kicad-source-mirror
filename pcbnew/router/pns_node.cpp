@@ -28,7 +28,6 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_index.h>
 
-#include "trace.h"
 #include "pns_item.h"
 #include "pns_line.h"
 #include "pns_node.h"
@@ -47,7 +46,7 @@ static boost::unordered_set<PNS_NODE*> allocNodes;
 
 PNS_NODE::PNS_NODE()
 {
-    TRACE( 0, "PNS_NODE::create %p", this );
+    wxLogTrace( "PNS", "PNS_NODE::create %p", this );
     m_depth = 0;
     m_root = this;
     m_parent = NULL;
@@ -63,18 +62,18 @@ PNS_NODE::PNS_NODE()
 
 PNS_NODE::~PNS_NODE()
 {
-    TRACE( 0, "PNS_NODE::delete %p", this );
+    wxLogTrace( "PNS", "PNS_NODE::delete %p", this );
 
     if( !m_children.empty() )
     {
-        TRACEn( 0, "attempting to free a node that has kids.\n" );
+        wxLogTrace( "PNS", "attempting to free a node that has kids.\n" );
         assert( false );
     }
 
 #ifdef DEBUG
     if( allocNodes.find( this ) == allocNodes.end() )
     {
-        TRACEn( 0, "attempting to free an already-free'd node.\n" );
+        wxLogTrace( "PNS", "attempting to free an already-free'd node.\n" );
         assert( false );
     }
 
@@ -108,7 +107,7 @@ PNS_NODE* PNS_NODE::Branch()
 {
     PNS_NODE* child = new PNS_NODE;
 
-    TRACE( 0, "PNS_NODE::branch %p (parent %p)", child % this );
+    wxLogTrace( "PNS", "PNS_NODE::branch %p (parent %p)", child, this );
 
     m_children.insert( child );
 
@@ -131,8 +130,8 @@ PNS_NODE* PNS_NODE::Branch()
         child->m_override = m_override;
     }
 
-    TRACE( 2, "%d items, %d joints, %d overrides",
-            child->m_index->Size() % child->m_joints.size() % child->m_override.size() );
+    wxLogTrace( "PNS", "%d items, %lu joints, %lu overrides",
+            child->m_index->Size(), child->m_joints.size(), child->m_override.size() );
 
     return child;
 }
@@ -583,7 +582,7 @@ void PNS_NODE::addSegment( PNS_SEGMENT* aSeg, bool aAllowRedundant )
 {
     if( aSeg->Seg().A == aSeg->Seg().B )
     {
-        TRACEn( 0, "attempting to add a segment with same end coordinates, ignoring." )
+        wxLogTrace( "PNS", "attempting to add a segment with same end coordinates, ignoring." );
         return;
     }
 

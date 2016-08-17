@@ -112,7 +112,7 @@ bool PNS_DRAGGER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
     aStartItem->Unmark( MK_LOCKED );
 
-    TRACE( 2, "StartDragging: item %p [kind %d]", aStartItem % aStartItem->Kind() );
+    wxLogTrace( "PNS", "StartDragging: item %p [kind %d]", aStartItem, aStartItem->Kind() );
 
     switch( aStartItem->Kind() )
     {

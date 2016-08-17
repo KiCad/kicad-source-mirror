@@ -120,8 +120,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS_ROUTER* a
         ent.clearance = clearance;
         m_clearanceCache[i] = ent;
 
-        TRACE( 1, "Add net %d netclass %s clearance %d", i % netClassName.mb_str() %
-            clearance );
+        wxLogTrace( "PNS", "Add net %d netclass %s clearance %d", i, netClassName.mb_str(), clearance );
     }
 
     m_overrideEnabled = false;
@@ -467,7 +466,7 @@ PNS_ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
         break;
 
     default:
-        TRACE( 0, "unsupported pad type 0x%x", aPad->GetAttribute() );
+        wxLogTrace( "PNS", "unsupported pad type 0x%x", aPad->GetAttribute() );
         return NULL;
     }
 
@@ -562,7 +561,7 @@ PNS_ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                 break;
 
             default:
-                TRACEn( 0, "unsupported pad shape" );
+                wxLogTrace( "PNS", "unsupported pad shape" );
                 delete solid;
                 return NULL;
             }
@@ -659,7 +658,7 @@ PNS_ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
             }
 
             default:
-                TRACEn( 0, "unsupported pad shape" );
+                wxLogTrace( "PNS", "unsupported pad shape" );
                 delete solid;
 
                 return NULL;
@@ -703,7 +702,7 @@ PNS_ITEM* PNS_KICAD_IFACE::syncVia( VIA* aVia )
 void PNS_KICAD_IFACE::SetBoard( BOARD* aBoard )
 {
     m_board = aBoard;
-    TRACE( 1, "m_board = %p\n", m_board );
+    wxLogTrace( "PNS", "m_board = %p\n", m_board );
 }
 
 
@@ -711,7 +710,7 @@ void PNS_KICAD_IFACE::SyncWorld( PNS_NODE *aWorld )
 {
     if( !m_board )
     {
-        TRACEn( 0, "No board attached, aborting sync." );
+        wxLogTrace( "PNS", "No board attached, aborting sync." );
         return;
     }
 

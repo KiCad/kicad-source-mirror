@@ -20,8 +20,6 @@
 
 #include <base_units.h> // God forgive me doing this...
 
-#include "trace.h"
-
 #include "pns_node.h"
 #include "pns_itemset.h"
 #include "pns_topology.h"

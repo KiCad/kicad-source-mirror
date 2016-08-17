@@ -23,7 +23,6 @@
 #include <deque>
 #include <cassert>
 
-#include "trace.h"
 #include "range.h"
 
 #include "pns_line.h"
@@ -191,19 +190,19 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::processHullSet( PNS_LINE& aCurrent, PNS_LINE&
 
         if( ( vFirst < 0 || vLast < 0 ) && !path.CompareGeometry( aObstacle.CLine() ) )
         {
-            TRACE( 100, "attempt %d fail vfirst-last", attempt );
+            wxLogTrace( "PNS", "attempt %d fail vfirst-last", attempt );
             continue;
         }
 
         if( path.CPoint( -1 ) != obs.CPoint( -1 ) || path.CPoint( 0 ) != obs.CPoint( 0 ) )
         {
-            TRACE( 100, "attempt %d fail vend-start\n", attempt );
+            wxLogTrace( "PNS", "attempt %d fail vend-start\n", attempt );
             continue;
         }
 
         if( !checkBumpDirection( aCurrent, l ) )
         {
-            TRACE( 100, "attempt %d fail direction-check", attempt );
+            wxLogTrace( "PNS", "attempt %d fail direction-check", attempt );
             aShoved.SetShape( l.CLine() );
 
             continue;
@@ -211,7 +210,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::processHullSet( PNS_LINE& aCurrent, PNS_LINE&
 
         if( path.SelfIntersecting() )
         {
-            TRACE( 100, "attempt %d fail self-intersect", attempt );
+            wxLogTrace( "PNS", "attempt %d fail self-intersect", attempt );
             continue;
         }
 
@@ -230,7 +229,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::processHullSet( PNS_LINE& aCurrent, PNS_LINE&
 
         if( colliding )
         {
-            TRACE( 100, "attempt %d fail coll-check", attempt );
+            wxLogTrace( "PNS", "attempt %d fail coll-check", attempt );
             continue;
         }
 
@@ -587,7 +586,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::pushVia( PNS_VIA* aVia, const VECTOR2I& aForc
 
     if( !jt )
     {
-        TRACEn( 1, "weird, can't find the center-of-via joint\n" );
+        wxLogTrace( "PNS", "weird, can't find the center-of-via joint\n" );
         return SH_INCOMPLETE;
     }
 
@@ -949,7 +948,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
         case PNS_ITEM::VIA:
         {
             PNS_VIA* revVia = (PNS_VIA*) ni;
-            TRACE( 2, "iter %d: reverse-collide-via", aIter );
+            wxLogTrace( "PNS", "iter %d: reverse-collide-via", aIter );
 
             if( currentLine.EndsWithVia() && m_currentNode->CheckColliding( &currentLine.Via(), revVia ) )
             {
@@ -966,7 +965,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
         case PNS_ITEM::SEGMENT:
         {
             PNS_SEGMENT* seg = (PNS_SEGMENT*) ni;
-            TRACE( 2, "iter %d: reverse-collide-segment ", aIter );
+            wxLogTrace( "PNS", "iter %d: reverse-collide-segment ", aIter );
             PNS_LINE revLine = assembleLine( seg );
 
             popLine();
@@ -986,7 +985,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
         switch( ni->Kind() )
         {
         case PNS_ITEM::SEGMENT:
-            TRACE( 2, "iter %d: collide-segment ", aIter );
+            wxLogTrace( "PNS", "iter %d: collide-segment ", aIter );
 
             st = onCollidingSegment( currentLine, (PNS_SEGMENT*) ni );
 
@@ -997,7 +996,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
             break;
 
         case PNS_ITEM::VIA:
-            TRACE( 2, "iter %d: shove-via ", aIter );
+            wxLogTrace( "PNS", "iter %d: shove-via ", aIter );
             st = onCollidingVia( &currentLine, (PNS_VIA*) ni );
 
             if( st == SH_TRY_WALK )
@@ -1007,7 +1006,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
             break;
 
         case PNS_ITEM::SOLID:
-            TRACE( 2, "iter %d: walk-solid ", aIter );
+            wxLogTrace( "PNS", "iter %d: walk-solid ", aIter );
             st = onCollidingSolid( currentLine, (PNS_SOLID*) ni );
             break;
 
@@ -1026,7 +1025,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveMainLoop()
 
     m_affectedAreaSum = OPT_BOX2I();
 
-    TRACE( 1, "ShoveStart [root: %d jts, current: %d jts]", m_root->JointCount() %
+    wxLogTrace( "PNS", "ShoveStart [root: %d jts, current: %d jts]", m_root->JointCount(),
            m_currentNode->JointCount() );
 
     int iterLimit = Settings().ShoveIterationLimit();
@@ -1144,8 +1143,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveLines( const PNS_LINE& aCurrentHead )
 
     m_currentNode->RemoveByMarker( MK_HEAD );
 
-    TRACE( 1, "Shove status : %s after %d iterations",
-           ( ( st == SH_OK || st == SH_HEAD_MODIFIED ) ? "OK" : "FAILURE") % m_iter );
+    wxLogTrace( "PNS", "Shove status : %s after %d iterations",
+           ( ( st == SH_OK || st == SH_HEAD_MODIFIED ) ? "OK" : "FAILURE"), m_iter );
 
     if( st == SH_OK || st == SH_HEAD_MODIFIED )
     {
@@ -1241,8 +1240,8 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveMultiLines( const PNS_ITEMSET& aHeadSet 
 
     m_currentNode->RemoveByMarker( MK_HEAD );
 
-    TRACE( 1, "Shove status : %s after %d iterations",
-           ( st == SH_OK ? "OK" : "FAILURE") % m_iter );
+    wxLogTrace( "PNS", "Shove status : %s after %d iterations",
+           ( st == SH_OK ? "OK" : "FAILURE"), m_iter );
 
     if( st == SH_OK )
     {
@@ -1290,7 +1289,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::ShoveDraggingVia( PNS_VIA* aVia, const VECTOR
     {
         if( aNewVia )
         {
-            wxLogTrace( "PNS","setNewV %p", m_draggedVia);
+            wxLogTrace( "PNS","setNewV %p", m_draggedVia );
             *aNewVia = m_draggedVia;
         }
 

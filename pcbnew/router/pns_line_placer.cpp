@@ -20,8 +20,6 @@
 
 #include <boost/optional.hpp>
 
-#include "trace.h"
-
 #include "pns_node.h"
 #include "pns_line_placer.h"
 #include "pns_walkaround.h"
@@ -195,8 +193,8 @@ bool PNS_LINE_PLACER::handlePullback()
         m_direction = DIRECTION_45( last );
         m_p_start = last.A;
 
-        TRACE( 0, "Placer: pullback triggered [%d] [%s %s]",
-                n % last_tail.Format().c_str() % first_head.Format().c_str() );
+        wxLogTrace( "PNS", "Placer: pullback triggered [%d] [%s %s]",
+                n, last_tail.Format().c_str(), first_head.Format().c_str() );
 
         // erase the last point in the tail, hoping that the next iteration will
         // result with a head trace that starts with a segment following our
@@ -261,7 +259,7 @@ bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
 
     if( reduce_index >= 0 )
     {
-        TRACE( 0, "Placer: reducing tail: %d", reduce_index );
+        wxLogTrace( "PNS", "Placer: reducing tail: %d", reduce_index );
         SHAPE_LINE_CHAIN reducedLine = new_direction.BuildInitialTrace( new_start, aEnd );
 
         m_p_start = new_start;
@@ -304,13 +302,13 @@ bool PNS_LINE_PLACER::mergeHead()
 
     if( n_head < 3 )
     {
-        TRACEn( 4, "Merge failed: not enough head segs." );
+        wxLogTrace( "PNS", "Merge failed: not enough head segs." );
         return false;
     }
 
     if( n_tail && head.CPoint( 0 ) != tail.CPoint( -1 ) )
     {
-        TRACEn( 4, "Merge failed: head and tail discontinuous." );
+        wxLogTrace( "PNS", "Merge failed: head and tail discontinuous." );
         return false;
     }
 
@@ -346,7 +344,7 @@ bool PNS_LINE_PLACER::mergeHead()
 
     head.Remove( 0, n_head - 2 );
 
-    TRACE( 0, "Placer: merge %d, new direction: %s", n_head % m_direction.Format().c_str() );
+    wxLogTrace( "PNS", "Placer: merge %d, new direction: %s", n_head, m_direction.Format().c_str() );
 
     head.Simplify();
     tail.Simplify();
@@ -574,7 +572,7 @@ bool PNS_LINE_PLACER::optimizeTailHeadTransition()
     {
         PNS_LINE tmp( m_tail, opt_line );
 
-        TRACE( 0, "Placer: optimize tail-head [%d]", threshold );
+        wxLogTrace( "PNS", "Placer: optimize tail-head [%d]", threshold );
 
         head.Clear();
         tail.Replace( -threshold, -1, new_head.CLine() );
@@ -599,9 +597,8 @@ void PNS_LINE_PLACER::routeStep( const VECTOR2I& aP )
 
     PNS_LINE new_head;
 
-    TRACE( 2, "INIT-DIR: %s head: %d, tail: %d segs\n",
-            m_initial_direction.Format().c_str() % m_head.SegmentCount() %
-            m_tail.SegmentCount() );
+    wxLogTrace( "PNS", "INIT-DIR: %s head: %d, tail: %d segs\n",
+            m_initial_direction.Format().c_str(), m_head.SegmentCount(), m_tail.SegmentCount() );
 
     for( i = 0; i < n_iter; i++ )
     {
@@ -789,8 +786,8 @@ void PNS_LINE_PLACER::initPlacement()
 
     setWorld( rootNode );
 
-    TRACE( 1, "world %p, intitial-direction %s layer %d\n",
-            m_world % m_direction.Format().c_str() % aLayer );
+    wxLogTrace( "PNS", "world %p, intitial-direction %s layer %d\n",
+            m_world, m_direction.Format().c_str(), m_currentLayer );
 
     m_lastNode = NULL;
     m_currentNode = m_world;
@@ -977,7 +974,7 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE& aLatest )
             }
         }
 
-        TRACE( 0, "total segs removed: %d/%d\n", removedCount % total );
+        wxLogTrace( "PNS", "total segs removed: %d/%d\n", removedCount, total );
     }
 
     for( PNS_SEGMENT *s : toErase )

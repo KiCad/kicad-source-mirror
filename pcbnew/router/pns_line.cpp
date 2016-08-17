@@ -345,7 +345,7 @@ void PNS_LINE::ShowLinks()
         return;
     }
 
-    wxLogTrace( "PNS", "line %p: %d linked segs\n", this, (int) m_segmentRefs->size() );
+    wxLogTrace( "PNS", "line %p: %lu linked segs\n", this, (int) m_segmentRefs->size() );
 
     for( int i = 0; i < (int) m_segmentRefs->size(); i++ )
         wxLogTrace( "PNS", "seg %d: %p\n", i, (*m_segmentRefs)[i] );

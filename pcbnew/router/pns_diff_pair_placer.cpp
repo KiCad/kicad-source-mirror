@@ -22,8 +22,6 @@
 #include <class_board_item.h>
 #include <class_netinfo.h>
 
-#include "trace.h"
-
 #include "pns_node.h"
 #include "pns_walkaround.h"
 #include "pns_shove.h"
