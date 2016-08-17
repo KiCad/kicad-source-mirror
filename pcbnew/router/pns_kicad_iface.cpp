@@ -295,6 +295,7 @@ public:
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
         Clear();
+        delete m_items;
     }
 
     void SetView( KIGFX::VIEW* aView )
@@ -416,11 +417,14 @@ PNS_KICAD_IFACE::PNS_KICAD_IFACE()
 
 PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 {
-    if( m_ruleResolver )
-        delete m_ruleResolver;
+    delete m_ruleResolver;
+    delete m_debugDecorator;
 
-    if( m_debugDecorator )
-        delete m_debugDecorator;
+    if( m_previewItems )
+    {
+        m_previewItems->FreeItems();
+        delete m_previewItems;
+    }
 }
 
 
@@ -741,9 +745,7 @@ void PNS_KICAD_IFACE::SyncWorld( PNS_NODE *aWorld )
 
     int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
 
-    if( m_ruleResolver )
-        delete m_ruleResolver;
-
+    delete m_ruleResolver;
     m_ruleResolver = new PNS_PCBNEW_RULE_RESOLVER( m_board, m_router );
 
     aWorld->SetRuleResolver( m_ruleResolver );
@@ -892,9 +894,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW *aView )
     m_view->Add( m_previewItems );
     m_previewItems->ViewSetVisible( true );
 
-    if( m_debugDecorator )
-        delete m_debugDecorator;
-
+    delete m_debugDecorator;
     m_debugDecorator = new PNS_PCBNEW_DEBUG_DECORATOR();
     m_debugDecorator->SetView( m_view );
 }

@@ -205,6 +205,7 @@ struct PNS_NODE::DEFAULT_OBSTACLE_VISITOR : public PNS_OBSTACLE_VISITOR
         m_kindMask( aKindMask ),
         m_limitCount( -1 ),
         m_matchCount( 0 ),
+        m_extraClearance( 0 ),
         m_differentNetsOnly( aDifferentNetsOnly ),
         m_forceClearance( -1 )
     {

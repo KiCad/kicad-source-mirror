@@ -68,7 +68,10 @@ TOOL_ACTION PNS_TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOp
 PNS_TOOL_BASE::PNS_TOOL_BASE( const std::string& aToolName ) :
     TOOL_INTERACTIVE( aToolName )
 {
+    m_gridHelper = NULL;
+    m_iface = NULL;
     m_router = NULL;
+
     m_startItem = NULL;
     m_startLayer = 0;
 
@@ -83,20 +86,18 @@ PNS_TOOL_BASE::PNS_TOOL_BASE( const std::string& aToolName ) :
 
 PNS_TOOL_BASE::~PNS_TOOL_BASE()
 {
-    delete m_router;
     delete m_gridHelper;
+    delete m_iface;
+    delete m_router;
 }
 
 
 
 void PNS_TOOL_BASE::Reset( RESET_REASON aReason )
 {
-    if( m_router )
-        delete m_router;
-
-    if( m_gridHelper)
-        delete m_gridHelper;
-
+    delete m_gridHelper;
+    delete m_iface;
+    delete m_router;
 
     m_frame = getEditFrame<PCB_EDIT_FRAME>();
     m_ctls = getViewControls();
