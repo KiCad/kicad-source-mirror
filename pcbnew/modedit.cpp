@@ -40,6 +40,7 @@
 #include <macros.h>
 #include <invoke_pcb_dialog.h>
 #include <class_pcb_layer_widget.h>
+#include <board_commit.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -451,7 +452,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 // the new module replace the old module (pos, orient, ref, value
                 // and connexions are kept)
                 // and the source_module (old module) is deleted
-                PICKED_ITEMS_LIST pickList;
+                BOARD_COMMIT commit( pcbframe );
 
                 if( pcbframe->IsGalCanvasActive() )
                 {
@@ -461,11 +462,10 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                     view->Remove( source_module );
                 }
 
-                pcbframe->Exchange_Module( source_module, newmodule, &pickList );
+                pcbframe->Exchange_Module( source_module, newmodule, commit );
                 newmodule->SetTimeStamp( module_in_edit->GetLink() );
 
-                if( pickList.GetCount() )
-                    pcbframe->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
+                commit.Push( wxT( "" ) );
             }
             else        // This is an insert command
             {

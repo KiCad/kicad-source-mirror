@@ -39,6 +39,7 @@
 /*  Forward declarations of classes. */
 class PCB_SCREEN;
 class BOARD;
+class BOARD_COMMIT;
 class BOARD_ITEM_CONTAINER;
 class TEXTE_PCB;
 class MODULE;
@@ -1088,11 +1089,9 @@ public:
      * OldModule is deleted or put in undo list.
      * @param aOldModule = footprint to replace
      * @param aNewModule = footprint to put
-     * @param aUndoPickList = the undo list used to save  OldModule. If null,
-     *                        OldModule is deleted
+     * @param aCommit = commit that should store the changes
      */
-    void Exchange_Module( MODULE* aOldModule, MODULE* aNewModule,
-                          PICKED_ITEMS_LIST* aUndoPickList );
+    void Exchange_Module( MODULE* aOldModule, MODULE* aNewModule, BOARD_COMMIT& aCommit );
 
     // loading modules: see PCB_BASE_FRAME
 

@@ -35,6 +35,7 @@
 #include <kicad_string.h>
 #include <wxPcbStruct.h>
 #include <macros.h>
+#include <board_commit.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -76,7 +77,7 @@ private:
                           const FPID&        aNewFootprintFPID,
                           bool               eShowError );
 
-    PICKED_ITEMS_LIST m_undoPickList;
+    BOARD_COMMIT m_commit;
 };
 
 
@@ -84,7 +85,7 @@ int DIALOG_EXCHANGE_MODULE::m_selectionMode = 0;
 
 
 DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* Module ) :
-    DIALOG_EXCHANGE_MODULE_BASE( parent )
+    DIALOG_EXCHANGE_MODULE_BASE( parent ), m_commit( parent )
 {
     m_parent = parent;
     m_currentModule = Module;
@@ -141,7 +142,6 @@ void DIALOG_EXCHANGE_MODULE::init()
 
 void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
 {
-    m_undoPickList.ClearItemsList();
     m_selectionMode = m_Selection->GetSelection();
     bool result = false;
 
@@ -172,8 +172,7 @@ void DIALOG_EXCHANGE_MODULE::OnOkClick( wxCommandEvent& event )
         m_parent->GetCanvas()->Refresh();
     }
 
-    if( m_undoPickList.GetCount() )
-        m_parent->SaveCopyInUndoList( m_undoPickList, UR_UNSPECIFIED );
+    m_commit.Push( wxT( "Changed footprint" ) );
 }
 
 
@@ -341,7 +340,7 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
                                               const FPID&        aNewFootprintFPID,
                                               bool               aShowError )
 {
-    MODULE*  newModule;
+    MODULE* newModule;
     wxString line;
 
     if( aModule == NULL )
@@ -367,8 +366,7 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
         return false;
     }
 
-    m_parent->Exchange_Module( aModule, newModule, &m_undoPickList );
-    m_parent->GetBoard()->Add( newModule, ADD_APPEND );
+    m_parent->Exchange_Module( aModule, newModule, m_commit );
 
     if( aModule == m_currentModule )
         m_currentModule = newModule;
@@ -379,15 +377,14 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
 }
 
 
-void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
-                                      MODULE*            aNewModule,
-                                      PICKED_ITEMS_LIST* aUndoPickList )
+void PCB_EDIT_FRAME::Exchange_Module( MODULE* aOldModule,
+                                      MODULE* aNewModule,
+                                      BOARD_COMMIT& aCommit )
 {
     aNewModule->SetParent( GetBoard() );
 
     /* place module without ratsnest refresh: this will be made later
-     * when all modules are on board
-     */
+     * when all modules are on board */
     PlaceModule( aNewModule, NULL, true );
 
     // Copy full placement and pad net names (when possible)
@@ -402,23 +399,12 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     aNewModule->SetTimeStamp( aOldModule->GetTimeStamp() );
     aNewModule->SetPath( aOldModule->GetPath() );
 
-    if( aUndoPickList )
-    {
-        GetBoard()->Remove( aOldModule );
-        ITEM_PICKER picker_old( aOldModule, UR_DELETED );
-        ITEM_PICKER picker_new( aNewModule, UR_NEW );
-        aUndoPickList->PushItem( picker_old );
-        aUndoPickList->PushItem( picker_new );
-    }
-    else
-    {
-        GetGalCanvas()->GetView()->Remove( aOldModule );
-        aOldModule->DeleteStructure();
-    }
+    aCommit.Remove( aOldModule );
+    aCommit.Add( aNewModule );
 
+    // @todo LEGACY should be unnecessary
     GetBoard()->m_Status_Pcb = 0;
     aNewModule->ClearFlags();
-    OnModify();
 }
 
 
