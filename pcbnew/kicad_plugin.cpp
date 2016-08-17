@@ -1729,6 +1729,11 @@ BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPER
     {
         board = dynamic_cast<BOARD*>( m_parser->Parse() );
     }
+    catch( const FUTURE_FORMAT_ERROR& parse_error )
+    {
+        // Don't wrap a FUTURE_FORMAT_ERROR in another
+        throw;
+    }
     catch( const PARSE_ERROR& parse_error )
     {
         if( m_parser->IsTooRecent() )
