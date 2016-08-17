@@ -212,7 +212,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
     {
         // the model cannot be found; we cannot proceed
         wxLogTrace( MASK_3D_CACHE, " * [3D model] could not find model '%s'\n",
-            aModelFile.ToUTF8() );
+            aModelFile.GetData() );
         return NULL;
     }
 
@@ -441,7 +441,7 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( m_CacheDir.empty() )
     {
         wxString errmsg = "cannot load cached model; config directory unknown";
-        wxLogTrace( MASK_3D_CACHE, " * [3D model] %s\n", errmsg.ToUTF8() );
+        wxLogTrace( MASK_3D_CACHE, " * [3D model] %s\n", errmsg.GetData() );
 
         return false;
     }
@@ -452,7 +452,7 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
     {
         wxString errmsg = "cannot open file";
         wxLogTrace( MASK_3D_CACHE, " * [3D model] %s '%s'\n",
-            errmsg.ToUTF8(), fname.ToUTF8() );
+            errmsg.GetData(), fname.GetData() );
         return false;
     }
 
@@ -512,7 +512,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
     if( m_CacheDir.empty() )
     {
         wxString errmsg = "cannot load cached model; config directory unknown";
-        wxLogTrace( MASK_3D_CACHE, " * [3D model] %s\n", errmsg.ToUTF8() );
+        wxLogTrace( MASK_3D_CACHE, " * [3D model] %s\n", errmsg.GetData() );
 
         return false;
     }
@@ -524,7 +524,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
         if( !wxFileName::FileExists( fname ) )
         {
             wxString errmsg = _( "path exists but is not a regular file" );
-            wxLogTrace( MASK_3D_CACHE, " * [3D model] %s '%s'\n", errmsg.ToUTF8(),
+            wxLogTrace( MASK_3D_CACHE, " * [3D model] %s '%s'\n", errmsg.GetData(),
                 fname.ToUTF8() );
 
             return false;

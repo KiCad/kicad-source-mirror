@@ -192,7 +192,7 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
     {
         const wxString msgError = (const char*) glewGetErrorString( err );
 
-        wxLogMessage( "%s", msgError.ToUTF8() );
+        wxLogMessage( msgError );
 
         return false;
     }
