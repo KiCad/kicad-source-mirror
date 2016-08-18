@@ -98,6 +98,10 @@ public:
 
     void SetWidth( int aWidth ) { m_Width = aWidth; }
 
+    void SetRadius( int aRadius ) { m_Radius = aRadius; }
+
+    int GetRadius() const { return m_Radius; }
+
     wxString GetSelectMenuText() const;
 
     BITMAP_DEF GetMenuImage() const { return  add_circle_xpm; }

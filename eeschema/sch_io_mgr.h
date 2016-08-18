@@ -32,6 +32,7 @@ class SCH_SCREEN;
 class SCH_PLUGIN;
 class KIWAY;
 class LIB_PART;
+class PART_LIB;
 class PROPERTIES;
 
 
@@ -253,24 +254,26 @@ public:
                        const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function SymbolEnumerate
-     * returns a list of symbol names contained within the library at @a aLibraryPath.
+     * Function EnumerateSymbolLib
+     * returns a list of #LIB_PART alias names contained within the library @a aLibraryPath.
      *
+     * @param aAliasNameList is an array to populate with the #LIB_ALIAS names associated with
+     *                       the library.
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *   or URL containing several footprints.
+     *                     or URL containing one or more #LIB_PART objects.
+     * @param aProperties is an associative array that can be used to tell the plugin anything
+     *                    needed about how to perform with respect to @a aLibraryPath.  The
+     *                    caller continues to own this object (plugin may not delete it), and
+     *                    plugins should expect it to be optionally NULL.
      *
-     * @param aProperties is an associative array that can be used to tell the
-     *  plugin anything needed about how to perform with respect to @a aLibraryPath.
-     *  The caller continues to own this object (plugin may not delete it), and
-     *  plugins should expect it to be optionally NULL.
-     *
-     * @return wxArrayString - is the array of available footprint names inside
-     *   a library
-     *
-     * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
+     * @throw IO_ERROR if the library cannot be found, the part library cannot be loaded.
      */
-    virtual wxArrayString SymbolEnumerate( const wxString& aLibraryPath,
-                                           const PROPERTIES* aProperties = NULL );
+    virtual void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
+                                     const wxString&   aLibraryPath,
+                                     const PROPERTIES* aProperties = NULL );
+
+    // Temporary for testing using PART_LIB instead of SCH_PLUGIN.
+    virtual void TransferCache( PART_LIB& aTarget );
 
     /**
      * Function SymbolLoad

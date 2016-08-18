@@ -33,6 +33,9 @@
 #include <lib_draw_item.h>
 
 
+class SCH_LEGACY_PLUGIN_CACHE;
+
+
 /**
  * Class LIB_FIELD
  * is used in symbol libraries.  At least MANDATORY_FIELDS are always present
@@ -80,6 +83,8 @@ class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
      * @param aPosition - The position to edit the circle in drawing coordinates.
      */
     void calcEdit( const wxPoint& aPosition );
+
+    friend class SCH_LEGACY_PLUGIN_CACHE;   // Required to access m_name.
 
 public:
 

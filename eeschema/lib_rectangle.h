@@ -102,6 +102,10 @@ public:
 
     void SetWidth( int aWidth ) { m_Width = aWidth; }
 
+    void SetEnd( const wxPoint& aEnd ) { m_End = aEnd; }
+
+    wxPoint GetEnd() const { return m_End; }
+
     wxString GetSelectMenuText() const;
 
     BITMAP_DEF GetMenuImage() const { return  add_rectangle_xpm; }

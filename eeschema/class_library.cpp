@@ -42,6 +42,7 @@
 
 #include <general.h>
 #include <class_library.h>
+#include <sch_legacy_plugin.h>
 
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
@@ -710,10 +711,18 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, bo
 {
     std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
-    wxBusyCursor ShowWait;
+    wxBusyCursor ShowWait;  // Do we want UI elements in PART_LIB?
 
     wxString errorMsg;
 
+#ifdef USE_SCH_IO_MANAGER
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+
+    wxArrayString tmp;
+
+    pi->EnumerateSymbolLib( tmp, aFileName );
+    pi->TransferCache( *lib.get() );
+#else
     if( !lib->Load( errorMsg ) )
         THROW_IO_ERROR( errorMsg );
 
@@ -727,6 +736,7 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, bo
             THROW_IO_ERROR( errorMsg );
 #endif
     }
+#endif
 
     PART_LIB* ret = lib.release();
 
@@ -742,6 +752,7 @@ PART_LIB* PART_LIBS::AddLibrary( const wxString& aFileName ) throw( IO_ERROR, bo
     wxFileName fn = aFileName;
     // Don't reload the library if it is already loaded.
     lib = FindLibrary( fn.GetName() );
+
     if( lib )
         return lib;
 #endif
@@ -1061,6 +1072,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
         try
         {
             cache_lib = AddLibrary( cache_name );
+
             if( cache_lib )
                 cache_lib->SetCache();
         }

@@ -63,7 +63,7 @@ public:
 
     bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
-    void AddPoint( const wxPoint& aPoint );
+    void AddPoint( const wxPoint& aPoint ) { m_BezierPoints.push_back( aPoint ); }
 
     void SetOffset( const wxPoint& aOffset );
 

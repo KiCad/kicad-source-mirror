@@ -304,7 +304,12 @@ void LIB_PART::SetName( const wxString& aName )
 {
     m_name = aName;
     GetValueField().SetText( aName );
-    m_aliases[0]->SetName( aName );
+
+    // The LIB_ALIAS that is the LIB_PART name has to be created so create it.
+    if( m_aliases.size() == 0 )
+        m_aliases.push_back( new LIB_ALIAS( aName, this ) );
+    else
+        m_aliases[0]->SetName( aName );
 }
 
 

@@ -41,6 +41,7 @@
 
 class LINE_READER;
 class OUTPUTFORMATTER;
+class SCH_LEGACY_PLUGIN;
 
 
 /*
@@ -353,6 +354,7 @@ class PART_LIB
 
     friend class LIB_PART;
     friend class PART_LIBS;
+    friend class SCH_LEGACY_PLUGIN;
 
 public:
     PART_LIB( int aType, const wxString& aFileName );

@@ -39,6 +39,9 @@ class SCH_TEXT;
 class SCH_COMPONENT;
 class SCH_FIELD;
 class PROPERTIES;
+class SCH_LEGACY_PLUGIN_CACHE;
+class LIB_PART;
+class PART_LIB;
 
 
 /**
@@ -58,6 +61,9 @@ class SCH_LEGACY_PLUGIN : public SCH_PLUGIN
 {
 public:
 
+    SCH_LEGACY_PLUGIN();
+    virtual ~SCH_LEGACY_PLUGIN() {}
+
     const wxString GetName() const
     {
         return wxT( "Eeschema-Legacy" );
@@ -76,10 +82,12 @@ public:
 
     void Format( SCH_SCREEN* aScreen );
 
-    //-----</PLUGIN IMPLEMENTATION>---------------------------------------------
+    void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
+                             const wxString&   aLibraryPath,
+                             const PROPERTIES* aProperties = NULL );
 
-    SCH_LEGACY_PLUGIN();
-    virtual ~SCH_LEGACY_PLUGIN() {}
+    // Temporary for testing using PART_LIB instead of SCH_PLUGIN.
+    void TransferCache( PART_LIB& aTarget );
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
@@ -105,6 +113,8 @@ private:
     void saveLine( SCH_LINE* aLine );
     void saveText( SCH_TEXT* aText );
 
+    void cacheLib( const wxString& aLibraryFileName );
+
 protected:
     int               m_version;    ///< Version of file being loaded.
     wxString          m_error;      ///< For throwing exceptions
@@ -113,6 +123,7 @@ protected:
     KIWAY*            m_kiway;      ///< Required for path to legacy component libraries.
     SCH_SHEET*        m_rootSheet;  ///< The root sheet of the schematic being loaded..
     FILE_OUTPUTFORMATTER* m_out;    ///< The output formatter for saving SCH_SCREEN objects.
+    SCH_LEGACY_PLUGIN_CACHE* m_cache;
 
     /// initialize PLUGIN like a constructor would.
     void init( KIWAY* aKiway, const PROPERTIES* aProperties = NULL );

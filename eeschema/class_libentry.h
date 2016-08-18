@@ -184,6 +184,7 @@ class LIB_PART : public EDA_ITEM
 {
     friend class PART_LIB;
     friend class LIB_ALIAS;
+    friend class SCH_LEGACY_PLUGIN_CACHE;
 
     PART_SPTR           m_me;               ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
     wxString            m_name;
@@ -239,6 +240,8 @@ public:
     const wxString GetLibraryName();
 
     PART_LIB* GetLib()              { return m_library; }
+
+    void SetLib( PART_LIB* aLibrary ) { m_library = aLibrary; }
 
     wxArrayString GetAliasNames( bool aIncludeRoot = true ) const;
 

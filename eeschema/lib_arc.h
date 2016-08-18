@@ -137,6 +137,22 @@ public:
 
     void SetWidth( int aWidth ) { m_Width = aWidth; }
 
+    void SetRadius( int aRadius ) { m_Radius = aRadius; }
+
+    int GetRadius() const { return m_Radius; }
+
+    void SetFirstRadiusAngle( int aAngle ) { m_t1 = aAngle; }
+
+    int GetFirstRadiusAngle() const { return m_t1; }
+
+    void SetSecondRadiusAngle( int aAngle ) { m_t2 = aAngle; }
+
+    int GetSecondRadiusAngle() const { return m_t2; }
+
+    void SetStart( const wxPoint& aPoint ) { m_ArcStart = aPoint; }
+
+    void SetEnd( const wxPoint& aPoint ) { m_ArcEnd = aPoint; }
+
     wxString GetSelectMenuText() const;
 
     BITMAP_DEF GetMenuImage() const { return  add_arc_xpm; }
