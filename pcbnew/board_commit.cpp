@@ -68,6 +68,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
 
     for( COMMIT_LINE& ent : m_changes )
     {
+        int changeType = ent.m_type & CHT_TYPE;
+        int changeFlags = ent.m_type & CHT_FLAGS;
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
 
         // Module items need to be saved in the undo buffer before modification
@@ -82,7 +84,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
             {
                 if( !ent.m_copy )
                 {
-                    assert( ent.m_type != CHT_MODIFY );     // too late to make a copy..
+                    assert( changeType != CHT_MODIFY );     // too late to make a copy..
                     ent.m_copy = ent.m_item->Clone();
                 }
 
@@ -99,14 +101,17 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
             }
         }
 
-        switch( ent.m_type )
+        switch( changeType )
         {
             case CHT_ADD:
             {
                 if( !m_editModules )
                 {
                     undoList.PushItem( ITEM_PICKER( boardItem, UR_NEW ) );
-                    board->Add( boardItem );
+
+                    if( !( changeFlags & CHT_DONE ) )
+                        board->Add( boardItem );
+
                     //ratsnest->Add( boardItem );       // TODO currently done by BOARD::Add()
 
                     if( boardItem->Type() == PCB_MODULE_T )
@@ -117,8 +122,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                 }
                 else
                 {
+                    // modules inside modules are not supported yet
                     assert( boardItem->Type() != PCB_MODULE_T );
-                    board->m_Modules->Add( boardItem );
+
+                    if( !( changeFlags & CHT_DONE ) )
+                        board->m_Modules->Add( boardItem );
                 }
 
                 view->Add( boardItem );
@@ -174,9 +182,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                     {
                         view->Remove( boardItem );
 
-                        MODULE* module = static_cast<MODULE*>( boardItem->GetParent() );
-                        assert( module && module->Type() == PCB_MODULE_T );
-                        module->Delete( boardItem );
+                        if( !( changeFlags & CHT_DONE ) )
+                        {
+                            MODULE* module = static_cast<MODULE*>( boardItem->GetParent() );
+                            assert( module && module->Type() == PCB_MODULE_T );
+                            module->Delete( boardItem );
+                        }
 
                         board->m_Status_Pcb = 0; // it is done in the legacy view (ratsnest perhaps?)
                     }
@@ -195,7 +206,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                 case PCB_ZONE_T:                // SEG_ZONE items are now deprecated
                 case PCB_ZONE_AREA_T:
                     view->Remove( boardItem );
-                    board->Remove( boardItem );
+
+                    if( !( changeFlags & CHT_DONE ) )
+                        board->Remove( boardItem );
+
                     //ratsnest->Remove( boardItem );    // currently done by BOARD::Remove()
                     break;
 
@@ -209,7 +223,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                     module->RunOnChildren( boost::bind( &KIGFX::VIEW::Remove, view, _1 ) );
 
                     view->Remove( module );
-                    board->Remove( module );
+
+                    if( !( changeFlags & CHT_DONE ) )
+                        board->Remove( module );
 
                     // Clear flags to indicate, that the ratsnest, list of nets & pads are not valid anymore
                     board->m_Status_Pcb = 0;

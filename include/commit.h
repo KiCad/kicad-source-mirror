@@ -32,6 +32,32 @@
 
 class EDA_ITEM;
 
+///> Types of changes
+enum CHANGE_TYPE {
+    CHT_ADD     = 1,
+    CHT_REMOVE  = 2,
+    CHT_MODIFY  = 4,
+    CHT_TYPE    = CHT_ADD | CHT_REMOVE | CHT_MODIFY,
+
+    ///> Flag to indicate the change is already applied,
+    ///> just notify observers (not compatible with CHT_MODIFY)
+    CHT_DONE    = 8,
+    CHT_FLAGS   = CHT_DONE
+};
+
+template<typename T>
+CHANGE_TYPE operator|( CHANGE_TYPE aTypeA, T aTypeB )
+{
+    return CHANGE_TYPE( (int) aTypeA | (int) aTypeB );
+}
+
+template<typename T>
+CHANGE_TYPE operator&( CHANGE_TYPE aTypeA, T aTypeB )
+{
+    return CHANGE_TYPE( (int) aTypeA & (int) aTypeB );
+}
+
+
 /**
  * Class COMMIT
  *
@@ -44,13 +70,6 @@ class EDA_ITEM;
 class COMMIT
 {
 public:
-    ///> types of changes.
-    enum CHANGE_TYPE {
-        CHT_ADD = 0,
-        CHT_REMOVE = 1,
-        CHT_MODIFY = 2
-    };
-
     COMMIT();
     virtual ~COMMIT();
 
@@ -60,10 +79,22 @@ public:
         return Stage( aItem, CHT_ADD );
     }
 
+    ///> Notifies observers that aItem has been added
+    COMMIT& Added( EDA_ITEM* aItem )
+    {
+        return Stage( aItem, CHT_ADD | CHT_DONE );
+    }
+
     ///> Removes a new item from the model
     COMMIT& Remove( EDA_ITEM* aItem )
     {
         return Stage( aItem, CHT_REMOVE );
+    }
+
+    ///> Notifies observers that aItem has been removed
+    COMMIT& Removed( EDA_ITEM* aItem )
+    {
+        return Stage( aItem, CHT_REMOVE | CHT_DONE );
     }
 
     ///> Modifies a given item in the model.

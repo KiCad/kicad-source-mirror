@@ -42,15 +42,19 @@ COMMIT::~COMMIT()
 
 COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 {
-    switch( aChangeType )
+    assert( aChangeType != ( CHT_MODIFY | CHT_DONE ) );    // CHT_MODIFY and CHT_DONE are not compatible
+
+    int flag = aChangeType & CHT_FLAGS;
+
+    switch( aChangeType & CHT_TYPE )
     {
         case CHT_ADD:
             assert( m_changedItems.find( aItem ) == m_changedItems.end() );
-            makeEntry( aItem, CHT_ADD );
+            makeEntry( aItem, CHT_ADD | flag  );
             return *this;
 
         case CHT_REMOVE:
-            makeEntry( aItem, CHT_REMOVE );
+            makeEntry( aItem, CHT_REMOVE | flag );
             return *this;
 
         case CHT_MODIFY:
@@ -58,9 +62,9 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
             EDA_ITEM* parent = parentObject( aItem );
 
             if( m_changedItems.find( parent ) != m_changedItems.end() )
-                return *this; // item already modifed once
+                return *this; // item has been already modified once
 
-            makeEntry( parent, CHT_MODIFY, parent->Clone() );
+            makeEntry( parent, CHT_MODIFY | flag, parent->Clone() );
 
             return *this;
         }
@@ -78,7 +82,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, EDA_ITEM* aCopy )
     EDA_ITEM* parent = parentObject( aItem );
 
     if( m_changedItems.find( parent ) != m_changedItems.end() )
-        return *this; // item already modifed once
+        return *this; // item has been already modified once
 
     makeEntry( parent, CHT_MODIFY, aCopy );
 
@@ -131,7 +135,7 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag )
 void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy )
 {
     // Expect an item copy if it is going to be modified
-    assert( !!aCopy == ( aType == CHT_MODIFY ) );
+    assert( !!aCopy == ( ( aType & CHT_TYPE ) == CHT_MODIFY ) );
 
     COMMIT_LINE ent;
 
@@ -144,7 +148,7 @@ void COMMIT::makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy )
 }
 
 
-COMMIT::CHANGE_TYPE COMMIT::convert( UNDO_REDO_T aType ) const
+CHANGE_TYPE COMMIT::convert( UNDO_REDO_T aType ) const
 {
     switch( aType )
     {
