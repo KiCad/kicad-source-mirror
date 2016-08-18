@@ -46,6 +46,7 @@
 #define TTL_USE_NODE_FLAG // Each node gets a flag (can be set to true or false)
 
 #include <list>
+#include <unordered_set>
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -106,7 +107,7 @@ protected:
     int m_tag;
 
     /// List of board items that share this node
-    std::list<const BOARD_CONNECTED_ITEM*> m_parents;
+    std::unordered_set<const BOARD_CONNECTED_ITEM*> m_parents;
 
     /// Layers that are occupied by this node
     LSET m_layers;
@@ -184,14 +185,19 @@ public:
 
     inline void AddParent( const BOARD_CONNECTED_ITEM* aParent )
     {
-        m_parents.push_back( aParent );
+        m_parents.insert( aParent );
         m_layers.reset();   // mark as needs updating
     }
 
     inline void RemoveParent( const BOARD_CONNECTED_ITEM* aParent )
     {
-        m_parents.remove( aParent );
-        m_layers.reset();   // mark as needs updating
+        auto it = m_parents.find( aParent );
+
+        if( it != m_parents.end() )
+        {
+            m_parents.erase( it );
+            m_layers.reset();   // mark as needs updating
+        }
     }
 
     const LSET& GetLayers()
