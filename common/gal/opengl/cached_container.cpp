@@ -275,8 +275,11 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
     wxLogDebug( wxT( "Resize %p from %d to %d" ), m_item, itemSize, aSize );
 #endif
 
+    // Find a free space chunk >= aSize
+    FREE_CHUNK_MAP::iterator newChunk = m_freeChunks.lower_bound( aSize );
+
     // Is there enough space to store vertices?
-    if( m_freeSpace < aSize )
+    if( newChunk == m_freeChunks.end() )
     {
         bool result;
 
@@ -294,11 +297,10 @@ bool CACHED_CONTAINER::reallocate( unsigned int aSize )
 
         if( !result )
             return false;
-    }
 
-    // Find a free space chunk >= aSize
-    FREE_CHUNK_MAP::iterator newChunk = m_freeChunks.lower_bound( aSize );
-    assert( newChunk != m_freeChunks.end() );
+        newChunk = m_freeChunks.lower_bound( aSize );
+        assert( newChunk != m_freeChunks.end() );
+    }
 
     // Parameters of the allocated chunk
     unsigned int newChunkSize   = getChunkSize( *newChunk );
