@@ -45,9 +45,7 @@ NGSPICE::~NGSPICE()
 
 void NGSPICE::Init()
 {
-    if( m_error )
-        init();
-
+    init();
     Command( "reset" );
 }
 
@@ -270,13 +268,16 @@ string NGSPICE::GetXAxis( SIM_TYPE aType ) const
 
 void NGSPICE::init()
 {
-    m_error = false;
+    if( m_initialized )
+        return;
 
     LOCALE_IO c_locale;               // ngspice works correctly only with C locale
     ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL, &cbBGThreadRunning, this );
 
     // Workaround to avoid hang ups on certain errors
     Command( "unset interactive" );
+
+    m_initialized = true;
 }
 
 
@@ -323,9 +324,12 @@ int NGSPICE::cbBGThreadRunning( bool is_running, int id, void* user )
 int NGSPICE::cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id, void* user )
 {
     // Something went wrong, reload the dll
-    NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
-    sim->m_error = true;
+    //NGSPICE* sim = reinterpret_cast<NGSPICE*>( user );
+    //sim->m_initialized = false;
     //printf("stat %d immed %d quit %d\n", status, !!immediate, !!exit_upon_quit);
 
     return 0;
 }
+
+
+bool NGSPICE::m_initialized = false;

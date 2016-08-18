@@ -74,8 +74,6 @@ public:
     std::vector<double> GetPhasePlot( const std::string& aName, int aMaxLen = -1 ) override;
 
 private:
-    bool m_error;
-
     void init();
 
     // Callback functions
@@ -85,6 +83,9 @@ private:
     static int cbControlledExit( int status, bool immediate, bool exit_upon_quit, int id, void* user );
 
     void dump();
+
+    ///> NGspice should be initialized only once
+    static bool m_initialized;
 };
 
 #endif /* NGSPICE_H */
