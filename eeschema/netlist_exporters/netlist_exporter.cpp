@@ -223,7 +223,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList( EDA_ITEM*   
               m_SortedComponentPinList.end(), sortPinsByNum );
 
         // Remove duplicate Pins in m_SortedComponentPinList
-        eraseDuplicatePins( );
+        eraseDuplicatePins();
 
         // record the usage of this library component entry.
         m_LibParts.insert( part );     // rejects non-unique pointers

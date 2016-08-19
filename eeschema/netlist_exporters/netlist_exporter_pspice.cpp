@@ -310,7 +310,11 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             for( unsigned ii = 0; ii < m_SortedComponentPinList.size(); ii++ )
             {
                 NETLIST_OBJECT* pin = m_SortedComponentPinList[ii];
-                assert( pin );
+
+                // NETLIST_EXPORTER marks removed pins by setting them to NULL
+                if( !pin )
+                    continue;
+
                 spiceItem.m_pins.push_back( pin );
                 pinNames.Add( pin->GetPinNumText() );
 
