@@ -838,7 +838,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
             continue;
         }
 
-        commit.Add( track );
+        commit.Added( track );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, track );
     }
 
@@ -846,7 +846,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
 
     for( ; module; module = module->Next() )
     {
-        commit.Add( module );
+        commit.Added( module );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, module );
     }
 
@@ -854,7 +854,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
 
     for( ; drawing; drawing = drawing->Next() )
     {
-        commit.Add( drawing );
+        commit.Added( drawing );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, drawing );
     }
 
@@ -862,7 +862,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
          zone = board->GetArea( zonescount ) )
     {
         ++zonescount;
-        commit.Add( zone );
+        commit.Added( zone );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, zone );
     }
 
@@ -890,7 +890,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     // Ratsnest
     board->BuildListOfNets();
     board->SynchronizeNetsAndNetClasses();
-    board->GetRatsnest()->Recalculate();
+    board->GetRatsnest()->ProcessBoard();
 
     // Start dragging the appended board
     SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
