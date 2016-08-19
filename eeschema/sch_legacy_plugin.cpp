@@ -2168,7 +2168,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadHeader( FILE_LINE_READER& aReader )
 {
     const char* line = aReader.Line();
 
-    wxCHECK( strCompare( "$HEADER", line, &line ), NULL );
+    wxASSERT( strCompare( "$HEADER", line, &line ) );
 
     while( aReader.ReadLine() )
     {
