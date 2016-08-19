@@ -48,6 +48,7 @@ class SCH_COMPONENT;
 class SPICE_SIMULATOR;
 class NETLIST_EXPORTER_PSPICE_SIM;
 class SIM_PLOT_PANEL;
+class SIM_THREAD_REPORTER;
 class TUNER_SLIDER;
 
 ///> Trace descriptor class
@@ -271,7 +272,8 @@ private:
 
     SCH_EDIT_FRAME* m_schematicFrame;
     std::unique_ptr<NETLIST_EXPORTER_PSPICE_SIM> m_exporter;
-    std::unique_ptr<SPICE_SIMULATOR> m_simulator;
+    SPICE_SIMULATOR* m_simulator;
+    SIM_THREAD_REPORTER* m_reporter;
 
     typedef std::map<wxString, TRACE_DESC> TRACE_MAP;
 

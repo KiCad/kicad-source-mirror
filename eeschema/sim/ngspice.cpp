@@ -45,7 +45,6 @@ NGSPICE::~NGSPICE()
 
 void NGSPICE::Init()
 {
-    init();
     Command( "reset" );
 }
 

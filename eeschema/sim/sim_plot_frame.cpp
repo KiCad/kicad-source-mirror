@@ -109,6 +109,19 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     if( m_schematicFrame == NULL )
         throw std::runtime_error( "There is no schematic window" );
 
+    m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
+
+    if( !m_simulator )
+    {
+        throw std::runtime_error( "Could not create simulator instance" );
+        return;
+    }
+
+    m_simulator->Init();
+
+    m_reporter = new SIM_THREAD_REPORTER( this );
+    m_simulator->SetReporter( m_reporter );
+
     updateNetlistExporter();
 
     Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( SIM_PLOT_FRAME::onClose ), NULL, this );
@@ -145,12 +158,13 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     m_toolBar->Realize();
     m_plotNotebook->SetPageText( 0, _( "Welcome!" ) );
-    m_simulator.reset( SPICE_SIMULATOR::CreateInstance( "ngspice" ) );
 }
 
 
 SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
+    delete m_simulator;
+    delete m_reporter;
 }
 
 
@@ -158,12 +172,6 @@ void SIM_PLOT_FRAME::StartSimulation()
 {
     STRING_FORMATTER formatter;
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
-
-    if( !m_simulator )
-    {
-        DisplayError( this, wxT( "Could not create simulator instance" ) );
-        return;
-    }
 
     m_simConsole->Clear();
     updateNetlistExporter();
@@ -183,8 +191,6 @@ void SIM_PLOT_FRAME::StartSimulation()
         return;
     }
 
-    m_simulator->SetReporter( new SIM_THREAD_REPORTER( this ) );
-    m_simulator->Init();
     m_simulator->LoadNetlist( formatter.GetString() );
     updateTuners();
     applyTuners();
@@ -194,8 +200,7 @@ void SIM_PLOT_FRAME::StartSimulation()
 
 void SIM_PLOT_FRAME::StopSimulation()
 {
-    if( m_simulator )
-        m_simulator->Stop();
+    m_simulator->Stop();
 }
 
 
@@ -367,9 +372,6 @@ void SIM_PLOT_FRAME::updateNetlistExporter()
 
 bool SIM_PLOT_FRAME::updatePlot( const TRACE_DESC& aDescriptor, SIM_PLOT_PANEL* aPanel )
 {
-    if( !m_simulator )
-        return false;
-
     SIM_TYPE simType = m_exporter->GetSimType();
     wxString spiceVector = m_exporter->GetSpiceVector( aDescriptor.GetName(),
             aDescriptor.GetType(), aDescriptor.GetParam() );
@@ -494,6 +496,7 @@ void SIM_PLOT_FRAME::applyTuners()
         /// @todo no ngspice hardcoding
         std::string command( "alter @" + tuner->GetSpiceName()
                 + "=" + tuner->GetValue().ToSpiceString() );
+
         m_simulator->Command( command );
     }
 }
@@ -1015,9 +1018,6 @@ void SIM_PLOT_FRAME::onSimFinished( wxCommandEvent& aEvent )
 
 void SIM_PLOT_FRAME::onSimUpdate( wxCommandEvent& aEvent )
 {
-    if( !m_simulator )
-        return;
-
     if( IsSimulationRunning() )
         StopSimulation();
 

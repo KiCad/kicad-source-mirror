@@ -30,7 +30,12 @@ SPICE_SIMULATOR* SPICE_SIMULATOR::CreateInstance( const std::string& )
 {
     try
     {
-        return new NGSPICE;
+        static NGSPICE* ngspiceInstance = nullptr;
+
+        if( !ngspiceInstance )
+            ngspiceInstance = new NGSPICE;
+
+        return ngspiceInstance;
     }
     catch( std::exception& e )
     {
