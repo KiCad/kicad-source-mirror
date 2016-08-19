@@ -61,7 +61,7 @@ S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
 
         while( sM != eM )
         {
-            wxLogTrace( MASK_3D_PLUGINMGR, "   + '%s' [%s]\n", sM->first.ToUTF8(),
+            wxLogTrace( MASK_3D_PLUGINMGR, "   + '%s' [%s]\n", sM->first.GetData(),
                   sM->second->GetKicadPluginName() );
             ++sM;
         }
@@ -82,7 +82,7 @@ S3D_PLUGIN_MANAGER::S3D_PLUGIN_MANAGER()
 
         while( sFF != eFF )
         {
-            wxLogTrace( MASK_3D_PLUGINMGR, " + '%s'\n", (*sFF).ToUTF8() );
+            wxLogTrace( MASK_3D_PLUGINMGR, " + '%s'\n", (*sFF).GetData() );
             ++sFF;
         }
     }
@@ -348,7 +348,7 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
 
     #ifdef DEBUG
     wxLogTrace( MASK_3D_PLUGINMGR, " * [INFO] found 3D plugin '%s'\n",
-        wxpath.ToUTF8() );
+        wxpath.GetData() );
     #endif
 
     return;
@@ -364,7 +364,7 @@ void S3D_PLUGIN_MANAGER::checkPluginPath( const wxString& aPath,
 
     #ifdef DEBUG
     wxLogTrace( MASK_3D_PLUGINMGR, " * [INFO] checking for 3D plugins in '%s'\n",
-        aPath.ToUTF8() );
+        aPath.GetData() );
     #endif
 
     wxFileName path;

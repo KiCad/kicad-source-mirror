@@ -486,7 +486,7 @@ void CINFO3D_VISU::createBoardPolygon()
         errmsg.append( _( "Unable to calculate the board outlines." ) );
         errmsg.append( wxT( "\n" ) );
         errmsg.append( _( "Therefore use the board boundary box." ) );
-        wxLogMessage( "%s", errmsg.GetData() );
+        wxLogMessage( errmsg );
     }
 
     m_board_poly.BooleanSubtract( allLayerHoles, SHAPE_POLY_SET::PM_FAST );

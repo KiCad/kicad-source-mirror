@@ -52,13 +52,16 @@ public:
     };
 
     // these members are used in the %TO object attributes command.
-    int m_NetAttribType;        ///< the type of net info
+    int      m_NetAttribType;   ///< the type of net info
                                 ///< (used to define the gerber string to create)
+    bool     m_NotInNet;        ///< true if a pad of a footprint cannot be connected
+                                ///< (for instance a mechanical NPTH, ot a not named pad)
+                                ///< in this case the pad net name is empty in gerber file
     wxString m_Padname;         ///< for a flashed pad: the pad name ((TO.P attribute)
     wxString m_Cmpref;          ///< the component reference parent of the data
     wxString m_Netname;         ///< for items associated to a net: the netname
 
-    GBR_NETLIST_METADATA(): m_NetAttribType( GBR_NETINFO_UNSPECIFIED )
+    GBR_NETLIST_METADATA(): m_NetAttribType( GBR_NETINFO_UNSPECIFIED ), m_NotInNet( false )
     {
     }
 

@@ -721,11 +721,23 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
     msg << wxT( " [" );
 
     if( getCurNickname().size() )
+    {
         msg << getCurNickname();
+    }
     else
         msg += _( "no library selected" );
 
     msg << wxT( "]" );
+
+    // Now, add the full path, for info
+    if( getCurNickname().size() )
+    {
+        FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
+        const FP_LIB_TABLE::ROW* row = libtable->FindRow( getCurNickname() );
+
+        if( row )
+            msg << " (" << row->GetFullURI( true ) << ")";
+    }
 
     SetTitle( msg );
 }

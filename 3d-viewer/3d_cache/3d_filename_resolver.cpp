@@ -225,8 +225,8 @@ bool S3D_FILENAME_RESOLVER::createPathList( void )
 
     while( sPL != ePL )
     {
-        wxLogTrace( MASK_3D_RESOLVER, "   + %s : '%s'\n", (*sPL).m_alias.ToUTF8(),
-            (*sPL).m_pathexp.ToUTF8() );
+        wxLogTrace( MASK_3D_RESOLVER, "   + %s : '%s'\n", (*sPL).m_alias.GetData(),
+            (*sPL).m_pathexp.GetData() );
         ++sPL;
     }
 #endif
@@ -317,7 +317,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             wxString errmsg = "[3D File Resolver] No such path; ensure the environment var is defined";
             errmsg.append( "\n" );
             errmsg.append( tname );
-            wxLogMessage( "%s\n", errmsg.ToUTF8() );
+            wxLogMessage( errmsg );
         }
 
         return wxEmptyString;
@@ -392,7 +392,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
             wxString errmsg = "[3D File Resolver] No such path";
             errmsg.append( "\n" );
             errmsg.append( tname );
-            wxLogTrace( MASK_3D_RESOLVER, "%s\n", errmsg.ToUTF8() );
+            wxLogTrace( MASK_3D_RESOLVER, errmsg );
         }
 
         return wxEmptyString;
@@ -428,7 +428,7 @@ wxString S3D_FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         wxString errmsg = "[3D File Resolver] No such path; ensure the path alias is defined";
         errmsg.append( "\n" );
         errmsg.append( tname.substr( 1 ) );
-        wxLogTrace( MASK_3D_RESOLVER, "%s\n", errmsg.ToUTF8() );
+        wxLogTrace( MASK_3D_RESOLVER, errmsg );
     }
 
     return wxEmptyString;

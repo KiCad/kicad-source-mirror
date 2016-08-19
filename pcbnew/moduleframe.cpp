@@ -777,6 +777,16 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
             // of libary selection UI.
             goto L_none;
         }
+
+        // Now, add the full path, for info
+        if( nickname.size() )
+        {
+            FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
+            const FP_LIB_TABLE::ROW* row = libtable->FindRow( nickname );
+
+            if( row )
+                title << " (" << row->GetFullURI( true ) << ")";
+        }
     }
 
     SetTitle( title );
