@@ -102,7 +102,10 @@ void DIALOG_EDIT_ONE_FIELD::init()
     wxString msg;
 
     m_TextValue->SetFocus();
-    m_TextValue->SetValidator( SCH_FIELD_VALIDATOR( m_fieldId, &m_text ) );
+    SCH_BASE_FRAME* parent = static_cast<SCH_BASE_FRAME*>( GetParent() );
+    m_TextValue->SetValidator( SCH_FIELD_VALIDATOR(
+                                    parent->IsType( FRAME_SCH_LIB_EDITOR ),
+                                    m_fieldId, &m_text ) );
 
     // Disable options for graphic text editing which are not needed for fields.
     m_CommonConvert->Show( false );

@@ -674,7 +674,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     // if fieldNdx == REFERENCE, VALUE, then disable delete button
     deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );
 
-    fieldValueTextCtrl->SetValidator( SCH_FIELD_VALIDATOR( field.GetId() ) );
+    fieldValueTextCtrl->SetValidator( SCH_FIELD_VALIDATOR( true, field.GetId() ) );
     fieldValueTextCtrl->SetValue( field.GetText() );
 
     textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );

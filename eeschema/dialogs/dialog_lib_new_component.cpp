@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,15 @@
  */
 
 #include <dialog_lib_new_component.h>
+#include <sch_validators.h>
+#include <template_fieldnames.h>
 
 DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( wxWindow* parent ) :
     DIALOG_LIB_NEW_COMPONENT_BASE( parent )
 {
+    m_textName->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE ) );
+    m_textReference->SetValidator( SCH_FIELD_VALIDATOR( true, REFERENCE ) );
+
     // initial focus should be on first editable field.
     m_textName->SetFocus();
 
