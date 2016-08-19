@@ -706,8 +706,12 @@ bool DIALOG_SPICE_MODEL::addPwlValue( const wxString& aTime, const wxString& aVa
 
 void DIALOG_SPICE_MODEL::onSemiSelectLib( wxCommandEvent& event )
 {
-    wxFileDialog openDlg( this, wxT( "Select library" ),
-            wxFileName( m_semiLib->GetValue() ).GetPath(), "",
+    wxString searchPath = wxFileName( m_semiLib->GetValue() ).GetPath();
+
+    if( searchPath.IsEmpty() )
+        searchPath = Prj().GetProjectPath();
+
+    wxFileDialog openDlg( this, wxT( "Select library" ), searchPath, "",
             "Spice library file (*.lib)|*.lib;*.LIB|Any file|*",
             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
@@ -723,13 +727,18 @@ void DIALOG_SPICE_MODEL::onSemiSelectLib( wxCommandEvent& event )
         m_semiLib->SetValue( openDlg.GetPath() );
 
     updateFromFile( m_semiModel, openDlg.GetPath(), ".model" );
+    m_semiModel->Popup();
 }
 
 
 void DIALOG_SPICE_MODEL::onSelectIcLib( wxCommandEvent& event )
 {
-    wxFileDialog openDlg( this, wxT( "Select library" ),
-            wxFileName( m_icLib->GetValue() ).GetPath(), "",
+    wxString searchPath = wxFileName( m_icLib->GetValue() ).GetPath();
+
+    if( searchPath.IsEmpty() )
+        searchPath = Prj().GetProjectPath();
+
+    wxFileDialog openDlg( this, wxT( "Select library" ), searchPath, "",
             "Spice library file (*.lib)|*.lib;*.LIB|Any file|*",
             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
@@ -745,6 +754,7 @@ void DIALOG_SPICE_MODEL::onSelectIcLib( wxCommandEvent& event )
         m_icLib->SetValue( openDlg.GetPath() );
 
     updateFromFile( m_icModel, openDlg.GetPath(), ".subckt" );
+    m_icModel->Popup();
 }
 
 
