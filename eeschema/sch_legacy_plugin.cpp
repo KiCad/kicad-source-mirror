@@ -2609,7 +2609,7 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr< LIB_PART >& aPart,
 {
     const char* line = aReader.Line();
 
-    wxCHECK_RET( strCompare( "A", line, &line ), "Invalid LIB_ARC definition" );
+    wxCHECK_MSG( strCompare( "A", line, &line ), NULL, "Invalid LIB_ARC definition" );
 
     std::unique_ptr< LIB_ARC > arc( new LIB_ARC( aPart.get() ) );
 
@@ -2672,7 +2672,7 @@ LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr< LIB_PART >& aP
 {
     const char* line = aReader.Line();
 
-    wxCHECK_RET( strCompare( "C", line, &line ), "Invalid LIB_CIRCLE definition" );
+    wxCHECK_MSG( strCompare( "C", line, &line ), NULL, "Invalid LIB_CIRCLE definition" );
 
     std::unique_ptr< LIB_CIRCLE > circle( new LIB_CIRCLE( aPart.get() ) );
 
@@ -2699,7 +2699,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
 {
     const char* line = aReader.Line();
 
-    wxCHECK_RET( strCompare( "T", line, &line ), "Invalid LIB_TEXT definition" );
+    wxCHECK_MSG( strCompare( "T", line, &line ), NULL, "Invalid LIB_TEXT definition" );
 
     std::unique_ptr< LIB_TEXT > text( new LIB_TEXT( aPart.get() ) );
 
@@ -2799,7 +2799,7 @@ LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr< LIB_PART
 {
     const char* line = aReader.Line();
 
-    wxCHECK_RET( strCompare( "S", line, &line ), "Invalid LIB_RECTANGLE definition" );
+    wxCHECK_MSG( strCompare( "S", line, &line ), NULL, "Invalid LIB_RECTANGLE definition" );
 
     std::unique_ptr< LIB_RECTANGLE > rectangle( new LIB_RECTANGLE( aPart.get() ) );
 
@@ -2831,7 +2831,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
 {
     const char* line = aReader.Line();
 
-    wxCHECK_RET( strCompare( "X", line, &line ), "Invalid LIB_PIN definition" );
+    wxCHECK_MSG( strCompare( "X", line, &line ), NULL, "Invalid LIB_PIN definition" );
 
     std::unique_ptr< LIB_PIN > pin( new LIB_PIN( aPart.get() ) );
 
@@ -3018,7 +3018,7 @@ LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr< LIB_PART >
 {
     const char* line = aReader.Line();
 
-    wxCHECK_RET( strCompare( "P", line, &line ), "Invalid LIB_POLYLINE definition" );
+    wxCHECK_MSG( strCompare( "P", line, &line ), NULL, "Invalid LIB_POLYLINE definition" );
 
     std::unique_ptr< LIB_POLYLINE > polyLine( new LIB_POLYLINE( aPart.get() ) );
 
@@ -3048,7 +3048,7 @@ LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr< LIB_PART >& aP
 {
     const char* line = aReader.Line();
 
-    wxCHECK_RET( strCompare( "B", line, &line ), "Invalid LIB_BEZIER definition" );
+    wxCHECK_MSG( strCompare( "B", line, &line ), NULL, "Invalid LIB_BEZIER definition" );
 
     std::unique_ptr< LIB_BEZIER > bezier( new LIB_BEZIER( aPart.get() ) );
 
@@ -3078,7 +3078,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr< LIB_PART >&
 {
     const char* line = aReader.Line();
 
-    wxCHECK_RET( strCompare( "$FPLIST", line, &line ), "Invalid footprint filter liat" );
+    wxCHECK_RET( strCompare( "$FPLIST", line, &line ), "Invalid footprint filter list" );
 
     line = aReader.ReadLine();
 
