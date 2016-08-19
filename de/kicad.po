@@ -18572,7 +18572,7 @@ msgstr "Vorschlag Beendigung Leiterbahn"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid "Optimizer effort"
-msgstr "Otimierungseinsatz"
+msgstr "Optimierungseinsatz"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid ""
