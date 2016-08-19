@@ -163,6 +163,7 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
 SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
+    m_simulator->SetReporter( nullptr );
     delete m_reporter;
 }
 
