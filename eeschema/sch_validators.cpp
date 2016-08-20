@@ -30,16 +30,20 @@
 #include <sch_validators.h>
 #include <template_fieldnames.h>
 
-SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR( int aFieldId, wxString* aValue ) :
+SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsCmplibEditor,
+                                           int aFieldId, wxString* aValue ) :
     wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
 {
     m_fieldId = aFieldId;
+    m_isLibEditor = aIsCmplibEditor;
 
     // Fields cannot contain carriage returns, line feeds, or tabs.
     wxString excludes( "\r\n\t" );
 
     // The reference field cannot contain spaces.
     if( aFieldId == REFERENCE )
+        excludes += " ";
+    else if( aFieldId == VALUE && m_isLibEditor )
         excludes += " ";
 
     long style = GetStyle();
@@ -57,6 +61,7 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR( const SCH_FIELD_VALIDATOR& aValidator 
     wxTextValidator( aValidator )
 {
     m_fieldId = aValidator.m_fieldId;
+    m_isLibEditor = aValidator.m_isLibEditor;
 }
 
 
@@ -93,6 +98,8 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
     else if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
     {
         wxArrayString whiteSpace;
+        bool spaceIllegal = ( m_fieldId == REFERENCE ) ||
+                            ( m_fieldId == VALUE && m_isLibEditor );
 
         if( val.Find( '\r' ) != wxNOT_FOUND )
             whiteSpace.Add( _( "carriage return" ) );
@@ -100,7 +107,7 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
             whiteSpace.Add( _( "line feed" ) );
         if( val.Find( '\t' ) != wxNOT_FOUND )
             whiteSpace.Add( _( "tab" ) );
-        if( (m_fieldId == REFERENCE) && (val.Find( ' ' ) != wxNOT_FOUND) )
+        if( spaceIllegal && (val.Find( ' ' ) != wxNOT_FOUND) )
             whiteSpace.Add( _( "space" ) );
 
         wxString badChars;

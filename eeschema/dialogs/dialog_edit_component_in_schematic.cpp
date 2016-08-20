@@ -853,7 +853,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     // may only delete user defined fields
     deleteFieldButton->Enable( fieldNdx >= MANDATORY_FIELDS );
 
-    fieldValueTextCtrl->SetValidator( SCH_FIELD_VALIDATOR( field.GetId() ) );
+    fieldValueTextCtrl->SetValidator( SCH_FIELD_VALIDATOR( false, field.GetId() ) );
     fieldValueTextCtrl->SetValue( field.GetText() );
 
     m_show_datasheet_button->Enable( fieldNdx == DATASHEET || fieldNdx == FOOTPRINT );
