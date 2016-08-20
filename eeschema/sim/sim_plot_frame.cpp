@@ -181,13 +181,13 @@ void SIM_PLOT_FRAME::StartSimulation()
 
     if( !m_exporter->Format( &formatter, m_settingsDlg.GetNetlistOptions() ) )
     {
-        DisplayError( this, wxT( "There were errors during netlist export, aborted." ) );
+        DisplayError( this, _( "There were errors during netlist export, aborted." ) );
         return;
     }
 
     if( m_exporter->GetSimType() == ST_UNKNOWN )
     {
-        DisplayInfoMessage( this, wxT( "You need to select the simulation settings first." ) );
+        DisplayInfoMessage( this, _( "You need to select the simulation settings first." ) );
         return;
     }
 
@@ -638,8 +638,8 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
 
 void SIM_PLOT_FRAME::menuOpenWorkbook( wxCommandEvent& event )
 {
-    wxFileDialog openDlg( this, wxT( "Open simulation workbook" ), "", "",
-            "Workbook file (*.wbk)|*.wbk", wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxFileDialog openDlg( this, _( "Open simulation workbook" ), "", "",
+            _( "Workbook file (*.wbk)|*.wbk" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( openDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -654,14 +654,14 @@ void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
     if( !CurrentPlot() )
         return;
 
-    wxFileDialog saveDlg( this, wxT( "Save simulation workbook" ), "", "",
-                "Workbook file (*.wbk)|*.wbk", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog saveDlg( this, _( "Save simulation workbook" ), "", "",
+                _( "Workbook file (*.wbk)|*.wbk" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
 
     if( !saveWorkbook( saveDlg.GetPath() ) )
-        DisplayError( this, wxT( "There was an error while saving the workbook file" ) );
+        DisplayError( this, _( "There was an error while saving the workbook file" ) );
 }
 
 
@@ -670,8 +670,8 @@ void SIM_PLOT_FRAME::menuSaveImage( wxCommandEvent& event )
     if( !CurrentPlot() )
         return;
 
-    wxFileDialog saveDlg( this, wxT( "Save plot as image" ), "", "",
-                "PNG file (*.png)|*.png", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog saveDlg( this, _( "Save plot as image" ), "", "",
+                _( "PNG file (*.png)|*.png" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -687,7 +687,7 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
 
     const wxChar SEPARATOR = ';';
 
-    wxFileDialog saveDlg( this, wxT( "Save plot data" ), "", "",
+    wxFileDialog saveDlg( this, _( "Save plot data" ), "", "",
                 "CSV file (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
@@ -849,7 +849,7 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
 
     if( !m_exporter->ProcessNetlist( NET_ALL_FLAGS ) )
     {
-        DisplayError( this, wxT( "There were errors during netlist export, aborted." ) );
+        DisplayError( this, _( "There were errors during netlist export, aborted." ) );
         return;
     }
 
@@ -880,7 +880,7 @@ void SIM_PLOT_FRAME::onAddSignal( wxCommandEvent& event )
 
     if( !plotPanel || !m_exporter || plotPanel->GetType() != m_exporter->GetSimType() )
     {
-        DisplayInfoMessage( this, wxT( "You need to run simulation first." ) );
+        DisplayInfoMessage( this, _( "You need to run simulation first." ) );
         return;
     }
 
@@ -927,7 +927,7 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
     if( !plotPanel )
         return;
 
-    const long SIGNAL_COL = m_cursors->AppendColumn( wxT( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
+    const long SIGNAL_COL = m_cursors->AppendColumn( _( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
     const long X_COL = m_cursors->AppendColumn( plotPanel->GetLabelX(), wxLIST_FORMAT_LEFT, size.x / 4 );
 
     wxString labelY1 = plotPanel->GetLabelY1();
@@ -1051,14 +1051,14 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
 {
     SIM_PLOT_PANEL* plot = m_plotFrame->CurrentPlot();
 
-    Append( HIDE_SIGNAL, wxT( "Hide signal" ) );
+    Append( HIDE_SIGNAL, _( "Hide signal" ) );
 
     TRACE* trace = plot->GetTrace( m_signal );
 
     if( trace->HasCursor() )
-        Append( HIDE_CURSOR, wxT( "Hide cursor" ) );
+        Append( HIDE_CURSOR, _( "Hide cursor" ) );
     else
-        Append( SHOW_CURSOR, wxT( "Show cursor" ) );
+        Append( SHOW_CURSOR, _( "Show cursor" ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ), NULL, this );
 }
