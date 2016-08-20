@@ -65,6 +65,8 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent )
 
     m_sdbSizerOK->SetDefault();
     updateNetlistOpts();
+
+    FixOSXCancelButtonIssue();
 }
 
 

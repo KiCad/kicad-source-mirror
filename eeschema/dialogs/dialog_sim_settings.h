@@ -75,6 +75,15 @@ private:
         LINEAR
     };
 
+    virtual void onInitDlg( wxInitDialogEvent& event ) override
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
+
     /**
      * @brief Parses a Spice directive.
      * @param aCommand is the directive to be parsed (e.g. ".tran 10n 1000n").

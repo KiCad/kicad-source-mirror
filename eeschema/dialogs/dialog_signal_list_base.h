@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 24 2016)
+// C++ code generated with wxFormBuilder (version Jul 31 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/listbox.h>
 #include <wx/gdicmn.h>
@@ -27,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SIGNAL_LIST_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SIGNAL_LIST_BASE : public wxDialog 
+class DIALOG_SIGNAL_LIST_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -43,7 +46,7 @@ class DIALOG_SIGNAL_LIST_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_SIGNAL_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 424,535 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		DIALOG_SIGNAL_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 599,419 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SIGNAL_LIST_BASE();
 	
 };

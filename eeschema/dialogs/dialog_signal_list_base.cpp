@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 24 2016)
+// C++ code generated with wxFormBuilder (version Jul 31 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,14 +9,16 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SIGNAL_LIST_BASE::DIALOG_SIGNAL_LIST_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_SIGNAL_LIST_BASE::DIALOG_SIGNAL_LIST_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 	
 	m_signals = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_EXTENDED|wxLB_NEEDED_SB|wxLB_SORT ); 
+	m_signals->SetMinSize( wxSize( 450,400 ) );
+	
 	bSizer6->Add( m_signals, 1, wxALL|wxEXPAND, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
@@ -26,7 +28,7 @@ DIALOG_SIGNAL_LIST_BASE::DIALOG_SIGNAL_LIST_BASE( wxWindow* parent, wxWindowID i
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizer6->Add( m_sdbSizer, 0, wxEXPAND, 5 );
+	bSizer6->Add( m_sdbSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bSizer6 );

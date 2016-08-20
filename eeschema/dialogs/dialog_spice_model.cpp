@@ -94,6 +94,8 @@ DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aCompo
     m_pwlValueCol = m_pwlValList->AppendColumn( "Value [V/A]", wxLIST_FORMAT_LEFT, 100 );
 
     m_sdbSizerOK->SetDefault();
+
+    FixOSXCancelButtonIssue();
 }
 
 

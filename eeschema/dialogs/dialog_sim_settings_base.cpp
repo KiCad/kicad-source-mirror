@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Jul 31 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -17,6 +17,8 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 	
 	m_simPages = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_simPages->SetMinSize( wxSize( 650,-1 ) );
+	
 	m_pgAC = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
@@ -59,10 +61,10 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	fgSizer1->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_acFreqStop = new wxTextCtrl( m_pgAC, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_acFreqStop, 0, wxALL, 5 );
+	fgSizer1->Add( m_acFreqStop, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer3->Add( fgSizer1, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer3->Add( fgSizer1, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	bSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -71,7 +73,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_pgAC->SetSizer( bSizer3 );
 	m_pgAC->Layout();
 	bSizer3->Fit( m_pgAC );
-	m_simPages->AddPage( m_pgAC, _("AC"), false );
+	m_simPages->AddPage( m_pgAC, _("AC"), true );
 	m_pgDC = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -119,7 +121,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	sbSizer21->Add( fgSizer21, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
-	bSizer4->Add( sbSizer21, 1, wxEXPAND, 5 );
+	bSizer4->Add( sbSizer21, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_pgDC, wxID_ANY, _("DC sweep source 2") ), wxVERTICAL );
@@ -164,7 +166,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	sbSizer2->Add( fgSizer2, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
-	bSizer4->Add( sbSizer2, 1, wxEXPAND, 5 );
+	bSizer4->Add( sbSizer2, 0, wxEXPAND, 5 );
 	
 	
 	m_pgDC->SetSizer( bSizer4 );
@@ -221,7 +223,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	fgSizer7->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
-	bSizer15->Add( fgSizer7, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer15->Add( fgSizer7, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	bSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -262,7 +264,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	fgSizer11->Add( m_noiseFreqStop, 0, wxALL, 5 );
 	
 	
-	bSizer15->Add( fgSizer11, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer15->Add( fgSizer11, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	bSizer15->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -300,7 +302,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_pgSensitivity = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pgSensitivity->Hide();
 	
-	m_simPages->AddPage( m_pgSensitivity, _("Sensitivity"), true );
+	m_simPages->AddPage( m_pgSensitivity, _("Sensitivity"), false );
 	m_pgTransferFunction = new wxPanel( m_simPages, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pgTransferFunction->Hide();
 	
@@ -325,7 +327,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	fgSizer6->Add( m_transStep, 0, wxALL, 5 );
 	
 	
-	fgSizer6->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer6->Add( 0, 0, 0, wxEXPAND, 5 );
 	
 	m_staticText161 = new wxStaticText( m_pgTransient, wxID_ANY, _("Final time [s]"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText161->Wrap( -1 );
@@ -335,7 +337,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	fgSizer6->Add( m_transFinal, 0, wxALL, 5 );
 	
 	
-	fgSizer6->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer6->Add( 0, 0, 0, wxEXPAND, 5 );
 	
 	m_staticText17 = new wxStaticText( m_pgTransient, wxID_ANY, _("Initial time [s]"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
@@ -349,7 +351,7 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	fgSizer6->Add( m_staticText24, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	bSizer81->Add( fgSizer6, 1, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	bSizer81->Add( fgSizer6, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	bSizer81->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -406,12 +408,14 @@ DIALOG_SIM_SETTINGS_BASE::DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SIM_SETTINGS_BASE::onInitDlg ) );
 	m_loadDirectives->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onLoadDirectives ), NULL, this );
 }
 
 DIALOG_SIM_SETTINGS_BASE::~DIALOG_SIM_SETTINGS_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SIM_SETTINGS_BASE::onInitDlg ) );
 	m_loadDirectives->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SIM_SETTINGS_BASE::onLoadDirectives ), NULL, this );
 	
 }

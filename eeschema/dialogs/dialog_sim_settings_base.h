@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Jul 31 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,9 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
+#include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -38,7 +41,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_SIM_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_SIM_SETTINGS_BASE : public wxDialog 
+class DIALOG_SIM_SETTINGS_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -111,12 +114,13 @@ class DIALOG_SIM_SETTINGS_BASE : public wxDialog
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onLoadDirectives( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 692,535 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SIM_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 685,518 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SIM_SETTINGS_BASE();
 	
 };

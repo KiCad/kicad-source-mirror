@@ -79,6 +79,15 @@ private:
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
 
+    virtual void onInitDlg( wxInitDialogEvent& event ) override
+    {
+        // Call the default wxDialog handler of a wxInitDialogEvent
+        TransferDataToWindow();
+
+        // Now all widgets have the size fixed, call FinishDialogSettings
+        FinishDialogSettings();
+    }
+
     // Event handlers
     void onSemiSelectLib( wxCommandEvent& event ) override;
     void onSelectIcLib( wxCommandEvent& event ) override;

@@ -290,12 +290,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
 
-    wxString msg = wxString::Format( _(
-            "Ready\nProject dir: '%s'\n" ),
-            GetChars( wxPathOnly( Prj().GetProjectFullName() ) )
-            );
-    SetStatusText( msg );
-
     // PROJECT::SetProjectFullName() is an impactful function.  It should only be
     // called under carefully considered circumstances.
 
@@ -335,6 +329,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
         catch( const IO_ERROR& ioe )
         {
+            wxString msg;
             msg.Printf( _( "Error loading schematic file '%s'.\n%s" ),
                         GetChars( fullFileName ), GetChars( ioe.errorText ) );
             DisplayError( this, msg );

@@ -30,6 +30,8 @@
 DIALOG_SIGNAL_LIST::DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent, NETLIST_EXPORTER_PSPICE_SIM* aExporter )
     : DIALOG_SIGNAL_LIST_BASE( aParent ), m_plotFrame( aParent ), m_exporter( aExporter )
 {
+
+    FixOSXCancelButtonIssue();
 }
 
 
@@ -72,7 +74,12 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
         }
     }
 
-    return DIALOG_SIGNAL_LIST_BASE::TransferDataToWindow();
+    bool success = DIALOG_SIGNAL_LIST_BASE::TransferDataToWindow();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
+
+    return success;
 }
 
 

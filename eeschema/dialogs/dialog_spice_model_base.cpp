@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Jul 31 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -66,7 +66,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizer3->Add( m_semiType, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer3->Add( 0, 0, 0, 0, 5 );
 	
 	m_staticText5 = new wxStaticText( m_semiconductor, wxID_ANY, _("Model"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText5->Wrap( -1 );
@@ -76,7 +76,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizer3->Add( m_semiModel, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer3->Add( 0, 0, 0, 0, 5 );
 	
 	m_staticText7 = new wxStaticText( m_semiconductor, wxID_ANY, _("Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText7->Wrap( -1 );
@@ -110,7 +110,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizer4->Add( m_icModel, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer4->Add( 0, 0, 0, 0, 5 );
 	
 	m_staticText9 = new wxStaticText( m_ic, wxID_ANY, _("Library"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
@@ -128,6 +128,8 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizer4->Fit( m_ic );
 	m_notebook->AddPage( m_ic, _("Integrated circuit"), false );
 	m_power = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_power->SetMinSize( wxSize( 650,-1 ) );
+	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
@@ -178,7 +180,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	sbSizer1->Add( fgSizer6, 1, wxEXPAND, 5 );
 	
 	
-	bSizer4->Add( sbSizer1, 1, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( sbSizer1, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( m_power, wxID_ANY, _("Transient analysis") ), wxVERTICAL );
@@ -246,7 +248,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pwrPulse->SetSizer( fgSizer7 );
 	m_pwrPulse->Layout();
 	fgSizer7->Fit( m_pwrPulse );
-	m_powerNotebook->AddPage( m_pwrPulse, _("Pulse"), false );
+	m_powerNotebook->AddPage( m_pwrPulse, _("Pulse"), true );
 	m_pwrSin = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer8;
 	fgSizer8 = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -351,7 +353,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pwrExp->SetSizer( fgSizer9 );
 	m_pwrExp->Layout();
 	fgSizer9->Fit( m_pwrExp );
-	m_powerNotebook->AddPage( m_pwrExp, _("Exponential"), true );
+	m_powerNotebook->AddPage( m_pwrExp, _("Exponential"), false );
 	m_pwrPwl = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_pwrPwl->SetToolTip( _("Piece-wise linear") );
 	
@@ -424,10 +426,10 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_powerNotebook->AddPage( m_pwrExtData, _("External data"), false );
 	
-	sbSizer3->Add( m_powerNotebook, 1, wxEXPAND | wxALL, 5 );
+	sbSizer3->Add( m_powerNotebook, 0, wxEXPAND | wxALL, 5 );
 	
 	
-	bSizer4->Add( sbSizer3, 1, wxALL|wxEXPAND, 5 );
+	bSizer4->Add( sbSizer3, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_pwrTypeChoices[] = { _("Voltage"), _("Current") };
 	int m_pwrTypeNChoices = sizeof( m_pwrTypeChoices ) / sizeof( wxString );
@@ -476,6 +478,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SPICE_MODEL_BASE::onInitDlg ) );
 	m_semiSelectLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSemiSelectLib ), NULL, this );
 	m_icSelectLib->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSelectIcLib ), NULL, this );
 	m_pwlAddButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlAdd ), NULL, this );
@@ -485,6 +488,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 DIALOG_SPICE_MODEL_BASE::~DIALOG_SPICE_MODEL_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( DIALOG_SPICE_MODEL_BASE::onInitDlg ) );
 	m_semiSelectLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSemiSelectLib ), NULL, this );
 	m_icSelectLib->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onSelectIcLib ), NULL, this );
 	m_pwlAddButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SPICE_MODEL_BASE::onPwlAdd ), NULL, this );

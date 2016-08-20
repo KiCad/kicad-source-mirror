@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Jul 31 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -135,6 +135,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onSemiSelectLib( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSelectIcLib( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlAdd( wxCommandEvent& event ) { event.Skip(); }
@@ -143,7 +144,7 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 552,621 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 640,582 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SPICE_MODEL_BASE();
 	
 };
