@@ -292,8 +292,11 @@ private:
     ///> List of currently displayed tuners
     std::list<TUNER_SLIDER*> m_tuners;
 
-    // Trick to preserve settings between runs
-    DIALOG_SIM_SETTINGS m_settingsDlg;
+    // Trick to preserve settings between runs:
+    // the DIALOG_SIM_SETTINGS is not destroyed after closing the dialog.
+    // Once created it will be not shown (shown only on request) during a session
+    // and will be destroyed only when closing the simulator frame.
+    DIALOG_SIM_SETTINGS* m_settingsDlg;
 
     // Right click context menu for signals in the listbox
     class SIGNAL_CONTEXT_MENU : public wxMenu

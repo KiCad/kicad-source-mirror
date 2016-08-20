@@ -100,7 +100,7 @@ TRACE_DESC::TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter, const wxSt
 
 
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
-    : SIM_PLOT_FRAME_BASE( aParent ), m_settingsDlg( this ), m_lastSimPlot( nullptr )
+    : SIM_PLOT_FRAME_BASE( aParent ), m_lastSimPlot( nullptr )
 {
     SetKiway( this, aKiway );
 
@@ -158,6 +158,12 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     m_toolBar->Realize();
     m_plotNotebook->SetPageText( 0, _( "Welcome!" ) );
+
+    // the settings dialog will be created later, on demand.
+    // if created in the ctor, for some obscure reason, there is an issue
+    // on Windows: when open it, the simulator frame is sent to the background.
+    // instead of beeing behind the dialog frame (as it does)
+    m_settingsDlg = NULL;
 }
 
 
@@ -165,6 +171,9 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
     m_simulator->SetReporter( nullptr );
     delete m_reporter;
+
+    if( m_settingsDlg )
+        m_settingsDlg->Destroy();
 }
 
 
@@ -173,13 +182,16 @@ void SIM_PLOT_FRAME::StartSimulation()
     STRING_FORMATTER formatter;
     SIM_PLOT_PANEL* plotPanel = CurrentPlot();
 
+    if( !m_settingsDlg )
+        m_settingsDlg = new DIALOG_SIM_SETTINGS( this );
+
     m_simConsole->Clear();
     updateNetlistExporter();
 
     if( plotPanel )
         m_exporter->SetSimCommand( m_plots[plotPanel].m_simCommand );
 
-    if( !m_exporter->Format( &formatter, m_settingsDlg.GetNetlistOptions() ) )
+    if( !m_exporter->Format( &formatter, m_settingsDlg->GetNetlistOptions() ) )
     {
         DisplayError( this, _( "There were errors during netlist export, aborted." ) );
         return;
@@ -853,14 +865,17 @@ void SIM_PLOT_FRAME::onSettings( wxCommandEvent& event )
         return;
     }
 
+    if( !m_settingsDlg )
+        m_settingsDlg = new DIALOG_SIM_SETTINGS( this );
+
     if( plotPanel )
-        m_settingsDlg.SetSimCommand( m_plots[plotPanel].m_simCommand );
+        m_settingsDlg->SetSimCommand( m_plots[plotPanel].m_simCommand );
 
-    m_settingsDlg.SetNetlistExporter( m_exporter.get() );
+    m_settingsDlg->SetNetlistExporter( m_exporter.get() );
 
-    if( m_settingsDlg.ShowModal() == wxID_OK )
+    if( m_settingsDlg->ShowModal() == wxID_OK )
     {
-        wxString newCommand = m_settingsDlg.GetSimCommand();
+        wxString newCommand = m_settingsDlg->GetSimCommand();
         SIM_TYPE newSimType = NETLIST_EXPORTER_PSPICE_SIM::CommandToSimType( newCommand );
 
         // If it is a new simulation type, open a new plot
