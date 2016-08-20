@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-16 21:57+0200\n"
-"PO-Revision-Date: 2016-08-17 10:36+0200\n"
+"POT-Creation-Date: 2016-08-20 17:38+0200\n"
+"PO-Revision-Date: 2016-08-20 18:36+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1547,7 +1547,7 @@ msgid "Warning"
 msgstr "Avertissement"
 
 #: common/confirm.cpp:79 kicad/prjconfig.cpp:140
-#: pcbnew/router/length_tuner_tool.cpp:170
+#: pcbnew/router/length_tuner_tool.cpp:168
 msgid "Error"
 msgstr "Erreur"
 
@@ -1856,7 +1856,7 @@ msgstr "Nom"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:225
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:38
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:87
-#: eeschema/dialogs/dialog_spice_model_base.cpp:390
+#: eeschema/dialogs/dialog_spice_model_base.cpp:392
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:75
 msgid "Add"
 msgstr "Ajouter"
@@ -3226,7 +3226,7 @@ msgstr ""
 "%s"
 
 #: cvpcb/cvpcb_mainframe.cpp:430 cvpcb/cvpcb_mainframe.cpp:450
-#: pcbnew/moduleframe.cpp:871 pcbnew/moduleframe.cpp:891
+#: pcbnew/moduleframe.cpp:881 pcbnew/moduleframe.cpp:901
 #: pcbnew/pcbnew_config.cpp:142 pcbnew/pcbnew_config.cpp:164
 msgid "File Save Error"
 msgstr "Erreur Écriture  Fichier"
@@ -3349,7 +3349,7 @@ msgstr "Fichiers equ composant/empreintes (fichiers .equ)"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:48
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:93
-#: eeschema/dialogs/dialog_spice_model_base.cpp:398
+#: eeschema/dialogs/dialog_spice_model_base.cpp:400
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:80
 #: pcbnew/tools/common_actions.cpp:130
 msgid "Remove"
@@ -3750,7 +3750,7 @@ msgstr ""
 msgid "none"
 msgstr "rien"
 
-#: eeschema/class_libentry.cpp:530
+#: eeschema/class_libentry.cpp:535
 #, c-format
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
@@ -3758,7 +3758,7 @@ msgstr ""
 "Une tentative a été faite pour supprimer le champ %s du composant %s en "
 "librairie %s."
 
-#: eeschema/class_library.cpp:50
+#: eeschema/class_library.cpp:51
 #, c-format
 msgid ""
 "Library '%s' has duplicate entry name '%s'.\n"
@@ -3769,63 +3769,63 @@ msgstr ""
 "Cela peut causer un comportement inattendu lors du chargement des composants "
 "dans une schématique."
 
-#: eeschema/class_library.cpp:213
+#: eeschema/class_library.cpp:214
 #, c-format
 msgid "Cannot add duplicate alias '%s' to library '%s'."
 msgstr "Ne peut ajouter un double de l'alias '%s' en librairie '%s'."
 
-#: eeschema/class_library.cpp:376
+#: eeschema/class_library.cpp:377
 msgid "The component library file name is not set."
 msgstr "Le nom du fichier librairie  est non sélectionné."
 
-#: eeschema/class_library.cpp:384
+#: eeschema/class_library.cpp:385
 msgid "The file could not be opened."
 msgstr "Le fichier n'a pas pu être ouvert."
 
-#: eeschema/class_library.cpp:392
+#: eeschema/class_library.cpp:393
 msgid "The file is empty!"
 msgstr "Fichier vide!"
 
-#: eeschema/class_library.cpp:415
+#: eeschema/class_library.cpp:416
 msgid "The file is NOT an Eeschema library!"
 msgstr "Le fichier n'est PAS une librairie Eeschema !"
 
-#: eeschema/class_library.cpp:421
+#: eeschema/class_library.cpp:422
 msgid "The file header is missing version and time stamp information."
 msgstr ""
 "L'entête de fichier ne comporte pas de numéro de version et de signature "
 "temporelle."
 
-#: eeschema/class_library.cpp:465
+#: eeschema/class_library.cpp:466
 msgid "An error occurred attempting to read the header."
 msgstr "Une erreur s'est produite lors de la lecture de l'entête."
 
-#: eeschema/class_library.cpp:494
+#: eeschema/class_library.cpp:495
 #, c-format
 msgid "Library '%s' component load error %s."
 msgstr "Librairie '%s' erreur de chargement du composant %s."
 
-#: eeschema/class_library.cpp:564
+#: eeschema/class_library.cpp:565
 #, c-format
 msgid "Could not open component document library file '%s'."
 msgstr "Ne peut ouvrir le fichier document librairie '%s'."
 
-#: eeschema/class_library.cpp:571
+#: eeschema/class_library.cpp:572
 #, c-format
 msgid "Part document library file '%s' is empty."
 msgstr "Fichier document de composants '%s' vide."
 
-#: eeschema/class_library.cpp:579
+#: eeschema/class_library.cpp:580
 #, c-format
 msgid "File '%s' is not a valid component library document file."
 msgstr "'%s' n'est pas un fichier documentation de composant valide."
 
-#: eeschema/class_library.cpp:954
+#: eeschema/class_library.cpp:965
 #, c-format
 msgid "Unable to load project's '%s' file"
 msgstr "Impossible de charger le fichier projet '%s'"
 
-#: eeschema/class_library.cpp:1045
+#: eeschema/class_library.cpp:1056
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
@@ -3834,7 +3834,7 @@ msgstr ""
 "La librairie de composant '%s' n'a pu être chargée. Erreur:\n"
 "%s"
 
-#: eeschema/class_library.cpp:1070
+#: eeschema/class_library.cpp:1082
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -4955,7 +4955,7 @@ msgstr "Position X"
 msgid "Y Position"
 msgstr "Position Y"
 
-#: eeschema/dialogs/dialog_edit_one_field.cpp:193
+#: eeschema/dialogs/dialog_edit_one_field.cpp:196
 msgid "Illegal reference field value!"
 msgstr "Valeur du champ  référence illégale!"
 
@@ -6210,166 +6210,166 @@ msgstr "&Remplacer"
 msgid "Replace &All"
 msgstr "&Tout Remplacer"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:27
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:229
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:29
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:231
 msgid "Decade"
 msgstr "Decade"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:27
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:229
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:29
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:231
 msgid "Octave"
 msgstr "Octave"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:27
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:229
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:29
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:231
 msgid "Linear"
 msgstr "Lineaire"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:29
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:231
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:31
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:233
 msgid "Frequency scale"
 msgstr "Echelle de fréquence"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:43
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:243
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:45
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:245
 msgid "Number of points"
 msgstr "Nombre de points"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:50
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:250
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:52
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:252
 msgid "Start frequency [Hz]"
 msgstr "Fréquence de départ [Hz]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:57
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:257
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:59
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:259
 msgid "Stop frequency [Hz]"
 msgstr "Fréquence de fin [Hz]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:74
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:76
 msgid "AC"
 msgstr "AC"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:80
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:82
 msgid "DC sweep source 1"
 msgstr "Balayage DC source 1"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:82
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:127
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:84
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:129
 msgid "Enable"
 msgstr "Activer"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:90
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:135
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:92
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:137
 msgid "DC source"
 msgstr "Source DC"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:97
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:142
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:99
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:144
 msgid "Starting voltage [V]"
 msgstr "Voltage de départ [Hz]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:104
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:149
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:106
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:151
 msgid "Final voltage [V]"
 msgstr "Voltage final [Hz]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:111
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:156
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:113
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:158
 msgid "Increment step [V]"
-msgstr ""
+msgstr "Pas d'incrémentation [V]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:125
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:127
 msgid "DC sweep source 2"
 msgstr "Balayage DC source 2"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:173
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:175
 msgid "DC Transfer"
 msgstr "Transfert  DC"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:177
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:179
 msgid "Distortion"
 msgstr "Distorsion"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:192
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:194
 msgid "Measured node"
 msgstr "Nœud mesuré"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:202
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:204
 msgid "Reference node"
 msgstr "Nœud de référence"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:209
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:211
 msgid "(optional; default GND)"
 msgstr "Option; défaut GND)"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:213
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:215
 msgid "Noise source"
 msgstr "Source de bruit"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:274
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:276
 msgid "Noise"
 msgstr "Bruit"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:284
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:286
 msgid "This tab has no settings"
-msgstr ""
+msgstr "Cet onglet n'a pas de paramètres"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:295
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:297
 msgid "Operating Point"
 msgstr "Point de Fonctionement"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:299
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:301
 msgid "Pole-Zero"
-msgstr ""
+msgstr "Pole-Zéro"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:303
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:305
 msgid "Sensitivity"
 msgstr "Sensibilité"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:307
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:309
 msgid "Transfer Function"
 msgstr "Fonction de Transfert"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:320
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:322
 msgid "Time step [s]"
 msgstr "Incrément de temps [s]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:330
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:332
 msgid "Final time [s]"
 msgstr "Temps final [s]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:340
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:342
 msgid "Initial time [s]"
 msgstr "Temps initial [s]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:347
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:349
 msgid "(optional; default 0)"
 msgstr "Option; défaut 0)"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:361
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:363
 msgid "Transient"
 msgstr "Transitoire"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:366
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:368
 msgid "Spice directives:"
 msgstr "Directives Spice"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:375
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:377
 msgid "Load directives from schematic"
 msgstr "Charger les directives a partir du schéma"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:382
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:384
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:129
 msgid "Custom"
 msgstr "Personnalisé"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:386
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:388
 msgid "Adjust passive component values (e.g. M -> Meg; 100 nF -> 100n)"
 msgstr ""
 "Ajustez les valeurs de composants passifs (p. ex. M-> Meg; 100 nF-> 100n)"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:389
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:391
 msgid "Add full path for .include library directives"
 msgstr ""
 "Ajouter le chemin d’accès complet pour les directives .include de librairies"
@@ -6423,162 +6423,162 @@ msgstr "Semiconducteur"
 msgid "Integrated circuit"
 msgstr "Circuit intégré"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:135
+#: eeschema/dialogs/dialog_spice_model_base.cpp:137
 msgid "DC/AC analysis"
 msgstr "Analyse DC/AC"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:144
+#: eeschema/dialogs/dialog_spice_model_base.cpp:146
 msgid "DC [V/A]"
 msgstr "DC [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:159
+#: eeschema/dialogs/dialog_spice_model_base.cpp:161
 msgid "AC magnitude [V/A]"
 msgstr "Amplitude AC [V / A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:168
+#: eeschema/dialogs/dialog_spice_model_base.cpp:170
 msgid "AC phase [rad]"
 msgstr "Phase AC [rad]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:184
+#: eeschema/dialogs/dialog_spice_model_base.cpp:186
 msgid "Transient analysis"
 msgstr "Analyse en transitoire"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:194
-#: eeschema/dialogs/dialog_spice_model_base.cpp:306
+#: eeschema/dialogs/dialog_spice_model_base.cpp:196
+#: eeschema/dialogs/dialog_spice_model_base.cpp:308
 msgid "Initial value [V/A]"
 msgstr "Valeur initiale [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:203
-#: eeschema/dialogs/dialog_spice_model_base.cpp:315
+#: eeschema/dialogs/dialog_spice_model_base.cpp:205
+#: eeschema/dialogs/dialog_spice_model_base.cpp:317
 msgid "Pulsed value [V/A]"
 msgstr "Valeur de l'impulsion [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:210
+#: eeschema/dialogs/dialog_spice_model_base.cpp:212
 msgid "Delay time [s]"
 msgstr "Délai du retard [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:217
+#: eeschema/dialogs/dialog_spice_model_base.cpp:219
 msgid "Rise time [s]"
 msgstr "Temps de montée [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:224
+#: eeschema/dialogs/dialog_spice_model_base.cpp:226
 msgid "Fall time [s]"
 msgstr "Temps de descente [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:231
+#: eeschema/dialogs/dialog_spice_model_base.cpp:233
 msgid "Pulse width [s]"
 msgstr "Largeur d'impulsion [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:238
+#: eeschema/dialogs/dialog_spice_model_base.cpp:240
 msgid "Period [s]"
 msgstr "Periode(s) "
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:249
+#: eeschema/dialogs/dialog_spice_model_base.cpp:251
 msgid "Pulse"
 msgstr "Impulsion"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:257
+#: eeschema/dialogs/dialog_spice_model_base.cpp:259
 msgid "DC offset [V/A]"
 msgstr "DC offset [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:266
+#: eeschema/dialogs/dialog_spice_model_base.cpp:268
 msgid "Amplitude [V/A]"
 msgstr "Amplitude [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:273
+#: eeschema/dialogs/dialog_spice_model_base.cpp:275
 msgid "Frequency [Hz]"
 msgstr "Fréquence [Hz]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:280
+#: eeschema/dialogs/dialog_spice_model_base.cpp:282
 msgid "Delay [s]"
 msgstr "Delai [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:287
+#: eeschema/dialogs/dialog_spice_model_base.cpp:289
 msgid "Damping factor [1/s]"
 msgstr "Factor d'amortissement [1/s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:298
+#: eeschema/dialogs/dialog_spice_model_base.cpp:300
 msgid "Sinusoidal"
 msgstr "Sinusoidal"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:322
+#: eeschema/dialogs/dialog_spice_model_base.cpp:324
 msgid "Rise delay time [s]"
 msgstr "Constante de temps de montée [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:329
+#: eeschema/dialogs/dialog_spice_model_base.cpp:331
 msgid "Rise time constant [s]"
 msgstr "Constante de temps de montée [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:336
+#: eeschema/dialogs/dialog_spice_model_base.cpp:338
 msgid "Fall delay time [s]"
 msgstr "Délai du temps de descente [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:343
+#: eeschema/dialogs/dialog_spice_model_base.cpp:345
 msgid "Fall time constant [s]"
 msgstr "Constante de temps de descente [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:354
+#: eeschema/dialogs/dialog_spice_model_base.cpp:356
 msgid "Exponential"
 msgstr "Exponentiel"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:356
+#: eeschema/dialogs/dialog_spice_model_base.cpp:358
 msgid "Piece-wise linear"
-msgstr ""
+msgstr "Linéaire par segment"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:371
+#: eeschema/dialogs/dialog_spice_model_base.cpp:373
 msgid "Time [s]"
 msgstr "Temps [s]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:380
+#: eeschema/dialogs/dialog_spice_model_base.cpp:382
 msgid "Value [V/A]"
 msgstr "Valeur [V/A]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:405
+#: eeschema/dialogs/dialog_spice_model_base.cpp:407
 msgid "Piece-wise Linear"
-msgstr ""
+msgstr "Linéaire par Segment"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:409
+#: eeschema/dialogs/dialog_spice_model_base.cpp:411
 msgid "FM"
 msgstr "FM"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:413
+#: eeschema/dialogs/dialog_spice_model_base.cpp:415
 msgid "AM"
 msgstr "AM"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:417
+#: eeschema/dialogs/dialog_spice_model_base.cpp:419
 msgid "Transient noise"
 msgstr "Bruit transitoire"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:421
+#: eeschema/dialogs/dialog_spice_model_base.cpp:423
 msgid "Random"
 msgstr "Aléatoire"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:425
+#: eeschema/dialogs/dialog_spice_model_base.cpp:427
 msgid "External data"
 msgstr "Données externes"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:432
+#: eeschema/dialogs/dialog_spice_model_base.cpp:434
 msgid "Voltage"
 msgstr "Voltage"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:432
+#: eeschema/dialogs/dialog_spice_model_base.cpp:434
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:262
 msgid "Current"
 msgstr "Courant"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:434
+#: eeschema/dialogs/dialog_spice_model_base.cpp:436
 msgid "Source type"
 msgstr "Type de source"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:442
+#: eeschema/dialogs/dialog_spice_model_base.cpp:444
 msgid "Source"
 msgstr "Source"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:446
+#: eeschema/dialogs/dialog_spice_model_base.cpp:448
 msgid "Disable component for simulation"
 msgstr "Désactiver le composant pour la simulation"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:452
+#: eeschema/dialogs/dialog_spice_model_base.cpp:454
 msgid "Alternate node sequence:"
 msgstr ""
 
@@ -6842,16 +6842,7 @@ msgstr "Charger sans Sauver"
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Le fichier schématique '%s' n'existe pas. Voulez vous le créer?"
 
-#: eeschema/files-io.cpp:294
-#, c-format
-msgid ""
-"Ready\n"
-"Project dir: '%s'\n"
-msgstr ""
-"Prêt\n"
-"Répertoire du projet: '%s'\n"
-
-#: eeschema/files-io.cpp:338
+#: eeschema/files-io.cpp:333
 #, c-format
 msgid ""
 "Error loading schematic file '%s'.\n"
@@ -6860,16 +6851,16 @@ msgstr ""
 "Erreur lors du chargement du fichier '%s'\n"
 "%s"
 
-#: eeschema/files-io.cpp:342
+#: eeschema/files-io.cpp:337
 #, c-format
 msgid "Failed to load '%s'"
 msgstr "Impossible de charger '%s'"
 
-#: eeschema/files-io.cpp:405
+#: eeschema/files-io.cpp:400
 msgid "Import Schematic"
 msgstr "Import Schématique"
 
-#: eeschema/files-io.cpp:521
+#: eeschema/files-io.cpp:516
 msgid ""
 "This operation cannot be undone. Besides, take into account that "
 "hierarchical sheets will not be appended.\n"
@@ -6881,7 +6872,7 @@ msgstr ""
 "\n"
 "Voulez vous sauver le document courant avant de procéder?"
 
-#: eeschema/files-io.cpp:545
+#: eeschema/files-io.cpp:540
 #, c-format
 msgid "Directory '%s' is not writable"
 msgstr "Le répertoire '%s' est en lecture seule, non inscriptible"
@@ -7508,7 +7499,7 @@ msgid "Part Library Editor: "
 msgstr "Éditeur de Composants:"
 
 #: eeschema/libedit.cpp:65 eeschema/viewlibs.cpp:141
-#: pcbnew/modview_frame.cpp:726
+#: pcbnew/modview_frame.cpp:728
 msgid "no library selected"
 msgstr "Pas de librairie sélectionnée"
 
@@ -9185,121 +9176,211 @@ msgstr "Plugin type '%s' non trouvé."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valeur inconnue pour SCH_FILE_T : %d"
 
-#: eeschema/sch_legacy_plugin.cpp:113 eeschema/sch_legacy_plugin.cpp:158
-#: eeschema/sch_legacy_plugin.cpp:206 eeschema/sch_legacy_plugin.cpp:252
-#: eeschema/sch_legacy_plugin.cpp:292 eeschema/sch_legacy_plugin.cpp:304
-#: eeschema/sch_legacy_plugin.cpp:355 eeschema/sch_legacy_plugin.cpp:368
-#: eeschema/sch_legacy_plugin.cpp:387 eeschema/sch_legacy_plugin.cpp:790
+#: eeschema/sch_legacy_plugin.cpp:126 eeschema/sch_legacy_plugin.cpp:171
+#: eeschema/sch_legacy_plugin.cpp:219 eeschema/sch_legacy_plugin.cpp:265
+#: eeschema/sch_legacy_plugin.cpp:309 eeschema/sch_legacy_plugin.cpp:322
+#: eeschema/sch_legacy_plugin.cpp:373 eeschema/sch_legacy_plugin.cpp:386
+#: eeschema/sch_legacy_plugin.cpp:405 eeschema/sch_legacy_plugin.cpp:810
+#: eeschema/sch_legacy_plugin.cpp:2394
 msgid "unexpected end of line"
 msgstr "fin de ligne inattendue"
 
-#: eeschema/sch_legacy_plugin.cpp:255
+#: eeschema/sch_legacy_plugin.cpp:268
 msgid "expected single character token"
 msgstr "attendu caractère clé unique"
 
-#: eeschema/sch_legacy_plugin.cpp:315
+#: eeschema/sch_legacy_plugin.cpp:333
 msgid "expected unquoted string"
 msgstr "attendu chaîne de caractères sans guillemets"
 
-#: eeschema/sch_legacy_plugin.cpp:373
+#: eeschema/sch_legacy_plugin.cpp:391
 msgid "expecting opening quote"
 msgstr "expecting opening quote"
 
-#: eeschema/sch_legacy_plugin.cpp:410
+#: eeschema/sch_legacy_plugin.cpp:428
 msgid "expected quoted string"
 msgstr "attendu chaîne de caractères entre guillemets"
 
-#: eeschema/sch_legacy_plugin.cpp:413
+#: eeschema/sch_legacy_plugin.cpp:431
 msgid "no closing quote for string found"
 msgstr "no closing quote for string found"
 
-#: eeschema/sch_legacy_plugin.cpp:593
+#: eeschema/sch_legacy_plugin.cpp:613
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file"
 msgstr "'%s' ne semble pas être un fichier Eeschema"
 
-#: eeschema/sch_legacy_plugin.cpp:621
+#: eeschema/sch_legacy_plugin.cpp:641
 msgid "Missing 'EELAYER END'"
 msgstr "'EELAYER END' manquant"
 
-#: eeschema/sch_legacy_plugin.cpp:640
+#: eeschema/sch_legacy_plugin.cpp:660
 msgid "invalid page size"
 msgstr "taille de page non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:666 eeschema/sch_legacy_plugin.cpp:928
-#: eeschema/sch_legacy_plugin.cpp:936
+#: eeschema/sch_legacy_plugin.cpp:686 eeschema/sch_legacy_plugin.cpp:948
+#: eeschema/sch_legacy_plugin.cpp:956 eeschema/sch_legacy_plugin.cpp:2012
 msgid "unexpected end of file"
 msgstr "fin de fichier inattendue"
 
-#: eeschema/sch_legacy_plugin.cpp:722
+#: eeschema/sch_legacy_plugin.cpp:742
 msgid "missing 'EndDescr'"
 msgstr "'EndDescr' manquant"
 
-#: eeschema/sch_legacy_plugin.cpp:814
+#: eeschema/sch_legacy_plugin.cpp:834
 msgid "invalid sheet pin type"
 msgstr "type pour pin de hiérarchie non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:835
+#: eeschema/sch_legacy_plugin.cpp:855
 msgid "invalid sheet pin side"
 msgstr "coté pour pin de hiérarchie non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:857
+#: eeschema/sch_legacy_plugin.cpp:877
 msgid "missing '$EndSheet`"
 msgstr "'$EndSheet` manquant"
 
-#: eeschema/sch_legacy_plugin.cpp:895
+#: eeschema/sch_legacy_plugin.cpp:915
 msgid "Unexpected end of file"
 msgstr "Fin de fichier inattendue"
 
-#: eeschema/sch_legacy_plugin.cpp:1116
+#: eeschema/sch_legacy_plugin.cpp:1136
 msgid "invalid label type"
 msgstr "type de label non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:1127
+#: eeschema/sch_legacy_plugin.cpp:1147
 msgid "expected 'Italics' or '~'"
 msgstr "attendu  'Italics' ou  '~'"
 
-#: eeschema/sch_legacy_plugin.cpp:1308
+#: eeschema/sch_legacy_plugin.cpp:1328
 msgid "component field text horizontal justification must be L, R, or C"
 msgstr ""
 "la justification horizontale du texte du champ composant doit être L, R ou C"
 
-#: eeschema/sch_legacy_plugin.cpp:1318
+#: eeschema/sch_legacy_plugin.cpp:1338
 msgid "component field text vertical justification must be B, T, or C"
 msgstr ""
 "la justification verticale du texte du champ composant doit être B, T, or C"
 
-#: eeschema/sch_legacy_plugin.cpp:1323
+#: eeschema/sch_legacy_plugin.cpp:1343
 msgid "component field text attributes must be 3 characters wide"
 msgstr "attributs du texte du le champ composant doivent avoir 3 caractères"
 
-#: eeschema/sch_legacy_plugin.cpp:1329
+#: eeschema/sch_legacy_plugin.cpp:1349
 msgid "component field text italics indicator must be I or N"
 msgstr "indicateur italique du texte du champ du composant doit être I ou N"
 
-#: eeschema/sch_legacy_plugin.cpp:1335
+#: eeschema/sch_legacy_plugin.cpp:1355
 msgid "component field text bold indicator must be B or N"
 msgstr "indicateur 'gras' du texte du champ composant doit être B ou N"
 
-#: eeschema/sch_legacy_plugin.cpp:1349
+#: eeschema/sch_legacy_plugin.cpp:1369
 msgid "component field orientation must be H or V"
 msgstr "L'orientation du champ composant doit être H ou V"
 
-#: eeschema/sch_legacy_plugin.cpp:1381
+#: eeschema/sch_legacy_plugin.cpp:1401
 msgid "invalid component X1 transform value"
 msgstr "valeur de transformation de composante non valide X1"
 
-#: eeschema/sch_legacy_plugin.cpp:1386
+#: eeschema/sch_legacy_plugin.cpp:1406
 msgid "invalid component Y1 transform value"
 msgstr "invalid component Y1 transform value"
 
-#: eeschema/sch_legacy_plugin.cpp:1391
+#: eeschema/sch_legacy_plugin.cpp:1411
 msgid "invalid component X2 transform value"
 msgstr "invalid component X2 transform value"
 
-#: eeschema/sch_legacy_plugin.cpp:1396
+#: eeschema/sch_legacy_plugin.cpp:1416
 msgid "invalid component Y2 transform value"
 msgstr "invalid component Y2 transform value"
+
+#: eeschema/sch_legacy_plugin.cpp:2091
+#, c-format
+msgid "user does not have permission to read library document file '%s'"
+msgstr ""
+"l'utilisateur n'a pas la permission de lire le fichier de documentation de "
+"librairie '%s'"
+
+#: eeschema/sch_legacy_plugin.cpp:2099
+msgid "symbol document library file is empty"
+msgstr "le fichier de documentation de librairie est vide"
+
+#: eeschema/sch_legacy_plugin.cpp:2385
+msgid "invalid field ID"
+msgstr "ID de champ invalide"
+
+#: eeschema/sch_legacy_plugin.cpp:2424
+msgid "invalid field text orientation parameter"
+msgstr "parametre orientation du texte de champ non valide"
+
+#: eeschema/sch_legacy_plugin.cpp:2433
+msgid "invalid field text visibility parameter"
+msgstr "parametre visibilité du texte de champ non valide"
+
+#: eeschema/sch_legacy_plugin.cpp:2450
+msgid "invalid field text horizontal justification parameter"
+msgstr "parametre justification horizontale du texte de champ non valide"
+
+#: eeschema/sch_legacy_plugin.cpp:2458
+msgid "invalid field text attributes size"
+msgstr "attributs de taille du texte de champ invalides"
+
+#: eeschema/sch_legacy_plugin.cpp:2468
+msgid "invalid field text vertical justification parameter"
+msgstr "parametre justification verticale du texte de champ non valide"
+
+#: eeschema/sch_legacy_plugin.cpp:2476
+msgid "invalid field text italic parameter"
+msgstr "parametre italique du texte de champ non valide"
+
+#: eeschema/sch_legacy_plugin.cpp:2481
+msgid "invalid field text bold parameter"
+msgstr "parametre gras du texte de champ non valide"
+
+#: eeschema/sch_legacy_plugin.cpp:2570
+msgid "undefined DRAW entry"
+msgstr "DRAW entry indéfinie"
+
+#: eeschema/sch_legacy_plugin.cpp:2576
+msgid "file ended prematurely loading component draw element"
+msgstr ""
+"fin de fichier prématurée lors du chargement d'élément de graphique du "
+"composant"
+
+#: eeschema/sch_legacy_plugin.cpp:2600
+msgid "invalid fill type, expected f, F, or N"
+msgstr "type de remplissage non valide, attendu f,F ou N"
+
+#: eeschema/sch_legacy_plugin.cpp:2748
+msgid "invalid text stype, expected 'Normal' or 'Italic'"
+msgstr ""
+
+#: eeschema/sch_legacy_plugin.cpp:2769
+msgid "invalid horizontal text justication parameter, expected L, C, or R"
+msgstr ""
+"parametre justification horizontale du texte de champ non valide, attendu L,"
+"C ou R"
+
+#: eeschema/sch_legacy_plugin.cpp:2788
+msgid "invalid vertical text justication parameter, expected T, C, or B"
+msgstr ""
+"parametre justification verticale du texte de champ non valide, attendu T,C "
+"ou B"
+
+#: eeschema/sch_legacy_plugin.cpp:2912
+msgid "unknown pin type"
+msgstr "type de pin inconnu"
+
+#: eeschema/sch_legacy_plugin.cpp:2965
+msgid "unknown pin attribute"
+msgstr "attribut de pin inconnu"
+
+#: eeschema/sch_legacy_plugin.cpp:3008
+msgid "pin attributes do not define a valid pin shape"
+msgstr "les attributs de pin ne définissent pas une forme de pin valide"
+
+#: eeschema/sch_legacy_plugin.cpp:3097
+msgid "file ended prematurely while loading footprint filters"
+msgstr "fin de fichier prématurée lors du chargement des filtres d'empreintes"
 
 #: eeschema/sch_line.cpp:458
 msgid "Vert."
@@ -9333,17 +9414,17 @@ msgstr "Ligne %s sur Couche Inconnue de (%s,%s) à (%s,%s)"
 msgid "Electronics Rule Check Error"
 msgstr "Contrôle des Règles Electroniques: Erreur"
 
-#: eeschema/sch_plugin.cpp:123
+#: eeschema/sch_plugin.cpp:130
 msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr ""
 "Activer les messages de <b>debug</b> pour les fonctions Symbol*() dans ce "
 "SCH_PLUGIN."
 
-#: eeschema/sch_plugin.cpp:127
+#: eeschema/sch_plugin.cpp:134
 msgid "Regular expression <b>symbol name</b> filter."
 msgstr "Expression rationelle de filtre <b>nom du symbole</b>."
 
-#: eeschema/sch_plugin.cpp:131 pcbnew/plugin.cpp:128
+#: eeschema/sch_plugin.cpp:138 pcbnew/plugin.cpp:128
 msgid ""
 "Enable transaction logging. The mere presence of this option turns on the "
 "logging, no need to set a Value."
@@ -9351,15 +9432,15 @@ msgstr ""
 "Active le logging de la connexion. La simple présence de cette option active "
 "ce logging, inutile de définir une valeur."
 
-#: eeschema/sch_plugin.cpp:136 pcbnew/plugin.cpp:133
+#: eeschema/sch_plugin.cpp:143 pcbnew/plugin.cpp:133
 msgid "User name for <b>login</b> to some special library server."
 msgstr "Nom utilisateur de <b>login</b> pour certains serveurs de librairie."
 
-#: eeschema/sch_plugin.cpp:140 pcbnew/plugin.cpp:137
+#: eeschema/sch_plugin.cpp:147 pcbnew/plugin.cpp:137
 msgid "Password for <b>login</b> to some special library server."
 msgstr "Mot de passe de <b>login</b> pour certains serveurs de librairie."
 
-#: eeschema/sch_plugin.cpp:148
+#: eeschema/sch_plugin.cpp:155
 msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 msgstr ""
@@ -9445,73 +9526,73 @@ msgstr "Label Global %s"
 msgid "Hierarchical Label %s"
 msgstr "Label Hiérarchique %s"
 
-#: eeschema/sch_validators.cpp:80
+#: eeschema/sch_validators.cpp:85
 msgid "reference designator"
 msgstr "référence"
 
-#: eeschema/sch_validators.cpp:81
+#: eeschema/sch_validators.cpp:86
 msgid "value"
 msgstr "valeur"
 
-#: eeschema/sch_validators.cpp:82
+#: eeschema/sch_validators.cpp:87
 msgid "footprint"
 msgstr "empreinte"
 
-#: eeschema/sch_validators.cpp:83
+#: eeschema/sch_validators.cpp:88
 msgid "data sheet"
 msgstr "fiche technique"
 
-#: eeschema/sch_validators.cpp:84
+#: eeschema/sch_validators.cpp:89
 msgid "user defined"
 msgstr "défini par l'utilisateur"
 
-#: eeschema/sch_validators.cpp:92
+#: eeschema/sch_validators.cpp:97
 #, c-format
 msgid "The %s field cannot be empty."
 msgstr " le champ %s ne peut être vide."
 
-#: eeschema/sch_validators.cpp:98
+#: eeschema/sch_validators.cpp:105
 msgid "carriage return"
 msgstr "retour chariot"
 
-#: eeschema/sch_validators.cpp:100
+#: eeschema/sch_validators.cpp:107
 msgid "line feed"
 msgstr "line feed"
 
-#: eeschema/sch_validators.cpp:102
+#: eeschema/sch_validators.cpp:109
 msgid "tab"
 msgstr "tab"
 
-#: eeschema/sch_validators.cpp:104
+#: eeschema/sch_validators.cpp:111
 msgid "space"
 msgstr "espace"
 
-#: eeschema/sch_validators.cpp:111
+#: eeschema/sch_validators.cpp:118
 #, c-format
 msgid "%s or %s"
 msgstr "%s ou %s"
 
-#: eeschema/sch_validators.cpp:113
+#: eeschema/sch_validators.cpp:120
 #, c-format
 msgid "%s, %s, or %s"
 msgstr "%s,%s ou%s"
 
-#: eeschema/sch_validators.cpp:115
+#: eeschema/sch_validators.cpp:122
 #, c-format
 msgid "%s, %s, %s, or %s"
 msgstr "%s,%s,%s ou%s"
 
-#: eeschema/sch_validators.cpp:120
+#: eeschema/sch_validators.cpp:127
 #, c-format
 msgid "The %s field cannot contain %s characters."
 msgstr " le champ %s ne peut pas contenir les caractères %s."
 
-#: eeschema/sch_validators.cpp:124
+#: eeschema/sch_validators.cpp:131
 #, c-format
 msgid "The %s field cannot contain leading and/or trailing white space."
 msgstr "Le champ %s ne peut pas contenir des espaces en début et/ou fin."
 
-#: eeschema/sch_validators.cpp:132
+#: eeschema/sch_validators.cpp:139
 msgid "Field Validation Error"
 msgstr "Erreur de Validation du Champ"
 
@@ -9754,51 +9835,107 @@ msgstr "Voulez vous la convertir en une feuille hiérarchique simple?"
 msgid "No new hierarchical labels found."
 msgstr "Pas de nouveau label hiérarchique trouvé"
 
-#: eeschema/sim/sim_plot_frame.cpp:122
+#: eeschema/sim/sim_plot_frame.cpp:135
 msgid "Run/Stop Simulation"
 msgstr "Lancer/Stopper Simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:123 eeschema/sim/sim_plot_frame_base.cpp:51
+#: eeschema/sim/sim_plot_frame.cpp:136 eeschema/sim/sim_plot_frame_base.cpp:51
 msgid "Run Simulation"
 msgstr "Lancer la Simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:124
+#: eeschema/sim/sim_plot_frame.cpp:137
 msgid "Add Signals"
 msgstr "Ajouter Signaux"
 
-#: eeschema/sim/sim_plot_frame.cpp:125
+#: eeschema/sim/sim_plot_frame.cpp:138
 msgid "Add signals to plot"
 msgstr "Ajouter des signaux à tracer"
 
-#: eeschema/sim/sim_plot_frame.cpp:126
+#: eeschema/sim/sim_plot_frame.cpp:139
 msgid "Probe"
 msgstr "Sonde"
 
-#: eeschema/sim/sim_plot_frame.cpp:127
+#: eeschema/sim/sim_plot_frame.cpp:140
 msgid "Probe signals on the schematic"
 msgstr "Sonde de signaux dans la schématique"
 
-#: eeschema/sim/sim_plot_frame.cpp:128 eeschema/sim/sim_plot_frame_base.cpp:201
+#: eeschema/sim/sim_plot_frame.cpp:141 eeschema/sim/sim_plot_frame_base.cpp:201
 msgid "Tune"
 msgstr "Ajustage"
 
-#: eeschema/sim/sim_plot_frame.cpp:129
+#: eeschema/sim/sim_plot_frame.cpp:142
 msgid "Tune component values"
 msgstr "Ajuster les valeurs du composant"
 
-#: eeschema/sim/sim_plot_frame.cpp:130
+#: eeschema/sim/sim_plot_frame.cpp:143
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:101
 msgid "Settings"
 msgstr "Caractéristiques"
 
-#: eeschema/sim/sim_plot_frame.cpp:131
-#: eeschema/dialogs/dialog_sim_settings_base.h:119
+#: eeschema/sim/sim_plot_frame.cpp:144
+#: eeschema/dialogs/dialog_sim_settings_base.h:123
 msgid "Simulation settings"
 msgstr "Paramètres de simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:147
+#: eeschema/sim/sim_plot_frame.cpp:160
 msgid "Welcome!"
 msgstr "Bienvenue !"
+
+#: eeschema/sim/sim_plot_frame.cpp:184 eeschema/sim/sim_plot_frame.cpp:852
+msgid "There were errors during netlist export, aborted."
+msgstr "Il y a eu des erreurs lors de l'exportation de netlist, abandon."
+
+#: eeschema/sim/sim_plot_frame.cpp:190
+msgid "You need to select the simulation settings first."
+msgstr "Vous devez sélectionner les paramètres de simulation en premier."
+
+#: eeschema/sim/sim_plot_frame.cpp:641
+msgid "Open simulation workbook"
+msgstr ""
+
+#: eeschema/sim/sim_plot_frame.cpp:642 eeschema/sim/sim_plot_frame.cpp:658
+msgid "Workbook file (*.wbk)|*.wbk"
+msgstr ""
+
+#: eeschema/sim/sim_plot_frame.cpp:657
+msgid "Save simulation workbook"
+msgstr ""
+
+#: eeschema/sim/sim_plot_frame.cpp:664
+msgid "There was an error while saving the workbook file"
+msgstr ""
+
+#: eeschema/sim/sim_plot_frame.cpp:673
+msgid "Save plot as image"
+msgstr "Sauver tracé comme fichier image"
+
+#: eeschema/sim/sim_plot_frame.cpp:674
+msgid "PNG file (*.png)|*.png"
+msgstr ""
+
+#: eeschema/sim/sim_plot_frame.cpp:690
+msgid "Save plot data"
+msgstr "Sauver les données de tracé"
+
+#: eeschema/sim/sim_plot_frame.cpp:883
+msgid "You need to run simulation first."
+msgstr "Vous devez exécuter la simulation en premier."
+
+#: eeschema/sim/sim_plot_frame.cpp:930
+msgid "Signal"
+msgstr "Signal"
+
+#: eeschema/sim/sim_plot_frame.cpp:1054
+msgid "Hide signal"
+msgstr "Masquer le signal"
+
+#: eeschema/sim/sim_plot_frame.cpp:1059
+msgid "Hide cursor"
+msgstr "Masquer le curseur"
+
+#: eeschema/sim/sim_plot_frame.cpp:1061
+msgid "Show cursor"
+msgstr "Afficher le curseur"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
@@ -9862,7 +9999,7 @@ msgstr "Vue"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:133
 msgid "Start the simulation by clicking the Run Simulation button"
-msgstr "Démarrer la simulation eb cliquant sur le bouton Lancer Simulation"
+msgstr "Démarrer la simulation en cliquant sur le bouton Lancer Simulation"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:153
 msgid "a page"
@@ -11242,11 +11379,11 @@ msgstr "Afficher/cacher le gestionnaire de couches"
 msgid "<No selection>"
 msgstr "<Pas de sélection>"
 
-#: gerbview/toolbars_gerber.cpp:520
+#: gerbview/toolbars_gerber.cpp:524
 msgid "Hide layers manager"
 msgstr "Cacher le gestionnaire de couches"
 
-#: gerbview/toolbars_gerber.cpp:522
+#: gerbview/toolbars_gerber.cpp:526
 msgid "Show layers manager"
 msgstr "Afficher le gestionnaire de couches"
 
@@ -20592,7 +20729,7 @@ msgid "Cannot convert \"%s\" to an integer"
 msgstr "Ne peut convertir \"%s\" en un entier"
 
 #: pcbnew/gpcb_plugin.cpp:294 pcbnew/gpcb_plugin.cpp:961
-#: pcbnew/kicad_plugin.cpp:1797
+#: pcbnew/kicad_plugin.cpp:1802
 #, c-format
 msgid "footprint library path '%s' does not exist"
 msgstr "Le chemin de librairie d'empreintes '%s' n'existe pas"
@@ -20613,29 +20750,29 @@ msgstr "mot clé \"%s\" inconnu"
 msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
-#: pcbnew/gpcb_plugin.cpp:1029 pcbnew/kicad_plugin.cpp:1870
-#: pcbnew/kicad_plugin.cpp:1935 pcbnew/librairi.cpp:523
+#: pcbnew/gpcb_plugin.cpp:1029 pcbnew/kicad_plugin.cpp:1875
+#: pcbnew/kicad_plugin.cpp:1940 pcbnew/librairi.cpp:523
 #, c-format
 msgid "Library '%s' is read only"
 msgstr "Librairie '%s' est en lecture seule"
 
-#: pcbnew/gpcb_plugin.cpp:1048 pcbnew/kicad_plugin.cpp:1972
+#: pcbnew/gpcb_plugin.cpp:1048 pcbnew/kicad_plugin.cpp:1977
 #, c-format
 msgid "user does not have permission to delete directory '%s'"
 msgstr ""
 "Vous n'avez pas la permission d'écriture pour supprimer le répertoire '%s'."
 
-#: pcbnew/gpcb_plugin.cpp:1056 pcbnew/kicad_plugin.cpp:1980
+#: pcbnew/gpcb_plugin.cpp:1056 pcbnew/kicad_plugin.cpp:1985
 #, c-format
 msgid "library directory '%s' has unexpected sub-directories"
 msgstr "le répertoire librairie '%s' a des sous-répertoires inattendus"
 
-#: pcbnew/gpcb_plugin.cpp:1075 pcbnew/kicad_plugin.cpp:1999
+#: pcbnew/gpcb_plugin.cpp:1075 pcbnew/kicad_plugin.cpp:2004
 #, c-format
 msgid "unexpected file '%s' was found in library path '%s'"
 msgstr "fichier inattendu '%s' trouvé dans le chemin de librairie '%s'"
 
-#: pcbnew/gpcb_plugin.cpp:1093 pcbnew/kicad_plugin.cpp:2017
+#: pcbnew/gpcb_plugin.cpp:1093 pcbnew/kicad_plugin.cpp:2022
 #, c-format
 msgid "footprint library '%s' cannot be deleted"
 msgstr "la librairie d'empreintes  '%s' ne peut pas être supprimée."
@@ -20717,7 +20854,7 @@ msgid "Select Layer and Add Blind/Buried Via"
 msgstr "Sélectionner Couche et Ajouter Via Aveugle/Enterrée"
 
 #: pcbnew/hotkeys.cpp:111 pcbnew/onrightclick.cpp:601
-#: pcbnew/router/router_tool.cpp:101
+#: pcbnew/router/router_tool.cpp:100
 msgid "Switch Track Posture"
 msgstr "Commuter Orientation"
 
@@ -20953,22 +21090,22 @@ msgstr "Type via inconnu %d"
 msgid "unknown zone corner smoothing type %d"
 msgstr "unknown zone corner smoothing type %d"
 
-#: pcbnew/kicad_plugin.cpp:1754
+#: pcbnew/kicad_plugin.cpp:1759
 msgid "this file does not contain a PCB"
 msgstr "ce fichier ne contient pas de PCB"
 
-#: pcbnew/kicad_plugin.cpp:1886
+#: pcbnew/kicad_plugin.cpp:1891
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Nom de fichier d'empreinte '%s' non valide."
 
-#: pcbnew/kicad_plugin.cpp:1892
+#: pcbnew/kicad_plugin.cpp:1897
 #, c-format
 msgid "user does not have write permission to delete file '%s' "
 msgstr ""
 "Vous n'avez pas la permission d'écriture pour supprimer  le fichier '%s'."
 
-#: pcbnew/kicad_plugin.cpp:1947
+#: pcbnew/kicad_plugin.cpp:1952
 #, c-format
 msgid "cannot overwrite library path '%s'"
 msgstr "impossible de remplacer le chemin librairie  '%s'"
@@ -22295,7 +22432,7 @@ msgstr "(pas de librairie active)"
 msgid "Footprint Editor (active library: "
 msgstr "Éditeur d'empreintes (librairie active: "
 
-#: pcbnew/moduleframe.cpp:867 pcbnew/pcbnew_config.cpp:138
+#: pcbnew/moduleframe.cpp:877 pcbnew/pcbnew_config.cpp:138
 #, c-format
 msgid ""
 "Error occurred saving the global footprint library table:\n"
@@ -22307,7 +22444,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/moduleframe.cpp:887 pcbnew/pcbnew_config.cpp:160
+#: pcbnew/moduleframe.cpp:897 pcbnew/pcbnew_config.cpp:160
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -22716,12 +22853,12 @@ msgstr "Briser Piste"
 msgid "Place Node"
 msgstr "Place nœud"
 
-#: pcbnew/onrightclick.cpp:577 pcbnew/router/length_tuner_tool.cpp:53
-#: pcbnew/router/router_tool.cpp:67
+#: pcbnew/onrightclick.cpp:577 pcbnew/router/length_tuner_tool.cpp:51
+#: pcbnew/router/router_tool.cpp:66
 msgid "End Track"
 msgstr "Terminer Piste"
 
-#: pcbnew/onrightclick.cpp:581 pcbnew/router/router_tool.cpp:78
+#: pcbnew/onrightclick.cpp:581 pcbnew/router/router_tool.cpp:77
 msgid "Place Through Via"
 msgstr "Placer Via Traversante"
 
@@ -22729,7 +22866,7 @@ msgstr "Placer Via Traversante"
 msgid "Select Layer and Place Through Via"
 msgstr "Sélection Couche  et Place Via Traversante"
 
-#: pcbnew/onrightclick.cpp:591 pcbnew/router/router_tool.cpp:84
+#: pcbnew/onrightclick.cpp:591 pcbnew/router/router_tool.cpp:83
 msgid "Place Blind/Buried Via"
 msgstr "Placer Via Aveugle/Enterrée"
 
@@ -23160,81 +23297,81 @@ msgid ""
 msgstr ""
 "Entrer le module python qui implémente les fonctions du PLUGIN::Footprint*()."
 
-#: pcbnew/router/length_tuner_tool.cpp:50 pcbnew/router/router_tool.cpp:64
+#: pcbnew/router/length_tuner_tool.cpp:48 pcbnew/router/router_tool.cpp:63
 msgid "New Track"
 msgstr "Nouvelle Piste"
 
-#: pcbnew/router/length_tuner_tool.cpp:50 pcbnew/router/router_tool.cpp:64
+#: pcbnew/router/length_tuner_tool.cpp:48 pcbnew/router/router_tool.cpp:63
 msgid "Starts laying a new track."
 msgstr "Démarrer le tracé d'une nouvelle piste."
 
-#: pcbnew/router/length_tuner_tool.cpp:53
+#: pcbnew/router/length_tuner_tool.cpp:51
 msgid "Stops laying the current meander."
 msgstr "Arrêter le tracé du méandre en cours."
 
-#: pcbnew/router/length_tuner_tool.cpp:56
+#: pcbnew/router/length_tuner_tool.cpp:54
 msgid "Length Tuning Settings"
 msgstr "Paramètres de Réglage de Longueur"
 
-#: pcbnew/router/length_tuner_tool.cpp:56
+#: pcbnew/router/length_tuner_tool.cpp:54
 msgid "Sets the length tuning parameters for currently routed item."
 msgstr ""
 "Définit les paramètres d'ajustage de longueur pour l'élément actuellement "
 "routé."
 
-#: pcbnew/router/length_tuner_tool.cpp:59
+#: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Increase spacing"
 msgstr "Augmenter espacement"
 
-#: pcbnew/router/length_tuner_tool.cpp:59
+#: pcbnew/router/length_tuner_tool.cpp:57
 msgid "Increase meander spacing by one step."
 msgstr "Augmenter l'espacement du méandre de un pas."
 
-#: pcbnew/router/length_tuner_tool.cpp:62
+#: pcbnew/router/length_tuner_tool.cpp:60
 msgid "Decrease spacing"
 msgstr "Diminuer espacement"
 
-#: pcbnew/router/length_tuner_tool.cpp:62
+#: pcbnew/router/length_tuner_tool.cpp:60
 msgid "Decrease meander spacing by one step."
 msgstr "Diminuer l'espacement des méandree d'un pas."
 
-#: pcbnew/router/length_tuner_tool.cpp:65
+#: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Increase amplitude"
 msgstr "Augmenter amplitude"
 
-#: pcbnew/router/length_tuner_tool.cpp:65
+#: pcbnew/router/length_tuner_tool.cpp:63
 msgid "Increase meander amplitude by one step."
 msgstr "Augmenter amplitude du méandre de un pas."
 
-#: pcbnew/router/length_tuner_tool.cpp:68
+#: pcbnew/router/length_tuner_tool.cpp:66
 msgid "Decrease amplitude"
 msgstr "Diminuer amplitude"
 
-#: pcbnew/router/length_tuner_tool.cpp:68
+#: pcbnew/router/length_tuner_tool.cpp:66
 msgid "Decrease meander amplitude by one step."
 msgstr "Diminuer l'amplitude des méandree d'un pas."
 
-#: pcbnew/router/length_tuner_tool.cpp:82
+#: pcbnew/router/length_tuner_tool.cpp:80
 msgid "Length Tuner"
 msgstr "Ajustage de Longueur"
 
-#: pcbnew/router/length_tuner_tool.cpp:240
+#: pcbnew/router/length_tuner_tool.cpp:238
 msgid "Tune Trace Length"
 msgstr "Ajuster Longueur de Piste"
 
-#: pcbnew/router/length_tuner_tool.cpp:247
+#: pcbnew/router/length_tuner_tool.cpp:245
 msgid "Tune Diff Pair Length"
 msgstr "Ajuster Longueur de Paire Différentielle"
 
-#: pcbnew/router/length_tuner_tool.cpp:254
+#: pcbnew/router/length_tuner_tool.cpp:252
 msgid "Tune Diff Pair Skew"
 msgstr "Ajuster Décalage de Paire Différentielle"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:561
+#: pcbnew/router/pns_diff_pair_placer.cpp:559
 msgid "Can't start a differential pair  in the middle of nowhere."
 msgstr "On ne peut démarrer une paire différentielle au milieu de nulle part."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:571
+#: pcbnew/router/pns_diff_pair_placer.cpp:569
 msgid ""
 "Unable to find complementary differential pair net. Make sure the names of "
 "the nets belonging to a differential pair end with either _N/_P or +/-."
@@ -23243,21 +23380,21 @@ msgstr ""
 "nommer les nets appartenant à une paire différentielle pour qu'ils "
 "finnissent par _N/_P ou +/-"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:590
+#: pcbnew/router/pns_diff_pair_placer.cpp:588
 msgid "Current track/via gap setting violates design rules for this net."
 msgstr ""
 "Le réglage actuel d'espacement de  piste/via viole les règles de conception."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:597
+#: pcbnew/router/pns_diff_pair_placer.cpp:595
 msgid "Current track width setting violates design rules."
 msgstr "Le réglage actuel de largeur de  piste viole les règles de conception."
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:76
-#: pcbnew/router/pns_meander_placer.cpp:66
+#: pcbnew/router/pns_dp_meander_placer.cpp:74
+#: pcbnew/router/pns_meander_placer.cpp:64
 msgid "Please select a track whose length you want to tune."
 msgstr "SVP sélectionner la piste dont vous voulez ajuster la longueur."
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:93
+#: pcbnew/router/pns_dp_meander_placer.cpp:91
 msgid ""
 "Unable to find complementary differential pair net for length tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
@@ -23267,32 +23404,32 @@ msgstr ""
 "longueur. Soyez sûr de nommer les nets appartenant à une paire "
 "différentielle pour qu'ils finissent par _N/_P ou +/-"
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:369
-#: pcbnew/router/pns_meander_placer.cpp:243
+#: pcbnew/router/pns_dp_meander_placer.cpp:367
+#: pcbnew/router/pns_meander_placer.cpp:241
 msgid "Too long: "
 msgstr "Trop long: "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:372
-#: pcbnew/router/pns_meander_placer.cpp:246
+#: pcbnew/router/pns_dp_meander_placer.cpp:370
+#: pcbnew/router/pns_meander_placer.cpp:244
 msgid "Too short: "
 msgstr "Trop court: "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:375
-#: pcbnew/router/pns_meander_placer.cpp:249
+#: pcbnew/router/pns_dp_meander_placer.cpp:373
+#: pcbnew/router/pns_meander_placer.cpp:247
 msgid "Tuned: "
 msgstr "Ajusté: "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:378
-#: pcbnew/router/pns_meander_placer.cpp:252
-#: pcbnew/router/pns_meander_skew_placer.cpp:163
+#: pcbnew/router/pns_dp_meander_placer.cpp:376
+#: pcbnew/router/pns_meander_placer.cpp:250
+#: pcbnew/router/pns_meander_skew_placer.cpp:161
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:53
+#: pcbnew/router/pns_meander_skew_placer.cpp:51
 msgid "Please select a differential pair trace you want to tune."
 msgstr "SVP sélectionner la paire différentielle que vous voulez ajuster."
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:72
+#: pcbnew/router/pns_meander_skew_placer.cpp:70
 msgid ""
 "Unable to find complementary differential pair net for skew tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
@@ -23302,129 +23439,129 @@ msgstr ""
 "l'ajustage de longueur. Soyez sûr de nommer les nets appartenant à une paire "
 "différentielle pour qu'ils finissent par _N/_P ou +/-"
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:154
+#: pcbnew/router/pns_meander_skew_placer.cpp:152
 msgid "Too long: skew "
 msgstr "Trop long: diff "
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:157
+#: pcbnew/router/pns_meander_skew_placer.cpp:155
 msgid "Too short: skew "
 msgstr "Trop court: diff "
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:160
+#: pcbnew/router/pns_meander_skew_placer.cpp:158
 msgid "Tuned: skew "
 msgstr "Ajusté: décalage"
 
-#: pcbnew/router/pns_tool_base.cpp:64
+#: pcbnew/router/pns_tool_base.cpp:62
 msgid "Routing Options..."
 msgstr "Options de Routage..."
 
-#: pcbnew/router/pns_tool_base.cpp:65
+#: pcbnew/router/pns_tool_base.cpp:63
 msgid "Shows a dialog containing router options."
 msgstr "Montrer un dialogue pour les options du routeur"
 
-#: pcbnew/router/router_tool.cpp:67
+#: pcbnew/router/router_tool.cpp:66
 msgid "Stops laying the current track."
 msgstr "Arrêter le tracé de la piste en cours."
 
-#: pcbnew/router/router_tool.cpp:70
+#: pcbnew/router/router_tool.cpp:69
 msgid "Auto-end Track"
 msgstr "Finir Automatiquement Piste"
 
-#: pcbnew/router/router_tool.cpp:70
+#: pcbnew/router/router_tool.cpp:69
 msgid "Automagically finishes currently routed track."
 msgstr "Finit automatiquement la piste en cours de routage."
 
-#: pcbnew/router/router_tool.cpp:74
+#: pcbnew/router/router_tool.cpp:73
 msgid "Drag Track/Via"
 msgstr "Drag Piste/Via"
 
-#: pcbnew/router/router_tool.cpp:74
+#: pcbnew/router/router_tool.cpp:73
 msgid "Drags a track or a via."
 msgstr "Dragger une piste ou une via"
 
-#: pcbnew/router/router_tool.cpp:79
+#: pcbnew/router/router_tool.cpp:78
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr "Ajouter une via traversante à la fin de la piste en cours."
 
-#: pcbnew/router/router_tool.cpp:85
+#: pcbnew/router/router_tool.cpp:84
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr "Ajouter une via aveugle ou enterrée à la fin de la piste en cours."
 
-#: pcbnew/router/router_tool.cpp:90
+#: pcbnew/router/router_tool.cpp:89
 msgid "Place Microvia"
 msgstr "Placer Microvia"
 
-#: pcbnew/router/router_tool.cpp:90
+#: pcbnew/router/router_tool.cpp:89
 msgid "Adds a microvia at the end of currently routed track."
 msgstr "Ajouter une microvia à la fin de la piste en cours."
 
-#: pcbnew/router/router_tool.cpp:95
+#: pcbnew/router/router_tool.cpp:94
 msgid "Custom Track/Via Size"
 msgstr "Dim Utilisateur des Pistes/Vias"
 
-#: pcbnew/router/router_tool.cpp:96
+#: pcbnew/router/router_tool.cpp:95
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
 "Montrer un dialogue pour changer la largeur de la piste et la dimension de "
 "la via."
 
-#: pcbnew/router/router_tool.cpp:102
+#: pcbnew/router/router_tool.cpp:101
 msgid "Switches posture of the currently routed track."
 msgstr "Commute le pliage de la piste en cours de tracé."
 
-#: pcbnew/router/router_tool.cpp:107
+#: pcbnew/router/router_tool.cpp:106
 msgid "Differential Pair Dimensions..."
 msgstr "Dimensions de la Paire Différentielle..."
 
-#: pcbnew/router/router_tool.cpp:108
+#: pcbnew/router/router_tool.cpp:107
 msgid "Sets the width and gap of the currently routed differential pair."
 msgstr ""
 "Définit la largeur et l'espacement de la paire différentielle actuellement "
 "routée."
 
-#: pcbnew/router/router_tool.cpp:131
+#: pcbnew/router/router_tool.cpp:130
 msgid "Custom size"
 msgstr "Taille utilisateur"
 
-#: pcbnew/router/router_tool.cpp:134
+#: pcbnew/router/router_tool.cpp:133
 msgid "Use the starting track width"
 msgstr "Utiliser la largeur de la piste de départ"
 
-#: pcbnew/router/router_tool.cpp:135
+#: pcbnew/router/router_tool.cpp:134
 msgid "Route using the width of the starting track."
 msgstr "Router en utilisant la largeur de la piste de départ.."
 
-#: pcbnew/router/router_tool.cpp:137
+#: pcbnew/router/router_tool.cpp:136
 msgid "Use net class values"
 msgstr "Utiliser les valeurs de la net classe"
 
-#: pcbnew/router/router_tool.cpp:138
+#: pcbnew/router/router_tool.cpp:137
 msgid "Use track and via sizes from the net class"
 msgstr "Utiliser les dimensions de pistes et vias de leur valeurs en netclasse"
 
-#: pcbnew/router/router_tool.cpp:205
+#: pcbnew/router/router_tool.cpp:204
 msgid "Interactive Router"
 msgstr "Routeur Interactif"
 
-#: pcbnew/router/router_tool.cpp:218
+#: pcbnew/router/router_tool.cpp:217
 msgid "Select Track/Via Width"
 msgstr "Sélection Largeur Piste/Via"
 
-#: pcbnew/router/router_tool.cpp:404
+#: pcbnew/router/router_tool.cpp:403
 msgid "Blind/buried vias have to be enabled in the design settings."
 msgstr ""
 "Vias aveugles / enterrées doivent être activées dans les paramètres de "
 "conception."
 
-#: pcbnew/router/router_tool.cpp:410
+#: pcbnew/router/router_tool.cpp:409
 msgid "Microvias have to be enabled in the design settings."
 msgstr "Les microvias doivent être activées dans les paramètres de conception."
 
-#: pcbnew/router/router_tool.cpp:417
+#: pcbnew/router/router_tool.cpp:416
 msgid "Only through vias are allowed on 2 layer boards."
 msgstr "Uniquement les vias traversantes sont admises pour les CI à 2 couches."
 
-#: pcbnew/router/router_tool.cpp:424
+#: pcbnew/router/router_tool.cpp:423
 msgid ""
 "Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the "
 "ones directly adjacent to them."
@@ -23432,15 +23569,15 @@ msgstr ""
 "Les microvias peuvent être placées seulement entre une couche extérieure (F."
 "Cu/B.Cu) et celle adjacente."
 
-#: pcbnew/router/router_tool.cpp:651
+#: pcbnew/router/router_tool.cpp:650
 msgid "Route Track"
 msgstr "Router Piste"
 
-#: pcbnew/router/router_tool.cpp:658
+#: pcbnew/router/router_tool.cpp:657
 msgid "Router Differential Pair"
 msgstr "Router Paire Différentielle"
 
-#: pcbnew/router/router_tool.cpp:748 pcbnew/router/router_tool.cpp:817
+#: pcbnew/router/router_tool.cpp:747 pcbnew/router/router_tool.cpp:816
 msgid "The item is locked. Do you want to continue?"
 msgstr "L'élément est verrouillé. Voulez vous continuer ?"
 
@@ -24905,6 +25042,13 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importation Fichier DXF"
+
+#~ msgid ""
+#~ "Ready\n"
+#~ "Project dir: '%s'\n"
+#~ msgstr ""
+#~ "Prêt\n"
+#~ "Répertoire du projet: '%s'\n"
 
 #~ msgid "No tool"
 #~ msgstr "Pas d'outil"
