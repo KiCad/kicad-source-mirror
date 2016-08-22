@@ -21,8 +21,9 @@ if( ${NGSPICE_INCLUDE_DIR} STREQUAL "NGSPICE_INCLUDE_DIR-NOTFOUND" OR ${NGSPICE_
     message( "You can either compile ngspice configured with --with-ngshared parameter" )
     message( "or run a script that does the job for you:" )
     message( "  wget https://orson.net.pl/pub/libngspice/get_libngspice_so.sh" )
-    message( "  sh get_libngspice_so.sh" )
-    message( "  sudo sh get_libngspice_so.sh install" )
+    message( "  chmod +x get_libngspice_so.sh" )
+    message( "  ./get_libngspice_so.sh" )
+    message( "  sudo ./get_libngspice_so.sh install" )
     message( "" )
 endif()
 
