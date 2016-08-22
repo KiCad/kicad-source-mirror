@@ -14,6 +14,18 @@ find_library( NGSPICE_LIBRARY ngspice
 
 include( FindPackageHandleStandardArgs )
 
+if( ${NGSPICE_INCLUDE_DIR} STREQUAL "NGSPICE_INCLUDE_DIR-NOTFOUND" OR ${NGSPICE_LIBRARY} STREQUAL "NGSPICE_LIBRARY-NOTFOUND" )
+    message( "" )
+    message( "*** NGSPICE library missing ***" )
+    message( "Most of ngspice packages do not provide the required libngspice library." )
+    message( "You can either compile ngspice configured with --with-ngshared parameter" )
+    message( "or run a script that does the job for you:" )
+    message( "  wget https://orson.net.pl/pub/libngspice/get_libngspice_so.sh" )
+    message( "  sh get_libngspice_so.sh" )
+    message( "  sudo sh get_libngspice_so.sh install" )
+    message( "" )
+endif()
+
 find_package_handle_standard_args( ngspice
   REQUIRED_VARS
     NGSPICE_INCLUDE_DIR
