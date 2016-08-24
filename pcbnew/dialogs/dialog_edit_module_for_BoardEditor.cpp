@@ -343,7 +343,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
             "Only components with this option are put in the footprint position list file" ) );
     m_AttributsCtrl->SetItemToolTip( 2,
         _( "Use this attribute for \"virtual\" components drawn on board\n"
-           "like a edge connector (old ISA PC bus for instance)" ) );
+           "like an edge connector (old ISA PC bus for instance)" ) );
 
     // Controls on right side of the dialog
     switch( m_CurrentModule->GetAttributes() & 255 )
