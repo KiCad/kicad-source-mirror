@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-20 17:38+0200\n"
-"PO-Revision-Date: 2016-08-20 18:36+0200\n"
+"POT-Creation-Date: 2016-08-24 18:14+0200\n"
+"PO-Revision-Date: 2016-08-24 18:16+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Basepath: f:/kicad-launchpad/testing\n"
+"X-Poedit-Basepath: f:/kicad-launchpad/git_testing\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Generator: Poedit 1.8.8\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -9881,59 +9881,61 @@ msgstr "Paramètres de simulation"
 msgid "Welcome!"
 msgstr "Bienvenue !"
 
-#: eeschema/sim/sim_plot_frame.cpp:184 eeschema/sim/sim_plot_frame.cpp:852
+#: eeschema/sim/sim_plot_frame.cpp:196 eeschema/sim/sim_plot_frame.cpp:864
 msgid "There were errors during netlist export, aborted."
 msgstr "Il y a eu des erreurs lors de l'exportation de netlist, abandon."
 
-#: eeschema/sim/sim_plot_frame.cpp:190
+#: eeschema/sim/sim_plot_frame.cpp:202
 msgid "You need to select the simulation settings first."
 msgstr "Vous devez sélectionner les paramètres de simulation en premier."
 
-#: eeschema/sim/sim_plot_frame.cpp:641
+#: eeschema/sim/sim_plot_frame.cpp:653
 msgid "Open simulation workbook"
-msgstr ""
+msgstr "Ouvrir le classeur de travail de simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:642 eeschema/sim/sim_plot_frame.cpp:658
+#: eeschema/sim/sim_plot_frame.cpp:654 eeschema/sim/sim_plot_frame.cpp:670
 msgid "Workbook file (*.wbk)|*.wbk"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:657
+#: eeschema/sim/sim_plot_frame.cpp:669
 msgid "Save simulation workbook"
-msgstr ""
+msgstr "Sauver le classeur de travail de simulation"
 
-#: eeschema/sim/sim_plot_frame.cpp:664
+#: eeschema/sim/sim_plot_frame.cpp:676
 msgid "There was an error while saving the workbook file"
 msgstr ""
+"Une erreur s'est produite lors de l'enregistrement du fichier classeur de "
+"travail."
 
-#: eeschema/sim/sim_plot_frame.cpp:673
+#: eeschema/sim/sim_plot_frame.cpp:685
 msgid "Save plot as image"
 msgstr "Sauver tracé comme fichier image"
 
-#: eeschema/sim/sim_plot_frame.cpp:674
+#: eeschema/sim/sim_plot_frame.cpp:686
 msgid "PNG file (*.png)|*.png"
-msgstr ""
+msgstr "Fichier PNG (*.png)|*.png"
 
-#: eeschema/sim/sim_plot_frame.cpp:690
+#: eeschema/sim/sim_plot_frame.cpp:702
 msgid "Save plot data"
 msgstr "Sauver les données de tracé"
 
-#: eeschema/sim/sim_plot_frame.cpp:883
+#: eeschema/sim/sim_plot_frame.cpp:898
 msgid "You need to run simulation first."
 msgstr "Vous devez exécuter la simulation en premier."
 
-#: eeschema/sim/sim_plot_frame.cpp:930
+#: eeschema/sim/sim_plot_frame.cpp:945
 msgid "Signal"
 msgstr "Signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1054
+#: eeschema/sim/sim_plot_frame.cpp:1069
 msgid "Hide signal"
 msgstr "Masquer le signal"
 
-#: eeschema/sim/sim_plot_frame.cpp:1059
+#: eeschema/sim/sim_plot_frame.cpp:1074
 msgid "Hide cursor"
 msgstr "Masquer le curseur"
 
-#: eeschema/sim/sim_plot_frame.cpp:1061
+#: eeschema/sim/sim_plot_frame.cpp:1076
 msgid "Show cursor"
 msgstr "Afficher le curseur"
 
@@ -9943,11 +9945,11 @@ msgstr "Nouveau Tracé"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:25
 msgid "Open Workbook"
-msgstr ""
+msgstr "Ouvrir Classeur de Travail"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 msgid "Save Workbook"
-msgstr ""
+msgstr "Saunver Classeur de Travail"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:35
 msgid "Save as image"
@@ -16092,13 +16094,14 @@ msgstr ""
 "des composants"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:345
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:181
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
-"(like a old ISA PC bus connector)"
+"like a edge connector (old ISA PC bus for instance)"
 msgstr ""
-"Utiliser cet attribut pour les composants \"virtuels\" directement dessinés "
-"sur le PCB\n"
-"(tel que les vieux connecteurs ISA de PC)"
+"Utilisez cet attribut pour des composants \"virtuels\" dessinés sur le "
+"circuit imprimé\n"
+"comme un connecteur de bord de carte (vieux PC ISA bus par exemple)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:376
 msgid ""
@@ -16122,9 +16125,25 @@ msgstr ""
 "Le composant est verrouillé: il ne peut être librement déplacé ou auto placé."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:499
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:348
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:350
 msgid "Invalid filename: "
 msgstr "Nom fichier invalide:"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:591
+msgid "Error: invalid footprint parameter"
+msgstr "Error : paramètre d'empreinte non valide"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:597
+msgid "Error: invalid 3D parameter"
+msgstr "Erreur: paramètre 3D non valide"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:616
+msgid "Error: invalid or missing footprint parameter"
+msgstr "Error : paramètre d'empreinte non valide ou manquant"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:622
+msgid "Error: invalid or missing 3D parameter"
+msgstr "Erreur: paramètre 3D non valide ou manquant"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:58
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1168
@@ -16341,23 +16360,15 @@ msgstr "Paramètres 3D"
 msgid "Use this attribute for most non SMD components"
 msgstr "Utiliser cet attribut pour la plupart des composants non CMS"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:180
-msgid ""
-"Use this attribute for \"virtual\" components drawn on board (like a old ISA "
-"PC bus connector)"
-msgstr ""
-"Utiliser cet attribut pour les composants \"virtuels\" directement dessinés "
-"sur le PCB (tel que les vieux connecteurs ISA de PC)"
-
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:203
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:205
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Activer les raccourcis clavier de déplacement et d'auto placement"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:204
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:206
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Désactiver les raccourcis clavier de déplacement et d'auto placement"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:450
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:452
 #, c-format
 msgid ""
 "Error:\n"
@@ -24765,7 +24776,7 @@ msgstr "Non Connexion"
 
 #: eeschema/sim/sim_plot_frame_base.h:102
 msgid "Simulation Workbook"
-msgstr ""
+msgstr "Classeur de Travail de Simulation"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.h:50
 msgid "Page Borders"
@@ -25042,6 +25053,28 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importation Fichier DXF"
+
+#~ msgid ""
+#~ "Use this attribute for \"virtual\" components drawn on board\n"
+#~ "(like a old ISA PC bus connector)"
+#~ msgstr ""
+#~ "Utiliser cet attribut pour les composants \"virtuels\" directement "
+#~ "dessinés sur le PCB\n"
+#~ "(tel que les vieux connecteurs ISA de PC)"
+
+#~ msgid ""
+#~ "Use this attribute for 'virtual' components drawn on board(like a old ISA "
+#~ "PC bus connector)"
+#~ msgstr ""
+#~ "Utiliser cet attribut pour les composants 'virtuels' directement dessinés "
+#~ "sur le PCB (tel que les vieux connecteurs ISA de PC)"
+
+#~ msgid ""
+#~ "Use this attribute for \"virtual\" components drawn on board (like a old "
+#~ "ISA PC bus connector)"
+#~ msgstr ""
+#~ "Utiliser cet attribut pour les composants \"virtuels\" directement "
+#~ "dessinés sur le PCB (tel que les vieux connecteurs ISA de PC)"
 
 #~ msgid ""
 #~ "Ready\n"
