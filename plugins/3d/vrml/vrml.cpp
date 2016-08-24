@@ -158,15 +158,19 @@ bool CanRender( void )
 
 class LOCALESWITCH
 {
+    // Store the user locale name, to restore this locale later, in dtor
+    std::string m_locale;
+
 public:
     LOCALESWITCH()
     {
+        m_locale = setlocale( LC_NUMERIC, 0 );
         setlocale( LC_NUMERIC, "C" );
     }
 
     ~LOCALESWITCH()
     {
-        setlocale( LC_NUMERIC, "" );
+        setlocale( LC_NUMERIC, m_locale.c_str() );
     }
 };
 
