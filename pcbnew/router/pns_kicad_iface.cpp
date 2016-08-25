@@ -120,7 +120,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS_ROUTER* a
         ent.clearance = clearance;
         m_clearanceCache[i] = ent;
 
-        wxLogTrace( "PNS", "Add net %d netclass %s clearance %d", i, netClassName.mb_str(), clearance );
+        wxLogTrace( "PNS", "Add net %u netclass %s clearance %d", i, netClassName.mb_str(), clearance );
     }
 
     m_overrideEnabled = false;
@@ -702,7 +702,7 @@ PNS_ITEM* PNS_KICAD_IFACE::syncVia( VIA* aVia )
 void PNS_KICAD_IFACE::SetBoard( BOARD* aBoard )
 {
     m_board = aBoard;
-    wxLogTrace( "PNS", "m_board = %p\n", m_board );
+    wxLogTrace( "PNS", "m_board = %p", m_board );
 }
 
 
@@ -772,7 +772,7 @@ void PNS_KICAD_IFACE::EraseView()
 
 void PNS_KICAD_IFACE::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance )
 {
-    wxLogTrace( "PNS", "DisplayItem %p\n", aItem );
+    wxLogTrace( "PNS", "DisplayItem %p", aItem );
 
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_previewItems );
 
@@ -879,7 +879,7 @@ void PNS_KICAD_IFACE::Commit()
 
 void PNS_KICAD_IFACE::SetView( KIGFX::VIEW *aView )
 {
-    wxLogTrace( "PNS", "SetView %p\n", aView );
+    wxLogTrace( "PNS", "SetView %p", aView );
 
     if( m_previewItems )
     {
@@ -900,7 +900,7 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW *aView )
 
 void PNS_KICAD_IFACE::UpdateNet( int aNetCode )
 {
-    wxLogTrace( "PNS", "Update-net %d\n", aNetCode );
+    wxLogTrace( "PNS", "Update-net %d", aNetCode );
 }
 
 PNS_RULE_RESOLVER* PNS_KICAD_IFACE::GetRuleResolver()
