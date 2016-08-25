@@ -289,8 +289,23 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply()
 
                 if( m_viaNetclass->IsChecked() )
                 {
-                    v->SetWidth( v->GetNetClass()->GetViaDiameter() );
-                    v->SetDrill( v->GetNetClass()->GetViaDrill() );
+                    switch( v->GetViaType() )
+                    {
+                    default:
+                        wxFAIL_MSG("Unhandled via type");
+                        // fall through
+
+                    case VIA_THROUGH:
+                    case VIA_BLIND_BURIED:
+                        v->SetWidth( v->GetNetClass()->GetViaDiameter() );
+                        v->SetDrill( v->GetNetClass()->GetViaDrill() );
+                        break;
+
+                    case VIA_MICROVIA:
+                        v->SetWidth( v->GetNetClass()->GetuViaDiameter() );
+                        v->SetDrill( v->GetNetClass()->GetuViaDrill() );
+                        break;
+                    }
                 }
                 else
                 {
