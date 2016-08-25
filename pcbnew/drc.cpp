@@ -514,7 +514,7 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
     int ii = 0;
     count = 0;
 
-    for( TRACK* segm = m_pcb->m_Track; segm && segm->Next(); segm = segm->Next() )
+    for( TRACK* segm = m_pcb->m_Track; segm; segm = segm->Next() )
     {
         if ( ii++ > delta )
         {
