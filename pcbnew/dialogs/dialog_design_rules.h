@@ -69,6 +69,7 @@ private:
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
     static int              s_LastTabSelection;     ///< which tab user had open last
+    int                     m_initialRowLabelsSize; ///< the initial width given by wxFormBuilder
 
     /**
      * A two column table which gets filled once and never loses any elements, so it is
