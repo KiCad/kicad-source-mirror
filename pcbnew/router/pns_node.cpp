@@ -66,14 +66,14 @@ PNS_NODE::~PNS_NODE()
 
     if( !m_children.empty() )
     {
-        wxLogTrace( "PNS", "attempting to free a node that has kids.\n" );
+        wxLogTrace( "PNS", "attempting to free a node that has kids." );
         assert( false );
     }
 
 #ifdef DEBUG
     if( allocNodes.find( this ) == allocNodes.end() )
     {
-        wxLogTrace( "PNS", "attempting to free an already-free'd node.\n" );
+        wxLogTrace( "PNS", "attempting to free an already-free'd node." );
         assert( false );
     }
 
@@ -130,8 +130,8 @@ PNS_NODE* PNS_NODE::Branch()
         child->m_override = m_override;
     }
 
-    wxLogTrace( "PNS", "%d items, %lu joints, %lu overrides",
-            child->m_index->Size(), child->m_joints.size(), child->m_override.size() );
+    wxLogTrace( "PNS", "%d items, %d joints, %d overrides",
+            child->m_index->Size(), (int) child->m_joints.size(), (int) child->m_override.size() );
 
     return child;
 }
@@ -1022,7 +1022,7 @@ PNS_JOINT& PNS_NODE::touchJoint( const VECTOR2I& aPos, const PNS_LAYERSET& aLaye
 
 void PNS_JOINT::Dump() const
 {
-    wxLogTrace( "PNS", "joint layers %d-%d, net %d, pos %s, links: %d\n", m_layers.Start(),
+    wxLogTrace( "PNS", "joint layers %d-%d, net %d, pos %s, links: %d", m_layers.Start(),
             m_layers.End(), m_tag.net, m_tag.pos.Format().c_str(), LinkCount() );
 }
 

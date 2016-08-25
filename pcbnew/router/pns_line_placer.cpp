@@ -597,7 +597,7 @@ void PNS_LINE_PLACER::routeStep( const VECTOR2I& aP )
 
     PNS_LINE new_head;
 
-    wxLogTrace( "PNS", "INIT-DIR: %s head: %d, tail: %d segs\n",
+    wxLogTrace( "PNS", "INIT-DIR: %s head: %d, tail: %d segs",
             m_initial_direction.Format().c_str(), m_head.SegmentCount(), m_tail.SegmentCount() );
 
     for( i = 0; i < n_iter; i++ )
@@ -786,7 +786,7 @@ void PNS_LINE_PLACER::initPlacement()
 
     setWorld( rootNode );
 
-    wxLogTrace( "PNS", "world %p, intitial-direction %s layer %d\n",
+    wxLogTrace( "PNS", "world %p, intitial-direction %s layer %d",
             m_world, m_direction.Format().c_str(), m_currentLayer );
 
     m_lastNode = NULL;
@@ -974,7 +974,7 @@ void PNS_LINE_PLACER::removeLoops( PNS_NODE* aNode, PNS_LINE& aLatest )
             }
         }
 
-        wxLogTrace( "PNS", "total segs removed: %d/%d\n", removedCount, total );
+        wxLogTrace( "PNS", "total segs removed: %d/%d", removedCount, total );
     }
 
     for( PNS_SEGMENT *s : toErase )
