@@ -66,18 +66,20 @@
 #define DRCE_TOO_SMALL_TRACK_WIDTH             27   ///< Too small track width
 #define DRCE_TOO_SMALL_VIA                     28   ///< Too small via size
 #define DRCE_TOO_SMALL_MICROVIA                29   ///< Too small micro via size
-#define DRCE_NETCLASS_TRACKWIDTH               30   ///< netclass has TrackWidth < board.m_designSettings->m_TrackMinWidth
-#define DRCE_NETCLASS_CLEARANCE                31   ///< netclass has Clearance < board.m_designSettings->m_TrackClearance
-#define DRCE_NETCLASS_VIASIZE                  32   ///< netclass has ViaSize < board.m_designSettings->m_ViasMinSize
-#define DRCE_NETCLASS_VIADRILLSIZE             33   ///< netclass has ViaDrillSize < board.m_designSettings->m_ViasMinDrill
-#define DRCE_NETCLASS_uVIASIZE                 34   ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinSize
-#define DRCE_NETCLASS_uVIADRILLSIZE            35   ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinDrill
-#define DRCE_VIA_INSIDE_KEEPOUT                36   ///< Via in inside a keepout area
-#define DRCE_TRACK_INSIDE_KEEPOUT              37   ///< Track in inside a keepout area
-#define DRCE_PAD_INSIDE_KEEPOUT                38   ///< Pad in inside a keepout area
-#define DRCE_VIA_INSIDE_TEXT                   39   ///< Via in inside a text area
-#define DRCE_TRACK_INSIDE_TEXT                 40   ///< Track in inside a text area
-#define DRCE_PAD_INSIDE_TEXT                   41   ///< Pad in inside a text area
+#define DRCE_TOO_SMALL_VIA_DRILL               30   ///< Too small via drill
+#define DRCE_TOO_SMALL_MICROVIA_DRILL          31   ///< Too small micro via drill
+#define DRCE_NETCLASS_TRACKWIDTH               32   ///< netclass has TrackWidth < board.m_designSettings->m_TrackMinWidth
+#define DRCE_NETCLASS_CLEARANCE                33   ///< netclass has Clearance < board.m_designSettings->m_TrackClearance
+#define DRCE_NETCLASS_VIASIZE                  34   ///< netclass has ViaSize < board.m_designSettings->m_ViasMinSize
+#define DRCE_NETCLASS_VIADRILLSIZE             35   ///< netclass has ViaDrillSize < board.m_designSettings->m_ViasMinDrill
+#define DRCE_NETCLASS_uVIASIZE                 36   ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinSize
+#define DRCE_NETCLASS_uVIADRILLSIZE            37   ///< netclass has ViaSize < board.m_designSettings->m_MicroViasMinDrill
+#define DRCE_VIA_INSIDE_KEEPOUT                38   ///< Via in inside a keepout area
+#define DRCE_TRACK_INSIDE_KEEPOUT              39   ///< Track in inside a keepout area
+#define DRCE_PAD_INSIDE_KEEPOUT                40   ///< Pad in inside a keepout area
+#define DRCE_VIA_INSIDE_TEXT                   41   ///< Via in inside a text area
+#define DRCE_TRACK_INSIDE_TEXT                 42   ///< Track in inside a text area
+#define DRCE_PAD_INSIDE_TEXT                   43   ///< Pad in inside a text area
 
 
 class EDA_DRAW_PANEL;

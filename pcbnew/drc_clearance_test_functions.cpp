@@ -169,6 +169,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                                               DRCE_TOO_SMALL_MICROVIA, m_currentMarker );
                 return false;
             }
+            if( refvia->GetDrill() < dsnSettings.m_MicroViasMinDrill )
+            {
+                m_currentMarker = fillMarker( refvia, NULL,
+                                              DRCE_TOO_SMALL_MICROVIA_DRILL, m_currentMarker );
+                return false;
+            }
         }
         else
         {
@@ -176,6 +182,12 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             {
                 m_currentMarker = fillMarker( refvia, NULL,
                                               DRCE_TOO_SMALL_VIA, m_currentMarker );
+                return false;
+            }
+            if( refvia->GetDrill() < dsnSettings.m_ViasMinDrill )
+            {
+                m_currentMarker = fillMarker( refvia, NULL,
+                                              DRCE_TOO_SMALL_VIA_DRILL, m_currentMarker );
                 return false;
             }
         }

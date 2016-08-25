@@ -89,6 +89,10 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Too small via size" ) );
     case DRCE_TOO_SMALL_MICROVIA:
         return wxString( _( "Too small micro via size" ) );
+    case DRCE_TOO_SMALL_VIA_DRILL:
+        return wxString( _( "Too small via drill" ) );
+    case DRCE_TOO_SMALL_MICROVIA_DRILL:
+        return wxString( _( "Too small micro via drill" ) );
 
     // use &lt; since this is text ultimately embedded in HTML
     case DRCE_NETCLASS_TRACKWIDTH:
