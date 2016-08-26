@@ -1,9 +1,11 @@
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
     bitmaps
     dialogs
     transline
+    ${CMAKE_CURRENT_BINARY_DIR}/attenuators
     attenuators
     ../polygon
     ../common
@@ -149,8 +151,8 @@ endif()
 # for the storage data file format.
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile.keywords
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pcb_calculator_datafile_lexer.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pcb_calculator_datafile_keywords.cpp
     PCBCALC_DATA_T
 
     # Pass header file with dependency on *_lexer.h as extra_arg
@@ -160,8 +162,8 @@ make_lexer(
 add_custom_target(
     pcb_calculator_lexer_source_files ALL
     DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_lexer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/pcb_calculator_datafile_keywords.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/pcb_calculator_datafile_lexer.h
+        ${CMAKE_CURRENT_BINARY_DIR}/pcb_calculator_datafile_keywords.cpp
 )
 
 #
@@ -170,25 +172,25 @@ add_custom_target(
 # Function html_doc2h : converts a single *.html text file to a *.h header
 function( html_doc2h inputFile )
     add_custom_command(
-        OUTPUT ${inputFile}.h
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${inputFile}.h
 
-        COMMAND ${CMAKE_COMMAND} -DinputFile=${inputFile}.html -DoutputFile=${inputFile}.h
+        COMMAND ${CMAKE_COMMAND} -DinputFile=${CMAKE_CURRENT_SOURCE_DIR}/${inputFile}.html -DoutputFile=${CMAKE_CURRENT_BINARY_DIR}/${inputFile}.h
             -P ${CMAKE_MODULE_PATH}/Html2C.cmake
         DEPENDS ${inputFile}.html ${CMAKE_MODULE_PATH}/Html2C.cmake
-        COMMENT "creating ${inputFile}.h from ${inputFile}.html"
+        COMMENT "creating ${CMAKE_CURRENT_BINARY_DIR}/${inputFile}.h from ${CMAKE_CURRENT_SOURCE_DIR}/${inputFile}.html"
         )
 endfunction()
 
-    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula )
-    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula )
-    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula )
-    html_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula )
+    html_doc2h( attenuators/bridget_tee_formula )
+    html_doc2h( attenuators/splitter_formula )
+    html_doc2h( attenuators/pi_formula )
+    html_doc2h( attenuators/tee_formula )
 
 set( DOCS_LIST
-        ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/tee_formula.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/bridget_tee_formula.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/splitter_formula.h
+        ${CMAKE_CURRENT_BINARY_DIR}/attenuators/pi_formula.h
+        ${CMAKE_CURRENT_BINARY_DIR}/attenuators/tee_formula.h
+        ${CMAKE_CURRENT_BINARY_DIR}/attenuators/bridget_tee_formula.h
+        ${CMAKE_CURRENT_BINARY_DIR}/attenuators/splitter_formula.h
     )
 
 set_source_files_properties( attenuators/attenuator_classes.cpp
