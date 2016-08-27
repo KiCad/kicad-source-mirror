@@ -2,7 +2,7 @@
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
 #  Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
-#  Copyright (C) 2015 KiCad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2015-2016 KiCad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -74,6 +74,7 @@ if( _wvh_write_version_file )
 #define __KICAD_VERSION_H__
 
 #define KICAD_BUILD_VERSION \"${_wvh_version_str}\"
+#define KICAD_BRANCH_NAME \"${KICAD_BRANCH_NAME}\"
 
 #endif  /* __KICAD_VERSION_H__ */
 "

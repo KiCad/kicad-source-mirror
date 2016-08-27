@@ -1,3 +1,25 @@
+#
+#  This program source code file is part of KICAD, a free EDA CAD application.
+#
+#  Copyright (C) 2007-2016 Kicad Developers, see AUTHORS.txt for contributors.
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, you may find one here:
+#  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+#  or you may search the http://www.gnu.org website for the version 2 license,
+#  or you may write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+#
 
 # Default to CMAKE_BUILD_TYPE = Release unless overridden on command line
 # http://www.cmake.org/pipermail/cmake/2008-September/023808.html
@@ -66,7 +88,7 @@ option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
 option( KICAD_SPICE "Build Kicad with internal Spice simulator." OFF )
 
 # This can be set to a custom name to brag about a particular branch in the "About" dialog:
-set( KICAD_REPO_NAME "product" CACHE STRING "Name of the tree from which this build came." )
+set( KICAD_REPO_NAME "unknown" CACHE STRING "Name of the tree from which this build came." )
 
 
 # Global setting: exports are explicit
