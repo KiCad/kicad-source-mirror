@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-20 11:03+0300\n"
-"PO-Revision-Date: 2016-08-20 12:11+0300\n"
+"POT-Creation-Date: 2016-08-27 16:34+0300\n"
+"PO-Revision-Date: 2016-08-27 16:50+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Poedit-Basepath: ../../kicad-source-mirror\n"
+"X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 1.8.7.1\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -1798,7 +1798,7 @@ msgstr "Имя"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:225
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:38
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:87
-#: eeschema/dialogs/dialog_spice_model_base.cpp:390
+#: eeschema/dialogs/dialog_spice_model_base.cpp:392
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:75
 msgid "Add"
 msgstr "Добавить"
@@ -3250,7 +3250,7 @@ msgstr "Файлы эквивалентностей посад.место/ком
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:48
 #: eeschema/dialogs/dialog_eeschema_config_fbp.cpp:93
-#: eeschema/dialogs/dialog_spice_model_base.cpp:398
+#: eeschema/dialogs/dialog_spice_model_base.cpp:400
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:80 pcbnew/tools/common_actions.cpp:130
 msgid "Remove"
 msgstr "Удалить"
@@ -6013,165 +6013,165 @@ msgstr "Заменить"
 msgid "Replace &All"
 msgstr "Заменить всё"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:27
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:229
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:29
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:231
 msgid "Decade"
 msgstr "Декада"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:27
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:229
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:29
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:231
 msgid "Octave"
 msgstr "Октава"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:27
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:229
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:29
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:231
 msgid "Linear"
 msgstr "Линейная"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:29
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:231
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:31
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:233
 msgid "Frequency scale"
 msgstr "Шкала частот"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:43
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:243
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:45
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:245
 msgid "Number of points"
 msgstr "Число точек"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:50
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:250
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:52
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:252
 msgid "Start frequency [Hz]"
 msgstr "Начальная частота [Гц]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:57
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:257
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:59
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:259
 msgid "Stop frequency [Hz]"
 msgstr "Конечная частота [Гц]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:74
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:76
 msgid "AC"
 msgstr "AC"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:80
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:82
 msgid "DC sweep source 1"
 msgstr "Источник DC развёртки 1"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:82
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:127
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:84
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:129
 msgid "Enable"
 msgstr "Разрешить"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:90
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:135
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:92
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:137
 msgid "DC source"
 msgstr "Источник DC"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:97
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:142
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:99
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:144
 msgid "Starting voltage [V]"
 msgstr "Начальное напряжение [В]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:104
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:149
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:106
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:151
 msgid "Final voltage [V]"
 msgstr "Конечное напряжение [В]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:111
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:156
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:113
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:158
 msgid "Increment step [V]"
 msgstr "Шаг приращения [В]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:125
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:127
 msgid "DC sweep source 2"
 msgstr "Источник DC развёртки 2"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:173
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:175
 msgid "DC Transfer"
 msgstr "DC переход"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:177
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:179
 msgid "Distortion"
 msgstr "Искажение"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:192
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:194
 msgid "Measured node"
 msgstr "Измеряемый узел"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:202
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:204
 msgid "Reference node"
 msgstr "Опорный узел"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:209
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:211
 msgid "(optional; default GND)"
 msgstr "(опционально; по умолчанию GND)"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:213
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:215
 msgid "Noise source"
 msgstr "Источник шума"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:274
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:276
 msgid "Noise"
 msgstr "Шум"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:284
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:286
 msgid "This tab has no settings"
 msgstr "Данная вкладка не имеет настроек"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:295
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:297
 msgid "Operating Point"
 msgstr "Рабочая точка"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:299
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:301
 msgid "Pole-Zero"
 msgstr "Полюс-ноль"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:303
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:305
 msgid "Sensitivity"
 msgstr "Чувствительность"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:307
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:309
 msgid "Transfer Function"
 msgstr "Передаточная функция"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:320
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:322
 msgid "Time step [s]"
 msgstr "Временной шаг [с]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:330
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:332
 msgid "Final time [s]"
 msgstr "Конечное время [с]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:340
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:342
 msgid "Initial time [s]"
 msgstr "Начальное время [с]"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:347
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:349
 msgid "(optional; default 0)"
 msgstr "(опционально; по умолчанию 0)"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:361
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:363
 msgid "Transient"
 msgstr "Переходной процесс"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:366
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:368
 msgid "Spice directives:"
 msgstr "Директивы Spice:"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:375
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:377
 msgid "Load directives from schematic"
 msgstr "Загрузить директивы из схемы"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:382
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:384
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:29
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:129
 msgid "Custom"
 msgstr "Пользовательская"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:386
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:388
 msgid "Adjust passive component values (e.g. M -> Meg; 100 nF -> 100n)"
 msgstr "Подстроить значения пассивных компонентов (например M -> Meg; 100 nF -> 100n)"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:389
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:391
 msgid "Add full path for .include library directives"
 msgstr "Добавить полный путь для директивы .include библиотека"
 
@@ -6223,162 +6223,162 @@ msgstr "Полупроводник"
 msgid "Integrated circuit"
 msgstr "Интегральная схема"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:135
+#: eeschema/dialogs/dialog_spice_model_base.cpp:137
 msgid "DC/AC analysis"
 msgstr "Анализ DC/AC"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:144
+#: eeschema/dialogs/dialog_spice_model_base.cpp:146
 msgid "DC [V/A]"
 msgstr "DC [В/А]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:159
+#: eeschema/dialogs/dialog_spice_model_base.cpp:161
 msgid "AC magnitude [V/A]"
 msgstr "Величина AC [В/А]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:168
+#: eeschema/dialogs/dialog_spice_model_base.cpp:170
 msgid "AC phase [rad]"
 msgstr "Фаза AC [рад]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:184
+#: eeschema/dialogs/dialog_spice_model_base.cpp:186
 msgid "Transient analysis"
 msgstr "Анализ переходных процессов"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:194
-#: eeschema/dialogs/dialog_spice_model_base.cpp:306
+#: eeschema/dialogs/dialog_spice_model_base.cpp:196
+#: eeschema/dialogs/dialog_spice_model_base.cpp:308
 msgid "Initial value [V/A]"
 msgstr "Начальное значение [В/А]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:203
-#: eeschema/dialogs/dialog_spice_model_base.cpp:315
+#: eeschema/dialogs/dialog_spice_model_base.cpp:205
+#: eeschema/dialogs/dialog_spice_model_base.cpp:317
 msgid "Pulsed value [V/A]"
 msgstr "Импульсное значение [В/А]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:210
+#: eeschema/dialogs/dialog_spice_model_base.cpp:212
 msgid "Delay time [s]"
 msgstr "Время задержки [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:217
+#: eeschema/dialogs/dialog_spice_model_base.cpp:219
 msgid "Rise time [s]"
 msgstr "Время нарастания [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:224
+#: eeschema/dialogs/dialog_spice_model_base.cpp:226
 msgid "Fall time [s]"
 msgstr "Время спада [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:231
+#: eeschema/dialogs/dialog_spice_model_base.cpp:233
 msgid "Pulse width [s]"
 msgstr "Ширина импульса [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:238
+#: eeschema/dialogs/dialog_spice_model_base.cpp:240
 msgid "Period [s]"
 msgstr "Период [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:249
+#: eeschema/dialogs/dialog_spice_model_base.cpp:251
 msgid "Pulse"
 msgstr "Импульс"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:257
+#: eeschema/dialogs/dialog_spice_model_base.cpp:259
 msgid "DC offset [V/A]"
 msgstr "Смещение DC [В/А]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:266
+#: eeschema/dialogs/dialog_spice_model_base.cpp:268
 msgid "Amplitude [V/A]"
 msgstr "Амплитуда [В/А]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:273
+#: eeschema/dialogs/dialog_spice_model_base.cpp:275
 msgid "Frequency [Hz]"
 msgstr "Частота [Гц]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:280
+#: eeschema/dialogs/dialog_spice_model_base.cpp:282
 msgid "Delay [s]"
 msgstr "Задержка [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:287
+#: eeschema/dialogs/dialog_spice_model_base.cpp:289
 msgid "Damping factor [1/s]"
 msgstr "Коэффициент затухания [1/с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:298
+#: eeschema/dialogs/dialog_spice_model_base.cpp:300
 msgid "Sinusoidal"
 msgstr "Синусоидальный"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:322
+#: eeschema/dialogs/dialog_spice_model_base.cpp:324
 msgid "Rise delay time [s]"
 msgstr "Время задержки нарастания [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:329
+#: eeschema/dialogs/dialog_spice_model_base.cpp:331
 msgid "Rise time constant [s]"
 msgstr "Постоянная времени нарастания [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:336
+#: eeschema/dialogs/dialog_spice_model_base.cpp:338
 msgid "Fall delay time [s]"
 msgstr "Время задержки спада [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:343
+#: eeschema/dialogs/dialog_spice_model_base.cpp:345
 msgid "Fall time constant [s]"
 msgstr "Постоянная времени спада [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:354
+#: eeschema/dialogs/dialog_spice_model_base.cpp:356
 msgid "Exponential"
 msgstr "Экспоненциальный"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:356
+#: eeschema/dialogs/dialog_spice_model_base.cpp:358
 msgid "Piece-wise linear"
 msgstr "Кусочно-линейный"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:371
+#: eeschema/dialogs/dialog_spice_model_base.cpp:373
 msgid "Time [s]"
 msgstr "Время [с]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:380
+#: eeschema/dialogs/dialog_spice_model_base.cpp:382
 msgid "Value [V/A]"
 msgstr "Значение [В/А]"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:405
+#: eeschema/dialogs/dialog_spice_model_base.cpp:407
 msgid "Piece-wise Linear"
 msgstr "Кусочно-линейный"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:409
+#: eeschema/dialogs/dialog_spice_model_base.cpp:411
 msgid "FM"
 msgstr "FM"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:413
+#: eeschema/dialogs/dialog_spice_model_base.cpp:415
 msgid "AM"
 msgstr "AM"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:417
+#: eeschema/dialogs/dialog_spice_model_base.cpp:419
 msgid "Transient noise"
 msgstr "Переходные помехи"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:421
+#: eeschema/dialogs/dialog_spice_model_base.cpp:423
 msgid "Random"
 msgstr "Случайный"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:425
+#: eeschema/dialogs/dialog_spice_model_base.cpp:427
 msgid "External data"
 msgstr "Внешние данные"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:432
+#: eeschema/dialogs/dialog_spice_model_base.cpp:434
 msgid "Voltage"
 msgstr "Напряжение"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:432
+#: eeschema/dialogs/dialog_spice_model_base.cpp:434
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:262
 msgid "Current"
 msgstr "Ток"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:434
+#: eeschema/dialogs/dialog_spice_model_base.cpp:436
 msgid "Source type"
 msgstr "Тип источника"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:442
+#: eeschema/dialogs/dialog_spice_model_base.cpp:444
 msgid "Source"
 msgstr "Источник"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:446
+#: eeschema/dialogs/dialog_spice_model_base.cpp:448
 msgid "Disable component for simulation"
 msgstr "Не симулировать компонент"
 
-#: eeschema/dialogs/dialog_spice_model_base.cpp:452
+#: eeschema/dialogs/dialog_spice_model_base.cpp:454
 msgid "Alternate node sequence:"
 msgstr "Альтернативная последовательность узлов:"
 
@@ -6638,16 +6638,7 @@ msgstr "Загрузить без сохранения"
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Файл схемы '%s' не существует. Создать его?"
 
-#: eeschema/files-io.cpp:294
-#, c-format
-msgid ""
-"Ready\n"
-"Project dir: '%s'\n"
-msgstr ""
-"Готово\n"
-"Каталог проекта: '%s'\n"
-
-#: eeschema/files-io.cpp:338
+#: eeschema/files-io.cpp:333
 #, c-format
 msgid ""
 "Error loading schematic file '%s'.\n"
@@ -6656,16 +6647,16 @@ msgstr ""
 "Ошибка загрузки файла схемы '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:342
+#: eeschema/files-io.cpp:337
 #, c-format
 msgid "Failed to load '%s'"
 msgstr "Не удалось загрузить '%s'"
 
-#: eeschema/files-io.cpp:405
+#: eeschema/files-io.cpp:400
 msgid "Import Schematic"
 msgstr "Импорт схемы"
 
-#: eeschema/files-io.cpp:521
+#: eeschema/files-io.cpp:516
 msgid ""
 "This operation cannot be undone. Besides, take into account that hierarchical sheets "
 "will not be appended.\n"
@@ -6676,7 +6667,7 @@ msgstr ""
 "\n"
 "Желаете сохранить текущий документ перед началом операции?"
 
-#: eeschema/files-io.cpp:545
+#: eeschema/files-io.cpp:540
 #, c-format
 msgid "Directory '%s' is not writable"
 msgstr "Каталог '%s' доступен только для чтения"
@@ -9618,13 +9609,69 @@ msgstr "Подстроить значения компонентов"
 msgid "Settings"
 msgstr "Установки"
 
-#: eeschema/sim/sim_plot_frame.cpp:144 eeschema/dialogs/dialog_sim_settings_base.h:119
+#: eeschema/sim/sim_plot_frame.cpp:144 eeschema/dialogs/dialog_sim_settings_base.h:123
 msgid "Simulation settings"
 msgstr "Настройки симулятора"
 
 #: eeschema/sim/sim_plot_frame.cpp:160
 msgid "Welcome!"
 msgstr "Добро пожаловать!"
+
+#: eeschema/sim/sim_plot_frame.cpp:196 eeschema/sim/sim_plot_frame.cpp:864
+msgid "There were errors during netlist export, aborted."
+msgstr "Произошли ошибки во время экспорта списка цепей, прервано."
+
+#: eeschema/sim/sim_plot_frame.cpp:202
+msgid "You need to select the simulation settings first."
+msgstr "Для начала вам необходимо выбрать настройки симуляции."
+
+#: eeschema/sim/sim_plot_frame.cpp:653
+msgid "Open simulation workbook"
+msgstr "Открыть работу симуляции"
+
+#: eeschema/sim/sim_plot_frame.cpp:654 eeschema/sim/sim_plot_frame.cpp:670
+msgid "Workbook file (*.wbk)|*.wbk"
+msgstr "Файл работы (*.wbk)|*.wbk"
+
+#: eeschema/sim/sim_plot_frame.cpp:669
+msgid "Save simulation workbook"
+msgstr "Созранить работу симуляции"
+
+#: eeschema/sim/sim_plot_frame.cpp:676
+msgid "There was an error while saving the workbook file"
+msgstr "Произошла ошибка при сохранении файла работы"
+
+#: eeschema/sim/sim_plot_frame.cpp:685
+msgid "Save plot as image"
+msgstr "Сохранить график как изображение"
+
+#: eeschema/sim/sim_plot_frame.cpp:686
+msgid "PNG file (*.png)|*.png"
+msgstr "PNG файл (*.png)|*.png"
+
+#: eeschema/sim/sim_plot_frame.cpp:702
+msgid "Save plot data"
+msgstr "Сохранить данные графика"
+
+#: eeschema/sim/sim_plot_frame.cpp:898
+msgid "You need to run simulation first."
+msgstr "Для начала вам необходимо запустить симуляцию."
+
+#: eeschema/sim/sim_plot_frame.cpp:945
+msgid "Signal"
+msgstr "Сигнал"
+
+#: eeschema/sim/sim_plot_frame.cpp:1069
+msgid "Hide signal"
+msgstr "Спрятать сигнал"
+
+#: eeschema/sim/sim_plot_frame.cpp:1074
+msgid "Hide cursor"
+msgstr "Спрятать курсор"
+
+#: eeschema/sim/sim_plot_frame.cpp:1076
+msgid "Show cursor"
+msgstr "Показать курсор"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:19
 msgid "New Plot"
@@ -13652,51 +13699,59 @@ msgstr "Слишком маленький размер перех.отв."
 msgid "Too small micro via size"
 msgstr "Слишком маленький размер перех.микроотв."
 
+#: pcbnew/class_drc_item.cpp:93
+msgid "Too small via drill"
+msgstr "Слишком маленькое сверло перех.отв."
+
 #: pcbnew/class_drc_item.cpp:95
+msgid "Too small micro via drill"
+msgstr "Слишком маленькое сверло перех.микроотв."
+
+#: pcbnew/class_drc_item.cpp:99
 msgid "NetClass Track Width &lt; global limit"
 msgstr "Ширина дорожки класса цепи &lt; глобальное ограничение"
 
-#: pcbnew/class_drc_item.cpp:97
+#: pcbnew/class_drc_item.cpp:101
 msgid "NetClass Clearance &lt; global limit"
 msgstr "Зазор класса цепи &lt; глобальное ограничение"
 
-#: pcbnew/class_drc_item.cpp:99
+#: pcbnew/class_drc_item.cpp:103
 msgid "NetClass Via Dia &lt; global limit"
 msgstr "Диаметр перех.отв. класса цепи &lt; глобальное ограничение"
 
-#: pcbnew/class_drc_item.cpp:101
+#: pcbnew/class_drc_item.cpp:105
 msgid "NetClass Via Drill &lt; global limit"
 msgstr "Сверло перех.отв. класса цепи &lt; глобальное ограничение"
 
-#: pcbnew/class_drc_item.cpp:103
+#: pcbnew/class_drc_item.cpp:107
 msgid "NetClass uVia Dia &lt; global limit"
 msgstr "Диаметр перех.микроотв. класса цепи &lt; глобальное ограничение"
 
-#: pcbnew/class_drc_item.cpp:105
+#: pcbnew/class_drc_item.cpp:109
 msgid "NetClass uVia Drill &lt; global limit"
 msgstr "Сверло перех.микроотв. класса цепи &lt; глобальное ограничение"
 
-#: pcbnew/class_drc_item.cpp:108
+#: pcbnew/class_drc_item.cpp:112
 msgid "Via inside a keepout area"
 msgstr "Перех.отв. внутри области запрета"
 
-#: pcbnew/class_drc_item.cpp:111
+#: pcbnew/class_drc_item.cpp:115
 msgid "Track inside a keepout area"
 msgstr "Дорожка внутри области запрета"
 
-#: pcbnew/class_drc_item.cpp:114
+#: pcbnew/class_drc_item.cpp:118
 msgid "Pad inside a keepout area"
 msgstr "Конт.пл. внутри области запрета"
 
-#: pcbnew/class_drc_item.cpp:117
+#: pcbnew/class_drc_item.cpp:121
 msgid "Via inside a text"
 msgstr "Перех.отв. внутри текста"
 
-#: pcbnew/class_drc_item.cpp:120
+#: pcbnew/class_drc_item.cpp:124
 msgid "Track inside a text"
 msgstr "Дорожка внутри текста"
 
-#: pcbnew/class_drc_item.cpp:123
+#: pcbnew/class_drc_item.cpp:127
 msgid "Pad inside a text"
 msgstr "Конт.пл. внутри текста"
 
@@ -14988,98 +15043,98 @@ msgstr "Класс"
 msgid "* (Any)"
 msgstr "* (Любые)"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:649
+#: pcbnew/dialogs/dialog_design_rules.cpp:674
 msgid "Design Rule Setting Error"
 msgstr "Ошибка настройки правила проектирования"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:669
+#: pcbnew/dialogs/dialog_design_rules.cpp:694
 msgid "New Net Class Name:"
 msgstr "Имя нового класса цепи:"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:689
+#: pcbnew/dialogs/dialog_design_rules.cpp:714
 msgid "Duplicate net class names are not allowed."
 msgstr "Дублирование имён класса цепей не допустимо."
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:751
+#: pcbnew/dialogs/dialog_design_rules.cpp:778
 msgid "The default net class cannot be removed"
 msgstr "Класс цепей Default не может быть удалён"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:934
+#: pcbnew/dialogs/dialog_design_rules.cpp:962
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>ширина дорожки</b> &lt; <b>минимальной ширины дорожки</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:945
+#: pcbnew/dialogs/dialog_design_rules.cpp:973
 #, c-format
 msgid "%s: <b>Differential Pair Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>размер диф.пары</b> &lt; <b>мин. размера дорожки</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:958
+#: pcbnew/dialogs/dialog_design_rules.cpp:986
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimum Via Diameter</b><br>"
 msgstr "%s: <b>диаметр перех.отв.</b> &lt; <b>минимального диаметра перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:969
+#: pcbnew/dialogs/dialog_design_rules.cpp:997
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
 msgstr "%s: <b>сверло перех.отв.</b> &ge; <b>диаметра перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:977
+#: pcbnew/dialogs/dialog_design_rules.cpp:1005
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
 msgstr "%s: <b>сверло перех.отв.</b> &lt; <b>минимального сверла перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:989
+#: pcbnew/dialogs/dialog_design_rules.cpp:1017
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
 msgstr ""
 "%s: <b>диаметр перех.микроотв.</b> &lt; <b>минимального диаметра перех.микроотв.</"
 "b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1000
+#: pcbnew/dialogs/dialog_design_rules.cpp:1028
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
 msgstr "%s: <b>сверло перех.микроотв.</b> &ge; <b>диаметра перех.микроотв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1008
+#: pcbnew/dialogs/dialog_design_rules.cpp:1036
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
 msgstr ""
 "%s: <b>сверло перех.микроотв.</b> &lt; <b>минимального сверла перех.микроотв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1027
+#: pcbnew/dialogs/dialog_design_rules.cpp:1055
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 msgstr ""
 "<b>Экстра размер дорожки %d </b> %s &lt; <b>минимального размера дорожки</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1036
+#: pcbnew/dialogs/dialog_design_rules.cpp:1064
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Экстра размер дорожки %d </b> %s &gt; <b>1 дюйма!</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1056
+#: pcbnew/dialogs/dialog_design_rules.cpp:1084
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
 msgstr ""
 "<b>Экстра размер перех.отв. %d </b> %s &lt; <b>минимального размера перех.отв.</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1066
+#: pcbnew/dialogs/dialog_design_rules.cpp:1094
 #, c-format
 msgid "<b>No via drill size define in row %d</b><br>"
 msgstr "<b>Нет определения размера сверла перех.отв. в строке %d</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1076
+#: pcbnew/dialogs/dialog_design_rules.cpp:1104
 #, c-format
 msgid "<b>Extra Via %d Drill</b> %s &lt; <b>Min Via Drill %s</b><br>"
 msgstr "<b>Экстра сверло перех.отв. %d</b> %s &lt; <b>мин. сверла перех.отв. %s</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1085
+#: pcbnew/dialogs/dialog_design_rules.cpp:1113
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>"
 msgstr "<b>Экстра размер перех.отв. %d </b> %s &le; <b>Размера сверла</b> %s<br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1094
+#: pcbnew/dialogs/dialog_design_rules.cpp:1122
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Экстра размер перех.отв. %d </b>%s &gt; <b>1 дюйма!</b><br>"
@@ -15616,12 +15671,13 @@ msgstr ""
 "Компоненты только с таким атрибутом попадут в файл списка позиций посад.мест"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:345
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:181
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
-"(like a old ISA PC bus connector)"
+"like an edge connector (old ISA PC bus for instance)"
 msgstr ""
-"Используйте этот атрибут для \"виртуальных\" компонентов,\n"
-"отображаемых на плате (таких как старый разъем шины ISA PC)"
+"Используйте этот атрибут для \"виртуальных\" компонентов, отображаемых на плате,\n"
+"как краевой соединитель (старый разъем шины ISA PC для примера)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:376
 msgid ""
@@ -15644,9 +15700,25 @@ msgid "Component is locked: it cannot be freely moved or auto placed."
 msgstr "Компонент заблокирован: невозможно перемещать и автоматически размещать."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:499
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:348
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:350
 msgid "Invalid filename: "
 msgstr "Неверное имя файла: "
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:591
+msgid "Error: invalid footprint parameter"
+msgstr "Ошибка: неверный параметр посад.места"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:597
+msgid "Error: invalid 3D parameter"
+msgstr "Ошибка: неверный параметр 3D"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:616
+msgid "Error: invalid or missing footprint parameter"
+msgstr "Ошибка: неверный или пропущенный параметр посад.места"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:622
+msgid "Error: invalid or missing 3D parameter"
+msgstr "Ошибка: неверный или пропущенный параметр 3D"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:58
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:1168
@@ -15859,23 +15931,15 @@ msgstr "Настройки 3D"
 msgid "Use this attribute for most non SMD components"
 msgstr "Использовать этот атрибут для большинства не-SMD компонентов"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:180
-msgid ""
-"Use this attribute for \"virtual\" components drawn on board (like a old ISA PC bus "
-"connector)"
-msgstr ""
-"Используйте этот атрибут для \"виртуальных\" компонентов, отображаемых на плате "
-"(таких как старый разъем шины ISA PC)"
-
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:203
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:205
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Включить горячие клавиши команд перемещения и авторазмещения"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:204
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:206
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Отключить горячие клавиши команд перемещения и авторазмещения"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:450
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:452
 #, c-format
 msgid ""
 "Error:\n"
@@ -19320,22 +19384,22 @@ msgstr "Стиль (OpenGL и Cairo)"
 msgid "+"
 msgstr "+"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:370
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:385
 #: pcbnew/dialogs/dialog_track_via_size.cpp:62
 msgid "Invalid track width"
 msgstr "Недопустимая ширина дорожки"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:379
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:394
 #: pcbnew/dialogs/dialog_track_via_size.cpp:69
 msgid "Invalid via diameter"
 msgstr "Недопустимый диаметр перех.отв."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:386
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:401
 #: pcbnew/dialogs/dialog_track_via_size.cpp:76
 msgid "Invalid via drill size"
 msgstr "Недопустимый размер сверла перех.отв."
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:393
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:408
 #: pcbnew/dialogs/dialog_track_via_size.cpp:83
 msgid "Via drill size has to be smaller than via diameter"
 msgstr "Размер сверла перех.отв. должен быть меньше, чем диаметр перех.отв."
