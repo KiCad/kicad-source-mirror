@@ -353,33 +353,38 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte *ptrPBO ,
 {
     m_isPreview = false;
 
-    unsigned int nrBlocks = m_blockPositions.size();    // Cache the number of blocks
-    unsigned startTime = GetRunningMicroSecs();         // Get time that started render this block
-    bool breakLoop = false;                             // It will be used to break the loop
+    const size_t nrBlocks = m_blockPositions.size();
+    const unsigned startTime = GetRunningMicroSecs();
+    bool breakLoop = false;
+    int numBlocksRendered = 0;
 
-    #pragma omp parallel for schedule(dynamic)
-    for( signed int iBlock = 0; iBlock < (int)nrBlocks; iBlock++ )
+    #pragma omp parallel for schedule(dynamic) shared(breakLoop) \
+        firstprivate(ptrPBO, nrBlocks, startTime) reduction(+:numBlocksRendered) default(none)
+    for( size_t iBlock = 0; iBlock < nrBlocks; iBlock++ )
     {
 
         #pragma omp flush(breakLoop)
-        if( !breakLoop ) // That is used to break the other threads
+        if( !breakLoop )
         {
-            // Check if this block was already processed
-            if( !m_blockPositionsWasProcessed[iBlock] )
+            bool process_block;
+
+            // std::vector<bool> stuffs eight bools to each byte, so access to
+            // them can never be natively atomic.
+            #pragma omp critical(checkProcessBlock)
             {
+                process_block = !m_blockPositionsWasProcessed[iBlock];
                 m_blockPositionsWasProcessed[iBlock] = true;
+            }
 
-                // Render this block
+            if( process_block )
+            {
                 rt_render_trace_block( ptrPBO, iBlock );
-
-                #pragma omp atomic
-                m_nrBlocksRenderProgress++;
+                numBlocksRendered++;
 
 
                 // Check if it spend already some time render and request to exit
                 // to display the progress
                 #ifdef _OPENMP
-                // This makes possible that only one thread (id 0) can check the time
                 if( omp_get_thread_num() == 0 )
                 #endif
                     if( (GetRunningMicroSecs() - startTime) > 150000 )
@@ -390,6 +395,8 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte *ptrPBO ,
             }
         }
     }
+
+    m_nrBlocksRenderProgress += numBlocksRendered;
 
     if( aStatusTextReporter )
         aStatusTextReporter->Report( wxString::Format( _( "Rendering: %.0f %%" ),
