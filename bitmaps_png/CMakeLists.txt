@@ -513,6 +513,7 @@ set( BMAPS_MID
     select_w_layer
     shape_3d
     sheetset
+    simulator
     sim_run
     sim_stop
     sim_tune

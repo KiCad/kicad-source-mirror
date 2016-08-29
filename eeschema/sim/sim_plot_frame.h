@@ -246,8 +246,8 @@ private:
     void onPlotChanged( wxAuiNotebookEvent& event ) override;
     void onPlotClose( wxAuiNotebookEvent& event ) override;
 
-    void onSignalDblClick( wxCommandEvent& event ) override;
-    void onSignalRClick( wxMouseEvent& event ) override;
+    void onSignalDblClick( wxMouseEvent& event ) override;
+    void onSignalRClick( wxListEvent& event ) override;
 
     void onSimulate( wxCommandEvent& event );
     void onSettings( wxCommandEvent& event );
@@ -320,6 +320,10 @@ private:
 
     ///> Panel that was used as the most recent one for simulations
     SIM_PLOT_PANEL* m_lastSimPlot;
+
+    ///> imagelists uset to add a small coloured icon to signal names
+    ///> and cursors name, the same color as the corresponding signal traces
+    wxImageList* m_signalsIconColorList;
 };
 
 // Commands

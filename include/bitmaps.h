@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2007-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -571,6 +571,7 @@ EXTERN_BITMAP( zoom_xpm )
 EXTERN_BITMAP( tune_diff_pair_length_legend_xpm )
 EXTERN_BITMAP( tune_diff_pair_skew_legend_xpm )
 EXTERN_BITMAP( tune_single_track_length_legend_xpm )
+EXTERN_BITMAP( simulator_xpm )
 EXTERN_BITMAP( sim_run_xpm )
 EXTERN_BITMAP( sim_stop_xpm )
 EXTERN_BITMAP( sim_tune_xpm )

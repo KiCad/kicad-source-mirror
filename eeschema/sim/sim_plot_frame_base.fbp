@@ -905,7 +905,6 @@
                                                                 <event name="OnAuiNotebookPageChanged">onPlotChanged</event>
                                                                 <event name="OnAuiNotebookPageChanging"></event>
                                                                 <event name="OnAuiNotebookPageClose">onPlotClose</event>
-                                                                <event name="OnAuiNotebookPageClosed"></event>
                                                                 <event name="OnChar"></event>
                                                                 <event name="OnEnterWindow"></event>
                                                                 <event name="OnEraseBackground"></event>
@@ -1269,7 +1268,7 @@
                                                                 <property name="max_size"></property>
                                                                 <property name="maximize_button">0</property>
                                                                 <property name="maximum_size"></property>
-                                                                <property name="maxlength"></property>
+                                                                <property name="maxlength">0</property>
                                                                 <property name="min_size"></property>
                                                                 <property name="minimize_button">0</property>
                                                                 <property name="minimum_size"></property>
@@ -1426,11 +1425,11 @@
                                             <property name="parent">1</property>
                                             <property name="permission">none</property>
                                             <event name="OnUpdateUI"></event>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxALL|wxEXPAND</property>
                                                 <property name="proportion">1</property>
-                                                <object class="wxListBox" expanded="0">
+                                                <object class="wxListCtrl" expanded="1">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
                                                     <property name="RightDockable">1</property>
@@ -1444,7 +1443,6 @@
                                                     <property name="caption"></property>
                                                     <property name="caption_visible">1</property>
                                                     <property name="center_pane">0</property>
-                                                    <property name="choices"></property>
                                                     <property name="close_button">1</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
@@ -1476,8 +1474,8 @@
                                                     <property name="resize">Resizable</property>
                                                     <property name="show">1</property>
                                                     <property name="size"></property>
-                                                    <property name="style">wxLB_SINGLE|wxLB_SORT</property>
-                                                    <property name="subclass"></property>
+                                                    <property name="style">wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_SMALL_ICON</property>
+                                                    <property name="subclass">wxListView; </property>
                                                     <property name="toolbar_pane">0</property>
                                                     <property name="tooltip"></property>
                                                     <property name="validator_data_type"></property>
@@ -1494,11 +1492,29 @@
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
                                                     <event name="OnLeaveWindow"></event>
-                                                    <event name="OnLeftDClick"></event>
+                                                    <event name="OnLeftDClick">onSignalDblClick</event>
                                                     <event name="OnLeftDown"></event>
                                                     <event name="OnLeftUp"></event>
-                                                    <event name="OnListBox"></event>
-                                                    <event name="OnListBoxDClick">onSignalDblClick</event>
+                                                    <event name="OnListBeginDrag"></event>
+                                                    <event name="OnListBeginLabelEdit"></event>
+                                                    <event name="OnListBeginRDrag"></event>
+                                                    <event name="OnListCacheHint"></event>
+                                                    <event name="OnListColBeginDrag"></event>
+                                                    <event name="OnListColClick"></event>
+                                                    <event name="OnListColDragging"></event>
+                                                    <event name="OnListColEndDrag"></event>
+                                                    <event name="OnListColRightClick"></event>
+                                                    <event name="OnListDeleteAllItems"></event>
+                                                    <event name="OnListDeleteItem"></event>
+                                                    <event name="OnListEndLabelEdit"></event>
+                                                    <event name="OnListInsertItem"></event>
+                                                    <event name="OnListItemActivated"></event>
+                                                    <event name="OnListItemDeselected"></event>
+                                                    <event name="OnListItemFocused"></event>
+                                                    <event name="OnListItemMiddleClick"></event>
+                                                    <event name="OnListItemRightClick">onSignalRClick</event>
+                                                    <event name="OnListItemSelected"></event>
+                                                    <event name="OnListKeyDown"></event>
                                                     <event name="OnMiddleDClick"></event>
                                                     <event name="OnMiddleDown"></event>
                                                     <event name="OnMiddleUp"></event>
@@ -1508,7 +1524,7 @@
                                                     <event name="OnPaint"></event>
                                                     <event name="OnRightDClick"></event>
                                                     <event name="OnRightDown"></event>
-                                                    <event name="OnRightUp">onSignalRClick</event>
+                                                    <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
                                                     <event name="OnUpdateUI"></event>

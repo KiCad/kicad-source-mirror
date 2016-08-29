@@ -142,9 +142,20 @@ public:
         return m_flags;
     }
 
+    void SetTraceColour( wxColour aColour )
+    {
+        m_traceColour = aColour;
+    }
+
+    wxColour GetTraceColour()
+    {
+        return m_traceColour;
+    }
+
 protected:
     CURSOR* m_cursor;
     int m_flags;
+    wxColour m_traceColour;
 };
 
 

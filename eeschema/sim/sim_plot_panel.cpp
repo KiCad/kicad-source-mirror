@@ -490,7 +490,8 @@ bool SIM_PLOT_PANEL::AddTrace( const wxString& aName, int aPoints,
 
         // New entry
         trace = new TRACE( aName );
-        trace->SetPen( wxPen( generateColor(), 2, wxPENSTYLE_SOLID ) );
+        trace->SetTraceColour( generateColor() );
+        trace->SetPen( wxPen( trace->GetTraceColour(), 2, wxPENSTYLE_SOLID ) );
         m_traces[aName] = trace;
 
         // It is a trick to keep legend & coords always on the top

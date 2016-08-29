@@ -5,7 +5,7 @@
 // Maintainer:      Davide Rondini
 // Contributors:    Jose Luis Blanco, Val Greene, Maciej Suminski, Tomasz Wlostowski
 // Created:         21/07/2003
-// Last edit:       12/08/2016
+// Last edit:       25/08/2016
 // Copyright:       (c) David Schalig, Davide Rondini
 // Licence:         wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -15,9 +15,7 @@
 #pragma implementation "mathplot.h"
 #endif
 
-// For compilers that support precompilation, includes "wx.h".
 #include <wx/window.h>
-// #include <wx/wxprec.h>
 
 // Comment out for release operation:
 // (Added by J.L.Blanco, Aug 2007)
@@ -878,13 +876,13 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
 
     for( int i = 10; i <= 20; i += 2 )
     {
-        double  step    = fabs( maxVvis - minVvis ) / (double) i;
-        double  base    = pow( 10, floor( log10( step ) ) );
+        double  curr_step    = fabs( maxVvis - minVvis ) / (double) i;
+        double  base    = pow( 10, floor( log10( curr_step ) ) );
 
         // printf("base %.3f\n", base);
 
-        double  stepInt = floor( step / base ) * base;
-        double  err = fabs( step - stepInt );
+        double  stepInt = floor( curr_step / base ) * base;
+        double  err = fabs( curr_step - stepInt );
 
         if( err < minErr )
         {
@@ -892,7 +890,7 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
             bestStep = stepInt;
         }
 
-        // printf("step %d %.3f %.3f best %.3f\n",i, step, stepInt, bestStep);
+        // printf("curr_step %d %.3f %.3f best %.3f\n",i, curr_step, stepInt, bestStep);
     }
 
 
@@ -1138,13 +1136,13 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
 
     for( int i = 10; i <= 20; i += 2 )
     {
-        double  step    = fabs( maxVvis - minVvis ) / (double) i;
-        double  base    = pow( 10, floor( log10( step ) ) );
+        double  curr_step    = fabs( maxVvis - minVvis ) / (double) i;
+        double  base    = pow( 10, floor( log10( curr_step ) ) );
 
         // printf("base %.3f\n", base);
 
-        double  stepInt = floor( step / base ) * base;
-        double  err = fabs( step - stepInt );
+        double  stepInt = floor( curr_step / base ) * base;
+        double  err = fabs( curr_step - stepInt );
 
         if( err< minErr )
         {
@@ -1152,7 +1150,7 @@ void mpScaleY::recalculateTicks( wxDC& dc, mpWindow& w )
             bestStep = stepInt;
         }
 
-        // printf("step %d %.3f %.3f best %.3f\n",i, step, stepInt, bestStep);
+        // printf("curr_step %d %.3f %.3f best %.3f\n",i, curr_step, stepInt, bestStep);
     }
 
 
@@ -1757,9 +1755,9 @@ mpWindow::mpWindow( wxWindow* parent,
     m_lockaspect = FALSE;
 
     m_popmenu.Append( mpID_CENTER, _( "Center" ), _( "Center plot view to this position" ) );
-    m_popmenu.Append( mpID_FIT, _( "Fit" ), _( "Set plot view to show all items" ) );
-    m_popmenu.Append( mpID_ZOOM_IN, _( "Zoom in" ), _( "Zoom in plot view." ) );
-    m_popmenu.Append( mpID_ZOOM_OUT, _( "Zoom out" ), _( "Zoom out plot view." ) );
+    m_popmenu.Append( mpID_FIT, _( "Fit on Screen" ), _( "Set plot view to show all items" ) );
+    m_popmenu.Append( mpID_ZOOM_IN, _( "Zoom In" ), _( "Zoom in plot view." ) );
+    m_popmenu.Append( mpID_ZOOM_OUT, _( "Zoom Out" ), _( "Zoom out plot view." ) );
     // m_popmenu.AppendCheckItem( mpID_LOCKASPECT, _("Lock aspect"), _("Lock horizontal and vertical zoom aspect."));
     // m_popmenu.Append( mpID_HELP_MOUSE,   _("Show mouse commands..."),    _("Show help about the mouse commands."));
 
@@ -2015,19 +2013,14 @@ void mpWindow::Fit( double xMin,
     double  xExtra = fabs( xMax - xMin ) * 0.00;
     double  yExtra = fabs( yMax - yMin ) * 0.03;
 
-
     xMin    -= xExtra;
     xMax    += xExtra;
     yMin    -= yExtra;
     yMax    += yExtra;
 
-    // printf("                          ******************Fit: %.3f %.3f", xMin, xMax);
-
-
     // Save desired borders:
     m_desiredXmin   = xMin; m_desiredXmax = xMax;
     m_desiredYmin   = yMin; m_desiredYmax = yMax;
-    // printf("minx %.1f miny %.1f maxx %.1f maxy %.1f\n", xMin, yMin, xMax, yMax);
 
     if( printSizeX!=NULL && printSizeY!=NULL )
     {
@@ -2525,17 +2518,11 @@ void mpWindow::DelAllLayers( bool alsoDeleteObject, bool refreshDisplay )
 }
 
 
-// void mpWindow::DoPrepareDC(wxDC& dc)
-// {
-// dc.SetDeviceOrigin(x2p(m_minX), y2p(m_maxY));
-// }
-
 void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
 {
     wxPaintDC dc( this );
 
     dc.GetSize( &m_scrX, &m_scrY );    // This is the size of the visible area only!
-    // DoPrepareDC(dc);
 
 #ifdef MATHPLOT_DO_LOGGING
         wxLogMessage( "[mpWindow::OnPaint] vis.area: x %i y%i", m_scrX, m_scrY );

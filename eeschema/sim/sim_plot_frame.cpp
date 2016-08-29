@@ -38,6 +38,8 @@
 #include "spice_simulator.h"
 #include "spice_reporter.h"
 
+#include <menus_helpers.h>
+
 SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
 {
     int res = (int) aFirst | (int) aSecond;
@@ -103,11 +105,17 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     : SIM_PLOT_FRAME_BASE( aParent ), m_lastSimPlot( nullptr )
 {
     SetKiway( this, aKiway );
+    m_signalsIconColorList = NULL;
 
     m_schematicFrame = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
 
     if( m_schematicFrame == NULL )
         throw std::runtime_error( "There is no schematic window" );
+
+    // Give an icon
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( simulator_xpm ) );
+    SetIcon( icon );
 
     m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
 
@@ -171,6 +179,7 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 {
     m_simulator->SetReporter( nullptr );
     delete m_reporter;
+    delete m_signalsIconColorList;
 
     if( m_settingsDlg )
         m_settingsDlg->Destroy();
@@ -461,11 +470,58 @@ void SIM_PLOT_FRAME::updateSignalList()
     if( !plotPanel )
         return;
 
-    // Fill the signals listbox
-    m_signals->Clear();
+    m_signals->ClearAll();
+
+    wxSize size = m_signals->GetClientSize();
+    m_signals->AppendColumn( _( "Signal" ), wxLIST_FORMAT_LEFT, size.x );
+
+    // Build an image list, to show the color of the corresponding trace
+    // in the plot panel
+    // This image list is used for trace and cursor lists
+    #define ICON_SIZEX 10
+    #define ICON_SIZEY 10
+
+    if( m_signalsIconColorList == NULL )
+        m_signalsIconColorList = new wxImageList( ICON_SIZEX, ICON_SIZEY, false );
+    else
+        m_signalsIconColorList->RemoveAll();
+
+    wxMemoryDC bmDC;
+    const int isize = bmDC.GetCharHeight();
+    wxBitmap bitmap( isize, isize );
+
+    for( const auto& trace : CurrentPlot()->GetTraces() )
+    {
+        bmDC.SelectObject( bitmap );
+        wxColor tcolor = trace.second->GetTraceColour();
+
+        bmDC.SetPen( wxPen( tcolor ) );
+        bmDC.SetBrush( wxBrush( m_signals->GetBackgroundColour() ) );
+        bmDC.Clear();
+        bmDC.SetBrush( wxBrush( tcolor ) );
+        bmDC.DrawRectangle( 0, isize/4, isize, isize - (isize/4) );
+
+        bmDC.SelectObject( wxNullBitmap );  // Needed to initialize bitmap
+
+        m_signalsIconColorList->Add( bitmap );
+    }
+
+    bmDC.SetBrush( wxNullBrush );
+    bmDC.SetPen( wxNullPen );
+
+    m_signals->SetImageList(m_signalsIconColorList, wxIMAGE_LIST_SMALL);
+
+    // Fill the signals listctrl. Keep the order of names and
+    // the order of icon color identical, because the icons
+    // are also used in cursor list, and the color index is
+    // calculated from the trace name index
+    int imgidx = 0;
 
     for( const auto& trace : m_plots[plotPanel].m_traces )
-        m_signals->Append( trace.first );
+    {
+        m_signals->InsertItem( imgidx, trace.first, imgidx );
+        imgidx++;
+    }
 }
 
 
@@ -815,28 +871,28 @@ void SIM_PLOT_FRAME::onPlotChanged( wxAuiNotebookEvent& event )
 }
 
 
-void SIM_PLOT_FRAME::onSignalDblClick( wxCommandEvent& event )
+void SIM_PLOT_FRAME::onSignalDblClick( wxMouseEvent& event )
 {
     // Remove signal from the plot panel when double clicked
-    int idx = m_signals->GetSelection();
+    long idx = m_signals->GetFocusedItem();
 
     if( idx != wxNOT_FOUND )
-        removePlot( m_signals->GetString( idx ) );
+        removePlot( m_signals->GetItemText( idx, 0 ) );
 }
 
 
-void SIM_PLOT_FRAME::onSignalRClick( wxMouseEvent& event )
+void SIM_PLOT_FRAME::onSignalRClick( wxListEvent& event )
 {
-    int idx = m_signals->HitTest( event.GetPosition() );
+    int idx = event.GetIndex();
 
     if( idx != wxNOT_FOUND )
-        m_signals->SetSelection( idx );
+        m_signals->Select( idx );
 
-    idx = m_signals->GetSelection();
+    idx = m_signals->GetFirstSelected();
 
     if( idx != wxNOT_FOUND )
     {
-        const wxString& netName = m_signals->GetString( idx );
+        const wxString& netName = m_signals->GetItemText( idx, 0 );
         SIGNAL_CONTEXT_MENU ctxMenu( netName, this );
         m_signals->PopupMenu( &ctxMenu );
     }
@@ -942,7 +998,11 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
     if( !plotPanel )
         return;
 
-    const long SIGNAL_COL = m_cursors->AppendColumn( _( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
+    if( m_signalsIconColorList )
+        m_cursors->SetImageList(m_signalsIconColorList, wxIMAGE_LIST_SMALL);
+
+    // Fill the signals listctrl
+    m_cursors->AppendColumn( _( "Signal" ), wxLIST_FORMAT_LEFT, size.x / 2 );
     const long X_COL = m_cursors->AppendColumn( plotPanel->GetLabelX(), wxLIST_FORMAT_LEFT, size.x / 4 );
 
     wxString labelY1 = plotPanel->GetLabelY1();
@@ -957,12 +1017,17 @@ void SIM_PLOT_FRAME::onCursorUpdate( wxCommandEvent& event )
     const long Y_COL = m_cursors->AppendColumn( labelY, wxLIST_FORMAT_LEFT, size.x / 4 );
 
     // Update cursor values
+    int itemidx = 0;
     for( const auto& trace : plotPanel->GetTraces() )
     {
         if( CURSOR* cursor = trace.second->GetCursor() )
         {
+           // Find the right icon color in list.
+            // It is the icon used in m_signals list for the same trace
+            long iconColor = m_signals->FindItem( -1, trace.first );
+
             const wxRealPoint coords = cursor->GetCoords();
-            long idx = m_cursors->InsertItem( SIGNAL_COL, trace.first );
+            long idx = m_cursors->InsertItem( itemidx++, trace.first, iconColor );
             m_cursors->SetItem( idx, X_COL, SPICE_VALUE( coords.x ).ToSpiceString() );
             m_cursors->SetItem( idx, Y_COL, SPICE_VALUE( coords.y ).ToSpiceString() );
         }
@@ -1066,14 +1131,18 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
 {
     SIM_PLOT_PANEL* plot = m_plotFrame->CurrentPlot();
 
-    Append( HIDE_SIGNAL, _( "Hide signal" ) );
+    AddMenuItem( this, HIDE_SIGNAL, _( "Hide signal" ),
+                 _( "Erase the signal from plot screen" ),
+                 KiBitmap( delete_xpm ) );
 
     TRACE* trace = plot->GetTrace( m_signal );
 
     if( trace->HasCursor() )
-        Append( HIDE_CURSOR, _( "Hide cursor" ) );
+        AddMenuItem( this, HIDE_CURSOR, _( "Hide cursor" ),
+                     wxEmptyString, KiBitmap( mirepcb_xpm ) );
     else
-        Append( SHOW_CURSOR, _( "Show cursor" ) );
+        AddMenuItem( this, SHOW_CURSOR, _( "Show cursor" ),
+                     wxEmptyString, KiBitmap( mirepcb_xpm ) );
 
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( SIGNAL_CONTEXT_MENU::onMenuEvent ), NULL, this );
 }

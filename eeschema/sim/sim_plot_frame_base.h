@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 24 2016)
+// C++ code generated with wxFormBuilder (version Jul 31 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class KIWAY_PLAYER;
+class wxListView;
 
 #include "kiway_player.h"
 #include <wx/string.h>
@@ -30,9 +31,8 @@ class KIWAY_PLAYER;
 #include <wx/aui/auibook.h>
 #include <wx/textctrl.h>
 #include <wx/splitter.h>
-#include <wx/listbox.h>
-#include <wx/statbox.h>
 #include <wx/listctrl.h>
+#include <wx/statbox.h>
 #include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxTextCtrl* m_simConsole;
 		wxPanel* m_sidePanel;
 		wxBoxSizer* m_sideSizer;
-		wxListBox* m_signals;
+		wxListView* m_signals;
 		wxListCtrl* m_cursors;
 		wxStaticBoxSizer* sbSizer4;
 		wxBoxSizer* m_tuneSizer;
@@ -93,8 +93,8 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void menuShowLegendUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPlotChanged( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
-		virtual void onSignalDblClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onSignalRClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onSignalDblClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onSignalRClick( wxListEvent& event ) { event.Skip(); }
 		
 	
 	public:

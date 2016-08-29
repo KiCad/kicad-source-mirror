@@ -499,7 +499,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( toolsMenu,
                  ID_SIM_SHOW,
                  _("Simula&tor"), _( "Simulate the circuit" ),
-                 wxNullBitmap );
+                 KiBitmap( simulator_xpm ) );
 #endif /* KICAD_SPICE */
 
     // Help Menu:
