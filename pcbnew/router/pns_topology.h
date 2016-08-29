@@ -29,46 +29,46 @@
 
 namespace PNS {
 
-class PNS_NODE;
-class PNS_SEGMENT;
-class PNS_JOINT;
-class PNS_ITEM;
-class PNS_SOLID;
-class PNS_DIFF_PAIR;
+class NODE;
+class SEGMENT;
+class JOINT;
+class ITEM;
+class SOLID;
+class DIFF_PAIR;
 
-class PNS_TOPOLOGY
+class TOPOLOGY
 {
 public:
-    typedef std::set<PNS_JOINT*> JOINT_SET;
+    typedef std::set<JOINT*> JOINT_SET;
 
-    PNS_TOPOLOGY( PNS_NODE* aNode ):
+    TOPOLOGY( NODE* aNode ):
         m_world( aNode ) {};
 
-    ~PNS_TOPOLOGY() {};
+    ~TOPOLOGY() {};
 
-    bool SimplifyLine( PNS_LINE *aLine );
-    PNS_ITEM* NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor = NULL, int aKindMask = PNS_ITEM::ANY_T );
-    bool LeadingRatLine( const PNS_LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine );
+    bool SimplifyLine( LINE *aLine );
+    ITEM* NearestUnconnectedItem( JOINT* aStart, int* aAnchor = NULL, int aKindMask = ITEM::ANY_T );
+    bool LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine );
 
-    const JOINT_SET ConnectedJoints( PNS_JOINT* aStart );
-    const PNS_ITEMSET ConnectedItems( PNS_JOINT* aStart, int aKindMask = PNS_ITEM::ANY_T );
-    const PNS_ITEMSET ConnectedItems( PNS_ITEM* aStart, int aKindMask = PNS_ITEM::ANY_T );
-    int64_t ShortestConnectionLength( PNS_ITEM* aFrom, PNS_ITEM* aTo );
+    const JOINT_SET ConnectedJoints( JOINT* aStart );
+    const ITEM_SET ConnectedItems( JOINT* aStart, int aKindMask = ITEM::ANY_T );
+    const ITEM_SET ConnectedItems( ITEM* aStart, int aKindMask = ITEM::ANY_T );
+    int64_t ShortestConnectionLength( ITEM* aFrom, ITEM* aTo );
 
-    const PNS_ITEMSET AssembleTrivialPath( PNS_ITEM* aStart );
-    const PNS_DIFF_PAIR AssembleDiffPair( PNS_SEGMENT* aStart );
+    const ITEM_SET AssembleTrivialPath( ITEM* aStart );
+    const DIFF_PAIR AssembleDiffPair( SEGMENT* aStart );
 
     int DpCoupledNet( int aNet );
     int DpNetPolarity( int aNet );
-    const PNS_LINE DpCoupledLine( PNS_LINE* aLine );
-    bool AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair );
+    const LINE DpCoupledLine( LINE* aLine );
+    bool AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair );
 
-    const std::set<PNS_ITEM*> AssembleCluster( PNS_ITEM* aStart, int aLayer );
+    const std::set<ITEM*> AssembleCluster( ITEM* aStart, int aLayer );
 
 private:
-    bool followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& aSet, std::set<PNS_ITEM*>& aVisited );
+    bool followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::set<ITEM*>& aVisited );
 
-    PNS_NODE *m_world;
+    NODE *m_world;
 };
 
 }

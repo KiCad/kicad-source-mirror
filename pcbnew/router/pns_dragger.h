@@ -32,28 +32,27 @@
 
 namespace PNS {
 
-class PNS_ROUTER;
-class PNS_SHOVE;
-class PNS_OPTIMIZER;
-class PNS_ROUTER_BASE;
+class ROUTER;
+class SHOVE;
+class OPTIMIZER;
 
 /**
- * Class PNS_DRAGGER
+ * Class DRAGGER
  *
  * Via, segment and corner dragging algorithm.
  */
-class PNS_DRAGGER : public PNS_ALGO_BASE
+class DRAGGER : public ALGO_BASE
 {
 public:
-     PNS_DRAGGER( PNS_ROUTER* aRouter );
-    ~PNS_DRAGGER();
+     DRAGGER( ROUTER* aRouter );
+    ~DRAGGER();
 
     /**
      * Function SetWorld()
      *
      * Sets the board to work on.
      */
-    void SetWorld( PNS_NODE* aWorld );
+    void SetWorld( NODE* aWorld );
 
     /**
      * Function Start()
@@ -61,7 +60,7 @@ public:
      * Starts routing a single track at point aP, taking item aStartItem as anchor
      * (unless NULL). Returns true if a dragging operation has started.
      */
-    bool Start( const VECTOR2I& aP, PNS_ITEM* aStartItem );
+    bool Start( const VECTOR2I& aP, ITEM* aStartItem );
 
     /**
      * Function Drag()
@@ -86,44 +85,44 @@ public:
      * Returns the most recent world state, including all
      * items changed due to dragging operation.
      */
-    PNS_NODE* CurrentNode() const;
+    NODE* CurrentNode() const;
 
     /**
      * Function Traces()
      *
      * Returns the set of dragged items.
      */
-    const PNS_ITEMSET Traces();
+    const ITEM_SET Traces();
 
-    /// @copydoc PNS_ALGO_BASE::Logger()
-    virtual PNS_LOGGER* Logger();
+    /// @copydoc ALGO_BASE::Logger()
+    virtual LOGGER* Logger();
 
 private:
     enum DragMode {
-        CORNER = 0,
-        SEGMENT,
-        VIA
+        DRAG_CORNER = 0,
+        DRAG_SEGMENT,
+        DRAG_VIA
     };
 
     bool dragMarkObstacles( const VECTOR2I& aP );
     bool dragShove(const VECTOR2I& aP );
-    bool startDragSegment( const VECTOR2D& aP, PNS_SEGMENT* aSeg );
-    bool startDragVia( const VECTOR2D& aP, PNS_VIA* aVia );
-    void dumbDragVia( PNS_VIA* aVia, PNS_NODE* aNode, const VECTOR2I& aP );
+    bool startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg );
+    bool startDragVia( const VECTOR2D& aP, VIA* aVia );
+    void dumbDragVia( VIA* aVia, NODE* aNode, const VECTOR2I& aP );
 
-    PNS_NODE*   m_world;
-    PNS_NODE*   m_lastNode;
-    DragMode    m_mode;
-    PNS_LINE    m_draggedLine;
-    PNS_VIA*    m_draggedVia;
-    PNS_LINE    m_lastValidDraggedLine;
-    PNS_SHOVE*  m_shove;
-    int         m_draggedSegmentIndex;
-    bool        m_dragStatus;
-    PNS_MODE    m_currentMode;
-    PNS_ITEMSET m_origViaConnections;
-    PNS_VIA*    m_initialVia;
-    PNS_ITEMSET m_draggedItems;
+    NODE*    m_world;
+    NODE*    m_lastNode;
+    DragMode m_mode;
+    LINE     m_draggedLine;
+    VIA*     m_draggedVia;
+    LINE     m_lastValidDraggedLine;
+    SHOVE*   m_shove;
+    int      m_draggedSegmentIndex;
+    bool     m_dragStatus;
+    PNS_MODE m_currentMode;
+    ITEM_SET m_origViaConnections;
+    VIA*     m_initialVia;
+    ITEM_SET m_draggedItems;
 };
 
 }

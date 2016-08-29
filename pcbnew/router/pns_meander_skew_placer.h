@@ -27,40 +27,39 @@
 
 namespace PNS {
 
-class PNS_ROUTER;
-class PNS_SHOVE;
-class PNS_OPTIMIZER;
-class PNS_ROUTER_BASE;
+class ROUTER;
+class SHOVE;
+class OPTIMIZER;
 
 /**
- * Class PNS_MEANDER_SKEW_PLACER
+ * Class MEANDER_SKEW_PLACER
  *
  * Differential pair skew adjustment algorithm.
  */
-class PNS_MEANDER_SKEW_PLACER : public PNS_MEANDER_PLACER
+class MEANDER_SKEW_PLACER : public MEANDER_PLACER
 {
 public:
-    PNS_MEANDER_SKEW_PLACER( PNS_ROUTER* aRouter );
-    ~PNS_MEANDER_SKEW_PLACER();
+    MEANDER_SKEW_PLACER( ROUTER* aRouter );
+    ~MEANDER_SKEW_PLACER();
 
-    /// @copydoc PNS_PLACEMENT_ALGO::Start()
-    bool Start( const VECTOR2I& aP, PNS_ITEM* aStartItem );
+    /// @copydoc PLACEMENT_ALGO::Start()
+    bool Start( const VECTOR2I& aP, ITEM* aStartItem );
 
-    /// @copydoc PNS_PLACEMENT_ALGO::Move()
-    bool Move( const VECTOR2I& aP, PNS_ITEM* aEndItem );
+    /// @copydoc PLACEMENT_ALGO::Move()
+    bool Move( const VECTOR2I& aP, ITEM* aEndItem );
 
-    /// @copydoc PNS_MEANDER_PLACER_BASE::TuningInfo()
+    /// @copydoc MEANDER_PLACER_BASE::TuningInfo()
     const wxString TuningInfo() const;
 
 private:
 
     int currentSkew( ) const;
-    int itemsetLength( const PNS_ITEMSET& aSet ) const;
+    int itemsetLength( const ITEM_SET& aSet ) const;
 
     int origPathLength () const;
 
-    PNS_DIFF_PAIR m_originPair;
-    PNS_ITEMSET m_tunedPath, m_tunedPathP, m_tunedPathN;
+    DIFF_PAIR m_originPair;
+    ITEM_SET  m_tunedPath, m_tunedPathP, m_tunedPathN;
 
     int m_coupledLength;
 };

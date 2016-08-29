@@ -34,14 +34,14 @@
 
 namespace PNS {
 
-class PNS_MEANDER_SETTINGS;
+class MEANDER_SETTINGS;
 
 }
 
 class DIALOG_PNS_LENGTH_TUNING_SETTINGS : public DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE
 {
 public:
-    DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* aParent, PNS::PNS_MEANDER_SETTINGS& aSettings, PNS::PNS_ROUTER_MODE aMode );
+    DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* aParent, PNS::MEANDER_SETTINGS& aSettings, PNS::ROUTER_MODE aMode );
 
     virtual void OnOkClick( wxCommandEvent& aEvent );
 
@@ -51,8 +51,8 @@ private:
     WX_UNIT_BINDER m_spacing;
     WX_UNIT_BINDER m_targetLength;
 
-    PNS::PNS_MEANDER_SETTINGS& m_settings;
-    PNS::PNS_ROUTER_MODE m_mode;
+    PNS::MEANDER_SETTINGS& m_settings;
+    PNS::ROUTER_MODE m_mode;
 };
 
 #endif // __dialog_pns_settings__

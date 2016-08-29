@@ -30,7 +30,7 @@
 
 namespace PNS {
 
-class PNS_ROUTER;
+class ROUTER;
 
 }
 
@@ -40,7 +40,7 @@ public:
      PNS_TUNE_STATUS_POPUP( PCB_EDIT_FRAME* aParent );
      ~PNS_TUNE_STATUS_POPUP();
 
-    void UpdateStatus( PNS::PNS_ROUTER* aRouter );
+    void UpdateStatus( PNS::ROUTER* aRouter );
 
 private:
     wxStaticText* m_statusLine;

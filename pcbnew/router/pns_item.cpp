@@ -24,7 +24,7 @@
 
 namespace PNS {
 
-bool PNS_ITEM::collideSimple( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
+bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV,
         VECTOR2I& aMTV, bool aDifferentNetsOnly ) const
 {
     // same nets? no collision!
@@ -41,7 +41,7 @@ bool PNS_ITEM::collideSimple( const PNS_ITEM* aOther, int aClearance, bool aNeed
 }
 
 
-bool PNS_ITEM::Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
+bool ITEM::Collide( const ITEM* aOther, int aClearance, bool aNeedMTV,
         VECTOR2I& aMTV, bool aDifferentNetsOnly ) const
 {
     if( collideSimple( aOther, aClearance, aNeedMTV, aMTV, aDifferentNetsOnly ) )
@@ -50,7 +50,7 @@ bool PNS_ITEM::Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
     // special case for "head" line with a via attached at the end.
     if( aOther->m_kind == LINE_T )
     {
-        const PNS_LINE* line = static_cast<const PNS_LINE*>( aOther );
+        const LINE* line = static_cast<const LINE*>( aOther );
 
         if( line->EndsWithVia() )
             return collideSimple( &line->Via(), aClearance - line->Width() / 2, aNeedMTV, aMTV, aDifferentNetsOnly );
@@ -60,7 +60,7 @@ bool PNS_ITEM::Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
 }
 
 
-const std::string PNS_ITEM::KindStr() const
+const std::string ITEM::KindStr() const
 {
     switch( m_kind )
     {
@@ -85,7 +85,7 @@ const std::string PNS_ITEM::KindStr() const
 }
 
 
-PNS_ITEM::~PNS_ITEM()
+ITEM::~ITEM()
 {
 }
 

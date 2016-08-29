@@ -32,14 +32,14 @@
 
 namespace PNS {
 
-class PNS_SIZES_SETTINGS;
+class SIZES_SETTINGS;
 
 }
 
 class DIALOG_PNS_DIFF_PAIR_DIMENSIONS : public DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE
 {
 public:
-    DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS::PNS_SIZES_SETTINGS& aSizes );
+    DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS::SIZES_SETTINGS& aSizes );
 
 private:
     void updateCheckbox();
@@ -51,7 +51,7 @@ private:
     WX_UNIT_BINDER m_traceGap;
     WX_UNIT_BINDER m_viaGap;
 
-    PNS::PNS_SIZES_SETTINGS& m_sizes;
+    PNS::SIZES_SETTINGS& m_sizes;
 };
 
 #endif // __dialog_pns_settings__

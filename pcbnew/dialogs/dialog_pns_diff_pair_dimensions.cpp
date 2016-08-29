@@ -26,7 +26,7 @@
 #include "dialog_pns_diff_pair_dimensions.h"
 #include <router/pns_sizes_settings.h>
 
-DIALOG_PNS_DIFF_PAIR_DIMENSIONS::DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS::PNS_SIZES_SETTINGS& aSizes ) :
+DIALOG_PNS_DIFF_PAIR_DIMENSIONS::DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS::SIZES_SETTINGS& aSizes ) :
     DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( aParent ),
     m_traceWidth( this, m_traceWidthText, m_traceWidthUnit ),
     m_traceGap( this, m_traceGapText, m_traceGapUnit ),

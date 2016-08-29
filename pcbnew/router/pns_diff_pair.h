@@ -35,18 +35,18 @@
 
 namespace PNS {
 
-class PNS_DIFF_PAIR;
+class DIFF_PAIR;
 
 /**
- * Class PNS_DP_GATEWAY
+ * Class DP_GATEWAY
  *
  * Defines a "gateway" for routing a differential pair - e.g. a pair of points (anchors) with certain
  * orientation, spacing and (optionally) predefined entry paths. The routing algorithm connects such
  * gateways with parallel lines, thus creating a difrerential pair.
  **/
-class PNS_DP_GATEWAY {
+class DP_GATEWAY {
 public:
-    PNS_DP_GATEWAY( const VECTOR2I& aAnchorP,
+    DP_GATEWAY( const VECTOR2I& aAnchorP,
                     const VECTOR2I& aAnchorN,
                     bool aIsDiagonal,
                     int aAllowedEntryAngles = DIRECTION_45::ANG_OBTUSE,
@@ -60,7 +60,7 @@ public:
         m_hasEntryLines = false;
     }
 
-    ~PNS_DP_GATEWAY()
+    ~DP_GATEWAY()
     {
     }
 
@@ -110,7 +110,7 @@ public:
 
     const SHAPE_LINE_CHAIN& EntryP() const { return m_entryP; }
     const SHAPE_LINE_CHAIN& EntryN() const { return m_entryN; }
-    const PNS_DIFF_PAIR Entry() const ;
+    const DIFF_PAIR Entry() const ;
 
     void Reverse();
 
@@ -129,31 +129,31 @@ private:
 };
 
 /**
- * Class PNS_DP_PRIMITIVE_PAIR
+ * Class DP_PRIMITIVE_PAIR
  *
  * Stores staring/ending primitives (pads, vias or segments) for a differential pair.
  **/
-class PNS_DP_PRIMITIVE_PAIR
+class DP_PRIMITIVE_PAIR
 {
 public:
-    PNS_DP_PRIMITIVE_PAIR():
+    DP_PRIMITIVE_PAIR():
         m_primP( NULL ), m_primN( NULL ) {};
 
-    PNS_DP_PRIMITIVE_PAIR( const PNS_DP_PRIMITIVE_PAIR& aOther );
-    PNS_DP_PRIMITIVE_PAIR( PNS_ITEM* aPrimP, PNS_ITEM* aPrimN );
-    PNS_DP_PRIMITIVE_PAIR( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN );
+    DP_PRIMITIVE_PAIR( const DP_PRIMITIVE_PAIR& aOther );
+    DP_PRIMITIVE_PAIR( ITEM* aPrimP, ITEM* aPrimN );
+    DP_PRIMITIVE_PAIR( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN );
 
-    ~PNS_DP_PRIMITIVE_PAIR();
+    ~DP_PRIMITIVE_PAIR();
 
     void SetAnchors( const VECTOR2I& aAnchorP, const VECTOR2I& aAnchorN );
 
     const VECTOR2I& AnchorP() const { return m_anchorP; }
     const VECTOR2I& AnchorN() const { return m_anchorN; }
 
-    PNS_DP_PRIMITIVE_PAIR& operator=( const PNS_DP_PRIMITIVE_PAIR& aOther );
+    DP_PRIMITIVE_PAIR& operator=( const DP_PRIMITIVE_PAIR& aOther );
 
-    PNS_ITEM* PrimP() const { return m_primP; }
-    PNS_ITEM* PrimN() const { return m_primN; }
+    ITEM* PrimP() const { return m_primP; }
+    ITEM* PrimN() const { return m_primN; }
 
     bool Directional() const;
 
@@ -170,23 +170,23 @@ public:
     }
 
 private:
-    DIRECTION_45 anchorDirection( PNS_ITEM* aItem, const VECTOR2I& aP ) const;
+    DIRECTION_45 anchorDirection( ITEM* aItem, const VECTOR2I& aP ) const;
 
-    PNS_ITEM* m_primP;
-    PNS_ITEM* m_primN;
+    ITEM* m_primP;
+    ITEM* m_primN;
     VECTOR2I m_anchorP, m_anchorN;
 };
 
 /**
- * Class PNS_GATEWAYS
+ * Class DP_GATEWAYS
  *
  * A set of gateways calculated for the cursor or starting/ending primitive pair.
  **/
 
-class PNS_DP_GATEWAYS
+class DP_GATEWAYS
 {
     public:
-        PNS_DP_GATEWAYS( int aGap ):
+        DP_GATEWAYS( int aGap ):
             m_gap( aGap ), m_viaGap( aGap )
         {
             // Do not leave unitialized members, and keep static analyser quiet:
@@ -217,18 +217,18 @@ class PNS_DP_GATEWAYS
 
 
         void BuildForCursor( const VECTOR2I& aCursorPos );
-        void BuildOrthoProjections( PNS_DP_GATEWAYS &aEntries, const VECTOR2I& aCursorPos, int aOrthoScore );
+        void BuildOrthoProjections( DP_GATEWAYS &aEntries, const VECTOR2I& aCursorPos, int aOrthoScore );
         void BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool aBuildEntries = false, bool aViaMode = false );
-        void BuildFromPrimitivePair( PNS_DP_PRIMITIVE_PAIR aPair, bool aPreferDiagonal );
+        void BuildFromPrimitivePair( DP_PRIMITIVE_PAIR aPair, bool aPreferDiagonal );
 
-        bool FitGateways( PNS_DP_GATEWAYS& aEntry, PNS_DP_GATEWAYS& aTarget, bool aPrefDiagonal, PNS_DIFF_PAIR& aDp );
+        bool FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget, bool aPrefDiagonal, DIFF_PAIR& aDp );
 
-        std::vector<PNS_DP_GATEWAY>& Gateways()
+        std::vector<DP_GATEWAY>& Gateways()
         {
             return m_gateways;
         }
 
-        const std::vector<PNS_DP_GATEWAY>& CGateways() const
+        const std::vector<DP_GATEWAY>& CGateways() const
         {
             return m_gateways;
         }
@@ -244,7 +244,7 @@ class PNS_DP_GATEWAYS
         };
 
         bool checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I& b ) const;
-        void buildDpContinuation( PNS_DP_PRIMITIVE_PAIR aPair, bool aIsDiagonal );
+        void buildDpContinuation( DP_PRIMITIVE_PAIR aPair, bool aIsDiagonal );
         void buildEntries( const VECTOR2I& p0_p, const VECTOR2I& p0_n );
 
         int m_gap;
@@ -252,17 +252,17 @@ class PNS_DP_GATEWAYS
         int m_viaDiameter;
         bool m_fitVias;
 
-        std::vector<PNS_DP_GATEWAY> m_gateways;
+        std::vector<DP_GATEWAY> m_gateways;
 };
 
 
 /**
- * Class PNS_DIFF_PAIR
+ * Class DIFF_PAIR
  *
  * Basic class for a differential pair. Stores two PNS_LINEs (for positive and negative nets, respectively),
  * the gap and coupling constraints.
  **/
-class PNS_DIFF_PAIR : public PNS_ITEM {
+class DIFF_PAIR : public ITEM {
 
 public:
     struct COUPLED_SEGMENTS {
@@ -286,7 +286,7 @@ public:
 
     typedef std::vector<COUPLED_SEGMENTS> COUPLED_SEGMENTS_VEC;
 
-    PNS_DIFF_PAIR() : PNS_ITEM( DIFF_PAIR_T ), m_hasVias( false )
+    DIFF_PAIR() : ITEM( DIFF_PAIR_T ), m_hasVias( false )
     {
         // Initialize some members, to avoid uninitialized variables.
         m_net_p = 0;
@@ -298,8 +298,8 @@ public:
         m_chamferLimit = 0;
     }
 
-    PNS_DIFF_PAIR( int aGap ) :
-        PNS_ITEM( DIFF_PAIR_T ),
+    DIFF_PAIR( int aGap ) :
+        ITEM( DIFF_PAIR_T ),
         m_hasVias( false )
     {
         m_gapConstraint = aGap;
@@ -314,8 +314,8 @@ public:
         m_chamferLimit = 0;
     }
 
-    PNS_DIFF_PAIR( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ):
-        PNS_ITEM( DIFF_PAIR_T ),
+    DIFF_PAIR( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ):
+        ITEM( DIFF_PAIR_T ),
         m_n( aN ),
         m_p( aP ),
         m_hasVias( false )
@@ -332,8 +332,8 @@ public:
         m_chamferLimit = 0;
     }
 
-    PNS_DIFF_PAIR( const PNS_LINE &aLineP, const PNS_LINE &aLineN, int aGap = 0 ):
-        PNS_ITEM( DIFF_PAIR_T ),
+    DIFF_PAIR( const LINE &aLineP, const LINE &aLineN, int aGap = 0 ):
+        ITEM( DIFF_PAIR_T ),
         m_line_p( aLineP ),
         m_line_n( aLineN ),
         m_hasVias( false )
@@ -352,14 +352,14 @@ public:
         m_chamferLimit  = 0;
     }
 
-    static inline bool ClassOf( const PNS_ITEM* aItem )
+    static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && DIFF_PAIR_T == aItem->Kind();
     }
 
-    PNS_DIFF_PAIR* Clone() const { assert( false ); return NULL; }
+    DIFF_PAIR* Clone() const { assert( false ); return NULL; }
 
-    static PNS_DIFF_PAIR* AssembleDp( PNS_LINE *aLine );
+    static DIFF_PAIR* AssembleDp( LINE *aLine );
 
     void SetShape( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, bool aSwapLanes = false )
     {
@@ -375,7 +375,7 @@ public:
         }
     }
 
-    void SetShape( const PNS_DIFF_PAIR& aPair )
+    void SetShape( const DIFF_PAIR& aPair )
     {
         m_p = aPair.m_p;
         m_n = aPair.m_n;
@@ -405,7 +405,7 @@ public:
         return m_gap;
     }
 
-    void AppendVias( const PNS_VIA &aViaP, const PNS_VIA& aViaN )
+    void AppendVias( const VIA &aViaP, const VIA& aViaN )
     {
         m_hasVias = true;
         m_via_p = aViaP;
@@ -432,7 +432,7 @@ public:
         return m_net_n;
     }
 
-    PNS_LINE& PLine()
+    LINE& PLine()
     {
         if( !m_line_p.IsLinked() )
             updateLine( m_line_p, m_p, m_net_p, m_via_p );
@@ -440,7 +440,7 @@ public:
         return m_line_p;
     }
 
-    PNS_LINE& NLine()
+    LINE& NLine()
     {
         if( !m_line_n.IsLinked() )
             updateLine( m_line_n, m_n, m_net_n, m_via_n );
@@ -448,7 +448,7 @@ public:
         return m_line_n;
     }
 
-    PNS_DP_PRIMITIVE_PAIR EndingPrimitives();
+    DP_PRIMITIVE_PAIR EndingPrimitives();
 
     double CoupledLength() const;
     double TotalLength() const;
@@ -463,7 +463,7 @@ public:
         m_p.Clear();
     }
 
-    void Append( const PNS_DIFF_PAIR& aOther )
+    void Append( const DIFF_PAIR& aOther )
     {
         m_n.Append( aOther.m_n );
         m_p.Append( aOther.m_p );
@@ -477,8 +477,8 @@ public:
     const SHAPE_LINE_CHAIN& CP() const { return m_p; }
     const SHAPE_LINE_CHAIN& CN() const { return m_n; }
 
-    bool BuildInitial( const PNS_DP_GATEWAY& aEntry, const PNS_DP_GATEWAY& aTarget, bool aPrefDiagonal );
-    bool CheckConnectionAngle( const PNS_DIFF_PAIR &aOther, int allowedAngles ) const;
+    bool BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY& aTarget, bool aPrefDiagonal );
+    bool CheckConnectionAngle( const DIFF_PAIR &aOther, int allowedAngles ) const;
     int CoupledLength( const SEG& aP, const SEG& aN ) const;
 
     int64_t CoupledLength( const SHAPE_LINE_CHAIN& aP, const SHAPE_LINE_CHAIN& aN ) const;
@@ -489,7 +489,7 @@ public:
     }
 
 private:
-    void updateLine( PNS_LINE &aLine, const SHAPE_LINE_CHAIN& aShape, int aNet, PNS_VIA& aVia )
+    void updateLine( LINE &aLine, const SHAPE_LINE_CHAIN& aShape, int aNet, VIA& aVia )
     {
         aLine.SetShape( aShape );
         aLine.SetWidth( m_width );
@@ -501,8 +501,8 @@ private:
     }
 
     SHAPE_LINE_CHAIN m_n, m_p;
-    PNS_LINE m_line_p, m_line_n;
-    PNS_VIA m_via_p, m_via_n;
+    LINE m_line_p, m_line_n;
+    VIA m_via_p, m_via_n;
 
     bool m_hasVias;
     int m_net_p, m_net_n;

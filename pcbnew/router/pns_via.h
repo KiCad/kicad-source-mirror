@@ -31,22 +31,22 @@
 
 namespace PNS {
 
-class PNS_NODE;
+class NODE;
 
-class PNS_VIA : public PNS_ITEM
+class VIA : public ITEM
 {
 public:
-    PNS_VIA() :
-        PNS_ITEM( VIA_T )
+    VIA() :
+        ITEM( VIA_T )
     {
         m_diameter = 2;     // Dummy value
         m_drill = 0;
         m_viaType = VIA_THROUGH;
     }
 
-    PNS_VIA( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers,
+    VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers,
              int aDiameter, int aDrill, int aNet = -1, VIATYPE_T aViaType = VIA_THROUGH ) :
-        PNS_ITEM( VIA_T )
+        ITEM( VIA_T )
     {
         SetNet( aNet );
         SetLayers( aLayers );
@@ -59,14 +59,14 @@ public:
         //If we're a through-board via, use all layers regardless of the set passed
         if( aViaType == VIA_THROUGH )
         {
-            PNS_LAYERSET allLayers( 0, MAX_CU_LAYERS - 1 );
+            LAYER_RANGE allLayers( 0, MAX_CU_LAYERS - 1 );
             SetLayers( allLayers );
         }
     }
 
 
-    PNS_VIA( const PNS_VIA& aB ) :
-        PNS_ITEM( VIA_T )
+    VIA( const VIA& aB ) :
+        ITEM( VIA_T )
     {
         SetNet( aB.Net() );
         SetLayers( aB.Layers() );
@@ -79,7 +79,7 @@ public:
         m_viaType = aB.m_viaType;
     }
 
-    static inline bool ClassOf( const PNS_ITEM* aItem )
+    static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && VIA_T == aItem->Kind();
     }
@@ -127,7 +127,7 @@ public:
         m_drill = aDrill;
     }
 
-    bool PushoutForce( PNS_NODE* aNode,
+    bool PushoutForce( NODE* aNode,
             const VECTOR2I& aDirection,
             VECTOR2I& aForce,
             bool aSolidsOnly = true,
@@ -138,7 +138,7 @@ public:
         return &m_shape;
     }
 
-    PNS_VIA* Clone() const;
+    VIA* Clone() const;
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const;
 
@@ -152,7 +152,7 @@ public:
         return 1;
     }
 
-    OPT_BOX2I ChangedArea( const PNS_VIA* aOther ) const;
+    OPT_BOX2I ChangedArea( const VIA* aOther ) const;
 
 private:
     int m_diameter;

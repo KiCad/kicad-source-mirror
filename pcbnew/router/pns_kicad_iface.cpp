@@ -60,20 +60,18 @@
 #include "pns_debug_decorator.h"
 #include "router_preview_item.h"
 
-using namespace PNS;
-
-class PNS_PCBNEW_RULE_RESOLVER : public PNS_RULE_RESOLVER
+class PNS_PCBNEW_RULE_RESOLVER : public PNS::RULE_RESOLVER
 {
 public:
-    PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS_ROUTER* aRouter );
+    PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* aRouter );
     virtual ~PNS_PCBNEW_RULE_RESOLVER();
 
-    virtual int Clearance( const PNS_ITEM* aA, const PNS_ITEM* aB );
+    virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB );
     virtual void OverrideClearance( bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0 );
     virtual void UseDpGap( bool aUseDpGap ) { m_useDpGap = aUseDpGap; }
     virtual int DpCoupledNet( int aNet );
     virtual int DpNetPolarity( int aNet );
-    virtual bool DpNetPair( PNS_ITEM* aItem, int& aNetP, int& aNetN );
+    virtual bool DpNetPair( PNS::ITEM* aItem, int& aNetP, int& aNetN );
 
 private:
     struct CLEARANCE_ENT
@@ -82,11 +80,11 @@ private:
         int clearance;
     };
 
-    int localPadClearance( const PNS_ITEM* aItem ) const;
+    int localPadClearance( const PNS::ITEM* aItem ) const;
     int matchDpSuffix( wxString aNetName, wxString& aComplementNet, wxString& aBaseDpName );
 
-    PNS_ROUTER* m_router;
-    BOARD* m_board;
+    PNS::ROUTER* m_router;
+    BOARD*       m_board;
 
     std::vector<CLEARANCE_ENT> m_clearanceCache;
     int m_defaultClearance;
@@ -97,13 +95,13 @@ private:
 };
 
 
-PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS_ROUTER* aRouter ) :
+PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* aRouter ) :
     m_router( aRouter ),
     m_board( aBoard )
 {
-    PNS_NODE* world = m_router->GetWorld();
+    PNS::NODE* world = m_router->GetWorld();
 
-    PNS_TOPOLOGY topo( world );
+    PNS::TOPOLOGY topo( world );
     m_clearanceCache.resize( m_board->GetNetCount() );
 
     for( unsigned int i = 0; i < m_board->GetNetCount(); i++ )
@@ -139,7 +137,7 @@ PNS_PCBNEW_RULE_RESOLVER::~PNS_PCBNEW_RULE_RESOLVER()
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::localPadClearance( const PNS_ITEM* aItem ) const
+int PNS_PCBNEW_RULE_RESOLVER::localPadClearance( const PNS::ITEM* aItem ) const
 {
     if( !aItem->Parent() || aItem->Parent()->Type() != PCB_PAD_T )
         return 0;
@@ -149,14 +147,15 @@ int PNS_PCBNEW_RULE_RESOLVER::localPadClearance( const PNS_ITEM* aItem ) const
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS_ITEM* aA, const PNS_ITEM* aB )
+int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB )
 {
     int net_a = aA->Net();
     int cl_a = ( net_a >= 0 ? m_clearanceCache[net_a].clearance : m_defaultClearance );
     int net_b = aB->Net();
     int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b].clearance : m_defaultClearance );
 
-    bool linesOnly = aA->OfKind( PNS_ITEM::SEGMENT_T | PNS_ITEM::LINE_T ) && aB->OfKind( PNS_ITEM::SEGMENT_T | PNS_ITEM::LINE_T );
+    bool linesOnly = aA->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::LINE_T ) 
+                  && aB->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::LINE_T );
 
     if( linesOnly && net_a >= 0 && net_b >= 0 && m_clearanceCache[net_a].coupledNet == net_b )
     {
@@ -246,7 +245,7 @@ int PNS_PCBNEW_RULE_RESOLVER::DpNetPolarity( int aNet )
 }
 
 
-bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( PNS_ITEM* aItem, int& aNetP, int& aNetN )
+bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( PNS::ITEM* aItem, int& aNetP, int& aNetN )
 {
     if( !aItem || !aItem->Parent() || !aItem->Parent()->GetNet() )
         return false;
@@ -285,10 +284,10 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( PNS_ITEM* aItem, int& aNetP, int& aNet
 }
 
 
-class PNS_PCBNEW_DEBUG_DECORATOR: public PNS_DEBUG_DECORATOR
+class PNS_PCBNEW_DEBUG_DECORATOR: public PNS::DEBUG_DECORATOR
 {
 public:
-    PNS_PCBNEW_DEBUG_DECORATOR( KIGFX::VIEW* aView = NULL ): PNS_DEBUG_DECORATOR(),
+    PNS_PCBNEW_DEBUG_DECORATOR( KIGFX::VIEW* aView = NULL ): PNS::DEBUG_DECORATOR(),
         m_view( NULL ), m_items( NULL )
     {
         SetView( aView );
@@ -398,7 +397,7 @@ private:
 };
 
 
-PNS_DEBUG_DECORATOR* PNS_KICAD_IFACE::GetDebugDecorator()
+PNS::DEBUG_DECORATOR* PNS_KICAD_IFACE::GetDebugDecorator()
 {
     return m_debugDecorator;
 }
@@ -430,9 +429,9 @@ PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 }
 
 
-PNS_ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
+PNS::ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 {
-    PNS_LAYERSET layers( 0, MAX_CU_LAYERS - 1 );
+    LAYER_RANGE layers( 0, MAX_CU_LAYERS - 1 );
 
     // ignore non-copper pads
     if( ( aPad->GetLayerSet() & LSET::AllCuMask()).none() )
@@ -457,7 +456,7 @@ PNS_ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                     is_copper = true;
 
                     if( aPad->GetAttribute() != PAD_ATTRIB_HOLE_NOT_PLATED )
-                        layers = PNS_LAYERSET( i );
+                        layers = LAYER_RANGE( i );
 
                     break;
                 }
@@ -473,7 +472,7 @@ PNS_ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
         return NULL;
     }
 
-    PNS_SOLID* solid = new PNS_SOLID;
+    PNS::SOLID* solid = new PNS::SOLID;
 
     solid->SetLayers( layers );
     solid->SetNet( aPad->GetNetCode() );
@@ -672,25 +671,25 @@ PNS_ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 }
 
 
-PNS_ITEM* PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
+PNS::ITEM* PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
 {
-    PNS_SEGMENT* s =
-        new PNS_SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() );
+    PNS::SEGMENT* s =
+        new PNS::SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() );
 
     s->SetWidth( aTrack->GetWidth() );
-    s->SetLayers( PNS_LAYERSET( aTrack->GetLayer() ) );
+    s->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );
     s->SetParent( aTrack );
     return s;
 }
 
 
-PNS_ITEM* PNS_KICAD_IFACE::syncVia( VIA* aVia )
+PNS::ITEM* PNS_KICAD_IFACE::syncVia( VIA* aVia )
 {
     LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
-    PNS_VIA* v = new PNS_VIA(
+    PNS::VIA* v = new PNS::VIA(
             aVia->GetPosition(),
-            PNS_LAYERSET( top, bottom ),
+            LAYER_RANGE( top, bottom ),
             aVia->GetWidth(),
             aVia->GetDrillValue(),
             aVia->GetNetCode(),
@@ -709,7 +708,7 @@ void PNS_KICAD_IFACE::SetBoard( BOARD* aBoard )
 }
 
 
-void PNS_KICAD_IFACE::SyncWorld( PNS_NODE *aWorld )
+void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
 {
     if( !m_board )
     {
@@ -721,7 +720,7 @@ void PNS_KICAD_IFACE::SyncWorld( PNS_NODE *aWorld )
     {
         for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
         {
-            PNS_ITEM* solid = syncPad( pad );
+            PNS::ITEM* solid = syncPad( pad );
 
             if( solid )
                 aWorld->Add( solid );
@@ -731,7 +730,7 @@ void PNS_KICAD_IFACE::SyncWorld( PNS_NODE *aWorld )
     for( TRACK* t = m_board->m_Track; t; t = t->Next() )
     {
         KICAD_T type = t->Type();
-        PNS_ITEM* item = NULL;
+        PNS::ITEM* item = NULL;
 
         if( type == PCB_TRACE_T )
             item = syncTrack( t );
@@ -739,7 +738,7 @@ void PNS_KICAD_IFACE::SyncWorld( PNS_NODE *aWorld )
             item = syncVia( static_cast<VIA*>( t ) );
 
         if( t->IsLocked() )
-            item->Mark( MK_LOCKED );
+            item->Mark( PNS::MK_LOCKED );
 
         if( item )
             aWorld->Add( item );
@@ -773,7 +772,7 @@ void PNS_KICAD_IFACE::EraseView()
 }
 
 
-void PNS_KICAD_IFACE::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClearance )
+void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClearance )
 {
     wxLogTrace( "PNS", "DisplayItem %p", aItem );
 
@@ -792,7 +791,7 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS_ITEM* aItem, int aColor, int aClear
 }
 
 
-void PNS_KICAD_IFACE::HideItem( PNS_ITEM* aItem )
+void PNS_KICAD_IFACE::HideItem( PNS::ITEM* aItem )
 {
     BOARD_CONNECTED_ITEM* parent = aItem->Parent();
 
@@ -807,7 +806,7 @@ void PNS_KICAD_IFACE::HideItem( PNS_ITEM* aItem )
 }
 
 
-void PNS_KICAD_IFACE::RemoveItem( PNS_ITEM* aItem )
+void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
 {
     BOARD_CONNECTED_ITEM* parent = aItem->Parent();
 
@@ -820,15 +819,15 @@ void PNS_KICAD_IFACE::RemoveItem( PNS_ITEM* aItem )
 }
 
 
-void PNS_KICAD_IFACE::AddItem( PNS_ITEM* aItem )
+void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 {
     BOARD_CONNECTED_ITEM* newBI = NULL;
 
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::SEGMENT_T:
+    case PNS::ITEM::SEGMENT_T:
     {
-        PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( aItem );
+        PNS::SEGMENT* seg = static_cast<PNS::SEGMENT*>( aItem );
         TRACK* track = new TRACK( m_board );
         const SEG& s = seg->Seg();
         track->SetStart( wxPoint( s.A.x, s.A.y ) );
@@ -840,10 +839,10 @@ void PNS_KICAD_IFACE::AddItem( PNS_ITEM* aItem )
         break;
     }
 
-    case PNS_ITEM::VIA_T:
+    case PNS::ITEM::VIA_T:
     {
         VIA* via_board = new VIA( m_board );
-        PNS_VIA* via = static_cast<PNS_VIA*>( aItem );
+        PNS::VIA* via = static_cast<PNS::VIA*>( aItem );
         via_board->SetPosition( wxPoint( via->Pos().x, via->Pos().y ) );
         via_board->SetWidth( via->Diameter() );
         via_board->SetDrill( via->Drill() );
@@ -906,12 +905,12 @@ void PNS_KICAD_IFACE::UpdateNet( int aNetCode )
     wxLogTrace( "PNS", "Update-net %d", aNetCode );
 }
 
-PNS_RULE_RESOLVER* PNS_KICAD_IFACE::GetRuleResolver()
+PNS::RULE_RESOLVER* PNS_KICAD_IFACE::GetRuleResolver()
 {
     return m_ruleResolver;
 }
 
-void PNS_KICAD_IFACE::SetRouter( PNS_ROUTER* aRouter )
+void PNS_KICAD_IFACE::SetRouter( PNS::ROUTER* aRouter )
 {
     m_router = aRouter;
 }

@@ -34,13 +34,13 @@ class SHAPE;
 
 namespace PNS {
 
-class PNS_ITEM;
+class ITEM;
 
-class PNS_LOGGER
+class LOGGER
 {
 public:
-    PNS_LOGGER();
-    ~PNS_LOGGER();
+    LOGGER();
+    ~LOGGER();
 
     void Save( const std::string& aFilename );
     void Clear();
@@ -48,7 +48,7 @@ public:
     void NewGroup( const std::string& aName, int aIter = 0 );
     void EndGroup();
 
-    void Log( const PNS_ITEM* aItem, int aKind = 0, const std::string aName = std::string() );
+    void Log( const ITEM* aItem, int aKind = 0, const std::string aName = std::string() );
     void Log( const SHAPE_LINE_CHAIN *aL, int aKind = 0, const std::string aName = std::string() );
     void Log( const VECTOR2I& aStart, const VECTOR2I& aEnd, int aKind = 0,
               const std::string aName = std::string() );

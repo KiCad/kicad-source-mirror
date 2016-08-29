@@ -25,7 +25,7 @@
 
 #include "pns_tool_base.h"
 
-class APIEXPORT ROUTER_TOOL : public PNS::PNS_TOOL_BASE
+class APIEXPORT ROUTER_TOOL : public PNS::TOOL_BASE
 {
 public:
     ROUTER_TOOL();
@@ -43,7 +43,7 @@ public:
 
 private:
 
-    int mainLoop( PNS::PNS_ROUTER_MODE aMode );
+    int mainLoop( PNS::ROUTER_MODE aMode );
 
     int getDefaultWidth( int aNetCode );
 
@@ -53,7 +53,7 @@ private:
     void getNetclassDimensions( int aNetCode, int& aWidth, int& aViaDiameter, int& aViaDrill );
     void handleCommonEvents( const TOOL_EVENT& evt );
 
-    int getStartLayer( const PNS::PNS_ITEM* aItem );
+    int getStartLayer( const PNS::ITEM* aItem );
     void switchLayerOnViaPlacement();
     bool onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType );
 

@@ -32,12 +32,12 @@ class BOARD_DESIGN_SETTINGS;
 
 namespace PNS {
 
-class PNS_ITEM;
+class ITEM;
 
-class PNS_SIZES_SETTINGS {
+class SIZES_SETTINGS {
 
 public:
-    PNS_SIZES_SETTINGS() :
+    SIZES_SETTINGS() :
         m_trackWidth( 155000 ),
         m_diffPairWidth( 125000 ),
         m_diffPairGap( 180000 ),
@@ -48,9 +48,9 @@ public:
         m_viaType( VIA_THROUGH )
     {};
 
-    ~PNS_SIZES_SETTINGS() {};
+    ~SIZES_SETTINGS() {};
 
-    void Init( BOARD* aBoard, PNS_ITEM* aStartItem = NULL, int aNet = -1 );
+    void Init( BOARD* aBoard, ITEM* aStartItem = NULL, int aNet = -1 );
     void ImportCurrent( BOARD_DESIGN_SETTINGS& aSettings );
 
     void ClearLayerPairs();
@@ -98,7 +98,7 @@ public:
 
 private:
 
-    int inheritTrackWidth( PNS_ITEM* aItem );
+    int inheritTrackWidth( ITEM* aItem );
 
     int m_trackWidth;
     int m_diffPairWidth;

@@ -30,19 +30,19 @@
 
 namespace PNS {
 
-class PNS_ROUTING_SETTINGS;
+class ROUTING_SETTINGS;
 
 }
 
 class DIALOG_PNS_SETTINGS : public DIALOG_PNS_SETTINGS_BASE
 {
     public:
-        DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::PNS_ROUTING_SETTINGS& aSettings );
+        DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTINGS& aSettings );
 
     private:
         virtual void OnOkClick( wxCommandEvent& aEvent );
 
-        PNS::PNS_ROUTING_SETTINGS& m_settings;
+        PNS::ROUTING_SETTINGS& m_settings;
 };
 
 #endif // __dialog_pns_settings__

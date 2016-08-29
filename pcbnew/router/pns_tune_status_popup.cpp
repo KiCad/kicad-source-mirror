@@ -37,9 +37,9 @@ PNS_TUNE_STATUS_POPUP::~PNS_TUNE_STATUS_POPUP()
 }
 
 
-void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS::PNS_ROUTER* aRouter )
+void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS::ROUTER* aRouter )
 {
-    PNS::PNS_MEANDER_PLACER_BASE* placer = dynamic_cast<PNS::PNS_MEANDER_PLACER_BASE*>( aRouter->Placer() );
+    PNS::MEANDER_PLACER_BASE* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aRouter->Placer() );
 
     if( !placer )
         return;
@@ -50,13 +50,13 @@ void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS::PNS_ROUTER* aRouter )
 
     switch( placer->TuningStatus() )
     {
-    case PNS::PNS_MEANDER_PLACER::TUNED:
+    case PNS::MEANDER_PLACER::TUNED:
         color = wxColour( 0, 255, 0 );
         break;
-    case PNS::PNS_MEANDER_PLACER::TOO_SHORT:
+    case PNS::MEANDER_PLACER::TOO_SHORT:
         color = wxColour( 255, 128, 128 );
         break;
-    case PNS::PNS_MEANDER_PLACER::TOO_LONG:
+    case PNS::MEANDER_PLACER::TOO_LONG:
         color = wxColour( 128, 128, 255 );
         break;
     }

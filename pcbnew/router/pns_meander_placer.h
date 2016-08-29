@@ -36,83 +36,82 @@
 
 namespace PNS {
 
-class PNS_ROUTER;
-class PNS_SHOVE;
-class PNS_OPTIMIZER;
-class PNS_ROUTER_BASE;
+class ROUTER;
+class SHOVE;
+class OPTIMIZER;
 
 /**
- * Class PNS_MEANDER_PLACER
+ * Class MEANDER_PLACER
  *
  * Single track length matching/meandering tool.
  */
-class PNS_MEANDER_PLACER : public PNS_MEANDER_PLACER_BASE
+class MEANDER_PLACER : public MEANDER_PLACER_BASE
 {
 public:
 
-    PNS_MEANDER_PLACER( PNS_ROUTER* aRouter );
-    virtual ~PNS_MEANDER_PLACER();
+    MEANDER_PLACER( ROUTER* aRouter );
+    virtual ~MEANDER_PLACER();
 
-    /// @copydoc PNS_PLACEMENT_ALGO::Start()
-    virtual bool Start( const VECTOR2I& aP, PNS_ITEM* aStartItem );
+    /// @copydoc PLACEMENT_ALGO::Start()
+    virtual bool Start( const VECTOR2I& aP, ITEM* aStartItem );
 
-    /// @copydoc PNS_PLACEMENT_ALGO::Move()
-    virtual bool Move( const VECTOR2I& aP, PNS_ITEM* aEndItem );
+    /// @copydoc PLACEMENT_ALGO::Move()
+    virtual bool Move( const VECTOR2I& aP, ITEM* aEndItem );
 
-    /// @copydoc PNS_PLACEMENT_ALGO::FixRoute()
-    virtual bool FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem );
+    /// @copydoc PLACEMENT_ALGO::FixRoute()
+    virtual bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem );
 
-    /// @copydoc PNS_PLACEMENT_ALGO::CurrentNode()
-    PNS_NODE* CurrentNode( bool aLoopsRemoved = false ) const;
+    /// @copydoc PLACEMENT_ALGO::CurrentNode()
+    NODE* CurrentNode( bool aLoopsRemoved = false ) const;
 
-    /// @copydoc PNS_PLACEMENT_ALGO::Traces()
-    const PNS_ITEMSET Traces();
+    /// @copydoc PLACEMENT_ALGO::Traces()
+    const ITEM_SET Traces();
 
-    /// @copydoc PNS_PLACEMENT_ALGO::CurrentEnd()
+    /// @copydoc PLACEMENT_ALGO::CurrentEnd()
     const VECTOR2I& CurrentEnd() const;
 
-    /// @copydoc PNS_PLACEMENT_ALGO::CurrentNets()
+    /// @copydoc PLACEMENT_ALGO::CurrentNets()
     const std::vector<int> CurrentNets() const
     {
         return std::vector<int> (1, m_originLine.Net() );
     }
 
-    /// @copydoc PNS_PLACEMENT_ALGO::CurrentLayer()
+    /// @copydoc PLACEMENT_ALGO::CurrentLayer()
     int CurrentLayer() const;
 
-    /// @copydoc PNS_MEANDER_PLACER_BASE::TuningInfo()
+    /// @copydoc MEANDER_PLACER_BASE::TuningInfo()
     virtual const wxString TuningInfo() const;
 
-    /// @copydoc PNS_MEANDER_PLACER_BASE::TuningStatus()
+    /// @copydoc MEANDER_PLACER_BASE::TuningStatus()
     virtual TUNING_STATUS TuningStatus() const;
 
-    /// @copydoc PNS_MEANDER_PLACER_BASE::CheckFit()
-    bool CheckFit ( PNS_MEANDER_SHAPE* aShape );
+    /// @copydoc MEANDER_PLACER_BASE::CheckFit()
+    bool CheckFit ( MEANDER_SHAPE* aShape );
 
 protected:
 
-    bool doMove( const VECTOR2I& aP, PNS_ITEM* aEndItem, int aTargetLength );
+    bool doMove( const VECTOR2I& aP, ITEM* aEndItem, int aTargetLength );
 
-    void setWorld( PNS_NODE* aWorld );
+    void setWorld( NODE* aWorld );
 
     virtual int origPathLength() const;
 
     ///> pointer to world to search colliding items
-    PNS_NODE* m_world;
+    NODE* m_world;
 
     ///> current routing start point (end of tail, beginning of head)
     VECTOR2I m_currentStart;
 
     ///> Current world state
-    PNS_NODE* m_currentNode;
+    NODE* m_currentNode;
 
-    PNS_LINE m_originLine;
-    PNS_LINE m_currentTrace;
-    PNS_ITEMSET m_tunedPath;
+    LINE     m_originLine;
+    LINE     m_currentTrace;
+    ITEM_SET m_tunedPath;
 
     SHAPE_LINE_CHAIN m_finalShape;
-    PNS_MEANDERED_LINE m_result;
-    PNS_SEGMENT* m_initialSegment;
+    MEANDERED_LINE   m_result;
+    SEGMENT*         m_initialSegment;
 
     int m_lastLength;
     TUNING_STATUS m_lastStatus;

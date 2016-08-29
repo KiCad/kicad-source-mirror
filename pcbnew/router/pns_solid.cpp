@@ -32,7 +32,7 @@
 
 namespace PNS {
 
-const SHAPE_LINE_CHAIN PNS_SOLID::Hull( int aClearance, int aWalkaroundThickness ) const
+const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness ) const
 {
     int cl = aClearance + ( aWalkaroundThickness + 1 )/ 2;
 
@@ -73,9 +73,9 @@ const SHAPE_LINE_CHAIN PNS_SOLID::Hull( int aClearance, int aWalkaroundThickness
 }
 
 
-PNS_ITEM* PNS_SOLID::Clone() const
+ITEM* SOLID::Clone() const
 {
-    PNS_ITEM* solid = new PNS_SOLID( *this );
+    ITEM* solid = new SOLID( *this );
     return solid;
 }
 

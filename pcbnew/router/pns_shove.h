@@ -33,17 +33,17 @@
 
 namespace PNS {
 
-class PNS_LINE;
-class PNS_NODE;
-class PNS_ROUTER;
+class LINE;
+class NODE;
+class ROUTER;
 
 /**
- * Class PNS_SHOVE
+ * Class SHOVE
  *
  * The actual Push and Shove algorithm.
  */
 
-class PNS_SHOVE : public PNS_ALGO_BASE
+class SHOVE : public ALGO_BASE
 {
 public:
 
@@ -56,20 +56,20 @@ public:
         SH_TRY_WALK
     };
 
-    PNS_SHOVE( PNS_NODE* aWorld, PNS_ROUTER* aRouter );
-    ~PNS_SHOVE();
+    SHOVE( NODE* aWorld, ROUTER* aRouter );
+    ~SHOVE();
 
-    virtual PNS_LOGGER* Logger()
+    virtual LOGGER* Logger()
     {
         return &m_logger;
     }
 
-    SHOVE_STATUS ShoveLines( const PNS_LINE& aCurrentHead );
-    SHOVE_STATUS ShoveMultiLines( const PNS_ITEMSET& aHeadSet );
+    SHOVE_STATUS ShoveLines( const LINE& aCurrentHead );
+    SHOVE_STATUS ShoveMultiLines( const ITEM_SET& aHeadSet );
 
-    SHOVE_STATUS ShoveDraggingVia( PNS_VIA* aVia, const VECTOR2I& aWhere, PNS_VIA** aNewVia );
-    SHOVE_STATUS ProcessSingleLine( PNS_LINE& aCurrent, PNS_LINE& aObstacle,
-                                    PNS_LINE& aShoved );
+    SHOVE_STATUS ShoveDraggingVia( VIA* aVia, const VECTOR2I& aWhere, VIA** aNewVia );
+    SHOVE_STATUS ProcessSingleLine( LINE& aCurrent, LINE& aObstacle,
+                                    LINE& aShoved );
 
     void ForceClearance ( bool aEnabled, int aClearance )
     {
@@ -79,16 +79,16 @@ public:
             m_forceClearance = -1;
     }
 
-    PNS_NODE* CurrentNode();
+    NODE* CurrentNode();
 
-    const PNS_LINE NewHead() const;
+    const LINE NewHead() const;
 
-    void SetInitialLine( PNS_LINE& aInitial );
+    void SetInitialLine( LINE& aInitial );
 
 private:
     typedef std::vector<SHAPE_LINE_CHAIN> HULL_SET;
-    typedef boost::optional<PNS_LINE> OPT_LINE;
-    typedef std::pair<PNS_LINE, PNS_LINE> LINE_PAIR;
+    typedef boost::optional<LINE> OPT_LINE;
+    typedef std::pair<LINE, LINE> LINE_PAIR;
     typedef std::vector<LINE_PAIR> LINE_PAIR_VEC;
 
     struct SPRINGBACK_TAG
@@ -96,67 +96,67 @@ private:
         int64_t m_length;
         int m_segments;
         VECTOR2I m_p;
-        PNS_NODE* m_node;
-        PNS_ITEMSET m_headItems;
-        PNS_COST_ESTIMATOR m_cost;
+        NODE* m_node;
+        ITEM_SET m_headItems;
+        COST_ESTIMATOR m_cost;
         OPT_BOX2I m_affectedArea;
     };
 
-    SHOVE_STATUS processHullSet( PNS_LINE& aCurrent, PNS_LINE& aObstacle,
-                                 PNS_LINE& aShoved, const HULL_SET& hulls );
+    SHOVE_STATUS processHullSet( LINE& aCurrent, LINE& aObstacle,
+                                 LINE& aShoved, const HULL_SET& hulls );
 
-    bool reduceSpringback( const PNS_ITEMSET& aHeadItems );
-    bool pushSpringback( PNS_NODE* aNode, const PNS_ITEMSET& aHeadItems,
-                                const PNS_COST_ESTIMATOR& aCost, const OPT_BOX2I& aAffectedArea );
+    bool reduceSpringback( const ITEM_SET& aHeadItems );
+    bool pushSpringback( NODE* aNode, const ITEM_SET& aHeadItems,
+                                const COST_ESTIMATOR& aCost, const OPT_BOX2I& aAffectedArea );
 
-    SHOVE_STATUS walkaroundLoneVia( PNS_LINE& aCurrent, PNS_LINE& aObstacle, PNS_LINE& aShoved );
-    bool checkBumpDirection( const PNS_LINE& aCurrent, const PNS_LINE& aShoved ) const;
+    SHOVE_STATUS walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );
+    bool checkBumpDirection( const LINE& aCurrent, const LINE& aShoved ) const;
 
-    SHOVE_STATUS onCollidingLine( PNS_LINE& aCurrent, PNS_LINE& aObstacle );
-    SHOVE_STATUS onCollidingSegment( PNS_LINE& aCurrent, PNS_SEGMENT* aObstacleSeg );
-    SHOVE_STATUS onCollidingSolid( PNS_LINE& aCurrent, PNS_ITEM* aObstacle );
-    SHOVE_STATUS onCollidingVia( PNS_ITEM* aCurrent, PNS_VIA* aObstacleVia );
-    SHOVE_STATUS onReverseCollidingVia( PNS_LINE& aCurrent, PNS_VIA* aObstacleVia );
-    SHOVE_STATUS pushVia( PNS_VIA* aVia, const VECTOR2I& aForce, int aCurrentRank, bool aDryRun = false );
+    SHOVE_STATUS onCollidingLine( LINE& aCurrent, LINE& aObstacle );
+    SHOVE_STATUS onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacleSeg );
+    SHOVE_STATUS onCollidingSolid( LINE& aCurrent, ITEM* aObstacle );
+    SHOVE_STATUS onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia );
+    SHOVE_STATUS onReverseCollidingVia( LINE& aCurrent, VIA* aObstacleVia );
+    SHOVE_STATUS pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurrentRank, bool aDryRun = false );
 
     OPT_BOX2I totalAffectedArea() const;
 
-    void unwindStack( PNS_SEGMENT* aSeg );
-    void unwindStack( PNS_ITEM* aItem );
+    void unwindStack( SEGMENT* aSeg );
+    void unwindStack( ITEM* aItem );
 
-    void runOptimizer( PNS_NODE* aNode );
+    void runOptimizer( NODE* aNode );
 
-    bool pushLine( const PNS_LINE& aL, bool aKeepCurrentOnTop = false );
+    bool pushLine( const LINE& aL, bool aKeepCurrentOnTop = false );
     void popLine();
 
-    PNS_LINE assembleLine( const PNS_SEGMENT* aSeg, int* aIndex = NULL );
+    LINE assembleLine( const SEGMENT* aSeg, int* aIndex = NULL );
 
-    void replaceItems( PNS_ITEM* aOld, PNS_ITEM* aNew );
+    void replaceItems( ITEM* aOld, ITEM* aNew );
 
     OPT_BOX2I                   m_affectedAreaSum;
 
     SHOVE_STATUS shoveIteration( int aIter );
     SHOVE_STATUS shoveMainLoop();
 
-    int getClearance( const PNS_ITEM* aA, const PNS_ITEM* aB ) const;
+    int getClearance( const ITEM* aA, const ITEM* aB ) const;
 
     std::vector<SPRINGBACK_TAG> m_nodeStack;
-    std::vector<PNS_LINE>       m_lineStack;
-    std::vector<PNS_LINE>       m_optimizerQueue;
+    std::vector<LINE>           m_lineStack;
+    std::vector<LINE>           m_optimizerQueue;
 
-    PNS_NODE*                   m_root;
-    PNS_NODE*                   m_currentNode;
+    NODE*                       m_root;
+    NODE*                       m_currentNode;
 
     OPT_LINE                    m_newHead;
 
-    PNS_LOGGER                  m_logger;
-    PNS_VIA*                    m_draggedVia;
-    PNS_ITEMSET                 m_draggedViaHeadSet;
+    LOGGER                      m_logger;
+    VIA*                        m_draggedVia;
+    ITEM_SET                    m_draggedViaHeadSet;
 
     int                         m_iter;
     int m_forceClearance;
     bool m_multiLineMode;
-    void sanityCheck( PNS_LINE* aOld, PNS_LINE* aNew );
+    void sanityCheck( LINE* aOld, LINE* aNew );
 };
 
 }

@@ -28,17 +28,17 @@
 
 namespace PNS {
 
-bool PNS_VIA::PushoutForce( PNS_NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
+bool VIA::PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
                             bool aSolidsOnly, int aMaxIterations )
 {
     int iter = 0;
-    PNS_VIA mv( *this );
+    VIA mv( *this );
     VECTOR2I force, totalForce, force2;
 
     while( iter < aMaxIterations )
     {
-        PNS_NODE::OPT_OBSTACLE obs = aNode->CheckColliding( &mv,
-                aSolidsOnly ? PNS_ITEM::SOLID_T : PNS_ITEM::ANY_T );
+        NODE::OPT_OBSTACLE obs = aNode->CheckColliding( &mv,
+                aSolidsOnly ? ITEM::SOLID_T : ITEM::ANY_T );
 
         if( !obs )
             break;
@@ -71,7 +71,7 @@ bool PNS_VIA::PushoutForce( PNS_NODE* aNode, const VECTOR2I& aDirection, VECTOR2
 }
 
 
-const SHAPE_LINE_CHAIN PNS_VIA::Hull( int aClearance, int aWalkaroundThickness ) const
+const SHAPE_LINE_CHAIN VIA::Hull( int aClearance, int aWalkaroundThickness ) const
 {
     int cl = ( aClearance + aWalkaroundThickness / 2 );
 
@@ -81,9 +81,9 @@ const SHAPE_LINE_CHAIN PNS_VIA::Hull( int aClearance, int aWalkaroundThickness )
 }
 
 
-PNS_VIA* PNS_VIA::Clone() const
+VIA* VIA::Clone() const
 {
-    PNS_VIA* v = new PNS_VIA();
+    VIA* v = new VIA();
 
     v->SetNet( Net() );
     v->SetLayers( Layers() );
@@ -99,7 +99,7 @@ PNS_VIA* PNS_VIA::Clone() const
 }
 
 
-OPT_BOX2I PNS_VIA::ChangedArea( const PNS_VIA* aOther ) const
+OPT_BOX2I VIA::ChangedArea( const VIA* aOther ) const
 {
     if ( aOther->Pos() != Pos() )
     {

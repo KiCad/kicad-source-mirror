@@ -35,8 +35,8 @@ using boost::optional;
 
 namespace PNS {
 
-PNS_LINE::PNS_LINE( const PNS_LINE& aOther ) :
-        PNS_ITEM( aOther ),
+LINE::LINE( const LINE& aOther ) :
+        ITEM( aOther ),
         m_line( aOther.m_line ),
         m_width( aOther.m_width )
 {
@@ -52,13 +52,13 @@ PNS_LINE::PNS_LINE( const PNS_LINE& aOther ) :
 }
 
 
-PNS_LINE::~PNS_LINE()
+LINE::~LINE()
 {
     delete m_segmentRefs;
 }
 
 
-const PNS_LINE& PNS_LINE::operator=( const PNS_LINE& aOther )
+const LINE& LINE::operator=( const LINE& aOther )
 {
     m_line = aOther.m_line;
     m_width = aOther.m_width;
@@ -76,31 +76,31 @@ const PNS_LINE& PNS_LINE::operator=( const PNS_LINE& aOther )
 }
 
 
-PNS_LINE* PNS_LINE::Clone() const
+LINE* LINE::Clone() const
 {
-    PNS_LINE* l = new PNS_LINE( *this );
+    LINE* l = new LINE( *this );
 
     return l;
 }
 
 
-void PNS_LINE::Mark( int aMarker )
+void LINE::Mark( int aMarker )
 {
     m_marker = aMarker;
 
     if( m_segmentRefs )
     {
-        for( PNS_SEGMENT* s : *m_segmentRefs )
+        for( SEGMENT* s : *m_segmentRefs )
             s->Mark( aMarker );
     }
 }
 
 
-void PNS_LINE::Unmark()
+void LINE::Unmark()
 {
     if( m_segmentRefs )
     {
-        for( PNS_SEGMENT* s : *m_segmentRefs )
+        for( SEGMENT* s : *m_segmentRefs )
             s->Unmark();
     }
 
@@ -108,13 +108,13 @@ void PNS_LINE::Unmark()
 }
 
 
-int PNS_LINE::Marker() const
+int LINE::Marker() const
 {
     int marker = m_marker;
 
     if( m_segmentRefs )
     {
-        for( PNS_SEGMENT* s : *m_segmentRefs )
+        for( SEGMENT* s : *m_segmentRefs )
         {
             marker |= s->Marker();
         }
@@ -124,7 +124,7 @@ int PNS_LINE::Marker() const
 }
 
 
-void PNS_LINE::copyLinks( const PNS_LINE* aParent )
+void LINE::copyLinks( const LINE* aParent )
 {
     if( aParent->m_segmentRefs == NULL )
     {
@@ -137,9 +137,9 @@ void PNS_LINE::copyLinks( const PNS_LINE* aParent )
 }
 
 
-PNS_SEGMENT* PNS_SEGMENT::Clone() const
+SEGMENT* SEGMENT::Clone() const
 {
-    PNS_SEGMENT* s = new PNS_SEGMENT;
+    SEGMENT* s = new SEGMENT;
 
     s->m_seg = m_seg;
     s->m_net = m_net;
@@ -151,7 +151,7 @@ PNS_SEGMENT* PNS_SEGMENT::Clone() const
 }
 
 
-int PNS_LINE::CountCorners( int aAngles )
+int LINE::CountCorners( int aAngles )
 {
     int count = 0;
 
@@ -173,7 +173,7 @@ int PNS_LINE::CountCorners( int aAngles )
 }
 
 
-bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
+bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
                            SHAPE_LINE_CHAIN& aWalk, SHAPE_LINE_CHAIN& aPost, bool aCw ) const
 {
     const SHAPE_LINE_CHAIN& line( CLine() );
@@ -269,7 +269,7 @@ bool PNS_LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
 }
 
 
-void PNS_LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
+void LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
         SHAPE_LINE_CHAIN& aPath,
         bool aCw ) const
 {
@@ -282,13 +282,13 @@ void PNS_LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
 }
 
 
-const SHAPE_LINE_CHAIN PNS_SEGMENT::Hull( int aClearance, int aWalkaroundThickness ) const
+const SHAPE_LINE_CHAIN SEGMENT::Hull( int aClearance, int aWalkaroundThickness ) const
 {
    return SegmentHull( m_seg, aClearance, aWalkaroundThickness );
 }
 
 
-bool PNS_LINE::Is45Degree()
+bool LINE::Is45Degree()
 {
     for( int i = 0; i < m_line.SegmentCount(); i++ )
     {
@@ -314,15 +314,15 @@ bool PNS_LINE::Is45Degree()
 }
 
 
-const PNS_LINE PNS_LINE::ClipToNearestObstacle( PNS_NODE* aNode ) const
+const LINE LINE::ClipToNearestObstacle( NODE* aNode ) const
 {
     const int IterationLimit = 5;
     int i;
-    PNS_LINE l( *this );
+    LINE l( *this );
 
     for( i = 0; i < IterationLimit; i++ )
     {
-        PNS_NODE::OPT_OBSTACLE obs = aNode->NearestObstacle( &l );
+        NODE::OPT_OBSTACLE obs = aNode->NearestObstacle( &l );
 
         if( obs )
         {
@@ -340,7 +340,7 @@ const PNS_LINE PNS_LINE::ClipToNearestObstacle( PNS_NODE* aNode ) const
 }
 
 
-void PNS_LINE::ShowLinks()
+void LINE::ShowLinks()
 {
     if( !m_segmentRefs )
     {
@@ -423,7 +423,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
 }
 
 
-void PNS_LINE::DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
+void LINE::DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
 {
     SHAPE_LINE_CHAIN path;
 
@@ -447,7 +447,7 @@ void PNS_LINE::DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshol
 }
 
 
-VECTOR2I PNS_LINE::snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
+VECTOR2I LINE::snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
                                       int aIndex, int aThreshold ) const
 {
     int s_start = std::max( aIndex - 2, 0 );
@@ -489,7 +489,7 @@ VECTOR2I PNS_LINE::snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTO
     return best_snap;
 }
 
-VECTOR2I PNS_LINE::snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP,
+VECTOR2I LINE::snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I &aP,
                                             int aIndex, int aThreshold ) const
 {
     VECTOR2I snap_p[2];
@@ -535,7 +535,7 @@ VECTOR2I PNS_LINE::snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const
 }
 
 
-void PNS_LINE::DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
+void LINE::DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
 {
     SHAPE_LINE_CHAIN path( m_line );
     VECTOR2I target( aP );
@@ -702,13 +702,13 @@ void PNS_LINE::DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThresho
 }
 
 
-bool PNS_LINE::CompareGeometry( const PNS_LINE& aOther )
+bool LINE::CompareGeometry( const LINE& aOther )
 {
     return m_line.CompareGeometry( aOther.m_line );
 }
 
 
-void PNS_LINE::Reverse()
+void LINE::Reverse()
 {
     m_line = m_line.Reverse();
 
@@ -717,7 +717,7 @@ void PNS_LINE::Reverse()
 }
 
 
-void PNS_LINE::AppendVia( const PNS_VIA& aVia )
+void LINE::AppendVia( const VIA& aVia )
 {
     if( m_line.PointCount() > 1 && aVia.Pos() == m_line.CPoint( 0 ) )
     {
@@ -730,26 +730,26 @@ void PNS_LINE::AppendVia( const PNS_VIA& aVia )
 }
 
 
-void PNS_LINE::SetRank( int aRank )
+void LINE::SetRank( int aRank )
 {
     m_rank = aRank;
 
     if( m_segmentRefs )
     {
-        for( PNS_SEGMENT* s : *m_segmentRefs )
+        for( SEGMENT* s : *m_segmentRefs )
             s->SetRank( aRank );
     }
 }
 
 
-int PNS_LINE::Rank() const
+int LINE::Rank() const
 {
     int min_rank = INT_MAX;
     int rank;
 
     if( m_segmentRefs )
     {
-        for( PNS_SEGMENT *s : *m_segmentRefs )
+        for( SEGMENT *s : *m_segmentRefs )
             min_rank = std::min( min_rank, s->Rank() );
         rank = ( min_rank == INT_MAX ) ? -1 : min_rank;
     }
@@ -762,7 +762,7 @@ int PNS_LINE::Rank() const
 }
 
 
-void PNS_LINE::ClipVertexRange( int aStart, int aEnd )
+void LINE::ClipVertexRange( int aStart, int aEnd )
 {
     m_line = m_line.Slice( aStart, aEnd );
 
@@ -777,7 +777,7 @@ void PNS_LINE::ClipVertexRange( int aStart, int aEnd )
 }
 
 
-bool PNS_LINE::HasLoops() const
+bool LINE::HasLoops() const
 {
     for( int i = 0; i < PointCount(); i++ )
     {
@@ -792,7 +792,7 @@ bool PNS_LINE::HasLoops() const
 }
 
 
-void PNS_LINE::ClearSegmentLinks()
+void LINE::ClearSegmentLinks()
 {
     if( m_segmentRefs )
         delete m_segmentRefs;
@@ -815,7 +815,7 @@ static void extendBox( BOX2I& aBox, bool& aDefined, const VECTOR2I& aP )
 }
 
 
-OPT_BOX2I PNS_LINE::ChangedArea( const PNS_LINE* aOther ) const
+OPT_BOX2I LINE::ChangedArea( const LINE* aOther ) const
 {
     BOX2I area;
     bool areaDefined = false;
@@ -894,9 +894,9 @@ OPT_BOX2I PNS_LINE::ChangedArea( const PNS_LINE* aOther ) const
 }
 
 
-bool PNS_LINE::HasLockedSegments() const
+bool LINE::HasLockedSegments() const
 {
-    for( const PNS_SEGMENT* seg : *m_segmentRefs )
+    for( const SEGMENT* seg : *m_segmentRefs )
     {
         if( seg->Marker() & MK_LOCKED )
             return true;

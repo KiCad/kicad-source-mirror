@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -24,19 +25,19 @@
 #include <algorithm>
 
 /**
- * Class PNS_LAYERSET
+ * Class LAYER_RANGE
  *
  * Represents a contiguous set of PCB layers.
  */
-class PNS_LAYERSET
+class LAYER_RANGE
 {
 public:
-    PNS_LAYERSET() :
+    LAYER_RANGE() :
         m_start( -1 ),
         m_end( -1 )
     {};
 
-    PNS_LAYERSET( int aStart, int aEnd )
+    LAYER_RANGE( int aStart, int aEnd )
     {
         if( aStart > aEnd )
             std::swap( aStart, aEnd );
@@ -45,26 +46,26 @@ public:
         m_end = aEnd;
     }
 
-    PNS_LAYERSET( int aLayer )
+    LAYER_RANGE( int aLayer )
     {
         m_start = m_end = aLayer;
     }
 
-    PNS_LAYERSET( const PNS_LAYERSET& aB ) :
+    LAYER_RANGE( const LAYER_RANGE& aB ) :
         m_start( aB.m_start ),
         m_end( aB.m_end )
     {}
 
-    ~PNS_LAYERSET() {};
+    ~LAYER_RANGE() {};
 
-    const PNS_LAYERSET& operator=( const PNS_LAYERSET& aB )
+    const LAYER_RANGE& operator=( const LAYER_RANGE& aB )
     {
         m_start = aB.m_start;
         m_end = aB.m_end;
         return *this;
     }
 
-    bool Overlaps( const PNS_LAYERSET& aOther ) const
+    bool Overlaps( const LAYER_RANGE& aOther ) const
     {
         return m_end >= aOther.m_start && m_start <= aOther.m_end;
     }
@@ -89,7 +90,7 @@ public:
         return m_end;
     }
 
-    void Merge( const PNS_LAYERSET& aOther )
+    void Merge( const LAYER_RANGE& aOther )
     {
         if( m_start < 0 || m_end < 0 )
         {
@@ -106,17 +107,17 @@ public:
     }
 
     ///> Shortcut for comparisons/overlap tests
-    static PNS_LAYERSET All()
+    static LAYER_RANGE All()
     {
-        return PNS_LAYERSET( 0, 256 ); // fixme: use layer IDs header
+        return LAYER_RANGE( 0, 256 ); // fixme: use layer IDs header
     }
 
-    bool operator==( const PNS_LAYERSET& aOther ) const
+    bool operator==( const LAYER_RANGE& aOther ) const
     {
         return ( m_start == aOther.m_start ) && ( m_end == aOther.m_end );
     }
 
-    bool operator!=( const PNS_LAYERSET& aOther ) const
+    bool operator!=( const LAYER_RANGE& aOther ) const
     {
         return ( m_start != aOther.m_start ) || ( m_end != aOther.m_end );
     }

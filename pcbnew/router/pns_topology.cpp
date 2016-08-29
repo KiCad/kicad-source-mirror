@@ -34,20 +34,20 @@
 
 namespace PNS {
 
-bool PNS_TOPOLOGY::SimplifyLine( PNS_LINE* aLine )
+bool TOPOLOGY::SimplifyLine( LINE* aLine )
 {
     if( !aLine->LinkedSegments() || !aLine->SegmentCount() )
         return false;
 
-    PNS_SEGMENT* root = ( *aLine->LinkedSegments() )[0];
-    PNS_LINE l = m_world->AssembleLine( root );
+    SEGMENT* root = ( *aLine->LinkedSegments() )[0];
+    LINE l = m_world->AssembleLine( root );
     SHAPE_LINE_CHAIN simplified( l.CLine() );
 
     simplified.Simplify();
 
     if( simplified.PointCount() != l.PointCount() )
     {
-        PNS_LINE lnew( l );
+        LINE lnew( l );
         m_world->Remove( &l );
         lnew.SetShape( simplified );
         m_world->Add( &lnew );
@@ -58,9 +58,9 @@ bool PNS_TOPOLOGY::SimplifyLine( PNS_LINE* aLine )
 }
 
 
-const PNS_TOPOLOGY::JOINT_SET PNS_TOPOLOGY::ConnectedJoints( PNS_JOINT* aStart )
+const TOPOLOGY::JOINT_SET TOPOLOGY::ConnectedJoints( JOINT* aStart )
 {
-    std::deque<PNS_JOINT*> searchQueue;
+    std::deque<JOINT*> searchQueue;
     JOINT_SET processed;
 
     searchQueue.push_back( aStart );
@@ -68,17 +68,17 @@ const PNS_TOPOLOGY::JOINT_SET PNS_TOPOLOGY::ConnectedJoints( PNS_JOINT* aStart )
 
     while( !searchQueue.empty() )
     {
-        PNS_JOINT* current = searchQueue.front();
+        JOINT* current = searchQueue.front();
         searchQueue.pop_front();
 
-        for( PNS_ITEM* item : current->LinkList() )
+        for( ITEM* item : current->LinkList() )
         {
-            if( item->OfKind( PNS_ITEM::SEGMENT_T ) )
+            if( item->OfKind( ITEM::SEGMENT_T ) )
             {
-                PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
-                PNS_JOINT* a = m_world->FindJoint( seg->Seg().A, seg );
-                PNS_JOINT* b = m_world->FindJoint( seg->Seg().B, seg );
-                PNS_JOINT* next = ( *a == *current ) ? b : a;
+                SEGMENT* seg = static_cast<SEGMENT*>( item );
+                JOINT* a = m_world->FindJoint( seg->Seg().A, seg );
+                JOINT* b = m_world->FindJoint( seg->Seg().B, seg );
+                JOINT* next = ( *a == *current ) ? b : a;
 
                 if( processed.find( next ) == processed.end() )
                 {
@@ -93,18 +93,18 @@ const PNS_TOPOLOGY::JOINT_SET PNS_TOPOLOGY::ConnectedJoints( PNS_JOINT* aStart )
 }
 
 
-bool PNS_TOPOLOGY::LeadingRatLine( const PNS_LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
+bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
 {
-    PNS_LINE track( *aTrack );
+    LINE track( *aTrack );
     VECTOR2I end;
 
     if( !track.PointCount() )
         return false;
 
-    std::unique_ptr<PNS_NODE> tmpNode( m_world->Branch() );
+    std::unique_ptr<NODE> tmpNode( m_world->Branch() );
     tmpNode->Add( &track );
 
-    PNS_JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );
+    JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );
 
     if( !jt )
        return false;
@@ -117,8 +117,8 @@ bool PNS_TOPOLOGY::LeadingRatLine( const PNS_LINE* aTrack, SHAPE_LINE_CHAIN& aRa
     {
         int anchor;
 
-        PNS_TOPOLOGY topo( tmpNode.get() );
-        PNS_ITEM* it = topo.NearestUnconnectedItem( jt, &anchor );
+        TOPOLOGY topo( tmpNode.get() );
+        ITEM* it = topo.NearestUnconnectedItem( jt, &anchor );
 
         if( !it )
             return false;
@@ -133,15 +133,15 @@ bool PNS_TOPOLOGY::LeadingRatLine( const PNS_LINE* aTrack, SHAPE_LINE_CHAIN& aRa
 }
 
 
-PNS_ITEM* PNS_TOPOLOGY::NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor, int aKindMask )
+ITEM* TOPOLOGY::NearestUnconnectedItem( JOINT* aStart, int* aAnchor, int aKindMask )
 {
-    std::set<PNS_ITEM*> disconnected;
+    std::set<ITEM*> disconnected;
 
     m_world->AllItemsInNet( aStart->Net(), disconnected );
 
-    for( const PNS_JOINT* jt : ConnectedJoints( aStart ) )
+    for( const JOINT* jt : ConnectedJoints( aStart ) )
     {
-        for( PNS_ITEM* link : jt->LinkList() )
+        for( ITEM* link : jt->LinkList() )
         {
             if( disconnected.find( link ) != disconnected.end() )
                 disconnected.erase( link );
@@ -149,9 +149,9 @@ PNS_ITEM* PNS_TOPOLOGY::NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor,
     }
 
     int best_dist = INT_MAX;
-    PNS_ITEM* best = NULL;
+    ITEM* best = NULL;
 
-    for( PNS_ITEM* item : disconnected )
+    for( ITEM* item : disconnected )
     {
         if( item->OfKind( aKindMask ) )
         {
@@ -176,11 +176,11 @@ PNS_ITEM* PNS_TOPOLOGY::NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor,
 }
 
 
-bool PNS_TOPOLOGY::followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& aSet, std::set<PNS_ITEM*>& aVisited )
+bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::set<ITEM*>& aVisited )
 {
     VECTOR2I anchor = aLeft ? aLine->CPoint( 0 ) : aLine->CPoint( -1 );
-    PNS_SEGMENT* last = aLeft ? aLine->LinkedSegments()->front() : aLine->LinkedSegments()->back();
-    PNS_JOINT* jt = m_world->FindJoint( anchor, aLine );
+    SEGMENT* last = aLeft ? aLine->LinkedSegments()->front() : aLine->LinkedSegments()->back();
+    JOINT* jt = m_world->FindJoint( anchor, aLine );
 
     assert( jt != NULL );
 
@@ -188,21 +188,21 @@ bool PNS_TOPOLOGY::followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& 
 
     if( jt->IsNonFanoutVia() || jt->IsTraceWidthChange() )
     {
-        PNS_ITEM* via = NULL;
-        PNS_SEGMENT* next_seg = NULL;
+        ITEM* via = NULL;
+        SEGMENT* next_seg = NULL;
 
-        for( PNS_ITEM* link : jt->Links().Items() )
+        for( ITEM* link : jt->Links().Items() )
         {
-            if( link->OfKind( PNS_ITEM::VIA_T ) )
+            if( link->OfKind( ITEM::VIA_T ) )
                 via = link;
             else if( aVisited.find( link ) == aVisited.end() )
-                next_seg = static_cast<PNS_SEGMENT*>( link );
+                next_seg = static_cast<SEGMENT*>( link );
         }
 
         if( !next_seg )
             return false;
 
-        PNS_LINE l = m_world->AssembleLine( next_seg );
+        LINE l = m_world->AssembleLine( next_seg );
 
         VECTOR2I nextAnchor = ( aLeft ? l.CLine().CPoint( -1 ) : l.CLine().CPoint( 0 ) );
 
@@ -233,31 +233,31 @@ bool PNS_TOPOLOGY::followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& 
 }
 
 
-const PNS_ITEMSET PNS_TOPOLOGY::AssembleTrivialPath( PNS_ITEM* aStart )
+const ITEM_SET TOPOLOGY::AssembleTrivialPath( ITEM* aStart )
 {
-    PNS_ITEMSET path;
-    std::set<PNS_ITEM*> visited;
-    PNS_SEGMENT* seg;
-    PNS_VIA* via;
+    ITEM_SET path;
+    std::set<ITEM*> visited;
+    SEGMENT* seg;
+    VIA* via;
 
-    seg = dyn_cast<PNS_SEGMENT*> (aStart);
+    seg = dyn_cast<SEGMENT*> (aStart);
 
-    if(!seg && (via = dyn_cast<PNS_VIA*>( aStart ) ) )
+    if(!seg && (via = dyn_cast<VIA*>( aStart ) ) )
     {
-        PNS_JOINT *jt = m_world->FindJoint( via->Pos(), via );
+        JOINT *jt = m_world->FindJoint( via->Pos(), via );
 
         if( !jt->IsNonFanoutVia() )
-            return PNS_ITEMSET();
+            return ITEM_SET();
 
         for( auto entry : jt->Links().Items() )
-            if( ( seg = dyn_cast<PNS_SEGMENT*>( entry.item ) ) )
+            if( ( seg = dyn_cast<SEGMENT*>( entry.item ) ) )
                 break;
     }
 
     if( !seg )
-        return PNS_ITEMSET();
+        return ITEM_SET();
 
-    PNS_LINE l = m_world->AssembleLine( seg );
+    LINE l = m_world->AssembleLine( seg );
 
     path.Add( l );
 
@@ -268,22 +268,22 @@ const PNS_ITEMSET PNS_TOPOLOGY::AssembleTrivialPath( PNS_ITEM* aStart )
 }
 
 
-const PNS_ITEMSET PNS_TOPOLOGY::ConnectedItems( PNS_JOINT* aStart, int aKindMask )
+const ITEM_SET TOPOLOGY::ConnectedItems( JOINT* aStart, int aKindMask )
 {
-    return PNS_ITEMSET();
+    return ITEM_SET();
 }
 
 
-const PNS_ITEMSET PNS_TOPOLOGY::ConnectedItems( PNS_ITEM* aStart, int aKindMask )
+const ITEM_SET TOPOLOGY::ConnectedItems( ITEM* aStart, int aKindMask )
 {
-    return PNS_ITEMSET();
+    return ITEM_SET();
 }
 
 
 bool commonParallelProjection( SEG n, SEG p, SEG &pClip, SEG& nClip );
 
 
-bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
+bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
 {
     int refNet = aStart->Net();
     int coupledNet = m_world->GetRuleResolver()->DpCoupledNet( refNet );
@@ -291,18 +291,18 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
     if( coupledNet < 0 )
         return false;
 
-    std::set<PNS_ITEM*> coupledItems;
+    std::set<ITEM*> coupledItems;
 
     m_world->AllItemsInNet( coupledNet, coupledItems );
 
-    PNS_SEGMENT* coupledSeg = NULL, *refSeg;
+    SEGMENT* coupledSeg = NULL, *refSeg;
     int minDist = std::numeric_limits<int>::max();
 
-    if( ( refSeg = dyn_cast<PNS_SEGMENT*>( aStart ) ) != NULL )
+    if( ( refSeg = dyn_cast<SEGMENT*>( aStart ) ) != NULL )
     {
-        for( PNS_ITEM* item : coupledItems )
+        for( ITEM* item : coupledItems )
         {
-            if( PNS_SEGMENT* s = dyn_cast<PNS_SEGMENT*>( item ) )
+            if( SEGMENT* s = dyn_cast<SEGMENT*>( item ) )
             {
                 if( s->Layers().Start() == refSeg->Layers().Start() && s->Width() == refSeg->Width() )
                 {
@@ -329,8 +329,8 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
     if( !coupledSeg )
         return false;
 
-    PNS_LINE lp = m_world->AssembleLine( refSeg );
-    PNS_LINE ln = m_world->AssembleLine( coupledSeg );
+    LINE lp = m_world->AssembleLine( refSeg );
+    LINE ln = m_world->AssembleLine( coupledSeg );
 
     if( m_world->GetRuleResolver()->DpNetPolarity( refNet ) < 0 )
     {
@@ -347,7 +347,7 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
         gap = (int) std::abs( refDir.Cross( displacement ) / refDir.EuclideanNorm() ) - lp.Width();
     }
 
-    aPair = PNS_DIFF_PAIR( lp, ln );
+    aPair = DIFF_PAIR( lp, ln );
     aPair.SetWidth( lp.Width() );
     aPair.SetLayers( lp.Layers() );
     aPair.SetGap( gap );
@@ -355,25 +355,25 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
     return true;
 }
 
-const std::set<PNS_ITEM*> PNS_TOPOLOGY::AssembleCluster( PNS_ITEM* aStart, int aLayer )
+const std::set<ITEM*> TOPOLOGY::AssembleCluster( ITEM* aStart, int aLayer )
 {
-    std::set<PNS_ITEM*> visited;
-    std::deque<PNS_ITEM*> pending;
+    std::set<ITEM*> visited;
+    std::deque<ITEM*> pending;
 
     pending.push_back( aStart );
 
     while( !pending.empty() )
     {
-        PNS_NODE::OBSTACLES obstacles;
-        PNS_ITEM* top = pending.front();
+        NODE::OBSTACLES obstacles;
+        ITEM* top = pending.front();
 
         pending.pop_front();
 
         visited.insert( top );
 
-        m_world->QueryColliding( top, obstacles, PNS_ITEM::ANY_T, -1, false );
+        m_world->QueryColliding( top, obstacles, ITEM::ANY_T, -1, false );
 
-        for( PNS_OBSTACLE& obs : obstacles )
+        for( OBSTACLE& obs : obstacles )
         {
             if( visited.find( obs.m_item ) == visited.end() && obs.m_item->Layers().Overlaps( aLayer ) && !( obs.m_item->Marker() & MK_HEAD ) )
             {

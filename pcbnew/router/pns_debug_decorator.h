@@ -29,13 +29,13 @@
 
 namespace PNS {
 
-class PNS_DEBUG_DECORATOR
+class DEBUG_DECORATOR
 {
 public:
-    PNS_DEBUG_DECORATOR()
+    DEBUG_DECORATOR()
     {}
 
-    virtual ~PNS_DEBUG_DECORATOR()
+    virtual ~DEBUG_DECORATOR()
     {}
 
     virtual void AddPoint( VECTOR2I aP, int aColor ) {};

@@ -33,23 +33,23 @@
 
 namespace PNS {
 
-class PNS_NODE;
+class NODE;
 
-class PNS_SEGMENT : public PNS_ITEM
+class SEGMENT : public ITEM
 {
 public:
-    PNS_SEGMENT() :
-        PNS_ITEM( SEGMENT_T )
+    SEGMENT() :
+        ITEM( SEGMENT_T )
     {}
 
-    PNS_SEGMENT( const SEG& aSeg, int aNet ) :
-        PNS_ITEM( SEGMENT_T ), m_seg( aSeg, 0 )
+    SEGMENT( const SEG& aSeg, int aNet ) :
+        ITEM( SEGMENT_T ), m_seg( aSeg, 0 )
     {
         m_net = aNet;
     }
 
-    PNS_SEGMENT( const PNS_LINE& aParentLine, const SEG& aSeg ) :
-        PNS_ITEM( SEGMENT_T ),
+    SEGMENT( const LINE& aParentLine, const SEG& aSeg ) :
+        ITEM( SEGMENT_T ),
         m_seg( aSeg, aParentLine.Width() )
     {
         m_net = aParentLine.Net();
@@ -58,12 +58,12 @@ public:
         m_rank = aParentLine.Rank();
     }
 
-    static inline bool ClassOf( const PNS_ITEM* aItem )
+    static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && SEGMENT_T == aItem->Kind();
     }
 
-    PNS_SEGMENT* Clone() const;
+    SEGMENT* Clone() const;
 
     const SHAPE* Shape() const
     {
@@ -72,7 +72,7 @@ public:
 
     void SetLayer( int aLayer )
     {
-        SetLayers( PNS_LAYERSET( aLayer ) );
+        SetLayers( LAYER_RANGE( aLayer ) );
     }
 
     int Layer() const

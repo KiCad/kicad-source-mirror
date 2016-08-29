@@ -27,7 +27,7 @@
 #include <router/pns_meander_placer.h>
 
 DIALOG_PNS_LENGTH_TUNING_SETTINGS::DIALOG_PNS_LENGTH_TUNING_SETTINGS( wxWindow* aParent,
-                        PNS::PNS_MEANDER_SETTINGS& aSettings, PNS::PNS_ROUTER_MODE aMode )
+                        PNS::MEANDER_SETTINGS& aSettings, PNS::ROUTER_MODE aMode )
     :
     DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( aParent ),
     m_minAmpl( this, m_minAmplText, m_minAmplUnit ),

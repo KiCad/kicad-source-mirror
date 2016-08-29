@@ -35,8 +35,8 @@ namespace PNS {
 
 using boost::optional;
 
-PNS_DP_MEANDER_PLACER::PNS_DP_MEANDER_PLACER( PNS_ROUTER* aRouter ) :
-    PNS_MEANDER_PLACER_BASE( aRouter )
+DP_MEANDER_PLACER::DP_MEANDER_PLACER( ROUTER* aRouter ) :
+    MEANDER_PLACER_BASE( aRouter )
 {
     m_world = NULL;
     m_currentNode = NULL;
@@ -48,18 +48,18 @@ PNS_DP_MEANDER_PLACER::PNS_DP_MEANDER_PLACER( PNS_ROUTER* aRouter ) :
 }
 
 
-PNS_DP_MEANDER_PLACER::~PNS_DP_MEANDER_PLACER()
+DP_MEANDER_PLACER::~DP_MEANDER_PLACER()
 {
 }
 
 
-const PNS_LINE PNS_DP_MEANDER_PLACER::Trace() const
+const LINE DP_MEANDER_PLACER::Trace() const
 {
     return m_currentTraceP;
 }
 
 
-PNS_NODE* PNS_DP_MEANDER_PLACER::CurrentNode( bool aLoopsRemoved ) const
+NODE* DP_MEANDER_PLACER::CurrentNode( bool aLoopsRemoved ) const
 {
     if( !m_currentNode )
         return m_world;
@@ -68,17 +68,17 @@ PNS_NODE* PNS_DP_MEANDER_PLACER::CurrentNode( bool aLoopsRemoved ) const
 }
 
 
-bool PNS_DP_MEANDER_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
+bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 {
     VECTOR2I p;
 
-    if( !aStartItem || !aStartItem->OfKind( PNS_ITEM::SEGMENT_T ) )
+    if( !aStartItem || !aStartItem->OfKind( ITEM::SEGMENT_T ) )
     {
         Router()->SetFailureReason( _( "Please select a track whose length you want to tune." ) );
         return false;
     }
 
-    m_initialSegment = static_cast<PNS_SEGMENT*>( aStartItem );
+    m_initialSegment = static_cast<SEGMENT*>( aStartItem );
 
     p = m_initialSegment->Seg().NearestPoint( aP );
 
@@ -87,7 +87,7 @@ bool PNS_DP_MEANDER_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
     m_world = Router()->GetWorld()->Branch();
 
-    PNS_TOPOLOGY topo( m_world );
+    TOPOLOGY topo( m_world );
 
     if( !topo.AssembleDiffPair( m_initialSegment, m_originPair ) )
     {
@@ -116,26 +116,26 @@ bool PNS_DP_MEANDER_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 }
 
 
-void PNS_DP_MEANDER_PLACER::release()
+void DP_MEANDER_PLACER::release()
 {
 }
 
 
-int PNS_DP_MEANDER_PLACER::origPathLength() const
+int DP_MEANDER_PLACER::origPathLength() const
 {
     int totalP = 0;
     int totalN = 0;
 
-    for( const PNS_ITEM* item : m_tunedPathP.CItems() )
+    for( const ITEM* item : m_tunedPathP.CItems() )
     {
-        if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
+        if( const LINE* l = dyn_cast<const LINE*>( item ) )
             totalP += l->CLine().Length();
 
     }
 
-    for( const PNS_ITEM* item : m_tunedPathN.CItems() )
+    for( const ITEM* item : m_tunedPathN.CItems() )
     {
-        if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
+        if( const LINE* l = dyn_cast<const LINE*>( item ) )
             totalN += l->CLine().Length();
     }
 
@@ -143,7 +143,7 @@ int PNS_DP_MEANDER_PLACER::origPathLength() const
 }
 
 
-const SEG PNS_DP_MEANDER_PLACER::baselineSegment( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& aCoupledSegs )
+const SEG DP_MEANDER_PLACER::baselineSegment( const DIFF_PAIR::COUPLED_SEGMENTS& aCoupledSegs )
 {
     const VECTOR2I a( ( aCoupledSegs.coupledP.A + aCoupledSegs.coupledN.A ) / 2 );
     const VECTOR2I b( ( aCoupledSegs.coupledP.B + aCoupledSegs.coupledN.B ) / 2 );
@@ -152,7 +152,7 @@ const SEG PNS_DP_MEANDER_PLACER::baselineSegment( const PNS_DIFF_PAIR::COUPLED_S
 }
 
 
-static bool pairOrientation( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& aPair )
+static bool pairOrientation( const DIFF_PAIR::COUPLED_SEGMENTS& aPair )
 {
     VECTOR2I midp = ( aPair.coupledP.A + aPair.coupledN.A ) / 2;
 
@@ -162,11 +162,11 @@ static bool pairOrientation( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& aPair )
 }
 
 
-bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
+bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
 //    return false;
 
-    PNS_DIFF_PAIR::COUPLED_SEGMENTS_VEC coupledSegments;
+    DIFF_PAIR::COUPLED_SEGMENTS_VEC coupledSegments;
 
     if( m_currentNode )
         delete m_currentNode;
@@ -179,7 +179,7 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     cutTunedLine( m_originPair.CP(), m_currentStart, aP, preP, tunedP, postP );
     cutTunedLine( m_originPair.CN(), m_currentStart, aP, preN, tunedN, postN );
 
-    PNS_DIFF_PAIR tuned( m_originPair );
+    DIFF_PAIR tuned( m_originPair );
 
     tuned.SetShape( tunedP, tunedN );
 
@@ -194,7 +194,7 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
     //Router()->DisplayDebugLine( m_originPair.CP(), 5, 20000 );
     //Router()->DisplayDebugLine( m_originPair.CN(), 4, 20000 );
 
-    m_result = PNS_MEANDERED_LINE( this, true );
+    m_result = MEANDERED_LINE( this, true );
     m_result.SetWidth( tuned.Width() );
 
     int offset = ( tuned.Gap() + tuned.Width() ) / 2;
@@ -204,21 +204,21 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
     m_result.SetBaselineOffset( offset );
 
-    for( const PNS_ITEM* item : m_tunedPathP.CItems() )
+    for( const ITEM* item : m_tunedPathP.CItems() )
     {
-        if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
+        if( const LINE* l = dyn_cast<const LINE*>( item ) )
             Dbg()->AddLine( l->CLine(), 5, 10000 );
     }
 
-    for( const PNS_ITEM* item : m_tunedPathN.CItems() )
+    for( const ITEM* item : m_tunedPathN.CItems() )
     {
-        if( const PNS_LINE* l = dyn_cast<const PNS_LINE*>( item ) )
+        if( const LINE* l = dyn_cast<const LINE*>( item ) )
             Dbg()->AddLine( l->CLine(), 5, 10000 );
     }
 
     int curIndexP = 0, curIndexN = 0;
 
-    for( const PNS_DIFF_PAIR::COUPLED_SEGMENTS& sp : coupledSegments )
+    for( const DIFF_PAIR::COUPLED_SEGMENTS& sp : coupledSegments )
     {
         SEG base = baselineSegment( sp );
 
@@ -265,7 +265,7 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
         tunedP.Clear();
         tunedN.Clear();
 
-        for( PNS_MEANDER_SHAPE* m : m_result.Meanders() )
+        for( MEANDER_SHAPE* m : m_result.Meanders() )
         {
             if( m->Type() != MT_EMPTY )
             {
@@ -302,10 +302,10 @@ bool PNS_DP_MEANDER_PLACER::Move( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 }
 
 
-bool PNS_DP_MEANDER_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
+bool DP_MEANDER_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
 {
-    PNS_LINE lP( m_originPair.PLine(), m_finalShapeP );
-    PNS_LINE lN( m_originPair.NLine(), m_finalShapeN );
+    LINE lP( m_originPair.PLine(), m_finalShapeP );
+    LINE lN( m_originPair.NLine(), m_finalShapeN );
 
     m_currentNode->Add( &lP );
     m_currentNode->Add( &lN );
@@ -316,10 +316,10 @@ bool PNS_DP_MEANDER_PLACER::FixRoute( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 }
 
 
-bool PNS_DP_MEANDER_PLACER::CheckFit( PNS_MEANDER_SHAPE* aShape )
+bool DP_MEANDER_PLACER::CheckFit( MEANDER_SHAPE* aShape )
 {
-    PNS_LINE l1( m_originPair.PLine(), aShape->CLine( 0 ) );
-    PNS_LINE l2( m_originPair.NLine(), aShape->CLine( 1 ) );
+    LINE l1( m_originPair.PLine(), aShape->CLine( 0 ) );
+    LINE l2( m_originPair.NLine(), aShape->CLine( 1 ) );
 
     if( m_currentNode->CheckColliding( &l1 ) )
         return false;
@@ -334,12 +334,12 @@ bool PNS_DP_MEANDER_PLACER::CheckFit( PNS_MEANDER_SHAPE* aShape )
 }
 
 
-const PNS_ITEMSET PNS_DP_MEANDER_PLACER::Traces()
+const ITEM_SET DP_MEANDER_PLACER::Traces()
 {
-    m_currentTraceP = PNS_LINE( m_originPair.PLine(), m_finalShapeP );
-    m_currentTraceN = PNS_LINE( m_originPair.NLine(), m_finalShapeN );
+    m_currentTraceP = LINE( m_originPair.PLine(), m_finalShapeP );
+    m_currentTraceN = LINE( m_originPair.NLine(), m_finalShapeN );
 
-    PNS_ITEMSET traces;
+    ITEM_SET traces;
 
     traces.Add( &m_currentTraceP );
     traces.Add( &m_currentTraceN );
@@ -348,19 +348,19 @@ const PNS_ITEMSET PNS_DP_MEANDER_PLACER::Traces()
 }
 
 
-const VECTOR2I& PNS_DP_MEANDER_PLACER::CurrentEnd() const
+const VECTOR2I& DP_MEANDER_PLACER::CurrentEnd() const
 {
     return m_currentEnd;
 }
 
 
-int PNS_DP_MEANDER_PLACER::CurrentLayer() const
+int DP_MEANDER_PLACER::CurrentLayer() const
 {
     return m_initialSegment->Layers().Start();
 }
 
 
-const wxString PNS_DP_MEANDER_PLACER::TuningInfo() const
+const wxString DP_MEANDER_PLACER::TuningInfo() const
 {
     wxString status;
 
@@ -390,12 +390,12 @@ const wxString PNS_DP_MEANDER_PLACER::TuningInfo() const
 }
 
 
-PNS_DP_MEANDER_PLACER::TUNING_STATUS PNS_DP_MEANDER_PLACER::TuningStatus() const
+DP_MEANDER_PLACER::TUNING_STATUS DP_MEANDER_PLACER::TuningStatus() const
 {
     return m_lastStatus;
 }
 
-const std::vector<int> PNS_DP_MEANDER_PLACER::CurrentNets() const
+const std::vector<int> DP_MEANDER_PLACER::CurrentNets() const
 {
     std::vector<int> rv;
     rv.push_back( m_originPair.NetP() );

@@ -29,19 +29,19 @@
 namespace PNS {
 
 /**
- * Class PNS_ITEMSET
+ * Class ITEM_SET
  *
  * Holds a list of board items, that can be filtered against net, kinds,
  * layers, etc.
  **/
-class PNS_LINE;
+class LINE;
 
-class PNS_ITEMSET
+class ITEM_SET
 {
 public:
     struct ENTRY {
 
-        ENTRY( PNS_ITEM* aItem, bool aOwned = false ) :
+        ENTRY( ITEM* aItem, bool aOwned = false ) :
             item( aItem ),
             owned( aOwned )
         {}
@@ -84,18 +84,18 @@ public:
             return *this;
         }
 
-        operator PNS_ITEM* () const
+        operator ITEM* () const
         {
             return item;
         }
 
-        PNS_ITEM *item;
+        ITEM *item;
         bool owned;
     };
 
     typedef std::vector<ENTRY> ENTRIES;
 
-    PNS_ITEMSET( PNS_ITEM* aInitialItem = NULL, bool aBecomeOwner = false )
+    ITEM_SET( ITEM* aInitialItem = NULL, bool aBecomeOwner = false )
     {
         if( aInitialItem )
         {
@@ -103,14 +103,14 @@ public:
         }
     }
 
-    PNS_ITEMSET( const PNS_ITEMSET& aOther )
+    ITEM_SET( const ITEM_SET& aOther )
     {
         m_items = aOther.m_items;
     }
 
-    ~PNS_ITEMSET();
+    ~ITEM_SET();
 
-    const PNS_ITEMSET& operator=( const PNS_ITEMSET& aOther )
+    const ITEM_SET& operator=( const ITEM_SET& aOther )
     {
         m_items = aOther.m_items;
         return *this;
@@ -120,7 +120,7 @@ public:
     {
         int n = 0;
 
-        for( PNS_ITEM* item : m_items )
+        for( ITEM* item : m_items )
         {
             if( item->Kind() & aKindMask )
                 n++;
@@ -137,47 +137,47 @@ public:
     ENTRIES& Items() { return m_items; }
     const ENTRIES& CItems() const { return m_items; }
 
-    PNS_ITEMSET& FilterLayers( int aStart, int aEnd = -1, bool aInvert = false );
-    PNS_ITEMSET& FilterKinds( int aKindMask, bool aInvert = false );
-    PNS_ITEMSET& FilterNet( int aNet, bool aInvert = false );
-    PNS_ITEMSET& FilterMarker( int aMarker, bool aInvert = false );
+    ITEM_SET& FilterLayers( int aStart, int aEnd = -1, bool aInvert = false );
+    ITEM_SET& FilterKinds( int aKindMask, bool aInvert = false );
+    ITEM_SET& FilterNet( int aNet, bool aInvert = false );
+    ITEM_SET& FilterMarker( int aMarker, bool aInvert = false );
 
-    PNS_ITEMSET& ExcludeLayers( int aStart, int aEnd = -1 )
+    ITEM_SET& ExcludeLayers( int aStart, int aEnd = -1 )
     {
         return FilterLayers( aStart, aEnd, true );
     }
 
-    PNS_ITEMSET& ExcludeKinds( int aKindMask )
+    ITEM_SET& ExcludeKinds( int aKindMask )
     {
         return FilterKinds( aKindMask, true );
     }
 
-    PNS_ITEMSET& ExcludeNet( int aNet )
+    ITEM_SET& ExcludeNet( int aNet )
     {
         return FilterNet( aNet, true );
     }
 
-    PNS_ITEMSET& ExcludeItem( const PNS_ITEM* aItem );
+    ITEM_SET& ExcludeItem( const ITEM* aItem );
 
     int Size() const
     {
         return m_items.size();
     }
 
-    void Add( const PNS_LINE& aLine );
-    void Prepend( const PNS_LINE& aLine );
+    void Add( const LINE& aLine );
+    void Prepend( const LINE& aLine );
 
-    PNS_ITEM* operator[] ( int index ) const
+    ITEM* operator[] ( int index ) const
     {
         return m_items[index].item;
     }
 
-    void Add( PNS_ITEM* aItem, bool aBecomeOwner = false )
+    void Add( ITEM* aItem, bool aBecomeOwner = false )
     {
         m_items.push_back( ENTRY( aItem, aBecomeOwner ) );
     }
 
-    void Prepend( PNS_ITEM* aItem, bool aBecomeOwner = false )
+    void Prepend( ITEM* aItem, bool aBecomeOwner = false )
     {
          m_items.insert( m_items.begin(), ENTRY( aItem, aBecomeOwner ) );
     }
@@ -187,13 +187,13 @@ public:
         m_items.clear();
     }
 
-    bool Contains( PNS_ITEM* aItem ) const
+    bool Contains( ITEM* aItem ) const
     {
         const ENTRY ent( aItem );
         return std::find( m_items.begin(), m_items.end(), ent ) != m_items.end();
     }
 
-    void Erase( PNS_ITEM* aItem )
+    void Erase( ITEM* aItem )
     {
         ENTRY ent( aItem );
         ENTRIES::iterator f = std::find( m_items.begin(), m_items.end(), ent );
@@ -203,11 +203,11 @@ public:
     }
 
     template<class T>
-    T* FindByKind( PNS_ITEM::PnsKind kind, int index = 0 )
+    T* FindByKind( ITEM::PnsKind kind, int index = 0 )
     {
         int n = 0;
 
-        for( const PNS_ITEM* item : m_items )
+        for( const ITEM* item : m_items )
         {
             if( item->OfKind( kind ) )
             {

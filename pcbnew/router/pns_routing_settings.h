@@ -49,15 +49,15 @@ enum PNS_OPTIMIZATION_EFFORT
 };
 
 /**
- * Class PNS_ROUTING_SETTINGS
+ * Class ROUTING_SETTINGS
  *
  * Contains all persistent settings of the router, such as the mode, optimization effort, etc.
  */
 
-class PNS_ROUTING_SETTINGS
+class ROUTING_SETTINGS
 {
 public:
-    PNS_ROUTING_SETTINGS();
+    ROUTING_SETTINGS();
 
     void Load( const TOOL_SETTINGS& where );
     void Save( TOOL_SETTINGS& where ) const;

@@ -32,13 +32,13 @@
 
 namespace PNS {
 
-class PNS_WALKAROUND : public PNS_ALGO_BASE
+class WALKAROUND : public ALGO_BASE
 {
     static const int DefaultIterationLimit = 50;
 
 public:
-    PNS_WALKAROUND( PNS_NODE* aWorld, PNS_ROUTER* aRouter ) :
-        PNS_ALGO_BASE ( aRouter ),
+    WALKAROUND( NODE* aWorld, ROUTER* aRouter ) :
+        ALGO_BASE ( aRouter ),
         m_world( aWorld ),
         m_iterationLimit( DefaultIterationLimit )
     {
@@ -46,7 +46,7 @@ public:
         m_forceLongerPath = false;
         m_forceWinding = false;
         m_cursorApproachMode = false;
-        m_itemMask = PNS_ITEM::ANY_T;
+        m_itemMask = ITEM::ANY_T;
 
         // Initialize other members, to avoid uninitialized variables.
         m_recursiveBlockageCount = 0;
@@ -55,7 +55,7 @@ public:
         m_forceCw = false;
     }
 
-    ~PNS_WALKAROUND() {};
+    ~WALKAROUND() {};
 
     enum WALKAROUND_STATUS
     {
@@ -64,7 +64,7 @@ public:
         STUCK
     };
 
-    void SetWorld( PNS_NODE* aNode )
+    void SetWorld( NODE* aNode )
     {
         m_world = aNode;
     }
@@ -77,9 +77,9 @@ public:
     void SetSolidsOnly( bool aSolidsOnly )
     {
         if( aSolidsOnly )
-            m_itemMask = PNS_ITEM::SOLID_T;
+            m_itemMask = ITEM::SOLID_T;
         else
-            m_itemMask = PNS_ITEM::ANY_T;
+            m_itemMask = ITEM::ANY_T;
     }
 
     void SetItemMask( int aMask )
@@ -110,7 +110,7 @@ public:
         m_forceWinding = aEnabled;
     }
 
-    void RestrictToSet( bool aEnabled, const std::set<PNS_ITEM*>& aSet )
+    void RestrictToSet( bool aEnabled, const std::set<ITEM*>& aSet )
     {
         if( aEnabled )
             m_restrictedSet = aSet;
@@ -118,21 +118,21 @@ public:
             m_restrictedSet.clear();
     }
 
-    WALKAROUND_STATUS Route( const PNS_LINE& aInitialPath, PNS_LINE& aWalkPath,
+    WALKAROUND_STATUS Route( const LINE& aInitialPath, LINE& aWalkPath,
             bool aOptimize = true );
 
-    virtual PNS_LOGGER* Logger()
+    virtual LOGGER* Logger()
     {
         return &m_logger;
     }
 
 private:
-    void start( const PNS_LINE& aInitialPath );
+    void start( const LINE& aInitialPath );
 
-    WALKAROUND_STATUS singleStep( PNS_LINE& aPath, bool aWindingDirection );
-    PNS_NODE::OPT_OBSTACLE nearestObstacle( const PNS_LINE& aPath );
+    WALKAROUND_STATUS singleStep( LINE& aPath, bool aWindingDirection );
+    NODE::OPT_OBSTACLE nearestObstacle( const LINE& aPath );
 
-    PNS_NODE* m_world;
+    NODE* m_world;
 
     int m_recursiveBlockageCount;
     int m_iteration;
@@ -143,10 +143,10 @@ private:
     bool m_forceWinding;
     bool m_forceCw;
     VECTOR2I m_cursorPos;
-    PNS_NODE::OPT_OBSTACLE m_currentObstacle[2];
+    NODE::OPT_OBSTACLE m_currentObstacle[2];
     bool m_recursiveCollision[2];
-    PNS_LOGGER m_logger;
-    std::set<PNS_ITEM*> m_restrictedSet;
+    LOGGER m_logger;
+    std::set<ITEM*> m_restrictedSet;
 };
 
 }

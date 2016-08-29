@@ -60,13 +60,13 @@ using namespace KIGFX;
 
 namespace PNS {
 
-TOOL_ACTION PNS_TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
+TOOL_ACTION TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
                                             AS_CONTEXT, 'E',
                                             _( "Routing Options..." ),
                                             _( "Shows a dialog containing router options." ), tools_xpm );
 
 
-PNS_TOOL_BASE::PNS_TOOL_BASE( const std::string& aToolName ) :
+TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
     TOOL_INTERACTIVE( aToolName )
 {
     m_gridHelper = NULL;
@@ -85,7 +85,7 @@ PNS_TOOL_BASE::PNS_TOOL_BASE( const std::string& aToolName ) :
 }
 
 
-PNS_TOOL_BASE::~PNS_TOOL_BASE()
+TOOL_BASE::~TOOL_BASE()
 {
     delete m_gridHelper;
     delete m_iface;
@@ -94,7 +94,7 @@ PNS_TOOL_BASE::~PNS_TOOL_BASE()
 
 
 
-void PNS_TOOL_BASE::Reset( RESET_REASON aReason )
+void TOOL_BASE::Reset( RESET_REASON aReason )
 {
     delete m_gridHelper;
     delete m_iface;
@@ -110,7 +110,7 @@ void PNS_TOOL_BASE::Reset( RESET_REASON aReason )
     m_iface->SetView( getView() );
     m_iface->SetHostFrame( m_frame );
 
-    m_router = new PNS_ROUTER;
+    m_router = new ROUTER;
     m_router->SetInterface(m_iface);
     m_router->ClearWorld();
     m_router->SyncWorld();
@@ -121,21 +121,21 @@ void PNS_TOOL_BASE::Reset( RESET_REASON aReason )
 }
 
 
-PNS_ITEM* PNS_TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer )
+ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer )
 {
     int tl = getView()->GetTopLayer();
 
     if( aLayer > 0 )
         tl = aLayer;
 
-    PNS_ITEM* prioritized[4];
+    ITEM* prioritized[4];
 
     for( int i = 0; i < 4; i++ )
         prioritized[i] = 0;
 
-    PNS_ITEMSET candidates = m_router->QueryHoverItems( aWhere );
+    ITEM_SET candidates = m_router->QueryHoverItems( aWhere );
 
-    for( PNS_ITEM* item : candidates.Items() )
+    for( ITEM* item : candidates.Items() )
     {
         if( !IsCopperLayer( item->Layers().Start() ) )
             continue;
@@ -146,7 +146,7 @@ PNS_ITEM* PNS_TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int a
 
         if( aNet < 0 || item->Net() == aNet )
         {
-            if( item->OfKind( PNS_ITEM::VIA_T | PNS_ITEM::SOLID_T ) )
+            if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
             {
                 if( !prioritized[2] )
                     prioritized[2] = item;
@@ -163,13 +163,13 @@ PNS_ITEM* PNS_TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int a
         }
     }
 
-    PNS_ITEM* rv = NULL;
+    ITEM* rv = NULL;
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)frame->GetDisplayOptions();
 
     for( int i = 0; i < 4; i++ )
     {
-        PNS_ITEM* item = prioritized[i];
+        ITEM* item = prioritized[i];
 
         if( displ_opts->m_ContrastModeDisplay )
             if( item && !item->Layers().Overlaps( tl ) )
@@ -194,7 +194,7 @@ PNS_ITEM* PNS_TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int a
 }
 
 
-void PNS_TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
+void TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
 {
     RENDER_SETTINGS* rs = getView()->GetPainter()->GetSettings();
 
@@ -207,13 +207,13 @@ void PNS_TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
 }
 
 
-void PNS_TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
+void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
 {
     int tl = getView()->GetTopLayer();
     VECTOR2I cp = m_ctls->GetCursorPosition();
     VECTOR2I p;
 
-    PNS_ITEM* startItem = NULL;
+    ITEM* startItem = NULL;
     bool snapEnabled = true;
 
     if( aEvent.IsMotion() || aEvent.IsClick() )
@@ -259,7 +259,7 @@ void PNS_TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
 }
 
 
-void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
+void TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
 {
     VECTOR2I mp = m_ctls->GetMousePosition();
     VECTOR2I p = getView()->ToWorld( mp );
@@ -283,7 +283,7 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
     else
         layer = m_router->GetCurrentLayer();
 
-    PNS_ITEM* endItem = NULL;
+    ITEM* endItem = NULL;
 
     std::vector<int> nets = m_router->GetCurrentNets();
 
@@ -316,9 +316,9 @@ void PNS_TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
 }
 
 
-void PNS_TOOL_BASE::deleteTraces( PNS_ITEM* aStartItem, bool aWholeTrack )
+void TOOL_BASE::deleteTraces( ITEM* aStartItem, bool aWholeTrack )
 {
-    PNS_NODE *node = m_router->GetWorld()->Branch();
+    NODE *node = m_router->GetWorld()->Branch();
 
     if( !aStartItem )
         return;
@@ -329,8 +329,8 @@ void PNS_TOOL_BASE::deleteTraces( PNS_ITEM* aStartItem, bool aWholeTrack )
     }
     else
     {
-        PNS_TOPOLOGY topo( node );
-        PNS_ITEMSET path = topo.AssembleTrivialPath( aStartItem );
+        TOPOLOGY topo( node );
+        ITEM_SET path = topo.AssembleTrivialPath( aStartItem );
 
         for( auto ent : path.Items() )
             node->Remove( ent.item );
@@ -340,13 +340,13 @@ void PNS_TOOL_BASE::deleteTraces( PNS_ITEM* aStartItem, bool aWholeTrack )
 }
 
 
-PNS_ROUTER *PNS_TOOL_BASE::Router() const
+ROUTER *TOOL_BASE::Router() const
 {
     return m_router;
 }
 
 
-const VECTOR2I PNS_TOOL_BASE::snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment )
+const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment )
 {
     VECTOR2I anchor;
 
@@ -358,19 +358,19 @@ const VECTOR2I PNS_TOOL_BASE::snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aS
 
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::SOLID_T:
-        anchor = static_cast<PNS_SOLID*>( aItem )->Pos();
+    case ITEM::SOLID_T:
+        anchor = static_cast<SOLID*>( aItem )->Pos();
         aSplitsSegment = false;
         break;
 
-    case PNS_ITEM::VIA_T:
-        anchor = static_cast<PNS_VIA*>( aItem )->Pos();
+    case ITEM::VIA_T:
+        anchor = static_cast<VIA*>( aItem )->Pos();
         aSplitsSegment = false;
         break;
 
-    case PNS_ITEM::SEGMENT_T:
+    case ITEM::SEGMENT_T:
     {
-        PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( aItem );
+        SEGMENT* seg = static_cast<SEGMENT*>( aItem );
         const SEG& s = seg->Seg();
         int w = seg->Width();
 

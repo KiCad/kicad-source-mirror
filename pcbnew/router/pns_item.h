@@ -33,7 +33,7 @@ class BOARD_CONNECTED_ITEM;
 
 namespace PNS {
 
-class PNS_NODE;
+class NODE;
 
 enum LineMarker {
     MK_HEAD         = ( 1 << 0 ),
@@ -44,12 +44,12 @@ enum LineMarker {
 
 
 /**
- * Class PNS_ITEM
+ * Class ITEM
  *
  * Base class for PNS router board items. Implements the shared properties of all PCB items -
  * net, spanned layers, geometric shape & refererence to owning model.
  */
-class PNS_ITEM
+class ITEM
 {
 public:
     static const int UnusedNet = INT_MAX;
@@ -66,7 +66,7 @@ public:
         ANY_T       = 0xff
     };
 
-    PNS_ITEM( PnsKind aKind )
+    ITEM( PnsKind aKind )
     {
         m_net = UnusedNet;
         m_movable = true;
@@ -77,7 +77,7 @@ public:
         m_rank = -1;
     }
 
-    PNS_ITEM( const PNS_ITEM& aOther )
+    ITEM( const ITEM& aOther )
     {
         m_layers = aOther.m_layers;
         m_net = aOther.m_net;
@@ -89,14 +89,14 @@ public:
         m_rank = aOther.m_rank;
     }
 
-    virtual ~PNS_ITEM();
+    virtual ~ITEM();
 
     /**
      * Function Clone()
      *
      * Returns a deep copy of the item
      */
-    virtual PNS_ITEM* Clone() const = 0;
+    virtual ITEM* Clone() const = 0;
 
     /*
      * Function Hull()
@@ -183,7 +183,7 @@ public:
      *
      * Sets the layers spanned by the item to aLayers.
      */
-    void SetLayers( const PNS_LAYERSET& aLayers )
+    void SetLayers( const LAYER_RANGE& aLayers )
     {
         m_layers = aLayers;
     }
@@ -195,7 +195,7 @@ public:
      */
     void SetLayer( int aLayer )
     {
-        m_layers = PNS_LAYERSET( aLayer, aLayer );
+        m_layers = LAYER_RANGE( aLayer, aLayer );
     }
 
     /**
@@ -203,7 +203,7 @@ public:
      *
      * Returns the contiguous set of layers spanned by the item.
      */
-    const PNS_LAYERSET& Layers() const
+    const LAYER_RANGE& Layers() const
     {
         return m_layers;
     }
@@ -224,7 +224,7 @@ public:
      * Returns true if the set of layers spanned by aOther overlaps our
      * layers.
      */
-    bool LayersOverlap( const PNS_ITEM* aOther ) const
+    bool LayersOverlap( const ITEM* aOther ) const
     {
         return Layers().Overlaps( aOther->Layers() );
     }
@@ -233,9 +233,9 @@ public:
      * Functon SetOwner()
      *
      * Sets the node that owns this item. An item can belong to a single
-     * PNS_NODE or stay unowned.
+     * NODE or stay unowned.
      */
-    void SetOwner( PNS_NODE* aOwner )
+    void SetOwner( NODE* aOwner )
     {
         m_owner = aOwner;
     }
@@ -245,7 +245,7 @@ public:
      *
      * @return true if the item is owned by the node aNode.
      */
-    bool BelongsTo( PNS_NODE* aNode ) const
+    bool BelongsTo( NODE* aNode ) const
     {
         return m_owner == aNode;
     }
@@ -255,7 +255,7 @@ public:
      *
      * Returns the owner of this item, or NULL if there's none.
      */
-    PNS_NODE* Owner() const { return m_owner; }
+    NODE* Owner() const { return m_owner; }
 
     /**
      * Function Collide()
@@ -271,15 +271,15 @@ public:
      * @param aMTV the minimum translation vector
      * @return true, if a collision was found.
      */
-    virtual bool Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
+    virtual bool Collide( const ITEM* aOther, int aClearance, bool aNeedMTV,
             VECTOR2I& aMTV,  bool aDifferentNetsOnly = true ) const;
 
     /**
      * Function Collide()
      *
-     * A shortcut for PNS_ITEM::Colllide() without MTV stuff.
+     * A shortcut for ITEM::Colllide() without MTV stuff.
      */
-  	bool Collide( const PNS_ITEM* aOther, int aClearance, bool aDifferentNetsOnly = true ) const
+  	bool Collide( const ITEM* aOther, int aClearance, bool aDifferentNetsOnly = true ) const
     {
         VECTOR2I dummy;
 
@@ -338,15 +338,15 @@ public:
     }
 
 private:
-    bool collideSimple( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
+    bool collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV,
             VECTOR2I& aMTV, bool aDifferentNetsOnly ) const;
 
 protected:
     PnsKind                 m_kind;
 
     BOARD_CONNECTED_ITEM*   m_parent;
-    PNS_NODE*               m_owner;
-    PNS_LAYERSET            m_layers;
+    NODE*               m_owner;
+    LAYER_RANGE            m_layers;
 
     bool                    m_movable;
     int                     m_net;

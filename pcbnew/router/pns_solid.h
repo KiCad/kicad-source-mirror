@@ -32,32 +32,32 @@
 
 namespace PNS {
 
-class PNS_SOLID : public PNS_ITEM
+class SOLID : public ITEM
 {
 public:
-    PNS_SOLID() : PNS_ITEM( SOLID_T ), m_shape( NULL )
+    SOLID() : ITEM( SOLID_T ), m_shape( NULL )
     {
         m_movable = false;
     }
 
-    ~PNS_SOLID()
+    ~SOLID()
     {
         delete m_shape;
     }
 
-    PNS_SOLID( const PNS_SOLID& aSolid ) :
-        PNS_ITEM( aSolid )
+    SOLID( const SOLID& aSolid ) :
+        ITEM( aSolid )
     {
         m_shape = aSolid.m_shape->Clone();
         m_pos = aSolid.m_pos;
     }
 
-    static inline bool ClassOf( const PNS_ITEM* aItem )
+    static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && SOLID_T == aItem->Kind();
     }
 
-    PNS_ITEM* Clone() const;
+    ITEM* Clone() const;
 
     const SHAPE* Shape() const { return m_shape; }
 

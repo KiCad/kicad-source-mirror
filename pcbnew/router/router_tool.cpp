@@ -110,7 +110,7 @@ static TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimension
 
 
 ROUTER_TOOL::ROUTER_TOOL() :
-    PNS_TOOL_BASE( "pcbnew.InteractiveRouter" )
+    TOOL_BASE( "pcbnew.InteractiveRouter" )
 {
 }
 
@@ -200,7 +200,7 @@ private:
 class ROUTER_TOOL_MENU: public CONTEXT_MENU
 {
 public:
-    ROUTER_TOOL_MENU( BOARD* aBoard, PNS::PNS_ROUTER_MODE aMode )
+    ROUTER_TOOL_MENU( BOARD* aBoard, PNS::ROUTER_MODE aMode )
     {
         SetTitle( _( "Interactive Router" ) );
         Add( ACT_NewTrack );
@@ -223,7 +223,7 @@ public:
             Add( ACT_SetDpDimensions );
 
         AppendSeparator();
-        Add( PNS::PNS_TOOL_BASE::ACT_RouterOptions );
+        Add( PNS::TOOL_BASE::ACT_RouterOptions );
     }
 
 private:
@@ -245,7 +245,7 @@ bool ROUTER_TOOL::Init()
 
 void ROUTER_TOOL::Reset( RESET_REASON aReason )
 {
-    PNS_TOOL_BASE::Reset( aReason );
+    TOOL_BASE::Reset( aReason );
 
     Go( &ROUTER_TOOL::RouteSingleTrace, COMMON_ACTIONS::routerActivateSingle.MakeEvent() );
     Go( &ROUTER_TOOL::RouteDiffPair, COMMON_ACTIONS::routerActivateDiffPair.MakeEvent() );
@@ -314,7 +314,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
     }
     else if( aEvent.IsAction( &ACT_SetDpDimensions ) )
     {
-        PNS::PNS_SIZES_SETTINGS sizes = m_router->Sizes();
+        PNS::SIZES_SETTINGS sizes = m_router->Sizes();
         DIALOG_PNS_DIFF_PAIR_DIMENSIONS settingsDlg( m_frame, sizes );
 
         if( settingsDlg.ShowModal() )
@@ -337,20 +337,20 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &COMMON_ACTIONS::trackViaSizeChanged ) )
     {
 
-        PNS::PNS_SIZES_SETTINGS sizes( m_router->Sizes() );
+        PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
         sizes.ImportCurrent( m_board->GetDesignSettings() );
         m_router->UpdateSizes( sizes );
     }
 }
 
 
-int ROUTER_TOOL::getStartLayer( const PNS::PNS_ITEM* aItem )
+int ROUTER_TOOL::getStartLayer( const PNS::ITEM* aItem )
 {
     int tl = getView()->GetTopLayer();
 
     if( m_startItem )
     {
-        const PNS_LAYERSET& ls = m_startItem->Layers();
+        const LAYER_RANGE& ls = m_startItem->Layers();
 
         if( ls.Overlaps( tl ) )
             return tl;
@@ -391,7 +391,7 @@ bool ROUTER_TOOL::onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType )
     LAYER_ID pairTop = m_frame->GetScreen()->m_Route_Layer_TOP;
     LAYER_ID pairBottom = m_frame->GetScreen()->m_Route_Layer_BOTTOM;
 
-    PNS::PNS_SIZES_SETTINGS sizes = m_router->Sizes();
+    PNS::SIZES_SETTINGS sizes = m_router->Sizes();
 
     // fixme: P&S supports more than one fixed layer pair. Update the dialog?
     sizes.ClearLayerPairs();
@@ -507,7 +507,7 @@ bool ROUTER_TOOL::prepareInteractive()
     m_ctls->ForceCursorPosition( false );
     m_ctls->SetAutoPan( true );
 
-    PNS::PNS_SIZES_SETTINGS sizes( m_router->Sizes() );
+    PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
 
     sizes.Init( m_board, m_startItem );
     sizes.AddLayerPair( m_frame->GetScreen()->m_Route_Layer_TOP,
@@ -619,7 +619,7 @@ int ROUTER_TOOL::DpDimensionsDialog( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    PNS::PNS_SIZES_SETTINGS sizes = m_router->Sizes();
+    PNS::SIZES_SETTINGS sizes = m_router->Sizes();
     DIALOG_PNS_DIFF_PAIR_DIMENSIONS settingsDlg( m_frame, sizes );
 
     if( settingsDlg.ShowModal() )
@@ -660,7 +660,7 @@ int ROUTER_TOOL::RouteDiffPair( const TOOL_EVENT& aEvent )
 }
 
 
-int ROUTER_TOOL::mainLoop( PNS::PNS_ROUTER_MODE aMode )
+int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 {
     PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
     BOARD* board = getModel<BOARD>();

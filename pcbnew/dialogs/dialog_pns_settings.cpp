@@ -26,7 +26,7 @@
 #include "dialog_pns_settings.h"
 #include <router/pns_routing_settings.h>
 
-DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::PNS_ROUTING_SETTINGS& aSettings ) :
+DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTINGS& aSettings ) :
     DIALOG_PNS_SETTINGS_BASE( aParent ), m_settings( aSettings )
 {
     // "Figure out what's best" is not available yet

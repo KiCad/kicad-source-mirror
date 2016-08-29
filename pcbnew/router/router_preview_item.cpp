@@ -37,7 +37,7 @@
 
 using namespace KIGFX;
 
-ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::PNS_ITEM* aItem, VIEW_GROUP* aParent ) :
+ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, VIEW_GROUP* aParent ) :
     EDA_ITEM( NOT_USED )
 {
     m_parent = aParent;
@@ -64,13 +64,13 @@ ROUTER_PREVIEW_ITEM::~ROUTER_PREVIEW_ITEM()
 }
 
 
-void ROUTER_PREVIEW_ITEM::Update( const PNS::PNS_ITEM* aItem )
+void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
 {
     m_originLayer = aItem->Layers().Start();
 
-    if( aItem->OfKind( PNS::PNS_ITEM::LINE_T ) )
+    if( aItem->OfKind( PNS::ITEM::LINE_T ) )
     {
-        const PNS::PNS_LINE* l = static_cast<const PNS::PNS_LINE*>( aItem );
+        const PNS::LINE* l = static_cast<const PNS::LINE*>( aItem );
 
         if( !l->SegmentCount() )
             return;
@@ -86,20 +86,20 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::PNS_ITEM* aItem )
 
     switch( aItem->Kind() )
     {
-    case PNS::PNS_ITEM::LINE_T:
+    case PNS::ITEM::LINE_T:
         m_type  = PR_SHAPE;
-        m_width = ( (PNS::PNS_LINE*) aItem )->Width();
+        m_width = ( (PNS::LINE*) aItem )->Width();
         break;
 
-    case PNS::PNS_ITEM::SEGMENT_T:
+    case PNS::ITEM::SEGMENT_T:
     {
-        PNS::PNS_SEGMENT* seg = (PNS::PNS_SEGMENT*) aItem;
+        PNS::SEGMENT* seg = (PNS::SEGMENT*) aItem;
         m_type  = PR_SHAPE;
         m_width = seg->Width();
         break;
     }
 
-    case PNS::PNS_ITEM::VIA_T:
+    case PNS::ITEM::VIA_T:
         m_originLayer = m_layer = ITEM_GAL_LAYER( VIAS_VISIBLE );
         m_type = PR_SHAPE;
         m_width = 0;
@@ -107,7 +107,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::PNS_ITEM* aItem )
         m_depth = ViaOverlayDepth;
         break;
 
-    case PNS::PNS_ITEM::SOLID_T:
+    case PNS::ITEM::SOLID_T:
         m_type = PR_SHAPE;
         m_width = 0;
         break;

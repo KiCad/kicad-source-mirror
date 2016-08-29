@@ -34,17 +34,17 @@
 namespace PNS {
 
 /**
- * Class PNS_JOINT
+ * Class JOINT
  *
  * Represents a 2D point on a given set of layers and belonging to a certain
  * net, that links together a number of board items.
  * A hash table of joints is used by the router to follow connectivity between
  * the items.
  **/
-class PNS_JOINT : public PNS_ITEM
+class JOINT : public ITEM
 {
 public:
-    typedef PNS_ITEMSET::ENTRIES LINKED_ITEMS;
+    typedef ITEM_SET::ENTRIES LINKED_ITEMS;
 
     ///> Joints are hashed by their position, layers and net.
     ///  Linked items are, obviously, not hashed
@@ -54,11 +54,11 @@ public:
         int net;
     };
 
-    PNS_JOINT() :
-        PNS_ITEM( JOINT_T ), m_locked( false ) {}
+    JOINT() :
+        ITEM( JOINT_T ), m_locked( false ) {}
 
-    PNS_JOINT( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers, int aNet = -1 ) :
-        PNS_ITEM( JOINT_T )
+    JOINT( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet = -1 ) :
+        ITEM( JOINT_T )
     {
         m_tag.pos = aPos;
         m_tag.net = aNet;
@@ -66,8 +66,8 @@ public:
         m_locked = false;
     }
 
-    PNS_JOINT( const PNS_JOINT& aB ) :
-        PNS_ITEM( JOINT_T )
+    JOINT( const JOINT& aB ) :
+        ITEM( JOINT_T )
     {
         m_layers = aB.m_layers;
         m_tag.pos = aB.m_tag.pos;
@@ -77,7 +77,7 @@ public:
         m_locked = aB.m_locked;
     }
 
-    PNS_ITEM* Clone( ) const
+    ITEM* Clone( ) const
     {
         assert( false );
         return NULL;
@@ -90,8 +90,8 @@ public:
         if( m_linkedItems.Size() != 2 || m_linkedItems.Count( SEGMENT_T ) != 2 )
             return false;
 
-        PNS_SEGMENT* seg1 = static_cast<PNS_SEGMENT*>( m_linkedItems[0] );
-        PNS_SEGMENT* seg2 = static_cast<PNS_SEGMENT*>( m_linkedItems[1] );
+        SEGMENT* seg1 = static_cast<SEGMENT*>( m_linkedItems[0] );
+        SEGMENT* seg2 = static_cast<SEGMENT*>( m_linkedItems[1] );
 
         // joints between segments of different widths are not considered trivial.
         return seg1->Width() == seg2->Width();
@@ -113,14 +113,14 @@ public:
         if( m_linkedItems.Count( SEGMENT_T ) != 2)
             return false;
 
-        PNS_SEGMENT* seg1 = static_cast<PNS_SEGMENT*>( m_linkedItems[0] );
-        PNS_SEGMENT* seg2 = static_cast<PNS_SEGMENT*>( m_linkedItems[1] );
+        SEGMENT* seg1 = static_cast<SEGMENT*>( m_linkedItems[0] );
+        SEGMENT* seg2 = static_cast<SEGMENT*>( m_linkedItems[1] );
 
         return seg1->Width() != seg2->Width();
     }
 
-    ///> Links the joint to a given board item (when it's added to the PNS_NODE)
-    void Link( PNS_ITEM* aItem )
+    ///> Links the joint to a given board item (when it's added to the NODE)
+    void Link( ITEM* aItem )
     {
         if( m_linkedItems.Contains( aItem ) )
             return;
@@ -128,9 +128,9 @@ public:
         m_linkedItems.Add( aItem );
     }
 
-    ///> Unlinks a given board item from the joint (upon its removal from a PNS_NODE)
+    ///> Unlinks a given board item from the joint (upon its removal from a NODE)
     ///> Returns true if the joint became dangling after unlinking.
-    bool Unlink( PNS_ITEM* aItem )
+    bool Unlink( ITEM* aItem )
     {
         m_linkedItems.Erase( aItem );
         return m_linkedItems.Size() == 0;
@@ -138,20 +138,20 @@ public:
 
     ///> For trivial joints, returns the segment adjacent to (aCurrent). For non-trival ones, returns
     ///> NULL, indicating the end of line.
-    PNS_SEGMENT* NextSegment( PNS_SEGMENT* aCurrent ) const
+    SEGMENT* NextSegment( SEGMENT* aCurrent ) const
     {
         if( !IsLineCorner() )
             return NULL;
 
-        return static_cast<PNS_SEGMENT*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
+        return static_cast<SEGMENT*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
     }
 
-    PNS_VIA* Via()
+    VIA* Via()
     {
-        for( PNS_ITEM* item : m_linkedItems.Items() )
+        for( ITEM* item : m_linkedItems.Items() )
         {
             if( item->OfKind( VIA_T ) )
-                return static_cast<PNS_VIA*>( item );
+                return static_cast<VIA*>( item );
         }
 
         return NULL;
@@ -179,12 +179,12 @@ public:
         return m_linkedItems.CItems();
     }
 
-    const PNS_ITEMSET& CLinks() const
+    const ITEM_SET& CLinks() const
     {
         return m_linkedItems;
     }
 
-    PNS_ITEMSET& Links()
+    ITEM_SET& Links()
     {
         return m_linkedItems;
     }
@@ -196,12 +196,12 @@ public:
 
     void Dump() const;
 
-    bool operator==( const PNS_JOINT& rhs )  const
+    bool operator==( const JOINT& rhs )  const
     {
         return m_tag.pos == rhs.m_tag.pos && m_tag.net == rhs.m_tag.net;
     }
 
-    void Merge( const PNS_JOINT& aJoint )
+    void Merge( const JOINT& aJoint )
     {
         if( !Overlaps( aJoint ) )
             return;
@@ -211,13 +211,13 @@ public:
         if( aJoint.IsLocked() )
             m_locked = true;
 
-        for( PNS_ITEM* item : aJoint.LinkList() )
+        for( ITEM* item : aJoint.LinkList() )
         {
             m_linkedItems.Add( item );
         }
     }
 
-    bool Overlaps( const PNS_JOINT& rhs ) const
+    bool Overlaps( const JOINT& rhs ) const
     {
         return m_tag.pos == rhs.m_tag.pos &&
             m_tag.net == rhs.m_tag.net && m_layers.Overlaps( rhs.m_layers );
@@ -238,18 +238,18 @@ private:
     HASH_TAG m_tag;
 
     ///> list of items linked to this joint
-    PNS_ITEMSET m_linkedItems;
+    ITEM_SET m_linkedItems;
 
     ///> locked (non-movable) flag
     bool m_locked;
 };
 
-inline bool operator==( PNS_JOINT::HASH_TAG const& aP1, PNS_JOINT::HASH_TAG const& aP2 )
+inline bool operator==( JOINT::HASH_TAG const& aP1, JOINT::HASH_TAG const& aP2 )
 {
     return aP1.pos == aP2.pos && aP1.net == aP2.net;
 }
 
-inline std::size_t hash_value( PNS_JOINT::HASH_TAG const& aP )
+inline std::size_t hash_value( JOINT::HASH_TAG const& aP )
 {
     std::size_t seed = 0;
     boost::hash_combine( seed, aP.pos.x );

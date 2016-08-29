@@ -31,19 +31,19 @@
 
 namespace PNS {
 
-const PNS_MEANDER_SETTINGS& PNS_MEANDER_SHAPE::Settings() const
+const MEANDER_SETTINGS& MEANDER_SHAPE::Settings() const
 {
     return m_placer->MeanderSettings();
 }
 
 
-const PNS_MEANDER_SETTINGS& PNS_MEANDERED_LINE::Settings() const
+const MEANDER_SETTINGS& MEANDERED_LINE::Settings() const
 {
     return m_placer->MeanderSettings();
 }
 
 
-void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
+void MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 {
     double base_len = aBase.Length();
 
@@ -62,7 +62,7 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 
     do
     {
-        PNS_MEANDER_SHAPE m( m_placer, m_width, m_dual );
+        MEANDER_SHAPE m( m_placer, m_width, m_dual );
 
         m.SetBaselineOffset( m_baselineOffset );
         m.SetBaseIndex( aBaseIndex );
@@ -84,7 +84,7 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
                     if( m.Fit( MT_CHECK_START, aBase, m_last, i ) )
                     {
                         turning = true;
-                        AddMeander( new PNS_MEANDER_SHAPE( m ) );
+                        AddMeander( new MEANDER_SHAPE( m ) );
                         side = !i;
                         started = true;
                         break;
@@ -99,7 +99,7 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
                     {
                         if( m.Fit( MT_SINGLE, aBase, m_last, i ) )
                         {
-                            AddMeander( new PNS_MEANDER_SHAPE( m ) );
+                            AddMeander( new MEANDER_SHAPE( m ) );
                             fail = false;
                             started = false;
                             side = !i;
@@ -113,12 +113,12 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
                 if( rv )
                 {
                     m.Fit( MT_TURN, aBase, m_last, side );
-                    AddMeander( new PNS_MEANDER_SHAPE( m ) );
+                    AddMeander( new MEANDER_SHAPE( m ) );
                     started = true;
                 } else {
                     m.Fit( MT_FINISH, aBase, m_last, side );
                     started = false;
-                    AddMeander( new PNS_MEANDER_SHAPE( m ) );
+                    AddMeander( new MEANDER_SHAPE( m ) );
                     turning = false;
                 }
 
@@ -128,7 +128,7 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
         {
             bool rv = m.Fit( MT_FINISH, aBase, m_last, side );
             if( rv )
-                AddMeander( new PNS_MEANDER_SHAPE( m ) );
+                AddMeander( new MEANDER_SHAPE( m ) );
 
             break;
 
@@ -143,7 +143,7 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 
         if( fail )
         {
-            PNS_MEANDER_SHAPE tmp( m_placer, m_width, m_dual );
+            MEANDER_SHAPE tmp( m_placer, m_width, m_dual );
             tmp.SetBaselineOffset( m_baselineOffset );
             tmp.SetBaseIndex( aBaseIndex );
 
@@ -165,13 +165,13 @@ void PNS_MEANDERED_LINE::MeanderSegment( const SEG& aBase, int aBaseIndex )
 }
 
 
-int PNS_MEANDER_SHAPE::cornerRadius() const
+int MEANDER_SHAPE::cornerRadius() const
 {
     return (int64_t) spacing() * Settings().m_cornerRadiusPercentage / 200;
 }
 
 
-int PNS_MEANDER_SHAPE::spacing( ) const
+int MEANDER_SHAPE::spacing( ) const
 {
     if( !m_dual )
         return std::max( 2 * m_width, Settings().m_spacing );
@@ -183,7 +183,7 @@ int PNS_MEANDER_SHAPE::spacing( ) const
 }
 
 
-SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool aSide )
+SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool aSide )
 {
     SHAPE_LINE_CHAIN lc;
 
@@ -254,7 +254,7 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, 
 }
 
 
-VECTOR2I PNS_MEANDER_SHAPE::reflect( VECTOR2I p, const SEG& line )
+VECTOR2I MEANDER_SHAPE::reflect( VECTOR2I p, const SEG& line )
 {
     typedef int64_t ecoord;
     VECTOR2I d = line.B - line.A;
@@ -273,7 +273,7 @@ VECTOR2I PNS_MEANDER_SHAPE::reflect( VECTOR2I p, const SEG& line )
 }
 
 
-void PNS_MEANDER_SHAPE::start( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir )
+void MEANDER_SHAPE::start( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir )
 {
     m_currentTarget = aTarget;
     m_currentTarget->Clear();
@@ -283,20 +283,20 @@ void PNS_MEANDER_SHAPE::start( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere
 }
 
 
-void PNS_MEANDER_SHAPE::forward( int aLength )
+void MEANDER_SHAPE::forward( int aLength )
 {
     m_currentPos += m_currentDir.Resize( aLength );
     m_currentTarget->Append( m_currentPos );
 }
 
 
-void PNS_MEANDER_SHAPE::turn( int aAngle )
+void MEANDER_SHAPE::turn( int aAngle )
 {
     m_currentDir = m_currentDir.Rotate( (double) aAngle * M_PI / 180.0 );
 }
 
 
-void PNS_MEANDER_SHAPE::miter( int aRadius, bool aSide )
+void MEANDER_SHAPE::miter( int aRadius, bool aSide )
 {
     if( aRadius <= 0 )
     {
@@ -314,7 +314,7 @@ void PNS_MEANDER_SHAPE::miter( int aRadius, bool aSide )
 }
 
 
-void PNS_MEANDER_SHAPE::uShape( int aSides, int aCorner, int aTop )
+void MEANDER_SHAPE::uShape( int aSides, int aCorner, int aTop )
 {
     forward( aSides );
     miter( aCorner, true );
@@ -324,10 +324,10 @@ void PNS_MEANDER_SHAPE::uShape( int aSides, int aCorner, int aTop )
 }
 
 
-SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
-        bool aSide, PNS_MEANDER_TYPE aType, int aAmpl, int aBaselineOffset )
+SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
+        bool aSide, MEANDER_TYPE aType, int aAmpl, int aBaselineOffset )
 {
-    const PNS_MEANDER_SETTINGS& st = Settings();
+    const MEANDER_SETTINGS& st = Settings();
     int cr = cornerRadius();
     int offset = aBaselineOffset;
     int spc = spacing();
@@ -417,11 +417,11 @@ SHAPE_LINE_CHAIN PNS_MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
 }
 
 
-bool PNS_MEANDERED_LINE::CheckSelfIntersections( PNS_MEANDER_SHAPE* aShape, int aClearance )
+bool MEANDERED_LINE::CheckSelfIntersections( MEANDER_SHAPE* aShape, int aClearance )
 {
     for( int i = m_meanders.size() - 1; i >= 0; i-- )
     {
-        PNS_MEANDER_SHAPE* m = m_meanders[i];
+        MEANDER_SHAPE* m = m_meanders[i];
 
         if( m->Type() == MT_EMPTY || m->Type() == MT_CORNER )
             continue;
@@ -443,12 +443,12 @@ bool PNS_MEANDERED_LINE::CheckSelfIntersections( PNS_MEANDER_SHAPE* aShape, int 
 }
 
 
-bool PNS_MEANDER_SHAPE::Fit( PNS_MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP, bool aSide )
+bool MEANDER_SHAPE::Fit( MEANDER_TYPE aType, const SEG& aSeg, const VECTOR2I& aP, bool aSide )
 {
-    const PNS_MEANDER_SETTINGS& st = Settings();
+    const MEANDER_SETTINGS& st = Settings();
 
     bool checkMode = false;
-    PNS_MEANDER_TYPE prim1, prim2;
+    MEANDER_TYPE prim1, prim2;
 
     if( aType == MT_CHECK_START )
     {
@@ -465,8 +465,8 @@ bool PNS_MEANDER_SHAPE::Fit( PNS_MEANDER_TYPE aType, const SEG& aSeg, const VECT
 
     if( checkMode )
     {
-        PNS_MEANDER_SHAPE m1( m_placer, m_width, m_dual );
-        PNS_MEANDER_SHAPE m2( m_placer, m_width, m_dual );
+        MEANDER_SHAPE m1( m_placer, m_width, m_dual );
+        MEANDER_SHAPE m2( m_placer, m_width, m_dual );
 
         m1.SetBaselineOffset( m_baselineOffset );
         m2.SetBaselineOffset( m_baselineOffset );
@@ -533,7 +533,7 @@ bool PNS_MEANDER_SHAPE::Fit( PNS_MEANDER_TYPE aType, const SEG& aSeg, const VECT
 }
 
 
-void PNS_MEANDER_SHAPE::Recalculate()
+void MEANDER_SHAPE::Recalculate()
 {
     m_shapes[0] = genMeanderShape( m_p0, m_baseSeg.B - m_baseSeg.A, m_side, m_type, m_amplitude, m_dual ? m_baselineOffset : 0 );
 
@@ -544,7 +544,7 @@ void PNS_MEANDER_SHAPE::Recalculate()
 }
 
 
-void PNS_MEANDER_SHAPE::Resize( int aAmpl )
+void MEANDER_SHAPE::Resize( int aAmpl )
 {
     if( aAmpl < 0 )
         return;
@@ -555,7 +555,7 @@ void PNS_MEANDER_SHAPE::Resize( int aAmpl )
 }
 
 
-void PNS_MEANDER_SHAPE::MakeEmpty()
+void MEANDER_SHAPE::MakeEmpty()
 {
     updateBaseSegment();
 
@@ -570,9 +570,9 @@ void PNS_MEANDER_SHAPE::MakeEmpty()
 }
 
 
-void PNS_MEANDERED_LINE::AddCorner( const VECTOR2I& aA, const VECTOR2I& aB )
+void MEANDERED_LINE::AddCorner( const VECTOR2I& aA, const VECTOR2I& aB )
 {
-    PNS_MEANDER_SHAPE* m = new PNS_MEANDER_SHAPE( m_placer, m_width, m_dual );
+    MEANDER_SHAPE* m = new MEANDER_SHAPE( m_placer, m_width, m_dual );
 
     m->MakeCorner( aA, aB );
     m_last = aA;
@@ -581,7 +581,7 @@ void PNS_MEANDERED_LINE::AddCorner( const VECTOR2I& aA, const VECTOR2I& aB )
 }
 
 
-void PNS_MEANDER_SHAPE::MakeCorner( VECTOR2I aP1, VECTOR2I aP2 )
+void MEANDER_SHAPE::MakeCorner( VECTOR2I aP1, VECTOR2I aP2 )
 {
     SetType( MT_CORNER );
     m_shapes[0].Clear();
@@ -593,16 +593,16 @@ void PNS_MEANDER_SHAPE::MakeCorner( VECTOR2I aP1, VECTOR2I aP2 )
 }
 
 
-void PNS_MEANDERED_LINE::AddMeander( PNS_MEANDER_SHAPE* aShape )
+void MEANDERED_LINE::AddMeander( MEANDER_SHAPE* aShape )
 {
     m_last = aShape->BaseSegment().B;
     m_meanders.push_back( aShape );
 }
 
 
-void PNS_MEANDERED_LINE::Clear()
+void MEANDERED_LINE::Clear()
 {
-    for( PNS_MEANDER_SHAPE* m : m_meanders )
+    for( MEANDER_SHAPE* m : m_meanders )
     {
         delete m;
     }
@@ -611,19 +611,19 @@ void PNS_MEANDERED_LINE::Clear()
 }
 
 
-int PNS_MEANDER_SHAPE::BaselineLength() const
+int MEANDER_SHAPE::BaselineLength() const
 {
     return m_clippedBaseSeg.Length();
 }
 
 
-int PNS_MEANDER_SHAPE::MaxTunableLength() const
+int MEANDER_SHAPE::MaxTunableLength() const
 {
     return CLine( 0 ).Length();
 }
 
 
-void PNS_MEANDER_SHAPE::updateBaseSegment( )
+void MEANDER_SHAPE::updateBaseSegment( )
 {
     if( m_dual )
     {

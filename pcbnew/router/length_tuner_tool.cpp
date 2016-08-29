@@ -68,7 +68,7 @@ static TOOL_ACTION ACT_AmplDecrease( "pcbnew.LengthTuner.AmplDecrease", AS_CONTE
 
 
 LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
-    PNS_TOOL_BASE( "pcbnew.LengthTuner" )
+    TOOL_BASE( "pcbnew.LengthTuner" )
 {
 }
 
@@ -101,7 +101,7 @@ LENGTH_TUNER_TOOL::~LENGTH_TUNER_TOOL()
 
 void LENGTH_TUNER_TOOL::Reset( RESET_REASON aReason )
 {
-    PNS_TOOL_BASE::Reset( aReason );
+    TOOL_BASE::Reset( aReason );
 
     Go( &LENGTH_TUNER_TOOL::TuneSingleTrace, COMMON_ACTIONS::routerActivateTuneSingleTrace.MakeEvent() );
     Go( &LENGTH_TUNER_TOOL::TuneDiffPair, COMMON_ACTIONS::routerActivateTuneDiffPair.MakeEvent() );
@@ -121,14 +121,14 @@ void LENGTH_TUNER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
         }
     }
 
-    PNS::PNS_MEANDER_PLACER_BASE* placer = static_cast<PNS::PNS_MEANDER_PLACER_BASE*>( m_router->Placer() );
+    PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( m_router->Placer() );
 
     if( !placer )
         return;
 
     if( aEvent.IsAction( &ACT_Settings ) )
     {
-        PNS::PNS_MEANDER_SETTINGS settings = placer->MeanderSettings();
+        PNS::MEANDER_SETTINGS settings = placer->MeanderSettings();
         DIALOG_PNS_LENGTH_TUNING_SETTINGS settingsDlg( m_frame, settings, m_router->Mode() );
 
         if( settingsDlg.ShowModal() )
@@ -171,7 +171,7 @@ void LENGTH_TUNER_TOOL::performTuning()
         return;
     }
 
-    PNS::PNS_MEANDER_PLACER_BASE* placer = static_cast<PNS::PNS_MEANDER_PLACER_BASE*>(
+    PNS::MEANDER_PLACER_BASE* placer = static_cast<PNS::MEANDER_PLACER_BASE*>( 
         m_router->Placer() );
 
     placer->UpdateSettings( m_savedMeanderSettings );
@@ -256,7 +256,7 @@ int LENGTH_TUNER_TOOL::TuneDiffPairSkew( const TOOL_EVENT& aEvent )
 }
 
 
-int LENGTH_TUNER_TOOL::mainLoop( PNS::PNS_ROUTER_MODE aMode )
+int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 {
     // Deselect all items
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );

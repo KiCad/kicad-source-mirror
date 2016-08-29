@@ -41,8 +41,8 @@
 
 namespace PNS {
 
-class PNS_ITEM;
-class PNS_ROUTER;
+class ITEM;
+class ROUTER;
 
 }
 
@@ -56,10 +56,10 @@ public:
         PR_SHAPE
     };
 
-    ROUTER_PREVIEW_ITEM( const PNS::PNS_ITEM* aItem = NULL, KIGFX::VIEW_GROUP* aParent = NULL );
+    ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = NULL, KIGFX::VIEW_GROUP* aParent = NULL );
     ~ROUTER_PREVIEW_ITEM();
 
-    void Update( const PNS::PNS_ITEM* aItem );
+    void Update( const PNS::ITEM* aItem );
 
     void StuckMarker( VECTOR2I& aPosition );
 
@@ -107,7 +107,7 @@ private:
 
     KIGFX::VIEW_GROUP* m_parent;
 
-    PNS::PNS_ROUTER* m_router;
+    PNS::ROUTER* m_router;
     SHAPE* m_shape;
 
     ITEM_TYPE m_type;
