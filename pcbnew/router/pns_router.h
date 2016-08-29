@@ -24,6 +24,7 @@
 
 #include <list>
 
+#include <memory>
 #include <boost/optional.hpp>
 #include <boost/unordered_set.hpp>
 
@@ -132,7 +133,7 @@ public:
 
     NODE* GetWorld() const
     {
-        return m_world;
+        return m_world.get();
     }
 
     void FlipPosture();
@@ -214,7 +215,7 @@ public:
     void SetFailureReason ( const wxString& aReason ) { m_failureReason = aReason; }
     const wxString& FailureReason() const { return m_failureReason; }
 
-    PLACEMENT_ALGO* Placer() { return m_placer; }
+    PLACEMENT_ALGO* Placer() { return m_placer.get(); }
 
     ROUTER_IFACE* GetInterface() const
     {
@@ -250,11 +251,13 @@ private:
     VECTOR2I m_currentEnd;
     RouterState m_state;
 
-    NODE* m_world;
-    NODE* m_lastNode;
-    PLACEMENT_ALGO * m_placer;
-    DRAGGER* m_dragger;
-    SHOVE* m_shove;
+    std::unique_ptr< NODE > m_world;
+    NODE*                   m_lastNode;
+
+    std::unique_ptr< PLACEMENT_ALGO > m_placer;
+    std::unique_ptr< DRAGGER >        m_dragger;
+    std::unique_ptr< SHOVE >          m_shove;
+
     ROUTER_IFACE* m_iface;
 
     int m_iterLimit;

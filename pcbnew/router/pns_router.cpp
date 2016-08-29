@@ -70,18 +70,14 @@ ROUTER::ROUTER()
 
 
     m_state = IDLE;
-    m_world = NULL;
-    m_placer = NULL;
-    m_dragger = NULL;
     m_mode = PNS_MODE_ROUTE_SINGLE;
 
     // Initialize all other variables:
-    m_lastNode = NULL;
-    m_shove = NULL;
+    m_lastNode = nullptr;
     m_iterLimit = 0;
     m_showInterSteps = false;
     m_snapshotIter = 0;
-    m_view = NULL;
+    m_view = nullptr;
     m_snappingEnabled  = false;
     m_violation = false;
 }
@@ -96,15 +92,15 @@ ROUTER* ROUTER::GetInstance()
 ROUTER::~ROUTER()
 {
     ClearWorld();
-    theRouter = NULL;
+    theRouter = nullptr;
 }
 
 void ROUTER::SyncWorld( )
 {
     ClearWorld();
 
-    m_world = new NODE;
-    m_iface->SyncWorld( m_world );
+    m_world = std::unique_ptr< NODE >( new NODE );
+    m_iface->SyncWorld( m_world.get() );
 
 }
 
@@ -113,15 +109,10 @@ void ROUTER::ClearWorld()
     if( m_world )
     {
         m_world->KillChildren();
-        delete m_world;
+        m_world.reset();
     }
 
-    if( m_placer )
-        delete m_placer;
-
-
-    m_world = NULL;
-    m_placer = NULL;
+    m_placer.reset();
 }
 
 
@@ -146,15 +137,15 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aStartItem )
     if( !aStartItem || aStartItem->OfKind( ITEM::SOLID_T ) )
         return false;
 
-    m_dragger = new DRAGGER( this );
-    m_dragger->SetWorld( m_world );
+    m_dragger.reset( new DRAGGER( this ) );
+    m_dragger->SetWorld( m_world.get() );
     m_dragger->SetDebugDecorator ( m_iface->GetDebugDecorator () );
 
     if( m_dragger->Start ( aP, aStartItem ) )
         m_state = DRAG_SEGMENT;
     else
     {
-        delete m_dragger;
+        m_dragger.reset();
         m_state = IDLE;
         return false;
     }
@@ -167,19 +158,19 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
     switch( m_mode )
     {
         case PNS_MODE_ROUTE_SINGLE:
-            m_placer = new LINE_PLACER( this );
+            m_placer.reset( new LINE_PLACER( this ) );
             break;
         case PNS_MODE_ROUTE_DIFF_PAIR:
-            m_placer = new DIFF_PAIR_PLACER( this );
+            m_placer.reset( new DIFF_PAIR_PLACER( this ) );
             break;
         case PNS_MODE_TUNE_SINGLE:
-            m_placer = new MEANDER_PLACER( this );
+            m_placer.reset( new MEANDER_PLACER( this ) );
             break;
         case PNS_MODE_TUNE_DIFF_PAIR:
-            m_placer = new DP_MEANDER_PLACER( this );
+            m_placer.reset( new DP_MEANDER_PLACER( this ) );
             break;
         case PNS_MODE_TUNE_DIFF_PAIR_SKEW:
-            m_placer = new MEANDER_SKEW_PLACER( this );
+            m_placer.reset( new MEANDER_SKEW_PLACER( this ) );
             break;
 
         default:
@@ -387,14 +378,8 @@ void ROUTER::StopRouting()
     if( !RoutingInProgress() )
         return;
 
-    if( m_placer )
-        delete m_placer;
-
-    if( m_dragger )
-        delete m_dragger;
-
-    m_placer = NULL;
-    m_dragger = NULL;
+    m_placer.reset();
+    m_dragger.reset();
 
     m_iface->EraseView();
 
@@ -455,7 +440,7 @@ int ROUTER::GetCurrentLayer() const
 
 void ROUTER::DumpLog()
 {
-    LOGGER* logger = NULL;
+    LOGGER* logger = nullptr;
 
     switch( m_state )
     {
