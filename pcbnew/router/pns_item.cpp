@@ -48,7 +48,7 @@ bool PNS_ITEM::Collide( const PNS_ITEM* aOther, int aClearance, bool aNeedMTV,
         return true;
 
     // special case for "head" line with a via attached at the end.
-    if( aOther->m_kind == LINE )
+    if( aOther->m_kind == LINE_T )
     {
         const PNS_LINE* line = static_cast<const PNS_LINE*>( aOther );
 
@@ -64,19 +64,19 @@ const std::string PNS_ITEM::KindStr() const
 {
     switch( m_kind )
     {
-    case LINE:
+    case LINE_T:
         return "line";
 
-    case SEGMENT:
+    case SEGMENT_T:
         return "segment";
 
-    case VIA:
+    case VIA_T:
         return "via";
 
-    case JOINT:
+    case JOINT_T:
         return "joint";
 
-    case SOLID:
+    case SOLID_T:
         return "solid";
 
     default:

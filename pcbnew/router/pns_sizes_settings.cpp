@@ -37,15 +37,15 @@ int PNS_SIZES_SETTINGS::inheritTrackWidth( PNS_ITEM* aItem )
 
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::VIA:
+    case PNS_ITEM::VIA_T:
         p = static_cast<PNS_VIA*>( aItem )->Pos();
         break;
 
-    case PNS_ITEM::SOLID:
+    case PNS_ITEM::SOLID_T:
         p = static_cast<PNS_SOLID*>( aItem )->Pos();
         break;
 
-    case PNS_ITEM::SEGMENT:
+    case PNS_ITEM::SEGMENT_T:
         return static_cast<PNS_SEGMENT*>( aItem )->Width();
 
     default:
@@ -60,7 +60,7 @@ int PNS_SIZES_SETTINGS::inheritTrackWidth( PNS_ITEM* aItem )
 
 
     PNS_ITEMSET linkedSegs = jt->Links();
-    linkedSegs.ExcludeItem( aItem ).FilterKinds( PNS_ITEM::SEGMENT );
+    linkedSegs.ExcludeItem( aItem ).FilterKinds( PNS_ITEM::SEGMENT_T );
 
     for( PNS_ITEM* item : linkedSegs.Items() )
     {

@@ -48,7 +48,7 @@ bool PNS_MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
     VECTOR2I p;
 
-    if( !aStartItem || !aStartItem->OfKind( PNS_ITEM::SEGMENT ) )
+    if( !aStartItem || !aStartItem->OfKind( PNS_ITEM::SEGMENT_T ) )
     {
         Router()->SetFailureReason( _( "Please select a differential pair trace you want to tune." ) );
         return false;

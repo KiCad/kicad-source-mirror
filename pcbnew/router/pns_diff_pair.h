@@ -286,7 +286,7 @@ public:
 
     typedef std::vector<COUPLED_SEGMENTS> COUPLED_SEGMENTS_VEC;
 
-    PNS_DIFF_PAIR() : PNS_ITEM( DIFF_PAIR ), m_hasVias( false )
+    PNS_DIFF_PAIR() : PNS_ITEM( DIFF_PAIR_T ), m_hasVias( false )
     {
         // Initialize some members, to avoid uninitialized variables.
         m_net_p = 0;
@@ -299,7 +299,7 @@ public:
     }
 
     PNS_DIFF_PAIR( int aGap ) :
-        PNS_ITEM( DIFF_PAIR ),
+        PNS_ITEM( DIFF_PAIR_T ),
         m_hasVias( false )
     {
         m_gapConstraint = aGap;
@@ -315,7 +315,7 @@ public:
     }
 
     PNS_DIFF_PAIR( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ):
-        PNS_ITEM( DIFF_PAIR ),
+        PNS_ITEM( DIFF_PAIR_T ),
         m_n( aN ),
         m_p( aP ),
         m_hasVias( false )
@@ -333,7 +333,7 @@ public:
     }
 
     PNS_DIFF_PAIR( const PNS_LINE &aLineP, const PNS_LINE &aLineN, int aGap = 0 ):
-        PNS_ITEM( DIFF_PAIR ),
+        PNS_ITEM( DIFF_PAIR_T ),
         m_line_p( aLineP ),
         m_line_n( aLineN ),
         m_hasVias( false )
@@ -354,7 +354,7 @@ public:
 
     static inline bool ClassOf( const PNS_ITEM* aItem )
     {
-        return aItem && DIFF_PAIR == aItem->Kind();
+        return aItem && DIFF_PAIR_T == aItem->Kind();
     }
 
     PNS_DIFF_PAIR* Clone() const { assert( false ); return NULL; }

@@ -47,12 +47,12 @@ public:
     ~PNS_TOPOLOGY() {};
 
     bool SimplifyLine( PNS_LINE *aLine );
-    PNS_ITEM* NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor = NULL, int aKindMask = PNS_ITEM::ANY );
+    PNS_ITEM* NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor = NULL, int aKindMask = PNS_ITEM::ANY_T );
     bool LeadingRatLine( const PNS_LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine );
 
     const JOINT_SET ConnectedJoints( PNS_JOINT* aStart );
-    const PNS_ITEMSET ConnectedItems( PNS_JOINT* aStart, int aKindMask = PNS_ITEM::ANY );
-    const PNS_ITEMSET ConnectedItems( PNS_ITEM* aStart, int aKindMask = PNS_ITEM::ANY );
+    const PNS_ITEMSET ConnectedItems( PNS_JOINT* aStart, int aKindMask = PNS_ITEM::ANY_T );
+    const PNS_ITEMSET ConnectedItems( PNS_ITEM* aStart, int aKindMask = PNS_ITEM::ANY_T );
     int64_t ShortestConnectionLength( PNS_ITEM* aFrom, PNS_ITEM* aTo );
 
     const PNS_ITEMSET AssembleTrivialPath( PNS_ITEM* aStart );

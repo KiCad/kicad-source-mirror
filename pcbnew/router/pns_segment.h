@@ -39,17 +39,17 @@ class PNS_SEGMENT : public PNS_ITEM
 {
 public:
     PNS_SEGMENT() :
-        PNS_ITEM( SEGMENT )
+        PNS_ITEM( SEGMENT_T )
     {}
 
     PNS_SEGMENT( const SEG& aSeg, int aNet ) :
-        PNS_ITEM( SEGMENT ), m_seg( aSeg, 0 )
+        PNS_ITEM( SEGMENT_T ), m_seg( aSeg, 0 )
     {
         m_net = aNet;
     }
 
     PNS_SEGMENT( const PNS_LINE& aParentLine, const SEG& aSeg ) :
-        PNS_ITEM( SEGMENT ),
+        PNS_ITEM( SEGMENT_T ),
         m_seg( aSeg, aParentLine.Width() )
     {
         m_net = aParentLine.Net();
@@ -60,7 +60,7 @@ public:
 
     static inline bool ClassOf( const PNS_ITEM* aItem )
     {
-        return aItem && SEGMENT == aItem->Kind();
+        return aItem && SEGMENT_T == aItem->Kind();
     }
 
     PNS_SEGMENT* Clone() const;

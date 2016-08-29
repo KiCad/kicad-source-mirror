@@ -107,13 +107,13 @@ bool PNS_DP_PRIMITIVE_PAIR::Directional() const
     if( !m_primP )
         return false;
 
-    return m_primP->OfKind( PNS_ITEM::SEGMENT );
+    return m_primP->OfKind( PNS_ITEM::SEGMENT_T );
 }
 
 
 DIRECTION_45 PNS_DP_PRIMITIVE_PAIR::anchorDirection( PNS_ITEM* aItem, const VECTOR2I& aP ) const
 {
-    if( !aItem->OfKind ( PNS_ITEM::SEGMENT ) )
+    if( !aItem->OfKind ( PNS_ITEM::SEGMENT_T ) )
         return DIRECTION_45();
 
     PNS_SEGMENT* s = static_cast<PNS_SEGMENT*>( aItem );
@@ -130,7 +130,7 @@ void PNS_DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTO
 
     VECTOR2I aP, aN, dir, midpoint;
 
-    if ( m_primP->OfKind( PNS_ITEM::SEGMENT ) && m_primN->OfKind( PNS_ITEM::SEGMENT ) )
+    if ( m_primP->OfKind( PNS_ITEM::SEGMENT_T ) && m_primN->OfKind( PNS_ITEM::SEGMENT_T ) )
     {
         aP = m_primP->Anchor( 1 );
         aN = m_primN->Anchor( 1 );
@@ -421,7 +421,7 @@ void PNS_DP_GATEWAYS::BuildFromPrimitivePair( PNS_DP_PRIMITIVE_PAIR aPair, bool 
         return;
     }
 
-    const int pvMask = PNS_ITEM::SOLID | PNS_ITEM::VIA;
+    const int pvMask = PNS_ITEM::SOLID_T | PNS_ITEM::VIA_T;
 
     if( aPair.PrimP()->OfKind( pvMask ) && aPair.PrimN()->OfKind(  pvMask ) )
     {
@@ -430,7 +430,7 @@ void PNS_DP_GATEWAYS::BuildFromPrimitivePair( PNS_DP_PRIMITIVE_PAIR aPair, bool 
 
         shP = aPair.PrimP()->Shape();
     }
-    else if( aPair.PrimP()->OfKind( PNS_ITEM::SEGMENT ) && aPair.PrimN()->OfKind( PNS_ITEM::SEGMENT ) )
+    else if( aPair.PrimP()->OfKind( PNS_ITEM::SEGMENT_T ) && aPair.PrimN()->OfKind( PNS_ITEM::SEGMENT_T ) )
     {
         buildDpContinuation( aPair, aPreferDiagonal );
 

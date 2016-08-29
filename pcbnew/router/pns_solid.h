@@ -35,7 +35,7 @@ namespace PNS {
 class PNS_SOLID : public PNS_ITEM
 {
 public:
-    PNS_SOLID() : PNS_ITEM( SOLID ), m_shape( NULL )
+    PNS_SOLID() : PNS_ITEM( SOLID_T ), m_shape( NULL )
     {
         m_movable = false;
     }
@@ -54,7 +54,7 @@ public:
 
     static inline bool ClassOf( const PNS_ITEM* aItem )
     {
-        return aItem && SOLID == aItem->Kind();
+        return aItem && SOLID_T == aItem->Kind();
     }
 
     PNS_ITEM* Clone() const;

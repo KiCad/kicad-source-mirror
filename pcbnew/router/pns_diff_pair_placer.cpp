@@ -181,7 +181,7 @@ bool PNS_DIFF_PAIR_PLACER::attemptWalk( PNS_NODE* aNode, PNS_DIFF_PAIR* aCurrent
 
     bool currentIsP = aPFirst;
 
-    int mask = aSolidsOnly ? PNS_ITEM::SOLID : PNS_ITEM::ANY;
+    int mask = aSolidsOnly ? PNS_ITEM::SOLID_T : PNS_ITEM::ANY_T;
 
     do
     {
@@ -392,7 +392,7 @@ bool PNS_DIFF_PAIR_PLACER::SetLayer( int aLayer )
         return false;
     else if( !m_prevPair )
         return false;
-    else if( m_prevPair->PrimP() || ( m_prevPair->PrimP()->OfKind( PNS_ITEM::VIA ) &&
+    else if( m_prevPair->PrimP() || ( m_prevPair->PrimP()->OfKind( PNS_ITEM::VIA_T ) &&
                 m_prevPair->PrimP()->Layers().Overlaps( aLayer ) ) )
     {
         m_currentLayer = aLayer;
@@ -444,11 +444,11 @@ OPT_VECTOR2I PNS_DIFF_PAIR_PLACER::getDanglingAnchor( PNS_NODE* aNode, PNS_ITEM*
 {
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::VIA:
-    case PNS_ITEM::SOLID:
+    case PNS_ITEM::VIA_T:
+    case PNS_ITEM::SOLID_T:
         return aItem->Anchor( 0 );
 
-    case PNS_ITEM::SEGMENT:
+    case PNS_ITEM::SEGMENT_T:
     {
         PNS_SEGMENT* s =static_cast<PNS_SEGMENT*>( aItem );
 
@@ -513,7 +513,7 @@ bool PNS_DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, PNS_ITEM* aI
 
             bool shapeMatches = true;
 
-            if( item->OfKind( PNS_ITEM::SOLID ) && item->Layers() != aItem->Layers() )
+            if( item->OfKind( PNS_ITEM::SOLID_T ) && item->Layers() != aItem->Layers() )
             {
                 shapeMatches = false;
             }

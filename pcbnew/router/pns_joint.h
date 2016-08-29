@@ -55,10 +55,10 @@ public:
     };
 
     PNS_JOINT() :
-        PNS_ITEM( JOINT ), m_locked( false ) {}
+        PNS_ITEM( JOINT_T ), m_locked( false ) {}
 
     PNS_JOINT( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers, int aNet = -1 ) :
-        PNS_ITEM( JOINT )
+        PNS_ITEM( JOINT_T )
     {
         m_tag.pos = aPos;
         m_tag.net = aNet;
@@ -67,7 +67,7 @@ public:
     }
 
     PNS_JOINT( const PNS_JOINT& aB ) :
-        PNS_ITEM( JOINT )
+        PNS_ITEM( JOINT_T )
     {
         m_layers = aB.m_layers;
         m_tag.pos = aB.m_tag.pos;
@@ -87,7 +87,7 @@ public:
     /// segments of the same net, on the same layer.
     bool IsLineCorner() const
     {
-        if( m_linkedItems.Size() != 2 || m_linkedItems.Count( SEGMENT ) != 2 )
+        if( m_linkedItems.Size() != 2 || m_linkedItems.Count( SEGMENT_T ) != 2 )
             return false;
 
         PNS_SEGMENT* seg1 = static_cast<PNS_SEGMENT*>( m_linkedItems[0] );
@@ -99,8 +99,8 @@ public:
 
     bool IsNonFanoutVia() const
     {
-        int vias = m_linkedItems.Count( VIA );
-        int segs = m_linkedItems.Count( SEGMENT );
+        int vias = m_linkedItems.Count( VIA_T );
+        int segs = m_linkedItems.Count( SEGMENT_T );
 
         return ( m_linkedItems.Size() == 3 && vias == 1 && segs == 2 );
     }
@@ -110,7 +110,7 @@ public:
         if( m_linkedItems.Size() != 2 )
             return false;
 
-        if( m_linkedItems.Count( SEGMENT ) != 2)
+        if( m_linkedItems.Count( SEGMENT_T ) != 2)
             return false;
 
         PNS_SEGMENT* seg1 = static_cast<PNS_SEGMENT*>( m_linkedItems[0] );
@@ -150,7 +150,7 @@ public:
     {
         for( PNS_ITEM* item : m_linkedItems.Items() )
         {
-            if( item->OfKind( VIA ) )
+            if( item->OfKind( VIA_T ) )
                 return static_cast<PNS_VIA*>( item );
         }
 

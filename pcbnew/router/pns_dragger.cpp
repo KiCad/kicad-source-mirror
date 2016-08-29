@@ -89,7 +89,7 @@ bool PNS_DRAGGER::startDragVia( const VECTOR2D& aP, PNS_VIA* aVia )
 
     for( PNS_ITEM* item : jt->LinkList() )
     {
-        if( item->OfKind( PNS_ITEM::SEGMENT ) )
+        if( item->OfKind( PNS_ITEM::SEGMENT_T ) )
         {
             int segIndex;
             PNS_SEGMENT* seg = ( PNS_SEGMENT*) item;
@@ -119,10 +119,10 @@ bool PNS_DRAGGER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 
     switch( aStartItem->Kind() )
     {
-    case PNS_ITEM::SEGMENT:
+    case PNS_ITEM::SEGMENT_T:
         return startDragSegment( aP, static_cast<PNS_SEGMENT*>( aStartItem ) );
 
-    case PNS_ITEM::VIA:
+    case PNS_ITEM::VIA_T:
         return startDragVia( aP, static_cast<PNS_VIA*>( aStartItem ) );
 
     default:

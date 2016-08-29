@@ -155,7 +155,7 @@ PNS_OBSTACLE_VISITOR::PNS_OBSTACLE_VISITOR( const PNS_ITEM* aItem ) :
     m_override( NULL ),
     m_extraClearance( 0 )
 {
-   if( aItem && aItem->Kind() == PNS_ITEM::LINE )
+   if( aItem && aItem->Kind() == PNS_ITEM::LINE_T )
         m_extraClearance += static_cast<const PNS_LINE*>( aItem )->Width() / 2;
 }
 
@@ -228,7 +228,7 @@ struct PNS_NODE::DEFAULT_OBSTACLE_VISITOR : public PNS_OBSTACLE_VISITOR
 
         int clearance = m_extraClearance + m_node->GetClearance( aCandidate, m_item );
 
-        if( aCandidate->Kind() == PNS_ITEM::LINE ) // this should never happen.
+        if( aCandidate->Kind() == PNS_ITEM::LINE_T ) // this should never happen.
         {
             assert( false );
             clearance += static_cast<PNS_LINE*>( aCandidate )->Width() / 2;
@@ -427,7 +427,7 @@ PNS_NODE::OPT_OBSTACLE PNS_NODE::CheckColliding( const PNS_ITEM* aItemA, int aKi
 
     obs.reserve( 100 );
 
-    if( aItemA->Kind() == PNS_ITEM::LINE )
+    if( aItemA->Kind() == PNS_ITEM::LINE_T )
     {
         int n = 0;
         const PNS_LINE* line = static_cast<const PNS_LINE*>( aItemA );
@@ -467,9 +467,9 @@ bool PNS_NODE::CheckColliding( const PNS_ITEM* aItemA, const PNS_ITEM* aItemB, i
         clearance = GetClearance( aItemA, aItemB );
 
     // fixme: refactor
-    if( aItemA->Kind() == PNS_ITEM::LINE )
+    if( aItemA->Kind() == PNS_ITEM::LINE_T )
         clearance += static_cast<const PNS_LINE*>( aItemA )->Width() / 2;
-    if( aItemB->Kind() == PNS_ITEM::LINE )
+    if( aItemB->Kind() == PNS_ITEM::LINE_T )
         clearance += static_cast<const PNS_LINE*>( aItemB )->Width() / 2;
 
     return aItemA->Collide( aItemB, clearance );
@@ -607,19 +607,19 @@ void PNS_NODE::Add( PNS_ITEM* aItem, bool aAllowRedundant )
 
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::SOLID:
+    case PNS_ITEM::SOLID_T:
         addSolid( static_cast<PNS_SOLID*>( aItem ) );
         break;
 
-    case PNS_ITEM::SEGMENT:
+    case PNS_ITEM::SEGMENT_T:
         addSegment( static_cast<PNS_SEGMENT*>( aItem ), aAllowRedundant );
         break;
 
-    case PNS_ITEM::LINE:
+    case PNS_ITEM::LINE_T:
         addLine( static_cast<PNS_LINE*>( aItem ), aAllowRedundant );
         break;
 
-    case PNS_ITEM::VIA:
+    case PNS_ITEM::VIA_T:
         addVia( static_cast<PNS_VIA*>( aItem ) );
         break;
 
@@ -732,20 +732,20 @@ void PNS_NODE::Remove( PNS_ITEM* aItem )
 {
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::SOLID:
+    case PNS_ITEM::SOLID_T:
         // fixme: this fucks up the joints, but it's only used for marking colliding obstacles for the moment, so we don't care.
         doRemove( aItem );
         break;
 
-    case PNS_ITEM::SEGMENT:
+    case PNS_ITEM::SEGMENT_T:
         removeSegment( static_cast<PNS_SEGMENT*>( aItem ) );
         break;
 
-    case PNS_ITEM::LINE:
+    case PNS_ITEM::LINE_T:
         removeLine( static_cast<PNS_LINE*>( aItem ) );
         break;
 
-    case PNS_ITEM::VIA:
+    case PNS_ITEM::VIA_T:
         removeVia( static_cast<PNS_VIA*>( aItem ) );
         break;
 
@@ -879,7 +879,7 @@ void PNS_NODE::MapConnectivity( PNS_JOINT* aStart, std::vector<PNS_JOINT*>& aFou
 
         for( PNS_ITEM* item : current->LinkList() )
         {
-            if( item->OfKind( PNS_ITEM::SEGMENT ) )
+            if( item->OfKind( PNS_ITEM::SEGMENT_T ) )
             {
                 PNS_SEGMENT* seg = static_cast<PNS_SEGMENT *>( item );
                 PNS_JOINT* a = FindJoint( seg->Seg().A, seg );
@@ -905,7 +905,7 @@ int PNS_NODE::FindLinesBetweenJoints( PNS_JOINT& aA, PNS_JOINT& aB, std::vector<
 {
     for( PNS_ITEM* item : aA.LinkList() )
     {
-        if( item->Kind() == PNS_ITEM::SEGMENT )
+        if( item->Kind() == PNS_ITEM::SEGMENT_T )
         {
             PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
             PNS_LINE line = AssembleLine( seg );
@@ -1057,7 +1057,7 @@ void PNS_NODE::Dump( bool aLong )
 
     for( i = m_items.begin(); i != m_items.end(); i++ )
     {
-        if( (*i)->GetKind() == PNS_ITEM::SEGMENT )
+        if( (*i)->GetKind() == PNS_ITEM::SEGMENT_T )
             all_segs.insert( static_cast<PNS_SEGMENT*>( *i ) );
     }
 
@@ -1065,7 +1065,7 @@ void PNS_NODE::Dump( bool aLong )
     {
         for( i = m_root->m_items.begin(); i != m_root->m_items.end(); i++ )
         {
-            if( (*i)->GetKind() == PNS_ITEM::SEGMENT && !overrides( *i ) )
+            if( (*i)->GetKind() == PNS_ITEM::SEGMENT_T && !overrides( *i ) )
                 all_segs.insert( static_cast<PNS_SEGMENT*>(*i) );
         }
     }
@@ -1085,7 +1085,7 @@ void PNS_NODE::Dump( bool aLong )
 
                 switch( m_item->GetKind() )
                 {
-                case PNS_ITEM::SEGMENT:
+                case PNS_ITEM::SEGMENT_T:
                     {
                         const PNS_SEGMENT* seg = static_cast<const PNS_SEGMENT*>( m_item );
                         wxLogTrace( "PNS", " -> seg %s %s\n", seg->GetSeg().A.Format().c_str(),
@@ -1275,7 +1275,7 @@ PNS_SEGMENT* PNS_NODE::findRedundantSegment( PNS_SEGMENT* aSeg )
 
     for( PNS_ITEM* item : jtStart->LinkList() )
     {
-        if( item->OfKind( PNS_ITEM::SEGMENT ) )
+        if( item->OfKind( PNS_ITEM::SEGMENT_T ) )
         {
             PNS_SEGMENT* seg2 = (PNS_SEGMENT*) item;
 

@@ -80,7 +80,7 @@ void PNS_LOGGER::Log ( const PNS_ITEM* aItem, int aKind, const std::string aName
 
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::LINE:
+    case PNS_ITEM::LINE_T:
     {
         PNS_LINE* l = (PNS_LINE*) aItem;
         m_theLog << " line ";
@@ -90,7 +90,7 @@ void PNS_LOGGER::Log ( const PNS_ITEM* aItem, int aKind, const std::string aName
         break;
     }
 
-    case PNS_ITEM::VIA:
+    case PNS_ITEM::VIA_T:
     {
         m_theLog << " via 0 0 ";
         dumpShape ( aItem->Shape() );
@@ -98,7 +98,7 @@ void PNS_LOGGER::Log ( const PNS_ITEM* aItem, int aKind, const std::string aName
         break;
     }
 
-    case PNS_ITEM::SEGMENT:
+    case PNS_ITEM::SEGMENT_T:
     {
         PNS_SEGMENT* s =(PNS_SEGMENT*) aItem;
         m_theLog << " line ";
@@ -107,7 +107,7 @@ void PNS_LOGGER::Log ( const PNS_ITEM* aItem, int aKind, const std::string aName
         break;
     }
 
-    case PNS_ITEM::SOLID:
+    case PNS_ITEM::SOLID_T:
     {
         PNS_SOLID* s = (PNS_SOLID*) aItem;
         m_theLog << " solid 0 0 ";

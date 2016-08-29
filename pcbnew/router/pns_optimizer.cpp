@@ -125,7 +125,7 @@ bool PNS_COST_ESTIMATOR::IsBetter( PNS_COST_ESTIMATOR& aOther,
  **/
 PNS_OPTIMIZER::PNS_OPTIMIZER( PNS_NODE* aWorld ) :
     m_world( aWorld ),
-    m_collisionKindMask( PNS_ITEM::ANY ),
+    m_collisionKindMask( PNS_ITEM::ANY_T ),
     m_effortLevel( MERGE_SEGMENTS ),
     m_keepPostures( false ),
     m_restrictAreaActive( false )
@@ -200,7 +200,7 @@ void PNS_OPTIMIZER::removeCachedSegments( PNS_LINE* aLine, int aStartVertex, int
 
 void PNS_OPTIMIZER::CacheRemove( PNS_ITEM* aItem )
 {
-    if( aItem->Kind() == PNS_ITEM::LINE )
+    if( aItem->Kind() == PNS_ITEM::LINE_T )
         removeCachedSegments( static_cast<PNS_LINE*>( aItem ) );
 }
 
@@ -274,7 +274,7 @@ int LINE_RESTRICTIONS::allowedAngles( PNS_NODE* aWorld, const PNS_LINE* aLine, c
 
     for( const PNS_ITEM* item : jt->Links().CItems() )
     {
-        if( item->OfKind( PNS_ITEM::VIA ) || item->OfKind( PNS_ITEM::SOLID ) )
+        if( item->OfKind( PNS_ITEM::VIA_T ) || item->OfKind( PNS_ITEM::SOLID_T ) )
             return 0xff;
         else if( const PNS_SEGMENT* seg = dyn_cast<const PNS_SEGMENT*>( item ) )
         {
@@ -767,13 +767,13 @@ PNS_OPTIMIZER::BREAKOUT_LIST PNS_OPTIMIZER::computeBreakouts( int aWidth,
 {
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::VIA:
+    case PNS_ITEM::VIA_T:
     {
         const PNS_VIA* via = static_cast<const PNS_VIA*>( aItem );
         return circleBreakouts( aWidth, via->Shape(), aPermitDiagonal );
     }
 
-    case PNS_ITEM::SOLID:
+    case PNS_ITEM::SOLID_T:
     {
         const SHAPE* shape = aItem->Shape();
 
@@ -817,7 +817,7 @@ PNS_ITEM* PNS_OPTIMIZER::findPadOrVia( int aLayer, int aNet, const VECTOR2I& aP 
 
     for( PNS_ITEM* item : jt->LinkList() )
     {
-        if( item->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID ) )
+        if( item->OfKind( PNS_ITEM::VIA_T | PNS_ITEM::SOLID_T ) )
             return item;
     }
 
@@ -985,12 +985,12 @@ bool PNS_OPTIMIZER::fanoutCleanup( PNS_LINE* aLine )
     if( !startPad )
         return false;
 
-    bool startMatch = startPad->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID );
+    bool startMatch = startPad->OfKind( PNS_ITEM::VIA_T | PNS_ITEM::SOLID_T );
     bool endMatch = false;
 
     if(endPad)
     {
-        endMatch = endPad->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID );
+        endMatch = endPad->OfKind( PNS_ITEM::VIA_T | PNS_ITEM::SOLID_T );
     }
     else
     {
@@ -1046,7 +1046,7 @@ bool verifyDpBypass( PNS_NODE* aNode, PNS_DIFF_PAIR* aPair, bool aRefIsP, const 
     PNS_LINE refLine ( aRefIsP ? aPair->PLine() : aPair->NLine(), aNewRef );
     PNS_LINE coupledLine ( aRefIsP ? aPair->NLine() : aPair->PLine(), aNewCoupled );
 
-    if( aNode->CheckColliding( &refLine, &coupledLine, PNS_ITEM::ANY, aPair->Gap() - 10 ) )
+    if( aNode->CheckColliding( &refLine, &coupledLine, PNS_ITEM::ANY_T, aPair->Gap() - 10 ) )
         return false;
 
     if( aNode->CheckColliding ( &refLine ) )

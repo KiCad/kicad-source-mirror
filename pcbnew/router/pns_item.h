@@ -57,13 +57,13 @@ public:
     ///> Supported item types
     enum PnsKind
     {
-        SOLID   = 1,
-        LINE    = 2,
-        JOINT   = 4,
-        SEGMENT = 8,
-        VIA     = 16,
-        DIFF_PAIR = 32,
-        ANY     = 0xff
+        SOLID_T     =    1,
+        LINE_T      =    2,
+        JOINT_T     =    4,
+        SEGMENT_T   =    8,
+        VIA_T       =   16,
+        DIFF_PAIR_T =   32,
+        ANY_T       = 0xff
     };
 
     PNS_ITEM( PnsKind aKind )

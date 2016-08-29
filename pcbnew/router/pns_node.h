@@ -193,7 +193,7 @@ public:
      */
     int QueryColliding( const PNS_ITEM* aItem,
                         OBSTACLES&      aObstacles,
-                        int             aKindMask = PNS_ITEM::ANY,
+                        int             aKindMask = PNS_ITEM::ANY_T,
                         int             aLimitCount = -1,
                         bool            aDifferentNetsOnly = true,
                         int             aForceClearance = -1 );
@@ -212,7 +212,7 @@ public:
      * @return the obstacle, if found, otherwise empty.
      */
     OPT_OBSTACLE NearestObstacle( const PNS_LINE*   		 aItem,
-                                  int                		 aKindMask = PNS_ITEM::ANY,
+                                  int                		 aKindMask = PNS_ITEM::ANY_T,
                                   const std::set<PNS_ITEM*>* aRestrictedSet = NULL );
 
     /**
@@ -225,7 +225,7 @@ public:
      * @return the obstacle, if found, otherwise empty.
      */
     OPT_OBSTACLE CheckColliding( const PNS_ITEM*     aItem,
-                                 int                 aKindMask = PNS_ITEM::ANY );
+                                 int                 aKindMask = PNS_ITEM::ANY_T );
 
 
     /**
@@ -238,7 +238,7 @@ public:
      * @return the obstacle, if found, otherwise empty.
      */
     OPT_OBSTACLE CheckColliding( const PNS_ITEMSET&  aSet,
-                                 int                 aKindMask = PNS_ITEM::ANY );
+                                 int                 aKindMask = PNS_ITEM::ANY_T );
 
 
     /**
@@ -253,7 +253,7 @@ public:
      */
     bool CheckColliding( const PNS_ITEM*    aItemA,
                          const PNS_ITEM*    aItemB,
-                         int                aKindMask = PNS_ITEM::ANY,
+                         int                aKindMask = PNS_ITEM::ANY_T,
                          int                aForceClearance = -1 );
 
     /**
@@ -369,7 +369,7 @@ public:
     void MapConnectivity( PNS_JOINT* aStart, std::vector<PNS_JOINT*> & aFoundJoints );
 
     PNS_ITEM* NearestUnconnectedItem( PNS_JOINT* aStart, int* aAnchor = NULL,
-                                      int aKindMask = PNS_ITEM::ANY);
+                                      int aKindMask = PNS_ITEM::ANY_T);
 
 #endif
 

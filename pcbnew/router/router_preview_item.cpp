@@ -68,7 +68,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::PNS_ITEM* aItem )
 {
     m_originLayer = aItem->Layers().Start();
 
-    if( aItem->OfKind( PNS::PNS_ITEM::LINE ) )
+    if( aItem->OfKind( PNS::PNS_ITEM::LINE_T ) )
     {
         const PNS::PNS_LINE* l = static_cast<const PNS::PNS_LINE*>( aItem );
 
@@ -86,12 +86,12 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::PNS_ITEM* aItem )
 
     switch( aItem->Kind() )
     {
-    case PNS::PNS_ITEM::LINE:
+    case PNS::PNS_ITEM::LINE_T:
         m_type  = PR_SHAPE;
         m_width = ( (PNS::PNS_LINE*) aItem )->Width();
         break;
 
-    case PNS::PNS_ITEM::SEGMENT:
+    case PNS::PNS_ITEM::SEGMENT_T:
     {
         PNS::PNS_SEGMENT* seg = (PNS::PNS_SEGMENT*) aItem;
         m_type  = PR_SHAPE;
@@ -99,7 +99,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::PNS_ITEM* aItem )
         break;
     }
 
-    case PNS::PNS_ITEM::VIA:
+    case PNS::PNS_ITEM::VIA_T:
         m_originLayer = m_layer = ITEM_GAL_LAYER( VIAS_VISIBLE );
         m_type = PR_SHAPE;
         m_width = 0;
@@ -107,7 +107,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::PNS_ITEM* aItem )
         m_depth = ViaOverlayDepth;
         break;
 
-    case PNS::PNS_ITEM::SOLID:
+    case PNS::PNS_ITEM::SOLID_T:
         m_type = PR_SHAPE;
         m_width = 0;
         break;

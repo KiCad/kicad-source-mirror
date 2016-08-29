@@ -156,7 +156,7 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS_ITEM* aA, const PNS_ITEM* aB 
     int net_b = aB->Net();
     int cl_b = ( net_b >= 0 ? m_clearanceCache[net_b].clearance : m_defaultClearance );
 
-    bool linesOnly = aA->OfKind( PNS_ITEM::SEGMENT | PNS_ITEM::LINE ) && aB->OfKind( PNS_ITEM::SEGMENT | PNS_ITEM::LINE );
+    bool linesOnly = aA->OfKind( PNS_ITEM::SEGMENT_T | PNS_ITEM::LINE_T ) && aB->OfKind( PNS_ITEM::SEGMENT_T | PNS_ITEM::LINE_T );
 
     if( linesOnly && net_a >= 0 && net_b >= 0 && m_clearanceCache[net_a].coupledNet == net_b )
     {
@@ -826,7 +826,7 @@ void PNS_KICAD_IFACE::AddItem( PNS_ITEM* aItem )
 
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::SEGMENT:
+    case PNS_ITEM::SEGMENT_T:
     {
         PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( aItem );
         TRACK* track = new TRACK( m_board );
@@ -840,7 +840,7 @@ void PNS_KICAD_IFACE::AddItem( PNS_ITEM* aItem )
         break;
     }
 
-    case PNS_ITEM::VIA:
+    case PNS_ITEM::VIA_T:
     {
         VIA* via_board = new VIA( m_board );
         PNS_VIA* via = static_cast<PNS_VIA*>( aItem );

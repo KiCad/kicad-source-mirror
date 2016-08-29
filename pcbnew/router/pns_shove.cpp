@@ -217,7 +217,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::processHullSet( PNS_LINE& aCurrent, PNS_LINE&
             continue;
         }
 
-        bool colliding = m_currentNode->CheckColliding( &l, &aCurrent, PNS_ITEM::ANY, m_forceClearance );
+        bool colliding = m_currentNode->CheckColliding( &l, &aCurrent, PNS_ITEM::ANY_T, m_forceClearance );
 
         if( ( aCurrent.Marker() & MK_HEAD ) && !colliding )
         {
@@ -416,7 +416,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingSolid( PNS_LINE& aCurrent, PNS_ITE
 
         for( PNS_ITEM* item : jtStart->LinkList() )
         {
-            if( item->OfKind( PNS_ITEM::VIA ) )
+            if( item->OfKind( PNS_ITEM::VIA_T ) )
             {
                 via = (PNS_VIA*) item;
                 break;
@@ -710,7 +710,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingVia( PNS_ITEM* aCurrent, PNS_VIA* 
     VECTOR2I mtvLine, mtvVia, mtv, mtvSolid;
     int rank = -1;
 
-    if( aCurrent->OfKind( PNS_ITEM::LINE ) )
+    if( aCurrent->OfKind( PNS_ITEM::LINE_T ) )
     {
 #ifdef DEBUG
          m_logger.NewGroup( "push-via-by-line", m_iter );
@@ -738,7 +738,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onCollidingVia( PNS_ITEM* aCurrent, PNS_VIA* 
 
         rank = currentLine->Rank();
     }
-    else if( aCurrent->OfKind( PNS_ITEM::SOLID ) )
+    else if( aCurrent->OfKind( PNS_ITEM::SOLID_T ) )
     {
         CollideShapes( aObstacleVia->Shape(), aCurrent->Shape(),
                        clearance + PNS_HULL_MARGIN, true, mtvSolid );
@@ -765,7 +765,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::onReverseCollidingVia( PNS_LINE& aCurrent, PN
 
     for( PNS_ITEM* item : jt->LinkList() )
     {
-        if( item->OfKind( PNS_ITEM::SEGMENT ) && item->LayersOverlap( &aCurrent ) )
+        if( item->OfKind( PNS_ITEM::SEGMENT_T ) && item->LayersOverlap( &aCurrent ) )
         {
             PNS_SEGMENT* seg = (PNS_SEGMENT*) item;
             PNS_LINE head = assembleLine( seg );
@@ -855,9 +855,9 @@ void PNS_SHOVE::unwindStack( PNS_SEGMENT* aSeg )
 
 void PNS_SHOVE::unwindStack( PNS_ITEM* aItem )
 {
-    if( aItem->OfKind( PNS_ITEM::SEGMENT ) )
+    if( aItem->OfKind( PNS_ITEM::SEGMENT_T ) )
         unwindStack( static_cast<PNS_SEGMENT*>( aItem ) );
-    else if( aItem->OfKind( PNS_ITEM::LINE ) )
+    else if( aItem->OfKind( PNS_ITEM::LINE_T ) )
     {
         PNS_LINE* l = static_cast<PNS_LINE*>( aItem );
 
@@ -924,7 +924,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
     PNS_NODE::OPT_OBSTACLE nearest;
     SHOVE_STATUS st = SH_NULL;
 
-    PNS_ITEM::PnsKind search_order[] = { PNS_ITEM::SOLID, PNS_ITEM::VIA, PNS_ITEM::SEGMENT };
+    PNS_ITEM::PnsKind search_order[] = { PNS_ITEM::SOLID_T, PNS_ITEM::VIA_T, PNS_ITEM::SEGMENT_T };
 
     for( int i = 0; i < 3; i++ )
     {
@@ -944,11 +944,11 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
 
     unwindStack( ni );
 
-    if( !ni->OfKind( PNS_ITEM::SOLID ) && ni->Rank() >= 0 && ni->Rank() > currentLine.Rank() )
+    if( !ni->OfKind( PNS_ITEM::SOLID_T ) && ni->Rank() >= 0 && ni->Rank() > currentLine.Rank() )
     {
         switch( ni->Kind() )
         {
-        case PNS_ITEM::VIA:
+        case PNS_ITEM::VIA_T:
         {
             PNS_VIA* revVia = (PNS_VIA*) ni;
             wxLogTrace( "PNS", "iter %d: reverse-collide-via", aIter );
@@ -965,7 +965,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
             break;
         }
 
-        case PNS_ITEM::SEGMENT:
+        case PNS_ITEM::SEGMENT_T:
         {
             PNS_SEGMENT* seg = (PNS_SEGMENT*) ni;
             wxLogTrace( "PNS", "iter %d: reverse-collide-segment ", aIter );
@@ -987,7 +987,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
     { // "forward" collisions
         switch( ni->Kind() )
         {
-        case PNS_ITEM::SEGMENT:
+        case PNS_ITEM::SEGMENT_T:
             wxLogTrace( "PNS", "iter %d: collide-segment ", aIter );
 
             st = onCollidingSegment( currentLine, (PNS_SEGMENT*) ni );
@@ -998,7 +998,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
             }
             break;
 
-        case PNS_ITEM::VIA:
+        case PNS_ITEM::VIA_T:
             wxLogTrace( "PNS", "iter %d: shove-via ", aIter );
             st = onCollidingVia( &currentLine, (PNS_VIA*) ni );
 
@@ -1008,7 +1008,7 @@ PNS_SHOVE::SHOVE_STATUS PNS_SHOVE::shoveIteration( int aIter )
             }
             break;
 
-        case PNS_ITEM::SOLID:
+        case PNS_ITEM::SOLID_T:
             wxLogTrace( "PNS", "iter %d: walk-solid ", aIter );
             st = onCollidingSolid( currentLine, (PNS_SOLID*) ni );
             break;
@@ -1364,7 +1364,7 @@ void PNS_SHOVE::runOptimizer( PNS_NODE* aNode )
         optFlags |= PNS_OPTIMIZER::SMART_PADS;
 
     optimizer.SetEffortLevel( optFlags );
-    optimizer.SetCollisionMask( PNS_ITEM::ANY );
+    optimizer.SetCollisionMask( PNS_ITEM::ANY_T );
 
     for( int pass = 0; pass < n_passes; pass++ )
     {

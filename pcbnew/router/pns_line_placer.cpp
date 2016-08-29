@@ -249,7 +249,7 @@ bool PNS_LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
 
         PNS_LINE tmp( m_tail, replacement );
 
-        if( m_currentNode->CheckColliding( &tmp, PNS_ITEM::ANY ) )
+        if( m_currentNode->CheckColliding( &tmp, PNS_ITEM::ANY_T ) )
             break;
 
         if( DIRECTION_45( replacement.CSegment( 0 ) ) == dir )
@@ -437,7 +437,7 @@ bool PNS_LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
     PNS_WALKAROUND::WALKAROUND_STATUS stat_solids = walkaround.Route( initTrack, walkSolids );
 
     optimizer.SetEffortLevel( PNS_OPTIMIZER::MERGE_SEGMENTS );
-    optimizer.SetCollisionMask( PNS_ITEM::SOLID );
+    optimizer.SetCollisionMask( PNS_ITEM::SOLID_T );
     optimizer.Optimize( &walkSolids );
 
     if( stat_solids == PNS_WALKAROUND::DONE )
@@ -487,7 +487,7 @@ bool PNS_LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, PNS_LINE& aNewHead )
 
         optimizer.SetWorld( m_currentNode );
         optimizer.SetEffortLevel( PNS_OPTIMIZER::MERGE_OBTUSE | PNS_OPTIMIZER::SMART_PADS );
-        optimizer.SetCollisionMask( PNS_ITEM::ANY );
+        optimizer.SetCollisionMask( PNS_ITEM::ANY_T );
         optimizer.Optimize( &l2 );
 
         aNewHead = l2;
@@ -690,7 +690,7 @@ void PNS_LINE_PLACER::splitAdjacentSegments( PNS_NODE* aNode, PNS_ITEM* aSeg, co
     if( !aSeg )
         return;
 
-    if( !aSeg->OfKind( PNS_ITEM::SEGMENT ) )
+    if( !aSeg->OfKind( PNS_ITEM::SEGMENT_T ) )
         return;
 
     PNS_JOINT* jt = aNode->FindJoint( aP, aSeg );
@@ -724,7 +724,7 @@ bool PNS_LINE_PLACER::SetLayer( int aLayer )
     {
         return false;
     }
-    else if( !m_startItem || ( m_startItem->OfKind( PNS_ITEM::VIA ) && m_startItem->Layers().Overlaps( aLayer ) ) )
+    else if( !m_startItem || ( m_startItem->OfKind( PNS_ITEM::VIA_T ) && m_startItem->Layers().Overlaps( aLayer ) ) )
     {
         m_currentLayer = aLayer;
         initPlacement();

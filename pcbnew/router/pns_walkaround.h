@@ -46,7 +46,7 @@ public:
         m_forceLongerPath = false;
         m_forceWinding = false;
         m_cursorApproachMode = false;
-        m_itemMask = PNS_ITEM::ANY;
+        m_itemMask = PNS_ITEM::ANY_T;
 
         // Initialize other members, to avoid uninitialized variables.
         m_recursiveBlockageCount = 0;
@@ -77,9 +77,9 @@ public:
     void SetSolidsOnly( bool aSolidsOnly )
     {
         if( aSolidsOnly )
-            m_itemMask = PNS_ITEM::SOLID;
+            m_itemMask = PNS_ITEM::SOLID_T;
         else
-            m_itemMask = PNS_ITEM::ANY;
+            m_itemMask = PNS_ITEM::ANY_T;
     }
 
     void SetItemMask( int aMask )

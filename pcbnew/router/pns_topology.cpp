@@ -73,7 +73,7 @@ const PNS_TOPOLOGY::JOINT_SET PNS_TOPOLOGY::ConnectedJoints( PNS_JOINT* aStart )
 
         for( PNS_ITEM* item : current->LinkList() )
         {
-            if( item->OfKind( PNS_ITEM::SEGMENT ) )
+            if( item->OfKind( PNS_ITEM::SEGMENT_T ) )
             {
                 PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( item );
                 PNS_JOINT* a = m_world->FindJoint( seg->Seg().A, seg );
@@ -193,7 +193,7 @@ bool PNS_TOPOLOGY::followTrivialPath( PNS_LINE* aLine, bool aLeft, PNS_ITEMSET& 
 
         for( PNS_ITEM* link : jt->Links().Items() )
         {
-            if( link->OfKind( PNS_ITEM::VIA ) )
+            if( link->OfKind( PNS_ITEM::VIA_T ) )
                 via = link;
             else if( aVisited.find( link ) == aVisited.end() )
                 next_seg = static_cast<PNS_SEGMENT*>( link );
@@ -371,7 +371,7 @@ const std::set<PNS_ITEM*> PNS_TOPOLOGY::AssembleCluster( PNS_ITEM* aStart, int a
 
         visited.insert( top );
 
-        m_world->QueryColliding( top, obstacles, PNS_ITEM::ANY, -1, false );
+        m_world->QueryColliding( top, obstacles, PNS_ITEM::ANY_T, -1, false );
 
         for( PNS_OBSTACLE& obs : obstacles )
         {

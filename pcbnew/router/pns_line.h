@@ -66,7 +66,7 @@ public:
      * Constructor
      * Makes an empty line.
      */
-    PNS_LINE() : PNS_ITEM( LINE )
+    PNS_LINE() : PNS_ITEM( LINE_T )
     {
         m_segmentRefs = NULL;
         m_hasVia = false;
@@ -95,7 +95,7 @@ public:
 
     static inline bool ClassOf( const PNS_ITEM* aItem )
     {
-        return aItem && LINE == aItem->Kind();
+        return aItem && LINE_T == aItem->Kind();
     }
 
     /// @copydoc PNS_ITEM::Clone()

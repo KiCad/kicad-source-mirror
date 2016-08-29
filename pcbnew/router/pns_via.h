@@ -37,7 +37,7 @@ class PNS_VIA : public PNS_ITEM
 {
 public:
     PNS_VIA() :
-        PNS_ITEM( VIA )
+        PNS_ITEM( VIA_T )
     {
         m_diameter = 2;     // Dummy value
         m_drill = 0;
@@ -46,7 +46,7 @@ public:
 
     PNS_VIA( const VECTOR2I& aPos, const PNS_LAYERSET& aLayers,
              int aDiameter, int aDrill, int aNet = -1, VIATYPE_T aViaType = VIA_THROUGH ) :
-        PNS_ITEM( VIA )
+        PNS_ITEM( VIA_T )
     {
         SetNet( aNet );
         SetLayers( aLayers );
@@ -66,7 +66,7 @@ public:
 
 
     PNS_VIA( const PNS_VIA& aB ) :
-        PNS_ITEM( VIA )
+        PNS_ITEM( VIA_T )
     {
         SetNet( aB.Net() );
         SetLayers( aB.Layers() );
@@ -81,7 +81,7 @@ public:
 
     static inline bool ClassOf( const PNS_ITEM* aItem )
     {
-        return aItem && VIA == aItem->Kind();
+        return aItem && VIA_T == aItem->Kind();
     }
 
 

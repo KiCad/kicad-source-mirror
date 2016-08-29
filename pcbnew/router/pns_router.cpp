@@ -143,7 +143,7 @@ const PNS_ITEMSET PNS_ROUTER::QueryHoverItems( const VECTOR2I& aP )
 
 bool PNS_ROUTER::StartDragging( const VECTOR2I& aP, PNS_ITEM* aStartItem )
 {
-    if( !aStartItem || aStartItem->OfKind( PNS_ITEM::SOLID ) )
+    if( !aStartItem || aStartItem->OfKind( PNS_ITEM::SOLID_T ) )
         return false;
 
     m_dragger = new PNS_DRAGGER( this );
@@ -245,16 +245,16 @@ void PNS_ROUTER::markViolations( PNS_NODE* aNode, PNS_ITEMSET& aCurrent,
     {
         PNS_NODE::OBSTACLES obstacles;
 
-        aNode->QueryColliding( item, obstacles, PNS_ITEM::ANY );
+        aNode->QueryColliding( item, obstacles, PNS_ITEM::ANY_T );
 
-        if( item->OfKind( PNS_ITEM::LINE ) )
+        if( item->OfKind( PNS_ITEM::LINE_T ) )
         {
             PNS_LINE* l = static_cast<PNS_LINE*>( item );
 
             if( l->EndsWithVia() )
             {
                 PNS_VIA v( l->Via() );
-                aNode->QueryColliding( &v, obstacles, PNS_ITEM::ANY );
+                aNode->QueryColliding( &v, obstacles, PNS_ITEM::ANY_T );
             }
         }
 
@@ -312,7 +312,7 @@ void PNS_ROUTER::movePlacing( const VECTOR2I& aP, PNS_ITEM* aEndItem )
 
     for( const PNS_ITEM* item : current.CItems() )
     {
-        if( !item->OfKind( PNS_ITEM::LINE ) )
+        if( !item->OfKind( PNS_ITEM::LINE_T ) )
             continue;
 
         const PNS_LINE* l = static_cast<const PNS_LINE*>( item );

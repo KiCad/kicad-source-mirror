@@ -146,7 +146,7 @@ PNS_ITEM* PNS_TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int a
 
         if( aNet < 0 || item->Net() == aNet )
         {
-            if( item->OfKind( PNS_ITEM::VIA | PNS_ITEM::SOLID ) )
+            if( item->OfKind( PNS_ITEM::VIA_T | PNS_ITEM::SOLID_T ) )
             {
                 if( !prioritized[2] )
                     prioritized[2] = item;
@@ -358,17 +358,17 @@ const VECTOR2I PNS_TOOL_BASE::snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aS
 
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::SOLID:
+    case PNS_ITEM::SOLID_T:
         anchor = static_cast<PNS_SOLID*>( aItem )->Pos();
         aSplitsSegment = false;
         break;
 
-    case PNS_ITEM::VIA:
+    case PNS_ITEM::VIA_T:
         anchor = static_cast<PNS_VIA*>( aItem )->Pos();
         aSplitsSegment = false;
         break;
 
-    case PNS_ITEM::SEGMENT:
+    case PNS_ITEM::SEGMENT_T:
     {
         PNS_SEGMENT* seg = static_cast<PNS_SEGMENT*>( aItem );
         const SEG& s = seg->Seg();

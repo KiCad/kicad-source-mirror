@@ -171,11 +171,11 @@ PNS_INDEX::ITEM_SHAPE_INDEX* PNS_INDEX::getSubindex( const PNS_ITEM* aItem )
 
     switch( aItem->Kind() )
     {
-    case PNS_ITEM::VIA:
+    case PNS_ITEM::VIA_T:
         idx_n = SI_Multilayer;
         break;
 
-    case PNS_ITEM::SOLID:
+    case PNS_ITEM::SOLID_T:
         {
             if( l.IsMultilayer() )
                 idx_n = SI_Multilayer;
@@ -186,8 +186,8 @@ PNS_INDEX::ITEM_SHAPE_INDEX* PNS_INDEX::getSubindex( const PNS_ITEM* aItem )
         }
         break;
 
-    case PNS_ITEM::SEGMENT:
-    case PNS_ITEM::LINE:
+    case PNS_ITEM::SEGMENT_T:
+    case PNS_ITEM::LINE_T:
         idx_n = SI_Traces + 2 * l.Start() + SI_SegStraight;
         break;
 

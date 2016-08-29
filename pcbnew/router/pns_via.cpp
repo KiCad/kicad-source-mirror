@@ -38,7 +38,7 @@ bool PNS_VIA::PushoutForce( PNS_NODE* aNode, const VECTOR2I& aDirection, VECTOR2
     while( iter < aMaxIterations )
     {
         PNS_NODE::OPT_OBSTACLE obs = aNode->CheckColliding( &mv,
-                aSolidsOnly ? PNS_ITEM::SOLID : PNS_ITEM::ANY );
+                aSolidsOnly ? PNS_ITEM::SOLID_T : PNS_ITEM::ANY_T );
 
         if( !obs )
             break;

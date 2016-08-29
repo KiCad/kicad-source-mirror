@@ -230,14 +230,14 @@ void DrawDebugDirs( VECTOR2D aP, int aMask, int aColor )
 
 OPT_BOX2I ChangedArea( const PNS_ITEM* aItemA, const PNS_ITEM* aItemB )
 {
-    if( aItemA->OfKind( PNS_ITEM::VIA ) && aItemB->OfKind( PNS_ITEM::VIA ) )
+    if( aItemA->OfKind( PNS_ITEM::VIA_T ) && aItemB->OfKind( PNS_ITEM::VIA_T ) )
     {
         const PNS_VIA* va = static_cast<const PNS_VIA*>( aItemA );
         const PNS_VIA* vb = static_cast<const PNS_VIA*>( aItemB );
 
         return va->ChangedArea( vb );
     }
-    else if( aItemA->OfKind( PNS_ITEM::LINE ) && aItemB->OfKind( PNS_ITEM::LINE ) )
+    else if( aItemA->OfKind( PNS_ITEM::LINE_T ) && aItemB->OfKind( PNS_ITEM::LINE_T ) )
     {
         const PNS_LINE* la = static_cast<const PNS_LINE*> ( aItemA );
         const PNS_LINE* lb = static_cast<const PNS_LINE*> ( aItemB );
