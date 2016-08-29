@@ -181,17 +181,16 @@ void OPTIMIZER::cacheAdd( ITEM* aItem, bool aIsStatic = false )
 
 void OPTIMIZER::removeCachedSegments( LINE* aLine, int aStartVertex, int aEndVertex )
 {
-    LINE::SEGMENT_REFS* segs = aLine->LinkedSegments();
+    if( !aLine->IsLinked() ) return;
 
-    if( !segs )
-        return;
+    LINE::SEGMENT_REFS& segs = aLine->LinkedSegments();
 
     if( aEndVertex < 0 )
         aEndVertex += aLine->PointCount();
 
     for( int i = aStartVertex; i < aEndVertex - 1; i++ )
     {
-        SEGMENT* s = (*segs)[i];
+        SEGMENT* s = segs[i];
         m_cacheTags.erase( s );
         m_cache.Remove( s );
     }

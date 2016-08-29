@@ -661,11 +661,9 @@ void NODE::removeSegment( SEGMENT* aSeg )
 
 void NODE::removeLine( LINE* aLine )
 {
-    std::vector<SEGMENT*>* segRefs = aLine->LinkedSegments();
+    std::vector<SEGMENT*>& segRefs = aLine->LinkedSegments();
 
-    assert( segRefs != NULL );
-
-    for( SEGMENT* seg : *segRefs )
+    for( SEGMENT* seg : segRefs )
     {
         removeSegment( seg );
     }

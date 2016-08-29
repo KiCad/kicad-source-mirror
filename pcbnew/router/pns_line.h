@@ -68,7 +68,6 @@ public:
      */
     LINE() : ITEM( LINE_T )
     {
-        m_segmentRefs = NULL;
         m_hasVia = false;
         m_width = 1;        // Dummy value
     }
@@ -87,7 +86,6 @@ public:
     {
         m_net = aBase.m_net;
         m_layers = aBase.m_layers;
-        m_segmentRefs = NULL;
         m_hasVia = false;
     }
 
@@ -175,37 +173,36 @@ public:
     ///> Adds a reference to a segment registered in a NODE that is a part of this line.
     void LinkSegment( SEGMENT* aSeg )
     {
-        if( !m_segmentRefs )
-            m_segmentRefs = new SEGMENT_REFS();
-
-        m_segmentRefs->push_back( aSeg );
+        m_segmentRefs.push_back( aSeg );
     }
 
     ///> Returns the list of segments from the owning node that constitute this
     ///> line (or NULL if the line is not linked)
-    SEGMENT_REFS* LinkedSegments()
+    SEGMENT_REFS& LinkedSegments()
     {
         return m_segmentRefs;
     }
 
     bool IsLinked() const
     {
-        return m_segmentRefs != NULL;
+        return m_segmentRefs.size() != 0;
+    }
+
+    bool IsLinkedChecked() const
+    {
+        return IsLinked() && LinkCount() == SegmentCount();
     }
 
     ///> Checks if the segment aSeg is a part of the line.
     bool ContainsSegment( SEGMENT* aSeg ) const
     {
-        if( !m_segmentRefs )
-            return false;
-
-        return std::find( m_segmentRefs->begin(), m_segmentRefs->end(),
-                aSeg ) != m_segmentRefs->end();
+        return std::find( m_segmentRefs.begin(), m_segmentRefs.end(),
+                aSeg ) != m_segmentRefs.end();
     }
 
     SEGMENT* GetLink( int aIndex ) const
     {
-        return (*m_segmentRefs)[aIndex];
+        return m_segmentRefs[aIndex];
     }
 
     ///> Erases the linking information. Used to detach the line from the owning node.
@@ -214,10 +211,7 @@ public:
     ///> Returns the number of segments that were assembled together to form this line.
     int LinkCount() const
     {
-        if( !m_segmentRefs )
-            return -1;
-
-        return m_segmentRefs->size();
+        return m_segmentRefs.size();
     }
 
     ///> Clips the line to the nearest obstacle, traversing from the line's start vertex (0).
@@ -228,7 +222,7 @@ public:
     void ClipVertexRange ( int aStart, int aEnd );
 
     ///> Returns the number of corners of angles specified by mask aAngles.
-    int CountCorners( int aAngles );
+    int CountCorners( int aAngles ) const;
 
     ///> Calculates a line thightly wrapping a convex hull
     ///> of an obstacle object (aObstacle).
@@ -246,10 +240,10 @@ public:
             SHAPE_LINE_CHAIN& aPath,
             bool aCw ) const;
 
-    bool Is45Degree();
+    bool Is45Degree() const;
 
     ///> Prints out all linked segments
-    void ShowLinks();
+    void ShowLinks() const;
 
     bool EndsWithVia() const { return m_hasVia; }
 
@@ -285,7 +279,7 @@ private:
 
     ///> List of segments in the owning NODE (ITEM::m_owner) that constitute this line, or NULL
     ///> if the line is not a part of any node.
-    SEGMENT_REFS* m_segmentRefs;
+    SEGMENT_REFS m_segmentRefs;
 
     ///> The actual shape of the line
     SHAPE_LINE_CHAIN m_line;

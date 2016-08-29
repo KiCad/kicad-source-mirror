@@ -54,7 +54,6 @@ LINE::LINE( const LINE& aOther ) :
 
 LINE::~LINE()
 {
-    delete m_segmentRefs;
 }
 
 
@@ -88,21 +87,16 @@ void LINE::Mark( int aMarker )
 {
     m_marker = aMarker;
 
-    if( m_segmentRefs )
-    {
-        for( SEGMENT* s : *m_segmentRefs )
-            s->Mark( aMarker );
-    }
+    for( SEGMENT* s : m_segmentRefs )
+        s->Mark( aMarker );
+
 }
 
 
 void LINE::Unmark()
 {
-    if( m_segmentRefs )
-    {
-        for( SEGMENT* s : *m_segmentRefs )
-            s->Unmark();
-    }
+    for( SEGMENT* s : m_segmentRefs )
+        s->Unmark();
 
     m_marker = 0;
 }
@@ -112,12 +106,9 @@ int LINE::Marker() const
 {
     int marker = m_marker;
 
-    if( m_segmentRefs )
+    for( SEGMENT* s : m_segmentRefs )
     {
-        for( SEGMENT* s : *m_segmentRefs )
-        {
-            marker |= s->Marker();
-        }
+        marker |= s->Marker();
     }
 
     return marker;
@@ -126,14 +117,7 @@ int LINE::Marker() const
 
 void LINE::copyLinks( const LINE* aParent )
 {
-    if( aParent->m_segmentRefs == NULL )
-    {
-        m_segmentRefs = NULL;
-        return;
-    }
-
-    m_segmentRefs = new SEGMENT_REFS();
-    *m_segmentRefs = *aParent->m_segmentRefs;
+    m_segmentRefs = aParent->m_segmentRefs;
 }
 
 
@@ -151,7 +135,7 @@ SEGMENT* SEGMENT::Clone() const
 }
 
 
-int LINE::CountCorners( int aAngles )
+int LINE::CountCorners( int aAngles ) const
 {
     int count = 0;
 
@@ -269,9 +253,7 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
 }
 
 
-void LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
-        SHAPE_LINE_CHAIN& aPath,
-        bool aCw ) const
+void LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const
 {
     SHAPE_LINE_CHAIN walk, post;
 
@@ -288,7 +270,7 @@ const SHAPE_LINE_CHAIN SEGMENT::Hull( int aClearance, int aWalkaroundThickness )
 }
 
 
-bool LINE::Is45Degree()
+bool LINE::Is45Degree() const
 {
     for( int i = 0; i < m_line.SegmentCount(); i++ )
     {
@@ -340,18 +322,18 @@ const LINE LINE::ClipToNearestObstacle( NODE* aNode ) const
 }
 
 
-void LINE::ShowLinks()
+void LINE::ShowLinks() const
 {
-    if( !m_segmentRefs )
+    if( !IsLinked() )
     {
         wxLogTrace( "PNS", "line %p: no links", this );
         return;
     }
 
-    wxLogTrace( "PNS", "line %p: %d linked segs", this, (int) m_segmentRefs->size() );
+    wxLogTrace( "PNS", "line %p: %d linked segs", this, (int) m_segmentRefs.size() );
 
-    for( int i = 0; i < (int) m_segmentRefs->size(); i++ )
-        wxLogTrace( "PNS", "seg %d: %p", i, (*m_segmentRefs)[i] );
+    for( int i = 0; i < (int) m_segmentRefs.size(); i++ )
+        wxLogTrace( "PNS", "seg %d: %p\n", i, m_segmentRefs[i] );
 }
 
 SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aP )
@@ -376,7 +358,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
         VECTOR2I p_start = aOrigin.CPoint( i );
         SHAPE_LINE_CHAIN paths[2];
         DIRECTION_45 dirs[2];
-        DIRECTION_45 d_prev = ( i > 0 ? DIRECTION_45( aOrigin.CSegment( i - 1 ) ) : DIRECTION_45() );
+        DIRECTION_45 d_prev = ( i > 0 ? DIRECTION_45( aOrigin.CSegment( i-1 ) ) : DIRECTION_45() );
 
         for( int j = 0; j < 2; j++ )
         {
@@ -588,7 +570,10 @@ void LINE::DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
     if( aIndex == 0 )
     {
         if( !lockEndpointA )
-            guideA[0] = guideA[1] = SEG( dragged.A, dragged.A + drag_dir.Right().Right().ToVector() );
+        {
+            guideA[0] = guideA[1] = SEG( dragged.A,
+                                         dragged.A + drag_dir.Right().Right().ToVector() );
+        }
         else
         {
             guideA[0] = SEG( dragged.A, dragged.A + drag_dir.Right().ToVector() );
@@ -609,7 +594,10 @@ void LINE::DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
     if( aIndex == m_line.SegmentCount() - 1 )
     {
         if( !lockEndpointB )
-            guideB[0] = guideB[1] = SEG( dragged.B, dragged.B + drag_dir.Right().Right().ToVector() );
+        {
+            guideB[0] = guideB[1] = SEG( dragged.B,
+                                         dragged.B + drag_dir.Right().Right().ToVector() );
+        }
         else
         {
             guideB[0] = SEG( dragged.B, dragged.B + drag_dir.Right().ToVector() );
@@ -712,8 +700,7 @@ void LINE::Reverse()
 {
     m_line = m_line.Reverse();
 
-    if( m_segmentRefs )
-        std::reverse( m_segmentRefs->begin(), m_segmentRefs->end() );
+    std::reverse( m_segmentRefs.begin(), m_segmentRefs.end() );
 }
 
 
@@ -734,29 +721,26 @@ void LINE::SetRank( int aRank )
 {
     m_rank = aRank;
 
-    if( m_segmentRefs )
-    {
-        for( SEGMENT* s : *m_segmentRefs )
-            s->SetRank( aRank );
-    }
+    for( SEGMENT* s : m_segmentRefs )
+        s->SetRank( aRank );
+
 }
 
 
 int LINE::Rank() const
 {
     int min_rank = INT_MAX;
-    int rank;
 
-    if( m_segmentRefs )
-    {
-        for( SEGMENT *s : *m_segmentRefs )
+    if( IsLinked() ) {
+        for( SEGMENT *s : m_segmentRefs )
+        {
             min_rank = std::min( min_rank, s->Rank() );
-        rank = ( min_rank == INT_MAX ) ? -1 : min_rank;
+        }
+    } else {
+        min_rank = m_rank;
     }
-    else
-    {
-        rank = m_rank;
-    }
+
+    int rank = ( min_rank == INT_MAX ) ? -1 : min_rank;
 
     return rank;
 }
@@ -766,13 +750,17 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
 {
     m_line = m_line.Slice( aStart, aEnd );
 
-    if( m_segmentRefs )
-    {
-        SEGMENT_REFS* snew = new SEGMENT_REFS( m_segmentRefs->begin() + aStart,
-                                               m_segmentRefs->begin() + aEnd );
+    if( IsLinked() ) {
+        assert( m_segmentRefs.size() >= (aEnd - aStart) );
 
-        delete m_segmentRefs;
-        m_segmentRefs = snew;
+        // Note: The range includes aEnd, but we have n-1 segments.
+        std::rotate(
+            m_segmentRefs.begin(),
+            m_segmentRefs.begin() + aStart,
+            m_segmentRefs.begin() + aEnd
+        );
+
+        m_segmentRefs.resize( aEnd - aStart );
     }
 }
 
@@ -794,10 +782,7 @@ bool LINE::HasLoops() const
 
 void LINE::ClearSegmentLinks()
 {
-    if( m_segmentRefs )
-        delete m_segmentRefs;
-
-    m_segmentRefs = NULL;
+    m_segmentRefs.clear();
 }
 
 
@@ -896,7 +881,7 @@ OPT_BOX2I LINE::ChangedArea( const LINE* aOther ) const
 
 bool LINE::HasLockedSegments() const
 {
-    for( const SEGMENT* seg : *m_segmentRefs )
+    for( const SEGMENT* seg : m_segmentRefs )
     {
         if( seg->Marker() & MK_LOCKED )
             return true;

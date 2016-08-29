@@ -252,10 +252,8 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle,
 
     bool obstacleIsHead = false;
 
-    if( aObstacle.LinkedSegments() )
+    for( SEGMENT* s : aObstacle.LinkedSegments() )
     {
-        for( SEGMENT* s : *aObstacle.LinkedSegments() )
-
         if( s->Marker() & MK_HEAD )
         {
             obstacleIsHead = true;
@@ -861,10 +859,7 @@ void SHOVE::unwindStack( ITEM* aItem )
     {
         LINE* l = static_cast<LINE*>( aItem );
 
-        if( !l->LinkedSegments() )
-            return;
-
-        for( SEGMENT* seg : *l->LinkedSegments() )
+        for( SEGMENT* seg : l->LinkedSegments() )
             unwindStack( seg );
     }
 }
@@ -872,7 +867,7 @@ void SHOVE::unwindStack( ITEM* aItem )
 
 bool SHOVE::pushLine( const LINE& aL, bool aKeepCurrentOnTop )
 {
-    if( aL.LinkCount() >= 0 && ( aL.LinkCount() != aL.SegmentCount() ) )
+    if( !aL.IsLinkedChecked() )
         return false;
 
     if( aKeepCurrentOnTop && m_lineStack.size() > 0)
@@ -897,10 +892,7 @@ void SHOVE::popLine( )
     {
         bool found = false;
 
-        if( !l.LinkedSegments() )
-            continue;
-
-        for( SEGMENT *s : *l.LinkedSegments() )
+        for( SEGMENT *s : l.LinkedSegments() )
         {
             if( i->ContainsSegment( s ) )
             {

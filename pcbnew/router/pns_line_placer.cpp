@@ -947,7 +947,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
 
     for( int s = 0; s < aLatest.LinkCount(); s++ )
     {
-        SEGMENT* seg = ( *aLatest.LinkedSegments() )[s];
+        SEGMENT* seg = aLatest.GetLink(s);
         LINE ourLine = aNode->AssembleLine( seg );
         JOINT a, b;
         std::vector<LINE> lines;
@@ -970,7 +970,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
 
             if( !( line.ContainsSegment( seg ) ) && line.SegmentCount() )
             {
-                for( SEGMENT *ss : *line.LinkedSegments() )
+                for( SEGMENT *ss : line.LinkedSegments() )
                     toErase.insert( ss );
 
                 removedCount++;
