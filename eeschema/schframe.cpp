@@ -52,6 +52,7 @@
 #include <eeschema_config.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+#include "sim/sim_plot_frame.h"
 
 #include <invoke_sch_dialog.h>
 #include <dialogs/dialog_schematic_find.h>
@@ -622,6 +623,11 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         if( viewlibFrame && !viewlibFrame->Close() )   // Can close modal component viewer?
             return;
     }
+
+    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
+
+    if( simFrame && !simFrame->Close() )   // Can close the simulator?
+        return;
 
     SCH_SHEET_LIST sheetList( g_RootSheet );
 

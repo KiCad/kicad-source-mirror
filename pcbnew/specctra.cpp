@@ -3749,7 +3749,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 
         if( part_number.size() )
         {
-            const char* quote = out->GetQuoteChar( part_number.c_str() );
+            quote = out->GetQuoteChar( part_number.c_str() );
             out->Print( nestLevel+1, "(PN %s%s%s)\n",
                        quote, part_number.c_str(), quote );
         }
@@ -3764,7 +3764,7 @@ void PLACE::Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
 
         if( part_number.size() )
         {
-            const char* quote = out->GetQuoteChar( part_number.c_str() );
+            quote = out->GetQuoteChar( part_number.c_str() );
             out->Print( 0, "%s(PN %s%s%s)", space,
                        quote, part_number.c_str(), quote );
         }
