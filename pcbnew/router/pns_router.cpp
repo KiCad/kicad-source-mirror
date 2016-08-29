@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -57,6 +58,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/convex_hull.h>
 
+namespace PNS {
 
 // an ugly singleton for drawing debug items within the router context.
 // To be fixed sometime in the future.
@@ -281,7 +283,7 @@ void PNS_ROUTER::updateView( PNS_NODE* aNode, PNS_ITEMSET& aCurrent )
 
     aNode->GetUpdatedItems( removed, added );
 
-	for ( auto item : added )
+    for ( auto item : added )
         m_iface->DisplayItem( item );
 
     for ( auto item : removed )
@@ -378,7 +380,7 @@ void PNS_ROUTER::StopRouting()
         m_placer->GetModifiedNets( nets );
 
         // Update the ratsnest with new changes
-		for ( auto n : nets )
+        for ( auto n : nets )
             m_iface->UpdateNet( n );
     }
 
@@ -501,4 +503,6 @@ void PNS_ROUTER::SetInterface( PNS_ROUTER_IFACE *aIface )
 {
     m_iface = aIface;
     m_iface->SetRouter( this );
+}
+
 }

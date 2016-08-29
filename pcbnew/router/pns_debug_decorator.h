@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Christian Gagneraud <chgans@gna.org>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -26,6 +27,8 @@
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 
+namespace PNS {
+
 class PNS_DEBUG_DECORATOR
 {
 public:
@@ -42,5 +45,7 @@ public:
     virtual void AddDirections( VECTOR2D aP, int aMask, int aColor ) {};
     virtual void Clear() {};
 };
+
+}
 
 #endif

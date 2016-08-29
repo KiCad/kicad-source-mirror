@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -27,6 +28,8 @@
 #include "pns_meander_placer_base.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
+
+namespace PNS {
 
 const PNS_MEANDER_SETTINGS& PNS_MEANDER_SHAPE::Settings() const
 {
@@ -635,4 +638,6 @@ void PNS_MEANDER_SHAPE::updateBaseSegment( )
         m_clippedBaseSeg.A = m_baseSeg.LineProject( CLine( 0 ).CPoint( 0 ) );
         m_clippedBaseSeg.B = m_baseSeg.LineProject( CLine( 0 ).CPoint( -1 ) );
     }
+}
+
 }

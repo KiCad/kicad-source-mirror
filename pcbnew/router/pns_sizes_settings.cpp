@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -25,6 +26,8 @@
 #include "pns_solid.h"
 #include "pns_node.h"
 #include "pns_sizes_settings.h"
+
+namespace PNS {
 
 int PNS_SIZES_SETTINGS::inheritTrackWidth( PNS_ITEM* aItem )
 {
@@ -164,4 +167,6 @@ int PNS_SIZES_SETTINGS::GetLayerBottom() const
         return B_Cu;
     else
         return m_layerPairs.begin()->second;
+}
+
 }

@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2014  CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -25,11 +26,11 @@
 #include "dialog_pns_settings.h"
 #include <router/pns_routing_settings.h>
 
-DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTINGS& aSettings ) :
+DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::PNS_ROUTING_SETTINGS& aSettings ) :
     DIALOG_PNS_SETTINGS_BASE( aParent ), m_settings( aSettings )
 {
     // "Figure out what's best" is not available yet
-    m_mode->Enable( RM_Smart, false );
+    m_mode->Enable( PNS::RM_Smart, false );
 
     // Add tool tip to the mode radio box, one by option
     // (cannot be made with wxFormBuilder for each item )
@@ -59,13 +60,13 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTING
 void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
 {
     // Save widgets' values to settings
-    m_settings.SetMode( (PNS_MODE) m_mode->GetSelection() );
+    m_settings.SetMode( (PNS::PNS_MODE) m_mode->GetSelection() );
     m_settings.SetShoveVias( m_shoveVias->GetValue() );
     m_settings.SetJumpOverObstacles( m_backPressure->GetValue() );
     m_settings.SetRemoveLoops( m_removeLoops->GetValue() );
     m_settings.SetSuggestFinish ( m_suggestEnding->GetValue() );
     m_settings.SetSmartPads( m_autoNeckdown->GetValue() );
-    m_settings.SetOptimizerEffort( (PNS_OPTIMIZATION_EFFORT) m_effort->GetValue() );
+    m_settings.SetOptimizerEffort( (PNS::PNS_OPTIMIZATION_EFFORT) m_effort->GetValue() );
     m_settings.SetSmoothDraggedSegments( m_smoothDragged->GetValue() );
     m_settings.SetCanViolateDRC( m_violateDrc->GetValue() );
     m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );

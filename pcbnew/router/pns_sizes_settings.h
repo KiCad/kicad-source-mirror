@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -28,6 +29,9 @@
 
 class BOARD;
 class BOARD_DESIGN_SETTINGS;
+
+namespace PNS {
+
 class PNS_ITEM;
 
 class PNS_SIZES_SETTINGS {
@@ -109,5 +113,7 @@ private:
 
     std::map<int, int> m_layerPairs;
 };
+
+}
 
 #endif // __PNS_SIZES_SETTINGS_H

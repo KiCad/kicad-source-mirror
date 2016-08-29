@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2014  CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -27,17 +28,21 @@
 
 #include "dialog_pns_settings_base.h"
 
+namespace PNS {
+
 class PNS_ROUTING_SETTINGS;
+
+}
 
 class DIALOG_PNS_SETTINGS : public DIALOG_PNS_SETTINGS_BASE
 {
-	public:
-		DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS_ROUTING_SETTINGS& aSettings );
+    public:
+        DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::PNS_ROUTING_SETTINGS& aSettings );
 
-	private:
+    private:
         virtual void OnOkClick( wxCommandEvent& aEvent );
 
-		PNS_ROUTING_SETTINGS& m_settings;
+        PNS::PNS_ROUTING_SETTINGS& m_settings;
 };
 
 #endif // __dialog_pns_settings__

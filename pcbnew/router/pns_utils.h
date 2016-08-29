@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014  CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -28,7 +29,9 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_convex.h>
 
-#define HULL_MARGIN 10
+namespace PNS {
+
+constexpr int HULL_MARGIN = 10;
 
 class PNS_ITEM;
 
@@ -60,5 +63,7 @@ void DrawDebugSeg( SEG aS, int aColor );
 void DrawDebugDirs( VECTOR2D aP, int aMask, int aColor );
 #endif
 OPT_BOX2I ChangedArea( const PNS_ITEM* aItemA, const PNS_ITEM* aItemB );
+
+}
 
 #endif    // __PNS_UTILS_H

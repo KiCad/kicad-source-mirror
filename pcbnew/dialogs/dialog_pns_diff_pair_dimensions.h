@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2014-2015  CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -29,12 +30,16 @@
 
 #include "dialog_pns_diff_pair_dimensions_base.h"
 
+namespace PNS {
+
 class PNS_SIZES_SETTINGS;
+
+}
 
 class DIALOG_PNS_DIFF_PAIR_DIMENSIONS : public DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE
 {
 public:
-    DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS_SIZES_SETTINGS& aSizes );
+    DIALOG_PNS_DIFF_PAIR_DIMENSIONS( wxWindow* aParent, PNS::PNS_SIZES_SETTINGS& aSizes );
 
 private:
     void updateCheckbox();
@@ -46,7 +51,7 @@ private:
     WX_UNIT_BINDER m_traceGap;
     WX_UNIT_BINDER m_viaGap;
 
-    PNS_SIZES_SETTINGS& m_sizes;
+    PNS::PNS_SIZES_SETTINGS& m_sizes;
 };
 
 #endif // __dialog_pns_settings__

@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -23,6 +24,8 @@
 
 #include <stdint.h>
 
+namespace PNS {
+
 class TIME_LIMIT
 {
 public:
@@ -39,5 +42,7 @@ private:
     int m_limitMs;
     int64_t m_startTics;
 };
+
+}
 
 #endif

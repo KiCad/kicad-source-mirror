@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -23,6 +24,8 @@
 
 #include "pns_meander_placer.h"
 #include "pns_diff_pair.h"
+
+namespace PNS {
 
 class PNS_ROUTER;
 class PNS_SHOVE;
@@ -61,5 +64,7 @@ private:
 
     int m_coupledLength;
 };
+
+}
 
 #endif    // __PNS_MEANDER_SKEW_PLACER_H

@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -21,6 +22,8 @@
 #include "pns_dragger.h"
 #include "pns_shove.h"
 #include "pns_router.h"
+
+namespace PNS {
 
 PNS_DRAGGER::PNS_DRAGGER( PNS_ROUTER* aRouter ) :
     PNS_ALGO_BASE( aRouter )
@@ -334,4 +337,6 @@ PNS_LOGGER* PNS_DRAGGER::Logger()
         return m_shove->Logger();
 
     return NULL;
+}
+
 }

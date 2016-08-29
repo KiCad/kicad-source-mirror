@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -30,6 +31,8 @@
 #include <geometry/shape_rect.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_convex.h>
+
+namespace PNS {
 
 PNS_LOGGER::PNS_LOGGER( )
 {
@@ -200,4 +203,6 @@ void PNS_LOGGER::Save( const std::string& aFilename )
     const std::string s = m_theLog.str();
     fwrite( s.c_str(), 1, s.length(), f );
     fclose( f );
+}
+
 }

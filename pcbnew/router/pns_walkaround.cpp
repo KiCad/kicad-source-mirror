@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -27,6 +28,8 @@
 #include "pns_utils.h"
 #include "pns_router.h"
 using boost::optional;
+
+namespace PNS {
 
 void PNS_WALKAROUND::start( const PNS_LINE& aInitialPath )
 {
@@ -269,4 +272,6 @@ PNS_WALKAROUND::WALKAROUND_STATUS PNS_WALKAROUND::Route( const PNS_LINE& aInitia
     }
 
     return st;
+}
+
 }

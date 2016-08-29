@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -34,6 +35,16 @@
 #include "pns_itemset.h"
 #include "pns_node.h"
 
+namespace KIGFX
+{
+
+class VIEW;
+class VIEW_GROUP;
+
+};
+
+namespace PNS {
+
 class PNS_DEBUG_DECORATOR;
 class PNS_NODE;
 class PNS_DIFF_PAIR_PLACER;
@@ -48,13 +59,6 @@ class PNS_VIA;
 class PNS_RULE_RESOLVER;
 class PNS_SHOVE;
 class PNS_DRAGGER;
-
-namespace KIGFX
-{
-    class VIEW;
-    class VIEW_GROUP;
-};
-
 
 enum PNS_ROUTER_MODE {
     PNS_MODE_ROUTE_SINGLE = 1,
@@ -270,5 +274,7 @@ private:
     wxString m_toolStatusbarName;
     wxString m_failureReason;
 };
+
+}
 
 #endif

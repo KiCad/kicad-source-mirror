@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -27,7 +28,7 @@
 
 class PNS_TUNE_STATUS_POPUP;
 
-class APIEXPORT LENGTH_TUNER_TOOL : public PNS_TOOL_BASE
+class APIEXPORT LENGTH_TUNER_TOOL : public PNS::PNS_TOOL_BASE
 {
 public:
     LENGTH_TUNER_TOOL();
@@ -42,13 +43,13 @@ public:
 
 private:
     void performTuning( );
-    int mainLoop( PNS_ROUTER_MODE aMode );
+    int mainLoop( PNS::PNS_ROUTER_MODE aMode );
     void handleCommonEvents( const TOOL_EVENT& aEvent );
     void updateStatusPopup ( PNS_TUNE_STATUS_POPUP& aPopup );
 
 
 
-    PNS_MEANDER_SETTINGS m_savedMeanderSettings;
+    PNS::PNS_MEANDER_SETTINGS m_savedMeanderSettings;
 };
 
 #endif

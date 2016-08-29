@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -22,8 +23,10 @@
 
 #include "time_limit.h"
 
+namespace PNS {
+
 TIME_LIMIT::TIME_LIMIT( int aMilliseconds ) :
-	m_limitMs( aMilliseconds )
+    m_limitMs( aMilliseconds )
 {
     Restart();
 }
@@ -35,17 +38,19 @@ TIME_LIMIT::~TIME_LIMIT()
 
 bool TIME_LIMIT::Expired() const
 {
-	return ( wxGetLocalTimeMillis().GetValue() - m_startTics ) >= m_limitMs;
+    return ( wxGetLocalTimeMillis().GetValue() - m_startTics ) >= m_limitMs;
 }
 
 
 void TIME_LIMIT::Restart()
 {
-	m_startTics = wxGetLocalTimeMillis().GetValue();
+    m_startTics = wxGetLocalTimeMillis().GetValue();
 }
 
 
 void TIME_LIMIT::Set( int aMilliseconds )
 {
-	m_limitMs = aMilliseconds;
+    m_limitMs = aMilliseconds;
+}
+
 }

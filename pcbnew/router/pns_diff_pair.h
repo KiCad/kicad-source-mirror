@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -31,6 +32,8 @@
 #include "pns_via.h"
 
 #include "ranged_num.h"
+
+namespace PNS {
 
 class PNS_DIFF_PAIR;
 
@@ -510,5 +513,7 @@ private:
     int m_chamferLimit;
     RANGED_NUM<int> m_gapConstraint;
 };
+
+}
 
 #endif

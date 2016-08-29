@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -41,6 +42,8 @@
 #include "time_limit.h"
 
 #include <profile.h>
+
+namespace PNS {
 
 void PNS_SHOVE::replaceItems( PNS_ITEM* aOld, PNS_ITEM* aNew )
 {
@@ -1406,4 +1409,6 @@ void PNS_SHOVE::SetInitialLine( PNS_LINE& aInitial )
 {
     m_root = m_root->Branch();
     m_root->Remove( &aInitial );
+}
+
 }

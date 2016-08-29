@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -30,6 +31,8 @@
 #include "pns_topology.h"
 
 #include <class_board.h>
+
+namespace PNS {
 
 bool PNS_TOPOLOGY::SimplifyLine( PNS_LINE* aLine )
 {
@@ -304,7 +307,7 @@ bool PNS_TOPOLOGY::AssembleDiffPair( PNS_ITEM* aStart, PNS_DIFF_PAIR& aPair )
                 if( s->Layers().Start() == refSeg->Layers().Start() && s->Width() == refSeg->Width() )
                 {
                     int dist = s->Seg().Distance( refSeg->Seg() );
-		    		bool isParallel = refSeg->Seg().ApproxParallel( s->Seg() );
+                    bool isParallel = refSeg->Seg().ApproxParallel( s->Seg() );
                     SEG p_clip, n_clip;
 
                     bool isCoupled = commonParallelProjection( refSeg->Seg(), s->Seg(), p_clip, n_clip );
@@ -381,4 +384,6 @@ const std::set<PNS_ITEM*> PNS_TOPOLOGY::AssembleCluster( PNS_ITEM* aStart, int a
     }
 
     return visited;
+}
+
 }

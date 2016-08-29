@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -31,6 +32,8 @@
 #include "pns_solid.h"
 #include "pns_topology.h"
 #include "pns_debug_decorator.h"
+
+namespace PNS {
 
 PNS_DIFF_PAIR_PLACER::PNS_DIFF_PAIR_PLACER( PNS_ROUTER* aRouter ) :
     PNS_PLACEMENT_ALGO( aRouter )
@@ -576,7 +579,7 @@ bool PNS_DIFF_PAIR_PLACER::Start( const VECTOR2I& aP, PNS_ITEM* aStartItem )
     m_netN = m_start.PrimN()->Net();
 
     #if 0
-	// FIXME: this also needs to be factored out but not so important right now
+    // FIXME: this also needs to be factored out but not so important right now
     // Check if the current track/via gap & track width settings are violated
     BOARD* brd = NULL; // FIXME Router()->GetBoard();
     NETCLASSPTR netclassP = brd->FindNet( m_netP )->GetNetClass();
@@ -843,4 +846,6 @@ const std::vector<int> PNS_DIFF_PAIR_PLACER::CurrentNets() const
     rv.push_back( m_netP );
     rv.push_back( m_netN );
     return rv;
+}
+
 }

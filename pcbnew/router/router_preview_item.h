@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -38,8 +39,12 @@
 
 #include <layers_id_colors_and_visibility.h>
 
+namespace PNS {
+
 class PNS_ITEM;
 class PNS_ROUTER;
+
+}
 
 class ROUTER_PREVIEW_ITEM : public EDA_ITEM
 {
@@ -51,10 +56,10 @@ public:
         PR_SHAPE
     };
 
-    ROUTER_PREVIEW_ITEM( const PNS_ITEM* aItem = NULL, KIGFX::VIEW_GROUP* aParent = NULL );
+    ROUTER_PREVIEW_ITEM( const PNS::PNS_ITEM* aItem = NULL, KIGFX::VIEW_GROUP* aParent = NULL );
     ~ROUTER_PREVIEW_ITEM();
 
-    void Update( const PNS_ITEM* aItem );
+    void Update( const PNS::PNS_ITEM* aItem );
 
     void StuckMarker( VECTOR2I& aPosition );
 
@@ -102,7 +107,7 @@ private:
 
     KIGFX::VIEW_GROUP* m_parent;
 
-    PNS_ROUTER* m_router;
+    PNS::PNS_ROUTER* m_router;
     SHAPE* m_shape;
 
     ITEM_TYPE m_type;

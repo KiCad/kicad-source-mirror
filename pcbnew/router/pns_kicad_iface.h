@@ -34,43 +34,43 @@ namespace KIGFX
     class VIEW;
 };
 
-class PNS_KICAD_IFACE : public PNS_ROUTER_IFACE {
+class PNS_KICAD_IFACE : public PNS::PNS_ROUTER_IFACE {
 public:
     PNS_KICAD_IFACE();
     ~PNS_KICAD_IFACE();
 
-    void SetRouter( PNS_ROUTER* aRouter );
+    void SetRouter( PNS::PNS_ROUTER* aRouter );
     void SetHostFrame( PCB_EDIT_FRAME* aFrame );
 
     void SetBoard( BOARD* aBoard );
     void SetView( KIGFX::VIEW* aView );
-    void SyncWorld( PNS_NODE* aWorld );
+    void SyncWorld( PNS::PNS_NODE* aWorld );
     void EraseView();
-    void HideItem( PNS_ITEM* aItem );
-    void DisplayItem( const PNS_ITEM* aItem, int aColor = 0, int aClearance = 0 );
-    void AddItem( PNS_ITEM* aItem );
-    void RemoveItem( PNS_ITEM* aItem );
+    void HideItem( PNS::PNS_ITEM* aItem );
+    void DisplayItem( const PNS::PNS_ITEM* aItem, int aColor = 0, int aClearance = 0 );
+    void AddItem( PNS::PNS_ITEM* aItem );
+    void RemoveItem( PNS::PNS_ITEM* aItem );
     void Commit();
 
     void UpdateNet( int aNetCode );
 
-    PNS_RULE_RESOLVER* GetRuleResolver();
-    PNS_DEBUG_DECORATOR* GetDebugDecorator();
+    PNS::PNS_RULE_RESOLVER* GetRuleResolver();
+    PNS::PNS_DEBUG_DECORATOR* GetDebugDecorator();
 
 private:
     PNS_PCBNEW_RULE_RESOLVER* m_ruleResolver;
     PNS_PCBNEW_DEBUG_DECORATOR* m_debugDecorator;
 
-    PNS_ITEM* syncPad( D_PAD* aPad );
-    PNS_ITEM* syncTrack( TRACK* aTrack );
-    PNS_ITEM* syncVia( VIA* aVia );
+    PNS::PNS_ITEM* syncPad( D_PAD* aPad );
+    PNS::PNS_ITEM* syncTrack( TRACK* aTrack );
+    PNS::PNS_ITEM* syncVia( VIA* aVia );
 
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_previewItems;
     std::unordered_set<BOARD_CONNECTED_ITEM*> m_hiddenItems;
 
-    PNS_NODE* m_world;
-    PNS_ROUTER* m_router;
+    PNS::PNS_NODE* m_world;
+    PNS::PNS_ROUTER* m_router;
     BOARD* m_board;
     PICKED_ITEMS_LIST m_undoBuffer;
     PCB_EDIT_FRAME* m_frame;

@@ -2,6 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013  CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -56,6 +57,8 @@ using namespace std::placeholders;
 #include "pns_topology.h"
 
 using namespace KIGFX;
+
+namespace PNS {
 
 TOOL_ACTION PNS_TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOptions",
                                             AS_CONTEXT, 'E',
@@ -394,4 +397,6 @@ const VECTOR2I PNS_TOOL_BASE::snapToItem( PNS_ITEM* aItem, VECTOR2I aP, bool& aS
     }
 
     return anchor;
+}
+
 }
