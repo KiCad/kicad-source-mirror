@@ -368,7 +368,7 @@ private:
     VECTOR2I m_p_start;
 
     ///> The shove engine
-    SHOVE* m_shove;
+    std::unique_ptr< SHOVE > m_shove;
 
     ///> Current world state
     NODE* m_currentNode;

@@ -59,8 +59,6 @@ LINE_PLACER::LINE_PLACER( ROUTER* aRouter ) :
 
 LINE_PLACER::~LINE_PLACER()
 {
-    if( m_shove )
-        delete m_shove;
 }
 
 
@@ -796,14 +794,11 @@ void LINE_PLACER::initPlacement()
     m_currentNode = m_world;
     m_currentMode = Settings().Mode();
 
-    if( m_shove )
-        delete m_shove;
-
-    m_shove = NULL;
+    m_shove.reset();
 
     if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
     {
-        m_shove = new SHOVE( m_world->Branch(), Router() );
+        m_shove.reset( new SHOVE( m_world->Branch(), Router() ) );
     }
 }
 
