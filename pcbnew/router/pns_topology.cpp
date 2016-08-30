@@ -50,7 +50,7 @@ bool TOPOLOGY::SimplifyLine( LINE* aLine )
         LINE lnew( l );
         m_world->Remove( &l );
         lnew.SetShape( simplified );
-        m_world->Add( &lnew );
+        m_world->Add( lnew );
         return true;
     }
 
@@ -102,7 +102,7 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
         return false;
 
     std::unique_ptr<NODE> tmpNode( m_world->Branch() );
-    tmpNode->Add( &track );
+    tmpNode->Add( track );
 
     JOINT* jt = tmpNode->FindJoint( track.CPoint( -1 ), &track );
 

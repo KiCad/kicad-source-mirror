@@ -158,7 +158,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
         m_lastValidDraggedLine.ClearSegmentLinks();
         m_lastValidDraggedLine.Unmark();
 
-        m_lastNode->Add( &m_lastValidDraggedLine );
+        m_lastNode->Add( m_lastValidDraggedLine );
         m_draggedItems.Clear();
         m_draggedItems.Add( m_lastValidDraggedLine );
 
@@ -188,13 +188,15 @@ void DRAGGER::dumbDragVia( VIA* aVia, NODE* aNode, const VECTOR2I& aP )
     m_draggedItems.Clear();
 
     // fixme: this is awful.
-    m_draggedVia = aVia->Clone();
+    auto via_clone = Clone( *aVia );
+
+    m_draggedVia = via_clone.get();
     m_draggedVia->SetPos( aP );
 
     m_draggedItems.Add( m_draggedVia );
 
     m_lastNode->Remove( aVia );
-    m_lastNode->Add( m_draggedVia );
+    m_lastNode->Add( std::move( via_clone ) );
 
     for( ITEM* item : m_origViaConnections.Items() )
     {
@@ -209,7 +211,7 @@ void DRAGGER::dumbDragVia( VIA* aVia, NODE* aNode, const VECTOR2I& aP )
             m_draggedItems.Add( draggedLine );
 
             m_lastNode->Remove( &origLine );
-            m_lastNode->Add( &draggedLine );
+            m_lastNode->Add( draggedLine );
         }
     }
 }
@@ -255,7 +257,7 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
 
         m_lastValidDraggedLine.ClearSegmentLinks();
         m_lastValidDraggedLine.Unmark();
-        m_lastNode->Add( &m_lastValidDraggedLine );
+        m_lastNode->Add( m_lastValidDraggedLine );
         m_draggedItems.Clear();
         m_draggedItems.Add( m_lastValidDraggedLine );
 

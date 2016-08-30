@@ -45,7 +45,19 @@
 
 namespace PNS {
 
-void SHOVE::replaceItems( ITEM* aOld, ITEM* aNew )
+void SHOVE::replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew )
+{
+    OPT_BOX2I changed_area = ChangedArea( aOld, aNew.get() );
+
+    if( changed_area )
+    {
+        m_affectedAreaSum = m_affectedAreaSum ? m_affectedAreaSum->Merge( *changed_area ) : *changed_area;
+    }
+
+    m_currentNode->Replace( aOld, std::move( aNew ) );
+}
+
+void SHOVE::replaceLine( LINE& aOld, LINE& aNew )
 {
     OPT_BOX2I changed_area = ChangedArea( aOld, aNew );
 
@@ -56,7 +68,6 @@ void SHOVE::replaceItems( ITEM* aOld, ITEM* aNew )
 
     m_currentNode->Replace( aOld, aNew );
 }
-
 
 int SHOVE::getClearance( const ITEM* aA, const ITEM* aB ) const
 {
@@ -349,7 +360,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
         shovedLine.SetRank( rank - 1 );
 
         sanityCheck( &obstacleLine, &shovedLine );
-        replaceItems( &obstacleLine, &shovedLine );
+        replaceLine( obstacleLine, shovedLine );
 
         if( !pushLine( shovedLine ) )
             rv = SH_INCOMPLETE;
@@ -383,7 +394,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingLine( LINE& aCurrent, LINE& aObstacle )
         }
 
         sanityCheck( &aObstacle, &shovedLine );
-        replaceItems( &aObstacle, &shovedLine );
+        replaceLine( aObstacle, shovedLine );
 
         int rank = aObstacle.Rank();
         shovedLine.SetRank( rank - 1 );
@@ -508,7 +519,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
     if(!success)
         return SH_INCOMPLETE;
 
-    replaceItems( &aCurrent, &walkaroundLine );
+    replaceLine( aCurrent, walkaroundLine );
     walkaroundLine.SetRank( nextRank );
 
 #ifdef DEBUG
@@ -607,13 +618,13 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
         p0_pushed += aForce.Resize( 2 ); // make sure pushed via does not overlap with any existing joint
     }
 
-    VIA* pushedVia = aVia->Clone();
+    std::unique_ptr< VIA > pushedVia = Clone( *aVia );
     pushedVia->SetPos( p0_pushed );
     pushedVia->Mark( aVia->Marker() );
 
     if( aVia->Marker() & MK_HEAD )
     {
-        m_draggedVia = pushedVia;
+        m_draggedVia = pushedVia.get();
         m_draggedViaHeadSet.Clear();
     }
 
@@ -645,18 +656,18 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
         }
     }
 
-    m_draggedViaHeadSet.Add( pushedVia );
+    m_draggedViaHeadSet.Add( pushedVia.get() );
 
     if( aDryRun )
         return SH_OK;
-
-    replaceItems( aVia, pushedVia );
 
 #ifdef DEBUG
     m_logger.Log( aVia, 0, "obstacle-via" );
 #endif
 
     pushedVia->SetRank( aCurrentRank - 1 );
+
+    replaceItems( aVia, std::move( pushedVia ) );
 
 #ifdef DEBUG
     m_logger.Log( pushedVia, 1, "pushed-via" );
@@ -678,7 +689,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
 
         if( lp.second.SegmentCount() )
         {
-            replaceItems( &lp.first, &lp.second );
+            replaceLine( lp.first, lp.second );
             lp.second.SetRank( aCurrentRank - 1 );
 
             if( !pushLine( lp.second, true ) )
@@ -820,7 +831,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
     m_logger.Log( &shoved, 3, "shoved-line" );
 #endif
     int currentRank = aCurrent.Rank();
-    replaceItems( &aCurrent, &shoved );
+    replaceLine( aCurrent, shoved );
 
     if( !pushLine( shoved ) )
         return SH_INCOMPLETE;
@@ -1092,7 +1103,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
 
     m_currentNode = parent->Branch();
     m_currentNode->ClearRanks();
-    m_currentNode->Add( &head );
+    m_currentNode->Add( head );
 
     m_currentNode->LockJoint( head.CPoint(0), &head, true );
 
@@ -1105,15 +1116,13 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveLines( const LINE& aCurrentHead )
     m_logger.NewGroup( "initial", 0 );
     m_logger.Log( &head, 0, "head" );
 
-    VIA* headVia = NULL;
-
     if( head.EndsWithVia() )
     {
-        headVia = head.Via().Clone();
-        m_currentNode->Add( headVia );
+        std::unique_ptr< VIA >headVia = Clone( head.Via() );
         headVia->Mark( MK_HEAD );
         headVia->SetRank( 100000 );
-        m_logger.Log( headVia, 0, "head-via" );
+        m_logger.Log( headVia.get(), 0, "head-via" );
+        m_currentNode->Add( std::move( headVia ) );
     }
 
     if( !pushLine( head ) )
@@ -1204,7 +1213,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
         LINE head( *headOrig );
         head.ClearSegmentLinks();
 
-        m_currentNode->Add( &head );
+        m_currentNode->Add( head );
 
         head.Mark( MK_HEAD );
         head.SetRank( 100000 );
@@ -1217,11 +1226,11 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
 
         if( head.EndsWithVia() )
         {
-            headVia = head.Via().Clone(); // fixme: leak
-            m_currentNode->Add( headVia );
+            std::unique_ptr< VIA > headVia = Clone( head.Via() );
             headVia->Mark( MK_HEAD );
             headVia->SetRank( 100000 );
-            m_logger.Log( headVia, 0, "head-via" );
+            m_logger.Log( headVia.get(), 0, "head-via" );
+            m_currentNode->Add( std::move( headVia ) );
         }
     }
 
@@ -1375,7 +1384,7 @@ void SHOVE::runOptimizer( NODE* aNode )
                 {
                     aNode->Remove( &line );
                     line.SetShape( optimized.CLine() );
-                    aNode->Add( &line );
+                    aNode->Add( line );
                 }
             }
         }

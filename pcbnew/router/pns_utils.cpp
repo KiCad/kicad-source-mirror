@@ -248,4 +248,9 @@ OPT_BOX2I ChangedArea( const ITEM* aItemA, const ITEM* aItemB )
     return OPT_BOX2I();
 }
 
+OPT_BOX2I ChangedArea( const LINE& aLineA, const LINE& aLineB )
+{
+    return aLineA.ChangedArea( &aLineB );
+}
+
 }

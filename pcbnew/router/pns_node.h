@@ -273,8 +273,16 @@ public:
      * @param aAllowRedundant if true, duplicate items are allowed (e.g. a segment or via
      * at the same coordinates as an existing one)
      */
-    void Add( ITEM* aItem, bool aAllowRedundant = false );
+    void Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant = false );
+    void Add( std::unique_ptr< SOLID >   aSolid );
+    void Add( std::unique_ptr< VIA >     aVia );
 
+    void Add( LINE& aLine, bool aAllowRedundant = false );
+
+private:
+    void Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant = false );
+
+public:
     /**
      * Function Remove()
      *
@@ -298,7 +306,8 @@ public:
      * @param aOldItem item to be removed
      * @param aNewItem item add instead
      */
-    void Replace( ITEM* aOldItem, ITEM* aNewItem );
+    void Replace( ITEM* aOldItem, std::unique_ptr< ITEM > aNewItem );
+    void Replace( LINE& aOldLine, LINE& aNewLine );
 
     /**
      * Function Branch()
@@ -429,8 +438,8 @@ private:
 
     ///> helpers for adding/removing items
     void addSolid( SOLID* aSeg );
-    void addSegment( SEGMENT* aSeg, bool aAllowRedundant );
-    void addLine( LINE* aLine, bool aAllowRedundant );
+    void addSegment( SEGMENT* aSeg );
+    void addLine( LINE& aLine, bool aAllowRedundant );
     void addVia( VIA* aVia );
     void removeSolid( SOLID* aSeg );
     void removeLine( LINE* aLine );

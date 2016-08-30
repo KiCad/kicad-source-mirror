@@ -22,6 +22,7 @@
 #ifndef __PNS_ITEM_H
 #define __PNS_ITEM_H
 
+#include <memory>
 #include <math/vector2d.h>
 
 #include <geometry/shape.h>
@@ -353,6 +354,21 @@ protected:
     int                     m_marker;
     int                     m_rank;
 };
+
+template< typename T, typename S >
+std::unique_ptr< T > ItemCast( std::unique_ptr< S > aPtr )
+{
+    static_assert(std::is_base_of< ITEM, S >::value, "Need to be handed a ITEM!");
+    static_assert(std::is_base_of< ITEM, T >::value, "Need to cast to an ITEM!");
+    return std::unique_ptr< T >( static_cast<T*>(aPtr.release()) );
+}
+
+template< typename T >
+std::unique_ptr< typename std::remove_const< T >::type > Clone( const T& aItem )
+{
+    static_assert(std::is_base_of< ITEM, T >::value, "Need to be handed an ITEM!");
+    return std::unique_ptr< typename std::remove_const< T >::type >( aItem.Clone() );
+}
 
 }
 

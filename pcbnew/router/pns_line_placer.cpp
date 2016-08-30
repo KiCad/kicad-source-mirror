@@ -697,17 +697,18 @@ void LINE_PLACER::splitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I
         return;
 
     SEGMENT* s_old = static_cast<SEGMENT*>( aSeg );
-    SEGMENT* s_new[2];
-
-    s_new[0] = s_old->Clone();
-    s_new[1] = s_old->Clone();
+    
+    std::unique_ptr< SEGMENT > s_new[2] = {
+        Clone( *s_old ),
+        Clone( *s_old )
+    };
 
     s_new[0]->SetEnds( s_old->Seg().A, aP );
     s_new[1]->SetEnds( aP, s_old->Seg().B );
 
     aNode->Remove( s_old );
-    aNode->Add( s_new[0], true );
-    aNode->Add( s_new[1], true );
+    aNode->Add( std::move( s_new[0] ), true );
+    aNode->Add( std::move( s_new[1] ), true );
 }
 
 
@@ -861,7 +862,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
     {
         if( pl.EndsWithVia() )
         {
-            m_lastNode->Add( pl.Via().Clone() );
+            m_lastNode->Add( Clone( pl.Via() ) );
             Router()->CommitRouting( m_lastNode );
 
             m_lastNode = NULL;
@@ -893,15 +894,15 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
     for( int i = 0; i < lastV; i++ )
     {
         const SEG& s = pl.CSegment( i );
-        SEGMENT* seg = new SEGMENT( s, m_currentNet );
+        std::unique_ptr< SEGMENT > seg( new SEGMENT( s, m_currentNet ) );
         seg->SetWidth( pl.Width() );
         seg->SetLayer( m_currentLayer );
-        m_lastNode->Add( seg );
-        lastSeg = seg;
+        lastSeg = seg.get();
+        m_lastNode->Add( std::move( seg ) );
     }
 
     if( pl.EndsWithVia() )
-        m_lastNode->Add( pl.Via().Clone() );
+        m_lastNode->Add( Clone( pl.Via() ) );
 
     if( realEnd )
         simplifyNewLine( m_lastNode, lastSeg );
@@ -938,7 +939,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
         return;
 
     std::set<SEGMENT *> toErase;
-    aNode->Add( &aLatest, true );
+    aNode->Add( aLatest, true );
 
     for( int s = 0; s < aLatest.LinkCount(); s++ )
     {
@@ -994,7 +995,7 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, SEGMENT* aLatest )
         LINE lnew( l );
         aNode->Remove( &l );
         lnew.SetShape( simplified );
-        aNode->Add( &lnew );
+        aNode->Add( lnew );
     }
 }
 

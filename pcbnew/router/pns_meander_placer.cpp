@@ -194,7 +194,7 @@ bool MEANDER_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
         return false;
 
     m_currentTrace = LINE( m_originLine, m_finalShape );
-    m_currentNode->Add( &m_currentTrace );
+    m_currentNode->Add( m_currentTrace );
 
     Router()->CommitRouting( m_currentNode );
     return true;

@@ -62,9 +62,9 @@ private:
     PNS_PCBNEW_RULE_RESOLVER* m_ruleResolver;
     PNS_PCBNEW_DEBUG_DECORATOR* m_debugDecorator;
 
-    PNS::ITEM* syncPad( D_PAD* aPad );
-    PNS::ITEM* syncTrack( TRACK* aTrack );
-    PNS::ITEM* syncVia( VIA* aVia );
+    std::unique_ptr< PNS::SOLID >   syncPad( D_PAD* aPad );
+    std::unique_ptr< PNS::SEGMENT > syncTrack( TRACK* aTrack );
+    std::unique_ptr< PNS::VIA >     syncVia( VIA* aVia );
 
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_previewItems;

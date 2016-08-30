@@ -778,8 +778,8 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
 
     if( m_currentTrace.EndsWithVias() )
     {
-        m_lastNode->Add( m_currentTrace.PLine().Via().Clone() );
-        m_lastNode->Add( m_currentTrace.NLine().Via().Clone() );
+        m_lastNode->Add( Clone( m_currentTrace.PLine().Via() ) );
+        m_lastNode->Add( Clone( m_currentTrace.NLine().Via() ) );
         m_chainedPlacement = false;
     }
     else
@@ -790,8 +790,8 @@ bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
     LINE lineP( m_currentTrace.PLine() );
     LINE lineN( m_currentTrace.NLine() );
 
-    m_lastNode->Add( &lineP );
-    m_lastNode->Add( &lineN );
+    m_lastNode->Add( lineP );
+    m_lastNode->Add( lineN );
 
     topo.SimplifyLine( &lineP );
     topo.SimplifyLine( &lineN );

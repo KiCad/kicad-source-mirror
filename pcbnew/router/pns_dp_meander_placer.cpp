@@ -307,8 +307,8 @@ bool DP_MEANDER_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem )
     LINE lP( m_originPair.PLine(), m_finalShapeP );
     LINE lN( m_originPair.NLine(), m_finalShapeN );
 
-    m_currentNode->Add( &lP );
-    m_currentNode->Add( &lN );
+    m_currentNode->Add( lP );
+    m_currentNode->Add( lN );
 
     Router()->CommitRouting( m_currentNode );
 

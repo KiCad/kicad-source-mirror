@@ -429,7 +429,7 @@ PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 }
 
 
-PNS::ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
+std::unique_ptr< PNS::SOLID > PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 {
     LAYER_RANGE layers( 0, MAX_CU_LAYERS - 1 );
 
@@ -472,7 +472,7 @@ PNS::ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
         return NULL;
     }
 
-    PNS::SOLID* solid = new PNS::SOLID;
+    std::unique_ptr< PNS::SOLID > solid( new PNS::SOLID );
 
     solid->SetLayers( layers );
     solid->SetNet( aPad->GetNetCode() );
@@ -564,8 +564,7 @@ PNS::ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 
             default:
                 wxLogTrace( "PNS", "unsupported pad shape" );
-                delete solid;
-                return NULL;
+                return nullptr;
             }
         }
         else
@@ -661,9 +660,7 @@ PNS::ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 
             default:
                 wxLogTrace( "PNS", "unsupported pad shape" );
-                delete solid;
-
-                return NULL;
+                return nullptr;
             }
         }
     }
@@ -671,33 +668,44 @@ PNS::ITEM* PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 }
 
 
-PNS::ITEM* PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
+std::unique_ptr< PNS::SEGMENT > PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
 {
-    PNS::SEGMENT* s =
-        new PNS::SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() );
+    std::unique_ptr< PNS::SEGMENT > segment(
+        new PNS::SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() )
+    );
 
-    s->SetWidth( aTrack->GetWidth() );
-    s->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );
-    s->SetParent( aTrack );
-    return s;
+    segment->SetWidth( aTrack->GetWidth() );
+    segment->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );
+    segment->SetParent( aTrack );
+
+    if( aTrack->IsLocked() ) {
+        segment->Mark( PNS::MK_LOCKED );
+    }
+
+    return segment;
 }
 
 
-PNS::ITEM* PNS_KICAD_IFACE::syncVia( VIA* aVia )
+std::unique_ptr< PNS::VIA > PNS_KICAD_IFACE::syncVia( VIA* aVia )
 {
     LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
-    PNS::VIA* v = new PNS::VIA(
+    std::unique_ptr<PNS::VIA> via( new PNS::VIA(
             aVia->GetPosition(),
             LAYER_RANGE( top, bottom ),
             aVia->GetWidth(),
             aVia->GetDrillValue(),
             aVia->GetNetCode(),
-            aVia->GetViaType() );
+            aVia->GetViaType() )
+    );
 
-    v->SetParent( aVia );
+    via->SetParent( aVia );
 
-    return v;
+    if( aVia->IsLocked() ) {
+        via->Mark( PNS::MK_LOCKED );
+    }
+
+    return via;
 }
 
 
@@ -720,10 +728,10 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
     {
         for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
         {
-            PNS::ITEM* solid = syncPad( pad );
+            std::unique_ptr< PNS::SOLID > solid = syncPad( pad );
 
             if( solid )
-                aWorld->Add( solid );
+                aWorld->Add( std::move( solid ) );
         }
     }
 
@@ -732,16 +740,17 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
         KICAD_T type = t->Type();
         PNS::ITEM* item = NULL;
 
-        if( type == PCB_TRACE_T )
-            item = syncTrack( t );
-        else if( type == PCB_VIA_T )
-            item = syncVia( static_cast<VIA*>( t ) );
-
-        if( t->IsLocked() )
-            item->Mark( PNS::MK_LOCKED );
-
-        if( item )
-            aWorld->Add( item );
+        if( type == PCB_TRACE_T ) {
+            std::unique_ptr< PNS::SEGMENT > segment = syncTrack( t );
+            if( segment ) {
+                aWorld->Add( std::move( segment ) ); 
+            }
+        } else if( type == PCB_VIA_T ) {
+            std::unique_ptr< PNS::VIA > via = syncVia( static_cast<VIA*>( t ) );
+            if( via ) {
+                aWorld->Add( std::move( via ) );
+            }
+        }
     }
 
     int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();

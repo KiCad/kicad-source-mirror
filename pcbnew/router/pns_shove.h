@@ -131,7 +131,8 @@ private:
 
     LINE assembleLine( const SEGMENT* aSeg, int* aIndex = NULL );
 
-    void replaceItems( ITEM* aOld, ITEM* aNew );
+    void replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew );
+    void replaceLine( LINE& aOld, LINE& aNew );
 
     OPT_BOX2I                   m_affectedAreaSum;
 

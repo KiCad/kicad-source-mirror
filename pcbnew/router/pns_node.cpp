@@ -535,6 +535,11 @@ void NODE::addSolid( SOLID* aSolid )
     m_index->Add( aSolid );
 }
 
+void NODE::Add( std::unique_ptr< SOLID > aSolid )
+{
+    aSolid->SetOwner( this );
+    addSolid( aSolid.release() );
+}
 
 void NODE::addVia( VIA* aVia )
 {
@@ -542,10 +547,15 @@ void NODE::addVia( VIA* aVia )
     m_index->Add( aVia );
 }
 
-
-void NODE::addLine( LINE* aLine, bool aAllowRedundant )
+void NODE::Add( std::unique_ptr< VIA > aVia )
 {
-    SHAPE_LINE_CHAIN& l = aLine->Line();
+    aVia->SetOwner( this );
+    addVia( aVia.release() );
+}
+
+void NODE::addLine( LINE& aLine, bool aAllowRedundant )
+{
+    SHAPE_LINE_CHAIN& l = aLine.Line();
 
     for( int i = 0; i < l.SegmentCount(); i++ )
     {
@@ -553,7 +563,7 @@ void NODE::addLine( LINE* aLine, bool aAllowRedundant )
 
         if( s.A != s.B )
         {
-            SEGMENT* pseg = new SEGMENT( *aLine, s );
+            SEGMENT* pseg = new SEGMENT( aLine, s );
             SEGMENT* psegR = NULL;
 
             if( !aAllowRedundant )
@@ -561,7 +571,7 @@ void NODE::addLine( LINE* aLine, bool aAllowRedundant )
 
             if( psegR )
             {
-                aLine->LinkSegment( psegR );
+                aLine.LinkSegment( psegR );
 
                 delete pseg;
             }
@@ -569,10 +579,10 @@ void NODE::addLine( LINE* aLine, bool aAllowRedundant )
             {
                 pseg->SetOwner( this );
 
-                linkJoint( s.A, pseg->Layers(), aLine->Net(), pseg );
-                linkJoint( s.B, pseg->Layers(), aLine->Net(), pseg );
+                linkJoint( s.A, pseg->Layers(), aLine.Net(), pseg );
+                linkJoint( s.B, pseg->Layers(), aLine.Net(), pseg );
 
-                aLine->LinkSegment( pseg );
+                aLine.LinkSegment( pseg );
 
                 m_index->Add( pseg );
             }
@@ -580,47 +590,52 @@ void NODE::addLine( LINE* aLine, bool aAllowRedundant )
     }
 }
 
-
-void NODE::addSegment( SEGMENT* aSeg, bool aAllowRedundant )
+void NODE::Add( LINE& aLine, bool aAllowRedundant )
 {
-    if( aSeg->Seg().A == aSeg->Seg().B )
-    {
-        wxLogTrace( "PNS", "attempting to add a segment with same end coordinates, ignoring." );
-        return;
-    }
+    addLine( aLine, aAllowRedundant );
+}
 
-   if( !aAllowRedundant && findRedundantSegment( aSeg ) )
-        return;
-
-    aSeg->SetOwner( this );
-
+void NODE::addSegment( SEGMENT* aSeg )
+{
     linkJoint( aSeg->Seg().A, aSeg->Layers(), aSeg->Net(), aSeg );
     linkJoint( aSeg->Seg().B, aSeg->Layers(), aSeg->Net(), aSeg );
 
     m_index->Add( aSeg );
 }
 
-
-void NODE::Add( ITEM* aItem, bool aAllowRedundant )
+void NODE::Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant )
 {
-    aItem->SetOwner( this );
+    if( aSegment->Seg().A == aSegment->Seg().B )
+    {
+        wxLogTrace( "PNS", "attempting to add a segment with same end coordinates, ignoring." );
+        return;
+    }
 
+    if( !aAllowRedundant && findRedundantSegment( aSegment.get() ) )
+        return;
+
+    aSegment->SetOwner( this );
+    addSegment( aSegment.release() );
+}
+
+void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
+{
     switch( aItem->Kind() )
     {
     case ITEM::SOLID_T:
-        addSolid( static_cast<SOLID*>( aItem ) );
+        Add( ItemCast<SOLID>( std::move( aItem ) ) );
         break;
 
     case ITEM::SEGMENT_T:
-        addSegment( static_cast<SEGMENT*>( aItem ), aAllowRedundant );
+        Add( ItemCast<SEGMENT>( std::move( aItem ) ), aAllowRedundant );
         break;
 
     case ITEM::LINE_T:
-        addLine( static_cast<LINE*>( aItem ), aAllowRedundant );
+        assert( false );
         break;
 
     case ITEM::VIA_T:
-        addVia( static_cast<VIA*>( aItem ) );
+        Add( ItemCast<VIA>( std::move( aItem ) ) );
         break;
 
     default:
@@ -719,12 +734,17 @@ void NODE::removeVia( VIA* aVia )
 }
 
 
-void NODE::Replace( ITEM* aOldItem, ITEM* aNewItem )
+void NODE::Replace( ITEM* aOldItem, std::unique_ptr< ITEM > aNewItem )
 {
     Remove( aOldItem );
-    Add( aNewItem );
+    Add( std::move( aNewItem ) );
 }
 
+void NODE::Replace( LINE& aOldLine, LINE& aNewLine )
+{
+    Remove( aOldLine );
+    Add( aNewLine );
+}
 
 void NODE::Remove( ITEM* aItem )
 {
@@ -1184,7 +1204,7 @@ void NODE::Commit( NODE* aNode )
     {
         (*i)->SetRank( -1 );
         (*i)->Unmark();
-        Add( *i );
+        Add( std::unique_ptr<ITEM>( *i ) );
     }
 
     releaseChildren();
