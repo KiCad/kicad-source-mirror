@@ -519,7 +519,6 @@ endif()
 set( INC_BEFORE
     .
     ${CMAKE_SOURCE_DIR}/include
-    ${PROJECT_BINARY_DIR}/include
     )
 
 set( INC_AFTER
