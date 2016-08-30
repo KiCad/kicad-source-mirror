@@ -428,6 +428,7 @@ SIM_PLOT_PANEL::SIM_PLOT_PANEL( SIM_TYPE aType, wxWindow* parent, wxWindowID id,
     }
 
     m_legend = new mpInfoLegend( wxRect( 0, 40, 200, 40 ), wxTRANSPARENT_BRUSH );
+    m_legend->SetVisible( false );
     AddLayer( m_legend );
     m_topLevel.push_back( m_legend );
     SetColourTheme( *wxBLACK, *wxWHITE, grey );

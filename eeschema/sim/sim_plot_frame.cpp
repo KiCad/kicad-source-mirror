@@ -478,38 +478,42 @@ void SIM_PLOT_FRAME::updateSignalList()
     // Build an image list, to show the color of the corresponding trace
     // in the plot panel
     // This image list is used for trace and cursor lists
-    #define ICON_SIZEX 10
-    #define ICON_SIZEY 10
+    wxMemoryDC bmDC;
+    const int isize = bmDC.GetCharHeight();
 
     if( m_signalsIconColorList == NULL )
-        m_signalsIconColorList = new wxImageList( ICON_SIZEX, ICON_SIZEY, false );
+        m_signalsIconColorList = new wxImageList( isize, isize, false );
     else
         m_signalsIconColorList->RemoveAll();
 
-    wxMemoryDC bmDC;
-    const int isize = bmDC.GetCharHeight();
-    wxBitmap bitmap( isize, isize );
-
     for( const auto& trace : CurrentPlot()->GetTraces() )
     {
+        wxBitmap bitmap( isize, isize );
         bmDC.SelectObject( bitmap );
         wxColor tcolor = trace.second->GetTraceColour();
 
+        wxColour bgColor = m_signals->wxWindow::GetBackgroundColour();
+        bmDC.SetPen( wxPen( bgColor ) );
+        bmDC.SetBrush( wxBrush( bgColor ) );
+        bmDC.DrawRectangle( 0, 0, isize, isize ); // because bmDC.Clear() does not work in wxGTK
+
         bmDC.SetPen( wxPen( tcolor ) );
-        bmDC.SetBrush( wxBrush( m_signals->GetBackgroundColour() ) );
-        bmDC.Clear();
         bmDC.SetBrush( wxBrush( tcolor ) );
-        bmDC.DrawRectangle( 0, isize/4, isize, isize - (isize/4) );
+        bmDC.DrawRectangle( 0, isize / 4 + 1, isize, isize / 2 );
 
         bmDC.SelectObject( wxNullBitmap );  // Needed to initialize bitmap
 
+        bitmap.SetMask( new wxMask( bitmap, *wxBLACK ) );
         m_signalsIconColorList->Add( bitmap );
     }
 
-    bmDC.SetBrush( wxNullBrush );
-    bmDC.SetPen( wxNullPen );
+    if( bmDC.IsOk() )
+    {
+        bmDC.SetBrush( wxNullBrush );
+        bmDC.SetPen( wxNullPen );
+    }
 
-    m_signals->SetImageList(m_signalsIconColorList, wxIMAGE_LIST_SMALL);
+    m_signals->SetImageList( m_signalsIconColorList, wxIMAGE_LIST_SMALL );
 
     // Fill the signals listctrl. Keep the order of names and
     // the order of icon color identical, because the icons
