@@ -37,10 +37,7 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_COMPO
     m_name->SetLabel( compName );
     m_value = SPICE_VALUE( aComponent->GetField( VALUE )->GetText() );
     m_changed = false;
-
-    // Generate Spice component name
-    char prim = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, aComponent, 0 )[0];
-    m_spiceName = wxString( prim + compName ).Lower();
+    m_spiceName = NETLIST_EXPORTER_PSPICE::GetSpiceComponentName( aComponent, 0 );
 
     // Call Set*() methods to update fields and slider
     m_max = SPICE_VALUE( 2.0 ) * m_value;

@@ -81,7 +81,7 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
 
     for( const auto& item : m_spiceItems )
     {
-        aFormatter->Print( 0, "%c%s ", item.m_primitive, (const char*) item.m_refName.c_str() );
+        aFormatter->Print( 0, "%s ", (const char*) GetSpiceComponentName( item.m_parent, aCtl ).c_str() );
 
         // Pins to node mapping
         int activePinIndex = 0;
@@ -148,6 +148,23 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
     aFormatter->Print( 0, ".end\n" );
 
     return true;
+}
+
+
+wxString NETLIST_EXPORTER_PSPICE::GetSpiceComponentName( SCH_COMPONENT* aComponent, unsigned aCtl )
+{
+    const wxString compName = aComponent->GetField( REFERENCE )->GetText();
+
+    // Get the component number
+    const char* number = compName.c_str();
+
+    while( isalpha( *number ) )
+        ++number;
+
+    if( number == nullptr )
+        number = compName.c_str();
+
+    return GetSpiceField( SF_PRIMITIVE, aComponent, aCtl ) + wxString( number );
 }
 
 
@@ -286,7 +303,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 
             spiceItem.m_primitive = GetSpiceField( SF_PRIMITIVE, comp, aCtl )[0];
             spiceItem.m_model = GetSpiceField( SF_MODEL, comp, aCtl );
-            spiceItem.m_refName = comp->GetRef( &sheetList[sheet_idx] );
+            spiceItem.m_refName = GetSpiceComponentName( comp, aCtl );
 
             // Duplicate references will result in simulation errors
             if( refNames.count( spiceItem.m_refName ) )

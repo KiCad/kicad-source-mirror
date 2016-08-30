@@ -118,7 +118,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
             try
             {
-                simCmd += wxString::Format( "v%s %s %s %s",
+                simCmd += wxString::Format( "%s %s %s %s",
                     m_dcSource1->GetValue(),
                     SPICE_VALUE( m_dcStart1->GetValue() ).ToSpiceString(),
                     SPICE_VALUE( m_dcStop1->GetValue() ).ToSpiceString(),
@@ -146,7 +146,7 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
 
             try
             {
-                simCmd += wxString::Format( "v%s %s %s %s",
+                simCmd += wxString::Format( "%s %s %s %s",
                     m_dcSource2->GetValue(),
                     SPICE_VALUE( m_dcStart2->GetValue() ).ToSpiceString(),
                     SPICE_VALUE( m_dcStop2->GetValue() ).ToSpiceString(),
@@ -278,7 +278,7 @@ int DIALOG_SIM_SETTINGS::ShowModal()
 
     for( auto item : m_exporter->GetSpiceItems() )
     {
-        if( item.m_primitive == 'V' )
+        if( item.m_primitive == SP_VSOURCE )
         {
             for( auto c : cmbSrc )
                 c.first->Append( item.m_refName );

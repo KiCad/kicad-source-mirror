@@ -96,7 +96,7 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::GetSpiceDevice( const wxString& aComponent
     if( it == spiceItems.end() )
         return wxEmptyString;
 
-    return wxString( it->m_primitive + it->m_refName );
+    return wxString( it->m_refName );
 }
 
 
