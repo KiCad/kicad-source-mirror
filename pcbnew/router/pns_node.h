@@ -289,8 +289,12 @@ public:
      * Just as the name says, removes an item from this branch.
      * @param aItem item to remove
      */
+    void Remove( SOLID* aSolid );
+    void Remove( VIA* aVia );
+    void Remove( SEGMENT* aSegment );
     void Remove( ITEM* aItem );
 
+public:
     /**
      * Function Remove()
      *
@@ -440,10 +444,11 @@ private:
     void addSolid( SOLID* aSeg );
     void addSegment( SEGMENT* aSeg );
     void addVia( VIA* aVia );
-    void removeSolid( SOLID* aSeg );
-    void removeLine( LINE* aLine );
-    void removeSegment( SEGMENT* aSeg );
-    void removeVia( VIA* aVia );
+    
+    void removeLine( LINE& aLine );
+    void removeSolidIndex( SOLID* aSeg );
+    void removeSegmentIndex( SEGMENT* aSeg );
+    void removeViaIndex( VIA* aVia );
 
     void doRemove( ITEM* aItem );
     void unlinkParent();

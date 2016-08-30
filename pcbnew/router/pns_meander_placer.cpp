@@ -80,7 +80,7 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     TOPOLOGY topo( m_world );
     m_tunedPath = topo.AssembleTrivialPath( m_initialSegment );
 
-    m_world->Remove( &m_originLine );
+    m_world->Remove( m_originLine );
 
     m_currentWidth = m_originLine.Width();
     m_currentEnd = VECTOR2I( 0, 0 );

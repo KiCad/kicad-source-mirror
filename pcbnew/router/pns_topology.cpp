@@ -48,7 +48,7 @@ bool TOPOLOGY::SimplifyLine( LINE* aLine )
     if( simplified.PointCount() != l.PointCount() )
     {
         LINE lnew( l );
-        m_world->Remove( &l );
+        m_world->Remove( l );
         lnew.SetShape( simplified );
         m_world->Add( lnew );
         return true;

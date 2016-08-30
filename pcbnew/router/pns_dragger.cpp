@@ -210,7 +210,7 @@ void DRAGGER::dumbDragVia( VIA* aVia, NODE* aNode, const VECTOR2I& aP )
 
             m_draggedItems.Add( draggedLine );
 
-            m_lastNode->Remove( &origLine );
+            m_lastNode->Remove( origLine );
             m_lastNode->Add( draggedLine );
         }
     }

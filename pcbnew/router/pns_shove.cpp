@@ -697,7 +697,7 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
         }
         else
         {
-            m_currentNode->Remove( &lp.first );
+            m_currentNode->Remove( lp.first );
         }
 
 #ifdef DEBUG
@@ -1382,7 +1382,7 @@ void SHOVE::runOptimizer( NODE* aNode )
 
                 if( optimizer.Optimize( &line, &optimized ) )
                 {
-                    aNode->Remove( &line );
+                    aNode->Remove( line );
                     line.SetShape( optimized.CLine() );
                     aNode->Add( line );
                 }
@@ -1409,7 +1409,7 @@ const LINE SHOVE::NewHead() const
 void SHOVE::SetInitialLine( LINE& aInitial )
 {
     m_root = m_root->Branch();
-    m_root->Remove( &aInitial );
+    m_root->Remove( aInitial );
 }
 
 }

@@ -1,4 +1,3 @@
-#include "pns_node.h"
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
@@ -581,7 +580,6 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
             }
         }
     }
-
 }
 
 void NODE::addSegment( SEGMENT* aSeg )
@@ -654,29 +652,13 @@ void NODE::doRemove( ITEM* aItem )
 }
 
 
-void NODE::removeSegment( SEGMENT* aSeg )
+void NODE::removeSegmentIndex( SEGMENT* aSeg )
 {
     unlinkJoint( aSeg->Seg().A, aSeg->Layers(), aSeg->Net(), aSeg );
     unlinkJoint( aSeg->Seg().B, aSeg->Layers(), aSeg->Net(), aSeg );
-
-    doRemove( aSeg );
 }
 
-
-void NODE::removeLine( LINE* aLine )
-{
-    std::vector<SEGMENT*>& segRefs = aLine->LinkedSegments();
-
-    for( SEGMENT* seg : segRefs )
-    {
-        removeSegment( seg );
-    }
-
-    aLine->ClearSegmentLinks();
-    aLine->SetOwner( nullptr );
-}
-
-void NODE::removeVia( VIA* aVia )
+void NODE::removeViaIndex( VIA* aVia )
 {
     // We have to split a single joint (associated with a via, binding together multiple layers)
     // into multiple independent joints. As I'm a lazy bastard, I simply delete the via and all its links and re-insert them.
@@ -721,8 +703,11 @@ void NODE::removeVia( VIA* aVia )
         if( item != aVia )
             linkJoint( p, item->Layers(), net, item );
     }
+}
 
-    doRemove( aVia );
+void NODE::removeSolidIndex( SOLID* aSolid )
+{
+    // fixme: this fucks up the joints, but it's only used for marking colliding obstacles for the moment, so we don't care.
 }
 
 
@@ -738,25 +723,42 @@ void NODE::Replace( LINE& aOldLine, LINE& aNewLine )
     Add( aNewLine );
 }
 
+void NODE::Remove( SOLID* aSolid )
+{
+    removeSolidIndex( aSolid );
+    doRemove( aSolid );
+}
+
+void NODE::Remove( VIA* aVia )
+{
+    removeViaIndex( aVia );
+    doRemove( aVia );
+}
+
+void NODE::Remove( SEGMENT* aSegment )
+{
+    removeSegmentIndex( aSegment );
+    doRemove( aSegment );
+}
+
 void NODE::Remove( ITEM* aItem )
 {
     switch( aItem->Kind() )
     {
     case ITEM::SOLID_T:
-        // fixme: this fucks up the joints, but it's only used for marking colliding obstacles for the moment, so we don't care.
-        doRemove( aItem );
+        Remove( static_cast<SOLID*>( aItem ) );
         break;
 
     case ITEM::SEGMENT_T:
-        removeSegment( static_cast<SEGMENT*>( aItem ) );
+        Remove( static_cast<SEGMENT*>( aItem ) );
         break;
 
     case ITEM::LINE_T:
-        removeLine( static_cast<LINE*>( aItem ) );
+        assert( false );
         break;
 
     case ITEM::VIA_T:
-        removeVia( static_cast<VIA*>( aItem ) );
+        Remove( static_cast<VIA*>( aItem ) );
         break;
 
     default:
@@ -767,7 +769,16 @@ void NODE::Remove( ITEM* aItem )
 
 void NODE::Remove( LINE& aLine )
 {
-    removeLine( &aLine );
+    // LINE does not have a seperate remover, as LINEs are never truly a member of the tree
+    std::vector<SEGMENT*>& segRefs = aLine.LinkedSegments();
+
+    for( SEGMENT* seg : segRefs )
+    {
+        Remove( seg );
+    }
+
+    aLine.SetOwner( nullptr );
+    aLine.ClearSegmentLinks();
 }
 
 

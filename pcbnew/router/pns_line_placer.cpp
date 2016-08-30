@@ -979,7 +979,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
     for( SEGMENT *s : toErase )
         aNode->Remove( s );
 
-    aNode->Remove( &aLatest );
+    aNode->Remove( aLatest );
 }
 
 
@@ -993,7 +993,7 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, SEGMENT* aLatest )
     if( simplified.PointCount() != l.PointCount() )
     {
         LINE lnew( l );
-        aNode->Remove( &l );
+        aNode->Remove( l );
         lnew.SetShape( simplified );
         aNode->Add( lnew );
     }
