@@ -1,3 +1,4 @@
+#include "pns_node.h"
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
@@ -553,8 +554,10 @@ void NODE::Add( std::unique_ptr< VIA > aVia )
     addVia( aVia.release() );
 }
 
-void NODE::addLine( LINE& aLine, bool aAllowRedundant )
+void NODE::Add( LINE& aLine, bool aAllowRedundant )
 {
+    assert( !aLine.IsLinked() );
+
     SHAPE_LINE_CHAIN& l = aLine.Line();
 
     for( int i = 0; i < l.SegmentCount(); i++ )
@@ -563,36 +566,22 @@ void NODE::addLine( LINE& aLine, bool aAllowRedundant )
 
         if( s.A != s.B )
         {
-            SEGMENT* pseg = new SEGMENT( aLine, s );
-            SEGMENT* psegR = NULL;
-
-            if( !aAllowRedundant )
-                psegR = findRedundantSegment( pseg );
-
-            if( psegR )
+            SEGMENT* rseg;
+            if( !aAllowRedundant &&
+                (rseg = findRedundantSegment( s.A, s.B, aLine.Layers(), aLine.Net() )) )
             {
-                aLine.LinkSegment( psegR );
-
-                delete pseg;
+                // another line could be referencing this segment too :(
+                aLine.LinkSegment( rseg );
             }
             else
             {
-                pseg->SetOwner( this );
-
-                linkJoint( s.A, pseg->Layers(), aLine.Net(), pseg );
-                linkJoint( s.B, pseg->Layers(), aLine.Net(), pseg );
-
-                aLine.LinkSegment( pseg );
-
-                m_index->Add( pseg );
+                std::unique_ptr< SEGMENT > newseg( new SEGMENT( aLine, s ) );
+                aLine.LinkSegment( newseg.get() );
+                Add( std::move( newseg ), true );
             }
         }
     }
-}
 
-void NODE::Add( LINE& aLine, bool aAllowRedundant )
-{
-    addLine( aLine, aAllowRedundant );
 }
 
 void NODE::addSegment( SEGMENT* aSeg )
@@ -682,6 +671,9 @@ void NODE::removeLine( LINE* aLine )
     {
         removeSegment( seg );
     }
+
+    aLine->ClearSegmentLinks();
+    aLine->SetOwner( nullptr );
 }
 
 void NODE::removeVia( VIA* aVia )
@@ -1283,33 +1275,35 @@ int NODE::RemoveByMarker( int aMarker )
     return 0;
 }
 
-
-SEGMENT* NODE::findRedundantSegment( SEGMENT* aSeg )
+SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
+                                     int aNet )
 {
-    JOINT* jtStart = FindJoint( aSeg->Seg().A, aSeg );
+    JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
 
     if( !jtStart )
-        return NULL;
+        return nullptr;
 
     for( ITEM* item : jtStart->LinkList() )
     {
         if( item->OfKind( ITEM::SEGMENT_T ) )
         {
-            SEGMENT* seg2 = (SEGMENT*) item;
-
-            const VECTOR2I a1( aSeg->Seg().A );
-            const VECTOR2I b1( aSeg->Seg().B );
+            SEGMENT* seg2 = (SEGMENT*)item;
 
             const VECTOR2I a2( seg2->Seg().A );
             const VECTOR2I b2( seg2->Seg().B );
 
-            if( seg2->Layers().Start() == aSeg->Layers().Start() &&
-                ( ( a1 == a2 && b1 == b2 ) || ( a1 == b2 && a2 == b1 ) ) )
-                    return seg2;
+            if( seg2->Layers().Start() == lr.Start() &&
+                ((A == a2 && B == b2) || (A == b2 && B == a2)) )
+                return seg2;
         }
     }
 
-    return NULL;
+    return nullptr;
+}
+
+SEGMENT* NODE::findRedundantSegment( SEGMENT* aSeg )
+{
+    return findRedundantSegment( aSeg->Seg().A, aSeg->Seg().B, aSeg->Layers(), aSeg->Net() );
 }
 
 

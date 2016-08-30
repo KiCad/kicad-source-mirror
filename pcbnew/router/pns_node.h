@@ -439,7 +439,6 @@ private:
     ///> helpers for adding/removing items
     void addSolid( SOLID* aSeg );
     void addSegment( SEGMENT* aSeg );
-    void addLine( LINE& aLine, bool aAllowRedundant );
     void addVia( VIA* aVia );
     void removeSolid( SOLID* aSeg );
     void removeLine( LINE* aLine );
@@ -456,6 +455,8 @@ private:
         return m_parent == NULL;
     }
 
+    SEGMENT* findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B,
+                                   const LAYER_RANGE & lr, int aNet );
     SEGMENT* findRedundantSegment( SEGMENT* aSeg );
 
     ///> scans the joint map, forming a line starting from segment (current).
