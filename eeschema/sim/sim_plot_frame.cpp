@@ -566,7 +566,7 @@ void SIM_PLOT_FRAME::applyTuners()
     for( auto& tuner : m_tuners )
     {
         /// @todo no ngspice hardcoding
-        std::string command( "alter @" + tuner->GetSpiceName().Lower()
+        std::string command( "alter @" + tuner->GetSpiceName()
                 + "=" + tuner->GetValue().ToSpiceString() );
 
         m_simulator->Command( command );

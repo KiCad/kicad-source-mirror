@@ -166,11 +166,6 @@ public:
     }
 
     /**
-     * @brief Returns a component name in the Spice world.
-     */
-    static wxString GetSpiceComponentName( SCH_COMPONENT* aComponent, unsigned aCtl );
-
-    /**
      * @brief Retrieves either the requested field value or the default value.
      */
     static wxString GetSpiceField( SPICE_FIELD aField, SCH_COMPONENT* aComponent, unsigned aCtl );
