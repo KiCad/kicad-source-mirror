@@ -45,6 +45,10 @@ option( USE_SCH_IO_MANAGER
     "Build Eeschema with the I/O manager for handling schematic and symbol library I/O. (default OFF)"
     )
 
+option( USE_OCE
+    "Build tools and plugins related to OpenCascade Community Edition (default OFF)"
+    )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -505,6 +509,13 @@ endif()
 # Find ngspice library, required for integrated circuit simulator
 if( KICAD_SPICE )
     find_package( ngspice REQUIRED )
+endif()
+
+# Find OpenCascade Community Edition, required for STEP plugin and tools
+if( USE_OCE )
+    set( LIBS_OCE TKBinXCAF TKPCAF TKSTEP TKXDESTEP TKIGES TKXDEIGES )
+
+    find_package( OCE 0.16 REQUIRED ${LIBS_OCE} )
 endif()
 
 # Assist with header file searching optimization:
