@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,11 +105,12 @@ public:
         return Stage( aItem, CHT_MODIFY );
     }
 
+    ///> Creates an undo entry for an item that has been already modified. Requires a copy done
+    ///> before the modification.
+    COMMIT& Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy );
+
     ///> Adds a change of the item aItem of type aChangeType to the change list.
     COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType );
-
-    ///> Adds a change of an item with its copy done before the change has occurred.
-    COMMIT& Stage( EDA_ITEM* aItem, EDA_ITEM* aCopy );
 
     COMMIT& Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType );
 

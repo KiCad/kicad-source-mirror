@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +78,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 }
 
 
-COMMIT& COMMIT::Stage( EDA_ITEM* aItem, EDA_ITEM* aCopy )
+COMMIT& COMMIT::Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy )
 {
     EDA_ITEM* parent = parentObject( aItem );
 
@@ -120,7 +121,7 @@ COMMIT& COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag )
             assert( change_type == UR_CHANGED );
 
             // There was already a copy created, so use it
-            Stage( item, copy );
+            Modified( item, copy );
         }
         else
         {
