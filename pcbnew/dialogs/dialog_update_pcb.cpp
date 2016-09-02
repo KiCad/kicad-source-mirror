@@ -19,17 +19,18 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST *aNetlist
     m_netlist (aNetlist)
 {
     m_messagePanel->SetLabel( _("Changes to be applied:") );
-    m_messagePanel->SetLazyUpdate ( true );
+    m_messagePanel->SetLazyUpdate( true );
     m_netlist->SortByReference();
     m_btnPerformUpdate->SetFocus();
 
     m_messagePanel->SetVisibleSeverities( REPORTER::RPT_WARNING | REPORTER::RPT_ERROR | REPORTER::RPT_ACTION );
 }
 
+
 DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
 {
-
 }
+
 
 void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 {
@@ -37,8 +38,8 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     REPORTER &reporter = m_messagePanel->Reporter();
     KIGFX::VIEW*    view = m_frame->GetGalCanvas()->GetView();
-    TOOL_MANAGER *toolManager = m_frame->GetToolManager();
-    BOARD *board = m_frame->GetBoard();
+    TOOL_MANAGER* toolManager = m_frame->GetToolManager();
+    BOARD* board = m_frame->GetBoard();
 
     if( !aDryRun )
     {
@@ -57,7 +58,8 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     m_netlist->SetFindByTimeStamp( m_matchByTimestamp->GetValue() );
     m_netlist->SetReplaceFootprints( true );
 
-    try {
+    try
+    {
         m_frame->LoadFootprints( *m_netlist, &reporter );
     }
     catch( IO_ERROR &error )
@@ -70,14 +72,12 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     }
 
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );
-
     updater.SetReporter ( &reporter );
     updater.SetIsDryRun( aDryRun);
     updater.SetLookupByTimestamp( m_matchByTimestamp->GetValue() );
     updater.SetDeleteUnusedComponents ( true );
     updater.SetReplaceFootprints( true );
-    updater.SetDeleteSinglePadNets ( false );
-
+    updater.SetDeleteSinglePadNets( false );
     updater.UpdateNetlist( *m_netlist );
 
     m_messagePanel->Flush();
@@ -103,9 +103,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
         board->GetRatsnest()->ProcessBoard();
 
     m_frame->Compile_Ratsnest( NULL, true );
-
     m_frame->SetMsgPanel( board );
-
 
     if( m_frame->IsGalCanvasActive() )
     {
@@ -117,30 +115,33 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
             {
                 toolManager->RunAction( COMMON_ACTIONS::selectItem, true, footprint );
             }
+
             toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
         }
     }
 
-
     m_btnPerformUpdate->Enable( false );
     m_btnPerformUpdate->SetLabel( _( "Update complete" ) );
-    m_btnCancel->SetLabel ( _("Close") );
+    m_btnCancel->SetLabel( _("Close") );
     m_btnCancel->SetFocus();
 }
+
 
 void DIALOG_UPDATE_PCB::OnMatchChange( wxCommandEvent& event )
 {
     PerformUpdate( true );
 }
 
+
 void DIALOG_UPDATE_PCB::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( wxID_CANCEL );
 }
 
+
 void DIALOG_UPDATE_PCB::OnUpdateClick( wxCommandEvent& event )
 {
-    m_messagePanel->SetLabel( _("Changes applied to the PCB:") );
+    m_messagePanel->SetLabel( _( "Changes applied to the PCB:" ) );
     PerformUpdate( false );
-    m_btnCancel->SetFocus( );
+    m_btnCancel->SetFocus();
 }
