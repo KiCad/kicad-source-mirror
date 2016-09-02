@@ -437,14 +437,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
 
             m_toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
+            BOARD_COMMIT commit( pcbframe );
 
             // Create the "new" module
             MODULE* newmodule = new MODULE( *module_in_edit );
             newmodule->SetParent( mainpcb );
             newmodule->SetLink( 0 );
-
-            // Put the footprint in the main pcb linked list.
-            mainpcb->Add( newmodule );
 
             if( source_module )         // this is an update command
             {
@@ -452,50 +450,28 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 // the new module replace the old module (pos, orient, ref, value
                 // and connexions are kept)
                 // and the source_module (old module) is deleted
-                BOARD_COMMIT commit( pcbframe );
-
-                if( pcbframe->IsGalCanvasActive() )
-                {
-                    KIGFX::VIEW* view = pcbframe->GetGalCanvas()->GetView();
-                    source_module->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view,
-                                                                  std::placeholders::_1 ) );
-                    view->Remove( source_module );
-                }
-
                 pcbframe->Exchange_Module( source_module, newmodule, commit );
                 newmodule->SetTimeStamp( module_in_edit->GetLink() );
-
-                commit.Push( wxT( "" ) );
+                commit.Push( wxT( "Update module" ) );
             }
             else        // This is an insert command
             {
                 wxPoint cursor_pos = pcbframe->GetCrossHairPosition();
 
+                commit.Add( newmodule );
                 pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
                 pcbframe->PlaceModule( newmodule, NULL );
                 newmodule->SetPosition( wxPoint( 0, 0 ) );
                 pcbframe->SetCrossHairPosition( cursor_pos );
                 newmodule->SetTimeStamp( GetNewTimeStamp() );
-                pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
+                commit.Push( wxT( "Insert module" ) );
             }
 
             newmodule->ClearFlags();
             GetScreen()->ClrModify();
             pcbframe->SetCurItem( NULL );
+            // @todo LEGACY should be unnecessary
             mainpcb->m_Status_Pcb = 0;
-
-            if( pcbframe->IsGalCanvasActive() )
-            {
-                RN_DATA* ratsnest = pcbframe->GetBoard()->GetRatsnest();
-                ratsnest->Update( newmodule );
-                ratsnest->Recalculate();
-
-                KIGFX::VIEW* view = pcbframe->GetGalCanvas()->GetView();
-                newmodule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view,
-                                                       std::placeholders::_1 ) );
-                view->Add( newmodule );
-                pcbframe->GetGalCanvas()->ForceRefresh();
-            }
         }
         break;
 
