@@ -138,7 +138,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
             if( part && part->HasConversion() )
                 asdeMorgan = true;
 
-            entry = lib->FindEntry( m_entryName );
+            entry = lib->FindAlias( m_entryName );
         }
     }
 

@@ -192,7 +192,7 @@ void LIB_VIEW_FRAME::SelectAndViewLibraryPart( int option )
                 return;
             }
 
-            if( lib->FindEntry( m_entryName ) )
+            if( lib->FindAlias( m_entryName ) )
             {
                 if( option == NEXT_PART )
                     ViewOneLibraryContent( lib, NEXT_PART );
@@ -243,7 +243,7 @@ void LIB_VIEW_FRAME::ViewOneLibraryContent( PART_LIB* Lib, int Flag )
     m_unit    = 1;
     m_convert = 1;
 
-    entry = Lib->FindEntry( CmpName );
+    entry = Lib->FindAlias( CmpName );
     m_entryName = CmpName;
     DisplayLibInfos();
     Zoom_Automatique( false );

@@ -85,7 +85,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         PART_LIB* lib = GetCurLib();
 
         // Test the current library for name conflicts.
-        if( lib && lib->FindEntry( newFieldValue ) )
+        if( lib && lib->FindAlias( newFieldValue ) )
         {
             msg.Printf( _(
                 "The name '%s' conflicts with an existing entry in the component library '%s'.\n\n"
@@ -140,7 +140,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 
             for( size_t i = 0;  i < aliases.GetCount();  i++ )
             {
-                if( lib->FindEntry( aliases[ i ] ) != NULL )
+                if( lib->FindAlias( aliases[ i ] ) != NULL )
                     parent->RemoveAlias( aliases[ i ] );
             }
         }

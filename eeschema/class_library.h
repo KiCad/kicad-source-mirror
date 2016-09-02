@@ -454,12 +454,12 @@ public:
     bool Conflicts( LIB_PART* aPart );
 
     /**
-     * Find entry by name.
+     * Find #LIB_ALIAS by \a aName.
      *
      * @param aName - Name of entry, case sensitive.
-     * @return Entry if found.  NULL if not found.
+     * @return #LIB_ALIAS* if found.  NULL if not found.
      */
-    LIB_ALIAS* FindEntry( const wxString& aName );
+    LIB_ALIAS* FindAlias( const wxString& aName );
 
     /**
      * Find part by \a aName.
@@ -471,17 +471,6 @@ public:
      * @return LIB_PART* - part if found, else NULL.
      */
     LIB_PART* FindPart( const wxString& aName );
-
-    /**
-     * Find alias by \a nName.
-     *
-     * @param aName - Name of alias, case sensitive.
-     * @return Alias if found.  NULL if not found.
-     */
-    LIB_ALIAS* FindAlias( const wxString& aName )
-    {
-        return (LIB_ALIAS*) FindEntry( aName );
-    }
 
     /**
      * Add a new \a aAlias entry to the library.

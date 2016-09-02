@@ -80,7 +80,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
             // If not already saved in the new cache, put it:
-            if( !libCache->FindEntry( component->GetPartName() ) )
+            if( !libCache->FindAlias( component->GetPartName() ) )
             {
                 if( LIB_PART* part = libs->FindLibPart( component->GetPartName() ) )
                 {

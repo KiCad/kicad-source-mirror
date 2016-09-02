@@ -138,7 +138,7 @@ bool PART_LIB::Conflicts( LIB_PART* aPart )
 }
 
 
-LIB_ALIAS* PART_LIB::FindEntry( const wxString& aName )
+LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName )
 {
     LIB_ALIAS_MAP::iterator it = m_amap.find( aName );
 
@@ -168,7 +168,7 @@ LIB_PART* PART_LIB::FindPart( const wxString& aName )
     }
 #endif
 
-    if( LIB_ALIAS* alias = FindEntry( aName ) )
+    if( LIB_ALIAS* alias = FindAlias( aName ) )
     {
         return alias->GetPart();
     }
@@ -481,7 +481,7 @@ bool PART_LIB::Load( wxString& aErrorMsg )
             {
                 // Check for duplicate entry names and warn the user about
                 // the potential conflict.
-                if( FindEntry( part->GetName() ) != NULL )
+                if( FindAlias( part->GetName() ) != NULL )
                 {
                     wxLogWarning( DUPLICATE_NAME_MSG,
                                   GetChars( fileName.GetName() ),
@@ -513,7 +513,7 @@ void PART_LIB::LoadAliases( LIB_PART* aPart )
 
     for( size_t i = 0; i < aPart->m_aliases.size(); i++ )
     {
-        if( FindEntry( aPart->m_aliases[i]->GetName() ) != NULL )
+        if( FindAlias( aPart->m_aliases[i]->GetName() ) != NULL )
         {
             wxLogError( DUPLICATE_NAME_MSG,
                         GetChars( fileName.GetName() ),
@@ -597,7 +597,7 @@ bool PART_LIB::LoadDocs( wxString& aErrorMsg )
 
         wxString cmpname = FROM_UTF8( name );
 
-        entry = FindEntry( cmpname );
+        entry = FindAlias( cmpname );
 
         while( GetLine( file, line, &lineNumber, sizeof(line) ) )
         {
@@ -868,7 +868,7 @@ LIB_ALIAS* PART_LIBS::FindLibraryEntry( const wxString& aEntryName, const wxStri
         if( !!aLibraryName && lib.GetName() != aLibraryName )
             continue;
 
-        entry = lib.FindEntry( aEntryName );
+        entry = lib.FindAlias( aEntryName );
 
         if( entry )
             break;

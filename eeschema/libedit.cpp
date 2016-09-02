@@ -150,7 +150,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     m_aliasName.Empty();
 
     // Load the new library component
-    libEntry = lib->FindEntry( cmp_name );
+    libEntry = lib->FindAlias( cmp_name );
     PART_LIB* searchLib = lib;
 
     if( !libEntry )
@@ -555,7 +555,7 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
         return;
 
-    libEntry = lib->FindEntry( dlg.GetStringSelection() );
+    libEntry = lib->FindAlias( dlg.GetStringSelection() );
 
     if( !libEntry )
     {
@@ -643,7 +643,7 @@ void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
     PART_LIB* lib = GetCurLib();
 
     // Test if there a component with this name already.
-    if( lib && lib->FindEntry( name ) )
+    if( lib && lib->FindAlias( name ) )
     {
         wxString msg = wxString::Format( _(
             "Part '%s' already exists in library '%s'" ),
