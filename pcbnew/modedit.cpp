@@ -437,6 +437,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
 
             m_toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
+            pcbframe->GetToolManager()->RunAction( COMMON_ACTIONS::selectionClear, true );
             BOARD_COMMIT commit( pcbframe );
 
             // Create the "new" module
