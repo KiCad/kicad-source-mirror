@@ -6,6 +6,7 @@ Type=Application
 Categories=Science;Electronics;
 Exec=kicad %f
 StartupWMClass=kicad
+Keywords=Projectmanager;
 MimeType=application/x-kicad-project;
 Name=KiCad
 GenericName=EDA Suite

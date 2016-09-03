@@ -10,5 +10,5 @@ MimeType=application/x-gerber;application/x-excellon;application/x-gerber-job
 Name=KiCad Gerber Viewer
 GenericName=Gerber File Viewer
 Comment=View Gerber files
-Keywords=gerbview
+Keywords=gerbview;PCB;Gerber;
 X-AppStream-Ignore=true
