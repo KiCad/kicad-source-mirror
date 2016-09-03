@@ -525,8 +525,6 @@ void dialog_about::OnCopyVersionInfo( wxCommandEvent& event )
     msg_version << OFF;
 #endif
 
-    msg_version << "                  USE_FP_LIB_TABLE=HARD_CODED_ON\n";
-
     msg_version << "                  BUILD_GITHUB_PLUGIN=";
 #ifdef BUILD_GITHUB_PLUGIN
     msg_version << ON;
