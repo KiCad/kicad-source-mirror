@@ -74,8 +74,8 @@ void SCH_PLUGIN::TransferCache( PART_LIB& aTarget )
 }
 
 
-LIB_PART* SCH_PLUGIN::SymbolLoad( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                  const PROPERTIES* aProperties )
+LIB_ALIAS* SCH_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
+                                   const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );

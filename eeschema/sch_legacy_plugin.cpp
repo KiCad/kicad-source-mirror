@@ -34,7 +34,6 @@
 #include <core/typeinfo.h>
 
 #include <general.h>
-#include <class_library.h>
 #include <lib_field.h>
 #include <sch_bus_entry.h>
 #include <sch_marker.h>
@@ -3142,4 +3141,22 @@ void SCH_LEGACY_PLUGIN::TransferCache( PART_LIB& aTarget )
     m_cache->m_aliases.clear();
     delete m_cache;
     m_cache = NULL;
+}
+
+
+LIB_ALIAS* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                                          const PROPERTIES* aProperties )
+{
+    LOCALE_IO toggle;     // toggles on, then off, the C locale.
+
+    m_props = aProperties;
+
+    cacheLib( aLibraryPath );
+
+    LIB_ALIAS_MAP::const_iterator it = m_cache->m_aliases.find( TO_UTF8( aAliasName ) );
+
+    if( it == m_cache->m_aliases.end() )
+        return NULL;
+
+    return it->second;
 }

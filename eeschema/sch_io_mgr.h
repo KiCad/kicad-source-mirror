@@ -32,13 +32,14 @@ class SCH_SCREEN;
 class SCH_PLUGIN;
 class KIWAY;
 class LIB_PART;
+class LIB_ALIAS;
 class PART_LIB;
 class PROPERTIES;
 
 
 /**
  * Class SCH_IO_MGR
- * is a factory which returns an instance of a SCH_PLUGIN.
+ * is a factory which returns an instance of a #SCH_PLUGIN.
  */
 class SCH_IO_MGR
 {
@@ -112,7 +113,7 @@ public:
 
     /**
      * Function Load
-     * finds the requested SCH_PLUGIN and if found, calls the SCH_PLUGIN->Load(..) funtion
+     * finds the requested SCH_PLUGIN and if found, calls the SCH_PLUGIN->Load(..) function
      * on it using the arguments passed to this function.  After the SCH_PLUGIN->Load()
      * function returns, the SCH_PLUGIN is Released() as part of this call.
      *
@@ -276,28 +277,30 @@ public:
     virtual void TransferCache( PART_LIB& aTarget );
 
     /**
-     * Function SymbolLoad
-     * loads a footprint having @a aSymbolName from the @a aLibraryPath containing
-     * a library format that this SCH_PLUGIN knows about.
+     * Function LoadSymbol
+     * loads a #LIB_ALIAS object having @a aAliasName from the @a aLibraryPath containing
+     * a library format that this SCH_PLUGIN knows about.  The #LIB_PART should be accessed
+     * indirectly using the #LIB_ALIAS it is associated with.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *   or URL containing several footprints.
+     *                     or URL containing several footprints.
      *
-     * @param aSymbolName is the name of the footprint to load.
+     * @param aAliasName is the alias name of the #LIB_PART to load.
      *
-     * @param aProperties is an associative array that can be used to tell the
-     *  loader implementation to do something special, because it can take any number of
-     *  additional named tuning arguments that the plugin is known to support.
-     *  The caller continues to own this object (plugin may not delete it), and
-     *  plugins should expect it to be optionally NULL.
+     * @param aProperties is an associative array that can be used to tell the loader
+     *                    implementation to do something special, because it can take
+     *                    any number of additional named tuning arguments that the plugin
+     *                    is known to support.  The caller continues to own this object
+     *                    (plugin may not delete it), and plugins should expect it to be
+     *                    optionally NULL.
      *
-     * @return  MODULE* - if found caller owns it, else NULL if not found.
+     * @return  LIB_ALIAS* - if found caller shares it, else NULL if not found.
      *
      * @throw   IO_ERROR if the library cannot be found or read.  No exception
-     *          is thrown in the case where aSymbolName cannot be found.
+     *                   is thrown in the case where aAliasName cannot be found.
      */
-    virtual LIB_PART* SymbolLoad( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                  const PROPERTIES* aProperties = NULL );
+    virtual LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                                   const PROPERTIES* aProperties = NULL );
 
     /**
      * Function SymbolSave
@@ -385,7 +388,7 @@ public:
 
     /**
      * Function IsSymbolLibWritable
-     * returns true iff the library at @a aLibraryPath is writable.  (Often
+     * returns true if the library at @a aLibraryPath is writable.  (Often
      * system libraries are read only because of where they are installed.)
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,

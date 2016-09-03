@@ -42,6 +42,7 @@ class PROPERTIES;
 class SCH_LEGACY_PLUGIN_CACHE;
 class LIB_PART;
 class PART_LIB;
+class LIB_ALIAS;
 
 
 /**
@@ -85,6 +86,8 @@ public:
     void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                              const wxString&   aLibraryPath,
                              const PROPERTIES* aProperties = NULL );
+    LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                           const PROPERTIES* aProperties = NULL );
 
     // Temporary for testing using PART_LIB instead of SCH_PLUGIN.
     void TransferCache( PART_LIB& aTarget );
