@@ -140,8 +140,8 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     hboxDirChoice->Add( dirChoices, 1, wxEXPAND | wxALL, 5 );
     hboxDirChoice->Add( cfgPaths, 0, wxALL, 5 );
 
-    wxButton* btn_OK = new wxButton( this, wxID_OK, _T( "OK" ) );
-    wxButton* btn_Cancel = new wxButton( this, wxID_CANCEL, _T( "Cancel" ) );
+    wxButton* btn_OK = new wxButton( this, wxID_OK, _( "OK" ) );
+    wxButton* btn_Cancel = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
 
     wxStdDialogButtonSizer* hSizer1 = new wxStdDialogButtonSizer();
     hSizer1->AddButton( btn_OK );

@@ -349,7 +349,7 @@ void DIALOG_MODULE_MODULE_EDITOR::Edit3DShapeFileName()
     {
         wxString msg = _( "Invalid filename: " );
         msg.append( filename );
-        wxMessageBox( msg, _T( "Edit 3D file name" ) );
+        wxMessageBox( msg, _( "Edit 3D file name" ) );
 
         return;
     }

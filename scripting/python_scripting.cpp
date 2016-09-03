@@ -287,10 +287,10 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
     {
         // Otherwise, get the returned window out of Python-land and
         // into C++-ville...
-        bool success = wxPyConvertSwigPtr( result, (void**) &window, _T( "wxWindow" ) );
+        bool success = wxPyConvertSwigPtr( result, (void**) &window, "wxWindow" );
         (void) success;
 
-        wxASSERT_MSG( success, _T( "Returned object was not a wxWindow!" ) );
+        wxASSERT_MSG( success, "Returned object was not a wxWindow!" );
         Py_DECREF( result );
 
         window->SetName( aFramenameId );

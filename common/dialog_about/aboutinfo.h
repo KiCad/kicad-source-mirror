@@ -94,8 +94,8 @@ public:
 
 #if wxUSE_UNICODE
         const wxString utf8_copyrightSign = wxString::FromUTF8( "\xc2\xa9" );
-        copyrightText.Replace( _T( "(c)" ), utf8_copyrightSign );
-        copyrightText.Replace( _T( "(C)" ), utf8_copyrightSign );
+        copyrightText.Replace( "(c)", utf8_copyrightSign );
+        copyrightText.Replace( "(C)", utf8_copyrightSign );
 #endif // wxUSE_UNICODE
 
         return copyrightText;
