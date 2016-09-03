@@ -534,6 +534,20 @@ void dialog_about::OnCopyVersionInfo( wxCommandEvent& event )
     msg_version << OFF;
 #endif
 
+    msg_version << "                  KICAD_USE_SCH_IO_MANAGER=";
+#ifdef KICAD_USE_SCH_IO_MANAGER
+    msg_version << ON;
+#else
+    msg_version << OFF;
+#endif
+
+    msg_version << "                  KICAD_USE_OCE=";
+#ifdef KICAD_USE_OCE
+    msg_version << ON;
+#else
+    msg_version << OFF;
+#endif
+
     wxTheClipboard->SetData( new wxTextDataObject( msg_version ) );
     wxTheClipboard->Close();
     copyVersionInfo->SetLabel( _( "Copied..." ) );

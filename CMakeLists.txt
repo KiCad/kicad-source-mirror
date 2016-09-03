@@ -18,9 +18,9 @@ set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
 #
 # KiCad build options should be added below.
 #
-# If you add a new build option, please add it's state to the CopyVersionInfoToClipboard()
-# function in common/basicframe.cpp so that build option settings can be included in bug
-# reports.
+# If you add a new build option, please add it's state to the
+# OnCopyVersionInfo() function in common/dialog_about/dialog_about.cpp
+# so that build option settings can be included in bug reports.
 #
 
 option( USE_WX_GRAPHICS_CONTEXT
@@ -257,6 +257,14 @@ endif()
 
 if( KICAD_SPICE )
     add_definitions( -DKICAD_SPICE )
+endif()
+
+if( KICAD_USE_SCH_IO_MANAGER )
+    add_definitions( -DKICAD_USE_SCH_IO_MANAGER )
+endif()
+
+if( KICAD_USE_OCE )
+    add_definitions( -DKICAD_USE_OCE )
 endif()
 
 if( USE_WX_GRAPHICS_CONTEXT OR APPLE )
