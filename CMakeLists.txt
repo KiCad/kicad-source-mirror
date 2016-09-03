@@ -41,11 +41,11 @@ option( KICAD_SCRIPTING_WXPYTHON
     "Build wxPython implementation for wx interface building in Python and py.shell (default OFF)."
     )
 
-option( USE_SCH_IO_MANAGER
+option( KICAD_USE_SCH_IO_MANAGER
     "Build Eeschema with the I/O manager for handling schematic and symbol library I/O. (default OFF)"
     )
 
-option( USE_OCE
+option( KICAD_USE_OCE
     "Build tools and plugins related to OpenCascade Community Edition (default OFF)"
     )
 
@@ -520,7 +520,7 @@ if( KICAD_SPICE )
 endif()
 
 # Find OpenCascade Community Edition, required for STEP plugin and tools
-if( USE_OCE )
+if( KICAD_USE_OCE )
     set( LIBS_OCE TKBinXCAF TKPCAF TKSTEP TKXDESTEP TKIGES TKXDEIGES )
 
     find_package( OCE 0.16 REQUIRED ${LIBS_OCE} )

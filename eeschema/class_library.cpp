@@ -715,7 +715,7 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, bo
 
     wxString errorMsg;
 
-#ifdef USE_SCH_IO_MANAGER
+#ifdef KICAD_USE_SCH_IO_MANAGER
     SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
     wxArrayString tmp;

@@ -110,7 +110,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
     wxLogTrace( traceAutoSave,
                 wxT( "Saving file <" ) + schematicFileName.GetFullPath() + wxT( ">" ) );
 
-#ifdef USE_SCH_IO_MANAGER
+#ifdef KICAD_USE_SCH_IO_MANAGER
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
         try
@@ -315,7 +315,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
     else
     {
-#ifdef USE_SCH_IO_MANAGER
+#ifdef KICAD_USE_SCH_IO_MANAGER
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
 
