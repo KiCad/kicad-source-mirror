@@ -28,6 +28,7 @@
  */
 
 #include <GL/glew.h>
+#include <climits>
 
 #include "c3d_render_raytracing.h"
 #include "mortoncodes.h"
@@ -352,15 +353,16 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte *ptrPBO ,
                                                REPORTER *aStatusTextReporter )
 {
     m_isPreview = false;
+    wxASSERT( m_blockPositions.size() <= LONG_MAX );
 
-    const size_t nrBlocks = m_blockPositions.size();
+    const long nrBlocks = (long) m_blockPositions.size();
     const unsigned startTime = GetRunningMicroSecs();
     bool breakLoop = false;
     int numBlocksRendered = 0;
 
     #pragma omp parallel for schedule(dynamic) shared(breakLoop) \
         firstprivate(ptrPBO, nrBlocks, startTime) reduction(+:numBlocksRendered) default(none)
-    for( size_t iBlock = 0; iBlock < nrBlocks; iBlock++ )
+    for( long iBlock = 0; iBlock < nrBlocks; iBlock++ )
     {
 
         #pragma omp flush(breakLoop)

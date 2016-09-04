@@ -40,7 +40,6 @@
 #include <plugins/3dapi/c3dmodel.h>
 
 #include <map>
-#include <cstddef>
 
 /// Vector of materials
 typedef std::vector< CBLINN_PHONG_MATERIAL > MODEL_MATERIALS;
@@ -111,7 +110,7 @@ private:
     unsigned long int m_stats_start_rendering_time;
 
     /// Save the number of blocks progress of the render
-    size_t m_nrBlocksRenderProgress;
+    long m_nrBlocksRenderProgress;
 
     CPOSTSHADER_SSAO m_postshader_ssao;
 
