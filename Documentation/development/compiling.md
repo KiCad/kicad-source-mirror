@@ -23,18 +23,12 @@ Some of these tools are required to build from source and some are optional.
 [CMake][] is the build configuration and makefile generation tool used by KiCad.  It is required.
 
 
-## Bazaar Version Control System ## {#bazaar}
-
-The official source code repository is hosted on [Launchpad][] and requires the [Bazaar][] version
-control system in order to create a branch of the latest source.  Bazaar is not required if you are
-going to build a stable version of KiCad from a source archive.
-
 ## GIT Version Control System ## {#git}
 
-If you prefer to use [GIT][] for version control, there is a mirror of the official KiCad
-repository on [GitHub][].  GIT is not required if you are going to build a stable version of
-KiCad from a source archive.  Please note that the GitHub mirror is read only.  Do not submit
-pull requests to GitHub.  Changes should be sent to the KiCad developer's [mailing list][] as
+The official source code repository is hosted on [Launchpad][] and
+requires git to get the latest source. If you prefer to use [GitHub][] there is a
+read only mirror of the official KiCad repository. Do not submit pull requests to GitHub.
+Changes should be sent to the KiCad developer's [mailing list][] as
 an attached patch with [PATCH] at the beginning of the subject.
 
 ## Doxygen Code Documentation Generator ## {#doxygen_section}
@@ -157,7 +151,13 @@ enabled by default.
 ## Integrated Spice simulator ## {#spice_opt}
 
 The KICAD_SPICE option is used to control if the Spice simulator interface for eeschema is built.  When
-the options is enabled, it requires [ngspice][] to be available as a shared library.  This option is
+this option is enabled, it requires [ngspice][] to be available as a shared library.  This option is
+disabled by default.
+
+## STEP and IGES model support ## {#oce_opt}
+
+The KICAD_USE_OCE option is used to enable STEP and IGES model support for the 3d viewer. When enabled
+this requires the location of the installed OCE libary to be passed via the OCE_DIR flag. This option is
 disabled by default.
 
 # Getting the KiCad Source Code ## {#getting_src}
@@ -170,20 +170,15 @@ following command:
     tar -xzf kicad_src_archive.tar.gz
 
 If you are contributing directly to the KiCad project on Launchpad, you can create a local
-branch on your machine by using the following command:
+copy on your machine by using the following command:
 
-    bzr branch https://code.launchpad.net/~kicad-product-committers/kicad/product kicad_source
-
-If you prefer to use [GIT][] as you version control system, you can clone the KiCad mirror on
-GitHub using the following command:
-
-    git clone https://github.com/KiCad/kicad-source-mirror
+    git clone -b master https://git.launchpad.net/kicad
 
 Here is a list of source links:
 
 Stable release archive: https://launchpad.net/kicad/4.0/4.0.2/+download/kicad-4.0.2.tar.xz
 
-Development branch: https://code.launchpad.net/~kicad-product-committers/kicad/product
+Development branch: https://code.launchpad.net/~kicad-product-committers/kicad/+git/product-git/+ref/master
 
 GitHub mirror: https://github.com/KiCad/kicad-source-mirror
 
@@ -379,8 +374,7 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [GNU GCC]: https://gcc.gnu.org/
 [Clang]: http://clang.llvm.org/
 [CMake]: https://cmake.org/
-[Launchpad]: https://code.launchpad.net/~kicad-product-committers/kicad/product
-[Bazaar]: http://bazaar.canonical.com/en/
+[Launchpad]: https://code.launchpad.net/kicad/
 [GIT]: https://git-scm.com/
 [GitHub]: https://github.com/KiCad/kicad-source-mirror
 [ngspice]: http://ngspice.sourceforge.net/
