@@ -55,6 +55,13 @@ private:
     std::string m_filename;
     PCBMODEL*   m_pcb;
     DOUBLET     m_origin;
+    DOUBLET     m_gridOrigin;
+    DOUBLET     m_drillOrigin;
+    bool        m_useGridOrigin;
+    bool        m_useDrillOrigin;
+    // set to TRUE if the origin was actually parsed
+    bool        m_hasGridOrigin;
+    bool        m_hasDrillOrigin;
 
     // PCB parameters/entities
     double                      m_thickness;
@@ -63,6 +70,7 @@ private:
 
     bool parsePCB( SEXPR::SEXPR* data );
     bool parseGeneral( SEXPR::SEXPR* data );
+    bool parseSetup( SEXPR::SEXPR* data );
     bool parseModule( SEXPR::SEXPR* data );
     bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
 
@@ -74,6 +82,16 @@ public:
     {
         m_origin.x = aXOrigin;
         m_origin.y = aYOrigin;
+    }
+
+    void UseGridOrigin( bool aUseOrigin )
+    {
+        m_useGridOrigin = aUseOrigin;
+    }
+
+    void UseDrillOrigin( bool aUseOrigin )
+    {
+        m_useDrillOrigin = aUseOrigin;
     }
 
     bool ReadFile( const wxString& aFileName );

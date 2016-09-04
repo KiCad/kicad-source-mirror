@@ -45,6 +45,8 @@ private:
     bool     m_fmtIGES;
 #endif
     bool     m_overwrite;
+    bool     m_useGridOrigin;
+    bool     m_useDrillOrigin;
     wxString m_filename;
     double   m_xOrigin;
     double   m_yOrigin;
@@ -60,6 +62,10 @@ static const wxCmdLineEntryDesc cmdLineDesc[] =
 #endif
         { wxCMD_LINE_SWITCH, "w", NULL, "overwrite output file",
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_SWITCH, "d", NULL, "Use Drill Origin for output origin",
+          wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_SWITCH, "o", NULL, "Use Grid Origin for output origin",
+          wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_OPTION, "x", NULL, "X origin of board",
             wxCMD_LINE_VAL_DOUBLE, wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_OPTION, "y", NULL, "Y origin of board (pcbnew coordinate system)",
@@ -79,6 +85,8 @@ bool KICAD2MCAD::OnInit()
     m_fmtIGES = false;
 #endif
     m_overwrite = false;
+    m_useGridOrigin = false;
+    m_useDrillOrigin = false;
     m_xOrigin = 0.0;
     m_yOrigin = 0.0;
 
@@ -106,6 +114,12 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
 
     if( parser.Found( "w" ) )
         m_overwrite = true;
+
+    if( parser.Found( "o" ) )
+        m_useGridOrigin = true;
+
+    if( parser.Found( "d" ) )
+        m_useDrillOrigin = true;
 
     parser.Found( "x", &m_xOrigin );
     parser.Found( "y", &m_yOrigin );
@@ -146,6 +160,12 @@ int KICAD2MCAD::OnRun()
 
     if( pcb.ReadFile( m_filename ) )
     {
+        if( m_useDrillOrigin )
+            pcb.UseDrillOrigin( true );
+
+        if( m_useGridOrigin )
+            pcb.UseGridOrigin( true );
+
         bool res;
 
         try

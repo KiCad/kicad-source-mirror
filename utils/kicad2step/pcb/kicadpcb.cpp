@@ -86,6 +86,10 @@ KICADPCB::KICADPCB()
     m_resolver.Set3DConfigDir( cfgdir.GetPath() );
     m_thickness = 1.6;
     m_pcb = NULL;
+    m_useGridOrigin = false;
+    m_useDrillOrigin = false;
+    m_hasGridOrigin = false;
+    m_hasDrillOrigin = false;
 
     return;
 }
@@ -239,6 +243,8 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
 
             if( symname == "general" )
                 result = result && parseGeneral( child );
+            else if( symname == "setup" )
+                result = result && parseSetup( child );
             else if( symname == "module" )
                 result = result && parseModule( child );
             else if( symname == "gr_arc" )
@@ -295,6 +301,66 @@ bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
 }
 
 
+bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
+{
+    size_t nc = data->GetNumberOfChildren();
+    SEXPR::SEXPR* child = NULL;
+
+    for( size_t i = 1; i < nc; ++i )
+    {
+        child = data->GetChild( i );
+
+        if( !child->IsList() )
+        {
+            std::ostringstream ostr;
+            ostr << "* corrupt PCB file: '" << m_filename << "'\n";
+            wxLogMessage( "%s\n", ostr.str().c_str() );
+            return false;
+        }
+
+        // at the moment only the Grid and Drill origins are of interest in
+        // the setup section
+        if( child->GetChild( 0 )->GetSymbol() == "grid_origin" )
+        {
+            if( child->GetNumberOfChildren() != 3 )
+            {
+                std::ostringstream ostr;
+                ostr << "* corrupt PCB file: '" << m_filename << "'\n";
+                ostr << "* grid_origin has " << child->GetNumberOfChildren();
+                ostr << " children (expected: 3)\n";
+                wxLogMessage( "%s\n", ostr.str().c_str() );
+
+                return false;
+            }
+
+            m_gridOrigin.x = child->GetChild( 1 )->GetDouble();
+            m_gridOrigin.y = child->GetChild( 2 )->GetDouble();
+            m_hasGridOrigin = true;
+        }
+        else if( child->GetChild( 0 )->GetSymbol() == "aux_axis_origin" )
+        {
+            if( child->GetNumberOfChildren() != 3 )
+            {
+                std::ostringstream ostr;
+                ostr << "* corrupt PCB file: '" << m_filename << "'\n";
+                ostr << "* aux_axis_origin has " << child->GetNumberOfChildren();
+                ostr << " children (expected: 3)\n";
+                wxLogMessage( "%s\n", ostr.str().c_str() );
+
+                return false;
+            }
+
+            m_drillOrigin.x = child->GetChild( 1 )->GetDouble();
+            m_drillOrigin.y = child->GetChild( 2 )->GetDouble();
+            m_hasDrillOrigin = true;
+        }
+
+    }
+
+    return true;
+}
+
+
 bool KICADPCB::parseModule( SEXPR::SEXPR* data )
 {
     KICADMODULE* mp = new KICADMODULE();
@@ -346,6 +412,23 @@ bool KICADPCB::ComposePCB()
         return false;
     }
 
+    DOUBLET origin;
+
+    // Determine the coordinate system reference:
+    // Precedence of reference point is Drill Origin > Grid Origin > User Offset
+    if( m_useDrillOrigin && m_hasDrillOrigin )
+    {
+        origin = m_drillOrigin;
+    }
+    else if( m_useGridOrigin && m_hasDrillOrigin )
+    {
+        origin = m_gridOrigin;
+    }
+    else
+    {
+        origin = m_origin;
+    }
+
     m_pcb = new PCBMODEL();
     m_pcb->SetPCBThickness( m_thickness );
 
@@ -356,10 +439,10 @@ bool KICADPCB::ComposePCB()
 
         // adjust the coordinate system
         KICADCURVE lcurve = *i;
-        lcurve.m_start.y = -( lcurve.m_start.y - m_origin.y );
-        lcurve.m_end.y = -( lcurve.m_end.y - m_origin.y );
-        lcurve.m_start.x -= m_origin.x;
-        lcurve.m_end.x -= m_origin.x;
+        lcurve.m_start.y = -( lcurve.m_start.y - origin.y );
+        lcurve.m_end.y = -( lcurve.m_end.y - origin.y );
+        lcurve.m_start.x -= origin.x;
+        lcurve.m_end.x -= origin.x;
 
         if( CURVE_ARC == lcurve.m_form )
             lcurve.m_angle = -lcurve.m_angle;
@@ -368,7 +451,7 @@ bool KICADPCB::ComposePCB()
     }
 
     for( auto i : m_modules )
-        i->ComposePCB( m_pcb, &m_resolver, m_origin );
+        i->ComposePCB( m_pcb, &m_resolver, origin );
 
     if( !m_pcb->CreatePCB() )
     {
