@@ -34,6 +34,8 @@
 #include <class_board.h>
 #include <class_board_item.h>
 
+#include <ratsnest_data.cpp>
+
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED_ITEM ),
     m_Subnet( 0 ), m_ZoneSubnet( 0 )
@@ -48,6 +50,11 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
     // set the m_netinfo to the dummy NETINFO_LIST::ORPHANED
 
     BOARD* board = GetBoard();
+    RN_DATA* ratsnest = board ? board->GetRatsnest() : NULL;
+    bool addRatsnest = false;
+
+    if( ratsnest )
+        addRatsnest = ratsnest->Remove( this );
 
     if( ( aNetCode >= 0 ) && board )
         m_netinfo = board->FindNet( aNetCode );
@@ -56,6 +63,10 @@ bool BOARD_CONNECTED_ITEM::SetNetCode( int aNetCode, bool aNoAssert )
 
     if( !aNoAssert )
         assert( m_netinfo );
+
+    // Add only if it was previously added to the ratsnest
+    if( addRatsnest )
+        ratsnest->Add( this );
 
     return ( m_netinfo != NULL );
 }
