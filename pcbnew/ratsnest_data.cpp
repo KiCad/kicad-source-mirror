@@ -1033,22 +1033,27 @@ void RN_NET::processPads()
 }
 
 
-void RN_DATA::Add( const BOARD_ITEM* aItem )
+bool RN_DATA::Add( const BOARD_ITEM* aItem )
 {
     int net;
 
     if( aItem->IsConnected() )
     {
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
-        if( net < 1 )           // do not process unconnected items
-            return;
 
+        if( net < 1 )           // do not process unconnected items
+            return false;
+
+        wxASSERT( (unsigned) net < m_nets.size() );
+        /// @todo if the assert above has not been triggered for a long time,
+        /// then removed the autoresize code below
         if( net >= (int) m_nets.size() )            // Autoresize
             m_nets.resize( net + 1 );
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
         const MODULE* module = static_cast<const MODULE*>( aItem );
+
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNetCode();
@@ -1056,16 +1061,26 @@ void RN_DATA::Add( const BOARD_ITEM* aItem )
             if( net < 1 )       // do not process unconnected items
                 continue;
 
+            wxASSERT( (unsigned) net < m_nets.size() );
+            /// @todo if the assert above has not been triggered for a long time,
+            /// then removed the autoresize code below
             if( net >= (int) m_nets.size() )        // Autoresize
                 m_nets.resize( net + 1 );
 
             m_nets[net].AddItem( pad );
         }
 
-        return;
+        return true;
     }
-    else
-        return;
+    else if( aItem->Type() == PCB_NETINFO_T )
+    {
+        int netCount = m_board->GetNetCount();
+
+        if( (unsigned) netCount > m_nets.size() )
+            m_nets.resize( netCount );
+
+        return true;
+    }
 
     switch( aItem->Type() )
     {
@@ -1086,12 +1101,15 @@ void RN_DATA::Add( const BOARD_ITEM* aItem )
         break;
 
     default:
+        return false;
         break;
     }
+
+    return true;
 }
 
 
-void RN_DATA::Remove( const BOARD_ITEM* aItem )
+bool RN_DATA::Remove( const BOARD_ITEM* aItem )
 {
     int net;
 
@@ -1100,21 +1118,23 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
 
         if( net < 1 )           // do not process unconnected items
-            return;
+            return false;
 
+        wxASSERT( (unsigned) net < m_nets.size() );
+        /// @todo if the assert above has not been triggered for a long time,
+        /// then removed the autoresize code below
 #ifdef NDEBUG
         if( net >= (int) m_nets.size() )        // Autoresize
         {
             m_nets.resize( net + 1 );
-
-            return;     // if it was resized, then surely the item had not been added before
+            return false;     // if it was resized, then surely the item had not been added before
         }
 #endif
-        assert( net < (int) m_nets.size() );
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
         const MODULE* module = static_cast<const MODULE*>( aItem );
+
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNetCode();
@@ -1122,23 +1142,26 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
             if( net < 1 )       // do not process unconnected items
                 continue;
 
+            wxASSERT( (unsigned) net < m_nets.size() );
+            /// @todo if the assert above has not been triggered for a long time,
+            /// then removed the autoresize code below
 #ifdef NDEBUG
             if( net >= (int) m_nets.size() )    // Autoresize
             {
                 m_nets.resize( net + 1 );
-
-                return;     // if it was resized, then surely the item had not been added before
+                return false;     // if it was resized, then surely the item had not been added before
             }
 #endif
-            assert( net < (int) m_nets.size() );
 
             m_nets[net].RemoveItem( pad );
         }
 
-        return;
+        return true;
     }
     else
-        return;
+    {
+        return false;
+    }
 
     switch( aItem->Type() )
     {
@@ -1159,15 +1182,24 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
         break;
 
     default:
+        return false;
         break;
     }
+
+    return true;
 }
 
 
-void RN_DATA::Update( const BOARD_ITEM* aItem )
+bool RN_DATA::Update( const BOARD_ITEM* aItem )
 {
-    Remove( aItem );
-    Add( aItem );
+    if( Remove( aItem ) )
+    {
+        bool res = Add( aItem );
+        assert( res );
+        return true;
+    }
+
+    return false;
 }
 
 

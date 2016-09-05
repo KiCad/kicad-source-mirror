@@ -647,22 +647,26 @@ public:
      * Function Add()
      * Adds an item to the ratsnest data.
      * @param aItem is an item to be added.
+     * @return True if operation succeeded.
      */
-    void Add( const BOARD_ITEM* aItem );
+    bool Add( const BOARD_ITEM* aItem );
 
     /**
      * Function Remove()
      * Removes an item from the ratsnest data.
      * @param aItem is an item to be updated.
+     * @return True if operation succeeded.
      */
-    void Remove( const BOARD_ITEM* aItem );
+    bool Remove( const BOARD_ITEM* aItem );
 
     /**
      * Function Update()
      * Updates the ratsnest data for an item.
      * @param aItem is an item to be updated.
+     * @return True if operation succeeded. The item will not be updated if it was not previously
+     * added to the ratsnest.
      */
-    void Update( const BOARD_ITEM* aItem );
+    bool Update( const BOARD_ITEM* aItem );
 
     /**
      * Function AddSimple()
