@@ -1044,10 +1044,8 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
         if( net < 1 )           // do not process unconnected items
             return false;
 
-        wxASSERT( (unsigned) net < m_nets.size() );
-        /// @todo if the assert above has not been triggered for a long time,
-        /// then removed the autoresize code below
-        if( net >= (int) m_nets.size() )            // Autoresize
+        // Autoresize is necessary e.g. for module editor
+        if( net >= (int) m_nets.size() )
             m_nets.resize( net + 1 );
     }
     else if( aItem->Type() == PCB_MODULE_T )
@@ -1061,10 +1059,8 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
             if( net < 1 )       // do not process unconnected items
                 continue;
 
-            wxASSERT( (unsigned) net < m_nets.size() );
-            /// @todo if the assert above has not been triggered for a long time,
-            /// then removed the autoresize code below
-            if( net >= (int) m_nets.size() )        // Autoresize
+            // Autoresize is necessary e.g. for module editor
+            if( net >= (int) m_nets.size() )
                 m_nets.resize( net + 1 );
 
             m_nets[net].AddItem( pad );
@@ -1120,16 +1116,12 @@ bool RN_DATA::Remove( const BOARD_ITEM* aItem )
         if( net < 1 )           // do not process unconnected items
             return false;
 
-        wxASSERT( (unsigned) net < m_nets.size() );
-        /// @todo if the assert above has not been triggered for a long time,
-        /// then removed the autoresize code below
-#ifdef NDEBUG
-        if( net >= (int) m_nets.size() )        // Autoresize
+        // Autoresize is necessary e.g. for module editor
+        if( net >= (int) m_nets.size() )
         {
             m_nets.resize( net + 1 );
             return false;     // if it was resized, then surely the item had not been added before
         }
-#endif
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
@@ -1142,16 +1134,12 @@ bool RN_DATA::Remove( const BOARD_ITEM* aItem )
             if( net < 1 )       // do not process unconnected items
                 continue;
 
-            wxASSERT( (unsigned) net < m_nets.size() );
-            /// @todo if the assert above has not been triggered for a long time,
-            /// then removed the autoresize code below
-#ifdef NDEBUG
-            if( net >= (int) m_nets.size() )    // Autoresize
+            // Autoresize is necessary e.g. for module editor
+            if( net >= (int) m_nets.size() )
             {
                 m_nets.resize( net + 1 );
                 return false;     // if it was resized, then surely the item had not been added before
             }
-#endif
 
             m_nets[net].RemoveItem( pad );
         }
@@ -1258,9 +1246,6 @@ void RN_DATA::ProcessBoard()
 void RN_DATA::Recalculate( int aNet )
 {
     unsigned int netCount = m_board->GetNetCount();
-
-    if( netCount > m_nets.size() )
-        m_nets.resize( netCount );
 
     if( aNet < 0 && netCount > 1 )              // Recompute everything
     {

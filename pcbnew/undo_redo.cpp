@@ -501,8 +501,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                 MODULE* module = static_cast<MODULE*>( item );
                 module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1) );
             }
-            view->Add( item );
 
+            view->Add( item );
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             build_item_list = true;
             break;
@@ -552,17 +552,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     {
         // Compile ratsnest propagates nets from pads to tracks
         /// @todo LEGACY Compile_Ratsnest() has to be rewritten and moved to RN_DATA
-        Compile_Ratsnest( NULL, true );
-
-        if( GetModel()->Type() == PCB_T )
-        {
-            /// @todo LEGACY Compile_Ratsnest() might have changed nets for tracks,
-            //so we need to refresh them
-            BOARD* board = static_cast<BOARD*>( GetModel() );
-
-            for( TRACK* track = board->m_Track; track; track = track->Next() )
-                track->ViewUpdate();
-        }
+        if( deep_reBuild_ratsnest )
+            Compile_Ratsnest( NULL, false );
 
         if( IsGalCanvasActive() )
         {
