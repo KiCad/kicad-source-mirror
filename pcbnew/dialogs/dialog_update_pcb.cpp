@@ -43,12 +43,6 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     if( !aDryRun )
     {
-        // Remove old modules
-        for( MODULE* module = board->m_Modules; module; module = module->Next() )
-        {
-            module->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, _1 ) );
-            view->Remove( module );
-        }
 
         // Clear selection, just in case a selected item has to be removed
         toolManager->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -85,28 +79,14 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     if( aDryRun )
         return;
 
-    std::vector<MODULE*> newFootprints = updater.GetAddedComponents();
-
-    m_frame->OnModify();
     m_frame->SetCurItem( NULL );
-
-    // Reload modules
-    for( MODULE* module = board->m_Modules; module; module = module->Next() )
-    {
-        module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
-        view->Add( module );
-        module->ViewUpdate();
-    }
-
-    // Rebuild the board connectivity:
-    if( m_frame->IsGalCanvasActive() )
-        board->GetRatsnest()->ProcessBoard();
-
-    m_frame->Compile_Ratsnest( NULL, true );
     m_frame->SetMsgPanel( board );
 
     if( m_frame->IsGalCanvasActive() )
     {
+        std::vector<MODULE*> newFootprints = updater.GetAddedComponents();
+
+        // Place the new modules
         m_frame->SpreadFootprints( &newFootprints, false, false, m_frame->GetCrossHairPosition() );
 
         if( !newFootprints.empty() )
@@ -122,7 +102,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     m_btnPerformUpdate->Enable( false );
     m_btnPerformUpdate->SetLabel( _( "Update complete" ) );
-    m_btnCancel->SetLabel( _("Close") );
+    m_btnCancel->SetLabel( _( "Close" ) );
     m_btnCancel->SetFocus();
 }
 

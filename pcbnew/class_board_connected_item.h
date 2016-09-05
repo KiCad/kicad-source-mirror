@@ -93,6 +93,16 @@ public:
     }
 
     /**
+     * Function SetNet
+     * Sets a NET_INFO object for the item.
+     */
+    void SetNet( NETINFO_ITEM* aNetInfo )
+    {
+        assert( aNetInfo->GetBoard() == GetBoard() );
+        m_netinfo = aNetInfo;
+    }
+
+    /**
      * Function GetNetCode
      * @return int - the net code.
      */

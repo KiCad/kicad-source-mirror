@@ -39,10 +39,9 @@ class REPORTER;
 class NETLIST;
 class COMPONENT;
 class MODULE;
-class PICKED_ITEMS_LIST;
 class PCB_EDIT_FRAME;
 
-#include <class_undoredo_container.h>
+#include <board_commit.h>
 
 /**
  * Class BOARD_NETLIST_UPDATER
@@ -130,9 +129,6 @@ public:
     }
 
 private:
-
-    void pushUndo( BOARD_ITEM* aItem, UNDO_REDO_T aCommandType, BOARD_ITEM* aCopy = NULL );
-
     wxPoint estimateComponentInsertionPosition();
     MODULE* addNewComponent( COMPONENT* aComponent );
     MODULE* replaceComponent( NETLIST& aNetlist, MODULE* aPcbComponent, COMPONENT* aNewComponent );
@@ -142,12 +138,13 @@ private:
     bool deleteSinglePadNets();
     bool testConnectivity( NETLIST& aNetlist );
 
-    PICKED_ITEMS_LIST* m_undoList;
+    BOARD_COMMIT m_commit;
     PCB_EDIT_FRAME* m_frame;
     BOARD* m_board;
     REPORTER* m_reporter;
 
     std::vector<MODULE*> m_addedComponents;
+    std::map<wxString, NETINFO_ITEM*> m_addedNets;
 
     bool m_deleteSinglePadNets;
     bool m_deleteUnusedComponents;
