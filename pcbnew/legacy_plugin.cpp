@@ -2080,7 +2080,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
             // if it is not the net 0, or if the net 0 does not exists.
             if( net && ( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL ) )
             {
-                m_board->AppendNet( net );
+                m_board->Add( net );
 
                 // Be sure we have room to store the net in m_netCodes
                 if( (int)m_netCodes.size() <= netCode )

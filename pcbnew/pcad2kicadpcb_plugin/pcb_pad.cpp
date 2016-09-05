@@ -278,7 +278,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
         {
             // It is a new net
             netinfo = new NETINFO_ITEM( m_board, m_net );
-            m_board->AppendNet( netinfo );
+            m_board->Add( netinfo );
         }
 
         pad->SetNetCode( netinfo->GetNet() );

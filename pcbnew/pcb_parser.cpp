@@ -1242,10 +1242,10 @@ void PCB_PARSER::parseNETINFO_ITEM() throw( IO_ERROR, PARSE_ERROR )
     // net 0 should be already in list, so store this net
     // if it is not the net 0, or if the net 0 does not exists.
     // (TODO: a better test.)
-    if( netCode > 0 || m_board->FindNet( 0 ) == NULL )
+    if( netCode > NETINFO_LIST::UNCONNECTED || !m_board->FindNet( NETINFO_LIST::UNCONNECTED ) )
     {
         NETINFO_ITEM* net = new NETINFO_ITEM( m_board, name, netCode );
-        m_board->AppendNet( net );
+        m_board->Add( net );
 
         // Store the new code mapping
         pushValueIntoMap( netCode, net->GetNet() );
@@ -2988,7 +2988,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER() throw( IO_ERROR, PARSE_ERROR )
         {
             int newnetcode = m_board->GetNetCount();
             net = new NETINFO_ITEM( m_board, netnameFromfile, newnetcode );
-            m_board->AppendNet( net );
+            m_board->Add( net );
 
             // Store the new code mapping
             pushValueIntoMap( newnetcode, net->GetNet() );
