@@ -382,6 +382,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
     bool build_item_list = true;    // if true the list of existing items must be rebuilt
 
+    // Restore changes in reverse order
     for( int ii = aList->GetCount() - 1; ii >= 0 ; ii-- )
     {
         item = (BOARD_ITEM*) aList->GetPickedItem( ii );
@@ -549,6 +550,19 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     // Rebuild pointers and ratsnest that can be changed.
     if( reBuild_ratsnest )
     {
+        // Compile ratsnest propagates nets from pads to tracks
+        /// @todo LEGACY Compile_Ratsnest() has to be rewritten and moved to RN_DATA
+        Compile_Ratsnest( NULL, true );
+
+        if( GetModel()->Type() == PCB_T )
+        {
+            /// @todo LEGACY Compile_Ratsnest() might have changed nets for tracks,
+            //so we need to refresh them
+            BOARD* board = static_cast<BOARD*>( GetModel() );
+
+            for( TRACK* track = board->m_Track; track; track = track->Next() )
+                track->ViewUpdate();
+        }
 
         if( IsGalCanvasActive() )
         {
@@ -556,10 +570,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                 ratsnest->ProcessBoard();
             else
                 ratsnest->Recalculate();
-        }
-        else
-        {
-            Compile_Ratsnest( NULL, true );
         }
     }
 }
