@@ -219,8 +219,12 @@ int BOARD_ITEM::getTrailingInt( wxString aStr )
     return number;
 }
 
-int BOARD_ITEM::getNextNumberInSequence( std::set<int> aSeq, bool aFillSequenceGaps)
+
+int BOARD_ITEM::getNextNumberInSequence( const std::set<int>& aSeq, bool aFillSequenceGaps)
 {
+    if( aSeq.empty() )
+        return 1;
+
     // By default go to the end of the sequence
     int candidate = *aSeq.rbegin();
 
@@ -230,16 +234,16 @@ int BOARD_ITEM::getNextNumberInSequence( std::set<int> aSeq, bool aFillSequenceG
         // start at the beginning
         candidate = *aSeq.begin();
 
-        for( std::set<int>::iterator it = aSeq.begin(),
-            itEnd = aSeq.end(); it != itEnd; ++it )
+        for( auto it : aSeq )
         {
-            if( *it - candidate > 1 )
+            if( it - candidate > 1 )
                 break;
 
-            candidate = *it;
+            candidate = it;
         }
     }
 
-    candidate++;
+    ++candidate;
+
     return candidate;
 }
