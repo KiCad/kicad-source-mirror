@@ -429,9 +429,6 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
     {
         nextModule = module->Next();
 
-        if( module->IsLocked() )
-            continue;
-
         if( m_lookupByTimestamp )
             component = aNetlist.GetComponentByTimeStamp( module->GetPath() );
         else
@@ -439,6 +436,14 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
 
         if( component == NULL )
         {
+            if( module->IsLocked() )
+            {
+                msg.Printf( _( "Component %s is locked, skipping removal.\n" ),
+                            GetChars( module->GetReference() ) );
+                m_reporter->Report( msg, REPORTER::RPT_INFO );
+                continue;
+            }
+
             msg.Printf( _( "Remove component %s." ),
                         GetChars( module->GetReference() ) );
             m_reporter->Report( msg, REPORTER::RPT_ACTION );
