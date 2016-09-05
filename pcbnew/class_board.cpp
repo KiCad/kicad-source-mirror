@@ -870,6 +870,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     {
     case PCB_NETINFO_T:
         m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem );
+        break;
 
     // this one uses a vector
     case PCB_MARKER_T:
