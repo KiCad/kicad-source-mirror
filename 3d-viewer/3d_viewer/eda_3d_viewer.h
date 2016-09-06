@@ -75,7 +75,11 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
      *  Set the default file name (eg: to be suggested to a screenshot)
      *  @param aFn = file name to assign
      */
-    void SetDefaultFileName( const wxString &aFn ) { m_defaultFileName = aFn; }
+    void SetDefaultFileName( const wxString &aFn )
+    {
+        wxFileName fn( aFn );
+        m_defaultFileName = fn.GetName();
+    }
 
     /**
      *  Function GetDefaultFileName
