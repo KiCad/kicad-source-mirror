@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,6 +150,17 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
                 {
                     item = m_collectedItems[0];
                 }
+                break;
+
+            case HK_MOVE_COMPONENT_OR_ITEM:
+                if( m_collectedItems.GetCount() == 2 &&
+                        dynamic_cast< SCH_SHEET_PIN * >( m_collectedItems[0] ) &&
+                        dynamic_cast< SCH_SHEET * >( m_collectedItems[1] ) )
+                {
+                    item = m_collectedItems[0];
+                }
+                break;
+
             default:
                 ;
             }
