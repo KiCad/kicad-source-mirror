@@ -697,7 +697,7 @@ void LINE_PLACER::splitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I
         return;
 
     SEGMENT* s_old = static_cast<SEGMENT*>( aSeg );
-    
+
     std::unique_ptr< SEGMENT > s_new[2] = {
         Clone( *s_old ),
         Clone( *s_old )
@@ -992,10 +992,9 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, SEGMENT* aLatest )
 
     if( simplified.PointCount() != l.PointCount() )
     {
-        LINE lnew( l );
         aNode->Remove( l );
-        lnew.SetShape( simplified );
-        aNode->Add( lnew );
+        l.SetShape( simplified );
+        aNode->Add( l );
     }
 }
 
