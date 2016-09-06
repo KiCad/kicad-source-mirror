@@ -80,8 +80,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-21 01:18+0200\n"
-"PO-Revision-Date: 2016-08-21 14:00+0200\n"
+"POT-Creation-Date: 2016-09-06 08:02+0200\n"
+"PO-Revision-Date: 2016-09-06 08:08+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -724,7 +724,7 @@ msgstr ""
 "Per procedere, si può usare il menu File per iniziare un nuovo progetto."
 
 #: kicad/prjconfig.cpp:334 pcbnew/moduleframe.cpp:771 pcbnew/pcbframe.cpp:991
-#: eeschema/schframe.cpp:1372 eeschema/libedit.cpp:61
+#: eeschema/schframe.cpp:1378 eeschema/libedit.cpp:61
 #: cvpcb/cvpcb_mainframe.cpp:762
 msgid " [Read Only]"
 msgstr " [Sola lettura]"
@@ -1018,8 +1018,9 @@ msgstr "la libreria impronte \"%s\" non può essere cancellata"
 #: common/dialogs/dialog_exit_base.cpp:69 eeschema/onrightclick.cpp:153
 #: eeschema/onrightclick.cpp:186 eeschema/libedit_onrightclick.cpp:70
 #: eeschema/dialogs/dialog_netlist_base.cpp:49
-#: eeschema/dialogs/dialog_netlist_base.cpp:133 gerbview/onrightclick.cpp:60
-#: gerbview/onrightclick.cpp:82
+#: eeschema/dialogs/dialog_netlist_base.cpp:133
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:144
+#: gerbview/onrightclick.cpp:60 gerbview/onrightclick.cpp:82
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182
 #: pagelayout_editor/onrightclick.cpp:115
 msgid "Cancel"
@@ -1752,6 +1753,7 @@ msgstr "Forma complessa"
 #: pcbnew/muonde.cpp:847 pcbnew/dialogs/wizard_add_fplib.cpp:842
 #: common/dialog_about/dialog_about_base.cpp:73
 #: eeschema/dialogs/dialog_netlist_base.cpp:129
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:143
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
 msgid "OK"
 msgstr "OK"
@@ -2249,14 +2251,16 @@ msgid "Switch the arc posture"
 msgstr "Commuta postura arco"
 
 #: pcbnew/tools/common_actions.cpp:196 pcbnew/hotkeys.cpp:176
-#: pcbnew/hotkeys.cpp:178 eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108
+#: pcbnew/hotkeys.cpp:178 common/widgets/mathplot.cpp:1759
+#: eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108
 #: eeschema/sim/sim_plot_frame_base.cpp:74 gerbview/hotkeys.cpp:64
 #: pagelayout_editor/hotkeys.cpp:79
 msgid "Zoom In"
 msgstr "Ingrandisci"
 
 #: pcbnew/tools/common_actions.cpp:200 pcbnew/hotkeys.cpp:183
-#: pcbnew/hotkeys.cpp:185 eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115
+#: pcbnew/hotkeys.cpp:185 common/widgets/mathplot.cpp:1760
+#: eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115
 #: eeschema/sim/sim_plot_frame_base.cpp:78 gerbview/hotkeys.cpp:63
 #: pagelayout_editor/hotkeys.cpp:78
 msgid "Zoom Out"
@@ -2264,7 +2268,7 @@ msgstr "Rimpicciolisci"
 
 #: pcbnew/tools/common_actions.cpp:212
 #: pcbnew/dialogs/dialog_pcb_text_properties_base.cpp:105 common/zoom.cpp:246
-#: common/widgets/mathplot.cpp:1759
+#: common/widgets/mathplot.cpp:1757
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:52
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:60
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:149
@@ -3254,51 +3258,59 @@ msgstr "Dimensione via troppo piccolo"
 msgid "Too small micro via size"
 msgstr "Dimensione Microvia troppo piccola"
 
+#: pcbnew/class_drc_item.cpp:93
+msgid "Too small via drill"
+msgstr "Foro via troppo piccolo"
+
 #: pcbnew/class_drc_item.cpp:95
+msgid "Too small micro via drill"
+msgstr "Foro microvia troppo piccolo"
+
+#: pcbnew/class_drc_item.cpp:99
 msgid "NetClass Track Width &lt; global limit"
 msgstr "Larghezza pista netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:97
+#: pcbnew/class_drc_item.cpp:101
 msgid "NetClass Clearance &lt; global limit"
 msgstr "Isolamento netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:99
+#: pcbnew/class_drc_item.cpp:103
 msgid "NetClass Via Dia &lt; global limit"
 msgstr "Diametro via netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:101
+#: pcbnew/class_drc_item.cpp:105
 msgid "NetClass Via Drill &lt; global limit"
 msgstr "Foratura via netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:103
+#: pcbnew/class_drc_item.cpp:107
 msgid "NetClass uVia Dia &lt; global limit"
 msgstr "Diametro microvia netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:105
+#: pcbnew/class_drc_item.cpp:109
 msgid "NetClass uVia Drill &lt; global limit"
 msgstr "Foratura microvia netclass &lt; limiti globali"
 
-#: pcbnew/class_drc_item.cpp:108
+#: pcbnew/class_drc_item.cpp:112
 msgid "Via inside a keepout area"
 msgstr "Via interno ad zona proibita"
 
-#: pcbnew/class_drc_item.cpp:111
+#: pcbnew/class_drc_item.cpp:115
 msgid "Track inside a keepout area"
 msgstr "Pista interna a zona proibita"
 
-#: pcbnew/class_drc_item.cpp:114
+#: pcbnew/class_drc_item.cpp:118
 msgid "Pad inside a keepout area"
 msgstr "Piazzola interna a zona proibita"
 
-#: pcbnew/class_drc_item.cpp:117
+#: pcbnew/class_drc_item.cpp:121
 msgid "Via inside a text"
 msgstr "Via dentro un testo"
 
-#: pcbnew/class_drc_item.cpp:120
+#: pcbnew/class_drc_item.cpp:124
 msgid "Track inside a text"
 msgstr "Pista dentro un testo"
 
-#: pcbnew/class_drc_item.cpp:123
+#: pcbnew/class_drc_item.cpp:127
 msgid "Pad inside a text"
 msgstr "Piazzola dentro un testo"
 
@@ -3727,18 +3739,16 @@ msgstr "Mostra impronta nel visualizzatore 3D"
 
 #: pcbnew/footprint_wizard_frame.cpp:610 pcbnew/tool_modedit.cpp:123
 #: pcbnew/tool_modview.cpp:79 pcbnew/help_common_strings.h:19
-#: common/zoom.cpp:248 common/widgets/mathplot.cpp:1761
-#: eeschema/tool_viewlib.cpp:75 eeschema/help_common_strings.h:43
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:72 gerbview/toolbars_gerber.cpp:78
-#: pagelayout_editor/toolbars_pl_editor.cpp:79
+#: common/zoom.cpp:248 eeschema/tool_viewlib.cpp:75
+#: eeschema/help_common_strings.h:43 3d-viewer/3d_viewer/3d_toolbar.cpp:72
+#: gerbview/toolbars_gerber.cpp:78 pagelayout_editor/toolbars_pl_editor.cpp:79
 msgid "Zoom in"
 msgstr "Ingrandisci"
 
 #: pcbnew/footprint_wizard_frame.cpp:615 pcbnew/tool_modedit.cpp:126
 #: pcbnew/tool_modview.cpp:84 pcbnew/help_common_strings.h:20
-#: common/zoom.cpp:250 common/widgets/mathplot.cpp:1762
-#: eeschema/tool_viewlib.cpp:80 eeschema/help_common_strings.h:44
-#: 3d-viewer/3d_viewer/3d_toolbar.cpp:75
+#: common/zoom.cpp:250 eeschema/tool_viewlib.cpp:80
+#: eeschema/help_common_strings.h:44 3d-viewer/3d_viewer/3d_toolbar.cpp:75
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1181 gerbview/toolbars_gerber.cpp:81
 #: pagelayout_editor/toolbars_pl_editor.cpp:82
 msgid "Zoom out"
@@ -4277,7 +4287,7 @@ msgstr "(Proibita)"
 msgid "** NO BOARD DEFINED **"
 msgstr "** Nessuna scheda definita **"
 
-#: pcbnew/class_zone.cpp:847 eeschema/schframe.cpp:172
+#: pcbnew/class_zone.cpp:847 eeschema/schframe.cpp:173
 msgid "Not Found"
 msgstr "Non trovato"
 
@@ -5931,7 +5941,7 @@ msgstr "P&referenze"
 msgid "D&imensions"
 msgstr "D&imensioni"
 
-#: pcbnew/pcbframe.cpp:579 eeschema/schframe.cpp:632
+#: pcbnew/pcbframe.cpp:579 eeschema/schframe.cpp:638
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -7367,96 +7377,98 @@ msgstr "Regole"
 msgid "* (Any)"
 msgstr "* (Qualsiasi)"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:649
+#: pcbnew/dialogs/dialog_design_rules.cpp:674
 msgid "Design Rule Setting Error"
 msgstr "Errore impostazione regole di progettazione"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:669
+#: pcbnew/dialogs/dialog_design_rules.cpp:694
 msgid "New Net Class Name:"
 msgstr "Nuovo nome netclass:"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:689
+#: pcbnew/dialogs/dialog_design_rules.cpp:714
 msgid "Duplicate net class names are not allowed."
 msgstr "Nomi di netclass duplicati non permessi."
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:751
+#: pcbnew/dialogs/dialog_design_rules.cpp:778
 msgid "The default net class cannot be removed"
 msgstr "Le netclass predefinite non possono essere rimosse"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:934
+#: pcbnew/dialogs/dialog_design_rules.cpp:962
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
 msgstr "%s: <b>Dimensione pista</b> &lt; <b>Dimensione minima pista</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:945
+#: pcbnew/dialogs/dialog_design_rules.cpp:973
 #, c-format
 msgid "%s: <b>Differential Pair Size</b> &lt; <b>Min Track Size</b><br>"
-msgstr "%s: <b>Dimensione coppia differenziale</b> &lt; <b>Dimensione minima pista</b><br>"
+msgstr ""
+"%s: <b>Dimensione coppia differenziale</b> &lt; <b>Dimensione minima pista</"
+"b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:958
+#: pcbnew/dialogs/dialog_design_rules.cpp:986
 #, c-format
 msgid "%s: <b>Via Diameter</b> &lt; <b>Minimum Via Diameter</b><br>"
 msgstr "%s: <b>Diametro via</b> &lt; <b>Diametro minimo via</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:969
+#: pcbnew/dialogs/dialog_design_rules.cpp:997
 #, c-format
 msgid "%s: <b>Via Drill</b> &ge; <b>Via Dia</b><br>"
 msgstr "%s: <b>Foratura via</b> &ge; <b>Diametro via</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:977
+#: pcbnew/dialogs/dialog_design_rules.cpp:1005
 #, c-format
 msgid "%s: <b>Via Drill</b> &lt; <b>Min Via Drill</b><br>"
 msgstr "%s: <b>Foratura Via</b> &lt; <b>Foratura minima via</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:989
+#: pcbnew/dialogs/dialog_design_rules.cpp:1017
 #, c-format
 msgid "%s: <b>MicroVia Diameter</b> &lt; <b>MicroVia Min Diameter</b><br>"
 msgstr "%s: <b>Diametro microvia</b> &lt; <b>Diametro minimo microvia</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1000
+#: pcbnew/dialogs/dialog_design_rules.cpp:1028
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &ge; <b>MicroVia Dia</b><br>"
 msgstr "%s: <b>Foratura microvia</b> &ge; <b>Diametro microvia</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1008
+#: pcbnew/dialogs/dialog_design_rules.cpp:1036
 #, c-format
 msgid "%s: <b>MicroVia Drill</b> &lt; <b>MicroVia Min Drill</b><br>"
 msgstr "%s: <b>Foratura microvia</b> &lt; <b>Foratura minima microvia</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1027
+#: pcbnew/dialogs/dialog_design_rules.cpp:1055
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 msgstr ""
 "<b>Dimensione pista extra %d</b> %s &lt; <b>Dimensione minima pista</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1036
+#: pcbnew/dialogs/dialog_design_rules.cpp:1064
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Dimensione pista extra %d</b> %s &gt; <b>1 pollice!</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1056
+#: pcbnew/dialogs/dialog_design_rules.cpp:1084
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
 msgstr ""
 "<b>Dimensione extra via %d</b> %s &lt; <b>Dimensione minima via</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1066
+#: pcbnew/dialogs/dialog_design_rules.cpp:1094
 #, c-format
 msgid "<b>No via drill size define in row %d</b><br>"
 msgstr "<b>Nessuna definizione di dimensione foro via nella riga %d</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1076
+#: pcbnew/dialogs/dialog_design_rules.cpp:1104
 #, c-format
 msgid "<b>Extra Via %d Drill</b> %s &lt; <b>Min Via Drill %s</b><br>"
 msgstr "<b>Foro extra via %d</b> %s &lt; <b>Foro minimo via %s</b><br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1085
+#: pcbnew/dialogs/dialog_design_rules.cpp:1113
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>"
 msgstr ""
 "<b>Dimensione extra via %d</b> %s &le; <b>Dimensione foratura</b> %s<br>"
 
-#: pcbnew/dialogs/dialog_design_rules.cpp:1094
+#: pcbnew/dialogs/dialog_design_rules.cpp:1122
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
 msgstr "<b>Dimensione extra via %d</b>%s &gt; <b>1 pollice!</b><br>"
@@ -7651,22 +7663,22 @@ msgstr "Spessore elemento"
 msgid "Default thickness:"
 msgstr "Spessore predefinito"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:370
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:385
 #: pcbnew/dialogs/dialog_track_via_size.cpp:62
 msgid "Invalid track width"
 msgstr "Larghezza pista non valida"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:379
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:394
 #: pcbnew/dialogs/dialog_track_via_size.cpp:69
 msgid "Invalid via diameter"
 msgstr "Diametro via non valido"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:386
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:401
 #: pcbnew/dialogs/dialog_track_via_size.cpp:76
 msgid "Invalid via drill size"
 msgstr "Diametro foro dei via non valido"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:393
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:408
 #: pcbnew/dialogs/dialog_track_via_size.cpp:83
 msgid "Via drill size has to be smaller than via diameter"
 msgstr "La dimensione del foro del via deve essere minore del diametro del via"
@@ -8945,12 +8957,13 @@ msgstr ""
 "impronte"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:345
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:181
 msgid ""
 "Use this attribute for \"virtual\" components drawn on board\n"
-"(like a old ISA PC bus connector)"
+"like an edge connector (old ISA PC bus for instance)"
 msgstr ""
 "Usa questo attributo per componenti \"virtuali\" disegnati sulla scheda\n"
-"(come i vecchi connettori PC ISA bus)"
+"come un connettore a pettine (per es. i vecchi connettori bus PC ISA)"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:376
 msgid ""
@@ -8975,9 +8988,30 @@ msgstr ""
 "liberamente."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:499
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:348
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:350
 msgid "Invalid filename: "
 msgstr "Nome file non valido: "
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:501
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:352
+msgid "Edit 3D file name"
+msgstr "Modifica nome file 3D"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:591
+msgid "Error: invalid footprint parameter"
+msgstr "Errore: parametro impronta non valido"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:597
+msgid "Error: invalid 3D parameter"
+msgstr "Errore: parametro 3D non valido"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:616
+msgid "Error: invalid or missing footprint parameter"
+msgstr "Errore: parametro impronta errato o mancante"
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:622
+msgid "Error: invalid or missing 3D parameter"
+msgstr "Errore: parametro 3D errato o mancante"
 
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:125
 #: gerbview/dialogs/dialog_print_using_printer.cpp:110
@@ -11613,23 +11647,15 @@ msgstr "Sposta Y vettore:"
 msgid "Use this attribute for most non SMD components"
 msgstr "Usa questo attributo per la maggioranza dei componenti non SMD"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:180
-msgid ""
-"Use this attribute for \"virtual\" components drawn on board (like a old ISA "
-"PC bus connector)"
-msgstr ""
-"Usa questo attributo per componenti \"virtuali\" disegnati sulla scheda "
-"(come i vecchi connetori ISA PC bus )"
-
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:203
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:205
 msgid "Enable hotkey move commands and Auto Placement"
 msgstr "Abilita comandi da tastiera spostamento e autoposizionamento"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:204
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:206
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Disabilita comandi da tastiera spostamento e autoposizionamento"
 
-#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:450
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:452
 #, c-format
 msgid ""
 "Error:\n"
@@ -13163,7 +13189,7 @@ msgid "Apply Filters"
 msgstr "Applica filtri:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:101
-#: eeschema/sim/sim_plot_frame.cpp:143
+#: eeschema/sim/sim_plot_frame.cpp:151
 msgid "Settings"
 msgstr "Impostazioni"
 
@@ -13820,23 +13846,24 @@ msgstr "Comando"
 msgid "Hotkey"
 msgstr "Tasto"
 
-#: common/widgets/mathplot.cpp:1759
+#: common/widgets/mathplot.cpp:1757
 msgid "Center plot view to this position"
 msgstr "Centra la vista tracciatura in questa posizione"
 
-#: common/widgets/mathplot.cpp:1760
-msgid "Fit"
-msgstr "Giusto"
+#: common/widgets/mathplot.cpp:1758 eeschema/hotkeys.cpp:87
+#: eeschema/sim/sim_plot_frame_base.cpp:82
+msgid "Fit on Screen"
+msgstr "Centra sullo schermo"
 
-#: common/widgets/mathplot.cpp:1760
+#: common/widgets/mathplot.cpp:1758
 msgid "Set plot view to show all items"
 msgstr "Imposta la vista tracciatura per mostrare tutti gli elementi"
 
-#: common/widgets/mathplot.cpp:1761
+#: common/widgets/mathplot.cpp:1759
 msgid "Zoom in plot view."
 msgstr "Ingrandisci vista tracciatura."
 
-#: common/widgets/mathplot.cpp:1762
+#: common/widgets/mathplot.cpp:1760
 msgid "Zoom out plot view."
 msgstr "Riduci vista tracciatura."
 
@@ -13901,7 +13928,7 @@ msgstr ""
 msgid "Clipboard Error"
 msgstr "Errore degli appunti"
 
-#: common/dialog_about/dialog_about.cpp:539
+#: common/dialog_about/dialog_about.cpp:551
 msgid "Copied..."
 msgstr "Copiate..."
 
@@ -15407,7 +15434,7 @@ msgstr "Unità in pollici"
 msgid "Set unit to mm"
 msgstr "Unità in millimetri"
 
-#: eeschema/tool_sch.cpp:295 eeschema/schframe.cpp:790
+#: eeschema/tool_sch.cpp:295 eeschema/schframe.cpp:796
 msgid "Show hidden pins"
 msgstr "Mostra piedini nascosti"
 
@@ -16280,23 +16307,23 @@ msgstr "Cambia la visibilità"
 msgid "Failed to open component-footprint link file '%s'"
 msgstr "Fallita l'apertura del file di associazione componenti-impronte \"%s\""
 
-#: eeschema/schframe.cpp:174
+#: eeschema/schframe.cpp:175
 msgid "The following libraries were not found:"
 msgstr "Le seguenti librerie non sono state trovate:"
 
-#: eeschema/schframe.cpp:779
+#: eeschema/schframe.cpp:785
 msgid "Draw wires and buses in any direction"
 msgstr "Disegna fili e bus in ogni direzione"
 
-#: eeschema/schframe.cpp:780
+#: eeschema/schframe.cpp:786
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Disegna fili e bus soltanto in verticale e in orizzontale"
 
-#: eeschema/schframe.cpp:789
+#: eeschema/schframe.cpp:795
 msgid "Do not show hidden pins"
 msgstr "Non mostrare i piedini nascosti"
 
-#: eeschema/schframe.cpp:844
+#: eeschema/schframe.cpp:850
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, you need to launch "
@@ -16307,28 +16334,28 @@ msgstr ""
 "stampato da uno schema elettrico, è necessario eseguire il gestore progetti "
 "KiCad e creare un progetto di circuito stampato."
 
-#: eeschema/schframe.cpp:959
+#: eeschema/schframe.cpp:965
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/schframe.cpp:978
+#: eeschema/schframe.cpp:984
 msgid "New Schematic"
 msgstr "Nuovo schema"
 
-#: eeschema/schframe.cpp:991
+#: eeschema/schframe.cpp:997
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr "Il file dello schema \"%s\" esiste già, usa invece Apri"
 
-#: eeschema/schframe.cpp:1012
+#: eeschema/schframe.cpp:1018
 msgid "Open Schematic"
 msgstr "Apri schema"
 
-#: eeschema/schframe.cpp:1142
+#: eeschema/schframe.cpp:1148
 msgid "Error: not a component or no component"
 msgstr "Errore: non è un componente o nessun componente"
 
-#: eeschema/schframe.cpp:1375
+#: eeschema/schframe.cpp:1381
 msgid " [no file]"
 msgstr "[nessun file]"
 
@@ -16935,10 +16962,6 @@ msgstr ""
 #, c-format
 msgid "Directory '%s' is not writable"
 msgstr "Cartella \"%s\" non scrivibile"
-
-#: eeschema/hotkeys.cpp:87 eeschema/sim/sim_plot_frame_base.cpp:82
-msgid "Fit on Screen"
-msgstr "Centra sullo schermo"
 
 #: eeschema/hotkeys.cpp:141
 msgid "End Line Wire Bus"
@@ -17801,7 +17824,7 @@ msgstr "Esci dalla simulazione"
 msgid "File"
 msgstr "File"
 
-#: eeschema/sim/sim_plot_frame_base.cpp:51 eeschema/sim/sim_plot_frame.cpp:136
+#: eeschema/sim/sim_plot_frame_base.cpp:51 eeschema/sim/sim_plot_frame.cpp:144
 msgid "Run Simulation"
 msgstr "Avvia simulazione"
 
@@ -17853,298 +17876,311 @@ msgstr "Segnali"
 msgid "Cursors"
 msgstr "Puntatori"
 
-#: eeschema/sim/sim_plot_frame_base.cpp:201 eeschema/sim/sim_plot_frame.cpp:141
+#: eeschema/sim/sim_plot_frame_base.cpp:201 eeschema/sim/sim_plot_frame.cpp:149
 msgid "Tune"
 msgstr "Regola"
 
-#: eeschema/sim/sim_plot_frame.cpp:135
+#: eeschema/sim/sim_plot_frame.cpp:143
 msgid "Run/Stop Simulation"
 msgstr "Esegui/ferma la simulazione"
 
-#: eeschema/sim/sim_plot_frame.cpp:137
+#: eeschema/sim/sim_plot_frame.cpp:145
 msgid "Add Signals"
 msgstr "Aggiungi segnali"
 
-#: eeschema/sim/sim_plot_frame.cpp:138
+#: eeschema/sim/sim_plot_frame.cpp:146
 msgid "Add signals to plot"
 msgstr "Aggiungi segnali al grafico"
 
-#: eeschema/sim/sim_plot_frame.cpp:139
+#: eeschema/sim/sim_plot_frame.cpp:147
 msgid "Probe"
 msgstr "Campiona"
 
-#: eeschema/sim/sim_plot_frame.cpp:140
+#: eeschema/sim/sim_plot_frame.cpp:148
 msgid "Probe signals on the schematic"
 msgstr "Campiona i segnali nello schema"
 
-#: eeschema/sim/sim_plot_frame.cpp:142
+#: eeschema/sim/sim_plot_frame.cpp:150
 msgid "Tune component values"
 msgstr "Regola i valori dei componenti"
 
-#: eeschema/sim/sim_plot_frame.cpp:144
+#: eeschema/sim/sim_plot_frame.cpp:152
 #: eeschema/dialogs/dialog_sim_settings_base.h:123
 msgid "Simulation settings"
 msgstr "Impostazioni simulazione"
 
-#: eeschema/sim/sim_plot_frame.cpp:160
+#: eeschema/sim/sim_plot_frame.cpp:168
 msgid "Welcome!"
 msgstr "Benvenuti!"
 
-#: eeschema/sim/sim_plot_frame.cpp:196 eeschema/sim/sim_plot_frame.cpp:864
+#: eeschema/sim/sim_plot_frame.cpp:205 eeschema/sim/sim_plot_frame.cpp:924
 msgid "There were errors during netlist export, aborted."
-msgstr "Si sono verificati degli errori durante l'esportazione della netlist, interrotta."
+msgstr ""
+"Si sono verificati degli errori durante l'esportazione della netlist, "
+"interrotta."
 
-#: eeschema/sim/sim_plot_frame.cpp:202
+#: eeschema/sim/sim_plot_frame.cpp:211
 msgid "You need to select the simulation settings first."
 msgstr "Bisogna prima selezionare le impostazioni di simulazione."
 
-#: eeschema/sim/sim_plot_frame.cpp:653
-msgid "Open simulation workbook"
-msgstr "Apri il libretto di lavoro della simulazione"
-
-#: eeschema/sim/sim_plot_frame.cpp:654 eeschema/sim/sim_plot_frame.cpp:670
-msgid "Workbook file (*.wbk)|*.wbk"
-msgstr "File libretto di lavoro (*.wbk)|*.wbk"
-
-#: eeschema/sim/sim_plot_frame.cpp:669
-msgid "Save simulation workbook"
-msgstr "Salva libretto di lavoro della simulazione"
-
-#: eeschema/sim/sim_plot_frame.cpp:676
-msgid "There was an error while saving the workbook file"
-msgstr "Si è verificato un errore durante il salvataggio del file libretto di lavoro"
-
-#: eeschema/sim/sim_plot_frame.cpp:685
-msgid "Save plot as image"
-msgstr "Salva grafico come immagine"
-
-#: eeschema/sim/sim_plot_frame.cpp:686
-msgid "PNG file (*.png)|*.png"
-msgstr "File PNG (*.png)|*.png"
-
-#: eeschema/sim/sim_plot_frame.cpp:702
-msgid "Save plot data"
-msgstr "Salva dati grafico"
-
-#: eeschema/sim/sim_plot_frame.cpp:898
-msgid "You need to run simulation first."
-msgstr "È necessario prima eseguire la simulazione."
-
-#: eeschema/sim/sim_plot_frame.cpp:945
+#: eeschema/sim/sim_plot_frame.cpp:476 eeschema/sim/sim_plot_frame.cpp:1009
 msgid "Signal"
 msgstr "Segnale"
 
-#: eeschema/sim/sim_plot_frame.cpp:1069
+#: eeschema/sim/sim_plot_frame.cpp:713
+msgid "Open simulation workbook"
+msgstr "Apri il libretto di lavoro della simulazione"
+
+#: eeschema/sim/sim_plot_frame.cpp:714 eeschema/sim/sim_plot_frame.cpp:730
+msgid "Workbook file (*.wbk)|*.wbk"
+msgstr "File libretto di lavoro (*.wbk)|*.wbk"
+
+#: eeschema/sim/sim_plot_frame.cpp:729
+msgid "Save simulation workbook"
+msgstr "Salva libretto di lavoro della simulazione"
+
+#: eeschema/sim/sim_plot_frame.cpp:736
+msgid "There was an error while saving the workbook file"
+msgstr ""
+"Si è verificato un errore durante il salvataggio del file libretto di lavoro"
+
+#: eeschema/sim/sim_plot_frame.cpp:745
+msgid "Save plot as image"
+msgstr "Salva grafico come immagine"
+
+#: eeschema/sim/sim_plot_frame.cpp:746
+msgid "PNG file (*.png)|*.png"
+msgstr "File PNG (*.png)|*.png"
+
+#: eeschema/sim/sim_plot_frame.cpp:762
+msgid "Save plot data"
+msgstr "Salva dati grafico"
+
+#: eeschema/sim/sim_plot_frame.cpp:958
+msgid "You need to run simulation first."
+msgstr "È necessario prima eseguire la simulazione."
+
+#: eeschema/sim/sim_plot_frame.cpp:1138
 msgid "Hide signal"
 msgstr "Nascondi segnale"
 
-#: eeschema/sim/sim_plot_frame.cpp:1074
+#: eeschema/sim/sim_plot_frame.cpp:1139
+msgid "Erase the signal from plot screen"
+msgstr "Cancella il segnale dallo schermo"
+
+#: eeschema/sim/sim_plot_frame.cpp:1145
 msgid "Hide cursor"
 msgstr "Nascondi puntatore"
 
-#: eeschema/sim/sim_plot_frame.cpp:1076
+#: eeschema/sim/sim_plot_frame.cpp:1148
 msgid "Show cursor"
 msgstr "Mostra puntatore"
 
-#: eeschema/sch_legacy_plugin.cpp:126 eeschema/sch_legacy_plugin.cpp:171
-#: eeschema/sch_legacy_plugin.cpp:219 eeschema/sch_legacy_plugin.cpp:265
-#: eeschema/sch_legacy_plugin.cpp:309 eeschema/sch_legacy_plugin.cpp:322
-#: eeschema/sch_legacy_plugin.cpp:373 eeschema/sch_legacy_plugin.cpp:386
-#: eeschema/sch_legacy_plugin.cpp:405 eeschema/sch_legacy_plugin.cpp:810
-#: eeschema/sch_legacy_plugin.cpp:2394
+#: eeschema/sch_legacy_plugin.cpp:125 eeschema/sch_legacy_plugin.cpp:170
+#: eeschema/sch_legacy_plugin.cpp:218 eeschema/sch_legacy_plugin.cpp:264
+#: eeschema/sch_legacy_plugin.cpp:308 eeschema/sch_legacy_plugin.cpp:321
+#: eeschema/sch_legacy_plugin.cpp:372 eeschema/sch_legacy_plugin.cpp:385
+#: eeschema/sch_legacy_plugin.cpp:404 eeschema/sch_legacy_plugin.cpp:809
+#: eeschema/sch_legacy_plugin.cpp:2393
 msgid "unexpected end of line"
 msgstr "fine riga non previsto"
 
-#: eeschema/sch_legacy_plugin.cpp:268
+#: eeschema/sch_legacy_plugin.cpp:267
 msgid "expected single character token"
 msgstr "atteso token a singolo carattere"
 
-#: eeschema/sch_legacy_plugin.cpp:333
+#: eeschema/sch_legacy_plugin.cpp:332
 msgid "expected unquoted string"
 msgstr "attesa stringa senza virgolette"
 
-#: eeschema/sch_legacy_plugin.cpp:391
+#: eeschema/sch_legacy_plugin.cpp:390
 msgid "expecting opening quote"
 msgstr "attese virgolette di apertura"
 
-#: eeschema/sch_legacy_plugin.cpp:428
+#: eeschema/sch_legacy_plugin.cpp:427
 msgid "expected quoted string"
 msgstr "attesa stringa virgolettata"
 
-#: eeschema/sch_legacy_plugin.cpp:431
+#: eeschema/sch_legacy_plugin.cpp:430
 msgid "no closing quote for string found"
 msgstr "virgolette di chiusura stringa non trovate"
 
-#: eeschema/sch_legacy_plugin.cpp:613
+#: eeschema/sch_legacy_plugin.cpp:612
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file"
 msgstr "\"%s\" non sembra essere un file di Eeschema"
 
-#: eeschema/sch_legacy_plugin.cpp:641
+#: eeschema/sch_legacy_plugin.cpp:640
 msgid "Missing 'EELAYER END'"
 msgstr "'EELAYER END' mancante"
 
-#: eeschema/sch_legacy_plugin.cpp:660
+#: eeschema/sch_legacy_plugin.cpp:659
 msgid "invalid page size"
 msgstr "dimensione pagina non valida"
 
-#: eeschema/sch_legacy_plugin.cpp:686 eeschema/sch_legacy_plugin.cpp:948
-#: eeschema/sch_legacy_plugin.cpp:956 eeschema/sch_legacy_plugin.cpp:2012
+#: eeschema/sch_legacy_plugin.cpp:685 eeschema/sch_legacy_plugin.cpp:947
+#: eeschema/sch_legacy_plugin.cpp:955 eeschema/sch_legacy_plugin.cpp:2011
 msgid "unexpected end of file"
 msgstr "fine file inaspettata"
 
-#: eeschema/sch_legacy_plugin.cpp:742
+#: eeschema/sch_legacy_plugin.cpp:741
 msgid "missing 'EndDescr'"
 msgstr "'EndDescr' mancante"
 
-#: eeschema/sch_legacy_plugin.cpp:834
+#: eeschema/sch_legacy_plugin.cpp:833
 msgid "invalid sheet pin type"
 msgstr "tipo pin foglio non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:855
+#: eeschema/sch_legacy_plugin.cpp:854
 msgid "invalid sheet pin side"
 msgstr "lato pin foglio non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:877
+#: eeschema/sch_legacy_plugin.cpp:876
 msgid "missing '$EndSheet`"
 msgstr "'$EndSheet` mancante"
 
-#: eeschema/sch_legacy_plugin.cpp:915
+#: eeschema/sch_legacy_plugin.cpp:914
 msgid "Unexpected end of file"
 msgstr "Fine file non prevista"
 
-#: eeschema/sch_legacy_plugin.cpp:1136
+#: eeschema/sch_legacy_plugin.cpp:1135
 msgid "invalid label type"
 msgstr "tipo etichetta non valida"
 
-#: eeschema/sch_legacy_plugin.cpp:1147
+#: eeschema/sch_legacy_plugin.cpp:1146
 msgid "expected 'Italics' or '~'"
 msgstr "previsto \"Italics\" o \"~\""
 
-#: eeschema/sch_legacy_plugin.cpp:1328
+#: eeschema/sch_legacy_plugin.cpp:1327
 msgid "component field text horizontal justification must be L, R, or C"
 msgstr ""
 "la giustificazione orizzontale del campo testo del componente deve essere L, "
 "R, o C"
 
-#: eeschema/sch_legacy_plugin.cpp:1338
+#: eeschema/sch_legacy_plugin.cpp:1337
 msgid "component field text vertical justification must be B, T, or C"
 msgstr ""
 "la giustificazione verticale del campo testo del componente deve essere B, "
 "T, o C<"
 
-#: eeschema/sch_legacy_plugin.cpp:1343
+#: eeschema/sch_legacy_plugin.cpp:1342
 msgid "component field text attributes must be 3 characters wide"
 msgstr ""
 "gli attributi del campo testo del componente devono essere larghi 3 caratteri"
 
-#: eeschema/sch_legacy_plugin.cpp:1349
+#: eeschema/sch_legacy_plugin.cpp:1348
 msgid "component field text italics indicator must be I or N"
 msgstr "l'indicatore corsivo del campo testo del componente deve essere I o N"
 
-#: eeschema/sch_legacy_plugin.cpp:1355
+#: eeschema/sch_legacy_plugin.cpp:1354
 msgid "component field text bold indicator must be B or N"
 msgstr ""
 "l'indicatore grassetto del campo testo del componente deve essere B o N"
 
-#: eeschema/sch_legacy_plugin.cpp:1369
+#: eeschema/sch_legacy_plugin.cpp:1368
 msgid "component field orientation must be H or V"
 msgstr "l'orientamento del campo del componente deve essere H o V"
 
-#: eeschema/sch_legacy_plugin.cpp:1401
+#: eeschema/sch_legacy_plugin.cpp:1400
 msgid "invalid component X1 transform value"
 msgstr "valore trasformazione componente X1 non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:1406
+#: eeschema/sch_legacy_plugin.cpp:1405
 msgid "invalid component Y1 transform value"
 msgstr "valore trasformazione componente Y1 non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:1411
+#: eeschema/sch_legacy_plugin.cpp:1410
 msgid "invalid component X2 transform value"
 msgstr "valore trasformazione componente X2 non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:1416
+#: eeschema/sch_legacy_plugin.cpp:1415
 msgid "invalid component Y2 transform value"
 msgstr "valore trasformazione componente Y2 non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:2091
+#: eeschema/sch_legacy_plugin.cpp:2090
 #, c-format
 msgid "user does not have permission to read library document file '%s'"
 msgstr "non si dispone dei permessi necessari per salvare il file \"%s\"."
 
-#: eeschema/sch_legacy_plugin.cpp:2099
+#: eeschema/sch_legacy_plugin.cpp:2098
 msgid "symbol document library file is empty"
 msgstr "il file della libreria di documentazione componenti è vuoto"
 
-#: eeschema/sch_legacy_plugin.cpp:2385
+#: eeschema/sch_legacy_plugin.cpp:2384
 msgid "invalid field ID"
 msgstr "campo ID non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:2424
+#: eeschema/sch_legacy_plugin.cpp:2423
 msgid "invalid field text orientation parameter"
 msgstr "parametro orientamento testo campo non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:2433
+#: eeschema/sch_legacy_plugin.cpp:2432
 msgid "invalid field text visibility parameter"
 msgstr "parametro visibilità testo campo non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:2450
+#: eeschema/sch_legacy_plugin.cpp:2449
 msgid "invalid field text horizontal justification parameter"
 msgstr "parametro giustificazione orizzontale testo campo non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:2458
+#: eeschema/sch_legacy_plugin.cpp:2457
 msgid "invalid field text attributes size"
 msgstr "dimensione attributi testo campo non valida"
 
-#: eeschema/sch_legacy_plugin.cpp:2468
+#: eeschema/sch_legacy_plugin.cpp:2467
 msgid "invalid field text vertical justification parameter"
 msgstr "parametro giustificazione verticale testo campo non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:2476
+#: eeschema/sch_legacy_plugin.cpp:2475
 msgid "invalid field text italic parameter"
 msgstr "parametro corsivo testo campo non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:2481
+#: eeschema/sch_legacy_plugin.cpp:2480
 msgid "invalid field text bold parameter"
 msgstr "parametro grassetto testo campo non valido"
 
-#: eeschema/sch_legacy_plugin.cpp:2570
+#: eeschema/sch_legacy_plugin.cpp:2569
 msgid "undefined DRAW entry"
 msgstr "voce DRAW indefinita"
 
-#: eeschema/sch_legacy_plugin.cpp:2576
+#: eeschema/sch_legacy_plugin.cpp:2575
 msgid "file ended prematurely loading component draw element"
-msgstr "il file si è interrotto in anticipo durante il caricamento di un elemento di disegno di un componente"
+msgstr ""
+"il file si è interrotto in anticipo durante il caricamento di un elemento di "
+"disegno di un componente"
 
-#: eeschema/sch_legacy_plugin.cpp:2600
+#: eeschema/sch_legacy_plugin.cpp:2599
 msgid "invalid fill type, expected f, F, or N"
 msgstr "tipo di riempimento non valido, doveva essere f, F o N"
 
-#: eeschema/sch_legacy_plugin.cpp:2748
+#: eeschema/sch_legacy_plugin.cpp:2747
 msgid "invalid text stype, expected 'Normal' or 'Italic'"
 msgstr "tipo stype non valido, doveva essere \"Normal\" o \"Italic\""
 
-#: eeschema/sch_legacy_plugin.cpp:2769
+#: eeschema/sch_legacy_plugin.cpp:2768
 msgid "invalid horizontal text justication parameter, expected L, C, or R"
-msgstr "parametro di giustificazione orizzontale del testo non valido, deve essere L, C o R"
+msgstr ""
+"parametro di giustificazione orizzontale del testo non valido, deve essere "
+"L, C o R"
 
-#: eeschema/sch_legacy_plugin.cpp:2788
+#: eeschema/sch_legacy_plugin.cpp:2787
 msgid "invalid vertical text justication parameter, expected T, C, or B"
-msgstr "parametro di giustificazione verticale del testo non valido, deve essere T, C o B"
+msgstr ""
+"parametro di giustificazione verticale del testo non valido, deve essere T, "
+"C o B"
 
-#: eeschema/sch_legacy_plugin.cpp:2912
+#: eeschema/sch_legacy_plugin.cpp:2911
 msgid "unknown pin type"
 msgstr "tipo pin sconosciuto"
 
-#: eeschema/sch_legacy_plugin.cpp:2965
+#: eeschema/sch_legacy_plugin.cpp:2964
 msgid "unknown pin attribute"
 msgstr "attributo pin sconosciuto"
 
-#: eeschema/sch_legacy_plugin.cpp:3008
+#: eeschema/sch_legacy_plugin.cpp:3007
 msgid "pin attributes do not define a valid pin shape"
 msgstr "gli attributi del pin non definiscono una forma pin valida"
 
-#: eeschema/sch_legacy_plugin.cpp:3097
+#: eeschema/sch_legacy_plugin.cpp:3096
 msgid "file ended prematurely while loading footprint filters"
 msgstr "fine file inattesa durante il caricamento dei filtri impronte"
 
@@ -19703,7 +19739,8 @@ msgstr "Carica direttive dallo schema"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:388
 msgid "Adjust passive component values (e.g. M -> Meg; 100 nF -> 100n)"
-msgstr "Regola i valori dei componenti passivi (per es. M -> Meg; 100 nF -> 100n)"
+msgstr ""
+"Regola i valori dei componenti passivi (per es. M -> Meg; 100 nF -> 100n)"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:391
 msgid "Add full path for .include library directives"
@@ -22440,7 +22477,7 @@ msgid "Show None"
 msgstr "Mostra niente"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:477
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:168
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:169
 msgid "Loading..."
 msgstr "Caricamento..."
 
@@ -22466,17 +22503,17 @@ msgstr "Caricamento modelli 3D"
 msgid "Reload time %.3f s"
 msgstr "Tempo di ricaricamento %.3f s"
 
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:345
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:346
 #, c-format
 msgid "Rendering time %.3f s"
 msgstr "Tempo di rendering %.3f s"
 
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:395
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:404
 #, c-format
 msgid "Rendering: %.0f %%"
 msgstr "Rendering: %.0f %%"
 
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:1119
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:1128
 msgid "Rendering: Post processing shader"
 msgstr "Rendering: ombreggiatura in post elaborazione"
 
@@ -22544,7 +22581,8 @@ msgstr "Seleziona un componente ed evidenzia di tutti i suoi elementi"
 
 #: gerbview/toolbars_gerber.cpp:158
 msgid "Select a net name and highlight graphic items belonging to this net"
-msgstr "Seleziona un nome collegamento ed evidenzia tutti i suoi elementi grafici"
+msgstr ""
+"Seleziona un nome collegamento ed evidenzia tutti i suoi elementi grafici"
 
 #: gerbview/toolbars_gerber.cpp:164
 msgid "Attr:"
@@ -22554,7 +22592,9 @@ msgstr "Attr:"
 msgid ""
 "Select an aperture attribute and highlight graphic items having this "
 "attribute"
-msgstr "Seleziona un attributo di apertura ed evidenzia gli elementi grafici con questo attributo"
+msgstr ""
+"Seleziona un attributo di apertura ed evidenzia gli elementi grafici con "
+"questo attributo"
 
 #: gerbview/toolbars_gerber.cpp:173
 msgid "DCode:"
