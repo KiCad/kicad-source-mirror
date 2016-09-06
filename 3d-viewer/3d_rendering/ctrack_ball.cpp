@@ -96,14 +96,20 @@ void CTRACK_BALL::Pan( const wxPoint &aNewMousePosition )
 {
     m_parametersChanged = true;
 
-    // Current zoom and an additional factor are taken into account
-    // for the amount of panning.
-
-    const float zoom = std::min( m_zoom, 1.0f );
-    const float panFactor = m_range_scale * zoom * (zoom * 4.0f);
-
-    m_camera_pos.x -= panFactor * ( m_lastPosition.x - aNewMousePosition.x ) / m_windowSize.x;
-    m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y ) / m_windowSize.y;
+    if( m_projectionType == PROJECTION_ORTHO )
+    {
+        // With the ortographic projection, there is just a zoom factor
+        const float panFactor = m_zoom / 37.5f; // Magic number from CCAMERA::rebuildProjection
+        m_camera_pos.x -= panFactor * ( m_lastPosition.x - aNewMousePosition.x );
+        m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y );
+    }
+    else // PROJECTION_PERSPECTIVE
+    {
+        // Unproject the coordinates using the precomputed frustum tangent (zoom level dependent)
+        const float panFactor = -m_camera_pos.z *  m_frustum.tang * 2;
+        m_camera_pos.x -= panFactor * m_frustum.ratio * ( m_lastPosition.x - aNewMousePosition.x ) / m_windowSize.x;
+        m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y ) / m_windowSize.y;
+    }
 
     updateViewMatrix();
     updateFrustum();
