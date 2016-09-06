@@ -667,11 +667,11 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
 
     pushedVia->SetRank( aCurrentRank - 1 );
 
-    replaceItems( aVia, std::move( pushedVia ) );
-
 #ifdef DEBUG
-    m_logger.Log( pushedVia, 1, "pushed-via" );
+    m_logger.Log( pushedVia.get(), 1, "pushed-via" );
 #endif
+
+    replaceItems( aVia, std::move( pushedVia ) );
 
     for( LINE_PAIR lp : draggedLines )
     {
@@ -1221,8 +1221,6 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveMultiLines( const ITEM_SET& aHeadSet )
 
         if( !pushLine( head ) )
             return SH_INCOMPLETE;
-
-        VIA* headVia = NULL;
 
         if( head.EndsWithVia() )
         {
