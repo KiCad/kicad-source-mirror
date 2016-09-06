@@ -459,7 +459,7 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
     }
     else if( event.ControlDown() )
     {
-        m_settings.CameraGet().Pan( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
+        m_settings.CameraGet().Pan( SFVEC3F( delta_move, 0.0f, 0.0f ) );
         mouseActivity = true;
     }
     else
