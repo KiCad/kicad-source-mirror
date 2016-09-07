@@ -221,7 +221,8 @@ static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
     aGbrItem->m_Size  = aPenSize;
     aGbrItem->m_Flashed = false;
 
-    aGbrItem->SetNetAttributes( aGbrItem->m_GerberImageFile->m_NetAttributeDict );
+    if( aGbrItem->m_GerberImageFile )
+        aGbrItem->SetNetAttributes( aGbrItem->m_GerberImageFile->m_NetAttributeDict );
 
     if( aMultiquadrant )
         center = aStart + aRelCenter;

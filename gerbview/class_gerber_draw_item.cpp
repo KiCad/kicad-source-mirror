@@ -36,6 +36,7 @@
 
 #include <class_gerber_draw_item.h>
 #include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 
 
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
@@ -52,6 +53,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
     m_mirrorB       = false;
     m_drawScale.x   = m_drawScale.y = 1.0;
     m_lyrRotation   = 0;
+
     if( m_GerberImageFile )
         SetLayerParameters();
 }
@@ -437,8 +439,8 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
 
     // Now create the full polygon.
     // Due to previous changes, the shape is always something like
-    //          3 4
-    // 2          5
+    // 3 4
+    // 2 5
     // 1 6
     wxPoint corner;
     corner.x -= m_Size.x/2;
@@ -514,7 +516,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     aList.push_back( MSG_PANEL_ITEM( msg, text, RED ) );
 
     // Display graphic layer number
-    msg.Printf( wxT( "%d" ), GetLayer() + 1 );
+    msg = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Graphic Layer" ), msg, BROWN ) );
 
     // Display item rotation

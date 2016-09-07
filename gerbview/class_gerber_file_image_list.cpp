@@ -120,7 +120,7 @@ void GERBER_FILE_IMAGE_LIST::DeleteImage( int aIdx )
 }
 
 // Build a name for image aIdx which can be used in layers manager
-const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx )
+const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx, bool aNameOnly )
 {
     wxString name;
 
@@ -151,7 +151,7 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx )
         {
             if( gerber->m_FileFunction->IsCopper() )
             {
-                name.Printf( "%d %s (%s, %s, %s)", aIdx + 1,
+                name.Printf( "%s (%s, %s, %s)",
                              filename.GetData(),
                              GetChars( gerber->m_FileFunction->GetFileType() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerId() ),
@@ -159,14 +159,23 @@ const wxString GERBER_FILE_IMAGE_LIST::GetDisplayName( int aIdx )
             }
             else
             {
-                name.Printf( "%d %s (%s, %s)", aIdx + 1,
+                name.Printf( "%s (%s, %s)",
                              filename.GetData(),
                              GetChars( gerber->m_FileFunction->GetFileType() ),
                              GetChars( gerber->m_FileFunction->GetBrdLayerId() ) );
             }
         }
         else
-            name.Printf( _( "%d %s" ), aIdx + 1, filename.GetData() );
+            name = filename;
+
+        if( aNameOnly )
+            return name;
+
+        wxString fullname;
+
+        fullname.Printf( "%d ", aIdx + 1 );
+        fullname << name;
+        return fullname;
     }
     else
         name.Printf( _( "Graphic layer %d" ), aIdx + 1 );

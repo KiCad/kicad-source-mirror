@@ -97,7 +97,7 @@ public:
 
     /**
      * @return a name for image aIdx which can be used in layers manager
-     * and layer selector
+     * and layer selector or in the status bar
      * if a file is loaded, the name is:
      * "<aIdx+1> <short filename> <X2 FileFunction info> if a X2 FileFunction info is found"
      * or (if no FileFunction info)
@@ -105,8 +105,10 @@ public:
      * if no file loaded, the name is:
      *  "Layer n"  with n = aIdx+1
      * @param aIdx = the index ( 0 ... GERBER_DRAWLAYERS_COUNT-1 )
+     * @param aNameOnly = false (default) to add the layer number (for layers manager)
+     * or true to return only the name without layer name (status bar)
      */
-    const wxString GetDisplayName( int aIdx );
+    const wxString GetDisplayName( int aIdx, bool aNameOnly = false );
 
     /**
      * Sort loaded images by Z order priority, if they have the X2 FileFormat info

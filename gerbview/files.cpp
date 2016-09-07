@@ -111,7 +111,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
          * Because the first letter is usually g, we accept g* as extension
          * (Mainly internal copper layers do not have specific extension,
          *  and filenames are like *.g1, *.g2 *.gb1 ...).
-         * Now (2014) Ucamco (the company which manager the Gerber format) encourage
+         * Now (2014) Ucamco (the company which manages the Gerber format) encourages
          * use of .gbr only and the Gerber X2 file format.
          */
         filetypes = _( "Gerber files (.g* .lgr .pho)" );
@@ -133,17 +133,23 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         filetypes += _( "Top Pad Master (*.GPT)|*.GPT;*.gpt|" );
         filetypes += _( "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|" );
 
-        /* All filetypes */
+        // All filetypes
         filetypes += AllFilesWildcard;
 
-        /* Use the current working directory if the file name path does not exist. */
+        // Use the current working directory if the file name path does not exist.
         if( filename.DirExists() )
             currentPath = filename.GetPath();
         else
+        {
             currentPath = m_mruPath;
 
-        wxFileDialog dlg( this,
-                          _( "Open Gerber File" ),
+            // On wxWidgets 3.1 (bug?) the path in wxFileDialog is ignored when
+            // finishing by the dir separator. Remove it if any:
+            if( currentPath.EndsWith( '\\' ) || currentPath.EndsWith( '/' ) )
+                currentPath.RemoveLast();
+        }
+
+        wxFileDialog dlg( this, _( "Open Gerber File" ),
                           currentPath,
                           filename.GetFullName(),
                           filetypes,
