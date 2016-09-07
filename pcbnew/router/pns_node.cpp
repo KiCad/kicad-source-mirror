@@ -155,8 +155,7 @@ OBSTACLE_VISITOR::OBSTACLE_VISITOR( const ITEM* aItem ) :
     m_override( NULL ),
     m_extraClearance( 0 )
 {
-   if( aItem && aItem->Kind() == ITEM::LINE_T )
-        m_extraClearance += static_cast<const LINE*>( aItem )->Width() / 2;
+
 }
 
 
@@ -211,6 +210,10 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         m_differentNetsOnly( aDifferentNetsOnly ),
         m_forceClearance( -1 )
     {
+        if( aItem && aItem->Kind() == ITEM::LINE_T )
+        {
+             m_extraClearance += static_cast<const LINE*>( aItem )->Width() / 2;
+        }
     }
 
     void SetCountLimit( int aLimit )
