@@ -72,9 +72,11 @@ Webpage titles and navigational elements | Header
 This section defines how dialog boxes should be designed.  The KiCad project
 uses the [GNOME User Interface Guidelines][gnome-ui-guidelines] for laying out
 dialogs.  KiCad's dialogs must be designed with [wxFormBuilder][wxformbuilder].
-Please use the most recent version of wxFormBuilder possible to prevent version
-issues with other developers.  When designing dialogs, follow the [visual layout
-section of the GNOME User Interface Guidelines][gnome-ui-layout].
+As wxFormBuilder available in packages is likely to be a different version than
+what other developers have installed, it has been decided to use the version
+kept in a Github repository, branch [wxFB3.5RC-1][wxformbuilder-github] to avoid
+version mismatch.  When designing dialogs, follow the [visual layout section of
+the GNOME User Interface Guidelines][gnome-ui-layout].
 
 ## Escape Key Termination ## {#dialogs-esc-key}
 Please note that the escape key termination only works properly if there is a
@@ -147,6 +149,12 @@ broken.  Do not implement default button handlers in your dialog code.  Use
 validators to transfer data to and from controls and allow the default dialog
 button handlers work the way they were designed.
 
+## Internationalization ## {#dialog-i18n}
+
+To generate a list of strings occurring in a dialog, one needs to enable
+'internationalize' checkbox in the project properties.  Otherwise, it will not
+be possible to translate the dialog.
+
 # String Quoting # {#quoting}
 Often text strings will be quoted for display which use may used in controls
 that render HTML.  Using angle brackets will cause grief for HTML rendering
@@ -161,6 +169,7 @@ controls so text should be quoted with single quotes ''.  e.g.:
 [gnome-ui-layout]:https://developer.gnome.org/hig/stable/visual-layout.html.en
 [gnome-ui-style]:https://developer.gnome.org/hig/stable/writing-style.html.en
 [wxformbuilder]:https://sourceforge.net/projects/wxformbuilder/
+[wxformbuilder-github]:https://github.com/marekr/wxFormBuilder/tree/wxFB3.5-RC1
 [wxwidgets-doc]:http://docs.wxwidgets.org/3.0/
 [wxdialog-setescapeid]:http://docs.wxwidgets.org/3.0/classwx_dialog.html#a585869988e308f549128a6a065f387c6
 [wxwidgets-sizers]:http://docs.wxwidgets.org/3.0/overview_sizer.html
