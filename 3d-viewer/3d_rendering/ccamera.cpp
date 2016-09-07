@@ -176,7 +176,7 @@ void CCAMERA::rebuildProjection()
 
     case PROJECTION_ORTHO:
 
-        m_frustum.nearD = 0.01f;
+        m_frustum.nearD = -m_frustum.farD; // Use a symmetrical clip plane for ortho projection
 
         const float orthoReductionFactor = m_zoom / 75.0f;
 
