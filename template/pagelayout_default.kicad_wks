@@ -1,5 +1,6 @@
 ( page_layout
-    ( setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15) )
+    ( setup (textsize 1.5 1.5) (linewidth 0.15) (textlinewidth 0.15)
+      (left_margin 10) (right_margin 10) (top_margin 10) (bottom_margin 10) )
     ( rect (comment "rect around the title block") (linewidth 0.15) (start 110 34) (end 2 2) )
     ( rect (start 0 0 ltcorner) (end 0 0 rbcorner) (repeat 2) (incrx 2) (incry 2) )
     ( line (start 50 2 ltcorner) (end 50 0 ltcorner) (repeat 30) (incrx 50) )
@@ -20,7 +21,7 @@
     ( tbtext "Size: %Z" (comment "Paper format name")(pos 109 6.9) )
     ( tbtext "Id: %S/%N" (comment "Sheet id")(pos 24 4.1) )
     ( line (start 110 12.5) (end 2 12.5) )
-    ( tbtext "Title: %T" (pos 109 10.7)(font bold (size 2 2)) )
+    ( tbtext "Title: %T" (pos 109 10.7)(font bold italic (size 2 2)) )
     ( tbtext "File: %F" (pos 109 14.3) )
     ( line (start 110 18.5) (end 2 18.5) )
     ( tbtext "Sheet: %P" (pos 109 17) )
