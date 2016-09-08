@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Feb 16 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -164,11 +164,35 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_MainSizer->Add( m_CommandSizer, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticTextErrMsg = new wxStaticText( this, wxID_ANY, _("Error Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextErrMsg->Wrap( -1 );
-	m_MainSizer->Add( m_staticTextErrMsg, 0, wxALL, 5 );
+	wxStaticBoxSizer* m_ErrorMsgs;
+	m_ErrorMsgs = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Error Messages:") ), wxVERTICAL );
 	
-	m_Notebook = new wxNotebook( this, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, 0 );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_MarkerCountLabel = new wxStaticText( m_ErrorMsgs->GetStaticBox(), wxID_ANY, _("Marker count:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MarkerCountLabel->Wrap( -1 );
+	bSizer8->Add( m_MarkerCountLabel, 0, wxALL, 5 );
+	
+	m_MarkerCount = new wxStaticText( m_ErrorMsgs->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_MarkerCount->Wrap( -1 );
+	bSizer8->Add( m_MarkerCount, 1, wxALL, 5 );
+	
+	m_staticline1 = new wxStaticLine( m_ErrorMsgs->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
+	bSizer8->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	m_UnconnectedCountLabel = new wxStaticText( m_ErrorMsgs->GetStaticBox(), wxID_ANY, _("Unconnected count:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnconnectedCountLabel->Wrap( -1 );
+	bSizer8->Add( m_UnconnectedCountLabel, 0, wxALL, 5 );
+	
+	m_UnconnectedCount = new wxStaticText( m_ErrorMsgs->GetStaticBox(), wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_UnconnectedCount->Wrap( -1 );
+	bSizer8->Add( m_UnconnectedCount, 1, wxALL, 5 );
+	
+	
+	m_ErrorMsgs->Add( bSizer8, 0, wxEXPAND, 5 );
+	
+	m_Notebook = new wxNotebook( m_ErrorMsgs->GetStaticBox(), ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, 0 );
 	m_panelClearanceListBox = new wxPanel( m_Notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizeClearanceBox;
 	bSizeClearanceBox = new wxBoxSizer( wxVERTICAL );
@@ -199,7 +223,10 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	bSizerUnconnectedBox->Fit( m_panelUnconnectedBox );
 	m_Notebook->AddPage( m_panelUnconnectedBox, _("Unconnected"), false );
 	
-	m_MainSizer->Add( m_Notebook, 1, wxEXPAND | wxALL, 5 );
+	m_ErrorMsgs->Add( m_Notebook, 1, wxEXPAND | wxALL, 5 );
+	
+	
+	m_MainSizer->Add( m_ErrorMsgs, 1, wxEXPAND, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );

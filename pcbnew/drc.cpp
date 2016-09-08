@@ -320,6 +320,8 @@ void DRC::updatePointers()
     {
         m_drcDialog->m_ClearanceListBox->SetList( new DRC_LIST_MARKERS( m_pcb ) );
         m_drcDialog->m_UnconnectedListBox->SetList( new DRC_LIST_UNCONNECTED( &m_unconnected ) );
+
+        m_drcDialog->UpdateDisplayedCounts();
     }
 }
 

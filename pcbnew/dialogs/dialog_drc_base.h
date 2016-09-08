@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Feb 16 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -26,6 +26,7 @@ class DRCLISTBOX;
 #include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/statbox.h>
+#include <wx/statline.h>
 #include <wx/listbox.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
@@ -70,7 +71,9 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxButton* m_buttonListUnconnected;
 		wxButton* m_DeleteAllButton;
 		wxButton* m_DeleteCurrentMarkerButton;
-		wxStaticText* m_staticTextErrMsg;
+		wxStaticText* m_MarkerCountLabel;
+		wxStaticLine* m_staticline1;
+		wxStaticText* m_UnconnectedCountLabel;
 		wxNotebook* m_Notebook;
 		wxPanel* m_panelClearanceListBox;
 		wxStdDialogButtonSizer* m_sdbSizer1;
@@ -101,6 +104,8 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_SetTrackMinWidthCtrl;
 		wxTextCtrl* m_SetViaMinSizeCtrl;
 		wxTextCtrl* m_SetMicroViakMinSizeCtrl;
+		wxStaticText* m_MarkerCount;
+		wxStaticText* m_UnconnectedCount;
 		DRCLISTBOX* m_ClearanceListBox;
 		DRCLISTBOX* m_UnconnectedListBox;
 		

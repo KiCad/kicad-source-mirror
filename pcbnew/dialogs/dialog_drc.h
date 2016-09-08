@@ -69,6 +69,9 @@ public:
 
     void GetRptSettings( bool* aEnable, wxString& aFileName );
 
+    void UpdateDisplayedCounts();
+
+
 private:
     /**
      * Function writeReport

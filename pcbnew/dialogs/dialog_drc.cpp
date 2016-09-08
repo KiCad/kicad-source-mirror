@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2009-2016 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -214,6 +214,7 @@ void DIALOG_DRC_CONTROL::OnDeleteAllClick( wxCommandEvent& event )
 {
     DelDRCMarkers();
     RedrawDrawPanel();
+    UpdateDisplayedCounts();
 }
 
 
@@ -269,6 +270,8 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
             DisplayError( this, wxString::Format( _( "Unable to create report file '%s' "),
                           GetChars( reportName ) ) );
     }
+
+    UpdateDisplayedCounts();
 
     wxEndBusyCursor();
 
@@ -656,4 +659,17 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
              */
         }
     }
+
+    UpdateDisplayedCounts();
 }
+
+
+void DIALOG_DRC_CONTROL::UpdateDisplayedCounts()
+{
+    int marker_count = m_ClearanceListBox->GetItemCount();
+    int unconnected_count = m_UnconnectedListBox->GetItemCount();
+
+    m_MarkerCount->SetLabelText( wxString::Format( "%d", marker_count ) );
+    m_UnconnectedCount->SetLabelText( wxString::Format( "%d", unconnected_count ) );
+}
+

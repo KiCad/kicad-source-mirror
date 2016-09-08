@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
+ * Copyright (C) 2009-2016 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2004-2012 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
