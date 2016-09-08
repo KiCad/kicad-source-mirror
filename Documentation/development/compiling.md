@@ -166,6 +166,13 @@ and plugins related to OpenCascade Community Edition (OCE) are enabled with this
 enabled it requires [OCE][] to be available, and the location of the installed OCE libary to be
 passed via the OCE_DIR flag. This option is disabled by default.
 
+## Demos and Examples ## {#demo_install_opt}
+
+The KiCad source code includes some demos and examples to showcase the program. You can choose
+whether install them or not with the KICAD_INSTALL_DEMOS option. You can also select where to
+install them with the KICAD_DEMOS variable. On Linux the demos are installed in
+$PREFIX/share/kicad/demos by default.
+
 # Getting the KiCad Source Code ## {#getting_src}
 
 There are several ways to get the KiCad source.  If you want to build the stable version you

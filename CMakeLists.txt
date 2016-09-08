@@ -71,6 +71,10 @@ option( KICAD_USE_OCE
     "Build tools and plugins related to OpenCascade Community Edition (default OFF)"
     )
 
+option( KICAD_INSTALL_DEMOS
+    "Install kicad demos and examples (default ON)"
+    ON )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -828,5 +832,7 @@ add_subdirectory( utils )
 add_subdirectory( qa )
 
 # Resources
+if ( KICAD_INSTALL_DEMOS )
 add_subdirectory( demos )
+endif ( KICAD_INSTALL_DEMOS )
 add_subdirectory( template )
