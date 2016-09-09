@@ -1,5 +1,5 @@
 add_subdirectory( idftools )
 
-if( USE_OCE )
+if( KICAD_USE_OCE )
     add_subdirectory( kicad2step )
-endif( USE_OCE )
+endif( KICAD_USE_OCE )

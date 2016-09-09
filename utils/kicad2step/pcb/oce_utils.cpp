@@ -1145,8 +1145,6 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
                 stop.Next();
                 dtop.Next();
             }
-
-
         }
 
         ++id;
