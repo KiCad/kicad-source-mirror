@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-03 09:19+0300\n"
-"PO-Revision-Date: 2016-09-03 09:20+0300\n"
+"POT-Creation-Date: 2016-09-10 15:37+0300\n"
+"PO-Revision-Date: 2016-09-10 15:39+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -229,6 +229,27 @@ msgstr "Пути:"
 msgid "Configure Paths"
 msgstr "Настроить пути"
 
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:143
+#: common/dialog_about/dialog_about_base.cpp:73
+#: eeschema/dialogs/dialog_netlist_base.cpp:129
+#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
+#: pcbnew/dialogs/wizard_add_fplib.cpp:842 pcbnew/muonde.cpp:847
+msgid "OK"
+msgstr "OK"
+
+#: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:144 common/dialog_shim.cpp:125
+#: common/dialogs/dialog_exit_base.cpp:69 common/selcolor.cpp:176
+#: eeschema/dialogs/dialog_netlist_base.cpp:49
+#: eeschema/dialogs/dialog_netlist_base.cpp:133 eeschema/libedit_onrightclick.cpp:70
+#: eeschema/onrightclick.cpp:153 eeschema/onrightclick.cpp:186
+#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182 gerbview/onrightclick.cpp:60
+#: gerbview/onrightclick.cpp:82 pagelayout_editor/onrightclick.cpp:115
+#: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:55 pcbnew/modedit_onclick.cpp:228
+#: pcbnew/modedit_onclick.cpp:271 pcbnew/muonde.cpp:850 pcbnew/onrightclick.cpp:81
+#: pcbnew/onrightclick.cpp:97
+msgid "Cancel"
+msgstr "Отмена"
+
 #: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:133
 msgid "3D Preview"
 msgstr "Просмотр 3D"
@@ -399,21 +420,21 @@ msgid "Reload time %.3f s"
 msgstr "Время перезагрузки %.3f с"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:477
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:168
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:169
 msgid "Loading..."
 msgstr "Загрузка..."
 
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:345
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:346
 #, c-format
 msgid "Rendering time %.3f s"
 msgstr "Время визуализации %.3f с"
 
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:402
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:404
 #, c-format
 msgid "Rendering: %.0f %%"
 msgstr "Визуализация: %.0f %%"
 
-#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:1126
+#: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:1128
 msgid "Rendering: Post processing shader"
 msgstr "Визуализация: шейдеры пост-обработки"
 
@@ -1509,7 +1530,7 @@ msgstr "Не удалось создать выходной каталог '%s'.
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: common/confirm.cpp:79 kicad/prjconfig.cpp:140 pcbnew/router/length_tuner_tool.cpp:168
+#: common/confirm.cpp:79 kicad/prjconfig.cpp:140 pcbnew/router/length_tuner_tool.cpp:169
 msgid "Error"
 msgstr "Ошибка"
 
@@ -1633,7 +1654,7 @@ msgstr "Не удалось открыть буфер обмена, чтобы �
 msgid "Clipboard Error"
 msgstr "Ошибка буфера обмена"
 
-#: common/dialog_about/dialog_about.cpp:539
+#: common/dialog_about/dialog_about.cpp:551
 msgid "Copied..."
 msgstr "Скопировано..."
 
@@ -1656,25 +1677,6 @@ msgstr "Информация о версии библиотек"
 #: common/dialog_about/dialog_about_base.cpp:70
 msgid "Copy Version Info"
 msgstr "Копировать информацию о версии"
-
-#: common/dialog_about/dialog_about_base.cpp:73
-#: eeschema/dialogs/dialog_netlist_base.cpp:129
-#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:178
-#: pcbnew/dialogs/wizard_add_fplib.cpp:842 pcbnew/muonde.cpp:847
-msgid "OK"
-msgstr "OK"
-
-#: common/dialog_shim.cpp:125 common/dialogs/dialog_exit_base.cpp:69
-#: common/selcolor.cpp:176 eeschema/dialogs/dialog_netlist_base.cpp:49
-#: eeschema/dialogs/dialog_netlist_base.cpp:133 eeschema/libedit_onrightclick.cpp:70
-#: eeschema/onrightclick.cpp:153 eeschema/onrightclick.cpp:186
-#: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:182 gerbview/onrightclick.cpp:60
-#: gerbview/onrightclick.cpp:82 pagelayout_editor/onrightclick.cpp:115
-#: pcbnew/dialogs/dialog_global_pads_edition_base.cpp:55 pcbnew/modedit_onclick.cpp:228
-#: pcbnew/modedit_onclick.cpp:271 pcbnew/muonde.cpp:850 pcbnew/onrightclick.cpp:81
-#: pcbnew/onrightclick.cpp:97
-msgid "Cancel"
-msgstr "Отмена"
 
 #: common/dialogs/dialog_display_info_HTML_base.cpp:22 common/zoom.cpp:300
 #: eeschema/dialogs/dialog_annotate_base.cpp:212 eeschema/dialogs/dialog_bom_base.cpp:62
@@ -3790,7 +3792,7 @@ msgstr "Дубликат временной метки (%s) для %s%d и %s%d"
 msgid "Unit"
 msgstr "Часть"
 
-#: eeschema/controle.cpp:165 eeschema/libeditframe.cpp:1278 pcbnew/controle.cpp:231
+#: eeschema/controle.cpp:176 eeschema/libeditframe.cpp:1278 pcbnew/controle.cpp:231
 #: pcbnew/modedit.cpp:131
 msgid "Clarify Selection"
 msgstr "Уточнение выбора"
@@ -4331,15 +4333,15 @@ msgstr "Используется только для полей посад.ме�
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1042
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:533
-#: gerbview/class_gerber_draw_item.cpp:534 pcbnew/class_pcb_text.cpp:145
+#: eeschema/lib_pin.cpp:2008 gerbview/class_gerber_draw_item.cpp:535
+#: gerbview/class_gerber_draw_item.cpp:536 pcbnew/class_pcb_text.cpp:145
 #: pcbnew/class_text_mod.cpp:357
 msgid "Yes"
 msgstr "Да"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1044
-#: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:533
-#: gerbview/class_gerber_draw_item.cpp:534 pcbnew/class_pcb_text.cpp:143
+#: eeschema/lib_pin.cpp:2010 gerbview/class_gerber_draw_item.cpp:535
+#: gerbview/class_gerber_draw_item.cpp:536 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_text_mod.cpp:355
 msgid "No"
 msgstr "Нет"
@@ -4359,6 +4361,7 @@ msgstr "Все части взаимозаменяемы:"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:185
 #: pcbnew/dialogs/dialog_create_array_base.cpp:196
 #: pcbnew/dialogs/dialog_create_array_base.cpp:215
+#: pcbnew/dialogs/dialog_drc_base.cpp:177 pcbnew/dialogs/dialog_drc_base.cpp:188
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:62
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:83
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:74
@@ -4403,7 +4406,7 @@ msgid "Mirror |"
 msgstr "По горизонтали"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:58
-#: gerbview/class_gerber_draw_item.cpp:535
+#: gerbview/class_gerber_draw_item.cpp:537
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:77 pcbnew/class_pcb_text.cpp:143
 #: pcbnew/class_pcb_text.cpp:145 pcbnew/class_text_mod.cpp:369
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:77
@@ -5278,7 +5281,7 @@ msgstr "Номер"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:27
 #: eeschema/dialogs/dialog_spice_model_base.cpp:58 eeschema/lib_draw_item.cpp:65
 #: eeschema/lib_pin.cpp:1999 eeschema/libedit.cpp:507 eeschema/sch_text.cpp:791
-#: gerbview/class_gerber_draw_item.cpp:503
+#: gerbview/class_gerber_draw_item.cpp:505
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
@@ -6996,7 +6999,7 @@ msgstr "Редактор библиотек"
 msgid "Add Pin"
 msgstr "Добавить вывод"
 
-#: eeschema/lib_arc.cpp:95 gerbview/class_gerber_draw_item.cpp:167
+#: eeschema/lib_arc.cpp:95 gerbview/class_gerber_draw_item.cpp:169
 #: pcbnew/class_board_item.cpp:44 pcbnew/class_drawsegment.cpp:377
 msgid "Arc"
 msgstr "Дуга"
@@ -7048,7 +7051,7 @@ msgstr "Точка %d кривой Безье — координата X не з
 msgid "Bezier point %d Y position not defined"
 msgstr "Точка %d кривой Безье — координата Y не задана"
 
-#: eeschema/lib_circle.cpp:53 gerbview/class_gerber_draw_item.cpp:170
+#: eeschema/lib_circle.cpp:53 gerbview/class_gerber_draw_item.cpp:172
 #: pcbnew/class_board_item.cpp:45 pcbnew/class_drawsegment.cpp:373
 #: pcbnew/class_pad.cpp:877
 msgid "Circle"
@@ -8716,7 +8719,7 @@ msgstr "Установить вход в шину \\"
 msgid "Delete Bus Entry"
 msgstr "Удалить вход в шину"
 
-#: eeschema/pin_shape.cpp:38 gerbview/class_gerber_draw_item.cpp:164
+#: eeschema/pin_shape.cpp:38 gerbview/class_gerber_draw_item.cpp:166
 #: pcbnew/class_board_item.cpp:42 pcbnew/dialogs/dialog_copper_zones_base.cpp:236
 #: pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:52
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:52
@@ -8923,199 +8926,199 @@ msgstr "Расширение типа '%s' не найдено."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Неизвестное SCH_FILE_T значение: %d"
 
-#: eeschema/sch_legacy_plugin.cpp:126 eeschema/sch_legacy_plugin.cpp:171
-#: eeschema/sch_legacy_plugin.cpp:219 eeschema/sch_legacy_plugin.cpp:265
-#: eeschema/sch_legacy_plugin.cpp:309 eeschema/sch_legacy_plugin.cpp:322
-#: eeschema/sch_legacy_plugin.cpp:373 eeschema/sch_legacy_plugin.cpp:386
-#: eeschema/sch_legacy_plugin.cpp:405 eeschema/sch_legacy_plugin.cpp:810
-#: eeschema/sch_legacy_plugin.cpp:2394
+#: eeschema/sch_legacy_plugin.cpp:125 eeschema/sch_legacy_plugin.cpp:170
+#: eeschema/sch_legacy_plugin.cpp:218 eeschema/sch_legacy_plugin.cpp:264
+#: eeschema/sch_legacy_plugin.cpp:308 eeschema/sch_legacy_plugin.cpp:321
+#: eeschema/sch_legacy_plugin.cpp:372 eeschema/sch_legacy_plugin.cpp:385
+#: eeschema/sch_legacy_plugin.cpp:404 eeschema/sch_legacy_plugin.cpp:809
+#: eeschema/sch_legacy_plugin.cpp:2393
 msgid "unexpected end of line"
 msgstr "неожиданный конец строки"
 
-#: eeschema/sch_legacy_plugin.cpp:268
+#: eeschema/sch_legacy_plugin.cpp:267
 msgid "expected single character token"
 msgstr "ожидался одно символьный токен"
 
-#: eeschema/sch_legacy_plugin.cpp:333
+#: eeschema/sch_legacy_plugin.cpp:332
 msgid "expected unquoted string"
 msgstr "ожидалась строка без кавычек"
 
-#: eeschema/sch_legacy_plugin.cpp:391
+#: eeschema/sch_legacy_plugin.cpp:390
 msgid "expecting opening quote"
 msgstr "ожидается открытая кавычка"
 
-#: eeschema/sch_legacy_plugin.cpp:428
+#: eeschema/sch_legacy_plugin.cpp:427
 msgid "expected quoted string"
 msgstr "ожидалась строка с кавычками"
 
-#: eeschema/sch_legacy_plugin.cpp:431
+#: eeschema/sch_legacy_plugin.cpp:430
 msgid "no closing quote for string found"
 msgstr "не найдена закрывающая кавычка в строке"
 
-#: eeschema/sch_legacy_plugin.cpp:613
+#: eeschema/sch_legacy_plugin.cpp:612
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file"
 msgstr "'%s' не является файлом Eeschema"
 
-#: eeschema/sch_legacy_plugin.cpp:641
+#: eeschema/sch_legacy_plugin.cpp:640
 msgid "Missing 'EELAYER END'"
 msgstr "Отсутствует 'EELAYER END'"
 
-#: eeschema/sch_legacy_plugin.cpp:660
+#: eeschema/sch_legacy_plugin.cpp:659
 msgid "invalid page size"
 msgstr "неверный размер страницы"
 
-#: eeschema/sch_legacy_plugin.cpp:686 eeschema/sch_legacy_plugin.cpp:948
-#: eeschema/sch_legacy_plugin.cpp:956 eeschema/sch_legacy_plugin.cpp:2012
+#: eeschema/sch_legacy_plugin.cpp:685 eeschema/sch_legacy_plugin.cpp:947
+#: eeschema/sch_legacy_plugin.cpp:955 eeschema/sch_legacy_plugin.cpp:2011
 msgid "unexpected end of file"
 msgstr "неожиданный конец файла"
 
-#: eeschema/sch_legacy_plugin.cpp:742
+#: eeschema/sch_legacy_plugin.cpp:741
 msgid "missing 'EndDescr'"
 msgstr "отсутствует 'EndDescr'"
 
-#: eeschema/sch_legacy_plugin.cpp:834
+#: eeschema/sch_legacy_plugin.cpp:833
 msgid "invalid sheet pin type"
 msgstr "неверный тип вывода листа"
 
-#: eeschema/sch_legacy_plugin.cpp:855
+#: eeschema/sch_legacy_plugin.cpp:854
 msgid "invalid sheet pin side"
 msgstr "неверная сторона вывода листа"
 
-#: eeschema/sch_legacy_plugin.cpp:877
+#: eeschema/sch_legacy_plugin.cpp:876
 msgid "missing '$EndSheet`"
 msgstr "отсутствует '$EndSheet`"
 
-#: eeschema/sch_legacy_plugin.cpp:915
+#: eeschema/sch_legacy_plugin.cpp:914
 msgid "Unexpected end of file"
 msgstr "Неожиданный конец файла"
 
-#: eeschema/sch_legacy_plugin.cpp:1136
+#: eeschema/sch_legacy_plugin.cpp:1135
 msgid "invalid label type"
 msgstr "неверный тип метки"
 
-#: eeschema/sch_legacy_plugin.cpp:1147
+#: eeschema/sch_legacy_plugin.cpp:1146
 msgid "expected 'Italics' or '~'"
 msgstr "ожидалось 'Italics' или '~'"
 
-#: eeschema/sch_legacy_plugin.cpp:1328
+#: eeschema/sch_legacy_plugin.cpp:1327
 msgid "component field text horizontal justification must be L, R, or C"
 msgstr "горизонтальное выравнивание текстового поля компонента должно быть L, R или C"
 
-#: eeschema/sch_legacy_plugin.cpp:1338
+#: eeschema/sch_legacy_plugin.cpp:1337
 msgid "component field text vertical justification must be B, T, or C"
 msgstr "вертикальное выравнивание текстового поля компонента должно быть B, T или C"
 
-#: eeschema/sch_legacy_plugin.cpp:1343
+#: eeschema/sch_legacy_plugin.cpp:1342
 msgid "component field text attributes must be 3 characters wide"
 msgstr "атрибуты текстового поля компонента должны быть 3 символа в ширину"
 
-#: eeschema/sch_legacy_plugin.cpp:1349
+#: eeschema/sch_legacy_plugin.cpp:1348
 msgid "component field text italics indicator must be I or N"
 msgstr "признак курсива текстового поля компонента должен быть I или N"
 
-#: eeschema/sch_legacy_plugin.cpp:1355
+#: eeschema/sch_legacy_plugin.cpp:1354
 msgid "component field text bold indicator must be B or N"
 msgstr "признак полужирный текстового поля компонента должен быть B или N"
 
-#: eeschema/sch_legacy_plugin.cpp:1369
+#: eeschema/sch_legacy_plugin.cpp:1368
 msgid "component field orientation must be H or V"
 msgstr "ориентация поля компонента должна быть H или V"
 
-#: eeschema/sch_legacy_plugin.cpp:1401
+#: eeschema/sch_legacy_plugin.cpp:1400
 msgid "invalid component X1 transform value"
 msgstr "неверное значение преобразования компонента X1"
 
-#: eeschema/sch_legacy_plugin.cpp:1406
+#: eeschema/sch_legacy_plugin.cpp:1405
 msgid "invalid component Y1 transform value"
 msgstr "неверное значение преобразования компонента Y1"
 
-#: eeschema/sch_legacy_plugin.cpp:1411
+#: eeschema/sch_legacy_plugin.cpp:1410
 msgid "invalid component X2 transform value"
 msgstr "неверное значение преобразования компонента X2"
 
-#: eeschema/sch_legacy_plugin.cpp:1416
+#: eeschema/sch_legacy_plugin.cpp:1415
 msgid "invalid component Y2 transform value"
 msgstr "неверное значение преобразования компонента Y2"
 
-#: eeschema/sch_legacy_plugin.cpp:2091
+#: eeschema/sch_legacy_plugin.cpp:2090
 #, c-format
 msgid "user does not have permission to read library document file '%s'"
 msgstr "пользователь не имеет прав для чтения файла документа библиотеки '%s'"
 
-#: eeschema/sch_legacy_plugin.cpp:2099
+#: eeschema/sch_legacy_plugin.cpp:2098
 msgid "symbol document library file is empty"
 msgstr "файл библиотеки документа символа пуст"
 
-#: eeschema/sch_legacy_plugin.cpp:2385
+#: eeschema/sch_legacy_plugin.cpp:2384
 msgid "invalid field ID"
 msgstr "неверный ID поля"
 
-#: eeschema/sch_legacy_plugin.cpp:2424
+#: eeschema/sch_legacy_plugin.cpp:2423
 msgid "invalid field text orientation parameter"
 msgstr "неверный параметр ориентации текстового поля"
 
-#: eeschema/sch_legacy_plugin.cpp:2433
+#: eeschema/sch_legacy_plugin.cpp:2432
 msgid "invalid field text visibility parameter"
 msgstr "неверный параметр видимости текстового поля"
 
-#: eeschema/sch_legacy_plugin.cpp:2450
+#: eeschema/sch_legacy_plugin.cpp:2449
 msgid "invalid field text horizontal justification parameter"
 msgstr "неверный параметр горизонтального выравнивания текстового поля"
 
-#: eeschema/sch_legacy_plugin.cpp:2458
+#: eeschema/sch_legacy_plugin.cpp:2457
 msgid "invalid field text attributes size"
 msgstr "неверный размер атрибутов текстового поля"
 
-#: eeschema/sch_legacy_plugin.cpp:2468
+#: eeschema/sch_legacy_plugin.cpp:2467
 msgid "invalid field text vertical justification parameter"
 msgstr "неверный параметр вертикального выравнивания текстового поля"
 
-#: eeschema/sch_legacy_plugin.cpp:2476
+#: eeschema/sch_legacy_plugin.cpp:2475
 msgid "invalid field text italic parameter"
 msgstr "неверный параметр курсива текстового поля"
 
-#: eeschema/sch_legacy_plugin.cpp:2481
+#: eeschema/sch_legacy_plugin.cpp:2480
 msgid "invalid field text bold parameter"
 msgstr "неверный параметр полужирный текстового поля"
 
-#: eeschema/sch_legacy_plugin.cpp:2570
+#: eeschema/sch_legacy_plugin.cpp:2569
 msgid "undefined DRAW entry"
 msgstr "не определённое поле DRAW"
 
-#: eeschema/sch_legacy_plugin.cpp:2576
+#: eeschema/sch_legacy_plugin.cpp:2575
 msgid "file ended prematurely loading component draw element"
 msgstr "файл закончился раньше загрузки элемента отрисовки компонента"
 
-#: eeschema/sch_legacy_plugin.cpp:2600
+#: eeschema/sch_legacy_plugin.cpp:2599
 msgid "invalid fill type, expected f, F, or N"
 msgstr "неверный тип заполнения, ожидалось f, F или N"
 
-#: eeschema/sch_legacy_plugin.cpp:2748
+#: eeschema/sch_legacy_plugin.cpp:2747
 msgid "invalid text stype, expected 'Normal' or 'Italic'"
 msgstr "неверный стиль текста, ожидалось 'Нормально' или 'Курсив'"
 
-#: eeschema/sch_legacy_plugin.cpp:2769
+#: eeschema/sch_legacy_plugin.cpp:2768
 msgid "invalid horizontal text justication parameter, expected L, C, or R"
 msgstr "неверный параметр горизонтального выравнивания текста, ожидалось L, C или R"
 
-#: eeschema/sch_legacy_plugin.cpp:2788
+#: eeschema/sch_legacy_plugin.cpp:2787
 msgid "invalid vertical text justication parameter, expected T, C, or B"
 msgstr "неверный параметр горизонтального выравнивания текста, ожидалось T, C или B"
 
-#: eeschema/sch_legacy_plugin.cpp:2912
+#: eeschema/sch_legacy_plugin.cpp:2911
 msgid "unknown pin type"
 msgstr "неизвестный тип вывода"
 
-#: eeschema/sch_legacy_plugin.cpp:2965
+#: eeschema/sch_legacy_plugin.cpp:2964
 msgid "unknown pin attribute"
 msgstr "неизвестный атрибут вывода"
 
-#: eeschema/sch_legacy_plugin.cpp:3008
+#: eeschema/sch_legacy_plugin.cpp:3007
 msgid "pin attributes do not define a valid pin shape"
 msgstr "атрибуты вывода не определяют верную форму вывода"
 
-#: eeschema/sch_legacy_plugin.cpp:3097
+#: eeschema/sch_legacy_plugin.cpp:3096
 msgid "file ended prematurely while loading footprint filters"
 msgstr "файл закончился раньше, во время загрузки фильтров посад.мест"
 
@@ -10119,52 +10122,52 @@ msgstr ""
 "задний фон и они не будут видны на экране.\n"
 "Вы уверены что хотите использовать эти цвета?"
 
-#: gerbview/class_gerber_draw_item.cpp:506
+#: gerbview/class_gerber_draw_item.cpp:508
 #, c-format
 msgid "D Code %d"
 msgstr "D-код %d"
 
-#: gerbview/class_gerber_draw_item.cpp:510
+#: gerbview/class_gerber_draw_item.cpp:512
 msgid "No attribute"
 msgstr "Нет атрибута"
 
-#: gerbview/class_gerber_draw_item.cpp:518
+#: gerbview/class_gerber_draw_item.cpp:520
 msgid "Graphic Layer"
 msgstr "Слой графики"
 
-#: gerbview/class_gerber_draw_item.cpp:525
+#: gerbview/class_gerber_draw_item.cpp:527
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:350 pcbnew/class_module.cpp:570
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:66
 msgid "Rotation"
 msgstr "Поворот"
 
-#: gerbview/class_gerber_draw_item.cpp:528
+#: gerbview/class_gerber_draw_item.cpp:530
 msgid "Clear"
 msgstr "Светлый"
 
-#: gerbview/class_gerber_draw_item.cpp:528
+#: gerbview/class_gerber_draw_item.cpp:530
 msgid "Dark"
 msgstr "Темный"
 
-#: gerbview/class_gerber_draw_item.cpp:529 gerbview/class_gerber_file_image.cpp:343
+#: gerbview/class_gerber_draw_item.cpp:531 gerbview/class_gerber_file_image.cpp:343
 msgid "Polarity"
 msgstr "Полярность"
 
-#: gerbview/class_gerber_draw_item.cpp:539
+#: gerbview/class_gerber_draw_item.cpp:541
 msgid "AB axis"
 msgstr "AB оси"
 
-#: gerbview/class_gerber_draw_item.cpp:551 gerbview/toolbars_gerber.cpp:154
+#: gerbview/class_gerber_draw_item.cpp:553 gerbview/toolbars_gerber.cpp:154
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:50
 msgid "Net:"
 msgstr "Цепь:"
 
-#: gerbview/class_gerber_draw_item.cpp:557
+#: gerbview/class_gerber_draw_item.cpp:559
 #, c-format
 msgid "Cmp: %s;  Pad: %s"
 msgstr "Компонент: %s;  конт.пл.: %s"
 
-#: gerbview/class_gerber_draw_item.cpp:564 gerbview/toolbars_gerber.cpp:144
+#: gerbview/class_gerber_draw_item.cpp:566 gerbview/toolbars_gerber.cpp:144
 msgid "Cmp:"
 msgstr "Компонент:"
 
@@ -10192,12 +10195,7 @@ msgstr "Выровнять по Y"
 msgid "Image Justify Offset"
 msgstr "Выровнять смещение изображения"
 
-#: gerbview/class_gerber_file_image_list.cpp:169
-#, c-format
-msgid "%d %s"
-msgstr "%d %s"
-
-#: gerbview/class_gerber_file_image_list.cpp:172
+#: gerbview/class_gerber_file_image_list.cpp:181
 #, c-format
 msgid "Graphic layer %d"
 msgstr "Слой графики %d"
@@ -10737,11 +10735,11 @@ msgstr "Главный слой конт.пл. сверху (*.GPT)|*.GPT;*.gpt|
 msgid "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 msgstr "Главный слой конт.пл. снизу (*.GPB)|*.GPB;*.gpb|"
 
-#: gerbview/files.cpp:146
+#: gerbview/files.cpp:152
 msgid "Open Gerber File"
 msgstr "Открыть файл Gerber"
 
-#: gerbview/files.cpp:235
+#: gerbview/files.cpp:241
 msgid "Open Drill File"
 msgstr "Открыть файл сверловки"
 
@@ -13561,7 +13559,7 @@ msgstr "Связей"
 msgid "Connections"
 msgstr "Соединений"
 
-#: pcbnew/class_board.cpp:1182 pcbnew/dialogs/dialog_drc_base.cpp:200
+#: pcbnew/class_board.cpp:1182 pcbnew/dialogs/dialog_drc_base.cpp:224
 #: pcbnew/pcb_draw_panel_gal.cpp:351
 msgid "Unconnected"
 msgstr "Не подсоединены"
@@ -15549,21 +15547,21 @@ msgstr "Показать графические элементы в контур
 msgid "Show page limits"
 msgstr "Показать границы страницы"
 
-#: pcbnew/dialogs/dialog_drc.cpp:196 pcbnew/dialogs/dialog_drc.cpp:263
+#: pcbnew/dialogs/dialog_drc.cpp:196 pcbnew/dialogs/dialog_drc.cpp:264
 #, c-format
 msgid "Report file \"%s\" created"
 msgstr "Файл отчёта \"%s\" создан"
 
-#: pcbnew/dialogs/dialog_drc.cpp:198 pcbnew/dialogs/dialog_drc.cpp:264
+#: pcbnew/dialogs/dialog_drc.cpp:198 pcbnew/dialogs/dialog_drc.cpp:265
 msgid "Disk File Report Completed"
 msgstr "Создание файл отчёта на диске завершено"
 
-#: pcbnew/dialogs/dialog_drc.cpp:203 pcbnew/dialogs/dialog_drc.cpp:269
+#: pcbnew/dialogs/dialog_drc.cpp:203 pcbnew/dialogs/dialog_drc.cpp:270
 #, c-format
 msgid "Unable to create report file '%s' "
 msgstr "Не удалось создать файл отчёта '%s' "
 
-#: pcbnew/dialogs/dialog_drc.cpp:287
+#: pcbnew/dialogs/dialog_drc.cpp:290
 msgid "Save DRC Report File"
 msgstr "Сохранить отчёт DRC"
 
@@ -15635,21 +15633,29 @@ msgstr "Удалить текущий маркер"
 msgid "Delete the marker selected in the list box below"
 msgstr "Удалить маркер, выбранный в списке ниже"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:167
+#: pcbnew/dialogs/dialog_drc_base.cpp:168
 msgid "Error Messages:"
 msgstr "Сообщения об ошибках:"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:177
+#: pcbnew/dialogs/dialog_drc_base.cpp:173
+msgid "Marker count:"
+msgstr "Кол-во маркеров:"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:184
+msgid "Unconnected count:"
+msgstr "Кол-во не подсоединённых:"
+
+#: pcbnew/dialogs/dialog_drc_base.cpp:201
 msgid "MARKERs, double click any to go there in PCB, right click for popup menu"
 msgstr ""
 "МАРКЕРЫ, двойной клик - переход на него на печатной плате, правый клик - выпадающее "
 "меню"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:186
+#: pcbnew/dialogs/dialog_drc_base.cpp:210
 msgid "Problems / Markers"
 msgstr "Проблемы / Маркеры"
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:192
+#: pcbnew/dialogs/dialog_drc_base.cpp:216
 msgid "A list of unconnected pads, right click for popup menu"
 msgstr "Список не подсоединённых конт.пл., правый клик - выпадающее меню"
 
@@ -15703,6 +15709,11 @@ msgstr "Компонент заблокирован: невозможно пер
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:350
 msgid "Invalid filename: "
 msgstr "Неверное имя файла: "
+
+#: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:501
+#: pcbnew/dialogs/dialog_edit_module_for_Modedit.cpp:352
+msgid "Edit 3D file name"
+msgstr "Редактировать имя файла 3D"
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor.cpp:591
 msgid "Error: invalid footprint parameter"
@@ -19006,19 +19017,19 @@ msgstr "Зазор перех.отв.:"
 msgid "Via gap same as trace gap"
 msgstr "Зазор перех.отв. равен зазору дорожек"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:52
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:55
 msgid "Single Track Length Tuning"
 msgstr "Настройка длины одиночной дорожки"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:58
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:61
 msgid "Differential Pair Length Tuning"
 msgstr "Настройка длины диф.пары"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:64
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:67
 msgid "Differential Pair Skew Tuning"
 msgstr "Настройка перекоса диф.пары"
 
-#: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:66
+#: pcbnew/dialogs/dialog_pns_length_tuning_settings.cpp:69
 msgid "Target skew: "
 msgstr "Целевой перекос: "
 
@@ -19082,15 +19093,15 @@ msgstr "45°"
 msgid "arc"
 msgstr "дуга"
 
-#: pcbnew/dialogs/dialog_pns_settings.cpp:36
+#: pcbnew/dialogs/dialog_pns_settings.cpp:37
 msgid "DRC violation: highlight obstacles"
 msgstr "DRC нарушение: подсветить препятствия"
 
-#: pcbnew/dialogs/dialog_pns_settings.cpp:37
+#: pcbnew/dialogs/dialog_pns_settings.cpp:38
 msgid "DRC violation: shove tracks and vias"
 msgstr "DRC нарушение: толкать дорожки и перех.отв."
 
-#: pcbnew/dialogs/dialog_pns_settings.cpp:38
+#: pcbnew/dialogs/dialog_pns_settings.cpp:39
 msgid "DRC violation: walk around obstacles"
 msgstr "DRC нарушение: обходить препятствия"
 
@@ -19695,37 +19706,37 @@ msgstr "Области запрета...\n"
 msgid "Test texts...\n"
 msgstr "Тест текстов...\n"
 
-#: pcbnew/drc.cpp:338
+#: pcbnew/drc.cpp:340
 #, c-format
 msgid "NETCLASS: '%s' has Clearance:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет зазор:%s меньший, чем глобальный:%s"
 
-#: pcbnew/drc.cpp:354
+#: pcbnew/drc.cpp:356
 #, c-format
 msgid "NETCLASS: '%s' has TrackWidth:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет ширину дорожки:%s меньшую, чем глобальная:%s"
 
-#: pcbnew/drc.cpp:369
+#: pcbnew/drc.cpp:371
 #, c-format
 msgid "NETCLASS: '%s' has Via Dia:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет диаметр перех.отв.:%s меньший, чем глобальный:%s"
 
-#: pcbnew/drc.cpp:384
+#: pcbnew/drc.cpp:386
 #, c-format
 msgid "NETCLASS: '%s' has Via Drill:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет сверло перех.отв.:%s меньшее, чем глобальное:%s"
 
-#: pcbnew/drc.cpp:399
+#: pcbnew/drc.cpp:401
 #, c-format
 msgid "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет диаметр перех.микроотв.:%s меньший, чем глобальный:%s"
 
-#: pcbnew/drc.cpp:414
+#: pcbnew/drc.cpp:416
 #, c-format
 msgid "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s"
 msgstr "NETCLASS: '%s' имеет сверло перех.микроотв.:%s меньшее, чем глобальное:%s"
 
-#: pcbnew/drc.cpp:507
+#: pcbnew/drc.cpp:509
 msgid "Track clearances"
 msgstr "Зазоры дорожки"
 
@@ -20322,7 +20333,7 @@ msgstr "Добавить глухое/внутр. перех.отв."
 msgid "Select Layer and Add Blind/Buried Via"
 msgstr "Выбрать слой и добавить глухое/внутр. перех.отв."
 
-#: pcbnew/hotkeys.cpp:111 pcbnew/onrightclick.cpp:601 pcbnew/router/router_tool.cpp:100
+#: pcbnew/hotkeys.cpp:111 pcbnew/onrightclick.cpp:601 pcbnew/router/router_tool.cpp:101
 msgid "Switch Track Posture"
 msgstr "Переключить положение дорожки"
 
@@ -22267,12 +22278,12 @@ msgstr "Разорвать дорожку"
 msgid "Place Node"
 msgstr "Разместить узел"
 
-#: pcbnew/onrightclick.cpp:577 pcbnew/router/length_tuner_tool.cpp:51
-#: pcbnew/router/router_tool.cpp:66
+#: pcbnew/onrightclick.cpp:577 pcbnew/router/length_tuner_tool.cpp:52
+#: pcbnew/router/router_tool.cpp:67
 msgid "End Track"
 msgstr "Закончить дорожку"
 
-#: pcbnew/onrightclick.cpp:581 pcbnew/router/router_tool.cpp:77
+#: pcbnew/onrightclick.cpp:581 pcbnew/router/router_tool.cpp:78
 msgid "Place Through Via"
 msgstr "Разместить сквозное перех.отв."
 
@@ -22280,7 +22291,7 @@ msgstr "Разместить сквозное перех.отв."
 msgid "Select Layer and Place Through Via"
 msgstr "Выбрать слой и разместить перех.отв."
 
-#: pcbnew/onrightclick.cpp:591 pcbnew/router/router_tool.cpp:83
+#: pcbnew/onrightclick.cpp:591 pcbnew/router/router_tool.cpp:84
 msgid "Place Blind/Buried Via"
 msgstr "Разместить глухое/внутр. перех.отв."
 
@@ -22700,79 +22711,79 @@ msgstr "Регулярное выражение фильтра <b>имени п�
 msgid "Enter the python module which implements the PLUGIN::Footprint*() functions."
 msgstr "Ввод python-модуль, который реализует функцию PLUGIN::Footprint*()."
 
-#: pcbnew/router/length_tuner_tool.cpp:48 pcbnew/router/router_tool.cpp:63
+#: pcbnew/router/length_tuner_tool.cpp:49 pcbnew/router/router_tool.cpp:64
 msgid "New Track"
 msgstr "Новая дорожка"
 
-#: pcbnew/router/length_tuner_tool.cpp:48 pcbnew/router/router_tool.cpp:63
+#: pcbnew/router/length_tuner_tool.cpp:49 pcbnew/router/router_tool.cpp:64
 msgid "Starts laying a new track."
 msgstr "Начинает прокладку новой дорожки."
 
-#: pcbnew/router/length_tuner_tool.cpp:51
+#: pcbnew/router/length_tuner_tool.cpp:52
 msgid "Stops laying the current meander."
 msgstr "Останавливает прокладку текущего меандра."
 
-#: pcbnew/router/length_tuner_tool.cpp:54
+#: pcbnew/router/length_tuner_tool.cpp:55
 msgid "Length Tuning Settings"
 msgstr "Настройка параметров длины"
 
-#: pcbnew/router/length_tuner_tool.cpp:54
+#: pcbnew/router/length_tuner_tool.cpp:55
 msgid "Sets the length tuning parameters for currently routed item."
 msgstr "Устанавливает настройки параметров длины для текущего разведённого элемента."
 
-#: pcbnew/router/length_tuner_tool.cpp:57
+#: pcbnew/router/length_tuner_tool.cpp:58
 msgid "Increase spacing"
 msgstr "Увеличить шаг"
 
-#: pcbnew/router/length_tuner_tool.cpp:57
+#: pcbnew/router/length_tuner_tool.cpp:58
 msgid "Increase meander spacing by one step."
 msgstr "Увеличить шаг меандра за один шаг."
 
-#: pcbnew/router/length_tuner_tool.cpp:60
+#: pcbnew/router/length_tuner_tool.cpp:61
 msgid "Decrease spacing"
 msgstr "Уменьшить шаг"
 
-#: pcbnew/router/length_tuner_tool.cpp:60
+#: pcbnew/router/length_tuner_tool.cpp:61
 msgid "Decrease meander spacing by one step."
 msgstr "Уменьшить шаг меандра за один шаг."
 
-#: pcbnew/router/length_tuner_tool.cpp:63
+#: pcbnew/router/length_tuner_tool.cpp:64
 msgid "Increase amplitude"
 msgstr "Увеличить амплитуду"
 
-#: pcbnew/router/length_tuner_tool.cpp:63
+#: pcbnew/router/length_tuner_tool.cpp:64
 msgid "Increase meander amplitude by one step."
 msgstr "Увеличить амплитуду меандра за один шаг."
 
-#: pcbnew/router/length_tuner_tool.cpp:66
+#: pcbnew/router/length_tuner_tool.cpp:67
 msgid "Decrease amplitude"
 msgstr "Уменьшить амплитуду"
 
-#: pcbnew/router/length_tuner_tool.cpp:66
+#: pcbnew/router/length_tuner_tool.cpp:67
 msgid "Decrease meander amplitude by one step."
 msgstr "Уменьшить амплитуду меандра за один шаг."
 
-#: pcbnew/router/length_tuner_tool.cpp:80
+#: pcbnew/router/length_tuner_tool.cpp:81
 msgid "Length Tuner"
 msgstr "Настройщик длины"
 
-#: pcbnew/router/length_tuner_tool.cpp:238
+#: pcbnew/router/length_tuner_tool.cpp:240
 msgid "Tune Trace Length"
 msgstr "Настроить длину дорожки"
 
-#: pcbnew/router/length_tuner_tool.cpp:245
+#: pcbnew/router/length_tuner_tool.cpp:247
 msgid "Tune Diff Pair Length"
 msgstr "Настроить длину диф.пары"
 
-#: pcbnew/router/length_tuner_tool.cpp:252
+#: pcbnew/router/length_tuner_tool.cpp:254
 msgid "Tune Diff Pair Skew"
 msgstr "Настроить перекос диф.пары"
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:559
+#: pcbnew/router/pns_diff_pair_placer.cpp:562
 msgid "Can't start a differential pair  in the middle of nowhere."
 msgstr "Не могу начать трассировку диф.пары."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:569
+#: pcbnew/router/pns_diff_pair_placer.cpp:572
 msgid ""
 "Unable to find complementary differential pair net. Make sure the names of the nets "
 "belonging to a differential pair end with either _N/_P or +/-."
@@ -22780,21 +22791,21 @@ msgstr ""
 "Не удалось найти второй проводник диф.пары. Проверьте, что имена цепей диф.пары "
 "заканчиваются на _N/_P или +/-."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:588
+#: pcbnew/router/pns_diff_pair_placer.cpp:591
 msgid "Current track/via gap setting violates design rules for this net."
 msgstr ""
 "Текущая настройка зазора дорожки/перех.отв. нарушает правила проектирования для "
 "данной цепи."
 
-#: pcbnew/router/pns_diff_pair_placer.cpp:595
+#: pcbnew/router/pns_diff_pair_placer.cpp:598
 msgid "Current track width setting violates design rules."
 msgstr "Текущая настройка ширины дорожки нарушает правила проектирования."
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:74 pcbnew/router/pns_meander_placer.cpp:64
+#: pcbnew/router/pns_dp_meander_placer.cpp:77 pcbnew/router/pns_meander_placer.cpp:66
 msgid "Please select a track whose length you want to tune."
 msgstr "Выберите дорожку, длину которой хотите настроить."
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:91
+#: pcbnew/router/pns_dp_meander_placer.cpp:94
 msgid ""
 "Unable to find complementary differential pair net for length tuning. Make sure the "
 "names of the nets belonging to a differential pair end with either _N/_P or +/-."
@@ -22802,28 +22813,28 @@ msgstr ""
 "Не удалось найти второй проводник диф.пары для настройки длины. Проверьте, что имена "
 "цепей диф.пары заканчиваются на _N/_P или +/-."
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:367 pcbnew/router/pns_meander_placer.cpp:241
+#: pcbnew/router/pns_dp_meander_placer.cpp:370 pcbnew/router/pns_meander_placer.cpp:243
 msgid "Too long: "
 msgstr "Длиннее: "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:370 pcbnew/router/pns_meander_placer.cpp:244
+#: pcbnew/router/pns_dp_meander_placer.cpp:373 pcbnew/router/pns_meander_placer.cpp:246
 msgid "Too short: "
 msgstr "Короче: "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:373 pcbnew/router/pns_meander_placer.cpp:247
+#: pcbnew/router/pns_dp_meander_placer.cpp:376 pcbnew/router/pns_meander_placer.cpp:249
 msgid "Tuned: "
 msgstr "Настроено: "
 
-#: pcbnew/router/pns_dp_meander_placer.cpp:376 pcbnew/router/pns_meander_placer.cpp:250
-#: pcbnew/router/pns_meander_skew_placer.cpp:161
+#: pcbnew/router/pns_dp_meander_placer.cpp:379 pcbnew/router/pns_meander_placer.cpp:252
+#: pcbnew/router/pns_meander_skew_placer.cpp:163
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:51
+#: pcbnew/router/pns_meander_skew_placer.cpp:53
 msgid "Please select a differential pair trace you want to tune."
 msgstr "Выберите дорожку диф.пары, которую хотите настроить."
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:70
+#: pcbnew/router/pns_meander_skew_placer.cpp:72
 msgid ""
 "Unable to find complementary differential pair net for skew tuning. Make sure the "
 "names of the nets belonging to a differential pair end with either _N/_P or +/-."
@@ -22831,123 +22842,123 @@ msgstr ""
 "Не удалось найти второй проводник диф.пары для настройки перекоса. Проверьте, что "
 "имена цепей диф.пары заканчиваются на _N/_P или +/-."
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:152
+#: pcbnew/router/pns_meander_skew_placer.cpp:154
 msgid "Too long: skew "
 msgstr "Длиннее: перекос "
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:155
+#: pcbnew/router/pns_meander_skew_placer.cpp:157
 msgid "Too short: skew "
 msgstr "Короче: перекос "
 
-#: pcbnew/router/pns_meander_skew_placer.cpp:158
+#: pcbnew/router/pns_meander_skew_placer.cpp:160
 msgid "Tuned: skew "
 msgstr "Настроен: перекос "
 
-#: pcbnew/router/pns_tool_base.cpp:62
+#: pcbnew/router/pns_tool_base.cpp:65
 msgid "Routing Options..."
 msgstr "Параметры трассировщика..."
 
-#: pcbnew/router/pns_tool_base.cpp:63
+#: pcbnew/router/pns_tool_base.cpp:66
 msgid "Shows a dialog containing router options."
 msgstr "Показывает диалог, содержащий параметры трассировщика."
 
-#: pcbnew/router/router_tool.cpp:66
+#: pcbnew/router/router_tool.cpp:67
 msgid "Stops laying the current track."
 msgstr "Останавливает прокладку текущей дорожки."
 
-#: pcbnew/router/router_tool.cpp:69
+#: pcbnew/router/router_tool.cpp:70
 msgid "Auto-end Track"
 msgstr "Автоматически закончить дорожку"
 
-#: pcbnew/router/router_tool.cpp:69
+#: pcbnew/router/router_tool.cpp:70
 msgid "Automagically finishes currently routed track."
 msgstr "Автоматически заканчивает текущую разведённую дорожку."
 
-#: pcbnew/router/router_tool.cpp:73
+#: pcbnew/router/router_tool.cpp:74
 msgid "Drag Track/Via"
 msgstr "Перетащить дорожку/перех.отв."
 
-#: pcbnew/router/router_tool.cpp:73
+#: pcbnew/router/router_tool.cpp:74
 msgid "Drags a track or a via."
 msgstr "Перетаскивает дорожку или перех.отв."
 
-#: pcbnew/router/router_tool.cpp:78
+#: pcbnew/router/router_tool.cpp:79
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr "Добавляет сквозное перех.отв. в конце текущей разведённой дорожки."
 
-#: pcbnew/router/router_tool.cpp:84
+#: pcbnew/router/router_tool.cpp:85
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr "Добавляет глухое или внутр. перех.отв. в конце текущей разведённой дорожки."
 
-#: pcbnew/router/router_tool.cpp:89
+#: pcbnew/router/router_tool.cpp:90
 msgid "Place Microvia"
 msgstr "Разместить перех.микроотв."
 
-#: pcbnew/router/router_tool.cpp:89
+#: pcbnew/router/router_tool.cpp:90
 msgid "Adds a microvia at the end of currently routed track."
 msgstr "Добавляет перех.микроотв. в конце текущей разведённой дорожки."
 
-#: pcbnew/router/router_tool.cpp:94
+#: pcbnew/router/router_tool.cpp:95
 msgid "Custom Track/Via Size"
 msgstr "Польз. размер дорожки/перех.отв."
 
-#: pcbnew/router/router_tool.cpp:95
+#: pcbnew/router/router_tool.cpp:96
 msgid "Shows a dialog for changing the track width and via size."
 msgstr "Показывает диалог для изменения ширины дорожки и размера перех.отв."
 
-#: pcbnew/router/router_tool.cpp:101
+#: pcbnew/router/router_tool.cpp:102
 msgid "Switches posture of the currently routed track."
 msgstr "Меняет положение текущей разведённой дорожки."
 
-#: pcbnew/router/router_tool.cpp:106
+#: pcbnew/router/router_tool.cpp:107
 msgid "Differential Pair Dimensions..."
 msgstr "Размеры диф.пары..."
 
-#: pcbnew/router/router_tool.cpp:107
+#: pcbnew/router/router_tool.cpp:108
 msgid "Sets the width and gap of the currently routed differential pair."
 msgstr "Устанавливает ширину и зазор текущей разведённой диф.пары."
 
-#: pcbnew/router/router_tool.cpp:130
+#: pcbnew/router/router_tool.cpp:131
 msgid "Custom size"
 msgstr "Пользовательский размер"
 
-#: pcbnew/router/router_tool.cpp:133
+#: pcbnew/router/router_tool.cpp:134
 msgid "Use the starting track width"
 msgstr "Использовать ширину дорожки начала"
 
-#: pcbnew/router/router_tool.cpp:134
+#: pcbnew/router/router_tool.cpp:135
 msgid "Route using the width of the starting track."
 msgstr "Трассировать с шириной начальной дорожки."
 
-#: pcbnew/router/router_tool.cpp:136
+#: pcbnew/router/router_tool.cpp:137
 msgid "Use net class values"
 msgstr "Использовать значения класса цепи"
 
-#: pcbnew/router/router_tool.cpp:137
+#: pcbnew/router/router_tool.cpp:138
 msgid "Use track and via sizes from the net class"
 msgstr "Использовать размеры дорожки и перех.отв. из класса цепи"
 
-#: pcbnew/router/router_tool.cpp:204
+#: pcbnew/router/router_tool.cpp:205
 msgid "Interactive Router"
 msgstr "Интерактивный трассировщик"
 
-#: pcbnew/router/router_tool.cpp:217
+#: pcbnew/router/router_tool.cpp:218
 msgid "Select Track/Via Width"
 msgstr "Выбрать ширину дорожки/перех.отв."
 
-#: pcbnew/router/router_tool.cpp:403
+#: pcbnew/router/router_tool.cpp:404
 msgid "Blind/buried vias have to be enabled in the design settings."
 msgstr "Глухие/внутр. перех.отв. должны быть разрешены в настройках проектирования."
 
-#: pcbnew/router/router_tool.cpp:409
+#: pcbnew/router/router_tool.cpp:410
 msgid "Microvias have to be enabled in the design settings."
 msgstr "Перех.микроотв. должны быть разрешены в настройках проектирования."
 
-#: pcbnew/router/router_tool.cpp:416
+#: pcbnew/router/router_tool.cpp:417
 msgid "Only through vias are allowed on 2 layer boards."
 msgstr "Только сквозные перех.отв. допустимы на 2-х слойных платах."
 
-#: pcbnew/router/router_tool.cpp:423
+#: pcbnew/router/router_tool.cpp:424
 msgid ""
 "Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the ones "
 "directly adjacent to them."
@@ -22955,15 +22966,15 @@ msgstr ""
 "Перех.микроотв. могут быть размещены только между внешними слоями (F.Cu/B.Cu) и теми, "
 "которые непосредственно прилегают к ним."
 
-#: pcbnew/router/router_tool.cpp:650
+#: pcbnew/router/router_tool.cpp:651
 msgid "Route Track"
 msgstr "Трассировать дорожку"
 
-#: pcbnew/router/router_tool.cpp:657
+#: pcbnew/router/router_tool.cpp:658
 msgid "Router Differential Pair"
 msgstr "Трассировка диф.пары"
 
-#: pcbnew/router/router_tool.cpp:747 pcbnew/router/router_tool.cpp:816
+#: pcbnew/router/router_tool.cpp:748 pcbnew/router/router_tool.cpp:817
 msgid "The item is locked. Do you want to continue?"
 msgstr "Элемент заблокирован. Хотите продолжить?"
 
@@ -24233,7 +24244,7 @@ msgstr "Правка правил проектирования"
 msgid "Dimension Properties"
 msgstr "Свойства размерной линии"
 
-#: pcbnew/dialogs/dialog_drc_base.h:107
+#: pcbnew/dialogs/dialog_drc_base.h:112
 msgid "DRC Control"
 msgstr "Контроль DRC"
 
