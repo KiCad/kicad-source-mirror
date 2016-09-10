@@ -20,6 +20,13 @@ add_executable( kicad2step
 
 target_link_libraries( kicad2step ${wxWidgets_LIBRARIES} ${LIBS_OCE} )
 
-install( TARGETS kicad2step
-        DESTINATION bin
-        COMPONENT binary )
+if( APPLE )
+    # puts binaries into the *.app bundle while linking
+    set_target_properties( kicad2step PROPERTIES
+            RUNTIME_OUTPUT_DIRECTORY ${OSX_BUNDLE_BUILD_BIN_DIR}
+            )
+else()
+    install( TARGETS kicad2step
+            DESTINATION ${KICAD_BIN}
+            COMPONENT binary )
+endif()
