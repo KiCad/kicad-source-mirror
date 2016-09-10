@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ class TITLE_BLOCK;
  * @param aScalar the scale factor to convert from mils to internal units.
  * @param aColor The color for drawing.
  * @param aAltColor The color for items which need to be "hightlighted".
+ * @param aSheetLayer The layer from pcbnew.
  *
  * Parameters used in aPageInfo
  * - the size of the page layout.
@@ -62,7 +63,8 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
                      TITLE_BLOCK& aTitleBlock,
                      int aSheetCount, int aSheetNumber,
                      int aPenWidth, double aScalar,
-                     EDA_COLOR_T aColor, EDA_COLOR_T aAltColor );
+                     EDA_COLOR_T aColor, EDA_COLOR_T aAltColor,
+                     const wxString& aSheetLayer = wxEmptyString );
 
 
 #endif // WORKSHEET_H_

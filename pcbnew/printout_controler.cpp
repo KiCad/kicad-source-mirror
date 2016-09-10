@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,8 @@ BOARD_PRINTOUT_CONTROLLER::BOARD_PRINTOUT_CONTROLLER( const PRINT_PARAMETERS& aP
 bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
 {
     LSET lset = m_PrintParams.m_PrintMaskLayer;
+    wxString layer;
+    LAYER_ID extractLayer;
 
     // compute layer mask from page number if we want one page per layer
     if( m_PrintParams.m_OptionPrintPage == 0 )  // One page per layer
@@ -101,11 +103,17 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
     if( !m_PrintParams.m_PrintMaskLayer.any() )
         return false;
 
+    extractLayer = m_PrintParams.m_PrintMaskLayer.ExtractLayer();
+    if( extractLayer == UNDEFINED_LAYER )
+        layer = _( "Multiple Layers" );
+    else
+        layer = LSET::Name( extractLayer );
+
     // In Pcbnew we can want the layer EDGE always printed
     if( m_PrintParams.m_Flags == 1 )
         m_PrintParams.m_PrintMaskLayer.set( Edge_Cuts );
 
-    DrawPage();
+    DrawPage( layer );
 
     m_PrintParams.m_PrintMaskLayer = lset;
 
@@ -129,7 +137,7 @@ void BOARD_PRINTOUT_CONTROLLER::GetPageInfo( int* minPage, int* maxPage,
 }
 
 
-void BOARD_PRINTOUT_CONTROLLER::DrawPage()
+void BOARD_PRINTOUT_CONTROLLER::DrawPage( wxString layer = wxEmptyString )
 {
     wxPoint       offset;
     double        userscale;
@@ -279,7 +287,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage()
 
     if( m_PrintParams.PrintBorderAndTitleBlock() )
         m_Parent->DrawWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
-                                  IU_PER_MILS, titleblockFilename );
+                                  IU_PER_MILS, titleblockFilename, layer );
 
     if( printMirror )
     {

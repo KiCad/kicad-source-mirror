@@ -593,9 +593,11 @@ public:
      * @param aLineWidth The pen width to use to draw the layout.
      * @param aScale The mils to Iu conversion factor.
      * @param aFilename The filename to display in basic inscriptions.
+     * @param aSheetLayer The layer displayed from pcbnew.
      */
     void DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
-                         double aScale, const wxString &aFilename );
+                         double aScale, const wxString &aFilename,
+                         const wxString &aSheetLayer = wxEmptyString );
 
     void            DisplayToolMsg( const wxString& msg );
     virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,7 +123,7 @@ public:
 
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
 
-    void DrawPage();
+    void DrawPage( wxString layer );
 };
 
 #endif      // PRINTOUT_CONTROLLER_H

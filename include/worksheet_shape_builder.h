@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -384,6 +384,7 @@ protected:
     const wxString* m_paperFormat;      // for basic inscriptions
     wxString        m_fileName;         // for basic inscriptions
     const wxString* m_sheetFullName;    // for basic inscriptions
+    const wxString* m_sheetLayer;       // for basic inscriptions
 
 
 public:
@@ -421,6 +422,15 @@ public:
     void SetSheetName( const wxString & aSheetName )
     {
         m_sheetFullName = &aSheetName;
+    }
+
+    /**
+     * Set the sheet layer to draw/plot
+     * @param aSheetLayer = the text to draw/plot by the "sheetlayer" format
+     */
+    void SetSheetLayer( const wxString & aSheetLayer )
+    {
+        m_sheetLayer = &aSheetLayer;
     }
 
     /** Function SetPenSize

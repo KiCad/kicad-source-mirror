@@ -8,7 +8,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -53,7 +53,8 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
                      TITLE_BLOCK& aTitleBlock,
                      int aSheetCount, int aSheetNumber,
                      int aPenWidth, double aScalar,
-                     EDA_COLOR_T aColor, EDA_COLOR_T aAltColor )
+                     EDA_COLOR_T aColor, EDA_COLOR_T aAltColor,
+                     const wxString& aSheetLayer )
 {
     WS_DRAW_ITEM_LIST drawList;
 
@@ -63,6 +64,7 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
     drawList.SetSheetCount( aSheetCount );
     drawList.SetFileName( aFileName );
     drawList.SetSheetName( aFullSheetName );
+    drawList.SetSheetLayer( aSheetLayer );
 
     drawList.BuildWorkSheetGraphicList( aPageInfo,
                                aTitleBlock, aColor, aAltColor );
@@ -73,7 +75,8 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
 
 
 void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
-                                     double aScalar, const wxString &aFilename )
+                                     double aScalar, const wxString &aFilename,
+                                     const wxString &aSheetLayer )
 {
     if( !m_showBorderAndTitleBlock )
         return;
@@ -104,7 +107,7 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo,
                     GetScreenDesc(), aFilename, t_block,
                     aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
-                    aLineWidth, aScalar, color, color );
+                    aLineWidth, aScalar, color, color, aSheetLayer );
 
     if( aScreen->m_IsPrinting && origin.y > 0 )
     {
@@ -136,6 +139,7 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
      * %R = revision
      * %S = sheet number
      * %N = number of sheets
+     * %L = layer name
      * %Cx = comment (x = 0 to 9 to identify the comment)
      * %F = filename
      * %P = sheet path (sheet full name)
@@ -190,6 +194,10 @@ wxString WS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
                     wxFileName fn( m_fileName );
                     msg += fn.GetFullName();
                 }
+                break;
+
+            case 'L':
+                msg += *m_sheetLayer;
                 break;
 
             case 'P':

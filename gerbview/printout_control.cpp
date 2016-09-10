@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
     // in gerbview, draw layers are always printed on separate pages
     // because handling negative objects when using only one page is tricky
     m_PrintParams.m_Flags = aPage;
-    DrawPage();
+    DrawPage( wxEmptyString );
 
     return true;
 }
@@ -99,7 +99,7 @@ void BOARD_PRINTOUT_CONTROLLER::GetPageInfo( int* minPage, int* maxPage,
 }
 
 
-void BOARD_PRINTOUT_CONTROLLER::DrawPage()
+void BOARD_PRINTOUT_CONTROLLER::DrawPage( wxString layer = wxEmptyString )
 {
     wxPoint       offset;
     double        userscale;
