@@ -89,30 +89,6 @@ void DIMENSION::SetLayer( LAYER_ID aLayer )
 }
 
 
-void DIMENSION::Copy( DIMENSION* source )
-{
-    m_Value = source->m_Value;
-    SetLayer( source->GetLayer() );
-    m_Width = source->m_Width;
-    m_Shape = source->m_Shape;
-    m_Height = source->m_Height;
-    m_Unit  = source->m_Unit;
-    SetTimeStamp( GetNewTimeStamp() );
-    m_Text.Copy( &source->m_Text );
-
-    m_crossBarO     = source->m_crossBarO;
-    m_crossBarF     = source->m_crossBarF;
-    m_featureLineGO = source->m_featureLineGO;
-    m_featureLineGF = source->m_featureLineGF;
-    m_featureLineDO = source->m_featureLineDO;
-    m_featureLineDF = source->m_featureLineDF;
-    m_arrowD1F  = source->m_arrowD1F;
-    m_arrowD2F  = source->m_arrowD2F;
-    m_arrowG1F  = source->m_arrowG1F;
-    m_arrowG2F  = source->m_arrowG2F;
-}
-
-
 void DIMENSION::Move( const wxPoint& offset )
 {
     m_Text.SetTextPosition( m_Text.GetTextPosition() + offset );

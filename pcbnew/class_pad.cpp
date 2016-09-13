@@ -423,41 +423,6 @@ bool D_PAD::IncrementPadName( bool aSkipUnconnectable, bool aFillSequenceGaps )
 }
 
 
-void D_PAD::Copy( D_PAD* source )
-{
-    if( source == NULL )
-        return;
-
-    m_Pos = source->m_Pos;
-    m_layerMask = source->m_layerMask;
-
-    m_NumPadName = source->m_NumPadName;
-    m_netinfo = source->m_netinfo;
-    m_Drill = source->m_Drill;
-    m_drillShape = source->m_drillShape;
-    m_Offset     = source->m_Offset;
-    m_Size = source->m_Size;
-    m_DeltaSize = source->m_DeltaSize;
-    m_Pos0     = source->m_Pos0;
-    m_boundingRadius    = source->m_boundingRadius;
-    m_padShape = source->m_padShape;
-    m_Attribute = source->m_Attribute;
-    m_Orient   = source->m_Orient;
-    m_LengthPadToDie = source->m_LengthPadToDie;
-    m_LocalClearance = source->m_LocalClearance;
-    m_LocalSolderMaskMargin  = source->m_LocalSolderMaskMargin;
-    m_LocalSolderPasteMargin = source->m_LocalSolderPasteMargin;
-    m_LocalSolderPasteMarginRatio = source->m_LocalSolderPasteMarginRatio;
-    m_ZoneConnection = source->m_ZoneConnection;
-    m_ThermalWidth = source->m_ThermalWidth;
-    m_ThermalGap = source->m_ThermalGap;
-    m_padRoundRectRadiusScale = source->m_padRoundRectRadiusScale;
-
-    SetSubRatsnest( 0 );
-    SetSubNet( 0 );
-}
-
-
 void D_PAD::CopyNetlistSettings( D_PAD* aPad, bool aCopyLocalSettings )
 {
     // Don't do anything foolish like trying to copy to yourself.

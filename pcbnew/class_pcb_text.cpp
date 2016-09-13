@@ -60,27 +60,6 @@ TEXTE_PCB:: ~TEXTE_PCB()
 }
 
 
-void TEXTE_PCB::Copy( TEXTE_PCB* source )
-{
-    m_Parent    = source->m_Parent;
-    Pback       = Pnext = NULL;
-    m_Mirror    = source->m_Mirror;
-    m_Size      = source->m_Size;
-    m_Orient    = source->m_Orient;
-    m_Pos       = source->m_Pos;
-    m_Layer     = source->m_Layer;
-    m_Thickness = source->m_Thickness;
-    m_Attributs = source->m_Attributs;
-    m_Italic    = source->m_Italic;
-    m_Bold      = source->m_Bold;
-    m_HJustify  = source->m_HJustify;
-    m_VJustify  = source->m_VJustify;
-    m_MultilineAllowed = source->m_MultilineAllowed;
-
-    m_Text = source->m_Text;
-}
-
-
 void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                       GR_DRAWMODE DrawMode, const wxPoint& offset )
 {

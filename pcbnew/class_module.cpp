@@ -50,7 +50,7 @@
 
 
 MODULE::MODULE( BOARD* parent ) :
-    BOARD_ITEM( (BOARD_ITEM*) parent, PCB_MODULE_T ),
+    BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_MODULE_T ),
     m_initial_comments( 0 )
 {
     m_Attributs    = MOD_DEFAULT;
@@ -79,11 +79,10 @@ MODULE::MODULE( BOARD* parent ) :
 
 
 MODULE::MODULE( const MODULE& aModule ) :
-    BOARD_ITEM( aModule )
+    BOARD_ITEM_CONTAINER( aModule )
 {
     m_Pos = aModule.m_Pos;
     m_fpid = aModule.m_fpid;
-    m_Layer  = aModule.m_Layer;
     m_Attributs = aModule.m_Attributs;
     m_ModuleStatus = aModule.m_ModuleStatus;
     m_Orient = aModule.m_Orient;
@@ -105,35 +104,27 @@ MODULE::MODULE( const MODULE& aModule ) :
     // Copy reference and value.
     m_Reference = new TEXTE_MODULE( *aModule.m_Reference );
     m_Reference->SetParent( this );
-
     m_Value = new TEXTE_MODULE( *aModule.m_Value );
     m_Value->SetParent( this );
 
     // Copy auxiliary data: Pads
     for( D_PAD* pad = aModule.m_Pads;  pad;  pad = pad->Next() )
     {
-        D_PAD* newpad = new D_PAD( *pad );
-        assert( newpad->GetNet() == pad->GetNet() );
-        newpad->SetParent( this );
-        m_Pads.PushBack( newpad );
+        Add( new D_PAD( *pad ) );
     }
 
     // Copy auxiliary data: Drawings
     for( BOARD_ITEM* item = aModule.m_Drawings;  item;  item = item->Next() )
     {
-        BOARD_ITEM* newItem;
-
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
         case PCB_MODULE_EDGE_T:
-            newItem = static_cast<BOARD_ITEM*>( item->Clone() );
-            newItem->SetParent( this );
-            m_Drawings.PushBack( newItem );
+            Add( static_cast<BOARD_ITEM*>( item->Clone() ) );
             break;
 
         default:
-            wxLogMessage( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
+            wxLogMessage( wxT( "Class MODULE copy constructor internal error: unknown type" ) );
             break;
         }
     }
@@ -161,13 +152,76 @@ MODULE::~MODULE()
     delete m_initial_comments;
 }
 
-    /**
-     * Function ClearAllNets
-     * Clear (i.e. force the ORPHANED dummy net info) the net info which
-     * depends on a given board for all pads of the footprint.
-     * This is needed when a footprint is copied between the fp editor and
-     * the board editor for instance, because net info become fully broken
-     */
+
+MODULE& MODULE::operator=( const MODULE& aOther )
+{
+    BOARD_ITEM::operator=( aOther );
+
+    m_Pos           = aOther.m_Pos;
+    m_fpid          = aOther.m_fpid;
+    m_Attributs     = aOther.m_Attributs;
+    m_ModuleStatus  = aOther.m_ModuleStatus;
+    m_Orient        = aOther.m_Orient;
+    m_BoundaryBox   = aOther.m_BoundaryBox;
+    m_CntRot90      = aOther.m_CntRot90;
+    m_CntRot180     = aOther.m_CntRot180;
+    m_LastEditTime  = aOther.m_LastEditTime;
+    m_Link          = aOther.m_Link;
+    m_Path          = aOther.m_Path; //is this correct behavior?
+
+    m_LocalClearance                = aOther.m_LocalClearance;
+    m_LocalSolderMaskMargin         = aOther.m_LocalSolderMaskMargin;
+    m_LocalSolderPasteMargin        = aOther.m_LocalSolderPasteMargin;
+    m_LocalSolderPasteMarginRatio   = aOther.m_LocalSolderPasteMarginRatio;
+    m_ZoneConnection                = aOther.m_ZoneConnection;
+    m_ThermalWidth                  = aOther.m_ThermalWidth;
+    m_ThermalGap                    = aOther.m_ThermalGap;
+
+    // Copy reference and value
+    *m_Reference = *aOther.m_Reference;
+    m_Reference->SetParent( this );
+    *m_Value = *aOther.m_Value;
+    m_Value->SetParent( this );
+
+    // Copy auxiliary data: Pads
+    m_Pads.DeleteAll();
+
+    for( D_PAD* pad = aOther.m_Pads;  pad;  pad = pad->Next() )
+    {
+        Add( new D_PAD( *pad ) );
+    }
+
+    // Copy auxiliary data: Drawings
+    m_Drawings.DeleteAll();
+
+    for( BOARD_ITEM* item = aOther.m_Drawings;  item;  item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_EDGE_T:
+            Add( static_cast<BOARD_ITEM*>( item->Clone() ) );
+            break;
+
+        default:
+            wxLogMessage( wxT( "MODULE::operator=() internal error: unknown type" ) );
+            break;
+        }
+    }
+
+    // Copy auxiliary data: 3D_Drawings info
+    m_3D_Drawings.clear();
+    m_3D_Drawings = aOther.m_3D_Drawings;
+    m_Doc         = aOther.m_Doc;
+    m_KeyWord     = aOther.m_KeyWord;
+
+    // Ensure auxiliary data is up to date
+    CalculateBoundingBox();
+
+    return *this;
+}
+
+
 void MODULE::ClearAllNets()
 {
     // Force the ORPHANED dummy net info for all pads.
@@ -177,10 +231,6 @@ void MODULE::ClearAllNets()
 }
 
 
-/* Draw the anchor cross (vertical)
- * Must be done after the pads, because drawing the hole will erase overwrite
- * every thing already drawn.
- */
 void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         int dim_ancre, GR_DRAWMODE draw_mode )
 {
@@ -195,86 +245,7 @@ void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 }
 
 
-void MODULE::Copy( MODULE* aModule )
-{
-    m_Pos           = aModule->m_Pos;
-    m_Layer         = aModule->m_Layer;
-    m_fpid          = aModule->m_fpid;
-    m_Attributs     = aModule->m_Attributs;
-    m_ModuleStatus  = aModule->m_ModuleStatus;
-    m_Orient        = aModule->m_Orient;
-    m_BoundaryBox   = aModule->m_BoundaryBox;
-    m_CntRot90      = aModule->m_CntRot90;
-    m_CntRot180     = aModule->m_CntRot180;
-    m_LastEditTime  = aModule->m_LastEditTime;
-    m_Link          = aModule->m_Link;
-    m_Path          = aModule->m_Path; //is this correct behavior?
-    SetTimeStamp( GetNewTimeStamp() );
-
-    m_LocalClearance                = aModule->m_LocalClearance;
-    m_LocalSolderMaskMargin         = aModule->m_LocalSolderMaskMargin;
-    m_LocalSolderPasteMargin        = aModule->m_LocalSolderPasteMargin;
-    m_LocalSolderPasteMarginRatio   = aModule->m_LocalSolderPasteMarginRatio;
-    m_ZoneConnection                = aModule->m_ZoneConnection;
-    m_ThermalWidth                  = aModule->m_ThermalWidth;
-    m_ThermalGap                    = aModule->m_ThermalGap;
-
-    // Copy reference and value.
-    m_Reference->Copy( aModule->m_Reference );
-    m_Value->Copy( aModule->m_Value );
-
-    // Copy auxiliary data: Pads
-    m_Pads.DeleteAll();
-
-    for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
-    {
-        D_PAD* newpad = new D_PAD( this );
-        newpad->Copy( pad );
-        m_Pads.PushBack( newpad );
-    }
-
-    // Copy auxiliary data: Drawings
-    m_Drawings.DeleteAll();
-
-    for( BOARD_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
-        {
-            TEXTE_MODULE* textm = new TEXTE_MODULE( this );
-            textm->Copy( static_cast<TEXTE_MODULE*>( item ) );
-            m_Drawings.PushBack( textm );
-            break;
-        }
-
-        case PCB_MODULE_EDGE_T:
-        {
-            EDGE_MODULE * edge;
-            edge = new EDGE_MODULE( this );
-            edge->Copy( (EDGE_MODULE*) item );
-            m_Drawings.PushBack( edge );
-            break;
-        }
-
-        default:
-            wxLogMessage( wxT( "MODULE::Copy() Internal Err:  unknown type" ) );
-            break;
-        }
-    }
-
-    // Copy auxiliary data: 3D_Drawings info
-    m_3D_Drawings.clear();
-    m_3D_Drawings = aModule->m_3D_Drawings;
-    m_Doc         = aModule->m_Doc;
-    m_KeyWord     = aModule->m_KeyWord;
-
-    // Ensure auxiliary data is up to date
-    CalculateBoundingBox();
-}
-
-
-void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
+void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 {
     switch( aBoardItem->Type() )
     {
@@ -285,14 +256,14 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
         // no break
 
     case PCB_MODULE_EDGE_T:
-        if( doAppend )
+        if( aMode == ADD_APPEND )
             m_Drawings.PushBack( aBoardItem );
         else
             m_Drawings.PushFront( aBoardItem );
         break;
 
     case PCB_PAD_T:
-        if( doAppend )
+        if( aMode == ADD_APPEND )
             m_Pads.PushBack( static_cast<D_PAD*>( aBoardItem ) );
         else
             m_Pads.PushFront( static_cast<D_PAD*>( aBoardItem ) );
@@ -310,10 +281,32 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, bool doAppend )
     }
 
     aBoardItem->SetParent( this );
+    SetLastEditTime();
+
+    // Update relative coordinates, it can be done only after there is a parent object assigned
+    switch( aBoardItem->Type() )
+    {
+    case PCB_MODULE_TEXT_T:
+        static_cast<TEXTE_MODULE*>( aBoardItem )->SetLocalCoord();
+        break;
+
+    case PCB_MODULE_EDGE_T:
+        static_cast<EDGE_MODULE*>( aBoardItem )->SetLocalCoord();
+        break;
+
+    case PCB_PAD_T:
+        static_cast<D_PAD*>( aBoardItem )->SetLocalCoord();
+        break;
+
+    default:
+        // Huh? It should have been filtered out by the previous switch
+        assert(false);
+        break;
+    }
 }
 
 
-BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
+void MODULE::Remove( BOARD_ITEM* aBoardItem )
 {
     switch( aBoardItem->Type() )
     {
@@ -324,10 +317,12 @@ BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
         // no break
 
     case PCB_MODULE_EDGE_T:
-        return m_Drawings.Remove( aBoardItem );
+        m_Drawings.Remove( aBoardItem );
+        break;
 
     case PCB_PAD_T:
-        return m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
+        m_Pads.Remove( static_cast<D_PAD*>( aBoardItem ) );
+        break;
 
     default:
     {
@@ -337,8 +332,6 @@ BOARD_ITEM* MODULE::Remove( BOARD_ITEM* aBoardItem )
         wxFAIL_MSG( msg );
     }
     }
-
-    return NULL;
 }
 
 
@@ -516,9 +509,6 @@ const EDA_RECT MODULE::GetBoundingBox() const
 }
 
 
-/* Virtual function, from EDA_ITEM.
- * display module info on MsgPanel
- */
 void MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 {
     int      nbpad;
@@ -902,11 +892,6 @@ const BOX2I MODULE::ViewBBox() const
 }
 
 
-/* Test for validity of the name in a library of the footprint
- * ( no spaces, dir separators ... )
- * return true if the given name is valid
- * static function
- */
 bool MODULE::IsLibNameValid( const wxString & aName )
 {
     const wxChar * invalids = StringLibNameInvalidChars( false );
@@ -918,13 +903,6 @@ bool MODULE::IsLibNameValid( const wxString & aName )
 }
 
 
-/* Test for validity of the name of a footprint to be used in a footprint library
- * ( no spaces, dir separators ... )
- * param bool aUserReadable = false to get the list of invalid chars
- *        true to get a readable form (i.e ' ' = 'space' '\t'= 'tab')
- * return a constant string giving the list of invalid chars in lib name
- * static function
- */
 const wxChar* MODULE::StringLibNameInvalidChars( bool aUserReadable )
 {
     static const wxChar invalidChars[] = wxT("%$\t \"\\/");
@@ -1132,8 +1110,9 @@ void MODULE::SetOrientation( double newangle )
     CalculateBoundingBox();
 }
 
-BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
-                                         bool aIncrementPadNumbers )
+BOARD_ITEM* MODULE::Duplicate( const BOARD_ITEM* aItem,
+                               bool aIncrementPadNumbers,
+                               bool aAddToModule )
 {
     BOARD_ITEM* new_item = NULL;
     D_PAD* new_pad = NULL;
@@ -1144,7 +1123,9 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
     {
         new_pad = new D_PAD( *static_cast<const D_PAD*>( aItem ) );
 
-        Pads().PushBack( new_pad );
+        if( aAddToModule )
+            Pads().PushBack( new_pad );
+
         new_item = new_pad;
         break;
     }
@@ -1159,7 +1140,9 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         {
             TEXTE_MODULE* new_text = new TEXTE_MODULE( *old_text );
 
-            GraphicalItems().PushBack( new_text );
+            if( aAddToModule )
+                GraphicalItems().PushBack( new_text );
+
             new_item = new_text;
         }
         break;
@@ -1170,7 +1153,9 @@ BOARD_ITEM* MODULE::DuplicateAndAddItem( const BOARD_ITEM* aItem,
         EDGE_MODULE* new_edge = new EDGE_MODULE(
                 *static_cast<const EDGE_MODULE*>(aItem) );
 
-        GraphicalItems().PushBack( new_edge );
+        if( aAddToModule )
+            GraphicalItems().PushBack( new_edge );
+
         new_item = new_edge;
         break;
     }

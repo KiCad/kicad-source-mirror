@@ -27,7 +27,7 @@
 #define __SELECTION_TOOL_H
 
 #include <math/vector2d.h>
-#include <tool/tool_interactive.h>
+#include <tools/pcb_tool.h>
 #include <tool/context_menu.h>
 #include <class_undoredo_container.h>
 
@@ -111,7 +111,7 @@ enum SELECTION_LOCK_FLAGS
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */
-class SELECTION_TOOL : public TOOL_INTERACTIVE
+class SELECTION_TOOL : public PCB_TOOL
 {
 public:
     SELECTION_TOOL();
@@ -136,18 +136,6 @@ public:
      * Returns the set of currently selected items.
      */
     const SELECTION& GetSelection();
-
-    /**
-     * Function EditModules()
-     *
-     * Toggles edit module mode. When enabled, one may select parts of modules individually
-     * (graphics, pads, etc.), so they can be modified.
-     * @param aEnabled decides if the mode should be enabled.
-     */
-    inline void EditModules( bool aEnabled )
-    {
-        m_editModules = aEnabled;
-    }
 
     inline CONDITIONAL_MENU& GetMenu()
     {
@@ -338,9 +326,6 @@ private:
 
     /// Flag saying if multiple selection mode is active.
     bool m_multiple;
-
-    /// Edit module mode flag.
-    bool m_editModules;
 
     /// Can other tools modify locked items.
     bool m_locked;

@@ -243,7 +243,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             if( IsType( FRAME_PCB ) )
                 SaveCopyInUndoList( Module, UR_CHANGED );
             else
-                SaveCopyInUndoList( Module, UR_MODEDIT );
+                SaveCopyInUndoList( Module, UR_CHANGED );
 
             Text->SetOrientation( tmp );
 

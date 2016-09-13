@@ -79,7 +79,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
             if( node->GetRefCount() > 1 )
                 continue;
 
-            RN_NODE_PTR dest = net.GetClosestNode( node, WITHOUT_FLAG() );
+            RN_NODE_PTR dest = net.GetClosestNode( node, LINE_TARGET() );
 
             if( dest )
             {

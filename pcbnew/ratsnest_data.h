@@ -92,19 +92,19 @@ struct RN_NODE_FILTER : public std::unary_function<const RN_NODE_PTR&, bool>
 RN_NODE_AND_FILTER operator&&( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
 RN_NODE_OR_FILTER operator||( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
 
-///> Filters out nodes that have the flag set.
-struct WITHOUT_FLAG : public RN_NODE_FILTER
+///> Filters out nodes that cannot be a ratsnest line target
+struct LINE_TARGET : public RN_NODE_FILTER
 {
     bool operator()( const RN_NODE_PTR& aNode ) const
     {
-        return !aNode->GetFlag();
+        return !aNode->GetNoLine();
     }
 };
 
 ///> Filters out nodes with a specific tag
-struct DIFFERENT_TAG : public RN_NODE_FILTER
+struct DIFF_TAG : public RN_NODE_FILTER
 {
-    DIFFERENT_TAG( int aTag ) :
+    DIFF_TAG( int aTag ) :
         m_tag( aTag )
     {}
 
@@ -515,7 +515,7 @@ public:
     inline void AddBlockedNode( RN_NODE_PTR& aNode )
     {
         m_blockedNodes.insert( aNode );
-        aNode->SetFlag( true );
+        aNode->SetNoLine( true );
     }
 
     /**
@@ -647,22 +647,26 @@ public:
      * Function Add()
      * Adds an item to the ratsnest data.
      * @param aItem is an item to be added.
+     * @return True if operation succeeded.
      */
-    void Add( const BOARD_ITEM* aItem );
+    bool Add( const BOARD_ITEM* aItem );
 
     /**
      * Function Remove()
      * Removes an item from the ratsnest data.
      * @param aItem is an item to be updated.
+     * @return True if operation succeeded.
      */
-    void Remove( const BOARD_ITEM* aItem );
+    bool Remove( const BOARD_ITEM* aItem );
 
     /**
      * Function Update()
      * Updates the ratsnest data for an item.
      * @param aItem is an item to be updated.
+     * @return True if operation succeeded. The item will not be updated if it was not previously
+     * added to the ratsnest.
      */
-    void Update( const BOARD_ITEM* aItem );
+    bool Update( const BOARD_ITEM* aItem );
 
     /**
      * Function AddSimple()

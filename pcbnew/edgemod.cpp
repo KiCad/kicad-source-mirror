@@ -163,7 +163,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 {
     MODULE* module = GetBoard()->m_Modules;
 
-    SaveCopyInUndoList( module, UR_MODEDIT );
+    SaveCopyInUndoList( module, UR_CHANGED );
 
     if( aEdge == NULL )
     {
@@ -225,7 +225,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
             if( aEdge && (aEdge->GetLayer() != new_layer) )
             {
                 if( ! modified )    // save only once
-                    SaveCopyInUndoList( module, UR_MODEDIT );
+                    SaveCopyInUndoList( module, UR_CHANGED );
                 aEdge->SetLayer( new_layer );
                 modified = true;
             }
@@ -233,7 +233,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* aEdge )
     }
     else if( aEdge->GetLayer() != new_layer )
     {
-        SaveCopyInUndoList( module, UR_MODEDIT );
+        SaveCopyInUndoList( module, UR_CHANGED );
         aEdge->SetLayer( new_layer );
         modified = true;
     }
@@ -330,7 +330,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
 
     if( aEdge == NULL )       // Start a new edge item
     {
-        SaveCopyInUndoList( module, UR_MODEDIT );
+        SaveCopyInUndoList( module, UR_CHANGED );
 
         aEdge = new EDGE_MODULE( module );
         MoveVector.x = MoveVector.y = 0;

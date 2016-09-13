@@ -65,13 +65,7 @@ EDA_ITEM::EDA_ITEM( KICAD_T idType )
 EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
 {
     initVars();
-    m_StructType = base.m_StructType;
-    m_Parent     = base.m_Parent;
-    m_Flags      = base.m_Flags;
-
-    // A copy of an item cannot have the same time stamp as the original item.
-    SetTimeStamp( GetNewTimeStamp() );
-    m_Status     = base.m_Status;
+    *this = base;
 }
 
 
@@ -82,7 +76,6 @@ void EDA_ITEM::initVars()
     Pback       = NULL;     // Linked list: Link (previous struct)
     m_Parent    = NULL;     // Linked list: Link (parent struct)
     m_List      = NULL;     // I am not on any list yet
-    m_Image     = NULL;     // Link to an image copy for undelete or abort command
     m_Flags     = 0;        // flags for editions and other
     SetTimeStamp( 0 );      // Time stamp used for logical links
     m_Status    = 0;
@@ -224,23 +217,23 @@ bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
     return false;
 }
 
-#ifdef USE_EDA_ITEM_OP_EQ   // see base_struct.h for explanations
 EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 {
-    if( &aItem != this )
-    {
-        m_Image = aItem.m_Image;
-        m_StructType = aItem.m_StructType;
-        m_Parent = aItem.m_Parent;
-        m_Flags = aItem.m_Flags;
-        m_TimeStamp = aItem.m_TimeStamp;
-        m_Status = aItem.m_Status;
-        m_forceVisible = aItem.m_forceVisible;
-    }
+    // do not call initVars()
+
+    m_StructType = aItem.m_StructType;
+    m_Flags      = aItem.m_Flags;
+    m_Status     = aItem.m_Status;
+    m_Parent     = aItem.m_Parent;
+    m_forceVisible = aItem.m_forceVisible;
+
+    // A copy of an item cannot have the same time stamp as the original item.
+    SetTimeStamp( GetNewTimeStamp() );
+
+    // do not copy list related fields (Pnext, Pback, m_List)
 
     return *this;
 }
-#endif
 
 const BOX2I EDA_ITEM::ViewBBox() const
 {

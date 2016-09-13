@@ -69,16 +69,6 @@ PCB_TARGET::~PCB_TARGET()
 {
 }
 
-void PCB_TARGET::Copy( PCB_TARGET* source )
-{
-    m_Layer     = source->m_Layer;
-    m_Width     = source->m_Width;
-    m_Pos       = source->m_Pos;
-    m_Shape     = source->m_Shape;
-    m_Size      = source->m_Size;
-    SetTimeStamp( GetNewTimeStamp() );
-}
-
 
 /* Draw PCB_TARGET object: 2 segments + 1 circle
  * The circle radius is half the radius of the target

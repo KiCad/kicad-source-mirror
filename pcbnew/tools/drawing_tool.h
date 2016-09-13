@@ -25,7 +25,7 @@
 #ifndef __DRAWING_TOOL_H
 #define __DRAWING_TOOL_H
 
-#include <tool/tool_interactive.h>
+#include <tools/pcb_tool.h>
 #include <boost/optional.hpp>
 
 namespace KIGFX
@@ -34,7 +34,7 @@ namespace KIGFX
     class VIEW_CONTROLS;
 }
 class BOARD;
-class PCB_EDIT_FRAME;
+class PCB_BASE_EDIT_FRAME;
 class DRAWSEGMENT;
 
 /**
@@ -43,7 +43,7 @@ class DRAWSEGMENT;
  * Tool responsible for drawing graphical elements like lines, arcs, circles, etc.
  */
 
-class DRAWING_TOOL : public TOOL_INTERACTIVE
+class DRAWING_TOOL : public PCB_TOOL
 {
 public:
     DRAWING_TOOL();
@@ -121,17 +121,6 @@ public:
      */
     int SetAnchor( const TOOL_EVENT& aEvent );
 
-    /**
-     * Function EditModules()
-     * Toggles edit module mode. When enabled, one may select parts of modules individually
-     * (graphics, pads, etc.), so they can be modified.
-     * @param aEnabled decides if the mode should be enabled.
-     */
-    void EditModules( bool aEnabled )
-    {
-        m_editModules = aEnabled;
-    }
-
     ///> Sets up handlers for various events.
     void SetTransitions();
 
@@ -157,20 +146,6 @@ private:
     int drawZone( bool aKeepout );
 
     /**
-     * Function placeTextModule()
-     * Displays a dialog that allows to input text and its settings and then lets the user decide
-     * where to place the text in module .
-     */
-    int placeTextModule();
-
-    /**
-     * Function placeTextPcb()
-     * Displays a dialog that allows to input text and its settings and then lets the user decide
-     * where to place the text in board editor.
-     */
-    int placeTextPcb();
-
-    /**
      * Function make45DegLine()
      * Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin stays the same,
      * the end of the aSegment is modified according to the current cursor position.
@@ -185,10 +160,7 @@ private:
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
-    PCB_EDIT_FRAME* m_frame;
-
-    /// Edit module mode flag
-    bool m_editModules;
+    PCB_BASE_EDIT_FRAME* m_frame;
 
     /// Stores the current line width for multisegment drawing.
     unsigned int m_lineWidth;

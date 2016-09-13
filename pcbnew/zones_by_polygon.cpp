@@ -33,6 +33,7 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <wxPcbStruct.h>
+#include <board_commit.h>
 
 #include <class_board.h>
 #include <class_zone.h>
@@ -108,8 +109,7 @@ void PCB_EDIT_FRAME::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* aZone )
 
 void PCB_EDIT_FRAME::duplicateZone( wxDC* aDC, ZONE_CONTAINER* aZone )
 {
-    ZONE_CONTAINER* newZone = new ZONE_CONTAINER( GetBoard() );
-    newZone->Copy( aZone );
+    ZONE_CONTAINER* newZone = new ZONE_CONTAINER( *aZone );
     newZone->UnFill();
     ZONE_SETTINGS zoneSettings;
     zoneSettings << *aZone;
@@ -860,13 +860,14 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     ZONE_EDIT_T     edited;
     ZONE_SETTINGS   zoneInfo = GetZoneSettings();
 
+    BOARD_COMMIT commit( this );
     m_canvas->SetIgnoreMouseEvents( true );
 
     // Save initial zones configuration, for undo/redo, before adding new zone
     // note the net name and the layer can be changed, so we must save all zones
     s_AuxiliaryList.ClearListAndDeleteItems();
     s_PickedList.ClearListAndDeleteItems();
-    SaveCopyOfZones(s_PickedList, GetBoard(), -1, UNDEFINED_LAYER );
+    SaveCopyOfZones( s_PickedList, GetBoard(), -1, UNDEFINED_LAYER );
 
     if( aZone->GetIsKeepout() )
     {
@@ -902,7 +903,8 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     if( edited == ZONE_EXPORT_VALUES )
     {
         UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
-        SaveCopyInUndoList(s_PickedList, UR_UNSPECIFIED);
+        commit.Stage( s_PickedList );
+        commit.Push( _( "Modify zone properties" ) );
         s_PickedList.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
         return;
     }
@@ -928,11 +930,10 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* aZone )
     GetBoard()->RedrawAreasOutlines( m_canvas, DC, GR_OR, UNDEFINED_LAYER );
 
     UpdateCopyOfZonesList( s_PickedList, s_AuxiliaryList, GetBoard() );
-    SaveCopyInUndoList(s_PickedList, UR_UNSPECIFIED);
+    commit.Stage( s_PickedList );
+    commit.Push( _( "Modify zone properties" ) );
 
     s_PickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
-
-    OnModify();
 }
 
 

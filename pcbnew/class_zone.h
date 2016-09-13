@@ -82,6 +82,7 @@ public:
     ZONE_CONTAINER( BOARD* parent );
 
     ZONE_CONTAINER( const ZONE_CONTAINER& aZone );
+    ZONE_CONTAINER& operator=( const ZONE_CONTAINER &aOther );
 
     ~ZONE_CONTAINER();
 
@@ -103,13 +104,6 @@ public:
      * @return the priority level of this zone
      */
     unsigned GetPriority() const { return m_priority; }
-
-    /**
-     * Function copy
-     * copy useful data from the source.
-     * flags and linked list pointers are NOT copied
-     */
-    void Copy( ZONE_CONTAINER* src );
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 

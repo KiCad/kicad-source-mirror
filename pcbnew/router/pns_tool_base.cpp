@@ -105,7 +105,6 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
     m_board = getModel<BOARD>();
 
     m_iface = new PNS_KICAD_IFACE;
-
     m_iface->SetBoard( m_board );
     m_iface->SetView( getView() );
     m_iface->SetHostFrame( m_frame );

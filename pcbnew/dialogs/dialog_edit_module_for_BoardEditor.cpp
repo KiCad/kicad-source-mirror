@@ -41,6 +41,7 @@
 #include <wxPcbStruct.h>
 #include <base_units.h>
 #include <project.h>
+#include <board_commit.h>
 
 #include <class_module.h>
 #include <class_text_mod.h>
@@ -325,10 +326,10 @@ void DIALOG_MODULE_BOARD_EDITOR::InitModeditProperties()
 
     }
 
-    m_ReferenceCopy = new TEXTE_MODULE( NULL );
-    m_ValueCopy     = new TEXTE_MODULE( NULL );
-    m_ReferenceCopy->Copy( &m_CurrentModule->Reference() );
-    m_ValueCopy->Copy( &m_CurrentModule->Value() );
+    m_ReferenceCopy = new TEXTE_MODULE( m_CurrentModule->Reference() );
+    m_ReferenceCopy->SetParent( m_CurrentModule );
+    m_ValueCopy = new TEXTE_MODULE( m_CurrentModule->Value() );
+    m_ValueCopy->SetParent( m_CurrentModule );
     m_ReferenceCtrl->SetValue( m_ReferenceCopy->GetText() );
     m_ValueCtrl->SetValue( m_ValueCopy->GetText() );
 
@@ -610,6 +611,9 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
     wxPoint  modpos;
     wxString msg;
 
+    BOARD_COMMIT commit( m_Parent );
+    commit.Modify( m_CurrentModule );
+
     if( !Validate() || !DIALOG_MODULE_BOARD_EDITOR_BASE::TransferDataFromWindow() ||
         !m_PanelProperties->TransferDataFromWindow() )
     {
@@ -623,10 +627,6 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
         return false;
     }
 
-    if( m_CurrentModule->GetFlags() == 0 )    // this is a simple edition, we
-                                              // must create an undo entry
-        m_Parent->SaveCopyInUndoList( m_CurrentModule, UR_CHANGED );
-
     if( m_DC )
     {
         m_Parent->GetCanvas()->CrossHairOff( m_DC );
@@ -634,8 +634,10 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
     }
 
     // Init Fields (should be first, because they can be moved or/and flipped later):
-    m_CurrentModule->Reference().Copy( m_ReferenceCopy );
-    m_CurrentModule->Value().Copy( m_ValueCopy );
+    TEXTE_MODULE& reference = m_CurrentModule->Reference();
+    reference = *m_ReferenceCopy;
+    TEXTE_MODULE& value = m_CurrentModule->Value();
+    value = *m_ValueCopy;
 
     // Initialize masks clearances
     m_CurrentModule->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
@@ -739,7 +741,9 @@ bool DIALOG_MODULE_BOARD_EDITOR::TransferDataFromWindow()
 
     m_CurrentModule->CalculateBoundingBox();
 
-    m_Parent->OnModify();
+    // This is a simple edition, we must create an undo entry
+    if( m_CurrentModule->GetFlags() == 0 )
+        commit.Push( _( "Modify module properties" ) );
 
     SetReturnCode( PRM_EDITOR_EDIT_OK );
 

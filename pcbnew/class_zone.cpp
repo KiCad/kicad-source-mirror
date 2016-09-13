@@ -105,6 +105,32 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
 }
 
 
+ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
+{
+    BOARD_CONNECTED_ITEM::operator=( aOther );
+
+    m_Poly->RemoveAllContours();
+    m_Poly->Copy( aOther.m_Poly );  // copy outlines
+    m_CornerSelection  = -1;        // for corner moving, corner index to drag or -1 if no selection
+    m_ZoneClearance    = aOther.m_ZoneClearance;            // clearance value
+    m_ZoneMinThickness = aOther.m_ZoneMinThickness;
+    m_FillMode = aOther.m_FillMode;                         // filling mode (segments/polygons)
+    m_ArcToSegmentsCount = aOther.m_ArcToSegmentsCount;
+    m_PadConnection = aOther.m_PadConnection;
+    m_ThermalReliefGap = aOther.m_ThermalReliefGap;
+    m_ThermalReliefCopperBridge = aOther.m_ThermalReliefCopperBridge;
+    m_Poly->SetHatchStyle( aOther.m_Poly->GetHatchStyle() );
+    m_Poly->SetHatchPitch( aOther.m_Poly->GetHatchPitch() );
+    m_Poly->m_HatchLines = aOther.m_Poly->m_HatchLines;     // copy vector <CSegment>
+    m_FilledPolysList.RemoveAllContours();
+    m_FilledPolysList.Append( aOther.m_FilledPolysList );
+    m_FillSegmList.clear();
+    m_FillSegmList = aOther.m_FillSegmList;
+
+    return *this;
+}
+
+
 ZONE_CONTAINER::~ZONE_CONTAINER()
 {
     delete m_Poly;
@@ -748,33 +774,6 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
         MIRROR( m_FillSegmList[ic].m_Start.y, mirror_ref.y );
         MIRROR( m_FillSegmList[ic].m_End.y,   mirror_ref.y );
     }
-}
-
-
-void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
-{
-    m_Parent = src->m_Parent;
-    m_Layer  = src->m_Layer;
-    SetNetCode( src->GetNetCode() );
-    SetTimeStamp( src->m_TimeStamp );
-    m_Poly->RemoveAllContours();
-    m_Poly->Copy( src->m_Poly );                // copy outlines
-    m_CornerSelection  = -1;                    // For corner moving, corner index to drag,
-                                                // or -1 if no selection
-    m_ZoneClearance    = src->m_ZoneClearance;  // clearance value
-    m_ZoneMinThickness = src->m_ZoneMinThickness;
-    m_FillMode = src->m_FillMode;               // Filling mode (segments/polygons)
-    m_ArcToSegmentsCount = src->m_ArcToSegmentsCount;
-    m_PadConnection = src->m_PadConnection;
-    m_ThermalReliefGap = src->m_ThermalReliefGap;
-    m_ThermalReliefCopperBridge = src->m_ThermalReliefCopperBridge;
-    m_Poly->SetHatchStyle( src->m_Poly->GetHatchStyle() );
-    m_Poly->SetHatchPitch( src->m_Poly->GetHatchPitch() );
-    m_Poly->m_HatchLines = src->m_Poly->m_HatchLines;   // Copy vector <CSegment>
-    m_FilledPolysList.RemoveAllContours();
-    m_FilledPolysList.Append( src->m_FilledPolysList );
-    m_FillSegmList.clear();
-    m_FillSegmList = src->m_FillSegmList;
 }
 
 

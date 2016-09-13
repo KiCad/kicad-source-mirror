@@ -229,8 +229,6 @@ void LENGTH_TUNER_TOOL::performTuning()
     }
 
     m_router->StopRouting();
-    m_frame->OnModify();
-
     highlightNet( false );
 }
 

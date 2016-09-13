@@ -43,6 +43,7 @@
 #include <wx/wx.h>
 #include <dialog_pcb_text_properties_base.h>
 #include <class_pcb_layer_box_selector.h>
+#include <board_commit.h>
 
 
 class PCB_EDIT_FRAME;
@@ -188,9 +189,11 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataFromWindow()
 {
-
     if( !DIALOG_PCB_TEXT_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
+
+    BOARD_COMMIT commit( m_Parent );
+    commit.Modify( m_SelectedPCBText );
 
     // Test for acceptable layer.
     // Incorrect layer can happen for old boards,
@@ -206,8 +209,7 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataFromWindow()
 
     // If no other command in progress, prepare undo command
     // (for a command in progress, will be made later, at the completion of command)
-    if( m_SelectedPCBText->GetFlags() == 0 )
-        m_Parent->SaveCopyInUndoList( m_SelectedPCBText, UR_CHANGED );
+    bool pushCommit = ( m_SelectedPCBText->GetFlags() == 0 );
 
     /* set flag in edit to force undo/redo/abort proper operation,
      * and avoid new calls to SaveCopyInUndoList for the same text
@@ -303,9 +305,11 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataFromWindow()
         m_SelectedPCBText->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
     }
 #else
-    m_parent->Refresh();
+    m_Parent->Refresh();
 #endif
-    m_Parent->OnModify();
+
+    if( pushCommit )
+        commit.Push( _( "Change text properties" ) );
 
     return true;
 }

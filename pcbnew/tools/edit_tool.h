@@ -27,9 +27,10 @@
 #define __EDIT_TOOL_H
 
 #include <math/vector2d.h>
-#include <tool/tool_interactive.h>
+#include <tools/pcb_tool.h>
 #include <view/view_group.h>
 
+class BOARD_COMMIT;
 class BOARD_ITEM;
 class SELECTION_TOOL;
 
@@ -45,7 +46,7 @@ class VIEW_GROUP;
  * using the pcbnew.InteractiveSelection tool.
  */
 
-class EDIT_TOOL : public TOOL_INTERACTIVE
+class EDIT_TOOL : public PCB_TOOL
 {
 public:
     EDIT_TOOL();
@@ -114,17 +115,6 @@ public:
      */
     int CreateArray( const TOOL_EVENT& aEvent );
 
-    /**
-     * Function EditModules()
-     *
-     * Toggles edit module mode. When enabled, one may select parts of modules individually
-     * (graphics, pads, etc.), so they can be modified.
-     * @param aEnabled decides if the mode should be enabled.
-     */
-    void EditModules( bool aEnabled )
-    {
-        m_editModules = aEnabled;
-    }
 
     ///> Sets up handlers for various events.
     void SetTransitions();
@@ -142,15 +132,6 @@ private:
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
     VECTOR2I m_cursor;
-
-    /// Edit module mode flag
-    bool m_editModules;
-
-    /// Counter of undo inhibitions. When zero, undo is not inhibited.
-    int m_undoInhibit;
-
-    ///> Removes and frees a single BOARD_ITEM.
-    void remove( BOARD_ITEM* aItem );
 
     ///> The required update flag for modified items
     KIGFX::VIEW_ITEM::VIEW_UPDATE_FLAGS m_updateFlag;
@@ -172,49 +153,8 @@ private:
     wxPoint getModificationPoint( const SELECTION& aSelection );
 
     ///> If there are no items currently selected, it tries to choose the item that is under
-    ///> the cursor or displays a disambiguation menu if there are multpile items.
-    bool hoverSelection( const SELECTION& aSelection, bool aSanitize = true );
-
-    ///> Processes the current undo buffer since the last change. If the last change does not occur
-    ///> in the current buffer, then the whole list is processed.
-    void processUndoBuffer( const PICKED_ITEMS_LIST* aLastChange );
-
-    ///> Updates items stored in the list.
-    void processPickedList( const PICKED_ITEMS_LIST* aList );
-
-    /**
-     * Increments the undo inhibit counter. This will indicate that tools
-     * should not create an undo point, as another tool is doing it already,
-     * and considers that its operation is atomic, even if it calls another one
-     * (for example a duplicate calls a move).
-     */
-    inline void incUndoInhibit()
-    {
-        m_undoInhibit++;
-    }
-
-    /**
-     * Decrements the inhibit counter. An assert is raised if the counter drops
-     * below zero.
-     */
-    inline void decUndoInhibit()
-    {
-        m_undoInhibit--;
-
-        wxASSERT_MSG( m_undoInhibit >= 0, wxT( "Undo inhibit count decremented past zero" ) );
-    }
-
-    /**
-     * Report if the tool manager has been told at least once that undo
-     * points should not be created. This can be ignored if the undo point
-     * is still required.
-     *
-     * @return true if undo are inhibited
-     */
-    inline bool isUndoInhibited() const
-    {
-        return m_undoInhibit > 0;
-    }
+    ///> the cursor or displays a disambiguation menu if there are multiple items.
+    bool hoverSelection( bool aSanitize = true );
 
     int editFootprintInFpEditor( const TOOL_EVENT& aEvent );
 
@@ -230,6 +170,8 @@ private:
         BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
         return dyn_cast<T*>( item );
     }
+
+    std::unique_ptr<BOARD_COMMIT> m_commit;
 };
 
 #endif

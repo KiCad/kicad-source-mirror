@@ -258,7 +258,5 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
     if( aClone )
         NewDrawStruct->SetTimeStamp( aDrawStruct->GetTimeStamp() );
 
-    NewDrawStruct->SetImage( aDrawStruct );
-
     return NewDrawStruct;
 }

@@ -23,10 +23,12 @@
 #ifndef __PNS_TOOL_BASE_H
 #define __PNS_TOOL_BASE_H
 
+#include <memory>
 #include <import_export.h>
 
 #include <math/vector2d.h>
-#include <tool/tool_interactive.h>
+#include <tools/pcb_tool.h>
+#include <board_commit.h>
 
 #include <msgpanel.h>
 

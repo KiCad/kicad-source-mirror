@@ -49,42 +49,28 @@
 #include <wxPcbStruct.h>
 
 
-BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER ( PCB_EDIT_FRAME *aFrame, BOARD *aBoard ) :
-    m_frame ( aFrame ),
+BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBoard ) :
+    m_commit( aFrame ),
+    m_frame( aFrame ),
     m_board( aBoard )
 {
     m_reporter = &NULL_REPORTER::GetInstance();
-    m_undoList = new PICKED_ITEMS_LIST;
 
-	m_deleteSinglePadNets = true;
-	m_deleteUnusedComponents = false;
-	m_isDryRun = false;
-	m_replaceFootprints = true;
-	m_lookupByTimestamp = false;
+    m_deleteSinglePadNets = true;
+    m_deleteUnusedComponents = false;
+    m_isDryRun = false;
+    m_replaceFootprints = true;
+    m_lookupByTimestamp = false;
 
-	m_warningCount = 0;
-	m_errorCount = 0;
+    m_warningCount = 0;
+    m_errorCount = 0;
 }
 
-BOARD_NETLIST_UPDATER::~BOARD_NETLIST_UPDATER ()
+
+BOARD_NETLIST_UPDATER::~BOARD_NETLIST_UPDATER()
 {
-    delete m_undoList;
 }
 
-void BOARD_NETLIST_UPDATER::pushUndo( BOARD_ITEM* aItem, UNDO_REDO_T aCommandType, BOARD_ITEM* aCopy )
-{
-    ITEM_PICKER picker( aItem, aCommandType );
-
-    if( aCommandType == UR_CHANGED )
-    {
-        if( m_undoList->FindItem ( aItem ) >= 0 ) // add only once
-            return;
-
-        picker.SetLink( aCopy ? aCopy : aItem->Clone() );
-    }
-
-    m_undoList->PushItem( picker );
-}
 
 wxPoint BOARD_NETLIST_UPDATER::estimateComponentInsertionPosition()
 {
@@ -124,28 +110,24 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetTimeStamp() ),
                     GetChars( aComponent->GetFPID().Format() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         msg.Printf( _( "Add component %s, footprint: %s.\n" ),
                     GetChars( aComponent->GetReference() ),
                     GetChars( aComponent->GetFPID().Format() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
 
         if( !m_isDryRun )
         {
             // Owned by NETLIST, can only copy it.
-            MODULE *footprint = new MODULE( *aComponent->GetModule() );
+            MODULE* footprint = new MODULE( *aComponent->GetModule() );
             footprint->SetParent( m_board );
             footprint->SetPosition( estimateComponentInsertionPosition( ) );
             footprint->SetTimeStamp( GetNewTimeStamp() );
 
-            m_board->Add( footprint, ADD_APPEND );
             m_addedComponents.push_back( footprint );
-
-            pushUndo( footprint, UR_NEW );
+            m_commit.Add( footprint );
 
             return footprint;
         }
@@ -165,23 +147,22 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
                     GetChars( aComponent->GetFPID().Format() ) );
 
         m_reporter->Report( msg, REPORTER::RPT_INFO );
-
-        m_errorCount ++;
+        ++m_errorCount;
     }
 
     return NULL;
 }
 
-MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE *aPcbComponent, COMPONENT* aNewComponent )
+
+MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcbComponent, COMPONENT* aNewComponent )
 {
     wxString msg;
 
     if( !m_replaceFootprints )
         return NULL;
 
-// Test if the footprint has not changed
-    if( aNewComponent->GetFPID().empty() ||
-        aPcbComponent->GetFPID() == aNewComponent->GetFPID() )
+    // Test if the footprint has not changed
+    if( aNewComponent->GetFPID().empty() || aPcbComponent->GetFPID() == aNewComponent->GetFPID() )
         return NULL;
 
     if( aNewComponent->GetModule() != NULL )
@@ -205,7 +186,9 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE *aPcb
         if( !m_isDryRun )
         {
             wxASSERT( aPcbComponent != NULL );
+
             MODULE* newFootprint = new MODULE( *aNewComponent->GetModule() );
+            newFootprint->SetParent( m_board );
 
             if( aNetlist.IsFindByTimeStamp() )
                 newFootprint->SetReference( aPcbComponent->GetReference() );
@@ -213,16 +196,14 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE *aPcb
                 newFootprint->SetPath( aPcbComponent->GetPath() );
 
             aPcbComponent->CopyNetlistSettings( newFootprint, false );
-            m_board->Remove( aPcbComponent );
-            m_board->Add( newFootprint, ADD_APPEND );
-
-            pushUndo( aPcbComponent, UR_DELETED );
-            pushUndo( newFootprint, UR_NEW );
+            m_commit.Remove( aPcbComponent );
+            m_commit.Add( newFootprint );
 
             return newFootprint;
         }
-    } else {
-
+    }
+    else
+    {
         msg.Printf( _( "Cannot change component %s footprint due to missing "
                        "footprint %s.\n" ),
                     GetChars( aPcbComponent->GetReference() ),
@@ -238,13 +219,14 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE *aPcb
 
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
-        m_errorCount ++;
+        ++m_errorCount;
     }
 
     return NULL;
 }
 
-bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE *aPcbComponent, COMPONENT* aNewComponent )
+
+bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent, COMPONENT* aNewComponent )
 {
     wxString msg;
 
@@ -292,9 +274,10 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE *aPcbComponent, CO
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aPcbComponent->GetValue() ),
                     GetChars( aNewComponent->GetValue() ) );
+
         m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-        if ( !m_isDryRun )
+        if( !m_isDryRun )
         {
             changed = true;
             aPcbComponent->SetValue( aNewComponent->GetValue() );
@@ -308,9 +291,10 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE *aPcbComponent, CO
                     GetChars( aPcbComponent->GetReference() ),
                     GetChars( aPcbComponent->GetPath() ),
                     GetChars( aNewComponent->GetTimeStamp() ) );
+
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
-        if ( !m_isDryRun )
+        if( !m_isDryRun )
         {
             changed = true;
             aPcbComponent->SetPath( aNewComponent->GetTimeStamp() );
@@ -318,14 +302,15 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE *aPcbComponent, CO
     }
 
     if( changed )
-        pushUndo( aPcbComponent, UR_CHANGED, copy );
+        m_commit.Modified( aPcbComponent, copy );
     else
         delete copy;
 
     return true;
 }
 
-bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE *aPcbComponent, COMPONENT* aNewComponent )
+
+bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent, COMPONENT* aNewComponent )
 {
     wxString msg;
 
@@ -333,7 +318,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE *aPcbComponent
     MODULE* copy = (MODULE*) aPcbComponent->Clone();
 
     // At this point, the component footprint is updated.  Now update the nets.
-    for( D_PAD *pad = aPcbComponent->Pads(); pad; pad = pad->Next() )
+    for( D_PAD* pad = aPcbComponent->Pads(); pad; pad = pad->Next() )
     {
         COMPONENT_NET net = aNewComponent->GetNet( pad->GetPadName() );
 
@@ -351,7 +336,6 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE *aPcbComponent
                             GetChars( aPcbComponent->GetPath() ),
                             GetChars( pad->GetPadName() ) );
                 m_reporter->Report( msg, REPORTER::RPT_INFO );
-
             }
 
             if( !m_isDryRun )
@@ -364,38 +348,46 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE *aPcbComponent
         {
             if( net.GetNetName() != pad->GetNetname() )
             {
-                NETINFO_ITEM* netinfo = m_board->FindNet( net.GetNetName() );
+                const wxString& netName = net.GetNetName();
+                NETINFO_ITEM* netinfo = m_board->FindNet( netName );
 
-                if( netinfo == NULL )
+                if( netinfo == nullptr )
+                {
+                    // It might be a new net that has not been added to the board yet
+                    auto netIt = m_addedNets.find( netName );
+
+                    if( netIt != m_addedNets.end() )
+                        netinfo = netIt->second;
+                }
+
+                if( netinfo == nullptr )
                 {
                     // It is a new net, we have to add it
                     if( !m_isDryRun )
                     {
                         changed = true;
-                        netinfo = new NETINFO_ITEM( m_board, net.GetNetName() );
-                        m_board->AppendNet( netinfo );
-                        pushUndo( netinfo, UR_NEW );
+                        netinfo = new NETINFO_ITEM( m_board, netName );
+                        m_commit.Add( netinfo );
+                        m_addedNets[netName] = netinfo;
                     }
 
-                    msg.Printf( _( "Add net %s.\n" ),
-                                GetChars( net.GetNetName() ) );
-
+                    msg.Printf( _( "Add net %s.\n" ), GetChars( netName ) );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
                 }
 
-                if( pad->GetNetname() != wxString("") )
+                if( !pad->GetNetname().IsEmpty() )
                 {
                     msg.Printf( _( "Reconnect component %s pin %s from net %s to net %s.\n"),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( pad->GetPadName() ),
                             GetChars( pad->GetNetname() ),
-                            GetChars( net.GetNetName() ) );
+                            GetChars( netName ) );
 
                 } else {
                     msg.Printf( _( "Connect component %s pin %s to net %s.\n"),
                             GetChars( aPcbComponent->GetReference() ),
                             GetChars( pad->GetPadName() ),
-                            GetChars( net.GetNetName() ) );
+                            GetChars( netName ) );
                 }
 
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
@@ -406,26 +398,26 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE *aPcbComponent
                             GetChars( aPcbComponent->GetPath() ),
                             GetChars( pad->GetPadName() ),
                             GetChars( pad->GetNetname() ),
-                            GetChars( net.GetNetName() ) );
-
+                            GetChars( netName ) );
                 m_reporter->Report( msg, REPORTER::RPT_INFO );
 
-                if ( !m_isDryRun )
+                if( !m_isDryRun )
                 {
                     changed = true;
-                    pad->SetNetCode( netinfo->GetNet() );
+                    pad->SetNet( netinfo );
                 }
             }
         }
     }
 
     if( changed )
-        pushUndo( aPcbComponent, UR_CHANGED, copy );
+        m_commit.Modified( aPcbComponent, copy );
     else
         delete copy;
 
     return true;
 }
+
 
 bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
 {
@@ -437,9 +429,6 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
     {
         nextModule = module->Next();
 
-        if( module->IsLocked() )
-            continue;
-
         if( m_lookupByTimestamp )
             component = aNetlist.GetComponentByTimeStamp( module->GetPath() );
         else
@@ -447,6 +436,14 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
 
         if( component == NULL )
         {
+            if( module->IsLocked() )
+            {
+                msg.Printf( _( "Component %s is locked, skipping removal.\n" ),
+                            GetChars( module->GetReference() ) );
+                m_reporter->Report( msg, REPORTER::RPT_INFO );
+                continue;
+            }
+
             msg.Printf( _( "Remove component %s." ),
                         GetChars( module->GetReference() ) );
             m_reporter->Report( msg, REPORTER::RPT_ACTION );
@@ -457,15 +454,13 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
             m_reporter->Report( msg, REPORTER::RPT_INFO );
 
             if( !m_isDryRun )
-            {
-                pushUndo( module, UR_DELETED );
-                m_board->Remove( module );
-            }
+                m_commit.Remove( module );
         }
     }
 
     return true;
 }
+
 
 bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 {
@@ -520,7 +515,6 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                 {
                     msg.Printf( _( "Remove single pad net %s." ),
                                 GetChars( previouspad->GetNetname() ) );
-
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
                     msg.Printf( _( "Remove single pad net \"%s\" on \"%s\" pad '%s'\n" ),
@@ -529,7 +523,6 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
                                 GetChars( previouspad->GetPadName() ) );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-                    //pushUndo( previouspad, UR_CHANGED );
                     previouspad->SetNetCode( NETINFO_LIST::UNCONNECTED );
                 }
             }
@@ -547,12 +540,11 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 
     // Examine last pad
     if( pad && count == 1 )
-    {
-        //pushUndo( pad, UR_CHANGED );
         pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
-    }
+
     return true;
 }
+
 
 bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
 {
@@ -592,7 +584,7 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
                         GetChars( padname ),
                         GetChars( footprint->GetFPID().Format() ) );
             m_reporter->Report( msg, REPORTER::RPT_ERROR );
-            m_errorCount ++;
+            ++m_errorCount;
         }
     }
 
@@ -611,12 +603,13 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
             msg.Printf( _( "Copper zone (net name %s): net has no pads connected." ),
                         GetChars( zone->GetNet()->GetNetname() ) );
             m_reporter->Report( msg, REPORTER::RPT_WARNING );
-            m_warningCount ++;
+            ++m_warningCount;
         }
     }
 
     return true;
 }
+
 
 bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 {
@@ -630,17 +623,15 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         m_board->SetStatus( 0 );
     }
 
-
     for( int i = 0; i < (int) aNetlist.GetCount();  i++ )
     {
         COMPONENT* component = aNetlist.GetComponent( i );
-        MODULE *footprint = NULL;
+        MODULE* footprint = NULL;
 
         msg.Printf( _( "Processing component \"%s:%s:%s\".\n" ),
                     GetChars( component->GetReference() ),
                     GetChars( component->GetTimeStamp() ),
                     GetChars( component->GetFPID().Format() ) );
-
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
         if( aNetlist.IsFindByTimeStamp() )
@@ -650,8 +641,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         if( footprint )        // An existing footprint.
         {
-            MODULE *newFootprint = replaceComponent ( aNetlist, footprint, component );
-            if ( newFootprint )
+            MODULE* newFootprint = replaceComponent( aNetlist, footprint, component );
+
+            if( newFootprint )
                 footprint = newFootprint;
         }
         else
@@ -666,9 +658,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         }
     }
 
-
-
-
     //aNetlist.GetDeleteExtraFootprints()
 
     if( m_deleteUnusedComponents )
@@ -677,47 +666,40 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     if( m_deleteSinglePadNets )
         deleteSinglePadNets();
 
-    if ( !m_isDryRun )
+    if( !m_isDryRun )
     {
-        m_frame->SaveCopyInUndoList( *m_undoList, UR_UNSPECIFIED, wxPoint(0, 0) );
-        m_frame->OnModify();
-
-        m_frame->Compile_Ratsnest( NULL, true );
+        m_commit.Push( _( "Update netlist" ) );
+        m_frame->Compile_Ratsnest( NULL, false );
         m_board->GetRatsnest()->ProcessBoard();
-
         testConnectivity( aNetlist );
     }
 
     // Update the ratsnest
+    m_reporter->Report( wxT( "" ), REPORTER::RPT_ACTION );
+    m_reporter->Report( wxT( "" ), REPORTER::RPT_ACTION );
 
-    m_reporter->Report( wxT(""), REPORTER::RPT_ACTION );
-    m_reporter->Report( wxT(""), REPORTER::RPT_ACTION );
-
-    msg.Printf( _( "Total warnings: %d, errors: %d." ),
-                m_warningCount, m_errorCount );
-
+    msg.Printf( _( "Total warnings: %d, errors: %d." ), m_warningCount, m_errorCount );
     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
-
-    if ( m_errorCount )
+    if( m_errorCount )
     {
-
-        m_reporter->Report( _("Errors occured during the netlist update. Unless you "
-                              "fix them, your board will not be consistent with the schematics." ),
+        m_reporter->Report( _( "Errors occured during the netlist update. Unless you "
+                               "fix them, your board will not be consistent with the schematics." ),
                             REPORTER::RPT_ERROR );
 
         return false;
-    } else {
-        m_reporter->Report( _("Netlist update successful!" ),
-                            REPORTER::RPT_ACTION );
-
+    }
+    else
+    {
+        m_reporter->Report( _( "Netlist update successful!" ), REPORTER::RPT_ACTION );
     }
 
     return true;
 }
 
+
 bool BOARD_NETLIST_UPDATER::UpdateNetlist( const wxString& aNetlistFileName,
-                                            const wxString& aCmpFileName )
+                                           const wxString& aCmpFileName )
 {
     return false;
 }

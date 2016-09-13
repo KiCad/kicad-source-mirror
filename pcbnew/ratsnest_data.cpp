@@ -215,11 +215,11 @@ void RN_NET::validateEdge( RN_EDGE_MST_PTR& aEdge )
 
     // If any of nodes belonging to the edge has the flag set,
     // change it to the closest node that has flag cleared
-    if( source->GetFlag() )
+    if( source->GetNoLine() )
     {
         valid = false;
+        std::list<RN_NODE_PTR> closest = GetClosestNodes( source, LINE_TARGET() );
 
-        std::list<RN_NODE_PTR> closest = GetClosestNodes( source, WITHOUT_FLAG() );
         for( RN_NODE_PTR& node : closest )
         {
             if( node && node != target )
@@ -230,11 +230,11 @@ void RN_NET::validateEdge( RN_EDGE_MST_PTR& aEdge )
         }
     }
 
-    if( target->GetFlag() )
+    if( target->GetNoLine() )
     {
         valid = false;
+        std::list<RN_NODE_PTR> closest = GetClosestNodes( target, LINE_TARGET() );
 
-        std::list<RN_NODE_PTR> closest = GetClosestNodes( target, WITHOUT_FLAG() );
         for( RN_NODE_PTR& node : closest )
         {
             if( node && node != source )
@@ -398,7 +398,7 @@ RN_POLY::RN_POLY( const SHAPE_POLY_SET* aParent,
 
     // Mark it as not appropriate as a destination of ratsnest edges
     // (edges coming out from a polygon vertex look weird)
-    m_node->SetFlag( true );
+    m_node->SetNoLine( true );
 }
 
 
@@ -761,7 +761,7 @@ void RN_NET::GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, RN_ITEM_TYP
 void RN_NET::ClearSimple()
 {
     for( const RN_NODE_PTR& node : m_blockedNodes )
-        node->SetFlag( false );
+        node->SetNoLine( false );
 
     m_blockedNodes.clear();
     m_simpleNodes.clear();
@@ -1033,22 +1033,25 @@ void RN_NET::processPads()
 }
 
 
-void RN_DATA::Add( const BOARD_ITEM* aItem )
+bool RN_DATA::Add( const BOARD_ITEM* aItem )
 {
     int net;
 
     if( aItem->IsConnected() )
     {
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
-        if( net < 1 )           // do not process unconnected items
-            return;
 
-        if( net >= (int) m_nets.size() )            // Autoresize
+        if( net < 1 )           // do not process unconnected items
+            return false;
+
+        // Autoresize is necessary e.g. for module editor
+        if( net >= (int) m_nets.size() )
             m_nets.resize( net + 1 );
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
         const MODULE* module = static_cast<const MODULE*>( aItem );
+
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNetCode();
@@ -1056,16 +1059,24 @@ void RN_DATA::Add( const BOARD_ITEM* aItem )
             if( net < 1 )       // do not process unconnected items
                 continue;
 
-            if( net >= (int) m_nets.size() )        // Autoresize
+            // Autoresize is necessary e.g. for module editor
+            if( net >= (int) m_nets.size() )
                 m_nets.resize( net + 1 );
 
             m_nets[net].AddItem( pad );
         }
 
-        return;
+        return true;
     }
-    else
-        return;
+    else if( aItem->Type() == PCB_NETINFO_T )
+    {
+        int netCount = m_board->GetNetCount();
+
+        if( (unsigned) netCount > m_nets.size() )
+            m_nets.resize( netCount );
+
+        return true;
+    }
 
     switch( aItem->Type() )
     {
@@ -1086,12 +1097,15 @@ void RN_DATA::Add( const BOARD_ITEM* aItem )
         break;
 
     default:
+        return false;
         break;
     }
+
+    return true;
 }
 
 
-void RN_DATA::Remove( const BOARD_ITEM* aItem )
+bool RN_DATA::Remove( const BOARD_ITEM* aItem )
 {
     int net;
 
@@ -1100,21 +1114,19 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
 
         if( net < 1 )           // do not process unconnected items
-            return;
+            return false;
 
-#ifdef NDEBUG
-        if( net >= (int) m_nets.size() )        // Autoresize
+        // Autoresize is necessary e.g. for module editor
+        if( net >= (int) m_nets.size() )
         {
             m_nets.resize( net + 1 );
-
-            return;     // if it was resized, then surely the item had not been added before
+            return false;     // if it was resized, then surely the item had not been added before
         }
-#endif
-        assert( net < (int) m_nets.size() );
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
         const MODULE* module = static_cast<const MODULE*>( aItem );
+
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
         {
             net = pad->GetNetCode();
@@ -1122,23 +1134,22 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
             if( net < 1 )       // do not process unconnected items
                 continue;
 
-#ifdef NDEBUG
-            if( net >= (int) m_nets.size() )    // Autoresize
+            // Autoresize is necessary e.g. for module editor
+            if( net >= (int) m_nets.size() )
             {
                 m_nets.resize( net + 1 );
-
-                return;     // if it was resized, then surely the item had not been added before
+                return false;     // if it was resized, then surely the item had not been added before
             }
-#endif
-            assert( net < (int) m_nets.size() );
 
             m_nets[net].RemoveItem( pad );
         }
 
-        return;
+        return true;
     }
     else
-        return;
+    {
+        return false;
+    }
 
     switch( aItem->Type() )
     {
@@ -1159,15 +1170,24 @@ void RN_DATA::Remove( const BOARD_ITEM* aItem )
         break;
 
     default:
+        return false;
         break;
     }
+
+    return true;
 }
 
 
-void RN_DATA::Update( const BOARD_ITEM* aItem )
+bool RN_DATA::Update( const BOARD_ITEM* aItem )
 {
-    Remove( aItem );
-    Add( aItem );
+    if( Remove( aItem ) )
+    {
+        bool res = Add( aItem );
+        assert( res );
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -1226,9 +1246,6 @@ void RN_DATA::ProcessBoard()
 void RN_DATA::Recalculate( int aNet )
 {
     unsigned int netCount = m_board->GetNetCount();
-
-    if( netCount > m_nets.size() )
-        m_nets.resize( netCount );
 
     if( aNet < 0 && netCount > 1 )              // Recompute everything
     {

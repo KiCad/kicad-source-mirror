@@ -52,7 +52,7 @@ void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* aPad )
 
     D_PAD& mp = GetDesignSettings().m_Pad_Master;
     // Copy all settings. Some of them are not used, but they break anything
-    mp.Copy( aPad );
+    mp = *aPad;
     // The pad orientation, for historical reasons is the
     // pad rotation + parent rotation.
     // store only the pad rotation.

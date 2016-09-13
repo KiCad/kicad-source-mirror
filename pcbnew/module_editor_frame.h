@@ -54,6 +54,9 @@ public:
      */
     static const wxChar* GetFootprintEditorFrameName();
 
+    ///> @copydoc PCB_BASE_FRAME::GetModel()
+    BOARD_ITEM_CONTAINER* GetModel() const override;
+
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const;           // overload PCB_BASE_FRAME, get parent's
     void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );  // overload
 
@@ -266,50 +269,6 @@ public:
     virtual bool HandleBlockEnd( wxDC* DC );
 
     BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
-
-    /* Undo and redo functions */
-
-    /**
-     * Function SaveCopyInUndoList.
-     * Creates a new entry in undo list of commands.
-     * add a picker to handle aItemToCopy
-     * @param aItem = the board item modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
-     * @param aTransformPoint = the reference point of the transformation, for
-     *                          commands like move
-     */
-    virtual void SaveCopyInUndoList( BOARD_ITEM* aItem,
-                                     UNDO_REDO_T aTypeCommand,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
-
-    /**
-     * Function SaveCopyInUndoList (overloaded).
-     * Creates a new entry in undo list of commands.
-     * add a list of pickers to handle a list of items
-     * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
-     * @param aTransformPoint = the reference point of the transformation, for
-     *                          commands like move
-     */
-    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                     UNDO_REDO_T aTypeCommand,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
-
-    /**
-     * Function RestoreCopyFromUndoList
-     * performs an undo operation on the last edition:
-     *  - Place the current edited library component in Redo list
-     *  - Get old version of the current edited library component
-     */
-    void RestoreCopyFromUndoList( wxCommandEvent& aEvent );
-
-    /**
-     * Function RestoreCopyFromRedoList
-     * performs a redo operation on the the last edition:
-     *  - Place the current edited library component in undo list
-     *  - Get old version of the current edited library component
-     */
-    void RestoreCopyFromRedoList( wxCommandEvent& aEvent );
 
     /// Return the current library nickname.
     const wxString GetCurrentLib() const;

@@ -65,30 +65,6 @@ EDGE_MODULE::~EDGE_MODULE()
 }
 
 
-const EDGE_MODULE& EDGE_MODULE::operator = ( const EDGE_MODULE& rhs )
-{
-    if( &rhs == this )
-        return *this;
-
-    DRAWSEGMENT::operator=( rhs );
-
-    m_Start0 = rhs.m_Start0;
-    m_End0   = rhs.m_End0;
-
-    m_PolyPoints = rhs.m_PolyPoints;    // std::vector copy
-    return *this;
-}
-
-
-void EDGE_MODULE::Copy( EDGE_MODULE* source )
-{
-    if( source == NULL )
-        return;
-
-    *this = *source;
-}
-
-
 void EDGE_MODULE::SetLocalCoord()
 {
     MODULE* module = (MODULE*) m_Parent;

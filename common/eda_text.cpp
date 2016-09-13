@@ -66,23 +66,6 @@ EDA_TEXT::EDA_TEXT( const wxString& text )
 }
 
 
-EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText )
-{
-    m_Pos = aText.m_Pos;
-    m_Size = aText.m_Size;
-    m_Orient = aText.m_Orient;
-    m_Attributs = aText.m_Attributs;
-    m_Mirror = aText.m_Mirror;
-    m_HJustify = aText.m_HJustify;
-    m_VJustify = aText.m_VJustify;
-    m_Thickness = aText.m_Thickness;
-    m_Italic = aText.m_Italic;
-    m_Bold = aText.m_Bold;
-    m_MultilineAllowed = aText.m_MultilineAllowed;
-    m_Text = aText.m_Text;
-}
-
-
 EDA_TEXT::~EDA_TEXT()
 {
 }

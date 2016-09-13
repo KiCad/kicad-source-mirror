@@ -34,6 +34,7 @@
 #include <base_units.h>
 #include <kicad_string.h>
 #include <macros.h>
+#include <board_commit.h>
 
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
@@ -134,35 +135,21 @@ void DIALOG_GLOBAL_MODULES_FIELDS_EDITION::OnOKClick( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::OnResetModuleTextSizes( wxCommandEvent& event )
 {
-    DIALOG_GLOBAL_MODULES_FIELDS_EDITION dlg(this);
+    DIALOG_GLOBAL_MODULES_FIELDS_EDITION dlg( this );
     dlg.ShowModal();
-
-    if( IsGalCanvasActive() )
-    {
-        for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
-        {
-            module->Value().ViewUpdate();
-            module->Reference().ViewUpdate();
-        }
-    }
-
-    m_canvas->Refresh();
 }
 
 void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
                                            bool aValue, bool aOthers )
 {
-    MODULE* module;
-    BOARD_ITEM* boardItem;
-    ITEM_PICKER itemWrapper( NULL, UR_CHANGED );
-    PICKED_ITEMS_LIST undoItemList;
-    unsigned int ii;
+    BOARD_COMMIT commit( this );
+
+    int modTextWidth = GetDesignSettings().m_ModuleTextWidth;
+    const wxSize& modTextSize = GetDesignSettings().m_ModuleTextSize;
 
     // Prepare undo list
-    for( module = GetBoard()->m_Modules; module; module = module->Next() )
+    for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
     {
-        itemWrapper.SetItem( module );
-
         if( ! aFilter.IsEmpty() )
         {
             if( ! WildCompareString( aFilter, FROM_UTF8( module->GetFPID().Format().c_str() ),
@@ -173,81 +160,50 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
 
         if( aRef )
         {
-            TEXTE_MODULE *item = &module->Reference();
+            TEXTE_MODULE* item = &module->Reference();
 
             if( item->GetSize() != GetDesignSettings().m_ModuleTextSize ||
                 item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
             {
-                undoItemList.PushItem( itemWrapper );
+                commit.Modify( item );
+                item->SetThickness( modTextWidth );
+                item->SetSize( modTextSize );
             }
         }
 
         if( aValue )
         {
-            TEXTE_MODULE *item = &module->Value();
+            TEXTE_MODULE* item = &module->Value();
 
             if( item->GetSize() != GetDesignSettings().m_ModuleTextSize ||
                 item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
             {
-                undoItemList.PushItem( itemWrapper );
+                commit.Modify( item );
+                item->SetThickness( modTextWidth );
+                item->SetSize( modTextSize );
             }
         }
 
         if( aOthers )
         {
             // Go through all other module text fields
-            for( boardItem = module->GraphicalItems(); boardItem; boardItem = boardItem->Next() )
+            for( BOARD_ITEM* boardItem = module->GraphicalItems(); boardItem; boardItem = boardItem->Next() )
             {
                 if( boardItem->Type() == PCB_MODULE_TEXT_T )
                 {
-                    TEXTE_MODULE *item = static_cast<TEXTE_MODULE*>( boardItem );
+                    TEXTE_MODULE* item = static_cast<TEXTE_MODULE*>( boardItem );
 
                     if( item->GetSize() != GetDesignSettings().m_ModuleTextSize
                         || item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
                     {
-                        undoItemList.PushItem( itemWrapper );
+                        commit.Modify( item );
+                        item->SetThickness( modTextWidth );
+                        item->SetSize( modTextSize );
                     }
                 }
             }
         }
     }
 
-    // Exit if there's nothing to do
-    if( !undoItemList.GetCount() )
-        return;
-
-    SaveCopyInUndoList( undoItemList, UR_CHANGED );
-
-    // Apply changes to modules in the undo list
-    for( ii = 0; ii < undoItemList.GetCount(); ii++ )
-    {
-        module = (MODULE*) undoItemList.GetPickedItem( ii );
-
-        if( aRef )
-        {
-            module->Reference().SetThickness( GetDesignSettings().m_ModuleTextWidth );
-            module->Reference().SetSize( GetDesignSettings().m_ModuleTextSize );
-        }
-
-        if( aValue )
-        {
-            module->Value().SetThickness( GetDesignSettings().m_ModuleTextWidth );
-            module->Value().SetSize( GetDesignSettings().m_ModuleTextSize );
-        }
-
-        if( aOthers )
-        {
-            for( boardItem = module->GraphicalItems(); boardItem; boardItem = boardItem->Next() )
-            {
-                if( boardItem->Type() == PCB_MODULE_TEXT_T )
-                {
-                    TEXTE_MODULE *item = static_cast<TEXTE_MODULE*>( boardItem );
-                    item->SetThickness( GetDesignSettings().m_ModuleTextWidth );
-                    item->SetSize( GetDesignSettings().m_ModuleTextSize );
-                }
-            }
-        }
-    }
-
-    OnModify();
+    commit.Push( wxT( "Reset module text size" ) );
 }

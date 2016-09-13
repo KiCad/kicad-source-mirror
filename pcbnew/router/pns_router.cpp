@@ -277,8 +277,8 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent )
     for ( auto item : added )
         m_iface->DisplayItem( item );
 
-    for ( auto item : removed )
-        m_iface->HideItem ( item );
+    for( auto item : removed )
+        m_iface->HideItem( item );
 }
 
 

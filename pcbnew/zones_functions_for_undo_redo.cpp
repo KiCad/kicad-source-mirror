@@ -237,7 +237,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                     wxASSERT_MSG( zcopy != NULL,
                                   wxT( "UpdateCopyOfZonesList() error: link = NULL" ) );
 
-                    ref->Copy( zcopy );
+                    *ref = *zcopy;
 
                     // the copy was deleted; the link does not exists now.
                     aPickList.SetPickedItemLink( NULL, kk );

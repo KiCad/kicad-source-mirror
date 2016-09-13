@@ -48,6 +48,7 @@
 #include <view/view_controls.h>
 #include <pcb_painter.h>
 #include <origin_viewitem.h>
+#include <board_commit.h>
 
 #include <functional>
 using namespace std::placeholders;
@@ -770,12 +771,10 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
 {
     int open_ctl;
     wxString fileName;
-    PICKED_ITEMS_LIST undoListPicker;
-    ITEM_PICKER picker( NULL, UR_NEW );
 
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
     BOARD* board = getModel<BOARD>();
-    KIGFX::VIEW* view = getView();
+    BOARD_COMMIT commit( editFrame );
 
     if( !editFrame )
         return 0;
@@ -839,9 +838,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
             continue;
         }
 
-        picker.SetItem( track );
-        undoListPicker.PushItem( picker );
-        view->Add( track );
+        commit.Added( track );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, track );
     }
 
@@ -849,11 +846,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
 
     for( ; module; module = module->Next() )
     {
-        picker.SetItem( module );
-        undoListPicker.PushItem( picker );
-
-        module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
-        view->Add( module );
+        commit.Added( module );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, module );
     }
 
@@ -861,26 +854,22 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
 
     for( ; drawing; drawing = drawing->Next() )
     {
-        picker.SetItem( drawing );
-        undoListPicker.PushItem( picker );
-        view->Add( drawing );
+        commit.Added( drawing );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, drawing );
     }
 
     for( ZONE_CONTAINER* zone = board->GetArea( zonescount ); zone;
          zone = board->GetArea( zonescount ) )
     {
-        picker.SetItem( zone );
-        undoListPicker.PushItem( picker );
-        zonescount++;
-        view->Add( zone );
+        ++zonescount;
+        commit.Added( zone );
         m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, zone );
     }
 
-    if( undoListPicker.GetCount() == 0 )
+    if( commit.Empty() )
         return 0;
 
-    editFrame->SaveCopyInUndoList( undoListPicker, UR_NEW );
+    commit.Push( _( "Append a board" ) );
 
     // Synchronize layers
     // we should not ask PLUGINs to do these items:
@@ -901,10 +890,12 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     // Ratsnest
     board->BuildListOfNets();
     board->SynchronizeNetsAndNetClasses();
-    board->GetRatsnest()->Recalculate();
+    board->GetRatsnest()->ProcessBoard();
 
     // Start dragging the appended board
-    VECTOR2D v( static_cast<BOARD_ITEM*>( undoListPicker.GetPickedItem( 0 ) )->GetPosition() );
+    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selectionTool->GetSelection();
+    VECTOR2D v( selection.Item<BOARD_ITEM>( 0 )->GetPosition() );
     getViewControls()->WarpCursor( v, true, true );
     m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
 

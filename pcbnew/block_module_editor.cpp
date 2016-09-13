@@ -196,7 +196,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
             if( ret == wxID_OK )
             {
-                SaveCopyInUndoList( currentModule, UR_MODEDIT );
+                SaveCopyInUndoList( currentModule, UR_CHANGED );
                 const wxPoint blockCentre = GetScreen()->m_BlockLocate.Centre();
                 MoveMarkedItemsExactly( currentModule, blockCentre, translation, rotation );
             }
@@ -213,7 +213,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
 
         if( itemsCount )
-            SaveCopyInUndoList( currentModule, UR_MODEDIT );
+            SaveCopyInUndoList( currentModule, UR_CHANGED );
 
         DeleteMarkedItems( currentModule );
         break;
@@ -226,7 +226,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
 
         if( itemsCount )
-            SaveCopyInUndoList( currentModule, UR_MODEDIT );
+            SaveCopyInUndoList( currentModule, UR_CHANGED );
 
         RotateMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
         break;
@@ -237,7 +237,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
 
         if( itemsCount )
-            SaveCopyInUndoList( currentModule, UR_MODEDIT );
+            SaveCopyInUndoList( currentModule, UR_CHANGED );
 
         MirrorMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
         break;
@@ -293,7 +293,7 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                // Move
     case BLOCK_PRESELECT_MOVE:      // Move with preselection list
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( currentModule, UR_MODEDIT );
+        SaveCopyInUndoList( currentModule, UR_CHANGED );
         MoveMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector() );
         m_canvas->Refresh( true );
         break;
@@ -301,7 +301,7 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_COPY:                // Copy
     case BLOCK_COPY_AND_INCREMENT:  // Copy and increment pad names
         GetScreen()->m_BlockLocate.ClearItemsList();
-        SaveCopyInUndoList( currentModule, UR_MODEDIT );
+        SaveCopyInUndoList( currentModule, UR_CHANGED );
         CopyMarkedItems( currentModule, GetScreen()->m_BlockLocate.GetMoveVector(),
                          command == BLOCK_COPY_AND_INCREMENT );
         break;
@@ -313,12 +313,12 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
     case BLOCK_FLIP:      // Mirror by popup menu, from block move
-        SaveCopyInUndoList( currentModule, UR_MODEDIT );
+        SaveCopyInUndoList( currentModule, UR_CHANGED );
         MirrorMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
     case BLOCK_ROTATE:
-        SaveCopyInUndoList( currentModule, UR_MODEDIT );
+        SaveCopyInUndoList( currentModule, UR_CHANGED );
         RotateMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
         break;
 

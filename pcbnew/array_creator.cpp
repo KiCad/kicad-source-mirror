@@ -28,7 +28,7 @@
 
 #include "array_creator.h"
 
-#include <class_undoredo_container.h>
+#include <board_commit.h>
 
 #include <dialogs/dialog_create_array.h>
 
@@ -41,6 +41,7 @@ void ARRAY_CREATOR::Invoke()
     if( numItems == 0 )
         return;
 
+    BOARD_COMMIT commit( &m_parent );
     MODULE* const module = getModule();
     const bool isModuleEditor = module != NULL;
 
@@ -52,77 +53,63 @@ void ARRAY_CREATOR::Invoke()
 
     DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* const array_opts = dialog.GetArrayOptions();
 
-    if( ret == wxID_OK && array_opts != NULL )
+    if( ret != wxID_OK || array_opts == NULL )
+        return;
+
+    for ( int i = 0; i < numItems; ++i )
     {
-        PICKED_ITEMS_LIST newItemsList;
+        BOARD_ITEM* item = getNthItemToArray( i );
 
-        if( isModuleEditor )
+        if( item->Type() == PCB_PAD_T && !isModuleEditor )
         {
-            // modedit saves everything upfront
-            m_parent.SaveCopyInUndoList( getBoard()->m_Modules, UR_MODEDIT );
+            // If it is not the module editor, then duplicate the parent module instead
+            item = static_cast<MODULE*>( item )->GetParent();
         }
 
-        for ( int i = 0; i < numItems; ++i )
+        // The first item in list is the original item. We do not modify it
+        for( int ptN = 1; ptN < array_opts->GetArraySize(); ptN++ )
         {
-            BOARD_ITEM* item = getNthItemToArray( i );
+            BOARD_ITEM* new_item;
 
-            if( item->Type() == PCB_PAD_T && !isModuleEditor )
+            if( isModuleEditor )
             {
-                // If it is not the module editor, then duplicate the parent module instead
-                item = static_cast<MODULE*>( item )->GetParent();
+                // increment pad numbers if do any renumbering
+                // (we will number again later according to the numbering scheme if set)
+                new_item = module->Duplicate( item, array_opts->ShouldNumberItems() );
+            }
+            else
+            {
+                // PCB items keep the same numbering
+                new_item = getBoard()->Duplicate( item );
+
+                // @TODO: we should merge zones. This is a bit tricky, because
+                // the undo command needs saving old area, if it is merged.
             }
 
-            // The first item in list is the original item. We do not modify it
-            for( int ptN = 1; ptN < array_opts->GetArraySize(); ptN++ )
+            if( new_item )
             {
-                BOARD_ITEM* new_item;
+                array_opts->TransformItem( ptN, new_item, rotPoint );
+                prePushAction( new_item );
+                commit.Add( new_item );
+                postPushAction( new_item );
+            }
 
-                if( isModuleEditor )
+            // attempt to renumber items if the array parameters define
+            // a complete numbering scheme to number by (as opposed to
+            // implicit numbering by incrementing the items during creation
+            if( new_item && array_opts->NumberingStartIsSpecified() )
+            {
+                // Renumber pads. Only new pad number renumbering has meaning,
+                // in the footprint editor.
+                if( new_item->Type() == PCB_PAD_T )
                 {
-                    // increment pad numbers if do any renumbering
-                    // (we will number again later according to the numbering scheme if set)
-                    new_item = module->DuplicateAndAddItem(
-                            item, array_opts->ShouldNumberItems() );
-                }
-                else
-                {
-                    // PCB items keep the same numbering
-                    new_item = getBoard()->DuplicateAndAddItem( item );
-
-                    // @TODO: we should merge zones. This is a bit tricky, because
-                    // the undo command needs saving old area, if it is merged.
-                }
-
-                if( new_item )
-                {
-                    array_opts->TransformItem( ptN, new_item, rotPoint );
-                    prePushAction( new_item );
-                    newItemsList.PushItem( new_item );  // For undo list
-                    postPushAction( new_item );
-                }
-
-                // attempt to renumber items if the array parameters define
-                // a complete numbering scheme to number by (as opposed to
-                // implicit numbering by incrementing the items during creation
-                if( new_item && array_opts->NumberingStartIsSpecified() )
-                {
-                    // Renumber pads. Only new pad number renumbering has meaning,
-                    // in the footprint editor.
-                    if( new_item->Type() == PCB_PAD_T )
-                    {
-                        const wxString padName = array_opts->GetItemNumber( ptN );
-                        static_cast<D_PAD*>( new_item )->SetPadName( padName );
-                    }
+                    const wxString padName = array_opts->GetItemNumber( ptN );
+                    static_cast<D_PAD*>( new_item )->SetPadName( padName );
                 }
             }
         }
-
-        if( !isModuleEditor )
-        {
-            // Add all items as a single undo point for PCB editors
-            m_parent.SaveCopyInUndoList( newItemsList, UR_NEW );
-        }
-
-        finalise();
     }
+
+    commit.Push( _( "Create an array" ) );
+    finalise();
 }

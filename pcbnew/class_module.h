@@ -36,6 +36,7 @@
 #include <dlist.h>
 #include <layers_id_colors_and_visibility.h>       // ALL_LAYERS definition.
 #include <class_board_item.h>
+#include <board_item_container.h>
 #include <fpid.h>
 
 #include <class_text_mod.h>
@@ -75,7 +76,7 @@ enum MODULE_ATTR_T
 };
 
 
-class MODULE : public BOARD_ITEM
+class MODULE : public BOARD_ITEM_CONTAINER
 {
 public:
     MODULE( BOARD* parent );
@@ -83,6 +84,8 @@ public:
     MODULE( const MODULE& aModule );
 
     ~MODULE();
+
+    MODULE& operator=( const MODULE& aOther );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -92,37 +95,11 @@ public:
     MODULE* Next() const { return static_cast<MODULE*>( Pnext ); }
     MODULE* Back() const { return static_cast<MODULE*>( Pback ); }
 
-    void Copy( MODULE* Module );        // Copy structure
+    ///> @copydoc BOARD_ITEM_CONTAINER::Add()
+    void Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode = ADD_INSERT ) override;
 
-    /**
-     * Function Add
-     * adds the given item to this MODULE and takes ownership of its memory.
-     * @param aBoardItem The item to add to this board.
-     * @param doAppend If true, then append, else insert.
-     */
-    void Add( BOARD_ITEM* aBoardItem, bool doAppend = true );
-
-    /**
-     * Function Delete
-     * removes the given single item from this MODULE and deletes its memory.
-     * @param aBoardItem The item to remove from this module and delete
-     */
-    void Delete( BOARD_ITEM* aBoardItem )
-    {
-        // developers should run DEBUG versions and fix such calls with NULL
-        wxASSERT( aBoardItem );
-
-        if( aBoardItem )
-            delete Remove( aBoardItem );
-    }
-
-    /**
-     * Function Remove
-     * removes \a aBoardItem from this MODULE and returns it to caller without deleting it.
-     * @param aBoardItem The item to remove from this module.
-     * @return BOARD_ITEM* \a aBoardItem which was passed in.
-     */
-    BOARD_ITEM* Remove( BOARD_ITEM* aBoardItem );
+    ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
+    void Remove( BOARD_ITEM* aBoardItem ) override;
 
     /**
      * Function ClearAllNets
@@ -404,9 +381,16 @@ public:
     void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                         GR_DRAWMODE draw_mode );
 
+    /**
+     * Function DrawAncre
+     * Draw the anchor cross (vertical)
+     * Must be done after the pads, because drawing the hole will erase overwrite
+     * every thing already drawn.
+     */
     void DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC,
                     const wxPoint& offset, int dim_ancre, GR_DRAWMODE draw_mode );
 
+    ///> @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
 
     bool HitTest( const wxPoint& aPosition ) const;
@@ -536,12 +520,13 @@ public:
     void SetPlacementCost90( int aCost )    { m_CntRot90 = aCost; }
 
     /**
-     * Function DuplicateAndAddItem
-     * Duplicate a given item within the module
+     * Function Duplicate
+     * Duplicate a given item within the module, without adding to the board
      * @return the new item, or NULL if the item could not be duplicated
      */
-    BOARD_ITEM* DuplicateAndAddItem( const BOARD_ITEM* item,
-                                     bool aIncrementPadNumbers );
+    BOARD_ITEM* Duplicate( const BOARD_ITEM* aItem,
+                           bool aIncrementPadNumbers,
+                           bool aAddToModule = false );
 
     /**
      * Function Add3DModel

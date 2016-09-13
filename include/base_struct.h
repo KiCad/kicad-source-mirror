@@ -179,9 +179,6 @@ protected:
     /// Flag bits for editing and other uses.
     STATUS_FLAGS  m_Flags;
 
-    // Link to an copy of the item use to save the item's state for undo/redo feature.
-    EDA_ITEM*     m_Image;
-
 private:
 
     void initVars();
@@ -261,8 +258,6 @@ public:
     void SetFlags( STATUS_FLAGS aMask ) { m_Flags |= aMask; }
     void ClearFlags( STATUS_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
     STATUS_FLAGS GetFlags() const { return m_Flags; }
-
-    void SetImage( EDA_ITEM* aItem ) { m_Image = aItem; }
 
     /**
      * Function SetForceVisible
@@ -482,17 +477,11 @@ public:
      */
     static bool Sort( const EDA_ITEM* aLeft, const EDA_ITEM* aRight ) { return *aLeft < *aRight; }
 
-#if 0
     /**
      * Operator assignment
      * is used to assign the members of \a aItem to another object.
-     *
-     * @warning This is still a work in progress and not ready for prime time.  Do not use
-     *          as there is a known issue with wxString buffers.
      */
-    virtual EDA_ITEM& operator=( const EDA_ITEM& aItem );
-    #define USE_EDA_ITEM_OP_EQ
-#endif
+    EDA_ITEM& operator=( const EDA_ITEM& aItem );
 
     /// @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const;

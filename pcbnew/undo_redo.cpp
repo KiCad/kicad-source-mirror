@@ -3,7 +3,9 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,40 +122,13 @@ using namespace std::placeholders;
 
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
-    static std::vector<BOARD_ITEM*> itemsList;
+    static std::list<BOARD_ITEM*> itemsList;
 
     if( aItem == NULL ) // Build list
     {
         // Count items to store in itemsList:
-        int icnt = 0;
         BOARD_ITEM* item;
-
-        // Count tracks:
-        for( item = aPcb->m_Track; item != NULL; item = item->Next() )
-            icnt++;
-
-        // Count modules:
-        for( item = aPcb->m_Modules; item != NULL; item = item->Next() )
-            icnt++;
-
-        // Count drawings
-        for( item = aPcb->m_Drawings; item != NULL; item = item->Next() )
-            icnt++;
-
-        // Count zones outlines
-        icnt +=  aPcb->GetAreaCount();
-
-        // Count zones segm (now obsolete):
-        for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
-             icnt++;
-
-        NETINFO_LIST& netInfo = aPcb->GetNetInfo();
-
-        icnt += netInfo.GetNetCount();
-
-        // Build candidate list:
         itemsList.clear();
-        itemsList.reserve(icnt);
 
         // Store items in list:
         // Append tracks:
@@ -176,11 +151,14 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
         for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
             itemsList.push_back( item );
 
+        NETINFO_LIST& netInfo = aPcb->GetNetInfo();
+
         for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )
             itemsList.push_back( *i );
 
         // Sort list
-        std::sort( itemsList.begin(), itemsList.end() );
+        itemsList.sort();
+
         return false;
     }
 
@@ -189,222 +167,42 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 }
 
 
-void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
+void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM* aItem, UNDO_REDO_T aCommandType,
+                                              const wxPoint& aTransformPoint )
 {
-    if( aImage == NULL )
-        return;
-
-    // Remark: to create images of edited items to undo, we are using Clone method
-    // which can duplication of items foe copy, but does not clone all members
-    // mainly pointers in chain and time stamp, which is set to new, unique value.
-    // So we have to use the current values of these parameters.
-
-    EDA_ITEM * pnext = Next();
-    EDA_ITEM * pback = Back();
-    DHEAD* mylist    = m_List;
-    time_t timestamp = GetTimeStamp();
-
-    switch( Type() )
-    {
-    case PCB_MODULE_T:
-    {
-        MODULE* tmp = (MODULE*) aImage->Clone();
-        ( (MODULE*) aImage )->Copy( (MODULE*) this );
-        ( (MODULE*) this )->Copy( tmp );
-        delete tmp;
-    }
-        break;
-
-    case PCB_ZONE_AREA_T:
-    {
-        ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) aImage->Clone();
-        ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) this );
-        ( (ZONE_CONTAINER*) this )->Copy( tmp );
-        delete tmp;
-    }
-        break;
-
-    case PCB_LINE_T:
-        std::swap( *((DRAWSEGMENT*)this), *((DRAWSEGMENT*)aImage) );
-        break;
-
-    case PCB_TRACE_T:
-    case PCB_VIA_T:
-    {
-        TRACK* track = (TRACK*) this;
-        TRACK* image = (TRACK*) aImage;
-
-        std::swap(track->m_Layer, image->m_Layer );
-
-        // swap start, end, width and shape for track and image.
-        wxPoint exchp = track->GetStart();
-        track->SetStart( image->GetStart() );
-        image->SetStart( exchp );
-        exchp = track->GetEnd();
-        track->SetEnd( image->GetEnd() );
-        image->SetEnd( exchp );
-
-        int atmp = track->GetWidth();
-        track->SetWidth( image->GetWidth() );
-        image->SetWidth( atmp );
-
-        if( Type() == PCB_VIA_T )
-        {
-            VIA *via = static_cast<VIA*>( this );
-            VIA *viaimage = static_cast<VIA*>( aImage );
-
-            VIATYPE_T viatmp = via->GetViaType();
-            via->SetViaType( viaimage->GetViaType() );
-            viaimage->SetViaType( viatmp );
-
-            int drilltmp = via->GetDrillValue();
-
-            if( via->IsDrillDefault() )
-                drilltmp = -1;
-
-            int itmp = viaimage->GetDrillValue();
-
-            if( viaimage->IsDrillDefault() )
-                itmp = -1;
-
-            std::swap(itmp, drilltmp );
-
-            if( drilltmp > 0 )
-                via->SetDrill( drilltmp );
-            else
-                via->SetDrillDefault();
-
-            if( itmp > 0 )
-                viaimage->SetDrill( itmp );
-            else
-                viaimage->SetDrillDefault();
-        }
-    }
-        break;
-
-    case PCB_TEXT_T:
-        std::swap( *((TEXTE_PCB*)this), *((TEXTE_PCB*)aImage) );
-        break;
-
-    case PCB_TARGET_T:
-        std::swap( *((PCB_TARGET*)this), *((PCB_TARGET*)aImage) );
-        break;
-
-    case PCB_DIMENSION_T:
-        std::swap( *((DIMENSION*)this), *((DIMENSION*)aImage) );
-        break;
-
-    case PCB_ZONE_T:
-    default:
-        wxLogMessage( wxT( "SwapData() error: unexpected type %d" ), Type() );
-        break;
-    }
-
-    // Restore pointers and time stamp, to be sure they are not broken
-    Pnext = pnext;
-    Pback = pback;
-    m_List = mylist;
-    SetTimeStamp( timestamp );
+    PICKED_ITEMS_LIST commandToUndo;
+    commandToUndo.PushItem( ITEM_PICKER( aItem, aCommandType ) );
+    SaveCopyInUndoList( commandToUndo, aCommandType, aTransformPoint );
 }
 
 
-void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
-                                         UNDO_REDO_T    aCommandType,
-                                         const wxPoint& aTransformPoint )
-{
-    if( aItem == NULL )     // Nothing to save
-        return;
-
-    // For texts belonging to modules, we need to save state of the parent module
-    if( aItem->Type() == PCB_MODULE_TEXT_T )
-    {
-        aItem = aItem->GetParent();
-        wxASSERT( aItem->Type() == PCB_MODULE_T );
-        aCommandType = UR_CHANGED;
-
-        if( aItem == NULL )
-            return;
-    }
-
-    PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
-
-    commandToUndo->m_TransformPoint = aTransformPoint;
-
-    ITEM_PICKER itemWrapper( aItem, aCommandType );
-
-    switch( aCommandType )
-    {
-    case UR_CHANGED:                        // Create a copy of item
-        if( itemWrapper.GetLink() == NULL ) // When not null, the copy is already done
-            itemWrapper.SetLink( aItem->Clone() );
-        commandToUndo->PushItem( itemWrapper );
-        break;
-
-    case UR_NEW:
-    case UR_DELETED:
-#ifdef USE_WX_OVERLAY
-    // Avoid to redraw when autoplacing
-    if( aItem->Type() == PCB_MODULE_T )
-        if( ((MODULE*)aItem)->GetFlags() & MODULE_to_PLACE )
-            break;
-        m_canvas->Refresh();
-#endif
-    case UR_MOVED:
-    case UR_FLIPPED:
-    case UR_ROTATED:
-    case UR_ROTATED_CLOCKWISE:
-        commandToUndo->PushItem( itemWrapper );
-        break;
-
-    default:
-    {
-        wxString msg;
-        msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), aCommandType );
-        wxMessageBox( msg );
-    }
-    break;
-    }
-
-    if( commandToUndo->GetCount() )
-    {
-        /* Save the copy in undo list */
-        GetScreen()->PushCommandToUndoList( commandToUndo );
-
-        /* Clear redo list, because after new save there is no redo to do */
-        GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
-    }
-    else
-    {
-        delete commandToUndo;
-    }
-}
-
-
-void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                         UNDO_REDO_T        aTypeCommand,
-                                         const wxPoint&     aTransformPoint )
+void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
+                                         UNDO_REDO_T aTypeCommand, const wxPoint& aTransformPoint )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
     commandToUndo->m_TransformPoint = aTransformPoint;
 
     // First, filter unnecessary stuff from the list (i.e. for multiple pads / labels modified),
-    // take the first occurence of the module.
-
+    // take the first occurence of the module (we save copies of modules when one of its subitems
+    // is changed).
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         ITEM_PICKER picker = aItemsList.GetItemWrapper(ii);
         BOARD_ITEM* item    = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
 
-        // For texts belonging to modules, we need to save state of the parent module
-        if( item->Type() == PCB_MODULE_TEXT_T  || item->Type() == PCB_PAD_T )
+        // For items belonging to modules, we need to save state of the parent module
+        if( item->Type() == PCB_MODULE_TEXT_T || item->Type() == PCB_MODULE_EDGE_T
+                || item->Type() == PCB_PAD_T )
         {
+            // Item to be stored in the undo buffer is the parent module
             item = item->GetParent();
-            wxASSERT( item->Type() == PCB_MODULE_T );
+            wxASSERT( item && item->Type() == PCB_MODULE_T );
 
             if( item == NULL )
                 continue;
 
+            // Check if the parent module has already been saved in another entry
             bool found = false;
 
             for( unsigned j = 0; j < commandToUndo->GetCount(); j++ )
@@ -417,11 +215,35 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
             }
 
             if( !found )
-                commandToUndo->PushItem( ITEM_PICKER(item, UR_CHANGED ) );
+            {
+                // Create a clean copy of the parent module
+                MODULE* orig = static_cast<MODULE*>( item );
+                MODULE* clone = new MODULE( *orig );
+                clone->SetParent( GetBoard() );
+
+                // Clear current flags (which can be temporary set by a current edit command)
+                for( EDA_ITEM* item = clone->GraphicalItems(); item; item = item->Next() )
+                    item->ClearFlags();
+
+                for( D_PAD* pad = clone->Pads(); pad; pad = pad->Next() )
+                    pad->ClearFlags();
+
+                clone->Reference().ClearFlags();
+                clone->Value().ClearFlags();
+
+                ITEM_PICKER picker( item, UR_CHANGED );
+                picker.SetLink( clone );
+                commandToUndo->PushItem( picker );
+
+                orig->SetLastEditTime();
+            }
             else
+            {
                 continue;
+            }
 
         } else {
+            // Normal case: all other BOARD_ITEMs, are simply copied to the new list
             commandToUndo->PushItem( picker );
         }
     }
@@ -468,7 +290,6 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
             msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), command );
             wxMessageBox( msg );
         }
-
         break;
 
         }
@@ -482,14 +303,70 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         /* Clear redo list, because after a new command one cannot redo a command */
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
     }
-    else    // Should not occur
+    else
     {
+        // Should not occur
+        wxASSERT( false );
         delete commandToUndo;
     }
 }
 
 
-void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand,
+void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
+{
+    if( UndoRedoBlocked() )
+        return;
+
+    if( GetScreen()->GetUndoCommandCount() <= 0 )
+        return;
+
+    // Inform tools that undo command was issued
+    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
+    m_toolManager->ProcessEvent( event );
+
+    // Get the old list
+    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
+
+    // Undo the command
+    PutDataInPreviousState( List, false );
+
+    // Put the old list in RedoList
+    List->ReversePickersListOrder();
+    GetScreen()->PushCommandToRedoList( List );
+
+    OnModify();
+    m_canvas->Refresh();
+}
+
+
+void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
+{
+    if( UndoRedoBlocked() )
+        return;
+
+    if( GetScreen()->GetRedoCommandCount() == 0 )
+        return;
+
+    // Inform tools that redo command was issued
+    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
+    m_toolManager->ProcessEvent( event );
+
+    // Get the old list
+    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
+
+    // Redo the command
+    PutDataInPreviousState( List, true );
+
+    // Put the old list in UndoList
+    List->ReversePickersListOrder();
+    GetScreen()->PushCommandToUndoList( List );
+
+    OnModify();
+    m_canvas->Refresh();
+}
+
+
+void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand,
                                              bool aRebuildRatsnet )
 {
     BOARD_ITEM* item;
@@ -505,6 +382,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
     bool build_item_list = true;    // if true the list of existing items must be rebuilt
 
+    // Restore changes in reverse order
     for( int ii = aList->GetCount() - 1; ii >= 0 ; ii-- )
     {
         item = (BOARD_ITEM*) aList->GetPickedItem( ii );
@@ -529,6 +407,9 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
             if( !TestForExistingItem( GetBoard(), item ) )
             {
+                // Checking if it ever happens
+                wxASSERT_MSG( false, "Item in the undo buffer does not exist" );
+
                 // Remove this non existent item
                 aList->RemovePicker( ii );
                 ii++;       // the current item was removed, ii points now the next item
@@ -559,6 +440,9 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             break;
         }
 
+        // It is possible that we are going to replace the selected item, so clear it
+        SetCurItem( NULL );
+
         switch( aList->GetPickedItemStatus( ii ) )
         {
         case UR_CHANGED:    /* Exchange old and new data for each item */
@@ -572,6 +456,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 MODULE* oldModule = static_cast<MODULE*>( item );
                 oldModule->RunOnChildren( std::bind( &KIGFX::VIEW::Remove, view, _1 ) );
             }
+
             view->Remove( item );
             ratsnest->Remove( item );
 
@@ -583,18 +468,19 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             {
                 MODULE* newModule = static_cast<MODULE*>( item );
                 newModule->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
+                newModule->RunOnChildren( std::bind( &BOARD_ITEM::ClearFlags, _1, EDA_ITEM_ALL_FLAGS ));
             }
+
             view->Add( item );
             ratsnest->Add( item );
-
-            item->ClearFlags( SELECTED );
+            item->ClearFlags();
             item->ViewUpdate( KIGFX::VIEW_ITEM::LAYERS );
         }
         break;
 
         case UR_NEW:        /* new items are deleted */
             aList->SetPickedItemStatus( UR_DELETED, ii );
-            GetBoard()->Remove( item );
+            GetModel()->Remove( item );
 
             if( item->Type() == PCB_MODULE_T )
             {
@@ -608,15 +494,15 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
         case UR_DELETED:    /* deleted items are put in List, as new items */
             aList->SetPickedItemStatus( UR_NEW, ii );
-            GetBoard()->Add( item );
+            GetModel()->Add( item );
 
             if( item->Type() == PCB_MODULE_T )
             {
                 MODULE* module = static_cast<MODULE*>( item );
                 module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1) );
             }
-            view->Add( item );
 
+            view->Add( item );
             item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             build_item_list = true;
             break;
@@ -664,7 +550,10 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     // Rebuild pointers and ratsnest that can be changed.
     if( reBuild_ratsnest )
     {
-        Compile_Ratsnest( NULL, true );
+        // Compile ratsnest propagates nets from pads to tracks
+        /// @todo LEGACY Compile_Ratsnest() has to be rewritten and moved to RN_DATA
+        if( deep_reBuild_ratsnest )
+            Compile_Ratsnest( NULL, false );
 
         if( IsGalCanvasActive() )
         {
@@ -673,61 +562,74 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             else
                 ratsnest->Recalculate();
         }
-
     }
 }
 
 
-void PCB_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
+void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 {
-    if( UndoRedoBlocked() )
+    if( aImage == NULL )
         return;
 
-    if( GetScreen()->GetUndoCommandCount() <= 0 )
-        return;
+    wxASSERT( Type() == aImage->Type() );
 
-    // Inform tools that undo command was issued
-    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager->ProcessEvent( event );
+    // Remark: to create images of edited items to undo, we are using Clone method
+    // which can duplication of items foe copy, but does not clone all members
+    // mainly pointers in chain and time stamp, which is set to new, unique value.
+    // So we have to use the current values of these parameters.
 
-    /* Get the old list */
-    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
-    /* Undo the command */
-    PutDataInPreviousState( List, false );
+    EDA_ITEM* pnext = Next();
+    EDA_ITEM* pback = Back();
+    DHEAD* mylist    = m_List;
+    time_t timestamp = GetTimeStamp();
+    EDA_ITEM* parent = GetParent();
 
-    /* Put the old list in RedoList */
-    List->ReversePickersListOrder();
-    GetScreen()->PushCommandToRedoList( List );
+    switch( Type() )
+    {
+    case PCB_MODULE_T:
+        std::swap( *((MODULE*) this), *((MODULE*) aImage) );
+        break;
 
-    OnModify();
-    m_canvas->Refresh();
-}
+    case PCB_ZONE_AREA_T:
+        std::swap( *((ZONE_CONTAINER*) this), *((ZONE_CONTAINER*) aImage) );
+        break;
 
+    case PCB_LINE_T:
+        std::swap( *((DRAWSEGMENT*) this), *((DRAWSEGMENT*) aImage) );
+        break;
 
-void PCB_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
-{
-    if( UndoRedoBlocked() )
-        return;
+    case PCB_TRACE_T:
+        std::swap( *((TRACK*) this), *((TRACK*) aImage) );
+        break;
 
-    if( GetScreen()->GetRedoCommandCount() == 0 )
-        return;
+    case PCB_VIA_T:
+        std::swap( *((VIA*) this), *((VIA*) aImage) );
+        break;
 
-    // Inform tools that redo command was issued
-    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager->ProcessEvent( event );
+    case PCB_TEXT_T:
+        std::swap( *((TEXTE_PCB*)this), *((TEXTE_PCB*)aImage) );
+        break;
 
-    /* Get the old list */
-    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
+    case PCB_TARGET_T:
+        std::swap( *((PCB_TARGET*)this), *((PCB_TARGET*)aImage) );
+        break;
 
-    /* Redo the command: */
-    PutDataInPreviousState( List, true );
+    case PCB_DIMENSION_T:
+        std::swap( *((DIMENSION*)this), *((DIMENSION*)aImage) );
+        break;
 
-    /* Put the old list in UndoList */
-    List->ReversePickersListOrder();
-    GetScreen()->PushCommandToUndoList( List );
+    case PCB_ZONE_T:
+    default:
+        wxLogMessage( wxT( "SwapData() error: unexpected type %d" ), Type() );
+        break;
+    }
 
-    OnModify();
-    m_canvas->Refresh();
+    // Restore pointers and time stamp, to be sure they are not broken
+    Pnext = pnext;
+    Pback = pback;
+    m_List = mylist;
+    SetTimeStamp( timestamp );
+    SetParent( parent );
 }
 
 
@@ -753,3 +655,4 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
         delete curr_cmd;    // Delete command
     }
 }
+

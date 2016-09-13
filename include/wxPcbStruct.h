@@ -39,6 +39,8 @@
 /*  Forward declarations of classes. */
 class PCB_SCREEN;
 class BOARD;
+class BOARD_COMMIT;
+class BOARD_ITEM_CONTAINER;
 class TEXTE_PCB;
 class MODULE;
 class TRACK;
@@ -637,64 +639,6 @@ public:
     void OnSelectOptionToolbar( wxCommandEvent& event );
     void ToolOnRightClick( wxCommandEvent& event );
 
-    /**
-     * Function SaveCopyInUndoList.
-     * Creates a new entry in undo list of commands.
-     * add a picker to handle aItemToCopy
-     * @param aItemToCopy = the board item modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
-     * @param aTransformPoint = the reference point of the transformation, for
-     *                          commands like move
-     */
-    virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
-                                     UNDO_REDO_T aTypeCommand,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
-
-    /**
-     * Function SaveCopyInUndoList (overloaded).
-     * Creates a new entry in undo list of commands.
-     * add a list of pickers to handle a list of items
-     * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
-     * @param aTransformPoint = the reference point of the transformation, for
-     *                          commands like move
-     */
-    virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                     UNDO_REDO_T aTypeCommand,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
-
-    /**
-     * Function PutDataInPreviousState
-     * Used in undo or redo command.
-     * Put data pointed by List in the previous state, i.e. the state memorized by List
-     * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
-     * @param aRedoCommand = a bool: true for redo, false for undo
-     * @param aRebuildRatsnet = a bool: true to rebuild ratsnest (normal use), false
-     * to just retrieve last state (used in abort commands that do not need to
-     * rebuild ratsnest)
-     */
-    void PutDataInPreviousState( PICKED_ITEMS_LIST* aList,
-                                 bool               aRedoCommand,
-                                 bool               aRebuildRatsnet = true );
-
-    /**
-     * Function RestoreCopyFromRedoList
-     *  Redo the last edition:
-     *  - Save the current board in Undo list
-     *  - Get an old version of the board from Redo list
-     *  @return none
-     */
-    void RestoreCopyFromRedoList( wxCommandEvent& aEvent );
-
-    /**
-     * Function RestoreCopyFromUndoList
-     *  Undo the last edition:
-     *  - Save the current board in Redo list
-     *  - Get an old version of the board from Undo list
-     *  @return none
-     */
-    void RestoreCopyFromUndoList( wxCommandEvent& aEvent );
-
     /* Block operations: */
 
     /**
@@ -915,6 +859,9 @@ public:
 
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
     void SetBoard( BOARD* aBoard );
+
+    ///> @copydoc PCB_BASE_EDIT_FRAME::GetModel()
+    BOARD_ITEM_CONTAINER* GetModel() const override;
 
     ///> @copydoc PCB_BASE_FRAME::SetPageSettings()
     void SetPageSettings( const PAGE_INFO& aPageSettings ); // overload
@@ -1142,11 +1089,9 @@ public:
      * OldModule is deleted or put in undo list.
      * @param aOldModule = footprint to replace
      * @param aNewModule = footprint to put
-     * @param aUndoPickList = the undo list used to save  OldModule. If null,
-     *                        OldModule is deleted
+     * @param aCommit = commit that should store the changes
      */
-    void Exchange_Module( MODULE* aOldModule, MODULE* aNewModule,
-                          PICKED_ITEMS_LIST* aUndoPickList );
+    void Exchange_Module( MODULE* aOldModule, MODULE* aNewModule, BOARD_COMMIT& aCommit );
 
     // loading modules: see PCB_BASE_FRAME
 

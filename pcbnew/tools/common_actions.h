@@ -79,6 +79,9 @@ public:
     /// Activation of the edit tool
     static TOOL_ACTION properties;
 
+    /// Modified selection notification
+    static TOOL_ACTION editModifiedSelection;
+
     /// Activation of the exact move tool
     static TOOL_ACTION moveExact;
 
@@ -161,9 +164,6 @@ public:
     static TOOL_ACTION routerInlineDrag;
 
     // Point Editor
-    /// Update edit points
-    static TOOL_ACTION pointEditorUpdate;
-
     /// Break outline (insert additional points to an edge)
     static TOOL_ACTION pointEditorAddCorner;
 

@@ -2622,7 +2622,7 @@ void EAGLE_PLUGIN::loadSignals( CPTREE& aSignals )
 
         const string& nname = net->second.get<string>( "<xmlattr>.name" );
         wxString netName = FROM_UTF8( nname.c_str() );
-        m_board->AppendNet( new NETINFO_ITEM( m_board, netName, netCode ) );
+        m_board->Add( new NETINFO_ITEM( m_board, netName, netCode ) );
 
         m_xpath->Value( nname.c_str() );
 

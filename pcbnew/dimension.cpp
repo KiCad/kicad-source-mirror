@@ -37,6 +37,7 @@
 #include <dialog_helpers.h>
 #include <macros.h>
 #include <base_units.h>
+#include <board_commit.h>
 
 #include <class_board.h>
 #include <class_pcb_text.h>
@@ -161,6 +162,8 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
 
 void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 {
+    BOARD_COMMIT commit( m_parent );
+
     LAYER_ID newlayer = ToLAYER_ID( m_SelLayerBox->GetLayerSelection() );
 
     if( !m_parent->GetBoard()->IsLayerEnabled( newlayer ) )
@@ -177,7 +180,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
     }
 #endif
 
-    m_parent->SaveCopyInUndoList(m_currentDimension, UR_CHANGED);
+    commit.Modify( m_currentDimension );
 
     if( m_Name->GetValue() != wxEmptyString )
     {
@@ -228,7 +231,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
     m_parent->Refresh();
 #endif
 
-    m_parent->OnModify();
+    commit.Push( _( "Modifed dimensions properties" ) );
     event.Skip();   // ends returning wxID_OK (default behavior)
 }
 

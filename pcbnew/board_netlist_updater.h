@@ -39,10 +39,9 @@ class REPORTER;
 class NETLIST;
 class COMPONENT;
 class MODULE;
-class PICKED_ITEMS_LIST;
 class PCB_EDIT_FRAME;
 
-#include <class_undoredo_container.h>
+#include <board_commit.h>
 
 /**
  * Class BOARD_NETLIST_UPDATER
@@ -72,94 +71,89 @@ class PCB_EDIT_FRAME;
 class BOARD_NETLIST_UPDATER
 {
 public:
+    BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBoard );
+    ~BOARD_NETLIST_UPDATER();
 
-	BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME *aFrame, BOARD *aBoard );
-	~BOARD_NETLIST_UPDATER();
+    /**
+     * Function UpdateNetlist()
+     *
+     * Updates the board's components according to the new netlist.
+     * See BOARD_NETLIST_UPDATER class description for the details of the process.
+     * @param aNetlist the new netlist
+     * @return true if process was completed successfully
+     */
+    bool UpdateNetlist( NETLIST& aNetlist );
 
-	/**
-	 * Function UpdateNetlist()
-	 *
-	 * Updates the board's components according to the new netlist.
-	 * See BOARD_NETLIST_UPDATER class description for the details of the process.
-	 * @param aNetlist the new netlist
-	 * @return true if process was completed successfully
-	 */
-	bool UpdateNetlist( NETLIST& aNetlist );
+    // @todo: implement and move NETLIST::ReadPcbNetlist here
+    bool UpdateNetlist( const wxString& aNetlistFileName, const wxString& aCmpFileName );
 
-	// @todo: implement and move NETLIST::ReadPcbNetlist here
-	bool UpdateNetlist( const wxString& aNetlistFileName,
-                        const wxString& aCmpFileName );
+    ///> Sets the reporter object
+    void SetReporter( REPORTER* aReporter )
+    {
+        m_reporter = aReporter;
+    }
 
+    ///> Enables "delete single pad nets" option
+    void SetDeleteSinglePadNets( bool aEnabled )
+    {
+        m_deleteSinglePadNets = aEnabled;
+    }
 
-	///> Sets the reporter object
-	void SetReporter ( REPORTER *aReporter )
-	{
-		m_reporter = aReporter;
-	}
+    ///> Enables dry run mode (just report, no changes to PCB)
+    void SetIsDryRun( bool aEnabled )
+    {
+        m_isDryRun = aEnabled;
+    }
 
-	///> Enables "delete single pad nets" option
-	void SetDeleteSinglePadNets( bool aEnabled )
-	{
-		m_deleteSinglePadNets = aEnabled;
-	}
+    ///> Enables replacing footprints with new ones
+    void SetReplaceFootprints( bool aEnabled )
+    {
+        m_replaceFootprints = aEnabled;
+    }
 
-	///> Enables dry run mode (just report, no changes to PCB)
-	void SetIsDryRun ( bool aEnabled )
-	{
-		m_isDryRun = aEnabled;
-	}
+    ///> Enables removing unused components
+    void SetDeleteUnusedComponents( bool aEnabled )
+    {
+        m_deleteUnusedComponents = aEnabled;
+    }
 
-	///> Enables replacing footprints with new ones
-	void SetReplaceFootprints ( bool aEnabled )
-	{
-		m_replaceFootprints = aEnabled;
-	}
+    ///> Enables component lookup by timestamp instead of reference
+    void SetLookupByTimestamp( bool aEnabled )
+    {
+        m_lookupByTimestamp = aEnabled;
+    }
 
-	///> Enables removing unused components
-	void SetDeleteUnusedComponents ( bool aEnabled )
-	{
-		m_deleteUnusedComponents = aEnabled;
-	}
-
-	///> Enables component lookup by timestamp instead of reference
-	void SetLookupByTimestamp ( bool aEnabled )
-	{
-		m_lookupByTimestamp = aEnabled;
-	}
-
-	std::vector<MODULE*> GetAddedComponents() const
-	{
-            return m_addedComponents;
-	}
+    std::vector<MODULE*> GetAddedComponents() const
+    {
+        return m_addedComponents;
+    }
 
 private:
+    wxPoint estimateComponentInsertionPosition();
+    MODULE* addNewComponent( COMPONENT* aComponent );
+    MODULE* replaceComponent( NETLIST& aNetlist, MODULE* aPcbComponent, COMPONENT* aNewComponent );
+    bool updateComponentParameters( MODULE* aPcbComponent, COMPONENT* aNewComponent );
+    bool updateComponentPadConnections( MODULE* aPcbComponent, COMPONENT* aNewComponent );
+    bool deleteUnusedComponents( NETLIST& aNetlist );
+    bool deleteSinglePadNets();
+    bool testConnectivity( NETLIST& aNetlist );
 
-	void pushUndo( BOARD_ITEM* aItem, UNDO_REDO_T aCommandType, BOARD_ITEM* aCopy = NULL );
+    BOARD_COMMIT m_commit;
+    PCB_EDIT_FRAME* m_frame;
+    BOARD* m_board;
+    REPORTER* m_reporter;
 
-	wxPoint estimateComponentInsertionPosition();
-	MODULE* addNewComponent( COMPONENT* aComponent );
-	MODULE* replaceComponent( NETLIST& aNetlist, MODULE *aPcbComponent, COMPONENT* aNewComponent );
-	bool updateComponentParameters( MODULE *aPcbComponent, COMPONENT* aNewComponent );
-	bool updateComponentPadConnections( MODULE *aPcbComponent, COMPONENT* aNewComponent );
-	bool deleteUnusedComponents( NETLIST& aNetlist );
-	bool deleteSinglePadNets();
-	bool testConnectivity( NETLIST& aNetlist );
+    std::vector<MODULE*> m_addedComponents;
+    std::map<wxString, NETINFO_ITEM*> m_addedNets;
 
-	PICKED_ITEMS_LIST *m_undoList;
-	PCB_EDIT_FRAME *m_frame;
-	BOARD *m_board;
-	REPORTER *m_reporter;
+    bool m_deleteSinglePadNets;
+    bool m_deleteUnusedComponents;
+    bool m_isDryRun;
+    bool m_replaceFootprints;
+    bool m_lookupByTimestamp;
 
-	std::vector<MODULE*> m_addedComponents;
-
-	bool m_deleteSinglePadNets;
-	bool m_deleteUnusedComponents;
-	bool m_isDryRun;
-	bool m_replaceFootprints;
-	bool m_lookupByTimestamp;
-
-	int m_warningCount;
-	int m_errorCount;
+    int m_warningCount;
+    int m_errorCount;
 };
 
 #endif

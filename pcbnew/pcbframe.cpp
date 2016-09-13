@@ -196,8 +196,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( wxID_CUT, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_COPY, PCB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_PASTE, PCB_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, PCB_EDIT_FRAME::RestoreCopyFromUndoList )
-    EVT_TOOL( wxID_REDO, PCB_EDIT_FRAME::RestoreCopyFromRedoList )
+    EVT_TOOL( wxID_UNDO, PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList )
+    EVT_TOOL( wxID_REDO, PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList )
     EVT_TOOL( wxID_PRINT, PCB_EDIT_FRAME::ToPrinter )
     EVT_TOOL( ID_GEN_PLOT_SVG, PCB_EDIT_FRAME::SVG_Print )
     EVT_TOOL( ID_GEN_PLOT, PCB_EDIT_FRAME::Process_Special_Functions )
@@ -481,11 +481,17 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard )
 
     if( IsGalCanvasActive() )
     {
-        aBoard->GetRatsnest()->Recalculate();
+        aBoard->GetRatsnest()->ProcessBoard();
 
         // reload the worksheet
         SetPageSettings( aBoard->GetPageSettings() );
     }
+}
+
+
+BOARD_ITEM_CONTAINER* PCB_EDIT_FRAME::GetModel() const
+{
+    return m_Pcb;
 }
 
 
@@ -667,17 +673,8 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
-    if( aEnable )
-    {
-        BOARD* board = GetBoard();
-
-        if( board )
-            board->GetRatsnest()->ProcessBoard();
-    }
-    else
-    {
+    if( !aEnable )
         Compile_Ratsnest( NULL, true );
-    }
 
     PCB_BASE_EDIT_FRAME::UseGalCanvas( aEnable );
 

@@ -124,27 +124,6 @@ void TEXTE_MODULE::Move( const wxPoint& aMoveVector )
 }
 
 
-void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
-{
-    if( source == NULL )
-        return;
-
-    m_Pos = source->m_Pos;
-    SetLayer( source->GetLayer() );
-
-    m_Mirror = source->m_Mirror;
-    m_NoShow = source->m_NoShow;
-    m_Type   = source->m_Type;
-    m_Orient = source->m_Orient;
-    m_Pos0   = source->m_Pos0;
-    m_Size   = source->m_Size;
-    m_Thickness  = source->m_Thickness;
-    m_Italic = source->m_Italic;
-    m_Bold   = source->m_Bold;
-    m_Text   = source->m_Text;
-}
-
-
 int TEXTE_MODULE::GetLength() const
 {
     return m_Text.Len();

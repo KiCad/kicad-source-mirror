@@ -67,7 +67,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 
 BOARD::BOARD() :
-    BOARD_ITEM( (BOARD_ITEM*) NULL, PCB_T ),
+    BOARD_ITEM_CONTAINER( (BOARD_ITEM*) NULL, PCB_T ),
     m_NetInfo( this ),
     m_paper( PAGE_INFO::A4 )
 {
@@ -858,7 +858,7 @@ bool BOARD::IsModuleLayerVisible( LAYER_ID layer )
 }
 
 
-void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
+void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 {
     if( aBoardItem == NULL )
     {
@@ -869,24 +869,22 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
     switch( aBoardItem->Type() )
     {
     case PCB_NETINFO_T:
-        aBoardItem->SetParent( this );
         m_NetInfo.AppendNet( (NETINFO_ITEM*) aBoardItem );
+        break;
 
     // this one uses a vector
     case PCB_MARKER_T:
-        aBoardItem->SetParent( this );
         m_markers.push_back( (MARKER_PCB*) aBoardItem );
         break;
 
     // this one uses a vector
     case PCB_ZONE_AREA_T:
-        aBoardItem->SetParent( this );
         m_ZoneDescriptorList.push_back( (ZONE_CONTAINER*) aBoardItem );
         break;
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
-        if( aControl & ADD_APPEND )
+        if( aMode == ADD_APPEND )
         {
             m_Track.PushBack( (TRACK*) aBoardItem );
         }
@@ -897,44 +895,36 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
             m_Track.Insert( (TRACK*) aBoardItem, insertAid );
         }
 
-        aBoardItem->SetParent( this );
         break;
 
     case PCB_ZONE_T:
-        if( aControl & ADD_APPEND )
+        if( aMode == ADD_APPEND )
             m_Zone.PushBack( (SEGZONE*) aBoardItem );
         else
             m_Zone.PushFront( (SEGZONE*) aBoardItem );
 
-        aBoardItem->SetParent( this );
         break;
 
     case PCB_MODULE_T:
-        if( aControl & ADD_APPEND )
+        if( aMode == ADD_APPEND )
             m_Modules.PushBack( (MODULE*) aBoardItem );
         else
             m_Modules.PushFront( (MODULE*) aBoardItem );
-
-        aBoardItem->SetParent( this );
 
         // Because the list of pads has changed, reset the status
         // This indicate the list of pad and nets must be recalculated before use
         m_Status_Pcb = 0;
         break;
 
-    case PCB_MODULE_EDGE_T:
-        assert( false );        // TODO Orson: I am just checking if it is supposed to be here
-
     case PCB_DIMENSION_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
-        if( aControl & ADD_APPEND )
+        if( aMode == ADD_APPEND )
             m_Drawings.PushBack( aBoardItem );
         else
             m_Drawings.PushFront( aBoardItem );
 
-        aBoardItem->SetParent( this );
         break;
 
     // other types may use linked list
@@ -944,15 +934,17 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
             msg.Printf( wxT( "BOARD::Add() needs work: BOARD_ITEM type (%d) not handled" ),
                         aBoardItem->Type() );
             wxFAIL_MSG( msg );
+            return;
         }
         break;
     }
 
+    aBoardItem->SetParent( this );
     m_ratsnest->Add( aBoardItem );
 }
 
 
-BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
+void BOARD::Remove( BOARD_ITEM* aBoardItem )
 {
     // find these calls and fix them!  Don't send me no stinking' NULL.
     wxASSERT( aBoardItem );
@@ -965,6 +957,7 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
         m_NetInfo.RemoveNet( item );
         break;
     }
+
     case PCB_MARKER_T:
 
         // find the item in the vector, then remove it
@@ -1007,7 +1000,6 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     case PCB_DIMENSION_T:
     case PCB_LINE_T:
     case PCB_TEXT_T:
-    case PCB_MODULE_EDGE_T:
     case PCB_TARGET_T:
         m_Drawings.Remove( aBoardItem );
         break;
@@ -1018,8 +1010,6 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
     }
 
     m_ratsnest->Remove( aBoardItem );
-
-    return aBoardItem;
 }
 
 
@@ -2605,7 +2595,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         {
                             // It is a new net, we have to add it
                             netinfo = new NETINFO_ITEM( this, net.GetNetName() );
-                            m_NetInfo.AppendNet( netinfo );
+                            Add( netinfo );
                         }
 
                         pad->SetNetCode( netinfo->GetNet() );
@@ -2781,18 +2771,14 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 }
 
 
-BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem )
+BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem,
+                              bool aAddToBoard )
 {
     BOARD_ITEM* new_item = NULL;
 
     switch( aItem->Type() )
     {
     case PCB_MODULE_T:
-    {
-        MODULE* new_module = new MODULE( *static_cast<const MODULE*>( aItem ) );
-        new_item = new_module;
-        break;
-    }
     case PCB_TEXT_T:
     case PCB_LINE_T:
     case PCB_TRACE_T:
@@ -2809,7 +2795,7 @@ BOARD_ITEM* BOARD::DuplicateAndAddItem( const BOARD_ITEM* aItem )
         break;
     }
 
-    if( new_item )
+    if( new_item && aAddToBoard )
         Add( new_item );
 
     return new_item;

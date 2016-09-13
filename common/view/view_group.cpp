@@ -55,18 +55,21 @@ VIEW_GROUP::~VIEW_GROUP()
 void VIEW_GROUP::Add( VIEW_ITEM* aItem )
 {
     m_items.insert( aItem );
+    ViewUpdate();
 }
 
 
 void VIEW_GROUP::Remove( VIEW_ITEM* aItem )
 {
     m_items.erase( aItem );
+    ViewUpdate();
 }
 
 
 void VIEW_GROUP::Clear()
 {
     m_items.clear();
+    ViewUpdate();
 }
 
 
@@ -128,7 +131,8 @@ void VIEW_GROUP::FreeItems()
     {
         delete item;
     }
-    m_items.clear();
+
+    Clear();
 }
 
 

@@ -41,6 +41,7 @@
 #include <ratsnest_data.h>
 #include <collectors.h>
 #include <zones_functions_for_undo_redo.h>
+#include <board_commit.h>
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
@@ -249,11 +250,10 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         {
             if( module )
             {
-                board->Delete( module );  // it was added by LoadModuleFromLibrary()
+                delete module;
                 module = NULL;
 
                 preview.Clear();
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
                 controls->ShowCursor( true );
             }
             else
@@ -285,26 +285,24 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 module = m_frame->LoadModuleFromLibrary( wxEmptyString,
                                                          m_frame->Prj().PcbFootprintLibs(),
                                                          true, NULL );
+
                 if( module == NULL )
                     continue;
 
+                // Module has been added in LoadModuleFromLibrary(),
+                // so we have to remove it before committing the change     @todo LEGACY
+                board->Remove( module );
                 module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
                 // Add all the drawable parts to preview
                 preview.Add( module );
                 module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
-
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             }
             else
             {
-                // Place the selected module
-                module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
-                view->Add( module );
-                module->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
-                m_frame->OnModify();
-                m_frame->SaveCopyInUndoList( module, UR_NEW );
+                BOARD_COMMIT commit( m_frame );
+                commit.Add( module );
+                commit.Push( _( "Place a module" ) );
 
                 // Remove from preview
                 preview.Remove( module );
@@ -416,7 +414,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( view );
     preview.Add( target );
     view->Add( &preview );
-    preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     controls->SetSnapping( true );
@@ -454,12 +451,9 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
             assert( target->GetSize() > 0 );
             assert( target->GetWidth() > 0 );
 
-            view->Add( target );
-            board->Add( target );
-            target->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-
-            m_frame->OnModify();
-            m_frame->SaveCopyInUndoList( target, UR_NEW );
+            BOARD_COMMIT commit( m_frame );
+            commit.Add( target );
+            commit.Push( _( "Place a layer alignment target" ) );
 
             preview.Remove( target );
 
@@ -579,6 +573,7 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
     BOARD* board = getModel<BOARD>();
     RN_DATA* ratsnest = board->GetRatsnest();
     KIGFX::VIEW* view = getView();
+    BOARD_COMMIT commit( m_frame );
 
     if( selection.Size() < 2 )
         return 0;
@@ -646,7 +641,8 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
     }
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
-    m_frame->SaveCopyInUndoList( changes, UR_UNSPECIFIED );
+
+    commit.Stage( changes );
 
     for( unsigned i = 0; i < changes.GetCount(); ++i )
     {
@@ -660,10 +656,11 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
         }
         else if( picker.GetStatus() == UR_CHANGED )
         {
-            item->ViewUpdate( KIGFX::VIEW_ITEM::ALL );
             m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, item );
         }
     }
+
+    commit.Push( _( "Merge zones" ) );
 
     return 0;
 }
