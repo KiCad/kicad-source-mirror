@@ -329,7 +329,7 @@ set( KIFACE_PREFIX  "_" )
 #================================================
 if( NOT APPLE )
     # Everything without leading / is relative to CMAKE_INSTALL_PREFIX.
-    set( KICAD_BIN ${CMAKE_INSTALL_PREFIX}/bin
+    set( KICAD_BIN bin
         CACHE PATH "Location of KiCad binaries." )
 
     if( WIN32 )
@@ -345,10 +345,10 @@ if( NOT APPLE )
         set( KICAD_PLUGINS lib/kicad/plugins
             CACHE PATH "Location of KiCad plugins." )
 
-        set( KICAD_LIB ${CMAKE_INSTALL_PREFIX}/lib
+        set( KICAD_LIB lib
             CACHE PATH "Location of KiCad shared objects" )
 
-        set( KICAD_USER_PLUGIN ${CMAKE_INSTALL_PREFIX}/lib/kicad/plugins
+        set( KICAD_USER_PLUGIN lib/kicad/plugins
             CACHE PATH "Location of KiCad user-loaded plugins" )
     endif()
 
