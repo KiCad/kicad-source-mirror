@@ -92,19 +92,19 @@ struct RN_NODE_FILTER : public std::unary_function<const RN_NODE_PTR&, bool>
 RN_NODE_AND_FILTER operator&&( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
 RN_NODE_OR_FILTER operator||( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
 
-///> Filters out nodes that have the flag set.
-struct WITHOUT_FLAG : public RN_NODE_FILTER
+///> Filters out nodes that cannot be a ratsnest line target
+struct LINE_TARGET : public RN_NODE_FILTER
 {
     bool operator()( const RN_NODE_PTR& aNode ) const
     {
-        return !aNode->GetFlag();
+        return !aNode->GetNoLine();
     }
 };
 
 ///> Filters out nodes with a specific tag
-struct DIFFERENT_TAG : public RN_NODE_FILTER
+struct DIFF_TAG : public RN_NODE_FILTER
 {
-    DIFFERENT_TAG( int aTag ) :
+    DIFF_TAG( int aTag ) :
         m_tag( aTag )
     {}
 
@@ -515,7 +515,7 @@ public:
     inline void AddBlockedNode( RN_NODE_PTR& aNode )
     {
         m_blockedNodes.insert( aNode );
-        aNode->SetFlag( true );
+        aNode->SetNoLine( true );
     }
 
     /**

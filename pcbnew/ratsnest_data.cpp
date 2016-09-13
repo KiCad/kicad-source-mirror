@@ -215,11 +215,11 @@ void RN_NET::validateEdge( RN_EDGE_MST_PTR& aEdge )
 
     // If any of nodes belonging to the edge has the flag set,
     // change it to the closest node that has flag cleared
-    if( source->GetFlag() )
+    if( source->GetNoLine() )
     {
         valid = false;
+        std::list<RN_NODE_PTR> closest = GetClosestNodes( source, LINE_TARGET() );
 
-        std::list<RN_NODE_PTR> closest = GetClosestNodes( source, WITHOUT_FLAG() );
         for( RN_NODE_PTR& node : closest )
         {
             if( node && node != target )
@@ -230,11 +230,11 @@ void RN_NET::validateEdge( RN_EDGE_MST_PTR& aEdge )
         }
     }
 
-    if( target->GetFlag() )
+    if( target->GetNoLine() )
     {
         valid = false;
+        std::list<RN_NODE_PTR> closest = GetClosestNodes( target, LINE_TARGET() );
 
-        std::list<RN_NODE_PTR> closest = GetClosestNodes( target, WITHOUT_FLAG() );
         for( RN_NODE_PTR& node : closest )
         {
             if( node && node != source )
@@ -398,7 +398,7 @@ RN_POLY::RN_POLY( const SHAPE_POLY_SET* aParent,
 
     // Mark it as not appropriate as a destination of ratsnest edges
     // (edges coming out from a polygon vertex look weird)
-    m_node->SetFlag( true );
+    m_node->SetNoLine( true );
 }
 
 
@@ -761,7 +761,7 @@ void RN_NET::GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, RN_ITEM_TYP
 void RN_NET::ClearSimple()
 {
     for( const RN_NODE_PTR& node : m_blockedNodes )
-        node->SetFlag( false );
+        node->SetNoLine( false );
 
     m_blockedNodes.clear();
     m_simpleNodes.clear();
