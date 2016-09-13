@@ -36,8 +36,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 {
     m_messagePanel->Clear();
 
-    REPORTER &reporter = m_messagePanel->Reporter();
-    KIGFX::VIEW*    view = m_frame->GetGalCanvas()->GetView();
+    REPORTER& reporter = m_messagePanel->Reporter();
     TOOL_MANAGER* toolManager = m_frame->GetToolManager();
     BOARD* board = m_frame->GetBoard();
 

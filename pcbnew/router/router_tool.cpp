@@ -756,8 +756,6 @@ void ROUTER_TOOL::performDragging()
 
     ctls->SetAutoPan( true );
 
-    bool modified = false;
-
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         ctls->ForceCursorPosition( false );
@@ -772,10 +770,7 @@ void ROUTER_TOOL::performDragging()
         else if( evt->IsClick( BUT_LEFT ) )
         {
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
-            {
-                modified = true;
                 break;
-            }
         }
 
         handleCommonEvents( *evt );

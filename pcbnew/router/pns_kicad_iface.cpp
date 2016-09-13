@@ -741,7 +741,6 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
     for( TRACK* t = m_board->m_Track; t; t = t->Next() )
     {
         KICAD_T type = t->Type();
-        PNS::ITEM* item = NULL;
 
         if( type == PCB_TRACE_T ) {
             std::unique_ptr< PNS::SEGMENT > segment = syncTrack( t );
