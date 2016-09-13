@@ -101,7 +101,7 @@ protected:
 #endif
 
     /// Node coordinates
-    int m_x, m_y;
+    const int m_x, m_y;
 
     /// Tag for quick connection resolution
     int m_tag;

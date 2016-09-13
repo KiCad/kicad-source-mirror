@@ -92,7 +92,7 @@ struct RN_NODE_FILTER : public std::unary_function<const RN_NODE_PTR&, bool>
 RN_NODE_AND_FILTER operator&&( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
 RN_NODE_OR_FILTER operator||( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILTER& aFilter2 );
 
-///> Filters out nodes that cannot be a ratsnest line target
+///> Leaves nodes that can be a ratsnest line target
 struct LINE_TARGET : public RN_NODE_FILTER
 {
     bool operator()( const RN_NODE_PTR& aNode ) const
@@ -101,20 +101,35 @@ struct LINE_TARGET : public RN_NODE_FILTER
     }
 };
 
-///> Filters out nodes with a specific tag
-struct DIFF_TAG : public RN_NODE_FILTER
+///> Leaves nodes that can be a ratsnest line target and have a specific tag
+struct LINE_TARGET_SAME_TAG : public RN_NODE_FILTER
 {
-    DIFF_TAG( int aTag ) :
+    LINE_TARGET_SAME_TAG( int aTag ) :
         m_tag( aTag )
     {}
 
     bool operator()( const RN_NODE_PTR& aNode ) const
     {
-        return aNode->GetTag() != m_tag;
+        return !aNode->GetNoLine() && aNode->GetTag() == m_tag;
     }
 
-    private:
-        int m_tag;
+private:
+    int m_tag;
+};
+
+struct LINE_TARGET_DIFF_TAG : public RN_NODE_FILTER
+{
+    LINE_TARGET_DIFF_TAG( int aTag ) :
+        m_tag( aTag )
+    {}
+
+    bool operator()( const RN_NODE_PTR& aNode ) const
+    {
+        return !aNode->GetNoLine() && aNode->GetTag() == m_tag;
+    }
+
+private:
+    int m_tag;
 };
 
 struct RN_NODE_AND_FILTER : public RN_NODE_FILTER
