@@ -658,10 +658,13 @@ void SCH_LEGACY_PLUGIN::loadPageSettings( FILE_LINE_READER& aReader, SCH_SCREEN*
     if( !pageInfo.SetType( buf ) )
         SCH_PARSE_ERROR( _( "invalid page size" ), aReader, line );
 
+    int pagew = parseInt( aReader, line, &line );
+    int pageh = parseInt( aReader, line, &line );
+
     if( buf == PAGE_INFO::Custom )
     {
-        pageInfo.SetWidthMils( parseInt( aReader, line, &line ) );
-        pageInfo.SetHeightMils( parseInt( aReader, line, &line ) );
+        pageInfo.SetWidthMils( pagew );
+        pageInfo.SetHeightMils( pageh );
     }
     else
     {
