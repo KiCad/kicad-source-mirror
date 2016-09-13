@@ -39,8 +39,6 @@
 #include <class_track.h>
 #include <class_zone.h>
 
-#include <boost/range/adaptor/map.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <functional>
 using namespace std::placeholders;
 
@@ -355,7 +353,7 @@ void RN_NET::compute()
 
     TRIANGULATOR triangulator;
     triangulator.CreateDelaunay( nodes.begin(), nodes.end() );
-    boost::scoped_ptr<RN_LINKS::RN_EDGE_LIST> triangEdges( triangulator.GetEdges() );
+    std::unique_ptr<RN_LINKS::RN_EDGE_LIST> triangEdges( triangulator.GetEdges() );
 
     // Compute weight/distance for edges resulting from triangulation
     RN_LINKS::RN_EDGE_LIST::iterator eit, eitEnd;
@@ -734,26 +732,26 @@ void RN_NET::GetAllItems( std::list<BOARD_CONNECTED_ITEM*>& aOutput, RN_ITEM_TYP
 {
     if( aType & RN_PADS )
     {
-        for( const BOARD_CONNECTED_ITEM* item : m_pads | boost::adaptors::map_keys )
-            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        for( auto it : m_pads )
+            aOutput.push_back( const_cast<D_PAD*>( it.first ) );
     }
 
     if( aType & RN_VIAS )
     {
-        for( const BOARD_CONNECTED_ITEM* item : m_vias | boost::adaptors::map_keys )
-            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        for( auto it : m_vias )
+            aOutput.push_back( const_cast<VIA*>( it.first ) );
     }
 
     if( aType & RN_TRACKS )
     {
-        for( const BOARD_CONNECTED_ITEM* item : m_tracks | boost::adaptors::map_keys )
-            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        for( auto it : m_tracks )
+            aOutput.push_back( const_cast<TRACK*>( it.first ) );
     }
 
     if( aType & RN_ZONES )
     {
-        for( const BOARD_CONNECTED_ITEM* item : m_zones | boost::adaptors::map_keys )
-            aOutput.push_back( const_cast<BOARD_CONNECTED_ITEM*>( item ) );
+        for( auto it : m_zones )
+            aOutput.push_back( const_cast<ZONE_CONTAINER*>( it.first ) );
     }
 }
 
