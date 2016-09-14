@@ -78,9 +78,15 @@ bool KICADPAD::Read( SEXPR::SEXPR* aEntry )
             bool ret = true;
 
             if( name == "drill" )
-                ret = parseDrill( child );
+            {
+                // ignore any drill info for SMD pads
+                if( m_thruhole )
+                    ret = parseDrill( child );
+            }
             else if( name == "at" )
+            {
                 ret = Get2DPositionAndRotation( child, m_position, m_rotation );
+            }
 
             if( !ret )
                 return false;
