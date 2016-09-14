@@ -83,42 +83,33 @@ void PROPERTIES_FRAME::CopyPrmsFromGeneralToPanel()
 // Data transfert from widgets to general properties
 bool PROPERTIES_FRAME::CopyPrmsFromPanelToGeneral()
 {
-    double dtmp;
     wxString msg;
 
     // Import default parameters from widgets
     msg = m_textCtrlDefaultLineWidth->GetValue();
-    msg.ToDouble( &dtmp );
-    WORKSHEET_DATAITEM::m_DefaultLineWidth = dtmp;
+    WORKSHEET_DATAITEM::m_DefaultLineWidth = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     msg = m_textCtrlDefaultTextSizeX->GetValue();
-    msg.ToDouble( &dtmp );
-    WORKSHEET_DATAITEM::m_DefaultTextSize.x  = dtmp;
+    WORKSHEET_DATAITEM::m_DefaultTextSize.x = DoubleValueFromString( UNSCALED_UNITS, msg );
     msg = m_textCtrlDefaultTextSizeY->GetValue();
-    msg.ToDouble( &dtmp );
-    WORKSHEET_DATAITEM::m_DefaultTextSize.y  = dtmp;
+    WORKSHEET_DATAITEM::m_DefaultTextSize.y = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     msg = m_textCtrlDefaultTextThickness->GetValue();
-    msg.ToDouble( &dtmp );
-    WORKSHEET_DATAITEM::m_DefaultTextThickness = dtmp;
+    WORKSHEET_DATAITEM::m_DefaultTextThickness = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     // Get page margins values
     WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
 
     msg = m_textCtrlRightMargin->GetValue();
-    msg.ToDouble( &dtmp );
-    pglayout.SetRightMargin( dtmp );
+    pglayout.SetRightMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
     msg = m_textCtrlDefaultBottomMargin->GetValue();
-    msg.ToDouble( &dtmp );
-    pglayout.SetBottomMargin( dtmp );
+    pglayout.SetBottomMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
 
     // cordinates of the left top corner are the left and top margins
     msg = m_textCtrlLeftMargin->GetValue();
-    msg.ToDouble( &dtmp );
-    pglayout.SetLeftMargin( dtmp );
+    pglayout.SetLeftMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
     msg = m_textCtrlTopMargin->GetValue();
-    msg.ToDouble( &dtmp );
-    pglayout.SetTopMargin( dtmp );
+    pglayout.SetTopMargin( DoubleValueFromString( UNSCALED_UNITS, msg ) );
 
     return true;
 }
@@ -315,12 +306,15 @@ void PROPERTIES_FRAME::OnAcceptPrms( wxCommandEvent& event )
     if( item )
     {
         CopyPrmsFromPanelToItem( item );
-        // Be sure what is displayed is waht is set for item
+        // Be sure what is displayed is what is set for item
         // (mainly, texts can be modified if they contain "\n")
         CopyPrmsFromItemToPanel( item );
     }
 
     CopyPrmsFromPanelToGeneral();
+
+    // Refresh values, exactly as they are converted, to avoid any mistake
+    CopyPrmsFromGeneralToPanel();
 
     m_parent->OnModify();
     m_parent->GetCanvas()->Refresh();
@@ -345,7 +339,6 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
     if( aItem == NULL )
         return false;
 
-    double dtmp;
     wxString msg;
 
     // Import common parameters:
@@ -369,17 +362,14 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
 
     // Import thickness
     msg = m_textCtrlThickness->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_LineWidth = dtmp;
+    aItem->m_LineWidth = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     // Import Start point
     msg = m_textCtrlPosX->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_Pos.m_Pos.x = dtmp;
+    aItem->m_Pos.m_Pos.x = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     msg = m_textCtrlPosY->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_Pos.m_Pos.y = dtmp;
+    aItem->m_Pos.m_Pos.y = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     switch( m_comboBoxCornerPos->GetSelection() )
     {
@@ -391,12 +381,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
 
     // Import End point
     msg = m_textCtrlEndX->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_End.m_Pos.x = dtmp;
+    aItem->m_End.m_Pos.x = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     msg = m_textCtrlEndY->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_End.m_Pos.y = dtmp;
+    aItem->m_End.m_Pos.y = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     switch( m_comboBoxCornerEnd->GetSelection() )
     {
@@ -413,12 +401,10 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
     aItem->m_RepeatCount = itmp;
 
     msg = m_textCtrlStepX->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_IncrementVector.x = dtmp;
+    aItem->m_IncrementVector.x = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     msg = m_textCtrlStepY->GetValue();
-    msg.ToDouble( &dtmp );
-    aItem->m_IncrementVector.y = dtmp;
+    aItem->m_IncrementVector.y = DoubleValueFromString( UNSCALED_UNITS, msg );
 
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_TEXT )
     {
@@ -447,26 +433,21 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
         }
 
         msg = m_textCtrlRotation->GetValue();
-        msg.ToDouble( &dtmp );
-        item->m_Orient = dtmp;
+        item->m_Orient = DoubleValueFromString( UNSCALED_UNITS, msg );
 
         // Import text size
         msg = m_textCtrlTextSizeX->GetValue();
-        msg.ToDouble( &dtmp );
-        item->m_TextSize.x = dtmp;
+        item->m_TextSize.x = DoubleValueFromString( UNSCALED_UNITS, msg );
 
         msg = m_textCtrlTextSizeY->GetValue();
-        msg.ToDouble( &dtmp );
-        item->m_TextSize.y = dtmp;
+        item->m_TextSize.y = DoubleValueFromString( UNSCALED_UNITS, msg );
 
         // Import constraints:
         msg = m_textCtrlConstraintX->GetValue();
-        msg.ToDouble( &dtmp );
-        item->m_BoundingBoxSize.x = dtmp;
+        item->m_BoundingBoxSize.x = DoubleValueFromString( UNSCALED_UNITS, msg );
 
         msg = m_textCtrlConstraintY->GetValue();
-        msg.ToDouble( &dtmp );
-        item->m_BoundingBoxSize.y = dtmp;
+        item->m_BoundingBoxSize.y = DoubleValueFromString( UNSCALED_UNITS, msg );
     }
 
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_POLYPOLYGON )
@@ -474,8 +455,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem )
         WORKSHEET_DATAITEM_POLYPOLYGON* item = (WORKSHEET_DATAITEM_POLYPOLYGON*) aItem;
 
         msg = m_textCtrlRotation->GetValue();
-        msg.ToDouble( &dtmp );
-        item->m_Orient = dtmp;
+        item->m_Orient = DoubleValueFromString( UNSCALED_UNITS, msg );
     }
 
     if( aItem->GetType() == WORKSHEET_DATAITEM::WS_BITMAP )
