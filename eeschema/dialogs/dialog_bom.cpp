@@ -302,7 +302,7 @@ void DIALOG_BOM::installPluginsList()
         }
         catch( const IO_ERROR& ioe )
         {
-//            wxLogMessage( ioe.errorText );
+//            wxLogMessage( ioe.What() );
         }
     }
 
