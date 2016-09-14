@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2016 Kicad Developers, see authors.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * Fragment shader
@@ -25,6 +26,13 @@
  */
 
 #version 120
+
+// Needed to reconstruct the mipmap level / texel derivative
+const int FONT_TEXTURE_WIDTH  = 1024;
+const int FONT_TEXTURE_HEIGHT = 1024;
+
+// Multi-channel signed distance field
+#define USE_MSDF
 
 // Shader types
 const float SHADER_LINE                 = 1.0;
@@ -58,6 +66,12 @@ void strokedCircle( vec2 aCoord, float aRadius, float aWidth )
         discard;
 }
 
+#ifdef USE_MSDF
+float median( vec3 v )
+{
+    return max( min( v.r, v.g ), min( max( v.r, v.g ), v.b ) );
+}
+#endif
 
 void main()
 {
@@ -71,12 +85,22 @@ void main()
     }
     else if( shaderParams[0] == SHADER_FONT )
     {
-        vec4 texel = texture2D( fontTexture, vec2( shaderParams[1], shaderParams[2] ) );
+        vec2 tex           = shaderParams.yz;
 
-        if(texel.r < 0.01)
-            discard;
-        else
-            gl_FragColor = vec4(gl_Color.r, gl_Color.g, gl_Color.b, texel.r);
+        // Unless we're streching chars it is okay to consider
+        // one derivative for filtering
+        float derivative   = length( dFdx( tex ) ) * FONT_TEXTURE_WIDTH / 8;
+
+#ifdef USE_MSDF
+        float dist         = median( texture2D( fontTexture, tex ).rgb );
+#else
+        float dist         = texture2D( fontTexture, tex ).r;
+#endif
+
+        // use the derivative for zoom-adaptive filtering
+        float alpha = smoothstep( 0.5 - derivative, 0.5 + derivative, dist );
+
+        gl_FragColor = vec4( gl_Color.rgb, alpha );
     }
     else
     {

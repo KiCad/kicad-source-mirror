@@ -33,6 +33,11 @@ def convert(png_file):
     r = png.Reader(file=open(png_file, 'rb'))
     img = r.read()
 
+    print(img);
+	
+    if img[3].get("alpha") == True:
+        print('Detected alpha channel!');
+	
     output = open(os.path.splitext(png_file)[0] + '_img.c', 'w')
 
     width = img[0]
@@ -50,11 +55,17 @@ static const struct {
 """ % (width, height));
 
     output.write('%d, %d,\n{' % (width, height))
-
-    for row in img[2]:
-        for p in row:
-            output.write('%d,' % p)
-        output.write('\n');
+    
+    if img[3].get("alpha") == True:
+        for row in img[2]:
+            for p in row[3::4]:
+                output.write('%d,' % p)
+            output.write('\n');			
+    else:
+        for row in img[2]:
+            for p in row:
+                output.write('%d,' % p)
+            output.write('\n');
 
     output.write('}\n};\n')
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2016 Kicad Developers, see change_log.txt for contributors.
  * Copyright (C) 2013-2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -274,10 +274,9 @@ void OPENGL_GAL::BeginDrawing()
             glActiveTexture( GL_TEXTURE0 + FONT_TEXTURE_UNIT );
             glGenTextures( 1, &fontTexture );
             glBindTexture( GL_TEXTURE_2D, fontTexture );
-            glTexImage2D( GL_TEXTURE_2D, 0, GL_RED, bitmap_font.width, bitmap_font.height,
-                          0, GL_RED, GL_UNSIGNED_BYTE, bitmap_font.pixels );
-            glGenerateMipmap( GL_TEXTURE_2D );
-            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+            glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB8, bitmap_font.width, bitmap_font.height,
+                          0, GL_RGB, GL_UNSIGNED_BYTE, bitmap_font.pixels );
+            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
             checkGlError( "loading bitmap font" );
 
@@ -1313,82 +1312,74 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     const float TEX_Y = bitmap_font.height;
 
     const bitmap_glyph& GLYPH = bitmap_chars[aChar];
-    const float X = GLYPH.x;
-    const float Y = GLYPH.y;
+    const float X = GLYPH.atlas_x;
+    const float Y = GLYPH.atlas_y;
     const float XOFF = GLYPH.x_off;
-    const float YOFF = GLYPH.y_off;
-    const float W = GLYPH.width;
-    const float H = GLYPH.height;
+    const float YOFF = -GLYPH.miny + GLYPH.atlas_shift;
+    const float W = GLYPH.atlas_w;
+    const float H = GLYPH.atlas_h;
+    const float B = bitmap_font.char_border;
 
-    Translate( VECTOR2D( XOFF / 2, 0 ) );
+    Translate( VECTOR2D( XOFF, 0 ) );
 
     currentManager->Reserve( 6 );
 
-    currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( 0,  YOFF, 0 );             // v0
-
-    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( W,  YOFF, 0 );             // v1
-
     currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( 0,  YOFF + H, 0 );         // v2
-
-
-    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( W,  YOFF, 0 );              // v1
-
-    currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( 0,  YOFF + H, 0 );          // v2
+    currentManager->Vertex( -B,     YOFF - B, 0 );             // v0
 
     currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( W,  YOFF + H, 0 );          // v3
+    currentManager->Vertex( W + B,  YOFF - B, 0 );             // v1
 
-    Translate( VECTOR2D( W + XOFF / 2, 0 ) );
+    currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
+    currentManager->Vertex( -B,     YOFF + H + B, 0 );         // v2
 
-    return GLYPH.width + GLYPH.x_off;
+
+    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, ( Y + H ) / TEX_Y );
+    currentManager->Vertex( W + B,  YOFF - B, 0 );              // v1
+
+    currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
+    currentManager->Vertex( -B,     YOFF + H + B, 0 );          // v2
+
+    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
+    currentManager->Vertex( W + B,  YOFF + H + B, 0 );          // v3
+
+    Translate( VECTOR2D( -XOFF + GLYPH.advance, 0 ) );
+
+    return GLYPH.advance;
 }
 
 
 void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 {
-    const float TEX_X = bitmap_font.width;
-    const float TEX_Y = bitmap_font.height;
-
-    // Margin is to shave off the blurry part of the character
-    const int MARGIN = 2;
-
-    // To draw an overbar, simply stretch an underscore character (_)
+    // To draw an overbar, simply draw an overbar
     const bitmap_glyph& GLYPH = bitmap_chars['_'];
-    const float X = GLYPH.x + MARGIN;
-    const float Y = GLYPH.y + MARGIN;
-    const float W = GLYPH.width - 2 * MARGIN;
-    const float H = GLYPH.height - 2 * MARGIN;
-
-    assert( W > 0 && H > 0 );
+    const float H = GLYPH.maxy - GLYPH.miny;
 
     Save();
-    Translate( VECTOR2D( -aLength, -aHeight ) );
+
+    Translate( VECTOR2D( -aLength, -aHeight - GLYPH.miny ) );
 
     currentManager->Reserve( 6 );
+    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, 1 );
 
-    currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
+    currentManager->Shader( 0 );
     currentManager->Vertex( 0, 0, 0 );                      // v0
 
-    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( aLength, 0 , 0 );                // v1
+    //currentManager->Shader( 0 );
+    currentManager->Vertex( aLength, 0, 0 );                // v1
 
-    currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( 0, H + 2 * MARGIN, 0 );          // v2
+    //currentManager->Shader( 0 );
+    currentManager->Vertex( 0, H, 0 );          // v2
 
 
-    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( aLength, 0 , 0 );                // v1
+    //currentManager->Shader( 0 );
+    currentManager->Vertex( aLength, 0, 0 );                // v1
 
-    currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( 0, H + 2 * MARGIN, 0 );         // v2
+    //currentManager->Shader( 0 );
+    currentManager->Vertex( 0, H, 0 );         // v2
 
-    currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( aLength, H + 2 * MARGIN, 0 );    // v3
+    //currentManager->Shader( 0 );
+    currentManager->Vertex( aLength, H, 0 );    // v3
 
     Restore();
 }
@@ -1397,7 +1388,7 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 std::pair<VECTOR2D, int> OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
 {
     VECTOR2D textSize( 0, 0 );
-    int commonOffset = std::numeric_limits<int>::max();
+    float commonOffset = std::numeric_limits<float>::max();
     bool wasTilda = false;
 
     for( unsigned int i = 0; i < aText.length(); ++i )
@@ -1420,9 +1411,9 @@ std::pair<VECTOR2D, int> OPENGL_GAL::computeBitmapTextSize( const wxString& aTex
         }
 
         const bitmap_glyph& GLYPH = bitmap_chars[aText[i]];
-        textSize.x += ( GLYPH.x_off + GLYPH.width );
-        textSize.y = std::max( (unsigned int)( textSize.y ), GLYPH.height + GLYPH.y_off );
-        commonOffset = std::min( GLYPH.y_off, commonOffset );
+        textSize.x  += GLYPH.advance;
+        textSize.y   = std::max<float>( textSize.y, GLYPH.atlas_shift + GLYPH.atlas_h - GLYPH.miny );
+        commonOffset = std::min<float>( GLYPH.atlas_shift - GLYPH.miny, commonOffset );
     }
 
     textSize.y -= commonOffset;
