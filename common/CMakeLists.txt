@@ -511,7 +511,8 @@ target_link_libraries( pcbcommon 3d-viewer )
 
 
 # kiway.so
-if( future AND KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
+if( false ) # future
+#if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     #file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
 
     set( SWIG_FLAGS
