@@ -467,11 +467,7 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
     EDA_DRAW_PANEL_GAL* galCanvas = myframe->GetGalCanvas();
 
     if( galCanvas )
-    {
-        KIGFX::VIEW* view = galCanvas->GetView();
-        view->SetLayerVisible( aLayer, isVisible );
-        view->RecacheAllItems();
-    }
+        galCanvas->GetView()->SetLayerVisible( aLayer, isVisible );
 
     if( isFinal )
         myframe->GetCanvas()->Refresh();
