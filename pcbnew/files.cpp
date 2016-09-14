@@ -522,7 +522,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             wxString msg = wxString::Format( _(
                     "Error loading board.\n%s" ),
-                    GetChars( ioe.errorText )
+                    GetChars( ioe.What() )
                     );
             DisplayError( this, msg );
             return false;
@@ -727,7 +727,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         wxString msg = wxString::Format( _(
                 "Error saving board file '%s'.\n%s" ),
                 GetChars( pcbFileName.GetFullPath() ),
-                GetChars( ioe.errorText )
+                GetChars( ioe.What() )
                 );
         DisplayError( this, msg );
 
@@ -807,7 +807,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName )
         wxString msg = wxString::Format( _(
                 "Error saving board file '%s'.\n%s" ),
                 GetChars( pcbFileName.GetFullPath() ),
-                GetChars( ioe.errorText )
+                GetChars( ioe.What() )
                 );
         DisplayError( this, msg );
 

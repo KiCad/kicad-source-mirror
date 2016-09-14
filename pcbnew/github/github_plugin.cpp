@@ -548,7 +548,7 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
                                      errorcmd,
                                      zip_url.c_str(),
                                      TO_UTF8( aRepoURL ),
-                                     TO_UTF8( ioe.errorText )
+                                     TO_UTF8( ioe.What() )
                                      );
 
         THROW_IO_ERROR( msg );
@@ -587,7 +587,7 @@ int main( int argc, char** argv )
     }
     catch( const IO_ERROR& ioe )
     {
-        printf( "%s\n", TO_UTF8(ioe.errorText) );
+        printf( "%s\n", TO_UTF8(ioe.What()) );
     }
 
     UNINIT_LOGGER();

@@ -140,7 +140,7 @@ void LIB_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
     }
     catch( const IO_ERROR& ioe )
     {
-        DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.errorText ) );)
+        DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.What() ) );)
         return;
     }
 
@@ -200,7 +200,7 @@ void SCH_EDIT_FRAME::InstallConfigFrame( wxCommandEvent& event )
     }
     catch( const IO_ERROR& ioe )
     {
-        DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.errorText ) );)
+        DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.What() ) );)
         return;
     }
 
@@ -663,7 +663,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
         {
             // @todo show error msg
             DBG( printf( "templatefieldnames parsing error: '%s'\n",
-                       TO_UTF8( e.errorText ) ); )
+                       TO_UTF8( e.What() ) ); )
         }
     }
 }

@@ -245,7 +245,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
             }
             catch( const IO_ERROR& ioe )
             {
-                msg = ioe.errorText;
+                msg = ioe.What();
                 msg += wxT( "\n\n" );
                 msg += _( "First check your footprint library table entries." );
 

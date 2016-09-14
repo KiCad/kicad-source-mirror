@@ -466,7 +466,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, ioe.What() );
         return NULL;
     }
 

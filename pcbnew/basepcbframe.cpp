@@ -156,7 +156,7 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayError( NULL, ioe.errorText );
+            DisplayError( NULL, ioe.What() );
         }
     }
 

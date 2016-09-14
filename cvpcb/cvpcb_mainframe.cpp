@@ -425,7 +425,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
             wxString msg = wxString::Format(
                     _( "Error occurred saving the global footprint library table:\n'%s'\n%s" ),
                     GetChars( fileName ),
-                    GetChars( ioe.errorText )
+                    GetChars( ioe.What() )
                     );
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
@@ -445,7 +445,7 @@ void CVPCB_MAINFRAME::OnEditFootprintLibraryTable( wxCommandEvent& aEvent )
             wxString msg = wxString::Format(
                     _( "Error occurred saving the project footprint library table:\n'%s'\n%s" ),
                     GetChars( fileName ),
-                    GetChars( ioe.errorText )
+                    GetChars( ioe.What() )
                     );
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
@@ -805,7 +805,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist( const std::string& aNetlist )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "Error loading netlist.\n%s" ), ioe.errorText.GetData() );
+        wxString msg = wxString::Format( _( "Error loading netlist.\n%s" ), ioe.What().GetData() );
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
         return 1;
     }

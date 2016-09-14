@@ -41,7 +41,7 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
 
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( NULL, ioe.errorText );
+        DisplayError( NULL, ioe.What() );
         return false;
     }
 

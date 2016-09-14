@@ -611,7 +611,7 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
     catch( const IO_ERROR& ioe )
     {
         wxString msg;
-        msg << _( "IDF Export Failed:\n" ) << ioe.errorText;
+        msg << _( "IDF Export Failed:\n" ) << ioe.What();
         wxMessageBox( msg );
 
         ok = false;

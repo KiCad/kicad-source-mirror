@@ -185,7 +185,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
         ok = false;
 
         // copy the error string to safe place, ioe is in this scope only.
-        errorText = ioe.errorText;
+        errorText = ioe.What();
     }
 
     // done assuredly, even if an exception was thrown and caught.
@@ -1397,7 +1397,7 @@ bool SPECCTRA_DB::GetBoardPolygonOutlines( BOARD* aBoard,
         // from global bounding box
         success = false;
         if( aErrorText )
-            *aErrorText = ioe.errorText;
+            *aErrorText = ioe.What();
 
         EDA_RECT bbbox = aBoard->ComputeBoundingBox( true );
 

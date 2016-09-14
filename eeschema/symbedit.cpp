@@ -242,7 +242,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, ioe.What() );
         return;
     }
 }

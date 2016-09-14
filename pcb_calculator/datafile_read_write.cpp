@@ -70,7 +70,7 @@ bool PCB_CALCULATOR_FRAME::ReadDataFile()
     {
         delete datafile;
 
-        wxString msg = ioe.errorText;
+        wxString msg = ioe.What();
 
         msg += wxChar('\n');
         msg += _("Data file error.");

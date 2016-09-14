@@ -250,7 +250,7 @@ protected:
             }
             catch( PARSE_ERROR& pe )
             {
-                DisplayError( NULL, pe.errorText );
+                DisplayError( NULL, pe.What() );
                 parsed = false;
             }
 

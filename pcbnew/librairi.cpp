@@ -120,7 +120,7 @@ static wxFileName prompt_for_module( wxWindow* aParent, const wxString& aLastPat
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxFileName();
-    
+
     lastFilterIndex = dlg.GetFilterIndex();
 
     return wxFileName( dlg.GetPath() );
@@ -309,7 +309,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, ioe.What() );
         return NULL;
     }
 
@@ -397,7 +397,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, ioe.What() );
         return;
     }
 
@@ -426,7 +426,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveCurrentModule( const wxString* aLibPath )
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, ioe.What() );
         return false;
     }
     return true;
@@ -494,7 +494,7 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, ioe.What() );
         return wxEmptyString;
     }
 
@@ -549,7 +549,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, ioe.What() );
         return false;
     }
 
@@ -595,7 +595,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib )
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayError( this, ioe.errorText );
+            DisplayError( this, ioe.What() );
         }
     }
     else
@@ -619,7 +619,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib )
             }
             catch( const IO_ERROR& ioe )
             {
-                DisplayError( this, ioe.errorText );
+                DisplayError( this, ioe.What() );
             }
         }
     }
@@ -722,7 +722,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( const wxString& aLibrary,
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, ioe.What() );
         return false;
     }
 

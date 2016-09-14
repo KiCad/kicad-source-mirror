@@ -882,7 +882,7 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
                     wxString msg = wxString::Format( _(
                         "Error occurred saving the global footprint library "
                         "table:\n\n%s" ),
-                        GetChars( ioe.errorText.GetData() )
+                        GetChars( ioe.What().GetData() )
                         );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }
@@ -902,7 +902,7 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
                     wxString msg = wxString::Format( _(
                         "Error occurred saving project specific footprint library "
                         "table:\n\n%s" ),
-                        GetChars( ioe.errorText )
+                        GetChars( ioe.What() )
                         );
                     wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
                 }

@@ -90,7 +90,7 @@ bool PCB_EDIT_FRAME::AppendBoardFile( const wxString& aFullFileName, int aCtl )
 
         wxString msg = wxString::Format( _(
                 "Error loading board.\n%s" ),
-                GetChars( ioe.errorText )
+                GetChars( ioe.What() )
                 );
         DisplayError( this, msg );
 

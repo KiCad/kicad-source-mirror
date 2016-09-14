@@ -121,7 +121,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
         catch( const IO_ERROR& ioe )
         {
             msg.Printf( _( "Error saving schematic file '%s'.\n%s" ),
-                        GetChars( schematicFileName.GetFullPath() ), GetChars( ioe.errorText ) );
+                        GetChars( schematicFileName.GetFullPath() ), GetChars( ioe.What() ) );
             DisplayError( this, msg );
 
             msg.Printf( _( "Failed to save '%s'" ), GetChars( schematicFileName.GetFullPath() ) );
@@ -331,7 +331,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         {
             wxString msg;
             msg.Printf( _( "Error loading schematic file '%s'.\n%s" ),
-                        GetChars( fullFileName ), GetChars( ioe.errorText ) );
+                        GetChars( fullFileName ), GetChars( ioe.What() ) );
             DisplayError( this, msg );
 
             msg.Printf( _( "Failed to load '%s'" ), GetChars( fullFileName ) );

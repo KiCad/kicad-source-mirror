@@ -89,7 +89,7 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef )
         }
         catch( IO_ERROR& e )
         {
-            msg.Printf( wxT( "DXF Plotter exception: %s"), GetChars( e.errorText ) );
+            msg.Printf( wxT( "DXF Plotter exception: %s"), GetChars( e.What() ) );
             reporter.Report( msg, REPORTER::RPT_ERROR );
             schframe->SetCurrentSheet( oldsheetpath );
             schframe->GetCurrentSheet().UpdateAllScreenReferences();

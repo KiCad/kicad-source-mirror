@@ -463,7 +463,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
                         _( "Could not load footprint \"%s\" from library \"%s\".\n\nError %s." ),
                         GetChars( getCurFootprintName() ),
                         GetChars( getCurNickname() ),
-                        GetChars( ioe.errorText ) );
+                        GetChars( ioe.What() ) );
 
             DisplayError( this, msg );
         }

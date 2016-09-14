@@ -117,7 +117,7 @@ SEARCH_STACK* PROJECT::SchSearchS()
         }
         catch( const IO_ERROR& ioe )
         {
-            DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.errorText ) );)
+            DBG(printf( "%s: %s\n", __func__, TO_UTF8( ioe.What() ) );)
         }
 
         if( !!libDir )
@@ -182,7 +182,7 @@ PART_LIBS* PROJECT::SchLibs()
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayError( NULL, ioe.errorText );
+            DisplayError( NULL, ioe.What() );
         }
     }
 

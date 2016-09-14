@@ -821,7 +821,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "Error loading board.\n%s" ), GetChars( ioe.errorText ));
+        wxString msg = wxString::Format( _( "Error loading board.\n%s" ), GetChars( ioe.What() ));
         DisplayError( editFrame, msg );
 
         return 0;

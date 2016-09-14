@@ -306,7 +306,7 @@ void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName
         }
         catch( IO_ERROR err )
         {
-            wxMessageBox( _( "Eeschema failed to load:\n" ) + err.errorText,
+            wxMessageBox( _( "Eeschema failed to load:\n" ) + err.What(),
                           _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
             return;
         }
@@ -348,7 +348,7 @@ void KICAD_MANAGER_FRAME::OnRunSchLibEditor( wxCommandEvent& event )
         }
         catch( IO_ERROR err )
         {
-            wxMessageBox( _( "Component library editor failed to load:\n" ) + err.errorText,
+            wxMessageBox( _( "Component library editor failed to load:\n" ) + err.What(),
                           _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
             return;
         }
@@ -375,7 +375,7 @@ void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
     }
     catch( IO_ERROR err )
     {
-        wxMessageBox( _( "Pcbnew failed to load:\n" ) + err.errorText, _( "KiCad Error" ),
+        wxMessageBox( _( "Pcbnew failed to load:\n" ) + err.What(), _( "KiCad Error" ),
                       wxOK | wxICON_ERROR, this );
         return;
     }
@@ -421,7 +421,7 @@ void KICAD_MANAGER_FRAME::OnRunPcbFpEditor( wxCommandEvent& event )
         }
         catch( IO_ERROR err )
         {
-            wxMessageBox( _( "Footprint library editor failed to load:\n" ) + err.errorText,
+            wxMessageBox( _( "Footprint library editor failed to load:\n" ) + err.What(),
                           _( "KiCad Error" ), wxOK | wxICON_ERROR, this );
             return;
         }

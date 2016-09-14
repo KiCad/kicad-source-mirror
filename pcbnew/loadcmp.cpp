@@ -234,7 +234,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     catch( const IO_ERROR& ioe )
     {
         wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
-                    fpid.Format().c_str(), GetChars( ioe.errorText ) );
+                    fpid.Format().c_str(), GetChars( ioe.What() ) );
     }
 
     if( !module && allowWildSeach )                // Search with wild card
@@ -264,7 +264,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
             catch( const IO_ERROR& ioe )
             {
                 wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
-                            fpid.Format().c_str(), GetChars( ioe.errorText ) );
+                            fpid.Format().c_str(), GetChars( ioe.What() ) );
             }
         }
     }
@@ -321,7 +321,7 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
     catch( const IO_ERROR& ioe )
     {
         wxLogDebug( wxT( "An error occurred attemping to load footprint '%s'.\n\nError: %s" ),
-                    aFootprintId.Format().c_str(), GetChars( ioe.errorText ) );
+                    aFootprintId.Format().c_str(), GetChars( ioe.What() ) );
     }
 
     return module;
@@ -564,7 +564,7 @@ void FOOTPRINT_EDIT_FRAME::OnSaveLibraryAs( wxCommandEvent& aEvent )
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this, ioe.errorText );
+        DisplayError( this, ioe.What() );
         return;
     }
 

@@ -88,7 +88,7 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef )
         catch( const IO_ERROR& e )
         {
             // Cannot plot SVG file
-            msg.Printf( wxT( "SVG Plotter exception: %s" ), GetChars( e.errorText ) );
+            msg.Printf( wxT( "SVG Plotter exception: %s" ), GetChars( e.What() ) );
             reporter.Report( msg, REPORTER::RPT_ERROR );
             break;
         }

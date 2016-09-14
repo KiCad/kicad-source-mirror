@@ -1056,7 +1056,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
                     "Part library '%s' failed to load. Error:\n"
                     "%s" ),
                     GetChars( filename ),
-                    GetChars( ioe.errorText )
+                    GetChars( ioe.What() )
                     );
 
             THROW_IO_ERROR( msg );
@@ -1081,7 +1081,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
             wxString msg = wxString::Format( _(
                     "Part library '%s' failed to load.\nError: %s" ),
                     GetChars( cache_name ),
-                    GetChars( ioe.errorText )
+                    GetChars( ioe.What() )
                     );
 
             THROW_IO_ERROR( msg );

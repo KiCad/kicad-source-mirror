@@ -61,7 +61,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
         reporter.Report( _( "Failed to load one or more footprints. Please add the missing libraries in PCBNew configuration. "
                             "The PCB will not update completely." ), REPORTER::RPT_ERROR );
-        reporter.Report( error.errorText, REPORTER::RPT_INFO );
+        reporter.Report( error.What(), REPORTER::RPT_INFO );
     }
 
     BOARD_NETLIST_UPDATER updater( m_frame, m_frame->GetBoard() );

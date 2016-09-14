@@ -783,7 +783,7 @@ void WORKSHEET_LAYOUT::SetDefaultLayout()
     }
     catch( const IO_ERROR& ioe )
     {
-        wxLogMessage( ioe.errorText );
+        wxLogMessage( ioe.What() );
     }
 }
 
@@ -804,7 +804,7 @@ void WORKSHEET_LAYOUT::SetPageLayout( const char* aPageLayout, bool Append )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxLogMessage( ioe.errorText );
+        wxLogMessage( ioe.What() );
     }
 }
 
@@ -867,7 +867,7 @@ void WORKSHEET_LAYOUT::SetPageLayout( const wxString& aFullFileName, bool Append
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogMessage( ioe.errorText );
+            wxLogMessage( ioe.What() );
         }
     }
 

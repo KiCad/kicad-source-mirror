@@ -236,7 +236,7 @@ bool GITHUB_GETLIBLIST::remoteGetJSON( const std::string& aFullURLCommand, wxStr
 
             std::string msg = StrPrintf( fmt.c_str(),
                                          aFullURLCommand.c_str(),
-                                         TO_UTF8( ioe.errorText ) );
+                                         TO_UTF8( ioe.What() ) );
 
             *aMsgError = FROM_UTF8( msg.c_str() );
         }

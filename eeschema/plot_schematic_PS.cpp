@@ -118,7 +118,7 @@ void DIALOG_PLOT_SCHEMATIC::createPSFile( bool aPlotAll, bool aPlotFrameRef )
         }
         catch( IO_ERROR& e )
         {
-            msg.Printf( wxT( "PS Plotter exception: %s"), GetChars( e.errorText ) );
+            msg.Printf( wxT( "PS Plotter exception: %s"), GetChars( e.What() ) );
             reporter.Report( msg, REPORTER::RPT_ERROR );
         }
     }

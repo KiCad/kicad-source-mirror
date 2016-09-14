@@ -101,7 +101,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
             catch( const IO_ERROR& e )
             {
                 // Cannot plot PDF file
-                msg.Printf( wxT( "PDF Plotter exception: %s" ), GetChars( e.errorText ) );
+                msg.Printf( wxT( "PDF Plotter exception: %s" ), GetChars( e.What() ) );
                 reporter.Report( msg, REPORTER::RPT_ERROR );
 
                 restoreEnvironment( plotter, oldsheetpath );

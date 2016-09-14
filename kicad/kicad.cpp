@@ -71,10 +71,9 @@ PGM_KICAD& PgmTop()
 }
 
 
-bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
+bool PGM_KICAD::OnPgmInit()
 {
-    m_wx_app = aWxApp;      // first thing.
-
+#if defined(DEBUG)
     wxString absoluteArgv0 = wxStandardPaths::Get().GetExecutablePath();
 
     if( !wxIsAbsolutePath( absoluteArgv0 ) )
@@ -82,8 +81,9 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
         wxLogError( wxT( "No meaningful argv[0]" ) );
         return false;
     }
+#endif
 
-    if( !initPgm() )
+    if( !InitPgm() )
         return false;
 
     m_bm.Init();
@@ -150,12 +150,12 @@ bool PGM_KICAD::OnPgmInit( wxApp* aWxApp )
             prjloaded = true;    // OnFileHistory() loads the project
         }
     }
-    else	// there is no history
+    else	 // there is no history
     {
-            wxFileName namelessProject( wxStandardPaths::Get().GetDocumentsDir(), NAMELESS_PROJECT,
-                                        ProjectFileExtension );
+        wxFileName namelessProject( wxStandardPaths::Get().GetDocumentsDir(), NAMELESS_PROJECT,
+                                    ProjectFileExtension );
 
-            frame->SetProjectFileName( namelessProject.GetFullPath() );
+        frame->SetProjectFileName( namelessProject.GetFullPath() );
     }
 
     if( !prjloaded )
@@ -176,12 +176,12 @@ void PGM_KICAD::OnPgmExit()
 {
     Kiway.OnKiwayEnd();
 
-    saveCommonSettings();
+    SaveCommonSettings();
 
     // write common settings to disk, and destroy everything in PGM_KICAD,
     // especially wxSingleInstanceCheckerImpl earlier than wxApp and earlier
     // than static destruction would.
-    destroy();
+    Destroy();
 }
 
 
@@ -200,14 +200,14 @@ void PGM_KICAD::MacOpenFile( const wxString& aFileName )
 }
 
 
-void PGM_KICAD::destroy()
+void PGM_KICAD::Destroy()
 {
     // unlike a normal destructor, this is designed to be called more
     // than once safely:
 
     m_bm.End();
 
-    PGM_BASE::destroy();
+    PGM_BASE::Destroy();
 }
 
 
@@ -234,25 +234,19 @@ struct APP_KICAD : public wxApp
     }
 #endif
 
-    bool OnInit()           // overload wxApp virtual
+    bool OnInit()           override
     {
-        // if( Kiways.OnStart( this ) )
-        {
-            return Pgm().OnPgmInit( this );
-        }
-        return false;
+        return program.OnPgmInit();
     }
 
-    int  OnExit()           // overload wxApp virtual
+    int  OnExit()           override
     {
-        // Kiways.OnEnd();
-
-        Pgm().OnPgmExit();
+        program.OnPgmExit();
 
         return wxApp::OnExit();
     }
 
-    int OnRun()             // overload wxApp virtual
+    int OnRun()             override
     {
         try
         {
@@ -266,7 +260,7 @@ struct APP_KICAD : public wxApp
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogError( GetChars( ioe.errorText ) );
+            wxLogError( GetChars( ioe.What() ) );
         }
         catch(...)
         {
@@ -282,7 +276,7 @@ struct APP_KICAD : public wxApp
      * MacOSX requires it for file association.
      * @see http://wiki.wxwidgets.org/WxMac-specific_topics
      */
-    void MacOpenFile( const wxString& aFileName )   // overload wxApp virtual
+    void MacOpenFile( const wxString& aFileName )
     {
         Pgm().MacOpenFile( aFileName );
     }
@@ -298,21 +292,3 @@ PROJECT& Prj()
     return Kiway.Prj();
 }
 
-
-#if 0   // there can be only one in C++ project manager.
-
-bool KIWAY_MGR::OnStart( wxApp* aProcess )
-{
-    // The C++ project manager supports only one open PROJECT
-    // We should need no copy constructor for KIWAY to push a pointer.
-    m_kiways.push_back( new KIWAY() );
-
-    return true;
-}
-
-
-void KIWAY_MGR::OnEnd()
-{
-}
-
-#endif
