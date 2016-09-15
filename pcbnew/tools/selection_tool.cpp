@@ -1142,8 +1142,9 @@ double calcRatio( double a, double b )
 {
     if( a == 0.0 && b == 0.0 )
         return 1.0;
+
     if( b == 0.0 )
-        return 10000000.0; // something arbitrarily big for the moment
+        return std::numeric_limits<double>::max();
 
     return a / b;
 }
@@ -1317,6 +1318,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         double maxLength = 0.0;
         double minLength = std::numeric_limits<double>::max();
         double maxArea = 0.0;
+        const TRACK* maxTrack = nullptr;
 
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
@@ -1325,10 +1327,15 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
                 maxLength = std::max( track->GetLength(), maxLength );
                 maxLength = std::max( (double) track->GetWidth(), maxLength );
 
-                minLength = std::min( std::max( track->GetLength(), (double)track->GetWidth() ), minLength );
+                minLength = std::min( std::max( track->GetLength(), (double) track->GetWidth() ), minLength );
 
-                double area =  ( track->GetLength() + track->GetWidth() * track->GetWidth() );
-                maxArea = std::max(area, maxArea);
+                double area = track->GetLength() * track->GetWidth();
+
+                if( area > maxArea )
+                {
+                    maxArea = area;
+                    maxTrack = track;
+                }
             }
         }
 
@@ -1350,9 +1357,9 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
         {
             if( MODULE* mod = dyn_cast<MODULE*>( aCollector[j] ) )
             {
-                double ratio = maxArea / mod->GetFootprintRect().GetArea();
+                double ratio = calcRatio( maxArea, mod->GetFootprintRect().GetArea() );
 
-                if( ratio < modulePadMinCoverRatio )
+                if( ratio < modulePadMinCoverRatio && calcCommonArea( maxTrack, mod ) < commonAreaRatio )
                     rejected.insert( mod );
             }
         }
