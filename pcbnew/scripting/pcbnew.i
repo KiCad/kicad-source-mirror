@@ -54,9 +54,9 @@ class BASE_SET {};
 %rename(AddNative) *::Add;
 
 // fix method names conflicts
-%rename(AddChild) MODULE::Add;
-%rename(RemoveChild) MODULE::Remove;
-%rename(DeleteChild) MODULE::Delete;
+%rename(AddChild) BOARD_ITEM_CONTAINER::Add;
+%rename(RemoveChild) BOARD_ITEM_CONTAINER::Remove;
+%rename(DeleteChild) BOARD_ITEM_CONTAINER::Delete;
 
 %exception {
     try{
@@ -129,6 +129,7 @@ class BASE_SET {};
 %}
 
 %include <class_board_item.h>
+%include <board_item_container.h>
 %include <class_board_connected_item.h>
 %include <pad_shapes.h>
 %include <class_pad.h>

@@ -47,7 +47,7 @@
 
     def Add(self,item):
         item.thisown=0
-        self.AddNative(item)
+        self.AddChild(item)
   %}
 
 }
