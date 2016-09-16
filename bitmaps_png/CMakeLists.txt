@@ -47,23 +47,6 @@
 
 # lower case is used for local variables, uppercase for global variables
 
-
-# If this file is used as part of the Kicad build, disable the stand alone build mode.
-if( NOT DEFINED CMAKE_PROJECT_NAME )
-
-    # stand alone debugging
-    project( kicad_for_bitmaps )
-
-    cmake_minimum_required( VERSION 2.8.0 FATAL_ERROR )
-
-    include_directories( /svn/kicad/work/include )
-
-    set( CMAKE_MODULE_PATH /svn/kicad/work/CMakeModules )
-
-    add_definitions( -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ -pthread )
-
-endif( NOT DEFINED CMAKE_PROJECT_NAME )
-
 option( MAINTAIN_PNGS
         "Set to true if you are a PNG maintainer and have the required tools given in the bitmaps_png/CMakeLists.txt file (default OFF)."
         OFF)
