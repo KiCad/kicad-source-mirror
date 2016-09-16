@@ -232,7 +232,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             m_fieldsTmp[idx] = fieldIt->GetText();
         else
             m_fieldsTmp[idx] = NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( (SPICE_FIELD) idx, &m_component,
-                NET_USE_X_PREFIX | NET_ADJUST_INCLUDE_PATHS | NET_ADJUST_PASSIVE_VALS );
+                NET_ADJUST_INCLUDE_PATHS | NET_ADJUST_PASSIVE_VALS );
     }
 
     // Analyze the component fields to fill out the dialog

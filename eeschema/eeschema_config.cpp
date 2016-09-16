@@ -419,10 +419,8 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
 
     m_projectFileParams.push_back( new PARAM_CFG_WXSTRING( wxT( "NetFmtName" ),
                                             &m_netListFormat) );
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceForceRefPrefix" ),
-                                            &m_spiceNetlistAddReferencePrefix, false ) );
-    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceUseNetNumbers" ),
-                                            &m_spiceNetlistUseNetcodeAsNetname, false ) );
+    m_projectFileParams.push_back( new PARAM_CFG_BOOL( wxT( "SpiceAjustPassiveValues" ),
+                                            &m_spiceAjustPassiveValues, false ) );
 
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "LabSize" ),
                                             &s_defaultTextSize,

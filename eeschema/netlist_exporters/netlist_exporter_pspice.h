@@ -34,8 +34,6 @@ class SEARCH_STACK;
 
 /// Flags for Spice netlist generation (can be combined)
 enum SPICE_NETLIST_OPTIONS {
-    NET_USE_X_PREFIX = 2,               // change "U" and "IC" reference prefix to "X"
-    NET_USE_NETCODES_AS_NETNAMES = 4,   // use netcode numbers as netnames
     NET_ADJUST_INCLUDE_PATHS = 8,       // use full paths for included files (if they are in search path)
     NET_ADJUST_PASSIVE_VALS = 16,       // reformat passive component values (e.g. 1M -> 1Meg)
     NET_ALL_FLAGS = 0xffff
@@ -140,6 +138,15 @@ public:
      * @return True if successful.
      */
     bool ProcessNetlist( unsigned aCtl );
+
+
+    /**
+     * @brief some chars are not accepted in netnames in spice netlists.
+     * for instance '(' and ')'
+     * ReplaceForbiddenChars replace these chars by an underscore.
+     * @param aNetName = the netname to modify.
+     */
+     static void ReplaceForbiddenChars( wxString& aNetName );
 
     /**
      * @brief Returns a map of circuit nodes to net names.

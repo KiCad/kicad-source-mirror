@@ -166,11 +166,8 @@ private:
     /// The name of the format to use when generating a net list.
     wxString    m_netListFormat;
 
-    /// Add X prefix to component references when generating spice net lists.
-    bool        m_spiceNetlistAddReferencePrefix;
-
     /// Use netcodes (net number) as net names when generating spice net lists.
-    bool        m_spiceNetlistUseNetcodeAsNetname;
+    bool        m_spiceAjustPassiveValues;
 
     /*  these are PROJECT specific, not schematic editor specific
     wxString        m_userLibraryPath;
@@ -250,13 +247,9 @@ public:
 
     void SetNetListFormatName( const wxString& aFormat ) { m_netListFormat = aFormat; }
 
-    bool GetSpiceAddReferencePrefix() const { return m_spiceNetlistAddReferencePrefix; }
+    bool GetSpiceAjustPassiveValues() const { return m_spiceAjustPassiveValues; }
 
-    void SetSpiceAddReferencePrefix( bool aEnable ) { m_spiceNetlistAddReferencePrefix = aEnable; }
-
-    bool GetSpiceUseNetcodeAsNetname() const { return m_spiceNetlistUseNetcodeAsNetname; }
-
-    void SetSpiceUseNetcodeAsNetname( bool aEnable ) { m_spiceNetlistUseNetcodeAsNetname = aEnable; }
+    void SetSpiceAjustPassiveValues( bool aEnable ) { m_spiceAjustPassiveValues = aEnable; }
 
     /* These are PROJECT specific, not schematic editor specific
     wxString GetUserLibraryPath() const { return m_userLibraryPath; }

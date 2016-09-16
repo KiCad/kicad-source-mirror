@@ -358,8 +358,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_hasAutoSave = true;
 
     SetForceHVLines( true );
-    SetSpiceAddReferencePrefix( false );
-    SetSpiceUseNetcodeAsNetname( false );
+    SetSpiceAjustPassiveValues( false );
 
     // Give an icon
     wxIcon icon;

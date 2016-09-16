@@ -46,11 +46,21 @@ bool NETLIST_EXPORTER_PSPICE::WriteNetlist( const wxString& aOutFileName, unsign
     return Format( &outputFile, aNetlistOptions );
 }
 
+void  NETLIST_EXPORTER_PSPICE::ReplaceForbiddenChars( wxString &aNetName )
+{
+    // some chars are not accepted in netnames in spice netlists, because they are separators
+    // they are replaced an underscore or some other allowed char.
+    // Note: this is a static function
+
+    aNetName.Replace( "(", "_" );
+    aNetName.Replace( ")", "_" );
+}
+
 
 bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl )
 {
     // Netlist options
-    const bool useNetcodeAsNetName = aCtl & NET_USE_NETCODES_AS_NETNAMES;
+    const bool useNetcodeAsNetName = false;//aCtl & NET_USE_NETCODES_AS_NETNAMES;
 
     if( !ProcessNetlist( aCtl ) )
         return false;
@@ -66,17 +76,15 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
         {
             // Look for the library in known search locations
             full_path = m_paths->FindValidPath( lib );
+
+            if( full_path.IsEmpty() )
+            {
+                DisplayError( NULL, wxString::Format( _( "Could not find library file %s" ), lib ) );
+                full_path = lib;
+            }
         }
 
-        if( full_path.IsEmpty() )
-        {
-            DisplayError( NULL, wxString::Format( wxT( "Could not find library file %s" ), lib ) );
-            return false;
-        }
-        else
-        {
-            aFormatter->Print( 0, ".include \"%s\"\n", (const char*) full_path.c_str() );
-        }
+        aFormatter->Print( 0, ".include \"%s\"\n", (const char*) full_path.c_str() );
     }
 
     for( const auto& item : m_spiceItems )
@@ -128,9 +136,8 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
             {
                 sprintPinNetName( netName , wxT( "N-%.6d" ), pin, useNetcodeAsNetName );
 
-                //Replace parenthesis with underscore to prevent parse issues with simulators
-                netName.Replace( wxT( "(" ), wxT( "_" ) );
-                netName.Replace( wxT( ")" ), wxT( "_" ) );
+                // Replace parenthesis with underscore to prevent parse issues with simulators
+                ReplaceForbiddenChars( netName );
 
                 if( netName.IsEmpty() )
                     netName = wxT( "?" );
@@ -167,12 +174,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
     case SF_PRIMITIVE:
     {
         const wxString& refName = aComponent->GetField( REFERENCE )->GetText();
-
-        // Convert ICs to subcircuits
-        if( aCtl & NET_USE_X_PREFIX && ( refName.StartsWith( "IC" ) || refName.StartsWith( "U" ) ) )
-            return wxString( "X" );
-        else
-            return refName.GetChar( 0 );
+        return refName.GetChar( 0 );
         break;
     }
 

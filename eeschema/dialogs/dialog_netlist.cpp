@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013-2015 Jean-Pierre Charras, jp.charras@wanadoo.fr
  * Copyright (C) 2013-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,8 +78,8 @@ class NETLIST_PAGE_DIALOG : public wxPanel
 public:
     NETLIST_TYPE_ID   m_IdNetType;
     wxCheckBox*       m_IsCurrentFormat;
-    wxCheckBox*       m_AddSubPrefix;
-    wxCheckBox*       m_SpiceUseNetcodeAsNetname;
+    // opt to reformat passive component values (e.g. 1M -> 1Meg):
+    wxCheckBox*       m_SpiceAjustPassiveValues;
     wxTextCtrl*       m_CommandStringCtrl;
     wxTextCtrl*       m_TitleStringCtrl;
     wxButton*         m_ButtonCancel;
@@ -117,10 +117,15 @@ public:
 /* Dialog frame for creating netlists */
 class NETLIST_DIALOG : public NETLIST_DIALOG_BASE
 {
+    friend class NETLIST_PAGE_DIALOG;
+
 public:
     SCH_EDIT_FRAME*   m_Parent;
     wxString          m_NetFmtName;
     NETLIST_PAGE_DIALOG* m_PanelNetType[4 + CUSTOMPANEL_COUNTMAX];
+
+protected:
+    bool          m_asFormatSelected;
 
 private:
     wxConfigBase* m_config;
@@ -140,7 +145,6 @@ private:
     void    GenNetlist( wxCommandEvent& event );
     void    RunSimulator( wxCommandEvent& event );
     void    NetlistUpdateOpt();
-    void    OnCancelClick( wxCommandEvent& event );
     void    OnNetlistTypeSelection( wxNotebookEvent& event );
     void    SelectDefaultNetlistType( wxCommandEvent& event );
 
@@ -216,7 +220,6 @@ private:
      * Validate info relative to a new netlist plugin
      */
     void OnOKClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
 
     /*
      * Browse plugin files, and set m_CommandStringCtrl field
@@ -262,20 +265,12 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_CommandStringCtrl = NULL;
     m_TitleStringCtrl   = NULL;
     m_IsCurrentFormat   = NULL;
-    m_AddSubPrefix = NULL;
-    m_SpiceUseNetcodeAsNetname = NULL;
+    m_SpiceAjustPassiveValues = NULL;
     m_ButtonCancel = NULL;
 
     wxString netfmtName = ((NETLIST_DIALOG*)parent->GetParent())->m_NetFmtName;
 
     bool selected = m_pageNetFmtName == netfmtName;
-
-    // PCBNEW Format is a special type:
-    if( id_NetType == NET_TYPE_PCBNEW )
-    {
-        selected = true;
-    }
-
 
     parent->AddPage( this, title, selected );
 
@@ -300,6 +295,9 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
                                         _( "Default format" ) );
     m_LeftBoxSizer->Add( m_IsCurrentFormat, 0, wxGROW | wxALL, 5 );
     m_IsCurrentFormat->SetValue( selected );
+
+    if( selected )
+        ((NETLIST_DIALOG*)parent->GetParent())->m_asFormatSelected = true;
 }
 
 
@@ -321,6 +319,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
     }
 
     // Add notebook pages:
+    m_asFormatSelected = false;     // Will be set to true, if a format is selected
 
     // Add Panel FORMAT PCBNEW
     m_PanelNetType[PANELPCBNEW] =
@@ -342,6 +341,9 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 
     // Add custom panels:
     InstallCustomPages();
+
+    if( !m_asFormatSelected )
+        m_PanelNetType[PANELPCBNEW]->m_IsCurrentFormat->SetValue( true );
 
     SetDefaultItem( m_buttonNetlist );
 
@@ -380,15 +382,12 @@ void NETLIST_DIALOG::InstallPageSpice()
     page = m_PanelNetType[PANELSPICE] =
         new NETLIST_PAGE_DIALOG( m_NoteBook, title, NET_TYPE_SPICE );
 
-    page->m_AddSubPrefix = new wxCheckBox( page, ID_ADD_SUBCIRCUIT_PREFIX,
-                                           _( "Prefix references 'U' and 'IC' with 'X'" ) );
-    page->m_AddSubPrefix->SetValue( m_Parent->GetSpiceAddReferencePrefix() );
-    page->m_LeftBoxSizer->Add( page->m_AddSubPrefix, 0, wxGROW | wxALL, 5 );
-
-    page->m_SpiceUseNetcodeAsNetname = new wxCheckBox( page, ID_USE_NETCODE_AS_NETNAME,
-                                           _( "Use net number as net name" ) );
-    page->m_SpiceUseNetcodeAsNetname->SetValue( m_Parent->GetSpiceUseNetcodeAsNetname() );
-    page->m_LeftBoxSizer->Add( page->m_SpiceUseNetcodeAsNetname, 0, wxGROW | wxALL, 5 );
+    page->m_SpiceAjustPassiveValues = new wxCheckBox( page, ID_USE_NETCODE_AS_NETNAME,
+                                           _( "Reformat passive component values" ) );
+    page->m_SpiceAjustPassiveValues->SetToolTip(
+                     _( "Reformat passive component values e.g. 1M -> 1Meg" ) );
+    page->m_SpiceAjustPassiveValues->SetValue( m_Parent->GetSpiceAjustPassiveValues() );
+    page->m_LeftBoxSizer->Add( page->m_SpiceAjustPassiveValues, 0, wxGROW | wxALL, 5 );
 
     page->m_LowBoxSizer->Add( new wxStaticText( page, -1, _( "Simulator command:" ) ), 0,
                               wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
@@ -515,8 +514,7 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
 {
     int ii;
 
-    m_Parent->SetSpiceAddReferencePrefix( m_PanelNetType[PANELSPICE]->m_AddSubPrefix->IsChecked() );
-    m_Parent->SetSpiceUseNetcodeAsNetname( m_PanelNetType[PANELSPICE]->m_SpiceUseNetcodeAsNetname->IsChecked() );
+    m_Parent->SetSpiceAjustPassiveValues( m_PanelNetType[PANELSPICE]->m_SpiceAjustPassiveValues->IsChecked() );
     m_Parent->SetSimulatorCommand( m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue() );
     m_Parent->SetNetListFormatName( wxEmptyString );
 
@@ -554,11 +552,8 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     {
     case NET_TYPE_SPICE:
         // Set spice netlist options:
-        if( currPage->m_AddSubPrefix->GetValue() )
-            netlist_opt |= NET_USE_X_PREFIX;
-
-        if( currPage->m_SpiceUseNetcodeAsNetname->GetValue() )
-            netlist_opt |= NET_USE_NETCODES_AS_NETNAMES;
+        if( currPage->m_SpiceAjustPassiveValues->GetValue() )
+            netlist_opt |= NET_ADJUST_PASSIVE_VALS;
         break;
 
     case NET_TYPE_CADSTAR:
@@ -651,12 +646,6 @@ bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aNetTypeId,
 }
 
 
-void NETLIST_DIALOG::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
-}
-
-
 void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
 {
     wxFileName fn;
@@ -682,11 +671,8 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
     // Set spice netlist options:
     unsigned netlist_opt = 0;
 
-    if( currPage->m_AddSubPrefix && currPage->m_AddSubPrefix->GetValue() )
-        netlist_opt |= NET_USE_X_PREFIX;
-
-    if( currPage->m_SpiceUseNetcodeAsNetname && currPage->m_SpiceUseNetcodeAsNetname->GetValue() )
-        netlist_opt |= NET_USE_NETCODES_AS_NETNAMES;
+    if( currPage->m_SpiceAjustPassiveValues && currPage->m_SpiceAjustPassiveValues->GetValue() )
+        netlist_opt |= NET_ADJUST_PASSIVE_VALS;
 
     if( ! m_Parent->CreateNetlist( currPage->m_IdNetType, fn.GetFullPath(),
                                    netlist_opt ) )
@@ -821,12 +807,6 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnOKClick( wxCommandEvent& event )
     }
 
     EndModal( wxID_OK );
-}
-
-
-void NETLIST_DIALOG_ADD_PLUGIN::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( wxID_CANCEL );
 }
 
 
