@@ -131,13 +131,13 @@ class SGCOORDINDEX;
             aOwnedList.push_back( (aType*)aNode ); \
             aNode->SetParent( this, false ); \
         } else { \
-            if( NULL == aNode->GetParent() ) { \
+            /*if( NULL == aNode->GetParent() ) { \
                 std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n"; \
                 std::cerr << " * [BUG] object '" << aNode->GetName(); \
                 std::cerr << "' has no parent\n"; \
                 std::cerr << " * [INFO] possible copy assignment or copy constructor bug\n"; \
                 return false; \
-            } \
+            } */ \
             aRefList.push_back( (aType*)aNode ); \
             aNode->addNodeRef( this ); \
         } \

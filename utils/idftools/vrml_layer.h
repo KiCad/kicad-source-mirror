@@ -460,7 +460,7 @@ public:
     /**
      * Function Get3DTriangles
      * Allocates and populates the 3D vertex and index lists with
-     * triangular vertices which may be used for rendering.
+     * triangular vertices which may be used for rendering a volume
      *
      * @param aVertexList will store the vertices
      * @param aIndexPlane will store the indices for the top + bottom planes
@@ -471,6 +471,19 @@ public:
     bool Get3DTriangles( std::vector< double >& aVertexList,
         std::vector< int > &aIndexPlane, std::vector< int > &aIndexSide,
         double aTopZ, double aBotZ );
+
+    /**
+     * Function Get2DTriangles
+     * Allocates and populates the 3D vertex and index lists with
+     * triangular vertices which may be used for rendering a plane
+     *
+     * @param aVertexList will store the vertices
+     * @param aIndexPlane will store the indices for the plane
+     * @param aHeight is the plane of the model
+     * @param aTopPlane is true if the plane is a top plane (false = reverse indices)
+     */
+    bool Get2DTriangles( std::vector< double >& aVertexList,
+        std::vector< int > &aIndexPlane, double aHeight, bool aTopPlane );
 
 };
 

@@ -340,8 +340,8 @@ static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >*
             #ifdef DEBUG
             do {
                 std::ostringstream ostr;
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] cannot create an outline";
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] cannot create an outline";
                 wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
             } while( 0 );
             #endif
@@ -354,8 +354,8 @@ static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >*
             #ifdef DEBUG
             do {
                 std::ostringstream ostr;
-                std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                std::cerr << " * [INFO] invalid contour: no vertices";
+                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                ostr << " * [INFO] invalid contour: no vertices";
                 wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
             } while( 0 );
             #endif
@@ -376,8 +376,8 @@ static bool getOutlineModel( VRML_LAYER& model, const std::list< IDF_OUTLINE* >*
                 #ifdef DEBUG
                 do {
                     std::ostringstream ostr;
-                    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    std::cerr << " * [BUG] cannot add segment";
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [BUG] cannot add segment";
                     wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
                 } while( 0 );
                 #endif
@@ -410,8 +410,8 @@ static bool addSegment( VRML_LAYER& model, IDF_SEGMENT* seg, int icont, int iseg
                 #ifdef DEBUG
                 do {
                     std::ostringstream ostr;
-                    std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                    std::cerr << " * [INFO] adding a circle to an existing vertex list";
+                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+                    ostr << " * [INFO] adding a circle to an existing vertex list";
                     wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
                 } while( 0 );
                 #endif
@@ -454,8 +454,8 @@ static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, do
         #ifdef DEBUG
         do {
             std::ostringstream ostr;
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] no vertex data";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] no vertex data";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
         #endif
@@ -468,8 +468,8 @@ static SCENEGRAPH* vrmlToSG( VRML_LAYER& vpcb, int idxColor, SGNODE* aParent, do
         #ifdef DEBUG
         do {
             std::ostringstream ostr;
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [BUG] index lists are not a multiple of 3 (not a triangle list)";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [BUG] index lists are not a multiple of 3 (not a triangle list)";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
         #endif
@@ -574,8 +574,8 @@ static SCENEGRAPH* addOutline( IDF3_COMP_OUTLINE* outline, int idxColor, SGNODE*
         #ifdef DEBUG
         do {
             std::ostringstream ostr;
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] no valid outline data";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] no valid outline data";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
         #endif
@@ -614,11 +614,11 @@ static SCENEGRAPH* loadIDFOutline( const wxString& aFileName )
         #ifdef DEBUG
         do {
             std::ostringstream ostr;
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] Failed to read IDF data:\n";
-            std::cerr << brd.GetError() << "\n\n";
-            std::cerr << " * [INFO] no outline for file '";
-            std::cerr << aFileName << "'";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] Failed to read IDF data:\n";
+            ostr << brd.GetError() << "\n\n";
+            ostr << " * [INFO] no outline for file '";
+            ostr << aFileName << "'";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
         #endif
@@ -643,10 +643,10 @@ static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
         #ifdef DEBUG
         do {
             std::ostringstream ostr;
-            std::cerr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            std::cerr << " * [INFO] Failed to read IDF file:\n";
-            std::cerr << brd.GetError() << "\n\n";
-            std::cerr << " * [INFO] IDF file '" << aFileName.ToUTF8() << "'";
+            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
+            ostr << " * [INFO] Failed to read IDF file:\n";
+            ostr << brd.GetError() << "\n\n";
+            ostr << " * [INFO] IDF file '" << aFileName.ToUTF8() << "'";
             wxLogTrace( MASK_IDF, "%s\n", ostr.str().c_str() );
         } while( 0 );
         #endif

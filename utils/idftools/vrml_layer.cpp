@@ -468,7 +468,7 @@ bool VRML_LAYER::AppendCircle( double aXpos, double aYpos,
 }
 
 
-// adds a circle the existing list; if 'hole' is true the contour is
+// adds a circle to the existing list; if 'hole' is true the contour is
 // a hole. Returns true if OK.
 bool VRML_LAYER::AddCircle( double aXpos, double aYpos, double aRadius,
                             bool aHoleFlag, bool aPlatedHole )
@@ -1826,8 +1826,8 @@ bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
             return false;
         }
 
-        aVertexList.push_back( vp->x );
-        aVertexList.push_back( vp->y );
+        aVertexList.push_back( vp->x + offsetX );
+        aVertexList.push_back( vp->y + offsetY );
         aVertexList.push_back( aTopZ );
     }
 
@@ -1836,8 +1836,8 @@ bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
     {
         vp = getVertexByIndex( ordmap[i], pholes );
 
-        aVertexList.push_back( vp->x );
-        aVertexList.push_back( vp->y );
+        aVertexList.push_back( vp->x + offsetX );
+        aVertexList.push_back( vp->y + offsetY );
         aVertexList.push_back( aBotZ );
     }
 
@@ -1957,6 +1957,80 @@ bool VRML_LAYER::Get3DTriangles( std::vector< double >& aVertexList,
 
         ++obeg;
         ++curContour;
+    }
+
+    return true;
+}
+
+
+bool VRML_LAYER::Get2DTriangles( std::vector< double >& aVertexList,
+    std::vector< int > &aIndexPlane, double aHeight, bool aTopPlane )
+{
+    aVertexList.clear();
+    aIndexPlane.clear();
+
+    if( ordmap.size() < 3 || outline.empty() )
+        return false;
+
+    VERTEX_3D* vp = getVertexByIndex( ordmap[0], pholes );
+
+    if( !vp )
+        return false;
+
+    size_t i;
+    size_t vsize = ordmap.size();
+
+    // vertices
+    for( i = 0; i < vsize; ++i )
+    {
+        vp = getVertexByIndex( ordmap[i], pholes );
+
+        if( !vp )
+        {
+            aVertexList.clear();
+            return false;
+        }
+
+        aVertexList.push_back( vp->x + offsetX );
+        aVertexList.push_back( vp->y + offsetY );
+        aVertexList.push_back( aHeight );
+    }
+
+    // create the index lists .. it is difficult to estimate the list size
+    // a priori so instead we use a vector to help
+
+    if( triplets.empty() )
+        return false;
+
+    // go through the triplet list and write out the indices based on order
+    std::list< TRIPLET_3D >::const_iterator tbeg = triplets.begin();
+    std::list< TRIPLET_3D >::const_iterator tend = triplets.end();
+
+    std::vector< int > aIndexBot;
+
+    if( aTopPlane )
+    {
+        while( tbeg != tend )
+        {
+            // top vertices
+            aIndexPlane.push_back( (int) tbeg->i1 );
+            aIndexPlane.push_back( (int) tbeg->i2 );
+            aIndexPlane.push_back( (int) tbeg->i3 );
+
+            ++tbeg;
+        }
+    }
+    else
+    {
+        while( tbeg != tend )
+        {
+            // bottom vertices
+            aIndexPlane.push_back( (int) ( tbeg->i2 ) );
+            aIndexPlane.push_back( (int) ( tbeg->i1 ) );
+            aIndexPlane.push_back( (int) ( tbeg->i3 ) );
+
+            ++tbeg;
+        }
     }
 
     return true;
