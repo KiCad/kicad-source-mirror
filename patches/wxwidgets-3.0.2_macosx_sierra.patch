@@ -1,0 +1,30 @@
+diff --git src/osx/carbon/dataobj.cpp src/osx/carbon/dataobj.cpp
+index c03c6a1..c40c1ce 100644
+--- src/osx/carbon/dataobj.cpp
++++ src/osx/carbon/dataobj.cpp
+@@ -30,8 +30,10 @@
+ #include "wx/osx/private.h"
+ 
+ #if wxOSX_USE_COCOA_OR_CARBON
++#ifndef __MAC_10_12
+     #include <QuickTime/QuickTime.h>
+ #endif
++#endif
+ 
+ // ----------------------------------------------------------------------------
+ // wxDataFormat
+diff --git src/osx/core/bitmap.cpp src/osx/core/bitmap.cpp
+index 3c61c17..32cbdb7 100644
+--- src/osx/core/bitmap.cpp
++++ src/osx/core/bitmap.cpp
+@@ -36,8 +36,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
+ #endif
+ 
+ #ifndef __WXOSX_IPHONE__
++#ifndef __MAC_10_12
+ #include <QuickTime/QuickTime.h>
+ #endif
++#endif
+ 
+ CGColorSpaceRef wxMacGetGenericRGBColorSpace();
+ CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
