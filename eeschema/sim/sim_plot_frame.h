@@ -324,6 +324,9 @@ private:
     ///> imagelists uset to add a small coloured icon to signal names
     ///> and cursors name, the same color as the corresponding signal traces
     wxImageList* m_signalsIconColorList;
+
+    ///> A string to store the path of saved workbooks during a session
+    static wxString m_savedWorkbooksPath;
 };
 
 // Commands

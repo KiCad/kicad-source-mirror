@@ -69,7 +69,8 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^[^$].*\\.kicad_pcb$" ),  // S format Pcbnew board files
     wxT( "^[^$].*\\.kicad_wks$" ),  // S format kicad page layout descr files
     wxT( "^[^$].*\\.kicad_mod$" ),  // S format kicad footprint files, currently not listed
-    wxT( "^.*\\.net$" ),
+    wxT( "^.*\\.net$" ),            // pcbnew netlist file
+    wxT( "^.*\\.cir$" ),            // Spice netlist file
     wxT( "^.*\\.lib$" ),            // Schematic library file
     wxT( "^.*\\.txt$" ),
     wxT( "^.*\\.pho$" ),            // Gerber file (Old Kicad extension)

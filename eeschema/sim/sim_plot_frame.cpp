@@ -32,6 +32,7 @@
 #include <widgets/tuner_slider.h>
 #include <dialogs/dialog_signal_list.h>
 #include "netlist_exporter_pspice_sim.h"
+#include <pgm_base.h>
 
 #include "sim_plot_frame.h"
 #include "sim_plot_panel.h"
@@ -100,6 +101,8 @@ TRACE_DESC::TRACE_DESC( const NETLIST_EXPORTER_PSPICE_SIM& aExporter, const wxSt
         m_title += " (phase)";
 }
 
+// Store the path of saved workbooks during the session
+wxString SIM_PLOT_FRAME::m_savedWorkbooksPath;
 
 SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     : SIM_PLOT_FRAME_BASE( aParent ), m_lastSimPlot( nullptr )
@@ -126,6 +129,11 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     }
 
     m_simulator->Init();
+
+    if( m_savedWorkbooksPath.IsEmpty() )
+    {
+        m_savedWorkbooksPath = Prj().GetProjectPath();
+    }
 
     m_reporter = new SIM_THREAD_REPORTER( this );
     m_simulator->SetReporter( m_reporter );
@@ -710,14 +718,16 @@ void SIM_PLOT_FRAME::menuNewPlot( wxCommandEvent& aEvent )
 
 void SIM_PLOT_FRAME::menuOpenWorkbook( wxCommandEvent& event )
 {
-    wxFileDialog openDlg( this, _( "Open simulation workbook" ), "", "",
+    wxFileDialog openDlg( this, _( "Open simulation workbook" ), m_savedWorkbooksPath, "",
             _( "Workbook file (*.wbk)|*.wbk" ), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( openDlg.ShowModal() == wxID_CANCEL )
         return;
 
+    m_savedWorkbooksPath = openDlg.GetDirectory();
+
     if( !loadWorkbook( openDlg.GetPath() ) )
-        DisplayError( this, wxT( "There was an error while opening the workbook file" ) );
+        DisplayError( this, _( "There was an error while opening the workbook file" ) );
 }
 
 
@@ -726,11 +736,13 @@ void SIM_PLOT_FRAME::menuSaveWorkbook( wxCommandEvent& event )
     if( !CurrentPlot() )
         return;
 
-    wxFileDialog saveDlg( this, _( "Save simulation workbook" ), "", "",
+    wxFileDialog saveDlg( this, _( "Save simulation workbook" ), m_savedWorkbooksPath, "",
                 _( "Workbook file (*.wbk)|*.wbk" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
+
+    m_savedWorkbooksPath = saveDlg.GetDirectory();
 
     if( !saveWorkbook( saveDlg.GetPath() ) )
         DisplayError( this, _( "There was an error while saving the workbook file" ) );
