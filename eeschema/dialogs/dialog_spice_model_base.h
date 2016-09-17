@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 31 2016)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -23,6 +23,7 @@ class DIALOG_SHIM;
 #include <wx/combobox.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -44,7 +45,7 @@ class DIALOG_SHIM;
 class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_passive;
@@ -52,6 +53,10 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxComboBox* m_pasType;
 		wxStaticText* m_staticText3;
 		wxTextCtrl* m_pasValue;
+		wxStaticLine* m_staticline1;
+		wxStaticText* m_staticText32;
+		wxStaticText* m_staticText321;
+		wxStaticText* m_staticTextUnitsSymbolsInfo;
 		wxPanel* m_semiconductor;
 		wxStaticText* m_staticText4;
 		wxComboBox* m_semiType;
@@ -133,20 +138,20 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onSemiSelectLib( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSelectIcLib( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlAdd( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPwlRemove( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 640,582 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 640,582 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_SPICE_MODEL_BASE();
-	
+
 };
 
 #endif //__DIALOG_SPICE_MODEL_BASE_H__

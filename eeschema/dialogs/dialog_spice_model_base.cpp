@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 31 2016)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -18,6 +18,9 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_passive = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer41;
+	bSizer41 = new wxBoxSizer( wxVERTICAL );
+	
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
 	fgSizer1->AddGrowableCol( 1 );
@@ -28,10 +31,11 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_staticText2->Wrap( -1 );
 	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_pasType = new wxComboBox( m_passive, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
+	m_pasType = new wxComboBox( m_passive, wxID_ANY, _("Resistor"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_pasType->Append( _("Resistor") );
 	m_pasType->Append( _("Capacitor") );
 	m_pasType->Append( _("Inductor") );
+	m_pasType->SetSelection( 0 );
 	fgSizer1->Add( m_pasType, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText3 = new wxStaticText( m_passive, wxID_ANY, _("Value"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -44,10 +48,34 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizer1->Add( m_pasValue, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	m_passive->SetSizer( fgSizer1 );
+	bSizer41->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
+	
+	m_staticline1 = new wxStaticLine( m_passive, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer41->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText32 = new wxStaticText( m_passive, wxID_ANY, _("In Spice values,the decimal separator is the point.\nValues can use Spice unit symbols."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText32->Wrap( -1 );
+	bSizer5->Add( m_staticText32, 0, wxALL, 5 );
+	
+	m_staticText321 = new wxStaticText( m_passive, wxID_ANY, _("Spice unit symbols in values (case insensitive):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText321->Wrap( -1 );
+	bSizer5->Add( m_staticText321, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_staticTextUnitsSymbolsInfo = new wxStaticText( m_passive, wxID_ANY, _("f = FEMTO\np = PICO\nn = NANO\nu = MICRO\nm = MILI\nk = KILO\nmeg = MEGA\ng = GIGA\nt = TERA"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextUnitsSymbolsInfo->Wrap( -1 );
+	bSizer5->Add( m_staticTextUnitsSymbolsInfo, 0, wxALL, 5 );
+	
+	
+	bSizer41->Add( bSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	
+	m_passive->SetSizer( bSizer41 );
 	m_passive->Layout();
-	fgSizer1->Fit( m_passive );
-	m_notebook->AddPage( m_passive, _("Passive"), false );
+	bSizer41->Fit( m_passive );
+	m_notebook->AddPage( m_passive, _("Passive"), true );
 	m_semiconductor = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxFlexGridSizer* fgSizer3;
 	fgSizer3 = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -441,7 +469,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_power->SetSizer( bSizer4 );
 	m_power->Layout();
 	bSizer4->Fit( m_power );
-	m_notebook->AddPage( m_power, _("Source"), true );
+	m_notebook->AddPage( m_power, _("Source"), false );
 	
 	bSizer1->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	

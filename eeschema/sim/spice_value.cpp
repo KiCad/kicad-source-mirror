@@ -28,7 +28,9 @@
 #include <cmath>
 
 #include <wx/textentry.h>
+#include <wx/numformatter.h>
 #include <confirm.h>
+#include <common.h>
 
 SPICE_VALUE::SPICE_VALUE( const wxString& aString )
 {
@@ -36,6 +38,8 @@ SPICE_VALUE::SPICE_VALUE( const wxString& aString )
 
     if( aString.IsEmpty() )
         throw std::invalid_argument( "Spice value cannot be empty" );
+
+    LOCALE_IO dummy;    // All numeric values should be in "C" locale(decimal separator = .)
 
     if( sscanf( (const char*) aString.c_str(), "%lf%7s", &m_base, buf ) == 0 )
         throw std::invalid_argument( "Invalid Spice value string" );
@@ -244,22 +248,32 @@ bool SPICE_VALIDATOR::Validate( wxWindow* aParent )
         if( m_emptyAllowed )
             return true;
 
-        DisplayError( aParent, wxString::Format( wxT( "Fill required fields" ) ) );
+        DisplayError( aParent, wxString::Format( _( "Please, fill required fields" ) ) );
         return false;
     }
+
+    wxString svalue = text->GetValue();
+
+    // In countries where the decimal separator is not a point, if the user
+    // has not used a point, replace the decimal separator by the point, as needed
+    // by spice simulator which uses the "C" decimal separator
+    svalue.Replace(",", "." );
 
     try
     {
         // If SPICE_VALUE can be constructed, then it is a valid Spice value
-        SPICE_VALUE val( text->GetValue() );
+        SPICE_VALUE val( svalue );
     }
     catch( ... )
     {
         DisplayError( aParent,
-                wxString::Format( wxT( "'%s' is not a valid Spice value" ), text->GetValue() ) );
+                wxString::Format( _( "'%s' is not a valid Spice value" ), text->GetValue() ) );
 
         return false;
     }
+
+    if( svalue != text->GetValue() )
+        text->SetValue( svalue );
 
     return true;
 }
