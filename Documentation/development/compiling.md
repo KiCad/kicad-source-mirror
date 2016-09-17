@@ -25,11 +25,12 @@ Some of these tools are required to build from source and some are optional.
 
 ## GIT Version Control System ## {#git}
 
-The official source code repository is hosted on [Launchpad][] and
-requires git to get the latest source. If you prefer to use [GitHub][] there is a
-read only mirror of the official KiCad repository. Do not submit pull requests to GitHub.
-Changes should be sent to the KiCad developer's [mailing list][] as
-an attached patch with [PATCH] at the beginning of the subject.
+The official source code repository is hosted on [Launchpad][] and requires [git][] to get
+the latest source. If you prefer to use [GitHub][] there is a read only mirror of the official
+KiCad repository. Do not submit pull requests to GitHub. Changes should be sent to the KiCad
+developer's [mailing list][] using `git format-patch` and attaching the patch with [PATCH] at
+the beginning of the subject or using `git send-email` to send your commit directly to the
+developer's [mailing list][].
 
 ## Doxygen Code Documentation Generator ## {#doxygen_section}
 
@@ -172,6 +173,25 @@ The KiCad source code includes some demos and examples to showcase the program. 
 whether install them or not with the KICAD_INSTALL_DEMOS option. You can also select where to
 install them with the KICAD_DEMOS variable. On Linux the demos are installed in
 $PREFIX/share/kicad/demos by default.
+
+## Setting the Build Version and Repository Name ## {#build_version_opt}
+
+By default, KiCad builds the version string information from the [git][] repository information
+as follows:
+
+    (2016-08-26 revision 67230ac)-master
+     |                   |        |
+     |                   |        branch name, "HEAD" if not on a branch,
+     |                   |        or "unknown" if no .git present
+     |                   |
+     |                   abbreviated commit hash, or no-git if no .git
+     |                   present
+     |
+     date of commit, or date of build if no .git present
+
+Package developers can set the version string information by using the KICAD_BUILD_VERSION and
+KICAD_REPO_NAME configuration variables during CMake configuration for custom versions and
+when building from the source archives.
 
 # Getting the KiCad Source Code ## {#getting_src}
 
@@ -319,10 +339,12 @@ Download the wxPython source and build using the following commands:
 
     cd path-to-wxwidgets-src
     patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx.patch
-    patch -p0 < path-to-kicad-src/wxwidgets-3.0.0_macosx_bug_15908.patch
+    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_bug_15908.patch
     patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_soname.patch
     patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.2_macosx_yosemite.patch
     patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.0_macosx_scrolledwindow.patch
+    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.2_macosx_sierra.patch
+    patch -p0 < path-to-kicad-src/patches/wxwidgets-3.0.2_macosx_unicode_pasteboard.patch
     mkdir build
     cd build
     export MAC_OS_X_VERSION_MIN_REQUIRED=10.7
@@ -412,3 +434,5 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [MSYS2 64-bit SourceForge repo]: http://sourceforge.net/projects/msys2/files/REPOS/MINGW/x86_64/
 [libcurl]: http://curl.haxx.se/libcurl/
 [GLM]: http://glm.g-truc.net/
+[ngspice]: http://ngspice.sourceforge.net/#
+[git]: https://git-scm.com/
