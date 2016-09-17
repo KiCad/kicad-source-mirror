@@ -1,4 +1,4 @@
-diff -rupN include/wx/glcanvas.h include/wx/glcanvas.h
+=== modified file 'include/wx/glcanvas.h'
 --- include/wx/glcanvas.h	2015-05-21 00:36:27.406145182 +0200
 +++ include/wx/glcanvas.h	2015-05-21 00:37:59.169474782 +0200
 @@ -19,6 +19,8 @@
@@ -10,7 +10,7 @@ diff -rupN include/wx/glcanvas.h include/wx/glcanvas.h
  class WXDLLIMPEXP_FWD_GL wxGLCanvas;
  class WXDLLIMPEXP_FWD_GL wxGLContext;
  
-diff -rupN include/wx/osx/glcanvas.h include/wx/osx/glcanvas.h
+=== modified file 'include/wx/osx/glcanvas.h'
 --- include/wx/osx/glcanvas.h	2015-05-21 00:36:27.419478515 +0200
 +++ include/wx/osx/glcanvas.h	2015-05-21 00:36:37.319478112 +0200
 @@ -88,6 +88,9 @@ public:
@@ -23,7 +23,7 @@ diff -rupN include/wx/osx/glcanvas.h include/wx/osx/glcanvas.h
  
      // deprecated methods
      // ------------------
-diff -rupN src/osx/cocoa/glcanvas.mm src/osx/cocoa/glcanvas.mm
+=== modified file 'src/osx/cocoa/glcanvas.mm'
 --- src/osx/cocoa/glcanvas.mm	2015-05-21 00:36:27.542811843 +0200
 +++ src/osx/cocoa/glcanvas.mm	2015-05-21 00:36:37.322811445 +0200
 @@ -313,6 +313,22 @@ bool wxGLCanvas::SwapBuffers()

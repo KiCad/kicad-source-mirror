@@ -1,4 +1,5 @@
---- src/osx/webview_webkit.mm.orig	2014-09-16 07:27:52.000000000 -0600
+=== modified file 'src/osx/webview_webkit.mm'
+--- src/osx/webview_webkit.mm	2014-09-16 07:27:52.000000000 -0600
 +++ src/osx/webview_webkit.mm	2014-09-16 07:28:12.000000000 -0600
 @@ -28,7 +28,7 @@
  #include "wx/hashmap.h"

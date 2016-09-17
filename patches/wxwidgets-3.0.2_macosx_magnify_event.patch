@@ -1,4 +1,4 @@
-diff -rupN include/wx/event.h include/wx/event.h
+=== modified file 'include/wx/event.h'
 --- include/wx/event.h	2015-05-21 23:18:15.126136156 +0200
 +++ include/wx/event.h	2015-05-21 23:20:35.112797127 +0200
 @@ -11,6 +11,8 @@
@@ -63,7 +63,7 @@ diff -rupN include/wx/event.h include/wx/event.h
  
  // Scrolling from wxWindow (sent to wxScrolledWindow)
  #define EVT_SCROLLWIN_TOP(func) wx__DECLARE_EVT0(wxEVT_SCROLLWIN_TOP, wxScrollWinEventHandler(func))
-diff -rupN src/common/event.cpp src/common/event.cpp
+=== modified file 'src/common/event.cpp'
 --- src/common/event.cpp	2015-05-21 23:18:15.049469492 +0200
 +++ src/common/event.cpp	2015-05-21 23:18:23.566135812 +0200
 @@ -208,6 +208,7 @@ wxDEFINE_EVENT( wxEVT_AUX1_DCLICK, wxMou
@@ -92,7 +92,7 @@ diff -rupN src/common/event.cpp src/common/event.cpp
  }
  
  // return true if was a button dclick event
-diff -rupN src/osx/cocoa/window.mm src/osx/cocoa/window.mm
+=== modified file 'src/osx/cocoa/window.mm'
 --- src/osx/cocoa/window.mm	2015-05-21 23:18:15.032802826 +0200
 +++ src/osx/cocoa/window.mm	2015-05-21 23:18:23.566135812 +0200
 @@ -741,6 +741,12 @@ void wxWidgetCocoaImpl::SetupMouseEvent(
