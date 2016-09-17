@@ -218,7 +218,7 @@ private:
 public:
 
     LIB_PART( const wxString& aName, PART_LIB* aLibrary = NULL );
-    LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary = NULL );
+    LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary = NULL );
 
     virtual ~LIB_PART();
 

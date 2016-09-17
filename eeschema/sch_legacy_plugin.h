@@ -88,6 +88,8 @@ public:
                              const PROPERTIES* aProperties = NULL );
     LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
                            const PROPERTIES* aProperties = NULL );
+    void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+                     const PROPERTIES* aProperties = NULL );
 
     // Temporary for testing using PART_LIB instead of SCH_PLUGIN.
     void TransferCache( PART_LIB& aTarget );

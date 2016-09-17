@@ -206,7 +206,7 @@ LIB_PART::LIB_PART( const wxString& aName, PART_LIB* aLibrary ) :
 }
 
 
-LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
+LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
     EDA_ITEM( aPart ),
     m_me( this, null_deleter() )
 {

@@ -1901,6 +1901,7 @@ class SCH_LEGACY_PLUGIN_CACHE
     wxDateTime      m_fileModTime;
     LIB_ALIAS_MAP   m_aliases;      // Map of names of LIB_ALIAS pointers.
     bool            m_isWritable;
+    bool            m_isModified;
     int             m_modHash;      // Keep track of the modification status of the library.
     int             m_versionMajor;
     int             m_versionMinor;
@@ -1926,6 +1927,7 @@ class SCH_LEGACY_PLUGIN_CACHE
     FILL_T          parseFillMode( FILE_LINE_READER& aReader, const char* aLine,
                                    const char** aOutput );
     bool            checkForDuplicates( wxString& aAliasName );
+    LIB_ALIAS*      removeAlias( LIB_ALIAS* aAlias );
 
     friend SCH_LEGACY_PLUGIN;
 
@@ -1938,9 +1940,11 @@ public:
     // Catch these exceptions higher up please.
 
     /// Save the entire library to file m_libFileName;
-//    void Save();
+    void Save();
 
     void Load();
+
+    void AddSymbol( const LIB_PART* aPart );
 
     wxDateTime  GetLibModificationTime();
 
@@ -1954,7 +1958,8 @@ public:
 
 SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFileName ) :
     m_libFileName( aFullPathAndFileName ),
-    m_isWritable( true )
+    m_isWritable( true ),
+    m_isModified( false )
 {
     m_versionMajor = -1;
     m_versionMinor = -1;
@@ -2001,6 +2006,76 @@ bool SCH_LEGACY_PLUGIN_CACHE::IsFile( const wxString& aFullPathAndFileName ) con
 bool SCH_LEGACY_PLUGIN_CACHE::IsFileChanged() const
 {
     return m_libFileName.GetModificationTime() != m_fileModTime;
+}
+
+
+LIB_ALIAS* SCH_LEGACY_PLUGIN_CACHE::removeAlias( LIB_ALIAS* aAlias )
+{
+    wxCHECK_MSG( aAlias != NULL, NULL, "NULL pointer cannot be removed from library." );
+
+    LIB_ALIAS_MAP::iterator it = m_aliases.find( aAlias->GetName() );
+
+    if( it == m_aliases.end() )
+        return NULL;
+
+    // If the entry pointer doesn't match the name it is mapped to in the library, we
+    // have done something terribly wrong.
+    wxCHECK_MSG( *it->second == aAlias, NULL,
+                 "Pointer mismatch while attempting to remove alias entry <" + aAlias->GetName() +
+                 "> from library cache <" + m_libFileName.GetName() + ">." );
+
+    LIB_ALIAS*  alias = aAlias;
+    LIB_PART*   part = alias->GetPart();
+
+    alias = part->RemoveAlias( alias );
+
+    if( !alias )
+    {
+        delete part;
+
+        if( m_aliases.size() > 1 )
+        {
+            LIB_ALIAS_MAP::iterator next = it;
+            next++;
+
+            if( next == m_aliases.end() )
+                next = m_aliases.begin();
+
+            alias = next->second;
+        }
+    }
+
+    m_aliases.erase( it );
+    m_isModified = true;
+    ++m_modHash;
+    return alias;
+}
+
+
+void SCH_LEGACY_PLUGIN_CACHE::AddSymbol( const LIB_PART* aPart )
+{
+    // add a clone, not the caller's copy
+    LIB_PART* part = new LIB_PART( *aPart );
+
+    wxArrayString aliasNames = aPart->GetAliasNames();
+
+    for( size_t i = 0; i < aliasNames.size(); i++ )
+    {
+        LIB_ALIAS_MAP::iterator it = m_aliases.find( aliasNames[i] );
+
+        if( it != m_aliases.end() )
+            removeAlias( it->second );
+
+        LIB_ALIAS* alias = aPart->GetAlias( aliasNames[i] );
+
+        wxASSERT_MSG( alias != NULL, "No alias <" + aliasNames[i] + "> found in symbol <" +
+                      aPart->GetName() +">." );
+
+        m_aliases[ aliasNames[i] ] = alias;
+    }
+
+    m_isModified = true;
+    ++m_modHash;
 }
 
 
@@ -3100,6 +3175,29 @@ void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr< LIB_PART >&
 }
 
 
+void SCH_LEGACY_PLUGIN_CACHE::Save()
+{
+    if( !m_isModified )
+        return;
+
+    FILE_OUTPUTFORMATTER formatter( m_libFileName.GetFullPath() );
+    formatter.Print( 0, "%s %d.%d\n", LIBFILE_IDENT, LIB_VERSION_MAJOR, LIB_VERSION_MINOR );
+    formatter.Print( 0, "#encoding utf-8\n");
+
+    for( LIB_ALIAS_MAP::iterator it = m_aliases.begin();  it != m_aliases.end();  it++ )
+    {
+        if( !it->second->IsRoot() )
+            continue;
+
+        it->second->GetPart()->Save( formatter );
+    }
+
+    formatter.Print( 0, "#\n#End Library\n" );
+    m_fileModTime = m_libFileName.GetModificationTime();
+    m_isModified = false;
+}
+
+
 void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
@@ -3162,4 +3260,16 @@ LIB_ALIAS* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wx
         return NULL;
 
     return it->second;
+}
+
+
+void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+                                    const PROPERTIES* aProperties )
+{
+    m_props = aProperties;
+
+    cacheLib( aLibraryPath );
+
+    m_cache->AddSymbol( aSymbol );
+    m_cache->Save();
 }

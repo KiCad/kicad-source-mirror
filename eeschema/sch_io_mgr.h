@@ -303,25 +303,27 @@ public:
                                    const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function SymbolSave
-     * will write @a aModule to an existing library located at @a aLibraryPath.
-     * If a footprint by the same name already exists, it is replaced.
+     * Function SaveSymbol
+     * will write @a aSymbol to an existing library located at @a aLibraryPath.
+     * If a #LIB_PART by the same name already exists or there are any conflicting
+     * alias names, an exception is thrown.  Symbol libraries cannot have duplicate
+     * alias names.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *   or URL containing several footprints.
+     *                     or URL containing several footprints.
      *
-     * @param aSymbol is what to store in the library. The caller continues
-     *    to own the footprint after this call.
+     * @param aSymbol is what to store in the library.  The library is refreshed and the
+     *                caller must update any #LIB_PART pointers that may have changed.
      *
      * @param aProperties is an associative array that can be used to tell the
-     *  saver how to save the footprint, because it can take any number of
-     *  additional named tuning arguments that the plugin is known to support.
-     *  The caller continues to own this object (plugin may not delete it), and
-     *  plugins should expect it to be optionally NULL.
+     *                    saver how to save the symbol, because it can take any number of
+     *                    additional named tuning arguments that the plugin is known to support.
+     *                    The caller continues to own this object (plugin may not delete it), and
+     *                    plugins should expect it to be optionally NULL.
      *
-     * @throw IO_ERROR if there is a problem saving.
+     * @throw IO_ERROR if there is a problem saving or duplicate alias names.
      */
-    virtual void SymbolSave( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+    virtual void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
                              const PROPERTIES* aProperties = NULL );
 
     /**

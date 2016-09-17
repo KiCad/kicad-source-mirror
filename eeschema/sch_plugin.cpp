@@ -83,7 +83,7 @@ LIB_ALIAS* SCH_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wxString&
 }
 
 
-void SCH_PLUGIN::SymbolSave( const wxString& aLibraryPath, const LIB_PART* aSymbol,
+void SCH_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
                              const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.

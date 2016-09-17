@@ -242,7 +242,7 @@ bool PART_LIB::AddPart( LIB_PART* aPart )
     }
 
     // add a clone, not the caller's copy
-    LIB_PART* my_part = new LIB_PART( *aPart, this );
+    LIB_PART* my_part = new LIB_PART( *aPart );
 
     for( size_t i = 0; i < my_part->m_aliases.size(); i++ )
     {
