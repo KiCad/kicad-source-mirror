@@ -65,6 +65,15 @@ public:
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
 
+    // The default dialog Validate() calls the validators of all widgets.
+    // This is not what we want; We want only validators of the selected page
+    // of the notbooks. So disable the wxDialog::Validate(), and let our
+    // TransferDataFromWindow doing the job.
+    virtual bool Validate() override
+    {
+        return true;
+    }
+
     int ShowModal() override;
 
 private:
