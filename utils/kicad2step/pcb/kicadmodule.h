@@ -51,6 +51,7 @@ private:
     bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
     bool parseLayer( SEXPR::SEXPR* data );
     bool parsePosition( SEXPR::SEXPR* data );
+    bool parseAttribute( SEXPR::SEXPR* data );
     bool parseText( SEXPR::SEXPR* data );
     bool parsePad( SEXPR::SEXPR* data );
 
@@ -58,6 +59,7 @@ private:
     std::string m_refdes;
     DOUBLET     m_position;
     double      m_rotation; // rotation (radians)
+    bool        m_virtual;  // true for a vitual (usually mechanical) component
 
     std::vector< KICADPAD* >    m_pads;
     std::vector< KICADCURVE* >  m_curves;
@@ -69,7 +71,8 @@ public:
 
     bool Read( SEXPR::SEXPR* aEntry );
 
-    bool ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver, DOUBLET aOrigin );
+    bool ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
+        DOUBLET aOrigin, bool aComposeVirtual = true );
 };
 
 #endif  // KICADMODULE_H

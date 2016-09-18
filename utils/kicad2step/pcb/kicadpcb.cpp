@@ -398,7 +398,7 @@ bool KICADPCB::parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType )
 }
 
 
-bool KICADPCB::ComposePCB()
+bool KICADPCB::ComposePCB( bool aComposeVirtual )
 {
     if( m_pcb )
         return true;
@@ -451,7 +451,7 @@ bool KICADPCB::ComposePCB()
     }
 
     for( auto i : m_modules )
-        i->ComposePCB( m_pcb, &m_resolver, origin );
+        i->ComposePCB( m_pcb, &m_resolver, origin, aComposeVirtual );
 
     if( !m_pcb->CreatePCB() )
     {

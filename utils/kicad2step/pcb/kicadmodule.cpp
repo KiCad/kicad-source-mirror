@@ -39,6 +39,7 @@ KICADMODULE::KICADMODULE()
 {
     m_side = LAYER_NONE;
     m_rotation = 0.0;
+    m_virtual = false;
 
     return;
 }
@@ -104,6 +105,8 @@ bool KICADMODULE::Read( SEXPR::SEXPR* aEntry )
                 result = result && parseLayer( child );
             else if( symname == "at" )
                 result = result && parsePosition( child );
+            else if( symname == "attr" )
+                result = result && parseAttribute( child );
             else if( symname == "fp_text" )
                 result = result && parseText( child );
             else if( symname == "fp_arc" )
@@ -198,6 +201,31 @@ bool KICADMODULE::parsePosition( SEXPR::SEXPR* data )
 }
 
 
+bool KICADMODULE::parseAttribute( SEXPR::SEXPR* data )
+{
+    if( data->GetNumberOfChildren() < 2 )
+    {
+        std::ostringstream ostr;
+        ostr << "* corrupt module in PCB file; attribute cannot be parsed\n";
+        wxLogMessage( "%s\n", ostr.str().c_str() );
+        return false;
+    }
+
+    SEXPR::SEXPR* child = data->GetChild( 1 );
+    std::string text;
+
+    if( child->IsSymbol() )
+        text = child->GetSymbol();
+    else if( child->IsString() )
+        text = child->GetString();
+
+    if( text == "virtual" )
+        m_virtual = true;
+
+    return true;
+}
+
+
 bool KICADMODULE::parseText( SEXPR::SEXPR* data )
 {
     // we're only interested in the Reference Designator
@@ -250,7 +278,8 @@ bool KICADMODULE::parsePad( SEXPR::SEXPR* data )
 }
 
 
-bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver, DOUBLET aOrigin )
+bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
+    DOUBLET aOrigin, bool aComposeVirtual )
 {
     // translate pads and curves to final position and append to PCB.
     double dlim = (double)std::numeric_limits< float >::epsilon();
@@ -321,6 +350,12 @@ bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver, DOUB
             hasdata = true;
 
     }
+
+    if( m_virtual )
+        std::cerr << "This is a virtual component, aComposeVirtual == " << (aComposeVirtual ? "true" : "false" ) << "\n";
+
+    if( m_virtual && !aComposeVirtual )
+        return hasdata;
 
     DOUBLET newpos( posX, posY );
 

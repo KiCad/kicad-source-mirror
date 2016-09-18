@@ -47,6 +47,7 @@ private:
     bool     m_overwrite;
     bool     m_useGridOrigin;
     bool     m_useDrillOrigin;
+    bool     m_includeVirtual;
     wxString m_filename;
     double   m_xOrigin;
     double   m_yOrigin;
@@ -54,23 +55,26 @@ private:
 
 static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
-        { wxCMD_LINE_OPTION, "f", NULL, "input file name",
+        { wxCMD_LINE_PARAM, NULL, NULL, _( "pcb_file" ),
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY },
 #ifdef SUPPORTS_IGES
         { wxCMD_LINE_SWITCH, "i", NULL, "IGES output (default STEP)",
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 #endif
-        { wxCMD_LINE_SWITCH, "w", NULL, "overwrite output file",
+        { wxCMD_LINE_SWITCH, "w", NULL, _( "overwrite output file" ),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_SWITCH, "d", NULL, "Use Drill Origin for output origin",
+        { wxCMD_LINE_SWITCH, "d", NULL, _( "Use Drill Origin for output origin" ),
           wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_SWITCH, "o", NULL, "Use Grid Origin for output origin",
+        { wxCMD_LINE_SWITCH, "o", NULL, _( "Use Grid Origin for output origin" ),
           wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_OPTION, "x", NULL, "X origin of board",
+        { wxCMD_LINE_OPTION, "x", NULL, _( "X origin of board" ),
             wxCMD_LINE_VAL_DOUBLE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_OPTION, "y", NULL, "Y origin of board (pcbnew coordinate system)",
+        { wxCMD_LINE_OPTION, "y", NULL, _( "Y origin of board (pcbnew coordinate system)" ),
             wxCMD_LINE_VAL_DOUBLE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_SWITCH, "h", NULL, "display this message",
+        { wxCMD_LINE_SWITCH, NULL, "no-virtual",
+            _( "exclude 3D models for components with 'virtual' attribute" ),
+            wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_SWITCH, "h", NULL, _( "display this message" ),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
         { wxCMD_LINE_NONE }
     };
@@ -87,6 +91,7 @@ bool KICAD2MCAD::OnInit()
     m_overwrite = false;
     m_useGridOrigin = false;
     m_useDrillOrigin = false;
+    m_includeVirtual = true;
     m_xOrigin = 0.0;
     m_yOrigin = 0.0;
 
@@ -121,12 +126,21 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
     if( parser.Found( "d" ) )
         m_useDrillOrigin = true;
 
+    if( parser.Found( "no-virtual" ) )
+        m_includeVirtual = false;
+
     parser.Found( "x", &m_xOrigin );
     parser.Found( "y", &m_yOrigin );
 
     wxString fname;
-    parser.Found( "f", &fname );
-    m_filename = fname;
+
+    if( parser.GetParamCount() < 1 )
+    {
+        parser.Usage();
+        return false;
+    }
+
+    m_filename = parser.GetParam( 0 );
 
     return true;
 }
@@ -170,7 +184,7 @@ int KICAD2MCAD::OnRun()
 
         try
         {
-            pcb.ComposePCB();
+            pcb.ComposePCB( m_includeVirtual );
 
         #ifdef SUPPORTS_IGES
             if( m_fmtIGES )
