@@ -28,6 +28,7 @@
 #include <wx/filename.h>
 #include <sstream>
 #include <iostream>
+#include <sstream>
 #include <Standard_Failure.hxx>
 
 #include "kicadpcb.h"
@@ -49,28 +50,31 @@ private:
     bool     m_useDrillOrigin;
     bool     m_includeVirtual;
     wxString m_filename;
+    wxString m_outputFile;
     double   m_xOrigin;
     double   m_yOrigin;
+    bool     m_inch;
 };
 
 static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
-        { wxCMD_LINE_PARAM, NULL, NULL, _( "pcb_file" ),
+        { wxCMD_LINE_PARAM, NULL, NULL, _( "pcb_filename" ),
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY },
+        { wxCMD_LINE_OPTION, "o", "output-filename", _( "output filename" ),
+            wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 #ifdef SUPPORTS_IGES
-        { wxCMD_LINE_SWITCH, "i", NULL, "IGES output (default STEP)",
+        { wxCMD_LINE_SWITCH, "fmt-iges", NULL, "IGES output (default STEP)",
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 #endif
-        { wxCMD_LINE_SWITCH, "w", NULL, _( "overwrite output file" ),
+        { wxCMD_LINE_SWITCH, "f", "force", _( "overwrite output file" ),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_SWITCH, "d", NULL, _( "Use Drill Origin for output origin" ),
-          wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_SWITCH, "o", NULL, _( "Use Grid Origin for output origin" ),
-          wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_OPTION, "x", NULL, _( "X origin of board" ),
-            wxCMD_LINE_VAL_DOUBLE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_OPTION, "y", NULL, _( "Y origin of board (pcbnew coordinate system)" ),
-            wxCMD_LINE_VAL_DOUBLE, wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_SWITCH, NULL, "drill-origin", _( "Use Drill Origin for output origin" ),
+            wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_SWITCH, NULL, "grid-origin", _( "Use Grid Origin for output origin" ),
+            wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
+        { wxCMD_LINE_OPTION, NULL, "user-origin",
+            _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)" ),
+            wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_SWITCH, NULL, "no-virtual",
             _( "exclude 3D models for components with 'virtual' attribute" ),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
@@ -92,6 +96,7 @@ bool KICAD2MCAD::OnInit()
     m_useGridOrigin = false;
     m_useDrillOrigin = false;
     m_includeVirtual = true;
+    m_inch = false;
     m_xOrigin = 0.0;
     m_yOrigin = 0.0;
 
@@ -113,26 +118,73 @@ void KICAD2MCAD::OnInitCmdLine( wxCmdLineParser& parser )
 bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
 {
     #ifdef SUPPORTS_IGES
-      if( parser.Found( "i" ) )
+      if( parser.Found( "fmt-iges" ) )
         m_fmtIGES = true;
     #endif
 
-    if( parser.Found( "w" ) )
+    if( parser.Found( "f" ) )
         m_overwrite = true;
 
-    if( parser.Found( "o" ) )
+    if( parser.Found( "grid-origin" ) )
         m_useGridOrigin = true;
 
-    if( parser.Found( "d" ) )
+    if( parser.Found( "drill-origin" ) )
         m_useDrillOrigin = true;
 
     if( parser.Found( "no-virtual" ) )
         m_includeVirtual = false;
 
-    parser.Found( "x", &m_xOrigin );
-    parser.Found( "y", &m_yOrigin );
+    wxString tstr;
 
-    wxString fname;
+    if( parser.Found( "user-origin", &tstr ) )
+    {
+        std::istringstream istr;
+        istr.str( std::string( tstr.ToUTF8() ) );
+        istr >> m_xOrigin;
+
+        if( istr.fail() )
+        {
+            parser.Usage();
+            return false;
+        }
+
+        char tmpc;
+        istr >> tmpc;
+
+        if( istr.fail() || ( tmpc != 'x' && tmpc != 'X' ) )
+        {
+            parser.Usage();
+            return false;
+        }
+
+        istr >> m_yOrigin;
+
+        if( istr.fail() )
+        {
+            parser.Usage();
+            return false;
+        }
+
+        if( !istr.eof() )
+        {
+            std::string tunit;
+            istr >> tunit;
+
+            if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
+            {
+                m_inch = true;
+            }
+            else if( tunit.compare( "mm" ) )
+            {
+                parser.Usage();
+                return false;
+            }
+        }
+    }
+
+    if( parser.Found( "o", &tstr ) )
+        m_outputFile = tstr;
+
 
     if( parser.GetParamCount() < 1 )
     {
@@ -160,17 +212,28 @@ int KICAD2MCAD::OnRun()
         return -1;
     }
 
+    wxFileName tfname;
+
+    if( m_outputFile.empty() )
+        tfname.Assign( fname.GetFullPath() );
+    else
+        tfname.Assign( m_outputFile );
+
 #ifdef SUPPORTS_IGES
     if( m_fmtIGES )
-        fname.SetExt( "igs" );
+        tfname.SetExt( "igs" );
     else
 #endif
-        fname.SetExt( "stp" );
+        tfname.SetExt( "stp" );
 
-    wxString outfile = fname.GetFullPath();
+    wxString outfile = tfname.GetFullPath();
 
     KICADPCB pcb;
-    pcb.SetOrigin( m_xOrigin, m_yOrigin );
+
+    if( m_inch )
+        pcb.SetOrigin( m_xOrigin * 25.4, m_yOrigin * 25.4 );
+    else
+        pcb.SetOrigin( m_xOrigin, m_yOrigin );
 
     if( pcb.ReadFile( m_filename ) )
     {

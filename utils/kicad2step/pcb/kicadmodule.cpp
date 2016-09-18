@@ -351,9 +351,6 @@ bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
 
     }
 
-    if( m_virtual )
-        std::cerr << "This is a virtual component, aComposeVirtual == " << (aComposeVirtual ? "true" : "false" ) << "\n";
-
     if( m_virtual && !aComposeVirtual )
         return hasdata;
 
