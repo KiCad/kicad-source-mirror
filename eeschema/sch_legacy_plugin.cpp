@@ -2054,8 +2054,10 @@ LIB_ALIAS* SCH_LEGACY_PLUGIN_CACHE::removeAlias( LIB_ALIAS* aAlias )
 
 void SCH_LEGACY_PLUGIN_CACHE::AddSymbol( const LIB_PART* aPart )
 {
-    // add a clone, not the caller's copy
-    LIB_PART* part = new LIB_PART( *aPart );
+    // Ugly hack to fix the fact that the LIB_PART copy constructor doesn't take a const
+    // reference.  I feel all dirty inside doing this.
+    // @todo: fix LIB_PART copy ctor so it can take a const reference.
+    LIB_PART* part = new LIB_PART( *const_cast< LIB_PART* >( aPart ) );
 
     wxArrayString aliasNames = aPart->GetAliasNames();
 
@@ -2066,10 +2068,10 @@ void SCH_LEGACY_PLUGIN_CACHE::AddSymbol( const LIB_PART* aPart )
         if( it != m_aliases.end() )
             removeAlias( it->second );
 
-        LIB_ALIAS* alias = aPart->GetAlias( aliasNames[i] );
+        LIB_ALIAS* alias = part->GetAlias( aliasNames[i] );
 
         wxASSERT_MSG( alias != NULL, "No alias <" + aliasNames[i] + "> found in symbol <" +
-                      aPart->GetName() +">." );
+                      part->GetName() +">." );
 
         m_aliases[ aliasNames[i] ] = alias;
     }
@@ -2133,7 +2135,7 @@ void SCH_LEGACY_PLUGIN_CACHE::Load()
         if( strCompare( "DEF", line ) )
         {
             // Read one DEF/ENDDEF part entry from library:
-            LIB_PART* part = loadPart( reader );
+            loadPart( reader );
 
         }
     }
