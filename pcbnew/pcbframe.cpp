@@ -470,11 +470,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     enableGALSpecificMenus();
 
     // disable Export STEP item if kicad2step does not exist
-    wxString   strK2S = Pgm().GetExecutablePath();
+    wxString strK2S = Pgm().GetExecutablePath();
 
     #ifdef _WIN32
     // translate from KiCad's internal UNIX-like path to MSWin paths
-    str2KS.Replace( wxT( "/" ), wxT( "\\" ) );
+    strK2S.Replace( "/", "\\" );
     #endif
 
     wxFileName appK2S( strK2S, "kicad2step" );
