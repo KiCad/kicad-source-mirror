@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -22,7 +22,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	bSizer41 = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer1 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer1->AddGrowableCol( 1 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -38,6 +38,10 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pasType->SetSelection( 0 );
 	fgSizer1->Add( m_pasType, 0, wxALL|wxEXPAND, 5 );
 	
+	m_staticText62 = new wxStaticText( m_passive, wxID_ANY, _("Passive type"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText62->Wrap( -1 );
+	fgSizer1->Add( m_staticText62, 0, wxALL, 5 );
+	
 	m_staticText3 = new wxStaticText( m_passive, wxID_ANY, _("Value"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText3->Wrap( -1 );
 	fgSizer1->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -46,6 +50,10 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_pasValue->SetMinSize( wxSize( 200,-1 ) );
 	
 	fgSizer1->Add( m_pasValue, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticText63 = new wxStaticText( m_passive, wxID_ANY, _("Spice value in simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText63->Wrap( -1 );
+	fgSizer1->Add( m_staticText63, 0, wxALL, 5 );
 	
 	
 	bSizer41->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
@@ -64,9 +72,122 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_staticText321->Wrap( -1 );
 	bSizer5->Add( m_staticText321, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextUnitsSymbolsInfo = new wxStaticText( m_passive, wxID_ANY, _("f = FEMTO\np = PICO\nn = NANO\nu = MICRO\nm = MILI\nk = KILO\nmeg = MEGA\ng = GIGA\nt = TERA"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextUnitsSymbolsInfo->Wrap( -1 );
-	bSizer5->Add( m_staticTextUnitsSymbolsInfo, 0, wxALL, 5 );
+	wxFlexGridSizer* fgSizerUnitSymbols;
+	fgSizerUnitSymbols = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerUnitSymbols->AddGrowableCol( 1 );
+	fgSizerUnitSymbols->SetFlexibleDirection( wxBOTH );
+	fgSizerUnitSymbols->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText341 = new wxStaticText( m_passive, wxID_ANY, _("f"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText341->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText341, 0, wxALL, 5 );
+	
+	m_staticText351 = new wxStaticText( m_passive, wxID_ANY, _("fempto"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText351->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText351, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText36 = new wxStaticText( m_passive, wxID_ANY, _("1e-15"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText36->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText36, 0, wxALL, 5 );
+	
+	m_staticText37 = new wxStaticText( m_passive, wxID_ANY, _("p"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText37->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText37, 0, wxALL, 5 );
+	
+	m_staticText38 = new wxStaticText( m_passive, wxID_ANY, _("pico"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText38->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText38, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText39 = new wxStaticText( m_passive, wxID_ANY, _("1e-12"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText39->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText39, 0, wxALL, 5 );
+	
+	m_staticText40 = new wxStaticText( m_passive, wxID_ANY, _("n"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText40->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText40, 0, wxALL, 5 );
+	
+	m_staticText41 = new wxStaticText( m_passive, wxID_ANY, _("nano"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText41->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText41, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText42 = new wxStaticText( m_passive, wxID_ANY, _("1e-9"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText42->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText42, 0, wxALL, 5 );
+	
+	m_staticText43 = new wxStaticText( m_passive, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText43->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText43, 0, wxALL, 5 );
+	
+	m_staticText44 = new wxStaticText( m_passive, wxID_ANY, _("micro"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText44->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText44, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText46 = new wxStaticText( m_passive, wxID_ANY, _("1e-6"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText46->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText46, 0, wxALL, 5 );
+	
+	m_staticText47 = new wxStaticText( m_passive, wxID_ANY, _("m"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText47->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText47, 0, wxALL, 5 );
+	
+	m_staticText48 = new wxStaticText( m_passive, wxID_ANY, _("milli"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText48->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText48, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText45 = new wxStaticText( m_passive, wxID_ANY, _("1e-3"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText45->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText45, 0, wxALL, 5 );
+	
+	m_staticText49 = new wxStaticText( m_passive, wxID_ANY, _("k"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText49->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText49, 0, wxALL, 5 );
+	
+	m_staticText50 = new wxStaticText( m_passive, wxID_ANY, _("kilo"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText50->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText50, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText51 = new wxStaticText( m_passive, wxID_ANY, _("1e3"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText51->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText51, 0, wxALL, 5 );
+	
+	m_staticText52 = new wxStaticText( m_passive, wxID_ANY, _("meg"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText52->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText52, 0, wxALL, 5 );
+	
+	m_staticText53 = new wxStaticText( m_passive, wxID_ANY, _("mega"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText53->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText53, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText54 = new wxStaticText( m_passive, wxID_ANY, _("1e6"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText54->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText54, 0, wxALL, 5 );
+	
+	m_staticText55 = new wxStaticText( m_passive, wxID_ANY, _("g"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText55->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText55, 0, wxALL, 5 );
+	
+	m_staticText56 = new wxStaticText( m_passive, wxID_ANY, _("giga"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText56->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText56, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText57 = new wxStaticText( m_passive, wxID_ANY, _("1e9"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText57->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText57, 0, wxALL, 5 );
+	
+	m_staticText58 = new wxStaticText( m_passive, wxID_ANY, _("t"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText58->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText58, 0, wxALL, 5 );
+	
+	m_staticText59 = new wxStaticText( m_passive, wxID_ANY, _("tera"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText59->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText59, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText60 = new wxStaticText( m_passive, wxID_ANY, _("1e12"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText60->Wrap( -1 );
+	fgSizerUnitSymbols->Add( m_staticText60, 0, wxALL, 5 );
+	
+	
+	bSizer5->Add( fgSizerUnitSymbols, 1, wxEXPAND, 5 );
 	
 	
 	bSizer41->Add( bSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
@@ -473,6 +594,9 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizer1->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer1->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
+	
 	m_disabled = new wxCheckBox( this, wxID_ANY, _("Disable component for simulation"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer1->Add( m_disabled, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
@@ -489,6 +613,9 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	
 	
 	bSizer1->Add( bSizer2, 0, wxEXPAND, 5 );
+	
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer1->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
