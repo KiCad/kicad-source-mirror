@@ -53,6 +53,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_STEP_Xorg;
 		wxStaticText* m_staticText4;
 		wxTextCtrl* m_STEP_Yorg;
+		wxCheckBox* m_cbRemoveVirtual;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

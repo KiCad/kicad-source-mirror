@@ -113,8 +113,14 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	
 	bSizer2->Add( bSizer3, 1, wxEXPAND|wxLEFT, 5 );
 	
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxVERTICAL );
 	
-	bSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_cbRemoveVirtual = new wxCheckBox( this, wxID_ANY, _("Ignore Virtual Components"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_cbRemoveVirtual, 0, wxALL, 5 );
+	
+	
+	bSizer2->Add( bSizer8, 1, wxEXPAND, 5 );
 	
 	
 	bSizerSTEPFile->Add( bSizer2, 1, wxEXPAND, 5 );

@@ -40,6 +40,7 @@
 #define OPTKEY_STEP_UORG_UNITS wxT( "STEP_UserOriginUnits" )
 #define OPTKEY_STEP_UORG_X wxT( "STEP_UserOriginX" )
 #define OPTKEY_STEP_UORG_Y wxT( "STEP_UserOriginY" )
+#define OPTKEY_STEP_NOVIRT wxT( "STEP_NoVirtual" )
 
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
@@ -50,6 +51,7 @@ private:
     bool   m_useDrillOrg;   // remember last preference for Use Drill Origin
     bool   m_useAuxOrg;     // remember last preference for Use Aux Origin
     bool   m_useUserOrg;    // remember last preference for Use User Origin
+    bool   m_noVirtual;     // remember last preference for No Virtual Component
     int    m_OrgUnits;      // remember last units for User Origin
     double m_XOrg;          // remember last User Origin X value
     double m_YOrg;          // remember last User Origin Y value
@@ -74,6 +76,8 @@ public:
         m_config->Read( OPTKEY_STEP_UORG_UNITS, &m_OrgUnits, 0 );
         m_config->Read( OPTKEY_STEP_UORG_X, &m_XOrg, 0.0 );
         m_config->Read( OPTKEY_STEP_UORG_Y, &m_YOrg, 0.0 );
+        m_config->Read( OPTKEY_STEP_NOVIRT, &m_noVirtual );
+        m_cbRemoveVirtual->SetValue( m_noVirtual );
 
         m_STEP_OrgUnitChoice->SetSelection( m_OrgUnits );
         wxString tmpStr;
@@ -109,6 +113,7 @@ public:
         m_config->Write( OPTKEY_STEP_USE_DRILL_ORG, m_cbDrillOrigin->GetValue() );
         m_config->Write( OPTKEY_STEP_USE_AUX_ORG, m_cbAuxOrigin->GetValue() );
         m_config->Write( OPTKEY_STEP_USE_USER_ORG, m_cbUserOrigin->GetValue() );
+        m_config->Write( OPTKEY_STEP_NOVIRT, m_cbRemoveVirtual->GetValue() );
 
         m_config->Write( OPTKEY_STEP_UORG_UNITS, m_STEP_OrgUnitChoice->GetSelection() );
         m_config->Write( OPTKEY_STEP_UORG_X, m_STEP_Xorg->GetValue() );
@@ -148,6 +153,11 @@ public:
     bool GetUserOrgOption()
     {
         return m_cbUserOrigin->GetValue();
+    }
+
+    bool GetNoVirtOption()
+    {
+        return m_cbRemoveVirtual->GetValue();
     }
 
     void OnUserOriginSelect( wxCommandEvent& event )
@@ -263,6 +273,7 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
     bool   aUseDrillOrg = dlg.GetDrillOrgOption();
     bool   aUseAuxOrg   = dlg.GetAuxOrgOption();
     bool   aUseUserOrg  = dlg.GetUserOrgOption();
+    bool   aNoVirtual = dlg.GetNoVirtOption();
     double aXOrg = 0.0;
     double aYOrg = 0.0;
 
@@ -284,6 +295,9 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
     appK2S.SetName( "kicad2step" );
 
     wxString cmdK2S = appK2S.GetFullPath();
+
+    if( aNoVirtual )
+        cmdK2S.Append( " --no-virtual" );
 
     if( aUseDrillOrg )
         cmdK2S.Append( " --drill-origin" );
