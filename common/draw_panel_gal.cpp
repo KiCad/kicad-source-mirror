@@ -155,9 +155,6 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
-    // This is required even though dc is not used otherwise.
-    wxPaintDC dc(this);
-
     m_pendingRefresh = false;
 
     if( m_drawing )
