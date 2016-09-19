@@ -79,6 +79,7 @@
 #include <pcb_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <functional>
+
 using namespace std::placeholders;
 
 ///@{
@@ -128,6 +129,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_GEN_EXPORT_FILE_MODULE_REPORT, PCB_EDIT_FRAME::GenFootprintsReport )
     EVT_MENU( ID_GEN_EXPORT_FILE_VRML, PCB_EDIT_FRAME::OnExportVRML )
     EVT_MENU( ID_GEN_EXPORT_FILE_IDF3, PCB_EDIT_FRAME::OnExportIDF3 )
+    EVT_MENU( ID_GEN_EXPORT_FILE_STEP, PCB_EDIT_FRAME::OnExportSTEP )
 
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_SESSION,PCB_EDIT_FRAME::ImportSpecctraSession )
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_DESIGN, PCB_EDIT_FRAME::ImportSpecctraDesign )
@@ -466,6 +468,24 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     }
 
     enableGALSpecificMenus();
+
+    // disable Export STEP item if kicad2step does not exist
+    wxString   strK2S = Pgm().GetExecutablePath();
+
+    #ifdef _WIN32
+    // translate from KiCad's internal UNIX-like path to MSWin paths
+    str2KS.Replace( wxT( "/" ), wxT( "\\" ) );
+    #endif
+
+    wxFileName appK2S( strK2S, "kicad2step" );
+
+    #ifdef _WIN32
+    appK2S.SetExt( ".exe" );
+    #endif
+
+    if( !appK2S.FileExists() )
+        GetMenuBar()->FindItem( ID_GEN_EXPORT_FILE_STEP )->Enable( false );
+
 }
 
 

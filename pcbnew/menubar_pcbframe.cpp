@@ -221,6 +221,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "I&DFv3" ), _( "IDFv3 board and component export" ),
                  KiBitmap( export_idf_xpm ) );
 
+    AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_STEP,
+                 _( "S&TEP" ), _( "STEP export" ),
+                 KiBitmap( export_idf_xpm ) );
+
     AddMenuItem( submenuexport, ID_PCB_GEN_CMP_FILE,
                  _( "&Component (.cmp) File" ),
                  _( "Export component file (*.cmp) for Eeschema footprint field back-annotation" ),

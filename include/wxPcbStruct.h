@@ -965,6 +965,13 @@ public:
     bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
                       bool aUseThou, double aXRef, double aYRef );
 
+
+    /**
+     * Function OnExportSTEP
+     * Exports the current BOARD to a STEP assembly.
+     */
+    void OnExportSTEP( wxCommandEvent& event );
+
     /**
      * Function ExporttoSPECCTRA
      * Ask for a filename and call ExportSpecctraFile to export the current BOARD

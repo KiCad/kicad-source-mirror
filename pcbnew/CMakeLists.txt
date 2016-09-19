@@ -68,6 +68,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_export_idf_base.cpp
     dialogs/dialog_export_vrml_base.cpp
     dialogs/dialog_export_vrml.cpp
+    dialogs/dialog_export_step_base.cpp
+    dialogs/dialog_export_step.cpp
     dialogs/dialog_find_base.cpp
     dialogs/dialog_find.cpp
     dialogs/dialog_fp_lib_table_base.cpp
