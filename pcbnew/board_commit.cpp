@@ -263,8 +263,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
     if( !m_editModules )
         frame->SaveCopyInUndoList( undoList, UR_UNSPECIFIED );
 
-    frame->OnModify();
     ratsnest->Recalculate();
+    frame->OnModify();
+    frame->UpdateMsgPanel();
 
     clear();
 }
