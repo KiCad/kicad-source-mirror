@@ -85,8 +85,7 @@ const wxString GetGerberProtelExtension( LAYER_NUM aLayer )
     }
 }
 
-
-wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
+const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
                 LAYER_NUM aLayer, bool aUseX1CompatibilityMode )
 {
     wxString attrib;
@@ -94,81 +93,81 @@ wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
     switch( aLayer )
     {
     case F_Adhes:
-        attrib = wxString( wxT( "Glue,Top" ) );
+        attrib = "Glue,Top";
         break;
 
     case B_Adhes:
-        attrib = wxString( wxT( "Glue,Bot" ) );
+        attrib = "Glue,Bot";
         break;
 
     case F_SilkS:
-        attrib = wxString( wxT( "Legend,Top" ) );
+        attrib = "Legend,Top";
         break;
 
     case B_SilkS:
-        attrib = wxString( wxT( "Legend,Bot" ) );
+        attrib = "Legend,Bot";
         break;
 
     case F_Mask:
-        attrib = wxString( wxT( "Soldermask,Top" ) );
+        attrib = "Soldermask,Top";
         break;
 
     case B_Mask:
-        attrib = wxString( wxT( "Soldermask,Bot" ) );
+        attrib = "Soldermask,Bot";
         break;
 
     case F_Paste:
-        attrib = wxString( wxT( "Paste,Top" ) );
+        attrib = "Paste,Top";
         break;
 
     case B_Paste:
-        attrib = wxString( wxT( "Paste,Bot" ) );
+        attrib = "Paste,Bot";
         break;
 
     case Edge_Cuts:
         // Board outline.
         // Can be "Profile,NP" (Not Plated: usual) or "Profile,P"
         // This last is the exception (Plated)
-        attrib = wxString( wxT( "Profile,NP" ) );
+        attrib = "Profile,NP";
         break;
 
     case Dwgs_User:
-        attrib = wxString( wxT( "Drawing" ) );
+        attrib = "Drawing";
         break;
 
     case Cmts_User:
-        attrib = wxString( wxT( "Other,Comment" ) );
+        attrib = "Other,Comment";
         break;
 
     case Eco1_User:
-        attrib = wxString( wxT( "Other,ECO1" ) );
+        attrib = "Other,ECO1";
         break;
 
     case Eco2_User:
-        attrib = wxString( wxT( "Other,ECO2" ) );
+        attrib = "Other,ECO2";
         break;
 
     case B_Fab:
-        attrib = wxString( wxT( "Other,Fab,Bot" ) );
+        attrib = "Other,Fab,Bot";
         break;
 
     case F_Fab:
-        attrib = wxString( wxT( "Other,Fab,Top" ) );
+        attrib = "Other,Fab,Top";
         break;
 
     case B_Cu:
-        attrib = wxString::Format( wxT( "Copper,L%d,Bot" ), aBoard->GetCopperLayerCount() );
+        attrib.Printf( wxT( "Copper,L%d,Bot" ), aBoard->GetCopperLayerCount() );
         break;
 
     case F_Cu:
-        attrib = wxString::Format( wxT( "Copper,L1,Top" ) );
+        attrib = "Copper,L1,Top";
         break;
 
     default:
         if( IsCopperLayer( aLayer ) )
-            attrib = wxString::Format( wxT( "Copper,L%d,Inr" ), aLayer+1 );
+            attrib.Printf( wxT( "Copper,L%d,Inr" ), aLayer+1 );
         else
-            attrib = wxString::Format( wxT( "Other,User" ), aLayer+1 );
+            attrib.Printf( wxT( "Other,User" ), aLayer+1 );
         break;
     }
 
@@ -180,13 +179,13 @@ wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
         switch( type )
         {
         case LT_SIGNAL:
-            attrib += wxString( wxT( ",Signal" ) );
+            attrib += ",Signal";
             break;
         case LT_POWER:
-            attrib += wxString( wxT( ",Plane" ) );
+            attrib += ",Plane";
             break;
         case LT_MIXED:
-            attrib += wxString( wxT( ",Mixed" ) );
+            attrib += ",Mixed";
             break;
         default:
             break;   // do nothing (but avoid a warning for unhandled LAYER_T values from GCC)
@@ -203,16 +202,69 @@ wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
     return fileFct;
 }
 
+
+static const wxString GetGerberFilePolarityAttribute( LAYER_NUM aLayer )
+{
+    /* build the string %TF.FilePolarity,Positive*%
+     * or  %TF.FilePolarity,Negative*%
+     * an emply string for layers which do not use a polarity
+     *
+     * The value of the .FilePolarity specifies whether the image represents the
+     * presence or absence of material.
+     * This attribute can only be used when the file represents a pattern in a material layer,
+     * e.g. copper, solder mask, legend.
+     * Together with.FileFunction it defines the role of that image in
+     * the layer structure of the PCB.
+     * Note that the .FilePolarity attribute does not change the image -
+     * no attribute does.
+     * It changes the interpretation of the image.
+     * For example, in a copper layer in positive polarity a round flash generates a copper pad.
+     * In a copper layer in negative polarity it generates a clearance.
+     * Solder mask images usually represent solder mask openings and are then negative.
+     * This may be counter-intuitive.
+     */
+    int polarity = 0;
+
+    switch( aLayer )
+    {
+    case F_Adhes:
+    case B_Adhes:
+    case F_SilkS:
+    case B_SilkS:
+    case F_Paste:
+    case B_Paste:
+        polarity = 1;
+        break;
+
+    case F_Mask:
+    case B_Mask:
+        polarity = -1;
+        break;
+
+    default:
+        if( IsCopperLayer( aLayer ) )
+            polarity = 1;
+        break;
+    }
+
+    wxString filePolarity;
+
+    if( polarity == 1 )
+        filePolarity = "%TF.FilePolarity,Positive*%";
+    if( polarity == -1 )
+        filePolarity = "%TF.FilePolarity,Negative*%";
+
+    return filePolarity;
+}
+
 /* Add some X2 attributes to the file header, as defined in the
  * Gerber file format specification J4 and "Revision 2015.06"
  */
-#define USE_REVISION_2015_06_ATTR
 void AddGerberX2Attribute( PLOTTER * aPlotter,
             const BOARD *aBoard, LAYER_NUM aLayer )
 {
     wxString text;
 
-#ifdef USE_REVISION_2015_06_ATTR
     // Creates the TF,.GenerationSoftware. Format is:
     // %TF,.GenerationSoftware,<vendor>,<application name>[,<application version>]*%
     text.Printf( wxT( "%%TF.GenerationSoftware,KiCad,Pcbnew,%s*%%" ), GetBuildVersion() );
@@ -278,11 +330,16 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
 
     text.Printf( wxT( "%%TF.ProjectId,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
     aPlotter->AddLineToHeader( text );
-#endif
 
     // Add the TF.FileFunction
     text = GetGerberFileFunctionAttribute( aBoard, aLayer, false );
     aPlotter->AddLineToHeader( text );
+
+    // Add the TF.FilePolarity (for layers which support that)
+    text = GetGerberFilePolarityAttribute( aLayer );
+
+    if( !text.IsEmpty() )
+        aPlotter->AddLineToHeader( text );
 }
 
 

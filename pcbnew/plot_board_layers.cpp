@@ -50,6 +50,7 @@
 
 #include <pcbnew.h>
 #include <pcbplot.h>
+#include <plot_auxiliary_data.h>
 
 // Local
 /* Plot a solder mask layer.
@@ -88,6 +89,8 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     {
         for( MODULE* Module = aBoard->m_Modules; Module; Module = Module->Next() )
         {
+            aPlotter->StartBlock( NULL );
+
             for( D_PAD * pad = Module->Pads(); pad; pad = pad->Next() )
             {
                 // See if the pad is on this layer
@@ -105,6 +108,8 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
                 itemplotter.PlotPad( pad, color, SKETCH );
             }
+
+            aPlotter->EndBlock( NULL );
         }
     }
 
@@ -119,6 +124,8 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     }
 
     // Plot filled areas
+    aPlotter->StartBlock( NULL );
+
     for( int ii = 0; ii < aBoard->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = aBoard->GetArea( ii );
@@ -129,6 +136,8 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
         itemplotter.PlotFilledAreas( edge_zone );
     }
 
+    aPlotter->EndBlock( NULL );
+
     // Plot segments used to fill zone areas (outdated, but here for old boards
     // compatibility):
     for( SEGZONE* seg = aBoard->m_Zone; seg; seg = seg->Next() )
@@ -137,7 +146,7 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             continue;
 
         aPlotter->ThickSegment( seg->GetStart(), seg->GetEnd(), seg->GetWidth(),
-                                itemplotter.GetPlotMode() );
+                                itemplotter.GetPlotMode(), NULL );
     }
 }
 
@@ -325,6 +334,8 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // Plot footprint pads
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {
+        aPlotter->StartBlock( NULL );
+
         for( D_PAD* pad = module->Pads();  pad;  pad = pad->Next() )
         {
             if( (pad->GetLayerSet() & aLayerMask) == 0 )
@@ -388,10 +399,25 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
             pad->SetSize( tmppadsize );     // Restore the pad size
         }
+
+        aPlotter->EndBlock( NULL );
     }
 
     // Plot vias on copper layers, and if aPlotOpt.GetPlotViaOnMaskLayer() is true,
     // plot them on solder mask
+
+    GBR_METADATA gbr_metadata;
+
+    bool isOnCopperLayer = ( aLayerMask & LSET::AllCuMask() ).any();
+
+    if( isOnCopperLayer )
+    {
+        gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_VIAPAD );
+        gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_NET );
+    }
+
+    aPlotter->StartBlock( NULL );
+
     for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
     {
         const VIA* Via = dyn_cast<const VIA*>( track );
@@ -433,12 +459,18 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( diameter <= 0 )
             continue;
 
+        gbr_metadata.SetNetName( Via->GetNetname() );
+
         EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->GetViaType());
         // Set plot color (change WHITE to LIGHTGRAY because
         // the white items are not seen on a white paper or screen
         aPlotter->SetColor( color != WHITE ? color : LIGHTGRAY);
-        aPlotter->FlashPadCircle( Via->GetStart(), diameter, plotMode );
+        aPlotter->FlashPadCircle( Via->GetStart(), diameter, plotMode, &gbr_metadata );
     }
+
+    aPlotter->EndBlock( NULL );
+    aPlotter->StartBlock( NULL );
+    gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
     // Plot tracks (not vias) :
     for( TRACK* track = aBoard->m_Track; track; track = track->Next() )
@@ -449,10 +481,13 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( !aLayerMask[track->GetLayer()] )
             continue;
 
+        gbr_metadata.SetNetName( track->GetNetname() );
         int width = track->GetWidth() + itemplotter.getFineWidthAdj();
         aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
-        aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode );
+        aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode, &gbr_metadata );
     }
+
+    aPlotter->EndBlock( NULL );
 
     // Plot zones (outdated, for old boards compatibility):
     for( TRACK* track = aBoard->m_Zone; track; track = track->Next() )
@@ -462,10 +497,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         int width = track->GetWidth() + itemplotter.getFineWidthAdj();
         aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
-        aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode );
+        aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode, NULL );
     }
 
     // Plot filled ares
+    aPlotter->StartBlock( NULL );
     for( int ii = 0; ii < aBoard->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = aBoard->GetArea( ii );
@@ -475,6 +511,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         itemplotter.PlotFilledAreas( zone );
     }
+    aPlotter->EndBlock( NULL );
 
     // Adding drill marks, if required and if the plotter is able to plot them:
     if( aPlotOpt.GetDrillMarksType() != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
@@ -604,7 +641,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
                         int width;
                         pad->GetOblongDrillGeometry( drl_start, drl_end, width );
                         aPlotter->ThickSegment( pad->GetPosition() + drl_start,
-                                pad->GetPosition() + drl_end, width, SKETCH );
+                                pad->GetPosition() + drl_end, width, SKETCH, NULL );
                     }
                 }
             }
@@ -985,7 +1022,12 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
             bool useX2mode = plotOpts.GetUseGerberAttributes();
 
             if( useX2mode )
+            {
                 AddGerberX2Attribute( plotter, aBoard, aLayer );
+                GERBER_PLOTTER* gbrplotter = static_cast <GERBER_PLOTTER*> ( plotter );
+                gbrplotter->UseX2Attributes( true );
+                gbrplotter->UseX2NetAttributes( plotOpts.GetIncludeGerberNetlistInfo() );
+            }
             else
                 plotter->AddLineToHeader( GetGerberFileFunctionAttribute(
                                                 aBoard, aLayer, true ) );

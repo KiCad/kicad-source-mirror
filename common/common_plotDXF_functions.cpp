@@ -347,7 +347,7 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill, int 
  * are converted to inflated polygon by aWidth/2
  */
 void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
-                            FILL_T aFill, int aWidth)
+                            FILL_T aFill, int aWidth, void * aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -383,7 +383,7 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
             ThickSegment( aCornerList[ii-1], aCornerList[ii],
-                          aWidth, FILLED );
+                          aWidth, FILLED, NULL );
 
         return;
     }
@@ -481,7 +481,7 @@ void DXF_PLOTTER::SetDash( bool dashed )
 
 
 void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int aWidth,
-                                EDA_DRAW_MODE_T aPlotMode )
+                                EDA_DRAW_MODE_T aPlotMode, void* aData )
 {
     segmentAsOval( aStart, aEnd, aWidth, aPlotMode );
 }
@@ -521,7 +521,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
  * DXF oval pad: always done in sketch mode
  */
 void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
-                                EDA_DRAW_MODE_T trace_mode )
+                                EDA_DRAW_MODE_T trace_mode, void* aData )
 {
     wxASSERT( outputFile );
     wxSize size( aSize );
@@ -543,7 +543,7 @@ void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double 
  * pretty if other kinds of pad aren't...
  */
 void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
-                                    EDA_DRAW_MODE_T trace_mode )
+                                    EDA_DRAW_MODE_T trace_mode, void* aData )
 {
     wxASSERT( outputFile );
     Circle( pos, diametre, NO_FILL );
@@ -554,7 +554,7 @@ void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
  * DXF rectangular pad: alwayd done in sketch mode
  */
 void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
-                                double orient, EDA_DRAW_MODE_T trace_mode )
+                                double orient, EDA_DRAW_MODE_T trace_mode, void* aData )
 {
     wxASSERT( outputFile );
     wxSize size;
@@ -619,7 +619,7 @@ void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
 
 void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                      int aCornerRadius, double aOrient,
-                                     EDA_DRAW_MODE_T aTraceMode )
+                                     EDA_DRAW_MODE_T aTraceMode, void* aData )
 {
     SHAPE_POLY_SET outline;
     const int segmentToCircleCount = 64;
@@ -639,7 +639,7 @@ void DXF_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize
 
 void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                    SHAPE_POLY_SET* aPolygons,
-                                   EDA_DRAW_MODE_T aTraceMode )
+                                   EDA_DRAW_MODE_T aTraceMode, void* aData )
 {
     for( int cnt = 0; cnt < aPolygons->OutlineCount(); ++cnt )
     {
@@ -659,7 +659,7 @@ void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
  * DXF trapezoidal pad: only sketch mode is supported
  */
 void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                  double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
+                                  double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData )
 {
     wxASSERT( outputFile );
     wxPoint coord[4];       /* coord actual corners of a trapezoidal trace */
@@ -708,7 +708,8 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                         int                         aWidth,
                         bool                        aItalic,
                         bool                        aBold,
-                        bool                        aMultilineAllowed )
+                        bool                        aMultilineAllowed,
+                        void*                       aData )
 {
     // Fix me: see how to use DXF text mode for multiline texts
     if( aMultilineAllowed && !aText.Contains( wxT( "\n" ) ) )

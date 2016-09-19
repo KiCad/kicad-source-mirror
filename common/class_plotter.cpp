@@ -393,7 +393,7 @@ void PLOTTER::segmentAsOval( const wxPoint& start, const wxPoint& end, int width
     size.x = KiROUND( EuclideanNorm( size ) ) + width;
     size.y = width;
 
-    FlashPadOval( center, size, orient, tracemode );
+    FlashPadOval( center, size, orient, tracemode, NULL );
 }
 
 
@@ -446,7 +446,7 @@ void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, double orient
 
 
 void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
-                            EDA_DRAW_MODE_T tracemode )
+                            EDA_DRAW_MODE_T tracemode, void* aData )
 {
     if( tracemode == FILLED )
     {
@@ -463,7 +463,7 @@ void PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end, int width,
 
 
 void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
-                        int radius, int width, EDA_DRAW_MODE_T tracemode )
+                        int radius, int width, EDA_DRAW_MODE_T tracemode, void* aData )
 {
     if( tracemode == FILLED )
         Arc( centre, StAngle, EndAngle, radius, NO_FILL, width );
@@ -479,7 +479,7 @@ void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
 
 
 void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
-                         EDA_DRAW_MODE_T tracemode )
+                         EDA_DRAW_MODE_T tracemode, void* aData )
 {
     if( tracemode == FILLED )
         Rect( p1, p2, NO_FILL, width );
@@ -500,7 +500,7 @@ void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
 }
 
 
-void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width, EDA_DRAW_MODE_T tracemode )
+void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width, EDA_DRAW_MODE_T tracemode, void* aData )
 {
     if( tracemode == FILLED )
         Circle( pos, diametre, NO_FILL, width );

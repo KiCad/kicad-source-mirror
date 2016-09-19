@@ -403,7 +403,7 @@ bool EXCELLON_WRITER::PlotDrillMarks( PLOTTER* aPlotter )
         if( hole.m_Hole_Shape != 0 )
         {
             wxSize oblong_size = hole.m_Hole_Size;
-            aPlotter->FlashPadOval( pos, oblong_size, hole.m_Hole_Orient, SKETCH );
+            aPlotter->FlashPadOval( pos, oblong_size, hole.m_Hole_Orient, SKETCH, NULL );
         }
     }
 

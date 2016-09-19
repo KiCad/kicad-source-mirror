@@ -271,6 +271,12 @@ public:
     static LSET AllCuMask( int aCuLayerCount = MAX_CU_LAYERS );
 
     /**
+     * Function ExternalCuMask
+     * returns a mask holding the Front and Bottom layers.
+     */
+    static LSET ExternalCuMask();
+
+    /**
      * Function AllNonCuMask
      * returns a mask holding all layer minus CU layers.
      */
@@ -285,11 +291,36 @@ public:
     static LSET FrontTechMask();
 
     /**
+     * Function FrontBoardTechMask
+     * returns a mask holding technical layers used in a board fabrication
+     * (no CU layer) on front side.
+     */
+    static LSET FrontBoardTechMask();
+
+    /**
      * Function BackTechMask
      * returns a mask holding all technical layers (no CU layer) on back side.
      */
     static LSET BackTechMask();
+
+    /**
+     * Function BackBoardTechMask
+     * returns a mask holding technical layers used in a board fabrication
+     * (no CU layer) on Back side.
+     */
+    static LSET BackBoardTechMask();
+
+    /**
+     * Function AllTechMask
+     * returns a mask holding all technical layers (no CU layer) on both side.
+     */
     static LSET AllTechMask();
+
+    /**
+     * Function AllTechMask
+     * returns a mask holding board technical layers (no CU layer) on both side.
+     */
+    static LSET AllBoardTechMask();
 
     /**
      * Function FrontMask

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 24 2016)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -99,6 +99,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerPlotItems->Add( m_plotModuleValueOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	m_plotModuleRefOpt = new wxCheckBox( sbOptionsSizer->GetStaticBox(), ID_PRINT_REF, _("Plot footprint references"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotModuleRefOpt->SetValue(true); 
 	bSizerPlotItems->Add( m_plotModuleRefOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	m_plotInvisibleText = new wxCheckBox( sbOptionsSizer->GetStaticBox(), wxID_ANY, _("Force plotting of invisible values/references"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -223,14 +224,19 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerGbrOpt = new wxBoxSizer( wxVERTICAL );
 	
 	m_useGerberExtensions = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Use Protel filename extensions"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useGerberExtensions->SetToolTip( _("Use conventional Protel Gerber extensions - .GBL, .GTL, etc...") );
+	m_useGerberExtensions->SetToolTip( _("Use Protel Gerber extensions - .GBL, .GTL, etc...\nNo more recommended. The official extension is .gbr") );
 	
 	bSizerGbrOpt->Add( m_useGerberExtensions, 0, wxALL, 2 );
 	
-	m_useGerberAttributes = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Include extended attributes"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_useGerberAttributes->SetToolTip( _("Include extended attributes (X2 Gerber files format) in the Gerber file") );
+	m_useGerberX2Attributes = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Include extended (X2) attributes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useGerberX2Attributes->SetToolTip( _("Include extended attributes (X2 Gerber files format) in the Gerber file.\nMainly File Format attributes.") );
 	
-	bSizerGbrOpt->Add( m_useGerberAttributes, 0, wxALL, 2 );
+	bSizerGbrOpt->Add( m_useGerberX2Attributes, 0, wxALL, 2 );
+	
+	m_useGerberNetAttributes = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Include advanced X2 features"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_useGerberNetAttributes->SetToolTip( _("Only available in X2 Gerber files format.\nInclude netlist metadata and aperture attributes.") );
+	
+	bSizerGbrOpt->Add( m_useGerberNetAttributes, 0, wxALL, 2 );
 	
 	m_subtractMaskFromSilk = new wxCheckBox( m_GerberOptionsSizer->GetStaticBox(), wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );

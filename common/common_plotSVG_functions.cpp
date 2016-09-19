@@ -244,7 +244,7 @@ void SVG_PLOTTER::setSVGPlotStyle()
 
 /* Set the current line width (in IUs) for the next plot
  */
-void SVG_PLOTTER::SetCurrentLineWidth( int width )
+void SVG_PLOTTER::SetCurrentLineWidth( int width, void* aData )
 {
     int pen_width;
 
@@ -439,7 +439,7 @@ void SVG_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 
 
 void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
-                            FILL_T aFill, int aWidth )
+                            FILL_T aFill, int aWidth, void * aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -611,7 +611,8 @@ void SVG_PLOTTER::Text( const wxPoint&              aPos,
                         int                         aWidth,
                         bool                        aItalic,
                         bool                        aBold,
-                        bool                        aMultilineAllowed )
+                        bool                        aMultilineAllowed,
+                        void*                       aData )
 {
     setFillMode( NO_FILL );
     SetColor( aColor );

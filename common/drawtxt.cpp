@@ -206,7 +206,7 @@ void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
 }
 
 /**
- * Function PlotGraphicText
+ * Function PLOTTER::Text
  *  same as DrawGraphicText, but plot graphic text insteed of draw it
  *  @param aPos = text position (according to aH_justify, aV_justify)
  *  @param aColor (enum EDA_COLOR_T) = text color
@@ -232,7 +232,8 @@ void PLOTTER::Text( const wxPoint&              aPos,
                     int                         aWidth,
                     bool                        aItalic,
                     bool                        aBold,
-                    bool                        aMultilineAllowed )
+                    bool                        aMultilineAllowed,
+                    void*                       aData )
 {
     int textPensize = aWidth;
 
@@ -244,7 +245,7 @@ void PLOTTER::Text( const wxPoint&              aPos,
     else
         textPensize = -Clamp_Text_PenSize( -aWidth, aSize, aBold );
 
-    SetCurrentLineWidth( textPensize );
+    SetCurrentLineWidth( textPensize, aData );
 
     if( aColor >= 0 )
         SetColor( aColor );
@@ -255,5 +256,5 @@ void PLOTTER::Text( const wxPoint&              aPos,
                      textPensize, aItalic, aBold, NULL, this );
 
     if( aWidth != textPensize )
-        SetCurrentLineWidth( aWidth );
+        SetCurrentLineWidth( aWidth, aData );
 }

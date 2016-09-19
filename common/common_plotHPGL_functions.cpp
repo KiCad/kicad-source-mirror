@@ -315,7 +315,7 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_T fill,
  */
 
 void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
-                             FILL_T aFill, int aWidth )
+                             FILL_T aFill, int aWidth, void * aData )
 {
     if( aCornerList.size() <= 1 )
         return;
@@ -433,7 +433,7 @@ void HPGL_PLOTTER::SetDash( bool dashed )
 
 
 void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
-                                 int width, EDA_DRAW_MODE_T tracemode )
+                                 int width, EDA_DRAW_MODE_T tracemode, void* aData )
 {
     wxASSERT( outputFile );
     wxPoint center;
@@ -496,7 +496,7 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
 /* Plot oval pad.
  */
 void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
-                                 EDA_DRAW_MODE_T trace_mode )
+                                 EDA_DRAW_MODE_T trace_mode, void* aData )
 {
     wxASSERT( outputFile );
     int     deltaxy, cx, cy;
@@ -516,13 +516,13 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double
     if( trace_mode == FILLED )
     {
         FlashPadRect( pos, wxSize( size.x, deltaxy + KiROUND( penDiameter ) ),
-                      orient, trace_mode );
+                      orient, trace_mode, aData );
         cx = 0; cy = deltaxy / 2;
         RotatePoint( &cx, &cy, orient );
-        FlashPadCircle( wxPoint( cx + pos.x, cy + pos.y ), size.x, trace_mode );
+        FlashPadCircle( wxPoint( cx + pos.x, cy + pos.y ), size.x, trace_mode, aData );
         cx = 0; cy = -deltaxy / 2;
         RotatePoint( &cx, &cy, orient );
-        FlashPadCircle( wxPoint( cx + pos.x, cy + pos.y ), size.x, trace_mode );
+        FlashPadCircle( wxPoint( cx + pos.x, cy + pos.y ), size.x, trace_mode, aData );
     }
     else    // Plot in outline mode.
     {
@@ -534,7 +534,7 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double
 /* Plot round pad or via.
  */
 void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
-                                   EDA_DRAW_MODE_T trace_mode )
+                                   EDA_DRAW_MODE_T trace_mode, void* aData )
 {
     wxASSERT( outputFile );
     DPOINT  pos_dev = userToDeviceCoordinates( pos );
@@ -574,7 +574,7 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 
 
 void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
-                                 double orient, EDA_DRAW_MODE_T trace_mode )
+                                 double orient, EDA_DRAW_MODE_T trace_mode, void* aData )
 {
     // Build rect polygon:
     std::vector<wxPoint> corners;
@@ -611,7 +611,7 @@ void HPGL_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
 
 void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                         int aCornerRadius, double aOrient,
-                                        EDA_DRAW_MODE_T aTraceMode )
+                                        EDA_DRAW_MODE_T aTraceMode, void* aData )
 {
     SHAPE_POLY_SET outline;
     const int segmentToCircleCount = 32;
@@ -647,7 +647,7 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
 
 void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                    SHAPE_POLY_SET* aPolygons,
-                                   EDA_DRAW_MODE_T aTraceMode )
+                                   EDA_DRAW_MODE_T aTraceMode, void* aData )
 {
     std::vector< wxPoint > cornerList;
 
@@ -667,7 +667,7 @@ void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
 
 
 void HPGL_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint* aCorners,
-                                   double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
+                                   double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData )
 {
     std::vector< wxPoint > cornerList;
     cornerList.reserve( 4 );

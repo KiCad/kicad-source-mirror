@@ -97,6 +97,9 @@ private:
     /// Include attributes from the Gerber X2 format (chapter 5 in revision J2)
     bool        m_useGerberAttributes;
 
+    /// Include netlist info (only in Gerber X2 format) (chapter ? in revision ?)
+    bool        m_includeGerberNetlistInfo;
+
     /// precision of coordinates in Gerber files: accepted 5 or 6
     /// when units are in mm (6 or 7 in inches, but Pcbnew uses mm).
     /// 6 is the internal resolution of Pcbnew, but not alwys accepted by board maker
@@ -230,6 +233,9 @@ public:
 
     void        SetUseGerberAttributes( bool aUse ) { m_useGerberAttributes = aUse; }
     bool        GetUseGerberAttributes() const { return m_useGerberAttributes; }
+
+    void        SetIncludeGerberNetlistInfo( bool aUse ) { m_includeGerberNetlistInfo = aUse; }
+    bool        GetIncludeGerberNetlistInfo() const { return m_includeGerberNetlistInfo; }
 
     void        SetUseGerberProtelExtensions( bool aUse ) { m_useGerberProtelExtensions = aUse; }
     bool        GetUseGerberProtelExtensions() const { return m_useGerberProtelExtensions; }

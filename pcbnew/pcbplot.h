@@ -268,7 +268,7 @@ const wxString GetGerberProtelExtension( LAYER_NUM aLayer );
  *      , compatible with X1 (rx274) notation (G04#@!TF.FileFunction)
  * @return The attribute, as a text string
  */
-extern wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
+const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
                 LAYER_NUM aLayer, bool aUseX1CompatibilityMode );
 
 /**

@@ -94,7 +94,7 @@ void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
  * no outline thickness
  * use in this case pen width = 1 does not actally change the polygon
  */
-void PDF_PLOTTER::SetCurrentLineWidth( int width )
+void PDF_PLOTTER::SetCurrentLineWidth( int width, void* aData )
 {
     wxASSERT( workFile );
     int pen_width;
@@ -263,7 +263,7 @@ void PDF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
  * Polygon plotting for PDF. Everything is supported
  */
 void PDF_PLOTTER::PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth )
+                           FILL_T aFill, int aWidth, void * aData )
 {
     wxASSERT( workFile );
     if( aCornerList.size() <= 1 )
@@ -756,7 +756,8 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
                         int                         aWidth,
                         bool                        aItalic,
                         bool                        aBold,
-                        bool                        aMultilineAllowed )
+                        bool                        aMultilineAllowed,
+                        void*                       aData )
 {
     // PDF files do not like 0 sized texts which create broken files.
     if( aSize.x == 0 || aSize.y == 0 )
@@ -781,7 +782,7 @@ void PDF_PLOTTER::Text( const wxPoint&              aPos,
                 &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
         SetColor( aColor );
-        SetCurrentLineWidth( aWidth );
+        SetCurrentLineWidth( aWidth, aData );
 
         /* We use the full CTM instead of the text matrix because the same
            coordinate system will be used for the overlining. Also the %f

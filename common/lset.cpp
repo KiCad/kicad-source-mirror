@@ -665,6 +665,13 @@ LSET LSET::AllNonCuMask()
 }
 
 
+LSET LSET::ExternalCuMask()
+{
+    static const LSET saved( 2, F_Cu, B_Cu );
+    return saved;
+}
+
+
 LSET LSET::AllLayersMask()
 {
     static const LSET saved = LSET().set();
@@ -674,16 +681,26 @@ LSET LSET::AllLayersMask()
 
 LSET LSET::BackTechMask()
 {
-    // (SILKSCREEN_LAYER_BACK | SOLDERMASK_LAYER_BACK | ADHESIVE_LAYER_BACK | SOLDERPASTE_LAYER_BACK)
     static const LSET saved( 6, B_SilkS, B_Mask, B_Adhes, B_Paste, B_CrtYd, B_Fab );
     return saved;
 }
 
+LSET LSET::BackBoardTechMask()
+{
+    static const LSET saved( 4, B_SilkS, B_Mask, B_Adhes, B_Paste );
+    return saved;
+}
 
 LSET LSET::FrontTechMask()
 {
-    // (SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_FRONT | ADHESIVE_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT)
     static const LSET saved( 6, F_SilkS, F_Mask, F_Adhes, F_Paste, F_CrtYd, F_Fab );
+    return saved;
+}
+
+
+LSET LSET::FrontBoardTechMask()
+{
+    static const LSET saved( 4, F_SilkS, F_Mask, F_Adhes, F_Paste );
     return saved;
 }
 
@@ -691,6 +708,13 @@ LSET LSET::FrontTechMask()
 LSET LSET::AllTechMask()
 {
     static const LSET saved = BackTechMask() | FrontTechMask();
+    return saved;
+}
+
+
+LSET LSET::AllBoardTechMask()
+{
+    static const LSET saved = BackBoardTechMask() | FrontBoardTechMask();
     return saved;
 }
 

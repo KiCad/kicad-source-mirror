@@ -81,6 +81,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 {
     m_useGerberProtelExtensions  = false;
     m_useGerberAttributes        = false;
+    m_includeGerberNetlistInfo   = false;
     m_gerberPrecision            = gbrDefaultPrecision;
     m_excludeEdgeLayer           = true;
     m_lineWidth                  = g_DrawDefaultLineThickness;
@@ -148,7 +149,12 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
 
     if( m_useGerberAttributes ) // save this option only if active,
                                 // to avoid incompatibility with older Pcbnew version
+    {
         aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ), trueStr );
+
+        if( GetIncludeGerberNetlistInfo() )
+            aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberadvancedattributes ), trueStr );
+    }
 
     if( m_gerberPrecision != gbrDefaultPrecision ) // save this option only if it is not the default value,
                                                    // to avoid incompatibility with older Pcbnew version
@@ -221,6 +227,8 @@ bool PCB_PLOT_PARAMS::operator==( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     if( m_useGerberProtelExtensions != aPcbPlotParams.m_useGerberProtelExtensions )
         return false;
     if( m_useGerberAttributes != aPcbPlotParams.m_useGerberAttributes )
+        return false;
+    if( m_useGerberAttributes && m_includeGerberNetlistInfo != aPcbPlotParams.m_includeGerberNetlistInfo )
         return false;
     if( m_gerberPrecision != aPcbPlotParams.m_gerberPrecision )
         return false;
@@ -382,6 +390,10 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_usegerberattributes:
             aPcbPlotParams->m_useGerberAttributes = parseBool();
+            break;
+
+        case T_usegerberadvancedattributes:
+            aPcbPlotParams->m_includeGerberNetlistInfo = parseBool();
             break;
 
         case T_gerberprecision:

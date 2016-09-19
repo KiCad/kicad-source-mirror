@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,9 @@
 #include <wx/ffile.h>
 #include <dialog_plot.h>
 #include <wx_html_report_panel.h>
+
+// Uncomment this line to allow experimetal net attributes in Gerber files:
+//#define KICAD_USE_GBR_NETATTRIBUTES
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ), m_parent( aParent ),
@@ -158,8 +161,15 @@ void DIALOG_PLOT::Init_Dialog()
     m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberProtelExtensions() );
 
     // Option for including Gerber attributes (from Gerber X2 format) in the output
-    m_useGerberAttributes->SetValue( m_plotOpts.GetUseGerberAttributes() );
+    m_useGerberX2Attributes->SetValue( m_plotOpts.GetUseGerberAttributes() );
 
+    // Option for including Gerber netlist info (from Gerber X2 format) in the output
+#ifdef KICAD_USE_GBR_NETATTRIBUTES
+    m_useGerberNetAttributes->SetValue( m_plotOpts.GetIncludeGerberNetlistInfo() );
+#else
+    m_plotOpts.SetIncludeGerberNetlistInfo( false );
+    m_useGerberNetAttributes->SetValue( false );
+#endif
     // Gerber precision for coordinates
     m_rbGerberFormat->SetSelection( m_plotOpts.GetGerberPrecision() == 5 ? 0 : 1 );
 
@@ -362,12 +372,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
-        m_subtractMaskFromSilk->Enable( false );
-        m_subtractMaskFromSilk->SetValue( false );
-        m_useGerberExtensions->Enable( false );
-        m_useGerberExtensions->SetValue( false );
-        m_useGerberAttributes->Enable( false );
-        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
@@ -391,12 +395,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
-        m_subtractMaskFromSilk->Enable( false );
-        m_subtractMaskFromSilk->SetValue( false );
-        m_useGerberExtensions->Enable( false );
-        m_useGerberExtensions->SetValue( false );
-        m_useGerberAttributes->Enable( false );
-        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( true );
         m_fineAdjustYscaleOpt->Enable( true );
@@ -420,9 +418,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_linesWidth->Enable( true );
         m_HPGLPenSizeOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
-        m_subtractMaskFromSilk->Enable( true );
-        m_useGerberExtensions->Enable( true );
-        m_useGerberAttributes->Enable( true );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
@@ -436,6 +431,9 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_PlotOptionsSizer->Show( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
         m_PlotOptionsSizer->Hide( m_PSOptionsSizer );
+#ifndef KICAD_USE_GBR_NETATTRIBUTES
+        m_useGerberNetAttributes->Show( false );
+#endif
         break;
 
     case PLOT_FORMAT_HPGL:
@@ -447,12 +445,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( true );
         m_excludeEdgeLayerOpt->Enable( true );
-        m_subtractMaskFromSilk->Enable( false );
-        m_subtractMaskFromSilk->SetValue( false );
-        m_useGerberExtensions->Enable( false );
-        m_useGerberExtensions->SetValue( false );
-        m_useGerberAttributes->Enable( false );
-        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
@@ -475,12 +467,6 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_linesWidth->Enable( false );
         m_HPGLPenSizeOpt->Enable( false );
         m_excludeEdgeLayerOpt->Enable( true );
-        m_subtractMaskFromSilk->Enable( false );
-        m_subtractMaskFromSilk->SetValue( false );
-        m_useGerberExtensions->Enable( false );
-        m_useGerberExtensions->SetValue( false );
-        m_useGerberAttributes->Enable( false );
-        m_useGerberAttributes->SetValue( false );
         m_scaleOpt->Enable( false );
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
@@ -649,7 +635,8 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetFormat( getPlotFormat() );
 
     tempOptions.SetUseGerberProtelExtensions( m_useGerberExtensions->GetValue() );
-    tempOptions.SetUseGerberAttributes( m_useGerberAttributes->GetValue() );
+    tempOptions.SetUseGerberAttributes( m_useGerberX2Attributes->GetValue() );
+    tempOptions.SetIncludeGerberNetlistInfo( m_useGerberNetAttributes->GetValue() );
     tempOptions.SetGerberPrecision( m_rbGerberFormat->GetSelection() == 0 ? 5 : 6 );
 
     LSET selectedLayers;

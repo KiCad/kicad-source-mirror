@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@
 #include <eda_text.h>       // FILL_T
 
 class SHAPE_POLY_SET;
+class GBR_NETLIST_METADATA;
 
 /**
  * Enum PlotFormat
@@ -89,7 +90,9 @@ private:
     double m_dashGapLength_mm;       ///< Dashed line parameter in mm: gap
 
 public:
-    static const int USE_DEFAULT_LINE_WIDTH = -1;
+    // These values are used as flag for pen or aperture selection
+    static const int DO_NOT_SET_LINE_WIDTH = -2;    // Skip selection
+    static const int USE_DEFAULT_LINE_WIDTH = -1;   // use the default pen
 
     PLOTTER();
 
@@ -125,8 +128,9 @@ public:
     /**
      * Set the line width for the next drawing.
      * @param width is specified in IUs
+     * @param aData is an auxiliary parameter, mainly used in gerber plotter
      */
-    virtual void SetCurrentLineWidth( int width ) = 0;
+    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) = 0;
 
     /**
      * Set the default line width. Used at the beginning and when a width
@@ -247,9 +251,10 @@ public:
      * @param aCornerList = corners list
      * @param aFill = type of fill
      * @param aWidth = line width
+     * @param aData an auxiliary info (mainly for gerber format)
      */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList, FILL_T aFill,
-               int aWidth = USE_DEFAULT_LINE_WIDTH ) = 0;
+               int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) = 0;
 
     /**
      * Function PlotImage
@@ -266,21 +271,51 @@ public:
 
     // Higher level primitives -- can be drawn as line, sketch or 'filled'
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
-                               EDA_DRAW_MODE_T tracemode );
+                               EDA_DRAW_MODE_T tracemode, void* aData );
     virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
-                           int rayon, int width, EDA_DRAW_MODE_T tracemode );
+                           int rayon, int width, EDA_DRAW_MODE_T tracemode, void* aData );
     virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
-                            EDA_DRAW_MODE_T tracemode );
+                            EDA_DRAW_MODE_T tracemode, void* aData );
     virtual void ThickCircle( const wxPoint& pos, int diametre, int width,
-                              EDA_DRAW_MODE_T tracemode );
+                              EDA_DRAW_MODE_T tracemode, void* aData );
 
     // Flash primitives
+
+    /**
+     * virtual function FlashPadCircle
+     * @param aPadPos Position of the shape (center of the rectangle
+     * @param aSize = size of rounded rect
+     * @param cornerRadius Radius of the rounded corners
+     * @param aOrient The rotation of the shape
+     * @param aTraceMode FILLED or SKETCH
+     * @param aData an auxiliary info (mainly for gerber format)
+     */
     virtual void FlashPadCircle( const wxPoint& aPadPos, int aDiameter,
-                                 EDA_DRAW_MODE_T aTraceMode ) = 0;
+                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) = 0;
+
+    /**
+     * virtual function FlashPadOval
+     * @param aPadPos Position of the shape (center of the rectangle
+     * @param aSize = size of rounded rect
+     * @param cornerRadius Radius of the rounded corners
+     * @param aOrient The rotation of the shape
+     * @param aTraceMode FILLED or SKETCH
+     * @param aData an auxiliary info (mainly for gerber format)
+     */
     virtual void FlashPadOval( const wxPoint& aPadPos, const wxSize& aSize, double aPadOrient,
-                               EDA_DRAW_MODE_T aTraceMode ) = 0;
+                               EDA_DRAW_MODE_T aTraceMode, void* aData ) = 0;
+
+    /**
+     * virtual function FlashPadRect
+     * @param aPadPos Position of the shape (center of the rectangle
+     * @param aSize = size of rounded rect
+     * @param cornerRadius Radius of the rounded corners
+     * @param aOrient The rotation of the shape
+     * @param aTraceMode FILLED or SKETCH
+     * @param aData an auxuliary info (mainly for gerber format)
+     */
     virtual void FlashPadRect( const wxPoint& aPadPos, const wxSize& aSize,
-                               double aPadOrient, EDA_DRAW_MODE_T aTraceMode ) = 0;
+                               double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) = 0;
 
     /**
      * virtual function FlashPadRoundRect
@@ -289,10 +324,11 @@ public:
      * @param cornerRadius Radius of the rounded corners
      * @param aOrient The rotation of the shape
      * @param aTraceMode FILLED or SKETCH
+     * @param aData an auxiliary info (mainly for gerber format)
      */
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    EDA_DRAW_MODE_T aTraceMode ) = 0;
+                                    EDA_DRAW_MODE_T aTraceMode, void* aData ) = 0;
 
     /**
      * virtual function FlashPadCustom
@@ -300,10 +336,11 @@ public:
      * @param aSize = size of round reference pad
      * @param aPolygons the shape as polygon set
      * @param aTraceMode FILLED or SKETCH
+     * @param aData an auxiliary info (mainly for gerber format)
      */
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 EDA_DRAW_MODE_T aTraceMode ) = 0;
+                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) = 0;
 
     /** virtual function FlashPadTrapez
      * flash a trapezoidal pad
@@ -314,11 +351,12 @@ public:
      * @param aTrace_Mode = FILLED or SKETCH
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode ) = 0;
+                                 double aPadOrient, EDA_DRAW_MODE_T aTraceMode, void* aData ) = 0;
 
 
     /**
      * Draws text with the plotter. For convenience it accept the color to use
+     * for specific plotters (GERBER) aData is used to pass extra parameters
      */
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
@@ -330,7 +368,8 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       bool                        aMultilineAllowed = false );
+                       bool                        aMultilineAllowed = false,
+                       void* aData = NULL );
 
     /**
      * Draw a marker (used for the drill map)
@@ -372,6 +411,25 @@ public:
     {
         // NOP for most plotters. Only for Gerber plotter
     }
+
+    /**
+     * calling this function allows to define the beginning of a group
+     * of drawing items, for instance in SVG  or Gerber format.
+     * (example: group all segments of a letter or a text)
+     * @param aData can define any parameter
+     * for most of plotters: do nothing
+     */
+    virtual void StartBlock( void* aData ) {}
+
+    /**
+     * calling this function allows to define the end of a group of drawing items
+     * for instance in SVG  or Gerber format.
+     * the group is started by StartBlock()
+     * @param aData can define any parameter
+     * for most of plotters: do nothing
+     */
+    virtual void EndBlock( void* aData ) {}
+
 
 protected:
     // These are marker subcomponents
@@ -508,7 +566,7 @@ public:
     virtual bool EndPlot();
 
     /// HPGL doesn't handle line thickness or color
-    virtual void SetCurrentLineWidth( int width )
+    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override
     {
         // This is the truth
         currentPenWidth = userToDeviceSize( penDiameter );
@@ -538,27 +596,28 @@ public:
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH);
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
+                           void * aData = NULL) override;
 
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
-                               EDA_DRAW_MODE_T tracemode );
+                               EDA_DRAW_MODE_T tracemode, void* aData ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
-                                 EDA_DRAW_MODE_T trace_mode );
+                                 EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
-                               EDA_DRAW_MODE_T trace_mode );
+                               EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               double orient, EDA_DRAW_MODE_T trace_mode );
+                               double orient, EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    EDA_DRAW_MODE_T aTraceMode );
+                                    EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 EDA_DRAW_MODE_T aTraceMode );
+                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
+                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData ) override;
 
 protected:
     void penControl( char plume );
@@ -603,19 +662,19 @@ public:
 
     // Pad routines are handled with lower level primitives
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
-                                 EDA_DRAW_MODE_T trace_mode );
+                                 EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
-                               EDA_DRAW_MODE_T trace_mode );
+                               EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               double orient, EDA_DRAW_MODE_T trace_mode );
+                               double orient, EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    EDA_DRAW_MODE_T aTraceMode );
+                                    EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 EDA_DRAW_MODE_T aTraceMode );
+                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
+                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData ) override;
 
     /** The SetColor implementation is split with the subclasses:
      * The PSLIKE computes the rgb values, the subclass emits the
@@ -685,7 +744,7 @@ public:
 
     virtual bool StartPlot();
     virtual bool EndPlot();
-    virtual void SetCurrentLineWidth( int width );
+    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
     virtual void SetDash( bool dashed );
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
@@ -698,7 +757,8 @@ public:
                       int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
+                           void * aData = NULL ) override;
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor );
@@ -714,7 +774,8 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       bool                        aMultilineAllowed = false );
+                       bool                        aMultilineAllowed = false,
+                       void* aData = NULL ) override;
 protected:
     virtual void emitSetRGBColor( double r, double g, double b );
 };
@@ -753,7 +814,7 @@ public:
     virtual bool EndPlot();
     virtual void StartPage();
     virtual void ClosePage();
-    virtual void SetCurrentLineWidth( int width );
+    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
     virtual void SetDash( bool dashed );
 
     /** PDF can have multiple pages, so SetPageSettings can be called
@@ -769,7 +830,8 @@ public:
                       int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH);
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
+                           void * aData = NULL ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume );
 
@@ -783,7 +845,8 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       bool                        aMultilineAllowed = false );
+                       bool                        aMultilineAllowed = false,
+                       void* aData = NULL ) override;
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor );
@@ -824,7 +887,7 @@ public:
     virtual void SetColor( EDA_COLOR_T color );
     virtual bool StartPlot();
     virtual bool EndPlot();
-    virtual void SetCurrentLineWidth( int width );
+    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
     virtual void SetDash( bool dashed );
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
@@ -837,7 +900,8 @@ public:
                       int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
+                           void * aData = NULL ) override;
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
                             double aScaleFactor );
@@ -853,7 +917,8 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       bool                        aMultilineAllowed = false );
+                       bool                        aMultilineAllowed = false,
+                       void* aData = NULL ) override;
 
 protected:
     FILL_T m_fillMode;              // true if the current contour
@@ -892,8 +957,9 @@ protected:
 /* Class to handle a D_CODE when plotting a board : */
 #define FIRST_DCODE_VALUE 10    // D_CODE < 10 is a command, D_CODE >= 10 is a tool
 
-struct APERTURE
+class APERTURE
 {
+public:
     enum APERTURE_TYPE {
         Circle   = 1,
         Rect     = 2,
@@ -901,12 +967,12 @@ struct APERTURE
         Oval     = 4
     };
 
-    wxSize        Size;     // horiz and Vert size
-    APERTURE_TYPE Type;     // Type ( Line, rect , circulaire , ovale .. )
-    int           DCode;    // code number ( >= 10 );
-
-    /* Trivia question: WHY Gerber decided to use D instead of the usual T for
-     * tool change? */
+    wxSize        m_Size;     // horiz and Vert size
+    APERTURE_TYPE m_Type;     // Type ( Line, rect , circulaire , ovale .. )
+    int           m_DCode;    // code number ( >= 10 );
+    int           m_ApertureAttribute;  // the attribute attached to this aperture
+                                        // Only one attribute is allowed by aperture
+                                        // 0 = no specific aperture attribute
 };
 
 
@@ -932,7 +998,7 @@ public:
      */
     virtual bool StartPlot();
     virtual bool EndPlot();
-    virtual void SetCurrentLineWidth( int width );
+    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
     virtual void SetDefaultLineWidth( int width );
 
     // RS274X has no dashing, nor colours
@@ -948,34 +1014,56 @@ public:
     virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
                       int aRadius, FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
 
+    virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
+                               EDA_DRAW_MODE_T tracemode, void* aData ) override;
+
+    virtual void ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
+                           int rayon, int width, EDA_DRAW_MODE_T tracemode, void* aData ) override;
+    virtual void ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
+                            EDA_DRAW_MODE_T tracemode, void* aData ) override;
+    virtual void ThickCircle( const wxPoint& pos, int diametre, int width,
+                              EDA_DRAW_MODE_T tracemode, void* aData ) override;
     /**
      * Gerber polygon: they can (and *should*) be filled with the
      * appropriate G36/G37 sequence
      */
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
+                           void * aData = NULL ) override;
 
     virtual void PenTo( const wxPoint& pos, char plume );
+
+    virtual void Text( const wxPoint&              aPos,
+                       enum EDA_COLOR_T            aColor,
+                       const wxString&             aText,
+                       double                      aOrient,
+                       const wxSize&               aSize,
+                       enum EDA_TEXT_HJUSTIFY_T    aH_justify,
+                       enum EDA_TEXT_VJUSTIFY_T    aV_justify,
+                       int                         aWidth,
+                       bool                        aItalic,
+                       bool                        aBold,
+                       bool                        aMultilineAllowed = false,
+                       void* aData = NULL ) override;
 
     /**
      * Filled circular flashes are stored as apertures
      */
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
-                                 EDA_DRAW_MODE_T trace_mode );
+                                 EDA_DRAW_MODE_T trace_mode, void* aData ) override;
 
     /**
      * Filled oval flashes are handled as aperture in the 90 degree positions only
      */
     virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
-                               EDA_DRAW_MODE_T trace_mode );
-
+                               EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     /**
      * Filled rect flashes are handled as aperture in the 0 90 180 or 270 degree orientation only
      * and as polygon for other orientations
      * TODO: always use flashed shapes (aperture macros)
      */
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               double orient, EDA_DRAW_MODE_T trace_mode );
+                               double orient, EDA_DRAW_MODE_T trace_mode, void* aData ) override;
 
     /**
      * Roundrect pad at the moment are not handled as aperture, since
@@ -984,17 +1072,17 @@ public:
      */
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    EDA_DRAW_MODE_T aTraceMode );
+                                    EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 EDA_DRAW_MODE_T aTraceMode );
+                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     /**
      * Trapezoidal pad at the moment are *never* handled as aperture, since
      * they require aperture macros
      * TODO: always use flashed shapes (aperture macros)
      */
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
+                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData ) override;
 
     /**
      * Change the plot polarity and begin a new layer
@@ -1014,8 +1102,32 @@ public:
      */
     virtual void SetGerberCoordinatesFormat( int aResolution, bool aUseInches = false );
 
+    void UseX2Attributes( bool aEnable ) { m_useX2Attributes = aEnable; }
+    void UseX2NetAttributes( bool aEnable ) { m_useNetAttributes = aEnable; }
+
+    /**
+     * calling this function allows to define the beginning of a group
+     * of drawing items (used in X2 format with netlist attributes)
+     * @param aData can define any parameter
+     */
+    virtual void StartBlock( void* aData ) override;
+
+    /**
+     * calling this function allows to define the end of a group of drawing items
+     * the group is started by StartBlock()
+     * (used in X2 format with netlist attributes)
+     * @param aData can define any parameter
+     */
+    virtual void EndBlock( void* aData ) override;
+
 protected:
-    void selectAperture( const wxSize& size, APERTURE::APERTURE_TYPE type );
+    /**
+     * Pick an existing aperture or create a new one, matching the
+     * size, type and attributes.
+     * write the DCode selection on gerber file
+     */
+    void selectAperture( const wxSize& aSize, APERTURE::APERTURE_TYPE aType,
+                         int aApertureAttribute );
 
     /**
      * Emit a D-Code record, using proper conversions
@@ -1024,8 +1136,43 @@ protected:
      */
     void emitDcode( const DPOINT& pt, int dcode );
 
-    std::vector<APERTURE>::iterator
-    getAperture( const wxSize& size, APERTURE::APERTURE_TYPE type );
+    /**
+     * print a Gerber net attribute object record.
+     * In a gerber file, a net attribute is owned by a graphic object
+     * formatNetAttribute must be called before creating the object
+     * @param aData contains the dato to format.
+     * the generated string depends on the type of netlist info
+     */
+    void formatNetAttribute( GBR_NETLIST_METADATA* aData );
+
+    /**
+     * clear a Gerber net attribute record (clear object attribute dictionnary)
+     * and output the clear object attribute dictionnary command to gerber file
+     */
+    void clearNetAttribute();
+
+    /**
+     * Function getAperture returns a reference to the aperture which meets the size anf type of tool
+     * if the aperture does not exist, it is created and entered in aperture list
+     * @param aSize = the size of tool
+     * @param aType = the type ( shape ) of tool
+     * @param aApertureAttribute = an aperture attribute of the tool (a tool can have onlu one attribute)
+     * 0 = no specific attribute
+     */
+    std::vector<APERTURE>::iterator getAperture( const wxSize& aSize,
+                    APERTURE::APERTURE_TYPE aType, int aApertureAttribute );
+
+    // the attributes dictionnary created/modifed by %TO, attached the objects, when they are created
+    // by D01, D03 G36/G37 commands
+    // standard attributes are .P, .C and .N
+    // this is used by gerber readers when creating a new object. Cleared by %TD command
+    // Note: m_objectAttributesDictionnary can store more than one attribute
+    // the string stores the line(s) actually written to the gerber file
+    // it can store a .P, .C or .N attribute, or 2 or 3 attributes, separated by a \n char (EOL)
+    std::string   m_objectAttributesDictionnary;
+
+    // The last aperture attribute generated (only one aperture attribute can be set)
+    int           m_apertureAttribute;
 
     FILE* workFile;
     FILE* finalFile;
@@ -1042,6 +1189,11 @@ protected:
     bool     m_gerberUnitInch;  // true if the gerber units are inches, false for mm
     int      m_gerberUnitFmt;   // number of digits in mantissa.
                                 // usually 6 in Inches and 5 or 6  in mm
+    bool    m_useX2Attributes;  // In recent gerber files, attributes can be added.
+                                // It will be added if this parm is true
+    bool    m_useNetAttributes; // In recent gerber files, netlist info can be added.
+                                // It will be added if this parm is true
+                                // (imply m_useX2Attributes == true)
 };
 
 
@@ -1077,7 +1229,7 @@ public:
     virtual bool EndPlot();
 
     // For now we don't use 'thick' primitives, so no line width
-    virtual void SetCurrentLineWidth( int width )
+    virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override
     {
         currentPenWidth = 0;
     }
@@ -1099,26 +1251,27 @@ public:
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
                          int width = USE_DEFAULT_LINE_WIDTH );
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
-                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
+                           FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) override;
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
-                               EDA_DRAW_MODE_T tracemode );
+                               EDA_DRAW_MODE_T tracemode, void* aData ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
                       int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
     virtual void PenTo( const wxPoint& pos, char plume );
+
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
-                                 EDA_DRAW_MODE_T trace_mode );
+                                 EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
-                               EDA_DRAW_MODE_T trace_mode );
+                               EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadRect( const wxPoint& pos, const wxSize& size,
-                               double orient, EDA_DRAW_MODE_T trace_mode );
+                               double orient, EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSize,
                                     int aCornerRadius, double aOrient,
-                                    EDA_DRAW_MODE_T aTraceMode );
+                                    EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
                                  SHAPE_POLY_SET* aPolygons,
-                                 EDA_DRAW_MODE_T aTraceMode );
+                                 EDA_DRAW_MODE_T aTraceMode, void* aData ) override;
     virtual void FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
-                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
+                                 double aPadOrient, EDA_DRAW_MODE_T aTrace_Mode, void* aData ) override;
 
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
@@ -1130,7 +1283,8 @@ public:
                        int                         aWidth,
                        bool                        aItalic,
                        bool                        aBold,
-                       bool                        aMultilineAllowed = false );
+                       bool                        aMultilineAllowed = false,
+                       void* aData = NULL ) override;
 
 protected:
     bool textAsLines;

@@ -227,6 +227,7 @@ set( COMMON_SRCS
     eda_pattern_match.cpp
     filter_reader.cpp
 #    findkicadhelppath.cpp.notused      deprecated, use searchhelpfilefullpath.cpp
+    gbr_metadata.cpp
     gestfich.cpp
     getrunningmicrosecs.cpp
     grid_tricks.cpp
