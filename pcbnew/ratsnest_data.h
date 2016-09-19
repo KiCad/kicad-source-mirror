@@ -35,10 +35,9 @@
 
 #include <math/box2.h>
 
-#include <boost/unordered_set.hpp>
-#include <boost/unordered_map.hpp>
-
 #include <deque>
+#include <unordered_set>
+#include <unordered_map>
 
 class BOARD;
 class BOARD_ITEM;
@@ -200,7 +199,7 @@ class RN_LINKS
 {
 public:
     // Helper typedefs
-    typedef boost::unordered_set<RN_NODE_PTR, RN_NODE_HASH, RN_NODE_COMPARE> RN_NODE_SET;
+    typedef std::unordered_set<RN_NODE_PTR, RN_NODE_HASH, RN_NODE_COMPARE> RN_NODE_SET;
     typedef std::list<RN_EDGE_PTR> RN_EDGE_LIST;
 
     /**
@@ -539,7 +538,7 @@ public:
      * ratsnest line per node).
      * @return list of nodes for which ratsnest is drawn in simple mode.
      */
-    inline const boost::unordered_set<RN_NODE_PTR>& GetSimpleNodes() const
+    inline const std::unordered_set<RN_NODE_PTR>& GetSimpleNodes() const
     {
         return m_simpleNodes;
     }
@@ -593,10 +592,10 @@ protected:
     std::shared_ptr< std::vector<RN_EDGE_MST_PTR> > m_rnEdges;
 
     ///> List of nodes which will not be used as ratsnest target nodes.
-    boost::unordered_set<RN_NODE_PTR> m_blockedNodes;
+    std::unordered_set<RN_NODE_PTR> m_blockedNodes;
 
     ///> Nodes to be displayed using the simplified ratsnest algorithm.
-    boost::unordered_set<RN_NODE_PTR> m_simpleNodes;
+    std::unordered_set<RN_NODE_PTR> m_simpleNodes;
 
     ///> Flag indicating necessity of recalculation of ratsnest for a net.
     bool m_dirty;
@@ -622,10 +621,10 @@ protected:
     } RN_PAD_DATA;
 
     ///> Helper typedefs
-    typedef boost::unordered_map<const D_PAD*, RN_PAD_DATA> PAD_NODE_MAP;
-    typedef boost::unordered_map<const VIA*, RN_NODE_PTR> VIA_NODE_MAP;
-    typedef boost::unordered_map<const TRACK*, RN_EDGE_MST_PTR> TRACK_EDGE_MAP;
-    typedef boost::unordered_map<const ZONE_CONTAINER*, RN_ZONE_DATA> ZONE_DATA_MAP;
+    typedef std::unordered_map<const D_PAD*, RN_PAD_DATA> PAD_NODE_MAP;
+    typedef std::unordered_map<const VIA*, RN_NODE_PTR> VIA_NODE_MAP;
+    typedef std::unordered_map<const TRACK*, RN_EDGE_MST_PTR> TRACK_EDGE_MAP;
+    typedef std::unordered_map<const ZONE_CONTAINER*, RN_ZONE_DATA> ZONE_DATA_MAP;
 
     ///> Map that associates nodes in the ratsnest model to respective nodes.
     PAD_NODE_MAP m_pads;

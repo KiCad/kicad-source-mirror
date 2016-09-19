@@ -125,7 +125,7 @@ static std::vector<RN_EDGE_MST_PTR>* kruskalMST( RN_LINKS::RN_EDGE_LIST& aEdges,
     mst->reserve( mstExpectedSize );
 
     // Set tags for marking cycles
-    boost::unordered_map<RN_NODE_PTR, int> tags;
+    std::unordered_map<RN_NODE_PTR, int> tags;
     unsigned int tag = 0;
 
     for( RN_NODE_PTR& node : aNodes )
@@ -311,7 +311,7 @@ const RN_NODE_PTR& RN_LINKS::AddNode( int aX, int aY )
     RN_NODE_SET::iterator node;
     bool wasNewElement;
 
-    boost::tie( node, wasNewElement ) = m_nodes.emplace( std::make_shared<RN_NODE>( aX, aY ) );
+    std::tie( node, wasNewElement ) = m_nodes.emplace( std::make_shared<RN_NODE>( aX, aY ) );
 
     return *node;
 }
@@ -355,7 +355,7 @@ void RN_NET::compute()
         // Check if the only possible connection exists
         if( boardEdges.size() == 0 && boardNodes.size() == 2 )
         {
-            RN_LINKS::RN_NODE_SET::iterator last = ++boardNodes.begin();
+            RN_LINKS::RN_NODE_SET::const_iterator last = ++boardNodes.begin();
 
             // There can be only one possible connection, but it is missing
             RN_EDGE_MST_PTR edge = std::make_shared<RN_EDGE_MST>( *boardNodes.begin(), *last );
@@ -993,7 +993,7 @@ void RN_NET::processZones()
 
         // Compute new connections
         RN_LINKS::RN_NODE_SET candidates = m_links.GetNodes();
-        RN_LINKS::RN_NODE_SET::iterator point, pointEnd;
+        RN_LINKS::RN_NODE_SET::const_iterator point, pointEnd;
 
         // Sorting by area should speed up the processing, as smaller polygons are computed
         // faster and may reduce the number of points for further checks
@@ -1045,7 +1045,7 @@ void RN_NET::processPads()
 
         LSET layers = pad->GetLayerSet();
         const RN_LINKS::RN_NODE_SET& candidates = m_links.GetNodes();
-        RN_LINKS::RN_NODE_SET::iterator point, pointEnd;
+        RN_LINKS::RN_NODE_SET::const_iterator point, pointEnd;
 
         point = candidates.begin();
         pointEnd = candidates.end();
