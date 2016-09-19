@@ -450,34 +450,36 @@ void RN_NET::Update()
 }
 
 
-void RN_NET::AddItem( const D_PAD* aPad )
+bool RN_NET::AddItem( const D_PAD* aPad )
 {
     // Ratsnest is not computed for non-copper pads
     if( ( aPad->GetLayerSet() & LSET::AllCuMask() ).none() )
-        return;
+        return false;
 
     RN_NODE_PTR node = m_links.AddNode( aPad->GetPosition().x, aPad->GetPosition().y );
     node->AddParent( aPad );
     m_pads[aPad].m_Node = node;
-
     m_dirty = true;
+
+    return true;
 }
 
 
-void RN_NET::AddItem( const VIA* aVia )
+bool RN_NET::AddItem( const VIA* aVia )
 {
     RN_NODE_PTR node = m_links.AddNode( aVia->GetPosition().x, aVia->GetPosition().y );
     node->AddParent( aVia );
     m_vias[aVia] = node;
-
     m_dirty = true;
+
+    return true;
 }
 
 
-void RN_NET::AddItem( const TRACK* aTrack )
+bool RN_NET::AddItem( const TRACK* aTrack )
 {
     if( aTrack->GetStart() == aTrack->GetEnd() )
-        return;
+        return false;
 
     RN_NODE_PTR start = m_links.AddNode( aTrack->GetStart().x, aTrack->GetStart().y );
     RN_NODE_PTR end = m_links.AddNode( aTrack->GetEnd().x, aTrack->GetEnd().y );
@@ -485,12 +487,13 @@ void RN_NET::AddItem( const TRACK* aTrack )
     start->AddParent( aTrack );
     end->AddParent( aTrack );
     m_tracks[aTrack] = m_links.AddConnection( start, end );
-
     m_dirty = true;
+
+    return true;
 }
 
 
-void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
+bool RN_NET::AddItem( const ZONE_CONTAINER* aZone )
 {
     // Prepare a list of polygons (every zone can contain one or more polygons)
     const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList();
@@ -504,15 +507,17 @@ void RN_NET::AddItem( const ZONE_CONTAINER* aZone )
     }
 
     m_dirty = true;
+
+    return true;
 }
 
 
-void RN_NET::RemoveItem( const D_PAD* aPad )
+bool RN_NET::RemoveItem( const D_PAD* aPad )
 {
     PAD_NODE_MAP::iterator it = m_pads.find( aPad );
 
     if( it == m_pads.end() )
-        return;
+        return false;
 
     RN_PAD_DATA& pad_data = it->second;
     removeNode( pad_data.m_Node, aPad );
@@ -521,39 +526,45 @@ void RN_NET::RemoveItem( const D_PAD* aPad )
         removeEdge( edge, aPad );
 
     m_pads.erase( aPad );
+
+    return true;
 }
 
 
-void RN_NET::RemoveItem( const VIA* aVia )
+bool RN_NET::RemoveItem( const VIA* aVia )
 {
     VIA_NODE_MAP::iterator it = m_vias.find( aVia );
 
     if( it == m_vias.end() )
-        return;
+        return false;
 
     removeNode( it->second, aVia );
     m_vias.erase( it );
+
+    return true;
 }
 
 
-void RN_NET::RemoveItem( const TRACK* aTrack )
+bool RN_NET::RemoveItem( const TRACK* aTrack )
 {
     TRACK_EDGE_MAP::iterator it = m_tracks.find( aTrack );
 
     if( it == m_tracks.end() )
-        return;
+        return false;
 
     removeEdge( it->second, aTrack );
     m_tracks.erase( it );
+
+    return true;
 }
 
 
-void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
+bool RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
 {
     ZONE_DATA_MAP::iterator it = m_zones.find( aZone );
 
     if( it == m_zones.end() )
-        return;
+        return false;
 
     RN_ZONE_DATA& zoneData = it->second;
 
@@ -565,11 +576,14 @@ void RN_NET::RemoveItem( const ZONE_CONTAINER* aZone )
 
     // Remove all connections added by the zone
     std::deque<RN_EDGE_MST_PTR>& edges = zoneData.m_Edges;
+
     for( RN_EDGE_MST_PTR edge : edges )
         removeEdge( edge, aZone );
-    edges.clear();
 
+    edges.clear();
     m_zones.erase( it );
+
+    return true;
 }
 
 
@@ -1061,7 +1075,7 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
     {
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
 
-        if( net < 1 )           // do not process unconnected items
+        if( net < 0 )           // do not process unconnected items
             return false;
 
         // Autoresize is necessary e.g. for module editor
@@ -1101,27 +1115,26 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_PAD_T:
-        m_nets[net].AddItem( static_cast<const D_PAD*>( aItem ) );
+        return m_nets[net].AddItem( static_cast<const D_PAD*>( aItem ) );
         break;
 
     case PCB_TRACE_T:
-        m_nets[net].AddItem( static_cast<const TRACK*>( aItem ) );
+        return m_nets[net].AddItem( static_cast<const TRACK*>( aItem ) );
         break;
 
     case PCB_VIA_T:
-        m_nets[net].AddItem( static_cast<const VIA*>( aItem ) );
+        return m_nets[net].AddItem( static_cast<const VIA*>( aItem ) );
         break;
 
     case PCB_ZONE_AREA_T:
-        m_nets[net].AddItem( static_cast<const ZONE_CONTAINER*>( aItem ) );
+        return m_nets[net].AddItem( static_cast<const ZONE_CONTAINER*>( aItem ) );
         break;
 
     default:
-        return false;
         break;
     }
 
-    return true;
+    return false;
 }
 
 
@@ -1133,7 +1146,7 @@ bool RN_DATA::Remove( const BOARD_ITEM* aItem )
     {
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
 
-        if( net < 1 )           // do not process unconnected items
+        if( net < 0 )           // do not process unconnected items
             return false;
 
         // Autoresize is necessary e.g. for module editor
@@ -1174,27 +1187,26 @@ bool RN_DATA::Remove( const BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_PAD_T:
-        m_nets[net].RemoveItem( static_cast<const D_PAD*>( aItem ) );
+        return m_nets[net].RemoveItem( static_cast<const D_PAD*>( aItem ) );
         break;
 
     case PCB_TRACE_T:
-        m_nets[net].RemoveItem( static_cast<const TRACK*>( aItem ) );
+        return m_nets[net].RemoveItem( static_cast<const TRACK*>( aItem ) );
         break;
 
     case PCB_VIA_T:
-        m_nets[net].RemoveItem( static_cast<const VIA*>( aItem ) );
+        return m_nets[net].RemoveItem( static_cast<const VIA*>( aItem ) );
         break;
 
     case PCB_ZONE_AREA_T:
-        m_nets[net].RemoveItem( static_cast<const ZONE_CONTAINER*>( aItem ) );
+        return m_nets[net].RemoveItem( static_cast<const ZONE_CONTAINER*>( aItem ) );
         break;
 
     default:
-        return false;
         break;
     }
 
-    return true;
+    return false;
 }
 
 
@@ -1227,7 +1239,7 @@ void RN_DATA::ProcessBoard()
 
             assert( netCode >= 0 && netCode < netCount );
 
-            if( netCode > 0 && netCode < netCount )
+            if( netCode >= 0 && netCode < netCount )
                 m_nets[netCode].AddItem( pad );
         }
     }
@@ -1238,7 +1250,7 @@ void RN_DATA::ProcessBoard()
 
         assert( netCode >= 0 && netCode < netCount );
 
-        if( netCode > 0 && netCode < netCount )
+        if( netCode >= 0 && netCode < netCount )
         {
             if( track->Type() == PCB_VIA_T )
                 m_nets[netCode].AddItem( static_cast<VIA*>( track ) );
@@ -1255,7 +1267,7 @@ void RN_DATA::ProcessBoard()
 
         assert( netCode >= 0 && netCode < netCount );
 
-        if( netCode > 0 && netCode < netCount )
+        if( netCode >= 0 && netCode < netCount )
             m_nets[netCode].AddItem( zone );
     }
 
@@ -1267,7 +1279,7 @@ void RN_DATA::Recalculate( int aNet )
 {
     unsigned int netCount = m_board->GetNetCount();
 
-    if( aNet < 0 && netCount > 1 )              // Recompute everything
+    if( aNet <= 0 && netCount > 1 )              // Recompute everything
     {
 #ifdef PROFILE
     prof_counter totalRealTime;

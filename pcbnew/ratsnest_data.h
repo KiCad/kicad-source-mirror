@@ -401,7 +401,7 @@ public:
      * taken into account during ratsnest computations.
      * @param aPad is a pad for which node is added.
      */
-    void AddItem( const D_PAD* aPad );
+    bool AddItem( const D_PAD* aPad );
 
     /**
      * Function AddItem()
@@ -409,7 +409,7 @@ public:
      * taken into account during ratsnest computations.
      * @param aVia is a via for which node is added.
      */
-    void AddItem( const VIA* aVia );
+    bool AddItem( const VIA* aVia );
 
     /**
      * Function AddItem()
@@ -417,7 +417,7 @@ public:
      * taken into account during ratsnest computations.
      * @param aTrack is a track for which nodes and edges are added.
      */
-    void AddItem( const TRACK* aTrack );
+    bool AddItem( const TRACK* aTrack );
 
     /**
      * Function AddItem()
@@ -425,7 +425,7 @@ public:
      * taken into account during ratsnest computations.
      * @param aZone is a zone to be processed.
      */
-    void AddItem( const ZONE_CONTAINER* aZone );
+    bool AddItem( const ZONE_CONTAINER* aZone );
 
     /**
      * Function RemoveItem()
@@ -433,7 +433,7 @@ public:
      * taken into account during ratsnest computations anymore.
      * @param aPad is a pad for which nodes and edges are removed.
      */
-    void RemoveItem( const D_PAD* aPad );
+    bool RemoveItem( const D_PAD* aPad );
 
     /**
      * Function RemoveItem()
@@ -441,7 +441,7 @@ public:
      * taken into account during ratsnest computations anymore.
      * @param aVia is a via for which nodes and edges are removed.
      */
-    void RemoveItem( const VIA* aVia );
+    bool RemoveItem( const VIA* aVia );
 
     /**
      * Function RemoveItem()
@@ -449,7 +449,7 @@ public:
      * taken into account during ratsnest computations anymore.
      * @param aTrack is a track for which nodes and edges are removed.
      */
-    void RemoveItem( const TRACK* aTrack );
+    bool RemoveItem( const TRACK* aTrack );
 
     /**
      * Function RemoveItem()
@@ -457,7 +457,7 @@ public:
      * taken into account during ratsnest computations anymore.
      * @param aZone is a zone for which nodes and edges are removed.
      */
-    void RemoveItem( const ZONE_CONTAINER* aZone );
+    bool RemoveItem( const ZONE_CONTAINER* aZone );
 
     /**
      * Function GetNodes()

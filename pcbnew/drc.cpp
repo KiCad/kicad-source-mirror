@@ -42,6 +42,7 @@
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <geometry/seg.h>
+#include <ratsnest_data.h>
 
 #include <tool/tool_manager.h>
 #include <tools/common_actions.h>
@@ -197,6 +198,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         }
 
         m_pcbEditorFrame->Compile_Ratsnest( NULL, true );
+        m_pcb->GetRatsnest()->ProcessBoard();
     }
 
     // someone should have cleared the two lists before calling this.
