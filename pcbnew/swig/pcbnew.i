@@ -67,28 +67,47 @@ class BASE_SET {};
 // this is what it must be included in the wrapper .cxx code to compile
 
 %{
-  #include <wx_python_helpers.h>
-  #include <colors.h>
+#include <wx_python_helpers.h>
+#include <colors.h>
 
-  //#include <dlist.h>
-  #include <class_zone_settings.h>
-  #include <pcbnew_scripting_helpers.h>
+#include <pcbnew_scripting_helpers.h>
 
-  #include <plotcontroller.h>
-  #include <pcb_plot_params.h>
-  #include <exporters/gendrill_Excellon_writer.h>
+#include <plotcontroller.h>
+#include <pcb_plot_params.h>
+#include <exporters/gendrill_Excellon_writer.h>
 
-  BOARD *GetBoard(); /* get current editor board */
+BOARD *GetBoard(); /* get current editor board */
 %}
 
 
+// ignore RELEASER as nested classes are still unsupported by swig
+%ignore IO_MGR::RELEASER;
+%include <io_mgr.h>
 %{
-  #include <io_mgr.h>
-  #include <kicad_plugin.h>
+#include <io_mgr.h>
 %}
 
 
-%include <class_board_design_settings.h>
+/*
+
+By default we do not translate exceptions for EVERY C++ function since not every
+C++ function throws, and that would be unused and very bulky mapping code.
+Therefore please help gather the subset of C++ functions for this class that do
+throw and add them here, before the class declarations.
+
+*/
+HANDLE_EXCEPTIONS(PLUGIN::Load)
+HANDLE_EXCEPTIONS(PLUGIN::Save)
+HANDLE_EXCEPTIONS(PLUGIN::FootprintEnumerate)
+HANDLE_EXCEPTIONS(PLUGIN::FootprintLoad)
+HANDLE_EXCEPTIONS(PLUGIN::FootprintSave)
+HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
+%include <kicad_plugin.h>
+%{
+#include <kicad_plugin.h>
+%}
+
+
 %include <plotcontroller.h>
 %include <pcb_plot_params.h>
 %include <plot_common.h>
@@ -98,10 +117,6 @@ class BASE_SET {};
 %include <pcbnew_scripting_helpers.h>
 
 
-// ignore RELEASER as nested classes are still unsupported by swig
-%ignore IO_MGR::RELEASER;
-%include <io_mgr.h>
-%include <kicad_plugin.h>
 
 %include board.i
 %include module.i

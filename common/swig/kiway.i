@@ -2,14 +2,20 @@
 //%module(directors="1") kiway
 %module kiway
 
-/*
-%import _defs.i
-%import _window.i
-%import _toplvl.i
-%threadWrapperOff           // _defs.i turns on thread protection, turn it off
-*/
+
+%import(module="wx")  wx_kiway_player_hierarchy.h
 
 %include ki_exception.i     // affects all that follow it
+
+/*
+
+By default we do not translate exceptions for EVERY C++ function since not every
+C++ function throws, and that would be unused and very bulky mapping code.
+Therefore please help gather the subset of C++ functions for this class that do
+throw and add them here, before the class declarations.
+
+*/
+HANDLE_EXCEPTIONS(KIWAY::Player)
 
 %include pgm_base.h
 %include frame_type.h
@@ -21,7 +27,6 @@
 %include kiway_player.i
 
 
-HANDLE_EXCEPTIONS(KIWAY::Player)
 
 %constant KIWAY    Kiway;
 
@@ -46,7 +51,17 @@ HANDLE_EXCEPTIONS(KIWAY::Player)
 KIWAY    Kiway( &Pgm(), KFCTL_PY_PROJECT_SUITE );
 
 
+// a dummy to quiet linking with EDA_BASE_FRAME::config();
+#include <kiface_i.h>
+KIFACE_I& Kiface()
+{
+    // This function should never be called.  It is only referenced from
+    // EDA_BASE_FRAME::config() and this is only provided to satisfy the linker,
+    // not to be actually called.
+    wxLogFatalError( wxT( "Unexpected call to Kiface() in kicad/kicad.cpp" ) );
 
+    return (KIFACE_I&) *(KIFACE_I*) 0;
+}
 
 
 /**

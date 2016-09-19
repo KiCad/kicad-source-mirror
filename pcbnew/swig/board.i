@@ -39,12 +39,16 @@ throw and add them here, before the class declarations.
 HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
 
+%include <class_board_design_settings.h>
+%{
+#include <class_board_design_settings.h>
+%}
+
+
+
 %{
 #include <class_board.h>
-
-#include <class_board_design_settings.h>
 #include <layers_id_colors_and_visibility.h>
-
 %}
 
 
@@ -130,6 +134,9 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %}
 
 %include class_zone_settings.h
+%{
+#include <class_zone_settings.h>
+%}
 
 %include class_netinfo.h
 %include class_netclass.h

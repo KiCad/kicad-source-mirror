@@ -510,14 +510,12 @@ add_dependencies( dsntest lib-dependencies )
 target_link_libraries( pcbcommon 3d-viewer )
 
 
-# kiway.so
+# _kiway.so
 if( false ) # future
 #if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
-    #file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
 
     set( SWIG_FLAGS
         -I${CMAKE_CURRENT_SOURCE_DIR}/../include
-        -I${CMAKE_CURRENT_SOURCE_DIR}/swig/wx
         )
 
     if( DEBUG )
@@ -535,8 +533,6 @@ if( false ) # future
 
     set( CMAKE_SWIG_FLAGS ${SWIG_FLAGS} )
 
-    #set( SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
-
     include_directories( BEFORE ${INC_BEFORE} )
     include_directories(
         ../common
@@ -550,10 +546,6 @@ if( false ) # future
 
     swig_add_module( kiway python
         swig/kiway.i
-        #../common/kiway.cpp
-        #../common/project.cpp
-        #../common/pgm_base.cpp
-        #../common/
         )
 
     swig_link_libraries( kiway
@@ -561,6 +553,12 @@ if( false ) # future
         bitmaps
         ${wxWidgets_LIBRARIES}
         ${PYTHON_LIBRARIES}
+        )
+
+    set_source_files_properties( ${swig_generated_file_fullname} PROPERTIES
+        # See section 16.3 "The SWIG runtime code"
+        # http://www.swig.org/Doc3.0/SWIGDocumentation.html#Modules_nn2
+        COMPILE_FLAGS "-DSWIG_TYPE_TABLE=WXPYTHON_TYPE_TABLE -Wno-delete-non-virtual-dtor"
         )
 
     if( MAKE_LINK_MAPS )
