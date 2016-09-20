@@ -189,38 +189,17 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
 
     if( GetScreen()->IsModify() || brdFile.GetFullPath().empty() )
     {
-        int idx = wxMessageBox( _( "The PCB has been modified; save before proceeding?" ),
-            _( "STEP Export: Modified PCB" ), wxYES_NO | wxCANCEL, this );
-
-        switch( idx )
+        if( !doAutoSave() )
         {
-            case wxYES:
-                if( !doAutoSave() )
-                {
-                    wxMessageBox( _( "Autosave failed; STEP export cancelled" ),
-                        _( "STEP Export" ) );
-                    return;
-                }
-
-                brdFile = GetBoard()->GetFileName();
-                brdName = GetAutoSaveFilePrefix();
-                brdName.append( brdFile.GetName() );
-                brdFile.SetName( brdName );
-                break;
-
-            case wxNO:
-                if( brdFile.GetFullPath().empty() )
-                {
-                    wxMessageBox( _( "No board file; STEP export cancelled" ),
-                                  _( "STEP Export" ) );
-                    return;
-                }
-                break;
-
-            default:
-                return;
+            wxMessageBox( _( "STEP export failed; please save the PCB and try again" ),
+                          _( "STEP Export" ) );
+            return;
         }
 
+        brdFile = GetBoard()->GetFileName();
+        brdName = GetAutoSaveFilePrefix();
+        brdName.append( brdFile.GetName() );
+        brdFile.SetName( brdName );
         brdName = brdFile.GetFullPath();
     }
 
