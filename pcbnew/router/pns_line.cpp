@@ -751,7 +751,8 @@ void LINE::ClipVertexRange( int aStart, int aEnd )
     m_line = m_line.Slice( aStart, aEnd );
 
     if( IsLinked() ) {
-        assert( m_segmentRefs.size() >= (aEnd - aStart) );
+        assert( m_segmentRefs.size() < INT_MAX );
+        assert( (int) m_segmentRefs.size() >= (aEnd - aStart) );
 
         // Note: The range includes aEnd, but we have n-1 segments.
         std::rotate(
