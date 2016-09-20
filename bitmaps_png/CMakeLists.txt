@@ -571,11 +571,11 @@ set( BMAPS_BIG
     icon_eeschema
     icon_gerbview
     icon_kicad
+    icon_libedit
     icon_modedit
     icon_pcbnew
     icon_bitmap2component
     icon_pcbcalculator
-    libedit_icon
     viewlibs_icon
     icon_pagelayout_editor
     wizard_add_fplib_icon

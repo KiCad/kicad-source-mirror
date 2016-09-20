@@ -64,7 +64,7 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
     btn = AddBitmapButton( ID_TO_SCH, KiBitmap( icon_eeschema_xpm ) );
     btn->SetToolTip( _( "Eeschema - Electronic schematic editor" ) );
 
-    btn = AddBitmapButton( ID_TO_SCH_LIB_EDITOR, KiBitmap( libedit_icon_xpm ) );
+    btn = AddBitmapButton( ID_TO_SCH_LIB_EDITOR, KiBitmap( icon_libedit_xpm ) );
     btn->SetToolTip( _( "Schematic library editor" ) );
 
     btn = AddBitmapButton( ID_TO_PCB, KiBitmap( icon_pcbnew_xpm ) );

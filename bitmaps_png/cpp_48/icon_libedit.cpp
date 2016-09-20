@@ -276,6 +276,6 @@ static const unsigned char png[] = {
  0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE libedit_icon_xpm[1] = {{ png, sizeof( png ), "libedit_icon_xpm" }};
+const BITMAP_OPAQUE icon_libedit_xpm[1] = {{ png, sizeof( png ), "icon_libedit_xpm" }};
 
 //EOF
