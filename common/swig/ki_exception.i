@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,14 +22,44 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+%warnfilter(511) IO_ERROR;
+
+%include ki_exception.h
+
 %{
-#include <scripting/pcbnew_footprint_wizards.h>
+#include <ki_exception.h>
 %}
 
-class PYTHON_FOOTPRINT_WIZARDS
-{
-public:
-    static void register_wizard(PyObject *wizard);
-    static void deregister_wizard(PyObject *wizard);
+%include exception.i
 
-};
+// Target a specific function with "C++ to python exception handling and
+// translation code".  Invoke this macro separately for each C++ function
+// that throws.  This is a less bulkier scheme than assuming that ALL C++
+// functions throw, because they do not all throw.
+%define HANDLE_EXCEPTIONS(function)
+%exception function {
+    try
+    {
+        $action
+    }
+    catch( const IO_ERROR& e )
+    {
+        UTF8 str = e.Problem();
+
+        SWIG_exception( SWIG_IOError, str.c_str() );
+        return NULL;
+    }
+    catch( const std::exception& e )
+    {
+        std::string str = e.what();
+
+        SWIG_exception( SWIG_IOError, str.c_str() );
+        return NULL;
+    }
+    catch( ... )
+    {
+        SWIG_fail;
+    }
+}
+%enddef
+

@@ -235,7 +235,7 @@ public:
 
     /**
      * Constructor LSET( const LAYER_ID* aArray, unsigned aCount )
-     * works well with an arry or LSEQ.
+     * works well with an array or LSEQ.
      */
     LSET( const LAYER_ID* aArray, unsigned aCount );
 

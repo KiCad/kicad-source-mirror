@@ -1,0 +1,29 @@
+--- pcbnew/scripting/pcbnew.i
++++ pcbnew/swig/pcbnew.i
+@@ -87,26 +46,6 @@ class BASE_SET {};
+   #include <kicad_plugin.h>
+ %}
+ 
+-%include <class_board_item.h>
+-%include <class_board_connected_item.h>
+-%include <pad_shapes.h>
+-%include <class_pad.h>
+-%include <class_netinfo.h>
+-%include <class_module.h>
+-%include <class_track.h>
+-%include <class_zone.h>
+-%include <zones.h>
+-%include <layers_id_colors_and_visibility.h>
+-%include <class_pcb_text.h>
+-%include <class_dimension.h>
+-%include <class_drawsegment.h>
+-%include <class_marker_pcb.h>
+-%include <class_mire.h>
+-%include <class_text_mod.h>
+-%include <class_edge_mod.h>
+-%include <dlist.h>
+-%include <class_zone_settings.h>
+-%include <class_netclass.h>
+ 
+ %include <class_board_design_settings.h>
+ %include <plotcontroller.h>

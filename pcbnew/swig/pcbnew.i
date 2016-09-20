@@ -36,10 +36,15 @@
 #endif
 
 
-%include "kicad.i"
+%include kicad.i
 
 %include <convert_to_biu.h>
-%include <fpid.h>
+
+%{
+#include <fpid.h>
+%}
+%include fpid.h
+
 
 // ignore a couple of items that generate warnings from swig built code
 %ignore BOARD_ITEM::ZeroOffset;
@@ -54,59 +59,15 @@ class BASE_SET {};
 %rename(AddNative) *::Add;
 
 // fix method names conflicts
-%rename(AddChild) BOARD_ITEM_CONTAINER::Add;
-%rename(RemoveChild) BOARD_ITEM_CONTAINER::Remove;
-%rename(DeleteChild) BOARD_ITEM_CONTAINER::Delete;
-
-%exception {
-    try{
-        $action
-    }
-    catch( IO_ERROR e )
-    {
-        std::string str = TO_UTF8( e.errorText );
-        str += '\n';
-        PyErr_SetString( PyExc_IOError, str.c_str() );
-        return NULL;
-    }
-    catch( std::exception &e )
-    {
-        std::string str = e.what();
-        str += '\n';
-        PyErr_SetString( PyExc_IOError, str.c_str() );
-        return NULL;
-    }
-    catch( ... )
-    {
-        SWIG_fail;
-    }
-}
-%include exception.i
+%rename(AddChild) MODULE::Add;
+%rename(RemoveChild) MODULE::Remove;
+%rename(DeleteChild) MODULE::Delete;
 
 
 // this is what it must be included in the wrapper .cxx code to compile
 
 %{
   #include <wx_python_helpers.h>
-  #include <class_board_item.h>
-  #include <class_board_connected_item.h>
-  #include <class_netinfo.h>
-  #include <class_board_design_settings.h>
-  #include <class_module.h>
-  #include <class_track.h>
-  #include <class_zone.h>
-  #include <zones.h>
-  #include <layers_id_colors_and_visibility.h>
-  #include <class_pad.h>
-  #include <class_pcb_text.h>
-  #include <class_dimension.h>
-  #include <class_drawsegment.h>
-  #include <class_marker_pcb.h>
-  #include <class_mire.h>
-  #include <class_text_mod.h>
-  #include <class_edge_mod.h>
-
-  #include <class_netclass.h>
   #include <colors.h>
 
   //#include <dlist.h>
@@ -117,8 +78,6 @@ class BASE_SET {};
   #include <pcb_plot_params.h>
   #include <exporters/gendrill_Excellon_writer.h>
 
-  #include <class_board.h>
-
   BOARD *GetBoard(); /* get current editor board */
 %}
 
@@ -128,27 +87,6 @@ class BASE_SET {};
   #include <kicad_plugin.h>
 %}
 
-%include <class_board_item.h>
-%include <board_item_container.h>
-%include <class_board_connected_item.h>
-%include <pad_shapes.h>
-%include <class_pad.h>
-%include <class_netinfo.h>
-%include <class_module.h>
-%include <class_track.h>
-%include <class_zone.h>
-%include <zones.h>
-%include <layers_id_colors_and_visibility.h>
-%include <class_pcb_text.h>
-%include <class_dimension.h>
-%include <class_drawsegment.h>
-%include <class_marker_pcb.h>
-%include <class_mire.h>
-%include <class_text_mod.h>
-%include <class_edge_mod.h>
-%include <dlist.h>
-%include <class_zone_settings.h>
-%include <class_netclass.h>
 
 %include <class_board_design_settings.h>
 %include <plotcontroller.h>
@@ -156,10 +94,6 @@ class BASE_SET {};
 %include <plot_common.h>
 %include <exporters/gendrill_Excellon_writer.h>
 %include <colors.h>
-
-%include <class_board.h>
-
-%include "board_item.i"
 
 %include <pcbnew_scripting_helpers.h>
 
@@ -169,10 +103,10 @@ class BASE_SET {};
 %include <io_mgr.h>
 %include <kicad_plugin.h>
 
-%include "board.i"
-%include "module.i"
-%include "plugins.i"
-%include "units.i"
+%include board.i
+%include module.i
+%include plugins.i
+%include units.i
 
 
 

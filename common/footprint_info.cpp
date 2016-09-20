@@ -306,7 +306,7 @@ void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 
     for( unsigned i = 0; i<m_errors.size();  ++i )
     {
-        msg += wxT( "<p>" ) + m_errors[i].errorText + wxT( "</p>" );
+        msg += wxT( "<p>" ) + m_errors[i].Problem() + wxT( "</p>" );
     }
 
     dlg.AddHTML_Text( msg );

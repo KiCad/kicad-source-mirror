@@ -32,6 +32,7 @@
 %include <std_string.i>
 %include <std_map.i>
 %include <std_shared_ptr.i>
+%include <std_set.i>
 
 /*
 http://www.swig.org/Doc3.0/CPlusPlus11.html

@@ -285,7 +285,6 @@ PGM_BASE::PGM_BASE()
     m_locale = NULL;
     m_common_settings = NULL;
 
-    m_wx_app = NULL;
     m_show_env_var_dialog = true;
 
     setLanguageId( wxLANGUAGE_DEFAULT );
@@ -296,11 +295,11 @@ PGM_BASE::PGM_BASE()
 
 PGM_BASE::~PGM_BASE()
 {
-    destroy();
+    Destroy();
 }
 
 
-void PGM_BASE::destroy()
+void PGM_BASE::Destroy()
 {
     // unlike a normal destructor, this is designed to be called more than once safely:
 
@@ -312,6 +311,13 @@ void PGM_BASE::destroy()
 
     delete m_locale;
     m_locale = 0;
+}
+
+
+wxApp& PGM_BASE::App()
+{
+    wxASSERT( wxTheApp );
+    return *wxTheApp;
 }
 
 
@@ -383,7 +389,7 @@ const wxString PGM_BASE::AskUserForPreferredEditor( const wxString& aDefaultEdit
 }
 
 
-bool PGM_BASE::initPgm()
+bool PGM_BASE::InitPgm()
 {
     wxFileName pgm_name( App().argv[0] );
 
@@ -609,10 +615,10 @@ void PGM_BASE::loadCommonSettings()
 }
 
 
-void PGM_BASE::saveCommonSettings()
+void PGM_BASE::SaveCommonSettings()
 {
     // m_common_settings is not initialized until fairly late in the
-    // process startup: initPgm(), so test before using:
+    // process startup: InitPgm(), so test before using:
     if( m_common_settings )
     {
         wxString cur_dir = wxGetCwd();
@@ -846,7 +852,7 @@ void PGM_BASE::SetLocalEnvVariables( const ENV_VAR_MAP& aEnvVarMap )
     if( m_common_settings )
         m_common_settings->DeleteGroup( pathEnvVariables );
 
-    saveCommonSettings();
+    SaveCommonSettings();
 
     // Overwrites externally defined environment variable until the next time the application
     // is run.

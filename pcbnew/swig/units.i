@@ -30,49 +30,48 @@
 // Unit conversion, between internal units and mm or mils
 
 %pythoncode
-{
-   def ToMM(iu):
-      if type(iu) in [int,float]:
-         return float(iu) / float(IU_PER_MM)
-      elif type(iu) in [wxPoint,wxSize]:
-         return tuple(map(ToMM,iu))
+%{
+    def ToMM(iu):
+        if type(iu) in [int,float]:
+            return float(iu) / float(IU_PER_MM)
+        elif type(iu) in [wxPoint,wxSize]:
+            return tuple(map(ToMM,iu))
 
-   def FromMM(mm):
-      if type(mm) in [int,float]:
-         return int(float(mm) * float(IU_PER_MM))
-      elif type(mm) in [wxPoint,wxSize]:
-        return tuple(map(FromMM,mm))
+    def FromMM(mm):
+        if type(mm) in [int,float]:
+            return int(float(mm) * float(IU_PER_MM))
+        elif type(mm) in [wxPoint,wxSize]:
+            return tuple(map(FromMM,mm))
 
-   def ToMils(iu):
-      if type(iu) in [int,float]:
-        return float(iu) / float(IU_PER_MILS)
-      elif type(iu) in [wxPoint,wxSize]:
-        return tuple(map(ToMils,iu))
+    def ToMils(iu):
+        if type(iu) in [int,float]:
+            return float(iu) / float(IU_PER_MILS)
+        elif type(iu) in [wxPoint,wxSize]:
+            return tuple(map(ToMils,iu))
 
-   def FromMils(mils):
-      if type(mils) in [int,float]:
-         return int(float(mils)*float(IU_PER_MILS))
-      elif type(mils) in [wxPoint,wxSize]:
-        return tuple(map(FromMils,mils))
+    def FromMils(mils):
+        if type(mils) in [int,float]:
+            return int(float(mils)*float(IU_PER_MILS))
+        elif type(mils) in [wxPoint,wxSize]:
+            return tuple(map(FromMils,mils))
 
-   def wxSizeMM(mmx,mmy): return wxSize(FromMM(mmx),FromMM(mmy))
-   def wxSizeMils(mmx,mmy): return wxSize(FromMils(mmx),FromMils(mmy))
+    def wxSizeMM(mmx,mmy): return wxSize(FromMM(mmx),FromMM(mmy))
+    def wxSizeMils(mmx,mmy): return wxSize(FromMils(mmx),FromMils(mmy))
 
-   def wxPointMM(mmx,mmy): return wxPoint(FromMM(mmx),FromMM(mmy))
-   def wxPointMils(mmx,mmy): return wxPoint(FromMils(mmx),FromMils(mmy))
+    def wxPointMM(mmx,mmy): return wxPoint(FromMM(mmx),FromMM(mmy))
+    def wxPointMils(mmx,mmy): return wxPoint(FromMils(mmx),FromMils(mmy))
 
-   def wxRectMM(x,y,wx,wy):
+    def wxRectMM(x,y,wx,wy):
         x = int(FromMM(x))
         y = int(FromMM(y))
         wx = int(FromMM(wx))
         wy = int (FromMM(wy))
         return wxRect(x,y,wx,wy)
 
-   def wxRectMils(x,y,wx,wy):
+    def wxRectMils(x,y,wx,wy):
         x = int(FromMils(x))
         y = int(FromMils(y))
         wx = int(FromMils(wx))
         wy = int (FromMils(wy))
         return wxRect(x,y,wx,wy)
-
-}
+%}

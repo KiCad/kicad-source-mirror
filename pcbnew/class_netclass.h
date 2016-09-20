@@ -43,6 +43,9 @@ class BOARD;
 class BOARD_DESIGN_SETTINGS;
 
 
+DECL_SET_FOR_SWIG( STRINGSET, wxString )
+
+
 /**
  * Class NETCLASS
  * handles a collection of nets and the parameters used to route or
@@ -66,8 +69,6 @@ protected:
     wxString    m_Name;                 ///< Name of the net class
     wxString    m_Description;          ///< what this NETCLASS is for.
 
-    typedef std::set<wxString> STRINGSET;
-
     STRINGSET   m_Members;              ///< names of NET members of this class
 
     /// The units on these parameters is Internal Units (1 nm)
@@ -86,7 +87,7 @@ protected:
 
 public:
 
-    static const wxChar Default[];      ///< the name of the default NETCLASS
+    static const char Default[];        ///< the name of the default NETCLASS
 
     /**
      * Constructor
@@ -163,6 +164,8 @@ public:
         m_Members.erase( aName );
     }
 
+    STRINGSET& NetNames()                   { return m_Members; }       ///< for SWIG
+
     const wxString& GetDescription() const  { return m_Description; }
     void    SetDescription( const wxString& aDesc ) { m_Description = aDesc; }
 
@@ -231,10 +234,10 @@ class NETCLASSES
 private:
 
     /// all the NETCLASSes except the default one.
-    NETCLASS_MAP             m_NetClasses;
+    NETCLASS_MAP    m_NetClasses;
 
     /// the default NETCLASS.
-    NETCLASSPTR             m_Default;
+    NETCLASSPTR     m_Default;
 
 public:
     NETCLASSES();
@@ -277,10 +280,10 @@ public:
 
     /**
      * Function Add
-     * takes ownership of \a aNetclass and puts it into this NETCLASSES container.
+     * takes \a aNetclass and puts it into this NETCLASSES container.
      * @param aNetclass is netclass to add
      * @return true if the name within aNetclass is unique and it could be inserted OK,
-     *  else false because the name was not unique and caller still owns aNetclass.
+     *  else false because the name was not unique.
      */
     bool Add( NETCLASSPTR aNetclass );
 
@@ -300,6 +303,8 @@ public:
      */
     NETCLASSPTR Find( const wxString& aName ) const;
 
+    /// Provide public access to m_NetClasses so it gets swigged.
+    NETCLASS_MAP&   NetClasses()       { return m_NetClasses; }
 };
 
 #endif  // CLASS_NETCLASS_H

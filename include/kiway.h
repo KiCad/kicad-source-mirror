@@ -103,6 +103,7 @@ as such!  As such, it is OK to use UTF8 characters:
 #include <project.h>
 #include <frame_type.h>
 #include <mail_type.h>
+#include <ki_exception.h>
 
 
 #define VTBL_ENTRY          virtual
@@ -114,6 +115,7 @@ as such!  As such, it is OK to use UTF8 characters:
 // be mangled.
 #define KIFACE_INSTANCE_NAME_AND_VERSION   "KIFACE_1"
 
+#ifndef SWIG
 #if defined(__linux__) || defined(__FreeBSD__)
  #define LIB_ENV_VAR    wxT( "LD_LIBRARY_PATH" )
 #elif defined(__WXMAC__)
@@ -123,7 +125,7 @@ as such!  As such, it is OK to use UTF8 characters:
 #else
  #error Platform support missing
 #endif
-
+#endif  // SWIG
 
 class wxConfigBase;
 class wxWindow;
@@ -150,6 +152,8 @@ struct KIFACE
     // The order of functions establishes the vtable sequence, do not change the
     // order of functions in this listing unless you recompile all clients of
     // this interface.
+
+    virtual ~KIFACE() throw() {}
 
 #define KFCTL_STANDALONE        (1<<0)  ///< Am running as a standalone Top.
 #define KFCTL_CPP_PROJECT_SUITE (1<<1)  ///< Am running under C++ project mgr, possibly with others
@@ -269,6 +273,8 @@ public:
         KIWAY_FACE_COUNT
     };
 
+    ~KIWAY() throw () {}
+
     /**
      * Function KifaceType
      * is a simple mapping function which returns the FACE_T which is known to
@@ -277,7 +283,6 @@ public:
      * @return KIWAY::FACE_T - a valid value or FACE_T(-1) if given a bad aFrameType.
      */
     static FACE_T KifaceType( FRAME_T aFrameType );
-
 
     // If you change the vtable, recompile all of KiCad.
 
@@ -303,6 +308,8 @@ public:
      *
      * @return KIWAY_PLAYER* - a valid opened KIWAY_PLAYER or NULL if there
      *  is something wrong or doCreate was false and the player has yet to be created.
+     *
+     * @throw IO_ERROR if the *.kiface file could not be found, filled with text saying what.
      */
     VTBL_ENTRY KIWAY_PLAYER* Player( FRAME_T aFrameType, bool doCreate = true, KIWAY_PLAYER* aParent = NULL );
 
@@ -368,8 +375,8 @@ public:
 
 private:
 
-    /// Get the full path & name of the DSO holding the requested FACE_T.
-    static const wxString dso_full_path( FACE_T aFaceId );
+    /// Get the [path &] name of the DSO holding the requested FACE_T.
+    const wxString dso_search_path( FACE_T aFaceId );
 
 #if 0
     /// hooked into m_top in SetTop(), marks child frame as closed.
@@ -400,7 +407,6 @@ private:
 
     wxFrame*        m_top;      // Usually m_top is the Project manager
 
-
     // a string array ( size KIWAY_PLAYER_COUNT ) to Store the frame name
     // of PLAYER frames which were run.
     // A non empty name means only a PLAYER was run at least one time.
@@ -413,20 +419,11 @@ private:
 };
 
 
-/*
-/// Given aProject, return its KIWAY*
-inline KIWAY* PrjToKiway( PROJECT* aProject )
-{
-    // It's ugly, but isolated.  The compiler should simply do what's
-    // it's told to do here and shut up.
-    KIWAY*      p = 0;
-    ptrdiff_t   offset = (char*) &p->m_project - (char*) p;
-
-    return (KIWAY*) ((char*)aProject - offset);
-}
-*/
-
-extern KIWAY Kiway;     // provided by single_top.cpp and kicad.cpp
+#ifndef SWIG
+// provided by single_top.cpp and kicad.cpp;
+extern KIWAY Kiway;
+// whereas python launchers: single_top.py and project manager instantiate as a python object
+#endif
 
 
 /**
@@ -444,16 +441,18 @@ extern KIWAY Kiway;     // provided by single_top.cpp and kicad.cpp
  */
 typedef     KIFACE*  KIFACE_GETTER_FUNC( int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
 
+
+#ifndef SWIG
+
 /// No name mangling.  Each KIFACE (DSO/DLL) will implement this once.
 extern "C" {
-
 #if defined(BUILD_KIWAY_DLL)
-MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
+ MY_API( KIFACE* ) KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
 #else
-KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
+ KIFACE* KIFACE_GETTER(  int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram );
 #endif
-
 }
 
+#endif  // SWIG
 
 #endif  // KIWAY_H_

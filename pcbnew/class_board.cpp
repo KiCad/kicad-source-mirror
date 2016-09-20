@@ -224,7 +224,7 @@ static void otherEnd( const TRACK& aTrack, const wxPoint& aNotThisEnd, wxPoint* 
 
 /**
  * Function find_vias_and_tracks_at
- * collects TRACKs and VIAs at aPos and returns true if any were VIAs.
+ * collects TRACKs and VIAs at aPos and returns the @a track_count which excludes vias.
  */
 static int find_vias_and_tracks_at( TRACKS& at_next, TRACKS& in_net, LSET& lset, const wxPoint& next )
 {
@@ -296,10 +296,13 @@ static void checkConnectedTo( BOARD* aBoard, TRACKS* aList, const TRACKS& aTrack
         if( next == aGoal )
             return;             // success
 
-        if( aBoard->GetPad( next, lset ) )
+        // Want an exact match on the position of next, i.e. pad at next,
+        // not a forgiving HitTest() with tolerance type of match, otherwise the overall
+        // algorithm will not work.  GetPadFast() is an exact match as I write this.
+        if( aBoard->GetPadFast( next, lset ) )
         {
             std::string m = StrPrintf(
-                "there is an intervening pad at:(xy %s) between start:(xy %s) and goal:(xy %s)",
+                "intervening pad at:(xy %s) between start:(xy %s) and goal:(xy %s)",
                 BOARD_ITEM::FormatInternalUnits( next ).c_str(),
                 BOARD_ITEM::FormatInternalUnits( aStart ).c_str(),
                 BOARD_ITEM::FormatInternalUnits( aGoal ).c_str()
@@ -313,13 +316,13 @@ static void checkConnectedTo( BOARD* aBoard, TRACKS* aList, const TRACKS& aTrack
         {
             std::string m = StrPrintf(
                 "found %d tracks intersecting at (xy %s), exactly 2 would be acceptable.",
-                track_count,
+                track_count + aList->size() == 1 ? 1 : 0,
                 BOARD_ITEM::FormatInternalUnits( next ).c_str()
                 );
             THROW_IO_ERROR( m );
         }
 
-        // reduce lset down to the layer that the only track at 'next' is on.
+        // reduce lset down to the layer that the last track at 'next' is on.
         lset = aList->back()->GetLayerSet();
 
         otherEnd( *aList->back(), next, &next );
@@ -334,21 +337,21 @@ static void checkConnectedTo( BOARD* aBoard, TRACKS* aList, const TRACKS& aTrack
 }
 
 
-TRACKS BOARD::TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint& aEndPos, int aNetCode )
+TRACKS BOARD::TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint& aGoalPos, int aNetCode )
 {
     TRACKS  in_between_pts;
-    TRACKS  on_start_pad;
+    TRACKS  on_start_point;
     TRACKS  in_net = TracksInNet( aNetCode );   // a small subset of TRACKs and VIAs
 
     for( auto t : in_net )
     {
         if( t->Type() == PCB_TRACE_T && ( t->GetStart() == aStartPos || t->GetEnd() == aStartPos )  )
-            on_start_pad.push_back( t );
+            on_start_point.push_back( t );
     }
 
-    IO_ERROR last_error;
+    wxString  per_path_problem_text;
 
-    for( auto t : on_start_pad )
+    for( auto t : on_start_point )    // explore each trace (path) leaving aStartPos
     {
         // checkConnectedTo() fills in_between_pts on every attempt.  For failures
         // this set needs to be cleared.
@@ -356,11 +359,12 @@ TRACKS BOARD::TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint&
 
         try
         {
-            checkConnectedTo( this, &in_between_pts, in_net, aEndPos, aStartPos, t );
+            checkConnectedTo( this, &in_between_pts, in_net, aGoalPos, aStartPos, t );
         }
         catch( const IO_ERROR& ioe )    // means not connected
         {
-            last_error = ioe;
+            per_path_problem_text += "\n\t";
+            per_path_problem_text += ioe.Problem();
             continue;           // keep trying, there may be other paths leaving from aStartPos
         }
 
@@ -369,17 +373,13 @@ TRACKS BOARD::TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint&
         return in_between_pts;
     }
 
-    if( on_start_pad.size() == 1 )
-        throw last_error;
-    else
-    {
-        std::string m = StrPrintf(
-            "no path connecting start:(xy %s) with end:(xy %s)",
+    wxString m = wxString::Format(
+            "no clean path connecting start:(xy %s) with goal:(xy %s)",
             BOARD_ITEM::FormatInternalUnits( aStartPos ).c_str(),
-            BOARD_ITEM::FormatInternalUnits( aEndPos ).c_str()
+            BOARD_ITEM::FormatInternalUnits( aGoalPos ).c_str()
             );
-        THROW_IO_ERROR( m );
-    }
+
+    THROW_IO_ERROR( m + per_path_problem_text );
 }
 
 
@@ -405,6 +405,8 @@ void BOARD::chainMarkedSegments( wxPoint aPosition, const LSET& aLayerSet, TRACK
      */
     for( ; ; )
     {
+
+
         if( GetPad( aPosition, layer_set ) != NULL )
             return;
 

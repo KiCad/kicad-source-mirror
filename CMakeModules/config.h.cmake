@@ -74,8 +74,8 @@
 
 /// A file extension with a leading '.' is a suffix, and this one is used on
 /// top level program modules which implement the KIFACE.
-#define KIFACE_SUFFIX                   wxT( "@KIFACE_SUFFIX@" )
-#define KIFACE_PREFIX                   wxT( "@KIFACE_PREFIX@" )
+#define KIFACE_SUFFIX                   "@KIFACE_SUFFIX@"
+#define KIFACE_PREFIX                   "@KIFACE_PREFIX@"
 
 /// Name of repo from which this build came.
 #define KICAD_REPO_NAME                 "@KICAD_REPO_NAME@"

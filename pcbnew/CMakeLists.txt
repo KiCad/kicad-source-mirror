@@ -5,16 +5,14 @@ add_subdirectory(router)
 # psnrouter depends on make_lexer outputs in common (bug # 1285878 )
 add_dependencies( pnsrouter pcbcommon )
 
+set( WXPYTHON_SWIG_DIR /usr/include/wx-3.0/wx/wxPython/i_files )
 
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
 
-    # SWIG 3.0 or later require for C++11 support.
-    find_package( SWIG 3.0 REQUIRED )
-    include( ${SWIG_USE_FILE} )
-
     # Infrequently needed headers go at end of search paths, append to INC_AFTER
-    set( INC_AFTER ${INC_AFTER} ${CMAKE_CURRENT_SOURCE_DIR}/scripting )
+    set( INC_AFTER ${INC_AFTER} swig )
+    set( INC_AFTER ${INC_AFTER} ../common/swig )
 
     #message( STATUS "pcbnew INC_AFTER:${INC_AFTER}" )
 endif()
@@ -317,10 +315,10 @@ set( PCBNEW_SCRIPTING_DIALOGS
     )
 
 set( PCBNEW_SCRIPTING_PYTHON_HELPERS
-    ../scripting/wx_python_helpers.cpp
-    ../scripting/python_scripting.cpp
-    scripting/pcbnew_scripting_helpers.cpp
-    scripting/pcbnew_footprint_wizards.cpp
+    ../common/swig/wx_python_helpers.cpp
+    swig/python_scripting.cpp
+    swig/pcbnew_scripting_helpers.cpp
+    swig/pcbnew_footprint_wizards.cpp
     )
 
 if( KICAD_SCRIPTING )
@@ -335,10 +333,11 @@ endif()
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
     set( SWIG_FLAGS
-        -I${CMAKE_CURRENT_SOURCE_DIR}/../..
         -I${CMAKE_CURRENT_SOURCE_DIR}
         -I${CMAKE_CURRENT_SOURCE_DIR}/../include
         -I${CMAKE_CURRENT_SOURCE_DIR}/../scripting
+        -I${CMAKE_CURRENT_SOURCE_DIR}/../common/swig
+        -I${WXPYTHON_SWIG_DIR}
         )
 
     if( DEBUG )
@@ -346,7 +345,6 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     endif()
 
     # collect CFLAGS , and pass them to swig later
-
     get_directory_property( DirDefs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} COMPILE_DEFINITIONS )
     foreach( d ${DirDefs} )
         set( SWIG_FLAGS ${SWIG_FLAGS} -D${d} )
@@ -370,21 +368,22 @@ if( KICAD_SCRIPTING )
         DEPENDS pcbcommon
         DEPENDS plotcontroller.h
         DEPENDS exporters/gendrill_Excellon_writer.h
-        DEPENDS scripting/pcbnew.i
-        DEPENDS scripting/board.i
-        DEPENDS scripting/board_item.i
-        DEPENDS scripting/module.i
-        DEPENDS scripting/plugins.i
-        DEPENDS scripting/units.i
-        DEPENDS ../scripting/dlist.i
-        DEPENDS ../scripting/kicad.i
-        DEPENDS ../scripting/wx.i
+        DEPENDS swig/pcbnew.i
+        DEPENDS swig/board.i
+        DEPENDS swig/board_item.i
+        DEPENDS swig/module.i
+        DEPENDS swig/plugins.i
+        DEPENDS swig/units.i
+        DEPENDS ../common/swig/dlist.i
+        DEPENDS ../common/swig/kicad.i
+        DEPENDS ../common/swig/wx.i
+        DEPENDS ../common/swig/ki_exception.i
         DEPENDS ../scripting/kicadplugins.i
 
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docstrings
         COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/docstrings/docstrings.i # this makes docstrings.i available if it doesn't exist
 
-        COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  scripting/pcbnew.i
+        COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  swig/pcbnew.i
         COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
@@ -406,11 +405,22 @@ if( KICAD_SCRIPTING_MODULES )
     #message( "building pcbnew scripting" )
 
     set( CMAKE_SWIG_FLAGS ${SWIG_FLAGS} )
-    set_source_files_properties( scripting/pcbnew.i PROPERTIES CPLUSPLUS ON )
+    set_source_files_properties( swig/pcbnew.i PROPERTIES CPLUSPLUS ON )
+
+    # https://cmake.org/cmake/help/v3.2/module/UseSWIG.html
+    # Set this ..EXTRA_DEPS variable before invoking swig_add_module() macro
+    set( SWIG_MODULE_pcbnew_EXTRA_DEPS
+        swig/board.i
+        swig/board_item.i
+        swig/plugins.i
+        swig/units.i
+        ../common/swig/ki_exception.i
+        ../common/swig/kicad.i
+        )
 
     swig_add_module( pcbnew
         python
-        scripting/pcbnew.i
+        swig/pcbnew.i
         ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
         pcbnew.cpp
         ${PCBNEW_SRCS}
@@ -674,14 +684,14 @@ if( KICAD_SCRIPTING )
         add_dependencies( ScriptingPcbnewPyCopy ScriptingWxpythonCopy )
     endif()
 
-    # scripting plugins
-    install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/scripting/plugins/
+    # python plugins
+    install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/python/plugins/
         DESTINATION ${KICAD_DATA}/scripting/plugins
         FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
     )
 
-    # scripting python shell
-    install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/scripting/kicad_pyshell/
+    # python shell
+    install( DIRECTORY ${PROJECT_SOURCE_DIR}/pcbnew/python/kicad_pyshell/
         DESTINATION ${KICAD_DATA}/scripting/kicad_pyshell
         FILE_PERMISSIONS OWNER_EXECUTE OWNER_READ OWNER_WRITE GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
     )
@@ -723,18 +733,4 @@ if( APPLE )
             COMMENT "Copying wxPython into ${PYTHON_DEST}"
             )
     endif()
-endif()
-
-
-if( false )     # haven't been used in years.
-    # This one gets made only when testing.
-    add_executable( specctra_test EXCLUDE_FROM_ALL specctra_test.cpp specctra.cpp )
-    target_link_libraries( specctra_test common ${wxWidgets_LIBRARIES} )
-
-
-    # This one gets made only when testing.
-    add_executable( layer_widget_test WIN32 EXCLUDE_FROM_ALL
-        layer_widget.cpp
-        )
-    target_link_libraries( layer_widget_test common ${wxWidgets_LIBRARIES} )
 endif()

@@ -1,5 +1,5 @@
-#ifndef __wx_helpers_h
-#define __wx_helpers_h
+#ifndef WX_HELPERS_H_
+#define WX_HELPERS_H_
 
 #include <Python.h>
 #include <wx/intl.h>
@@ -15,4 +15,4 @@ PyObject*   wx2PyString( const wxString& src );
 void        wxSetDefaultPyEncoding( const char* encoding );
 const char* wxGetDefaultPyEncoding();
 
-#endif
+#endif  // WX_HELPERS_H_

@@ -24,6 +24,13 @@
 
 /* DLIST python iteration code, to allow standard iteration over DLIST */
 
+%include <dlist.h>
+
+%{
+#include <dlist.h>
+%}
+
+
 %extend DLIST
 {
     %pythoncode

@@ -105,7 +105,11 @@ class WX_EVENT_LOOP;
  * EDA_BASE_FRAME would not have sufficed because BM2CMP_FRAME_BASE is not
  * derived from it.
  */
+#ifdef SWIG
+class KIWAY_PLAYER : public wxFrame, public KIWAY_HOLDER
+#else
 class KIWAY_PLAYER : public EDA_BASE_FRAME, public KIWAY_HOLDER
+#endif
 {
 public:
     KIWAY_PLAYER( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
@@ -118,7 +122,7 @@ public:
             const wxPoint& aPos, const wxSize& aSize, long aStyle,
             const wxString& aWdoName = wxFrameNameStr );
 
-    ~KIWAY_PLAYER();
+    ~KIWAY_PLAYER() throw();
 
     //----<Cross Module API>-----------------------------------------------------
 
@@ -238,7 +242,9 @@ protected:
     wxString        m_modal_string;
     bool            m_modal_ret_val;    // true if a selection was made
 
+#ifndef SWIG
     DECLARE_EVENT_TABLE()
+#endif
 };
 
 
