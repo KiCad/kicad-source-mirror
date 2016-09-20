@@ -232,7 +232,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     DialogEditModuleText textDialog( m_frame, textMod, NULL );
                     bool placing = textDialog.ShowModal() && ( textMod->GetText().Length() > 0 );
 
-                    if( !placing )
+                    if( placing )
                         text = textMod;
                     else
                         delete textMod;
