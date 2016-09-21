@@ -84,7 +84,6 @@ protected:
 };
 
 
-#ifndef SWIG
 /**
  * Struct PARSE_ERROR
  * contains a filename or source description, a problem input line, a line number,
@@ -148,8 +147,6 @@ struct FUTURE_FORMAT_ERROR : public PARSE_ERROR
     FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError, const wxString& aRequiredVersion );
     ~FUTURE_FORMAT_ERROR() throw () {}
 };
-
-#endif  // SWIG
 
 /** @} exception_types */
 

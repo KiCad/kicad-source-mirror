@@ -167,13 +167,16 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
     def GetAllNetClasses(self):
         """
-        Return a dictionary like object with net_class_name as key and NETCLASSPRT as value
+        Return a dictionary like object with net_class_name as key and NETCLASSPTR as value
         GetNetClasses(BOARD self) -> { wxString net_class_name : NETCLASSPTR }
         Include the "Default" netclass also.
         """
         netclassmap = self.GetNetClasses().NetClasses()
-        # add the Default one too
-        netclassmap[ NETCLASS.Default ] = self.GetNetClasses().GetDefault()
+
+        # Add the Default one too, but this is probably modifying the dict (aka NETCLASS_MAP)
+        # in the BOARD.  So change code here to create a dict copy first.
+        # netclassmap = dict(netclassmap)
+        netclassmap['Default'] = self.GetNetClasses().GetDefault()
         return netclassmap
     %}
 }

@@ -354,8 +354,6 @@ public:
 };
 
 
-#ifndef SWIG
-
 class NETINFO_MAPPING
 {
 public:
@@ -391,7 +389,6 @@ public:
      */
     int Translate( int aNetCode ) const;
 
-#ifndef SWIG
     ///> Wrapper class, so you can iterate through NETINFO_ITEM*s, not
     ///> std::pair<int/wxString, NETINFO_ITEM*>
     class iterator
@@ -459,7 +456,6 @@ public:
     {
         return iterator( m_netMapping.end(), this );
     }
-#endif
 
     /**
      * Function GetSize
@@ -477,8 +473,6 @@ private:
     ///> Map that allows saving net codes with consecutive numbers (for compatibility reasons)
     std::map<int, int> m_netMapping;
 };
-
-#endif  // SWIG
 
 
 #if 0
@@ -711,6 +705,5 @@ enum StatusPcbFlags {
     DO_NOT_SHOW_GENERAL_RASTNEST = 0x20  /* Do not display the general
                                           * ratsnest (used in module moves) */
 };
-
 
 #endif  // CLASS_NETINFO_

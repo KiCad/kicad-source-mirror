@@ -64,6 +64,8 @@ class VIA;
 class ZONE_CONTAINER;
 class PCB_TARGET;
 
+// Anthing targeted to the %wrapper section is extern "C" whereas code targeted
+// to %header section is C++.
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -177,4 +179,3 @@ static VIA*              Cast_to_VIA( BOARD_ITEM* self )             {  return d
 static ZONE_CONTAINER*   Cast_to_ZONE_CONTAINER( BOARD_ITEM* self )  {  return dynamic_cast<ZONE_CONTAINER*>(self);  }
 static PCB_TARGET*       Cast_to_PCB_TARGET( BOARD_ITEM* self )      {  return dynamic_cast<PCB_TARGET*>(self);      }
 %}
-

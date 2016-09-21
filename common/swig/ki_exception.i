@@ -24,13 +24,15 @@
 
 %warnfilter(511) IO_ERROR;
 
+%ignore PARSE_ERROR;
+%ignore FUTURE_FORMAT_ERROR;
 %include ki_exception.h
 
 %{
 #include <ki_exception.h>
 %}
 
-%include exception.i
+%include exception.i        // from SWIG
 
 // Target a specific function with "C++ to python exception handling and
 // translation code".  Invoke this macro separately for each C++ function
