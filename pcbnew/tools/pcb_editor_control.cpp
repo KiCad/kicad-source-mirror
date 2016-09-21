@@ -21,6 +21,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include <cstdint>
 
 #include "pcb_editor_control.h"
 #include "common_actions.h"
@@ -776,7 +777,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
 int PCB_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
 {
-    int netcode = aEvent.Parameter<long>();
+    int netcode = aEvent.Parameter<intptr_t>();
 
     if( netcode > 0 )
     {

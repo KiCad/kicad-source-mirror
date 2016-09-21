@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cstdint>
+
 #include "pcbnew_control.h"
 #include "common_actions.h"
 #include "selection_tool.h"
@@ -174,7 +176,7 @@ int PCBNEW_CONTROL::ZoomFitScreen( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ZoomPreset( const TOOL_EVENT& aEvent )
 {
-    unsigned int idx = aEvent.Parameter<long>();
+    unsigned int idx = aEvent.Parameter<intptr_t>();
     std::vector<double>& zoomList = m_frame->GetScreen()->m_ZoomList;
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
     KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
@@ -332,7 +334,7 @@ int PCBNEW_CONTROL::HighContrastDec( const TOOL_EVENT& aEvent )
 // Layer control
 int PCBNEW_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 {
-    m_frame->SwitchLayer( NULL, (LAYER_ID) aEvent.Parameter<long>() );
+    m_frame->SwitchLayer( NULL, (LAYER_ID) aEvent.Parameter<intptr_t>() );
 
     return 0;
 }
@@ -445,7 +447,7 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 // Cursor control
 int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
 {
-    long type = aEvent.Parameter<long>();
+    long type = aEvent.Parameter<intptr_t>();
     bool fastMove = type & COMMON_ACTIONS::CURSOR_FAST_MOVE;
     type &= ~COMMON_ACTIONS::CURSOR_FAST_MOVE;
 
@@ -552,7 +554,7 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::PanControl( const TOOL_EVENT& aEvent )
 {
-    long type = aEvent.Parameter<long>();
+    long type = aEvent.Parameter<intptr_t>();
     KIGFX::VIEW* view = getView();
     GRID_HELPER gridHelper( m_frame );
     VECTOR2D center = view->GetCenter();
@@ -674,7 +676,7 @@ int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::GridPreset( const TOOL_EVENT& aEvent )
 {
-    long idx = aEvent.Parameter<long>();
+    long idx = aEvent.Parameter<intptr_t>();
 
     m_frame->SetPresetGrid( idx );
     updateGrid();
