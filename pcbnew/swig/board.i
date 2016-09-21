@@ -177,16 +177,3 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         return netclassmap
     %}
 }
-
-
-%feature("notabstract")     NETINFO_ITEM;
-
-// http://swig.10945.n7.nabble.com/std-containers-and-pointers-td3728.html
-%{
-    namespace swig {
-        template <>  struct traits<NETINFO_ITEM> {
-            typedef pointer_category category;
-            static const char* type_name() { return "NETINFO_ITEM"; }
-        };
-    }
-%}

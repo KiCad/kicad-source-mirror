@@ -27,8 +27,6 @@
  * @brief Specific BOARD extensions and templates
  */
 
-%import dlist.i
-
 
 
 %include class_module.h
@@ -40,6 +38,11 @@
 %}
 
 
+// BOARD_ITEM_CONTAINER's interface functions will be implemented by SWIG
+// automatically.
+
+
+/*
 %extend MODULE
 {
     %pythoncode
@@ -52,19 +55,9 @@
     # add function, clears the thisown to avoid python from deleting
     # the object in the garbage collector
     #
-
-    def Add(self,item):
-
-        itemC = item.Cast()
-
-        if type(itemC) is D_PAD:
-            item.thisown=0
-            self.Pads().PushBack(itemC)
-        elif type(itemC) in [ TEXTE_PCB, DIMENSION, TEXTE_MODULE, DRAWSEGMENT,EDGE_MODULE]:
-            item.thisown = 0
-            self.GraphicalItems().PushBack(item)
     %}
 }
+*/
 
 
 %pythoncode
@@ -101,20 +94,23 @@
         plug.FootprintLibIsWritable(lpath)
 %}
 
+
 %{
-    MODULE *PyModule_to_MODULE(PyObject *obj0)
+
+// called from pcbnew/swig/pcbnew_footprint_wizards.cpp
+MODULE* PyModule_to_MODULE(PyObject *obj0)
+{
+    void* argp;
+    int res1 = SWIG_ConvertPtr(obj0, &argp,SWIGTYPE_p_MODULE, 0 |  0 );
+    if (!SWIG_IsOK(res1))
     {
-        void *argp;
-        int res1 = SWIG_ConvertPtr(obj0, &argp,SWIGTYPE_p_MODULE, 0 |  0 );
-        if (!SWIG_IsOK(res1))
-        {
-            SWIG_exception_fail(SWIG_ArgError(res1), "Converting object to MODULE*");
-        }
-
-        return (MODULE*)argp;
-
-        fail:
-        return NULL;
-
+        SWIG_exception_fail(SWIG_ArgError(res1), "Converting object to MODULE*");
     }
+
+    return (MODULE*) argp;
+
+fail:
+    return NULL;
+}
+
 %}
