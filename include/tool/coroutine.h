@@ -100,6 +100,76 @@
 template <typename ReturnType, typename ArgType>
 class COROUTINE
 {
+private:
+    class CALL_CONTEXT;
+
+    struct INVOCATION_ARGS
+    {
+        enum
+        {
+            FROM_ROOT,      // a stub was called/a corutine was resumed from the main-stack context
+            FROM_ROUTINE,   // a stub was called/a coroutine was resumed fron a coroutine context
+            CONTINUE_AFTER_ROOT // a function sent a request to invoke a function on the main
+                                // stack context
+        } type; // invocation type
+        COROUTINE*    destination;  // stores the coroutine pointer for the stub OR the coroutine
+                                    // ptr for the coroutine to be resumed if a
+                                    // root(main-stack)-call-was initiated.
+        CALL_CONTEXT* context;      // pointer to the call context of the current callgraph this
+                                    // call context holds a reference to the main stack context
+    };
+
+#if BOOST_VERSION < 106100
+    using CONTEXT_T = boost::context::fcontext_t;
+#else
+    using CONTEXT_T = boost::context::execution_context<INVOCATION_ARGS*>;
+#endif
+
+#if BOOST_VERSION < 105600
+    using CALLEE_STORAGE = CONTEXT_T*;
+#else
+    using CALLEE_STORAGE = CONTEXT_T;
+#endif
+
+    class CALL_CONTEXT
+    {
+    public:
+        void SetMainStack( CONTEXT_T* aStack )
+        {
+            m_mainStackContext = aStack;
+        }
+
+        void RunMainStack( COROUTINE* aCor, std::function<void()> aFunc )
+        {
+            m_mainStackFunction = std::move( aFunc );
+            INVOCATION_ARGS args{ INVOCATION_ARGS::CONTINUE_AFTER_ROOT, aCor, this };
+
+#if BOOST_VERSION < 105600
+            boost::context::jump_fcontext( aCor->m_callee, m_mainStackContext,
+                reinterpret_cast<intptr_t>( &args ) );
+#elif BOOST_VERSION < 106100
+            boost::context::jump_fcontext( &aCor->m_callee, *m_mainStackContext,
+                reinterpret_cast<intptr_t>( &args ) );
+#else
+            *m_mainStackContext = std::get<0>( ( *m_mainStackContext )( &args ) );
+#endif
+        }
+
+        void Continue( INVOCATION_ARGS* args )
+        {
+            while( args->type == INVOCATION_ARGS::CONTINUE_AFTER_ROOT )
+            {
+                m_mainStackFunction();
+                args->type = INVOCATION_ARGS::FROM_ROOT;
+                args = args->destination->doResume( args );
+            }
+        }
+
+    private:
+        CONTEXT_T*              m_mainStackContext;
+        std::function<void()>   m_mainStackFunction;
+    };
+
 public:
     COROUTINE() :
         COROUTINE( nullptr )
@@ -135,13 +205,6 @@ public:
     {
     }
 
-private:
-#if BOOST_VERSION < 106100
-    using context_type = boost::context::fcontext_t;
-#else
-    using context_type = boost::context::execution_context<COROUTINE*>;
-#endif
-
 public:
     /**
      * Function Yield()
@@ -168,19 +231,6 @@ public:
     }
 
     /**
-    * Function Resume()
-    *
-    * Resumes execution of a previously yielded coroutine.
-    * @return true, if the coroutine has yielded again and false if it has finished its
-    * execution (returned).
-    */
-    bool Resume()
-    {
-        jumpIn();
-        return m_running;
-    }
-
-    /**
      * Function SetEntry()
      *
      * Defines the entry point for the coroutine, if not set in the constructor.
@@ -190,47 +240,86 @@ public:
         m_func = std::move( aEntry );
     }
 
-    /* Function Call()
+    /**
+     * Function RunMainStack()
      *
-     * Starts execution of a coroutine, passing args as its arguments.
-     * @return true, if the coroutine has yielded and false if it has finished its
-     * execution (returned).
+     * Run a functor inside the application main stack context
+     * Call this function for example if the operation will spawn a webkit browser instance which
+     * will walk the stack to the upper border of the address space on mac osx systems because
+     * its javascript needs garbage collection (for example if you paste text into an edit box).
      */
-    bool Call( ArgType aArgs )
+    void RunMainStack( std::function<void()> func )
     {
-        assert( m_func );
-        assert( !m_callee );
+        assert( m_callContext );
+        m_callContext->RunMainStack( this, std::move( func ) );
+    }
 
-        m_args = &aArgs;
+   /**
+    * Function Call()
+    *
+    * Starts execution of a coroutine, passing args as its arguments. Call this method
+    * from the application main stack only.
+    * @return true, if the coroutine has yielded and false if it has finished its
+    * execution (returned).
+    */
+    bool Call( ArgType aArg )
+    {
+        CALL_CONTEXT ctx;
+        INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROOT, this, &ctx };
+        ctx.Continue( doCall( &args, aArg ) );
 
-#if BOOST_VERSION < 106100
-        assert( m_stack == nullptr );
+        return Running();
+    }
 
-        // fixme: Clean up stack stuff. Add a guard
-        size_t stackSize = c_defaultStackSize;
-        m_stack.reset( new char[stackSize] );
+   /**
+    * Function Call()
+    *
+    * Starts execution of a coroutine, passing args as its arguments. Call this method
+    * for a nested coroutine invocation.
+    * @return true, if the coroutine has yielded and false if it has finished its
+    * execution (returned).
+    */
+    bool Call( const COROUTINE& aCor, ArgType aArg )
+    {
+        INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, this, aCor.m_callContext };
+        doCall( &args, aArg );
+        // we will not be asked to continue
 
-        // align to 16 bytes
-        void* sp = (void*) ( ( ( (ptrdiff_t) m_stack.get() ) + stackSize - 0xf ) & ( ~0x0f ) );
+        return Running();
+    }
 
-        // correct the stack size
-        stackSize -= size_t( ( (ptrdiff_t) m_stack.get() + stackSize) - (ptrdiff_t) sp );
+    /**
+    * Function Resume()
+    *
+    * Resumes execution of a previously yielded coroutine. Call this method only
+    * from the main application stack.
+    * @return true, if the coroutine has yielded again and false if it has finished its
+    * execution (returned).
+    */
+    bool Resume()
+    {
+        CALL_CONTEXT ctx;
+        INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROOT, this, &ctx };
+        ctx.Continue( doResume( &args ) );
 
-        m_callee = boost::context::make_fcontext( sp, stackSize, callerStub );
-#else
-        m_callee = context_type(
-            std::allocator_arg_t(),
-            boost::context::protected_fixedsize_stack( c_defaultStackSize ),
-            &COROUTINE::callerStub
-        );
-#endif
+        return Running();
+    }
 
-        m_running = true;
+    /**
+    * Function Resume()
+    *
+    * Resumes execution of a previously yielded coroutine. Call this method
+    * for a nested coroutine invocation.
+    * @return true, if the coroutine has yielded again and false if it has finished its
+    * execution (returned).
+    */
+    bool Resume( const COROUTINE& aCor )
+    {
+        INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, this, aCor.m_callContext };
+        doResume( &args );
+        // we will not be asked to continue
 
-        // off we go!
-        jumpIn();
-
-        return m_running;
+        return Running();
     }
 
     /**
@@ -254,14 +343,57 @@ public:
     }
 
 private:
-    static const int c_defaultStackSize = 2000000;    // fixme: make configurable
+    INVOCATION_ARGS* doCall( INVOCATION_ARGS* aInvArgs, ArgType aArgs )
+    {
+        assert( m_func );
+        assert( !m_callee );
+
+        m_args = &aArgs;
+
+#if BOOST_VERSION < 106100
+        assert( m_stack == nullptr );
+
+        // fixme: Clean up stack stuff. Add a guard
+        size_t stackSize = c_defaultStackSize;
+        m_stack.reset( new char[stackSize] );
+
+        // align to 16 bytes
+        void* sp = (void*)((((ptrdiff_t) m_stack.get()) + stackSize - 0xf) & (~0x0f));
+
+        // correct the stack size
+        stackSize -= size_t( ( (ptrdiff_t) m_stack.get() + stackSize ) - (ptrdiff_t) sp );
+
+        m_callee = boost::context::make_fcontext( sp, stackSize, callerStub );
+#else
+        m_callee = CONTEXT_T(
+            std::allocator_arg_t(),
+            boost::context::protected_fixedsize_stack( c_defaultStackSize ),
+            &COROUTINE::callerStub
+        );
+#endif
+
+        m_running = true;
+
+        // off we go!
+        return jumpIn( aInvArgs );
+    }
+
+    INVOCATION_ARGS* doResume( INVOCATION_ARGS* args )
+    {
+        return jumpIn( args );
+    }
 
     /* real entry point of the coroutine */
 #if BOOST_VERSION < 106100
     static void callerStub( intptr_t aData )
     {
+        INVOCATION_ARGS& args = *reinterpret_cast<INVOCATION_ARGS*>( aData );
         // get pointer to self
-        COROUTINE* cor = reinterpret_cast<COROUTINE*>( aData );
+        COROUTINE* cor     = args.destination;
+        cor->m_callContext = args.context;
+
+        if( args.type == INVOCATION_ARGS::FROM_ROOT )
+            cor->m_callContext->SetMainStack( &cor->m_caller );
 
         // call the coroutine method
         cor->m_retVal = cor->m_func( *(cor->m_args) );
@@ -272,9 +404,16 @@ private:
     }
 #else
     /* real entry point of the coroutine */
-    static context_type callerStub( context_type caller, COROUTINE* cor )
+    static CONTEXT_T callerStub( CONTEXT_T caller, INVOCATION_ARGS* aArgsPtr )
     {
-        cor->m_caller = std::move( caller );
+        const auto& args = *aArgsPtr;
+        auto* cor = args.destination;
+
+        cor->m_caller      = std::move( caller );
+        cor->m_callContext = args.context;
+
+        if( args.type == INVOCATION_ARGS::FROM_ROOT )
+            cor->m_callContext->SetMainStack( &cor->m_caller );
 
         // call the coroutine method
         cor->m_retVal = cor->m_func( *(cor->m_args) );
@@ -285,52 +424,74 @@ private:
     }
 #endif
 
-    void jumpIn()
+    INVOCATION_ARGS* jumpIn( INVOCATION_ARGS* args )
     {
 #if BOOST_VERSION < 105600
-        boost::context::jump_fcontext( &m_caller, m_callee, reinterpret_cast<intptr_t>(this) );
+        args = reinterpret_cast<INVOCATION_ARGS*>(
+            boost::context::jump_fcontext( &m_caller, m_callee,
+                                           reinterpret_cast<intptr_t>( args ) )
+            );
 #elif BOOST_VERSION < 106100
-        boost::context::jump_fcontext( &m_caller, m_callee, reinterpret_cast<intptr_t>(this) );
+        args = reinterpret_cast<INVOCATION_ARGS*>(
+            boost::context::jump_fcontext( &m_caller, m_callee,
+                                           reinterpret_cast<intptr_t>( args ) )
+            );
 #else
-        auto result = m_callee( this );
-        m_callee = std::move( std::get<0>( result ) );
+        std::tie( m_callee, args ) = m_callee( args );
 #endif
+
+        return args;
     }
 
     void jumpOut()
     {
+        INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, nullptr, nullptr };
+        INVOCATION_ARGS* ret;
 #if BOOST_VERSION < 105600
-        boost::context::jump_fcontext( m_callee, &m_caller, 0 );
+        ret = reinterpret_cast<INVOCATION_ARGS*>(
+            boost::context::jump_fcontext( m_callee, &m_caller,
+                                           reinterpret_cast<intptr_t>( &args ) )
+            );
 #elif BOOST_VERSION < 106100
-        boost::context::jump_fcontext( &m_callee, m_caller, 0 );
+        ret = reinterpret_cast<INVOCATION_ARGS*>(
+            boost::context::jump_fcontext( &m_callee, m_caller,
+                                           reinterpret_cast<intptr_t>( &args ) )
+            );
 #else
-        auto result = m_caller( nullptr );
-        m_caller = std::move( std::get<0>( result ) );
+        std::tie( m_caller, ret ) = m_caller( &args );
 #endif
+
+        m_callContext = ret->context;
+
+        if( ret->type == INVOCATION_ARGS::FROM_ROOT )
+        {
+            m_callContext->SetMainStack( &m_caller );
+        }
     }
 
-    std::function<ReturnType(ArgType)> m_func;
-
-    bool m_running;
+    static constexpr int c_defaultStackSize = 2000000;    // fixme: make configurable
 
 #if BOOST_VERSION < 106100
     ///< coroutine stack
     std::unique_ptr<char[]> m_stack;
 #endif
 
+    std::function<ReturnType( ArgType )> m_func;
+
+    bool m_running;
+
     ///< pointer to coroutine entry arguments. Stripped of references
     ///< to avoid compiler errors.
     typename std::remove_reference<ArgType>::type* m_args;
 
     ///< saved caller context
-    context_type m_caller;
+    CONTEXT_T m_caller;
+
+    ///< main stack information
+    CALL_CONTEXT* m_callContext;
 
     ///< saved coroutine context
-#if BOOST_VERSION < 105600
-    context_type* m_callee;
-#else
-    context_type m_callee;
-#endif
+    CALLEE_STORAGE m_callee;
 
     ReturnType m_retVal;
 };

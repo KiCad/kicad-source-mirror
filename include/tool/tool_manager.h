@@ -279,6 +279,8 @@ public:
     void ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandler,
             const TOOL_EVENT_LIST& aConditions );
 
+    void RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc );
+
     /**
      * Pauses execution of a given tool until one or more events matching aConditions arrives.
      * The pause/resume operation is done through COROUTINE object.

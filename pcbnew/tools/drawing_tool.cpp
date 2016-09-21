@@ -230,7 +230,11 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textMod->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
                     DialogEditModuleText textDialog( m_frame, textMod, NULL );
-                    bool placing = textDialog.ShowModal() && ( textMod->GetText().Length() > 0 );
+                    bool placing;
+
+                    RunMainStack( [&]() {
+                        placing = textDialog.ShowModal() && ( textMod->GetText().Length() > 0 );
+                    } );
 
                     if( placing )
                         text = textMod;
@@ -254,7 +258,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textPcb->SetThickness( dsnSettings.m_PcbTextWidth );
                     textPcb->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
-                    getEditFrame<PCB_EDIT_FRAME>()->InstallTextPCBOptionsFrame( textPcb, NULL );
+                    RunMainStack( [&]() {
+                        getEditFrame<PCB_EDIT_FRAME>()->InstallTextPCBOptionsFrame( textPcb, NULL );
+                    } );
 
                     if( textPcb->GetText().IsEmpty() )
                         delete textPcb;

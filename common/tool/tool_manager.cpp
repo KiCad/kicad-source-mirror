@@ -470,6 +470,13 @@ void TOOL_MANAGER::ScheduleNextState( TOOL_BASE* aTool, TOOL_STATE_FUNC& aHandle
 }
 
 
+void TOOL_MANAGER::RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc )
+{
+    TOOL_STATE* st = m_toolState[aTool];
+    st->cofunc->RunMainStack( std::move( aFunc ) );
+}
+
+
 optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
                                                  const TOOL_EVENT_LIST& aConditions )
 {

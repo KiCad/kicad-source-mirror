@@ -71,3 +71,10 @@ void TOOL_INTERACTIVE::SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER
 
     m_toolMgr->ScheduleContextMenu( this, aMenu, aTrigger );
 }
+
+
+void TOOL_INTERACTIVE::RunMainStack( std::function<void()> aFunc )
+{
+    m_toolMgr->RunMainStack( this, std::move( aFunc ) );
+}
+

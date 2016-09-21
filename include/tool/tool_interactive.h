@@ -64,6 +64,15 @@ public:
      */
     void SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger = CMENU_BUTTON );
 
+
+    /**
+     * Function RunMainStack()
+     *
+     * Calls a function using the main stack.
+     * @param aFunc is the function to be calls.
+     */
+    void RunMainStack( std::function<void()> aFunc );
+
     /**
      * Function Go()
      *
