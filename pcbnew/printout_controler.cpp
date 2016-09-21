@@ -84,7 +84,7 @@ BOARD_PRINTOUT_CONTROLLER::BOARD_PRINTOUT_CONTROLLER( const PRINT_PARAMETERS& aP
 bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
 {
     LSET lset = m_PrintParams.m_PrintMaskLayer;
-    int aPageCount = lset.count();
+    int pageCount = lset.count();
     wxString layer;
     LAYER_ID extractLayer;
 
@@ -114,7 +114,7 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
     if( m_PrintParams.m_Flags == 1 )
         m_PrintParams.m_PrintMaskLayer.set( Edge_Cuts );
 
-    DrawPage( layer, aPage, aPageCount );
+    DrawPage( layer, aPage, pageCount );
 
     m_PrintParams.m_PrintMaskLayer = lset;
 
@@ -138,7 +138,7 @@ void BOARD_PRINTOUT_CONTROLLER::GetPageInfo( int* minPage, int* maxPage,
 }
 
 
-void BOARD_PRINTOUT_CONTROLLER::DrawPage( wxString layer, int aPageNum, int aPageCount )
+void BOARD_PRINTOUT_CONTROLLER::DrawPage( const wxString& aLayerName, int aPageNum, int aPageCount )
 {
     wxPoint       offset;
     double        userscale;
@@ -295,7 +295,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage( wxString layer, int aPageNum, int aPag
         screen->m_ScreenNumber = aPageNum;
         screen->m_NumberOfScreens = aPageCount;
         m_Parent->DrawWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
-                                  IU_PER_MILS, titleblockFilename, layer );
+                                 IU_PER_MILS, titleblockFilename, aLayerName );
         screen->m_ScreenNumber = tempScreenNumber;
         screen->m_NumberOfScreens = tempNumberOfScreens;
     }

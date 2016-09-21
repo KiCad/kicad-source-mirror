@@ -123,7 +123,16 @@ public:
 
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
 
-    void DrawPage( wxString layer = wxEmptyString, int aPageNum = 1, int aPageCount = 1 );
+    /**
+     * Print a page ( or a set of pages ).
+     * Note: this function prepare print parameters for the function
+     * which actually print the draw layers.
+     * @param aLayerName = a text which can be printed as layer name
+     * @param aPageNum = the number of the current page (only used to print this value)
+     * @param aPageCount = the number of pages to ptint (only used to print this value)
+     */
+    void DrawPage( const wxString& aLayerName = wxEmptyString,
+                   int aPageNum = 1, int aPageCount = 1 );
 };
 
 #endif      // PRINTOUT_CONTROLLER_H

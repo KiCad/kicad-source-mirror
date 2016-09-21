@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -37,6 +37,8 @@
 #include <class_base_screen.h>
 
 #include <gerbview_frame.h>
+#include <class_gerber_file_image.h>
+#include <class_gerber_file_image_list.h>
 
 #include <printout_controler.h>
 
@@ -77,7 +79,25 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
     // in gerbview, draw layers are always printed on separate pages
     // because handling negative objects when using only one page is tricky
     m_PrintParams.m_Flags = aPage;
-    DrawPage();
+
+    // The gerber filename of the page to print will be printed to the worksheet.
+    // Find this filename:
+    // Find the graphic layer number for the page to print
+    std::vector<int> printList =
+        ((GERBVIEW_FRAME*) m_Parent)->GetGerberLayout()->GetPrintableLayers();
+
+    if( printList.size() < 1 )      // Should not occur
+        return false;
+
+    int graphiclayer = printList[aPage-1];
+    GERBER_FILE_IMAGE_LIST& gbrImgList = GERBER_FILE_IMAGE_LIST::GetImagesList();
+    GERBER_FILE_IMAGE* gbrImage = gbrImgList.GetGbrImage( graphiclayer );
+    wxString gbr_filename;
+
+    if( gbrImage )
+        gbr_filename = gbrImage->m_FileName;
+
+    DrawPage( gbr_filename, aPage, m_PrintParams.m_PageCount );
 
     return true;
 }
@@ -99,7 +119,8 @@ void BOARD_PRINTOUT_CONTROLLER::GetPageInfo( int* minPage, int* maxPage,
 }
 
 
-void BOARD_PRINTOUT_CONTROLLER::DrawPage( wxString layer, int aPageNum, int aPageCount)
+void BOARD_PRINTOUT_CONTROLLER::DrawPage( const wxString& aLayerName,
+                                          int aPageNum, int aPageCount)
 {
     wxPoint       offset;
     double        userscale;
@@ -113,7 +134,7 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage( wxString layer, int aPageNum, int aPag
     wxBusyCursor  dummy;
 
     boardBoundingBox = ((GERBVIEW_FRAME*) m_Parent)->GetGerberLayoutBoundingBox();
-    wxString titleblockFilename;    // TODO see if we uses the gerber file name
+    wxString titleblockFilename = aLayerName;    // TODO see if we uses the gerber file name
 
     // Use the page size as the drawing area when the board is shown or the user scale
     // is less than 1.
@@ -223,8 +244,16 @@ void BOARD_PRINTOUT_CONTROLLER::DrawPage( wxString layer, int aPageNum, int aPag
         GRForceBlackPen( true );
 
     if( m_PrintParams.PrintBorderAndTitleBlock() )
+    {
+        int tempScreenNumber = screen->m_ScreenNumber;
+        int tempNumberOfScreens = screen->m_NumberOfScreens;
+        screen->m_ScreenNumber = aPageNum;
+        screen->m_NumberOfScreens = aPageCount;
         m_Parent->DrawWorkSheet( dc, screen, m_PrintParams.m_PenDefaultSize,
                                  IU_PER_MILS, titleblockFilename );
+        screen->m_ScreenNumber = tempScreenNumber;
+        screen->m_NumberOfScreens = tempNumberOfScreens;
+    }
 
     if( printMirror )
     {
