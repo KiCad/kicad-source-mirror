@@ -54,15 +54,6 @@ class BASE_SET {};
 %ignore BASE_SET;
 
 
-// rename the Add method of classes to Add native, so we will handle
-// the Add method in python
-%rename(AddNative) *::Add;
-
-// fix method names conflicts
-%rename(AddChild) MODULE::Add;
-%rename(RemoveChild) MODULE::Remove;
-%rename(DeleteChild) MODULE::Delete;
-
 
 // this is what it must be included in the wrapper .cxx code to compile
 
@@ -123,30 +114,4 @@ HANDLE_EXCEPTIONS(PLUGIN::FootprintDelete)
 %include plugins.i
 %include units.i
 
-
-
-// Extend LSET by 2 methods to add or remove layers from the layer list
-// Mainly used to add or remove layers of a pad layer list
-%extend LSET
-{
-    LSET addLayer( LAYER_ID aLayer)    { return self->set(aLayer); }
-    LSET removeLayer( LAYER_ID aLayer) { return self->reset(aLayer); }
-    LSET addLayerSet( LSET aLayerSet)    { return *self |= aLayerSet; }
-    LSET removeLayerSet( LSET aLayerSet) { return *self &= ~aLayerSet; }
-
-    %pythoncode
-    %{
-    def AddLayer(self, layer):
-        return self.addLayer( layer )
-
-    def AddLayerSet(self, layers):
-        return self.addLayerSet( layers )
-
-    def RemoveLayer(self, layer):
-        return self.removeLayer( layer )
-
-    def RemoveLayerSet(self, layers):
-        return self.removeLayerSet( layers )
-    %}
-}
 

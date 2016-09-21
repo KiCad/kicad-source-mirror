@@ -27,11 +27,23 @@
  * @brief Specific BOARD extensions and templates
  */
 
+%import dlist.i
+
+
+
+%include class_module.h
+
+%rename(Get) operator   MODULE*;
+%template(MODULE_List)  DLIST<MODULE>;
+%{
+#include <class_module.h>
+%}
+
 
 %extend MODULE
 {
-  %pythoncode
-  %{
+    %pythoncode
+    %{
 
     #def SaveToLibrary(self,filename):
     #  return SaveModuleToLibrary(filename,self)
@@ -51,13 +63,12 @@
         elif type(itemC) in [ TEXTE_PCB, DIMENSION, TEXTE_MODULE, DRAWSEGMENT,EDGE_MODULE]:
             item.thisown = 0
             self.GraphicalItems().PushBack(item)
-  %}
-
+    %}
 }
 
-%pythoncode
-{
 
+%pythoncode
+%{
     def GetPluginForPath(lpath):
         return IO_MGR.PluginFind(IO_MGR.LEGACY)
 
@@ -88,7 +99,7 @@
     def FootprintIsWritable(lpath):
         plug = GetPluginForPath(lpath)
         plug.FootprintLibIsWritable(lpath)
-}
+%}
 
 %{
     MODULE *PyModule_to_MODULE(PyObject *obj0)
@@ -106,5 +117,4 @@
         return NULL;
 
     }
-
 %}

@@ -3,7 +3,6 @@
 
 
 %include kiway_player.h
-
 %{
 #include <kiway_player.h>
 %}

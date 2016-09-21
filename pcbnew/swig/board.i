@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
+ * Copyright (C) 2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -33,131 +34,81 @@
 By default we do not translate exceptions for EVERY C++ function since not every
 C++ function throws, and that would be unused and very bulky mapping code.
 Therefore please help gather the subset of C++ functions for this class that do
-throw and add them here, before the class declarations.
+throw and add them here, each before its respective class declaration.
 
 */
 HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
 
-%include <class_board_design_settings.h>
-%{
-#include <class_board_design_settings.h>
-%}
-
-
-
 %{
 #include <class_board.h>
-#include <layers_id_colors_and_visibility.h>
+#include <class_board_design_settings.h>
 %}
 
 
 %import dlist.h
 
+
 // Organize the two forms of include side by side so that it is easier to
 // migrate each grouping into a separate *.i file later.
 
 
-%include class_board_item.h
-%{
-#include <class_board_item.h>
-%}
+%include board_item.i
+
+%include board_item_container.i
 
 %include class_board_connected_item.h
-%{
-#include <class_board_connected_item.h>
-%}
 
-%include pad_shapes.h
 
-%include class_pad.h
-%{
-#include <class_pad.h>
-%}
-
-%include class_module.h
-%{
-#include <class_module.h>
-%}
-
-%include class_track.h
-%{
-#include <class_track.h>
-%}
-
-%include class_zone.h
-%include zones.h
-%{
-#include <class_zone.h>
-#include <zones.h>
-%}
+%include pad.i
+%include track.i
+%include zone.i
 
 
 %include layers_id_colors_and_visibility.h
+// Extend LSET by 2 methods to add or remove layers from the layer list
+// Mainly used to add or remove layers of a pad layer list
+%extend LSET
+{
+    LSET addLayer( LAYER_ID aLayer)    { return self->set(aLayer); }
+    LSET removeLayer( LAYER_ID aLayer) { return self->reset(aLayer); }
+    LSET addLayerSet( LSET aLayerSet)    { return *self |= aLayerSet; }
+    LSET removeLayerSet( LSET aLayerSet) { return *self &= ~aLayerSet; }
 
-%include class_pcb_text.h
+    %pythoncode
+    %{
+    def AddLayer(self, layer):
+        return self.addLayer( layer )
+
+    def AddLayerSet(self, layers):
+        return self.addLayerSet( layers )
+
+    def RemoveLayer(self, layer):
+        return self.removeLayer( layer )
+
+    def RemoveLayerSet(self, layers):
+        return self.removeLayerSet( layers )
+    %}
+}
 %{
-#include <class_pcb_text.h>
+#include <layers_id_colors_and_visibility.h>
 %}
 
-%include class_dimension.h
-%{
-#include <class_dimension.h>
-%}
 
+%include pcb_text.i
+%include dimension.i
+%include drawsegment.i
+%include marker_pcb.i
+%include mire.i
+%include text_mod.i
+%include edge_mod.i
 
-%include class_drawsegment.h
-%{
-#include <class_drawsegment.h>
-%}
-
-%include class_marker_pcb.h
-%{
-#include <class_marker_pcb.h>
-%}
-
-
-%include class_mire.h
-%{
-#include <class_mire.h>
-%}
-
-
-%include class_text_mod.h
-%{
-#include <class_text_mod.h>
-%}
-
-%include class_edge_mod.h
-%{
-#include <class_edge_mod.h>
-%}
 
 %include class_zone_settings.h
-%{
-#include <class_zone_settings.h>
-%}
 
-%include class_netinfo.h
-%include class_netclass.h
-%{
-#include <class_netinfo.h>
-#include <class_netclass.h>
-%}
+%include netinfo.i
+%include netclass.i
 
-
-// this is to help python with the * accessor of DLIST templates
-%rename(Get) operator BOARD_ITEM*;
-%rename(Get) operator TRACK*;
-%rename(Get) operator D_PAD*;
-%rename(Get) operator MODULE*;
-
-// we must translate C++ templates to scripting languages
-
-%template(BOARD_ITEM_List) DLIST<BOARD_ITEM>;
-%template(MODULE_List)     DLIST<MODULE>;
-%template(TRACK_List)      DLIST<TRACK>;
-%template(PAD_List)        DLIST<D_PAD>;
 
 // std::vector templates
 
@@ -166,8 +117,6 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
 
 %include class_board.h
-
-
 %extend BOARD
 {
     %pythoncode
@@ -180,14 +129,6 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
     def Save(self,filename):
         return SaveBoard(filename,self,IO_MGR.KICAD)
-
-    #
-    # add function, clears the thisown to avoid python from deleting
-    # the object in the garbage collector
-    #
-    def Add(self,item):
-        item.thisown=0
-        self.AddNative(item)
 
     def GetNetClasses(self):
         return self.GetDesignSettings().m_NetClasses
@@ -230,32 +171,6 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         # add the Default one too
         netclassmap[ NETCLASS.Default ] = self.GetNetClasses().GetDefault()
         return netclassmap
-    %}
-}
-
-
-%extend DRAWSEGMENT
-{
-    %pythoncode
-    %{
-    def GetShapeStr(self):
-        return self.ShowShape(self.GetShape())
-    %}
-}
-
-%extend BOARD_ITEM
-{
-    %pythoncode
-    %{
-    def SetPos(self,p):
-        self.SetPosition(p)
-        self.SetPos0(p)
-
-    def SetStartEnd(self,start,end):
-        self.SetStart(start)
-        self.SetStart0(start)
-        self.SetEnd(end)
-        self.SetEnd0(end)
     %}
 }
 

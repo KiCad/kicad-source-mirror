@@ -371,9 +371,23 @@ if( KICAD_SCRIPTING )
         DEPENDS swig/pcbnew.i
         DEPENDS swig/board.i
         DEPENDS swig/board_item.i
+        DEPENDS swig/board_item_container.i
+        DEPENDS swig/dimension.i
+        DEPENDS swig/drawsegment.i
+        DEPENDS swig/edge_mod.i
+        DEPENDS swig/marker_pcb.i
+        DEPENDS swig/mire.i
         DEPENDS swig/module.i
+        DEPENDS swig/netclass.i
+        DEPENDS swig/netinfo.i
+        DEPENDS swig/pad.i
+        DEPENDS swig/pcb_text.i
         DEPENDS swig/plugins.i
+        DEPENDS swig/text_mod.i
+        DEPENDS swig/track.i
         DEPENDS swig/units.i
+        DEPENDS swig/zone.i
+
         DEPENDS ../common/swig/dlist.i
         DEPENDS ../common/swig/kicad.i
         DEPENDS ../common/swig/wx.i
@@ -412,10 +426,28 @@ if( KICAD_SCRIPTING_MODULES )
     set( SWIG_MODULE_pcbnew_EXTRA_DEPS
         swig/board.i
         swig/board_item.i
+        swig/board_item_container.i
+        swig/dimension.i
+        swig/drawsegment.i
+        swig/edge_mod.i
+        swig/marker_pcb.i
+        swig/mire.i
+        swig/module.i
+        swig/netclass.i
+        swig/netinfo.i
+        swig/pad.i
+        swig/pcb_text.i
         swig/plugins.i
+        swig/text_mod.i
+        swig/track.i
         swig/units.i
-        ../common/swig/ki_exception.i
+        swig/zone.i
+
+        ../common/swig/dlist.i
         ../common/swig/kicad.i
+        ../common/swig/wx.i
+        ../common/swig/ki_exception.i
+        ../scripting/kicadplugins.i
         )
 
     swig_add_module( pcbnew
