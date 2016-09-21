@@ -480,7 +480,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxFileName appK2S( strK2S, "kicad2step" );
 
     #ifdef _WIN32
-    appK2S.SetExt( ".exe" );
+    appK2S.SetExt( "exe" );
     #endif
 
     if( !appK2S.FileExists() )
