@@ -592,15 +592,26 @@ set( BMAPS_OTHER
 # @todo keep these in sync with .bzrignore
 set( TMP_DIR   "${CMAKE_CURRENT_BINARY_DIR}/tmp" )
 
+# true to generate log files, false to build icon files only
+# generate logs is useful only if you have problems
+set( CREATE_LOG_FILES false )
+
+
 function( svg2png inputFile outFile pngWidth pngHeight )
     #message( "svg2png( inputFile: ${inputFile} outFile: ${outFile} pngWidth: ${pngWidth} pngHeight: ${pngHeight})")
+
+    if( CREATE_LOG_FILES )
+        set( logfile "${TMP_DIR}/${bmn}.inkscape.log" )
+    else()
+        set( logfile "null" )
+    endif()
 
     get_filename_component( bmn ${inputFile} NAME_WE )
 
     add_custom_command(
         OUTPUT ${outFile}
         COMMAND ${Inkscape_EXECUTABLE} --export-area-snap -f ${inputFile} -e ${outFile}
-            -w ${pngWidth} -h ${pngHeight} > ${TMP_DIR}/${bmn}.inkscape.log
+            -w ${pngWidth} -h ${pngHeight} > ${logfile}
         DEPENDS ${inputFile}
         COMMENT "Creating ${pngHeight} pixel tall ${outFile}"
         )
@@ -611,17 +622,23 @@ endfunction()
 # converts a basic PNG to one
 function( png2png inputFile outFile )
 
+    if( CREATE_LOG_FILES )
+        set( logfile "${TMP_DIR}/${bmn}.pngcrush.log" )
+    else()
+        set( logfile "null" )
+    endif()
+
     get_filename_component( bmn ${inputFile} NAME_WE )
 
     add_custom_command(
         OUTPUT  ${outFile}
 
         # pngcrush all icons without background to remove any extraneous text records.
-        COMMAND ${pngcrush_EXECUTABLE} -rem alla ${inputFile} ${outFile} > ${TMP_DIR}/${bmn}.pngcrush.log
+        COMMAND ${pngcrush_EXECUTABLE} -rem alla ${inputFile} ${outFile} > ${logfile}
 
         DEPENDS ${inputFile}
 
-        COMMENT "Creating ${outFile}"
+        COMMENT "Creating cleaned file ${outFile}"
         )
 endfunction()
 
