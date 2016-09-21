@@ -28,7 +28,7 @@
 
 
 class OUTPUTFORMATTER;
-struct IO_ERROR;
+class IO_ERROR;
 
 
 /**

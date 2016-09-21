@@ -63,7 +63,7 @@ class PCB_LAYER_BOX_SELECTOR;
 class NETLIST;
 class REPORTER;
 struct PARSE_ERROR;
-struct IO_ERROR;
+class IO_ERROR;
 class FP_LIB_TABLE;
 
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
