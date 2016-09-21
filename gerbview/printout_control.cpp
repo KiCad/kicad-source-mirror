@@ -77,7 +77,7 @@ bool BOARD_PRINTOUT_CONTROLLER::OnPrintPage( int aPage )
     // in gerbview, draw layers are always printed on separate pages
     // because handling negative objects when using only one page is tricky
     m_PrintParams.m_Flags = aPage;
-    DrawPage( wxEmptyString );
+    DrawPage();
 
     return true;
 }
@@ -99,7 +99,7 @@ void BOARD_PRINTOUT_CONTROLLER::GetPageInfo( int* minPage, int* maxPage,
 }
 
 
-void BOARD_PRINTOUT_CONTROLLER::DrawPage( wxString layer = wxEmptyString )
+void BOARD_PRINTOUT_CONTROLLER::DrawPage( wxString layer, int aPageNum, int aPageCount)
 {
     wxPoint       offset;
     double        userscale;
