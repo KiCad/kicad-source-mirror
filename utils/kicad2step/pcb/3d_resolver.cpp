@@ -39,7 +39,7 @@
 
 // configuration file version
 #define CFGFILE_VERSION 1
-#define S3D_RESOLVER_CONFIG wxT( "3Dresolver.cfg" )
+#define S3D_RESOLVER_CONFIG "3Dresolver.cfg"
 
 // flag bits used to track different one-off messages to users
 #define ERRFLG_ALIAS    (1)
@@ -122,7 +122,7 @@ bool S3D_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChanged )
     if( aProjDir.empty() )
         return false;
 
-    wxFileName projdir( aProjDir, wxT( "" ) );
+    wxFileName projdir( aProjDir, "" );
     projdir.Normalize();
 
     if( false == projdir.DirExists() )
@@ -346,7 +346,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
 
     #ifdef _WIN32
     // translate from KiCad's internal UNIX-like path to MSWin paths
-    tname.Replace( wxT( "/" ), wxT( "\\" ) );
+    tname.Replace( "/", "\\" );
     #endif
 
     // Note: variable expansion must preferably be performed via a
@@ -354,7 +354,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     // wxFileName::Normalize() routine to perform expansion then
     // we will have a race condition since wxWidgets does not assure
     // a threadsafe wrapper for getenv().
-    if( tname.StartsWith( wxT( "${" ) ) || tname.StartsWith( wxT( "$(" ) ) )
+    if( tname.StartsWith( "${" ) || tname.StartsWith( "$(" ) )
         tname = expandVars( tname );
 
     wxFileName tmpFN( tname );
@@ -530,24 +530,24 @@ bool S3D_RESOLVER::addPath( const S3D_ALIAS& aPath )
     S3D_ALIAS tpath = aPath;
 
     #ifdef _WIN32
-    while( tpath.m_pathvar.EndsWith( wxT( "\\" ) ) )
+    while( tpath.m_pathvar.EndsWith( "\\" ) )
         tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
     #else
-    while( tpath.m_pathvar.EndsWith( wxT( "/" ) ) &&  tpath.m_pathvar.length() > 1 )
+    while( tpath.m_pathvar.EndsWith( "/" ) &&  tpath.m_pathvar.length() > 1 )
         tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
     #endif
 
-    wxFileName path( tpath.m_pathvar, wxT( "" ) );
+    wxFileName path( tpath.m_pathvar, "" );
     path.Normalize();
 
     if( !path.DirExists() )
     {
         // suppress the message if the missing pathvar is the
         // legacy KISYS3DMOD variable
-        if( aPath.m_pathvar.compare( wxT( "${KISYS3DMOD}" ) ) )
+        if( aPath.m_pathvar.compare( "${KISYS3DMOD}" ) )
         {
             wxString msg = _( "The given path does not exist" );
-            msg.append( wxT( "\n" ) );
+            msg.append( "\n" );
             msg.append( tpath.m_pathvar );
             wxLogMessage( "%s\n", msg.ToUTF8() );
         }
@@ -559,10 +559,10 @@ bool S3D_RESOLVER::addPath( const S3D_ALIAS& aPath )
         tpath.m_pathexp = path.GetFullPath();
 
         #ifdef _WIN32
-        while( tpath.m_pathexp.EndsWith( wxT( "\\" ) ) )
+        while( tpath.m_pathexp.EndsWith( "\\" ) )
         tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
         #else
-        while( tpath.m_pathexp.EndsWith( wxT( "/" ) ) &&  tpath.m_pathexp.length() > 1 )
+        while( tpath.m_pathexp.EndsWith( "/" ) &&  tpath.m_pathexp.length() > 1 )
             tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
         #endif
     }
@@ -577,10 +577,10 @@ bool S3D_RESOLVER::addPath( const S3D_ALIAS& aPath )
         {
             wxString msg = _( "Alias: " );
             msg.append( tpath.m_alias );
-            msg.append( wxT( "\n" ) );
+            msg.append( "\n" );
             msg.append( _( "This path: " ) );
             msg.append( tpath.m_pathvar );
-            msg.append( wxT( "\n" ) );
+            msg.append( "\n" );
             msg.append( _( "Existing path: " ) );
             msg.append( sPL->m_pathvar );
             wxMessageBox( msg, _( "Bad alias (duplicate name)" ) );
@@ -678,7 +678,7 @@ bool S3D_RESOLVER::readPathList( void )
             continue;
 
         // never add on KISYS3DMOD from a config file
-        if( !al.m_alias.Cmp( wxT( "KISYS3DMOD" ) ) )
+        if( !al.m_alias.Cmp( "KISYS3DMOD" ) )
             continue;
 
         if( !getHollerith( cfgLine, idx, al.m_pathvar ) )
@@ -912,7 +912,7 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
             continue;
         }
 
-        wxFileName fpath( sL->m_pathexp, wxT( "" ) );
+        wxFileName fpath( sL->m_pathexp, "" );
         wxString fps = fpath.GetPathWithSep();
         wxString tname;
 
@@ -924,7 +924,7 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
             #ifdef _WIN32
             // ensure only the '/' separator is used in the internal name
-            fname.Replace( wxT( "\\" ), wxT( "/" ) );
+            fname.Replace( "\\", "/" );
             #endif
 
             if( sL->m_alias.StartsWith( "${" ) || sL->m_alias.StartsWith( "$(" ) )
@@ -954,7 +954,7 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
     // UNIX separator but this is done for consistency and can
     // be helpful even when transferring project files from
     // MSWin to *NIX.
-    fname.Replace( wxT( "\\" ), wxT( "/" ) );
+    fname.Replace( "\\", "/" );
 #endif
 
     return fname;
@@ -974,10 +974,10 @@ bool S3D_RESOLVER::SplitAlias( const wxString& aFileName,
     anAlias.clear();
     aRelPath.clear();
 
-    if( !aFileName.StartsWith( wxT( ":" ) ) )
+    if( !aFileName.StartsWith( ":" ) )
         return false;
 
-    size_t tagpos = aFileName.find( wxT( ":" ), 1 );
+    size_t tagpos = aFileName.find( ":", 1 );
 
     if( wxString::npos ==  tagpos || 1 == tagpos )
         return false;
@@ -1092,7 +1092,7 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
     // Rules:
     // 1. The generic form of an aliased 3D relative path is:
     //    ALIAS:relative/path
-    // 2. ALIAS is a UTF string excluding wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" )
+    // 2. ALIAS is a UTF string excluding "{}[]()%~<>\"='`;:.,&?/\\|$"
     // 3. The relative path must be a valid relative path for the platform
     hasAlias = false;
 
@@ -1105,12 +1105,12 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
 
     // ensure that the file separators suit the current platform
     #ifdef __WINDOWS__
-    filename.Replace( wxT( "/" ), wxT( "\\" ) );
+    filename.Replace( "/", "\\" );
 
     // if we see the :\ pattern then it must be a drive designator
     if( pos0 != wxString::npos )
     {
-        size_t pos1 = aFileName.find( wxT( ":\\" ) );
+        size_t pos1 = aFileName.find( ":\\" );
 
         if( pos1 != wxString::npos && ( pos1 != pos0 || pos1 != 1 ) )
             return false;
@@ -1120,7 +1120,7 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
             pos0 = wxString::npos;
     }
     #else
-    filename.Replace( wxT( "\\" ), wxT( "/" ) );
+    filename.Replace( "\\", "/" );
     #endif
 
     // names may not end with ':'
@@ -1136,7 +1136,7 @@ bool S3D_RESOLVER::ValidateFileName( const wxString& aFileName, bool& hasAlias )
         lpath = filename.substr( 0, pos0 );
 
         // check the alias for restricted characters
-        if( wxString::npos != lpath.find_first_of( wxT( "{}[]()%~<>\"='`;:.,&?/\\|$" ) ) )
+        if( wxString::npos != lpath.find_first_of( "{}[]()%~<>\"='`;:.,&?/\\|$" ) )
             return false;
 
         hasAlias = true;

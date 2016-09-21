@@ -34,13 +34,13 @@
 #include "class_board.h"
 #include "dialog_export_step_base.h"
 
-#define OPTKEY_STEP_USE_DRILL_ORG wxT( "STEP_UseDrillOrigin" )
-#define OPTKEY_STEP_USE_AUX_ORG wxT( "STEP_UseAuxOrigin" )
-#define OPTKEY_STEP_USE_USER_ORG wxT( "STEP_UseUserOrigin" )
-#define OPTKEY_STEP_UORG_UNITS wxT( "STEP_UserOriginUnits" )
-#define OPTKEY_STEP_UORG_X wxT( "STEP_UserOriginX" )
-#define OPTKEY_STEP_UORG_Y wxT( "STEP_UserOriginY" )
-#define OPTKEY_STEP_NOVIRT wxT( "STEP_NoVirtual" )
+#define OPTKEY_STEP_USE_DRILL_ORG   "STEP_UseDrillOrigin"
+#define OPTKEY_STEP_USE_AUX_ORG     "STEP_UseAuxOrigin"
+#define OPTKEY_STEP_USE_USER_ORG    "STEP_UseUserOrigin"
+#define OPTKEY_STEP_UORG_UNITS      "STEP_UserOriginUnits"
+#define OPTKEY_STEP_UORG_X          "STEP_UserOriginX"
+#define OPTKEY_STEP_UORG_Y          "STEP_UserOriginY"
+#define OPTKEY_STEP_NOVIRT          "STEP_NoVirtual"
 
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
@@ -83,7 +83,7 @@ public:
         wxString tmpStr;
         tmpStr << m_XOrg;
         m_STEP_Xorg->SetValue( tmpStr );
-        tmpStr = wxT( "" );
+        tmpStr = "";
         tmpStr << m_YOrg;
         m_STEP_Yorg->SetValue( tmpStr );
 
@@ -185,7 +185,7 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
 {
 
     wxFileName brdFile = GetBoard()->GetFileName();
-    wxString brdName = brdFile.GetFullPath();
+    wxString brdName;
 
     if( GetScreen()->IsModify() || brdFile.GetFullPath().empty() )
     {
@@ -200,13 +200,16 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
         brdName = GetAutoSaveFilePrefix();
         brdName.append( brdFile.GetName() );
         brdFile.SetName( brdName );
-        brdName = brdFile.GetFullPath();
     }
+
+    brdName = "\"";
+    brdName.Append( brdFile.GetFullPath() );
+    brdName.Append( "\"" );
 
     // Build default output file name
     brdFile = GetBoard()->GetFileName();
     wxString brdExt = brdFile.GetExt();
-    brdFile.SetExt( wxT( "stp" ) );
+    brdFile.SetExt( "stp" );
 
     DIALOG_EXPORT_STEP dlg( this );
     dlg.FilePicker()->SetPath( brdFile.GetFullPath() );
@@ -249,6 +252,8 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
         }
     }
 
+    outputFile.Prepend( "\"" );
+    outputFile.Append( "\"" );
     bool   aUseDrillOrg = dlg.GetDrillOrgOption();
     bool   aUseAuxOrg   = dlg.GetAuxOrgOption();
     bool   aUseUserOrg  = dlg.GetUserOrgOption();
@@ -269,11 +274,12 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
         }
     }
 
-    wxBusyCursor dummy;
     wxFileName appK2S( wxStandardPaths::Get().GetExecutablePath() );
     appK2S.SetName( "kicad2step" );
 
-    wxString cmdK2S = appK2S.GetFullPath();
+    wxString cmdK2S = "\"";
+    cmdK2S.Append( appK2S.GetFullPath() );
+    cmdK2S.Append( "\"" );
 
     if( aNoVirtual )
         cmdK2S.Append( " --no-virtual" );
@@ -293,10 +299,20 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
     cmdK2S.Append( " " );
     cmdK2S.Append( brdName );
 
-    if( wxExecute( cmdK2S, wxEXEC_SYNC | wxEXEC_HIDE_CONSOLE ) )
+    std::cerr << "Executing kicad2step:\n  " << cmdK2S.ToUTF8() << "\n";
+    int result = 0;
+
+    do
     {
-        wxMessageBox( _( "Unable to create STEP file." ),
-            _( "STEP EXPORT" ), wxOK );
+        wxBusyCursor dummy;
+        result = wxExecute( cmdK2S, wxEXEC_SYNC | wxEXEC_HIDE_CONSOLE );
+    } while( 0 );
+
+    if( result )
+    {
+        wxMessageBox(
+            _( "Unable to create STEP file; check that the board has a valid outline and models." ),
+            _( "STEP Export" ), wxOK );
     }
 
     return;

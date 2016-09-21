@@ -56,10 +56,10 @@ static wxString GetKicadConfigPath()
 #if !defined( __WINDOWS__ ) && !defined( __WXMAC__ )
     wxString envstr;
 
-    if( !wxGetEnv( wxT( "XDG_CONFIG_HOME" ), &envstr ) || envstr.IsEmpty() )
+    if( !wxGetEnv( "XDG_CONFIG_HOME", &envstr ) || envstr.IsEmpty() )
     {
         // XDG_CONFIG_HOME is not set, so use the fallback
-        cfgpath.AppendDir( wxT( ".config" ) );
+        cfgpath.AppendDir( ".config" );
     }
     else
     {
@@ -68,7 +68,7 @@ static wxString GetKicadConfigPath()
     }
 #endif
 
-    cfgpath.AppendDir( wxT( "kicad" ) );
+    cfgpath.AppendDir( "kicad" );
 
     if( !cfgpath.DirExists() )
     {

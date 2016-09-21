@@ -471,12 +471,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // disable Export STEP item if kicad2step does not exist
     wxString strK2S = Pgm().GetExecutablePath();
-
-    #ifdef _WIN32
-    // translate from KiCad's internal UNIX-like path to MSWin paths
-    strK2S.Replace( "/", "\\" );
-    #endif
-
     wxFileName appK2S( strK2S, "kicad2step" );
 
     #ifdef _WIN32
