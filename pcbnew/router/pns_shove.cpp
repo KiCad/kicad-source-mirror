@@ -622,12 +622,6 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
     pushedVia->SetPos( p0_pushed );
     pushedVia->Mark( aVia->Marker() );
 
-    if( aVia->Marker() & MK_HEAD )
-    {
-        m_draggedVia = pushedVia.get();
-        m_draggedViaHeadSet.Clear();
-    }
-
     for( ITEM* item : jt->LinkList() )
     {
         if( SEGMENT* seg = dyn_cast<SEGMENT*>( item ) )
@@ -670,6 +664,12 @@ SHOVE::SHOVE_STATUS SHOVE::pushVia( VIA* aVia, const VECTOR2I& aForce, int aCurr
 #ifdef DEBUG
     m_logger.Log( pushedVia.get(), 1, "pushed-via" );
 #endif
+
+    if( aVia->Marker() & MK_HEAD )
+    {
+        m_draggedVia = pushedVia.get();
+        m_draggedViaHeadSet.Clear();
+    }
 
     replaceItems( aVia, std::move( pushedVia ) );
 
