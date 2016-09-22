@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-06 08:02+0200\n"
-"PO-Revision-Date: 2016-09-06 08:08+0200\n"
+"PO-Revision-Date: 2016-09-22 16:03+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -18906,7 +18906,7 @@ msgstr "Usa nome collegamento predefinito"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:70
 msgid "Default Netlist Filename:"
-msgstr "Nome file Elenco collegamenti predefinito "
+msgstr "Nome file netlist predefinito:"
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:105
 #: eeschema/dialogs/dialog_netlist.cpp:446
