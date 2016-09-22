@@ -56,7 +56,7 @@ option( KICAD_SCRIPTING
     )
 
 option( KICAD_SCRIPTING_MODULES
-    "Build KiCad Python modules that can be used from scripting languages (default OFF)."
+    "Build native portion of the pcbnew Python module: _pcbnew.{pyd,so} for OS command line use of Python."
     )
 
 option( KICAD_SCRIPTING_WXPYTHON

@@ -5,8 +5,6 @@ add_subdirectory(router)
 # psnrouter depends on make_lexer outputs in common (bug # 1285878 )
 add_dependencies( pnsrouter pcbcommon )
 
-set( WXPYTHON_SWIG_DIR /usr/include/wx-3.0/wx/wxPython/i_files )
-
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
 
