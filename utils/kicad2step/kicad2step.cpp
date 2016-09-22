@@ -58,27 +58,27 @@ private:
 
 static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
-        { wxCMD_LINE_PARAM, NULL, NULL, _( "pcb_filename" ),
+        { wxCMD_LINE_PARAM, NULL, NULL, _( "pcb_filename" ).mb_str(),
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY },
-        { wxCMD_LINE_OPTION, "o", "output-filename", _( "output filename" ),
+        { wxCMD_LINE_OPTION, "o", "output-filename", _( "output filename" ).mb_str(),
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
 #ifdef SUPPORTS_IGES
-        { wxCMD_LINE_SWITCH, "fmt-iges", NULL, "IGES output (default STEP)",
+        { wxCMD_LINE_SWITCH, "fmt-iges", NULL, _("IGES output (default STEP)").mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
 #endif
-        { wxCMD_LINE_SWITCH, "f", "force", _( "overwrite output file" ),
+        { wxCMD_LINE_SWITCH, "f", "force", _( "overwrite output file" ).mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_SWITCH, NULL, "drill-origin", _( "Use Drill Origin for output origin" ),
+        { wxCMD_LINE_SWITCH, NULL, "drill-origin", _( "Use Drill Origin for output origin" ).mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_SWITCH, NULL, "grid-origin", _( "Use Grid Origin for output origin" ),
+        { wxCMD_LINE_SWITCH, NULL, "grid-origin", _( "Use Grid Origin for output origin" ).mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_OPTION, NULL, "user-origin",
-            _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)" ),
+            _( "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)" ).mb_str(),
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL },
         { wxCMD_LINE_SWITCH, NULL, "no-virtual",
-            _( "exclude 3D models for components with 'virtual' attribute" ),
+            _( "exclude 3D models for components with 'virtual' attribute" ).mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_PARAM_OPTIONAL },
-        { wxCMD_LINE_SWITCH, "h", NULL, _( "display this message" ),
+        { wxCMD_LINE_SWITCH, "h", NULL, _( "display this message" ).mb_str(),
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
         { wxCMD_LINE_NONE }
     };
