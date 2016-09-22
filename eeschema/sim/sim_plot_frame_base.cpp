@@ -183,7 +183,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( m_sidePanel, wxID_ANY, _("Signals") ), wxVERTICAL );
 	
-	m_signals = new wxListView( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL|wxLC_SMALL_ICON );
+	m_signals = new wxListView( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL );
 	sbSizer1->Add( m_signals, 1, wxALL|wxEXPAND, 5 );
 	
 	
