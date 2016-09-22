@@ -1,5 +1,5 @@
 
-%warnfilter(325) NETINFO_MAPPING;
+%warnfilter(325) NETINFO_MAPPING::iterator;
 %ignore NETINFO_MAPPING;        // no code generation for this class
 
 %include class_netinfo.h
