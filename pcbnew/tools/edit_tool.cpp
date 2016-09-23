@@ -173,7 +173,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             break;          // Finish
         }
 
-        else if( evt->Action() == TA_UNDO_REDO )
+        else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
             unselect = true;
             break;

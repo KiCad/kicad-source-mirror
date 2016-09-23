@@ -260,7 +260,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             UnselectItem( *evt );
         }
 
-        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO ||
+        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE ||
                  evt->IsAction( &COMMON_ACTIONS::selectionClear ) )
         {
             clearSelection();

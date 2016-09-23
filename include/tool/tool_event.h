@@ -95,13 +95,16 @@ enum TOOL_ACTIONS
     TA_CONTEXT_MENU = TA_CONTEXT_MENU_UPDATE | TA_CONTEXT_MENU_CHOICE | TA_CONTEXT_MENU_CLOSED,
 
     // This event is sent *before* undo/redo command is performed.
-    TA_UNDO_REDO            = 0x20000,
+    TA_UNDO_REDO_PRE        = 0x20000,
+
+    // This event is sent *after* undo/redo command is performed.
+    TA_UNDO_REDO_POST       = 0x40000,
 
     // Tool action (allows to control tools).
-    TA_ACTION               = 0x40000,
+    TA_ACTION               = 0x80000,
 
     // Tool activation event.
-    TA_ACTIVATE             = 0x80000,
+    TA_ACTIVATE             = 0x100000,
 
     TA_ANY = 0xffffffff
 };

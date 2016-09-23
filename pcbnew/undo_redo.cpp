@@ -321,8 +321,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
         return;
 
     // Inform tools that undo command was issued
-    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager->ProcessEvent( event );
+    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     // Get the old list
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
@@ -335,6 +334,9 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromUndoList( wxCommandEvent& aEvent )
     GetScreen()->PushCommandToRedoList( List );
 
     OnModify();
+
+    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
+
     m_canvas->Refresh();
 }
 
@@ -348,8 +350,7 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
         return;
 
     // Inform tools that redo command was issued
-    TOOL_EVENT event( TC_MESSAGE, TA_UNDO_REDO, AS_GLOBAL );
-    m_toolManager->ProcessEvent( event );
+    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     // Get the old list
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
@@ -362,6 +363,9 @@ void PCB_BASE_EDIT_FRAME::RestoreCopyFromRedoList( wxCommandEvent& aEvent )
     GetScreen()->PushCommandToUndoList( List );
 
     OnModify();
+
+    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_POST, AS_GLOBAL } );
+
     m_canvas->Refresh();
 }
 
