@@ -471,6 +471,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // disable Export STEP item if kicad2step does not exist
     wxString strK2S = Pgm().GetExecutablePath();
+    #ifdef __WXMAC__
+        strK2S += "Contents/MacOS/";
+    #endif
     wxFileName appK2S( strK2S, "kicad2step" );
 
     #ifdef _WIN32
