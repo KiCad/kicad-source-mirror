@@ -1069,7 +1069,7 @@ void RN_NET::processPads()
 
 bool RN_DATA::Add( const BOARD_ITEM* aItem )
 {
-    int net;
+    int net = NETINFO_LIST::ORPHANED;
 
     if( aItem->IsConnected() )
     {
@@ -1111,6 +1111,12 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
 
         return true;
     }
+
+    if( net == NETINFO_LIST::ORPHANED )
+        return false;
+
+    // If the netcode is set, it should be valid for indexing into vector
+    assert( net < (int) m_nets.size() );
 
     switch( aItem->Type() )
     {
