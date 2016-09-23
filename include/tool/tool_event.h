@@ -299,6 +299,11 @@ public:
         return m_actions == TA_ACTIVATE;
     }
 
+    bool IsUndoRedo() const
+    {
+        return m_actions & ( TA_UNDO_REDO_PRE | TA_UNDO_REDO_POST );
+    }
+
     ///> Returns information about key modifiers state (Ctrl, Alt, etc.)
     int Modifier( int aMask = MD_MODIFIER_MASK ) const
     {

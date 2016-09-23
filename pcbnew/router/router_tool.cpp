@@ -549,9 +549,7 @@ void ROUTER_TOOL::performRouting()
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() || evt->IsActivate() )
-            break;
-        else if( evt->IsMotion() )
+        if( evt->IsMotion() )
         {
             m_router->SetOrthoMode( evt->Modifier( MD_CTRL ) );
             updateEndItem( *evt );
@@ -605,6 +603,8 @@ void ROUTER_TOOL::performRouting()
                 still_routing = m_router->FixRoute( m_endSnapPoint, m_endItem );
             break;
         }
+        else if( evt->IsCancel() || evt->IsActivate() || evt->IsUndoRedo() )
+            break;
 
         handleCommonEvents( *evt );
     }
@@ -764,9 +764,7 @@ void ROUTER_TOOL::performDragging()
     {
         ctls->ForceCursorPosition( false );
 
-        if( evt->IsCancel() || evt->IsActivate() )
-            break;
-        else if( evt->IsMotion() )
+        if( evt->IsMotion() )
         {
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
@@ -776,6 +774,8 @@ void ROUTER_TOOL::performDragging()
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
         }
+        else if( evt->IsCancel() || evt->IsActivate() || evt->IsUndoRedo() )
+            break;
 
         handleCommonEvents( *evt );
     }
