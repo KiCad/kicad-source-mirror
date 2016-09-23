@@ -35,6 +35,7 @@ install_manifest.txt
 Documentation/doxygen
 Documentation/development/doxygen
 *.bak
+*.pyc
 .*.swp
 *~
 build-*

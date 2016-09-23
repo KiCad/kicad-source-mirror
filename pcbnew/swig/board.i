@@ -33,37 +33,34 @@
 
 By default we do not translate exceptions for EVERY C++ function since not every
 C++ function throws, and that would be unused and very bulky mapping code.
-Therefore please help gather the subset of C++ functions for this class that do
-throw and add them here, each before its respective class declaration.
+Therefore please help gather the subset of C++ functions for each class that do
+throw and add each in a separate HANDLE_EXCEPTIONS() invocation before its
+respective class declaration.  i.e. put them inside of their respective *.i
+file near the top; only class BOARD functions go in board.i.
 
 */
 HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 
 
-%include <class_board_design_settings.h>
-%{
-#include <class_board.h>
-#include <class_board_design_settings.h>
-%}
-
-
-%import dlist.h
-
-
-// Organize the two forms of include side by side so that it is easier to
-// migrate each grouping into a separate *.i file later.
-
+//%import dlist.h       // comes in from kicad.i which wraps & includes board.i
 
 %include board_item.i
-
 %include board_item_container.i
-
-%include class_board_connected_item.h
-
-
+%include board_connected_item.i
+%include board_design_settings.i
 %include pad.i
 %include track.i
 %include zone.i
+%include zone_settings.i
+%include pcb_text.i
+%include dimension.i
+%include drawsegment.i
+%include marker_pcb.i
+%include mire.i
+%include text_mod.i
+%include edge_mod.i
+%include netinfo.i
+%include netclass.i
 
 
 %include layers_id_colors_and_visibility.h
@@ -96,33 +93,19 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %}
 
 
-%include pcb_text.i
-%include dimension.i
-%include drawsegment.i
-%include marker_pcb.i
-%include mire.i
-%include text_mod.i
-%include edge_mod.i
-
-
-%include class_zone_settings.h
-%{
-#include <class_zone_settings.h>
-%}
-
-%include netinfo.i
-%include netclass.i
-
-
 // std::vector templates
-
 %template(VIA_DIMENSION_Vector) std::vector<VIA_DIMENSION>;
 %template(RATSNEST_Vector)      std::vector<RATSNEST_ITEM>;
-
-
 %include class_board.h
+%{
+#include <class_board.h>
+%}
+
 %extend BOARD
 {
+    // BOARD_ITEM_CONTAINER's interface functions will be implemented by SWIG
+    // automatically and inherited by the python wrapper class.
+
     %pythoncode
     %{
 
@@ -173,9 +156,9 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         """
         netclassmap = self.GetNetClasses().NetClasses()
 
-        # Add the Default one too, but this is probably modifying the dict (aka NETCLASS_MAP)
-        # in the BOARD.  So change code here to create a dict copy first.
-        # netclassmap = dict(netclassmap)
+        # Add the Default one too, but this is probably modifying the NETCLASS_MAP
+        # in the BOARD.  If that causes trouble, could make a deepcopy() here first.
+        # netclassmap = deepcopy(netclassmap)
         netclassmap['Default'] = self.GetNetClasses().GetDefault()
         return netclassmap
     %}

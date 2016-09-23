@@ -39,7 +39,7 @@
 
 
 // BOARD_ITEM_CONTAINER's interface functions will be implemented by SWIG
-// automatically.
+// automatically and inherited by the python wrapper class.
 
 
 /*
