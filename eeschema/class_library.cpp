@@ -1059,7 +1059,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
                     GetChars( ioe.What() )
                     );
 
-            THROW_IO_ERROR( msg );
+            wxLogError( msg );
         }
     }
 
