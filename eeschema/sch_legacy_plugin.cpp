@@ -1946,7 +1946,9 @@ public:
 
     void AddSymbol( const LIB_PART* aPart );
 
-    wxDateTime  GetLibModificationTime();
+    void DeleteAlias( const wxString& aAliasName );
+
+    wxDateTime GetLibModificationTime();
 
     bool IsFile( const wxString& aFullPathAndFileName ) const;
 
@@ -3200,6 +3202,41 @@ void SCH_LEGACY_PLUGIN_CACHE::Save()
 }
 
 
+void SCH_LEGACY_PLUGIN_CACHE::DeleteAlias( const wxString& aAliasName )
+{
+    LIB_ALIAS_MAP::iterator it = m_aliases.find( aAliasName );
+
+    if( it == m_aliases.end() )
+        THROW_IO_ERROR( wxString::Format( _( "library %s does not contain an alias %s" ),
+                                          m_libFileName.GetFullName(), aAliasName ) );
+
+    LIB_ALIAS*  alias = it->second;
+    LIB_PART*   part = alias->GetPart();
+
+    alias = part->RemoveAlias( alias );
+
+    if( !alias )
+    {
+        delete part;
+
+        if( m_aliases.size() > 1 )
+        {
+            LIB_ALIAS_MAP::iterator next = it;
+            next++;
+
+            if( next == m_aliases.end() )
+                next = m_aliases.begin();
+
+            alias = next->second;
+        }
+    }
+
+    m_aliases.erase( it );
+    ++m_modHash;
+    m_isModified = true;
+}
+
+
 void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
@@ -3274,4 +3311,15 @@ void SCH_LEGACY_PLUGIN::SaveSymbol( const wxString& aLibraryPath, const LIB_PART
 
     m_cache->AddSymbol( aSymbol );
     m_cache->Save();
+}
+
+
+void SCH_LEGACY_PLUGIN::DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
+                                     const PROPERTIES* aProperties )
+{
+    m_props = aProperties;
+
+    cacheLib( aLibraryPath );
+
+    m_cache->DeleteAlias( aAliasName );
 }
