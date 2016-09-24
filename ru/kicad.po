@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-24 10:24+0300\n"
-"PO-Revision-Date: 2016-09-24 11:49+0300\n"
+"PO-Revision-Date: 2016-09-24 11:58+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -6306,7 +6306,7 @@ msgstr "1e-9"
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:60
 msgid "u"
-msgstr "мкм"
+msgstr "мк"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:121
 msgid "micro"
