@@ -64,7 +64,7 @@ public:
      * Starts routing a single track at point aP, taking item aStartItem as anchor
      * (unless NULL).
      */
-    bool Start( const VECTOR2I& aP, ITEM* aStartItem );
+    bool Start( const VECTOR2I& aP, ITEM* aStartItem ) override;
 
     /**
      * Function Move()
@@ -73,7 +73,7 @@ public:
      * aEndItem as anchor (if not NULL).
      * (unless NULL).
      */
-    bool Move( const VECTOR2I& aP, ITEM* aEndItem );
+    bool Move( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     /**
      * Function FixRoute()
@@ -84,28 +84,28 @@ public:
      * result is violating design rules - in such case, the track is only committed
      * if Settings.CanViolateDRC() is on.
      */
-    bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem );
+    bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     /**
      * Function ToggleVia()
      *
      * Enables/disables a via at the end of currently routed trace.
      */
-    bool ToggleVia( bool aEnabled );
+    bool ToggleVia( bool aEnabled ) override;
 
     /**
      * Function SetLayer()
      *
      * Sets the current routing layer.
      */
-    bool SetLayer( int aLayer );
+    bool SetLayer( int aLayer ) override;
 
     /**
      * Function Traces()
      *
      * Returns the complete routed line, as a single-member ITEM_SET.
      */
-    const ITEM_SET Traces();
+    const ITEM_SET Traces() override;
 
     /**
      * Function CurrentEnd()
@@ -123,7 +123,7 @@ public:
      *
      * Returns the net code of currently routed track.
      */
-    const std::vector<int> CurrentNets() const;
+    const std::vector<int> CurrentNets() const override;
 
     /**
      * Function CurrentLayer()
@@ -140,14 +140,14 @@ public:
      *
      * Returns the most recent world state.
      */
-    NODE* CurrentNode( bool aLoopsRemoved = false ) const;
+    NODE* CurrentNode( bool aLoopsRemoved = false ) const override;
 
     /**
      * Function FlipPosture()
      *
      * Toggles the current posture (straight/diagonal) of the trace head.
      */
-    void FlipPosture();
+    void FlipPosture() override;
 
     /**
      * Function UpdateSizes()
@@ -156,13 +156,13 @@ public:
      * a settings class. Used to dynamically change these parameters as
      * the track is routed.
      */
-    void UpdateSizes( const SIZES_SETTINGS& aSizes );
+    void UpdateSizes( const SIZES_SETTINGS& aSizes ) override;
 
     bool IsPlacingVia() const { return m_placingVia; }
 
-    void SetOrthoMode( bool aOrthoMode );
+    void SetOrthoMode( bool aOrthoMode ) override;
 
-    void GetModifiedNets( std::vector<int>& aNets ) const;
+    void GetModifiedNets( std::vector<int>& aNets ) const override;
 
 private:
     int viaGap() const;

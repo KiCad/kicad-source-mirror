@@ -154,8 +154,8 @@ public:
     PAD_SHAPE_T GetShape() const                { return m_padShape; }
     void SetShape( PAD_SHAPE_T aShape )         { m_padShape = aShape; m_boundingRadius = -1; }
 
-    void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }   // was overload
-    const wxPoint& GetPosition() const          { return m_Pos; }   // was overload
+    void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
+    const wxPoint& GetPosition() const override { return m_Pos; }
 
     void SetY( int y )                          { m_Pos.y = y; }
     void SetX( int x )                          { m_Pos.x = x; }
@@ -179,7 +179,7 @@ public:
     const wxPoint& GetOffset() const            { return m_Offset; }
 
 
-    void Flip( const wxPoint& aCentre );        // Virtual function
+    void Flip( const wxPoint& aCentre ) override;
 
 
     /**
@@ -220,7 +220,7 @@ public:
     void GetOblongDrillGeometry( wxPoint& aStartPoint, wxPoint& aEndPoint, int& aWidth ) const;
 
     void SetLayerSet( LSET aLayerMask )         { m_layerMask = aLayerMask; }
-    LSET GetLayerSet() const                    { return m_layerMask; }
+    LSET GetLayerSet() const override           { return m_layerMask; }
 
     void SetAttribute( PAD_ATTR_T aAttribute );
     PAD_ATTR_T GetAttribute() const             { return m_Attribute; }
@@ -267,7 +267,7 @@ public:
      * @param aItem is another BOARD_CONNECTED_ITEM or NULL
      * @return int - the clearance in internal units.
      */
-    int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
+    int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const override;
 
    // Mask margins handling:
 
@@ -305,7 +305,7 @@ public:
 
     /* drawing functions */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
 
     /**
      * Function DrawShape
@@ -462,22 +462,22 @@ public:
     int GetSubRatsnest() const                  { return m_SubRatsnest; }
     void SetSubRatsnest( int aSubRatsnest )     { m_SubRatsnest = aSubRatsnest; }
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool IsOnLayer( LAYER_ID aLayer ) const
+    bool IsOnLayer( LAYER_ID aLayer ) const override
     {
         return m_layerMask[aLayer];
     }
 
-    bool HitTest( const wxPoint& aPosition ) const;
+    bool HitTest( const wxPoint& aPosition ) const override;
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "PAD" );
     }
 
     // Virtual function:
-    const EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const override;
 
     ///> Set absolute coordinates.
     void SetDrawCoord();
@@ -492,17 +492,17 @@ public:
      */
     static int Compare( const D_PAD* padref, const D_PAD* padcmp );
 
-    void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector ) override
     {
         m_Pos += aMoveVector;
         SetLocalCoord();
     }
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return pad_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return pad_xpm; }
 
     /**
      * Function ShowPadShape
@@ -524,7 +524,7 @@ public:
      */
     void AppendConfigs( PARAM_CFG_ARRAY* aResult );
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
     /**
      * same as Clone, but returns a D_PAD item.
@@ -537,13 +537,13 @@ public:
     }
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLOD()
-    virtual unsigned int ViewGetLOD( int aLayer ) const;
+    virtual unsigned int ViewGetLOD( int aLayer ) const override;
 
     /// @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const override;
 
     /**
      * Function CopyNetlistSettings
@@ -563,7 +563,7 @@ public:
     void CopyNetlistSettings( D_PAD* aPad, bool aCopyLocalSettings );
 
 #if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
+    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
 

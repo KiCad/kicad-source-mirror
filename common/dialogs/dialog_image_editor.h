@@ -53,15 +53,15 @@ public:
     void TransfertToImage( BITMAP_BASE* aItem );
 
 private:
-    void OnUndoLastChange( wxCommandEvent& event );
-    void OnGreyScaleConvert( wxCommandEvent& event );
-    void OnHalfSize( wxCommandEvent& event );
-    void OnMirrorX_click( wxCommandEvent& event );
-    void OnMirrorY_click( wxCommandEvent& event );
-    void OnRotateClick( wxCommandEvent& event );
-    void OnOK_Button( wxCommandEvent& aEvent );
-    void OnCancel_Button( wxCommandEvent& aEvent );
-    void OnRedrawPanel( wxPaintEvent& event );
+    void OnUndoLastChange( wxCommandEvent& event ) override;
+    void OnGreyScaleConvert( wxCommandEvent& event ) override;
+    void OnHalfSize( wxCommandEvent& event ) override;
+    void OnMirrorX_click( wxCommandEvent& event ) override;
+    void OnMirrorY_click( wxCommandEvent& event ) override;
+    void OnRotateClick( wxCommandEvent& event ) override;
+    void OnOK_Button( wxCommandEvent& aEvent ) override;
+    void OnCancel_Button( wxCommandEvent& aEvent ) override;
+    void OnRedrawPanel( wxPaintEvent& event ) override;
     bool CheckValues();
 };
 

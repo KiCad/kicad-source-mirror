@@ -61,9 +61,9 @@ static struct IFACE : public KIFACE_I
         KIFACE_I( aName, aType )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
 
-    void OnKifaceEnd();
+    void OnKifaceEnd() override;
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {

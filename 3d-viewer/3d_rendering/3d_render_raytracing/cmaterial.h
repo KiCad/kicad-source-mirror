@@ -123,7 +123,7 @@ public:
                    const SFVEC3F &aDiffuseObjColor,
                    const SFVEC3F &aDirToLight,
                    const SFVEC3F &aLightColor,
-                   float aShadowAttenuationFactor ) const;
+                   float aShadowAttenuationFactor ) const override;
 };
 
 #endif // _CMATERIAL_H_

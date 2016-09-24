@@ -47,7 +47,7 @@ public:
         return m_item->ViewBBox();
     }
 
-    void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const;
+    void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
 
     void ViewGetLayers( int aLayers[], int& aCount ) const
     {

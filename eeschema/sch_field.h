@@ -120,7 +120,7 @@ public:
         return len == 0 || ( len == 1 && m_Text[0] == wxChar( '~' ) );
     }
 
-    void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem ) override;
 
     /**
      * Function ImportValues
@@ -130,7 +130,7 @@ public:
      */
     void ImportValues( const LIB_FIELD& aSource );
 
-    int GetPenSize() const;
+    int GetPenSize() const override;
 
     /**
      * Function IsVisible
@@ -144,7 +144,7 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
     // Geometric transforms (used in block operations):
 
@@ -154,7 +154,7 @@ public:
     }
 
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
     /**
      * @copydoc SCH_ITEM::MirrorX()
@@ -178,29 +178,29 @@ public:
     {
     }
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
-    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL );
+    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL ) override;
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const;
+    BITMAP_DEF GetMenuImage() const override;
 
     bool IsReplaceable() const { return true; }
 
     wxPoint GetLibPosition() const { return m_Pos; }
 
-    wxPoint GetPosition() const;
+    wxPoint GetPosition() const override;
 
-    void SetPosition( const wxPoint& aPosition );
+    void SetPosition( const wxPoint& aPosition ) override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter );
+    void Plot( PLOTTER* aPlotter ) override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override

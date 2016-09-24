@@ -127,7 +127,7 @@ public:
     ~SHAPE_LINE_CHAIN()
     {}
 
-    SHAPE* Clone() const;
+    SHAPE* Clone() const override;
 
     /**
      * Function Clear()
@@ -261,7 +261,7 @@ public:
     }
 
     /// @copydoc SHAPE::BBox()
-    const BOX2I BBox( int aClearance = 0 ) const
+    const BOX2I BBox( int aClearance = 0 ) const override
     {
         BOX2I bbox;
         bbox.Compute( m_points );
@@ -280,7 +280,7 @@ public:
      * @param aClearance minimum distance that does not qualify as a collision.
      * @return true, when a collision has been found
      */
-    bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const;
+    bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override;
 
     /**
      * Function Collide()
@@ -290,7 +290,7 @@ public:
      * @param aClearance minimum distance that does not qualify as a collision.
      * @return true, when a collision has been found
      */
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const;
+    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override;
 
     /**
      * Function Distance()
@@ -552,10 +552,10 @@ public:
     const VECTOR2I NearestPoint( const SEG& aSeg, int& dist ) const;
 
     /// @copydoc SHAPE::Format()
-    const std::string Format() const;
+    const std::string Format() const override;
 
     /// @copydoc SHAPE::Parse()
-    bool Parse( std::stringstream& aStream );
+    bool Parse( std::stringstream& aStream ) override;
 
     bool operator!=( const SHAPE_LINE_CHAIN& aRhs ) const
     {
@@ -573,13 +573,13 @@ public:
 
     bool CompareGeometry( const SHAPE_LINE_CHAIN & aOther ) const;
 
-    void Move( const VECTOR2I& aVector )
+    void Move( const VECTOR2I& aVector ) override
     {
         for( std::vector<VECTOR2I>::iterator i = m_points.begin(); i != m_points.end(); ++i )
             (*i) += aVector;
     }
 
-    bool IsSolid() const
+    bool IsSolid() const override
     {
         return false;
     }

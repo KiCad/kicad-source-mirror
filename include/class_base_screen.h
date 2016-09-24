@@ -491,7 +491,7 @@ public:
      * returns the class name.
      * @return wxString
      */
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "BASE_SCREEN" );
     }
@@ -501,7 +501,7 @@ public:
     void ClearBlockCommand() { m_BlockLocate.Clear(); }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // overload
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 };
 

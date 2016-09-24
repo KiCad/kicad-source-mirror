@@ -121,11 +121,11 @@ public:
      * @param aPoints = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
      */
-    void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos );
+    void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos ) override;
 
-    void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem ) override;
 
-    int GetPenSize() const;
+    int GetPenSize() const override;
 
     /**
      * Get the sheet label number.
@@ -160,9 +160,9 @@ public:
      */
     SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_Parent; }
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
@@ -175,13 +175,13 @@ public:
         m_Pos += aMoveVector;
     }
 
-    void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
     bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL )
     {
@@ -190,19 +190,19 @@ public:
 
     bool IsReplaceable() const { return true; }
 
-    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
+    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
     bool IsConnectable() const { return true; }
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const { return  add_hierar_pin_xpm; }
 
     void SetPosition( const wxPoint& aPosition ) { ConstrainOnEdge( aPosition ); }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 };
 
 
@@ -323,11 +323,11 @@ public:
      */
     int GetScreenCount() const;
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /* there is no member for orientation in sch_sheet, to preserve file
      * format, we detect orientation based on pin edges
@@ -426,12 +426,12 @@ public:
      */
     int GetMinHeight() const;
 
-    int GetPenSize() const;
+    int GetPenSize() const override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
-    EDA_RECT const GetBoundingBox() const;
+    EDA_RECT const GetBoundingBox() const override;
 
     /**
      * Function GetResizePos
@@ -441,7 +441,7 @@ public:
      */
     wxPoint GetResizePosition() const;
 
-    void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem ) override;
 
     /**
      * Function ComponentCount
@@ -525,15 +525,15 @@ public:
         }
     }
 
-    void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position ) override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
-    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL );
+    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL ) override;
 
     bool IsReplaceable() const { return true; }
 
@@ -556,21 +556,21 @@ public:
      */
     wxPoint GetFileNamePosition();
 
-    void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
+    void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList ) override;
 
-    bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
+    bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
-    bool IsDangling() const;
+    bool IsDangling() const override;
 
-    bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     bool IsConnectable() const { return true; }
 
-    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const { return add_hierarchical_subsheet_xpm; }
 
@@ -581,15 +581,15 @@ public:
 
     wxPoint GetPosition() const { return m_pos; }
 
-    void SetPosition( const wxPoint& aPosition );
+    void SetPosition( const wxPoint& aPosition ) override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter );
+    void Plot( PLOTTER* aPlotter ) override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

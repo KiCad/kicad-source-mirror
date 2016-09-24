@@ -283,7 +283,7 @@ public:
      * @throw IO_ERROR if a file IO error occurs.
      * @throw PARSE_ERROR if an error occurs while parsing the file.
      */
-    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer );
+    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer ) override;
 };
 
 
@@ -397,7 +397,7 @@ public:
         delete m_parser;
     }
 
-    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer );
+    virtual void LoadNetlist() throw ( IO_ERROR, PARSE_ERROR, boost::bad_pointer ) override;
 };
 
 

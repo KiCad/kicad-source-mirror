@@ -58,7 +58,7 @@ public:
      * Function OnGetItemText
      * is an overloaded method needed by wxListCtrl with wxLC_VIRTUAL options
      */
-    virtual wxString OnGetItemText( long item, long column ) const;
+    virtual wxString OnGetItemText( long item, long column ) const override;
 
     /**
      * Function SetRowItems

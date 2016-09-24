@@ -94,7 +94,7 @@ RN_NODE_OR_FILTER operator||( const RN_NODE_FILTER& aFilter1, const RN_NODE_FILT
 ///> Leaves nodes that can be a ratsnest line target
 struct LINE_TARGET : public RN_NODE_FILTER
 {
-    bool operator()( const RN_NODE_PTR& aNode ) const
+    bool operator()( const RN_NODE_PTR& aNode ) const override
     {
         return !aNode->GetNoLine();
     }
@@ -107,7 +107,7 @@ struct LINE_TARGET_SAME_TAG : public RN_NODE_FILTER
         m_tag( aTag )
     {}
 
-    bool operator()( const RN_NODE_PTR& aNode ) const
+    bool operator()( const RN_NODE_PTR& aNode ) const override
     {
         return !aNode->GetNoLine() && aNode->GetTag() == m_tag;
     }
@@ -122,7 +122,7 @@ struct LINE_TARGET_DIFF_TAG : public RN_NODE_FILTER
         m_tag( aTag )
     {}
 
-    bool operator()( const RN_NODE_PTR& aNode ) const
+    bool operator()( const RN_NODE_PTR& aNode ) const override
     {
         return !aNode->GetNoLine() && aNode->GetTag() == m_tag;
     }
@@ -137,7 +137,7 @@ struct RN_NODE_AND_FILTER : public RN_NODE_FILTER
         m_filter1( aFilter1 ), m_filter2( aFilter2 )
     {}
 
-    bool operator()( const RN_NODE_PTR& aNode ) const
+    bool operator()( const RN_NODE_PTR& aNode ) const override
     {
         return m_filter1( aNode ) && m_filter2( aNode );
     }
@@ -153,7 +153,7 @@ struct RN_NODE_OR_FILTER : public RN_NODE_FILTER
         m_filter1( aFilter1 ), m_filter2( aFilter2 )
     {}
 
-    bool operator()( const RN_NODE_PTR& aNode ) const
+    bool operator()( const RN_NODE_PTR& aNode ) const override
     {
         return m_filter1( aNode ) || m_filter2( aNode );
     }

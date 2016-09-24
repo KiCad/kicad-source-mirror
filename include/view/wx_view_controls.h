@@ -69,7 +69,7 @@ public:
      *
      * @param aEnabled says whether the option should be enabled or disabled.
      */
-    void SetGrabMouse( bool aEnabled );
+    void SetGrabMouse( bool aEnabled ) override;
 
     /**
      * Function SetAutoPan()
@@ -77,7 +77,7 @@ public:
      *
      * @param aEnabled says whether the option should enabled or disabled.
      */
-    void SetAutoPan( bool aEnabled )
+    void SetAutoPan( bool aEnabled ) override
     {
         m_autoPanEnabled = aEnabled;
 
@@ -86,17 +86,17 @@ public:
     }
 
     /// @copydoc VIEW_CONTROLS::GetMousePosition()
-    VECTOR2I GetMousePosition() const;
+    VECTOR2I GetMousePosition() const override;
 
     /// @copydoc VIEW_CONTROLS::GetCursorPosition()
-    VECTOR2D GetCursorPosition() const;
+    VECTOR2D GetCursorPosition() const override;
 
     /// @copydoc VIEW_CONTROLS::CursorWarp()
     void WarpCursor( const VECTOR2D& aPosition, bool aWorldCoordinates = false,
-            bool aWarpView = false ) const;
+            bool aWarpView = false ) const override;
 
     /// @copydoc VIEW_CONTROLS::CenterOnCursor()
-    void CenterOnCursor() const;
+    void CenterOnCursor() const override;
 
     /// Adjusts the scrollbars position to match the current viewport.
     void UpdateScrollbars();

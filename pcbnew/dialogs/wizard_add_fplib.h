@@ -86,13 +86,13 @@ public:
     void OnSourceCheck( wxCommandEvent& aEvent );
     void OnSelectFiles( wxCommandEvent& aEvent );
     void OnCheckGithubList( wxCommandEvent& aEvent );
-    void OnPageChanged( wxWizardEvent& aEvent );
-    void OnSelectAllGH( wxCommandEvent& aEvent );
-    void OnUnselectAllGH( wxCommandEvent& aEvent );
-    void OnChangeSearch( wxCommandEvent& aEvent );
-    void OnWizardFinished( wxWizardEvent& aEvent );
-    void OnBrowseButtonClick( wxCommandEvent& aEvent );
-    void OnCheckSaveCopy( wxCommandEvent& aEvent );
+    void OnPageChanged( wxWizardEvent& aEvent ) override;
+    void OnSelectAllGH( wxCommandEvent& aEvent ) override;
+    void OnUnselectAllGH( wxCommandEvent& aEvent ) override;
+    void OnChangeSearch( wxCommandEvent& aEvent ) override;
+    void OnWizardFinished( wxWizardEvent& aEvent ) override;
+    void OnBrowseButtonClick( wxCommandEvent& aEvent ) override;
+    void OnCheckSaveCopy( wxCommandEvent& aEvent ) override;
 
     class LIBRARY
     {

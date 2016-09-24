@@ -47,10 +47,10 @@ public:
     ~PCB_EDITOR_CONTROL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason );
+    void Reset( RESET_REASON aReason ) override;
 
     /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init();
+    bool Init() override;
 
     // Track & via size control
     int TrackWidthInc( const TOOL_EVENT& aEvent );
@@ -102,7 +102,7 @@ public:
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
-    void SetTransitions();
+    void SetTransitions() override;
 
 private:
     ///> Pointer to the currently used edit frame.

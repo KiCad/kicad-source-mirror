@@ -49,10 +49,10 @@ public:
     virtual ~WRL1MATBINDING();
 
     // functions inherited from WRL1NODE
-    bool Read( WRLPROC& proc, WRL1BASE* aTopNode );
-    bool AddRefNode( WRL1NODE* aNode );
-    bool AddChildNode( WRL1NODE* aNode );
-    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp );
+    bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
+    bool AddRefNode( WRL1NODE* aNode ) override;
+    bool AddChildNode( WRL1NODE* aNode ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
 };
 
 #endif  // VRML1_MATBINDING_H

@@ -102,11 +102,11 @@ public:
                      const BOARD_ITEM &aBoardItem );
 
     // Imported from COBJECT2D
-    bool Overlaps( const CBBOX2D &aBBox ) const;
-    bool Intersects( const CBBOX2D &aBBox ) const;
-    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const;
-    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const;
-    bool IsPointInside( const SFVEC2F &aPoint ) const;
+    bool Overlaps( const CBBOX2D &aBBox ) const override;
+    bool Intersects( const CBBOX2D &aBBox ) const override;
+    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
+    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
+    bool IsPointInside( const SFVEC2F &aPoint ) const override;
 };
 
 
@@ -126,11 +126,11 @@ public:
     CDUMMYBLOCK2D( const CBBOX2D &aBBox, const BOARD_ITEM &aBoardItem );
 
      // Imported from COBJECT2D
-     bool Overlaps( const CBBOX2D &aBBox ) const;
-     bool Intersects( const CBBOX2D &aBBox ) const;
-     bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const;
-     INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const;
-     bool IsPointInside( const SFVEC2F &aPoint ) const;
+     bool Overlaps( const CBBOX2D &aBBox ) const override;
+     bool Intersects( const CBBOX2D &aBBox ) const override;
+     bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
+     INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
+     bool IsPointInside( const SFVEC2F &aPoint ) const override;
 };
 
 /**

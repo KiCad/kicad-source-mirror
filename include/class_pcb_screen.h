@@ -61,7 +61,7 @@ public:
     void        SetPreviousZoom();
     void        SetLastZoom();
 
-    virtual int MilsToIuScalar();
+    virtual int MilsToIuScalar() override;
 
     /**
      * Function GetCurItem
@@ -99,7 +99,7 @@ public:
      * items are removed from the beginning of the list.
      * So this function can be called to remove old commands
      */
-    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
+    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
 };
 
 #endif  // CLASS_PCB_SCREEN_H_

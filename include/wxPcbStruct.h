@@ -162,7 +162,7 @@ protected:
      */
     void syncLayerVisibilities();
 
-    virtual void unitsChangeRefresh();
+    virtual void unitsChangeRefresh() override;
 
     /**
      * Function doAutoSave
@@ -171,13 +171,13 @@ protected:
      *
      * @return true if the auto save was successful.
      */
-    virtual bool doAutoSave();
+    virtual bool doAutoSave() override;
 
     /**
      * Function isautoSaveRequired
      * returns true if the board has been modified.
      */
-    virtual bool isAutoSaveRequired() const;
+    virtual bool isAutoSaveRequired() const override;
 
     /**
      * Function duplicateZone
@@ -198,7 +198,7 @@ protected:
      * Duplicate selected item if possible and start a move
      * @param aIncrement increment the item number if appropriate
      */
-    void duplicateItems( bool aIncrement ); //override
+    void duplicateItems( bool aIncrement ) override;
 
     // protected so that PCB::IFACE::CreateWindow() is the only factory.
     PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -240,9 +240,9 @@ public:
      * this is a virtual function called by EDA_DRAW_FRAME::OnSockRequest().
      * @param cmdline = received command from socket
      */
-    virtual void ExecuteRemoteCommand( const char* cmdline );
+    virtual void ExecuteRemoteCommand( const char* cmdline ) override;
 
-    void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // virtual overload from KIWAY_PLAYER
+    void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     /**
      * Function ToPlotter
@@ -303,7 +303,7 @@ public:
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, LSET aPrintMaskLayer, bool aPrintMirrorMode,
-                            void* aData = NULL );
+                            void* aData = NULL ) override;
 
     void GetKicadAbout( wxCommandEvent& event );
 
@@ -311,7 +311,7 @@ public:
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool IsGridVisible() const;
+    virtual bool IsGridVisible() const override;
 
     /**
      * Function SetGridVisibility() , virtual
@@ -319,22 +319,22 @@ public:
      * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
-    virtual void SetGridVisibility( bool aVisible );
+    virtual void SetGridVisibility( bool aVisible ) override;
 
     /**
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual EDA_COLOR_T GetGridColor() const;
+    virtual EDA_COLOR_T GetGridColor() const override;
 
     /**
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void SetGridColor( EDA_COLOR_T aColor );
+    virtual void SetGridColor( EDA_COLOR_T aColor ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::SetCursorShape()
-    virtual void SetCursorShape( int aCursorShape );
+    virtual void SetCursorShape( int aCursorShape ) override;
 
     // Configurations:
     void Process_Config( wxCommandEvent& event );
@@ -358,7 +358,7 @@ public:
      * saves changes to the project settings to the project (.pro) file.
      * @param aAskForSave = true to open a dialog before saving the settings
      */
-    void SaveProjectSettings( bool aAskForSave );
+    void SaveProjectSettings( bool aAskForSave ) override;
 
     /**
      * Load the current project's file configuration settings which are pertinent
@@ -385,9 +385,9 @@ public:
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings();
 
-    void LoadSettings( wxConfigBase* aCfg );    // override virtual
+    void LoadSettings( wxConfigBase* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg );    // override virtual
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     wxConfigBase* GetSettings() { return config(); };
 
@@ -412,7 +412,7 @@ public:
     void SetLastNetListRead( const wxString& aNetListFile );
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
     /**
      * Function OnHotKey.
@@ -423,7 +423,7 @@ public:
      * @param aPosition The cursor position in logical (drawing) units.
      * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
      */
-    bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+    bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
 
     /**
      * Function OnHotkeyDeleteItem
@@ -508,7 +508,7 @@ public:
      */
     TRACK * OnHotkeyBeginRoute( wxDC* aDC );
 
-    void OnCloseWindow( wxCloseEvent& Event );
+    void OnCloseWindow( wxCloseEvent& Event ) override;
     void Process_Special_Functions( wxCommandEvent& event );
     void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
     void OnSelectTool( wxCommandEvent& aEvent );
@@ -523,13 +523,13 @@ public:
     void ProcessMuWaveFunctions( wxCommandEvent& event );
     void MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
 
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void ReCreateHToolbar();
-    void ReCreateAuxiliaryToolbar();
-    void ReCreateVToolbar();
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
+    void ReCreateHToolbar() override;
+    void ReCreateAuxiliaryToolbar() override;
+    void ReCreateVToolbar() override;
     void ReCreateMicrowaveVToolbar();
     void ReCreateOptToolbar();
-    void ReCreateMenuBar();
+    void ReCreateMenuBar() override;
 
     /**
      * Re create the layer Box by clearing the old list, and building
@@ -561,14 +561,14 @@ public:
      * to update auxiliary information.
      * </p>
      */
-    virtual void OnModify();
+    virtual void OnModify() override;
 
     /**
      * Function SetActiveLayer
      * will change the currently active layer to \a aLayer and also
      * update the PCB_LAYER_WIDGET.
      */
-    virtual void SetActiveLayer( LAYER_ID aLayer );
+    virtual void SetActiveLayer( LAYER_ID aLayer ) override;
 
     /**
      * Function IsElementVisible
@@ -606,12 +606,12 @@ public:
      * Function Show3D_Frame
      * displays the 3D view of current printed circuit board.
      */
-    void Show3D_Frame( wxCommandEvent& event );
+    void Show3D_Frame( wxCommandEvent& event ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    void UseGalCanvas( bool aEnable );
+    void UseGalCanvas( bool aEnable ) override;
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     /**
      * Function ShowDesignRulesEditor
@@ -624,8 +624,8 @@ public:
     void PrepareLayerIndicator();
 
     /* mouse functions events: */
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
+    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
 
     /**
      * Function OnRightClick
@@ -634,10 +634,10 @@ public:
      * @param aMousePos The current mouse position
      * @param aPopMenu The menu to add to.
      */
-    bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu );
+    bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu ) override;
 
     void OnSelectOptionToolbar( wxCommandEvent& event );
-    void ToolOnRightClick( wxCommandEvent& event );
+    void ToolOnRightClick( wxCommandEvent& event ) override;
 
     /* Block operations: */
 
@@ -649,7 +649,7 @@ public:
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int BlockCommand( EDA_KEY aKey );
+    virtual int BlockCommand( EDA_KEY aKey ) override;
 
     /**
      * Function HandleBlockPlace()
@@ -658,7 +658,7 @@ public:
      * (bloc move, drag, copy .. )
      * Parameters must be initialized in GetScreen()->m_BlockLocate
      */
-    virtual void HandleBlockPlace( wxDC* DC );
+    virtual void HandleBlockPlace( wxDC* DC ) override;
 
     /**
      * Function HandleBlockEnd()
@@ -670,7 +670,7 @@ public:
      * @return false if no item selected, or command finished,
      * true if some items found and HandleBlockPlace must be called later
      */
-    virtual bool HandleBlockEnd( wxDC* DC );
+    virtual bool HandleBlockEnd( wxDC* DC ) override;
 
     /**
      * Function Block_SelectItems
@@ -812,7 +812,7 @@ public:
     bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
                          bool aForceFileDialog = false );
      */
-    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 );
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
      * Function AppendBoardFile
@@ -858,13 +858,13 @@ public:
     bool Clear_Pcb( bool aQuery );
 
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
-    void SetBoard( BOARD* aBoard );
+    void SetBoard( BOARD* aBoard ) override;
 
     ///> @copydoc PCB_BASE_EDIT_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
     ///> @copydoc PCB_BASE_FRAME::SetPageSettings()
-    void SetPageSettings( const PAGE_INFO& aPageSettings ); // overload
+    void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
 
     // Drc control
 
@@ -1111,7 +1111,7 @@ public:
      * @param aDC = the current device context
      * @param aItem = a pointer to the BOARD_ITEM to edit
      */
-    void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem );
+    void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem ) override;
 
     /**
      * Locate track or pad and highlight the corresponding net.
@@ -1261,7 +1261,7 @@ public:
     bool MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
 
     void Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
-    void SwitchLayer( wxDC* DC, LAYER_ID layer );
+    void SwitchLayer( wxDC* DC, LAYER_ID layer ) override;
 
     /**
      * Function Add45DegreeSegment
@@ -1642,7 +1642,7 @@ public:
 
     void Begin_Self( wxDC* DC );
 
-    void ShowChangedLanguage();         // override EDA_BASE_FRAME virtual
+    void ShowChangedLanguage() override;
 
     /**
      * Function UpdateTitle

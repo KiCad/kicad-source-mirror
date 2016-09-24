@@ -63,7 +63,7 @@ public:
         (void) aPlotter;
     }
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
     EDA_RECT const GetBoundingBox() const;      // Virtual
 
@@ -75,11 +75,11 @@ public:
     }
 
 
-    void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position ) override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
     /**
      * Function Matches, virtual from the base class EDA_ITEM
@@ -91,11 +91,11 @@ public:
      * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if the DRC main or auxiliary text matches the search criteria.
      */
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     wxString GetSelectMenuText() const { return wxString( _( "ERC Marker" ) ); }
 
@@ -105,9 +105,9 @@ public:
 
     void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

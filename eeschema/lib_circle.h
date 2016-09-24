@@ -42,7 +42,7 @@ class LIB_CIRCLE : public LIB_ITEM
                       EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
                       const TRANSFORM& aTransform );
 
-    void calcEdit( const wxPoint& aPosition );
+    void calcEdit( const wxPoint& aPosition ) override;
 
 public:
     LIB_CIRCLE( LIB_PART * aParent );
@@ -57,39 +57,39 @@ public:
     }
 
 
-    bool Save( OUTPUTFORMATTER& aFormatter );
+    bool Save( OUTPUTFORMATTER& aFormatter ) override;
 
-    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const;
+    bool HitTest( const wxPoint& aPosition ) const override;
 
-    bool HitTest( const wxPoint& aPosRef, int aThreshold, const TRANSFORM& aTransform ) const;
+    bool HitTest( const wxPoint& aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;
 
-    int GetPenSize( ) const;
+    int GetPenSize( ) const override;
 
     const EDA_RECT GetBoundingBox() const;  // Virtual
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
+    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
 
-    bool ContinueEdit( const wxPoint aNextPoint );
+    bool ContinueEdit( const wxPoint aNextPoint ) override;
 
-    void EndEdit( const wxPoint& aPosition, bool aAbort = false );
+    void EndEdit( const wxPoint& aPosition, bool aAbort = false ) override;
 
-    void SetOffset( const wxPoint& aOffset );
+    void SetOffset( const wxPoint& aOffset ) override;
 
-    bool Inside( EDA_RECT& aRect ) const;
+    bool Inside( EDA_RECT& aRect ) const override;
 
-    void Move( const wxPoint& aPosition );
+    void Move( const wxPoint& aPosition ) override;
 
     wxPoint GetPosition() const { return m_Pos; }
 
-    void MirrorHorizontal( const wxPoint& aCenter );
+    void MirrorHorizontal( const wxPoint& aCenter ) override;
 
-    void MirrorVertical( const wxPoint& aCenter );
+    void MirrorVertical( const wxPoint& aCenter ) override;
 
-    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform );
@@ -102,11 +102,11 @@ public:
 
     int GetRadius() const { return m_Radius; }
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const { return  add_circle_xpm; }
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 private:
 
@@ -118,7 +118,7 @@ private:
      *      - Circle vertical (Y) position.
      *      - Circle radius.
      */
-    int compare( const LIB_ITEM& aOther ) const;
+    int compare( const LIB_ITEM& aOther ) const override;
 };
 
 

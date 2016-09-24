@@ -61,8 +61,8 @@ public:
     bool GetNetName( wxString& aName );
 
 private:
-    void onCellClick( wxGridEvent& event );
-	void onFilterChange( wxCommandEvent& event );
+    void onCellClick( wxGridEvent& event ) override;
+	void onFilterChange( wxCommandEvent& event ) override;
 
     void buildNetsList();
 };

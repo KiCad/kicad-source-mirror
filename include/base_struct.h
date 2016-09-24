@@ -484,10 +484,10 @@ public:
     EDA_ITEM& operator=( const EDA_ITEM& aItem );
 
     /// @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
 #if defined(DEBUG)
 

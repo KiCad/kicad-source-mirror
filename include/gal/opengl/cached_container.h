@@ -48,19 +48,19 @@ public:
     ~CACHED_CONTAINER();
 
     ///> @copydoc VERTEX_CONTAINER::SetItem()
-    virtual void SetItem( VERTEX_ITEM* aItem );
+    virtual void SetItem( VERTEX_ITEM* aItem ) override;
 
     ///> @copydoc VERTEX_CONTAINER::FinishItem()
-    virtual void FinishItem();
+    virtual void FinishItem() override;
 
     ///> @copydoc VERTEX_CONTAINER::Allocate()
-    virtual VERTEX* Allocate( unsigned int aSize );
+    virtual VERTEX* Allocate( unsigned int aSize ) override;
 
     ///> @copydoc VERTEX_CONTAINER::Delete()
-    virtual void Delete( VERTEX_ITEM* aItem );
+    virtual void Delete( VERTEX_ITEM* aItem ) override;
 
     ///> @copydoc VERTEX_CONTAINER::Clear()
-    virtual void Clear();
+    virtual void Clear() override;
 
     /**
      * Function GetBufferHandle()
@@ -81,10 +81,10 @@ public:
     }
 
     ///> @copydoc VERTEX_CONTAINER::Map()
-    void Map();
+    void Map() override;
 
     ///> @copydoc VERTEX_CONTAINER::Unmap()
-    void Unmap();
+    void Unmap() override;
 
 protected:
     ///> Maps size of free memory chunks to their offsets

@@ -53,17 +53,17 @@ public:
     PCB( BOARD* aBoard );
     ~PCB();
 
-    LAYER_ID        GetKiCadLayer( int aPCadLayer );
-    LAYER_TYPE_T    GetLayerType( int aPCadLayer );
-    wxString        GetLayerNetNameRef( int aPCadLayer );
-    int             GetNewTimestamp();
-    int             GetNetCode( wxString aNetName );
+    LAYER_ID        GetKiCadLayer( int aPCadLayer ) override;
+    LAYER_TYPE_T    GetLayerType( int aPCadLayer ) override;
+    wxString        GetLayerNetNameRef( int aPCadLayer ) override;
+    int             GetNewTimestamp() override;
+    int             GetNetCode( wxString aNetName ) override;
 
     void            Parse( wxStatusBar* aStatusBar,
                            wxXmlDocument* aXmlDoc,
                            wxString     aActualConversion );
 
-    void            AddToBoard();
+    void            AddToBoard() override;
 
 private:
     int             m_timestamp_cnt;

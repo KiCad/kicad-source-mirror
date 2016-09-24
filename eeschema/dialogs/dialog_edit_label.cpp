@@ -76,10 +76,10 @@ public:
     }
 
 private:
-    void InitDialog( );
-    virtual void OnEnterKey( wxCommandEvent& aEvent );
-    virtual void OnOkClick( wxCommandEvent& aEvent );
-    virtual void OnCancelClick( wxCommandEvent& aEvent );
+    void InitDialog( ) override;
+    virtual void OnEnterKey( wxCommandEvent& aEvent ) override;
+    virtual void OnOkClick( wxCommandEvent& aEvent ) override;
+    virtual void OnCancelClick( wxCommandEvent& aEvent ) override;
     void TextPropertiesAccept( wxCommandEvent& aEvent );
 
     SCH_EDIT_FRAME* m_Parent;

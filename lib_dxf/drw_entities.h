@@ -159,7 +159,7 @@ public:
         thickness = 0;
     }
 
-    virtual void applyExtrusion() {}
+    virtual void applyExtrusion() override {}
 
     void parseCode( int code, dxfReader* reader );
 
@@ -183,7 +183,7 @@ public:
         secPoint.z = 0;
     }
 
-    virtual void applyExtrusion() {}
+    virtual void applyExtrusion() override {}
     void parseCode( int code, dxfReader* reader );
 
 public:
@@ -232,7 +232,7 @@ public:
         radious = 0.0;
     }
 
-    virtual void    applyExtrusion();
+    virtual void    applyExtrusion() override;
     void            parseCode( int code, dxfReader* reader );
 
 public:
@@ -255,7 +255,7 @@ public:
         endangle    = 0.0;
     }
 
-    virtual void    applyExtrusion();
+    virtual void    applyExtrusion() override;
     void            parseCode( int code, dxfReader* reader );
 
 public:
@@ -284,7 +284,7 @@ public:
 
     void            parseCode( int code, dxfReader* reader );
     void            toPolyline( DRW_Polyline* pol, int parts = 128 );
-    virtual void    applyExtrusion();
+    virtual void    applyExtrusion() override;
     void            correctAxis();
 
 public:
@@ -309,7 +309,7 @@ public:
         fourPoint.z     = 0;
     }
 
-    virtual void    applyExtrusion();
+    virtual void    applyExtrusion() override;
     void            parseCode( int code, dxfReader* reader );
 
 public:
@@ -347,7 +347,7 @@ public:
         invisibleflag = 0;
     }
 
-    virtual void applyExtrusion() {}
+    virtual void applyExtrusion() override {}
     void parseCode( int code, dxfReader* reader );
 
 public:
@@ -370,7 +370,7 @@ public:
         name    = "*U0";
     }
 
-    virtual void applyExtrusion() {}
+    virtual void applyExtrusion() override {}
     void parseCode( int code, dxfReader* reader );
 
 public:
@@ -400,7 +400,7 @@ public:
         rowspace    = 0;
     }
 
-    virtual void applyExtrusion() { DRW_Point::applyExtrusion(); }
+    virtual void applyExtrusion() override { DRW_Point::applyExtrusion(); }
     void parseCode( int code, dxfReader* reader );
 
 public:
@@ -442,7 +442,7 @@ public:
         }
     }
 
-    virtual void applyExtrusion();
+    virtual void applyExtrusion() override;
 
     void addVertex( DRW_Vertex2D v )
     {
@@ -521,7 +521,7 @@ public:
         height  = 0.0;
     }
 
-    virtual void applyExtrusion() {}    // RLZ TODO
+    virtual void applyExtrusion() override {}
     void parseCode( int code, dxfReader* reader );
 
 public:
@@ -715,7 +715,7 @@ public:
         }
     }
 
-    virtual void applyExtrusion() {}
+    virtual void applyExtrusion() override {}
 
     void parseCode( int code, dxfReader* reader );
 
@@ -820,7 +820,7 @@ public:
         looplist.push_back( v );
     }
 
-    virtual void applyExtrusion() {}
+    virtual void applyExtrusion() override {}
     void parseCode( int code, dxfReader* reader );
 
 public:
@@ -988,7 +988,7 @@ public:
 
     void parseCode( int code, dxfReader* reader );
 
-    virtual void applyExtrusion() {}
+    virtual void applyExtrusion() override {}
 
     DRW_Coord getDefPoint() const { return defPoint; }      /*!< Definition point, code 10, 20 & 30 */
     void setDefPoint( const DRW_Coord& p ) { defPoint = p; }
@@ -1280,7 +1280,7 @@ public:
         }
     }
 
-    virtual void applyExtrusion() {}
+    virtual void applyExtrusion() override {}
     void parseCode( int code, dxfReader* reader );
 
 public:
@@ -1324,7 +1324,7 @@ public:
         centerPY    = 97.5;
     }
 
-    virtual void applyExtrusion() {}
+    virtual void applyExtrusion() override {}
     void parseCode( int code, dxfReader* reader );
 
 public:

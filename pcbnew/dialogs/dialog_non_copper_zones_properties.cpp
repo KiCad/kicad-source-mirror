@@ -59,8 +59,8 @@ private:
     ZONE_SETTINGS*  m_ptr;
     ZONE_SETTINGS   m_settings;     // working copy of zone settings
 
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override;
     void Init();
 
 public:

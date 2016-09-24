@@ -87,16 +87,16 @@ public:
 
     int GetValue() const { return m_Value; }
 
-    const wxPoint&  GetPosition() const;
+    const wxPoint&  GetPosition() const override;
 
-    void            SetPosition( const wxPoint& aPos ); // override, sets m_Text's position too
+    void            SetPosition( const wxPoint& aPos ) override;
 
     void SetTextSize( const wxSize& aTextSize )
     {
         m_Text.SetSize( aTextSize );
     }
 
-    void SetLayer( LAYER_ID aLayer );
+    void SetLayer( LAYER_ID aLayer ) override;
 
     void SetShape( int aShape )         { m_Shape = aShape; }
     int GetShape() const { return m_Shape; }
@@ -184,17 +184,17 @@ public:
     TEXTE_PCB&      Text() const  { return *(const_cast<TEXTE_PCB*> (&m_Text)); }
 
     void            Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                          GR_DRAWMODE aColorMode, const wxPoint& offset = ZeroOffset );
+                          GR_DRAWMODE aColorMode, const wxPoint& offset = ZeroOffset ) override;
 
     /**
      * Function Move
      * @param offset : moving vector
      */
-    void            Move( const wxPoint& offset );
+    void            Move( const wxPoint& offset ) override;
 
-    void            Rotate( const wxPoint& aRotCentre, double aAngle );
+    void            Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    void            Flip( const wxPoint& aCentre );
+    void            Flip( const wxPoint& aCentre ) override;
 
     /**
      * Function Mirror
@@ -205,34 +205,34 @@ public:
      */
     void            Mirror( const wxPoint& axis_pos );
 
-    void            GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void            GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool            HitTest( const wxPoint& aPosition ) const;
+    bool            HitTest( const wxPoint& aPosition ) const override;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "DIMENSION" );
     }
 
     // Virtual function
-    const EDA_RECT    GetBoundingBox() const;
+    const EDA_RECT    GetBoundingBox() const override;
 
-    wxString    GetSelectMenuText() const;
+    wxString    GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return add_dimension_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return add_dimension_xpm; }
 
-    EDA_ITEM*   Clone() const;
+    EDA_ITEM*   Clone() const override;
 
     /// @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const override;
 
 #if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
+    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 };
 

@@ -103,7 +103,7 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED );
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
 };
 
 
@@ -122,7 +122,7 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED );
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
 };
 
 
@@ -141,7 +141,7 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED );
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
 };
 
 /**
@@ -159,7 +159,7 @@ class NULL_REPORTER : public REPORTER
 
         static REPORTER& GetInstance();
 
-        REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED );
+        REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override;
 };
 
 #endif     // _REPORTER_H_

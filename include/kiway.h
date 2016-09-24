@@ -371,7 +371,7 @@ public:
 
     void OnKiwayEnd();
 
-    bool ProcessEvent( wxEvent& aEvent );   // overload virtual
+    bool ProcessEvent( wxEvent& aEvent ) override;
 
 private:
 

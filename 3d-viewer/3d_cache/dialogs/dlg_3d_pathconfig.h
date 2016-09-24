@@ -39,16 +39,16 @@ private:
 
     void initDialog();
 
-    void OnAddAlias( wxCommandEvent& event );
-    void OnDelAlias( wxCommandEvent& event );
-    void OnAliasMoveUp( wxCommandEvent& event );
-    void OnAliasMoveDown( wxCommandEvent& event );
-    void OnConfigEnvVar( wxCommandEvent& event );
-    void OnHelp( wxCommandEvent& event );
+    void OnAddAlias( wxCommandEvent& event ) override;
+    void OnDelAlias( wxCommandEvent& event ) override;
+    void OnAliasMoveUp( wxCommandEvent& event ) override;
+    void OnAliasMoveDown( wxCommandEvent& event ) override;
+    void OnConfigEnvVar( wxCommandEvent& event ) override;
+    void OnHelp( wxCommandEvent& event ) override;
 
 public:
     DLG_3D_PATH_CONFIG( wxWindow* aParent, S3D_FILENAME_RESOLVER* aResolver );
-    bool TransferDataFromWindow();
+    bool TransferDataFromWindow() override;
 
 private:
     void updateEnvVars( void );

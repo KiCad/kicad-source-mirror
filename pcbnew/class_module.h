@@ -124,7 +124,7 @@ public:
     EDA_RECT GetFootprintRect() const;
 
     // Virtual function
-    const EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const override;
 
     DLIST<D_PAD>& Pads()                        { return m_Pads; }
     const DLIST<D_PAD>& Pads() const            { return m_Pads; }
@@ -135,8 +135,8 @@ public:
     std::list<S3D_INFO>& Models()             { return m_3D_Drawings; }
     const std::list<S3D_INFO>& Models() const { return m_3D_Drawings; }
 
-    void SetPosition( const wxPoint& aPos );                        // was overload
-    const wxPoint& GetPosition() const          { return m_Pos; }   // was overload
+    void SetPosition( const wxPoint& aPos ) override;
+    const wxPoint& GetPosition() const override { return m_Pos; }
 
     void SetOrientation( double newangle );
     void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation*10.0 ); }
@@ -184,11 +184,11 @@ public:
     void IncrementFlag() { m_arflag += 1; }
     int GetFlag() const { return m_arflag; }
 
-    void Move( const wxPoint& aMoveVector );
+    void Move( const wxPoint& aMoveVector ) override;
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre ) override;
 
     /**
      * Function MoveAnchorPosition
@@ -216,7 +216,7 @@ public:
 #define MODULE_PADS_LOCKED  0x08        ///< In autoplace: module waiting for autoplace
 
 
-    bool IsLocked() const // override
+    bool IsLocked() const override
     {
         return ( m_ModuleStatus & MODULE_is_LOCKED ) != 0;
     }
@@ -226,7 +226,7 @@ public:
      * sets the MODULE_is_LOCKED bit in the m_ModuleStatus
      * @param isLocked When true means turn on locked status, else unlock
      */
-    void SetLocked( bool isLocked ) // override
+    void SetLocked( bool isLocked ) override
     {
         if( isLocked )
             m_ModuleStatus |= MODULE_is_LOCKED;
@@ -279,7 +279,7 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                GR_DRAWMODE     aDrawMode,
-               const wxPoint&  aOffset = ZeroOffset );
+               const wxPoint&  aOffset = ZeroOffset ) override;
 
     /**
      * Function DrawOutlinesWhenMoving
@@ -391,14 +391,14 @@ public:
                     const wxPoint& offset, int dim_ancre, GR_DRAWMODE draw_mode );
 
     ///> @copydoc EDA_ITEM::GetMsgPanelInfo
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const;
+    bool HitTest( const wxPoint& aPosition ) const override;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
     /**
      * Function GetReference
@@ -538,16 +538,16 @@ public:
 
     SEARCH_RESULT Visit( INSPECTOR inspector,  void* testData, const KICAD_T scanTypes[] ) override;
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "MODULE" );
     }
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  module_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  module_xpm; }
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
     /**
      * Function RunOnChildren
@@ -558,16 +558,16 @@ public:
     void RunOnChildren( std::function<void (BOARD_ITEM*)> aFunction );
 
     /// @copydoc VIEW_ITEM::ViewUpdate()
-    void ViewUpdate( int aUpdateFlags = KIGFX::VIEW_ITEM::ALL );
+    void ViewUpdate( int aUpdateFlags = KIGFX::VIEW_ITEM::ALL ) override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLOD()
-    virtual unsigned int ViewGetLOD( int aLayer ) const;
+    virtual unsigned int ViewGetLOD( int aLayer ) const override;
 
     /// @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const override;
 
     /**
      * Function CopyNetlistSettings
@@ -639,7 +639,7 @@ public:
     const wxArrayString* GetInitialComments() const { return m_initial_comments; }
 
 #if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
+    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
 private:

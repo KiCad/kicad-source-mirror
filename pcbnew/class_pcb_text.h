@@ -55,31 +55,31 @@ public:
         return aItem && PCB_TEXT_T == aItem->Type();
     }
 
-    virtual const wxPoint& GetPosition() const
+    virtual const wxPoint& GetPosition() const override
     {
         return m_Pos;
     }
 
-    virtual void SetPosition( const wxPoint& aPos )
+    virtual void SetPosition( const wxPoint& aPos ) override
     {
         m_Pos = aPos;
     }
 
-    void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector ) override
     {
         m_Pos += aMoveVector;
     }
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre ) override;
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const
+    bool HitTest( const wxPoint& aPosition ) const override
     {
         return TextHitTest( aPosition );
     }
@@ -87,12 +87,12 @@ public:
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override
     {
         return TextHitTest( aRect, aContained, aAccuracy );
     }
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "PTEXT" );
     }
@@ -129,17 +129,17 @@ public:
                                                int                aCircleToSegmentsCount,
                                                double             aCorrectionFactor ) const;
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  add_text_xpm; }
 
     // Virtual function
-    const EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
+    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 };
 

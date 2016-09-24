@@ -50,8 +50,8 @@ public:
     const wxString GetFullPrettyLibName();
 
 private:
-    virtual void OnSelectFolder( wxFileDirPickerEvent& event );
-	virtual void OnOKButton( wxCommandEvent& event );
+    virtual void OnSelectFolder( wxFileDirPickerEvent& event ) override;
+	virtual void OnOKButton( wxCommandEvent& event ) override;
 };
 
 

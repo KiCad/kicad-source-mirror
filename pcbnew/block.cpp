@@ -102,7 +102,7 @@ public:
 
 
 private:
-    void ExecuteCommand( wxCommandEvent& event );
+    void ExecuteCommand( wxCommandEvent& event ) override;
     void OnCancel( wxCommandEvent& event )
     {
         EndModal( wxID_CANCEL );

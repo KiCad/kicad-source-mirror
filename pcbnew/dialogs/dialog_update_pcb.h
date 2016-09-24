@@ -47,9 +47,9 @@ public:
 
 private:
 
-    virtual void OnMatchChange( wxCommandEvent& event );
-    virtual void OnCancelClick( wxCommandEvent& event );
-    virtual void OnUpdateClick( wxCommandEvent& event );
+    virtual void OnMatchChange( wxCommandEvent& event ) override;
+    virtual void OnCancelClick( wxCommandEvent& event ) override;
+    virtual void OnUpdateClick( wxCommandEvent& event ) override;
 
 };
 

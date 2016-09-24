@@ -96,48 +96,48 @@ private:
     void SetDrcParmeters( );
 
     /// wxEVT_COMMAND_CHECKBOX_CLICKED event handler for ID_CHECKBOX
-    void OnReportCheckBoxClicked( wxCommandEvent& event );
+    void OnReportCheckBoxClicked( wxCommandEvent& event ) override;
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON_BROWSE_RPT_FILE
-    void OnButtonBrowseRptFileClick( wxCommandEvent& event );
+    void OnButtonBrowseRptFileClick( wxCommandEvent& event ) override;
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_STARTDRC
-    void OnStartdrcClick( wxCommandEvent& event );
+    void OnStartdrcClick( wxCommandEvent& event ) override;
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_LIST_UNCONNECTED
-    void OnListUnconnectedClick( wxCommandEvent& event );
+    void OnListUnconnectedClick( wxCommandEvent& event ) override;
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ALL
-    void OnDeleteAllClick( wxCommandEvent& event );
+    void OnDeleteAllClick( wxCommandEvent& event ) override;
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ONE
-    void OnDeleteOneClick( wxCommandEvent& event );
+    void OnDeleteOneClick( wxCommandEvent& event ) override;
 
     /// wxEVT_LEFT_DCLICK event handler for ID_CLEARANCE_LIST
-    void OnLeftDClickClearance( wxMouseEvent& event );
+    void OnLeftDClickClearance( wxMouseEvent& event ) override;
 
     /// wxEVT_RIGHT_UP event handler for ID_CLEARANCE_LIST
-    void OnRightUpClearance( wxMouseEvent& event );
+    void OnRightUpClearance( wxMouseEvent& event ) override;
 
     /// wxEVT_LEFT_DCLICK event handler for ID_UNCONNECTED_LIST
-    void OnLeftDClickUnconnected( wxMouseEvent& event );
+    void OnLeftDClickUnconnected( wxMouseEvent& event ) override;
 
     /// wxEVT_RIGHT_UP event handler for ID_UNCONNECTED_LIST
-    void OnRightUpUnconnected( wxMouseEvent& event );
+    void OnRightUpUnconnected( wxMouseEvent& event ) override;
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
-    void OnCancelClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event ) override;
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
-    void OnOkClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event ) override;
 
     /// handler for activate event, updating data which can be modified outside the dialog
     /// (DRC parameters)
-    void OnActivateDlg( wxActivateEvent& event );
+    void OnActivateDlg( wxActivateEvent& event ) override;
 
-    void OnMarkerSelectionEvent( wxCommandEvent& event );
-    void OnUnconnectedSelectionEvent( wxCommandEvent& event );
-    void OnChangingMarkerList( wxNotebookEvent& event );
+    void OnMarkerSelectionEvent( wxCommandEvent& event ) override;
+    void OnUnconnectedSelectionEvent( wxCommandEvent& event ) override;
+    void OnChangingMarkerList( wxNotebookEvent& event ) override;
 
     void DelDRCMarkers();
     void RedrawDrawPanel();

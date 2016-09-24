@@ -188,7 +188,7 @@ public:
 
     void Process_Config( wxCommandEvent& event );
 
-    void ReCreateMenuBar();
+    void ReCreateMenuBar() override;
     void RecreateBaseHToolbar();
 
     /**
@@ -221,9 +221,9 @@ public:
 
     void CreateNewProject( const wxString& aPrjFullFileName, bool aTemplateSelector );
 
-    void LoadSettings( wxConfigBase* aCfg );
+    void LoadSettings( wxConfigBase* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg );
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
      * Function Execute
@@ -246,7 +246,7 @@ public:
         {
         }
 
-        void OnTerminate( int pid, int status );
+        void OnTerminate( int pid, int status ) override;
     };
 
     /**

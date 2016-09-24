@@ -274,7 +274,7 @@ public:
      * </p>
      * @param aList is the list to populate.
      */
-    virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
      * Test LIB_ITEM objects for equivalence.

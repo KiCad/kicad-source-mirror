@@ -49,7 +49,7 @@ public:
     TOOL_BASE( const std::string& aToolName );
     virtual ~TOOL_BASE();
 
-    virtual void Reset( RESET_REASON aReason );
+    virtual void Reset( RESET_REASON aReason ) override;
 
     const ROUTING_SETTINGS& PNSSettings() const
     {

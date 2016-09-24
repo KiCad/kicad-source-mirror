@@ -55,16 +55,16 @@ private:
     RESCUER*        m_Rescuer;
     bool            m_AskShowAgain;
 
-    bool TransferDataToWindow();
-    bool TransferDataFromWindow();
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
     void PopulateConflictList();
     void PopulateInstanceList();
-    void OnConflictSelect( wxDataViewEvent& event );
-    void OnNeverShowClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-    void OnHandleCachePreviewRepaint( wxPaintEvent& aRepaintEvent );
-    void OnHandleLibraryPreviewRepaint( wxPaintEvent& aRepaintEvent );
-    void OnDialogResize( wxSizeEvent& aSizeEvent );
+    void OnConflictSelect( wxDataViewEvent& event ) override;
+    void OnNeverShowClick( wxCommandEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override;
+    void OnHandleCachePreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
+    void OnHandleLibraryPreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
+    void OnDialogResize( wxSizeEvent& aSizeEvent ) override;
     void renderPreview( LIB_PART* aComponent, int aUnit, wxPanel* panel );
 };
 

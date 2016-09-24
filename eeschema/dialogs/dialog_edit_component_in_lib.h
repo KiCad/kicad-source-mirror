@@ -50,20 +50,20 @@ private:
     void initDlg();
     void InitPanelDoc();
     void InitBasicPanel();
-    void OnCancelClick( wxCommandEvent& event );
-    void OnOkClick(wxCommandEvent& event);
-    void DeleteAllAliasOfPart(wxCommandEvent& event);
-    void DeleteAliasOfPart(wxCommandEvent& event);
-    void AddAliasOfPart(wxCommandEvent& event);
+    void OnCancelClick( wxCommandEvent& event ) override;
+    void OnOkClick(wxCommandEvent& event) override;
+    void DeleteAllAliasOfPart(wxCommandEvent& event) override;
+    void DeleteAliasOfPart(wxCommandEvent& event) override;
+    void AddAliasOfPart(wxCommandEvent& event) override;
     bool ChangeNbUnitsPerPackage(int newUnit);
     bool SetUnsetConvert();
-    void CopyDocFromRootToAlias(wxCommandEvent& event);
-    void BrowseAndSelectDocFile(wxCommandEvent& event);
+    void CopyDocFromRootToAlias(wxCommandEvent& event) override;
+    void BrowseAndSelectDocFile(wxCommandEvent& event) override;
 
-    void DeleteAllFootprintFilter(wxCommandEvent& event);
-    void DeleteOneFootprintFilter(wxCommandEvent& event);
-    void AddFootprintFilter(wxCommandEvent& event);
-    void EditOneFootprintFilter( wxCommandEvent& event );
+    void DeleteAllFootprintFilter(wxCommandEvent& event) override;
+    void DeleteOneFootprintFilter(wxCommandEvent& event) override;
+    void AddFootprintFilter(wxCommandEvent& event) override;
+    void EditOneFootprintFilter( wxCommandEvent& event ) override;
 };
 
 #endif

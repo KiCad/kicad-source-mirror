@@ -46,8 +46,8 @@ public:
 
 private:
     void initDlg( );
-    void OnOkClick( wxCommandEvent& aEvent );
-    void OnCancelClick( wxCommandEvent& aEvent );
+    void OnOkClick( wxCommandEvent& aEvent ) override;
+    void OnCancelClick( wxCommandEvent& aEvent ) override;
 };
 
 

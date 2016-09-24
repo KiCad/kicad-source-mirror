@@ -47,12 +47,12 @@ class dxfWriterBinary : public dxfWriter
 public:
     dxfWriterBinary( std::ofstream* stream ) : dxfWriter( stream ) {}
     virtual ~dxfWriterBinary() {}
-    virtual bool    writeString( int code, std::string text );
-    virtual bool    writeInt16( int code, int data );
-    virtual bool    writeInt32( int code, int data );
-    virtual bool    writeInt64( int code, unsigned long long int data );
-    virtual bool    writeDouble( int code, double data );
-    virtual bool    writeBool( int code, bool data );
+    virtual bool    writeString( int code, std::string text ) override;
+    virtual bool    writeInt16( int code, int data ) override;
+    virtual bool    writeInt32( int code, int data ) override;
+    virtual bool    writeInt64( int code, unsigned long long int data ) override;
+    virtual bool    writeDouble( int code, double data ) override;
+    virtual bool    writeBool( int code, bool data ) override;
 };
 
 class dxfWriterAscii : public dxfWriter
@@ -60,12 +60,12 @@ class dxfWriterAscii : public dxfWriter
 public:
     dxfWriterAscii( std::ofstream* stream ) : dxfWriter( stream ) {}
     virtual ~dxfWriterAscii() {}
-    virtual bool    writeString( int code, std::string text );
-    virtual bool    writeInt16( int code, int data );
-    virtual bool    writeInt32( int code, int data );
-    virtual bool    writeInt64( int code, unsigned long long int data );
-    virtual bool    writeDouble( int code, double data );
-    virtual bool    writeBool( int code, bool data );
+    virtual bool    writeString( int code, std::string text ) override;
+    virtual bool    writeInt16( int code, int data ) override;
+    virtual bool    writeInt32( int code, int data ) override;
+    virtual bool    writeInt64( int code, unsigned long long int data ) override;
+    virtual bool    writeDouble( int code, double data ) override;
+    virtual bool    writeBool( int code, bool data ) override;
 };
 
 #endif    // DXFWRITER_H

@@ -40,7 +40,7 @@ public:
     {
     }
 
-    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
 };
 
 #endif

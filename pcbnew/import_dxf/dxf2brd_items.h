@@ -106,28 +106,28 @@ private:
     // They are "call back" fonctions, called when the corresponding object
     // is read in dxf file
     // Depending of the application, they can do something or not
-    virtual void addHeader( const DRW_Header* aData );
+    virtual void addHeader( const DRW_Header* aData ) override;
     virtual void addLType( const DRW_LType& aData ) {}
-    virtual void addLayer( const DRW_Layer& aData );
+    virtual void addLayer( const DRW_Layer& aData ) override;
     virtual void addDimStyle( const DRW_Dimstyle& aData ) {}
     virtual void addBlock( const DRW_Block& aData ) {}
     virtual void endBlock() {}
     virtual void addPoint( const DRW_Point& aData ) {}
-    virtual void addLine( const DRW_Line& aData);
+    virtual void addLine( const DRW_Line& aData) override;
     virtual void addRay( const DRW_Ray& aData ) {}
     virtual void addXline( const DRW_Xline& aData ) {}
-    virtual void addCircle( const DRW_Circle& aData );
-    virtual void addArc( const DRW_Arc& aData );
+    virtual void addCircle( const DRW_Circle& aData ) override;
+    virtual void addArc( const DRW_Arc& aData ) override;
     virtual void addEllipse( const DRW_Ellipse& aData ) {}
-    virtual void addLWPolyline( const DRW_LWPolyline& aData );
-    virtual void addText( const DRW_Text& aData );
-    virtual void addPolyline( const DRW_Polyline& aData );
+    virtual void addLWPolyline( const DRW_LWPolyline& aData ) override;
+    virtual void addText( const DRW_Text& aData ) override;
+    virtual void addPolyline( const DRW_Polyline& aData ) override;
     virtual void addSpline( const DRW_Spline* aData ) {}
     virtual void addKnot( const DRW_Entity&) {}
     virtual void addInsert( const DRW_Insert& aData ){}
     virtual void addTrace( const DRW_Trace& aData ){}
     virtual void addSolid( const DRW_Solid& aData ){}
-    virtual void addMText( const DRW_MText& aData);
+    virtual void addMText( const DRW_MText& aData) override;
     virtual void addDimAlign( const DRW_DimAligned* aData ) {}
     virtual void addDimLinear( const DRW_DimLinear* aData ) {}
     virtual void addDimRadial( const DRW_DimRadial* aData ) {}
@@ -145,7 +145,7 @@ private:
 
     virtual void addVport( const DRW_Vport& aData ) {}
 
-    virtual void addTextStyle( const DRW_Textstyle& aData );
+    virtual void addTextStyle( const DRW_Textstyle& aData ) override;
 
     virtual void addViewport( const DRW_Viewport& aData ) {}
 

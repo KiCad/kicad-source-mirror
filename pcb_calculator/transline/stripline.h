@@ -41,8 +41,8 @@ private:
     double atten_cond;          // loss in conductors (dB)
 
 public:
-    void   analyze();
-    void   synthesize();
+    void   analyze() override;
+    void   synthesize() override;
 
 private:
     double lineImpedance( double, double& );

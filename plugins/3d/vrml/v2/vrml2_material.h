@@ -52,7 +52,7 @@ private:
 public:
 
     // functions inherited from WRL2NODE
-    bool isDangling( void );
+    bool isDangling( void ) override;
 
 public:
     WRL2MATERIAL();
@@ -60,10 +60,10 @@ public:
     virtual ~WRL2MATERIAL();
 
     // functions inherited from WRL2NODE
-    bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
-    bool AddRefNode( WRL2NODE* aNode );
-    bool AddChildNode( WRL2NODE* aNode );
-    SGNODE* TranslateToSG( SGNODE* aParent );
+    bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
+    bool AddRefNode( WRL2NODE* aNode ) override;
+    bool AddChildNode( WRL2NODE* aNode ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent ) override;
 };
 
 #endif  // VRML2_MATERIAL_H

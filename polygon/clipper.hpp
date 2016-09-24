@@ -391,7 +391,7 @@ class clipperException : public std::exception
   public:
     clipperException(const char* description): m_descr(description) {}
     virtual ~clipperException() throw() {}
-    virtual const char* what() const throw() {return m_descr.c_str();}
+    virtual const char* what() const throw() override { return m_descr.c_str(); }
   private:
     std::string m_descr;
 };

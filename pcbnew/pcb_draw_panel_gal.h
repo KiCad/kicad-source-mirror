@@ -65,10 +65,10 @@ public:
     void UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings );
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
-    virtual void SetHighContrastLayer( LAYER_ID aLayer );
+    virtual void SetHighContrastLayer( LAYER_ID aLayer ) override;
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::SetTopLayer()
-    virtual void SetTopLayer( LAYER_ID aLayer );
+    virtual void SetTopLayer( LAYER_ID aLayer ) override;
 
     /**
      * Function SyncLayersVisibility
@@ -78,7 +78,7 @@ public:
     void SyncLayersVisibility( const BOARD* aBoard );
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
-    void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList );
+    void GetMsgPanelInfo( std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
     void OnShow() override;

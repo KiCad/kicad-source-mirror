@@ -48,10 +48,10 @@ private:
     // Function called when an item is found
     boost::function<void (BOARD_ITEM*)> callback;
 
-    void onButtonFindItemClick( wxCommandEvent& event );
-    void onButtonFindMarkerClick( wxCommandEvent& event );
-    void onButtonCloseClick( wxCommandEvent& event );
-    void onClose( wxCloseEvent& event );
+    void onButtonFindItemClick( wxCommandEvent& event ) override;
+    void onButtonFindMarkerClick( wxCommandEvent& event ) override;
+    void onButtonCloseClick( wxCommandEvent& event ) override;
+    void onClose( wxCloseEvent& event ) override;
 };
 
 #endif /* DIALOG_FIND_BASE_H */

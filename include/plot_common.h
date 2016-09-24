@@ -552,7 +552,7 @@ class HPGL_PLOTTER : public PLOTTER
 public:
     HPGL_PLOTTER();
 
-    virtual PlotFormat GetPlotterType() const
+    virtual PlotFormat GetPlotterType() const override
     {
         return PLOT_FORMAT_HPGL;
     }
@@ -562,8 +562,8 @@ public:
         return wxString( wxT( "plt" ) );
     }
 
-    virtual bool StartPlot();
-    virtual bool EndPlot();
+    virtual bool StartPlot() override;
+    virtual bool EndPlot() override;
 
     /// HPGL doesn't handle line thickness or color
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override
@@ -572,10 +572,10 @@ public:
         currentPenWidth = userToDeviceSize( penDiameter );
     }
 
-    virtual void SetDefaultLineWidth( int width ) {};
-    virtual void SetDash( bool dashed );
+    virtual void SetDefaultLineWidth( int width ) override {}
+    virtual void SetDash( bool dashed ) override;
 
-    virtual void SetColor( EDA_COLOR_T color ) {};
+    virtual void SetColor( EDA_COLOR_T color ) override {}
 
     virtual void SetPenSpeed( int speed )
     {
@@ -590,11 +590,11 @@ public:
     virtual void SetPenDiameter( double diameter );
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                  double aScale, bool aMirror );
+                  double aScale, bool aMirror ) override;
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-               int width = USE_DEFAULT_LINE_WIDTH );
+               int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void * aData = NULL) override;
@@ -602,8 +602,8 @@ public:
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode, void* aData ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
-    virtual void PenTo( const wxPoint& pos, char plume );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void PenTo( const wxPoint& pos, char plume ) override;
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode, void* aData ) override;
     virtual void FlashPadOval( const wxPoint& pos, const wxSize& size, double orient,
@@ -643,13 +643,13 @@ public:
     /**
      * PS and PDF fully implement native text (for the Latin-1 subset)
      */
-    virtual void SetTextMode( PlotTextMode mode )
+    virtual void SetTextMode( PlotTextMode mode ) override
     {
         if( mode != PLOTTEXTMODE_DEFAULT )
             m_textMode = mode;
     }
 
-    virtual void SetDefaultLineWidth( int width );
+    virtual void SetDefaultLineWidth( int width ) override;
 
     /**
      * Set the 'fine' scaling for the postscript engine
@@ -680,7 +680,7 @@ public:
      * The PSLIKE computes the rgb values, the subclass emits the
      * operator to actually do it
      */
-    virtual void SetColor( EDA_COLOR_T color );
+    virtual void SetColor( EDA_COLOR_T color ) override;
 
 protected:
     void computeTextParameters( const wxPoint&           aPos,
@@ -737,33 +737,33 @@ public:
         return wxString( wxT( "ps" ) );
     }
 
-    virtual PlotFormat GetPlotterType() const
+    virtual PlotFormat GetPlotterType() const override
     {
         return PLOT_FORMAT_POST;
     }
 
-    virtual bool StartPlot();
-    virtual bool EndPlot();
+    virtual bool StartPlot() override;
+    virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDash( bool dashed );
+    virtual void SetDash( bool dashed ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                  double aScale, bool aMirror );
+                  double aScale, bool aMirror ) override;
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void * aData = NULL ) override;
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
-                            double aScaleFactor );
+                            double aScaleFactor ) override;
 
-    virtual void PenTo( const wxPoint& pos, char plume );
+    virtual void PenTo( const wxPoint& pos, char plume ) override;
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
                        const wxString&             aText,
@@ -777,7 +777,7 @@ public:
                        bool                        aMultilineAllowed = false,
                        void* aData = NULL ) override;
 protected:
-    virtual void emitSetRGBColor( double r, double g, double b );
+    virtual void emitSetRGBColor( double r, double g, double b ) override;
 };
 
 class PDF_PLOTTER : public PSLIKE_PLOTTER
@@ -790,7 +790,7 @@ public:
         pageTreeHandle = 0;
     }
 
-    virtual PlotFormat GetPlotterType() const
+    virtual PlotFormat GetPlotterType() const override
     {
         return PLOT_FORMAT_PDF;
     }
@@ -808,32 +808,32 @@ public:
      * The base class open the file in text mode, so we should have this
      * function overlaid for PDF files, which are binary files
      */
-    virtual bool OpenFile( const wxString& aFullFilename );
+    virtual bool OpenFile( const wxString& aFullFilename ) override;
 
-    virtual bool StartPlot();
-    virtual bool EndPlot();
+    virtual bool StartPlot() override;
+    virtual bool EndPlot() override;
     virtual void StartPage();
     virtual void ClosePage();
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDash( bool dashed );
+    virtual void SetDash( bool dashed ) override;
 
     /** PDF can have multiple pages, so SetPageSettings can be called
      * with the outputFile open (but not inside a page stream!) */
-    virtual void SetPageSettings( const PAGE_INFO& aPageSettings );
+    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                  double aScale, bool aMirror );
+                  double aScale, bool aMirror ) override;
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void * aData = NULL ) override;
 
-    virtual void PenTo( const wxPoint& pos, char plume );
+    virtual void PenTo( const wxPoint& pos, char plume ) override;
 
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
@@ -849,11 +849,11 @@ public:
                        void* aData = NULL ) override;
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
-                            double aScaleFactor );
+                            double aScaleFactor ) override;
 
 
 protected:
-    virtual void emitSetRGBColor( double r, double g, double b );
+    virtual void emitSetRGBColor( double r, double g, double b ) override;
     int allocPdfObject();
     int startPdfObject(int handle = -1);
     void closePdfObject();
@@ -879,34 +879,34 @@ public:
         return wxString( wxT( "svg" ) );
     }
 
-    virtual PlotFormat GetPlotterType() const
+    virtual PlotFormat GetPlotterType() const override
     {
         return PLOT_FORMAT_SVG;
     }
 
-    virtual void SetColor( EDA_COLOR_T color );
-    virtual bool StartPlot();
-    virtual bool EndPlot();
+    virtual void SetColor( EDA_COLOR_T color ) override;
+    virtual bool StartPlot() override;
+    virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDash( bool dashed );
+    virtual void SetDash( bool dashed ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                  double aScale, bool aMirror );
+                  double aScale, bool aMirror ) override;
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void * aData = NULL ) override;
 
     virtual void PlotImage( const wxImage& aImage, const wxPoint& aPos,
-                            double aScaleFactor );
+                            double aScaleFactor ) override;
 
-    virtual void PenTo( const wxPoint& pos, char plume );
+    virtual void PenTo( const wxPoint& pos, char plume ) override;
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
                        const wxString&             aText,
@@ -939,7 +939,7 @@ protected:
      * initialize m_pen_rgb_color from reduced values r, g ,b
      * ( reduced values are 0.0 to 1.0 )
      */
-    virtual void emitSetRGBColor( double r, double g, double b );
+    virtual void emitSetRGBColor( double r, double g, double b ) override;
 
     /**
      * function setSVGPlotStyle()
@@ -981,7 +981,7 @@ class GERBER_PLOTTER : public PLOTTER
 public:
     GERBER_PLOTTER();
 
-    virtual PlotFormat GetPlotterType() const
+    virtual PlotFormat GetPlotterType() const override
     {
         return PLOT_FORMAT_GERBER;
     }
@@ -996,23 +996,23 @@ public:
      * Write GERBER header to file
      * initialize global variable g_Plot_PlotOutputFile
      */
-    virtual bool StartPlot();
-    virtual bool EndPlot();
+    virtual bool StartPlot() override;
+    virtual bool EndPlot() override;
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override;
-    virtual void SetDefaultLineWidth( int width );
+    virtual void SetDefaultLineWidth( int width ) override;
 
     // RS274X has no dashing, nor colours
-    virtual void SetDash( bool dashed ) {};
-    virtual void SetColor( EDA_COLOR_T color ) {};
+    virtual void SetDash( bool dashed ) override {}
+    virtual void SetColor( EDA_COLOR_T color ) override {}
     // Currently, aScale and aMirror are not used in gerber plotter
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                          double aScale, bool aMirror );
+                          double aScale, bool aMirror ) override;
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Arc( const wxPoint& aCenter, double aStAngle, double aEndAngle,
-                      int aRadius, FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH );
+                      int aRadius, FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH ) override;
 
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode, void* aData ) override;
@@ -1031,7 +1031,7 @@ public:
                            FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH,
                            void * aData = NULL ) override;
 
-    virtual void PenTo( const wxPoint& pos, char plume );
+    virtual void PenTo( const wxPoint& pos, char plume ) override;
 
     virtual void Text( const wxPoint&              aPos,
                        enum EDA_COLOR_T            aColor,
@@ -1088,7 +1088,7 @@ public:
      * Change the plot polarity and begin a new layer
      * Used to 'scratch off' silk screen away from solder mask
      */
-    virtual void SetLayerPolarity( bool aPositive );
+    virtual void SetLayerPolarity( bool aPositive ) override;
 
     /**
      * Function SetGerberCoordinatesFormat
@@ -1100,7 +1100,7 @@ public:
      *
      * Should be called only after SetViewport() is called
      */
-    virtual void SetGerberCoordinatesFormat( int aResolution, bool aUseInches = false );
+    virtual void SetGerberCoordinatesFormat( int aResolution, bool aUseInches = false ) override;
 
     void UseX2Attributes( bool aEnable ) { m_useX2Attributes = aEnable; }
     void UseX2NetAttributes( bool aEnable ) { m_useNetAttributes = aEnable; }
@@ -1206,7 +1206,7 @@ public:
         m_currentColor = BLACK;
     }
 
-    virtual PlotFormat GetPlotterType() const
+    virtual PlotFormat GetPlotterType() const override
     {
         return PLOT_FORMAT_DXF;
     }
@@ -1219,14 +1219,14 @@ public:
     /**
      * DXF handles NATIVE text emitting TEXT entities
      */
-    virtual void SetTextMode( PlotTextMode mode )
+    virtual void SetTextMode( PlotTextMode mode ) override
     {
         if( mode != PLOTTEXTMODE_DEFAULT )
             textAsLines = ( mode != PLOTTEXTMODE_NATIVE );
     }
 
-    virtual bool StartPlot();
-    virtual bool EndPlot();
+    virtual bool StartPlot() override;
+    virtual bool EndPlot() override;
 
     // For now we don't use 'thick' primitives, so no line width
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override
@@ -1234,29 +1234,29 @@ public:
         currentPenWidth = 0;
     }
 
-    virtual void SetDefaultLineWidth( int width )
+    virtual void SetDefaultLineWidth( int width ) override
     {
         // DXF lines are infinitesimal
         defaultPenWidth = 0;
     }
 
-    virtual void SetDash( bool dashed );
+    virtual void SetDash( bool dashed ) override;
 
-    virtual void SetColor( EDA_COLOR_T color );
+    virtual void SetColor( EDA_COLOR_T color ) override;
 
     virtual void SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
-                  double aScale, bool aMirror );
+                  double aScale, bool aMirror ) override;
     virtual void Rect( const wxPoint& p1, const wxPoint& p2, FILL_T fill,
-                       int width = USE_DEFAULT_LINE_WIDTH );
+                       int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void Circle( const wxPoint& pos, int diametre, FILL_T fill,
-                         int width = USE_DEFAULT_LINE_WIDTH );
+                         int width = USE_DEFAULT_LINE_WIDTH ) override;
     virtual void PlotPoly( const std::vector< wxPoint >& aCornerList,
                            FILL_T aFill, int aWidth = USE_DEFAULT_LINE_WIDTH, void * aData = NULL ) override;
     virtual void ThickSegment( const wxPoint& start, const wxPoint& end, int width,
                                EDA_DRAW_MODE_T tracemode, void* aData ) override;
     virtual void Arc( const wxPoint& centre, double StAngle, double EndAngle,
-                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH );
-    virtual void PenTo( const wxPoint& pos, char plume );
+                      int rayon, FILL_T fill, int width = USE_DEFAULT_LINE_WIDTH ) override;
+    virtual void PenTo( const wxPoint& pos, char plume ) override;
 
     virtual void FlashPadCircle( const wxPoint& pos, int diametre,
                                  EDA_DRAW_MODE_T trace_mode, void* aData ) override;

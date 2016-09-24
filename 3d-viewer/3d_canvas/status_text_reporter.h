@@ -50,7 +50,7 @@ public:
         m_hasMessage = false;
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED )
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_UNDEFINED ) override
     {
         if( !aText.IsEmpty() )
             m_hasMessage = true;

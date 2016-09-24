@@ -230,7 +230,7 @@ public:
      * </p>
      * @param aDC The device context to prepare.
      */
-    virtual void DoPrepareDC( wxDC& aDC );
+    virtual void DoPrepareDC( wxDC& aDC ) override;
 
     /**
      * Function DeviceToLogical
@@ -322,7 +322,7 @@ public:
     void RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackground = true );
 
     /// @copydoc wxWindow::Refresh()
-    virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
+    virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL ) override;
 
     /**
      * Function GetScreenCenterLogicalPosition

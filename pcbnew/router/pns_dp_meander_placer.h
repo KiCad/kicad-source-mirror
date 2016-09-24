@@ -58,7 +58,7 @@ public:
      * Starts routing a single track at point aP, taking item aStartItem as anchor
      * (unless NULL).
      */
-    bool Start( const VECTOR2I& aP, ITEM* aStartItem );
+    bool Start( const VECTOR2I& aP, ITEM* aStartItem ) override;
 
     /**
      * Function Move()
@@ -67,7 +67,7 @@ public:
      * aEndItem as anchor (if not NULL).
      * (unless NULL).
      */
-    bool Move( const VECTOR2I& aP, ITEM* aEndItem );
+    bool Move( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     /**
      * Function FixRoute()
@@ -78,7 +78,7 @@ public:
      * result is violating design rules - in such case, the track is only committed
      * if Settings.CanViolateDRC() is on.
      */
-    bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem );
+    bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     const LINE Trace() const;
 
@@ -87,23 +87,23 @@ public:
      *
      * Returns the most recent world state.
      */
-    NODE* CurrentNode( bool aLoopsRemoved = false ) const;
+    NODE* CurrentNode( bool aLoopsRemoved = false ) const override;
 
-    const ITEM_SET Traces();
+    const ITEM_SET Traces() override;
 
-    const VECTOR2I& CurrentEnd() const;
+    const VECTOR2I& CurrentEnd() const override;
 
     /// @copydoc PLACEMENT_ALGO::CurrentNets()
-    const std::vector<int> CurrentNets() const;
+    const std::vector<int> CurrentNets() const override;
 
-    int CurrentLayer() const;
+    int CurrentLayer() const override;
 
     int totalLength();
 
-    const wxString TuningInfo() const;
-    TUNING_STATUS TuningStatus() const;
+    const wxString TuningInfo() const override;
+    TUNING_STATUS TuningStatus() const override;
 
-    bool CheckFit( MEANDER_SHAPE* aShape );
+    bool CheckFit( MEANDER_SHAPE* aShape ) override;
 
 
 private:

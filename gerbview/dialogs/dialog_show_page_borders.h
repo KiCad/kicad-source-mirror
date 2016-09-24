@@ -41,7 +41,7 @@ public:
     ~DIALOG_PAGE_SHOW_PAGE_BORDERS() {};
 
 private:
-    void OnOKBUttonClick( wxCommandEvent& event );
-    void OnCancelButtonClick( wxCommandEvent& event );
+    void OnOKBUttonClick( wxCommandEvent& event ) override;
+    void OnCancelButtonClick( wxCommandEvent& event ) override;
 };
 

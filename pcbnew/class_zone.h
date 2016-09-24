@@ -90,8 +90,8 @@ public:
      * Function GetPosition
      * @return a wxPoint, position of the first point of the outline
      */
-    const wxPoint& GetPosition() const;             // was overload
-    void SetPosition( const wxPoint& aPos )     {}  // was overload
+    const wxPoint& GetPosition() const override;
+    void SetPosition( const wxPoint& aPos ) override {}
 
     /**
      * Function SetPriority
@@ -105,7 +105,7 @@ public:
      */
     unsigned GetPriority() const { return m_priority; }
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
      * Function Draw
@@ -118,7 +118,7 @@ public:
     void Draw( EDA_DRAW_PANEL* panel,
                wxDC*           DC,
                GR_DRAWMODE     aDrawMode,
-               const wxPoint&  offset = ZeroOffset );
+               const wxPoint&  offset = ZeroOffset ) override;
 
     /**
      * Function DrawDrawFilledArea
@@ -148,9 +148,9 @@ public:
     /** Function GetBoundingBox (virtual)
      * @return an EDA_RECT that is the bounding box of the zone outline
      */
-    const EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const override;
 
-    int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
+    int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const override;
 
     /**
      * Function TestForCopperIslandAndRemoveInsulatedIslands
@@ -220,7 +220,7 @@ public:
      * @param aPosition the wxPoint to test
      * @return bool - true if a hit, else false
      */
-    virtual bool HitTest( const wxPoint& aPosition ) const;
+    virtual bool HitTest( const wxPoint& aPosition ) const override;
 
     /**
      * Function HitTest
@@ -333,7 +333,7 @@ public:
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
     /**
      * Function FillZoneAreasWithSegments
@@ -360,7 +360,7 @@ public:
      * Move the outlines
      * @param offset = moving vector
      */
-    void Move( const wxPoint& offset );
+    void Move( const wxPoint& offset ) override;
 
     /**
      * Function MoveEdge
@@ -376,7 +376,7 @@ public:
      * @param centre = rot centre
      * @param angle = in 0.1 degree
      */
-    void Rotate( const wxPoint& centre, double angle );
+    void Rotate( const wxPoint& centre, double angle ) override;
 
     /**
      * Function Flip
@@ -384,7 +384,7 @@ public:
      * (like Mirror() but changes layer)
      * @param aCentre - the rotation point.
      */
-    virtual void Flip( const wxPoint& aCentre );
+    virtual void Flip( const wxPoint& aCentre ) override;
 
     /**
      * Function Mirror
@@ -399,7 +399,7 @@ public:
      * returns the class name.
      * @return wxString
      */
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "ZONE_CONTAINER" );
     }
@@ -515,11 +515,11 @@ public:
         m_FillSegmList.insert( m_FillSegmList.end(), aSegments.begin(), aSegments.end() );
     }
 
-    virtual wxString GetSelectMenuText() const;
+    virtual wxString GetSelectMenuText() const override;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  add_zone_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const override { return  add_zone_xpm; }
 
-    virtual EDA_ITEM* Clone() const;
+    virtual EDA_ITEM* Clone() const override;
 
     /**
      * Accessors to parameters used in Keepout zones:
@@ -535,7 +535,7 @@ public:
     void SetDoNotAllowTracks( bool aEnable ) { m_doNotAllowTracks = aEnable; }
 
 #if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
+    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
 

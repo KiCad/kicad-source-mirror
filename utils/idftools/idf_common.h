@@ -55,7 +55,7 @@ struct IDF_ERROR : std::exception
 
     virtual ~IDF_ERROR() throw();
 
-    virtual const char* what() const throw();
+    virtual const char* what() const throw() override;
 };
 
 

@@ -65,9 +65,9 @@ public:
 
 
     // virtuals inherited from KICAD_PLUGIN_LDR
-    bool Open( const wxString& aFullFileName );
+    bool Open( const wxString& aFullFileName ) override;
 
-    void Close( void );
+    void Close( void ) override;
 
     void GetLoaderVersion( unsigned char* Major, unsigned char* Minor,
         unsigned char* Revision, unsigned char* Patch ) const;

@@ -103,26 +103,26 @@ private:
     // event handlers:
     void OnResize( wxSizeEvent& event );
 
-    void OnPadShapeSelection( wxCommandEvent& event );
-    void OnDrillShapeSelected( wxCommandEvent& event );
+    void OnPadShapeSelection( wxCommandEvent& event ) override;
+    void OnDrillShapeSelected( wxCommandEvent& event ) override;
 
-    void PadOrientEvent( wxCommandEvent& event );
-    void PadTypeSelected( wxCommandEvent& event );
+    void PadOrientEvent( wxCommandEvent& event ) override;
+    void PadTypeSelected( wxCommandEvent& event ) override;
 
-    void OnSetLayers( wxCommandEvent& event );
-    void OnPaintShowPanel( wxPaintEvent& event );
+    void OnSetLayers( wxCommandEvent& event ) override;
+    void OnPaintShowPanel( wxPaintEvent& event ) override;
 
     // Called when corner setup value is changed for rounded rect pads
-    void onCornerSizePercentChange( wxCommandEvent& event );
+    void onCornerSizePercentChange( wxCommandEvent& event ) override;
 
     /// Called when a dimension has changed.
     /// Update the graphical pad shown in the panel.
-    void OnValuesChanged( wxCommandEvent& event );
+    void OnValuesChanged( wxCommandEvent& event ) override;
 
     /// Updates the different parameters for the component being edited.
     /// Automatically fired from the OK button click.
-    bool TransferDataFromWindow();
-    bool TransferDataToWindow();
+    bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
 };
 
 #endif      // #ifndef _DIALOG_PAD_PROPERTIES_H_

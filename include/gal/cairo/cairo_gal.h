@@ -96,152 +96,152 @@ public:
     // ---------------
 
     /// @copydoc GAL::BeginDrawing()
-    virtual void BeginDrawing();
+    virtual void BeginDrawing() override;
 
     /// @copydoc GAL::EndDrawing()
-    virtual void EndDrawing();
+    virtual void EndDrawing() override;
 
     /// @copydoc GAL::DrawLine()
-    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
     /// @copydoc GAL::DrawSegment()
-    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth );
+    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth ) override;
 
     /// @copydoc GAL::DrawCircle()
-    virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius );
+    virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) override;
 
     /// @copydoc GAL::DrawArc()
     virtual void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
-                          double aStartAngle, double aEndAngle );
+                          double aStartAngle, double aEndAngle ) override;
 
     /// @copydoc GAL::DrawRectangle()
-    virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
     /// @copydoc GAL::DrawPolyline()
-    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) { drawPoly( aPointList ); }
-    virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) { drawPoly( aPointList, aListSize ); }
+    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override { drawPoly( aPointList ); }
+    virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override { drawPoly( aPointList, aListSize ); }
 
     /// @copydoc GAL::DrawPolygon()
-    virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) { drawPoly( aPointList ); }
-    virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) { drawPoly( aPointList, aListSize ); }
+    virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) override { drawPoly( aPointList ); }
+    virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override { drawPoly( aPointList, aListSize ); }
 
     /// @copydoc GAL::DrawCurve()
     virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
-                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint );
+                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint ) override;
 
     // --------------
     // Screen methods
     // --------------
 
     /// @brief Resizes the canvas.
-    virtual void ResizeScreen( int aWidth, int aHeight );
+    virtual void ResizeScreen( int aWidth, int aHeight ) override;
 
     /// @brief Shows/hides the GAL canvas
-    virtual bool Show( bool aShow );
+    virtual bool Show( bool aShow ) override;
 
     /// @copydoc GAL::Flush()
-    virtual void Flush();
+    virtual void Flush() override;
 
     /// @copydoc GAL::ClearScreen()
-    virtual void ClearScreen( const COLOR4D& aColor );
+    virtual void ClearScreen( const COLOR4D& aColor ) override;
 
     // -----------------
     // Attribute setting
     // -----------------
 
     /// @copydoc GAL::SetIsFill()
-    virtual void SetIsFill( bool aIsFillEnabled );
+    virtual void SetIsFill( bool aIsFillEnabled ) override;
 
     /// @copydoc GAL::SetIsStroke()
-    virtual void SetIsStroke( bool aIsStrokeEnabled );
+    virtual void SetIsStroke( bool aIsStrokeEnabled ) override;
 
     /// @copydoc GAL::SetStrokeColor()
-    virtual void SetStrokeColor( const COLOR4D& aColor );
+    virtual void SetStrokeColor( const COLOR4D& aColor ) override;
 
     /// @copydoc GAL::SetFillColor()
-    virtual void SetFillColor( const COLOR4D& aColor );
+    virtual void SetFillColor( const COLOR4D& aColor ) override;
 
     /// @copydoc GAL::SetLineWidth()
-    virtual void SetLineWidth( double aLineWidth );
+    virtual void SetLineWidth( double aLineWidth ) override;
 
     /// @copydoc GAL::SetLayerDepth()
-    virtual void SetLayerDepth( double aLayerDepth );
+    virtual void SetLayerDepth( double aLayerDepth ) override;
 
     // --------------
     // Transformation
     // --------------
 
     /// @copydoc GAL::Transform()
-    virtual void Transform( const MATRIX3x3D& aTransformation );
+    virtual void Transform( const MATRIX3x3D& aTransformation ) override;
 
     /// @copydoc GAL::Rotate()
-    virtual void Rotate( double aAngle );
+    virtual void Rotate( double aAngle ) override;
 
     /// @copydoc GAL::Translate()
-    virtual void Translate( const VECTOR2D& aTranslation );
+    virtual void Translate( const VECTOR2D& aTranslation ) override;
 
     /// @copydoc GAL::Scale()
-    virtual void Scale( const VECTOR2D& aScale );
+    virtual void Scale( const VECTOR2D& aScale ) override;
 
     /// @copydoc GAL::Save()
-    virtual void Save();
+    virtual void Save() override;
 
     /// @copydoc GAL::Restore()
-    virtual void Restore();
+    virtual void Restore() override;
 
     // --------------------------------------------
     // Group methods
     // ---------------------------------------------
 
     /// @copydoc GAL::BeginGroup()
-    virtual int BeginGroup();
+    virtual int BeginGroup() override;
 
     /// @copydoc GAL::EndGroup()
-    virtual void EndGroup();
+    virtual void EndGroup() override;
 
     /// @copydoc GAL::DrawGroup()
-    virtual void DrawGroup( int aGroupNumber );
+    virtual void DrawGroup( int aGroupNumber ) override;
 
     /// @copydoc GAL::ChangeGroupColor()
-    virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor );
+    virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor ) override;
 
     /// @copydoc GAL::ChangeGroupDepth()
-    virtual void ChangeGroupDepth( int aGroupNumber, int aDepth );
+    virtual void ChangeGroupDepth( int aGroupNumber, int aDepth ) override;
 
     /// @copydoc GAL::DeleteGroup()
-    virtual void DeleteGroup( int aGroupNumber );
+    virtual void DeleteGroup( int aGroupNumber ) override;
 
     /// @copydoc GAL::ClearCache()
-    virtual void ClearCache();
+    virtual void ClearCache() override;
 
     // --------------------------------------------------------
     // Handling the world <-> screen transformation
     // --------------------------------------------------------
 
     /// @copydoc GAL::SaveScreen()
-    virtual void SaveScreen();
+    virtual void SaveScreen() override;
 
     /// @copydoc GAL::RestoreScreen()
-    virtual void RestoreScreen();
+    virtual void RestoreScreen() override;
 
     /// @copydoc GAL::SetTarget()
-    virtual void SetTarget( RENDER_TARGET aTarget );
+    virtual void SetTarget( RENDER_TARGET aTarget ) override;
 
     /// @copydoc GAL::GetTarget()
-    virtual RENDER_TARGET GetTarget() const;
+    virtual RENDER_TARGET GetTarget() const override;
 
     /// @copydoc GAL::ClearTarget()
-    virtual void ClearTarget( RENDER_TARGET aTarget );
+    virtual void ClearTarget( RENDER_TARGET aTarget ) override;
 
     // -------
     // Cursor
     // -------
 
     /// @copydoc GAL::SetCursorSize()
-    virtual void SetCursorSize( unsigned int aCursorSize );
+    virtual void SetCursorSize( unsigned int aCursorSize ) override;
 
     /// @copydoc GAL::DrawCursor()
-    virtual void DrawCursor( const VECTOR2D& aCursorPosition );
+    virtual void DrawCursor( const VECTOR2D& aCursorPosition ) override;
 
     /**
      * Function PostPaint
@@ -268,7 +268,7 @@ public:
     }
 
 protected:
-    virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
 private:
     /// Super class definition

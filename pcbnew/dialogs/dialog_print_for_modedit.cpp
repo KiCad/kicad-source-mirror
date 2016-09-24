@@ -59,15 +59,15 @@ private:
     PCB_BASE_FRAME* m_parent;
     wxConfigBase*       m_config;
 
-    void OnCloseWindow( wxCloseEvent& event );
+    void OnCloseWindow( wxCloseEvent& event ) override;
 
     /// Open a dialog box for printer setup (printer options, page size ...)
-    void OnPageSetup( wxCommandEvent& event );
+    void OnPageSetup( wxCommandEvent& event ) override;
 
-    void OnPrintPreview( wxCommandEvent& event );
+    void OnPrintPreview( wxCommandEvent& event ) override;
 
     /// Called on activate Print button
-    void OnPrintButtonClick( wxCommandEvent& event );
+    void OnPrintButtonClick( wxCommandEvent& event ) override;
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
 

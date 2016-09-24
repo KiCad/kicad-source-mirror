@@ -39,13 +39,13 @@ public:
 
     // -----<PUBLIC PLUGIN API>--------------------------------------------------
 
-    const wxString  PluginName() const;
+    const wxString  PluginName() const override;
 
     BOARD*          Load( const wxString&   aFileName,
                           BOARD*            aAppendToMe,
                           const PROPERTIES* aProperties = NULL );
 
-    const wxString  GetFileExtension() const;
+    const wxString  GetFileExtension() const override;
 
     // -----</PUBLIC PLUGIN API>-------------------------------------------------
 

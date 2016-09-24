@@ -63,7 +63,7 @@ public:
      * Function WriteNetlist
      * writes to specified output file
      */
-    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
 
 #define GNL_ALL     ( GNL_LIBRARIES | GNL_COMPONENTS | GNL_PARTS | GNL_HEADER | GNL_NETS )
 

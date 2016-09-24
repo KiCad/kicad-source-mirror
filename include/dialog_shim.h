@@ -85,9 +85,9 @@ public:
 
     bool IsQuasiModal()         { return m_qmodal_showing; }
 
-    bool Show( bool show );     // override wxDialog::Show
+    bool Show( bool show ) override;
 
-    bool Enable( bool enable ); // override wxDialog::Enable virtual
+    bool Enable( bool enable ) override;
 
 protected:
 

@@ -57,7 +57,7 @@ public:
     ~TREEPROJECTFILES();
 private:
     /* overridden sort function */
-    int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 );
+    int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;
 };
 
 #endif  // CLASS_TREEPROJECTFILES_H

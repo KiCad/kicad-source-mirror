@@ -332,7 +332,7 @@ public:
     void SkipNextLeftButtonReleaseEvent();
 
     ///> @copydoc EDA_BASE_FRAME::WriteHotkeyConfig
-    int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL );
+    int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL ) override;
 
     /**
      * Function GetHotkeyConfig()
@@ -382,7 +382,7 @@ public:
 
     virtual void ReCreateHToolbar() = 0;
     virtual void ReCreateVToolbar() = 0;
-    virtual void ReCreateMenuBar();
+    virtual void ReCreateMenuBar() override;
     virtual void ReCreateAuxiliaryToolbar();
 
     /**
@@ -692,9 +692,9 @@ public:
     void OnSockRequest( wxSocketEvent& evt );
     void OnSockRequestServer( wxSocketEvent& evt );
 
-    void LoadSettings( wxConfigBase* aCfg );    // override virtual
+    void LoadSettings( wxConfigBase* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg );    // override virtual
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
      * Append a message to the message panel.

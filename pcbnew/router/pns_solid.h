@@ -57,11 +57,11 @@ public:
         return aItem && SOLID_T == aItem->Kind();
     }
 
-    ITEM* Clone() const;
+    ITEM* Clone() const override;
 
     const SHAPE* Shape() const { return m_shape; }
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const;
+    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const override;
 
     void SetShape( SHAPE* shape )
     {

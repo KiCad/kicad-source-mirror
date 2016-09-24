@@ -48,8 +48,8 @@ public:
     virtual ~WRL1SWITCH();
 
     // functions inherited from WRL1NODE
-    bool Read( WRLPROC& proc, WRL1BASE* aTopNode );
-    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp );
+    bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
 };
 
 #endif  // VRML1_SWITCH_H

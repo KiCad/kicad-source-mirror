@@ -90,9 +90,9 @@ public:
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
             const PROPERTIES* aProperties = NULL );
 
-    bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
+    bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL ) override;
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath );
+    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
     //-----</PLUGIN IMPLEMENTATION>---------------------------------------------
 

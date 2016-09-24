@@ -37,29 +37,29 @@ class SGCOLORS : public SGNODE
 public:
     std::vector< SGCOLOR > colors;
 
-    void unlinkChildNode( const SGNODE* aNode );
-    void unlinkRefNode( const SGNODE* aNode );
+    void unlinkChildNode( const SGNODE* aNode ) override;
+    void unlinkRefNode( const SGNODE* aNode ) override;
 
 public:
     SGCOLORS( SGNODE* aParent );
     virtual ~SGCOLORS();
 
-    virtual bool SetParent( SGNODE* aParent, bool notify = true );
+    virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller);
-    bool AddRefNode( SGNODE* aNode );
-    bool AddChildNode( SGNODE* aNode );
+    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
+    bool AddRefNode( SGNODE* aNode ) override;
+    bool AddChildNode( SGNODE* aNode ) override;
 
     bool GetColorList( size_t& aListSize, SGCOLOR*& aColorList );
     void SetColorList( size_t aListSize, const SGCOLOR* aColorList );
     void AddColor( double aRedValue, double aGreenValue, double aBlueValue );
     void AddColor( const SGCOLOR& aColor );
 
-    void ReNameNodes( void );
-    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag );
+    void ReNameNodes( void ) override;
+    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag ) override;
 
-    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode );
-    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode );
+    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode ) override;
+    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode ) override;
 };
 
 #endif  // SG_COLORS_H

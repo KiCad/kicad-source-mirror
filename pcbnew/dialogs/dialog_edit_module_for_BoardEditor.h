@@ -72,23 +72,23 @@ private:
     void Edit3DShapeFileName();
 
     // virtual event functions
-    void OnEditValue( wxCommandEvent& event );
-    void OnEditReference( wxCommandEvent& event );
+    void OnEditValue( wxCommandEvent& event ) override;
+    void OnEditReference( wxCommandEvent& event ) override;
     void On3DShapeSelection( wxCommandEvent& event );
-    void On3DShapeNameSelected( wxCommandEvent& event );
+    void On3DShapeNameSelected( wxCommandEvent& event ) override;
     void Edit3DShapeFilename( wxCommandEvent& event )
     {
         Edit3DShapeFileName();
     }
-    void Remove3DShape( wxCommandEvent& event );
+    void Remove3DShape( wxCommandEvent& event ) override;
     void Add3DShape( wxCommandEvent& event )
     {
         BrowseAndAdd3DShapeFile();
     }
-    void GotoModuleEditor( wxCommandEvent& event );
-    void ExchangeModule( wxCommandEvent& event );
-    void ModuleOrientEvent( wxCommandEvent& event );
-    void Cfg3DPath( wxCommandEvent& event );
+    void GotoModuleEditor( wxCommandEvent& event ) override;
+    void ExchangeModule( wxCommandEvent& event ) override;
+    void ModuleOrientEvent( wxCommandEvent& event ) override;
+    void Cfg3DPath( wxCommandEvent& event ) override;
 
     void OnInitDlg( wxInitDialogEvent& event )
     {
@@ -99,8 +99,8 @@ private:
         FinishDialogSettings();
     }
 
-    bool TransferDataToWindow();
-    bool TransferDataFromWindow();
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
     /**
      * @brief OnCloseWindow - called when the frame is closed

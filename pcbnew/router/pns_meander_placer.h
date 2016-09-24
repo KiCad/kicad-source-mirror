@@ -53,22 +53,22 @@ public:
     virtual ~MEANDER_PLACER();
 
     /// @copydoc PLACEMENT_ALGO::Start()
-    virtual bool Start( const VECTOR2I& aP, ITEM* aStartItem );
+    virtual bool Start( const VECTOR2I& aP, ITEM* aStartItem ) override;
 
     /// @copydoc PLACEMENT_ALGO::Move()
-    virtual bool Move( const VECTOR2I& aP, ITEM* aEndItem );
+    virtual bool Move( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     /// @copydoc PLACEMENT_ALGO::FixRoute()
-    virtual bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem );
+    virtual bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     /// @copydoc PLACEMENT_ALGO::CurrentNode()
-    NODE* CurrentNode( bool aLoopsRemoved = false ) const;
+    NODE* CurrentNode( bool aLoopsRemoved = false ) const override;
 
     /// @copydoc PLACEMENT_ALGO::Traces()
-    const ITEM_SET Traces();
+    const ITEM_SET Traces() override;
 
     /// @copydoc PLACEMENT_ALGO::CurrentEnd()
-    const VECTOR2I& CurrentEnd() const;
+    const VECTOR2I& CurrentEnd() const override;
 
     /// @copydoc PLACEMENT_ALGO::CurrentNets()
     const std::vector<int> CurrentNets() const
@@ -77,16 +77,16 @@ public:
     }
 
     /// @copydoc PLACEMENT_ALGO::CurrentLayer()
-    int CurrentLayer() const;
+    int CurrentLayer() const override;
 
     /// @copydoc MEANDER_PLACER_BASE::TuningInfo()
-    virtual const wxString TuningInfo() const;
+    virtual const wxString TuningInfo() const override;
 
     /// @copydoc MEANDER_PLACER_BASE::TuningStatus()
-    virtual TUNING_STATUS TuningStatus() const;
+    virtual TUNING_STATUS TuningStatus() const override;
 
     /// @copydoc MEANDER_PLACER_BASE::CheckFit()
-    bool CheckFit ( MEANDER_SHAPE* aShape );
+    bool CheckFit ( MEANDER_SHAPE* aShape ) override;
 
 protected:
 

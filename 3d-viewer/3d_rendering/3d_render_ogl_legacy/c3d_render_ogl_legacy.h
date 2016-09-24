@@ -64,10 +64,10 @@ public:
     ~C3D_RENDER_OGL_LEGACY();
 
     // Imported from C3D_RENDER_BASE
-    void SetCurWindowSize( const wxSize &aSize );
-    bool Redraw( bool aIsMoving, REPORTER *aStatusTextReporter );
+    void SetCurWindowSize( const wxSize &aSize ) override;
+    bool Redraw( bool aIsMoving, REPORTER *aStatusTextReporter ) override;
 
-    int GetWaitForEditingTimeOut();
+    int GetWaitForEditingTimeOut() override;
 
 private:
     bool initializeOpenGL();

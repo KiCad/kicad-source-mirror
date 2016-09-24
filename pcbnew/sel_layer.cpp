@@ -94,8 +94,8 @@ public:
 
 private:
     // Event handlers
-    void OnLeftGridCellClick( wxGridEvent& event );
-    void OnRightGridCellClick( wxGridEvent& event );
+    void OnLeftGridCellClick( wxGridEvent& event ) override;
+    void OnRightGridCellClick( wxGridEvent& event ) override;
 
     void buildList();
 };
@@ -264,8 +264,8 @@ public:
     }
 
 private:
-    void OnLeftGridCellClick( wxGridEvent& event );
-    void OnRightGridCellClick( wxGridEvent& event );
+    void OnLeftGridCellClick( wxGridEvent& event ) override;
+    void OnRightGridCellClick( wxGridEvent& event ) override;
 
     void OnOkClick( wxCommandEvent& event )
     {

@@ -72,9 +72,9 @@ public:
 
 private:
     void     initDialog( wxArrayString& aHistoryList );
-    void     OnCancel( wxCommandEvent& event );
-    void     Accept( wxCommandEvent& event );
-    void     GetExtraSelection( wxCommandEvent& event );
+    void     OnCancel( wxCommandEvent& event ) override;
+    void     Accept( wxCommandEvent& event ) override;
+    void     GetExtraSelection( wxCommandEvent& event ) override;
 };
 
 

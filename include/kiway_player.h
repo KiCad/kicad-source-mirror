@@ -209,7 +209,7 @@ public:
     /**
      * Our version of Destroy() which is virtual from wxWidgets
      */
-    bool Destroy();
+    bool Destroy() override;
 
 protected:
 

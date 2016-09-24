@@ -85,7 +85,7 @@ private:
 public:
 
     // functions inherited from WRL2NODE
-    bool isDangling( void );
+    bool isDangling( void ) override;
 
 public:
     WRL2BASE();
@@ -105,13 +105,13 @@ public:
     bool ReadNode( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode );
 
     // overrides
-    virtual std::string GetName( void );
-    virtual bool SetName( const std::string& aName );
+    virtual std::string GetName( void ) override;
+    virtual bool SetName( const std::string& aName ) override;
 
     // functions inherited from WRL2NODE
-    bool Read( WRLPROC& proc, WRL2BASE* aTopNode );
-    bool SetParent( WRL2NODE* aParent, bool doUnlink = true );
-    SGNODE* TranslateToSG( SGNODE* aParent );
+    bool Read( WRLPROC& proc, WRL2BASE* aTopNode ) override;
+    bool SetParent( WRL2NODE* aParent, bool doUnlink = true ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent ) override;
 };
 
 #endif  // VRML2_BASE_H

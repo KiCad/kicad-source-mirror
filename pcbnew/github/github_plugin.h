@@ -163,9 +163,9 @@ class GITHUB_PLUGIN : public PCB_IO
 {
 public:
     //-----<PLUGIN API>----------------------------------------------------------
-    const wxString PluginName() const;
+    const wxString PluginName() const override;
 
-    const wxString GetFileExtension() const;
+    const wxString GetFileExtension() const override;
 
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
             const PROPERTIES* aProperties = NULL );
@@ -179,17 +179,17 @@ public:
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
             const PROPERTIES* aProperties = NULL );
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath );
+    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
-    void FootprintLibOptions( PROPERTIES* aListToAppendTo ) const;
+    void FootprintLibOptions( PROPERTIES* aListToAppendTo ) const override;
 
     // Since I derive from PCB_IO, I have to implement this, else I'd inherit his, which is bad since
     // my lib_path is not his.  Note: it is impossible to create a Github library, but can the C.O.W. portion.
-    void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties );
+    void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties ) override;
 
     // Since I derive from PCB_IO, I have to implement this, else I'd inherit his, which is bad since
     // my lib_path is not his.  Note: it is impossible to delete a Github library, but can the C.O.W portion.
-    bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties );
+    bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties ) override;
 
     //-----</PLUGIN API>---------------------------------------------------------
 

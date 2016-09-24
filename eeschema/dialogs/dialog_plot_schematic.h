@@ -63,10 +63,10 @@ public:
                                                         // and therefore should be saved
 
 private:
-    void OnPlotFormatSelection( wxCommandEvent& event );
-    void OnButtonPlotCurrentClick( wxCommandEvent& event );
-    void OnButtonPlotAllClick( wxCommandEvent& event );
-    void OnButtonCancelClick( wxCommandEvent& event );
+    void OnPlotFormatSelection( wxCommandEvent& event ) override;
+    void OnButtonPlotCurrentClick( wxCommandEvent& event ) override;
+    void OnButtonPlotAllClick( wxCommandEvent& event ) override;
+    void OnButtonCancelClick( wxCommandEvent& event ) override;
 
     void    initDlg();
 
@@ -82,7 +82,7 @@ private:
     /**
      * Set the m_outputDirectoryName variable to the selected directory from directory dialog.
      */
-    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
+    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
 
     PlotFormat GetPlotFileFormat();
 

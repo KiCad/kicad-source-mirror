@@ -61,7 +61,7 @@ public:
 
     ~LIB_VIEW_FRAME();
 
-    void OnSize( wxSizeEvent& event );
+    void OnSize( wxSizeEvent& event ) override;
 
     /**
      * Function ReCreateListLib
@@ -74,23 +74,23 @@ public:
     void ReCreateListCmp();
     void Process_Special_Functions( wxCommandEvent& event );
     void DisplayLibInfos();
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
     void OnCloseWindow( wxCloseEvent& Event );
     void CloseLibraryViewer( wxCommandEvent& event );
-    void ReCreateHToolbar();
-    void ReCreateVToolbar();
-    void ReCreateMenuBar();
+    void ReCreateHToolbar() override;
+    void ReCreateVToolbar() override;
+    void ReCreateMenuBar() override;
 
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    double BestZoom();
+    void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
+    double BestZoom() override;
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
     /**
      * Function OnHotKey
@@ -100,10 +100,10 @@ public:
      * case insensitive
      * </p>
      */
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
 
-    void LoadSettings( wxConfigBase* aCfg );
-    void SaveSettings( wxConfigBase* aCfg );
+    void LoadSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
      * set a filter to display only libraries and/or components
@@ -143,7 +143,7 @@ private:
      * is called when the frame frame is activate to reload the libraries and component lists
      * that can be changed by the schematic editor or the library editor.
      */
-    virtual void OnActivate( wxActivateEvent& event );
+    virtual void OnActivate( wxActivateEvent& event ) override;
 
     void SelectCurrentLibrary();
     void SelectAndViewLibraryPart( int option );
@@ -154,7 +154,7 @@ private:
      */
     void ExportToSchematicLibraryPart( wxCommandEvent& event );
     void ViewOneLibraryContent( PART_LIB* Lib, int Flag );
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
     void DClickOnCmpList( wxCommandEvent& event );
 
 // Private members:

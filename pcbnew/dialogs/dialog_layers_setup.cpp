@@ -164,12 +164,12 @@ private:
     int getLayerTypeIndex( LAYER_NUM layer );
 
 
-    void OnCancelButtonClick( wxCommandEvent& event );
-    void OnOkButtonClick( wxCommandEvent& event );
-    void OnCheckBox( wxCommandEvent& event );
-    void DenyChangeCheckBox( wxCommandEvent& event );
-    void OnPresetsChoice( wxCommandEvent& event );
-    void OnCopperLayersChoice( wxCommandEvent& event );
+    void OnCancelButtonClick( wxCommandEvent& event ) override;
+    void OnOkButtonClick( wxCommandEvent& event ) override;
+    void OnCheckBox( wxCommandEvent& event ) override;
+    void DenyChangeCheckBox( wxCommandEvent& event ) override;
+    void OnPresetsChoice( wxCommandEvent& event ) override;
+    void OnCopperLayersChoice( wxCommandEvent& event ) override;
 
     bool testLayerNames();
 
@@ -214,7 +214,7 @@ private:
         m_typeStaticText->Move( offset + (widths[2] - txtz.x)/2, 5 );
     }
 
-    void OnSize( wxSizeEvent& event );
+    void OnSize( wxSizeEvent& event ) override;
 };
 
 

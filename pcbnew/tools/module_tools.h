@@ -48,10 +48,10 @@ public:
     ~MODULE_TOOLS();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason );
+    void Reset( RESET_REASON aReason ) override;
 
     /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init();
+    bool Init() override;
 
     /**
      * Function PlacePad()
@@ -101,7 +101,7 @@ public:
     int ModuleEdgeOutlines( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
-    void SetTransitions();
+    void SetTransitions() override;
 
 private:
     KIGFX::VIEW* m_view;

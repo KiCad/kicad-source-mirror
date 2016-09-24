@@ -98,8 +98,8 @@ public:
     void SetBezControl2( const wxPoint& aPoint )    { m_BezierC2 = aPoint; }
     const wxPoint& GetBezControl2() const           { return m_BezierC2; }
 
-    void SetPosition( const wxPoint& aPos )         { m_Start = aPos; }     // override
-    const wxPoint& GetPosition() const              { return m_Start; }     // override
+    void SetPosition( const wxPoint& aPos ) override { m_Start = aPos; }
+    const wxPoint& GetPosition() const override     { return m_Start; }
 
     /**
      * Function GetStart
@@ -123,7 +123,7 @@ public:
     // m_Start, m_End, and m_Angle.
     // No Set...() function for these attributes.
 
-    const wxPoint GetCenter() const;        //override
+    const wxPoint GetCenter() const override;
     const wxPoint& GetArcStart() const      { return m_End; }
     const wxPoint GetArcEnd() const;
 
@@ -180,20 +180,20 @@ public:
     }
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
 
-    virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    virtual void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    virtual const EDA_RECT GetBoundingBox() const;
+    virtual const EDA_RECT GetBoundingBox() const override;
 
-    virtual bool HitTest( const wxPoint& aPosition ) const;
+    virtual bool HitTest( const wxPoint& aPosition ) const override;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "DRAWSEGMENT" );
     }
@@ -208,15 +208,15 @@ public:
         return GetLineLength( GetStart(), GetEnd() );
     }
 
-    virtual void Move( const wxPoint& aMoveVector )
+    virtual void Move( const wxPoint& aMoveVector ) override
     {
         m_Start += aMoveVector;
         m_End   += aMoveVector;
     }
 
-    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
+    virtual void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    virtual void Flip( const wxPoint& aCentre );
+    virtual void Flip( const wxPoint& aCentre ) override;
 
     /**
      * Function TransformShapeWithClearanceToPolygon
@@ -235,17 +235,17 @@ public:
                                                int             aCircleToSegmentsCount,
                                                double          aCorrectionFactor ) const;
 
-    virtual wxString GetSelectMenuText() const;
+    virtual wxString GetSelectMenuText() const override;
 
-    virtual BITMAP_DEF GetMenuImage() const { return  add_dashed_line_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const override { return  add_dashed_line_xpm; }
 
-    virtual EDA_ITEM* Clone() const;
+    virtual EDA_ITEM* Clone() const override;
 
     /// @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 };
 

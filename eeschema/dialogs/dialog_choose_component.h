@@ -71,17 +71,17 @@ public:
     bool IsExternalBrowserSelected() const { return m_external_browser_requested; }
 
 protected:
-    virtual void OnSearchBoxChange( wxCommandEvent& aEvent );
-    virtual void OnSearchBoxEnter( wxCommandEvent& aEvent );
-    virtual void OnInterceptSearchBoxKey( wxKeyEvent& aEvent );
+    virtual void OnSearchBoxChange( wxCommandEvent& aEvent ) override;
+    virtual void OnSearchBoxEnter( wxCommandEvent& aEvent ) override;
+    virtual void OnInterceptSearchBoxKey( wxKeyEvent& aEvent ) override;
 
-    virtual void OnTreeSelect( wxTreeEvent& aEvent );
-    virtual void OnDoubleClickTreeActivation( wxTreeEvent& aEvent );
-    virtual void OnInterceptTreeEnter( wxKeyEvent& aEvent );
-    virtual void OnTreeMouseUp( wxMouseEvent& aMouseEvent );
+    virtual void OnTreeSelect( wxTreeEvent& aEvent ) override;
+    virtual void OnDoubleClickTreeActivation( wxTreeEvent& aEvent ) override;
+    virtual void OnInterceptTreeEnter( wxKeyEvent& aEvent ) override;
+    virtual void OnTreeMouseUp( wxMouseEvent& aMouseEvent ) override;
 
-    virtual void OnStartComponentBrowser( wxMouseEvent& aEvent );
-    virtual void OnHandlePreviewRepaint( wxPaintEvent& aRepaintEvent );
+    virtual void OnStartComponentBrowser( wxMouseEvent& aEvent ) override;
+    virtual void OnHandlePreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
 
 private:
     bool updateSelection();

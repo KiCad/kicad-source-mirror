@@ -308,25 +308,25 @@ class SHAPE_POLY_SET : public SHAPE
         void Simplify( POLYGON_MODE aFastMode );
 
         /// @copydoc SHAPE::Format()
-        const std::string Format() const;
+        const std::string Format() const override;
 
         /// @copydoc SHAPE::Parse()
-        bool Parse( std::stringstream& aStream );
+        bool Parse( std::stringstream& aStream ) override;
 
         /// @copydoc SHAPE::Move()
-        void Move( const VECTOR2I& aVector );
+        void Move( const VECTOR2I& aVector ) override;
 
         /// @copydoc SHAPE::IsSolid()
-        bool IsSolid() const
+        bool IsSolid() const override
         {
             return true;
         }
 
-        const BOX2I BBox( int aClearance = 0 ) const;
+        const BOX2I BBox( int aClearance = 0 ) const override;
 
         // fixme: add collision support
-        bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const { return false; }
-        bool Collide( const SEG& aSeg, int aClearance = 0 ) const { return false; }
+        bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override { return false; }
+        bool Collide( const SEG& aSeg, int aClearance = 0 ) const override { return false; }
 
 
         ///> Returns true is a given subpolygon contains the point aP. If aSubpolyIndex < 0 (default value),

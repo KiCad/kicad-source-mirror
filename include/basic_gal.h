@@ -94,12 +94,12 @@ public:
     }
 
     /// @brief Save the context.
-    virtual void Save()
+    virtual void Save() override
     {
         m_transformHistory.push( m_transform );
     }
 
-    virtual void Restore()
+    virtual void Restore() override
     {
         m_transform = m_transformHistory.top();
         m_transformHistory.pop();
@@ -110,20 +110,20 @@ public:
      * @brief Draw a polyline
      * @param aPointList is a list of 2D-Vectors containing the polyline points.
      */
-    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList );
+    virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override;
 
     /** Start and end points are defined as 2D-Vectors.
      * @param aStartPoint   is the start point of the line.
      * @param aEndPoint     is the end point of the line.
      */
-    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+    virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
     /**
      * @brief Translate the context.
      *
      * @param aTranslation is the translation vector.
      */
-    virtual void Translate( const VECTOR2D& aTranslation )
+    virtual void Translate( const VECTOR2D& aTranslation ) override
     {
         m_transform.m_moveOffset += aTranslation;
     }
@@ -133,7 +133,7 @@ public:
      *
      * @param aAngle is the rotation angle in radians.
      */
-    virtual void Rotate( double aAngle )
+    virtual void Rotate( double aAngle ) override
     {
         m_transform.m_rotAngle = aAngle;
         m_transform.m_rotCenter = m_transform.m_moveOffset;

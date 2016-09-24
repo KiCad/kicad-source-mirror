@@ -47,8 +47,8 @@ public:
 
 private:
     void initValues( );
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override;
 
     void OnInitDlg( wxInitDialogEvent& event )
     {

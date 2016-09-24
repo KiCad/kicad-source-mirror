@@ -52,8 +52,8 @@ public:
     ~DIALOG_DISPLAY_OPTIONS() {};
 
 private:
-    void OnOKBUttonClick( wxCommandEvent& event );
-    void OnCancelButtonClick( wxCommandEvent& event );
+    void OnOKBUttonClick( wxCommandEvent& event ) override;
+    void OnCancelButtonClick( wxCommandEvent& event ) override;
     void initOptDialog( );
 };
 

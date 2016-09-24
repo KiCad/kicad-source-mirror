@@ -56,8 +56,8 @@ class DRW_ConvTable : public DRW_Converter
 {
 public:
     DRW_ConvTable( const int* t, int l ) : DRW_Converter( t, l ) {}
-    virtual std::string fromUtf8( std::string* s );
-    virtual std::string toUtf8( std::string* s );
+    virtual std::string fromUtf8( std::string* s ) override;
+    virtual std::string toUtf8( std::string* s ) override;
 };
 
 class DRW_ConvDBCSTable : public DRW_Converter
@@ -70,8 +70,8 @@ public:
         doubleTable = dt;
     }
 
-    virtual std::string fromUtf8( std::string* s );
-    virtual std::string toUtf8( std::string* s );
+    virtual std::string fromUtf8( std::string* s ) override;
+    virtual std::string toUtf8( std::string* s ) override;
 
 private:
     const int* leadTable;
@@ -88,8 +88,8 @@ public:
         doubleTable = dt;
     }
 
-    virtual std::string fromUtf8( std::string* s );
-    virtual std::string toUtf8( std::string* s );
+    virtual std::string fromUtf8( std::string* s ) override;
+    virtual std::string toUtf8( std::string* s ) override;
 
 private:
     const int* leadTable;

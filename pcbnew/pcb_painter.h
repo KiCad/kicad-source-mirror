@@ -81,7 +81,7 @@ public:
     PCB_RENDER_SETTINGS();
 
     /// @copydoc RENDER_SETTINGS::ImportLegacyColors()
-    void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings );
+    void ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings ) override;
 
     /**
      * Function LoadDisplayOptions
@@ -92,7 +92,7 @@ public:
     void LoadDisplayOptions( const DISPLAY_OPTIONS* aOptions );
 
     /// @copydoc RENDER_SETTINGS::GetColor()
-    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const;
+    virtual const COLOR4D& GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
     /**
      * Function GetLayerColor
@@ -141,7 +141,7 @@ public:
 
 protected:
     ///> @copydoc RENDER_SETTINGS::Update()
-    void update();
+    void update() override;
 
     ///> Colors for all layers (normal)
     COLOR4D m_layerColors[TOTAL_LAYER_COUNT];
@@ -185,19 +185,19 @@ public:
     PCB_PAINTER( GAL* aGal );
 
     /// @copydoc PAINTER::ApplySettings()
-    virtual void ApplySettings( const RENDER_SETTINGS* aSettings )
+    virtual void ApplySettings( const RENDER_SETTINGS* aSettings ) override
     {
         m_pcbSettings = *static_cast<const PCB_RENDER_SETTINGS*>( aSettings );
     }
 
     /// @copydoc PAINTER::GetSettings()
-    virtual RENDER_SETTINGS* GetSettings()
+    virtual RENDER_SETTINGS* GetSettings() override
     {
         return &m_pcbSettings;
     }
 
     /// @copydoc PAINTER::Draw()
-    virtual bool Draw( const VIEW_ITEM* aItem, int aLayer );
+    virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) override;
 
 protected:
     PCB_RENDER_SETTINGS m_pcbSettings;

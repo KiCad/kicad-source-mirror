@@ -51,18 +51,18 @@ public:
         return wxT( "SCH_NO_CONNECT" );
     }
 
-    int GetPenSize() const;
+    int GetPenSize() const override;
 
-    void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem ) override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
-    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
+    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
     const EDA_RECT GetBoundingBox() const;  // Virtual
 
@@ -73,42 +73,42 @@ public:
         m_pos += aMoveVector;
     }
 
-    void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position ) override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
-    bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     bool IsConnectable() const { return true; }
 
-    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
     wxString GetSelectMenuText() const { return wxString( _( "No Connect" ) ); }
 
     BITMAP_DEF GetMenuImage() const { return noconn_xpm; }
 
-    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath );
+    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 
     wxPoint GetPosition() const { return m_pos; }
 
     void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter );
+    void Plot( PLOTTER* aPlotter ) override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
 #endif
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const;
+    bool doIsConnected( const wxPoint& aPosition ) const override;
 };
 
 

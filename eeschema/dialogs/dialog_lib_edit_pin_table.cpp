@@ -48,14 +48,14 @@ public:
     DataViewModel( LIB_PART& aPart );
 
     // wxDataViewModel
-    virtual unsigned int    GetColumnCount() const;
-    virtual wxString        GetColumnType( unsigned int col ) const;
-    virtual void            GetValue( wxVariant&, const wxDataViewItem&, unsigned int ) const;
-    virtual bool            SetValue( const wxVariant&, const wxDataViewItem&, unsigned int );
-    virtual wxDataViewItem  GetParent( const wxDataViewItem& ) const;
-    virtual bool            IsContainer( const wxDataViewItem& ) const;
-    virtual bool            HasContainerColumns( const wxDataViewItem& ) const;
-    virtual unsigned int    GetChildren( const wxDataViewItem&, wxDataViewItemArray& ) const;
+    virtual unsigned int    GetColumnCount() const override;
+    virtual wxString        GetColumnType( unsigned int col ) const override;
+    virtual void            GetValue( wxVariant&, const wxDataViewItem&, unsigned int ) const override;
+    virtual bool            SetValue( const wxVariant&, const wxDataViewItem&, unsigned int ) override;
+    virtual wxDataViewItem  GetParent( const wxDataViewItem& ) const override;
+    virtual bool            IsContainer( const wxDataViewItem& ) const override;
+    virtual bool            HasContainerColumns( const wxDataViewItem& ) const override;
+    virtual unsigned int    GetChildren( const wxDataViewItem&, wxDataViewItemArray& ) const override;
 
     virtual int Compare( const wxDataViewItem& lhs,
             const wxDataViewItem& rhs,
@@ -118,8 +118,8 @@ class DIALOG_LIB_EDIT_PIN_TABLE::DataViewModel::Group :
 public:
     Group( unsigned int aGroupingColumn ) : m_GroupingColumn( aGroupingColumn ) {}
 
-    virtual void            GetValue( wxVariant& aValue, unsigned int aCol ) const;
-    virtual wxString        GetString( unsigned int aCol ) const;
+    virtual void            GetValue( wxVariant& aValue, unsigned int aCol ) const override;
+    virtual wxString        GetString( unsigned int aCol ) const override;
     virtual wxDataViewItem  GetParent() const { return wxDataViewItem(); }
     virtual bool            IsContainer() const { return true; }
     virtual unsigned int    GetChildren( wxDataViewItemArray& aItems ) const
@@ -146,8 +146,8 @@ public:
     Pin( DataViewModel& aModel,
             LIB_PIN* aBacking ) : m_Model( aModel ), m_Backing( aBacking ), m_Group( 0 ) {}
 
-    virtual void GetValue( wxVariant& aValue, unsigned int aCol ) const;
-    virtual wxString        GetString( unsigned int aCol ) const;
+    virtual void GetValue( wxVariant& aValue, unsigned int aCol ) const override;
+    virtual wxString        GetString( unsigned int aCol ) const override;
     virtual wxDataViewItem GetParent() const { return wxDataViewItem( m_Group ); }
     virtual bool IsContainer() const { return false; }
     virtual unsigned int GetChildren( wxDataViewItemArray& ) const { return 0; }

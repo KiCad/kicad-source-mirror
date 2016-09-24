@@ -40,7 +40,7 @@ class DIALOG_PNS_SETTINGS : public DIALOG_PNS_SETTINGS_BASE
         DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTINGS& aSettings );
 
     private:
-        virtual void OnOkClick( wxCommandEvent& aEvent );
+        virtual void OnOkClick( wxCommandEvent& aEvent ) override;
 
         PNS::ROUTING_SETTINGS& m_settings;
 };

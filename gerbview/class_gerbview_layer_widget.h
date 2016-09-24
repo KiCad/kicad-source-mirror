@@ -75,7 +75,7 @@ class GERBER_LAYER_WIDGET : public LAYER_WIDGET
      * @return true if bitmaps shown in Render layer list
      * are alternate bitmaps, or false if they are "normal" bitmaps
      */
-    virtual bool useAlternateBitmap(int aRow);
+    virtual bool useAlternateBitmap(int aRow) override;
 
     GERBER_FILE_IMAGE_LIST* GetImagesList();
 
@@ -100,11 +100,11 @@ public:
     void ReFillRender();
 
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
-    void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor );
-    bool OnLayerSelect( int aLayer );
-    void OnLayerVisible( int aLayer, bool isVisible, bool isFinal );
-    void OnRenderColorChange( int aId, EDA_COLOR_T aColor );
-    void OnRenderEnable( int aId, bool isEnabled );
+    void OnLayerColorChange( int aLayer, EDA_COLOR_T aColor ) override;
+    bool OnLayerSelect( int aLayer ) override;
+    void OnLayerVisible( int aLayer, bool isVisible, bool isFinal ) override;
+    void OnRenderColorChange( int aId, EDA_COLOR_T aColor ) override;
+    void OnRenderEnable( int aId, bool isEnabled ) override;
 
     /**
      * Function SetLayersManagerTabsText

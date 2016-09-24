@@ -498,7 +498,7 @@ public:
     }
 
     ///> @copydoc VIEW_ITEM::ViewDraw()
-    virtual void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const;
+    virtual void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
 
     ///> @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const

@@ -82,7 +82,7 @@ public:
 
     void InstallOptionsFrame( const wxPoint& pos );
 
-    void OnCloseWindow( wxCloseEvent& Event );
+    void OnCloseWindow( wxCloseEvent& Event ) override;
     void CloseModuleEditor( wxCommandEvent& Event );
 
     void Process_Special_Functions( wxCommandEvent& event );
@@ -93,25 +93,25 @@ public:
      * Function RedrawActiveWindoow
      * draws the footprint editor BOARD, and others elements such as axis and grid.
      */
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
 
     /**
      * Function ReCreateHToolbar
      * create the main horizontal toolbar for the footprint editor
      */
-    void ReCreateHToolbar();
+    void ReCreateHToolbar() override;
 
-    void ReCreateVToolbar();
+    void ReCreateVToolbar() override;
     void ReCreateOptToolbar();
-    void ReCreateAuxiliaryToolbar();
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
+    void ReCreateAuxiliaryToolbar() override;
+    void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
 
     /**
      * Function OnLeftDClick
      * handles the double click in the footprint editor:
      * If the double clicked item is editable: call the corresponding editor.
      */
-    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
 
     /**
      * Function OnRightClick
@@ -119,17 +119,17 @@ public:
      * Create the pop up menu
      * After this menu is built, the standard ZOOM menu is added
      */
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
 
     /**
      * @brief (Re)Create the menubar for the module editor frame
      */
-    void ReCreateMenuBar();
+    void ReCreateMenuBar() override;
 
     // The Tool Framework initalization, for GAL mode
     void setupTools();
 
-    void ToolOnRightClick( wxCommandEvent& event );
+    void ToolOnRightClick( wxCommandEvent& event ) override;
     void OnSelectOptionToolbar( wxCommandEvent& event );
     void OnConfigurePaths( wxCommandEvent& aEvent );
 
@@ -143,7 +143,7 @@ public:
     void OnSaveLibraryAs( wxCommandEvent& aEvent );
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
     /**
      * Function OnHotKey
@@ -153,7 +153,7 @@ public:
      * case insensitive
      * </p>
      */
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
 
     BOARD_ITEM* PrepareItemForHotkey( bool failIfCurrentlyEdited );
 
@@ -168,9 +168,9 @@ public:
      * Function Show3D_Frame
      * displays 3D view of the footprint (module) being edited.
      */
-    void Show3D_Frame( wxCommandEvent& event );
+    void Show3D_Frame( wxCommandEvent& event ) override;
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
     void OnVerticalToolbar( wxCommandEvent& aEvent );
 
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
@@ -184,7 +184,7 @@ public:
     void OnUpdateSelectCurrentLib( wxUpdateUIEvent& aEvent );
 
     ///> @copydoc PCB_BASE_EDIT_FRAME::OnEditItemRequest()
-    void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem );
+    void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem ) override;
 
     /**
      * Function LoadModuleFromBoard
@@ -215,7 +215,7 @@ public:
      * and prepare, if needed the refresh of the 3D frame showing the footprint
      * do not forget to call the basic OnModify function to update auxiliary info
      */
-    virtual void OnModify();
+    virtual void OnModify() override;
 
     /**
      * Function ToPrinter
@@ -245,7 +245,7 @@ public:
     bool Clear_Pcb( bool aQuery );
 
     /* handlers for block commands */
-    virtual int BlockCommand( EDA_KEY key );
+    virtual int BlockCommand( EDA_KEY key ) override;
 
     /**
      * Function HandleBlockPlace
@@ -254,7 +254,7 @@ public:
      *  - block move & drag
      *  - block copy & paste
      */
-    virtual void HandleBlockPlace( wxDC* DC );
+    virtual void HandleBlockPlace( wxDC* DC ) override;
 
     /**
      * Function HandleBlockEnd( )
@@ -266,7 +266,7 @@ public:
      * @return false if no item selected, or command finished,
      * true if some items found and HandleBlockPlace must be called later
      */
-    virtual bool HandleBlockEnd( wxDC* DC );
+    virtual bool HandleBlockEnd( wxDC* DC ) override;
 
     BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
@@ -434,7 +434,7 @@ public:
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool IsGridVisible() const;
+    virtual bool IsGridVisible() const override;
 
     /**
      * Function SetGridVisibility() , virtual
@@ -442,19 +442,19 @@ public:
      * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
-    virtual void SetGridVisibility( bool aVisible );
+    virtual void SetGridVisibility( bool aVisible ) override;
 
     /**
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual EDA_COLOR_T GetGridColor() const;
+    virtual EDA_COLOR_T GetGridColor() const override;
 
     ///> @copydoc PCB_BASE_FRAME::SetActiveLayer()
-    void SetActiveLayer( LAYER_ID aLayer );
+    void SetActiveLayer( LAYER_ID aLayer ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    virtual void UseGalCanvas( bool aEnable );
+    virtual void UseGalCanvas( bool aEnable ) override;
 
     DECLARE_EVENT_TABLE()
 

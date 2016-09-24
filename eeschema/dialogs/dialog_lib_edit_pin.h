@@ -46,13 +46,13 @@ public:
     DIALOG_LIB_EDIT_PIN( EDA_DRAW_FRAME* parent, LIB_PIN* aPin );
     ~DIALOG_LIB_EDIT_PIN();
 
-    void OnInitDialog( wxInitDialogEvent& event);
+    void OnInitDialog( wxInitDialogEvent& event) override;
 
-    void OnCloseDialog( wxCloseEvent& event );
-    void OnCancelButtonClick( wxCommandEvent& event );
-    void OnOKButtonClick( wxCommandEvent& event );
-    void OnPaintShowPanel( wxPaintEvent& event );
-    void OnPropertiesChange( wxCommandEvent& event );
+    void OnCloseDialog( wxCloseEvent& event ) override;
+    void OnCancelButtonClick( wxCommandEvent& event ) override;
+    void OnOKButtonClick( wxCommandEvent& event ) override;
+    void OnPaintShowPanel( wxPaintEvent& event ) override;
+    void OnPropertiesChange( wxCommandEvent& event ) override;
 
     void SetOrientationList( const wxArrayString& list, const BITMAP_DEF* aBitmaps );
     void SetOrientation( int orientation )

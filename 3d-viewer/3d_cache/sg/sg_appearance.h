@@ -41,14 +41,14 @@ public:
     SGCOLOR emissive;   // default 0.0 0.0 0.0
     SGCOLOR specular;   // default 0.0 0.0 0.0
 
-    void unlinkChildNode( const SGNODE* aNode );
-    void unlinkRefNode( const SGNODE* aNode );
+    void unlinkChildNode( const SGNODE* aNode ) override;
+    void unlinkRefNode( const SGNODE* aNode ) override;
 
 public:
     SGAPPEARANCE( SGNODE* aParent );
     virtual ~SGAPPEARANCE();
 
-    virtual bool SetParent( SGNODE* aParent, bool notify = true );
+    virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
     bool SetEmissive( float aRVal, float aGVal, float aBVal );
     bool SetEmissive( const SGCOLOR* aRGBColor );
@@ -66,15 +66,15 @@ public:
     bool SetAmbient( const SGCOLOR* aRGBColor );
     bool SetAmbient( const SGCOLOR& aRGBColor );
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller);
-    bool AddRefNode( SGNODE* aNode );
-    bool AddChildNode( SGNODE* aNode );
+    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
+    bool AddRefNode( SGNODE* aNode ) override;
+    bool AddChildNode( SGNODE* aNode ) override;
 
-    void ReNameNodes( void );
-    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag );
+    void ReNameNodes( void ) override;
+    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag ) override;
 
-    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode );
-    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode );
+    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode ) override;
+    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode ) override;
 };
 
 #endif  // SG_APPEARANCE_H

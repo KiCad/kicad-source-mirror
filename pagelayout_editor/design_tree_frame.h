@@ -82,7 +82,7 @@ public:
     ~DESIGN_TREE_FRAME();
 
     void    ReCreateDesignTree();
-    wxSize  GetMinSize() const;
+    wxSize  GetMinSize() const override;
 
     /** @return the page layout item managed by the cell
      */

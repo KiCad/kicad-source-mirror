@@ -38,9 +38,9 @@ private:
     void initDialog();
 
     // Event functions:
-    void OnShowAllClick( wxCommandEvent& event );
-    void OnShowNoneClick( wxCommandEvent& event );
-    void OnOKClick( wxCommandEvent& event );
+    void OnShowAllClick( wxCommandEvent& event ) override;
+    void OnShowNoneClick( wxCommandEvent& event ) override;
+    void OnOKClick( wxCommandEvent& event ) override;
 };
 
 

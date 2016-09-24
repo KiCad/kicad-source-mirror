@@ -293,7 +293,7 @@ public:
     {
     }
 
-    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
+    virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override;
 
 
     //-----< list operations >--------------------------------------------
@@ -389,7 +389,7 @@ public:
 
     PARSER( ELEM* aParent );
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override;
 };
 
 
@@ -423,7 +423,7 @@ public:
     DSN_T   GetEngUnits() const  { return units; }
     int     GetValue() const  { return value; }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( type == T_unit )
             out->Print( nestLevel, "(%s %s)\n", Name(),
@@ -469,7 +469,7 @@ public:
     POINT GetOrigin() { return point0; }
     POINT GetEnd() { return point1; }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* newline = nestLevel ? "\n" : "";
 
@@ -502,7 +502,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s", Name() );
 
@@ -548,7 +548,7 @@ public:
         delete rule;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s", Name() );
 
@@ -609,7 +609,7 @@ public:
         aperture_width = aWidth;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* newline = nestLevel ? "\n" : "";
 
@@ -702,7 +702,7 @@ public:
     }
 
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s\n", Name() );
 
@@ -735,7 +735,7 @@ public:
         diameter = 0.0;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* newline = nestLevel ? "\n" : "";
 
@@ -782,7 +782,7 @@ public:
         aperture_width = 0.0;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* newline = nestLevel ? "\n" : "";
 
@@ -864,7 +864,7 @@ public:
         }
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s ", Name() );
 
@@ -947,7 +947,7 @@ public:
         windows.push_back( aWindow );
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* newline = "\n";
 
@@ -1024,7 +1024,7 @@ public:
         padstacks.push_back( aViaName );
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const int RIGHTMARGIN = 80;
         int perLine = out->Print( nestLevel, "(%s", Name() );
@@ -1078,7 +1078,7 @@ public:
     {
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         for( STRINGS::iterator i=class_ids.begin();  i!=class_ids.end();  ++i )
         {
@@ -1117,7 +1117,7 @@ public:
         delete classes;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( classes )
             classes->Format( out, nestLevel );
@@ -1147,7 +1147,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s\n", Name() );
 
@@ -1202,7 +1202,7 @@ public:
         delete rules;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( name.c_str() );
 
@@ -1276,7 +1276,7 @@ public:
         layer_weight = 0.0;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote0 = out->GetQuoteChar( layer_id0.c_str() );
         const char* quote1 = out->GetQuoteChar( layer_id1.c_str() );
@@ -1303,7 +1303,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s\n", Name() );
 
@@ -1351,7 +1351,7 @@ public:
         value = T_NONE;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s %s)\n", Name(),
                    GetTokenText( value ) );
@@ -1377,7 +1377,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( value.c_str() );
 
@@ -1420,7 +1420,7 @@ public:
         delete rules;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( region_id.size() )
         {
@@ -1464,7 +1464,7 @@ public:
         image_type= T_NONE;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s %s %.6g",
                    Name(),
@@ -1508,7 +1508,7 @@ public:
         delete rules;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         for( LAYERS::iterator i=layers.begin();  i!=layers.end();  ++i )
             i->Format( out, nestLevel );
@@ -1592,7 +1592,7 @@ public:
             place_boundary->SetParent( this );
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -1639,7 +1639,7 @@ public:
             i->Format( out, nestLevel );
     }
 
-    UNIT_RES* GetUnits() const
+    UNIT_RES* GetUnits() const override
     {
         if( unit )
             return unit;
@@ -1724,7 +1724,7 @@ public:
         rotation = aRotation;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR );
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override;
 };
 typedef boost::ptr_vector<PLACE>    PLACES;
 
@@ -1761,7 +1761,7 @@ public:
      */
 //    static int Compare( IMAGE* lhs, IMAGE* rhs );
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( image_id.c_str() );
         out->Print( nestLevel, "(%s %s%s%s\n", Name(),
@@ -1772,7 +1772,7 @@ public:
         out->Print( nestLevel, ")\n" );
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         for( PLACES::iterator i=places.begin();  i!=places.end();  ++i )
             i->Format( out, nestLevel );
@@ -1825,7 +1825,7 @@ public:
         return added;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -1840,7 +1840,7 @@ public:
             i->Format( out, nestLevel );
     }
 
-    UNIT_RES* GetUnits() const
+    UNIT_RES* GetUnits() const override
     {
         if( unit )
             return unit;
@@ -1891,7 +1891,7 @@ public:
         connect = aConnect;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s ", Name() );
 
@@ -1950,7 +1950,7 @@ public:
         vertex.FixNegativeZero();
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
         if( isRotated )
@@ -2035,7 +2035,7 @@ public:
         return image_id;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         std::string imageId = GetImageId();
 
@@ -2050,7 +2050,7 @@ public:
     }
 
     // this is here for makeHash()
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( side != T_both )
             out->Print( 0, " (side %s)", GetTokenText( side ) );
@@ -2077,7 +2077,7 @@ public:
     }
 
 
-    UNIT_RES* GetUnits() const
+    UNIT_RES* GetUnits() const override
     {
         if( unit )
             return unit;
@@ -2150,7 +2150,7 @@ public:
         padstack_id = aPadstackId;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
 
@@ -2164,7 +2164,7 @@ public:
 
 
     // this factored out for use by Compare()
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -2198,7 +2198,7 @@ public:
     }
 
 
-    UNIT_RES* GetUnits() const
+    UNIT_RES* GetUnits() const override
     {
         if( unit )
             return unit;
@@ -2393,7 +2393,7 @@ public:
         return NULL;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -2408,7 +2408,7 @@ public:
             i->Format( out, nestLevel );
     }
 
-    UNIT_RES* GetUnits() const
+    UNIT_RES* GetUnits() const override
     {
         if( unit )
             return unit;
@@ -2482,7 +2482,7 @@ public:
         delete rules;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         // no quoting on these two, the lexer preserved the quotes on input
         out->Print( nestLevel, "(%s %s %s ",
@@ -2540,7 +2540,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s", Name() );
 
@@ -2623,7 +2623,7 @@ public:
         return -1;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( net_id.c_str() );
         const char* space = " ";
@@ -2700,7 +2700,7 @@ public:
     {
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         for( FROMTOS::iterator i=fromtos.begin();  i!=fromtos.end();  ++i )
             i->Format( out, nestLevel );
@@ -2747,7 +2747,7 @@ public:
     }
 
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( class_id.c_str() );
 
@@ -2816,7 +2816,7 @@ public:
     {
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         for( NETS::iterator i=nets.begin();  i!=nets.end();  ++i )
             i->Format( out, nestLevel );
@@ -2897,7 +2897,7 @@ public:
         }
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         out->Print( nestLevel, "(%s ", Name() );
 
@@ -2981,7 +2981,7 @@ public:
         return padstack_id;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( padstack_id.c_str() );
 
@@ -3107,7 +3107,7 @@ public:
         delete unit;
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( unit )
             unit->Format( out, nestLevel );
@@ -3119,7 +3119,7 @@ public:
             i->Format( out, nestLevel );
     }
 
-    UNIT_RES*  GetUnits() const
+    UNIT_RES*  GetUnits() const override
     {
         if( unit )
             return unit;
@@ -3170,7 +3170,7 @@ public:
         delete wiring;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( pcbname.c_str() );
 
@@ -3204,7 +3204,7 @@ public:
         out->Print( nestLevel, ")\n" );
     }
 
-    UNIT_RES*  GetUnits() const
+    UNIT_RES*  GetUnits() const override
     {
         if( unit )
             return unit;
@@ -3233,7 +3233,7 @@ public:
         time_stamp = time(NULL);
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         char    temp[80];
         struct  tm* tmp;
@@ -3277,7 +3277,7 @@ public:
         time_stamp = time(NULL);
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         for( ANCESTORS::iterator i=ancestors.begin();  i!=ancestors.end();  ++i )
             i->Format( out, nestLevel );
@@ -3320,7 +3320,7 @@ public:
     {
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         bool singleLine = pin_refs.size() <= 1;
         out->Print( nestLevel, "(%s", Name() );
@@ -3379,7 +3379,7 @@ public:
         delete rules;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( net_id.c_str() );
 
@@ -3438,7 +3438,7 @@ public:
 //        delete test_points;
     }
 
-    UNIT_RES*  GetUnits() const
+    UNIT_RES*  GetUnits() const override
     {
         if( resolution )
             return resolution;
@@ -3446,7 +3446,7 @@ public:
         return ELEM::GetUnits();
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         if( resolution )
             resolution->Format( out, nestLevel );
@@ -3509,7 +3509,7 @@ public:
     {
     }
 
-    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void FormatContents( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         for( PIN_PAIRS::iterator i=pin_pairs.begin();  i!=pin_pairs.end();  ++i )
         {
@@ -3566,7 +3566,7 @@ public:
         delete route;
     }
 
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR )
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) throw( IO_ERROR ) override
     {
         const char* quote = out->GetQuoteChar( session_id.c_str() );
         out->Print( nestLevel, "(%s %s%s%s\n", Name(),

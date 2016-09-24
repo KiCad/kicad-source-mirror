@@ -119,10 +119,10 @@ private:
     void replaceCurrentPage();
 
     void onNotebookResize( wxSizeEvent& event );
-    void OnPageChange( wxNotebookEvent& event );
-    void onDirectoryBrowseClicked( wxCommandEvent& event );
-	void onValidatePath( wxCommandEvent& event );
-	void OnHtmlLinkActivated( wxHtmlLinkEvent& event );
+    void OnPageChange( wxNotebookEvent& event ) override;
+    void onDirectoryBrowseClicked( wxCommandEvent& event ) override;
+	void onValidatePath( wxCommandEvent& event ) override;
+	void OnHtmlLinkActivated( wxHtmlLinkEvent& event ) override;
 };
 
 #endif

@@ -154,16 +154,16 @@ class DIALOG_SCH_FIND : public DIALOG_SCH_FIND_BASE
 {
 protected:
     // Handlers for DIALOG_SCH_FIND_BASE events.
-    void OnClose( wxCloseEvent& aEvent );
-    void OnUpdateFindUI( wxUpdateUIEvent& aEvent );
-    void OnUpdateReplaceUI( wxUpdateUIEvent& aEvent );
-    void OnUpdateReplaceAllUI( wxUpdateUIEvent& aEvent );
-    void OnUpdateWholeWordUI( wxUpdateUIEvent& aEvent );
-    void OnUpdateWildcardUI( wxUpdateUIEvent& aEvent );
+    void OnClose( wxCloseEvent& aEvent ) override;
+    void OnUpdateFindUI( wxUpdateUIEvent& aEvent ) override;
+    void OnUpdateReplaceUI( wxUpdateUIEvent& aEvent ) override;
+    void OnUpdateReplaceAllUI( wxUpdateUIEvent& aEvent ) override;
+    void OnUpdateWholeWordUI( wxUpdateUIEvent& aEvent ) override;
+    void OnUpdateWildcardUI( wxUpdateUIEvent& aEvent ) override;
 
-    void OnFind( wxCommandEvent& aEvent );
-    void OnReplace( wxCommandEvent& aEvent );
-    void OnCancel( wxCommandEvent& aEvent );
+    void OnFind( wxCommandEvent& aEvent ) override;
+    void OnReplace( wxCommandEvent& aEvent ) override;
+    void OnCancel( wxCommandEvent& aEvent ) override;
 
     void SendEvent( const wxEventType& aEventType );
 

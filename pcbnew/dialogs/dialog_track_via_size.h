@@ -50,9 +50,9 @@ protected:
     bool check();
 
     // Handlers for DIALOG_TRACK_VIA_SIZE_BASE events.
-    void onClose( wxCloseEvent& aEvent );
-    void onOkClick( wxCommandEvent& aEvent );
-    void onCancelClick( wxCommandEvent& aEvent );
+    void onClose( wxCloseEvent& aEvent ) override;
+    void onOkClick( wxCommandEvent& aEvent ) override;
+    void onCancelClick( wxCommandEvent& aEvent ) override;
 };
 
 #endif // __dialog_track_via_size__

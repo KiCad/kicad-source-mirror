@@ -44,13 +44,13 @@ private:
     void Init();
 
     // Virtual event handlers
-    void OnCloseWindow( wxCloseEvent& event );
-    void OnOkClick( wxCommandEvent& event );
-    void OnAddFiles( wxCommandEvent& event );
-    void OnEditEquFile( wxCommandEvent& event );
-    void OnRemoveFiles( wxCommandEvent& event );
-    void OnButtonMoveUp( wxCommandEvent& event );
-    void OnButtonMoveDown( wxCommandEvent& event );
+    void OnCloseWindow( wxCloseEvent& event ) override;
+    void OnOkClick( wxCommandEvent& event ) override;
+    void OnAddFiles( wxCommandEvent& event ) override;
+    void OnEditEquFile( wxCommandEvent& event ) override;
+    void OnRemoveFiles( wxCommandEvent& event ) override;
+    void OnButtonMoveUp( wxCommandEvent& event ) override;
+    void OnButtonMoveDown( wxCommandEvent& event ) override;
 
     int getEnvVarCount()                // Get the number of rows in env var table
     {

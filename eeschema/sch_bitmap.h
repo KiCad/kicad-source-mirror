@@ -96,7 +96,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const;    // Virtual
 
-    void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem ) override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
@@ -110,9 +110,9 @@ public:
      */
     bool ReadImageFile( const wxString& aFullFilename );
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     void Move( const wxPoint& aMoveVector )
     {
@@ -120,13 +120,13 @@ public:
     }
 
 
-    void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position ) override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
-    bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     wxString GetSelectMenuText() const { return wxString( _( "Image" ) ); }
 
@@ -136,13 +136,13 @@ public:
 
     void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter );
+    void Plot( PLOTTER* aPlotter ) override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override

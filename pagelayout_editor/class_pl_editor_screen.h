@@ -48,14 +48,14 @@ public:
 
     ~PL_EDITOR_SCREEN();
 
-    virtual int MilsToIuScalar();
+    virtual int MilsToIuScalar() override;
 
     /**
      * Function ClearUndoORRedoList
      * virtual pure in BASE_SCREEN, so it must be defined here
      */
 
-    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
+    void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
     /**
      * Function GetCurItem
      * returns the currently selected WORKSHEET_DATAITEM, overriding

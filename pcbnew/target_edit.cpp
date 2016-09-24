@@ -75,8 +75,8 @@ public:
     ~TARGET_PROPERTIES_DIALOG_EDITOR() { }
 
 private:
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override;
 };
 
 

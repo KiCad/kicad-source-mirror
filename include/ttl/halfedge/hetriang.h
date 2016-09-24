@@ -363,7 +363,7 @@ public:
     }
 
     /// @copydoc Edge::setSourceNode()
-    virtual const NODE_PTR& GetTargetNode() const
+    virtual const NODE_PTR& GetTargetNode() const override
     {
         return m_target;
     }

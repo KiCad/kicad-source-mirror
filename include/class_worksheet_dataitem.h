@@ -306,7 +306,7 @@ private:
 public:
     WORKSHEET_DATAITEM_POLYPOLYGON( );
 
-    virtual int GetPenSizeUi()
+    virtual int GetPenSizeUi() override
     {
         return KiROUND( m_LineWidth * m_WSunits2Iu );
     }
@@ -314,7 +314,7 @@ public:
    /**
      * @return false  (no end point)
      */
-    virtual bool HasEndPoint() { return false; };
+    virtual bool HasEndPoint() override { return false; }
 
     /**
      * add a corner in corner list
@@ -377,7 +377,7 @@ public:
      */
     void SetBoundingBox();
 
-    bool IsInsidePage( int ii ) const;
+    bool IsInsidePage( int ii ) const override;
 };
 
 
@@ -405,9 +405,9 @@ public:
     /**
      * @return false  (no end point)
      */
-    virtual bool HasEndPoint() { return false; };
+    virtual bool HasEndPoint() override { return false; }
 
-    virtual int GetPenSizeUi()
+    virtual int GetPenSizeUi() override
     {
         if( m_LineWidth )
             return KiROUND( m_LineWidth * m_WSunits2Iu );
@@ -510,7 +510,7 @@ public:
     /**
      * @return false  (no end point)
      */
-    virtual bool HasEndPoint() { return false; }
+    virtual bool HasEndPoint() override { return false; }
 
     /**
      * @return the PPI of the bitmap

@@ -78,7 +78,7 @@ public:
     }
 
     ///> @copydoc BOARD_ITEM::IsConnected()
-    bool IsConnected() const
+    bool IsConnected() const override
     {
         return true;
     }

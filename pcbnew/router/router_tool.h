@@ -31,8 +31,8 @@ public:
     ROUTER_TOOL();
     ~ROUTER_TOOL();
 
-    bool Init();
-    void Reset( RESET_REASON aReason );
+    bool Init() override;
+    void Reset( RESET_REASON aReason ) override;
 
     int RouteSingleTrace ( const TOOL_EVENT& aEvent );
     int RouteDiffPair ( const TOOL_EVENT& aEvent );

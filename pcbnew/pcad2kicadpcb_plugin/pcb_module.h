@@ -62,8 +62,8 @@ public:
     virtual void    Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
                            wxString aDefaultMeasurementUnit, wxString aActualConversion );
 
-    virtual void    Flip();
-    void            AddToBoard();
+    virtual void    Flip() override;
+    void            AddToBoard() override;
 
 private:
     XNODE*          FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGraphRefName );

@@ -76,7 +76,7 @@ public:
 
     // Reload the Layers names and bitmaps
     // Virtual function
-    void Resync();
+    void Resync() override;
 
     // Allow (or not) the layers not activated for the current board to be shown
     // in layer selector. Not actavated layers are flagged
@@ -89,15 +89,15 @@ public:
 private:
     // Returns a color index from the layer id
     // Virtual function
-    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const;
+    EDA_COLOR_T GetLayerColor( LAYER_NUM aLayer ) const override;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     // Virtual function
-    bool IsLayerEnabled( LAYER_NUM aLayer ) const;
+    bool IsLayerEnabled( LAYER_NUM aLayer ) const override;
 
     // Returns the name of the layer id
     // Virtual function
-    wxString GetLayerName( LAYER_NUM aLayer ) const;
+    wxString GetLayerName( LAYER_NUM aLayer ) const override;
 
     LSET getEnabledLayers() const;
 };

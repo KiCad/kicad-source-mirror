@@ -65,7 +65,7 @@ public:
                         const wxSize& aSize, GAL_TYPE aGalType = GAL_TYPE_OPENGL );
     ~EDA_DRAW_PANEL_GAL();
 
-    virtual void SetFocus();
+    virtual void SetFocus() override;
 
     /**
      * Function SwitchBackend
@@ -114,7 +114,7 @@ public:
     }
 
     /// @copydoc wxWindow::Refresh()
-    void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL );
+    void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL ) override;
 
     /**
      * Function ForceRefresh()

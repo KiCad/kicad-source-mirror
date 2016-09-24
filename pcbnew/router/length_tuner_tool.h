@@ -34,7 +34,7 @@ public:
     LENGTH_TUNER_TOOL();
     ~LENGTH_TUNER_TOOL();
 
-    void Reset( RESET_REASON aReason );
+    void Reset( RESET_REASON aReason ) override;
 
     int TuneSingleTrace( const TOOL_EVENT& aEvent );
     int TuneDiffPair( const TOOL_EVENT& aEvent );

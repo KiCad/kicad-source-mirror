@@ -48,8 +48,8 @@ private:
     }
 
     void AcceptPcbDelete();
-    void OnCheckDeleteTracks( wxCommandEvent& event );
-    void OnCheckDeleteModules( wxCommandEvent& event );
+    void OnCheckDeleteTracks( wxCommandEvent& event ) override;
+    void OnCheckDeleteModules( wxCommandEvent& event ) override;
 };
 
 #endif  // _DIALOG_GLOBAL_DELETION_H_

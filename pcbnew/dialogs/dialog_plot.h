@@ -59,15 +59,15 @@ private:
 
     // Event called functions
     void        Init_Dialog();
-    void        Plot( wxCommandEvent& event );
-    void        OnQuit( wxCommandEvent& event );
-    void        OnClose( wxCloseEvent& event );
-    void        OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
-    void        OnRightClick( wxMouseEvent& event );
-    void        OnPopUpLayers( wxCommandEvent& event );
-    void        SetPlotFormat( wxCommandEvent& event );
-    void        OnSetScaleOpt( wxCommandEvent& event );
-    void        CreateDrillFile( wxCommandEvent& event );
+    void        Plot( wxCommandEvent& event ) override;
+    void        OnQuit( wxCommandEvent& event ) override;
+    void        OnClose( wxCloseEvent& event ) override;
+    void        OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
+    void        OnRightClick( wxMouseEvent& event ) override;
+    void        OnPopUpLayers( wxCommandEvent& event ) override;
+    void        SetPlotFormat( wxCommandEvent& event ) override;
+    void        OnSetScaleOpt( wxCommandEvent& event ) override;
+    void        CreateDrillFile( wxCommandEvent& event ) override;
 	virtual void onRunDRC( wxCommandEvent& event ) override;
 
     // orther functions

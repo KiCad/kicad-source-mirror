@@ -99,7 +99,7 @@ public:
     }
 
     ///> @copydoc TOOL_INTERACTIVE::SetTransitions();
-    void SetTransitions();
+    void SetTransitions() override;
 
 private:
     // Tool settings.

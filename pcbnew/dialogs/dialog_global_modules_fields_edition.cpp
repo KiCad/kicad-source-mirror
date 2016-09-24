@@ -72,7 +72,7 @@ private:
     void initDialog();
 
     // event handlers
-    void OnOKClick( wxCommandEvent& event );
+    void OnOKClick( wxCommandEvent& event ) override;
     void OnCancelClick( wxCommandEvent& event )
     {
         EndModal( wxID_CANCEL );

@@ -73,29 +73,29 @@ private:
     void initDialog();  // Initialisation of member variables
 
     // event handler for button OK
-    void OnOkClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event ) override;
 
     // event handlers for page size choice
-    void OnPaperSizeChoice( wxCommandEvent& event );
-    void OnUserPageSizeXTextUpdated( wxCommandEvent& event );
-    void OnUserPageSizeYTextUpdated( wxCommandEvent& event );
-    void OnPageOrientationChoice( wxCommandEvent& event );
+    void OnPaperSizeChoice( wxCommandEvent& event ) override;
+    void OnUserPageSizeXTextUpdated( wxCommandEvent& event ) override;
+    void OnUserPageSizeYTextUpdated( wxCommandEvent& event ) override;
+    void OnPageOrientationChoice( wxCommandEvent& event ) override;
 
     // event handler for texts in title block
-    void OnRevisionTextUpdated( wxCommandEvent& event );
-    void OnDateTextUpdated( wxCommandEvent& event );
-    void OnTitleTextUpdated( wxCommandEvent& event );
-    void OnCompanyTextUpdated( wxCommandEvent& event );
-    void OnComment1TextUpdated( wxCommandEvent& event );
-    void OnComment2TextUpdated( wxCommandEvent& event );
-    void OnComment3TextUpdated( wxCommandEvent& event );
-    void OnComment4TextUpdated( wxCommandEvent& event );
+    void OnRevisionTextUpdated( wxCommandEvent& event ) override;
+    void OnDateTextUpdated( wxCommandEvent& event ) override;
+    void OnTitleTextUpdated( wxCommandEvent& event ) override;
+    void OnCompanyTextUpdated( wxCommandEvent& event ) override;
+    void OnComment1TextUpdated( wxCommandEvent& event ) override;
+    void OnComment2TextUpdated( wxCommandEvent& event ) override;
+    void OnComment3TextUpdated( wxCommandEvent& event ) override;
+    void OnComment4TextUpdated( wxCommandEvent& event ) override;
 
     // Handle button click for setting the date from the picker
-    void OnDateApplyClick( wxCommandEvent& event );
+    void OnDateApplyClick( wxCommandEvent& event ) override;
 
     // .kicad_wks file description selection
-    void OnWksFileSelection( wxCommandEvent& event );
+    void OnWksFileSelection( wxCommandEvent& event ) override;
 
     // Save in the current title block the new page settings
     // return true if changes are made, or false if not

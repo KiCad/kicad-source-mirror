@@ -79,12 +79,12 @@ public:
     ~DIALOG_PRINT_USING_PRINTER() {};
 
 private:
-    void OnCloseWindow( wxCloseEvent& event );
+    void OnCloseWindow( wxCloseEvent& event ) override;
     void OnInitDialog( wxInitDialogEvent& event );
-    void OnPageSetup( wxCommandEvent& event );
-    void OnPrintPreview( wxCommandEvent& event );
-    void OnPrintButtonClick( wxCommandEvent& event );
-    void OnScaleSelectionClick( wxCommandEvent& event );
+    void OnPageSetup( wxCommandEvent& event ) override;
+    void OnPrintPreview( wxCommandEvent& event ) override;
+    void OnPrintButtonClick( wxCommandEvent& event ) override;
+    void OnScaleSelectionClick( wxCommandEvent& event ) override;
 
     void OnButtonCloseClick( wxCommandEvent& event ) { Close(); }
     void SetPrintParameters();

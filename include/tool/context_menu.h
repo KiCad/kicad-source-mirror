@@ -60,7 +60,7 @@ public:
      * the menu.
      * @param aTitle is the new title.
      */
-    void SetTitle( const wxString& aTitle );
+    void SetTitle( const wxString& aTitle ) override;
 
     /**
      * Function SetIcon()

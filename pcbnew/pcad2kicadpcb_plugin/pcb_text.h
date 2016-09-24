@@ -48,8 +48,8 @@ public:
                            int          aLayer,
                            wxString     aDefaultMeasurementUnit,
                            wxString     aActualConversion );
-    void            AddToModule( MODULE* aModule );
-    void            AddToBoard();
+    void            AddToModule( MODULE* aModule ) override;
+    void            AddToBoard() override;
 
 // virtual void    SetPosOffset( int aX_offs, int aY_offs );
 };

@@ -141,8 +141,8 @@ public:
                    int max = std::numeric_limits<int>::max(),
                    const wxChar* group = NULL );
 
-    virtual void ReadParam( wxConfigBase* aConfig ) const;
-    virtual void SaveParam( wxConfigBase* aConfig ) const;
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
 };
 
 /**
@@ -171,8 +171,8 @@ public:
                    const wxChar* group = NULL,
                    double aBiu2cfgunit = 1.0 );
 
-    virtual void ReadParam( wxConfigBase* aConfig ) const;
-    virtual void SaveParam( wxConfigBase* aConfig ) const;
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
 };
 
 
@@ -192,8 +192,8 @@ public:
     PARAM_CFG_SETCOLOR( bool Insetup, const wxString& ident, EDA_COLOR_T* ptparam,
                         EDA_COLOR_T default_val, const wxChar* group = NULL );
 
-    virtual void ReadParam( wxConfigBase* aConfig ) const;
-    virtual void SaveParam( wxConfigBase* aConfig ) const;
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
 };
 
 
@@ -216,8 +216,8 @@ public:
                       double default_val = 0.0, double min = 0.0, double max = 10000.0,
                       const wxChar* group = NULL );
 
-    virtual void ReadParam( wxConfigBase* aConfig ) const;
-    virtual void SaveParam( wxConfigBase* aConfig ) const;
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
 };
 
 
@@ -237,8 +237,8 @@ public:
     PARAM_CFG_BOOL( bool Insetup, const wxString& ident, bool* ptparam,
                     int default_val = false, const wxChar* group = NULL );
 
-    virtual void ReadParam( wxConfigBase* aConfig ) const;
-    virtual void SaveParam( wxConfigBase* aConfig ) const;
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
 };
 
 
@@ -261,8 +261,8 @@ public:
                         const wxString& default_val = wxEmptyString,
                         const wxChar* group = NULL );
 
-    virtual void ReadParam( wxConfigBase* aConfig ) const;
-    virtual void SaveParam( wxConfigBase* aConfig ) const;
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
 };
 
 
@@ -280,8 +280,8 @@ public:
 public:
     PARAM_CFG_FILENAME( const wxString& ident, wxString* ptparam,
             const wxChar* group = NULL );
-    virtual void ReadParam( wxConfigBase* aConfig ) const;
-    virtual void SaveParam( wxConfigBase* aConfig ) const;
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
 };
 
 
@@ -295,8 +295,8 @@ public:
                                 wxArrayString* ptparam,
                                 const wxChar*  group = NULL );
 
-    virtual void ReadParam( wxConfigBase* aConfig ) const;
-    virtual void SaveParam( wxConfigBase* aConfig ) const;
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
 };
 
 

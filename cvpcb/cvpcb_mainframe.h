@@ -115,7 +115,7 @@ public:
     void             OnCloseWindow( wxCloseEvent& Event );
     void             OnSize( wxSizeEvent& SizeEvent );
     void             ReCreateHToolbar();
-    virtual void     ReCreateMenuBar();
+    virtual void     ReCreateMenuBar() override;
 
     void             ChangeFocus( bool aMoveRight );
 

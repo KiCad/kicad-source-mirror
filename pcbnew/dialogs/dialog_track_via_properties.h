@@ -41,11 +41,11 @@ public:
     bool Apply( COMMIT& aCommit );
 
 private:
-    void onClose( wxCloseEvent& aEvent );
-    void onTrackNetclassCheck( wxCommandEvent& aEvent );
-    void onViaNetclassCheck( wxCommandEvent& aEvent );
-    void onCancelClick( wxCommandEvent& aEvent );
-    void onOkClick( wxCommandEvent& aEvent );
+    void onClose( wxCloseEvent& aEvent ) override;
+    void onTrackNetclassCheck( wxCommandEvent& aEvent ) override;
+    void onViaNetclassCheck( wxCommandEvent& aEvent ) override;
+    void onCancelClick( wxCommandEvent& aEvent ) override;
+    void onOkClick( wxCommandEvent& aEvent ) override;
 
     void OnInitDlg( wxInitDialogEvent& event )
     {

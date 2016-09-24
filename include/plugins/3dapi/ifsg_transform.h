@@ -46,9 +46,9 @@ public:
     // since a transform may own another transform and that construct
     // invites accidental misuse of the copy constructor
 
-    bool Attach( SGNODE* aNode );
-    bool NewNode( SGNODE* aParent );
-    bool NewNode( IFSG_NODE& aParent );
+    bool Attach( SGNODE* aNode ) override;
+    bool NewNode( SGNODE* aParent ) override;
+    bool NewNode( IFSG_NODE& aParent ) override;
 
     bool SetScaleOrientation( const SGVECTOR& aScaleAxis, double aAngle );
     bool SetRotation( const SGVECTOR& aRotationAxis, double aAngle );

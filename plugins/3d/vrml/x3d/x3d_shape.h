@@ -50,15 +50,15 @@ public:
     virtual ~X3DSHAPE();
 
     // functions inherited from X3DNODE
-    bool Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict );
-    bool SetParent( X3DNODE* aParent, bool doUnlink = true );
-    bool AddChildNode( X3DNODE* aNode );
-    bool AddRefNode( X3DNODE* aNode );
-    SGNODE* TranslateToSG( SGNODE* aParent );
+    bool Read( wxXmlNode* aNode, X3DNODE* aTopNode, X3D_DICT& aDict ) override;
+    bool SetParent( X3DNODE* aParent, bool doUnlink = true ) override;
+    bool AddChildNode( X3DNODE* aNode ) override;
+    bool AddRefNode( X3DNODE* aNode ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent ) override;
 
     // overrides
-    virtual void unlinkChildNode( const X3DNODE* aNode );
-    virtual void unlinkRefNode( const X3DNODE* aNode );
+    virtual void unlinkChildNode( const X3DNODE* aNode ) override;
+    virtual void unlinkRefNode( const X3DNODE* aNode ) override;
 };
 
 #endif  // X3D_SHAPE_H

@@ -63,13 +63,13 @@ class DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR : public DIALOG_FP_CONFLICT_ASSIGNM
         int GetSelection( const wxString& aReference );
 
     private:
-        void OnSize( wxSizeEvent& event );
+        void OnSize( wxSizeEvent& event ) override;
 
         // Virtual: called when clicking on the column title:
         // when it is a column choice, set all item choices.
-        void OnColumnClick( wxListEvent& event );
+        void OnColumnClick( wxListEvent& event ) override;
 
-        void OnItemClicked( wxMouseEvent& event );
+        void OnItemClicked( wxMouseEvent& event ) override;
 
         void OnCancelClick( wxCommandEvent& event ) { EndModal( wxID_CANCEL ); }
         void OnOKClick( wxCommandEvent& event ) { EndModal( wxID_OK ); }

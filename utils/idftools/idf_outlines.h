@@ -364,7 +364,7 @@ private:
      * @param aHeader is the .OTHER_OUTLINE header as read via FetchIDFLine
      */
     virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
-                           IDF3::IDF_VERSION aIdfVersion );
+                           IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
      * Function writeData
@@ -374,7 +374,7 @@ private:
      *
      * @return bool: true if the data was successfully written, otherwise false.
      */
-    virtual void writeData( std::ofstream& aBoardFile );
+    virtual void writeData( std::ofstream& aBoardFile ) override;
 
 public:
     OTHER_OUTLINE( IDF3_BOARD* aParent );
@@ -411,7 +411,7 @@ public:
      * Function Clear
      * deletes internal data except for the parent object
      */
-    virtual bool Clear( void );
+    virtual bool Clear( void ) override;
 };
 
 
@@ -432,13 +432,13 @@ private:
      * @param aHeader is the .ROUTE_OUTLINE header as returned by FetchIDFLine
      */
     virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
-                           IDF3::IDF_VERSION aIdfVersion );
+                           IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
      * Function writeData
      * writes the ROUTE_OUTLINE data to an open IDFv3 file
      */
-    virtual void writeData( std::ofstream& aBoardFile );
+    virtual void writeData( std::ofstream& aBoardFile ) override;
 
 protected:
     IDF3::IDF_LAYER layers; // Routing layers (IDF spec)
@@ -464,7 +464,7 @@ public:
      * Function Clear
      * deletes internal data except for the parent object
      */
-    virtual bool Clear( void );
+    virtual bool Clear( void ) override;
 };
 
 /**
@@ -484,7 +484,7 @@ private:
      * @param aHeader is the .PLACE_OUTLINE header as returned by FetchIDFLine
      */
     virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
-                           IDF3::IDF_VERSION aIdfVersion );
+                           IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
      * Function writeData
@@ -494,7 +494,7 @@ private:
      *
      * @return bool: true if the data was successfully written, otherwise false
      */
-    virtual void writeData( std::ofstream& aBoardFile );
+    virtual void writeData( std::ofstream& aBoardFile ) override;
 
 protected:
     IDF3::IDF_LAYER side;   // Board Side [TOP/BOTTOM/BOTH ONLY] (IDF spec)
@@ -534,7 +534,7 @@ public:
      * Function Clear
      * deletes all internal data
      */
-    virtual bool Clear( void );
+    virtual bool Clear( void ) override;
 };
 
 
@@ -593,7 +593,7 @@ private:
      * @param aHeader is the .PLACE_REGION header as returned by FetchIDFLine
      */
     virtual void readData( std::ifstream& aBoardFile, const std::string& aHeader,
-                           IDF3::IDF_VERSION aIdfVersion );
+                           IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
      * Function writeData
@@ -603,7 +603,7 @@ private:
      *
      * @return bool: true if the data is successfully written, otherwise false
      */
-    virtual void writeData( std::ofstream& aBoardFile );
+    virtual void writeData( std::ofstream& aBoardFile ) override;
 
 public:
     GROUP_OUTLINE( IDF3_BOARD* aParent );
@@ -640,7 +640,7 @@ public:
      * Function Clear
      * deletes internal data, subject to IDF ownership rules
      */
-    virtual bool Clear( void );
+    virtual bool Clear( void ) override;
 };
 
 
@@ -673,7 +673,7 @@ private:
      * @param aHeader is the .ELECTRICAL or .MECHANICAL header as returned by FetchIDFLine
      */
     virtual void readData( std::ifstream& aLibFile, const std::string& aHeader,
-                           IDF3::IDF_VERSION aIdfVersion );
+                           IDF3::IDF_VERSION aIdfVersion ) override;
 
     /**
      * Function writeData
@@ -683,7 +683,7 @@ private:
      *
      * @return bool: true if the data was successfully written, otherwise false
      */
-    virtual void writeData( std::ofstream& aLibFile );
+    virtual void writeData( std::ofstream& aLibFile ) override;
 
     /**
      * Function incrementRef
@@ -712,7 +712,7 @@ public:
      * Function Clear
      * deletes internal outline data
      */
-    virtual bool Clear( void );
+    virtual bool Clear( void ) override;
 
     /**
      * Function SetComponentClass

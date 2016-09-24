@@ -58,17 +58,17 @@ private:
     void Init();
 
     // from DIALOG_ERC_BASE:
-    void OnCloseErcDialog( wxCloseEvent& event );
-    void OnErcCmpClick( wxCommandEvent& event );
-    void OnEraseDrcMarkersClick( wxCommandEvent& event );
-    void OnButtonCloseClick( wxCommandEvent& event );
-    void OnResetMatrixClick( wxCommandEvent& event );
+    void OnCloseErcDialog( wxCloseEvent& event ) override;
+    void OnErcCmpClick( wxCommandEvent& event ) override;
+    void OnEraseDrcMarkersClick( wxCommandEvent& event ) override;
+    void OnButtonCloseClick( wxCommandEvent& event ) override;
+    void OnResetMatrixClick( wxCommandEvent& event ) override;
 
     // Click on a marker info:
-    void OnLeftClickMarkersList( wxHtmlLinkEvent& event );
+    void OnLeftClickMarkersList( wxHtmlLinkEvent& event ) override;
 
     // Double click on a marker info:
-    void OnLeftDblClickMarkersList( wxMouseEvent& event );
+    void OnLeftDblClickMarkersList( wxMouseEvent& event ) override;
 
     void TestErc( wxArrayString* aMessagesList );
     void DisplayERC_MarkersList();

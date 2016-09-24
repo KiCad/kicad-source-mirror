@@ -49,9 +49,9 @@ public:
 private:
     void initDialog( );
     void UpdateObjectSettings( void );
-    void OnApplyClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-    void OnOkClick( wxCommandEvent& event );
+    void OnApplyClick( wxCommandEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override;
+    void OnOkClick( wxCommandEvent& event ) override;
 };
 
 #endif      // _DIALOG_DISPLAY_OPTIONS_H_

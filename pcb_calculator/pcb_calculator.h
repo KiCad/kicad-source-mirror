@@ -78,16 +78,16 @@ public:
 private:
 
     // Event handlers
-    void OnClosePcbCalc( wxCloseEvent& event );
+    void OnClosePcbCalc( wxCloseEvent& event ) override;
 
     // These 3 functions are called by the OnPaint event, to draw
     // icons that show the current item on the specific panels
-    void OnPaintTranslinePanel( wxPaintEvent& event );
-    void OnPaintAttenuatorPanel( wxPaintEvent& event );
+    void OnPaintTranslinePanel( wxPaintEvent& event ) override;
+    void OnPaintAttenuatorPanel( wxPaintEvent& event ) override;
 
     // Config read-write, virtual from EDA_BASE_FRAME
-    void LoadSettings( wxConfigBase* aCfg );
-    void SaveSettings( wxConfigBase* aCfg );
+    void LoadSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     // R/W data files:
     bool ReadDataFile();
@@ -124,28 +124,28 @@ private:
      * Called when the user changes the general parameters (i.e., anything that
      * is not one of the controlling values). This update the calculations.
      */
-    void OnTWParametersChanged( wxCommandEvent& event );
+    void OnTWParametersChanged( wxCommandEvent& event ) override;
 
     /**
      * Function OnTWCalculateFromCurrent
      * Called when the user changes the desired maximum current. This sets the
      * current as the controlling value and performs the calculations.
      */
-    void OnTWCalculateFromCurrent( wxCommandEvent& event );
+    void OnTWCalculateFromCurrent( wxCommandEvent& event ) override;
 
     /**
      * Function OnTWCalculateFromExtWidth
      * Called when the user changes the desired external trace width. This sets
      * the external width as the controlling value and performs the calculations.
      */
-    void OnTWCalculateFromExtWidth( wxCommandEvent& event );
+    void OnTWCalculateFromExtWidth( wxCommandEvent& event ) override;
 
     /**
      * Function OnTWCalculateFromIntWidth
      * Called when the user changes the desired internal trace width. This sets
      * the internal width as the controlling value and performs the calculations.
      */
-    void OnTWCalculateFromIntWidth( wxCommandEvent& event );
+    void OnTWCalculateFromIntWidth( wxCommandEvent& event ) override;
 
     /**
      * Function TWCalculateWidth
@@ -177,8 +177,8 @@ private:
     void TWUpdateModeDisplay();
 
     // Electrical spacing panel:
-    void OnElectricalSpacingUnitsSelection( wxCommandEvent& event );
-    void OnElectricalSpacingRefresh( wxCommandEvent& event );
+    void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) override;
+    void OnElectricalSpacingRefresh( wxCommandEvent& event ) override;
     void ElectricalSpacingUpdateData( double aUnitScale );
 
     // Transline functions:
@@ -186,42 +186,42 @@ private:
      * Function OnTranslineSelection
      * Called on new transmission line selection
     */
-    void OnTranslineSelection( wxCommandEvent& event );
+    void OnTranslineSelection( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineAnalyse
      * Run a new analyse for the current transline with current parameters
      * and displays the electrical parmeters
      */
-    void OnTranslineAnalyse( wxCommandEvent& event );
+    void OnTranslineAnalyse( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineSynthetize
      * Run a new synthezis for the current transline with current parameters
      * and displays the geometrical parmeters
      */
-    void OnTranslineSynthetize( wxCommandEvent& event );
+    void OnTranslineSynthetize( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineEpsilonR_Button
      * Shows a list of current relative dielectric constant(Er)
      * and set the selected value in main dialog frame
      */
-    void OnTranslineEpsilonR_Button( wxCommandEvent& event );
+    void OnTranslineEpsilonR_Button( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineTanD_Button
      * Shows a list of current dielectric loss factor (tangent delta)
      * and set the selected value in main dialog frame
      */
-    void OnTranslineTanD_Button( wxCommandEvent& event );
+    void OnTranslineTanD_Button( wxCommandEvent& event ) override;
 
     /**
      * Function OnTranslineRho_Button
      * Shows a list of current Specific resistance list (rho)
      * and set the selected value in main dialog frame
      */
-    void OnTranslineRho_Button( wxCommandEvent& event );
+    void OnTranslineRho_Button( wxCommandEvent& event ) override;
 
     /**
      * Function TranslineTypeSelection
@@ -241,25 +241,25 @@ private:
     void TransfDlgDataToTranslineParams();
 
     // Color Code panel
-    void OnToleranceSelection( wxCommandEvent& event );
+    void OnToleranceSelection( wxCommandEvent& event ) override;
     void ToleranceSelection( int aSelection );
 
     // Attenuators Panel
-    void OnAttenuatorSelection( wxCommandEvent& event );
+    void OnAttenuatorSelection( wxCommandEvent& event ) override;
     void SetAttenuator( unsigned aIdx );
-    void OnCalculateAttenuator( wxCommandEvent& event );
+    void OnCalculateAttenuator( wxCommandEvent& event ) override;
     void TransfPanelDataToAttenuator();
     void TransfAttenuatorDataToPanel();
     void TransfAttenuatorResultsToPanel();
 
     // Regulators Panel
-    void OnRegulatorCalcButtonClick( wxCommandEvent& event );
-    void OnRegulTypeSelection( wxCommandEvent& event );
-    void OnRegulatorSelection( wxCommandEvent& event );
-    void OnDataFileSelection( wxCommandEvent& event );
-    void OnAddRegulator( wxCommandEvent& event );
-    void OnEditRegulator( wxCommandEvent& event );
-    void OnRemoveRegulator( wxCommandEvent& event );
+    void OnRegulatorCalcButtonClick( wxCommandEvent& event ) override;
+    void OnRegulTypeSelection( wxCommandEvent& event ) override;
+    void OnRegulatorSelection( wxCommandEvent& event ) override;
+    void OnDataFileSelection( wxCommandEvent& event ) override;
+    void OnAddRegulator( wxCommandEvent& event ) override;
+    void OnEditRegulator( wxCommandEvent& event ) override;
+    void OnRemoveRegulator( wxCommandEvent& event ) override;
 
     /**
      * Function RegulatorPageUpdate:
@@ -315,7 +315,7 @@ public:
     bool   IsPrmSelected( enum PRMS_ID aPrmId );
 
     // Board classes panel:
-    void OnBoardClassesUnitsSelection( wxCommandEvent& event );
+    void OnBoardClassesUnitsSelection( wxCommandEvent& event ) override;
     void BoardClassesUpdateData( double aUnitScale );
 
 };

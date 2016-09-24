@@ -344,8 +344,8 @@ private:
     const wxPoint m_originalItemPosition;
 
     // Event callbacks
-    void    OnParameterChanged( wxCommandEvent& event );
-    void    OnOkClick( wxCommandEvent& event );
+    void    OnParameterChanged( wxCommandEvent& event ) override;
+    void    OnOkClick( wxCommandEvent& event ) override;
 
     // Internal callback handlers
     void setControlEnablement();

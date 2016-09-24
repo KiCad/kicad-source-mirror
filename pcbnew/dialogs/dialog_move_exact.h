@@ -47,12 +47,12 @@ private:
     /*!
      * Reset a text field to be 0 if it was exited while blank
      */
-    void OnTextFocusLost( wxFocusEvent& event );
+    void OnTextFocusLost( wxFocusEvent& event ) override;
 
-    void OnPolarChanged( wxCommandEvent& event );
-    void OnClear( wxCommandEvent& event );
+    void OnPolarChanged( wxCommandEvent& event ) override;
+    void OnClear( wxCommandEvent& event ) override;
 
-    void OnOkClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event ) override;
 
     /**
      * Convert a given Cartesian point into a polar representation.

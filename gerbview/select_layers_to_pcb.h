@@ -57,13 +57,13 @@ public: LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent );
 private:
     void initDialog();
     void normalizeBrdLayersCount();
-    void OnBrdLayersCountSelection( wxCommandEvent& event );
+    void OnBrdLayersCountSelection( wxCommandEvent& event ) override;
     void OnSelectLayer( wxCommandEvent& event );
-    void OnOkClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event ) override;
 
-    void OnStoreSetup( wxCommandEvent& event );
-    void OnGetSetup( wxCommandEvent& event );
-    void OnResetClick( wxCommandEvent& event );
+    void OnStoreSetup( wxCommandEvent& event ) override;
+    void OnGetSetup( wxCommandEvent& event ) override;
+    void OnResetClick( wxCommandEvent& event ) override;
 
     DECLARE_EVENT_TABLE()
 };

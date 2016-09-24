@@ -83,7 +83,7 @@ protected:
 
     void updateGridSelectBox();
     void updateZoomSelectBox();
-    virtual void unitsChangeRefresh();
+    virtual void unitsChangeRefresh() override;
 
     /**
      * Function loadFootprint
@@ -128,18 +128,18 @@ public:
      */
     EDA_RECT    GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
 
-    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ); // overload
-    const PAGE_INFO& GetPageSettings() const;                   // overload
-    const wxSize GetPageSizeIU() const;                         // overload
+    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
+    const PAGE_INFO& GetPageSettings() const override;
+    const wxSize GetPageSizeIU() const override;
 
-    const wxPoint& GetAuxOrigin() const;                        // overload
-    void SetAuxOrigin( const wxPoint& aPoint );                 // overload
+    const wxPoint& GetAuxOrigin() const override;
+    void SetAuxOrigin( const wxPoint& aPoint ) override;
 
-    const wxPoint& GetGridOrigin() const;                       // overload
-    void SetGridOrigin( const wxPoint& aPoint );                // overload
+    const wxPoint& GetGridOrigin() const override;
+    void SetGridOrigin( const wxPoint& aPoint ) override;
 
-    const TITLE_BLOCK& GetTitleBlock() const;                   // overload
-    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload
+    const TITLE_BLOCK& GetTitleBlock() const override;
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
     /**
      * Function GetDesignSettings
@@ -157,7 +157,7 @@ public:
      * Must be overloaded in frames which have display options
      * (board editor and footprint editor)
      */
-    void* GetDisplayOptions() { return &m_DisplayOptions; }
+    void* GetDisplayOptions() override { return &m_DisplayOptions; }
 
     const ZONE_SETTINGS& GetZoneSettings() const;
     void SetZoneSettings( const ZONE_SETTINGS& aSettings );
@@ -186,15 +186,15 @@ public:
 
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
-    virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
-    virtual void ReCreateHToolbar() = 0;
-    virtual void ReCreateVToolbar() = 0;
-    virtual void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;
-    virtual void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) = 0;
-    virtual bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )  = 0;
-    virtual void ReCreateMenuBar();
-    virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg );
-    virtual void UpdateStatusBar();
+    virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override { }
+    virtual void ReCreateHToolbar() override = 0;
+    virtual void ReCreateVToolbar() override = 0;
+    virtual void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override = 0;
+    virtual void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override = 0;
+    virtual bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override = 0;
+    virtual void ReCreateMenuBar() override;
+    virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg ) override;
+    virtual void UpdateStatusBar() override;
 
     PCB_SCREEN* GetScreen() const { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
 
@@ -202,7 +202,7 @@ public:
      * Function BestZoom
      * @return the "best" zoom to show the entire board or footprint on the screen.
      */
-    virtual double BestZoom();
+    virtual double BestZoom() override;
 
     /**
      * Function GetZoomLevelIndicator
@@ -210,7 +210,7 @@ public:
      * level indicator in dialogs.
      * Virtual from the base class
      */
-    const wxString GetZoomLevelIndicator() const;
+    const wxString GetZoomLevelIndicator() const override;
 
     virtual void Show3D_Frame( wxCommandEvent& event );
 
@@ -259,7 +259,7 @@ public:
     BOARD_ITEM* GetCurItem();
 
     ///> @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
-    void UpdateMsgPanel();
+    void UpdateMsgPanel() override;
 
     /**
      * Function GetCollectorsGuide
@@ -635,8 +635,8 @@ public:
         return GetScreen()->m_Active_Layer;
     }
 
-    void LoadSettings( wxConfigBase* aCfg );    // override virtual
-    void SaveSettings( wxConfigBase* aCfg );    // override virtual
+    void LoadSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     bool InvokeDialogGrid();
 
@@ -667,18 +667,18 @@ public:
      * Virtual function SetNextGrid()
      * changes the grid size settings to the next one available.
      */
-    void SetNextGrid();
+    void SetNextGrid() override;
 
     /**
      * Virtual function SetPrevGrid()
      * changes the grid size settings to the previous one available.
      */
-    void SetPrevGrid();
+    void SetPrevGrid() override;
 
     void ClearSelection();
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
-    virtual void UseGalCanvas( bool aEnable );
+    virtual void UseGalCanvas( bool aEnable ) override;
 
     /**
      * Function SwitchCanvas

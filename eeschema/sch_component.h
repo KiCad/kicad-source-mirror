@@ -210,9 +210,9 @@ public:
      */
     int GetUnitCount() const;
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     /**
      * Function SetOrientation
@@ -247,7 +247,7 @@ public:
      */
     wxPoint GetScreenCoord( const wxPoint& aPoint );
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
      * Function ClearAnnotation
@@ -397,7 +397,7 @@ public:
                GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor,
                bool aDrawPinText );
 
-    void SwapData( SCH_ITEM* aItem );
+    void SwapData( SCH_ITEM* aItem ) override;
 
     // returns a unique ID, in the form of a path.
     wxString GetPath( const SCH_SHEET_PATH* sheet ) const;
@@ -461,15 +461,15 @@ public:
         SetModified();
     }
 
-    void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position ) override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
-    void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList );
+    void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     /**
      * Test if the component's dangling state has changed for one given pin index. As
@@ -490,17 +490,17 @@ public:
      * @param aItemList - list of all DANGLING_END_ITEMs to be tested
      * @return true if any pin's state has changed.
      */
-    bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList );
+    bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     /**
      * Return whether any pin has dangling status. Does NOT update the internal status,
      * only checks the existing status.
      */
-    bool IsDangling() const;
+    bool IsDangling() const override;
 
     wxPoint GetPinPhysicalPosition( LIB_PIN* Pin );
 
-    bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     bool IsConnectable() const { return true; }
 
@@ -511,7 +511,7 @@ public:
      */
     bool IsInNetlist() const;
 
-    void GetConnectionPoints( std::vector<wxPoint>& aPoints ) const;
+    void GetConnectionPoints( std::vector<wxPoint>& aPoints ) const override;
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -525,14 +525,14 @@ public:
      */
     LIB_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const { return  add_component_xpm; }
 
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                          SCH_SHEET_PATH*      aSheetPath );
 
-    bool operator <( const SCH_ITEM& aItem ) const;
+    bool operator <( const SCH_ITEM& aItem ) const override;
 
     bool operator==( const SCH_COMPONENT& aComponent) const;
     bool operator!=( const SCH_COMPONENT& aComponent) const;
@@ -545,20 +545,20 @@ public:
 
     void SetPosition( const wxPoint& aPosition ) { Move( aPosition - m_Pos ); }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter );
+    void Plot( PLOTTER* aPlotter ) override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const;
+    bool doIsConnected( const wxPoint& aPosition ) const override;
 };
 
 

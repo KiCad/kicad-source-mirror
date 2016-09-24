@@ -73,14 +73,14 @@ class dxfReaderBinary : public dxfReader
 public:
     dxfReaderBinary( std::ifstream* stream ) : dxfReader( stream ) {}
     virtual ~dxfReaderBinary() {}
-    virtual bool    readCode( int* code );
-    virtual bool    readString( std::string* text );
-    virtual bool    readString();
-    virtual bool    readInt();
-    virtual bool    readInt32();
-    virtual bool    readInt64();
-    virtual bool    readDouble();
-    virtual bool    readBool();
+    virtual bool    readCode( int* code ) override;
+    virtual bool    readString( std::string* text ) override;
+    virtual bool    readString() override;
+    virtual bool    readInt() override;
+    virtual bool    readInt32() override;
+    virtual bool    readInt64() override;
+    virtual bool    readDouble() override;
+    virtual bool    readBool() override;
 };
 
 class dxfReaderAscii : public dxfReader
@@ -88,14 +88,14 @@ class dxfReaderAscii : public dxfReader
 public:
     dxfReaderAscii( std::ifstream* stream ) : dxfReader( stream ) {}
     virtual ~dxfReaderAscii() {}
-    virtual bool    readCode( int* code );
-    virtual bool    readString( std::string* text );
-    virtual bool    readString();
-    virtual bool    readInt();
-    virtual bool    readDouble();
-    virtual bool    readInt32();
-    virtual bool    readInt64();
-    virtual bool    readBool();
+    virtual bool    readCode( int* code ) override;
+    virtual bool    readString( std::string* text ) override;
+    virtual bool    readString() override;
+    virtual bool    readInt() override;
+    virtual bool    readDouble() override;
+    virtual bool    readInt32() override;
+    virtual bool    readInt64() override;
+    virtual bool    readBool() override;
 };
 
 #endif    // DXFREADER_H

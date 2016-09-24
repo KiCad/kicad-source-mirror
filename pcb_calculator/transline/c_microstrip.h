@@ -59,8 +59,8 @@ private:
     double atten_cond_o;        // odd-mode conductors losses (dB)
 
 public:
-    void   analyze();
-    void   synthesize();
+    void   analyze() override;
+    void   synthesize() override;
 
 private:
     double delta_u_thickness_single( double, double );

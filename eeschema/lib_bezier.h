@@ -59,36 +59,36 @@ public:
     }
 
 
-    bool Save( OUTPUTFORMATTER& aFormatter );
+    bool Save( OUTPUTFORMATTER& aFormatter ) override;
 
-    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg ) override;
 
     void AddPoint( const wxPoint& aPoint ) { m_BezierPoints.push_back( aPoint ); }
 
-    void SetOffset( const wxPoint& aOffset );
+    void SetOffset( const wxPoint& aOffset ) override;
 
     /**
      * @return the number of corners
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
-    bool HitTest( const wxPoint& aPosition ) const;
+    bool HitTest( const wxPoint& aPosition ) const override;
 
-    bool HitTest( const wxPoint& aPosRef, int aThreshold, const TRANSFORM& aTransform ) const;
+    bool HitTest( const wxPoint& aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;
 
     const EDA_RECT GetBoundingBox() const;  // Virtual
 
-    bool Inside( EDA_RECT& aRect ) const;
+    bool Inside( EDA_RECT& aRect ) const override;
 
-    void Move( const wxPoint& aPosition );
+    void Move( const wxPoint& aPosition ) override;
 
     wxPoint GetPosition() const { return m_PolyPoints[0]; }
 
-    void MirrorHorizontal( const wxPoint& aCenter );
+    void MirrorHorizontal( const wxPoint& aCenter ) override;
 
-    void MirrorVertical( const wxPoint& aCenter );
+    void MirrorVertical( const wxPoint& aCenter ) override;
 
-    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform );
@@ -97,11 +97,11 @@ public:
 
     void SetWidth( int aWidth ) { m_Width = aWidth; }
 
-    int GetPenSize( ) const;
+    int GetPenSize( ) const override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 private:
 
@@ -112,7 +112,7 @@ private:
      *      - Bezier horizontal (X) point position.
      *      - Bezier vertical (Y) point position.
      */
-    int compare( const LIB_ITEM& aOther ) const;
+    int compare( const LIB_ITEM& aOther ) const override;
 };
 
 

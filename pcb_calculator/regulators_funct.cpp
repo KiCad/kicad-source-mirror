@@ -49,7 +49,7 @@ public:
     ~DIALOG_EDITOR_DATA() {};
 
     // Event called functions:
-    void OnOKClick( wxCommandEvent& event );
+    void OnOKClick( wxCommandEvent& event ) override;
 
     /**
      * Function IsOK()

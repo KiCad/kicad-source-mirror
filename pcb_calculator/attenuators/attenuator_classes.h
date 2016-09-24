@@ -79,7 +79,7 @@ class ATTENUATOR_PI : public ATTENUATOR
 public:
     ATTENUATOR_PI();
     ~ATTENUATOR_PI(){};
-    virtual bool Calculate();
+    virtual bool Calculate() override;
 };
 
 class ATTENUATOR_TEE : public ATTENUATOR
@@ -87,7 +87,7 @@ class ATTENUATOR_TEE : public ATTENUATOR
 public:
     ATTENUATOR_TEE();
     ~ATTENUATOR_TEE(){};
-    virtual bool Calculate();
+    virtual bool Calculate() override;
 };
 
 class ATTENUATOR_BRIDGE : public ATTENUATOR
@@ -95,7 +95,7 @@ class ATTENUATOR_BRIDGE : public ATTENUATOR
 public:
     ATTENUATOR_BRIDGE();
     ~ATTENUATOR_BRIDGE(){};
-    virtual bool Calculate();
+    virtual bool Calculate() override;
 };
 
 class ATTENUATOR_SPLITTER : public ATTENUATOR
@@ -103,7 +103,7 @@ class ATTENUATOR_SPLITTER : public ATTENUATOR
 public:
     ATTENUATOR_SPLITTER();
     ~ATTENUATOR_SPLITTER(){};
-    virtual bool Calculate();
+    virtual bool Calculate() override;
 };
 
 #endif  // ATTENUATORFUNC_H

@@ -43,20 +43,20 @@ public:
     ~MEANDER_SKEW_PLACER();
 
     /// @copydoc PLACEMENT_ALGO::Start()
-    bool Start( const VECTOR2I& aP, ITEM* aStartItem );
+    bool Start( const VECTOR2I& aP, ITEM* aStartItem ) override;
 
     /// @copydoc PLACEMENT_ALGO::Move()
-    bool Move( const VECTOR2I& aP, ITEM* aEndItem );
+    bool Move( const VECTOR2I& aP, ITEM* aEndItem ) override;
 
     /// @copydoc MEANDER_PLACER_BASE::TuningInfo()
-    const wxString TuningInfo() const;
+    const wxString TuningInfo() const override;
 
 private:
 
     int currentSkew( ) const;
     int itemsetLength( const ITEM_SET& aSet ) const;
 
-    int origPathLength () const;
+    int origPathLength () const override;
 
     DIFF_PAIR m_originPair;
     ITEM_SET  m_tunedPath, m_tunedPathP, m_tunedPathN;

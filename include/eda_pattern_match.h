@@ -65,8 +65,8 @@ public:
 class EDA_PATTERN_MATCH_SUBSTR : public EDA_PATTERN_MATCH
 {
 public:
-    virtual bool SetPattern( const wxString& aPattern );
-    virtual int Find( const wxString& aCandidate ) const;
+    virtual bool SetPattern( const wxString& aPattern ) override;
+    virtual int Find( const wxString& aCandidate ) const override;
 
 protected:
     wxString m_pattern;
@@ -79,8 +79,8 @@ protected:
 class EDA_PATTERN_MATCH_REGEX : public EDA_PATTERN_MATCH
 {
 public:
-    virtual bool SetPattern( const wxString& aPattern );
-    virtual int Find( const wxString& aCandidate ) const;
+    virtual bool SetPattern( const wxString& aPattern ) override;
+    virtual int Find( const wxString& aCandidate ) const override;
 
 protected:
     wxString m_pattern;
@@ -91,8 +91,8 @@ protected:
 class EDA_PATTERN_MATCH_WILDCARD : public EDA_PATTERN_MATCH_REGEX
 {
 public:
-    virtual bool SetPattern( const wxString& aPattern );
-    virtual int Find( const wxString& aCandidate ) const;
+    virtual bool SetPattern( const wxString& aPattern ) override;
+    virtual int Find( const wxString& aCandidate ) const override;
 };
 
 #endif  // EDA_PATTERN_MATCH_H

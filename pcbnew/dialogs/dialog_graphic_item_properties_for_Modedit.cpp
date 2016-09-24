@@ -70,10 +70,10 @@ public:
     ~DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES() {};
 
 private:
-    bool TransferDataToWindow();
-    bool TransferDataFromWindow();
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
     void OnLayerChoice( wxCommandEvent& event );
-    bool Validate();
+    bool Validate() override;
 };
 
 DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES(

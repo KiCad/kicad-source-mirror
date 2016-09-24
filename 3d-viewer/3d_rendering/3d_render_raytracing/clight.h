@@ -83,7 +83,7 @@ public:
     void GetLightParameters( const SFVEC3F &aHitPoint,
                              SFVEC3F &aOutVectorToLight,
                              SFVEC3F &aOutLightColor,
-                             float &aOutDistance ) const
+                             float &aOutDistance ) const override
     {
         const SFVEC3F vectorLight = m_position - aHitPoint;
 
@@ -134,7 +134,7 @@ public:
     void GetLightParameters( const SFVEC3F &aHitPoint,
                              SFVEC3F &aOutVectorToLight,
                              SFVEC3F &aOutLightColor,
-                             float &aOutDistance ) const
+                             float &aOutDistance ) const override
     {
         (void)aHitPoint; // unused
 

@@ -205,9 +205,9 @@ public:
      * @warning If you override this function in a derived class, make sure you call
      *          down to this or the auto save feature will be disabled.
      */
-    bool ProcessEvent( wxEvent& aEvent );       // override wxFrame::ProcessEvent()
+    bool ProcessEvent( wxEvent& aEvent ) override;
 
-    bool Enable( bool enable );                 // override wxFrame::Enable virtual
+    bool Enable( bool enable ) override;
 
     void SetAutoSaveInterval( int aInterval ) { m_autoSaveInterval = aInterval; }
 

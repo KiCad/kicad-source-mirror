@@ -118,10 +118,10 @@ public:
     ~SELECTION_TOOL();
 
     /// @copydoc TOOL_BASE::Init()
-    bool Init();
+    bool Init() override;
 
     /// @copydoc TOOL_BASE::Reset()
-    void Reset( RESET_REASON aReason );
+    void Reset( RESET_REASON aReason ) override;
 
     /**
      * Function Main()
@@ -171,7 +171,7 @@ public:
     static const TOOL_EVENT ClearedEvent;
 
     ///> Sets up handlers for various events.
-    void SetTransitions();
+    void SetTransitions() override;
 
 private:
     /**

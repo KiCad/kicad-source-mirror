@@ -44,9 +44,9 @@ public:
     IFSG_COORDS( SGNODE* aParent );
     IFSG_COORDS( IFSG_NODE& aParent );
 
-    bool Attach( SGNODE* aNode );
-    bool NewNode( SGNODE* aParent );
-    bool NewNode( IFSG_NODE& aParent );
+    bool Attach( SGNODE* aNode ) override;
+    bool NewNode( SGNODE* aParent ) override;
+    bool NewNode( IFSG_NODE& aParent ) override;
 
     bool GetCoordsList( size_t& aListSize, SGPOINT*& aCoordsList );
     bool SetCoordsList( size_t aListSize, const SGPOINT* aCoordsList );

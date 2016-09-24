@@ -47,11 +47,11 @@ public:
     SELECTION_AREA();
     ~SELECTION_AREA() {};
 
-    virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const override;
 
-    void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const;
+    void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const;
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     void SetOrigin( VECTOR2I aOrigin )
     {

@@ -61,7 +61,7 @@ public:
      * This is a footprint shape modification.
      * (should be only called by a footprint editing function)
      */
-    void Move( const wxPoint& aMoveVector );
+    void Move( const wxPoint& aMoveVector ) override;
 
     /**
      * Mirror an edge of the footprint.
@@ -76,7 +76,7 @@ public:
      * This is a footprint shape modification.
      * (should be only called by a footprint editing function )
      */
-    void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
     /**
      * Flip entity relative to aCentre.
@@ -86,7 +86,7 @@ public:
      * not usual to flip an item alone, without flipping the parent footprint.
      * (consider Mirror for a mirror transform).
      */
-    void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre ) override;
 
     void SetStart0( const wxPoint& aPoint )     { m_Start0 = aPoint; }
     const wxPoint& GetStart0() const            { return m_Start0; }
@@ -113,18 +113,18 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     wxString GetClass() const
     {
         return wxT( "MGRAPHIC" );
     }
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const { return  show_mod_edge_xpm; }
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 
 #if defined(DEBUG)

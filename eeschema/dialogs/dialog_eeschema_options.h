@@ -56,7 +56,7 @@ protected:
      *
      * Adds a new template fieldname (with default values) to the template fieldnames data
      */
-    void OnAddButtonClick( wxCommandEvent& event );
+    void OnAddButtonClick( wxCommandEvent& event ) override;
 
     /**
      * Function OnDeleteButtonClick
@@ -67,19 +67,19 @@ protected:
      *
      * Deletes the selected template fieldname from the template fieldnames data
      */
-    void OnDeleteButtonClick( wxCommandEvent& event );
+    void OnDeleteButtonClick( wxCommandEvent& event ) override;
 
     /**
      * Function TransferDataToWindow
      * Transfer data into the GUI.
      */
-    bool TransferDataToWindow();
+    bool TransferDataToWindow() override;
 
     /**
      * Function TransferDataFromWindow
      * Transfer data out of the GUI.
      */
-    bool TransferDataFromWindow();
+    bool TransferDataFromWindow() override;
 
 public:
     /**

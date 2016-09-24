@@ -74,12 +74,12 @@ public:
         return aItem && PCB_MODULE_TEXT_T == aItem->Type();
     }
 
-    virtual const wxPoint& GetPosition() const
+    virtual const wxPoint& GetPosition() const override
     {
         return m_Pos;
     }
 
-    virtual void SetPosition( const wxPoint& aPos )
+    virtual void SetPosition( const wxPoint& aPos ) override
     {
         m_Pos = aPos;
         SetLocalCoord();
@@ -87,10 +87,10 @@ public:
 
     /// Rotate text, in footprint editor
     /// (for instance in footprint rotation transform)
-    void Rotate( const wxPoint& aOffset, double aAngle );
+    void Rotate( const wxPoint& aOffset, double aAngle ) override;
 
     /// Flip entity during module flip
-    void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre ) override;
 
     /// Mirror text position in footprint edition
     /// the text itself is not mirrored, and the layer not modified,
@@ -99,7 +99,7 @@ public:
     void Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis );
 
     /// move text in move transform, in footprint editor
-    void Move( const wxPoint& aMoveVector );
+    void Move( const wxPoint& aMoveVector ) override;
 
     /// @deprecated it seems (but the type is used to 'protect'
     //  reference and value from deletion, and for identification)
@@ -123,7 +123,7 @@ public:
     double GetDrawRotationRadians() const { return GetDrawRotation() * M_PI/1800; }
 
     // Virtual function
-    const EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const override;
 
     ///> Set absolute coordinates.
     void SetDrawCoord();
@@ -144,7 +144,7 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel,
                wxDC*           aDC,
                GR_DRAWMODE     aDrawMode,
-               const wxPoint&  aOffset = ZeroOffset );
+               const wxPoint&  aOffset = ZeroOffset ) override;
 
     /**
      * Function DrawUmbilical
@@ -160,34 +160,34 @@ public:
                         GR_DRAWMODE     aDrawMode,
                         const wxPoint&  aOffset = ZeroOffset );
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const;
+    bool HitTest( const wxPoint& aPosition ) const override;
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "MTEXT" );
     }
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  footprint_text_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  footprint_text_xpm; }
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
-    virtual wxString GetShownText() const;
+    virtual wxString GetShownText() const override;
 
     /// @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLOD()
-    virtual unsigned int ViewGetLOD( int aLayer ) const;
+    virtual unsigned int ViewGetLOD( int aLayer ) const override;
 
 #if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); }    // override
+    virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
 private:

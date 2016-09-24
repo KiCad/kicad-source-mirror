@@ -36,10 +36,10 @@ public:
     virtual ~PLACEMENT_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) {};
+    void Reset( RESET_REASON aReason ) override {}
 
     /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init();
+    bool Init() override;
 
     /**
      * Function AlignTop()
@@ -78,7 +78,7 @@ public:
     int DistributeVertically( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
-    void SetTransitions();
+    void SetTransitions() override;
 
 private:
     SELECTION_TOOL* m_selectionTool;

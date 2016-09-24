@@ -41,8 +41,8 @@ private:
     double atten_cond;          // Loss in conductors (dB)
 
 public:
-    void analyze();
-    void synthesize();
+    void analyze() override;
+    void synthesize() override;
 
 private:
     void calc();

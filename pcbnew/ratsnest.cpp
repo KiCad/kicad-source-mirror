@@ -88,7 +88,7 @@ public:
      * @param aItem2 = other item
      * @return the weight between items ( the rectilinear distance )
      */
-    int GetWeight( int aItem1, int aItem2 );
+    int GetWeight( int aItem1, int aItem2 ) override;
 };
 
 

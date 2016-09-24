@@ -180,7 +180,7 @@ public:
     void SetRepeatPinStep( int aStep) { m_repeatPinStep = aStep; }
 
 
-    void ReCreateMenuBar();
+    void ReCreateMenuBar() override;
 
     /**
      * Function EnsureActiveLibExists
@@ -313,27 +313,27 @@ public:
      * Display reference like in schematic (a reference U is shown U? or U?A)
      * update status bar and info shown in the bottom of the window
      */
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
 
     void OnCloseWindow( wxCloseEvent& Event );
-    void ReCreateHToolbar();
-    void ReCreateVToolbar();
+    void ReCreateHToolbar() override;
+    void ReCreateVToolbar() override;
     void CreateOptionToolbar();
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
+    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
     double BestZoom();         // Returns the best zoom
-    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
-    void LoadSettings( wxConfigBase* aCfg );
+    void LoadSettings( wxConfigBase* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg );
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
      * Function CloseWindow
@@ -429,7 +429,7 @@ private:
      * The library list can be changed by the schematic editor after reloading a new schematic
      * and the current library can point a non existent lib.
      */
-    virtual void OnActivate( wxActivateEvent& event );
+    virtual void OnActivate( wxActivateEvent& event ) override;
 
     // General:
 
@@ -609,13 +609,13 @@ public:
      * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
      * the \a aKey (ALT, SHIFT ALT ..)
      */
-    virtual int BlockCommand( EDA_KEY aKey );
+    virtual int BlockCommand( EDA_KEY aKey ) override;
 
     /**
      * Function HandleBlockPlace
      * handles the block place command.
      */
-    virtual void HandleBlockPlace( wxDC* DC );
+    virtual void HandleBlockPlace( wxDC* DC ) override;
 
     /**
      * Function HandleBlockEnd
@@ -623,7 +623,7 @@ public:
      * @return If command finished (zoom, delete ...) false is returned otherwise true
      *         is returned indicating more processing is required.
      */
-    virtual bool HandleBlockEnd( wxDC* DC );
+    virtual bool HandleBlockEnd( wxDC* DC ) override;
 
     /**
      * Function PlacePin

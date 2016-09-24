@@ -59,7 +59,7 @@ public:
     void Clear();
 
     ///> sets the frame label
-    void SetLabel( const wxString& aLabel );
+    void SetLabel( const wxString& aLabel ) override;
 
     ///> Sets the lasy update. If this mode is on, messages are stored but the display
     ///> is not updated (Updating display can be very time consumming if there are many messages)
@@ -94,13 +94,13 @@ private:
     void scrollToBottom();
     void syncCheckboxes();
 
-    void onCheckBoxShowAll( wxCommandEvent& event );
-    void onCheckBoxShowWarnings( wxCommandEvent& event );
-    void onCheckBoxShowErrors( wxCommandEvent& event );
-    void onCheckBoxShowInfos( wxCommandEvent& event );
-    void onCheckBoxShowActions( wxCommandEvent& event );
+    void onCheckBoxShowAll( wxCommandEvent& event ) override;
+    void onCheckBoxShowWarnings( wxCommandEvent& event ) override;
+    void onCheckBoxShowErrors( wxCommandEvent& event ) override;
+    void onCheckBoxShowInfos( wxCommandEvent& event ) override;
+    void onCheckBoxShowActions( wxCommandEvent& event ) override;
 
-    void onBtnSaveToFile( wxCommandEvent& event );
+    void onBtnSaveToFile( wxCommandEvent& event ) override;
 
     ///> copy of the report, stored for filtering
     REPORT_LINES m_report;

@@ -40,23 +40,23 @@ class CTRACK_BALL : public CCAMERA
 
     explicit CTRACK_BALL( float aRangeScale );
 
-    void Drag( const wxPoint &aNewMousePosition );
+    void Drag( const wxPoint &aNewMousePosition ) override;
 
-    void Pan( const wxPoint &aNewMousePosition );
+    void Pan( const wxPoint &aNewMousePosition ) override;
 
-    void Pan( const SFVEC3F &aDeltaOffsetInc );
+    void Pan( const SFVEC3F &aDeltaOffsetInc ) override;
 
-    void Pan_T1( const SFVEC3F &aDeltaOffsetInc );
+    void Pan_T1( const SFVEC3F &aDeltaOffsetInc ) override;
 
-    void SetLookAtPos( const SFVEC3F &aLookAtPos );
+    void SetLookAtPos( const SFVEC3F &aLookAtPos ) override;
 
-    void Reset();
+    void Reset() override;
 
-    void Reset_T1();
+    void Reset_T1() override;
 
-    void SetT0_and_T1_current_T();
+    void SetT0_and_T1_current_T() override;
 
-    void Interpolate( float t );
+    void Interpolate( float t ) override;
 
  private:
 

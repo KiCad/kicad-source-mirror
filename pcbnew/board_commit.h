@@ -40,13 +40,13 @@ public:
     BOARD_COMMIT( PCB_BASE_FRAME* aFrame );
     virtual ~BOARD_COMMIT();
 
-    virtual void Push( const wxString& aMessage );
-    virtual void Revert();
+    virtual void Push( const wxString& aMessage ) override;
+    virtual void Revert() override;
 
 private:
     TOOL_MANAGER* m_toolMgr;
     bool m_editModules;
-    virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const;
+    virtual EDA_ITEM* parentObject( EDA_ITEM* aItem ) const override;
 };
 
 #endif

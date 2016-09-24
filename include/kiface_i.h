@@ -42,7 +42,7 @@ public:
 
         // see base class KIFACE in kiway.h for doxygen docs
 
-    VTBL_ENTRY bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) = 0;
+    VTBL_ENTRY bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override = 0;
     /*
     {
         typically call start_common() in your overload
@@ -50,16 +50,16 @@ public:
     }
     */
 
-    VTBL_ENTRY void OnKifaceEnd()
+    VTBL_ENTRY void OnKifaceEnd() override
     {
         // overload this if you want, end_common() may be handy.
         end_common();
     }
 
     VTBL_ENTRY  wxWindow* CreateWindow( wxWindow* aParent,
-            int aClassId, KIWAY* aKIWAY, int aCtlBits = 0 ) = 0;
+            int aClassId, KIWAY* aKIWAY, int aCtlBits = 0 ) override = 0;
 
-    VTBL_ENTRY void* IfaceOrAddress( int aDataId ) = 0;
+    VTBL_ENTRY void* IfaceOrAddress( int aDataId ) override = 0;
 
     //-----</KIFACE API>---------------------------------------------------------
 

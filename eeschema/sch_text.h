@@ -147,15 +147,15 @@ public:
         aPoints.clear();
     }
 
-    virtual void SwapData( SCH_ITEM* aItem );
+    virtual void SwapData( SCH_ITEM* aItem ) override;
 
-    virtual const EDA_RECT GetBoundingBox() const;
+    virtual const EDA_RECT GetBoundingBox() const override;
 
-    virtual bool Save( FILE* aFile ) const;
+    virtual bool Save( FILE* aFile ) const override;
 
-    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
-    virtual int GetPenSize() const;
+    virtual int GetPenSize() const override;
 
     // Geometric transforms (used in block operations):
 
@@ -164,13 +164,13 @@ public:
         m_Pos += aMoveVector;
     }
 
-    virtual void MirrorY( int aYaxis_position );
+    virtual void MirrorY( int aYaxis_position ) override;
 
-    virtual void MirrorX( int aXaxis_position );
+    virtual void MirrorX( int aXaxis_position ) override;
 
-    virtual void Rotate( wxPoint aPosition );
+    virtual void Rotate( wxPoint aPosition ) override;
 
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
     virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL )
     {
@@ -179,19 +179,19 @@ public:
 
     virtual bool IsReplaceable() const { return true; }
 
-    virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
+    virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
-    virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
+    virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
     virtual bool IsDangling() const { return m_isDangling; }
 
-    virtual bool IsSelectStateChanged( const wxRect& aRect );
+    virtual bool IsSelectStateChanged( const wxRect& aRect ) override;
 
-    virtual void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const;
+    virtual void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
     virtual bool CanIncrementLabel() const { return true; }
 
-    virtual wxString GetSelectMenuText() const;
+    virtual wxString GetSelectMenuText() const override;
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
 
@@ -202,16 +202,16 @@ public:
 
     virtual void SetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 
-    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
     virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false,
                           int aAccuracy = 0 ) const;
 
-    virtual void Plot( PLOTTER* aPlotter );
+    virtual void Plot( PLOTTER* aPlotter ) override;
 
-    virtual EDA_ITEM* Clone() const;
+    virtual EDA_ITEM* Clone() const override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;     // override
@@ -236,29 +236,29 @@ public:
         return wxT( "SCH_LABEL" );
     }
 
-    void SetOrientation( int aSchematicOrientation );
+    void SetOrientation( int aSchematicOrientation ) override;
 
-    wxPoint GetSchematicTextOffset() const;
+    wxPoint GetSchematicTextOffset() const override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
     const EDA_RECT GetBoundingBox() const;  // Virtual
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     bool IsConnectable() const { return true; }
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const { return  add_line_label_xpm; }
 
     bool IsReplaceable() const { return true; }
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }
@@ -282,31 +282,31 @@ public:
         return wxT( "SCH_GLOBALLABEL" );
     }
 
-    void SetOrientation( int aSchematicOrientation );
+    void SetOrientation( int aSchematicOrientation ) override;
 
-    wxPoint GetSchematicTextOffset() const;
+    wxPoint GetSchematicTextOffset() const override;
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     const EDA_RECT GetBoundingBox() const;  // Virtual
 
-    void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos );
+    void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos ) override;
 
-    void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position ) override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
     bool IsConnectable() const { return true; }
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const { return  add_glabel_xpm; }
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }
@@ -332,31 +332,31 @@ public:
         return wxT( "SCH_HIERLABEL" );
     }
 
-    void SetOrientation( int aSchematicOrientation );
+    void SetOrientation( int aSchematicOrientation ) override;
 
-    wxPoint GetSchematicTextOffset() const;
+    wxPoint GetSchematicTextOffset() const override;
 
-    void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos );
+    void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos ) override;
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
     const EDA_RECT GetBoundingBox() const;      // Virtual
 
-    void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position ) override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
     bool IsConnectable() const { return true; }
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
     BITMAP_DEF GetMenuImage() const { return  add_hierarchical_label_xpm; }
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }

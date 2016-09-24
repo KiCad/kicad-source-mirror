@@ -65,12 +65,12 @@ private:
 
     //------ event handlers, overiding the fbp handlers --------------
 
-    void OnCloseWindow( wxCloseEvent& event );
+    void OnCloseWindow( wxCloseEvent& event ) override;
 
     /* Remove a library to the library list.
      * The real list (m_Parent->m_ComponentLibFiles) is not changed, so the change can be canceled
      */
-    void OnRemoveLibClick( wxCommandEvent& event );
+    void OnRemoveLibClick( wxCommandEvent& event ) override;
 
     /* Insert or add a library to the library list:
      *   The new library is put in list before (insert button) the selection,
@@ -78,14 +78,14 @@ private:
      * The real list (m_Parent->m_ComponentLibFiles) is not changed, so the change
      * can be canceled
      */
-    void OnAddOrInsertLibClick( wxCommandEvent& event );
+    void OnAddOrInsertLibClick( wxCommandEvent& event ) override;
 
-    void OnAddOrInsertPath( wxCommandEvent& event );
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-    void OnRemoveUserPath( wxCommandEvent& event );
-    void OnButtonUpClick( wxCommandEvent& event );
-    void OnButtonDownClick( wxCommandEvent& event );
+    void OnAddOrInsertPath( wxCommandEvent& event ) override;
+    void OnOkClick( wxCommandEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override;
+    void OnRemoveUserPath( wxCommandEvent& event ) override;
+    void OnButtonUpClick( wxCommandEvent& event ) override;
+    void OnButtonDownClick( wxCommandEvent& event ) override;
 };
 
 

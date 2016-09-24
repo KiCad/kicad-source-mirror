@@ -70,23 +70,23 @@ public:
 
     ~MARKER_PCB();
 
-    void Move(const wxPoint& aMoveVector)
+    void Move(const wxPoint& aMoveVector) override
     {
         m_Pos += aMoveVector;
     }
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre ) override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset )
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override
     {
         DrawMarker( aPanel, aDC, aDrawMode, aOffset );
     }
 
-    const wxPoint& GetPosition() const          { return m_Pos; }
-    void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }
+    const wxPoint& GetPosition() const override { return m_Pos; }
+    void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
 
     void SetItem( const BOARD_ITEM* aItem )
     {
@@ -98,36 +98,36 @@ public:
         return m_item;
     }
 
-    bool HitTest( const wxPoint& aPosition ) const
+    bool HitTest( const wxPoint& aPosition ) const override
     {
         return HitTestMarker( aPosition );
     }
 
-    bool IsOnLayer( LAYER_ID aLayer ) const;
+    bool IsOnLayer( LAYER_ID aLayer ) const override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  drc_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  drc_xpm; }
 
     ///> @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const
+    virtual const BOX2I ViewBBox() const override
     {
         return GetParent()->ViewBBox();
     }
 
     ///> @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
     /** Get class name
      * @return  string "MARKER_PCB"
      */
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "MARKER_PCB" );
     }

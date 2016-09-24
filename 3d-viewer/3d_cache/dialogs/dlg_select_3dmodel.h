@@ -64,7 +64,7 @@ public:
     DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager, S3D_INFO* aModelItem,
         wxString& prevModelSelectDir, int& prevModelWildcard );
 
-    bool TransferDataFromWindow();
+    bool TransferDataFromWindow() override;
     void OnSelectionChanged( wxTreeEvent& event );
     void OnFileActivated( wxTreeEvent& event );
     void SetRootDir( wxCommandEvent& event );

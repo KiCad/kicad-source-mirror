@@ -45,7 +45,7 @@ public:
 
 private:
     void OnCancelClick( wxCommandEvent& event ) { EndModal( wxID_CANCEL ); }
-    void OnOkClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event ) override;
 
     void initValues( );
 };

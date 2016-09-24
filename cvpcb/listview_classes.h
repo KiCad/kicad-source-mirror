@@ -131,7 +131,7 @@ public:
      * this overloaded function MUST be provided for the wxLC_VIRTUAL mode
      * because real data is not handled by ITEMS_LISTBOX_BASE
      */
-    wxString OnGetItemText( long item, long column ) const;
+    wxString OnGetItemText( long item, long column ) const override;
 
     // Events functions:
     void     OnLeftClick( wxListEvent& event );
@@ -161,7 +161,7 @@ public:
     void     SetLibraryList( const wxArrayString& aList );
 
     wxString GetSelectedLibrary();
-    wxString OnGetItemText( long item, long column ) const;
+    wxString OnGetItemText( long item, long column ) const override;
 
     // Events functions:
     void     OnLeftClick( wxListEvent& event );
@@ -209,7 +209,7 @@ public:
      * this overloaded function MUST be provided for the wxLC_VIRTUAL mode
      * because real data is not handled by ITEMS_LISTBOX_BASE
      */
-    wxString OnGetItemText( long item, long column ) const;
+    wxString OnGetItemText( long item, long column ) const override;
 
     /*
      * Enable or disable an item

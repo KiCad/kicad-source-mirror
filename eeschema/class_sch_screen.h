@@ -342,7 +342,7 @@ public:
      * items are removed from the beginning of the list.
      * So this function can be called to remove old commands
      */
-    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
+    virtual void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 ) override;
 
     /**
      * Function Save

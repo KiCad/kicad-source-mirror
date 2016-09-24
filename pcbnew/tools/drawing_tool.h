@@ -50,7 +50,7 @@ public:
     ~DRAWING_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason );
+    void Reset( RESET_REASON aReason ) override;
 
     /**
      * Function DrawLine()
@@ -122,7 +122,7 @@ public:
     int SetAnchor( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
-    void SetTransitions();
+    void SetTransitions() override;
 
 private:
     ///> Starts drawing a selected shape (i.e. DRAWSEGMENT).

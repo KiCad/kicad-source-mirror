@@ -117,8 +117,8 @@ private:
     static int m_fileFormat;
 
 	void initDialog();
-    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
-    void OnOKButton( wxCommandEvent& event );
+    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
+    void OnOKButton( wxCommandEvent& event ) override;
 
     bool CreateFiles();
 

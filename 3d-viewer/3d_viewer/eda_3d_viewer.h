@@ -185,9 +185,9 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
 
     void SetToolbars();
 
-    void SaveSettings( wxConfigBase *aCfg );
+    void SaveSettings( wxConfigBase *aCfg ) override;
 
-    void LoadSettings( wxConfigBase *aCfg );
+    void LoadSettings( wxConfigBase *aCfg ) override;
 
     void OnLeftClick( wxDC *DC, const wxPoint &MousePos );
 

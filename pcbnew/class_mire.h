@@ -59,8 +59,8 @@ public:
 
     ~PCB_TARGET();
 
-    void SetPosition( const wxPoint& aPos ) { m_Pos = aPos; }   // override
-    const wxPoint& GetPosition() const      { return m_Pos; }   // override
+    void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
+    const wxPoint& GetPosition() const override { return m_Pos; }
 
     void SetShape( int aShape )     { m_Shape = aShape; }
     int GetShape() const            { return m_Shape; }
@@ -71,21 +71,21 @@ public:
     void SetWidth( int aWidth )     { m_Width = aWidth; }
     int GetWidth() const            { return m_Width; }
 
-    void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector ) override
     {
         m_Pos += aMoveVector;
     }
 
-    void Rotate( const wxPoint& aRotCentre, double aAngle );
+    void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 
-    void Flip( const wxPoint& aCentre );
+    void Flip( const wxPoint& aCentre ) override;
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const;
+    bool HitTest( const wxPoint& aPosition ) const override;
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "PCB_TARGET" );
     }
@@ -93,19 +93,19 @@ public:
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
 
     // Virtual function
-    const EDA_RECT GetBoundingBox() const;
+    const EDA_RECT GetBoundingBox() const override;
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  add_mires_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  add_mires_xpm; }
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 };
 

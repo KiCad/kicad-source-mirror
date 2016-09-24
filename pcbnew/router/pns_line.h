@@ -97,7 +97,7 @@ public:
     }
 
     /// @copydoc ITEM::Clone()
-    virtual LINE* Clone() const;
+    virtual LINE* Clone() const override;
 
     const LINE& operator=( const LINE& aOther );
 
@@ -252,15 +252,15 @@ public:
 
     const VIA& Via() const { return m_via; }
 
-    virtual void Mark( int aMarker );
+    virtual void Mark( int aMarker ) override;
     virtual void Unmark ();
-    virtual int Marker() const;
+    virtual int Marker() const override;
 
     void DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
     void DragCorner( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
 
-    void SetRank( int aRank );
-    int Rank() const;
+    void SetRank( int aRank ) override;
+    int Rank() const override;
 
     bool HasLoops() const;
     bool HasLockedSegments() const;

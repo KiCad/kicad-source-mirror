@@ -66,10 +66,10 @@
 class IDF2VRML : public wxAppConsole
 {
 public:
-    virtual bool OnInit();
-    virtual int OnRun();
-    virtual void OnInitCmdLine(wxCmdLineParser& parser);
-    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+    virtual bool OnInit() override;
+    virtual int OnRun() override;
+    virtual void OnInitCmdLine(wxCmdLineParser& parser) override;
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
 private:
     double m_ScaleFactor;

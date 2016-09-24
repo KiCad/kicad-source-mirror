@@ -118,10 +118,10 @@ public:
     ~CBVH_PBRT();
 
     // Imported from CGENERICACCELERATOR
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const;
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo, unsigned int aAccNodeInfo ) const;
-    bool Intersect(const RAYPACKET &aRayPacket, HITINFO_PACKET *aHitInfoPacket ) const;
-    bool IntersectP( const RAY &aRay, float aMaxDistance ) const;
+    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
+    bool Intersect( const RAY &aRay, HITINFO &aHitInfo, unsigned int aAccNodeInfo ) const override;
+    bool Intersect(const RAYPACKET &aRayPacket, HITINFO_PACKET *aHitInfoPacket ) const override;
+    bool IntersectP( const RAY &aRay, float aMaxDistance ) const override;
 
 private:
 

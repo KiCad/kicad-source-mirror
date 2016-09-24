@@ -61,9 +61,9 @@ private:
 
     /// Initialises member variables
     void InitValues();
-    void OnCancelClick( wxCommandEvent& event );
-    void OnClearAnnotationCmpClick( wxCommandEvent& event );
-    void OnApplyClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event ) override;
+    void OnClearAnnotationCmpClick( wxCommandEvent& event ) override;
+    void OnApplyClick( wxCommandEvent& event ) override;
 
     // User functions:
     bool GetLevel();

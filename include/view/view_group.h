@@ -102,7 +102,7 @@ public:
      *
      * @return The current bounding box
      */
-    virtual const BOX2I ViewBBox() const;
+    virtual const BOX2I ViewBBox() const override;
 
     /**
      * Function ViewDraw()
@@ -111,7 +111,7 @@ public:
      * @param aLayer is the layer which should be drawn.
      * @param aGal is the GAL that should be used for drawing.
      */
-    virtual void ViewDraw( int aLayer, GAL* aGal ) const;
+    virtual void ViewDraw( int aLayer, GAL* aGal ) const override;
 
     /**
      * Function ViewGetLayers()
@@ -120,7 +120,7 @@ public:
      * @param aLayers[] is the output layer index array.
      * @param aCount is the number of layer indices in aLayers[].
      */
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /**
      * Function SetLayer()
@@ -171,23 +171,23 @@ protected:
     /// These functions cannot be used with VIEW_GROUP as they are intended only to work with
     /// singular VIEW_ITEMs (there is only one-to-one relation between item/layer combination and
     /// its group).
-    int getGroup( int aLayer ) const
+    int getGroup( int aLayer ) const override
     {
         return -1;
     }
 
-    std::vector<int> getAllGroups() const
+    std::vector<int> getAllGroups() const override
     {
         return std::vector<int>();
     }
 
-    void setGroup( int aLayer, int aGroup )
+    void setGroup( int aLayer, int aGroup ) override
     {}
 
-    void deleteGroups()
+    void deleteGroups() override
     {}
 
-    bool storesGroups() const
+    bool storesGroups() const override
     {
         return false;
     }

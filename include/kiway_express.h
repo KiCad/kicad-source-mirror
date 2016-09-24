@@ -62,7 +62,7 @@ public:
     const std::string&  GetPayload()                    { return m_payload; }
     void SetPayload( const std::string& aPayload )      { m_payload = aPayload; }
 
-    KIWAY_EXPRESS* Clone() const            { return new KIWAY_EXPRESS( *this ); }
+    KIWAY_EXPRESS* Clone() const override   { return new KIWAY_EXPRESS( *this ); }
 
     //KIWAY_EXPRESS() {}
 

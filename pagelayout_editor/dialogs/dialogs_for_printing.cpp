@@ -55,9 +55,9 @@ public:
         m_parent = aParent;
     }
 
-    bool OnPrintPage( int aPageNum );
+    bool OnPrintPage( int aPageNum ) override;
     bool HasPage( int aPageNum ) { return ( aPageNum <= 2 ); }
-    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
+    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
     void DrawPage( int aPageNum );
 };
 

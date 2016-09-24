@@ -41,7 +41,7 @@ class HTML_MESSAGE_BOX : public DIALOG_DISPLAY_HTML_TEXT_BASE
 {
 protected:
     // Handlers for HTML_MESSAGE_BOX_BASE events.
-    void OnCloseButtonClick( wxCommandEvent& event );
+    void OnCloseButtonClick( wxCommandEvent& event ) override;
 
 public:
     /**

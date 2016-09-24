@@ -60,12 +60,12 @@ public:
 
 private:
     // Events handlers:
-    void OnInitDialog( wxInitDialogEvent& event );
-    void OnCloseDialog( wxCloseEvent& event );
+    void OnInitDialog( wxInitDialogEvent& event ) override;
+    void OnCloseDialog( wxCloseEvent& event ) override;
 
-    void OnListItemDeselected( wxListEvent& event );
-    void OnListItemSelected( wxListEvent& event );
-    void addFieldButtonHandler( wxCommandEvent& event );
+    void OnListItemDeselected( wxListEvent& event ) override;
+    void OnListItemSelected( wxListEvent& event ) override;
+    void addFieldButtonHandler( wxCommandEvent& event ) override;
 
     /**
      * Function deleteFieldButtonHandler
@@ -74,12 +74,12 @@ private:
      * If a field is empty, it is removed.
      * if not empty, the text is removed.
      */
-    void deleteFieldButtonHandler( wxCommandEvent& event );
+    void deleteFieldButtonHandler( wxCommandEvent& event ) override;
 
-    void moveUpButtonHandler( wxCommandEvent& event );
-    void OnCancelButtonClick( wxCommandEvent& event );
-    void OnOKButtonClick( wxCommandEvent& event );
-    void showButtonHandler( wxCommandEvent& event );
+    void moveUpButtonHandler( wxCommandEvent& event ) override;
+    void OnCancelButtonClick( wxCommandEvent& event ) override;
+    void OnOKButtonClick( wxCommandEvent& event ) override;
+    void showButtonHandler( wxCommandEvent& event ) override;
 
     // internal functions:
     void setSelectedFieldNdx( int aFieldNdx );

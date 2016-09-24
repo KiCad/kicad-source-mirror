@@ -68,20 +68,20 @@ private:
     void            InitDisplayParams( void );
 
     // event functions
-    void            OnSelDrillUnitsSelected( wxCommandEvent& event );
-    void            OnSelZerosFmtSelected( wxCommandEvent& event );
-    void            OnGenDrillFile( wxCommandEvent& event );
-    void            OnGenMapFile( wxCommandEvent& event );
+    void            OnSelDrillUnitsSelected( wxCommandEvent& event ) override;
+    void            OnSelZerosFmtSelected( wxCommandEvent& event ) override;
+    void            OnGenDrillFile( wxCommandEvent& event ) override;
+    void            OnGenMapFile( wxCommandEvent& event ) override;
 
     /*
      *  Create a plain text report file giving a list of drill values and drill count
      *  for through holes, oblong holes, and for buried vias,
      *  drill values and drill count per layer pair
      */
-    void            OnGenReportFile( wxCommandEvent& event );
+    void            OnGenReportFile( wxCommandEvent& event ) override;
 
-    void            OnCancelClick( wxCommandEvent& event );
-    void            OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
+    void            OnCancelClick( wxCommandEvent& event ) override;
+    void            OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
 
     // Specific functions:
     void            SetParams( void );

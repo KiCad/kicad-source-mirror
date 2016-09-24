@@ -70,13 +70,13 @@ public:
     bool ReadNode( WRLPROC& proc, WRL1NODE* aParent, WRL1NODE** aNode );
 
     // overrides
-    virtual std::string GetName( void );
-    virtual bool SetName( const std::string& aName );
+    virtual std::string GetName( void ) override;
+    virtual bool SetName( const std::string& aName ) override;
 
     // functions inherited from WRL1NODE
-    bool Read( WRLPROC& proc, WRL1BASE* aTopNode );
-    bool SetParent( WRL1NODE* aParent, bool doUnlink = true );
-    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp );
+    bool Read( WRLPROC& proc, WRL1BASE* aTopNode ) override;
+    bool SetParent( WRL1NODE* aParent, bool doUnlink = true ) override;
+    SGNODE* TranslateToSG( SGNODE* aParent, WRL1STATUS* sp ) override;
 };
 
 #endif  // VRML1_BASE_H

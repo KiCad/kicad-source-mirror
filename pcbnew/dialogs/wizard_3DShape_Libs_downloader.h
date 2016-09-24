@@ -65,16 +65,16 @@ public:
     // Wizard event handlers
     void OnSourceCheck( wxCommandEvent& aEvent );
     void OnCheckGithubList( wxCommandEvent& aEvent );
-    void OnPageChanged( wxWizardEvent& aEvent );
-    void OnSelectAll3Dlibs( wxCommandEvent& aEvent );
-    void OnUnselectAll3Dlibs( wxCommandEvent& aEvent );
-    void OnChangeSearch( wxCommandEvent& aEvent );
-    void OnWizardFinished( wxWizardEvent& aEvent );
-    void OnBrowseButtonClick( wxCommandEvent& aEvent );
+    void OnPageChanged( wxWizardEvent& aEvent ) override;
+    void OnSelectAll3Dlibs( wxCommandEvent& aEvent ) override;
+    void OnUnselectAll3Dlibs( wxCommandEvent& aEvent ) override;
+    void OnChangeSearch( wxCommandEvent& aEvent ) override;
+    void OnWizardFinished( wxWizardEvent& aEvent ) override;
+    void OnBrowseButtonClick( wxCommandEvent& aEvent ) override;
     void OnCheckSaveCopy( wxCommandEvent& aEvent );
-	void OnDefault3DPathButtonClick( wxCommandEvent& event );
-	void OnGridLibReviewSize( wxSizeEvent& event );
-    void OnLocalFolderChange( wxCommandEvent& event );
+	void OnDefault3DPathButtonClick( wxCommandEvent& event ) override;
+	void OnGridLibReviewSize( wxSizeEvent& event ) override;
+    void OnLocalFolderChange( wxCommandEvent& event ) override;
 
 protected:
     // Initialization of wizard pages

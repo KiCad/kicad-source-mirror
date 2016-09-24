@@ -111,7 +111,7 @@ public:
                                EDA_DRAW_FRAME*         aParent,
                                const wxString&         aTitle );
 
-    bool OnPrintPage( int aPage );
+    bool OnPrintPage( int aPage ) override;
 
     bool HasPage( int aPage )       // do not test page num
     {
@@ -121,7 +121,7 @@ public:
             return false;
     }
 
-    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
+    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
 
     /**
      * Print a page ( or a set of pages ).

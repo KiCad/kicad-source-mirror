@@ -65,7 +65,7 @@ public:
         return "A";
     }
 
-    bool HandleTag(const wxHtmlTag& tag);
+    bool HandleTag(const wxHtmlTag& tag) override;
 };
 
 /**

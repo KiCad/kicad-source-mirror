@@ -80,7 +80,7 @@ public:
 
     // Imported from CGENERICCONTAINER2D
     void GetListObjectsIntersects( const CBBOX2D & aBBox,
-                                   CONST_LIST_OBJECT2D &aOutList ) const;
+                                   CONST_LIST_OBJECT2D &aOutList ) const override;
 };
 
 
@@ -117,7 +117,7 @@ public:
 
     // Imported from CGENERICCONTAINER2D
     void GetListObjectsIntersects( const CBBOX2D & aBBox,
-                                   CONST_LIST_OBJECT2D &aOutList ) const;
+                                   CONST_LIST_OBJECT2D &aOutList ) const override;
 };
 
 #endif // _CCONTAINER2D_H_

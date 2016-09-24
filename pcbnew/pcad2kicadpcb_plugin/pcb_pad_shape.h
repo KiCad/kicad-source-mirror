@@ -51,7 +51,7 @@ public:
                            wxString     aDefaultMeasurementUnit,
                            wxString     aActualConversion );
 
-    void            AddToBoard();
+    void            AddToBoard() override;
 };
 
 WX_DEFINE_ARRAY( PCB_PAD_SHAPE*, PCB_PAD_SHAPES_ARRAY );

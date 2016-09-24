@@ -46,10 +46,10 @@ public:
     void SetColor( SFVEC3F aObjColor ) { m_diffusecolor = aObjColor; }
 
     // Imported from COBJECT
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const;
-    bool IntersectP(const RAY &aRay , float aMaxDistance ) const;
-    bool Intersects( const CBBOX &aBBox ) const;
-    SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const;
+    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
+    bool IntersectP(const RAY &aRay , float aMaxDistance ) const override;
+    bool Intersects( const CBBOX &aBBox ) const override;
+    SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const override;
 
 private:
     SFVEC3F m_diffusecolor;

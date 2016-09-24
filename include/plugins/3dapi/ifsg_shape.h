@@ -44,9 +44,9 @@ public:
     IFSG_SHAPE( SGNODE* aParent );
     IFSG_SHAPE( IFSG_NODE& aParent );
 
-    bool Attach( SGNODE* aNode );
-    bool NewNode( SGNODE* aParent );
-    bool NewNode( IFSG_NODE& aParent );
+    bool Attach( SGNODE* aNode ) override;
+    bool NewNode( SGNODE* aParent ) override;
+    bool NewNode( IFSG_NODE& aParent ) override;
 };
 
 #endif  // IFSG_SHAPE_H

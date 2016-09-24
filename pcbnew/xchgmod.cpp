@@ -62,12 +62,12 @@ public:
     ~DIALOG_EXCHANGE_MODULE() { };
 
 private:
-    void OnSelectionClicked( wxCommandEvent& event );
-    void OnOkClick( wxCommandEvent& event );
-    void OnQuit( wxCommandEvent& event );
-    void BrowseAndSelectFootprint( wxCommandEvent& event );
-    void ViewAndSelectFootprint( wxCommandEvent& event );
-    void RebuildCmpList( wxCommandEvent& event );
+    void OnSelectionClicked( wxCommandEvent& event ) override;
+    void OnOkClick( wxCommandEvent& event ) override;
+    void OnQuit( wxCommandEvent& event ) override;
+    void BrowseAndSelectFootprint( wxCommandEvent& event ) override;
+    void ViewAndSelectFootprint( wxCommandEvent& event ) override;
+    void RebuildCmpList( wxCommandEvent& event ) override;
     void init();
 
     bool changeCurrentFootprint();

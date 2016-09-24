@@ -32,13 +32,13 @@ public:
     ~ZOOM_TOOL();
 
     /// @copydoc TOOL_BASE::Reset()
-    void Reset( RESET_REASON aReason );
+    void Reset( RESET_REASON aReason ) override;
 
     /// Main loop
     int Main( const TOOL_EVENT& aEvent );
 
     /// @copydoc TOOL_BASE::SetTransitions()
-    void SetTransitions();
+    void SetTransitions() override;
 
 private:
     bool selectRegion();

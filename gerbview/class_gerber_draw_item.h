@@ -227,7 +227,7 @@ public:
     /* divers */
     int Shape() const { return m_Shape; }
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     wxString ShowGBRShape();
 
@@ -237,7 +237,7 @@ public:
      * @param aRefPos a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( const wxPoint& aRefPos ) const;
+    bool HitTest( const wxPoint& aRefPos ) const override;
 
     /**
      * Function HitTest (overloaded)

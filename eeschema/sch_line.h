@@ -87,19 +87,19 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
 
-    bool Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const override;
 
-    bool Load( LINE_READER& aLine, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
-    int GetPenSize() const;
+    int GetPenSize() const override;
 
-    void Move( const wxPoint& aMoveVector );
+    void Move( const wxPoint& aMoveVector ) override;
 
-    void MirrorX( int aXaxis_position );
+    void MirrorX( int aXaxis_position ) override;
 
-    void MirrorY( int aYaxis_position );
+    void MirrorY( int aYaxis_position ) override;
 
-    void Rotate( wxPoint aPosition );
+    void Rotate( wxPoint aPosition ) override;
 
     /**
      * Check line against \a aLine to see if it overlaps and merge if it does.
@@ -113,44 +113,44 @@ public:
      */
     bool MergeOverlap( SCH_LINE* aLine );
 
-    void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList );
+    void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
-    bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
+    bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
     bool IsDangling() const { return m_startIsDangling || m_endIsDangling; }
 
-    bool IsSelectStateChanged( const wxRect& aRect );
+    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
-    bool IsConnectable() const;
+    bool IsConnectable() const override;
 
-    void GetConnectionPoints(std::vector< wxPoint >& aPoints ) const;
+    void GetConnectionPoints(std::vector< wxPoint >& aPoints ) const override;
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const;
+    BITMAP_DEF GetMenuImage() const override;
 
-    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath );
+    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 
-    bool operator <( const SCH_ITEM& aItem ) const;
+    bool operator <( const SCH_ITEM& aItem ) const override;
 
     wxPoint GetPosition() const { return m_start; }
 
-    void SetPosition( const wxPoint& aPosition );
+    void SetPosition( const wxPoint& aPosition ) override;
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const;
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter );
+    void Plot( PLOTTER* aPlotter ) override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const; // override
 #endif
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const;
+    bool doIsConnected( const wxPoint& aPosition ) const override;
 };
 
 

@@ -44,19 +44,19 @@ public:
     virtual ~OPENGL_COMPOSITOR();
 
     /// @copydoc COMPOSITOR::Initialize()
-    virtual void Initialize();
+    virtual void Initialize() override;
 
     /// @copydoc COMPOSITOR::Resize()
-    virtual void Resize( unsigned int aWidth, unsigned int aHeight );
+    virtual void Resize( unsigned int aWidth, unsigned int aHeight ) override;
 
     /// @copydoc COMPOSITOR::CreateBuffer()
-    virtual unsigned int CreateBuffer();
+    virtual unsigned int CreateBuffer() override;
 
     /// @copydoc COMPOSITOR::SetBuffer()
-    virtual void SetBuffer( unsigned int aBufferHandle );
+    virtual void SetBuffer( unsigned int aBufferHandle ) override;
 
     /// @copydoc COMPOSITOR::GetBuffer()
-    inline virtual unsigned int GetBuffer() const
+    inline virtual unsigned int GetBuffer() const override
     {
         if( m_curFbo == DIRECT_RENDERING )
             return DIRECT_RENDERING;
@@ -65,10 +65,10 @@ public:
     }
 
     /// @copydoc COMPOSITOR::ClearBuffer()
-    virtual void ClearBuffer();
+    virtual void ClearBuffer() override;
 
     /// @copydoc COMPOSITOR::DrawBuffer()
-    virtual void DrawBuffer( unsigned int aBufferHandle );
+    virtual void DrawBuffer( unsigned int aBufferHandle ) override;
 
     // Constant used by glBindFramebuffer to turn off rendering to framebuffers
     static const unsigned int DIRECT_RENDERING = 0;

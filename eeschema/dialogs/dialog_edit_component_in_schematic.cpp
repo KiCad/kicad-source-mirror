@@ -118,18 +118,18 @@ private:
     }
 
     // event handlers
-    void OnCloseDialog( wxCloseEvent& event );
-    void OnListItemDeselected( wxListEvent& event );
-    void OnListItemSelected( wxListEvent& event );
-    void OnCancelButtonClick( wxCommandEvent& event );
-    void OnOKButtonClick( wxCommandEvent& event );
-    void SetInitCmp( wxCommandEvent& event );
-    void addFieldButtonHandler( wxCommandEvent& event );
-    void deleteFieldButtonHandler( wxCommandEvent& event );
-    void moveUpButtonHandler( wxCommandEvent& event );
-    void showButtonHandler( wxCommandEvent& event );
-    void OnTestChipName( wxCommandEvent& event );
-    void OnSelectChipName( wxCommandEvent& event );
+    void OnCloseDialog( wxCloseEvent& event ) override;
+    void OnListItemDeselected( wxListEvent& event ) override;
+    void OnListItemSelected( wxListEvent& event ) override;
+    void OnCancelButtonClick( wxCommandEvent& event ) override;
+    void OnOKButtonClick( wxCommandEvent& event ) override;
+    void SetInitCmp( wxCommandEvent& event ) override;
+    void addFieldButtonHandler( wxCommandEvent& event ) override;
+    void deleteFieldButtonHandler( wxCommandEvent& event ) override;
+    void moveUpButtonHandler( wxCommandEvent& event ) override;
+    void showButtonHandler( wxCommandEvent& event ) override;
+    void OnTestChipName( wxCommandEvent& event ) override;
+    void OnSelectChipName( wxCommandEvent& event ) override;
     void OnInitDlg( wxInitDialogEvent& event )
     {
         TransferDataToWindow();

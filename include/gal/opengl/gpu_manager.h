@@ -104,16 +104,16 @@ public:
     ~GPU_CACHED_MANAGER();
 
     ///> @copydoc GPU_MANAGER::BeginDrawing()
-    virtual void BeginDrawing();
+    virtual void BeginDrawing() override;
 
     ///> @copydoc GPU_MANAGER::DrawIndices()
-    virtual void DrawIndices( unsigned int aOffset, unsigned int aSize );
+    virtual void DrawIndices( unsigned int aOffset, unsigned int aSize ) override;
 
     ///> @copydoc GPU_MANAGER::DrawAll()
-    virtual void DrawAll();
+    virtual void DrawAll() override;
 
     ///> @copydoc GPU_MANAGER::EndDrawing()
-    virtual void EndDrawing();
+    virtual void EndDrawing() override;
 
     ///> Maps vertex buffer stored in GPU memory.
     void Map();
@@ -151,16 +151,16 @@ public:
     GPU_NONCACHED_MANAGER( VERTEX_CONTAINER* aContainer );
 
     ///> @copydoc GPU_MANAGER::BeginDrawing()
-    virtual void BeginDrawing();
+    virtual void BeginDrawing() override;
 
     ///> @copydoc GPU_MANAGER::DrawIndices()
-    virtual void DrawIndices( unsigned int aOffset, unsigned int aSize );
+    virtual void DrawIndices( unsigned int aOffset, unsigned int aSize ) override;
 
     ///> @copydoc GPU_MANAGER::DrawAll()
-    virtual void DrawAll();
+    virtual void DrawAll() override;
 
     ///> @copydoc GPU_MANAGER::EndDrawing()
-    virtual void EndDrawing();
+    virtual void EndDrawing() override;
 };
 } // namespace KIGFX
 #endif /* GPU_MANAGER_H_ */

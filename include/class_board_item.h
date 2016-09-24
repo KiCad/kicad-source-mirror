@@ -284,7 +284,7 @@ public:
      */
     wxString GetLayerName() const;
 
-    virtual bool HitTest( const wxPoint& aPosition ) const
+    virtual bool HitTest( const wxPoint& aPosition ) const override
     {
         return EDA_ITEM::HitTest( aPosition );
     }
@@ -332,7 +332,7 @@ public:
     static std::string FormatInternalUnits( const wxSize& aSize );
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const;
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 };
 
 #endif /* BOARD_ITEM_STRUCT_H */

@@ -51,24 +51,24 @@ public:
     SGAPPEARANCE* m_RAppearance;
     SGFACESET*    m_RFaceSet;
 
-    void unlinkChildNode( const SGNODE* aNode );
-    void unlinkRefNode( const SGNODE* aNode );
+    void unlinkChildNode( const SGNODE* aNode ) override;
+    void unlinkRefNode( const SGNODE* aNode ) override;
 
 public:
     SGSHAPE( SGNODE* aParent );
     virtual ~SGSHAPE();
 
-    virtual bool SetParent( SGNODE* aParent, bool notify = true );
+    virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller);
-    bool AddRefNode( SGNODE* aNode );
-    bool AddChildNode( SGNODE* aNode );
+    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
+    bool AddRefNode( SGNODE* aNode ) override;
+    bool AddChildNode( SGNODE* aNode ) override;
 
-    void ReNameNodes( void );
-    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag );
+    void ReNameNodes( void ) override;
+    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag ) override;
 
-    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode );
-    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode );
+    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode ) override;
+    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode ) override;
 
     bool Prepare( const glm::dmat4* aTransform,
         S3D::MATLIST& materials, std::vector< SMESH >& meshes );

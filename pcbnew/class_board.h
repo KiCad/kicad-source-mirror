@@ -257,9 +257,9 @@ public:
     BOARD();
     ~BOARD();
 
-    virtual const wxPoint& GetPosition() const;
+    virtual const wxPoint& GetPosition() const override;
 
-    virtual void SetPosition( const wxPoint& aPos );
+    virtual void SetPosition( const wxPoint& aPos ) override;
 
     bool IsEmpty() const
     {
@@ -267,7 +267,7 @@ public:
                m_Track.GetCount() == 0 && m_Zone.GetCount() == 0;
     }
 
-    void Move( const wxPoint& aMoveVector );        // overload
+    void Move( const wxPoint& aMoveVector ) override;
 
     void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
     int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
@@ -833,11 +833,11 @@ public:
      * as long as the BOARD has not changed.  Remember, ComputeBoundingBox()'s
      * aBoardEdgesOnly argument is considered in this return value also.
      */
-    const EDA_RECT GetBoundingBox() const { return m_BoundingBox; }   // override
+    const EDA_RECT GetBoundingBox() const override { return m_BoundingBox; }
 
     void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
      * Function Draw.
@@ -848,7 +848,7 @@ public:
      * @param aOffset = an draw offset value (default = 0,0)
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
 
     /**
      * Function DrawHighLight
@@ -951,13 +951,13 @@ public:
 
     /***************************************************************************/
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "BOARD" );
     }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
 

@@ -76,8 +76,8 @@ private:
 class  CCONTAINER : public CGENERICCONTAINER
 {
 public:
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const;
-    bool IntersectP( const RAY &aRay, float aMaxDistance ) const;
+    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
+    bool IntersectP( const RAY &aRay, float aMaxDistance ) const override;
 };
 
 #endif // _CCONTAINER_H_

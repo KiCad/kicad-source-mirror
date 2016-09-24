@@ -56,9 +56,9 @@ public:
                         wxString        aActualConversion,
                         wxStatusBar*    aStatusBar );
 
-    virtual void    SetPosOffset( int aX_offs, int aY_offs );
-    void            AddToModule( MODULE* aModule );
-    void            AddToBoard();
+    virtual void    SetPosOffset( int aX_offs, int aY_offs ) override;
+    void            AddToModule( MODULE* aModule ) override;
+    void            AddToBoard() override;
 
 // protected:
     void            AssignNet( wxString aNetName );

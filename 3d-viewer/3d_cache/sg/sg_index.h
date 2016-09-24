@@ -42,18 +42,18 @@ protected:
 public:
     // for internal SG consumption only
     std::vector< int > index;
-    void unlinkChildNode( const SGNODE* aCaller );
-    void unlinkRefNode( const SGNODE* aCaller );
+    void unlinkChildNode( const SGNODE* aCaller ) override;
+    void unlinkRefNode( const SGNODE* aCaller ) override;
 
 public:
     SGINDEX( SGNODE* aParent );
     virtual ~SGINDEX();
 
-    virtual bool SetParent( SGNODE* aParent, bool notify = true );
+    virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller);
-    bool AddRefNode( SGNODE* aNode );
-    bool AddChildNode( SGNODE* aNode );
+    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
+    bool AddRefNode( SGNODE* aNode ) override;
+    bool AddChildNode( SGNODE* aNode ) override;
 
     /**
      * Function GetIndices
@@ -88,11 +88,11 @@ public:
      */
     void AddIndex( int aIndex );
 
-    void ReNameNodes( void );
-    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag );
+    void ReNameNodes( void ) override;
+    bool WriteVRML( std::ofstream& aFile, bool aReuseFlag ) override;
 
-    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode );
-    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode );
+    bool WriteCache( std::ofstream& aFile, SGNODE* parentNode ) override;
+    bool ReadCache( std::ifstream& aFile, SGNODE* parentNode ) override;
 };
 
 #endif  // SG_INDEX_H

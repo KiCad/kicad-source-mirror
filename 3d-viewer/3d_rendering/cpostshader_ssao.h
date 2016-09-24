@@ -41,7 +41,7 @@ public:
     //~CPOSTSHADER_SSAO();
 
     // Imported from CPOSTSHADER
-    SFVEC3F Shade(const SFVEC2I &aShaderPos ) const;
+    SFVEC3F Shade(const SFVEC2I &aShaderPos ) const override;
 
 private:
     SFVEC3F posFromDepth( const SFVEC2F &coord ) const;

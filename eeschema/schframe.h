@@ -192,13 +192,13 @@ protected:
      *
      * @return true if the auto save was successful otherwise false.
      */
-    virtual bool doAutoSave();
+    virtual bool doAutoSave() override;
 
     /**
      * Function autoSaveRequired
      * returns true if the schematic has been modified.
      */
-    virtual bool isAutoSaveRequired() const;
+    virtual bool isAutoSaveRequired() const override;
 
     /**
      * Function addCurrentItemToList
@@ -266,7 +266,7 @@ public:
     void Process_Config( wxCommandEvent& event );
     void OnSelectTool( wxCommandEvent& aEvent );
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     /**
      * Function GetProjectFileParametersList
@@ -284,7 +284,7 @@ public:
      * saves changes to the project settings to the project (.pro) file.
      * @param aAskForSave = true to open a dialog before saving the settings
      */
-    void SaveProjectSettings( bool aAskForSave );
+    void SaveProjectSettings( bool aAskForSave ) override;
 
     /**
      * Function LoadProjectFile
@@ -361,21 +361,21 @@ public:
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings();
 
-    void LoadSettings( wxConfigBase* aCfg );
-    void SaveSettings( wxConfigBase* aCfg );
+    void LoadSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
 
     void CreateScreens();
-    void ReCreateHToolbar();
-    void ReCreateVToolbar();
+    void ReCreateHToolbar() override;
+    void ReCreateVToolbar() override;
     void ReCreateOptToolbar();
-    void ReCreateMenuBar();
+    void ReCreateMenuBar() override;
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
 
     /**
      * Function OnModify
@@ -385,7 +385,7 @@ public:
      */
     void OnModify();
 
-    virtual wxString GetScreenDesc() const;
+    virtual wxString GetScreenDesc() const override;
 
     void InstallConfigFrame( wxCommandEvent& event );
 
@@ -395,15 +395,15 @@ public:
      * this is a virtual function called by EDA_DRAW_FRAME::OnSockRequest().
      * @param cmdline = received command from socket
      */
-    virtual void ExecuteRemoteCommand( const char* cmdline );
+    virtual void ExecuteRemoteCommand( const char* cmdline ) override;
 
     void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // override virtual from KIWAY_PLAYER
 
-    void OnLeftClick( wxDC* aDC, const wxPoint& aPosition );
-    void OnLeftDClick( wxDC* aDC, const wxPoint& aPosition );
-    bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu );
+    void OnLeftClick( wxDC* aDC, const wxPoint& aPosition ) override;
+    void OnLeftDClick( wxDC* aDC, const wxPoint& aPosition ) override;
+    bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override;
     void OnSelectOptionToolbar( wxCommandEvent& event );
-    double BestZoom();
+    double BestZoom() override;
 
     /**
      * Function LocateAndShowItem
@@ -1216,7 +1216,7 @@ public:
      * Function InitBlockPasteInfos
      * initializes the parameters used by the block paste command.
      */
-    void InitBlockPasteInfos();
+    void InitBlockPasteInfos() override;
 
     /**
      * Function BlockCommand
@@ -1226,7 +1226,7 @@ public:
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int BlockCommand( EDA_KEY aKey );
+    virtual int BlockCommand( EDA_KEY aKey ) override;
 
     /**
      * Function HandleBlockPlace
@@ -1235,7 +1235,7 @@ public:
      * (bloc move, drag, copy .. )
      * Parameters must be initialized in GetScreen()->m_BlockLocate
      */
-    virtual void HandleBlockPlace( wxDC* DC );
+    virtual void HandleBlockPlace( wxDC* DC ) override;
 
     /**
      * Function HandleBlockEnd
@@ -1249,7 +1249,7 @@ public:
      * @return false if no item selected, or command finished,
      * true if some items found and HandleBlockPlace must be called later
      */
-    virtual bool HandleBlockEnd( wxDC* aDC );
+    virtual bool HandleBlockEnd( wxDC* aDC ) override;
 
     /**
      * Function RepeatDrawItem

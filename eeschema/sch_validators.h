@@ -65,7 +65,7 @@ public:
      * @param aParent - a pointer to the parent window of the error message dialog.
      * @return true if the text in the control is valid otherwise false.
      */
-    virtual bool Validate( wxWindow *aParent );
+    virtual bool Validate( wxWindow *aParent ) override;
 };
 
 

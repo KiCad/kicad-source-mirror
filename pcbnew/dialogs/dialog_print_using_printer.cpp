@@ -86,11 +86,11 @@ private:
     std::pair<wxCheckListBox*, int> m_boxSelectLayer[LAYER_ID_COUNT];
     static bool     m_ExcludeEdgeLayer;
 
-    void OnCloseWindow( wxCloseEvent& event );
-    void OnPageSetup( wxCommandEvent& event );
-    void OnPrintPreview( wxCommandEvent& event );
-    void OnPrintButtonClick( wxCommandEvent& event );
-    void OnScaleSelectionClick( wxCommandEvent& event );
+    void OnCloseWindow( wxCloseEvent& event ) override;
+    void OnPageSetup( wxCommandEvent& event ) override;
+    void OnPrintPreview( wxCommandEvent& event ) override;
+    void OnPrintButtonClick( wxCommandEvent& event ) override;
+    void OnScaleSelectionClick( wxCommandEvent& event ) override;
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
 

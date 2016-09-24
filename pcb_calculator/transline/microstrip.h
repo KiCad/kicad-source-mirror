@@ -53,8 +53,8 @@ private:
     double Z0_h_1;      // homogeneous stripline impedance
 
 public:
-    void   analyze();
-    void   synthesize();
+    void   analyze() override;
+    void   synthesize() override;
 
 private:
     double er_eff_freq();

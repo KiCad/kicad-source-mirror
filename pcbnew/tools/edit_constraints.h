@@ -92,7 +92,7 @@ public:
     {}
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle );
+    virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
     const EDIT_POINT& m_constrainer;      ///< Point that imposes the constraint.
@@ -118,7 +118,7 @@ public:
     {}
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle );
+    virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
     const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
@@ -145,7 +145,7 @@ public:
     {}
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle );
+    virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
     const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
@@ -164,7 +164,7 @@ public:
     EC_LINE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer );
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle );
+    virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
     const EDIT_POINT& m_constrainer;    ///< Point that imposes the constraint.
@@ -192,7 +192,7 @@ public:
     {}
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_POINT& aHandle );
+    virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
     ///> Point that imposes the constraint (center of the circle).
@@ -217,7 +217,7 @@ public:
     virtual ~EC_CONVERGING();
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_LINE& aHandle );
+    virtual void Apply( EDIT_LINE& aHandle ) override;
 
 private:
     ///> Constraint for origin side segment.
@@ -257,7 +257,7 @@ public:
     {}
 
     ///> @copydoc EDIT_CONSTRAINT::Apply()
-    virtual void Apply( EDIT_LINE& aHandle );
+    virtual void Apply( EDIT_LINE& aHandle ) override;
 
 private:
     ///> Function that determines snapping point.

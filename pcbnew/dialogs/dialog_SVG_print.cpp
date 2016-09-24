@@ -70,12 +70,12 @@ private:
 
     void initDialog();
 
-    void OnCloseWindow( wxCloseEvent& event );
-    void OnButtonPlot( wxCommandEvent& event );
+    void OnCloseWindow( wxCloseEvent& event ) override;
+    void OnButtonPlot( wxCommandEvent& event ) override;
 
-    void OnButtonCloseClick( wxCommandEvent& event );
+    void OnButtonCloseClick( wxCommandEvent& event ) override;
 
-    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event );
+    void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
     void SetPenWidth();
     void ExportSVGFile( bool aOnlyOneFile );
 

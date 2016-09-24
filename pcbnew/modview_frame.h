@@ -52,7 +52,7 @@ protected:
 public:
     ~FOOTPRINT_VIEWER_FRAME();
 
-    virtual EDA_COLOR_T GetGridColor() const;
+    virtual EDA_COLOR_T GetGridColor() const override;
 
     /**
      * Function ReCreateLibraryList
@@ -73,7 +73,7 @@ private:
     const wxString      getCurFootprintName();
     void                setCurFootprintName( const wxString& aName );
 
-    void OnSize( wxSizeEvent& event );
+    void OnSize( wxSizeEvent& event ) override;
 
     void ReCreateFootprintList();
     void OnIterateFootprintList( wxCommandEvent& event );
@@ -89,25 +89,25 @@ private:
      * Display the current selected component.
      * If the component is an alias, the ROOT component is displayed
      */
-    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
 
-    void OnCloseWindow( wxCloseEvent& Event );
+    void OnCloseWindow( wxCloseEvent& Event ) override;
     void CloseFootprintViewer( wxCommandEvent& event );
 
-    void ReCreateHToolbar();
-    void ReCreateVToolbar();
-    void ReCreateMenuBar();
+    void ReCreateHToolbar() override;
+    void ReCreateVToolbar() override;
+    void ReCreateMenuBar() override;
 
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
+    void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnFootprintList( wxCommandEvent& event );
     void DClickOnFootprintList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const;
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
     /**
      * Function OnHotKey
@@ -117,7 +117,7 @@ private:
      * case insensitive
      * </p>
      */
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
 
     void LoadSettings( wxConfigBase* aCfg );    // override virtual
     void SaveSettings( wxConfigBase* aCfg );    // override virtual
@@ -127,7 +127,7 @@ private:
      * is called when the frame frame is activate to reload the libraries and component lists
      * that can be changed by the schematic editor or the library editor.
      */
-    virtual void OnActivate( wxActivateEvent& event );
+    virtual void OnActivate( wxActivateEvent& event ) override;
 
     void SelectCurrentLibrary( wxCommandEvent& event );
 
@@ -152,13 +152,13 @@ private:
      */
     void SelectAndViewFootprint( int aMode );
 
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
 
     /**
      * Function Show3D_Frame (virtual)
      * displays 3D view of the footprint (module) being edited.
      */
-    void Show3D_Frame( wxCommandEvent& event );
+    void Show3D_Frame( wxCommandEvent& event ) override;
 
     /**
      * Function Update3D_Frame

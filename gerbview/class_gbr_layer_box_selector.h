@@ -42,18 +42,18 @@ public:
 
     // Reload the Layers names and bitmaps
     // Virtual function
-    void Resync();
+    void Resync() override;
 
     // Returns a color index from the layer id
     // Virtual function
-    EDA_COLOR_T GetLayerColor( int aLayer ) const;
+    EDA_COLOR_T GetLayerColor( int aLayer ) const override;
 
     // Returns true if the layer id is enabled (i.e. is it should be displayed)
     // Virtual function
-    bool IsLayerEnabled( int aLayer ) const { return true; };
+    bool IsLayerEnabled( int aLayer ) const override { return true; }
 
     // Returns the name of the layer id
-    wxString GetLayerName( int aLayer ) const;
+    wxString GetLayerName( int aLayer ) const override;
 };
 
 #endif //CLASS_GBR_LAYER_BOX_SELECTOR_H

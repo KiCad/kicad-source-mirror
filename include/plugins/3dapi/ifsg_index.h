@@ -42,9 +42,9 @@ class SGLIB_API IFSG_INDEX : public IFSG_NODE
 public:
     IFSG_INDEX();
 
-    virtual bool Attach( SGNODE* aNode ) = 0;
-    virtual bool NewNode( SGNODE* aParent ) = 0;
-    virtual bool NewNode( IFSG_NODE& aParent ) = 0;
+    virtual bool Attach( SGNODE* aNode ) override = 0;
+    virtual bool NewNode( SGNODE* aParent ) override = 0;
+    virtual bool NewNode( IFSG_NODE& aParent ) override = 0;
 
     bool GetIndices( size_t& nIndices, int*& aIndexList );
 

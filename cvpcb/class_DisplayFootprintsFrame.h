@@ -45,15 +45,15 @@ public:
     DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, CVPCB_MAINFRAME* aParent );
     ~DISPLAY_FOOTPRINTS_FRAME();
 
-    void    OnCloseWindow( wxCloseEvent& Event );
+    void    OnCloseWindow( wxCloseEvent& Event ) override;
 
     /*
      * Draws the current highlighted footprint.
      */
-    void    RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
 
-    void    ReCreateHToolbar();
-    void    ReCreateVToolbar();
+    void    ReCreateHToolbar() override;
+    void    ReCreateVToolbar() override;
     void    ReCreateOptToolbar();
     void    RecreateMenuBar();
 
@@ -74,7 +74,7 @@ public:
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool IsGridVisible() const;
+    virtual bool IsGridVisible() const override;
 
     /**
      * Function SetGridVisibility() , virtual
@@ -82,17 +82,17 @@ public:
      * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
-    virtual void SetGridVisibility( bool aVisible );
+    virtual void SetGridVisibility( bool aVisible ) override;
     /**
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual EDA_COLOR_T GetGridColor() const;
+    virtual EDA_COLOR_T GetGridColor() const override;
 
-    void    OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-    bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    bool    GeneralControl( wxDC* DC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 );
+    void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
+    void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
+    bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
+    bool    GeneralControl( wxDC* DC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
     void    InstallOptionsDisplay( wxCommandEvent& event );
     MODULE* Get_Module( const wxString& CmpName );
 
@@ -104,7 +104,7 @@ public:
     /**
      * Display 3D frame of current footprint selection.
      */
-    void    Show3D_Frame( wxCommandEvent& event );
+    void    Show3D_Frame( wxCommandEvent& event ) override;
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in CvPcb.

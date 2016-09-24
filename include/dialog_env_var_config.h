@@ -43,15 +43,15 @@ private:
     bool         m_extDefsChanged;
 
 protected:
-    virtual void OnAddRow( wxCommandEvent& aEvent );
-    virtual void OnDeleteSelectedRows( wxCommandEvent& aEvent );
-    virtual void OnHelpRequest( wxCommandEvent& aEvent );
+    virtual void OnAddRow( wxCommandEvent& aEvent ) override;
+    virtual void OnDeleteSelectedRows( wxCommandEvent& aEvent ) override;
+    virtual void OnHelpRequest( wxCommandEvent& aEvent ) override;
 
 public:
     DIALOG_ENV_VAR_CONFIG( wxWindow* parent, const ENV_VAR_MAP& aEnvVarMap );
 
-    bool TransferDataToWindow();
-    bool TransferDataFromWindow();
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
     bool ExternalDefsChanged() const { return m_extDefsChanged; }
 

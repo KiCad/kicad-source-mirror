@@ -108,7 +108,7 @@ public:
     void Save( const wxString& aFileName, BOARD* aBoard,
                const PROPERTIES* aProperties = NULL );          // overload
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL );
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL ) override;
 
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
             const PROPERTIES* aProperties = NULL );
@@ -119,13 +119,13 @@ public:
     void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
                         const PROPERTIES* aProperties = NULL );
 
-    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL );
+    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL ) override;
 
-    void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL);
+    void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL) override;
 
-    bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
+    bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL ) override;
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath );
+    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
     //-----</PLUGIN API>--------------------------------------------------------
 

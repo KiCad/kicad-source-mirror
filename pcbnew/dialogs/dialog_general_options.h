@@ -37,8 +37,8 @@ private:
 public:
     DIALOG_GENERALOPTIONS( PCB_EDIT_FRAME* parent );
     ~DIALOG_GENERALOPTIONS() {};
-    void OnOkClick( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override;
 
     PCB_EDIT_FRAME* GetParent() const { return (PCB_EDIT_FRAME*) wxDialog::GetParent(); }
 };

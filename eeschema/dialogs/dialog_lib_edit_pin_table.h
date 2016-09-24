@@ -11,7 +11,7 @@ public:
 
     void UpdateSummary();
 
-    virtual void OnColumnHeaderRightClicked( wxDataViewEvent& aEvent );
+    virtual void OnColumnHeaderRightClicked( wxDataViewEvent& aEvent ) override;
 
 private:
     class DataViewModel;

@@ -70,8 +70,8 @@ public:
     ~DIALOG_GRAPHIC_ITEM_PROPERTIES() {};
 
 private:
-    bool TransferDataToWindow();
-    bool TransferDataFromWindow();
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
     void OnLayerChoice( wxCommandEvent& event );
 
     void OnInitDlg( wxInitDialogEvent& event )
@@ -83,7 +83,7 @@ private:
         FinishDialogSettings();
     }
 
-    bool Validate();
+    bool Validate() override;
 };
 
 DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_EDIT_FRAME* aParent,

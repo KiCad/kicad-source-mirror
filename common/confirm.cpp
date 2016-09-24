@@ -50,8 +50,8 @@ public:
     };
 
 private:
-    void OnSaveAndExit( wxCommandEvent& event ) { EndModal( wxID_YES ); }
-    void OnExitNoSave( wxCommandEvent& event ) { EndModal( wxID_NO ); }
+    void OnSaveAndExit( wxCommandEvent& event ) override { EndModal( wxID_YES ); }
+    void OnExitNoSave( wxCommandEvent& event ) override { EndModal( wxID_NO ); }
 };
 
 

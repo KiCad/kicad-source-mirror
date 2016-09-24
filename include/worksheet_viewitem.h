@@ -115,17 +115,17 @@ public:
     }
 
     /// @copydoc VIEW_ITEM::ViewBBox()
-    const BOX2I ViewBBox() const;
+    const BOX2I ViewBBox() const override;
 
     /// @copydoc VIEW_ITEM::ViewDraw()
-    void ViewDraw( int aLayer, GAL* aGal ) const;
+    void ViewDraw( int aLayer, GAL* aGal ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    void ViewGetLayers( int aLayers[], int& aCount ) const;
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
 #if defined(DEBUG)
     /// @copydoc EDA_ITEM::Show()
-    void Show( int x, std::ostream& st ) const
+    void Show( int x, std::ostream& st ) const override
     {
     }
 #endif
@@ -133,7 +133,7 @@ public:
     /** Get class name
      * @return  string "WORKSHEET_VIEWITEM"
      */
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "WORKSHEET_VIEWITEM" );
     }

@@ -43,8 +43,8 @@ public:
     ~DIALOG_PADS_MASK_CLEARANCE() {};
 private:
     void         myInit();
-    virtual void OnButtonOkClick( wxCommandEvent& event );
-    virtual void OnButtonCancelClick( wxCommandEvent& event );
+    virtual void OnButtonOkClick( wxCommandEvent& event ) override;
+    virtual void OnButtonCancelClick( wxCommandEvent& event ) override;
 };
 
 #endif    // _DIALOG_MASK_CLEARANCE_H_

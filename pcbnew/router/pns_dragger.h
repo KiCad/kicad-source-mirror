@@ -95,7 +95,7 @@ public:
     const ITEM_SET Traces();
 
     /// @copydoc ALGO_BASE::Logger()
-    virtual LOGGER* Logger();
+    virtual LOGGER* Logger() override;
 
 private:
     enum DragMode {

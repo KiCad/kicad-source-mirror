@@ -665,7 +665,7 @@ private:
         }
     }
 
-    void OnClickLibraryWizard( wxCommandEvent& event );
+    void OnClickLibraryWizard( wxCommandEvent& event ) override;
 
     void onCancelButtonClick( wxCommandEvent& event )
     {

@@ -108,17 +108,17 @@ public:
     void Show( int nestLevel, std::ostream& os ) const;   // virtual override
 #endif
 
-    bool Save( OUTPUTFORMATTER& aFormatter );
+    bool Save( OUTPUTFORMATTER& aFormatter ) override;
 
-    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
+    bool Load( LINE_READER& aLineReader, wxString& aErrorMsg ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const;
+    bool HitTest( const wxPoint& aPosition ) const override;
 
-    bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const;
+    bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;
 
-    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList );
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
     const EDA_RECT GetBoundingBox() const { return GetBoundingBox( false ); }
@@ -230,7 +230,7 @@ public:
      */
     void SetOrientation( int aOrientation );
 
-    void Rotate();
+    void Rotate() override;
 
     GRAPHIC_PINSHAPE GetShape() const { return m_shape; }
 
@@ -363,7 +363,7 @@ public:
      */
     bool IsPowerConnection() const { return !IsVisible() && GetType() == PIN_POWER_IN; }
 
-    int GetPenSize() const;
+    int GetPenSize() const override;
 
     /**
      * Function DrawPinSymbol
@@ -440,32 +440,32 @@ public:
      */
     static int GetOrientationCodeIndex( int aCode );
 
-    void SetOffset( const wxPoint& aOffset );
+    void SetOffset( const wxPoint& aOffset ) override;
 
-    bool Inside( EDA_RECT& aRect ) const;
+    bool Inside( EDA_RECT& aRect ) const override;
 
-    void Move( const wxPoint& aPosition );
+    void Move( const wxPoint& aPosition ) override;
 
     wxPoint GetPosition() const { return m_position; }
 
-    void MirrorHorizontal( const wxPoint& aCenter );
+    void MirrorHorizontal( const wxPoint& aCenter ) override;
 
-    void MirrorVertical( const wxPoint& aCenter );
+    void MirrorVertical( const wxPoint& aCenter ) override;
 
-    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true );
+    void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform );
 
     int GetWidth() const { return m_width; }
 
-    void SetWidth( int aWidth );
+    void SetWidth( int aWidth ) override;
 
-    BITMAP_DEF GetMenuImage() const;
+    BITMAP_DEF GetMenuImage() const override;
 
-    wxString GetSelectMenuText() const;
+    wxString GetSelectMenuText() const override;
 
-    EDA_ITEM* Clone() const;
+    EDA_ITEM* Clone() const override;
 
 private:
 
@@ -478,7 +478,7 @@ private:
      *      - Pin horizontal (X) position.
      *      - Pin vertical (Y) position.
      */
-    int compare( const LIB_ITEM& aOther ) const;
+    int compare( const LIB_ITEM& aOther ) const override;
 };
 
 

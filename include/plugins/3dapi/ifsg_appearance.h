@@ -38,9 +38,9 @@ public:
     IFSG_APPEARANCE( SGNODE* aParent );
     IFSG_APPEARANCE( IFSG_NODE& aParent );
 
-    bool Attach( SGNODE* aNode );
-    bool NewNode( SGNODE* aParent );
-    bool NewNode( IFSG_NODE& aParent );
+    bool Attach( SGNODE* aNode ) override;
+    bool NewNode( SGNODE* aParent ) override;
+    bool NewNode( IFSG_NODE& aParent ) override;
 
     bool SetEmissive( float aRVal, float aGVal, float aBVal );
     bool SetEmissive( const SGCOLOR* aRGBColor );

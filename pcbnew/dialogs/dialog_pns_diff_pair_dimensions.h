@@ -44,8 +44,8 @@ public:
 private:
     void updateCheckbox();
 
-    virtual void OnOkClick( wxCommandEvent& aEvent );
-    virtual void OnViaTraceGapEqualCheck( wxCommandEvent& event );
+    virtual void OnOkClick( wxCommandEvent& aEvent ) override;
+    virtual void OnViaTraceGapEqualCheck( wxCommandEvent& event ) override;
 
     WX_UNIT_BINDER m_traceWidth;
     WX_UNIT_BINDER m_traceGap;

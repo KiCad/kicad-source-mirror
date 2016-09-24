@@ -87,14 +87,14 @@ public:
     ~BM2CMP_FRAME();
 
     // overload KIWAY_PLAYER virtual
-    bool OpenProjectFiles( const std::vector<wxString>& aFilenames, int aCtl=0 );
+    bool OpenProjectFiles( const std::vector<wxString>& aFilenames, int aCtl=0 ) override;
 
 private:
 
     // Event handlers
-    void OnPaint( wxPaintEvent& event );
-    void OnLoadFile( wxCommandEvent& event );
-    void OnExport( wxCommandEvent& event );
+    void OnPaint( wxPaintEvent& event ) override;
+    void OnLoadFile( wxCommandEvent& event ) override;
+    void OnExport( wxCommandEvent& event ) override;
 
     /**
      * Generate a schematic library which contains one component:
@@ -119,9 +119,9 @@ private:
     void OnExportLogo();
 
     void Binarize( double aThreshold );     // aThreshold = 0.0 (black level) to 1.0 (white level)
-    void OnOptionsSelection( wxCommandEvent& event );
-    void OnThresholdChange( wxScrollEvent& event );
-    void OnResolutionChange( wxCommandEvent& event );
+    void OnOptionsSelection( wxCommandEvent& event ) override;
+    void OnThresholdChange( wxScrollEvent& event ) override;
+    void OnResolutionChange( wxCommandEvent& event ) override;
 
     // called when texts controls which handle the image resolution
     // lose the focus, to ensure the right values are displayed
@@ -141,7 +141,7 @@ private:
     void NegateGreyscaleImage( );
     void ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat );
     void updateImageInfo();
-    void OnFormatChange( wxCommandEvent& event );
+    void OnFormatChange( wxCommandEvent& event ) override;
 };
 
 
@@ -668,7 +668,7 @@ namespace BMP2CMP {
 
 static struct IFACE : public KIFACE_I
 {
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits );
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
 
     wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
     {

@@ -159,10 +159,10 @@ public:
     bool PostCommandMenuEvent( int evt_type );
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    void UseGalCanvas( bool aEnable );
+    void UseGalCanvas( bool aEnable ) override;
 
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
-    virtual void SetBoard( BOARD* aBoard );
+    virtual void SetBoard( BOARD* aBoard ) override;
 
 protected:
     /// User defined rotation angle (in tenths of a degree).

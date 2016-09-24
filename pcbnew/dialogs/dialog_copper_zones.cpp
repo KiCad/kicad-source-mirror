@@ -83,10 +83,10 @@ private:
      */
     void initDialog();
 
-    void OnButtonOkClick( wxCommandEvent& event );
-    void OnButtonCancelClick( wxCommandEvent& event );
-    void OnClose( wxCloseEvent& event );
-    void OnCornerSmoothingModeChoice( wxCommandEvent& event );
+    void OnButtonOkClick( wxCommandEvent& event ) override;
+    void OnButtonCancelClick( wxCommandEvent& event ) override;
+    void OnClose( wxCloseEvent& event ) override;
+    void OnCornerSmoothingModeChoice( wxCommandEvent& event ) override;
 
     /**
      * Function AcceptOptions
@@ -96,10 +96,10 @@ private:
      */
     bool AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly = false );
 
-    void OnNetSortingOptionSelected( wxCommandEvent& event );
-    void ExportSetupToOtherCopperZones( wxCommandEvent& event );
-    void OnPadsInZoneClick( wxCommandEvent& event );
-    void OnRunFiltersButtonClick( wxCommandEvent& event );
+    void OnNetSortingOptionSelected( wxCommandEvent& event ) override;
+    void ExportSetupToOtherCopperZones( wxCommandEvent& event ) override;
+    void OnPadsInZoneClick( wxCommandEvent& event ) override;
+    void OnRunFiltersButtonClick( wxCommandEvent& event ) override;
 
     void buildAvailableListOfNets();
 

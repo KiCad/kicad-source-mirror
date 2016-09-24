@@ -78,7 +78,7 @@ public:
     }
 
 #if defined(DEBUG)
-    void Show( int aA, std::ostream& aB ) const {};
+    void Show( int aA, std::ostream& aB ) const override {}
 #endif
 
     /** Get class name
@@ -89,9 +89,9 @@ public:
         return wxT( "ROUTER_PREVIEW_ITEM" );
     }
 
-    const BOX2I ViewBBox() const;
+    const BOX2I ViewBBox() const override;
 
-    virtual void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const;
+    virtual void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const
     {

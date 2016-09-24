@@ -232,7 +232,7 @@ public:
      */
     ~FILE_LINE_READER();
 
-    char* ReadLine() throw( IO_ERROR );   // see LINE_READER::ReadLine() description
+    char* ReadLine() throw( IO_ERROR ) override;
 
     /**
      * Function Rewind
@@ -279,7 +279,7 @@ public:
      */
     STRING_LINE_READER( const STRING_LINE_READER& aStartingPoint );
 
-    char* ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
+    char* ReadLine() throw( IO_ERROR ) override;
 };
 
 
@@ -302,7 +302,7 @@ public:
      */
     INPUTSTREAM_LINE_READER( wxInputStream* aStream, const wxString& aSource );
 
-    char* ReadLine() throw( IO_ERROR );    // see LINE_READER::ReadLine() description
+    char* ReadLine() throw( IO_ERROR ) override;
 };
 
 
@@ -479,7 +479,7 @@ public:
 
 protected:
     //-----<OUTPUTFORMATTER>------------------------------------------------
-    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
+    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR ) override;
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
 
@@ -511,7 +511,7 @@ public:
 
 protected:
     //-----<OUTPUTFORMATTER>------------------------------------------------
-    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
+    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR ) override;
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 
     FILE*       m_fp;               ///< takes ownership
@@ -542,7 +542,7 @@ public:
 
 protected:
     //-----<OUTPUTFORMATTER>------------------------------------------------
-    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR );
+    void write( const char* aOutBuf, int aCount ) throw( IO_ERROR ) override;
     //-----</OUTPUTFORMATTER>-----------------------------------------------
 };
 

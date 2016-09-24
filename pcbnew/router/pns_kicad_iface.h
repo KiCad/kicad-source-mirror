@@ -41,23 +41,23 @@ public:
     PNS_KICAD_IFACE();
     ~PNS_KICAD_IFACE();
 
-    void SetRouter( PNS::ROUTER* aRouter );
+    void SetRouter( PNS::ROUTER* aRouter ) override;
     void SetHostFrame( PCB_EDIT_FRAME* aFrame );
 
     void SetBoard( BOARD* aBoard );
     void SetView( KIGFX::VIEW* aView );
-    void SyncWorld( PNS::NODE* aWorld );
-    void EraseView();
-    void HideItem( PNS::ITEM* aItem );
-    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0 );
-    void AddItem( PNS::ITEM* aItem );
-    void RemoveItem( PNS::ITEM* aItem );
-    void Commit();
+    void SyncWorld( PNS::NODE* aWorld ) override;
+    void EraseView() override;
+    void HideItem( PNS::ITEM* aItem ) override;
+    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0 ) override;
+    void AddItem( PNS::ITEM* aItem ) override;
+    void RemoveItem( PNS::ITEM* aItem ) override;
+    void Commit() override;
 
-    void UpdateNet( int aNetCode );
+    void UpdateNet( int aNetCode ) override;
 
-    PNS::RULE_RESOLVER* GetRuleResolver();
-    PNS::DEBUG_DECORATOR* GetDebugDecorator();
+    PNS::RULE_RESOLVER* GetRuleResolver() override;
+    PNS::DEBUG_DECORATOR* GetDebugDecorator() override;
 
 private:
     PNS_PCBNEW_RULE_RESOLVER* m_ruleResolver;

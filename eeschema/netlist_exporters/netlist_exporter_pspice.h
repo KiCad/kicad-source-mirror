@@ -126,7 +126,7 @@ public:
      * Function WriteNetlist
      * writes to specified output file
      */
-    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
 
     ///> @copydoc NETLIST_EXPORTER::Format()
     bool Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl );

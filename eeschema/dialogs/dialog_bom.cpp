@@ -185,16 +185,16 @@ public:
     ~DIALOG_BOM();
 
 private:
-    void OnPluginSelected( wxCommandEvent& event );
-    void OnRunPlugin( wxCommandEvent& event );
-    void OnCancelClick( wxCommandEvent& event );
-    void OnHelp( wxCommandEvent& event );
-    void OnAddPlugin( wxCommandEvent& event );
-    void OnRemovePlugin( wxCommandEvent& event );
-    void OnEditPlugin( wxCommandEvent& event );
-    void OnCommandLineEdited( wxCommandEvent& event );
-    void OnNameEdited( wxCommandEvent& event );
-    void OnShowConsoleChanged( wxCommandEvent& event );
+    void OnPluginSelected( wxCommandEvent& event ) override;
+    void OnRunPlugin( wxCommandEvent& event ) override;
+    void OnCancelClick( wxCommandEvent& event ) override;
+    void OnHelp( wxCommandEvent& event ) override;
+    void OnAddPlugin( wxCommandEvent& event ) override;
+    void OnRemovePlugin( wxCommandEvent& event ) override;
+    void OnEditPlugin( wxCommandEvent& event ) override;
+    void OnCommandLineEdited( wxCommandEvent& event ) override;
+    void OnNameEdited( wxCommandEvent& event ) override;
+    void OnShowConsoleChanged( wxCommandEvent& event ) override;
 
     void pluginInit();
     void installPluginsList();

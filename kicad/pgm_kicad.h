@@ -52,7 +52,7 @@ public:
     bool OnPgmInit();
     void OnPgmExit();
 
-    void MacOpenFile( const wxString& aFileName );
+    void MacOpenFile( const wxString& aFileName ) override;
 
     wxFileHistory&  GetFileHistory()            { return m_bm.m_history; }
 

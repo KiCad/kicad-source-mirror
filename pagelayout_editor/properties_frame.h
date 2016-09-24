@@ -48,8 +48,8 @@ public:
     ~PROPERTIES_FRAME();
 
     // Event functions
-    void OnAcceptPrms( wxCommandEvent& event );
-    void OnSetDefaultValues( wxCommandEvent& event );
+    void OnAcceptPrms( wxCommandEvent& event ) override;
+    void OnSetDefaultValues( wxCommandEvent& event ) override;
 
 
     // Data transfert from general properties to widgets
@@ -64,7 +64,7 @@ public:
     // Data transfert from widgets in properties frame to item
     bool CopyPrmsFromPanelToItem( WORKSHEET_DATAITEM* aItem );
 
-    wxSize GetMinSize() const;
+    wxSize GetMinSize() const override;
 };
 
 #endif /* _PROPERTIES_FRAME_H */

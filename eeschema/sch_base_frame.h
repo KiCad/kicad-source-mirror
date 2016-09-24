@@ -96,7 +96,7 @@ public:
      * level indicator in dialogs.
      * Virtual from the base class
      */
-    const wxString GetZoomLevelIndicator() const;
+    const wxString GetZoomLevelIndicator() const override;
 
     void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
     const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
@@ -114,8 +114,8 @@ public:
 
     // Virtual from EDA_DRAW_FRAME
     // the background color of the draw canvas:
-    EDA_COLOR_T GetDrawBgColor() const;
-    void SetDrawBgColor( EDA_COLOR_T aColor);
+    EDA_COLOR_T GetDrawBgColor() const override;
+    void SetDrawBgColor( EDA_COLOR_T aColor) override;
 
     const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME

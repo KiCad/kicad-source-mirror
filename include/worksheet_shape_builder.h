@@ -159,31 +159,31 @@ public:
     /** The function to draw a WS_DRAW_ITEM_LINE
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     /**
      * Virtual function
      * return true if the point aPosition is on the line
      */
-    virtual bool HitTest( const wxPoint& aPosition) const;
+    virtual bool HitTest( const wxPoint& aPosition) const override;
 
     /**
      * Virtual function
      * return true if the rect aRect intersects on the item
      */
-    virtual bool HitTest( const EDA_RECT& aRect ) const;
+    virtual bool HitTest( const EDA_RECT& aRect ) const override;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition);
+    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
 
     /**
      * return true if the point aPosition is on the ending point of this item
      * This is avirtual function which should be overriden for items defien by
      * 2 points
      */
-    virtual bool HitTestEndPoint( const wxPoint& aPosition);
+    virtual bool HitTestEndPoint( const wxPoint& aPosition) override;
 };
 
 // This class draws a polygon
@@ -216,24 +216,24 @@ public:
     /** The function to draw a WS_DRAW_ITEM_POLYGON
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     /**
      * Virtual function
      * return true if the point aPosition is inside one polygon
      */
-    virtual bool HitTest( const wxPoint& aPosition) const;
+    virtual bool HitTest( const wxPoint& aPosition) const override;
 
     /**
      * Virtual function
      * return true if the rect aRect intersects on the item
      */
-    virtual bool HitTest( const EDA_RECT& aRect ) const;
+    virtual bool HitTest( const EDA_RECT& aRect ) const override;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition);
+    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
 };
 
 // This class draws a not filled rectangle with thick segment
@@ -251,31 +251,31 @@ public:
     /** The function to draw a WS_DRAW_ITEM_RECT
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     /**
      * Virtual function
      * return true if the point aPosition is on one edge of the rectangle
      */
-    virtual bool HitTest( const wxPoint& aPosition) const;
+    virtual bool HitTest( const wxPoint& aPosition) const override;
 
     /**
      * Virtual function
      * return true if the rect aRect intersects on the item
      */
-    virtual bool HitTest( const EDA_RECT& aRect ) const;
+    virtual bool HitTest( const EDA_RECT& aRect ) const override;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition);
+    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
 
     /**
      * return true if the point aPosition is on the ending point of this item
      * This is avirtual function which should be overriden for items defien by
      * 2 points
      */
-    virtual bool HitTestEndPoint( const wxPoint& aPosition);
+    virtual bool HitTestEndPoint( const wxPoint& aPosition) override;
 };
 
 // This class draws a graphic text.
@@ -292,7 +292,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_TEXT
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     // Accessors:
     int GetPenWidth() { return GetThickness(); }
@@ -301,18 +301,18 @@ public:
      * Virtual function
      * return true if the point aPosition is on the text
      */
-    virtual bool HitTest( const wxPoint& aPosition) const;
+    virtual bool HitTest( const wxPoint& aPosition) const override;
 
     /**
      * Virtual function
      * return true if the rect aRect intersects on the item
      */
-    virtual bool HitTest( const EDA_RECT& aRect ) const;
+    virtual bool HitTest( const EDA_RECT& aRect ) const override;
 
     /**
      * return true if the point aPosition is on the starting point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition);
+    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
 };
 
 // This class draws a bitmap.
@@ -337,24 +337,24 @@ public:
     /** The function to draw a WS_DRAW_ITEM_BITMAP
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+            GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     /**
      * Virtual function
      * return true if the point aPosition is on bitmap
      */
-    virtual bool HitTest( const wxPoint& aPosition) const;
+    virtual bool HitTest( const wxPoint& aPosition) const override;
 
     /**
      * Virtual function
      * return true if the rect aRect intersects on the item
      */
-    virtual bool HitTest( const EDA_RECT& aRect ) const;
+    virtual bool HitTest( const EDA_RECT& aRect ) const override;
 
     /**
      * return true if the point aPosition is on the reference point of this item.
      */
-    virtual bool HitTestStartPoint( const wxPoint& aPosition);
+    virtual bool HitTestStartPoint( const wxPoint& aPosition) override;
 
     const wxPoint& GetPosition() { return m_pos; }
 };

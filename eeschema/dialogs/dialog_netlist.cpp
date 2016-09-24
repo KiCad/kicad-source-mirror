@@ -142,23 +142,23 @@ private:
                                            const wxString & aCommandString,
                                            NETLIST_TYPE_ID aNetTypeId );
     void    InstallPageSpice();
-    void    GenNetlist( wxCommandEvent& event );
+    void    GenNetlist( wxCommandEvent& event ) override;
     void    RunSimulator( wxCommandEvent& event );
     void    NetlistUpdateOpt();
-    void    OnNetlistTypeSelection( wxNotebookEvent& event );
+    void    OnNetlistTypeSelection( wxNotebookEvent& event ) override;
     void    SelectDefaultNetlistType( wxCommandEvent& event );
 
     /**
      * Function OnAddPlugin
      * Add a new panel for a new netlist plugin
      */
-    void    OnAddPlugin( wxCommandEvent& event );
+    void    OnAddPlugin( wxCommandEvent& event ) override;
 
     /**
      * Function OnDelPlugin
      * Remove a panel relative to a netlist plugin
      */
-    void    OnDelPlugin( wxCommandEvent& event );
+    void    OnDelPlugin( wxCommandEvent& event ) override;
 
     /**
      * Function WriteCurrentNetlistSetup
@@ -219,12 +219,12 @@ private:
      * Function OnOKClick
      * Validate info relative to a new netlist plugin
      */
-    void OnOKClick( wxCommandEvent& event );
+    void OnOKClick( wxCommandEvent& event ) override;
 
     /*
      * Browse plugin files, and set m_CommandStringCtrl field
      */
-    void OnBrowsePlugins( wxCommandEvent& event );
+    void OnBrowsePlugins( wxCommandEvent& event ) override;
 };
 
 

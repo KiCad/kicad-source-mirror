@@ -52,10 +52,10 @@ public:
     EDIT_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason );
+    void Reset( RESET_REASON aReason ) override;
 
     /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init();
+    bool Init() override;
 
     /**
      * Function Main()
@@ -117,7 +117,7 @@ public:
 
 
     ///> Sets up handlers for various events.
-    void SetTransitions();
+    void SetTransitions() override;
 
 private:
     ///> Selection tool used for obtaining selected items

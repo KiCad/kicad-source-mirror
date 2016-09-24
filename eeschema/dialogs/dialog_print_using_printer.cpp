@@ -58,10 +58,10 @@ public:
     }
 
 private:
-    void OnCloseWindow( wxCloseEvent& event );
-    void OnPageSetup( wxCommandEvent& event );
-    void OnPrintPreview( wxCommandEvent& event );
-    void OnPrintButtonClick( wxCommandEvent& event );
+    void OnCloseWindow( wxCloseEvent& event ) override;
+    void OnPageSetup( wxCommandEvent& event ) override;
+    void OnPrintPreview( wxCommandEvent& event ) override;
+    void OnPrintButtonClick( wxCommandEvent& event ) override;
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
 
     void initDialog();
@@ -85,10 +85,10 @@ public:
         wxASSERT( aParent != NULL );
         m_parent = aParent;
     }
-    bool OnPrintPage( int page );
-    bool HasPage( int page );
-    bool OnBeginDocument( int startPage, int endPage );
-    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo );
+    bool OnPrintPage( int page ) override;
+    bool HasPage( int page ) override;
+    bool OnBeginDocument( int startPage, int endPage ) override;
+    void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
     void DrawPage( SCH_SCREEN* aScreen );
 };
 
