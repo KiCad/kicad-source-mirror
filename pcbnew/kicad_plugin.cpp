@@ -779,7 +779,7 @@ void PCB_IO::format( DIMENSION* aDimension, int aNestLevel ) const
     formatLayer( aDimension );
 
     if( aDimension->GetTimeStamp() )
-        m_out->Print( 0, " (tstamp %lX)", aDimension->GetTimeStamp() );
+        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aDimension->GetTimeStamp() );
 
     m_out->Print( 0, "\n" );
 
@@ -888,7 +888,7 @@ void PCB_IO::format( DRAWSEGMENT* aSegment, int aNestLevel ) const
         m_out->Print( 0, " (width %s)", FMT_IU( aSegment->GetWidth() ).c_str() );
 
     if( aSegment->GetTimeStamp() )
-        m_out->Print( 0, " (tstamp %lX)", aSegment->GetTimeStamp() );
+        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aSegment->GetTimeStamp() );
 
     if( aSegment->GetStatus() )
         m_out->Print( 0, " (status %X)", aSegment->GetStatus() );
@@ -975,7 +975,7 @@ void PCB_IO::format( PCB_TARGET* aTarget, int aNestLevel ) const
     formatLayer( aTarget );
 
     if( aTarget->GetTimeStamp() )
-        m_out->Print( 0, " (tstamp %lX)", aTarget->GetTimeStamp() );
+        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aTarget->GetTimeStamp() );
 
     m_out->Print( 0, ")\n" );
 }
@@ -1008,11 +1008,11 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 
     formatLayer( aModule );
 
-    m_out->Print( 0, " (tedit %lX)", aModule->GetLastEditTime() );
+    m_out->Print( 0, " (tedit %lX)", (unsigned long)aModule->GetLastEditTime() );
 
     if( !( m_ctl & CTL_OMIT_TSTAMPS ) )
     {
-        m_out->Print( 0, " (tstamp %lX)\n", aModule->GetTimeStamp() );
+        m_out->Print( 0, " (tstamp %lX)\n", (unsigned long)aModule->GetTimeStamp() );
     }
     else
         m_out->Print( 0, "\n" );
@@ -1365,7 +1365,7 @@ void PCB_IO::format( TEXTE_PCB* aText, int aNestLevel ) const
     formatLayer( aText );
 
     if( aText->GetTimeStamp() )
-        m_out->Print( 0, " (tstamp %lX)", aText->GetTimeStamp() );
+        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aText->GetTimeStamp() );
 
     m_out->Print( 0, "\n" );
 
@@ -1473,7 +1473,7 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
     m_out->Print( 0, " (net %d)", m_mapping->Translate( aTrack->GetNetCode() ) );
 
     if( aTrack->GetTimeStamp() != 0 )
-        m_out->Print( 0, " (tstamp %lX)", aTrack->GetTimeStamp() );
+        m_out->Print( 0, " (tstamp %lX)", (unsigned long)aTrack->GetTimeStamp() );
 
     if( aTrack->GetStatus() != 0 )
         m_out->Print( 0, " (status %X)", aTrack->GetStatus() );
@@ -1494,7 +1494,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
 
     formatLayer( aZone );
 
-    m_out->Print( 0, " (tstamp %lX)", aZone->GetTimeStamp() );
+    m_out->Print( 0, " (tstamp %lX)", (unsigned long) aZone->GetTimeStamp() );
 
     // Save the outline aux info
     std::string hatch;
