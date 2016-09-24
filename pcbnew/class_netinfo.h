@@ -174,9 +174,11 @@ public:
         return wxT( "NETINFO_ITEM" );
     }
 
+#if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override
     {
     }
+#endif
 
     const wxPoint& GetPosition() const override
     {
