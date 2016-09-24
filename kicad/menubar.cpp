@@ -64,6 +64,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( ID_PROJECT_TREE_REFRESH, KICAD_MANAGER_FRAME::OnRefresh )
     EVT_MENU( wxID_HELP, KICAD_MANAGER_FRAME::GetKicadHelp )
     EVT_MENU( wxID_INDEX, KICAD_MANAGER_FRAME::GetKicadHelp )
+    EVT_MENU( ID_HELP_GET_INVOLVED, KICAD_MANAGER_FRAME::GetKicadContribute )
     EVT_MENU( wxID_ABOUT, KICAD_MANAGER_FRAME::GetKicadAbout )
 
     // Range menu events
@@ -420,6 +421,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  KiBitmap( hotkeys_xpm ) );
 
     // Separator
+    helpMenu->AppendSeparator();
+
+    // Get involved with KiCad
+    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
+                 _( "Get &Involved" ),
+                 _( "Contribute to KiCad (opens a web browser)" ),
+                 KiBitmap( info_xpm ) );
+
     helpMenu->AppendSeparator();
 
     // About

@@ -161,6 +161,12 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
 
+    helpMenu->AppendSeparator();
+    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
+                 _( "Get &Involved" ),
+                 _( "Contribute to KiCad (opens a web browser)" ),
+                 KiBitmap( info_xpm ) );
+
     // Separator
     helpMenu->AppendSeparator();
 

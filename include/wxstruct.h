@@ -217,6 +217,8 @@ public:
 
     void GetKicadHelp( wxCommandEvent& event );
 
+    void GetKicadContribute( wxCommandEvent& event );
+
     void GetKicadAbout( wxCommandEvent& event );
 
     void PrintMsg( const wxString& text );

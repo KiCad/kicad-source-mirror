@@ -230,6 +230,14 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Separator
     helpMenu->AppendSeparator();
 
+    // Get involved with KiCad
+    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
+                 _( "Get &Involved" ),
+                 _( "Contribute to KiCad (opens a web browser)" ),
+                 KiBitmap( info_xpm ) );
+
+    helpMenu->AppendSeparator();
+
     // About Kicad
     AddMenuItem( helpMenu,
                  wxID_ABOUT,

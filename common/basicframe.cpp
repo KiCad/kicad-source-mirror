@@ -40,11 +40,13 @@
 #include <wxstruct.h>
 
 #include <wx/display.h>
+#include <wx/utils.h>
 
 
 /// The default auto save interval is 10 minutes.
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
 
+#define URL_GET_INVOLVED "http://kicad-pcb.org/contribute/"
 
 const wxChar traceAutoSave[] = wxT( "KicadAutoSave" );
 
@@ -478,6 +480,17 @@ void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
     // value will be retained.
     if( !editorname.IsEmpty() )
         Pgm().SetEditorName( editorname );
+}
+
+
+void EDA_BASE_FRAME::GetKicadContribute( wxCommandEvent& event )
+{
+    if( !wxLaunchDefaultBrowser( URL_GET_INVOLVED ) )
+    {
+        wxString msg = _( "Could not launch the default browser. For information on how to help the KiCad project, visit " );
+        msg.Append( URL_GET_INVOLVED );
+        wxMessageBox( msg, _( "Get involved with KiCad" ), wxOK, this );
+    }
 }
 
 

@@ -656,6 +656,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( hotkeys_xpm ) );
 
     helpMenu->AppendSeparator();
+
+    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
+                 _( "Get &Involved" ),
+                 _( "Contribute to KiCad (opens a web browser)" ),
+                 KiBitmap( info_xpm ) );
+
+    helpMenu->AppendSeparator();
+
     AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About KiCad" ),
                  _( "Display the KiCad About dialog" ),
