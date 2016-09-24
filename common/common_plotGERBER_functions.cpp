@@ -688,6 +688,11 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
         {
             // TODO: use an aperture macro to declare the rotated pad
             //
+
+            // Flash a pad anchor, if a netlist attribute is set
+            if( aData )
+                FlashPadCircle( pos, size.x, trace_mode, aData );
+
             // The pad is reduced to an segment with dy > dx
             delta = size.y - size.x;
             x0    = 0;
@@ -703,17 +708,14 @@ void GERBER_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, doub
                 metadata = *gbr_metadata;
                 metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
 
+                // Cleat .P attribute, only allowed for flashed items
                 wxString attrname( ".P" );
-                metadata.m_NetlistMetadata.ClearAttribute( &attrname );   // not allowed on inner layers
+                metadata.m_NetlistMetadata.ClearAttribute( &attrname );
             }
 
             ThickSegment( wxPoint( pos.x + x0, pos.y + y0 ),
                            wxPoint( pos.x + x1, pos.y + y1 ),
                            size.x, trace_mode, &metadata );
-
-            // Now, flash a pad anchor, if a netlist attribute is set
-            if( aData )
-                FlashPadCircle( pos, size.x, trace_mode, aData );
         }
         else
         {
