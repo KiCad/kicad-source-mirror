@@ -517,6 +517,10 @@ set( BMAPS_MID
     show_zone
     show_zone_disable
     show_zone_outline_only
+    show_all_layers
+    show_no_layers
+    show_no_copper_layers
+    show_all_copper_layers
     svg_file
     swap_layer
     text_sketch
