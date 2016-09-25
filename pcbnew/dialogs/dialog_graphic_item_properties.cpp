@@ -74,7 +74,7 @@ private:
     bool TransferDataFromWindow() override;
     void OnLayerChoice( wxCommandEvent& event );
 
-    void OnInitDlg( wxInitDialogEvent& event )
+    void OnInitDlg( wxInitDialogEvent& event ) override
     {
         // Call the default wxDialog handler of a wxInitDialogEvent
         TransferDataToWindow();

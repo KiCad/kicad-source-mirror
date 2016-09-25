@@ -67,7 +67,7 @@ private:
     bool TransferDataFromWindow() override;
 
     // Virtual event handler
-    virtual void OnInitDlg( wxInitDialogEvent& event )
+    virtual void OnInitDlg( wxInitDialogEvent& event ) override
     {
         // Call the default wxDialog handler of a wxInitDialogEvent
         TransferDataToWindow();

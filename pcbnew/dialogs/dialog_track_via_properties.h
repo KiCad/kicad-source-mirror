@@ -47,7 +47,7 @@ private:
     void onCancelClick( wxCommandEvent& aEvent ) override;
     void onOkClick( wxCommandEvent& aEvent ) override;
 
-    void OnInitDlg( wxInitDialogEvent& event )
+    void OnInitDlg( wxInitDialogEvent& event ) override
     {
         // Call the default wxDialog handler of a wxInitDialogEvent
         TransferDataToWindow();

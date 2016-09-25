@@ -108,7 +108,7 @@ static struct IFACE : public KIFACE_I
 
     void OnKifaceEnd() override;
 
-    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 )
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
     {
         wxWindow* frame = NULL;
 
@@ -163,7 +163,7 @@ static struct IFACE : public KIFACE_I
      *
      * @return void* - and must be cast into the know type.
      */
-    void* IfaceOrAddress( int aDataId )
+    void* IfaceOrAddress( int aDataId ) override
     {
         return NULL;
     }

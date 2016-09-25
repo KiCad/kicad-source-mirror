@@ -95,7 +95,7 @@ public:
 
     virtual ~LIB_ALIAS();
 
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "LIB_ALIAS" );
     }
@@ -164,7 +164,7 @@ public:
     bool operator==( const LIB_ALIAS* aAlias ) const { return this == aAlias; }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 };
 
@@ -228,7 +228,7 @@ public:
         return m_me;
     }
 
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "LIB_PART" );
     }
@@ -755,7 +755,7 @@ public:
     bool operator==( const LIB_PART*  aPart ) const { return this == aPart; }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 };
 

@@ -153,11 +153,11 @@ private:
 
     bool                GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
-    void                LoadSettings( wxConfigBase* aCfg ); // override virtual
-    void                SaveSettings( wxConfigBase* aCfg ); // override virtual
+    void                LoadSettings( wxConfigBase* aCfg ) override;
+    void                SaveSettings( wxConfigBase* aCfg ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int ) const { return NULL; }
+    EDA_HOTKEY* GetHotKeyDescription( int ) const override { return NULL; }
 
     /**
      * Function OnActivate
@@ -195,9 +195,9 @@ private:
      * Virtual functions, not used here, but needed by PCB_BASE_FRAME
      * (virtual pure functions )
      */
-    void OnLeftDClick( wxDC*, const wxPoint& ) {}
-    void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO_T, const wxPoint& ) {}
-    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint& ) {}
+    void OnLeftDClick( wxDC*, const wxPoint& ) override {}
+    void SaveCopyInUndoList( BOARD_ITEM*, UNDO_REDO_T, const wxPoint& ) override {}
+    void SaveCopyInUndoList( const PICKED_ITEMS_LIST&, UNDO_REDO_T, const wxPoint& ) override {}
 
 
     DECLARE_EVENT_TABLE()

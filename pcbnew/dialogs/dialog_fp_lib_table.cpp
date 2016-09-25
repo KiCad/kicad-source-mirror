@@ -81,10 +81,10 @@ public:
 
     //-----<wxGridTableBase overloads>-------------------------------------------
 
-    int         GetNumberRows()     { return rows.size(); }
-    int         GetNumberCols()     { return COL_COUNT; }
+    int         GetNumberRows() override { return rows.size(); }
+    int         GetNumberCols() override { return COL_COUNT; }
 
-    wxString    GetValue( int aRow, int aCol )
+    wxString    GetValue( int aRow, int aCol ) override
     {
         if( unsigned( aRow ) < rows.size() )
         {
@@ -105,7 +105,7 @@ public:
         return wxEmptyString;
     }
 
-    void    SetValue( int aRow, int aCol, const wxString &aValue )
+    void    SetValue( int aRow, int aCol, const wxString &aValue ) override
     {
         if( unsigned( aRow ) < rows.size() )
         {
@@ -122,12 +122,12 @@ public:
         }
     }
 
-    bool IsEmptyCell( int aRow, int aCol )
+    bool IsEmptyCell( int aRow, int aCol ) override
     {
         return !GetValue( aRow, aCol );
     }
 
-    bool InsertRows( size_t aPos = 0, size_t aNumRows = 1 )
+    bool InsertRows( size_t aPos = 0, size_t aNumRows = 1 ) override
     {
         if( aPos < rows.size() )
         {
@@ -149,7 +149,7 @@ public:
         return false;
     }
 
-    bool AppendRows( size_t aNumRows = 1 )
+    bool AppendRows( size_t aNumRows = 1 ) override
     {
         // do not modify aNumRows, original value needed for wxGridTableMessage below
         for( int i = aNumRows; i; --i )
@@ -167,7 +167,7 @@ public:
         return true;
     }
 
-    bool DeleteRows( size_t aPos, size_t aNumRows )
+    bool DeleteRows( size_t aPos, size_t aNumRows ) override
     {
         // aPos may be a large positive, e.g. size_t(-1), and the sum of
         // aPos+aNumRows may wrap here, so both ends of the range are tested.
@@ -191,13 +191,13 @@ public:
         return false;
     }
 
-    void Clear()
+    void Clear() override
     {
         rows.clear();
         nickIndex.clear();
     }
 
-    wxString GetColLabelValue( int aCol )
+    wxString GetColLabelValue( int aCol ) override
     {
         switch( aCol )
         {
@@ -228,7 +228,7 @@ protected:
 
     /// handle specialized clipboard text, with leading "(fp_lib_table", OR
     /// spreadsheet formatted text.
-    virtual void paste_text( const wxString& cb_text )
+    virtual void paste_text( const wxString& cb_text ) override
     {
         FP_TBL_MODEL*       tbl = (FP_TBL_MODEL*) m_grid->GetTable();
 
@@ -501,7 +501,7 @@ private:
 
     //-----<event handlers>----------------------------------
 
-    void onKeyDown( wxKeyEvent& ev )
+    void onKeyDown( wxKeyEvent& ev ) override
     {
 #if 0
         // send the key to the current grid
@@ -513,13 +513,13 @@ private:
 #endif
     }
 
-    void pageChangedHandler( wxAuiNotebookEvent& event )
+    void pageChangedHandler( wxAuiNotebookEvent& event ) override
     {
         m_pageNdx = m_auinotebook->GetSelection();
         m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
     }
 
-    void appendRowHandler( wxCommandEvent& event )
+    void appendRowHandler( wxCommandEvent& event ) override
     {
         if( m_cur_grid->AppendRows( 1 ) )
         {
@@ -532,7 +532,7 @@ private:
         }
     }
 
-    void deleteRowHandler( wxCommandEvent& event )
+    void deleteRowHandler( wxCommandEvent& event ) override
     {
 #if 1
         int currRow = getCursorRow();
@@ -569,7 +569,7 @@ private:
 #endif
     }
 
-    void moveUpHandler( wxCommandEvent& event )
+    void moveUpHandler( wxCommandEvent& event ) override
     {
         int curRow = getCursorRow();
         if( curRow >= 1 )
@@ -601,7 +601,7 @@ private:
         }
     }
 
-    void moveDownHandler( wxCommandEvent& event )
+    void moveDownHandler( wxCommandEvent& event ) override
     {
         FP_TBL_MODEL* tbl = cur_model();
 
@@ -633,7 +633,7 @@ private:
         }
     }
 
-    void optionsEditor( wxCommandEvent& event )
+    void optionsEditor( wxCommandEvent& event ) override
     {
         FP_TBL_MODEL*   tbl = cur_model();
 
@@ -667,17 +667,17 @@ private:
 
     void OnClickLibraryWizard( wxCommandEvent& event ) override;
 
-    void onCancelButtonClick( wxCommandEvent& event )
+    void onCancelButtonClick( wxCommandEvent& event ) override
     {
         EndModal( 0 );
     }
 
-    void onCancelCaptionButtonClick( wxCloseEvent& event )
+    void onCancelCaptionButtonClick( wxCloseEvent& event ) override
     {
         EndModal( 0 );
     }
 
-    void onOKButtonClick( wxCommandEvent& event )
+    void onOKButtonClick( wxCommandEvent& event ) override
     {
         int dialogRet = 0;
 

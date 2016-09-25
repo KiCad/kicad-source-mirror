@@ -70,7 +70,7 @@ public:
     void Close( void ) override;
 
     void GetLoaderVersion( unsigned char* Major, unsigned char* Minor,
-        unsigned char* Revision, unsigned char* Patch ) const;
+        unsigned char* Revision, unsigned char* Patch ) const override;
 
 
     // these functions are shadows of the 3D Plugin functions from 3d_plugin.h

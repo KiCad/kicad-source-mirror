@@ -65,36 +65,36 @@ public:
     SCH_LEGACY_PLUGIN();
     virtual ~SCH_LEGACY_PLUGIN() {}
 
-    const wxString GetName() const
+    const wxString GetName() const override
     {
         return wxT( "Eeschema-Legacy" );
     }
 
-    const wxString GetFileExtension() const
+    const wxString GetFileExtension() const override
     {
         return wxT( "sch" );
     }
 
     SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
-                     SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
+                     SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL ) override;
 
     void Save( const wxString& aFileName, SCH_SCREEN* aScreen, KIWAY* aKiway,
-               const PROPERTIES* aProperties = NULL );
+               const PROPERTIES* aProperties = NULL ) override;
 
     void Format( SCH_SCREEN* aScreen );
 
     void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                              const wxString&   aLibraryPath,
-                             const PROPERTIES* aProperties = NULL );
+                             const PROPERTIES* aProperties = NULL ) override;
     LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                           const PROPERTIES* aProperties = NULL );
+                           const PROPERTIES* aProperties = NULL ) override;
     void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
-                     const PROPERTIES* aProperties = NULL );
+                     const PROPERTIES* aProperties = NULL ) override;
     void DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
-                      const PROPERTIES* aProperties = NULL );
+                      const PROPERTIES* aProperties = NULL ) override;
 
     // Temporary for testing using PART_LIB instead of SCH_PLUGIN.
-    void TransferCache( PART_LIB& aTarget );
+    void TransferCache( PART_LIB& aTarget ) override;
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );

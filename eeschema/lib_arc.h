@@ -62,7 +62,7 @@ class LIB_ARC : public LIB_ITEM
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
-                      const TRANSFORM& aTransform );
+                      const TRANSFORM& aTransform ) override;
 
     /**
      * Draw the graphics when the arc is being edited.
@@ -90,7 +90,7 @@ public:
 
     ~LIB_ARC() { }
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "LIB_ARC" );
     }
@@ -104,7 +104,7 @@ public:
 
     bool HitTest( const wxPoint& aPosition, int aThreshold, const TRANSFORM& aTransform ) const override;
 
-    const EDA_RECT GetBoundingBox() const;  // Virtual
+    const EDA_RECT GetBoundingBox() const override;
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
@@ -122,7 +122,7 @@ public:
 
     void Move( const wxPoint& aPosition ) override;
 
-    wxPoint GetPosition() const { return m_Pos; }
+    wxPoint GetPosition() const override { return m_Pos; }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
 
@@ -131,11 +131,11 @@ public:
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-               const TRANSFORM& aTransform );
+               const TRANSFORM& aTransform ) override;
 
-    int GetWidth() const { return m_Width; }
+    int GetWidth() const override { return m_Width; }
 
-    void SetWidth( int aWidth ) { m_Width = aWidth; }
+    void SetWidth( int aWidth ) override { m_Width = aWidth; }
 
     void SetRadius( int aRadius ) { m_Radius = aRadius; }
 
@@ -155,7 +155,7 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  add_arc_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  add_arc_xpm; }
 
     EDA_ITEM* Clone() const override;
 

@@ -71,8 +71,8 @@ class DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR : public DIALOG_FP_CONFLICT_ASSIGNM
 
         void OnItemClicked( wxMouseEvent& event ) override;
 
-        void OnCancelClick( wxCommandEvent& event ) { EndModal( wxID_CANCEL ); }
-        void OnOKClick( wxCommandEvent& event ) { EndModal( wxID_OK ); }
+        void OnCancelClick( wxCommandEvent& event ) override { EndModal( wxID_CANCEL ); }
+        void OnOKClick( wxCommandEvent& event ) override { EndModal( wxID_OK ); }
 
         void recalculateColumns();
 

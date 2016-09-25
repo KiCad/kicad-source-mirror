@@ -357,7 +357,7 @@ public:
         return aItem && DIFF_PAIR_T == aItem->Kind();
     }
 
-    DIFF_PAIR* Clone() const { assert( false ); return NULL; }
+    DIFF_PAIR* Clone() const override { assert( false ); return NULL; }
 
     static DIFF_PAIR* AssembleDp( LINE *aLine );
 

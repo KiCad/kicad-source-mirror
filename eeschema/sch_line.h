@@ -56,7 +56,7 @@ public:
     SCH_LINE* Next() const { return (SCH_LINE*) Pnext; }
     SCH_LINE* Back() const { return (SCH_LINE*) Pback; }
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "SCH_LINE" );
     }
@@ -76,7 +76,7 @@ public:
 
     void SetEndPoint( const wxPoint& aPosition ) { m_end = aPosition; }
 
-    const EDA_RECT GetBoundingBox() const;    // Virtual
+    const EDA_RECT GetBoundingBox() const override;
 
     /**
      * Function GetLength
@@ -85,7 +85,7 @@ public:
     double GetLength() const;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     bool Save( FILE* aFile ) const override;
 
@@ -117,7 +117,7 @@ public:
 
     bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
-    bool IsDangling() const { return m_startIsDangling || m_endIsDangling; }
+    bool IsDangling() const override { return m_startIsDangling || m_endIsDangling; }
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
@@ -133,7 +133,7 @@ public:
 
     bool operator <( const SCH_ITEM& aItem ) const override;
 
-    wxPoint GetPosition() const { return m_start; }
+    wxPoint GetPosition() const override { return m_start; }
 
     void SetPosition( const wxPoint& aPosition ) override;
 
@@ -146,7 +146,7 @@ public:
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const; // override
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
 private:

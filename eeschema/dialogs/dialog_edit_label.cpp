@@ -51,7 +51,7 @@ class DIALOG_LABEL_EDITOR : public DIALOG_LABEL_EDITOR_BASE
 public:
     DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* parent, SCH_TEXT* aTextItem );
 
-    void SetTitle( const wxString& aTitle )    // OVERRIDE wxTopLevelWindow::SetTitle
+    void SetTitle( const wxString& aTitle ) override
     {
         // This class is shared for numerous tasks: a couple of
         // single line labels and multi-line text fields.

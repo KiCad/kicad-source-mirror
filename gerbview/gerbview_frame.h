@@ -104,21 +104,21 @@ public:
      */
     EDA_RECT            GetGerberLayoutBoundingBox();
 
-    void                SetPageSettings( const PAGE_INFO& aPageSettings );  // overload
-    const PAGE_INFO&    GetPageSettings() const;                            // overload
-    const wxSize        GetPageSizeIU() const;                              // overload
+    void                SetPageSettings( const PAGE_INFO& aPageSettings ) override;
+    const PAGE_INFO&    GetPageSettings() const override;
+    const wxSize        GetPageSizeIU() const override;
 
-    const wxPoint&      GetAuxOrigin() const;                               // overload
-    void                SetAuxOrigin( const wxPoint& aPoint );              // overload
+    const wxPoint&      GetAuxOrigin() const override;
+    void                SetAuxOrigin( const wxPoint& aPoint ) override;
 
-    const wxPoint&      GetGridOrigin() const  { return m_grid_origin; }    // overload
-    void                SetGridOrigin( const wxPoint& aPoint )              // overload
+    const wxPoint&      GetGridOrigin() const override { return m_grid_origin; }
+    void                SetGridOrigin( const wxPoint& aPoint ) override
     {
         m_grid_origin = aPoint;
     }
 
-    const TITLE_BLOCK&  GetTitleBlock() const;                              // overload
-    void                SetTitleBlock( const TITLE_BLOCK& aTitleBlock );    // overload
+    const TITLE_BLOCK&  GetTitleBlock() const override;
+    void                SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
     /**
      * Function SetCurItem
@@ -203,7 +203,7 @@ public:
 
     void    OnCloseWindow( wxCloseEvent& Event );
 
-    bool    OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl );   // overload KIWAY_PLAYER
+    bool    OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
 
     // Virtual basic functions:
     void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
@@ -459,11 +459,11 @@ public:
      */
     PARAM_CFG_ARRAY&    GetConfigurationSettings( void );
 
-    void LoadSettings( wxConfigBase* aCfg );    // override virtual
+    void LoadSettings( wxConfigBase* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg );    // override virtual
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
-    void                ShowChangedLanguage();  // override EDA_BASE_FRAME virtual
+    void                ShowChangedLanguage() override;
 
     void                Process_Special_Functions( wxCommandEvent& event );
     void                OnSelectOptionToolbar( wxCommandEvent& event );
@@ -657,7 +657,7 @@ public:
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
     virtual void    PrintPage( wxDC* aDC, LSET aPrintMasklayer, bool aPrintMirrorMode,
-                               void* aData = NULL );
+                               void* aData = NULL ) override;
 
     DECLARE_EVENT_TABLE()
 };

@@ -67,7 +67,7 @@ public:
 
     ~SCH_FIELD();
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "SCH_FIELD" );
     }
@@ -100,7 +100,7 @@ public:
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
-    const EDA_RECT GetBoundingBox() const;    // Virtual
+    const EDA_RECT GetBoundingBox() const override;
 
     /**
      * Function IsHorizJustifyFlipped
@@ -142,13 +142,13 @@ public:
     }
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     bool Save( FILE* aFile ) const override;
 
     // Geometric transforms (used in block operations):
 
-    void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector ) override
     {
         m_Pos += aMoveVector;
     }
@@ -163,7 +163,7 @@ public:
      * when the parent component is mirrored.  This function is only needed by the
      * pure function of the master class.
      */
-    void MirrorX( int aXaxis_position )
+    void MirrorX( int aXaxis_position ) override
     {
     }
 
@@ -174,7 +174,7 @@ public:
      * when the parent component is mirrored.  This function is only needed by the
      * pure function of the master class.
      */
-    void MirrorY( int aYaxis_position )
+    void MirrorY( int aYaxis_position ) override
     {
     }
 
@@ -186,7 +186,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    bool IsReplaceable() const { return true; }
+    bool IsReplaceable() const override { return true; }
 
     wxPoint GetLibPosition() const { return m_Pos; }
 
@@ -203,7 +203,7 @@ public:
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 };
 

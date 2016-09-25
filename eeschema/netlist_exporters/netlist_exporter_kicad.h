@@ -47,7 +47,7 @@ public:
      * Function WriteNetlist
      * writes to specified output file
      */
-    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions );   // OVERRIDE
+    bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
 
     /**
      * Function Format

@@ -203,7 +203,7 @@ public:
      */
     D_CODE* GetDcodeDescr();
 
-    const EDA_RECT GetBoundingBox() const;  // Virtual
+    const EDA_RECT GetBoundingBox() const override;
 
     /* Display on screen: */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
@@ -253,7 +253,7 @@ public:
      * returns the class name.
      * @return wxString
      */
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "GERBER_DRAW_ITEM" );
     }
@@ -281,7 +281,7 @@ public:
         delete this;
     }
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;  // override
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
 };

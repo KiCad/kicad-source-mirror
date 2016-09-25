@@ -133,7 +133,7 @@ public:
      * Returns the current end of the line being placed. It may not be equal
      * to the cursor position due to collisions.
      */
-    const VECTOR2I& CurrentEnd() const
+    const VECTOR2I& CurrentEnd() const override
     {
         return m_currentEnd;
     }
@@ -143,7 +143,7 @@ public:
      *
      * Returns the net code of currently routed track.
      */
-    const std::vector<int> CurrentNets() const
+    const std::vector<int> CurrentNets() const override
     {
         return std::vector<int>( 1, m_currentNet );
     }
@@ -153,7 +153,7 @@ public:
      *
      * Returns the layer of currently routed track.
      */
-    int CurrentLayer() const
+    int CurrentLayer() const override
     {
         return m_currentLayer;
     }
@@ -183,7 +183,7 @@ public:
 
     void SetOrthoMode( bool aOrthoMode ) override;
 
-    bool IsPlacingVia() const { return m_placingVia; }
+    bool IsPlacingVia() const override { return m_placingVia; }
 
     void GetModifiedNets( std::vector<int>& aNets ) const override;
 

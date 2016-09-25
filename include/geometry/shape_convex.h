@@ -56,7 +56,7 @@ public:
        SHAPE( SH_CONVEX ), m_points( aOther.m_points )
     {}
 
-    SHAPE* Clone() const
+    SHAPE* Clone() const override
     {
         return new SHAPE_CONVEX( *this );
     }
@@ -71,7 +71,7 @@ public:
     }
 
     /// @copydoc SHAPE::BBox()
-    const BOX2I BBox( int aClearance = 0 ) const
+    const BOX2I BBox( int aClearance = 0 ) const override
     {
         return m_points.BBox( aClearance );
     }
@@ -166,17 +166,17 @@ public:
     }
 
     /// @copydoc SHAPE::Collide()
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const
+    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override
     {
         return m_points.Collide( aSeg, aClearance );
     }
 
-    void Move( const VECTOR2I& aVector )
+    void Move( const VECTOR2I& aVector ) override
     {
         m_points.Move( aVector );
     }
 
-    bool IsSolid() const
+    bool IsSolid() const override
     {
         return true;
     }

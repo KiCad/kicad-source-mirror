@@ -45,7 +45,7 @@ public:
 
     ~SCH_JUNCTION() { }
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "SCH_JUNCTION" );
     }
@@ -55,16 +55,16 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
-    const EDA_RECT GetBoundingBox() const;    // Virtual
+    const EDA_RECT GetBoundingBox() const override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     bool Save( FILE* aFile ) const override;
 
     bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
-    void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector ) override
     {
         m_pos += aMoveVector;
     }
@@ -79,30 +79,30 @@ public:
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
-    bool IsConnectable() const { return true; }
+    bool IsConnectable() const override { return true; }
 
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
-    wxString GetSelectMenuText() const { return wxString( _( "Junction" ) ); }
+    wxString GetSelectMenuText() const override { return wxString( _( "Junction" ) ); }
 
-    BITMAP_DEF GetMenuImage() const { return  add_junction_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  add_junction_xpm; }
 
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 
-    wxPoint GetPosition() const { return m_pos; }
+    wxPoint GetPosition() const override { return m_pos; }
 
-    void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
+    void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
     bool HitTest( const EDA_RECT& aRect, bool aContained = false,
-                          int aAccuracy = 0 ) const;
+                          int aAccuracy = 0 ) const override;
     void Plot( PLOTTER* aPlotter ) override;
 
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // override
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
 private:

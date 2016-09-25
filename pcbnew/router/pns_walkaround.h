@@ -121,7 +121,7 @@ public:
     WALKAROUND_STATUS Route( const LINE& aInitialPath, LINE& aWalkPath,
             bool aOptimize = true );
 
-    virtual LOGGER* Logger()
+    virtual LOGGER* Logger() override
     {
         return &m_logger;
     }

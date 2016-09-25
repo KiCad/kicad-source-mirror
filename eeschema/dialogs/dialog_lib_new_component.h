@@ -39,8 +39,8 @@ public:
     /** Constructor */
     DIALOG_LIB_NEW_COMPONENT( wxWindow* parent );
 
-    void SetName( const wxString& name ) { m_textName->SetValue( name ); }
-    wxString GetName( void ) const { return m_textName->GetValue(); }
+    void SetName( const wxString& name ) override { m_textName->SetValue( name ); }
+    wxString GetName( void ) const override { return m_textName->GetValue(); }
 
     void SetReference( const wxString& reference )
     {

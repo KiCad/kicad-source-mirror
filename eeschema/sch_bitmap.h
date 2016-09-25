@@ -82,7 +82,7 @@ public:
     }
 
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "SCH_BITMAP" );
     }
@@ -94,12 +94,12 @@ public:
      */
     wxSize GetSize() const;
 
-    const EDA_RECT GetBoundingBox() const;    // Virtual
+    const EDA_RECT GetBoundingBox() const override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     /**
      * Function ReadImageFile
@@ -114,7 +114,7 @@ public:
 
     bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
-    void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector ) override
     {
         m_pos += aMoveVector;
     }
@@ -128,13 +128,13 @@ public:
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
-    wxString GetSelectMenuText() const { return wxString( _( "Image" ) ); }
+    wxString GetSelectMenuText() const override { return wxString( _( "Image" ) ); }
 
-    BITMAP_DEF GetMenuImage() const { return image_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return image_xpm; }
 
-    wxPoint GetPosition() const { return m_pos; }
+    wxPoint GetPosition() const override { return m_pos; }
 
-    void SetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
+    void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
@@ -145,7 +145,7 @@ public:
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // override
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 };
 

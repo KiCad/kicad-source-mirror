@@ -121,7 +121,7 @@ struct APP_SINGLE_TOP : public wxApp
     }
 #endif
 
-    bool OnInit()           // overload wxApp virtual
+    bool OnInit() override
     {
         try
         {
@@ -147,7 +147,7 @@ struct APP_SINGLE_TOP : public wxApp
         return false;
     }
 
-    int  OnExit()           // overload wxApp virtual
+    int  OnExit() override
     {
         // Fixes segfault when wxPython scripting is enabled.
 #if defined( KICAD_SCRIPTING_WXPYTHON )
@@ -156,7 +156,7 @@ struct APP_SINGLE_TOP : public wxApp
         return wxApp::OnExit();
     }
 
-    int OnRun()             // overload wxApp virtual
+    int OnRun() override
     {
         int ret = -1;
 

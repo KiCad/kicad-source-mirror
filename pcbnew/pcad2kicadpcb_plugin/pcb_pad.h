@@ -51,7 +51,7 @@ public:
     virtual void    Parse( XNODE*       aNode,
                            wxString     aDefaultMeasurementUnit,
                            wxString     aActualConversion );
-    virtual void    Flip();
+    virtual void    Flip() override;
     void            AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad );
     void            AddToBoard() override;
 

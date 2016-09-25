@@ -65,7 +65,7 @@ public:
 
     SEGMENT* Clone() const override;
 
-    const SHAPE* Shape() const
+    const SHAPE* Shape() const override
     {
         return static_cast<const SHAPE*>( &m_seg );
     }
@@ -75,7 +75,7 @@ public:
         SetLayers( LAYER_RANGE( aLayer ) );
     }
 
-    int Layer() const
+    int Layer() const override
     {
         return Layers().Start();
     }
@@ -113,7 +113,7 @@ public:
 
     const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness ) const override;
 
-    virtual VECTOR2I Anchor( int n ) const
+    virtual VECTOR2I Anchor( int n ) const override
     {
         if( n == 0 )
             return m_seg.GetSeg().A;
@@ -121,7 +121,7 @@ public:
             return m_seg.GetSeg().B;
     }
 
-    virtual int AnchorCount() const
+    virtual int AnchorCount() const override
     {
         return 2;
     }

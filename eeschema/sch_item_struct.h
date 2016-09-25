@@ -128,7 +128,7 @@ public:
 
     ~SCH_ITEM();
 
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "SCH_ITEM" );
     }
@@ -314,7 +314,7 @@ public:
     bool IsConnected( const wxPoint& aPoint ) const;
 
     /** @copydoc EDA_ITEM::HitTest(const wxPoint&) */
-    virtual bool HitTest( const wxPoint& aPosition ) const
+    virtual bool HitTest( const wxPoint& aPosition ) const override
     {
         return HitTest( aPosition, 0 );
     }

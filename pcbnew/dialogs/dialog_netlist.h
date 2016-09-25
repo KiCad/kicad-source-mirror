@@ -84,7 +84,7 @@ private:
     void OnCompileRatsnestClick( wxCommandEvent& event ) override;
     void OnCancelClick( wxCommandEvent& event ) override;
     void OnSaveMessagesToFile( wxCommandEvent& aEvent ) override;
-    void OnClickSilentMode( wxCommandEvent& event )
+    void OnClickSilentMode( wxCommandEvent& event ) override
     {
         m_silentMode = m_checkBoxSilentMode->GetValue();
     }

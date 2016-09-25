@@ -106,7 +106,7 @@ public:
 
     ~SCH_SCREEN();
 
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "SCH_SCREEN" );
     }
@@ -521,7 +521,7 @@ public:
     int UpdatePickList();
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // overload
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 };
 

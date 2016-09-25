@@ -43,11 +43,11 @@ public:
     }
 
 private:
-        void OnCancelClick( wxCommandEvent& event )
+        void OnCancelClick( wxCommandEvent& event ) override
         {
             EndModal( wxID_CANCEL );
         }
-        void OnOKClick( wxCommandEvent& event )
+        void OnOKClick( wxCommandEvent& event ) override
         {
             GetOpts( );
             EndModal( wxID_OK );

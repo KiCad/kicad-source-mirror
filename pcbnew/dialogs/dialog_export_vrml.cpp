@@ -165,7 +165,7 @@ public:
         event.Enable( m_cbCopyFiles->GetValue() );
     }
 
-    virtual void OnFileChanged( wxFileDirPickerEvent& event )
+    virtual void OnFileChanged( wxFileDirPickerEvent& event ) override
     {
         // Clicking on file picker button changes the focus to the file picker button which
         // is not the behavior we want.  Set the focus back to the OK button so the next enter

@@ -141,7 +141,7 @@ public:
 
     ~SCH_COMPONENT() { }
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "SCH_COMPONENT" );
     }
@@ -156,7 +156,7 @@ public:
      * items which can be large (hierarchical sheets, compoments)
      * @return false for a componant
      */
-    bool IsMovableFromAnchorPoint() { return false; }
+    bool IsMovableFromAnchorPoint() override { return false; }
 
     void SetPartName( const wxString& aName, PART_LIBS* aLibs=NULL );
     const wxString& GetPartName() const        { return m_part_name; }
@@ -265,7 +265,7 @@ public:
      */
     void SetTimeStamp( time_t aNewTimeStamp );
 
-    const EDA_RECT GetBoundingBox() const;    // Virtual
+    const EDA_RECT GetBoundingBox() const override;
 
     /**
      * Function GetBodyBoundingBox
@@ -376,7 +376,7 @@ public:
      * Virtual function, from the base class SCH_ITEM::Draw
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR )
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override
     {
         Draw( aPanel, aDC, aOffset, aDrawMode, aColor, true );
     }
@@ -448,7 +448,7 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector ) override
     {
         if( aMoveVector == wxPoint( 0, 0 ) )
             return;
@@ -502,7 +502,7 @@ public:
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
-    bool IsConnectable() const { return true; }
+    bool IsConnectable() const override { return true; }
 
     /**
      * @return true if the component is in netlist
@@ -527,10 +527,10 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  add_component_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  add_component_xpm; }
 
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                         SCH_SHEET_PATH*      aSheetPath );
+                         SCH_SHEET_PATH*      aSheetPath ) override;
 
     bool operator <( const SCH_ITEM& aItem ) const override;
 
@@ -539,11 +539,11 @@ public:
 
     SCH_ITEM& operator=( const SCH_ITEM& aItem );
 
-    bool IsReplaceable() const { return true; }
+    bool IsReplaceable() const override { return true; }
 
-    wxPoint GetPosition() const { return m_Pos; }
+    wxPoint GetPosition() const override { return m_Pos; }
 
-    void SetPosition( const wxPoint& aPosition ) { Move( aPosition - m_Pos ); }
+    void SetPosition( const wxPoint& aPosition ) override { Move( aPosition - m_Pos ); }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
@@ -554,7 +554,7 @@ public:
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // override
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
 private:

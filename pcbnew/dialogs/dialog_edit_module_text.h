@@ -55,7 +55,7 @@ protected:
 private:
     void ModuleOrientEvent( wxCommandEvent& event ) override;
 
-    void OnInitDlg( wxInitDialogEvent& event )
+    void OnInitDlg( wxInitDialogEvent& event ) override
     {
         // Call the default wxDialog handler of a wxInitDialogEvent
         TransferDataToWindow();

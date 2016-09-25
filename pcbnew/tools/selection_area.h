@@ -64,7 +64,7 @@ public:
     }
 
 #if defined(DEBUG)
-    void Show( int x, std::ostream& st ) const
+    void Show( int x, std::ostream& st ) const override
     {
     }
 #endif
@@ -72,7 +72,7 @@ public:
     /** Get class name
      * @return  string "SELECTION_AREA"
      */
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "SELECTION_AREA" );
     }

@@ -103,11 +103,11 @@ public:
 
 private:
     void ExecuteCommand( wxCommandEvent& event ) override;
-    void OnCancel( wxCommandEvent& event )
+    void OnCancel( wxCommandEvent& event ) override
     {
         EndModal( wxID_CANCEL );
     }
-    void checkBoxClicked( wxCommandEvent& aEvent )
+    void checkBoxClicked( wxCommandEvent& aEvent ) override
     {
         if( m_Include_Modules->GetValue() )
             m_IncludeLockedModules->Enable();

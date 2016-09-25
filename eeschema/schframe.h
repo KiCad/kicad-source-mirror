@@ -232,7 +232,7 @@ public:
     SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~SCH_EDIT_FRAME();
 
-    SCH_SCREEN* GetScreen() const;                  // overload SCH_BASE_FRAME
+    SCH_SCREEN* GetScreen() const override;
 
     void OnCloseWindow( wxCloseEvent& Event );
 
@@ -397,7 +397,7 @@ public:
      */
     virtual void ExecuteRemoteCommand( const char* cmdline ) override;
 
-    void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // override virtual from KIWAY_PLAYER
+    void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     void OnLeftClick( wxDC* aDC, const wxPoint& aPosition ) override;
     void OnLeftDClick( wxDC* aDC, const wxPoint& aPosition ) override;
@@ -680,7 +680,7 @@ public:
      */
     void OnSaveProject( wxCommandEvent& aEvent );
 
-    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 );  // virtual from KIWAY_PLAYER
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
      * Function AppendOneEEProject
@@ -1341,7 +1341,7 @@ public:
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, LSET aPrintMask,
-                            bool aPrintMirrorMode, void* aData = NULL );
+                            bool aPrintMirrorMode, void* aData = NULL ) override;
 
     void SetSimulatorCommand( const wxString& aCommand ) { m_simulatorCommand = aCommand; }
 

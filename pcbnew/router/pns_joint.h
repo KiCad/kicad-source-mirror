@@ -77,7 +77,7 @@ public:
         m_locked = aB.m_locked;
     }
 
-    ITEM* Clone( ) const
+    ITEM* Clone( ) const override
     {
         assert( false );
         return NULL;

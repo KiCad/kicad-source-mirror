@@ -62,7 +62,7 @@ private:
     void OnPageSetup( wxCommandEvent& event ) override;
     void OnPrintPreview( wxCommandEvent& event ) override;
     void OnPrintButtonClick( wxCommandEvent& event ) override;
-    void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
+    void OnButtonCancelClick( wxCommandEvent& event ) override { Close(); }
 
     void initDialog();
     void GetPrintOptions();
@@ -107,7 +107,7 @@ public:
     {
     }
 
-    bool Show( bool show )      // overload
+    bool Show( bool show ) override
     {
         bool        ret;
 

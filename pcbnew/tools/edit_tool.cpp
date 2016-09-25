@@ -613,46 +613,46 @@ public:
 
 private:
 
-    int getNumberOfItemsToArray() const //override
+    int getNumberOfItemsToArray() const override
     {
         // only handle single items
         return m_selection.Size();
     }
 
-    BOARD_ITEM* getNthItemToArray( int n ) const //override
+    BOARD_ITEM* getNthItemToArray( int n ) const override
     {
         return m_selection.Item<BOARD_ITEM>( n );
     }
 
-    BOARD* getBoard() const //override
+    BOARD* getBoard() const override
     {
         return m_parent.GetBoard();
     }
 
-    MODULE* getModule() const //override
+    MODULE* getModule() const override
     {
         // Remember this is valid and used only in the module editor.
         // in board editor, the parent of items is usually the board.
         return m_editModules ? m_parent.GetBoard()->m_Modules.GetFirst() : NULL;
     }
 
-    wxPoint getRotationCentre() const //override
+    wxPoint getRotationCentre() const override
     {
         const VECTOR2I rp = m_selection.GetCenter();
         return wxPoint( rp.x, rp.y );
     }
 
-    void prePushAction( BOARD_ITEM* new_item ) // override
+    void prePushAction( BOARD_ITEM* new_item ) override
     {
         m_parent.GetToolManager()->RunAction( COMMON_ACTIONS::unselectItem,
                                               true, new_item );
     }
 
-    void postPushAction( BOARD_ITEM* new_item ) //override
+    void postPushAction( BOARD_ITEM* new_item ) override
     {
     }
 
-    void finalise() // override
+    void finalise() override
     {
     }
 

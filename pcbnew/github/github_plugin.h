@@ -168,16 +168,16 @@ public:
     const wxString GetFileExtension() const override;
 
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
-            const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL ) override;
 
     MODULE* FootprintLoad( const wxString& aLibraryPath,
-            const wxString& aFootprintName, const PROPERTIES* aProperties );
+            const wxString& aFootprintName, const PROPERTIES* aProperties ) override;
 
     void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
-            const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL ) override;
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL ) override;
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 

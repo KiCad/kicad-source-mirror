@@ -61,7 +61,7 @@ public:
                     const wxPoint& aPosition, const wxSize& aSize,
                     long aStyle, const wxString & aFrameName );
 
-    SCH_SCREEN* GetScreen() const;                              // overload EDA_DRAW_FRAME
+    SCH_SCREEN* GetScreen() const override;
 
     /**
      * @return the increment value of the position of an item
@@ -98,29 +98,29 @@ public:
      */
     const wxString GetZoomLevelIndicator() const override;
 
-    void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
-    const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
-    const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
+    void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
+    const PAGE_INFO& GetPageSettings () const override;
+    const wxSize GetPageSizeIU() const override;
 
-    const wxPoint& GetAuxOrigin() const;                        // overload EDA_DRAW_FRAME
-    void SetAuxOrigin( const wxPoint& aPosition );              // overload EDA_DRAW_FRAME
+    const wxPoint& GetAuxOrigin() const override;
+    void SetAuxOrigin( const wxPoint& aPosition ) override;
 
-    const wxPoint& GetGridOrigin() const                        // overload EDA_DRAW_FRAME
+    const wxPoint& GetGridOrigin() const override
     {
         static wxPoint zero;
         return zero;
     }
-    void SetGridOrigin( const wxPoint& aPoint )   {}            // overload EDA_DRAW_FRAME
+    void SetGridOrigin( const wxPoint& aPoint ) override {}
 
     // Virtual from EDA_DRAW_FRAME
     // the background color of the draw canvas:
     EDA_COLOR_T GetDrawBgColor() const override;
     void SetDrawBgColor( EDA_COLOR_T aColor) override;
 
-    const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
-    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME
+    const TITLE_BLOCK& GetTitleBlock() const override;
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
-    void UpdateStatusBar();                                     // overload EDA_DRAW_FRAME
+    void UpdateStatusBar() override;
 
     /**
      * Function SelectComponentFromLib

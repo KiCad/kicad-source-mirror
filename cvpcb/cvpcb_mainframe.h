@@ -86,9 +86,9 @@ protected:
 public:
     ~CVPCB_MAINFRAME();
 
-    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl=0 );   // overload KIWAY_PLAYER
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl=0 ) override;
 
-    void KiwayMailIn( KIWAY_EXPRESS& aEvent );      // override virtual from KIWAY_PLAYER
+    void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     /**
      * @return a pointer on the Footprint Viewer frame, if exists, or NULL
@@ -212,9 +212,9 @@ public:
      */
     void SaveProjectFile();
 
-    void LoadSettings( wxConfigBase* aCfg );    // override virtual
+    void LoadSettings( wxConfigBase* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg );    // override virtual
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
      * Function DisplayStatus

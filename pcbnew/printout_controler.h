@@ -113,7 +113,7 @@ public:
 
     bool OnPrintPage( int aPage ) override;
 
-    bool HasPage( int aPage )       // do not test page num
+    bool HasPage( int aPage ) override
     {
         if( aPage <= m_PrintParams.m_PageCount )
             return true;

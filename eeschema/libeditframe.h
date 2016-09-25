@@ -321,7 +321,7 @@ public:
     void CreateOptionToolbar();
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
-    double BestZoom();         // Returns the best zoom
+    double BestZoom() override;         // Returns the best zoom
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
@@ -668,7 +668,7 @@ public:
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, LSET aPrintMask,
-                            bool aPrintMirrorMode, void* aData = NULL );
+                            bool aPrintMirrorMode, void* aData = NULL ) override;
 
     /**
      * Function SVG_PlotComponent

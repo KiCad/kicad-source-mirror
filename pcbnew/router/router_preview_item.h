@@ -84,7 +84,7 @@ public:
     /** Get class name
      * @return  string "ROUTER_PREVIEW_ITEM"
      */
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "ROUTER_PREVIEW_ITEM" );
     }
@@ -93,7 +93,7 @@ public:
 
     virtual void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
 
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
         aLayers[0] = m_layer;
         aCount = 1;

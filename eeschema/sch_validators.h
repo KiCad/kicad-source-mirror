@@ -54,7 +54,7 @@ public:
 
     SCH_FIELD_VALIDATOR( const SCH_FIELD_VALIDATOR& aValidator );
 
-    virtual wxObject* Clone() const { return new SCH_FIELD_VALIDATOR( *this ); }
+    virtual wxObject* Clone() const override { return new SCH_FIELD_VALIDATOR( *this ); }
 
     /**
      * Function Validate

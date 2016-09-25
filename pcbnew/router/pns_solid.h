@@ -59,7 +59,7 @@ public:
 
     ITEM* Clone() const override;
 
-    const SHAPE* Shape() const { return m_shape; }
+    const SHAPE* Shape() const override { return m_shape; }
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const override;
 
@@ -81,12 +81,12 @@ public:
         m_pos = aCenter;
     }
 
-    virtual VECTOR2I Anchor( int aN ) const
+    virtual VECTOR2I Anchor( int aN ) const override
     {
         return m_pos;
     }
 
-    virtual int AnchorCount() const
+    virtual int AnchorCount() const override
     {
         return 1;
     }

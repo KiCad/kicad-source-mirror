@@ -97,7 +97,7 @@ public:
 
     ~SCH_SHEET_PIN() { }
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "SCH_SHEET_PIN" );
     }
@@ -110,10 +110,10 @@ public:
      * and false for items moved with no reference to anchor (usually large items)
      * @return true for a hierarchical sheet pin
      */
-    bool IsMovableFromAnchorPoint() { return true; }
+    bool IsMovableFromAnchorPoint() override { return true; }
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     /**
      * Function CreateGraphicShape (virtual)
@@ -165,12 +165,12 @@ public:
     bool Load( LINE_READER& aLine, wxString& aErrorMsg ) override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // override
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
     // Geometric transforms (used in block operations):
 
-    void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector ) override
     {
         m_Pos += aMoveVector;
     }
@@ -183,22 +183,22 @@ public:
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
-    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL )
+    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL ) override
     {
         return EDA_ITEM::Replace( aSearchData, m_Text );
     }
 
-    bool IsReplaceable() const { return true; }
+    bool IsReplaceable() const override { return true; }
 
     void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
-    bool IsConnectable() const { return true; }
+    bool IsConnectable() const override { return true; }
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  add_hierar_pin_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  add_hierar_pin_xpm; }
 
-    void SetPosition( const wxPoint& aPosition ) { ConstrainOnEdge( aPosition ); }
+    void SetPosition( const wxPoint& aPosition ) override { ConstrainOnEdge( aPosition ); }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
@@ -256,7 +256,7 @@ public:
 
     ~SCH_SHEET();
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "SCH_SHEET" );
     }
@@ -269,7 +269,7 @@ public:
      * items which can be large (hierarchical sheets, compoments)
      * @return false for a hierarchical sheet
      */
-    bool IsMovableFromAnchorPoint() { return false; }
+    bool IsMovableFromAnchorPoint() override { return false; }
 
     wxString GetName() const { return m_name; }
 
@@ -429,7 +429,7 @@ public:
     int GetPenSize() const override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR );
+               GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor = UNSPECIFIED_COLOR ) override;
 
     EDA_RECT const GetBoundingBox() const override;
 
@@ -515,7 +515,7 @@ public:
 
     // Geometric transforms (used in block operations):
 
-    void Move( const wxPoint& aMoveVector )
+    void Move( const wxPoint& aMoveVector ) override
     {
         m_pos += aMoveVector;
 
@@ -535,7 +535,7 @@ public:
 
     bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL ) override;
 
-    bool IsReplaceable() const { return true; }
+    bool IsReplaceable() const override { return true; }
 
     /**
      * Resize this sheet to aSize and adjust all of the labels accordingly.
@@ -564,7 +564,7 @@ public:
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;
 
-    bool IsConnectable() const { return true; }
+    bool IsConnectable() const override { return true; }
 
     void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
@@ -572,14 +572,14 @@ public:
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return add_hierarchical_subsheet_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return add_hierarchical_subsheet_xpm; }
 
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                         SCH_SHEET_PATH*      aSheetPath );
+                         SCH_SHEET_PATH*      aSheetPath ) override;
 
     SCH_ITEM& operator=( const SCH_ITEM& aSheet );
 
-    wxPoint GetPosition() const { return m_pos; }
+    wxPoint GetPosition() const override { return m_pos; }
 
     void SetPosition( const wxPoint& aPosition ) override;
 
@@ -592,7 +592,7 @@ public:
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;     // override
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
 protected:

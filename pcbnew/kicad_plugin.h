@@ -91,12 +91,12 @@ public:
 
     //-----<PLUGIN API>---------------------------------------------------------
 
-    const wxString PluginName() const
+    const wxString PluginName() const override
     {
         return wxT( "KiCad" );
     }
 
-    const wxString GetFileExtension() const
+    const wxString GetFileExtension() const override
     {
         // Would have used wildcards_and_files_ext.cpp's KiCadPcbFileExtension,
         // but to be pure, a plugin should not assume that it will always be linked
@@ -106,18 +106,18 @@ public:
     }
 
     void Save( const wxString& aFileName, BOARD* aBoard,
-               const PROPERTIES* aProperties = NULL );          // overload
+               const PROPERTIES* aProperties = NULL ) override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL ) override;
 
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
-            const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL ) override;
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL ) override;
 
     void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
-                        const PROPERTIES* aProperties = NULL );
+                        const PROPERTIES* aProperties = NULL ) override;
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL ) override;
 

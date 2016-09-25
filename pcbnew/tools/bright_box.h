@@ -42,21 +42,21 @@ public:
     BRIGHT_BOX( BOARD_ITEM* aItem );
     ~BRIGHT_BOX() {};
 
-    virtual const BOX2I ViewBBox() const
+    virtual const BOX2I ViewBBox() const override
     {
         return m_item->ViewBBox();
     }
 
     void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const
+    void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
         aLayers[0] = ITEM_GAL_LAYER( GP_OVERLAY );
         aCount = 1;
     }
 
 #if defined(DEBUG)
-    void Show( int x, std::ostream& st ) const
+    void Show( int x, std::ostream& st ) const override
     {
     }
 #endif
@@ -64,7 +64,7 @@ public:
     /** Get class name
      * @return  string "BRIGHT_BOX"
      */
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "BRIGHT_BOX" );
     }

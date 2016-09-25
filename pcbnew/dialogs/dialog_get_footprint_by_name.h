@@ -57,7 +57,7 @@ public:
 
 private:
     // Called when selecting an item from the item list
-	void OnSelectFootprint( wxCommandEvent& aEvent )
+	void OnSelectFootprint( wxCommandEvent& aEvent ) override
     {
         if( m_choiceFpList->GetSelection() >= 0 )
             m_SearchTextCtrl->SetValue(

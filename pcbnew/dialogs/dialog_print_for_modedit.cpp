@@ -69,7 +69,7 @@ private:
     /// Called on activate Print button
     void OnPrintButtonClick( wxCommandEvent& event ) override;
 
-    void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
+    void OnButtonCancelClick( wxCommandEvent& event ) override { Close(); }
 
     void OnInitDlg( wxInitDialogEvent& event )
     {

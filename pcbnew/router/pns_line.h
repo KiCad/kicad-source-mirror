@@ -108,7 +108,7 @@ public:
     }
 
     ///> Returns the shape of the line
-    const SHAPE* Shape() const
+    const SHAPE* Shape() const override
     {
         return &m_line;
     }

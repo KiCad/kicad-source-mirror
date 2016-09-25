@@ -43,7 +43,7 @@ public:
     ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() {};
 
     // Virtual event handlers, overided here
-    void OnSelectionClick( wxCommandEvent& event ){ m_OptionID = event.GetId(); }
+    void OnSelectionClick( wxCommandEvent& event ) override { m_OptionID = event.GetId(); }
     void OnOkClick( wxCommandEvent& event ) override;
     void OnCancelClick( wxCommandEvent& event ) override;
     void MyInit();

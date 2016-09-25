@@ -60,7 +60,7 @@ public:
     virtual int Compare( const wxDataViewItem& lhs,
             const wxDataViewItem& rhs,
             unsigned int col,
-            bool ascending ) const;
+            bool ascending ) const override;
 
     void    SetGroupingColumn( int aCol );
     void    CalculateGrouping();
@@ -120,9 +120,9 @@ public:
 
     virtual void            GetValue( wxVariant& aValue, unsigned int aCol ) const override;
     virtual wxString        GetString( unsigned int aCol ) const override;
-    virtual wxDataViewItem  GetParent() const { return wxDataViewItem(); }
-    virtual bool            IsContainer() const { return true; }
-    virtual unsigned int    GetChildren( wxDataViewItemArray& aItems ) const
+    virtual wxDataViewItem  GetParent() const override { return wxDataViewItem(); }
+    virtual bool            IsContainer() const override { return true; }
+    virtual unsigned int    GetChildren( wxDataViewItemArray& aItems ) const override
     {
         /// @todo C++11
         for( std::list<Pin*>::const_iterator i = m_Members.begin(); i != m_Members.end(); ++i )
@@ -148,9 +148,9 @@ public:
 
     virtual void GetValue( wxVariant& aValue, unsigned int aCol ) const override;
     virtual wxString        GetString( unsigned int aCol ) const override;
-    virtual wxDataViewItem GetParent() const { return wxDataViewItem( m_Group ); }
-    virtual bool IsContainer() const { return false; }
-    virtual unsigned int GetChildren( wxDataViewItemArray& ) const { return 0; }
+    virtual wxDataViewItem GetParent() const override { return wxDataViewItem( m_Group ); }
+    virtual bool IsContainer() const override { return false; }
+    virtual unsigned int GetChildren( wxDataViewItemArray& ) const override { return 0; }
 
     void SetGroup( Group* aGroup ) { m_Group = aGroup; }
 

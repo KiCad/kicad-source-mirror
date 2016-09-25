@@ -88,9 +88,9 @@ public:
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL) override;
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL ) override;
 
-    bool IsFootprintLibWritable( const wxString& aLibraryPath )
+    bool IsFootprintLibWritable( const wxString& aLibraryPath ) override
     {
         return false;   // until someone writes others like FootprintSave(), etc.
     }

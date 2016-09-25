@@ -44,7 +44,7 @@ public:
 
     virtual void Parse( XNODE*      aNode,
                         wxString    aDefaultMeasurementUnit,
-                        wxString    aActualConversion );
+                        wxString    aActualConversion ) override;
 };
 
 } // namespace PCAD2KICAD

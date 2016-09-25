@@ -221,7 +221,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         m_limitCount = aLimit;
     }
 
-    bool operator()( ITEM* aCandidate )
+    bool operator()( ITEM* aCandidate ) override
     {
         if( !aCandidate->OfKind( m_kindMask ) )
             return true;
@@ -489,7 +489,7 @@ struct HIT_VISITOR : public OBSTACLE_VISITOR
         m_items( aTab ), m_point( aPoint )
     {}
 
-    bool operator()( ITEM* aItem )
+    bool operator()( ITEM* aItem ) override
     {
         SHAPE_CIRCLE cp( m_point, 0 );
 

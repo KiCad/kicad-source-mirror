@@ -79,7 +79,7 @@ protected:
 
     /// @todo Update DIALOG_SHIM to handle this transparently so no matter what mode the
     ///       dialogs is shown, everything is handled without this ugliness.
-    void OnOkClick( wxCommandEvent& aEvent )
+    void OnOkClick( wxCommandEvent& aEvent ) override
     {
         if( IsQuasiModal() )
             EndQuasiModal( wxID_OK );
@@ -87,7 +87,7 @@ protected:
             EndDialog( wxID_OK );
     }
 
-    void OnCancelClick( wxCommandEvent& event )
+    void OnCancelClick( wxCommandEvent& event ) override
     {
         if( IsQuasiModal() )
             EndQuasiModal( wxID_CANCEL );
@@ -95,7 +95,7 @@ protected:
             EndDialog( wxID_CANCEL );
     }
 
-    void OnCloseDialog( wxCloseEvent& aEvent )
+    void OnCloseDialog( wxCloseEvent& aEvent ) override
     {
         if( IsQuasiModal() )
             EndQuasiModal( wxID_CANCEL );

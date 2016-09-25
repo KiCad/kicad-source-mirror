@@ -97,7 +97,7 @@ public:
     MODULE* Get_Module( const wxString& CmpName );
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
-    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const { return NULL; }
+    EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override { return NULL; }
 
     void    Process_Settings( wxCommandEvent& event );
 
@@ -112,7 +112,7 @@ public:
      */
     virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
                                      UNDO_REDO_T aTypeCommand = UR_UNSPECIFIED,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
+                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override
     {
     }
 
@@ -128,7 +128,7 @@ public:
      */
     virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
                                      UNDO_REDO_T aTypeCommand,
-                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
+                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override
     {
         // currently: do nothing in CvPcb.
     }

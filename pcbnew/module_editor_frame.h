@@ -57,14 +57,14 @@ public:
     ///> @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
-    BOARD_DESIGN_SETTINGS& GetDesignSettings() const;           // overload PCB_BASE_FRAME, get parent's
-    void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings );  // overload
+    BOARD_DESIGN_SETTINGS& GetDesignSettings() const override;
+    void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings ) override;
 
-    const PCB_PLOT_PARAMS& GetPlotSettings() const;             // overload PCB_BASE_FRAME, get parent's
-    void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings );   // overload
+    const PCB_PLOT_PARAMS& GetPlotSettings() const override;
+    void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings ) override;
 
-    void LoadSettings( wxConfigBase* aCfg );         // Virtual
-    void SaveSettings( wxConfigBase* aCfg );         // Virtual
+    void LoadSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
      * Function GetConfigurationSettings
@@ -233,7 +233,7 @@ public:
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
     virtual void PrintPage( wxDC* aDC, LSET aPrintMaskLayer, bool aPrintMirrorMode,
-                            void * aData = NULL);
+                            void * aData = NULL) override;
 
     // BOARD handling
 
@@ -504,7 +504,7 @@ private:
      * Duplicate the item under the cursor
      * @param aIncrement increment the number of pad (if that is what is selected)
      */
-    void duplicateItems( bool aIncrement ); //override
+    void duplicateItems( bool aIncrement ) override;
 };
 
 #endif      // MODULE_EDITOR_FRAME_H_

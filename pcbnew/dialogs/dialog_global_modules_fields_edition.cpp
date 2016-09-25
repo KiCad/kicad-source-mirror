@@ -73,7 +73,7 @@ private:
 
     // event handlers
     void OnOKClick( wxCommandEvent& event ) override;
-    void OnCancelClick( wxCommandEvent& event )
+    void OnCancelClick( wxCommandEvent& event ) override
     {
         EndModal( wxID_CANCEL );
     }

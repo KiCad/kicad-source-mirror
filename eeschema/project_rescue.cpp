@@ -285,17 +285,17 @@ public:
 
     RESCUE_CASE_CANDIDATE() { m_lib_candidate = NULL; }
 
-    virtual wxString GetRequestedName() const { return m_requested_name; }
-    virtual wxString GetNewName() const { return m_new_name; }
-    virtual LIB_PART* GetLibCandidate() const { return m_lib_candidate; }
-    virtual wxString GetActionDescription() const
+    virtual wxString GetRequestedName() const override { return m_requested_name; }
+    virtual wxString GetNewName() const override { return m_new_name; }
+    virtual LIB_PART* GetLibCandidate() const override { return m_lib_candidate; }
+    virtual wxString GetActionDescription() const override
     {
         wxString action;
         action.Printf( _( "Rename to %s" ), m_new_name );
         return action;
     }
 
-    virtual bool PerformAction( RESCUER* aRescuer )
+    virtual bool PerformAction( RESCUER* aRescuer ) override
     {
         for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
         {
@@ -378,11 +378,11 @@ public:
     RESCUE_CACHE_CANDIDATE()
         : m_cache_candidate( NULL ), m_lib_candidate( NULL ) {}
 
-    virtual wxString GetRequestedName() const { return m_requested_name; }
-    virtual wxString GetNewName() const { return m_new_name; }
-    virtual LIB_PART* GetCacheCandidate() const { return m_cache_candidate; }
-    virtual LIB_PART* GetLibCandidate() const { return m_lib_candidate; }
-    virtual wxString GetActionDescription() const
+    virtual wxString GetRequestedName() const override { return m_requested_name; }
+    virtual wxString GetNewName() const override { return m_new_name; }
+    virtual LIB_PART* GetCacheCandidate() const override { return m_cache_candidate; }
+    virtual LIB_PART* GetLibCandidate() const override { return m_lib_candidate; }
+    virtual wxString GetActionDescription() const override
     {
         wxString action;
         action.Printf( _( "Rescue %s as %s" ), m_requested_name, m_new_name );
@@ -408,7 +408,7 @@ public:
         m_rescue_lib = std::move( rescue_lib );
     }
 
-    virtual bool PerformAction( RESCUER* aRescuer )
+    virtual bool PerformAction( RESCUER* aRescuer ) override
     {
         LIB_PART new_part( *m_cache_candidate, m_rescue_lib.get() );
         new_part.SetName( m_new_name );

@@ -42,22 +42,22 @@ public:
 
     ~SHAPE_SEGMENT() {};
 
-    SHAPE* Clone() const
+    SHAPE* Clone() const override
     {
         return new SHAPE_SEGMENT( m_seg, m_width );
     }
 
-    const BOX2I BBox( int aClearance = 0 ) const
+    const BOX2I BBox( int aClearance = 0 ) const override
     {
         return BOX2I( m_seg.A, m_seg.B - m_seg.A ).Inflate( aClearance + ( m_width + 1 ) / 2 );
     }
 
-    bool Collide( const SEG& aSeg, int aClearance = 0 ) const
+    bool Collide( const SEG& aSeg, int aClearance = 0 ) const override
     {
         return m_seg.Distance( aSeg ) < ( m_width + 1 ) / 2 + aClearance;
     }
 
-    bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const
+    bool Collide( const VECTOR2I& aP, int aClearance = 0 ) const override
     {
         return m_seg.Distance( aP ) < ( m_width + 1 ) / 2 + aClearance;
     }
@@ -82,12 +82,12 @@ public:
         return m_width;
     }
 
-    bool IsSolid() const
+    bool IsSolid() const override
     {
         return true;
     }
 
-    void Move( const VECTOR2I& aVector )
+    void Move( const VECTOR2I& aVector ) override
     {
         m_seg.A += aVector;
         m_seg.B += aVector;

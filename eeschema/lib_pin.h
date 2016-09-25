@@ -90,7 +90,7 @@ class LIB_PIN : public LIB_ITEM
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
-                      const TRANSFORM& aTransform );
+                      const TRANSFORM& aTransform ) override;
 
 public:
     LIB_PIN( LIB_PART* aParent );
@@ -99,13 +99,13 @@ public:
 
     ~LIB_PIN() { }
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "LIB_PIN" );
     }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;   // virtual override
+    void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
     bool Save( OUTPUTFORMATTER& aFormatter ) override;
@@ -121,7 +121,7 @@ public:
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
-    const EDA_RECT GetBoundingBox() const { return GetBoundingBox( false ); }
+    const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false ); }
 
     /**
      * Function GetBoundingBox
@@ -446,7 +446,7 @@ public:
 
     void Move( const wxPoint& aPosition ) override;
 
-    wxPoint GetPosition() const { return m_position; }
+    wxPoint GetPosition() const override { return m_position; }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
 
@@ -455,9 +455,9 @@ public:
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-               const TRANSFORM& aTransform );
+               const TRANSFORM& aTransform ) override;
 
-    int GetWidth() const { return m_width; }
+    int GetWidth() const override { return m_width; }
 
     void SetWidth( int aWidth ) override;
 

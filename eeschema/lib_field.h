@@ -75,7 +75,7 @@ class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode, void* aData,
-                      const TRANSFORM& aTransform );
+                      const TRANSFORM& aTransform ) override;
 
     /**
      * Calculate the new circle at \a aPosition when editing.
@@ -96,7 +96,7 @@ public:
 
     ~LIB_FIELD();
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "LIB_FIELD" );
     }
@@ -170,7 +170,7 @@ public:
         return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
     }
 
-    const EDA_RECT GetBoundingBox() const;    // Virtual
+    const EDA_RECT GetBoundingBox() const override;
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
@@ -239,7 +239,7 @@ public:
 
     void Move( const wxPoint& aPosition ) override;
 
-    wxPoint GetPosition() const { return m_Pos; }
+    wxPoint GetPosition() const override { return m_Pos; }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
 
@@ -248,15 +248,15 @@ public:
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
-               const TRANSFORM& aTransform );
+               const TRANSFORM& aTransform ) override;
 
-    int GetWidth() const { return m_Thickness; }
+    int GetWidth() const override { return m_Thickness; }
 
-    void SetWidth( int aWidth ) { m_Thickness = aWidth; }
+    void SetWidth( int aWidth ) override { m_Thickness = aWidth; }
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  move_field_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  move_field_xpm; }
 
     EDA_ITEM* Clone() const override;
 

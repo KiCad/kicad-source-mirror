@@ -92,9 +92,9 @@ private:
     void OnPrintButtonClick( wxCommandEvent& event ) override;
     void OnScaleSelectionClick( wxCommandEvent& event ) override;
 
-    void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
+    void OnButtonCancelClick( wxCommandEvent& event ) override { Close(); }
 
-    void OnInitDlg( wxInitDialogEvent& event )
+    void OnInitDlg( wxInitDialogEvent& event ) override
     {
         // Call the default wxDialog handler of a wxInitDialogEvent
         TransferDataToWindow();

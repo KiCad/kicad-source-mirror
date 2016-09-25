@@ -42,7 +42,7 @@ public:
     typedef boost::function<bool(const VECTOR2D&)> CLICK_HANDLER;
 
     ///> @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) {}
+    void Reset( RESET_REASON aReason ) override {}
 
     ///> Main event loop.
     int Main( const TOOL_EVENT& aEvent );

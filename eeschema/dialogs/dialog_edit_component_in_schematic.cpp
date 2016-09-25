@@ -130,7 +130,7 @@ private:
     void showButtonHandler( wxCommandEvent& event ) override;
     void OnTestChipName( wxCommandEvent& event ) override;
     void OnSelectChipName( wxCommandEvent& event ) override;
-    void OnInitDlg( wxInitDialogEvent& event )
+    void OnInitDlg( wxInitDialogEvent& event ) override
     {
         TransferDataToWindow();
 

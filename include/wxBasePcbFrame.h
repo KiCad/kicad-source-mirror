@@ -196,7 +196,7 @@ public:
     virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg ) override;
     virtual void UpdateStatusBar() override;
 
-    PCB_SCREEN* GetScreen() const { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
+    PCB_SCREEN* GetScreen() const override { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
 
     /**
      * Function BestZoom

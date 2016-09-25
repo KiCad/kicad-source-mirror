@@ -77,7 +77,7 @@ public:
     PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~PL_EDITOR_FRAME();
 
-    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl );   // overload KIWAY_PLAYER
+    bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl ) override;
 
     /**
      * Function LoadPageLayoutDescrFile
@@ -108,8 +108,8 @@ public:
     void    ReCreateHToolbar() override;
 
     void SetPageSettings(const PAGE_INFO&) override;
-    const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
-    const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
+    const PAGE_INFO& GetPageSettings () const override;
+    const wxSize GetPageSizeIU() const override;
 
     /**
      * Function GetZoomLevelIndicator
@@ -119,31 +119,31 @@ public:
      */
     const wxString GetZoomLevelIndicator() const override;
 
-    PL_EDITOR_SCREEN* GetScreen() const                         // overload EDA_DRAW_FRAME
+    PL_EDITOR_SCREEN* GetScreen() const override
     {
         return (PL_EDITOR_SCREEN*) EDA_DRAW_FRAME::GetScreen();
     }
 
-    const wxPoint& GetAuxOrigin() const                         // overload EDA_DRAW_FRAME
+    const wxPoint& GetAuxOrigin() const override
     {
         static wxPoint dummy;   // ( 0,0 );
         return dummy;
     }
-    void SetAuxOrigin( const wxPoint& aPosition ) {}            // overload EDA_DRAW_FRAME
+    void SetAuxOrigin( const wxPoint& aPosition ) override {}
 
-    const wxPoint& GetGridOrigin() const                        // overload EDA_DRAW_FRAME
+    const wxPoint& GetGridOrigin() const override
     {
         return m_grid_origin;
     }
-    void SetGridOrigin( const wxPoint& aPoint )                 // overload EDA_DRAW_FRAME
+    void SetGridOrigin( const wxPoint& aPoint ) override
     {
         m_grid_origin = aPoint;
     }
 
-    const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
-    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME
+    const TITLE_BLOCK& GetTitleBlock() const override;
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
-    void UpdateStatusBar();                                     // overload EDA_DRAW_FRAME
+    void UpdateStatusBar() override;
 
     /**
      * Must be called to initialize parameters when a new page layout
@@ -205,9 +205,9 @@ public:
      */
     PARAM_CFG_ARRAY&    GetConfigurationSettings( void );
 
-    void LoadSettings( wxConfigBase* aCfg );    // override virtual
+    void LoadSettings( wxConfigBase* aCfg ) override;
 
-    void SaveSettings( wxConfigBase* aCfg );    // override virtual
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
     void                Process_Special_Functions( wxCommandEvent& event );
     void                OnSelectOptionToolbar( wxCommandEvent& event );
@@ -315,7 +315,7 @@ public:
      * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
      */
     virtual void    PrintPage( wxDC* aDC, LSET aPrintMasklayer,
-                               bool aPrintMirrorMode, void * aData );
+                               bool aPrintMirrorMode, void * aData ) override;
 
     void OnFileHistory( wxCommandEvent& event );
 

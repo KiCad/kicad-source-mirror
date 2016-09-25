@@ -84,8 +84,8 @@ private:
     std::vector <int> m_TracksWidthList;
 
 private:
-    void OnNetClassesNameLeftClick( wxGridEvent& event ){ event.Skip(); }
-    void OnNetClassesNameRightClick( wxGridEvent& event ){ event.Skip(); }
+    void OnNetClassesNameLeftClick( wxGridEvent& event ) override { event.Skip(); }
+    void OnNetClassesNameRightClick( wxGridEvent& event ) override { event.Skip(); }
     void OnAddNetclassClick( wxCommandEvent& event ) override;
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;
 

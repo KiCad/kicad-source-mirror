@@ -1618,34 +1618,34 @@ public:
 
 private:
 
-    int getNumberOfItemsToArray() const //override
+    int getNumberOfItemsToArray() const override
     {
         // only handle single items
         return (m_item != NULL) ? 1 : 0;
     }
 
-    BOARD_ITEM* getNthItemToArray( int n ) const //override
+    BOARD_ITEM* getNthItemToArray( int n ) const override
     {
         wxASSERT_MSG( n == 0, "Legacy array tool can only handle a single item" );
         return m_item;
     }
 
-    BOARD* getBoard() const //override
+    BOARD* getBoard() const override
     {
         return m_parent.GetBoard();
     }
 
-    MODULE* getModule() const //override
+    MODULE* getModule() const override
     {
         return dynamic_cast<MODULE*>( m_item->GetParent() );
     }
 
-    wxPoint getRotationCentre() const //override
+    wxPoint getRotationCentre() const override
     {
         return m_item->GetCenter();
     }
 
-    void finalise() // override
+    void finalise() override
     {
         m_parent.GetCanvas()->Refresh();
     }

@@ -133,7 +133,7 @@ public:
             bool aSolidsOnly = true,
             int aMaxIterations = 10 );
 
-    const SHAPE* Shape() const
+    const SHAPE* Shape() const override
     {
         return &m_shape;
     }
@@ -142,12 +142,12 @@ public:
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0 ) const override;
 
-    virtual VECTOR2I Anchor( int n ) const
+    virtual VECTOR2I Anchor( int n ) const override
     {
         return m_pos;
     }
 
-    virtual int AnchorCount() const
+    virtual int AnchorCount() const override
     {
         return 1;
     }

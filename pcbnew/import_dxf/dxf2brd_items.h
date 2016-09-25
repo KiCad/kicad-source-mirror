@@ -107,70 +107,70 @@ private:
     // is read in dxf file
     // Depending of the application, they can do something or not
     virtual void addHeader( const DRW_Header* aData ) override;
-    virtual void addLType( const DRW_LType& aData ) {}
+    virtual void addLType( const DRW_LType& aData ) override {}
     virtual void addLayer( const DRW_Layer& aData ) override;
-    virtual void addDimStyle( const DRW_Dimstyle& aData ) {}
-    virtual void addBlock( const DRW_Block& aData ) {}
-    virtual void endBlock() {}
-    virtual void addPoint( const DRW_Point& aData ) {}
+    virtual void addDimStyle( const DRW_Dimstyle& aData ) override {}
+    virtual void addBlock( const DRW_Block& aData ) override {}
+    virtual void endBlock() override {}
+    virtual void addPoint( const DRW_Point& aData ) override {}
     virtual void addLine( const DRW_Line& aData) override;
-    virtual void addRay( const DRW_Ray& aData ) {}
-    virtual void addXline( const DRW_Xline& aData ) {}
+    virtual void addRay( const DRW_Ray& aData ) override {}
+    virtual void addXline( const DRW_Xline& aData ) override {}
     virtual void addCircle( const DRW_Circle& aData ) override;
     virtual void addArc( const DRW_Arc& aData ) override;
-    virtual void addEllipse( const DRW_Ellipse& aData ) {}
+    virtual void addEllipse( const DRW_Ellipse& aData ) override {}
     virtual void addLWPolyline( const DRW_LWPolyline& aData ) override;
     virtual void addText( const DRW_Text& aData ) override;
     virtual void addPolyline( const DRW_Polyline& aData ) override;
-    virtual void addSpline( const DRW_Spline* aData ) {}
-    virtual void addKnot( const DRW_Entity&) {}
-    virtual void addInsert( const DRW_Insert& aData ){}
-    virtual void addTrace( const DRW_Trace& aData ){}
-    virtual void addSolid( const DRW_Solid& aData ){}
+    virtual void addSpline( const DRW_Spline* aData ) override {}
+    virtual void addKnot( const DRW_Entity&) override {}
+    virtual void addInsert( const DRW_Insert& aData ) override {}
+    virtual void addTrace( const DRW_Trace& aData ) override {}
+    virtual void addSolid( const DRW_Solid& aData ) override {}
     virtual void addMText( const DRW_MText& aData) override;
-    virtual void addDimAlign( const DRW_DimAligned* aData ) {}
-    virtual void addDimLinear( const DRW_DimLinear* aData ) {}
-    virtual void addDimRadial( const DRW_DimRadial* aData ) {}
-    virtual void addDimDiametric( const DRW_DimDiametric* aData ) {}
-    virtual void addDimAngular( const DRW_DimAngular* aData ) {}
-    virtual void addDimAngular3P( const DRW_DimAngular3p* aData ) {}
-    virtual void addDimOrdinate( const DRW_DimOrdinate* aData ) {}
-    virtual void addLeader( const DRW_Leader* aData ) {}
-    virtual void addHatch( const DRW_Hatch* aData ) {}
-    virtual void addImage( const DRW_Image* aData ) {}
-    virtual void linkImage( const DRW_ImageDef* aData ) {}
+    virtual void addDimAlign( const DRW_DimAligned* aData ) override {}
+    virtual void addDimLinear( const DRW_DimLinear* aData ) override {}
+    virtual void addDimRadial( const DRW_DimRadial* aData ) override {}
+    virtual void addDimDiametric( const DRW_DimDiametric* aData ) override {}
+    virtual void addDimAngular( const DRW_DimAngular* aData ) override {}
+    virtual void addDimAngular3P( const DRW_DimAngular3p* aData ) override {}
+    virtual void addDimOrdinate( const DRW_DimOrdinate* aData ) override {}
+    virtual void addLeader( const DRW_Leader* aData ) override {}
+    virtual void addHatch( const DRW_Hatch* aData ) override {}
+    virtual void addImage( const DRW_Image* aData ) override {}
+    virtual void linkImage( const DRW_ImageDef* aData ) override {}
 
-    virtual void add3dFace( const DRW_3Dface& aData ) {}
-    virtual void addComment( const char*) {}
+    virtual void add3dFace( const DRW_3Dface& aData ) override {}
+    virtual void addComment( const char*) override {}
 
-    virtual void addVport( const DRW_Vport& aData ) {}
+    virtual void addVport( const DRW_Vport& aData ) override {}
 
     virtual void addTextStyle( const DRW_Textstyle& aData ) override;
 
-    virtual void addViewport( const DRW_Viewport& aData ) {}
+    virtual void addViewport( const DRW_Viewport& aData ) override {}
 
-    virtual void setBlock( const int aHandle ) {}
+    virtual void setBlock( const int aHandle ) override {}
 
     static wxString toDxfString( const wxString& aStr );
     static wxString toNativeString( const wxString& aData );
 
     // These functions are not used in Kicad.
     // But because they are virtual pure in DRW_Interface, they should be defined
-    virtual void writeTextstyles() {}
-    virtual void writeVports() {}
-    virtual void writeHeader( DRW_Header& aData ) {}
-    virtual void writeEntities() {}
-    virtual void writeLTypes() {}
-    virtual void writeLayers() {}
-    virtual void writeBlockRecords() {}
-    virtual void writeBlocks() {}
-    virtual void writeDimstyles() {}
+    virtual void writeTextstyles() override {}
+    virtual void writeVports() override {}
+    virtual void writeHeader( DRW_Header& aData ) override {}
+    virtual void writeEntities() override {}
+    virtual void writeLTypes() override {}
+    virtual void writeLayers() override {}
+    virtual void writeBlockRecords() override {}
+    virtual void writeBlocks() override {}
+    virtual void writeDimstyles() override {}
 
     void writeLine();
     void writeMtext();
 
-    virtual void addAppId( const DRW_AppId& data ) {}
-    virtual void writeAppId() {}
+    virtual void addAppId( const DRW_AppId& data ) override {}
+    virtual void writeAppId() override {}
 };
 
 #endif  // FILTERDXFRW_H

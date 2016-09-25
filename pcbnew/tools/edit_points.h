@@ -201,13 +201,13 @@ public:
     }
 
     ///> @copydoc EDIT_POINT::GetPosition()
-    virtual VECTOR2I GetPosition() const
+    virtual VECTOR2I GetPosition() const override
     {
         return ( m_origin.GetPosition() + m_end.GetPosition() ) / 2;
     }
 
     ///> @copydoc EDIT_POINT::GetPosition()
-    virtual void SetPosition( const VECTOR2I& aPosition )
+    virtual void SetPosition( const VECTOR2I& aPosition ) override
     {
         VECTOR2I difference = aPosition - GetPosition();
 
@@ -216,7 +216,7 @@ public:
     }
 
     ///> @copydoc EDIT_POINT::ApplyConstraint()
-    virtual void ApplyConstraint()
+    virtual void ApplyConstraint() override
     {
         m_origin.ApplyConstraint();
         m_end.ApplyConstraint();
@@ -492,7 +492,7 @@ public:
     }
 
     ///> @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const
+    virtual const BOX2I ViewBBox() const override
     {
         return m_parent->ViewBBox();
     }
@@ -501,14 +501,14 @@ public:
     virtual void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
 
     ///> @copydoc VIEW_ITEM::ViewGetLayers()
-    virtual void ViewGetLayers( int aLayers[], int& aCount ) const
+    virtual void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
         aCount = 1;
         aLayers[0] = ITEM_GAL_LAYER( GP_OVERLAY );
     }
 
 #if defined(DEBUG)
-    void Show( int x, std::ostream& st ) const
+    void Show( int x, std::ostream& st ) const override
     {
     }
 #endif
@@ -516,7 +516,7 @@ public:
     /** Get class name
      * @return  string "EDIT_POINTS"
      */
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "EDIT_POINTS" );
     }

@@ -69,7 +69,7 @@ public:
 
     virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
     virtual void OverrideClearance( bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0 ) override;
-    virtual void UseDpGap( bool aUseDpGap ) { m_useDpGap = aUseDpGap; }
+    virtual void UseDpGap( bool aUseDpGap ) override { m_useDpGap = aUseDpGap; }
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
     virtual bool DpNetPair( PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;

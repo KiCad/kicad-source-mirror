@@ -107,7 +107,7 @@ public: EXCELLON_IMAGE( int layer ) :
 
     ~EXCELLON_IMAGE() {};
 
-    virtual void ResetDefaultValues()
+    virtual void ResetDefaultValues() override
     {
         GERBER_FILE_IMAGE::ResetDefaultValues();
         SelectUnits( false );

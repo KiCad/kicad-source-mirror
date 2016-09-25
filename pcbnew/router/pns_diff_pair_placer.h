@@ -113,7 +113,7 @@ public:
      * Returns the current end of the line being placed. It may not be equal
      * to the cursor position due to collisions.
      */
-    const VECTOR2I& CurrentEnd() const
+    const VECTOR2I& CurrentEnd() const override
     {
         return m_currentEnd;
     }
@@ -130,7 +130,7 @@ public:
      *
      * Returns the layer of currently routed track.
      */
-    int CurrentLayer() const
+    int CurrentLayer() const override
     {
         return m_currentLayer;
     }
@@ -158,7 +158,7 @@ public:
      */
     void UpdateSizes( const SIZES_SETTINGS& aSizes ) override;
 
-    bool IsPlacingVia() const { return m_placingVia; }
+    bool IsPlacingVia() const override { return m_placingVia; }
 
     void SetOrthoMode( bool aOrthoMode ) override;
 

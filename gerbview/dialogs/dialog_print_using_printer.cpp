@@ -86,7 +86,7 @@ private:
     void OnPrintButtonClick( wxCommandEvent& event ) override;
     void OnScaleSelectionClick( wxCommandEvent& event ) override;
 
-    void OnButtonCloseClick( wxCommandEvent& event ) { Close(); }
+    void OnButtonCloseClick( wxCommandEvent& event ) override { Close(); }
     void SetPrintParameters();
     void InitValues();
 

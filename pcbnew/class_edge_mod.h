@@ -111,24 +111,24 @@ public:
 
     /* drawing functions */
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset );
+               GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) override;
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    wxString GetClass() const
+    wxString GetClass() const override
     {
         return wxT( "MGRAPHIC" );
     }
 
     wxString GetSelectMenuText() const override;
 
-    BITMAP_DEF GetMenuImage() const { return  show_mod_edge_xpm; }
+    BITMAP_DEF GetMenuImage() const override { return  show_mod_edge_xpm; }
 
     EDA_ITEM* Clone() const override;
 
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
     wxPoint m_Start0;       // Start point or center, relative to module origin, orient 0.

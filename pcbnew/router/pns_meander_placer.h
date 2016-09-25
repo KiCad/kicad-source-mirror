@@ -71,7 +71,7 @@ public:
     const VECTOR2I& CurrentEnd() const override;
 
     /// @copydoc PLACEMENT_ALGO::CurrentNets()
-    const std::vector<int> CurrentNets() const
+    const std::vector<int> CurrentNets() const override
     {
         return std::vector<int> (1, m_originLine.Net() );
     }

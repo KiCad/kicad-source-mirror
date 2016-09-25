@@ -43,7 +43,7 @@ public:
 
     BOARD*          Load( const wxString&   aFileName,
                           BOARD*            aAppendToMe,
-                          const PROPERTIES* aProperties = NULL );
+                          const PROPERTIES* aProperties = NULL ) override;
 
     const wxString  GetFileExtension() const override;
 

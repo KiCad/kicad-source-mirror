@@ -71,24 +71,24 @@ public:
 
     //-----<PLUGIN IMPLEMENTATION>----------------------------------------------
 
-    const wxString PluginName() const
+    const wxString PluginName() const override
     {
         return wxT( "KiCad-Legacy" );
     }
 
-    const wxString GetFileExtension() const
+    const wxString GetFileExtension() const override
     {
         return wxT( "brd" );
     }
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-            const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL ) override;
 
     wxArrayString FootprintEnumerate( const wxString& aLibraryPath,
-            const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL ) override;
 
     MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties = NULL );
+            const PROPERTIES* aProperties = NULL ) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL ) override;
 

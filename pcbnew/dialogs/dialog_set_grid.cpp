@@ -63,7 +63,7 @@ public:
 
 private:
     void OnResetGridOrgClick( wxCommandEvent& event ) override;
-    void OnInitDlg( wxInitDialogEvent& event )
+    void OnInitDlg( wxInitDialogEvent& event ) override
     {
         // Call the default wxDialog handler of a wxInitDialogEvent
         TransferDataToWindow();

@@ -55,13 +55,13 @@ public:
 
     // Required to keep compiler happy on debug builds.
 #if defined(DEBUG)
-    virtual void Show( int nestLevel, std::ostream& os ) const {}
+    virtual void Show( int nestLevel, std::ostream& os ) const override {}
 #endif
 
     /** Get class name
      * @return  string "PL_ITEM_LAYOUT"
      */
-    virtual wxString GetClass() const
+    virtual wxString GetClass() const override
     {
         return wxT( "PL_ITEM_LAYOUT" );
     }
