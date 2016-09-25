@@ -122,6 +122,9 @@ protected:
 #define ID_SHOW_NO_COPPERS                      (wxID_HIGHEST+1)
 #define ID_SHOW_NO_COPPERS_BUT_ACTIVE           (wxID_HIGHEST+2)
 #define ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE    (wxID_HIGHEST+3)
+#define ID_SHOW_NO_LAYERS                        (wxID_HIGHEST+4)
+#define ID_SHOW_ALL_LAYERS                      (wxID_HIGHEST+5)
+
 
     /**
      * Function isAllowedInFpMode

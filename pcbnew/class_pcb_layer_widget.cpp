@@ -105,10 +105,10 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_BASE_FRAME* aParent, wxWindow* aFocusOwn
 
     // since Popupmenu() calls this->ProcessEvent() we must call this->Connect()
     // and not m_LayerScrolledWindow->Connect()
-    Connect( ID_SHOW_ALL_COPPERS, ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE,
+
+    Connect( ID_SHOW_ALL_COPPERS, ID_SHOW_ALL_LAYERS,
         wxEVT_COMMAND_MENU_SELECTED,
         wxCommandEventHandler( PCB_LAYER_WIDGET::onPopupSelection ), NULL, this );
-
     // install the right click handler into each control at end of ReFill()
     // using installRightLayerClickHandler
 }
@@ -165,6 +165,10 @@ void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
                                  _( "Always Hide All Copper Layers But Active" ) ) );
     menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS,
                                  _( "Hide All Copper Layers" ) ) );
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_LAYERS,
+                                 _( "Hide All Layers" ) ) );
+    menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_LAYERS,
+                                 _( "Show All Layers" ) ) );
 
     PopupMenu( &menu );
 
@@ -186,10 +190,39 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 
     switch( menuId )
     {
+
+    case ID_SHOW_NO_LAYERS:
+    case ID_SHOW_ALL_LAYERS:
+        bool loc_visible;
+        if (menuId==ID_SHOW_ALL_LAYERS)
+                loc_visible= true;
+                        else
+                loc_visible = false;
+
+        rowCount = GetLayerRowCount();
+
+           for( int row=0;  row<rowCount;  ++row )
+        {
+            bool isLast;
+            wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
+            LAYER_ID    layer = ToLAYER_ID( getDecodedId( cb->GetId() ) );
+            cb->SetValue( loc_visible );
+
+            if (row==rowCount-1)
+                isLast=true;
+            else
+                isLast=false;
+
+            OnLayerVisible( layer, loc_visible, isLast );
+           if (isLast) break;
+         }
+        break;
+
     case ID_SHOW_ALL_COPPERS:
     case ID_ALWAYS_SHOW_NO_COPPERS_BUT_ACTIVE:
     case ID_SHOW_NO_COPPERS_BUT_ACTIVE:
     case ID_SHOW_NO_COPPERS:
+
         // Search the last copper layer row index:
         int lastCu = -1;
         rowCount = GetLayerRowCount();
@@ -228,6 +261,7 @@ void PCB_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
             }
         }
         break;
+
     }
 }
 
