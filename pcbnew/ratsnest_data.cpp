@@ -858,14 +858,13 @@ void RN_NET::GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
 
 void RN_DATA::AddSimple( const BOARD_ITEM* aItem )
 {
-    int net;
-
     if( aItem->IsConnected() )
     {
         const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( aItem );
-        net = item->GetNetCode();
+        int net = item->GetNetCode();
 
-        if( net < 1 )           // do not process unconnected items
+        // Do not process orphaned & unconnected items
+        if( net <= NETINFO_LIST::UNCONNECTED )
             return;
 
         m_nets[net].AddSimple( item );
@@ -876,24 +875,19 @@ void RN_DATA::AddSimple( const BOARD_ITEM* aItem )
 
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
             AddSimple( pad );
-
-        return;
     }
-    else
-        return;
 }
 
 
 void RN_DATA::AddBlocked( const BOARD_ITEM* aItem )
 {
-    int net;
-
     if( aItem->IsConnected() )
     {
         const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( aItem );
-        net = item->GetNetCode();
+        int net = item->GetNetCode();
 
-        if( net < 1 )           // do not process unconnected items
+        // Do not process orphaned & unconnected items
+        if( net <= NETINFO_LIST::UNCONNECTED )
             return;
 
         // Block all nodes belonging to the item
@@ -906,11 +900,7 @@ void RN_DATA::AddBlocked( const BOARD_ITEM* aItem )
 
         for( const D_PAD* pad = module->Pads().GetFirst(); pad; pad = pad->Next() )
             AddBlocked( pad );
-
-        return;
     }
-    else
-        return;
 }
 
 
@@ -1074,13 +1064,6 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
     if( aItem->IsConnected() )
     {
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
-
-        if( net < 0 )           // do not process unconnected items
-            return false;
-
-        // Autoresize is necessary e.g. for module editor
-        if( net >= (int) m_nets.size() )
-            m_nets.resize( net + 1 );
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
@@ -1090,12 +1073,9 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
         {
             net = pad->GetNetCode();
 
-            if( net < 1 )       // do not process unconnected items
+            // Do not process orphaned items
+            if( net <= NETINFO_LIST::ORPHANED )
                 continue;
-
-            // Autoresize is necessary e.g. for module editor
-            if( net >= (int) m_nets.size() )
-                m_nets.resize( net + 1 );
 
             m_nets[net].AddItem( pad );
         }
@@ -1111,12 +1091,17 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
 
         return true;
     }
+    else
+    {
+        return false;
+    }
 
-    if( net == NETINFO_LIST::ORPHANED )
+    if( net < 0 )
         return false;
 
-    // If the netcode is set, it should be valid for indexing into vector
-    assert( net < (int) m_nets.size() );
+    // Autoresize is necessary e.g. for module editor
+    if( net >= (int) m_nets.size() )
+        m_nets.resize( net + 1 );
 
     switch( aItem->Type() )
     {
@@ -1146,21 +1131,11 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
 
 bool RN_DATA::Remove( const BOARD_ITEM* aItem )
 {
-    int net;
+    int net = NETINFO_LIST::ORPHANED;
 
     if( aItem->IsConnected() )
     {
         net = static_cast<const BOARD_CONNECTED_ITEM*>( aItem )->GetNetCode();
-
-        if( net < 0 )           // do not process unconnected items
-            return false;
-
-        // Autoresize is necessary e.g. for module editor
-        if( net >= (int) m_nets.size() )
-        {
-            m_nets.resize( net + 1 );
-            return false;     // if it was resized, then surely the item had not been added before
-        }
     }
     else if( aItem->Type() == PCB_MODULE_T )
     {
@@ -1170,15 +1145,9 @@ bool RN_DATA::Remove( const BOARD_ITEM* aItem )
         {
             net = pad->GetNetCode();
 
-            if( net < 1 )       // do not process unconnected items
+            // Do not process orphaned items
+            if( net <= NETINFO_LIST::ORPHANED )
                 continue;
-
-            // Autoresize is necessary e.g. for module editor
-            if( net >= (int) m_nets.size() )
-            {
-                m_nets.resize( net + 1 );
-                return false;     // if it was resized, then surely the item had not been added before
-            }
 
             m_nets[net].RemoveItem( pad );
         }
@@ -1188,6 +1157,16 @@ bool RN_DATA::Remove( const BOARD_ITEM* aItem )
     else
     {
         return false;
+    }
+
+    if( net < 0 )
+        return false;
+
+    // Autoresize is necessary e.g. for module editor
+    if( net >= (int) m_nets.size() )
+    {
+        m_nets.resize( net + 1 );
+        return false;     // if it was resized, then surely the item had not been added before
     }
 
     switch( aItem->Type() )
