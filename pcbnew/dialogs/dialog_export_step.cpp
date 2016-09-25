@@ -299,7 +299,6 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
     cmdK2S.Append( " " );
     cmdK2S.Append( brdName );
 
-    std::cerr << "Executing kicad2step:\n  " << cmdK2S.ToUTF8() << "\n";
     int result = 0;
 
     do
