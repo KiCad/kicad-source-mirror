@@ -50,8 +50,8 @@ set( _wvh_write_version_file ON )
 # Compare the version argument against the version in the existing header file for a mismatch.
 if( EXISTS ${OUTPUT_FILE} )
     file( STRINGS ${OUTPUT_FILE} _current_version_str
-        REGEX "^#define[\t ]+KICAD_BUILD_VERSION[\t ]+.*" )
-    string( REGEX REPLACE "^#define KICAD_BUILD_VERSION \"([()a-zA-Z0-9 -.]+)\".*"
+        REGEX "^#define[\t ]+KICAD_FULL_VERSION[\t ]+.*" )
+    string( REGEX REPLACE "^#define KICAD_FULL_VERSION \"([()a-zA-Z0-9 -.]+)\".*"
         "\\1" _wvh_last_version "${_current_version_str}" )
 
     # No change, do not write version.h
@@ -75,6 +75,7 @@ if( _wvh_write_version_file )
 
 #define KICAD_BUILD_VERSION \"${_wvh_version_str}\"
 #define KICAD_BRANCH_NAME \"${KICAD_BRANCH_NAME}\"
+#define KICAD_FULL_VERSION \"${KICAD_FULL_VERSION}\"
 
 #endif  /* __KICAD_VERSION_H__ */
 "
