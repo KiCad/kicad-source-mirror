@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,19 +45,19 @@ class PYTHON_FOOTPRINT_WIZARD : public FOOTPRINT_WIZARD
 public:
     PYTHON_FOOTPRINT_WIZARD( PyObject* wizard );
     ~PYTHON_FOOTPRINT_WIZARD();
-    wxString        GetName();
-    wxString        GetImage();
-    wxString        GetDescription();
-    int             GetNumParameterPages();
-    wxString        GetParameterPageName( int aPage );
-    wxArrayString   GetParameterNames( int aPage );
-    wxArrayString   GetParameterTypes( int aPage );
-    wxArrayString   GetParameterValues( int aPage );
-    wxArrayString   GetParameterErrors( int aPage );
+    wxString        GetName() override;
+    wxString        GetImage() override;
+    wxString        GetDescription() override;
+    int             GetNumParameterPages() override;
+    wxString        GetParameterPageName( int aPage ) override;
+    wxArrayString   GetParameterNames( int aPage ) override;
+    wxArrayString   GetParameterTypes( int aPage ) override;
+    wxArrayString   GetParameterValues( int aPage ) override;
+    wxArrayString   GetParameterErrors( int aPage ) override;
     // must return an empty string or an error description
-    wxString        SetParameterValues( int aPage, wxArrayString& aValues );
-    MODULE*         GetFootprint( wxString * aMessages );
-    void*           GetObject();
+    wxString        SetParameterValues( int aPage, wxArrayString& aValues ) override;
+    MODULE*         GetFootprint( wxString * aMessages ) override;
+    void*           GetObject() override;
 };
 
 
