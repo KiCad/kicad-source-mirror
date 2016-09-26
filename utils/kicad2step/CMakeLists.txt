@@ -1,7 +1,10 @@
-include_directories(
+include_directories( BEFORE
         pcb
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${OCE_INCLUDE_DIRS}
+)
+
+include_directories( SYSTEM 
+    ${OCE_INCLUDE_DIRS}
 )
 
 add_executable( kicad2step

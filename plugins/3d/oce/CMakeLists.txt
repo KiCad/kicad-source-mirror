@@ -12,7 +12,7 @@
 # export WXTRACE="PLUGIN_OCE"
 #
 
-include_directories(
+include_directories( SYSTEM
     ${OCE_INCLUDE_DIRS}
 )
 
