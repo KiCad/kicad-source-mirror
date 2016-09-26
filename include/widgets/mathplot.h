@@ -58,10 +58,6 @@ Jose Luis Blanco, Val Greene.<br>
 #define WXDLLIMPEXP_DATA_MATHPLOT(type) type
 #endif
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-#pragma interface "mathplot.h"
-#endif
-
 #include <vector>
 
 // #include <wx/wx.h>

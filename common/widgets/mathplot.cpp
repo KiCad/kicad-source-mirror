@@ -10,11 +10,6 @@
 // Licence:         wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-// #pragma implementation "plot.h"
-#pragma implementation "mathplot.h"
-#endif
-
 #include <wx/window.h>
 
 // Comment out for release operation:
