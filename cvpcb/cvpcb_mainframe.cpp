@@ -748,21 +748,22 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
 
 void CVPCB_MAINFRAME::UpdateTitle()
 {
-    wxString    title = wxString::Format( wxT( "Cvpcb %s  " ), GetChars( GetBuildVersion() ) );
+    wxString    title;
     PROJECT&    prj = Prj();
     wxFileName fn = prj.GetProjectFullName();
 
     if( fn.IsOk() && !prj.GetProjectFullName().IsEmpty() && fn.FileExists() )
     {
-        title += wxString::Format( _("Project: '%s'"),
-                                   GetChars( fn.GetFullPath() )
-                                 );
-
-        if( !fn.IsFileWritable() )
-            title += _( " [Read Only]" );
+        title.Printf( L"Cvpcb \u2014 %s%s",
+                fn.GetFullPath(),
+                fn.IsFileWritable()
+                    ? wxString( wxEmptyString )
+                    : _( " [Read Only]" ) );
     }
     else
-        title += _( "[no project]" );
+    {
+        title = "Cvpcb";
+    }
 
     SetTitle( title );
 }

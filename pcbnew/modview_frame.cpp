@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -660,11 +660,11 @@ void FOOTPRINT_VIEWER_FRAME::Update3D_Frame( bool aForceReloadFootprint )
     if( draw3DFrame == NULL )
         return;
 
-    wxString frm3Dtitle = wxString::Format(
-                _( "ModView: 3D Viewer [%s]" ),
-                GetChars( getCurFootprintName() ) );
+    wxString title = wxString::Format(
+                _( "3D Viewer" ) + L" \u2014 %s",
+                getCurFootprintName() );
 
-    draw3DFrame->SetTitle( frm3Dtitle );
+    draw3DFrame->SetTitle( title );
 
     if( aForceReloadFootprint )
     {
@@ -715,19 +715,13 @@ bool FOOTPRINT_VIEWER_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopM
 
 void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 {
-    wxString     msg;
+    wxString title;
+    wxString path;
 
-    msg = _( "Library Browser" );
-    msg << wxT( " [" );
-
-    if( getCurNickname().size() )
-    {
-        msg << getCurNickname();
-    }
-    else
-        msg += _( "no library selected" );
-
-    msg << wxT( "]" );
+    title.Printf( _( "Library Browser" ) + L" \u2014 %s",
+            getCurNickname().size()
+                ? getCurNickname()
+                : _( "no library selected" ) );
 
     // Now, add the full path, for info
     if( getCurNickname().size() )
@@ -736,10 +730,10 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
         const FP_LIB_TABLE::ROW* row = libtable->FindRow( getCurNickname() );
 
         if( row )
-            msg << " (" << row->GetFullURI( true ) << ")";
+            title << L" \u2014 " << row->GetFullURI( true );
     }
 
-    SetTitle( msg );
+    SetTitle( title );
 }
 
 

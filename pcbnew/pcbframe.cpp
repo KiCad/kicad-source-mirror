@@ -994,20 +994,24 @@ void PCB_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::UpdateTitle()
 {
-    wxFileName  fileName = GetBoard()->GetFileName();
-    wxString    title = wxString::Format( wxT( "Pcbnew %s " ), GetChars( GetBuildVersion() ) );
+    wxFileName fileName = GetBoard()->GetFileName();
+    wxString fileinfo;
 
     if( fileName.IsOk() && fileName.FileExists() )
     {
-        title << fileName.GetFullPath();
-
-        if( !fileName.IsFileWritable() )
-            title << _( " [Read Only]" );
+        fileinfo = fileName.IsFileWritable()
+            ? wxString( wxEmptyString )
+            : _( " [Read Only]" );
     }
     else
     {
-        title << _( " [new file]" ) << wxT(" ") << fileName.GetFullPath();
+        fileinfo = _( " [new file]" );
     }
+
+    wxString title;
+    title.Printf( L"Pcbnew \u2014 %s%s",
+            fileName.GetFullPath(),
+            fileinfo );
 
     SetTitle( title );
 }

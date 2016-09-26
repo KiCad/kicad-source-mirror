@@ -490,58 +490,62 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 }
 
 
-
 void GERBVIEW_FRAME::UpdateTitleAndInfo()
 {
     GERBER_FILE_IMAGE* gerber = GetGbrImage( getActiveLayer() );
-    wxString text;
 
     // Display the gerber filename
     if( gerber == NULL )
     {
-        text.Printf( wxT( "GerbView %s" ), GetChars( GetBuildVersion() ) );
-        SetTitle( text );
-        SetStatusText( wxEmptyString, 0 );
-        text.Printf( _( "Drawing layer %d not in use" ), getActiveLayer() + 1 );
-        m_TextInfo->SetValue( text );
+        SetTitle( "GerbView" );
 
-        if( EnsureTextCtrlWidth( m_TextInfo, &text ) )  // Resized
+        SetStatusText( wxEmptyString, 0 );
+
+        wxString info;
+        info.Printf( _( "Drawing layer %d not in use" ), getActiveLayer() + 1 );
+        m_TextInfo->SetValue( info );
+
+        if( EnsureTextCtrlWidth( m_TextInfo, &info ) )  // Resized
            m_auimgr.Update();
 
         ClearMsgPanel();
         return;
     }
+    else
+    {
+        wxString title;
+        title.Printf( L"GerbView \u2014 %s%s",
+                gerber->m_FileName,
+                gerber->m_IsX2_file
+                    ? " " + _( "(with X2 attributes)" )
+                    : wxString( wxEmptyString ) );
+        SetTitle( title );
 
-    text = _( "File:" );
-    text << wxT( " " ) << gerber->m_FileName;
+        gerber->DisplayImageInfo( this );
 
-    if( gerber->m_IsX2_file )
-        text << wxT( " " ) << _( "(with X2 Attributes)" );
+        // Display Image Name and Layer Name (from the current gerber data):
+        wxString status;
+        status.Printf( _( "Image name: '%s'  Layer name: '%s'" ),
+                GetChars( gerber->m_ImageName ),
+                GetChars( gerber->GetLayerParams().m_LayerName ) );
+        SetStatusText( status, 0 );
 
-    SetTitle( text );
+        // Display data format like fmt in X3.4Y3.4 no LZ or fmt mm X2.3 Y3.5 no TZ in main toolbar
+        wxString info;
+        info.Printf( wxT( "fmt: %s X%d.%d Y%d.%d no %cZ" ),
+                gerber->m_GerbMetric ? wxT( "mm" ) : wxT( "in" ),
+                gerber->m_FmtLen.x - gerber->m_FmtScale.x, gerber->m_FmtScale.x,
+                gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y,
+                gerber->m_NoTrailingZeros ? 'T' : 'L' );
 
-    gerber->DisplayImageInfo( this );
+        if( gerber->m_IsX2_file )
+            info << wxT(" ") << _( "X2 attr" );
 
-    // Display Image Name and Layer Name (from the current gerber data):
-    text.Printf( _( "Image name: '%s'  Layer name: '%s'" ),
-                 GetChars( gerber->m_ImageName ),
-                 GetChars( gerber->GetLayerParams().m_LayerName ) );
-    SetStatusText( text, 0 );
+        m_TextInfo->SetValue( info );
 
-    // Display data format like fmt in X3.4Y3.4 no LZ or fmt mm X2.3 Y3.5 no TZ in main toolbar
-    text.Printf( wxT( "fmt: %s X%d.%d Y%d.%d no %cZ" ),
-                 gerber->m_GerbMetric ? wxT( "mm" ) : wxT( "in" ),
-                 gerber->m_FmtLen.x - gerber->m_FmtScale.x, gerber->m_FmtScale.x,
-                 gerber->m_FmtLen.y - gerber->m_FmtScale.y, gerber->m_FmtScale.y,
-                 gerber->m_NoTrailingZeros ? 'T' : 'L' );
-
-    if( gerber->m_IsX2_file )
-        text << wxT(" ") << _( "X2 attr" );
-
-    m_TextInfo->SetValue( text );
-
-    if( EnsureTextCtrlWidth( m_TextInfo, &text ) )  // Resized
-       m_auimgr.Update();
+        if( EnsureTextCtrlWidth( m_TextInfo, &info ) )  // Resized
+            m_auimgr.Update();
+    }
 }
 
 

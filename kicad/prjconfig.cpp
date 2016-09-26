@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -328,7 +328,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     Prj().ConfigLoad( PgmTop().SysSearch(), GeneralGroupName, s_KicadManagerParams );
 
-    title = wxT( "KiCad " ) + GetBuildVersion() +  wxT( ' ' ) + prj_filename;
+    title = L"KiCad \u2014 " + prj_filename;
 
     if( !wxFileName( prj_filename ).IsDirWritable() )
         title += _( " [Read Only]" );

@@ -231,9 +231,6 @@ bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
         return false;
 
     wxString filename = dlg.GetPath();
-    wxString title    = wxT( "Eeschema " ) + GetBuildVersion() + wxT( ' ' ) + filename;
-
-    SetTitle( title );
 
     wxArrayString choices;
     choices.Add( _( "Keep existing footprint field visibility" ) );

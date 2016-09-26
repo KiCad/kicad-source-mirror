@@ -755,45 +755,41 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
-    wxString title   = _( "Footprint Editor " );
-
     wxString nickname = GetCurrentLib();
+    wxString nickname_display = _( "no active library" );
+    bool writable = true;
 
-    if( !nickname )
-    {
-    L_none:
-        title += _( "(no active library)" );
-    }
-    else
+    if( !!nickname )
     {
         try
         {
-            bool writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname );
+            writable = Prj().PcbFootprintLibs()->IsFootprintLibWritable( nickname );
 
-            // no exception was thrown, this means libPath is valid, but it may be read only.
-            title = _( "Footprint Editor (active library: " ) + nickname + wxT( ")" );
-
-            if( !writable )
-                title += _( " [Read Only]" );
+            nickname_display = nickname;
         }
         catch( const IO_ERROR& ioe )
         {
             // user may be bewildered as to why after selecting a library it is not showing up
             // in the title, we could show an error message, but that should have been done at time
             // of libary selection UI.
-            goto L_none;
-        }
-
-        // Now, add the full path, for info
-        if( nickname.size() )
-        {
-            FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
-            const FP_LIB_TABLE::ROW* row = libtable->FindRow( nickname );
-
-            if( row )
-                title << " (" << row->GetFullURI( true ) << ")";
         }
     }
+
+    wxString path_display;
+    if( nickname.size() )
+    {
+        FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
+        const FP_LIB_TABLE::ROW* row = libtable->FindRow( nickname );
+
+        if( row )
+            path_display = L" \u2014 " + row->GetFullURI( true );
+    }
+
+    wxString title;
+    title.Printf( _( "Footprint Editor" ) + L" \u2014 %s%s%s",
+            nickname_display,
+            writable ? wxString( wxEmptyString ) : _( " [Read Only]" ),
+            path_display );
 
     SetTitle( title );
 }
