@@ -544,7 +544,8 @@ void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
         m_DCodeSelector->SetDCodeSelection( selected );
         // Be sure the selection can be made. If no, set to
         // a correct value
-        gerber->m_Selected_Tool = m_DCodeSelector->GetSelectedDCodeId();
+        if( gerber )
+            gerber->m_Selected_Tool = m_DCodeSelector->GetSelectedDCodeId();
     }
 }
 

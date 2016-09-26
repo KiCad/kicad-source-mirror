@@ -395,6 +395,7 @@ public:
         m_penSize = 1;
         m_sheetNumber = 1;
         m_sheetCount = 1;
+        m_sheetLayer = 0;
         m_titleBlock = NULL;
         m_paperFormat = NULL;
         m_sheetFullName = NULL;
