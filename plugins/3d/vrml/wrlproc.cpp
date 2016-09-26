@@ -828,12 +828,9 @@ bool WRLPROC::ReadSFFloat( float& aSFFloat )
 
     std::istringstream istr;
     istr.str( tmp );
-
     istr >> aSFFloat;
-    tmp.clear();
-    istr >> tmp;
 
-    if( !tmp.empty() )
+    if( istr.fail() || !istr.eof() )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -901,12 +898,9 @@ bool WRLPROC::ReadSFInt( int& aSFInt32 )
 
     std::istringstream istr;
     istr.str( tmp );
-
     istr >> aSFInt32;
-    tmp.clear();
-    istr >> tmp;
 
-    if( !tmp.empty() )
+    if( istr.fail() || !istr.eof() )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -971,12 +965,9 @@ bool WRLPROC::ReadSFRotation( WRLROTATION& aSFRotation )
 
         std::istringstream istr;
         istr.str( tmp );
-
         istr >> trot[i];
-        tmp.clear();
-        istr >> tmp;
 
-        if( !tmp.empty() )
+        if( istr.fail() || !istr.eof() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1047,12 +1038,9 @@ bool WRLPROC::ReadSFVec2f( WRLVEC2F& aSFVec2f )
 
         std::istringstream istr;
         istr.str( tmp );
-
         istr >> tcol[i];
-        tmp.clear();
-        istr >> tmp;
 
-        if( !tmp.empty() )
+        if( istr.fail() || !istr.eof() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
@@ -1129,12 +1117,9 @@ bool WRLPROC::ReadSFVec3f( WRLVEC3F& aSFVec3f )
 
         std::istringstream istr;
         istr.str( tmp );
-
         istr >> tcol[i];
-        tmp.clear();
-        istr >> tmp;
 
-        if( !tmp.empty() )
+        if( istr.fail() || !istr.eof() )
         {
             std::ostringstream ostr;
             ostr << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << "\n";
