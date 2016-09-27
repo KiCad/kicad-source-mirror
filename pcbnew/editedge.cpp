@@ -164,7 +164,7 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( PCB_LAYER_ID aLayer )
     ITEM_PICKER         picker( NULL, UR_DELETED );
     BOARD_ITEM*         PtNext;
 
-    for( BOARD_ITEM* item = GetBoard()->m_Drawings;  item;  item = PtNext )
+    for( auto item : GetBoard()->Drawings() )
     {
         PtNext = item->Next();
 

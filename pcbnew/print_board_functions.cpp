@@ -194,7 +194,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
-    for( BOARD_ITEM* item = Pcb->m_Drawings; item; item = item->Next() )
+    for( auto item : Pcb->Drawings() )
     {
         switch( item->Type() )
         {

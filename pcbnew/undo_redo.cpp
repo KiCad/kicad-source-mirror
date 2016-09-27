@@ -142,7 +142,7 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
             itemsList.push_back( item );
 
         // Append drawings
-        for( item = aPcb->m_Drawings; item != NULL; item = item->Next() )
+        for( auto item : aPcb->Drawings() )
             itemsList.push_back( item );
 
         // Append zones outlines

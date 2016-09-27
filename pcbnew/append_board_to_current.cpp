@@ -58,7 +58,7 @@ bool PCB_EDIT_FRAME::AppendBoardFile( const wxString& aFullFileName, int aCtl )
     // Other items are append to the item list, so keep trace to the
     // last existing item is enough
     MODULE* module = GetBoard()->m_Modules.GetLast();
-    BOARD_ITEM* drawing = GetBoard()->m_Drawings.GetLast();
+    BOARD_ITEM* drawing = GetBoard()->DrawingsList().GetLast();
     int zonescount = GetBoard()->GetAreaCount();
 
     // Keep also the count of copper layers, because we can happen boards
@@ -152,7 +152,7 @@ bool PCB_EDIT_FRAME::AppendBoardFile( const wxString& aFullFileName, int aCtl )
     if( drawing )
         drawing = drawing->Next();
     else
-        drawing = GetBoard()->m_Drawings;
+        drawing = GetBoard()->DrawingsList();
 
     for( ; drawing; drawing = drawing->Next() )
     {

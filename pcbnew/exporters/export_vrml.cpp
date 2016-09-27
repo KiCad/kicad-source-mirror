@@ -771,7 +771,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
 static void export_vrml_drawings( MODEL_VRML& aModel, BOARD* pcb )
 {
     // draw graphic items
-    for( BOARD_ITEM* drawing = pcb->m_Drawings; drawing != 0; drawing = drawing->Next() )
+    for( auto drawing : pcb->Drawings() )
     {
         PCB_LAYER_ID layer = drawing->GetLayer();
 

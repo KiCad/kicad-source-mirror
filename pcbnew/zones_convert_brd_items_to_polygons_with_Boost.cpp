@@ -269,7 +269,7 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
     }
 
     // Add graphic items (copper texts) and board edges
-    for( BOARD_ITEM* item = aPcb->m_Drawings; item; item = item->Next() )
+    for( auto item : aPcb->Drawings() )
     {
         if( item->GetLayer() != GetLayer() && item->GetLayer() != Edge_Cuts )
             continue;

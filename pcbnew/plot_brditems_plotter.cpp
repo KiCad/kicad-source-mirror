@@ -266,7 +266,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
 // plot items like text and graphics, but not tracks and module
 void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
 {
-    for( BOARD_ITEM* item = m_board->m_Drawings; item; item = item->Next() )
+    for( auto item : m_board->Drawings() )
     {
         switch( item->Type() )
         {

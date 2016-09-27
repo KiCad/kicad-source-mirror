@@ -251,7 +251,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
     }
 
     // Place board outlines and texts on copper layers:
-    for( BOARD_ITEM* item = aPcb->m_Drawings; item; item = item->Next() )
+    for( auto item : aPcb->Drawings() )
     {
         switch( item->Type() )
         {

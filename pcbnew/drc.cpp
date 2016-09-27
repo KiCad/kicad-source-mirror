@@ -677,14 +677,13 @@ void DRC::testKeepoutAreas()
     }
 }
 
-
 void DRC::testTexts()
 {
     std::vector<wxPoint> textShape;      // a buffer to store the text shape (set of segments)
     std::vector<D_PAD*> padList = m_pcb->GetPads();
 
     // Test text areas for vias, tracks and pads inside text areas
-    for( BOARD_ITEM* item = m_pcb->m_Drawings; item; item = item->Next() )
+    for( auto item : m_pcb->Drawings() )
     {
         // Drc test only items on copper layers
         if( ! IsCopperLayer( item->GetLayer() ) )

@@ -501,9 +501,7 @@ int genPlacementRoutingMatrix( BOARD* aBrd, EDA_MSG_PANEL* messagePanel )
     TmpSegm.SetNetCode( -1 );
     TmpSegm.SetWidth( RoutingMatrix.m_GridRouting / 2 );
 
-    EDA_ITEM* PtStruct = aBrd->m_Drawings;
-
-    for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( auto PtStruct : aBrd->Drawings() )
     {
         DRAWSEGMENT* DrawSegm;
 

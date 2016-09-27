@@ -357,7 +357,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     if( !blockOpts.includeBoardOutlineLayer )
         layerMask.set( Edge_Cuts, false );
 
-    for( BOARD_ITEM* PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( auto PtStruct : m_Pcb->Drawings() )
     {
         if( !m_Pcb->IsLayerVisible( PtStruct->GetLayer() ) && ! blockOpts.includeItemsOnInvisibleLayers)
             continue;

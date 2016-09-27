@@ -76,7 +76,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
     aIDFBoard.GetUserOffset( offX, offY );
 
     // Retrieve segments and arcs from the board
-    for( BOARD_ITEM* item = aPcb->m_Drawings; item; item = item->Next() )
+    for( auto item : aPcb->Drawings() )
     {
         if( item->Type() != PCB_LINE_T || item->GetLayer() != Edge_Cuts )
             continue;

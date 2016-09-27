@@ -176,7 +176,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName,
     BRDITEMS_PLOTTER itemplotter( plotter, m_pcb, plot_opts );
     itemplotter.SetLayerSet( Edge_Cuts );
 
-    for( EDA_ITEM* PtStruct = m_pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( auto PtStruct : m_pcb->Drawings() )
     {
         switch( PtStruct->Type() )
         {

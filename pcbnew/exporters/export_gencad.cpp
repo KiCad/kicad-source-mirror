@@ -1029,8 +1029,7 @@ static void CreateBoardSection( FILE* aFile, BOARD* aPcb )
     fputs( "$BOARD\n", aFile );
 
     // Extract the board edges
-    for( EDA_ITEM* drawing = aPcb->m_Drawings; drawing != 0;
-        drawing = drawing->Next() )
+    for( auto drawing : aPcb->Drawings() )
     {
         if( drawing->Type() == PCB_LINE_T )
         {

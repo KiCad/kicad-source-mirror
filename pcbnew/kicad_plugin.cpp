@@ -542,7 +542,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     m_out->Print( aNestLevel+1, "(thickness %s)\n",
                   FMTIU( dsnSettings.GetBoardThickness() ).c_str() );
 
-    m_out->Print( aNestLevel+1, "(drawings %d)\n", aBoard->m_Drawings.GetCount() );
+    m_out->Print( aNestLevel+1, "(drawings %d)\n", aBoard->Drawings().Size() );
     m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
     m_out->Print( aNestLevel+1, "(zones %d)\n", aBoard->GetNumSegmZone() );
     m_out->Print( aNestLevel+1, "(modules %d)\n", aBoard->m_Modules.GetCount() );
@@ -756,10 +756,10 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     }
 
     // Save the graphical items on the board (not owned by a module)
-    for( BOARD_ITEM* item = aBoard->m_Drawings;  item;  item = item->Next() )
+    for( auto item : aBoard->Drawings() )
         Format( item, aNestLevel );
 
-    if( aBoard->m_Drawings.GetCount() )
+    if( aBoard->Drawings().Size() )
         m_out->Print( 0, "\n" );
 
     // Do not save MARKER_PCBs, they can be regenerated easily.

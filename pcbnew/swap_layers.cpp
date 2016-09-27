@@ -412,7 +412,7 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
     }
 
     // Change other segments.
-    for( EDA_ITEM* item = GetBoard()->m_Drawings; item; item = item->Next() )
+    for( auto item : GetBoard()->Drawings() )
     {
         if( item->Type() == PCB_LINE_T )
         {
