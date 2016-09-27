@@ -644,6 +644,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                         modSeg->SetWidth( seg->GetWidth() );
                         modSeg->SetStart( seg->GetStart() );
                         modSeg->SetEnd( seg->GetEnd() );
+                        modSeg->SetAngle( seg->GetAngle() );
                         modSeg->SetShape( seg->GetShape() );
                         modSeg->SetType( seg->GetType() );
                         modSeg->SetBezControl1( seg->GetBezControl1() );
