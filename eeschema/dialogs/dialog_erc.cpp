@@ -563,10 +563,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             return;
 
         if( WriteDiagnosticERC( dlg.GetPath() ) )
-        {
-            Close( true );
             ExecuteFile( this, Pgm().GetEditorName(), QuoteFullPath( fn ) );
-        }
     }
 }
 
