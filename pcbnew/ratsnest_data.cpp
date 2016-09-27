@@ -1077,7 +1077,7 @@ bool RN_DATA::Add( const BOARD_ITEM* aItem )
             if( net <= NETINFO_LIST::ORPHANED )
                 continue;
 
-            m_nets[net].AddItem( pad );
+            Add( pad );
         }
 
         return true;
@@ -1149,7 +1149,7 @@ bool RN_DATA::Remove( const BOARD_ITEM* aItem )
             if( net <= NETINFO_LIST::ORPHANED )
                 continue;
 
-            m_nets[net].RemoveItem( pad );
+            Remove( pad );
         }
 
         return true;
