@@ -605,28 +605,60 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                 {
                     // Modules use different types for the same things,
                     // so we need to convert imported items to appropriate classes.
-                    BOARD_ITEM* converted = NULL;
+                    BOARD_ITEM* converted;
 
                     switch( item->Type() )
                     {
                     case PCB_TEXT_T:
-                        converted = new TEXTE_MODULE( (MODULE*) parent );
-
-                        // Copy coordinates, layer, etc.
-                        *static_cast<BOARD_ITEM*>( converted ) = *static_cast<BOARD_ITEM*>( item );
+                    {
+                        TEXTE_PCB* text = static_cast<TEXTE_PCB*>( item );
+                        TEXTE_MODULE* textMod = new TEXTE_MODULE( (MODULE*) parent );
+                        // Assignment operator also copies the item PCB_TEXT_T type,
+                        // so it cannot be added to a module which handles PCB_MODULE_TEXT_T
+                        textMod->SetPosition( text->GetPosition() );
+                        textMod->SetText( text->GetText() );
+                        textMod->SetSize( text->GetSize() );
+                        textMod->SetThickness( text->GetThickness() );
+                        textMod->SetOrientation( text->GetOrientation() );
+                        textMod->SetTextPosition( text->GetTextPosition() );
+                        textMod->SetSize( text->GetSize() );
+                        textMod->SetMirrored( text->IsMirrored() );
+                        textMod->SetAttributes( text->GetAttributes() );
+                        textMod->SetItalic( text->IsItalic() );
+                        textMod->SetBold( text->IsBold() );
+                        textMod->SetHorizJustify( text->GetHorizJustify() );
+                        textMod->SetVertJustify( text->GetVertJustify() );
+                        textMod->SetMultilineAllowed( text->IsMultilineAllowed() );
+                        converted = textMod;
                         break;
+                    }
 
                     case PCB_LINE_T:
-                        converted = new EDGE_MODULE( (MODULE*) parent );
-                        // Copy coordinates, layer, etc.
-                        *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
+                    {
+                        DRAWSEGMENT* seg = static_cast<DRAWSEGMENT*>( item );
+                        EDGE_MODULE* modSeg = new EDGE_MODULE( (MODULE*) parent );
+
+                        // Assignment operator also copies the item PCB_LINE_T type,
+                        // so it cannot be added to a module which handles PCB_MODULE_EDGE_T
+                        modSeg->SetWidth( seg->GetWidth() );
+                        modSeg->SetStart( seg->GetStart() );
+                        modSeg->SetEnd( seg->GetEnd() );
+                        modSeg->SetShape( seg->GetShape() );
+                        modSeg->SetType( seg->GetType() );
+                        modSeg->SetBezControl1( seg->GetBezControl1() );
+                        modSeg->SetBezControl2( seg->GetBezControl2() );
+                        modSeg->SetBezierPoints( seg->GetBezierPoints() );
+                        modSeg->SetPolyPoints( seg->GetPolyPoints() );
+                        converted = modSeg;
                         break;
+                    }
 
                     default:
                         assert( false );
                         break;
                     }
 
+                    converted->SetLayer( item->GetLayer() );
                     delete item;
                     item = converted;
                 }
