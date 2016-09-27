@@ -6,7 +6,7 @@ add_subdirectory(router)
 add_dependencies( pnsrouter pcbcommon )
 
 if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
-    file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/scripting )
+    file( MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/swig )
 
     # Infrequently needed headers go at end of search paths, append to INC_AFTER
     set( INC_AFTER ${INC_AFTER} swig )
