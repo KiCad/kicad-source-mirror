@@ -31,8 +31,9 @@
 
 #include "base.h"
 
-struct KICADMODEL
+class KICADMODEL
 {
+public:
     KICADMODEL();
     virtual ~KICADMODEL();
 
