@@ -66,7 +66,7 @@ public:
         mpInfoLayer::Move( aDelta );
     }
 
-    void UpdateReference();
+    void UpdateReference() override;
 
     const wxRealPoint& GetCoords() const
     {

@@ -151,7 +151,7 @@ public:
     FREQUENCY_LOG_SCALE( wxString name, int flags ) :
         mpScaleXLog( name, flags ) {};
 
-    void formatLabels()
+    void formatLabels() override
     {
         const wxString unit = wxT( "Hz" );
         wxString suffix;
@@ -176,7 +176,7 @@ public:
     FREQUENCY_LIN_SCALE( wxString name, int flags ) :
         mpScaleX( name, flags, false , 0 ) {};
 
-    void formatLabels()
+    void formatLabels() override
     {
         formatSILabels( this, wxT( "Hz" ), 3 );
     }
@@ -189,7 +189,7 @@ public:
     TIME_SCALE( wxString name, int flags ) :
         mpScaleX( name, flags, false, 0 ) {};
 
-    void formatLabels()
+    void formatLabels() override
     {
         formatSILabels( this, wxT( "s" ), 3 );
     }
@@ -202,7 +202,7 @@ public:
     VOLTAGE_SCALE_X( wxString name, int flags ) :
         mpScaleX( name, flags, false, 0 ) {};
 
-    void formatLabels()
+    void formatLabels() override
     {
         formatSILabels( this, wxT( "V" ), 3 );
     }
@@ -215,7 +215,7 @@ public:
     GAIN_SCALE( wxString name, int flags ) :
         mpScaleY( name, flags, false ) {};
 
-    void formatLabels()
+    void formatLabels() override
     {
         formatSILabels( this, wxT( "dB" ), 3 );
     }
@@ -229,7 +229,7 @@ public:
     PHASE_SCALE( wxString name, int flags ) :
         mpScaleY( name, flags, false ) {};
 
-    void formatLabels()
+    void formatLabels() override
     {
         formatSILabels( this, wxT( "\u00B0" ), 3 );     // degree sign
     }
@@ -242,7 +242,7 @@ public:
     VOLTAGE_SCALE_Y( wxString name, int flags ) :
         mpScaleY( name, flags, false ) {};
 
-    void formatLabels()
+    void formatLabels() override
     {
         formatSILabels( this, wxT( "V" ), 3 );
     }
@@ -255,7 +255,7 @@ public:
     CURRENT_SCALE( wxString name, int flags ) :
         mpScaleY( name, flags, false ) {};
 
-    void formatLabels()
+    void formatLabels() override
     {
         formatSILabels( this, wxT( "A" ), 3 );
     }

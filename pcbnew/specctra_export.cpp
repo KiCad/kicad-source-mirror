@@ -550,27 +550,27 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
             double  dy  = scale( aPad->GetSize().y ) / 2.0;
             double  dr  = dx - dy;
             double  radius;
-            POINT   start;
-            POINT   stop;
+            POINT   pstart;
+            POINT   pstop;
 
             if( dr >= 0 )       // oval is horizontal
             {
                 radius = dy;
 
-                start   = POINT( -dr, 0.0 );
-                stop    = POINT(  dr, 0.0 );
+                pstart   = POINT( -dr, 0.0 );
+                pstop    = POINT(  dr, 0.0 );
             }
             else        // oval is vertical
             {
                 radius  = dx;
                 dr      = -dr;
 
-                start   = POINT( 0.0, -dr );
-                stop    = POINT( 0.0, dr );
+                pstart   = POINT( 0.0, -dr );
+                pstop    = POINT( 0.0, dr );
             }
 
-            start   += dsnOffset;
-            stop    += dsnOffset;
+            pstart   += dsnOffset;
+            pstop    += dsnOffset;
 
             for( int ndx=0; ndx<reportedLayers; ++ndx )
             {
@@ -580,7 +580,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
                 shape = new SHAPE( padstack );
 
                 padstack->Append( shape );
-                path = makePath( start, stop, layerName[ndx] );
+                path = makePath( pstart, pstop, layerName[ndx] );
                 shape->SetShape( path );
                 path->aperture_width = 2.0 * radius;
             }
@@ -982,7 +982,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                 // an arc with a series of short lines and put those
                 // line segments into the !same! PATH.
                 {
-                    wxPoint     start   = graphic->GetArcStart();
+                    wxPoint     pstart   = graphic->GetArcStart();
                     wxPoint     center  = graphic->GetCenter();
                     double      angle   = -graphic->GetAngle();
                     int         steps   = STEPS * fabs(angle) /3600.0;
@@ -996,9 +996,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                     {
                         double rotation = ( angle * step ) / steps;
 
-                        pt = start;
+                        pt = pstart;
 
-                        RotatePoint( &pt.x, &pt.y, center.x, center.y, rotation );
+                        RotatePoint( &pt, center, rotation );
 
                         if( pt.x < xmin.x )
                         {
@@ -1098,21 +1098,21 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                     // an arc with a series of short lines and put those
                     // line segments into the !same! PATH.
                     {
-                        wxPoint start  = graphic->GetArcStart();
-                        wxPoint end    = graphic->GetArcEnd();
-                        wxPoint center = graphic->GetCenter();
+                        wxPoint pstart  = graphic->GetArcStart();
+                        wxPoint pend    = graphic->GetArcEnd();
+                        wxPoint pcenter = graphic->GetCenter();
                         double  angle  = -graphic->GetAngle();
                         int     steps  = STEPS * fabs(angle) /3600.0;
 
                         if( steps == 0 )
                             steps = 1;
 
-                        if( !close_enough( prevPt, start, prox ) )
+                        if( !close_enough( prevPt, pstart, prox ) )
                         {
                             wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), prox ) );
 
                             angle = -angle;
-                            std::swap( start, end );
+                            std::swap( pstart, pend );
                         }
 
                         wxPoint nextPt;
@@ -1120,10 +1120,8 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                         for( int step = 1; step<=steps; ++step )
                         {
                             double rotation = ( angle * step ) / steps;
-
-                            nextPt = start;
-
-                            RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
+                            nextPt = pstart;
+                            RotatePoint( &nextPt, pcenter, rotation );
 
                             path->AppendPoint( mapPt( nextPt ) );
                         }
@@ -1233,21 +1231,21 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                         // an arc with a series of short lines and put those
                         // line segments into the !same! PATH.
                         {
-                            wxPoint     start   = graphic->GetArcStart();
-                            wxPoint     end     = graphic->GetArcEnd();
-                            wxPoint     center  = graphic->GetCenter();
+                            wxPoint     pstart   = graphic->GetArcStart();
+                            wxPoint     pend     = graphic->GetArcEnd();
+                            wxPoint     pcenter  = graphic->GetCenter();
                             double      angle   = -graphic->GetAngle();
                             int         steps   = STEPS * fabs(angle) /3600.0;
 
                             if( steps == 0 )
                                 steps = 1;
 
-                            if( !close_enough( prevPt, start, prox ) )
+                            if( !close_enough( prevPt, pstart, prox ) )
                             {
                                 wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), prox ) );
 
                                 angle = -angle;
-                                std::swap( start, end );
+                                std::swap( pstart, pend );
                             }
 
                             wxPoint nextPt;
@@ -1256,9 +1254,8 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                             {
                                 double rotation = ( angle * step ) / steps;
 
-                                nextPt = start;
-
-                                RotatePoint( &nextPt.x, &nextPt.y, center.x, center.y, rotation );
+                                nextPt = pstart;
+                                RotatePoint( &nextPt, pcenter, rotation );
 
                                 poly_ko->AppendPoint( mapPt( nextPt ) );
                             }
