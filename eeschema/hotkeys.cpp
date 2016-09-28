@@ -444,8 +444,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ZOOM_REDRAW:
     case HK_ZOOM_CENTER:
     case HK_ZOOM_AUTO:
-    case HK_LEAVE_SHEET:
-    case HK_DELETE_NODE:
+    case HK_ZOOM_SELECTION:
     case HK_MOVEBLOCK_TO_DRAGBLOCK:          // Switch to drag mode, when block moving
     case HK_SAVE_BLOCK:                      // Copy block to paste buffer.
         cmd.SetId( hotKey->m_IdMenuEvent );
@@ -472,10 +471,12 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         break;
 
-    case HK_UNDO:
-    case HK_REDO:
+    case HK_UNDO:             // Hot keys that map to command IDs that cannot be called
+    case HK_REDO:             // while busy performing another command.
     case HK_FIND_ITEM:
     case HK_FIND_REPLACE:
+    case HK_DELETE_NODE:
+    case HK_LEAVE_SHEET:
         if( notBusy )
         {
             cmd.SetId( hotKey->m_IdMenuEvent );
