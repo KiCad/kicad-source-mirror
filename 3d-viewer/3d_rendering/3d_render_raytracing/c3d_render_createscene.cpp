@@ -244,8 +244,8 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
     m_lights.Clear();
 
     // This will work as the front camera light.
-    const float light_camera_intensity = 0.15f;
-    const float light_directional_intensity_top = 0.20f;
+    const float light_camera_intensity = 0.17f;
+    const float light_directional_intensity_top = 0.15f;
     const float light_directional_intensity = ( 1.0f - ( light_camera_intensity +
                                                          light_directional_intensity_top ) ) / 4.0f;
 

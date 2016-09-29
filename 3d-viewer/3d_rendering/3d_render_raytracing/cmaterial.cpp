@@ -71,7 +71,7 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
 
 // This may be a good value if based on nr of lights
 // that contribute to the illumination of that point
-#define AMBIENT_FACTOR  0.160f
+#define AMBIENT_FACTOR  (1.0f/6.0f)
 #define SPECULAR_FACTOR 1.000f
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model

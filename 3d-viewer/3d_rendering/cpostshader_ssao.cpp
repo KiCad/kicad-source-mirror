@@ -44,13 +44,14 @@ float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos,
                               const SFVEC3F &ddiff,
                               const SFVEC3F &cnorm,
                               int c1,
-                              int c2 ) const
+                              int c2,
+                              float aAttShadowFactor ) const
 {
     float return_value = -1.0f;
 
     const float rd = glm::length( ddiff );
 
-    const float shadow_factor_at_shade_pos = GetShadowFactorAt( aShaderPos ) * 1.00f;
+    const float shadow_factor_at_shade_pos = aAttShadowFactor * 1.00f;
 
     float shadow_factor = shadow_factor_at_shade_pos;
 
@@ -80,17 +81,19 @@ float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos,
     //shadow_factor = 1.0f / ( shadow_factor * 15.0f + 3.0f ) - 0.05f;            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIxLjAvKHgqMTUuMCszLjApLTAuMDUiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC41OTk1NTEyNjc1Njk4MjUiLCIxLjI3Mzk0NjE3NzQxNjI5ODgiLCItMC4xMTQzMjE1NjkyMTMwMTAwOCIsIjEuMDM4NTk5OTM1MzkzODM1MyJdfV0-
     //shadow_factor = 1.0f / ( shadow_factor * 10.0f + 2.0f ) - 0.08f;            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIxLjAvKHgqMTAuMCsyLjApLTAuMDgiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC41OTk1NTEyNjc1Njk4MjUiLCIxLjI3Mzk0NjE3NzQxNjI5ODgiLCItMC4xMTQzMjE1NjkyMTMwMTAwOCIsIjEuMDM4NTk5OTM1MzkzODM1MyJdfV0-
     //shadow_factor = (1.0f / ( shadow_factor * 3.0f + 1.5f ))- 0.22f;            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIxLjAvKHgqMy4wKzEuNSktMC4yMiIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0wLjU5OTU1MTI2NzU2OTgyNSIsIjEuMjczOTQ2MTc3NDE2Mjk4OCIsIi0wLjExNDMyMTU2OTIxMzAxMDA4IiwiMS4wMzg1OTk5MzUzOTM4MzUzIl19XQ--
-    shadow_factor = (1.0f / ( shadow_factor * 1.7f + 1.9f ))- 0.28f;            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoMS4wLyh4KjEuNysxLjkpKS0wLjI4IiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuNTk5NTUxMjY3NTY5ODI1IiwiMS4yNzM5NDYxNzc0MTYyOTg4IiwiLTAuMTE0MzIxNTY5MjEzMDEwMDgiLCIxLjAzODU5OTkzNTM5MzgzNTMiXX1d
-    //shadow_factor = 0.25f - shadow_factor * 0.25f;
-    //shadow_factor = (0.7f - shadow_factor * shadow_factor * 1.0f ) / 9.0f;
-
+    //shadow_factor = (1.0f / ( shadow_factor * 1.7f + 1.9f ))- 0.28f;            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoMS4wLyh4KjEuNysxLjkpKS0wLjI4IiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuNTk5NTUxMjY3NTY5ODI1IiwiMS4yNzM5NDYxNzc0MTYyOTg4IiwiLTAuMTE0MzIxNTY5MjEzMDEwMDgiLCIxLjAzODU5OTkzNTM5MzgzNTMiXX1d
+    //shadow_factor = (shadow_factor - 0.1);
+    //shadow_factor = (1.0f / ( shadow_factor * shadow_factor * 1.7f + 1.1f ))- 0.58f; // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoMS4wLygoeC0wLjEpKih4LTAuMSkqMS43KzEuMSkpLTAuNTgiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC41OTk1NTEyNjc1Njk4MjUiLCIxLjI3Mzk0NjE3NzQxNjI5ODgiLCItMC4xMTQzMjE1NjkyMTMwMTAwOCIsIjEuMDM4NTk5OTM1MzkzODM1MyJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
+    //shadow_factor = -shadow_factor * shadow_factor * 0.2f + 0.15f; //http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoLXgqMC4yKzAuMTUpIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuNTk5NTUxMjY3NTY5ODI1IiwiMS4yNzM5NDYxNzc0MTYyOTg4IiwiLTAuMTE0MzIxNTY5MjEzMDEwMDgiLCIxLjAzODU5OTkzNTM5MzgzNTMiXSwic2l6ZSI6WzY0OSwzOTldfV0-
+    shadow_factor = -shadow_factor * shadow_factor * 0.3f + 0.25f; // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoLXgqMC4zKzAuMjUpIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuNTk5NTUxMjY3NTY5ODI1IiwiMS4yNzM5NDYxNzc0MTYyOTg4IiwiLTAuMTE0MzIxNTY5MjEzMDEwMDgiLCIxLjAzODU5OTkzNTM5MzgzNTMiXSwic2l6ZSI6WzY0OSwzOTldfV0-
+    shadow_factor = glm::max( shadow_factor, -0.06f ); // add some bias
 
     // Calculate the edges ambient oclusion
     // /////////////////////////////////////////////////////////////////////////
 
     //if( (rd > FLT_EPSILON) && (rd < 0.2f) ) // This limit to the zero of the function (see below)
     //if( rd > FLT_EPSILON )
-    if( (rd > FLT_EPSILON) && (rd < 5.0f) )
+    if( (rd > FLT_EPSILON) && (rd < 1.0f) )
     {
         const SFVEC3F vv = glm::normalize( ddiff );
 
@@ -111,9 +114,12 @@ float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos,
 
         // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIwLjgtKHgvKHgvMiswLjE1KSkiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjAsImVxIjoiLXgqMC4wNSswLjI1IiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuMjE1NzI4MDU1ODgzMjU4NjYiLCIyLjEyNjE0Mzc1MDM0OTM4ODciLCItMC4wOTM1NDA0NzY0MjczNjA0MiIsIjEuMzQ3NjExNDA0MzMxMTkyNCJdfV0-
         // zero: 0.2
-        attDistFactor = 0.8f - (rd / (rd / 2.0f  + 0.15f));
+        // attDistFactor = 0.8f - (rd / (rd / 2.0f  + 0.15f));
+        // attDistFactor = glm::max( attDistFactor, -rd * 0.05f + 0.25f );
 
-        attDistFactor = glm::max( attDistFactor, -rd * 0.05f + 0.25f );
+        // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIwLjgtKHgvKHgvMC45MCswLjEzKSkiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjAsImVxIjoiKC14KjAuMiswLjE1KSIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0wLjIxNTcyODA1NTg4MzI1ODY2IiwiMi4xMjYxNDM3NTAzNDkzODg3IiwiLTAuMDkzNTQwNDc2NDI3MzYwNDIiLCIxLjM0NzYxMTQwNDMzMTE5MjQiXSwic2l6ZSI6WzY0OSwzOTldfV0-
+        // zero: 1.0
+        attDistFactor = 0.8f - (rd / (rd / 0.90f  + 0.13f));
 
 
         // Original:
@@ -141,7 +147,7 @@ float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos,
     }
 
     // Test / Debug code
-    //return glm::clamp( return_value, 0.0f, 0.500f );
+    //return glm::clamp( return_value, 0.0f, 1.000f );
     //return 0.0f;
     return return_value;
 }
@@ -199,9 +205,11 @@ SFVEC3F CPOSTSHADER_SSAO::Shade( const SFVEC2I &aShaderPos ) const
         //cdepth = (1.0f / cdepth) * 2.0f;
 
         // read current normal,position and color.
-        const SFVEC3F n   = GetNormalAt( aShaderPos );
-        const SFVEC3F p   = GetPositionAt( aShaderPos );
+        const SFVEC3F n = GetNormalAt( aShaderPos );
+        const SFVEC3F p = GetPositionAt( aShaderPos );
         //const SFVEC3F col = GetColorAt( aShaderPos );
+
+        const float shadowFactor = GetShadowFactorAt( aShaderPos );
 
         // initialize variables:
         float ao = 0.0f;
@@ -231,14 +239,14 @@ SFVEC3F CPOSTSHADER_SSAO::Shade( const SFVEC2I &aShaderPos ) const
             const SFVEC3F ddiff7 = GetPositionAt( aShaderPos + SFVEC2I( npw,   0 ) ) - p;
             const SFVEC3F ddiff8 = GetPositionAt( aShaderPos + SFVEC2I(-npw,   0 ) ) - p;
 
-            ao+=  aoFF( aShaderPos, ddiff , n,  npw, nph );
-            ao+=  aoFF( aShaderPos, ddiff2, n,  npw,-nph );
-            ao+=  aoFF( aShaderPos, ddiff3, n, -npw, nph );
-            ao+=  aoFF( aShaderPos, ddiff4, n, -npw,-nph );
-            ao+=  aoFF( aShaderPos, ddiff5, n,    0, nph );
-            ao+=  aoFF( aShaderPos, ddiff6, n,    0,-nph );
-            ao+=  aoFF( aShaderPos, ddiff7, n,  npw,   0 );
-            ao+=  aoFF( aShaderPos, ddiff8, n, -npw,   0 );
+            ao+=  aoFF( aShaderPos, ddiff , n,  npw, nph, shadowFactor );
+            ao+=  aoFF( aShaderPos, ddiff2, n,  npw,-nph, shadowFactor );
+            ao+=  aoFF( aShaderPos, ddiff3, n, -npw, nph, shadowFactor );
+            ao+=  aoFF( aShaderPos, ddiff4, n, -npw,-nph, shadowFactor );
+            ao+=  aoFF( aShaderPos, ddiff5, n,    0, nph, shadowFactor );
+            ao+=  aoFF( aShaderPos, ddiff6, n,    0,-nph, shadowFactor );
+            ao+=  aoFF( aShaderPos, ddiff7, n,  npw,   0, shadowFactor );
+            ao+=  aoFF( aShaderPos, ddiff8, n, -npw,   0, shadowFactor );
 
             gi+=  giFF( aShaderPos, ddiff , n, npw,  nph) *
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I(  npw, nph ) ) );
