@@ -1948,6 +1948,8 @@ public:
 
     void DeleteAlias( const wxString& aAliasName );
 
+    void DeleteSymbol( const wxString& aAliasName );
+
     wxDateTime GetLibModificationTime();
 
     bool IsFile( const wxString& aFullPathAndFileName ) const;
@@ -3237,6 +3239,25 @@ void SCH_LEGACY_PLUGIN_CACHE::DeleteAlias( const wxString& aAliasName )
 }
 
 
+void SCH_LEGACY_PLUGIN_CACHE::DeleteSymbol( const wxString& aAliasName )
+{
+    LIB_ALIAS_MAP::iterator it = m_aliases.find( aAliasName );
+
+    if( it == m_aliases.end() )
+        THROW_IO_ERROR( wxString::Format( _( "library %s does not contain an alias %s" ),
+                                          m_libFileName.GetFullName(), aAliasName ) );
+
+    LIB_ALIAS*  alias = it->second;
+    LIB_PART*   part = alias->GetPart();
+
+    wxArrayString aliasNames = part->GetAliasNames();
+
+    // Deleting all of the aliases deletes the symbol from the library.
+    for( size_t i = 0;  i < aliasNames.Count(); i++ )
+        DeleteAlias( aliasNames[i] );
+}
+
+
 void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName )
 {
     if( !m_cache || !m_cache->IsFile( aLibraryFileName ) || m_cache->IsFileChanged() )
@@ -3322,4 +3343,15 @@ void SCH_LEGACY_PLUGIN::DeleteAlias( const wxString& aLibraryPath, const wxStrin
     cacheLib( aLibraryPath );
 
     m_cache->DeleteAlias( aAliasName );
+}
+
+
+void SCH_LEGACY_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                                      const PROPERTIES* aProperties )
+{
+    m_props = aProperties;
+
+    cacheLib( aLibraryPath );
+
+    m_cache->DeleteSymbol( aAliasName );
 }

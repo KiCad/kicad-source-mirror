@@ -99,6 +99,14 @@ void SCH_PLUGIN::DeleteAlias( const wxString& aLibraryPath, const wxString& aAli
 }
 
 
+void SCH_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                               const PROPERTIES* aProperties )
+{
+    // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
+    not_implemented( this, __FUNCTION__ );
+}
+
+
 void SCH_PLUGIN::SymbolLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.

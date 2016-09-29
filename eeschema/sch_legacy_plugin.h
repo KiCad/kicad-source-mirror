@@ -93,6 +93,9 @@ public:
     void DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
                       const PROPERTIES* aProperties = NULL ) override;
 
+    void DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                       const PROPERTIES* aProperties = NULL ) override;
+
     // Temporary for testing using PART_LIB instead of SCH_PLUGIN.
     void TransferCache( PART_LIB& aTarget ) override;
 

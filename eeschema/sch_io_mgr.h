@@ -352,6 +352,28 @@ public:
                               const PROPERTIES* aProperties = NULL );
 
     /**
+     * Function DeleteSymbol
+     * deletes the entire #LIB_PART associated with @a aAliasName from the library
+     * @a aLibraryPath.
+     *
+     * @param aLibraryPath is a locator for the "library", usually a directory, file,
+     *                     or URL containing several symbols.
+     *
+     * @param aAliasName is the name of a #LIB_ALIAS associated with it's root #LIB_PART
+     *                   object to delete from the specified library.
+     *
+     * @param aProperties is an associative array that can be used to tell the library
+     *                    delete function anything special, because it can take any number
+     *                    of additional named tuning arguments that the plugin is known to
+     *                    support.  The caller continues to own this object (plugin may not
+     *                    delete it), and plugins should expect it to be optionally NULL.
+     *
+     * @throw IO_ERROR if there is a problem finding the alias or the library or deleting it.
+     */
+    virtual void DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
+                               const PROPERTIES* aProperties = NULL );
+
+    /**
      * Function SymbolLibCreate
      * creates a new empty footprint library at @a aLibraryPath empty.  It is an
      * error to attempt to create an existing library or to attempt to create
