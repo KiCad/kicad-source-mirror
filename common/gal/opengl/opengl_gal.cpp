@@ -450,7 +450,7 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
 
 void OPENGL_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
 {
-    if( aPointList.empty() )
+    if( aPointList.size() < 2 )
         return;
 
     currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
@@ -478,6 +478,9 @@ void OPENGL_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
 
 void OPENGL_GAL::DrawPolyline( const VECTOR2D aPointList[], int aListSize )
 {
+    if( aListSize < 2 )
+        return;
+
     currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
     // Start from the second point
