@@ -452,8 +452,8 @@ bool TRACKS_CLEANER::remove_duplicates_of_track( const TRACK *aTrack )
 
         // Must be of the same type, on the same layer and the endpoints
         // must be the same (maybe swapped)
-        if( (aTrack->Type() != other->Type()) &&
-            (aTrack->GetLayer() != other->GetLayer()) )
+        if( (aTrack->Type() == other->Type()) &&
+            (aTrack->GetLayer() == other->GetLayer()) )
         {
             if( ((aTrack->GetStart() == other->GetStart()) &&
                  (aTrack->GetEnd() == other->GetEnd())) ||
