@@ -194,16 +194,6 @@ public:
         m_settings = aSettings;
     }
 
-    void EnableSnapping( bool aEnable )
-    {
-        m_snappingEnabled = aEnable;
-    }
-
-    bool SnappingEnabled() const
-    {
-        return m_snappingEnabled;
-    }
-
     SIZES_SETTINGS& Sizes()
     {
         return m_sizes;
@@ -262,10 +252,6 @@ private:
     int m_iterLimit;
     bool m_showInterSteps;
     int m_snapshotIter;
-
-    KIGFX::VIEW* m_view;
-
-    bool m_snappingEnabled;
     bool m_violation;
 
     ROUTING_SETTINGS m_settings;

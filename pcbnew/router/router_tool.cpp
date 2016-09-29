@@ -487,7 +487,6 @@ bool ROUTER_TOOL::prepareInteractive()
 {
     int routingLayer = getStartLayer( m_startItem );
     m_frame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
-    m_frame->UndoRedoBlock( true );
 
     // fixme: switch on invisible layer
 
@@ -524,7 +523,7 @@ bool ROUTER_TOOL::prepareInteractive()
     m_endItem = NULL;
     m_endSnapPoint = m_startSnapPoint;
 
-    m_frame->UndoRedoBlock( false );
+    m_frame->UndoRedoBlock( true );
 
     return true;
 }
@@ -536,6 +535,7 @@ bool ROUTER_TOOL::finishInteractive()
 
     m_ctls->SetAutoPan( false );
     m_ctls->ForceCursorPosition( false );
+    m_frame->UndoRedoBlock( false );
     highlightNet( false );
 
     return true;
@@ -670,7 +670,6 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 
     m_router->SetMode( aMode );
 
-    m_ctls->SetSnapping( true );
     m_ctls->ShowCursor( true );
 
     m_startSnapPoint = getViewControls()->GetCursorPosition();
@@ -760,6 +759,8 @@ void ROUTER_TOOL::performDragging()
 
     ctls->SetAutoPan( true );
 
+    m_frame->UndoRedoBlock( true );
+
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         ctls->ForceCursorPosition( false );
@@ -785,6 +786,7 @@ void ROUTER_TOOL::performDragging()
 
     m_startItem = NULL;
 
+    m_frame->UndoRedoBlock( false );
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
     highlightNet( false );
@@ -813,6 +815,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     VECTOR2I p0 = ctls->GetCursorPosition();
 
+    printf("StartDrag : %p\n", m_startItem );
+
     bool dragStarted = m_router->StartDragging( p0, m_startItem );
 
     if( !dragStarted )
@@ -824,7 +828,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        p0 = ctls->GetCursorPosition();
 
         if( evt->IsCancel() )
         {
@@ -832,11 +835,13 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
-            m_router->Move( p0, NULL );
+            updateEndItem( *evt );
+            m_router->Move( m_endSnapPoint, m_endItem );
         }
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
-            m_router->FixRoute( p0, NULL );
+            updateEndItem( *evt );
+            m_router->FixRoute( m_endSnapPoint, m_endItem );
             break;
         }
     }

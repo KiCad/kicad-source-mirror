@@ -77,8 +77,6 @@ ROUTER::ROUTER()
     m_iterLimit = 0;
     m_showInterSteps = false;
     m_snapshotIter = 0;
-    m_view = nullptr;
-    m_snappingEnabled  = false;
     m_violation = false;
 }
 

@@ -69,19 +69,19 @@ TOOL_ACTION TOOL_BASE::ACT_RouterOptions( "pcbnew.InteractiveRouter.RouterOption
 TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
     TOOL_INTERACTIVE( aToolName )
 {
-    m_gridHelper = NULL;
-    m_iface = NULL;
-    m_router = NULL;
+    m_gridHelper = nullptr;
+    m_iface = nullptr;
+    m_router = nullptr;
 
-    m_startItem = NULL;
+    m_startItem = nullptr;
     m_startLayer = 0;
 
-    m_endItem = NULL;
+    m_endItem = nullptr;
 
-    m_frame = NULL;
-    m_ctls = NULL;
-    m_board = NULL;
-    m_gridHelper = NULL;
+    m_frame = nullptr;
+    m_ctls = nullptr;
+    m_board = nullptr;
+    m_gridHelper = nullptr;
 }
 
 
@@ -212,7 +212,6 @@ void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
     VECTOR2I cp = m_ctls->GetCursorPosition();
     VECTOR2I p;
 
-    ITEM* startItem = NULL;
     bool snapEnabled = true;
 
     if( aEvent.IsMotion() || aEvent.IsClick() )
@@ -225,36 +224,13 @@ void TOOL_BASE::updateStartItem( TOOL_EVENT& aEvent )
         p = cp;
     }
 
-    startItem = pickSingleItem( p );
-    m_router->EnableSnapping( snapEnabled );
+    m_startItem = pickSingleItem( p );
 
-    if( !snapEnabled && startItem && !startItem->Layers().Overlaps( tl ) )
-        startItem = NULL;
+    if( !snapEnabled && m_startItem && !m_startItem->Layers().Overlaps( tl ) )
+        m_startItem = nullptr;
 
-    if( startItem && startItem->Net() >= 0 )
-    {
-        bool dummy;
-        VECTOR2I psnap = snapToItem( startItem, p, dummy );
-
-        if( snapEnabled )
-        {
-            m_startSnapPoint = psnap;
-            m_ctls->ForceCursorPosition( true, psnap );
-        }
-        else
-        {
-            m_startSnapPoint = cp;
-            m_ctls->ForceCursorPosition( false );
-        }
-
-        m_startItem = startItem;
-    }
-    else
-    {
-        m_startItem = NULL;
-        m_startSnapPoint = cp;
-        m_ctls->ForceCursorPosition( false );
-    }
+    m_startSnapPoint = snapToItem( snapEnabled, m_startItem, p );
+    m_ctls->ForceCursorPosition( true, m_startSnapPoint );
 }
 
 
@@ -266,23 +242,21 @@ void TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
     int layer;
     bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
 
-    m_router->EnableSnapping( snapEnabled );
-
     if( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 )
     {
-        m_endItem = NULL;
-        m_endSnapPoint = cp;
+        m_endSnapPoint = snapToItem( snapEnabled, nullptr, p );
+        m_ctls->ForceCursorPosition( true, m_endSnapPoint );
+        m_endItem = nullptr;
+
         return;
     }
-
-    bool dummy;
 
     if( m_router->IsPlacingVia() )
         layer = -1;
     else
         layer = m_router->GetCurrentLayer();
 
-    ITEM* endItem = NULL;
+    ITEM* endItem = nullptr;
 
     std::vector<int> nets = m_router->GetCurrentNets();
 
@@ -294,19 +268,10 @@ void TOOL_BASE::updateEndItem( TOOL_EVENT& aEvent )
             break;
     }
 
-    if( endItem )
-    {
-        VECTOR2I cursorPos = snapToItem( endItem, p, dummy );
-        m_ctls->ForceCursorPosition( true, cursorPos );
-        m_endItem = endItem;
-        m_endSnapPoint = cursorPos;
-    }
-    else
-    {
-        m_endItem = NULL;
-        m_endSnapPoint = cp;
-        m_ctls->ForceCursorPosition( false );
-    }
+    VECTOR2I cursorPos = snapToItem( snapEnabled, endItem, p );
+    m_ctls->ForceCursorPosition( true, cursorPos );
+    m_endItem = endItem;
+    m_endSnapPoint = cursorPos;
 
     if( m_endItem )
     {
@@ -345,26 +310,23 @@ ROUTER *TOOL_BASE::Router() const
 }
 
 
-const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, VECTOR2I aP, bool& aSplitsSegment )
+const VECTOR2I TOOL_BASE::snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP)
 {
     VECTOR2I anchor;
 
-    if( !aItem )
+    if( !aItem || !aEnabled )
     {
-        aSplitsSegment = false;
-        return aP;
+        return m_gridHelper->Align( aP );
     }
 
     switch( aItem->Kind() )
     {
     case ITEM::SOLID_T:
         anchor = static_cast<SOLID*>( aItem )->Pos();
-        aSplitsSegment = false;
         break;
 
     case ITEM::VIA_T:
         anchor = static_cast<VIA*>( aItem )->Pos();
-        aSplitsSegment = false;
         break;
 
     case ITEM::SEGMENT_T:
@@ -373,20 +335,13 @@ const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, VECTOR2I aP, bool& aSplitsSeg
         const SEG& s = seg->Seg();
         int w = seg->Width();
 
-        aSplitsSegment = false;
 
         if( ( aP - s.A ).EuclideanNorm() < w / 2 )
             anchor = s.A;
         else if( ( aP - s.B ).EuclideanNorm() < w / 2 )
             anchor = s.B;
         else
-        {
-            anchor = s.NearestPoint( aP );
-            aSplitsSegment = true;
-
             anchor = m_gridHelper->AlignToSegment( aP, s );
-            aSplitsSegment = ( anchor != s.A && anchor != s.B );
-        }
 
         break;
     }
