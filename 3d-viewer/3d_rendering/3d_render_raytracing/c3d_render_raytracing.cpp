@@ -37,6 +37,10 @@
 #include "3d_math.h"
 #include "../common_ogl/ogl_utils.h"
 
+// This should be used in future for the function
+// convertLinearToSRGB
+//#include <glm/gtc/color_space.hpp>
+
 #ifdef _OPENMP
 #include <omp.h>
 #endif
@@ -418,6 +422,49 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte *ptrPBO ,
     }
 }
 
+#define USE_SRGB_SPACE
+
+#ifdef USE_SRGB_SPACE
+
+// This should be removed in future when the KiCad support a greater version of
+// glm lib.
+// This function implements the conversion from linear RGB to sRGB
+// https://github.com/g-truc/glm/blob/master/glm/gtc/color_space.inl#L12
+static SFVEC3F convertLinearToSRGB( const SFVEC3F &aRGBcolor )
+{
+    const float gammaCorrection = 1.0f / 1.3f;
+    const SFVEC3F clampedColor = glm::clamp( aRGBcolor, SFVEC3F(0.0f), SFVEC3F(1.0f) );
+
+    return glm::mix(
+        glm::pow( clampedColor, SFVEC3F(gammaCorrection) ) * 1.055f - 0.055f,
+        clampedColor * 12.92f,
+        glm::lessThan( clampedColor, SFVEC3F(0.0031308f) ) );
+}
+#endif
+
+void C3D_RENDER_RAYTRACING::rt_final_color( GLubyte *ptrPBO,
+                                            const SFVEC3F &rgbColor,
+                                            bool applyColorSpaceConversion )
+{
+
+    SFVEC3F color = rgbColor;
+
+#ifdef USE_SRGB_SPACE
+
+    // This should be used in future when the KiCad support a greater version of
+    // glm lib.
+    // if( applyColorSpaceConversion )
+    //    rgbColor = glm::convertLinearToSRGB( rgbColor );
+
+    if( applyColorSpaceConversion )
+        color = convertLinearToSRGB( rgbColor );
+#endif
+
+    ptrPBO[0] = (unsigned int)glm::clamp( (int)(color.r * 255), 0, 255 );
+    ptrPBO[1] = (unsigned int)glm::clamp( (int)(color.g * 255), 0, 255 );
+    ptrPBO[2] = (unsigned int)glm::clamp( (int)(color.b * 255), 0, 255 );
+    ptrPBO[3] = 255;
+}
 
 void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
                                                    signed int iBlock )
@@ -485,6 +532,9 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
         // If post processing is enabled, it will not reflect the final result
         // (as the final color will be computed on post processing)
         // but it is used for report progress
+
+        const bool isFinalColor = !m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
+
         for( unsigned int y = 0; y < RAYPACKET_DIM; ++y )
         {
             const SFVEC3F &outColor = bgColor[y];
@@ -496,10 +546,7 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
             {
                 GLubyte *ptr = &ptrPBO[ (yConst + x) * 4 ];
 
-                ptr[0] = (unsigned int)glm::clamp( (int)(outColor.r * 255), 0, 255 );
-                ptr[1] = (unsigned int)glm::clamp( (int)(outColor.g * 255), 0, 255 );
-                ptr[2] = (unsigned int)glm::clamp( (int)(outColor.b * 255), 0, 255 );
-                ptr[3] = 255;
+                rt_final_color( ptr, outColor, isFinalColor );
             }
         }
 
@@ -1081,6 +1128,13 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
                 hColor = hColor * 0.60f + aaColor * 0.40f;
             }
 
+            // This will set the output color to be displayed
+            // If post processing is enabled, it will not reflect the final result
+            // (as the final color will be computed on post processing)
+            // but it is used for report progress
+            GLubyte *ptr = &ptrPBO[ ( blockPos.x + x +
+                                      ((y + blockPos.y) * m_realBufferSize.x) ) * 4 ];
+
             if( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
             {
                 if( hitPacket[i].m_hitresult == true )
@@ -1099,19 +1153,12 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
                                                     0,
                                                     1.0f );
 
+                rt_final_color( ptr, hColor, false );
             }
-
-            // This will set the output color to be displayed
-            // If post processing is enabled, it will not reflect the final result
-            // (as the final color will be computed on post processing)
-            // but it is used for report progress
-            GLubyte *ptr = &ptrPBO[ ( blockPos.x + x +
-                                      ((y + blockPos.y) * m_realBufferSize.x) ) * 4 ];
-
-            ptr[0] = (unsigned int)glm::clamp( (int)(hColor.r * 255), 0, 255 );
-            ptr[1] = (unsigned int)glm::clamp( (int)(hColor.g * 255), 0, 255 );
-            ptr[2] = (unsigned int)glm::clamp( (int)(hColor.b * 255), 0, 255 );
-            ptr[3] = 255;
+            else
+            {
+                rt_final_color( ptr, hColor, true );
+            }
         }
     }
 }
@@ -1260,27 +1307,37 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
                                                 bluredShadeColor.g +
                                                 bluredShadeColor.b ) / 3.0f;
 
-                const SFVEC3F shadedColor = m_postshader_ssao.GetColorAtNotProtected(
-                                            SFVEC2I( x, y ) ) * ( SFVEC3F(1.0f) -
-                                                                  bluredShadeColor ) -
-                                            ( bluredShadeColor - grayBluredColor * 0.5f );
+                const SFVEC3F &originalColor = m_postshader_ssao.GetColorAtNotProtected( SFVEC2I( x, y ) );
+
+                float luminanceColor = (originalColor.r * 0.2126f +
+                                        originalColor.g * 0.7152f +
+                                        originalColor.b * 0.0722f);
+
+                // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoeCoxLjMtMC4xNSkqKC14KjEuMysyLjE1KSIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0xLjQ5MjM4OTg5MzY5NjAyNCIsIjIuMTY2Nzg0ODAzNTQyNDk4IiwiLTAuNjYzNzYwNzIzNzUyMjA5NSIsIjEuNTg4MDM5MDg5OTMzMDM0NiJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
+                // luminanceColor = (+luminanceColor * 1.3f - 0.15f) *
+                //                  (-luminanceColor * 1.3f + 2.15f);
+
+                // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoeC0wLjEpKjkiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC45OTI5NjA0NzE5OTg5Njk1IiwiMS45MzQzNzkyODU3OTE4NDYzIiwiLTAuNDE1MTAzMzMwNzkyMzc5NyIsIjEuMzg2MzM2NTIwMTU1ODE0MiJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
+                luminanceColor = (luminanceColor - 0.10f) * 9.0f;
+
+                luminanceColor = glm::clamp( luminanceColor, 0.0f, 1.0f );
+
+                const SFVEC3F shadedColor = ( originalColor *
+                                              ( SFVEC3F(1.0f) - 2.0f * bluredShadeColor * luminanceColor ) ) -
+                                            ( bluredShadeColor - (grayBluredColor * 0.65f) );
 
                 // Debug code
-                //const SFVEC3F shadedColor =  ( bluredShadeColor - grayBluredColor * 0.5f);
-                //const SFVEC3F shadedColor =  - glm::min( bluredShadeColor, SFVEC3F(0.0f) );
-                //const SFVEC3F shadedColor =  0.5f * (SFVEC3F(1.0f) - bluredShadeColor) -
-                //                             glm::min( bluredShadeColor, SFVEC3F(0.0f) );
-                //const SFVEC3F shadedColor =  bluredShadeColor;
+                //const SFVEC3F shadedColor = bluredShadeColor;
+                //const SFVEC3F shadedColor = SFVEC3F(grayOriginalColorFactor);
 #else
                 // Debug code
                 //const SFVEC3F shadedColor =  SFVEC3F( 1.0f ) -
                 //                             m_shaderBuffer[ y * m_realBufferSize.x + x];
                 const SFVEC3F shadedColor =  m_shaderBuffer[ y * m_realBufferSize.x + x ];
 #endif
-                ptr[0] = (unsigned int)glm::clamp( (int)(shadedColor.r * 255), 0, 255 );
-                ptr[1] = (unsigned int)glm::clamp( (int)(shadedColor.g * 255), 0, 255 );
-                ptr[2] = (unsigned int)glm::clamp( (int)(shadedColor.b * 255), 0, 255 );
-                ptr[3] = 255;
+
+                rt_final_color( ptr, shadedColor, true );
+
                 ptr += 4;
             }
         }
@@ -1289,7 +1346,7 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
         #pragma omp barrier
 
         // Debug code
-        //m_postshader_ssao.DebugBuffersOutputAsImages();
+        m_postshader_ssao.DebugBuffersOutputAsImages();
     }
 
     // End rendering
@@ -2074,6 +2131,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
             }
         }
 
+        // Improvement: this is not taking in account the lightcolor
         if( nr_lights_that_can_cast_shadows > 0 )
         {
             aHitInfo.m_ShadowFactor = shadow_att_factor_sum /

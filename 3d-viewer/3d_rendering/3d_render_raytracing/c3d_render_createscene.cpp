@@ -71,7 +71,7 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 glm::clamp( ((SFVEC3F)(1.0f) -
                              (SFVEC3F)m_settings.m_CopperColor),
                             SFVEC3F( 0.0f ),
-                            SFVEC3F( 0.40f ) ),                         // specular
+                            SFVEC3F( 0.45f ) ),                         // specular
                 shininessfactor * 128.0f,                               // shiness
                 0.0f,                                                   // transparency
                 0.0f );
@@ -92,7 +92,7 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 glm::clamp( ((SFVEC3F)(1.0f) -
                              (SFVEC3F)m_settings.m_SilkScreenColor),
                             SFVEC3F( 0.0f ),
-                            SFVEC3F( 0.1f ) ),          // specular
+                            SFVEC3F( 0.10f ) ),         // specular
                 0.078125f * 128.0f,                     // shiness
                 0.0f,                                   // transparency
                 0.0f );
@@ -244,10 +244,10 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
     m_lights.Clear();
 
     // This will work as the front camera light.
-    const float light_camera_intensity = 0.17f;
-    const float light_directional_intensity_top = 0.15f;
+    const float light_camera_intensity = 0.15;
+    const float light_directional_intensity_top = 0.2;
     const float light_directional_intensity = ( 1.0f - ( light_camera_intensity +
-                                                         light_directional_intensity_top ) ) / 4.0f;
+                                                         light_directional_intensity_top ) ) / 2.0f;
 
     m_camera_light = new CDIRECTIONALLIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
                                             SFVEC3F( light_camera_intensity ) );

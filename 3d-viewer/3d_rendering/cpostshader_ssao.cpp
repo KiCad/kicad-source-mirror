@@ -84,9 +84,11 @@ float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos,
     //shadow_factor = (1.0f / ( shadow_factor * 1.7f + 1.9f ))- 0.28f;            // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoMS4wLyh4KjEuNysxLjkpKS0wLjI4IiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuNTk5NTUxMjY3NTY5ODI1IiwiMS4yNzM5NDYxNzc0MTYyOTg4IiwiLTAuMTE0MzIxNTY5MjEzMDEwMDgiLCIxLjAzODU5OTkzNTM5MzgzNTMiXX1d
     //shadow_factor = (shadow_factor - 0.1);
     //shadow_factor = (1.0f / ( shadow_factor * shadow_factor * 1.7f + 1.1f ))- 0.58f; // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoMS4wLygoeC0wLjEpKih4LTAuMSkqMS43KzEuMSkpLTAuNTgiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC41OTk1NTEyNjc1Njk4MjUiLCIxLjI3Mzk0NjE3NzQxNjI5ODgiLCItMC4xMTQzMjE1NjkyMTMwMTAwOCIsIjEuMDM4NTk5OTM1MzkzODM1MyJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
-    //shadow_factor = -shadow_factor * shadow_factor * 0.2f + 0.15f; //http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoLXgqMC4yKzAuMTUpIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuNTk5NTUxMjY3NTY5ODI1IiwiMS4yNzM5NDYxNzc0MTYyOTg4IiwiLTAuMTE0MzIxNTY5MjEzMDEwMDgiLCIxLjAzODU5OTkzNTM5MzgzNTMiXSwic2l6ZSI6WzY0OSwzOTldfV0-
-    shadow_factor = -shadow_factor * shadow_factor * 0.3f + 0.25f; // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoLXgqMC4zKzAuMjUpIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuNTk5NTUxMjY3NTY5ODI1IiwiMS4yNzM5NDYxNzc0MTYyOTg4IiwiLTAuMTE0MzIxNTY5MjEzMDEwMDgiLCIxLjAzODU5OTkzNTM5MzgzNTMiXSwic2l6ZSI6WzY0OSwzOTldfV0-
-    shadow_factor = glm::max( shadow_factor, -0.06f ); // add some bias
+    //shadow_factor = -shadow_factor * shadow_factor * 0.1f + 0.10f; // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoLXgqMC4xMCswLjEwKSIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0wLjU5OTU1MTI2NzU2OTgyNSIsIjEuMjczOTQ2MTc3NDE2Mjk4OCIsIi0wLjExNDMyMTU2OTIxMzAxMDA4IiwiMS4wMzg1OTk5MzUzOTM4MzUzIl0sInNpemUiOls2NDksMzk5XX1d
+    shadow_factor = -shadow_factor * shadow_factor * 0.2f + 0.15f; // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoLXgqMC4yKzAuMTUpIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuNTk5NTUxMjY3NTY5ODI1IiwiMS4yNzM5NDYxNzc0MTYyOTg4IiwiLTAuMTE0MzIxNTY5MjEzMDEwMDgiLCIxLjAzODU5OTkzNTM5MzgzNTMiXSwic2l6ZSI6WzY0OSwzOTldfV0-
+    //shadow_factor = -shadow_factor * shadow_factor * 0.3f + 0.25f; // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoLXgqMC4zKzAuMjUpIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiLTAuNTk5NTUxMjY3NTY5ODI1IiwiMS4yNzM5NDYxNzc0MTYyOTg4IiwiLTAuMTE0MzIxNTY5MjEzMDEwMDgiLCIxLjAzODU5OTkzNTM5MzgzNTMiXSwic2l6ZSI6WzY0OSwzOTldfV0-
+    //shadow_factor = -shadow_factor * shadow_factor * 0.4f + 0.40f; // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoLXgqMC40MCswLjM1KSIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0wLjU5OTU1MTI2NzU2OTgyNSIsIjEuMjczOTQ2MTc3NDE2Mjk4OCIsIi0wLjExNDMyMTU2OTIxMzAxMDA4IiwiMS4wMzg1OTk5MzUzOTM4MzUzIl0sInNpemUiOls2NDksMzk5XX1d
+    shadow_factor = glm::max( shadow_factor, 0.00f );
 
     // Calculate the edges ambient oclusion
     // /////////////////////////////////////////////////////////////////////////
@@ -137,6 +139,7 @@ float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos,
         // Test / Debug code
         //return_value = glm::max( aaFactor, shadow_factor );
         //return_value = aaFactor;
+        //return_value = shadow_factor;
     }
     else
     {
@@ -146,10 +149,7 @@ float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos,
         //return_value = 0.0f;
     }
 
-    // Test / Debug code
-    //return glm::clamp( return_value, 0.0f, 1.000f );
-    //return 0.0f;
-    return return_value;
+    return glm::clamp( return_value, 0.0f, 1.0f );
 }
 
 
@@ -266,11 +266,10 @@ SFVEC3F CPOSTSHADER_SSAO::Shade( const SFVEC2I &aShaderPos ) const
                     giColorCurve( GetColorAt( aShaderPos + SFVEC2I( -npw,    0) ) );
         }
         ao = (ao / 24.0f) + 0.0f; // Apply a bias for the ambient oclusion
-
-        //ao = 1.0f - ( 1.0f / (ao * 1.0f + 1.0f) );
         gi = (gi * 5.0f / 24.0f); // Apply a bias for the global illumination
 
-        return SFVEC3F( SFVEC3F(ao) - gi );
+        //return SFVEC3F(ao);
+        return SFVEC3F( SFVEC3F(ao) - gi);
 
         // Test source code
         //return SFVEC3F( col );

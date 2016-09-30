@@ -81,6 +81,7 @@ private:
     void rt_render_post_process_shade( GLubyte *ptrPBO , REPORTER *aStatusTextReporter );
     void rt_render_post_process_blur_finish( GLubyte *ptrPBO , REPORTER *aStatusTextReporter );
     void rt_render_trace_block( GLubyte *ptrPBO , signed int iBlock );
+    void rt_final_color( GLubyte *ptrPBO, const SFVEC3F &rgbColor, bool applyColorSpaceConversion );
 
     // Materials
     void setupMaterials();

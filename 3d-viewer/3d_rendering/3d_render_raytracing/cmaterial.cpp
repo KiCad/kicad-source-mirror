@@ -71,8 +71,8 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
 
 // This may be a good value if based on nr of lights
 // that contribute to the illumination of that point
-#define AMBIENT_FACTOR  (1.0f/6.0f)
-#define SPECULAR_FACTOR 1.000f
+#define AMBIENT_FACTOR  (1.0f / 6.0f)
+#define SPECULAR_FACTOR 1.0f
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model
 SFVEC3F CBLINN_PHONG_MATERIAL::Shade( const RAY &aRay,
@@ -85,13 +85,13 @@ SFVEC3F CBLINN_PHONG_MATERIAL::Shade( const RAY &aRay,
 {
     wxASSERT( NdotL >= FLT_EPSILON );
 
-    //const float ambientFactor = AMBIENT_FACTOR;
+    const float ambientFactor = AMBIENT_FACTOR;
 
     // This is a hack to get some kind of fake ambient illumination
     // There is no logic behind this, just pure artistic experimentation
-    const float ambientFactor = glm::max( ( (1.0f - NdotL) /** (1.0f - NdotL)*/ ) *
-                                          ( AMBIENT_FACTOR + AMBIENT_FACTOR ),
-                                          AMBIENT_FACTOR );
+    //const float ambientFactor = glm::max( ( (1.0f - NdotL) /** (1.0f - NdotL)*/ ) *
+    //                                      ( AMBIENT_FACTOR + AMBIENT_FACTOR ),
+    //                                      AMBIENT_FACTOR );
 
     if( aShadowAttenuationFactor > FLT_EPSILON )
     {
