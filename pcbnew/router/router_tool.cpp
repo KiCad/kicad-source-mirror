@@ -815,8 +815,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     VECTOR2I p0 = ctls->GetCursorPosition();
 
-    printf("StartDrag : %p\n", m_startItem );
-
     bool dragStarted = m_router->StartDragging( p0, m_startItem );
 
     if( !dragStarted )
