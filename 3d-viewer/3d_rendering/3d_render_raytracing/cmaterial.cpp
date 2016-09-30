@@ -28,6 +28,7 @@
  */
 
 #include "cmaterial.h"
+#include <3d_math.h>
 #include <wx/debug.h>
 
 
@@ -40,6 +41,8 @@ CMATERIAL::CMATERIAL()
     m_transparency  = 0.0f; // completely opaque
     m_cast_shadows  = true;
     m_reflection    = 0.0f;
+
+    m_normal_perturbator = NULL;
 }
 
 
@@ -66,6 +69,8 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
     m_transparency  = aTransparency;
     m_reflection    = aReflection;
     m_cast_shadows  = true;
+
+    m_normal_perturbator = NULL;
 }
 
 
@@ -116,4 +121,63 @@ SFVEC3F CBLINN_PHONG_MATERIAL::Shade( const RAY &aRay,
     }
 
     return m_ambientColor * ambientFactor;
+}
+
+
+CPROCEDURALGENERATOR::CPROCEDURALGENERATOR()
+{
+}
+
+
+CBOARDNORMAL::CBOARDNORMAL( float aScale ) : CPROCEDURALGENERATOR()
+{
+    m_scale = (2.0f * glm::pi<float>()) / aScale;
+}
+
+
+SFVEC3F CBOARDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
+{
+    const SFVEC3F hitPos = aRay.at( aHitInfo.m_tHit );
+
+    // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiJzaW4oc2luKHgpKjEuNykrMSIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0wLjk2MjEwNTcwODA3ODUyNjIiLCI3Ljk3MTQyNjI2NzYwMTQzIiwiLTIuNTE3NjIwMzUxNDgyNDQ5IiwiMi45Nzk5Mzc3ODczOTc1MzAzIl0sInNpemUiOls2NDgsMzk4XX1d
+
+    return SFVEC3F( ((float)glm::sin( glm::sin(hitPos.x * m_scale ) ) + 1.0f) * 0.15f,
+                    ((float)glm::sin( glm::sin(hitPos.y * m_scale ) ) + 1.0f) * 0.07f,
+                    0.0f );
+}
+
+
+CCOPPERNORMAL::CCOPPERNORMAL( const CBOARDNORMAL *aBoardNormalGenerator )
+{
+    m_board_normal_generator = aBoardNormalGenerator;
+}
+
+
+SFVEC3F CCOPPERNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
+{
+    if( m_board_normal_generator )
+    {
+        const SFVEC3F boardNormal = m_board_normal_generator->Generate( aRay, aHitInfo );
+
+        return boardNormal * SFVEC3F(0.75f);
+    }
+    else
+        return SFVEC3F(0.0f);
+}
+
+CSOLDERMASKNORMAL::CSOLDERMASKNORMAL( const CCOPPERNORMAL *aCopperNormalGenerator )
+{
+    m_copper_normal_generator = aCopperNormalGenerator;
+}
+
+SFVEC3F CSOLDERMASKNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
+{
+    if( m_copper_normal_generator )
+    {
+        const SFVEC3F copperNormal = m_copper_normal_generator->Generate( aRay, aHitInfo );
+
+        return copperNormal * SFVEC3F(0.40f);
+    }
+    else
+        return SFVEC3F(0.0f);
 }

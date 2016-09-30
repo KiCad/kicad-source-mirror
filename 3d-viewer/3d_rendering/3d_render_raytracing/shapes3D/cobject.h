@@ -46,6 +46,7 @@ enum OBJECT3D_TYPE
     OBJ3D_MAX
 };
 
+
 class  COBJECT
 {
 protected:

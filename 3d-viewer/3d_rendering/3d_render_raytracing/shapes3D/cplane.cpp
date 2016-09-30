@@ -90,6 +90,13 @@ bool CXYPLANE::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
     else
         aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f,-1.0f );
 
+    if (m_material->GetNormalPerturbator())
+    {
+        aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
+                               m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
+        aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
+    }
+
     return true;
 }
 

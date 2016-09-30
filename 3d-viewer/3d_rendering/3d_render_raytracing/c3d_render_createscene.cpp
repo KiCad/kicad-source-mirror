@@ -54,6 +54,10 @@
 
 void C3D_RENDER_RAYTRACING::setupMaterials()
 {
+    m_board_normal_perturbator  = CBOARDNORMAL( 1.25f * IU_PER_MM * m_settings.BiuTo3Dunits() );
+    m_copper_normal_perturbator = CCOPPERNORMAL( &m_board_normal_perturbator );
+    m_solder_mask_normal_perturbator = CSOLDERMASKNORMAL( &m_copper_normal_perturbator );
+
     // http://devernay.free.fr/cours/opengl/materials.html
 
     // Copper
@@ -75,6 +79,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 shininessfactor * 128.0f,                               // shiness
                 0.0f,                                                   // transparency
                 0.0f );
+
+    m_materials.m_Copper.SetNormalPerturbator( &m_copper_normal_perturbator );
 
     m_materials.m_Paste = CBLINN_PHONG_MATERIAL(
                 (SFVEC3F)m_settings.m_SolderPasteColor *
@@ -111,6 +117,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
 
     m_materials.m_SolderMask.SetCastShadows( true );
 
+    m_materials.m_SolderMask.SetNormalPerturbator( &m_solder_mask_normal_perturbator );
+
     m_materials.m_EpoxyBoard = CBLINN_PHONG_MATERIAL(
                 SFVEC3F( 16.0f / 255.0f,
                          14.0f / 255.0f,
@@ -122,6 +130,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 0.1f * 128.0f,                          // shiness
                 0.10f,                                  // transparency
                 0.0f );                                 // reflection
+
+    m_materials.m_EpoxyBoard.SetNormalPerturbator( &m_board_normal_perturbator );
 
     SFVEC3F bgTop = (SFVEC3F)m_settings.m_BgColorTop;
     //SFVEC3F bgBot = (SFVEC3F)m_settings.m_BgColorBot;

@@ -1346,7 +1346,7 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
         #pragma omp barrier
 
         // Debug code
-        m_postshader_ssao.DebugBuffersOutputAsImages();
+        //m_postshader_ssao.DebugBuffersOutputAsImages();
     }
 
     // End rendering

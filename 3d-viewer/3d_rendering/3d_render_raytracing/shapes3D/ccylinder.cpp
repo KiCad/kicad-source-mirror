@@ -114,6 +114,14 @@ bool CVCYLINDER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
         aHitInfo.m_HitNormal = SFVEC3F( -(hitPoint2D.x - m_center.x) * m_inv_radius,
                                         -(hitPoint2D.y - m_center.y) * m_inv_radius,
                                         0.0f );
+
+        if (m_material->GetNormalPerturbator())
+        {
+            aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
+                                   m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
+            aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
+        }
+
         aHitInfo.pHitObject = this;
     }
 

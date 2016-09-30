@@ -96,6 +96,10 @@ private:
         CBLINN_PHONG_MATERIAL m_Floor;
     }m_materials;
 
+    CBOARDNORMAL        m_board_normal_perturbator;
+    CCOPPERNORMAL       m_copper_normal_perturbator;
+    CSOLDERMASKNORMAL   m_solder_mask_normal_perturbator;
+
     bool m_isPreview;
 
     SFVEC3F shadeHit( const SFVEC3F &aBgColor,

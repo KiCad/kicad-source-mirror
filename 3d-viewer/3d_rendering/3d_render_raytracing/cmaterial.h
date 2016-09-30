@@ -33,6 +33,68 @@
 #include "ray.h"
 #include "hitinfo.h"
 
+/// A base class that can be used to derive a procedural generator implementation
+class  CPROCEDURALGENERATOR
+{
+public:
+    CPROCEDURALGENERATOR();
+
+    /**
+     * @brief Generate - Generates a 3D vector based on the ray and
+     * hit information depending on the implementation
+     * @param aRay: the camera ray that hits the object
+     * @param aHitInfo: the hit information
+     * @return the result of the procedural
+     */
+    virtual SFVEC3F Generate( const RAY &aRay,
+                              const HITINFO &aHitInfo ) const = 0;
+
+protected:
+
+};
+
+
+// Procedural generation of the board normals
+class  CBOARDNORMAL : public CPROCEDURALGENERATOR
+{
+public:
+    CBOARDNORMAL() : CPROCEDURALGENERATOR() { m_scale = 1.0f; }
+    CBOARDNORMAL( float aScale );
+
+    // Imported from CPROCEDURALGENERATOR
+    SFVEC3F Generate( const RAY &aRay,
+                      const HITINFO &aHitInfo ) const override;
+private:
+    float m_scale;
+};
+
+// Procedural generation of the copper normals
+class  CCOPPERNORMAL : public CPROCEDURALGENERATOR
+{
+public:
+    CCOPPERNORMAL() : CPROCEDURALGENERATOR() { m_board_normal_generator = NULL; }
+    CCOPPERNORMAL( const CBOARDNORMAL *aBoardNormalGenerator );
+
+    // Imported from CPROCEDURALGENERATOR
+    SFVEC3F Generate( const RAY &aRay,
+                      const HITINFO &aHitInfo ) const override;
+private:
+    const CBOARDNORMAL *m_board_normal_generator;
+};
+
+// Procedural generation of the solder mask
+class  CSOLDERMASKNORMAL : public CPROCEDURALGENERATOR
+{
+public:
+    CSOLDERMASKNORMAL() : CPROCEDURALGENERATOR() { m_copper_normal_generator = NULL; }
+    CSOLDERMASKNORMAL( const CCOPPERNORMAL *aCopperNormalGenerator );
+
+    // Imported from CPROCEDURALGENERATOR
+    SFVEC3F Generate( const RAY &aRay,
+                      const HITINFO &aHitInfo ) const override;
+private:
+    const CCOPPERNORMAL *m_copper_normal_generator;
+};
 
 /// A base material class that can be used to derive a material implementation
 class  CMATERIAL
@@ -81,6 +143,9 @@ public:
                            const SFVEC3F &aLightColor,
                            float aShadowAttenuationFactor ) const = 0;
 
+    void SetNormalPerturbator( const CPROCEDURALGENERATOR *aPerturbator ) { m_normal_perturbator = aPerturbator; }
+    const CPROCEDURALGENERATOR *GetNormalPerturbator() const { return m_normal_perturbator; }
+
 protected:
     SFVEC3F m_ambientColor;
 
@@ -94,6 +159,8 @@ protected:
     float   m_transparency;     ///< 1.0 is completely transparent, 0.0 completely opaque
     float   m_reflection;       ///< 1.0 completely reflective, 0.0 no reflective
     bool    m_cast_shadows;     ///< true if this object will block the light
+
+    const CPROCEDURALGENERATOR *m_normal_perturbator;
 };
 
 

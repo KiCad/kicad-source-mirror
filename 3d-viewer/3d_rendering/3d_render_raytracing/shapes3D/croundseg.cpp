@@ -89,6 +89,13 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                                             aRay.m_dirIsNeg[2]? 1.0f: -1.0f );
             aHitInfo.pHitObject = this;
 
+            if (m_material->GetNormalPerturbator())
+            {
+                aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
+                                       m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
+                aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
+            }
+
             return true;
         }
 
@@ -124,6 +131,13 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                                                     m_plane_dir_right.y,
                                                     0.0f );
                     aHitInfo.pHitObject = this;
+
+                    if (m_material->GetNormalPerturbator())
+                    {
+                        aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
+                                               m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
+                        aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
+                    }
 
                     return true;
                 }
@@ -161,6 +175,13 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                                                         m_plane_dir_left.y,
                                                         0.0f );
                         aHitInfo.pHitObject = this;
+
+                        if (m_material->GetNormalPerturbator())
+                        {
+                            aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
+                                                   m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
+                            aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
+                        }
 
                         return true;
                     }
@@ -212,6 +233,13 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                             0.0f );
                 aHitInfo.pHitObject = this;
 
+                if (m_material->GetNormalPerturbator())
+                {
+                    aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
+                                           m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
+                    aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
+                }
+
                 return true;
             }
 
@@ -251,6 +279,13 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                                 (hitPoint2D.y - m_segment.m_End.y) * m_inv_radius,
                                 0.0f );
                 aHitInfo.pHitObject = this;
+
+                if (m_material->GetNormalPerturbator())
+                {
+                    aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
+                                           m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
+                    aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
+                }
 
                 return true;
             }
