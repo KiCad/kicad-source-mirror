@@ -33,6 +33,11 @@
  * Inc., 2011 N.  Shoreline Blvd., Mountain View, CA 94039-7311.
  *
  * OpenGL(TM) is a trademark of Silicon Graphics, Inc.
+ *
+ * ====================================================================
+ * Code in this file has been modified by the KiCad project.
+ * For modifications:
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  */
 /*
  * Trackball code:
@@ -90,7 +95,7 @@ void vsub( const double *src1, const double *src2, double *dst )
 
 void vcopy( const double *v1, double *v2 )
 {
-    register int i;
+    int i;
 
     for( i = 0 ; i < 3 ; i++ )
         v2[i] = v1[i];
