@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,7 +102,7 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
             PAGE_INFO pageSave = GetScreen()->GetPageSettings();
             PAGE_INFO pageTemp = pageSave;
 
-            wxSize componentSize = part->GetBoundingBox( m_unit, m_convert ).GetSize();
+            wxSize componentSize = part->GetUnitBoundingBox( m_unit, m_convert ).GetSize();
 
             // Add a small margin to the plot bounding box
             pageTemp.SetWidthMils(  int( componentSize.x * 1.2 ) );

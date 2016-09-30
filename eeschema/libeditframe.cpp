@@ -369,7 +369,7 @@ double LIB_EDIT_FRAME::BestZoom()
 
     if( part )
     {
-        EDA_RECT boundingBox = part->GetBoundingBox( m_unit, m_convert );
+        EDA_RECT boundingBox = part->GetUnitBoundingBox( m_unit, m_convert );
 
         dx = boundingBox.GetWidth();
         dy = boundingBox.GetHeight();

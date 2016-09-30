@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2016 Chris Pavlina <pavlina.chris@gmail.com>
+ * Copyright (C) 2015-2016 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -222,7 +222,7 @@ void DIALOG_RESCUE_EACH::renderPreview( LIB_PART* aComponent, int aUnit, wxPanel
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Find joint bounding box for everything we are about to draw.
-    EDA_RECT bBox = aComponent->GetBoundingBox( aUnit, /* deMorganConvert */ 1 );
+    EDA_RECT bBox = aComponent->GetUnitBoundingBox( aUnit, /* deMorganConvert */ 1 );
     const double xscale = (double) dc_size.x / bBox.GetWidth();
     const double yscale = (double) dc_size.y / bBox.GetHeight();
     const double scale  = std::min( xscale, yscale ) * 0.85;

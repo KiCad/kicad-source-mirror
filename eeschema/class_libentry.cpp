@@ -431,7 +431,7 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
     /* Enable this to draw the bounding box around the component to validate
      * the bounding box calculations. */
 #if 0
-    EDA_RECT bBox = GetBoundingBox( aMulti, aConvert );
+    EDA_RECT bBox = GetUnitBoundingBox( aMulti, aConvert );
     bBox.RevertYAxis();
     bBox = aTransform.TransformCoordinate( bBox );
     bBox.Move( aOffset );
@@ -1158,7 +1158,7 @@ bool LIB_PART::LoadFootprints( LINE_READER& aLineReader, wxString& aErrorMsg )
 }
 
 
-const EDA_RECT LIB_PART::GetBoundingBox( int aUnit, int aConvert ) const
+const EDA_RECT LIB_PART::GetUnitBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox;
     bool initialized = false;
