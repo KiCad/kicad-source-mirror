@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -1201,6 +1202,7 @@ bool RN_DATA::Update( const BOARD_ITEM* aItem )
     {
         bool res = Add( aItem );
         assert( res );
+        (void) res;
         return true;
     }
 
