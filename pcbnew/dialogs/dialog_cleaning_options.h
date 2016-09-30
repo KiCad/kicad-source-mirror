@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,32 +33,20 @@ public:
     static bool m_cleanVias;
     static bool m_mergeSegments;
     static bool m_deleteUnconnectedSegm;
+    static bool m_deleteShortCircuits;
 
 public:
     DIALOG_CLEANING_OPTIONS( wxWindow* parent );
 
-    ~DIALOG_CLEANING_OPTIONS()
+    bool TransferDataFromWindow() override
     {
-        GetOpts( );
+        m_cleanVias = m_cleanViasOpt->GetValue( );
+        m_mergeSegments = m_mergeSegmOpt->GetValue( );
+        m_deleteUnconnectedSegm = m_deleteUnconnectedOpt->GetValue( );
+        m_deleteShortCircuits = m_cleanShortCircuitOpt->GetValue( );
+
+        return true;
     }
-
-private:
-        void OnCancelClick( wxCommandEvent& event ) override
-        {
-            EndModal( wxID_CANCEL );
-        }
-        void OnOKClick( wxCommandEvent& event ) override
-        {
-            GetOpts( );
-            EndModal( wxID_OK );
-        }
-
-        void GetOpts( )
-        {
-            m_cleanVias = m_cleanViasOpt->GetValue( );
-            m_mergeSegments = m_mergeSegmOpt->GetValue( );
-            m_deleteUnconnectedSegm = m_deleteUnconnectedOpt->GetValue( );
-        }
 };
 
 #endif

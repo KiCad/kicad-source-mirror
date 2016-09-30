@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 13 2015)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,8 +19,13 @@ DIALOG_CLEANING_OPTIONS_BASE::DIALOG_CLEANING_OPTIONS_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerUpper;
 	bSizerUpper = new wxBoxSizer( wxVERTICAL );
 	
+	m_cleanShortCircuitOpt = new wxCheckBox( this, wxID_ANY, _("Delete &track segments connecting different nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cleanShortCircuitOpt->SetToolTip( _("remove track segments connecting nodes belonging to different nets (short circuit)") );
+	
+	bSizerUpper->Add( m_cleanShortCircuitOpt, 0, wxALL, 5 );
+	
 	m_cleanViasOpt = new wxCheckBox( this, wxID_ANY, _("&Delete redundant vias"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cleanViasOpt->SetToolTip( _("remove vias on pads with a through hole") );
+	m_cleanViasOpt->SetToolTip( _("remove vias on through hole pads and superimposed vias") );
 	
 	bSizerUpper->Add( m_cleanViasOpt, 0, wxALL, 5 );
 	
@@ -29,8 +34,8 @@ DIALOG_CLEANING_OPTIONS_BASE::DIALOG_CLEANING_OPTIONS_BASE( wxWindow* parent, wx
 	
 	bSizerUpper->Add( m_mergeSegmOpt, 0, wxALL, 5 );
 	
-	m_deleteUnconnectedOpt = new wxCheckBox( this, wxID_ANY, _("D&elete unconnected tracks"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_deleteUnconnectedOpt->SetToolTip( _("delete track segment having a dangling end") );
+	m_deleteUnconnectedOpt = new wxCheckBox( this, wxID_ANY, _("Delete &dangling tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_deleteUnconnectedOpt->SetToolTip( _("delete tracks having at least one dangling end") );
 	
 	bSizerUpper->Add( m_deleteUnconnectedOpt, 0, wxALL, 5 );
 	
@@ -54,16 +59,8 @@ DIALOG_CLEANING_OPTIONS_BASE::DIALOG_CLEANING_OPTIONS_BASE( wxWindow* parent, wx
 	this->Layout();
 	
 	this->Centre( wxBOTH );
-	
-	// Connect Events
-	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnOKClick ), NULL, this );
 }
 
 DIALOG_CLEANING_OPTIONS_BASE::~DIALOG_CLEANING_OPTIONS_BASE()
 {
-	// Disconnect Events
-	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CLEANING_OPTIONS_BASE::OnOKClick ), NULL, this );
-	
 }

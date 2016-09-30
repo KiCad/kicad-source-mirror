@@ -431,8 +431,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         switch( item->Type() )
         {
         case PCB_MODULE_T:
-            deep_reBuild_ratsnest = true;
-            // Fall though
+            deep_reBuild_ratsnest = true;   // Pointers on pads can be invalid
+            // Fall through
         case PCB_ZONE_AREA_T:
         case PCB_TRACE_T:
         case PCB_VIA_T:
