@@ -70,6 +70,21 @@ const char* delims = " \t\r\n";
 const wxChar traceSchLegacyPlugin[] = wxT( "KI_SCH_LEGACY_PLUGIN" );
 
 
+static bool is_eol( char c )
+{
+    //        The default file eol character used internally by KiCad.
+    //        |
+    //        |            Possible eol if someone edited the file by hand on certain platforms.
+    //        |            |
+    //        |            |           May have gone past eol with strtok().
+    //        |            |           |
+    if( c == '\n' || c == '\r' || c == 0 )
+        return true;
+
+    return false;
+}
+
+
 /**
  * Function strCompare
  *
@@ -2823,7 +2838,10 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
     // was changed to add text properties.  However rather than add the token to the end of
     // the text definition, it was added after the string and no mention if the file
     // verion was bumped or not so this code make break on very old component libraries.
-    if( LIB_VERSION( m_versionMajor, m_versionMinor ) > LIB_VERSION( 2, 0 ) )
+    //
+    // Update: apparently even in the latest version this can be different so added a test
+    //         for end of line before checking for the text properties.
+    if( LIB_VERSION( m_versionMajor, m_versionMinor ) > LIB_VERSION( 2, 0 ) && !is_eol( *line ) )
     {
         if( strCompare( "Italic", line, &line ) )
             text->SetItalic( true );
