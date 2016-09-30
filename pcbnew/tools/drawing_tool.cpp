@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -605,7 +606,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                 {
                     // Modules use different types for the same things,
                     // so we need to convert imported items to appropriate classes.
-                    BOARD_ITEM* converted;
+                    BOARD_ITEM* converted = NULL;
 
                     switch( item->Type() )
                     {
@@ -658,12 +659,15 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                         break;
                     }
 
-                    converted->SetLayer( item->GetLayer() );
+                    if( converted )
+                        converted->SetLayer( item->GetLayer() );
+
                     delete item;
                     item = converted;
                 }
 
-                commit.Add( item );
+                if( item )
+                    commit.Add( item );
             }
 
             commit.Push( _( "Place a DXF drawing" ) );
