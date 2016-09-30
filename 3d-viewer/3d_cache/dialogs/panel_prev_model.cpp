@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -665,7 +666,7 @@ void PANEL_PREV_3D::getOrientationVars( SGPOINT& aScale, SGPOINT& aRotation, SGP
 }
 
 
-bool PANEL_PREV_3D::Validate( wxString& aErrorMessage )
+bool PANEL_PREV_3D::ValidateWithMessage( wxString& aErrorMessage )
 {
     bool invalidScale = false;
     #define MIN_SCALE 0.001

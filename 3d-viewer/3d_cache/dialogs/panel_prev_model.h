@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +100,13 @@ public:
      * @return false if one (or more) value is not acceptable.
      * @param aErrorMessage is a wxString to store error messages, if any
      */
-    bool Validate( wxString& aErrorMessage );
+    bool ValidateWithMessage( wxString& aErrorMessage );
+
+    bool Validate() override
+    {
+        wxString temp;
+        return ValidateWithMessage(temp);
+    }
 
 private:
     wxString                currentModelFile;   ///< Used to check if the model file was changed
