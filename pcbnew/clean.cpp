@@ -58,11 +58,14 @@ public:
      * @param aDeleteUnconnected = true to remove dangling tracks
      * (short circuits)
      */
-    bool CleanupBoard( PCB_EDIT_FRAME *aFrame, bool aCleanVias,
-                       bool aRemoveMisConnected,
+    bool CleanupBoard( bool aCleanVias, bool aRemoveMisConnected,
                        bool aMergeSegments, bool aDeleteUnconnected );
 
 private:
+    /* finds and remove all track segments which are connected to more than one net.
+     * (short circuits)
+     */
+    bool removeBadTrackSegments();
 
     /**
      * Removes redundant vias like vias at same location
@@ -133,8 +136,17 @@ void PCB_EDIT_FRAME::Clean_Pcb()
     wxBusyCursor( dummy );
     TRACKS_CLEANER cleaner( GetBoard() );
 
-    cleaner.CleanupBoard( this, dlg.m_deleteShortCircuits, dlg.m_cleanVias,
-                          dlg.m_mergeSegments, dlg.m_deleteUnconnectedSegm );
+    bool modified = cleaner.CleanupBoard( dlg.m_deleteShortCircuits, dlg.m_cleanVias,
+                            dlg.m_mergeSegments, dlg.m_deleteUnconnectedSegm );
+
+    if( modified )
+    {
+        // Clear undo and redo lists to avoid inconsistencies between lists
+        GetScreen()->ClearUndoRedoList();
+        SetCurItem( NULL );
+        Compile_Ratsnest( NULL, true );
+        OnModify();
+    }
 
     // There is a chance that some of tracks have changed their nets,
     // so rebuild ratsnest from scratch
@@ -151,12 +163,13 @@ void PCB_EDIT_FRAME::Clean_Pcb()
  * - vias on pad
  * - null length segments
  */
-bool TRACKS_CLEANER::CleanupBoard( PCB_EDIT_FRAME *aFrame,
-                                   bool aRemoveMisConnected,
+bool TRACKS_CLEANER::CleanupBoard( bool aRemoveMisConnected,
                                    bool aCleanVias,
                                    bool aMergeSegments,
                                    bool aDeleteUnconnected )
 {
+    buildTrackConnectionInfo();
+
     bool modified = false;
 
     // delete redundant vias
@@ -164,31 +177,39 @@ bool TRACKS_CLEANER::CleanupBoard( PCB_EDIT_FRAME *aFrame,
         modified |= clean_vias();
 
     // Remove null segments and intermediate points on aligned segments
+    // If not asked, remove null segments only if remove misconnected is asked
     if( aMergeSegments )
         modified |= clean_segments();
+    else if( aRemoveMisConnected )
+        modified |= delete_null_segments();
 
     if( aRemoveMisConnected )
-        modified |= aFrame->RemoveMisConnectedTracks();
-
-    // Delete dangling tracks
-    if( aDeleteUnconnected && deleteDanglingTracks() )
     {
-        modified = true ;
+        if( removeBadTrackSegments() )
+        {
+            modified = true;
 
-        // Removed tracks can leave aligned segments
-        // (when a T was formed by tracks and the "vertical" segment
-        // is removed)
-        if( aMergeSegments )
-            clean_segments();
+            // Refresh track connection info
+            buildTrackConnectionInfo();
+        }
     }
 
-    if( modified )
+    // Delete dangling tracks
+    if( aDeleteUnconnected )
     {
-        // Clear undo and redo lists to avoid inconsistencies between lists
-        aFrame->GetScreen()->ClearUndoRedoList();
-        aFrame->SetCurItem( NULL );
-        aFrame->Compile_Ratsnest( NULL, true );
-        aFrame->OnModify();
+        if( modified ) // Refresh track connection info
+            buildTrackConnectionInfo();
+
+        if( deleteDanglingTracks() )
+        {
+            modified = true ;
+
+            // Removed tracks can leave aligned segments
+            // (when a T was formed by tracks and the "vertical" segment
+            // is removed)
+            if( aMergeSegments )
+                clean_segments();
+        }
     }
 
     return modified;
@@ -198,9 +219,8 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD * aPcb ): CONNECTIONS( aPcb )
 {
     m_Brd = aPcb;
 
-    // Build connections info
+    // Be sure pad list is up to date
     BuildPadsList();
-    buildTrackConnectionInfo();
 }
 
 void TRACKS_CLEANER::buildTrackConnectionInfo()
@@ -240,6 +260,79 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
         }
     }
 }
+
+
+bool TRACKS_CLEANER::removeBadTrackSegments()
+{
+    // The rastsnet is expected to be up to date (Compile_Ratsnest was called)
+
+    // Rebuild physical connections.
+    // the list of physical connected items to a given item is in
+    // m_PadsConnected and m_TracksConnected members of each item
+    BuildTracksCandidatesList( m_Brd->m_Track );
+
+    // build connections between track segments and pads.
+    SearchTracksConnectedToPads();
+
+    TRACK* segment;
+
+    // build connections between track ends
+    for( segment = m_Brd->m_Track; segment; segment = segment->Next() )
+    {
+        SearchConnectedTracks( segment );
+        GetConnectedTracks( segment );
+    }
+
+    bool isModified = false;
+
+    for( segment = m_Brd->m_Track; segment; segment = segment->Next() )
+    {
+        segment->SetState( FLAG0, false );
+
+        for( unsigned ii = 0; ii < segment->m_PadsConnected.size(); ++ii )
+        {
+            if( segment->GetNetCode() != segment->m_PadsConnected[ii]->GetNetCode() )
+                segment->SetState( FLAG0, true );
+        }
+
+        for( unsigned ii = 0; ii < segment->m_TracksConnected.size(); ++ii )
+        {
+            TRACK* tested = segment->m_TracksConnected[ii];
+
+            if( segment->GetNetCode() != tested->GetNetCode() && !tested->GetState( FLAG0 ) )
+                segment->SetState( FLAG0, true );
+        }
+    }
+
+    // Remove tracks having a flagged segment
+    TRACK* next;
+    for( segment = m_Brd->m_Track; segment; segment = next )
+    {
+        next = segment->Next();
+
+        if( segment->GetState( FLAG0 ) )    // Segment is flagged to be removed
+        {
+            isModified = true;
+            segment->ViewRelease();
+            m_Brd->Remove( segment );
+            delete segment;     // TODO: See if it can be put in undo list
+        }
+    }
+
+    if( isModified )
+    {   // some pointers are invalid. Clear the m_TracksConnected list,
+        // to avoid any issue
+        for( segment = m_Brd->m_Track; segment; segment = segment->Next() )
+        {
+            segment->m_TracksConnected.clear();
+        }
+
+        m_Brd->m_Status_Pcb = 0;
+    }
+
+    return isModified;
+}
+
 
 bool TRACKS_CLEANER::remove_duplicates_of_via( const VIA *aVia )
 {
@@ -693,75 +786,29 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
 
 bool PCB_EDIT_FRAME::RemoveMisConnectedTracks()
 {
-     /* finds all track segments which are connected to more than one net.
-     * When such a bad segment is found, it is flagged.
-     * All flagged segments are removed.
-     */
+    // Old model has to be refreshed, GAL normally does not keep updating it
     Compile_Ratsnest( NULL, false );
 
-    // Rebuild physical connections.
-    // the list of physical connected items to a given item is in
-    // m_PadsConnected and m_TracksConnected members of each item
-    CONNECTIONS connections( GetBoard() );
-    connections.BuildPadsList();
-    connections.BuildTracksCandidatesList(GetBoard()->m_Track);
+    TRACKS_CLEANER cleaner( GetBoard() );
 
-    // build connections between track segments and pads.
-    connections.SearchTracksConnectedToPads();
-
-    TRACK* segment;
-
-    // build connections between track ends
-    for( segment = GetBoard()->m_Track; segment; segment = segment->Next() )
-    {
-        connections.SearchConnectedTracks( segment );
-        connections.GetConnectedTracks( segment );
-    }
-
-    bool isModified = false;
-
-    for( segment = GetBoard()->m_Track; segment; segment = segment->Next() )
-    {
-        segment->SetState( FLAG0, false );
-
-        for( unsigned ii = 0; ii < segment->m_PadsConnected.size(); ++ii )
-        {
-            if( segment->GetNetCode() != segment->m_PadsConnected[ii]->GetNetCode() )
-                segment->SetState( FLAG0, true );
-        }
-
-        for( unsigned ii = 0; ii < segment->m_TracksConnected.size(); ++ii )
-        {
-            TRACK* tested = segment->m_TracksConnected[ii];
-
-            if( segment->GetNetCode() != tested->GetNetCode() && !tested->GetState( FLAG0 ) )
-                segment->SetState( FLAG0, true );
-        }
-    }
-
-    // Remove tracks having a flagged segment
-    TRACK* next;
-    for( segment = GetBoard()->m_Track; segment; segment = next )
-    {
-        next = segment->Next();
-
-        if( segment->GetState( FLAG0 ) )    // Segment is flagged to be removed
-        {
-            isModified = true;
-            GetBoard()->m_Status_Pcb = 0;
-            GetBoard()->Remove( segment );
-            delete segment;     // TODO: See if it can be put in undo list
-        }
-    }
+    bool isModified = cleaner.CleanupBoard( true, false, false, false );
 
     if( isModified )
-    {   // some pointers are invalid. Clear the m_TracksConnected list,
-        // to avoid any issue
-        for( segment = GetBoard()->m_Track; segment; segment = segment->Next() )
-        {
-            segment->m_TracksConnected.clear();
-        }
+    {
+        // Clear undo and redo lists to avoid inconsistencies between lists
+        GetScreen()->ClearUndoRedoList();
+        SetCurItem( NULL );
+
+        // There is a chance that some of tracks have changed,
+        // so rebuild ratsnest from scratch
+        if( IsGalCanvasActive() )
+            GetBoard()->GetRatsnest()->ProcessBoard();
+
+        Compile_Ratsnest( NULL, true );
+        OnModify();
     }
+
+    m_canvas->Refresh( true );
 
     return isModified;
 }
