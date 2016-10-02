@@ -144,14 +144,18 @@ inline float mapf( float x,
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+inline float RGBtoGray( const SFVEC3F &aColor )
+{
+    return (aColor.r * 0.2126f +
+            aColor.g * 0.7152f +
+            aColor.b * 0.0722f);
+}
 
 inline SFVEC3F MaterialDiffuseToColorCAD( const SFVEC3F &aDiffuseColor )
 {
     // convert to a discret scale of grays
     const float luminance = glm::min( (((float)((unsigned int) ( 4.0f *
-                                         (aDiffuseColor.r * 0.2126f +
-                                          aDiffuseColor.g * 0.7152f +
-                                          aDiffuseColor.b * 0.0722f))) + 0.5f) /
+                                                                 RGBtoGray( aDiffuseColor ) ) ) + 0.5f) /
                                        4.0f) * 1.0f,
                                       1.0f );
 

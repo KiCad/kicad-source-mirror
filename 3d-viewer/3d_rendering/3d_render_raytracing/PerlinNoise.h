@@ -32,11 +32,12 @@
  * Original copyright notice:
  *
  * Perlin_Noise
- * Here you could find the code for "Perlin noise in C++11", for more informations visit the project webpage:
+ * "Here you could find the code for "Perlin noise in C++11",
+ *  for more informations visit the project webpage:
  * http://solarianprogrammer.com/2012/07/18/perlin-noise-cpp-11/
  * You could use this program under the terms of GPL v3, for more details see:
  * http://www.gnu.org/copyleft/gpl.html
- * Copyright 2012 Sol from www.solarianprogrammer.com
+ * Copyright 2012 Sol from www.solarianprogrammer.com"
  */
 
 #include <vector>
@@ -45,28 +46,33 @@
 // JAVA IMPLEMENTATION OF THE IMPROVED PERLIN FUNCTION (see http://mrl.nyu.edu/~perlin/noise/)
 // THE ORIGINAL JAVA IMPLEMENTATION IS COPYRIGHT 2002 KEN PERLIN
 
-// I ADDED AN EXTRA METHOD THAT GENERATES A NEW PERMUTATION VECTOR (THIS IS NOT PRESENT IN THE ORIGINAL IMPLEMENTATION)
+// I ADDED AN EXTRA METHOD THAT GENERATES A NEW PERMUTATION VECTOR
+// (THIS IS NOT PRESENT IN THE ORIGINAL IMPLEMENTATION)
 
 #ifndef PERLINNOISE_H
 #define PERLINNOISE_H
 
-class PerlinNoise {
-	// The permutation vector
-	std::vector<int> p;
+class PerlinNoise
+{
+    // The permutation vector
+    std::vector<int> p;
+
 public:
-	// Initialize with the reference values for the permutation vector
-	PerlinNoise();
+    // Initialize with the reference values for the permutation vector
+    PerlinNoise();
 
-	// Generate a new permutation vector based on the value of seed
-	PerlinNoise( unsigned int seed );
+    // Generate a new permutation vector based on the value of seed
+    PerlinNoise( unsigned int seed );
 
-	// Get a noise value, for 2D images z can have any value
-	float noise( float x, float y, float z );
+    // Returns between 0.0f and 1.0f
+    float noise( float x, float y, float z ) const;
+    float noise( float x, float y ) const;
 
 private:
-	float fade( float t );
-	float lerp( float t, float a, float b );
-	float grad( int hash, float x, float y, float z );
+    float fade( float t ) const;
+    float lerp( float t, float a, float b ) const;
+    float grad( int hash, float x, float y, float z ) const;
+    float grad( int hash, float x, float y ) const;
 };
 
 #endif

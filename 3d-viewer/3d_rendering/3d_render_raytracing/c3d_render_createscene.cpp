@@ -54,33 +54,37 @@
 
 void C3D_RENDER_RAYTRACING::setupMaterials()
 {
-    m_board_normal_perturbator  = CBOARDNORMAL( 1.25f * IU_PER_MM * m_settings.BiuTo3Dunits() );
-    m_copper_normal_perturbator = CCOPPERNORMAL( &m_board_normal_perturbator );
-    m_solder_mask_normal_perturbator = CSOLDERMASKNORMAL( &m_copper_normal_perturbator );
+
+    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+    {
+        m_board_normal_perturbator  = CBOARDNORMAL( 0.5f * IU_PER_MM * m_settings.BiuTo3Dunits() );
+
+        m_copper_normal_perturbator = CCOPPERNORMAL( 4.0f * IU_PER_MM * m_settings.BiuTo3Dunits(),
+                                                     &m_board_normal_perturbator );
+
+        m_solder_mask_normal_perturbator = CSOLDERMASKNORMAL( &m_board_normal_perturbator );
+
+        m_plastic_normal_perturbator = CPLASTICNORMAL( 0.15f * IU_PER_MM * m_settings.BiuTo3Dunits() );
+
+        m_plastic_shine_normal_perturbator = CPLASTICSHINENORMAL( 1.0f * IU_PER_MM * m_settings.BiuTo3Dunits() );
+    }
 
     // http://devernay.free.fr/cours/opengl/materials.html
 
     // Copper
-
-    // This guess the material type(ex: copper vs gold) to determine the
-    // shininess factor between 0.1 and 0.4
-    float shininessfactor = 0.40f - mapf( fabs( m_settings.m_CopperColor.r -
-                                                m_settings.m_CopperColor.g ),
-                                          0.15f, 1.00f,
-                                          0.00f, 0.30f );
-
     m_materials.m_Copper = CBLINN_PHONG_MATERIAL(
-                (SFVEC3F)m_settings.m_CopperColor * (SFVEC3F)(0.28f),   // ambient
+                (SFVEC3F)m_settings.m_CopperColor * (SFVEC3F)(0.18f),   // ambient
                 SFVEC3F( 0.0f, 0.0f, 0.0f ),                            // emissive
                 glm::clamp( ((SFVEC3F)(1.0f) -
                              (SFVEC3F)m_settings.m_CopperColor),
                             SFVEC3F( 0.0f ),
-                            SFVEC3F( 0.45f ) ),                         // specular
-                shininessfactor * 128.0f,                               // shiness
+                            SFVEC3F( 0.35f ) ),                         // specular
+                0.4f * 128.0f,                                          // shiness
                 0.0f,                                                   // transparency
                 0.0f );
 
-    m_materials.m_Copper.SetNormalPerturbator( &m_copper_normal_perturbator );
+    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+        m_materials.m_Copper.SetNormalPerturbator( &m_copper_normal_perturbator );
 
     m_materials.m_Paste = CBLINN_PHONG_MATERIAL(
                 (SFVEC3F)m_settings.m_SolderPasteColor *
@@ -117,7 +121,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
 
     m_materials.m_SolderMask.SetCastShadows( true );
 
-    m_materials.m_SolderMask.SetNormalPerturbator( &m_solder_mask_normal_perturbator );
+    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+        m_materials.m_SolderMask.SetNormalPerturbator( &m_solder_mask_normal_perturbator );
 
     m_materials.m_EpoxyBoard = CBLINN_PHONG_MATERIAL(
                 SFVEC3F( 16.0f / 255.0f,
@@ -131,7 +136,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 0.10f,                                  // transparency
                 0.0f );                                 // reflection
 
-    m_materials.m_EpoxyBoard.SetNormalPerturbator( &m_board_normal_perturbator );
+    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+        m_materials.m_EpoxyBoard.SetNormalPerturbator( &m_board_normal_perturbator );
 
     SFVEC3F bgTop = (SFVEC3F)m_settings.m_BgColorTop;
     //SFVEC3F bgBot = (SFVEC3F)m_settings.m_BgColorBot;
@@ -255,9 +261,9 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
     // This will work as the front camera light.
     const float light_camera_intensity = 0.15;
-    const float light_directional_intensity_top = 0.2;
+    const float light_directional_intensity_top = 0.30;
     const float light_directional_intensity = ( 1.0f - ( light_camera_intensity +
-                                                         light_directional_intensity_top ) ) / 2.0f;
+                                                         light_directional_intensity_top ) ) / 4.0f;
 
     m_camera_light = new CDIRECTIONALLIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
                                             SFVEC3F( light_camera_intensity ) );
@@ -1306,18 +1312,52 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                 {
                     const SMATERIAL &material = a3DModel->m_Materials[imat];
 
-                    float reflectionFactor = glm::clamp( material.m_Shininess *
-                                                         0.75f - 0.125f,
-                                                         0.0f,
-                                                         1.0f );
+                    const float reflectionFactor = glm::clamp( material.m_Shininess *
+                                                               0.75f - 0.125f,
+                                                               0.0f,
+                                                               1.0f );
 
-                    (*materialVector)[imat] = CBLINN_PHONG_MATERIAL(
+                    CBLINN_PHONG_MATERIAL &blinnMaterial = (*materialVector)[imat];
+
+                    blinnMaterial = CBLINN_PHONG_MATERIAL(
                                               material.m_Ambient,
                                               material.m_Emissive,
                                               material.m_Specular,
                                               material.m_Shininess * 180.0f,
                                               material.m_Transparency,
                                               reflectionFactor );
+
+                    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
+                    {
+                        // Guess material type and apply a normal perturbator
+
+                        if( ( RGBtoGray(material.m_Diffuse) < 0.3f ) &&
+                            ( material.m_Shininess < 0.36f ) &&
+                            ( material.m_Transparency == 0.0f ) &&
+                            ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.15f) &&
+                              (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.15f) &&
+                              (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.15f) ) )
+                        {
+                            // This may be a black plastic..
+
+                            if( material.m_Shininess < 0.26f )
+                                blinnMaterial.SetNormalPerturbator( &m_plastic_normal_perturbator );
+                            else
+                                blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
+                        }
+                        else
+                        {
+                            if( ( RGBtoGray(material.m_Diffuse) > 0.3f ) &&
+                                ( material.m_Shininess < 0.30f ) &&
+                                ( material.m_Transparency == 0.0f ) &&
+                                ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) > 0.25f) ||
+                                  (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) > 0.25f) ||
+                                  (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) > 0.25f) ) )
+                            {
+                                    blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
+                            }
+                        }
+                    }
                 }
                 else
                 {

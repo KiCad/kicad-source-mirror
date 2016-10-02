@@ -1988,13 +1988,10 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
     if( aRecursiveLevel > 2 )
         return SFVEC3F( 0.0f );
 
-    SFVEC3F hitPoint;
+    SFVEC3F hitPoint = aHitInfo.m_HitPoint;
 
-    if( m_isPreview )
-        hitPoint = aRay.at( aHitInfo.m_tHit );
-    else
-        hitPoint = aRay.at( aHitInfo.m_tHit ) +
-                   aHitInfo.m_HitNormal * ( 0.5f * m_settings.GetNonCopperLayerThickness3DU() *
+    if( !m_isPreview )
+        hitPoint += aHitInfo.m_HitNormal * ( 0.5f * m_settings.GetNonCopperLayerThickness3DU() *
                                             glm::abs(Fast_RandFloat()) +
                                             0.5f * m_settings.GetNonCopperLayerThickness3DU() );
 

@@ -94,6 +94,7 @@ static const wxChar keyRenderRAY_Refractions[]  = wxT( "Render_RAY_Refractions" 
 static const wxChar keyRenderRAY_Reflections[]  = wxT( "Render_RAY_Reflections" );
 static const wxChar keyRenderRAY_PostProcess[]  = wxT( "Render_RAY_PostProcess" );
 static const wxChar keyRenderRAY_AAliasing[]    = wxT( "Render_RAY_AntiAliasing" );
+static const wxChar keyRenderRAY_ProceduralT[]  = wxT( "Render_RAY_ProceduralTextures" );
 
 static const wxChar keyShowAxis[]               = wxT( "ShowAxis" );
 static const wxChar keyShowGrid[]               = wxT( "ShowGrid3D" );
@@ -341,12 +342,22 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_BGCOLOR_BOTTOM_SELECTION:
         if( Set3DColorFromUser( m_settings.m_BgColorBot, _( "Background Color, Bottom" ) ) )
-            m_canvas->Request_refresh();
+        {
+            if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+                m_canvas->Request_refresh();
+            else
+                ReloadRequest();
+        }
         return;
 
     case ID_MENU3D_BGCOLOR_TOP_SELECTION:
         if( Set3DColorFromUser( m_settings.m_BgColorTop, _( "Background Color, Top" ) ) )
-            m_canvas->Request_refresh();
+        {
+            if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+                m_canvas->Request_refresh();
+            else
+                ReloadRequest();
+        }
         return;
 
     case ID_MENU3D_SILKSCREEN_COLOR_SELECTION:
@@ -412,6 +423,11 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     case ID_MENU3D_FL_RAYTRACING_RENDER_SHADOWS:
         m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS, isChecked );
         m_canvas->Request_refresh();
+        return;
+
+    case ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES:
+        m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, isChecked );
+        ReloadRequest( );
         return;
 
     case ID_MENU3D_FL_RAYTRACING_BACKFLOOR:
@@ -754,6 +770,8 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
     aCfg->Read( keyRenderRAY_AAliasing, &tmp, true );
     m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING, tmp );
 
+    aCfg->Read( keyRenderRAY_ProceduralT, &tmp, true );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, tmp );
 
     aCfg->Read( keyShowAxis, &tmp, true );
     m_settings.SetFlag( FL_AXIS, tmp );
@@ -858,12 +876,13 @@ void EDA_3D_VIEWER::SaveSettings( wxConfigBase *aCfg )
     aCfg->Write( keyRenderRAY_Reflections,  m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
     aCfg->Write( keyRenderRAY_PostProcess,  m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
     aCfg->Write( keyRenderRAY_AAliasing,    m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
+    aCfg->Write( keyRenderRAY_ProceduralT,  m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
 
     aCfg->Write( keyShowAxis,               m_settings.GetFlag( FL_AXIS ) );
     aCfg->Write( keyShowGrid,               (int)m_settings.GridGet() );
 
     aCfg->Write( keyShowFootprints_Normal,  m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL ) );
-    aCfg->Write( keyShowFootprints_Virtual, m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
+    aCfg->Write( keyShowFootprints_Insert,  m_settings.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT ) );
     aCfg->Write( keyShowFootprints_Virtual, m_settings.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL ) );
 
     aCfg->Write( keyShowZones,              m_settings.GetFlag( FL_ZONE ) );

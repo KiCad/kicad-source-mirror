@@ -242,6 +242,11 @@ void EDA_3D_VIEWER::CreateMenuBar()
                 _( "Render Shadows" ),
                 KiBitmap( green_xpm ), wxITEM_CHECK );
 
+    AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES,
+                _( "Procedural Textures" ),
+                _( "Apply procedural textures to materials (slow)"),
+                 KiBitmap( green_xpm ), wxITEM_CHECK );
+
     AddMenuItem( renderOptionsMenu_RAYTRACING, ID_MENU3D_FL_RAYTRACING_BACKFLOOR,
                 _( "Add floor" ),
                 _( "Adds a floor plane below the board (slow)"),
@@ -424,6 +429,13 @@ void EDA_3D_VIEWER::SetMenuBarOptionsState()
     item = menuBar->FindItem( ID_MENU3D_MOUSEWHEEL_PANNING );
     item->Check( m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) );
 
+
+    item = menuBar->FindItem( ID_MENU3D_ENGINE_OPENGL_LEGACY );
+    item->Check( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY );
+
+    item = menuBar->FindItem( ID_MENU3D_ENGINE_RAYTRACING );
+    item->Check( m_settings.RenderEngineGet() == RENDER_ENGINE_RAYTRACING );
+
     item = menuBar->FindItem( ID_MENU3D_REALISTIC_MODE );
     item->Check(  m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
     item = menuBar->FindItem( ID_MENU3D_COMMENTS_ONOFF );
@@ -468,6 +480,9 @@ void EDA_3D_VIEWER::SetMenuBarOptionsState()
 
     item = menuBar->FindItem( ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING );
     item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
+
+    item = menuBar->FindItem( ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES );
+    item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
 
 
     item = menuBar->FindItem( ID_MENU3D_SHOW_BOARD_BODY );

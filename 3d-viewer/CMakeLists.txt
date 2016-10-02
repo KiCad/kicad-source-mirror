@@ -60,6 +60,7 @@ set(3D-VIEWER_SRCS
     ${DIR_RAY_ACC}/cbvh_pbrt.cpp
     ${DIR_RAY_ACC}/ccontainer.cpp
     ${DIR_RAY_ACC}/ccontainer2d.cpp
+    ${DIR_RAY}/PerlinNoise.cpp
     ${DIR_RAY}/c3d_render_createscene.cpp
     ${DIR_RAY}/c3d_render_raytracing.cpp
     ${DIR_RAY}/cfrustum.cpp

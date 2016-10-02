@@ -118,16 +118,11 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                     if( tBot < aHitInfo.m_tHit )
                     {
                         aHitInfo.m_tHit = tBot;
-                        //aHitInfo.m_HitPoint = aRay.at( tBot );
+                        aHitInfo.m_HitPoint = aRay.at( tBot );
                         aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, -1.0f );
                         aHitInfo.pHitObject = this;
 
-                        if (m_material->GetNormalPerturbator())
-                        {
-                            aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
-                                                   m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
-                            aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
-                        }
+                        m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                         return true;
                     }
@@ -142,16 +137,11 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                     if( tTop < aHitInfo.m_tHit )
                     {
                         aHitInfo.m_tHit = tTop;
-                        //aHitInfo.m_HitPoint = aRay.at( tTop );
+                        aHitInfo.m_HitPoint = aRay.at( tTop );
                         aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, 1.0f );
                         aHitInfo.pHitObject = this;
 
-                        if (m_material->GetNormalPerturbator())
-                        {
-                            aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
-                                                   m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
-                            aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
-                        }
+                        m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                         return true;
                     }
@@ -171,16 +161,11 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                         if( tTop < aHitInfo.m_tHit )
                         {
                             aHitInfo.m_tHit = tTop;
-                            //aHitInfo.m_HitPoint = aRay.at( tTop );
+                            aHitInfo.m_HitPoint = aRay.at( tTop );
                             aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, 1.0f );
                             aHitInfo.pHitObject = this;
 
-                            if (m_material->GetNormalPerturbator())
-                            {
-                                aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
-                                                       m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
-                                aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
-                            }
+                            m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                             return true;
                         }
@@ -200,16 +185,11 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                             if( tBot < aHitInfo.m_tHit )
                             {
                                 aHitInfo.m_tHit = tBot;
-                                //aHitInfo.m_HitPoint = aRay.at( tBot );
+                                aHitInfo.m_HitPoint = aRay.at( tBot );
                                 aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, -1.0f );
                                 aHitInfo.pHitObject = this;
 
-                                if (m_material->GetNormalPerturbator())
-                                {
-                                    aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
-                                                           m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
-                                    aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
-                                }
+                                m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                                 return true;
                             }
@@ -247,21 +227,27 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
             // and calculate the real hitT of the ray.
             SFVEC3F hitPoint = boxHitPointStart +
                                (boxHitPointEnd - boxHitPointStart) * tOut;
+
             const float t = glm::length( hitPoint - aRay.m_Origin );
 
             if( t < aHitInfo.m_tHit )
             {
                 aHitInfo.m_tHit = t;
-                //aHitInfo.m_HitPoint = hitPoint;
-                aHitInfo.m_HitNormal = SFVEC3F( outNormal.x, outNormal.y, 0.0f );
+                aHitInfo.m_HitPoint = hitPoint;
+
+                if( (outNormal.x == 0.0f) &&
+                    (outNormal.y == 0.0f) )
+                {
+                    aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, 1.0f );
+                }
+                else
+                {
+                    aHitInfo.m_HitNormal = SFVEC3F( outNormal.x, outNormal.y, 0.0f );
+                }
+
                 aHitInfo.pHitObject = this;
 
-                if (m_material->GetNormalPerturbator())
-                {
-                    aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
-                                           m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
-                    aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
-                }
+                m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                 return true;
             }
@@ -294,6 +280,7 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
             if( tBBoxEnd < aHitInfo.m_tHit )
             {
                 aHitInfo.m_tHit = tBBoxEnd;
+                aHitInfo.m_HitPoint = aRay.at( tBBoxEnd );
                 aHitInfo.pHitObject = this;
 
                 if( aRay.m_Dir.z > 0.0f )
@@ -301,12 +288,7 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                 else
                     aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f,  1.0f );
 
-                if (m_material->GetNormalPerturbator())
-                {
-                    aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
-                                           m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
-                    aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
-                }
+                m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                 return true;
             }
@@ -326,16 +308,11 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                 if( t < aHitInfo.m_tHit )
                 {
                     aHitInfo.m_tHit = t;
-                    //aHitInfo.m_HitPoint = hitPoint;
+                    aHitInfo.m_HitPoint = hitPoint;
                     aHitInfo.m_HitNormal = SFVEC3F( outNormal.x, outNormal.y, 0.0f );
                     aHitInfo.pHitObject = this;
 
-                    if (m_material->GetNormalPerturbator())
-                    {
-                        aHitInfo.m_HitNormal = aHitInfo.m_HitNormal +
-                                               m_material->GetNormalPerturbator()->Generate( aRay, aHitInfo );
-                        aHitInfo.m_HitNormal = glm::normalize( aHitInfo.m_HitNormal );
-                    }
+                    m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
 
                     return true;
                 }

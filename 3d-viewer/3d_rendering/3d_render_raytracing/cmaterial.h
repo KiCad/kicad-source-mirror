@@ -32,6 +32,7 @@
 
 #include "ray.h"
 #include "hitinfo.h"
+#include "PerlinNoise.h"
 
 /// A base class that can be used to derive a procedural generator implementation
 class  CPROCEDURALGENERATOR
@@ -72,14 +73,21 @@ private:
 class  CCOPPERNORMAL : public CPROCEDURALGENERATOR
 {
 public:
-    CCOPPERNORMAL() : CPROCEDURALGENERATOR() { m_board_normal_generator = NULL; }
-    CCOPPERNORMAL( const CBOARDNORMAL *aBoardNormalGenerator );
+    CCOPPERNORMAL() : CPROCEDURALGENERATOR()
+    {
+        m_board_normal_generator = NULL;
+        m_scale = 1.0f;
+    }
+
+    CCOPPERNORMAL( float aScale, const CPROCEDURALGENERATOR *aBoardNormalGenerator );
 
     // Imported from CPROCEDURALGENERATOR
     SFVEC3F Generate( const RAY &aRay,
                       const HITINFO &aHitInfo ) const override;
 private:
-    const CBOARDNORMAL *m_board_normal_generator;
+    const CPROCEDURALGENERATOR *m_board_normal_generator;
+    PerlinNoise                 m_copper_perlin;
+    float                       m_scale;
 };
 
 // Procedural generation of the solder mask
@@ -87,14 +95,55 @@ class  CSOLDERMASKNORMAL : public CPROCEDURALGENERATOR
 {
 public:
     CSOLDERMASKNORMAL() : CPROCEDURALGENERATOR() { m_copper_normal_generator = NULL; }
-    CSOLDERMASKNORMAL( const CCOPPERNORMAL *aCopperNormalGenerator );
+    CSOLDERMASKNORMAL( const CPROCEDURALGENERATOR *aCopperNormalGenerator );
 
     // Imported from CPROCEDURALGENERATOR
     SFVEC3F Generate( const RAY &aRay,
                       const HITINFO &aHitInfo ) const override;
 private:
-    const CCOPPERNORMAL *m_copper_normal_generator;
+    const CPROCEDURALGENERATOR *m_copper_normal_generator;
 };
+
+
+// Procedural generation of the plastic normals
+class  CPLASTICNORMAL : public CPROCEDURALGENERATOR
+{
+public:
+    CPLASTICNORMAL() : CPROCEDURALGENERATOR()
+    {
+        m_scale = 1.0f;
+    }
+
+    CPLASTICNORMAL( float aScale );
+
+    // Imported from CPROCEDURALGENERATOR
+    SFVEC3F Generate( const RAY &aRay,
+                      const HITINFO &aHitInfo ) const override;
+private:
+    PerlinNoise                 m_perlin;
+    float                       m_scale;
+};
+
+
+// Procedural generation of the shining plastic normals
+class  CPLASTICSHINENORMAL : public CPROCEDURALGENERATOR
+{
+public:
+    CPLASTICSHINENORMAL() : CPROCEDURALGENERATOR()
+    {
+        m_scale = 1.0f;
+    }
+
+    CPLASTICSHINENORMAL( float aScale );
+
+    // Imported from CPROCEDURALGENERATOR
+    SFVEC3F Generate( const RAY &aRay,
+                      const HITINFO &aHitInfo ) const override;
+private:
+    PerlinNoise                 m_perlin;
+    float                       m_scale;
+};
+
 
 /// A base material class that can be used to derive a material implementation
 class  CMATERIAL
@@ -145,6 +194,8 @@ public:
 
     void SetNormalPerturbator( const CPROCEDURALGENERATOR *aPerturbator ) { m_normal_perturbator = aPerturbator; }
     const CPROCEDURALGENERATOR *GetNormalPerturbator() const { return m_normal_perturbator; }
+
+    void PerturbeNormal( SFVEC3F &aNormal, const RAY &aRay, const HITINFO &aHitInfo ) const;
 
 protected:
     SFVEC3F m_ambientColor;

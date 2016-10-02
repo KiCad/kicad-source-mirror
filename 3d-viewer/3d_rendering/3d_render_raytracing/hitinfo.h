@@ -46,6 +46,7 @@ struct HITINFO
     SFVEC2F m_UV;                       ///< ( 8) 2-D texture coordinates
     unsigned int m_acc_node_info;       ///< ( 4) The acc stores here the node that it hits
 
+    SFVEC3F m_HitPoint;                 ///< (12) hit position
     float m_ShadowFactor;               ///< ( 4) Shadow attenuation (1.0 no shadow, 0.0f darkness)
 
 #ifdef RAYTRACING_RAY_STATISTICS

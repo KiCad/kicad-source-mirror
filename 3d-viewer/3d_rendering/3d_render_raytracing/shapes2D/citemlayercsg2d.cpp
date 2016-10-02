@@ -145,7 +145,6 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
                     currentRayPos = aSegRay.atNormalized( currentRayDist );
 
                     if( m_objectA->IsPointInside( currentRayPos ) )
-                    //if(1)
                     {
                         wasInsideSubVol = true;
 

@@ -74,6 +74,17 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
 }
 
 
+void CMATERIAL::PerturbeNormal( SFVEC3F &aNormal,
+                                const RAY &aRay,
+                                const HITINFO &aHitInfo ) const
+{
+    if( m_normal_perturbator )
+    {
+        aNormal = aNormal + m_normal_perturbator->Generate( aRay, aHitInfo );
+        aNormal = glm::normalize( aNormal );
+    }
+}
+
 // This may be a good value if based on nr of lights
 // that contribute to the illumination of that point
 #define AMBIENT_FACTOR  (1.0f / 6.0f)
@@ -137,19 +148,22 @@ CBOARDNORMAL::CBOARDNORMAL( float aScale ) : CPROCEDURALGENERATOR()
 
 SFVEC3F CBOARDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
 {
-    const SFVEC3F hitPos = aRay.at( aHitInfo.m_tHit );
+    const SFVEC3F &hitPos = aHitInfo.m_HitPoint;
 
-    // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiJzaW4oc2luKHgpKjEuNykrMSIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0wLjk2MjEwNTcwODA3ODUyNjIiLCI3Ljk3MTQyNjI2NzYwMTQzIiwiLTIuNTE3NjIwMzUxNDgyNDQ5IiwiMi45Nzk5Mzc3ODczOTc1MzAzIl0sInNpemUiOls2NDgsMzk4XX1d
+    // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiJzaW4oc2luKHNpbih4KSoxLjkpKjEuNSkiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC45NjIxMDU3MDgwNzg1MjYyIiwiNy45NzE0MjYyNjc2MDE0MyIsIi0yLjUxNzYyMDM1MTQ4MjQ0OSIsIjIuOTc5OTM3Nzg3Mzk3NTMwMyJdLCJzaXplIjpbNjQ2LDM5Nl19XQ--
 
-    return SFVEC3F( ((float)glm::sin( glm::sin(hitPos.x * m_scale ) ) + 1.0f) * 0.15f,
-                    ((float)glm::sin( glm::sin(hitPos.y * m_scale ) ) + 1.0f) * 0.07f,
-                    0.0f );
+    const float x = (glm::sin(glm::sin( glm::sin( hitPos.x * m_scale ) * 1.9f ) * 1.5f ) + 0.0f) * 0.10f;
+    const float y = (glm::sin(glm::sin( glm::sin( hitPos.y * m_scale ) * 1.9f ) * 1.5f ) + 0.0f) * 0.04f;
+
+    return SFVEC3F( x, y, 0.0f );
 }
 
 
-CCOPPERNORMAL::CCOPPERNORMAL( const CBOARDNORMAL *aBoardNormalGenerator )
+CCOPPERNORMAL::CCOPPERNORMAL( float aScale, const CPROCEDURALGENERATOR *aBoardNormalGenerator )
 {
     m_board_normal_generator = aBoardNormalGenerator;
+    m_copper_perlin = PerlinNoise( 0 );
+    m_scale = 1.0f / aScale;
 }
 
 
@@ -159,16 +173,30 @@ SFVEC3F CCOPPERNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) cons
     {
         const SFVEC3F boardNormal = m_board_normal_generator->Generate( aRay, aHitInfo );
 
-        return boardNormal * SFVEC3F(0.75f);
+        SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
+
+        const float noise = (m_copper_perlin.noise( hitPos.x + Fast_RandFloat() * 0.1f,
+                                                    hitPos.y ) - 0.5f) * 2.0f;
+
+        float scratchPattern = (m_copper_perlin.noise( hitPos.x / 100.0f, hitPos.y  * 20.0f ) - 0.5f);
+
+        scratchPattern = glm::clamp( scratchPattern * 5.0f, -1.0f, 1.0f );
+
+        const float x = glm::clamp( (noise + scratchPattern)           * 0.04f, -0.10f, 0.10f );
+        const float y = glm::clamp( (noise + (noise * scratchPattern)) * 0.04f, -0.10f, 0.10f );
+
+        return SFVEC3F( x, y, 0.0f ) + boardNormal * 0.85f;
     }
     else
         return SFVEC3F(0.0f);
 }
 
-CSOLDERMASKNORMAL::CSOLDERMASKNORMAL( const CCOPPERNORMAL *aCopperNormalGenerator )
+
+CSOLDERMASKNORMAL::CSOLDERMASKNORMAL( const CPROCEDURALGENERATOR *aCopperNormalGenerator )
 {
     m_copper_normal_generator = aCopperNormalGenerator;
 }
+
 
 SFVEC3F CSOLDERMASKNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
 {
@@ -176,8 +204,56 @@ SFVEC3F CSOLDERMASKNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) 
     {
         const SFVEC3F copperNormal = m_copper_normal_generator->Generate( aRay, aHitInfo );
 
-        return copperNormal * SFVEC3F(0.40f);
+        return copperNormal * SFVEC3F(0.20f);
     }
     else
         return SFVEC3F(0.0f);
+}
+
+
+CPLASTICNORMAL::CPLASTICNORMAL( float aScale )
+{
+    m_scale = 1.0f / aScale;
+}
+
+
+SFVEC3F CPLASTICNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
+{
+        SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
+
+        const float noise1 = (m_perlin.noise( hitPos.x,
+                                              hitPos.y,
+                                              hitPos.z ) - 0.5f);
+
+        const float noise2 = (m_perlin.noise( hitPos.x * 5.0f,
+                                              hitPos.y * 5.0f,
+                                              hitPos.z * 5.0f ) - 0.5f);
+
+        const float noise3 = (m_perlin.noise( hitPos.x * 10.0f + Fast_RandFloat() * 0.10f,
+                                              hitPos.y * 10.0f + Fast_RandFloat() * 0.10f,
+                                              hitPos.z * 10.0f + Fast_RandFloat() * 0.10f ) - 0.5f);
+
+        return SFVEC3F( noise1 * 0.08f + noise2 * 0.10f + noise3 * 0.20f );
+}
+
+
+CPLASTICSHINENORMAL::CPLASTICSHINENORMAL( float aScale )
+{
+    m_scale = 1.0f / aScale;
+}
+
+
+SFVEC3F CPLASTICSHINENORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
+{
+        SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
+
+        const float noise1 = (m_perlin.noise( hitPos.x,
+                                              hitPos.y,
+                                              hitPos.z ) - 0.5f);
+
+        const float noise2 = (m_perlin.noise( hitPos.x * 3.0f,
+                                              hitPos.y * 3.0f,
+                                              hitPos.z * 3.0f ) - 0.5f);
+
+        return SFVEC3F( noise1 * 0.09f + noise2 * 0.05f );
 }
