@@ -2167,13 +2167,13 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
             for( unsigned int i = 0; i < reflection_number_of_samples; ++i )
             {
                 // If we want to apply some randomize to the reflected vector
-                const SFVEC3F random_reflectVector =
-                        glm::normalize( reflectVector +
-                                        UniformRandomHemisphereDirection() *
-                                        0.02f );
+                // const SFVEC3F random_reflectVector =
+                //        glm::normalize( reflectVector +
+                //                        UniformRandomHemisphereDirection() *
+                //                        0.02f );
 
                 RAY reflectedRay;
-                reflectedRay.Init( hitPoint, random_reflectVector );
+                reflectedRay.Init( hitPoint, reflectVector );
 
                 HITINFO reflectedHit;
                 reflectedHit.m_tHit = std::numeric_limits<float>::infinity();

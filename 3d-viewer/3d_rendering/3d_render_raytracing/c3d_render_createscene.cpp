@@ -67,6 +67,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
         m_plastic_normal_perturbator = CPLASTICNORMAL( 0.15f * IU_PER_MM * m_settings.BiuTo3Dunits() );
 
         m_plastic_shine_normal_perturbator = CPLASTICSHINENORMAL( 1.0f * IU_PER_MM * m_settings.BiuTo3Dunits() );
+
+        m_brushed_metal_normal_perturbator = CMETALBRUSHEDNORMAL( 1.0f * IU_PER_MM * m_settings.BiuTo3Dunits() );
     }
 
     // http://devernay.free.fr/cours/opengl/materials.html
@@ -85,6 +87,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
 
     if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
         m_materials.m_Copper.SetNormalPerturbator( &m_copper_normal_perturbator );
+
+
 
     m_materials.m_Paste = CBLINN_PHONG_MATERIAL(
                 (SFVEC3F)m_settings.m_SolderPasteColor *
@@ -1312,10 +1316,17 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                 {
                     const SMATERIAL &material = a3DModel->m_Materials[imat];
 
-                    const float reflectionFactor = glm::clamp( material.m_Shininess *
-                                                               0.75f - 0.125f,
-                                                               0.0f,
-                                                               1.0f );
+                    // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiJtaW4oc3FydCh4LTAuMzUpKjAuNDAtMC4wNSwxLjApIiwiY29sb3IiOiIjMDAwMDAwIn0seyJ0eXBlIjoxMDAwLCJ3aW5kb3ciOlsiMC4wNzA3NzM2NzMyMzY1OTAxMiIsIjEuNTY5NTcxNjI5MjI1NDY5OCIsIi0wLjI3NDYzNTMyMTc1OTkyOTMiLCIwLjY0NzcwMTg4MTkyNTUzNjIiXSwic2l6ZSI6WzY0NCwzOTRdfV0-
+
+                    float reflectionFactor = 0.0f;
+
+                    if( (material.m_Shininess - 0.35f) > FLT_EPSILON )
+                    {
+                        reflectionFactor = glm::clamp( glm::sqrt( (material.m_Shininess - 0.35f) ) *
+                                                       0.40f - 0.05f,
+                                                       0.0f,
+                                                       0.5f );
+                    }
 
                     CBLINN_PHONG_MATERIAL &blinnMaterial = (*materialVector)[imat];
 
@@ -1354,7 +1365,21 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                                   (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) > 0.25f) ||
                                   (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) > 0.25f) ) )
                             {
-                                    blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
+                                // This may be a color plastic ...
+                                blinnMaterial.SetNormalPerturbator( &m_plastic_shine_normal_perturbator );
+                            }
+                            else
+                            {
+                                if( ( RGBtoGray(material.m_Diffuse) > 0.6f ) &&
+                                    ( material.m_Shininess > 0.35f ) &&
+                                    ( material.m_Transparency == 0.0f ) &&
+                                    ( (glm::abs( material.m_Diffuse.r - material.m_Diffuse.g ) < 0.40f) &&
+                                      (glm::abs( material.m_Diffuse.b - material.m_Diffuse.g ) < 0.40f) &&
+                                      (glm::abs( material.m_Diffuse.r - material.m_Diffuse.b ) < 0.40f) ) )
+                                {
+                                    // This may be a brushed metal
+                                    blinnMaterial.SetNormalPerturbator( &m_brushed_metal_normal_perturbator );
+                                }
                             }
                         }
                     }

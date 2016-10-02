@@ -125,7 +125,7 @@ private:
 };
 
 
-// Procedural generation of the shining plastic normals
+// Procedural generation of the shiny plastic normals
 class  CPLASTICSHINENORMAL : public CPROCEDURALGENERATOR
 {
 public:
@@ -144,6 +144,24 @@ private:
     float                       m_scale;
 };
 
+// Procedural generation of the shiny brushed metal
+class  CMETALBRUSHEDNORMAL : public CPROCEDURALGENERATOR
+{
+public:
+    CMETALBRUSHEDNORMAL() : CPROCEDURALGENERATOR()
+    {
+        m_scale = 1.0f;
+    }
+
+    CMETALBRUSHEDNORMAL( float aScale );
+
+    // Imported from CPROCEDURALGENERATOR
+    SFVEC3F Generate( const RAY &aRay,
+                      const HITINFO &aHitInfo ) const override;
+private:
+    PerlinNoise                 m_perlin;
+    float                       m_scale;
+};
 
 /// A base material class that can be used to derive a material implementation
 class  CMATERIAL
