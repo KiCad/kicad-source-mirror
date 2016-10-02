@@ -233,7 +233,7 @@ SFVEC3F CPLASTICNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) con
                                               hitPos.y * 10.0f + Fast_RandFloat() * 0.10f,
                                               hitPos.z * 10.0f + Fast_RandFloat() * 0.10f ) - 0.5f);
 
-        return SFVEC3F( noise1 * 0.08f + noise2 * 0.10f + noise3 * 0.20f );
+        return SFVEC3F( noise1 * 0.08f + noise2 * 0.10f + noise3 * 0.30f );
 }
 
 
@@ -255,7 +255,7 @@ SFVEC3F CPLASTICSHINENORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo 
                                           hitPos.y * 3.0f,
                                           hitPos.z * 3.0f ) - 0.5f);
 
-    return SFVEC3F( noise1 * 0.09f + noise2 * 0.05f );
+    return SFVEC3F( noise1 * 0.09f + noise2 * 0.08f );
 }
 
 
@@ -271,40 +271,41 @@ SFVEC3F CMETALBRUSHEDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo 
 
     SFVEC3F hitPosRelative = hitPos - glm::floor( hitPos );
 
-    const float noiseX = (m_perlin.noise( hitPos.x * 20.0f,
-                                          hitPos.y * 0.1f,
-                                          hitPos.z * 0.1f ) - 0.5f);
+    const float noiseX = (m_perlin.noise( hitPos.x * (60.0f),
+                                          hitPos.y * 1.0f,
+                                          hitPos.z * 1.0f ) - 0.5f);
 
-    const float noiseY = (m_perlin.noise( hitPos.x * 0.1f,
-                                          hitPos.y * 20.0f,
-                                          hitPos.z * 0.1f ) - 0.5f);
+    const float noiseY = (m_perlin.noise( hitPos.x * 1.0f,
+                                          hitPos.y * (60.0f),
+                                          hitPos.z * 1.0f ) - 0.5f);
 
     const float noise2 = (m_perlin.noise( hitPos.x * 1.0f,
-                                          hitPos.y * 0.1f,
-                                          hitPos.z * 0.1f ) - 0.5f);
+                                          hitPos.y * 1.0f,
+                                          hitPos.z * 1.0f ) - 0.5f);
 
-    const float noise3X = (m_perlin.noise( hitPos.x * 100.0f + Fast_RandFloat() * 0.1f,
-                                           hitPos.y * 0.05f,
-                                           hitPos.z * 0.05f ) - 0.5f);
+    const float noise3X = (m_perlin.noise( hitPos.x * (80.0f + noise2 * 0.5f),
+                                           hitPos.y * 0.5f + Fast_RandFloat() * 0.05f,
+                                           hitPos.z * 0.5f ) - 0.5f );
 
-    const float noise3Y = (m_perlin.noise( hitPos.x * 0.05f,
-                                           hitPos.y * 100.0f + Fast_RandFloat() * 0.1f,
-                                           hitPos.z * 0.05f ) - 0.5f);
+    const float noise3Y = (m_perlin.noise( hitPos.x * 0.5f + Fast_RandFloat() * 0.05f,
+                                           hitPos.y * (80.0f + noise2 * 0.5f),
+                                           hitPos.z * 0.5f ) - 0.5f );
 
     // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoKHgtZmxvb3IoeCkpK3Npbih4KSleMyIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi02LjcxNDAwMDAxOTAzMDA3NyIsIjcuMjQ0NjQzNjkyOTY5NzM5IiwiLTMuMTU1NTUyNjAxNDUyNTg4IiwiNS40MzQzODE5OTA1NDczMDY1Il0sInNpemUiOls2NDQsMzk0XX1d
     // ((x - floor(x))+sin(x))^3
 
-    float sawX = (hitPosRelative.x + glm::sin(10.0f * hitPos.x + 5.0f * noise2) );
+    float sawX = (hitPosRelative.x + glm::sin(10.0f * hitPos.x + 5.0f * noise2 + Fast_RandFloat() ) );
           sawX = sawX * sawX * sawX;
 
-    float sawY = (hitPosRelative.y + glm::sin(10.0f * hitPos.y + 5.0f * noise2) );
+    float sawY = (hitPosRelative.y + glm::sin(10.0f * hitPos.y + 5.0f * noise2 + Fast_RandFloat() ) );
           sawY = sawY * sawY * sawY;
 
-    float xOut = sawX * noiseX * 0.02f + noiseX * 0.02f + noise3X * 0.15f;
-    float yOut = sawY * noiseY * 0.02f + noiseY * 0.02f + noise3Y * 0.15f;
+    float xOut = sawX * noise3X * 0.07f + noiseX * 0.25f + noise3X * 0.07f;
+    float yOut = sawY * noise3Y * 0.07f + noiseY * 0.25f + noise3Y * 0.07f;
 
-    xOut = glm::clamp( xOut * 1.0f, -0.20f, 0.20f );
-    yOut = glm::clamp( yOut * 1.0f, -0.20f, 0.20f );
+    const float outLowFreqNoise = noise2 * 0.005f;
 
-    return SFVEC3F( xOut, yOut, noise2 * 0.01f );
+    return SFVEC3F( xOut + outLowFreqNoise,
+                    yOut + outLowFreqNoise,
+                    0.0f + outLowFreqNoise );
 }
