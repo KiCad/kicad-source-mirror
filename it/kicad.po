@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-01 20:08+0200\n"
-"PO-Revision-Date: 2016-10-02 01:47+0200\n"
+"PO-Revision-Date: 2016-10-03 12:14+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -25424,7 +25424,7 @@ msgstr "Tipoerr(%d): <b>%s</b><ul><li> %s: %s </li><li> %s: %s </li></ul>"
 #: include/class_drc_item.h:185
 #, c-format
 msgid "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
-msgstr "ErrType(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
+msgstr "Tipoerr(%d): <b>%s</b><ul><li> %s: %s </li></ul>"
 
 #: include/common.h:272
 #, c-format
