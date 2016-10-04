@@ -119,7 +119,7 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                               (SFVEC3F)m_settings.m_SolderMaskColor ),
                             SFVEC3F( 0.0f ),
                             SFVEC3F( 0.35f ) ),         // specular
-                0.85f * 128.0f,                         // shiness
+                0.95f * 128.0f,                         // shiness
                 0.12f,                                  // transparency
                 0.16f );                                // reflection
 
@@ -259,58 +259,6 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
 
     SFVEC3F camera_pos = m_settings.GetBoardCenter3DU();
     m_settings.CameraGet().SetBoardLookAtPos( camera_pos );
-
-    // Init initial lights
-    m_lights.Clear();
-
-    // This will work as the front camera light.
-    const float light_camera_intensity = 0.20;
-    const float light_directional_intensity_top = 0.35;
-    const float light_directional_intensity = ( 1.0f - ( light_camera_intensity +
-                                                         light_directional_intensity_top ) ) / 4.0f;
-
-    m_camera_light = new CDIRECTIONALLIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                                            SFVEC3F( light_camera_intensity ) );
-    m_camera_light->SetCastShadows( false );
-    m_lights.Add( m_camera_light );
-
-    // http://www.flashandmath.com/mathlets/multicalc/coords/shilmay23fin.html
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 0.03f,
-                                                               glm::pi<float>() * 0.25f ),
-                                         SFVEC3F( light_directional_intensity_top ) ) );
-
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 0.97f,
-                                                               glm::pi<float>() * 1.25f ),
-                                         SFVEC3F( light_directional_intensity_top ) ) );
-
-
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
-                                                               glm::pi<float>() * 1 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
-                                                               glm::pi<float>() * 3 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
-                                                               glm::pi<float>() * 5 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
-                                                               glm::pi<float>() * 7 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-
-
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
-                                                               glm::pi<float>() * 1 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
-                                                               glm::pi<float>() * 3 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
-                                                               glm::pi<float>() * 5 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
-                                                               glm::pi<float>() * 7 / 4.0f ),
-                                         SFVEC3F( light_directional_intensity ) ) );
-
 
     m_object_container.Clear();
     m_containerWithObjectsToDelete.Clear();
@@ -877,6 +825,73 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
             }
         }
     }
+
+
+    // Init initial lights
+    // /////////////////////////////////////////////////////////////////////////
+    m_lights.Clear();
+
+    // This will work as the front camera light.
+    const float light_camera_intensity = 0.15;
+    const float light_top_bottom = 0.70;
+    const float light_directional_intensity = ( 1.0f - ( light_camera_intensity +
+                                                         light_top_bottom * 0.5f ) ) / 4.0f;
+
+    m_camera_light = new CDIRECTIONALLIGHT( SFVEC3F( 0.0f, 0.0f, 0.0f ),
+                                            SFVEC3F( light_camera_intensity ) );
+    m_camera_light->SetCastShadows( false );
+    m_lights.Add( m_camera_light );
+
+    // Option 1 - using Point Lights
+
+    const SFVEC3F &boarCenter = m_settings.GetBBox3DU().GetCenter();
+
+    m_lights.Add( new CPOINTLIGHT( SFVEC3F( boarCenter.x, boarCenter.y, +RANGE_SCALE_3D * 2.0f ),
+                                   SFVEC3F( light_top_bottom ) ) );
+
+    m_lights.Add( new CPOINTLIGHT( SFVEC3F( boarCenter.x, boarCenter.y, -RANGE_SCALE_3D * 2.0f ),
+                                   SFVEC3F( light_top_bottom ) ) );
+
+
+    // http://www.flashandmath.com/mathlets/multicalc/coords/shilmay23fin.html
+
+    // Option 2 - Top/Bottom direction lights
+    /*
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 0.03f,
+                                                               glm::pi<float>() * 0.25f ),
+                                         SFVEC3F( light_top_bottom ) ) );
+
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 0.97f,
+                                                               glm::pi<float>() * 1.25f ),
+                                         SFVEC3F( light_top_bottom ) ) );
+    */
+
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
+                                                               glm::pi<float>() * 1 / 4.0f ),
+                                         SFVEC3F( light_directional_intensity ) ) );
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
+                                                               glm::pi<float>() * 3 / 4.0f ),
+                                         SFVEC3F( light_directional_intensity ) ) );
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
+                                                               glm::pi<float>() * 5 / 4.0f ),
+                                         SFVEC3F( light_directional_intensity ) ) );
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 1.0f / 8.0f,
+                                                               glm::pi<float>() * 7 / 4.0f ),
+                                         SFVEC3F( light_directional_intensity ) ) );
+
+
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
+                                                               glm::pi<float>() * 1 / 4.0f ),
+                                         SFVEC3F( light_directional_intensity ) ) );
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
+                                                               glm::pi<float>() * 3 / 4.0f ),
+                                         SFVEC3F( light_directional_intensity ) ) );
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
+                                                               glm::pi<float>() * 5 / 4.0f ),
+                                         SFVEC3F( light_directional_intensity ) ) );
+    m_lights.Add( new CDIRECTIONALLIGHT( SphericalToCartesian( glm::pi<float>() * 7.0f / 8.0f,
+                                                               glm::pi<float>() * 7 / 4.0f ),
+                                         SFVEC3F( light_directional_intensity ) ) );
 
 
     // Create an accelerator

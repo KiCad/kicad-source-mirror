@@ -152,10 +152,13 @@ SFVEC3F CBOARDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
 
     // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiJzaW4oc2luKHNpbih4KSoxLjkpKjEuNSkiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC45NjIxMDU3MDgwNzg1MjYyIiwiNy45NzE0MjYyNjc2MDE0MyIsIi0yLjUxNzYyMDM1MTQ4MjQ0OSIsIjIuOTc5OTM3Nzg3Mzk3NTMwMyJdLCJzaXplIjpbNjQ2LDM5Nl19XQ--
 
-    const float x = (glm::sin(glm::sin( glm::sin( hitPos.x * m_scale ) * 1.9f ) * 1.5f ) + 0.0f) * 0.10f;
-    const float y = (glm::sin(glm::sin( glm::sin( hitPos.y * m_scale ) * 1.9f ) * 1.5f ) + 0.0f) * 0.04f;
+    // Implement a texture as the "measling crazing blistering" method of FR4
 
-    return SFVEC3F( x, y, 0.0f );
+    const float x = (glm::sin(glm::sin( glm::sin( hitPos.x * m_scale ) * 1.9f ) * 1.5f ) + 0.0f) * 0.10f;
+    const float y = (glm::sin(glm::sin( glm::sin( hitPos.y * m_scale ) * 1.9f ) * 1.5f ) + 0.0f) * 0.10f;
+    const float z = glm::sin( 2.0f * hitPos.z * m_scale + Fast_RandFloat() * 1.0f ) * 0.2f;
+
+    return SFVEC3F( x, y, z );
 }
 
 
