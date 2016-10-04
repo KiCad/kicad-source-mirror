@@ -80,8 +80,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-01 20:08+0200\n"
-"PO-Revision-Date: 2016-10-03 12:14+0200\n"
+"POT-Creation-Date: 2016-10-04 10:55+0200\n"
+"PO-Revision-Date: 2016-10-04 10:56+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -4643,12 +4643,12 @@ msgstr "Aggiorna zoom"
 #: pcbnew/hotkeys.cpp:194 eeschema/hotkeys.cpp:124
 #: pagelayout_editor/hotkeys.cpp:92
 msgid "Undo"
-msgstr "Annulla"
+msgstr "Ripristina"
 
 #: pcbnew/hotkeys.cpp:198 pcbnew/hotkeys.cpp:200 eeschema/hotkeys.cpp:128
 #: eeschema/hotkeys.cpp:130 pagelayout_editor/hotkeys.cpp:93
 msgid "Redo"
-msgstr "Ripristina"
+msgstr "Rifa"
 
 #: pcbnew/hotkeys.cpp:205
 msgid "Switch Track Width To Next"
@@ -7323,7 +7323,9 @@ msgstr "Impossibile creare"
 msgid ""
 "Unable to calculate the board outlines; fall back to using the board "
 "boundary box."
-msgstr "Impossibile calcolare i bordi della scheda; ripiego sull'uso il riquadro limite della scheda."
+msgstr ""
+"Impossibile calcolare i bordi della scheda; ripiego sull'uso il riquadro "
+"limite della scheda."
 
 #: pcbnew/exporters/export_vrml.cpp:867
 msgid "VRML Export Failed: Could not add holes to contours."
@@ -10107,7 +10109,9 @@ msgstr "Il file esiste, sovrascrivere?"
 msgid ""
 "Unable to create STEP file; check that the board has a valid outline and "
 "models."
-msgstr "Impossibile creare il file STEP; controllare che la scheda abbia contorni e modelli validi."
+msgstr ""
+"Impossibile creare il file STEP; controllare che la scheda abbia contorni e "
+"modelli validi."
 
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:24
 #, c-format
@@ -10539,7 +10543,9 @@ msgstr "Cancella segmenti di pis&te che connettono collegamenti diversi"
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
-msgstr "rimuove segmenti di pista che connettono nodi appartenenti a collegamenti diversi (corto circuiti)"
+msgstr ""
+"rimuove segmenti di pista che connettono nodi appartenenti a collegamenti "
+"diversi (corto circuiti)"
 
 #: pcbnew/dialogs/dialog_cleaning_options_base.cpp:27
 msgid "&Delete redundant vias"
@@ -11919,7 +11925,7 @@ msgstr "x:"
 #: common/dialogs/dialog_hotkeys_editor_base.cpp:28
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:85
 msgid "Reset"
-msgstr "Annulla"
+msgstr "Reimposta"
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:42
 msgid "y:"
@@ -19325,7 +19331,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:71
 msgid "Spice unit symbols in values (case insensitive):"
-msgstr "Simboli unità Spice nei valori (indifferente se maiuscole o minuscole):"
+msgstr ""
+"Simboli unità Spice nei valori (indifferente se maiuscole o minuscole):"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:81
 msgid "f"
