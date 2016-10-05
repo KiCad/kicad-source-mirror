@@ -180,9 +180,7 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     CHECK_CXX_COMPILER_FLAG("-Wsuggest-override" COMPILER_SUPPORTS_WSUGGEST_OVERRIDE)
 
-    # Swig generated files do not use override specifier and create a lot of warnings
-    # So do not use -Wsuggest-override with KICAD_SCRIPTING ON, untill a best way is found
-    if(COMPILER_SUPPORTS_WSUGGEST_OVERRIDE AND NOT KICAD_SCRIPTING)
+    if(COMPILER_SUPPORTS_WSUGGEST_OVERRIDE)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wsuggest-override")
     endif()
 endif()
