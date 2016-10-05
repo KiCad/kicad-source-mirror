@@ -107,7 +107,7 @@ void SCH_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxString& aAl
 }
 
 
-void SCH_PLUGIN::SymbolLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+void SCH_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );

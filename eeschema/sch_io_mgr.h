@@ -304,10 +304,12 @@ public:
 
     /**
      * Function SaveSymbol
-     * will write @a aSymbol to an existing library located at @a aLibraryPath.
-     * If a #LIB_PART by the same name already exists or there are any conflicting
-     * alias names, an exception is thrown.  Symbol libraries cannot have duplicate
-     * alias names.
+     *
+     * will write @a aSymbol to an existing library located at @a aLibraryPath.  If a #LIB_PART
+     * by the same name already exists or there are any conflicting alias names, the new
+     * #LIB_PART will silently overwrite any existing aliases and/or part becaue libraries
+     * cannot have duplicate alias names.  It is the responsibility of the caller to check
+     * the library for conflicts before saving.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
      *                     or URL containing several symbols.
@@ -321,7 +323,7 @@ public:
      *                    The caller continues to own this object (plugin may not delete it), and
      *                    plugins should expect it to be optionally NULL.
      *
-     * @throw IO_ERROR if there is a problem saving or duplicate alias names.
+     * @throw IO_ERROR if there is a problem saving.
      */
     virtual void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
                              const PROPERTIES* aProperties = NULL );
@@ -374,23 +376,22 @@ public:
                                const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function SymbolLibCreate
-     * creates a new empty footprint library at @a aLibraryPath empty.  It is an
-     * error to attempt to create an existing library or to attempt to create
-     * on a "read only" location.
+     * Function CreateSymbolLib
+     * creates a new empty symbol library at @a aLibraryPath.  It is an error to attempt
+     * to create an existing library or to attempt to create on a "read only" location.
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *   or URL containing several footprints.
+     *                     or URL containing several footprints.
      *
-     * @param aProperties is an associative array that can be used to tell the
-     *  library create function anything special, because it can take any number of
-     *  additional named tuning arguments that the plugin is known to support.
-     *  The caller continues to own this object (plugin may not delete it), and
-     *  plugins should expect it to be optionally NULL.
+     * @param aProperties is an associative array that can be used to tell the library
+     *                    create function anything special, because it can take any number
+     *                    of additional named tuning arguments that the plugin is known to
+     *                    support.  The caller continues to own this object (plugin may not
+     *                    delete it), and plugins should expect it to be optionally NULL.
      *
      * @throw IO_ERROR if there is a problem finding the library, or creating it.
      */
-    virtual void SymbolLibCreate( const wxString& aLibraryPath,
+    virtual void CreateSymbolLib( const wxString& aLibraryPath,
                                   const PROPERTIES* aProperties = NULL );
 
     /**

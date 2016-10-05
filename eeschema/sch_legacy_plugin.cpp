@@ -3373,3 +3373,24 @@ void SCH_LEGACY_PLUGIN::DeleteSymbol( const wxString& aLibraryPath, const wxStri
 
     m_cache->DeleteSymbol( aAliasName );
 }
+
+
+void SCH_LEGACY_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
+                                         const PROPERTIES* aProperties )
+{
+    if( wxFileExists( aLibraryPath ) )
+    {
+        THROW_IO_ERROR( wxString::Format(
+            _( "symbol library '%s' already exists, cannot create a new library" ),
+            aLibraryPath.GetData() ) );
+    }
+
+    LOCALE_IO toggle;
+
+    m_props = aProperties;
+
+    delete m_cache;
+    m_cache = new SCH_LEGACY_PLUGIN_CACHE( aLibraryPath );
+    m_cache->Save();
+    m_cache->Load();    // update m_writable and m_mod_time
+}
