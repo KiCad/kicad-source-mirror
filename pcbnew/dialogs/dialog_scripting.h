@@ -33,7 +33,7 @@ public:
     DIALOG_SCRIPTING( wxWindow * parent );
 
 private:
-    void OnRunButtonClick( wxCommandEvent& event );
+    void OnRunButtonClick( wxCommandEvent& event ) override;
 };
 
 #endif  // _DIALOG_SCRIPTING_H_
