@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-04 10:55+0200\n"
-"PO-Revision-Date: 2016-10-05 08:12+0200\n"
+"PO-Revision-Date: 2016-10-05 09:00+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -21139,7 +21139,7 @@ msgstr "Modifica modello spice"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:106
 msgid "Reset to Library Defaults"
-msgstr "Riporta alle impostazioni predefinite libreria"
+msgstr "Reimposta ai valori predefiniti di libreria"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:107
 msgid ""
