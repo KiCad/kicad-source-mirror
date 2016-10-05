@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-04 10:55+0200\n"
-"PO-Revision-Date: 2016-10-04 10:56+0200\n"
+"PO-Revision-Date: 2016-10-05 08:12+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -4910,7 +4910,7 @@ msgstr "Impossibile trascinare questo segmento: due segmenti collimano"
 
 #: pcbnew/class_edge_mod.cpp:239
 msgid "TimeStamp"
-msgstr "Stampigliatura"
+msgstr "Marcatura temporale"
 
 #: pcbnew/class_edge_mod.cpp:240
 msgid "Footprint Layer"
@@ -11405,7 +11405,7 @@ msgstr "Abbina componenti per:"
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:92
 msgid "Timestamp"
-msgstr "Stampigliatura"
+msgstr "Marcatura temporale"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:59
 msgid "Perform PCB Update"
@@ -16644,7 +16644,7 @@ msgstr "Punto di connessione gerarchico %s"
 #: eeschema/annotate.cpp:87
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr "%d stampigliature duplicate trovate e sostituite."
+msgstr "%d marcature temporali duplicate trovate e sostituite."
 
 #: eeschema/libeditframe.cpp:181 eeschema/hotkeys.cpp:335
 msgid "Library Editor"
@@ -18519,7 +18519,7 @@ msgstr "Valori differenti per %s%d%s (%s) e %s%d%s (%s)"
 #: eeschema/component_references_lister.cpp:679
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
-msgstr "Duplicazione stampigliatura (%s) per %s%d e %s%d"
+msgstr "Duplicata marcatura temporale (%s) per %s%d e %s%d"
 
 #: eeschema/lib_export.cpp:51
 msgid "Import Component"
@@ -18790,7 +18790,7 @@ msgstr "Questo file NON è una libreria di Eeschema!"
 
 #: eeschema/class_library.cpp:422
 msgid "The file header is missing version and time stamp information."
-msgstr "L'intestazione del file manca della versione e della stampigliatura"
+msgstr "L'intestazione del file manca della versione e della marcatura temporale"
 
 #: eeschema/class_library.cpp:466
 msgid "An error occurred attempting to read the header."
