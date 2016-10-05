@@ -320,8 +320,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                              m_ZoneMinThickness, color );
                 else
                     GRFillCSegm( panel->GetClipBox(), DC,
-	                         x0, y0, x1, y1,
-				 m_ZoneMinThickness, color );
+                                 x0, y0, x1, y1, m_ZoneMinThickness, color );
             }
         }
 

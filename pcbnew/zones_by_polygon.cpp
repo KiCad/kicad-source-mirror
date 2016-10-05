@@ -768,7 +768,6 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     {
         zone->Outline()->CloseLastContour(); // Close the current corner list
         GetBoard()->Add( zone );
-        GetBoard()->m_CurrentZoneContour = NULL;
 
         // Add this zone in picked list, as new item
         ITEM_PICKER picker( zone, UR_NEW );
@@ -788,6 +787,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
 
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
+    GetBoard()->m_CurrentZoneContour = NULL;
 
     GetScreen()->SetCurItem( NULL );       // This outline can be deleted when merging outlines
 
