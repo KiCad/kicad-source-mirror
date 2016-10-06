@@ -163,12 +163,12 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList(
                 if( jj && ! wsText->IsInsidePage( jj ) )
                     continue;
 
-                Append( gtext = new WS_DRAW_ITEM_TEXT( wsText, wsText->m_FullText,
-                                                       wsText->GetStartPosUi( jj ),
-                                                       textsize,
-                                                       pensize, color,
-                                                       wsText->IsItalic(),
-                                                       wsText->IsBold() ) );
+                gtext = new WS_DRAW_ITEM_TEXT( wsText, wsText->m_FullText,
+                                               wsText->GetStartPosUi( jj ),
+                                               textsize, pensize, color,
+                                               wsText->IsItalic(),
+                                               wsText->IsBold() );
+                Append( gtext );
                 gtext->SetMultilineAllowed( multilines );
                 wsText->TransfertSetupToGraphicText( gtext );
 

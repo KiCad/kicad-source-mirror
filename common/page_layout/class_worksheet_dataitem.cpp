@@ -537,14 +537,15 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
 
     if( m_BoundingBoxSize.x || m_BoundingBoxSize.y )
     {
-        int linewidth = 0;
         // to know the X and Y size of the line, we should use
         // EDA_TEXT::GetTextBox()
         // but this function uses integers
         // So, to avoid truncations with our unit in mm, use microns.
         wxSize size_micron;
-        size_micron.x = KiROUND( m_ConstrainedTextSize.x * 1000.0 );
-        size_micron.y = KiROUND( m_ConstrainedTextSize.y * 1000.0 );
+        #define FSCALE 1000.0
+        int linewidth = 0;
+        size_micron.x = KiROUND( m_ConstrainedTextSize.x * FSCALE );
+        size_micron.y = KiROUND( m_ConstrainedTextSize.y * FSCALE );
         WS_DRAW_ITEM_TEXT dummy( WS_DRAW_ITEM_TEXT( this, this->m_FullText,
                                                wxPoint(0,0),
                                                size_micron,
@@ -552,10 +553,11 @@ void WORKSHEET_DATAITEM_TEXT::SetConstrainedTextSize()
                                                IsItalic(), IsBold() ) );
         dummy.SetMultilineAllowed( true );
         TransfertSetupToGraphicText( &dummy );
+
         EDA_RECT rect = dummy.GetTextBox();
         DSIZE size;
-        size.x = rect.GetWidth() / 1000.0;
-        size.y = rect.GetHeight() / 1000.0;
+        size.x = rect.GetWidth() / FSCALE;
+        size.y = rect.GetHeight() / FSCALE;
 
         if( m_BoundingBoxSize.x && size.x > m_BoundingBoxSize.x )
             m_ConstrainedTextSize.x *= m_BoundingBoxSize.x / size.x;

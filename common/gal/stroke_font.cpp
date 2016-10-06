@@ -409,7 +409,7 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, VECTOR2D a
                                         double aGlyphThickness,
                                         double* aTopLimit, double* aBottomLimit ) const
 {
-    VECTOR2D result = VECTOR2D( 0.0, m_gal->GetGlyphSize().y );
+    VECTOR2D string_bbox;
     double ymax = 0.0;
     double ymin = 0.0;
 
@@ -434,7 +434,7 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, VECTOR2D a
 
         const BOX2D& box = m_glyphBoundingBoxes[dd];
 
-        result.x += box.GetEnd().x;
+        string_bbox.x += box.GetEnd().x;
 
         // Calculate Y min and Y max
         if( aTopLimit )
@@ -450,12 +450,13 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, VECTOR2D a
         }
     }
 
-    result.x *= aGlyphSize.x;
-    result.x += aGlyphThickness;
+    string_bbox.x *= aGlyphSize.x;
+    string_bbox.x += aGlyphThickness;
+    string_bbox.y = aGlyphSize.y + aGlyphThickness;
 
     // For italic correction, take in account italic tilt
     if( m_gal->IsFontItalic() )
-        result.x += result.y * STROKE_FONT::ITALIC_TILT;
+        string_bbox.x += string_bbox.y * STROKE_FONT::ITALIC_TILT;
 
     if( aTopLimit )
         *aTopLimit = ymax * aGlyphSize.y;
@@ -463,5 +464,5 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, VECTOR2D a
     if( aBottomLimit )
         *aBottomLimit = ymin * aGlyphSize.y;
 
-    return result;
+    return string_bbox;
 }
