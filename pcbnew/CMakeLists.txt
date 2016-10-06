@@ -332,7 +332,7 @@ if( KICAD_SCRIPTING )
     # Swig generated files do not use the override specifier, therefore
     # disable suggest-override warnings
     if (COMPILER_SUPPORTS_WSUGGEST_OVERRIDE)
-        set_source_files_properties(pcbnew_wrap.cxx
+        set_source_files_properties( pcbnew_wrap.cxx pcbnewPYTHON_wrap.cxx
             PROPERTIES COMPILE_FLAGS -Wno-suggest-override
         )
     endif()
