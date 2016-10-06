@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-04 10:55+0200\n"
-"PO-Revision-Date: 2016-10-05 09:00+0200\n"
+"PO-Revision-Date: 2016-10-06 10:36+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: Italiano\n"
@@ -19923,11 +19923,11 @@ msgstr "Dimensioni dello schema"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:50
 msgid "Force size A4"
-msgstr "Forza Formato A4"
+msgstr "Forza formato A4"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:50
 msgid "Force size A"
-msgstr "Forza Formato A"
+msgstr "Forza formato A"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:52
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:58
