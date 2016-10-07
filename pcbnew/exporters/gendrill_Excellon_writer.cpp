@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2015 Jean_Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,8 +80,8 @@ EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
 
 
 void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
-                                            bool aGenDrill, bool aGenMap,
-                                            REPORTER * aReporter )
+                                                 bool aGenDrill, bool aGenMap,
+                                                 REPORTER * aReporter )
 {
     wxFileName  fn;
     wxString    msg;
@@ -93,10 +93,10 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
         hole_sets.push_back( LAYER_PAIR( F_Cu, B_Cu ) );
 
     for( std::vector<LAYER_PAIR>::const_iterator it = hole_sets.begin();
-            it != hole_sets.end();  ++it )
+         it != hole_sets.end();  ++it )
     {
         LAYER_PAIR  pair = *it;
-        // For separate drill files, the last layer pair is the NPTH dril file.
+        // For separate drill files, the last layer pair is the NPTH drill file.
         bool doing_npth = m_merge_PTH_NPTH ? false : ( it == hole_sets.end() - 1 );
 
         BuildHolesList( pair, doing_npth );
@@ -118,8 +118,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                 {
                     if( aReporter )
                     {
-                        msg.Printf(  _( "** Unable to create %s **\n" ),
-                                          GetChars( fullFilename ) );
+                        msg.Printf( _( "** Unable to create %s **\n" ), GetChars( fullFilename ) );
                         aReporter->Report( msg );
                     }
                     break;
@@ -168,17 +167,6 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 }
 
 
-
-/*
- *  Creates the drill files in EXCELLON format
- *  Number format:
- *      - Floating point format
- *      - integer format
- *      - integer format: "Trailing Zero" ( TZ ) or "Leading Zero"
- *  Units
- *      - Decimal
- *      - Metric
- */
 int EXCELLON_WRITER::CreateDrillFile( FILE* aFile )
 {
     m_file = aFile;
@@ -207,25 +195,23 @@ int EXCELLON_WRITER::CreateDrillFile( FILE* aFile )
         DRILL_TOOL& tool_descr = m_toolListBuffer[ii];
 
 #ifdef WRITE_PTH_NPTH_COMMENT
-            if( writePTHcomment && !tool_descr.m_Hole_NotPlated )
-            {
-                writePTHcomment = false;
-                fprintf( m_file, ";TYPE=PLATED\n" );
-            }
+        if( writePTHcomment && !tool_descr.m_Hole_NotPlated )
+        {
+            writePTHcomment = false;
+            fprintf( m_file, ";TYPE=PLATED\n" );
+        }
 
-            if( writeNPTHcomment && tool_descr.m_Hole_NotPlated )
-            {
-                writeNPTHcomment = false;
-                fprintf( m_file, ";TYPE=NON_PLATED\n" );
-            }
+        if( writeNPTHcomment && tool_descr.m_Hole_NotPlated )
+        {
+            writeNPTHcomment = false;
+            fprintf( m_file, ";TYPE=NON_PLATED\n" );
+        }
 #endif
 
-        fprintf( m_file, "T%dC%.3f\n", ii + 1,
-                 tool_descr.m_Diameter * m_conversionUnits  );
+        fprintf( m_file, "T%dC%.3f\n", ii + 1, tool_descr.m_Diameter * m_conversionUnits );
     }
 
     fputs( "%\n", m_file );                         // End of header info
-
     fputs( "G90\n", m_file );                       // Absolute mode
     fputs( "G05\n", m_file );                       // Drill mode
 
@@ -485,8 +471,7 @@ void EXCELLON_WRITER::WriteEXCELLONHeader()
         wxString msg;
         msg << wxT("KiCad") << wxT( " " ) << GetBuildVersion();
 
-        fprintf( m_file, ";DRILL file {%s} date %s\n", TO_UTF8( msg ),
-                 TO_UTF8( DateAndTime() ) );
+        fprintf( m_file, ";DRILL file {%s} date %s\n", TO_UTF8( msg ), TO_UTF8( DateAndTime() ) );
         msg = wxT( ";FORMAT={" );
 
         // Print precision:
@@ -754,7 +739,8 @@ const std::string EXCELLON_WRITER::layerPairName( LAYER_PAIR aPair ) const
 }
 
 
-const wxString EXCELLON_WRITER::drillFileName( LAYER_PAIR aPair, bool aNPTH, bool aMerge_PTH_NPTH ) const
+const wxString EXCELLON_WRITER::drillFileName( LAYER_PAIR aPair, bool aNPTH,
+                                               bool aMerge_PTH_NPTH ) const
 {
     wxASSERT( m_pcb );
 
@@ -777,10 +763,9 @@ const wxString EXCELLON_WRITER::drillFileName( LAYER_PAIR aPair, bool aNPTH, boo
     wxFileName  fn = m_pcb->GetFileName();
 
     fn.SetName( fn.GetName() + extend );
-    fn.SetPath( "" );
     fn.SetExt( DrillFileExtension );
 
-    wxString ret = fn.GetFullPath();    // show me in debugger
+    wxString ret = fn.GetFullName();    // show me in debugger
 
     return ret;
 }

@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2012 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,8 +131,8 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_Check_Mirror->SetValue( m_Mirror );
     m_Check_Merge_PTH_NPTH->SetValue( m_Merge_PTH_NPTH );
     m_Choice_Drill_Map->SetSelection( m_mapFileType );
-    m_ViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
-    m_MicroViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
+    m_ViaDrillValue->SetLabel( _( "Use Netclass values" ) );
+    m_MicroViaDrillValue->SetLabel( _( "Use Netclass values" ) );
 
     // See if we have some buried vias or/and microvias, and display
     // microvias drill value if so
@@ -243,6 +243,7 @@ void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
     UpdatePrecisionOptions();
 }
 
+
 void DIALOG_GENDRILL::OnGenMapFile( wxCommandEvent& event )
 {
     GenDrillAndMapFiles( false, true);
@@ -302,8 +303,7 @@ void DIALOG_GENDRILL::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     fn = Prj().AbsolutePath( m_parent->GetBoard()->GetFileName() );
     wxString defaultPath = fn.GetPathWithSep();
     wxString msg;
-    msg.Printf( _( "Do you want to use a path relative to\n'%s'" ),
-                   GetChars( defaultPath ) );
+    msg.Printf( _( "Do you want to use a path relative to\n'%s'" ), GetChars( defaultPath ) );
 
     wxMessageDialog dialog( this, msg, _( "Plot Output Directory" ),
                             wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
@@ -352,7 +352,7 @@ void DIALOG_GENDRILL::SetParams()
 }
 
 
-void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
+void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
 {
     UpdateConfig();     // set params and Save drill options
 
@@ -365,21 +365,19 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles(bool aGenDrill, bool aGenMap)
         PLOT_FORMAT_HPGL, PLOT_FORMAT_POST, PLOT_FORMAT_GERBER,
         PLOT_FORMAT_DXF, PLOT_FORMAT_SVG, PLOT_FORMAT_PDF
     };
+
     unsigned choice = (unsigned) m_Choice_Drill_Map->GetSelection();
 
     if( choice >= DIM( filefmt ) )
         choice = 1;
 
     EXCELLON_WRITER excellonWriter( m_parent->GetBoard() );
-    excellonWriter.SetFormat( !m_UnitDrillIsInch,
-                              (EXCELLON_WRITER::ZEROS_FMT) m_ZerosFormat,
+    excellonWriter.SetFormat( !m_UnitDrillIsInch, (EXCELLON_WRITER::ZEROS_FMT) m_ZerosFormat,
                               m_Precision.m_lhs, m_Precision.m_rhs );
-    excellonWriter.SetOptions( m_Mirror, m_MinimalHeader,
-                               m_FileDrillOffset, m_Merge_PTH_NPTH );
+    excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset, m_Merge_PTH_NPTH );
     excellonWriter.SetMapFileFormat( filefmt[choice] );
 
-    excellonWriter.CreateDrillandMapFilesSet( defaultPath, aGenDrill, aGenMap,
-                                              &reporter);
+    excellonWriter.CreateDrillandMapFilesSet( defaultPath, aGenDrill, aGenMap, &reporter );
 }
 
 
@@ -397,19 +395,16 @@ void DIALOG_GENDRILL::OnGenReportFile( wxCommandEvent& event )
     if( defaultPath.IsEmpty() )
         defaultPath = wxStandardPaths::Get().GetDocumentsDir();
 
-    wxFileDialog dlg( this, _( "Save Drill Report File" ), defaultPath,
-                      fn.GetFullName(), wxGetTranslation( ReportFileWildcard ),
-                      wxFD_SAVE );
+    wxFileDialog dlg( this, _( "Save Drill Report File" ), defaultPath, fn.GetFullName(),
+                      wxGetTranslation( ReportFileWildcard ), wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     EXCELLON_WRITER excellonWriter( m_parent->GetBoard() );
-    excellonWriter.SetFormat( !m_UnitDrillIsInch,
-                              (EXCELLON_WRITER::ZEROS_FMT) m_ZerosFormat,
+    excellonWriter.SetFormat( !m_UnitDrillIsInch, (EXCELLON_WRITER::ZEROS_FMT) m_ZerosFormat,
                               m_Precision.m_lhs, m_Precision.m_rhs );
-    excellonWriter.SetOptions( m_Mirror, m_MinimalHeader,
-                               m_FileDrillOffset, m_Merge_PTH_NPTH );
+    excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset, m_Merge_PTH_NPTH );
 
     bool success = excellonWriter.GenDrillReportFile( dlg.GetPath() );
 
