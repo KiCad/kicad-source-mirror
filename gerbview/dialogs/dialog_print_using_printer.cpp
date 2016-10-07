@@ -170,7 +170,8 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
                                                wxID_ANY, msg );
         boxSizer->Add( m_BoxSelectLayer[ii], wxGROW | wxLEFT | wxRIGHT | wxTOP );
 
-        if( images->GetGbrImage( ii ) == NULL )     // Nothing loaded on this draw layer
+        if( g_GERBER_List.GetGbrImage( ii ) == NULL )
+            // Nothing loaded on this draw layer
             m_BoxSelectLayer[ii]->Enable( false );
     }
 
