@@ -626,7 +626,7 @@ void DIALOG_SPICE_MODEL::updateFromFile( wxComboBox* aComboBox,
     if( !filePath.Exists() )
     {
         // Look for the file in the project path
-        filePath.SetPath( Prj().GetProjectPath() );
+        filePath.SetPath( Prj().GetProjectPath() + filePath.GetPath() );
     }
 
     wxTextFile file;
