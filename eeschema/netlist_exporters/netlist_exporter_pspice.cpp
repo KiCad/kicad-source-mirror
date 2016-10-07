@@ -89,6 +89,9 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
 
     for( const auto& item : m_spiceItems )
     {
+        if( !item.m_enabled )
+            continue;
+
         aFormatter->Print( 0, "%c%s ", item.m_primitive, (const char*) item.m_refName.c_str() );
 
         // Pins to node mapping

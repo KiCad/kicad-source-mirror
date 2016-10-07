@@ -151,6 +151,9 @@ void NETLIST_EXPORTER_PSPICE_SIM::writeDirectives( OUTPUTFORMATTER* aFormatter, 
         for( const auto& current :
                 NETLIST_EXPORTER_PSPICE_SIM::GetCurrents( (SPICE_PRIMITIVE) item.m_primitive ) )
         {
+            if( !item.m_enabled )
+                continue;
+
             /// @todo is it required to switch to lowercase
             aFormatter->Print( 0, ".save %s\n",
                     (const char*) GetSpiceVector( item.m_refName, SPT_CURRENT, current ).c_str() );
