@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-30 20:34+0300\n"
-"PO-Revision-Date: 2016-09-30 20:42+0300\n"
+"POT-Creation-Date: 2016-10-08 16:23+0300\n"
+"PO-Revision-Date: 2016-10-08 16:25+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -250,39 +250,39 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "Отмена"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:133
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:134
 msgid "3D Preview"
 msgstr "Просмотр 3D"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:142
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:143
 msgid "Scale"
 msgstr "Масштаб"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:143
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:144
 msgid "Rotation (degrees)"
 msgstr "Поворот ( ° )"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:145
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:146
 msgid "Offset "
 msgstr "Смещение "
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:272
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:273
 msgid "Change to isometric perspective"
 msgstr "Переключиться на изометрическую перспективу"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:276
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:277
 msgid "Reload board and 3D models"
 msgstr "Перезагрузить плату и 3D модели"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:686
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:687
 msgid "Invalid X scale"
 msgstr "Неверный масштаб по X"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:697
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:698
 msgid "Invalid Y scale"
 msgstr "Неверный масштаб по Y"
 
-#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:708
+#: 3d-viewer/3d_cache/dialogs/panel_prev_model.cpp:709
 msgid "Invalid Z scale"
 msgstr "Неверный масштаб по Z"
 
@@ -5318,7 +5318,7 @@ msgstr "Номер"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:163
 #: pcbnew/class_drawsegment.cpp:338 pcbnew/class_marker_pcb.cpp:97
 #: pcbnew/class_text_mod.cpp:331 pcbnew/class_track.cpp:1128 pcbnew/class_track.cpp:1155
-#: pcbnew/class_track.cpp:1204 pcbnew/class_zone.cpp:608
+#: pcbnew/class_track.cpp:1204 pcbnew/class_zone.cpp:607
 #: pcbnew/dialogs/dialog_layers_setup.cpp:346
 msgid "Type"
 msgstr "Тип"
@@ -5565,13 +5565,13 @@ msgid "Browse Plugins"
 msgstr "Обзор плагинов"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:173
-#: pcbnew/dialogs/dialog_SVG_print.cpp:214 pcbnew/dialogs/dialog_gendrill.cpp:295
+#: pcbnew/dialogs/dialog_SVG_print.cpp:214 pcbnew/dialogs/dialog_gendrill.cpp:296
 #: pcbnew/dialogs/dialog_plot.cpp:314 pcbnew/exporters/gen_modules_placefile.cpp:180
 #: pcbnew/exporters/gen_modules_placefile.cpp:610
 msgid "Select Output Directory"
 msgstr "Выбор выходного каталога"
 
-#: eeschema/dialogs/dialog_plot_schematic.cpp:185 pcbnew/dialogs/dialog_gendrill.cpp:305
+#: eeschema/dialogs/dialog_plot_schematic.cpp:185 pcbnew/dialogs/dialog_gendrill.cpp:306
 #: pcbnew/dialogs/dialog_plot.cpp:324
 #, c-format
 msgid ""
@@ -5854,7 +5854,7 @@ msgid "Page Setup"
 msgstr "Настройки страницы"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:50
-#: gerbview/dialogs/dialog_print_using_printer.cpp:404
+#: gerbview/dialogs/dialog_print_using_printer.cpp:403
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:103
 #: pcbnew/dialogs/dialog_print_for_modedit_base.cpp:54
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:495
@@ -9294,6 +9294,11 @@ msgstr "файл закончился раньше, во время загруз
 msgid "library %s does not contain an alias %s"
 msgstr "библиотека %s не содержит псевдоним %s"
 
+#: eeschema/sch_legacy_plugin.cpp:3384
+#, c-format
+msgid "symbol library '%s' already exists, cannot create a new library"
+msgstr "библиотека символов '%s' уже существует, невозможно создать новую библиотеку"
+
 #: eeschema/sch_line.cpp:458
 msgid "Vert."
 msgstr "Верт."
@@ -9590,7 +9595,7 @@ msgstr "Добавить пробник симулятора"
 msgid "Select a value to be tuned"
 msgstr "Выбрать значение для подстройки"
 
-#: eeschema/schframe.cpp:173 pcbnew/class_zone.cpp:846
+#: eeschema/schframe.cpp:173 pcbnew/class_zone.cpp:845
 msgid "Not Found"
 msgstr "Не найдено"
 
@@ -10391,7 +10396,7 @@ msgstr "Слой графики %d"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:163 pcbnew/class_drawsegment.cpp:380
 #: pcbnew/class_pad.cpp:610 pcbnew/class_pcb_layer_widget.cpp:272
 #: pcbnew/class_pcb_text.cpp:119 pcbnew/class_text_mod.cpp:341
-#: pcbnew/class_track.cpp:1138 pcbnew/class_track.cpp:1165 pcbnew/class_zone.cpp:654
+#: pcbnew/class_track.cpp:1138 pcbnew/class_track.cpp:1165 pcbnew/class_zone.cpp:653
 #: pcbnew/dialogs/dialog_dimension_editor_base.cpp:83
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:111
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:140 pcbnew/layer_widget.cpp:548
@@ -10507,28 +10512,28 @@ msgstr "Получить сохранённый выбор"
 msgid "Error Init Printer info"
 msgstr "Ошибка инициализации принтера"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:299
+#: gerbview/dialogs/dialog_print_using_printer.cpp:298
 #: pcbnew/dialogs/dialog_plot.cpp:742 pcbnew/dialogs/dialog_print_using_printer.cpp:356
 msgid "Warning: Scale option set to a very large value"
 msgstr "Предупреждение: параметр масштаба установлен в очень большое значение"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:305
+#: gerbview/dialogs/dialog_print_using_printer.cpp:304
 #: pcbnew/dialogs/dialog_plot.cpp:738 pcbnew/dialogs/dialog_print_using_printer.cpp:366
 msgid "Warning: Scale option set to a very small value"
 msgstr "Предупреждение: параметр масштаба установлен в очень маленькое значение"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:354
+#: gerbview/dialogs/dialog_print_using_printer.cpp:353
 #: pcbnew/dialogs/dialog_plot.cpp:801 pcbnew/dialogs/dialog_print_using_printer.cpp:433
 msgid "No layer selected"
 msgstr "Слой не выбран"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:368
+#: gerbview/dialogs/dialog_print_using_printer.cpp:367
 #: pcbnew/dialogs/dialog_print_for_modedit.cpp:181
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:438
 msgid "Print Preview"
 msgstr "Просмотр"
 
-#: gerbview/dialogs/dialog_print_using_printer.cpp:410
+#: gerbview/dialogs/dialog_print_using_printer.cpp:409
 msgid "There was a problem printing"
 msgstr "Проблема с печатью"
 
@@ -10759,7 +10764,7 @@ msgid "Flashed items"
 msgstr "Подсвеченные элементы"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:67
-#: pcbnew/class_zone.cpp:662
+#: pcbnew/class_zone.cpp:661
 msgid "Polygons"
 msgstr "Полигоны"
 
@@ -14434,13 +14439,13 @@ msgstr "Размер перех.отв. КЦ"
 msgid "NC Via Drill"
 msgstr "Сверло перех.отв. КЦ"
 
-#: pcbnew/class_track.cpp:1077 pcbnew/class_zone.cpp:639
+#: pcbnew/class_track.cpp:1077 pcbnew/class_zone.cpp:638
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:46
 #: pcbnew/zones_by_polygon_fill_functions.cpp:113
 msgid "NetName"
 msgstr "Имя цепи"
 
-#: pcbnew/class_track.cpp:1081 pcbnew/class_zone.cpp:643
+#: pcbnew/class_track.cpp:1081 pcbnew/class_zone.cpp:642
 msgid "NetCode"
 msgstr "Код цепи"
 
@@ -14487,71 +14492,71 @@ msgstr "Не найдено"
 msgid "Track %s, net [%s] (%d) on layer %s, length: %s"
 msgstr "Дорожка %s, цепь [%s] (%d) на слое %s, длина: %s"
 
-#: pcbnew/class_zone.cpp:599
+#: pcbnew/class_zone.cpp:598
 msgid "Zone Outline"
 msgstr "Контур зоны"
 
-#: pcbnew/class_zone.cpp:606 pcbnew/class_zone.cpp:816
+#: pcbnew/class_zone.cpp:605 pcbnew/class_zone.cpp:815
 msgid "(Cutout)"
 msgstr "(очертание)"
 
-#: pcbnew/class_zone.cpp:615
+#: pcbnew/class_zone.cpp:614
 msgid "No via"
 msgstr "Без перех.отв."
 
-#: pcbnew/class_zone.cpp:618
+#: pcbnew/class_zone.cpp:617
 msgid "No track"
 msgstr "Без дорожек"
 
-#: pcbnew/class_zone.cpp:621 pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:67
+#: pcbnew/class_zone.cpp:620 pcbnew/dialogs/dialog_keepout_area_properties_base.cpp:67
 msgid "No copper pour"
 msgstr "Без меди"
 
-#: pcbnew/class_zone.cpp:623
+#: pcbnew/class_zone.cpp:622
 msgid "Keepout"
 msgstr "Область запрета"
 
-#: pcbnew/class_zone.cpp:634
+#: pcbnew/class_zone.cpp:633
 msgid "<unknown>"
 msgstr "<неизвестно>"
 
-#: pcbnew/class_zone.cpp:647
+#: pcbnew/class_zone.cpp:646
 msgid "Priority"
 msgstr "Приоритет"
 
-#: pcbnew/class_zone.cpp:651
+#: pcbnew/class_zone.cpp:650
 msgid "Non Copper Zone"
 msgstr "Не медная зона"
 
-#: pcbnew/class_zone.cpp:657
+#: pcbnew/class_zone.cpp:656
 msgid "Corners"
 msgstr "Углы"
 
-#: pcbnew/class_zone.cpp:660
+#: pcbnew/class_zone.cpp:659
 msgid "Segments"
 msgstr "Сегменты"
 
-#: pcbnew/class_zone.cpp:664
+#: pcbnew/class_zone.cpp:663
 msgid "Fill Mode"
 msgstr "Режим заливки"
 
-#: pcbnew/class_zone.cpp:668
+#: pcbnew/class_zone.cpp:667
 msgid "Hatch Lines"
 msgstr "Штрих.линии"
 
-#: pcbnew/class_zone.cpp:673
+#: pcbnew/class_zone.cpp:672
 msgid "Corner Count"
 msgstr "Количество углов"
 
-#: pcbnew/class_zone.cpp:819
+#: pcbnew/class_zone.cpp:818
 msgid "(Keepout)"
 msgstr "(Область запрета)"
 
-#: pcbnew/class_zone.cpp:839
+#: pcbnew/class_zone.cpp:838
 msgid "** NO BOARD DEFINED **"
 msgstr "** ПЛАТА НЕ ОПРЕДЕЛЕНА **"
 
-#: pcbnew/class_zone.cpp:851
+#: pcbnew/class_zone.cpp:850
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Контур зоны %s на %s"
@@ -16793,21 +16798,21 @@ msgstr ""
 "Предупреждение: эти опции модифицируют плату."
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:134 pcbnew/dialogs/dialog_gendrill.cpp:135
-msgid "Use Netclasses values"
-msgstr "Использовать значение класса цепи"
+msgid "Use Netclass values"
+msgstr "Использовать значения класса цепи"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:400
+#: pcbnew/dialogs/dialog_gendrill.cpp:398
 msgid "Save Drill Report File"
 msgstr "Сохранить отчёт сверловки"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:420
+#: pcbnew/dialogs/dialog_gendrill.cpp:415
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:121
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:151
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:150
 #, c-format
 msgid "** Unable to create %s **\n"
 msgstr "** Не удалось создать %s **\n"
 
-#: pcbnew/dialogs/dialog_gendrill.cpp:425
+#: pcbnew/dialogs/dialog_gendrill.cpp:420
 #, c-format
 msgid "Report file %s created\n"
 msgstr "Файл отчёта %s создан\n"
@@ -20270,8 +20275,8 @@ msgstr "Отчёт о посад.местах"
 msgid "Unable to create '%s'"
 msgstr "Не удалось создать '%s'"
 
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:131
-#: pcbnew/exporters/gendrill_Excellon_writer.cpp:161
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:130
+#: pcbnew/exporters/gendrill_Excellon_writer.cpp:160
 #, c-format
 msgid "Create file %s\n"
 msgstr "Создать файл %s\n"
@@ -20742,7 +20747,7 @@ msgstr "Добавить посад.место"
 msgid "Board Editor"
 msgstr "Редактор плат"
 
-#: pcbnew/import_dxf/dialog_dxf_import.cpp:137
+#: pcbnew/import_dxf/dialog_dxf_import.cpp:138
 msgid "Open File"
 msgstr "Открыть файл"
 
