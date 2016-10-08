@@ -50,10 +50,14 @@ private:
     int m_brdLayer;         // The board layer to place imported DXF items
     int m_version;          // the dxf version, not used here
     std::string m_codePage; // The code page, not used here
+    bool m_useModuleItems;  // Use module items instead of board items when true.
 
 public:
     DXF2BRD_CONVERTER();
     ~DXF2BRD_CONVERTER();
+
+    bool IsUsingModuleItems() const { return m_useModuleItems; }
+    void UseModuleItems( bool aUseModuleItems = true ) { m_useModuleItems = aUseModuleItems; }
 
     /**
      * Set the coordinate offset between the importede dxf items
@@ -151,7 +155,19 @@ private:
 
     virtual void setBlock( const int aHandle ) {}
 
+    /**
+     * Converts a native unicode string into a DXF encoded string.
+     *
+     * DXF endoding includes the following special sequences:
+     * - %%%c for a diameter sign
+     * - %%%d for a degree sign
+     * - %%%p for a plus/minus sign
+     */
     static wxString toDxfString( const wxString& aStr );
+
+    /**
+     * Converts a DXF encoded string into a native Unicode string.
+     */
     static wxString toNativeString( const wxString& aData );
 
     // These functions are not used in Kicad.

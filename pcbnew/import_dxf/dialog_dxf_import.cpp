@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,12 +39,12 @@
 #include <class_pcb_text.h>
 
 // Keys to store setup in config
-#define DXF_IMPORT_LAYER_OPTION_KEY wxT("DxfImportBrdLayer")
-#define DXF_IMPORT_COORD_ORIGIN_KEY wxT("DxfImportCoordOrigin")
-#define DXF_IMPORT_LAST_FILE_KEY wxT("DxfImportLastFile")
-#define DXF_IMPORT_GRID_UNITS_KEY wxT("DxfImportGridUnits")
-#define DXF_IMPORT_GRID_OFFSET_X_KEY wxT("DxfImportGridOffsetX")
-#define DXF_IMPORT_GRID_OFFSET_Y_KEY wxT("DxfImportGridOffsetY")
+#define DXF_IMPORT_LAYER_OPTION_KEY  "DxfImportBrdLayer"
+#define DXF_IMPORT_COORD_ORIGIN_KEY  "DxfImportCoordOrigin"
+#define DXF_IMPORT_LAST_FILE_KEY     "DxfImportLastFile"
+#define DXF_IMPORT_GRID_UNITS_KEY    "DxfImportGridUnits"
+#define DXF_IMPORT_GRID_OFFSET_X_KEY "DxfImportGridOffsetX"
+#define DXF_IMPORT_GRID_OFFSET_Y_KEY "DxfImportGridOffsetY"
 
 
 // Static members of DIALOG_DXF_IMPORT, to remember
@@ -54,10 +54,11 @@ int DIALOG_DXF_IMPORT::m_offsetSelection = 0;
 LAYER_NUM DIALOG_DXF_IMPORT::m_layer = Dwgs_User;
 
 
-DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent )
+DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent, bool aUseModuleItems )
     : DIALOG_DXF_IMPORT_BASE( aParent )
 {
     m_parent = aParent;
+    m_dxfImporter.UseModuleItems( aUseModuleItems );
     m_config = Kiface().KifaceSettings();
     m_PCBGridUnits = 0;
     m_PCBGridOffsetX = 0.0;
@@ -77,7 +78,7 @@ DIALOG_DXF_IMPORT::DIALOG_DXF_IMPORT( PCB_BASE_FRAME* aParent )
     wxString tmpStr;
     tmpStr << m_PCBGridOffsetX;
     m_DXFPCBXCoord->SetValue( tmpStr );
-    tmpStr = wxT( "" );
+    tmpStr =  "";
     tmpStr << m_PCBGridOffsetY;
     m_DXFPCBYCoord->SetValue( tmpStr );
 
@@ -136,7 +137,7 @@ void DIALOG_DXF_IMPORT::OnBrowseDxfFiles( wxCommandEvent& event )
     wxFileDialog dlg( m_parent,
                       _( "Open File" ),
                       path, filename,
-                      wxT( "DXF Files (*.dxf)|*.dxf" ),
+                       "DXF Files (*.dxf)|*.dxf",
                       wxFD_OPEN|wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -238,7 +239,7 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
 {
     wxASSERT( aModule );
 
-    DIALOG_DXF_IMPORT dlg( aCaller );
+    DIALOG_DXF_IMPORT dlg( aCaller, true );
     bool success = ( dlg.ShowModal() == wxID_OK );
 
     if( success )
@@ -252,37 +253,7 @@ bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule )
 
         for( it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
         {
-            BOARD_ITEM* item = *it;
-            BOARD_ITEM* converted = NULL;
-
-            // Modules use different types for the same things,
-            // so we need to convert imported items to appropriate classes.
-            switch( item->Type() )
-            {
-            case PCB_LINE_T:
-            {
-                converted = new EDGE_MODULE( aModule );
-                *static_cast<DRAWSEGMENT*>( converted ) = *static_cast<DRAWSEGMENT*>( item );
-                aModule->Add( converted );
-                static_cast<EDGE_MODULE*>( converted )->SetLocalCoord();
-                delete item;
-                break;
-            }
-
-            case PCB_TEXT_T:
-            {
-                converted = new TEXTE_MODULE( aModule );
-                *static_cast<TEXTE_PCB*>( converted ) = *static_cast<TEXTE_PCB*>( item );
-                aModule->Add( converted );
-                static_cast<TEXTE_MODULE*>( converted )->SetLocalCoord();
-                delete item;
-                break;
-            }
-
-            default:
-                wxLogDebug( wxT( "type %d currently not handled" ), item->Type() );
-                break;
-            }
+            aModule->Add( *it );
         }
     }
 
@@ -304,6 +275,7 @@ int  DIALOG_DXF_IMPORT::GetPCBGridUnits( void )
 {
     return m_DXFPCBGridUnits->GetSelection();
 }
+
 
 void DIALOG_DXF_IMPORT::GetPCBGridOffsets( double &aXOffset, double &aYOffset )
 {
