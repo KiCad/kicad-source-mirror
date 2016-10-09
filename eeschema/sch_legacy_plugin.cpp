@@ -3394,3 +3394,29 @@ void SCH_LEGACY_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath,
     m_cache->Save();
     m_cache->Load();    // update m_writable and m_mod_time
 }
+
+
+bool SCH_LEGACY_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
+                                         const PROPERTIES* aProperties )
+{
+    wxFileName fn = aLibraryPath;
+
+    if( !fn.FileExists() )
+        return false;
+
+    // Some of the more elaborate wxRemoveFile() crap puts up its own wxLog dialog
+    // we don't want that.  we want bare metal portability with no UI here.
+    if( wxRemove( aLibraryPath ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "library '%s' cannot be deleted" ),
+                                          aLibraryPath.GetData() ) );
+    }
+
+    if( m_cache && m_cache->IsFile( aLibraryPath ) )
+    {
+        delete m_cache;
+        m_cache = 0;
+    }
+
+    return true;
+}

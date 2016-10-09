@@ -96,6 +96,8 @@ public:
                        const PROPERTIES* aProperties = NULL ) override;
     void CreateSymbolLib( const wxString& aLibraryPath,
                           const PROPERTIES* aProperties = NULL ) override;
+    bool DeleteSymbolLib( const wxString& aLibraryPath,
+                          const PROPERTIES* aProperties = NULL ) override;
 
     // Temporary for testing using PART_LIB instead of SCH_PLUGIN.
     void TransferCache( PART_LIB& aTarget ) override;

@@ -36,9 +36,8 @@
 static void not_implemented( SCH_PLUGIN* aPlugin, const char* aCaller )
 {
     THROW_IO_ERROR( wxString::Format( FMT_UNIMPLEMENTED,
-            aPlugin->GetName().GetData(),
-            wxString::FromUTF8( aCaller ).GetData() )
-            );
+                                      aPlugin->GetName().GetData(),
+                                      wxString::FromUTF8( aCaller ).GetData() ) );
 }
 
 
@@ -114,7 +113,7 @@ void SCH_PLUGIN::CreateSymbolLib( const wxString& aLibraryPath, const PROPERTIES
 }
 
 
-bool SCH_PLUGIN::SymbolLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+bool SCH_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
@@ -136,16 +135,16 @@ void SCH_PLUGIN::SymbolLibOptions( PROPERTIES* aListToAppendTo ) const
 #if 1
     (*aListToAppendTo)["debug_level"] = UTF8( _(
         "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
-        ));
+        ) );
 
     (*aListToAppendTo)["read_filter_regex"] = UTF8( _(
         "Regular expression <b>symbol name</b> filter."
-        ));
+        ) );
 
     (*aListToAppendTo)["enable_transaction_logging"] = UTF8( _(
         "Enable transaction logging. The mere presence of this option turns on the "
         "logging, no need to set a Value."
-        ));
+        ) );
 
     (*aListToAppendTo)["username"] = UTF8( _(
         "User name for <b>login</b> to some special library server."
@@ -153,7 +152,7 @@ void SCH_PLUGIN::SymbolLibOptions( PROPERTIES* aListToAppendTo ) const
 
     (*aListToAppendTo)["password"] = UTF8( _(
         "Password for <b>login</b> to some special library server."
-        ));
+        ) );
 #endif
 
 #if 1
@@ -161,7 +160,6 @@ void SCH_PLUGIN::SymbolLibOptions( PROPERTIES* aListToAppendTo ) const
     // if and when implemented.
     (*aListToAppendTo)["python_symbol_plugin"] = UTF8( _(
         "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
-        ));
+        ) );
 #endif
 }
-

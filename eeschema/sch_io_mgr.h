@@ -191,6 +191,7 @@ public:
     //-----<PUBLIC SCH_PLUGIN API>-------------------------------------------------
 
     /**
+     *
      * Function GetName
      * returns a brief hard coded name for this SCH_PLUGIN.
      */
@@ -204,50 +205,53 @@ public:
 
     /**
      * Function Load
+     *
      * loads information from some input file format that this SCH_PLUGIN implementation
      * knows about, into either a new SCHEMATIC or an existing one. This may be used to load an
      * entire new SCHEMATIC, or to augment an existing one if @a aAppendToMe is not NULL.
      *
      * @param aFileName is the name of the file to use as input and may be foreign in
-     *  nature or native in nature.
+     *                  nature or native in nature.
      *
-     * @param aAppendToMe is an existing SCHEMATIC to append to, but if NULL then
-     *   this means "do not append, rather load anew".
+     * @param aAppendToMe is an existing SCHEMATIC to append to, but if NULL then this means
+     *                    "do not append, rather load anew".
      *
-     * @param aProperties is an associative array that can be used to tell the
-     *  loader how to load the file, because it can take any number of
-     *  additional named arguments that the plugin is known to support. These are
-     *  tuning parameters for the import or load.  The caller continues to own
-     *  this object (plugin may not delete it), and plugins should expect it to
-     *  be optionally NULL.
+     * @param aProperties is an associative array that can be used to tell the loader how to
+     *                    load the file, because it can take any number of additional named
+     *                    arguments that the plugin is known to support. These are tuning
+     *                    parameters for the import or load.  The caller continues to own
+     *                    this object (plugin may not delete it), and plugins should expect
+     *                    it to be optionally NULL.
      *
      * @return SCHEMATIC* - the successfully loaded schematic, or the same one as \a aAppendToMe
-     *  if \a aAppendToMe was not NULL, and the caller owns it.
+     *                      if \a aAppendToMe was not NULL, and the caller owns it.
      *
-     * @throw IO_ERROR if there is a problem loading, and its contents should
-     *  say what went wrong, using line number and character offsets of the
-     *  input file if possible.
+     * @throw IO_ERROR if there is a problem loading, and its contents should say what went
+     *                 wrong, using line number and character offsets of the input file if
+     *                 possible.
      */
     virtual SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
                              SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL );
 
     /**
      * Function Save
+     *
      * will write @a aSchematic to a storage file in a format that this
      * SCH_PLUGIN implementation knows about, or it can be used to write a portion of
      * aSchematic to a special kind of export file.
      *
      * @param aFileName is the name of a file to save to on disk.
      *
-     * @param aSchematic is the class SCHEMATIC in memory document tree from which to
-     *  extract information when writing to \a aFileName.  The caller continues to
-     *  own the SCHEMATIC, and the plugin should refrain from modifying the SCHEMATIC if possible.
+     * @param aSchematic is the class SCHEMATIC in memory document tree from which to extract
+     *                   information when writing to \a aFileName.  The caller continues to
+     *                   own the SCHEMATIC, and the plugin should refrain from modifying the
+     *                   SCHEMATIC if possible.
      *
-     * @param aProperties is an associative array that can be used to tell the
-     *  saver how to save the file, because it can take any number of
-     *  additional named tuning arguments that the plugin is known to support.
-     *  The caller continues to own this object (plugin may not delete it),
-     *  and plugins should expect it to be optionally NULL.
+     * @param aProperties is an associative array that can be used to tell the saver how to
+     *                    save the file, because it can take any number of additional named
+     *                    tuning arguments that the plugin is known to support.  The caller
+     *                    continues to own this object (plugin may not delete it), and plugins
+     *                    should expect it to be optionally NULL.
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
@@ -256,6 +260,7 @@ public:
 
     /**
      * Function EnumerateSymbolLib
+     *
      * returns a list of #LIB_PART alias names contained within the library @a aLibraryPath.
      *
      * @param aAliasNameList is an array to populate with the #LIB_ALIAS names associated with
@@ -278,6 +283,7 @@ public:
 
     /**
      * Function LoadSymbol
+     *
      * loads a #LIB_ALIAS object having @a aAliasName from the @a aLibraryPath containing
      * a library format that this SCH_PLUGIN knows about.  The #LIB_PART should be accessed
      * indirectly using the #LIB_ALIAS it is associated with.
@@ -330,6 +336,7 @@ public:
 
     /**
      * Function DeleteAlias
+     *
      * deletes @a aAliasName from the library at @a aLibraryPath.
      *
      * If @a aAliasName refers the the root #LIB_PART object, the part is renamed to
@@ -355,6 +362,7 @@ public:
 
     /**
      * Function DeleteSymbol
+     *
      * deletes the entire #LIB_PART associated with @a aAliasName from the library
      * @a aLibraryPath.
      *
@@ -377,6 +385,7 @@ public:
 
     /**
      * Function CreateSymbolLib
+     *
      * creates a new empty symbol library at @a aLibraryPath.  It is an error to attempt
      * to create an existing library or to attempt to create on a "read only" location.
      *
@@ -395,25 +404,27 @@ public:
                                   const PROPERTIES* aProperties = NULL );
 
     /**
-     * Function SymbolLibDelete
-     * deletes an existing footprint library and returns true, or if library does not
-     * exist returns false, or throws an exception if library exists but is read only or
-     * cannot be deleted for some other reason.
+     * Function DeleteSymbolLib
      *
-     * @param aLibraryPath is a locator for the "library", usually a directory
-     *   or file which will contain footprints.
+     * deletes an existing symbol library and returns true if successful, or if library
+     * does not exist returns false, or throws an exception if library exists but is read
+     * only or cannot be deleted for some other reason.
      *
-     * @param aProperties is an associative array that can be used to tell the
-     *  library delete implementation function anything special, because it can
-     *  take any number of additional named tuning arguments that the plugin is
-     *  known to support. The caller continues to own this object (plugin may
-     *  not delete it), and plugins should expect it to be optionally NULL.
+     * @param aLibraryPath is a locator for the "library", usually a directory or file
+     *                     which will contain symbols.
+     *
+     * @param aProperties is an associative array that can be used to tell the library
+     *                    delete implementation function anything special, because it can
+     *                    take any number of additional named tuning arguments that the
+     *                    plugin is known to support.  The caller continues to own this
+     *                    object (plugin may not delete it), and plugins should expect
+     *                    it to be optionally NULL.
      *
      * @return bool - true if library deleted, false if library did not exist.
      *
      * @throw IO_ERROR if there is a problem deleting an existing library.
      */
-    virtual bool SymbolLibDelete( const wxString& aLibraryPath,
+    virtual bool DeleteSymbolLib( const wxString& aLibraryPath,
                                   const PROPERTIES* aProperties = NULL );
 
     /**
@@ -422,7 +433,7 @@ public:
      * system libraries are read only because of where they are installed.)
      *
      * @param aLibraryPath is a locator for the "library", usually a directory, file,
-     *   or URL containing several footprints.
+     *                     or URL containing several symbols.
      *
      * @throw IO_ERROR if no library at aLibraryPath exists.
      */
@@ -430,13 +441,13 @@ public:
 
     /**
      * Function SymbolLibOptions
-     * appends supported SCH_PLUGIN options to @a aListToAppenTo along with
-     * internationalized descriptions.  Options are typically appended so
-     * that a derived SCH_PLUGIN can call its base class
-     * function by the same name first, thus inheriting options declared there.
-     * (Some base class options could pertain to all Symbol*() functions
-     * in all derived SCH_PLUGINs.)  Note that since aListToAppendTo is a PROPERTIES
-     * object, all options will be unique and last guy wins.
+     *
+     * appends supported SCH_PLUGIN options to @a aListToAppenTo along with internationalized
+     * descriptions.  Options are typically appended so that a derived SCH_PLUGIN can call
+     * its base class function by the same name first, thus inheriting options declared there.
+     * (Some base class options could pertain to all Symbol*() functions in all derived
+     * SCH_PLUGINs.)  Note that since aListToAppendTo is a PROPERTIES object, all options
+     * will be unique and last guy wins.
      *
      * @param aListToAppendTo holds a tuple of
      * <dl>
@@ -471,6 +482,7 @@ public:
 
     /**
      * Class SCH_PLUGIN_RELEASER
+     *
      * releases a SCH_PLUGIN in the context of a potential thrown exception, through
      * its destructor.
      */
