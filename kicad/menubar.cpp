@@ -262,14 +262,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
     AddMenuItem( fileMenu,
                  ID_SAVE_AND_ZIP_FILES,
-                 _( "&Archive" ),
+                 _( "&Archive Current Project" ),
                  _( "Archive project files in zip archive" ),
                  KiBitmap( zip_xpm ) );
 
     // Unarchive
     AddMenuItem( fileMenu,
                  ID_READ_ZIP_ARCHIVE,
-                 _( "&Unarchive" ),
+                 _( "&Unarchive Project" ),
                  _( "Unarchive project files from zip file" ),
                  KiBitmap( unzip_xpm ) );
 

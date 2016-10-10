@@ -65,7 +65,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Select current library
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SELECT_CURRENT_LIB,
-                 _( "&Current Library" ),
+                 _( "Select &Current Library" ),
                  _( "Select working library" ),
                  KiBitmap( library_xpm ) );
     fileMenu->AppendSeparator();

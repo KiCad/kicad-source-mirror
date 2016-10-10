@@ -216,11 +216,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                KiBitmap( unit_inch_xpm ),
-                               _( "Units in inches" ), wxITEM_CHECK );
+                               _( "Set units to inches" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
                                KiBitmap( unit_mm_xpm ),
-                               _( "Units in millimeters" ), wxITEM_CHECK );
+                               _( "Set units to millimeters" ), wxITEM_CHECK );
 
 #ifndef __APPLE__
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
