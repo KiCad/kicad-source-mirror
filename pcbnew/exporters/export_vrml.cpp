@@ -272,31 +272,8 @@ public:
         if( aWorldScale < 0.001 || aWorldScale > 10.0 )
             throw( std::runtime_error( "WorldScale out of range (valid range is 0.001 to 10.0)" ) );
 
-        // note: the KiCad SceneGraph library uses mm internally
-        // and scales output to VRML UNIT = 0.1 inch so that by
-        // default the output models are compatible with KiCad's
-        // expectations. This requires us to divide aWorldScale
-        // by 2.54 in order to generate the scaling which the
-        // user specified in the Export VRML GUI.
-        OutputPCB.SetScale( aWorldScale / 2.54 );
-
+        OutputPCB.SetScale( aWorldScale * 2.54 );
         WORLD_SCALE = aWorldScale * 2.54;
-
-        // XXX - Delete if no longer necessary
-        /*
-        double smin = arcMinLen * aWorldScale;
-        double smax = arcMaxLen * aWorldScale;
-
-        holes.SetArcParams( iMaxSeg, smin, smax );
-        board.SetArcParams( iMaxSeg, smin, smax );
-        top_copper.SetArcParams( iMaxSeg, smin, smax);
-        bot_copper.SetArcParams( iMaxSeg, smin, smax);
-        top_silk.SetArcParams( iMaxSeg, smin, smax );
-        bot_silk.SetArcParams( iMaxSeg, smin, smax );
-        top_tin.SetArcParams( iMaxSeg, smin, smax );
-        bot_tin.SetArcParams( iMaxSeg, smin, smax );
-        plated_holes.SetArcParams( iMaxSeg, smin, smax );
-         */
 
         return true;
     }
@@ -1515,19 +1492,21 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
     SUBDIR_3D = a3D_Subdir;
     MODEL_VRML model3d;
     model_vrml = &model3d;
+    model3d.SetScale( aMMtoWRMLunit );
 
     if( USE_INLINES )
+    {
         BOARD_SCALE = MM_PER_IU / 2.54;
+        model3d.SetOffset( -aXRef / 2.54, aYRef / 2.54 );
+    }
     else
+    {
         BOARD_SCALE = MM_PER_IU;
-
-    // Set the VRML world scale factor
-    model3d.SetScale( aMMtoWRMLunit );
+        model3d.SetOffset( -aXRef, aYRef );
+    }
 
     // plain PCB or else PCB with copper and silkscreen
     model3d.plainPCB = aUsePlainPCB;
-    // board reference point
-    model3d.SetOffset( -aXRef, aYRef );
 
     // locale switch for C numeric output
     LOCALE_IO* toggle = NULL;
@@ -1578,12 +1557,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
             output_file << WORLD_SCALE << " ";
             output_file << WORLD_SCALE << " ";
             output_file << WORLD_SCALE << "\n";
-
-            // board reference point
-            model3d.SetOffset( -aXRef, aYRef );
-
             output_file << "  children [\n";
-
         }
 
         // Export footprints
