@@ -103,7 +103,7 @@ bool PCB_CALCULATOR_FRAME::WriteDataFile()
         while( nestlevel-- )
             formatter.Print( nestlevel, ")\n" );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         return false;
     }

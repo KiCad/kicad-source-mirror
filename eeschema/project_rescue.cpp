@@ -113,7 +113,7 @@ static bool insert_library( PROJECT *aProject, PART_LIB *aLibrary, size_t aIndex
         libNames.Insert( libName, aIndex );
         PART_LIBS::LibNamesAndPaths( aProject, true, &libPaths, &libNames );
     }
-    catch( const IO_ERROR& e )
+    catch( const IO_ERROR& )
     {
         // Could not get or save the current libraries.
         return false;
@@ -131,12 +131,12 @@ static bool insert_library( PROJECT *aProject, PART_LIB *aLibrary, size_t aIndex
     {
         libs->LoadAllLibraries( aProject );
     }
-    catch( const PARSE_ERROR& e )
+    catch( const PARSE_ERROR& )
     {
         // Some libraries were not found. There's no point in showing the error,
         // because it was already shown. Just don't do anything.
     }
-    catch( const IO_ERROR& e )
+    catch( const IO_ERROR& )
     {
         // Restore the old list
         libs->clear();

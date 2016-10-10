@@ -186,7 +186,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
         // longer lines then perhaps it shouldn't be used
         modelFile = new FILE_LINE_READER( aFileName, 0, 8388608 );
     }
-    catch( IO_ERROR &e )
+    catch( IO_ERROR & )
     {
         wxLogError( _( " * [INFO] load failed: input line too long\n" ) );
         return NULL;

@@ -140,7 +140,7 @@ bool LIB_ALIAS::SaveDoc( OUTPUTFORMATTER& aFormatter )
 
         aFormatter.Print( 0, "$ENDCMP\n" );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         return false;
     }

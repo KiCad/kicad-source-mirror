@@ -655,7 +655,7 @@ bool PART_LIB::Save( OUTPUTFORMATTER& aFormatter )
 
         aFormatter.Print( 0, "#\n#End Library\n" );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         success = false;
     }
@@ -680,7 +680,7 @@ bool PART_LIB::SaveDocs( OUTPUTFORMATTER& aFormatter )
 
         aFormatter.Print( 0, "#\n#End Doc Library\n" );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         success = false;
     }

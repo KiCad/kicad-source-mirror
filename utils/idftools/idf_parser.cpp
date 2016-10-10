@@ -2381,7 +2381,7 @@ void IDF3_BOARD::readBoardFile( const std::string& aFileName, bool aNoSubstitute
             }
         }
     }
-    catch( const std::exception& e )
+    catch( const std::exception& )
     {
         brd.exceptions ( std::ios_base::goodbit );
 
@@ -2699,7 +2699,7 @@ void IDF3_BOARD::readLibFile( const std::string& aFileName )
 
         while( lib.good() ) readLibSection( lib, state, this );
     }
-    catch( const std::exception& e )
+    catch( const std::exception& )
     {
         lib.exceptions ( std::ios_base::goodbit );
 
@@ -2853,7 +2853,7 @@ bool IDF3_BOARD::writeLibFile( const std::string& aFileName )
         }
 
     }
-    catch( const std::exception& e )
+    catch( const std::exception& )
     {
         lib.exceptions( std::ios_base::goodbit );
 
@@ -3120,7 +3120,7 @@ void IDF3_BOARD::writeBoardFile( const std::string& aFileName )
         }
 
     }
-    catch( const std::exception& e )
+    catch( const std::exception& )
     {
         brd.exceptions( std::ios_base::goodbit );
 

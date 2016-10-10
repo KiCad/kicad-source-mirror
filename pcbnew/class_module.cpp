@@ -820,7 +820,7 @@ void MODULE::RunOnChildren( std::function<void (BOARD_ITEM*)> aFunction )
         aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
         aFunction( static_cast<BOARD_ITEM*>( m_Value ) );
     }
-    catch( std::bad_function_call& e )
+    catch( std::bad_function_call& )
     {
         DisplayError( NULL, wxT( "Error running MODULE::RunOnChildren" ) );
     }

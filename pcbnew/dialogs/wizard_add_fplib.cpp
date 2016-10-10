@@ -178,7 +178,7 @@ bool WIZARD_FPLIB_TABLE::LIBRARY::Test()
     {
         footprints = p->FootprintEnumerate( m_path );
     }
-    catch( IO_ERROR& e )
+    catch( IO_ERROR& )
     {
         m_status = LIBRARY::INVALID;
         return false;

@@ -60,7 +60,7 @@ CONTEXT_MENU* CONDITIONAL_MENU::Generate( SELECTION& aSelection )
             if( !cond( aSelection ) )
                 continue;
         }
-        catch( std::exception& e )
+        catch( std::exception& )
         {
             continue;
         }

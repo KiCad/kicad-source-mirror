@@ -66,7 +66,7 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
         std::unique_ptr<PART_LIB> new_lib( PART_LIB::LoadLibrary( fn.GetFullPath() ) );
         lib = std::move( new_lib );
     }
-    catch( const IO_ERROR& ioe )
+    catch( const IO_ERROR& )
     {
         wxString msg = wxString::Format( _(
             "Unable to import library '%s'.  Error:\n"
