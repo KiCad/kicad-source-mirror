@@ -44,6 +44,7 @@
 #include <cmath>
 #include <random>
 #include <algorithm>
+#include <numeric>
 
 // THIS IS A DIRECT TRANSLATION TO C++11 FROM THE REFERENCE
 // JAVA IMPLEMENTATION OF THE IMPROVED PERLIN FUNCTION (see http://mrl.nyu.edu/~perlin/noise/)
