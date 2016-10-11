@@ -251,9 +251,6 @@ enum main_id
     ID_EDA_SOCKET_EVENT_SERV,
     ID_EDA_SOCKET_EVENT,
 
-    // Command IDs common to Pcbnew and CvPcb.
-    ID_PCB_DISPLAY_FOOTPRINT_DOC,
-
     // Common to all
     ID_TB_OPTIONS_SELECT_UNIT_MM,
     ID_TB_OPTIONS_SELECT_UNIT_INCH,
@@ -276,7 +273,8 @@ enum main_id
     // mainly we experienced issues related to wxUpdateUIEvent calls when 2 (or more) wxFrames
     // share the same ID in menus, mainly in menubars/toolbars
     // The reason is the fact wxWidgets propagates the wxUpdateUIEvent to all parent windows
-    // to find wxUpdateUIEvent event functions matching the menuitem IDs found when activate a menu in the first frame.
+    // to find wxUpdateUIEvent event functions matching the menuitem IDs found when activate a
+    // menu in the first frame.
 
     // Reserve ROOM_FOR_KICADMANAGER IDs, for Kicad manager
     // Change it if this count is too small.

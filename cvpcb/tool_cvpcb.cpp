@@ -75,12 +75,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddTool( ID_CVPCB_DEL_ASSOCIATIONS, wxEmptyString,
                             KiBitmap( delete_association_xpm ),
-                            _( "Delete all associations (links)" ) );
-
-    m_mainToolBar->AddSeparator();
-    m_mainToolBar->AddTool( ID_PCB_DISPLAY_FOOTPRINT_DOC, wxEmptyString,
-                            KiBitmap( datasheet_xpm ),
-                            _( "Display footprint documentation" ) );
+                            _( "Delete all footprint associations" ) );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,

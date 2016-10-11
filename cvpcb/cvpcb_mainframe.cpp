@@ -85,7 +85,6 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
     EVT_TOOL( ID_CVPCB_GOTO_PREVIOUSNA, CVPCB_MAINFRAME::ToPreviousNA )
     EVT_TOOL( ID_CVPCB_DEL_ASSOCIATIONS, CVPCB_MAINFRAME::DelAssociations )
     EVT_TOOL( ID_CVPCB_AUTO_ASSOCIE, CVPCB_MAINFRAME::AutomaticFootprintMatching )
-    EVT_TOOL( ID_PCB_DISPLAY_FOOTPRINT_DOC, CVPCB_MAINFRAME::DisplayDocFile )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
               CVPCB_MAINFRAME::OnSelectFilteringFootprint )
     EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_PIN_FILTERED_LIST,
@@ -470,12 +469,6 @@ void CVPCB_MAINFRAME::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
     GetFootprintViewerFrame()->RedrawScreen( wxPoint( 0, 0 ), false );
-}
-
-
-void CVPCB_MAINFRAME::DisplayDocFile( wxCommandEvent& event )
-{
-    GetAssociatedDocument( this, m_DocModulesFileName, &Kiface().KifaceSearch() );
 }
 
 
