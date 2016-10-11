@@ -151,7 +151,7 @@ protected:
     ///> otherwise returns unchanged net code
     inline int getNetCode( int aNetCode )
     {
-        if( aNetCode < (int) m_netCodes.size() )
+        if( (unsigned int) aNetCode < m_netCodes.size() )
             return m_netCodes[aNetCode];
 
         return aNetCode;
