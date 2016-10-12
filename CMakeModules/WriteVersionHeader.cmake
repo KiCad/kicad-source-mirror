@@ -28,7 +28,7 @@
 # version.h file is still created with KICAD_BUILD_VERSION set to
 # "no-vcs-found".
 if( NOT KICAD_BUILD_VERSION )
-    set( _wvh_version_str "no-vcs-found" )
+    include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
 
     # Attempt to detect if we have a git repo and set the version string.
     if( EXISTS "${SRC_PATH}/.git" )
