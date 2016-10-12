@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-12 11:24+0200\n"
-"PO-Revision-Date: 2016-10-12 12:16+0200\n"
+"PO-Revision-Date: 2016-10-13 00:53+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -4607,7 +4607,7 @@ msgstr "Componente"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:37
 msgid "Units are interchangeable:"
-msgstr "Le paerti sono intercambiabili:"
+msgstr "Le parti sono intercambiabili:"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:48
 #: pcbnew/dialogs/dialog_create_array_base.cpp:69
