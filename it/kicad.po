@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-12 11:24+0200\n"
-"PO-Revision-Date: 2016-10-12 11:35+0200\n"
+"PO-Revision-Date: 2016-10-12 12:16+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -3645,7 +3645,7 @@ msgstr "Apri il manuale di CvPcb"
 #: pcbnew/menubar_modedit.cpp:342 pcbnew/menubar_pcbframe.cpp:649
 #: pcbnew/tool_modview.cpp:191
 msgid "&Getting Started in KiCad"
-msgstr "&Introduzione a KiCad"
+msgstr "Introdu&zione a KiCad"
 
 #: cvpcb/menubar.cpp:121 eeschema/menubar.cpp:517 kicad/menubar.cpp:414
 #: pagelayout_editor/menubar.cpp:156
@@ -8663,7 +8663,7 @@ msgstr "Contribuisci a KiCad (apre il browser web)"
 #: kicad/menubar.cpp:436 pcbnew/menubar_modedit.cpp:361
 #: pcbnew/menubar_pcbframe.cpp:668
 msgid "&About KiCad"
-msgstr "&Informazioni su KiCad"
+msgstr "Inform&azioni su KiCad"
 
 #: eeschema/menubar.cpp:541 eeschema/menubar_libedit.cpp:286
 #: pcbnew/menubar_modedit.cpp:367 pcbnew/menubar_pcbframe.cpp:674
@@ -10550,7 +10550,7 @@ msgstr "Apri il manuale di Eeschema"
 
 #: eeschema/tool_viewlib.cpp:264
 msgid "&About Eeschema"
-msgstr "&Informazioni su Eeschema"
+msgstr "Inform&azioni su Eeschema"
 
 #: eeschema/tool_viewlib.cpp:265
 msgid "About Eeschema schematic designer"
@@ -24301,7 +24301,7 @@ msgstr "Apri manuale di Pcbnew"
 
 #: pcbnew/tool_modview.cpp:198
 msgid "&About Pcbnew"
-msgstr "&Informazioni su Pcbnew"
+msgstr "Inform&azioni su Pcbnew"
 
 #: pcbnew/tool_modview.cpp:199
 msgid "About Pcbnew PCB designer"
