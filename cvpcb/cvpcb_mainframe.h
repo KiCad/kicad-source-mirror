@@ -164,8 +164,6 @@ public:
      */
     void             AutomaticFootprintMatching( wxCommandEvent& event );
 
-    void             DisplayDocFile( wxCommandEvent& event );
-
     /**
      * Function OnSelectFilteringFootprint
      * is the command event handler for enabling and disabling footprint filtering.

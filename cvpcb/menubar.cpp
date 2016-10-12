@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,9 +91,9 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                  KiBitmap( editor_xpm ) );
 
     AddMenuItem( preferencesMenu, ID_CVPCB_EQUFILES_LIST_EDIT,
-                 _( "Edit &Equ Files List" ),
-                 _( "Setup equ files list (.equ files)\n"
-                    "They are files which give the footprint name from the component value"),
+                 _( "&Edit Footprint Association File" ),
+                 _( "Modify footprint association file (.equ).  This is the file which "
+                    "assigns the footprint name by the component value" ),
                  KiBitmap( library_table_xpm ) );
 
     // Language submenu
