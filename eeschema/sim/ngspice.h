@@ -76,6 +76,16 @@ public:
 private:
     void init();
 
+    ///> Executes commands from a file
+    bool loadSpinit( const std::string& aFileName );
+
+    ///> Checks a few different locations for codemodel files and returns one
+    ///> if it exists
+    std::string findCmPath() const;
+
+    ///> Loads codemodel files from a directory
+    bool loadCodemodels( const std::string& aPath );
+
     // Callback functions
     static int cbSendChar( char* what, int id, void* user );
     static int cbSendStat( char* what, int id, void* user );

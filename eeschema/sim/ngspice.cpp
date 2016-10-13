@@ -26,7 +26,9 @@
 #include "ngspice.h"
 #include "spice_reporter.h"
 
-#include <common.h>
+#include <common.h>     // LOCALE_IO
+#include <wx/stdpaths.h>
+#include <wx/dir.h>
 
 #include <sstream>
 
@@ -273,10 +275,108 @@ void NGSPICE::init()
     LOCALE_IO c_locale;               // ngspice works correctly only with C locale
     ngSpice_Init( &cbSendChar, &cbSendStat, &cbControlledExit, NULL, NULL, &cbBGThreadRunning, this );
 
-    // Workaround to avoid hang ups on certain errors
+    // Load a custom spinit file, to fix the problem with loading .cm files
+    // Switch to the executable directory, so the relative paths are correct
+    const wxStandardPaths& paths = wxStandardPaths::Get();
+    wxString cwd( wxGetCwd() );
+    wxFileName exeDir( paths.GetExecutablePath() );
+    wxSetWorkingDirectory( exeDir.GetPath() );
+
+    // Find *.cm files
+    string cmPath = findCmPath();
+
+    // __CMPATH is used in custom spinit file to point to the codemodels directory
+    if( !cmPath.empty() )
+        Command( "set __CMPATH=\"" + cmPath + "\"" );
+
+    // Possible relative locations for spinit file
+    const vector<string> spiceinitPaths =
+    {
+        ".",
+        "../share/kicad",
+        "../share",
+        "../../share/kicad",
+        "../../share"
+    };
+
+    bool foundSpiceinit = false;
+
+    for( const auto& path : spiceinitPaths )
+    {
+        if( loadSpinit( path + "/spiceinit" ) )
+        {
+            foundSpiceinit = true;
+            break;
+        }
+    }
+
+    // Last chance to load codemodel files, we have not found
+    // spiceinit file, but we know the path to *.cm files
+    if( !foundSpiceinit && !cmPath.empty() )
+        loadCodemodels( cmPath );
+
+    // Restore the working directory
+    wxSetWorkingDirectory( cwd );
+
+    // Workarounds to avoid hang ups on certain errors,
+    // they have to be called, no matter what is in the spinit file
     Command( "unset interactive" );
+    Command( "set noaskquit" );
+    Command( "set nomoremode" );
 
     m_initialized = true;
+}
+
+
+bool NGSPICE::loadSpinit( const string& aFileName )
+{
+    if( !wxFileName::FileExists( aFileName ) )
+        return false;
+
+    wxTextFile file;
+
+    if( !file.Open( aFileName ) )
+        return false;
+
+    for( auto cmd = file.GetFirstLine(); !file.Eof(); cmd = file.GetNextLine() )
+        Command( cmd.ToStdString() );
+
+    return true;
+}
+
+
+string NGSPICE::findCmPath() const
+{
+    const vector<string> cmPaths =
+    {
+#ifdef __APPLE__
+        "/Applications/ngspice/lib/ngspice",
+#endif /* __APPLE__ */
+        "../lib/ngspice",
+        "../../lib/ngspice"
+        "lib/ngspice",
+        "ngspice"
+    };
+
+    for( const auto& path : cmPaths )
+    {
+        if( wxFileName::DirExists( path ) )
+            return path;
+    }
+
+    return string();
+}
+
+
+bool NGSPICE::loadCodemodels( const string& aPath )
+{
+    wxArrayString cmFiles;
+    size_t count = wxDir::GetAllFiles( aPath, &cmFiles );
+
+    for( const auto& cm : cmFiles )
+        Command( "codemodel " + cm.ToStdString() );
+
+    return count != 0;
 }
 
 
