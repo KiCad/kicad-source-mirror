@@ -63,7 +63,7 @@
  *  %AMMOIRE10*
  *  6,0,0,0.350000,0.005,0.050,3,0.005,0.400000,0.0*%
  *  Example of instanciation:
- *  %ADD19THERM19*%
+ *  %ADD19MOIRE10*%
  *
  *  A simple definition, one parameter:
  *  %AMCIRCLE*

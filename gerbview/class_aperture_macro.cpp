@@ -280,15 +280,25 @@ void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
         // Draw circles:
         wxPoint center = aParent->GetABPosition( curPos );
         // adjust outerDiam by this on each nested circle
-        int diamAdjust = (gap + penThickness); //*2;     //Should we use * 2 ?
+        int diamAdjust = (gap + penThickness) * 2;
 
         for( int i = 0; i < numCircles; ++i, outerDiam -= diamAdjust )
         {
             if( outerDiam <= 0 )
                 break;
 
-            TransformRingToPolygon( aShapeBuffer, center,
-                                    (outerDiam - penThickness) / 2, seg_per_circle, penThickness );
+            // Note: outerDiam is the outer diameter of the ring.
+            // the ring graphic diameter is (outerDiam - penThickness)
+            if( outerDiam <= penThickness )
+            {   // No room to draw a ring (no room for the hole):
+                // draw a circle instead (with no hole), with the right diameter
+                TransformCircleToPolygon( aShapeBuffer, center,
+                                          outerDiam / 2, seg_per_circle );
+            }
+            else
+                TransformRingToPolygon( aShapeBuffer, center,
+                                        (outerDiam - penThickness) / 2,
+                                        seg_per_circle, penThickness );
         }
 
         // Draw the cross:

@@ -1,0 +1,32 @@
+G04 Verification of moire aperture macro *
+%MOMM*%
+%FSLAX23Y23*%
+%OFA0.0000B0.0000*%
+G90*
+G04 parameters are
+G04 1 X coordinate of center point, a decimal*
+G04 2 Y coordinate of center point, a decimal*
+G04 3 Outer diameter of outer concentric ring, a decimal >= 0*
+G04 4 Ring thickness, a decimal >= 0*
+G04 5 Gap between rings, a decimal >= 0*
+G04 6 Maximum number of rings, an integer >= 0*
+G04 7 Cross hair thickness, a decimal >= 0*
+G04 8 Cross hair length, a decimal >= 0*
+G04 9 Rotation angle of the moiré primitive*
+%AMMOIRE*
+6,0,0, 11.0,1.3,1.2,6, 0.2,14, 20*
+%
+G04 Outline*
+%ADD10C,0.1*%
+X0Y0D02*
+G54D10*
+X0Y0D01*
+X40000D01*
+Y40000D01*
+X0D01*
+Y0D01*
+G04 Draw Moire *
+%ADD10MOIRE*%
+G54D10*
+X20000Y20000D03*
+M02*

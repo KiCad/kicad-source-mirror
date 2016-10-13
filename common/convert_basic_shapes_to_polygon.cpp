@@ -283,16 +283,23 @@ void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                              wxPoint aCentre, int aRadius,
                              int aCircleToSegmentsCount, int aWidth )
 {
-    int     delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
-
-    // Compute the corners posituions and creates poly
+    // Compute the corners positions and creates the poly
     wxPoint curr_point;
     int     inner_radius    = aRadius - ( aWidth / 2 );
     int     outer_radius    = inner_radius + aWidth;
 
+    if( inner_radius <= 0 )
+    {   //In this case, the ring is just a circle (no hole inside)
+        TransformCircleToPolygon( aCornerBuffer, aCentre, aRadius + ( aWidth / 2 ),
+                                  aCircleToSegmentsCount );
+        return;
+    }
+
     aCornerBuffer.NewOutline();
 
     // Draw the inner circle of the ring
+    int     delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
+
     for( int ii = 0; ii < 3600; ii += delta )
     {
         curr_point.x    = inner_radius;
