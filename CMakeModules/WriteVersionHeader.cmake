@@ -27,18 +27,23 @@
 # CreateGitVersionHeader cannot determine the current repo version, a
 # version.h file is still created with KICAD_BUILD_VERSION set to
 # "no-vcs-found".
-if( NOT KICAD_BUILD_VERSION )
-    include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
+include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
 
-    # Attempt to detect if we have a git repo and set the version string.
-    if( EXISTS "${SRC_PATH}/.git" )
-        message( STATUS "Using Git to determine build version string." )
-        include( ${CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
-        create_git_version_header( ${SRC_PATH} )
-        set( _wvh_version_str ${KICAD_BUILD_VERSION} )
-    endif()
-else()
+# Attempt to detect if we have a git repo and set the version string.
+if( EXISTS "${SRC_PATH}/.git" )
+    message( STATUS "Using Git to determine build version string." )
+    include( ${CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
+    create_git_version_header( ${SRC_PATH} )
     set( _wvh_version_str ${KICAD_BUILD_VERSION} )
+endif()
+
+# If KICAD_BRANCH_NAME is empty, set KICAD_FULL_VERSION to just the build
+# version rather than the concatenation of the build version and the branch
+# name.
+if( KICAD_BRANCH_NAME )
+    set( KICAD_FULL_VERSION "${_wvh_version_str}-${KICAD_BRANCH_NAME}" )
+else()
+    set( KICAD_FULL_VERSION "${_wvh_version_str}" )
 endif()
 
 set( _wvh_new_version_text

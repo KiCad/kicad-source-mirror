@@ -77,7 +77,4 @@
 #define KIFACE_SUFFIX                   "@KIFACE_SUFFIX@"
 #define KIFACE_PREFIX                   "@KIFACE_PREFIX@"
 
-/// Name of repo from which this build came.
-#define KICAD_REPO_NAME                 "@KICAD_REPO_NAME@"
-
 #endif  // CONFIG_H_

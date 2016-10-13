@@ -91,10 +91,6 @@ option( BUILD_GITHUB_PLUGIN "Build the GITHUB_PLUGIN for pcbnew." ON )
 
 option( KICAD_SPICE "Build Kicad with internal Spice simulator." OFF )
 
-# This can be set to a custom name to brag about a particular branch in the "About" dialog:
-set( KICAD_REPO_NAME "unknown" CACHE STRING "Name of the tree from which this build came." )
-
-
 # Global setting: exports are explicit
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
 set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
