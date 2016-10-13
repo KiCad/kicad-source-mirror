@@ -27,7 +27,7 @@ macro( create_git_version_header _git_src_path )
     # version, set the build version string to "no-git" and the default
     # branch name to unknown
     set( KICAD_BUILD_VERSION "no-git" )
-    set( KICAD_BRANCH_NAME ${KICAD_REPO_NAME} )
+    set( KICAD_BRANCH_NAME "undefined" )
     set( KICAD_FULL_VERSION "${KICAD_BUILD_VERSION}-${KICAD_BRANCH_NAME}")
 
     # Include Git support to automagically create version header file.
@@ -108,5 +108,4 @@ macro( create_git_version_header _git_src_path )
     endif()
 
     set( KICAD_BUILD_VERSION ${KICAD_BUILD_VERSION} )
-    set( KICAD_FULL_VERSION "${KICAD_BUILD_VERSION}-${KICAD_BRANCH_NAME}")
 endmacro()
