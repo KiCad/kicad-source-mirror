@@ -44,7 +44,7 @@ static void DisplayCmpDocAndKeywords( wxString& aName, void* aData )
 
     wxASSERT( libs );
 
-    LIB_ALIAS* part = libs->FindLibraryEntry( aName );
+    LIB_ALIAS* part = libs->FindLibraryAlias( aName );
 
     if( !part )
         return;
@@ -120,7 +120,7 @@ bool SCH_BASE_FRAME::DisplayListComponentsInLib( PART_LIB*  aLibrary,
     if( aLibrary == NULL )
         return false;
 
-    aLibrary->GetEntryNames( nameList );
+    aLibrary->GetAliasNames( nameList );
 
     wxArrayString headers;
     headers.Add( wxT("Component") );

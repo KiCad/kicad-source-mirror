@@ -406,7 +406,7 @@ void LIB_VIEW_FRAME::ReCreateListCmp()
     if( m_listPowerCmpOnly )
         lib->GetEntryTypePowerNames( nameList );
     else
-        lib->GetEntryNames( nameList );
+        lib->GetAliasNames( nameList );
 
     m_cmpList->Append( nameList );
 

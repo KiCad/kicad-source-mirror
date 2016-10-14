@@ -78,17 +78,19 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
         return;
     }
 
-    LIB_ALIAS* entry = lib->GetFirstEntry();
+    wxArrayString aliasNames;
 
-    if( !entry )
+    lib->GetAliasNames( aliasNames );
+
+    if( aliasNames.IsEmpty() )
     {
-        wxString msg = wxString::Format( _(
-            "Part library file '%s' is empty." ),
-            GetChars( fn.GetFullPath() )
-            );
+        wxString msg = wxString::Format( _( "Part library file '%s' is empty." ),
+                                         GetChars( fn.GetFullPath() ) );
         DisplayError( this,  msg );
         return;
     }
+
+    LIB_ALIAS* entry = lib->FindAlias( aliasNames[0] );
 
     if( LoadOneLibraryPartAux( entry, lib.get() ) )
     {

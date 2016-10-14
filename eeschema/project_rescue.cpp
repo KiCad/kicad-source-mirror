@@ -251,7 +251,7 @@ public:
         {
             wxString part_name( each_component->GetPartName() );
 
-            LIB_ALIAS* case_sensitive_match = aRescuer.GetLibs()->FindLibraryEntry( part_name );
+            LIB_ALIAS* case_sensitive_match = aRescuer.GetLibs()->FindLibraryAlias( part_name );
             std::vector<LIB_ALIAS*> case_insensitive_matches;
             aRescuer.GetLibs()->FindLibraryNearEntries( case_insensitive_matches, part_name );
 

@@ -109,7 +109,13 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
         wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
     }
 
-    LIB_PART*   first = lib->GetFirstEntry()->GetPart();
+    wxArrayString aliasNames;
+
+    lib->GetAliasNames( aliasNames );
+
+    wxCHECK_RET( !aliasNames.IsEmpty(), "No aliases found in library " + filename );
+
+    LIB_PART*   first = lib->FindAlias( aliasNames[0] )->GetPart();
     LIB_ITEMS&  drawList = first->GetDrawItemList();
 
     for( LIB_ITEM& item : drawList )

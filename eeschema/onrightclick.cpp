@@ -357,7 +357,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     }
 
     wxString       msg;
-    LIB_ALIAS*     libEntry = aLibs->FindLibraryEntry( Component->GetPartName() );
+    LIB_ALIAS*     libEntry = aLibs->FindLibraryAlias( Component->GetPartName() );
 
     if( !Component->GetFlags() )
     {
@@ -412,7 +412,7 @@ void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_L
 
     wxString    msg;
     LIB_PART*   part = NULL;
-    LIB_ALIAS*  libEntry = aLibs->FindLibraryEntry( Component->GetPartName() );
+    LIB_ALIAS*  libEntry = aLibs->FindLibraryAlias( Component->GetPartName() );
 
     if( libEntry )
         part = libEntry->GetPart();

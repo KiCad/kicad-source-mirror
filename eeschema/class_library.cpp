@@ -93,7 +93,7 @@ PART_LIB::~PART_LIB()
 }
 
 
-void PART_LIB::GetEntryNames( wxArrayString& aNames )
+void PART_LIB::GetAliasNames( wxArrayString& aNames )
 {
     for( LIB_ALIAS_MAP::iterator it = m_amap.begin();  it!=m_amap.end();  it++ )
     {
@@ -146,15 +146,6 @@ LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName )
         return it->second;
 
     return NULL;
-}
-
-
-LIB_ALIAS* PART_LIB::GetFirstEntry()
-{
-    if( m_amap.size() )
-        return m_amap.begin()->second;
-    else
-        return NULL;
 }
 
 
@@ -249,7 +240,7 @@ bool PART_LIB::AddPart( LIB_PART* aPart )
         wxString aliasname = my_part->m_aliases[i]->GetName();
 
         if( LIB_ALIAS* alias = FindAlias( aliasname ) )
-            RemoveEntry( alias );
+            RemoveAlias( alias );
 
         m_amap[ aliasname ] = my_part->m_aliases[i];
     }
@@ -261,7 +252,7 @@ bool PART_LIB::AddPart( LIB_PART* aPart )
 }
 
 
-LIB_ALIAS* PART_LIB::RemoveEntry( LIB_ALIAS* aEntry )
+LIB_ALIAS* PART_LIB::RemoveAlias( LIB_ALIAS* aEntry )
 {
     wxCHECK_MSG( aEntry != NULL, NULL, wxT( "NULL pointer cannot be removed from library." ) );
 
@@ -312,7 +303,7 @@ LIB_PART* PART_LIB::ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart )
     /* Remove the old root component.  The component will automatically be deleted
      * when all it's aliases are deleted.  Do not place any code that accesses
      * aOldPart inside this loop that gets evaluated after the last alias is
-     * removed in RemoveEntry().  Failure to heed this warning will result in a
+     * removed in RemoveAlias().  Failure to heed this warning will result in a
      * segfault.
      */
     size_t i = aOldPart->m_aliases.size();
@@ -320,7 +311,7 @@ LIB_PART* PART_LIB::ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart )
     while( i > 0 )
     {
         i -= 1;
-        RemoveEntry( aOldPart->m_aliases[ i ] );
+        RemoveAlias( aOldPart->m_aliases[ i ] );
     }
 
     LIB_PART* my_part = new LIB_PART( *aNewPart, this );
@@ -859,7 +850,7 @@ LIB_PART* PART_LIBS::FindLibPart( const wxString& aPartName, const wxString& aLi
 }
 
 
-LIB_ALIAS* PART_LIBS::FindLibraryEntry( const wxString& aEntryName, const wxString& aLibraryName )
+LIB_ALIAS* PART_LIBS::FindLibraryAlias( const wxString& aEntryName, const wxString& aLibraryName )
 {
     LIB_ALIAS* entry = NULL;
 
@@ -890,24 +881,17 @@ void PART_LIBS::FindLibraryNearEntries( std::vector<LIB_ALIAS*>& aCandidates,
         if( !!aLibraryName && lib.GetName() != aLibraryName )
             continue;
 
-        LIB_ALIAS* entry = lib.GetFirstEntry();
+        wxArrayString aliasNames;
 
-        if( ! entry )
+        lib.GetAliasNames( aliasNames );
+
+        if( aliasNames.IsEmpty() )
             continue;
 
-        wxString first_entry_name = entry->GetName();
-        wxString entry_name = first_entry_name;
-
-        for( ;; )
+        for( size_t i = 0;  i < aliasNames.size();  i++ )
         {
-            if( entry_name.CmpNoCase( aEntryName ) == 0 )
-                aCandidates.push_back( entry );
-
-            entry = lib.GetNextEntry( entry_name );
-            entry_name = entry->GetName();
-
-            if( first_entry_name == entry_name )
-                break;
+            if( aliasNames[i].CmpNoCase( aEntryName ) == 0 )
+                aCandidates.push_back( lib.FindAlias( aliasNames[i] ) );
         }
     }
 }

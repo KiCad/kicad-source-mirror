@@ -147,7 +147,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     {
         // Not found in the active library: search inside the full list
         // (can happen when using Viewlib to load a component)
-        libEntry = Prj().SchLibs()->FindLibraryEntry( cmp_name );
+        libEntry = Prj().SchLibs()->FindLibraryAlias( cmp_name );
 
         if( libEntry )
         {
@@ -527,7 +527,7 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         }
     }
 
-    lib->GetEntryNames( nameList );
+    lib->GetAliasNames( nameList );
 
     if( nameList.IsEmpty() )
     {
@@ -567,7 +567,7 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
 
     if( !part || !part->HasAlias( libEntry->GetName() ) )
     {
-        lib->RemoveEntry( libEntry );
+        lib->RemoveAlias( libEntry );
         return;
     }
 
@@ -581,7 +581,7 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         return;
     }
 
-    LIB_ALIAS* nextEntry = lib->RemoveEntry( libEntry );
+    LIB_ALIAS* nextEntry = lib->RemoveAlias( libEntry );
 
     if( nextEntry != NULL )
     {

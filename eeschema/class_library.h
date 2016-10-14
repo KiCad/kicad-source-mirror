@@ -233,8 +233,6 @@ public:
      */
     void RemoveLibrary( const wxString& aName );
 
-    void RemoveAllLibraries()       { clear(); }
-
     /**
      * Function LoadAllLibraries
      * loads all of the project's libraries into this container, which should
@@ -301,17 +299,8 @@ public:
      * @param aLibraryName - Name of the library to search.
      * @return The entry object if found, otherwise NULL.
      */
-    LIB_ALIAS* FindLibraryEntry( const wxString& aEntryName,
+    LIB_ALIAS* FindLibraryAlias( const wxString& aEntryName,
             const wxString& aLibraryName = wxEmptyString );
-
-    /**
-     * Function FindLibraryEntries
-     * searches all libraries in the list for an entry, returns all matches.
-     *
-     * @param aEntryName - Name of entry to search for (case sensitive).
-     * @param aEntries - a std::vector to store entries
-     */
-    // void FindLibraryEntries( const wxString& aEntryName, std::vector<LIB_ALIAS*>& aEntries );
 
     /**
      * Function FindLibraryNearEntries
@@ -436,7 +425,7 @@ public:
      *
      * @param aNames - String array to place entry names into.
      */
-    void GetEntryNames( wxArrayString& aNames );
+    void GetAliasNames( wxArrayString& aNames );
 
     /**
      * Load a string array with the names of  entries of type POWER in this library.
@@ -509,7 +498,7 @@ public:
      * @param aEntry - Entry to remove from library.
      * @return The next entry in the library or NULL if the library is empty.
      */
-    LIB_ALIAS* RemoveEntry( LIB_ALIAS* aEntry );
+    LIB_ALIAS* RemoveAlias( LIB_ALIAS* aEntry );
 
     /**
      * Replace an existing part entry in the library.
@@ -519,13 +508,6 @@ public:
      * @param aNewPart - The new part.
      */
     LIB_PART* ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart );
-
-    /**
-     * Return the first entry in the library.
-     *
-     * @return The first entry or NULL if the library has no entries.
-     */
-    LIB_ALIAS* GetFirstEntry();
 
     /**
      * Find next library entry by \a aName.
@@ -582,18 +564,6 @@ public:
         return fileName.GetName();
     }
 
-
-    /**
-     * Function SetFileName
-     * sets the part library file name.
-     *
-     * @param aFileName - New library file name.
-     */
-    void SetFileName( const wxString& aFileName )
-    {
-        if( aFileName != fileName.GetFullName() )
-            fileName = aFileName;
-    }
 
     /**
      * Function LoadLibrary

@@ -352,7 +352,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     {
         PART_LIBS* libs = Prj().SchLibs();
 
-        if( libs->FindLibraryEntry( newname ) == NULL )
+        if( libs->FindLibraryAlias( newname ) == NULL )
         {
             wxString msg = wxString::Format( _(
                 "Component '%s' not found!" ),  GetChars( newname ) );

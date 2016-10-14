@@ -141,7 +141,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddLibrary( PART_LIB& aLib )
     if( m_filter == CMP_FILTER_POWER )
         aLib.GetEntryTypePowerNames( all_aliases );
     else
-        aLib.GetEntryNames( all_aliases );
+        aLib.GetAliasNames( all_aliases );
 
     AddAliasList( aLib.GetName(), all_aliases, &aLib );
 
@@ -164,7 +164,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         if( aOptionalLib )
             a = aOptionalLib->FindAlias( aName );
         else
-            a = m_libs->FindLibraryEntry( aName, wxEmptyString );
+            a = m_libs->FindLibraryAlias( aName, wxEmptyString );
 
         if( a == NULL )
             continue;

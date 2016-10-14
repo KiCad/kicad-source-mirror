@@ -72,7 +72,7 @@ void LIB_VIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBVIEW_VIEWDOC:
-        entry = Prj().SchLibs()->FindLibraryEntry( m_entryName, m_libraryName );
+        entry = Prj().SchLibs()->FindLibraryAlias( m_entryName, m_libraryName );
 
         if( entry && !entry->GetDocFileName().IsEmpty() )
         {
@@ -253,7 +253,7 @@ void LIB_VIEW_FRAME::ViewOneLibraryContent( PART_LIB* Lib, int Flag )
 
 void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryEntry( m_entryName, m_libraryName );
+    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryAlias( m_entryName, m_libraryName );
 
     if( !entry )
         return;
