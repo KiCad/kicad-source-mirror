@@ -27,6 +27,8 @@
 
 #include <dialog_global_edit_tracks_and_vias_base.h>
 
+class BOARD;
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,19 +36,28 @@ class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS :
     public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 {
 private:
-    PCB_EDIT_FRAME* m_Parent;
-    int m_Netcode;
-    int m_OptionID;
+    PCB_EDIT_FRAME* m_parent;
+    BOARD* m_brd;
+    int m_curr_netcode;
+    int m_optionID;
 
 public:
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent, int aNetcode );
     ~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS() {};
 
+private:
     // Virtual event handlers, overided here
-    void OnSelectionClick( wxCommandEvent& event ) override { m_OptionID = event.GetId(); }
+    void OnSelectionClick( wxCommandEvent& event ) override
+    {
+            m_optionID = event.GetId();
+    }
     void OnOkClick( wxCommandEvent& event ) override;
-    void OnCancelClick( wxCommandEvent& event ) override;
+	void onNetSelection( wxCommandEvent& event ) override;
+
+
     void MyInit();
+    void updateNetInfo();
+    void buildNetsList();
 };
 
 #endif //__dialog_global_edit_tracks_and_vias__

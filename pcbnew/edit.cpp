@@ -336,6 +336,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         OnModify();
         break;
 
+    case ID_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE:
+        {
+        DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this, GetBoard()->GetHighLightNetCode() );
+        dlg.ShowModal();
+        }
+        break;
+
     case ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE:
         if( GetCurItem() == NULL )
             break;

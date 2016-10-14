@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2014 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <class_drawpanel.h>
-#include <confirm.h>
 #include <wxPcbStruct.h>
 
 #include <class_board.h>
@@ -38,22 +37,19 @@
 
 #include <pcbnew.h>
 #include <drc_stuff.h>
-#include <protos.h>
 
 
-/**
- * Function SetTrackSegmentWidth
- *  Modify one track segment width or one via diameter and drill (using DRC control).
- *  Basic routine used by other routines when editing tracks or vias
- * @param aTrackItem = the track segment or via to modify
- * @param aItemsListPicker = the list picker to use for an undo command (can be NULL)
- * @param aUseNetclassValue = true to use NetClass value, false to use BOARD::m_designSettings value
- * @return  true if done, false if no not change (because DRC error)
- */
 bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
                                            PICKED_ITEMS_LIST* aItemsListPicker,
                                            bool               aUseNetclassValue )
 {
+    /* Modify one track segment width or one via diameter and drill (using DRC control).
+     * Basic function used by other routines when editing tracks or vias
+     * aTrackItem = the track segment or via to modify
+     * aItemsListPicker = the list picker to use for an undo command (can be NULL)
+     * aUseNetclassValue = true to use NetClass value, false to use BOARD::m_designSettings value
+     * return  true if done, false if no not change (due to DRC error)
+     */
     int           initial_width, new_width;
     int           initial_drill = -1,new_drill = -1;
     bool          change_ok = false;
@@ -201,16 +197,14 @@ void PCB_EDIT_FRAME::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
 }
 
 
-/**
- * Function Edit_Track_Width
- * Modify a full track width (using DRC control).
- * a full track is the set of track segments between 2 ends: pads or a point that has
- * more than 2 segments ends connected
- * @param aDC = the curred device context (can be NULL)
- * @param aTrackSegment = a segment or via on the track to change
- */
 void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
 {
+    /* Modify a full track (a trace) width (using DRC control).
+     * a full track is the set of track segments between 2 nodes: pads or a node that has
+     * more than 2 segments connected
+     * aDC = the curred device context (can be NULL)
+     * aTrackSegment = a via or a track belonging to the trace to change
+     */
     TRACK* pt_track;
     int    nb_segm;
 
@@ -244,6 +238,8 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
             segm->Draw( m_canvas, aDC, GR_XOR );            // Erase old track shape
             segm = (TRACK*) itemsListPicker.GetPickedItem( ii );
             segm->Draw( m_canvas, aDC, GR_OR );             // Display new track shape
+
+            segm->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
 
         m_canvas->CrossHairOn( aDC );                   // Display cursor shape
@@ -253,15 +249,13 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
 }
 
 
-/**
- * Function Change_Net_Tracks_And_Vias_Sizes
- * Reset all tracks width and vias diameters and drill
- * to their default Netclass value or current values
- * @param aNetcode : the netcode of the net to edit
- * @param aUseNetclassValue : bool. True to use netclass values, false to use current values
- */
 bool PCB_EDIT_FRAME::Change_Net_Tracks_And_Vias_Sizes( int aNetcode, bool aUseNetclassValue )
 {
+    /* Reset all tracks width and vias diameters and drill
+     * to their default Netclass value or current values
+     * aNetcode : the netcode of the net to edit
+     * aUseNetclassValue = true to use netclass values, false to use current values
+     */
     TRACK* pt_segm;
 
     if( aNetcode <= 0 )

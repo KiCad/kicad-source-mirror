@@ -300,7 +300,20 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( editMenu, ID_FIND_ITEMS, text, HELP_FIND , KiBitmap( find_xpm ) );
 
     editMenu->AppendSeparator();
+    AddMenuItem( editMenu, ID_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
+                     _( "Edit All Tracks and Vias" ), KiBitmap( width_track_via_xpm ) );
 
+    AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
+                 _( "Set Footp&rint Field Sizes" ),
+                 _( "Set text size and width of footprint fields." ),
+                 KiBitmap( reset_text_xpm ) );
+
+    AddMenuItem( editMenu, ID_MENU_PCB_SWAP_LAYERS,
+                 _( "&Swap Layers" ),
+                 _( "Swap tracks on copper layers or drawings on other layers" ),
+                 KiBitmap( swap_layer_xpm ) );
+
+    editMenu->AppendSeparator();
     AddMenuItem( editMenu, ID_PCB_GLOBAL_DELETE,
                  _( "&Global Deletions" ),
                  _( "Delete tracks, footprints, texts... on board" ),
@@ -310,16 +323,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Cleanup Tracks and Vias" ),
                  _( "Clean stubs, vias, delete break points, or unconnected tracks to pads and vias" ),
                  KiBitmap( delete_xpm ) );
-
-    AddMenuItem( editMenu, ID_MENU_PCB_SWAP_LAYERS,
-                 _( "&Swap Layers" ),
-                 _( "Swap tracks on copper layers or drawings on other layers" ),
-                 KiBitmap( swap_layer_xpm ) );
-
-    AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_FIELDS_SIZES,
-                 _( "Set Footp&rint Field Sizes" ),
-                 _( "Set text size and width of footprint fields." ),
-                 KiBitmap( reset_text_xpm ) );
 
     //----- View menu -----------------------------------------------------------
     wxMenu* viewMenu = new wxMenu;

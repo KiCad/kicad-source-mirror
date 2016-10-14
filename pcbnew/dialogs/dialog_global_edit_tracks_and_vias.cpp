@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2016 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,12 +44,12 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
                                                                         int             aNetcode ) :
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE( aParent )
 {
-    m_Parent  = aParent;
-    m_Netcode = aNetcode;
-    m_OptionID = 0;
+    m_parent  = aParent;
+    m_curr_netcode = aNetcode;
+    m_optionID = 0;
     MyInit();
+
     GetSizer()->SetSizeHints( this );
-    Layout();
 }
 
 
@@ -57,45 +57,53 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
 {
     SetFocus();
 
-    wxString      msg;
-
     // Display current setup for tracks and vias
-    BOARD*        board = m_Parent->GetBoard();
-    BOARD_DESIGN_SETTINGS& dsnSettings = board->GetDesignSettings();
-    NETCLASSES&   netclasses = dsnSettings.m_NetClasses;
+    m_brd = m_parent->GetBoard();
+    buildNetsList();
+    updateNetInfo();
+
+    m_gridDisplayCurrentSettings->Fit();
+}
+
+
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::updateNetInfo()
+{
+    BOARD_DESIGN_SETTINGS& brdSettings = m_brd->GetDesignSettings();
+    NETCLASSES&   netclasses = brdSettings.m_NetClasses;
     NETCLASSPTR   netclass = netclasses.GetDefault();
-    NETINFO_ITEM* net = board->FindNet( m_Netcode );
+    NETINFO_ITEM* net = m_brd->FindNet( m_curr_netcode );
 
     if( net )
     {
-        m_CurrentNetName->SetLabel( net->GetNetname() );
-        m_CurrentNetclassName->SetLabel( dsnSettings.GetCurrentNetClassName() );
-        netclass = netclasses.Find( dsnSettings.GetCurrentNetClassName() );
+        netclass = net->GetNetClass();
+        m_CurrentNetclassName->SetLabel( netclass->GetName() );
     }
 
     /* Disable the option "copy current to net" if we have only default netclass values
      * i.e. when m_TrackWidthSelector and m_ViaSizeSelector are set to 0
      */
-    if( !dsnSettings.GetTrackWidthIndex() && !dsnSettings.GetViaSizeIndex() )
+    if( !brdSettings.GetTrackWidthIndex() && !brdSettings.GetViaSizeIndex() )
     {
         m_Net2CurrValueButton->Enable( false );
-        m_OptionID = ID_NETCLASS_VALUES_TO_CURRENT_NET;
+        m_optionID = ID_NETCLASS_VALUES_TO_CURRENT_NET;
         m_NetUseNetclassValueButton->SetValue(true);
     }
     else
-     {
-        m_OptionID = ID_CURRENT_VALUES_TO_CURRENT_NET;
+    {
+        m_optionID = ID_CURRENT_VALUES_TO_CURRENT_NET;
         m_Net2CurrValueButton->SetValue(true);
     }
 
     // Display current values, and current netclass values:
+    wxString      msg;
+
     int value = netclass->GetTrackWidth();      // Display track width
     msg = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 0, msg  );
 
-    if( dsnSettings.GetTrackWidthIndex() )
+    if( brdSettings.GetTrackWidthIndex() > 0 )
     {
-        value = dsnSettings.GetCurrentTrackWidth();
+        value = brdSettings.GetCurrentTrackWidth();
         msg   = StringFromValue( g_UserUnit, value, true );
     }
     else
@@ -107,44 +115,37 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 1, msg  );
 
-    if( dsnSettings.GetViaSizeIndex() )
+    if( brdSettings.GetViaSizeIndex() > 0 )
     {
-        value = dsnSettings.GetCurrentViaSize();
+        value = brdSettings.GetCurrentViaSize();
         msg   = StringFromValue( g_UserUnit, value, true );
     }
     else
         msg = _( "Default" );
+
     m_gridDisplayCurrentSettings->SetCellValue( 1, 1, msg  );
 
     value = netclass->GetViaDrill();      // Display via drill
     msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 2, msg  );
-    value = dsnSettings.GetCurrentViaDrill();
+    value = brdSettings.GetCurrentViaDrill();
+
     if( value >= 0 )
         msg = StringFromValue( g_UserUnit, value, true );
     else
         msg = _( "Default" );
+
     m_gridDisplayCurrentSettings->SetCellValue( 1, 2, msg  );
 
     value = netclass->GetuViaDiameter();      // Display micro via diameter
     msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 3, msg  );
-#if 0   // Currently we use always the default netclass value
-    value = board->GetCurrentMicroViaSize();
-    msg   = StringFromValue( g_UserUnit, value, true );
-#endif
     msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 3, msg  );
 
     value = netclass->GetuViaDrill();      // Display micro via drill
     msg   = StringFromValue( g_UserUnit, value, true );
     m_gridDisplayCurrentSettings->SetCellValue( 0, 4, msg  );
-#if 0   // Currently we use always the default netclass value
-    value = board->GetCurrentMicroViaDrill();
-    if( value >= 0 )
-        msg = StringFromValue( g_UserUnit, value, true );
-    else
-#endif
     msg = _( "Default" );
     m_gridDisplayCurrentSettings->SetCellValue( 1, 4, msg  );
 
@@ -155,18 +156,56 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
             m_gridDisplayCurrentSettings->SetReadOnly( ii, jj, true );
     }
 
-    // needs wxWidgets version >= 2.8.8:
     m_gridDisplayCurrentSettings->SetRowLabelSize(wxGRID_AUTOSIZE);
-
-    m_gridDisplayCurrentSettings->Fit();
 }
 
+
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetsList()
+{
+    wxString txt;
+
+    // Populate the nets list with nets names
+    for( unsigned netcode = 0; netcode < m_brd->GetNetCount(); netcode++ )
+    {
+        NETINFO_ITEM* net = m_brd->GetNetInfo().GetNetItem( netcode );
+        wxString netname = net->GetNetname();
+
+        if( netcode == 0 )  // netcode 0 is the netcode of not connected items
+            netname = "<no net>";
+
+        txt.Printf( _( "net %.3d" ), net->GetNet() );
+
+        txt << "    "  << netname;
+
+        m_choiceNetName->Append( txt );
+    }
+
+    if( m_curr_netcode < 0 )
+        m_curr_netcode = 0;
+
+    m_choiceNetName->SetSelection( m_curr_netcode );
+
+    updateNetInfo();
+}
+
+void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onNetSelection( wxCommandEvent& event )
+{
+    int idx = m_choiceNetName->GetSelection();
+
+    if( idx == wxNOT_FOUND )
+        return;
+
+    m_curr_netcode = idx;
+    updateNetInfo();
+}
+
+#include <ratsnest_data.h>
 
 void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
 {
     bool change = false;
 
-    switch( m_OptionID )
+    switch( m_optionID )
     {
     case ID_CURRENT_VALUES_TO_CURRENT_NET:
         if( !IsOK( this,
@@ -174,7 +213,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
             return;
         {
             wxBusyCursor dummy;
-            change = m_Parent->Change_Net_Tracks_And_Vias_Sizes( m_Netcode, false );
+            change = m_parent->Change_Net_Tracks_And_Vias_Sizes( m_curr_netcode, false );
         }
         break;
 
@@ -184,7 +223,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
             return;
         {
             wxBusyCursor dummy;
-            change = m_Parent->Change_Net_Tracks_And_Vias_Sizes( m_Netcode, true );
+            change = m_parent->Change_Net_Tracks_And_Vias_Sizes( m_curr_netcode, true );
         }
         break;
 
@@ -193,7 +232,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
             return;
         {
             wxBusyCursor dummy;
-            change = m_Parent->Reset_All_Tracks_And_Vias_To_Netclass_Values( true, true );
+            change = m_parent->Reset_All_Tracks_And_Vias_To_Netclass_Values( true, true );
         }
         break;
 
@@ -202,7 +241,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
             return;
         {
             wxBusyCursor dummy;
-            change = m_Parent->Reset_All_Tracks_And_Vias_To_Netclass_Values( false, true );
+            change = m_parent->Reset_All_Tracks_And_Vias_To_Netclass_Values( false, true );
         }
         break;
 
@@ -211,19 +250,22 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
             return;
         {
             wxBusyCursor dummy;
-            change = m_Parent->Reset_All_Tracks_And_Vias_To_Netclass_Values( true, false );
+            change = m_parent->Reset_All_Tracks_And_Vias_To_Netclass_Values( true, false );
         }
         break;
     }
 
-    EndModal( 1 );
-
     if( change )
-        m_Parent->GetCanvas()->Refresh();
-}
+    {
+        if( m_parent->IsGalCanvasActive() )
+        {
+            for( TRACK* track = m_parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
+                track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        }
+        else
+            m_parent->GetCanvas()->Refresh();
+    }
 
-
-void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnCancelClick( wxCommandEvent& event )
-{
-    EndModal( 0 );
+    // Call the default handler
+    event.Skip();
 }

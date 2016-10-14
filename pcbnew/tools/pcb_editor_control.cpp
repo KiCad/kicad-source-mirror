@@ -747,7 +747,8 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
     KIGFX::RENDER_SETTINGS* render = aToolMgr->GetView()->GetPainter()->GetSettings();
-    GENERAL_COLLECTORS_GUIDE guide = static_cast<PCB_BASE_FRAME*>( aToolMgr->GetEditFrame() )->GetCollectorsGuide();
+    GENERAL_COLLECTORS_GUIDE guide =
+        static_cast<PCB_BASE_FRAME*>( aToolMgr->GetEditFrame() )->GetCollectorsGuide();
     BOARD* board = static_cast<BOARD*>( aToolMgr->GetModel() );
     GENERAL_COLLECTOR collector;
     int net = -1;
@@ -770,6 +771,12 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         render->SetHighlight( enableHighlight, net );
         aToolMgr->GetView()->UpdateAllLayersColor();
     }
+
+    // Store the highlighted netcode in the current board (for dialogs for instance)
+    if( enableHighlight && net >= 0 )
+        board->SetHighLightNet( net );
+    else
+        board->ResetHighLight();
 
     return true;
 }
