@@ -29,8 +29,10 @@
 # "no-vcs-found".
 include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
 
-# Attempt to detect if we have a git repo and set the version string.
-if( EXISTS "${SRC_PATH}/.git" )
+# Attempt to detect if we have a git repo and set the version string if
+# the version wasn't set to something other than the default value in
+# KiCadVersion.cmake.
+if( _wvh_version_str STREQUAL "no-vcs-found" AND EXISTS "${SRC_PATH}/.git" )
     message( STATUS "Using Git to determine build version string." )
     include( ${CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
     create_git_version_header( ${SRC_PATH} )
