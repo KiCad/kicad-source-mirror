@@ -44,6 +44,7 @@
 // Polygon calculations can use fast mode or force strickly simple polygons after calculations
 // Forcing strickly simple polygons is time consuming, and we have not see issues in fast mode
 // so we use fast mode
+// (choice is SHAPE_POLY_SET::PM_STRICTLY_SIMPLE or SHAPE_POLY_SET::PM_FAST)
 #define POLY_CALC_MODE SHAPE_POLY_SET::PM_FAST
 
 #include <cmath>

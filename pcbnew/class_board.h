@@ -1289,12 +1289,12 @@ public:
      *
      * @param aTrace The segment within a list of trace segments to test.
      * @param aCount A pointer to an integer where to return the number of
-     *               marked segments.
+     *               marked segments (can be NULL).
      * @param aTraceLength A pointer to an double where to return the length of the
-     *                     trace.
+     *                     trace (can be NULL).
      * @param aInPackageLength A pointer to an double where to return the extra lengths inside
      *                   integrated circuits from the pads connected to this track to the
-     *                   die (if any).
+     *                   die (if any) (can be NULL).
      * @param aReorder true for reorder the interesting segments (useful for
      *                 track edition/deletion) in this case the flag BUSY is
      *                 set (the user is responsible of flag clearing). False
@@ -1378,7 +1378,7 @@ public:
      *                  segment start position if the return value is not NULL.
      * @param aSegment The trace segment to create the lock point on.
      * @param aList The pick list to add the created items to.
-     * @return NULL if no new point was created or a pointer to a TRACK ojbect of the
+     * @return NULL if no new point was created or a pointer to a TRACK object of the
      *         created segment.  If \a aSegment points to a via the exact value of \a
      *         aPosition and a pointer to the via are returned.
      */

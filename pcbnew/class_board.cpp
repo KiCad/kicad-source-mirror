@@ -2001,8 +2001,86 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
     if( firstTrack == NULL )
         return NULL;
 
+    // First step: calculate the track length and find the pads (when exist)
+    // at each end of the trace.
     double full_len = 0;
     double lenPadToDie = 0;
+    // Because we have a track (a set of track segments between 2 nodes),
+    // only 2 pads (maximum) will be taken in account:
+    // that are on each end of the track, if any.
+    // keep trace of them, to know the die length and the track length ibside each pad.
+    D_PAD* s_pad = NULL;        // the pad on one end of the trace
+    D_PAD* e_pad = NULL;        // the pad on the other end of the trace
+    int dist_fromstart = INT_MAX;
+    int dist_fromend = INT_MAX;
+
+    for( TRACK* track = firstTrack; track; track = track->Next() )
+    {
+        if( !track->GetState( BUSY ) )
+            continue;
+
+        layer_set = track->GetLayerSet();
+        D_PAD * pad_on_start = GetPad( track->GetStart(), layer_set );
+        D_PAD * pad_on_end = GetPad( track->GetEnd(), layer_set );
+
+        // a segment fully inside a pad does not contribute to the track len
+        // (an other track end inside this pad will contribute to this lenght)
+        if( pad_on_start && ( pad_on_start == pad_on_end ) )
+            continue;
+
+        full_len += track->GetLength();
+
+        if( pad_on_start == NULL && pad_on_end == NULL )
+            // This most of time the case
+            continue;
+
+        // At this point, we can have one track end on a pad, or the 2 track ends on
+        // 2 different pads.
+        // We don't know what pad (s_pad or e_pad) must be used to store the
+        // start point and the end point of the track, so if a pad is already set,
+        // use the other
+        if( pad_on_start )
+        {
+            SEG segm( track->GetStart(), pad_on_start->GetPosition() );
+            int dist = segm.Length();
+
+            if( s_pad == NULL )
+            {
+                dist_fromstart = dist;
+                s_pad = pad_on_start;
+            }
+            else if( e_pad == NULL )
+            {
+                dist_fromend = dist;
+                e_pad = pad_on_start;
+            }
+            else    // Should not occur, at least for basic pads
+            {
+                // wxLogMessage( "BOARD::MarkTrace: multiple pad_on_start" );
+            }
+        }
+
+        if( pad_on_end )
+        {
+            SEG segm( track->GetEnd(), pad_on_end->GetPosition() );
+            int dist = segm.Length();
+
+            if( s_pad == NULL )
+            {
+                dist_fromstart = dist;
+                s_pad = pad_on_end;
+            }
+            else if( e_pad == NULL )
+            {
+                dist_fromend = dist;
+                e_pad = pad_on_end;
+            }
+            else    // Should not occur, at least for basic pads
+            {
+                // wxLogMessage( "BOARD::MarkTrace: multiple pad_on_end" );
+            }
+        }
+    }
 
     if( aReorder )
     {
@@ -2025,25 +2103,6 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
                 track->UnLink();
                 list->Insert( track, firstTrack->Next() );
 
-                if( aTraceLength )
-                    full_len += track->GetLength();
-
-                if( aPadToDieLength ) // Add now length die.
-                {
-                    // In fact only 2 pads (maximum) will be taken in account:
-                    // that are on each end of the track, if any
-                    if( track->GetState( BEGIN_ONPAD ) )
-                    {
-                        D_PAD* pad = (D_PAD *) track->start;
-                        lenPadToDie += (double) pad->GetPadToDieLength();
-                    }
-
-                    if( track->GetState( END_ONPAD ) )
-                    {
-                        D_PAD* pad = (D_PAD *) track->end;
-                        lenPadToDie += (double) pad->GetPadToDieLength();
-                    }
-                }
             }
         }
     }
@@ -2057,26 +2116,22 @@ TRACK* BOARD::MarkTrace( TRACK*  aTrace, int* aCount,
             {
                 busy_count++;
                 track->SetState( BUSY, false );
-                full_len += track->GetLength();
-
-                // Add now length die.
-                // In fact only 2 pads (maximum) will be taken in account:
-                // that are on each end of the track, if any
-                if( track->GetState( BEGIN_ONPAD ) )
-                {
-                    D_PAD* pad = (D_PAD *) track->start;
-                    lenPadToDie += (double) pad->GetPadToDieLength();
-                }
-
-                if( track->GetState( END_ONPAD ) )
-                {
-                    D_PAD* pad = (D_PAD *) track->end;
-                    lenPadToDie += (double) pad->GetPadToDieLength();
-                }
             }
         }
 
         DBG( printf( "%s: busy_count:%d\n", __func__, busy_count ); )
+    }
+
+    if( s_pad )
+    {
+        full_len += dist_fromstart;
+        lenPadToDie += (double) s_pad->GetPadToDieLength();
+    }
+
+    if( e_pad )
+    {
+        full_len += dist_fromend;
+        lenPadToDie += (double) e_pad->GetPadToDieLength();
     }
 
     if( aTraceLength )
