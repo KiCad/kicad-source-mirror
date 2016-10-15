@@ -124,11 +124,19 @@ public:
 
     /**
      * Function ImportValues
-     * copy parameters from a source.
+     * copy parameters from a LIB_FIELD source.
      * Pointers and specific values (position) are not copied
      * @param aSource = the LIB_FIELD to read
      */
     void ImportValues( const LIB_FIELD& aSource );
+
+    /**
+     * Function ImportValues
+     * copy parameters into a LIB_FIELD destination.
+     * Pointers and specific values (position) are not copied
+     * @param aDest = the LIB_FIELD to write
+     */
+    void ExportValues(LIB_FIELD& aDest ) const;
 
     int GetPenSize() const override;
 

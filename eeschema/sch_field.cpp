@@ -230,6 +230,22 @@ void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
     m_Mirror    = aSource.IsMirrored();
 }
 
+void SCH_FIELD::ExportValues( LIB_FIELD& aDest ) const
+{
+    aDest.SetId( GetId() );
+    aDest.SetText( m_Text );        // Set field value
+    aDest.SetName( GetName() );
+    aDest.SetOrientation( GetOrientation() );
+    aDest.SetSize( GetSize() );
+    aDest.SetTextPosition( GetTextPosition() );
+    aDest.SetHorizJustify( GetHorizJustify() );
+    aDest.SetVertJustify( GetVertJustify() );
+    aDest.SetItalic( IsItalic() );
+    aDest.SetBold( IsBold() );
+    aDest.SetThickness( GetThickness() );
+    aDest.SetAttributes( GetAttributes() );
+}
+
 
 void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 {

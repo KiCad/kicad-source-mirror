@@ -45,6 +45,10 @@
 #include <sch_validators.h>
 
 #include <dialog_edit_libentry_fields_in_lib_base.h>
+#ifdef KICAD_SPICE
+#include <dialog_spice_model.h>
+#include <netlist_exporter_pspice.h>
+#endif /* KICAD_SPICE */
 
 // Local variables:
 static int s_SelectedRow;
@@ -66,6 +70,7 @@ private:
     void OnListItemDeselected( wxListEvent& event ) override;
     void OnListItemSelected( wxListEvent& event ) override;
     void addFieldButtonHandler( wxCommandEvent& event ) override;
+    void EditSpiceModel( wxCommandEvent& event ) override;
 
     /**
      * Function deleteFieldButtonHandler
@@ -171,6 +176,10 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
     m_parent   = aParent;
     m_libEntry = aLibEntry;
     m_skipCopyFromPanel = false;
+
+#ifndef KICAD_SPICE
+    m_spiceFieldsButton->Show(false);
+#endif
 }
 
 
@@ -299,6 +308,50 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
     m_parent->OnModify();
 
     EndQuasiModal( wxID_OK );
+}
+
+
+void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::EditSpiceModel( wxCommandEvent& event )
+{
+#ifdef KICAD_SPICE
+    // DIALOG_SPICE_MODEL expects a SCH_COMPONENT,
+    // and a list of SCH_FIELDS to create/edit/delete Spice fields.
+    SCH_COMPONENT component;    // This dummy component
+
+    // Build fields list from the m_FieldsBuf fields buffer dialog
+    // to be sure to use the current fields.
+    SCH_FIELDS schfields;
+
+    for( unsigned ii = 0; ii < m_FieldsBuf.size(); ++ii )
+    {
+        LIB_FIELD& libfield = m_FieldsBuf[ii];
+        SCH_FIELD schfield( libfield.GetTextPosition(), libfield.GetId(),
+                            &component,  libfield.GetName() );
+        schfield.ImportValues( m_FieldsBuf[ii] );
+        schfield.SetText( m_FieldsBuf[ii].GetText() );
+
+        schfields.push_back( schfield );
+    }
+
+    component.SetFields( schfields );
+
+    DIALOG_SPICE_MODEL dialog( this, component, schfields );
+
+    if( dialog.ShowModal() != wxID_OK )
+        return;
+
+    // Transfert sch fields to the m_FieldsBuf fields buffer dialog:
+    m_FieldsBuf.clear();
+
+    for( unsigned ii = 0; ii < schfields.size(); ii++ )
+    {
+        LIB_FIELD libfield;
+        schfields[ii].ExportValues( libfield );
+        m_FieldsBuf.push_back( libfield );
+    }
+
+    updateDisplay();
+#endif /* KICAD_SPICE */
 }
 
 
