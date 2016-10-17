@@ -2662,7 +2662,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr< LIB_PART >& aPar
         case '\n':   // Empty line
         case '\r':
         case 0:
-            continue;
+            break;
 
         default:
             SCH_PARSE_ERROR( _( "undefined DRAW entry" ), aReader, line );
