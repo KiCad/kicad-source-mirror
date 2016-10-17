@@ -1960,7 +1960,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
                 RotatePoint( &pt, module->GetOrientation() );
                 pad->SetPosition( pt + module->GetPosition() );
-                module->Add( pad );
+                module->Add( pad, ADD_APPEND );
             }
             break;
 
