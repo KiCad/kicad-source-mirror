@@ -1,7 +1,7 @@
 boost_root
 .downloads-by-cmake
-Build
-build
+Build*
+build*
 common/netlist_keywords.*
 common/netlist_lexer.h
 common/pcb_plot_params_lexer.h
@@ -38,7 +38,6 @@ Documentation/development/doxygen
 *.pyc
 .*.swp
 *~
-build-*
 common/pcb_plot_params_keywords.cpp
 include/pcb_plot_params_lexer.h
 pcbnew/specctra_keywords.cpp
