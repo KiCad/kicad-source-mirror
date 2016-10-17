@@ -525,6 +525,29 @@ segments, and circles or polygons.
 - In progress.
 
 
+## Stitching Via Support ## {#v5_pcb_stitching_vias}
+**Goal:**
+
+Add capability to add vias for stitching and thermal transfer purposes
+that do not require being attached to tracks.
+
+**Task:**
+- Develop more robust connectivity checking algorithm.
+- Create a UI element to allow the user to select a net from the list of
+  valid nets.
+- Connection propagation fix for the current issue of vias that are not
+  connected to tracks being tagged as unassigned and removed.
+- Manual via placement tool.
+- Improve the DRC to handle cases of orphaned vias.
+
+
+**Dependencies:**
+- None
+
+**Progress:**
+- Patch available to fix via propagation issue.
+
+
 # Documentation # {#v5_documentation}
 This section defines the tasks for both the user and developer documentation.
 
