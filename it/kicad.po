@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-12 11:24+0200\n"
-"PO-Revision-Date: 2016-10-18 09:53+0200\n"
+"PO-Revision-Date: 2016-10-18 10:03+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -22145,9 +22145,7 @@ msgstr "&Accoda scheda"
 msgid ""
 "Append another Pcbnew board to the current loaded board. Available only when "
 "Pcbnew runs in stand alone mode"
-msgstr ""
-"Aggiunge una nuova scheda a quella caricata attualmente. Funzione "
-"disponibile sono quando Pcbnew viene eseguito autonomamente"
+msgstr "Accoda una nuova scheda a quella caricata attualmente. Funzione disponibile sono quando Pcbnew viene eseguito autonomamente"
 
 #: pcbnew/menubar_pcbframe.cpp:107
 msgid "Load a non KiCad board file and convert it to a .kicad_pcb file"
@@ -24860,7 +24858,7 @@ msgstr "Cancellare l'elemento selezionato?"
 
 #: pcbnew/tools/pcbnew_control.cpp:874
 msgid "Append a board"
-msgstr "Allega una scheda"
+msgstr "Accoda una scheda"
 
 #: pcbnew/tools/pcbnew_control.cpp:918
 msgid "Not available in OpenGL/Cairo canvases."
