@@ -154,6 +154,14 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
     m_panelShowPin->Refresh();
 }
 
+void DIALOG_LIB_EDIT_PIN::SetDlgUnitsLabel( const wxString& units )
+{
+        m_staticNameTextSizeUnits->SetLabel( units );
+        m_staticNumberTextSizeUnits->SetLabel( units );
+        m_staticLengthUnits->SetLabel( units );
+        m_staticPosXUnits->SetLabel( units );
+        m_staticPosYUnits->SetLabel( units );
+}
 
 void DIALOG_LIB_EDIT_PIN::SetOrientationList( const wxArrayString& list,
                                               const BITMAP_DEF* aBitmaps )

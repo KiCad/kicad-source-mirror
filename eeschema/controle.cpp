@@ -53,7 +53,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
 {
     SCH_ITEM*      item;
     LIB_PIN*       Pin     = NULL;
-    SCH_COMPONENT* LibItem = NULL;
+    SCH_COMPONENT* component = NULL;
     wxPoint        gridPosition = GetNearestGridPosition( aPosition );
 
     // Check the on grid position first.  There is more likely to be multiple items on
@@ -82,18 +82,18 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
     {
     case SCH_FIELD_T:
     case LIB_FIELD_T:
-        LibItem = (SCH_COMPONENT*) item->GetParent();
-        SendMessageToPCBNEW( item, LibItem );
+        component = (SCH_COMPONENT*) item->GetParent();
+        SendMessageToPCBNEW( item, component );
         break;
 
     case SCH_COMPONENT_T:
-        LibItem = (SCH_COMPONENT*) item;
-        SendMessageToPCBNEW( item, LibItem );
+        component = (SCH_COMPONENT*) item;
+        SendMessageToPCBNEW( item, component );
         break;
 
     case LIB_PIN_T:
         Pin = (LIB_PIN*) item;
-        LibItem = (SCH_COMPONENT*) LocateItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
+        component = (SCH_COMPONENT*) LocateItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
         break;
 
     default:
@@ -105,16 +105,12 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
         // Force display pin information (the previous display could be a component info)
         MSG_PANEL_ITEMS items;
 
-        Pin->GetMsgPanelInfo( items );
-
-        if( LibItem )
-            items.push_back( MSG_PANEL_ITEM( LibItem->GetRef( m_CurrentSheet ),
-                                             LibItem->GetField( VALUE )->GetShownText(), DARKCYAN ) );
+        Pin->GetMsgPanelInfo( items, component );
 
         SetMsgPanel( items );
 
         // Cross probing:2 - pin found, and send a locate pin command to Pcbnew (highlight net)
-        SendMessageToPCBNEW( Pin, LibItem );
+        SendMessageToPCBNEW( Pin, component );
     }
 
     return item;

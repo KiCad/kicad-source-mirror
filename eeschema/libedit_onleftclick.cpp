@@ -57,6 +57,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         {
             MSG_PANEL_ITEMS items;
             item->GetMsgPanelInfo( items );
+
             SetMsgPanel( items );
         }
         else

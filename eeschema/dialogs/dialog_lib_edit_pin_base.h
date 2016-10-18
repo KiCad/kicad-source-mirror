@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -81,6 +81,12 @@ class DIALOG_LIB_EDIT_PIN_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextPinLen;
 		wxTextCtrl* m_textLength;
 		wxStaticText* m_staticLengthUnits;
+		wxStaticText* m_staticTextPinPosX;
+		wxTextCtrl* m_textPinPosX;
+		wxStaticText* m_staticPosXUnits;
+		wxStaticText* m_staticPinPosY;
+		wxTextCtrl* m_textPinPosY;
+		wxStaticText* m_staticPosYUnits;
 		wxPanel* m_panelShowPin;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
@@ -98,7 +104,7 @@ class DIALOG_LIB_EDIT_PIN_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 515,370 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 625,428 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIB_EDIT_PIN_BASE();
 	
 };

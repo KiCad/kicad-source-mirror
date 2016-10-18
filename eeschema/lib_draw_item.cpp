@@ -80,7 +80,7 @@ void LIB_ITEM::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     else
         msg = wxT( "?" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Convert" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Converted" ), msg, BROWN ) );
 }
 
 

@@ -30,6 +30,8 @@
 #ifndef CLASS_PIN_H
 #define CLASS_PIN_H
 
+class SCH_COMPONENT;
+
 #include <lib_draw_item.h>
 
 #include "pin_shape.h"
@@ -117,6 +119,13 @@ public:
     bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;
 
     void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList ) override;
+
+    /**
+     * Display pin info (given by GetMsgPanelInfo) and add some info related to aComponent
+     * (schematic pin position, and sheet path)
+     * @param aComponent is the component which "owns" the pin
+     */
+    void GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList, SCH_COMPONENT* aComponent );
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
@@ -448,6 +457,14 @@ public:
 
     wxPoint GetPosition() const override { return m_position; }
 
+    /**
+     * move this and all linked pins to the new position
+     * used in pin edition.
+     * use SetPinPosition to set the position of this only
+     * @param aPosition is the new position of this and linked pins
+     */
+    void SetPinPosition( wxPoint aPosition );
+
     void MirrorHorizontal( const wxPoint& aCenter ) override;
 
     void MirrorVertical( const wxPoint& aCenter ) override;
@@ -468,6 +485,13 @@ public:
     EDA_ITEM* Clone() const override;
 
 private:
+    /**
+     * Build the pin basic info to display in message panel.
+     * they are pin info without the actual pin position, which
+     * is not known in schematic without knowing the parent component
+     */
+    void getMsgPanelInfoBase( std::vector< MSG_PANEL_ITEM >& aList );
+
 
     /**
      * @copydoc LIB_ITEM::compare()

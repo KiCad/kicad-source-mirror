@@ -41,6 +41,7 @@
 #include <class_libentry.h>
 #include <lib_pin.h>
 #include <general.h>
+#include <confirm.h>
 
 #include <../common/dialogs/dialog_display_info_HTML_base.h>
 #include <dialog_lib_edit_pin.h>
@@ -102,19 +103,20 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     DIALOG_LIB_EDIT_PIN dlg( this, pin );
 
     wxString units = GetUnitsLabel( g_UserUnit );
+    dlg.SetDlgUnitsLabel( units );
+
     dlg.SetOrientationList( LIB_PIN::GetOrientationNames(), LIB_PIN::GetOrientationSymbols() );
     dlg.SetOrientation( LIB_PIN::GetOrientationCodeIndex( pin->GetOrientation() ) );
     dlg.SetStyle( pin->GetShape() );
     dlg.SetElectricalType( pin->GetType() );
     dlg.SetPinName( pin->GetName() );
     dlg.SetPinNameTextSize( StringFromValue( g_UserUnit, pin->GetNameTextSize() ) );
-    dlg.SetPinNameTextSizeUnits( units );
+    dlg.SetPinPositionX( StringFromValue( g_UserUnit, pin->GetPosition().x ) );
+    dlg.SetPinPositionY( StringFromValue( g_UserUnit, -pin->GetPosition().y ) );
     dlg.SetPadName( pin->GetNumberString() );
     dlg.SetPadNameTextSize( StringFromValue( g_UserUnit, pin->GetNumberTextSize() ) );
 
-    dlg.SetPadNameTextSizeUnits( units );
     dlg.SetLength( StringFromValue( g_UserUnit, pin->GetLength() ) );
-    dlg.SetLengthUnits( units );
     dlg.SetAddToAllParts( pin->GetUnit() == 0 );
     dlg.SetAddToAllBodyStyles( pin->GetConvert() == 0 );
     dlg.SetVisible( pin->IsVisible() );
@@ -139,6 +141,25 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
         return;
     }
 
+    // Test the pin position validity: to avoid issues in schematic,
+    // it must be on a 50 mils grid
+    wxPoint pinpos;
+    pinpos.x = ValueFromString( g_UserUnit, dlg.GetPinPositionX() );
+    pinpos.y = -ValueFromString( g_UserUnit, dlg.GetPinPositionY() );
+    const int acceptable_mingrid = 50;
+
+    if( (pinpos.x % acceptable_mingrid) || (pinpos.y % acceptable_mingrid) )
+    {
+        wxString msg;
+        msg.Printf( _( "This pin is not on a %d mils grid\n"
+                       "It will be not easy to connect in schematic\n"
+                       "Do you want to continue?"), acceptable_mingrid );
+
+        if( !IsOK( this, msg ) )
+            return;
+    }
+
+
     // Save the pin properties to use for the next new pin.
     LastPinNameSize = ValueFromString( g_UserUnit, dlg.GetPinNameTextSize() );
     LastPinNumSize = ValueFromString( g_UserUnit, dlg.GetPadNameTextSize() );
@@ -157,6 +178,8 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     pin->SetNumberTextSize( GetLastPinNumSize() );
     pin->SetOrientation( LastPinOrient );
     pin->SetLength( GetLastPinLength() );
+    pin->SetPinPosition( pinpos );
+
     pin->SetType( LastPinType );
     pin->SetShape( LastPinShape );
     pin->SetConversion( ( LastPinCommonConvert ) ? 0 : m_convert );

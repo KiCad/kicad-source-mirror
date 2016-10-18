@@ -368,6 +368,33 @@ void LIB_PIN::SetLength( int length )
 }
 
 
+void LIB_PIN::SetPinPosition( wxPoint aPosition )
+{
+    if( m_position != aPosition )
+    {
+        m_position = aPosition;
+        SetModified();
+    }
+
+    if( GetParent() == NULL )
+        return;
+
+    LIB_PINS pinList;
+    GetParent()->GetPins( pinList );
+
+    for( size_t i = 0; i < pinList.size(); i++ )
+    {
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0
+           || pinList[i]->m_Convert != m_Convert
+           || pinList[i]->m_position == aPosition )
+            continue;
+
+        pinList[i]->m_position = aPosition;
+        SetModified();
+    }
+}
+
+
 void LIB_PIN::SetPartNumber( int part )
 {
     if( m_Unit == part )
@@ -1981,7 +2008,7 @@ void LIB_PIN::SetWidth( int aWidth )
 }
 
 
-void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+void LIB_PIN::getMsgPanelInfoBase( MSG_PANEL_ITEMS& aList )
 {
     wxString text;
 
@@ -2019,6 +2046,44 @@ void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
 }
 
+void LIB_PIN::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
+{
+    getMsgPanelInfoBase( aList );
+
+    wxString text;
+    wxPoint pinpos = GetPosition();
+    pinpos.y = -pinpos.y;   // Display coord are top to bottom
+                            // lib items coord are bottom to top
+
+    text = StringFromValue( g_UserUnit, pinpos.x, true );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text, DARKMAGENTA ) );
+
+    text = StringFromValue( g_UserUnit, pinpos.y, true );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
+}
+
+void LIB_PIN::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList,
+                               SCH_COMPONENT* aComponent )
+{
+    getMsgPanelInfoBase( aList );
+
+    if( !aComponent )
+        return;
+
+    wxString text;
+    wxPoint pinpos = aComponent->GetTransform().TransformCoordinate( GetPosition() )
+                     + aComponent->GetPosition();
+
+    text = StringFromValue( g_UserUnit, pinpos.x, true );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text, DARKMAGENTA ) );
+
+    text = StringFromValue( g_UserUnit, pinpos.y, true );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
+
+    aList.push_back( MSG_PANEL_ITEM( aComponent->GetField( REFERENCE )->GetShownText(),
+                                     aComponent->GetField( VALUE )->GetShownText(),
+                                     DARKCYAN ) );
+}
 
 const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const
 {

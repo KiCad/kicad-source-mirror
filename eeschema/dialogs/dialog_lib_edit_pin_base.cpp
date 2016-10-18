@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -37,7 +37,6 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	fgSizerPins->Add( m_staticTextPinName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textPinName = new wxTextCtrl( this, ID_M_TEXTPINNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPinName->SetMaxLength( 0 ); 
 	fgSizerPins->Add( m_textPinName, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticTextPadName = new wxStaticText( this, ID_M_STATICTEXTPADNAME, _("Pin n&umber:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -47,7 +46,6 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	fgSizerPins->Add( m_staticTextPadName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textPadName = new wxTextCtrl( this, ID_M_TEXTPADNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPadName->SetMaxLength( 0 ); 
 	fgSizerPins->Add( m_textPadName, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticTextOrient = new wxStaticText( this, wxID_ANY, _("&Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -111,7 +109,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizerTextsSizes;
-	fgSizerTextsSizes = new wxFlexGridSizer( 3, 3, 0, 0 );
+	fgSizerTextsSizes = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizerTextsSizes->AddGrowableCol( 1 );
 	fgSizerTextsSizes->SetFlexibleDirection( wxBOTH );
 	fgSizerTextsSizes->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
@@ -121,7 +119,6 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	fgSizerTextsSizes->Add( m_staticTextNameSize, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textPinNameTextSize = new wxTextCtrl( this, ID_M_TEXTPINNAMETEXTSIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPinNameTextSize->SetMaxLength( 0 ); 
 	fgSizerTextsSizes->Add( m_textPinNameTextSize, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	m_staticNameTextSizeUnits = new wxStaticText( this, ID_M_STATICNAMETEXTSIZEUNITS, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -133,8 +130,7 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	fgSizerTextsSizes->Add( m_staticTextPadNameSize, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textPadNameTextSize = new wxTextCtrl( this, ID_M_TEXTPADNAMETEXTSIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textPadNameTextSize->SetMaxLength( 0 ); 
-	fgSizerTextsSizes->Add( m_textPadNameTextSize, 0, wxTOP|wxBOTTOM|wxEXPAND, 3 );
+	fgSizerTextsSizes->Add( m_textPadNameTextSize, 0, wxEXPAND|wxTOP, 3 );
 	
 	m_staticNumberTextSizeUnits = new wxStaticText( this, ID_M_STATICNUMBERTEXTSIZEUNITS, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticNumberTextSizeUnits->Wrap( -1 );
@@ -142,15 +138,36 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	m_staticTextPinLen = new wxStaticText( this, ID_M_STATICTEXTPINLEN, _("&Length:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPinLen->Wrap( -1 );
-	fgSizerTextsSizes->Add( m_staticTextPinLen, 0, wxALL, 5 );
+	fgSizerTextsSizes->Add( m_staticTextPinLen, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_textLength = new wxTextCtrl( this, ID_M_TEXTLENGTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textLength->SetMaxLength( 0 ); 
-	fgSizerTextsSizes->Add( m_textLength, 0, wxTOP|wxBOTTOM|wxEXPAND, 5 );
+	fgSizerTextsSizes->Add( m_textLength, 0, wxEXPAND|wxTOP, 5 );
 	
 	m_staticLengthUnits = new wxStaticText( this, ID_M_STATICLENGTHUNITS, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticLengthUnits->Wrap( -1 );
 	fgSizerTextsSizes->Add( m_staticLengthUnits, 0, wxALL, 5 );
+	
+	m_staticTextPinPosX = new wxStaticText( this, wxID_ANY, _("Pin Pos X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPinPosX->Wrap( -1 );
+	fgSizerTextsSizes->Add( m_staticTextPinPosX, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_textPinPosX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerTextsSizes->Add( m_textPinPosX, 0, wxEXPAND|wxTOP, 5 );
+	
+	m_staticPosXUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticPosXUnits->Wrap( -1 );
+	fgSizerTextsSizes->Add( m_staticPosXUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_staticPinPosY = new wxStaticText( this, wxID_ANY, _("Pin Pos Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticPinPosY->Wrap( -1 );
+	fgSizerTextsSizes->Add( m_staticPinPosY, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_textPinPosY = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerTextsSizes->Add( m_textPinPosY, 0, wxEXPAND|wxTOP, 5 );
+	
+	m_staticPosYUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticPosYUnits->Wrap( -1 );
+	fgSizerTextsSizes->Add( m_staticPosYUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	bRightSizer->Add( fgSizerTextsSizes, 0, wxALL|wxEXPAND, 5 );
