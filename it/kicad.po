@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-12 11:24+0200\n"
-"PO-Revision-Date: 2016-10-15 13:28+0200\n"
+"PO-Revision-Date: 2016-10-18 09:53+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -8302,19 +8302,19 @@ msgstr ""
 
 #: eeschema/menubar.cpp:67
 msgid "&New Schematic Project"
-msgstr "&Nuovo schema elettrico"
+msgstr "&Nuovo progetto schema"
 
 #: eeschema/menubar.cpp:68
 msgid "Clear current schematic hierarchy and start a new schematic root sheet"
-msgstr "Ripulisci l'intera gerarchia schematica ed iniziane una nuova"
+msgstr "Ripulisci l'intera gerarchia dello schema ed inizia una nuovo foglio radice"
 
 #: eeschema/menubar.cpp:71
 msgid "&Open Schematic Project"
-msgstr "Apri schema elettric&o"
+msgstr "Apri pr&ogetto schema"
 
 #: eeschema/menubar.cpp:74
 msgid "Open an existing schematic hierarchy"
-msgstr "Apri uno schema gerarchico già esistente"
+msgstr "Apri uno schema gerarchico esistente"
 
 #: eeschema/menubar.cpp:95 kicad/menubar.cpp:228 pcbnew/menubar_pcbframe.cpp:95
 msgid "Open &Recent"
@@ -8322,18 +8322,16 @@ msgstr "Apri &recente"
 
 #: eeschema/menubar.cpp:96
 msgid "Open a recent opened schematic project"
-msgstr "Apri un schema elettrico aperto recentemente"
+msgstr "Apri un progetto schema aperto recentemente"
 
 #: eeschema/menubar.cpp:101
 msgid "Imp&ort Schematic Sheet Content"
-msgstr "Imp&orta il contenuto dello schema"
+msgstr "Imp&orta contenuto foglio schema"
 
 #: eeschema/menubar.cpp:102
 msgid ""
 "Import a schematic sheet content from an other project in the current sheet"
-msgstr ""
-"Importa il contenuto di uno schema elettrico da un altro progetto nel foglio "
-"corrente"
+msgstr "Importa i contenuti del foglio di uno schema da un altro progetto nel foglio corrente"
 
 #: eeschema/menubar.cpp:107
 msgid "&Save Schematic Project"
