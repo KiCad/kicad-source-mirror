@@ -395,7 +395,7 @@ public:
      * images.
      * @return The menu image associated with the item.
      */
-    virtual BITMAP_DEF GetMenuImage() const { return right_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const;
 
     /**
      * Function Matches
