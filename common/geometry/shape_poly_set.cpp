@@ -54,6 +54,7 @@ int SHAPE_POLY_SET::NewOutline()
 {
     SHAPE_LINE_CHAIN empty_path;
     POLYGON poly;
+    empty_path.SetClosed( true );
     poly.push_back( empty_path );
     m_polys.push_back( poly );
     return m_polys.size() - 1;
@@ -62,7 +63,10 @@ int SHAPE_POLY_SET::NewOutline()
 
 int SHAPE_POLY_SET::NewHole( int aOutline )
 {
-    m_polys.back().push_back( SHAPE_LINE_CHAIN() );
+    SHAPE_LINE_CHAIN empty_path;
+    empty_path.SetClosed( true );
+
+    m_polys.back().push_back( empty_path );
 
     return m_polys.back().size() - 2;
 }
