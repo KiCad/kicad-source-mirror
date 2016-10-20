@@ -47,6 +47,7 @@ using namespace KIGFX;
 
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
+#define BITMAP_FONT_USE_SPANS
 #include "bitmap_font_img.c"
 #include "bitmap_font_desc.c"
 
@@ -274,8 +275,8 @@ void OPENGL_GAL::BeginDrawing()
             glActiveTexture( GL_TEXTURE0 + FONT_TEXTURE_UNIT );
             glGenTextures( 1, &fontTexture );
             glBindTexture( GL_TEXTURE_2D, fontTexture );
-            glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB8, bitmap_font.width, bitmap_font.height,
-                          0, GL_RGB, GL_UNSIGNED_BYTE, bitmap_font.pixels );
+            glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB8, font_image.width, font_image.height,
+                          0, GL_RGB, GL_UNSIGNED_BYTE, font_image.pixels );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
             checkGlError( "loading bitmap font" );
@@ -748,11 +749,11 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
 {
     wxASSERT_MSG( !IsTextMirrored(), "No support for mirrored text using bitmap fonts." );
 
-
     // Compute text size, so it can be properly justified
-    std::pair<VECTOR2D, int> bbox = computeBitmapTextSize( aText );
-    VECTOR2D textSize = bbox.first;
-    int commonOffset = bbox.second;
+    VECTOR2D textSize;
+    float commonOffset;
+    std::tie( textSize, commonOffset ) = computeBitmapTextSize( aText );
+
     const double SCALE = GetGlyphSize().y / textSize.y;
     int tildas = 0;
     bool overbar = false;
@@ -801,24 +802,11 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
         break;
     }
 
-    /* Glyph:
-     * v0    v1
-     *   +--+
-     *   | /|
-     *   |/ |
-     *   +--+
-     * v2    v3
-     */
-
     for( unsigned int ii = 0; ii < aText.length(); ++ii )
     {
         const unsigned int c = aText[ii];
 
-        wxASSERT_MSG( c < bitmap_chars_count, wxT( "Missing character in bitmap font atlas." ) );
-
-        if( c >= bitmap_chars_count )
-            continue;
-
+        wxASSERT_MSG( lookupGlyph(c) != nullptr, wxT( "Missing character in bitmap font atlas." ) );
         wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
 
         // Handle overbar
@@ -851,6 +839,8 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     }
 
     // Handle the case when overbar is active till the end of the drawn text
+    currentManager->Translate( 0, commonOffset, 0 );
+
     if( overbar )
         drawBitmapOverbar( overbarLength, overbarHeight );
 
@@ -863,7 +853,7 @@ void OPENGL_GAL::DrawGrid()
     if( !gridVisibility )
         return;
 
-    int gridScreenSizeDense = KiROUND( gridSize.x * worldScale );
+    int gridScreenSizeDense  = KiROUND( gridSize.x * worldScale );
     int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
 
     // Check if the grid would not be too dense
@@ -1313,84 +1303,108 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
 
 int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
 {
-    const float TEX_X = bitmap_font.width;
-    const float TEX_Y = bitmap_font.height;
+    const float TEX_X = font_image.width;
+    const float TEX_Y = font_image.height;
 
-    const bitmap_glyph& GLYPH = bitmap_chars[aChar];
-    const float X = GLYPH.atlas_x;
-    const float Y = GLYPH.atlas_y;
-    const float XOFF = GLYPH.x_off;
-    const float YOFF = -GLYPH.miny + GLYPH.atlas_shift;
-    const float W = GLYPH.atlas_w;
-    const float H = GLYPH.atlas_h;
-    const float B = bitmap_font.char_border;
+    const bitmap_glyph* glyph = lookupGlyph(aChar);
+    if( !glyph ) return 0;
 
-    Translate( VECTOR2D( XOFF, 0 ) );
+    const float X = glyph->atlas_x + font_information.smooth_pixels;
+    const float Y = glyph->atlas_y + font_information.smooth_pixels;
+    const float XOFF =  glyph->minx;
+
+    // adjust for height rounding
+    const float round_adjust =   ( glyph->maxy - glyph->miny ) 
+                               - float( glyph->atlas_h - font_information.smooth_pixels * 2 );
+    const float top_adjust   = font_information.max_y - glyph->maxy;
+    const float YOFF = round_adjust + top_adjust;
+    const float W    = glyph->atlas_w  - font_information.smooth_pixels *2;
+    const float H    = glyph->atlas_h  - font_information.smooth_pixels *2;
+    const float B    = 0;
 
     currentManager->Reserve( 6 );
-
+    Translate( VECTOR2D( XOFF, YOFF ) );
+    /* Glyph:
+    * v0    v1
+    *   +--+
+    *   | /|
+    *   |/ |
+    *   +--+
+    * v2    v3
+    */
     currentManager->Shader( SHADER_FONT, X / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( -B,     YOFF - B, 0 );             // v0
+    currentManager->Vertex( -B,      -B, 0 );             // v0
 
     currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( W + B,  YOFF - B, 0 );             // v1
+    currentManager->Vertex( W + B,   -B, 0 );             // v1
 
     currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( -B,     YOFF + H + B, 0 );         // v2
+    currentManager->Vertex( -B,   H + B, 0 );             // v2
 
 
     currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, ( Y + H ) / TEX_Y );
-    currentManager->Vertex( W + B,  YOFF - B, 0 );              // v1
+    currentManager->Vertex( W + B, -B, 0 );               // v1
 
     currentManager->Shader( SHADER_FONT, X / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( -B,     YOFF + H + B, 0 );          // v2
+    currentManager->Vertex( -B,  H + B, 0 );              // v2
 
     currentManager->Shader( SHADER_FONT, ( X + W ) / TEX_X, Y / TEX_Y );
-    currentManager->Vertex( W + B,  YOFF + H + B, 0 );          // v3
+    currentManager->Vertex( W + B,  H + B, 0 );           // v3
 
-    Translate( VECTOR2D( -XOFF + GLYPH.advance, 0 ) );
+    Translate( VECTOR2D( -XOFF + glyph->advance, -YOFF ) );
 
-    return GLYPH.advance;
+    return glyph->advance;
 }
 
 
 void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 {
     // To draw an overbar, simply draw an overbar
-    const bitmap_glyph& GLYPH = bitmap_chars[(unsigned char) '_'];
-    const float H = GLYPH.maxy - GLYPH.miny;
+    const bitmap_glyph* glyph = lookupGlyph( '_' );
+    const float H = glyph->maxy - glyph->miny;
 
     Save();
 
-    Translate( VECTOR2D( -aLength, -aHeight - GLYPH.miny ) );
+    Translate( VECTOR2D( -aLength, -aHeight-1.5*H ) );
 
     currentManager->Reserve( 6 );
     currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, 1 );
 
     currentManager->Shader( 0 );
-    currentManager->Vertex( 0, 0, 0 );                      // v0
 
-    //currentManager->Shader( 0 );
-    currentManager->Vertex( aLength, 0, 0 );                // v1
-
-    //currentManager->Shader( 0 );
+    currentManager->Vertex( 0, 0, 0 );          // v0
+    currentManager->Vertex( aLength, 0, 0 );    // v1
     currentManager->Vertex( 0, H, 0 );          // v2
 
-
-    //currentManager->Shader( 0 );
-    currentManager->Vertex( aLength, 0, 0 );                // v1
-
-    //currentManager->Shader( 0 );
-    currentManager->Vertex( 0, H, 0 );         // v2
-
-    //currentManager->Shader( 0 );
+    currentManager->Vertex( aLength, 0, 0 );    // v1
+    currentManager->Vertex( 0, H, 0 );          // v2
     currentManager->Vertex( aLength, H, 0 );    // v3
 
     Restore();
 }
 
+const bitmap_glyph* OPENGL_GAL::lookupGlyph( unsigned int codepoint ) const
+{
+#ifdef BITMAP_FONT_USE_SPANS
+        auto *end = font_codepoint_spans + sizeof( font_codepoint_spans ) / sizeof( bitmap_span );
+        auto ptr = std::upper_bound( font_codepoint_spans, end, codepoint,
+            []( unsigned int codepoint, const bitmap_span& span ) {
+                return codepoint < span.end;
+            }
+        );
 
-std::pair<VECTOR2D, int> OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
+        if( ptr != end && ptr->start <= codepoint ) {
+            unsigned int index = codepoint - ptr->start + ptr->cumulative;
+            return &font_codepoint_infos[index];
+        } else {
+            return nullptr;
+        }
+#else
+        return &bitmap_chars[codepoint];
+#endif
+}
+
+std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
 {
     VECTOR2D textSize( 0, 0 );
     float commonOffset = std::numeric_limits<float>::max();
@@ -1415,10 +1429,12 @@ std::pair<VECTOR2D, int> OPENGL_GAL::computeBitmapTextSize( const wxString& aTex
             }
         }
 
-        const bitmap_glyph& GLYPH = bitmap_chars[aText[i]];
-        textSize.x  += GLYPH.advance;
-        textSize.y   = std::max<float>( textSize.y, GLYPH.atlas_shift + GLYPH.atlas_h - GLYPH.miny );
-        commonOffset = std::min<float>( GLYPH.atlas_shift - GLYPH.miny, commonOffset );
+        const bitmap_glyph* glyph = lookupGlyph(aText[i]);
+        if( glyph ) {
+            textSize.x  += glyph->advance;
+            textSize.y   = std::max<float>( textSize.y, font_information.max_y - glyph->miny );
+            commonOffset = std::min<float>( font_information.max_y - glyph->maxy, commonOffset );
+        }
     }
 
     textSize.y -= commonOffset;
@@ -1565,7 +1581,7 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
         int maxTextureSize;
         glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
 
-        if( maxTextureSize < (int) bitmap_font.width || maxTextureSize < (int) bitmap_font.height )
+        if( maxTextureSize < (int) font_image.width || maxTextureSize < (int)font_image.height )
         {
             // TODO implement software texture scaling
             // for bitmap fonts and use a higher resolution texture?

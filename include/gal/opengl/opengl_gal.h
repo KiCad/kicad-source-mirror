@@ -48,10 +48,11 @@
 #define CALLBACK
 #endif
 
+struct bitmap_glyph;
+
 namespace KIGFX
 {
 class SHADER;
-
 
 /**
  * @brief Class OpenGL_GAL is the OpenGL implementation of the Graphics Abstraction Layer.
@@ -377,7 +378,9 @@ private:
      * @return Pair containing text bounding box and common Y axis offset. The values are expressed
      * as a number of pixels on the bitmap font texture and need to be scaled before drawing.
      */
-    std::pair<VECTOR2D, int> computeBitmapTextSize( const wxString& aText ) const;
+    std::pair<VECTOR2D, float> computeBitmapTextSize( const wxString& aText ) const;
+
+    const bitmap_glyph* lookupGlyph( unsigned int codepoint ) const;
 
     // Event handling
     /**
