@@ -320,9 +320,9 @@ static void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
 static void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
     VRML_LAYER* layer, double aHeight, bool aTopPlane );
 
-static void write_triangle_bag( std::ofstream& output_file, VRML_COLOR& color,
-                                VRML_LAYER* layer, bool plane, bool top,
-                                double top_z, double bottom_z )
+static void write_triangle_bag( std::ofstream& aOut_file, VRML_COLOR& aColor,
+                                VRML_LAYER* aLayer, bool aPlane, bool aTop,
+                                double aTop_z, double aBottom_z )
 {
     /* A lot of nodes are not required, but blender sometimes chokes
      * without them */
@@ -362,7 +362,7 @@ static void write_triangle_bag( std::ofstream& output_file, VRML_COLOR& color,
     while( marker_found < 4 )
     {
         if( shape_boiler[lineno] )
-            output_file << shape_boiler[lineno];
+            aOut_file << shape_boiler[lineno];
         else
         {
             marker_found++;
@@ -370,44 +370,44 @@ static void write_triangle_bag( std::ofstream& output_file, VRML_COLOR& color,
             switch( marker_found )
             {
             case 1:    // Material marker
-                output_file << "              diffuseColor " << std::setprecision(3);
-                output_file << color.diffuse_red << " ";
-                output_file << color.diffuse_grn << " ";
-                output_file << color.diffuse_blu << "\n";
+                aOut_file << "              diffuseColor " << std::setprecision(3);
+                aOut_file << aColor.diffuse_red << " ";
+                aOut_file << aColor.diffuse_grn << " ";
+                aOut_file << aColor.diffuse_blu << "\n";
 
-                output_file << "              specularColor ";
-                output_file << color.spec_red << " ";
-                output_file << color.spec_grn << " ";
-                output_file << color.spec_blu << "\n";
+                aOut_file << "              specularColor ";
+                aOut_file << aColor.spec_red << " ";
+                aOut_file << aColor.spec_grn << " ";
+                aOut_file << aColor.spec_blu << "\n";
 
-                output_file << "              emissiveColor ";
-                output_file << color.emit_red << " ";
-                output_file << color.emit_grn << " ";
-                output_file << color.emit_blu << "\n";
+                aOut_file << "              emissiveColor ";
+                aOut_file << aColor.emit_red << " ";
+                aOut_file << aColor.emit_grn << " ";
+                aOut_file << aColor.emit_blu << "\n";
 
-                output_file << "              ambientIntensity " << color.ambient << "\n";
-                output_file << "              transparency " << color.transp << "\n";
-                output_file << "              shininess " << color.shiny << "\n";
+                aOut_file << "              ambientIntensity " << aColor.ambient << "\n";
+                aOut_file << "              transparency " << aColor.transp << "\n";
+                aOut_file << "              shininess " << aColor.shiny << "\n";
                 break;
 
             case 2:
 
-                if( plane )
-                    layer->WriteVertices( top_z, output_file, PRECISION );
+                if( aPlane )
+                    aLayer->WriteVertices( aTop_z, aOut_file, PRECISION );
                 else
-                    layer->Write3DVertices( top_z, bottom_z, output_file, PRECISION );
+                    aLayer->Write3DVertices( aTop_z, aBottom_z, aOut_file, PRECISION );
 
-                output_file << "\n";
+                aOut_file << "\n";
                 break;
 
             case 3:
 
-                if( plane )
-                    layer->WriteIndices( top, output_file );
+                if( aPlane )
+                    aLayer->WriteIndices( aTop, aOut_file );
                 else
-                    layer->Write3DIndices( output_file );
+                    aLayer->Write3DIndices( aOut_file );
 
-                output_file << "\n";
+                aOut_file << "\n";
                 break;
 
             default:
