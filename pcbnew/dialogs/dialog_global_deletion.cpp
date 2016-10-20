@@ -111,7 +111,6 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
     BOARD*            pcb = m_Parent->GetBoard();
     BOARD_COMMIT      commit( m_Parent );
     BOARD_ITEM*       item;
-    BOARD_ITEM*       nextitem;
 
     LSET layers_filter = LSET().set();
 
@@ -130,47 +129,39 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
                 commit.Remove( item );
                 gen_rastnest = true;
             }
-            else
-            {
-                area_index++;
-            }
 
+            area_index++;
             item = pcb->GetArea( area_index );
         }
     }
 
-    if( delAll || m_DelDrawings->GetValue() || m_DelBoardEdges->GetValue() )
+    bool delDrawings = m_DelDrawings->GetValue() || m_DelBoardEdges->GetValue();
+    bool delTexts = m_DelTexts->GetValue();
+
+    if( delAll || delDrawings || delTexts )
     {
+        // Layer mask for texts
+        LSET del_text_layers = layers_filter;
+
+        // Layer mask for drawings
         LSET masque_layer;
 
         if( m_DelDrawings->GetValue() )
-             masque_layer = LSET::AllNonCuMask().set( Edge_Cuts, false );
+            masque_layer = LSET::AllNonCuMask().set( Edge_Cuts, false );
 
         if( m_DelBoardEdges->GetValue() )
-             masque_layer.set( Edge_Cuts );
+            masque_layer.set( Edge_Cuts );
 
         masque_layer &= layers_filter;
 
-        for( item = pcb->m_Drawings; item; item = nextitem )
+        for( item = pcb->m_Drawings; item; item = item->Next() )
         {
-            nextitem = item->Next();
+            KICAD_T type = item->Type();
+            LAYER_NUM layer = item->GetLayer();
 
-            if( delAll || ( item->Type() == PCB_LINE_T && masque_layer[item->GetLayer()] ) )
-            {
-                commit.Remove( item );
-            }
-        }
-    }
-
-    if( delAll || m_DelTexts->GetValue() )
-    {
-        LSET del_text_layers = layers_filter;
-
-        for( item = pcb->m_Drawings; item; item = nextitem )
-        {
-            nextitem = item->Next();
-
-            if( delAll || ( item->Type() == PCB_TEXT_T && del_text_layers[item->GetLayer()] ) )
+            if( delAll
+                || ( type == PCB_LINE_T && delDrawings && masque_layer[layer] )
+                || ( type == PCB_TEXT_T && delTexts && del_text_layers[layer] ) )
             {
                 commit.Remove( item );
             }
@@ -179,10 +170,8 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
     if( delAll || m_DelModules->GetValue() )
     {
-        for( item = pcb->m_Modules; item; item = nextitem )
+        for( item = pcb->m_Modules; item; item = item->Next() )
         {
-            nextitem = item->Next();
-
             bool del_fp = delAll;
 
             if( layers_filter[item->GetLayer()] &&

@@ -43,7 +43,8 @@ COMMIT::~COMMIT()
 
 COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 {
-    assert( aChangeType != ( CHT_MODIFY | CHT_DONE ) );    // CHT_MODIFY and CHT_DONE are not compatible
+    // CHT_MODIFY and CHT_DONE are not compatible
+    assert( ( aChangeType & ( CHT_MODIFY | CHT_DONE ) ) != ( CHT_MODIFY | CHT_DONE ) );
 
     int flag = aChangeType & CHT_FLAGS;
 
@@ -55,6 +56,7 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
             return *this;
 
         case CHT_REMOVE:
+            assert( m_changedItems.find( aItem ) == m_changedItems.end() );
             makeEntry( aItem, CHT_REMOVE | flag );
             return *this;
 
