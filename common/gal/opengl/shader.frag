@@ -27,10 +27,6 @@
 
 #version 120
 
-// Needed to reconstruct the mipmap level / texel derivative
-const int FONT_TEXTURE_WIDTH  = 1024;
-const int FONT_TEXTURE_HEIGHT = 1024;
-
 // Multi-channel signed distance field
 #define USE_MSDF
 
@@ -43,6 +39,9 @@ const float SHADER_FONT                 = 4.0;
 varying vec4 shaderParams;
 varying vec2 circleCoords;
 uniform sampler2D fontTexture;
+
+// Needed to reconstruct the mipmap level / texel derivative
+uniform int fontTextureWidth;
 
 void filledCircle( vec2 aCoord )
 {
@@ -89,7 +88,7 @@ void main()
 
         // Unless we're streching chars it is okay to consider
         // one derivative for filtering
-        float derivative   = length( dFdx( tex ) ) * FONT_TEXTURE_WIDTH / 8;
+        float derivative   = length( dFdx( tex ) ) * fontTextureWidth / 4;
 
 #ifdef USE_MSDF
         float dist         = median( texture2D( fontTexture, tex ).rgb );

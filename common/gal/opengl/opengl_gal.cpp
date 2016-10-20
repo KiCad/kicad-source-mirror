@@ -292,9 +292,11 @@ void OPENGL_GAL::BeginDrawing()
         }
 
         // Set shader parameter
-        GLint ufm_fontTexture = shader->AddParameter( "fontTexture" );
+        GLint ufm_fontTexture       = shader->AddParameter( "fontTexture" );
+        GLint ufm_fontTextureWidth  = shader->AddParameter( "fontTextureWidth" );
         shader->Use();
-        shader->SetParameter( ufm_fontTexture, (int) FONT_TEXTURE_UNIT );
+        shader->SetParameter( ufm_fontTexture,       (int) FONT_TEXTURE_UNIT  );
+        shader->SetParameter( ufm_fontTextureWidth,  (int) font_image.width  );
         shader->Deactivate();
         checkGlError( "setting bitmap font sampler as shader parameter" );
 
