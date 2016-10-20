@@ -281,7 +281,6 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     }
 
     aBoardItem->SetParent( this );
-    SetLastEditTime();
 
     // Update relative coordinates, it can be done only after there is a parent object assigned
     switch( aBoardItem->Type() )
