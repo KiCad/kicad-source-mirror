@@ -236,10 +236,9 @@ enum id_eeschema_frm
     ID_LIBEDIT_GEN_SVG_FILE,
 
     /* Library viewer horizontal toolbar IDs */
+    ID_LIBVIEW_SELECT_PART,
     ID_LIBVIEW_NEXT,
     ID_LIBVIEW_PREVIOUS,
-    ID_LIBVIEW_SELECT_PART,
-    ID_LIBVIEW_SELECT_LIB,
     ID_LIBVIEW_VIEWDOC,
     ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT,
     ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
@@ -260,7 +259,7 @@ enum id_eeschema_frm
     ID_SIM_SETTINGS,
     ID_SIM_ADD_SIGNALS,
     ID_SIM_SHOW,
-    
+
     ID_END_EESCHEMA_ID_LIST
 
 };

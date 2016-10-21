@@ -40,75 +40,120 @@
 #include <eeschema_id.h>
 #include <class_library.h>
 #include <dialog_helpers.h>
+#include <dialog_choose_component.h>
+#include <component_tree_search_container.h>
 
 
-#define NEXT_PART      1
-#define NEW_PART       0
-#define PREVIOUS_PART -1
-
-
-void LIB_VIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
+void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 {
-    wxString   msg;
-    LIB_ALIAS* entry;
-    int        ii, id = event.GetId();
+    wxString   dialogTitle;
+    PART_LIBS* libs = Prj().SchLibs();
+
+    // Container doing search-as-you-type.
+    COMPONENT_TREE_SEARCH_CONTAINER search_container( libs );
+
+    for( PART_LIB& lib : *libs )
+    {
+        search_container.AddLibrary( lib );
+    }
+
+    dialogTitle.Printf( _( "Choose Component (%d items loaded)" ),
+                        search_container.GetComponentsCount() );
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, m_convert );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    /// @todo: The unit selection gets reset to 1 by SetSelectedComponent() so the unit
+    ///        selection feature of the choose symbol dialog doesn't work.
+    LIB_ALIAS* const alias = dlg.GetSelectedAlias( &m_unit );
+
+    if( !alias || !alias->GetLib() )
+        return;
+
+    if( m_libraryName == alias->GetLib()->GetName() )
+    {
+        if( m_entryName != alias->GetName() )
+            SetSelectedComponent( alias->GetName() );
+    }
+    else
+    {
+        m_entryName = alias->GetName();
+        SetSelectedLibrary( alias->GetLib()->GetName() );
+    }
+}
+
+
+void LIB_VIEW_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
+{
+    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
+    int ii = m_cmpList->GetSelection();
+
+    // Select the next symbol or stop at the end of the list.
+    if( ii != wxNOT_FOUND || ii != (int)m_cmpList->GetCount() - 1 )
+        ii += 1;
+
+    m_cmpList->SetSelection( ii );
+    ProcessEvent( evt );
+}
+
+
+void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
+{
+    wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
+    int ii = m_cmpList->GetSelection();
+
+    // Select the previous symbol or stop at the beginning of list.
+    if( ii != wxNOT_FOUND && ii != 0 )
+        ii -= 1;
+
+    m_cmpList->SetSelection( ii );
+    ProcessEvent( evt );
+}
+
+
+void LIB_VIEW_FRAME::onViewSymbolDocument( wxCommandEvent& aEvent )
+{
+    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryAlias( m_entryName, m_libraryName );
+
+    if( entry && !entry->GetDocFileName().IsEmpty() )
+    {
+        SEARCH_STACK* lib_search = Prj().SchSearchS();
+
+        GetAssociatedDocument( this, entry->GetDocFileName(), lib_search );
+    }
+}
+
+
+void LIB_VIEW_FRAME::onSelectSymbolBodyStyle( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
 
     switch( id )
     {
-    case ID_LIBVIEW_SELECT_LIB:
-        SelectCurrentLibrary();
-        break;
-
-    case ID_LIBVIEW_SELECT_PART:
-        SelectAndViewLibraryPart( NEW_PART );
-        break;
-
-    case ID_LIBVIEW_NEXT:
-        SelectAndViewLibraryPart( NEXT_PART );
-        break;
-
-    case ID_LIBVIEW_PREVIOUS:
-        SelectAndViewLibraryPart( PREVIOUS_PART );
-        break;
-
-    case ID_LIBVIEW_VIEWDOC:
-        entry = Prj().SchLibs()->FindLibraryAlias( m_entryName, m_libraryName );
-
-        if( entry && !entry->GetDocFileName().IsEmpty() )
-        {
-            SEARCH_STACK* lib_search = Prj().SchSearchS();
-
-            GetAssociatedDocument( this, entry->GetDocFileName(), lib_search );
-        }
-        break;
-
+    default:
     case ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT:
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, true );
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, false );
         m_convert = 1;
-        m_canvas->Refresh();
         break;
 
     case ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT:
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, false );
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, true );
         m_convert = 2;
-        m_canvas->Refresh();
-        break;
-
-    case ID_LIBVIEW_SELECT_PART_NUMBER:
-        ii = m_selpartBox->GetCurrentSelection();
-        if( ii < 0 )
-            return;
-        m_unit = ii + 1;
-        m_canvas->Refresh();
-        break;
-
-    default:
-        msg << wxT( "LIB_VIEW_FRAME::Process_Special_Functions error: id = " ) << id;
-        DisplayError( this, msg );
         break;
     }
+
+    m_canvas->Refresh();
+}
+
+
+void LIB_VIEW_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
+{
+    int ii = m_selpartBox->GetCurrentSelection();
+
+    if( ii < 0 )
+        return;
+
+    m_unit = ii + 1;
+    m_canvas->Refresh();
 }
 
 
@@ -131,123 +176,10 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
     {
         PART_LIB* lib = libs->FindLibrary( m_libraryName );
 
-        wxString title = wxString::Format( L"Library Browser \u2014 %s",
+        wxString title = wxString::Format( "Library Browser \u2014 %s",
             lib ? lib->GetFullFileName() : "no library selected" );
         SetTitle( title );
     }
-}
-
-
-void LIB_VIEW_FRAME::SelectCurrentLibrary()
-{
-    PART_LIB* Lib;
-
-    Lib = SelectLibraryFromList();
-
-    if( Lib )
-    {
-        m_entryName.Empty();
-        m_libraryName = Lib->GetName();
-        DisplayLibInfos();
-
-        if( m_libList )
-        {
-            ReCreateListCmp();
-            m_canvas->Refresh();
-            DisplayLibInfos();
-            ReCreateHToolbar();
-            int id = m_libList->FindString( m_libraryName.GetData() );
-
-            if( id >= 0 )
-                m_libList->SetSelection( id );
-        }
-    }
-}
-
-
-void LIB_VIEW_FRAME::SelectAndViewLibraryPart( int option )
-{
-    if( m_libraryName.IsEmpty() )
-        SelectCurrentLibrary();
-
-    if( m_libraryName.IsEmpty() )
-        return;
-
-    if( PART_LIBS* libs = Prj().SchLibs() )
-    {
-        if( PART_LIB* lib = libs->FindLibrary( m_libraryName ) )
-        {
-            if( m_entryName.IsEmpty() || option == NEW_PART )
-            {
-                ViewOneLibraryContent( lib, NEW_PART );
-                return;
-            }
-
-            if( lib->FindAlias( m_entryName ) )
-            {
-                if( option == NEXT_PART )
-                    ViewOneLibraryContent( lib, NEXT_PART );
-
-                if( option == PREVIOUS_PART )
-                    ViewOneLibraryContent( lib, PREVIOUS_PART );
-            }
-        }
-    }
-}
-
-
-void LIB_VIEW_FRAME::ViewOneLibraryContent( PART_LIB* Lib, int Flag )
-{
-    int        NumOfParts = 0;
-
-    if( Lib )
-        NumOfParts = Lib->GetCount();
-
-    if( NumOfParts == 0 )
-    {
-        DisplayError( this, wxT( "No library or library is empty!" ) );
-        return;
-    }
-
-    LIB_ALIAS* entry;
-    wxString   CmpName;
-
-    if( Flag == NEW_PART )
-        DisplayListComponentsInLib( Lib, CmpName, m_entryName );
-
-    if( Flag == NEXT_PART )
-    {
-        entry = Lib->GetNextEntry( m_entryName );
-
-        if( entry )
-            CmpName = entry->GetName();
-    }
-
-    if( Flag == PREVIOUS_PART )
-    {
-        entry = Lib->GetPreviousEntry( m_entryName );
-
-        if( entry )
-            CmpName = entry->GetName();
-    }
-
-    m_unit    = 1;
-    m_convert = 1;
-
-    entry = Lib->FindAlias( CmpName );
-    m_entryName = CmpName;
-    DisplayLibInfos();
-    Zoom_Automatique( false );
-    m_canvas->Refresh( );
-
-    if( m_cmpList )
-    {
-        int id = m_cmpList->FindString( m_entryName.GetData() );
-        if( id >= 0 )
-            m_cmpList->SetSelection( id );
-    }
-
-    ReCreateHToolbar();
 }
 
 

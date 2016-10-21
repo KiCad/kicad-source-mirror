@@ -510,28 +510,6 @@ public:
     LIB_PART* ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart );
 
     /**
-     * Find next library entry by \a aName.
-     *
-     * If the name of the entry is the last entry in the library, the first
-     * entry in the list is returned.
-     *
-     * @param aName - Name of current entry.
-     * @return Next entry if entry name is found. Otherwise NULL.
-     */
-    LIB_ALIAS* GetNextEntry( const wxString& aName );
-
-    /**
-     * Find previous library entry by \a aName.
-     *
-     * If the name of the entry is the first entry in the library, the last
-     * entry in the list is returned.
-     *
-     * @param aName - Name of current entry.
-     * @return Previous entry if entry name is found, otherwise NULL.
-     */
-    LIB_ALIAS* GetPreviousEntry( const wxString& aName );
-
-    /**
      * Return the file name without path or extension.
      *
      * @return Name of library file.

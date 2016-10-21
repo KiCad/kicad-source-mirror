@@ -329,38 +329,6 @@ LIB_PART* PART_LIB::ReplacePart( LIB_PART* aOldPart, LIB_PART* aNewPart )
 }
 
 
-LIB_ALIAS* PART_LIB::GetNextEntry( const wxString& aName )
-{
-    if( m_amap.empty() )
-        return NULL;
-
-    LIB_ALIAS_MAP::iterator it = m_amap.find( aName );
-
-    it++;
-
-    if( it == m_amap.end() )
-        it = m_amap.begin();
-
-    return it->second;
-}
-
-
-LIB_ALIAS* PART_LIB::GetPreviousEntry( const wxString& aName )
-{
-    if( m_amap.empty() )
-        return NULL;
-
-    LIB_ALIAS_MAP::iterator it = m_amap.find( aName );
-
-    if( it == m_amap.begin() )
-        it = m_amap.end();
-
-    it--;
-
-    return it->second;
-}
-
-
 bool PART_LIB::Load( wxString& aErrorMsg )
 {
     if( fileName.GetFullPath().IsEmpty() )

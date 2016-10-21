@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,19 +44,12 @@
 void LIB_VIEW_FRAME::ReCreateHToolbar()
 {
     wxString    msg;
-    LIB_ALIAS*  entry = NULL;
-    bool        asdeMorgan = false;
     LIB_PART*   part = NULL;
 
-    if( m_mainToolBar  == NULL )
+    if( m_mainToolBar == NULL )
     {
         m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                           wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
-
-        // Set up toolbar
-        m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_LIB, wxEmptyString,
-                                KiBitmap( library_xpm ),
-                                _( "Select library to browse" ) );
 
         m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
                                 KiBitmap( add_component_xpm ),
@@ -134,30 +127,12 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
         if( PART_LIB* lib = Prj().SchLibs()->FindLibrary( m_libraryName ) )
         {
             part = lib->FindPart( m_entryName );
-
-            if( part && part->HasConversion() )
-                asdeMorgan = true;
-
-            entry = lib->FindAlias( m_entryName );
         }
     }
 
-    // Must be AFTER Realize():
-    m_mainToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, asdeMorgan );
-    m_mainToolBar->EnableTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, asdeMorgan );
-
-    if( asdeMorgan )
-    {
-        bool normal = m_convert <= 1;
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT,normal );
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, !normal );
-    }
-    else
-    {
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, true  );
-        m_mainToolBar->ToggleTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, false );
-     }
-
+    /// @todo Move updating the symbol units in the combobox to the symbol select function
+    ///       and stop calling this function to update the toolbar.  All of the other toolbar
+    ///       updates are handled by wxUpdateUIEvents.
     int parts_count = 1;
 
     if( part )
@@ -173,8 +148,6 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     m_selpartBox->SetSelection( m_unit > 0 ? m_unit - 1 : 0 );
     m_selpartBox->Enable( parts_count > 1 );
-
-    m_mainToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, entry && !!entry->GetDocFileName() );
 
     m_mainToolBar->Refresh();
 }
@@ -207,13 +180,6 @@ void LIB_VIEW_FRAME::ReCreateMenuBar( void )
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
-    // Active library selection
-    AddMenuItem( fileMenu, ID_LIBVIEW_SELECT_LIB, _("Set Current Library"),
-                           _( "Select library to be displayed" ),
-                           KiBitmap( open_library_xpm ) );
-    fileMenu->AppendSeparator();
-
-    // Close viewer
     AddMenuItem( fileMenu, wxID_EXIT,
                  _( "Cl&ose" ),
                  _( "Close schematic component viewer" ),

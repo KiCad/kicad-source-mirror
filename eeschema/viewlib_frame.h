@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2014 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,8 @@
 class wxListBox;
 class PART_LIB;
 class SCHLIB_FILTER;
+class LIB_ALIAS;
+class LIB_PART;
 
 
 /**
@@ -57,7 +59,7 @@ public:
      * @param aLibrary = the library to open when starting (default = NULL)
      */
     LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent,
-            FRAME_T aFrameType, PART_LIB* aLibrary = NULL );
+                    FRAME_T aFrameType, PART_LIB* aLibrary = NULL );
 
     ~LIB_VIEW_FRAME();
 
@@ -72,7 +74,6 @@ public:
     void ReCreateListLib();
 
     void ReCreateListCmp();
-    void Process_Special_Functions( wxCommandEvent& event );
     void DisplayLibInfos();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
     void OnCloseWindow( wxCloseEvent& Event );
@@ -86,6 +87,7 @@ public:
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
+    void OnSelectSymbol( wxCommandEvent& aEvent );
 
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
@@ -100,7 +102,8 @@ public:
      * case insensitive
      * </p>
      */
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
+                   EDA_ITEM* aItem = NULL ) override;
 
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
@@ -145,17 +148,25 @@ private:
      */
     virtual void OnActivate( wxActivateEvent& event ) override;
 
-    void SelectCurrentLibrary();
-    void SelectAndViewLibraryPart( int option );
-
     /**
      * Function ExportToSchematicLibraryPart
      * exports the current component to schematic and close the library browser.
      */
     void ExportToSchematicLibraryPart( wxCommandEvent& event );
-    void ViewOneLibraryContent( PART_LIB* Lib, int Flag );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
     void DClickOnCmpList( wxCommandEvent& event );
+
+    void onUpdateAlternateBodyStyleButton( wxUpdateUIEvent& aEvent );
+    void onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent );
+    void onUpdateViewDoc( wxUpdateUIEvent& aEvent );
+    void onSelectNextSymbol( wxCommandEvent& aEvent );
+    void onSelectPreviousSymbol( wxCommandEvent& aEvent );
+    void onViewSymbolDocument( wxCommandEvent& aEvent );
+    void onSelectSymbolBodyStyle( wxCommandEvent& aEvent );
+    void onSelectSymbolUnit( wxCommandEvent& aEvent );
+
+    LIB_ALIAS* getSelectedAlias();
+    LIB_PART* getSelectedSymbol();
 
 // Private members:
     wxComboBox*         m_selpartBox;
