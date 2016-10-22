@@ -83,6 +83,18 @@ private:
     void rt_render_trace_block( GLubyte *ptrPBO , signed int iBlock );
     void rt_final_color( GLubyte *ptrPBO, const SFVEC3F &rgbColor, bool applyColorSpaceConversion );
 
+    void rt_shades_packet( const SFVEC3F *bgColorY,
+                           const RAY *aRayPkt,
+                           HITINFO_PACKET *aHitPacket,
+                           bool is_testShadow,
+                           SFVEC3F *aOutHitColor );
+
+    void rt_trace_AA_packet( const SFVEC3F *aBgColorY,
+                             const HITINFO_PACKET *aHitPck_X0Y0,
+                             const HITINFO_PACKET *aHitPck_AA_X1Y1,
+                             const RAY *aRayPck,
+                             SFVEC3F *aOutHitColor );
+
     // Materials
     void setupMaterials();
 
@@ -109,7 +121,8 @@ private:
                       const RAY &aRay,
                       HITINFO &aHitInfo,
                       bool aIsInsideObject,
-                      unsigned int aRecursiveLevel ) const;
+                      unsigned int aRecursiveLevel,
+                      bool is_testShadow ) const;
 
     /// State used on quality render
     RT_RENDER_STATE m_rt_render_state;

@@ -227,6 +227,14 @@ class CCAMERA
     void MakeRay( const SFVEC2I &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const;
 
     /**
+     * @brief MakeRay - Make a ray based on a windows screen position, it will interpolate based on the float aWindowPos
+     * @param aWindowPos: the windows buffer position (float value)
+     * @param aOutOrigin: out origin position of the ray
+     * @param aOutDirection: out direction
+     */
+    void MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const;
+
+    /**
      * @brief MakeRayAtCurrrentMousePosition - Make a ray based on the latest mouse position
      * @param aOutOrigin: out origin position of the ray
      * @param aOutDirection: out direction

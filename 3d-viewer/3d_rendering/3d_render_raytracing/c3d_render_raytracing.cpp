@@ -466,6 +466,176 @@ void C3D_RENDER_RAYTRACING::rt_final_color( GLubyte *ptrPBO,
     ptrPBO[3] = 255;
 }
 
+
+static void HITINFO_PACKET_init( HITINFO_PACKET *aHitPacket )
+{
+    // Initialize hitPacket with a "not hit" information
+    for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
+    {
+        aHitPacket[i].m_HitInfo.m_tHit = std::numeric_limits<float>::infinity();
+        aHitPacket[i].m_HitInfo.m_acc_node_info = 0;
+        aHitPacket[i].m_hitresult = false;
+        aHitPacket[i].m_HitInfo.m_HitNormal = SFVEC3F();
+        aHitPacket[i].m_HitInfo.m_ShadowFactor = 1.0f;
+    }
+}
+
+
+void C3D_RENDER_RAYTRACING::rt_shades_packet(const SFVEC3F *bgColorY,
+                                              const RAY     *aRayPkt,
+                                              HITINFO_PACKET *aHitPacket,
+                                              bool is_testShadow,
+                                              SFVEC3F *aOutHitColor )
+{
+    for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
+    {
+        for( unsigned int x = 0; x < RAYPACKET_DIM; ++x, ++i )
+        {
+            if( aHitPacket[i].m_hitresult == true )
+            {
+                aOutHitColor[i] = shadeHit( bgColorY[y],
+                                            aRayPkt[i],
+                                            aHitPacket[i].m_HitInfo,
+                                            false,
+                                            0,
+                                            is_testShadow );
+            }
+            else
+            {
+                aOutHitColor[i] = bgColorY[y];
+            }
+        }
+    }
+}
+
+
+void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F *aBgColorY,
+                                                const HITINFO_PACKET *aHitPck_X0Y0,
+                                                const HITINFO_PACKET *aHitPck_AA_X1Y1,
+                                                const RAY *aRayPck,
+                                                SFVEC3F *aOutHitColor )
+{
+    // If post processing is using, do not calculate shadows as they will not be
+    // used for futher post processing.
+    const bool is_testShadow =  m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) &&
+                               !m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
+
+    for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
+    {
+        for( unsigned int x = 0; x < RAYPACKET_DIM; ++x, ++i )
+        {
+            const RAY &rayAA = aRayPck[i];
+
+            HITINFO hitAA;
+            hitAA.m_tHit = std::numeric_limits<float>::infinity();
+            hitAA.m_acc_node_info = 0;
+
+            bool hitted = false;
+
+            const unsigned int idx0y1 = ( x + 0 ) + RAYPACKET_DIM * ( y + 1 );
+            const unsigned int idx1y1 = ( x + 1 ) + RAYPACKET_DIM * ( y + 1 );
+
+            // Gets the node info from the hit.
+            const unsigned int nodex0y0 = aHitPck_X0Y0[ i ].m_HitInfo.m_acc_node_info;
+            const unsigned int node_AA_x0y0 = aHitPck_AA_X1Y1[ i ].m_HitInfo.m_acc_node_info;
+
+            unsigned int nodex1y0 = 0;
+
+            if( x < (RAYPACKET_DIM - 1) )
+                nodex1y0 = aHitPck_X0Y0[ i + 1 ].m_HitInfo.m_acc_node_info;
+
+            unsigned int nodex0y1 = 0;
+
+            if( y < (RAYPACKET_DIM - 1) )
+                    nodex0y1 = aHitPck_X0Y0[ idx0y1 ].m_HitInfo.m_acc_node_info;
+
+            unsigned int nodex1y1 = 0;
+
+            if(  ((x < (RAYPACKET_DIM - 1)) &&
+                  (y < (RAYPACKET_DIM - 1))) )
+                nodex1y1 = aHitPck_X0Y0[ idx1y1 ].m_HitInfo.m_acc_node_info;
+
+
+            if( (nodex0y0 == nodex1y0) &&   // If all notes are equal we assume there was no change on the object hits
+                (nodex0y0 == nodex0y1) &&
+                (nodex0y0 == nodex1y1) &&
+                (nodex0y0 == node_AA_x0y0) )
+            {
+                // Option 1
+                // This option will give a very good quality on reflections (slow)
+                /*
+                if( m_accelerator->Intersect( rayAA, hitAA, nodex0y0 ) )
+                {
+                    aOutHitColor[i] += shadeHit( aBgColorY[y], rayAA, hitAA, false, 0 );
+                }
+                else
+                {
+                    if( m_accelerator->Intersect( rayAA, hitAA ) )
+                        aOutHitColor[i] += shadeHit( aBgColorY[y], rayAA, hitAA, false, 0 );
+                    else
+                        aOutHitColor[i] += hitColor[i];
+                }
+                */
+
+                // Option 2
+                // Trace again with the same node,
+                // then if miss just give the same color as before
+                //if( m_accelerator->Intersect( rayAA, hitAA, nodex0y0 ) )
+                //    aOutHitColor[i] += shadeHit( aBgColorY[y], rayAA, hitAA, false, 0 );
+
+            }
+            else
+            {
+                // Try to intersect the different nodes
+                // It tests the possible combination of hitted or not hitted points
+                // This will try to get the best hit for this ray
+
+                if( nodex0y0 != 0 )
+                    hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex0y0 );
+
+                if( ( nodex1y0 != 0 ) &&
+                    ( nodex0y0 != nodex1y0 ) )
+                    hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex1y0 );
+
+                if( ( nodex0y1 != 0 ) &&
+                    ( nodex0y0 != nodex0y1 ) &&
+                    ( nodex1y0 != nodex0y1 ) )
+                    hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex0y1 );
+
+                if( (nodex1y1 != 0 ) &&
+                    ( nodex0y0 != nodex1y1 ) &&
+                    ( nodex0y1 != nodex1y1 ) &&
+                    ( nodex1y0 != nodex1y1 ) )
+                    hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex1y1 );
+
+                if( (node_AA_x0y0 != 0 ) &&
+                    ( nodex0y0 != node_AA_x0y0 ) &&
+                    ( nodex0y1 != node_AA_x0y0 ) &&
+                    ( nodex1y0 != node_AA_x0y0 ) &&
+                    ( nodex1y1 != node_AA_x0y0 ) )
+                    hitted |= m_accelerator->Intersect( rayAA, hitAA, node_AA_x0y0 );
+
+                if( hitted )
+                {
+                    // If we got any result, shade it
+                    aOutHitColor[i] = shadeHit( aBgColorY[y], rayAA, hitAA, false, 0, is_testShadow );
+                }
+                else
+                {
+                    // Note: There are very few cases that will end on this situation
+                    // so it is not so expensive to trace a single ray from the beginning
+
+                    // It was missed the 'last nodes' so, trace a ray from the beginning
+                    if( m_accelerator->Intersect( rayAA, hitAA ) )
+                        aOutHitColor[i] = shadeHit( aBgColorY[y], rayAA, hitAA, false, 0, is_testShadow );
+                }
+            }
+        }
+    }
+}
+
+#define DISP_FACTOR 0.075f
+
 void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
                                                    signed int iBlock )
 {
@@ -475,19 +645,14 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
     const SFVEC2I blockPosI = SFVEC2I( blockPos.x + m_xoffset,
                                        blockPos.y + m_yoffset );
 
-    RAYPACKET blockPacket( m_settings.CameraGet(), blockPosI );
+    RAYPACKET blockPacket( m_settings.CameraGet(),
+                           (SFVEC2F)blockPosI + SFVEC2F(DISP_FACTOR, DISP_FACTOR),
+                           SFVEC2F(DISP_FACTOR, DISP_FACTOR) // Displacement random factor
+                           );
 
-    HITINFO_PACKET hitPacket[RAYPACKET_RAYS_PER_PACKET];
+    HITINFO_PACKET hitPacket_X0Y0[RAYPACKET_RAYS_PER_PACKET];
 
-    // Initialize hitPacket with a "not hit" information
-    for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
-    {
-        hitPacket[i].m_HitInfo.m_tHit = std::numeric_limits<float>::infinity();
-        hitPacket[i].m_HitInfo.m_acc_node_info = 0;
-        hitPacket[i].m_hitresult = false;
-        hitPacket[i].m_HitInfo.m_HitNormal = SFVEC3F();
-        hitPacket[i].m_HitInfo.m_ShadowFactor = 1.0f;
-    }
+    HITINFO_PACKET_init( hitPacket_X0Y0 );
 
     // Calculate background gradient color
     // /////////////////////////////////////////////////////////////////////////
@@ -503,7 +668,7 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
 
     // Intersect ray packets (calculate the intersection with rays and objects)
     // /////////////////////////////////////////////////////////////////////////
-    if( !m_accelerator->Intersect( blockPacket, hitPacket ) )
+    if( !m_accelerator->Intersect( blockPacket, hitPacket_X0Y0 ) )
     {
 
         // If block is empty then set shades and continue
@@ -556,597 +721,147 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
     }
 
 
-    // Shade hits ("paint" the intersected objects)
+    SFVEC3F hitColor_X0Y0[RAYPACKET_RAYS_PER_PACKET];
+
+    // Shade original (0, 0) hits ("paint" the intersected objects)
     // /////////////////////////////////////////////////////////////////////////
-
-    SFVEC3F hitColor[RAYPACKET_RAYS_PER_PACKET];
-
-    for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
-    {
-        for( unsigned int x = 0; x < RAYPACKET_DIM; ++x, ++i )
-        {
-            if( hitPacket[i].m_hitresult == true )
-            {
-                hitColor[i] = shadeHit( bgColor[y],
-                                        blockPacket.m_ray[i],
-                                        hitPacket[i].m_HitInfo,
-                                        false,
-                                        0 );
-            }
-            else
-            {
-                hitColor[i] = bgColor[y];
-            }
-        }
-    }
-
-
-    // This code was a tentative to retrace the block but using small changes
-    // on ray direction (to work as a random anti-aliasing)
-    // but it was not producing good results with low passes,
-    // parked for future use / to be implemented
-    // /////////////////////////////////////////////////////////////////////////
-
-    /*
-    //if( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) )
-    if(0)
-    {
-        SFVEC3F absDirDiff;
-        absDirDiff.x = glm::abs( blockPacket.m_ray[                1].m_Dir.x - blockPacket.m_ray[0].m_Dir.x ) * 0.45f;
-        absDirDiff.y = glm::abs( blockPacket.m_ray[RAYPACKET_DIM + 0].m_Dir.y - blockPacket.m_ray[0].m_Dir.y ) * 0.45f;
-        absDirDiff.z = glm::abs( blockPacket.m_ray[RAYPACKET_DIM + 1].m_Dir.z - blockPacket.m_ray[0].m_Dir.z ) * 0.45f;
-
-        const unsigned int number_of_passes = 16;
-
-        for( unsigned int aaPasses = 0; aaPasses < number_of_passes; ++aaPasses )
-        {
-
-            HITINFO_PACKET hitPacketAA[RAYPACKET_RAYS_PER_PACKET];
-
-            // Initialize hitPacket with a "not hit" information
-            for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
-            {
-                hitPacketAA[i].m_HitInfo.m_tHit = std::numeric_limits<float>::infinity();
-                hitPacketAA[i].m_HitInfo.m_acc_node_info = 0;
-                hitPacketAA[i].m_hitresult = false;
-                hitPacketAA[i].m_HitInfo.m_HitNormal = SFVEC3F();
-                hitPacketAA[i].m_HitInfo.m_ShadowFactor = 1.0f;
-            }
-
-            RAYPACKET blockPacketAA( m_settings.CameraGet(), blockPosI, absDirDiff );
-
-            if( m_accelerator->Intersect( blockPacketAA, hitPacketAA ) )
-            {
-                for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
-                {
-                    for( unsigned int x = 0; x < RAYPACKET_DIM; ++x, ++i )
-                    {
-                        if( hitPacketAA[i].m_hitresult == true )
-                        {
-                            hitColor[i] += shadeHit( bgColor[y],
-                                                     blockPacketAA.m_ray[i],
-                                                     hitPacketAA[i].m_HitInfo,
-                                                     false,
-                                                     0 );
-                        }
-                        else
-                        {
-                            hitColor[i] += bgColor[y];
-                        }
-                    }
-                }
-            }
-        }
-
-        const float aaPasses_inv = 1.0f / (float)(number_of_passes + 1);
-
-        for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
-            hitColor[i] *= aaPasses_inv;
-    }
-    */
-
-    // If anti-aliasing is enabled, trace a new random rays over the hits
-    // already calculated.
-    // On this pass it will calculate pixels near the hitted ray,
-    // so it will reuse the nodes found on that hits
-    // /////////////////////////////////////////////////////////////////////
+    rt_shades_packet( bgColor,
+                      blockPacket.m_ray,
+                      hitPacket_X0Y0,
+                      m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ),
+                      hitColor_X0Y0 );
 
     if( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) )
     {
+        SFVEC3F hitColor_AA_X1Y1[RAYPACKET_RAYS_PER_PACKET];
 
-        SFVEC3F hitColorAA[RAYPACKET_RAYS_PER_PACKET];
 
-        for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
-            hitColorAA[i] = SFVEC3F(0.0f);
+        // Intersect one blockPosI + (0.5, 0.5) used for anti aliasing calculation
+        // /////////////////////////////////////////////////////////////////////////
+        HITINFO_PACKET hitPacket_AA_X1Y1[RAYPACKET_RAYS_PER_PACKET];
+        HITINFO_PACKET_init( hitPacket_AA_X1Y1 );
 
-        // This just get some difference between two pixels
-        // There is not logic on this approach, it trys to guess the xyz increments
-        SFVEC3F absDirDiff;
-        absDirDiff.x = glm::abs( blockPacket.m_ray[RAYPACKET_DIM + 0].m_Dir.x -
-                                 blockPacket.m_ray[0].m_Dir.x ) * 0.55f;
+        RAYPACKET blockPacket_AA_X1Y1( m_settings.CameraGet(),
+                                       (SFVEC2F)blockPosI + SFVEC2F(0.5f, 0.5f),
+                                       SFVEC2F(DISP_FACTOR, DISP_FACTOR) // Displacement random factor
+                                       );
 
-        absDirDiff.y = glm::abs( blockPacket.m_ray[RAYPACKET_DIM + 0].m_Dir.y -
-                                 blockPacket.m_ray[0].m_Dir.y ) * 0.55f;
-
-        absDirDiff.z = glm::abs( blockPacket.m_ray[RAYPACKET_DIM + 0].m_Dir.z -
-                                 blockPacket.m_ray[0].m_Dir.z ) * 0.55f;
-
-        const unsigned int number_of_passes = 3;
-
-        for( unsigned int aaPasses = 0; aaPasses < number_of_passes; ++aaPasses )
+        if( !m_accelerator->Intersect( blockPacket_AA_X1Y1, hitPacket_AA_X1Y1 ) )
         {
+            // Missed all the package
             for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
             {
+                const SFVEC3F &outColor = bgColor[y];
+
                 for( unsigned int x = 0; x < RAYPACKET_DIM; ++x, ++i )
                 {
-                    if( hitPacket[i].m_hitresult == true )
-                    {
-                        const SFVEC3F randVector = SFVEC3F( Fast_RandFloat() * absDirDiff.x,
-                                                            Fast_RandFloat() * absDirDiff.y,
-                                                            Fast_RandFloat() * absDirDiff.z );
-
-                        RAY rayAA;
-                        rayAA.Init( blockPacket.m_ray[i].m_Origin,
-                                    glm::normalize( blockPacket.m_ray[i].m_Dir +
-                                                    randVector ) );
-
-                        HITINFO hitAA;
-                        hitAA.m_tHit = std::numeric_limits<float>::infinity();
-                        hitAA.m_acc_node_info = 0;
-                        hitAA.m_ShadowFactor = 1.0f;
-
-                        bool hitted = false;
-
-                        const unsigned int idx0y1 = ( x + 0 ) + RAYPACKET_DIM * ( y + 1 );
-                        const unsigned int idx1y1 = ( x + 1 ) + RAYPACKET_DIM * ( y + 1 );
-
-                        // Gets the node info from the hit. If there was no hit, return 0
-                        const unsigned int nodex0y0 = (hitPacket[ i ].m_hitresult == false)?0:
-                                                       hitPacket[ i ].m_HitInfo.m_acc_node_info;
-
-                        unsigned int nodex1y0 = 0;
-
-                        if( x < (RAYPACKET_DIM - 1) )
-                            nodex1y0 = (hitPacket[ i + 1 ].m_hitresult == false)?0:
-                                        hitPacket[ i + 1 ].m_HitInfo.m_acc_node_info;
-
-                        unsigned int nodex0y1 = 0;
-
-                        if( y < (RAYPACKET_DIM - 1) )
-                                nodex0y1 = (hitPacket[ idx0y1 ].m_hitresult == false)?0:
-                                            hitPacket[ idx0y1 ].m_HitInfo.m_acc_node_info;
-
-                        unsigned int nodex1y1 = 0;
-
-                        if(  ((x < (RAYPACKET_DIM - 1)) &&
-                              (y < (RAYPACKET_DIM - 1))) )
-                            nodex1y1 = (hitPacket[ idx1y1 ].m_hitresult == false)?0:
-                                        hitPacket[ idx1y1 ].m_HitInfo.m_acc_node_info;
-
-
-                        if( (nodex0y0 == nodex1y0) &&   //
-                            (nodex0y0 == nodex0y1) &&
-                            (nodex0y0 == nodex1y1) )
-                        {
-                            // Option 1
-                            // This option will give a very good quality on reflections (slow)
-                            /*
-                            if( m_accelerator->Intersect( rayAA, hitAA, nodex0y0 ) )
-                            {
-                                hitColorAA[i] += shadeHit( bgColor[y], rayAA, hitAA, false, 0 );
-                            }
-                            else
-                            {
-                                if( m_accelerator->Intersect( rayAA, hitAA ) )
-                                    hitColorAA[i] += shadeHit( bgColor[y], rayAA, hitAA, false, 0 );
-                                else
-                                    hitColorAA[i] += hitColor[i];
-                            }
-                            */
-
-                            // Option 2
-                            // Trace again with the same node,
-                            // then if miss just give the same color as before
-                            //if( m_accelerator->Intersect( rayAA, hitAA, nodex0y0 ) )
-                            //    hitColorAA[i] += shadeHit( bgColor[y], rayAA, hitAA, false, 0 );
-                            //else
-                                // This option will give the same color as the hit before (faster)
-                                hitColorAA[i] += hitColor[i];
-                        }
-                        else
-                        {
-                            // Try to intersect the different nodes
-                            // It tests the possible combination of hitted or not hitted points
-                            // This will try to get the best hit for this ray
-
-                            if( nodex0y0 != 0 )
-                                hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex0y0 );
-
-                            if( nodex1y0 != 0 )
-                                if( ( nodex0y0 != nodex1y0 ) || ( nodex0y0 == 0 ) )
-                                    hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex1y0 );
-
-                            if( nodex0y1 != 0 )
-                                if( ( ( nodex0y0 != nodex0y1 ) || ( nodex0y0 == 0 ) ) &&
-                                    ( ( nodex1y0 != nodex0y1 ) || ( nodex1y0 == 0 ) ) )
-                                    hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex0y1 );
-
-                            if( nodex1y1 != 0 )
-                                if( ( ( nodex0y0 != nodex1y1 ) || ( nodex0y0 == 0 ) ) &&
-                                    ( ( nodex0y1 != nodex1y1 ) || ( nodex0y1 == 0 ) ) &&
-                                    ( ( nodex1y0 != nodex1y1 ) || ( nodex1y0 == 0 ) ) )
-                                    hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex1y1 );
-
-                            if( hitted )
-                            {
-                                // If he got any result, shade it
-                                hitColorAA[i] += shadeHit( bgColor[y], rayAA, hitAA, false, 0 );
-                            }
-                            else
-                            {
-                                // It was missed the 'last nodes' so, trace a ray from the beginning
-                                if( m_accelerator->Intersect( rayAA, hitAA ) )
-                                    hitColorAA[i] += shadeHit( bgColor[y], rayAA, hitAA, false, 0 );
-                                else
-                                    hitColorAA[i] += hitColor[i];
-                            }
-                        }
-                    }
-                    else
-                    {
-                        hitColorAA[i] += hitColor[i];
-                    }
+                    hitColor_AA_X1Y1[i] = outColor;
                 }
             }
         }
+        else
+        {
+            rt_shades_packet( bgColor,
+                              blockPacket_AA_X1Y1.m_ray,
+                              hitPacket_AA_X1Y1,
+                              m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) &&
+                              (!m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING )),
+                              hitColor_AA_X1Y1
+                              );
+        }
 
-        const float aaPasses_inv = 1.0f / (float)number_of_passes;
+        SFVEC3F hitColor_AA_X1Y0[RAYPACKET_RAYS_PER_PACKET];
+        SFVEC3F hitColor_AA_X0Y1[RAYPACKET_RAYS_PER_PACKET];
+        SFVEC3F hitColor_AA_X0Y1_half[RAYPACKET_RAYS_PER_PACKET];
 
         for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
-            hitColor[i] = hitColor[i] * 0.40f + (hitColorAA[i] * aaPasses_inv) * 0.60f;
-    }
-
-
-    // Trace adaptative anti-aliasing middle pixels
-    // /////////////////////////////////////////////////////////////////////
-
-    HITINFO_PACKET hitPacketAA[ (RAYPACKET_DIM-1) * (RAYPACKET_DIM-1) ];
-    RAY            raysAA[ (RAYPACKET_DIM-1) * (RAYPACKET_DIM-1) ];
-    SFVEC3F        hitColorAA[ (RAYPACKET_DIM-1) * (RAYPACKET_DIM-1) ];
-    bool           hittedAA[ (RAYPACKET_DIM-1) * (RAYPACKET_DIM-1) ];
-
-    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) )
-    {
-        for( unsigned int y = 0, i = 0; y < (RAYPACKET_DIM - 1); ++y )
         {
-            for( unsigned int x = 0; x < (RAYPACKET_DIM - 1); ++x, ++i )
-            {
-                hitColorAA[i] = bgColor[y];
-                hittedAA[i] = false;
+            const SFVEC3F color_average = ( hitColor_X0Y0[i] +
+                                            hitColor_AA_X1Y1[i] ) * SFVEC3F(0.5f);
 
-                const unsigned int idx0y0 = (x + 0) + RAYPACKET_DIM * (y + 0);
-                const unsigned int idx1y0 = (x + 1) + RAYPACKET_DIM * (y + 0);
-                const unsigned int idx0y1 = (x + 0) + RAYPACKET_DIM * (y + 1);
-                const unsigned int idx1y1 = (x + 1) + RAYPACKET_DIM * (y + 1);
+            hitColor_AA_X1Y0[i] = color_average;
+            hitColor_AA_X0Y1[i] = color_average;
+            hitColor_AA_X0Y1_half[i] = color_average;
+        }
 
-                // Evaluate if we can skip the pixel from trace if the adjacent
-                // pixels are similar (hitted, similar color and normal)
+        RAY blockRayPck_AA_X1Y0[RAYPACKET_RAYS_PER_PACKET];
+        RAY blockRayPck_AA_X0Y1[RAYPACKET_RAYS_PER_PACKET];
+        RAY blockRayPck_AA_X1Y1_half[RAYPACKET_RAYS_PER_PACKET];
 
-                if( hitPacket[ idx0y0 ].m_hitresult &&
-                    hitPacket[ idx1y0 ].m_hitresult &&
-                    hitPacket[ idx0y1 ].m_hitresult &&
-                    hitPacket[ idx1y1 ].m_hitresult )
-                {
-                    // Calc the average gray scale
+        RAYPACKET_InitRays_with2DDisplacement( m_settings.CameraGet(),
+                                               (SFVEC2F)blockPosI + SFVEC2F(0.5f - DISP_FACTOR, DISP_FACTOR),
+                                               SFVEC2F(DISP_FACTOR, DISP_FACTOR), // Displacement random factor
+                                               blockRayPck_AA_X1Y0 );
 
-                    // Average
-                    /*
-                    const float gray_idx0y0 =
-                            (hitColor[idx0y0].r + hitColor[idx0y0].g + hitColor[idx0y0].b ) / 3.0f;
-                    const float gray_idx1y0 =
-                            (hitColor[idx1y0].r + hitColor[idx1y0].g + hitColor[idx1y0].b ) / 3.0f;
-                    const float gray_idx0y1 =
-                            (hitColor[idx0y1].r + hitColor[idx0y1].g + hitColor[idx0y1].b ) / 3.0f;
-                    const float gray_idx1y1 =
-                            (hitColor[idx1y1].r + hitColor[idx1y1].g + hitColor[idx1y1].b ) / 3.0f;
-                    */
+        RAYPACKET_InitRays_with2DDisplacement( m_settings.CameraGet(),
+                                               (SFVEC2F)blockPosI + SFVEC2F(DISP_FACTOR, 0.5f - DISP_FACTOR),
+                                               SFVEC2F(DISP_FACTOR, DISP_FACTOR), // Displacement random factor
+                                               blockRayPck_AA_X0Y1 );
 
+        RAYPACKET_InitRays_with2DDisplacement( m_settings.CameraGet(),
+                                               (SFVEC2F)blockPosI + SFVEC2F(0.25f - DISP_FACTOR, 0.25f - DISP_FACTOR),
+                                               SFVEC2F(DISP_FACTOR, DISP_FACTOR), // Displacement random factor
+                                               blockRayPck_AA_X1Y1_half );
 
-                    // Luminance
-                    const float gray_idx0y0 = (hitColor[idx0y0].r * 0.2126f +
-                                               hitColor[idx0y0].g * 0.7152f +
-                                               hitColor[idx0y0].b * 0.0722f);
+        rt_trace_AA_packet( bgColor,
+                            hitPacket_X0Y0, hitPacket_AA_X1Y1,
+                            blockRayPck_AA_X1Y0,
+                            hitColor_AA_X1Y0 );
 
-                    const float gray_idx1y0 = (hitColor[idx1y0].r * 0.2126f +
-                                               hitColor[idx1y0].g * 0.7152f +
-                                               hitColor[idx1y0].b * 0.0722f);
+        rt_trace_AA_packet( bgColor,
+                            hitPacket_X0Y0, hitPacket_AA_X1Y1,
+                            blockRayPck_AA_X0Y1,
+                            hitColor_AA_X0Y1 );
 
-                    const float gray_idx0y1 = (hitColor[idx0y1].r * 0.2126f +
-                                               hitColor[idx0y1].g * 0.7152f +
-                                               hitColor[idx0y1].b * 0.0722f);
+        rt_trace_AA_packet( bgColor,
+                            hitPacket_X0Y0, hitPacket_AA_X1Y1,
+                            blockRayPck_AA_X1Y1_half,
+                            hitColor_AA_X0Y1_half );
 
-                    const float gray_idx1y1 = (hitColor[idx1y1].r * 0.2126f +
-                                               hitColor[idx1y1].g * 0.7152f +
-                                               hitColor[idx1y1].b * 0.0722f);
-
-                    const float threshould_color = 0.070f;
-
-                    // Check if there are no big difference, if not,
-                    // it will continue and not process anti-aliasing
-                    if( ( glm::abs( gray_idx0y0 - gray_idx1y0) < threshould_color ) &&
-                        ( glm::abs( gray_idx0y0 - gray_idx0y1) < threshould_color ) &&
-                        ( glm::abs( gray_idx0y1 - gray_idx1y1) < threshould_color ) &&
-                        ( glm::abs( gray_idx1y1 - gray_idx1y0) < threshould_color ) )
-                    {
-                            continue;
-                    }
-                }
-
-
-                // Use this code if you want to see (debug) the pixels that are interpolated
-                // hitColorAA[i] = SFVEC3F(1.0f, 0.0f, 1.0f);
-                // hittedAA[i] = true;
-                // continue;
-
-
-
-                // Initialize a ray that is in the middle of the 4 pixeis and
-                // have an average direction of the 4 pixels
-                raysAA[i].Init( ( blockPacket.m_ray[idx0y0].m_Origin +
-                                  blockPacket.m_ray[idx1y0].m_Origin +
-                                  blockPacket.m_ray[idx0y1].m_Origin +
-                                  blockPacket.m_ray[idx1y1].m_Origin ) / 4.0f,
-                                glm::normalize( ( blockPacket.m_ray[idx0y0].m_Dir +
-                                                  blockPacket.m_ray[idx1y0].m_Dir +
-                                                  blockPacket.m_ray[idx0y1].m_Dir +
-                                                  blockPacket.m_ray[idx1y1].m_Dir ) ) );
-
-                hitPacketAA[i].m_HitInfo.m_tHit = std::numeric_limits<float>::infinity();
-                hitPacketAA[i].m_HitInfo.m_acc_node_info = 0;
-                hitPacketAA[i].m_HitInfo.m_ShadowFactor = 1.0f;
-                hitPacketAA[i].m_hitresult = false;
-
-                bool hitted = false;
-
-                // Gets the node info from the hit. If there was no hit, return 0
-                const unsigned int nodex0y0 = (hitPacket[ idx0y0 ].m_hitresult == false)?0:
-                                               hitPacket[ idx0y0 ].m_HitInfo.m_acc_node_info;
-
-                const unsigned int nodex1y0 = (hitPacket[ idx1y0 ].m_hitresult == false)?0:
-                                               hitPacket[ idx1y0 ].m_HitInfo.m_acc_node_info;
-
-                const unsigned int nodex0y1 = (hitPacket[ idx0y1 ].m_hitresult == false)?0:
-                                               hitPacket[ idx0y1 ].m_HitInfo.m_acc_node_info;
-
-                const unsigned int nodex1y1 = (hitPacket[ idx1y1 ].m_hitresult == false)?0:
-                                               hitPacket[ idx1y1 ].m_HitInfo.m_acc_node_info;
-
-                // Try to intersect the different nodes
-                // It tests the possible combination of hitted or not hitted points
-                // This will try to get the best hit for this ray
-
-                if( nodex0y0 != 0 )
-                    hitted |= m_accelerator->Intersect( raysAA[i],
-                                                        hitPacketAA[i].m_HitInfo,
-                                                        nodex0y0 );
-
-                if( nodex1y0 != 0 )
-                    if( ( nodex0y0 != nodex1y0 ) || ( nodex0y0 == 0 ) )
-                        hitted |= m_accelerator->Intersect( raysAA[i],
-                                                            hitPacketAA[i].m_HitInfo,
-                                                            nodex1y0 );
-
-                if( nodex0y1 != 0 )
-                    if( ( ( nodex0y0 != nodex0y1 ) || ( nodex0y0 == 0 ) ) &&
-                        ( ( nodex1y0 != nodex0y1 ) || ( nodex1y0 == 0 ) ) )
-                        hitted |= m_accelerator->Intersect( raysAA[i],
-                                                            hitPacketAA[i].m_HitInfo,
-                                                            nodex0y1 );
-
-                if( nodex1y1 != 0 )
-                    if( ( ( nodex0y0 != nodex1y1 ) || ( nodex0y0 == 0 ) ) &&
-                        ( ( nodex0y1 != nodex1y1 ) || ( nodex0y1 == 0 ) ) &&
-                        ( ( nodex1y0 != nodex1y1 ) || ( nodex1y0 == 0 ) ) )
-                        hitted |= m_accelerator->Intersect( raysAA[i],
-                                                            hitPacketAA[i].m_HitInfo,
-                                                            nodex1y1 );
-
-                if( hitted )
-                {
-                    // If he got any result, shade it
-                    hitColorAA[i] = shadeHit( bgColor[y],
-                                              raysAA[i],
-                                              hitPacketAA[i].m_HitInfo,
-                                              false,
-                                              0 );
-                }
-                else
-                {
-                    // It was missed the 'last nodes' so,
-                    // trace a ray from the beginning
-                    if( m_accelerator->Intersect( raysAA[i], hitPacketAA[i].m_HitInfo ) )
-                        hitColorAA[i] = shadeHit( bgColor[y],
-                                                  raysAA[i],
-                                                  hitPacketAA[i].m_HitInfo,
-                                                  false,
-                                                  0 );
-                }
-
-                hittedAA[i] = true;
-            }
+        // Average the result
+        for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
+        {
+            hitColor_X0Y0[i] = ( hitColor_X0Y0[i] +
+                                 hitColor_AA_X1Y1[i] +
+                                 hitColor_AA_X1Y0[i] +
+                                 hitColor_AA_X0Y1[i] +
+                                 hitColor_AA_X0Y1_half[i]
+                                 ) * SFVEC3F(1.0f / 5.0f);
         }
     }
 
 
-    // Blend original hitted pixels with anti-alised pixels
+    // Copy results to the next stage
     // /////////////////////////////////////////////////////////////////////
-    for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
+
+    GLubyte *ptr = &ptrPBO[ ( blockPos.x +
+                              (blockPos.y * m_realBufferSize.x) ) * 4 ];
+
+    const uint32_t ptrInc = (m_realBufferSize.x - RAYPACKET_DIM) * 4;
+
+    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
     {
-        for( unsigned int x = 0; x < RAYPACKET_DIM; ++x, ++i )
+        SFVEC2I bPos;
+        bPos.y = blockPos.y;
+
+        for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
         {
-            SFVEC3F hColor = hitColor[i];
+            bPos.x = blockPos.x;
 
-            if( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) )
+            for( unsigned int x = 0; x < RAYPACKET_DIM; ++x, ++i )
             {
-                SFVEC3F aaColor = bgColor[y];
+                const SFVEC3F &hColor = hitColor_X0Y0[i];
 
-                if( (x > 0) &&
-                    (y > 0) &&
-                    ( x < (RAYPACKET_DIM - 1) ) &&
-                    ( y < (RAYPACKET_DIM - 1) ) )
-                {
-                    // It makes a blur of the hitColor
-                    const SFVEC3F averageHitColor =
-                             hitColor[ (x - 1) + RAYPACKET_DIM * (y - 1) ] * 0.0625f +
-                             hitColor[ (x + 0) + RAYPACKET_DIM * (y - 1) ] * 0.1250f +
-                             hitColor[ (x + 1) + RAYPACKET_DIM * (y - 1) ] * 0.0625f +
-                             hitColor[ (x - 1) + RAYPACKET_DIM * (y + 0) ] * 0.1250f +
-                             hitColor[ (x + 0) + RAYPACKET_DIM * (y + 0) ] * 0.2500f +
-                             hitColor[ (x + 1) + RAYPACKET_DIM * (y + 0) ] * 0.1250f +
-                             hitColor[ (x - 1) + RAYPACKET_DIM * (y + 1) ] * 0.0625f +
-                             hitColor[ (x + 0) + RAYPACKET_DIM * (y + 1) ] * 0.1250f +
-                             hitColor[ (x + 1) + RAYPACKET_DIM * (y + 1) ] * 0.0625f;
-
-
-                    const unsigned x0y0 = (x - 1) + (RAYPACKET_DIM - 1) * (y - 1);
-                    const unsigned x1y0 = (x - 0) + (RAYPACKET_DIM - 1) * (y - 1);
-                    const unsigned x0y1 = (x - 1) + (RAYPACKET_DIM - 1) * (y - 0);
-                    const unsigned x1y1 = (x - 0) + (RAYPACKET_DIM - 1) * (y - 0);
-
-                    aaColor = (hittedAA[ x0y0 ]? hitColorAA[ x0y0 ]: averageHitColor) +
-                              (hittedAA[ x1y0 ]? hitColorAA[ x1y0 ]: averageHitColor) +
-                              (hittedAA[ x0y1 ]? hitColorAA[ x0y1 ]: averageHitColor) +
-                              (hittedAA[ x1y1 ]? hitColorAA[ x1y1 ]: averageHitColor);
-
-                    aaColor /= 4.0f;
-                }
-                else
-                {
-                    if( (x == 0) && (y == 0) )
-                    {
-                        const unsigned x0y0 = (x - 0) + (RAYPACKET_DIM - 1) * (y - 0);
-                        aaColor = (hittedAA[ x0y0 ]? hitColorAA[ x0y0 ]: hColor);
-                    }
-                    else
-                    {
-                        if( (x == (RAYPACKET_DIM - 1)) && (y == (RAYPACKET_DIM - 1)) )
-                        {
-                            const unsigned x0y0 = (x - 1) + (RAYPACKET_DIM - 1) * (y - 1);
-                            aaColor = (hittedAA[ x0y0 ]? hitColorAA[ x0y0 ]: hColor);
-                        }
-                        else
-                        {
-                            if( (x == (RAYPACKET_DIM - 1)) && (y == 0) )
-                            {
-                                const unsigned x0y0 = (x - 1) + (RAYPACKET_DIM - 1) * (y - 0);
-                                aaColor = (hittedAA[ x0y0 ]? hitColorAA[ x0y0 ]: hColor);
-                            }
-                            else
-                            {
-                                if( (x == 0) && (y == (RAYPACKET_DIM - 1)) )
-                                {
-                                    const unsigned x0y0 = (x - 0) + (RAYPACKET_DIM - 1) * (y - 1);
-                                    aaColor = (hittedAA[ x0y0 ]? hitColorAA[ x0y0 ]: hColor);
-                                }
-                                else
-                                {
-                                    if( ( y == 0 ) && ( x < (RAYPACKET_DIM - 1) ) )
-                                    {
-                                        const unsigned x0y0 = (x - 1) + (RAYPACKET_DIM - 1) *
-                                                              (y - 0);
-                                        const unsigned x1y0 = (x - 0) + (RAYPACKET_DIM - 1) *
-                                                              (y - 0);
-
-                                        aaColor = (hittedAA[ x0y0 ]? hitColorAA[ x0y0 ]: hColor) +
-                                                  (hittedAA[ x1y0 ]? hitColorAA[ x1y0 ]: hColor);
-
-                                        aaColor = aaColor / 2.0f;
-                                    }
-                                    else
-                                    {
-                                        if( ( y == (RAYPACKET_DIM - 1) ) &&
-                                            ( x < (RAYPACKET_DIM - 1) ) )
-                                        {
-                                            const unsigned x0y0 = (x - 1) + (RAYPACKET_DIM - 1) *
-                                                                  (y - 1);
-                                            const unsigned x1y0 = (x - 0) + (RAYPACKET_DIM - 1) *
-                                                                  (y - 1);
-
-                                            aaColor = (hittedAA[ x0y0 ]?hitColorAA[ x0y0 ]:hColor) +
-                                                      (hittedAA[ x1y0 ]?hitColorAA[ x1y0 ]:hColor);
-
-                                            aaColor = aaColor / 2.0f;
-                                        }
-                                        else
-                                        {
-                                            if( ( x == 0 ) && ( y < (RAYPACKET_DIM - 1) ) )
-                                            {
-                                                const unsigned x0y0 = (x - 0) +
-                                                                      (RAYPACKET_DIM - 1) * (y - 1);
-                                                const unsigned x0y1 = (x - 0) +
-                                                                      (RAYPACKET_DIM - 1) * (y - 0);
-
-                                                aaColor = (hittedAA[x0y0]?hitColorAA[x0y0]:hColor) +
-                                                          (hittedAA[x0y1]?hitColorAA[x0y1]:hColor);
-
-                                                aaColor = aaColor / 2.0f;
-                                            }
-                                            else
-                                            {
-                                                if( ( x == (RAYPACKET_DIM - 1) ) &&
-                                                    ( y < (RAYPACKET_DIM - 1) ) )
-                                                {
-                                                    const unsigned x0y0 = (x - 1) +
-                                                                          (RAYPACKET_DIM - 1) *
-                                                                          (y - 1);
-
-                                                    const unsigned x0y1 = (x - 1) +
-                                                                          (RAYPACKET_DIM - 1) *
-                                                                          (y - 0);
-
-                                                    aaColor =
-                                                        (hittedAA[x0y0]?hitColorAA[x0y0]:hColor) +
-                                                        (hittedAA[x0y1]?hitColorAA[x0y1]:hColor);
-
-                                                    aaColor = aaColor / 2.0f;
-                                                }
-                                                else
-                                                {
-                                                    aaColor = SFVEC3F(1.0f, 0.0f, 1.0f ); // Invalid
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Calculate the final blend color. It gives more importance
-                // to the original color
-                hColor = hColor * 0.60f + aaColor * 0.40f;
-            }
-
-            // This will set the output color to be displayed
-            // If post processing is enabled, it will not reflect the final result
-            // (as the final color will be computed on post processing)
-            // but it is used for report progress
-            GLubyte *ptr = &ptrPBO[ ( blockPos.x + x +
-                                      ((y + blockPos.y) * m_realBufferSize.x) ) * 4 ];
-
-            if( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
-            {
-                if( hitPacket[i].m_hitresult == true )
-                    m_postshader_ssao.SetPixelData( blockPos.x + x, blockPos.y + y,
-                                                    hitPacket[i].m_HitInfo.m_HitNormal,
+                if( hitPacket_X0Y0[i].m_hitresult == true )
+                    m_postshader_ssao.SetPixelData( bPos.x, bPos.y,
+                                                    hitPacket_X0Y0[i].m_HitInfo.m_HitNormal,
                                                     hColor,
                                                     blockPacket.m_ray[i].at(
-                                                        hitPacket[i].m_HitInfo.m_tHit ),
-                                                    hitPacket[i].m_HitInfo.m_tHit,
-                                                    hitPacket[i].m_HitInfo.m_ShadowFactor );
+                                                        hitPacket_X0Y0[i].m_HitInfo.m_tHit ),
+                                                    hitPacket_X0Y0[i].m_HitInfo.m_tHit,
+                                                    hitPacket_X0Y0[i].m_HitInfo.m_ShadowFactor );
                 else
-                    m_postshader_ssao.SetPixelData( blockPos.x + x, blockPos.y + y,
+                    m_postshader_ssao.SetPixelData( bPos.x, bPos.y,
                                                     SFVEC3F(),
                                                     hColor,
                                                     SFVEC3F(),
@@ -1154,11 +869,26 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
                                                     1.0f );
 
                 rt_final_color( ptr, hColor, false );
+
+                bPos.x++;
+                ptr += 4;
             }
-            else
+
+            ptr += ptrInc;
+            bPos.y++;
+        }
+    }
+    else
+    {
+        for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
+        {
+            for( unsigned int x = 0; x < RAYPACKET_DIM; ++x, ++i )
             {
-                rt_final_color( ptr, hColor, true );
+                rt_final_color( ptr, hitColor_X0Y0[i], true );
+                ptr += 4;
             }
+
+            ptr += ptrInc;
         }
     }
 }
@@ -1399,7 +1129,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
 
         for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
         {
-            const SFVEC3F bhColorY = bgColor[i/RAYPACKET_DIM];
+            const SFVEC3F bhColorY = bgColor[i / RAYPACKET_DIM];
 
             if( hitPacket[i].m_hitresult == true )
             {
@@ -1407,7 +1137,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                    blockPacket.m_ray[i],
                                                    hitPacket[i].m_HitInfo,
                                                    false,
-                                                   0 );
+                                                   0,
+                                                   false );
 
                 hitColorShading[i] = CCOLORRGB( hitColor );
             }
@@ -1485,38 +1216,31 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                     RAY centerRay;
                     centerRay.Init( oriC, dirC );
 
-                    const unsigned int nodeLT = (hitPacket[ iLT ].m_hitresult == false)?0:
-                                                 hitPacket[ iLT ].m_HitInfo.m_acc_node_info;
-
-                    const unsigned int nodeRT = (hitPacket[ iRT ].m_hitresult == false)?0:
-                                                 hitPacket[ iRT ].m_HitInfo.m_acc_node_info;
-
-                    const unsigned int nodeLB = (hitPacket[ iLB ].m_hitresult == false)?0:
-                                                 hitPacket[ iLB ].m_HitInfo.m_acc_node_info;
-
-                    const unsigned int nodeRB = (hitPacket[ iRB ].m_hitresult == false)?0:
-                                                 hitPacket[ iRB ].m_HitInfo.m_acc_node_info;
+                    const unsigned int nodeLT = hitPacket[ iLT ].m_HitInfo.m_acc_node_info;
+                    const unsigned int nodeRT = hitPacket[ iRT ].m_HitInfo.m_acc_node_info;
+                    const unsigned int nodeLB = hitPacket[ iLB ].m_HitInfo.m_acc_node_info;
+                    const unsigned int nodeRB = hitPacket[ iRB ].m_HitInfo.m_acc_node_info;
 
                     if( nodeLT != 0 )
                         hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo, nodeLT );
 
-                    if( nodeRT != 0 )
-                        if( ( nodeRT != nodeLT ) || ( nodeLT == 0 ) )
-                            hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo, nodeRT );
+                    if( ( nodeRT != 0 ) &&
+                        ( nodeRT != nodeLT ) )
+                        hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo, nodeRT );
 
-                    if( nodeLB != 0 )
-                        if( ( ( nodeLB != nodeLT ) || ( nodeLT == 0 ) ) &&
-                            ( ( nodeLB != nodeRT ) || ( nodeRT == 0 ) ) )
+                    if( ( nodeLB != 0 ) &&
+                        ( nodeLB != nodeLT ) &&
+                        ( nodeLB != nodeRT ) )
                             hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo, nodeLB );
 
-                    if( nodeRB != 0 )
-                        if( ( ( nodeRB != nodeLB ) || ( nodeLB == 0 ) ) &&
-                            ( ( nodeRB != nodeLT ) || ( nodeLT == 0 ) ) &&
-                            ( ( nodeRB != nodeRT ) || ( nodeRT == 0 ) ) )
+                    if( ( nodeRB != 0 ) &&
+                        ( nodeRB != nodeLB ) &&
+                        ( nodeRB != nodeLT ) &&
+                        ( nodeRB != nodeRT ) )
                             hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo, nodeRB );
 
                     if( hittedC )
-                        cC = CCOLORRGB( shadeHit( bgColorY, centerRay, centerHitInfo, false, 0 ) );
+                        cC = CCOLORRGB( shadeHit( bgColorY, centerRay, centerHitInfo, false, 0, false ) );
                     else
                     {
                         centerHitInfo.m_tHit = std::numeric_limits<float>::infinity();
@@ -1527,7 +1251,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                       centerRay,
                                                       centerHitInfo,
                                                       false,
-                                                      0 ) );
+                                                      0,
+                                                      false ) );
                     }
                 }
 
@@ -1559,7 +1284,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                 glm::normalize( ( hitPacket[ iLT ].m_HitInfo.m_HitNormal +
                                                   hitPacket[ iRT ].m_HitInfo.m_HitNormal ) * 0.5f );
 
-                        cLRT = CCOLORRGB( shadeHit( bgColorY, rayLRT, hitInfoLRT, false, 0 ) );
+                        cLRT = CCOLORRGB( shadeHit( bgColorY, rayLRT, hitInfoLRT, false, 0, false ) );
                         cLRT = BlendColor( cLRT, BlendColor( cLT, cRT) );
                     }
                     else
@@ -1567,29 +1292,27 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                         if( hitPacket[ iLT ].m_hitresult ||
                             hitPacket[ iRT ].m_hitresult )                  // If any hits
                         {
-                            const unsigned int nodeLT = (hitPacket[ iLT ].m_hitresult == false)?0:
-                                                         hitPacket[ iLT ].m_HitInfo.m_acc_node_info;
-
-                            const unsigned int nodeRT = (hitPacket[ iRT ].m_hitresult == false)?0:
-                                                         hitPacket[ iRT ].m_HitInfo.m_acc_node_info;
+                            const unsigned int nodeLT = hitPacket[ iLT ].m_HitInfo.m_acc_node_info;
+                            const unsigned int nodeRT = hitPacket[ iRT ].m_HitInfo.m_acc_node_info;
 
                             bool hittedLRT = false;
 
                             if( nodeLT != 0 )
                                 hittedLRT |= m_accelerator->Intersect( rayLRT, hitInfoLRT, nodeLT );
 
-                            if( nodeRT != 0 )
-                                if( ( nodeRT != nodeLT ) || ( nodeLT == 0 ) )
-                                    hittedLRT |= m_accelerator->Intersect( rayLRT,
-                                                                           hitInfoLRT,
-                                                                           nodeRT );
+                            if( ( nodeRT != 0 ) &&
+                                ( nodeRT != nodeLT ) )
+                                hittedLRT |= m_accelerator->Intersect( rayLRT,
+                                                                       hitInfoLRT,
+                                                                       nodeRT );
 
                             if( hittedLRT )
                                 cLRT = CCOLORRGB( shadeHit( bgColorY,
                                                             rayLRT,
                                                             hitInfoLRT,
                                                             false,
-                                                            0 ) );
+                                                            0,
+                                                            false ) );
                             else
                             {
                                 hitInfoLRT.m_tHit = std::numeric_limits<float>::infinity();
@@ -1599,7 +1322,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                                 rayLRT,
                                                                 hitInfoLRT,
                                                                 false,
-                                                                0 ) );
+                                                                0,
+                                                                false ) );
                             }
                         }
                     }
@@ -1636,7 +1360,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                         hitInfoLTB.m_HitNormal =
                                 glm::normalize( ( hitPacket[ iLT ].m_HitInfo.m_HitNormal +
                                                   hitPacket[ iLB ].m_HitInfo.m_HitNormal ) * 0.5f );
-                        cLTB = CCOLORRGB( shadeHit( bgColorY, rayLTB, hitInfoLTB, false, 0 ) );
+                        cLTB = CCOLORRGB( shadeHit( bgColorY, rayLTB, hitInfoLTB, false, 0, false ) );
                         cLTB = BlendColor( cLTB, BlendColor( cLT, cLB) );
                     }
                     else
@@ -1644,11 +1368,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                         if( hitPacket[ iLT ].m_hitresult ||
                             hitPacket[ iLB ].m_hitresult )                  // If any hits
                         {
-                            const unsigned int nodeLT = (hitPacket[ iLT ].m_hitresult == false)?0:
-                                                         hitPacket[ iLT ].m_HitInfo.m_acc_node_info;
-
-                            const unsigned int nodeLB = (hitPacket[ iLB ].m_hitresult == false)?0:
-                                                         hitPacket[ iLB ].m_HitInfo.m_acc_node_info;
+                            const unsigned int nodeLT = hitPacket[ iLT ].m_HitInfo.m_acc_node_info;
+                            const unsigned int nodeLB = hitPacket[ iLB ].m_HitInfo.m_acc_node_info;
 
                             bool hittedLTB = false;
 
@@ -1657,18 +1378,19 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                                        hitInfoLTB,
                                                                        nodeLT );
 
-                            if( nodeLB != 0 )
-                                if( ( nodeLB != nodeLT ) || ( nodeLT == 0 ) )
-                                    hittedLTB |= m_accelerator->Intersect( rayLTB,
-                                                                           hitInfoLTB,
-                                                                           nodeLB );
+                            if( ( nodeLB != 0 ) &&
+                                ( nodeLB != nodeLT ) )
+                                hittedLTB |= m_accelerator->Intersect( rayLTB,
+                                                                       hitInfoLTB,
+                                                                       nodeLB );
 
                             if( hittedLTB )
                                 cLTB = CCOLORRGB( shadeHit( bgColorY,
                                                             rayLTB,
                                                             hitInfoLTB,
                                                             false,
-                                                            0 ) );
+                                                            0,
+                                                            false ) );
                             else
                             {
                                 hitInfoLTB.m_tHit = std::numeric_limits<float>::infinity();
@@ -1678,7 +1400,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                                 rayLTB,
                                                                 hitInfoLTB,
                                                                 false,
-                                                                0 ) );
+                                                                0,
+                                                                false ) );
                             }
                         }
                     }
@@ -1713,7 +1436,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                             glm::normalize( ( hitPacket[ iRT ].m_HitInfo.m_HitNormal +
                                               hitPacket[ iRB ].m_HitInfo.m_HitNormal ) * 0.5f );
 
-                    cRTB = CCOLORRGB( shadeHit( bgColorY, rayRTB, hitInfoRTB, false, 0 ) );
+                    cRTB = CCOLORRGB( shadeHit( bgColorY, rayRTB, hitInfoRTB, false, 0, false ) );
                     cRTB = BlendColor( cRTB, BlendColor( cRT, cRB) );
                 }
                 else
@@ -1721,26 +1444,25 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                     if( hitPacket[ iRT ].m_hitresult ||
                         hitPacket[ iRB ].m_hitresult )                  // If any hits
                     {
-                        const unsigned int nodeRT = (hitPacket[ iRT ].m_hitresult == false)?0:
-                                                     hitPacket[ iRT ].m_HitInfo.m_acc_node_info;
-                        const unsigned int nodeRB = (hitPacket[ iRB ].m_hitresult == false)?0:
-                                                     hitPacket[ iRB ].m_HitInfo.m_acc_node_info;
+                        const unsigned int nodeRT = hitPacket[ iRT ].m_HitInfo.m_acc_node_info;
+                        const unsigned int nodeRB = hitPacket[ iRB ].m_HitInfo.m_acc_node_info;
 
                         bool hittedRTB = false;
 
                         if( nodeRT != 0 )
                             hittedRTB |= m_accelerator->Intersect( rayRTB, hitInfoRTB, nodeRT );
 
-                        if( nodeRB != 0 )
-                            if( ( nodeRB != nodeRT ) || ( nodeRT == 0 ) )
-                                hittedRTB |= m_accelerator->Intersect( rayRTB, hitInfoRTB, nodeRB );
+                        if( ( nodeRB != 0 ) &&
+                            ( nodeRB != nodeRT ) )
+                            hittedRTB |= m_accelerator->Intersect( rayRTB, hitInfoRTB, nodeRB );
 
                         if( hittedRTB )
                             cRTB = CCOLORRGB( shadeHit( bgColorY,
                                                         rayRTB,
                                                         hitInfoRTB,
                                                         false,
-                                                        0 ) );
+                                                        0,
+                                                        false) );
                         else
                         {
                             hitInfoRTB.m_tHit = std::numeric_limits<float>::infinity();
@@ -1750,7 +1472,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                             rayRTB,
                                                             hitInfoRTB,
                                                             false,
-                                                            0 ) );
+                                                            0,
+                                                            false ) );
                         }
                     }
                 }
@@ -1787,7 +1510,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                             glm::normalize( ( hitPacket[ iLB ].m_HitInfo.m_HitNormal +
                                               hitPacket[ iRB ].m_HitInfo.m_HitNormal ) * 0.5f );
 
-                    cLRB = CCOLORRGB( shadeHit( bgColorY, rayLRB, hitInfoLRB, false, 0 ) );
+                    cLRB = CCOLORRGB( shadeHit( bgColorY, rayLRB, hitInfoLRB, false, 0, false ) );
                     cLRB = BlendColor( cLRB, BlendColor( cLB, cRB) );
                 }
                 else
@@ -1795,22 +1518,20 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                     if( hitPacket[ iLB ].m_hitresult ||
                         hitPacket[ iRB ].m_hitresult )                  // If any hits
                     {
-                        const unsigned int nodeLB = (hitPacket[ iLB ].m_hitresult == false)?0:
-                                                     hitPacket[ iLB ].m_HitInfo.m_acc_node_info;
-                        const unsigned int nodeRB = (hitPacket[ iRB ].m_hitresult == false)?0:
-                                                     hitPacket[ iRB ].m_HitInfo.m_acc_node_info;
+                        const unsigned int nodeLB = hitPacket[ iLB ].m_HitInfo.m_acc_node_info;
+                        const unsigned int nodeRB = hitPacket[ iRB ].m_HitInfo.m_acc_node_info;
 
                         bool hittedLRB = false;
 
                         if( nodeLB != 0 )
                             hittedLRB |= m_accelerator->Intersect( rayLRB, hitInfoLRB, nodeLB );
 
-                        if( nodeRB != 0 )
-                            if( ( nodeRB != nodeLB ) || ( nodeLB == 0 ) )
-                                hittedLRB |= m_accelerator->Intersect( rayLRB, hitInfoLRB, nodeRB );
+                        if( ( nodeRB != 0 ) &&
+                            ( nodeRB != nodeLB ) )
+                            hittedLRB |= m_accelerator->Intersect( rayLRB, hitInfoLRB, nodeRB );
 
                         if( hittedLRB )
-                            cLRB = CCOLORRGB( shadeHit( bgColorY, rayLRB, hitInfoLRB, false, 0 ) );
+                            cLRB = CCOLORRGB( shadeHit( bgColorY, rayLRB, hitInfoLRB, false, 0, false ) );
                         else
                         {
                             hitInfoLRB.m_tHit = std::numeric_limits<float>::infinity();
@@ -1820,7 +1541,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                             rayLRB,
                                                             hitInfoLRB,
                                                             false,
-                                                            0 ) );
+                                                            0,
+                                                            false ) );
                         }
                     }
                 }
@@ -1852,7 +1574,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                                                        hitInfoLTC );
 
                     if( hitted )
-                        cLTC = CCOLORRGB( shadeHit( bgColorY, rayLTC, hitInfoLTC, false, 0 ) );
+                        cLTC = CCOLORRGB( shadeHit( bgColorY, rayLTC, hitInfoLTC, false, 0, false ) );
                 }
 
 
@@ -1880,7 +1602,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                                                        hitInfoRTC );
 
                     if( hitted )
-                        cRTC = CCOLORRGB( shadeHit( bgColorY, rayRTC, hitInfoRTC, false, 0 ) );
+                        cRTC = CCOLORRGB( shadeHit( bgColorY, rayRTC, hitInfoRTC, false, 0, false ) );
                 }
 
 
@@ -1908,7 +1630,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                                                        hitInfoLBC );
 
                     if( hitted )
-                        cLBC = CCOLORRGB( shadeHit( bgColorY, rayLBC, hitInfoLBC, false, 0 ) );
+                        cLBC = CCOLORRGB( shadeHit( bgColorY, rayLBC, hitInfoLBC, false, 0, false ) );
                 }
 
 
@@ -1936,7 +1658,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                                                                        hitInfoRBC );
 
                     if( hitted )
-                        cRBC = CCOLORRGB( shadeHit( bgColorY, rayRBC, hitInfoRBC, false, 0 ) );
+                        cRBC = CCOLORRGB( shadeHit( bgColorY, rayRBC, hitInfoRBC, false, 0, false ) );
                 }
 
 
@@ -1983,7 +1705,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                                          const RAY &aRay,
                                          HITINFO &aHitInfo,
                                          bool aIsInsideObject,
-                                         unsigned int aRecursiveLevel ) const
+                                         unsigned int aRecursiveLevel,
+                                         bool is_testShadow ) const
 {
     if( aRecursiveLevel > 2 )
         return SFVEC3F( 0.0f );
@@ -2003,9 +1726,6 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
     SFVEC3F outColor = objMaterial->GetEmissiveColor();
 
     const LIST_LIGHT &lightList = m_lights.GetList();
-
-    const bool is_testShadow = m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) &&
-                               (!m_isPreview);
 
 #if USE_EXPERIMENTAL_SOFT_SHADOWS
     const bool is_aa_enabled = m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) &&
@@ -2185,7 +1905,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                                            reflectedRay,
                                            reflectedHit,
                                            false,
-                                           aRecursiveLevel + 1 ) *
+                                           aRecursiveLevel + 1,
+                                           is_testShadow ) *
                                  (1.0f / ( 1.0f + 0.75f * reflectedHit.m_tHit *
                                                           reflectedHit.m_tHit) ); // Falloff factor
                 }
@@ -2241,7 +1962,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                                                refractedRay,
                                                refractedHit,
                                                true,
-                                               aRecursiveLevel + 1 );
+                                               aRecursiveLevel + 1,
+                                               is_testShadow );
 
                     const SFVEC3F absorbance = ( SFVEC3F(1.0f) - diffuseColorObj ) *
                                                (1.0f - objTransparency ) *

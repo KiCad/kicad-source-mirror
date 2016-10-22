@@ -55,7 +55,22 @@ struct RAYPACKET
     RAYPACKET( const CCAMERA &aCamera,
                const SFVEC2I &aWindowsPosition,
                unsigned int aPixelMultiple );
+
+    RAYPACKET( const CCAMERA &aCamera,
+               const SFVEC2F &aWindowsPosition );
+
+    RAYPACKET( const CCAMERA &aCamera,
+               const SFVEC2F &aWindowsPosition,
+               const SFVEC2F &a2DWindowsPosDisplacementFactor );
 };
 
+void RAYPACKET_InitRays( const CCAMERA &aCamera,
+                         const SFVEC2F &aWindowsPosition,
+                         RAY *aRayPck );
+
+void RAYPACKET_InitRays_with2DDisplacement( const CCAMERA &aCamera,
+                                            const SFVEC2F &aWindowsPosition,
+                                            const SFVEC2F &a2DWindowsPosDisplacementFactor,
+                                            RAY *aRayPck );
 
 #endif // _RAYPACKET_H_
