@@ -1114,7 +1114,9 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
                                  " PCBs from schematics, you need to launch Kicad shell"
                                  " and create a PCB project." ) );
         return;
-    } else {
+    }
+    else
+    {
         KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH, true );
         wxFileName schfn = Prj().AbsolutePath( Prj().GetProjectName() );
 
@@ -1127,6 +1129,5 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
         }
 
         Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "", this );
-
     }
 }

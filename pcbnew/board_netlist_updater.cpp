@@ -614,7 +614,6 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
 bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 {
     wxString msg;
-
     m_errorCount = 0;
     m_warningCount = 0;
 
