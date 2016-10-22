@@ -38,7 +38,7 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE
 	moveUpButton = new wxButton( this, wxID_ANY, _("Move Up"), wxDefaultPosition, wxDefaultSize, 0 );
 	moveUpButton->SetToolTip( _("Move the selected optional fields up one position") );
 	
-	bSizerFiledsList->Add( moveUpButton, 0, wxALL|wxEXPAND, 5 );
+	bSizerFiledsList->Add( moveUpButton, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_spiceFieldsButton = new wxButton( this, wxID_ANY, _("Edit Spice model"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerFiledsList->Add( m_spiceFieldsButton, 0, wxALL|wxEXPAND, 5 );
