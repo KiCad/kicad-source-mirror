@@ -551,7 +551,11 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_NET ) )
     {
         net_msg = _( "Net:" );
-        net_msg << " " << m_netAttributes.m_Netname;
+        net_msg << " ";
+        if( m_netAttributes.m_Netname.IsEmpty() )
+            net_msg << "<no net name>";
+        else
+            net_msg << m_netAttributes.m_Netname;
     }
 
     if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) )

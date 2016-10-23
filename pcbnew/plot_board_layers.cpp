@@ -459,6 +459,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( diameter <= 0 )
             continue;
 
+        // Some vias can be not connected (no net).
+        // Set the m_NotInNet for these vias to force a empty net name in gerber file
+        gbr_metadata.m_NetlistMetadata.m_NotInNet = Via->GetNetname().IsEmpty();
+
         gbr_metadata.SetNetName( Via->GetNetname() );
 
         EDA_COLOR_T color = aBoard->GetVisibleElementColor(VIAS_VISIBLE + Via->GetViaType());
@@ -480,6 +484,10 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
         if( !aLayerMask[track->GetLayer()] )
             continue;
+
+        // Some track segments can be not connected (no net).
+        // Set the m_NotInNet for these segments to force a empty net name in gerber file
+        gbr_metadata.m_NetlistMetadata.m_NotInNet = track->GetNetname().IsEmpty();
 
         gbr_metadata.SetNetName( track->GetNetname() );
         int width = track->GetWidth() + itemplotter.getFineWidthAdj();

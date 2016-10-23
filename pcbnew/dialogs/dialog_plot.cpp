@@ -41,7 +41,7 @@
 #include <wx_html_report_panel.h>
 
 // Uncomment this line to allow experimetal net attributes in Gerber files:
-//#define KICAD_USE_GBR_NETATTRIBUTES
+#define KICAD_USE_GBR_NETATTRIBUTES
 
 DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* aParent ) :
     DIALOG_PLOT_BASE( aParent ), m_parent( aParent ),
