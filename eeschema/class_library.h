@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ class SCH_LEGACY_PLUGIN;
 /* Must be the first line of part library document (.dcm) files. */
 #define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"
 
-#define DOC_EXT           wxT( "dcm" )
+#define DOC_EXT           "dcm"
 
 // Helper class to filter a list of libraries, and/or a list of PART_LIB
 // in dialogs
@@ -226,14 +226,6 @@ public:
         throw( IO_ERROR, boost::bad_pointer );
 
     /**
-     * Function RemoveLibrary
-     * removes a part library from the library list.
-     *
-     * @param aName - Name of part library to remove.
-     */
-    void RemoveLibrary( const wxString& aName );
-
-    /**
      * Function LoadAllLibraries
      * loads all of the project's libraries into this container, which should
      * be cleared before calling it.
@@ -287,7 +279,8 @@ public:
      * @param aLibraryName - Name of the library to search for part.
      * @return LIB_PART* - The part object if found, otherwise NULL.
      */
-    LIB_PART* FindLibPart( const wxString& aPartName, const wxString& aLibraryName = wxEmptyString );
+    LIB_PART* FindLibPart( const wxString& aPartName,
+                           const wxString& aLibraryName = wxEmptyString );
 
     /**
      * Function FindLibraryEntry
@@ -300,7 +293,7 @@ public:
      * @return The entry object if found, otherwise NULL.
      */
     LIB_ALIAS* FindLibraryAlias( const wxString& aEntryName,
-            const wxString& aLibraryName = wxEmptyString );
+                                 const wxString& aLibraryName = wxEmptyString );
 
     /**
      * Function FindLibraryNearEntries
@@ -316,7 +309,7 @@ public:
      * @param aCandidates - a std::vector to store candidates
      */
     void FindLibraryNearEntries( std::vector<LIB_ALIAS*>& aCandidates, const wxString& aEntryName,
-            const wxString& aLibraryName = wxEmptyString );
+                                 const wxString& aLibraryName = wxEmptyString );
 
     int GetLibraryCount() { return size(); }
 };

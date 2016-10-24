@@ -204,6 +204,19 @@ public:
     virtual const wxString GetFileExtension() const = 0;
 
     /**
+     * Function GetModifyHash
+     *
+     * returns the modification hash from the library cache.
+     *
+     * @note This is temporary until the new s-expr file format is implement.  The new file
+     *       format will embed symbols instead of referencing them from the library.  This
+     *       function can be removed when the new file format is implemented.
+     *
+     * @return the modification hash of the library cache.
+     */
+    virtual int GetModifyHash() const = 0;
+
+    /**
      * Function Load
      *
      * loads information from some input file format that this SCH_PLUGIN implementation

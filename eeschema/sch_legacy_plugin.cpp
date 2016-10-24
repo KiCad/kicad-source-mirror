@@ -1950,6 +1950,8 @@ public:
     SCH_LEGACY_PLUGIN_CACHE( const wxString& aLibraryPath );
     ~SCH_LEGACY_PLUGIN_CACHE();
 
+    int GetModifyHash() const { return m_modHash; }
+
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any SCH_PLUGIN objects.
     // Catch these exceptions higher up please.
@@ -1978,7 +1980,8 @@ public:
 SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFileName ) :
     m_libFileName( aFullPathAndFileName ),
     m_isWritable( true ),
-    m_isModified( false )
+    m_isModified( false ),
+    m_modHash( 1 )
 {
     m_versionMajor = -1;
     m_versionMinor = -1;
@@ -3285,6 +3288,16 @@ void SCH_LEGACY_PLUGIN::cacheLib( const wxString& aLibraryFileName )
         m_cache = new SCH_LEGACY_PLUGIN_CACHE( aLibraryFileName );
         m_cache->Load();
     }
+}
+
+
+int SCH_LEGACY_PLUGIN::GetModifyHash() const
+{
+    if( m_cache )
+        return m_cache->GetModifyHash();
+
+    // If the cache hasn't been loaded, it hasn't been modified.
+    return 0;
 }
 
 

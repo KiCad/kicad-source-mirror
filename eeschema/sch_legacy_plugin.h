@@ -75,6 +75,8 @@ public:
         return wxT( "sch" );
     }
 
+    int GetModifyHash() const override;
+
     SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
                      SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL ) override;
 
