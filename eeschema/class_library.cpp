@@ -121,23 +121,6 @@ void PART_LIB::GetEntryTypePowerNames( wxArrayString& aNames )
 }
 
 
-bool PART_LIB::Conflicts( LIB_PART* aPart )
-{
-    wxCHECK_MSG( aPart != NULL, false,
-                 "Cannot test NULL component for conflicts in library " + GetName() );
-
-    for( size_t i=0;  i<aPart->m_aliases.size();  i++ )
-    {
-        LIB_ALIAS_MAP::iterator it = m_amap.find( aPart->m_aliases[i]->GetName() );
-
-        if( it != m_amap.end() )
-            return true;
-    }
-
-    return false;
-}
-
-
 LIB_ALIAS* PART_LIB::FindAlias( const wxString& aName )
 {
     LIB_ALIAS_MAP::iterator it = m_amap.find( aName );
@@ -218,20 +201,8 @@ bool PART_LIB::AddAlias( LIB_ALIAS* aAlias )
 }
 
 
-bool PART_LIB::AddPart( LIB_PART* aPart )
+void PART_LIB::AddPart( LIB_PART* aPart )
 {
-    // Conflict detection: See if already existing aliases exist,
-    // and if yes, ask user for continue or abort
-    // Special case: if the library is the library cache of the project,
-    // old aliases are always removed to avoid conflict,
-    //      and user is not prompted )
-    if( Conflicts( aPart ) && !IsCache() )
-    {
-        wxFAIL_MSG( "Cannot add component <" + aPart->GetName() +
-                    "> to library <" + GetName() + "> due to name conflict." );
-        return false;
-    }
-
     // add a clone, not the caller's copy
     LIB_PART* my_part = new LIB_PART( *aPart );
 
@@ -247,8 +218,6 @@ bool PART_LIB::AddPart( LIB_PART* aPart )
 
     isModified = true;
     ++m_mod_hash;
-
-    return true;
 }
 
 

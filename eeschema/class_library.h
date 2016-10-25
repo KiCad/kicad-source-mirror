@@ -428,14 +428,6 @@ public:
     void GetEntryTypePowerNames( wxArrayString& aNames );
 
     /**
-     * Checks \a aPart for name conflict in the library.
-     *
-     * @param aPart - The part to check.
-     * @return True if a conflict exists.  Otherwise false.
-     */
-    bool Conflicts( LIB_PART* aPart );
-
-    /**
      * Find #LIB_ALIAS by \a aName.
      *
      * @param aName - Name of entry, case sensitive.
@@ -470,15 +462,13 @@ public:
 
     /**
      * Add \a aPart entry to library.
-     * Note a part can have an alias list,
-     * so these alias will be added in library.
-     * Conflicts can happen if aliases are already existing.
-     * User is asked to choose what alias is removed (existing, or new)
+     *
+     * @note A #LIB_PART can have an alias list so these alias will be added in library.
+     *       and the any existing duplicate aliases will be removed from the library.
      *
      * @param aPart - Part to add, caller retains ownership, a clone is added.
-     * @return bool - true iff successful.
      */
-    bool AddPart( LIB_PART* aPart );
+    void AddPart( LIB_PART* aPart );
 
     /**
      * Safely remove \a aEntry from the library and return the next entry.

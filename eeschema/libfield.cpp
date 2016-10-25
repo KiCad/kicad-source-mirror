@@ -119,29 +119,47 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
         parent->SetName( newFieldValue );
 
         // Test the library for any conflicts with the any aliases in the current component.
-        if( parent->GetAliasCount() > 1 && lib && lib->Conflicts( parent ) )
+        if( parent->GetAliasCount() > 1 && lib )
         {
-            msg.Printf( _(
-                "The new component contains alias names that conflict with entries in the "
-                "component library '%s'.\n\n"
-                "Do you wish to remove all of the conflicting aliases from this component?" ),
-                GetChars( lib->GetName() )
-                );
+            bool conflicts = false;
+            wxArrayString libAliasNames, symbolAliasNames;
 
-            int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
+            lib->GetAliasNames( libAliasNames );
+            symbolAliasNames = parent->GetAliasNames();
 
-            if( rsp == wxNO )
+            for( size_t i = 0; i < symbolAliasNames.GetCount(); i++ )
             {
-                parent->SetName( fieldText );
-                return;
+                if( libAliasNames.Index( symbolAliasNames[i] ) != wxNOT_FOUND )
+                {
+                    conflicts = true;
+                    break;
+                }
             }
 
-            wxArrayString aliases = parent->GetAliasNames( false );
-
-            for( size_t i = 0;  i < aliases.GetCount();  i++ )
+            if( conflicts )
             {
-                if( lib->FindAlias( aliases[ i ] ) != NULL )
-                    parent->RemoveAlias( aliases[ i ] );
+                msg.Printf( _( "The new component contains alias names that conflict with "
+                               "entries in the component library '%s'.\n\n"
+                               "Do you wish to remove all of the conflicting aliases from "
+                               "this component?" ),
+                            GetChars( lib->GetName() )
+                    );
+
+                int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
+
+                if( rsp == wxNO )
+                {
+                    parent->SetName( fieldText );
+                    return;
+                }
+
+                wxArrayString aliases = parent->GetAliasNames( false );
+
+                for( size_t i = 0;  i < aliases.GetCount();  i++ )
+                {
+                    if( lib->FindAlias( aliases[ i ] ) != NULL )
+                        parent->RemoveAlias( aliases[ i ] );
+                }
             }
         }
 
