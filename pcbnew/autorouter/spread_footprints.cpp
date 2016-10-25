@@ -167,13 +167,15 @@ void moveFootprintsInArea( CRectPlacement& aPlacementArea,
 static bool sortFootprintsbySheetPath( MODULE* ref, MODULE* compare );
 
 /* Function to move components in a rectangular area format 4 / 3,
- * starting from the mouse cursor
- * The components with the FIXED status set are not moved
+ * starting from the mouse cursor.
+ * Footprints are grouped by sheet.
+ * Components with the LOCKED status set are not moved
  */
 void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
                                        bool aMoveFootprintsOutsideBoardOnly,
                                        bool aCheckForBoardEdges,
-                                       wxPoint aSpreadAreaPosition )
+                                       wxPoint aSpreadAreaPosition,
+                                       bool aPrepareUndoCommand )
 {
     EDA_RECT bbox = GetBoard()->ComputeBoundingBox( true );
     bool     edgesExist = bbox.GetWidth() || bbox.GetHeight();
@@ -216,17 +218,23 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
     // sort footprints by sheet path. we group them later by sheet
     sort( footprintList.begin(), footprintList.end(), sortFootprintsbySheetPath );
 
-    // Undo command: init undo list
+    // Undo command: init undo list. If aPrepareUndoCommand == false
+    // no undo command will be initialized.
+    // Useful when a undo command is already initialized by the caller
     PICKED_ITEMS_LIST  undoList;
-    undoList.m_Status = UR_CHANGED;
-    ITEM_PICKER        picker( NULL, UR_CHANGED );
 
-    for( MODULE* footprint : footprintList )
+    if( aPrepareUndoCommand )
     {
-        // Undo: add copy of the footprint to undo list
-        picker.SetItem( footprint );
-        picker.SetLink( footprint->Clone() );
-        undoList.PushItem( picker );
+        undoList.m_Status = UR_CHANGED;
+        ITEM_PICKER        picker( NULL, UR_CHANGED );
+
+        for( MODULE* footprint : footprintList )
+        {
+            // Undo: add copy of the footprint to undo list
+            picker.SetItem( footprint );
+            picker.SetLink( footprint->Clone() );
+            undoList.PushItem( picker );
+        }
     }
 
     // Extract and place footprints by sheet
@@ -348,7 +356,9 @@ void PCB_EDIT_FRAME::SpreadFootprints( std::vector<MODULE*>* aFootprints,
     }   // End pass
 
     // Undo: commit list
-    SaveCopyInUndoList( undoList, UR_CHANGED );
+    if( aPrepareUndoCommand )
+        SaveCopyInUndoList( undoList, UR_CHANGED );
+
     OnModify();
 
     m_canvas->Refresh();

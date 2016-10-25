@@ -1562,11 +1562,15 @@ public:
      *        board edges, if aSpreadAreaPosition is incorrectly chosen.
      * @param aSpreadAreaPosition the position of the upper left corner of the
      *        area used to spread footprints
+     * @param aPrepareUndoCommand = true (defualt) to commit a undo command for the
+     * spread footprints, false to do just the spread command
+     * (no undo specific to this move command)
      */
     void SpreadFootprints( std::vector<MODULE*>* aFootprints,
                            bool                  aMoveFootprintsOutsideBoardOnly,
                            bool                  aCheckForBoardEdges,
-                           wxPoint               aSpreadAreaPosition );
+                           wxPoint               aSpreadAreaPosition,
+                           bool                  aPrepareUndoCommand = true );
 
     /**
      * Function AutoPlaceModule

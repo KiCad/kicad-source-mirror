@@ -71,7 +71,7 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     std::vector<MODULE*> newFootprints;
     // keep trace of the initial baord area, if we want to place new footprints
     // outside the existinag board
-    EDA_RECT bbox = GetBoard()->ComputeBoundingBox( false );
+    EDA_RECT bbox = board->ComputeBoundingBox( false );
 
     netlist.SetIsDryRun( aIsDryRun );
     netlist.SetFindByTimeStamp( aSelectByTimeStamp );

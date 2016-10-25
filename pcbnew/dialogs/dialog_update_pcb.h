@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,6 @@ public:
 private:
 
     virtual void OnMatchChange( wxCommandEvent& event ) override;
-    virtual void OnCancelClick( wxCommandEvent& event ) override;
     virtual void OnUpdateClick( wxCommandEvent& event ) override;
 
 };
