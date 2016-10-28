@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -293,37 +293,37 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     lyrs.Caption( _( "Visibles" ) );
 
     m_auimgr.AddPane( m_mainToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top(). Row( 0 ) );
+                      wxAuiPaneInfo( horiz ).Name( "m_mainToolBar" ).Top(). Row( 0 ) );
 
     m_auimgr.AddPane( m_auxiliaryToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_auxiliaryToolBar" ) ).Top().Row( 1 ) );
+                      wxAuiPaneInfo( horiz ).Name( "m_auxiliaryToolBar" ).Top().Row( 1 ) );
 
     // The main right vertical toolbar
     m_auimgr.AddPane( m_drawToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Layer(1) );
+                      wxAuiPaneInfo( vert ).Name( "m_VToolBar" ).Right().Layer(1) );
 
     // Add the layer manager ( most right side of pcbframe )
-    m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 2 ) );
+    m_auimgr.AddPane( m_Layers, lyrs.Name( "m_LayersManagerToolBar" ).Right().Layer( 2 ) );
     // Layers manager is visible
-    m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( true );
+    m_auimgr.GetPane( "m_LayersManagerToolBar" ).Show( true );
 
     // The left vertical toolbar (fast acces to display options)
     m_auimgr.AddPane( m_optionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ). Left().Layer(1) );
+                      wxAuiPaneInfo( vert ).Name( "m_optionsToolBar" ). Left().Layer(1) );
 
     m_auimgr.AddPane( m_canvas,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+                      wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
     m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
-                      wxAuiPaneInfo().Name( wxT( "DrawFrameGal" ) ).CentrePane().Hide() );
+                      wxAuiPaneInfo().Name( "DrawFrameGal" ).CentrePane().Hide() );
 
     m_auimgr.AddPane( m_messagePanel,
-                      wxAuiPaneInfo( mesg_pane ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
+                      wxAuiPaneInfo( mesg_pane ).Name( "MsgPanel" ).Bottom().Layer(10) );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
     UseGalCanvas( parentFrame->IsGalCanvasActive() );
 
-    if( m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).IsShown() )
+    if( m_auimgr.GetPane( "m_LayersManagerToolBar" ).IsShown() )
     {
         m_Layers->ReFill();
         m_Layers->ReFillRender();
@@ -363,7 +363,7 @@ const wxString FOOTPRINT_EDIT_FRAME::getLibPath()
     {
         const wxString& nickname = GetCurrentLib();
 
-        const FP_LIB_TABLE::ROW* row = Prj().PcbFootprintLibs()->FindRow( nickname );
+        const FP_LIB_TABLE_ROW* row = Prj().PcbFootprintLibs()->FindRow( nickname );
 
         return row->GetFullURI( true );
     }
@@ -413,12 +413,12 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
         catch( const PARSE_ERROR& )
         {
             // unlikely to be a problem, since we produced the pretty string.
-            wxLogError( wxT( "PARSE_ERROR" ) );
+            wxLogError( "PARSE_ERROR" );
         }
         catch( const IO_ERROR& )
         {
             // unlikely to be a problem, since we produced the pretty string.
-            wxLogError( wxT( "IO_ERROR" ) );
+            wxLogError( "IO_ERROR" );
         }
 
         if( module )
@@ -583,7 +583,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent )
         break;
 
     default:
-        wxMessageBox( wxT( "FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar error" ) );
+        wxMessageBox( "FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar error" );
         break;
     }
 
@@ -780,7 +780,7 @@ void FOOTPRINT_EDIT_FRAME::updateTitle()
     if( nickname.size() )
     {
         FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
-        const FP_LIB_TABLE::ROW* row = libtable->FindRow( nickname );
+        const FP_LIB_TABLE_ROW* row = libtable->FindRow( nickname );
 
         if( row )
             path_display = L" \u2014 " + row->GetFullURI( true );
@@ -838,11 +838,11 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
     {
     // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
-        ExportHotkeyConfigToFile( g_Module_Editor_Hokeys_Descr, wxT( "pcbnew" ) );
+        ExportHotkeyConfigToFile( g_Module_Editor_Hokeys_Descr, "pcbnew" );
         break;
 
     case ID_PREFERENCES_HOTKEY_IMPORT_CONFIG:
-        ImportHotkeyConfigFromFile( g_Module_Editor_Hokeys_Descr, wxT( "pcbnew" ) );
+        ImportHotkeyConfigFromFile( g_Module_Editor_Hokeys_Descr, "pcbnew" );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
@@ -918,7 +918,7 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "FOOTPRINT_EDIT_FRAME::ProcessPreferences error" ) );
+        DisplayError( this, "FOOTPRINT_EDIT_FRAME::ProcessPreferences error" );
     }
 }
 

@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2012-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,215 @@ class OUTPUTFORMATTER;
 class MODULE;
 class FP_LIB_TABLE_LEXER;
 class FPID;
+
+
+/**
+ * Class LIB_TABLE_ROW
+ *
+ * holds a record identifying a library accessed by the appropriate #PLUGIN object in the
+ * #FP_LIB_TABLE.
+ */
+class LIB_TABLE_ROW
+{
+public:
+
+    LIB_TABLE_ROW() :
+        properties( 0 )
+    {
+    }
+
+    virtual ~LIB_TABLE_ROW()
+    {
+        delete properties;
+    }
+
+    LIB_TABLE_ROW( const wxString& aNick, const wxString& aURI, const wxString& aOptions,
+                   const wxString& aDescr = wxEmptyString ) :
+        nickName( aNick ),
+        description( aDescr ),
+        properties( 0 )
+    {
+        SetOptions( aOptions ),
+        SetFullURI( aURI );
+    }
+
+    LIB_TABLE_ROW( const LIB_TABLE_ROW& aRow );
+
+    LIB_TABLE_ROW& operator=( const LIB_TABLE_ROW& r );
+
+    bool operator==( const LIB_TABLE_ROW& r ) const;
+
+    bool operator!=( const LIB_TABLE_ROW& r ) const   { return !( *this == r ); }
+
+    //-----<accessors>------------------------------------------------------
+
+    /**
+     * Function GetNickName
+     * returns the short name of this library table row.
+     */
+    const wxString& GetNickName() const         { return nickName; }
+
+    /**
+     * Function SetNickName
+     * changes the logical name of this library, useful for an editor.
+     */
+    void SetNickName( const wxString& aNickName ) { nickName = aNickName; }
+
+    /**
+     * Function GetType
+     * is a pure virtual function that returns the type of LIB represented by this row.
+     */
+    virtual const wxString GetType() const = 0;
+
+    /**
+     * Function SetType
+     *
+     * is a pure virtual function changes the type represented by this row that must
+     * be implemented in the derived object to provide the library table row type.
+     */
+    virtual void SetType( const wxString& aType ) = 0;
+
+    /**
+     * Function GetFullURI
+     * returns the full location specifying URI for the LIB, either in original
+     * UI form or in environment variable expanded form.
+     *
+     * @param aSubstituted Tells if caller wanted the substituted form, else not.
+     */
+    const wxString GetFullURI( bool aSubstituted = false ) const;
+
+    /**
+     * Function SetFullURI
+     * changes the full URI for the library.
+     */
+    void SetFullURI( const wxString& aFullURI );
+
+    /**
+     * Function GetOptions
+     * returns the options string, which may hold a password or anything else needed to
+     * instantiate the underlying LIB_SOURCE.
+     */
+    const wxString& GetOptions() const          { return options; }
+
+    /**
+     * Function SetOptions
+     */
+    void SetOptions( const wxString& aOptions );
+
+    /**
+     * Function GetDescr
+     * returns the description of the library referenced by this row.
+     */
+    const wxString& GetDescr() const            { return description; }
+
+    /**
+     * Function SetDescr
+     * changes the description of the library referenced by this row.
+     */
+    void SetDescr( const wxString& aDescr )     { description = aDescr; }
+
+    /**
+     * Function GetProperties
+     * returns the constant PROPERTIES for this library (LIB_TABLE_ROW).  These are
+     * the "options" in a table.
+     */
+    const PROPERTIES* GetProperties() const     { return properties; }
+
+    //-----</accessors>-----------------------------------------------------
+
+    /**
+     * Function Format
+     *
+     * serializes this object as utf8 text to an OUTPUTFORMATTER, and tries to
+     * make it look good using multiple lines and indentation.
+     *
+     * @param out is an #OUTPUTFORMATTER
+     * @param nestLevel is the indentation level to base all lines of the output.
+     *   Actual indentation will be 2 spaces for each nestLevel.
+     */
+    void Format( OUTPUTFORMATTER* out, int nestLevel ) const
+        throw( IO_ERROR, boost::interprocess::lock_exception );
+
+private:
+
+    /**
+     * Function setProperties
+     *
+     * sets this LIB_TABLE_ROW's PROPERTIES by taking ownership of @a aProperties.
+     *
+     * @param aProperties ownership is given over to this LIB_TABLE_ROW.
+     */
+    void setProperties( const PROPERTIES* aProperties )
+    {
+        delete properties;
+        properties = aProperties;
+    }
+
+    wxString          nickName;
+    wxString          uri_user;           ///< what user entered from UI or loaded from disk
+
+#if !FP_LATE_ENVVAR
+    wxString          uri_expanded;       ///< from ExpandSubstitutions()
+#endif
+
+    wxString          options;
+    wxString          description;
+
+    const PROPERTIES* properties;
+};
+
+
+class FP_LIB_TABLE_ROW : public LIB_TABLE_ROW
+{
+    friend class FP_LIB_TABLE;
+    friend class DIALOG_FP_LIB_TABLE;
+
+public:
+    typedef IO_MGR::PCB_FILE_T LIB_T;
+
+    FP_LIB_TABLE_ROW( const wxString& aNick, const wxString& aURI, const wxString& aType,
+                      const wxString& aOptions, const wxString& aDescr = wxEmptyString ) :
+        LIB_TABLE_ROW( aNick, aURI, aOptions, aDescr )
+    {
+        SetType( aType );
+    }
+
+    FP_LIB_TABLE_ROW() :
+        type( IO_MGR::KICAD )
+    {
+    }
+
+    FP_LIB_TABLE_ROW( const FP_LIB_TABLE_ROW& aRow );
+
+    FP_LIB_TABLE_ROW& operator=( const FP_LIB_TABLE_ROW& aRow );
+
+    /// Used in DIALOG_FP_LIB_TABLE for detecting an edit.
+    bool operator==( const FP_LIB_TABLE_ROW& aRow ) const;
+
+    bool operator!=( const FP_LIB_TABLE_ROW& aRow ) const   { return !( *this == aRow ); }
+
+    /**
+     * Function GetType
+     * returns the type of LIB represented by this row.
+     */
+    const wxString GetType() const override         { return IO_MGR::ShowType( type ); }
+
+    /**
+     * Function SetType
+     * changes the type represented by this row.
+     */
+    void SetType( const wxString& aType ) override;
+
+private:
+    void setPlugin( PLUGIN* aPlugin )
+    {
+        plugin.set( aPlugin );
+    }
+
+    PLUGIN::RELEASER  plugin;
+    LIB_T             type;
+};
+
 
 /**
  * Class FP_LIB_TABLE
@@ -85,178 +294,10 @@ class FPID;
  */
 class FP_LIB_TABLE : public PROJECT::_ELEM
 {
+    friend class FP_LIB_TABLE_ROW;
     friend class DIALOG_FP_LIB_TABLE;
 
 public:
-
-    /**
-     * Class ROW
-     * holds a record identifying a footprint library accessed by the appropriate #PLUGIN
-     * object in the #FP_LIB_TABLE.
-     */
-    class ROW
-    {
-        friend class FP_LIB_TABLE;
-        friend class DIALOG_FP_LIB_TABLE;
-
-    public:
-
-        typedef IO_MGR::PCB_FILE_T   LIB_T;
-
-        ROW() :
-            type( IO_MGR::KICAD ),
-            properties( 0 )
-        {
-        }
-
-        ROW( const wxString& aNick, const wxString& aURI, const wxString& aType,
-             const wxString& aOptions, const wxString& aDescr = wxEmptyString ) :
-            nickName( aNick ),
-            description( aDescr ),
-            properties( 0 )
-        {
-            SetOptions( aOptions ),
-            SetFullURI( aURI );
-            SetType( aType );
-        }
-
-        ROW( const ROW& a );
-
-        ~ROW()
-        {
-            delete properties;
-        }
-
-        ROW& operator=( const ROW& r );
-
-        /// Used in DIALOG_FP_LIB_TABLE for detecting an edit.
-        bool operator==( const ROW& r ) const;
-
-        bool operator!=( const ROW& r ) const   { return !( *this == r ); }
-
-        //-----<accessors>------------------------------------------------------
-
-        /**
-         * Function GetNickName
-         * returns the short name of this library table row.
-         */
-        const wxString& GetNickName() const         { return nickName; }
-
-        /**
-         * Function SetNickName
-         * changes the logical name of this library, useful for an editor.
-         */
-        void SetNickName( const wxString& aNickName ) { nickName = aNickName; }
-
-        /**
-         * Function GetType
-         * returns the type of LIB represented by this row.
-         */
-        const wxString GetType() const              { return IO_MGR::ShowType( type ); }
-
-        /**
-         * Function SetType
-         * changes the type represented by this row.
-         */
-        void SetType( const wxString& aType );
-
-        /**
-         * Function GetFullURI
-         * returns the full location specifying URI for the LIB, either in original
-         * UI form or in environment variable expanded form.
-         *
-         * @param aSubstituted Tells if caller wanted the substituted form, else not.
-         */
-        const wxString GetFullURI( bool aSubstituted = false ) const;
-
-        /**
-         * Function SetFullURI
-         * changes the full URI for the library.
-         */
-        void SetFullURI( const wxString& aFullURI );
-
-        /**
-         * Function GetOptions
-         * returns the options string, which may hold a password or anything else needed to
-         * instantiate the underlying LIB_SOURCE.
-         */
-        const wxString& GetOptions() const          { return options; }
-
-        /**
-         * Function SetOptions
-         */
-        void SetOptions( const wxString& aOptions )
-        {
-            options = aOptions;
-
-            // set PROPERTIES* from options
-            setProperties( ParseOptions( TO_UTF8( aOptions ) ) );
-        }
-
-        /**
-         * Function GetDescr
-         * returns the description of the library referenced by this row.
-         */
-        const wxString& GetDescr() const            { return description; }
-
-        /**
-         * Function SetDescr
-         * changes the description of the library referenced by this row.
-         */
-        void SetDescr( const wxString& aDescr )     { description = aDescr; }
-
-        /**
-         * Function GetProperties
-         * returns the constant PROPERTIES for this library (ROW).  These are
-         * the "options" in a table.
-         */
-        const PROPERTIES* GetProperties() const     { return properties; }
-
-        //-----</accessors>-----------------------------------------------------
-
-        /**
-         * Function Format
-         * serializes this object as utf8 text to an OUTPUTFORMATTER, and tries to
-         * make it look good using multiple lines and indentation.
-         * @param out is an #OUTPUTFORMATTER
-         * @param nestLevel is the indentation level to base all lines of the output.
-         *   Actual indentation will be 2 spaces for each nestLevel.
-         */
-        void Format( OUTPUTFORMATTER* out, int nestLevel ) const
-            throw( IO_ERROR, boost::interprocess::lock_exception );
-
-    private:
-
-        /**
-         * Function setProperties
-         * sets this ROW's PROPERTIES by taking ownership of @a aProperties.
-         * @param aProperties ownership is given over to this ROW.
-         */
-        void setProperties( const PROPERTIES* aProperties )
-        {
-            delete properties;
-            properties = aProperties;
-        }
-
-        void setPlugin( PLUGIN* aPlugin )
-        {
-            plugin.set( aPlugin );
-        }
-
-        wxString        nickName;
-        wxString        uri_user;           ///< what user entered from UI or loaded from disk
-
-#if !FP_LATE_ENVVAR
-        wxString        uri_expanded;       ///< from ExpandSubstitutions()
-#endif
-
-        LIB_T           type;
-        wxString        options;
-        wxString        description;
-
-        const PROPERTIES*   properties;
-        PLUGIN::RELEASER    plugin;
-    };
 
     /**
      * Constructor FP_LIB_TABLE
@@ -297,7 +338,7 @@ public:
 
     int     GetCount()                              { return rows.size(); }
 
-    ROW&    At( int aIndex )                        { return rows[aIndex]; }
+    LIB_TABLE_ROW&    At( int aIndex )                        { return rows[aIndex]; }
 
     /**
      * Function Parse
@@ -329,7 +370,7 @@ public:
      * which is returned.  If the options field is empty, then the returned PROPERTIES
      * will be a NULL pointer.
      * <p>
-     * Typically aOptionsList comes from the "options" field within a ROW and
+     * Typically aOptionsList comes from the "options" field within a LIB_TABLE_ROW and
      * the format is simply a comma separated list of name value pairs. e.g.:
      * [name1[=value1][|name2[=value2]]] etc.  When using the UI to create or edit
      * a fp lib table, this formatting is handled for you.
@@ -375,7 +416,7 @@ public:
      * @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name"
-     *     in FP_LIB_TABLE::ROW
+     *     in FP_LIB_TABLE::LIB_TABLE_ROW
      *
      * @return wxArrayString - is the array of available footprint names inside
      *   a library
@@ -389,7 +430,7 @@ public:
      * loads a footprint having @a aFootprintName from the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name"
-     *     in FP_LIB_TABLE::ROW
+     *     in FP_LIB_TABLE::LIB_TABLE_ROW
      *
      * @param aFootprintName is the name of the footprint to load.
      *
@@ -416,7 +457,7 @@ public:
      * If a footprint by the same name already exists, it is replaced.
      *
      * @param aNickname is a locator for the "library", it is a "name"
-     *     in FP_LIB_TABLE::ROW
+     *     in FP_LIB_TABLE::LIB_TABLE_ROW
      *
      * @param aFootprint is what to store in the library. The caller continues
      *    to own the footprint after this call.
@@ -435,7 +476,7 @@ public:
      * deletes the @a aFootprintName from the library given by @a aNickname.
      *
      * @param aNickname is a locator for the "library", it is a "name"
-     *     in FP_LIB_TABLE::ROW
+     *     in FP_LIB_TABLE::LIB_TABLE_ROW
      *
      * @param aFootprintName is the name of a footprint to delete from the specified library.
      *
@@ -490,24 +531,24 @@ public:
      *  exists.  If false, then fail if the key already exists.
      * @return bool - true if the operation succeeded.
      */
-    bool InsertRow( const ROW& aRow, bool doReplace = false );
+    bool InsertRow( const FP_LIB_TABLE_ROW& aRow, bool doReplace = false );
 
     /**
      * Function FindRow
-     * returns a ROW if aNickName is found in this table or in any chained
+     * returns a LIB_TABLE_ROW if aNickName is found in this table or in any chained
      * fallBack table fragment.  The PLUGIN is loaded and attached
-     * to the "plugin" field of the ROW if not already loaded.
+     * to the "plugin" field of the LIB_TABLE_ROW if not already loaded.
      *
      * @throw IO_ERROR if aNickName cannot be found.
      */
-    const ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
+    const FP_LIB_TABLE_ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
 
     /**
      * Function FindRowByURI
-     * returns a #FP_LIB_TABLE::ROW if aURE is found in this table or in any chained
+     * returns a #FP_LIB_TABLE::LIB_TABLE_ROW if aURE is found in this table or in any chained
      * fallBack table fragments, else NULL.
      */
-    const ROW* FindRowByURI( const wxString& aURI );
+    const FP_LIB_TABLE_ROW* FindRowByURI( const wxString& aURI );
 
     /**
      * Function IsEmpty
@@ -520,7 +561,7 @@ public:
     /**
      * Function ExpandSubstitutions
      * replaces any environment variable references with their values and is
-     * here to fully embellish the ROW::uri in a platform independent way.
+     * here to fully embellish the LIB_TABLE_ROW::uri in a platform independent way.
      * This enables (fp_lib_table)s to have platform dependent environment
      * variables in them, allowing for a uniform table across platforms.
      */
@@ -590,17 +631,17 @@ protected:
 
     /**
      * Function findRow
-     * returns a ROW if aNickname is found in this table or in any chained
+     * returns a LIB_TABLE_ROW if aNickname is found in this table or in any chained
      * fallBack table fragment, else NULL.
      */
-    ROW* findRow( const wxString& aNickname ) const;
+    LIB_TABLE_ROW* findRow( const wxString& aNickname ) const;
 
     void reindex()
     {
         nickIndex.clear();
 
-        for( ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
-            nickIndex.insert( INDEX_VALUE( it->nickName, it - rows.begin() ) );
+        for( FP_LIB_TABLE_ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
+            nickIndex.insert( INDEX_VALUE( it->GetNickName(), it - rows.begin() ) );
     }
 
     void ensureIndex()
@@ -612,13 +653,13 @@ protected:
             reindex();
     }
 
-    typedef std::vector<ROW>            ROWS;
-    typedef ROWS::iterator              ROWS_ITER;
-    typedef ROWS::const_iterator        ROWS_CITER;
+    typedef std::vector<FP_LIB_TABLE_ROW>     FP_LIB_TABLE_ROWS;
+    typedef FP_LIB_TABLE_ROWS::iterator       FP_LIB_TABLE_ROWS_ITER;
+    typedef FP_LIB_TABLE_ROWS::const_iterator FP_LIB_TABLE_ROWS_CITER;
 
-    ROWS            rows;
+    FP_LIB_TABLE_ROWS            rows;
 
-    /// this is a non-owning index into the ROWS table
+    /// this is a non-owning index into the LIB_TABLE_ROWS table
     typedef std::map<wxString,int>      INDEX;              // "int" is std::vector array index
     typedef INDEX::iterator             INDEX_ITER;
     typedef INDEX::const_iterator       INDEX_CITER;

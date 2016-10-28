@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 CERN
- * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,7 +88,7 @@ public:
     {
         if( unsigned( aRow ) < rows.size() )
         {
-            const ROW&  r  = rows[aRow];
+            const FP_LIB_TABLE_ROW&  r  = rows[aRow];
 
             switch( aCol )
             {
@@ -109,7 +109,7 @@ public:
     {
         if( unsigned( aRow ) < rows.size() )
         {
-            ROW&  r  = rows[aRow];
+            FP_LIB_TABLE_ROW&  r  = rows[aRow];
 
             switch( aCol )
             {
@@ -131,7 +131,7 @@ public:
     {
         if( aPos < rows.size() )
         {
-            rows.insert( rows.begin() + aPos, aNumRows, ROW() );
+            rows.insert( rows.begin() + aPos, aNumRows, FP_LIB_TABLE_ROW() );
 
             // use the (wxGridStringTable) source Luke.
             if( GetView() )
@@ -153,7 +153,7 @@ public:
     {
         // do not modify aNumRows, original value needed for wxGridTableMessage below
         for( int i = aNumRows; i; --i )
-            rows.push_back( ROW() );
+            rows.push_back( FP_LIB_TABLE_ROW() );
 
         if( GetView() )
         {
@@ -173,7 +173,7 @@ public:
         // aPos+aNumRows may wrap here, so both ends of the range are tested.
         if( aPos < rows.size() && aPos + aNumRows <= rows.size() )
         {
-            ROWS_ITER start = rows.begin() + aPos;
+            FP_LIB_TABLE_ROWS_ITER start = rows.begin() + aPos;
             rows.erase( start, start + aNumRows );
 
             if( GetView() )
@@ -232,14 +232,14 @@ protected:
     {
         FP_TBL_MODEL*       tbl = (FP_TBL_MODEL*) m_grid->GetTable();
 
-        size_t  ndx = cb_text.find( wxT( "(fp_lib_table" ) );
+        size_t  ndx = cb_text.find( "(fp_lib_table" );
 
         if( ndx != std::string::npos )
         {
-            // paste the ROWs of s-expression (fp_lib_table), starting
+            // paste the FP_LIB_TABLE_ROWs of s-expression (fp_lib_table), starting
             // at column 0 regardless of current cursor column.
 
-            STRING_LINE_READER  slr( TO_UTF8( cb_text ), wxT( "Clipboard" ) );
+            STRING_LINE_READER  slr( TO_UTF8( cb_text ), "Clipboard" );
             FP_LIB_TABLE_LEXER  lexer( &slr );
             FP_LIB_TABLE        tmp_tbl;
             bool                parsed = true;
@@ -386,7 +386,7 @@ public:
 
 
 private:
-    typedef FP_LIB_TABLE::ROW   ROW;
+    typedef FP_LIB_TABLE_ROW   ROW;
 
     /// If the cursor is not on a valid cell, because there are no rows at all, return -1,
     /// else return a 0 based column index.
@@ -430,7 +430,7 @@ private:
                 {
                     wxString msg = wxString::Format(
                         _( "Illegal character '%s' found in Nickname: '%s' in row %d" ),
-                        wxT( ":" ), GetChars( nick ), r );
+                        ":", GetChars( nick ), r );
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( &model != cur_model() )
@@ -710,7 +710,7 @@ private:
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable()
     {
-        wxRegEx re( wxT( ".*?\\$\\{(.+?)\\}.*?" ), wxRE_ADVANCED );
+        wxRegEx re( ".*?\\$\\{(.+?)\\}.*?", wxRE_ADVANCED );
         wxASSERT( re.IsValid() );   // wxRE_ADVANCED is required.
 
         std::set< wxString >        unique;
@@ -875,10 +875,10 @@ int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_
             if( it->GetStatus() == WIZARD_FPLIB_TABLE::LIBRARY::INVALID )
                 continue;
 
-            FP_LIB_TABLE::ROW row( it->GetDescription(),
-                                it->GetAutoPath( scope ),
-                                it->GetPluginName(),
-                                wxEmptyString );     // options
+            FP_LIB_TABLE_ROW row( it->GetDescription(),
+                                  it->GetAutoPath( scope ),
+                                  it->GetPluginName(),
+                                  wxEmptyString );     // options
             fp_tbl->InsertRow( row );
         }
     }
