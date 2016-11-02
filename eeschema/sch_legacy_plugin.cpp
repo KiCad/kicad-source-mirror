@@ -99,7 +99,8 @@ static bool is_eol( char c )
 static bool strCompare( const char* aString, const char* aLine, const char** aOutput = NULL )
 {
     size_t len = strlen( aString );
-    bool retv = ( strncasecmp( aLine, aString, len ) == 0 ) && isspace( aLine[ len ] );
+    bool retv = ( strncasecmp( aLine, aString, len ) == 0 ) &&
+                ( isspace( aLine[ len ] ) || aLine[ len ] == 0 );
 
     if( retv && aOutput )
     {
@@ -1164,8 +1165,9 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
             SCH_PARSE_ERROR( _( "expected 'Italics' or '~'" ), aReader, line );
 
         // The thickness token does not exist in older versions of the schematic file format
-        // so calling parseInt will not work here.
-        thickness = parseInt( aReader, line, &line );
+        // so calling parseInt will be made only if the EOL is not reached.
+        if( *line >= ' ' )
+            thickness = parseInt( aReader, line, &line );
     }
 
     text->SetBold( thickness != 0 );
