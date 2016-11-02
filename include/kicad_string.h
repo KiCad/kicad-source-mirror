@@ -30,6 +30,8 @@
 #ifndef KICAD_STRING_H_
 #define KICAD_STRING_H_
 
+#include "config.h"
+
 #include <wx/string.h>
 #include <wx/filename.h>
 
