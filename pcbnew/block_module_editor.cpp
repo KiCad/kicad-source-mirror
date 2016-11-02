@@ -616,7 +616,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset, bool force_all )
         tmpz.x = -tmpz.x;
         pad->SetDelta( tmpz );
 
-        pad->SetOrientation( 1800 - pad->GetOrientation() );
+        pad->SetOrientation( - pad->GetOrientation() );
     }
 
     for( EDA_ITEM* item = module->GraphicalItems();  item;  item = item->Next() )
