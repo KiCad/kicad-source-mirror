@@ -31,6 +31,7 @@
 #include <tool/tool_interactive.h>
 #include <wxPcbStruct.h>
 #include <class_board.h>
+#include <view/view_group.h>
 
 /**
  * Class PCB_TOOL

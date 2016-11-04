@@ -28,16 +28,10 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool.h>
-#include <view/view_group.h>
 
 class BOARD_COMMIT;
 class BOARD_ITEM;
 class SELECTION_TOOL;
-
-namespace KIGFX
-{
-class VIEW_GROUP;
-}
 
 /**
  * Class EDIT_TOOL
@@ -164,10 +158,10 @@ private:
     {
         const SELECTION& selection = m_selectionTool->GetSelection();
 
-        if( selection.items.GetCount() != 1 )
-            return NULL;
+        if( selection.Size() != 1 )
+        return nullptr;
 
-        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
+        auto item = selection[0];
         return dyn_cast<T*>( item );
     }
 

@@ -370,9 +370,9 @@ int MODULE_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
         // Create a temporary module that contains selected items to ease serialization
         MODULE module( m_board );
 
-        for( int i = 0; i < selection.Size(); ++i )
+        for ( auto item : selection )
         {
-            BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( selection.Item<BOARD_ITEM>( i )->Clone() );
+            auto clone = static_cast<BOARD_ITEM *> ( item->Clone() );
 
             // Do not add reference/value - convert them to the common type
             if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
@@ -426,7 +426,7 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     pastedModule->SetParent( m_board );
     pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-    pastedModule->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, 
+    pastedModule->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add,
                                                 std::ref( preview ),  _1 ) );
     preview.Add( pastedModule );
     m_view->Add( &preview );

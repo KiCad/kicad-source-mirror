@@ -49,35 +49,48 @@ VIEW_GROUP::VIEW_GROUP( VIEW* aView ) :
 
 VIEW_GROUP::~VIEW_GROUP()
 {
+
 }
 
 
 void VIEW_GROUP::Add( VIEW_ITEM* aItem )
 {
-    m_items.insert( aItem );
+    m_groupItems.push_back( aItem );
     ViewUpdate();
 }
 
 
 void VIEW_GROUP::Remove( VIEW_ITEM* aItem )
 {
-    m_items.erase( aItem );
+    for ( auto iter = m_groupItems.begin(); iter != m_groupItems.end(); ++iter)
+    {
+        if ( aItem == *iter )
+        {
+            m_groupItems.erase( iter);
+            break;
+        }
+    }
+
     ViewUpdate();
 }
 
 
 void VIEW_GROUP::Clear()
 {
-    m_items.clear();
+    m_groupItems.clear();
     ViewUpdate();
 }
 
 
 unsigned int VIEW_GROUP::GetSize() const
 {
-    return m_items.size();
+    return m_groupItems.size();
 }
 
+VIEW_ITEM *VIEW_GROUP::GetItem(unsigned int idx) const
+{
+    return m_groupItems[idx];
+}
 
 const BOX2I VIEW_GROUP::ViewBBox() const
 {
@@ -92,8 +105,10 @@ void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal ) const
 {
     PAINTER* painter = m_view->GetPainter();
 
+    const auto drawList = updateDrawList();
+
     // Draw all items immediately (without caching)
-    for( VIEW_ITEM* item : m_items )
+    for ( auto item : drawList )
     {
         aGal->PushDepth();
 
@@ -127,31 +142,32 @@ void VIEW_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
 
 void VIEW_GROUP::FreeItems()
 {
-    for( VIEW_ITEM* item : m_items )
+    for (unsigned int i = 0 ; i < GetSize(); i++)
     {
+        VIEW_ITEM *item = GetItem(i);
         delete item;
     }
 
     Clear();
 }
 
-
-void VIEW_GROUP::ItemsSetVisibility( bool aVisible )
+const VIEW_GROUP::ITEMS VIEW_GROUP::updateDrawList() const
 {
-    std::set<VIEW_ITEM*>::const_iterator it, it_end;
+    return m_groupItems;
+}
 
-    for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
-        (*it)->ViewSetVisible( aVisible );
+/*void VIEW_GROUP::ItemsSetVisibility( bool aVisible )
+{
+    for (unsigned int i = 0 ; i < GetSize(); i++)
+        GetItem(i)->ViewSetVisible( aVisible );
 }
 
 
 void VIEW_GROUP::ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags )
 {
-    std::set<VIEW_ITEM*>::const_iterator it, it_end;
-
-    for( it = m_items.begin(), it_end = m_items.end(); it != it_end; ++it )
-        (*it)->ViewUpdate( aFlags );
-}
+    for (unsigned int i = 0 ; i < GetSize(); i++)
+        GetItem(i)->ViewUpdate( aFlags );
+}*/
 
 
 void VIEW_GROUP::updateBbox()

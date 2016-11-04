@@ -672,15 +672,11 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
     }
 }
 
-
 void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate )
 {
-    std::set<VIEW_ITEM*>::const_iterator it;
-
-    for( it = aGroup->Begin(); it != aGroup->End(); ++it )
-        draw( *it, aImmediate );
+    for ( int i = 0; i < aGroup->GetSize(); i++)
+        draw( aGroup->GetItem(i), aImmediate );
 }
-
 
 struct VIEW::unlinkItem
 {

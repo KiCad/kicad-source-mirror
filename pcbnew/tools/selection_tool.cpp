@@ -80,7 +80,6 @@ SELECTION_TOOL::SELECTION_TOOL() :
 
 SELECTION_TOOL::~SELECTION_TOOL()
 {
-    delete m_selection.group;
     delete m_contextMenu;
     delete m_selectMenu;
     delete m_zoomMenu;
@@ -90,8 +89,6 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 bool SELECTION_TOOL::Init()
 {
-    m_selection.group = new KIGFX::VIEW_GROUP;
-
     m_selectMenu = new SELECT_MENU;
     m_selectMenu->SetTool( this );
 
@@ -129,7 +126,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         // Remove pointers to the selected items from containers
         // without changing their properties (as they are already deleted
         // while a new board is loaded)
-        m_selection.clear();
+        m_selection.Clear();
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
     }
     else
@@ -137,8 +134,8 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         clearSelection();
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
-    getView()->Remove( m_selection.group );
-    getView()->Add( m_selection.group );
+    getView()->Remove( &m_selection );
+    getView()->Add( &m_selection );
 }
 
 
@@ -301,24 +298,19 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-const SELECTION& SELECTION_TOOL::GetSelection()
+SELECTION& SELECTION_TOOL::GetSelection()
 {
     // The selected items list has been requested, so it is no longer preliminary
     m_preliminary = false;
 
-    // Filter out not modifiable items
-    for( int i = 0; i < m_selection.Size(); )
-    {
-        BOARD_ITEM* item = m_selection.Item<BOARD_ITEM>( i );
+    auto items = m_selection.GetItems();
 
+    // Filter out not modifiable items
+    for ( auto item : items )
+    {
         if( !modifiable( item ) )
         {
-            m_selection.items.RemovePicker( i );
-            m_selection.group->Remove( item );
-        }
-        else
-        {
-            ++i;
+            m_selection.Remove( item );
         }
     }
 
@@ -360,7 +352,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag )
     GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
     GENERAL_COLLECTOR collector;
 
-    collector.Collect( getModel<BOARD>(),
+    collector.Collect( board(),
         m_editModules ? GENERAL_COLLECTOR::ModuleItems : GENERAL_COLLECTOR::AllBoardItems,
         wxPoint( aWhere.x, aWhere.y ), guide );
 
@@ -485,7 +477,7 @@ bool SELECTION_TOOL::selectMultiple()
             }
 
             if( m_selection.Size() == 1 )
-                m_frame->SetCurItem( m_selection.Item<BOARD_ITEM>( 0 ) );
+                m_frame->SetCurItem( m_selection.Front() );
             else
                 m_frame->SetCurItem( NULL );
 
@@ -530,10 +522,8 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
     bool containsLocked = false;
 
     // Check if the selection contains locked items
-    for( int i = 0; i < m_selection.Size(); ++i )
+    for ( const auto& item : m_selection )
     {
-        BOARD_ITEM* item = m_selection.Item<BOARD_ITEM>( i );
-
         switch( item->Type() )
         {
         case PCB_MODULE_T:
@@ -624,14 +614,14 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
     if( !selectCursor( true ) )
         return 0;
 
-    BOARD_CONNECTED_ITEM* item = m_selection.Item<BOARD_CONNECTED_ITEM>( 0 );
+    auto item = m_selection.Front();
     clearSelection();
 
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T )
         return 0;
 
     int segmentCount;
-    TRACK* trackList = getModel<BOARD>()->MarkTrace( static_cast<TRACK*>( item ), &segmentCount,
+    TRACK* trackList = board()->MarkTrace( static_cast<TRACK*>( item ), &segmentCount,
                                                      NULL, NULL, true );
 
     if( segmentCount == 0 )
@@ -655,7 +645,7 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
     if( !selectCursor( true ) )
         return 0;
 
-    BOARD_CONNECTED_ITEM* item = m_selection.Item<BOARD_CONNECTED_ITEM>( 0 );
+    auto item = static_cast<BOARD_CONNECTED_ITEM*> ( m_selection.Front() );
     clearSelection();
 
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T )
@@ -682,7 +672,10 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
     if( !selectCursor( true ) )
         return 0;
 
-    BOARD_CONNECTED_ITEM* item = m_selection.Item<BOARD_CONNECTED_ITEM>( 0 );
+    auto item = dynamic_cast<BOARD_CONNECTED_ITEM*> ( m_selection.Front() );
+
+    if( !item )
+        return 0;
 
     std::list<BOARD_CONNECTED_ITEM*> itemsList;
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
@@ -752,19 +745,10 @@ void SELECTION_TOOL::clearSelection()
     if( m_selection.Empty() )
         return;
 
-    KIGFX::VIEW_GROUP::const_iter it, it_end;
+    for ( auto item : m_selection )
+        unselectVisually( item );
 
-    // Restore the initial properties
-    for( it = m_selection.group->Begin(), it_end = m_selection.group->End(); it != it_end; ++it )
-    {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
-
-        item->ViewHide( false );
-        item->ClearSelected();
-        item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY ) ;
-    }
-
-    m_selection.clear();
+    m_selection.Clear();
 
     m_frame->SetCurItem( NULL );
     m_locked = true;
@@ -904,8 +888,6 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
             return false;
     }
 
-    BOARD* board = getModel<BOARD>();
-
     switch( aItem->Type() )
     {
     case PCB_VIA_T:
@@ -915,15 +897,15 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
             static_cast<const VIA*>( aItem )->LayerPair( &top, &bottom );
 
-            return board->IsLayerVisible( top ) || board->IsLayerVisible( bottom );
+            return board()->IsLayerVisible( top ) || board()->IsLayerVisible( bottom );
         }
         break;
 
     case PCB_MODULE_T:
-        if( aItem->IsOnLayer( F_Cu ) && board->IsElementVisible( MOD_FR_VISIBLE ) )
+        if( aItem->IsOnLayer( F_Cu ) && board()->IsElementVisible( MOD_FR_VISIBLE ) )
             return !m_editModules;
 
-        if( aItem->IsOnLayer( B_Cu ) && board->IsElementVisible( MOD_BK_VISIBLE ) )
+        if( aItem->IsOnLayer( B_Cu ) && board()->IsElementVisible( MOD_BK_VISIBLE ) )
             return !m_editModules;
 
         return false;
@@ -934,7 +916,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         if( m_multiple && !m_editModules )
             return false;
 
-        return aItem->ViewIsVisible() && board->IsLayerVisible( aItem->GetLayer() );
+        return aItem->ViewIsVisible() && board()->IsLayerVisible( aItem->GetLayer() );
 
     case PCB_MODULE_EDGE_T:
     case PCB_PAD_T:
@@ -959,7 +941,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     }
 
     // All other items are selected only if the layer on which they exist is visible
-    return board->IsLayerVisible( aItem->GetLayer() );
+    return board()->IsLayerVisible( aItem->GetLayer() );
 }
 
 
@@ -975,27 +957,20 @@ bool SELECTION_TOOL::modifiable( const BOARD_ITEM* aItem ) const
 void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 {
     if( aItem->IsSelected() )
-        return;
-
-    // Modules are treated in a special way - when they are selected, we have to mark
-    // all the parts that make the module as selected
-    if( aItem->Type() == PCB_MODULE_T )
     {
-        MODULE* module = static_cast<MODULE*>( aItem );
-        module->RunOnChildren( std::bind( &SELECTION_TOOL::selectVisually, this, _1 ) );
+        return;
     }
 
     if( aItem->Type() == PCB_PAD_T )
     {
         MODULE* module = static_cast<MODULE*>( aItem->GetParent() );
 
-        if( m_selection.items.FindItem( module ) >= 0 )
+        if( m_selection.Contains( module ) )
             return;
     }
 
     selectVisually( aItem );
-    ITEM_PICKER picker( aItem );
-    m_selection.items.PushItem( picker );
+    m_selection.Add ( aItem );
 
     if( m_selection.Size() == 1 )
     {
@@ -1015,19 +990,8 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
     if( !aItem->IsSelected() )
         return;
 
-    // Modules are treated in a special way - when they are selected, we have to
-    // unselect all the parts that make the module, not the module itself
-    if( aItem->Type() == PCB_MODULE_T )
-    {
-        MODULE* module = static_cast<MODULE*>( aItem );
-        module->RunOnChildren( std::bind( &SELECTION_TOOL::unselectVisually, this, _1 ) );
-    }
-
     unselectVisually( aItem );
-
-    int itemIdx = m_selection.items.FindItem( aItem );
-    if( itemIdx >= 0 )
-        m_selection.items.RemovePicker( itemIdx );
+    m_selection.Remove( aItem );
 
     if( m_selection.Empty() )
     {
@@ -1039,22 +1003,41 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 
 void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
 {
-    m_selection.group->Add( aItem );
-
     // Hide the original item, so it is shown only on overlay
     aItem->ViewHide( true );
     aItem->SetSelected();
+
+    // Modules are treated in a special way - when they are selected, we have to
+    // unselect all the parts that make the module, not the module itself
+
+    if( aItem->Type() == PCB_MODULE_T )
+    {
+        static_cast<MODULE*>( aItem )->RunOnChildren( [] ( BOARD_ITEM *item ) {
+            item->ViewHide( true );
+            item->SetSelected();
+        });
+    }
 }
 
 
 void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem ) const
 {
-    m_selection.group->Remove( aItem );
-
     // Restore original item visibility
     aItem->ViewHide( false );
     aItem->ClearSelected();
     aItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+
+    // Modules are treated in a special way - when they are selected, we have to
+    // unselect all the parts that make the module, not the module itself
+
+    if( aItem->Type() == PCB_MODULE_T )
+        {
+            static_cast<MODULE*>( aItem )->RunOnChildren( [] ( BOARD_ITEM *item ) {
+                item->ViewHide( false );
+                item->ClearSelected();
+                item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            });
+        }
 }
 
 
@@ -1064,9 +1047,8 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     VECTOR2D margin = getView()->ToWorld( VECTOR2D( GRIP_MARGIN, GRIP_MARGIN ), false );
 
     // Check if the point is located within any of the currently selected items bounding boxes
-    for( unsigned int i = 0; i < m_selection.items.GetCount(); ++i )
+    for( auto item : m_selection )
     {
-        BOARD_ITEM* item = m_selection.Item<BOARD_ITEM>( i );
         BOX2I itemBox = item->ViewBBox();
         itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item
 
@@ -1382,10 +1364,8 @@ bool SELECTION_TOOL::SanitizeSelection()
 
     if( !m_editModules )
     {
-        for( unsigned int i = 0; i < m_selection.items.GetCount(); ++i )
+        for( auto item : m_selection )
         {
-            BOARD_ITEM* item = m_selection.Item<BOARD_ITEM>( i );
-
             if( item->Type() == PCB_PAD_T )
             {
                 MODULE* mod = static_cast<MODULE*>( item->GetParent() );
@@ -1400,7 +1380,7 @@ bool SELECTION_TOOL::SanitizeSelection()
                 }
 
                 // case 2: multi-item selection contains both the module and its pads - remove the pads
-                if( mod && m_selection.items.FindItem( mod ) >= 0 )
+                if( mod && m_selection.Contains( mod ) )
                     rejected.insert( item );
             }
         }
@@ -1430,8 +1410,7 @@ bool SELECTION_TOOL::SanitizeSelection()
 
 void SELECTION::clear()
 {
-    items.ClearItemsList();
-    group->Clear();
+    m_items.clear();
 }
 
 
@@ -1441,15 +1420,17 @@ VECTOR2I SELECTION::GetCenter() const
 
     if( Size() == 1 )
     {
-        centre = Item<BOARD_ITEM>( 0 )->GetCenter();
+        centre = Front()->GetCenter();
     }
     else
     {
-        EDA_RECT bbox =  Item<BOARD_ITEM>( 0 )->GetBoundingBox();
-        for( unsigned int i = 1; i < items.GetCount(); ++i )
+        EDA_RECT bbox =  Front()->GetBoundingBox();
+        auto i = m_items.begin();
+        ++i;
+
+        for( ; i != m_items.end(); ++i )
         {
-            BOARD_ITEM* item = Item<BOARD_ITEM>( i );
-            bbox.Merge( item->GetBoundingBox() );
+            bbox.Merge( (*i)->GetBoundingBox() );
         }
 
         centre = bbox.Centre();
@@ -1462,3 +1443,25 @@ VECTOR2I SELECTION::GetCenter() const
 const TOOL_EVENT SELECTION_TOOL::SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" );
 const TOOL_EVENT SELECTION_TOOL::UnselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.unselected" );
 const TOOL_EVENT SELECTION_TOOL::ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" );
+
+SELECTION::SELECTION( KIGFX::VIEW *aView ) :
+    KIGFX::VIEW_GROUP ( aView )
+{}
+
+const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
+{
+    std::vector<VIEW_ITEM *> items;
+
+    items.clear();
+    for ( auto item : m_items )
+    {
+        items.push_back( item );
+        if( item->Type() == PCB_MODULE_T )
+        {
+            MODULE* module = static_cast<MODULE*>( item );
+            module->RunOnChildren( [&] ( BOARD_ITEM *bitem ) { items.push_back(bitem); });
+        }
+    }
+
+    return items;
+}

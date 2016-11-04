@@ -740,7 +740,7 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     if( selection.Empty() )
         return true;
 
-    bool canBeRemoved = ( selection.Item<EDA_ITEM>( 0 )->Type() != PCB_MODULE_T );
+    bool canBeRemoved = ( selection.Front()->Type() != PCB_MODULE_T );
 
     if( canBeRemoved || IsOK( aToolMgr->GetEditFrame(), _( "Are you sure you want to delete item?" ) ) )
         aToolMgr->RunAction( COMMON_ACTIONS::remove, true );
@@ -897,7 +897,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     // Start dragging the appended board
     SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
-    VECTOR2D v( selection.Item<BOARD_ITEM>( 0 )->GetPosition() );
+    VECTOR2D v( selection.Front()->GetPosition() );
     getViewControls()->WarpCursor( v, true, true );
     m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
 

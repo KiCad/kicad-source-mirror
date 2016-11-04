@@ -40,15 +40,22 @@ namespace KIGFX
 {
 class VIEW_GROUP : public VIEW_ITEM
 {
+protected:
+    typedef std::vector<VIEW_ITEM *> ITEMS;
+
 public:
     VIEW_GROUP( VIEW* aView = NULL );
     virtual ~VIEW_GROUP();
 
-    /// Helper typedefs
-    typedef std::set<VIEW_ITEM*>::const_iterator const_iter;
-    typedef std::set<VIEW_ITEM*>::iterator iter;
-
     /**
+     * Function GetSize()
+     * Returns the number of stored items.
+     *
+     * @return Number of stored items.
+     */
+    virtual unsigned int GetSize() const;
+
+	/**
      * Function Add()
      * Adds an item to the group.
      *
@@ -70,31 +77,8 @@ public:
      */
     virtual void Clear();
 
-    /**
-     * Function Begin()
-     * Returns iterator to beginning.
-     */
-    inline const_iter Begin() const
-    {
-        return m_items.begin();
-    }
 
-    /**
-     * Function End()
-     * Returns iterator to end.
-     */
-    inline const_iter End() const
-    {
-        return m_items.end();
-    }
-
-    /**
-     * Function GetSize()
-     * Returns the number of stored items.
-     *
-     * @return Number of stored items.
-     */
-    virtual unsigned int GetSize() const;
+    virtual VIEW_ITEM *GetItem(unsigned int idx) const;
 
     /**
      * Function ViewBBox()
@@ -157,7 +141,7 @@ public:
      *
      * @param aVisible decides if items should be visible or not.
      */
-    virtual void ItemsSetVisibility( bool aVisible );
+    //virtual void ItemsSetVisibility( bool aVisible );
 
     /**
      * Function ItemsViewUpdate()
@@ -165,9 +149,12 @@ public:
      *
      * @param aFlags determines the way in which items will be updated.
      */
-    virtual void ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags );
+    //virtual void ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags );
 
 protected:
+
+    virtual const ITEMS updateDrawList() const;
+
     /// These functions cannot be used with VIEW_GROUP as they are intended only to work with
     /// singular VIEW_ITEMs (there is only one-to-one relation between item/layer combination and
     /// its group).
@@ -195,12 +182,15 @@ protected:
     /// Layer on which the group is drawn
     int m_layer;
 
+protected:
+    /// Container for storing VIEW_ITEMs
+    ITEMS m_groupItems;
+
 private:
     void updateBbox();
 
-    /// Container for storing VIEW_ITEMs
-    std::set<VIEW_ITEM*> m_items;
 };
+
 } // namespace KIGFX
 
 #endif // VIEW_GROUP_H_
