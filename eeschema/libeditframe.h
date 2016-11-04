@@ -232,6 +232,11 @@ public:
     void OnSelectPart( wxCommandEvent& event );
 
     /**
+     * From Option toolbar: option to show the electrical pin type name
+     */
+    void OnShowElectricalType( wxCommandEvent& event );
+
+    /**
      * Function DeleteOnePart
      * is the command event handler to delete an entry from the current library.
      *
@@ -289,6 +294,7 @@ public:
     void OnUpdateDeMorganNormal( wxUpdateUIEvent& event );
     void OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
     void OnUpdateSelectAlias( wxUpdateUIEvent& event );
+    void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
 
     void UpdateAliasSelectList();
     void UpdatePartSelectList();

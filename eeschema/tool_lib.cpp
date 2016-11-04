@@ -245,5 +245,9 @@ void LIB_EDIT_FRAME::CreateOptionToolbar()
                                _( "Change cursor shape" ), wxITEM_CHECK );
 #endif // !__APPLE__
 
+    m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, wxEmptyString,
+                               KiBitmap( pin_show_etype_xpm ),
+                               _( "Show the pins electrical type" ), wxITEM_CHECK );
+
     m_optionsToolBar->Realize();
 }

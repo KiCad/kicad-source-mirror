@@ -230,6 +230,9 @@ enum id_eeschema_frm
     ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM,
     ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
 
+    /* Library editor toolbar options IDs */
+    ID_LIBEDIT_SHOW_ELECTRICAL_TYPE,
+
     /* Library editor menubar IDs */
     ID_LIBEDIT_SAVE_CURRENT_LIB_AS,
     ID_LIBEDIT_GEN_PNG_FILE,

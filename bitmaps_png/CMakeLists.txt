@@ -437,6 +437,7 @@ set( BMAPS_MID
     pin_name_to
     pin_number_to
     pin_size_to
+    pin_show_etype
     pin_table
     pin_to
     pin

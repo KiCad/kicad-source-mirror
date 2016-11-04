@@ -207,7 +207,7 @@ void LIB_VIEW_FRAME::ReCreateMenuBar( void )
 
     viewMenu->AppendSeparator();
     AddMenuItem( viewMenu, ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, _( "&Show Pin Electrical Type" ),
-                 wxEmptyString, KiBitmap( pin_xpm ), wxITEM_CHECK );
+                 wxEmptyString, KiBitmap( pin_show_etype_xpm ), wxITEM_CHECK );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;

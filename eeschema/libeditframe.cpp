@@ -120,6 +120,9 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                     LIB_EDIT_FRAME::OnSelectTool )
 
+    // Left vertical toolbar (option toolbar).
+    EVT_TOOL( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, LIB_EDIT_FRAME::OnShowElectricalType )
+
     // menubar commands
     EVT_MENU( wxID_EXIT, LIB_EDIT_FRAME::CloseWindow )
     EVT_MENU( ID_LIBEDIT_SAVE_CURRENT_LIB_AS, LIB_EDIT_FRAME::OnSaveActiveLibrary )
@@ -174,6 +177,8 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_ZOOM_SELECTION, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                          LIB_EDIT_FRAME::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, LIB_EDIT_FRAME::OnUpdateElectricalType )
+
 END_EVENT_TABLE()
 
 #define LIB_EDIT_FRAME_NAME wxT( "LibeditFrame" )
@@ -458,6 +463,19 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
         m_unit = 1;
 
     m_partSelectBox->SetSelection( ( m_unit > 0 ) ? m_unit - 1 : 0 );
+}
+
+
+void LIB_EDIT_FRAME::OnShowElectricalType( wxCommandEvent& event )
+{
+    SetShowElectricalType( not GetShowElectricalType() );
+    GetCanvas()->Refresh();
+}
+
+
+void LIB_EDIT_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( GetShowElectricalType() );
 }
 
 
