@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -76,10 +76,13 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_EXIT, LIB_VIEW_FRAME::CloseLibraryViewer )
     EVT_MENU( ID_HELP_GET_INVOLVED, EDA_DRAW_FRAME::GetKicadContribute )
     EVT_MENU( ID_SET_RELATIVE_OFFSET, LIB_VIEW_FRAME::OnSetRelativeOffset )
+    EVT_MENU( ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, LIB_VIEW_FRAME::OnShowElectricalType )
 
     EVT_UPDATE_UI( ID_LIBVIEW_VIEWDOC, LIB_VIEW_FRAME::onUpdateViewDoc )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, LIB_VIEW_FRAME::onUpdateAlternateBodyStyleButton )
+    EVT_UPDATE_UI( ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, LIB_VIEW_FRAME::OnUpdateElectricalType )
+
 END_EVENT_TABLE()
 
 
@@ -135,6 +138,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_cmpList   = NULL;
     m_libList   = NULL;
     m_listPowerCmpOnly = false;
+    SetShowElectricalType( true );
 
     SetScreen( new SCH_SCREEN( aKiway ) );
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
@@ -337,6 +341,18 @@ void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
     UpdateStatusBar();
 }
 
+
+void LIB_VIEW_FRAME::OnShowElectricalType( wxCommandEvent& event )
+{
+    SetShowElectricalType( not GetShowElectricalType() );
+    m_canvas->Refresh();
+}
+
+
+void LIB_VIEW_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Check( GetShowElectricalType() );
+}
 
 double LIB_VIEW_FRAME::BestZoom()
 {
@@ -600,6 +616,7 @@ void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 
 #define LIBLIST_WIDTH_KEY "ViewLiblistWidth"
 #define CMPLIST_WIDTH_KEY "ViewCmplistWidth"
+#define CMPVIEW_SHOW_PINELECTRICALTYPE_KEY "ViewCmpShowPinElectricalType"
 
 // Currently, the library viewer has no dialog to change the background color
 // of the draw canvas. Therefore the background color is here just
@@ -616,6 +633,8 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 150 );
     aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
+    aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
+    m_showPinElectricalTypeName = aCfg->Read( CMPVIEW_SHOW_PINELECTRICALTYPE_KEY, true );
 
     // Set parameters to a reasonable value.
     if( m_libListWidth > m_FrameSize.x/2 )
@@ -638,6 +657,8 @@ void LIB_VIEW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     m_cmpListWidth = m_cmpList->GetSize().x;
     aCfg->Write( CMPLIST_WIDTH_KEY, m_cmpListWidth );
+
+    aCfg->Write( CMPVIEW_SHOW_PINELECTRICALTYPE_KEY, m_showPinElectricalTypeName );
 }
 
 

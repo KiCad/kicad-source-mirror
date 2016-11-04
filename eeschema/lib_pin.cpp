@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -915,6 +915,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
     bool drawPinText = flags & PIN_DRAW_TEXTS;
     bool drawPinDangling = flags & PIN_DRAW_DANGLING;
     bool drawDanglingHidden = flags & PIN_DANGLING_HIDDEN;
+    bool drawElectricalTypeName = flags & PIN_DRAW_ELECTRICAL_TYPE_NAME;
 
     LIB_PART* Entry = GetParent();
 
@@ -959,6 +960,10 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
                       Entry->ShowPinNumbers(), Entry->ShowPinNames(),
                       aColor, aDrawMode );
     }
+
+    if( drawElectricalTypeName )
+        DrawPinElectricalTypeName( aPanel, aDC, pos1, orient, aColor, aDrawMode );
+
 
     /* Set to one (1) to draw bounding box around pin to validate bounding
      * box calculation. */
@@ -1385,6 +1390,63 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
             }
         }
     }
+}
+
+
+
+void LIB_PIN::DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                                         wxPoint& aPosition, int aOrientation,
+                                         EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode )
+{
+    wxString    etypeName = GetElectricalTypeName();
+    int         etextSize = (m_nameTextSize*3)/4;
+
+    #define ETXT_MAX_SIZE Millimeter2iu(0.7 )
+    if( etextSize > ETXT_MAX_SIZE )
+        etextSize = ETXT_MAX_SIZE;
+
+    // Use a reasonable pen size to draw the text
+    int pensize = etextSize/6;
+
+    /* Get the num and name colors */
+    if( (aColor < 0) && IsSelected() )
+        aColor = GetItemSelectedColor();
+
+    wxPoint txtpos = aPosition;
+    int offset = Millimeter2iu( 0.4 );
+    EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_LEFT;
+    int orient = TEXT_ORIENT_HORIZ;
+
+    switch( aOrientation )
+    {
+    case PIN_UP:
+        txtpos.y += offset;
+        orient = TEXT_ORIENT_VERT;
+        hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+        break;
+
+    case PIN_DOWN:
+        txtpos.y -= offset;
+        orient = TEXT_ORIENT_VERT;
+        break;
+
+    case PIN_LEFT:
+        txtpos.x += offset;
+        break;
+
+    case PIN_RIGHT:
+        txtpos.x -= offset;
+        hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+        break;
+    }
+
+    GRSetDrawMode( aDC, aDrawMode );
+    EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
+
+    DrawGraphicText( clipbox, aDC, txtpos, aColor, etypeName,
+                     orient, wxSize( etextSize, etextSize ),
+                     hjustify, GR_TEXT_VJUSTIFY_CENTER, pensize,
+                     false, false );
 }
 
 

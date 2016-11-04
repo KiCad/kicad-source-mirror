@@ -37,10 +37,11 @@ class SCH_COMPONENT;
 #include "pin_shape.h"
 #include "pin_type.h"
 
-#define TARGET_PIN_RADIUS   12  // Circle diameter drawn at the active end of pins
+// Circle diameter drawn at the active end of pins:
+#define TARGET_PIN_RADIUS   12
 
-/* Pin visibility flag bit. */
-#define PIN_INVISIBLE 1    /* Set makes pin invisible */
+// Pin visibility flag bit:
+#define PIN_INVISIBLE 1    // Set makes pin invisible
 
 
 /**
@@ -57,6 +58,8 @@ enum LibPinDrawFlags {
     PIN_DRAW_TEXTS = 1,
     PIN_DRAW_DANGLING = 2,      // Draw this pin with a 'dangling' indicator
     PIN_DANGLING_HIDDEN = 4,    // Draw (only!) the dangling indicator if the pin is hidden
+    PIN_DRAW_ELECTRICAL_TYPE_NAME = 8   // Draw the pin electrical type name
+                                        // used only in component editor and component viewer
 };
 
 
@@ -88,6 +91,7 @@ class LIB_PIN : public LIB_ITEM
      *      PIN_DRAW_TEXTS,     -- false to draw only pin shape, useful for fast mode
      *      PIN_DRAW_DANGLING,  -- true to draw the pin with its target
      *      PIN_DANGLING_HIDDEN -- draw the target even if the pin is hidden
+     *      PIN_DRAW_ELECTRICAL_TYPE_NAME -- Draw the pin electrical type name
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
@@ -398,6 +402,14 @@ public:
     void DrawPinTexts( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
                        int aOrientation, int TextInside, bool DrawPinNum, bool DrawPinName,
                        EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode );
+
+    /**
+     * Function DrawPinElectricalTypeName
+     * draws the electrical type text of the pin (only for the footprint editor)
+     * aDrawMode = GR_OR, XOR ...
+     */
+    void DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
+                       int aOrientation, EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode );
 
     /**
      * Function PlotPinTexts

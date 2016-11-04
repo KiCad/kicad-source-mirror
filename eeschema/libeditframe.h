@@ -76,6 +76,11 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
      */
     bool m_editPinsPerPartOrConvert;
 
+    /**
+     * the option to show the pin electrical name in the component editor
+     */
+    bool m_showPinElectricalTypeName;
+
     /** The current draw or edit graphic item fill style. */
     static FILL_T m_drawFillStyle;
 
@@ -390,6 +395,10 @@ public:
     bool GetShowDeMorgan() { return m_showDeMorgan; }
 
     void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
+
+    bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
+
+    void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
     FILL_T GetFillStyle() { return m_drawFillStyle; }
 

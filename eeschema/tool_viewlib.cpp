@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
@@ -204,6 +204,10 @@ void LIB_VIEW_FRAME::ReCreateMenuBar( void )
     text = AddHotkeyName( _( "&Redraw" ), g_Viewlib_Hokeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
                  HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
+
+    viewMenu->AppendSeparator();
+    AddMenuItem( viewMenu, ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, _( "&Show Pin Electrical Type" ),
+                 wxEmptyString, KiBitmap( pin_xpm ), wxITEM_CHECK );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;

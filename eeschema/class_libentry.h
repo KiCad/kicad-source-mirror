@@ -417,6 +417,8 @@ public:
      *              vector<bool> exactly the same length as the number of pins,
      *              indicating whether each pin is dangling. If NULL, all pins
      *              will be drawn as if they were dangling.
+     * @param aShowElectricalType - show the electrical type name of the pin
+     *              used only in component editor and component viewer
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
                int aMulti, int aConvert, GR_DRAWMODE aDrawMode,
@@ -424,7 +426,8 @@ public:
                const TRANSFORM& aTransform = DefaultTransform,
                bool aShowPinText = true, bool aDrawFields = true,
                bool aOnlySelected = false,
-               const std::vector<bool>* aPinsDangling = NULL );
+               const std::vector<bool>* aPinsDangling = NULL,
+               bool aShowElectricalType = false );
 
     /**
      * Plot lib part to plotter.

@@ -189,6 +189,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_hotkeysDescrList    = g_Libedit_Hokeys_Descr;
     m_editPinsPerPartOrConvert = false;
     m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
+    SetShowElectricalType( true );
 
     m_my_part = NULL;
     m_tempCopyComponent = NULL;

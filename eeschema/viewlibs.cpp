@@ -176,7 +176,7 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
     {
         PART_LIB* lib = libs->FindLibrary( m_libraryName );
 
-        wxString title = wxString::Format( "Library Browser \u2014 %s",
+        wxString title = wxString::Format( L"Library Browser \u2014 %s",
             lib ? lib->GetFullFileName() : "no library selected" );
         SetTitle( title );
     }
@@ -217,7 +217,9 @@ void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     else
         msg = _( "None" );
 
-    part->Draw( m_canvas, DC, wxPoint( 0, 0 ), m_unit, m_convert, GR_DEFAULT_DRAWMODE );
+    part->Draw( m_canvas, DC, wxPoint( 0, 0 ), m_unit, m_convert, GR_DEFAULT_DRAWMODE,
+                UNSPECIFIED_COLOR, DefaultTransform,
+                true, true,false, NULL, GetShowElectricalType() );
 
     // Redraw the cursor
     m_canvas->DrawCrossHair( DC );

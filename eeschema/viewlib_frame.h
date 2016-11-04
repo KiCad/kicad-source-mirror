@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
  *
@@ -88,6 +88,7 @@ public:
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
     void OnSelectSymbol( wxCommandEvent& aEvent );
+    void OnShowElectricalType( wxCommandEvent& event );
 
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
@@ -140,6 +141,9 @@ public:
     void SetConvert( int aConvert ) { m_convert = aConvert; }
     int GetConvert( void ) { return m_convert; }
 
+    bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
+    void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
+
 private:
     /**
      * Function OnActivate
@@ -159,6 +163,7 @@ private:
     void onUpdateAlternateBodyStyleButton( wxUpdateUIEvent& aEvent );
     void onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent );
     void onUpdateViewDoc( wxUpdateUIEvent& aEvent );
+    void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
     void onSelectNextSymbol( wxCommandEvent& aEvent );
     void onSelectPreviousSymbol( wxCommandEvent& aEvent );
     void onViewSymbolDocument( wxCommandEvent& aEvent );
@@ -192,6 +197,11 @@ private:
 
     static int      m_unit;
     static int      m_convert;
+
+    /**
+     * the option to show the pin electrical name in the component editor
+     */
+    bool m_showPinElectricalTypeName;
 
     DECLARE_EVENT_TABLE()
 };

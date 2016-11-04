@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -146,7 +146,10 @@ DIALOG_LIBEDIT_OPTIONS_BASE::DIALOG_LIBEDIT_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizer2->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
 	
 	m_checkShowGrid = new wxCheckBox( this, wxID_ANY, _("&Show grid"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer2->Add( m_checkShowGrid, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 3 );
+	bSizer2->Add( m_checkShowGrid, 0, wxEXPAND|wxALL, 3 );
+	
+	m_checkShowPinElectricalType = new wxCheckBox( this, wxID_ANY, _("Show pin &electrical type"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_checkShowPinElectricalType, 0, wxALL, 3 );
 	
 	
 	bSizer3->Add( bSizer2, 0, wxEXPAND, 0 );

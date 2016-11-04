@@ -236,7 +236,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, PART_LIB* aLibrar
 
 void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
 {
-    LIB_PART*      part = GetCurPart();
+    LIB_PART* part = GetCurPart();
 
     if( part )
     {
@@ -248,7 +248,9 @@ void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
         wxString    fieldfullText = field->GetFullText( m_unit );
 
         field->EDA_TEXT::SetText( fieldfullText );  // change the field text string only
-        part->Draw( m_canvas, aDC, aOffset, m_unit, m_convert, GR_DEFAULT_DRAWMODE );
+        part->Draw( m_canvas, aDC, aOffset, m_unit, m_convert, GR_DEFAULT_DRAWMODE,
+                    UNSPECIFIED_COLOR, DefaultTransform,
+                    true, true,false, NULL, GetShowElectricalType() );
         field->EDA_TEXT::SetText( fieldText );      // restore the field text string
     }
 }

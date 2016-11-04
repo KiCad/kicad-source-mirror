@@ -536,6 +536,7 @@ static const wxChar repeatLibLabelIncEntry[] =      wxT( "LibeditRepeatLabelInc"
 static const wxChar pinRepeatStepEntry[] =          wxT( "LibeditPinRepeatStep" );
 static const wxChar repeatLibStepXEntry[] =         wxT( "LibeditRepeatStepX" );
 static const wxChar repeatLibStepYEntry[] =         wxT( "LibeditRepeatStepY" );
+static const wxChar showPinElectricalType[] =       wxT( "LibeditShowPinElectricalType" );
 
 ///@}
 
@@ -756,6 +757,7 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     step.x = aCfg->Read( repeatLibStepXEntry, (long)DEFAULT_REPEAT_OFFSET_X );
     step.y = aCfg->Read( repeatLibStepYEntry, (long)DEFAULT_REPEAT_OFFSET_Y );
     SetRepeatStep( step );
+    m_showPinElectricalTypeName = aCfg->Read( showPinElectricalType, true );
 }
 
 
@@ -770,6 +772,7 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( pinRepeatStepEntry, (long) GetRepeatPinStep() );
     aCfg->Write( repeatLibStepXEntry, (long) GetRepeatStep().x );
     aCfg->Write( repeatLibStepYEntry, (long) GetRepeatStep().y );
+    aCfg->Write( showPinElectricalType, GetShowElectricalType() );
 }
 
 
@@ -787,6 +790,7 @@ void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     dlg.SetPinNameSize( m_textPinNameDefaultSize );
 
     dlg.SetShowGrid( IsGridVisible() );
+    dlg.SetShowElectricalType( GetShowElectricalType() );
     dlg.Layout();
     dlg.Fit();
 
@@ -804,6 +808,7 @@ void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
     SetRepeatPinStep( dlg.GetPinRepeatStep() );
     SetRepeatStep( dlg.GetItemRepeatStep() );
     SetRepeatDeltaLabel( dlg.GetRepeatLabelInc() );
+    SetShowElectricalType( dlg.GetShowElectricalType() );
 
     SaveSettings( config() );  // save values shared by eeschema applications.
 

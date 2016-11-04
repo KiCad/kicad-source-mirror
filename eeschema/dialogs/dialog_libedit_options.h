@@ -86,6 +86,12 @@ public:
         return m_spinRepeatLabel->GetValue();
     }
 
+    void SetShowElectricalType( bool show ) { m_checkShowPinElectricalType->SetValue( show ); }
+    bool GetShowElectricalType( void )
+    {
+        return m_checkShowPinElectricalType->GetValue();
+    }
+
 };
 
 #endif // __DIALOG_LIBEDIT_OPTIONS__

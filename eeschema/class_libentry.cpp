@@ -316,7 +316,8 @@ void LIB_PART::SetName( const wxString& aName )
 void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, int aMulti,
                      int aConvert, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor,
                      const TRANSFORM& aTransform, bool aShowPinText, bool aDrawFields,
-                     bool aOnlySelected, const std::vector<bool>* aPinsDangling )
+                     bool aOnlySelected, const std::vector<bool>* aPinsDangling,
+                     bool aShowElectricalType )
 {
     BASE_SCREEN*   screen = aPanel ? aPanel->GetScreen() : NULL;
 
@@ -393,6 +394,9 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
             uintptr_t flags = 0;
             if( aShowPinText )
                 flags |= PIN_DRAW_TEXTS;
+
+            if( aShowElectricalType )
+                flags |= PIN_DRAW_ELECTRICAL_TYPE_NAME;
 
             if( !aPinsDangling || (aPinsDangling->size() > pin_index && (*aPinsDangling)[pin_index] ) )
                 flags |= PIN_DRAW_DANGLING;
