@@ -1399,6 +1399,8 @@ void LIB_PIN::DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                          EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode )
 {
     wxString    etypeName = GetElectricalTypeName();
+
+    // Use a reasonable (small) size to draw the text
     int         etextSize = (m_nameTextSize*3)/4;
 
     #define ETXT_MAX_SIZE Millimeter2iu(0.7 )
@@ -1408,9 +1410,13 @@ void LIB_PIN::DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     // Use a reasonable pen size to draw the text
     int pensize = etextSize/6;
 
-    /* Get the num and name colors */
+    // Get a suitable color
     if( (aColor < 0) && IsSelected() )
         aColor = GetItemSelectedColor();
+    else if( !IsVisible() )
+        aColor = GetInvisibleItemColor();
+    else
+        aColor = GetLayerColor( LAYER_NOTES );
 
     wxPoint txtpos = aPosition;
     int offset = Millimeter2iu( 0.4 );
@@ -1489,9 +1495,9 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
         const int radius = ExternalPinDecoSize( *this );
         aPlotter->Circle( wxPoint( MapX1 * radius + x1,
                                    MapY1 * radius + y1 ),
-                          radius * 2, // diameter
-                          NO_FILL,               // fill option
-                          GetPenSize() );       // width
+                          radius * 2,       // diameter
+                          NO_FILL,          // fill option
+                          GetPenSize() );   // width
 
         aPlotter->MoveTo( wxPoint( MapX1 * radius * 2 + x1,
                                     MapY1 * radius * 2 + y1 ) );
