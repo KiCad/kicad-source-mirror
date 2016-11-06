@@ -43,7 +43,7 @@
 
 // Polygon calculations can use fast mode or force strickly simple polygons after calculations
 // Forcing strickly simple polygons is time consuming, and we have not see issues in fast mode
-// so we use fast mode
+// so we use fast mode when possible (intermediate calculations)
 // (choice is SHAPE_POLY_SET::PM_STRICTLY_SIMPLE or SHAPE_POLY_SET::PM_FAST)
 #define POLY_CALC_MODE SHAPE_POLY_SET::PM_FAST
 
@@ -456,7 +456,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     if (g_DumpZonesWhenFilling)
         dumper->Write( &holes, "feature-holes-postsimplify" );
 
-    solidAreas.BooleanSubtract( holes, POLY_CALC_MODE );
+    // Generate the filled areas (currently, without thermal shapes, which will
+    // be created later).
+    // Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to generate strictly simple polygons
+    // needed by Gerber files and Fracture()
+    solidAreas.BooleanSubtract( holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     if (g_DumpZonesWhenFilling)
         dumper->Write( &solidAreas, "solid-areas-minus-holes" );
@@ -485,8 +489,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     if( !thermalHoles.IsEmpty() )
     {
         thermalHoles.Simplify( POLY_CALC_MODE );
-        // Remove unconnected stubs
-        solidAreas.BooleanSubtract( thermalHoles, POLY_CALC_MODE );
+        // Remove unconnected stubs. Use SHAPE_POLY_SET::PM_STRICTLY_SIMPLE to
+        // generate strictly simple polygons
+        // needed by Gerber files and Fracture()
+        solidAreas.BooleanSubtract( thermalHoles, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
         if( g_DumpZonesWhenFilling )
             dumper->Write( &thermalHoles, "thermal-holes" );
