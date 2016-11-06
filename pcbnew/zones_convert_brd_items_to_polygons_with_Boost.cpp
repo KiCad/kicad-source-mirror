@@ -447,7 +447,10 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     if (g_DumpZonesWhenFilling)
         dumper->Write( &holes, "feature-holes-postsimplify" );
 
-    solidAreas.BooleanSubtract( holes, true );
+    // Generate the filled areas (currently, without thermal shapes, which will
+    // be created later).
+    // Generate strictly simple polygons needed by Gerber files and Fracture()
+    solidAreas.BooleanSubtract( holes, false );
 
     if (g_DumpZonesWhenFilling)
         dumper->Write( &solidAreas, "solid-areas-minus-holes" );
@@ -476,8 +479,9 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
     if( !thermalHoles.IsEmpty() )
     {
         thermalHoles.Simplify();
-        // Remove unconnected stubs
-        solidAreas.BooleanSubtract( thermalHoles );
+        // Remove unconnected stubs.
+        // Generate strictly simple polygons needed by Gerber files and Fracture()
+        solidAreas.BooleanSubtract( thermalHoles, false );
 
         if( g_DumpZonesWhenFilling )
             dumper->Write( &thermalHoles, "thermal-holes" );
