@@ -1707,7 +1707,7 @@ void SCH_LEGACY_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap )
     wxStreamBuffer* buffer = stream.GetOutputStreamBuffer();
     char*           begin  = (char*) buffer->GetBufferStart();
 
-    for( int ii = 0; begin <= buffer->GetBufferEnd(); begin++, ii++ )
+    for( int ii = 0; begin < buffer->GetBufferEnd(); begin++, ii++ )
     {
         if( ii >= 32 )
         {
