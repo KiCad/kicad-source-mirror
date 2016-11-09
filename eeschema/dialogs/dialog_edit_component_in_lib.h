@@ -59,11 +59,11 @@ private:
     bool SetUnsetConvert();
     void CopyDocFromRootToAlias(wxCommandEvent& event) override;
     void BrowseAndSelectDocFile(wxCommandEvent& event) override;
-
     void DeleteAllFootprintFilter(wxCommandEvent& event) override;
     void DeleteOneFootprintFilter(wxCommandEvent& event) override;
     void AddFootprintFilter(wxCommandEvent& event) override;
     void EditOneFootprintFilter( wxCommandEvent& event ) override;
+	void OnUpdateInterchangeableUnits( wxUpdateUIEvent& event ) override;
 };
 
 #endif

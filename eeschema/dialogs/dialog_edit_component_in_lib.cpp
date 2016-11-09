@@ -578,3 +578,12 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::EditOneFootprintFilter( wxCommandEvent& e
 
     m_FootprintFilterListBox->SetString( idx, filter );
 }
+
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateInterchangeableUnits( wxUpdateUIEvent& event )
+{
+    if( m_SelNumberOfUnits->GetValue() <= 1 )
+        m_OptionPartsLocked->Enable( false );
+    else
+        m_OptionPartsLocked->Enable( true );
+}

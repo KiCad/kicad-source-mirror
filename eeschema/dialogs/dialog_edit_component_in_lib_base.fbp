@@ -1343,7 +1343,7 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnUpdateUI"></event>
+                                                    <event name="OnUpdateUI">OnUpdateInterchangeableUnits</event>
                                                 </object>
                                             </object>
                                         </object>

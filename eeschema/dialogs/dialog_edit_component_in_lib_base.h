@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 28 2015)
+// C++ code generated with wxFormBuilder (version Jul 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -96,6 +96,7 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		wxButton* m_stdSizerButtonCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateInterchangeableUnits( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void CopyDocFromRootToAlias( wxCommandEvent& event ) { event.Skip(); }
 		virtual void BrowseAndSelectDocFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void AddAliasOfPart( wxCommandEvent& event ) { event.Skip(); }
