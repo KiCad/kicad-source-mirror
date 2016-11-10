@@ -926,7 +926,6 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
         fn.Clear();
         fn.SetName( lib_names[i] );
         fn.SetExt( SchematicLibraryFileExtension );
-
         // Skip if the file name is not valid..
         if( !fn.IsOk() )
             continue;
@@ -943,7 +942,13 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
             }
         }
         else
-        {
+        {   // ensure the lib filename has a absolute path.
+            // If the lib has no absolute path, and is found in the cwd by fn.FileExists(),
+            // make a full absolute path, to avoid issues with load library functions which
+            // expects an absolute path.
+            if( !fn.IsAbsolute() )
+                fn.Normalize();
+
             filename = fn.GetFullPath();
         }
 
