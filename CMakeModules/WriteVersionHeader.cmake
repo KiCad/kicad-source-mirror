@@ -36,16 +36,19 @@ if( _wvh_version_str STREQUAL "no-vcs-found" AND EXISTS "${SRC_PATH}/.git" )
     message( STATUS "Using Git to determine build version string." )
     include( ${CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
     create_git_version_header( ${SRC_PATH} )
-    set( _wvh_version_str ${KICAD_BUILD_VERSION} )
 endif()
 
 # If KICAD_BRANCH_NAME is empty, set KICAD_FULL_VERSION to just the build
 # version rather than the concatenation of the build version and the branch
 # name.
-if( KICAD_BRANCH_NAME )
-    set( KICAD_FULL_VERSION "${_wvh_version_str}-${KICAD_BRANCH_NAME}" )
+if( KICAD_BUILD_VERSION )
+    set( KICAD_FULL_VERSION "${KICAD_BUILD_VERSION}" )
+elseif( KICAD_BRANCH_NAME AND KICAD_GIT_BUILD_VERSION )
+    set( KICAD_BUILD_VERSION "${KICAD_GIT_BUILD_VERSION}" )
+    set( KICAD_FULL_VERSION "${KICAD_GIT_BUILD_VERSION}-${KICAD_BRANCH_NAME}" )
 else()
-    set( KICAD_FULL_VERSION "${_wvh_version_str}" )
+    set( KICAD_BUILD_VERSION "unknown" )
+    set( KICAD_FULL_VERSION "unknown" )
 endif()
 
 set( _wvh_new_version_text
@@ -57,7 +60,7 @@ set( _wvh_new_version_text
 #ifndef __KICAD_VERSION_H__
 #define __KICAD_VERSION_H__
 
-#define KICAD_BUILD_VERSION \"${_wvh_version_str}\"
+#define KICAD_BUILD_VERSION \"${KICAD_BUILD_VERSION}\"
 #define KICAD_BRANCH_NAME \"${KICAD_BRANCH_NAME}\"
 #define KICAD_FULL_VERSION \"${KICAD_FULL_VERSION}\"
 
