@@ -41,13 +41,13 @@ endif()
 # If KICAD_BRANCH_NAME is empty, set KICAD_FULL_VERSION to just the build
 # version rather than the concatenation of the build version and the branch
 # name.
-if( KICAD_BUILD_VERSION )
+if( KICAD_BUILD_VERSION AND KICAD_REPO_NAME )
+    set( KICAD_FULL_VERSION "${KICAD_BUILD_VERSION}-${KICAD_REPO_NAME}" )
+elseif( KICAD_BUILD_VERSION )
     set( KICAD_FULL_VERSION "${KICAD_BUILD_VERSION}" )
 elseif( KICAD_BRANCH_NAME AND KICAD_GIT_BUILD_VERSION )
-    set( KICAD_BUILD_VERSION "${KICAD_GIT_BUILD_VERSION}" )
     set( KICAD_FULL_VERSION "${KICAD_GIT_BUILD_VERSION}-${KICAD_BRANCH_NAME}" )
 else()
-    set( KICAD_BUILD_VERSION "unknown" )
     set( KICAD_FULL_VERSION "unknown" )
 endif()
 
@@ -60,8 +60,6 @@ set( _wvh_new_version_text
 #ifndef __KICAD_VERSION_H__
 #define __KICAD_VERSION_H__
 
-#define KICAD_BUILD_VERSION \"${KICAD_BUILD_VERSION}\"
-#define KICAD_BRANCH_NAME \"${KICAD_BRANCH_NAME}\"
 #define KICAD_FULL_VERSION \"${KICAD_FULL_VERSION}\"
 
 #endif  /* __KICAD_VERSION_H__ */
@@ -79,7 +77,7 @@ if( EXISTS ${OUTPUT_FILE} )
 endif()
 
 if( _wvh_write_version_file )
-    message( STATUS "Writing ${OUTPUT_FILE} file with version: ${_wvh_version_str}" )
+    message( STATUS "Writing ${OUTPUT_FILE} file with version: ${KICAD_FULL_VERSION}" )
 
     file( WRITE ${OUTPUT_FILE} ${_wvh_new_version_text} )
 
