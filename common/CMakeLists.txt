@@ -131,12 +131,14 @@ endif()
 # KiCad build version string defaults to undefined which forces the build version header
 # command to look for Bazaar to create the version string header.
 set( KICAD_BUILD_VERSION "" CACHE STRING "Version string defined at configuration time." )
+set( KICAD_REPO_NAME     "" CACHE STRING "KiCad repository name." )
 
 # Generate version header file.
 add_custom_target(
     version_header ALL
     COMMAND ${CMAKE_COMMAND}
         -DKICAD_BUILD_VERSION=${KICAD_BUILD_VERSION}
+        -DKICAD_REPO_NAME=${KICAD_REPO_NAME}
         -DOUTPUT_FILE=${CMAKE_BINARY_DIR}/kicad_build_version.h
         -DSRC_PATH=${PROJECT_SOURCE_DIR}
         -DCMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}
