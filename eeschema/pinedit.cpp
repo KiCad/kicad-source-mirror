@@ -392,7 +392,9 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( parent->GetShowElectricalType() )
         show_opts |= PIN_DRAW_ELECTRICAL_TYPE_NAME;
 
-    void* showOptions = (void*) show_opts;
+    // In LIB_PIN::Draw() a void* parameter used as flag to pass show_opts.
+    // Build it:
+    void* showOptions = reinterpret_cast<void*>( show_opts );
 
     // Erase pin in old position
     if( aErase )
@@ -474,7 +476,9 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
             if( GetShowElectricalType() )
                 show_opts |= PIN_DRAW_ELECTRICAL_TYPE_NAME;
 
-            void* showOptions = (void*) show_opts;
+            // In LIB_PIN::Draw() a void* parameter used as flag to pass show_opts.
+            // Build it:
+            void* showOptions = reinterpret_cast<void*>( show_opts );
 
             pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR, GR_COPY,
                        showOptions, DefaultTransform );
