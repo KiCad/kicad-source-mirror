@@ -486,6 +486,13 @@ bool ROUTER_TOOL::onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType )
 bool ROUTER_TOOL::prepareInteractive()
 {
     int routingLayer = getStartLayer( m_startItem );
+
+    if( !IsCopperLayer( routingLayer ) )
+    {
+        DisplayError( m_frame, _( "Tracks on Copper layers only " ) );
+        return false;
+    }
+
     m_frame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
 
     // fixme: switch on invisible layer
