@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-04 16:09+0300\n"
-"PO-Revision-Date: 2016-11-04 16:11+0300\n"
+"POT-Creation-Date: 2016-11-13 16:36+0300\n"
+"PO-Revision-Date: 2016-11-13 16:36+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -1808,7 +1808,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:193
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:316
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:319
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2079
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2085
 #: eeschema/libedit.cpp:469 eeschema/widgets/tuner_slider_base.cpp:20
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:34
@@ -3762,7 +3762,7 @@ msgstr "Файл '%s' не является файлом документаци�
 msgid "Unable to load project's '%s' file"
 msgstr "Не удалось загрузить файл проекта '%s'"
 
-#: eeschema/class_library.cpp:957
+#: eeschema/class_library.cpp:962
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
@@ -3771,7 +3771,7 @@ msgstr ""
 "Не удалось загрузить библиотеку компонентов '%s'. Ошибка:\n"
 "%s"
 
-#: eeschema/class_library.cpp:983
+#: eeschema/class_library.cpp:988
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -4380,14 +4380,14 @@ msgstr "Используется только для полей посад.ме�
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1042
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/lib_pin.cpp:2097 gerbview/class_gerber_draw_item.cpp:535
+#: eeschema/lib_pin.cpp:2103 gerbview/class_gerber_draw_item.cpp:535
 #: gerbview/class_gerber_draw_item.cpp:536 pcbnew/class_pcb_text.cpp:124
 #: pcbnew/class_text_mod.cpp:336
 msgid "Yes"
 msgstr "Да"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1044
-#: eeschema/lib_pin.cpp:2099 gerbview/class_gerber_draw_item.cpp:535
+#: eeschema/lib_pin.cpp:2105 gerbview/class_gerber_draw_item.cpp:535
 #: gerbview/class_gerber_draw_item.cpp:536 pcbnew/class_pcb_text.cpp:122
 #: pcbnew/class_text_mod.cpp:334
 msgid "No"
@@ -5121,7 +5121,7 @@ msgstr "Заданные пользователем имена полей для
 msgid "Default Value"
 msgstr "Значение по умолчанию"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:318 eeschema/lib_pin.cpp:2101
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:318 eeschema/lib_pin.cpp:2107
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:103
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:125
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:154
@@ -5334,14 +5334,14 @@ msgstr "Позиция вывода X:"
 msgid "Pin Pos Y:"
 msgstr "Позиция вывода Y:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:175 eeschema/lib_pin.cpp:2086
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:175 eeschema/lib_pin.cpp:2092
 msgid "Number"
 msgstr "Номер"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:207 eeschema/lib_draw_item.cpp:65
-#: eeschema/lib_pin.cpp:2088 eeschema/libedit.cpp:499 eeschema/sch_text.cpp:791
+#: eeschema/lib_pin.cpp:2094 eeschema/libedit.cpp:499 eeschema/sch_text.cpp:791
 #: gerbview/class_gerber_draw_item.cpp:505
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
@@ -5391,7 +5391,7 @@ msgid "Invisible"
 msgstr "Невидимый"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/lib_field.cpp:757
-#: eeschema/lib_pin.cpp:2094 eeschema/sch_text.cpp:773
+#: eeschema/lib_pin.cpp:2100 eeschema/sch_text.cpp:773
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
 msgid "Style"
 msgstr "Стиль"
@@ -7385,25 +7385,25 @@ msgstr "Высота"
 msgid "Pin"
 msgstr "Вывод"
 
-#: eeschema/lib_pin.cpp:2105 pcbnew/class_drawsegment.cpp:363
+#: eeschema/lib_pin.cpp:2111 pcbnew/class_drawsegment.cpp:363
 #: pcbnew/class_track.cpp:1031
 msgid "Length"
 msgstr "Длина"
 
-#: eeschema/lib_pin.cpp:2108 eeschema/sch_text.cpp:762
+#: eeschema/lib_pin.cpp:2114 eeschema/sch_text.cpp:762
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:120
 msgid "Orientation"
 msgstr "Ориентация"
 
-#: eeschema/lib_pin.cpp:2121 eeschema/lib_pin.cpp:2140
+#: eeschema/lib_pin.cpp:2127 eeschema/lib_pin.cpp:2146
 msgid "Pos X"
 msgstr "Позиция X"
 
-#: eeschema/lib_pin.cpp:2124 eeschema/lib_pin.cpp:2143
+#: eeschema/lib_pin.cpp:2130 eeschema/lib_pin.cpp:2149
 msgid "Pos Y"
 msgstr "Позиция Y"
 
-#: eeschema/lib_pin.cpp:2344
+#: eeschema/lib_pin.cpp:2350
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Вывод %s, %s, %s"
