@@ -280,7 +280,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_TRACK_BUTT:
         if( !IsCopperLayer( GetActiveLayer() ) )
         {
-            DisplayError( this, _( "Tracks on Copper layers only " ) );
+            DisplayError( this, _( "Tracks on Copper layers only" ) );
             break;
         }
 
