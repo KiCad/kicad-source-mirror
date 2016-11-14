@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -902,7 +902,6 @@ const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
 
 void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::bad_pointer )
 {
-    wxFileName      fn;
     wxString        filename;
     wxString        libs_not_found;
     SEARCH_STACK*   lib_search = aProject->SchSearchS();
@@ -923,9 +922,10 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
 
     for( unsigned i = 0; i < lib_names.GetCount();  ++i )
     {
-        fn.Clear();
-        fn.SetName( lib_names[i] );
+        wxFileName fn = lib_names[i];
+        // lib_names[] does not store the file extension. Set it:
         fn.SetExt( SchematicLibraryFileExtension );
+
         // Skip if the file name is not valid..
         if( !fn.IsOk() )
             continue;
@@ -936,7 +936,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
 
             if( !filename )
             {
-                libs_not_found += fn.GetName();
+                libs_not_found += fn.GetFullPath();
                 libs_not_found += '\n';
                 continue;
             }
@@ -947,7 +947,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
             // make a full absolute path, to avoid issues with load library functions which
             // expects an absolute path.
             if( !fn.IsAbsolute() )
-                fn.Normalize();
+                fn.MakeAbsolute();
 
             filename = fn.GetFullPath();
         }
@@ -959,11 +959,8 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
         catch( const IO_ERROR& ioe )
         {
             wxString msg = wxString::Format( _(
-                    "Part library '%s' failed to load. Error:\n"
-                    "%s" ),
-                    GetChars( filename ),
-                    GetChars( ioe.What() )
-                    );
+                    "Part library '%s' failed to load. Error:\n %s" ),
+                    GetChars( filename ), GetChars( ioe.What() ) );
 
             wxLogError( msg );
         }
