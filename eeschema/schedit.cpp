@@ -530,7 +530,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_HIGHLIGHT:
-        SetToolID( id, wxCURSOR_HAND, _("click to highlight") );
+        SetToolID( id, wxCURSOR_HAND, _("Highlight net") );
         break;
 
     case ID_ZOOM_SELECTION:
