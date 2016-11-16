@@ -119,6 +119,7 @@ class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 private:
     SCH_SHEET_PATH*         m_CurrentSheet;    ///< which sheet we are presently working on.
     wxString                m_DefaultSchematicFileName;
+    wxString                m_SelectedNetName;
 
     PARAM_CFG_ARRAY         m_projectFileParams;
     PARAM_CFG_ARRAY         m_configSettings;
@@ -490,9 +491,10 @@ public:
      * netlist generation:
      * Creates a flat list which stores all connected objects, and mainly
      * pins and labels.
+     * @param updateStatusText = decides if window StatusText should be modified
      * @return NETLIST_OBJECT_LIST* - caller owns the object.
      */
-    NETLIST_OBJECT_LIST* BuildNetListBase();
+    NETLIST_OBJECT_LIST* BuildNetListBase( bool updateStatusText = true );
 
     /**
      * Function CreateNetlist

@@ -31,6 +31,7 @@
 #include <kiway.h>
 #include <eeschema_id.h>
 #include <class_drawpanel.h>
+#include <confirm.h>
 #include <schframe.h>
 #include <sim/sim_plot_frame.h>
 #include <menus_helpers.h>
@@ -49,6 +50,8 @@
 #include <class_netlist_object.h>
 #include <class_library.h>      // fo class SCHLIB_FILTER to filter power parts
 
+ //Imported function:
+int TestDuplicateSheetNames( bool aCreateMarker );
 
 // TODO(hzeller): These pairs of elmenets should be represented by an object, but don't want
 // to refactor too much right now to not get in the way with other code changes.
@@ -109,6 +112,34 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     {
     case ID_NO_TOOL_SELECTED:
         break;
+
+    case ID_HIGHLIGHT:
+    {
+        m_SelectedNetName = "";
+
+        //find which item is selected
+        EDA_ITEMS nodeList;
+
+        if( GetScreen()->GetNode( gridPosition,nodeList ) 
+            && ( !TestDuplicateSheetNames( false )
+            || IsOK( NULL, _( "Error: duplicate sheet names. Continue?" ) ) ) )
+        {
+            // Build netlist info to get the proper netnames
+            std::unique_ptr<NETLIST_OBJECT_LIST> objectsConnectedList( BuildNetListBase() );
+
+            for( auto obj : *objectsConnectedList )
+            {
+                if( obj->m_SheetPath == *m_CurrentSheet && obj->m_Comp == nodeList[0] )
+                {
+                    m_SelectedNetName = obj->GetNetName( true );
+                    break;
+                }
+            }
+        }
+
+        SetStatusText( "selected net: " + m_SelectedNetName );
+        DisplayCurrentSheet();
+    }break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:
         if( ( item && item->GetFlags() ) || ( g_RootSheet->CountSheets() == 0 ) )

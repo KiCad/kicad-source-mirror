@@ -240,18 +240,20 @@ public:
 
     /**
      * Function GetNetName
+     * @param adoptTimestamp if annotation is not done (i.e. GetRef returns something with an ? at the end)
      * @return the full net name of the item, i.e. the net name
      * from the "best" label, prefixed by the sheet path
      */
-    wxString GetNetName() const;
+    wxString GetNetName( bool adoptTimestamp = false ) const;
 
     /**
      * Function GetShortNetName
+     * @param adoptTimestamp if annotation is not done (i.e. GetRef returns something with an ? at the end)
      * @return the short net name of the item i.e. the net name
      * from the "best" label without any prefix.
      * 2 different nets can have the same short name
      */
-    wxString GetShortNetName() const;
+    wxString GetShortNetName( bool adoptTimestamp = false ) const;
 
     /**
      * Function ConvertBusToNetListItems

@@ -74,6 +74,7 @@ enum id_eeschema_frm
 
     /* Schematic editor veritcal toolbar IDs */
     ID_SCHEMATIC_VERTICAL_TOOLBAR_START,
+    ID_HIGHLIGHT,
     ID_HIERARCHY_PUSH_POP_BUTT,
     ID_SCH_PLACE_COMPONENT,
     ID_PLACE_POWER_BUTT,

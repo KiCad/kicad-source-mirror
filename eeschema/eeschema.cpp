@@ -211,6 +211,7 @@ static PARAM_CFG_ARRAY& cfg_params()
         CLR( "ColorErcEEx",             LAYER_ERC_ERR,          RED )
         CLR( "ColorGridEx",             LAYER_GRID,             DARKGRAY )
         CLR( "ColorBgCanvasEx",         LAYER_BACKGROUND,       WHITE )
+        CLR( "ColorBrighenedEx",        LAYER_BRIGHTENED,       PUREMAGENTA )
     }
 
     return ca;

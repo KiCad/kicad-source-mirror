@@ -529,6 +529,10 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetToolID( id, m_canvas->GetDefaultCursor(), _( "No tool selected" ) );
         break;
 
+    case ID_HIGHLIGHT:
+        SetToolID( id, m_canvas->GetDefaultCursor(), _("click to highlight") );
+        break;
+
     case ID_ZOOM_SELECTION:
         SetToolID( id, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         break;

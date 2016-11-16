@@ -155,7 +155,7 @@ void NETLIST_OBJECT_LIST::SortListbySheet()
 }
 
 
-NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase()
+NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase( bool updateStatusText )
 {
     // I own this list until I return it to the new owner.
     std::unique_ptr<NETLIST_OBJECT_LIST> ret( new NETLIST_OBJECT_LIST() );
@@ -168,13 +168,15 @@ NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase()
 
     if( !success )
     {
-        SetStatusText( _( "No Objects" ) );
+        if( updateStatusText )
+            SetStatusText( _( "No Objects" ) );
         return ret.release();
     }
 
     wxString msg = wxString::Format( _( "Net count = %d" ), int( ret->size() ) );
 
-    SetStatusText( msg );
+    if( updateStatusText )
+         SetStatusText( msg );
 
     return ret.release();
 }

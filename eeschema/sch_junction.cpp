@@ -117,7 +117,7 @@ void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
     if( aColor >= 0 )
         color = aColor;
     else
-        color = GetLayerColor( m_Layer );
+        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
 
     GRSetDrawMode( aDC, aDrawMode );
 

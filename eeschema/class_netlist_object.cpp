@@ -345,7 +345,7 @@ bool NETLIST_OBJECT::IsLabelBusMemberType() const
 /*
  * return the net name of the item
  */
-wxString NETLIST_OBJECT::GetNetName() const
+wxString NETLIST_OBJECT::GetNetName( bool adoptTimestamp ) const
 {
     if( m_netNameCandidate == NULL )
         return wxEmptyString;
@@ -353,7 +353,7 @@ wxString NETLIST_OBJECT::GetNetName() const
     wxString netName;
 
     if( m_netNameCandidate->m_Type == NET_PIN )
-        return GetShortNetName();
+        return GetShortNetName( adoptTimestamp );
 
     if( !m_netNameCandidate->IsLabelGlobal() )
     {
@@ -371,7 +371,7 @@ wxString NETLIST_OBJECT::GetNetName() const
  * from the "best" label without any prefix.
  * 2 different nets can have the same short name
  */
-wxString NETLIST_OBJECT::GetShortNetName() const
+wxString NETLIST_OBJECT::GetShortNetName( bool adoptTimestamp ) const
 {
     if( m_netNameCandidate == NULL )
         return wxEmptyString;
@@ -385,6 +385,10 @@ wxString NETLIST_OBJECT::GetShortNetName() const
         {
             netName = wxT("Net-(");
             netName << link->GetRef( &m_netNameCandidate->m_SheetPath );
+
+            if( adoptTimestamp && netName.Last() == '?' )
+                netName << link->GetTimeStamp();
+
             netName << wxT("-Pad")
                     << LIB_PIN::PinStringNum( m_netNameCandidate->m_PinNum )
                     << wxT(")");

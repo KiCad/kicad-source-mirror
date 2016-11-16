@@ -189,7 +189,7 @@ void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     if( aColor >= 0 )
         color = aColor;
     else
-        color = GetLayerColor( m_Layer );
+        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
 
     GRSetDrawMode( aDC, aDrawMode );
 

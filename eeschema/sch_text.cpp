@@ -354,7 +354,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     if( Color >= 0 )
         color = Color;
     else
-        color = GetLayerColor( m_Layer );
+        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -1238,7 +1238,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     if( Color >= 0 )
         color = Color;
     else
-        color = GetLayerColor( m_Layer );
+        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -1591,7 +1591,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
     if( Color >= 0 )
         color = Color;
     else
-        color = GetLayerColor( m_Layer );
+        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 

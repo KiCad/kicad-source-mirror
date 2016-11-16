@@ -40,6 +40,8 @@
 #include <wx/imaglist.h>
 #include <wx/treectrl.h>
 
+#include <class_netlist_object.h>
+#include <sch_sheet_path.h>
 
 enum
 {
@@ -48,6 +50,9 @@ enum
 
 
 class HIERARCHY_NAVIG_DLG;
+
+//Imported function:
+int TestDuplicateSheetNames( bool aCreateMarker );
 
 /* This class derived from wxTreeItemData stores the SCH_SHEET_PATH of each
  * sheet in hierarchy in each TreeItem, in its associated data buffer
@@ -302,6 +307,49 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
         RedrawScreen( GetScrollCenterPosition(), true );
     }
 
+
+    // Disable highlight on all items (Note: might be the wrong call if needed for something else than net highlighting)
+    for( SCH_ITEM* ptr = screen->GetDrawItems(); ptr; ptr = ptr->Next() )
+    {
+        ptr->SetState( BRIGHTENED, false );
+
+        if( ptr->Type() == SCH_SHEET_T )
+        {
+            for( SCH_SHEET_PIN& pin : static_cast<SCH_SHEET*>( ptr )->GetPins() )
+                pin.SetState( BRIGHTENED, false ); 
+        }
+    }
+
+    //avoid selection of buses as they are nameless
+    if( m_SelectedNetName != "" )
+    {
+        if( TestDuplicateSheetNames( false ) )
+            SetStatusText( "duplicated sheets names prevent net highlighting" );
+        else
+        {
+            // Build netlist info to get the proper netnames
+            std::unique_ptr<NETLIST_OBJECT_LIST> objectsConnectedList( BuildNetListBase( false ) );
+
+            // highlight the new items
+            for( auto obj1 : *objectsConnectedList )
+            {
+                if( obj1->m_SheetPath == *m_CurrentSheet && obj1->GetNetName( true ) == m_SelectedNetName && obj1->m_Comp )
+                {
+                    obj1->m_Comp->SetState( BRIGHTENED, true );
+
+                    //if a bus is associated with this net highlight it as well
+                    if( obj1->m_BusNetCode )
+                    {
+                        for( auto obj2 : *objectsConnectedList )
+                        {
+                            if( obj2 && obj2->m_Comp && obj2->m_SheetPath == *m_CurrentSheet && obj1->m_BusNetCode == obj2->m_BusNetCode )
+                                obj2->m_Comp->SetState( BRIGHTENED, true );
+                        }
+                    }
+                }
+            }
+        }
+    }
     // Now refresh m_canvas. Should be not necessary, but because screen has changed
     // the previous refresh has set all new draw parameters (scroll position ..)
     // but most of time there were some inconsitencies about cursor parameters

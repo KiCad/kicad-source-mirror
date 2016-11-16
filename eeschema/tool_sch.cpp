@@ -190,6 +190,9 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
                             wxEmptyString, wxITEM_CHECK );
 
+    m_drawToolBar->AddTool( ID_HIGHLIGHT, wxEmptyString, KiBitmap( net_highlight_xpm ),
+                            _( "Click to highlight net" ), wxITEM_CHECK );
+
     m_drawToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiBitmap( zoom_area_xpm ),
                             _( "Zoom to selection" ), wxITEM_CHECK );
 

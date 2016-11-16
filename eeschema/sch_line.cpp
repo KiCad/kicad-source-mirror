@@ -220,7 +220,7 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
     if( Color >= 0 )
         color = Color;
     else
-        color = GetLayerColor( m_Layer );
+        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -559,7 +559,7 @@ bool SCH_LINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
     EDA_RECT rect = aRect;
 
     if ( aAccuracy )
-    	rect.Inflate( aAccuracy );
+        rect.Inflate( aAccuracy );
 
     if( aContained )
         return rect.Contains( m_start ) && rect.Contains( m_end );
