@@ -226,6 +226,9 @@ static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FI
 
 static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematics" ), HK_UPDATE_PCB_FROM_SCH, WXK_F8 );
 
+// Higtlight connection
+static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT, 'X' + GR_KB_CTRL );
+
 // List of common hotkey descriptors
 static EDA_HOTKEY* common_Hotkey_List[] =
 {
@@ -303,6 +306,7 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkAutoplaceFields,
     &HkLeaveSheet,
     &HkDeleteNode,
+    &HkHighlightConnection,
     NULL
 };
 
@@ -433,6 +437,11 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_RESET_LOCAL_COORD:         // Reset the relative coord
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
+        break;
+
+    case ID_HOTKEY_HIGHLIGHT:
+        if( notBusy )
+            HighlightConnectionAtPosition( GetCrossHairPosition() );
         break;
 
     case HK_LEFT_CLICK:

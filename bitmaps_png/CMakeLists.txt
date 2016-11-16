@@ -379,6 +379,7 @@ set( BMAPS_MID
     mw_add_stub
     mw_toolbar
     net_highlight
+    net_highlight_schematic
     netlist
     net_locked
     net_unlocked

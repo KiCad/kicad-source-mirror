@@ -175,6 +175,8 @@ enum id_eeschema_frm
     // events (menus, toolbar, context menu, etc.) that result in the same event handler.
     ID_CANCEL_CURRENT_COMMAND,
 
+    ID_HOTKEY_HIGHLIGHT,
+
     /* Library editor main menubar IDs. */
     ID_LIBEDIT_DIMENSIONS,
 

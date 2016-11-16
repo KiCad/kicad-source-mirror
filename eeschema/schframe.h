@@ -457,6 +457,18 @@ public:
      */
     bool DeleteItemAtCrossHair( wxDC* aDC );
 
+
+    /**
+     * Function HighlightConnectionAtPosition
+     * Highlight the connection found at aPosition.
+     * If no connection to highlight is found, clear the current highlighted connect (if any).
+     *
+     * @param aPosition is the location of the test point (usually cross hair position).
+     * @return true if ok, false if there was an issue to build the netlist
+     * needed to highlight a connection.
+     */
+    bool HighlightConnectionAtPosition( wxPoint aPosition );
+
     /**
      * Function FindComponentAndItem
      * finds a component in the schematic and an item in this component.
@@ -618,6 +630,15 @@ public:
      * draws the current sheet on the display.
      */
     void DisplayCurrentSheet();
+
+    /**
+     * Function SetCurrentSheetHighlightFlags
+     * Set/reset the BRIGHTENED of connected objects inside the current sheet,
+     * according to the highligthed net name.
+     * @return true if the flags are correctly set, and false if something goes wrong
+     * (duplicate sheet names)
+     */
+    bool SetCurrentSheetHighlightFlags();
 
     /**
      * Function GetUniqueFilenameForCurrentSheet
