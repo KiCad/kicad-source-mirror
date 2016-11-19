@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-13 16:36+0300\n"
-"PO-Revision-Date: 2016-11-13 16:36+0300\n"
+"POT-Creation-Date: 2016-11-19 16:17+0300\n"
+"PO-Revision-Date: 2016-11-19 16:31+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -696,7 +696,7 @@ msgid "Choose Colors"
 msgstr "Выбрать цвета"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:288
-#: eeschema/widgets/widget_eeschema_color_config.cpp:193
+#: eeschema/widgets/widget_eeschema_color_config.cpp:194
 msgid "Background Color"
 msgstr "Цвет фона"
 
@@ -1372,7 +1372,7 @@ msgstr "Отразить блок"
 msgid "Marker Info"
 msgstr "Информация о маркере"
 
-#: common/colors.cpp:39 eeschema/widgets/widget_eeschema_color_config.cpp:192
+#: common/colors.cpp:39 eeschema/widgets/widget_eeschema_color_config.cpp:193
 msgid "Black"
 msgstr "Черный"
 
@@ -1388,7 +1388,7 @@ msgstr "Серый 2"
 msgid "Gray 3"
 msgstr "Серый 3"
 
-#: common/colors.cpp:43 eeschema/widgets/widget_eeschema_color_config.cpp:191
+#: common/colors.cpp:43 eeschema/widgets/widget_eeschema_color_config.cpp:192
 msgid "White"
 msgstr "Белый"
 
@@ -1549,7 +1549,7 @@ msgid "Cannot create output directory '%s'.\n"
 msgstr "Не удалось создать выходной каталог '%s'.\n"
 
 #: common/confirm.cpp:74 common/pgm_base.cpp:896 eeschema/symbedit.cpp:109
-#: eeschema/widgets/widget_eeschema_color_config.cpp:277
+#: eeschema/widgets/widget_eeschema_color_config.cpp:278
 msgid "Warning"
 msgstr "Предупреждение"
 
@@ -3074,7 +3074,7 @@ msgid "Set units to millimeters"
 msgstr "Установить единицы измерения - мм"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:195 eeschema/tool_lib.cpp:245
-#: eeschema/tool_sch.cpp:289 gerbview/toolbars_gerber.cpp:240 pcbnew/tool_pcb.cpp:349
+#: eeschema/tool_sch.cpp:292 gerbview/toolbars_gerber.cpp:240 pcbnew/tool_pcb.cpp:349
 msgid "Change cursor shape"
 msgstr "Изменить форму курсора"
 
@@ -3170,7 +3170,7 @@ msgstr ""
 "библиотек, включив все посад.места не включённые KiCad. Подробности смотрите в "
 "разделе \"Таблица библиотек посадочных мест\" документации CvPcb."
 
-#: cvpcb/cvpcb.cpp:182 pcbnew/pcbnew.cpp:350
+#: cvpcb/cvpcb.cpp:182 pcbnew/pcbnew.cpp:339
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
@@ -3273,7 +3273,7 @@ msgstr ""
 msgid "Configuration Error"
 msgstr "Ошибка конфигурации"
 
-#: cvpcb/cvpcb_mainframe.cpp:754 eeschema/schframe.cpp:1384 kicad/prjconfig.cpp:334
+#: cvpcb/cvpcb_mainframe.cpp:754 eeschema/schframe.cpp:1386 kicad/prjconfig.cpp:334
 #: pcbnew/moduleframe.cpp:792 pcbnew/pcbframe.cpp:1006
 msgid " [Read Only]"
 msgstr " [Только чтение]"
@@ -3766,12 +3766,12 @@ msgstr "Не удалось загрузить файл проекта '%s'"
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
-"%s"
+" %s"
 msgstr ""
-"Не удалось загрузить библиотеку компонентов '%s'. Ошибка:\n"
+"Не удалось загрузить библиотеку компонентов '%s'. Ошибка: \n"
 "%s"
 
-#: eeschema/class_library.cpp:988
+#: eeschema/class_library.cpp:985
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -4055,7 +4055,7 @@ msgid "Alias of "
 msgstr "Псевдоним "
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:75
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.h:114
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.h:115
 msgid "Library Component Properties"
 msgstr "Свойства библиотеки компонентов"
 
@@ -4138,7 +4138,7 @@ msgstr "Редактировать фильтр посад.места"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:28
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:22
-#: eeschema/widgets/widget_eeschema_color_config.cpp:102
+#: eeschema/widgets/widget_eeschema_color_config.cpp:103
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:414
 msgid "General"
 msgstr "Общие"
@@ -4394,7 +4394,7 @@ msgid "No"
 msgstr "Нет"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
-#: eeschema/sch_component.cpp:1547 eeschema/widgets/widget_eeschema_color_config.cpp:103
+#: eeschema/sch_component.cpp:1547 eeschema/widgets/widget_eeschema_color_config.cpp:104
 msgid "Component"
 msgstr "Компонент"
 
@@ -6953,13 +6953,17 @@ msgstr "Выбор компонента (загружено %d элементо�
 msgid "Failed to find part '%s' in library"
 msgstr "Не удалось найти элемент '%s' в библиотеке"
 
-#: eeschema/hierarch.cpp:147
+#: eeschema/hierarch.cpp:150
 msgid "Navigator"
 msgstr "Навигатор"
 
-#: eeschema/hierarch.cpp:157
+#: eeschema/hierarch.cpp:160
 msgid "Root"
 msgstr "Основной лист"
+
+#: eeschema/highlight_connection.cpp:51
+msgid "Error: duplicate sub-sheet names found in current sheet. Fix it"
+msgstr "Ошибка: найдены дубликаты имён под листов на текущем листе. Исправьте это"
 
 #: eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:60 pagelayout_editor/hotkeys.cpp:74
 #: pcbnew/basepcbframe.cpp:843 pcbnew/hotkeys.cpp:160 pcbnew/hotkeys.cpp:162
@@ -7179,20 +7183,24 @@ msgstr "Авторазместить поля"
 msgid "Update PCB from Schematics"
 msgstr "Обновить плату из схемы"
 
-#: eeschema/hotkeys.cpp:333 pagelayout_editor/hotkeys.cpp:117
+#: eeschema/hotkeys.cpp:230
+msgid "Highlight Connection"
+msgstr "Подсветить соединение"
+
+#: eeschema/hotkeys.cpp:337 pagelayout_editor/hotkeys.cpp:117
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20 pcbnew/hotkeys.cpp:304
 msgid "Common"
 msgstr "Общее"
 
-#: eeschema/hotkeys.cpp:334
+#: eeschema/hotkeys.cpp:338
 msgid "Schematic Editor"
 msgstr "Редактор схем"
 
-#: eeschema/hotkeys.cpp:335 eeschema/libeditframe.cpp:187
+#: eeschema/hotkeys.cpp:339 eeschema/libeditframe.cpp:187
 msgid "Library Editor"
 msgstr "Редактор библиотек"
 
-#: eeschema/hotkeys.cpp:749
+#: eeschema/hotkeys.cpp:758
 msgid "Add Pin"
 msgstr "Добавить вывод"
 
@@ -7884,8 +7892,8 @@ msgstr "Часть %s"
 msgid "No part to save."
 msgstr "Нет компонента для сохранения."
 
-#: eeschema/libeditframe.cpp:1126 eeschema/schedit.cpp:533 eeschema/tool_lib.cpp:65
-#: eeschema/tool_sch.cpp:194 gerbview/events_called_functions.cpp:210
+#: eeschema/libeditframe.cpp:1126 eeschema/schedit.cpp:537 eeschema/tool_lib.cpp:65
+#: eeschema/tool_sch.cpp:197 gerbview/events_called_functions.cpp:210
 #: gerbview/toolbars_gerber.cpp:218 pagelayout_editor/events_functions.cpp:133
 #: pagelayout_editor/toolbars_pl_editor.cpp:97 pcbnew/edit.cpp:1442
 #: pcbnew/modedit.cpp:922 pcbnew/tool_modedit.cpp:165 pcbnew/tool_pcb.cpp:426
@@ -7901,7 +7909,7 @@ msgstr "Добавить вывод"
 msgid "Set pin options"
 msgstr "Установка параметров вывода"
 
-#: eeschema/libeditframe.cpp:1147 eeschema/schedit.cpp:573 pcbnew/edit.cpp:1502
+#: eeschema/libeditframe.cpp:1147 eeschema/schedit.cpp:577 pcbnew/edit.cpp:1502
 #: pcbnew/modedit.cpp:938 pcbnew/tools/drawing_tool.cpp:176
 msgid "Add text"
 msgstr "Добавить текст"
@@ -7930,7 +7938,7 @@ msgstr "Установить позиция привязки"
 msgid "Import"
 msgstr "Импорт"
 
-#: eeschema/libeditframe.cpp:1189 eeschema/schedit.cpp:609 pcbnew/edit.cpp:1514
+#: eeschema/libeditframe.cpp:1189 eeschema/schedit.cpp:613 pcbnew/edit.cpp:1514
 #: pcbnew/modedit.cpp:963 pcbnew/tools/pcbnew_control.cpp:762
 #: eeschema/help_common_strings.h:48
 msgid "Delete item"
@@ -8571,11 +8579,11 @@ msgstr ""
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Ошибка: дубликат имени листа. Продолжить?"
 
-#: eeschema/netlist.cpp:171
+#: eeschema/netlist.cpp:172
 msgid "No Objects"
 msgstr "Нет объектов"
 
-#: eeschema/netlist.cpp:175
+#: eeschema/netlist.cpp:176
 #, c-format
 msgid "Net count = %d"
 msgstr "Количество цепей = %d"
@@ -9024,15 +9032,15 @@ msgstr ""
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Позиция занята другим выводом. Продолжить?"
 
-#: eeschema/pinedit.cpp:706
+#: eeschema/pinedit.cpp:710
 msgid "No pins!"
 msgstr "Нет выводов!"
 
-#: eeschema/pinedit.cpp:716
+#: eeschema/pinedit.cpp:720
 msgid "Marker Information"
 msgstr "Информация маркера"
 
-#: eeschema/pinedit.cpp:742
+#: eeschema/pinedit.cpp:746
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s "
@@ -9041,25 +9049,25 @@ msgstr ""
 "<b>Дубликат вывода %s</b> \"%s\" с координатами <b>(%.3f, %.3f)</b>, конфликт с "
 "выводом %s \"%s\" с координатами <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:756 eeschema/pinedit.cpp:798
+#: eeschema/pinedit.cpp:760 eeschema/pinedit.cpp:802
 #, c-format
 msgid " in part %c"
 msgstr " в элементе %c"
 
-#: eeschema/pinedit.cpp:762 eeschema/pinedit.cpp:804
+#: eeschema/pinedit.cpp:766 eeschema/pinedit.cpp:808
 msgid "  of converted"
 msgstr " (дополнительный вид)"
 
-#: eeschema/pinedit.cpp:764 eeschema/pinedit.cpp:806
+#: eeschema/pinedit.cpp:768 eeschema/pinedit.cpp:810
 msgid "  of normal"
 msgstr " (нормальный вид)"
 
-#: eeschema/pinedit.cpp:789
+#: eeschema/pinedit.cpp:793
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Вывод %s не по сетке</b> \"%s\" с координатами <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:815
+#: eeschema/pinedit.cpp:819
 msgid "No off grid or duplicate pins were found."
 msgstr "Дубликатов выводов и выводов, расположенных не по сетке, не найдено."
 
@@ -9595,79 +9603,83 @@ msgstr "Очистить этот лист?"
 msgid "No tool selected"
 msgstr "Инструмент не выбран"
 
-#: eeschema/schedit.cpp:537
+#: eeschema/schedit.cpp:533
+msgid "click to highlight"
+msgstr "кликните для подсветки"
+
+#: eeschema/schedit.cpp:541
 msgid "Descend or ascend hierarchy"
 msgstr "Перемещение по иерархии"
 
-#: eeschema/schedit.cpp:541
+#: eeschema/schedit.cpp:545
 msgid "Add no connect"
 msgstr "Добавить \"Не подключено\""
 
-#: eeschema/schedit.cpp:545
+#: eeschema/schedit.cpp:549
 msgid "Add wire"
 msgstr "Добавить проводник"
 
-#: eeschema/schedit.cpp:549
+#: eeschema/schedit.cpp:553
 msgid "Add bus"
 msgstr "Добавить шину"
 
-#: eeschema/schedit.cpp:553
+#: eeschema/schedit.cpp:557
 msgid "Add lines"
 msgstr "Добавить линию"
 
-#: eeschema/schedit.cpp:557
+#: eeschema/schedit.cpp:561
 msgid "Add junction"
 msgstr "Добавить соединение"
 
-#: eeschema/schedit.cpp:561
+#: eeschema/schedit.cpp:565
 msgid "Add label"
 msgstr "Добавить метку"
 
-#: eeschema/schedit.cpp:565
+#: eeschema/schedit.cpp:569
 msgid "Add global label"
 msgstr "Добавить глобальную метку"
 
-#: eeschema/schedit.cpp:569
+#: eeschema/schedit.cpp:573
 msgid "Add hierarchical label"
 msgstr "Добавить иерархическую метку"
 
-#: eeschema/schedit.cpp:577
+#: eeschema/schedit.cpp:581
 msgid "Add image"
 msgstr "Добавить изображение"
 
-#: eeschema/schedit.cpp:581
+#: eeschema/schedit.cpp:585
 msgid "Add wire to bus entry"
 msgstr "Добавить ввод проводника в шину"
 
-#: eeschema/schedit.cpp:585
+#: eeschema/schedit.cpp:589
 msgid "Add bus to bus entry"
 msgstr "Добавить ввод шины в шину"
 
-#: eeschema/schedit.cpp:589
+#: eeschema/schedit.cpp:593
 msgid "Add sheet"
 msgstr "Добавить лист"
 
-#: eeschema/schedit.cpp:593
+#: eeschema/schedit.cpp:597
 msgid "Add sheet pins"
 msgstr "Добавить вывод листа"
 
-#: eeschema/schedit.cpp:597
+#: eeschema/schedit.cpp:601
 msgid "Import sheet pins"
 msgstr "Импорт выводов листа"
 
-#: eeschema/schedit.cpp:601
+#: eeschema/schedit.cpp:605
 msgid "Add component"
 msgstr "Добавить компонент"
 
-#: eeschema/schedit.cpp:605
+#: eeschema/schedit.cpp:609
 msgid "Add power"
 msgstr "Добавить питание"
 
-#: eeschema/schedit.cpp:614
+#: eeschema/schedit.cpp:618
 msgid "Add a simulator probe"
 msgstr "Добавить пробник симулятора"
 
-#: eeschema/schedit.cpp:619
+#: eeschema/schedit.cpp:623
 msgid "Select a value to be tuned"
 msgstr "Выбрать значение для подстройки"
 
@@ -9679,7 +9691,7 @@ msgstr "Не найдено"
 msgid "The following libraries were not found:"
 msgstr "Следующие библиотеки не найдены:"
 
-#: eeschema/schframe.cpp:638 pcbnew/pcbframe.cpp:604
+#: eeschema/schframe.cpp:640 pcbnew/pcbframe.cpp:604
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -9690,23 +9702,23 @@ msgstr ""
 "'%s'\n"
 "перед закрытием?"
 
-#: eeschema/schframe.cpp:785
+#: eeschema/schframe.cpp:787
 msgid "Draw wires and buses in any direction"
 msgstr "Рисовать проводники и шины в любом направлении"
 
-#: eeschema/schframe.cpp:786
+#: eeschema/schframe.cpp:788
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Рисовать только гориз. и верт. проводники и шины"
 
-#: eeschema/schframe.cpp:795
+#: eeschema/schframe.cpp:797
 msgid "Do not show hidden pins"
 msgstr "Не показывать скрытые выводы"
 
-#: eeschema/schframe.cpp:796 eeschema/tool_sch.cpp:295
+#: eeschema/schframe.cpp:798 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Показать скрытые выводы"
 
-#: eeschema/schframe.cpp:850
+#: eeschema/schframe.cpp:852
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone mode. In "
 "order to create/update PCBs from schematics, you need to launch Kicad shell and "
@@ -9716,15 +9728,15 @@ msgstr ""
 "Для создания/обновления печатной платы необходимо запустить KiCAD оболочку и создать "
 "проект печатной платы."
 
-#: eeschema/schframe.cpp:972
+#: eeschema/schframe.cpp:974
 msgid "Schematic"
 msgstr "Схема"
 
-#: eeschema/schframe.cpp:991
+#: eeschema/schframe.cpp:993
 msgid "New Schematic"
 msgstr "Новая схема"
 
-#: eeschema/schframe.cpp:1004
+#: eeschema/schframe.cpp:1006
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr ""
@@ -9732,15 +9744,15 @@ msgstr ""
 "\n"
 "Используйте Отрыть вместо Создать"
 
-#: eeschema/schframe.cpp:1025
+#: eeschema/schframe.cpp:1027
 msgid "Open Schematic"
 msgstr "Открыть схему"
 
-#: eeschema/schframe.cpp:1155
+#: eeschema/schframe.cpp:1157
 msgid "Error: not a component or no component"
 msgstr "Ошибка: не компонент или нет компонента"
 
-#: eeschema/schframe.cpp:1387
+#: eeschema/schframe.cpp:1389
 msgid " [no file]"
 msgstr " [нет файла]"
 
@@ -10143,7 +10155,7 @@ msgstr "Править выводы в частях или стиль компо
 msgid "Show pin table"
 msgstr "Показать таблицу выводов"
 
-#: eeschema/tool_lib.cpp:232 eeschema/tool_sch.cpp:276 gerbview/toolbars_gerber.cpp:223
+#: eeschema/tool_lib.cpp:232 eeschema/tool_sch.cpp:279 gerbview/toolbars_gerber.cpp:223
 msgid "Turn grid off"
 msgstr "Не отображать сетку"
 
@@ -10213,23 +10225,27 @@ msgstr "Запустить CvPcb для связи компонентов и п�
 msgid "Run Pcbnew to layout printed circuit board"
 msgstr "Запустить Pcbnew для разработки печатной платы"
 
-#: eeschema/tool_sch.cpp:198
+#: eeschema/tool_sch.cpp:194
+msgid "Click to highlight net"
+msgstr "Кликните для подсветки цепи"
+
+#: eeschema/tool_sch.cpp:201
 msgid "Ascend/descend hierarchy"
 msgstr "Перемещение по иерархии"
 
-#: eeschema/tool_sch.cpp:254 eeschema/help_common_strings.h:90
+#: eeschema/tool_sch.cpp:257 eeschema/help_common_strings.h:90
 msgid "Add bitmap image"
 msgstr "Добавить растровое изображение"
 
-#: eeschema/tool_sch.cpp:280
+#: eeschema/tool_sch.cpp:283
 msgid "Set unit to inch"
 msgstr "Установить единицы измерения - дюймы"
 
-#: eeschema/tool_sch.cpp:284
+#: eeschema/tool_sch.cpp:287
 msgid "Set unit to mm"
 msgstr "Установить единицы измерения - мм"
 
-#: eeschema/tool_sch.cpp:300
+#: eeschema/tool_sch.cpp:303
 msgid "HV orientation for wires and bus"
 msgstr "Ортогональная ориентация для проводников и шин"
 
@@ -10337,7 +10353,7 @@ msgid "Pin name"
 msgstr "Имя вывода"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:85
-#: eeschema/widgets/widget_eeschema_color_config.cpp:104
+#: eeschema/widgets/widget_eeschema_color_config.cpp:105
 msgid "Sheet"
 msgstr "Лист"
 
@@ -10371,11 +10387,15 @@ msgstr "Ошибка ERС"
 msgid "Grid"
 msgstr "Сетка"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:105
+#: eeschema/widgets/widget_eeschema_color_config.cpp:97
+msgid "Brightened"
+msgstr "Подсвеченный"
+
+#: eeschema/widgets/widget_eeschema_color_config.cpp:106
 msgid "Miscellaneous"
 msgstr "Разное"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:274
+#: eeschema/widgets/widget_eeschema_color_config.cpp:275
 msgid ""
 "Some items have the same color as the background\n"
 "and they will not be seen on the screen.  Are you\n"
@@ -19254,11 +19274,11 @@ msgstr "Использовать Protel расширения файлов"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid ""
-"Use Protel Gerber extensions - .GBL, .GTL, etc...\n"
-"No more recommended. The official extension is .gbr"
+"Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
+"No longer recommended. The official extension is .gbr"
 msgstr ""
-"Использовать расширения Protel Gerber  - .GBL, .GTL, и.т.д.\n"
-"Не рекомендуется. Официальное расширение .gbr"
+"Использовать расширения Protel Gerber (.GBL, .GTL, и.т.д.)\n"
+"Больше не рекомендуется. Официальное расширение .gbr"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Include extended (X2) attributes"
@@ -20128,7 +20148,7 @@ msgstr "<package> наименование:'%s' дублирован в eagle <�
 msgid "No '%s' package in library '%s'"
 msgstr "Посадочного места '%s' нет в библиотеке '%s'"
 
-#: pcbnew/eagle_plugin.cpp:3021
+#: pcbnew/eagle_plugin.cpp:3022
 #, c-format
 msgid "File '%s' is not readable."
 msgstr "Файл '%s' не удаётся прочитать."
@@ -22428,8 +22448,8 @@ msgstr ""
 msgid "Graphic not allowed on Copper layers"
 msgstr "Графика не разрешена на слоях меди"
 
-#: pcbnew/onleftclick.cpp:283
-msgid "Tracks on Copper layers only "
+#: pcbnew/onleftclick.cpp:283 pcbnew/router/router_tool.cpp:492
+msgid "Tracks on Copper layers only"
 msgstr "Дорожки только на слоях меди"
 
 #: pcbnew/onleftclick.cpp:342
@@ -23037,7 +23057,7 @@ msgstr ""
 "создания/обновления печатной платы необходимо запустить KiCad оболочку и создать "
 "проект печатной платы."
 
-#: pcbnew/pcbnew.cpp:337
+#: pcbnew/pcbnew.cpp:326
 msgid ""
 "You have run Pcbnew for the first time using the new footprint library table method "
 "for finding footprints.\n"
@@ -23337,15 +23357,15 @@ msgstr ""
 "Перех.микроотв. могут быть размещены только между внешними слоями (F.Cu/B.Cu) и теми, "
 "которые непосредственно прилегают к ним."
 
-#: pcbnew/router/router_tool.cpp:649
+#: pcbnew/router/router_tool.cpp:654
 msgid "Route Track"
 msgstr "Трассировать дорожку"
 
-#: pcbnew/router/router_tool.cpp:656
+#: pcbnew/router/router_tool.cpp:661
 msgid "Router Differential Pair"
 msgstr "Трассировка диф.пары"
 
-#: pcbnew/router/router_tool.cpp:748 pcbnew/router/router_tool.cpp:812
+#: pcbnew/router/router_tool.cpp:753 pcbnew/router/router_tool.cpp:817
 msgid "The item is locked. Do you want to continue?"
 msgstr "Элемент заблокирован. Хотите продолжить?"
 
