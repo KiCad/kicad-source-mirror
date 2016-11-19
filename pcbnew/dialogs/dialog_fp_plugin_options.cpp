@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 CERN
- * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ public:
         // Fill the grid with existing aOptions
         string options = TO_UTF8( aOptions );
 
-        PROPERTIES* props = FP_LIB_TABLE::ParseOptions( options );
+        PROPERTIES* props = LIB_TABLE::ParseOptions( options );
 
         if( props )
         {
@@ -192,7 +192,7 @@ private:
             }
         }
 
-        return FP_LIB_TABLE::FormatOptions( &props );
+        return LIB_TABLE::FormatOptions( &props );
     }
 
     void saveColSizes()

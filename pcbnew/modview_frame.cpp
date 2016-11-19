@@ -727,7 +727,7 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
     if( getCurNickname().size() )
     {
         FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
-        const FP_LIB_TABLE_ROW* row = libtable->FindRow( getCurNickname() );
+        const LIB_TABLE_ROW* row = libtable->FindRow( getCurNickname() );
 
         if( row )
             title << L" \u2014 " << row->GetFullURI( true );

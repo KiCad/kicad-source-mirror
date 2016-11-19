@@ -74,9 +74,9 @@ public:
      * is a copy constructor that builds a wxGridTableBase (table model) by wrapping
      * an FP_LIB_TABLE.
      */
-    FP_TBL_MODEL( const FP_LIB_TABLE& aTableToEdit ) :
-        FP_LIB_TABLE( aTableToEdit )    // copy constructor
+    FP_TBL_MODEL( const FP_LIB_TABLE& aTableToEdit )
     {
+        rows = aTableToEdit.rows;
     }
 
     //-----<wxGridTableBase overloads>-------------------------------------------
@@ -88,15 +88,15 @@ public:
     {
         if( unsigned( aRow ) < rows.size() )
         {
-            const FP_LIB_TABLE_ROW&  r  = rows[aRow];
+            const LIB_TABLE_ROW* r  = &rows[aRow];
 
             switch( aCol )
             {
-            case COL_NICKNAME:  return r.GetNickName();
-            case COL_URI:       return r.GetFullURI();
-            case COL_TYPE:      return r.GetType();
-            case COL_OPTIONS:   return r.GetOptions();
-            case COL_DESCR:     return r.GetDescr();
+            case COL_NICKNAME:  return r->GetNickName();
+            case COL_URI:       return r->GetFullURI();
+            case COL_TYPE:      return r->GetType();
+            case COL_OPTIONS:   return r->GetOptions();
+            case COL_DESCR:     return r->GetDescr();
             default:
                 ;       // fall thru to wxEmptyString
             }
@@ -109,15 +109,15 @@ public:
     {
         if( unsigned( aRow ) < rows.size() )
         {
-            FP_LIB_TABLE_ROW&  r  = rows[aRow];
+            LIB_TABLE_ROW* r  = &rows[aRow];
 
             switch( aCol )
             {
-            case COL_NICKNAME:  r.SetNickName( aValue );    break;
-            case COL_URI:       r.SetFullURI( aValue );     break;
-            case COL_TYPE:      r.SetType( aValue  );       break;
-            case COL_OPTIONS:   r.SetOptions( aValue );     break;
-            case COL_DESCR:     r.SetDescr( aValue );       break;
+            case COL_NICKNAME:  r->SetNickName( aValue );    break;
+            case COL_URI:       r->SetFullURI( aValue );     break;
+            case COL_TYPE:      r->SetType( aValue  );       break;
+            case COL_OPTIONS:   r->SetOptions( aValue );     break;
+            case COL_DESCR:     r->SetDescr( aValue );       break;
             }
         }
     }
@@ -131,7 +131,11 @@ public:
     {
         if( aPos < rows.size() )
         {
-            rows.insert( rows.begin() + aPos, aNumRows, FP_LIB_TABLE_ROW() );
+            for( size_t i = 0; i < aNumRows; i++ )
+            {
+                rows.insert( rows.begin() + i,
+                             dynamic_cast< LIB_TABLE_ROW* >( new FP_LIB_TABLE_ROW ) );
+            }
 
             // use the (wxGridStringTable) source Luke.
             if( GetView() )
@@ -146,6 +150,7 @@ public:
 
             return true;
         }
+
         return false;
     }
 
@@ -153,7 +158,7 @@ public:
     {
         // do not modify aNumRows, original value needed for wxGridTableMessage below
         for( int i = aNumRows; i; --i )
-            rows.push_back( FP_LIB_TABLE_ROW() );
+            rows.push_back( new FP_LIB_TABLE_ROW );
 
         if( GetView() )
         {
@@ -173,7 +178,7 @@ public:
         // aPos+aNumRows may wrap here, so both ends of the range are tested.
         if( aPos < rows.size() && aPos + aNumRows <= rows.size() )
         {
-            FP_LIB_TABLE_ROWS_ITER start = rows.begin() + aPos;
+            LIB_TABLE_ROWS_ITER start = rows.begin() + aPos;
             rows.erase( start, start + aNumRows );
 
             if( GetView() )
@@ -188,13 +193,8 @@ public:
 
             return true;
         }
-        return false;
-    }
 
-    void Clear() override
-    {
-        rows.clear();
-        nickIndex.clear();
+        return false;
     }
 
     wxString GetColLabelValue( int aCol ) override
@@ -267,9 +267,10 @@ protected:
 
                 for( int i = 0;  i < tmp_tbl.GetCount();  ++i )
                 {
-                    tbl->At( cur_row+i ) = tmp_tbl.At( i );
+                    tbl->rows.replace( cur_row+i, tmp_tbl.At( i ) );
                 }
             }
+
             m_grid->AutoSizeColumns( false );
         }
         else
@@ -364,8 +365,8 @@ public:
 
         // Gives a selection for each grid, mainly for delete lib button.
         // Without that, we do not see what lib will be deleted
-        m_global_grid->SelectRow(0);
-        m_project_grid->SelectRow(0);
+        m_global_grid->SelectRow( 0 );
+        m_project_grid->SelectRow( 0 );
 
         // for ALT+A handling, we want the initial focus to be on the first selected grid.
         m_cur_grid->SetFocus();
@@ -534,7 +535,6 @@ private:
 
     void deleteRowHandler( wxCommandEvent& event ) override
     {
-#if 1
         int currRow = getCursorRow();
         wxArrayInt selectedRows	= m_cur_grid->GetSelectedRows();
 
@@ -553,36 +553,29 @@ private:
             m_cur_grid->SetGridCursor(m_cur_grid->GetNumberRows()-1, getCursorCol() );
 
         m_cur_grid->SelectRow( m_cur_grid->GetGridCursorRow() );
-#else
-        int rowCount = m_cur_grid->GetNumberRows();
-        int curRow   = getCursorRow();
-
-        if( curRow >= 0 )
-        {
-            m_cur_grid->DeleteRows( curRow );
-
-            if( curRow && curRow == rowCount - 1 )
-            {
-                m_cur_grid->SetGridCursor( curRow-1, getCursorCol() );
-            }
-        }
-#endif
     }
 
     void moveUpHandler( wxCommandEvent& event ) override
     {
-        int curRow = getCursorRow();
+        wxArrayInt rowsSelected = m_cur_grid->GetSelectedRows();
+
+        if( rowsSelected.GetCount() == 0 )
+            return;
+
+        // @todo: add multiple selection moves.
+        int curRow = rowsSelected[0];
+
         if( curRow >= 1 )
         {
             int curCol = getCursorCol();
 
             FP_TBL_MODEL* tbl = cur_model();
 
-            ROW move_me = tbl->rows[curRow];
+            boost::ptr_vector< LIB_TABLE_ROW >::auto_type move_me =
+                tbl->rows.release( tbl->rows.begin() + curRow );
 
-            tbl->rows.erase( tbl->rows.begin() + curRow );
             --curRow;
-            tbl->rows.insert( tbl->rows.begin() + curRow, move_me );
+            tbl->rows.insert( tbl->rows.begin() + curRow, move_me.release() );
 
             if( tbl->GetView() )
             {
@@ -603,18 +596,25 @@ private:
 
     void moveDownHandler( wxCommandEvent& event ) override
     {
+        wxArrayInt rowsSelected = m_cur_grid->GetSelectedRows();
+
+        if( rowsSelected.GetCount() == 0 )
+            return;
+
         FP_TBL_MODEL* tbl = cur_model();
 
-        int curRow = getCursorRow();
+        // @todo: add multiple selection moves.
+        int curRow = rowsSelected[0];
+
         if( unsigned( curRow + 1 ) < tbl->rows.size() )
         {
-            int curCol  = getCursorCol();
+            int curCol = getCursorCol();
 
-            ROW move_me = tbl->rows[curRow];
+            boost::ptr_vector< LIB_TABLE_ROW >::auto_type move_me =
+                tbl->rows.release( tbl->rows.begin() + curRow );
 
-            tbl->rows.erase( tbl->rows.begin() + curRow );
-             ++curRow;
-            tbl->rows.insert( tbl->rows.begin() + curRow, move_me );
+            ++curRow;
+            tbl->rows.insert( tbl->rows.begin() + curRow, move_me.release() );
 
             if( tbl->GetView() )
             {
@@ -639,17 +639,17 @@ private:
 
         if( tbl->GetNumberRows() )
         {
-            int     curRow = getCursorRow();
-            ROW&    row    = tbl->rows[curRow];
+            int            curRow = getCursorRow();
+            LIB_TABLE_ROW* row    = &tbl->rows[curRow];
 
             wxString        result;
-            const wxString& options = row.GetOptions();
+            const wxString& options = row->GetOptions();
 
-            InvokePluginOptionsEditor( this, row.GetNickName(), row.GetType(), options, &result );
+            InvokePluginOptionsEditor( this, row->GetNickName(), row->GetType(), options, &result );
 
             if( options != result )
             {
-                row.SetOptions( result );
+                row->SetOptions( result );
 
                 // all but options:
                 m_cur_grid->AutoSizeColumn( COL_NICKNAME, false );
@@ -690,7 +690,9 @@ private:
             {
                 dialogRet |= 1;
 
-                *m_global  = *global_model();
+                m_global->Clear();
+                m_global->rows.transfer( m_global->rows.end(), global_model()->rows.begin(),
+                                         global_model()->rows.end(), global_model()->rows );
                 m_global->reindex();
             }
 
@@ -698,7 +700,9 @@ private:
             {
                 dialogRet |= 2;
 
-                *m_project = *project_model();
+                m_project->Clear();
+                m_project->rows.transfer( m_project->rows.end(), project_model()->rows.begin(),
+                                          project_model()->rows.end(), project_model()->rows );
                 m_project->reindex();
             }
 
@@ -769,6 +773,7 @@ private:
         m_path_subs_grid->AppendRows( unique.size() );
 
         row = 0;
+
         for( SET_CITER it = unique.begin();  it != unique.end();  ++it, ++row )
         {
             wxString    evName = *it;
@@ -786,16 +791,17 @@ private:
     //-----</event handlers>---------------------------------
 
     // caller's tables are modified only on OK button and successful verification.
-    FP_LIB_TABLE*       m_global;
-    FP_LIB_TABLE*       m_project;
+    FP_LIB_TABLE*    m_global;
+    FP_LIB_TABLE*    m_project;
 
-    FP_TBL_MODEL*       global_model()  const   { return (FP_TBL_MODEL*) m_global_grid->GetTable(); }
-    FP_TBL_MODEL*       project_model() const   { return (FP_TBL_MODEL*) m_project_grid->GetTable(); }
-    FP_TBL_MODEL*       cur_model() const       { return (FP_TBL_MODEL*) m_cur_grid->GetTable(); }
+    FP_TBL_MODEL*    global_model()  const   { return (FP_TBL_MODEL*) m_global_grid->GetTable(); }
+    FP_TBL_MODEL*    project_model() const   { return (FP_TBL_MODEL*) m_project_grid->GetTable(); }
+    FP_TBL_MODEL*    cur_model() const       { return (FP_TBL_MODEL*) m_cur_grid->GetTable(); }
 
-    wxGrid*             m_cur_grid;     ///< changed based on tab choice
-    static int          m_pageNdx;      ///< Remember the last notebook page selected during a session
+    wxGrid*          m_cur_grid;     ///< changed based on tab choice
+    static int       m_pageNdx;      ///< Remember the last notebook page selected during a session
 };
+
 
 int DIALOG_FP_LIB_TABLE::m_pageNdx = 0;
 
@@ -846,7 +852,8 @@ void DIALOG_FP_LIB_TABLE::OnClickLibraryWizard( wxCommandEvent& event )
 }
 
 
-int InvokePcbLibTableEditor( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )
+int InvokePcbLibTableEditor( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal,
+                             FP_LIB_TABLE* aProject )
 {
     DIALOG_FP_LIB_TABLE dlg( aParent, aGlobal, aProject );
 
@@ -856,7 +863,8 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, F
 }
 
 
-int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject )
+int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal,
+                           FP_LIB_TABLE* aProject )
 {
     WIZARD_FPLIB_TABLE dlg( aParent );
 
@@ -875,10 +883,10 @@ int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_
             if( it->GetStatus() == WIZARD_FPLIB_TABLE::LIBRARY::INVALID )
                 continue;
 
-            FP_LIB_TABLE_ROW row( it->GetDescription(),
-                                  it->GetAutoPath( scope ),
-                                  it->GetPluginName(),
-                                  wxEmptyString );     // options
+            FP_LIB_TABLE_ROW* row = new FP_LIB_TABLE_ROW( it->GetDescription(),
+                                                          it->GetAutoPath( scope ),
+                                                          it->GetPluginName(),
+                                                          wxEmptyString );     // options
             fp_tbl->InsertRow( row );
         }
     }

@@ -42,18 +42,23 @@
 #include <fp_lib_table.h>
 #include <class_module.h>
 
+#define OPT_SEP     '|'         ///< options separator character
+
 using namespace FP_LIB_TABLE_T;
 
 
 static const wxChar global_tbl_name[] = wxT( "fp-lib-table" );
 
 
-void FP_LIB_TABLE_ROW::SetType( const wxString& aType )
+LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow )
 {
-    type = IO_MGR::EnumFromStr( aType );
+    return aRow.clone();
+}
 
-    if( IO_MGR::PCB_FILE_T( -1 ) == type )
-        type = IO_MGR::KICAD;
+
+void LIB_TABLE_ROW::setProperties( PROPERTIES* aProperties )
+{
+    properties.reset( aProperties );
 }
 
 
@@ -75,49 +80,11 @@ const wxString LIB_TABLE_ROW::GetFullURI( bool aSubstituted ) const
         return uri_expanded;
 
 #else   // late expansion
-        return FP_LIB_TABLE::ExpandSubstitutions( uri_user );
+        return LIB_TABLE::ExpandSubstitutions( uri_user );
 #endif
     }
-    else
-        return uri_user;
-}
 
-
-LIB_TABLE_ROW::LIB_TABLE_ROW( const LIB_TABLE_ROW& a ) :
-    nickName( a.nickName ),
-    options( a.options ),
-    description( a.description ),
-    properties( 0 )
-{
-    // may call ExpandSubstitutions()
-    SetFullURI( a.uri_user );
-
-    if( a.properties )
-        properties = new PROPERTIES( *a.properties );
-}
-
-
-LIB_TABLE_ROW& LIB_TABLE_ROW::operator=( const LIB_TABLE_ROW& r )
-{
-    nickName     = r.nickName;
-    options      = r.options;
-    description  = r.description;
-    properties   = r.properties ? new PROPERTIES( *r.properties ) : NULL;
-
-    // may call ExpandSubstitutions()
-    SetFullURI( r.uri_user );
-
-    return *this;
-}
-
-
-bool LIB_TABLE_ROW::operator==( const LIB_TABLE_ROW& r ) const
-{
-    return nickName == r.nickName
-        && uri_user == r.uri_user
-        && options == r.options
-        && description == r.description
-        ;
+    return uri_user;
 }
 
 
@@ -134,31 +101,113 @@ void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 }
 
 
+void LIB_TABLE_ROW::Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, FP_LIB_TABLE_LEXER* in )
+    throw( IO_ERROR, PARSE_ERROR )
+{
+    /*
+     * (lib (name NICKNAME)(descr DESCRIPTION)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
+     *
+     *  Elements after (name) are order independent.
+     */
+
+    T tok = in->NextTok();
+
+    if( tok != T_lib )
+        in->Expecting( T_lib );
+
+    // (name NICKNAME)
+    in->NeedLEFT();
+
+    if( ( tok = in->NextTok() ) != T_name )
+        in->Expecting( T_name );
+
+    in->NeedSYMBOLorNUMBER();
+
+    aRow->SetNickName( in->FromUTF8() );
+
+    in->NeedRIGHT();
+
+    // After (name), remaining (lib) elements are order independent, and in
+    // some cases optional.
+    bool    sawType = false;
+    bool    sawOpts = false;
+    bool    sawDesc = false;
+    bool    sawUri  = false;
+
+    while( ( tok = in->NextTok() ) != T_RIGHT )
+    {
+        if( tok == T_EOF )
+            in->Unexpected( T_EOF );
+
+        if( tok != T_LEFT )
+            in->Expecting( T_LEFT );
+
+        tok = in->NeedSYMBOLorNUMBER();
+
+        switch( tok )
+        {
+        case T_uri:
+            if( sawUri )
+                in->Duplicate( tok );
+            sawUri = true;
+            in->NeedSYMBOLorNUMBER();
+            aRow->SetFullURI( in->FromUTF8() );
+            break;
+
+        case T_type:
+            if( sawType )
+                in->Duplicate( tok );
+            sawType = true;
+            in->NeedSYMBOLorNUMBER();
+            aRow->SetType( in->FromUTF8() );
+            break;
+
+        case T_options:
+            if( sawOpts )
+                in->Duplicate( tok );
+            sawOpts = true;
+            in->NeedSYMBOLorNUMBER();
+            aRow->SetOptions( in->FromUTF8() );
+            break;
+
+        case T_descr:
+            if( sawDesc )
+                in->Duplicate( tok );
+            sawDesc = true;
+            in->NeedSYMBOLorNUMBER();
+            aRow->SetDescr( in->FromUTF8() );
+            break;
+
+        default:
+            in->Unexpected( tok );
+        }
+
+        in->NeedRIGHT();
+    }
+
+    if( !sawType )
+        in->Expecting( T_type );
+
+    if( !sawUri )
+        in->Expecting( T_uri );
+}
+
+
+bool LIB_TABLE_ROW::operator==( const LIB_TABLE_ROW& r ) const
+{
+    return nickName == r.nickName
+        && uri_user == r.uri_user
+        && options == r.options
+        && description == r.description;
+}
+
+
 void LIB_TABLE_ROW::SetOptions( const wxString& aOptions )
 {
     options = aOptions;
 
     // set PROPERTIES* from options
-    setProperties( FP_LIB_TABLE::ParseOptions( TO_UTF8( aOptions ) ) );
-}
-
-
-FP_LIB_TABLE_ROW::FP_LIB_TABLE_ROW( const FP_LIB_TABLE_ROW& aRow ) :
-    LIB_TABLE_ROW( aRow ),
-    type( aRow.type )
-{
-}
-
-
-FP_LIB_TABLE_ROW& FP_LIB_TABLE_ROW::operator=( const FP_LIB_TABLE_ROW& aRow )
-{
-    LIB_TABLE_ROW::operator = ( aRow );
-    type                    = aRow.type;
-
-    // Do not copy the PLUGIN, it is lazily created.  Delete any existing destination plugin.
-    setPlugin( NULL );
-
-    return *this;
+    setProperties( LIB_TABLE::ParseOptions( TO_UTF8( aOptions ) ) );
 }
 
 
@@ -168,7 +217,16 @@ bool FP_LIB_TABLE_ROW::operator==( const FP_LIB_TABLE_ROW& aRow ) const
 }
 
 
-FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
+void FP_LIB_TABLE_ROW::SetType( const wxString& aType )
+{
+    type = IO_MGR::EnumFromStr( aType );
+
+    if( IO_MGR::PCB_FILE_T( -1 ) == type )
+        type = IO_MGR::KICAD;
+}
+
+
+LIB_TABLE::LIB_TABLE( LIB_TABLE* aFallBackTable ) :
     fallBack( aFallBackTable )
 {
     // not copying fall back, simply search aFallBackTable separately
@@ -176,9 +234,403 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 }
 
 
-FP_LIB_TABLE::~FP_LIB_TABLE()
+LIB_TABLE::~LIB_TABLE()
 {
     // *fallBack is not owned here.
+}
+
+
+bool LIB_TABLE::IsEmpty( bool aIncludeFallback )
+{
+    if( !aIncludeFallback || !fallBack )
+        return rows.empty();
+
+    return rows.empty() && fallBack->IsEmpty( true );
+}
+
+
+const wxString LIB_TABLE::GetDescription( const wxString& aNickname )
+{
+    // use "no exception" form of find row:
+    const LIB_TABLE_ROW* row = findRow( aNickname );
+
+    if( row )
+        return row->GetDescr();
+    else
+        return wxEmptyString;
+}
+
+
+LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName ) const
+{
+    LIB_TABLE* cur = (LIB_TABLE*) this;
+
+    do
+    {
+        cur->ensureIndex();
+
+        INDEX_CITER it = cur->nickIndex.find( aNickName );
+
+        if( it != cur->nickIndex.end() )
+        {
+            return &cur->rows[it->second];  // found
+        }
+
+        // not found, search fall back table(s), if any
+    } while( ( cur = cur->fallBack ) != 0 );
+
+    return NULL;   // not found
+}
+
+
+const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
+{
+    LIB_TABLE* cur = this;
+
+    do
+    {
+        cur->ensureIndex();
+
+        for( unsigned i = 0;  i < cur->rows.size();  i++ )
+        {
+            wxString uri = cur->rows[i].GetFullURI( true );
+
+            if( wxFileName::GetPathSeparator() == wxChar( '\\' ) && uri.Find( wxChar( '/' ) ) >= 0 )
+                uri.Replace( "/", "\\" );
+
+            if( (wxFileName::IsCaseSensitive() && uri == aURI)
+              || (!wxFileName::IsCaseSensitive() && uri.Upper() == aURI.Upper() ) )
+            {
+                return &cur->rows[i];  // found
+            }
+        }
+
+        // not found, search fall back table(s), if any
+    } while( ( cur = cur->fallBack ) != 0 );
+
+    return NULL;   // not found
+}
+
+
+std::vector<wxString> LIB_TABLE::GetLogicalLibs()
+{
+    // Only return unique logical library names.  Use std::set::insert() to
+    // quietly reject any duplicates, which can happen when encountering a duplicate
+    // nickname from one of the fall back table(s).
+
+    std::set< wxString >       unique;
+    std::vector< wxString >    ret;
+    const LIB_TABLE*           cur = this;
+
+    do
+    {
+        for( LIB_TABLE_ROWS_CITER it = cur->rows.begin();  it!=cur->rows.end();  ++it )
+        {
+            unique.insert( it->GetNickName() );
+        }
+
+    } while( ( cur = cur->fallBack ) != 0 );
+
+    ret.reserve( unique.size() );
+
+    // return a sorted, unique set of nicknames in a std::vector<wxString> to caller
+    for( std::set< wxString >::const_iterator it = unique.begin();  it!=unique.end();  ++it )
+    {
+        ret.push_back( *it );
+    }
+
+    return ret;
+}
+
+
+bool LIB_TABLE::InsertRow( LIB_TABLE_ROW* aRow, bool doReplace )
+{
+    ensureIndex();
+
+    INDEX_CITER it = nickIndex.find( aRow->GetNickName() );
+
+    if( it == nickIndex.end() )
+    {
+        rows.push_back( aRow );
+        nickIndex.insert( INDEX_VALUE( aRow->GetNickName(), rows.size() - 1 ) );
+        return true;
+    }
+
+    if( doReplace )
+    {
+        rows.replace( it->second, aRow );
+        return true;
+    }
+
+    return false;
+}
+
+
+void LIB_TABLE::Load( const wxString& aFileName )
+    throw( IO_ERROR )
+{
+    // It's OK if footprint library tables are missing.
+    if( wxFileName::IsFileReadable( aFileName ) )
+    {
+        FILE_LINE_READER    reader( aFileName );
+        FP_LIB_TABLE_LEXER  lexer( &reader );
+
+        Parse( &lexer );
+    }
+}
+
+
+void LIB_TABLE::Save( const wxString& aFileName ) const
+    throw( IO_ERROR, boost::interprocess::lock_exception )
+{
+    FILE_OUTPUTFORMATTER sf( aFileName );
+    Format( &sf, 0 );
+}
+
+
+PROPERTIES* LIB_TABLE::ParseOptions( const std::string& aOptionsList )
+{
+    if( aOptionsList.size() )
+    {
+        const char* cp  = &aOptionsList[0];
+        const char* end = cp + aOptionsList.size();
+
+        PROPERTIES  props;
+        std::string pair;
+
+        // Parse all name=value pairs
+        while( cp < end )
+        {
+            pair.clear();
+
+            // Skip leading white space.
+            while( cp < end && isspace( *cp )  )
+                ++cp;
+
+            // Find the end of pair/field
+            while( cp < end )
+            {
+                if( *cp == '\\'  &&  cp + 1 < end  &&  cp[1] == OPT_SEP  )
+                {
+                    ++cp;           // skip the escape
+                    pair += *cp++;  // add the separator
+                }
+                else if( *cp == OPT_SEP )
+                {
+                    ++cp;           // skip the separator
+                    break;          // process the pair
+                }
+                else
+                    pair += *cp++;
+            }
+
+            // stash the pair
+            if( pair.size() )
+            {
+                // first equals sign separates 'name' and 'value'.
+                size_t  eqNdx = pair.find( '=' );
+
+                if( eqNdx != pair.npos )
+                {
+                    std::string name  = pair.substr( 0, eqNdx );
+                    std::string value = pair.substr( eqNdx + 1 );
+                    props[name] = value;
+                }
+                else
+                    props[pair] = "";       // property is present, but with no value.
+            }
+        }
+
+        if( props.size() )
+            return new PROPERTIES( props );
+    }
+
+    return NULL;
+}
+
+
+UTF8 LIB_TABLE::FormatOptions( const PROPERTIES* aProperties )
+{
+    UTF8 ret;
+
+    if( aProperties )
+    {
+        for( PROPERTIES::const_iterator it = aProperties->begin(); it != aProperties->end(); ++it )
+        {
+            const std::string& name = it->first;
+
+            const UTF8& value = it->second;
+
+            if( ret.size() )
+                ret += OPT_SEP;
+
+            ret += name;
+
+            // the separation between name and value is '='
+            if( value.size() )
+            {
+                ret += '=';
+
+                for( std::string::const_iterator si = value.begin();  si != value.end();  ++si )
+                {
+                    // escape any separator in the value.
+                    if( *si == OPT_SEP )
+                        ret += '\\';
+
+                    ret += *si;
+                }
+            }
+        }
+    }
+
+    return ret;
+}
+
+
+const wxString LIB_TABLE::ExpandSubstitutions( const wxString& aString )
+{
+    return ExpandEnvVarSubstitutions( aString );
+}
+
+
+FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
+    LIB_TABLE( aFallBackTable )
+{
+    // not copying fall back, simply search aFallBackTable separately
+    // if "nickName not found".
+}
+
+
+void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw()
+{
+    T       tok;
+
+    // This table may be nested within a larger s-expression, or not.
+    // Allow for parser of that optional containing s-epression to have looked ahead.
+    if( in->CurTok() != T_fp_lib_table )
+    {
+        in->NeedLEFT();
+        if( ( tok = in->NextTok() ) != T_fp_lib_table )
+            in->Expecting( T_fp_lib_table );
+    }
+
+    while( ( tok = in->NextTok() ) != T_RIGHT )
+    {
+        std::unique_ptr< FP_LIB_TABLE_ROW > row( new FP_LIB_TABLE_ROW );
+
+        if( tok == T_EOF )
+            in->Expecting( T_RIGHT );
+
+        if( tok != T_LEFT )
+            in->Expecting( T_LEFT );
+
+        // in case there is a "row integrity" error, tell where later.
+        int lineNum = in->CurLineNumber();
+        int offset  = in->CurOffset();
+
+        if( ( tok = in->NextTok() ) != T_lib )
+            in->Expecting( T_lib );
+
+        // (name NICKNAME)
+        in->NeedLEFT();
+
+        if( ( tok = in->NextTok() ) != T_name )
+            in->Expecting( T_name );
+
+        in->NeedSYMBOLorNUMBER();
+
+        row->SetNickName( in->FromUTF8() );
+
+        in->NeedRIGHT();
+
+        // After (name), remaining (lib) elements are order independent, and in
+        // some cases optional.
+        bool    sawType = false;
+        bool    sawOpts = false;
+        bool    sawDesc = false;
+        bool    sawUri  = false;
+
+        while( ( tok = in->NextTok() ) != T_RIGHT )
+        {
+            if( tok == T_EOF )
+                in->Unexpected( T_EOF );
+
+            if( tok != T_LEFT )
+                in->Expecting( T_LEFT );
+
+            tok = in->NeedSYMBOLorNUMBER();
+
+            switch( tok )
+            {
+            case T_uri:
+                if( sawUri )
+                    in->Duplicate( tok );
+                sawUri = true;
+                in->NeedSYMBOLorNUMBER();
+                row->SetFullURI( in->FromUTF8() );
+                break;
+
+            case T_type:
+                if( sawType )
+                    in->Duplicate( tok );
+                sawType = true;
+                in->NeedSYMBOLorNUMBER();
+                row->SetType( in->FromUTF8() );
+                break;
+
+            case T_options:
+                if( sawOpts )
+                    in->Duplicate( tok );
+                sawOpts = true;
+                in->NeedSYMBOLorNUMBER();
+                row->SetOptions( in->FromUTF8() );
+                break;
+
+            case T_descr:
+                if( sawDesc )
+                    in->Duplicate( tok );
+                sawDesc = true;
+                in->NeedSYMBOLorNUMBER();
+                row->SetDescr( in->FromUTF8() );
+                break;
+
+            default:
+                in->Unexpected( tok );
+            }
+
+            in->NeedRIGHT();
+        }
+
+        if( !sawType )
+            in->Expecting( T_type );
+
+        if( !sawUri )
+            in->Expecting( T_uri );
+
+        // all nickNames within this table fragment must be unique, so we do not
+        // use doReplace in InsertRow().  (However a fallBack table can have a
+        // conflicting nickName and ours will supercede that one since in
+        // FindLib() we search this table before any fall back.)
+        if( !InsertRow( row.release() ) )
+        {
+            wxString msg = wxString::Format(
+                                _( "'%s' is a duplicate footprint library nickName" ),
+                                GetChars( row->GetNickName() ) );
+            THROW_PARSE_ERROR( msg, in->CurSource(), in->CurLine(), lineNum, offset );
+        }
+    }
+}
+
+
+void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
+    throw()
+{
+    out->Print( nestLevel, "(fp_lib_table\n" );
+
+    for( LIB_TABLE_ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
+        it->Format( out, nestLevel+1 );
+
+    out->Print( nestLevel, ")\n" );
 }
 
 
@@ -187,6 +639,30 @@ wxArrayString FP_LIB_TABLE::FootprintEnumerate( const wxString& aNickname )
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
     return row->plugin->FootprintEnumerate( row->GetFullURI( true ), row->GetProperties() );
+}
+
+
+const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
+    throw( IO_ERROR )
+{
+    FP_LIB_TABLE_ROW* row = dynamic_cast< FP_LIB_TABLE_ROW* >( findRow( aNickname ) );
+
+    if( !row )
+    {
+        wxString msg = wxString::Format(
+            _( "fp-lib-table files contain no library with nickname '%s'" ),
+            GetChars( aNickname ) );
+
+        THROW_IO_ERROR( msg );
+    }
+
+    // We've been 'lazy' up until now, but it cannot be deferred any longer,
+    // instantiate a PLUGIN of the proper kind if it is not already in this
+    // FP_LIB_TABLE_ROW.
+    if( !row->plugin )
+        row->setPlugin( IO_MGR::PluginFind( row->type ) );
+
+    return row;
 }
 
 
@@ -280,423 +756,6 @@ void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 }
 
 
-const wxString FP_LIB_TABLE::GetDescription( const wxString& aNickname )
-{
-    // use "no exception" form of find row:
-    const FP_LIB_TABLE_ROW* row = dynamic_cast< FP_LIB_TABLE_ROW* >( findRow( aNickname ) );
-
-    if( row )
-        return row->GetDescr();
-    else
-        return wxEmptyString;
-}
-
-
-void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR )
-{
-    /*
-        (fp_lib_table
-            (lib (name NICKNAME)(descr DESCRIPTION)(type TYPE)(full_uri FULL_URI)(options OPTIONS))
-            :
-        )
-
-        Elements after (name) are order independent.
-    */
-
-    T       tok;
-
-    // This table may be nested within a larger s-expression, or not.
-    // Allow for parser of that optional containing s-epression to have looked ahead.
-    if( in->CurTok() != T_fp_lib_table )
-    {
-        in->NeedLEFT();
-        if( ( tok = in->NextTok() ) != T_fp_lib_table )
-            in->Expecting( T_fp_lib_table );
-    }
-
-    while( ( tok = in->NextTok() ) != T_RIGHT )
-    {
-        FP_LIB_TABLE_ROW     row;        // reconstructed for each row in input stream.
-
-        if( tok == T_EOF )
-            in->Expecting( T_RIGHT );
-
-        if( tok != T_LEFT )
-            in->Expecting( T_LEFT );
-
-        // in case there is a "row integrity" error, tell where later.
-        int lineNum = in->CurLineNumber();
-        int offset  = in->CurOffset();
-
-        if( ( tok = in->NextTok() ) != T_lib )
-            in->Expecting( T_lib );
-
-        // (name NICKNAME)
-        in->NeedLEFT();
-
-        if( ( tok = in->NextTok() ) != T_name )
-            in->Expecting( T_name );
-
-        in->NeedSYMBOLorNUMBER();
-
-        row.SetNickName( in->FromUTF8() );
-
-        in->NeedRIGHT();
-
-        // After (name), remaining (lib) elements are order independent, and in
-        // some cases optional.
-        bool    sawType = false;
-        bool    sawOpts = false;
-        bool    sawDesc = false;
-        bool    sawUri  = false;
-
-        while( ( tok = in->NextTok() ) != T_RIGHT )
-        {
-            if( tok == T_EOF )
-                in->Unexpected( T_EOF );
-
-            if( tok != T_LEFT )
-                in->Expecting( T_LEFT );
-
-            tok = in->NeedSYMBOLorNUMBER();
-
-            switch( tok )
-            {
-            case T_uri:
-                if( sawUri )
-                    in->Duplicate( tok );
-                sawUri = true;
-                in->NeedSYMBOLorNUMBER();
-                row.SetFullURI( in->FromUTF8() );
-                break;
-
-            case T_type:
-                if( sawType )
-                    in->Duplicate( tok );
-                sawType = true;
-                in->NeedSYMBOLorNUMBER();
-                row.SetType( in->FromUTF8() );
-                break;
-
-            case T_options:
-                if( sawOpts )
-                    in->Duplicate( tok );
-                sawOpts = true;
-                in->NeedSYMBOLorNUMBER();
-                row.SetOptions( in->FromUTF8() );
-                break;
-
-            case T_descr:
-                if( sawDesc )
-                    in->Duplicate( tok );
-                sawDesc = true;
-                in->NeedSYMBOLorNUMBER();
-                row.SetDescr( in->FromUTF8() );
-                break;
-
-            default:
-                in->Unexpected( tok );
-            }
-
-            in->NeedRIGHT();
-        }
-
-        if( !sawType )
-            in->Expecting( T_type );
-
-        if( !sawUri )
-            in->Expecting( T_uri );
-
-        // all nickNames within this table fragment must be unique, so we do not
-        // use doReplace in InsertRow().  (However a fallBack table can have a
-        // conflicting nickName and ours will supercede that one since in
-        // FindLib() we search this table before any fall back.)
-        if( !InsertRow( row ) )
-        {
-            wxString msg = wxString::Format(
-                                _( "'%s' is a duplicate footprint library nickName" ),
-                                GetChars( row.GetNickName() ) );
-            THROW_PARSE_ERROR( msg, in->CurSource(), in->CurLine(), lineNum, offset );
-        }
-    }
-}
-
-
-void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw( IO_ERROR, boost::interprocess::lock_exception )
-{
-    out->Print( nestLevel, "(fp_lib_table\n" );
-
-    for( FP_LIB_TABLE_ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
-        it->Format( out, nestLevel+1 );
-
-    out->Print( nestLevel, ")\n" );
-}
-
-
-#define OPT_SEP     '|'         ///< options separator character
-
-PROPERTIES* FP_LIB_TABLE::ParseOptions( const std::string& aOptionsList )
-{
-    if( aOptionsList.size() )
-    {
-        const char* cp  = &aOptionsList[0];
-        const char* end = cp + aOptionsList.size();
-
-        PROPERTIES  props;
-        std::string pair;
-
-        // Parse all name=value pairs
-        while( cp < end )
-        {
-            pair.clear();
-
-            // Skip leading white space.
-            while( cp < end && isspace( *cp )  )
-                ++cp;
-
-            // Find the end of pair/field
-            while( cp < end )
-            {
-                if( *cp=='\\'  &&  cp+1<end  &&  cp[1]==OPT_SEP  )
-                {
-                    ++cp;           // skip the escape
-                    pair += *cp++;  // add the separator
-                }
-                else if( *cp==OPT_SEP )
-                {
-                    ++cp;           // skip the separator
-                    break;          // process the pair
-                }
-                else
-                    pair += *cp++;
-            }
-
-            // stash the pair
-            if( pair.size() )
-            {
-                // first equals sign separates 'name' and 'value'.
-                size_t  eqNdx = pair.find( '=' );
-                if( eqNdx != pair.npos )
-                {
-                    std::string name  = pair.substr( 0, eqNdx );
-                    std::string value = pair.substr( eqNdx + 1 );
-                    props[name] = value;
-                }
-                else
-                    props[pair] = "";       // property is present, but with no value.
-            }
-        }
-
-        if( props.size() )
-            return new PROPERTIES( props );
-    }
-
-    return NULL;
-}
-
-
-UTF8 FP_LIB_TABLE::FormatOptions( const PROPERTIES* aProperties )
-{
-    UTF8 ret;
-
-    if( aProperties )
-    {
-        for( PROPERTIES::const_iterator it = aProperties->begin();  it != aProperties->end();  ++it )
-        {
-            const std::string& name  = it->first;
-
-            const UTF8& value = it->second;
-
-            if( ret.size() )
-                ret += OPT_SEP;
-
-            ret += name;
-
-            // the separation between name and value is '='
-            if( value.size() )
-            {
-                ret += '=';
-
-                for( std::string::const_iterator si = value.begin();  si != value.end();  ++si )
-                {
-                    // escape any separator in the value.
-                    if( *si == OPT_SEP )
-                        ret += '\\';
-
-                    ret += *si;
-                }
-            }
-        }
-    }
-
-    return ret;
-}
-
-
-std::vector<wxString> FP_LIB_TABLE::GetLogicalLibs()
-{
-    // Only return unique logical library names.  Use std::set::insert() to
-    // quietly reject any duplicates, which can happen when encountering a duplicate
-    // nickname from one of the fall back table(s).
-
-    std::set<wxString>          unique;
-    std::vector<wxString>       ret;
-    const FP_LIB_TABLE*         cur = this;
-
-    do
-    {
-        for( FP_LIB_TABLE_ROWS_CITER it = cur->rows.begin();  it!=cur->rows.end();  ++it )
-        {
-            unique.insert( it->GetNickName() );
-        }
-
-    } while( ( cur = cur->fallBack ) != 0 );
-
-    ret.reserve( unique.size() );
-
-    // DBG(printf( "%s: count:%zd\n", __func__, unique.size() );)
-
-    // return a sorted, unique set of nicknames in a std::vector<wxString> to caller
-    for( std::set<wxString>::const_iterator it = unique.begin();  it!=unique.end();  ++it )
-    {
-        //DBG(printf( " %s\n", TO_UTF8( *it ) );)
-        ret.push_back( *it );
-    }
-
-    return ret;
-}
-
-
-LIB_TABLE_ROW* FP_LIB_TABLE::findRow( const wxString& aNickName ) const
-{
-    FP_LIB_TABLE* cur = (FP_LIB_TABLE*) this;
-
-    do
-    {
-        cur->ensureIndex();
-
-        INDEX_CITER  it = cur->nickIndex.find( aNickName );
-
-        if( it != cur->nickIndex.end() )
-        {
-            return &cur->rows[it->second];  // found
-        }
-
-        // not found, search fall back table(s), if any
-    } while( ( cur = cur->fallBack ) != 0 );
-
-    return 0;   // not found
-}
-
-
-const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRowByURI( const wxString& aURI )
-{
-    FP_LIB_TABLE* cur = this;
-
-    do
-    {
-        cur->ensureIndex();
-
-        for( unsigned i = 0;  i < cur->rows.size();  i++ )
-        {
-            wxString uri = cur->rows[i].GetFullURI( true );
-
-            if( wxFileName::GetPathSeparator() == wxChar( '\\' ) && uri.Find( wxChar( '/' ) ) >= 0 )
-                uri.Replace( "/", "\\" );
-
-            if( (wxFileName::IsCaseSensitive() && uri == aURI)
-              || (!wxFileName::IsCaseSensitive() && uri.Upper() == aURI.Upper() ) )
-            {
-                return &cur->rows[i];  // found
-            }
-        }
-
-        // not found, search fall back table(s), if any
-    } while( ( cur = cur->fallBack ) != 0 );
-
-    return 0;   // not found
-}
-
-
-bool FP_LIB_TABLE::InsertRow( const FP_LIB_TABLE_ROW& aRow, bool doReplace )
-{
-    ensureIndex();
-
-    INDEX_CITER it = nickIndex.find( aRow.GetNickName() );
-
-    if( it == nickIndex.end() )
-    {
-        rows.push_back( aRow );
-        nickIndex.insert( INDEX_VALUE( aRow.GetNickName(), rows.size() - 1 ) );
-        return true;
-    }
-
-    if( doReplace )
-    {
-        rows[it->second] = aRow;
-        return true;
-    }
-
-    return false;
-}
-
-
-const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
-    throw( IO_ERROR )
-{
-    FP_LIB_TABLE_ROW* row = dynamic_cast< FP_LIB_TABLE_ROW* >( findRow( aNickname ) );
-
-    if( !row )
-    {
-        wxString msg = wxString::Format(
-            _( "fp-lib-table files contain no lib with nickname '%s'" ),
-            GetChars( aNickname ) );
-
-        THROW_IO_ERROR( msg );
-    }
-
-    // We've been 'lazy' up until now, but it cannot be deferred any longer,
-    // instantiate a PLUGIN of the proper kind if it is not already in this LIB_TABLE_ROW.
-    if( !row->plugin )
-        row->setPlugin( IO_MGR::PluginFind( row->type ) );
-
-    return row;
-}
-
-
-// wxGetenv( wchar_t* ) is not re-entrant on linux.
-// Put a lock on multithreaded use of wxGetenv( wchar_t* ), called from wxEpandEnvVars(),
-// needed by bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = NULL );
-#include <ki_mutex.h>
-
-const wxString FP_LIB_TABLE::ExpandSubstitutions( const wxString& aString )
-{
-// Duplicate code: the same is now in common.cpp, due to the fact it is used
-// in many other places than FP_LIB_TABLE
-#if 0
-    static MUTEX    getenv_mutex;
-
-    MUTLOCK lock( getenv_mutex );
-
-    // We reserve the right to do this another way, by providing our own member
-    // function.
-    return wxExpandEnvVars( aString );
-#else
-    return ExpandEnvVarSubstitutions( aString );
-#endif
-}
-
-
-bool FP_LIB_TABLE::IsEmpty( bool aIncludeFallback )
-{
-    if( !aIncludeFallback || !fallBack )
-        return rows.empty();
-
-    return rows.empty() && fallBack->IsEmpty( true );
-}
-
-
 MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const FPID& aFootprintId )
     throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
@@ -714,11 +773,12 @@ MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const FPID& aFootprintI
         std::vector<wxString> nicks = GetLogicalLibs();
 
         // Search each library going through libraries alphabetically.
-        for( unsigned i = 0;  i<nicks.size();  ++i )
+        for( unsigned i = 0;  i < nicks.size();  ++i )
         {
             // FootprintLoad() returns NULL on not found, does not throw exception
             // unless there's an IO_ERROR.
             MODULE* ret = FootprintLoad( nicks[i], fpname );
+
             if( ret )
                 return ret;
         }
@@ -777,27 +837,4 @@ wxString FP_LIB_TABLE::GetGlobalTableFileName()
     fn.SetName( global_tbl_name );
 
     return fn.GetFullPath();
-}
-
-// prefer wxString filename so it can be seen in a debugger easier than wxFileName.
-
-void FP_LIB_TABLE::Load( const wxString& aFileName )
-    throw( IO_ERROR )
-{
-    // It's OK if footprint library tables are missing.
-    if( wxFileName::IsFileReadable( aFileName ) )
-    {
-        FILE_LINE_READER    reader( aFileName );
-        FP_LIB_TABLE_LEXER  lexer( &reader );
-
-        Parse( &lexer );
-    }
-}
-
-
-void FP_LIB_TABLE::Save( const wxString& aFileName )
-    const throw( IO_ERROR, boost::interprocess::lock_exception )
-{
-    FILE_OUTPUTFORMATTER sf( aFileName );
-    Format( &sf, 0 );
 }

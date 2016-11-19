@@ -33,6 +33,8 @@
 #include <project.h>
 #include <properties.h>
 #include <boost/interprocess/exceptions.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+
 
 #define FP_LATE_ENVVAR  1           ///< late=1/early=0 environment variable expansion
 
@@ -41,62 +43,68 @@ class OUTPUTFORMATTER;
 class MODULE;
 class FP_LIB_TABLE_LEXER;
 class FPID;
+class FP_TBL_MODEL;
+class LIB_TABLE_ROW;
+
+
+/**
+ * Function new_clone
+ *
+ * Allows boost pointer containers to make clones of the data stored in them.  Since they
+ * store pointers the data is cloned.  Copying and assigning pointers would cause ownership
+ * issues if the standard C++ containers were used.
+ */
+LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow );
 
 
 /**
  * Class LIB_TABLE_ROW
  *
  * holds a record identifying a library accessed by the appropriate #PLUGIN object in the
- * #FP_LIB_TABLE.
+ * #LIB_TABLE.  This is an abstract base class from which to derive specific library rows.
  */
-class LIB_TABLE_ROW
+class LIB_TABLE_ROW : boost::noncopyable
 {
 public:
-
-    LIB_TABLE_ROW() :
-        properties( 0 )
+    LIB_TABLE_ROW()
     {
     }
 
     virtual ~LIB_TABLE_ROW()
     {
-        delete properties;
     }
 
     LIB_TABLE_ROW( const wxString& aNick, const wxString& aURI, const wxString& aOptions,
                    const wxString& aDescr = wxEmptyString ) :
         nickName( aNick ),
-        description( aDescr ),
-        properties( 0 )
+        description( aDescr )
     {
-        SetOptions( aOptions ),
+        properties.reset();
+        SetOptions( aOptions );
         SetFullURI( aURI );
     }
-
-    LIB_TABLE_ROW( const LIB_TABLE_ROW& aRow );
-
-    LIB_TABLE_ROW& operator=( const LIB_TABLE_ROW& r );
 
     bool operator==( const LIB_TABLE_ROW& r ) const;
 
     bool operator!=( const LIB_TABLE_ROW& r ) const   { return !( *this == r ); }
 
-    //-----<accessors>------------------------------------------------------
-
     /**
      * Function GetNickName
-     * returns the short name of this library table row.
+     *
+     * @return the logical name of this library table row.
      */
     const wxString& GetNickName() const         { return nickName; }
 
     /**
      * Function SetNickName
+     *
      * changes the logical name of this library, useful for an editor.
      */
     void SetNickName( const wxString& aNickName ) { nickName = aNickName; }
 
     /**
      * Function GetType
+     *
      * is a pure virtual function that returns the type of LIB represented by this row.
      */
     virtual const wxString GetType() const = 0;
@@ -111,6 +119,7 @@ public:
 
     /**
      * Function GetFullURI
+     *
      * returns the full location specifying URI for the LIB, either in original
      * UI form or in environment variable expanded form.
      *
@@ -120,12 +129,14 @@ public:
 
     /**
      * Function SetFullURI
+     *
      * changes the full URI for the library.
      */
     void SetFullURI( const wxString& aFullURI );
 
     /**
      * Function GetOptions
+     *
      * returns the options string, which may hold a password or anything else needed to
      * instantiate the underlying LIB_SOURCE.
      */
@@ -138,24 +149,25 @@ public:
 
     /**
      * Function GetDescr
+     *
      * returns the description of the library referenced by this row.
      */
     const wxString& GetDescr() const            { return description; }
 
     /**
      * Function SetDescr
+     *
      * changes the description of the library referenced by this row.
      */
     void SetDescr( const wxString& aDescr )     { description = aDescr; }
 
     /**
      * Function GetProperties
+     *
      * returns the constant PROPERTIES for this library (LIB_TABLE_ROW).  These are
      * the "options" in a table.
      */
-    const PROPERTIES* GetProperties() const     { return properties; }
-
-    //-----</accessors>-----------------------------------------------------
+    const PROPERTIES* GetProperties() const     { return properties.get(); }
 
     /**
      * Function Format
@@ -165,25 +177,41 @@ public:
      *
      * @param out is an #OUTPUTFORMATTER
      * @param nestLevel is the indentation level to base all lines of the output.
-     *   Actual indentation will be 2 spaces for each nestLevel.
+     *                  Actual indentation will be 2 spaces for each nestLevel.
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const
         throw( IO_ERROR, boost::interprocess::lock_exception );
 
-private:
+    static void Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, FP_LIB_TABLE_LEXER* in )
+        throw( IO_ERROR, PARSE_ERROR );
 
-    /**
-     * Function setProperties
-     *
-     * sets this LIB_TABLE_ROW's PROPERTIES by taking ownership of @a aProperties.
-     *
-     * @param aProperties ownership is given over to this LIB_TABLE_ROW.
-     */
-    void setProperties( const PROPERTIES* aProperties )
+    LIB_TABLE_ROW* clone() const
     {
-        delete properties;
-        properties = aProperties;
+        return do_clone();
     }
+
+protected:
+    LIB_TABLE_ROW( const LIB_TABLE_ROW& aRow ) :
+        nickName( aRow.nickName ),
+        uri_user( aRow.uri_user ),
+#if !FP_LATE_ENVVAR
+        uri_expanded( aRow.uri_expanded ),
+#endif
+        options( aRow.options ),
+        description( aRow.description )
+    {
+        if( aRow.properties )
+            properties.reset( new PROPERTIES( *aRow.properties.get() ) );
+        else
+            properties.reset();
+    }
+
+    void operator=( const LIB_TABLE_ROW& aRow );
+
+private:
+    virtual LIB_TABLE_ROW* do_clone() const = 0;
+
+    void setProperties( PROPERTIES* aProperties );
 
     wxString          nickName;
     wxString          uri_user;           ///< what user entered from UI or loaded from disk
@@ -195,14 +223,19 @@ private:
     wxString          options;
     wxString          description;
 
-    const PROPERTIES* properties;
+    std::unique_ptr< PROPERTIES > properties;
 };
 
 
+/**
+ * Class FP_LIB_TABLE_ROW
+ *
+ * holds a record identifying a library accessed by the appropriate footprint library #PLUGIN
+ *& object in the #FP_LIB_TABLE.
+ */
 class FP_LIB_TABLE_ROW : public LIB_TABLE_ROW
 {
     friend class FP_LIB_TABLE;
-    friend class DIALOG_FP_LIB_TABLE;
 
 public:
     typedef IO_MGR::PCB_FILE_T LIB_T;
@@ -219,28 +252,38 @@ public:
     {
     }
 
-    FP_LIB_TABLE_ROW( const FP_LIB_TABLE_ROW& aRow );
-
-    FP_LIB_TABLE_ROW& operator=( const FP_LIB_TABLE_ROW& aRow );
-
-    /// Used in DIALOG_FP_LIB_TABLE for detecting an edit.
     bool operator==( const FP_LIB_TABLE_ROW& aRow ) const;
 
     bool operator!=( const FP_LIB_TABLE_ROW& aRow ) const   { return !( *this == aRow ); }
 
     /**
      * Function GetType
-     * returns the type of LIB represented by this row.
+     *
+     * returns the type of footprint library table represented by this row.
      */
     const wxString GetType() const override         { return IO_MGR::ShowType( type ); }
 
     /**
      * Function SetType
+     *
      * changes the type represented by this row.
      */
     void SetType( const wxString& aType ) override;
 
+protected:
+    FP_LIB_TABLE_ROW( const FP_LIB_TABLE_ROW& aRow ) :
+        LIB_TABLE_ROW( aRow ),
+        type( aRow.type )
+    {
+    }
+
 private:
+
+    virtual LIB_TABLE_ROW* do_clone() const override
+    {
+        return new FP_LIB_TABLE_ROW( *this );
+    }
+
     void setPlugin( PLUGIN* aPlugin )
     {
         plugin.set( aPlugin );
@@ -252,19 +295,20 @@ private:
 
 
 /**
- * Class FP_LIB_TABLE
- * holds FP_LIB_TABLE::ROW records (rows), and can be searched based on library nickName.
+ * Class LIB_TABLE
+ * holds LIB_TABLE_ROW records (rows), and can be searched based on library nickname.
  * <p>
- * This class owns the <b>footprint library table</b>, which is like fstab in concept and maps
- * logical library name to the library URI, type, and options. It is heavily based on the SWEET
- * parser work done by Dick Hollenbeck and can be seen in new/sch_lib_table.h.  A footprint
- * library table had  the following columns:
+ * This class owns the <b>library table</b>, which is like fstab in concept and maps
+ * logical library name to the library URI, type, and options. It is heavily based on
+ * the SWEET parser work done by Dick Hollenbeck and can be seen in new/sch_lib_table.h.
+ * A library table has the following columns:
  * <ul>
  * <li> Logical Library Name (Nickname)
  * <li> Library Type, used to determine which plugin to load to access the library.
  * <li> Library URI.  The full URI to the library source, form dependent on Type.
  * <li> Options, used for as yet to be defined information such as user names or passwords
  * </ul>
+ * </p>
  * <p>
  * The Library Type can be one of:
  * <ul>
@@ -272,6 +316,7 @@ private:
  * <li> "ftp"
  * <li> "http"
  * </ul>
+ * </p>
  * <p>
  * For now, the Library URI types needed to support the various types can be one of those
  * shown below, which are typical of each type:
@@ -280,37 +325,43 @@ private:
  * <li> "ftp://kicad.org/partlib/trunk"
  * <li> "http://kicad.org/partlib"
  * </ul>
+ * </p>
  * <p>
- * The footprint library table is built up from several additive entries (table fragments),
- * and the final table is a (conceptual) merging of the table fragments. Two
- * anticipated sources of the entries are a personal table saved in the KiCad configuration
- * and a project resident table that resides in project file.  The project footprint table
- * entries are considered a higher priority in the final dynamically assembled library table.
- * An row in the project file contribution to the library table takes precedence over the
- * personal table if there is a collision of logical library names.  Otherwise, the entries
- * simply combine without issue to make up the applicable library table.
+ * The library table is built up from several additive entries (table fragments), and the
+ * final table is a (conceptual) merging of the table fragments. Two anticipated sources
+ * of the entries are a personal table saved in the KiCad configuration and a project
+ * resident table that resides in project file.  The project footprint table entries are
+ * considered a higher priority in the final dynamically assembled library table.  An row
+ * in the project file contribution to the library table takes precedence over the personal
+ * table if there is a collision of logical library names.  Otherwise, the entries simply
+ * combine without issue to make up the applicable library table.
+ * </p>
  *
  * @author Wayne Stambaugh
  */
-class FP_LIB_TABLE : public PROJECT::_ELEM
+class LIB_TABLE : public PROJECT::_ELEM
 {
-    friend class FP_LIB_TABLE_ROW;
     friend class DIALOG_FP_LIB_TABLE;
+    friend class FP_TBL_MODEL;
 
 public:
 
+    virtual void Parse( FP_LIB_TABLE_LEXER* aLexer ) throw() = 0;
+
+    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw() = 0;
+
     /**
-     * Constructor FP_LIB_TABLE
+     * Constructor LIB_TABLE
      * builds a library table by pre-pending this table fragment in front of
      * @a aFallBackTable.  Loading of this table fragment is done by using Parse().
      *
-     * @param aFallBackTable is another FP_LIB_TABLE which is searched only when
+     * @param aFallBackTable is another LIB_TABLE which is searched only when
      *                       a row is not found in this table.  No ownership is
      *                       taken of aFallBackTable.
      */
-    FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable = NULL );
+    LIB_TABLE( LIB_TABLE* aFallBackTable = NULL );
 
-    ~FP_LIB_TABLE();
+    virtual ~LIB_TABLE();
 
     /// Delete all rows.
     void Clear()
@@ -319,11 +370,12 @@ public:
         nickIndex.clear();
     }
 
-    bool operator==( const FP_LIB_TABLE& r ) const
+    bool operator==( const LIB_TABLE& r ) const
     {
         if( rows.size() == r.rows.size() )
         {
             unsigned i;
+
             for( i = 0; i < rows.size() && rows[i] == r.rows[i];  ++i )
                 ;
 
@@ -334,79 +386,197 @@ public:
         return false;
     }
 
-    bool operator!=( const FP_LIB_TABLE& r ) const  { return !( *this == r ); }
+    bool operator!=( const LIB_TABLE& r ) const  { return !( *this == r ); }
 
-    int     GetCount()                              { return rows.size(); }
+    int GetCount()       { return rows.size(); }
 
-    LIB_TABLE_ROW&    At( int aIndex )                        { return rows[aIndex]; }
+    LIB_TABLE_ROW* At( int aIndex ) { return &rows[aIndex]; }
 
     /**
-     * Function Parse
-     * fills this table fragment from information in the input stream \a aParser, which
-     * is a DSNLEXER customized for the grammar needed to describe instances of this object.
-     * The entire textual element spec is <br>
+     * Function IsEmpty
      *
-     * <pre>
-     * (fp_lib_table
-     *   (lib (name LOGICAL)(descr DESCRIPTION)(uri FULL_URI)(type TYPE)(options OPTIONS))
-     *   (lib (name LOGICAL)(descr DESCRIPTION)(uri FULL_URI)(type TYPE)(options OPTIONS))
-     *   (lib (name LOGICAL)(descr DESCRIPTION)(uri FULL_URI)(type TYPE)(options OPTIONS))
-     *  )
-     * </pre>
+     * @param aIncludeFallback is used to determine if the fallback table should be
+     *                         included in the test.
      *
-     * When this function is called, the input token stream given by \a aParser
-     * is assumed to be positioned at the '^' in the following example, i.e. just
-     * after the identifying keyword and before the content specifying stuff.
-     * <br>
-     * (lib_table ^ (....) )
-     *
-     * @param aParser is the input token stream of keywords and symbols.
+     * @return true if the footprint library table is empty.
      */
-    void Parse( FP_LIB_TABLE_LEXER* aParser ) throw( IO_ERROR, PARSE_ERROR );
+    bool IsEmpty( bool aIncludeFallback = true );
+
+    /**
+     * Function GetDescription
+     *
+     * @return the library description from @a aNickname, or an empty string
+     *         if @a aNickname does not exist.
+     */
+    const wxString GetDescription( const wxString& aNickname );
+
+    /**
+     * Function GetLogicalLibs
+     *
+     * returns the logical library names, all of them that are pertinent to
+     * a look up done on this LIB_TABLE.
+     */
+    std::vector<wxString> GetLogicalLibs();
+
+    /**
+     * Function InsertRow
+     *
+     * adds aRow if it does not already exist or if doReplace is true.  If doReplace
+     * is not true and the key for aRow already exists, the function fails and returns false.
+     *
+     * The key for the table is the nickName, and all in this table must be unique.
+     *
+     * @param aRow is the new row to insert, or to forcibly add if doReplace is true.
+     * @param doReplace if true, means insert regardless of whether aRow's key already
+     *                  exists.  If false, then fail if the key already exists.
+     *
+     * @return bool - true if the operation succeeded.
+     */
+    bool InsertRow( LIB_TABLE_ROW* aRow, bool doReplace = false );
+
+    /**
+     * Function FindRowByURI
+     *
+     * @return a #LIB_TABLE_ROW pointer if \a aURI is found in this table or in any chained
+     *         fallBack table fragments, else NULL.
+     */
+    const LIB_TABLE_ROW* FindRowByURI( const wxString& aURI );
+
+    /**
+     * Function Load
+     *
+     * loads the library table using the path defined by \a aFileName aFallBackTable.
+     *
+     * @param aFileName contains the full path to the s-expression file.
+     *
+     * @throw IO_ERROR if an error occurs attempting to load the footprint library
+     *                 table.
+     */
+    void Load( const wxString& aFileName ) throw( IO_ERROR );
+
+    /**
+     * Function Save
+     *
+     * writes this library table to \a aFileName in s-expression form.
+     *
+     * @param aFileName is the name of the file to write to.
+     */
+    void Save( const wxString& aFileName ) const
+        throw( IO_ERROR, boost::interprocess::lock_exception );
 
     /**
      * Function ParseOptions
-     * parses @a aOptionsList and places the result into a PROPERTIES object
-     * which is returned.  If the options field is empty, then the returned PROPERTIES
-     * will be a NULL pointer.
+     *
+     * parses @a aOptionsList and places the result into a PROPERTIES object which is
+     * returned.  If the options field is empty, then the returned PROPERTIES will be
+     * a NULL pointer.
      * <p>
      * Typically aOptionsList comes from the "options" field within a LIB_TABLE_ROW and
      * the format is simply a comma separated list of name value pairs. e.g.:
      * [name1[=value1][|name2[=value2]]] etc.  When using the UI to create or edit
-     * a fp lib table, this formatting is handled for you.
+     * a library table, this formatting is handled for you.
+     * </p>
      */
     static PROPERTIES* ParseOptions( const std::string& aOptionsList );
 
     /**
      * Function FormatOptions
+     *
      * returns a list of options from the aProperties parameter.  The name=value
-     * pairs will be separted with the '|' character.  The =value portion may not
+     * pairs will be separated with the '|' character.  The =value portion may not
      * be present.  You might expect something like "name1=value1|name2=value2|flag_me".
      * Notice that flag_me does not have a value.  This is ok.
      *
      * @param aProperties is the PROPERTIES to format or NULL.  If NULL the returned
-     *  string will be empty.
+     *                    string will be empty.
      */
     static UTF8 FormatOptions( const PROPERTIES* aProperties );
 
     /**
-     * Function Format
-     * serializes this object as utf8 text to an #OUTPUTFORMATTER, and tries to
-     * make it look good using multiple lines and indentation.
+     * Function ExpandSubstitutions
      *
-     * @param out is an #OUTPUTFORMATTER
-     * @param nestLevel is the indentation level to base all lines of the output.
-     *   Actual indentation will be 2 spaces for each nestLevel.
+     * replaces any environment variable references with their values and is here to fully
+     * embellish the TABLE_ROW::uri in a platform independent way.  This enables library
+     * tables to have platform dependent environment variables in them, allowing for a
+     * uniform table across platforms.
      */
-    void Format( OUTPUTFORMATTER* out, int nestLevel ) const
-        throw( IO_ERROR, boost::interprocess::lock_exception );
+    static const wxString ExpandSubstitutions( const wxString& aString );
+
+protected:
 
     /**
-     * Function GetLogicalLibs
-     * returns the logical library names, all of them that are pertinent to
-     * a lookup done on this FP_LIB_TABLE.
+     * Function findRow
+     * returns a LIB_TABLE_ROW if aNickname is found in this table or in any chained
+     * fallBack table fragment, else NULL.
      */
-    std::vector<wxString> GetLogicalLibs();
+    LIB_TABLE_ROW* findRow( const wxString& aNickname ) const;
+
+    void reindex()
+    {
+        nickIndex.clear();
+
+        for( LIB_TABLE_ROWS_ITER it = rows.begin(); it != rows.end(); ++it )
+            nickIndex.insert( INDEX_VALUE( it->GetNickName(), it - rows.begin() ) );
+    }
+
+    void ensureIndex()
+    {
+        // The dialog lib table editor may not maintain the nickIndex.
+        // Lazy indexing may be required.  To handle lazy indexing, we must enforce
+        // that "nickIndex" is either empty or accurate, but never inaccurate.
+        if( !nickIndex.size() )
+            reindex();
+    }
+
+    typedef boost::ptr_vector< LIB_TABLE_ROW > LIB_TABLE_ROWS;
+    typedef LIB_TABLE_ROWS::iterator           LIB_TABLE_ROWS_ITER;
+    typedef LIB_TABLE_ROWS::const_iterator     LIB_TABLE_ROWS_CITER;
+
+    LIB_TABLE_ROWS rows;
+
+    /// this is a non-owning index into the LIB_TABLE_ROWS table
+    typedef std::map<wxString,int>      INDEX;              // "int" is std::vector array index
+    typedef INDEX::iterator             INDEX_ITER;
+    typedef INDEX::const_iterator       INDEX_CITER;
+    typedef INDEX::value_type           INDEX_VALUE;
+
+    /// this particular key is the nickName within each row.
+    INDEX nickIndex;
+
+    LIB_TABLE* fallBack;
+};
+
+
+class FP_LIB_TABLE : public LIB_TABLE
+{
+public:
+
+    virtual void Parse( FP_LIB_TABLE_LEXER* aLexer ) throw() override;
+
+    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw() override;
+
+    /**
+     * Constructor FP_LIB_TABLE
+     *
+     * builds a footprint library table by pre-pending this table fragment in front of
+     * @a aFallBackTable.  Loading of this table fragment is done by using Parse().
+     *
+     * @param aFallBackTable is another FP_LIB_TABLE which is searched only when
+     *                       a row is not found in this table.  No ownership is
+     *                       taken of aFallBackTable.
+     */
+    FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable = NULL );
+
+    /**
+     * Function FindRow
+     *
+     * returns an FP_LIB_TABLE_ROW if \a aNickName is found in this table or in any chained
+     * fallBack table fragment.  The #PLUGIN is loaded and attached to the "plugin" field
+     * of the #FP_LIB_TABLE_ROW if not already loaded.
+     *
+     * @throw IO_ERROR if \a aNickName cannot be found.
+     */
+    const FP_LIB_TABLE_ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
 
     //-----<PLUGIN API SUBSET, REBASED ON aNickname>---------------------------
 
@@ -415,11 +585,9 @@ public:
      * returns a list of footprint names contained within the library given by
      * @a aNickname.
      *
-     * @param aNickname is a locator for the "library", it is a "name"
-     *     in FP_LIB_TABLE::LIB_TABLE_ROW
+     * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
      *
-     * @return wxArrayString - is the array of available footprint names inside
-     *   a library
+     * @return wxArrayString - is the array of available footprint names inside a library
      *
      * @throw IO_ERROR if the library cannot be found, or footprint cannot be loaded.
      */
@@ -427,10 +595,10 @@ public:
 
     /**
      * Function FootprintLoad
+     *
      * loads a footprint having @a aFootprintName from the library given by @a aNickname.
      *
-     * @param aNickname is a locator for the "library", it is a "name"
-     *     in FP_LIB_TABLE::LIB_TABLE_ROW
+     * @param aNickname is a locator for the "library", it is a "name" in #LIB_TABLE_ROW
      *
      * @param aFootprintName is the name of the footprint to load.
      *
@@ -453,30 +621,31 @@ public:
 
     /**
      * Function FootprintSave
+     *
      * will write @a aFootprint to an existing library given by @a aNickname.
      * If a footprint by the same name already exists, it is replaced.
      *
-     * @param aNickname is a locator for the "library", it is a "name"
-     *     in FP_LIB_TABLE::LIB_TABLE_ROW
+     * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW
      *
-     * @param aFootprint is what to store in the library. The caller continues
-     *    to own the footprint after this call.
+     * @param aFootprint is what to store in the library. The caller continues to own the
+     *                   footprint after this call.
      *
-     * @param aOverwrite when true means overwrite any existing footprint by the
-     *  same name, else if false means skip the write and return SAVE_SKIPPED.
+     * @param aOverwrite when true means overwrite any existing footprint by the same name,
+     *                   else if false means skip the write and return SAVE_SKIPPED.
      *
      * @return SAVE_T - SAVE_OK or SAVE_SKIPPED.  If error saving, then IO_ERROR is thrown.
      *
      * @throw IO_ERROR if there is a problem saving.
      */
-    SAVE_T FootprintSave( const wxString& aNickname, const MODULE* aFootprint, bool aOverwrite = true );
+    SAVE_T FootprintSave( const wxString& aNickname, const MODULE* aFootprint,
+                          bool aOverwrite = true );
 
     /**
      * Function FootprintDelete
+     *
      * deletes the @a aFootprintName from the library given by @a aNickname.
      *
-     * @param aNickname is a locator for the "library", it is a "name"
-     *     in FP_LIB_TABLE::LIB_TABLE_ROW
+     * @param aNickname is a locator for the "library", it is a "name" in LIB_TABLE_ROW.
      *
      * @param aFootprintName is the name of a footprint to delete from the specified library.
      *
@@ -486,7 +655,8 @@ public:
 
     /**
      * Function IsFootprintLibWritable
-     * returns true iff the library given by @a aNickname is writable.  (Often
+     *
+     * returns true if the library given by @a aNickname is writable.  (Often
      * system libraries are read only because of where they are installed.)
      *
      * @throw IO_ERROR if no library at aLibraryPath exists.
@@ -503,7 +673,7 @@ public:
      * Function FootprintLoadWithOptionalNickname
      * loads a footprint having @a aFootprintId with possibly an empty nickname.
      *
-     * @param aFootprintId the [nickname] & fooprint name of the footprint to load.
+     * @param aFootprintId the [nickname] & footprint name of the footprint to load.
      *
      * @return  MODULE* - if found caller owns it, else NULL if not found.
      *
@@ -513,59 +683,6 @@ public:
      */
     MODULE* FootprintLoadWithOptionalNickname( const FPID& aFootprintId )
         throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
-
-    /**
-     * Function GetDescription
-     * returns the library desicription from @a aNickname, or an empty string
-     * if aNickname does not exist.
-     */
-    const wxString GetDescription( const wxString& aNickname );
-
-    /**
-     * Function InsertRow
-     * adds aRow if it does not already exist or if doReplace is true.  If doReplace
-     * is not true and the key for aRow already exists, the function fails and returns false.
-     * The key for the table is the nickName, and all in this table must be unique.
-     * @param aRow is the new row to insert, or to forcibly add if doReplace is true.
-     * @param doReplace if true, means insert regardless of whether aRow's key already
-     *  exists.  If false, then fail if the key already exists.
-     * @return bool - true if the operation succeeded.
-     */
-    bool InsertRow( const FP_LIB_TABLE_ROW& aRow, bool doReplace = false );
-
-    /**
-     * Function FindRow
-     * returns a LIB_TABLE_ROW if aNickName is found in this table or in any chained
-     * fallBack table fragment.  The PLUGIN is loaded and attached
-     * to the "plugin" field of the LIB_TABLE_ROW if not already loaded.
-     *
-     * @throw IO_ERROR if aNickName cannot be found.
-     */
-    const FP_LIB_TABLE_ROW* FindRow( const wxString& aNickName ) throw( IO_ERROR );
-
-    /**
-     * Function FindRowByURI
-     * returns a #FP_LIB_TABLE::LIB_TABLE_ROW if aURE is found in this table or in any chained
-     * fallBack table fragments, else NULL.
-     */
-    const FP_LIB_TABLE_ROW* FindRowByURI( const wxString& aURI );
-
-    /**
-     * Function IsEmpty
-     * @param aIncludeFallback is used to determine if the fallback table should be
-     *                         included in the test.
-     * @return true if the footprint library table is empty.
-     */
-    bool IsEmpty( bool aIncludeFallback = true );
-
-    /**
-     * Function ExpandSubstitutions
-     * replaces any environment variable references with their values and is
-     * here to fully embellish the LIB_TABLE_ROW::uri in a platform independent way.
-     * This enables (fp_lib_table)s to have platform dependent environment
-     * variables in them, allowing for a uniform table across platforms.
-     */
-    static const wxString ExpandSubstitutions( const wxString& aString );
 
     /**
      * Function LoadGlobalTable
@@ -585,90 +702,21 @@ public:
 
     /**
      * Function GetGlobalTableFileName
+     *
      * @return the platform specific global footprint library path and file name.
      */
     static wxString GetGlobalTableFileName();
 
-#if 0
-    /**
-     * Function GetFileName
-     * @return the footprint library file name.
-     */
-    static const wxString GetFileName();
-#endif
-
     /**
      * Function GlobalPathEnvVarVariableName
+     *
      * returns the name of the environment variable used to hold the directory of
      * locally installed "KiCad sponsored" system footprint libraries.  These can
      * be either legacy or pretty format.  The only thing special about this
      * particular environment variable is that it is set automatically by
-     * KiCad on program startup, <b>iff</b> it is not set already in the environment.
+     * KiCad on program start up, <b>if</b> it is not set already in the environment.
      */
     static const wxString GlobalPathEnvVariableName();
-
-    /**
-     * Function Load
-     * loads the footprint library table using the path defined in \a aFileName with
-     * \a aFallBackTable.
-     *
-     * @param aFileName contains the full path to the s-expression file.
-     *
-     * @throw IO_ERROR if an error occurs attempting to load the footprint library
-     *                 table.
-     */
-    void Load( const wxString& aFileName ) throw( IO_ERROR );
-
-    /**
-     * Function Save
-     * writes this table to aFileName in s-expression form.
-     * @param aFileName is the name of the file to write to.
-     */
-    void Save( const wxString& aFileName ) const
-        throw( IO_ERROR, boost::interprocess::lock_exception );
-
-protected:
-
-    /**
-     * Function findRow
-     * returns a LIB_TABLE_ROW if aNickname is found in this table or in any chained
-     * fallBack table fragment, else NULL.
-     */
-    LIB_TABLE_ROW* findRow( const wxString& aNickname ) const;
-
-    void reindex()
-    {
-        nickIndex.clear();
-
-        for( FP_LIB_TABLE_ROWS_CITER it = rows.begin();  it != rows.end();  ++it )
-            nickIndex.insert( INDEX_VALUE( it->GetNickName(), it - rows.begin() ) );
-    }
-
-    void ensureIndex()
-    {
-        // The dialog lib table editor may not maintain the nickIndex.
-        // Lazy indexing may be required.  To handle lazy indexing, we must enforce
-        // that "nickIndex" is either empty or accurate, but never inaccurate.
-        if( !nickIndex.size() )
-            reindex();
-    }
-
-    typedef std::vector<FP_LIB_TABLE_ROW>     FP_LIB_TABLE_ROWS;
-    typedef FP_LIB_TABLE_ROWS::iterator       FP_LIB_TABLE_ROWS_ITER;
-    typedef FP_LIB_TABLE_ROWS::const_iterator FP_LIB_TABLE_ROWS_CITER;
-
-    FP_LIB_TABLE_ROWS            rows;
-
-    /// this is a non-owning index into the LIB_TABLE_ROWS table
-    typedef std::map<wxString,int>      INDEX;              // "int" is std::vector array index
-    typedef INDEX::iterator             INDEX_ITER;
-    typedef INDEX::const_iterator       INDEX_CITER;
-    typedef INDEX::value_type           INDEX_VALUE;
-
-    /// this particular key is the nickName within each row.
-    INDEX           nickIndex;
-
-    FP_LIB_TABLE*   fallBack;
 };
 
 

@@ -381,7 +381,7 @@ void GITHUB_PLUGIN::cacheLib( const wxString& aLibraryPath, const PROPERTIES* aP
             {
                 wxString    wx_pretty_dir = pretty_dir;
 
-                wx_pretty_dir = FP_LIB_TABLE::ExpandSubstitutions( wx_pretty_dir );
+                wx_pretty_dir = LIB_TABLE::ExpandSubstitutions( wx_pretty_dir );
 
                 wxFileName wx_pretty_fn = wx_pretty_dir;
 

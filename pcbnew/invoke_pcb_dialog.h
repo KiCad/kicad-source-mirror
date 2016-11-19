@@ -5,7 +5,7 @@
 /* This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,8 @@ class PCB_PLOT_PARAMS;
  * @return int - bits 0 and 1 tell whether a change was made to the @a aGlobal
  *  and/or the @a aProject table, respectively.  If set, table was modified.
  */
-int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject );
+int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal,
+                             FP_LIB_TABLE* aProject );
 
 /**
  * Function InvokeFootprintWizard
@@ -88,7 +89,8 @@ int InvokePcbLibTableEditor( wxTopLevelWindow* aCaller, FP_LIB_TABLE* aGlobal, F
  *             2 - changes in the project table
  *             3 - changes in both tables
  */
-int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal, FP_LIB_TABLE* aProject );
+int InvokeFootprintWizard( wxTopLevelWindow* aParent, FP_LIB_TABLE* aGlobal,
+                           FP_LIB_TABLE* aProject );
 
 /**
  * Function Invoke3DShapeLibsDownloaderWizard
