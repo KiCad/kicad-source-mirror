@@ -273,6 +273,8 @@ set( BMAPS_MID
     hierarchy_cursor
     hierarchy_nav
     hotkeys
+    hotkeys_import
+    hotkeys_export
     html
     icon_cvpcb_small
     icon_gerbview_small
@@ -284,6 +286,7 @@ set( BMAPS_MID
     import_footprint_names
     import_hierarchical_label
     import_module
+    import_setup
     import
     info
     insert_module_board

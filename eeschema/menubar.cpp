@@ -396,25 +396,25 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_CONFIG_SAVE,
                  _( "&Save Preferences" ),
                  _( "Save application preferences" ),
-                 wxNullBitmap );
+                 KiBitmap( save_setup_xpm ) );
 
     AddMenuItem( importExportSubmenu,
                  ID_CONFIG_READ,
                  _( "Load Prefe&rences" ),
                  _( "Load application preferences" ),
-                 wxNullBitmap );
+                 KiBitmap( import_setup_xpm ) );
 
     AddMenuItem( importExportSubmenu,
                  ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
                  _( "E&xport Hotkeys" ),
                  _( "Create a hotkey configuration file to export the current hotkeys" ),
-                 wxNullBitmap );
+                 KiBitmap( hotkeys_export_xpm ) );
 
     AddMenuItem( importExportSubmenu,
                  ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
                  _( "&Import Hotkeys" ),
                  _( "Load an existing hotkey configuration file" ),
-                 wxNullBitmap );
+                 KiBitmap( hotkeys_import_xpm ) );
 
     AddMenuItem( preferencesMenu, importExportSubmenu,
                  wxID_ANY,
