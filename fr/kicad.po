@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-31 13:15+0100\n"
-"PO-Revision-Date: 2016-10-31 13:17+0100\n"
+"POT-Creation-Date: 2016-11-19 19:44+0100\n"
+"PO-Revision-Date: 2016-11-19 19:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: f:/kicad-launchpad/git_testing\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 1.8.10\n"
+"X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -169,7 +169,7 @@ msgstr "Config Env"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_3d_pathconfig_base.cpp:81
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:202
-#: eeschema/libedit.cpp:478 eeschema/viewlibs.cpp:230
+#: eeschema/libedit.cpp:480 eeschema/viewlibs.cpp:232
 msgid "Alias"
 msgstr "Alias"
 
@@ -177,8 +177,8 @@ msgstr "Alias"
 #: common/dialog_about/AboutDialog_main.cpp:129
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:117
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:163
-#: eeschema/libedit.cpp:498 eeschema/sch_component.cpp:1563
-#: eeschema/viewlibs.cpp:231
+#: eeschema/libedit.cpp:500 eeschema/sch_component.cpp:1563
+#: eeschema/viewlibs.cpp:233
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:35
 #: pcbnew/dialogs/dialog_fp_lib_table.cpp:210 pcbnew/librairi.cpp:823
 msgid "Description"
@@ -524,7 +524,7 @@ msgid "Enable/Disable orthographic projection"
 msgstr "Active/Désactive projection orthographique"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:142 eeschema/menubar.cpp:540
-#: eeschema/menubar_libedit.cpp:285 eeschema/tool_viewlib.cpp:235
+#: eeschema/menubar_libedit.cpp:285 eeschema/tool_viewlib.cpp:239
 #: gerbview/menubar.cpp:249 kicad/menubar.cpp:441
 #: pagelayout_editor/menubar.cpp:181 pcbnew/menubar_modedit.cpp:366
 #: pcbnew/menubar_pcbframe.cpp:676 pcbnew/tool_modview.cpp:203
@@ -649,11 +649,11 @@ msgstr "Rendre les Ombres"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:246
 msgid "Procedural Textures"
-msgstr ""
+msgstr "Textures Procédurales"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:247
 msgid "Apply procedural textures to materials (slow)"
-msgstr ""
+msgstr "Appliquer les textures procédurales aux matériaux (lent)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:251
 msgid "Add floor"
@@ -708,7 +708,7 @@ msgid "Choose Colors"
 msgstr "Choix Couleurs"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:288
-#: eeschema/widgets/widget_eeschema_color_config.cpp:193
+#: eeschema/widgets/widget_eeschema_color_config.cpp:194
 msgid "Background Color"
 msgstr "Couleur de Fond"
 
@@ -789,7 +789,7 @@ msgstr "Montrer M&odèles 3D"
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:183
 #: eeschema/dialogs/dialog_edit_label_base.cpp:76
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:93
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/libedit.cpp:488
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:95 eeschema/libedit.cpp:490
 #: eeschema/onrightclick.cpp:381 eeschema/sch_text.cpp:764
 #: gerbview/class_gerber_file_image.cpp:342
 #: gerbview/class_gerber_file_image.cpp:346
@@ -866,7 +866,7 @@ msgstr "Rétablir les paramètres par défaut"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:402 cvpcb/menubar.cpp:133
 #: eeschema/menubar.cpp:546 eeschema/menubar_libedit.cpp:290
-#: eeschema/tool_viewlib.cpp:238 gerbview/menubar.cpp:252 kicad/menubar.cpp:445
+#: eeschema/tool_viewlib.cpp:242 gerbview/menubar.cpp:252 kicad/menubar.cpp:445
 #: pagelayout_editor/menubar.cpp:183 pcbnew/menubar_modedit.cpp:372
 #: pcbnew/menubar_pcbframe.cpp:685 pcbnew/tool_modview.cpp:206
 msgid "&Help"
@@ -1151,7 +1151,7 @@ msgstr "DPI"
 msgid "Load Bitmap"
 msgstr "Charger Image Bitmap"
 
-#: bitmap2component/bitmap2cmp_gui_base.cpp:124 eeschema/libeditframe.cpp:1158
+#: bitmap2component/bitmap2cmp_gui_base.cpp:124 eeschema/libeditframe.cpp:1177
 msgid "Export"
 msgstr "Exporter"
 
@@ -1410,7 +1410,7 @@ msgstr "Bloc Miroir"
 msgid "Marker Info"
 msgstr "Info Marqueur"
 
-#: common/colors.cpp:39 eeschema/widgets/widget_eeschema_color_config.cpp:192
+#: common/colors.cpp:39 eeschema/widgets/widget_eeschema_color_config.cpp:193
 msgid "Black"
 msgstr "Noir"
 
@@ -1426,7 +1426,7 @@ msgstr "Gris 2"
 msgid "Gray 3"
 msgstr "Gris 3"
 
-#: common/colors.cpp:43 eeschema/widgets/widget_eeschema_color_config.cpp:191
+#: common/colors.cpp:43 eeschema/widgets/widget_eeschema_color_config.cpp:192
 msgid "White"
 msgstr "Blanc"
 
@@ -1588,7 +1588,7 @@ msgid "Cannot create output directory '%s'.\n"
 msgstr "Impossible de créer le répertoire de sortie '%s'.\n"
 
 #: common/confirm.cpp:74 common/pgm_base.cpp:896 eeschema/symbedit.cpp:109
-#: eeschema/widgets/widget_eeschema_color_config.cpp:277
+#: eeschema/widgets/widget_eeschema_color_config.cpp:278
 msgid "Warning"
 msgstr "Avertissement"
 
@@ -1867,8 +1867,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:193
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:316
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:319
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2017
-#: eeschema/libedit.cpp:467 eeschema/widgets/tuner_slider_base.cpp:20
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:182 eeschema/lib_pin.cpp:2085
+#: eeschema/libedit.cpp:469 eeschema/widgets/tuner_slider_base.cpp:20
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:26
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:34
 #: pcbnew/dialogs/dialog_layers_setup.cpp:342
@@ -3171,7 +3171,7 @@ msgid "Set units to millimeters"
 msgstr "Unités en millimètres"
 
 #: cvpcb/class_DisplayFootprintsFrame.cpp:195 eeschema/tool_lib.cpp:245
-#: eeschema/tool_sch.cpp:289 gerbview/toolbars_gerber.cpp:240
+#: eeschema/tool_sch.cpp:292 gerbview/toolbars_gerber.cpp:240
 #: pcbnew/tool_pcb.cpp:349
 msgid "Change cursor shape"
 msgstr "Changer la forme du curseur"
@@ -3272,7 +3272,7 @@ msgstr ""
 "Consultez la section « Tables des Librairies d'Empreintes » dans la "
 "documentation CvPcb ou Pcbnew pour plus d'informations."
 
-#: cvpcb/cvpcb.cpp:182 pcbnew/pcbnew.cpp:338
+#: cvpcb/cvpcb.cpp:182 pcbnew/pcbnew.cpp:339
 #, c-format
 msgid ""
 "An error occurred attempting to load the global footprint library table:\n"
@@ -3378,7 +3378,7 @@ msgstr ""
 msgid "Configuration Error"
 msgstr "Erreur de Configuration"
 
-#: cvpcb/cvpcb_mainframe.cpp:754 eeschema/schframe.cpp:1384
+#: cvpcb/cvpcb_mainframe.cpp:754 eeschema/schframe.cpp:1386
 #: kicad/prjconfig.cpp:334 pcbnew/moduleframe.cpp:792 pcbnew/pcbframe.cpp:1006
 msgid " [Read Only]"
 msgstr " [Lecture Seule]"
@@ -3590,7 +3590,7 @@ msgid "Open CvPcb Manual"
 msgstr "Ouvrir la documentation de CvPcb"
 
 #: cvpcb/menubar.cpp:120 eeschema/menubar.cpp:516
-#: eeschema/menubar_libedit.cpp:259 eeschema/tool_viewlib.cpp:218
+#: eeschema/menubar_libedit.cpp:259 eeschema/tool_viewlib.cpp:222
 #: kicad/menubar.cpp:413 pagelayout_editor/menubar.cpp:155
 #: pcbnew/menubar_modedit.cpp:342 pcbnew/menubar_pcbframe.cpp:652
 #: pcbnew/tool_modview.cpp:191
@@ -3818,7 +3818,7 @@ msgstr ""
 msgid "none"
 msgstr "rien"
 
-#: eeschema/class_libentry.cpp:535
+#: eeschema/class_libentry.cpp:539
 #, c-format
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
@@ -3893,16 +3893,16 @@ msgstr "'%s' n'est pas un fichier documentation de composant valide."
 msgid "Unable to load project's '%s' file"
 msgstr "Impossible de charger le fichier projet '%s'"
 
-#: eeschema/class_library.cpp:957
+#: eeschema/class_library.cpp:962
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
-"%s"
+" %s"
 msgstr ""
 "La librairie de composant '%s' n'a pu être chargée. Erreur:\n"
-"%s"
+" %s"
 
-#: eeschema/class_library.cpp:983
+#: eeschema/class_library.cpp:985
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -3950,7 +3950,7 @@ msgstr "Signature temporelle dupliquée (%s) pour %s%d et %s%d"
 
 #: eeschema/component_tree_search_container.cpp:205
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:25
-#: eeschema/lib_draw_item.cpp:72 eeschema/libedit.cpp:483
+#: eeschema/lib_draw_item.cpp:72 eeschema/libedit.cpp:485
 #: eeschema/onrightclick.cpp:468
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:37
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:48
@@ -3971,7 +3971,7 @@ msgstr "Signature temporelle dupliquée (%s) pour %s%d et %s%d"
 msgid "Unit"
 msgstr "Unité"
 
-#: eeschema/controle.cpp:172 eeschema/libeditframe.cpp:1279
+#: eeschema/controle.cpp:172 eeschema/libeditframe.cpp:1298
 #: pcbnew/controle.cpp:231 pcbnew/modedit.cpp:132
 msgid "Clarify Selection"
 msgstr "Clarification Sélection"
@@ -4195,7 +4195,7 @@ msgid "Alias of "
 msgstr "Alias de "
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:75
-#: eeschema/dialogs/dialog_edit_component_in_lib_base.h:114
+#: eeschema/dialogs/dialog_edit_component_in_lib_base.h:115
 msgid "Library Component Properties"
 msgstr "Propriétés du Composant Librairie"
 
@@ -4281,7 +4281,7 @@ msgstr "Éditer filtre empreintes"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:28
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:22
-#: eeschema/widgets/widget_eeschema_color_config.cpp:102
+#: eeschema/widgets/widget_eeschema_color_config.cpp:103
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:414
 msgid "General"
 msgstr "Général "
@@ -4539,14 +4539,14 @@ msgstr "Utilisé uniquement pour les champs empreinte et documentation."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1042
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:41
-#: eeschema/lib_pin.cpp:2035 gerbview/class_gerber_draw_item.cpp:535
+#: eeschema/lib_pin.cpp:2103 gerbview/class_gerber_draw_item.cpp:535
 #: gerbview/class_gerber_draw_item.cpp:536 pcbnew/class_pcb_text.cpp:124
 #: pcbnew/class_text_mod.cpp:336
 msgid "Yes"
 msgstr "Oui"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:1044
-#: eeschema/lib_pin.cpp:2037 gerbview/class_gerber_draw_item.cpp:535
+#: eeschema/lib_pin.cpp:2105 gerbview/class_gerber_draw_item.cpp:535
 #: gerbview/class_gerber_draw_item.cpp:536 pcbnew/class_pcb_text.cpp:122
 #: pcbnew/class_text_mod.cpp:334
 msgid "No"
@@ -4554,7 +4554,7 @@ msgstr "Non"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:23
 #: eeschema/sch_component.cpp:1547
-#: eeschema/widgets/widget_eeschema_color_config.cpp:103
+#: eeschema/widgets/widget_eeschema_color_config.cpp:104
 msgid "Component"
 msgstr "Composant"
 
@@ -5299,7 +5299,7 @@ msgid "Default Value"
 msgstr "Valeur par Défaut"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:318
-#: eeschema/lib_pin.cpp:2039
+#: eeschema/lib_pin.cpp:2107
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:103
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:125
 #: pcbnew/dialogs/dialog_modedit_options_base.cpp:154
@@ -5514,15 +5514,15 @@ msgstr "Pin Pos X:"
 msgid "Pin Pos Y:"
 msgstr "Pin Pos Y:"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:175 eeschema/lib_pin.cpp:2024
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:175 eeschema/lib_pin.cpp:2092
 msgid "Number"
 msgstr "Numéro"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:189
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:207
-#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:2026
-#: eeschema/libedit.cpp:497 eeschema/sch_text.cpp:791
+#: eeschema/lib_draw_item.cpp:65 eeschema/lib_pin.cpp:2094
+#: eeschema/libedit.cpp:499 eeschema/sch_text.cpp:791
 #: gerbview/class_gerber_draw_item.cpp:505
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:29
 #: pcb_calculator/dialogs/dialog_regulator_data_base.cpp:47
@@ -5574,7 +5574,7 @@ msgid "Invisible"
 msgstr "Invisible"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:97 eeschema/lib_field.cpp:757
-#: eeschema/lib_pin.cpp:2032 eeschema/sch_text.cpp:773
+#: eeschema/lib_pin.cpp:2100 eeschema/sch_text.cpp:773
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:111
 msgid "Style"
 msgstr "Style"
@@ -5697,6 +5697,10 @@ msgstr "100"
 #: eeschema/dialogs/dialog_libedit_options_base.cpp:119
 msgid "50"
 msgstr "50"
+
+#: eeschema/dialogs/dialog_libedit_options_base.cpp:151
+msgid "Show pin &electrical type"
+msgstr "Montrer le type &electrique des pins"
 
 #: eeschema/dialogs/dialog_netlist.cpp:291
 #: gerbview/dialogs/dialog_print_using_printer_base.cpp:75
@@ -7160,13 +7164,19 @@ msgstr "Sélection Composant (%d items chargés)"
 msgid "Failed to find part '%s' in library"
 msgstr "Impossible de trouver le composant  '%s' en librairie"
 
-#: eeschema/hierarch.cpp:147
+#: eeschema/hierarch.cpp:150
 msgid "Navigator"
 msgstr "Navigateur"
 
-#: eeschema/hierarch.cpp:157
+#: eeschema/hierarch.cpp:160
 msgid "Root"
 msgstr "Racine"
+
+#: eeschema/highlight_connection.cpp:51
+msgid "Error: duplicate sub-sheet names found in current sheet. Fix it"
+msgstr ""
+"Erreur :  noms de sous-feuilles dupliqués trouvés dans la feuille courante. "
+"Fixez ceci."
 
 #: eeschema/hotkeys.cpp:89 gerbview/hotkeys.cpp:60
 #: pagelayout_editor/hotkeys.cpp:74 pcbnew/basepcbframe.cpp:843
@@ -7397,21 +7407,25 @@ msgstr "Autoplacement des champs"
 msgid "Update PCB from Schematics"
 msgstr "Mise à jour du PCB à partir du  Schéma"
 
-#: eeschema/hotkeys.cpp:333 pagelayout_editor/hotkeys.cpp:117
+#: eeschema/hotkeys.cpp:230
+msgid "Highlight Connection"
+msgstr "Surbrillance Connexion"
+
+#: eeschema/hotkeys.cpp:337 pagelayout_editor/hotkeys.cpp:117
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 #: pcbnew/hotkeys.cpp:304
 msgid "Common"
 msgstr "Commun"
 
-#: eeschema/hotkeys.cpp:334
+#: eeschema/hotkeys.cpp:338
 msgid "Schematic Editor"
 msgstr "Éditeur de Schématique"
 
-#: eeschema/hotkeys.cpp:335 eeschema/libeditframe.cpp:182
+#: eeschema/hotkeys.cpp:339 eeschema/libeditframe.cpp:187
 msgid "Library Editor"
 msgstr "Éditeur de Librairies"
 
-#: eeschema/hotkeys.cpp:749
+#: eeschema/hotkeys.cpp:758
 msgid "Add Pin"
 msgstr "Addition de \"pins\""
 
@@ -7576,7 +7590,7 @@ msgstr "Champ"
 msgid "Footprint"
 msgstr "Empreinte"
 
-#: eeschema/lib_field.cpp:606 eeschema/libedit.cpp:500
+#: eeschema/lib_field.cpp:606 eeschema/libedit.cpp:502
 #: eeschema/template_fieldnames.cpp:48
 msgid "Datasheet"
 msgstr "Documentation"
@@ -7610,25 +7624,25 @@ msgstr "Hauteur"
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/lib_pin.cpp:2043 pcbnew/class_drawsegment.cpp:363
+#: eeschema/lib_pin.cpp:2111 pcbnew/class_drawsegment.cpp:363
 #: pcbnew/class_track.cpp:1031
 msgid "Length"
 msgstr "Longueur"
 
-#: eeschema/lib_pin.cpp:2046 eeschema/sch_text.cpp:762
+#: eeschema/lib_pin.cpp:2114 eeschema/sch_text.cpp:762
 #: pcbnew/dialogs/dialog_edit_module_text_base.cpp:120
 msgid "Orientation"
 msgstr "Orientation"
 
-#: eeschema/lib_pin.cpp:2059 eeschema/lib_pin.cpp:2078
+#: eeschema/lib_pin.cpp:2127 eeschema/lib_pin.cpp:2146
 msgid "Pos X"
 msgstr "Pos X"
 
-#: eeschema/lib_pin.cpp:2062 eeschema/lib_pin.cpp:2081
+#: eeschema/lib_pin.cpp:2130 eeschema/lib_pin.cpp:2149
 msgid "Pos Y"
 msgstr "Pos Y"
 
-#: eeschema/lib_pin.cpp:2282
+#: eeschema/lib_pin.cpp:2350
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
@@ -7693,7 +7707,7 @@ msgstr ""
 "Une erreur s'est produite lors de la sauvegarde de la librairie de "
 "composants '%s'."
 
-#: eeschema/libarch.cpp:111 eeschema/libedit.cpp:396
+#: eeschema/libarch.cpp:111 eeschema/libedit.cpp:398
 #: eeschema/project_rescue.cpp:70
 #, c-format
 msgid "Failed to create component library file '%s'"
@@ -7730,53 +7744,53 @@ msgstr "Voulez vous changer la librairie active?"
 msgid "Part name '%s' not found in library '%s'"
 msgstr "Composnt '%s' non trouvée en librairie '%s'"
 
-#: eeschema/libedit.cpp:305 eeschema/libeditframe.cpp:730
+#: eeschema/libedit.cpp:307 eeschema/libeditframe.cpp:749
 msgid "No library specified."
 msgstr "Pas de librairie spécifiée."
 
-#: eeschema/libedit.cpp:311
+#: eeschema/libedit.cpp:313
 msgid "Include last component changes?"
 msgstr "Inclure les dernières modifications du composant"
 
-#: eeschema/libedit.cpp:326
+#: eeschema/libedit.cpp:328
 msgid "Part Library Name:"
 msgstr "Nom Librairie de Composants:"
 
-#: eeschema/libedit.cpp:346
+#: eeschema/libedit.cpp:348
 #, c-format
 msgid "Modify library file '%s' ?"
 msgstr "Modifier le fichier Librairie '%s' ?"
 
-#: eeschema/libedit.cpp:386
+#: eeschema/libedit.cpp:388
 #, c-format
 msgid "Error occurred while saving library file '%s'"
 msgstr "Erreur en sauvant le fichier librairie '%s'"
 
-#: eeschema/libedit.cpp:388 eeschema/libedit.cpp:430
+#: eeschema/libedit.cpp:390 eeschema/libedit.cpp:432
 msgid "*** ERROR: ***"
 msgstr "***ERREUR:****"
 
-#: eeschema/libedit.cpp:428
+#: eeschema/libedit.cpp:430
 #, c-format
 msgid "Error occurred while saving library documentation file <%s>"
 msgstr "Erreur en sauvant le fichier de documentation librairie <%s>"
 
-#: eeschema/libedit.cpp:438
+#: eeschema/libedit.cpp:440
 #, c-format
 msgid "Failed to create component document library file <%s>"
 msgstr "Erreur en sauvant le fichier document librairie <%s>."
 
-#: eeschema/libedit.cpp:444
+#: eeschema/libedit.cpp:446
 #, c-format
 msgid "Library file '%s' OK"
 msgstr "Fichier librairie '%s' OK"
 
-#: eeschema/libedit.cpp:447
+#: eeschema/libedit.cpp:449
 #, c-format
 msgid "Documentation file '%s' OK"
 msgstr "Fichier de doc '%s' OK"
 
-#: eeschema/libedit.cpp:470 eeschema/viewlibs.cpp:218
+#: eeschema/libedit.cpp:472 eeschema/viewlibs.cpp:218
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:50
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:126
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:151
@@ -7787,41 +7801,41 @@ msgstr "Fichier de doc '%s' OK"
 msgid "None"
 msgstr "Aucun"
 
-#: eeschema/libedit.cpp:486 eeschema/onrightclick.cpp:443
+#: eeschema/libedit.cpp:488 eeschema/onrightclick.cpp:443
 msgid "Convert"
 msgstr "Convertir"
 
-#: eeschema/libedit.cpp:490
+#: eeschema/libedit.cpp:492
 #: eeschema/widgets/widget_eeschema_color_config.cpp:73
 msgid "Body"
 msgstr "Graphique"
 
-#: eeschema/libedit.cpp:493
+#: eeschema/libedit.cpp:495
 msgid "Power Symbol"
 msgstr "Symbole d'Alimentation"
 
-#: eeschema/libedit.cpp:495 eeschema/viewlibs.cpp:229
+#: eeschema/libedit.cpp:497 eeschema/viewlibs.cpp:231
 msgid "Part"
 msgstr "Part"
 
-#: eeschema/libedit.cpp:499 eeschema/viewlibs.cpp:232
+#: eeschema/libedit.cpp:501 eeschema/viewlibs.cpp:234
 msgid "Key words"
 msgstr "Mots clé"
 
-#: eeschema/libedit.cpp:525
+#: eeschema/libedit.cpp:527
 msgid "Please select a component library."
 msgstr "Veuillez sélectionner une librairie de composants."
 
-#: eeschema/libedit.cpp:534
+#: eeschema/libedit.cpp:536
 #, c-format
 msgid "Part library '%s' is empty."
 msgstr "Fichier librairie de composants '%s' vide"
 
-#: eeschema/libedit.cpp:535
+#: eeschema/libedit.cpp:537
 msgid "Delete Entry Error"
 msgstr "Erreur en suppression d'élément"
 
-#: eeschema/libedit.cpp:539
+#: eeschema/libedit.cpp:541
 #, c-format
 msgid ""
 "Select one of %d components to delete\n"
@@ -7830,21 +7844,21 @@ msgstr ""
 "Sélectionnez l'un des %d composants à supprimer\n"
 "de la librairie '%s'."
 
-#: eeschema/libedit.cpp:543
+#: eeschema/libedit.cpp:545
 msgid "Delete Part"
 msgstr "Supprimer Composant"
 
-#: eeschema/libedit.cpp:552
+#: eeschema/libedit.cpp:554
 #, c-format
 msgid "Entry '%s' not found in library '%s'."
 msgstr "Élément '%s' non trouvé en librairie '%s'."
 
-#: eeschema/libedit.cpp:559
+#: eeschema/libedit.cpp:561
 #, c-format
 msgid "Delete component '%s' from library '%s' ?"
 msgstr "Supprimer composant '%s' de la librairie  '%s'?"
 
-#: eeschema/libedit.cpp:578
+#: eeschema/libedit.cpp:580
 msgid ""
 "The component being deleted has been modified. All changes will be lost. "
 "Discard changes?"
@@ -7852,7 +7866,7 @@ msgstr ""
 "Le composant à supprimer a été modifié. Tous les changements seront perdus. "
 "Ignorer les changements?"
 
-#: eeschema/libedit.cpp:607
+#: eeschema/libedit.cpp:609
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -7862,21 +7876,21 @@ msgstr ""
 "\n"
 "Supprimer le composant courant de l'écran?"
 
-#: eeschema/libedit.cpp:626
+#: eeschema/libedit.cpp:628
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Ce nouveau composant n'a pas de nom et ne peut être créé, Abandon"
 
-#: eeschema/libedit.cpp:639
+#: eeschema/libedit.cpp:641
 #, c-format
 msgid "Part '%s' already exists in library '%s'"
 msgstr "L'empreinte '%s' existe déjà  existant en librairie '%s'"
 
-#: eeschema/libedit.cpp:711
+#: eeschema/libedit.cpp:713
 #, c-format
 msgid "Part '%s' already exists. Change it?"
 msgstr "Le composant  '%s' existe déjà. Le changer ?"
 
-#: eeschema/libedit.cpp:725
+#: eeschema/libedit.cpp:727
 #, c-format
 msgid "Part '%s' saved in library '%s'"
 msgstr "Composant '%s' en librairie '%s'"
@@ -8092,11 +8106,11 @@ msgstr "Nom Fichier:"
 msgid "Can't save file <%s>"
 msgstr "Impossible de sauver le  fichier <%s>"
 
-#: eeschema/libeditframe.cpp:316
+#: eeschema/libeditframe.cpp:322
 msgid "Save the changes in the library before closing?"
 msgstr "Sauver les changements en librairie avant de fermer?"
 
-#: eeschema/libeditframe.cpp:343
+#: eeschema/libeditframe.cpp:349
 #, c-format
 msgid ""
 "Library '%s' was modified!\n"
@@ -8105,17 +8119,17 @@ msgstr ""
 "Librairie '%s'  modifiée!\n"
 "Perdre les changements ?"
 
-#: eeschema/libeditframe.cpp:449 eeschema/onrightclick.cpp:454
+#: eeschema/libeditframe.cpp:455 eeschema/onrightclick.cpp:454
 #, c-format
 msgid "Unit %s"
 msgstr "Unité %s"
 
-#: eeschema/libeditframe.cpp:717
+#: eeschema/libeditframe.cpp:736
 msgid "No part to save."
 msgstr "Pas de composant à sauver."
 
-#: eeschema/libeditframe.cpp:1107 eeschema/schedit.cpp:533
-#: eeschema/tool_lib.cpp:65 eeschema/tool_sch.cpp:194
+#: eeschema/libeditframe.cpp:1126 eeschema/schedit.cpp:537
+#: eeschema/tool_lib.cpp:65 eeschema/tool_sch.cpp:197
 #: gerbview/events_called_functions.cpp:210 gerbview/toolbars_gerber.cpp:218
 #: pagelayout_editor/events_functions.cpp:133
 #: pagelayout_editor/toolbars_pl_editor.cpp:97 pcbnew/edit.cpp:1442
@@ -8124,44 +8138,44 @@ msgstr "Pas de composant à sauver."
 msgid "Zoom to selection"
 msgstr "Zoom sur la sélection"
 
-#: eeschema/libeditframe.cpp:1113
+#: eeschema/libeditframe.cpp:1132
 msgid "Add pin"
 msgstr "Addition de \"pins\""
 
-#: eeschema/libeditframe.cpp:1117
+#: eeschema/libeditframe.cpp:1136
 msgid "Set pin options"
 msgstr "Choix options de pin"
 
-#: eeschema/libeditframe.cpp:1128 eeschema/schedit.cpp:573 pcbnew/edit.cpp:1502
+#: eeschema/libeditframe.cpp:1147 eeschema/schedit.cpp:577 pcbnew/edit.cpp:1502
 #: pcbnew/modedit.cpp:938 pcbnew/tools/drawing_tool.cpp:176
 msgid "Add text"
 msgstr "Ajout de Texte"
 
-#: eeschema/libeditframe.cpp:1132
+#: eeschema/libeditframe.cpp:1151
 msgid "Add rectangle"
 msgstr "Ajout de rectangle"
 
-#: eeschema/libeditframe.cpp:1136 pcbnew/modedit.cpp:934
+#: eeschema/libeditframe.cpp:1155 pcbnew/modedit.cpp:934
 msgid "Add circle"
 msgstr "Ajout de cercle"
 
-#: eeschema/libeditframe.cpp:1140 pcbnew/modedit.cpp:930
+#: eeschema/libeditframe.cpp:1159 pcbnew/modedit.cpp:930
 msgid "Add arc"
 msgstr "Ajout d'arc"
 
-#: eeschema/libeditframe.cpp:1144 pcbnew/modedit.cpp:926
+#: eeschema/libeditframe.cpp:1163 pcbnew/modedit.cpp:926
 msgid "Add line"
 msgstr "Addition de lignes"
 
-#: eeschema/libeditframe.cpp:1148
+#: eeschema/libeditframe.cpp:1167
 msgid "Set anchor position"
 msgstr "Ajuster Position Ancre"
 
-#: eeschema/libeditframe.cpp:1152
+#: eeschema/libeditframe.cpp:1171
 msgid "Import"
 msgstr "Importer"
 
-#: eeschema/libeditframe.cpp:1170 eeschema/schedit.cpp:609 pcbnew/edit.cpp:1514
+#: eeschema/libeditframe.cpp:1189 eeschema/schedit.cpp:613 pcbnew/edit.cpp:1514
 #: pcbnew/modedit.cpp:963 pcbnew/tools/pcbnew_control.cpp:762
 #: eeschema/help_common_strings.h:48
 msgid "Delete item"
@@ -8627,7 +8641,7 @@ msgid "Simulate the circuit"
 msgstr "Simuler le circuit"
 
 #: eeschema/menubar.cpp:510 eeschema/menubar_libedit.cpp:253
-#: eeschema/tool_viewlib.cpp:213
+#: eeschema/tool_viewlib.cpp:217
 msgid "Eeschema &Manual"
 msgstr "&Manuel de Eeschema"
 
@@ -8636,14 +8650,14 @@ msgid "Open Eeschema Manual"
 msgstr "Ouvrir la documentation de Eeschema"
 
 #: eeschema/menubar.cpp:528 eeschema/menubar_libedit.cpp:271
-#: eeschema/tool_viewlib.cpp:224 gerbview/menubar.cpp:235 kicad/menubar.cpp:428
+#: eeschema/tool_viewlib.cpp:228 gerbview/menubar.cpp:235 kicad/menubar.cpp:428
 #: pagelayout_editor/menubar.cpp:166 pcbnew/menubar_modedit.cpp:354
 #: pcbnew/menubar_pcbframe.cpp:664
 msgid "Get &Involved"
 msgstr "Rester &Impliqué"
 
 #: eeschema/menubar.cpp:529 eeschema/menubar_libedit.cpp:272
-#: eeschema/tool_viewlib.cpp:225 gerbview/menubar.cpp:236 kicad/menubar.cpp:429
+#: eeschema/tool_viewlib.cpp:229 gerbview/menubar.cpp:236 kicad/menubar.cpp:429
 #: pagelayout_editor/menubar.cpp:167 pcbnew/menubar_modedit.cpp:355
 #: pcbnew/menubar_pcbframe.cpp:665
 msgid "Contribute to KiCad (opens a web browser)"
@@ -8661,7 +8675,7 @@ msgid "&Edit"
 msgstr "&Editer"
 
 #: eeschema/menubar.cpp:542 eeschema/menubar_libedit.cpp:287
-#: eeschema/tool_viewlib.cpp:237 pcbnew/menubar_modedit.cpp:368
+#: eeschema/tool_viewlib.cpp:241 pcbnew/menubar_modedit.cpp:368
 #: pcbnew/menubar_pcbframe.cpp:678 pcbnew/tool_modview.cpp:205
 msgid "&View"
 msgstr "&Affichage"
@@ -8778,7 +8792,7 @@ msgstr "Ajuster les options et valeurs par défaut de l'Éditeur de Composants"
 msgid "Open the Eeschema Manual"
 msgstr "Ouvrir la documentation de Eeschema"
 
-#: eeschema/menubar_libedit.cpp:260 eeschema/tool_viewlib.cpp:219
+#: eeschema/menubar_libedit.cpp:260 eeschema/tool_viewlib.cpp:223
 #: pcbnew/menubar_modedit.cpp:343 pcbnew/menubar_pcbframe.cpp:653
 #: pcbnew/tool_modview.cpp:192
 msgid "Open the \"Getting Started in KiCad\" guide for beginners"
@@ -8819,11 +8833,11 @@ msgstr ""
 msgid "Error: duplicate sheet names. Continue?"
 msgstr "Erreur: nom de feuille dupliqué dans une feuille donnée. Continuer?"
 
-#: eeschema/netlist.cpp:171
+#: eeschema/netlist.cpp:172
 msgid "No Objects"
 msgstr "Pas d'objets"
 
-#: eeschema/netlist.cpp:175
+#: eeschema/netlist.cpp:176
 #, c-format
 msgid "Net count = %d"
 msgstr "Nombre nets = %d"
@@ -9273,15 +9287,15 @@ msgstr ""
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Position occupée par une autre pin. Continuer ?"
 
-#: eeschema/pinedit.cpp:694
+#: eeschema/pinedit.cpp:710
 msgid "No pins!"
 msgstr "Pas de Pins!"
 
-#: eeschema/pinedit.cpp:704
+#: eeschema/pinedit.cpp:720
 msgid "Marker Information"
 msgstr "Info Marqueur"
 
-#: eeschema/pinedit.cpp:730
+#: eeschema/pinedit.cpp:746
 #, c-format
 msgid ""
 "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts "
@@ -9290,25 +9304,25 @@ msgstr ""
 "<b>Pin dupliquée %s</b> \"%s\" en position <b>(%.3f, %.3f)</b> en conflit "
 "avec pin %s \"%s\" en position <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:744 eeschema/pinedit.cpp:786
+#: eeschema/pinedit.cpp:760 eeschema/pinedit.cpp:802
 #, c-format
 msgid " in part %c"
 msgstr " en unité %c"
 
-#: eeschema/pinedit.cpp:750 eeschema/pinedit.cpp:792
+#: eeschema/pinedit.cpp:766 eeschema/pinedit.cpp:808
 msgid "  of converted"
 msgstr "  de converti"
 
-#: eeschema/pinedit.cpp:752 eeschema/pinedit.cpp:794
+#: eeschema/pinedit.cpp:768 eeschema/pinedit.cpp:810
 msgid "  of normal"
 msgstr "  de normal"
 
-#: eeschema/pinedit.cpp:777
+#: eeschema/pinedit.cpp:793
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Pin %s hors grille </b> \"%s\" en position <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:803
+#: eeschema/pinedit.cpp:819
 msgid "No off grid or duplicate pins were found."
 msgstr "Pas de  pins doublées ou hors grille trouvées"
 
@@ -9413,225 +9427,225 @@ msgstr "Plugin type '%s' non trouvé."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valeur inconnue pour SCH_FILE_T : %d"
 
-#: eeschema/sch_legacy_plugin.cpp:140 eeschema/sch_legacy_plugin.cpp:185
-#: eeschema/sch_legacy_plugin.cpp:233 eeschema/sch_legacy_plugin.cpp:279
-#: eeschema/sch_legacy_plugin.cpp:323 eeschema/sch_legacy_plugin.cpp:336
-#: eeschema/sch_legacy_plugin.cpp:387 eeschema/sch_legacy_plugin.cpp:400
-#: eeschema/sch_legacy_plugin.cpp:419 eeschema/sch_legacy_plugin.cpp:827
-#: eeschema/sch_legacy_plugin.cpp:2495
+#: eeschema/sch_legacy_plugin.cpp:141 eeschema/sch_legacy_plugin.cpp:186
+#: eeschema/sch_legacy_plugin.cpp:234 eeschema/sch_legacy_plugin.cpp:280
+#: eeschema/sch_legacy_plugin.cpp:324 eeschema/sch_legacy_plugin.cpp:337
+#: eeschema/sch_legacy_plugin.cpp:388 eeschema/sch_legacy_plugin.cpp:401
+#: eeschema/sch_legacy_plugin.cpp:420 eeschema/sch_legacy_plugin.cpp:828
+#: eeschema/sch_legacy_plugin.cpp:2497
 msgid "unexpected end of line"
 msgstr "fin de ligne inattendue"
 
-#: eeschema/sch_legacy_plugin.cpp:282
+#: eeschema/sch_legacy_plugin.cpp:283
 msgid "expected single character token"
 msgstr "attendu caractère clé unique"
 
-#: eeschema/sch_legacy_plugin.cpp:347
+#: eeschema/sch_legacy_plugin.cpp:348
 msgid "expected unquoted string"
 msgstr "attendu chaîne de caractères sans guillemets"
 
-#: eeschema/sch_legacy_plugin.cpp:405
+#: eeschema/sch_legacy_plugin.cpp:406
 msgid "expecting opening quote"
 msgstr "expecting opening quote"
 
-#: eeschema/sch_legacy_plugin.cpp:442
+#: eeschema/sch_legacy_plugin.cpp:443
 msgid "expected quoted string"
 msgstr "attendu chaîne de caractères entre guillemets"
 
-#: eeschema/sch_legacy_plugin.cpp:445
+#: eeschema/sch_legacy_plugin.cpp:446
 msgid "no closing quote for string found"
 msgstr "no closing quote for string found"
 
-#: eeschema/sch_legacy_plugin.cpp:627
+#: eeschema/sch_legacy_plugin.cpp:628
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file"
 msgstr "'%s' ne semble pas être un fichier Eeschema"
 
-#: eeschema/sch_legacy_plugin.cpp:655
+#: eeschema/sch_legacy_plugin.cpp:656
 msgid "Missing 'EELAYER END'"
 msgstr "'EELAYER END' manquant"
 
-#: eeschema/sch_legacy_plugin.cpp:674
+#: eeschema/sch_legacy_plugin.cpp:675
 msgid "invalid page size"
 msgstr "taille de page non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:703 eeschema/sch_legacy_plugin.cpp:965
-#: eeschema/sch_legacy_plugin.cpp:973 eeschema/sch_legacy_plugin.cpp:2113
+#: eeschema/sch_legacy_plugin.cpp:704 eeschema/sch_legacy_plugin.cpp:966
+#: eeschema/sch_legacy_plugin.cpp:974 eeschema/sch_legacy_plugin.cpp:2115
 msgid "unexpected end of file"
 msgstr "fin de fichier inattendue"
 
-#: eeschema/sch_legacy_plugin.cpp:759
+#: eeschema/sch_legacy_plugin.cpp:760
 msgid "missing 'EndDescr'"
 msgstr "'EndDescr' manquant"
 
-#: eeschema/sch_legacy_plugin.cpp:851
+#: eeschema/sch_legacy_plugin.cpp:852
 msgid "invalid sheet pin type"
 msgstr "type pour pin de hiérarchie non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:872
+#: eeschema/sch_legacy_plugin.cpp:873
 msgid "invalid sheet pin side"
 msgstr "coté pour pin de hiérarchie non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:894
+#: eeschema/sch_legacy_plugin.cpp:895
 msgid "missing '$EndSheet`"
 msgstr "'$EndSheet` manquant"
 
-#: eeschema/sch_legacy_plugin.cpp:932
+#: eeschema/sch_legacy_plugin.cpp:933
 msgid "Unexpected end of file"
 msgstr "Fin de fichier inattendue"
 
-#: eeschema/sch_legacy_plugin.cpp:1153
+#: eeschema/sch_legacy_plugin.cpp:1154
 msgid "invalid label type"
 msgstr "type de label non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:1164
+#: eeschema/sch_legacy_plugin.cpp:1165
 msgid "expected 'Italics' or '~'"
 msgstr "attendu  'Italics' ou  '~'"
 
-#: eeschema/sch_legacy_plugin.cpp:1345
+#: eeschema/sch_legacy_plugin.cpp:1347
 msgid "component field text horizontal justification must be L, R, or C"
 msgstr ""
 "la justification horizontale du texte du champ composant doit être L, R ou C"
 
-#: eeschema/sch_legacy_plugin.cpp:1355
+#: eeschema/sch_legacy_plugin.cpp:1357
 msgid "component field text vertical justification must be B, T, or C"
 msgstr ""
 "la justification verticale du texte du champ composant doit être B, T, or C"
 
-#: eeschema/sch_legacy_plugin.cpp:1360
+#: eeschema/sch_legacy_plugin.cpp:1362
 msgid "component field text attributes must be 3 characters wide"
 msgstr "attributs du texte du le champ composant doivent avoir 3 caractères"
 
-#: eeschema/sch_legacy_plugin.cpp:1366
+#: eeschema/sch_legacy_plugin.cpp:1368
 msgid "component field text italics indicator must be I or N"
 msgstr "indicateur italique du texte du champ du composant doit être I ou N"
 
-#: eeschema/sch_legacy_plugin.cpp:1372
+#: eeschema/sch_legacy_plugin.cpp:1374
 msgid "component field text bold indicator must be B or N"
 msgstr "indicateur 'gras' du texte du champ composant doit être B ou N"
 
-#: eeschema/sch_legacy_plugin.cpp:1386
+#: eeschema/sch_legacy_plugin.cpp:1388
 msgid "component field orientation must be H or V"
 msgstr "L'orientation du champ composant doit être H ou V"
 
-#: eeschema/sch_legacy_plugin.cpp:1418
+#: eeschema/sch_legacy_plugin.cpp:1420
 msgid "invalid component X1 transform value"
 msgstr "valeur de transformation de composante non valide X1"
 
-#: eeschema/sch_legacy_plugin.cpp:1423
+#: eeschema/sch_legacy_plugin.cpp:1425
 msgid "invalid component Y1 transform value"
 msgstr "invalid component Y1 transform value"
 
-#: eeschema/sch_legacy_plugin.cpp:1428
+#: eeschema/sch_legacy_plugin.cpp:1430
 msgid "invalid component X2 transform value"
 msgstr "invalid component X2 transform value"
 
-#: eeschema/sch_legacy_plugin.cpp:1433
+#: eeschema/sch_legacy_plugin.cpp:1435
 msgid "invalid component Y2 transform value"
 msgstr "invalid component Y2 transform value"
 
-#: eeschema/sch_legacy_plugin.cpp:2192
+#: eeschema/sch_legacy_plugin.cpp:2194
 #, c-format
 msgid "user does not have permission to read library document file '%s'"
 msgstr ""
 "l'utilisateur n'a pas la permission de lire le fichier de documentation de "
 "librairie '%s'"
 
-#: eeschema/sch_legacy_plugin.cpp:2200
+#: eeschema/sch_legacy_plugin.cpp:2202
 msgid "symbol document library file is empty"
 msgstr "le fichier de documentation de librairie est vide"
 
-#: eeschema/sch_legacy_plugin.cpp:2486
+#: eeschema/sch_legacy_plugin.cpp:2488
 msgid "invalid field ID"
 msgstr "ID de champ invalide"
 
-#: eeschema/sch_legacy_plugin.cpp:2525
+#: eeschema/sch_legacy_plugin.cpp:2527
 msgid "invalid field text orientation parameter"
 msgstr "parametre orientation du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2534
+#: eeschema/sch_legacy_plugin.cpp:2536
 msgid "invalid field text visibility parameter"
 msgstr "parametre visibilité du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2551
+#: eeschema/sch_legacy_plugin.cpp:2553
 msgid "invalid field text horizontal justification parameter"
 msgstr "parametre justification horizontale du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2559
+#: eeschema/sch_legacy_plugin.cpp:2561
 msgid "invalid field text attributes size"
 msgstr "attributs de taille du texte de champ invalides"
 
-#: eeschema/sch_legacy_plugin.cpp:2569
+#: eeschema/sch_legacy_plugin.cpp:2571
 msgid "invalid field text vertical justification parameter"
 msgstr "parametre justification verticale du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2577
+#: eeschema/sch_legacy_plugin.cpp:2579
 msgid "invalid field text italic parameter"
 msgstr "parametre italique du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2582
+#: eeschema/sch_legacy_plugin.cpp:2584
 msgid "invalid field text bold parameter"
 msgstr "parametre gras du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2671
+#: eeschema/sch_legacy_plugin.cpp:2673
 msgid "undefined DRAW entry"
 msgstr "DRAW entry indéfinie"
 
-#: eeschema/sch_legacy_plugin.cpp:2677
+#: eeschema/sch_legacy_plugin.cpp:2679
 msgid "file ended prematurely loading component draw element"
 msgstr ""
 "fin de fichier prématurée lors du chargement d'élément de graphique du "
 "composant"
 
-#: eeschema/sch_legacy_plugin.cpp:2701
+#: eeschema/sch_legacy_plugin.cpp:2703
 msgid "invalid fill type, expected f, F, or N"
 msgstr "type de remplissage non valide, attendu f,F ou N"
 
-#: eeschema/sch_legacy_plugin.cpp:2852
+#: eeschema/sch_legacy_plugin.cpp:2854
 msgid "invalid text stype, expected 'Normal' or 'Italic'"
 msgstr "stype text invalide, attendu 'Normal' ou 'Italic'"
 
-#: eeschema/sch_legacy_plugin.cpp:2873
+#: eeschema/sch_legacy_plugin.cpp:2875
 msgid "invalid horizontal text justication parameter, expected L, C, or R"
 msgstr ""
 "parametre justification horizontale du texte de champ non valide, attendu L,"
 "C ou R"
 
-#: eeschema/sch_legacy_plugin.cpp:2892
+#: eeschema/sch_legacy_plugin.cpp:2894
 msgid "invalid vertical text justication parameter, expected T, C, or B"
 msgstr ""
 "parametre justification verticale du texte de champ non valide, attendu T,C "
 "ou B"
 
-#: eeschema/sch_legacy_plugin.cpp:3016
+#: eeschema/sch_legacy_plugin.cpp:3018
 msgid "unknown pin type"
 msgstr "type de pin inconnu"
 
-#: eeschema/sch_legacy_plugin.cpp:3069
+#: eeschema/sch_legacy_plugin.cpp:3071
 msgid "unknown pin attribute"
 msgstr "attribut de pin inconnu"
 
-#: eeschema/sch_legacy_plugin.cpp:3112
+#: eeschema/sch_legacy_plugin.cpp:3114
 msgid "pin attributes do not define a valid pin shape"
 msgstr "les attributs de pin ne définissent pas une forme de pin valide"
 
-#: eeschema/sch_legacy_plugin.cpp:3201
+#: eeschema/sch_legacy_plugin.cpp:3203
 msgid "file ended prematurely while loading footprint filters"
 msgstr "fin de fichier prématurée lors du chargement des filtres d'empreintes"
 
-#: eeschema/sch_legacy_plugin.cpp:3233 eeschema/sch_legacy_plugin.cpp:3268
+#: eeschema/sch_legacy_plugin.cpp:3235 eeschema/sch_legacy_plugin.cpp:3270
 #, c-format
 msgid "library %s does not contain an alias %s"
 msgstr "la librairie %s ne contient pas un alias %s"
 
-#: eeschema/sch_legacy_plugin.cpp:3397
+#: eeschema/sch_legacy_plugin.cpp:3399
 #, c-format
 msgid "symbol library '%s' already exists, cannot create a new library"
 msgstr ""
 "La librairie de symboles '%s' existe déjà, impossible de créer une nouvelle "
 "bibliothèque"
 
-#: eeschema/sch_legacy_plugin.cpp:3424 pcbnew/legacy_plugin.cpp:3478
+#: eeschema/sch_legacy_plugin.cpp:3426 pcbnew/legacy_plugin.cpp:3478
 #, c-format
 msgid "library '%s' cannot be deleted"
 msgstr "la librairie '%s' ne peut pas être supprimée"
@@ -9862,79 +9876,84 @@ msgstr "Voulez vous nettoyer cette feuille?"
 msgid "No tool selected"
 msgstr "Pas d'outil sélectionné"
 
-#: eeschema/schedit.cpp:537
+#: eeschema/schedit.cpp:533 pcbnew/edit.cpp:1518 pcbnew/tool_pcb.cpp:431
+#: pcbnew/tools/pcb_editor_control.cpp:812
+msgid "Highlight net"
+msgstr "Surbrillance net"
+
+#: eeschema/schedit.cpp:541
 msgid "Descend or ascend hierarchy"
 msgstr "Naviguer dans la hiérarchie"
 
-#: eeschema/schedit.cpp:541
+#: eeschema/schedit.cpp:545
 msgid "Add no connect"
 msgstr "Placer un symbole de Non connexion"
 
-#: eeschema/schedit.cpp:545
+#: eeschema/schedit.cpp:549
 msgid "Add wire"
 msgstr "Ajouter fils"
 
-#: eeschema/schedit.cpp:549
+#: eeschema/schedit.cpp:553
 msgid "Add bus"
 msgstr "Addition de bus"
 
-#: eeschema/schedit.cpp:553
+#: eeschema/schedit.cpp:557
 msgid "Add lines"
 msgstr "Addition de lignes"
 
-#: eeschema/schedit.cpp:557
+#: eeschema/schedit.cpp:561
 msgid "Add junction"
 msgstr "Ajout jonction"
 
-#: eeschema/schedit.cpp:561
+#: eeschema/schedit.cpp:565
 msgid "Add label"
 msgstr "Ajout label"
 
-#: eeschema/schedit.cpp:565
+#: eeschema/schedit.cpp:569
 msgid "Add global label"
 msgstr "Ajouter label global"
 
-#: eeschema/schedit.cpp:569
+#: eeschema/schedit.cpp:573
 msgid "Add hierarchical label"
 msgstr "Ajouter label hiérarchique"
 
-#: eeschema/schedit.cpp:577
+#: eeschema/schedit.cpp:581
 msgid "Add image"
 msgstr "Ajout image"
 
-#: eeschema/schedit.cpp:581
+#: eeschema/schedit.cpp:585
 msgid "Add wire to bus entry"
 msgstr "Addition d'entrée de bus (type fil vers bus)"
 
-#: eeschema/schedit.cpp:585
+#: eeschema/schedit.cpp:589
 msgid "Add bus to bus entry"
 msgstr "Addition d'entrée de bus (type bus vers bus)"
 
-#: eeschema/schedit.cpp:589
+#: eeschema/schedit.cpp:593
 msgid "Add sheet"
 msgstr "Ajout de feuille"
 
-#: eeschema/schedit.cpp:593
+#: eeschema/schedit.cpp:597
 msgid "Add sheet pins"
 msgstr "Ajout de pins de feuille"
 
-#: eeschema/schedit.cpp:597
+#: eeschema/schedit.cpp:601
 msgid "Import sheet pins"
 msgstr "Importer connecteur de hiérarchie"
 
-#: eeschema/schedit.cpp:601
+#: eeschema/schedit.cpp:605
 msgid "Add component"
 msgstr "Ajout composant"
 
-#: eeschema/schedit.cpp:605
+#: eeschema/schedit.cpp:609
 msgid "Add power"
 msgstr "Ajouter symboles d'alims"
 
-#: eeschema/schedit.cpp:614
+#: eeschema/schedit.cpp:618
 msgid "Add a simulator probe"
 msgstr "Ajouter une sonde de simulateur"
 
-#: eeschema/schedit.cpp:619
+#: eeschema/schedit.cpp:623
 msgid "Select a value to be tuned"
 msgstr "Sélectionner une valeur à ajuster"
 
@@ -9946,7 +9965,7 @@ msgstr " Non Trouvé"
 msgid "The following libraries were not found:"
 msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
 
-#: eeschema/schframe.cpp:638 pcbnew/pcbframe.cpp:604
+#: eeschema/schframe.cpp:640 pcbnew/pcbframe.cpp:604
 #, c-format
 msgid ""
 "Save the changes in\n"
@@ -9957,23 +9976,23 @@ msgstr ""
 "'%s'\n"
 "avant de fermer?"
 
-#: eeschema/schframe.cpp:785
+#: eeschema/schframe.cpp:787
 msgid "Draw wires and buses in any direction"
 msgstr "Tracer les fils et bus avec direction quelconque"
 
-#: eeschema/schframe.cpp:786
+#: eeschema/schframe.cpp:788
 msgid "Draw horizontal and vertical wires and buses only"
 msgstr "Autoriser fils et bus verticaux et horizontaux seulement"
 
-#: eeschema/schframe.cpp:795
+#: eeschema/schframe.cpp:797
 msgid "Do not show hidden pins"
 msgstr "Ne pas afficher les pins invisibles"
 
-#: eeschema/schframe.cpp:796 eeschema/tool_sch.cpp:295
+#: eeschema/schframe.cpp:798 eeschema/tool_sch.cpp:298
 msgid "Show hidden pins"
 msgstr "Force affichage des pins invisibles"
 
-#: eeschema/schframe.cpp:850
+#: eeschema/schframe.cpp:852
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, you need to launch "
@@ -9983,28 +10002,28 @@ msgstr ""
 "mode autonome. Afin de créer/mettre à jour le PCB à partir du schéma, vous "
 "devrez lancer Kicad manager et créez un projet."
 
-#: eeschema/schframe.cpp:972
+#: eeschema/schframe.cpp:974
 msgid "Schematic"
 msgstr "Schématique"
 
-#: eeschema/schframe.cpp:991
+#: eeschema/schframe.cpp:993
 msgid "New Schematic"
 msgstr "Nouvelle Schématique"
 
-#: eeschema/schframe.cpp:1004
+#: eeschema/schframe.cpp:1006
 #, c-format
 msgid "Schematic file '%s' already exists, use Open instead"
 msgstr "Le fichier schématique '%s' existe déjà, utiliser Ouvrir à la place"
 
-#: eeschema/schframe.cpp:1025
+#: eeschema/schframe.cpp:1027
 msgid "Open Schematic"
 msgstr "Ouvrir Schématique"
 
-#: eeschema/schframe.cpp:1155
+#: eeschema/schframe.cpp:1157
 msgid "Error: not a component or no component"
 msgstr "Erreur: ce n'est pas un composant, ou pas de composant"
 
-#: eeschema/schframe.cpp:1387
+#: eeschema/schframe.cpp:1389
 msgid " [no file]"
 msgstr " [pas de fichier]"
 
@@ -10415,10 +10434,14 @@ msgstr ""
 msgid "Show pin table"
 msgstr "Montrer la table des pins"
 
-#: eeschema/tool_lib.cpp:232 eeschema/tool_sch.cpp:276
+#: eeschema/tool_lib.cpp:232 eeschema/tool_sch.cpp:279
 #: gerbview/toolbars_gerber.cpp:223
 msgid "Turn grid off"
 msgstr "Ne pas afficher la grille"
+
+#: eeschema/tool_lib.cpp:250
+msgid "Show the pins electrical type"
+msgstr "Montrer le type electrique des pins"
 
 #: eeschema/tool_sch.cpp:58
 msgid "New schematic project"
@@ -10482,23 +10505,27 @@ msgstr "Lancer CvPcb - Association composants et  empreintes"
 msgid "Run Pcbnew to layout printed circuit board"
 msgstr "Lancer Pcbnew - outil de conception de C.I."
 
-#: eeschema/tool_sch.cpp:198
+#: eeschema/tool_sch.cpp:194
+msgid "Click to highlight net"
+msgstr "Cliquez pour mettre en surbrillance une équipotentielle."
+
+#: eeschema/tool_sch.cpp:201
 msgid "Ascend/descend hierarchy"
 msgstr "Naviguer dans la hiérarchie"
 
-#: eeschema/tool_sch.cpp:254 eeschema/help_common_strings.h:90
+#: eeschema/tool_sch.cpp:257 eeschema/help_common_strings.h:90
 msgid "Add bitmap image"
 msgstr "Ajouter une image bitmap"
 
-#: eeschema/tool_sch.cpp:280
+#: eeschema/tool_sch.cpp:283
 msgid "Set unit to inch"
 msgstr "Unités en pouces"
 
-#: eeschema/tool_sch.cpp:284
+#: eeschema/tool_sch.cpp:287
 msgid "Set unit to mm"
 msgstr "Unités en millimètres"
 
-#: eeschema/tool_sch.cpp:300
+#: eeschema/tool_sch.cpp:303
 msgid "HV orientation for wires and bus"
 msgstr "Force direction H, V  pour les fils et bus"
 
@@ -10536,19 +10563,23 @@ msgstr "&Fermer"
 msgid "Close schematic component viewer"
 msgstr "Fermer le visualisateur de composants schématiques"
 
-#: eeschema/tool_viewlib.cpp:214
+#: eeschema/tool_viewlib.cpp:209
+msgid "&Show Pin Electrical Type"
+msgstr "Montrer le &Type Electrique des Pins"
+
+#: eeschema/tool_viewlib.cpp:218
 msgid "Open Eeschema manual"
 msgstr "Ouvrir la documentation de Eeschema"
 
-#: eeschema/tool_viewlib.cpp:230
+#: eeschema/tool_viewlib.cpp:234
 msgid "&About Eeschema"
 msgstr "&Au Sujet de Eeschema"
 
-#: eeschema/tool_viewlib.cpp:231
+#: eeschema/tool_viewlib.cpp:235
 msgid "About Eeschema schematic designer"
 msgstr "Au sujet de Eeschema (outil de conception schématique)"
 
-#: eeschema/viewlib_frame.cpp:109 pcbnew/modview_frame.cpp:721
+#: eeschema/viewlib_frame.cpp:112 pcbnew/modview_frame.cpp:721
 msgid "Library Browser"
 msgstr "Visualisateur de Librairies"
 
@@ -10603,7 +10634,7 @@ msgid "Pin name"
 msgstr "Nom pin"
 
 #: eeschema/widgets/widget_eeschema_color_config.cpp:85
-#: eeschema/widgets/widget_eeschema_color_config.cpp:104
+#: eeschema/widgets/widget_eeschema_color_config.cpp:105
 msgid "Sheet"
 msgstr "Feuille"
 
@@ -10637,11 +10668,15 @@ msgstr "ERC erreur"
 msgid "Grid"
 msgstr "Grille"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:105
+#: eeschema/widgets/widget_eeschema_color_config.cpp:97
+msgid "Brightened"
+msgstr "Surbrillance"
+
+#: eeschema/widgets/widget_eeschema_color_config.cpp:106
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: eeschema/widgets/widget_eeschema_color_config.cpp:274
+#: eeschema/widgets/widget_eeschema_color_config.cpp:275
 msgid ""
 "Some items have the same color as the background\n"
 "and they will not be seen on the screen.  Are you\n"
@@ -19771,11 +19806,11 @@ msgstr "Utiliser extensions Gerber Protel"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid ""
-"Use Protel Gerber extensions - .GBL, .GTL, etc...\n"
-"No more recommended. The official extension is .gbr"
+"Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
+"No longer recommended. The official extension is .gbr"
 msgstr ""
-"Utiliser les extensions Protel Gerber - .gbl, .GTL, etc ...\n"
-"Nest pas recommandé. L'extension officielle est .gbr"
+"Utiliser les extensions de Protel Gerber (. GBL. GTL, etc....)\n"
+"N’est plus recommandée. L’extension officielle est .gbr"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:231
 msgid "Include extended (X2) attributes"
@@ -20672,7 +20707,7 @@ msgstr "nom <package>: '%s' dupliqué dans la <librairie> Eagle: '%s'"
 msgid "No '%s' package in library '%s'"
 msgstr "Pas de boîtier '%s' en librairie '%s'"
 
-#: pcbnew/eagle_plugin.cpp:3021
+#: pcbnew/eagle_plugin.cpp:3022
 #, c-format
 msgid "File '%s' is not readable."
 msgstr "Le fichier '%s' n'est pas lisible."
@@ -20758,11 +20793,6 @@ msgstr "Addition de graphiques (Cercle)"
 #: pcbnew/tools/drawing_tool.cpp:337
 msgid "Add dimension"
 msgstr "Ajout des cotes"
-
-#: pcbnew/edit.cpp:1518 pcbnew/tool_pcb.cpp:431
-#: pcbnew/tools/pcb_editor_control.cpp:812
-msgid "Highlight net"
-msgstr "Surbrillance net"
 
 #: pcbnew/edit.cpp:1522
 msgid "Select rats nest"
@@ -23036,8 +23066,8 @@ msgstr ""
 msgid "Graphic not allowed on Copper layers"
 msgstr "Graphique non autorisé sur couches Cuivre"
 
-#: pcbnew/onleftclick.cpp:283
-msgid "Tracks on Copper layers only "
+#: pcbnew/onleftclick.cpp:283 pcbnew/router/router_tool.cpp:492
+msgid "Tracks on Copper layers only"
 msgstr "Pistes sur Couches Cuivre seulement"
 
 #: pcbnew/onleftclick.cpp:342
@@ -23655,7 +23685,7 @@ msgstr ""
 "Afin de créer/mettre à jour le PCB à partir du schéma, vous devrez lancer "
 "Kicad manager et créez un projet."
 
-#: pcbnew/pcbnew.cpp:325
+#: pcbnew/pcbnew.cpp:326
 msgid ""
 "You have run Pcbnew for the first time using the new footprint library table "
 "method for finding footprints.\n"
@@ -23976,15 +24006,15 @@ msgstr ""
 "Les microvias peuvent être placées seulement entre une couche extérieure (F."
 "Cu/B.Cu) et celle adjacente."
 
-#: pcbnew/router/router_tool.cpp:649
+#: pcbnew/router/router_tool.cpp:654
 msgid "Route Track"
 msgstr "Router Piste"
 
-#: pcbnew/router/router_tool.cpp:656
+#: pcbnew/router/router_tool.cpp:661
 msgid "Router Differential Pair"
 msgstr "Router Paire Différentielle"
 
-#: pcbnew/router/router_tool.cpp:748 pcbnew/router/router_tool.cpp:812
+#: pcbnew/router/router_tool.cpp:753 pcbnew/router/router_tool.cpp:817
 msgid "The item is locked. Do you want to continue?"
 msgstr "L'élément est verrouillé. Voulez vous continuer ?"
 
@@ -25086,7 +25116,7 @@ msgstr "Table des Pins"
 msgid "Library Text Properties"
 msgstr "Propriétés du Texte Librairie"
 
-#: eeschema/dialogs/dialog_libedit_options_base.h:77
+#: eeschema/dialogs/dialog_libedit_options_base.h:78
 msgid "Library Editor Options"
 msgstr "Options de l'Éditeur de librairies"
 
@@ -25506,3 +25536,20 @@ msgstr ""
 #: pcbnew/import_dxf/dialog_dxf_import_base.h:72
 msgid "Import DXF File"
 msgstr "Importation Fichier DXF"
+
+#~ msgid ""
+#~ "Use Protel Gerber extensions - .GBL, .GTL, etc...\n"
+#~ "No more recommended. The official extension is .gbr"
+#~ msgstr ""
+#~ "Utiliser les extensions Protel Gerber - .gbl, .GTL, etc ...\n"
+#~ "Nest pas recommandé. L'extension officielle est .gbr"
+
+#~ msgid ""
+#~ "Part library '%s' failed to load. Error:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "La librairie de composant '%s' n'a pu être chargée. Erreur:\n"
+#~ "%s"
+
+#~ msgid "Tracks on Copper layers only "
+#~ msgstr "Pistes sur Couches Cuivre seulement"
