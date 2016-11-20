@@ -2128,7 +2128,7 @@ MODULE* EAGLE_PLUGIN::makeModule( CPTREE& aPackage, const string& aPkgName ) con
 {
     std::unique_ptr<MODULE>   m( new MODULE( m_board ) );
 
-    m->SetFPID( FPID( aPkgName ) );
+    m->SetFPID( LIB_ID( aPkgName ) );
 
     opt_string description = aPackage.get_optional<string>( "description" );
     if( description )

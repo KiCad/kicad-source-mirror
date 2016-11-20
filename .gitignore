@@ -6,9 +6,9 @@ common/netlist_keywords.*
 common/netlist_lexer.h
 common/pcb_plot_params_lexer.h
 common/page_layout/page_layout_reader_keywords.cpp
-common/fp_lib_table_keywords.*
+common/lib_table_keywords.*
 common/gal/opengl/shader_src.h
-include/fp_lib_table_lexer.h
+include/lib_table_lexer.h
 include/netlist_lexer.h
 include/page_layout_reader_lexer.h
 eeschema/cmp_library_lexer.h

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -311,7 +311,7 @@ void GPCB_FPL_CACHE::Load()
         MODULE*          footprint = parseMODULE( &reader );
 
         // The footprint name is the file name without the extension.
-        footprint->SetFPID( FPID( fn.GetName() ) );
+        footprint->SetFPID( LIB_ID( fn.GetName() ) );
         m_modules.insert( name, new GPCB_FPL_CACHE_ITEM( footprint, fn.GetName() ) );
 
     } while( dir.GetNext( &fpFileName ) );

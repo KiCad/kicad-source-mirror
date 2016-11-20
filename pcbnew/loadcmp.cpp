@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ using namespace std::placeholders;
 #include <gr_basic.h>
 #include <macros.h>
 #include <fp_lib_table.h>
-#include <fpid.h>
+#include <lib_id.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -182,7 +182,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
     if( dlg.m_GetExtraFunction )
     {
         // SelectFootprintFromLibBrowser() returns the "full" footprint name, i.e.
-        // <lib_name>/<footprint name> or FPID format "lib_name:fp_name:rev#"
+        // <lib_name>/<footprint name> or LIB_ID format "lib_name:fp_name:rev#"
         moduleName = SelectFootprintFromLibBrowser();
     }
     else
@@ -221,10 +221,10 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         }
     }
 
-    FPID fpid;
+    LIB_ID fpid;
 
     wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
-                 wxString::Format( wxT( "Could not parse FPID string '%s'." ),
+                 wxString::Format( wxT( "Could not parse LIB_ID string '%s'." ),
                                    GetChars( moduleName ) ) );
 
     try
@@ -254,7 +254,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
         else
         {
             wxCHECK_MSG( fpid.Parse( moduleName ) < 0, NULL,
-                         wxString::Format( wxT( "Could not parse FPID string '%s'." ),
+                         wxString::Format( wxT( "Could not parse LIB_ID string '%s'." ),
                                            GetChars( moduleName ) ) );
 
             try
@@ -310,7 +310,7 @@ MODULE* PCB_BASE_FRAME::LoadModuleFromLibrary( const wxString& aLibrary,
 }
 
 
-MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
+MODULE* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
 {
     MODULE* module = NULL;
 
@@ -328,12 +328,12 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const FPID& aFootprintId )
 }
 
 
-MODULE* PCB_BASE_FRAME::loadFootprint( const FPID& aFootprintId )
+MODULE* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
     throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
 
-    wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up FPID in NULL FP_LIB_TABLE." ) );
+    wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up LIB_ID in NULL FP_LIB_TABLE." ) );
 
     MODULE* module = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
 

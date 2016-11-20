@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ class BOARD_DESIGN_SETTINGS;
 class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
-class FPID;
+class LIB_ID;
 
 /**
  * class PCB_BASE_FRAME
@@ -89,13 +89,13 @@ protected:
      * Function loadFootprint
      * attempts to load \a aFootprintId from the footprint library table.
      *
-     * @param aFootprintId is the #FPID of component footprint to load.
+     * @param aFootprintId is the #LIB_ID of component footprint to load.
      * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
      *         libraries in the table returned from #Prj().PcbFootprintLibs().
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *                 occurs while reading footprint library files.
      */
-    MODULE* loadFootprint( const FPID& aFootprintId )
+    MODULE* loadFootprint( const LIB_ID& aFootprintId )
         throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
 
 public:
@@ -114,11 +114,11 @@ public:
      * Function LoadFootprint
      * attempts to load \a aFootprintId from the footprint library table.
      *
-     * @param aFootprintId is the #FPID of component footprint to load.
+     * @param aFootprintId is the #LIB_ID of component footprint to load.
      * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
      *         libraries in table returned from #Prj().PcbFootprintLibs().
      */
-    MODULE* LoadFootprint( const FPID& aFootprintId );
+    MODULE* LoadFootprint( const LIB_ID& aFootprintId );
 
     /**
      * Function GetBoardBoundingBox

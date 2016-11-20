@@ -27,14 +27,14 @@
 #include <common.h>
 #include <kiface_i.h>
 #include <macros.h>
-#include <fpid.h>
-#include <fp_lib_table_lexer.h>
+#include <lib_id.h>
+#include <lib_table_lexer.h>
 #include <symbol_lib_table.h>
 #include <class_libentry.h>
 
 #define OPT_SEP     '|'         ///< options separator character
 
-using namespace FP_LIB_TABLE_T;
+using namespace LIB_TABLE_T;
 
 
 static const wxChar global_tbl_name[] = wxT( "sym-lib-table" );
@@ -63,7 +63,7 @@ SYMBOL_LIB_TABLE::SYMBOL_LIB_TABLE( SYMBOL_LIB_TABLE* aFallBackTable ) :
 }
 
 
-void SYMBOL_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw()
+void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in ) throw()
 {
     T       tok;
 
@@ -243,16 +243,16 @@ LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbol( const wxString& aNickname, const wxStri
     if( ret )
     {
         // remove "const"-ness, I really do want to set nickname without
-        // having to copy the FPID and its two strings, twice each.
-        FPID& fpid = (FPID&) ret->GetPart()->GetFPID();
+        // having to copy the LIB_ID and its two strings, twice each.
+        LIB_ID& id = (LIB_ID&) ret->GetPart()->GetLibId();
 
         // Catch any misbehaving plugin, which should be setting internal alias name properly:
-        wxASSERT( aAliasName == (wxString) fpid.GetFootprintName() );
+        wxASSERT( aAliasName == (wxString) id.GetLibItemName() );
 
         // and clearing nickname
-        wxASSERT( !fpid.GetLibNickname().size() );
+        wxASSERT( !id.GetLibNickname().size() );
 
-        fpid.SetLibNickname( row->GetNickName() );
+        id.SetLibNickname( row->GetNickName() );
     }
 
     return ret;
@@ -270,7 +270,7 @@ SYMBOL_LIB_TABLE::SAVE_T SYMBOL_LIB_TABLE::SaveSymbol( const wxString& aNickname
         // Try loading the footprint to see if it already exists, caller wants overwrite
         // protection, which is atypical, not the default.
 
-        wxString name = aSymbol->GetFPID().GetFootprintName();
+        wxString name = aSymbol->GetLibId().GetLibItemName();
 
         std::unique_ptr< LIB_ALIAS > symbol( row->plugin->LoadSymbol( row->GetFullURI( true ),
                                                                       name,
@@ -328,11 +328,11 @@ void SYMBOL_LIB_TABLE::CreateSymbolLib( const wxString& aNickname )
 }
 
 
-LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const FPID& aFootprintId )
+LIB_ALIAS* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibId )
     throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
-    wxString   nickname = aFootprintId.GetLibNickname();
-    wxString   name     = aFootprintId.GetFootprintName();
+    wxString   nickname = aLibId.GetLibNickname();
+    wxString   name     = aLibId.GetLibItemName();
 
     if( nickname.size() )
     {

@@ -162,7 +162,7 @@ void FOOTPRINTS_LISTBOX::SetFootprints( FOOTPRINT_LIST& aList, const wxString& a
             && aComponent->GetNetCount() != aList.GetItem( ii ).GetUniquePadCount() )
             continue;
 
-        // We can search (Using case insensitive search) in full FPID or only
+        // We can search (Using case insensitive search) in full LIB_ID or only
         // in the fp name itself.
         // After tests, only in the fp name itself looks better.
         // However, the code to take in account the nickname is just commented, no removed.

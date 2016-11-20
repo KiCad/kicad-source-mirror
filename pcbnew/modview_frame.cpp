@@ -37,7 +37,7 @@
 #include <dialog_helpers.h>
 #include <msgpanel.h>
 #include <fp_lib_table.h>
-#include <fpid.h>
+#include <lib_id.h>
 #include <confirm.h>
 
 #include <class_board.h>
@@ -203,10 +203,10 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // If a footprint was previously loaded, reload it
     if( getCurNickname().size() && getCurFootprintName().size() )
     {
-        FPID id;
+        LIB_ID id;
 
         id.SetLibNickname( getCurNickname() );
-        id.SetFootprintName( getCurFootprintName() );
+        id.SetLibItemName( getCurFootprintName() );
         GetBoard()->Add( loadFootprint( id ) );
     }
 
@@ -449,9 +449,9 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
         // Delete the current footprint
         GetBoard()->m_Modules.DeleteAll();
 
-        FPID id;
+        LIB_ID id;
         id.SetLibNickname( getCurNickname() );
-        id.SetFootprintName( getCurFootprintName() );
+        id.SetLibItemName( getCurFootprintName() );
 
         try
         {
@@ -511,10 +511,10 @@ void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
     {
         wxString fp_name = m_footprintList->GetString( ii );
 
-        FPID fpid;
+        LIB_ID fpid;
 
         fpid.SetLibNickname( getCurNickname() );
-        fpid.SetFootprintName( fp_name );
+        fpid.SetLibItemName( fp_name );
 
         DismissModal( true, fpid.Format() );
     }
@@ -773,7 +773,7 @@ void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
             delete oldmodule;
         }
 
-        setCurFootprintName( module->GetFPID().GetFootprintName() );
+        setCurFootprintName( module->GetFPID().GetLibItemName() );
 
         wxString nickname = module->GetFPID().GetLibNickname();
 

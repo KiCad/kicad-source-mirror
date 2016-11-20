@@ -434,7 +434,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
         {
             unique_ptr<MODULE>    module( new MODULE( m_board ) );
 
-            FPID        fpid;
+            LIB_ID      fpid;
             std::string fpName = StrPurge( line + SZ( "$MODULE" ) );
 
             // The footprint names in legacy libraries can contain the '/' and ':'
@@ -442,7 +442,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             ReplaceIllegalFileNameChars( &fpName );
 
             if( !fpName.empty() )
-                fpid = FPID( fpName );
+                fpid = LIB_ID( fpName );
 
             module->SetFPID( fpid );
 
@@ -1377,7 +1377,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 
     wxString msg = wxString::Format(
         wxT( "Missing '$EndMODULE' for MODULE '%s'" ),
-        GetChars( aModule->GetFPID().GetFootprintName() ) );
+        GetChars( aModule->GetFPID().GetLibItemName() ) );
 
     THROW_IO_ERROR( msg );
 }
@@ -1432,7 +1432,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
                                 padchar,
                                 padchar,
                                 m_reader->LineNumber(),
-                                GetChars( aModule->GetFPID().GetFootprintName() )
+                                GetChars( aModule->GetFPID().GetLibItemName() )
                     );
                 THROW_IO_ERROR( m_error );
             }
@@ -1638,7 +1638,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
                         (unsigned char) line[1],
                         (unsigned char) line[1],
                         m_reader->LineNumber(),
-                        GetChars( aModule->GetFPID().GetFootprintName() )
+                        GetChars( aModule->GetFPID().GetLibItemName() )
                         );
         THROW_IO_ERROR( m_error );
     }
@@ -3318,11 +3318,11 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
             std::string         footprintName = StrPurge( line + SZ( "$MODULE" ) );
 
             // The footprint names in legacy libraries can contain the '/' and ':'
-            // characters which will cause the FPID parser to choke.
+            // characters which will cause the LIB_ID parser to choke.
             ReplaceIllegalFileNameChars( &footprintName );
 
             // set the footprint name first thing, so exceptions can use name.
-            module->SetFPID( FPID( footprintName ) );
+            module->SetFPID( LIB_ID( footprintName ) );
 
 #if 0 && defined( DEBUG )
             printf( "%s\n", footprintName.c_str() );
@@ -3339,7 +3339,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
 
             // Not sure why this is asserting on debug builds.  The debugger shows the
             // strings are the same.  If it's not really needed maybe it can be removed.
-//            wxASSERT( footprintName == m->GetFPID().GetFootprintName() );
+//            wxASSERT( footprintName == m->GetFPID().GetLibItemName() );
 
             /*
 
@@ -3386,7 +3386,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
                     {
                         nameOK = true;
 
-                        m->SetFPID( FPID( newName ) );
+                        m->SetFPID( LIB_ID( newName ) );
                         std::pair<MODULE_ITER, bool> r = m_modules.insert( newName, m );
 
                         wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );

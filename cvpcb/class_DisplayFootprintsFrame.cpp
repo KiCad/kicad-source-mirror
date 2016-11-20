@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2007-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2007-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
 #include <bitmaps.h>
 #include <msgpanel.h>
 #include <wildcards_and_files_ext.h>
-#include <fpid.h>
+#include <lib_id.h>
 #include <fp_lib_table.h>
 #include <pcbcommon.h>
 
@@ -446,7 +446,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
 
     try
     {
-        FPID fpid;
+        LIB_ID fpid;
 
         if( fpid.Parse( aFootprintName ) >= 0 )
         {
@@ -456,7 +456,7 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::Get_Module( const wxString& aFootprintName )
         }
 
         std::string nickname = fpid.GetLibNickname();
-        std::string fpname   = fpid.GetFootprintName();
+        std::string fpname   = fpid.GetLibItemName();
 
         wxLogDebug( wxT( "Load footprint <%s> from library <%s>." ),
                     fpname.c_str(), nickname.c_str()  );

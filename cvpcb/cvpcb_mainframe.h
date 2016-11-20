@@ -279,7 +279,7 @@ public:
     COMPONENT* GetSelectedComponent();
 
     /**
-     * @return the FPID of the selected footprint in footprint listview
+     * @return the LIB_ID of the selected footprint in footprint listview
      * or a empty string if no selection
      */
     const wxString GetSelectedFootprint();

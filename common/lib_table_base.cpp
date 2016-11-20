@@ -32,14 +32,14 @@
 #include <common.h>
 #include <macros.h>
 #include <kiface_i.h>
-#include <fp_lib_table_lexer.h>
+#include <lib_table_lexer.h>
 #include <lib_table_base.h>
 
 
 #define OPT_SEP     '|'         ///< options separator character
 
 
-using namespace FP_LIB_TABLE_T;
+using namespace LIB_TABLE_T;
 
 
 LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow )
@@ -93,7 +93,7 @@ void LIB_TABLE_ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 }
 
 
-void LIB_TABLE_ROW::Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, FP_LIB_TABLE_LEXER* in )
+void LIB_TABLE_ROW::Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, LIB_TABLE_LEXER* in )
     throw( IO_ERROR, PARSE_ERROR )
 {
     /*
@@ -350,7 +350,7 @@ void LIB_TABLE::Load( const wxString& aFileName )
     if( wxFileName::IsFileReadable( aFileName ) )
     {
         FILE_LINE_READER    reader( aFileName );
-        FP_LIB_TABLE_LEXER  lexer( &reader );
+        LIB_TABLE_LEXER     lexer( &reader );
 
         Parse( &lexer );
     }

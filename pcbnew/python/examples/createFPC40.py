@@ -50,7 +50,7 @@ e.SetShape(S_SEGMENT)
 module.Add(e)
 
 # save the PCB to disk
-fpid = FPID("FPC"+str(pads))   #the name in library
+fpid = LIB_ID("FPC"+str(pads))   #the name in library
 module.SetFPID( fpid )
 
 try:

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 #ifndef AUTOSEL_H
 #define AUTOSEL_H
 
-// A helper class to handle info read in .equ files, which gives a footprint FPID
+// A helper class to handle info read in .equ files, which gives a footprint LIB_ID
 // corresponding to a component value.
 // Each line is something like:
 // 'FT232BL'		'QFP:LQFP-32_7x7mm_Pitch0.8mm'
@@ -35,7 +35,7 @@ class FOOTPRINT_EQUIVALENCE
 {
 public:
     wxString    m_ComponentValue;   // The value of a component
-    wxString    m_FootprintFPID;    // the footprint FPID corresponding to this value
+    wxString    m_FootprintFPID;    // the footprint LIB_ID corresponding to this value
 
     FOOTPRINT_EQUIVALENCE() {}
 };

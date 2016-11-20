@@ -31,7 +31,6 @@
 
 class MODULE;
 class FP_TBL_MODEL;
-class IO_ERROR;
 
 /**
  * Class FP_LIB_TABLE_ROW
@@ -104,7 +103,7 @@ class FP_LIB_TABLE : public LIB_TABLE
 {
 public:
 
-    virtual void Parse( FP_LIB_TABLE_LEXER* aLexer ) throw() override;
+    virtual void Parse( LIB_TABLE_LEXER* aLexer ) throw() override;
 
     virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw() override;
 
@@ -234,7 +233,7 @@ public:
      *          is thrown in the case where aFootprintName cannot be found.
      * @throw   PARSE_ERROR if @a aFootprintId is not parsed OK.
      */
-    MODULE* FootprintLoadWithOptionalNickname( const FPID& aFootprintId )
+    MODULE* FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId )
         throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
 
     /**

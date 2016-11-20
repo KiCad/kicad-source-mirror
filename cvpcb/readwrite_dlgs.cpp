@@ -6,8 +6,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jean-pierre.charras
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <build_version.h>
 #include <macros.h>
-#include <fpid.h>
+#include <lib_id.h>
 #include <fp_lib_table.h>
 #include <reporter.h>
 #include <html_messagebox.h>
@@ -74,12 +74,12 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
         // Check to see if the component has already a footprint set.
         hasFootprint = !component->GetFPID().empty();
 
-        FPID fpid;
+        LIB_ID fpid;
 
         if( !aFootprintName.IsEmpty() )
         {
             wxCHECK_RET( fpid.Parse( aFootprintName ) < 0,
-                         wxString::Format( wxT( "<%s> is not a valid FPID." ),
+                         wxString::Format( wxT( "<%s> is not a valid LIB_ID." ),
                                            GetChars( aFootprintName ) ) );
         }
 
@@ -116,16 +116,16 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& aFootprintName )
 }
 
 
-/// Return true if the resultant FPID has a certain nickname.  The guess
+/// Return true if the resultant LIB_ID has a certain nickname.  The guess
 /// is only made if this footprint resides in only one library.
 /// @return int - 0 on success, 1 on not found, 2 on ambiguous i.e. multiple matches
-static int guessNickname( FP_LIB_TABLE* aTbl, FPID* aFootprintId )
+static int guessNickname( FP_LIB_TABLE* aTbl, LIB_ID* aFootprintId )
 {
     if( aFootprintId->GetLibNickname().size() )
         return 0;
 
     wxString    nick;
-    wxString    fpname = aFootprintId->GetFootprintName();
+    wxString    fpname = aFootprintId->GetLibItemName();
 
     std::vector<wxString> nicks = aTbl->GetLogicalLibs();
 
@@ -194,7 +194,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
     {
         msg = _(
             "Some of the assigned footprints are legacy entries (are missing lib nicknames). "
-            "Would you like CvPcb to attempt to convert them to the new required FPID format? "
+            "Would you like CvPcb to attempt to convert them to the new required LIB_ID format? "
             "(If you answer no, then these assignments will be cleared out and you will "
             "have to re-assign these footprints yourself.)"
             );
@@ -214,7 +214,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
                         // get this first here, it's possibly obsoleted if we get it too soon.
                         FP_LIB_TABLE*   tbl = Prj().PcbFootprintLibs();
 
-                        int guess = guessNickname( tbl, (FPID*) &component->GetFPID() );
+                        int guess = guessNickname( tbl, (LIB_ID*) &component->GetFPID() );
 
                         switch( guess )
                         {
@@ -228,7 +228,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
                             msg += wxString::Format( _(
                                     "Component '%s' footprint '%s' was <b>not found</b> in any library.\n" ),
                                     GetChars( component->GetReference() ),
-                                    GetChars( component->GetFPID().GetFootprintName() )
+                                    GetChars( component->GetFPID().GetLibItemName() )
                                     );
                             break;
 
@@ -236,7 +236,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
                             msg += wxString::Format( _(
                                     "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n" ),
                                     GetChars( component->GetReference() ),
-                                    GetChars( component->GetFPID().GetFootprintName() )
+                                    GetChars( component->GetFPID().GetLibItemName() )
                                     );
                             break;
                         }
@@ -281,7 +281,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndLinkFiles( const std::string& aNetlist )
 
                 if( component->GetFPID().IsLegacy() )
                 {
-                    component->SetFPID( FPID() /* empty */ );
+                    component->SetFPID( LIB_ID() /* empty */ );
                     m_modified = true;
                 }
             }

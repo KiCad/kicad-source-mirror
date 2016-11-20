@@ -44,7 +44,6 @@
 #include <worksheet.h>
 #include <dialog_hotkeys_editor.h>
 #include <fp_lib_table.h>
-#include <fp_lib_table_lexer.h>
 #include <worksheet_shape_builder.h>
 
 #include <class_board.h>

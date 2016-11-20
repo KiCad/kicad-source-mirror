@@ -6,7 +6,7 @@
  *
  * Copyright (C) 1992-2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ using namespace std::placeholders;
 #include <netlist_reader.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
-#include <fpid.h>
+#include <lib_id.h>
 #include <fp_lib_table.h>
 
 #include <class_board.h>
@@ -227,7 +227,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
     throw( IO_ERROR, PARSE_ERROR )
 {
     wxString   msg;
-    FPID       lastFPID;
+    LIB_ID     lastFPID;
     COMPONENT* component;
     MODULE*    module = 0;
     MODULE*    fpOnBoard;
@@ -244,7 +244,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
 #if ALLOW_PARTIAL_FPID
         // The FPID is ok as long as there is a footprint portion coming
         // from eeschema.
-        if( !component->GetFPID().GetFootprintName().size() )
+        if( !component->GetFPID().GetLibItemName().size() )
 #else
         if( component->GetFPID().empty() )
 #endif
@@ -293,9 +293,9 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             module = NULL;
 
 #if ALLOW_PARTIAL_FPID
-            // The FPID is ok as long as there is a footprint portion coming
+            // The LIB_ID is ok as long as there is a footprint portion coming
             // the library if it's needed.  Nickname can be blank.
-            if( !component->GetFPID().GetFootprintName().size() )
+            if( !component->GetFPID().GetLibItemName().size() )
 #else
             if( !component->GetFPID().IsValid() )
 #endif
@@ -326,7 +326,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
                     msg.Printf( _( "Component '%s' footprint '%s' was not found in "
                                    "any libraries in the footprint library table.\n" ),
                                 GetChars( component->GetReference() ),
-                                GetChars( component->GetFPID().GetFootprintName() ) );
+                                GetChars( component->GetFPID().GetLibItemName() ) );
                     aReporter->Report( msg, REPORTER::RPT_ERROR );
                 }
 

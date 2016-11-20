@@ -1743,7 +1743,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     wxString name;
     wxPoint  pt;
     T        token;
-    FPID     fpid;
+    LIB_ID   fpid;
 
     std::unique_ptr<MODULE> module( new MODULE( m_board ) );
 

@@ -6,8 +6,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras.
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>.
+ * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,10 +166,10 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
         name = FROM_UTF8( text ).AfterFirst( wxChar( '=' ) ).BeforeLast( wxChar( '}' ) );
     }
 
-    FPID fpid;
+    LIB_ID fpid;
 
     if( !footprintName.IsEmpty() )
-        fpid.SetFootprintName( footprintName );
+        fpid.SetLibItemName( footprintName );
 
     COMPONENT* component = new COMPONENT( fpid, reference, value, timeStamp );
     component->SetName( name );

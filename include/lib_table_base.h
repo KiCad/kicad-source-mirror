@@ -40,8 +40,8 @@
 #define FP_LATE_ENVVAR  1           ///< late=1/early=0 environment variable expansion
 
 class OUTPUTFORMATTER;
-class FP_LIB_TABLE_LEXER;
-class FPID;
+class LIB_TABLE_LEXER;
+class LIB_ID;
 class LIB_TABLE_ROW;
 class IO_ERROR;
 
@@ -181,7 +181,7 @@ public:
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const
         throw( IO_ERROR, boost::interprocess::lock_exception );
 
-    static void Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, FP_LIB_TABLE_LEXER* in )
+    static void Parse( std::unique_ptr< LIB_TABLE_ROW >& aRow, LIB_TABLE_LEXER* in )
         throw( IO_ERROR, PARSE_ERROR );
 
     LIB_TABLE_ROW* clone() const
@@ -279,7 +279,7 @@ class LIB_TABLE : public PROJECT::_ELEM
 
 public:
 
-    virtual void Parse( FP_LIB_TABLE_LEXER* aLexer ) throw() = 0;
+    virtual void Parse( LIB_TABLE_LEXER* aLexer ) throw() = 0;
 
     virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw() = 0;
 

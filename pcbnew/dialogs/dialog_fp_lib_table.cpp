@@ -39,7 +39,7 @@
 #include <3d_viewer.h>      // for KISYS3DMOD
 #include <dialog_fp_lib_table_base.h>
 #include <fp_lib_table.h>
-#include <fp_lib_table_lexer.h>
+#include <lib_table_lexer.h>
 #include <invoke_pcb_dialog.h>
 #include <grid_tricks.h>
 #include <confirm.h>
@@ -240,7 +240,7 @@ protected:
             // at column 0 regardless of current cursor column.
 
             STRING_LINE_READER  slr( TO_UTF8( cb_text ), "Clipboard" );
-            FP_LIB_TABLE_LEXER  lexer( &slr );
+            LIB_TABLE_LEXER     lexer( &slr );
             FP_LIB_TABLE        tmp_tbl;
             bool                parsed = true;
 

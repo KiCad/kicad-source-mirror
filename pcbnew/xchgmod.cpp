@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -74,7 +74,7 @@ private:
     bool changeSameFootprints( bool aUseValue);
     bool changeAllFootprints();
     bool change_1_Module( MODULE*            aModule,
-                          const FPID&        aNewFootprintFPID,
+                          const LIB_ID&      aNewFootprintFPID,
                           bool               eShowError );
 
     BOARD_COMMIT m_commit;
@@ -240,7 +240,7 @@ bool DIALOG_EXCHANGE_MODULE::changeSameFootprints( bool aUseValue )
     bool     change = false;
     wxString newmodulename = m_NewFootprintFPID->GetValue();
     wxString value;
-    FPID     lib_reference;
+    LIB_ID   lib_reference;
     bool     check_module_value = false;
     int      ShowErr = 3;           // Post 3 error messages max.
 
@@ -337,7 +337,7 @@ bool DIALOG_EXCHANGE_MODULE::changeAllFootprints()
 
 
 bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
-                                              const FPID&        aNewFootprintFPID,
+                                              const LIB_ID&      aNewFootprintFPID,
                                               bool               aShowError )
 {
     MODULE* newModule;
@@ -349,7 +349,7 @@ bool DIALOG_EXCHANGE_MODULE::change_1_Module( MODULE*            aModule,
     wxBusyCursor dummy;
 
     // Copy parameters from the old module.
-    FPID oldFootprintFPID = aModule->GetFPID();
+    LIB_ID oldFootprintFPID = aModule->GetFPID();
 
     // Load module.
     line.Printf( _( "Change footprint '%s' (from '%s') to '%s'" ),

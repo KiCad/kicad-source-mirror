@@ -381,7 +381,7 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
 
         for( unsigned i = 0;  i < m_netlist.GetCount();  i++ )
         {
-            FPID fpid;
+            LIB_ID fpid;
 
             m_netlist.GetComponent( i )->SetFPID( fpid );
             SetNewPkg( wxEmptyString );
@@ -808,8 +808,8 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist( const std::string& aNetlist )
     // not the actual name of the footprint.
     for( unsigned ii = 0; ii < m_netlist.GetCount(); ii++ )
     {
-        if( m_netlist.GetComponent( ii )->GetFPID().GetFootprintName() == std::string( "$noname" ) )
-            m_netlist.GetComponent( ii )->SetFPID( FPID( wxEmptyString ) );
+        if( m_netlist.GetComponent( ii )->GetFPID().GetLibItemName() == std::string( "$noname" ) )
+            m_netlist.GetComponent( ii )->SetFPID( LIB_ID( wxEmptyString ) );
     }
 
     // Sort components by reference:
@@ -956,7 +956,7 @@ DISPLAY_FOOTPRINTS_FRAME* CVPCB_MAINFRAME::GetFootprintViewerFrame()
 
 const wxString CVPCB_MAINFRAME::GetSelectedFootprint()
 {
-    // returns the FPID of the selected footprint in footprint listview
+    // returns the LIB_ID of the selected footprint in footprint listview
     // or a empty string
     return m_footprintListBox->GetSelectedFootprint();
 }

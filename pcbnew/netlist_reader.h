@@ -34,7 +34,7 @@
 
 #include <fctsys.h>
 #include <macros.h>
-#include <fpid.h>
+#include <lib_id.h>
 
 #include <netlist_lexer.h>    // netlist_lexer is common to Eeschema and Pcbnew
 

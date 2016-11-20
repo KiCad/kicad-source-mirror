@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,7 +66,7 @@ class cmp
 public:
     wxString m_Ref;
     wxString m_Val;
-    FPID     m_fpid;
+    LIB_ID   m_fpid;
     int      m_Id;
     int      m_CmpCount;
 };
@@ -173,7 +173,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
 
         msg << current->m_Id << wxT( ";\"" );
         msg << current->m_Ref << wxT( "\";\"" );
-        msg << FROM_UTF8( current->m_fpid.GetFootprintName().c_str() ) << wxT( "\";" );
+        msg << FROM_UTF8( current->m_fpid.GetLibItemName().c_str() ) << wxT( "\";" );
         msg << current->m_CmpCount << wxT( ";\"" );
         msg << current->m_Val << wxT( "\";;;\n" );
         fprintf( fp_bom, "%s", TO_UTF8( msg ) );

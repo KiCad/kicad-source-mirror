@@ -28,14 +28,14 @@
 #include <common.h>
 #include <kiface_i.h>
 #include <footprint_info.h>
-#include <fpid.h>
-#include <fp_lib_table_lexer.h>
+#include <lib_id.h>
+#include <lib_table_lexer.h>
 #include <fp_lib_table.h>
 #include <class_module.h>
 
 #define OPT_SEP     '|'         ///< options separator character
 
-using namespace FP_LIB_TABLE_T;
+using namespace LIB_TABLE_T;
 
 
 static const wxChar global_tbl_name[] = wxT( "fp-lib-table" );
@@ -64,7 +64,7 @@ FP_LIB_TABLE::FP_LIB_TABLE( FP_LIB_TABLE* aFallBackTable ) :
 }
 
 
-void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw()
+void FP_LIB_TABLE::Parse( LIB_TABLE_LEXER* in ) throw()
 {
     T       tok;
 
@@ -244,11 +244,11 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
     if( ret )
     {
         // remove "const"-ness, I really do want to set nickname without
-        // having to copy the FPID and its two strings, twice each.
-        FPID& fpid = (FPID&) ret->GetFPID();
+        // having to copy the LIB_ID and its two strings, twice each.
+        LIB_ID& fpid = (LIB_ID&) ret->GetFPID();
 
         // Catch any misbehaving plugin, which should be setting internal footprint name properly:
-        wxASSERT( aFootprintName == (wxString) fpid.GetFootprintName() );
+        wxASSERT( aFootprintName == (wxString) fpid.GetLibItemName() );
 
         // and clearing nickname
         wxASSERT( !fpid.GetLibNickname().size() );
@@ -271,7 +271,7 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
         // Try loading the footprint to see if it already exists, caller wants overwrite
         // protection, which is atypical, not the default.
 
-        wxString fpname = aFootprint->GetFPID().GetFootprintName();
+        wxString fpname = aFootprint->GetFPID().GetLibItemName();
 
         std::unique_ptr<MODULE> footprint( row->plugin->FootprintLoad( row->GetFullURI( true ),
                                            fpname, row->GetProperties() ) );
@@ -319,11 +319,11 @@ void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 }
 
 
-MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const FPID& aFootprintId )
+MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId )
     throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception )
 {
     wxString   nickname = aFootprintId.GetLibNickname();
-    wxString   fpname   = aFootprintId.GetFootprintName();
+    wxString   fpname   = aFootprintId.GetLibItemName();
 
     if( nickname.size() )
     {

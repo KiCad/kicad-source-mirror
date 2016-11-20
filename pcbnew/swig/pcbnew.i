@@ -41,9 +41,9 @@
 %include <convert_to_biu.h>
 
 %{
-#include <fpid.h>
+#include <lib_id.h>
 %}
-%include fpid.h
+%include lib_id.h
 
 
 // ignore a couple of items that generate warnings from swig built code

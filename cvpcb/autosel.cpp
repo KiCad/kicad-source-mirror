@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
  */
 
 // This file handle automatic selection of footprints, from .equ files which give
-// a footprint FPID associated to a component value.
+// a footprint LIB_ID associated to a component value.
 // These associations have this form:
 // 'FT232BL'		'QFP:LQFP-32_7x7mm_Pitch0.8mm'
 

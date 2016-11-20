@@ -48,7 +48,7 @@
 #include <footprint_info.h>
 #include <io_mgr.h>
 #include <fp_lib_table.h>
-#include <fpid.h>
+#include <lib_id.h>
 #include <class_module.h>
 #include <thread>
 #include <html_messagebox.h>
@@ -268,14 +268,14 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetModuleInfo( const wxString& aFootprintName )
 
     for( FOOTPRINT_INFO& fp : m_list )
     {
-        FPID fpid;
+        LIB_ID fpid;
 
         wxCHECK_MSG( fpid.Parse( aFootprintName ) < 0, NULL,
-                     wxString::Format( wxT( "'%s' is not a valid FPID." ),
+                     wxString::Format( wxT( "'%s' is not a valid LIB_ID." ),
                                        GetChars( aFootprintName ) ) );
 
         wxString libNickname   = fpid.GetLibNickname();
-        wxString footprintName = fpid.GetFootprintName();
+        wxString footprintName = fpid.GetLibItemName();
 
         if( libNickname == fp.GetNickname() && footprintName == fp.GetFootprintName() )
             return &fp;

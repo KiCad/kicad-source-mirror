@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2010-2016 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@
 #include <wx/wx.h>      // _()
 
 #include <macros.h>     // TO_UTF8()
-#include <fpid.h>
+#include <lib_id.h>
 #include <kicad_string.h>
 
 
@@ -111,15 +111,15 @@ static int okRevision( const std::string& aField )
 //----</Policy and field test functions>-------------------------------------
 
 
-void FPID::clear()
+void LIB_ID::clear()
 {
     nickname.clear();
-    footprint.clear();
+    item_name.clear();
     revision.clear();
 }
 
 
-int FPID::Parse( const UTF8& aId )
+int LIB_ID::Parse( const UTF8& aId )
 {
     clear();
 
@@ -130,7 +130,7 @@ int FPID::Parse( const UTF8& aId )
     int         offset;
 
     //=====<revision>=========================================
-    // in a FPID like discret:R3/rev4
+    // in a LIB_ID like discret:R3/rev4
     if( rev )
     {
         revNdx = rev - buffer;
@@ -161,28 +161,27 @@ int FPID::Parse( const UTF8& aId )
         partNdx = 0;
     }
 
-    //=====<footprint name>====================================
+    //=====<item name>====================================
     if( partNdx >= revNdx )
-        return partNdx;     // Error: no footprint name.
+        return partNdx;     // Error: no library item name.
 
-    // Be sure the footprint name is valid.
-    // Some chars can be found in board file (in old board files
-    // or converted files from an other EDA tool
+    // Be sure the item name is valid.
+    // Some chars can be found in legacy files converted files from an other EDA tools.
     std::string fpname = aId.substr( partNdx, revNdx-partNdx );
     ReplaceIllegalFileNameChars( &fpname, '_' );
-    SetFootprintName( UTF8( fpname ) );
+    SetLibItemName( UTF8( fpname ) );
 
     return -1;
 }
 
 
-FPID::FPID( const std::string& aId ) throw( PARSE_ERROR )
+LIB_ID::LIB_ID( const std::string& aId ) throw( PARSE_ERROR )
 {
     int offset = Parse( aId );
 
     if( offset != -1 )
     {
-        THROW_PARSE_ERROR( _( "Illegal character found in FPID string" ),
+        THROW_PARSE_ERROR( _( "Illegal character found in LIB_ID string" ),
                            wxString::FromUTF8( aId.c_str() ),
                            aId.c_str(),
                            0,
@@ -191,7 +190,7 @@ FPID::FPID( const std::string& aId ) throw( PARSE_ERROR )
 }
 
 
-FPID::FPID( const wxString& aId ) throw( PARSE_ERROR )
+LIB_ID::LIB_ID( const wxString& aId ) throw( PARSE_ERROR )
 {
     UTF8 id = aId;
 
@@ -199,7 +198,7 @@ FPID::FPID( const wxString& aId ) throw( PARSE_ERROR )
 
     if( offset != -1 )
     {
-        THROW_PARSE_ERROR( _( "Illegal character found in FPID string" ),
+        THROW_PARSE_ERROR( _( "Illegal character found in LIB_ID string" ),
                            aId,
                            id.c_str(),
                            0,
@@ -208,7 +207,7 @@ FPID::FPID( const wxString& aId ) throw( PARSE_ERROR )
 }
 
 
-int FPID::SetLibNickname( const UTF8& aLogical )
+int LIB_ID::SetLibNickname( const UTF8& aLogical )
 {
     int offset = okLogical( aLogical );
 
@@ -221,25 +220,25 @@ int FPID::SetLibNickname( const UTF8& aLogical )
 }
 
 
-int FPID::SetFootprintName( const UTF8& aFootprintName )
+int LIB_ID::SetLibItemName( const UTF8& aLibItemName )
 {
-    int separation = int( aFootprintName.find_first_of( "/" ) );
+    int separation = int( aLibItemName.find_first_of( "/" ) );
 
     if( separation != -1 )
     {
-        footprint = aFootprintName.substr( 0, separation-1 );
+        item_name = aLibItemName.substr( 0, separation-1 );
         return separation;
     }
     else
     {
-        footprint = aFootprintName;
+        item_name = aLibItemName;
     }
 
     return -1;
 }
 
 
-int FPID::SetRevision( const UTF8& aRevision )
+int LIB_ID::SetRevision( const UTF8& aRevision )
 {
     int offset = okRevision( aRevision );
 
@@ -252,7 +251,7 @@ int FPID::SetRevision( const UTF8& aRevision )
 }
 
 
-UTF8 FPID::Format() const
+UTF8 LIB_ID::Format() const
 {
     UTF8    ret;
 
@@ -262,7 +261,7 @@ UTF8 FPID::Format() const
         ret += ':';
     }
 
-    ret += footprint;
+    ret += item_name;
 
     if( revision.size() )
     {
@@ -274,7 +273,7 @@ UTF8 FPID::Format() const
 }
 
 
-UTF8 FPID::GetFootprintNameAndRev() const
+UTF8 LIB_ID::GetLibItemNameAndRev() const
 {
     UTF8 ret;
 
@@ -288,10 +287,9 @@ UTF8 FPID::GetFootprintNameAndRev() const
 }
 
 
-#if 0   // this is broken, it does not output aFootprintName for some reason
+#if 0   // this is broken, it does not output aLibItemName for some reason
 
-UTF8 FPID::Format( const UTF8& aLogicalLib, const UTF8& aFootprintName,
-                          const UTF8& aRevision )
+UTF8 LIB_ID::Format( const UTF8& aLogicalLib, const UTF8& aLibItemName, const UTF8& aRevision )
     throw( PARSE_ERROR )
 {
     UTF8    ret;
@@ -336,23 +334,23 @@ UTF8 FPID::Format( const UTF8& aLogicalLib, const UTF8& aFootprintName,
 #endif
 
 
-int FPID::compare( const FPID& aFPID ) const
+int LIB_ID::compare( const LIB_ID& aLibId ) const
 {
     // Don't bother comparing the same object.
-    if( this == &aFPID )
+    if( this == &aLibId )
         return 0;
 
-    int retv = nickname.compare( aFPID.nickname );
+    int retv = nickname.compare( aLibId.nickname );
 
     if( retv != 0 )
         return retv;
 
-    retv = footprint.compare( aFPID.footprint );
+    retv = item_name.compare( aLibId.item_name );
 
     if( retv != 0 )
         return retv;
 
-    return revision.compare( aFPID.revision );
+    return revision.compare( aLibId.revision );
 }
 
 
@@ -360,7 +358,7 @@ int FPID::compare( const FPID& aFPID ) const
 
 // build this with Debug CMAKE_BUILD_TYPE
 
-void FPID::Test()
+void LIB_ID::Test()
 {
     static const char* lpids[] = {
         "smt:R_0805/rev0",
@@ -372,14 +370,14 @@ void FPID::Test()
     {
         // test some round tripping
 
-        FPID lpid( lpids[i] );  // parse
+        LIB_ID lpid( lpids[i] );  // parse
 
         // format
-        printf( "input:'%s'  full:'%s'  nickname: %s  footprint:'%s' rev:'%s'\n",
+        printf( "input:'%s'  full:'%s'  nickname: %s  item_name:'%s' rev:'%s'\n",
                 lpids[i],
                 lpid.Format().c_str(),
                 lpid.GetLibNickname().c_str(),
-                lpid.GetFootprintName().c_str(),
+                lpid.GetLibItemName().c_str(),
                 lpid.GetRevision().c_str() );
     }
 }
@@ -387,7 +385,7 @@ void FPID::Test()
 
 int main( int argc, char** argv )
 {
-    FPID::Test();
+    LIB_ID::Test();
 
     return 0;
 }

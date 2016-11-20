@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,7 +288,7 @@ MODULE* CreateMicrowaveInductor( PCB_EDIT_FRAME* aPcbFrame, wxString& aErrorMess
     MODULE* module = aPcbFrame->CreateNewModule( msg );
 
     // here the module is already in the BOARD, CreateNewModule() does that.
-    module->SetFPID( FPID( std::string( "mw_inductor" ) ) );
+    module->SetFPID( LIB_ID( std::string( "mw_inductor" ) ) );
     module->SetAttributes( MOD_VIRTUAL | MOD_CMS );
     module->ClearFlags();
     module->SetPosition( s_inductor_pattern.m_End );

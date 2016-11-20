@@ -29,7 +29,6 @@
 #include <sch_io_mgr.h>
 
 class LIB_PART;
-class IO_ERROR;
 
 /**
  * Class SYMBOL_LIB_TABLE_ROW
@@ -102,7 +101,7 @@ class SYMBOL_LIB_TABLE : public LIB_TABLE
 {
 public:
 
-    virtual void Parse( FP_LIB_TABLE_LEXER* aLexer ) throw() override;
+    virtual void Parse( LIB_TABLE_LEXER* aLexer ) throw() override;
 
     virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw() override;
 
@@ -254,7 +253,7 @@ public:
      *                   is thrown in the case where aId cannot be found.
      * @throw   PARSE_ERROR if @a atId is not parsed OK.
      */
-    LIB_ALIAS* LoadSymbolWithOptionalNickname( const FPID& aId )
+    LIB_ALIAS* LoadSymbolWithOptionalNickname( const LIB_ID& aId )
         throw( IO_ERROR, PARSE_ERROR, boost::interprocess::lock_exception );
 
     /**

@@ -9,8 +9,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras.
- * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>.
- * Copyright (C) 2012-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>.
+ * Copyright (C) 2012-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <wx/arrstr.h>
 
-#include <fpid.h>
+#include <lib_id.h>
 #include <class_module.h>
 
 
@@ -95,13 +95,13 @@ class COMPONENT
     /// The name of the component library where #m_name was found.
     wxString       m_library;
 
-    /// The #FPID of the footprint assigned to the component.
-    FPID           m_fpid;
+    /// The #LIB_ID of the footprint assigned to the component.
+    LIB_ID         m_fpid;
 
-    /// The alt FPID of the footprint, when there are 2 different assigned footprints,
+    /// The alt LIB_ID of the footprint, when there are 2 different assigned footprints,
     /// One from the netlist, the other from the .cmp file.
     /// this one is a copy of the netlist footprint assignment
-    FPID           m_altFpid;
+    LIB_ID         m_altFpid;
 
     /// The #MODULE loaded for #m_fpid.
     std::unique_ptr< MODULE > m_footprint;
@@ -112,7 +112,7 @@ class COMPONENT
     static COMPONENT_NET    m_emptyNet;
 
 public:
-    COMPONENT( const FPID&     aFPID,
+    COMPONENT( const LIB_ID&   aFPID,
                const wxString& aReference,
                const wxString& aValue,
                const wxString& aTimeStamp )
@@ -149,20 +149,20 @@ public:
 
     const wxString& GetValue() const { return m_value; }
 
-    void SetFPID( const FPID& aFPID )
+    void SetFPID( const LIB_ID& aFPID )
     {
         m_footprintChanged = !m_fpid.empty() && (m_fpid != aFPID);
         m_fpid = aFPID;
     }
 
-    void SetAltFPID( const FPID& aFPID )
+    void SetAltFPID( const LIB_ID& aFPID )
     {
         m_altFpid = aFPID;
     }
 
-   const FPID& GetFPID() const { return m_fpid; }
+   const LIB_ID& GetFPID() const { return m_fpid; }
 
-    const FPID& GetAltFPID() const { return m_altFpid; }
+    const LIB_ID& GetAltFPID() const { return m_altFpid; }
 
      const wxString& GetTimeStamp() const { return m_timeStamp; }
 

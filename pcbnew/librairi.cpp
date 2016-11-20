@@ -339,7 +339,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule )
     if( !aModule )
         return;
 
-    fn.SetName( aModule->GetFPID().GetFootprintName() );
+    fn.SetName( aModule->GetFPID().GetLibItemName() );
 
     wxString    wildcard = wxGetTranslation( KiCadFootprintLibFileWildcard );
 
@@ -534,8 +534,8 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromCurrentLibrary()
     if( !fpid_txt )
         return false;
 
-    FPID        fpid( fpid_txt );
-    wxString    fpname = fpid.GetFootprintName();
+    LIB_ID      fpid( fpid_txt );
+    wxString    fpname = fpid.GetLibItemName();
 
     // Confirmation
     wxString msg = wxString::Format( FMT_OK_DELETE, fpname.GetData(), nickname.GetData() );
@@ -589,7 +589,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib )
 
             for( MODULE* curr_fp = GetBoard()->m_Modules; curr_fp; curr_fp = curr_fp->Next() )
             {
-                if( !curr_fp->GetFPID().GetFootprintName().empty() )      // Can happen with old boards.
+                if( !curr_fp->GetFPID().GetLibItemName().empty() )      // Can happen with old boards.
                     tbl->FootprintSave( nickname, curr_fp, false );
             }
         }
@@ -614,7 +614,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib )
         {
             try
             {
-                if( !curr_fp->GetFPID().GetFootprintName().empty() )      // Can happen with old boards.
+                if( !curr_fp->GetFPID().GetLibItemName().empty() )      // Can happen with old boards.
                     pi->FootprintSave( libPath, curr_fp );
             }
             catch( const IO_ERROR& ioe )
@@ -649,7 +649,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( const wxString& aLibrary,
     }
 
     // Ask what to use as the footprint name in the library
-    wxString footprintName = aModule->GetFPID().GetFootprintName();
+    wxString footprintName = aModule->GetFPID().GetLibItemName();
 
     if( aDisplayDialog )
     {
@@ -676,14 +676,14 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( const wxString& aLibrary,
             return false;
         }
 
-        aModule->SetFPID( FPID( footprintName ) );
+        aModule->SetFPID( LIB_ID( footprintName ) );
     }
 
     // Ensure this footprint has a libname
     if( footprintName.IsEmpty() )
     {
         footprintName = wxT("noname");
-        aModule->SetFPID( FPID( footprintName ) );
+        aModule->SetFPID( LIB_ID( footprintName ) );
     }
 
     bool module_exists = false;
@@ -779,7 +779,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
     module->SetLastEditTime();
 
     // Update its name in lib
-    module->SetFPID( FPID( moduleName ) );
+    module->SetFPID( LIB_ID( moduleName ) );
 
     wxPoint default_pos;
     BOARD_DESIGN_SETTINGS& settings = GetDesignSettings();
