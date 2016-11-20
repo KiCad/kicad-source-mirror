@@ -34,6 +34,7 @@
 #include <properties.h>
 #include <boost/interprocess/exceptions.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/core/noncopyable.hpp>
 
 
 #define FP_LATE_ENVVAR  1           ///< late=1/early=0 environment variable expansion
