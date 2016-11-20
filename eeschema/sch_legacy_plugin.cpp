@@ -2364,9 +2364,9 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
         reference.SetText( prefix );
     }
 
-    // In version 2.0 and earlier, this parameter was a '0' which was just a place holder.
+    // In version 2.2 and earlier, this parameter was a '0' which was just a place holder.
     // The was no concept of interchangeable multiple unit symbols.
-    if( LIB_VERSION( m_versionMajor, m_versionMinor ) <= LIB_VERSION( 2, 0 ) )
+    if( LIB_VERSION( m_versionMajor, m_versionMinor ) <= LIB_VERSION( 2, 2 ) )
     {
         // Nothing needs to be set since the default setting for symbols with multiple
         // units were never interchangeable.  Just parse the 0 an move on.
@@ -2735,12 +2735,11 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr< LIB_PART >& aPart,
     arc->SetUnit( parseInt( aReader, line, &line ) );
     arc->SetConvert( parseInt( aReader, line, &line ) );
     arc->SetWidth( parseInt( aReader, line, &line ) );
+    arc->SetFillMode( parseFillMode( aReader, line, &line ) );
 
     // Actual Coordinates of arc ends are read from file
     if( *line != 0 )
     {
-        arc->SetFillMode( parseFillMode( aReader, line, &line ) );
-
         wxPoint arcStart, arcEnd;
 
         arcStart.x = parseInt( aReader, line, &line );
