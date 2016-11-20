@@ -242,6 +242,7 @@ set( COMMON_SRCS
     kiway_express.cpp
     kiway_holder.cpp
     kiway_player.cpp
+    lib_table_base.cpp
     lockfile.cpp
     msgpanel.cpp
     netlist_keywords.cpp
