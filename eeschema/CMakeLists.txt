@@ -172,6 +172,7 @@ set( EESCHEMA_SRCS
     sheetlab.cpp
     symbdraw.cpp
     symbedit.cpp
+    symbol_lib_table.cpp
     template_fieldnames_keywords.cpp
     template_fieldnames.cpp
     tool_lib.cpp
