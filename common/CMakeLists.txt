@@ -484,6 +484,7 @@ add_custom_target(
     )
 
 add_dependencies( common lib_table_lexer_source_files )
+add_dependencies( pcbcommon lib_table_lexer_source_files )
 
 # auto-generate page layout reader s-expression page_layout_reader_lexer.h
 # and title_block_reader_keywords.cpp.
