@@ -166,6 +166,9 @@ void DIALOG_PLOT::Init_Dialog()
     // Option for including Gerber netlist info (from Gerber X2 format) in the output
 #ifdef KICAD_USE_GBR_NETATTRIBUTES
     m_useGerberNetAttributes->SetValue( m_plotOpts.GetIncludeGerberNetlistInfo() );
+
+    // Grey out if m_useGerberX2Attributes is not checked
+    m_useGerberNetAttributes->Enable( m_useGerberX2Attributes->GetValue() );
 #else
     m_plotOpts.SetIncludeGerberNetlistInfo( false );
     m_useGerberNetAttributes->SetValue( false );
@@ -666,6 +669,23 @@ void DIALOG_PLOT::applyPlotSettings()
         m_parent->SetPlotSettings( tempOptions );
         m_plotOpts = tempOptions;
         m_parent->OnModify();
+    }
+}
+
+
+void DIALOG_PLOT::OnGerberX2Checked( wxCommandEvent& event )
+{
+    // m_useGerberNetAttributes is useless if m_useGerberX2Attributes
+    // is not checked. So disabled (greyed out) when Gerber X2 gets unchecked
+    // to make it clear to the user.
+    if( m_useGerberX2Attributes->GetValue() )
+    {
+        m_useGerberNetAttributes->Enable( true );
+    }
+    else
+    {
+        m_useGerberNetAttributes->Enable( false );
+        m_useGerberNetAttributes->SetValue( false );
     }
 }
 
