@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 10 2016)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -116,7 +116,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_panel5->SetSizer( bSizer82 );
 	m_panel5->Layout();
 	bSizer82->Fit( m_panel5 );
-	m_notebook->AddPage( m_panel5, _("Display"), false );
+	m_notebook->AddPage( m_panel5, _("Display"), true );
 	m_panel3 = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -141,9 +141,9 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 3 );
 	
-	m_staticText9 = new wxStaticText( m_panel3, wxID_ANY, _("&Horizontal pitch of repeated items:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	fgSizer3->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	m_staticTextHpitch = new wxStaticText( m_panel3, wxID_ANY, _("&Horizontal pitch of repeated items:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextHpitch->Wrap( -1 );
+	fgSizer3->Add( m_staticTextHpitch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinRepeatHorizontal = new wxSpinCtrl( m_panel3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -5000, 5000, 0 );
 	fgSizer3->Add( m_spinRepeatHorizontal, 0, wxALL|wxEXPAND, 3 );
@@ -152,9 +152,9 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticRepeatXUnits->Wrap( -1 );
 	fgSizer3->Add( m_staticRepeatXUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
-	m_staticText12 = new wxStaticText( m_panel3, wxID_ANY, _("&Vertical pitch of repeated items:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	fgSizer3->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	m_staticTextVpitch = new wxStaticText( m_panel3, wxID_ANY, _("&Vertical pitch of repeated items:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextVpitch->Wrap( -1 );
+	fgSizer3->Add( m_staticTextVpitch, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinRepeatVertical = new wxSpinCtrl( m_panel3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, -5000, 5000, 100 );
 	fgSizer3->Add( m_spinRepeatVertical, 0, wxALL|wxEXPAND, 3 );
@@ -173,9 +173,9 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	
 	fgSizer3->Add( 0, 0, 1, wxEXPAND, 3 );
 	
-	m_staticText7 = new wxStaticText( m_panel3, wxID_ANY, _("Def&ault text size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	fgSizer3->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	m_staticTextTsize = new wxStaticText( m_panel3, wxID_ANY, _("Def&ault text size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTsize->Wrap( -1 );
+	fgSizer3->Add( m_staticTextTsize, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinTextSize = new wxSpinCtrl( m_panel3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS|wxSP_WRAP, 0, 1000, 0 );
 	fgSizer3->Add( m_spinTextSize, 0, wxALL|wxEXPAND, 3 );
@@ -184,11 +184,13 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_staticTextSizeUnits->Wrap( -1 );
 	fgSizer3->Add( m_staticTextSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
-	m_staticText221 = new wxStaticText( m_panel3, wxID_ANY, _("&Auto-save time interval"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText221->Wrap( -1 );
-	fgSizer3->Add( m_staticText221, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
+	m_staticTextTimeInterval = new wxStaticText( m_panel3, wxID_ANY, _("&Auto-save time interval"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTimeInterval->Wrap( -1 );
+	fgSizer3->Add( m_staticTextTimeInterval, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 3 );
 	
 	m_spinAutoSaveInterval = new wxSpinCtrl( m_panel3, ID_M_SPINAUTOSAVEINTERVAL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 10 );
+	m_spinAutoSaveInterval->SetToolTip( _("Delay after the first change to create a backup file of the board on disk.\nIf set to 0, auto backup is disabled") );
+	
 	fgSizer3->Add( m_spinAutoSaveInterval, 0, wxALL|wxEXPAND, 3 );
 	
 	m_staticText23 = new wxStaticText( m_panel3, wxID_ANY, _("minutes"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -275,7 +277,7 @@ DIALOG_EESCHEMA_OPTIONS_BASE::DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wx
 	m_tabControls->SetSizer( bSizer81 );
 	m_tabControls->Layout();
 	bSizer81->Fit( m_tabControls );
-	m_notebook->AddPage( m_tabControls, _("Controls"), true );
+	m_notebook->AddPage( m_tabControls, _("Controls"), false );
 	m_tabColors = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxVERTICAL );

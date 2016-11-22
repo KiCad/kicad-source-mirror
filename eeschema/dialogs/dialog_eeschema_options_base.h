@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 10 2016)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -81,18 +81,18 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public DIALOG_SHIM
 		wxPanel* m_panel3;
 		wxStaticText* m_staticText2;
 		wxChoice* m_choiceUnits;
-		wxStaticText* m_staticText9;
+		wxStaticText* m_staticTextHpitch;
 		wxSpinCtrl* m_spinRepeatHorizontal;
 		wxStaticText* m_staticRepeatXUnits;
-		wxStaticText* m_staticText12;
+		wxStaticText* m_staticTextVpitch;
 		wxSpinCtrl* m_spinRepeatVertical;
 		wxStaticText* m_staticRepeatYUnits;
 		wxStaticText* m_staticText16;
 		wxSpinCtrl* m_spinRepeatLabel;
-		wxStaticText* m_staticText7;
+		wxStaticText* m_staticTextTsize;
 		wxSpinCtrl* m_spinTextSize;
 		wxStaticText* m_staticTextSizeUnits;
-		wxStaticText* m_staticText221;
+		wxStaticText* m_staticTextTimeInterval;
 		wxSpinCtrl* m_spinAutoSaveInterval;
 		wxStaticText* m_staticText23;
 		wxStaticLine* m_staticline2;

@@ -717,7 +717,7 @@
                                                 <property name="style">wxSP_ARROW_KEYS</property>
                                                 <property name="subclass"></property>
                                                 <property name="toolbar_pane">0</property>
-                                                <property name="tooltip">Delay after the first change to create a backup file of the board on disk.</property>
+                                                <property name="tooltip">Delay after the first change to create a backup file of the board on disk.&#x0A;If set to 0, auto backup is disabled</property>
                                                 <property name="value">0</property>
                                                 <property name="window_extra_style"></property>
                                                 <property name="window_name"></property>
