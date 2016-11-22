@@ -200,6 +200,25 @@ bool EDA_BASE_FRAME::Enable( bool enable )
 }
 
 
+void EDA_BASE_FRAME::SetAutoSaveInterval( int aInterval )
+{
+    m_autoSaveInterval = aInterval;
+
+    if( m_autoSaveTimer->IsRunning() )
+    {
+        if( m_autoSaveInterval > 0 )
+        {
+            m_autoSaveTimer->Start( m_autoSaveInterval * 1000, wxTIMER_ONE_SHOT );
+        }
+        else
+        {
+            m_autoSaveTimer->Stop();
+            m_autoSaveState = false;
+        }
+    }
+}
+
+
 void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
 {
     if( !doAutoSave() )

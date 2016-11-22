@@ -209,7 +209,7 @@ public:
 
     bool Enable( bool enable ) override;
 
-    void SetAutoSaveInterval( int aInterval ) { m_autoSaveInterval = aInterval; }
+    void SetAutoSaveInterval( int aInterval );
 
     int GetAutoSaveInterval() const { return m_autoSaveInterval; }
 
