@@ -25,30 +25,29 @@
 # Automagically create version header file if the version string was
 # not defined during the build configuration.  If
 # CreateGitVersionHeader cannot determine the current repo version, a
-# version.h file is still created with KICAD_BUILD_VERSION set to
-# "no-vcs-found".
+# version.h file is still created with KICAD_VERSION set to "no-vcs-found".
 include( ${CMAKE_MODULE_PATH}/KiCadVersion.cmake )
 
 # Attempt to detect if we have a git repo and set the version string if
 # the version wasn't set to something other than the default value in
 # KiCadVersion.cmake.
-if( _wvh_version_str STREQUAL "no-vcs-found" AND EXISTS "${SRC_PATH}/.git" )
+if( KICAD_VERSION STREQUAL "no-vcs-found" AND EXISTS "${SRC_PATH}/.git" )
     message( STATUS "Using Git to determine build version string." )
     include( ${CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
     create_git_version_header( ${SRC_PATH} )
 endif()
 
-# If KICAD_BRANCH_NAME is empty, set KICAD_FULL_VERSION to just the build
-# version rather than the concatenation of the build version and the branch
-# name.
-if( KICAD_BUILD_VERSION AND KICAD_REPO_NAME )
-    set( KICAD_FULL_VERSION "${KICAD_BUILD_VERSION}-${KICAD_REPO_NAME}" )
-elseif( KICAD_BUILD_VERSION )
-    set( KICAD_FULL_VERSION "${KICAD_BUILD_VERSION}" )
-elseif( KICAD_BRANCH_NAME AND KICAD_GIT_BUILD_VERSION )
-    set( KICAD_FULL_VERSION "${KICAD_GIT_BUILD_VERSION}-${KICAD_BRANCH_NAME}" )
-else()
-    set( KICAD_FULL_VERSION "unknown" )
+# $KICAD_VERSION_FULL will always be set to something.  Even if it is "no-vcs-found".
+set( KICAD_VERSION_FULL "${KICAD_VERSION}" )
+
+# Optional branch name detected by git or configuration defined option.
+if( KICAD_BRANCH_NAME )
+    set( KICAD_VERSION_FULL "${KICAD_VERSION_FULL}-${KICAD_BRANCH_NAME}" )
+endif()
+
+# Optional user version information defined at configuration.
+if( KICAD_VERSION_EXTRA )
+    set( KICAD_VERSION_FULL "${KICAD_VERSION_FULL}-${KICAD_VERSION_EXTRA}" )
 endif()
 
 set( _wvh_new_version_text
@@ -60,7 +59,7 @@ set( _wvh_new_version_text
 #ifndef __KICAD_VERSION_H__
 #define __KICAD_VERSION_H__
 
-#define KICAD_FULL_VERSION \"${KICAD_FULL_VERSION}\"
+#define KICAD_VERSION_FULL \"${KICAD_VERSION_FULL}\"
 
 #endif  /* __KICAD_VERSION_H__ */
 " )
@@ -77,7 +76,7 @@ if( EXISTS ${OUTPUT_FILE} )
 endif()
 
 if( _wvh_write_version_file )
-    message( STATUS "Writing ${OUTPUT_FILE} file with version: ${KICAD_FULL_VERSION}" )
+    message( STATUS "Writing ${OUTPUT_FILE} file with version: ${KICAD_VERSION_FULL}" )
 
     file( WRITE ${OUTPUT_FILE} ${_wvh_new_version_text} )
 

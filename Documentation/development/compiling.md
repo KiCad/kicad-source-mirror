@@ -151,11 +151,11 @@ enabled by default.
 
 ## Integrated Spice simulator ## {#spice_opt}
 
-The KICAD_SPICE option is used to control if the Spice simulator interface for eeschema is built.  When
+The KICAD_SPICE option is used to control if the Spice simulator interface for Eeschema is built.  When
 this option is enabled, it requires [ngspice][] to be available as a shared library.  This option is
 disabled by default.
 
-## New schmatic file format ## {#sch_io_mgr_opt}
+## New schematic file format ## {#sch_io_mgr_opt}
 
 The KICAD_USE_SCH_IO_MANAGER option is used to control if the new Eeschema I/O manager for handling
 schematic and symbol library I/O is enabled. This option is disabled by default.
@@ -164,7 +164,7 @@ schematic and symbol library I/O is enabled. This option is disabled by default.
 
 The KICAD_USE_OCE is used for the 3D viewer plugin to support STEP and IGES 3D models. Build tools
 and plugins related to OpenCascade Community Edition (OCE) are enabled with this option. When
-enabled it requires [OCE][] to be available, and the location of the installed OCE libary to be
+enabled it requires [OCE][] to be available, and the location of the installed OCE library to be
 passed via the OCE_DIR flag. This option is disabled by default.
 
 ## Demos and Examples ## {#demo_install_opt}
@@ -176,8 +176,17 @@ $PREFIX/share/kicad/demos by default.
 
 ## Setting the Build Version and Repository Name ## {#build_version_opt}
 
-By default, KiCad builds the version string information from the [git][] repository information
-as follows:
+The KiCad version string is defined by the three CMake variables KICAD_VERSION, KICAD_BRANCH_NAME,
+and KICAD_VERSION_EXTRA.  Variables KICAD_BRANCH_NAME and KICAD_VERSION_EXTRA are defined as empty
+strings and can be set at configuration.  Unless the source branch is a stable release archive,
+KICAD_VERSION is set to "no-vcs-found".  If an optional variable is not define, it is not appended
+to the full version string.  If an optional variable is defined it is appended along with a leading
+'-' to the full version string as follows:
+
+    KICAD_VERSION[-KICAD_BRANCH_NAME][-KICAD_VERSION_EXTRA]
+
+When the version string is set to "no-vcs-found", the build script automatically creates the
+version string information from the [git][] repository information as follows:
 
     (2016-08-26 revision 67230ac)-master
      |                   |        |
@@ -188,10 +197,6 @@ as follows:
      |                   present
      |
      date of commit, or date of build if no .git present
-
-Package developers can set the version string information by using the KICAD_BUILD_VERSION and
-KICAD_REPO_NAME configuration variables during CMake configuration for custom versions and
-when building from the source archives.
 
 # Getting the KiCad Source Code ## {#getting_src}
 

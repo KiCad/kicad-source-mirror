@@ -24,11 +24,8 @@
 
 macro( create_git_version_header _git_src_path )
     # If an error occurs using the git commands to determine the repo
-    # version, set the build version string to "no-git" and the default
-    # branch name to unknown
-    set( KICAD_GIT_BUILD_VERSION "no-git" )
-    set( KICAD_BRANCH_NAME "undefined" )
-    set( KICAD_FULL_VERSION "${KICAD_BUILD_VERSION}-${KICAD_BRANCH_NAME}")
+    # version, set the build version string to "git-error".
+    set( KICAD_GIT_BUILD_VERSION "git-error" )
 
     # Include Git support to automagically create version header file.
     find_package( Git )
@@ -101,7 +98,7 @@ macro( create_git_version_header _git_src_path )
     if( Kicad_REPO_LAST_CHANGED_DATE )
         string( REGEX REPLACE "^([0-9]+)\\-([0-9]+)\\-([0-9]+)" "\\1-\\2-\\3"
                 _kicad_git_date ${Kicad_REPO_LAST_CHANGED_DATE} )
-        set( KICAD_GIT_BUILD_VERSION "(${_kicad_git_date} ${Kicad_REPO_REVISION})" )
+        set( KICAD_VERSION "(${_kicad_git_date} ${Kicad_REPO_REVISION})" )
         set( KICAD_BRANCH_NAME ${_git_BRANCH} )
     endif()
 
