@@ -32,6 +32,7 @@
 #include <pgm_base.h>
 #include <kiface_i.h>
 #include <class_drawpanel.h>
+#include <confirm.h>
 #include <gestfich.h>
 #include <eda_dde.h>
 #include <schframe.h>
@@ -44,6 +45,7 @@
 #include <hotkeys.h>
 #include <transform.h>
 #include <wildcards_and_files_ext.h>
+#include <symbol_lib_table.h>
 
 #include <kiway.h>
 #include <sim/sim_plot_frame.h>
@@ -238,6 +240,34 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     ReadHotkeyConfig( SCH_EDIT_FRAME_NAME, g_Eeschema_Hokeys_Descr );
 
     wxConfigLoadSetups( KifaceSettings(), cfg_params() );
+
+    try
+    {
+        // The global table is not related to a specific project.  All projects
+        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
+        // of avoiding anything project specific is not violated here.
+        if( !SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE::GetGlobalLibTable() ) )
+        {
+            DisplayInfoMessage( NULL, _(
+                "You have run Eeschema for the first time using the new symbol library table "
+                "method for finding symbols.\n\n"
+                "Eeschema has either copied the default table or created an empty table in the "
+                "kicad configuration folder.\n\n"
+                "You must first configure the library table to include all symbol libraries you "
+                "want to use.\n\n"
+                "See the \"Symbol Library Table\" section of Eeschema documentation for more "
+                "information." ) );
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg = wxString::Format( _(
+            "An error occurred attempting to load the global symbol library table:\n\n%s" ),
+            GetChars( ioe.What() )
+            );
+        DisplayError( NULL, msg );
+        return false;
+    }
 
     return true;
 }

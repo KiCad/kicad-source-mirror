@@ -40,6 +40,9 @@ using namespace LIB_TABLE_T;
 static const wxChar global_tbl_name[] = wxT( "sym-lib-table" );
 
 
+SYMBOL_LIB_TABLE SYMBOL_LIB_TABLE::m_globalLibTable;   // There can be only one.
+
+
 bool SYMBOL_LIB_TABLE_ROW::operator==( const SYMBOL_LIB_TABLE_ROW& aRow ) const
 {
     return LIB_TABLE_ROW::operator == ( aRow ) && type == aRow.type;
@@ -386,7 +389,7 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
         // template folder to the user's home configuration path.
         wxString fileName = Kiface().KifaceSearch().FindValidPath( global_tbl_name );
 
-        // The fallback is to create an empty global footprint table for the user to populate.
+        // The fallback is to create an empty global symbol table for the user to populate.
         if( fileName.IsEmpty() || !::wxCopyFile( fileName, fn.GetFullPath(), false ) )
         {
             SYMBOL_LIB_TABLE    emptyTable;

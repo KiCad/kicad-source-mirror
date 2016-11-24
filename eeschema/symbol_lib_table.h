@@ -289,6 +289,11 @@ public:
      * set already in the environment.
      */
     static const wxString GlobalPathEnvVariableName();
+
+    static SYMBOL_LIB_TABLE& GetGlobalLibTable() { return m_globalLibTable; }
+
+private:
+    static SYMBOL_LIB_TABLE m_globalLibTable;   // There can be only one.
 };
 
 
