@@ -38,7 +38,7 @@ wxString GetBuildVersion()
 {
     wxString msg = wxString::Format(
         wxT( "%s" ),
-        wxT( KICAD_FULL_VERSION )
+        wxT( KICAD_VERSION_FULL )
         );
 
     return msg;

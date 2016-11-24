@@ -151,6 +151,11 @@ supplied by KiCad.  This option is disabled by default.
 The KICAD_SCRIPTING_WXPYTHON option is used to enable building the wxPython interface into
 Pcbnew including the wxPython console.  This option is disabled by default.
 
+## Github Plugin ## {#github_opt}
+
+The BUILD_GITHUB_PLUGIN option is used to control if the Github plugin is built.  This option is
+enabled by default.
+
 ## Build with Static Libraries ## {#static_lib_opt}
 
 The KICAD_BUILD_STATIC option is used to build KiCad with static libraries.  This option is
@@ -175,10 +180,30 @@ The USE_OSX_DEPS_BUILDER option forces the build configuration to download and b
 required dependencies to build KiCad on OSX.  This option is not longer maintained and most
 likely is broken.  Use it at your own peril.
 
-## Github Plugin ## {#github_opt}
+## Setting the Build Version and Repository Name ## {#build_version_opt}
 
-The BUILD_GITHUB_PLUGIN option is used to control if the Github plugin is built.  This option is
-enabled by default.
+The KiCad version string is defined by the three CMake variables KICAD_VERSION, KICAD_BRANCH_NAME,
+and KICAD_VERSION_EXTRA.  Variables KICAD_BRANCH_NAME and KICAD_VERSION_EXTRA are defined as empty
+strings and can be set at configuration.  Unless the source branch is a stable release archive,
+KICAD_VERSION is set to "no-vcs-found".  If an optional variable is not define, it is not appended
+to the full version string.  If an optional variable is defined it is appended along with a leading
+'-' to the full version string as follows:
+
+    KICAD_VERSION[-KICAD_BRANCH_NAME][-KICAD_VERSION_EXTRA]
+
+When the version string is set to "no-vcs-found", the build script automatically creates the
+version string information from the [git][] repository information as follows:
+
+
+    (2016-08-26 revision 67230ac)-master
+     |                   |        |
+     |                   |        branch name, "HEAD" if not on a branch,
+     |                   |        or "unknown" if no .git present
+     |                   |
+     |                   abbreviated commit hash, or no-git if no .git
+     |                   present
+     |
+     date of commit, or date of build if no .git present
 
 # Getting the KiCad Source Code ## {#getting_src}
 

@@ -33,8 +33,5 @@
 # When KiCad is cloned using git, the git version is used.  The only
 # time this should be set to a value other than "no-vcs-found" is when
 # a source archive is created.  This eliminates the need to set
-# KICAD_BUILD_VERSION during the build configuration step.
-set( _wvh_version_str "no-vcs-found" )
-
-# Set the KiCad branch name to stable for stable source releases.
-set( KICAD_BRANCH_NAME "undefined" )
+# KICAD_VERSION during the build configuration step.
+set( KICAD_VERSION "no-vcs-found" )
