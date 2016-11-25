@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 12 2016)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,12 +21,12 @@ class DIALOG_SHIM;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/filepicker.h>
+#include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
-#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -42,6 +42,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_txtBrdFile;
 		wxFilePickerCtrl* m_filePickerSTEP;
+		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticText6;
 		wxCheckBox* m_cbDrillOrigin;
 		wxCheckBox* m_cbAuxOrigin;
@@ -53,6 +54,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_STEP_Xorg;
 		wxStaticText* m_staticText4;
 		wxTextCtrl* m_STEP_Yorg;
+		wxStaticText* m_staticText7;
 		wxCheckBox* m_cbRemoveVirtual;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
