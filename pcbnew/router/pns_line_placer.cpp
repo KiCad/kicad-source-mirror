@@ -528,16 +528,16 @@ bool LINE_PLACER::routeHead( const VECTOR2I& aP, LINE& aNewHead )
 
 bool LINE_PLACER::optimizeTailHeadTransition()
 {
-    LINE tmp = Trace();
+    LINE linetmp = Trace();
 
-    if( OPTIMIZER::Optimize( &tmp, OPTIMIZER::FANOUT_CLEANUP, m_currentNode ) )
+    if( OPTIMIZER::Optimize( &linetmp, OPTIMIZER::FANOUT_CLEANUP, m_currentNode ) )
     {
-        if( tmp.SegmentCount() < 1 )
+        if( linetmp.SegmentCount() < 1 )
             return false;
 
-        m_head = tmp;
-        m_p_start = tmp.CLine().CPoint( 0 );
-        m_direction = DIRECTION_45( tmp.CSegment( 0 ) );
+        m_head = linetmp;
+        m_p_start = linetmp.CLine().CPoint( 0 );
+        m_direction = DIRECTION_45( linetmp.CSegment( 0 ) );
         m_tail.Line().Clear();
 
         return true;

@@ -347,7 +347,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
 
         if( aLine.EndsWithVia() )
         {
-            int clearance = GetClearance( obs.m_item, &aLine.Via() );
+            clearance = GetClearance( obs.m_item, &aLine.Via() );
 
             SHAPE_LINE_CHAIN viaHull = aLine.Via().Hull( clearance, aItem->Width() );
 

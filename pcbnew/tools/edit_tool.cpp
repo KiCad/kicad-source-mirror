@@ -216,9 +216,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         lockOverride = true;
 
                     // Save items, so changes can be undone
-                    selection.ForAll<BOARD_ITEM>( [&](BOARD_ITEM* item)
+                    selection.ForAll<BOARD_ITEM>( [&](BOARD_ITEM* brd_item)
                     {
-                        m_commit->Modify( item );
+                        m_commit->Modify( brd_item );
                     } );
 
                     m_cursor = controls->GetCursorPosition();

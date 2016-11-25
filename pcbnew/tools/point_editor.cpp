@@ -778,7 +778,6 @@ void POINT_EDITOR::addCorner( const VECTOR2I& aBreakPoint )
 
         if( segment->GetShape() == S_SEGMENT )
         {
-            BOARD_COMMIT commit( frame );
             commit.Modify( segment );
 
             SEG seg( segment->GetStart(), segment->GetEnd() );
