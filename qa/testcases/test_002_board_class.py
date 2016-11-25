@@ -46,7 +46,7 @@ class TestBoardClass(unittest.TestCase):
 
         #track.SetStartEnd(wxPointMM(10.0, 10.0),
         #                  wxPointMM(20.0, 30.0))
-        
+
         track.SetStart(wxPointMM(10.0, 10.0))
         track.SetEnd(wxPointMM(20.0, 30.0))
 
@@ -68,10 +68,10 @@ class TestBoardClass(unittest.TestCase):
         pad = D_PAD(module)
         module.Add(pad)
 
-        pad.SetShape(PAD_OVAL)
+        pad.SetShape(PAD_SHAPE_OVAL)
         pad.SetSize(wxSizeMM(2.0, 3.0))
         pad.SetPosition(wxPointMM(0,0))
-        
+
         # easy case
         p1 = pcb.GetPad(wxPointMM(0,0))
 
@@ -93,7 +93,7 @@ class TestBoardClass(unittest.TestCase):
         pcb.GetTitleBlock().SetComment1(self.COMMENT1)
         result = SaveBoard(self.FILENAME,pcb)
         self.assertTrue(result)
-        
+
         pcb2 = LoadBoard(self.FILENAME)
         self.assertNotEqual(pcb2,None)
 
@@ -129,4 +129,4 @@ class TestBoardClass(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-   
+
