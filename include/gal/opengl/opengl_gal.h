@@ -380,7 +380,7 @@ private:
      */
     std::pair<VECTOR2D, float> computeBitmapTextSize( const wxString& aText ) const;
 
-    const bitmap_glyph* lookupGlyph( unsigned int codepoint ) const;
+    const bitmap_glyph* lookupGlyph( unsigned int aCodepoint ) const;
 
     // Event handling
     /**

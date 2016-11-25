@@ -2549,7 +2549,7 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR, boost::bad_pointer )
             {
                 std::string     builder;
                 int             bracketNesting = 1; // we already saw the opening T_LEFT
-                T               tok = T_NONE;
+                tok = T_NONE;
 
                 while( bracketNesting!=0 && tok!=T_EOF )
                 {
@@ -2563,9 +2563,9 @@ void SPECCTRA_DB::doCLASS( CLASS* growth ) throw( IO_ERROR, boost::bad_pointer )
 
                     if( bracketNesting >= 1 )
                     {
-                        T     prevTok = (T) PrevTok();
+                        T     previousTok = (T) PrevTok();
 
-                        if( prevTok!=T_LEFT && prevTok!=T_circuit && tok!=T_RIGHT )
+                        if( previousTok!=T_LEFT && previousTok!=T_circuit && tok!=T_RIGHT )
                             builder += ' ';
 
                         if( tok==T_STRING )

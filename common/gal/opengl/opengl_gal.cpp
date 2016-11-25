@@ -1314,7 +1314,7 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     const float XOFF =  glyph->minx;
 
     // adjust for height rounding
-    const float round_adjust =   ( glyph->maxy - glyph->miny ) 
+    const float round_adjust =   ( glyph->maxy - glyph->miny )
                                - float( glyph->atlas_h - font_information.smooth_pixels * 2 );
     const float top_adjust   = font_information.max_y - glyph->maxy;
     const float YOFF = round_adjust + top_adjust;
@@ -1383,20 +1383,24 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
     Restore();
 }
 
-const bitmap_glyph* OPENGL_GAL::lookupGlyph( unsigned int codepoint ) const
+const bitmap_glyph* OPENGL_GAL::lookupGlyph( unsigned int aCodepoint ) const
 {
 #ifdef BITMAP_FONT_USE_SPANS
         auto *end = font_codepoint_spans + sizeof( font_codepoint_spans ) / sizeof( bitmap_span );
-        auto ptr = std::upper_bound( font_codepoint_spans, end, codepoint,
-            []( unsigned int codepoint, const bitmap_span& span ) {
+        auto ptr = std::upper_bound( font_codepoint_spans, end, aCodepoint,
+            []( unsigned int codepoint, const bitmap_span& span )
+            {
                 return codepoint < span.end;
             }
         );
 
-        if( ptr != end && ptr->start <= codepoint ) {
-            unsigned int index = codepoint - ptr->start + ptr->cumulative;
+        if( ptr != end && ptr->start <= aCodepoint )
+        {
+            unsigned int index = aCodepoint - ptr->start + ptr->cumulative;
             return &font_codepoint_infos[index];
-        } else {
+        }
+        else
+        {
             return nullptr;
         }
 #else
