@@ -235,7 +235,7 @@ SFVEC3F CPLASTICNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) con
                                               hitPos.y * 8.0f + Fast_RandFloat() * 0.10f,
                                               hitPos.z * 8.0f + Fast_RandFloat() * 0.10f ) - 0.5f);
 
-        return SFVEC3F( noise1 * 0.30f + noise2 * 0.50f + noise3 * 0.80f );
+        return SFVEC3F( noise1 * 0.10f + noise2 * 0.20f + noise3 * 0.50f );
 }
 
 
@@ -249,15 +249,19 @@ SFVEC3F CPLASTICSHINENORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo 
 {
     const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-    const float noise1 = (m_perlin.noise( hitPos.x * 0.15f,
-                                          hitPos.y * 0.15f,
-                                          hitPos.z * 0.15f ) - 0.5f);
+    const float noise1 = (m_perlin.noise( hitPos.x * 0.05f,
+                                          hitPos.y * 0.05f,
+                                          hitPos.z * 0.05f ) - 0.5f);
 
-    const float noise2 = (m_perlin.noise( hitPos.x * 0.5f,
+    const float noise2 = (m_perlin.noise( hitPos.x * 0.2f,
+                                          hitPos.y * 0.2f,
+                                          hitPos.z * 0.2f ) - 0.5f);
+
+    const float noise3 = (m_perlin.noise( hitPos.x * 0.5f,
                                           hitPos.y * 0.5f,
                                           hitPos.z * 0.5f ) - 0.5f);
 
-    return SFVEC3F( noise1 * 1.0f,  noise2 * 1.0f, noise1 * noise2 );
+    return SFVEC3F( noise1, noise2, noise3 );
 }
 
 
