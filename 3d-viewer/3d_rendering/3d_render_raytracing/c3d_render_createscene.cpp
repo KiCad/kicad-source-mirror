@@ -75,10 +75,11 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
 
     // Copper
     m_materials.m_Copper = CBLINN_PHONG_MATERIAL(
-                (SFVEC3F)m_settings.m_CopperColor * (SFVEC3F)(0.18f),   // ambient
+                ConvertSRGBToLinear( (SFVEC3F)m_settings.m_CopperColor ) *
+                                     (SFVEC3F)(0.18f),                  // ambient
                 SFVEC3F( 0.0f, 0.0f, 0.0f ),                            // emissive
                 glm::clamp( ((SFVEC3F)(1.0f) -
-                             (SFVEC3F)m_settings.m_CopperColor),
+                             ConvertSRGBToLinear( (SFVEC3F)m_settings.m_CopperColor ) ),
                             SFVEC3F( 0.0f ),
                             SFVEC3F( 0.35f ) ),                         // specular
                 0.4f * 128.0f,                                          // shiness
@@ -88,39 +89,43 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
     if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
         m_materials.m_Copper.SetNormalPerturbator( &m_copper_normal_perturbator );
 
-
-
     m_materials.m_Paste = CBLINN_PHONG_MATERIAL(
-                (SFVEC3F)m_settings.m_SolderPasteColor *
-                (SFVEC3F)m_settings.m_SolderPasteColor, // ambient
+                ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SolderPasteColor ) *
+                ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SolderPasteColor ), // ambient
                 SFVEC3F( 0.0f, 0.0f, 0.0f ),            // emissive
-                (SFVEC3F)m_settings.m_SolderPasteColor *
-                (SFVEC3F)m_settings.m_SolderPasteColor, // specular
+                ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SolderPasteColor ) *
+                ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SolderPasteColor ), // specular
                 0.10f * 128.0f,                         // shiness
                 0.0f,                                   // transparency
                 0.0f );
 
     m_materials.m_SilkS = CBLINN_PHONG_MATERIAL(
-                SFVEC3F( 0.11f ),                       // ambient
+                ConvertSRGBToLinear( SFVEC3F( 0.11f ) ),// ambient
                 SFVEC3F( 0.0f, 0.0f, 0.0f ),            // emissive
                 glm::clamp( ((SFVEC3F)(1.0f) -
-                             (SFVEC3F)m_settings.m_SilkScreenColor),
+                            ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SilkScreenColor) ),
                             SFVEC3F( 0.0f ),
                             SFVEC3F( 0.10f ) ),         // specular
                 0.078125f * 128.0f,                     // shiness
                 0.0f,                                   // transparency
                 0.0f );
 
+    const float solderMask_gray = ( m_settings.m_SolderMaskColor.r +
+                                    m_settings.m_SolderMaskColor.g +
+                                    m_settings.m_SolderMaskColor.b ) / 3.0f;
+
+    const float solderMask_transparency = solderMask_gray * 0.40f + 0.005f;
+
     m_materials.m_SolderMask = CBLINN_PHONG_MATERIAL(
-                (SFVEC3F)m_settings.m_SolderMaskColor *
+                ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SolderMaskColor ) *
                 0.10f,                                  // ambient
                 SFVEC3F( 0.0f, 0.0f, 0.0f ),            // emissive
                 glm::clamp( ( (SFVEC3F)( 1.0f ) -
-                              (SFVEC3F)m_settings.m_SolderMaskColor ),
+                            ConvertSRGBToLinear( (SFVEC3F)m_settings.m_SolderMaskColor ) ),
                             SFVEC3F( 0.0f ),
-                            SFVEC3F( 0.35f ) ),         // specular
-                0.95f * 128.0f,                         // shiness
-                0.12f,                                  // transparency
+                            SFVEC3F( solderMask_gray * 2.0f ) ),         // specular
+                0.85f * 128.0f,                         // shiness
+                solderMask_transparency,                // transparency
                 0.16f );                                // reflection
 
     m_materials.m_SolderMask.SetCastShadows( true );
@@ -129,21 +134,21 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
         m_materials.m_SolderMask.SetNormalPerturbator( &m_solder_mask_normal_perturbator );
 
     m_materials.m_EpoxyBoard = CBLINN_PHONG_MATERIAL(
-                SFVEC3F( 16.0f / 255.0f,
-                         14.0f / 255.0f,
-                         10.0f / 255.0f ),              // ambient
-                SFVEC3F( 0.0f, 0.0f, 0.0f ),            // emissive
-                SFVEC3F( 10.0f / 255.0f,
-                          8.0f / 255.0f,
-                         10.0f / 255.0f ),              // specular
-                0.1f * 128.0f,                          // shiness
-                0.10f,                                  // transparency
-                0.0f );                                 // reflection
+                ConvertSRGBToLinear( SFVEC3F( 16.0f / 255.0f,
+                                              14.0f / 255.0f,
+                                              10.0f / 255.0f ) ), // ambient
+                SFVEC3F( 0.0f, 0.0f, 0.0f ),                      // emissive
+                ConvertSRGBToLinear( SFVEC3F( 10.0f / 255.0f,
+                                              8.0f / 255.0f,
+                                              10.0f / 255.0f ) ), // specular
+                0.1f * 128.0f,                                    // shiness
+                0.10f,                                            // transparency
+                0.0f );                                           // reflection
 
     if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
         m_materials.m_EpoxyBoard.SetNormalPerturbator( &m_board_normal_perturbator );
 
-    SFVEC3F bgTop = (SFVEC3F)m_settings.m_BgColorTop;
+    SFVEC3F bgTop = ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BgColorTop );
     //SFVEC3F bgBot = (SFVEC3F)m_settings.m_BgColorBot;
 
     m_materials.m_Floor = CBLINN_PHONG_MATERIAL(
@@ -185,7 +190,7 @@ void C3D_RENDER_RAYTRACING::create_3d_object_from(  CCONTAINER &aDstContainer,
                                                     aObject2D->GetBBox().Max().y,
                                                     aZMin ) ) );
             objPtr->SetMaterial( aMaterial );
-            objPtr->SetColor( aObjColor );
+            objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
             aDstContainer.Add( objPtr );
 
             objPtr = new CXYPLANE( CBBOX ( SFVEC3F( aObject2D->GetBBox().Min().x,
@@ -195,7 +200,7 @@ void C3D_RENDER_RAYTRACING::create_3d_object_from(  CCONTAINER &aDstContainer,
                                                     aObject2D->GetBBox().Max().y,
                                                     aZMax ) ) );
             objPtr->SetMaterial( aMaterial );
-            objPtr->SetColor( aObjColor );
+            objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
             aDstContainer.Add( objPtr );
 #else
             objPtr = new CDUMMYBLOCK( CBBOX ( SFVEC3F( aObject2D->GetBBox().Min().x,
@@ -217,7 +222,7 @@ void C3D_RENDER_RAYTRACING::create_3d_object_from(  CCONTAINER &aDstContainer,
             const CROUNDSEGMENT2D *aRoundSeg2D = static_cast<const CROUNDSEGMENT2D *>( aObject2D );
             CROUNDSEG *objPtr = new CROUNDSEG( *aRoundSeg2D, aZMin, aZMax );
             objPtr->SetMaterial( aMaterial );
-            objPtr->SetColor( aObjColor );
+            objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
             aDstContainer.Add( objPtr );
         }
         break;
@@ -227,7 +232,7 @@ void C3D_RENDER_RAYTRACING::create_3d_object_from(  CCONTAINER &aDstContainer,
         {
             CLAYERITEM *objPtr = new CLAYERITEM( aObject2D, aZMin, aZMax );
             objPtr->SetMaterial( aMaterial );
-            objPtr->SetColor( aObjColor );
+            objPtr->SetColor( ConvertSRGBToLinear( aObjColor ) );
             aDstContainer.Add( objPtr );
         }
         break;
@@ -351,7 +356,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                                                          m_settings.GetLayerBottomZpos3DU( B_Cu ) );
 
                     objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
-                    objPtr->SetColor( (SFVEC3F)m_settings.m_BoardBodyColor );
+                    objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BoardBodyColor ) );
                     m_object_container.Add( objPtr );
         #endif
                 }
@@ -370,7 +375,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                                                          m_settings.GetLayerBottomZpos3DU( B_Cu ) );
 
                     objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
-                    objPtr->SetColor( (SFVEC3F)m_settings.m_BoardBodyColor );
+                    objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BoardBodyColor ) );
                     m_object_container.Add( objPtr );
                 }
             }
@@ -405,7 +410,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                                     radius );
 
                         objPtr->SetMaterial( &m_materials.m_EpoxyBoard );
-                        objPtr->SetColor( (SFVEC3F)m_settings.m_BoardBodyColor );
+                        objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BoardBodyColor ) );
 
                         m_object_container.Add( objPtr );
                     }
@@ -590,7 +595,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                                                      m_settings.GetLayerBottomZpos3DU( layer_id ),
                                                      m_settings.GetLayerTopZpos3DU( layer_id ) );
                 objPtr->SetMaterial( materialLayer );
-                objPtr->SetColor( layerColor );
+                objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
                 m_object_container.Add( objPtr );
 #endif
             }
@@ -608,7 +613,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                                                      m_settings.GetLayerTopZpos3DU( layer_id ) );
 
                 objPtr->SetMaterial( materialLayer );
-                objPtr->SetColor( layerColor );
+                objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
 
                 m_object_container.Add( objPtr );
 #endif
@@ -732,7 +737,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                                                           zLayerMax );
 
                     objPtr->SetMaterial( materialLayer );
-                    objPtr->SetColor( layerColor );
+                    objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
 
                     m_object_container.Add( objPtr );
         #endif
@@ -750,7 +755,7 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                                                           zLayerMin,
                                                           zLayerMax );
                     objPtr->SetMaterial( materialLayer );
-                    objPtr->SetColor( layerColor );
+                    objPtr->SetColor( ConvertSRGBToLinear( layerColor ) );
 
                     m_object_container.Add( objPtr );
                 }
@@ -820,8 +825,8 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
                 newTriangle1->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
                 newTriangle2->SetMaterial( (const CMATERIAL *)&m_materials.m_Floor );
 
-                newTriangle1->SetColor( (SFVEC3F)m_settings.m_BgColorTop );
-                newTriangle2->SetColor( (SFVEC3F)m_settings.m_BgColorTop );
+                newTriangle1->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BgColorTop ) );
+                newTriangle2->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BgColorTop ) );
             }
         }
     }
@@ -832,8 +837,8 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
     m_lights.Clear();
 
     // This will work as the front camera light.
-    const float light_camera_intensity = 0.15;
-    const float light_top_bottom = 0.70;
+    const float light_camera_intensity = 0.20;
+    const float light_top_bottom = 0.25;
     const float light_directional_intensity = ( 1.0f - ( light_camera_intensity +
                                                          light_top_bottom * 0.5f ) ) / 4.0f;
 
@@ -988,9 +993,9 @@ void C3D_RENDER_RAYTRACING::insert3DViaHole( const VIA* aVia )
     objPtr->SetMaterial( &m_materials.m_Copper );
 
     if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
-        objPtr->SetColor( (SFVEC3F)m_settings.m_CopperColor );
+        objPtr->SetColor( ConvertSRGBToLinear( (SFVEC3F)m_settings.m_CopperColor ) );
     else
-        objPtr->SetColor( m_settings.GetItemColor( VIAS_VISIBLE + aVia->GetViaType() ) );
+        objPtr->SetColor( ConvertSRGBToLinear( m_settings.GetItemColor( VIAS_VISIBLE + aVia->GetViaType() ) ) );
 
     m_object_container.Add( objPtr );
 }
@@ -1132,7 +1137,7 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
             CLAYERITEM *objPtr = new CLAYERITEM( object2d_A, topZ, botZ );
 
             objPtr->SetMaterial( &m_materials.m_Copper );
-            objPtr->SetColor( objColor );
+            objPtr->SetColor( ConvertSRGBToLinear( objColor ) );
             m_object_container.Add( objPtr );
         }
         else
@@ -1147,7 +1152,7 @@ void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
             CLAYERITEM *objPtr = new CLAYERITEM( itemCSG2d, topZ, botZ );
 
             objPtr->SetMaterial( &m_materials.m_Copper );
-            objPtr->SetColor( objColor );
+            objPtr->SetColor( ConvertSRGBToLinear( objColor ) );
 
             m_object_container.Add( objPtr );
         }
@@ -1345,10 +1350,32 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
 
                     CBLINN_PHONG_MATERIAL &blinnMaterial = (*materialVector)[imat];
 
+                    SFVEC3F ambient;
+
+                    if( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
+                    {
+                        // apply a gain to the (dark) ambient colors
+
+                        // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoKHgrMC4yMCleKDEvMi4wMCkpLTAuMzUiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjAsImVxIjoieCIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0xLjI0OTUwNTMzOTIyMzYyIiwiMS42Nzc4MzQ0MTg1NjcxODQzIiwiLTAuNDM1NTA0NjQyODEwOTMwMjYiLCIxLjM2NTkzNTIwODEzNzI1OCJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
+                        // ambient = glm::max( (glm::pow((material.m_Ambient + 0.20f), SFVEC3F(1.0f / 2.00f)) - SFVEC3F(0.35f)), material.m_Ambient );
+
+                        // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoKHgrMC4yMCleKDEvMS41OCkpLTAuMzUiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjAsImVxIjoieCIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0xLjI0OTUwNTMzOTIyMzYyIiwiMS42Nzc4MzQ0MTg1NjcxODQzIiwiLTAuNDM1NTA0NjQyODEwOTMwMjYiLCIxLjM2NTkzNTIwODEzNzI1OCJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
+                        //ambient = glm::max( (glm::pow((material.m_Ambient + 0.20f), SFVEC3F(1.0f / 1.58f)) - SFVEC3F(0.35f)), material.m_Ambient );
+
+                        // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoKHgrMC4yMCleKDEvMS41NCkpLTAuMzQiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjAsImVxIjoieCIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0yLjcyMTA5NTg0MjA1MDYwNSIsIjEuODUyODcyNTI5NDk3NTIyMyIsIi0xLjQyMTM3NjAxOTkyOTA4MDYiLCIxLjM5MzM3Mzc0NzE3NzQ2MTIiXSwic2l6ZSI6WzY0OSwzOTldfV0-
+                        ambient = ConvertSRGBToLinear(
+                                glm::pow((material.m_Ambient + 0.30f), SFVEC3F(1.0f / 1.54f)) - SFVEC3F(0.34f) );
+                    }
+                    else
+                    {
+                        ambient = ConvertSRGBToLinear( material.m_Ambient );
+                    }
+
+
                     blinnMaterial = CBLINN_PHONG_MATERIAL(
-                                              material.m_Ambient,
-                                              material.m_Emissive,
-                                              material.m_Specular,
+                                              ambient,
+                                              ConvertSRGBToLinear( material.m_Emissive ),
+                                              ConvertSRGBToLinear( material.m_Specular ),
                                               material.m_Shininess * 180.0f,
                                               material.m_Transparency,
                                               reflectionFactor );
@@ -1485,21 +1512,20 @@ void C3D_RENDER_RAYTRACING::add_3D_models( const S3DMODEL *a3DModel,
                                 a3DModel->m_Materials[mesh.m_MaterialIdx].m_Diffuse;
 
                             if( m_settings.MaterialModeGet() == MATERIAL_MODE_CAD_MODE )
-                                newTriangle->SetColor( MaterialDiffuseToColorCAD( diffuseColor ) );
+                                newTriangle->SetColor( ConvertSRGBToLinear( MaterialDiffuseToColorCAD( diffuseColor ) ) );
                             else
-                                newTriangle->SetColor( diffuseColor );
+                                newTriangle->SetColor( ConvertSRGBToLinear( diffuseColor ) );
                         }
                         else
                         {
                             if( m_settings.MaterialModeGet() == MATERIAL_MODE_CAD_MODE )
-                                newTriangle->SetColor(
-                                    MaterialDiffuseToColorCAD( mesh.m_Color[idx0] ),
-                                    MaterialDiffuseToColorCAD( mesh.m_Color[idx1] ),
-                                    MaterialDiffuseToColorCAD( mesh.m_Color[idx2] ) );
+                                newTriangle->SetColor( ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx0] ) ),
+                                                       ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx1] ) ),
+                                                       ConvertSRGBToLinear( MaterialDiffuseToColorCAD( mesh.m_Color[idx2] ) ) );
                             else
-                                newTriangle->SetColor( mesh.m_Color[idx0],
-                                                       mesh.m_Color[idx1],
-                                                       mesh.m_Color[idx2] );
+                                newTriangle->SetColor( ConvertSRGBToLinear( mesh.m_Color[idx0] ),
+                                                       ConvertSRGBToLinear( mesh.m_Color[idx1] ),
+                                                       ConvertSRGBToLinear( mesh.m_Color[idx2] ) );
                         }
                     }
                 }

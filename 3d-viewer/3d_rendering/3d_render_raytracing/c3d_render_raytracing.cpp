@@ -319,6 +319,9 @@ void C3D_RENDER_RAYTRACING::render( GLubyte *ptrPBO , REPORTER *aStatusTextRepor
                 tmp_ptrPBO += 4;                // PBO is RGBA
             }
         }
+
+        m_BgColorTop_LinearRGB = ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BgColorTop );
+        m_BgColorBot_LinearRGB = ConvertSRGBToLinear( (SFVEC3F)m_settings.m_BgColorBot );
     }
 
     switch( m_rt_render_state )
@@ -422,17 +425,18 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte *ptrPBO ,
     }
 }
 
-#define USE_SRGB_SPACE
-
 #ifdef USE_SRGB_SPACE
 
 // This should be removed in future when the KiCad support a greater version of
 // glm lib.
+
+#define SRGB_GAMA 2.4f
+
 // This function implements the conversion from linear RGB to sRGB
 // https://github.com/g-truc/glm/blob/master/glm/gtc/color_space.inl#L12
 static SFVEC3F convertLinearToSRGB( const SFVEC3F &aRGBcolor )
 {
-    const float gammaCorrection = 1.0f / 1.3f;
+    const float gammaCorrection = 1.0f / SRGB_GAMA;
     const SFVEC3F clampedColor = glm::clamp( aRGBcolor, SFVEC3F(0.0f), SFVEC3F(1.0f) );
 
     return glm::mix(
@@ -440,6 +444,20 @@ static SFVEC3F convertLinearToSRGB( const SFVEC3F &aRGBcolor )
         clampedColor * 12.92f,
         glm::lessThan( clampedColor, SFVEC3F(0.0031308f) ) );
 }
+
+// This function implements the conversion from sRGB to linear RGB
+// https://github.com/g-truc/glm/blob/master/glm/gtc/color_space.inl#L35
+SFVEC3F ConvertSRGBToLinear( const SFVEC3F &aSRGBcolor )
+{
+    const float gammaCorrection = SRGB_GAMA;
+
+    return glm::mix(
+                    glm::pow( (aSRGBcolor + SFVEC3F(0.055f)) * SFVEC3F(0.94786729857819905213270142180095f),
+                              SFVEC3F(gammaCorrection) ),
+                    aSRGBcolor * SFVEC3F(0.07739938080495356037151702786378f),
+                    glm::lessThanEqual( aSRGBcolor, SFVEC3F(0.04045f) ) );
+}
+
 #endif
 
 void C3D_RENDER_RAYTRACING::rt_final_color( GLubyte *ptrPBO,
@@ -515,10 +533,7 @@ void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F *aBgColorY,
                                                 const RAY *aRayPck,
                                                 SFVEC3F *aOutHitColor )
 {
-    // If post processing is using, do not calculate shadows as they will not be
-    // used for futher post processing.
-    const bool is_testShadow =  m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) &&
-                               !m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING );
+    const bool is_testShadow =  m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
 
     for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
     {
@@ -556,9 +571,9 @@ void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F *aBgColorY,
                 nodex1y1 = aHitPck_X0Y0[ idx1y1 ].m_HitInfo.m_acc_node_info;
 
 
-            if( (nodex0y0 == nodex1y0) &&   // If all notes are equal we assume there was no change on the object hits
-                (nodex0y0 == nodex0y1) &&
-                (nodex0y0 == nodex1y1) &&
+            if( ((nodex0y0 == nodex1y0) || (nodex1y0 == 0)) &&  // If all notes are equal we assume there was no change on the object hits
+                ((nodex0y0 == nodex0y1) || (nodex0y1 == 0)) &&
+                ((nodex0y0 == nodex1y1) || (nodex1y1 == 0)) &&
                 (nodex0y0 == node_AA_x0y0) )
             {
                 // Option 1
@@ -582,6 +597,9 @@ void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F *aBgColorY,
                 // then if miss just give the same color as before
                 //if( m_accelerator->Intersect( rayAA, hitAA, nodex0y0 ) )
                 //    aOutHitColor[i] += shadeHit( aBgColorY[y], rayAA, hitAA, false, 0 );
+
+                // Option 3
+                // Use same color
 
             }
             else
@@ -662,8 +680,8 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
     {
         const float posYfactor = (float)(blockPosI.y + y) / (float)m_windowSize.y;
 
-        bgColor[y] = (SFVEC3F)m_settings.m_BgColorTop * SFVEC3F(posYfactor) +
-                     (SFVEC3F)m_settings.m_BgColorBot * ( SFVEC3F(1.0f) - SFVEC3F(posYfactor) );
+        bgColor[y] = m_BgColorTop_LinearRGB * SFVEC3F(posYfactor) +
+                     m_BgColorBot_LinearRGB * ( SFVEC3F(1.0f) - SFVEC3F(posYfactor) );
     }
 
     // Intersect ray packets (calculate the intersection with rays and objects)
@@ -764,8 +782,7 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO ,
             rt_shades_packet( bgColor,
                               blockPacket_AA_X1Y1.m_ray,
                               hitPacket_AA_X1Y1,
-                              m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) &&
-                              (!m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING )),
+                              m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ),
                               hitColor_AA_X1Y1
                               );
         }
@@ -1033,32 +1050,13 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
                 ptrShaderY3-= 3;
                 ptrShaderY4-= 3;
 
-                const float grayBluredColor = ( bluredShadeColor.r +
-                                                bluredShadeColor.g +
-                                                bluredShadeColor.b ) / 3.0f;
+#ifdef USE_SRGB_SPACE
+                const SFVEC3F originColor = convertLinearToSRGB( m_postshader_ssao.GetColorAtNotProtected( SFVEC2I( x,y ) ) );
+#else
+                const SFVEC3F originColor = m_postshader_ssao.GetColorAtNotProtected( SFVEC2I( x,y ) );
+#endif
 
-                const SFVEC3F &originalColor = m_postshader_ssao.GetColorAtNotProtected( SFVEC2I( x, y ) );
-
-                float luminanceColor = (originalColor.r * 0.2126f +
-                                        originalColor.g * 0.7152f +
-                                        originalColor.b * 0.0722f);
-
-                // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoeCoxLjMtMC4xNSkqKC14KjEuMysyLjE1KSIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0xLjQ5MjM4OTg5MzY5NjAyNCIsIjIuMTY2Nzg0ODAzNTQyNDk4IiwiLTAuNjYzNzYwNzIzNzUyMjA5NSIsIjEuNTg4MDM5MDg5OTMzMDM0NiJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
-                // luminanceColor = (+luminanceColor * 1.3f - 0.15f) *
-                //                  (-luminanceColor * 1.3f + 2.15f);
-
-                // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoeC0wLjEpKjkiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC45OTI5NjA0NzE5OTg5Njk1IiwiMS45MzQzNzkyODU3OTE4NDYzIiwiLTAuNDE1MTAzMzMwNzkyMzc5NyIsIjEuMzg2MzM2NTIwMTU1ODE0MiJdLCJzaXplIjpbNjQ5LDM5OV19XQ--
-                luminanceColor = (luminanceColor - 0.10f) * 9.0f;
-
-                luminanceColor = glm::clamp( luminanceColor, 0.0f, 1.0f );
-
-                const SFVEC3F shadedColor = ( originalColor *
-                                              ( SFVEC3F(1.0f) - 2.0f * bluredShadeColor * luminanceColor ) ) -
-                                            ( bluredShadeColor - (grayBluredColor * 0.65f) );
-
-                // Debug code
-                //const SFVEC3F shadedColor = bluredShadeColor;
-                //const SFVEC3F shadedColor = SFVEC3F(grayOriginalColorFactor);
+                const SFVEC3F shadedColor = m_postshader_ssao.ApplyShadeColor( SFVEC2I( x,y ), originColor, bluredShadeColor );
 #else
                 // Debug code
                 //const SFVEC3F shadedColor =  SFVEC3F( 1.0f ) -
@@ -1066,7 +1064,7 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
                 const SFVEC3F shadedColor =  m_shaderBuffer[ y * m_realBufferSize.x + x ];
 #endif
 
-                rt_final_color( ptr, shadedColor, true );
+                rt_final_color( ptr, shadedColor, false );
 
                 ptr += 4;
             }
@@ -1714,9 +1712,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
     SFVEC3F hitPoint = aHitInfo.m_HitPoint;
 
     if( !m_isPreview )
-        hitPoint += aHitInfo.m_HitNormal * ( 0.5f * m_settings.GetNonCopperLayerThickness3DU() *
-                                            glm::abs(Fast_RandFloat()) +
-                                            0.5f * m_settings.GetNonCopperLayerThickness3DU() );
+        hitPoint += aHitInfo.m_HitNormal * m_settings.GetNonCopperLayerThickness3DU() * 1.0f;
 
     const CMATERIAL *objMaterial = aHitInfo.pHitObject->GetMaterial();
     wxASSERT( objMaterial != NULL );
@@ -1765,7 +1761,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
         // otherwise it is in the shadow
         if( NdotL >= FLT_EPSILON )
         {
-            float   shadow_att_factor_light = 1.0f;
+            float shadow_att_factor_light = 1.0f;
 
             if( is_testShadow && light->GetCastShadows() )
             {
@@ -1796,10 +1792,10 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                 else
                 {
 
-                    const unsigned int shadow_number_of_samples = 2;
+                    const unsigned int shadow_number_of_samples = 3;
                     const float shadow_inc_factor = 1.0f / (float)(shadow_number_of_samples);
 
-                    for( unsigned int i=0; i < shadow_number_of_samples; ++i )
+                    for( unsigned int i = 0; i < shadow_number_of_samples; ++i )
                     {
                         const SFVEC3F unifVector = UniformRandomHemisphereDirection();
                         const SFVEC3F disturbed_vector_to_light = glm::normalize( vectorToLight +
@@ -1835,8 +1831,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
             }
             else
             {
-                // This is a render hack in order to compensate for the lake of
-                // ambient and too much darkness when using post process shadeer
+                // This is a render hack in order to compensate for the lack of
+                // ambient and too much darkness when using post process shader
                 // It will calculate as it was not in shadow
                 outColor += objMaterial->Shade( aRay,
                                                 aHitInfo,
@@ -1844,24 +1840,32 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                                                 diffuseColorObj,
                                                 vectorToLight,
                                                 colorOfLight,
-                                                1.0f );
+                                                // The sampled point will be darkshaded by the post
+                                                // processing, so here it compensates to not shadow
+                                                // so much
+                                                glm::min( shadow_att_factor_light + (3.0f / 6.0f), 1.0f )
+                                                );
             }
-        }
-
-        // Improvement: this is not taking in account the lightcolor
-        if( nr_lights_that_can_cast_shadows > 0 )
-        {
-            aHitInfo.m_ShadowFactor = shadow_att_factor_sum /
-                                      (float)(nr_lights_that_can_cast_shadows * 1.0f);
         }
         else
         {
-            aHitInfo.m_ShadowFactor = 1.0f;
+            outColor += objMaterial->GetAmbientColor();
         }
 
         // Only use the headlight for preview
         if( m_isPreview )
             break;
+    }
+
+    // Improvement: this is not taking in account the lightcolor
+    if( nr_lights_that_can_cast_shadows > 0 )
+    {
+        aHitInfo.m_ShadowFactor = shadow_att_factor_sum /
+                                  (float)(nr_lights_that_can_cast_shadows * 1.0f);
+    }
+    else
+    {
+        aHitInfo.m_ShadowFactor = 1.0f;
     }
 
     // Clamp color to not be brighter than 1.0f

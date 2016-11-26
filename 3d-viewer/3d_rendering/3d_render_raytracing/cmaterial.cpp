@@ -31,6 +31,10 @@
 #include <3d_math.h>
 #include <wx/debug.h>
 
+// This may be a good value if based on nr of lights
+// that contribute to the illumination of that point
+#define AMBIENT_FACTOR  (1.0f / 6.0f)
+#define SPECULAR_FACTOR 1.0f
 
 CMATERIAL::CMATERIAL()
 {
@@ -62,7 +66,8 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
     wxASSERT( aShinness >= 0.0f );
     wxASSERT( aShinness <= 180.0f );
 
-    m_ambientColor  = aAmbient;
+    m_ambientColor  = aAmbient * SFVEC3F(AMBIENT_FACTOR);
+
     m_emissiveColor = aEmissive;
     m_specularColor = aSpecular;
     m_shinness      = aShinness;
@@ -85,10 +90,6 @@ void CMATERIAL::PerturbeNormal( SFVEC3F &aNormal,
     }
 }
 
-// This may be a good value if based on nr of lights
-// that contribute to the illumination of that point
-#define AMBIENT_FACTOR  (1.0f / 6.0f)
-#define SPECULAR_FACTOR 1.0f
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model
 SFVEC3F CBLINN_PHONG_MATERIAL::Shade( const RAY &aRay,
@@ -100,8 +101,6 @@ SFVEC3F CBLINN_PHONG_MATERIAL::Shade( const RAY &aRay,
                                       float aShadowAttenuationFactor ) const
 {
     wxASSERT( NdotL >= FLT_EPSILON );
-
-    const float ambientFactor = AMBIENT_FACTOR;
 
     // This is a hack to get some kind of fake ambient illumination
     // There is no logic behind this, just pure artistic experimentation
@@ -123,7 +122,7 @@ SFVEC3F CBLINN_PHONG_MATERIAL::Shade( const RAY &aRay,
         const float intensitySpecular = glm::pow( glm::max( NdotH, 0.0f ),
                                                   m_shinness );
 
-        return  m_ambientColor * ambientFactor +
+        return  m_ambientColor +
                 aShadowAttenuationFactor * ( diffuse * aDiffuseObjColor +
                                              SPECULAR_FACTOR *
                                              aLightColor *
@@ -131,7 +130,7 @@ SFVEC3F CBLINN_PHONG_MATERIAL::Shade( const RAY &aRay,
                                              m_specularColor );
     }
 
-    return m_ambientColor * ambientFactor;
+    return m_ambientColor;
 }
 
 
@@ -222,21 +221,21 @@ CPLASTICNORMAL::CPLASTICNORMAL( float aScale )
 
 SFVEC3F CPLASTICNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
 {
-        SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
+        const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-        const float noise1 = (m_perlin.noise( hitPos.x,
-                                              hitPos.y,
-                                              hitPos.z ) - 0.5f);
+        const float noise1 = (m_perlin.noise( hitPos.x * 0.1f,
+                                              hitPos.y * 0.1f,
+                                              hitPos.z * 0.1f) - 0.5f);
 
-        const float noise2 = (m_perlin.noise( hitPos.x * 5.0f,
-                                              hitPos.y * 5.0f,
-                                              hitPos.z * 5.0f ) - 0.5f);
+        const float noise2 = (m_perlin.noise( hitPos.x * 4.0f,
+                                              hitPos.y * 4.0f,
+                                              hitPos.z * 4.0f ) - 0.5f);
 
-        const float noise3 = (m_perlin.noise( hitPos.x * 10.0f + Fast_RandFloat() * 0.10f,
-                                              hitPos.y * 10.0f + Fast_RandFloat() * 0.10f,
-                                              hitPos.z * 10.0f + Fast_RandFloat() * 0.10f ) - 0.5f);
+        const float noise3 = (m_perlin.noise( hitPos.x * 8.0f + Fast_RandFloat() * 0.10f,
+                                              hitPos.y * 8.0f + Fast_RandFloat() * 0.10f,
+                                              hitPos.z * 8.0f + Fast_RandFloat() * 0.10f ) - 0.5f);
 
-        return SFVEC3F( noise1 * 0.08f + noise2 * 0.10f + noise3 * 0.30f );
+        return SFVEC3F( noise1 * 0.30f + noise2 * 0.50f + noise3 * 0.80f );
 }
 
 
@@ -248,17 +247,17 @@ CPLASTICSHINENORMAL::CPLASTICSHINENORMAL( float aScale )
 
 SFVEC3F CPLASTICSHINENORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
 {
-    SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
+    const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-    const float noise1 = (m_perlin.noise( hitPos.x,
-                                          hitPos.y,
-                                          hitPos.z ) - 0.5f);
+    const float noise1 = (m_perlin.noise( hitPos.x * 0.15f,
+                                          hitPos.y * 0.15f,
+                                          hitPos.z * 0.15f ) - 0.5f);
 
-    const float noise2 = (m_perlin.noise( hitPos.x * 3.0f,
-                                          hitPos.y * 3.0f,
-                                          hitPos.z * 3.0f ) - 0.5f);
+    const float noise2 = (m_perlin.noise( hitPos.x * 0.5f,
+                                          hitPos.y * 0.5f,
+                                          hitPos.z * 0.5f ) - 0.5f);
 
-    return SFVEC3F( noise1 * 0.09f + noise2 * 0.08f );
+    return SFVEC3F( noise1 * 1.0f,  noise2 * 1.0f, noise1 * noise2 );
 }
 
 
@@ -303,10 +302,10 @@ SFVEC3F CMETALBRUSHEDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo 
     float sawY = (hitPosRelative.y + glm::sin(10.0f * hitPos.y + 5.0f * noise2 + Fast_RandFloat() ) );
           sawY = sawY * sawY * sawY;
 
-    float xOut = sawX * noise3X * 0.07f + noiseX * 0.25f + noise3X * 0.07f;
-    float yOut = sawY * noise3Y * 0.07f + noiseY * 0.25f + noise3Y * 0.07f;
+    float xOut = sawX * noise3X * 0.17f + noiseX * 0.25f + noise3X * 0.57f;
+    float yOut = sawY * noise3Y * 0.17f + noiseY * 0.25f + noise3Y * 0.57f;
 
-    const float outLowFreqNoise = noise2 * 0.005f;
+    const float outLowFreqNoise = noise2 * 0.05f;
 
     return SFVEC3F( xOut + outLowFreqNoise,
                     yOut + outLowFreqNoise,

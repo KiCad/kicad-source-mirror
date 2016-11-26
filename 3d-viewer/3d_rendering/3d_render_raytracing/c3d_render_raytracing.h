@@ -153,6 +153,8 @@ private:
 
     CGENERICACCELERATOR *m_accelerator;
 
+    SFVEC3F m_BgColorTop_LinearRGB;
+    SFVEC3F m_BgColorBot_LinearRGB;
 
     // Morton codes
 
@@ -204,5 +206,13 @@ private:
     void render( GLubyte *ptrPBO, REPORTER *aStatusTextReporter );
     void render_preview( GLubyte *ptrPBO );
 };
+
+#define USE_SRGB_SPACE
+
+#ifdef USE_SRGB_SPACE
+extern SFVEC3F ConvertSRGBToLinear( const SFVEC3F &aSRGBcolor );
+#else
+#define ConvertSRGBToLinear(v) (v)
+#endif
 
 #endif // C3D_RENDER_RAYTRACING_H

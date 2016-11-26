@@ -447,7 +447,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_FL_RAYTRACING_POST_PROCESSING:
         m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING, isChecked );
-        m_canvas->Request_refresh();
+        ReloadRequest( );
         return;
 
     case ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING:

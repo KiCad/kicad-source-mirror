@@ -40,6 +40,13 @@ public:
 
     virtual SFVEC3F Shade( const SFVEC2I &aShaderPos ) const = 0;
 
+    /**
+     * @brief ApplyShadeColor - apply the final color process using a previous stage color
+     * @param aShadeColor - The result of the shader
+     * @return the result of the shade process
+     */
+    virtual SFVEC3F ApplyShadeColor( const SFVEC2I &aShaderPos, const SFVEC3F &aInputColor, const SFVEC3F &aShadeColor ) const = 0;
+
     void UpdateSize( const SFVEC2UI &aSize );
 
     void UpdateSize( unsigned int xSize, unsigned int ySize );
