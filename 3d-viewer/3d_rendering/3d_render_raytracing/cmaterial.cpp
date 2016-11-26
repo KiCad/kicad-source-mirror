@@ -261,7 +261,7 @@ SFVEC3F CPLASTICSHINENORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo 
                                           hitPos.y * 0.5f,
                                           hitPos.z * 0.5f ) - 0.5f);
 
-    return SFVEC3F( noise1, noise2, noise3 );
+    return SFVEC3F( noise1 * 0.5f, noise2 * 0.5f, noise3 * 0.5f );
 }
 
 
