@@ -693,7 +693,7 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         {
             m_router->ClearWorld();
         }
-        else if( evt->Action() == TA_UNDO_REDO_POST )
+        else if( evt->Action() == TA_UNDO_REDO_POST || evt->Action() == TA_MODEL_CHANGE )
         {
             m_router->SyncWorld();
         }
