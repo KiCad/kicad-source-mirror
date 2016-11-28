@@ -1267,7 +1267,6 @@ mpScaleXBase::mpScaleXBase( wxString name, int flags, bool ticks, unsigned int t
     m_ticks = ticks;
     // m_labelType = type;
     m_type = mpLAYER_AXIS;
-    // m_labelFormat = wxT("");
 }
 
 
@@ -1497,7 +1496,6 @@ mpScaleY::mpScaleY( wxString name, int flags, bool ticks )
     m_type  = mpLAYER_AXIS;
     m_masterScale = NULL;
     m_nameFlags = mpALIGN_BORDER_LEFT;
-    // m_labelFormat = wxT("");
 }
 
 
@@ -3429,7 +3427,7 @@ mpText::mpText( wxString name, int offsetx, int offsety )
     if( offsety >= 0 && offsety <= 100 )
         m_offsety = offsety;
     else
-        m_offsetx = 50;
+        m_offsety = 50;
 
     m_type = mpLAYER_INFO;
 }
