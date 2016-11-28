@@ -106,6 +106,9 @@ enum TOOL_ACTIONS
     // Tool activation event.
     TA_ACTIVATE             = 0x100000,
 
+    // Model has changed (partial update).
+    TA_MODEL_CHANGE         = 0x200000,
+
     TA_ANY = 0xffffffff
 };
 
