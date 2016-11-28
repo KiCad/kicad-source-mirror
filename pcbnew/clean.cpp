@@ -77,12 +77,12 @@ private:
      * Removes all the following THT vias on the same position of the
      * specified one
      */
-    bool remove_duplicates_of_via( const VIA *aVia );
+    bool remove_duplicates_of_via( const VIA* aVia );
 
     /**
      * Removes all the following duplicates tracks of the specified one
      */
-    bool remove_duplicates_of_track( const TRACK *aTrack );
+    bool remove_duplicates_of_track( const TRACK* aTrack );
 
     /**
      * Removes dangling tracks
@@ -93,7 +93,7 @@ private:
     bool delete_null_segments();
 
     /// Try to merge the segment to a following collinear one
-    bool merge_collinear_of_track( TRACK *aSegment );
+    bool merge_collinear_of_track( TRACK* aSegment );
 
     /**
      * Merge collinear segments and remove duplicated and null len segments
@@ -115,11 +115,12 @@ private:
     TRACK* mergeCollinearSegmentIfPossible( TRACK* aTrackRef,
                                            TRACK* aCandidate, ENDPOINT_T aEndType );
 
-    const ZONE_CONTAINER* zoneForTrackEndpoint( const TRACK *aTrack,
+    const ZONE_CONTAINER* zoneForTrackEndpoint( const TRACK* aTrack,
             ENDPOINT_T aEndPoint );
 
-    bool testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPoint );
+    bool testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPoint );
 };
+
 
 /* Install the cleanup dialog frame to know what should be cleaned
 */
@@ -223,6 +224,7 @@ TRACKS_CLEANER::TRACKS_CLEANER( BOARD * aPcb ): CONNECTIONS( aPcb )
     BuildPadsList();
 }
 
+
 void TRACKS_CLEANER::buildTrackConnectionInfo()
 {
     BuildTracksCandidatesList( m_Brd->m_Track, NULL);
@@ -239,7 +241,7 @@ void TRACKS_CLEANER::buildTrackConnectionInfo()
     // Build connections info tracks to pads
     SearchTracksConnectedToPads();
 
-    for( TRACK *track = m_Brd->m_Track; track != NULL; track = track->Next() )
+    for( TRACK* track = m_brd->m_Track; track != NULL; track = track->Next() )
     {
         // Mark track if connected to pads
         for( unsigned jj = 0; jj < track->m_PadsConnected.size(); jj++ )
@@ -358,6 +360,7 @@ bool TRACKS_CLEANER::remove_duplicates_of_via( const VIA *aVia )
     return modified;
 }
 
+
 bool TRACKS_CLEANER::clean_vias()
 {
     bool modified = false;
@@ -383,11 +386,10 @@ bool TRACKS_CLEANER::clean_vias()
              * if one through pad is found, the via can be removed */
             for( unsigned ii = 0; ii < via->m_PadsConnected.size(); ++ii )
             {
-                const D_PAD *pad = via->m_PadsConnected[ii];
-
+                const D_PAD* pad = via->m_PadsConnected[ii];
                 const LSET all_cu = LSET::AllCuMask();
 
-                if( (pad->GetLayerSet() & all_cu) == all_cu )
+                if( ( pad->GetLayerSet() & all_cu ) == all_cu )
                 {
                     // redundant: delete the via
                     m_Brd->GetRatsnest()->Remove( via );
@@ -403,8 +405,9 @@ bool TRACKS_CLEANER::clean_vias()
     return modified;
 }
 
+
 /// Utility for checking if a track/via ends on a zone
-const ZONE_CONTAINER* TRACKS_CLEANER::zoneForTrackEndpoint( const TRACK *aTrack,
+const ZONE_CONTAINER* TRACKS_CLEANER::zoneForTrackEndpoint( const TRACK* aTrack,
         ENDPOINT_T aEndPoint )
 {
     // Vias are special cased, since they get a layer range, not a single one
@@ -423,15 +426,16 @@ const ZONE_CONTAINER* TRACKS_CLEANER::zoneForTrackEndpoint( const TRACK *aTrack,
             top_layer, bottom_layer, aTrack->GetNetCode() );
 }
 
+
 /** Utility: does the endpoint unconnected processed for one endpoint of one track
  * Returns true if the track must be deleted, false if not necessarily */
-bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPoint )
+bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK* aTrack, ENDPOINT_T aEndPoint )
 {
     bool flag_erase = false;
 
-    TRACK* other = aTrack->GetTrack( m_Brd->m_Track, NULL, aEndPoint, true, false );
+    TRACK* other = aTrack->GetTrack( m_brd->m_Track, NULL, aEndPoint, true, false );
 
-    if( (other == NULL) && (zoneForTrackEndpoint( aTrack, aEndPoint ) == NULL) )
+    if( !other && !zoneForTrackEndpoint( aTrack, aEndPoint ) )
         flag_erase = true; // Start endpoint is neither on pad, zone or other track
     else    // segment, via or zone connected to this end
     {
@@ -454,8 +458,7 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPo
             other = via->GetTrack( m_Brd->m_Track, NULL, aEndPoint, true, false );
 
             // There is a via on the start but it goes nowhere
-            if( (other == NULL) &&
-                    (zoneForTrackEndpoint( via, aEndPoint ) == NULL) )
+            if( !other && !zoneForTrackEndpoint( via, aEndPoint ) )
                 flag_erase = true;
 
             aTrack->SetState( BUSY, false );
@@ -464,6 +467,7 @@ bool TRACKS_CLEANER::testTrackEndpointDangling( TRACK *aTrack, ENDPOINT_T aEndPo
 
     return flag_erase;
 }
+
 
 /* Delete dangling tracks
  *  Vias:
@@ -496,11 +500,11 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
              * same layer */
 
             // Check if there is nothing attached on the start
-            if( !(track->GetState( START_ON_PAD )) )
+            if( !( track->GetState( START_ON_PAD ) ) )
                 flag_erase |= testTrackEndpointDangling( track, ENDPOINT_START );
 
             // Check if there is nothing attached on the end
-            if( !(track->GetState( END_ON_PAD )) )
+            if( !( track->GetState( END_ON_PAD ) ) )
                 flag_erase |= testTrackEndpointDangling( track, ENDPOINT_END );
 
             if( flag_erase )
@@ -521,6 +525,7 @@ bool TRACKS_CLEANER::deleteDanglingTracks()
     return modified;
 }
 
+
 // Delete null length track segments
 bool TRACKS_CLEANER::delete_null_segments()
 {
@@ -540,8 +545,10 @@ bool TRACKS_CLEANER::delete_null_segments()
             modified = true;
         }
     }
+
     return modified;
 }
+
 
 bool TRACKS_CLEANER::remove_duplicates_of_track( const TRACK *aTrack )
 {
@@ -558,13 +565,13 @@ bool TRACKS_CLEANER::remove_duplicates_of_track( const TRACK *aTrack )
 
         // Must be of the same type, on the same layer and the endpoints
         // must be the same (maybe swapped)
-        if( (aTrack->Type() == other->Type()) &&
-            (aTrack->GetLayer() == other->GetLayer()) )
+        if( ( aTrack->Type() == other->Type() ) &&
+            ( aTrack->GetLayer() == other->GetLayer() ) )
         {
-            if( ((aTrack->GetStart() == other->GetStart()) &&
-                 (aTrack->GetEnd() == other->GetEnd())) ||
-                ((aTrack->GetStart() == other->GetEnd()) &&
-                 (aTrack->GetEnd() == other->GetStart())))
+            if( ( ( aTrack->GetStart() == other->GetStart() ) &&
+                 ( aTrack->GetEnd() == other->GetEnd() ) ) ||
+                ( ( aTrack->GetStart() == other->GetEnd() ) &&
+                 ( aTrack->GetEnd() == other->GetStart() ) ) )
             {
                 m_Brd->GetRatsnest()->Remove( other );
                 other->ViewRelease();
@@ -573,10 +580,12 @@ bool TRACKS_CLEANER::remove_duplicates_of_track( const TRACK *aTrack )
             }
         }
     }
+
     return modified;
 }
 
-bool TRACKS_CLEANER::merge_collinear_of_track( TRACK *aSegment )
+
+bool TRACKS_CLEANER::merge_collinear_of_track( TRACK* aSegment )
 {
     bool merged_this = false;
 
@@ -584,7 +593,8 @@ bool TRACKS_CLEANER::merge_collinear_of_track( TRACK *aSegment )
             endpoint = ENDPOINT_T( endpoint + 1 ) )
     {
         // search for a possible segment connected to the current endpoint of the current one
-        TRACK *other = aSegment->Next();
+        TRACK* other = aSegment->Next();
+
         if( other )
         {
             other = aSegment->GetTrack( other, NULL, endpoint, true, false );
@@ -593,7 +603,7 @@ bool TRACKS_CLEANER::merge_collinear_of_track( TRACK *aSegment )
             {
                 // the two segments must have the same width and the other
                 // cannot be a via
-                if( (aSegment->GetWidth() == other->GetWidth()) &&
+                if( ( aSegment->GetWidth() == other->GetWidth() ) &&
                         (other->Type() == PCB_TRACE_T) )
                 {
                     // There can be only one segment connected
@@ -605,7 +615,7 @@ bool TRACKS_CLEANER::merge_collinear_of_track( TRACK *aSegment )
                     if( !yet_another )
                     {
                         // Try to merge them
-                        TRACK *segDelete = mergeCollinearSegmentIfPossible( aSegment,
+                        TRACK* segDelete = mergeCollinearSegmentIfPossible( aSegment,
                                 other, endpoint );
 
                         // Merge succesful, the other one has to go away
@@ -625,6 +635,7 @@ bool TRACKS_CLEANER::merge_collinear_of_track( TRACK *aSegment )
     return merged_this;
 }
 
+
 // Delete null length segments, and intermediate points ..
 bool TRACKS_CLEANER::clean_segments()
 {
@@ -639,7 +650,7 @@ bool TRACKS_CLEANER::clean_segments()
         modified |= remove_duplicates_of_track( segment );
 
     // merge collinear segments:
-    TRACK *nextsegment;
+    TRACK* nextsegment;
 
     for( TRACK *segment = m_Brd->m_Track; segment; segment = nextsegment )
     {
@@ -659,6 +670,7 @@ bool TRACKS_CLEANER::clean_segments()
 
     return modified;
 }
+
 
 /* Utility: check for parallelism between two segments */
 static bool parallelism_test( int dx1, int dy1, int dx2, int dy2 )
@@ -687,6 +699,7 @@ static bool parallelism_test( int dx1, int dy1, int dx2, int dy2 )
     return ((double)dy1 * dx2 == (double)dx1 * dy2);
 }
 
+
 /** Function used by clean_segments.
  *  Test if aTrackRef and aCandidate (which must have a common end) are collinear.
  *  and see if the common point is not on a pad (i.e. if this common point can be removed).
@@ -703,9 +716,9 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
                                        ENDPOINT_T aEndType )
 {
     // First of all, they must be of the same width and must be both actual tracks
-    if( (aTrackRef->GetWidth() != aCandidate->GetWidth()) ||
-        (aTrackRef->Type() != PCB_TRACE_T) ||
-        (aCandidate->Type() != PCB_TRACE_T) )
+    if( ( aTrackRef->GetWidth() != aCandidate->GetWidth() ) ||
+        ( aTrackRef->Type() != PCB_TRACE_T ) ||
+        ( aCandidate->Type() != PCB_TRACE_T ) )
         return NULL;
 
     // Trivial case: exactly the same track
@@ -732,16 +745,16 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
     if( aEndType == ENDPOINT_START )
     {
         // We do not have a pad, which is a always terminal point for a track
-        if( aTrackRef->GetState( START_ON_PAD) )
+        if( aTrackRef->GetState( START_ON_PAD ) )
             return NULL;
 
         /* change the common point coordinate of pt_segm to use the other point
          * of pt_segm (pt_segm will be removed later) */
         if( aTrackRef->GetStart() == aCandidate->GetStart() )
         {
-            aTrackRef->SetStart( aCandidate->GetEnd());
+            aTrackRef->SetStart( aCandidate->GetEnd() );
             aTrackRef->start = aCandidate->end;
-            aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( END_ON_PAD) );
+            aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( END_ON_PAD ) );
             aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
@@ -749,7 +762,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
         {
             aTrackRef->SetStart( aCandidate->GetStart() );
             aTrackRef->start = aCandidate->start;
-            aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( START_ON_PAD) );
+            aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( START_ON_PAD ) );
             aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
@@ -757,7 +770,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
     else    // aEndType == END
     {
         // We do not have a pad, which is a always terminal point for a track
-        if( aTrackRef->GetState( END_ON_PAD) )
+        if( aTrackRef->GetState( END_ON_PAD ) )
             return NULL;
 
         /* change the common point coordinate of pt_segm to use the other point
@@ -766,7 +779,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
         {
             aTrackRef->SetEnd( aCandidate->GetEnd() );
             aTrackRef->end = aCandidate->end;
-            aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( END_ON_PAD) );
+            aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( END_ON_PAD ) );
             aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
@@ -774,7 +787,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
         {
             aTrackRef->SetEnd( aCandidate->GetStart() );
             aTrackRef->end = aCandidate->start;
-            aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( START_ON_PAD) );
+            aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( START_ON_PAD ) );
             aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
