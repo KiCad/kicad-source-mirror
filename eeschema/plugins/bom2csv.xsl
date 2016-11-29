@@ -59,9 +59,9 @@
         <xsl:value-of select="@ref"/><xsl:text>","</xsl:text>
         <xsl:value-of select="value"/><xsl:text>","</xsl:text>
         <xsl:value-of select="footprint"/><xsl:text>","</xsl:text>
-        <xsl:value-of select="datasheet"/><xsl:text>","</xsl:text>
-        <xsl:apply-templates select="fields"/><xsl:text>","</xsl:text>
-        <xsl:text>"&nl;</xsl:text>
+        <xsl:value-of select="datasheet"/><xsl:text>"</xsl:text>
+        <xsl:apply-templates select="fields"/>
+        <xsl:text>&nl;</xsl:text>
     </xsl:template>
 
     <!-- table entries with dynamic table head -->
@@ -73,7 +73,7 @@
         <!-- for all existing head entries -->
         <xsl:for-each select="/export/components/comp/fields/field[generate-id(.) = generate-id(key('headentr',@name)[1])]">
             <xsl:variable name="allnames" select="@name"/>
-            <xsl:text>,</xsl:text>
+            <xsl:text>,"</xsl:text>
 
             <!-- for all field entries in the remembered fields section -->
             <xsl:for-each select="$fieldvar">
@@ -88,6 +88,8 @@
                     Every non-blank entry is assigned to its proper column.
                 -->
             </xsl:for-each>
+
+            <xsl:text>"</xsl:text>
         </xsl:for-each>
     </xsl:template>
 
