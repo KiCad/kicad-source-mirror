@@ -30,11 +30,12 @@ class NETS_LIST_CTRL;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/radiobox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/statline.h>
+#include <wx/valtext.h>
+#include <wx/checkbox.h>
 #include <wx/notebook.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -70,24 +71,29 @@ class DIALOG_DESIGN_RULES_BASE : public DIALOG_SHIM
 		wxComboBox* m_rightClassChoice;
 		NETS_LIST_CTRL* m_rightListCtrl;
 		wxPanel* m_panelGolbalDesignRules;
-		wxRadioBox* m_OptViaType;
-		wxRadioBox* m_AllowMicroViaCtrl;
 		wxStaticText* m_TrackMinWidthTitle;
 		wxTextCtrl* m_SetTrackMinWidthCtrl;
+		wxStaticText* m_TrackMinWidthUnits;
 		wxStaticText* m_ViaMinTitle;
 		wxTextCtrl* m_SetViasMinSizeCtrl;
+		wxStaticText* m_ViaMinUnits;
 		wxStaticText* m_ViaMinDrillTitle;
 		wxTextCtrl* m_SetViasMinDrillCtrl;
+		wxStaticText* m_ViaMinDrillUnits;
+		wxCheckBox* m_OptAllowBlindBuriedVias;
+		wxCheckBox* m_OptAllowMicroVias;
 		wxStaticText* m_MicroViaMinSizeTitle;
 		wxTextCtrl* m_SetMicroViasMinSizeCtrl;
+		wxStaticText* m_MicroViaMinSizeUnits;
 		wxStaticText* m_MicroViaMinDrillTitle;
 		wxTextCtrl* m_SetMicroViasMinDrillCtrl;
-		wxStaticLine* m_staticline1;
+		wxStaticText* m_MicroViaMinDrillUnits;
 		wxStaticText* m_staticTextInfo;
 		wxStaticText* m_staticText7;
 		wxGrid* m_gridViaSizeList;
 		wxStaticText* m_staticText8;
 		wxGrid* m_gridTrackWidthList;
+		wxStaticLine* m_staticline2;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -105,11 +111,12 @@ class DIALOG_DESIGN_RULES_BASE : public DIALOG_SHIM
 		virtual void OnLeftSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightCBSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAllowMicroVias( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_DESIGN_RULES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Design Rules Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 798,611 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_DESIGN_RULES_BASE();
 	
 };

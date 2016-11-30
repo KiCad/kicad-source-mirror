@@ -35,6 +35,9 @@
 
 #include <dialog_design_rules_base.h>
 
+#include <float.h>
+#include <wx/valnum.h>
+
 
 class PCB_EDIT_FRAME;
 class BOARD_DESIGN_SETTINGS;
@@ -68,8 +71,12 @@ private:
     BOARD*                  m_Pcb;
     BOARD_DESIGN_SETTINGS*  m_BrdSettings;
 
+    NETCLASSPTR             m_SelectedNetClass;
+
     static int              s_LastTabSelection;     ///< which tab user had open last
     int                     m_initialRowLabelsSize; ///< the initial width given by wxFormBuilder
+
+    wxFloatingPointValidator< double > m_validator; // Floating point validator
 
     /**
      * A two column table which gets filled once and never loses any elements, so it is
@@ -88,6 +95,7 @@ private:
     void OnNetClassesNameRightClick( wxGridEvent& event ) override { event.Skip(); }
     void OnAddNetclassClick( wxCommandEvent& event ) override;
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;
+    void OnAllowMicroVias( wxCommandEvent& event ) override;
 
     /*
      * Called on "Move Up" button click
@@ -122,6 +130,12 @@ private:
      * select all items of the right netname list list box
      */
     void OnRightSelectAllButton( wxCommandEvent& event ) override;
+
+    /*
+     * Function SetDataValidators
+     * adds numerical validators to relevant text input boxes
+     */
+    void SetDataValidators( void );
 
     /*
      * Function TestDataValidity
