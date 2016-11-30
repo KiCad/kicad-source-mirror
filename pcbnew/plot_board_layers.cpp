@@ -8,7 +8,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1031,14 +1031,15 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
 
             if( useX2mode )
             {
-                AddGerberX2Attribute( plotter, aBoard, aLayer );
+                AddGerberX2Attribute( plotter, aBoard, aLayer, false );
                 GERBER_PLOTTER* gbrplotter = static_cast <GERBER_PLOTTER*> ( plotter );
                 gbrplotter->UseX2Attributes( true );
                 gbrplotter->UseX2NetAttributes( plotOpts.GetIncludeGerberNetlistInfo() );
             }
             else
-                plotter->AddLineToHeader( GetGerberFileFunctionAttribute(
-                                                aBoard, aLayer, true ) );
+            {
+                AddGerberX2Attribute( plotter, aBoard, aLayer, true );
+            }
         }
 
         plotter->StartPlot();

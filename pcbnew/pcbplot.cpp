@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,8 +85,8 @@ const wxString GetGerberProtelExtension( LAYER_NUM aLayer )
     }
 }
 
-const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
-                LAYER_NUM aLayer, bool aUseX1CompatibilityMode )
+
+const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aLayer )
 {
     wxString attrib;
 
@@ -193,11 +193,7 @@ const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard,
     }
 
     wxString fileFct;
-
-    if( aUseX1CompatibilityMode )
-        fileFct.Printf( "G04 #@! TF.FileFunction,%s*", GetChars( attrib ) );
-    else
-        fileFct.Printf( "%%TF.FileFunction,%s*%%", GetChars( attrib ) );
+    fileFct.Printf( "%%TF.FileFunction,%s*%%", GetChars( attrib ) );
 
     return fileFct;
 }
@@ -260,15 +256,28 @@ static const wxString GetGerberFilePolarityAttribute( LAYER_NUM aLayer )
 /* Add some X2 attributes to the file header, as defined in the
  * Gerber file format specification J4 and "Revision 2015.06"
  */
+
+// A helper function to convert a X2 attribute string to a X1 structured comment:
+static wxString& makeStringCompatX1( wxString& aText, bool aUseX1CompatibilityMode )
+{
+    if( aUseX1CompatibilityMode )
+    {
+        aText.Replace( "%", "" );
+        aText.Prepend( "G04 #@! " );
+    }
+
+    return aText;
+}
+
 void AddGerberX2Attribute( PLOTTER * aPlotter,
-            const BOARD *aBoard, LAYER_NUM aLayer )
+            const BOARD *aBoard, LAYER_NUM aLayer, bool aUseX1CompatibilityMode )
 {
     wxString text;
 
     // Creates the TF,.GenerationSoftware. Format is:
     // %TF,.GenerationSoftware,<vendor>,<application name>[,<application version>]*%
     text.Printf( wxT( "%%TF.GenerationSoftware,KiCad,Pcbnew,%s*%%" ), GetBuildVersion() );
-    aPlotter->AddLineToHeader( text );
+    aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 
     // creates the TF.CreationDate ext:
     // The attribute value must conform to the full version of the ISO 8601
@@ -283,7 +292,7 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
     if( msg.Len() > 3 )
         msg.insert( 3, ":", 1 ),
     text.Printf( wxT( "%%TF.CreationDate,%s%s*%%" ), GetChars( date.FormatISOCombined() ), GetChars( msg ) );
-    aPlotter->AddLineToHeader( text );
+    aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 
     // Creates the TF,.ProjectId. Format is (from Gerber file format doc):
     // %TF.ProjectId,<project id>,<project GUID>,<revision id>*%
@@ -329,17 +338,17 @@ void AddGerberX2Attribute( PLOTTER * aPlotter,
         rev = wxT( "rev?" );
 
     text.Printf( wxT( "%%TF.ProjectId,%s,%s,%s*%%" ), msg.ToAscii(), GetChars( guid ), rev.ToAscii() );
-    aPlotter->AddLineToHeader( text );
+    aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 
     // Add the TF.FileFunction
-    text = GetGerberFileFunctionAttribute( aBoard, aLayer, false );
-    aPlotter->AddLineToHeader( text );
+    text = GetGerberFileFunctionAttribute( aBoard, aLayer );
+    aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 
     // Add the TF.FilePolarity (for layers which support that)
     text = GetGerberFilePolarityAttribute( aLayer );
 
     if( !text.IsEmpty() )
-        aPlotter->AddLineToHeader( text );
+        aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 }
 
 
