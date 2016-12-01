@@ -188,6 +188,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         }
+
+        if( TOOL_MANAGER* toolMgr = GetToolManager() )
+            toolMgr->DeactivateTool();
+
         break;
     }
 
