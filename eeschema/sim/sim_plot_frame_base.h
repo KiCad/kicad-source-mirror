@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 30 2016)
+// C++ code generated with wxFormBuilder (version Sep  8 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,7 +44,7 @@ class wxListView;
 class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 {
 	private:
-
+	
 	protected:
 		wxMenuBar* m_mainMenu;
 		wxMenu* m_fileMenu;
@@ -55,34 +55,34 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxMenuItem* m_tuneValue;
 		wxMenuItem* m_settings;
 		wxMenu* m_viewMenu;
-		wxBoxSizer* m_sizer1;
+		wxBoxSizer* m_sizerMain;
 		wxToolBar* m_toolBar;
-		wxSplitterWindow* m_splitterPlot;
-		wxPanel* m_panel2;
+		wxSplitterWindow* m_splitterLeftRight;
+		wxPanel* m_panelLeft;
 		wxBoxSizer* m_sizer11;
-		wxSplitterWindow* m_splitterConsole;
+		wxSplitterWindow* m_splitterPlotAndConsole;
 		wxPanel* m_plotPanel;
-		wxBoxSizer* m_sizer5;
+		wxBoxSizer* m_sizerPlot;
 		wxAuiNotebook* m_plotNotebook;
 		wxPanel* m_welcomePanel;
 		wxBoxSizer* m_sizer8;
 		wxStaticText* m_staticText2;
-		wxPanel* m_panel5;
-		wxBoxSizer* m_sizer13;
+		wxPanel* m_panelConsole;
+		wxBoxSizer* m_sizerConsole;
 		wxTextCtrl* m_simConsole;
 		wxPanel* m_sidePanel;
 		wxBoxSizer* m_sideSizer;
-		wxSplitterWindow* m_splitter3;
-		wxPanel* m_panel6;
+		wxSplitterWindow* m_splitterSignals;
+		wxPanel* m_panelSignals;
 		wxListView* m_signals;
-		wxPanel* m_panel9;
-		wxSplitterWindow* m_splitter5;
-		wxPanel* m_panel10;
+		wxPanel* m_panelCursorsAndTune;
+		wxSplitterWindow* m_splitterTuneValues;
+		wxPanel* m_panelCursors;
 		wxListCtrl* m_cursors;
 		wxPanel* m_tunePanel;
-		wxStaticBoxSizer* sbSizer4;
+		wxStaticBoxSizer* m_tuneSizerStb;
 		wxBoxSizer* m_tuneSizer;
-
+		
 		// Virtual event handlers, overide them in your derived class
 		virtual void menuNewPlot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuOpenWorkbook( wxCommandEvent& event ) { event.Skip(); }
@@ -101,38 +101,38 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onSignalRClick( wxListEvent& event ) { event.Skip(); }
-
-
+		
+	
 	public:
-
-		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Simulation Workbook"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1000,700 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
-
+		
+		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Simulator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 883,594 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
+		
 		~SIM_PLOT_FRAME_BASE();
-
-		void m_splitterPlotOnIdle( wxIdleEvent& )
+		
+		void m_splitterLeftRightOnIdle( wxIdleEvent& )
 		{
-			m_splitterPlot->SetSashPosition( 700 );
-			m_splitterPlot->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterPlotOnIdle ), NULL, this );
+			m_splitterLeftRight->SetSashPosition( 700 );
+			m_splitterLeftRight->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterLeftRightOnIdle ), NULL, this );
 		}
-
-		void m_splitterConsoleOnIdle( wxIdleEvent& )
+		
+		void m_splitterPlotAndConsoleOnIdle( wxIdleEvent& )
 		{
-			m_splitterConsole->SetSashPosition( 500 );
-			m_splitterConsole->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterConsoleOnIdle ), NULL, this );
+			m_splitterPlotAndConsole->SetSashPosition( 500 );
+			m_splitterPlotAndConsole->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterPlotAndConsoleOnIdle ), NULL, this );
 		}
-
-		void m_splitter3OnIdle( wxIdleEvent& )
+		
+		void m_splitterSignalsOnIdle( wxIdleEvent& )
 		{
-			m_splitter3->SetSashPosition( 0 );
-			m_splitter3->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitter3OnIdle ), NULL, this );
+			m_splitterSignals->SetSashPosition( 0 );
+			m_splitterSignals->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterSignalsOnIdle ), NULL, this );
 		}
-
-		void m_splitter5OnIdle( wxIdleEvent& )
+		
+		void m_splitterTuneValuesOnIdle( wxIdleEvent& )
 		{
-			m_splitter5->SetSashPosition( 0 );
-			m_splitter5->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitter5OnIdle ), NULL, this );
+			m_splitterTuneValues->SetSashPosition( 0 );
+			m_splitterTuneValues->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterTuneValuesOnIdle ), NULL, this );
 		}
-
+	
 };
 
 #endif //__SIM_PLOT_FRAME_BASE_H__

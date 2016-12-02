@@ -41,13 +41,13 @@
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
-            <property name="minimum_size"></property>
+            <property name="minimum_size">600,500</property>
             <property name="name">SIM_PLOT_FRAME_BASE</property>
             <property name="pos"></property>
-            <property name="size">1000,700</property>
+            <property name="size">883,594</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass">KIWAY_PLAYER; kiway_player.h</property>
-            <property name="title">Simulation Workbook</property>
+            <property name="title">Spice Simulator</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name">SIM_PLOT_FRAME</property>
@@ -415,7 +415,7 @@
             </object>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
-                <property name="name">m_sizer1</property>
+                <property name="name">m_sizerMain</property>
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">protected</property>
                 <object class="sizeritem" expanded="0">
@@ -538,12 +538,12 @@
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
                         <property name="maximum_size"></property>
-                        <property name="min_pane_size">0</property>
+                        <property name="min_pane_size">50</property>
                         <property name="min_size"></property>
                         <property name="minimize_button">0</property>
                         <property name="minimum_size"></property>
                         <property name="moveable">1</property>
-                        <property name="name">m_splitterPlot</property>
+                        <property name="name">m_splitterLeftRight</property>
                         <property name="pane_border">1</property>
                         <property name="pane_position"></property>
                         <property name="pane_size"></property>
@@ -551,7 +551,7 @@
                         <property name="pin_button">1</property>
                         <property name="pos"></property>
                         <property name="resize">Resizable</property>
-                        <property name="sashgravity">0.8</property>
+                        <property name="sashgravity">0.7</property>
                         <property name="sashpos">700</property>
                         <property name="sashsize">-1</property>
                         <property name="show">1</property>
@@ -625,9 +625,9 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">300,-1</property>
                                 <property name="moveable">1</property>
-                                <property name="name">m_panel2</property>
+                                <property name="name">m_panelLeft</property>
                                 <property name="pane_border">1</property>
                                 <property name="pane_position"></property>
                                 <property name="pane_size"></property>
@@ -706,12 +706,12 @@
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
                                             <property name="maximum_size"></property>
-                                            <property name="min_pane_size">0</property>
+                                            <property name="min_pane_size">50</property>
                                             <property name="min_size"></property>
                                             <property name="minimize_button">0</property>
                                             <property name="minimum_size"></property>
                                             <property name="moveable">1</property>
-                                            <property name="name">m_splitterConsole</property>
+                                            <property name="name">m_splitterPlotAndConsole</property>
                                             <property name="pane_border">1</property>
                                             <property name="pane_position"></property>
                                             <property name="pane_size"></property>
@@ -793,7 +793,7 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
-                                                    <property name="minimum_size"></property>
+                                                    <property name="minimum_size">-1,200</property>
                                                     <property name="moveable">1</property>
                                                     <property name="name">m_plotPanel</property>
                                                     <property name="pane_border">1</property>
@@ -836,7 +836,7 @@
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="wxBoxSizer" expanded="1">
                                                         <property name="minimum_size"></property>
-                                                        <property name="name">m_sizer5</property>
+                                                        <property name="name">m_sizerPlot</property>
                                                         <property name="orient">wxHORIZONTAL</property>
                                                         <property name="permission">protected</property>
                                                         <object class="sizeritem" expanded="0">
@@ -905,6 +905,7 @@
                                                                 <event name="OnAuiNotebookPageChanged">onPlotChanged</event>
                                                                 <event name="OnAuiNotebookPageChanging"></event>
                                                                 <event name="OnAuiNotebookPageClose">onPlotClose</event>
+                                                                <event name="OnAuiNotebookPageClosed"></event>
                                                                 <event name="OnChar"></event>
                                                                 <event name="OnEnterWindow"></event>
                                                                 <event name="OnEraseBackground"></event>
@@ -1187,9 +1188,9 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
-                                                    <property name="minimum_size"></property>
+                                                    <property name="minimum_size">-1,100</property>
                                                     <property name="moveable">1</property>
-                                                    <property name="name">m_panel5</property>
+                                                    <property name="name">m_panelConsole</property>
                                                     <property name="pane_border">1</property>
                                                     <property name="pane_position"></property>
                                                     <property name="pane_size"></property>
@@ -1230,7 +1231,7 @@
                                                     <event name="OnUpdateUI"></event>
                                                     <object class="wxBoxSizer" expanded="1">
                                                         <property name="minimum_size"></property>
-                                                        <property name="name">m_sizer13</property>
+                                                        <property name="name">m_sizerConsole</property>
                                                         <property name="orient">wxVERTICAL</property>
                                                         <property name="permission">protected</property>
                                                         <object class="sizeritem" expanded="0">
@@ -1366,7 +1367,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min_size"></property>
                                 <property name="minimize_button">0</property>
-                                <property name="minimum_size"></property>
+                                <property name="minimum_size">200,-1</property>
                                 <property name="moveable">1</property>
                                 <property name="name">m_sidePanel</property>
                                 <property name="pane_border">1</property>
@@ -1447,12 +1448,12 @@
                                             <property name="max_size"></property>
                                             <property name="maximize_button">0</property>
                                             <property name="maximum_size"></property>
-                                            <property name="min_pane_size">10</property>
+                                            <property name="min_pane_size">20</property>
                                             <property name="min_size"></property>
                                             <property name="minimize_button">0</property>
                                             <property name="minimum_size"></property>
                                             <property name="moveable">1</property>
-                                            <property name="name">m_splitter3</property>
+                                            <property name="name">m_splitterSignals</property>
                                             <property name="pane_border">1</property>
                                             <property name="pane_position"></property>
                                             <property name="pane_size"></property>
@@ -1460,7 +1461,7 @@
                                             <property name="pin_button">1</property>
                                             <property name="pos"></property>
                                             <property name="resize">Resizable</property>
-                                            <property name="sashgravity">0.0</property>
+                                            <property name="sashgravity">0.3</property>
                                             <property name="sashpos">0</property>
                                             <property name="sashsize">-1</property>
                                             <property name="show">1</property>
@@ -1534,9 +1535,9 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
-                                                    <property name="minimum_size"></property>
+                                                    <property name="minimum_size">-1,100</property>
                                                     <property name="moveable">1</property>
-                                                    <property name="name">m_panel6</property>
+                                                    <property name="name">m_panelSignals</property>
                                                     <property name="pane_border">1</property>
                                                     <property name="pane_position"></property>
                                                     <property name="pane_size"></property>
@@ -1581,13 +1582,14 @@
                                                         <property name="minimum_size"></property>
                                                         <property name="name">sbSizer1</property>
                                                         <property name="orient">wxVERTICAL</property>
+                                                        <property name="parent">1</property>
                                                         <property name="permission">none</property>
                                                         <event name="OnUpdateUI"></event>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxALL|wxEXPAND</property>
                                                             <property name="proportion">1</property>
-                                                            <object class="wxListCtrl" expanded="1">
+                                                            <object class="wxListCtrl" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -1725,9 +1727,9 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="min_size"></property>
                                                     <property name="minimize_button">0</property>
-                                                    <property name="minimum_size"></property>
+                                                    <property name="minimum_size">-1,300</property>
                                                     <property name="moveable">1</property>
-                                                    <property name="name">m_panel9</property>
+                                                    <property name="name">m_panelCursorsAndTune</property>
                                                     <property name="pane_border">1</property>
                                                     <property name="pane_position"></property>
                                                     <property name="pane_size"></property>
@@ -1806,12 +1808,12 @@
                                                                 <property name="max_size"></property>
                                                                 <property name="maximize_button">0</property>
                                                                 <property name="maximum_size"></property>
-                                                                <property name="min_pane_size">10</property>
+                                                                <property name="min_pane_size">20</property>
                                                                 <property name="min_size"></property>
                                                                 <property name="minimize_button">0</property>
                                                                 <property name="minimum_size"></property>
                                                                 <property name="moveable">1</property>
-                                                                <property name="name">m_splitter5</property>
+                                                                <property name="name">m_splitterTuneValues</property>
                                                                 <property name="pane_border">1</property>
                                                                 <property name="pane_position"></property>
                                                                 <property name="pane_size"></property>
@@ -1819,7 +1821,7 @@
                                                                 <property name="pin_button">1</property>
                                                                 <property name="pos"></property>
                                                                 <property name="resize">Resizable</property>
-                                                                <property name="sashgravity">0.0</property>
+                                                                <property name="sashgravity">0.5</property>
                                                                 <property name="sashpos">0</property>
                                                                 <property name="sashsize">-1</property>
                                                                 <property name="show">1</property>
@@ -1893,9 +1895,9 @@
                                                                         <property name="maximum_size"></property>
                                                                         <property name="min_size"></property>
                                                                         <property name="minimize_button">0</property>
-                                                                        <property name="minimum_size"></property>
+                                                                        <property name="minimum_size">-1,100</property>
                                                                         <property name="moveable">1</property>
-                                                                        <property name="name">m_panel10</property>
+                                                                        <property name="name">m_panelCursors</property>
                                                                         <property name="pane_border">1</property>
                                                                         <property name="pane_position"></property>
                                                                         <property name="pane_size"></property>
@@ -1940,6 +1942,7 @@
                                                                             <property name="minimum_size"></property>
                                                                             <property name="name">sbSizer3</property>
                                                                             <property name="orient">wxVERTICAL</property>
+                                                                            <property name="parent">1</property>
                                                                             <property name="permission">none</property>
                                                                             <event name="OnUpdateUI"></event>
                                                                             <object class="sizeritem" expanded="0">
@@ -2084,7 +2087,7 @@
                                                                         <property name="maximum_size"></property>
                                                                         <property name="min_size"></property>
                                                                         <property name="minimize_button">0</property>
-                                                                        <property name="minimum_size"></property>
+                                                                        <property name="minimum_size">-1,200</property>
                                                                         <property name="moveable">1</property>
                                                                         <property name="name">m_tunePanel</property>
                                                                         <property name="pane_border">1</property>
@@ -2129,15 +2132,16 @@
                                                                             <property name="id">wxID_ANY</property>
                                                                             <property name="label">Tune</property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">sbSizer4</property>
-                                                                            <property name="orient">wxVERTICAL</property>
+                                                                            <property name="name">m_tuneSizerStb</property>
+                                                                            <property name="orient">wxHORIZONTAL</property>
+                                                                            <property name="parent">1</property>
                                                                             <property name="permission">protected</property>
                                                                             <event name="OnUpdateUI"></event>
-                                                                            <object class="sizeritem" expanded="0">
+                                                                            <object class="sizeritem" expanded="1">
                                                                                 <property name="border">5</property>
                                                                                 <property name="flag">wxEXPAND</property>
                                                                                 <property name="proportion">1</property>
-                                                                                <object class="wxBoxSizer" expanded="0">
+                                                                                <object class="wxBoxSizer" expanded="1">
                                                                                     <property name="minimum_size"></property>
                                                                                     <property name="name">m_tuneSizer</property>
                                                                                     <property name="orient">wxHORIZONTAL</property>

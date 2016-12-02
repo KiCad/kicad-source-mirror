@@ -120,6 +120,9 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     icon.CopyFromBitmap( KiBitmap( simulator_xpm ) );
     SetIcon( icon );
 
+    // Get the previous size and position of windows:
+    LoadSettings( config() );
+
     m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
 
     if( !m_simulator )
@@ -159,11 +162,16 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_toolSettings = m_toolBar->AddTool( wxID_ANY, _( "Settings" ),
             KiBitmap( sim_settings_xpm ), _( "Simulation settings" ), wxITEM_NORMAL );
 
-    Connect( m_toolSimulate->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onSimulate ), NULL, this );
-    Connect( m_toolAddSignals->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onAddSignal ), NULL, this );
-    Connect( m_toolProbe->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onProbe ), NULL, this );
-    Connect( m_toolTune->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onTune ), NULL, this );
-    Connect( m_toolSettings->GetId(), wxEVT_COMMAND_TOOL_CLICKED, wxCommandEventHandler( SIM_PLOT_FRAME::onSettings ), NULL, this );
+    Connect( m_toolSimulate->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+             wxCommandEventHandler( SIM_PLOT_FRAME::onSimulate ), NULL, this );
+    Connect( m_toolAddSignals->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+             wxCommandEventHandler( SIM_PLOT_FRAME::onAddSignal ), NULL, this );
+    Connect( m_toolProbe->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+             wxCommandEventHandler( SIM_PLOT_FRAME::onProbe ), NULL, this );
+    Connect( m_toolTune->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+             wxCommandEventHandler( SIM_PLOT_FRAME::onTune ), NULL, this );
+    Connect( m_toolSettings->GetId(), wxEVT_COMMAND_TOOL_CLICKED,
+             wxCommandEventHandler( SIM_PLOT_FRAME::onSettings ), NULL, this );
 
     // Bind toolbar buttons event to existing menu event handlers, so they behave the same
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SIM_PLOT_FRAME::onSimulate,  this, m_runSimulation->GetId() );
@@ -178,8 +186,16 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     // the settings dialog will be created later, on demand.
     // if created in the ctor, for some obscure reason, there is an issue
     // on Windows: when open it, the simulator frame is sent to the background.
-    // instead of beeing behind the dialog frame (as it does)
+    // instead of being behind the dialog frame (as it does)
     m_settingsDlg = NULL;
+
+    // resize the subwindows size. At least on Windows, calling wxSafeYield before
+    // resizing the subwindows forces the wxSplitWindows size events automatically generated
+    // by wxWidgets to be executed before our resize code.
+    // Otherwise, the changes made by setSubWindowsSashSize are overwritten by one these
+    // events
+    wxSafeYield();
+    setSubWindowsSashSize();
 }
 
 
@@ -191,6 +207,53 @@ SIM_PLOT_FRAME::~SIM_PLOT_FRAME()
 
     if( m_settingsDlg )
         m_settingsDlg->Destroy();
+}
+
+#define PLOT_PANEL_WIDTH_ENTRY "SimPlotPanelWidth"
+#define PLOT_PANEL_HEIGHT_ENTRY "SimPlotPanelHeight"
+#define SIGNALS_PANEL_HEIGHT_ENTRY "SimSignalPanelHeight"
+#define CURSORS_PANEL_HEIGHT_ENTRY "SimCursorsPanelHeight"
+
+void SIM_PLOT_FRAME::SaveSettings( wxConfigBase* aCfg )
+{
+    // Save main frame size and position:
+    EDA_BASE_FRAME::SaveSettings( aCfg );
+
+    // Save subwindows sizes
+    aCfg->Write( PLOT_PANEL_WIDTH_ENTRY, m_splitterLeftRight->GetSashPosition() );
+    aCfg->Write( PLOT_PANEL_HEIGHT_ENTRY, m_splitterPlotAndConsole->GetSashPosition() );
+    aCfg->Write( SIGNALS_PANEL_HEIGHT_ENTRY, m_splitterSignals->GetSashPosition() );
+    aCfg->Write( CURSORS_PANEL_HEIGHT_ENTRY, m_splitterTuneValues->GetSashPosition() );
+}
+
+
+void SIM_PLOT_FRAME::LoadSettings( wxConfigBase* aCfg )
+{
+    // Read main frame size and position:
+    EDA_BASE_FRAME::LoadSettings( aCfg );
+    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+
+    // Read subwindows sizes (should be > 0 )
+    aCfg->Read( PLOT_PANEL_WIDTH_ENTRY, &m_splitterLeftRightSashPosition, -1 );
+    aCfg->Read( PLOT_PANEL_HEIGHT_ENTRY, &m_splitterPlotAndConsoleSashPosition, -1 );
+    aCfg->Read( SIGNALS_PANEL_HEIGHT_ENTRY, &m_splitterSignalsSashPosition, -1 );
+    aCfg->Read( CURSORS_PANEL_HEIGHT_ENTRY, &m_splitterTuneValuesSashPosition, -1 );
+}
+
+
+void SIM_PLOT_FRAME::setSubWindowsSashSize()
+{
+    if( m_splitterLeftRightSashPosition > 0 )
+        m_splitterLeftRight->SetSashPosition( m_splitterLeftRightSashPosition );
+
+    if( m_splitterPlotAndConsoleSashPosition > 0 )
+        m_splitterPlotAndConsole->SetSashPosition( m_splitterPlotAndConsoleSashPosition );
+
+    if( m_splitterSignalsSashPosition > 0 )
+        m_splitterSignals->SetSashPosition( m_splitterSignalsSashPosition );
+
+    if( m_splitterTuneValuesSashPosition > 0 )
+        m_splitterTuneValues->SetSashPosition( m_splitterTuneValuesSashPosition );
 }
 
 
@@ -998,6 +1061,8 @@ void SIM_PLOT_FRAME::onTune( wxCommandEvent& event )
 
 void SIM_PLOT_FRAME::onClose( wxCloseEvent& aEvent )
 {
+    SaveSettings( config() );
+
     if( IsSimulationRunning() )
         m_simulator->Stop();
 

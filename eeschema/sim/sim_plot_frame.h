@@ -153,6 +153,9 @@ public:
     SIM_PLOT_PANEL* CurrentPlot() const;
 
 private:
+    void LoadSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( wxConfigBase* aCfg ) override;
+
     /**
      * @brief Adds a new plot to the current panel.
      * @param aName is the device/net name.
@@ -263,6 +266,12 @@ private:
     void onSimStarted( wxCommandEvent& aEvent );
     void onSimFinished( wxCommandEvent& aEvent );
 
+    // adjust the sash dimension of splitter windows after reading
+    // the config settings
+    // must be called after the config settings are read, and once the
+    // frame is initialized (end of the Ctor)
+    void setSubWindowsSashSize();
+
     // Toolbar buttons
     wxToolBarToolBase* m_toolSimulate;
     wxToolBarToolBase* m_toolAddSignals;
@@ -327,6 +336,12 @@ private:
 
     ///> A string to store the path of saved workbooks during a session
     static wxString m_savedWorkbooksPath;
+
+    // Variables for temporary storage:
+    int m_splitterLeftRightSashPosition;
+    int m_splitterPlotAndConsoleSashPosition;
+    int m_splitterSignalsSashPosition;
+    int m_splitterTuneValuesSashPosition;
 };
 
 // Commands
