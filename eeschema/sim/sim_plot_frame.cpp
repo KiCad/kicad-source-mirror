@@ -297,10 +297,10 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
 
     try
     {
-        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_sidePanel, aComponent );
+        TUNER_SLIDER* tuner = new TUNER_SLIDER( this, m_tunePanel, aComponent );
         m_tuneSizer->Add( tuner );
         m_tuners.push_back( tuner );
-        m_sidePanel->Layout();
+        m_tunePanel->Layout();
     }
     catch( ... )
     {
@@ -315,7 +315,7 @@ void SIM_PLOT_FRAME::RemoveTuner( TUNER_SLIDER* aTuner, bool aErase )
         m_tuners.remove( aTuner );
 
     aTuner->Destroy();
-    m_sidePanel->Layout();
+    m_tunePanel->Layout();
 }
 
 
