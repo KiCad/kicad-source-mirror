@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-26 15:03+0300\n"
-"PO-Revision-Date: 2016-11-26 15:27+0300\n"
+"POT-Creation-Date: 2016-12-02 22:52+0300\n"
+"PO-Revision-Date: 2016-12-02 22:55+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -2769,7 +2769,7 @@ msgstr "OUTPUTSTREAM_OUTPUTFORMATTER ошибка записи"
 msgid "Colors"
 msgstr "Цвета"
 
-#: common/widgets/mathplot.cpp:1752 common/zoom.cpp:246
+#: common/widgets/mathplot.cpp:1750 common/zoom.cpp:246
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:149
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:155
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:55
@@ -2782,38 +2782,38 @@ msgstr "Цвета"
 msgid "Center"
 msgstr "Центр"
 
-#: common/widgets/mathplot.cpp:1752
+#: common/widgets/mathplot.cpp:1750
 msgid "Center plot view to this position"
 msgstr "Центрировать изображение графика в этой позиции"
 
-#: common/widgets/mathplot.cpp:1753 eeschema/hotkeys.cpp:87
+#: common/widgets/mathplot.cpp:1751 eeschema/hotkeys.cpp:87
 #: eeschema/sim/sim_plot_frame_base.cpp:82
 msgid "Fit on Screen"
 msgstr "Масштаб по экрану"
 
-#: common/widgets/mathplot.cpp:1753
+#: common/widgets/mathplot.cpp:1751
 msgid "Set plot view to show all items"
 msgstr "Показать все элементы на изображении графика"
 
-#: common/widgets/mathplot.cpp:1754 eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108
+#: common/widgets/mathplot.cpp:1752 eeschema/hotkeys.cpp:106 eeschema/hotkeys.cpp:108
 #: eeschema/sim/sim_plot_frame_base.cpp:74 gerbview/hotkeys.cpp:64
 #: pagelayout_editor/hotkeys.cpp:79 pcbnew/hotkeys.cpp:176 pcbnew/hotkeys.cpp:178
 #: pcbnew/tools/common_actions.cpp:200
 msgid "Zoom In"
 msgstr "Увеличить"
 
-#: common/widgets/mathplot.cpp:1754
+#: common/widgets/mathplot.cpp:1752
 msgid "Zoom in plot view."
 msgstr "Увеличить изображение графика."
 
-#: common/widgets/mathplot.cpp:1755 eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115
+#: common/widgets/mathplot.cpp:1753 eeschema/hotkeys.cpp:113 eeschema/hotkeys.cpp:115
 #: eeschema/sim/sim_plot_frame_base.cpp:78 gerbview/hotkeys.cpp:63
 #: pagelayout_editor/hotkeys.cpp:78 pcbnew/hotkeys.cpp:183 pcbnew/hotkeys.cpp:185
 #: pcbnew/tools/common_actions.cpp:204
 msgid "Zoom Out"
 msgstr "Уменьшить"
 
-#: common/widgets/mathplot.cpp:1755
+#: common/widgets/mathplot.cpp:1753
 msgid "Zoom out plot view."
 msgstr "Уменьшить изображение графика."
 
@@ -9847,111 +9847,111 @@ msgstr "Вы хотите преобразовать его в простой и
 msgid "No new hierarchical labels found."
 msgstr "Новые иерархические метки не найдены."
 
-#: eeschema/sim/sim_plot_frame.cpp:151
+#: eeschema/sim/sim_plot_frame.cpp:154
 msgid "Run/Stop Simulation"
 msgstr "Запустить/Остановить симуляцию"
 
-#: eeschema/sim/sim_plot_frame.cpp:152 eeschema/sim/sim_plot_frame_base.cpp:51
+#: eeschema/sim/sim_plot_frame.cpp:155 eeschema/sim/sim_plot_frame_base.cpp:51
 msgid "Run Simulation"
 msgstr "Запустить симуляцию"
 
-#: eeschema/sim/sim_plot_frame.cpp:153
+#: eeschema/sim/sim_plot_frame.cpp:156
 msgid "Add Signals"
 msgstr "Добавить сигналы"
 
-#: eeschema/sim/sim_plot_frame.cpp:154
+#: eeschema/sim/sim_plot_frame.cpp:157
 msgid "Add signals to plot"
 msgstr "Добавить сигналы для отображения"
 
-#: eeschema/sim/sim_plot_frame.cpp:155
+#: eeschema/sim/sim_plot_frame.cpp:158
 msgid "Probe"
 msgstr "Пробник"
 
-#: eeschema/sim/sim_plot_frame.cpp:156
+#: eeschema/sim/sim_plot_frame.cpp:159
 msgid "Probe signals on the schematic"
 msgstr "Исследовать сигналы на схеме"
 
-#: eeschema/sim/sim_plot_frame.cpp:157 eeschema/sim/sim_plot_frame_base.cpp:201
+#: eeschema/sim/sim_plot_frame.cpp:160 eeschema/sim/sim_plot_frame_base.cpp:238
 msgid "Tune"
 msgstr "Подстройка"
 
-#: eeschema/sim/sim_plot_frame.cpp:158
+#: eeschema/sim/sim_plot_frame.cpp:161
 msgid "Tune component values"
 msgstr "Подстроить значения компонентов"
 
-#: eeschema/sim/sim_plot_frame.cpp:159 pcbnew/dialogs/dialog_copper_zones_base.cpp:101
+#: eeschema/sim/sim_plot_frame.cpp:162 pcbnew/dialogs/dialog_copper_zones_base.cpp:101
 msgid "Settings"
 msgstr "Установки"
 
-#: eeschema/sim/sim_plot_frame.cpp:160 eeschema/dialogs/dialog_sim_settings_base.h:123
+#: eeschema/sim/sim_plot_frame.cpp:163 eeschema/dialogs/dialog_sim_settings_base.h:123
 msgid "Simulation settings"
 msgstr "Настройки симулятора"
 
-#: eeschema/sim/sim_plot_frame.cpp:176
+#: eeschema/sim/sim_plot_frame.cpp:184
 msgid "Welcome!"
 msgstr "Добро пожаловать!"
 
-#: eeschema/sim/sim_plot_frame.cpp:213 eeschema/sim/sim_plot_frame.cpp:936
+#: eeschema/sim/sim_plot_frame.cpp:276 eeschema/sim/sim_plot_frame.cpp:999
 msgid "There were errors during netlist export, aborted."
 msgstr "Произошли ошибки во время экспорта списка цепей, прервано."
 
-#: eeschema/sim/sim_plot_frame.cpp:219
+#: eeschema/sim/sim_plot_frame.cpp:282
 msgid "You need to select the simulation settings first."
 msgstr "Для начала вам необходимо выбрать настройки симуляции."
 
-#: eeschema/sim/sim_plot_frame.cpp:484 eeschema/sim/sim_plot_frame.cpp:1021
+#: eeschema/sim/sim_plot_frame.cpp:547 eeschema/sim/sim_plot_frame.cpp:1086
 msgid "Signal"
 msgstr "Сигнал"
 
-#: eeschema/sim/sim_plot_frame.cpp:721
+#: eeschema/sim/sim_plot_frame.cpp:784
 msgid "Open simulation workbook"
 msgstr "Открыть работу симуляции"
 
-#: eeschema/sim/sim_plot_frame.cpp:722 eeschema/sim/sim_plot_frame.cpp:740
+#: eeschema/sim/sim_plot_frame.cpp:785 eeschema/sim/sim_plot_frame.cpp:803
 msgid "Workbook file (*.wbk)|*.wbk"
 msgstr "Файл работы (*.wbk)|*.wbk"
 
-#: eeschema/sim/sim_plot_frame.cpp:730
+#: eeschema/sim/sim_plot_frame.cpp:793
 msgid "There was an error while opening the workbook file"
 msgstr "Произошла ошибка при открытии файла работы"
 
-#: eeschema/sim/sim_plot_frame.cpp:739
+#: eeschema/sim/sim_plot_frame.cpp:802
 msgid "Save simulation workbook"
 msgstr "Созранить работу симуляции"
 
-#: eeschema/sim/sim_plot_frame.cpp:748
+#: eeschema/sim/sim_plot_frame.cpp:811
 msgid "There was an error while saving the workbook file"
 msgstr "Произошла ошибка при сохранении файла работы"
 
-#: eeschema/sim/sim_plot_frame.cpp:757
+#: eeschema/sim/sim_plot_frame.cpp:820
 msgid "Save plot as image"
 msgstr "Сохранить график как изображение"
 
-#: eeschema/sim/sim_plot_frame.cpp:758
+#: eeschema/sim/sim_plot_frame.cpp:821
 msgid "PNG file (*.png)|*.png"
 msgstr "PNG файл (*.png)|*.png"
 
-#: eeschema/sim/sim_plot_frame.cpp:774
+#: eeschema/sim/sim_plot_frame.cpp:837
 msgid "Save plot data"
 msgstr "Сохранить данные графика"
 
-#: eeschema/sim/sim_plot_frame.cpp:970
+#: eeschema/sim/sim_plot_frame.cpp:1033
 msgid "You need to run simulation first."
 msgstr "Для начала вам необходимо запустить симуляцию."
 
-#: eeschema/sim/sim_plot_frame.cpp:1150
+#: eeschema/sim/sim_plot_frame.cpp:1215
 msgid "Hide signal"
 msgstr "Спрятать сигнал"
 
-#: eeschema/sim/sim_plot_frame.cpp:1151
+#: eeschema/sim/sim_plot_frame.cpp:1216
 msgid "Erase the signal from plot screen"
 msgstr "Стереть сигнал с изображения графика"
 
-#: eeschema/sim/sim_plot_frame.cpp:1157
+#: eeschema/sim/sim_plot_frame.cpp:1222
 msgid "Hide cursor"
 msgstr "Спрятать курсор"
 
-#: eeschema/sim/sim_plot_frame.cpp:1160
+#: eeschema/sim/sim_plot_frame.cpp:1225
 msgid "Show cursor"
 msgstr "Показать курсор"
 
@@ -10015,19 +10015,19 @@ msgstr "Показать надписи"
 msgid "View"
 msgstr "Вид"
 
-#: eeschema/sim/sim_plot_frame_base.cpp:133
+#: eeschema/sim/sim_plot_frame_base.cpp:139
 msgid "Start the simulation by clicking the Run Simulation button"
 msgstr "Начать симуляцию нажав на кнопку \"Запустить симуляцию\""
 
-#: eeschema/sim/sim_plot_frame_base.cpp:153
+#: eeschema/sim/sim_plot_frame_base.cpp:159
 msgid "a page"
 msgstr "страница"
 
-#: eeschema/sim/sim_plot_frame_base.cpp:184
+#: eeschema/sim/sim_plot_frame_base.cpp:202
 msgid "Signals"
 msgstr "Сигналы"
 
-#: eeschema/sim/sim_plot_frame_base.cpp:193
+#: eeschema/sim/sim_plot_frame_base.cpp:226
 msgid "Cursors"
 msgstr "Курсоры"
 
@@ -14663,6 +14663,10 @@ msgstr "** ПЛАТА НЕ ОПРЕДЕЛЕНА **"
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Контур зоны %s на %s"
+
+#: pcbnew/clean.cpp:151 pcbnew/clean.cpp:785
+msgid "Board cleanup"
+msgstr "Очистка платы"
 
 #: pcbnew/cross-probing.cpp:70
 #, c-format
@@ -24657,9 +24661,9 @@ msgstr "Маркер ERC"
 msgid "No Connect"
 msgstr "\"Не подключено\""
 
-#: eeschema/sim/sim_plot_frame_base.h:102
-msgid "Simulation Workbook"
-msgstr "Симуляция работы"
+#: eeschema/sim/sim_plot_frame_base.h:108
+msgid "Spice Simulator"
+msgstr "Spice симулятор"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.h:50
 msgid "Page Borders"
