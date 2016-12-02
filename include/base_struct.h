@@ -229,12 +229,12 @@ public:
     inline bool IsBrightened() const { return m_Flags & BRIGHTENED; }
 
     inline void SetWireImage() { SetFlags( IS_WIRE_IMAGE ); }
-    inline void SetSelected() { SetFlags( SELECTED ); ViewUpdate( COLOR ); }
-    inline void SetHighlighted() { SetFlags( HIGHLIGHTED ); ViewUpdate( COLOR ); }
+    inline void SetSelected() { SetFlags( SELECTED ); }
+    inline void SetHighlighted() { SetFlags( HIGHLIGHTED ); }
     inline void SetBrightened() { SetFlags( BRIGHTENED ); }
 
-    inline void ClearSelected() { ClearFlags( SELECTED ); ViewUpdate( COLOR ); }
-    inline void ClearHighlighted() { ClearFlags( HIGHLIGHTED ); ViewUpdate( COLOR ); }
+    inline void ClearSelected() { ClearFlags( SELECTED ); }
+    inline void ClearHighlighted() { ClearFlags( HIGHLIGHTED ); }
     inline void ClearBrightened() { ClearFlags( BRIGHTENED ); }
 
     void SetModified();

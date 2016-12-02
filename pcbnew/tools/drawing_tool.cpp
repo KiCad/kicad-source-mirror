@@ -37,6 +37,7 @@
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
+#include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <router/direction.h>
@@ -208,13 +209,13 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
                 text->Rotate( text->GetPosition(), m_frame->GetRotationAngle() );
-                preview.ViewUpdate();
+                m_view->Update( &preview );
             }
             // TODO rotate CCW
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
                 text->Flip( text->GetPosition() );
-                preview.ViewUpdate();
+                m_view->Update( &preview );
             }
         }
 
@@ -304,7 +305,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             text->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
             // Show a preview of the item
-            preview.ViewUpdate();
+            m_view->Update( &preview );
         }
     }
 
@@ -371,7 +372,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
             dimension->SetWidth( dimension->GetWidth() + WIDTH_STEP );
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && step != SET_ORIGIN )
@@ -381,7 +382,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             if( width > WIDTH_STEP )
             {
                 dimension->SetWidth( width - WIDTH_STEP );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
         }
 
@@ -480,7 +481,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
 
             // Show a preview of the item
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
     }
 
@@ -565,7 +566,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             for ( auto item : preview )
                 item->Move( wxPoint( delta.x, delta.y ) );
 
-            preview.ViewUpdate();
+            m_view->Update( &preview );
         }
 
         else if( evt->Category() == TC_COMMAND )
@@ -577,14 +578,14 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                     item->Rotate( wxPoint( cursorPos.x, cursorPos.y ),
                                  m_frame->GetRotationAngle() );
 
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
                 for ( auto item : preview )
                     item->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
 
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
             else if( evt->IsCancel() || evt->IsActivate() )
             {
@@ -901,7 +902,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         }
 
         if( updatePreview )
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
     }
 
     m_controls->ShowCursor( false );
@@ -1012,7 +1013,6 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
                     assert( aGraphic->GetWidth() > 0 );
 
                     m_view->Add( aGraphic );
-                    aGraphic->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
                     preview.Remove( aGraphic );
                     preview.Remove( &helperLine );
@@ -1053,13 +1053,13 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             }
 
             // Show a preview of the item
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
         {
             aGraphic->SetWidth( aGraphic->GetWidth() + WIDTH_STEP );
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
@@ -1069,7 +1069,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             if( width > WIDTH_STEP )
             {
                 aGraphic->SetWidth( width - WIDTH_STEP );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
         }
 
@@ -1081,7 +1081,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
                 aGraphic->SetAngle( aGraphic->GetAngle() + 3600.0 );
 
             clockwise = !clockwise;
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
     }
 
@@ -1291,7 +1291,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
         }
 
         if( updatePreview )
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
     }
 
     m_controls->ShowCursor( false );

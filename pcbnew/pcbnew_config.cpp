@@ -60,6 +60,7 @@
 #include <dialog_mask_clearance.h>
 #include <dialog_general_options.h>
 #include <wildcards_and_files_ext.h>
+#include <view/view.h>
 
 
 void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
@@ -186,7 +187,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             if( dlg.ShowModal() == 1 && IsGalCanvasActive() )
             {
                 for( MODULE* module = GetBoard()->m_Modules; module; module = module->Next() )
-                    module->ViewUpdate();
+                    GetGalCanvas()->GetView()->Update( module );
 
                 GetGalCanvas()->Refresh();
             }

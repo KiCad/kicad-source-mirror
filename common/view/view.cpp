@@ -29,6 +29,7 @@
 
 #include <view/view.h>
 #include <view/view_group.h>
+#include <view/view_item.h>
 #include <view/view_rtree.h>
 #include <gal/definitions.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -38,7 +39,219 @@
 #include <profile.h>
 #endif /* __WXDEBUG__  */
 
-using namespace KIGFX;
+namespace KIGFX {
+
+class VIEW;
+
+class VIEW_ITEM_DATA
+{
+public:
+    VIEW_ITEM_DATA() :
+        m_flags( KIGFX::VISIBLE ),
+        m_requiredUpdate( KIGFX::NONE ),
+        m_groups( nullptr ),
+        m_groupsSize( 0 ) {}
+
+    ~VIEW_ITEM_DATA()
+    {
+        delete[] m_groups;
+    }
+
+    int getFlags() const
+    {
+        return m_flags;
+    }
+
+private:
+    friend class VIEW;
+
+    /**
+     * Function getLayers()
+     * Returns layer numbers used by the item.
+     *
+     * @param aLayers[]: output layer index array
+     * @param aCount: number of layer indices in aLayers[]
+     */
+    void getLayers( int* aLayers, int& aCount ) const
+    {
+        int* layersPtr = aLayers;
+
+        for( unsigned int i = 0; i < m_layers.size(); ++i )
+        {
+            if( m_layers[i] )
+                *layersPtr++ = i;
+        }
+
+        aCount = m_layers.count();
+    }
+
+    VIEW*   m_view;             ///< Current dynamic view the item is assigned to.
+    int     m_flags;             ///< Visibility flags
+    int     m_requiredUpdate;   ///< Flag required for updating
+
+    ///* Helper for storing cached items group ids
+    typedef std::pair<int, int> GroupPair;
+
+    ///* Indexes of cached GAL display lists corresponding to the item (for every layer it occupies).
+    ///* (in the std::pair "first" stores layer number, "second" stores group id).
+    GroupPair* m_groups;
+    int        m_groupsSize;
+
+    /**
+     * Function getGroup()
+     * Returns number of the group id for the given layer, or -1 in case it was not cached before.
+     *
+     * @param aLayer is the layer number for which group id is queried.
+     * @return group id or -1 in case there is no group id (ie. item is not cached).
+     */
+     int getGroup( int aLayer ) const
+     {
+         for( int i = 0; i < m_groupsSize; ++i )
+         {
+             if( m_groups[i].first == aLayer )
+                 return m_groups[i].second;
+         }
+
+         return -1;
+     }
+
+    /**
+     * Function getAllGroups()
+     * Returns all group ids for the item (collected from all layers the item occupies).
+     *
+     * @return vector of group ids.
+     */
+    std::vector<int> getAllGroups() const
+    {
+        std::vector<int> groups( m_groupsSize );
+
+        for( int i = 0; i < m_groupsSize; ++i )
+        {
+            groups[i] = m_groups[i].second;
+        }
+
+        return groups;
+    }
+
+    /**
+     * Function setGroup()
+     * Sets a group id for the item and the layer combination.
+     *
+     * @param aLayer is the layer numbe.
+     * @param aGroup is the group id.
+     */
+    void setGroup( int aLayer, int aGroup )
+    {
+        //printf("sgGrpSize %d l %d g %d\n", m_groupsSize, aLayer, aGroup);
+        // Look if there is already an entry for the layer
+        for( int i = 0; i < m_groupsSize; ++i )
+        {
+            if( m_groups[i].first == aLayer )
+            {
+                m_groups[i].second = aGroup;
+                return;
+            }
+        }
+
+        // If there was no entry for the given layer - create one
+        GroupPair* newGroups = new GroupPair[m_groupsSize + 1];
+
+        if( m_groupsSize > 0 )
+        {
+            std::copy( m_groups, m_groups + m_groupsSize, newGroups );
+            delete[] m_groups;
+        }
+
+        m_groups = newGroups;
+        newGroups[m_groupsSize++] = GroupPair( aLayer, aGroup );
+        //printf("sgGrpSizeaTexit %d\n", m_groupsSize);
+
+    }
+
+
+    /**
+     * Function deleteGroups()
+     * Removes all of the stored group ids. Forces recaching of the item.
+     */
+    void deleteGroups()
+    {
+        delete[] m_groups;
+        m_groups = NULL;
+        m_groupsSize = 0;
+    }
+
+
+    /**
+     * Function storesGroups()
+     * Returns information if the item uses at least one group id (ie. if it is cached at all).
+     *
+     * @returns true in case it is cached at least for one layer.
+     */
+    inline bool storesGroups() const
+    {
+        return m_groupsSize > 0;
+    }
+
+    /// Stores layer numbers used by the item.
+    std::bitset<VIEW::VIEW_MAX_LAYERS> m_layers;
+
+    /**
+     * Function saveLayers()
+     * Saves layers used by the item.
+     *
+     * @param aLayers is an array containing layer numbers to be saved.
+     * @param aCount is the size of the array.
+     */
+    void saveLayers( int* aLayers, int aCount )
+    {
+        m_layers.reset();
+
+        for( int i = 0; i < aCount; ++i )
+        {
+            // this fires on some eagle board after EAGLE_PLUGIN::Load()
+            wxASSERT( unsigned( aLayers[i] ) <= unsigned( VIEW::VIEW_MAX_LAYERS ) );
+
+            m_layers.set( aLayers[i] );
+        }
+    }
+
+    /**
+     * Function viewRequiredUpdate()
+     * Returns current update flag for an item.
+     */
+    int requiredUpdate() const
+    {
+        return m_requiredUpdate;
+    }
+
+    /**
+     * Function clearUpdateFlags()
+     * Marks an item as already updated, so it is not going to be redrawn.
+     */
+    void clearUpdateFlags()
+    {
+        m_requiredUpdate = NONE;
+    }
+
+    /**
+     * Function isRenderable()
+     * Returns if the item should be drawn or not.
+     */
+    bool isRenderable() const
+    {
+        return m_flags == VISIBLE;
+    }
+};
+
+void VIEW::OnDestroy ( VIEW_ITEM* aItem )
+{
+    auto data = aItem->viewPrivData();
+
+    if(!data)
+        return;
+
+    data->m_view->Remove( aItem );
+}
 
 VIEW::VIEW( bool aIsDynamic ) :
     m_enableOrderModifier( true ),
@@ -91,11 +304,11 @@ void VIEW::Add( VIEW_ITEM* aItem )
 {
     int layers[VIEW_MAX_LAYERS], layers_count;
 
-    aItem->ViewGetLayers( layers, layers_count );
-    aItem->saveLayers( layers, layers_count );
+    aItem->m_viewPrivData = new VIEW_ITEM_DATA;
+    aItem->m_viewPrivData->m_view = this;
 
-    if( m_dynamic )
-        aItem->viewAssign( this );
+    aItem->ViewGetLayers( layers, layers_count );
+    aItem->viewPrivData()->saveLayers( layers, layers_count );
 
     for( int i = 0; i < layers_count; ++i )
     {
@@ -104,16 +317,21 @@ void VIEW::Add( VIEW_ITEM* aItem )
         MarkTargetDirty( l.target );
     }
 
-    aItem->ViewUpdate( VIEW_ITEM::ALL );
+    SetVisible ( aItem, true );
+    Update( aItem, KIGFX::ALL );
 }
 
 
 void VIEW::Remove( VIEW_ITEM* aItem )
 {
-    if( m_dynamic )
-        aItem->m_view = NULL;
+    if ( !aItem )
+        return;
+    auto viewData = aItem->viewPrivData();
 
-    if( aItem->viewRequiredUpdate() != VIEW_ITEM::NONE )    // prevent from updating a removed item
+    if ( !viewData )
+        return;
+
+    if( viewData->requiredUpdate() != NONE )    // prevent from updating a removed item
     {
         std::vector<VIEW_ITEM*>::iterator item = std::find( m_needsUpdate.begin(),
                                                             m_needsUpdate.end(), aItem );
@@ -121,12 +339,12 @@ void VIEW::Remove( VIEW_ITEM* aItem )
         if( item != m_needsUpdate.end() )
         {
             m_needsUpdate.erase( item );
-            aItem->clearUpdateFlags();
+            viewData->clearUpdateFlags();
         }
     }
 
     int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
-    aItem->getLayers( layers, layers_count );
+    viewData->getLayers( layers, layers_count );
 
     for( int i = 0; i < layers_count; ++i )
     {
@@ -135,13 +353,14 @@ void VIEW::Remove( VIEW_ITEM* aItem )
         MarkTargetDirty( l.target );
 
         // Clear the GAL cache
-        int prevGroup = aItem->getGroup( layers[i] );
+        int prevGroup = viewData->getGroup( layers[i] );
 
         if( prevGroup >= 0 )
             m_gal->DeleteGroup( prevGroup );
     }
 
-    aItem->deleteGroups();
+    viewData->deleteGroups();
+    aItem->m_viewPrivData = nullptr;
 }
 
 
@@ -170,7 +389,7 @@ struct queryVisitor
 
     bool operator()( VIEW_ITEM* aItem )
     {
-        if( aItem->ViewIsVisible() )
+        if( aItem->viewPrivData()->getFlags() & VISIBLE )
             m_cont.push_back( VIEW::LAYER_ITEM_PAIR( aItem, m_layer ) );
 
         return true;
@@ -398,7 +617,7 @@ struct VIEW::updateItemsColor
     {
         // Obtain the color that should be used for coloring the item
         const COLOR4D color = painter->GetSettings()->GetColor( aItem, layer );
-        int group = aItem->getGroup( layer );
+        int group = aItem->viewPrivData()->getGroup( layer );
 
         if( group >= 0 )
             gal->ChangeGroupColor( group, color );
@@ -463,7 +682,7 @@ struct VIEW::changeItemsDepth
 
     bool operator()( VIEW_ITEM* aItem )
     {
-        int group = aItem->getGroup( layer );
+        int group = aItem->viewPrivData()->getGroup( layer );
 
         if( group >= 0 )
             gal->ChangeGroupDepth( group, depth );
@@ -593,9 +812,11 @@ struct VIEW::drawItem
 
     bool operator()( VIEW_ITEM* aItem )
     {
+
+        assert ( aItem->viewPrivData() );
         // Conditions that have te be fulfilled for an item to be drawn
-        bool drawCondition = aItem->isRenderable() &&
-                             aItem->ViewGetLOD( layer ) < view->m_scale;
+        bool drawCondition = aItem->viewPrivData()->isRenderable() &&
+                             aItem->ViewGetLOD( layer, view ) < view->m_scale;
         if( !drawCondition )
             return true;
 
@@ -627,10 +848,12 @@ void VIEW::redrawRect( const BOX2I& aRect )
 
 void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate )
 {
+    auto viewData = aItem->viewPrivData();
+
     if( IsCached( aLayer ) && !aImmediate )
     {
         // Draw using cached information or create one
-        int group = aItem->getGroup( aLayer );
+        int group = viewData->getGroup( aLayer );
 
         if( group >= 0 )
         {
@@ -639,10 +862,10 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate )
         else
         {
             group = m_gal->BeginGroup();
-            aItem->setGroup( aLayer, group );
+            viewData->setGroup( aLayer, group );
 
             if( !m_painter->Draw( aItem, aLayer ) )
-                aItem->ViewDraw( aLayer, m_gal ); // Alternative drawing method
+                aItem->ViewDraw( aLayer, this ); // Alternative drawing method
 
             m_gal->EndGroup();
         }
@@ -651,7 +874,7 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate )
     {
         // Immediate mode
         if( !m_painter->Draw( aItem, aLayer ) )
-            aItem->ViewDraw( aLayer, m_gal );  // Alternative drawing method
+            aItem->ViewDraw( aLayer, this );  // Alternative drawing method
     }
 }
 
@@ -674,7 +897,7 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
 
 void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate )
 {
-    for ( int i = 0; i < aGroup->GetSize(); i++)
+    for ( unsigned int i = 0; i < aGroup->GetSize(); i++)
         draw( aGroup->GetItem(i), aImmediate );
 }
 
@@ -682,8 +905,8 @@ struct VIEW::unlinkItem
 {
     bool operator()( VIEW_ITEM* aItem )
     {
-        aItem->m_view = NULL;
-
+        delete aItem->m_viewPrivData;
+		aItem->m_viewPrivData = nullptr;
         return true;
     }
 };
@@ -698,14 +921,15 @@ struct VIEW::recacheItem
 
     bool operator()( VIEW_ITEM* aItem )
     {
+        auto viewData = aItem->viewPrivData();
         // Remove previously cached group
-        int group = aItem->getGroup( layer );
+        int group = viewData->getGroup( layer );
 
         if( group >= 0 )
             gal->DeleteGroup( group );
 
-        aItem->setGroup( layer, -1 );
-        aItem->ViewUpdate( VIEW_ITEM::ALL );
+        viewData->setGroup( layer, -1 );
+        view->Update( aItem );
 
         return true;
     }
@@ -723,7 +947,7 @@ void VIEW::Clear()
     r.SetMaximum();
 
     for( VIEW_ITEM* item : m_needsUpdate )
-        item->clearUpdateFlags();
+        item->viewPrivData()->clearUpdateFlags();
 
     m_needsUpdate.clear();
 
@@ -802,7 +1026,7 @@ struct VIEW::clearLayerCache
 
     bool operator()( VIEW_ITEM* aItem )
     {
-        aItem->deleteGroups();
+        aItem->viewPrivData()->deleteGroups();
 
         return true;
     }
@@ -829,13 +1053,15 @@ void VIEW::clearGroupCache()
 void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 {
     // updateLayers updates geometry too, so we do not have to update both of them at the same time
-    if( aUpdateFlags & VIEW_ITEM::LAYERS )
+    if( aUpdateFlags & LAYERS )
         updateLayers( aItem );
-    else if( aUpdateFlags & VIEW_ITEM::GEOMETRY )
+    else if( aUpdateFlags & GEOMETRY )
         updateBbox( aItem );
 
     int layers[VIEW_MAX_LAYERS], layers_count;
     aItem->ViewGetLayers( layers, layers_count );
+
+	printf("invlidate %p", aItem);
 
     // Iterate through layers used by the item and recache it immediately
     for( int i = 0; i < layers_count; ++i )
@@ -844,9 +1070,10 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
 
         if( IsCached( layerId ) )
         {
-            if( aUpdateFlags & ( VIEW_ITEM::GEOMETRY | VIEW_ITEM::LAYERS ) )
+            printf("updateGeom %p flg %d\n", aItem, aUpdateFlags );
+            if( aUpdateFlags & ( GEOMETRY | LAYERS ) )
                 updateItemGeometry( aItem, layerId );
-            else if( aUpdateFlags & VIEW_ITEM::COLOR )
+            else if( aUpdateFlags & COLOR )
                 updateItemColor( aItem, layerId );
         }
 
@@ -854,7 +1081,7 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
         MarkTargetDirty( m_layers[layerId].target );
     }
 
-    aItem->clearUpdateFlags();
+    aItem->viewPrivData()->clearUpdateFlags();
 }
 
 
@@ -875,12 +1102,13 @@ void VIEW::sortLayers()
 
 void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 {
+    auto viewData = aItem->viewPrivData();
     wxASSERT( (unsigned) aLayer < m_layers.size() );
     wxASSERT( IsCached( aLayer ) );
 
     // Obtain the color that should be used for coloring the item on the specific layerId
     const COLOR4D color = m_painter->GetSettings()->GetColor( aItem, aLayer );
-    int group = aItem->getGroup( aLayer );
+    int group = viewData->getGroup( aLayer );
 
     // Change the color, only if it has group assigned
     if( group >= 0 )
@@ -890,6 +1118,7 @@ void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
 
 void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
 {
+    auto viewData = aItem->viewPrivData();
     wxASSERT( (unsigned) aLayer < m_layers.size() );
     wxASSERT( IsCached( aLayer ) );
 
@@ -899,16 +1128,18 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
     m_gal->SetLayerDepth( l.renderingOrder );
 
     // Redraw the item from scratch
-    int group = aItem->getGroup( aLayer );
+    int group = viewData->getGroup( aLayer );
 
     if( group >= 0 )
         m_gal->DeleteGroup( group );
 
     group = m_gal->BeginGroup();
-    aItem->setGroup( aLayer, group );
+    viewData->setGroup( aLayer, group );
+
+    printf("upadteGeom2: %p\n", aItem );
 
     if( !m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer ) )
-        aItem->ViewDraw( aLayer, m_gal ); // Alternative drawing method
+        aItem->ViewDraw( aLayer, this ); // Alternative drawing method
 
     m_gal->EndGroup();
 }
@@ -932,10 +1163,11 @@ void VIEW::updateBbox( VIEW_ITEM* aItem )
 
 void VIEW::updateLayers( VIEW_ITEM* aItem )
 {
+    auto viewData = aItem->viewPrivData();
     int layers[VIEW_MAX_LAYERS], layers_count;
 
     // Remove the item from previous layer set
-    aItem->getLayers( layers, layers_count );
+    viewData->getLayers( layers, layers_count );
 
     for( int i = 0; i < layers_count; ++i )
     {
@@ -946,19 +1178,19 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
         if( IsCached( l.id ) )
         {
             // Redraw the item from scratch
-            int prevGroup = aItem->getGroup( layers[i] );
+            int prevGroup = viewData->getGroup( layers[i] );
 
             if( prevGroup >= 0 )
             {
                 m_gal->DeleteGroup( prevGroup );
-                aItem->setGroup( l.id, -1 );
+                viewData->setGroup( l.id, -1 );
             }
         }
     }
 
     // Add the item to new layer set
     aItem->ViewGetLayers( layers, layers_count );
-    aItem->saveLayers( layers, layers_count );
+    viewData->saveLayers( layers, layers_count );
 
     for( int i = 0; i < layers_count; i++ )
     {
@@ -1012,9 +1244,10 @@ void VIEW::UpdateItems()
 
     for( VIEW_ITEM* item : m_needsUpdate )
     {
-        assert( item->viewRequiredUpdate() != VIEW_ITEM::NONE );
+        auto viewData = item->viewPrivData();
+        assert( viewData->m_requiredUpdate != NONE );
 
-        invalidateItem( item, item->viewRequiredUpdate() );
+        invalidateItem( item, viewData->m_requiredUpdate );
     }
 
     m_gal->EndUpdate();
@@ -1058,4 +1291,87 @@ const BOX2I VIEW::CalculateExtents()
 }
 
 
+void VIEW::SetVisible( VIEW_ITEM *aItem, bool aIsVisible )
+{
+    auto viewData = aItem->viewPrivData();
+
+    assert( viewData );
+
+    bool cur_visible = viewData->m_flags & VISIBLE;
+
+    if( cur_visible != aIsVisible )
+    {
+        if( aIsVisible )
+            viewData->m_flags |= VISIBLE;
+        else
+            viewData->m_flags &= ~VISIBLE;
+
+        Update( aItem, APPEARANCE | COLOR );
+    }
+}
+
+void VIEW::Hide( VIEW_ITEM *aItem, bool aHide )
+{
+    auto viewData = aItem->viewPrivData();
+
+    if( !( viewData->m_flags & VISIBLE ) )
+        return;
+
+    if( aHide )
+        viewData->m_flags |= HIDDEN;
+    else
+        viewData->m_flags &= ~HIDDEN;
+
+    Update( aItem, APPEARANCE );
+}
+
+bool VIEW::IsVisible( const VIEW_ITEM *aItem ) const
+{
+    const auto viewData = aItem->viewPrivData();
+
+    return viewData->m_flags & VISIBLE;
+}
+
+void VIEW::Update( VIEW_ITEM *aItem )
+{
+    Update( aItem, ALL );
+}
+
+void VIEW::Update( VIEW_ITEM *aItem, int aUpdateFlags )
+{
+    auto viewData = aItem->viewPrivData();
+
+    if ( !viewData )
+        return;
+
+    assert( aUpdateFlags != NONE );
+    bool firstTime = (viewData->m_requiredUpdate == NONE);
+
+    viewData->m_requiredUpdate |= aUpdateFlags;
+
+    if( firstTime )
+    {
+        MarkForUpdate( aItem );
+    }
+
+
+}
+
+void VIEW::MarkForUpdate( VIEW_ITEM* aItem )
+{
+    auto viewData = aItem->viewPrivData();
+
+	printf("MarkForUpdate %p\n", aItem);
+
+    assert( viewData->m_requiredUpdate != NONE );
+
+    for ( auto item : m_needsUpdate )
+        assert(item != aItem);
+
+    m_needsUpdate.push_back( aItem );
+}
+
 const int VIEW::TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
+
+
+};

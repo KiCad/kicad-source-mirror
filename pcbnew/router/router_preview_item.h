@@ -56,7 +56,7 @@ public:
         PR_SHAPE
     };
 
-    ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = NULL, KIGFX::VIEW_GROUP* aParent = NULL );
+    ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = NULL, KIGFX::VIEW* aView = NULL);
     ~ROUTER_PREVIEW_ITEM();
 
     void Update( const PNS::ITEM* aItem );
@@ -91,7 +91,7 @@ public:
 
     const BOX2I ViewBBox() const override;
 
-    virtual void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
+    virtual void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
@@ -105,7 +105,7 @@ private:
     const KIGFX::COLOR4D assignColor( int aStyle ) const;
     const KIGFX::COLOR4D getLayerColor( int aLayer ) const;
 
-    KIGFX::VIEW_GROUP* m_parent;
+    KIGFX::VIEW* m_view;
 
     PNS::ROUTER* m_router;
     SHAPE* m_shape;

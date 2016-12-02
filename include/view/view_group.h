@@ -38,6 +38,7 @@
 
 namespace KIGFX
 {
+
 class VIEW_GROUP : public VIEW_ITEM
 {
 protected:
@@ -95,7 +96,7 @@ public:
      * @param aLayer is the layer which should be drawn.
      * @param aGal is the GAL that should be used for drawing.
      */
-    virtual void ViewDraw( int aLayer, GAL* aGal ) const override;
+    virtual void ViewDraw( int aLayer, VIEW* aView ) const override;
 
     /**
      * Function ViewGetLayers()
@@ -115,7 +116,6 @@ public:
     inline virtual void SetLayer( int aLayer )
     {
         m_layer = aLayer;
-        ViewUpdate();
     }
 
     /**
@@ -124,60 +124,9 @@ public:
      */
     void FreeItems();
 
-    /**
-     * Function GetView()
-     * Returns pointer to the VIEW instance used by items.
-     *
-     * @return Pointer to the VIEW instance.
-     */
-    KIGFX::VIEW* GetView() const
-    {
-        return m_view;
-    }
-
-    /**
-     * Function ItemsSetVisibility()
-     * Sets visibility of items stored in the VIEW_GROUP.
-     *
-     * @param aVisible decides if items should be visible or not.
-     */
-    //virtual void ItemsSetVisibility( bool aVisible );
-
-    /**
-     * Function ItemsViewUpdate()
-     * Updates items stored in the VIEW_GROUP.
-     *
-     * @param aFlags determines the way in which items will be updated.
-     */
-    //virtual void ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags );
-
 protected:
 
     virtual const ITEMS updateDrawList() const;
-
-    /// These functions cannot be used with VIEW_GROUP as they are intended only to work with
-    /// singular VIEW_ITEMs (there is only one-to-one relation between item/layer combination and
-    /// its group).
-    int getGroup( int aLayer ) const override
-    {
-        return -1;
-    }
-
-    std::vector<int> getAllGroups() const override
-    {
-        return std::vector<int>();
-    }
-
-    void setGroup( int aLayer, int aGroup ) override
-    {}
-
-    void deleteGroups() override
-    {}
-
-    bool storesGroups() const override
-    {
-        return false;
-    }
 
     /// Layer on which the group is drawn
     int m_layer;
@@ -188,6 +137,8 @@ protected:
 
 private:
     void updateBbox();
+
+    VIEW *m_view;
 
 };
 

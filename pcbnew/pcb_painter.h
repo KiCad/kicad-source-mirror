@@ -191,7 +191,7 @@ public:
     }
 
     /// @copydoc PAINTER::GetSettings()
-    virtual RENDER_SETTINGS* GetSettings() override
+    virtual PCB_RENDER_SETTINGS* GetSettings() override
     {
         return &m_pcbSettings;
     }

@@ -582,7 +582,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             int ret = dialog.ShowModal();
             GetScreen()->GetCurItem()->ClearFlags();
-            GetBoard()->m_Modules.GetFirst()->ViewUpdate();
+            //GetBoard()->m_Modules.GetFirst()->ViewUpdate();
 
             if( ret > 0 )
                 m_canvas->Refresh();
@@ -988,4 +988,3 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
     if( IsGalCanvasActive() )
         GetGalCanvas()->Refresh();
 }
-

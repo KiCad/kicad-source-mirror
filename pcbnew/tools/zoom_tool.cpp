@@ -21,6 +21,7 @@
 #include <wxPcbStruct.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
+#include <view/view.h>
 #include <tool/tool_manager.h>
 
 #include "zoom_tool.h"
@@ -90,13 +91,13 @@ bool ZOOM_TOOL::selectRegion()
         {
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
-            area.ViewSetVisible( true );
-            area.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            view->SetVisible( &area, true );
+            view->Update( &area, KIGFX::GEOMETRY );
         }
 
         if( evt->IsMouseUp( BUT_LEFT ) )
         {
-            area.ViewSetVisible( false );
+            view->SetVisible( &area, false );
             auto selectionBox = area.ViewBBox();
 
             VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
@@ -118,7 +119,7 @@ bool ZOOM_TOOL::selectRegion()
         }
     }
 
-    area.ViewSetVisible( false );
+    view->SetVisible( &area, false );
     view->Remove( &area );
     getViewControls()->SetAutoPan( false );
 

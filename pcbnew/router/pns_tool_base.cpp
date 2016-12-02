@@ -56,6 +56,8 @@ using namespace std::placeholders;
 #include "pns_tune_status_popup.h"
 #include "pns_topology.h"
 
+#include <view/view.h>
+
 using namespace KIGFX;
 
 namespace PNS {

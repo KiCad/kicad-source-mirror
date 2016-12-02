@@ -35,6 +35,7 @@
 
 #include <memory>
 
+#include <view/view.h>
 
 /**
  * Class EDIT_POINT
@@ -317,7 +318,7 @@ public:
      * Returns a point that is at given coordinates or NULL if there is no such point.
      * @param aLocation is the location for searched point.
      */
-    EDIT_POINT* FindPoint( const VECTOR2I& aLocation );
+    EDIT_POINT* FindPoint( const VECTOR2I& aLocation, KIGFX::VIEW *aView );
 
     /**
      * Function GetParent()
@@ -498,7 +499,7 @@ public:
     }
 
     ///> @copydoc VIEW_ITEM::ViewDraw()
-    virtual void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
+    virtual void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
     ///> @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override

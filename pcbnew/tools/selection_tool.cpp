@@ -80,6 +80,8 @@ SELECTION_TOOL::SELECTION_TOOL() :
 
 SELECTION_TOOL::~SELECTION_TOOL()
 {
+    getView()->Remove( &m_selection );
+
     delete m_contextMenu;
     delete m_selectMenu;
     delete m_zoomMenu;
@@ -448,14 +450,14 @@ bool SELECTION_TOOL::selectMultiple()
             // Start drawing a selection box
             area.SetOrigin( evt->DragOrigin() );
             area.SetEnd( evt->Position() );
-            area.ViewSetVisible( true );
-            area.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            view->SetVisible( &area, true );
+            view->Update( &area );
         }
 
         if( evt->IsMouseUp( BUT_LEFT ) )
         {
             // End drawing the selection box
-            area.ViewSetVisible( false );
+            view->SetVisible( &area, false );
 
             // Mark items within the selection box as selected
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
@@ -490,7 +492,6 @@ bool SELECTION_TOOL::selectMultiple()
     }
 
     // Stop drawing the selection box
-    area.ViewSetVisible( false );
     view->Remove( &area );
     m_multiple = false;         // Multiple selection mode is inactive
     getViewControls()->SetAutoPan( false );
@@ -742,6 +743,7 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::clearSelection()
 {
+    printf("ClearSelection\n");
     if( m_selection.Empty() )
         return;
 
@@ -761,8 +763,10 @@ void SELECTION_TOOL::clearSelection()
 BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
 {
     BOARD_ITEM* current = NULL;
-    std::shared_ptr<BRIGHT_BOX> brightBox;
+    BRIGHT_BOX brightBox;
     CONTEXT_MENU menu;
+
+    getView()->Add( &brightBox );
 
     int limit = std::min( 10, aCollector->GetCount() );
 
@@ -813,11 +817,16 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         // Draw a mark to show which item is available to be selected
         if( current && current->IsBrightened() )
         {
-            brightBox.reset( new BRIGHT_BOX( current ) );
-            getView()->Add( brightBox.get() );
-            // BRIGHT_BOX is removed from view on destruction
+            brightBox.SetItem ( current );
+            getView()->SetVisible( &brightBox, true );
+//          getView()->Hide( &brightBox, false );
+            getView()->Update( &brightBox, KIGFX::GEOMETRY );
+//            getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
         }
     }
+
+    getView()->Remove( &brightBox );
+
 
     return current;
 }
@@ -916,7 +925,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         if( m_multiple && !m_editModules )
             return false;
 
-        return aItem->ViewIsVisible() && board()->IsLayerVisible( aItem->GetLayer() );
+        return view()->IsVisible( aItem ) && board()->IsLayerVisible( aItem->GetLayer() );
 
     case PCB_MODULE_EDGE_T:
     case PCB_PAD_T:
@@ -1004,17 +1013,19 @@ void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
 {
     // Hide the original item, so it is shown only on overlay
-    aItem->ViewHide( true );
     aItem->SetSelected();
+    view()->Hide( aItem, true );
+    view()->Update( aItem, KIGFX::GEOMETRY );
 
     // Modules are treated in a special way - when they are selected, we have to
     // unselect all the parts that make the module, not the module itself
 
     if( aItem->Type() == PCB_MODULE_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren( [] ( BOARD_ITEM *item ) {
-            item->ViewHide( true );
+        static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM *item ) {
             item->SetSelected();
+            view()->Hide( item, true );
+            view()->Update( item, KIGFX::GEOMETRY );
         });
     }
 }
@@ -1022,22 +1033,31 @@ void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
 
 void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem ) const
 {
+    printf("UnselectVisually %p\n", aItem);
     // Restore original item visibility
-    aItem->ViewHide( false );
     aItem->ClearSelected();
-    aItem->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+    view()->Hide( aItem, false );
+    view()->Update( aItem, KIGFX::ALL );
+
+    printf("%d %d %d\n",
+    !!aItem->IsSelected(),
+    !!aItem->IsHighlighted(),
+    !!aItem->IsBrightened() );
 
     // Modules are treated in a special way - when they are selected, we have to
     // unselect all the parts that make the module, not the module itself
 
     if( aItem->Type() == PCB_MODULE_T )
         {
-            static_cast<MODULE*>( aItem )->RunOnChildren( [] ( BOARD_ITEM *item ) {
-                item->ViewHide( false );
+            static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM *item ) {
                 item->ClearSelected();
-                item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                view()->Hide( item, false );
+                view()->Update( item, KIGFX::ALL );
             });
         }
+
+
+//view()->RecacheAllItems();
 }
 
 

@@ -253,7 +253,13 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry)
                     undoList.PushItem( itemWrapper );
                 }
 
-                boardItem->ViewUpdate( KIGFX::VIEW_ITEM::ALL );
+                if ( boardItem->Type() == PCB_MODULE_T )
+                {
+                    MODULE* module = static_cast<MODULE*>( boardItem );
+                    module->RunOnChildren( boost::bind( &KIGFX::VIEW::Update, view, _1 ) );
+                }
+
+                view->Update ( boardItem );
                 ratsnest->Update( boardItem );
                 break;
             }

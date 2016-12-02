@@ -742,7 +742,8 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
             aTrackRef->SetStart( aCandidate->GetEnd() );
             aTrackRef->start = aCandidate->end;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( END_ON_PAD ) );
-            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+// fixme: should be updated by the commit
+//            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
         else
@@ -750,7 +751,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
             aTrackRef->SetStart( aCandidate->GetStart() );
             aTrackRef->start = aCandidate->start;
             aTrackRef->SetState( START_ON_PAD, aCandidate->GetState( START_ON_PAD ) );
-            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+//            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
     }
@@ -767,7 +768,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
             aTrackRef->SetEnd( aCandidate->GetEnd() );
             aTrackRef->end = aCandidate->end;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( END_ON_PAD ) );
-            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+//            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
         else
@@ -775,7 +776,7 @@ TRACK* TRACKS_CLEANER::mergeCollinearSegmentIfPossible( TRACK* aTrackRef, TRACK*
             aTrackRef->SetEnd( aCandidate->GetStart() );
             aTrackRef->end = aCandidate->start;
             aTrackRef->SetState( END_ON_PAD, aCandidate->GetState( START_ON_PAD ) );
-            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+//            aTrackRef->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
             return aCandidate;
         }
     }

@@ -226,11 +226,11 @@ void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsMotion() )
     {
-        point = m_editPoints->FindPoint( aEvent.Position() );
+        point = m_editPoints->FindPoint( aEvent.Position(), getView() );
     }
     else if( aEvent.IsDrag( BUT_LEFT ) )
     {
-        point = m_editPoints->FindPoint( aEvent.DragOrigin() );
+        point = m_editPoints->FindPoint( aEvent.DragOrigin(), getView() );
     }
 
     if( m_editedPoint != point )
@@ -620,7 +620,7 @@ void POINT_EDITOR::updatePoints()
         break;
     }
 
-    m_editPoints->ViewUpdate();
+    getView()->Update( m_editPoints.get() );
 }
 
 

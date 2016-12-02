@@ -71,6 +71,7 @@ PCBNEW_CONTROL::PCBNEW_CONTROL() :
 
 PCBNEW_CONTROL::~PCBNEW_CONTROL()
 {
+    getView()->Remove( m_gridOrigin );
     delete m_gridOrigin;
 }
 
@@ -203,10 +204,8 @@ int PCBNEW_CONTROL::ZoomPreset( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
 
     // Apply new display options to the GAL canvas
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
@@ -216,7 +215,7 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
     for( TRACK* track = getModel<BOARD>()->m_Track; track; track = track->Next() )
     {
         if( track->Type() == PCB_TRACE_T )
-            track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            getView()->Update( track, KIGFX::GEOMETRY );
     }
 
     m_frame->GetGalCanvas()->Refresh();
@@ -227,10 +226,9 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
+
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
@@ -240,7 +238,7 @@ int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
     for( MODULE* module = getModel<BOARD>()->m_Modules; module; module = module->Next() )
     {
         for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
-            pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            getView()->Update( pad, KIGFX::GEOMETRY );
     }
 
     m_frame->GetGalCanvas()->Refresh();
@@ -251,10 +249,8 @@ int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
@@ -263,8 +259,8 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 
     for( TRACK* track = getModel<BOARD>()->m_Track; track; track = track->Next() )
     {
-        if( track->Type() == PCB_VIA_T )
-            track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        if( track->Type() == PCB_TRACE_T )
+            getView()->Update( track, KIGFX::GEOMETRY );
     }
 
     m_frame->GetGalCanvas()->Refresh();
@@ -275,10 +271,8 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
@@ -295,7 +289,7 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
     BOARD* board = getModel<BOARD>();
     for( int i = 0; i < board->GetAreaCount(); ++i )
-        board->GetArea( i )->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        getView()->Update( board->GetArea( i ), KIGFX::GEOMETRY );
 
     m_frame->GetGalCanvas()->Refresh();
 
@@ -305,10 +299,8 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     displ_opts->m_ContrastModeDisplay = !displ_opts->m_ContrastModeDisplay;
@@ -404,10 +396,8 @@ int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );
@@ -425,10 +415,8 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );

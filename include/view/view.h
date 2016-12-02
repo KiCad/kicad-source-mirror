@@ -70,6 +70,13 @@ public:
 
     ~VIEW();
 
+    // nasty hack, invoked by the destructor of VIEW_ITEM to auto-remove the item
+    // from the owning VIEW if there is any. Kicad relies too much on this mechanism.
+    // this is the only linking dependency now between EDA_ITEM and VIEW class. In near future
+    // I'll replace it with observers.
+    static void OnDestroy ( VIEW_ITEM* aItem );
+
+
     /**
      * Function Add()
      * Adds a VIEW_ITEM to the view.
@@ -84,6 +91,7 @@ public:
      */
     void Remove( VIEW_ITEM* aItem );
 
+
     /**
      * Function Query()
      * Finds all visible items that touch or are within the rectangle aRect.
@@ -94,6 +102,41 @@ public:
      * @return Number of found items.
      */
     int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const;
+
+    /**
+     * Function SetVisible()
+     * Sets the item visibility.
+     *
+     * @param aIsVisible: whether the item is visible (on all layers), or not.
+     */
+    void SetVisible( VIEW_ITEM *aItem, bool aIsVisible = true );
+
+    /**
+     * Function Hide()
+     * Temporarily hides the item in the view (e.g. for overlaying)
+     *
+     * @param aHide: whether the item is hidden (on all layers), or not.
+     */
+    void Hide( VIEW_ITEM *aItem, bool aHide = true );
+
+    /**
+     * Function IsVisible()
+     * Returns information if the item is visible (or not).
+     *
+     * @return when true, the item is visible (i.e. to be displayed, not visible in the
+     * *current* viewport)
+     */
+    bool IsVisible( const VIEW_ITEM *aItem ) const;
+
+    /**
+     * Function ViewUpdate()
+     * For dynamic VIEWs, informs the associated VIEW that the graphical representation of
+     * this item has changed. For static views calling has no effect.
+     *
+     * @param aUpdateFlags: how much the object has changed.
+     */
+     void Update( VIEW_ITEM *aItem );
+     void Update( VIEW_ITEM *aItem, int aUpdateFlags );
 
     /**
      * Function SetRequired()
@@ -547,10 +590,7 @@ public:
      * Adds an item to a list of items that are going to be refreshed upon the next frame rendering.
      * @param aItem is the item to be refreshed.
      */
-    void MarkForUpdate( VIEW_ITEM* aItem )
-    {
-        m_needsUpdate.push_back( aItem );
-    }
+    void MarkForUpdate( VIEW_ITEM* aItem );
 
     /**
      * Function UpdateItems()

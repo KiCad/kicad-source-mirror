@@ -44,10 +44,17 @@ public:
 
     virtual const BOX2I ViewBBox() const override
     {
+        BOX2I bb; bb.SetMaximum();
+        return bb;
+        
+        if ( !m_item )
+            return BOX2I();
+
         return m_item->ViewBBox();
+
     }
 
-    void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
@@ -68,6 +75,8 @@ public:
     {
         return wxT( "BRIGHT_BOX" );
     }
+
+    void SetItem( BOARD_ITEM *aItem );
 
 private:
     static const KIGFX::COLOR4D BOX_COLOR;

@@ -41,14 +41,17 @@
 using namespace KIGFX;
 
 VIEW_GROUP::VIEW_GROUP( VIEW* aView ) :
-    m_layer( ITEM_GAL_LAYER( GP_OVERLAY ) )
+    m_layer( ITEM_GAL_LAYER( GP_OVERLAY ) ),
+    m_view ( aView )
 {
-    m_view = aView;
+
 }
 
 
 VIEW_GROUP::~VIEW_GROUP()
 {
+    if (m_view && viewPrivData() )
+        m_view->Remove ( this );
 
 }
 
@@ -56,7 +59,6 @@ VIEW_GROUP::~VIEW_GROUP()
 void VIEW_GROUP::Add( VIEW_ITEM* aItem )
 {
     m_groupItems.push_back( aItem );
-    ViewUpdate();
 }
 
 
@@ -70,15 +72,12 @@ void VIEW_GROUP::Remove( VIEW_ITEM* aItem )
             break;
         }
     }
-
-    ViewUpdate();
 }
 
 
 void VIEW_GROUP::Clear()
 {
     m_groupItems.clear();
-    ViewUpdate();
 }
 
 
@@ -101,33 +100,34 @@ const BOX2I VIEW_GROUP::ViewBBox() const
 }
 
 
-void VIEW_GROUP::ViewDraw( int aLayer, GAL* aGal ) const
+void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 {
-    PAINTER* painter = m_view->GetPainter();
+    auto gal = aView->GetGAL();
+    PAINTER* painter = aView->GetPainter();
 
     const auto drawList = updateDrawList();
 
     // Draw all items immediately (without caching)
     for ( auto item : drawList )
     {
-        aGal->PushDepth();
+        gal->PushDepth();
 
         int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
         item->ViewGetLayers( layers, layers_count );
-        m_view->SortLayers( layers, layers_count );
+        aView->SortLayers( layers, layers_count );
 
         for( int i = 0; i < layers_count; i++ )
         {
-            if( m_view->IsCached( layers[i] ) && m_view->IsLayerVisible( layers[i] ) )
+            if( aView->IsCached( layers[i] ) && aView->IsLayerVisible( layers[i] ) )
             {
-                aGal->AdvanceDepth();
+                gal->AdvanceDepth();
 
                 if( !painter->Draw( item, layers[i] ) )
-                    item->ViewDraw( layers[i], aGal ); // Alternative drawing method
+                    item->ViewDraw( layers[i], aView ); // Alternative drawing method
             }
         }
 
-        aGal->PopDepth();
+        gal->PopDepth();
     }
 }
 
@@ -172,10 +172,5 @@ void VIEW_GROUP::ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags )
 
 void VIEW_GROUP::updateBbox()
 {
-    // Save the used VIEW, as it used nulled during Remove()
-    VIEW* view = m_view;
-
-    // Reinsert the group, so the bounding box can be updated
-    view->Remove( this );
-    view->Add( this );
+   
 }

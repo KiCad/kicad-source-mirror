@@ -26,6 +26,8 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/color4d.h>
 
+#include <view/view.h>
+
 using namespace KIGFX;
 
 const BOX2I SELECTION_AREA::ViewBBox() const
@@ -46,14 +48,15 @@ void SELECTION_AREA::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::GAL* aGal ) const
+void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    aGal->SetLineWidth( 1.0 );
-    aGal->SetStrokeColor( COLOR4D( 1.0, 1.0, 0.4, 1.0 ) );
-    aGal->SetFillColor( COLOR4D( 0.3, 0.3, 0.5, 0.3 ) );
-    aGal->SetIsStroke( true );
-    aGal->SetIsFill( true );
-    aGal->DrawRectangle( m_origin, m_end );
+    auto gal = aView->GetGAL();
+    gal->SetLineWidth( 1.0 );
+    gal->SetStrokeColor( COLOR4D( 1.0, 1.0, 0.4, 1.0 ) );
+    gal->SetFillColor( COLOR4D( 0.3, 0.3, 0.5, 0.3 ) );
+    gal->SetIsStroke( true );
+    gal->SetIsFill( true );
+    gal->DrawRectangle( m_origin, m_end );
 }
 
 
