@@ -389,6 +389,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  text, _( "Switch the canvas implementation to Cairo" ),
                  KiBitmap( tools_xpm ) );
 
+    viewMenu->AppendSeparator();
+    AddMenuItem( viewMenu, ID_MENU_PCB_FLIP_VIEW, _("&Flip View"), _( "Flips (mirrors) the board view." ),
+                  KiBitmap( three_d_xpm ), wxITEM_CHECK );
+
+
     //----- Place Menu ----------------------------------------------------------
     wxMenu* placeMenu = new wxMenu;
 

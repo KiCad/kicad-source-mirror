@@ -766,7 +766,11 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
     currentManager->Translate( aPosition.x, aPosition.y, layerDepth );
     currentManager->Rotate( aRotationAngle, 0.0f, 0.0f, -1.0f );
-    currentManager->Scale( SCALE, SCALE, 0 );
+
+    double sx = SCALE * (globalFlipX ? -1.0 : 1.0);
+    double sy = SCALE * (globalFlipY ? -1.0 : 1.0);
+
+    currentManager->Scale( sx, sy, 0 );
     currentManager->Translate( 0, -commonOffset, 0 );
 
     switch( GetHorizontalJustify() )
@@ -874,9 +878,8 @@ void OPENGL_GAL::DrawGrid()
     int gridEndX = KiROUND( worldEndPoint.x / gridSize.x );
     int gridStartY = KiROUND( worldStartPoint.y / gridSize.y );
     int gridEndY = KiROUND( worldEndPoint.y / gridSize.y );
-
-    assert( gridEndX >= gridStartX );
-    assert( gridEndY >= gridStartY );
+	int dirX = gridStartX >= gridEndX ? -1 : 1;
+	int dirY = gridStartY >= gridEndY ? -1 : 1;
 
     // Correct the index, else some lines are not correctly painted
     gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
@@ -900,7 +903,7 @@ void OPENGL_GAL::DrawGrid()
     }
 
     // Vertical lines
-    for( int j = gridStartY; j < gridEndY; j += 1 )
+    for( int j = gridStartY; j != gridEndY; j += dirY )
     {
         if( j % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
             glLineWidth( 2.0 );
@@ -924,7 +927,7 @@ void OPENGL_GAL::DrawGrid()
     }
 
     // Horizontal lines
-    for( int i = gridStartX; i < gridEndX; i += 1 )
+    for( int i = gridStartX; i != gridEndX; i += dirX )
     {
         if( i % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
             glLineWidth( 2.0 );
