@@ -34,4 +34,4 @@
 # time this should be set to a value other than "no-vcs-found" is when
 # a source archive is created.  This eliminates the need to set
 # KICAD_VERSION during the build configuration step.
-set( KICAD_VERSION "no-vcs-found" )
+set( KICAD_VERSION "4.0.5" )
