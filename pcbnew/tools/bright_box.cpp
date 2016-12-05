@@ -40,8 +40,6 @@ BRIGHT_BOX::BRIGHT_BOX () :
 
 void BRIGHT_BOX::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    printf("DrawBB item %p\n", m_item);
-
     if( !m_item )
         return;
 

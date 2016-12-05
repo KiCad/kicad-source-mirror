@@ -1061,16 +1061,13 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
     int layers[VIEW_MAX_LAYERS], layers_count;
     aItem->ViewGetLayers( layers, layers_count );
 
-	printf("invlidate %p", aItem);
-
-    // Iterate through layers used by the item and recache it immediately
+	// Iterate through layers used by the item and recache it immediately
     for( int i = 0; i < layers_count; ++i )
     {
         int layerId = layers[i];
 
         if( IsCached( layerId ) )
         {
-            printf("updateGeom %p flg %d\n", aItem, aUpdateFlags );
             if( aUpdateFlags & ( GEOMETRY | LAYERS ) )
                 updateItemGeometry( aItem, layerId );
             else if( aUpdateFlags & COLOR )
@@ -1135,8 +1132,6 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
 
     group = m_gal->BeginGroup();
     viewData->setGroup( aLayer, group );
-
-    printf("upadteGeom2: %p\n", aItem );
 
     if( !m_painter->Draw( static_cast<EDA_ITEM*>( aItem ), aLayer ) )
         aItem->ViewDraw( aLayer, this ); // Alternative drawing method
@@ -1345,6 +1340,7 @@ void VIEW::Update( VIEW_ITEM *aItem, int aUpdateFlags )
         return;
 
     assert( aUpdateFlags != NONE );
+
     bool firstTime = (viewData->m_requiredUpdate == NONE);
 
     viewData->m_requiredUpdate |= aUpdateFlags;
@@ -1361,9 +1357,7 @@ void VIEW::MarkForUpdate( VIEW_ITEM* aItem )
 {
     auto viewData = aItem->viewPrivData();
 
-	printf("MarkForUpdate %p\n", aItem);
-
-    assert( viewData->m_requiredUpdate != NONE );
+	assert( viewData->m_requiredUpdate != NONE );
 
     for ( auto item : m_needsUpdate )
         assert(item != aItem);

@@ -52,7 +52,7 @@ public:
 
     void ViewDraw( int aLayer, VIEW* aView ) const override;
 
-    void ViewGetLayers( int aLayers[], int& aCount ) constm override
+    void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
         aLayers[0] = ITEM_GAL_LAYER( GP_OVERLAY );
         aCount = 1;

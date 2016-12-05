@@ -743,7 +743,6 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::clearSelection()
 {
-    printf("ClearSelection\n");
     if( m_selection.Empty() )
         return;
 
@@ -821,7 +820,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
             getView()->SetVisible( &brightBox, true );
 //          getView()->Hide( &brightBox, false );
             getView()->Update( &brightBox, KIGFX::GEOMETRY );
-//            getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+            getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
         }
     }
 
@@ -1033,16 +1032,10 @@ void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
 
 void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem ) const
 {
-    printf("UnselectVisually %p\n", aItem);
     // Restore original item visibility
     aItem->ClearSelected();
     view()->Hide( aItem, false );
     view()->Update( aItem, KIGFX::ALL );
-
-    printf("%d %d %d\n",
-    !!aItem->IsSelected(),
-    !!aItem->IsHighlighted(),
-    !!aItem->IsBrightened() );
 
     // Modules are treated in a special way - when they are selected, we have to
     // unselect all the parts that make the module, not the module itself
