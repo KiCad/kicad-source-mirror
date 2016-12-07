@@ -70,6 +70,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
     {
         int changeType = ent.m_type & CHT_TYPE;
         int changeFlags = ent.m_type & CHT_FLAGS;
+        bool done = changeFlags & CHT_DONE;
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( ent.m_item );
 
         // Module items need to be saved in the undo buffer before modification
@@ -109,7 +110,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                 {
                     undoList.PushItem( ITEM_PICKER( boardItem, UR_NEW ) );
 
-                    if( !( changeFlags & CHT_DONE ) )
+                    if( !done )
                         board->Add( boardItem );
 
                     //ratsnest->Add( boardItem );       // TODO currently done by BOARD::Add()
@@ -125,7 +126,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                     // modules inside modules are not supported yet
                     assert( boardItem->Type() != PCB_MODULE_T );
 
-                    if( !( changeFlags & CHT_DONE ) )
+                    if( !done )
                         board->m_Modules->Add( boardItem );
                 }
 
@@ -136,9 +137,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
             case CHT_REMOVE:
             {
                 if( !m_editModules )
-                {
                     undoList.PushItem( ITEM_PICKER( boardItem, UR_DELETED ) );
-                }
 
                 switch( boardItem->Type() )
                 {
@@ -182,7 +181,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                     {
                         view->Remove( boardItem );
 
-                        if( !( changeFlags & CHT_DONE ) )
+                        if( !done )
                         {
                             MODULE* module = static_cast<MODULE*>( boardItem->GetParent() );
                             assert( module && module->Type() == PCB_MODULE_T );
@@ -207,7 +206,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                 case PCB_ZONE_AREA_T:
                     view->Remove( boardItem );
 
-                    if( !( changeFlags & CHT_DONE ) )
+                    if( !done )
                         board->Remove( boardItem );
 
                     //ratsnest->Remove( boardItem );    // currently done by BOARD::Remove()
@@ -224,7 +223,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
 
                     view->Remove( module );
 
-                    if( !( changeFlags & CHT_DONE ) )
+                    if( !done )
                         board->Remove( module );
 
                     // Clear flags to indicate, that the ratsnest, list of nets & pads are not valid anymore
