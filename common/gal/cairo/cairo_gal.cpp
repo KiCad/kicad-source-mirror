@@ -33,10 +33,10 @@
 
 #include <limits>
 
+#include <pixman.h>
+
 using namespace KIGFX;
 
-
-const float CAIRO_GAL::LAYER_ALPHA = 0.8;
 
 
 CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
@@ -111,46 +111,94 @@ void CAIRO_GAL::BeginDrawing()
     compositor->SetBuffer( mainBuffer );
 
     // Cairo grouping prevents display of overlapping items on the same layer in the lighter color
-    cairo_push_group( currentContext );
+    //cairo_push_group( currentContext );
 }
 
+#include <profile.h>
 
 void CAIRO_GAL::EndDrawing()
 {
+
+    printf("EndDRAW!\n\n\n");
     // Force remaining objects to be drawn
     Flush();
 
     // Cairo grouping prevents display of overlapping items on the same layer in the lighter color
-    cairo_pop_group_to_source( currentContext );
-    cairo_paint_with_alpha( currentContext, LAYER_ALPHA );
+    //cairo_pop_group_to_source( currentContext );
+    //cairo_paint_with_alpha( currentContext, LAYER_ALPHA );
 
     // Merge buffers on the screen
+    PROF_COUNTER comp("cairo-comp");
     compositor->DrawBuffer( mainBuffer );
     compositor->DrawBuffer( overlayBuffer );
+    comp.show();
 
     // This code was taken from the wxCairo example - it's not the most efficient one
     // Here is a good place for optimizations
 
     // Now translate the raw context data from the format stored
     // by cairo into a format understood by wxImage.
+
+    PROF_COUNTER draw("cairo-draw");
+
     unsigned char* wxOutputPtr = wxOutput;
 
-    for( size_t count = 0; count < bufferSize; count++ )
+    printf("W %d sw %d\n", wxBufferWidth, screenSize.x);
+
+    pixman_image_t *dstImg = pixman_image_create_bits (PIXMAN_r8g8b8, screenSize.x, screenSize.y, (uint32_t*)wxOutput, wxBufferWidth * 3);
+    pixman_image_t *srcImg = pixman_image_create_bits (PIXMAN_a8b8g8r8, screenSize.x, screenSize.y, (uint32_t*)bitmapBuffer, wxBufferWidth * 4);
+
+    pixman_image_composite (PIXMAN_OP_SRC, srcImg, NULL, dstImg,
+    			    0, 0, 0, 0, 0, 0, screenSize.x, screenSize.y );
+
+    pixman_image_unref (srcImg);
+//    free (srcImg);
+    pixman_image_unref (dstImg);
+//free (dstImg);
+
+    /*for( size_t count = 0; count < bufferSize; count++ )
     {
         unsigned int value = bitmapBuffer[count];
         *wxOutputPtr++ = ( value >> 16 ) & 0xff;  // Red pixel
         *wxOutputPtr++ = ( value >> 8 ) & 0xff;   // Green pixel
         *wxOutputPtr++ = value & 0xff;            // Blue pixel
-    }
+    }*/
 
-    wxImage      img( screenSize.x, screenSize.y, (unsigned char*) wxOutput, true );
+    draw.show();
+
+    PROF_COUNTER wxd1("wx-draw");
+
+
+    wxImage      img( wxBufferWidth, screenSize.y, (unsigned char*) wxOutput, true );
+    wxd1.show();
+
+        PROF_COUNTER wxd2("wx-draw2");
+
     wxBitmap     bmp( img );
-    wxClientDC   client_dc( this );
-    wxBufferedDC dc;
-    dc.Init( &client_dc, bmp );
+    wxd2.show();
+    PROF_COUNTER wxd3("wx-draw2");
+
+    wxMemoryDC mdc ( bmp );
+    wxd3.show();
+    PROF_COUNTER wxd("wx-drawf");
+
+    wxClientDC   clientDC( this );
+    //wxBufferedDC dc;
+    //dc.Init( &client_dc, bmp );
+    wxd.show();
+
+    PROF_COUNTER wxb("wx-blt");
+
+
+    blitCursor( mdc );
+
+    clientDC.Blit( 0, 0, screenSize.x, screenSize.y, &mdc, 0, 0, wxCOPY );
+    wxb.show();
+
+
+
 
     // Now it is the time to blit the mouse cursor
-    blitCursor( dc );
 
     deinitSurface();
 }
@@ -158,8 +206,12 @@ void CAIRO_GAL::EndDrawing()
 
 void CAIRO_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
+
     cairo_move_to( currentContext, aStartPoint.x, aStartPoint.y );
     cairo_line_to( currentContext, aEndPoint.x, aEndPoint.y );
+    flushPath();
+//    cairo_set_source_rgb( currentContext, gridColor.r, gridColor.g, gridColor.b );
+    //cairo_stroke( currentContext );
     isElementAdded = true;
 }
 
@@ -174,6 +226,8 @@ void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPo
 
         cairo_move_to( currentContext, (double) aStartPoint.x, (double) aStartPoint.y );
         cairo_line_to( currentContext, (double) aEndPoint.x, (double) aEndPoint.y );
+        cairo_set_source_rgba( currentContext, fillColor.r, fillColor.g, fillColor.b, fillColor.a);
+        cairo_stroke( currentContext );
     }
     else
     {
@@ -197,6 +251,7 @@ void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPo
         cairo_line_to( currentContext, lineLength, -aWidth / 2.0 );
 
         cairo_restore( currentContext );
+        flushPath();
     }
 
     isElementAdded = true;
@@ -205,10 +260,9 @@ void CAIRO_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPo
 
 void CAIRO_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
 {
-    // A circle is drawn using an arc
     cairo_new_sub_path( currentContext );
     cairo_arc( currentContext, aCenterPoint.x, aCenterPoint.y, aRadius, 0.0, 2 * M_PI );
-
+    flushPath();
     isElementAdded = true;
 }
 
@@ -233,6 +287,7 @@ void CAIRO_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aS
         cairo_line_to( currentContext, endPoint.x, endPoint.y );
         cairo_close_path( currentContext );
     }
+    flushPath();
 
     isElementAdded = true;
 }
@@ -250,6 +305,7 @@ void CAIRO_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
     cairo_line_to( currentContext, aEndPoint.x, aEndPoint.y );
     cairo_line_to( currentContext, diagonalPointB.x, diagonalPointB.y );
     cairo_close_path( currentContext );
+    flushPath();
 
     isElementAdded = true;
 }
@@ -263,6 +319,7 @@ void CAIRO_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControl
                     aControlPointB.y, aEndPoint.x, aEndPoint.y );
     cairo_line_to( currentContext, aEndPoint.x, aEndPoint.y );
 
+    flushPath();
     isElementAdded = true;
 }
 
@@ -408,10 +465,10 @@ void CAIRO_GAL::SetLayerDepth( double aLayerDepth )
     {
         storePath();
 
-        cairo_pop_group_to_source( currentContext );
-        cairo_paint_with_alpha( currentContext, LAYER_ALPHA );
+        //cairo_pop_group_to_source( currentContext );
+        //cairo_paint_with_alpha( currentContext, LAYER_ALPHA );
 
-        cairo_push_group( currentContext );
+        //cairo_push_group( currentContext );
     }
 }
 
@@ -593,7 +650,7 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
         case CMD_STROKE_PATH:
             cairo_set_source_rgb( currentContext, strokeColor.r, strokeColor.g, strokeColor.b );
             cairo_append_path( currentContext, it->cairoPath );
-            cairo_stroke( currentContext );
+                cairo_stroke( currentContext );
             break;
 
         case CMD_FILL_PATH:
@@ -734,8 +791,8 @@ void CAIRO_GAL::SetTarget( RENDER_TARGET aTarget )
     {
         storePath();
 
-        cairo_pop_group_to_source( currentContext );
-        cairo_paint_with_alpha( currentContext, LAYER_ALPHA );
+        //cairo_pop_group_to_source( currentContext );
+        //cairo_paint_with_alpha( currentContext, LAYER_ALPHA );
     }
 
     switch( aTarget )
@@ -751,8 +808,8 @@ void CAIRO_GAL::SetTarget( RENDER_TARGET aTarget )
         break;
     }
 
-    if( isInitialized )
-        cairo_push_group( currentContext );
+    //if( isInitialized )
+        //cairo_push_group( currentContext );
 
     currentTarget = aTarget;
 }
@@ -799,19 +856,34 @@ void CAIRO_GAL::SetCursorSize( unsigned int aCursorSize )
 
 void CAIRO_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
-    // Now we should only store the position of the mouse cursor
-    // The real drawing routines are in blitCursor()
-    cursorPosition = VECTOR2D( aCursorPosition.x - cursorSize / 2,
-                               aCursorPosition.y - cursorSize / 2 );
+    cursorPosition = aCursorPosition;
 }
-
 
 void CAIRO_GAL::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     cairo_move_to( currentContext, aStartPoint.x, aStartPoint.y );
     cairo_line_to( currentContext, aEndPoint.x, aEndPoint.y );
-    cairo_set_source_rgb( currentContext, gridColor.r, gridColor.g, gridColor.b );
+    cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, strokeColor.a );
     cairo_stroke( currentContext );
+}
+
+void CAIRO_GAL::flushPath()
+{
+        if( isFillEnabled )
+        {
+            cairo_set_source_rgba( currentContext, fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+            if( isStrokeEnabled )
+                cairo_fill_preserve( currentContext );
+            else
+                cairo_fill( currentContext );
+        }
+
+        if( isStrokeEnabled )
+        {
+            cairo_set_source_rgba( currentContext, strokeColor.r, strokeColor.g,
+                                  strokeColor.b, strokeColor.a );
+            cairo_stroke( currentContext );
+        }
 }
 
 
@@ -902,47 +974,32 @@ void CAIRO_GAL::initCursor()
 }
 
 
-void CAIRO_GAL::blitCursor( wxBufferedDC& clientDC )
+void CAIRO_GAL::blitCursor( wxMemoryDC& clientDC )
 {
     if( !isCursorEnabled )
         return;
 
-    wxMemoryDC cursorSave( *cursorPixelsSaved );
-    wxMemoryDC cursorShape( *cursorPixels );
+    auto p = ToScreen( cursorPosition );
 
-    if( !isDeleteSavedPixels )
-    {
-        // Restore pixels that were overpainted by the previous cursor
-        clientDC.Blit( savedCursorPosition.x, savedCursorPosition.y,
-                       cursorSize, cursorSize, &cursorSave, 0, 0 );
-    }
-    else
-    {
-        isDeleteSavedPixels = false;
-    }
+    clientDC.SetPen( *wxWHITE_PEN );
+    clientDC.DrawLine ( p.x - cursorSize / 2, p.y, p.x + cursorSize / 2, p.y );
+    clientDC.DrawLine ( p.x, p.y - cursorSize / 2, p.x, p.y + cursorSize / 2 );
 
-    // Store pixels that are going to be overpainted
-    VECTOR2D cursorScreen = ToScreen( cursorPosition ) - cursorSize / 2.0f;
-    cursorSave.Blit( 0, 0, cursorSize, cursorSize, &clientDC, cursorScreen.x, cursorScreen.y );
-
-    // Draw the cursor
-    clientDC.Blit( cursorScreen.x, cursorScreen.y, cursorSize, cursorSize,
-                   &cursorShape, 0, 0, wxOR );
-
-    savedCursorPosition.x = (wxCoord) cursorScreen.x;
-    savedCursorPosition.y = (wxCoord) cursorScreen.y;
 }
 
 
 void CAIRO_GAL::allocateBitmaps()
 {
+    wxBufferWidth = screenSize.x;
+    while( ((wxBufferWidth * 3) % 4) != 0 ) wxBufferWidth++;
+
     // Create buffer, use the system independent Cairo context backend
-    stride     = cairo_format_stride_for_width( GAL_FORMAT, screenSize.x );
+    stride     = cairo_format_stride_for_width( GAL_FORMAT, wxBufferWidth );
     bufferSize = stride * screenSize.y;
 
     bitmapBuffer        = new unsigned int[bufferSize];
     bitmapBufferBackup  = new unsigned int[bufferSize];
-    wxOutput            = new unsigned char[bufferSize * 3];
+    wxOutput            = new unsigned char[wxBufferWidth * 3 * screenSize.y];
 }
 
 
@@ -961,7 +1018,7 @@ void CAIRO_GAL::initSurface()
 
     // Create the Cairo surface
     surface = cairo_image_surface_create_for_data( (unsigned char*) bitmapBuffer, GAL_FORMAT,
-                                                   screenSize.x, screenSize.y, stride );
+                                                   wxBufferWidth, screenSize.y, stride );
     context = cairo_create( surface );
 #ifdef __WXDEBUG__
     cairo_status_t status = cairo_status( context );
@@ -969,7 +1026,7 @@ void CAIRO_GAL::initSurface()
 #endif /* __WXDEBUG__ */
     currentContext = context;
 
-    cairo_set_antialias( context, CAIRO_ANTIALIAS_SUBPIXEL );
+    cairo_set_antialias( context, CAIRO_ANTIALIAS_NONE );
 
     // Clear the screen
     ClearScreen( backgroundColor );
@@ -1037,6 +1094,9 @@ void CAIRO_GAL::drawPoly( const std::deque<VECTOR2D>& aPointList )
         cairo_line_to( currentContext, it->x, it->y );
     }
 
+    flushPath();
+    //cairo_fill( currentContext );
+
     isElementAdded = true;
 }
 
@@ -1053,6 +1113,8 @@ void CAIRO_GAL::drawPoly( const VECTOR2D aPointList[], int aListSize )
         ++ptr;
         cairo_line_to( currentContext, ptr->x, ptr->y );
     }
+
+    flushPath();
 
     isElementAdded = true;
 }

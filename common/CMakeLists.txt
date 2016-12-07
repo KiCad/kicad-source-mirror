@@ -4,6 +4,7 @@ include_directories(
     ./widgets
     ./dialog_about
     ${CAIRO_INCLUDE_DIR}
+    ${PIXMAN_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
     ${CURL_INCLUDE_DIRS}

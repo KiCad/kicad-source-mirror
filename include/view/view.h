@@ -751,8 +751,8 @@ private:
     /// Rendering order modifier for layers that are marked as top layers
     static const int TOP_LAYER_MODIFIER;
 
-    /// Items to be updated
-    std::vector<VIEW_ITEM*> m_needsUpdate;
+    /// Flat list of all items
+    std::vector<VIEW_ITEM*> m_allItems;
 };
 } // namespace KIGFX
 

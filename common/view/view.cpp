@@ -262,7 +262,7 @@ VIEW::VIEW( bool aIsDynamic ) :
     m_dynamic( aIsDynamic )
 {
     m_boundary.SetMaximum();
-    m_needsUpdate.reserve( 32768 );
+    m_allItems.reserve( 32768 );
 
     // Redraw everything at the beginning
     MarkDirty();
@@ -310,6 +310,8 @@ void VIEW::Add( VIEW_ITEM* aItem )
     aItem->ViewGetLayers( layers, layers_count );
     aItem->viewPrivData()->saveLayers( layers, layers_count );
 
+    m_allItems.push_back(aItem);
+
     for( int i = 0; i < layers_count; ++i )
     {
         VIEW_LAYER& l = m_layers[layers[i]];
@@ -326,21 +328,18 @@ void VIEW::Remove( VIEW_ITEM* aItem )
 {
     if ( !aItem )
         return;
+
     auto viewData = aItem->viewPrivData();
 
     if ( !viewData )
         return;
 
-    if( viewData->requiredUpdate() != NONE )    // prevent from updating a removed item
-    {
-        std::vector<VIEW_ITEM*>::iterator item = std::find( m_needsUpdate.begin(),
-                                                            m_needsUpdate.end(), aItem );
+    auto item = std::find( m_allItems.begin(), m_allItems.end(), aItem );
 
-        if( item != m_needsUpdate.end() )
-        {
-            m_needsUpdate.erase( item );
-            viewData->clearUpdateFlags();
-        }
+    if( item != m_allItems.end() )
+    {
+        m_allItems.erase( item );
+        viewData->clearUpdateFlags();
     }
 
     int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
@@ -360,6 +359,7 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     }
 
     viewData->deleteGroups();
+
     aItem->m_viewPrivData = nullptr;
 }
 
@@ -946,10 +946,7 @@ void VIEW::Clear()
 
     r.SetMaximum();
 
-    for( VIEW_ITEM* item : m_needsUpdate )
-        item->viewPrivData()->clearUpdateFlags();
-
-    m_needsUpdate.clear();
+    m_allItems.clear();
 
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
     {
@@ -1237,16 +1234,16 @@ void VIEW::UpdateItems()
 {
     m_gal->BeginUpdate();
 
-    for( VIEW_ITEM* item : m_needsUpdate )
+    for( VIEW_ITEM* item : m_allItems )
     {
         auto viewData = item->viewPrivData();
-        assert( viewData->m_requiredUpdate != NONE );
 
-        invalidateItem( item, viewData->m_requiredUpdate );
+        if ( viewData->m_requiredUpdate != NONE )
+            invalidateItem( item, viewData->m_requiredUpdate );
+        viewData->m_requiredUpdate = NONE;
     }
 
     m_gal->EndUpdate();
-    m_needsUpdate.clear();
 }
 
 
@@ -1341,31 +1338,10 @@ void VIEW::Update( VIEW_ITEM *aItem, int aUpdateFlags )
 
     assert( aUpdateFlags != NONE );
 
-    bool firstTime = (viewData->m_requiredUpdate == NONE);
-
     viewData->m_requiredUpdate |= aUpdateFlags;
 
-    if( firstTime )
-    {
-        MarkForUpdate( aItem );
-    }
-
-
-}
-
-void VIEW::MarkForUpdate( VIEW_ITEM* aItem )
-{
-    auto viewData = aItem->viewPrivData();
-
-	assert( viewData->m_requiredUpdate != NONE );
-
-    for ( auto item : m_needsUpdate )
-        assert(item != aItem);
-
-    m_needsUpdate.push_back( aItem );
 }
 
 const int VIEW::TOP_LAYER_MODIFIER = -VIEW_MAX_LAYERS;
-
 
 };

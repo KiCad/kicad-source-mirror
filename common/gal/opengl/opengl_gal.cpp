@@ -878,14 +878,15 @@ void OPENGL_GAL::DrawGrid()
     int gridEndX = KiROUND( worldEndPoint.x / gridSize.x );
     int gridStartY = KiROUND( worldStartPoint.y / gridSize.y );
     int gridEndY = KiROUND( worldEndPoint.y / gridSize.y );
-	int dirX = gridStartX >= gridEndX ? -1 : 1;
-	int dirY = gridStartY >= gridEndY ? -1 : 1;
 
     // Correct the index, else some lines are not correctly painted
     gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
     gridStartY -= std::abs( gridOrigin.y / gridSize.y ) + 1;
     gridEndX += std::abs( gridOrigin.x / gridSize.x ) + 1;
     gridEndY += std::abs( gridOrigin.y / gridSize.y ) + 1;
+
+    int dirX = gridStartX >= gridEndX ? -1 : 1;
+    int dirY = gridStartY >= gridEndY ? -1 : 1;
 
     glDisable( GL_DEPTH_TEST );
     glDisable( GL_TEXTURE_2D );

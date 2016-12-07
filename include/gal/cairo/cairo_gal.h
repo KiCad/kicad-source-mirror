@@ -346,6 +346,9 @@ private:
     bool                isInitialized;          ///< Are Cairo image & surface ready to use
     COLOR4D             backgroundColor;        ///< Background color
 
+    int wxBufferWidth;
+
+    void flushPath();
     // Methods
     void storePath();                           ///< Store the actual path
 
@@ -372,7 +375,7 @@ private:
     /**
      * @brief Blits cursor into the current screen.
      */
-    virtual void blitCursor( wxBufferedDC& clientDC );
+    virtual void blitCursor( wxMemoryDC& clientDC );
 
     /// Prepare Cairo surfaces for drawing
     void initSurface();

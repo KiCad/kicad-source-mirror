@@ -118,7 +118,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 
         for( int i = 0; i < layers_count; i++ )
         {
-            if( aView->IsCached( layers[i] ) && aView->IsLayerVisible( layers[i] ) )
+            if( aView->IsLayerVisible( layers[i] ) )
             {
                 gal->AdvanceDepth();
 
@@ -172,5 +172,5 @@ void VIEW_GROUP::ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags )
 
 void VIEW_GROUP::updateBbox()
 {
-   
+
 }

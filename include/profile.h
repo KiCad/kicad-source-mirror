@@ -119,7 +119,9 @@ public:
   {
     stop();
     fprintf(stderr,"%s took %.1f milliseconds.\n", m_name.c_str(), (double)m_cnt.msecs());
+    start();
   }
+  
   double msecs() const {
       return m_cnt.msecs();
   }
