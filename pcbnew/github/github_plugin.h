@@ -213,11 +213,11 @@ protected:
     static bool repoURL_zipURL( const wxString& aRepoURL, std::string* aZipURL );
 
     /**
-     * Function remote_get_zip
+     * Function remoteGetZip
      * fetches a zip file image from a github repo synchronously.  The byte image
      * is received into the m_input_stream.
      */
-    void remote_get_zip( const wxString& aRepoURL ) throw( IO_ERROR );
+    void remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR );
 
     wxString    m_lib_path;     ///< from aLibraryPath, something like https://github.com/liftoff-sr/pretty_footprints
     std::string m_zip_image;    ///< byte image of the zip file in its entirety.

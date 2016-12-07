@@ -27,6 +27,14 @@
  * @file basicframe.cpp
  * @brief EDA_BASE_FRAME class implementation.
  */
+#include <config.h>
+
+// kicad_curl.h must be included before wx headers, to avoid
+// conflicts for some defines, at least on Windows
+#ifdef BUILD_GITHUB_PLUGIN
+#include <curl/curlver.h>
+#include <kicad_curl/kicad_curl.h>
+#endif
 
 #include <wx/aboutdlg.h>
 #include <wx/fontdlg.h>
@@ -579,6 +587,11 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     msg_version << wxT( "Boost version: " ) << ( BOOST_VERSION / 100000 ) << wxT( "." )
                 << ( BOOST_VERSION / 100 % 1000 ) << wxT( "." )
                 << ( BOOST_VERSION % 100 ) << wxT( "\n" );
+
+#ifdef BUILD_GITHUB_PLUGIN
+    // Shows the Curl library version in use:
+    msg_version << "Curl version: " << KICAD_CURL::GetVersion() << "\n";
+#endif
 
     msg_version << wxT( "         USE_WX_GRAPHICS_CONTEXT=" );
 #ifdef USE_WX_GRAPHICS_CONTEXT

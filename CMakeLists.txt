@@ -569,6 +569,10 @@ if( NOT GLEW_FOUND )
     check_find_package_result( GLEW_FOUND "GLEW" )
 endif()
 
+# Find CURL library
+find_package( CURL REQUIRED )
+
+
 ######################
 # Find Cairo library #
 ######################

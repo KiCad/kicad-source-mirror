@@ -10,6 +10,12 @@ include_directories(
     ${INC_AFTER}
     )
 
+
+if( NOT APPLE )     # windows and linux use openssl under curl
+    find_package( OpenSSL REQUIRED )
+endif()
+
+
 # Generate header files containing shader programs
 # Order of input files is significant
 add_custom_command(
@@ -257,6 +263,9 @@ endif()
 
 set( COMMON_SRCS
     ${COMMON_SRCS}
+    kicad_curl/kicad_curl.cpp
+    kicad_curl/kicad_curl_easy.cpp
+
     view/view.cpp
     view/view_item.cpp
     view/view_group.cpp
@@ -282,7 +291,11 @@ set( COMMON_SRCS
 add_library( common STATIC ${COMMON_SRCS} )
 add_dependencies( common lib-dependencies )
 add_dependencies( common version_header )
-target_link_libraries( common ${Boost_LIBRARIES} )
+target_link_libraries( common
+    ${Boost_LIBRARIES}
+    ${CURL_LIBRARIES}
+    ${OPENSSL_LIBRARIES}        # empty on Apple
+    )
 
 
 set( PCB_COMMON_SRCS
