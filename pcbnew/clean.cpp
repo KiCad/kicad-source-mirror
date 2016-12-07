@@ -370,7 +370,7 @@ bool TRACKS_CLEANER::clean_vias()
 
         /* Important: these cleanups only do thru hole vias, they don't
          * (yet) handle high density interconnects */
-        if( via->GetViaType() != VIA_THROUGH )
+        if( via->GetViaType() == VIA_THROUGH )
         {
             modified |= remove_duplicates_of_via( via );
 
