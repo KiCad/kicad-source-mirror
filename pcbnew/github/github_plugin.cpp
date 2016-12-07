@@ -554,9 +554,10 @@ void GITHUB_PLUGIN::remoteGetZip( const wxString& aRepoURL ) throw( IO_ERROR )
         THROW_IO_ERROR( msg );
     }
 
-    // If the zip archive is not existing, the received data is "Not Found",
+    // If the zip archive is not existing, the received data is "Not Found" or "404: Not Found",
     // and no error is returned by kcurl.Perform().
-    if( m_zip_image.compare( 0, 9, "Not Found" ) == 0 )
+    if( ( m_zip_image.compare( 0, 9, "Not Found", 9 ) == 0 ) ||
+        ( m_zip_image.compare( 0, 14, "404: Not Found", 14 ) == 0 ) )
     {
         UTF8 fmt( _( "Cannot download library '%s'.\nThe library does not exist on the server" ) );
         std::string msg = StrPrintf( fmt.c_str(), TO_UTF8( aRepoURL ) );
