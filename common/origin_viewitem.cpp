@@ -59,7 +59,7 @@ void ORIGIN_VIEWITEM::ViewDraw( int, VIEW* aView ) const
 
     // Draw a circle around the marker's centre point if the style demands it
     if( ( m_style == CIRCLE_CROSS ) || ( m_style == CIRCLE_DOT ) || ( m_style == CIRCLE_X ) )
-        gal->DrawCircle( m_position, scaledSize.x );
+        gal->DrawCircle( m_position, fabs( scaledSize.x ) );
 
     switch( m_style )
     {
