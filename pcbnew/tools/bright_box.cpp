@@ -31,9 +31,9 @@ using namespace KIGFX;
 const double BRIGHT_BOX::LINE_WIDTH = 100000.0;
 const COLOR4D BRIGHT_BOX::BOX_COLOR = KIGFX::COLOR4D( 0.0, 1.0, 0.0, 1.0 );
 
-BRIGHT_BOX::BRIGHT_BOX () :
+BRIGHT_BOX::BRIGHT_BOX() :
     EDA_ITEM( NOT_USED ),    // this item is never added to a BOARD so it needs no type
-    m_item ( nullptr )
+    m_item( nullptr )
 {
 }
 
@@ -65,7 +65,8 @@ void BRIGHT_BOX::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     }
 }
 
-void BRIGHT_BOX::SetItem( BOARD_ITEM *aItem )
+
+void BRIGHT_BOX::SetItem( BOARD_ITEM* aItem )
 {
     m_item = aItem;
 }

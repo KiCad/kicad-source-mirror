@@ -74,8 +74,7 @@ public:
     // from the owning VIEW if there is any. Kicad relies too much on this mechanism.
     // this is the only linking dependency now between EDA_ITEM and VIEW class. In near future
     // I'll replace it with observers.
-    static void OnDestroy ( VIEW_ITEM* aItem );
-
+    static void OnDestroy( VIEW_ITEM* aItem );
 
     /**
      * Function Add()
@@ -109,7 +108,7 @@ public:
      *
      * @param aIsVisible: whether the item is visible (on all layers), or not.
      */
-    void SetVisible( VIEW_ITEM *aItem, bool aIsVisible = true );
+    void SetVisible( VIEW_ITEM* aItem, bool aIsVisible = true );
 
     /**
      * Function Hide()
@@ -117,7 +116,7 @@ public:
      *
      * @param aHide: whether the item is hidden (on all layers), or not.
      */
-    void Hide( VIEW_ITEM *aItem, bool aHide = true );
+    void Hide( VIEW_ITEM* aItem, bool aHide = true );
 
     /**
      * Function IsVisible()
@@ -126,7 +125,7 @@ public:
      * @return when true, the item is visible (i.e. to be displayed, not visible in the
      * *current* viewport)
      */
-    bool IsVisible( const VIEW_ITEM *aItem ) const;
+    bool IsVisible( const VIEW_ITEM* aItem ) const;
 
     /**
      * Function ViewUpdate()
@@ -135,8 +134,8 @@ public:
      *
      * @param aUpdateFlags: how much the object has changed.
      */
-     void Update( VIEW_ITEM *aItem );
-     void Update( VIEW_ITEM *aItem, int aUpdateFlags );
+     void Update( VIEW_ITEM* aItem );
+     void Update( VIEW_ITEM* aItem, int aUpdateFlags );
 
     /**
      * Function SetRequired()

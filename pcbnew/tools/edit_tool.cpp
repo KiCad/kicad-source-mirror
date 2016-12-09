@@ -190,7 +190,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 totalMovement += movement;
 
                 // Drag items to the current cursor position
-                for ( auto item : selection )
+                for( auto item : selection )
                     item->Move( movement + m_offset );
 
                 updateRatsnest( true );
@@ -213,7 +213,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         lockOverride = true;
 
                     // Save items, so changes can be undone
-                    for ( auto item : selection )
+                    for( auto item : selection )
                         m_commit->Modify( item );
 
                     m_cursor = controls->GetCursorPosition();
@@ -242,7 +242,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
 
-			getView()->Update( &selection );
+            getView()->Update( &selection );
             m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
         }
 
@@ -299,7 +299,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Update dragging offset (distance between cursor and the first dragged item)
                 m_offset = selection.Front()->GetPosition() - modPoint;
-				getView()->Update( &selection );
+                getView()->Update( &selection );
                 updateRatsnest( true );
             }
         }
@@ -394,7 +394,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     wxPoint rotatePoint = getModificationPoint( selection );
 
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         m_commit->Modify( item );
         item->Rotate( rotatePoint, editFrame->GetRotationAngle() );
@@ -530,7 +530,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     std::vector<BOARD_ITEM*> old_items;
 
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         if( item )
             old_items.push_back( item );
@@ -548,7 +548,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         BOARD_ITEM* new_item = NULL;
 
         if( m_editModules )
+        {
             new_item = editFrame->GetBoard()->m_Modules->Duplicate( item, increment );
+        }
         else
         {
 #if 0
@@ -633,11 +635,11 @@ private:
                                               true, new_item );
     }
 
-    void postPushAction( BOARD_ITEM* new_item ) //override
+    void postPushAction( BOARD_ITEM* new_item ) override
     {
     }
 
-    void finalise() // override
+    void finalise() override
     {
     }
 

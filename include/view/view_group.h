@@ -42,7 +42,7 @@ namespace KIGFX
 class VIEW_GROUP : public VIEW_ITEM
 {
 protected:
-    typedef std::vector<VIEW_ITEM *> ITEMS;
+    typedef std::vector<VIEW_ITEM*> ITEMS;
 
 public:
     VIEW_GROUP( VIEW* aView = NULL );
@@ -56,7 +56,7 @@ public:
      */
     virtual unsigned int GetSize() const;
 
-	/**
+    /**
      * Function Add()
      * Adds an item to the group.
      *
@@ -78,8 +78,7 @@ public:
      */
     virtual void Clear();
 
-
-    virtual VIEW_ITEM *GetItem(unsigned int idx) const;
+    virtual VIEW_ITEM* GetItem( unsigned int aIdx ) const;
 
     /**
      * Function ViewBBox()
@@ -138,8 +137,7 @@ protected:
 private:
     void updateBbox();
 
-    VIEW *m_view;
-
+    VIEW* m_view;
 };
 
 } // namespace KIGFX

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -134,8 +134,6 @@ public:
         return 0;
     }
 
-    
-
 public:
 
     VIEW_ITEM_DATA* viewPrivData() const
@@ -146,7 +144,7 @@ public:
 private:
     friend class VIEW;
 
-    VIEW_ITEM_DATA *m_viewPrivData;
+    VIEW_ITEM_DATA* m_viewPrivData;
 };
 
 } // namespace KIGFX

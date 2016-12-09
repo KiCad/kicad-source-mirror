@@ -368,7 +368,7 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
     bool modified = false;
 
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         bool prevState = item->IsLocked();
 
@@ -490,7 +490,7 @@ int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
     const auto& selection = selTool->GetSelection();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         assert( item->Type() == PCB_ZONE_AREA_T );
 
@@ -533,12 +533,11 @@ int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
     const auto& selection = selTool->GetSelection();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         assert( item->Type() == PCB_ZONE_AREA_T );
 
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*> ( item );
-
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         zone->SetIsFilled( false );
         zone->ClearFilledPolysList();
         ratsnest->Update( zone );
@@ -570,11 +569,13 @@ int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-static bool mergeZones ( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aOriginZones, std::vector<ZONE_CONTAINER *>& aMergedZones )
+
+static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aOriginZones,
+        std::vector<ZONE_CONTAINER *>& aMergedZones )
 {
     SHAPE_POLY_SET mergedOutlines = ConvertPolyListToPolySet( aOriginZones[0]->Outline()->m_CornersList );
 
-    for ( unsigned int i = 1; i < aOriginZones.size(); i++ )
+    for( unsigned int i = 1; i < aOriginZones.size(); i++ )
     {
         SHAPE_POLY_SET areaToMergePoly = ConvertPolyListToPolySet( aOriginZones[i]->Outline()->m_CornersList );
 
@@ -589,16 +590,16 @@ static bool mergeZones ( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& a
     // but we should never have more than 2 polys
     if( mergedOutlines.OutlineCount() > 1 )
     {
-        wxLogMessage(wxT("BOARD::CombineAreas error: more than 2 polys after merging") );
+        wxLogMessage( wxT( "BOARD::CombineAreas error: more than 2 polys after merging" ) );
         return false;
     }
 
-    for ( unsigned int i = 1; i < aOriginZones.size(); i++ )
+    for( unsigned int i = 1; i < aOriginZones.size(); i++ )
     {
         aCommit.Remove( aOriginZones[i] );
     }
 
-    aCommit.Modify ( aOriginZones[0] );
+    aCommit.Modify( aOriginZones[0] );
     aMergedZones.push_back( aOriginZones[0] );
 
     aOriginZones[0]->Outline()->m_CornersList = ConvertPolySetToPolyList( mergedOutlines );
@@ -619,11 +620,10 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 
     int netcode = -1;
 
-    ZONE_CONTAINER *firstZone = nullptr;
-    std::vector<ZONE_CONTAINER *> toMerge, merged;
+    ZONE_CONTAINER* firstZone = nullptr;
+    std::vector<ZONE_CONTAINER*> toMerge, merged;
 
-
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         auto curr_area = dynamic_cast<ZONE_CONTAINER*>( item );
 
@@ -635,7 +635,7 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 
         netcode = curr_area->GetNetCode();
 
-        if ( firstZone )
+        if( firstZone )
         {
             if( firstZone->GetNetCode() != netcode )
                 continue;
@@ -649,23 +649,24 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
             if( curr_area->GetLayer() != firstZone->GetLayer() )
                 continue;
 
-            if (! board->TestAreaIntersection( curr_area, firstZone ) )
+            if( !board->TestAreaIntersection( curr_area, firstZone ) )
                 continue;
 
-            toMerge.push_back(curr_area);
+            toMerge.push_back( curr_area );
         }
         else
         {
-            toMerge.push_back(curr_area);
+            toMerge.push_back( curr_area );
         }
     }
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-    if ( mergeZones( commit, toMerge, merged ) )
+    if( mergeZones( commit, toMerge, merged ) )
     {
         commit.Push( _( "Merge zones" ) );
-        for ( auto item : merged )
+
+        for( auto item : merged )
             m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, item );
     }
 

@@ -42,7 +42,7 @@ using namespace KIGFX;
 
 VIEW_GROUP::VIEW_GROUP( VIEW* aView ) :
     m_layer( ITEM_GAL_LAYER( GP_OVERLAY ) ),
-    m_view ( aView )
+    m_view( aView )
 {
 
 }
@@ -50,9 +50,8 @@ VIEW_GROUP::VIEW_GROUP( VIEW* aView ) :
 
 VIEW_GROUP::~VIEW_GROUP()
 {
-    if (m_view && viewPrivData() )
-        m_view->Remove ( this );
-
+    if( m_view && viewPrivData() )
+        m_view->Remove( this );
 }
 
 
@@ -64,9 +63,9 @@ void VIEW_GROUP::Add( VIEW_ITEM* aItem )
 
 void VIEW_GROUP::Remove( VIEW_ITEM* aItem )
 {
-    for ( auto iter = m_groupItems.begin(); iter != m_groupItems.end(); ++iter)
+    for( auto iter = m_groupItems.begin(); iter != m_groupItems.end(); ++iter)
     {
-        if ( aItem == *iter )
+        if( aItem == *iter )
         {
             m_groupItems.erase( iter);
             break;
@@ -108,7 +107,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
     const auto drawList = updateDrawList();
 
     // Draw all items immediately (without caching)
-    for ( auto item : drawList )
+    for( auto item : drawList )
     {
         gal->PushDepth();
 
@@ -142,30 +141,32 @@ void VIEW_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
 
 void VIEW_GROUP::FreeItems()
 {
-    for (unsigned int i = 0 ; i < GetSize(); i++)
+    for(unsigned int i = 0 ; i < GetSize(); i++)
     {
-        VIEW_ITEM *item = GetItem(i);
+        VIEW_ITEM* item = GetItem(i);
         delete item;
     }
 
     Clear();
 }
 
+
 const VIEW_GROUP::ITEMS VIEW_GROUP::updateDrawList() const
 {
     return m_groupItems;
 }
 
+
 /*void VIEW_GROUP::ItemsSetVisibility( bool aVisible )
 {
-    for (unsigned int i = 0 ; i < GetSize(); i++)
+    for(unsigned int i = 0 ; i < GetSize(); i++)
         GetItem(i)->ViewSetVisible( aVisible );
 }
 
 
 void VIEW_GROUP::ItemsViewUpdate( VIEW_ITEM::VIEW_UPDATE_FLAGS aFlags )
 {
-    for (unsigned int i = 0 ; i < GetSize(); i++)
+    for(unsigned int i = 0 ; i < GetSize(); i++)
         GetItem(i)->ViewUpdate( aFlags );
 }*/
 

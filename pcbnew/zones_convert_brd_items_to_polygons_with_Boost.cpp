@@ -504,7 +504,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList_NG( BOARD* aPcb )
         if( g_DumpZonesWhenFilling )
             dumper->Write ( &th_fractured, "th_fractured" );
 
-         m_FilledPolysList = th_fractured;
+        m_FilledPolysList = th_fractured;
 
         if( GetNetCode() > 0 )
             TestForCopperIslandAndRemoveInsulatedIslands( aPcb );

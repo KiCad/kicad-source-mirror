@@ -308,7 +308,7 @@ SELECTION& SELECTION_TOOL::GetSelection()
     auto items = m_selection.GetItems();
 
     // Filter out not modifiable items
-    for ( auto item : items )
+    for( auto item : items )
     {
         if( !modifiable( item ) )
         {
@@ -523,7 +523,7 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
     bool containsLocked = false;
 
     // Check if the selection contains locked items
-    for ( const auto& item : m_selection )
+    for( const auto& item : m_selection )
     {
         switch( item->Type() )
         {
@@ -746,7 +746,7 @@ void SELECTION_TOOL::clearSelection()
     if( m_selection.Empty() )
         return;
 
-    for ( auto item : m_selection )
+    for( auto item : m_selection )
         unselectVisually( item );
 
     m_selection.Clear();
@@ -816,7 +816,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
         // Draw a mark to show which item is available to be selected
         if( current && current->IsBrightened() )
         {
-            brightBox.SetItem ( current );
+            brightBox.SetItem( current );
             getView()->SetVisible( &brightBox, true );
 //          getView()->Hide( &brightBox, false );
             getView()->Update( &brightBox, KIGFX::GEOMETRY );
@@ -978,7 +978,7 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
     }
 
     selectVisually( aItem );
-    m_selection.Add ( aItem );
+    m_selection.Add( aItem );
 
     if( m_selection.Size() == 1 )
     {
@@ -1021,11 +1021,12 @@ void SELECTION_TOOL::selectVisually( BOARD_ITEM* aItem ) const
 
     if( aItem->Type() == PCB_MODULE_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM *item ) {
+        static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
+        {
             item->SetSelected();
             view()->Hide( item, true );
             view()->Update( item, KIGFX::GEOMETRY );
-        });
+        } );
     }
 }
 
@@ -1041,16 +1042,14 @@ void SELECTION_TOOL::unselectVisually( BOARD_ITEM* aItem ) const
     // unselect all the parts that make the module, not the module itself
 
     if( aItem->Type() == PCB_MODULE_T )
+    {
+        static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
         {
-            static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM *item ) {
-                item->ClearSelected();
-                view()->Hide( item, false );
-                view()->Update( item, KIGFX::ALL );
-            });
-        }
-
-
-//view()->RecacheAllItems();
+            item->ClearSelected();
+            view()->Hide( item, false );
+            view()->Update( item, KIGFX::ALL );
+        });
+    }
 }
 
 
@@ -1421,6 +1420,11 @@ bool SELECTION_TOOL::SanitizeSelection()
 }
 
 
+SELECTION::SELECTION( KIGFX::VIEW* aView ) :
+    KIGFX::VIEW_GROUP( aView )
+{}
+
+
 void SELECTION::clear()
 {
     m_items.clear();
@@ -1437,7 +1441,7 @@ VECTOR2I SELECTION::GetCenter() const
     }
     else
     {
-        EDA_RECT bbox =  Front()->GetBoundingBox();
+        EDA_RECT bbox = Front()->GetBoundingBox();
         auto i = m_items.begin();
         ++i;
 
@@ -1453,28 +1457,25 @@ VECTOR2I SELECTION::GetCenter() const
 }
 
 
-const TOOL_EVENT SELECTION_TOOL::SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" );
-const TOOL_EVENT SELECTION_TOOL::UnselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.unselected" );
-const TOOL_EVENT SELECTION_TOOL::ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" );
-
-SELECTION::SELECTION( KIGFX::VIEW *aView ) :
-    KIGFX::VIEW_GROUP ( aView )
-{}
-
 const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
 {
-    std::vector<VIEW_ITEM *> items;
+    std::vector<VIEW_ITEM*> items;
 
-    items.clear();
-    for ( auto item : m_items )
+    for( auto item : m_items )
     {
         items.push_back( item );
+
         if( item->Type() == PCB_MODULE_T )
         {
             MODULE* module = static_cast<MODULE*>( item );
-            module->RunOnChildren( [&] ( BOARD_ITEM *bitem ) { items.push_back(bitem); });
+            module->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { items.push_back( bitem ); } );
         }
     }
 
     return items;
 }
+
+
+const TOOL_EVENT SELECTION_TOOL::SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" );
+const TOOL_EVENT SELECTION_TOOL::UnselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.unselected" );
+const TOOL_EVENT SELECTION_TOOL::ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" );

@@ -93,43 +93,46 @@ static inline void prof_end( prof_counter* aCnt )
 class PROF_COUNTER
 {
 public:
-    PROF_COUNTER(const std::string& name, bool autostart = true)
-  {
-    m_name = name;
-    m_running= false;
-    if(autostart)
-      start();
-  }
+    PROF_COUNTER( const std::string& name, bool autostart = true )
+    {
+        m_name = name;
+        m_running = false;
 
-  void start()
-  {
-    m_running = true;
-    prof_start(&m_cnt);
-  }
+        if( autostart )
+            start();
+    }
 
-  void stop()
-  {
-    if(!m_running)
-    return;
-    m_running=false;
-    prof_end(&m_cnt);
-  }
+    void start()
+    {
+        m_running = true;
+        prof_start( &m_cnt );
+    }
 
-  void show()
-  {
-    stop();
-    fprintf(stderr,"%s took %.1f milliseconds.\n", m_name.c_str(), (double)m_cnt.msecs());
-    start();
-  }
-  
-  double msecs() const {
-      return m_cnt.msecs();
-  }
+    void stop()
+    {
+        if( !m_running )
+            return;
+
+        m_running = false;
+        prof_end( &m_cnt );
+    }
+
+    void show()
+    {
+        stop();
+        fprintf( stderr, "%s took %.1f milliseconds.\n", m_name.c_str(), (double)m_cnt.msecs() );
+        start();
+    }
+
+    double msecs() const
+    {
+        return m_cnt.msecs();
+    }
 
 private:
-  std::string m_name;
-  prof_counter m_cnt;
-  bool m_running;
+    std::string m_name;
+    prof_counter m_cnt;
+    bool m_running;
 };
 
 

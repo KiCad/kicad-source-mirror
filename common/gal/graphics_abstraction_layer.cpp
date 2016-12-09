@@ -122,6 +122,7 @@ void GAL::ComputeWorldScreenMatrix()
     screenWorldMatrix = worldScreenMatrix.Inverse();
 }
 
+
 void GAL::DrawGrid()
 {
     if( !gridVisibility )
@@ -160,11 +161,13 @@ void GAL::DrawGrid()
         {
             gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
             gridEndX += std::abs( gridOrigin.x / gridSize.x ) + 1;
-        } else {
+        }
+        else
+        {
             gridStartX += std::abs( gridOrigin.x / gridSize.x ) + 1;
             gridEndX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
         }
-        
+
         int dirX = gridEndX >= gridStartX ? 1 : -1;
         int dirY = gridEndY >= gridStartY ? 1 : -1;
 

@@ -379,12 +379,14 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerOrder()
     }
 }
 
+
 bool PCB_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
-    bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend ( aGalType );
+    bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
     setDefaultLayerDeps();
     return rv;
 }
+
 
 void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 {
@@ -406,11 +408,11 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
         }
     }
 
-	// caching makes no sense for Cairo and other software renderers
+    // caching makes no sense for Cairo and other software renderers
     if ( m_backend != GAL_TYPE_OPENGL )
     {
-        for (int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++)
-           m_view->SetLayerTarget(i, KIGFX::TARGET_NONCACHED);
+        for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
+           m_view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
     }
 
     m_view->SetLayerTarget( ITEM_GAL_LAYER( ANCHOR_VISIBLE ), KIGFX::TARGET_NONCACHED );
@@ -451,5 +453,4 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
     m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( WORKSHEET ) );
     m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( GRID_VISIBLE ) );
     m_view->SetLayerDisplayOnly( ITEM_GAL_LAYER( DRC_VISIBLE ) );
-
 }

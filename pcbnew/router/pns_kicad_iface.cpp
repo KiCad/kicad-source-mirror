@@ -326,7 +326,7 @@ public:
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
         Clear();
-        m_view->Remove ( m_items );
+        m_view->Remove( m_items );
         delete m_items;
     }
 
@@ -408,7 +408,7 @@ public:
 
         pitem->Line( aLine, aWidth, aType );
         m_items->Add( pitem ); // Should not be needed, as m_items has been passed as a parent group in alloc;
-        m_view->Update ( m_items );
+        m_view->Update( m_items );
     }
 
     void Clear() override
@@ -416,7 +416,7 @@ public:
         if( m_view && m_items )
         {
             m_items->FreeItems();
-            m_view->Update ( m_items );
+            m_view->Update( m_items );
         }
     }
 
@@ -517,7 +517,7 @@ std::unique_ptr< PNS::SOLID > PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
     RotatePoint( &offset, aPad->GetOrientation() );
 
     solid->SetPos( VECTOR2I( c.x - offset.x, c.y - offset.y ) );
-    solid->SetOffset ( VECTOR2I ( offset.x, offset.y ) );
+    solid->SetOffset( VECTOR2I( offset.x, offset.y ) );
 
     double orient = aPad->GetOrientation() / 10.0;
 
@@ -823,7 +823,7 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClea
 
     m_previewItems->Add( pitem );
 
-    m_view->Update ( m_previewItems );
+    m_view->Update( m_previewItems );
 }
 
 
@@ -833,11 +833,11 @@ void PNS_KICAD_IFACE::HideItem( PNS::ITEM* aItem )
 
     if( parent )
     {
-        if( m_view->IsVisible ( parent ) )
+        if( m_view->IsVisible( parent ) )
             m_hiddenItems.insert( parent );
 
         m_view->SetVisible( parent, false );
-        m_view->Update ( parent, KIGFX::APPEARANCE );
+        m_view->Update( parent, KIGFX::APPEARANCE );
     }
 }
 
@@ -906,7 +906,7 @@ void PNS_KICAD_IFACE::Commit()
 {
     EraseView();
     m_commit->Push( wxT( "Added a track" ) );
-    m_commit.reset( new BOARD_COMMIT ( m_frame ) );
+    m_commit.reset( new BOARD_COMMIT( m_frame ) );
 }
 
 
@@ -936,10 +936,12 @@ void PNS_KICAD_IFACE::UpdateNet( int aNetCode )
     wxLogTrace( "PNS", "Update-net %d", aNetCode );
 }
 
+
 PNS::RULE_RESOLVER* PNS_KICAD_IFACE::GetRuleResolver()
 {
     return m_ruleResolver;
 }
+
 
 void PNS_KICAD_IFACE::SetRouter( PNS::ROUTER* aRouter )
 {
@@ -951,5 +953,5 @@ void PNS_KICAD_IFACE::SetHostFrame( PCB_EDIT_FRAME* aFrame )
 {
     m_frame = aFrame;
 
-    m_commit.reset( new BOARD_COMMIT ( m_frame ) );
+    m_commit.reset( new BOARD_COMMIT( m_frame ) );
 }

@@ -261,7 +261,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnOkClick( wxCommandEvent& event )
         if( m_parent->IsGalCanvasActive() )
         {
             for( TRACK* track = m_parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
-                m_parent->GetGalCanvas()->GetView()->Update(track, KIGFX::GEOMETRY );
+                m_parent->GetGalCanvas()->GetView()->Update( track, KIGFX::GEOMETRY );
         }
         else
             m_parent->GetCanvas()->Refresh();

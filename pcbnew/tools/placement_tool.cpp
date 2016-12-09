@@ -94,7 +94,7 @@ int PLACEMENT_TOOL::AlignTop( const TOOL_EVENT& aEvent )
     }
 
     // Move the selected items
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         int difference = top - item->GetBoundingBox().GetY();
 
@@ -129,7 +129,7 @@ int PLACEMENT_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
     }
 
     // Move the selected items
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         int difference = bottom - item->GetBoundingBox().GetBottom();
 
@@ -164,7 +164,7 @@ int PLACEMENT_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
     }
 
     // Move the selected items
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         int difference = left - item->GetBoundingBox().GetX();
 
@@ -199,7 +199,7 @@ int PLACEMENT_TOOL::AlignRight( const TOOL_EVENT& aEvent )
     }
 
     // Move the selected items
-    for ( auto item : selection )
+    for( auto item : selection )
     {
         int difference = right - item->GetBoundingBox().GetRight();
 
@@ -236,7 +236,8 @@ int PLACEMENT_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 
     // Prepare a list, so the items can be sorted by their X coordinate
     std::vector<BOARD_ITEM*> itemsList;
-    for ( auto item : selection )
+
+    for( auto item : selection )
         itemsList.push_back( item );
 
     // Sort items by X coordinate
@@ -278,11 +279,12 @@ int PLACEMENT_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 
     // Prepare a list, so the items can be sorted by their Y coordinate
     std::vector<BOARD_ITEM*> itemsList;
-    for ( auto item : selection )
+
+    for( auto item : selection )
         itemsList.push_back( item );
 
     // Sort items by Y coordinate
-    std::sort(itemsList.begin(), itemsList.end(), compareY );
+    std::sort( itemsList.begin(), itemsList.end(), compareY );
 
     // Expected Y coordinate for the next item (=minY)
     int position = (*itemsList.begin())->GetBoundingBox().Centre().y;

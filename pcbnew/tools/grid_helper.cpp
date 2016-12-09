@@ -203,6 +203,7 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea ) const
     for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
+
         if( view->IsVisible( item ) )
             items.insert ( item );
     }

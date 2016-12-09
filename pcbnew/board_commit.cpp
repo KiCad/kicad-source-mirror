@@ -53,7 +53,7 @@ BOARD_COMMIT::~BOARD_COMMIT()
 }
 
 
-void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry)
+void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry )
 {
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST undoList;
@@ -90,13 +90,14 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry)
 
                 assert( ent.m_item->Type() == PCB_MODULE_T );
                 assert( ent.m_copy->Type() == PCB_MODULE_T );
+
                 if ( aCreateUndoEntry )
                 {
-		                ITEM_PICKER itemWrapper( ent.m_item, UR_CHANGED );
-	                itemWrapper.SetLink( ent.m_copy );
-	                undoList.PushItem( itemWrapper );
-	                frame->SaveCopyInUndoList( undoList, UR_CHANGED );
-				}
+                    ITEM_PICKER itemWrapper( ent.m_item, UR_CHANGED );
+                    itemWrapper.SetLink( ent.m_copy );
+                    undoList.PushItem( itemWrapper );
+                    frame->SaveCopyInUndoList( undoList, UR_CHANGED );
+                }
 
                 savedModules.insert( ent.m_item );
                 static_cast<MODULE*>( ent.m_item )->SetLastEditTime();
@@ -109,8 +110,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry)
             {
                 if( !m_editModules )
                 {
-                    if ( aCreateUndoEntry )                    
-						undoList.PushItem( ITEM_PICKER( boardItem, UR_NEW ) );
+                    if( aCreateUndoEntry )
+                        undoList.PushItem( ITEM_PICKER( boardItem, UR_NEW ) );
 
                     if( !( changeFlags & CHT_DONE ) )
                         board->Add( boardItem );

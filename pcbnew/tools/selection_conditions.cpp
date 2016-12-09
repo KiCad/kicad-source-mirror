@@ -41,7 +41,7 @@ bool SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
     if( aSelection.Empty() )
         return false;
 
-    for ( const auto &item : aSelection )
+    for( const auto &item : aSelection )
     {
         auto type = item->Type();
 
@@ -114,7 +114,7 @@ bool SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection, bool aAllow
 
     int netcode = -1;   // -1 stands for 'net code is not yet determined'
 
-    for ( const auto& aitem : aSelection )
+    for( const auto& aitem : aSelection )
     {
         int current_netcode = -1;
 
@@ -161,7 +161,7 @@ bool SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
     LSET layerSet;
     layerSet.set();
 
-    for ( const auto& item : aSelection )
+    for( const auto& item : aSelection )
     {
         layerSet &= item->GetLayerSet();
 
@@ -175,7 +175,7 @@ bool SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
 
 bool SELECTION_CONDITIONS::hasTypeFunc( const SELECTION& aSelection, KICAD_T aType )
 {
-    for ( const auto& item : aSelection )
+    for( const auto& item : aSelection )
     {
         if( item->Type() == aType )
             return true;
@@ -190,7 +190,7 @@ bool SELECTION_CONDITIONS::onlyTypeFunc( const SELECTION& aSelection, KICAD_T aT
     if( aSelection.Empty() )
         return false;
 
-    for ( const auto& item : aSelection )
+    for( const auto& item : aSelection )
     {
         if( item->Type() != aType )
             return false;
@@ -205,7 +205,7 @@ bool SELECTION_CONDITIONS::onlyTypesFunc( const SELECTION& aSelection, const std
     if( aSelection.Empty() )
         return false;
 
-    for ( const auto& item : aSelection )
+    for( const auto& item : aSelection )
     {
         bool valid = false;
 
@@ -231,7 +231,7 @@ bool SELECTION_CONDITIONS::onlyTypesFuncArr( const SELECTION& aSelection, const 
     if( aSelection.Empty() )
         return false;
 
-    for ( const auto& item : aSelection )
+    for( const auto& item : aSelection )
     {
         bool valid = false;
         const KICAD_T* type = aTypes;

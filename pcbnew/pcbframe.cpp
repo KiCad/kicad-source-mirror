@@ -1133,6 +1133,7 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
     }
 }
 
+
 void PCB_EDIT_FRAME::OnFlipPcbView(wxCommandEvent& evt)
 {
     auto view = GetGalCanvas()->GetView();

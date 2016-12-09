@@ -104,16 +104,16 @@ private:
      * @param aLayer is the layer number for which group id is queried.
      * @return group id or -1 in case there is no group id (ie. item is not cached).
      */
-     int getGroup( int aLayer ) const
-     {
-         for( int i = 0; i < m_groupsSize; ++i )
-         {
-             if( m_groups[i].first == aLayer )
-                 return m_groups[i].second;
-         }
+    int getGroup( int aLayer ) const
+    {
+        for( int i = 0; i < m_groupsSize; ++i )
+        {
+            if( m_groups[i].first == aLayer )
+                return m_groups[i].second;
+        }
 
-         return -1;
-     }
+        return -1;
+    }
 
     /**
      * Function getAllGroups()
@@ -142,7 +142,6 @@ private:
      */
     void setGroup( int aLayer, int aGroup )
     {
-        //printf("sgGrpSize %d l %d g %d\n", m_groupsSize, aLayer, aGroup);
         // Look if there is already an entry for the layer
         for( int i = 0; i < m_groupsSize; ++i )
         {
@@ -164,8 +163,6 @@ private:
 
         m_groups = newGroups;
         newGroups[m_groupsSize++] = GroupPair( aLayer, aGroup );
-        //printf("sgGrpSizeaTexit %d\n", m_groupsSize);
-
     }
 
 
@@ -243,7 +240,7 @@ private:
     }
 };
 
-void VIEW::OnDestroy ( VIEW_ITEM* aItem )
+void VIEW::OnDestroy( VIEW_ITEM* aItem )
 {
     auto data = aItem->viewPrivData();
 
@@ -319,19 +316,19 @@ void VIEW::Add( VIEW_ITEM* aItem )
         MarkTargetDirty( l.target );
     }
 
-    SetVisible ( aItem, true );
+    SetVisible( aItem, true );
     Update( aItem, KIGFX::ALL );
 }
 
 
 void VIEW::Remove( VIEW_ITEM* aItem )
 {
-    if ( !aItem )
+    if( !aItem )
         return;
 
     auto viewData = aItem->viewPrivData();
 
-    if ( !viewData )
+    if( !viewData )
         return;
 
     auto item = std::find( m_allItems.begin(), m_allItems.end(), aItem );
@@ -359,7 +356,6 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     }
 
     viewData->deleteGroups();
-
     aItem->m_viewPrivData = nullptr;
 }
 
@@ -813,7 +809,7 @@ struct VIEW::drawItem
     bool operator()( VIEW_ITEM* aItem )
     {
 
-        assert ( aItem->viewPrivData() );
+        assert( aItem->viewPrivData() );
         // Conditions that have te be fulfilled for an item to be drawn
         bool drawCondition = aItem->viewPrivData()->isRenderable() &&
                              aItem->ViewGetLOD( layer, view ) < view->m_scale;
@@ -897,7 +893,7 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
 
 void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate )
 {
-    for ( unsigned int i = 0; i < aGroup->GetSize(); i++)
+    for( unsigned int i = 0; i < aGroup->GetSize(); i++)
         draw( aGroup->GetItem(i), aImmediate );
 }
 
@@ -906,7 +902,7 @@ struct VIEW::unlinkItem
     bool operator()( VIEW_ITEM* aItem )
     {
         delete aItem->m_viewPrivData;
-		aItem->m_viewPrivData = nullptr;
+        aItem->m_viewPrivData = nullptr;
         return true;
     }
 };
@@ -1058,7 +1054,7 @@ void VIEW::invalidateItem( VIEW_ITEM* aItem, int aUpdateFlags )
     int layers[VIEW_MAX_LAYERS], layers_count;
     aItem->ViewGetLayers( layers, layers_count );
 
-	// Iterate through layers used by the item and recache it immediately
+    // Iterate through layers used by the item and recache it immediately
     for( int i = 0; i < layers_count; ++i )
     {
         int layerId = layers[i];
@@ -1238,8 +1234,9 @@ void VIEW::UpdateItems()
     {
         auto viewData = item->viewPrivData();
 
-        if ( viewData->m_requiredUpdate != NONE )
+        if( viewData->m_requiredUpdate != NONE )
             invalidateItem( item, viewData->m_requiredUpdate );
+
         viewData->m_requiredUpdate = NONE;
     }
 
@@ -1262,7 +1259,8 @@ struct VIEW::extentsVisitor
         if( first )
             extents = aItem->ViewBBox();
         else
-            extents.Merge ( aItem->ViewBBox() );
+            extents.Merge( aItem->ViewBBox() );
+
         return false;
     }
 };
@@ -1283,7 +1281,7 @@ const BOX2I VIEW::CalculateExtents()
 }
 
 
-void VIEW::SetVisible( VIEW_ITEM *aItem, bool aIsVisible )
+void VIEW::SetVisible( VIEW_ITEM* aItem, bool aIsVisible )
 {
     auto viewData = aItem->viewPrivData();
 
@@ -1302,7 +1300,8 @@ void VIEW::SetVisible( VIEW_ITEM *aItem, bool aIsVisible )
     }
 }
 
-void VIEW::Hide( VIEW_ITEM *aItem, bool aHide )
+
+void VIEW::Hide( VIEW_ITEM* aItem, bool aHide )
 {
     auto viewData = aItem->viewPrivData();
 
@@ -1317,23 +1316,26 @@ void VIEW::Hide( VIEW_ITEM *aItem, bool aHide )
     Update( aItem, APPEARANCE );
 }
 
-bool VIEW::IsVisible( const VIEW_ITEM *aItem ) const
+
+bool VIEW::IsVisible( const VIEW_ITEM* aItem ) const
 {
     const auto viewData = aItem->viewPrivData();
 
     return viewData->m_flags & VISIBLE;
 }
 
+
 void VIEW::Update( VIEW_ITEM *aItem )
 {
     Update( aItem, ALL );
 }
 
-void VIEW::Update( VIEW_ITEM *aItem, int aUpdateFlags )
+
+void VIEW::Update( VIEW_ITEM* aItem, int aUpdateFlags )
 {
     auto viewData = aItem->viewPrivData();
 
-    if ( !viewData )
+    if( !viewData )
         return;
 
     assert( aUpdateFlags != NONE );

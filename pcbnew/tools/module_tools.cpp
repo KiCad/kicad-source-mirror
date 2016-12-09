@@ -370,9 +370,9 @@ int MODULE_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
         // Create a temporary module that contains selected items to ease serialization
         MODULE module( m_board );
 
-        for ( auto item : selection )
+        for( auto item : selection )
         {
-            auto clone = static_cast<BOARD_ITEM *> ( item->Clone() );
+            auto clone = static_cast<BOARD_ITEM*>( item->Clone() );
 
             // Do not add reference/value - convert them to the common type
             if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )

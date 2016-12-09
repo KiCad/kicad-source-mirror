@@ -767,8 +767,8 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     currentManager->Translate( aPosition.x, aPosition.y, layerDepth );
     currentManager->Rotate( aRotationAngle, 0.0f, 0.0f, -1.0f );
 
-    double sx = SCALE * (globalFlipX ? -1.0 : 1.0);
-    double sy = SCALE * (globalFlipY ? -1.0 : 1.0);
+    double sx = SCALE * ( globalFlipX ? -1.0 : 1.0 );
+    double sy = SCALE * ( globalFlipY ? -1.0 : 1.0 );
 
     currentManager->Scale( sx, sy, 0 );
     currentManager->Translate( 0, -commonOffset, 0 );
@@ -887,7 +887,9 @@ void OPENGL_GAL::DrawGrid()
     {
         gridStartX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
         gridEndX += std::abs( gridOrigin.x / gridSize.x ) + 1;
-    } else {
+    }
+    else
+    {
         gridStartX += std::abs( gridOrigin.x / gridSize.x ) + 1;
         gridEndX -= std::abs( gridOrigin.x / gridSize.x ) + 1;
     }

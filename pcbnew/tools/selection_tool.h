@@ -52,27 +52,27 @@ struct SELECTION : public KIGFX::VIEW_GROUP
 {
 private:
     /// Set of selected items
-    std::set<BOARD_ITEM *> m_items;
+    std::set<BOARD_ITEM*> m_items;
 
 public:
-    using ITER = std::set<BOARD_ITEM *>::iterator;
-    using CITER = std::set<BOARD_ITEM *>::const_iterator;
+    using ITER = std::set<BOARD_ITEM*>::iterator;
+    using CITER = std::set<BOARD_ITEM*>::const_iterator;
 
-    SELECTION( KIGFX::VIEW *aView = nullptr );
+    SELECTION( KIGFX::VIEW* aView = nullptr );
 
     ITER begin() { return m_items.begin(); }
     ITER end() { return m_items.end(); }
     CITER begin() const { return m_items.cbegin(); }
     CITER end() const { return m_items.cend(); }
 
-    virtual void Add( BOARD_ITEM *aItem )
+    virtual void Add( BOARD_ITEM* aItem )
     {
-        m_items.insert (aItem);
+        m_items.insert( aItem );
     }
 
     virtual void Remove( BOARD_ITEM *aItem )
     {
-        m_items.erase (aItem);
+        m_items.erase( aItem );
     }
 
     virtual void Clear() override
@@ -85,18 +85,19 @@ public:
         return m_items.size();
     }
 
-    virtual KIGFX::VIEW_ITEM *GetItem( unsigned int idx ) const override
+    virtual KIGFX::VIEW_ITEM* GetItem( unsigned int idx ) const override
     {
         auto iter = m_items.begin();
-        while(idx--)
+
+        while( idx-- )
             ++iter;
 
         return *iter;
     }
 
-    bool Contains( BOARD_ITEM *aItem ) const
+    bool Contains( BOARD_ITEM* aItem ) const
     {
-        return m_items.find (aItem) != m_items.end();
+        return m_items.find( aItem ) != m_items.end();
     }
 
     /// Checks if there is anything selected
@@ -111,7 +112,7 @@ public:
         return m_items.size();
     }
 
-    const std::set<BOARD_ITEM *> GetItems() const
+    const std::set<BOARD_ITEM*> GetItems() const
     {
         return m_items;
     }
@@ -127,7 +128,7 @@ public:
         return (* m_items.begin() + index );
     }
 
-    BOARD_ITEM *Front() const
+    BOARD_ITEM* Front() const
     {
         if ( !m_items.size() )
             return nullptr;
@@ -135,7 +136,7 @@ public:
         return *m_items.begin();
     }
 
-    std::set<BOARD_ITEM *>& Items()
+    std::set<BOARD_ITEM*>& Items()
     {
         return m_items;
     }

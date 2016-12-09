@@ -848,7 +848,7 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW *aView ) const
+unsigned int MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     int layer = ( m_Layer == F_Cu ) ? MOD_FR_VISIBLE :
                 ( m_Layer == B_Cu ) ? MOD_BK_VISIBLE : ANCHOR_VISIBLE;

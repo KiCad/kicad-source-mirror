@@ -117,7 +117,7 @@ public:
     void ViewDraw( int aLayer, VIEW* aView ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
-    void ViewGetLayers( int aLayers[], int& aCount ) const  override;
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
 #if defined(DEBUG)
     /// @copydoc EDA_ITEM::Show()

@@ -40,18 +40,17 @@ class BRIGHT_BOX : public EDA_ITEM
 {
 public:
     BRIGHT_BOX();
-    ~BRIGHT_BOX() {};
+    ~BRIGHT_BOX() {}
 
     virtual const BOX2I ViewBBox() const override
     {
         BOX2I bb; bb.SetMaximum();
         return bb;
-        
-        if ( !m_item )
+
+        if( !m_item )
             return BOX2I();
 
         return m_item->ViewBBox();
-
     }
 
     void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
@@ -76,7 +75,7 @@ public:
         return wxT( "BRIGHT_BOX" );
     }
 
-    void SetItem( BOARD_ITEM *aItem );
+    void SetItem( BOARD_ITEM* aItem );
 
 private:
     static const KIGFX::COLOR4D BOX_COLOR;

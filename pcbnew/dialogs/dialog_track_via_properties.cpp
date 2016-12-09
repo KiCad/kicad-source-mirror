@@ -52,9 +52,8 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     bool hasLocked = false;
     bool hasUnlocked = false;
 
-
     // Look for values that are common for every item that is selected
-    for ( auto& item : m_items )
+    for( auto& item : m_items )
     {
         switch( item->Type() )
         {
@@ -210,7 +209,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::Apply( COMMIT& aCommit )
     bool changeLock = m_lockedCbox->Get3StateValue() != wxCHK_UNDETERMINED;
     bool setLock = m_lockedCbox->Get3StateValue() == wxCHK_CHECKED;
 
-    for ( auto item : m_items )
+    for( auto item : m_items )
     {
         aCommit.Modify( item );
 

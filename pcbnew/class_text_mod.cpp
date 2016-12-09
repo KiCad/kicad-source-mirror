@@ -421,7 +421,7 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW *aView ) const
+unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     const int MAX = std::numeric_limits<unsigned int>::max();
 

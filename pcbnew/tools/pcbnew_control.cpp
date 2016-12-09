@@ -780,6 +780,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     // (for undo command for instance)
 
     // Tracks are inserted, not appended, so mark the existing tracks to know what are the new tracks
+    // TODO legacy
     for( TRACK* track = board->m_Track; track; track = track->Next() )
         track->SetFlags( FLAG0 );
 

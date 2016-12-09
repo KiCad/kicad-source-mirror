@@ -149,7 +149,7 @@ private:
         const SELECTION& selection = m_selectionTool->GetSelection();
 
         if( selection.Size() != 1 )
-        return nullptr;
+            return nullptr;
 
         auto item = selection[0];
         return dyn_cast<T*>( item );

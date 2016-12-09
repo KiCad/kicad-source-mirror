@@ -537,7 +537,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( m_frame );
 
     // Build the undo list & add items to the current view
-    for ( auto item : list )
+    for( auto item : list )
     {
         KICAD_T type = item->Type();
         assert( type == PCB_LINE_T || type == PCB_TEXT_T );
@@ -563,7 +563,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         {
             delta = cursorPos - firstItem->GetPosition();
 
-            for ( auto item : preview )
+            for( auto item : preview )
                 item->Move( wxPoint( delta.x, delta.y ) );
 
             m_view->Update( &preview );
@@ -574,7 +574,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             // TODO it should be handled by EDIT_TOOL, so add items and select?
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                for ( auto item : preview )
+                for( auto item : preview )
                     item->Rotate( wxPoint( cursorPos.x, cursorPos.y ),
                                  m_frame->GetRotationAngle() );
 
@@ -582,7 +582,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
-                for ( auto item : preview )
+                for( auto item : preview )
                     item->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
 
                 m_view->Update( &preview );
@@ -599,7 +599,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             // Place the drawing
             BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
 
-            for ( auto item : preview )
+            for( auto item : preview )
             {
                 if( m_editModules )
                 {
@@ -927,7 +927,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     helperLine.SetWidth( 1 );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION  preview( m_view );
+    SELECTION preview( m_view );
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );

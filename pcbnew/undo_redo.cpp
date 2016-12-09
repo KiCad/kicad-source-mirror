@@ -517,27 +517,27 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
         case UR_MOVED:
             item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
-            view->Update ( item, KIGFX::GEOMETRY );
+            view->Update( item, KIGFX::GEOMETRY );
             ratsnest->Update( item );
             break;
 
         case UR_ROTATED:
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? m_rotationAngle : -m_rotationAngle );
-            view->Update ( item, KIGFX::GEOMETRY );
+            view->Update( item, KIGFX::GEOMETRY );
             ratsnest->Update( item );
             break;
 
         case UR_ROTATED_CLOCKWISE:
             item->Rotate( aList->m_TransformPoint,
                           aRedoCommand ? -m_rotationAngle : m_rotationAngle );
-            view->Update ( item, KIGFX::GEOMETRY );
+            view->Update( item, KIGFX::GEOMETRY );
             ratsnest->Update( item );
             break;
 
         case UR_FLIPPED:
             item->Flip( aList->m_TransformPoint );
-            view->Update ( item, KIGFX::LAYERS );
+            view->Update( item, KIGFX::LAYERS );
             ratsnest->Update( item );
             break;
 

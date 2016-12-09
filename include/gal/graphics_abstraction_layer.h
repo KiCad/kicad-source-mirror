@@ -974,8 +974,8 @@ protected:
     MATRIX3x3D         screenWorldMatrix;      ///< Screen transformation
     double             worldScale;             ///< The scale factor world->screen
 
-    bool globalFlipX;
-    bool globalFlipY;
+    bool globalFlipX;                          ///< Flag for X axis flipping
+    bool globalFlipY;                          ///< Flag for Y axis flipping
 
     double             lineWidth;              ///< The line width
 
