@@ -47,7 +47,7 @@ public:
     const BOX2I ViewBBox() const override;
 
     /// @copydoc VIEW_ITEM::ViewDraw()
-    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const;
+    void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
