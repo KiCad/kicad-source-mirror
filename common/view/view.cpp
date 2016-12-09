@@ -846,6 +846,9 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate )
 {
     auto viewData = aItem->viewPrivData();
 
+    if( !viewData )
+        return;
+
     if( IsCached( aLayer ) && !aImmediate )
     {
         // Draw using cached information or create one
@@ -918,6 +921,10 @@ struct VIEW::recacheItem
     bool operator()( VIEW_ITEM* aItem )
     {
         auto viewData = aItem->viewPrivData();
+
+        if( !viewData )
+            return false;
+
         // Remove previously cached group
         int group = viewData->getGroup( layer );
 
@@ -1096,6 +1103,9 @@ void VIEW::updateItemColor( VIEW_ITEM* aItem, int aLayer )
     wxASSERT( (unsigned) aLayer < m_layers.size() );
     wxASSERT( IsCached( aLayer ) );
 
+    if( !viewData )
+        return;
+
     // Obtain the color that should be used for coloring the item on the specific layerId
     const COLOR4D color = m_painter->GetSettings()->GetColor( aItem, aLayer );
     int group = viewData->getGroup( aLayer );
@@ -1111,6 +1121,9 @@ void VIEW::updateItemGeometry( VIEW_ITEM* aItem, int aLayer )
     auto viewData = aItem->viewPrivData();
     wxASSERT( (unsigned) aLayer < m_layers.size() );
     wxASSERT( IsCached( aLayer ) );
+
+    if( !viewData )
+        return;
 
     VIEW_LAYER& l = m_layers.at( aLayer );
 
@@ -1153,6 +1166,9 @@ void VIEW::updateLayers( VIEW_ITEM* aItem )
 {
     auto viewData = aItem->viewPrivData();
     int layers[VIEW_MAX_LAYERS], layers_count;
+
+    if( !viewData )
+        return;
 
     // Remove the item from previous layer set
     viewData->getLayers( layers, layers_count );
@@ -1234,6 +1250,9 @@ void VIEW::UpdateItems()
     {
         auto viewData = item->viewPrivData();
 
+        if( !viewData )
+            continue;
+
         if( viewData->m_requiredUpdate != NONE )
             invalidateItem( item, viewData->m_requiredUpdate );
 
@@ -1285,7 +1304,8 @@ void VIEW::SetVisible( VIEW_ITEM* aItem, bool aIsVisible )
 {
     auto viewData = aItem->viewPrivData();
 
-    assert( viewData );
+    if( !viewData )
+        return;
 
     bool cur_visible = viewData->m_flags & VISIBLE;
 
@@ -1304,6 +1324,9 @@ void VIEW::SetVisible( VIEW_ITEM* aItem, bool aIsVisible )
 void VIEW::Hide( VIEW_ITEM* aItem, bool aHide )
 {
     auto viewData = aItem->viewPrivData();
+
+    if( !viewData )
+        return;
 
     if( !( viewData->m_flags & VISIBLE ) )
         return;
