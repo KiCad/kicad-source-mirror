@@ -296,7 +296,7 @@ private:
     wxBitmap*               cursorPixelsSaved;      ///< Saved cursor pixels
 
     /// Maximum number of arguments for one command
-    static const int MAX_CAIRO_ARGUMENTS = 6;
+    static const int MAX_CAIRO_ARGUMENTS = 4;
 
     /// Definitions for the command recorder
     enum GRAPHICS_COMMAND
@@ -308,7 +308,7 @@ private:
         CMD_SET_LINE_WIDTH,                         ///< Set the line width
         CMD_STROKE_PATH,                            ///< Set the stroke path
         CMD_FILL_PATH,                              ///< Set the fill path
-        CMD_TRANSFORM,                              ///< Transform the actual context
+        //CMD_TRANSFORM,                              ///< Transform the actual context
         CMD_ROTATE,                                 ///< Rotate the context
         CMD_TRANSLATE,                              ///< Translate the context
         CMD_SCALE,                                  ///< Scale the context

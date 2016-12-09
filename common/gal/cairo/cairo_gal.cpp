@@ -594,12 +594,14 @@ void CAIRO_GAL::DrawGroup( int aGroupNumber )
             cairo_fill( currentContext );
             break;
 
+            /*
         case CMD_TRANSFORM:
             cairo_matrix_t matrix;
             cairo_matrix_init( &matrix, it->argument.dblArg[0], it->argument.dblArg[1], it->argument.dblArg[2],
                                it->argument.dblArg[3], it->argument.dblArg[4], it->argument.dblArg[5] );
             cairo_transform( currentContext, &matrix );
             break;
+            */
 
         case CMD_ROTATE:
             cairo_rotate( currentContext, it->argument.dblArg[0] );
