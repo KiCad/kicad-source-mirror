@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,13 +224,7 @@ public:
      * Function DeleteStructure
      * deletes this object after UnLink()ing it from its owner if it has one.
      */
-    void DeleteStructure()
-    {
-        if( GetList() != NULL )
-            UnLink();
-
-        delete this;
-    }
+    void DeleteStructure();
 
     /**
      * Function ShowShape
