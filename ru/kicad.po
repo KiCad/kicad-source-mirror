@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-02 22:52+0300\n"
-"PO-Revision-Date: 2016-12-02 22:55+0300\n"
+"POT-Creation-Date: 2016-12-10 17:28+0300\n"
+"PO-Revision-Date: 2016-12-10 17:28+0300\n"
 "Last-Translator: Eldar Khayrullin <eldar.khayrullin@mail.ru>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -14664,7 +14664,7 @@ msgstr "** ПЛАТА НЕ ОПРЕДЕЛЕНА **"
 msgid "Zone Outline %s on %s"
 msgstr "Контур зоны %s на %s"
 
-#: pcbnew/clean.cpp:151 pcbnew/clean.cpp:785
+#: pcbnew/clean.cpp:150 pcbnew/clean.cpp:800
 msgid "Board cleanup"
 msgstr "Очистка платы"
 
@@ -20625,7 +20625,7 @@ msgstr ""
 "для пути библиотеки: '%s'.\n"
 "Причина: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:561
+#: pcbnew/github/github_plugin.cpp:562
 #, c-format
 msgid ""
 "Cannot download library '%s'.\n"
