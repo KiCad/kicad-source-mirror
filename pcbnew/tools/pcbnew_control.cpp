@@ -438,6 +438,7 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
     long type = aEvent.Parameter<intptr_t>();
     bool fastMove = type & COMMON_ACTIONS::CURSOR_FAST_MOVE;
     type &= ~COMMON_ACTIONS::CURSOR_FAST_MOVE;
+    bool mirroredX = getView()->IsMirroredX();
 
     GRID_HELPER gridHelper( m_frame );
     VECTOR2D cursor = getViewControls()->GetCursorPosition();
@@ -458,11 +459,11 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
             break;
 
         case COMMON_ACTIONS::CURSOR_LEFT:
-            newCursor -= VECTOR2D( gridSize.x, 0 );
+            newCursor -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         case COMMON_ACTIONS::CURSOR_RIGHT:
-            newCursor += VECTOR2D( gridSize.x, 0 );
+            newCursor += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         case COMMON_ACTIONS::CURSOR_CLICK:              // fall through
@@ -547,6 +548,7 @@ int PCBNEW_CONTROL::PanControl( const TOOL_EVENT& aEvent )
     GRID_HELPER gridHelper( m_frame );
     VECTOR2D center = view->GetCenter();
     VECTOR2I gridSize = gridHelper.GetGrid() * 10;
+    bool mirroredX = view->IsMirroredX();
 
     switch( type )
     {
@@ -559,11 +561,11 @@ int PCBNEW_CONTROL::PanControl( const TOOL_EVENT& aEvent )
             break;
 
         case COMMON_ACTIONS::CURSOR_LEFT:
-            center -= VECTOR2D( gridSize.x, 0 );
+            center -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         case COMMON_ACTIONS::CURSOR_RIGHT:
-            center += VECTOR2D( gridSize.x, 0 );
+            center += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         default:

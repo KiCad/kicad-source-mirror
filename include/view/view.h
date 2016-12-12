@@ -219,6 +219,24 @@ public:
     void SetMirror( bool aMirrorX, bool aMirrorY );
 
     /**
+     * Function IsMirroredX()
+     * Returns true if view is flipped across the X axis.
+     */
+    bool IsMirroredX() const
+    {
+        return m_mirrorX;
+    }
+
+    /**
+     * Function IsMirroredX()
+     * Returns true if view is flipped across the Y axis.
+     */
+    bool IsMirroredY() const
+    {
+        return m_mirrorY;
+    }
+
+    /**
      * Function SetScale()
      * Sets the scaling factor. Scale = 1 corresponds to the real world size of the objects
      * (depending on correct GAL unit length & DPI settings).
