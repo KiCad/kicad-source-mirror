@@ -31,31 +31,42 @@ using namespace KIGFX;
 const double BRIGHT_BOX::LINE_WIDTH = 100000.0;
 const COLOR4D BRIGHT_BOX::BOX_COLOR = KIGFX::COLOR4D( 0.0, 1.0, 0.0, 1.0 );
 
-BRIGHT_BOX::BRIGHT_BOX( BOARD_ITEM* aItem ) :
+BRIGHT_BOX::BRIGHT_BOX() :
     EDA_ITEM( NOT_USED ),    // this item is never added to a BOARD so it needs no type
-    m_item( aItem )
+    m_item( nullptr )
 {
 }
 
 
-void BRIGHT_BOX::ViewDraw( int aLayer, GAL* aGal ) const
+void BRIGHT_BOX::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    aGal->SetIsStroke( true );
-    aGal->SetIsFill( false );
-    aGal->SetLineWidth( LINE_WIDTH );
-    aGal->SetStrokeColor( BOX_COLOR );
+    if( !m_item )
+        return;
+
+    auto gal = aView->GetGAL();
+
+    gal->SetIsStroke( true );
+    gal->SetIsFill( false );
+    gal->SetLineWidth( LINE_WIDTH );
+    gal->SetStrokeColor( BOX_COLOR );
+
 
     if( m_item->Type() == PCB_TRACE_T )
     {
         const TRACK* track = static_cast<const TRACK*>( m_item );
 
-        aGal->DrawSegment( track->GetStart(), track->GetEnd(), track->GetWidth() );
+        gal->DrawSegment( track->GetStart(), track->GetEnd(), track->GetWidth() );
     }
     else
     {
         BOX2I box = m_item->ViewBBox();
 
-        aGal->DrawRectangle( box.GetOrigin(), box.GetOrigin() + box.GetSize() );
+        gal->DrawRectangle( box.GetOrigin(), box.GetOrigin() + box.GetSize() );
     }
 }
 
+
+void BRIGHT_BOX::SetItem( BOARD_ITEM* aItem )
+{
+    m_item = aItem;
+}

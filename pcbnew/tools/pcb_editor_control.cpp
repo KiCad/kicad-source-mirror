@@ -40,6 +40,7 @@
 #include <class_module.h>
 #include <class_mire.h>
 #include <ratsnest_data.h>
+#include <ratsnest_data.h>
 #include <collectors.h>
 #include <zones_functions_for_undo_redo.h>
 #include <board_commit.h>
@@ -107,6 +108,8 @@ PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
 
 PCB_EDITOR_CONTROL::~PCB_EDITOR_CONTROL()
 {
+    getView()->Remove( m_placeOrigin );
+
     delete m_placeOrigin;
     delete m_zoneMenu;
     delete m_lockMenu;
@@ -269,12 +272,12 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
                 module->Rotate( module->GetPosition(), m_frame->GetRotationAngle() );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                view->Update( &preview );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
                 module->Flip( module->GetPosition() );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                view->Update( &preview );
             }
         }
 
@@ -321,7 +324,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         else if( module && evt->IsMotion() )
         {
             module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            view->Update( &preview );
         }
     }
 
@@ -365,9 +368,8 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
     bool modified = false;
 
-    for( int i = 0; i < selection.Size(); ++i )
+    for( auto item : selection )
     {
-        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( i );
         bool prevState = item->IsLocked();
 
         switch( aMode )
@@ -433,7 +435,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
         {
             target->SetWidth( target->GetWidth() + WIDTH_STEP );
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
@@ -443,7 +445,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
             if( width > WIDTH_STEP )
             {
                 target->SetWidth( width - WIDTH_STEP );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                view->Update( &preview );
             }
         }
 
@@ -466,7 +468,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
         else if( evt->IsMotion() )
         {
             target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            view->Update( &preview );
         }
     }
 
@@ -484,19 +486,19 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 // Zone actions
 int PCB_EDITOR_CONTROL::ZoneFill( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const SELECTION& selection = selTool->GetSelection();
+    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const auto& selection = selTool->GetSelection();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
-    for( int i = 0; i < selection.Size(); ++i )
+    for( auto item : selection )
     {
-        assert( selection.Item<BOARD_ITEM>( i )->Type() == PCB_ZONE_AREA_T );
+        assert( item->Type() == PCB_ZONE_AREA_T );
 
-        ZONE_CONTAINER* zone = selection.Item<ZONE_CONTAINER>( i );
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*> ( item );
         m_frame->Fill_Zone( zone );
         zone->SetIsFilled( true );
         ratsnest->Update( zone );
-        zone->ViewUpdate();
+        getView()->Update( zone );
     }
 
     ratsnest->Recalculate();
@@ -516,7 +518,7 @@ int PCB_EDITOR_CONTROL::ZoneFillAll( const TOOL_EVENT& aEvent )
         m_frame->Fill_Zone( zone );
         zone->SetIsFilled( true );
         ratsnest->Update( zone );
-        zone->ViewUpdate();
+        getView()->Update( zone );
     }
 
     ratsnest->Recalculate();
@@ -527,19 +529,19 @@ int PCB_EDITOR_CONTROL::ZoneFillAll( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::ZoneUnfill( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const SELECTION& selection = selTool->GetSelection();
+    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const auto& selection = selTool->GetSelection();
     RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
 
-    for( int i = 0; i < selection.Size(); ++i )
+    for( auto item : selection )
     {
-        assert( selection.Item<BOARD_ITEM>( i )->Type() == PCB_ZONE_AREA_T );
+        assert( item->Type() == PCB_ZONE_AREA_T );
 
-        ZONE_CONTAINER* zone = selection.Item<ZONE_CONTAINER>( i );
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         zone->SetIsFilled( false );
         zone->ClearFilledPolysList();
         ratsnest->Update( zone );
-        zone->ViewUpdate();
+        getView()->Update( zone );
     }
 
     ratsnest->Recalculate();
@@ -559,7 +561,7 @@ int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
         zone->SetIsFilled( false );
         zone->ClearFilledPolysList();
         ratsnest->Update( zone );
-        zone->ViewUpdate();
+        getView()->Update( zone );
     }
 
     ratsnest->Recalculate();
@@ -568,100 +570,105 @@ int PCB_EDITOR_CONTROL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 }
 
 
+static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aOriginZones,
+        std::vector<ZONE_CONTAINER *>& aMergedZones )
+{
+    SHAPE_POLY_SET mergedOutlines = ConvertPolyListToPolySet( aOriginZones[0]->Outline()->m_CornersList );
+
+    for( unsigned int i = 1; i < aOriginZones.size(); i++ )
+    {
+        SHAPE_POLY_SET areaToMergePoly = ConvertPolyListToPolySet( aOriginZones[i]->Outline()->m_CornersList );
+
+        mergedOutlines.BooleanAdd( areaToMergePoly, SHAPE_POLY_SET::PM_FAST  );
+    }
+
+    mergedOutlines.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+    // We should have one polygon with hole
+    // We can have 2 polygons with hole, if the 2 initial polygons have only one common corner
+    // and therefore cannot be merged (they are dectected as intersecting)
+    // but we should never have more than 2 polys
+    if( mergedOutlines.OutlineCount() > 1 )
+    {
+        wxLogMessage( wxT( "BOARD::CombineAreas error: more than 2 polys after merging" ) );
+        return false;
+    }
+
+    for( unsigned int i = 1; i < aOriginZones.size(); i++ )
+    {
+        aCommit.Remove( aOriginZones[i] );
+    }
+
+    aCommit.Modify( aOriginZones[0] );
+    aMergedZones.push_back( aOriginZones[0] );
+
+    aOriginZones[0]->Outline()->m_CornersList = ConvertPolySetToPolyList( mergedOutlines );
+    aOriginZones[0]->SetLocalFlags( 1 );
+    aOriginZones[0]->Outline()->Hatch();
+
+    return true;
+}
+
 int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 {
-    SELECTION selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
     BOARD* board = getModel<BOARD>();
-    RN_DATA* ratsnest = board->GetRatsnest();
-    KIGFX::VIEW* view = getView();
     BOARD_COMMIT commit( m_frame );
 
     if( selection.Size() < 2 )
         return 0;
 
-    PICKED_ITEMS_LIST changes;
     int netcode = -1;
 
-    // Loop through all combinations
-    for( int ia1 = 0; ia1 < selection.Size() - 1; ++ia1 )
+    ZONE_CONTAINER* firstZone = nullptr;
+    std::vector<ZONE_CONTAINER*> toMerge, merged;
+
+    for( auto item : selection )
     {
-        ZONE_CONTAINER* curr_area = dynamic_cast<ZONE_CONTAINER*>( selection.Item<EDA_ITEM>( ia1 ) );
+        auto curr_area = dynamic_cast<ZONE_CONTAINER*>( item );
 
         if( !curr_area )
             continue;
 
+        if( !firstZone )
+            firstZone = curr_area;
+
         netcode = curr_area->GetNetCode();
 
-        EDA_RECT b1 = curr_area->Outline()->GetBoundingBox();
-        bool mod_ia1 = false;
-
-        for( int ia2 = selection.Size() - 1; ia2 > ia1; --ia2 )
+        if( firstZone )
         {
-            ZONE_CONTAINER* area2 = dynamic_cast<ZONE_CONTAINER*>( selection.Item<EDA_ITEM>( ia2 ) );
-
-            if( !area2 )
+            if( firstZone->GetNetCode() != netcode )
                 continue;
 
-            if( area2->GetNetCode() != netcode )
+            if( curr_area->GetPriority() != firstZone->GetPriority() )
                 continue;
 
-            if( curr_area->GetPriority() != area2->GetPriority() )
+            if( curr_area->GetIsKeepout() != firstZone->GetIsKeepout() )
                 continue;
 
-            if( curr_area->GetIsKeepout() != area2->GetIsKeepout() )
+            if( curr_area->GetLayer() != firstZone->GetLayer() )
                 continue;
 
-            if( curr_area->GetLayer() != area2->GetLayer() )
+            if( !board->TestAreaIntersection( curr_area, firstZone ) )
                 continue;
 
-            EDA_RECT b2 = area2->Outline()->GetBoundingBox();
-
-            if( b1.Intersects( b2 ) )
-            {
-                EDA_ITEM* backup = curr_area->Clone();
-                bool ret = board->TestAreaIntersection( curr_area, area2 );
-
-                if( ret && board->CombineAreas( &changes, curr_area, area2 ) )
-                {
-                    mod_ia1 = true;
-                    selection.items.RemovePicker( ia2 );
-
-                    ITEM_PICKER picker( curr_area, UR_CHANGED );
-                    picker.SetLink( backup );
-                    changes.PushItem( picker );
-                }
-                else
-                {
-                    delete backup;
-                }
-            }
+            toMerge.push_back( curr_area );
         }
-
-        if( mod_ia1 )
-            --ia1;     // if modified, we need to check it again
+        else
+        {
+            toMerge.push_back( curr_area );
+        }
     }
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
 
-    commit.Stage( changes );
-
-    for( unsigned i = 0; i < changes.GetCount(); ++i )
+    if( mergeZones( commit, toMerge, merged ) )
     {
-        ITEM_PICKER picker = changes.GetItemWrapper( i );
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( picker.GetItem() );
+        commit.Push( _( "Merge zones" ) );
 
-        if( picker.GetStatus() == UR_DELETED )
-        {
-            view->Remove( item );
-            ratsnest->Remove( item );
-        }
-        else if( picker.GetStatus() == UR_CHANGED )
-        {
+        for( auto item : merged )
             m_toolMgr->RunAction( COMMON_ACTIONS::selectItem, true, item );
-        }
     }
-
-    commit.Push( _( "Merge zones" ) );
 
     return 0;
 }
@@ -679,7 +686,7 @@ int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
     const SELECTION& selection = selTool->GetSelection();
 
     if( selection.Size() == 1 )
-        m_frame->SendMessageToEESCHEMA( selection.Item<BOARD_ITEM>( 0 ) );
+        m_frame->SendMessageToEESCHEMA( selection.Front() );
 
     return 0;
 }

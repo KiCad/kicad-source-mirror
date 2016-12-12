@@ -33,6 +33,7 @@ using namespace std::placeholders;
 #include <class_zone.h>
 #include <class_draw_panel_gal.h>
 
+#include <view/view.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 
@@ -196,12 +197,14 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea ) const
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
 
-    m_frame->GetGalCanvas()->GetView()->Query( aArea, selectedItems );         // Get the list of selected items
+    auto view = m_frame->GetGalCanvas()->GetView();
+    view->Query( aArea, selectedItems );         // Get the list of selected items
 
     for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
-        if( item->ViewIsVisible() )
+
+        if( view->IsVisible( item ) )
             items.insert ( item );
     }
 

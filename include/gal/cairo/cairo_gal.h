@@ -296,7 +296,7 @@ private:
     wxBitmap*               cursorPixelsSaved;      ///< Saved cursor pixels
 
     /// Maximum number of arguments for one command
-    static const int MAX_CAIRO_ARGUMENTS = 6;
+    static const int MAX_CAIRO_ARGUMENTS = 4;
 
     /// Definitions for the command recorder
     enum GRAPHICS_COMMAND
@@ -308,7 +308,7 @@ private:
         CMD_SET_LINE_WIDTH,                         ///< Set the line width
         CMD_STROKE_PATH,                            ///< Set the stroke path
         CMD_FILL_PATH,                              ///< Set the fill path
-        CMD_TRANSFORM,                              ///< Transform the actual context
+        //CMD_TRANSFORM,                              ///< Transform the actual context
         CMD_ROTATE,                                 ///< Rotate the context
         CMD_TRANSLATE,                              ///< Translate the context
         CMD_SCALE,                                  ///< Scale the context
@@ -321,9 +321,11 @@ private:
     typedef struct
     {
         GRAPHICS_COMMAND command;                   ///< Command to execute
-        double arguments[MAX_CAIRO_ARGUMENTS];      ///< Arguments for Cairo commands
-        bool boolArgument;                          ///< A bool argument
-        int intArgument;                            ///< An int argument
+        union {
+            double dblArg[MAX_CAIRO_ARGUMENTS];     ///< Arguments for Cairo commands
+            bool boolArg;                           ///< A bool argument
+            int intArg;                             ///< An int argument
+        } argument;
         cairo_path_t* cairoPath;                    ///< Pointer to a Cairo path
     } GROUP_ELEMENT;
 
@@ -346,6 +348,9 @@ private:
     bool                isInitialized;          ///< Are Cairo image & surface ready to use
     COLOR4D             backgroundColor;        ///< Background color
 
+    int wxBufferWidth;
+
+    void flushPath();
     // Methods
     void storePath();                           ///< Store the actual path
 
@@ -372,7 +377,7 @@ private:
     /**
      * @brief Blits cursor into the current screen.
      */
-    virtual void blitCursor( wxBufferedDC& clientDC );
+    virtual void blitCursor( wxMemoryDC& clientDC );
 
     /// Prepare Cairo surfaces for drawing
     void initSurface();

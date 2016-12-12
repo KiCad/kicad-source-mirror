@@ -43,6 +43,8 @@
 #include <pcbnew.h>
 #include <zones.h>
 
+#include <view/view.h>
+
 #define FORMAT_STRING _( "Filling zone %d out of %d (net %s)..." )
 
 
@@ -115,7 +117,7 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
     aZone->BuildFilledSolidAreasPolygons( GetBoard() );
-    aZone->ViewUpdate( KIGFX::VIEW_ITEM::ALL );
+    GetGalCanvas()->GetView()->Update( aZone, KIGFX::ALL );
     GetBoard()->GetRatsnest()->Update( aZone );
 
     OnModify();

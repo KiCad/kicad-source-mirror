@@ -115,6 +115,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     // Menu Files:
     EVT_MENU( ID_MAIN_MENUBAR, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MENU_PCB_FLIP_VIEW, PCB_EDIT_FRAME::OnFlipPcbView )
 
     EVT_MENU( ID_APPEND_FILE, PCB_EDIT_FRAME::Files_io )
     EVT_MENU( ID_SAVE_BOARD_AS, PCB_EDIT_FRAME::Files_io )
@@ -1130,4 +1131,13 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
 
         Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "", this );
     }
+}
+
+
+void PCB_EDIT_FRAME::OnFlipPcbView( wxCommandEvent& evt )
+{
+    auto view = GetGalCanvas()->GetView();
+    view->SetMirror( evt.IsChecked(), false );
+    view->RecacheAllItems();
+    Refresh();
 }

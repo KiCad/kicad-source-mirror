@@ -133,7 +133,7 @@ int MODULE_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
         if( evt->IsMotion() )
         {
             pad->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            preview.ViewUpdate();
+            m_view->Update( &preview );
         }
 
         else if( evt->Category() == TC_COMMAND )
@@ -141,12 +141,12 @@ int MODULE_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
                 pad->Rotate( pad->GetPosition(), m_frame->GetRotationAngle() );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
                 pad->Flip( pad->GetPosition() );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
             else if( evt->IsCancel() || evt->IsActivate() )
             {
@@ -370,9 +370,9 @@ int MODULE_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
         // Create a temporary module that contains selected items to ease serialization
         MODULE module( m_board );
 
-        for( int i = 0; i < selection.Size(); ++i )
+        for( auto item : selection )
         {
-            BOARD_ITEM* clone = static_cast<BOARD_ITEM*>( selection.Item<BOARD_ITEM>( i )->Clone() );
+            auto clone = static_cast<BOARD_ITEM*>( item->Clone() );
 
             // Do not add reference/value - convert them to the common type
             if( TEXTE_MODULE* text = dyn_cast<TEXTE_MODULE*>( clone ) )
@@ -426,7 +426,7 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_GROUP preview( m_view );
     pastedModule->SetParent( m_board );
     pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-    pastedModule->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, 
+    pastedModule->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add,
                                                 std::ref( preview ),  _1 ) );
     preview.Add( pastedModule );
     m_view->Add( &preview );
@@ -446,7 +446,7 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
         if( evt->IsMotion() )
         {
             pastedModule->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            preview.ViewUpdate();
+            m_view->Update( &preview );
         }
 
         else if( evt->Category() == TC_COMMAND )
@@ -454,12 +454,12 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
                 pastedModule->Rotate( pastedModule->GetPosition(), m_frame->GetRotationAngle() );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
                 pastedModule->Flip( pastedModule->GetPosition() );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
             else if( evt->IsCancel() || evt->IsActivate() )
             {
@@ -542,11 +542,11 @@ int MODULE_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
         for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item ->Next() )
         {
             if( item->Type() == PCB_MODULE_TEXT_T )
-                item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                getView()->Update( item, KIGFX::GEOMETRY );
         }
 
-        module->Reference().ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
-        module->Value().ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        getView()->Update( &module->Reference(), KIGFX::GEOMETRY );
+        getView()->Update( &module->Value(), KIGFX::GEOMETRY );
     }
 
     m_frame->GetGalCanvas()->Refresh();
@@ -576,7 +576,7 @@ int MODULE_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
         for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item ->Next() )
         {
             if( item->Type() == PCB_MODULE_EDGE_T )
-                item->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                getView()->Update( item, KIGFX::GEOMETRY );
         }
     }
 

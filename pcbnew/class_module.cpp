@@ -48,6 +48,7 @@
 #include <class_edge_mod.h>
 #include <class_module.h>
 
+#include <view/view.h>
 
 MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_MODULE_T ),
@@ -825,29 +826,6 @@ void MODULE::RunOnChildren( std::function<void (BOARD_ITEM*)> aFunction )
     }
 }
 
-
-void MODULE::ViewUpdate( int aUpdateFlags )
-{
-    if( !m_view )
-        return;
-
-    // Update the module itself
-    VIEW_ITEM::ViewUpdate( aUpdateFlags );
-
-    // Update pads
-    for( D_PAD* pad = m_Pads.GetFirst(); pad; pad = pad->Next() )
-        pad->ViewUpdate( aUpdateFlags );
-
-    // Update module's drawing (mostly silkscreen)
-    for( BOARD_ITEM* drawing = m_Drawings.GetFirst(); drawing; drawing = drawing->Next() )
-        drawing->ViewUpdate( aUpdateFlags );
-
-    // Update module's texts
-    m_Reference->ViewUpdate( aUpdateFlags );
-    m_Value->ViewUpdate( aUpdateFlags );
-}
-
-
 void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 2;
@@ -870,13 +848,13 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int MODULE::ViewGetLOD( int aLayer ) const
+unsigned int MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     int layer = ( m_Layer == F_Cu ) ? MOD_FR_VISIBLE :
                 ( m_Layer == B_Cu ) ? MOD_BK_VISIBLE : ANCHOR_VISIBLE;
 
     // Currently it is only for anchor layer
-    if( m_view->IsLayerVisible( ITEM_GAL_LAYER( layer ) ) )
+    if( aView->IsLayerVisible( ITEM_GAL_LAYER( layer ) ) )
         return 30;
 
     return std::numeric_limits<unsigned int>::max();

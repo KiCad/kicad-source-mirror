@@ -637,6 +637,7 @@ public:
     bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu ) override;
 
     void OnSelectOptionToolbar( wxCommandEvent& event );
+    void OnFlipPcbView( wxCommandEvent& event );
     void ToolOnRightClick( wxCommandEvent& event ) override;
 
     /* Block operations: */

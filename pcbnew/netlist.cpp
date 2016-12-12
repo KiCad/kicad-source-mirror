@@ -52,6 +52,7 @@ using namespace std::placeholders;
 
 #include <tool/tool_manager.h>
 #include <tools/common_actions.h>
+#include <view/view.h>
 
 
 void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
@@ -159,7 +160,6 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     {
         module->RunOnChildren( std::bind( &KIGFX::VIEW::Add, view, _1 ) );
         view->Add( module );
-        module->ViewUpdate();
     }
 
     if( aDeleteUnconnectedTracks && board->m_Track )

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -70,6 +70,12 @@ public:
 
     ~VIEW();
 
+    // nasty hack, invoked by the destructor of VIEW_ITEM to auto-remove the item
+    // from the owning VIEW if there is any. Kicad relies too much on this mechanism.
+    // this is the only linking dependency now between EDA_ITEM and VIEW class. In near future
+    // I'll replace it with observers.
+    static void OnDestroy( VIEW_ITEM* aItem );
+
     /**
      * Function Add()
      * Adds a VIEW_ITEM to the view.
@@ -84,6 +90,7 @@ public:
      */
     void Remove( VIEW_ITEM* aItem );
 
+
     /**
      * Function Query()
      * Finds all visible items that touch or are within the rectangle aRect.
@@ -94,6 +101,41 @@ public:
      * @return Number of found items.
      */
     int Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) const;
+
+    /**
+     * Function SetVisible()
+     * Sets the item visibility.
+     *
+     * @param aIsVisible: whether the item is visible (on all layers), or not.
+     */
+    void SetVisible( VIEW_ITEM* aItem, bool aIsVisible = true );
+
+    /**
+     * Function Hide()
+     * Temporarily hides the item in the view (e.g. for overlaying)
+     *
+     * @param aHide: whether the item is hidden (on all layers), or not.
+     */
+    void Hide( VIEW_ITEM* aItem, bool aHide = true );
+
+    /**
+     * Function IsVisible()
+     * Returns information if the item is visible (or not).
+     *
+     * @return when true, the item is visible (i.e. to be displayed, not visible in the
+     * *current* viewport)
+     */
+    bool IsVisible( const VIEW_ITEM* aItem ) const;
+
+    /**
+     * Function ViewUpdate()
+     * For dynamic VIEWs, informs the associated VIEW that the graphical representation of
+     * this item has changed. For static views calling has no effect.
+     *
+     * @param aUpdateFlags: how much the object has changed.
+     */
+     void Update( VIEW_ITEM* aItem );
+     void Update( VIEW_ITEM* aItem, int aUpdateFlags );
 
     /**
      * Function SetRequired()
@@ -175,6 +217,24 @@ public:
      *  @param aMirrorY: when true, the Y axis is mirrored.
      */
     void SetMirror( bool aMirrorX, bool aMirrorY );
+
+    /**
+     * Function IsMirroredX()
+     * Returns true if view is flipped across the X axis.
+     */
+    bool IsMirroredX() const
+    {
+        return m_mirrorX;
+    }
+
+    /**
+     * Function IsMirroredX()
+     * Returns true if view is flipped across the Y axis.
+     */
+    bool IsMirroredY() const
+    {
+        return m_mirrorY;
+    }
 
     /**
      * Function SetScale()
@@ -547,10 +607,7 @@ public:
      * Adds an item to a list of items that are going to be refreshed upon the next frame rendering.
      * @param aItem is the item to be refreshed.
      */
-    void MarkForUpdate( VIEW_ITEM* aItem )
-    {
-        m_needsUpdate.push_back( aItem );
-    }
+    void MarkForUpdate( VIEW_ITEM* aItem );
 
     /**
      * Function UpdateItems()
@@ -695,6 +752,12 @@ private:
     /// Scale upper limit
     double m_maxScale;
 
+    ///> Horizontal flip flag
+    bool m_mirrorX;
+
+    ///> Vertical flip flag
+    bool m_mirrorY;
+
     /// PAINTER contains information how do draw items
     PAINTER* m_painter;
 
@@ -711,8 +774,8 @@ private:
     /// Rendering order modifier for layers that are marked as top layers
     static const int TOP_LAYER_MODIFIER;
 
-    /// Items to be updated
-    std::vector<VIEW_ITEM*> m_needsUpdate;
+    /// Flat list of all items
+    std::vector<VIEW_ITEM*> m_allItems;
 };
 } // namespace KIGFX
 

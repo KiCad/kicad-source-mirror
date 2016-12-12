@@ -109,6 +109,16 @@ public:
     ///> before the modification.
     COMMIT& Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy );
 
+    template<class Range>
+    COMMIT& StageItems( const Range& aRange, CHANGE_TYPE aChangeType )
+    {
+        for( const auto& item : aRange )
+            Stage( item, aChangeType );
+
+        return *this;
+    }
+
+
     ///> Adds a change of the item aItem of type aChangeType to the change list.
     COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType );
 
@@ -117,7 +127,7 @@ public:
     COMMIT& Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO_T aModFlag = UR_UNSPECIFIED );
 
     ///> Executes the changes.
-    virtual void Push( const wxString& aMessage ) = 0;
+    virtual void Push( const wxString& aMessage = wxT( "A commit" ) ) = 0;
 
     ///> Revertes the commit by restoring the modifed items state.
     virtual void Revert() = 0;

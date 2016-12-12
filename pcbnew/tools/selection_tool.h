@@ -26,10 +26,11 @@
 #ifndef __SELECTION_TOOL_H
 #define __SELECTION_TOOL_H
 
+#include <memory>
+
 #include <math/vector2d.h>
 #include <tools/pcb_tool.h>
 #include <tool/context_menu.h>
-#include <class_undoredo_container.h>
 
 #include "selection_conditions.h"
 #include "conditional_menu.h"
@@ -44,53 +45,110 @@ class GRID_MENU;
 
 namespace KIGFX
 {
-class VIEW_GROUP;
+    class GAL;
 }
 
-struct SELECTION
+struct SELECTION : public KIGFX::VIEW_GROUP
 {
+private:
     /// Set of selected items
-    PICKED_ITEMS_LIST items;
+    std::set<BOARD_ITEM*> m_items;
 
-    /// VIEW_GROUP that holds currently selected items
-    KIGFX::VIEW_GROUP* group;
+public:
+    using ITER = std::set<BOARD_ITEM*>::iterator;
+    using CITER = std::set<BOARD_ITEM*>::const_iterator;
+
+    SELECTION( KIGFX::VIEW* aView = nullptr );
+
+    ITER begin() { return m_items.begin(); }
+    ITER end() { return m_items.end(); }
+    CITER begin() const { return m_items.cbegin(); }
+    CITER end() const { return m_items.cend(); }
+
+    virtual void Add( BOARD_ITEM* aItem )
+    {
+        m_items.insert( aItem );
+    }
+
+    virtual void Remove( BOARD_ITEM *aItem )
+    {
+        m_items.erase( aItem );
+    }
+
+    virtual void Clear() override
+    {
+        m_items.clear();
+    }
+
+    virtual unsigned int GetSize() const override
+    {
+        return m_items.size();
+    }
+
+    virtual KIGFX::VIEW_ITEM* GetItem( unsigned int idx ) const override
+    {
+        auto iter = m_items.begin();
+
+        while( idx-- )
+            ++iter;
+
+        return *iter;
+    }
+
+    bool Contains( BOARD_ITEM* aItem ) const
+    {
+        return m_items.find( aItem ) != m_items.end();
+    }
 
     /// Checks if there is anything selected
     bool Empty() const
     {
-        return ( items.GetCount() == 0 );
+        return ( m_items.size() == 0 );
     }
 
     /// Returns the number of selected parts
     int Size() const
     {
-        return items.GetCount();
+        return m_items.size();
     }
 
-    /// Alias to make code shorter and clearer
-    template <typename T>
-    T* Item( unsigned int aIndex ) const
+    const std::set<BOARD_ITEM*> GetItems() const
     {
-        return static_cast<T*>( items.GetPickedItem( aIndex ) );
+        return m_items;
     }
 
     /// Returns the center point of the selection area bounding box.
     VECTOR2I GetCenter() const;
 
-    /// Runs a function on all selected items.
-    template <typename T>
-    void ForAll( std::function<void (T*)> aFunction ) const
+    BOARD_ITEM *operator[] ( const int index ) const
     {
-        for( unsigned int i = 0; i < items.GetCount(); ++i )
-            aFunction( Item<T>( i ) );
+        if ( index < 0 || (unsigned int) index >= m_items.size() )
+            return nullptr;
+
+        return (* m_items.begin() + index );
     }
 
+    BOARD_ITEM* Front() const
+    {
+        if ( !m_items.size() )
+            return nullptr;
+
+        return *m_items.begin();
+    }
+
+    std::set<BOARD_ITEM*>& Items()
+    {
+        return m_items;
+    }
+
+    virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
+
 private:
+
+
     /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
     /// change properties of selected items (e.g. selection flag).
     void clear();
-
-    friend class SELECTION_TOOL;
 };
 
 enum SELECTION_LOCK_FLAGS
@@ -135,7 +193,7 @@ public:
      *
      * Returns the set of currently selected items.
      */
-    const SELECTION& GetSelection();
+    SELECTION& GetSelection();
 
     inline CONDITIONAL_MENU& GetMenu()
     {

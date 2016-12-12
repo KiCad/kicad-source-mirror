@@ -32,6 +32,7 @@ using namespace std::placeholders;
 #include <id.h>
 #include <macros.h>
 #include <pcbnew_id.h>
+#include <view/view.h>
 #include <view/view_controls.h>
 #include <pcbcommon.h>
 #include <pcb_painter.h>

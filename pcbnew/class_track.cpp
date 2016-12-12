@@ -757,7 +757,7 @@ void TRACK::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int TRACK::ViewGetLOD( int aLayer ) const
+unsigned int TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )

@@ -47,7 +47,7 @@ void main()
     if( shaderParams[0] == SHADER_LINE )
     {
         float lineWidth = shaderParams[3];
-        float worldScale = gl_ModelViewMatrix[0][0];
+        float worldScale = abs( gl_ModelViewMatrix[0][0] );
 
         // Make lines appear to be at least 1 pixel wide
         if( worldScale * lineWidth < MIN_WIDTH )
@@ -79,7 +79,7 @@ void main()
 
         // Make the line appear to be at least 1 pixel wide
         float lineWidth = shaderParams[3];
-        float worldScale = gl_ModelViewMatrix[0][0];
+        float worldScale = abs( gl_ModelViewMatrix[0][0] );
 
         if( worldScale * lineWidth < MIN_WIDTH )
             shaderParams[3] = shaderParams[3] / ( worldScale * lineWidth );

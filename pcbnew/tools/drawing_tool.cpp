@@ -37,6 +37,7 @@
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
+#include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <router/direction.h>
@@ -49,6 +50,8 @@
 #include <class_dimension.h>
 #include <class_zone.h>
 #include <class_module.h>
+
+#include <tools/selection_tool.h>
 
 DRAWING_TOOL::DRAWING_TOOL() :
     PCB_TOOL( "pcbnew.InteractiveDrawing" ), m_view( NULL ),
@@ -163,7 +166,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( m_frame );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
+    SELECTION preview( m_view );
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -206,13 +209,13 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
                 text->Rotate( text->GetPosition(), m_frame->GetRotationAngle() );
-                preview.ViewUpdate();
+                m_view->Update( &preview );
             }
             // TODO rotate CCW
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
                 text->Flip( text->GetPosition() );
-                preview.ViewUpdate();
+                m_view->Update( &preview );
             }
         }
 
@@ -302,7 +305,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             text->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
             // Show a preview of the item
-            preview.ViewUpdate();
+            m_view->Update( &preview );
         }
     }
 
@@ -326,7 +329,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     int maxThickness;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
+    SELECTION preview( m_view );
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -369,7 +372,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
             dimension->SetWidth( dimension->GetWidth() + WIDTH_STEP );
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && step != SET_ORIGIN )
@@ -379,7 +382,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             if( width > WIDTH_STEP )
             {
                 dimension->SetWidth( width - WIDTH_STEP );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
         }
 
@@ -478,7 +481,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
 
             // Show a preview of the item
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
     }
 
@@ -527,23 +530,21 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         return 0;
 
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
-    VECTOR2I delta = cursorPos - (*list.begin())->GetPosition();
+    VECTOR2I delta = cursorPos - list.front()->GetPosition();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
+    SELECTION preview( m_view );
     BOARD_COMMIT commit( m_frame );
 
     // Build the undo list & add items to the current view
-    for( auto it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
+    for( auto item : list )
     {
-        KICAD_T type = (*it)->Type();
-        assert( type == PCB_LINE_T || type == PCB_TEXT_T );
+        assert( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
 
-        if( type == PCB_LINE_T || type == PCB_TEXT_T )
-            preview.Add( *it );
+        preview.Add( item );
     }
 
-    BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( *preview.Begin() );
+    BOARD_ITEM* firstItem = preview.Front();
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -561,10 +562,10 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         {
             delta = cursorPos - firstItem->GetPosition();
 
-            for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
-                static_cast<BOARD_ITEM*>( *it )->Move( wxPoint( delta.x, delta.y ) );
+            for( auto item : preview )
+                item->Move( wxPoint( delta.x, delta.y ) );
 
-            preview.ViewUpdate();
+            m_view->Update( &preview );
         }
 
         else if( evt->Category() == TC_COMMAND )
@@ -572,18 +573,18 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             // TODO it should be handled by EDIT_TOOL, so add items and select?
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
-                for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
-                    static_cast<BOARD_ITEM*>( *it )->Rotate( wxPoint( cursorPos.x, cursorPos.y ),
-                                                             m_frame->GetRotationAngle() );
+                for( auto item : preview )
+                    item->Rotate( wxPoint( cursorPos.x, cursorPos.y ),
+                                 m_frame->GetRotationAngle() );
 
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
-                for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(), end = preview.End(); it != end; ++it )
-                    static_cast<BOARD_ITEM*>( *it )->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
+                for( auto item : preview )
+                    item->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
 
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
             else if( evt->IsCancel() || evt->IsActivate() )
             {
@@ -595,13 +596,10 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) )
         {
             // Place the drawing
-            PICKED_ITEMS_LIST picklist;
             BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
 
-            for( KIGFX::VIEW_GROUP::const_iter it = preview.Begin(); it != preview.End(); ++it )
+            for( auto item : preview )
             {
-                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( *it );
-
                 if( m_editModules )
                 {
                     // Modules use different types for the same things,
@@ -745,7 +743,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     DRAWSEGMENT line45;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
+    SELECTION preview( m_view );
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -903,7 +901,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         }
 
         if( updatePreview )
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
     }
 
     m_controls->ShowCursor( false );
@@ -928,7 +926,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     helperLine.SetWidth( 1 );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
+    SELECTION preview( m_view );
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -1014,7 +1012,6 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
                     assert( aGraphic->GetWidth() > 0 );
 
                     m_view->Add( aGraphic );
-                    aGraphic->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
 
                     preview.Remove( aGraphic );
                     preview.Remove( &helperLine );
@@ -1055,13 +1052,13 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             }
 
             // Show a preview of the item
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
         {
             aGraphic->SetWidth( aGraphic->GetWidth() + WIDTH_STEP );
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
@@ -1071,7 +1068,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             if( width > WIDTH_STEP )
             {
                 aGraphic->SetWidth( width - WIDTH_STEP );
-                preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                m_view->Update( &preview );
             }
         }
 
@@ -1083,7 +1080,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
                 aGraphic->SetAngle( aGraphic->GetAngle() + 3600.0 );
 
             clockwise = !clockwise;
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
         }
     }
 
@@ -1105,7 +1102,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     BOARD_COMMIT commit( m_frame );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    KIGFX::VIEW_GROUP preview( m_view );
+    SELECTION preview( m_view );
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -1293,7 +1290,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
         }
 
         if( updatePreview )
-            preview.ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            m_view->Update( &preview );
     }
 
     m_controls->ShowCursor( false );

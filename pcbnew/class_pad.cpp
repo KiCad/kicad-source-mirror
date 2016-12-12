@@ -959,7 +959,7 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int D_PAD::ViewGetLOD( int aLayer ) const
+unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )

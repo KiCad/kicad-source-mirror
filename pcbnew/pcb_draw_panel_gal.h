@@ -83,6 +83,8 @@ public:
     ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
     void OnShow() override;
 
+    bool SwitchBackend( GAL_TYPE aGalType ) override;
+
 protected:
     ///> Reassigns layer order to the initial settings.
     void setDefaultLayerOrder();

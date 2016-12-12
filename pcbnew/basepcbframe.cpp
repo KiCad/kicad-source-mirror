@@ -442,10 +442,9 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
     if( gal )
     {
     // Apply new display options to the GAL canvas
-        KIGFX::PCB_PAINTER* painter =
-                static_cast<KIGFX::PCB_PAINTER*> ( gal->GetView()->GetPainter() );
-        KIGFX::PCB_RENDER_SETTINGS* settings =
-                static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+        auto view = gal->GetView();
+        auto painter = static_cast<KIGFX::PCB_PAINTER*> ( view->GetPainter() );
+        auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
         settings->LoadDisplayOptions( displ_opts );
 
         // Update pads
@@ -453,7 +452,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
         for( MODULE* module = board->m_Modules; module; module = module->Next() )
         {
             for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
-                pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+                view->Update( pad, KIGFX::GEOMETRY );
         }
     }
 

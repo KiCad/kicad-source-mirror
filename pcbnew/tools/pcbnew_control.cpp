@@ -71,6 +71,7 @@ PCBNEW_CONTROL::PCBNEW_CONTROL() :
 
 PCBNEW_CONTROL::~PCBNEW_CONTROL()
 {
+    getView()->Remove( m_gridOrigin );
     delete m_gridOrigin;
 }
 
@@ -203,10 +204,8 @@ int PCBNEW_CONTROL::ZoomPreset( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
 
     // Apply new display options to the GAL canvas
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
@@ -216,7 +215,7 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
     for( TRACK* track = getModel<BOARD>()->m_Track; track; track = track->Next() )
     {
         if( track->Type() == PCB_TRACE_T )
-            track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            getView()->Update( track, KIGFX::GEOMETRY );
     }
 
     m_frame->GetGalCanvas()->Refresh();
@@ -227,10 +226,9 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
+
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
@@ -240,7 +238,7 @@ int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
     for( MODULE* module = getModel<BOARD>()->m_Modules; module; module = module->Next() )
     {
         for( D_PAD* pad = module->Pads(); pad; pad = pad->Next() )
-            pad->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+            getView()->Update( pad, KIGFX::GEOMETRY );
     }
 
     m_frame->GetGalCanvas()->Refresh();
@@ -251,10 +249,8 @@ int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
@@ -263,8 +259,8 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 
     for( TRACK* track = getModel<BOARD>()->m_Track; track; track = track->Next() )
     {
-        if( track->Type() == PCB_VIA_T )
-            track->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        if( track->Type() == PCB_TRACE_T )
+            getView()->Update( track, KIGFX::GEOMETRY );
     }
 
     m_frame->GetGalCanvas()->Refresh();
@@ -275,10 +271,8 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Apply new display options to the GAL canvas
@@ -295,7 +289,7 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
     BOARD* board = getModel<BOARD>();
     for( int i = 0; i < board->GetAreaCount(); ++i )
-        board->GetArea( i )->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+        getView()->Update( board->GetArea( i ), KIGFX::GEOMETRY );
 
     m_frame->GetGalCanvas()->Refresh();
 
@@ -305,10 +299,8 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     displ_opts->m_ContrastModeDisplay = !displ_opts->m_ContrastModeDisplay;
@@ -404,10 +396,8 @@ int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );
@@ -425,10 +415,8 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 
 int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
-    KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*> ( painter->GetSettings() );
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( getView()->GetPainter() );
+    auto settings = painter->GetSettings();
 
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
     KIGFX::COLOR4D currentColor = settings->GetLayerColor( currentLayer );
@@ -450,6 +438,7 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
     long type = aEvent.Parameter<intptr_t>();
     bool fastMove = type & COMMON_ACTIONS::CURSOR_FAST_MOVE;
     type &= ~COMMON_ACTIONS::CURSOR_FAST_MOVE;
+    bool mirroredX = getView()->IsMirroredX();
 
     GRID_HELPER gridHelper( m_frame );
     VECTOR2D cursor = getViewControls()->GetCursorPosition();
@@ -470,11 +459,11 @@ int PCBNEW_CONTROL::CursorControl( const TOOL_EVENT& aEvent )
             break;
 
         case COMMON_ACTIONS::CURSOR_LEFT:
-            newCursor -= VECTOR2D( gridSize.x, 0 );
+            newCursor -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         case COMMON_ACTIONS::CURSOR_RIGHT:
-            newCursor += VECTOR2D( gridSize.x, 0 );
+            newCursor += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         case COMMON_ACTIONS::CURSOR_CLICK:              // fall through
@@ -559,6 +548,7 @@ int PCBNEW_CONTROL::PanControl( const TOOL_EVENT& aEvent )
     GRID_HELPER gridHelper( m_frame );
     VECTOR2D center = view->GetCenter();
     VECTOR2I gridSize = gridHelper.GetGrid() * 10;
+    bool mirroredX = view->IsMirroredX();
 
     switch( type )
     {
@@ -571,11 +561,11 @@ int PCBNEW_CONTROL::PanControl( const TOOL_EVENT& aEvent )
             break;
 
         case COMMON_ACTIONS::CURSOR_LEFT:
-            center -= VECTOR2D( gridSize.x, 0 );
+            center -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         case COMMON_ACTIONS::CURSOR_RIGHT:
-            center += VECTOR2D( gridSize.x, 0 );
+            center += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
             break;
 
         default:
@@ -740,7 +730,7 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     if( selection.Empty() )
         return true;
 
-    bool canBeRemoved = ( selection.Item<EDA_ITEM>( 0 )->Type() != PCB_MODULE_T );
+    bool canBeRemoved = ( selection.Front()->Type() != PCB_MODULE_T );
 
     if( canBeRemoved || IsOK( aToolMgr->GetEditFrame(), _( "Are you sure you want to delete item?" ) ) )
         aToolMgr->RunAction( COMMON_ACTIONS::remove, true );
@@ -792,6 +782,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     // (for undo command for instance)
 
     // Tracks are inserted, not appended, so mark the existing tracks to know what are the new tracks
+    // TODO legacy
     for( TRACK* track = board->m_Track; track; track = track->Next() )
         track->SetFlags( FLAG0 );
 
@@ -897,7 +888,7 @@ int PCBNEW_CONTROL::AppendBoard( const TOOL_EVENT& aEvent )
     // Start dragging the appended board
     SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     const SELECTION& selection = selectionTool->GetSelection();
-    VECTOR2D v( selection.Item<BOARD_ITEM>( 0 )->GetPosition() );
+    VECTOR2D v( selection.Front()->GetPosition() );
     getViewControls()->WarpCursor( v, true, true );
     m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
 

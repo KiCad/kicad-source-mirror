@@ -366,6 +366,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "&List Nets" ), _( "View a list of nets with names and id's" ),
                  KiBitmap( list_nets_xpm ) );
 
+    AddMenuItem( viewMenu, ID_MENU_PCB_FLIP_VIEW,
+                 _( "&Flip View" ), _( "Flips (mirrors) the board view." ),
+                 KiBitmap( three_d_xpm ), wxITEM_CHECK );
+
     viewMenu->AppendSeparator();
 
     text = AddHotkeyName( _( "&Switch Canvas to Legacy" ), g_Pcbnew_Editor_Hokeys_Descr,

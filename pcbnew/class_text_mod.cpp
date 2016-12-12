@@ -45,6 +45,8 @@
 #include <class_board.h>
 #include <class_module.h>
 
+#include <view/view.h>
+
 #include <pcbnew.h>
 
 
@@ -419,25 +421,25 @@ void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer ) const
+unsigned int TEXTE_MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     const int MAX = std::numeric_limits<unsigned int>::max();
 
-    if( !m_view )
+    if( !aView )
         return 0;
 
-    if( m_Type == TEXT_is_VALUE && !m_view->IsLayerVisible( ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ) ) )
+    if( m_Type == TEXT_is_VALUE && !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_VALUES_VISIBLE ) ) )
         return MAX;
 
-    if( m_Type == TEXT_is_REFERENCE && !m_view->IsLayerVisible( ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE ) ) )
+    if( m_Type == TEXT_is_REFERENCE && !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_REFERENCES_VISIBLE ) ) )
         return MAX;
 
-    if( IsFrontLayer( m_Layer ) && ( !m_view->IsLayerVisible( ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ) ) ||
-                                     !m_view->IsLayerVisible( ITEM_GAL_LAYER( MOD_FR_VISIBLE ) ) ) )
+    if( IsFrontLayer( m_Layer ) && ( !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ) ) ||
+                                     !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_FR_VISIBLE ) ) ) )
         return MAX;
 
-    if( IsBackLayer( m_Layer ) && ( !m_view->IsLayerVisible( ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ) ) ||
-                                    !m_view->IsLayerVisible( ITEM_GAL_LAYER( MOD_BK_VISIBLE ) ) ) )
+    if( IsBackLayer( m_Layer ) && ( !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ) ) ||
+                                    !aView->IsLayerVisible( ITEM_GAL_LAYER( MOD_BK_VISIBLE ) ) ) )
         return MAX;
 
     return 0;

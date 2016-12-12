@@ -49,6 +49,7 @@ enum GRID_STYLE
     GRID_STYLE_DOTS     ///< Use dots for the grid
 };
 
+
 /**
  * @brief Class GAL is the abstract interface for drawing on a 2D-surface.
  *
@@ -309,7 +310,15 @@ public:
                              double aRotationAngle )
     {
         // Fallback: use stroke font
+
+        // Handle flipped view
+        if( globalFlipX )
+            textProperties.m_mirrored = !textProperties.m_mirrored;
+
         StrokeText( aText, aPosition, aRotationAngle );
+
+        if( globalFlipX )
+            textProperties.m_mirrored = !textProperties.m_mirrored;
     }
 
     /**
@@ -690,16 +699,10 @@ public:
      */
     inline void SetFlip( bool xAxis, bool yAxis )
     {
-        if( xAxis )
-            flipX = -1.0;   // flipped
-        else
-            flipX = 1.0;    // regular
-
-        if( yAxis )
-            flipY = -1.0;   // flipped
-        else
-            flipY = 1.0;    // regular
+        globalFlipX = xAxis;
+        globalFlipY = yAxis;
     }
+
 
     // ---------------------------
     // Buffer manipulation methods
@@ -978,8 +981,9 @@ protected:
     MATRIX3x3D         worldScreenMatrix;      ///< World transformation
     MATRIX3x3D         screenWorldMatrix;      ///< Screen transformation
     double             worldScale;             ///< The scale factor world->screen
-    double             flipX;                  ///< Flag for X axis flipping
-    double             flipY;                  ///< Flag for Y axis flipping
+
+    bool globalFlipX;                          ///< Flag for X axis flipping
+    bool globalFlipY;                          ///< Flag for Y axis flipping
 
     double             lineWidth;              ///< The line width
 

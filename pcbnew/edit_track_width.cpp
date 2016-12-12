@@ -239,7 +239,8 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
             segm = (TRACK*) itemsListPicker.GetPickedItem( ii );
             segm->Draw( m_canvas, aDC, GR_OR );             // Display new track shape
 
-            segm->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
+// fixme: commit!
+//          segm->ViewUpdate( KIGFX::VIEW_ITEM::GEOMETRY );
         }
 
         m_canvas->CrossHairOn( aDC );                   // Display cursor shape

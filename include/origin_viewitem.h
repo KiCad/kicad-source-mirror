@@ -50,7 +50,7 @@ public:
 
     const BOX2I ViewBBox() const override;
 
-    void ViewDraw( int aLayer, KIGFX::GAL* aGal ) const override;
+    void ViewDraw( int aLayer, VIEW* aView ) const override;
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
@@ -86,7 +86,6 @@ public:
     inline void SetPosition( const VECTOR2D& aPosition )
     {
         m_position = aPosition;
-        ViewUpdate();
     }
 
     inline const VECTOR2D& GetPosition() const

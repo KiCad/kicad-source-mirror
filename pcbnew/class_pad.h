@@ -46,6 +46,10 @@ class MODULE;
 class TRACK;
 class MSG_PANEL_INFO;
 
+namespace KIGFX
+{
+    class VIEW;
+};
 
 // Helper class to store parameters used to draw a pad
 class PAD_DRAWINFO
@@ -540,7 +544,7 @@ public:
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLOD()
-    virtual unsigned int ViewGetLOD( int aLayer ) const override;
+    virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     /// @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const override;

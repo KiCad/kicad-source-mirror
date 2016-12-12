@@ -27,6 +27,8 @@
 #include <pcb_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <class_board.h>
+#include <view/view.h>
+
 
 void PCB_BASE_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
 {

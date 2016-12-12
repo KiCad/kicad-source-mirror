@@ -42,6 +42,7 @@ class WS_DRAW_ITEM_TEXT;
 
 namespace KIGFX
 {
+class VIEW;
 class GAL;
 
 class WORKSHEET_VIEWITEM : public EDA_ITEM
@@ -58,7 +59,6 @@ public:
     void SetFileName( const std::string& aFileName )
     {
         m_fileName = aFileName;
-        ViewUpdate( GEOMETRY );
     }
 
     /**
@@ -70,7 +70,6 @@ public:
     void SetSheetName( const std::string& aSheetName )
     {
         m_sheetName = aSheetName;
-        ViewUpdate( GEOMETRY );
     }
 
     /**
@@ -98,8 +97,6 @@ public:
     void SetSheetNumber( int aSheetNumber )
     {
         m_sheetNumber = aSheetNumber;
-        ViewUpdate( GEOMETRY );
-
     }
 
     /**
@@ -111,14 +108,13 @@ public:
     void SetSheetCount( int aSheetCount )
     {
         m_sheetCount = aSheetCount;
-        ViewUpdate( GEOMETRY );
     }
 
     /// @copydoc VIEW_ITEM::ViewBBox()
     const BOX2I ViewBBox() const override;
 
     /// @copydoc VIEW_ITEM::ViewDraw()
-    void ViewDraw( int aLayer, GAL* aGal ) const override;
+    void ViewDraw( int aLayer, VIEW* aView ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     void ViewGetLayers( int aLayers[], int& aCount ) const override;

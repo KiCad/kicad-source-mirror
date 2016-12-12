@@ -28,16 +28,10 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool.h>
-#include <view/view_group.h>
 
 class BOARD_COMMIT;
 class BOARD_ITEM;
 class SELECTION_TOOL;
-
-namespace KIGFX
-{
-class VIEW_GROUP;
-}
 
 /**
  * Class EDIT_TOOL
@@ -133,16 +127,6 @@ private:
     ///> of edit reference point).
     VECTOR2I m_cursor;
 
-    ///> The required update flag for modified items
-    KIGFX::VIEW_ITEM::VIEW_UPDATE_FLAGS m_updateFlag;
-
-    ///> Enables higher order update flag
-    void enableUpdateFlag( KIGFX::VIEW_ITEM::VIEW_UPDATE_FLAGS aFlag )
-    {
-        if( m_updateFlag < aFlag )
-            m_updateFlag = aFlag;
-    }
-
     ///> Updates ratsnest for selected items.
     ///> @param aRedraw says if selected items should be drawn using the simple mode (e.g. one line
     ///> per item).
@@ -164,10 +148,10 @@ private:
     {
         const SELECTION& selection = m_selectionTool->GetSelection();
 
-        if( selection.items.GetCount() != 1 )
-            return NULL;
+        if( selection.Size() != 1 )
+            return nullptr;
 
-        BOARD_ITEM* item = selection.Item<BOARD_ITEM>( 0 );
+        auto item = selection[0];
         return dyn_cast<T*>( item );
     }
 

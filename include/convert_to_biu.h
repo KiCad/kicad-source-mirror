@@ -29,23 +29,21 @@
  * @file convert_to_biu.h
  */
 
-
 /**
  * @brief some define and functions to convert a value in mils, decimils or mm
  * to the internal unit used in pcbnew, cvpcb or gerbview (nanometer or deci-mil)
  * depending on compile time option
  */
 
-
-
 /// Scaling factor to convert mils to internal units.
 #if defined(PCBNEW) || defined(CVPCB) || defined(GERBVIEW)
  #if defined(GERBVIEW)
-  #define IU_PER_MM        1e5     // Gerbview IU is 10 nanometers.
+  constexpr double IU_PER_MM = 1e5;     // Gerbview IU is 10 nanometers.
  #else
-  #define IU_PER_MM        1e6     // Pcbnew IU is 1 nanometer.
+  constexpr double IU_PER_MM = 1e6;     // Pcbnew IU is 1 nanometer.
  #endif
- #define IU_PER_MILS       (IU_PER_MM * 0.0254)
+
+constexpr double IU_PER_MILS = IU_PER_MM * 0.0254;
 
 /// Convert mils to PCBNEW internal units (iu).
 inline int Mils2iu( int mils )
@@ -55,8 +53,9 @@ inline int Mils2iu( int mils )
 }
 
 #elif defined (PL_EDITOR)
-#define IU_PER_MM           1e3 // internal units in micron (should be enough)
-#define IU_PER_MILS       (IU_PER_MM * 0.0254)
+constexpr double IU_PER_MM   =   1e3; // internal units in micron (should be enough)
+constexpr double IU_PER_MILS = (IU_PER_MM * 0.0254);
+
 /// Convert mils to page layout editor internal units (iu).
 inline int Mils2iu( int mils )
 {
@@ -65,37 +64,37 @@ inline int Mils2iu( int mils )
 }
 
 #elif defined (EESCHEMA)            // Eeschema
-#define IU_PER_MILS         1.0
-#define IU_PER_MM           (IU_PER_MILS / 0.0254)
+constexpr double IU_PER_MILS = 1.0;
+constexpr double IU_PER_MM   = ( IU_PER_MILS / 0.0254 );
 
-inline int Mils2iu( int mils )
+constexpr inline int Mils2iu( int mils )
 {
     return mils;
 }
 #else
 // Here, we do not know the value of internal units: do not define
-// conversion functions (They do not have meaning
+// conversion functions (They do not have meaning)
 #define UNKNOWN_IU
 #endif
 
 #ifndef UNKNOWN_IU
 // Other definitions used in a few files
-#define MM_PER_IU (1/IU_PER_MM)
+constexpr double MM_PER_IU = ( 1 / IU_PER_MM );
 
 /// Convert mm to internal units (iu).
-inline int Millimeter2iu( double mm )
+constexpr inline int Millimeter2iu( double mm )
 {
-    return (int) ( mm < 0 ? mm * IU_PER_MM - 0.5 : mm * IU_PER_MM + 0.5);
+    return (int) ( mm < 0 ? mm * IU_PER_MM - 0.5 : mm * IU_PER_MM + 0.5 );
 }
 
 /// Convert mm to internal units (iu).
-inline double Iu2Millimeter( int iu )
+constexpr inline double Iu2Millimeter( int iu )
 {
     return iu / IU_PER_MM;
 }
 
 /// Convert mm to internal units (iu).
-inline double Iu2Mils( int iu )
+constexpr inline double Iu2Mils( int iu )
 {
     return iu / IU_PER_MILS;
 }

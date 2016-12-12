@@ -33,6 +33,9 @@
 #include <sys/time.h>
 #include <stdint.h>
 
+#include <cstdio>
+#include <string>
+
 /**
  * Function get_tics
  * Returns the number of microseconds that have elapsed since the system was started.
@@ -86,5 +89,51 @@ static inline void prof_end( prof_counter* aCnt )
 {
     aCnt->end = get_tics();
 }
+
+class PROF_COUNTER
+{
+public:
+    PROF_COUNTER( const std::string& name, bool autostart = true )
+    {
+        m_name = name;
+        m_running = false;
+
+        if( autostart )
+            start();
+    }
+
+    void start()
+    {
+        m_running = true;
+        prof_start( &m_cnt );
+    }
+
+    void stop()
+    {
+        if( !m_running )
+            return;
+
+        m_running = false;
+        prof_end( &m_cnt );
+    }
+
+    void show()
+    {
+        stop();
+        fprintf( stderr, "%s took %.1f milliseconds.\n", m_name.c_str(), (double)m_cnt.msecs() );
+        start();
+    }
+
+    double msecs() const
+    {
+        return m_cnt.msecs();
+    }
+
+private:
+    std::string m_name;
+    prof_counter m_cnt;
+    bool m_running;
+};
+
 
 #endif

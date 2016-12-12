@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2016 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -29,81 +29,8 @@
 
 using namespace KIGFX;
 
-void VIEW_ITEM::ViewRelease()
+VIEW_ITEM::~VIEW_ITEM()
 {
-    if( m_view && m_view->IsDynamic() )
-        m_view->Remove( this );
-}
-
-
-void VIEW_ITEM::getLayers( int* aLayers, int& aCount ) const
-{
-    int* layersPtr = aLayers;
-
-    for( unsigned int i = 0; i < m_layers.size(); ++i )
-    {
-        if( m_layers[i] )
-            *layersPtr++ = i;
-    }
-
-    aCount = m_layers.count();
-}
-
-
-int VIEW_ITEM::getGroup( int aLayer ) const
-{
-    for( int i = 0; i < m_groupsSize; ++i )
-    {
-        if( m_groups[i].first == aLayer )
-            return m_groups[i].second;
-    }
-
-    return -1;
-}
-
-
-std::vector<int> VIEW_ITEM::getAllGroups() const
-{
-    std::vector<int> groups( m_groupsSize );
-
-    for( int i = 0; i < m_groupsSize; ++i )
-    {
-        groups[i] = m_groups[i].second;
-    }
-
-    return groups;
-}
-
-
-void VIEW_ITEM::setGroup( int aLayer, int aId )
-{
-    // Look if there is already an entry for the layer
-    for( int i = 0; i < m_groupsSize; ++i )
-    {
-        if( m_groups[i].first == aLayer )
-        {
-            m_groups[i].second = aId;
-            return;
-        }
-    }
-
-    // If there was no entry for the given layer - create one
-    GroupPair* newGroups = new GroupPair[m_groupsSize + 1];
-
-    if( m_groupsSize > 0 )
-    {
-        std::copy( m_groups, m_groups + m_groupsSize, newGroups );
-        delete[] m_groups;
-    }
-
-    m_groups = newGroups;
-    newGroups[m_groupsSize++] = GroupPair( aLayer, aId );
-}
-
-
-void VIEW_ITEM::deleteGroups()
-{
-    delete[] m_groups;
-    m_groups = NULL;
-    m_groupsSize = 0;
+    VIEW::OnDestroy( this );
+    m_viewPrivData = nullptr;
 }

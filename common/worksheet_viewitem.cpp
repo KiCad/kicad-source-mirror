@@ -33,6 +33,7 @@
 #include <painter.h>
 #include <layers_id_colors_and_visibility.h>
 #include <class_page_info.h>
+#include <view/view.h>
 
 using namespace KIGFX;
 
@@ -44,14 +45,12 @@ WORKSHEET_VIEWITEM::WORKSHEET_VIEWITEM( const PAGE_INFO* aPageInfo, const TITLE_
 void WORKSHEET_VIEWITEM::SetPageInfo( const PAGE_INFO* aPageInfo )
 {
     m_pageInfo = aPageInfo;
-    ViewUpdate( GEOMETRY );
 }
 
 
 void WORKSHEET_VIEWITEM::SetTitleBlock( const TITLE_BLOCK* aTitleBlock )
 {
     m_titleBlock = aTitleBlock;
-    ViewUpdate( GEOMETRY );
 }
 
 
@@ -74,9 +73,10 @@ const BOX2I WORKSHEET_VIEWITEM::ViewBBox() const
 }
 
 
-void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
+void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, VIEW* aView ) const
 {
-    RENDER_SETTINGS* settings = m_view->GetPainter()->GetSettings();
+    auto gal = aView->GetGAL();
+    auto settings = aView->GetPainter()->GetSettings();
     wxString fileName( m_fileName.c_str(), wxConvUTF8 );
     wxString sheetName( m_sheetName.c_str(), wxConvUTF8 );
     WS_DRAW_ITEM_LIST drawList;
@@ -102,19 +102,19 @@ void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
         switch( item->GetType() )
         {
         case WS_DRAW_ITEM_BASE::wsg_line:
-            draw( static_cast<const WS_DRAW_ITEM_LINE*>( item ), aGal );
+            draw( static_cast<const WS_DRAW_ITEM_LINE*>( item ), gal );
             break;
 
         case WS_DRAW_ITEM_BASE::wsg_rect:
-            draw( static_cast<const WS_DRAW_ITEM_RECT*>( item ), aGal );
+            draw( static_cast<const WS_DRAW_ITEM_RECT*>( item ), gal );
             break;
 
         case WS_DRAW_ITEM_BASE::wsg_poly:
-            draw( static_cast<const WS_DRAW_ITEM_POLYGON*>( item ), aGal );
+            draw( static_cast<const WS_DRAW_ITEM_POLYGON*>( item ), gal );
             break;
 
         case WS_DRAW_ITEM_BASE::wsg_text:
-            draw( static_cast<const WS_DRAW_ITEM_TEXT*>( item ), aGal );
+            draw( static_cast<const WS_DRAW_ITEM_TEXT*>( item ), gal );
             break;
 
         case WS_DRAW_ITEM_BASE::wsg_bitmap:
@@ -125,7 +125,7 @@ void WORKSHEET_VIEWITEM::ViewDraw( int aLayer, GAL* aGal ) const
     }
 
     // Draw gray line that outlines the sheet size
-    drawBorder( aGal );
+    drawBorder( gal );
 }
 
 

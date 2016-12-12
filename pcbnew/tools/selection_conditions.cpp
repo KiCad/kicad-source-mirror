@@ -41,9 +41,9 @@ bool SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
     if( aSelection.Empty() )
         return false;
 
-    for( int i = 0; i < aSelection.Size(); ++i )
+    for( const auto &item : aSelection )
     {
-        KICAD_T type = aSelection.Item<EDA_ITEM>( i )->Type();
+        auto type = item->Type();
 
         if( type != PCB_PAD_T && type != PCB_VIA_T && type != PCB_TRACE_T && type != PCB_ZONE_T )
             return false;
@@ -114,12 +114,12 @@ bool SELECTION_CONDITIONS::sameNetFunc( const SELECTION& aSelection, bool aAllow
 
     int netcode = -1;   // -1 stands for 'net code is not yet determined'
 
-    for( int i = 0; i < aSelection.Size(); ++i )
+    for( const auto& aitem : aSelection )
     {
         int current_netcode = -1;
 
         const BOARD_CONNECTED_ITEM* item =
-            dynamic_cast<const BOARD_CONNECTED_ITEM*>( aSelection.Item<EDA_ITEM>( i ) );
+            dynamic_cast<const BOARD_CONNECTED_ITEM*>( aitem );
 
         if( item )
         {
@@ -161,13 +161,8 @@ bool SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
     LSET layerSet;
     layerSet.set();
 
-    for( int i = 0; i < aSelection.Size(); ++i )
+    for( const auto& item : aSelection )
     {
-        const BOARD_ITEM* item = dynamic_cast<const BOARD_ITEM*>( aSelection.Item<EDA_ITEM>( i ) );
-
-        if( !item )
-            return false;
-
         layerSet &= item->GetLayerSet();
 
         if( !layerSet.any() )       // there are no common layers left
@@ -180,9 +175,9 @@ bool SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
 
 bool SELECTION_CONDITIONS::hasTypeFunc( const SELECTION& aSelection, KICAD_T aType )
 {
-    for( int i = 0; i < aSelection.Size(); ++i )
+    for( const auto& item : aSelection )
     {
-        if( aSelection.Item<EDA_ITEM>( i )->Type() == aType )
+        if( item->Type() == aType )
             return true;
     }
 
@@ -195,9 +190,9 @@ bool SELECTION_CONDITIONS::onlyTypeFunc( const SELECTION& aSelection, KICAD_T aT
     if( aSelection.Empty() )
         return false;
 
-    for( int i = 0; i < aSelection.Size(); ++i )
+    for( const auto& item : aSelection )
     {
-        if( aSelection.Item<EDA_ITEM>( i )->Type() != aType )
+        if( item->Type() != aType )
             return false;
     }
 
@@ -210,13 +205,13 @@ bool SELECTION_CONDITIONS::onlyTypesFunc( const SELECTION& aSelection, const std
     if( aSelection.Empty() )
         return false;
 
-    for( int i = 0; i < aSelection.Size(); ++i )
+    for( const auto& item : aSelection )
     {
         bool valid = false;
 
         for( std::vector<KICAD_T>::const_iterator it = aTypes.begin(); it != aTypes.end(); ++it )
         {
-            if( aSelection.Item<EDA_ITEM>( i )->Type() == *it )
+            if( item->Type() == *it )
             {
                 valid = true;
                 break;
@@ -236,14 +231,14 @@ bool SELECTION_CONDITIONS::onlyTypesFuncArr( const SELECTION& aSelection, const 
     if( aSelection.Empty() )
         return false;
 
-    for( int i = 0; i < aSelection.Size(); ++i )
+    for( const auto& item : aSelection )
     {
         bool valid = false;
         const KICAD_T* type = aTypes;
 
         while( *type != EOT )
         {
-            if( aSelection.Item<EDA_ITEM>( i )->Type() == *type )
+            if( item->Type() == *type )
             {
                 valid = true;
                 break;

@@ -53,6 +53,10 @@ class D_PAD;
 class BOARD;
 class MSG_PANEL_ITEM;
 
+namespace KIGFX
+{
+    class VIEW;
+};
 
 enum INCLUDE_NPTH_T
 {
@@ -557,14 +561,12 @@ public:
      */
     void RunOnChildren( std::function<void (BOARD_ITEM*)> aFunction );
 
-    /// @copydoc VIEW_ITEM::ViewUpdate()
-    void ViewUpdate( int aUpdateFlags = KIGFX::VIEW_ITEM::ALL ) override;
 
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /// @copydoc VIEW_ITEM::ViewGetLOD()
-    virtual unsigned int ViewGetLOD( int aLayer ) const override;
+    virtual unsigned int ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const override;
 
     /// @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const override;
