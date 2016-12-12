@@ -256,6 +256,7 @@ VIEW::VIEW( bool aIsDynamic ) :
     m_enableOrderModifier( true ),
     m_scale( 4.0 ),
     m_minScale( 4.0 ), m_maxScale( 15000 ),
+    m_mirrorX( false ), m_mirrorY( false ),
     m_painter( NULL ),
     m_gal( NULL ),
     m_dynamic( aIsDynamic )
@@ -478,6 +479,7 @@ void VIEW::SetGAL( GAL* aGal )
     // force the new GAL to display the current viewport.
     SetCenter( m_center );
     SetScale( m_scale );
+    SetMirror( m_mirrorX, m_mirrorY );
 }
 
 
@@ -510,6 +512,10 @@ void VIEW::SetViewport( const BOX2D& aViewport )
 
 void VIEW::SetMirror( bool aMirrorX, bool aMirrorY )
 {
+    wxASSERT_MSG( !aMirrorY, _( "Mirroring for Y axis is not supported yet" ) );
+
+    m_mirrorX = aMirrorX;
+    m_mirrorY = aMirrorY;
     m_gal->SetFlip( aMirrorX, aMirrorY );
 
     // Redraw everything

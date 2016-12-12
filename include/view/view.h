@@ -734,6 +734,12 @@ private:
     /// Scale upper limit
     double m_maxScale;
 
+    ///> Horizontal flip flag
+    bool m_mirrorX;
+
+    ///> Vertical flip flag
+    bool m_mirrorY;
+
     /// PAINTER contains information how do draw items
     PAINTER* m_painter;
 
