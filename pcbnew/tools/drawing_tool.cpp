@@ -539,8 +539,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     // Build the undo list & add items to the current view
     for( auto item : list )
     {
-        KICAD_T type = item->Type();
-        assert( type == PCB_LINE_T || type == PCB_TEXT_T );
+        assert( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
 
         preview.Add( item );
     }
