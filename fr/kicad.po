@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-02 18:25+0100\n"
-"PO-Revision-Date: 2016-12-02 18:25+0100\n"
+"POT-Creation-Date: 2016-12-12 16:21+0100\n"
+"PO-Revision-Date: 2016-12-12 16:24+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2486,7 +2486,7 @@ msgid "fp-lib-table files contain no library with nickname '%s'"
 msgstr ""
 "La table de librairie ne contient pas de librairie de  nom logique  '%s'"
 
-#: common/fp_lib_table.cpp:372 eeschema/symbol_lib_table.cpp:381
+#: common/fp_lib_table.cpp:372 eeschema/symbol_lib_table.cpp:384
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Impossible de créer le chemin de la table des librairie globale '%s'."
@@ -3280,7 +3280,7 @@ msgid ""
 "%s"
 msgstr ""
 "Une erreur s'est produite lors du chargement de la table globale des "
-"librairie d'empreintes:\n"
+"librairies d'empreintes:\n"
 "\n"
 "%s"
 
@@ -6824,6 +6824,33 @@ msgstr "Impossible de charger l’image depuis <%s>"
 msgid "Edit %s Field"
 msgstr "Édition Champ %s"
 
+#: eeschema/eeschema.cpp:252
+msgid ""
+"You have run Eeschema for the first time using the new symbol library table "
+"method for finding symbols.\n"
+"\n"
+"Eeschema has either copied the default table or created an empty table in "
+"the kicad configuration folder.\n"
+"\n"
+"You must first configure the library table to include all symbol libraries "
+"you want to use.\n"
+"\n"
+"See the \"Symbol Library Table\" section of Eeschema documentation for more "
+"information."
+msgstr ""
+
+#: eeschema/eeschema.cpp:265
+#, c-format
+msgid ""
+"An error occurred attempting to load the global symbol library table:\n"
+"\n"
+"%s"
+msgstr ""
+"Une erreur s'est produite lors du chargement de la table globale des "
+"librairies de composants:\n"
+"\n"
+"%s"
+
 #: eeschema/eeschema_config.cpp:245 pcbnew/pcbnew_config.cpp:216
 msgid "Read Project File"
 msgstr "Lire Fichier Projet"
@@ -10351,12 +10378,12 @@ msgid "An error occurred attempting to save symbol file '%s'"
 msgstr ""
 "Une erreur s'est produite lors de la sauvegarde du fichier symbole '%s'"
 
-#: eeschema/symbol_lib_table.cpp:179
+#: eeschema/symbol_lib_table.cpp:182
 #, c-format
 msgid "'%s' is a duplicate symbol library nickname"
 msgstr "'%s' est un nom logique dupliqué de bibliothèque de symboles"
 
-#: eeschema/symbol_lib_table.cpp:215
+#: eeschema/symbol_lib_table.cpp:218
 #, c-format
 msgid "sym-lib-table files contain no library with nickname '%s'"
 msgstr ""
@@ -15085,7 +15112,7 @@ msgstr "**  PAS de PCB DÉFINI **"
 msgid "Zone Outline %s on %s"
 msgstr "Contour de Zone %s sur %s"
 
-#: pcbnew/clean.cpp:151 pcbnew/clean.cpp:785
+#: pcbnew/clean.cpp:150 pcbnew/clean.cpp:800
 msgid "Board cleanup"
 msgstr "Nettoyage du circuit imprimé"
 
@@ -21194,7 +21221,7 @@ msgstr ""
 "à partir du chemin librairie: '%s'.\n"
 "Raison: '%s'"
 
-#: pcbnew/github/github_plugin.cpp:561
+#: pcbnew/github/github_plugin.cpp:562
 #, c-format
 msgid ""
 "Cannot download library '%s'.\n"
