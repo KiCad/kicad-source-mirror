@@ -511,6 +511,9 @@ void VIEW::SetViewport( const BOX2D& aViewport )
 void VIEW::SetMirror( bool aMirrorX, bool aMirrorY )
 {
     m_gal->SetFlip( aMirrorX, aMirrorY );
+
+    // Redraw everything
+    MarkDirty();
 }
 
 

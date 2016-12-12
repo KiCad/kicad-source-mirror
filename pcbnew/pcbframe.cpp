@@ -1139,5 +1139,5 @@ void PCB_EDIT_FRAME::OnFlipPcbView( wxCommandEvent& evt )
     auto view = GetGalCanvas()->GetView();
     view->SetMirror( evt.IsChecked(), false );
     view->RecacheAllItems();
-    GetGalCanvas()->ForceRefresh();
+    Refresh();
 }
