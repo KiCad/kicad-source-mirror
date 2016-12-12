@@ -86,14 +86,14 @@ private:
     }
 
     VIEW*   m_view;             ///< Current dynamic view the item is assigned to.
-    int     m_flags;             ///< Visibility flags
+    int     m_flags;            ///< Visibility flags
     int     m_requiredUpdate;   ///< Flag required for updating
 
-    ///* Helper for storing cached items group ids
+    ///> Helper for storing cached items group ids
     typedef std::pair<int, int> GroupPair;
 
-    ///* Indexes of cached GAL display lists corresponding to the item (for every layer it occupies).
-    ///* (in the std::pair "first" stores layer number, "second" stores group id).
+    ///> Indexes of cached GAL display lists corresponding to the item (for every layer it occupies).
+    ///> (in the std::pair "first" stores layer number, "second" stores group id).
     GroupPair* m_groups;
     int        m_groupsSize;
 
@@ -240,6 +240,7 @@ private:
     }
 };
 
+
 void VIEW::OnDestroy( VIEW_ITEM* aItem )
 {
     auto data = aItem->viewPrivData();
@@ -249,6 +250,7 @@ void VIEW::OnDestroy( VIEW_ITEM* aItem )
 
     data->m_view->Remove( aItem );
 }
+
 
 VIEW::VIEW( bool aIsDynamic ) :
     m_enableOrderModifier( true ),

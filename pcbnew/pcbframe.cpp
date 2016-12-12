@@ -1134,7 +1134,7 @@ void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
 }
 
 
-void PCB_EDIT_FRAME::OnFlipPcbView(wxCommandEvent& evt)
+void PCB_EDIT_FRAME::OnFlipPcbView( wxCommandEvent& evt )
 {
     auto view = GetGalCanvas()->GetView();
     view->SetMirror( evt.IsChecked(), false );
