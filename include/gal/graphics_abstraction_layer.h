@@ -310,7 +310,15 @@ public:
                              double aRotationAngle )
     {
         // Fallback: use stroke font
+
+        // Handle flipped view
+        if( globalFlipX )
+            textProperties.m_mirrored = !textProperties.m_mirrored;
+
         StrokeText( aText, aPosition, aRotationAngle );
+
+        if( globalFlipX )
+            textProperties.m_mirrored = !textProperties.m_mirrored;
     }
 
     /**
