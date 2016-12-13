@@ -40,6 +40,7 @@
 #define FMT_ANGLE  BOARD_ITEM::FormatAngle
 
 class BOARD;
+class BOARD_ITEM_CONTAINER;
 class EDA_DRAW_PANEL;
 
 
@@ -122,7 +123,7 @@ public:
 
     BOARD_ITEM* Next() const { return static_cast<BOARD_ITEM*>( Pnext ); }
     BOARD_ITEM* Back() const { return static_cast<BOARD_ITEM*>( Pback ); }
-    BOARD_ITEM* GetParent() const { return (BOARD_ITEM*) m_Parent; }
+    BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_Parent; }
 
     /**
      * Function GetLayer

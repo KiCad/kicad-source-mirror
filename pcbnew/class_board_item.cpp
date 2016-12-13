@@ -251,10 +251,10 @@ int BOARD_ITEM::getNextNumberInSequence( const std::set<int>& aSeq, bool aFillSe
 
 void BOARD_ITEM::DeleteStructure()
 {
-    auto brd = GetBoard();
+    auto parent = GetParent();
 
-    if( brd )
-        brd->Remove( this );
+    if( parent && GetList() )
+        parent->Remove( this );
 
     delete this;
 }
