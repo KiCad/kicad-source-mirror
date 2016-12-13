@@ -246,6 +246,7 @@ set( BMAPS_MID
     find
     find_replace
     flag
+    flip_board
     fonts
     footprint_text
     gbr_select_mode0
