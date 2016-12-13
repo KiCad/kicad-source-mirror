@@ -369,8 +369,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AppendSeparator();
 
     AddMenuItem( viewMenu, ID_MENU_PCB_FLIP_VIEW,
-                 _( "&Flip View" ), _( "Flips (mirrors) the board view." ),
+                 _( "&Flip Board View" ),
+                 _( "Flips (mirrors) the board view" ),
                  KiBitmap( flip_board_xpm ), wxITEM_CHECK );
+
 
     viewMenu->AppendSeparator();
 
