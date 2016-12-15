@@ -350,16 +350,16 @@ void EDA_3D_VIEWER::CreateMenuBar()
     AddMenuItem( prefsMenu, moduleAttributes, ID_MENU3D_MODULE_ONOFF,
                 _( "Show 3D M&odels" ), KiBitmap( shape_3d_xpm ) );
     moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL,
-                                       _( "Normal" ),
-                                       _( "Footprint Properties -> Attributes -> Normal (eg: THT parts)" ) );
+                                       _( "Through hole" ),
+                                       _( "Footprint Properties -> Placement type -> Through hole" ) );
 
     moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_NORMAL_INSERT,
-                                       _( "Normal+Insert" ),
-                                       _( "Footprint Properties -> Attributes -> Normal+Insert (eg: SMD parts)" ) );
+                                       _( "Surface mount" ),
+                                       _( "Footprint Properties -> Placement type -> Surface mount" ) );
 
     moduleAttributes->AppendCheckItem( ID_MENU3D_MODULE_ONOFF_ATTRIBUTES_VIRTUAL,
                                        _( "Virtual" ),
-                                       _( "Footprint Properties -> Attributes -> Virtual (eg: edge connectors, test points, mechanical parts)" ) );
+                                       _( "Footprint Properties -> Placement type -> Virtual (eg: edge connectors, test points, mechanical parts)" ) );
 
     // Layer options
     // /////////////////////////////////////////////////////////////////////////
