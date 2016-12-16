@@ -113,7 +113,8 @@ public:
 
     const BOX2I ViewBBox() const override
     {
-        return m_item->ViewBBox();
+        // The following is based on the PCB_PAINTER::draw( const MARKER_PCB* )
+        return BOX2I( m_Pos, VECTOR2I( 1300000, 1300000 ) );
     }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;

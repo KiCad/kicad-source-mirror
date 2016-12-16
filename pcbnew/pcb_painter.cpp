@@ -1025,7 +1025,9 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 
 void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
 {
+    // If you are changing this, update MARKER_PCB::ViewBBox()
     const int scale = 100000;
+
     const VECTOR2D arrow[] = {
         VECTOR2D(  0 * scale,   0 * scale ),
         VECTOR2D(  8 * scale,   1 * scale ),
