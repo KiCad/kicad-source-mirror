@@ -360,9 +360,49 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 margin = pad->GetSolderPasteMargin();
             }
 
+            // Now offset the pad size by margin + width_adj
+            // this is easy for most shapes, but not for a trapezoid
             wxSize padPlotsSize;
-            padPlotsSize.x = pad->GetSize().x + ( 2 * margin.x ) + width_adj;
-            padPlotsSize.y = pad->GetSize().y + ( 2 * margin.y ) + width_adj;
+            wxSize extraSize = margin * 2;
+            extraSize.x += width_adj;
+            extraSize.y += width_adj;
+            wxSize deltaSize = pad->GetDelta(); // has meaning only for trapezoidal pads
+
+            if( pad->GetShape() == PAD_SHAPE_TRAPEZOID )
+            {   // The easy way is to use BuildPadPolygon to calculate
+                // size and delta of the trapezoidal pad after offseting:
+                wxPoint coord[4];
+                pad->BuildPadPolygon( coord, extraSize/2, 0.0 );
+                // Calculate the size and delta from polygon corners coordinates:
+                // coord[0] is the lower left
+                // coord[1] is the upper left
+                // coord[2] is the upper right
+                // coord[3] is the lower right
+
+                // the size is the distance between middle of segments
+                // (left/right or top/bottom)
+                // size X is the dist between left and right middle points:
+                padPlotsSize.x = ( ( -coord[0].x + coord[3].x )     // the lower segment X length
+                                 + ( -coord[1].x + coord[2].x ) )   // the upper segment X length
+                                 / 2;           // the Y size is the half sum
+                // size Y is the dist between top and bottom middle points:
+                padPlotsSize.y = ( ( coord[0].y - coord[1].y )      // the left segment Y lenght
+                                 + ( coord[3].y - coord[2].y ) )    // the right segment Y lenght
+                                 / 2;           // the Y size is the half sum
+
+                // calculate the delta ( difference of lenght between 2 opposite edges )
+                // The delta.x is the delta along the X axis, therefore the delta of Y lenghts
+                wxSize delta;
+
+                if( coord[0].y != coord[3].y )
+                    delta.x = coord[0].y - coord[3].y;
+                else
+                    delta.y = coord[1].x - coord[0].x;
+
+                pad->SetDelta( delta );
+            }
+            else
+                padPlotsSize = pad->GetSize() + extraSize;
 
             // Don't draw a null size item :
             if( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 )
@@ -379,6 +419,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             // Temporary set the pad size to the required plot size:
             wxSize tmppadsize = pad->GetSize();
             pad->SetSize( padPlotsSize );
+
             switch( pad->GetShape() )
             {
             case PAD_SHAPE_CIRCLE:
@@ -398,6 +439,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             }
 
             pad->SetSize( tmppadsize );     // Restore the pad size
+            pad->SetDelta( deltaSize );
         }
 
         aPlotter->EndBlock( NULL );
