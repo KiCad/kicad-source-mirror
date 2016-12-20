@@ -179,14 +179,14 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &COMMON_ACTIONS::editActivate )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
-            BOARD_ITEM* item = selection.Front();
+            BOARD_ITEM* curr_item = selection.Front();
 
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
-                m_cursor = grid.BestSnapAnchor( evt->Position(), item );
+                m_cursor = grid.BestSnapAnchor( evt->Position(), curr_item );
                 controls->ForceCursorPosition( true, m_cursor );
 
-                wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) - item->GetPosition();
+                wxPoint movement = wxPoint( m_cursor.x, m_cursor.y ) - curr_item->GetPosition();
                 totalMovement += movement;
 
                 // Drag items to the current cursor position
@@ -222,7 +222,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         // Set the current cursor position to the first dragged item origin, so the
                         // movement vector could be computed later
-                        m_cursor = grid.BestDragOrigin( originalCursorPos, item );
+                        m_cursor = grid.BestDragOrigin( originalCursorPos, curr_item );
                         grid.SetAuxAxes( true, m_cursor );
                     }
                     else
@@ -233,7 +233,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     controls->ForceCursorPosition( true, m_cursor );
                     controls->WarpCursor( m_cursor, true );
 
-                    VECTOR2I o = VECTOR2I( item->GetPosition() );
+                    VECTOR2I o = VECTOR2I( curr_item->GetPosition() );
                     m_offset.x = o.x - m_cursor.x;
                     m_offset.y = o.y - m_cursor.y;
 
