@@ -89,8 +89,7 @@ public:
     {
         auto iter = m_items.begin();
 
-        while( idx-- )
-            ++iter;
+        std::advance( iter, idx );
 
         return *iter;
     }
@@ -120,12 +119,14 @@ public:
     /// Returns the center point of the selection area bounding box.
     VECTOR2I GetCenter() const;
 
-    BOARD_ITEM *operator[] ( const int index ) const
+    BOARD_ITEM* operator[]( const int index ) const
     {
-        if ( index < 0 || (unsigned int) index >= m_items.size() )
+        if( index < 0 || (unsigned int) index >= m_items.size() )
             return nullptr;
 
-        return (* m_items.begin() + index );
+        auto iter = m_items.begin();
+        std::advance( iter, index );
+        return *iter;
     }
 
     BOARD_ITEM* Front() const
