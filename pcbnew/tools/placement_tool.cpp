@@ -33,6 +33,7 @@
 #include <board_commit.h>
 
 #include <confirm.h>
+#include <menus_helpers.h>
 
 PLACEMENT_TOOL::PLACEMENT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL ), m_placementMenu( NULL )
@@ -58,13 +59,24 @@ bool PLACEMENT_TOOL::Init()
 
     // Create a context menu and make it available through selection tool
     m_placementMenu = new CONTEXT_MENU;
-    m_placementMenu->Add( COMMON_ACTIONS::alignTop );
-    m_placementMenu->Add( COMMON_ACTIONS::alignBottom );
-    m_placementMenu->Add( COMMON_ACTIONS::alignLeft );
-    m_placementMenu->Add( COMMON_ACTIONS::alignRight );
+    m_placementMenu->SetIcon( align_items_xpm );
+
+    // Add all menuitem commands
+    wxMenuItem* item;
+    item = m_placementMenu->Add( COMMON_ACTIONS::alignTop );
+    SET_BITMAP( KiBitmap( up_xpm ) );
+    item = m_placementMenu->Add( COMMON_ACTIONS::alignBottom );
+    SET_BITMAP( KiBitmap( down_xpm ) );
+    item = m_placementMenu->Add( COMMON_ACTIONS::alignLeft );
+    SET_BITMAP( KiBitmap( left_xpm ) );
+    item = m_placementMenu->Add( COMMON_ACTIONS::alignRight );
+    SET_BITMAP( KiBitmap( right_xpm ) );
     m_placementMenu->AppendSeparator();
-    m_placementMenu->Add( COMMON_ACTIONS::distributeHorizontally );
-    m_placementMenu->Add( COMMON_ACTIONS::distributeVertically );
+    item = m_placementMenu->Add( COMMON_ACTIONS::distributeHorizontally );
+    SET_BITMAP( KiBitmap( distribute_horizontal_xpm ) );
+    item = m_placementMenu->Add( COMMON_ACTIONS::distributeVertically );
+    SET_BITMAP( KiBitmap( distribute_vertical_xpm ) );
+
     m_selectionTool->GetMenu().AddMenu( m_placementMenu, _( "Align/distribute" ), false,
                                         SELECTION_CONDITIONS::MoreThan( 1 ) );
 

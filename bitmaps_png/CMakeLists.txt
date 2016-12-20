@@ -131,6 +131,7 @@ set( BMAPS_MID
     add_tracks
     add_zone_cutout
     add_zone
+    align_items
     anchor
     annotate_down_right
     annotate_right_down
@@ -202,6 +203,8 @@ set( BMAPS_MID
     directory
     dismiss
     display_options
+    distribute_horizontal
+    distribute_vertical
     down
     drag_module
     drag_outline_segment
