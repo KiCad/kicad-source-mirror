@@ -182,6 +182,7 @@ public:
      */
     void SetParameter( int aParameterNumber, float aValue ) const;
     void SetParameter( int aParameterNumber, int aValue ) const;
+    void SetParameter( int aParameterNumber, float f0, float f1, float f2, float f3 ) const;
 
     /**
      * @brief Gets an attribute location.

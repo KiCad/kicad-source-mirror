@@ -149,6 +149,12 @@ void SHADER::SetParameter( int parameterNumber, int value ) const
     glUniform1i( parameterLocation[parameterNumber], value );
 }
 
+void SHADER::SetParameter( int parameterNumber, float f0, float f1, float f2, float f3 ) const
+{
+    assert( (unsigned)parameterNumber < parameterLocation.size() );
+    float arr[4] = { f0, f1, f2, f3 };
+    glUniform4fv( parameterLocation[parameterNumber], 1, arr );
+}
 
 int SHADER::GetAttribute( std::string aAttributeName ) const
 {

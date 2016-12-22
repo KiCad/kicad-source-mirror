@@ -40,7 +40,8 @@ OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
     m_initialized( false ), m_curBuffer( 0 ),
     m_mainFbo( 0 ), m_depthBuffer( 0 ), m_curFbo( DIRECT_RENDERING )
 {
-    m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X4 ) );
+    //m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X4 ) );
+    m_antialiasing.reset( new ANTIALIASING_SMAA( this ) );
 }
 
 
