@@ -56,7 +56,6 @@ set( GAL_SRCS
     )
 
 add_library( gal STATIC ${GAL_SRCS} )
-add_dependencies( gal shader_headers )
 add_dependencies( gal lib-dependencies )
 
 target_link_libraries( gal
@@ -237,6 +236,7 @@ set( COMMON_SRCS
     lockfile.cpp
     msgpanel.cpp
     netlist_keywords.cpp
+    observable.cpp
     prependpath.cpp
     project.cpp
     properties.cpp
