@@ -40,7 +40,7 @@ OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
     m_initialized( false ), m_curBuffer( 0 ),
     m_mainFbo( 0 ), m_depthBuffer( 0 ), m_curFbo( DIRECT_RENDERING )
 {
-    m_antialiasing.reset( new ANTIALIASING_NONE( this ) );
+    m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X4 ) );
 }
 
 
@@ -81,6 +81,8 @@ void OPENGL_COMPOSITOR::Initialize()
     bindFb( DIRECT_RENDERING );
 
     m_initialized = true;
+
+    m_antialiasing->Init();
 }
 
 
@@ -236,7 +238,6 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 
 }
 
-
 void OPENGL_COMPOSITOR::ClearBuffer()
 {
     assert( m_initialized );
@@ -255,19 +256,19 @@ void OPENGL_COMPOSITOR::Begin()
     m_antialiasing->Begin();
 }
 
-void OPENGL_COMPOSITOR::DrawBuffer(unsigned int aBufferHandle)
+void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 {
     m_antialiasing->DrawBuffer( aBufferHandle );
 }
 
-void OPENGL_COMPOSITOR::DrawBuffer(unsigned int aSourceHandle, unsigned int aDestHandle)
+void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle )
 {
     assert( m_initialized );
     assert( aSourceHandle != 0 && aSourceHandle <= usedBuffers() );
     assert (aDestHandle <= usedBuffers() );
 
-    // Switch to the main framebuffer and blit the scene
-    bindFb( aDestHandle );
+    // Switch to the destination buffer and blit the scene
+    SetBuffer ( aDestHandle );
 
     // Depth test has to be disabled to make transparency working
     glDisable( GL_DEPTH_TEST );

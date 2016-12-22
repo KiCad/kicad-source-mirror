@@ -41,6 +41,36 @@ namespace KIGFX {
         OPENGL_COMPOSITOR* compositor;
     };
 
+    enum class SUPERSAMPLING_MODE {
+        X2,
+        X4
+    };
+
+    class ANTIALIASING_SUPERSAMPLING : public OPENGL_PRESENTOR {
+    public:
+        ANTIALIASING_SUPERSAMPLING(OPENGL_COMPOSITOR* compositor, SUPERSAMPLING_MODE aMode);
+
+        bool Init() override;
+        unsigned int CreateBuffer() override;
+
+        VECTOR2U GetInternalBufferSize() override;
+        void OnLostBuffers() override;
+
+        void Begin() override;
+        void DrawBuffer(GLuint) override;
+        void Present() override;
+
+    private:
+        OPENGL_COMPOSITOR* compositor;
+        SUPERSAMPLING_MODE mode;
+
+        unsigned int ssaaMainBuffer;
+        bool areBuffersCreated;
+
+        bool areShadersCreated;
+        std::unique_ptr< SHADER > x4_shader;
+    };
+
 }
 
 #endif

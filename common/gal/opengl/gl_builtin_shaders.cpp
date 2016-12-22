@@ -224,6 +224,38 @@ void main()
 
 )SHADER_SOURCE";
 
+const char ssaa_x4_vertex_shader[] = R"SHADER_SOURCE(
+
+#version 120
+varying vec2 texcoord;
+void main()
+{
+    texcoord = gl_MultiTexCoord0.st;
+    gl_Position = ftransform();
+}
+
+)SHADER_SOURCE";
+
+const char ssaa_x4_fragment_shader[] = R"SHADER_SOURCE(
+
+#version 120
+varying vec2 texcoord;
+uniform sampler2D source;
+void main()
+{
+    float step_x = dFdx(texcoord.x)/4.;
+    float step_y = dFdy(texcoord.y)/4.;
+
+    vec4 q00 = texture2D( source, texcoord + vec2(-step_x, -step_y) );
+    vec4 q01 = texture2D( source, texcoord + vec2( step_x, -step_y) );
+    vec4 q10 = texture2D( source, texcoord + vec2(-step_x,  step_y) );
+    vec4 q11 = texture2D( source, texcoord + vec2( step_x,  step_y) );
+
+    gl_FragColor = (q00+q01+q10+q11)/4;
+}
+
+)SHADER_SOURCE";
+
 }
 }
 

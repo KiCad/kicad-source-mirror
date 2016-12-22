@@ -299,6 +299,10 @@ void OPENGL_GAL::BeginDrawing()
         isBitmapFontInitialized = true;
     }
 
+    // Something betreen BeginDrawing and EndDrawing seems to depend on
+    // this texture unit being active, but it does not assure it itself.
+    glActiveTexture(GL_TEXTURE0);
+
     // Unbind buffers - set compositor for direct drawing
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
@@ -332,7 +336,7 @@ void OPENGL_GAL::EndDrawing()
     compositor->DrawBuffer( mainBuffer );
     compositor->DrawBuffer( overlayBuffer );
     compositor->Present();
-    blitCursor();
+    //blitCursor();
 
     SwapBuffers();
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
