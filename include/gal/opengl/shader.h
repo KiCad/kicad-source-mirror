@@ -46,6 +46,21 @@ enum SHADER_TYPE
     SHADER_TYPE_GEOMETRY = GL_GEOMETRY_SHADER   ///< Geometry shader
 };
 
+namespace DETAIL {
+
+inline const char* translateStringArg( const std::string& str )
+{
+    return str.c_str();
+}
+
+inline const char* translateStringArg( const char* str )
+{
+    return str;
+}
+
+}
+
+
 /**
  * @brief Class SHADER provides the access to the OpenGL shaders.
  *
@@ -71,13 +86,19 @@ public:
     virtual ~SHADER();
 
     /**
-     * @brief Loads one of the built-in shaders and compiles it.
-     *
-     * @param aShaderNumber is the shader number (indexing from 0).
-     * @param aShaderType is the type of the shader.
-     * @return True in case of success, false otherwise.
-     */
-    bool LoadBuiltinShader( unsigned int aShaderNumber, SHADER_TYPE aShaderType );
+    * @brief Add a shader and compile the shader sources.
+    *
+    * @param aArgs is the list of strings (std::string or convertible to const char*) which
+             are concatenated and compiled as a single shader source code.
+    * @param aShaderType is the type of the shader.
+    * @return True in case of success, false otherwise.
+    */
+    template< typename... Args >
+    bool LoadShaderFromStrings( SHADER_TYPE aShaderType, Args&&... aArgs )
+    {
+        const char* arr[] = { DETAIL::translateStringArg( aArgs )... };
+        return loadShaderFromStringArray( aShaderType, arr, sizeof...(Args) );
+    }
 
     /**
      * @brief Loads one of the built-in shaders and compiles it.
@@ -86,7 +107,7 @@ public:
      * @param aShaderType is the type of the shader.
      * @return True in case of success, false otherwise.
      */
-    bool LoadShaderFromFile( const std::string& aShaderSourceName, SHADER_TYPE aShaderType );
+    bool LoadShaderFromFile( SHADER_TYPE aShaderType, const std::string& aShaderSourceName );
 
     /**
      * @brief Link the shaders.
@@ -170,7 +191,21 @@ public:
      */
     int GetAttribute( std::string aAttributeName ) const;
 
+    /**
+    * @brief Read the shader source file
+    *
+    * @param aShaderSourceName is the shader source file name.
+    * @return the source as string
+    */
+    static std::string ReadSource( std::string aShaderSourceName );
+
 private:
+
+    /**
+     * @brief Compile vertex of fragment shader source code into the program.
+     */
+    bool loadShaderFromStringArray( SHADER_TYPE aShaderType, const char * const * aArray,
+                                    size_t aSize );
 
     /**
      * @brief Get the shader program information.
@@ -185,23 +220,6 @@ private:
      * @param aShader is the shader number.
      */
     void shaderInfo( GLuint aShader );
-
-    /**
-     * @brief Read the shader source file
-     *
-     * @param aShaderSourceName is the shader source file name.
-     * @return the source as string
-     */
-    std::string readSource( std::string aShaderSourceName );
-
-    /**
-     * @brief Add a shader and compile the shader sources.
-     *
-     * @param aShaderSource is the shader source content.
-     * @param aShaderType is the type of the shader.
-     * @return True in case of success, false otherwise.
-     */
-    bool addSource( const std::string& aShaderSource, SHADER_TYPE aShaderType );
 
     std::deque<GLuint>  shaderNumbers;      ///< Shader number list
     GLuint              programNumber;      ///< Shader program number

@@ -49,6 +49,7 @@ using namespace KIGFX;
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
 #include "gl_resources.h"
+#include "gl_builtin_shaders.h"
 using namespace KIGFX::BUILTIN_FONT;
 
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
@@ -1558,10 +1559,10 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
             error( "Vertex buffer objects are not supported!" );
 
         // Prepare shaders
-        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
+        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadShaderFromStrings( SHADER_TYPE_VERTEX, BUILTIN_SHADERS::kicad_vertex_shader ) )
             error( "Cannot compile vertex shader!" );
 
-        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
+        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadShaderFromStrings(SHADER_TYPE_FRAGMENT, BUILTIN_SHADERS::kicad_fragment_shader  ) )
             error( "Cannot compile fragment shader!" );
 
         else if( !m_gal->shader->IsLinked() && !m_gal->shader->Link() )

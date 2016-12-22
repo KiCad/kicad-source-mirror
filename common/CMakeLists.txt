@@ -19,24 +19,6 @@ if( NOT APPLE )     # windows and linux use openssl under curl
     find_package( OpenSSL REQUIRED )
 endif()
 
-
-# Generate header files containing shader programs
-# Order of input files is significant
-add_custom_command(
-    OUTPUT gal/opengl/shader_src.h
-    COMMAND ${CMAKE_COMMAND}
-        -DinputFiles="${PROJECT_SOURCE_DIR}/common/gal/opengl/shader.vert\\;${PROJECT_SOURCE_DIR}/common/gal/opengl/shader.frag"
-        -DoutputFile="shader_src.h"
-        -P ${CMAKE_MODULE_PATH}/Shaders.cmake
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/common/gal/opengl
-    COMMENT "Generating headers containing GLSL source code"
-    )
-
-add_custom_target(
-    shader_headers ALL
-    DEPENDS gal/opengl/shader_src.h
-    )
-
 set( GAL_SRCS
     # Common part
     basic_gal.cpp
@@ -56,6 +38,7 @@ set( GAL_SRCS
     # OpenGL GAL
     gal/opengl/opengl_gal.cpp
     gal/opengl/gl_resources.cpp
+    gal/opengl/gl_builtin_shaders.cpp
     gal/opengl/shader.cpp
     gal/opengl/vertex_item.cpp
     gal/opengl/vertex_container.cpp

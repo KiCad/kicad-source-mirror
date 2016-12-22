@@ -34,7 +34,6 @@
 #include <cassert>
 
 #include <gal/opengl/shader.h>
-#include "shader_src.h"
 
 using namespace KIGFX;
 
@@ -76,22 +75,12 @@ SHADER::~SHADER()
     }
 }
 
-
-bool SHADER::LoadBuiltinShader( unsigned int aShaderNumber, SHADER_TYPE aShaderType )
-{
-    if( aShaderNumber >= shaders_number )
-        return false;
-
-    return addSource( std::string( shaders_src[aShaderNumber] ), aShaderType );
-}
-
-
-bool SHADER::LoadShaderFromFile( const std::string& aShaderSourceName, SHADER_TYPE aShaderType )
+bool SHADER::LoadShaderFromFile( SHADER_TYPE aShaderType, const std::string& aShaderSourceName )
 {
     // Load shader sources
-    const std::string shaderSource = readSource( aShaderSourceName );
+    const std::string shaderSource = ReadSource( aShaderSourceName );
 
-    return addSource( shaderSource, aShaderType );
+    return LoadShaderFromStrings( aShaderType, shaderSource );
 }
 
 
@@ -209,7 +198,7 @@ void SHADER::shaderInfo( GLuint aShader )
 }
 
 
-std::string SHADER::readSource( std::string aShaderSourceName )
+std::string SHADER::ReadSource( std::string aShaderSourceName )
 {
     // Open the shader source for reading
     std::ifstream inputFile( aShaderSourceName.c_str(), std::ifstream::in );
@@ -231,7 +220,8 @@ std::string SHADER::readSource( std::string aShaderSourceName )
 }
 
 
-bool SHADER::addSource( const std::string& aShaderSource, SHADER_TYPE aShaderType )
+bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char* const * aArray,
+                                        size_t aSize  )
 {
     assert( !isShaderLinked );
 
@@ -249,17 +239,9 @@ bool SHADER::addSource( const std::string& aShaderSource, SHADER_TYPE aShaderTyp
     // Get the program info
     programInfo( programNumber );
 
-    // Copy to char array
-    char* source = new char[aShaderSource.size() + 1];
-    strncpy( source, aShaderSource.c_str(), aShaderSource.size() + 1 );
-    const char** source_ = (const char**) ( &source );
-
-    // Attach the source
-    glShaderSource( shaderNumber, 1, source_, NULL );
+    // Attach the sources
+    glShaderSource( shaderNumber, aSize, aArray, NULL );
     programInfo( programNumber );
-
-    // Delete the allocated char array
-    delete[] source;
 
     // Compile and attach shader to the program
     glCompileShader( shaderNumber );
