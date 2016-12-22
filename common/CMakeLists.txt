@@ -55,6 +55,7 @@ set( GAL_SRCS
 
     # OpenGL GAL
     gal/opengl/opengl_gal.cpp
+    gal/opengl/gl_resources.cpp
     gal/opengl/shader.cpp
     gal/opengl/vertex_item.cpp
     gal/opengl/vertex_container.cpp

@@ -45,11 +45,11 @@ using namespace std::placeholders;
 
 using namespace KIGFX;
 
+
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
-#define BITMAP_FONT_USE_SPANS
-#include "bitmap_font_img.c"
-#include "bitmap_font_desc.c"
+#include "gl_resources.h"
+using namespace KIGFX::BUILTIN_FONT;
 
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
@@ -808,7 +808,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     {
         const unsigned int c = aText[ii];
 
-        wxASSERT_MSG( lookupGlyph(c) != nullptr, wxT( "Missing character in bitmap font atlas." ) );
+        wxASSERT_MSG( LookupGlyph(c) != nullptr, wxT( "Missing character in bitmap font atlas." ) );
         wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
 
         // Handle overbar
@@ -1317,7 +1317,7 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     const float TEX_X = font_image.width;
     const float TEX_Y = font_image.height;
 
-    const bitmap_glyph* glyph = lookupGlyph(aChar);
+    const FONT_GLYPH_TYPE* glyph = LookupGlyph(aChar);
     if( !glyph ) return 0;
 
     const float X = glyph->atlas_x + font_information.smooth_pixels;
@@ -1371,7 +1371,7 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
 void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 {
     // To draw an overbar, simply draw an overbar
-    const bitmap_glyph* glyph = lookupGlyph( '_' );
+    const FONT_GLYPH_TYPE* glyph = LookupGlyph( '_' );
     const float H = glyph->maxy - glyph->miny;
 
     Save();
@@ -1392,31 +1392,6 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
     currentManager->Vertex( aLength, H, 0 );    // v3
 
     Restore();
-}
-
-const bitmap_glyph* OPENGL_GAL::lookupGlyph( unsigned int aCodepoint ) const
-{
-#ifdef BITMAP_FONT_USE_SPANS
-        auto *end = font_codepoint_spans + sizeof( font_codepoint_spans ) / sizeof( bitmap_span );
-        auto ptr = std::upper_bound( font_codepoint_spans, end, aCodepoint,
-            []( unsigned int codepoint, const bitmap_span& span )
-            {
-                return codepoint < span.end;
-            }
-        );
-
-        if( ptr != end && ptr->start <= aCodepoint )
-        {
-            unsigned int index = aCodepoint - ptr->start + ptr->cumulative;
-            return &font_codepoint_infos[index];
-        }
-        else
-        {
-            return nullptr;
-        }
-#else
-        return &bitmap_chars[codepoint];
-#endif
 }
 
 std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
@@ -1444,7 +1419,7 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const wxString& aT
             }
         }
 
-        const bitmap_glyph* glyph = lookupGlyph(aText[i]);
+        const FONT_GLYPH_TYPE* glyph = LookupGlyph(aText[i]);
         if( glyph ) {
             textSize.x  += glyph->advance;
             textSize.y   = std::max<float>( textSize.y, font_information.max_y - glyph->miny );
