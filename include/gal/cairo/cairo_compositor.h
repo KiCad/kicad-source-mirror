@@ -62,11 +62,17 @@ public:
     /// @copydoc COMPOSITOR::SetBuffer()
     virtual void SetBuffer( unsigned int aBufferHandle ) override;
 
+    /// @copydoc COMPOSITOR::Begin()
+    virtual void Begin() override;
+
     /// @copydoc COMPOSITOR::ClearBuffer()
     virtual void ClearBuffer() override;
 
     /// @copydoc COMPOSITOR::DrawBuffer()
     virtual void DrawBuffer( unsigned int aBufferHandle ) override;
+
+    /// @copydoc COMPOSITOR::Present()
+    virtual void Present() override;
 
     /**
      * Function SetMainContext()

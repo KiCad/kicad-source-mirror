@@ -89,12 +89,24 @@ public:
     virtual void ClearBuffer() = 0;
 
     /**
+     * Function Begin()
+     * Call this at the beginning of each frame
+     */
+    virtual void Begin() = 0;
+
+    /**
      * Function DrawBuffer()
-     * draws the selected buffer on the screen.
+     * draws the selected buffer to the output buffer.
      *
      * @param aBufferHandle is the handle of the buffer to be drawn.
      */
     virtual void DrawBuffer( unsigned int aBufferHandle ) = 0;
+
+    /**
+     * Function Present()
+     * Call this to present the output buffer to the screen.
+     */
+    virtual void Present() = 0;
 
 protected:
     unsigned int m_width;           ///< Width of the buffer (in pixels)

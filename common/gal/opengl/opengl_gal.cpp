@@ -199,19 +199,12 @@ void OPENGL_GAL::BeginDrawing()
 
     GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
 
-#ifdef RETINA_OPENGL_PATCH
-    const float scaleFactor = GetBackingScaleFactor();
-#else
-    const float scaleFactor = 1.0f;
-#endif
-
     // Set up the view port
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    glViewport( 0, 0, (GLsizei) screenSize.x * scaleFactor, (GLsizei) screenSize.y * scaleFactor );
 
-    // Create the screen transformation
-    glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y, -depthRange.x, -depthRange.y );
+    // Create the screen transformation (Do the RH-LH conversion here)
+    glOrtho( 0, (GLint) screenSize.x, (GLsizei) screenSize.y, 0, -depthRange.x, -depthRange.y );
 
     if( !isFramebufferInitialized )
     {
@@ -222,6 +215,8 @@ void OPENGL_GAL::BeginDrawing()
 
         isFramebufferInitialized = true;
     }
+
+    compositor->Begin();
 
     // Disable 2D Textures
     glDisable( GL_TEXTURE_2D );
@@ -336,6 +331,7 @@ void OPENGL_GAL::EndDrawing()
     // Draw the remaining contents, blit the rendering targets to the screen, swap the buffers
     compositor->DrawBuffer( mainBuffer );
     compositor->DrawBuffer( overlayBuffer );
+    compositor->Present();
     blitCursor();
 
     SwapBuffers();

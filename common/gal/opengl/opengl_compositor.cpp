@@ -40,6 +40,7 @@ OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
     m_initialized( false ), m_curBuffer( 0 ),
     m_mainFbo( 0 ), m_depthBuffer( 0 ), m_curFbo( DIRECT_RENDERING )
 {
+    m_antialiasing.reset( new ANTIALIASING_NONE( this ) );
 }
 
 
@@ -55,6 +56,8 @@ void OPENGL_COMPOSITOR::Initialize()
     if( m_initialized )
         return;
 
+    VECTOR2U dims = m_antialiasing->GetInternalBufferSize();
+
     // We need framebuffer objects for drawing the screen contents
     // Generate framebuffer and a depth buffer
     glGenFramebuffersEXT( 1, &m_mainFbo );
@@ -68,7 +71,7 @@ void OPENGL_COMPOSITOR::Initialize()
     glBindRenderbufferEXT( GL_RENDERBUFFER_EXT, m_depthBuffer );
     checkGlError( "binding renderbuffer" );
 
-    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8, m_width, m_height );
+    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8, dims.x, dims.y );
     checkGlError( "creating renderbuffer storage" );
     glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_STENCIL_ATTACHMENT,
                                   GL_RENDERBUFFER_EXT, m_depthBuffer );
@@ -86,12 +89,18 @@ void OPENGL_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
     if( m_initialized )
         clean();
 
+    m_antialiasing->OnLostBuffers();
+
     m_width  = aWidth;
     m_height = aHeight;
 }
 
-
 unsigned int OPENGL_COMPOSITOR::CreateBuffer()
+{
+    return m_antialiasing->CreateBuffer();
+}
+
+unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
 {
     assert( m_initialized );
 
@@ -109,7 +118,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 
     glGetIntegerv( GL_MAX_TEXTURE_SIZE, (GLint*) &maxTextureSize );
 
-    if( maxTextureSize < (int) m_width || maxTextureSize < (int) m_height )
+    if( maxTextureSize < (int) aDimensions.x || maxTextureSize < (int) aDimensions.y )
     {
         throw std::runtime_error( "Requested texture size is not supported. "
                                    "Could not create a buffer." );
@@ -120,6 +129,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
     GLuint textureTarget;
 
     // Generate the texture for the pixel storage
+    glActiveTexture( GL_TEXTURE0 );
     glGenTextures( 1, &textureTarget );
     checkGlError( "generating framebuffer texture target" );
     glBindTexture( GL_TEXTURE_2D, textureTarget );
@@ -127,7 +137,7 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 
     // Set texture parameters
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA,
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, aDimensions.x, aDimensions.y, 0, GL_RGBA,
                   GL_UNSIGNED_BYTE, NULL );
     checkGlError( "creating framebuffer texture" );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
@@ -190,12 +200,17 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer()
     bindFb( DIRECT_RENDERING );
 
     // Store the new buffer
-    OPENGL_BUFFER buffer = { textureTarget, attachmentPoint };
+    OPENGL_BUFFER buffer = { aDimensions, textureTarget, attachmentPoint };
     m_buffers.push_back( buffer );
 
     return usedBuffers();
 }
 
+GLenum OPENGL_COMPOSITOR::GetBufferTexture( unsigned int aBufferHandle )
+{
+    assert( aBufferHandle > 0 && aBufferHandle <= usedBuffers() );
+    return m_buffers[aBufferHandle - 1].textureTarget;
+}
 
 void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 {
@@ -211,7 +226,14 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
         m_curBuffer = aBufferHandle - 1;
         glDrawBuffer( m_buffers[m_curBuffer].attachmentPoint );
         checkGlError( "setting draw buffer" );
+
+        glViewport( 0, 0,
+                    m_buffers[m_curBuffer].dimensions.x, m_buffers[m_curBuffer].dimensions.y );
+    } else {
+        glViewport( 0, 0, GetScreenSize().x, GetScreenSize().y );
     }
+
+
 }
 
 
@@ -223,14 +245,29 @@ void OPENGL_COMPOSITOR::ClearBuffer()
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
 
+VECTOR2U OPENGL_COMPOSITOR::GetScreenSize() const
+{
+    return{ m_width, m_height };
+}
 
-void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
+void OPENGL_COMPOSITOR::Begin()
+{
+    m_antialiasing->Begin();
+}
+
+void OPENGL_COMPOSITOR::DrawBuffer(unsigned int aBufferHandle)
+{
+    m_antialiasing->DrawBuffer( aBufferHandle );
+}
+
+void OPENGL_COMPOSITOR::DrawBuffer(unsigned int aSourceHandle, unsigned int aDestHandle)
 {
     assert( m_initialized );
-    assert( aBufferHandle != 0 && aBufferHandle <= usedBuffers() );
+    assert( aSourceHandle != 0 && aSourceHandle <= usedBuffers() );
+    assert (aDestHandle <= usedBuffers() );
 
     // Switch to the main framebuffer and blit the scene
-    bindFb( DIRECT_RENDERING );
+    bindFb( aDestHandle );
 
     // Depth test has to be disabled to make transparency working
     glDisable( GL_DEPTH_TEST );
@@ -238,7 +275,7 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 
     // Enable texturing and bind the main texture
     glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, m_buffers[aBufferHandle - 1].textureTarget );
+    glBindTexture( GL_TEXTURE_2D, m_buffers[aSourceHandle - 1].textureTarget );
 
     // Draw a full screen quad with the texture
     glMatrixMode( GL_MODELVIEW );
@@ -249,19 +286,19 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
     glLoadIdentity();
 
     glBegin( GL_TRIANGLES );
-    glTexCoord2f( 0.0f,  1.0f );
-    glVertex2f(  -1.0f, -1.0f );
-    glTexCoord2f( 1.0f,  1.0f );
-    glVertex2f(   1.0f, -1.0f );
-    glTexCoord2f( 1.0f,  0.0f );
-    glVertex2f(   1.0f,  1.0f );
+    glTexCoord2f(  0.0f,  1.0f );
+    glVertex2f  ( -1.0f,  1.0f );
+    glTexCoord2f(  0.0f,  0.0f );
+    glVertex2f  ( -1.0f, -1.0f );
+    glTexCoord2f(  1.0f,  1.0f );
+    glVertex2f  (  1.0f,  1.0f );
 
-    glTexCoord2f( 0.0f,  1.0f );
-    glVertex2f(  -1.0f, -1.0f );
-    glTexCoord2f( 1.0f,  0.0f );
-    glVertex2f(   1.0f,  1.0f );
-    glTexCoord2f( 0.0f,  0.0f );
-    glVertex2f(  -1.0f,  1.0f );
+    glTexCoord2f(  1.0f,  1.0f );
+    glVertex2f  (  1.0f,  1.0f );
+    glTexCoord2f(  0.0f,  0.0f );
+    glVertex2f  ( -1.0f, -1.0f );
+    glTexCoord2f(  1.0f,  0.0f );
+    glVertex2f  (  1.0f, -1.0f );
     glEnd();
 
     glPopMatrix();
@@ -269,6 +306,10 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
     glPopMatrix();
 }
 
+void OPENGL_COMPOSITOR::Present()
+{
+    m_antialiasing->Present();
+}
 
 void OPENGL_COMPOSITOR::bindFb( unsigned int aFb ) {
     // Currently there are only 2 valid FBOs

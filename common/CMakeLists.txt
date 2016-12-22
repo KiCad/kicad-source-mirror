@@ -46,6 +46,7 @@ set( GAL_SRCS
     gal/opengl/noncached_container.cpp
     gal/opengl/vertex_manager.cpp
     gal/opengl/gpu_manager.cpp
+    gal/opengl/antialiasing.cpp
     gal/opengl/opengl_compositor.cpp
     gal/opengl/utils.cpp
 
