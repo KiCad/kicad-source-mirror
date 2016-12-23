@@ -28,6 +28,7 @@ set( GAL_SRCS
     worksheet_viewitem.cpp
     origin_viewitem.cpp
     gl_context_mgr.cpp
+    gal/gal_display_options.cpp
     gal/graphics_abstraction_layer.cpp
     gal/stroke_font.cpp
     gal/color4d.cpp

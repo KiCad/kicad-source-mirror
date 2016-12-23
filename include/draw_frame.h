@@ -29,6 +29,7 @@
 #include <wxstruct.h>
 #include <kiway_player.h>
 #include <climits>
+#include <gal/gal_display_options.h>
 
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
@@ -56,6 +57,7 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
     bool        m_galCanvasActive;              ///< whether to use new GAL engine
 
     EDA_DRAW_PANEL_GAL* m_galCanvas;
+    KIGFX::GAL_DISPLAY_OPTIONS m_galDisplayOptions;
 
 protected:
 
@@ -812,6 +814,12 @@ public:
      * pass usefull info.
      */
     virtual void* GetDisplayOptions() { return NULL; }
+
+    /**
+    * Function GetGalDisplayOptions
+    * Returns a reference to the gal rendering options used by GAL for rendering.
+    */
+    KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return m_galDisplayOptions; }
 
     DECLARE_EVENT_TABLE()
 };

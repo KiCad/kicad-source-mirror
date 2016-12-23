@@ -71,9 +71,14 @@ namespace KIGFX {
         std::unique_ptr< SHADER > x4_shader;
     };
 
+    enum class SMAA_QUALITY {
+        HIGH,
+        ULTRA
+    };
+
     class ANTIALIASING_SMAA : public OPENGL_PRESENTOR {
     public:
-        ANTIALIASING_SMAA ( OPENGL_COMPOSITOR* aCompositor );
+        ANTIALIASING_SMAA ( OPENGL_COMPOSITOR* aCompositor, SMAA_QUALITY aQuality );
 
         bool Init() override;
         unsigned int CreateBuffer () override;
@@ -111,6 +116,7 @@ namespace KIGFX {
         std::unique_ptr< SHADER > pass_3_shader;
         GLint pass_3_metrics;
 
+        SMAA_QUALITY quality;
         OPENGL_COMPOSITOR* compositor;
     };
 

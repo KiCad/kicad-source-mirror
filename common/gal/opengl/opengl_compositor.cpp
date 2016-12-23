@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
@@ -40,8 +40,7 @@ OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
     m_initialized( false ), m_curBuffer( 0 ),
     m_mainFbo( 0 ), m_depthBuffer( 0 ), m_curFbo( DIRECT_RENDERING )
 {
-    //m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X4 ) );
-    m_antialiasing.reset( new ANTIALIASING_SMAA( this ) );
+    m_antialiasing.reset( new ANTIALIASING_NONE( this ) );
 }
 
 
@@ -51,11 +50,40 @@ OPENGL_COMPOSITOR::~OPENGL_COMPOSITOR()
         clean();
 }
 
+void OPENGL_COMPOSITOR::SetAntialiasingMode( OPENGL_ANTIALIASING_MODE aMode )
+{
+    m_currentAntialiasingMode = aMode;
+    if(m_initialized)
+        clean();
+}
+
+OPENGL_ANTIALIASING_MODE OPENGL_COMPOSITOR::GetAntialiasingMode() const
+{
+    return m_currentAntialiasingMode;
+}
 
 void OPENGL_COMPOSITOR::Initialize()
 {
     if( m_initialized )
         return;
+
+    switch(m_currentAntialiasingMode) {
+    case OPENGL_ANTIALIASING_MODE::NONE:
+        m_antialiasing.reset( new ANTIALIASING_NONE( this ) );
+        break;
+    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
+        m_antialiasing.reset( new ANTIALIASING_SMAA( this, SMAA_QUALITY::HIGH ) );
+        break;
+    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
+        m_antialiasing.reset( new ANTIALIASING_SMAA( this, SMAA_QUALITY::ULTRA ) );
+        break;
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
+        m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X2 ) );
+        break;
+    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
+        m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X4 ) );
+        break;
+    }
 
     VECTOR2U dims = m_antialiasing->GetInternalBufferSize();
 

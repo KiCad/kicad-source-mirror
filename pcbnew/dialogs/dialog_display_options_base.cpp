@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 10 2016)
+// C++ code generated with wxFormBuilder (version Dec 15 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -37,7 +37,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sOpenGLRenderingSizer;
 	sOpenGLRenderingSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("OpenGL Rendering:") ), wxVERTICAL );
 	
-	wxString m_choiceAntialiasingChoices[] = { _("No Antialiasing"), _("Subpixel Antialiasing"), _("2x Supersampling"), _("4x Supersampling") };
+	wxString m_choiceAntialiasingChoices[] = { _("No Antialiasing"), _("Subpixel Antialiasing (High Quality)"), _("Subpixel Antialiasing (Ultra Quality)"), _("Supersampling (2x)"), _("Supersampling (4x)") };
 	int m_choiceAntialiasingNChoices = sizeof( m_choiceAntialiasingChoices ) / sizeof( wxString );
 	m_choiceAntialiasing = new wxChoice( sOpenGLRenderingSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceAntialiasingNChoices, m_choiceAntialiasingChoices, 0 );
 	m_choiceAntialiasing->SetSelection( 0 );

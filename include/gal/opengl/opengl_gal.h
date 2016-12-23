@@ -31,6 +31,7 @@
 
 // GAL imports
 #include <gal/graphics_abstraction_layer.h>
+#include <gal/gal_display_options.h>
 #include <gal/opengl/shader.h>
 #include <gal/opengl/vertex_manager.h>
 #include <gal/opengl/vertex_item.h>
@@ -61,7 +62,7 @@ class SHADER;
  * and quads. The purpose is to provide a fast graphics interface, that takes advantage of modern
  * graphics card GPUs. All methods here benefit thus from the hardware acceleration.
  */
-class OPENGL_GAL : public GAL, public wxGLCanvas
+class OPENGL_GAL : public GAL, public wxGLCanvas, GAL_DISPLAY_OPTIONS_OBSERVER
 {
 public:
     /**
@@ -79,8 +80,9 @@ public:
      *
      * @param aName is the name of this window for use by wxWindow::FindWindowByName()
      */
-    OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener = NULL,
-                wxEvtHandler* aPaintListener = NULL, const wxString& aName = wxT( "GLCanvas" ) );
+    OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
+                wxEvtHandler* aMouseListener = nullptr, wxEvtHandler* aPaintListener = nullptr,
+                const wxString& aName = wxT( "GLCanvas" ) );
 
     virtual ~OPENGL_GAL();
 
@@ -91,6 +93,8 @@ public:
     bool IsVisible() const override {
         return IsShownOnScreen();
     }
+
+    void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& ) override;
 
     // ---------------
     // Drawing methods
@@ -270,6 +274,9 @@ public:
 private:
     /// Super class definition
     typedef GAL super;
+
+    GAL_DISPLAY_OPTIONS&    options;
+    UTIL::LINK              observerLink;
 
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation

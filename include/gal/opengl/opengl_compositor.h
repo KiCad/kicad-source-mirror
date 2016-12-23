@@ -33,6 +33,7 @@
 
 #include <gal/compositor.h>
 #include <gal/opengl/antialiasing.h>
+#include <gal/gal_display_options.h>
 #include <GL/glew.h>
 #include <deque>
 
@@ -87,6 +88,9 @@ public:
     void     DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle );
     unsigned int CreateBuffer( VECTOR2U aDimensions );
 
+    void SetAntialiasingMode( OPENGL_ANTIALIASING_MODE aMode ); // clears all buffers
+    OPENGL_ANTIALIASING_MODE GetAntialiasingMode() const;
+
 protected:
     // Buffers are simply textures storing a result of certain target rendering.
     typedef struct
@@ -108,6 +112,7 @@ protected:
     /// Store the used FBO name in case there was more than one compositor used
     GLuint          m_curFbo;
 
+    OPENGL_ANTIALIASING_MODE m_currentAntialiasingMode;
     std::unique_ptr< OPENGL_PRESENTOR > m_antialiasing;
 
     /// Binds a specific Framebuffer Object.

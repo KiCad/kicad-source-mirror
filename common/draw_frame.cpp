@@ -72,6 +72,8 @@ static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
 static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
 /// Most recently used grid size (suffix)
 static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
+/// GAL Display Options
+static const wxString GalDisplayOptionsKeyword( wxT( "GalDisplayOptions" ) );
 
 ///@}
 
@@ -708,6 +710,8 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     m_UndoRedoCountMax = aCfg->Read( baseCfgName + MaxUndoItemsEntry,
             long( DEFAULT_MAX_UNDO_ITEMS ) );
+
+    m_galDisplayOptions.ReadConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
 }
 
 
@@ -724,6 +728,8 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     if( GetScreen() )
         aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
+
+    m_galDisplayOptions.WriteConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
 }
 
 

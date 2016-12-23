@@ -39,6 +39,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 
+#include <pcbstruct.h>  // display options definition
 
 #ifdef PROFILE
 #include <profile.h>
@@ -334,10 +335,12 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     try
     {
+        auto& gal_opts = m_edaFrame->GetGalDisplayOptions();
+
         switch( aGalType )
         {
         case GAL_TYPE_OPENGL:
-            new_gal = new KIGFX::OPENGL_GAL( this, this, this );
+            new_gal = new KIGFX::OPENGL_GAL( gal_opts, this, this, this );
             break;
 
         case GAL_TYPE_CAIRO:

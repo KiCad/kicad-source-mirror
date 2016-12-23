@@ -62,12 +62,14 @@ bool OPENGL_GAL::isBitmapFontLoaded = false;
 SHADER* OPENGL_GAL::shader = NULL;
 
 
-OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
-                        wxEvtHandler* aPaintListener, const wxString& aName ) :
+OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
+                        wxEvtHandler* aMouseListener, wxEvtHandler* aPaintListener,
+                        const wxString& aName ) :
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
     mouseListener( aMouseListener ),
-    paintListener( aPaintListener )
+    paintListener( aPaintListener ),
+    options( aDisplayOptions )
 {
     if( glMainContext == NULL )
     {
@@ -94,6 +96,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     overlayManager->SetShader( *shader );
 
     compositor = new OPENGL_COMPOSITOR;
+    compositor->SetAntialiasingMode( options.gl_antialiasing_mode );
 
     // Initialize the flags
     isFramebufferInitialized = false;
@@ -104,6 +107,8 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 #ifdef RETINA_OPENGL_PATCH
     SetViewWantsBestResolution( true );
 #endif
+
+    observerLink = options.Subscribe( this );
 
     // Connecting the event handlers
     Connect( wxEVT_PAINT,           wxPaintEventHandler( OPENGL_GAL::onPaint ) );
@@ -187,6 +192,15 @@ OPENGL_GAL::~OPENGL_GAL()
 
 }
 
+void OPENGL_GAL::OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aDisplayOptions )
+{
+    if(options.gl_antialiasing_mode != compositor->GetAntialiasingMode())
+    {
+        compositor->SetAntialiasingMode( options.gl_antialiasing_mode );
+        isFramebufferInitialized = false;
+        Refresh();
+    }
+}
 
 void OPENGL_GAL::BeginDrawing()
 {

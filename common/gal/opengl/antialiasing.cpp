@@ -188,8 +188,9 @@ namespace KIGFX {
     // ANTIALIASING_SMAA
     // ===============================
 
-    ANTIALIASING_SMAA::ANTIALIASING_SMAA( OPENGL_COMPOSITOR* aCompositor )
-        : compositor( aCompositor ), shadersLoaded( false ), areBuffersInitialized( false )
+    ANTIALIASING_SMAA::ANTIALIASING_SMAA( OPENGL_COMPOSITOR* aCompositor, SMAA_QUALITY aQuality )
+        : compositor( aCompositor ), shadersLoaded( false ), areBuffersInitialized( false ),
+          quality( aQuality )
     {
     }
 
@@ -222,13 +223,22 @@ namespace KIGFX {
         glTexImage2D( GL_TEXTURE_2D, 0, GL_R8, SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT, 0, GL_RED, GL_UNSIGNED_BYTE, searchTexBytes );
         checkGlError( "loading smaa search tex" );
 
+        std::string quality_string;
+
+        if(quality == SMAA_QUALITY::HIGH) {
+            quality_string = "#define SMAA_PRESET_HIGH\n";
+        }
+        else {
+            quality_string = "#define SMAA_PRESET_ULTRA\n";
+        }
+
+
         // set up shaders
         std::string vert_preamble( R"SHADER(
 #version 120
 #define SMAA_GLSL_2_1
 #define SMAA_INCLUDE_VS 1
 #define SMAA_INCLUDE_PS 0
-#define SMAA_PRESET_ULTRA
 uniform vec4 SMAA_RT_METRICS;
 )SHADER" );
 
@@ -237,7 +247,6 @@ uniform vec4 SMAA_RT_METRICS;
 #define SMAA_GLSL_2_1
 #define SMAA_INCLUDE_VS 0
 #define SMAA_INCLUDE_PS 1
-#define SMAA_PRESET_ULTRA
 uniform vec4 SMAA_RT_METRICS;
 )SHADER" );
 
@@ -251,10 +260,10 @@ uniform vec4 SMAA_RT_METRICS;
         // Set up pass 1 Shader
         //
         pass_1_shader.reset( new SHADER() );
-        pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX,
-            vert_preamble, smaa_source, BUILTIN_SHADERS::smaa_pass_1_vertex_shader );
-        pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT,
-            frag_preamble, smaa_source, BUILTIN_SHADERS::smaa_pass_1_fragment_shader );
+        pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble,
+            quality_string, smaa_source, BUILTIN_SHADERS::smaa_pass_1_vertex_shader );
+        pass_1_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
+            quality_string, smaa_source, BUILTIN_SHADERS::smaa_pass_1_fragment_shader );
         pass_1_shader->Link();
         checkGlError( "linking pass 1 shader" );
 
@@ -269,10 +278,10 @@ uniform vec4 SMAA_RT_METRICS;
         // set up pass 2 shader
         //
         pass_2_shader.reset( new SHADER() );
-        pass_2_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX,
-            vert_preamble, smaa_source, BUILTIN_SHADERS::smaa_pass_2_vertex_shader );
-        pass_2_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT,
-            frag_preamble, smaa_source, BUILTIN_SHADERS::smaa_pass_2_fragment_shader );
+        pass_2_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble,
+            quality_string, smaa_source, BUILTIN_SHADERS::smaa_pass_2_vertex_shader );
+        pass_2_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
+            quality_string, smaa_source, BUILTIN_SHADERS::smaa_pass_2_fragment_shader );
         pass_2_shader->Link();
         checkGlError( "linking pass 2 shader" );
 
@@ -291,10 +300,10 @@ uniform vec4 SMAA_RT_METRICS;
         // set up pass 3 shader
         //
         pass_3_shader.reset( new SHADER() );
-        pass_3_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX,
-            vert_preamble, smaa_source, BUILTIN_SHADERS::smaa_pass_3_vertex_shader );
-        pass_3_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT,
-            frag_preamble, smaa_source, BUILTIN_SHADERS::smaa_pass_3_fragment_shader );
+        pass_3_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_VERTEX, vert_preamble,
+            quality_string, smaa_source, BUILTIN_SHADERS::smaa_pass_3_vertex_shader );
+        pass_3_shader->LoadShaderFromStrings( KIGFX::SHADER_TYPE_FRAGMENT, frag_preamble,
+            quality_string, smaa_source, BUILTIN_SHADERS::smaa_pass_3_fragment_shader );
         pass_3_shader->Link();
 
         GLint smaaP3ColorTexParameter = pass_3_shader->AddParameter( "colorTex" );                 checkGlError( "pass3: getting colorTex uniform" );
