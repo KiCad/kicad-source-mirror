@@ -22,6 +22,7 @@ class DIALOG_SHIM;
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/choice.h>
 #include <wx/radiobox.h>
 #include <wx/statline.h>
 #include <wx/button.h>
@@ -44,6 +45,7 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		
 		wxCheckBox* m_OptDisplayTracks;
 		wxCheckBox* m_OptDisplayVias;
+		wxChoice* m_choiceAntialiasing;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxRadioBox* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayModOutlines;
