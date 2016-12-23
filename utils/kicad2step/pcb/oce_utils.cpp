@@ -52,6 +52,7 @@
 
 #include <BRep_Tool.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
+#include <BRepBuilderAPI.hxx>
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
@@ -218,6 +219,7 @@ PCBMODEL::PCBMODEL()
     m_thickness = THICKNESS_DEFAULT;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_mincurve = m_curves.end();
+    BRepBuilderAPI::Precision( 1.0e-6 );
     return;
 }
 
