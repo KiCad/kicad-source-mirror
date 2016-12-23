@@ -187,11 +187,11 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
         switch( status )
         {
         case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
-            throw std::runtime_error( "Cannot create the framebuffer." );
+            throw std::runtime_error( "The framebuffer attachment points are incomplete." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
-            throw std::runtime_error( "The framebuffer attachment points are incomplete." );
+            throw std::runtime_error( "No images attached to the framebuffer." );
             break;
 
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
@@ -217,8 +217,12 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
             throw std::runtime_error( "Framebuffer incomplete layer targets errors." );
             break;
 
+        case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+            throw std::runtime_error( "Framebuffer attachments have different dimensions" );
+            break;
+
         default:
-            throw std::runtime_error( "Cannot create the framebuffer." );
+            throw std::runtime_error( "Unknown error occurred when creating the framebuffer." );
             break;
         }
 
