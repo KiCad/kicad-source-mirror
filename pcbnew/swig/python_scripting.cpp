@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,8 @@
 #include <common.h>
 #include <colors.h>
 #include <macros.h>
+
+#include <pgm_base.h>
 
 /* init functions defined by swig */
 
@@ -358,4 +360,30 @@ wxString PyErrStringWithTraceback()
     PyErr_Clear();
 
     return err;
+}
+
+/**
+ * Find the Python scripting path
+ */
+wxString PyScriptingPath()
+{
+    wxString path;
+
+    //TODO should this be a user configurable variable eg KISCRIPT ?
+#if defined( __WXMAC__ )
+    path = GetOSXKicadDataDir() + wxT( "/scripting" );
+#else
+    path = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
+#endif
+
+    wxFileName scriptPath( path );
+
+    scriptPath.MakeAbsolute();
+
+    return scriptPath.GetFullPath();
+}
+
+wxString PyPluginsPath()
+{
+    return PyScriptingPath() + wxFileName::GetPathSeparator() + "plugins";
 }

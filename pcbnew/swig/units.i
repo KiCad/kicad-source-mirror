@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,11 +55,25 @@
         elif type(mils) in [wxPoint,wxSize]:
             return tuple(map(FromMils,mils))
 
-    def wxSizeMM(mmx,mmy): return wxSize(FromMM(mmx),FromMM(mmy))
-    def wxSizeMils(mmx,mmy): return wxSize(FromMils(mmx),FromMils(mmy))
+    def PutOnGridMM(value, gridSizeMM):
+        thresh = FromMM(gridSizeMM)
+        return round(value/thresh)*thresh
 
-    def wxPointMM(mmx,mmy): return wxPoint(FromMM(mmx),FromMM(mmy))
-    def wxPointMils(mmx,mmy): return wxPoint(FromMils(mmx),FromMils(mmy))
+    def PutOnGridMils(value, gridSizeMils):
+        thresh = FromMils(gridSizeMils)
+        return round(value/thresh)*thresh
+
+    def wxSizeMM(mmx,mmy):
+        return wxSize(FromMM(mmx),FromMM(mmy))
+
+    def wxSizeMils(mmx,mmy):
+        return wxSize(FromMils(mmx),FromMils(mmy))
+
+    def wxPointMM(mmx,mmy):
+        return wxPoint(FromMM(mmx),FromMM(mmy))
+
+    def wxPointMils(mmx,mmy):
+        return wxPoint(FromMils(mmx),FromMils(mmy))
 
     def wxRectMM(x,y,wx,wy):
         x = int(FromMM(x))
@@ -72,6 +86,6 @@
         x = int(FromMils(x))
         y = int(FromMils(y))
         wx = int(FromMils(wx))
-        wy = int (FromMils(wy))
+        wy = int(FromMils(wy))
         return wxRect(x,y,wx,wy)
 %}

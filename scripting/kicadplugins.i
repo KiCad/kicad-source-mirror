@@ -119,19 +119,23 @@ def LoadPlugins(bundlepath=None):
     if bundlepath:
         plugin_directories.append(bundlepath)
         plugin_directories.append(os.path.join(bundlepath, 'plugins'))
+        plugin_directories.append(os.path.join(bundlepath, 'plugins', 'wizards'))
 
     if kicad_path:
         plugin_directories.append(os.path.join(kicad_path, 'scripting'))
         plugin_directories.append(os.path.join(kicad_path, 'scripting', 'plugins'))
+        plugin_directories.append(os.path.join(kicad_path, 'scripting', 'plugins', 'wizards'))
 
     if config_path:
         plugin_directories.append(os.path.join(config_path, 'scripting'))
         plugin_directories.append(os.path.join(config_path, 'scripting', 'plugins'))
+        plugin_directories.append(os.path.join(config_path, 'scripting', 'plugins', 'wizards'))
 
     if sys.platform.startswith('linux'):
         plugin_directories.append(os.environ['HOME']+'/.kicad_plugins/')
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/')
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/')
+        plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/wizards')
 
     for plugins_dir in plugin_directories:
         if not os.path.isdir(plugins_dir):
@@ -146,15 +150,18 @@ def LoadPlugins(bundlepath=None):
             if module == '__init__.py' or module[-3:] != '.py':
                 continue
 
-            mod = __import__(module[:-3], locals(), globals())
+            try:  # If there is an error loading the script, skip it
+                mod = __import__(module[:-3], locals(), globals())
 
-            module_filename = plugins_dir+"/"+module
-            mtime = os.path.getmtime(module_filename)
-            if hasattr(mod,'register'):
-                KICAD_PLUGINS[module]={"filename":module_filename,
-                                       "modification_time":mtime,
-                                       "object":mod.register(),
-                                       "module":mod}
+                module_filename = plugins_dir+"/"+module
+                mtime = os.path.getmtime(module_filename)
+                if hasattr(mod,'register'):
+                    KICAD_PLUGINS[module]={"filename":module_filename,
+                                           "modification_time":mtime,
+                                           "object":mod.register(),
+                                           "module":mod}
+            except:
+                pass
 
 
 

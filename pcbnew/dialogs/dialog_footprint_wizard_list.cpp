@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,14 @@
 #include <kiface_i.h>
 #include <dialog_footprint_wizard_list.h>
 #include <class_footprint_wizard.h>
+#include <python_scripting.h>
 
-#define ROW_NAME 0
-#define ROW_DESCR 1
+enum FPGeneratorRowNames
+{
+    FP_GEN_ROW_NAME = 0,
+    FP_GEN_ROW_DESCR,
+};
+
 #define FPWIZARTDLIST_HEIGHT_KEY wxT( "FpWizardListHeight" )
 #define FPWIZARTDLIST_WIDTH_KEY  wxT( "FpWizardListWidth" )
 
@@ -64,10 +69,20 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         wxString description = wizard->GetDescription();
         wxString image = wizard->GetImage();
 
-        m_footprintGeneratorsGrid->SetCellValue( i, ROW_NAME, name );
-        m_footprintGeneratorsGrid->SetCellValue( i, ROW_DESCR, description );
+        m_footprintGeneratorsGrid->SetCellValue( i, FP_GEN_ROW_NAME, name );
+        m_footprintGeneratorsGrid->SetCellValue( i, FP_GEN_ROW_DESCR, description );
 
     }
+
+    m_footprintGeneratorsGrid->AutoSizeColumns();
+
+    // Auto-expand the description column
+    int width = m_footprintGeneratorsGrid->GetClientSize().GetWidth() -
+                m_footprintGeneratorsGrid->GetRowLabelSize() -
+                m_footprintGeneratorsGrid->GetColSize( FP_GEN_ROW_NAME );
+
+    if ( width > m_footprintGeneratorsGrid->GetColMinimalAcceptableWidth() )
+        m_footprintGeneratorsGrid->SetColSize( FP_GEN_ROW_DESCR, width );
 
     // Select the first row
     m_footprintGeneratorsGrid->ClearSelection();
