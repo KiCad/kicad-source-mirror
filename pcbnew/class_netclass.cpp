@@ -264,8 +264,14 @@ void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FMT_IU( GetuViaDiameter() ).c_str() );
     aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FMT_IU( GetuViaDrill() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(diff_pair_gap %s)\n", FMT_IU( GetDiffPairGap() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(diff_pair_width %s)\n", FMT_IU( GetDiffPairWidth() ).c_str() );
+    // Save the diff_pair_gap and diff_pair_width values only if not the default, to avoid unnecessary
+    // incompatibility  with previous Pcbnew versions.
+    if( ( DEFAULT_DIFF_PAIR_WIDTH != GetDiffPairWidth() ) ||
+        ( DEFAULT_DIFF_PAIR_GAP != GetDiffPairGap() ) )
+    {
+        aFormatter->Print( aNestLevel+1, "(diff_pair_gap %s)\n", FMT_IU( GetDiffPairGap() ).c_str() );
+        aFormatter->Print( aNestLevel+1, "(diff_pair_width %s)\n", FMT_IU( GetDiffPairWidth() ).c_str() );
+    }
 
 
     for( NETCLASS::const_iterator it = begin(); it != end(); ++it )
