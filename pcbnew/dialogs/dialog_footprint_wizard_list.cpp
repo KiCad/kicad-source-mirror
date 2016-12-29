@@ -33,7 +33,6 @@
 #include <kiface_i.h>
 #include <dialog_footprint_wizard_list.h>
 #include <class_footprint_wizard.h>
-#include <python_scripting.h>
 
 enum FPGeneratorRowNames
 {
