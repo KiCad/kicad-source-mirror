@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1157,8 +1157,8 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
                     else
                     {
                         wxString error = wxString::Format(
-                            _( "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm).\n"
-                                  "Edit Edge.Cuts perimeter graphics, making them contiguous polygons each." ),
+                            _( "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm). "
+                                "Edge.Cuts perimeter graphics must form a contiguous, closed polygon." ),
                             GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
                             GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
                         );

@@ -483,9 +483,7 @@ void CINFO3D_VISU::createBoardPolygon()
     if( !m_board->GetBoardPolygonOutlines( m_board_poly, allLayerHoles, &errmsg ) )
     {
         errmsg.append( wxT( "\n\n" ) );
-        errmsg.append( _( "Unable to calculate the board outlines." ) );
-        errmsg.append( wxT( "\n" ) );
-        errmsg.append( _( "Therefore use the board boundary box." ) );
+        errmsg.append( _( "Cannot determine the board outline." ) );
         wxLogMessage( errmsg );
     }
 
