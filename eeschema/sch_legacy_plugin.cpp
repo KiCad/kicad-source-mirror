@@ -1358,21 +1358,24 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
                                         "B, T, or C" ), aReader, line );
 
                 // Newer file formats include the bold and italics text attribute.
-                if( textAttrs.Length() != 3 )
-                    SCH_PARSE_ERROR( _( "component field text attributes must be 3 characters wide" ),
-                                     aReader, line );
+                if( textAttrs.Length() > 1 )
+                {
+                    if( textAttrs.Length() != 3 )
+                        SCH_PARSE_ERROR( _( "component field text attributes must be 3 characters wide" ),
+                                         aReader, line );
 
-                if( textAttrs[1] == 'I' )
-                    component->GetField( index )->SetItalic( true );
-                else if( textAttrs[1] != 'N' )
-                    SCH_PARSE_ERROR( _( "component field text italics indicator must be I or N" ),
-                                     aReader, line );
+                    if( textAttrs[1] == 'I' )
+                        component->GetField( index )->SetItalic( true );
+                    else if( textAttrs[1] != 'N' )
+                        SCH_PARSE_ERROR( _( "component field text italics indicator must be I or N" ),
+                                         aReader, line );
 
-                if( textAttrs[2] == 'B' )
-                    component->GetField( index )->SetBold( true );
-                else if( textAttrs[2] != 'N' )
-                    SCH_PARSE_ERROR( _( "component field text bold indicator must be B or N" ),
-                                     aReader, line );
+                    if( textAttrs[2] == 'B' )
+                        component->GetField( index )->SetBold( true );
+                    else if( textAttrs[2] != 'N' )
+                        SCH_PARSE_ERROR( _( "component field text bold indicator must be B or N" ),
+                                         aReader, line );
+                }
             }
 
             component->GetField( index )->SetText( text );
