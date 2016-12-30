@@ -916,14 +916,26 @@ void mpScaleX::recalculateTicks( wxDC& dc, mpWindow& w )
         m_tickLabels.push_back( TickLabel( t ) );
     }
 
-    // n0 = floor(minVvis / bestStep) * bestStep;
-    // end = n0 +
-
-    // n0 = floor( (w.GetPosX() ) / step ) * step ;
-    // printf("zeroOffset:%.3f tickjs : %d\n", zeroOffset, m_tickValues.size());
     updateTickLabels( dc, w );
 }
 
+
+mpScaleBase::mpScaleBase()
+{
+    m_rangeSet = false;
+    m_nameFlags = mpALIGN_BORDER_BOTTOM;
+
+    // initialize these members mainly to avoid not initialized values
+    m_offset = 0.0;
+    m_scale = 1.0;
+    m_absVisibleMaxV = 0.0;
+    m_flags = 0;            // Flag for axis alignment
+    m_ticks = true;         // Flag to toggle between ticks or grid
+    m_minV = 0.0;
+    m_maxV = 0.0;
+    m_maxLabelHeight = 1;
+    m_maxLabelWidth = 1;
+}
 
 #if 0
 int mpScaleBase::getLabelDecimalDigits( int maxDigits )
@@ -2690,9 +2702,6 @@ void mpWindow::SetMPScrollbars( bool status )
 
 bool mpWindow::UpdateBBox()
 {
-    bool first = true;
-
-
     m_minX  = 0.0;
     m_maxX  = 1.0;
     m_minY  = 0.0;
@@ -2701,6 +2710,7 @@ bool mpWindow::UpdateBBox()
     return true;
 
 #if 0
+    bool first = true;
 
     for( wxLayerList::iterator li = m_layers.begin(); li != m_layers.end(); li++ )
     {
@@ -2733,14 +2743,14 @@ bool mpWindow::UpdateBBox()
         // node = node->GetNext();
     }
 
-#endif
-
 #ifdef MATHPLOT_DO_LOGGING
     wxLogDebug( wxT(
                     "[mpWindow::UpdateBBox] Bounding box: Xmin = %f, Xmax = %f, Ymin = %f, YMax = %f" ), m_minX, m_maxX, m_minY,
             m_maxY );
 #endif    // MATHPLOT_DO_LOGGING
+
     return first == false;
+#endif
 }
 
 

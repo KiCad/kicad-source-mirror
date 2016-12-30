@@ -47,6 +47,7 @@ class VIEW_ITEM_DATA
 {
 public:
     VIEW_ITEM_DATA() :
+        m_view( nullptr ),
         m_flags( KIGFX::VISIBLE ),
         m_requiredUpdate( KIGFX::NONE ),
         m_groups( nullptr ),

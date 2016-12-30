@@ -78,6 +78,7 @@ ROUTER::ROUTER()
     m_showInterSteps = false;
     m_snapshotIter = 0;
     m_violation = false;
+    m_iface = nullptr;
 }
 
 

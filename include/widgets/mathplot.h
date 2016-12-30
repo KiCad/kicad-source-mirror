@@ -690,7 +690,7 @@ protected:
 class WXDLLIMPEXP_MATHPLOT mpScaleBase : public mpLayer
 {
 public:
-    mpScaleBase() { m_rangeSet = false; m_nameFlags = mpALIGN_BORDER_BOTTOM; };
+    mpScaleBase();
     virtual ~mpScaleBase() {};
 
     virtual bool IsHorizontal() = 0;
@@ -1587,7 +1587,6 @@ public:
     double GetMaxY() override { return m_maxY; }
 
 protected:
-    int m_flags;         // !< Holds label alignment
 
     DECLARE_DYNAMIC_CLASS( mpFXYVector )
 };

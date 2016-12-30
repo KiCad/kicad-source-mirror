@@ -61,6 +61,7 @@ DXF2BRD_CONVERTER::DXF2BRD_CONVERTER() : DRW_Interface()
     m_version   = 0;
     m_defaultThickness = 0.1;
     m_brdLayer = Dwgs_User;
+    m_useModuleItems = true;
 }
 
 

@@ -1990,6 +1990,7 @@ SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFi
 {
     m_versionMajor = -1;
     m_versionMinor = -1;
+    m_libType = LIBRARY_TYPE_EESCHEMA;
 }
 
 
