@@ -770,7 +770,9 @@ public:
     struct TickLabel
     {
         TickLabel( double pos_ = 0.0, const wxString& label_ = wxT("") ) :
-            pos( pos_ ), label( label_ ) {};
+            pos( pos_ ), label( label_ ), pixelPos( 0 ), visible( true )
+        {}
+
         double pos;
         wxString label;
         int pixelPos;

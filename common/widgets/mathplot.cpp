@@ -605,6 +605,9 @@ mpFXY::mpFXY( wxString name, int flags )
     m_type      = mpLAYER_PLOT;
     m_scaleX    = NULL;
     m_scaleY    = NULL;
+
+    // Avoid not initialized members:
+    maxDrawX = minDrawX = maxDrawY = minDrawY = 0;
 }
 
 

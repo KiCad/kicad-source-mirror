@@ -238,7 +238,7 @@ static int find_vias_and_tracks_at( TRACKS& at_next, TRACKS& in_net, LSET& lset,
         {
             lset |= t->GetLayerSet();
             at_next.push_back( t );
-            in_net.erase( it );
+            it = in_net.erase( it );
         }
         else
             ++it;
