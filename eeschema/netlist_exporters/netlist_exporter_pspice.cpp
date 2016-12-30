@@ -83,6 +83,8 @@ bool NETLIST_EXPORTER_PSPICE::Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl
                 full_path = lib;
             }
         }
+        else
+            full_path = lib;    // just use the unaltered path
 
         aFormatter->Print( 0, ".include \"%s\"\n", (const char*) full_path.c_str() );
     }
