@@ -757,8 +757,14 @@ void NODE::Remove( ITEM* aItem )
         break;
 
     case ITEM::LINE_T:
-        assert( false );
+    {
+        auto l = static_cast<LINE *> ( aItem );
+
+        for ( auto s : l->LinkedSegments() )
+            Remove( s );
+
         break;
+    }
 
     case ITEM::VIA_T:
         Remove( static_cast<VIA*>( aItem ) );
