@@ -60,6 +60,16 @@ static inline wxString FROM_UTF8( const char* cstring )
     return line;
 }
 
+
+/// Utility to build comma separated lists in messages
+inline void AccumulateDescription( wxString &aDesc, const wxString &aItem )
+{
+    if( !aDesc.IsEmpty() )
+        aDesc << wxT(", ");
+
+    aDesc << aItem;
+}
+
 /**
  * Function GetChars
  * returns a wxChar* to the actual wxChar* data within a wxString, and is

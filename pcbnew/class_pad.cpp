@@ -45,6 +45,14 @@
 #include <convert_basic_shapes_to_polygon.h>
 
 
+/**
+ * Helper function
+ * Return a string (to be shown to the user) describing a layer mask.
+ * Useful for showing where is a pad.
+ * The BOARD is needed because layer names are (somewhat) customizable
+ */
+static wxString LayerMaskDescribe( const BOARD* aBoard, LSET aMask );
+
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
 
 
@@ -990,4 +998,41 @@ const BOX2I D_PAD::ViewBBox() const
 
     return BOX2I( VECTOR2I( bbox.GetOrigin() ) - VECTOR2I( xMargin, yMargin ),
                   VECTOR2I( bbox.GetSize() ) + VECTOR2I( 2 * xMargin, 2 * yMargin ) );
+}
+
+
+wxString LayerMaskDescribe( const BOARD *aBoard, LSET aMask )
+{
+    // Try the single or no- layer case (easy)
+    LAYER_ID layer = aMask.ExtractLayer();
+
+    switch( (int) layer )
+    {
+    case UNSELECTED_LAYER:
+        return _( "No layers" );
+
+    case UNDEFINED_LAYER:
+        break;
+
+    default:
+        return aBoard->GetLayerName( layer );
+    }
+
+    // Try to be smart and useful, starting with outer copper
+    // (which are more important than internal ones)
+    wxString layerInfo;
+
+    if( aMask[F_Cu] )
+        AccumulateDescription( layerInfo, aBoard->GetLayerName( F_Cu ) );
+
+    if( aMask[B_Cu] )
+        AccumulateDescription( layerInfo, aBoard->GetLayerName( B_Cu ) );
+
+    if( ( aMask & LSET::InternalCuMask() ).any() )
+        AccumulateDescription( layerInfo, _("Internal" ) );
+
+    if( ( aMask & LSET::AllNonCuMask() ).any() )
+        AccumulateDescription( layerInfo, _("Non-copper" ) );
+
+    return layerInfo;
 }

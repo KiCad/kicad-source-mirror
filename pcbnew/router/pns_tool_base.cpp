@@ -32,7 +32,6 @@ using namespace std::placeholders;
 #include <macros.h>
 #include <pcbnew_id.h>
 #include <view/view_controls.h>
-#include <pcbcommon.h>
 #include <pcb_painter.h>
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>

@@ -34,7 +34,6 @@
 #include <pgm_base.h>
 #include <wxstruct.h>
 #include <confirm.h>
-#include <pcbcommon.h>
 
 #include <cvpcb.h>
 #include <zones.h>

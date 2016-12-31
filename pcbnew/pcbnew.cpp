@@ -40,7 +40,6 @@
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
 #include <eda_dde.h>
-#include <pcbcommon.h>
 #include <colors_selection.h>
 #include <wx/stdpaths.h>
 

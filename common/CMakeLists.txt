@@ -328,7 +328,6 @@ set( PCB_COMMON_SRCS
     base_screen.cpp
     eda_text.cpp
     class_page_info.cpp
-    pcbcommon.cpp
     lset.cpp
     footprint_info.cpp
     ../pcbnew/basepcbframe.cpp

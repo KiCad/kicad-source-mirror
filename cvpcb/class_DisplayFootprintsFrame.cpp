@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2007-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -28,7 +28,6 @@
  */
 
 #include <fctsys.h>
-#include <pgm_base.h>
 #include <common.h>
 #include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
@@ -39,7 +38,6 @@
 #include <wildcards_and_files_ext.h>
 #include <lib_id.h>
 #include <fp_lib_table.h>
-#include <pcbcommon.h>
 
 #include <io_mgr.h>
 #include <class_module.h>

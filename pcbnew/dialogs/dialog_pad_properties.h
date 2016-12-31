@@ -32,12 +32,9 @@
 #ifndef _DIALOG_PAD_PROPERTIES_H_
 #define _DIALOG_PAD_PROPERTIES_H_
 
-#include <fctsys.h>
-#include <common.h>
 #include <class_drawpanel.h>
 #include <pcbnew.h>
 #include <wxBasePcbFrame.h>
-#include <pcbcommon.h>
 #include <base_units.h>
 #include <wx/valnum.h>
 

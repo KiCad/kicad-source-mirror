@@ -36,7 +36,6 @@
 #include <confirm.h>
 #include <pcbnew.h>
 #include <wxBasePcbFrame.h>
-#include <pcbcommon.h>
 #include <base_units.h>
 #include <board_commit.h>
 
