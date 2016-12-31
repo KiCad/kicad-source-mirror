@@ -342,7 +342,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
         return;
 
 #ifdef __WXDEBUG__
-    PROF_COUNTER totalTime( "CACHED_CONTAINER::mergeFreeChunks()", true );
+    PROF_COUNTER totalTime;
 #endif /* __WXDEBUG__ */
 
     // Reversed free chunks map - this one stores chunk size with its offset as the key
@@ -386,9 +386,8 @@ void CACHED_CONTAINER::mergeFreeChunks()
     m_freeChunks.insert( std::make_pair( size, offset ) );
 
 #ifdef __WXDEBUG__
-    totalTime.stop();
-
-    wxLogDebug( wxT( "Merged free chunks / %.1f ms" ), totalTime.msecs() );
+    totalTime.Stop();
+    wxLogDebug( "Merged free chunks / %.1f ms", totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 #if CACHED_CONTAINER_TEST > 0
     test();
@@ -411,7 +410,7 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
         return false;
 
 #ifdef __WXDEBUG__
-    PROF_COUNTER totalTime( "CACHED_CONTAINER::defragmentResize()", true );
+    PROF_COUNTER totalTime;
 #endif /* __WXDEBUG__ */
 
     GLuint newBuffer;
@@ -479,10 +478,10 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
     checkGlError( "switching buffers during defragmentation" );
 
 #ifdef __WXDEBUG__
-    totalTime.stop();
+    totalTime.Stop();
 
     wxLogTrace( "GAL_CACHED_CONTAINER",
-            wxT( "Defragmented container storing %d vertices / %.1f ms" ),
+                "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 
@@ -510,7 +509,7 @@ bool CACHED_CONTAINER::defragmentResizeMemcpy( unsigned int aNewSize )
         return false;
 
 #ifdef __WXDEBUG__
-    PROF_COUNTER totalTime( "CACHED_CONTAINER::defragmentResizeMemcpy()", true );
+    PROF_COUNTER totalTime;
 #endif /* __WXDEBUG__ */
 
     GLuint newBuffer;
@@ -572,10 +571,10 @@ bool CACHED_CONTAINER::defragmentResizeMemcpy( unsigned int aNewSize )
     checkGlError( "switching buffers during defragmentation" );
 
 #ifdef __WXDEBUG__
-    totalTime.stop();
+    totalTime.Stop();
 
     wxLogTrace( "GAL_CACHED_CONTAINER",
-            wxT( "Defragmented container storing %d vertices / %.1f ms" ),
+                "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* __WXDEBUG__ */
 

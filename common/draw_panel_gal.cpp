@@ -161,8 +161,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         return;
 
 #ifdef PROFILE
-    prof_counter totalRealTime;
-    prof_start( &totalRealTime );
+    PROF_COUNTER totalRealTime;
 #endif /* PROFILE */
 
     m_drawing = true;
@@ -196,8 +195,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     m_gal->EndDrawing();
 
 #ifdef PROFILE
-    prof_end( &totalRealTime );
-    wxLogDebug( wxT( "EDA_DRAW_PANEL_GAL::onPaint(): %.1f ms" ), totalRealTime.msecs() );
+    totalRealTime.Stop();
+    wxLogDebug( "EDA_DRAW_PANEL_GAL::onPaint(): %.1f ms", totalRealTime.msecs() );
 #endif /* PROFILE */
 
     m_lastRefresh = wxGetLocalTimeMillis();

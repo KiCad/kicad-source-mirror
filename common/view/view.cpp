@@ -1000,7 +1000,7 @@ void VIEW::ClearTargets()
 void VIEW::Redraw()
 {
 #ifdef __WXDEBUG__
-    PROF_COUNTER totalRealTime( "VIEW::Redraw()", true );
+    PROF_COUNTER totalRealTime;
 #endif /* __WXDEBUG__ */
 
     VECTOR2D screenSize = m_gal->GetScreenPixelSize();
@@ -1016,7 +1016,7 @@ void VIEW::Redraw()
     markTargetClean( TARGET_OVERLAY );
 
 #ifdef __WXDEBUG__
-    totalRealTime.stop();
+    totalRealTime.Stop();
     wxLogTrace( "GAL_PROFILE", wxT( "VIEW::Redraw(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }

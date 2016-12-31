@@ -39,54 +39,76 @@
 class PROF_COUNTER
 {
 public:
-    PROF_COUNTER( const std::string& name, bool autostart = true ) :
-        m_name( name ),
+    /**
+     * Creates a PROF_COUNTER for measuring an elapsed time in milliseconds
+     * @param aName = a string that will be printed in message.
+     * @param aAutostart = true (default) to immediately start the timer
+     */
+    PROF_COUNTER( const std::string& aName, bool aAutostart = true ) :
+        m_name( aName ), m_running( false )
+    {
+        if( aAutostart )
+            Start();
+    }
+
+    /**
+     * Creates a PROF_COUNTER for measuring an elapsed time in milliseconds
+     * The string that will be printed in message is left empty.
+     * @param aAutostart = true (default) to immediately start the timer
+     */
+    PROF_COUNTER( bool aAutostart = true ) :
         m_running( false )
     {
-        if( autostart )
-            start();
+        if( aAutostart )
+            Start();
     }
 
-    void start()
+    void Start()
     {
         m_running = true;
-        starttime = std::chrono::system_clock::now();
+        m_starttime = std::chrono::system_clock::now();
     }
 
-    void stop()
+    void Stop()
     {
         if( !m_running )
             return;
 
-        stoptime = std::chrono::system_clock::now();
+        m_stoptime = std::chrono::system_clock::now();
     }
 
-    void show()
+    /**
+     * Print the elapsed time (in ms) to STDERR.
+     */
+    void Show()
     {
-        time_point display_stoptime;
+        TIME_POINT display_stoptime;
 
         if( m_running )
             display_stoptime = std::chrono::system_clock::now();
         else
-            display_stoptime = stoptime;
+            display_stoptime = m_stoptime;
 
-        std::chrono::duration<double, std::milli> d = display_stoptime - starttime;
+        std::chrono::duration<double, std::milli> d = display_stoptime - m_starttime;
         std::cerr << m_name << " took " << std::setprecision(1) << d.count() << "milliseconds." << std::endl;
     }
 
+    /**
+     * @return the elapsed time in ms
+     */
     double msecs() const
     {
-        std::chrono::duration<double, std::milli> d = stoptime - starttime;
+        std::chrono::duration<double, std::milli> d = m_stoptime - m_starttime;
         return d.count();
     }
 
 private:
-    std::string m_name;
+    std::string m_name;     // a string printed in message
     bool m_running;
 
-    typedef std::chrono::time_point<std::chrono::high_resolution_clock> time_point;
+    typedef std::chrono::time_point<std::chrono::high_resolution_clock> TIME_POINT;
 
-    time_point starttime, stoptime;
+    TIME_POINT m_starttime, m_stoptime;
 };
 
 
