@@ -145,8 +145,7 @@ void GPU_CACHED_MANAGER::DrawAll()
 void GPU_CACHED_MANAGER::EndDrawing()
 {
 #ifdef __WXDEBUG__
-    prof_counter totalRealTime;
-    prof_start( &totalRealTime );
+    PROF_COUNTER totalRealTime( "GPU_CACHED_MANAGER::EndDrawing()", true );
 #endif /* __WXDEBUG__ */
 
     wxASSERT( m_isDrawing );
@@ -205,7 +204,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
     m_isDrawing = false;
 
 #ifdef __WXDEBUG__
-    prof_end( &totalRealTime );
+    totalRealTime.stop();
     wxLogTrace( "GAL_PROFILE",
                 wxT( "GPU_CACHED_MANAGER::EndDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
@@ -251,8 +250,7 @@ void GPU_NONCACHED_MANAGER::DrawAll()
 void GPU_NONCACHED_MANAGER::EndDrawing()
 {
 #ifdef __WXDEBUG__
-    prof_counter totalRealTime;
-    prof_start( &totalRealTime );
+    PROF_COUNTER totalRealTime( "GPU_NONCACHED_MANAGER::EndDrawing()", true );
 #endif /* __WXDEBUG__ */
 
     if( m_container->GetSize() == 0 )
@@ -296,7 +294,7 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
     }
 
 #ifdef __WXDEBUG__
-    prof_end( &totalRealTime );
+    totalRealTime.stop();
     wxLogTrace( "GAL_PROFILE",
                 wxT( "GPU_NONCACHED_MANAGER::EndDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */

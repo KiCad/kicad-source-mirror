@@ -193,8 +193,7 @@ void OPENGL_GAL::BeginDrawing()
         return;
 
 #ifdef __WXDEBUG__
-    prof_counter totalRealTime;
-    prof_start( &totalRealTime );
+    PROF_COUNTER totalRealTime( "OPENGL_GAL::BeginDrawing()", true );
 #endif /* __WXDEBUG__ */
 
     GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
@@ -308,7 +307,7 @@ void OPENGL_GAL::BeginDrawing()
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
 #ifdef __WXDEBUG__
-    prof_end( &totalRealTime );
+    totalRealTime.stop();
     wxLogTrace( "GAL_PROFILE",
                 wxT( "OPENGL_GAL::BeginDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
@@ -318,8 +317,7 @@ void OPENGL_GAL::BeginDrawing()
 void OPENGL_GAL::EndDrawing()
 {
 #ifdef __WXDEBUG__
-    prof_counter totalRealTime;
-    prof_start( &totalRealTime );
+    PROF_COUNTER totalRealTime( "OPENGL_GAL::EndDrawing()", true );
 #endif /* __WXDEBUG__ */
 
     // Cached & non-cached containers are rendered to the same buffer
@@ -343,7 +341,7 @@ void OPENGL_GAL::EndDrawing()
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 
 #ifdef __WXDEBUG__
-    prof_end( &totalRealTime );
+    totalRealTime.stop();
     wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::EndDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }

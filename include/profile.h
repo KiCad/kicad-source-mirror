@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,74 +31,18 @@
 #ifndef __TPROFILE_H
 #define __TPROFILE_H
 
-#include <sys/time.h>
-#include <stdint.h>
-
-#include <cstdio>
+#include <chrono>
 #include <string>
-
-/**
- * Function get_tics
- * Returns the number of microseconds that have elapsed since the system was started.
- * @return uint64_t Number of microseconds.
- */
-static inline uint64_t get_tics()
-{
-    struct timeval tv;
-    gettimeofday( &tv, NULL );
-
-    return (uint64_t) tv.tv_sec * 1000000ULL + (uint64_t) tv.tv_usec;
-}
-
-/**
- * Structure for storing data related to profiling counters.
- */
-struct prof_counter
-{
-    uint64_t start, end;         // Stored timer value
-
-    uint64_t usecs() const
-    {
-        return end - start;
-    }
-
-    float msecs() const
-    {
-        return ( end - start ) / 1000.0;
-    }
-};
-
-/**
- * Function prof_start
- * Begins code execution time counting for a given profiling counter.
- * @param aCnt is the counter which should be started.
- * use_rdtsc tells if processor's time-stamp counter should be used for time counting.
- *      Otherwise is system tics method will be used. IMPORTANT: time-stamp counter should not
- *      be used on multicore machines executing threaded code.
- */
-static inline void prof_start( prof_counter* aCnt )
-{
-    aCnt->start = get_tics();
-}
-
-/**
- * Function prof_stop
- * Ends code execution time counting for a given profiling counter.
- * @param aCnt is the counter which should be stopped.
- */
-static inline void prof_end( prof_counter* aCnt )
-{
-    aCnt->end = get_tics();
-}
+#include <iostream>
+#include <iomanip>
 
 class PROF_COUNTER
 {
 public:
-    PROF_COUNTER( const std::string& name, bool autostart = true )
+    PROF_COUNTER( const std::string& name, bool autostart = true ) :
+        m_name( name ),
+        m_running( false )
     {
-        m_name = name;
-        m_running = false;
-
         if( autostart )
             start();
     }
@@ -105,7 +50,7 @@ public:
     void start()
     {
         m_running = true;
-        prof_start( &m_cnt );
+        starttime = std::chrono::system_clock::now();
     }
 
     void stop()
@@ -113,26 +58,35 @@ public:
         if( !m_running )
             return;
 
-        m_running = false;
-        prof_end( &m_cnt );
+        stoptime = std::chrono::system_clock::now();
     }
 
     void show()
     {
-        stop();
-        fprintf( stderr, "%s took %.1f milliseconds.\n", m_name.c_str(), (double)m_cnt.msecs() );
-        start();
+        time_point display_stoptime;
+
+        if( m_running )
+            display_stoptime = std::chrono::system_clock::now();
+        else
+            display_stoptime = stoptime;
+
+        std::chrono::duration<double, std::milli> d = display_stoptime - starttime;
+        std::cerr << m_name << " took " << std::setprecision(1) << d.count() << "milliseconds." << std::endl;
     }
 
     double msecs() const
     {
-        return m_cnt.msecs();
+        std::chrono::duration<double, std::milli> d = stoptime - starttime;
+        return d.count();
     }
 
 private:
     std::string m_name;
-    prof_counter m_cnt;
     bool m_running;
+
+    typedef std::chrono::time_point<std::chrono::high_resolution_clock> time_point;
+
+    time_point starttime, stoptime;
 };
 
 

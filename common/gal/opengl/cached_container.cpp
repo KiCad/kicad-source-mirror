@@ -342,8 +342,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
         return;
 
 #ifdef __WXDEBUG__
-    prof_counter totalTime;
-    prof_start( &totalTime );
+    PROF_COUNTER totalTime( "CACHED_CONTAINER::mergeFreeChunks()", true );
 #endif /* __WXDEBUG__ */
 
     // Reversed free chunks map - this one stores chunk size with its offset as the key
@@ -387,7 +386,7 @@ void CACHED_CONTAINER::mergeFreeChunks()
     m_freeChunks.insert( std::make_pair( size, offset ) );
 
 #ifdef __WXDEBUG__
-    prof_end( &totalTime );
+    totalTime.stop();
 
     wxLogDebug( wxT( "Merged free chunks / %.1f ms" ), totalTime.msecs() );
 #endif /* __WXDEBUG__ */
@@ -412,8 +411,7 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
         return false;
 
 #ifdef __WXDEBUG__
-    prof_counter totalTime;
-    prof_start( &totalTime );
+    PROF_COUNTER totalTime( "CACHED_CONTAINER::defragmentResize()", true );
 #endif /* __WXDEBUG__ */
 
     GLuint newBuffer;
@@ -481,7 +479,7 @@ bool CACHED_CONTAINER::defragmentResize( unsigned int aNewSize )
     checkGlError( "switching buffers during defragmentation" );
 
 #ifdef __WXDEBUG__
-    prof_end( &totalTime );
+    totalTime.stop();
 
     wxLogTrace( "GAL_CACHED_CONTAINER",
             wxT( "Defragmented container storing %d vertices / %.1f ms" ),
@@ -512,8 +510,7 @@ bool CACHED_CONTAINER::defragmentResizeMemcpy( unsigned int aNewSize )
         return false;
 
 #ifdef __WXDEBUG__
-    prof_counter totalTime;
-    prof_start( &totalTime );
+    PROF_COUNTER totalTime( "CACHED_CONTAINER::defragmentResizeMemcpy()", true );
 #endif /* __WXDEBUG__ */
 
     GLuint newBuffer;
@@ -575,7 +572,7 @@ bool CACHED_CONTAINER::defragmentResizeMemcpy( unsigned int aNewSize )
     checkGlError( "switching buffers during defragmentation" );
 
 #ifdef __WXDEBUG__
-    prof_end( &totalTime );
+    totalTime.stop();
 
     wxLogTrace( "GAL_CACHED_CONTAINER",
             wxT( "Defragmented container storing %d vertices / %.1f ms" ),
