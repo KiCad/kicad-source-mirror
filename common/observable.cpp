@@ -62,20 +62,39 @@ namespace UTIL {
         {
         }
 
+        void OBSERVABLE_BASE::IMPL::enter_iteration()
+        {
+            ++iteration_count_;
+        }
+
+        void OBSERVABLE_BASE::IMPL::leave_iteration()
+        {
+            --iteration_count_;
+            if(iteration_count_ == 0) {
+                collect();
+            }
+        }
+
+        bool OBSERVABLE_BASE::IMPL::is_iterating() const
+        {
+            return iteration_count_ != 0;
+        }
+
+        void OBSERVABLE_BASE::IMPL::add_observer( void* observer )
+        {
+            assert( !is_iterating() );
+            observers_.push_back( observer );
+        }
+
         void OBSERVABLE_BASE::IMPL::remove_observer( void* observer )
         {
-            if(iteration_count_) {
-                for(auto*& ptr : observers_) {
-                    if(ptr == observer) {
-                        ptr = nullptr;
-                    }
-                }
+            auto it = std::find( observers_.begin(), observers_.end(), observer );
+
+            if(is_iterating()) {
+                *it = nullptr;
             }
             else {
-                collect();
-                if(observers_.empty() && owned_by_) {
-                    owned_by_->on_observers_empty();
-                }
+                observers_.erase( it );
             }
         }
 
@@ -122,6 +141,7 @@ namespace UTIL {
     {
         if(token_) {
             token_->remove_observer( observer_ );
+            token_.reset();
         }
     }
 
@@ -140,19 +160,6 @@ namespace UTIL {
         {
         }
 
-        size_t OBSERVABLE_BASE::size() const {
-            if(impl_) {
-                return impl_->observers_.size();
-            }
-            else {
-                return 0;
-            }
-        }
-
-        void OBSERVABLE_BASE::remove_observer( void* observer ) {
-            assert( impl_ );
-            impl_->remove_observer( observer );
-        }
 
         void OBSERVABLE_BASE::allocate_impl() {
             if(!impl_) {
@@ -174,23 +181,44 @@ namespace UTIL {
             impl_.reset();
         }
 
+        std::shared_ptr<OBSERVABLE_BASE::IMPL> OBSERVABLE_BASE::get_shared_impl()
+        {
+            allocate_shared_impl();
+            return impl_;
+        }
+
+        void OBSERVABLE_BASE::add_observer( void* observer ) {
+            allocate_impl();
+            impl_->add_observer( observer );
+        }
+
+        void OBSERVABLE_BASE::remove_observer( void* observer ) {
+            assert( impl_ );
+            impl_->remove_observer( observer );
+        }
+
         void OBSERVABLE_BASE::enter_iteration() {
             if(impl_) {
-                ++impl_->iteration_count_;
+                impl_->enter_iteration();
             }
         }
 
         void OBSERVABLE_BASE::leave_iteration() {
             if(impl_) {
-                --impl_->iteration_count_;
-                if(impl_->iteration_count_ == 0) {
-                    if(!impl_->is_shared() && impl_.use_count() == 1) {
-                        impl_.reset();
-                    }
-                    else {
-                        impl_->collect();
-                    }
+                impl_->leave_iteration();
+
+                if( !impl_->is_iterating() && !impl_->is_shared() && impl_.use_count() == 1 ) {
+                    impl_.reset();
                 }
+            }
+        }
+
+        size_t OBSERVABLE_BASE::size() const {
+            if(impl_) {
+                return impl_->observers_.size();
+            }
+            else {
+                return 0;
             }
         }
 
@@ -201,16 +229,7 @@ namespace UTIL {
             deallocate_impl();
         }
 
-        std::shared_ptr<OBSERVABLE_BASE::IMPL> OBSERVABLE_BASE::get_shared_impl()
-        {
-            allocate_shared_impl();
-            return impl_;
-        }
 
-        void OBSERVABLE_BASE::add_observer( void* observer ) {
-            allocate_impl();
-            impl_->observers_.push_back( observer );
-        }
 
     }
 

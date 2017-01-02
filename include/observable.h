@@ -64,8 +64,14 @@ namespace UTIL {
                 void set_shared();
                 ~IMPL();
 
+                void add_observer( void* observer );
                 void remove_observer( void* observer );
                 void collect();
+
+                bool is_iterating() const;
+
+                void enter_iteration();
+                void leave_iteration();
 
                 std::vector<void*> observers_;
                 unsigned int iteration_count_;
@@ -147,7 +153,7 @@ namespace UTIL {
          */
         void SubscribeUnmanaged( ObserverInterface* aObserver )
         {
-            return OBSERVABLE_BASE::add_observer_unmanaged( static_cast<void*>(aObserver) );
+            OBSERVABLE_BASE::add_observer( static_cast<void*>(aObserver) );
         }
 
         /**
