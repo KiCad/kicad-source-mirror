@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,11 @@
 #include <iostream>
 #include <iomanip>
 
+/**
+ * The class PROF_COUNTER is a small class to help profiling.
+ * It allows the calculation of the elapsed time (in millisecondes) between
+ * its creation (or the last call to Start() ) and the last call to Stop()
+ */
 class PROF_COUNTER
 {
 public:
@@ -53,22 +58,26 @@ public:
 
     /**
      * Creates a PROF_COUNTER for measuring an elapsed time in milliseconds
-     * The string that will be printed in message is left empty.
-     * @param aAutostart = true (default) to immediately start the timer
+     * The counter is started and the string to print in message is left empty.
      */
-    PROF_COUNTER( bool aAutostart = true ) :
-        m_running( false )
+    PROF_COUNTER()
     {
-        if( aAutostart )
-            Start();
+        Start();
     }
 
+    /**
+     * Starts or restarts the counter
+     */
     void Start()
     {
         m_running = true;
         m_starttime = std::chrono::system_clock::now();
     }
 
+
+    /**
+     * save the time when this function was called, and set the counter stane to stop
+     */
     void Stop()
     {
         if( !m_running )
@@ -82,15 +91,12 @@ public:
      */
     void Show()
     {
-        TIME_POINT display_stoptime;
+        TIME_POINT display_stoptime = m_running ?
+                    std::chrono::system_clock::now() :
+                    m_stoptime;
 
-        if( m_running )
-            display_stoptime = std::chrono::system_clock::now();
-        else
-            display_stoptime = m_stoptime;
-
-        std::chrono::duration<double, std::milli> d = display_stoptime - m_starttime;
-        std::cerr << m_name << " took " << std::setprecision(1) << d.count() << "milliseconds." << std::endl;
+        std::chrono::duration<double, std::milli> elapsed = display_stoptime - m_starttime;
+        std::cerr << m_name << " took " << elapsed.count() << " milliseconds." << std::endl;
     }
 
     /**
@@ -98,8 +104,13 @@ public:
      */
     double msecs() const
     {
-        std::chrono::duration<double, std::milli> d = m_stoptime - m_starttime;
-        return d.count();
+        TIME_POINT stoptime = m_running ?
+                    std::chrono::system_clock::now() :
+                    m_stoptime;
+
+        std::chrono::duration<double, std::milli> elapsed = stoptime - m_starttime;
+
+        return elapsed.count();
     }
 
 private:
@@ -111,5 +122,14 @@ private:
     TIME_POINT m_starttime, m_stoptime;
 };
 
+
+/**
+ * Function GetRunningMicroSecs
+ * An alternate way to calculate an elapset time (in microsecondes) to class PROF_COUNTER
+ * @return an ever increasing indication of elapsed microseconds.
+ * Use this by computing differences between two calls.
+ * @author Dick Hollenbeck
+ */
+unsigned GetRunningMicroSecs();
 
 #endif

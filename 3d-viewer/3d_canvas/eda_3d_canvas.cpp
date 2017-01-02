@@ -39,6 +39,7 @@
 #include <class_board.h>
 #include "status_text_reporter.h"
 #include <gl_context_mgr.h>
+#include <profile.h>        // To use GetRunningMicroSecs or an other profiling utility
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.

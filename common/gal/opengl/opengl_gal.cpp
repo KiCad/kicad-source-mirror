@@ -307,7 +307,7 @@ void OPENGL_GAL::BeginDrawing()
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
 #ifdef __WXDEBUG__
-    totalRealTime.stop();
+    totalRealTime.Stop();
     wxLogTrace( "GAL_PROFILE",
                 wxT( "OPENGL_GAL::BeginDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
@@ -341,7 +341,7 @@ void OPENGL_GAL::EndDrawing()
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 
 #ifdef __WXDEBUG__
-    totalRealTime.stop();
+    totalRealTime.Stop();
     wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::EndDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }

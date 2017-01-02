@@ -36,6 +36,7 @@
 #include "3d_fastmath.h"
 #include "3d_math.h"
 #include "../common_ogl/ogl_utils.h"
+#include <profile.h>        // To use GetRunningMicroSecs or an other profiling utility
 
 // This should be used in future for the function
 // convertLinearToSRGB

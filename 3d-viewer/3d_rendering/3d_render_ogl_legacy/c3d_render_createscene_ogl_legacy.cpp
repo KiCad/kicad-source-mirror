@@ -35,6 +35,7 @@
 #include "../../3d_fastmath.h"
 #include <trigo.h>
 #include <project.h>
+#include <profile.h>        // To use GetRunningMicroSecs or an other profiling utility
 
 
 void C3D_RENDER_OGL_LEGACY::add_object_to_triangle_layer( const CFILLEDCIRCLE2D * aFilledCircle,

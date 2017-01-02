@@ -42,7 +42,6 @@
 #include "common.h"
 #include "3d_cache.h"
 #include "3d_info.h"
-#include "common.h"
 #include "sg/scenegraph.h"
 #include "3d_filename_resolver.h"
 #include "3d_plugin_manager.h"

@@ -43,23 +43,6 @@ unsigned GetRunningMicroSecs()
     return unsigned( t );
 }
 
-
-#if 0
-// test program
-#include <stdio.h>
-int main( int argc, char** argv )
-{
-    unsigned then = GetRunningMicroSecs();
-
-    Sleep( 2000 );      // Windows Sleep( msecs )
-
-    printf( "delta: %u\n", GetRunningMicroSecs() - then );
-
-    return 0;
-}
-#endif
-
-
 #elif defined(HAVE_CLOCK_GETTIME)
 
 #include <time.h>

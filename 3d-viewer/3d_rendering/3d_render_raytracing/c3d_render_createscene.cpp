@@ -46,6 +46,7 @@
 #include <class_module.h>
 
 #include <base_units.h>
+#include <profile.h>        // To use GetRunningMicroSecs or an other profiling utility
 
 /**
   * Scale convertion from 3d model units to pcb units
