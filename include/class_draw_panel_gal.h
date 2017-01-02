@@ -48,6 +48,7 @@ class VIEW;
 class WX_VIEW_CONTROLS;
 class VIEW_CONTROLS;
 class PAINTER;
+class GAL_DISPLAY_OPTIONS;
 };
 
 
@@ -62,7 +63,8 @@ public:
     };
 
     EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,
-                        const wxSize& aSize, GAL_TYPE aGalType = GAL_TYPE_OPENGL );
+                        const wxSize& aSize, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
+                        GAL_TYPE aGalType = GAL_TYPE_OPENGL );
     ~EDA_DRAW_PANEL_GAL();
 
     virtual void SetFocus() override;
@@ -243,6 +245,7 @@ protected:
 
     /// Currently used GAL
     GAL_TYPE                 m_backend;
+    KIGFX::GAL_DISPLAY_OPTIONS& m_options;
 
     /// Processes and forwards events to tools
     TOOL_DISPATCHER*         m_eventDispatcher;
