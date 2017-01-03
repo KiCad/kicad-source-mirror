@@ -17,10 +17,9 @@
 from __future__ import division
 import pcbnew
 
-import HelpfulFootprintWizardPlugin as HFPW
+import FootprintWizardBase
 
-
-class FPC_FootprintWizard(HFPW.HelpfulFootprintWizardPlugin):
+class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
 
     def GetName(self):
         return "FPC (SMT connector)"
@@ -29,11 +28,11 @@ class FPC_FootprintWizard(HFPW.HelpfulFootprintWizardPlugin):
         return "FPC (SMT connector) Footprint Wizard"
 
     def GetValue(self):
-        pins = self.parameters["Pads"]["*n"]
+        pins = self.parameters["Pads"]["n"]
         return "FPC_%d" % pins
 
     def GenerateParameterList(self):
-        self.AddParam( "Pads", "n", self.uNatural, 40 )
+        self.AddParam( "Pads", "n", self.uInteger, 40 )
         self.AddParam( "Pads", "pitch", self.uMM, 0.5 )
         self.AddParam( "Pads", "width", self.uMM, 0.25 )
         self.AddParam( "Pads", "height", self.uMM, 1.6)
@@ -56,13 +55,12 @@ class FPC_FootprintWizard(HFPW.HelpfulFootprintWizardPlugin):
         return pad
 
     def CheckParameters(self):
-        p = self.parameters
-        self.CheckParamInt( "Pads", "*n" )  # not internal units preceded by "*"
-
+        #TODO implement custom parameter checking
+        pass
 
     def BuildThisFootprint(self):
         p = self.parameters
-        pad_count       = int(p["Pads"]["*n"])
+        pad_count       = int(p["Pads"]["n"])
         pad_width       = p["Pads"]["width"]
         pad_height      = p["Pads"]["height"]
         pad_pitch       = p["Pads"]["pitch"]

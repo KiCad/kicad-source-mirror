@@ -17,7 +17,7 @@
 from __future__ import division
 import pcbnew
 
-import HelpfulFootprintWizardPlugin as HFPW
+import FootprintWizardBase
 import PadArray as PA
 
 
@@ -29,7 +29,7 @@ class BGAPadGridArray(PA.PadGridArray):
             n_x + 1)
 
 
-class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
+class BGAWizard(FootprintWizardBase.FootprintWizard):
 
     def GetName(self):
         return "BGA"
@@ -38,35 +38,48 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
         return "Ball Grid Array Footprint Wizard"
 
     def GenerateParameterList(self):
-        self.AddParam("Pads", "pad pitch", self.uMM, 1)
-        self.AddParam("Pads", "pad size", self.uMM, 0.5)
-        self.AddParam("Pads", "row count", self.uNatural, 5)
-        self.AddParam("Pads", "column count", self.uNatural, 5)
-        self.AddParam("Pads", "outline x margin", self.uMM, 1)
-        self.AddParam("Pads", "outline y margin", self.uMM, 1)
+        self.AddParam("Pads", "pitch", self.uMM, 1, designator='p')
+        self.AddParam("Pads", "size", self.uMM, 0.5)
+        self.AddParam("Pads", "columns", self.uInteger, 5, designator="nx")
+        self.AddParam("Pads", "rows", self.uInteger, 5, designator="ny")
+
+        self.AddParam("Package", "width", self.uMM, 6, designator='X')
+        self.AddParam("Package", "length", self.uMM, 6, designator='Y')
+        self.AddParam("Package", "margin", self.uMM, 0.25, min_value=0.2, hint="Courtyard margin")
 
     def CheckParameters(self):
-        self.CheckParamInt("Pads", "*row count")
-        self.CheckParamInt("Pads", "*column count")
+
+        # check that the package is large enough
+        width = pcbnew.ToMM(self.parameters['Pads']['pitch'] * self.parameters['Pads']['columns'])
+
+        length = pcbnew.ToMM(self.parameters['Pads']['pitch'] * self.parameters['Pads']['rows'])
+
+        self.CheckParam('Package','width',min_value=width,info="Package width is too small (< {w}mm)".format(w=width))
+        self.CheckParam('Package','length',min_value=length,info="Package length is too small (< {l}mm".format(l=length))
 
     def GetValue(self):
-        pins = (self.parameters["Pads"]["*row count"]
-                * self.parameters["Pads"]["*column count"])
+        pins = (self.parameters["Pads"]["rows"] * self.parameters["Pads"]["columns"])
 
-        return "BGA_%d" % pins
+        return "BGA-{n}_{a}x{b}_{x}x{y}mm".format(
+                n = pins,
+                a = self.parameters['Pads']['columns'],
+                b = self.parameters['Pads']['rows'],
+                x = pcbnew.ToMM(self.parameters['Package']['width']),
+                y = pcbnew.ToMM(self.parameters['Package']['length'])
+            )
 
     def BuildThisFootprint(self):
 
         pads = self.parameters["Pads"]
 
-        rows = pads["*row count"]
-        cols = pads["*column count"]
-        pad_size = pads["pad size"]
+        rows = pads["rows"]
+        cols = pads["columns"]
+        pad_size = pads["size"]
         pad_size = pcbnew.wxSize(pad_size, pad_size)
-        pad_pitch = pads["pad pitch"]
+        pad_pitch = pads["pitch"]
 
         # add in the pads
-        pad = PA.PadMaker(self.module).SMTRoundPad(pads["pad size"])
+        pad = PA.PadMaker(self.module).SMTRoundPad(pads["size"])
 
         pin1_pos = pcbnew.wxPoint(-((cols - 1) * pad_pitch) / 2,
                                   -((rows - 1) * pad_pitch) / 2)
@@ -74,21 +87,68 @@ class BGAWizard(HFPW.HelpfulFootprintWizardPlugin):
         array = BGAPadGridArray(pad, cols, rows, pad_pitch, pad_pitch)
         array.AddPadsToModule(self.draw)
 
-        #box
-        ssx = -pin1_pos.x + pads["outline x margin"]
-        ssy = -pin1_pos.y + pads["outline y margin"]
+        # Draw box outline on F.Fab layer
+        self.draw.SetLayer(pcbnew.F_Fab)
+        ssx = self.parameters['Package']['width'] / 2
+        ssy = self.parameters['Package']['length'] / 2
 
-        self.draw.BoxWithDiagonalAtCorner(0, 0, ssx*2, ssy*2,
-                                          pads["outline x margin"])
+        # Bevel should be 1mm nominal but we'll allow smaller values
+        if pcbnew.ToMM(ssx) < 1:
+            bevel = ssx
+        else:
+            bevel = pcbnew.FromMM(1)
+
+        # Box with 1mm bevel as per IPC7351C
+        self.draw.BoxWithDiagonalAtCorner(0, 0, ssx*2, ssy*2, bevel)
+
+        # Add IPC markings to F_Silk layer
+        self.draw.SetLayer(pcbnew.F_SilkS)
+        offset = pcbnew.FromMM(0.15)
+        len_x  = 0.5 * ssx
+        len_y  = 0.5 * ssy
+
+        edge = [
+            [ ssx + offset - len_x, -ssy - offset],
+            [ ssx + offset, -ssy - offset],
+            [ ssx + offset, -ssy - offset + len_y],
+               ]
+
+        # Draw three square edges
+        self.draw.Polyline(edge)
+        self.draw.Polyline(edge, mirrorY=0)
+        self.draw.Polyline(edge, mirrorX=0, mirrorY=0)
+
+        # Draw pin-1 marker
+        bevel += offset
+        pin1 = [
+            [ -ssx - offset + len_x, -ssy - offset],
+            [ -ssx - offset + bevel, -ssy - offset],
+            [ -ssx - offset, -ssy - offset + bevel],
+            [ -ssx - offset, -ssy - offset + len_y],
+                ]
+
+        # Remove lines if the package is too small
+        if bevel > len_x:
+            pin1 = pin1[1:]
+
+        if bevel > len_y:
+            pin1 = pin1[:-1]
+
+        self.draw.Polyline(pin1)
+
+        # Draw a circle in the bevel void
+        self.draw.Circle( -ssx, -ssy, pcbnew.FromMM(0.2), filled=True)
 
         # Courtyard
-        cmargin = self.draw.GetLineThickness()
+        cmargin = self.parameters['Package']['margin']
         self.draw.SetLayer(pcbnew.F_CrtYd)
         sizex = (ssx + cmargin) * 2
         sizey = (ssy + cmargin) * 2
+
         # round size to nearest 0.1mm, rectangle will thus land on a 0.05mm grid
-        sizex = self.PutOnGridMM(sizex, 0.1)
-        sizey = self.PutOnGridMM(sizey, 0.1)
+        sizex = pcbnew.PutOnGridMM(sizex, 0.1)
+        sizey = pcbnew.PutOnGridMM(sizey, 0.1)
+
         # set courtyard line thickness to the one defined in KLC
         self.draw.SetLineThickness(pcbnew.FromMM(0.05))
         self.draw.Box(0, 0, sizex, sizey)

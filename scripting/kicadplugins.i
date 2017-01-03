@@ -119,23 +119,19 @@ def LoadPlugins(bundlepath=None):
     if bundlepath:
         plugin_directories.append(bundlepath)
         plugin_directories.append(os.path.join(bundlepath, 'plugins'))
-        plugin_directories.append(os.path.join(bundlepath, 'plugins', 'wizards'))
 
     if kicad_path:
         plugin_directories.append(os.path.join(kicad_path, 'scripting'))
         plugin_directories.append(os.path.join(kicad_path, 'scripting', 'plugins'))
-        plugin_directories.append(os.path.join(kicad_path, 'scripting', 'plugins', 'wizards'))
 
     if config_path:
         plugin_directories.append(os.path.join(config_path, 'scripting'))
         plugin_directories.append(os.path.join(config_path, 'scripting', 'plugins'))
-        plugin_directories.append(os.path.join(config_path, 'scripting', 'plugins', 'wizards'))
 
     if sys.platform.startswith('linux'):
         plugin_directories.append(os.environ['HOME']+'/.kicad_plugins/')
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/')
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/')
-        plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/wizards')
 
     for plugins_dir in plugin_directories:
         if not os.path.isdir(plugins_dir):
@@ -162,7 +158,6 @@ def LoadPlugins(bundlepath=None):
                                            "module":mod}
             except:
                 pass
-
 
 
 class KiCadPlugin:
@@ -203,88 +198,295 @@ class FilePlugin(KiCadPlugin):
 
 from math import ceil, floor, sqrt
 
-class FootprintWizardPlugin(KiCadPlugin):
+uMM = "mm"            # Millimetres
+uMils = "mils"        # Mils
+uFloat = "float"      # Natural number units (dimensionless)
+uInteger = "integer"  # Integer (no decimals, numeric, dimensionless)
+uBool = "bool"        # Boolean value
+uRadians = "radians"  # Angular units (radians)
+uDegrees = "degrees"  # Angular units (degrees)
+uPercent = "%"  # Percent (0% -> 100%)
+uString = "string"    # Raw string
+
+uNumeric = [uMM, uMils, uFloat, uInteger, uDegrees, uRadians, uPercent]                  # List of numeric types
+uUnits   = [uMM, uMils, uFloat, uInteger, uBool, uDegrees, uRadians, uPercent, uString]  # List of allowable types
+
+class FootprintWizardParameter(object):
+    _true  = ['true','t','y','yes','on','1',1,]
+    _false = ['false','f','n','no','off','0',0,'',None]
+
+    _bools = _true + _false
+
+    def __init__(self, page, name, units, default, **kwarg):
+        self.page = page
+        self.name = name
+        self.hint = kwarg.get('hint','')               # Parameter hint (shown as mouse-over text)
+        self.designator = kwarg.get('designator',' ')  # Parameter designator such as "e, D, p" (etc)
+
+        if units.lower() in uUnits:
+            self.units = units.lower()
+        elif units.lower() == 'percent':
+            self.units = uPercent
+        elif type(units) in [list, tuple]:  # Convert a list of options into a single string
+            self.units = ",".join([str(el).strip() for el in units])
+        else:
+            self.units = units
+
+        self.multiple = int(kwarg.get('multiple',1))   # Check integer values are multiples of this number
+        self.min_value = kwarg.get('min_value',None)   # Check numeric values are above or equal to this number
+        self.max_value = kwarg.get('max_value',None)   # Check numeric values are below or equal to this number
+
+        self.SetValue(default)
+        self.default = self.raw_value  # Save value as default
+
+    def ClearErrors(self):
+        self.error_list = []
+
+    def AddError(self, err, info=None):
+
+        if err in self.error_list:  # prevent duplicate error messages
+            return
+        if info is not None:
+            err = err + " (" + str(info) + ")"
+
+        self.error_list.append(err)
+
+    def Check(self, min_value=None, max_value=None, multiple=None, info=None):
+
+        if min_value is None:
+            min_value = self.min_value
+        if max_value is None:
+            max_value = self.max_value
+        if multiple is None:
+            multiple = self.multiple
+
+        if self.units not in uUnits and ',' not in self.units:  # Allow either valid units or a list of strings
+            self.AddError("type '{t}' unknown".format(t=self.units),info)
+            self.AddError("Allowable types: " + str(self.units),info)
+
+        if self.units in uNumeric:
+            try:
+                to_num = float(self.raw_value)
+
+                if min_value is not None:  # Check minimum value if it is present
+                    if to_num < min_value:
+                        self.AddError("value '{v}' is below minimum ({m})".format(v=self.raw_value,m=min_value),info)
+
+                if max_value is not None:  # Check maximum value if it is present
+                    if to_num > max_value:
+                        self.AddError("value '{v}' is above maximum ({m})".format(v=self.raw_value,m=max_value),info)
+
+            except:
+                self.AddError("value '{v}' is not of type '{t}'".format(v = self.raw_value, t=self.units),info)
+
+        if self.units == uInteger:  # Perform integer specific checks
+            try:
+                to_int = int(self.raw_value)
+
+                if multiple is not None and multiple > 1:
+                    if (to_int % multiple) > 0:
+                        self.AddError("value '{v}' is not a multiple of {m}".format(v=self.raw_value,m=multiple),info)
+            except:
+                self.AddError("value {'v}' is not an integer".format(v=self.raw_value),info)
+
+        if self.units == uBool:  # Check that the value is of a correct boolean format
+            if self.raw_value in [True,False] or str(self.raw_value).lower() in self._bools:
+                pass
+            else:
+                self.AddError("value '{v}' is not a boolean value".format(v = self.raw_value),info)
+
+    @property
+    def value(self):  # Return the current value, converted to appropriate units (from string representation) if required
+        v = str(self.raw_value)  # Enforce string type for known starting point
+
+        if self.units == uInteger:  # Integer values
+            return int(v)
+        elif self.units in uNumeric:  # Any values that use floating points
+            v = v.replace(",",".")  # Replace "," separators with "."
+            v = float(v)
+
+            if self.units == uMM: # Convert from millimetres to nanometres
+                return FromMM(v)
+
+            elif self.units == uMils:  # Convert from mils to nanometres
+                return FromMils(v)
+
+            else:  # Any other floating-point values
+                return v
+
+        elif self.units == uBool:
+            if v.lower() in self._true:
+                return True
+            else:
+                return False
+        else:
+            return v
+
+    def DefaultValue(self):  # Reset the value of the parameter to its default
+        self.raw_value = str(self.default)
+
+    def SetValue(self, new_value):  # Update the value
+        new_value = str(new_value)
+
+        if len(new_value.strip()) == 0:
+            if not self.units in [uString, uBool]:
+                return  # Ignore empty values unless for strings or bools
+
+        if self.units == uBool:  # Enforce the same boolean representation as is used in KiCad
+            new_value = "1" if new_value.lower() in self._true else "0"
+        elif self.units in uNumeric:
+            new_value = new_value.replace(",", ".")  # Enforce decimal point separators
+        elif ',' in self.units:  # Select from a list of values
+            if new_value not in self.units.split(','):
+                new_value = self.units.split(',')[0]
+
+        self.raw_value = new_value
+
+    def __str__(self):  # pretty-print the parameter
+
+        s = self.name + ": " + str(self.raw_value)
+
+        if self.units in [uMM, uMils, uPercent, uRadians, uDegrees]:
+            s += self.units
+        elif self.units == uBool:  # Special case for Boolean values
+            s = self.name + ": {b}".format(b = "True" if self.value else "False")
+        elif self.units == uString:
+            s = self.name + ": '" + self.raw_value + "'"
+
+        return s
+
+class FootprintWizardPlugin(KiCadPlugin, object):
     def __init__(self):
         KiCadPlugin.__init__(self)
         self.defaults()
 
     def defaults(self):
         self.module = None
-        self.parameters = {}
-        self.parameter_errors={}
-        self.name = "Undefined Footprint Wizard plugin"
-        self.description = ""
+        self.params = []  # List of added parameters that observes addition order
+
+        self.name = "KiCad FP Wizard"
+        self.description = "Undefined Footprint Wizard plugin"
         self.image = ""
         self.buildmessages = ""
 
-    def GetName(self):
+    def AddParam(self, page, name, unit, default, **kwarg):
+
+        if self.GetParam(page,name) is not None:  # Param already exists!
+            return
+
+        param = FootprintWizardParameter(page, name, unit, default, **kwarg)  # Create a new parameter
+        self.params.append(param)
+
+    @property
+    def parameters(self):  # This is a helper function that returns a nested (unordered) dict of the VALUES of parameters
+        pages = {}  # Page dict
+        for p in self.params:
+            if p.page not in pages:
+                pages[p.page] = {}
+
+            pages[p.page][p.name] = p.value  # Return the 'converted' value (convert from string to actual useful units)
+
+        return pages
+
+    @property
+    def values(self):  # Same as above
+        return self.parameters
+
+    def ResetWizard(self):  # Reset all parameters to default values
+        for p in self.params:
+            p.DefaultValue()
+
+    def GetName(self):  # Return the name of this wizard
         return self.name
 
-    def GetImage(self):
+    def GetImage(self):  # Return the filename of the preview image associated with this wizard
         return self.image
 
-    def GetDescription(self):
+    def GetDescription(self):  # Return the description text
         return self.description
 
+    def GetValue(self):
+        raise NotImplementedError
 
-    def GetNumParameterPages(self):
-        return len(self.parameters)
+    def GetReferencePrefix(self):
+        return "REF"  # Default reference prefix for any footprint
 
-    def GetParameterPageName(self,page_n):
-        return self.page_order[page_n]
+    def GetParam(self, page, name):  # Grab a parameter
+        for p in self.params:
+            if p.page == page and p.name == name:
+                return p
 
-    def GetParameterNames(self,page_n):
-        name = self.GetParameterPageName(page_n)
-        return self.parameter_order[name]
+        return None
 
-    def GetParameterValues(self,page_n):
-        name = self.GetParameterPageName(page_n)
-        names = self.GetParameterNames(page_n)
-        values = [self.parameters[name][n] for n in names]
-        return map(lambda x: str(x), values)  # list elements as strings
+    def CheckParam(self, page, name, **kwarg):
+        self.GetParam(page,name).Check(**kwarg)
 
-    def GetParameterErrors(self,page_n):
-        self.CheckParameters()
-        name = self.GetParameterPageName(page_n)
-        names = self.GetParameterNames(page_n)
-        values = [self.parameter_errors[name][n] for n in names]
-        return map(lambda x: str(x), values)  # list elements as strings
+    def AnyErrors(self):
+        return any([len(p.error_list) > 0 for p in self.params])
 
-    def CheckParameters(self):
-        return ""
+    @property
+    def pages(self):  # Return an (ordered) list of the available page names
+        page_list = []
+        for p in self.params:
+            if p.page not in page_list:
+                page_list.append(p.page)
 
-    def ConvertValue(self,v):
-        try:
-            v = float(v)
-        except:
-            pass
-        if type(v) is float:
-            if ceil(v) == floor(v):
-                v = int(v)
-        return v
+        return page_list
 
+    def GetNumParameterPages(self):  # Return the number of parameter pages
+        return len(self.pages)
 
-    def SetParameterValues(self,page_n,values):
-        name = self.GetParameterPageName(page_n)
-        keys = self.GetParameterNames(page_n)
-        for n, key in enumerate(keys):
-            val = self.ConvertValue(values[n])
-            self.parameters[name][key] = val
+    def GetParameterPageName(self,page_n):  # Return the name of a page at a given index
+        return self.pages[page_n]
 
+    def GetParametersByPageName(self, page_name):  # Return a list of parameters on a given page
+        params = []
 
-    def ClearErrors(self):
-        errs={}
+        for p in self.params:
+            if p.page == page_name:
+                params.append(p)
 
-        for page in self.parameters.keys():
-            page_dict = self.parameters[page]
-            page_params = {}
-            for param in page_dict.keys():
-                page_params[param]=""
+        return params
 
-            errs[page]=page_params
+    def GetParametersByPageIndex(self, page_index):  # Return an ordered list of parameters on a given page
+        return self.GetParametersByPageName(self.GetParameterPageName(page_index))
 
-        self.parameter_errors = errs
+    def GetParameterDesignators(self, page_index):  # Return a list of designators associated with a given page
+        params = self.GetParametersByPageIndex(page_index)
+        return [p.designator for p in params]
 
+    def GetParameterNames(self,page_index):  # Return the list of names associated with a given page
+        params = self.GetParametersByPageIndex(page_index)
+        return [p.name for p in params]
+
+    def GetParameterValues(self,page_index):  # Return the list of values associated with a given page
+        params = self.GetParametersByPageIndex(page_index)
+        return [str(p.raw_value) for p in params]
+
+    def GetParameterErrors(self,page_index):  # Return list of errors associated with a given page
+        params = self.GetParametersByPageIndex(page_index)
+        return [str("\n".join(p.error_list)) for p in params]
+
+    def GetParameterTypes(self, page_index):  # Return list of units associated with a given page
+        params = self.GetParametersByPageIndex(page_index)
+        return [str(p.units) for p in params]
+
+    def GetParameterHints(self, page_index):  # Return a list of units associated with a given page
+        params = self.GetParametersByPageIndex(page_index)
+        return [str(p.hint) for p in params]
+
+    def GetParameterDesignators(self, page_index):  # Return a list of designators associated with a given page
+        params = self.GetParametersByPageIndex(page_index)
+        return [str(p.designator) for p in params]
+
+    def SetParameterValues(self, page_index, list_of_values):  # Update values on a given page
+
+        params = self.GetParametersByPageIndex(page_index)
+
+        for i, param in enumerate(params):
+            if i >= len(list_of_values):
+                break
+            param.SetValue(list_of_values[i])
 
     def GetFootprint( self ):
         self.BuildFootprint()
@@ -297,17 +499,30 @@ class FootprintWizardPlugin(KiCadPlugin):
         return self.buildmessages
 
     def Show(self):
-        print "Footprint Wizard Name:        ",self.GetName()
-        print "Footprint Wizard Description: ",self.GetDescription()
+        text  = "Footprint Wizard Name:        {name}\n".format(name=self.GetName())
+        text += "Footprint Wizard Description: {desc}\n".format(desc=self.GetDescription())
+
         n_pages = self.GetNumParameterPages()
-        print " setup pages: ",n_pages
-        for page in range(0,n_pages):
-            name = self.GetParameterPageName(page)
-            values = self.GetParameterValues(page)
-            names =  self.GetParameterNames(page)
-            print "page %d) %s"%(page,name)
-            for n in range (0,len(values)):
-                print "\t%s\t:\t%s"%(names[n],values[n])
+
+        text += "Pages: {n}\n".format(n=n_pages)
+
+        for i in range(n_pages):
+            name = self.GetParameterPageName(i)
+
+            params = self.GetParametersByPageName(name)
+
+            text += "{name}\n".format(name=name)
+
+            for j in range(len(params)):
+                text += ("\t{param}{err}\n".format(
+                    param = str(params[j]),
+                    err = ' *' if len(params[j].error_list) > 0 else ''
+                    ))
+
+        if self.AnyErrors():
+            text += " * Errors exist for these parameters"
+
+        return text
 
 class ActionPlugin(KiCadPlugin):
     def __init__(self):

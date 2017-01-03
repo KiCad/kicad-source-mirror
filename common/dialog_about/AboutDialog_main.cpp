@@ -151,9 +151,15 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                 << HtmlHyperlink( wxT( "https://launchpad.net/kicad" ),
                                   _( "Developer's website on Launchpad" ) )
                 << wxT("</li>" );
+
     description << wxT( "<li>" )
                 << HtmlHyperlink( wxT( "https://github.com/KiCad/" ),
                                   _( "Our official Repository for component and footprint libraries" ) )
+                << wxT( "</li>" );
+
+    description << wxT( "<li>" )
+                << HtmlHyperlink( wxT( "https://github.com/KiCad/Footprint_Wizards" ),
+                                  _( "Footprint wizards info on our official repository " ) )
                 << wxT( "</li>" );
 
     description << wxT( "<p><u>" )

@@ -200,7 +200,6 @@ PGM_BASE& Pgm()
 #if defined( KICAD_SCRIPTING )
 static bool scriptingSetup()
 {
-    wxString path_frag;
 
 #if defined( __WINDOWS__ )
     // If our python.exe (in kicad/bin) exists, force our kicad python environment
@@ -226,14 +225,6 @@ static bool scriptingSetup()
         kipython << wxT( ";" ) << ppath;
         wxSetEnv( wxT( "PATH" ), kipython );
     }
-
-    // wizard plugins are stored in ../share/kicad/scripting/plugins.
-    // so add the base scripting path to python scripting default search paths
-    // which are ( [KICAD_PATH] is an environment variable to define)
-    // [KICAD_PATH]/scripting
-    // [KICAD_PATH]/scripting/plugins
-    // Add this default search path:
-    path_frag = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
 
 #elif defined( __WXMAC__ )
 
@@ -278,13 +269,9 @@ static bool scriptingSetup()
 
     wxSetEnv( wxT( "PYTHONPATH" ), pypath );
 
-    // Add this default search path:
-    path_frag = Pgm().GetExecutablePath() + wxT( "../share/kicad/scripting" );
 #endif
 
-    // path_frag is the path to the bundled scripts and plugins, all other paths are
-    // determined by the python pcbnew.py initialisation code.
-    if( !pcbnewInitPythonScripting( TO_UTF8( path_frag ) ) )
+    if ( !pcbnewInitPythonScripting( TO_UTF8( PyScriptingPath() ) ) )
     {
         wxLogError( "pcbnewInitPythonScripting() failed." );
         return false;

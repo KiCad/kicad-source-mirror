@@ -203,6 +203,22 @@ void FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard( wxCommandEvent& event )
     SelectFootprintWizard();
 }
 
+void FOOTPRINT_WIZARD_FRAME::DefaultParameters( wxCommandEvent& event )
+{
+    FOOTPRINT_WIZARD* footprintWizard = GetMyWizard();
+
+    if ( footprintWizard == NULL )
+        return;
+
+    footprintWizard->ResetParameters();
+
+    // Reload
+    ReCreateParameterList();
+    ReloadFootprint();
+    DisplayWizardInfos();
+
+}
+
 
 void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 {
@@ -223,39 +239,12 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
     int             count = m_parameterGrid->GetNumberRows();
 
     // Skip extra event, useless
-    if( event.GetString() == m_parameterGrid->GetCellValue( event.GetRow(), m_columnPrmValue ) )
+    if( event.GetString() == m_parameterGrid->GetCellValue( event.GetRow(), WIZ_COL_VALUE ) )
         return;
 
     for( int prm_id = 0; prm_id < count; ++prm_id )
     {
-        wxString value = m_parameterGrid->GetCellValue( prm_id, m_columnPrmValue );
-
-        // if this parameter is expected to be an internal
-        // unit convert it back from the user format
-        if( ptList[prm_id]==wxT( "IU" ) )
-        {
-            // If our locale is set to use, for decimal point, just change it
-            // to be scripting compatible
-            LOCALE_IO   toggle;
-            double      dValue;
-
-            value.ToDouble( &dValue );
-
-            // convert from mils to inches where it's needed
-            if( g_UserUnit==INCHES )
-                dValue = dValue / 1000.0;
-
-            dValue = From_User_Unit( g_UserUnit, dValue );
-
-            // Internal units are int. Print them as int.
-            value.Printf( "%d", KiROUND( dValue ) );
-
-            if(  prmValues[prm_id].EndsWith(".0") )
-            {
-                 prmValues[prm_id].RemoveLast();
-                 prmValues[prm_id].RemoveLast();
-            }
-        }
+        wxString value = m_parameterGrid->GetCellValue( prm_id, WIZ_COL_VALUE);
 
         if( prmValues[prm_id] != value )
         {

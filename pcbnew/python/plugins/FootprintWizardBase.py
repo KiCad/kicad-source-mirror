@@ -15,10 +15,150 @@
 #
 
 from __future__ import division
-
 import pcbnew
 import math
 
+# Base class for creating footprint wizards
+# Inherit this class to make a new wizard
+class FootprintWizard(pcbnew.FootprintWizardPlugin):
+
+    # Copy units from pcbnew
+    uMM         = pcbnew.uMM
+    uMils       = pcbnew.uMils
+    uFloat      = pcbnew.uFloat
+    uInteger    = pcbnew.uInteger
+    uBool       = pcbnew.uBool
+    uRadians    = pcbnew.uRadians
+    uDegrees    = pcbnew.uDegrees
+    uPercent    = pcbnew.uPercent
+    uString     = pcbnew.uString
+
+    """
+    A class to simplify many aspects of footprint creation, leaving only
+    the foot-print specific routines to the wizards themselves
+
+    Generally, you need to implement:
+        GetValue()
+        GenerateParameterList()
+        CheckParameters()
+        BuildThisFootprint()
+        GetName()
+        GetDescription()
+    """
+
+    def __init__(self):
+        pcbnew.FootprintWizardPlugin.__init__(self)
+        self.GenerateParameterList()
+
+    def GetName(self):
+        """
+        Retun the name of the footprint wizard
+        """
+        raise NotImplementedError
+
+    def GetDescription(self):
+        """
+        Return the footprint wizard description
+        """
+        raise NotImplementedError
+
+    def GetValue(self):
+        """
+        Return the value (name) of the generated footprint
+        """
+        raise NotImplementedError
+
+    def GenerateParameterList(self):
+        """
+        Footprint parameter specification is done here
+        """
+    	raise NotImplementedError
+
+    def CheckParameters(self):
+        """
+        Any custom parameter checking should be performed here
+        """
+        raise NotImplementedError
+
+    def BuildThisFootprint(self):
+        """
+        Draw the footprint.
+
+        This is specific to each footprint class, you need to implment
+        this to draw what you want
+        """
+        raise NotImplementedError
+
+    # Do not override this method!
+    def BuildFootprint( self ):
+        """
+        Actually make the footprint. We defer all but the setup to
+        the implementing class
+        """
+
+        self.buildmessages = ""
+        self.module = pcbnew.MODULE(None)  # create a new module
+
+        # Perform default checks on all params
+        for p in self.params:
+            p.ClearErrors()
+            p.Check() # use defaults
+
+        self.CheckParameters() # User error checks
+
+
+        if self.AnyErrors():  # Errors were detected!
+
+            self.buildmessages = "Cannot build footprint: Parameters have errors:\n"
+
+            for p in self.params:
+                if len(p.error_list) > 0:
+                    self.buildmessages +="['{page}']['{name}']:\n".format(page=p.page,name=p.name)
+
+                    for error in p.error_list:
+                        self.buildmessages += "\t" + error + "\n"
+
+            return
+
+        self.buildmessages = ("Building new {name} footprint with the following parameters:\n".format(name=self.name))
+
+        self.buildmessages += self.Show()
+
+        self.draw = FootprintWizardDrawingAids(
+            self.module)
+
+        self.module.SetValue(self.GetValue())
+        self.module.SetReference("%s**" % self.GetReferencePrefix())
+
+        fpid = pcbnew.LIB_ID(self.module.GetValue())  # the name in library
+        self.module.SetFPID(fpid)
+
+        self.SetModule3DModel()  # add a 3d module if specified
+
+        thick = self.GetTextThickness()
+
+        self.module.Reference().SetThickness(thick)
+        self.module.Value().SetThickness(thick)
+
+        self.BuildThisFootprint()  # implementer's build function
+
+        return
+
+    def SetModule3DModel(self):
+        pass
+
+    def GetTextSize(self):
+        """
+        IPC nominal
+        """
+        return pcbnew.FromMM(1.0)
+
+    def GetTextThickness(self):
+        """
+        Thicker than IPC guidelines (10% of text height = 0.12mm)
+        as 5 wires/mm is a common silk screen limitation
+        """
+        return pcbnew.FromMM(0.15)
 
 class FootprintWizardDrawingAids:
     """
@@ -294,6 +434,7 @@ class FootprintWizardDrawingAids:
         If filled is true, the thickness and radius of the line will be set
         such that the circle appears filled
         """
+
         circle = pcbnew.EDGE_MODULE(self.module)
         start = self.TransformPoint(x, y)
 
@@ -362,20 +503,21 @@ class FootprintWizardDrawingAids:
 
         _PolyLineInternal(pts)  # original
 
-        if mirrorX is not None:
-            self.TransformFlip(mirrorX, 0, self.flipX)
-            _PolyLineInternal(pts)
-            self.PopTransform()
-
-        if mirrorY is not None:
-            self.TransformFlipOrigin(0, mirrorY, self.flipY)
-            _PolyLineInternal(pts)
-            self.PopTransform()
-
         if mirrorX is not None and mirrorY is not None:
             self.TransformFlip(mirrorX, mirrorY, self.flipBoth)  # both
             _PolyLineInternal(pts)
             self.PopTransform()
+
+        elif mirrorX is not None:
+            self.TransformFlip(mirrorX, 0, self.flipX)
+            _PolyLineInternal(pts)
+            self.PopTransform()
+
+        elif mirrorY is not None:
+            self.TransformFlip(0, mirrorY, self.flipY)
+            _PolyLineInternal(pts)
+            self.PopTransform()
+
 
     def Reference(self, x, y, size, orientation_degree = 0):
         """

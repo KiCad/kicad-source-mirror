@@ -39,8 +39,15 @@ class wxGrid;
 class wxGridEvent;
 class FOOTPRINT_EDIT_FRAME;
 
-// A helper class to display messages when building a footprin
+// A helper class to display messages when building a footprint
 class FOOTPRINT_WIZARD_MESSAGES;
+
+enum WizardParameterColumnNames
+{
+    WIZ_COL_NAME = 0,
+    WIZ_COL_VALUE,
+    WIZ_COL_UNITS
+};
 
 /**
  * Class FOOTPRINT_WIZARD_FRAME
@@ -53,11 +60,6 @@ private:
     wxGrid*         m_parameterGrid;        ///< The list of parameters
     int             m_parameterGridWidth;   ///< size of the grid
     FOOTPRINT_WIZARD_MESSAGES* m_messagesFrame;
-
-    // Column index to display parameters in m_parameterGrid
-    static int      m_columnPrmName;
-    static int      m_columnPrmValue;
-    static int      m_columnPrmUnit;
 
 protected:
     wxString        m_wizardName;           ///< name of the current wizard
@@ -75,6 +77,8 @@ public:
 private:
 
     void                OnSize( wxSizeEvent& event ) override;
+
+    void                OnGridSize( wxSizeEvent& aSizeEvent );
 
     /**
      * Function ExportSelectedFootprint();
@@ -102,6 +106,11 @@ private:
      * Creates the list of parameters for the current page
      */
     void                ReCreateParameterList();
+
+    /**
+     * Expand the 'Value' column to fill available
+     */
+    void                ResizeParamColumns();
 
     /**
      * Function initParameterGrid
@@ -167,6 +176,8 @@ private:
     virtual void        OnActivate( wxActivateEvent& event ) override;
 
     void                SelectCurrentWizard( wxCommandEvent& event );
+
+    void                DefaultParameters( wxCommandEvent& event );
 
     /**
      * Function ParametersUpdated

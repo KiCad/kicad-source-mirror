@@ -33,6 +33,17 @@
 #include <vector>
 #include <wxPcbStruct.h>
 
+// Allowable parameter types for PCB wizards
+const wxString WIZARD_PARAM_UNITS_MM        = "mm";          // Millimetres
+const wxString WIZARD_PARAM_UNITS_MILS      = "mils";        // Mils / thou
+const wxString WIZARD_PARAM_UNITS_FLOAT     = "float";       // Floating point (dimensionless)
+const wxString WIZARD_PARAM_UNITS_INTEGER   = "integer";     // Integer (dimensionless)
+const wxString WIZARD_PARAM_UNITS_BOOL      = "bool";        // Boolean option
+const wxString WIZARD_PARAM_UNITS_RADIANS   = "radians";     // Angle (radians)
+const wxString WIZARD_PARAM_UNITS_DEGREES   = "degrees";     // Angle (degrees)
+const wxString WIZARD_PARAM_UNITS_PERCENT   = "%";           // Percent (0% -> 100%)
+const wxString WIZARD_PARAM_UNITS_STRING    = "string";      // String
+
 /**
  * Class FOOTPRINT_WIZARD
  * This is the parent class from where any footprint wizard class must
@@ -105,12 +116,32 @@ public:
     virtual wxArrayString   GetParameterErrors( int aPage ) = 0;
 
     /**
+     * Function GetParameterHints
+     * @param aPage is the page we want to know the hints of
+     * @return an array of hints (if any) for the parameters, empty string for no hints
+     */
+    virtual wxArrayString   GetParameterHints( int aPage ) = 0;
+
+    /**
+     * Function GetParamaterDesignators
+     * @param aPage is the page we want to know the designators of
+     * @return an array of designators (blank strings for no designators
+     */
+    virtual wxArrayString    GetParameterDesignators( int aPage ) = 0;
+
+    /**
      * Function SetParameterValues
      * @param aPage is the page we want to set the parameters in
      * @param aValues are the values we want to set into the parameters
      * @return an array of parameter values
      */
     virtual wxString        SetParameterValues( int aPage, wxArrayString& aValues ) = 0;
+
+    /**
+     * Function ResetParameters
+     * Reset all wizard parameters to default values
+     */
+    virtual void ResetParameters() = 0;
 
     /**
      * Function GetModule

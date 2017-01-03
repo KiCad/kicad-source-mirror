@@ -24,10 +24,10 @@
 #
 
 from pcbnew import *
-import HelpfulFootprintWizardPlugin as HFPW
+import FootprintWizardBase
+import pcbnew
 
-
-class TouchSliderWizard(HFPW.HelpfulFootprintWizardPlugin):
+class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
 
     def GetName(self):
         """
@@ -44,15 +44,22 @@ class TouchSliderWizard(HFPW.HelpfulFootprintWizardPlugin):
         return 'Capacitive Touch Slider wizard'
 
     def GetValue(self):
-        steps = int(self.parameters["Pads"]["*steps"])
-        return "TS"+str(steps)
+        return "TouchSlider-{s}_{x:g}x{y:g}mm".format(
+            s = self.pads['steps'],
+            x = pcbnew.ToMM(self.pads['length']),
+            y = pcbnew.ToMM(self.pads['width'])
+            )
 
     def GenerateParameterList(self):
-        self.AddParam("Pads", "steps", self.uNatural, 4)
-        self.AddParam("Pads", "bands", self.uNatural, 2)
+        self.AddParam("Pads", "steps", self.uInteger, 4, min_value=2)
+        self.AddParam("Pads", "bands", self.uInteger, 2, min_value=1)
         self.AddParam("Pads", "width", self.uMM, 10)
         self.AddParam("Pads", "length", self.uMM, 50)
         self.AddParam("Pads", "clearance", self.uMM, 1)
+
+    @property
+    def pads(self):
+        return self.parameters['Pads']
 
     # build a rectangular pad
     def smdRectPad(self,module,size,pos,name):
@@ -82,18 +89,8 @@ class TouchSliderWizard(HFPW.HelpfulFootprintWizardPlugin):
 
     # This method checks the parameters provided to wizard and set errors
     def CheckParameters(self):
-        prms = self.parameters["Pads"]
-        steps = prms["*steps"]
-        bands = prms["*bands"]
-
-        if steps < 1:
-            self.parameter_errors["Pads"]["*steps"]="steps must be positive"
-        if bands < 1:
-            self.parameter_errors["Pads"]["*bands"]="bands must be positive"
-
-        touch_width       = prms["width"]
-        touch_length      = prms["length"]
-        touch_clearance   = prms["clearance"]
+        #TODO - implement custom checks
+        pass
 
     # The start pad is made of a rectangular pad plus a couple of
     # triangular pads facing tips on the middle/right of the first
@@ -177,18 +174,18 @@ class TouchSliderWizard(HFPW.HelpfulFootprintWizardPlugin):
     # build the footprint from parameters
     # FIX ME: the X and Y position of the footprint can be better.
     def BuildThisFootprint(self):
-        prm = self.parameters["Pads"]
-        steps             = int(prm["*steps"])
-        bands             = int(prm["*bands"])
-        touch_width       = prm["width"]
-        touch_length      = prm["length"]
-        touch_clearance   = prm["clearance"]
+
+        steps             = self.pads["steps"]
+        bands             = self.pads["bands"]
+        touch_width       = self.pads["width"]
+        touch_length      = self.pads["length"]
+        touch_clearance   = self.pads["clearance"]
 
         step_length = float(touch_length) / float(steps)
 
         t_size = self.GetTextSize()
         w_text = self.draw.GetLineThickness()
-        ypos = touch_width/(bands*2) + t_size/2 + w_text
+        ypos = touch_width/2 + t_size/2 + w_text
         self.draw.Value(0, -ypos, t_size)
         ypos += t_size + w_text*2
         self.draw.Reference(0, -ypos, t_size)
@@ -197,8 +194,12 @@ class TouchSliderWizard(HFPW.HelpfulFootprintWizardPlugin):
         self.module.SetAttributes(MOD_CMS)
 
         # starting pad
-        pos = wxPointMM(0,0)
         band_width = touch_width/bands
+
+        xpos = -0.5 * (steps - 1) * step_length
+        ypos = -0.5 * (bands - 1) * band_width
+
+        pos = wxPointMM(pcbnew.ToMM(xpos), pcbnew.ToMM(ypos))
 
         for b in range(bands):
             self.AddStrip(pos,steps,band_width,step_length,touch_clearance)

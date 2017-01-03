@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -237,23 +237,8 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterTypes( int aPage )
 
     PyObject*       arglist = Py_BuildValue( "(i)", aPage );
 
-    ret = CallRetArrayStrMethod( "GetParameterNames", arglist );
+    ret = CallRetArrayStrMethod( "GetParameterTypes", arglist );
     Py_DECREF( arglist );
-
-    for( unsigned i = 0; i<ret.GetCount(); i++ )
-    {
-        wxString    rest;
-        wxString    item = ret[i];
-
-        if( item.StartsWith( wxT( "*" ), &rest ) )
-        {
-            ret[i] = wxT( "UNITS" );    // units
-        }
-        else
-        {
-            ret[i] = wxT( "IU" );       // internal units
-        }
-    }
 
     return ret;
 }
@@ -284,6 +269,29 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterErrors( int aPage )
     return ret;
 }
 
+wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterHints( int aPage )
+{
+	PyLOCK          lock;
+
+	PyObject*       arglist = Py_BuildValue( "(i)", aPage );
+	wxArrayString   ret = CallRetArrayStrMethod( "GetParameterHints", arglist );
+
+	Py_DECREF( arglist );
+
+	return ret;
+}
+
+wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterDesignators( int aPage )
+{
+	PyLOCK          lock;
+
+	PyObject*       arglist = Py_BuildValue( "(i)", aPage );
+	wxArrayString   ret = CallRetArrayStrMethod( "GetParameterDesignators", arglist );
+
+	Py_DECREF( arglist );
+
+	return ret;
+}
 
 wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues( int aPage, wxArrayString& aValues )
 {
@@ -307,6 +315,13 @@ wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues( int aPage, wxArrayString& 
     Py_DECREF( arglist );
 
     return res;
+}
+
+void PYTHON_FOOTPRINT_WIZARD::ResetParameters()
+{
+	PyLOCK 	lock;
+
+	CallMethod( "ResetWizard", NULL );
 }
 
 
