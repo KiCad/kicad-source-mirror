@@ -271,26 +271,26 @@ wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterErrors( int aPage )
 
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterHints( int aPage )
 {
-	PyLOCK          lock;
+    PyLOCK          lock;
 
-	PyObject*       arglist = Py_BuildValue( "(i)", aPage );
-	wxArrayString   ret = CallRetArrayStrMethod( "GetParameterHints", arglist );
+    PyObject*       arglist = Py_BuildValue( "(i)", aPage );
+    wxArrayString   ret = CallRetArrayStrMethod( "GetParameterHints", arglist );
 
-	Py_DECREF( arglist );
+    Py_DECREF( arglist );
 
-	return ret;
+    return ret;
 }
 
 wxArrayString PYTHON_FOOTPRINT_WIZARD::GetParameterDesignators( int aPage )
 {
-	PyLOCK          lock;
+    PyLOCK          lock;
 
-	PyObject*       arglist = Py_BuildValue( "(i)", aPage );
-	wxArrayString   ret = CallRetArrayStrMethod( "GetParameterDesignators", arglist );
+    PyObject*       arglist = Py_BuildValue( "(i)", aPage );
+    wxArrayString   ret = CallRetArrayStrMethod( "GetParameterDesignators", arglist );
 
-	Py_DECREF( arglist );
+    Py_DECREF( arglist );
 
-	return ret;
+    return ret;
 }
 
 wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues( int aPage, wxArrayString& aValues )
@@ -319,9 +319,9 @@ wxString PYTHON_FOOTPRINT_WIZARD::SetParameterValues( int aPage, wxArrayString& 
 
 void PYTHON_FOOTPRINT_WIZARD::ResetParameters()
 {
-	PyLOCK 	lock;
+    PyLOCK     lock;
 
-	CallMethod( "ResetWizard", NULL );
+    CallMethod( "ResetWizard", NULL );
 }
 
 

@@ -244,7 +244,7 @@ void FOOTPRINT_WIZARD_FRAME::ParametersUpdated( wxGridEvent& event )
 
     for( int prm_id = 0; prm_id < count; ++prm_id )
     {
-        wxString value = m_parameterGrid->GetCellValue( prm_id, WIZ_COL_VALUE);
+        wxString value = m_parameterGrid->GetCellValue( prm_id, WIZ_COL_VALUE );
 
         if( prmValues[prm_id] != value )
         {

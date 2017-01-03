@@ -271,7 +271,7 @@ static bool scriptingSetup()
 
 #endif
 
-    if ( !pcbnewInitPythonScripting( TO_UTF8( PyScriptingPath() ) ) )
+    if( !pcbnewInitPythonScripting( TO_UTF8( PyScriptingPath() ) ) )
     {
         wxLogError( "pcbnewInitPythonScripting() failed." );
         return false;

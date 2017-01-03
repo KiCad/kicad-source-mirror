@@ -127,7 +127,7 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
 
         # set SMD attribute
         self.module.SetAttributes(pcbnew.MOD_CMS)
-        
+
         # vertical segment at left of the pad
         xstart = xend
         yend = posy - (shl_height + linewidth + margin*2)

@@ -55,14 +55,14 @@ public:
     wxArrayString   GetParameterTypes( int aPage ) override;
     wxArrayString   GetParameterValues( int aPage ) override;
     wxArrayString   GetParameterErrors( int aPage ) override;
-    // must return an empty string or an error description
+    // must return an empty string or an error description:
     wxString        SetParameterValues( int aPage, wxArrayString& aValues ) override;
     MODULE*         GetFootprint( wxString * aMessages ) override;
     void*           GetObject() override;
     wxArrayString   GetParameterHints( int aPage ) override;
-    wxArrayString	GetParameterDesignators( int aPage = 0) override;
+    wxArrayString   GetParameterDesignators( int aPage = 0) override;
 
-    void			ResetParameters() override;
+    void            ResetParameters() override;
 };
 
 

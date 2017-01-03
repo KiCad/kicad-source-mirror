@@ -4,7 +4,7 @@
  * Copyright (C) 2012-2015 Miguel Angel Ajo Pelayo <miguelangel@nbee.es>
  * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -384,21 +384,20 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
         // Set the editor type of the
 
         // Boolean parameters can be displayed using a checkbox
-        if ( units == WIZARD_PARAM_UNITS_BOOL )
+        if( units == WIZARD_PARAM_UNITS_BOOL )
         {
             wxGridCellBoolEditor *boolEditor = new wxGridCellBoolEditor;
             boolEditor->UseStringValues("True","False");
             m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE, boolEditor );
-
             m_parameterGrid->SetCellRenderer( i, WIZ_COL_VALUE, new wxGridCellBoolRenderer );
         }
         // Parameters that can be selected from a list of multiple options
-        else if ( units.Contains( "," ) )  // Indicates list of available options
+        else if( units.Contains( "," ) )  // Indicates list of available options
         {
             wxStringTokenizer tokenizer( units, "," );
             wxArrayString options;
 
-            while ( tokenizer.HasMoreTokens() )
+            while( tokenizer.HasMoreTokens() )
             {
                 options.Add( tokenizer.GetNextToken() );
             }
@@ -408,17 +407,17 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
             units = wxT( "" );
         }
         // Integer parameters
-        else if ( units == WIZARD_PARAM_UNITS_INTEGER )
+        else if( units == WIZARD_PARAM_UNITS_INTEGER )
         {
             m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE, new wxGridCellNumberEditor );
         }
         // Non-integer numerical parameters
-        else if ( ( units == WIZARD_PARAM_UNITS_MM )      ||
-                  ( units == WIZARD_PARAM_UNITS_MILS )    ||
-                  ( units == WIZARD_PARAM_UNITS_FLOAT )   ||
-                  ( units == WIZARD_PARAM_UNITS_RADIANS ) ||
-                  ( units == WIZARD_PARAM_UNITS_DEGREES ) ||
-                  ( units == WIZARD_PARAM_UNITS_PERCENT ) )
+        else if( ( units == WIZARD_PARAM_UNITS_MM )      ||
+                 ( units == WIZARD_PARAM_UNITS_MILS )    ||
+                 ( units == WIZARD_PARAM_UNITS_FLOAT )   ||
+                 ( units == WIZARD_PARAM_UNITS_RADIANS ) ||
+                 ( units == WIZARD_PARAM_UNITS_DEGREES ) ||
+                 ( units == WIZARD_PARAM_UNITS_PERCENT ) )
         {
             m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE, new wxGridCellFloatEditor );
 
@@ -426,7 +425,6 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
             value.Replace( ",", wxNumberFormatter::GetDecimalSeparator() );
             value.Replace( ".", wxNumberFormatter::GetDecimalSeparator() );
         }
-
 
         // Set the 'Units'
         m_parameterGrid->SetCellValue( i, WIZ_COL_UNITS, units );
@@ -439,14 +437,13 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
     }
 
     ResizeParamColumns();
-
 }
 
 void FOOTPRINT_WIZARD_FRAME::ResizeParamColumns()
 {
 
     // Parameter grid is not yet configured
-    if ( ( m_parameterGrid == NULL ) || ( m_parameterGrid->GetNumberCols() == 0 ) )
+    if( ( m_parameterGrid == NULL ) || ( m_parameterGrid->GetNumberCols() == 0 ) )
         return;
 
     // first auto-size the columns to ensure enough space around text
@@ -458,7 +455,7 @@ void FOOTPRINT_WIZARD_FRAME::ResizeParamColumns()
                 m_parameterGrid->GetColSize( WIZ_COL_NAME ) -
                 m_parameterGrid->GetColSize( WIZ_COL_UNITS );
 
-    if ( width > m_parameterGrid->GetColMinimalAcceptableWidth() )
+    if( width > m_parameterGrid->GetColMinimalAcceptableWidth() )
     {
         m_parameterGrid->SetColSize( WIZ_COL_VALUE, width );
     }
