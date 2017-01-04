@@ -59,19 +59,17 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.qr.make()
 
     def drawSquareArea( self, layer, size, xposition, yposition):
-        # creates a EDGE_MODULE of polygon type
+        # creates a EDGE_MODULE of polygon type. The polygon is a square
         polygon = pcbnew.EDGE_MODULE(self.module)
         polygon.SetShape(pcbnew.S_POLYGON)
         polygon.SetWidth( 0 )
         polygon.SetLayer(layer)
-        clist = polygon.GetPolyPoints();
         halfsize = size/2
         pos = pcbnew.wxPoint(xposition, yposition)
-        clist.push_back( pcbnew.wxPoint( halfsize, halfsize  ) + pos )
-        clist.push_back( pcbnew.wxPoint( halfsize, -halfsize ) + pos )
-        clist.push_back( pcbnew.wxPoint( -halfsize, -halfsize ) + pos )
-        clist.push_back( pcbnew.wxPoint( -halfsize, halfsize ) + pos )
-        polygon.SetPolyPoints(clist)
+        polygon.GetPolyPoints().push_back( pcbnew.wxPoint( halfsize, halfsize  ) + pos )
+        polygon.GetPolyPoints().push_back( pcbnew.wxPoint( halfsize, -halfsize ) + pos )
+        polygon.GetPolyPoints().push_back( pcbnew.wxPoint( -halfsize, -halfsize ) + pos )
+        polygon.GetPolyPoints().push_back( pcbnew.wxPoint( -halfsize, halfsize ) + pos )
         return polygon
 
 
