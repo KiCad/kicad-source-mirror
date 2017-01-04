@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2009-2014 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2009-2016 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -395,6 +395,12 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     aParentMenu->AppendSeparator();
 
+    // Edit page layout:
+    AddMenuItem( aParentMenu, ID_SHEET_SET,
+                 _( "Pa&ge Settings" ),
+                 _( "Settings for sheet size and frame references" ),
+                 KiBitmap( sheetset_xpm ) );
+
     AddMenuItem( aParentMenu,
                  wxID_PRINT,
                  _( "Pri&nt" ),
@@ -457,13 +463,6 @@ void prepareEditMenu( wxMenu* aParentMenu )
                           HK_FIND_REPLACE );
     AddMenuItem( aParentMenu, wxID_REPLACE, text, HELP_REPLACE,
                  KiBitmap( find_replace_xpm ) );
-
-    // Edit page layout:
-    aParentMenu->AppendSeparator();
-    AddMenuItem( aParentMenu, ID_SHEET_SET,
-                 _( "Pa&ge Settings (Size and Texts)" ),
-                 _( "Settings for sheet size and frame references" ),
-                 KiBitmap( sheetset_xpm ) );
 
     // Import footprint association .cmp file which can be created by Pcbnew:
     aParentMenu->AppendSeparator();

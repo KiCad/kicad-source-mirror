@@ -237,8 +237,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     AddMenuItem( filesMenu, ID_SHEET_SET,
-                 _( "Page s&ettings" ),
-                 _( "Page settings for paper size and texts" ),
+                 _( "Page S&ettings" ),
+                 _( "Settings for sheet size and frame references" ),
                  KiBitmap( sheetset_xpm ) );
 
     AddMenuItem( filesMenu, wxID_PRINT,
