@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 NBEE Embedded Systems, Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,15 +198,15 @@ class FilePlugin(KiCadPlugin):
 
 from math import ceil, floor, sqrt
 
-uMM = "mm"            # Millimetres
-uMils = "mils"        # Mils
-uFloat = "float"      # Natural number units (dimensionless)
-uInteger = "integer"  # Integer (no decimals, numeric, dimensionless)
-uBool = "bool"        # Boolean value
-uRadians = "radians"  # Angular units (radians)
-uDegrees = "degrees"  # Angular units (degrees)
-uPercent = "%"  # Percent (0% -> 100%)
-uString = "string"    # Raw string
+uMM = "mm"              # Millimetres
+uMils = "mils"          # Mils
+uFloat = "float"        # Natural number units (dimensionless)
+uInteger = "integer"    # Integer (no decimals, numeric, dimensionless)
+uBool = "bool"          # Boolean value
+uRadians = "radians"    # Angular units (radians)
+uDegrees = "degrees"    # Angular units (degrees)
+uPercent = "%"          # Percent (0% -> 100%)
+uString = "string"      # Raw string
 
 uNumeric = [uMM, uMils, uFloat, uInteger, uDegrees, uRadians, uPercent]                  # List of numeric types
 uUnits   = [uMM, uMils, uFloat, uInteger, uBool, uDegrees, uRadians, uPercent, uString]  # List of allowable types
