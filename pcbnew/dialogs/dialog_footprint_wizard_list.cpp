@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012-2014 Miguel Angel Ajo <miguelangel@nbee.es>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,8 @@
 
 enum FPGeneratorRowNames
 {
-    FP_GEN_ROW_NAME = 0,
+    FP_GEN_ROW_NUMBER = 0,
+    FP_GEN_ROW_NAME,
     FP_GEN_ROW_DESCR,
 };
 
@@ -61,15 +62,17 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     m_footprintGeneratorsGrid->InsertRows( 0, n_wizards, true );
 
     // Put all wizards in the list
-    for( int i=0; i<n_wizards; i++ )
+    for( int ii = 0; ii < n_wizards; ii++ )
     {
-        FOOTPRINT_WIZARD *wizard = FOOTPRINT_WIZARDS::GetWizard( i );
+        wxString num = wxString::Format( "%d", ii+1 );
+        FOOTPRINT_WIZARD *wizard = FOOTPRINT_WIZARDS::GetWizard( ii );
         wxString name = wizard->GetName();
         wxString description = wizard->GetDescription();
         wxString image = wizard->GetImage();
 
-        m_footprintGeneratorsGrid->SetCellValue( i, FP_GEN_ROW_NAME, name );
-        m_footprintGeneratorsGrid->SetCellValue( i, FP_GEN_ROW_DESCR, description );
+        m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_NUMBER, num );
+        m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_NAME, name );
+        m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_DESCR, description );
 
     }
 

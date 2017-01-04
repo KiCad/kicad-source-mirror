@@ -457,7 +457,7 @@ class FootprintWizardDrawingAids:
         The transform matrix is applied
 
         Note that this won't work properly if the result is not a
-        circular arc (eg a horzontal scale)
+        circular arc (eg a horizontal scale)
         """
         circle = pcbnew.EDGE_MODULE(self.module)
         circle.SetWidth(self.dc['lineThickness'])

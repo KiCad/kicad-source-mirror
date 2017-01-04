@@ -387,7 +387,7 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
         if( units == WIZARD_PARAM_UNITS_BOOL )
         {
             wxGridCellBoolEditor *boolEditor = new wxGridCellBoolEditor;
-            boolEditor->UseStringValues("True","False");
+            boolEditor->UseStringValues( "1", "0" );
             m_parameterGrid->SetCellEditor( i, WIZ_COL_VALUE, boolEditor );
             m_parameterGrid->SetCellRenderer( i, WIZ_COL_VALUE, new wxGridCellBoolRenderer );
         }

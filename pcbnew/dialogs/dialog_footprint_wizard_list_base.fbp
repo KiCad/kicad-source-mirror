@@ -44,7 +44,7 @@
             <property name="minimum_size">400,200</property>
             <property name="name">DIALOG_FOOTPRINT_WIZARD_LIST_BASE</property>
             <property name="pos"></property>
-            <property name="size">501,273</property>
+            <property name="size">554,286</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Footprint Generators</property>
@@ -121,9 +121,9 @@
                         <property name="close_button">1</property>
                         <property name="col_label_horiz_alignment">wxALIGN_LEFT</property>
                         <property name="col_label_size">20</property>
-                        <property name="col_label_values">&quot;Name&quot; &quot;Description&quot;</property>
+                        <property name="col_label_values">&quot;&quot; &quot;Name&quot; &quot;Description&quot;</property>
                         <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
-                        <property name="cols">2</property>
+                        <property name="cols">3</property>
                         <property name="column_sizes">160,325</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>

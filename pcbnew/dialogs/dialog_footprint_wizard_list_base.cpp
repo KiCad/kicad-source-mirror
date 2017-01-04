@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,7 +19,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_footprintGeneratorsGrid = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	
 	// Grid
-	m_footprintGeneratorsGrid->CreateGrid( 0, 2 );
+	m_footprintGeneratorsGrid->CreateGrid( 0, 3 );
 	m_footprintGeneratorsGrid->EnableEditing( false );
 	m_footprintGeneratorsGrid->EnableGridLines( true );
 	m_footprintGeneratorsGrid->EnableDragGridSize( false );
@@ -31,8 +31,9 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_footprintGeneratorsGrid->EnableDragColMove( false );
 	m_footprintGeneratorsGrid->EnableDragColSize( true );
 	m_footprintGeneratorsGrid->SetColLabelSize( 20 );
-	m_footprintGeneratorsGrid->SetColLabelValue( 0, _("Name") );
-	m_footprintGeneratorsGrid->SetColLabelValue( 1, _("Description") );
+	m_footprintGeneratorsGrid->SetColLabelValue( 0, wxEmptyString );
+	m_footprintGeneratorsGrid->SetColLabelValue( 1, _("Name") );
+	m_footprintGeneratorsGrid->SetColLabelValue( 2, _("Description") );
 	m_footprintGeneratorsGrid->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTRE );
 	
 	// Rows

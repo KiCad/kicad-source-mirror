@@ -13,6 +13,8 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 
+#  last change: 2017, Jan 4.
+
 import pcbnew
 import FootprintWizardBase
 
@@ -22,7 +24,7 @@ import qrcode
 
 class QRCodeWizard(FootprintWizardBase.FootprintWizard):
     GetName = lambda self: '2D Barcode QRCode'
-    GetDescription = lambda self: 'QR Code'
+    GetDescription = lambda self: 'QR Code barcode generator'
     GetReferencePrefix = lambda self: 'QR***'
     GetValue = lambda self: self.module.Value().GetText()
 
@@ -56,8 +58,26 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.qr.addData(str(self.Barcode))
         self.qr.make()
 
+    def drawSquareArea( self, layer, size, xposition, yposition):
+        # creates a EDGE_MODULE of polygon type
+        polygon = pcbnew.EDGE_MODULE(self.module)
+        polygon.SetShape(pcbnew.S_POLYGON)
+        polygon.SetWidth( 0 )
+        polygon.SetLayer(layer)
+        clist = polygon.GetPolyPoints();
+        halfsize = size/2
+        pos = pcbnew.wxPoint(xposition, yposition)
+        clist.push_back( pcbnew.wxPoint( halfsize, halfsize  ) + pos )
+        clist.push_back( pcbnew.wxPoint( halfsize, -halfsize ) + pos )
+        clist.push_back( pcbnew.wxPoint( -halfsize, -halfsize ) + pos )
+        clist.push_back( pcbnew.wxPoint( -halfsize, halfsize ) + pos )
+        polygon.SetPolyPoints(clist)
+        return polygon
+
+
     def _drawPixel(self, xposition, yposition):
-        # build a rectangular pad: as a dot
+        # build a rectangular pad as a dot on copper layer,
+        # and a polygon (a square) on silkscreen
         pad = pcbnew.D_PAD(self.module)
         pad.SetSize(pcbnew.wxSize(self.X, self.X))
         pad.SetShape(pcbnew.PAD_SHAPE_RECT)
@@ -66,12 +86,13 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         if self.UseCu:
             layerset.AddLayer(pcbnew.F_Cu)
             layerset.AddLayer(pcbnew.F_Mask)
+            pad.SetLayerSet( layerset )
+            pad.SetPosition(pcbnew.wxPoint(xposition,yposition))
+            pad.SetPadName("1")
+            self.module.Add(pad)
         if self.UseSilkS:
-            layerset.AddLayer(pcbnew.F_SilkS)
-        pad.SetLayerSet( layerset )
-        pad.SetPosition(pcbnew.wxPoint(xposition,yposition))
-        pad.SetPadName("1")
-        self.module.Add(pad)
+            polygon=self.drawSquareArea(pcbnew.F_SilkS, self.X, xposition, yposition)
+            self.module.Add(polygon)
 
 
     def BuildThisFootprint(self):
