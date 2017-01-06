@@ -33,6 +33,7 @@
 #include <kiface_i.h>
 #include <dialog_footprint_wizard_list.h>
 #include <class_footprint_wizard.h>
+#include <python_scripting.h>
 
 enum FPGeneratorRowNames
 {
@@ -75,6 +76,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_DESCR, description );
 
     }
+    //wxLogMessage( KICAD_FAILED_PLUGINS );
 
     m_footprintGeneratorsGrid->AutoSizeColumns();
 
@@ -97,6 +99,15 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         m_config->Read( FPWIZARTDLIST_HEIGHT_KEY, &size.y, -1 );
         SetSize( size );
     }
+
+
+    wxString not_loaded_wiz_names;
+    pcbnewGetUnloadableScriptNames( not_loaded_wiz_names );
+
+    if( not_loaded_wiz_names.IsEmpty() )
+        m_bsizerNotLoaded->Show( false );
+    else
+        m_tcNotLoaded->SetValue( not_loaded_wiz_names );
 
     Center();
 }

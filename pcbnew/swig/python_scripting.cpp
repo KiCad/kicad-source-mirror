@@ -201,6 +201,37 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
 }
 
 
+void pcbnewGetUnloadableScriptNames( wxString& aNames )
+{
+    PyLOCK      lock;
+    PyErr_Clear();
+
+    PyObject*   globals     = PyDict_New();
+    PyObject*   builtins    = PyImport_ImportModule( "pcbnew" );
+    PyDict_SetItemString( globals, "pcbnew", builtins );
+    Py_DECREF( builtins );
+
+    // Execute the code and get the returned data
+    PyObject* localDict = PyDict_New();
+    PyObject* pobj = PyRun_String( "result = pcbnew.GetUnLoadableWizards()",
+                                   Py_file_input, globals, localDict);
+    Py_DECREF( globals );
+
+    if( pobj )
+    {
+        PyObject* str = PyDict_GetItemString(localDict, "result" );
+        const char* str_res = str ? PyString_AsString( str ) : 0;
+        aNames = FROM_UTF8( str_res );
+        Py_DECREF( pobj );
+    }
+
+    Py_DECREF( localDict );
+
+    if( PyErr_Occurred() )
+        wxLogMessage(PyErrStringWithTraceback());
+}
+
+
 void pcbnewFinishPythonScripting()
 {
 #ifdef KICAD_SCRIPTING_WXPYTHON
@@ -312,13 +343,17 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
 {
     wxArrayString   ret;
 
-    int             list_size = PyList_Size( aArrayString );
+    if( !aArrayString )
+        return ret;
 
-    for( int n = 0; n<list_size; n++ )
+    int list_size = PyList_Size( aArrayString );
+
+    for( int n = 0; n < list_size; n++ )
     {
         PyObject* element = PyList_GetItem( aArrayString, n );
 
-        ret.Add( FROM_UTF8( PyString_AsString( element ) ), 1 );
+        if( element )
+            ret.Add( FROM_UTF8( PyString_AsString( element ) ), 1 );
     }
 
     return ret;
@@ -338,17 +373,21 @@ wxString PyErrStringWithTraceback()
 
     PyErr_Fetch( &type, &value, &traceback );
 
-    PyObject*   tracebackModuleString = PyString_FromString( (char*) "traceback" );
-    PyObject*   tracebackModule = PyImport_Import( tracebackModuleString );
+    PyObject* tracebackModuleString = PyString_FromString( "traceback" );
+    PyObject* tracebackModule = PyImport_Import( tracebackModuleString );
+    Py_DECREF( tracebackModuleString );
 
+    PyObject* formatException = PyObject_GetAttrString( tracebackModule,
+                                                        "format_exception" );
+    Py_DECREF( tracebackModule );
 
-    PyObject*   formatException = PyObject_GetAttrString( tracebackModule,
-                                                          (char*) "format_exception" );
-    PyObject*   args = Py_BuildValue( "(O,O,O)", type, value, traceback );
-
-    PyObject*   result = PyObject_CallObject( formatException, args );
-
-    Py_DECREF( args );
+    PyObject* args = Py_BuildValue( "(O,O,O)", type, value, traceback );
+    PyObject* result = PyObject_CallObject( formatException, args );
+    Py_XDECREF( formatException );
+    Py_XDECREF( args );
+    Py_XDECREF( type );
+    Py_XDECREF( value );
+    Py_XDECREF( traceback );
 
     wxArrayString res = PyArrayStringToWx( result );
 

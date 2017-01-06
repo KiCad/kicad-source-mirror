@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Dec  4 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 400,200 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( 400,300 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
@@ -49,6 +49,20 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_footprintGeneratorsGrid->SetMinSize( wxSize( 485,120 ) );
 	
 	bSizerMain->Add( m_footprintGeneratorsGrid, 1, wxALL|wxEXPAND, 5 );
+	
+	m_bsizerNotLoaded = new wxBoxSizer( wxVERTICAL );
+	
+	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Not loadable:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1->Wrap( -1 );
+	m_bsizerNotLoaded->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_tcNotLoaded = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	m_tcNotLoaded->SetMinSize( wxSize( -1,60 ) );
+	
+	m_bsizerNotLoaded->Add( m_tcNotLoaded, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	
+	bSizerMain->Add( m_bsizerNotLoaded, 0, wxEXPAND, 5 );
 	
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );

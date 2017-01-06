@@ -49,7 +49,7 @@
 
 bool        pcbnewInitPythonScripting( const char * aUserScriptingPath );
 void        pcbnewFinishPythonScripting();
-
+void        pcbnewGetUnloadableScriptNames( wxString& aNames );
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
 

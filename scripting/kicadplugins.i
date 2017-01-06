@@ -52,7 +52,18 @@
 %pythoncode
 {
 
-KICAD_PLUGINS={}
+KICAD_PLUGINS={}    # the list of loaded footprint wizards
+
+""" the list of not loaded python scripts (due to a synthax error in python script)
+    this is the python script full filenames, separated by '\n'
+"""
+NOT_LOADED_WIZARDS=""
+
+
+def GetUnLoadableWizards():
+    global NOT_LOADED_WIZARDS
+    return NOT_LOADED_WIZARDS
+
 
 def ReloadPlugin(name):
     if not KICAD_PLUGINS.has_key(name):
@@ -133,6 +144,8 @@ def LoadPlugins(bundlepath=None):
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/')
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/')
 
+    failed_wizards_list=""
+
     for plugins_dir in plugin_directories:
         if not os.path.isdir(plugins_dir):
             continue
@@ -147,17 +160,23 @@ def LoadPlugins(bundlepath=None):
                 continue
 
             try:  # If there is an error loading the script, skip it
+                module_filename = plugins_dir + "/" + module
                 mod = __import__(module[:-3], locals(), globals())
-
-                module_filename = plugins_dir+"/"+module
                 mtime = os.path.getmtime(module_filename)
+
                 if hasattr(mod,'register'):
                     KICAD_PLUGINS[module]={"filename":module_filename,
                                            "modification_time":mtime,
                                            "object":mod.register(),
                                            "module":mod}
             except:
+                if failed_wizards_list != "" :
+                    failed_wizards_list += "\n"
+                failed_wizards_list += module_filename
                 pass
+
+    global NOT_LOADED_WIZARDS
+    NOT_LOADED_WIZARDS = failed_wizards_list
 
 
 class KiCadPlugin:
@@ -187,8 +206,6 @@ class KiCadPlugin:
             pass # register to action plugins in C++
 
         return
-
-
 
 
 class FilePlugin(KiCadPlugin):
@@ -354,6 +371,7 @@ class FootprintWizardParameter(object):
             s = self.name + ": '" + self.raw_value + "'"
 
         return s
+
 
 class FootprintWizardPlugin(KiCadPlugin, object):
     def __init__(self):
