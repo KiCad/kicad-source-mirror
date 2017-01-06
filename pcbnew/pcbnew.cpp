@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -227,11 +227,6 @@ static bool scriptingSetup()
     }
 
 #elif defined( __WXMAC__ )
-
-    // This path is given to LoadPlugins() from kicadplugins.i, which
-    // only supports one path, the bundle scripting path for now.
-    // All other paths are determined by the pcbnew.py initialisation code
-    path_frag = GetOSXKicadDataDir() + wxT( "/scripting" );
 
     // Add default paths to PYTHONPATH
     wxString pypath;
