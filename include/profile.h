@@ -71,7 +71,7 @@ public:
     void Start()
     {
         m_running = true;
-        m_starttime = std::chrono::system_clock::now();
+        m_starttime = std::chrono::high_resolution_clock::now();
     }
 
 
@@ -83,7 +83,7 @@ public:
         if( !m_running )
             return;
 
-        m_stoptime = std::chrono::system_clock::now();
+        m_stoptime = std::chrono::high_resolution_clock::now();
     }
 
     /**
@@ -92,7 +92,7 @@ public:
     void Show()
     {
         TIME_POINT display_stoptime = m_running ?
-                    std::chrono::system_clock::now() :
+                    std::chrono::high_resolution_clock::now() :
                     m_stoptime;
 
         std::chrono::duration<double, std::milli> elapsed = display_stoptime - m_starttime;
@@ -105,7 +105,7 @@ public:
     double msecs() const
     {
         TIME_POINT stoptime = m_running ?
-                    std::chrono::system_clock::now() :
+                    std::chrono::high_resolution_clock::now() :
                     m_stoptime;
 
         std::chrono::duration<double, std::milli> elapsed = stoptime - m_starttime;
