@@ -115,6 +115,9 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     else
         m_tcNotLoaded->SetValue( message );
 
+    m_sdbSizerOK->SetDefault();
+    FinishDialogSettings();
+
     Center();
 }
 

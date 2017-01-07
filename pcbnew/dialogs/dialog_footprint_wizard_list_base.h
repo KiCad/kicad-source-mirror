@@ -29,7 +29,6 @@ class DIALOG_SHIM;
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/notebook.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,6 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText11;
 		wxTextCtrl* m_tcNotLoaded;
 		wxButton* m_buttonShowTrace;
-		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -65,7 +63,7 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Generators"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 597,339 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Generators"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 572,467 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_FOOTPRINT_WIZARD_LIST_BASE();
 	
 };

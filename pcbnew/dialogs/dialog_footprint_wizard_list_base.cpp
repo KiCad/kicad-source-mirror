@@ -11,13 +11,15 @@
 
 DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 400,300 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
 	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_panelGenerators = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_panelGenerators->SetMinSize( wxSize( 550,300 ) );
+	
 	wxBoxSizer* bSizerpanelGen;
 	bSizerpanelGen = new wxBoxSizer( wxVERTICAL );
 	
@@ -70,8 +72,6 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_bsizerPanelInfo->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_tcSearchPaths = new wxTextCtrl( m_panelInfo, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	m_tcSearchPaths->SetMinSize( wxSize( -1,60 ) );
-	
 	m_bsizerPanelInfo->Add( m_tcSearchPaths, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText11 = new wxStaticText( m_panelInfo, wxID_ANY, _("Not loadable python scripts:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -79,8 +79,6 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_bsizerPanelInfo->Add( m_staticText11, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_tcNotLoaded = new wxTextCtrl( m_panelInfo, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
-	m_tcNotLoaded->SetMinSize( wxSize( -1,60 ) );
-	
 	m_bsizerPanelInfo->Add( m_tcNotLoaded, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonShowTrace = new wxButton( m_panelInfo, wxID_ANY, _("Show Trace"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -93,9 +91,6 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_notebook->AddPage( m_panelInfo, _("Messages"), false );
 	
 	bSizerMain->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
-	
-	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -129,12 +124,14 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::~DIALOG_FOOTPRINT_WIZARD_LIST_BASE()
 
 DIALOG_FOOTPRINT_WIZARD_LOG::DIALOG_FOOTPRINT_WIZARD_LOG( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxSize( 600,350 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 	
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
 	m_Message = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	m_Message->SetMinSize( wxSize( 550,300 ) );
+	
 	bSizerMain->Add( m_Message, 1, wxALL|wxEXPAND, 5 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
