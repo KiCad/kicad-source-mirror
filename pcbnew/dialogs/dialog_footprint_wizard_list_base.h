@@ -20,9 +20,14 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
+#include <wx/sizer.h>
+#include <wx/panel.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
+#include <wx/notebook.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -38,9 +43,13 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
+		wxNotebook* m_notebook;
+		wxPanel* m_panelGenerators;
 		wxGrid* m_footprintGeneratorsGrid;
-		wxBoxSizer* m_bsizerNotLoaded;
+		wxPanel* m_panelInfo;
 		wxStaticText* m_staticText1;
+		wxTextCtrl* m_tcSearchPaths;
+		wxStaticText* m_staticText11;
 		wxTextCtrl* m_tcNotLoaded;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
@@ -49,6 +58,7 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCellFpGeneratorClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void OnCellFpGeneratorDoubleClick( wxGridEvent& event ) { event.Skip(); }
 		
 	
 	public:

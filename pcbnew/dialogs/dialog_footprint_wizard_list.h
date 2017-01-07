@@ -42,6 +42,7 @@ public:
 
 private:
     void OnCellFpGeneratorClick( wxGridEvent& event ) override;
+    void OnCellFpGeneratorDoubleClick( wxGridEvent& event ) override;
 };
 
 #endif  // _DIALOG_FOOTPRINT_WIZARD_LIST_H_

@@ -101,13 +101,16 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     }
 
 
-    wxString not_loaded_wiz_names;
-    pcbnewGetUnloadableScriptNames( not_loaded_wiz_names );
-
-    if( not_loaded_wiz_names.IsEmpty() )
-        m_bsizerNotLoaded->Show( false );
+    // Display info about scripts: Search paths
+    wxString message;
+    pcbnewGetScriptsSearchPaths( message );
+    m_tcSearchPaths->SetValue( message );
+    // Display info about scripts: unloadable scripts (due to syntax errors is python source)
+    pcbnewGetUnloadableScriptNames( message );
+    if( message.IsEmpty() )
+        m_tcNotLoaded->SetValue( _( "All footprint generator scripts were loaded" ) );
     else
-        m_tcNotLoaded->SetValue( not_loaded_wiz_names );
+        m_tcNotLoaded->SetValue( message );
 
     Center();
 }
@@ -129,6 +132,14 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellFpGeneratorClick( wxGridEvent& event )
     int click_row = event.GetRow();
     m_footprintWizard = FOOTPRINT_WIZARDS::GetWizard( click_row );
     m_footprintGeneratorsGrid->SelectRow( event.GetRow(), false );
+    // Move the grid cursor, mainly for aesthetic reasons:
+    m_footprintGeneratorsGrid->GoToCell( event.GetRow(), FP_GEN_ROW_NUMBER );
+}
+
+
+void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellFpGeneratorDoubleClick( wxGridEvent& event )
+{
+    EndModal( wxID_OK );
 }
 
 

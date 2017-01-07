@@ -59,10 +59,21 @@ KICAD_PLUGINS={}    # the list of loaded footprint wizards
 """
 NOT_LOADED_WIZARDS=""
 
+""" the list of paths used to search python scripts.
+    Stored here to be displayed on request in Pcbnew
+    paths are separated by '\n'
+"""
+PLUGIN_DIRECTORIES_SEARCH=""
+
 
 def GetUnLoadableWizards():
     global NOT_LOADED_WIZARDS
     return NOT_LOADED_WIZARDS
+
+
+def GetWizardsSearchPaths():
+    global PLUGIN_DIRECTORIES_SEARCH
+    return PLUGIN_DIRECTORIES_SEARCH
 
 
 def ReloadPlugin(name):
@@ -144,6 +155,13 @@ def LoadPlugins(bundlepath=None):
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/')
         plugin_directories.append(os.environ['HOME']+'/.kicad/scripting/plugins/')
 
+    global PLUGIN_DIRECTORIES_SEARCH
+    PLUGIN_DIRECTORIES_SEARCH=""
+    for plugins_dir in plugin_directories:    # save search path list for later use
+        if PLUGIN_DIRECTORIES_SEARCH != "" :
+            PLUGIN_DIRECTORIES_SEARCH += "\n"
+        PLUGIN_DIRECTORIES_SEARCH += plugins_dir
+
     failed_wizards_list=""
 
     for plugins_dir in plugin_directories:
@@ -176,7 +194,7 @@ def LoadPlugins(bundlepath=None):
                 pass
 
     global NOT_LOADED_WIZARDS
-    NOT_LOADED_WIZARDS = failed_wizards_list
+    NOT_LOADED_WIZARDS = failed_wizards_list    # save not loaded wizards names list for later use
 
 
 class KiCadPlugin:

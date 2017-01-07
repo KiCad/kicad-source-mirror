@@ -43,14 +43,27 @@
 #include <wx/string.h>
 #include <wx/arrstr.h>
 
-/* Function pcbnewInitPythonScripting
+/**
+ * Function pcbnewInitPythonScripting
  * Initializes the Python engine inside pcbnew
  */
-
 bool        pcbnewInitPythonScripting( const char * aUserScriptingPath );
 void        pcbnewFinishPythonScripting();
+
+/**
+ * Function pcbnewGetUnloadableScriptNames
+ * collects the list of python scripts which could not be loaded because
+ * some error (synthax error) happened
+ * @param aNames is a wxString which will contain the filenames (separated by '\n')
+ */
 void        pcbnewGetUnloadableScriptNames( wxString& aNames );
 
+/**
+ * Function pcbnewGetScriptsSearchPaths
+ * collects the list of paths where python scripts are searched
+ * @param aNames is a wxString which will contain the paths (separated by '\n')
+ */
+void        pcbnewGetScriptsSearchPaths( wxString& aNames );
 #ifdef KICAD_SCRIPTING_WXPYTHON
 
 void        RedirectStdio();

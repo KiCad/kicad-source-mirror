@@ -201,8 +201,15 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
 }
 
 
-void pcbnewGetUnloadableScriptNames( wxString& aNames )
+/**
+ * this function runs a python method from pcbnew module, which returns a string
+ * @param aMethodName is the name of the method (like "pcbnew.myfunction" )
+ * @param aNames will contains the returned string
+ */
+static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wxString& aNames )
 {
+    aNames.Clear();
+
     PyLOCK      lock;
     PyErr_Clear();
 
@@ -211,10 +218,13 @@ void pcbnewGetUnloadableScriptNames( wxString& aNames )
     PyDict_SetItemString( globals, "pcbnew", builtins );
     Py_DECREF( builtins );
 
-    // Execute the code and get the returned data
+    // Build the python code
+    char cmd[1024];
+    snprintf( cmd, sizeof(cmd), "result = %s()", aMethodName );
+
+    // Execute the python code and get the returned data
     PyObject* localDict = PyDict_New();
-    PyObject* pobj = PyRun_String( "result = pcbnew.GetUnLoadableWizards()",
-                                   Py_file_input, globals, localDict);
+    PyObject* pobj = PyRun_String( cmd,  Py_file_input, globals, localDict);
     Py_DECREF( globals );
 
     if( pobj )
@@ -229,6 +239,18 @@ void pcbnewGetUnloadableScriptNames( wxString& aNames )
 
     if( PyErr_Occurred() )
         wxLogMessage(PyErrStringWithTraceback());
+}
+
+
+void pcbnewGetUnloadableScriptNames( wxString& aNames )
+{
+    pcbnewRunPythonMethodWithReturnedString( "pcbnew.GetUnLoadableWizards", aNames );
+}
+
+
+void pcbnewGetScriptsSearchPaths( wxString& aNames )
+{
+    pcbnewRunPythonMethodWithReturnedString( "pcbnew.GetWizardsSearchPaths", aNames );
 }
 
 
