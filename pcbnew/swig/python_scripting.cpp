@@ -213,8 +213,13 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
     PyLOCK      lock;
     PyErr_Clear();
 
-    PyObject*   globals     = PyDict_New();
-    PyObject*   builtins    = PyImport_ImportModule( "pcbnew" );
+    PyObject* builtins = PyImport_ImportModule( "pcbnew" );
+    wxASSERT( builtins );
+
+    if( !builtins ) // Something is wrong in pcbnew.py module (incorrect version?)
+        return;
+
+    PyObject* globals = PyDict_New();
     PyDict_SetItemString( globals, "pcbnew", builtins );
     Py_DECREF( builtins );
 
