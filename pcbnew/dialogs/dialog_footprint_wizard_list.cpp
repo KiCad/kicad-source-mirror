@@ -108,7 +108,10 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
     // Display info about scripts: unloadable scripts (due to syntax errors is python source)
     pcbnewGetUnloadableScriptNames( message );
     if( message.IsEmpty() )
+    {
         m_tcNotLoaded->SetValue( _( "All footprint generator scripts were loaded" ) );
+        m_buttonShowTrace->Show( false );
+    }
     else
         m_tcNotLoaded->SetValue( message );
 
@@ -132,7 +135,7 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellFpGeneratorClick( wxGridEvent& event )
     int click_row = event.GetRow();
     m_footprintWizard = FOOTPRINT_WIZARDS::GetWizard( click_row );
     m_footprintGeneratorsGrid->SelectRow( event.GetRow(), false );
-    // Move the grid cursor, mainly for aesthetic reasons:
+    // Move the grid cursor to the active line, mainly for aesthetic reasons:
     m_footprintGeneratorsGrid->GoToCell( event.GetRow(), FP_GEN_ROW_NUMBER );
 }
 
@@ -140,6 +143,40 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellFpGeneratorClick( wxGridEvent& event )
 void DIALOG_FOOTPRINT_WIZARD_LIST::OnCellFpGeneratorDoubleClick( wxGridEvent& event )
 {
     EndModal( wxID_OK );
+}
+
+void DIALOG_FOOTPRINT_WIZARD_LIST::onShowTrace( wxCommandEvent& event )
+{
+    wxString trace;
+    pcbnewGetWizardsBackTrace( trace );
+
+    // Filter message before displaying them
+    // a trace starts by "Traceback" and is followed by 2 useless lines
+    // for our purpose
+    wxArrayString traces;
+    wxStringSplit( trace, traces, '\n' );
+
+    // Build the filtered message (remove useless lines)
+    trace.Clear();
+
+    for( unsigned ii = 0; ii < traces.Count(); ++ii )
+    {
+        if( traces[ii].Contains( "Traceback" ) )
+        {
+            ii += 2;    // Skip this line and next lines which are related to pcbnew.py module
+
+            if( !trace.IsEmpty() )  // Add separator for the next trace block
+                trace << "\n**********************************\n";
+        }
+        else
+            trace += traces[ii] + "\n";
+    }
+
+    // Now display the filtered trace in our dialog
+    // (a simple wxMessageBox is really not suitable for long messages)
+    DIALOG_FOOTPRINT_WIZARD_LOG logWindow( this );
+    logWindow.m_Message->SetValue( trace );
+    logWindow.ShowModal();
 }
 
 

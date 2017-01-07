@@ -27,9 +27,9 @@ class DIALOG_SHIM;
 #include <wx/icon.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/button.h>
 #include <wx/notebook.h>
 #include <wx/statline.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -51,6 +51,7 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_tcSearchPaths;
 		wxStaticText* m_staticText11;
 		wxTextCtrl* m_tcNotLoaded;
+		wxButton* m_buttonShowTrace;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -59,12 +60,32 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCellFpGeneratorClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnCellFpGeneratorDoubleClick( wxGridEvent& event ) { event.Skip(); }
+		virtual void onShowTrace( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
 		DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Footprint Generators"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 597,339 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_FOOTPRINT_WIZARD_LIST_BASE();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_FOOTPRINT_WIZARD_LOG
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_FOOTPRINT_WIZARD_LOG : public DIALOG_SHIM
+{
+	private:
+	
+	protected:
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+	
+	public:
+		wxTextCtrl* m_Message;
+		
+		DIALOG_FOOTPRINT_WIZARD_LOG( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Traceback of errors in not loadable python scripts"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 646,361 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_FOOTPRINT_WIZARD_LOG();
 	
 };
 

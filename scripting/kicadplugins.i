@@ -65,16 +65,21 @@ NOT_LOADED_WIZARDS=""
 """
 PLUGIN_DIRECTORIES_SEARCH=""
 
+""" the trace of errors during execution of footprint wizards scripts
+"""
+FULL_BACK_TRACE=""
 
 def GetUnLoadableWizards():
     global NOT_LOADED_WIZARDS
     return NOT_LOADED_WIZARDS
 
-
 def GetWizardsSearchPaths():
     global PLUGIN_DIRECTORIES_SEARCH
     return PLUGIN_DIRECTORIES_SEARCH
 
+def GetWizardsBackTrace():
+    global FULL_BACK_TRACE
+    return FULL_BACK_TRACE
 
 def ReloadPlugin(name):
     if not KICAD_PLUGINS.has_key(name):
@@ -132,6 +137,7 @@ def LoadPlugins(bundlepath=None):
     """
     import os
     import sys
+    import traceback
     import pcbnew
 
     kicad_path = os.environ.get('KICAD_PATH')
@@ -162,6 +168,8 @@ def LoadPlugins(bundlepath=None):
             PLUGIN_DIRECTORIES_SEARCH += "\n"
         PLUGIN_DIRECTORIES_SEARCH += plugins_dir
 
+    global FULL_BACK_TRACE
+    FULL_BACK_TRACE=""
     failed_wizards_list=""
 
     for plugins_dir in plugin_directories:
@@ -191,6 +199,7 @@ def LoadPlugins(bundlepath=None):
                 if failed_wizards_list != "" :
                     failed_wizards_list += "\n"
                 failed_wizards_list += module_filename
+                FULL_BACK_TRACE += traceback.format_exc(sys.exc_info())
                 pass
 
     global NOT_LOADED_WIZARDS

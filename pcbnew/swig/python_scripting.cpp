@@ -258,6 +258,11 @@ void pcbnewGetScriptsSearchPaths( wxString& aNames )
     pcbnewRunPythonMethodWithReturnedString( "pcbnew.GetWizardsSearchPaths", aNames );
 }
 
+void pcbnewGetWizardsBackTrace( wxString& aNames )
+{
+    pcbnewRunPythonMethodWithReturnedString( "pcbnew.GetWizardsBackTrace", aNames );
+}
+
 
 void pcbnewFinishPythonScripting()
 {

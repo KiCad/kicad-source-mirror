@@ -64,6 +64,14 @@ void        pcbnewGetUnloadableScriptNames( wxString& aNames );
  * @param aNames is a wxString which will contain the paths (separated by '\n')
  */
 void        pcbnewGetScriptsSearchPaths( wxString& aNames );
+
+/**
+ * Function pcbnewGetWizardsBackTrace
+ * returns the backtrace of errors (if any) when wizard python scripts are loaded
+ * @param aNames is a wxString which will contain the trace
+ */
+void        pcbnewGetWizardsBackTrace( wxString& aNames );
+
 #ifdef KICAD_SCRIPTING_WXPYTHON
 
 void        RedirectStdio();
