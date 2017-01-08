@@ -33,7 +33,15 @@
 #include <kiface_i.h>
 #include <dialog_footprint_wizard_list.h>
 #include <class_footprint_wizard.h>
+
+#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
+#else
+// Dummy functions, actually defined in python_scripting.h when KICAD_SCRIPTING is enabled
+static void pcbnewGetWizardsBackTrace( wxString& aText ) {};
+static void pcbnewGetScriptsSearchPaths( wxString& aText ) {};
+static void pcbnewGetUnloadableScriptNames( wxString& aText ) {};
+#endif
 
 enum FPGeneratorRowNames
 {
@@ -76,7 +84,6 @@ DIALOG_FOOTPRINT_WIZARD_LIST::DIALOG_FOOTPRINT_WIZARD_LIST( wxWindow* aParent )
         m_footprintGeneratorsGrid->SetCellValue( ii, FP_GEN_ROW_DESCR, description );
 
     }
-    //wxLogMessage( KICAD_FAILED_PLUGINS );
 
     m_footprintGeneratorsGrid->AutoSizeColumns();
 
