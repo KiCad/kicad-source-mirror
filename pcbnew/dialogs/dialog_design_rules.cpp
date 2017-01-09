@@ -280,7 +280,7 @@ void DIALOG_DESIGN_RULES::InitDialogRules()
 void DIALOG_DESIGN_RULES::InitGlobalRules()
 {
     // Set unit labels
-    wxString units = ReturnUnitSymbol( g_UserUnit, _( "%s" ) );
+    wxString units = ReturnUnitSymbol( g_UserUnit, "%s" );
 
     m_ViaMinUnits->SetLabel( units );
     m_ViaMinDrillUnits->SetLabel( units );
@@ -975,7 +975,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity( wxString* aErrorMsg )
     wxString netclassLabel; // Name of a given netclass
     wxString netclassError; // Error message particular to a given netclass
 
-    wxString units = ReturnUnitSymbol( g_UserUnit, _( "%s" ) );
+    wxString units = ReturnUnitSymbol( g_UserUnit, "%s" );
 
     int      minViaDia = ValueFromTextCtrl( *m_SetViasMinSizeCtrl );
     int      minViaDrill = ValueFromTextCtrl( *m_SetViasMinDrillCtrl );
@@ -991,7 +991,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity( wxString* aErrorMsg )
     for( int row = 0; row < m_grid->GetNumberRows(); row++ )
     {
         netclassLabel = GetChars( m_grid->GetRowLabelValue( row ) );
-        netclassError = _( "" ); // Clear the error for this netclass
+        netclassError.Clear();      // Clear the error for this netclass
 
         int tracksize = ValueFromString( g_UserUnit,
                                          m_grid->GetCellValue( row, GRID_TRACKSIZE ) );
@@ -1092,7 +1092,7 @@ bool DIALOG_DESIGN_RULES::TestDataValidity( wxString* aErrorMsg )
             msg.Printf( _( "Netclass: <b>%s</b><br>" ), netclassLabel );
             errorMsg += msg;
             errorMsg += netclassError;
-            errorMsg += _( "<br>" );
+            errorMsg += "<br>";
         }
     }
 
