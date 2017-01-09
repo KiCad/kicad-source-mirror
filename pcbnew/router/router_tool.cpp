@@ -49,6 +49,7 @@ using namespace std::placeholders;
 #include <tools/size_menu.h>
 #include <tools/selection_tool.h>
 #include <tools/edit_tool.h>
+#include <tools/grid_menu.h>
 
 #include <ratsnest_data.h>
 
@@ -200,7 +201,8 @@ private:
 class ROUTER_TOOL_MENU: public CONTEXT_MENU
 {
 public:
-    ROUTER_TOOL_MENU( BOARD* aBoard, PNS::ROUTER_MODE aMode )
+    ROUTER_TOOL_MENU( BOARD* aBoard, PCB_EDIT_FRAME& frame, PNS::ROUTER_MODE aMode ) :
+            m_gridMenu( &frame )
     {
         SetTitle( _( "Interactive Router" ) );
         Add( ACT_NewTrack );
@@ -224,10 +226,13 @@ public:
 
         AppendSeparator();
         Add( PNS::TOOL_BASE::ACT_RouterOptions );
+
+        Add( &m_gridMenu, _( "Grid" ), false );
     }
 
 private:
     CONTEXT_TRACK_WIDTH_MENU m_widthMenu;
+    GRID_MENU m_gridMenu;
 };
 
 
@@ -679,7 +684,7 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
 
     m_startSnapPoint = getViewControls()->GetCursorPosition();
 
-    std::unique_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( board, aMode ) );
+    std::unique_ptr<ROUTER_TOOL_MENU> ctxMenu( new ROUTER_TOOL_MENU( board, *frame, aMode ) );
     SetContextMenu( ctxMenu.get() );
 
     // Main loop: keep receiving events
