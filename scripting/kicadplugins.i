@@ -54,8 +54,10 @@
 
 KICAD_PLUGINS={}    # the list of loaded footprint wizards
 
-""" the list of not loaded python scripts (due to a synthax error in python script)
-    this is the python script full filenames, separated by '\n'
+""" the list of not loaded python scripts
+    (usually because there is a syntax error in python script)
+    this is the python script full filenames list.
+    filenames are separated by '\n'
 """
 NOT_LOADED_WIZARDS=""
 
@@ -80,29 +82,6 @@ def GetWizardsSearchPaths():
 def GetWizardsBackTrace():
     global FULL_BACK_TRACE
     return FULL_BACK_TRACE
-
-def ReloadPlugin(name):
-    if not KICAD_PLUGINS.has_key(name):
-        return False
-
-    KICAD_PLUGINS[name]["object"].deregister()
-    mod = reload(KICAD_PLUGINS[name]["module"])
-    KICAD_PLUGINS[name]["object"]= mod.register()
-
-
-def ReloadPlugins():
-    import os.path
-    for k in KICAD_PLUGINS.keys():
-        plugin = KICAD_PLUGINS[k]
-
-        filename = plugin["filename"]
-        mtime = plugin["modification_time"]
-        now_mtime = os.path.getmtime(filename)
-
-        if mtime!=now_mtime:
-            # /* print filename, " is modified, reloading" */
-            KICAD_PLUGINS[k]["modification_time"]=now_mtime
-            ReloadPlugin(k)
 
 
 def LoadPlugins(bundlepath=None):
@@ -169,8 +148,10 @@ def LoadPlugins(bundlepath=None):
         PLUGIN_DIRECTORIES_SEARCH += plugins_dir
 
     global FULL_BACK_TRACE
-    FULL_BACK_TRACE=""
+    FULL_BACK_TRACE=""          # clear any existing trace
     failed_wizards_list=""
+
+    global KICAD_PLUGINS
 
     for plugins_dir in plugin_directories:
         if not os.path.isdir(plugins_dir):
@@ -187,14 +168,22 @@ def LoadPlugins(bundlepath=None):
 
             try:  # If there is an error loading the script, skip it
                 module_filename = plugins_dir + "/" + module
-                mod = __import__(module[:-3], locals(), globals())
                 mtime = os.path.getmtime(module_filename)
 
-                if hasattr(mod,'register'):
-                    KICAD_PLUGINS[module]={"filename":module_filename,
-                                           "modification_time":mtime,
-                                           "object":mod.register(),
-                                           "module":mod}
+                if KICAD_PLUGINS.has_key(module):
+                    plugin = KICAD_PLUGINS[module]
+                    if not plugin["modification_time"] == mtime:
+                        mod = reload(plugin["module"])
+                        plugin["modification_time"] = mtime
+                    else:
+                        mod = plugin["module"]
+                else:
+                    mod = __import__(module[:-3], locals(), globals() )
+
+                KICAD_PLUGINS[module]={"filename":module_filename,
+                                       "modification_time":mtime,
+                                       "module":mod}
+
             except:
                 if failed_wizards_list != "" :
                     failed_wizards_list += "\n"
@@ -213,6 +202,7 @@ class KiCadPlugin:
     def register(self):
         if isinstance(self,FilePlugin):
             pass # register to file plugins in C++
+
         if isinstance(self,FootprintWizardPlugin):
             PYTHON_FOOTPRINT_WIZARDS.register_wizard(self)
             return
@@ -224,13 +214,14 @@ class KiCadPlugin:
 
     def deregister(self):
         if isinstance(self,FilePlugin):
-            pass # register to file plugins in C++
+            pass # deregister to file plugins in C++
+
         if isinstance(self,FootprintWizardPlugin):
             PYTHON_FOOTPRINT_WIZARDS.deregister_wizard(self)
             return
 
         if isinstance(self,ActionPlugin):
-            pass # register to action plugins in C++
+            pass # deregister to action plugins in C++
 
         return
 

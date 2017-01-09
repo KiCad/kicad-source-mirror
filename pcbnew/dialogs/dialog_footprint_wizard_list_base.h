@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  4 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,6 +51,7 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText11;
 		wxTextCtrl* m_tcNotLoaded;
 		wxButton* m_buttonShowTrace;
+		wxButton* m_buttonUpdateModules;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -59,6 +60,7 @@ class DIALOG_FOOTPRINT_WIZARD_LIST_BASE : public DIALOG_SHIM
 		virtual void OnCellFpGeneratorClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnCellFpGeneratorDoubleClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void onShowTrace( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdatePythonModulesClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

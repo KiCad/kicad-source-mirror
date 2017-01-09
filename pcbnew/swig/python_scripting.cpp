@@ -448,7 +448,6 @@ wxString PyScriptingPath()
 #endif
 
     wxFileName scriptPath( path );
-
     scriptPath.MakeAbsolute();
 
     return scriptPath.GetFullPath();

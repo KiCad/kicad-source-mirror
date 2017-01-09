@@ -182,7 +182,9 @@ public:
      * Function register_wizard
      * A footprint wizard calls this static method when it wants to register itself
      * into the system wizards
-     *
+     * Note: if it is already registered, this function do nothing
+     * if n existing wizard with the same name exists, this existing wizard will be
+     * unregistered.
      * @param aWizard is the footprint wizard to be registered
      */
     static void                 register_wizard( FOOTPRINT_WIZARD* aWizard );

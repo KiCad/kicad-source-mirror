@@ -76,6 +76,26 @@ int FOOTPRINT_WIZARDS::GetWizardsCount()
 
 void FOOTPRINT_WIZARDS::register_wizard( FOOTPRINT_WIZARD* aWizard )
 {
+    // Search for this entry do not register twice this wizard):
+    for( int ii = 0; ii < GetWizardsCount(); ii++ )
+    {
+        if( aWizard == GetWizard( ii ) )    // Already registered
+            return;
+    }
+
+    // Search for a wizard with the same name, and remove it if found
+    for( int ii = 0; ii < GetWizardsCount(); ii++ )
+    {
+        FOOTPRINT_WIZARD* wizard = GetWizard( ii );
+
+        if( wizard->GetName() == aWizard->GetName() )
+        {
+            m_FootprintWizards.erase( m_FootprintWizards.begin() + ii );
+            delete wizard;
+            break;
+        }
+    }
+
     m_FootprintWizards.push_back( aWizard );
 }
 
@@ -84,13 +104,13 @@ bool FOOTPRINT_WIZARDS::deregister_object( void* aObject )
 {
     int max = GetWizardsCount();
 
-    for( int i = 0; i<max; i++ )
+    for( int ii = 0; ii < max; ii++ )
     {
-        FOOTPRINT_WIZARD* wizard = GetWizard( i );
+        FOOTPRINT_WIZARD* wizard = GetWizard( ii );
 
         if( wizard->GetObject() == aObject )
         {
-            m_FootprintWizards.erase( m_FootprintWizards.begin() + i );
+            m_FootprintWizards.erase( m_FootprintWizards.begin() + ii );
             delete wizard;
             return true;
         }

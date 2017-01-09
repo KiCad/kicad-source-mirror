@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  4 2016)
+// C++ code generated with wxFormBuilder (version May  6 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -92,6 +92,18 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	
 	bSizerMain->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 	
+	wxBoxSizer* bSizerLower;
+	bSizerLower = new wxBoxSizer( wxHORIZONTAL );
+	
+	
+	bSizerLower->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_buttonUpdateModules = new wxButton( this, wxID_ANY, _("Update Python Modules"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerLower->Add( m_buttonUpdateModules, 0, wxALL, 5 );
+	
+	
+	bSizerLower->Add( 0, 0, 0, wxRIGHT|wxLEFT, 5 );
+	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -99,7 +111,10 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
+	bSizerLower->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
+	
+	
+	bSizerMain->Add( bSizerLower, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
@@ -111,6 +126,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_footprintGeneratorsGrid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnCellFpGeneratorClick ), NULL, this );
 	m_footprintGeneratorsGrid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnCellFpGeneratorDoubleClick ), NULL, this );
 	m_buttonShowTrace->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::onShowTrace ), NULL, this );
+	m_buttonUpdateModules->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::onUpdatePythonModulesClick ), NULL, this );
 }
 
 DIALOG_FOOTPRINT_WIZARD_LIST_BASE::~DIALOG_FOOTPRINT_WIZARD_LIST_BASE()
@@ -119,6 +135,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::~DIALOG_FOOTPRINT_WIZARD_LIST_BASE()
 	m_footprintGeneratorsGrid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnCellFpGeneratorClick ), NULL, this );
 	m_footprintGeneratorsGrid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::OnCellFpGeneratorDoubleClick ), NULL, this );
 	m_buttonShowTrace->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::onShowTrace ), NULL, this );
+	m_buttonUpdateModules->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_WIZARD_LIST_BASE::onUpdatePythonModulesClick ), NULL, this );
 	
 }
 
