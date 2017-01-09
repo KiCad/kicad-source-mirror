@@ -28,6 +28,7 @@
 #include <tool/tool_manager.h>
 
 #include "selection_tool.h"
+#include "drawing_tool.h"
 #include "picker_tool.h"
 
 #include <painter.h>
@@ -71,6 +72,12 @@ private:
     void update()
     {
         SELECTION_TOOL* selTool = getToolManager()->GetTool<SELECTION_TOOL>();
+
+        // enable zone actions that ably to a specific set of zones (as opposed to all of them)
+        bool nonGlobalActionsEnabled = ( SELECTION_CONDITIONS::MoreThan( 0 ) )( selTool->GetSelection() );
+
+        Enable( getMenuId( COMMON_ACTIONS::zoneFill ), nonGlobalActionsEnabled );
+        Enable( getMenuId( COMMON_ACTIONS::zoneUnfill ), nonGlobalActionsEnabled );
 
         // lines like this make me really think about a better name for SELECTION_CONDITIONS class
         bool mergeEnabled = ( SELECTION_CONDITIONS::MoreThan( 1 ) &&
@@ -131,19 +138,41 @@ void PCB_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 
 bool PCB_EDITOR_CONTROL::Init()
 {
+    m_zoneMenu = new ZONE_CONTEXT_MENU;
+    m_zoneMenu->SetTool( this );
+
+    m_lockMenu = new LOCK_CONTEXT_MENU;
+    m_lockMenu->SetTool( this );
+
+    // Add the PCB control menus to relevant other tools
+
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
     if( selTool )
     {
-        m_zoneMenu = new ZONE_CONTEXT_MENU;
-        m_zoneMenu->SetTool( this );
         selTool->GetMenu().AddMenu( m_zoneMenu, _( "Zones" ), false,
                                     SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
 
-        m_lockMenu = new LOCK_CONTEXT_MENU;
-        m_lockMenu->SetTool( this );
         selTool->GetMenu().AddMenu( m_lockMenu, _( "Locking" ), false,
                                     SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+    }
+
+    DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<DRAWING_TOOL>();
+
+    if( drawingTool )
+    {
+        // Functor to say if the PCB_EDIT_FRAME is in a given mode
+        // Capture the tool pointer and tool mode by value
+        auto toolActiveFunctor = [=]( DRAWING_TOOL::MODE aMode )
+        {
+            return [=]( const SELECTION& sel )
+            {
+                return drawingTool->GetDrawingMode() == aMode;
+            };
+        };
+
+        drawingTool->GetMenu().AddMenu( m_zoneMenu, _( "Zones" ), false,
+                                        toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ) );
     }
 
     return true;

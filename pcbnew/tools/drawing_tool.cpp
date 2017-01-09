@@ -51,17 +51,50 @@
 #include <class_zone.h>
 #include <class_module.h>
 
+#include <scoped_set_reset.h>
+
+#include "zoom_menu.h"
+#include "grid_menu.h"
+
 #include <tools/selection_tool.h>
 
+
+using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
+
 DRAWING_TOOL::DRAWING_TOOL() :
-    PCB_TOOL( "pcbnew.InteractiveDrawing" ), m_view( NULL ),
-    m_controls( NULL ), m_board( NULL ), m_frame( NULL ), m_lineWidth( 1 )
+    PCB_TOOL( "pcbnew.InteractiveDrawing" ),
+    m_view( nullptr ), m_controls( nullptr ),
+    m_board( nullptr ), m_frame( nullptr ), m_mode( MODE::NONE ),
+    m_lineWidth( 1 ),
+    m_menu( this ), m_contextMenu( nullptr ),
+    m_gridMenu( nullptr), m_zoomMenu( nullptr)
 {
 }
 
 
 DRAWING_TOOL::~DRAWING_TOOL()
 {
+}
+
+
+bool DRAWING_TOOL::Init()
+{
+    // Drawing type-specific options will be added by the PCB control tool
+
+    m_menu.AddItem( COMMON_ACTIONS::zoomCenter, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddItem( COMMON_ACTIONS::zoomIn, SELECTION_CONDITIONS::ShowAlways, 1000  );
+    m_menu.AddItem( COMMON_ACTIONS::zoomOut , SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen , SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+
+    m_zoomMenu = new ZOOM_MENU( frame );
+    m_menu.AddMenu( m_zoomMenu, _( "Zoom" ), false, SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    m_gridMenu = new GRID_MENU( frame );
+    m_menu.AddMenu( m_gridMenu, _( "Grid" ), false, SELECTION_CONDITIONS::ShowAlways, 1000 );
+
+    return true;
 }
 
 
@@ -75,12 +108,20 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
 }
 
 
+DRAWING_TOOL::MODE DRAWING_TOOL::GetDrawingMode() const
+{
+    return m_mode;
+}
+
+
 int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 {
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     boost::optional<VECTOR2D> startingPoint;
     BOARD_COMMIT commit( m_frame );
+
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_LINE_TOOL : ID_PCB_ADD_LINE_BUTT,
                         wxCURSOR_PENCIL, _( "Add graphic line" ) );
@@ -113,6 +154,8 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     DRAWSEGMENT* circle = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     BOARD_COMMIT commit( m_frame );
 
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
+
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_CIRCLE_TOOL : ID_PCB_CIRCLE_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic circle" ) );
 
@@ -138,6 +181,8 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* arc = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
     BOARD_COMMIT commit( m_frame );
+
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_ARC_TOOL : ID_PCB_ARC_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic arc" ) );
@@ -173,6 +218,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
     // do not capture or auto-pan until we start placing some text
+
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::TEXT );
 
     Activate();
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_TEXT_TOOL : ID_PCB_ADD_TEXT_BUTT,
@@ -217,6 +264,11 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 text->Flip( text->GetPosition() );
                 m_view->Update( &preview );
             }
+        }
+
+        else if ( evt->IsClick( BUT_RIGHT ) )
+        {
+            showContextMenu();
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -336,6 +388,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DIMENSION );
+
     Activate();
     m_frame->SetToolID( ID_PCB_DIMENSION_BUTT, wxCURSOR_PENCIL, _( "Add dimension" ) );
 
@@ -384,6 +438,11 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 dimension->SetWidth( width - WIDTH_STEP );
                 m_view->Update( &preview );
             }
+        }
+
+        else if ( evt->IsClick( BUT_RIGHT ) )
+        {
+            showContextMenu();
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -502,6 +561,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 {
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ZONE );
     m_frame->SetToolID( ID_PCB_ZONES_BUTT, wxCURSOR_PENCIL, _( "Add zones" ) );
 
     return drawZone( false );
@@ -510,6 +570,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawKeepout( const TOOL_EVENT& aEvent )
 {
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::KEEPOUT );
     m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add keepout" ) );
 
     return drawZone( true );
@@ -551,6 +612,8 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
+
     Activate();
 
     // Main loop: keep receiving events
@@ -591,6 +654,11 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                 preview.FreeItems();
                 break;
             }
+        }
+
+        else if ( evt->IsClick( BUT_RIGHT ) )
+        {
+            showContextMenu();
         }
 
         else if( evt->IsClick( BUT_LEFT ) )
@@ -690,6 +758,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 {
     assert( m_editModules );
 
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
+
     Activate();
     m_frame->SetToolID( ID_MODEDIT_ANCHOR_TOOL, wxCURSOR_PENCIL,
                         _( "Place the footprint anchor" ) );
@@ -718,7 +788,10 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             // so deselect the active tool
             break;
         }
-
+        else if ( evt->IsClick( BUT_RIGHT ) )
+        {
+            showContextMenu();
+        }
         else if( evt->IsCancel() || evt->IsActivate() )
             break;
     }
@@ -731,6 +804,17 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
+}
+
+
+void DRAWING_TOOL::showContextMenu()
+{
+    // Dummy selection - the drawing tool doesn't depend on a selection
+    SELECTION aSelection;
+    m_contextMenu = m_menu.Generate( aSelection );
+
+    if( m_contextMenu->GetMenuItemCount() > 0 )
+        SetContextMenu( m_contextMenu, CMENU_NOW );
 }
 
 
@@ -812,7 +896,10 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             aGraphic = NULL;
             break;
         }
-
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            showContextMenu();
+        }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             if( !started )
@@ -958,7 +1045,10 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             aGraphic = NULL;
             break;
         }
-
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            showContextMenu();
+        }
         else if( evt->IsClick( BUT_LEFT ) )
         {
             switch( step )
@@ -1168,7 +1258,10 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
             if( evt->IsActivate() )  // now finish unconditionally
                 break;
         }
-
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            showContextMenu();
+        }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
