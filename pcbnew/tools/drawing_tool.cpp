@@ -783,10 +783,12 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         bool updatePreview = false;            // should preview be updated
         cursorPos = m_controls->GetCursorPosition();
 
-        // Enable 45 degrees lines only mode by holding control
-        if( direction45 != evt->Modifier( MD_CTRL ) && started && aShape == S_SEGMENT )
+        // 45 degree angle constraint enabled with an option and toggled with Ctrl
+        const bool limit45 = ( g_Segments_45_Only != !!( evt->Modifier( MD_CTRL ) ) );
+
+        if( direction45 != limit45 && started && aShape == S_SEGMENT )
         {
-            direction45 = evt->Modifier( MD_CTRL );
+            direction45 = limit45;
 
             if( direction45 )
             {
