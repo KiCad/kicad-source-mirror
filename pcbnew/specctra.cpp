@@ -571,7 +571,7 @@ void SPECCTRA_DB::doUNIT( UNIT_RES* growth ) throw( IO_ERROR )
 }
 
 
-void SPECCTRA_DB::doLAYER_PAIR( LAYER_PAIR* growth ) throw( IO_ERROR )
+void SPECCTRA_DB::doSPECCTRA_LAYER_PAIR( SPECCTRA_LAYER_PAIR* growth ) throw( IO_ERROR )
 {
     NeedSYMBOL();
     growth->layer_id0 = CurText();
@@ -600,9 +600,9 @@ void SPECCTRA_DB::doLAYER_NOISE_WEIGHT( LAYER_NOISE_WEIGHT* growth )
         if( NextTok() != T_layer_pair )
             Expecting( T_layer_pair );
 
-        LAYER_PAIR* layer_pair = new LAYER_PAIR( growth );
+        SPECCTRA_LAYER_PAIR* layer_pair = new SPECCTRA_LAYER_PAIR( growth );
         growth->layer_pairs.push_back( layer_pair );
-        doLAYER_PAIR( layer_pair );
+        doSPECCTRA_LAYER_PAIR( layer_pair );
     }
 }
 

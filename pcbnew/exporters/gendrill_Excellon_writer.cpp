@@ -86,16 +86,16 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
     wxFileName  fn;
     wxString    msg;
 
-    std::vector<LAYER_PAIR> hole_sets = getUniqueLayerPairs();
+    std::vector<DRILL_LAYER_PAIR> hole_sets = getUniqueLayerPairs();
 
     // append a pair representing the NPTH set of holes, for separate drill files.
     if( !m_merge_PTH_NPTH )
-        hole_sets.push_back( LAYER_PAIR( F_Cu, B_Cu ) );
+        hole_sets.push_back( DRILL_LAYER_PAIR( F_Cu, B_Cu ) );
 
-    for( std::vector<LAYER_PAIR>::const_iterator it = hole_sets.begin();
+    for( std::vector<DRILL_LAYER_PAIR>::const_iterator it = hole_sets.begin();
          it != hole_sets.end();  ++it )
     {
-        LAYER_PAIR  pair = *it;
+        DRILL_LAYER_PAIR  pair = *it;
         // For separate drill files, the last layer pair is the NPTH drill file.
         bool doing_npth = m_merge_PTH_NPTH ? false : ( it == hole_sets.end() - 1 );
 
@@ -554,7 +554,7 @@ static bool CmpHoleSettings( const HOLE_INFO& a, const HOLE_INFO& b )
 }
 
 
-void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
+void EXCELLON_WRITER::BuildHolesList( DRILL_LAYER_PAIR aLayerPair,
                                       bool aGenerateNPTH_list )
 {
     HOLE_INFO new_hole;
@@ -596,7 +596,7 @@ void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
         }
     }
 
-    if( aLayerPair == LAYER_PAIR( F_Cu, B_Cu ) )
+    if( aLayerPair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
     {
         // add holes for thru hole pads
         for( MODULE* module = m_pcb->m_Modules;  module;  module = module->Next() )
@@ -672,7 +672,7 @@ void EXCELLON_WRITER::BuildHolesList( LAYER_PAIR aLayerPair,
 }
 
 
-std::vector<LAYER_PAIR> EXCELLON_WRITER::getUniqueLayerPairs() const
+std::vector<DRILL_LAYER_PAIR> EXCELLON_WRITER::getUniqueLayerPairs() const
 {
     wxASSERT( m_pcb );
 
@@ -685,9 +685,9 @@ std::vector<LAYER_PAIR> EXCELLON_WRITER::getUniqueLayerPairs() const
 
     vias.Collect( m_pcb, interesting_stuff_to_collect );
 
-    std::set< LAYER_PAIR >  unique;
+    std::set< DRILL_LAYER_PAIR >  unique;
 
-    LAYER_PAIR  layer_pair;
+    DRILL_LAYER_PAIR  layer_pair;
 
     for( int i = 0; i < vias.GetCount(); ++i )
     {
@@ -697,17 +697,17 @@ std::vector<LAYER_PAIR> EXCELLON_WRITER::getUniqueLayerPairs() const
 
         // only make note of blind buried.
         // thru hole is placed unconditionally as first in fetched list.
-        if( layer_pair != LAYER_PAIR( F_Cu, B_Cu ) )
+        if( layer_pair != DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
         {
             unique.insert( layer_pair );
         }
     }
 
-    std::vector<LAYER_PAIR>    ret;
+    std::vector<DRILL_LAYER_PAIR>    ret;
 
-    ret.push_back( LAYER_PAIR( F_Cu, B_Cu ) );      // always first in returned list
+    ret.push_back( DRILL_LAYER_PAIR( F_Cu, B_Cu ) );      // always first in returned list
 
-    for( std::set< LAYER_PAIR >::const_iterator it = unique.begin();  it != unique.end(); ++it )
+    for( std::set< DRILL_LAYER_PAIR >::const_iterator it = unique.begin();  it != unique.end(); ++it )
         ret.push_back( *it );
 
     return ret;
@@ -729,7 +729,7 @@ const std::string EXCELLON_WRITER::layerName( LAYER_ID aLayer ) const
 }
 
 
-const std::string EXCELLON_WRITER::layerPairName( LAYER_PAIR aPair ) const
+const std::string EXCELLON_WRITER::layerPairName( DRILL_LAYER_PAIR aPair ) const
 {
     std::string ret = layerName( aPair.first );
     ret += '-';
@@ -739,7 +739,7 @@ const std::string EXCELLON_WRITER::layerPairName( LAYER_PAIR aPair ) const
 }
 
 
-const wxString EXCELLON_WRITER::drillFileName( LAYER_PAIR aPair, bool aNPTH,
+const wxString EXCELLON_WRITER::drillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
                                                bool aMerge_PTH_NPTH ) const
 {
     wxASSERT( m_pcb );
@@ -748,7 +748,7 @@ const wxString EXCELLON_WRITER::drillFileName( LAYER_PAIR aPair, bool aNPTH,
 
     if( aNPTH )
         extend = "-NPTH";
-    else if( aPair == LAYER_PAIR( F_Cu, B_Cu ) )
+    else if( aPair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
     {
         if( !aMerge_PTH_NPTH )
             extend = "-PTH";

@@ -115,7 +115,7 @@ public: DRILL_PRECISION( int l = 2, int r = 4 )
 };
 
 
-typedef std::pair<LAYER_ID, LAYER_ID>   LAYER_PAIR;
+typedef std::pair<LAYER_ID, LAYER_ID>   DRILL_LAYER_PAIR;
 class OUTPUTFORMATTER;
 
 /**
@@ -228,7 +228,7 @@ public:
      *       true to create NPTH only list (with no plated holes)
      *       false to created plated holes list (with no NPTH )
      */
-    void BuildHolesList( LAYER_PAIR aLayerPair,
+    void BuildHolesList( DRILL_LAYER_PAIR aLayerPair,
                          bool aGenerateNPTH_list );
 
     int  GetHolesCount() const { return m_holeListBuffer.size(); }
@@ -348,7 +348,7 @@ private:
     bool PlotDrillMarks( PLOTTER* aPlotter );
 
     /// Get unique layer pairs by examining the micro and blind_buried vias.
-    std::vector<LAYER_PAIR> getUniqueLayerPairs() const;
+    std::vector<DRILL_LAYER_PAIR> getUniqueLayerPairs() const;
 
     /**
      * Function printToolSummary
@@ -358,7 +358,7 @@ private:
      */
     unsigned printToolSummary( OUTPUTFORMATTER& aOut, bool aSummaryNPTH ) const;
 
-    const std::string layerPairName( LAYER_PAIR aPair ) const;
+    const std::string layerPairName( DRILL_LAYER_PAIR aPair ) const;
 
     const std::string layerName( LAYER_ID aLayer ) const;
 
@@ -371,7 +371,8 @@ private:
      * @param aMerge_PTH_NPTH = true to generate the filename of a file which containd both
      * NPH and NPTH holes
      */
-    const wxString drillFileName( LAYER_PAIR aPair, bool aNPTH, bool aMerge_PTH_NPTH ) const;
+    const wxString drillFileName( DRILL_LAYER_PAIR aPair, bool aNPTH,
+                                  bool aMerge_PTH_NPTH ) const;
 };
 
 #endif  //  #ifndef _GENDRILL_EXCELLON_WRITER_
