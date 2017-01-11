@@ -205,7 +205,7 @@ private:
     /**
      * @brief Compile vertex of fragment shader source code into the program.
      */
-    bool loadShaderFromStringArray( SHADER_TYPE aShaderType, const char* const* aArray,
+    bool loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aArray,
                                     size_t aSize );
 
     /**

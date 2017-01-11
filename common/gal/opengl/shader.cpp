@@ -156,6 +156,7 @@ void SHADER::SetParameter( int parameterNumber, float f0, float f1, float f2, fl
     glUniform4fv( parameterLocation[parameterNumber], 1, arr );
 }
 
+
 int SHADER::GetAttribute( std::string aAttributeName ) const
 {
     return glGetAttribLocation( programNumber, aAttributeName.c_str() );
@@ -226,7 +227,7 @@ std::string SHADER::ReadSource( const std::string& aShaderSourceName )
 }
 
 
-bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char* const* aArray,
+bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aArray,
                                         size_t aSize )
 {
     assert( !isShaderLinked );
@@ -246,7 +247,7 @@ bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char* con
     programInfo( programNumber );
 
     // Attach the sources
-    glShaderSource( shaderNumber, aSize, aArray, NULL );
+    glShaderSource( shaderNumber, aSize, (const GLchar**) aArray, NULL );
     programInfo( programNumber );
 
     // Compile and attach shader to the program
