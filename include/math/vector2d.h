@@ -576,8 +576,9 @@ std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector )
 
 
 /* Default specializations */
-typedef VECTOR2<double> VECTOR2D;
-typedef VECTOR2<int>    VECTOR2I;
+typedef VECTOR2<double>       VECTOR2D;
+typedef VECTOR2<int>          VECTOR2I;
+typedef VECTOR2<unsigned int> VECTOR2U;
 
 /* Compatibility typedefs */
 // FIXME should be removed to avoid multiple typedefs for the same type

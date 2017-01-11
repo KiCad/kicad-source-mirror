@@ -68,6 +68,7 @@ void DIALOG_DISPLAY_OPTIONS::init()
 {
     SetFocus();
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
 
     m_OptDisplayTracks->SetValue( displ_opts->m_DisplayPcbTrackFill == SKETCH );
 
@@ -107,6 +108,30 @@ void DIALOG_DISPLAY_OPTIONS::init()
     m_OptDisplayPadNoConn->SetValue( m_Parent->IsElementVisible( PCB_VISIBLE( NO_CONNECTS_VISIBLE ) ) );
     m_OptDisplayDrawings->SetValue( displ_opts->m_DisplayDrawItemsFill == SKETCH );
     m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
+
+    switch( gal_opts.gl_antialiasing_mode )
+    {
+        case KIGFX::OPENGL_ANTIALIASING_MODE::NONE:
+            m_choiceAntialiasing->Select( 0 );
+            break;
+
+        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
+            m_choiceAntialiasing->Select( 1 );
+            break;
+
+        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
+            m_choiceAntialiasing->Select( 2 );
+            break;
+
+        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
+            m_choiceAntialiasing->Select( 3 );
+            break;
+
+        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
+            m_choiceAntialiasing->Select( 4 );
+            break;
+    }
+
 }
 
 
@@ -121,6 +146,7 @@ void DIALOG_DISPLAY_OPTIONS::OnCancelClick( wxCommandEvent& event )
 void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 {
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
 
     m_Parent->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 
@@ -164,6 +190,31 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 
     displ_opts->m_DisplayDrawItemsFill = not m_OptDisplayDrawings->GetValue();
     displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
+
+    switch( m_choiceAntialiasing->GetSelection() )
+    {
+        case 0:
+            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
+            break;
+
+        case 1:
+            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH;
+            break;
+
+        case 2:
+            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA;
+            break;
+
+        case 3:
+            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2;
+            break;
+
+        case 4:
+            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4;
+            break;
+    }
+
+    gal_opts.NotifyChanged();
 
     // Apply changes to the GAL
     KIGFX::VIEW* view = m_Parent->GetGalCanvas()->GetView();

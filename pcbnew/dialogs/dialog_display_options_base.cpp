@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 10 2016)
+// C++ code generated with wxFormBuilder (version Dec 15 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,42 +19,60 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bupperSizer;
 	bupperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxStaticBoxSizer* sLeftBoxSizer;
-	sLeftBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tracks and Vias:") ), wxVERTICAL );
+	wxBoxSizer* sLeftSizer;
+	sLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
-	m_OptDisplayTracks = new wxCheckBox( sLeftBoxSizer->GetStaticBox(), wxID_ANY, _("Show tracks in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	sLeftBoxSizer->Add( m_OptDisplayTracks, 0, wxALL, 5 );
+	wxStaticBoxSizer* sSketchModeSizer;
+	sSketchModeSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Tracks and Vias:") ), wxVERTICAL );
 	
-	m_OptDisplayVias = new wxCheckBox( sLeftBoxSizer->GetStaticBox(), wxID_ANY, _("Show vias in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	sLeftBoxSizer->Add( m_OptDisplayVias, 0, wxALL, 5 );
+	m_OptDisplayTracks = new wxCheckBox( sSketchModeSizer->GetStaticBox(), wxID_ANY, _("Show tracks in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	sSketchModeSizer->Add( m_OptDisplayTracks, 0, wxALL, 5 );
+	
+	m_OptDisplayVias = new wxCheckBox( sSketchModeSizer->GetStaticBox(), wxID_ANY, _("Show vias in sketch mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	sSketchModeSizer->Add( m_OptDisplayVias, 0, wxALL, 5 );
 	
 	
-	bupperSizer->Add( sLeftBoxSizer, 0, wxEXPAND|wxALL, 5 );
+	sLeftSizer->Add( sSketchModeSizer, 0, wxEXPAND|wxALL, 5 );
 	
-	wxStaticBoxSizer* sbMiddleLeftSizer;
-	sbMiddleLeftSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Routing Help:") ), wxVERTICAL );
+	wxStaticBoxSizer* sOpenGLRenderingSizer;
+	sOpenGLRenderingSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("OpenGL Rendering:") ), wxVERTICAL );
+	
+	wxString m_choiceAntialiasingChoices[] = { _("No Antialiasing"), _("Subpixel Antialiasing (High Quality)"), _("Subpixel Antialiasing (Ultra Quality)"), _("Supersampling (2x)"), _("Supersampling (4x)") };
+	int m_choiceAntialiasingNChoices = sizeof( m_choiceAntialiasingChoices ) / sizeof( wxString );
+	m_choiceAntialiasing = new wxChoice( sOpenGLRenderingSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceAntialiasingNChoices, m_choiceAntialiasingChoices, 0 );
+	m_choiceAntialiasing->SetSelection( 0 );
+	sOpenGLRenderingSizer->Add( m_choiceAntialiasing, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	sLeftSizer->Add( sOpenGLRenderingSizer, 1, wxEXPAND, 5 );
+	
+	
+	bupperSizer->Add( sLeftSizer, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sMiddleSizer;
+	sMiddleSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Routing Help:") ), wxVERTICAL );
 	
 	wxString m_ShowNetNamesOptionChoices[] = { _("Do not show"), _("On pads"), _("On tracks"), _("On pads and tracks") };
 	int m_ShowNetNamesOptionNChoices = sizeof( m_ShowNetNamesOptionChoices ) / sizeof( wxString );
-	m_ShowNetNamesOption = new wxRadioBox( sbMiddleLeftSizer->GetStaticBox(), wxID_ANY, _("Show Net Names:"), wxDefaultPosition, wxDefaultSize, m_ShowNetNamesOptionNChoices, m_ShowNetNamesOptionChoices, 1, wxRA_SPECIFY_COLS );
+	m_ShowNetNamesOption = new wxRadioBox( sMiddleSizer->GetStaticBox(), wxID_ANY, _("Show Net Names:"), wxDefaultPosition, wxDefaultSize, m_ShowNetNamesOptionNChoices, m_ShowNetNamesOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ShowNetNamesOption->SetSelection( 0 );
 	m_ShowNetNamesOption->SetToolTip( _("Show or hide net names on pads and/or tracks") );
 	
-	sbMiddleLeftSizer->Add( m_ShowNetNamesOption, 0, wxALL|wxEXPAND, 5 );
+	sMiddleSizer->Add( m_ShowNetNamesOption, 0, wxALL|wxEXPAND, 5 );
 	
 	wxString m_OptDisplayTracksClearanceChoices[] = { _("Never"), _("New track"), _("New track with via area"), _("New and edited tracks with via area"), _("Always") };
 	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
-	m_OptDisplayTracksClearance = new wxRadioBox( sbMiddleLeftSizer->GetStaticBox(), ID_SHOW_CLEARANCE, _("Show Track Clearance:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 1, wxRA_SPECIFY_COLS );
+	m_OptDisplayTracksClearance = new wxRadioBox( sMiddleSizer->GetStaticBox(), ID_SHOW_CLEARANCE, _("Show Track Clearance:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 1, wxRA_SPECIFY_COLS );
 	m_OptDisplayTracksClearance->SetSelection( 0 );
 	m_OptDisplayTracksClearance->SetToolTip( _("Show or hide the track and via clearance area.\nIf New track is selected,  track clearance area is shown only when creating the track.") );
 	
-	sbMiddleLeftSizer->Add( m_OptDisplayTracksClearance, 1, wxALL|wxEXPAND, 5 );
+	sMiddleSizer->Add( m_OptDisplayTracksClearance, 1, wxALL|wxEXPAND, 5 );
 	
 	
-	bupperSizer->Add( sbMiddleLeftSizer, 0, wxALL|wxEXPAND, 5 );
+	bupperSizer->Add( sMiddleSizer, 0, wxALL|wxEXPAND, 5 );
 	
-	wxBoxSizer* b_rightSizer;
-	b_rightSizer = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* sRightSizer;
+	sRightSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sfootprintSizer;
 	sfootprintSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Footprints:") ), wxVERTICAL );
@@ -82,7 +100,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	sfootprintSizer->Add( m_OptDisplayPadNoConn, 0, wxALL, 5 );
 	
 	
-	b_rightSizer->Add( sfootprintSizer, 0, wxEXPAND|wxALL, 5 );
+	sRightSizer->Add( sfootprintSizer, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* s_otherSizer;
 	s_otherSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other:") ), wxVERTICAL );
@@ -96,10 +114,10 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	s_otherSizer->Add( m_Show_Page_Limits, 0, wxALL, 5 );
 	
 	
-	b_rightSizer->Add( s_otherSizer, 1, wxEXPAND|wxALL, 5 );
+	sRightSizer->Add( s_otherSizer, 1, wxEXPAND|wxALL, 5 );
 	
 	
-	bupperSizer->Add( b_rightSizer, 0, 0, 5 );
+	bupperSizer->Add( sRightSizer, 0, 0, 5 );
 	
 	
 	bMainSizer->Add( bupperSizer, 1, wxEXPAND, 5 );

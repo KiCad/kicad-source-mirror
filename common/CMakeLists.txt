@@ -19,24 +19,6 @@ if( NOT APPLE )     # windows and linux use openssl under curl
     find_package( OpenSSL REQUIRED )
 endif()
 
-
-# Generate header files containing shader programs
-# Order of input files is significant
-add_custom_command(
-    OUTPUT gal/opengl/shader_src.h
-    COMMAND ${CMAKE_COMMAND}
-        -DinputFiles="${PROJECT_SOURCE_DIR}/common/gal/opengl/shader.vert\\;${PROJECT_SOURCE_DIR}/common/gal/opengl/shader.frag"
-        -DoutputFile="shader_src.h"
-        -P ${CMAKE_MODULE_PATH}/Shaders.cmake
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/common/gal/opengl
-    COMMENT "Generating headers containing GLSL source code"
-    )
-
-add_custom_target(
-    shader_headers ALL
-    DEPENDS gal/opengl/shader_src.h
-    )
-
 set( GAL_SRCS
     # Common part
     basic_gal.cpp
@@ -46,6 +28,7 @@ set( GAL_SRCS
     worksheet_viewitem.cpp
     origin_viewitem.cpp
     gl_context_mgr.cpp
+    gal/gal_display_options.cpp
     gal/graphics_abstraction_layer.cpp
     gal/stroke_font.cpp
     gal/color4d.cpp
@@ -55,6 +38,8 @@ set( GAL_SRCS
 
     # OpenGL GAL
     gal/opengl/opengl_gal.cpp
+    gal/opengl/gl_resources.cpp
+    gal/opengl/gl_builtin_shaders.cpp
     gal/opengl/shader.cpp
     gal/opengl/vertex_item.cpp
     gal/opengl/vertex_container.cpp
@@ -62,6 +47,7 @@ set( GAL_SRCS
     gal/opengl/noncached_container.cpp
     gal/opengl/vertex_manager.cpp
     gal/opengl/gpu_manager.cpp
+    gal/opengl/antialiasing.cpp
     gal/opengl/opengl_compositor.cpp
     gal/opengl/utils.cpp
 
@@ -71,7 +57,6 @@ set( GAL_SRCS
     )
 
 add_library( gal STATIC ${GAL_SRCS} )
-add_dependencies( gal shader_headers )
 add_dependencies( gal lib-dependencies )
 
 target_link_libraries( gal
@@ -252,6 +237,7 @@ set( COMMON_SRCS
     lockfile.cpp
     msgpanel.cpp
     netlist_keywords.cpp
+    observable.cpp
     prependpath.cpp
     project.cpp
     properties.cpp

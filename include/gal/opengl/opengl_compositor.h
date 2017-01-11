@@ -32,11 +32,14 @@
 #define OPENGL_COMPOSITOR_H_
 
 #include <gal/compositor.h>
+#include <gal/opengl/antialiasing.h>
+#include <gal/gal_display_options.h>
 #include <GL/glew.h>
 #include <deque>
 
 namespace KIGFX
 {
+
 class OPENGL_COMPOSITOR : public COMPOSITOR
 {
 public:
@@ -70,13 +73,29 @@ public:
     /// @copydoc COMPOSITOR::DrawBuffer()
     virtual void DrawBuffer( unsigned int aBufferHandle ) override;
 
+    /// @copydoc COMPOSITOR::Begin()
+    virtual void Begin() override;
+
+    // @copydoc COMPOSITOR::Present()
+    virtual void Present() override;
+
     // Constant used by glBindFramebuffer to turn off rendering to framebuffers
     static const unsigned int DIRECT_RENDERING = 0;
+
+public:
+    VECTOR2U GetScreenSize() const;
+    GLenum   GetBufferTexture( unsigned int aBufferHandle );
+    void     DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle );
+    unsigned int CreateBuffer( VECTOR2U aDimensions );
+
+    void SetAntialiasingMode( OPENGL_ANTIALIASING_MODE aMode ); // clears all buffers
+    OPENGL_ANTIALIASING_MODE GetAntialiasingMode() const;
 
 protected:
     // Buffers are simply textures storing a result of certain target rendering.
     typedef struct
     {
+        VECTOR2U dimensions;
         GLuint textureTarget;                ///< Main texture handle
         GLuint attachmentPoint;              ///< Point to which an image from texture is attached
     } OPENGL_BUFFER;
@@ -92,6 +111,9 @@ protected:
 
     /// Store the used FBO name in case there was more than one compositor used
     GLuint          m_curFbo;
+
+    OPENGL_ANTIALIASING_MODE m_currentAntialiasingMode;
+    std::unique_ptr<OPENGL_PRESENTOR> m_antialiasing;
 
     /// Binds a specific Framebuffer Object.
     void bindFb( unsigned int aFb );

@@ -45,11 +45,12 @@ using namespace std::placeholders;
 
 using namespace KIGFX;
 
+
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
-#define BITMAP_FONT_USE_SPANS
-#include "bitmap_font_img.c"
-#include "bitmap_font_desc.c"
+#include "gl_resources.h"
+#include "gl_builtin_shaders.h"
+using namespace KIGFX::BUILTIN_FONT;
 
 static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
 static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
@@ -61,12 +62,12 @@ bool OPENGL_GAL::isBitmapFontLoaded = false;
 SHADER* OPENGL_GAL::shader = NULL;
 
 
-OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
-                        wxEvtHandler* aPaintListener, const wxString& aName ) :
+OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
+                        wxEvtHandler* aMouseListener, wxEvtHandler* aPaintListener,
+                        const wxString& aName ) :
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
-    mouseListener( aMouseListener ),
-    paintListener( aPaintListener )
+    options( aDisplayOptions ), mouseListener( aMouseListener ), paintListener( aPaintListener )
 {
     if( glMainContext == NULL )
     {
@@ -93,6 +94,7 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
     overlayManager->SetShader( *shader );
 
     compositor = new OPENGL_COMPOSITOR;
+    compositor->SetAntialiasingMode( options.gl_antialiasing_mode );
 
     // Initialize the flags
     isFramebufferInitialized = false;
@@ -103,6 +105,8 @@ OPENGL_GAL::OPENGL_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
 #ifdef RETINA_OPENGL_PATCH
     SetViewWantsBestResolution( true );
 #endif
+
+    observerLink = options.Subscribe( this );
 
     // Connecting the event handlers
     Connect( wxEVT_PAINT,           wxPaintEventHandler( OPENGL_GAL::onPaint ) );
@@ -186,6 +190,15 @@ OPENGL_GAL::~OPENGL_GAL()
 
 }
 
+void OPENGL_GAL::OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aDisplayOptions )
+{
+    if(options.gl_antialiasing_mode != compositor->GetAntialiasingMode())
+    {
+        compositor->SetAntialiasingMode( options.gl_antialiasing_mode );
+        isFramebufferInitialized = false;
+        Refresh();
+    }
+}
 
 void OPENGL_GAL::BeginDrawing()
 {
@@ -198,19 +211,12 @@ void OPENGL_GAL::BeginDrawing()
 
     GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
 
-#ifdef RETINA_OPENGL_PATCH
-    const float scaleFactor = GetBackingScaleFactor();
-#else
-    const float scaleFactor = 1.0f;
-#endif
-
     // Set up the view port
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    glViewport( 0, 0, (GLsizei) screenSize.x * scaleFactor, (GLsizei) screenSize.y * scaleFactor );
 
-    // Create the screen transformation
-    glOrtho( 0, (GLint) screenSize.x, 0, (GLsizei) screenSize.y, -depthRange.x, -depthRange.y );
+    // Create the screen transformation (Do the RH-LH conversion here)
+    glOrtho( 0, (GLint) screenSize.x, (GLsizei) screenSize.y, 0, -depthRange.x, -depthRange.y );
 
     if( !isFramebufferInitialized )
     {
@@ -221,6 +227,8 @@ void OPENGL_GAL::BeginDrawing()
 
         isFramebufferInitialized = true;
     }
+
+    compositor->Begin();
 
     // Disable 2D Textures
     glDisable( GL_TEXTURE_2D );
@@ -303,6 +311,10 @@ void OPENGL_GAL::BeginDrawing()
         isBitmapFontInitialized = true;
     }
 
+    // Something betreen BeginDrawing and EndDrawing seems to depend on
+    // this texture unit being active, but it does not assure it itself.
+    glActiveTexture(GL_TEXTURE0);
+
     // Unbind buffers - set compositor for direct drawing
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
@@ -335,7 +347,8 @@ void OPENGL_GAL::EndDrawing()
     // Draw the remaining contents, blit the rendering targets to the screen, swap the buffers
     compositor->DrawBuffer( mainBuffer );
     compositor->DrawBuffer( overlayBuffer );
-    blitCursor();
+    compositor->Present();
+    //blitCursor();
 
     SwapBuffers();
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
@@ -808,7 +821,7 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
     {
         const unsigned int c = aText[ii];
 
-        wxASSERT_MSG( lookupGlyph(c) != nullptr, wxT( "Missing character in bitmap font atlas." ) );
+        wxASSERT_MSG( LookupGlyph(c) != nullptr, wxT( "Missing character in bitmap font atlas." ) );
         wxASSERT_MSG( c != '\n' && c != '\r', wxT( "No support for multiline bitmap text yet" ) );
 
         // Handle overbar
@@ -1317,7 +1330,7 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     const float TEX_X = font_image.width;
     const float TEX_Y = font_image.height;
 
-    const bitmap_glyph* glyph = lookupGlyph(aChar);
+    const FONT_GLYPH_TYPE* glyph = LookupGlyph(aChar);
     if( !glyph ) return 0;
 
     const float X = glyph->atlas_x + font_information.smooth_pixels;
@@ -1371,7 +1384,7 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
 void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
 {
     // To draw an overbar, simply draw an overbar
-    const bitmap_glyph* glyph = lookupGlyph( '_' );
+    const FONT_GLYPH_TYPE* glyph = LookupGlyph( '_' );
     const float H = glyph->maxy - glyph->miny;
 
     Save();
@@ -1392,31 +1405,6 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight )
     currentManager->Vertex( aLength, H, 0 );    // v3
 
     Restore();
-}
-
-const bitmap_glyph* OPENGL_GAL::lookupGlyph( unsigned int aCodepoint ) const
-{
-#ifdef BITMAP_FONT_USE_SPANS
-        auto *end = font_codepoint_spans + sizeof( font_codepoint_spans ) / sizeof( bitmap_span );
-        auto ptr = std::upper_bound( font_codepoint_spans, end, aCodepoint,
-            []( unsigned int codepoint, const bitmap_span& span )
-            {
-                return codepoint < span.end;
-            }
-        );
-
-        if( ptr != end && ptr->start <= aCodepoint )
-        {
-            unsigned int index = aCodepoint - ptr->start + ptr->cumulative;
-            return &font_codepoint_infos[index];
-        }
-        else
-        {
-            return nullptr;
-        }
-#else
-        return &bitmap_chars[codepoint];
-#endif
 }
 
 std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const wxString& aText ) const
@@ -1444,7 +1432,7 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const wxString& aT
             }
         }
 
-        const bitmap_glyph* glyph = lookupGlyph(aText[i]);
+        const FONT_GLYPH_TYPE* glyph = LookupGlyph(aText[i]);
         if( glyph ) {
             textSize.x  += glyph->advance;
             textSize.y   = std::max<float>( textSize.y, font_information.max_y - glyph->miny );
@@ -1583,10 +1571,10 @@ void OPENGL_GAL::OPENGL_TEST::Render( wxPaintEvent& WXUNUSED( aEvent ) )
             error( "Vertex buffer objects are not supported!" );
 
         // Prepare shaders
-        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadBuiltinShader( 0, SHADER_TYPE_VERTEX ) )
+        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadShaderFromStrings( SHADER_TYPE_VERTEX, BUILTIN_SHADERS::kicad_vertex_shader ) )
             error( "Cannot compile vertex shader!" );
 
-        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadBuiltinShader( 1, SHADER_TYPE_FRAGMENT ) )
+        else if( !m_gal->shader->IsLinked() && !m_gal->shader->LoadShaderFromStrings(SHADER_TYPE_FRAGMENT, BUILTIN_SHADERS::kicad_fragment_shader  ) )
             error( "Cannot compile fragment shader!" );
 
         else if( !m_gal->shader->IsLinked() && !m_gal->shader->Link() )

@@ -119,6 +119,9 @@ void CAIRO_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
     cairo_set_matrix( *m_currentContext, &m_matrix );
 }
 
+void CAIRO_COMPOSITOR::Begin()
+{
+}
 
 void CAIRO_COMPOSITOR::ClearBuffer()
 {
@@ -144,6 +147,9 @@ void CAIRO_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
     cairo_set_matrix( m_mainContext, &m_matrix );
 }
 
+void CAIRO_COMPOSITOR::Present()
+{
+}
 
 void CAIRO_COMPOSITOR::clean()
 {

@@ -98,8 +98,8 @@ const LAYER_NUM GAL_LAYER_ORDER[] =
 
 PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
-                                        GAL_TYPE aGalType ) :
-EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aGalType )
+                                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
+EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType )
 {
     m_worksheet = NULL;
     m_ratsnest = NULL;

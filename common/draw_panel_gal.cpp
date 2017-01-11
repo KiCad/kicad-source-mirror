@@ -39,6 +39,7 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
 
+#include <pcbstruct.h>  // display options definition
 
 #ifdef PROFILE
 #include <profile.h>
@@ -47,8 +48,8 @@
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
-                                        GAL_TYPE aGalType ) :
-    wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize )
+                                        KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
+    wxScrolledCanvas( aParentWindow, aWindowId, aPosition, aSize ), m_options( aOptions )
 {
     m_parent     = aParentWindow;
     m_edaFrame   = dynamic_cast<EDA_DRAW_FRAME*>( aParentWindow );
@@ -337,7 +338,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         switch( aGalType )
         {
         case GAL_TYPE_OPENGL:
-            new_gal = new KIGFX::OPENGL_GAL( this, this, this );
+            new_gal = new KIGFX::OPENGL_GAL( m_options, this, this, this );
             break;
 
         case GAL_TYPE_CAIRO:

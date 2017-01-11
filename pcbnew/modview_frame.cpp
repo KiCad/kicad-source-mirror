@@ -187,6 +187,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     // Create GAL canvas
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                                            parentFrame->GetGalDisplayOptions(),
                                                             parentFrame->GetGalCanvas()->GetBackend() );
     SetGalCanvas( drawPanel );
 

@@ -4690,7 +4690,6 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbSizer2</property>
                                                             <property name="orient">wxVERTICAL</property>
-                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -5491,7 +5490,6 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">m_LayersSizer</property>
                                                             <property name="orient">wxVERTICAL</property>
-                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -5686,7 +5684,6 @@
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">sbSizerTechlayers</property>
                                                                     <property name="orient">wxVERTICAL</property>
-                                                                    <property name="parent">1</property>
                                                                     <property name="permission">none</property>
                                                                     <event name="OnUpdateUI"></event>
                                                                     <object class="sizeritem" expanded="0">
@@ -6671,7 +6668,6 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbSizeModuleInfo</property>
                                                             <property name="orient">wxVERTICAL</property>
-                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -7133,7 +7129,6 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbClearancesSizer</property>
                                                             <property name="orient">wxVERTICAL</property>
-                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -8194,7 +8189,6 @@
                                                             <property name="minimum_size"></property>
                                                             <property name="name">sbSizerZonesSettings</property>
                                                             <property name="orient">wxVERTICAL</property>
-                                                            <property name="parent">1</property>
                                                             <property name="permission">none</property>
                                                             <event name="OnUpdateUI"></event>
                                                             <object class="sizeritem" expanded="0">
@@ -9184,7 +9178,7 @@
                                         <property name="center_pane">0</property>
                                         <property name="class">PCB_DRAW_PANEL_GAL</property>
                                         <property name="close_button">1</property>
-                                        <property name="construction">m_panelShowPadGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );</property>
+                                        <property name="construction">PCB_BASE_FRAME* frame = static_cast&lt;PCB_BASE_FRAME*&gt;( parent );&#x0A;m_panelShowPadGal = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), wxDefaultSize, frame-&gt;GetGalDisplayOptions(), EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );</property>
                                         <property name="context_help"></property>
                                         <property name="context_menu">1</property>
                                         <property name="declaration">PCB_DRAW_PANEL_GAL* m_panelShowPadGal;</property>
@@ -9199,7 +9193,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="include">#include &lt;pcb_draw_panel_gal.h&gt;</property>
+                                        <property name="include">#include &lt;wxBasePcbFrame.h&gt;&#x0A;#include &lt;pcb_draw_panel_gal.h&gt;</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>
                                         <property name="maximum_size"></property>

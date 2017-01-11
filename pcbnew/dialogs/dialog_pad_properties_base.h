@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May  6 2016)
+// C++ code generated with wxFormBuilder (version Dec 17 2016)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -31,6 +31,7 @@ class DIALOG_SHIM;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/notebook.h>
+#include <wxBasePcbFrame.h>
 #include <pcb_draw_panel_gal.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
