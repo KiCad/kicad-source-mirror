@@ -91,27 +91,30 @@ SELECTION_TOOL::~SELECTION_TOOL()
 
 bool SELECTION_TOOL::Init()
 {
+    using S_C = SELECTION_CONDITIONS;
+
+    auto showSelectMenuFunctor = ( S_C::OnlyType( PCB_VIA_T ) || S_C::OnlyType( PCB_TRACE_T ) )
+                                    && S_C::Count( 1 );
+
     m_selectMenu = new SELECT_MENU;
     m_selectMenu->SetTool( this );
 
-    m_menu.AddMenu( m_selectMenu, _( "Select..." ), false,
-            ( SELECTION_CONDITIONS::OnlyType( PCB_VIA_T ) || SELECTION_CONDITIONS::OnlyType( PCB_TRACE_T ) ) &&
-            SELECTION_CONDITIONS::Count( 1 ) );
+    m_menu.AddMenu( m_selectMenu, _( "Select..." ), false, showSelectMenuFunctor );
+    // only show separator if there is a Select menu to show above it
+    GetMenu().AddSeparator( showSelectMenuFunctor, 1000 );
 
-    m_menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
-
-    m_menu.AddItem( COMMON_ACTIONS::zoomCenter, SELECTION_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddItem( COMMON_ACTIONS::zoomIn, SELECTION_CONDITIONS::ShowAlways, 1000  );
-    m_menu.AddItem( COMMON_ACTIONS::zoomOut , SELECTION_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen , SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddItem( COMMON_ACTIONS::zoomCenter, S_C::ShowAlways, 1000 );
+    m_menu.AddItem( COMMON_ACTIONS::zoomIn, S_C::ShowAlways, 1000  );
+    m_menu.AddItem( COMMON_ACTIONS::zoomOut , S_C::ShowAlways, 1000 );
+    m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen , S_C::ShowAlways, 1000 );
 
     PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
 
     m_zoomMenu = new ZOOM_MENU( frame );
-    m_menu.AddMenu( m_zoomMenu, _( "Zoom" ), false, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddMenu( m_zoomMenu, _( "Zoom" ), false, S_C::ShowAlways, 1000 );
 
     m_gridMenu = new GRID_MENU( frame );
-    m_menu.AddMenu( m_gridMenu, _( "Grid" ), false, SELECTION_CONDITIONS::ShowAlways, 1000 );
+    m_menu.AddMenu( m_gridMenu, _( "Grid" ), false, S_C::ShowAlways, 1000 );
 
     return true;
 }
