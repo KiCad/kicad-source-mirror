@@ -4,10 +4,6 @@
 *
 * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
 *
-* Graphics Abstraction Layer (GAL) for OpenGL
-*
-* Shader class
-*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation; either version 2
@@ -58,7 +54,8 @@ namespace UTIL {
         private:
             friend class UTIL::LINK;
 
-            struct IMPL {
+            struct IMPL
+            {
                 IMPL( OBSERVABLE_BASE* owned_by = nullptr );
                 bool is_shared() const;
                 void set_shared();
@@ -126,7 +123,7 @@ namespace UTIL {
     //
     //
     //
-    template< typename ObserverInterface >
+    template<typename ObserverInterface>
     class OBSERVABLE :
         public DETAIL::OBSERVABLE_BASE
     {
@@ -188,17 +185,21 @@ namespace UTIL {
         {
             static_assert(sizeof...(Args1) == sizeof...(Args2), "argument counts don't match");
 
-            if(impl_) {
+            if( impl_ )
+            {
                 enter_iteration();
                 try {
-                    for(auto* void_ptr : impl_->observers_) {
-                        if(void_ptr) {
+                    for( auto* void_ptr : impl_->observers_ )
+                    {
+                        if( void_ptr )
+                        {
                             auto* typed_ptr = static_cast<ObserverInterface*>(void_ptr);
                             (typed_ptr->*Ptr)(std::forward<Args2>( aArgs )...);
                         }
                     }
                 }
-                catch(...) {
+                catch(...)
+                {
                     leave_iteration();
                     throw;
                 }
@@ -220,20 +221,27 @@ namespace UTIL {
         {
             static_assert(sizeof...(Args1) == sizeof...(Args2), "argument counts don't match");
 
-            if(impl_) {
+            if( impl_ )
+            {
                 enter_iteration();
-                try {
-                    for(auto* void_ptr : impl_->observers_) {
-                        if(void_ptr && void_ptr != aIgnore) {
+
+                try
+                {
+                    for(auto* void_ptr : impl_->observers_)
+                    {
+                        if( void_ptr && void_ptr != aIgnore )
+                        {
                             auto* typed_ptr = static_cast<ObserverInterface*>(void_ptr);
                             (typed_ptr->*Ptr)(std::forward<Args2>( aArgs )...);
                         }
                     }
                 }
-                catch(...) {
+                catch(...)
+                {
                     leave_iteration();
                     throw;
                 }
+
                 leave_iteration();
             }
         }

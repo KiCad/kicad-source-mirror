@@ -3,10 +3,6 @@
 *
 * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
 *
-* Graphics Abstraction Layer (GAL) for OpenGL
-*
-* Shader class
-*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation; either version 2
@@ -37,7 +33,8 @@ namespace KIGFX {
 
     class GAL_DISPLAY_OPTIONS;
 
-    enum class OPENGL_ANTIALIASING_MODE : long {
+    enum class OPENGL_ANTIALIASING_MODE : long
+    {
         NONE = 0,
         SUBSAMPLE_HIGH = 1,
         SUBSAMPLE_ULTRA = 2,
@@ -48,11 +45,10 @@ namespace KIGFX {
     class GAL_DISPLAY_OPTIONS_OBSERVER
     {
     public:
-        virtual void OnGalDisplayOptionsChanged(const GAL_DISPLAY_OPTIONS&) = 0;
+        virtual void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& ) = 0;
     };
 
-    class GAL_DISPLAY_OPTIONS
-        : public UTIL::OBSERVABLE< GAL_DISPLAY_OPTIONS_OBSERVER >
+    class GAL_DISPLAY_OPTIONS : public UTIL::OBSERVABLE<GAL_DISPLAY_OPTIONS_OBSERVER>
     {
     public:
         GAL_DISPLAY_OPTIONS();

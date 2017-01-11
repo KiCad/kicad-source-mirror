@@ -204,7 +204,7 @@ void SHADER::shaderInfo( GLuint aShader )
 }
 
 
-std::string SHADER::ReadSource( std::string aShaderSourceName )
+std::string SHADER::ReadSource( const std::string& aShaderSourceName )
 {
     // Open the shader source for reading
     std::ifstream inputFile( aShaderSourceName.c_str(), std::ifstream::in );
@@ -226,8 +226,8 @@ std::string SHADER::ReadSource( std::string aShaderSourceName )
 }
 
 
-bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char* const * aArray,
-                                        size_t aSize  )
+bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char* const* aArray,
+                                        size_t aSize )
 {
     assert( !isShaderLinked );
 

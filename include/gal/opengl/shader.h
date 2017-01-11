@@ -198,14 +198,14 @@ public:
     * @param aShaderSourceName is the shader source file name.
     * @return the source as string
     */
-    static std::string ReadSource( std::string aShaderSourceName );
+    static std::string ReadSource( const std::string& aShaderSourceName );
 
 private:
 
     /**
      * @brief Compile vertex of fragment shader source code into the program.
      */
-    bool loadShaderFromStringArray( SHADER_TYPE aShaderType, const char * const * aArray,
+    bool loadShaderFromStringArray( SHADER_TYPE aShaderType, const char* const* aArray,
                                     size_t aSize );
 
     /**

@@ -3,10 +3,6 @@
 *
 * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
 *
-* Graphics Abstraction Layer (GAL) for OpenGL
-*
-* Shader class
-*
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
 * as published by the Free Software Foundation; either version 2
@@ -46,11 +42,13 @@ namespace KIGFX {
         virtual void OnLostBuffers() = 0;
 
         virtual void Begin() = 0;
-        virtual void DrawBuffer(GLuint buffer) = 0;
+        virtual void DrawBuffer( GLuint aBuffer ) = 0;
         virtual void Present() = 0;
     };
 
-    class ANTIALIASING_NONE : public OPENGL_PRESENTOR {
+
+    class ANTIALIASING_NONE : public OPENGL_PRESENTOR
+    {
     public:
         ANTIALIASING_NONE( OPENGL_COMPOSITOR* aCompositor );
 
@@ -61,7 +59,7 @@ namespace KIGFX {
         void OnLostBuffers() override;
 
         void Begin() override;
-        void DrawBuffer( GLuint buffer ) override;
+        void DrawBuffer( GLuint aBuffer ) override;
         void Present() override;
 
     private:
@@ -73,9 +71,11 @@ namespace KIGFX {
         X4
     };
 
-    class ANTIALIASING_SUPERSAMPLING : public OPENGL_PRESENTOR {
+
+    class ANTIALIASING_SUPERSAMPLING : public OPENGL_PRESENTOR
+    {
     public:
-        ANTIALIASING_SUPERSAMPLING(OPENGL_COMPOSITOR* compositor, SUPERSAMPLING_MODE aMode);
+        ANTIALIASING_SUPERSAMPLING( OPENGL_COMPOSITOR* aCompositor, SUPERSAMPLING_MODE aMode );
 
         bool Init() override;
         unsigned int CreateBuffer() override;
@@ -84,7 +84,7 @@ namespace KIGFX {
         void OnLostBuffers() override;
 
         void Begin() override;
-        void DrawBuffer(GLuint) override;
+        void DrawBuffer( GLuint ) override;
         void Present() override;
 
     private:
@@ -95,7 +95,7 @@ namespace KIGFX {
         bool areBuffersCreated;
 
         bool areShadersCreated;
-        std::unique_ptr< SHADER > x4_shader;
+        std::unique_ptr<SHADER> x4_shader;
     };
 
     enum class SMAA_QUALITY {
@@ -103,44 +103,45 @@ namespace KIGFX {
         ULTRA
     };
 
-    class ANTIALIASING_SMAA : public OPENGL_PRESENTOR {
+    class ANTIALIASING_SMAA : public OPENGL_PRESENTOR
+    {
     public:
-        ANTIALIASING_SMAA ( OPENGL_COMPOSITOR* aCompositor, SMAA_QUALITY aQuality );
+        ANTIALIASING_SMAA( OPENGL_COMPOSITOR* aCompositor, SMAA_QUALITY aQuality );
 
         bool Init() override;
         unsigned int CreateBuffer () override;
 
         VECTOR2U GetInternalBufferSize() override;
-        void OnLostBuffers () override;
+        void OnLostBuffers() override;
 
         void Begin() override;
         void DrawBuffer( GLuint buffer ) override;
-        void Present () override;
+        void Present() override;
 
     private:
-        void loadShaders ();
-        void updateUniforms ();
+        void loadShaders();
+        void updateUniforms();
 
         bool areBuffersInitialized;     //
         bool isInitialized;             // shaders linked
 
-        unsigned int            smaaBaseBuffer; // base + overlay temporary
-        unsigned int            smaaEdgesBuffer;
-        unsigned int            smaaBlendBuffer;
+        unsigned int smaaBaseBuffer;    // base + overlay temporary
+        unsigned int smaaEdgesBuffer;
+        unsigned int smaaBlendBuffer;
 
         // smaa shader lookup textures
-        unsigned int            smaaAreaTex;
-        unsigned int            smaaSearchTex;
+        unsigned int smaaAreaTex;
+        unsigned int smaaSearchTex;
 
         bool shadersLoaded;
 
-        std::unique_ptr< SHADER > pass_1_shader;
+        std::unique_ptr<SHADER> pass_1_shader;
         GLint pass_1_metrics;
 
-        std::unique_ptr< SHADER > pass_2_shader;
+        std::unique_ptr<SHADER> pass_2_shader;
         GLint pass_2_metrics;
 
-        std::unique_ptr< SHADER > pass_3_shader;
+        std::unique_ptr<SHADER> pass_3_shader;
         GLint pass_3_metrics;
 
         SMAA_QUALITY quality;

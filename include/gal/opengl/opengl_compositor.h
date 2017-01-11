@@ -113,7 +113,7 @@ protected:
     GLuint          m_curFbo;
 
     OPENGL_ANTIALIASING_MODE m_currentAntialiasingMode;
-    std::unique_ptr< OPENGL_PRESENTOR > m_antialiasing;
+    std::unique_ptr<OPENGL_PRESENTOR> m_antialiasing;
 
     /// Binds a specific Framebuffer Object.
     void bindFb( unsigned int aFb );
