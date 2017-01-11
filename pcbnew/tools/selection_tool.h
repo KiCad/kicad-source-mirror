@@ -33,15 +33,12 @@
 #include <tool/context_menu.h>
 
 #include "selection_conditions.h"
-#include "conditional_menu.h"
+#include "tool_menu.h"
 
 class PCB_BASE_FRAME;
 class SELECTION_AREA;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
-class SELECT_MENU;
-class ZOOM_MENU;
-class GRID_MENU;
 
 namespace KIGFX
 {
@@ -198,7 +195,7 @@ public:
 
     inline CONDITIONAL_MENU& GetMenu()
     {
-        return m_menu;
+        return m_menu.GetMenu();
     }
 
     ///> Checks if the user has agreed to modify locked items for the given selection.
@@ -392,14 +389,8 @@ private:
     /// Determines if the selection is preliminary or final.
     bool m_preliminary;
 
-    /// Menu displayed by the tool.
-    CONDITIONAL_MENU m_menu;
-
-    /// Pointers to context menus
-    CONTEXT_MENU* m_contextMenu;
-    SELECT_MENU* m_selectMenu;
-    ZOOM_MENU* m_zoomMenu;
-    GRID_MENU* m_gridMenu;
+    /// Menu model displayed by the tool.
+    TOOL_MENU m_menu;
 };
 
 #endif

@@ -28,7 +28,7 @@
 #include <tools/pcb_tool.h>
 #include <boost/optional.hpp>
 
-#include "conditional_menu.h"
+#include "tool_menu.h"
 
 namespace KIGFX
 {
@@ -38,9 +38,6 @@ namespace KIGFX
 class BOARD;
 class PCB_BASE_EDIT_FRAME;
 class DRAWSEGMENT;
-class CONTEXT_MENU;
-class GRID_MENU;
-class ZOOM_MENU;
 
 /**
  * Class DRAWING_TOOL
@@ -63,7 +60,7 @@ public:
     ///> Get the DRAWING_TOOL top-level context menu
     inline CONDITIONAL_MENU& GetMenu()
     {
-        return m_menu;
+        return m_menu.GetMenu();
     }
 
     ///> The possible drawing modes of DRAWING_TOOL
@@ -208,13 +205,8 @@ private:
     /// Stores the current line width for multisegment drawing.
     unsigned int m_lineWidth;
 
-    /// Menu displayed by the tool.
-    CONDITIONAL_MENU m_menu;
-
-    /// Pointers to context menus
-    CONTEXT_MENU* m_contextMenu;
-    GRID_MENU* m_gridMenu;
-    ZOOM_MENU* m_zoomMenu;
+    /// Menu model displayed by the tool.
+    TOOL_MENU m_menu;
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP;
