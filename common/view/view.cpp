@@ -360,6 +360,8 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     }
 
     viewData->deleteGroups();
+
+    delete aItem->m_viewPrivData;
     aItem->m_viewPrivData = nullptr;
 }
 
@@ -906,11 +908,13 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
     }
 }
 
+
 void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate )
 {
     for( unsigned int i = 0; i < aGroup->GetSize(); i++)
         draw( aGroup->GetItem(i), aImmediate );
 }
+
 
 struct VIEW::unlinkItem
 {
