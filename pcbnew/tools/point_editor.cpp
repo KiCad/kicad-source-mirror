@@ -211,10 +211,11 @@ bool POINT_EDITOR::Init()
         return false;
     }
 
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::pointEditorAddCorner,
-                                        POINT_EDITOR::addCornerCondition );
-    m_selectionTool->GetMenu().AddItem( COMMON_ACTIONS::pointEditorRemoveCorner,
-                                        std::bind( &POINT_EDITOR::removeCornerCondition, this, _1 ) );
+    auto& menu = m_selectionTool->GetToolMenu().GetMenu();
+    menu.AddItem( COMMON_ACTIONS::pointEditorAddCorner,
+                  POINT_EDITOR::addCornerCondition );
+    menu.AddItem( COMMON_ACTIONS::pointEditorRemoveCorner,
+                  std::bind( &POINT_EDITOR::removeCornerCondition, this, _1 ) );
 
     return true;
 }

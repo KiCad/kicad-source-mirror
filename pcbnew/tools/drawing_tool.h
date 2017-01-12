@@ -58,9 +58,9 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     ///> Get the DRAWING_TOOL top-level context menu
-    inline CONDITIONAL_MENU& GetMenu()
+    inline TOOL_MENU& GetToolMenu()
     {
-        return m_menu.GetMenu();
+        return m_menu;
     }
 
     ///> The possible drawing modes of DRAWING_TOOL

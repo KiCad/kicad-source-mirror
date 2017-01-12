@@ -77,8 +77,9 @@ bool PLACEMENT_TOOL::Init()
     item = m_placementMenu->Add( COMMON_ACTIONS::distributeVertically );
     SET_BITMAP( KiBitmap( distribute_vertical_xpm ) );
 
-    m_selectionTool->GetMenu().AddMenu( m_placementMenu, _( "Align/distribute" ), false,
-                                        SELECTION_CONDITIONS::MoreThan( 1 ) );
+    m_selectionTool->GetToolMenu().GetMenu().AddMenu(
+            m_placementMenu, _( "Align/distribute" ), false,
+            SELECTION_CONDITIONS::MoreThan( 1 ) );
 
     return true;
 }

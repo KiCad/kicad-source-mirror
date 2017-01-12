@@ -32,8 +32,6 @@ namespace KIGFX {
 }
 
 class PCB_EDIT_FRAME;
-class ZONE_CONTEXT_MENU;
-class LOCK_CONTEXT_MENU;
 
 /**
  * Class PCB_EDITOR_CONTROL
@@ -121,9 +119,6 @@ private:
 
     // How does line width change after one -/+ key press.
     static const int WIDTH_STEP;
-
-    ZONE_CONTEXT_MENU* m_zoneMenu;
-    LOCK_CONTEXT_MENU* m_lockMenu;
 };
 
 #endif

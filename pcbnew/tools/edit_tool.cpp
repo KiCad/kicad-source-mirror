@@ -87,7 +87,7 @@ bool EDIT_TOOL::Init()
     }
 
     // Add context menu entries that are displayed when selection tool is active
-    CONDITIONAL_MENU& menu = m_selectionTool->GetMenu();
+    CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
     menu.AddItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( COMMON_ACTIONS::rotate, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( COMMON_ACTIONS::flip, SELECTION_CONDITIONS::NotEmpty );

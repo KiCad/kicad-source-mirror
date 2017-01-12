@@ -193,9 +193,9 @@ public:
      */
     SELECTION& GetSelection();
 
-    inline CONDITIONAL_MENU& GetMenu()
+    inline TOOL_MENU& GetToolMenu()
     {
-        return m_menu.GetMenu();
+        return m_menu;
     }
 
     ///> Checks if the user has agreed to modify locked items for the given selection.
