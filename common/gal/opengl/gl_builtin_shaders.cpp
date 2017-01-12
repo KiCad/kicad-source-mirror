@@ -335,7 +335,7 @@ const char smaa_base_shader_p1[] = R"SHADER_SOURCE(
  *
  * The shader has three passes, chained together as follows:
  *
- *                           |input|------------------·
+ *                           |input|------------------\
  *                              v                     |
  *                    [ SMAA*EdgeDetection ]          |
  *                              v                     |
@@ -345,7 +345,7 @@ const char smaa_base_shader_p1[] = R"SHADER_SOURCE(
  *                              v                     |
  *                          |blendTex|                |
  *                              v                     |
- *                [ SMAANeighborhoodBlending ] <------·
+ *                [ SMAANeighborhoodBlending ] <------/
  *                              v
  *                           |output|
  *
