@@ -98,11 +98,7 @@ void OPENGL_COMPOSITOR::Initialize()
 
     // VECTOR2U is unsigned, so no need to check if < 0
     if( dims.x > (unsigned) maxBufSize || dims.y >= (unsigned) maxBufSize )
-    {
-        throw std::runtime_error(
-                wxString::Format( "Requested render buffer size is %ux%u, but the max supported size is %dx%d",
-                dims.x, dims.y, maxBufSize, maxBufSize ) );
-    }
+        throw std::runtime_error( "Requested render buffer size is not supported" );
 
     // We need framebuffer objects for drawing the screen contents
     // Generate framebuffer and a depth buffer
