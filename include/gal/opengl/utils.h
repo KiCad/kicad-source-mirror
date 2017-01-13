@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -30,8 +30,10 @@
 /**
  * @brief Checks if one of recent OpenGL operations has failed. If so, it displays appropriate
  * message, starting with aInfo string to give more details.
+ * @param aInfo is the beginning of the error message.
+ * @param aThrow an exception is thrown when true, otherwise only an error message is displayed.
  * @return GL_NO_ERROR in case of no errors or one of GL_ constants returned by glGetError().
  */
-int checkGlError( const std::string& aInfo );
+int checkGlError( const std::string& aInfo, bool aThrow = true );
 
 #endif /* __OPENGL_ERROR_H */

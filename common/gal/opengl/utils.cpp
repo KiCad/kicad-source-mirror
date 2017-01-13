@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 CERN
+ * Copyright (C) 2016-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,14 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <confirm.h>
+#include <confirm.h>    // DisplayError
 
 #include <GL/glew.h>
 #include <cassert>
 
-int checkGlError( const std::string& aInfo )
+int checkGlError( const std::string& aInfo, bool aThrow )
 {
     int result = glGetError();
+    wxString errorMsg;
 
     switch( result )
     {
@@ -38,39 +39,45 @@ int checkGlError( const std::string& aInfo )
             break;
 
         case GL_INVALID_ENUM:
-            DisplayError( NULL, wxString::Format( "Error: %s: invalid enum", aInfo ) );
+            errorMsg = wxString::Format( "Error: %s: invalid enum", aInfo );
             break;
 
         case GL_INVALID_VALUE:
-            DisplayError( NULL, wxString::Format( "Error: %s: invalid value", aInfo ) );
+            errorMsg = wxString::Format( "Error: %s: invalid value", aInfo );
             break;
 
         case GL_INVALID_OPERATION:
-            DisplayError( NULL, wxString::Format( "Error: %s: invalid operation", aInfo ) );
+            errorMsg = wxString::Format( "Error: %s: invalid operation", aInfo );
             break;
 
         case GL_INVALID_FRAMEBUFFER_OPERATION:
-            DisplayError( NULL, wxString::Format( "Error: %s: invalid framebuffer operation", aInfo ) );
+            errorMsg = wxString::Format( "Error: %s: invalid framebuffer operation", aInfo );
             break;
 
         case GL_OUT_OF_MEMORY:
-            DisplayError( NULL, wxString::Format( "Error: %s: out of memory", aInfo ) );
+            errorMsg = wxString::Format( "Error: %s: out of memory", aInfo );
             break;
 
         case GL_STACK_UNDERFLOW:
-            DisplayError( NULL, wxString::Format( "Error: %s: stack underflow", aInfo ) );
+            errorMsg = wxString::Format( "Error: %s: stack underflow", aInfo );
             break;
 
         case GL_STACK_OVERFLOW:
-            DisplayError( NULL, wxString::Format( "Error: %s: stack overflow", aInfo ) );
+            errorMsg = wxString::Format( "Error: %s: stack overflow", aInfo );
             break;
 
         default:
-            DisplayError( NULL, wxString::Format( "Error: %s: unknown error", aInfo ) );
+            errorMsg = wxString::Format( "Error: %s: unknown error", aInfo );
             break;
     }
 
-    //assert( result == GL_NO_ERROR );
+    if( result != GL_NO_ERROR )
+    {
+        if( aThrow )
+            throw std::runtime_error( errorMsg );
+        else
+            DisplayError( nullptr, errorMsg );
+    }
 
     return result;
 }
