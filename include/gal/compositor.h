@@ -37,6 +37,11 @@ namespace KIGFX
 class COMPOSITOR
 {
 public:
+    COMPOSITOR()
+        : m_width( 0 ), m_height( 0 )
+    {
+    }
+
     virtual ~COMPOSITOR()
     {
     }
