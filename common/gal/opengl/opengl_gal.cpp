@@ -355,7 +355,7 @@ void OPENGL_GAL::EndDrawing()
     compositor->DrawBuffer( mainBuffer );
     compositor->DrawBuffer( overlayBuffer );
     compositor->Present();
-    //blitCursor();
+    blitCursor();
 
     SwapBuffers();
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
@@ -1202,9 +1202,9 @@ void OPENGL_GAL::DrawCursor( const VECTOR2D& aCursorPosition )
 {
     // Now we should only store the position of the mouse cursor
     // The real drawing routines are in blitCursor()
-    VECTOR2D screenCursor = worldScreenMatrix * aCursorPosition;
-
-    cursorPosition = screenWorldMatrix * VECTOR2D( screenCursor.x, screenSize.y - screenCursor.y );
+    //VECTOR2D screenCursor = worldScreenMatrix * aCursorPosition;
+    //cursorPosition = screenWorldMatrix * VECTOR2D( screenCursor.x, screenCursor.y );
+    cursorPosition = aCursorPosition;
 }
 
 
