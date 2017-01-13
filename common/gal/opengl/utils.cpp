@@ -74,7 +74,7 @@ int checkGlError( const std::string& aInfo, bool aThrow )
     if( result != GL_NO_ERROR )
     {
         if( aThrow )
-            throw std::runtime_error( errorMsg.mb_str() );
+            throw std::runtime_error( (const char*) errorMsg.char_str() );
         else
             DisplayError( nullptr, errorMsg );
     }
