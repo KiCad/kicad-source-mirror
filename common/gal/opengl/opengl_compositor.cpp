@@ -50,39 +50,44 @@ OPENGL_COMPOSITOR::~OPENGL_COMPOSITOR()
         clean();
 }
 
+
 void OPENGL_COMPOSITOR::SetAntialiasingMode( OPENGL_ANTIALIASING_MODE aMode )
 {
     m_currentAntialiasingMode = aMode;
-    if(m_initialized)
+
+    if( m_initialized )
         clean();
 }
+
 
 OPENGL_ANTIALIASING_MODE OPENGL_COMPOSITOR::GetAntialiasingMode() const
 {
     return m_currentAntialiasingMode;
 }
 
+
 void OPENGL_COMPOSITOR::Initialize()
 {
     if( m_initialized )
         return;
 
-    switch(m_currentAntialiasingMode) {
-    case OPENGL_ANTIALIASING_MODE::NONE:
-        m_antialiasing.reset( new ANTIALIASING_NONE( this ) );
-        break;
-    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
-        m_antialiasing.reset( new ANTIALIASING_SMAA( this, SMAA_QUALITY::HIGH ) );
-        break;
-    case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
-        m_antialiasing.reset( new ANTIALIASING_SMAA( this, SMAA_QUALITY::ULTRA ) );
-        break;
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
-        m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X2 ) );
-        break;
-    case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
-        m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X4 ) );
-        break;
+    switch( m_currentAntialiasingMode )
+    {
+        case OPENGL_ANTIALIASING_MODE::NONE:
+            m_antialiasing.reset( new ANTIALIASING_NONE( this ) );
+            break;
+        case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
+            m_antialiasing.reset( new ANTIALIASING_SMAA( this, SMAA_QUALITY::HIGH ) );
+            break;
+        case OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
+            m_antialiasing.reset( new ANTIALIASING_SMAA( this, SMAA_QUALITY::ULTRA ) );
+            break;
+        case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
+            m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X2 ) );
+            break;
+        case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
+            m_antialiasing.reset( new ANTIALIASING_SUPERSAMPLING( this, SUPERSAMPLING_MODE::X4 ) );
+            break;
     }
 
     VECTOR2U dims = m_antialiasing->GetInternalBufferSize();
@@ -117,6 +122,8 @@ void OPENGL_COMPOSITOR::Initialize()
 
 void OPENGL_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 {
+    assert( aWidth > 0 && aHeight > 0 );
+
     if( m_initialized )
         clean();
 
@@ -126,10 +133,12 @@ void OPENGL_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
     m_height = aHeight;
 }
 
+
 unsigned int OPENGL_COMPOSITOR::CreateBuffer()
 {
     return m_antialiasing->CreateBuffer();
 }
+
 
 unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
 {
@@ -241,11 +250,13 @@ unsigned int OPENGL_COMPOSITOR::CreateBuffer( VECTOR2U aDimensions )
     return usedBuffers();
 }
 
+
 GLenum OPENGL_COMPOSITOR::GetBufferTexture( unsigned int aBufferHandle )
 {
     assert( aBufferHandle > 0 && aBufferHandle <= usedBuffers() );
     return m_buffers[aBufferHandle - 1].textureTarget;
 }
+
 
 void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 {
@@ -264,12 +275,13 @@ void OPENGL_COMPOSITOR::SetBuffer( unsigned int aBufferHandle )
 
         glViewport( 0, 0,
                     m_buffers[m_curBuffer].dimensions.x, m_buffers[m_curBuffer].dimensions.y );
-    } else {
+    }
+    else
+    {
         glViewport( 0, 0, GetScreenSize().x, GetScreenSize().y );
     }
-
-
 }
+
 
 void OPENGL_COMPOSITOR::ClearBuffer()
 {
@@ -279,26 +291,30 @@ void OPENGL_COMPOSITOR::ClearBuffer()
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
 
+
 VECTOR2U OPENGL_COMPOSITOR::GetScreenSize() const
 {
-    return{ m_width, m_height };
+    return { m_width, m_height };
 }
+
 
 void OPENGL_COMPOSITOR::Begin()
 {
     m_antialiasing->Begin();
 }
 
+
 void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aBufferHandle )
 {
     m_antialiasing->DrawBuffer( aBufferHandle );
 }
 
+
 void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle )
 {
     assert( m_initialized );
     assert( aSourceHandle != 0 && aSourceHandle <= usedBuffers() );
-    assert (aDestHandle <= usedBuffers() );
+    assert( aDestHandle <= usedBuffers() );
 
     // Switch to the destination buffer and blit the scene
     SetBuffer ( aDestHandle );
@@ -340,12 +356,15 @@ void OPENGL_COMPOSITOR::DrawBuffer( unsigned int aSourceHandle, unsigned int aDe
     glPopMatrix();
 }
 
+
 void OPENGL_COMPOSITOR::Present()
 {
     m_antialiasing->Present();
 }
 
-void OPENGL_COMPOSITOR::bindFb( unsigned int aFb ) {
+
+void OPENGL_COMPOSITOR::bindFb( unsigned int aFb )
+{
     // Currently there are only 2 valid FBOs
     assert( aFb == DIRECT_RENDERING || aFb == m_mainFbo );
 

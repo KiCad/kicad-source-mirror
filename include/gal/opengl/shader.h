@@ -190,7 +190,7 @@ public:
      * @param aAttributeName is the name of the attribute.
      * @return the location.
      */
-    int GetAttribute( std::string aAttributeName ) const;
+    int GetAttribute( const std::string& aAttributeName ) const;
 
     /**
     * @brief Read the shader source file

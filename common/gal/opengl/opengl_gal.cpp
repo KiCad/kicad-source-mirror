@@ -82,7 +82,8 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 
     ++instanceCounter;
 
-    // Check if OpenGL requirements are met
+    // Check if OpenGL requirements are met. The test procedure also initializes a few parts
+    // of the OpenGL backend (e.g. GLEW), so it is required that it is invoked before any GL calls.
     runTest();
 
     // Make VBOs use shaders
@@ -192,7 +193,7 @@ OPENGL_GAL::~OPENGL_GAL()
 
 void OPENGL_GAL::OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aDisplayOptions )
 {
-    if(options.gl_antialiasing_mode != compositor->GetAntialiasingMode())
+    if( options.gl_antialiasing_mode != compositor->GetAntialiasingMode() )
     {
         compositor->SetAntialiasingMode( options.gl_antialiasing_mode );
         isFramebufferInitialized = false;
@@ -313,7 +314,7 @@ void OPENGL_GAL::BeginDrawing()
 
     // Something betreen BeginDrawing and EndDrawing seems to depend on
     // this texture unit being active, but it does not assure it itself.
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture( GL_TEXTURE0 );
 
     // Unbind buffers - set compositor for direct drawing
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );

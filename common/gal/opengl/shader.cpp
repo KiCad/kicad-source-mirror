@@ -157,7 +157,7 @@ void SHADER::SetParameter( int parameterNumber, float f0, float f1, float f2, fl
 }
 
 
-int SHADER::GetAttribute( std::string aAttributeName ) const
+int SHADER::GetAttribute( const std::string& aAttributeName ) const
 {
     return glGetAttribLocation( programNumber, aAttributeName.c_str() );
 }
@@ -209,7 +209,7 @@ std::string SHADER::ReadSource( const std::string& aShaderSourceName )
 {
     // Open the shader source for reading
     std::ifstream inputFile( aShaderSourceName.c_str(), std::ifstream::in );
-    std::string   shaderSource;
+    std::string shaderSource;
 
     if( !inputFile )
         throw std::runtime_error( "Can't read the shader source: " + aShaderSourceName );

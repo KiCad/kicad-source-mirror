@@ -90,7 +90,8 @@ public:
     virtual bool IsInitialized() const override { return IsShownOnScreen(); }
 
     ///> @copydoc GAL::IsVisible()
-    bool IsVisible() const override {
+    bool IsVisible() const override
+    {
         return IsShownOnScreen();
     }
 
