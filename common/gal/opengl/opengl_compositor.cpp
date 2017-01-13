@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -91,6 +91,18 @@ void OPENGL_COMPOSITOR::Initialize()
     }
 
     VECTOR2U dims = m_antialiasing->GetInternalBufferSize();
+    assert( dims.x != 0 && dims.y != 0 );
+
+    GLint maxBufSize;
+    glGetIntegerv( GL_MAX_RENDERBUFFER_SIZE_EXT, &maxBufSize );
+
+    // VECTOR2U is unsigned, so no need to check if < 0
+    if( dims.x > (unsigned) maxBufSize || dims.y >= (unsigned) maxBufSize )
+    {
+        throw std::runtime_error(
+                wxString::Format( "Requested render buffer size is %ux%u, but the max supported size is %dx%d",
+                dims.x, dims.y, maxBufSize, maxBufSize ) );
+    }
 
     // We need framebuffer objects for drawing the screen contents
     // Generate framebuffer and a depth buffer
