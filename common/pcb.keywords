@@ -25,6 +25,7 @@
 
 add_net
 allowed
+anchor
 angle
 arc
 arc_segments
@@ -52,6 +53,9 @@ connect
 connect_pads
 copperpour
 crossbar
+custom
+outline
+convexhull
 date
 descr
 die_length
@@ -117,6 +121,7 @@ none
 not_allowed
 np_thru_hole
 offset
+options
 oval
 pad
 pads
@@ -135,6 +140,7 @@ placed
 plus
 polygon
 portrait
+primitives
 priority
 pts
 radius

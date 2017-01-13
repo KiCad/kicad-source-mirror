@@ -6,10 +6,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <gr_basic.h>
+#include <trigo.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcbnew.h>
@@ -53,6 +54,8 @@ static PAD_SHAPE_T code_shape[] = {
     PAD_SHAPE_RECT,
     PAD_SHAPE_TRAPEZOID,
     PAD_SHAPE_ROUNDRECT,
+    PAD_SHAPE_CUSTOM,      // choice = CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR
+    PAD_SHAPE_CUSTOM       // choice = PAD_SHAPE_CUSTOM_RECT_ANCHOR
 };
 
 // the ordered index of the pad shape wxChoice in dialog.
@@ -63,6 +66,8 @@ enum CODE_CHOICE {
     CHOICE_SHAPE_RECT,
     CHOICE_SHAPE_TRAPEZOID,
     CHOICE_SHAPE_ROUNDRECT,
+    CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR,
+    CHOICE_SHAPE_CUSTOM_RECT_ANCHOR
 };
 
 
@@ -121,33 +126,14 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     else    // We are editing a "master" pad, i.e. a template to create new pads
         *m_dummyPad = *m_padMaster;
 
-    // Show the X and Y axis. It is usefull because pad shape can have an offset
-    // or be a complex shape.
-    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( KIGFX::COLOR4D(0.0, 0.0, 0.8, 1.0),
-                                               KIGFX::ORIGIN_VIEWITEM::CROSS,
-                                               Millimeter2iu( 0.2 ),
-                                               VECTOR2D( m_dummyPad->GetPosition() ) );
-    m_axisOrigin->SetDrawAtZero( true );
-
-    if( m_parent->IsGalCanvasActive() )
-    {
-
-        m_panelShowPadGal->UseColorScheme( &m_parent->Settings().Colors() );
-        m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
-        m_panelShowPadGal->Show();
-        m_panelShowPad->Hide();
-        m_panelShowPadGal->GetView()->Add( m_dummyPad );
-        m_panelShowPadGal->GetView()->Add( m_axisOrigin );
-        m_panelShowPadGal->StartDrawing();
-        Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PAD_PROPERTIES::OnResize ) );
-    }
-    else
-    {
-        m_panelShowPad->Show();
-        m_panelShowPadGal->Hide();
-    }
+    // Initialize canvas to be able to display the dummy pad:
+    prepareCanvas();
 
     initValues();
+
+    // Usually, TransferDataToWindow is called by OnInitDialog
+    // calling it here fixes all widgets sizes, and FinishDialogSettings can
+    // safely fix minsizes
     TransferDataToWindow();
 
     m_sdbSizerOK->SetDefault();
@@ -157,11 +143,47 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     FinishDialogSettings();
 }
 
+
 void DIALOG_PAD_PROPERTIES::OnInitDialog( wxInitDialogEvent& event )
 {
     m_PadNumCtrl->SetFocus();
     m_PadNumCtrl->SetSelection( -1, -1 );
 }
+
+void DIALOG_PAD_PROPERTIES::prepareCanvas()
+{
+    // Initialize the canvases (legacy or gal) to display the pad
+    // Enable the suitable canvas and make some inits
+
+    // Show the X and Y axis. It is usefull because pad shape can have an offset
+    // or be a complex shape.
+    KIGFX::COLOR4D axis_color = LIGHTBLUE;
+
+    m_axisOrigin = new KIGFX::ORIGIN_VIEWITEM( axis_color,
+                                               KIGFX::ORIGIN_VIEWITEM::CROSS,
+                                               Millimeter2iu( 0.2 ),
+                                               VECTOR2D( m_dummyPad->GetPosition() ) );
+    m_axisOrigin->SetDrawAtZero( true );
+
+    if( m_parent->IsGalCanvasActive() )
+    {
+        m_panelShowPadGal->UseColorScheme( &m_parent->Settings().Colors() );
+        m_panelShowPadGal->SwitchBackend( m_parent->GetGalCanvas()->GetBackend() );
+        m_panelShowPadGal->Show();
+        m_panelShowPad->Hide();
+        m_panelShowPadGal->GetView()->Add( m_dummyPad );
+        m_panelShowPadGal->GetView()->Add( m_axisOrigin );
+
+        m_panelShowPadGal->StartDrawing();
+        Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_PAD_PROPERTIES::OnResize ) );
+    }
+    else
+    {
+        m_panelShowPad->Show();
+        m_panelShowPadGal->Hide();
+    }
+}
+
 
 void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 {
@@ -221,6 +243,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     // If the pad is a circle, use the x size here instead.
     int ysize;
+
     if( m_dummyPad->GetShape() == PAD_SHAPE_CIRCLE )
         ysize = m_dummyPad->GetSize().x;
     else
@@ -249,7 +272,63 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     GRResetPenAndBrush( &dc );
     m_dummyPad->DrawShape( NULL, &dc, drawInfo );
 
-    // Draw X and Y axis. Hhis is particularly useful to show the
+    // draw selected primitives:
+    COLOR4D hcolor = CYAN;
+    long select = m_listCtrlShapes->GetFirstSelected();
+    wxPoint start, end, center;
+
+    while( select >= 0 )
+    {
+        PAD_CS_PRIMITIVE& primitive = m_primitives[select];
+
+        // The best way to calculate parameters to draw a primitive is to
+        // use a dummy DRAWSEGMENT and use its methods
+        // Note: in legacy canvas, the pad has the 0,0 position
+        DRAWSEGMENT dummySegment;
+        primitive.ExportTo( &dummySegment );
+        dummySegment.Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
+
+        switch( primitive.m_Shape )
+        {
+        case S_SEGMENT:         // usual segment : line with rounded ends
+            GRFilledSegment( NULL, &dc, dummySegment.GetStart(), dummySegment.GetEnd(),
+                             primitive.m_Thickness, hcolor );
+            break;
+
+        case S_ARC:             // Arc with rounded ends
+            GRArc1( NULL, &dc, dummySegment.GetArcEnd(), dummySegment.GetArcStart(),
+                    dummySegment.GetCenter(), primitive.m_Thickness, hcolor );
+            break;
+
+        case S_CIRCLE:          //  ring or circle
+            if( primitive.m_Thickness )
+            {
+                GRCircle(  NULL, &dc, dummySegment.GetCenter(), primitive.m_Radius,
+                           primitive.m_Thickness, hcolor );
+            }
+            else
+            {
+                GRFilledCircle( NULL, &dc, dummySegment.GetCenter(),
+                                primitive.m_Radius, hcolor );
+            }
+            break;
+
+        case S_POLYGON:         // polygon
+        {
+            std::vector<wxPoint>& poly = dummySegment.GetPolyPoints();
+            GRClosedPoly( NULL, &dc, poly.size(), &poly[0], /* filled */ true,
+                          primitive.m_Thickness, hcolor, hcolor );
+        }
+            break;
+
+        default:
+            break;
+        }
+
+        select = m_listCtrlShapes->GetNextSelected( select );
+    }
+
+    // Draw X and Y axis. This is particularly useful to show the
     // reference position of pads with offset and no hole, or custom pad shapes
     const int linethickness = 0;
     GRLine( NULL, &dc, -int( dc_size.x/scale ), 0, int( dc_size.x/scale ), 0,
@@ -376,7 +455,12 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
         // flip pad's layers
         m_dummyPad->SetLayerSet( FlipLayerMask( m_dummyPad->GetLayerSet() ) );
+
+        // flip custom pad shapes
+        m_dummyPad->FlipBasicShapes();
     }
+
+    m_primitives = m_dummyPad->GetBasicShapes();
 
     m_staticTextWarningPadFlipped->Show(m_isFlipped);
 
@@ -463,6 +547,11 @@ void DIALOG_PAD_PROPERTIES::initValues()
         break;
     }
 
+    if( m_dummyPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
+        m_ZoneCustomPadShape->SetSelection( 1 );
+    else
+        m_ZoneCustomPadShape->SetSelection( 0 );
+
     if( m_currentPad )
     {
         angle = m_currentPad->GetOrientation();
@@ -531,6 +620,13 @@ void DIALOG_PAD_PROPERTIES::initValues()
     case PAD_SHAPE_ROUNDRECT:
         m_PadShape->SetSelection( CHOICE_SHAPE_ROUNDRECT );
         break;
+
+    case PAD_SHAPE_CUSTOM:
+        if( m_dummyPad->GetAnchorPadShape() == PAD_SHAPE_RECT )
+            m_PadShape->SetSelection( CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
+        else
+            m_PadShape->SetSelection( CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR );
+        break;
     }
 
     m_OrientValue = angle / 10.0;
@@ -566,8 +662,90 @@ void DIALOG_PAD_PROPERTIES::initValues()
     OnDrillShapeSelected( cmd_event );
     OnPadShapeSelection( cmd_event );
     updateRoundRectCornerValues();
+
+    // Update basic shapes list
+    displayBasicShapesList();
 }
 
+// A small helper function, to display coordinates:
+static wxString formatCoord( wxPoint aCoord )
+{
+    return wxString::Format( "(X:%s Y:%s)",
+                CoordinateToString( aCoord.x, true ),
+                CoordinateToString( aCoord.y, true ) );
+}
+
+void DIALOG_PAD_PROPERTIES::displayBasicShapesList()
+{
+    m_listCtrlShapes->ClearAll();
+
+    wxListItem itemCol;
+    itemCol.SetImage(-1);
+
+    for( int ii = 0; ii < 5; ++ii )
+        m_listCtrlShapes->InsertColumn(ii, itemCol);
+
+    wxString bs_info[5];
+
+    for( unsigned ii = 0; ii < m_primitives.size(); ++ii )
+    {
+        const PAD_CS_PRIMITIVE& primitive = m_primitives[ii];
+
+        for( unsigned jj = 0; jj < 5; ++jj )
+            bs_info[jj].Empty();
+
+        bs_info[4] = wxString::Format( _( "width %s" ),
+                                       CoordinateToString( primitive.m_Thickness, true ) );
+
+        switch( primitive.m_Shape )
+        {
+        case S_SEGMENT:         // usual segment : line with rounded ends
+            bs_info[0] = _( "Segment" );
+            bs_info[1] = _( "from " ) + formatCoord( primitive.m_Start );
+            bs_info[2] = _( "to " ) +  formatCoord( primitive.m_End );
+            break;
+
+        case S_ARC:             // Arc with rounded ends
+            bs_info[0] = _( "Arc" );
+            bs_info[1] = _( "center " ) + formatCoord( primitive.m_Start );     // Center
+            bs_info[2] = _( "start " ) + formatCoord( primitive.m_End );       // Start point
+            bs_info[3] = wxString::Format( _( "angle %s" ), FMT_ANGLE( primitive.m_ArcAngle ) );
+            break;
+
+        case S_CIRCLE:          //  ring or circle
+            if( primitive.m_Thickness )
+                bs_info[0] = _( "ring" );
+            else
+                bs_info[0] = _( "circle" );
+
+            bs_info[1] = formatCoord( primitive.m_Start );
+            bs_info[2] = wxString::Format( _( "radius %s" ),
+                                CoordinateToString( primitive.m_Radius, true ) );
+            break;
+
+        case S_POLYGON:         // polygon
+            bs_info[0] = "Polygon";
+            bs_info[1] = wxString::Format( _( "corners count %d" ), primitive.m_Poly.size() );
+            break;
+
+        default:
+            bs_info[0] = "Unknown primitive";
+            break;
+        }
+
+        long tmp = m_listCtrlShapes->InsertItem(ii, bs_info[0]);
+        m_listCtrlShapes->SetItemData(tmp, ii);
+
+        for( int jj = 0, col = 0; jj < 5; ++jj )
+        {
+            m_listCtrlShapes->SetItem(tmp, col++, bs_info[jj]);
+        }
+    }
+
+    // Now columns are filled, ensure correct width of columns
+    for( unsigned ii = 0; ii < 5; ++ii )
+        m_listCtrlShapes->SetColumnWidth( ii, wxLIST_AUTOSIZE );
+}
 
 void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
 {
@@ -578,6 +756,8 @@ void DIALOG_PAD_PROPERTIES::OnResize( wxSizeEvent& event )
 
 void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
 {
+    bool is_custom = false;
+
     switch( m_PadShape->GetSelection() )
     {
     case CHOICE_SHAPE_CIRCLE:
@@ -622,10 +802,29 @@ void DIALOG_PAD_PROPERTIES::OnPadShapeSelection( wxCommandEvent& event )
         m_tcCornerSizeRatio->ChangeValue( wxString::Format( "%.1f",
                                 m_dummyPad->GetRoundRectRadiusRatio()*100 ) );
         break;
+
+    case CHOICE_SHAPE_CUSTOM_CIRC_ANCHOR:     // PAD_SHAPE_CUSTOM, circular anchor
+    case CHOICE_SHAPE_CUSTOM_RECT_ANCHOR:     // PAD_SHAPE_CUSTOM, rect anchor
+        is_custom = true;
+        m_ShapeDelta_Ctrl->Enable( false );
+        m_trapDeltaDirChoice->Enable( false );
+        m_ShapeSize_Y_Ctrl->Enable(
+            m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR );
+        m_ShapeOffset_X_Ctrl->Enable( false );
+        m_ShapeOffset_Y_Ctrl->Enable( false );
+        break;
     }
 
     // A few widgets are enabled only for rounded rect pads:
     m_tcCornerSizeRatio->Enable( m_PadShape->GetSelection() == CHOICE_SHAPE_ROUNDRECT );
+
+    // PAD_SHAPE_CUSTOM type has constraints for zone connection and thermal shape:
+    // only not connected is allowed to avoid destroying the shape.
+    // Enable/disable options
+    m_ZoneConnectionChoice->Enable( !is_custom );
+    m_ThermalWidthCtrl->Enable( !is_custom );
+    m_ThermalGapCtrl->Enable( !is_custom );
+    m_ZoneCustomPadShape->Enable( is_custom );
 
     transferDataToPad( m_dummyPad );
 
@@ -872,6 +1071,14 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         }
     }
 
+    if( m_dummyPad->GetShape() == PAD_SHAPE_CUSTOM )
+    {
+        if( !m_dummyPad->MergeBasicShapesAsPolygon( ) )
+            error_msgs.Add(
+                _( "Incorrect pad shape: the shape must be equivalent to only one polygon" ) );
+    }
+
+
     if( error_msgs.GetCount() )
     {
         HTML_MESSAGE_BOX dlg( this, _("Pad setup errors list" ) );
@@ -887,7 +1094,77 @@ void DIALOG_PAD_PROPERTIES::redraw()
 {
     if( m_parent->IsGalCanvasActive() )
     {
-        m_parent->GetGalCanvas()->GetView()->Update( m_dummyPad );
+        auto view = m_panelShowPadGal->GetView();
+        m_panelShowPadGal->StopDrawing();
+
+        view->SetTopLayer( F_SilkS );
+
+        view->Update( m_dummyPad );
+
+        // delete previous items if highlight list
+        while( m_highligth.size() )
+        {
+            delete m_highligth.back(); // the dtor also removes item from view
+            m_highligth.pop_back();
+        }
+
+        // highlight selected primitives:
+        long select = m_listCtrlShapes->GetFirstSelected();
+
+        while( select >= 0 )
+        {
+            PAD_CS_PRIMITIVE& primitive = m_primitives[select];
+
+            DRAWSEGMENT* dummySegment = new DRAWSEGMENT;
+            dummySegment->SetLayer( F_SilkS );
+            primitive.ExportTo( dummySegment );
+            dummySegment->Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
+            dummySegment->Move( m_dummyPad->GetPosition() );
+
+            // Update selected primitive (highligth selected)
+            switch( primitive.m_Shape )
+            {
+            case S_SEGMENT:
+            case S_ARC:
+                break;
+
+            case S_CIRCLE:          //  ring or circle
+                if( primitive.m_Thickness == 0 )    // filled circle
+                {   // the filled circle option does not exist in a DRAWSEGMENT
+                    // but it is easy to create it with a circle having the
+                    // right radius and outline width
+                    wxPoint end = dummySegment->GetCenter();
+                    end.x += primitive.m_Radius/2;
+                    dummySegment->SetEnd( end );
+                    dummySegment->SetWidth( primitive.m_Radius );
+                }
+                break;
+
+            case S_POLYGON:         // polygon
+            {
+                std::vector<wxPoint>& poly = dummySegment->GetPolyPoints();
+
+                for( unsigned ii = 0; ii < poly.size(); ii++ )
+                {
+                    poly[ii] += m_dummyPad->GetPosition();
+                }
+            }
+                break;
+
+            default:
+                delete dummySegment;
+                dummySegment = nullptr;
+                break;
+            }
+
+            if( dummySegment )
+            {
+                view->Add( dummySegment );
+                m_highligth.push_back( dummySegment );
+            }
+
+            select = m_listCtrlShapes->GetNextSelected( select );
+        }
 
         BOX2I bbox = m_dummyPad->ViewBBox();
 
@@ -897,14 +1174,15 @@ void DIALOG_PAD_PROPERTIES::redraw()
             BOX2I drawbox;
             drawbox.Move( m_dummyPad->GetPosition() );
             drawbox.Inflate( bbox.GetSize().x*2, bbox.GetSize().y*2 );
-            m_panelShowPadGal->GetView()->SetBoundary( drawbox );
+            view->SetBoundary( drawbox );
 
             // Autozoom
-            m_panelShowPadGal->GetView()->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
+            view->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
 
             // Add a margin
-            m_panelShowPadGal->GetView()->SetScale( m_panelShowPadGal->GetView()->GetScale() * 0.7 );
+            view->SetScale( m_panelShowPadGal->GetView()->GetScale() * 0.7 );
 
+            m_panelShowPadGal->StartDrawing();
             m_panelShowPadGal->Refresh();
         }
     }
@@ -1004,6 +1282,19 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     m_currentPad->SetPadToDieLength( m_padMaster->GetPadToDieLength() );
 
+    if( m_padMaster->GetShape() != PAD_SHAPE_CUSTOM )
+        m_padMaster->DeleteBasicShapesList();
+
+
+    m_currentPad->SetAnchorPadShape( m_padMaster->GetAnchorPadShape() );
+    m_currentPad->SetBasicShapes( m_padMaster->GetBasicShapes() );
+
+    if( m_isFlipped )
+    {
+        m_currentPad->SetLayerSet( FlipLayerMask( m_currentPad->GetLayerSet() ) );
+        m_currentPad->FlipBasicShapes();
+    }
+
     if( m_currentPad->GetLayerSet() != m_padMaster->GetLayerSet() )
     {
         rastnestIsChanged = true;
@@ -1055,6 +1346,9 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         m_currentPad->SetShape( PAD_SHAPE_RECT );
     }
 
+    // define the way the clearnce area is defined in zones
+    m_currentPad->SetCustomShapeInZoneOpt( m_padMaster->GetCustomShapeInZoneOpt() );
+
     if( footprint )
         footprint->CalculateBoundingBox();
 
@@ -1088,7 +1382,11 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     aPad->SetAttribute( code_type[m_PadType->GetSelection()] );
     aPad->SetShape( code_shape[m_PadShape->GetSelection()] );
+    aPad->SetAnchorPadShape( m_PadShape->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR ?
+                                PAD_SHAPE_RECT : PAD_SHAPE_CIRCLE );
 
+    if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
+        aPad->SetBasicShapes( m_primitives );
 
     // Read pad clearances values:
     aPad->SetLocalClearance( ValueFromTextCtrl( *m_NetClearanceValueCtrl ) );
@@ -1156,6 +1454,10 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     y = ValueFromTextCtrl( *m_ShapeSize_Y_Ctrl );
 
     if( aPad->GetShape() == PAD_SHAPE_CIRCLE )
+        y = x;
+
+    // for custom shped pads, the pad size is the anchor pad size:
+    if( aPad->GetShape() == PAD_SHAPE_CUSTOM && aPad->GetAnchorPadShape() == PAD_SHAPE_CIRCLE )
         y = x;
 
     aPad->SetSize( wxSize( x, y ) );
@@ -1246,6 +1548,27 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
 
     case PAD_SHAPE_ROUNDRECT:
         aPad->SetDelta( wxSize( 0, 0 ) );
+        break;
+
+    case PAD_SHAPE_CUSTOM:
+        aPad->SetOffset( wxPoint( 0, 0 ) );
+        aPad->SetDelta( wxSize( 0, 0 ) );
+
+        // The pad custom has a "anchor pad" (a basic shape: round or rect pad)
+        // that is the minimal area of this pad, and is usefull to ensure a hole
+        // diameter is acceptable, and is used in Gerber files as flashed area
+        // reference
+        if( aPad->GetAnchorPadShape() == PAD_SHAPE_CIRCLE )
+        {
+            x = aPad->GetSize().x;
+            aPad->SetSize( wxSize( x, x ) );
+        }
+
+        // define the way the clearance area is defined in zones
+        aPad->SetCustomShapeInZoneOpt( m_ZoneCustomPadShape->GetSelection() == 0 ?
+                                       CUST_PAD_SHAPE_IN_ZONE_OUTLINE :
+                                       CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL );
+
         break;
 
     default:
@@ -1358,6 +1681,230 @@ void DIALOG_PAD_PROPERTIES::OnValuesChanged( wxCommandEvent& event )
         // for rounded rect pads
         updateRoundRectCornerValues();
 
+        redraw();
+    }
+}
+
+void DIALOG_PAD_PROPERTIES::editBasicShape()
+{
+    long select = m_listCtrlShapes->GetFirstSelected();
+
+    if( select < 0 )
+    {
+        wxMessageBox( _( "No shape selected" ) );
+        return;
+    }
+
+    PAD_CS_PRIMITIVE& shape = m_primitives[select];
+
+    if( shape.m_Shape == S_POLYGON )
+    {
+        DIALOG_PAD_BASIC_SHP_POLY_PROPS dlg( this, &shape );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return;
+
+        dlg.TransferDataFromWindow();
+    }
+
+    else
+    {
+        DIALOG_PAD_BASICSHAPES_PROPERTIES dlg( this, &shape );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return;
+
+        dlg.TransferDataFromWindow();
+    }
+
+    displayBasicShapesList();
+
+    if( m_canUpdate )
+    {
+        transferDataToPad( m_dummyPad );
+        redraw();
+    }
+}
+
+
+void DIALOG_PAD_PROPERTIES::OnPrimitiveSelection( wxListEvent& event )
+{
+    // Called on a double click on the basic shapes list
+    // To Do: highligth the primitive(s) currently selected.
+    redraw();
+}
+
+
+/// Called on a double click on the basic shapes list
+void DIALOG_PAD_PROPERTIES::onCustomShapeDClick( wxMouseEvent& event )
+{
+    editBasicShape();
+}
+
+
+// Called on a click on basic shapes list panel button
+void DIALOG_PAD_PROPERTIES::onEditShape( wxCommandEvent& event )
+{
+    editBasicShape();
+}
+
+// Called on a click on basic shapes list panel button
+void DIALOG_PAD_PROPERTIES::onDeleteShape( wxCommandEvent& event )
+{
+    long select = m_listCtrlShapes->GetFirstSelected();
+
+    if( select < 0 )
+        return;
+
+    // Multiple selections are allowed. get them and remove corresponding shapes
+    std::vector<long> indexes;
+    indexes.push_back( select );
+
+    while( ( select = m_listCtrlShapes->GetNextSelected( select ) ) >= 0 )
+        indexes.push_back( select );
+
+    // Erase all select shapes
+    for( unsigned ii = indexes.size(); ii > 0; --ii )
+        m_primitives.erase( m_primitives.begin() + indexes[ii-1] );
+
+    displayBasicShapesList();
+
+    if( m_canUpdate )
+    {
+        transferDataToPad( m_dummyPad );
+        redraw();
+    }
+}
+
+
+void DIALOG_PAD_PROPERTIES::onAddShape( wxCommandEvent& event )
+{
+    // Ask user for shape type
+    wxString shapelist[] =
+    {
+        _( "Segment" ), _( "Arc" ), _( "ring/circle" ), _( "polygon" )
+    };
+
+    int type = wxGetSingleChoiceIndex( wxEmptyString, _( " Select shape type:" ),
+                    DIM( shapelist ), shapelist, 0 );
+
+    STROKE_T listtype[] =
+    {
+        S_SEGMENT, S_ARC, S_CIRCLE, S_POLYGON
+    };
+
+    PAD_CS_PRIMITIVE basicShape( listtype[type] );
+
+    if( listtype[type] == S_POLYGON )
+    {
+        DIALOG_PAD_BASIC_SHP_POLY_PROPS dlg( this, &basicShape );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return;
+    }
+    else
+    {
+        DIALOG_PAD_BASICSHAPES_PROPERTIES dlg( this, &basicShape );
+
+        if( dlg.ShowModal() != wxID_OK )
+            return;
+    }
+
+    m_primitives.push_back( basicShape );
+
+    displayBasicShapesList();
+
+    if( m_canUpdate )
+    {
+        transferDataToPad( m_dummyPad );
+        redraw();
+    }
+}
+
+
+void DIALOG_PAD_PROPERTIES::onImportShape( wxCommandEvent& event )
+{
+    wxMessageBox( "Not yet available" );
+}
+
+
+void DIALOG_PAD_PROPERTIES::onGeometryTransform( wxCommandEvent& event )
+{
+    long select = m_listCtrlShapes->GetFirstSelected();
+
+    if( select < 0 )
+    {
+        wxMessageBox( _( "No shape selected" ) );
+        return;
+    }
+
+    // Multiple selections are allowed. Build selected shapes list
+    std::vector<long> indexes;
+    indexes.push_back( select );
+
+    std::vector<PAD_CS_PRIMITIVE*> shapeList;
+    shapeList.push_back( &m_primitives[select] );
+
+    while( ( select = m_listCtrlShapes->GetNextSelected( select ) ) >= 0 )
+    {
+        indexes.push_back( select );
+        shapeList.push_back( &m_primitives[select] );
+    }
+
+    DIALOG_PAD_BASICSHAPES_TRANSFORM dlg( this, shapeList );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    // Transfert new settings:
+    dlg.Transform();
+
+    displayBasicShapesList();
+
+    if( m_canUpdate )
+    {
+        transferDataToPad( m_dummyPad );
+        redraw();
+    }
+}
+
+
+void DIALOG_PAD_PROPERTIES::onDuplicateShape( wxCommandEvent& event )
+{
+    long select = m_listCtrlShapes->GetFirstSelected();
+
+    if( select < 0 )
+    {
+        wxMessageBox( _( "No shape selected" ) );
+        return;
+    }
+
+    // Multiple selections are allowed. Build selected shapes list
+    std::vector<long> indexes;
+    indexes.push_back( select );
+
+    std::vector<PAD_CS_PRIMITIVE*> shapeList;
+    shapeList.push_back( &m_primitives[select] );
+
+    while( ( select = m_listCtrlShapes->GetNextSelected( select ) ) >= 0 )
+    {
+        indexes.push_back( select );
+        shapeList.push_back( &m_primitives[select] );
+    }
+
+    DIALOG_PAD_BASICSHAPES_TRANSFORM dlg( this, shapeList, true );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    // Transfert new settings:
+    dlg.Transform( &m_primitives, dlg.GetDuplicateCount() );
+
+    displayBasicShapesList();
+
+    if( m_canUpdate )
+    {
+        transferDataToPad( m_dummyPad );
         redraw();
     }
 }

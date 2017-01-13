@@ -325,6 +325,10 @@ if( KICAD_USE_OCE )
     add_definitions( -DKICAD_USE_OCE )
 endif()
 
+if( KICAD_USE_CUSTOM_PADS )
+    add_definitions( -DKICAD_USE_CUSTOM_PADS )
+endif()
+
 if( USE_WX_GRAPHICS_CONTEXT OR APPLE )
     add_definitions( -DUSE_WX_GRAPHICS_CONTEXT )
 endif()

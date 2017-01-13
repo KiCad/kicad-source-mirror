@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 17 2016)
+// C++ code generated with wxFormBuilder (version Jul  2 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class wxListView;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -30,11 +31,14 @@ class DIALOG_SHIM;
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/listctrl.h>
+#include <wx/button.h>
 #include <wx/notebook.h>
 #include <wxBasePcbFrame.h>
 #include <pcb_draw_panel_gal.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
+#include <wx/spinctrl.h>
+#include <wx/grid.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -145,16 +149,29 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextRatio;
 		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
+		wxStaticBoxSizer* m_sbSizerZonesSettings;
 		wxStaticText* m_staticText40;
 		wxChoice* m_ZoneConnectionChoice;
-		wxStaticText* m_staticText53;
 		wxStaticText* m_staticText49;
 		wxTextCtrl* m_ThermalWidthCtrl;
 		wxStaticText* m_ThermalWidthUnits;
 		wxStaticText* m_staticText52;
 		wxTextCtrl* m_ThermalGapCtrl;
 		wxStaticText* m_ThermalGapUnits;
+		wxStaticText* m_staticTextcps;
+		wxChoice* m_ZoneCustomPadShape;
 		wxStaticText* m_staticTextWarning;
+		wxPanel* m_panelCustomShape;
+		wxBoxSizer* m_bSizerPanelShapes;
+		wxStaticText* m_staticTextShapesList;
+		wxStaticText* m_staticTextShapesListWraning;
+		wxListView* m_listCtrlShapes;
+		wxButton* m_buttonDel;
+		wxButton* m_buttonEditShape;
+		wxButton* m_buttonAddShape;
+		wxButton* m_buttonDup;
+		wxButton* m_buttonGeometry;
+		wxButton* m_buttonImport;
 		wxPanel* m_panelShowPad;
 		PCB_DRAW_PANEL_GAL* m_panelShowPadGal;
 		KIGFX::GAL_DISPLAY_OPTIONS m_galOptions;
@@ -172,6 +189,14 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnSetLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCornerSizePercentChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCustomShapeDClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnPrimitiveSelection( wxListEvent& event ) { event.Skip(); }
+		virtual void onDeleteShape( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onEditShape( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAddShape( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onDuplicateShape( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onGeometryTransform( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onImportShape( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
 		
 	
@@ -179,6 +204,117 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		
 		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 785,659 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER ); 
 		~DIALOG_PAD_PROPERTIES_BASE();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE : public DIALOG_SHIM
+{
+	private:
+	
+	protected:
+		wxStaticText* m_staticTextInfo;
+		wxStaticText* m_staticTextPosStart;
+		wxStaticText* m_staticTextStartX;
+		wxTextCtrl* m_textCtrPosX;
+		wxStaticText* m_staticTextStartY;
+		wxTextCtrl* m_textCtrPosY;
+		wxStaticText* m_staticTextPosUnit;
+		wxStaticText* m_staticTextPosEnd;
+		wxStaticText* m_staticTextEndX;
+		wxTextCtrl* m_textCtrEndX;
+		wxStaticText* m_staticTextEndY;
+		wxTextCtrl* m_textCtrEndY;
+		wxStaticText* m_staticTextEndUnit;
+		wxStaticText* m_staticTextAngle;
+		wxTextCtrl* m_textCtrAngle;
+		wxStaticText* m_staticTextAngleUnit;
+		wxStaticText* m_staticTextThickness;
+		wxTextCtrl* m_textCtrlThickness;
+		wxStaticText* m_staticTextThicknessUnit;
+		wxStaticLine* m_staticline1;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
+	
+	public:
+		
+		DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 561,243 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE : public DIALOG_SHIM
+{
+	private:
+	
+	protected:
+		wxStaticText* m_staticTextMove;
+		wxStaticText* m_staticTextMoveX;
+		wxTextCtrl* m_textCtrMoveX;
+		wxStaticText* m_staticTextMoveY;
+		wxTextCtrl* m_textCtrMoveY;
+		wxStaticText* m_staticTextMoveUnit;
+		wxStaticText* m_staticTextAngle;
+		wxTextCtrl* m_textCtrAngle;
+		wxStaticText* m_staticTextAngleUnit;
+		wxStaticText* m_staticTextSF;
+		wxTextCtrl* m_textCtrlScalingFactor;
+		wxStaticText* m_staticTextDupCnt;
+		wxSpinCtrl* m_spinCtrlDuplicateCount;
+		wxStaticLine* m_staticline1;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
+	
+	public:
+		
+		DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pad Custom Shape Geometry Transform"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 472,208 ), long style = wxDEFAULT_DIALOG_STYLE ); 
+		~DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE
+///////////////////////////////////////////////////////////////////////////////
+class DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE : public DIALOG_SHIM
+{
+	private:
+	
+	protected:
+		wxStaticText* m_staticTextShapesListWarning;
+		wxStaticText* m_staticTextValidate;
+		wxGrid* m_gridCornersList;
+		wxButton* m_buttonAdd;
+		wxButton* m_buttonDelete;
+		wxPanel* m_panelPoly;
+		wxStaticText* m_staticTextThickness;
+		wxTextCtrl* m_textCtrlThickness;
+		wxStaticText* m_staticTextThicknessUnit;
+		wxStaticText* m_staticTextInfo;
+		wxStaticLine* m_staticline3;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void onGridSelect( wxGridRangeSelectEvent& event ) { event.Skip(); }
+		virtual void onCellSelect( wxGridEvent& event ) { event.Skip(); }
+		virtual void onButtonAdd( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonDelete( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPaintPolyPanel( wxPaintEvent& event ) { event.Skip(); }
+		virtual void onPolyPanelResize( wxSizeEvent& event ) { event.Skip(); }
+		
+	
+	public:
+		
+		DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Basic Shape Polygon"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 503,396 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE();
 	
 };
 

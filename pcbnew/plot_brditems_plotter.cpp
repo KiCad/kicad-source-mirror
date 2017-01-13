@@ -182,6 +182,19 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
                                       aPad->GetOrientation(), aPlotMode, &gbr_metadata );
         break;
 
+    case PAD_SHAPE_CUSTOM:
+        {
+        SHAPE_POLY_SET polygons;
+        aPad->MergeBasicShapesAsPolygon(&polygons, 64 );
+
+        if( polygons.OutlineCount() == 0 )
+            break;
+
+        aPad->BasicShapesAsPolygonToBoardPosition( &polygons, shape_pos, aPad->GetOrientation() );
+        m_plotter->FlashPadCustom( shape_pos, aPad->GetSize(), &polygons, aPlotMode, &gbr_metadata );
+        }
+        break;
+
     case PAD_SHAPE_RECT:
     default:
         m_plotter->FlashPadRect( shape_pos, aPad->GetSize(),

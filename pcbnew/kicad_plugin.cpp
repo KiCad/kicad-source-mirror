@@ -1238,11 +1238,12 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
 
     switch( aPad->GetShape() )
     {
-    case PAD_SHAPE_CIRCLE:    shape = "circle";       break;
-    case PAD_SHAPE_RECT:      shape = "rect";         break;
-    case PAD_SHAPE_OVAL:      shape = "oval";         break;
-    case PAD_SHAPE_TRAPEZOID: shape = "trapezoid";    break;
-    case PAD_SHAPE_ROUNDRECT: shape = "roundrect";    break;
+    case PAD_SHAPE_CIRCLE:      shape = "circle";       break;
+    case PAD_SHAPE_RECT:        shape = "rect";         break;
+    case PAD_SHAPE_OVAL:        shape = "oval";         break;
+    case PAD_SHAPE_TRAPEZOID:   shape = "trapezoid";    break;
+    case PAD_SHAPE_ROUNDRECT:   shape = "roundrect";    break;
+    case PAD_SHAPE_CUSTOM:      shape = "custom";       break;
 
     default:
         THROW_IO_ERROR( wxString::Format( _( "unknown pad type: %d"), aPad->GetShape() ) );
@@ -1344,6 +1345,107 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     {
         m_out->Print( 0, "\n" );
         m_out->Print( aNestLevel+1, "%s", output.c_str()+1 );   // +1 skips 1st space on 1st element
+    }
+
+    if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
+    {
+        m_out->Print( 0, "\n");
+        m_out->Print( aNestLevel+1, "(options" );
+
+        if( aPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
+            m_out->Print( 0, " (clearance convexhull)" );
+        #if 1   // Set to 1 to output the default option
+        else
+            m_out->Print( 0, " (clearance outline)" );
+        #endif
+
+        // Output the anchor pad shape (circle/rect)
+        if( aPad->GetAnchorPadShape() == PAD_SHAPE_RECT )
+            shape = "rect";
+        else
+            shape = "circle";
+
+        m_out->Print( 0, " (anchor %s)", shape );
+
+        m_out->Print( 0, ")");  // end of (options ...
+
+        // Output graphic primitive of the pad shape
+        m_out->Print( 0, "\n");
+        m_out->Print( aNestLevel+1, "(primitives" );
+
+        int nested_level = aNestLevel+2;
+
+        // Output all basic shapes
+        for( unsigned icnt = 0; icnt < aPad->GetBasicShapes().size(); ++icnt )
+        {
+            m_out->Print( 0, "\n");
+
+            const PAD_CS_PRIMITIVE& primitive = aPad->GetBasicShapes()[icnt];
+
+            switch( primitive.m_Shape )
+            {
+            case S_SEGMENT:         // usual segment : line with rounded ends
+                m_out->Print( nested_level, "(gr_line (start %s) (end %s) (width %s))",
+                              FMT_IU( primitive.m_Start ).c_str(),
+                              FMT_IU( primitive.m_End ).c_str(),
+                              FMT_IU( primitive.m_Thickness ).c_str() );
+                break;
+
+            case S_ARC:             // Arc with rounded ends
+                m_out->Print( nested_level, "(gr_arc (start %s) (end %s) (angle %s) (width %s))",
+                              FMT_IU( primitive.m_Start ).c_str(),
+                              FMT_IU( primitive.m_End ).c_str(),
+                              FMT_ANGLE( primitive.m_ArcAngle ).c_str(),
+                              FMT_IU( primitive.m_Thickness ).c_str() );
+                break;
+
+            case S_CIRCLE:          //  ring or circle (circle if width == 0
+                m_out->Print( nested_level, "(gr_circle (center %s) (end %s %s) (width %s))",
+                              FMT_IU( primitive.m_Start ).c_str(),
+                              FMT_IU( primitive.m_Start.x + primitive.m_Radius ).c_str(),
+                              FMT_IU( primitive.m_Start.y ).c_str(),
+                              FMT_IU( primitive.m_Thickness ).c_str() );
+                break;
+
+            case S_POLYGON:         // polygon
+                if( primitive.m_Poly.size() < 2 )
+                    break;      // Malformed polygon.
+
+                {
+                m_out->Print( nested_level, "(gr_poly (pts\n");
+
+                // Write the polygon corners coordinates:
+                const std::vector< wxPoint>& poly = primitive.m_Poly;
+                int newLine = 0;
+
+                for( unsigned ii = 0; ii < poly.size(); ii++ )
+                {
+                    if( newLine == 0 )
+                        m_out->Print( nested_level+1, " (xy %s)", FMT_IU( wxPoint( poly[ii].x, poly[ii].y ) ).c_str() );
+                    else
+                        m_out->Print( 0, " (xy %s)", FMT_IU( wxPoint( poly[ii].x, poly[ii].y ) ).c_str() );
+
+                    if( ++newLine > 4 )
+                    {
+                        newLine = 0;
+                        m_out->Print( 0, "\n" );
+                    }
+                }
+
+                if( primitive.m_Thickness != 0 )
+                    m_out->Print( 0, ") (width %s))", FMT_IU( primitive.m_Thickness ).c_str() );
+                else
+                    m_out->Print( 0, "))");
+                }
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        m_out->Print( 0, "\n");
+        m_out->Print( aNestLevel+1, ")" );   // end of (basic_shapes
     }
 
     m_out->Print( 0, ")\n" );

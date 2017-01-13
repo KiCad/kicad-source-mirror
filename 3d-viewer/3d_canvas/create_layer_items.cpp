@@ -296,8 +296,8 @@ COBJECT2D *CINFO3D_VISU::createNewTrack( const TRACK* aTrack,
 // void D_PAD:: TransformShapeWithClearanceToPolygon(
 // board_items_to_polygon_shape_transform.cpp
 void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
-                                                    CGENERICCONTAINER2D *aDstContainer,
-                                                    int aClearanceValue ) const
+                                              CGENERICCONTAINER2D *aDstContainer,
+                                              int aClearanceValue ) const
 {
     const int dx = (aPad->GetSize().x / 2) + aClearanceValue;
     const int dy = (aPad->GetSize().y / 2) + aClearanceValue;
@@ -495,8 +495,23 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
     }
     break;
 
-    default:
-        wxFAIL_MSG( "CINFO3D_VISU::createNewPadWithClearance - a pad shape type is not implemented" );
+    case PAD_SHAPE_CUSTOM:
+    {
+        SHAPE_POLY_SET polyList;     // Will contain the pad outlines in board coordinates
+        polyList.Append( aPad->GetCustomShapeAsPolygon() );
+        aPad->BasicShapesAsPolygonToBoardPosition( &polyList, aPad->ShapePos(), aPad->GetOrientation() );
+
+        if( aClearanceValue )
+            polyList.Inflate( aClearanceValue, 32 );
+
+        // This convert the poly in outline and holes
+        polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
+        polyList.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+        // Add the PAD polygon
+        Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits, *aPad );
+
+    }
         break;
     }
 }
@@ -565,13 +580,10 @@ void CINFO3D_VISU::createNewPad( const D_PAD* aPad,
 {
     switch( aPad->GetShape() )
     {
-    default:
-        wxFAIL_MSG( wxT( "CINFO3D_VISU::createNewPad: found a not implemented pad shape (new shape?)" ) );
-        break;
-
     case PAD_SHAPE_CIRCLE:
     case PAD_SHAPE_OVAL:
     case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE_CUSTOM:
         createNewPadWithClearance( aPad, aDstContainer, aInflateValue.x );
         break;
 

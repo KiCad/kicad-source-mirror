@@ -460,6 +460,93 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     }
         break;
 
+    case PAD_SHAPE_CUSTOM:
+    {
+        // The full shape has 2 items
+        // 1- The anchor pad: a round or rect pad located at pad position
+        // 2- The custom complex shape
+        // Note: The anchor pad shape is containing by the custom complex shape polygon
+        // The anchor pad is shown to help user to see where is the anchor, only in sketch mode
+        // (In filled mode, it is merged with the basic shapes)
+        wxPoint pad_pos = GetPosition() - aDrawInfo.m_Offset;
+
+        // In sketch mode only: Draw the anchor pad: a round or rect pad
+        if( !aDrawInfo.m_ShowPadFilled )
+        {
+            if( GetAnchorPadShape() == PAD_SHAPE_RECT )
+            {
+                wxPoint poly[4];
+                poly[0] = wxPoint( - halfsize.x, - halfsize.y );
+                poly[1] = wxPoint( - halfsize.x, + halfsize.y );
+                poly[2] = wxPoint( + halfsize.x, + halfsize.y );
+                poly[3] = wxPoint( + halfsize.x, - halfsize.y );
+
+                for( int ii = 0; ii < 4; ++ii )
+                {
+                    RotatePoint( &poly[ii], m_Orient );
+                    poly[ii] += pad_pos;
+                }
+
+                GRClosedPoly( aClipBox, aDC, 4, poly, false, 0,
+                              aDrawInfo.m_Color, aDrawInfo.m_Color );
+            }
+            else
+            {
+                GRCircle( aClipBox, aDC, pad_pos.x, pad_pos.y,
+                          halfsize.x,
+                          m_PadSketchModePenSize, aDrawInfo.m_Color );
+            }
+        }
+
+        SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
+        outline.Append( m_customShapeAsPolygon );
+        BasicShapesAsPolygonToBoardPosition( &outline, pad_pos, GetOrientation() );
+        SHAPE_LINE_CHAIN* poly;
+
+        const int segmentToCircleCount = 32;
+
+        if( aDrawInfo.m_Mask_margin.x )
+        {
+            SHAPE_POLY_SET clearance_outline;
+            clearance_outline.Append( outline );
+            clearance_outline.Inflate( aDrawInfo.m_Mask_margin.x, segmentToCircleCount );
+
+            poly = &clearance_outline.Outline( 0 );
+        }
+        else
+        {
+            // Draw the polygon: only one polygon is expected
+            // However we provide a multi polygon shape drawing
+            // ( for the future or to show a non expected shape )
+            for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+            {
+                poly = &outline.Outline( jj );
+
+                GRClosedPoly( aClipBox, aDC, poly->PointCount(),
+                        (wxPoint*)&poly->Point( 0 ), aDrawInfo.m_ShowPadFilled, 0,
+                        aDrawInfo.m_Color, aDrawInfo.m_Color );
+            }
+        }
+
+        if( aDrawInfo.m_PadClearance )
+        {
+            SHAPE_POLY_SET clearance_outline;
+            clearance_outline.Append( outline );
+
+            clearance_outline.Inflate( aDrawInfo.m_PadClearance, segmentToCircleCount );
+
+            for( int jj = 0; jj < clearance_outline.OutlineCount(); ++jj )
+            {
+                poly = &clearance_outline.Outline( jj );
+
+                GRClosedPoly( aClipBox, aDC, poly->PointCount(),
+                              (wxPoint*)&poly->Point( 0 ), false, 0,
+                              aDrawInfo.m_Color, aDrawInfo.m_Color );
+            }
+        }
+        break;
+    }
+
     default:
         break;
     }

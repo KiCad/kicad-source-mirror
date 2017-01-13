@@ -379,6 +379,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_mire.cpp
     ../pcbnew/class_module.cpp
     ../pcbnew/class_pad.cpp
+    ../pcbnew/class_pad_custom_shape_functions.cpp
     ../pcbnew/class_pad_draw_functions.cpp
     ../pcbnew/class_pcb_text.cpp
     ../pcbnew/class_text_mod.cpp

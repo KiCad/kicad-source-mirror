@@ -75,8 +75,13 @@ void CINFO3D_VISU::buildPadShapePolygon( const D_PAD* aPad,
     }
         break;
 
-    default:
-        wxFAIL_MSG( wxT( "CINFO3D_VISU::buildPadShapePolygon: found a not implemented pad shape (new shape?)" ) );
+    case PAD_SHAPE_CUSTOM:
+        {
+        SHAPE_POLY_SET polyList;     // Will contain the pad outlines in board coordinates
+        polyList.Append( aPad->GetCustomShapeAsPolygon() );
+        aPad->BasicShapesAsPolygonToBoardPosition( &polyList, aPad->ShapePos(), aPad->GetOrientation() );
+        aCornerBuffer.Append( polyList );
+        }
         break;
     }
 }
@@ -96,14 +101,15 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
         return;
     }
 
+
     // For other shapes, draw polygon outlines
     SHAPE_POLY_SET corners;
 
     unsigned int nr_sides_per_circle = GetNrSegmentsCircle( glm::min( aPad->GetSize().x,
                                                                       aPad->GetSize().y) );
-
     buildPadShapePolygon( aPad, corners, wxSize( 0, 0 ),
-                                nr_sides_per_circle, GetCircleCorrectionFactor( nr_sides_per_circle ) );
+                          nr_sides_per_circle,
+                          GetCircleCorrectionFactor( nr_sides_per_circle ) );
 
     // Add outlines as thick segments in polygon buffer
 

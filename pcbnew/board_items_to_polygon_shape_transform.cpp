@@ -704,6 +704,18 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         aCornerBuffer.Append( outline );
     }
         break;
+
+    case PAD_SHAPE_CUSTOM:
+    {
+        int clearance = KiROUND( aClearanceValue * aCorrectionFactor );
+
+        SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
+        outline.Append( m_customShapeAsPolygon );
+        BasicShapesAsPolygonToBoardPosition( &outline, GetPosition(), GetOrientation() );
+        outline.Inflate( clearance, aCircleToSegmentsCount );
+        aCornerBuffer.Append( outline );
+    }
+        break;
     }
 }
 
@@ -730,6 +742,7 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_CIRCLE:
     case PAD_SHAPE_OVAL:
     case PAD_SHAPE_ROUNDRECT:
+    case PAD_SHAPE_CUSTOM:
         TransformShapeWithClearanceToPolygon( aCornerBuffer, aInflateValue.x,
                                               aSegmentsPerCircle, aCorrectionFactor );
         break;

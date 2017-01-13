@@ -134,6 +134,8 @@ class PCB_PARSER : public PCB_LEXER
     TEXTE_MODULE*   parseTEXTE_MODULE();
     EDGE_MODULE*    parseEDGE_MODULE();
     D_PAD*          parseD_PAD( MODULE* aParent = NULL );
+    // Parse only the (option ...) inside a pad description
+    bool            parseD_PAD_option( D_PAD* aPad );
     TRACK*          parseTRACK();
     VIA*            parseVIA();
     ZONE_CONTAINER* parseZONE_CONTAINER();

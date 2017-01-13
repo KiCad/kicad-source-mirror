@@ -56,7 +56,6 @@ static wxString LayerMaskDescribe( const BOARD* aBoard, LSET aMask );
 
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
 
-
 D_PAD::D_PAD( MODULE* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
@@ -72,6 +71,8 @@ D_PAD::D_PAD( MODULE* parent ) :
     }
 
     SetShape( PAD_SHAPE_CIRCLE );                   // Default pad shape is PAD_CIRCLE.
+    SetAnchorPadShape( PAD_SHAPE_CIRCLE );          // Default shape for custom shaped pads
+                                                    // is PAD_CIRCLE.
     SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );        // Default pad drill shape is a circle.
     m_Attribute           = PAD_ATTRIB_STANDARD;    // Default pad type is NORMAL (thru hole)
     m_LocalClearance      = 0;
@@ -84,6 +85,8 @@ D_PAD::D_PAD( MODULE* parent ) :
     m_ZoneConnection      = PAD_ZONE_CONN_INHERITED; // Use parent setting by default
     m_ThermalWidth        = 0;                  // Use parent setting by default
     m_ThermalGap          = 0;                  // Use parent setting by default
+
+    m_customShapeClearanceArea = CUST_PAD_SHAPE_IN_ZONE_OUTLINE;
 
     // Set layers mask to default for a standard thru hole pad.
     m_layerMask           = StandardMask();
@@ -158,6 +161,22 @@ int D_PAD::boundingRadius() const
         x = m_Size.x >> 1;
         y = m_Size.y >> 1;
         radius += 1 + KiROUND( EuclideanNorm( wxSize( x - radius, y - radius )));
+        break;
+
+    case PAD_SHAPE_CUSTOM:
+        radius = 0;
+
+        for( int cnt = 0; cnt < m_customShapeAsPolygon.OutlineCount(); ++cnt )
+        {
+            const SHAPE_LINE_CHAIN& poly = m_customShapeAsPolygon.COutline( cnt );
+            for( int ii = 0; ii < poly.PointCount(); ++ii )
+            {
+                int dist = KiROUND( poly.CPoint( ii ).EuclideanNorm() );
+                radius = std::max( radius, dist );
+            }
+        }
+
+        radius += 1;
         break;
 
     default:
@@ -306,6 +325,32 @@ const EDA_RECT D_PAD::GetBoundingBox() const
         area.SetSize( dx-x, dy-y );
         break;
 
+    case PAD_SHAPE_CUSTOM:
+        {
+        SHAPE_POLY_SET polySet( m_customShapeAsPolygon );
+        // Move shape to actual position
+        BasicShapesAsPolygonToBoardPosition( &polySet, GetPosition(), GetOrientation() );
+        quadrant1 = m_Pos;
+        quadrant2 = m_Pos;
+
+        for( int cnt = 0; cnt < polySet.OutlineCount(); ++cnt )
+        {
+            const SHAPE_LINE_CHAIN& poly = polySet.COutline( cnt );
+
+            for( int ii = 0; ii < poly.PointCount(); ++ii )
+            {
+                quadrant1.x = std::min( quadrant1.x, poly.CPoint( ii ).x );
+                quadrant1.y = std::min( quadrant1.y, poly.CPoint( ii ).y );
+                quadrant2.x = std::max( quadrant2.x, poly.CPoint( ii ).x );
+                quadrant2.y = std::max( quadrant2.y, poly.CPoint( ii ).y );
+            }
+        }
+
+        area.SetOrigin( quadrant1 );
+        area.SetEnd( quadrant2 );
+        }
+        break;
+
     default:
         break;
     }
@@ -379,7 +424,45 @@ void D_PAD::Flip( const wxPoint& aCentre )
     // So the copper layers count is not taken in account
     SetLayerSet( FlipLayerMask( m_layerMask ) );
 
+    // Flip the basic shapes, in custom pads
+    FlipBasicShapes();
+
     // m_boundingRadius = -1;  the shape has not been changed
+}
+
+
+// Flip the basic shapes, in custom pads
+void D_PAD::FlipBasicShapes()
+{
+    // Flip custom shapes
+    for( unsigned ii = 0; ii < m_basicShapes.size(); ++ii )
+    {
+        PAD_CS_PRIMITIVE& primitive = m_basicShapes[ii];
+
+        MIRROR( primitive.m_Start.y, 0 );
+        MIRROR( primitive.m_End.y, 0 );
+        primitive.m_ArcAngle = -primitive.m_ArcAngle;
+
+        switch( primitive.m_Shape )
+        {
+        case S_POLYGON:         // polygon
+            for( unsigned jj = 0; jj < primitive.m_Poly.size(); jj++ )
+                MIRROR( primitive.m_Poly[jj].y, 0 );
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    // Flip local coordinates in merged Polygon
+    for( int cnt = 0; cnt < m_customShapeAsPolygon.OutlineCount(); ++cnt )
+    {
+        SHAPE_LINE_CHAIN& poly = m_customShapeAsPolygon.Outline( cnt );
+
+        for( int ii = 0; ii < poly.PointCount(); ++ii )
+            MIRROR( poly.Point( ii ).y, 0 );
+    }
 }
 
 
@@ -817,6 +900,17 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
         return TestPointInsidePolygon( (const wxPoint*)&poly.CPoint(0), poly.PointCount(), delta );
     }
         break;
+
+    case PAD_SHAPE_CUSTOM:
+        // Check for hit in polygon
+        RotatePoint( &delta, -m_Orient );
+
+        if( m_customShapeAsPolygon.OutlineCount() )
+        {
+            const SHAPE_LINE_CHAIN& poly = m_customShapeAsPolygon.COutline( 0 );
+            return TestPointInsidePolygon( (const wxPoint*)&poly.CPoint(0), poly.PointCount(), delta );
+        }
+        break;
     }
 
     return false;
@@ -1096,6 +1190,9 @@ wxString D_PAD::ShowPadShape() const
     case PAD_SHAPE_ROUNDRECT:
         return _( "Roundrect" );
 
+    case PAD_SHAPE_CUSTOM:
+        return _( "CustomShape" );
+
     default:
         return wxT( "???" );
     }
@@ -1334,4 +1431,9 @@ void D_PAD::ImportSettingsFromMaster( const D_PAD& aMasterPad )
     default:
         ;
     }
+
+    // Add or remove custom pad shapes:
+    SetBasicShapes( aMasterPad.GetBasicShapes() );
+    SetAnchorPadShape( aMasterPad.GetAnchorPadShape() );
+    MergeBasicShapesAsPolygon();
 }

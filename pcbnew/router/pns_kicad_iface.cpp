@@ -626,6 +626,26 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
             }
                 break;
 
+            case PAD_SHAPE_CUSTOM:
+            {
+                SHAPE_POLY_SET outline;
+                outline.Append( aPad->GetCustomShapeAsPolygon() );
+                aPad->BasicShapesAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
+
+                for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+                {
+                    SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+                    const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
+
+                    for( int ii = 0; ii < poly.PointCount(); ii++ )
+                        shape->Append( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
+
+                    solid->SetShape( shape );
+                }
+
+                break;
+            }
+
             default:
                 wxLogTrace( "PNS", "unsupported pad shape" );
                 return nullptr;
@@ -719,6 +739,26 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
                 }
 
                 solid->SetShape( shape );
+                break;
+            }
+
+            case PAD_SHAPE_CUSTOM:
+            {
+                SHAPE_POLY_SET outline;
+                outline.Append( aPad->GetCustomShapeAsPolygon() );
+                aPad->BasicShapesAsPolygonToBoardPosition( &outline, wx_c, aPad->GetOrientation() );
+
+                for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+                {
+                    SHAPE_CONVEX* shape = new SHAPE_CONVEX();
+                    const SHAPE_LINE_CHAIN& poly = outline.COutline( jj );
+
+                    for( int ii = 0; ii < poly.PointCount(); ii++ )
+                        shape->Append( wxPoint( poly.CPoint( ii ).x, poly.CPoint( ii ).y ) );
+
+                    solid->SetShape( shape );
+                }
+
                 break;
             }
 

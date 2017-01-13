@@ -40,6 +40,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <class_drawsegment.h>
 
 #include <origin_viewitem.h>
 
@@ -56,7 +57,6 @@ class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
 public:
     DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad );
-    void OnInitDialog( wxInitDialogEvent& event ) override;
     ~DIALOG_PAD_PROPERTIES()
     {
         delete m_dummyPad;
@@ -80,13 +80,23 @@ private:
     bool    m_canUpdate;
     bool    m_canEditNetName;       // true only if the caller is the board editor
 
+    // for free shape pads: the list of primitives (basic shapes),
+    // in local coordinates, orient 0, coordinates relative to m_Pos
+    // They are expected to define only one copper area.
+    std::vector<PAD_CS_PRIMITIVE> m_primitives;
+
+    std::vector<DRAWSEGMENT*> m_highligth;     // shapes highlighted in GAL mode
+
     wxFloatingPointValidator<double>    m_OrientValidator;
     double  m_OrientValue;
 
 private:
+    void prepareCanvas();       // Initialize the canvases (legacy or gal) to display the pad
     void initValues();
-    bool padValuesOK();       ///< test if all values are acceptable for the pad
+    void displayBasicShapesList();
+    bool padValuesOK();         ///< test if all values are acceptable for the pad
     void redraw();
+    void editBasicShape();
     void updateRoundRectCornerValues();
 
     /**
@@ -100,6 +110,7 @@ private:
     bool transferDataToPad( D_PAD* aPad );
 
     // event handlers:
+    void OnInitDialog( wxInitDialogEvent& event ) override;
     void OnResize( wxSizeEvent& event );
 
     void OnPadShapeSelection( wxCommandEvent& event ) override;
@@ -120,8 +131,128 @@ private:
 
     /// Updates the different parameters for the component being edited.
     /// Automatically fired from the OK button click.
+
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
+
+    /// Event handlers of basic shapes list panel
+    void onDeleteShape( wxCommandEvent& event ) override;
+    void onEditShape( wxCommandEvent& event ) override;
+    void onAddShape( wxCommandEvent& event ) override;
+    void onImportShape( wxCommandEvent& event ) override;
+    void onGeometryTransform( wxCommandEvent& event ) override;
+    void onDuplicateShape( wxCommandEvent& event ) override;
+
+    /// Called on a double click on the basic shapes list
+    void onCustomShapeDClick( wxMouseEvent& event ) override;
+    /// Called on selection/deselection of a basic shape
+	void OnPrimitiveSelection( wxListEvent& event ) override;
+};
+
+/**
+ * a dialog to edit basics shapes parameters.
+ * Polygonal shape is not handles by this dialog
+ */
+class DIALOG_PAD_BASICSHAPES_PROPERTIES: public DIALOG_PAD_BASICSHAPES_PROPERTIES_BASE
+{
+public:
+    DIALOG_PAD_BASICSHAPES_PROPERTIES( wxWindow* aParent, PAD_CS_PRIMITIVE * aShape );
+
+    /**
+     * Function TransferDataFromWindow
+     * Transfer data out of the GUI.
+     */
+    bool TransferDataFromWindow() override;
+
+private:
+    /**
+     * Function TransferDataToWindow
+     * Transfer data into the GUI.
+     */
+    bool TransferDataToWindow() override;
+
+    // The basic shape currently edited
+    PAD_CS_PRIMITIVE * m_shape;
+};
+
+
+/**
+ * a dialog to edit basic polygonal shape parameters
+ */
+class DIALOG_PAD_BASIC_SHP_POLY_PROPS: public DIALOG_PAD_BASIC_SHP_POLY_PROPS_BASE
+{
+    // The basic shape currently edited
+    PAD_CS_PRIMITIVE * m_shape;
+
+    // The working copy of the basic shape currently edited
+    PAD_CS_PRIMITIVE m_currshape;
+
+public:
+    DIALOG_PAD_BASIC_SHP_POLY_PROPS( wxWindow* aParent, PAD_CS_PRIMITIVE * aShape );
+    ~DIALOG_PAD_BASIC_SHP_POLY_PROPS();
+
+    /**
+     * Function TransferDataFromWindow
+     * Transfer data out of the GUI.
+     */
+    bool TransferDataFromWindow() override;
+
+private:
+    /**
+     * Function TransferDataToWindow
+     * Transfer data into the GUI.
+     */
+    bool TransferDataToWindow() override;
+
+    /**
+     * test for a valid polygon (a not self intersectiong polygon)
+     */
+    bool Validate() override;
+
+    // Events handlers:
+    void OnValidateButton( wxCommandEvent& event );
+    void onButtonAdd( wxCommandEvent& event ) override;
+    void OnButtonDelete( wxCommandEvent& event ) override;
+    void onPaintPolyPanel( wxPaintEvent& event ) override;
+    void onPolyPanelResize( wxSizeEvent& event ) override;
+    void onGridSelect( wxGridRangeSelectEvent& event ) override;
+    void onCellChanging( wxGridEvent& event );
+    void onCellSelect( wxGridEvent& event ) override
+    {
+        event.Skip();
+    }
+};
+
+
+/** A dialog to apply geometry transforms to a shape or set of shapes
+ * (move, rotate around origin, scaling factor, duplication).
+ * shapes are scaled, then moved then rotated.
+ * aList is a list of shapes to transform or duplicate
+ * if aShowDuplicate == false, the parameter "Duplicate count" is disabled
+ */
+
+class DIALOG_PAD_BASICSHAPES_TRANSFORM : public DIALOG_PAD_BASICSHAPES_TRANSFORM_BASE
+{
+public:
+    DIALOG_PAD_BASICSHAPES_TRANSFORM( wxWindow* aParent,
+                                      std::vector<PAD_CS_PRIMITIVE*>& aList, bool aShowDuplicate = false );
+
+    /**
+     * Apply geometric transform (rotation, move, scale) defined in dialog
+     * aDuplicate = 1 .. n to duplicate the list of shapes
+     * aDuplicate = 0 to transform the list of shapes
+     * The duplicated items are transformed, but the initial shpes are not modified.
+     * The duplicated items are added to aList
+     */
+    void Transform( std::vector<PAD_CS_PRIMITIVE>* aList = NULL, int aDuplicateCount = 0 );
+
+    /**
+     * @return the number of duplicate, chosen by user
+     */
+    int GetDuplicateCount() { return m_spinCtrlDuplicateCount->GetValue(); }
+
+private:
+    std::vector<PAD_CS_PRIMITIVE*>& m_list;
 };
 
 #endif      // #ifndef _DIALOG_PAD_PROPERTIES_H_

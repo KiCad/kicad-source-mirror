@@ -1910,7 +1910,6 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
                     Expecting( "smd and/or virtual" );
                 }
             }
-
             break;
 
         case T_fp_text:
@@ -2307,6 +2306,10 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
         pad->SetShape( PAD_SHAPE_ROUNDRECT );
         break;
 
+    case T_custom:
+        pad->SetShape( PAD_SHAPE_CUSTOM );
+        break;
+
     default:
         Expecting( "circle, rectangle, roundrect, oval, trapezoid or custom" );
     }
@@ -2481,14 +2484,138 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             NeedRIGHT();
             break;
 
+        case T_options:
+            parseD_PAD_option( pad.get() );
+            break;
+
+        case T_primitives:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                // Currently, I am using parseDRAWSEGMENT() to read basic shapes parameters,
+                // because they are the same as a DRAWSEGMENT.
+                // However it could be better to write a specific parser, to avoid possible issues
+                // if the DRAWSEGMENT parser is modified.
+                DRAWSEGMENT* dummysegm = NULL;
+
+                switch( token )
+                {
+                case T_gr_arc:
+                    dummysegm = parseDRAWSEGMENT();
+                    pad->AddBasicShape( dummysegm->GetCenter(), dummysegm->GetArcStart(),
+                                        dummysegm->GetAngle(), dummysegm->GetWidth() );
+                    break;
+
+                case T_gr_line:
+                    dummysegm = parseDRAWSEGMENT();
+                    pad->AddBasicShape( dummysegm->GetStart(), dummysegm->GetEnd(),
+                                        dummysegm->GetWidth() );
+                    break;
+
+                case T_gr_circle:
+                    dummysegm = parseDRAWSEGMENT();
+                    pad->AddBasicShape( dummysegm->GetCenter(), dummysegm->GetRadius(),
+                                        dummysegm->GetWidth() );
+                    break;
+
+                case T_gr_poly:
+                    dummysegm = parseDRAWSEGMENT();
+                    pad->AddBasicShape( dummysegm->GetPolyPoints(), dummysegm->GetWidth() );
+                    break;
+
+                default:
+                    Expecting( "gr_line, gr_arc, gr_circle or gr_poly" );
+                    break;
+                }
+
+                delete dummysegm;
+            }
+            break;
+
         default:
-            Expecting( "at, drill, layers, net, die_length, solder_mask_margin, roundrect_rratio,"
-                       "solder_paste_margin, solder_paste_margin_ratio, clearance, "
-                       "zone_connect, fp_poly, basic_shapes, thermal_width, or thermal_gap" );
+            Expecting( "at, drill, layers, net, die_length, solder_mask_margin, roundrect_rratio,\n"
+                       "solder_paste_margin, solder_paste_margin_ratio, clearance,\n"
+                       "zone_connect, fp_poly, primitives, thermal_width, or thermal_gap" );
         }
     }
 
+    // Be sure the custom shape polygon is built:
+    if( pad->GetShape() == PAD_SHAPE_CUSTOM )
+        pad->MergeBasicShapesAsPolygon();
+
     return pad.release();
+}
+
+
+bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
+{
+    // Parse only the (option ...) inside a pad description
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_anchor:
+            token = NextTok();
+            // Custom shaped pads have a "anchor pad", which is the reference
+            // for connection calculations.
+            // Because this is an anchor, only the 2 very basic shapes are managed:
+            // circle and rect. The default is circle
+            switch( token )
+            {
+                case T_circle:  // default
+                    break;
+
+                case T_rect:
+                    aPad->SetAnchorPadShape( PAD_SHAPE_RECT );
+                    break;
+
+                default:
+                    // Currently, because pad options is a moving target
+                    // just skip unknown keywords
+                    break;
+            }
+            NeedRIGHT();
+            break;
+
+        case T_clearance:
+            token = NextTok();
+            // Custom shaped pads have a clearance area that is the pad shape
+            // (like usual pads) or the convew hull of the pad shape.
+            switch( token )
+            {
+            case T_outline:
+                aPad->SetCustomShapeInZoneOpt( CUST_PAD_SHAPE_IN_ZONE_OUTLINE );
+                break;
+
+            case T_convexhull:
+                aPad->SetCustomShapeInZoneOpt( CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL );
+                break;
+
+            default:
+                // Currently, because pad options is a moving target
+                // just skip unknown keywords
+                break;
+            }
+            NeedRIGHT();
+            break;
+
+        default:
+            // Currently, because pad options is a moving target
+            // just skip unknown keywords
+            while( (token = NextTok() ) != T_RIGHT )
+            {}
+            break;
+        }
+    }
+
+    return true;
 }
 
 

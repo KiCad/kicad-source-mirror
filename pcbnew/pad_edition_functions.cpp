@@ -73,6 +73,10 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
     aPad->ImportSettingsFromMaster( mp );
 
+    aPad->SetBasicShapes( mp.GetBasicShapes() );
+    aPad->SetAnchorPadShape( mp.GetAnchorPadShape() );
+    aPad->MergeBasicShapesAsPolygon();
+
     if( aDraw )
         m_canvas->RefreshDrawingRect( aPad->GetBoundingBox() );
 

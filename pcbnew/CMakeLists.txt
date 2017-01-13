@@ -132,6 +132,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_non_copper_zones_properties_base.cpp
     dialogs/dialog_pad_properties.cpp
     dialogs/dialog_pad_properties_base.cpp
+    dialogs/dialog_pad_basicshapes_properties.cpp
     dialogs/dialog_plot_base.cpp
     dialogs/dialog_plot.cpp
     dialogs/dialog_position_relative.cpp

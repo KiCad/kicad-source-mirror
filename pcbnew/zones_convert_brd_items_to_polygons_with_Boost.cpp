@@ -69,6 +69,7 @@
 
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_file_io.h>
+#include <geometry/convex_hull.h>
 
 /* DEBUG OPTION:
  * To emit zone data to a file when filling zones for the debugging purposes,
@@ -194,17 +195,45 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
                     int clearance = std::max( zone_clearance, item_clearance );
-                    pad->TransformShapeWithClearanceToPolygon( aFeatures,
-                                                               clearance,
-                                                               segsPerCircle,
-                                                               correctionFactor );
+
+                    // PAD_SHAPE_CUSTOM can have a specific keepout, to avoid to break the shape
+                    if( pad->GetShape() == PAD_SHAPE_CUSTOM &&
+                        pad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
+                    {
+                        // the pad shape in zone can be its convex hull or
+                        // the shape itself
+                        SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
+                        outline.Inflate( KiROUND( clearance*correctionFactor) , segsPerCircle );
+                        pad->BasicShapesAsPolygonToBoardPosition( &outline,
+                                    pad->GetPosition(), pad->GetOrientation() );
+
+                        if( pad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
+                        {
+                            std::vector<wxPoint> convex_hull;
+                            BuildConvexHull( convex_hull, outline );
+
+                            aFeatures.NewOutline();
+                            for( unsigned ii = 0; ii < convex_hull.size(); ++ii )
+                                aFeatures.Append( convex_hull[ii] );
+                        }
+                        else
+                            aFeatures.Append( outline );
+                    }
+                    else
+                        pad->TransformShapeWithClearanceToPolygon( aFeatures,
+                                                                   clearance,
+                                                                   segsPerCircle,
+                                                                   correctionFactor );
                 }
 
                 continue;
             }
 
             // Pads are removed from zone if the setup is PAD_ZONE_CONN_NONE
-            if( GetPadConnection( pad ) == PAD_ZONE_CONN_NONE )
+            // or if they have a custom shape, because a thermal relief will break
+            // the shape
+            if( GetPadConnection( pad ) == PAD_ZONE_CONN_NONE ||
+                pad->GetShape() == PAD_SHAPE_CUSTOM )
             {
                 int gap = zone_clearance;
                 int thermalGap = GetThermalReliefGap( pad );
@@ -214,10 +243,28 @@ void ZONE_CONTAINER::buildFeatureHoleList( BOARD* aPcb, SHAPE_POLY_SET& aFeature
 
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
-                    pad->TransformShapeWithClearanceToPolygon( aFeatures,
-                                                               gap,
-                                                               segsPerCircle,
-                                                               correctionFactor );
+                    // PAD_SHAPE_CUSTOM has a specific keepout, to avoid to break the shape
+                    // the pad shape in zone can be its convex hull or the shape itself
+                    if( pad->GetShape() == PAD_SHAPE_CUSTOM &&
+                        pad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
+                    {
+                        // the pad shape in zone can be its convex hull or
+                        // the shape itself
+                        SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
+                        outline.Inflate( KiROUND( gap*correctionFactor) , segsPerCircle );
+                        pad->BasicShapesAsPolygonToBoardPosition( &outline,
+                                    pad->GetPosition(), pad->GetOrientation() );
+
+                        std::vector<wxPoint> convex_hull;
+                        BuildConvexHull( convex_hull, outline );
+
+                        aFeatures.NewOutline();
+                        for( unsigned ii = 0; ii < convex_hull.size(); ++ii )
+                            aFeatures.Append( convex_hull[ii] );
+                    }
+                    else
+                        pad->TransformShapeWithClearanceToPolygon( aFeatures,
+                                        gap, segsPerCircle, correctionFactor );
                 }
             }
         }

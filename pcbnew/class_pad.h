@@ -38,6 +38,13 @@
 #include <config_params.h>       // PARAM_CFG_ARRAY
 #include "zones.h"
 
+class DRAWSEGMENT;
+
+enum CUST_PAD_SHAPE_IN_ZONE
+{
+    CUST_PAD_SHAPE_IN_ZONE_OUTLINE,
+    CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL
+};
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -74,6 +81,38 @@ public:
     wxPoint m_Offset;             // general draw offset
 
     PAD_DRAWINFO();
+};
+
+/** Helper class to handle a primitive (basic shape: polygon, segment, circle or arc)
+ * to build a custom pad full shape from a set of primitives
+ */
+class PAD_CS_PRIMITIVE
+{
+public:
+    STROKE_T m_Shape;   /// S_SEGMENT, S_ARC, S_CIRCLE, S_POLYGON only (same as DRAWSEGMENT)
+    int m_Thickness;    /// thickness of segment or outline
+                        /// For filled S_CIRCLE shape, thickness = 0.
+                        // if thickness is not = 0 S_CIRCLE shape is a ring
+    int m_Radius;       /// radius of a circle
+    double m_ArcAngle;  /// angle of an arc, from its starting point, in 0.1 deg
+    wxPoint m_Start;    /// is also the center of the circle and arc
+    wxPoint m_End;      /// is also the start point of the arc
+    std::vector<wxPoint> m_Poly;
+
+    PAD_CS_PRIMITIVE( STROKE_T aShape ):
+        m_Shape( aShape ), m_Thickness( 0 ), m_Radius( 0 ), m_ArcAngle( 0 )
+    {
+    }
+
+    // Accessors (helpers for arc and circle shapes)
+    wxPoint GetCenter() { return m_Start; }     /// returns the center of a circle or arc
+    wxPoint GetArcStart() { return m_End; }     /// returns the start point of an arc
+
+    /** Export the PAD_CS_PRIMITIVE parameters to a DRAWSEGMENT
+     * useful to draw a primitive shape
+     * @param aTarget is the DRAWSEGMENT to initialize
+     */
+    void ExportTo( DRAWSEGMENT* aTarget );
 };
 
 
@@ -169,6 +208,43 @@ public:
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
     const wxPoint& GetPosition() const override { return m_Pos; }
 
+    /**
+     * Function GetAnchorPadShape
+     * @return the shape of the anchor pad shape, for custom shaped pads.
+     */
+    PAD_SHAPE_T GetAnchorPadShape() const       { return m_anchorPadShape; }
+
+    /**
+     * @return the option for the custom pad shape to use as clearance area
+     * in copper zones
+     */
+    CUST_PAD_SHAPE_IN_ZONE GetCustomShapeInZoneOpt() const
+    {
+        return m_customShapeClearanceArea;
+    }
+
+    /**
+     * Set the option for the custom pad shape to use as clearance area
+     * in copper zones
+     * @param aOption is the clearance area shape CUST_PAD_SHAPE_IN_ZONE option
+     */
+    void SetCustomShapeInZoneOpt( CUST_PAD_SHAPE_IN_ZONE aOption )
+    {
+        m_customShapeClearanceArea = aOption;
+    }
+
+    /**
+     * Function SetAnchorPadShape
+     * Set the shape of the anchor pad for custm shped pads.
+     * @param the shape of the anchor pad shape( currently, only
+     * PAD_SHAPE_RECT or PAD_SHAPE_CIRCLE.
+     */
+    void SetAnchorPadShape( PAD_SHAPE_T aShape )
+    {
+        m_anchorPadShape = ( aShape ==  PAD_SHAPE_RECT ) ? PAD_SHAPE_RECT : PAD_SHAPE_CIRCLE;
+        m_boundingRadius = -1;
+    }
+
     void SetY( int y )                          { m_Pos.y = y; }
     void SetX( int x )                          { m_Pos.x = x; }
 
@@ -190,8 +266,79 @@ public:
     void SetOffset( const wxPoint& aOffset )    { m_Offset = aOffset; }
     const wxPoint& GetOffset() const            { return m_Offset; }
 
+    /**
+     * Has meaning only for free shape pads.
+     * add a free shape to the shape list.
+     * the shape can be
+     *   a polygon (outline can have a thickness)
+     *   a thick segment
+     *   a filled circle or ring ( if thickness == 0, this is a filled circle, else a ring)
+     *   a arc
+     */
+    void AddBasicShape( std::vector<wxPoint>& aPoly, int aThickness );  ///< add a polygonal basic shape
+    void AddBasicShape( wxPoint aStart, wxPoint aEnd, int aThickness ); ///< segment basic shape
+    void AddBasicShape( wxPoint aCenter, int aRadius, int aThickness ); ///< ring or circle basic shape
+    void AddBasicShape( wxPoint aCenter, wxPoint aStart,
+                        int aArcAngle, int aThickness );    ///< arc basic shape
+
+
+    /**
+     * Merge all basic shapes, converted to a polygon in one polygon,
+     * in m_customShapeAsPolygon
+     * @return true if OK, false in there is more than one polygon
+     * in m_customShapeAsPolygon
+     * @param aMergedPolygon = the SHAPE_POLY_SET to fill.
+     * if NULL, m_customShapeAsPolygon is the target
+     * @param aCircleToSegmentsCount = number of segment to approximate a circle
+     * (default = 32)
+     * Note: The corners coordinates are relative to the pad position, orientation 0,
+     */
+    bool MergeBasicShapesAsPolygon( SHAPE_POLY_SET * aMergedPolygon = NULL,
+                                    int aCircleToSegmentsCount = 32 );
+
+    /**
+     * clear the basic shapes list
+     */
+    void DeleteBasicShapesList();
+
+    /**
+     * When created, the corners coordinates are relative to the pad position, orientation 0,
+     * in m_customShapeAsPolygon
+     * BasicShapesAsPolygonToBoardPosition transform these coordinates to actual
+     * (board) coordinates
+     * @param aMergedPolygon = the corners coordinates, relative to aPosition and
+     *  rotated by aRotation
+     * @param aPosition = the position of the shape (usually the pad shape, but
+     * not always, when moving the pad)
+     * @param aRotation = the rotation of the shape (usually the pad rotation, but
+     * not always, in DRC)
+     */
+    void BasicShapesAsPolygonToBoardPosition( SHAPE_POLY_SET * aMergedPolygon,
+                                    wxPoint aPosition, double aRotation ) const;
+
+    /**
+     * Accessor to the basic shape list
+     */
+    const std::vector<PAD_CS_PRIMITIVE>& GetBasicShapes() const { return m_basicShapes; }
+
+    /**
+     * Accessor to the custom shape as one polygon
+     */
+    const SHAPE_POLY_SET& GetCustomShapeAsPolygon() const { return m_customShapeAsPolygon; }
 
     void Flip( const wxPoint& aCentre ) override;
+
+    /**
+     * Flip the basic shapes, in custom pads
+     */
+    void FlipBasicShapes();
+
+    /**
+     * Import to the basic shape list
+     * @return true if OK, false if issues
+     * (more than one polygon to build the polygon shape list)
+     */
+    bool SetBasicShapes( const std::vector<PAD_CS_PRIMITIVE>& aBasicShapesList );
 
 
     /**
@@ -217,7 +364,6 @@ public:
 
     void SetDrillShape( PAD_DRILL_SHAPE_T aDrillShape )
         { m_drillShape = aDrillShape; }
-
     PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
 
     /**
@@ -607,6 +753,25 @@ private:    // Private variable members:
                                     ///< PAD_SHAPE_OVAL, PAD_SHAPE_TRAPEZOID,
                                     ///< PAD_SHAPE_ROUNDRECT, PAD_SHAPE_POLYGON
 
+    /** for free shape pads: a list of basic shapes,
+     * in local coordinates, orient 0, coordinates relative to m_Pos
+     * They are expected to define only one copper area.
+     */
+    std::vector<PAD_CS_PRIMITIVE> m_basicShapes;
+
+    /** for free shape pads: the set of basic shapes, merged as one polygon,
+     * in local coordinates, orient 0, coordinates relative to m_Pos
+     */
+    SHAPE_POLY_SET m_customShapeAsPolygon;
+
+    /**
+     * How to build the custom shape in zone, to create the clearance area:
+     * CUST_PAD_SHAPE_IN_ZONE_OUTLINE = use pad shape
+     * CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL = use the convex hull of the pad shape
+     * other values are currently reserved
+     */
+    CUST_PAD_SHAPE_IN_ZONE  m_customShapeClearanceArea;
+
     int         m_SubRatsnest;      ///< variable used in rats nest computations
                                     ///< handle subnet (block) number in ratsnest connection
 
@@ -620,6 +785,9 @@ private:    // Private variable members:
 
     double      m_padRoundRectRadiusScale;  ///< scaling factor from smallest m_Size coord
                                             ///< to corner radius, default 0.25
+
+    PAD_SHAPE_T m_anchorPadShape;         ///< for custom shaped pads: shape of pad anchor,
+                                          ///< PAD_SHAPE_RECT, PAD_SHAPE_CIRCLE
 
     /**
      * m_Offset is useful only for oblong and rect pads (it can be used for other
