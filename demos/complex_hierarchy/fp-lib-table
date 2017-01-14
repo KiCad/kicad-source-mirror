@@ -1,0 +1,5 @@
+(fp_lib_table
+  (lib (name Housings_DIP)(type KiCad)(uri "$(KISYSMOD)\\Housings_DIP.pretty")(options "")(descr ""))
+  (lib (name Connect)(type KiCad)(uri "$(KISYSMOD)\\Connect.pretty")(options "")(descr ""))
+  (lib (name Discret)(type KiCad)(uri "$(KISYSMOD)\\Discret.pretty")(options "")(descr ""))
+)
