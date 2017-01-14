@@ -439,5 +439,5 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [MSYS2 64-bit SourceForge repo]: http://sourceforge.net/projects/msys2/files/REPOS/MINGW/x86_64/
 [libcurl]: http://curl.haxx.se/libcurl/
 [GLM]: http://glm.g-truc.net/
-[ngspice]: http://ngspice.sourceforge.net/#
 [git]: https://git-scm.com/
+[OCE]: https://github.com/tpaviot/oce
