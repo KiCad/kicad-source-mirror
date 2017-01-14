@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -451,91 +451,39 @@ void CCAMERA::ZoomReset()
     rebuildProjection();
 }
 
-
-bool CCAMERA::ZoomIn( float aFactor )
+bool CCAMERA::Zoom( float aFactor )
 {
-    if( m_zoom > MIN_ZOOM )
-    {
-        const float old_zoom = m_zoom;
+    if ( ( m_zoom == MIN_ZOOM && aFactor > 1 ) || ( m_zoom == MAX_ZOOM && aFactor < 1 ) || aFactor == 1 )
+        return false;
 
-        m_zoom /= aFactor;
+    m_zoom /= aFactor;
+    if( m_zoom <= MIN_ZOOM )
+        m_zoom = MIN_ZOOM;
+    if( m_zoom >= MAX_ZOOM )
+        m_zoom = MAX_ZOOM;
 
-        if( m_zoom <= MIN_ZOOM )
-            m_zoom = MIN_ZOOM;
+    m_camera_pos.z = m_camera_pos_init.z * m_zoom;
 
-        m_camera_pos.z = m_zoom * m_camera_pos_init.z;
+    updateViewMatrix();
+    rebuildProjection();
 
-        if( old_zoom != m_zoom )
-        {
-            updateViewMatrix();
-            rebuildProjection();
-
-            return true;
-        }
-    }
-
-    return false;
+    return true;
 }
 
-
-bool CCAMERA::ZoomOut( float aFactor )
+bool CCAMERA::Zoom_T1( float aFactor )
 {
-    if( m_zoom < MAX_ZOOM )
-    {
-        const float old_zoom = m_zoom;
+    if( ( m_zoom == MIN_ZOOM && aFactor > 1 ) || ( m_zoom == MAX_ZOOM && aFactor < 1 ) || aFactor == 1 )
+        return false;
 
-        m_zoom *= aFactor;
+    m_zoom_t1 = m_zoom / aFactor;
+    if (m_zoom_t1 < MIN_ZOOM )
+        m_zoom_t1 = MIN_ZOOM;
+    if (m_zoom_t1 > MAX_ZOOM )
+        m_zoom_t1 = MAX_ZOOM;
 
-        if( m_zoom >= MAX_ZOOM )
-            m_zoom = MAX_ZOOM;
+    m_camera_pos_t1.z = m_camera_pos_init.z * m_zoom_t1;
 
-        m_camera_pos.z = m_zoom * m_camera_pos_init.z;
-
-        if( old_zoom != m_zoom )
-        {
-            updateViewMatrix();
-            rebuildProjection();
-
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool CCAMERA::ZoomIn_T1( float aFactor )
-{
-    if( m_zoom > MIN_ZOOM )
-    {
-        m_zoom_t1 = m_zoom / aFactor;
-
-        if( m_zoom_t1 <= MIN_ZOOM )
-            m_zoom_t1 = MIN_ZOOM;
-
-        m_camera_pos_t1.z = m_zoom_t1 * m_camera_pos_init.z;
-
-        return true;
-    }
-
-    return false;
-}
-
-
-bool CCAMERA::ZoomOut_T1( float aFactor )
-{
-    if( m_zoom < MAX_ZOOM )
-    {
-        m_zoom_t1 = m_zoom * aFactor;
-
-        if( m_zoom_t1 >= MAX_ZOOM )
-            m_zoom_t1 = MAX_ZOOM;
-
-        m_camera_pos_t1.z = m_zoom_t1 * m_camera_pos_init.z;
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 

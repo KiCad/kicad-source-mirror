@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -390,14 +390,7 @@ void C3D_MODEL_VIEWER::OnMouseWheel( wxMouseEvent &event )
     }
     else
     {
-        if( event.GetWheelRotation() > 0 )
-        {
-            m_trackBallCamera.ZoomIn( 1.1f );
-        }
-        else
-        {
-            m_trackBallCamera.ZoomOut( 1.1f );
-        }
+        m_trackBallCamera.Zoom( event.GetWheelRotation() > 0 ? 1.1f : 1/1.1f );
 
         //DisplayStatus();
         Refresh( false );

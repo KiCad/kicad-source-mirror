@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -465,14 +465,7 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
     }
     else
     {
-        if( event.GetWheelRotation() > 0 )
-        {
-            mouseActivity = m_settings.CameraGet().ZoomIn( 1.1f );
-        }
-        else
-        {
-            mouseActivity = m_settings.CameraGet().ZoomOut( 1.1f );
-        }
+        mouseActivity = m_settings.CameraGet().Zoom( event.GetWheelRotation() > 0 ? 1.1f : 1/1.1f );
     }
 
     // If it results on a camera movement
@@ -503,7 +496,7 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
 
     float magnification = ( event.GetMagnification() + 1.0f );
 
-    m_settings.CameraGet().ZoomIn( magnification );
+    m_settings.CameraGet().Zoom( magnification );
 
     DisplayStatus();
     Request_refresh();
@@ -909,14 +902,14 @@ void EDA_3D_CANVAS::SetView3D( int keycode )
     case WXK_F1:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
-        if( m_settings.CameraGet().ZoomIn_T1( 1.4f ) )
+        if( m_settings.CameraGet().Zoom_T1( 1.4f ) )
             request_start_moving_camera( 3.0f );
         return;
 
     case WXK_F2:
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
-        if( m_settings.CameraGet().ZoomOut_T1( 1.4f ) )
+        if( m_settings.CameraGet().Zoom_T1( 1/1.4f ) )
             request_start_moving_camera( 3.0f );
         return;
 

@@ -170,13 +170,9 @@ class CCAMERA
 
     void ZoomReset();
 
-    bool ZoomIn( float aFactor );
+    bool Zoom( float aFactor );
 
-    bool ZoomOut( float aFactor );
-
-    bool ZoomIn_T1( float aFactor );
-
-    bool ZoomOut_T1( float aFactor );
+    bool Zoom_T1( float aFactor );
 
     float ZoomGet() const ;
 
