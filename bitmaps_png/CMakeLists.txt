@@ -267,6 +267,7 @@ set( BMAPS_MID
     glabel2text
     gl_change
     global_options_pad
+    graphic_mode_option
     green
     grid_select
     grid_select_axis

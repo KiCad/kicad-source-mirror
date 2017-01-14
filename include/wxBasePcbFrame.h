@@ -681,10 +681,14 @@ public:
     virtual void UseGalCanvas( bool aEnable ) override;
 
     /**
-     * Function SwitchCanvas
      * switches currently used canvas (default / Cairo / OpenGL).
      */
     void SwitchCanvas( wxCommandEvent& aEvent );
+
+    /**
+     * Update UI called when switches currently used canvas (default / Cairo / OpenGL).
+     */
+    void OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent );
 
     /**
      * Function LoadCanvasTypeSetting()

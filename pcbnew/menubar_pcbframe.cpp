@@ -381,21 +381,21 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
                  text, _( "Switch the canvas implementation to Legacy" ),
-                 KiBitmap( tools_xpm ) );
+                 KiBitmap( graphic_mode_option_xpm ) );
 
     text = AddHotkeyName( _( "Switch Canvas to Open&GL" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_OPENGL );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
                  text, _( "Switch the canvas implementation to OpenGL" ),
-                 KiBitmap( tools_xpm ) );
+                 KiBitmap( graphic_mode_option_xpm ) );
 
     text = AddHotkeyName( _( "Switch Canvas to &Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_CAIRO );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
                  text, _( "Switch the canvas implementation to Cairo" ),
-                 KiBitmap( tools_xpm ) );
+                 KiBitmap( graphic_mode_option_xpm ) );
 
     //----- Place Menu ----------------------------------------------------------
     wxMenu* placeMenu = new wxMenu;
