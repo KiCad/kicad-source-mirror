@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -376,26 +376,29 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Switch Canvas to Legacy" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Legacy Canva&s" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_LEGACY );
 
-    AddMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
-                 text, _( "Switch the canvas implementation to Legacy" ),
-                 KiBitmap( graphic_mode_option_xpm ) );
+    viewMenu->Append(
+        new wxMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
+                        text, _( "Switch the canvas implementation to Legacy" ),
+                        wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "Switch Canvas to Open&GL" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "Open&GL Canvas" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_OPENGL );
 
-    AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
-                 text, _( "Switch the canvas implementation to OpenGL" ),
-                 KiBitmap( graphic_mode_option_xpm ) );
+    viewMenu->Append(
+        new wxMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
+                        text, _( "Switch the canvas implementation to OpenGL" ),
+                        wxITEM_RADIO ) );
 
-    text = AddHotkeyName( _( "Switch Canvas to &Cairo" ), g_Pcbnew_Editor_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Cairo Canvas" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_CANVAS_CAIRO );
 
-    AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
-                 text, _( "Switch the canvas implementation to Cairo" ),
-                 KiBitmap( graphic_mode_option_xpm ) );
+    viewMenu->Append(
+        new wxMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
+                        text, _( "Switch the canvas implementation to Cairo" ),
+                        wxITEM_RADIO ) );
 
     //----- Place Menu ----------------------------------------------------------
     wxMenu* placeMenu = new wxMenu;

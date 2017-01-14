@@ -239,26 +239,26 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Add canvas selection
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Switch Canvas to Legacy" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "Legacy Canva&s" ), m_hotkeysDescrList,
                           HK_CANVAS_LEGACY );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
                  text, _( "Switch the canvas implementation to Legacy" ),
-                 KiBitmap( tools_xpm ) );
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Switch Canvas to Open&GL" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "Open&GL Canvas" ), m_hotkeysDescrList,
                           HK_CANVAS_OPENGL );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
                  text, _( "Switch the canvas implementation to OpenGL" ),
-                 KiBitmap( tools_xpm ) );
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Switch Canvas to &Cairo" ), m_hotkeysDescrList,
+    text = AddHotkeyName( _( "&Cairo Canvas" ), m_hotkeysDescrList,
                           HK_CANVAS_CAIRO );
 
     AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
                  text, _( "Switch the canvas implementation to Cairo" ),
-                 KiBitmap( tools_xpm ) );
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
 
     //-------- Place menu --------------------
     wxMenu* placeMenu = new wxMenu;

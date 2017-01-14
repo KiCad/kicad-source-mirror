@@ -1031,15 +1031,6 @@ bool PCB_BASE_FRAME::SaveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 
 void PCB_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
 {
-    // In switch canvas options menus, add a symbol before the menu label,
-    // to show what mode is currently selected
-    // the symbol is SYMB_SELECTION
-    //
-    // I did not used menuitems with wxCHECK_MENU option, because bitmaps are not
-    // accepted on some OS in menuitems with wxCHECK_MENU option
-
-    #define SYMB_SELECTION "** "
-
     wxMenuBar* menuBar = GetMenuBar();
     EDA_DRAW_PANEL_GAL* gal_canvas = GetGalCanvas();
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
@@ -1047,35 +1038,16 @@ void PCB_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
     if( IsGalCanvasActive() && gal_canvas )
         canvasType = gal_canvas->GetBackend();
 
-    int menuIdList[] =
+    struct { int menuId; int galType; } menuList[] =
     {
-        ID_MENU_CANVAS_LEGACY, ID_MENU_CANVAS_OPENGL, ID_MENU_CANVAS_CAIRO
+        { ID_MENU_CANVAS_LEGACY,    EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE },
+        { ID_MENU_CANVAS_OPENGL,    EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL },
+        { ID_MENU_CANVAS_CAIRO,     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO },
     };
 
-    int galtype[] =
-    {   // Must be ordered like menuIdList
-        EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE,
-        EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL,
-        EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO
-    };
-
-    for( unsigned ii = 0; ii < DIM( menuIdList ); ii++ )
+    for( auto ii: menuList )
     {
-        wxMenuItem* item = menuBar->FindItem( menuIdList[ii] );
-        wxString label = item->GetItemLabel();
-        wxString labelBase;
-
-        if( label.StartsWith( SYMB_SELECTION, &labelBase ) )
-        {
-            if( galtype[ii] == canvasType )
-                continue;
-            else
-                item->SetItemLabel( labelBase );
-        }
-        else if( galtype[ii] == canvasType )
-        {
-            labelBase = SYMB_SELECTION + label;
-            item->SetItemLabel( labelBase );
-        }
+        wxMenuItem* item = menuBar->FindItem( ii.menuId );
+        item->Check( ii.galType == canvasType );
     }
 }
