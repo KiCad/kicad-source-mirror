@@ -204,7 +204,7 @@ bool EXCELLON_WRITER::GenDrillMapFile( const wxString& aFullFileName,
     plotter->SetCurrentLineWidth( -1 );
 
     // Plot board outlines and drill map
-    PlotDrillMarks( plotter );
+    plotDrillMarks( plotter );
 
     // Print a list of symbols used.
     int     charSize    = 3 * IU_PER_MM;                    // text size in IUs
@@ -333,7 +333,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
     {
         DRILL_LAYER_PAIR  pair = hole_sets[pair_ndx];
 
-        BuildHolesList( pair, buildNPTHlist );
+        buildHolesList( pair, buildNPTHlist );
 
         if( pair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
         {
@@ -369,7 +369,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
     if( !m_merge_PTH_NPTH )
         buildNPTHlist = true;
 
-    BuildHolesList( DRILL_LAYER_PAIR( F_Cu, B_Cu ), buildNPTHlist );
+    buildHolesList( DRILL_LAYER_PAIR( F_Cu, B_Cu ), buildNPTHlist );
 
     // nothing wrong with an empty NPTH file in report.
     if( m_merge_PTH_NPTH )
@@ -388,7 +388,7 @@ bool EXCELLON_WRITER::GenDrillReportFile( const wxString& aFullFileName )
 }
 
 
-bool EXCELLON_WRITER::PlotDrillMarks( PLOTTER* aPlotter )
+bool EXCELLON_WRITER::plotDrillMarks( PLOTTER* aPlotter )
 {
     // Plot the drill map:
     wxPoint pos;

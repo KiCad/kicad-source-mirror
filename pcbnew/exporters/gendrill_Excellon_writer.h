@@ -6,8 +6,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2015 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +99,8 @@ public:
     int m_lhs;      // Left digit number (integer value of coordinates)
     int m_rhs;      // Right digit number (decimal value of coordinates)
 
-public: DRILL_PRECISION( int l = 2, int r = 4 )
+public:
+    DRILL_PRECISION( int l = 2, int r = 4 )
     {
         m_lhs = l; m_rhs = r;
     }
@@ -216,24 +217,6 @@ public:
     }
 
     /**
-     * Function BuildHolesList
-     * Create the list of holes and tools for a given board
-     * The list is sorted by increasing drill size.
-     * Only holes included within aLayerPair are listed.
-     * If aLayerPair identifies with [F_Cu, B_Cu], then
-     * pad holes are always included also.
-     *
-     * @param aLayerPair is an inclusive range of layers.
-     * @param aGenerateNPTH_list :
-     *       true to create NPTH only list (with no plated holes)
-     *       false to created plated holes list (with no NPTH )
-     */
-    void BuildHolesList( DRILL_LAYER_PAIR aLayerPair,
-                         bool aGenerateNPTH_list );
-
-    int  GetHolesCount() const { return m_holeListBuffer.size(); }
-
-    /**
      * Function CreateDrillandMapFilesSet
      * Creates the full set of Excellon drill file for the board
      * filenames are computed from the board name, and layers id
@@ -245,14 +228,6 @@ public:
     void CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                                     bool aGenDrill, bool aGenMap,
                                     REPORTER * aReporter = NULL );
-
-    /**
-     * Function CreateDrillFile
-     * Creates an Excellon drill file
-     * @param aFile = an opened file to write to will be closed by CreateDrillFile
-     * @return hole count
-     */
-    int  CreateDrillFile( FILE * aFile );
 
     /**
      * Function GenDrillReportFile
@@ -320,6 +295,32 @@ public:
     bool GenDrillMapFile( const wxString& aFullFileName, PlotFormat aFormat );
 
 private:
+    /**
+     * Function CreateDrillFile
+     * Creates an Excellon drill file
+     * @param aFile = an opened file to write to will be closed by CreateDrillFile
+     * @return hole count
+     */
+    int  createDrillFile( FILE * aFile );
+
+    /**
+     * Function BuildHolesList
+     * Create the list of holes and tools for a given board
+     * The list is sorted by increasing drill size.
+     * Only holes included within aLayerPair are listed.
+     * If aLayerPair identifies with [F_Cu, B_Cu], then
+     * pad holes are always included also.
+     *
+     * @param aLayerPair is an inclusive range of layers.
+     * @param aGenerateNPTH_list :
+     *       true to create NPTH only list (with no plated holes)
+     *       false to created plated holes list (with no NPTH )
+     */
+    void buildHolesList( DRILL_LAYER_PAIR aLayerPair,
+                         bool aGenerateNPTH_list );
+
+    int  getHolesCount() const { return m_holeListBuffer.size(); }
+
     /* Print the DRILL file header. The full header is:
      * M48
      * ;DRILL file {PCBNEW (2007-11-29-b)} date 17/1/2008-21:02:35
@@ -327,15 +328,15 @@ private:
      * FMAT,2
      * INCH,TZ
      */
-    void WriteEXCELLONHeader();
+    void writeEXCELLONHeader();
 
-    void WriteEXCELLONEndOfFile();
+    void writeEXCELLONEndOfFile();
 
     /* Created a line like:
      * X48000Y19500
      * According to the selected format
      */
-    void WriteCoordinates( char* aLine, double aCoordX, double aCoordY );
+    void writeCoordinates( char* aLine, double aCoordX, double aCoordY );
 
     /** Helper function.
      * Writes the drill marks in HPGL, POSTSCRIPT or other supported formats
@@ -345,7 +346,7 @@ private:
      * these other values share the same mark shape
      * @param aPlotter = a PLOTTER instance (HPGL, POSTSCRIPT ... plotter).
      */
-    bool PlotDrillMarks( PLOTTER* aPlotter );
+    bool plotDrillMarks( PLOTTER* aPlotter );
 
     /// Get unique layer pairs by examining the micro and blind_buried vias.
     std::vector<DRILL_LAYER_PAIR> getUniqueLayerPairs() const;
