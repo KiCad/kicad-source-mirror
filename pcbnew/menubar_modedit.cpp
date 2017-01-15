@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
 *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -242,23 +242,26 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "Legacy Canva&s" ), m_hotkeysDescrList,
                           HK_CANVAS_LEGACY );
 
-    AddMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
-                 text, _( "Switch the canvas implementation to Legacy" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+    viewMenu->Append(
+        new wxMenuItem( viewMenu, ID_MENU_CANVAS_LEGACY,
+                        text, _( "Switch the canvas implementation to Legacy" ),
+                        wxITEM_RADIO ) );
 
     text = AddHotkeyName( _( "Open&GL Canvas" ), m_hotkeysDescrList,
                           HK_CANVAS_OPENGL );
 
-    AddMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
-                 text, _( "Switch the canvas implementation to OpenGL" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+    viewMenu->Append(
+        new wxMenuItem( viewMenu, ID_MENU_CANVAS_OPENGL,
+                        text, _( "Switch the canvas implementation to OpenGL" ),
+                        wxITEM_RADIO ) );
 
     text = AddHotkeyName( _( "&Cairo Canvas" ), m_hotkeysDescrList,
                           HK_CANVAS_CAIRO );
 
-    AddMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
-                 text, _( "Switch the canvas implementation to Cairo" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+    viewMenu->Append(
+        new wxMenuItem( viewMenu, ID_MENU_CANVAS_CAIRO,
+                        text, _( "Switch the canvas implementation to Cairo" ),
+                        wxITEM_RADIO ) );
 
     //-------- Place menu --------------------
     wxMenu* placeMenu = new wxMenu;
