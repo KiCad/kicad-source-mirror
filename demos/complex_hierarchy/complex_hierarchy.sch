@@ -7,8 +7,8 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 3
-Title ""
-Date "21 mar 2015"
+Title "Complex hierarchy: demo"
+Date "2017-01-15"
 Rev ""
 Comp ""
 Comment1 ""
@@ -187,7 +187,7 @@ U 1 1 4B3A1558
 P 2500 1500
 F 0 "C9" H 2650 1550 50  0000 L CNN
 F 1 "47uF/63V" H 2650 1500 50  0000 L TNN
-F 2 "Discret:CP8" H 2800 1400 60  0000 C CNN
+F 2 "Discret:CP8" H 2800 1400 30  0000 C CNN
 F 3 "" H 2500 1500 60  0001 C CNN
 	1    2500 1500
 	1    0    0    -1  
@@ -232,7 +232,7 @@ U 1 1 4B3A12F4
 P 1650 1400
 F 0 "P1" V 1600 1400 40  0000 C CNN
 F 1 "CONN_2" V 1700 1400 40  0000 C CNN
-F 2 "Connect:bornier2" H 1650 1200 60  0000 C CNN
+F 2 "Connect:bornier2" H 1650 1200 30  0000 C CNN
 F 3 "" H 1650 1400 60  0001 C CNN
 	1    1650 1400
 	-1   0    0    -1  
@@ -397,7 +397,7 @@ U 1 1 4AD71B06
 P 1650 2600
 F 0 "P2" V 1600 2600 40  0000 C CNN
 F 1 "CONN_2" V 1700 2600 40  0000 C CNN
-F 2 "Connect:bornier2" H 1650 2400 60  0000 C CNN
+F 2 "Connect:bornier2" H 1650 2400 30  0000 C CNN
 F 3 "" H 1650 2600 60  0001 C CNN
 	1    1650 2600
 	-1   0    0    -1  

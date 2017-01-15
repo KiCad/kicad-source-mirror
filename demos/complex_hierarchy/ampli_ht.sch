@@ -6,10 +6,10 @@ EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 3 3
-Title ""
-Date "21 mar 2015"
-Rev ""
+Sheet 2 3
+Title "Complex hierarchy: demo"
+Date "2017-01-15"
+Rev "1"
 Comp ""
 Comment1 ""
 Comment2 ""
@@ -714,7 +714,7 @@ F 3 "" H 4350 1600 60  0001 C CNN
 	1    4350 1600
 	0    1    1    0   
 $EndComp
-Text Notes 3100 2900 0    60   ~ 0
+Text Notes 2600 2950 0    80   Italic 16
 Filter:\nFc =1000Hz
 $Comp
 L POT RV2
