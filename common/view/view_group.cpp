@@ -50,8 +50,7 @@ VIEW_GROUP::VIEW_GROUP( VIEW* aView ) :
 
 VIEW_GROUP::~VIEW_GROUP()
 {
-    if( m_view && viewPrivData() )
-        m_view->Remove( this );
+    // VIEW_ITEM destructor removes the object from its parent view
 }
 
 

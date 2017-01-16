@@ -84,10 +84,12 @@ class VIEW_ITEM
 public:
     VIEW_ITEM() : m_viewPrivData( nullptr )
     {
-
     }
 
     virtual ~VIEW_ITEM();
+
+    VIEW_ITEM( const VIEW_ITEM& aOther ) = delete;
+    VIEW_ITEM& operator=( const VIEW_ITEM& aOther ) = delete;
 
     /**
      * Function ViewBBox()

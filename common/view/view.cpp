@@ -55,7 +55,7 @@ public:
 
     ~VIEW_ITEM_DATA()
     {
-        delete[] m_groups;
+        deleteGroups();
     }
 
     int getFlags() const
@@ -174,7 +174,7 @@ private:
     void deleteGroups()
     {
         delete[] m_groups;
-        m_groups = NULL;
+        m_groups = nullptr;
         m_groupsSize = 0;
     }
 
@@ -246,7 +246,7 @@ void VIEW::OnDestroy( VIEW_ITEM* aItem )
 {
     auto data = aItem->viewPrivData();
 
-    if(!data)
+    if( !data )
         return;
 
     data->m_view->Remove( aItem );
@@ -311,7 +311,7 @@ void VIEW::Add( VIEW_ITEM* aItem )
     aItem->ViewGetLayers( layers, layers_count );
     aItem->viewPrivData()->saveLayers( layers, layers_count );
 
-    m_allItems.push_back(aItem);
+    m_allItems.push_back( aItem );
 
     for( int i = 0; i < layers_count; ++i )
     {
@@ -360,7 +360,6 @@ void VIEW::Remove( VIEW_ITEM* aItem )
     }
 
     viewData->deleteGroups();
-    aItem->m_viewPrivData = nullptr;
 }
 
 
@@ -906,21 +905,12 @@ void VIEW::draw( VIEW_ITEM* aItem, bool aImmediate )
     }
 }
 
+
 void VIEW::draw( VIEW_GROUP* aGroup, bool aImmediate )
 {
     for( unsigned int i = 0; i < aGroup->GetSize(); i++)
         draw( aGroup->GetItem(i), aImmediate );
 }
-
-struct VIEW::unlinkItem
-{
-    bool operator()( VIEW_ITEM* aItem )
-    {
-        delete aItem->m_viewPrivData;
-        aItem->m_viewPrivData = nullptr;
-        return true;
-    }
-};
 
 
 struct VIEW::recacheItem
@@ -960,19 +950,10 @@ void VIEW::Clear()
     BOX2I r;
 
     r.SetMaximum();
-
     m_allItems.clear();
 
     for( LAYER_MAP_ITER i = m_layers.begin(); i != m_layers.end(); ++i )
-    {
-        VIEW_LAYER* l = &( ( *i ).second );
-        unlinkItem v;
-
-        if( m_dynamic )
-            l->items->Query( r, v );
-
-        l->items->RemoveAll();
-    }
+        i->second.items->RemoveAll();
 
     m_gal->ClearCache();
 }
@@ -1265,9 +1246,10 @@ void VIEW::UpdateItems()
             continue;
 
         if( viewData->m_requiredUpdate != NONE )
+        {
             invalidateItem( item, viewData->m_requiredUpdate );
-
-        viewData->m_requiredUpdate = NONE;
+            viewData->m_requiredUpdate = NONE;
+        }
     }
 
     m_gal->EndUpdate();
