@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2013-2017 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -253,7 +253,7 @@ public:
     const VIA& Via() const { return m_via; }
 
     virtual void Mark( int aMarker ) override;
-    virtual void Unmark ();
+    virtual void Unmark( int aMarker = -1 ) override;
     virtual int Marker() const override;
 
     void DragSegment( const VECTOR2I& aP, int aIndex, int aSnappingThreshold = 0 );
