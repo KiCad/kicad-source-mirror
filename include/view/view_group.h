@@ -136,8 +136,6 @@ protected:
 
 private:
     void updateBbox();
-
-    VIEW* m_view;
 };
 
 } // namespace KIGFX

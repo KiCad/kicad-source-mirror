@@ -55,8 +55,6 @@ public:
     using ITER = std::set<BOARD_ITEM*>::iterator;
     using CITER = std::set<BOARD_ITEM*>::const_iterator;
 
-    SELECTION( KIGFX::VIEW* aView = nullptr );
-
     ITER begin() { return m_items.begin(); }
     ITER end() { return m_items.end(); }
     CITER begin() const { return m_items.cbegin(); }

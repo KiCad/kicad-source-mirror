@@ -194,7 +194,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( m_frame );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview( m_view );
+    SELECTION preview;
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -364,7 +364,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     int maxThickness;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview( m_view );
+    SELECTION preview;
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -577,7 +577,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     VECTOR2I delta = cursorPos - list.front()->GetPosition();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview( m_view );
+    SELECTION preview;
     BOARD_COMMIT commit( m_frame );
 
     // Build the undo list & add items to the current view
@@ -799,7 +799,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     DRAWSEGMENT line45;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview( m_view );
+    SELECTION preview;
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -987,7 +987,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     helperLine.SetWidth( 1 );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview( m_view );
+    SELECTION preview;
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -1166,7 +1166,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     BOARD_COMMIT commit( m_frame );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    SELECTION preview( m_view );
+    SELECTION preview;
     m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );

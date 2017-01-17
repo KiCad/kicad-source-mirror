@@ -1399,11 +1399,6 @@ bool SELECTION_TOOL::SanitizeSelection()
 }
 
 
-SELECTION::SELECTION( KIGFX::VIEW* aView ) :
-    KIGFX::VIEW_GROUP( aView )
-{}
-
-
 void SELECTION::clear()
 {
     m_items.clear();

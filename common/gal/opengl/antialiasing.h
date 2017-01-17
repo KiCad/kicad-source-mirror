@@ -122,8 +122,7 @@ namespace KIGFX {
         void loadShaders();
         void updateUniforms();
 
-        bool areBuffersInitialized;     //
-        bool isInitialized;             // shaders linked
+        bool areBuffersInitialized;
 
         unsigned int smaaBaseBuffer;    // base + overlay temporary
         unsigned int smaaEdgesBuffer;
