@@ -39,21 +39,6 @@ void PCB_BASE_EDIT_FRAME::SetRotationAngle( int aRotationAngle )
 }
 
 
-bool PCB_BASE_EDIT_FRAME::PostCommandMenuEvent( int evt_type )
-{
-    if( evt_type != 0 )
-    {
-        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
-        evt.SetEventObject( this );
-        evt.SetId( evt_type );
-        wxPostEvent( this, evt );
-        return true;
-    }
-
-    return false;
-}
-
-
 void PCB_BASE_EDIT_FRAME::UseGalCanvas( bool aEnable )
 {
     PCB_BASE_FRAME::UseGalCanvas( aEnable );

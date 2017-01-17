@@ -631,3 +631,18 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName,
         wxRemoveFile( autoSaveFileName.GetFullPath() );
     }
 }
+
+
+bool EDA_BASE_FRAME::PostCommandMenuEvent( int evt_type )
+{
+    if( evt_type != 0 )
+    {
+        wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
+        evt.SetEventObject( this );
+        evt.SetId( evt_type );
+        wxPostEvent( this, evt );
+        return true;
+    }
+
+    return false;
+}

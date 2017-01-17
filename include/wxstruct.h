@@ -406,6 +406,15 @@ public:
      * redraws the menus and what not in current language.
      */
     virtual void ShowChangedLanguage();
+
+
+    /**
+     * Function PostCommandMenuEvent
+     *
+     * Post a menu event to the frame, which can be used to trigger actions
+     * bound to menu items.
+     */
+    bool PostCommandMenuEvent( int evt_type );
 };
 
 

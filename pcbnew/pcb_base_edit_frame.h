@@ -156,8 +156,6 @@ public:
      */
     void SetRotationAngle( int aRotationAngle );
 
-    bool PostCommandMenuEvent( int evt_type );
-
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void UseGalCanvas( bool aEnable ) override;
 
