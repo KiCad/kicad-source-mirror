@@ -238,7 +238,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // (it depends on the actual board)
     // So we do not show the default clearance, by setting it to 0
     // The footprint or pad specific clearance will be shown
-    GetBoard()->GetDesignSettings().GetDefault()->SetClearance(0);
+    GetBoard()->GetDesignSettings().GetDefault()->SetClearance( 0 );
+
+    // Don't show the default board solder mask clearance in the footprint editor.  Only the
+    // footprint or pad clearance setting should be shown if it is not 0.
+    GetBoard()->GetDesignSettings().m_SolderMaskMargin = 0;
 
     // restore the last footprint from the project, if any
     restoreLastFootprint();
@@ -561,6 +565,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
     if( aEvent.GetEventObject() == m_drawToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }
+
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent )
 {
