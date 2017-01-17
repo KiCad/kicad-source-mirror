@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -242,7 +242,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
 
-            getView()->Update( &selection );
+            getView()->Update( selection.ViewGroup() );
             m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
         }
 
@@ -299,7 +299,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // Update dragging offset (distance between cursor and the first dragged item)
                 m_offset = selection.Front()->GetPosition() - modPoint;
-                getView()->Update( &selection );
+                getView()->Update( selection.ViewGroup() );
                 updateRatsnest( true );
             }
         }

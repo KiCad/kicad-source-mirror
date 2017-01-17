@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -77,7 +77,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
 
 SELECTION_TOOL::~SELECTION_TOOL()
 {
-    getView()->Remove( &m_selection );
+    getView()->Remove( m_selection.ViewGroup() );
 }
 
 
@@ -123,8 +123,8 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         clearSelection();
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
-    getView()->Remove( &m_selection );
-    getView()->Add( &m_selection );
+    getView()->Remove( m_selection.ViewGroup() );
+    getView()->Add( m_selection.ViewGroup() );
 }
 
 
@@ -1399,12 +1399,6 @@ bool SELECTION_TOOL::SanitizeSelection()
 }
 
 
-void SELECTION::clear()
-{
-    m_items.clear();
-}
-
-
 VECTOR2I SELECTION::GetCenter() const
 {
     VECTOR2I centre;
@@ -1431,9 +1425,9 @@ VECTOR2I SELECTION::GetCenter() const
 }
 
 
-const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
+const KIGFX::VIEW_GROUP::ITEMS SELECTION::SELECTION_VIEW_GROUP::updateDrawList() const
 {
-    std::vector<VIEW_ITEM*> items;
+    std::vector<KIGFX::VIEW_ITEM*> items;
 
     for( auto item : m_items )
     {

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -45,12 +45,8 @@ namespace KIGFX
     class GAL;
 }
 
-struct SELECTION : public KIGFX::VIEW_GROUP
+struct SELECTION
 {
-private:
-    /// Set of selected items
-    std::set<BOARD_ITEM*> m_items;
-
 public:
     using ITER = std::set<BOARD_ITEM*>::iterator;
     using CITER = std::set<BOARD_ITEM*>::const_iterator;
@@ -60,27 +56,35 @@ public:
     CITER begin() const { return m_items.cbegin(); }
     CITER end() const { return m_items.cend(); }
 
-    virtual void Add( BOARD_ITEM* aItem )
+    SELECTION()
+        : m_viewGroup( m_items )
+    {
+    }
+
+    void Add( BOARD_ITEM* aItem )
     {
         m_items.insert( aItem );
+        m_viewGroup.Add( aItem );
     }
 
-    virtual void Remove( BOARD_ITEM *aItem )
+    void Remove( BOARD_ITEM *aItem )
     {
         m_items.erase( aItem );
+        m_viewGroup.Remove( aItem );
     }
 
-    virtual void Clear() override
+    void Clear()
     {
         m_items.clear();
+        m_viewGroup.Clear();
     }
 
-    virtual unsigned int GetSize() const override
+    unsigned int GetSize() const
     {
         return m_items.size();
     }
 
-    virtual KIGFX::VIEW_ITEM* GetItem( unsigned int idx ) const override
+    KIGFX::VIEW_ITEM* GetItem( unsigned int idx ) const
     {
         auto iter = m_items.begin();
 
@@ -137,15 +141,34 @@ public:
         return m_items;
     }
 
-    virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
+    KIGFX::VIEW_GROUP* ViewGroup()
+    {
+        return &m_viewGroup;
+    }
 
 private:
+    class SELECTION_VIEW_GROUP : public KIGFX::VIEW_GROUP
+    {
+    public:
+        SELECTION_VIEW_GROUP( std::set<BOARD_ITEM*>& aItemSet )
+            : m_items( aItemSet )
+        {
+        }
 
+    protected:
+        virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
 
-    /// Clears both the VIEW_GROUP and set of selected items. Please note that it does not
-    /// change properties of selected items (e.g. selection flag).
-    void clear();
+    private:
+        std::set<BOARD_ITEM*>& m_items;
+    };
+
+    /// VIEW_GROUP keeping the selected items
+    SELECTION_VIEW_GROUP m_viewGroup;
+
+    /// Set of selected items
+    std::set<BOARD_ITEM*> m_items;
 };
+
 
 enum SELECTION_LOCK_FLAGS
 {
@@ -153,6 +176,7 @@ enum SELECTION_LOCK_FLAGS
     SELECTION_LOCK_OVERRIDE = 1,
     SELECTION_LOCKED = 2
 };
+
 
 /**
  * Class SELECTION_TOOL
