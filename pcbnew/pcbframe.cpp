@@ -627,6 +627,17 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         }
     }
 
+    if( IsGalCanvasActive() )
+    {
+        // On Windows 7 / 32 bits, on OpenGL mode only, Pcbnew crashes
+        // when closing this frame if a footprint was selected, and the footprint editor called
+        // to edit this footprint, and when closing pcbnew if this footprint is still selected
+        // See https://bugs.launchpad.net/kicad/+bug/1655858
+        // I think this is certainly a OpenGL event fired after frame deletion, so this workaround
+        // avoid the crash (JPC)
+        GetGalCanvas()->SetEvtHandlerEnabled( false );
+    }
+
     GetGalCanvas()->StopDrawing();
 
     // Delete the auto save file if it exists.
