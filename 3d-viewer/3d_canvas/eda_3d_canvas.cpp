@@ -439,26 +439,35 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
     float delta_move = m_delta_move_step_factor * m_settings.CameraGet().ZoomGet();
 
     if( m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) )
-        delta_move *= (0.05f * event.GetWheelRotation());
+        delta_move *= (0.01f * event.GetWheelRotation());
     else
         if( event.GetWheelRotation() < 0 )
             delta_move = -delta_move;
 
-    if( m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) )
+    // mousewheel_panning enabled:
+    //      wheel           -> pan;
+    //      wheel + shift   -> horizontal scrolling;
+    //      wheel + ctrl    -> zooming;
+    // mousewheel_panning disabled:
+    //      wheel + shift   -> vertical scrolling;
+    //      wheel + ctrl    -> horizontal scrolling;
+    //      wheel           -> zooming.
+
+    if( m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) && !event.ControlDown() )
     {
-        if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL )
+        if( event.GetWheelAxis() == wxMOUSE_WHEEL_HORIZONTAL || event.ShiftDown() )
             m_settings.CameraGet().Pan( SFVEC3F( -delta_move, 0.0f, 0.0f ) );
         else
             m_settings.CameraGet().Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
 
         mouseActivity = true;
     }
-    else if( event.ShiftDown() )
+    else if( event.ShiftDown() && !m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) )
     {
         m_settings.CameraGet().Pan( SFVEC3F( 0.0f, -delta_move, 0.0f ) );
         mouseActivity = true;
     }
-    else if( event.ControlDown() )
+    else if( event.ControlDown() && !m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) )
     {
         m_settings.CameraGet().Pan( SFVEC3F( delta_move, 0.0f, 0.0f ) );
         mouseActivity = true;

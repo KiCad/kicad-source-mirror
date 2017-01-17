@@ -981,15 +981,35 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 
     if( m_enableMousewheelPan )
     {
-        wxPoint newStart = GetViewStart();
-        if( axis == wxMOUSE_WHEEL_HORIZONTAL )
-            newStart.x += wheelRotation;
+        // MousewheelPAN + Ctrl = zooming
+        if( event.ControlDown() && !event.ShiftDown() )
+        {
+            if( wheelRotation > 0 )
+                cmd.SetId( ID_POPUP_ZOOM_IN );
+            else if( wheelRotation < 0)
+                cmd.SetId( ID_POPUP_ZOOM_OUT );
+        }
+        // MousewheelPAN + Shift = horizontal scrolling
+        else if( event.ShiftDown() && !event.ControlDown() )
+        {
+            if( wheelRotation > 0 )
+                cmd.SetId( ID_PAN_LEFT );
+            else if( wheelRotation < 0)
+                cmd.SetId( ID_PAN_RIGHT );
+        }
+        // Without modifiers MousewheelPAN - just pan
         else
-            newStart.y -= wheelRotation;
+        {
+            wxPoint newStart = GetViewStart();
+            if( axis == wxMOUSE_WHEEL_HORIZONTAL )
+                newStart.x += wheelRotation;
+            else
+                newStart.y -= wheelRotation;
 
-        wxPoint center = GetScreenCenterLogicalPosition();
-        GetParent()->SetScrollCenterPosition( center );
-        Scroll( newStart );
+            wxPoint center = GetScreenCenterLogicalPosition();
+            GetParent()->SetScrollCenterPosition( center );
+            Scroll( newStart );
+        }
     }
     else if( wheelRotation > 0 )
     {

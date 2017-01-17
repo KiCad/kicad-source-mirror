@@ -98,7 +98,17 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 {
     const double wheelPanSpeed = 0.001;
 
-    if( aEvent.ControlDown() || aEvent.ShiftDown() || m_enableMousewheelPan )
+    // mousewheelpan disabled:
+    //      wheel + ctrl    -> horizontal scrolling;
+    //      wheel + shift   -> vertical scrolling;
+    //      wheel           -> zooming;
+    // mousewheelpan enabled:
+    //      wheel           -> pan;
+    //      wheel + ctrl    -> zooming;
+    //      wheel + shift   -> horizontal scrolling.
+
+    if( ( !m_enableMousewheelPan && ( aEvent.ControlDown() || aEvent.ShiftDown() ) ) ||
+        ( m_enableMousewheelPan && !aEvent.ControlDown() ) )
     {
         // Scrolling
         VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
@@ -109,7 +119,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 
         if ( m_enableMousewheelPan )
         {
-            if ( axis == wxMOUSE_WHEEL_HORIZONTAL )
+            if ( axis == wxMOUSE_WHEEL_HORIZONTAL || aEvent.ShiftDown() )
                 scrollX = scrollVec.x;
             else
                 scrollY = -scrollVec.y;
