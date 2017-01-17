@@ -42,12 +42,10 @@ public:
     int ClearMeanders( const TOOL_EVENT& aEvent );
 
 private:
-    void performTuning( );
+    void performTuning();
     int mainLoop( PNS::ROUTER_MODE aMode );
     void handleCommonEvents( const TOOL_EVENT& aEvent );
-    void updateStatusPopup ( PNS_TUNE_STATUS_POPUP& aPopup );
-
-
+    void updateStatusPopup( PNS_TUNE_STATUS_POPUP& aPopup );
 
     PNS::MEANDER_SETTINGS m_savedMeanderSettings;
 };

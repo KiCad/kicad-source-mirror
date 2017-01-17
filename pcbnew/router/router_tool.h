@@ -34,9 +34,9 @@ public:
     bool Init() override;
     void Reset( RESET_REASON aReason ) override;
 
-    int RouteSingleTrace ( const TOOL_EVENT& aEvent );
-    int RouteDiffPair ( const TOOL_EVENT& aEvent );
-    int InlineDrag ( const TOOL_EVENT& aEvent );
+    int RouteSingleTrace( const TOOL_EVENT& aEvent );
+    int RouteDiffPair( const TOOL_EVENT& aEvent );
+    int InlineDrag( const TOOL_EVENT& aEvent );
 
     int DpDimensionsDialog ( const TOOL_EVENT& aEvent );
     int SettingsDialog ( const TOOL_EVENT& aEvent );

@@ -128,14 +128,14 @@ public:
     bool IsVisible( const VIEW_ITEM* aItem ) const;
 
     /**
-     * Function ViewUpdate()
+     * Function Update()
      * For dynamic VIEWs, informs the associated VIEW that the graphical representation of
      * this item has changed. For static views calling has no effect.
      *
      * @param aUpdateFlags: how much the object has changed.
      */
-     void Update( VIEW_ITEM* aItem );
-     void Update( VIEW_ITEM* aItem, int aUpdateFlags );
+    void Update( VIEW_ITEM* aItem );
+    void Update( VIEW_ITEM* aItem, int aUpdateFlags );
 
     /**
      * Function SetRequired()

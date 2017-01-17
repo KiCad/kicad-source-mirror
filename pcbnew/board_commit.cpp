@@ -249,10 +249,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage )
                     undoList.PushItem( itemWrapper );
                 }
 
-                if ( boardItem->Type() == PCB_MODULE_T )
+                if( boardItem->Type() == PCB_MODULE_T )
                 {
                     MODULE* module = static_cast<MODULE*>( boardItem );
-                    module->RunOnChildren( [&view] ( BOARD_ITEM *aItem ){ view->Update( aItem ); } );
+                    module->RunOnChildren( [&view] ( BOARD_ITEM* aItem ) { view->Update( aItem ); } );
                 }
 
                 view->Update ( boardItem );

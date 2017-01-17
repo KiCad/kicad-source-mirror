@@ -1341,7 +1341,7 @@ bool VIEW::IsVisible( const VIEW_ITEM* aItem ) const
 }
 
 
-void VIEW::Update( VIEW_ITEM *aItem )
+void VIEW::Update( VIEW_ITEM* aItem )
 {
     Update( aItem, ALL );
 }
