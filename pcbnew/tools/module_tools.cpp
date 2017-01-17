@@ -521,10 +521,9 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
 
 int MODULE_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::VIEW* view = getView();
     KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
     const LAYER_NUM layers[] = { ITEM_GAL_LAYER( MOD_TEXT_BK_VISIBLE ),
                                  ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE ),
@@ -542,11 +541,11 @@ int MODULE_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
         for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item ->Next() )
         {
             if( item->Type() == PCB_MODULE_TEXT_T )
-                getView()->Update( item, KIGFX::GEOMETRY );
+                view->Update( item, KIGFX::GEOMETRY );
         }
 
-        getView()->Update( &module->Reference(), KIGFX::GEOMETRY );
-        getView()->Update( &module->Value(), KIGFX::GEOMETRY );
+        view->Update( &module->Reference(), KIGFX::GEOMETRY );
+        view->Update( &module->Value(), KIGFX::GEOMETRY );
     }
 
     m_frame->GetGalCanvas()->Refresh();
@@ -557,10 +556,9 @@ int MODULE_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
 
 int MODULE_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
 {
-    KIGFX::PCB_PAINTER* painter =
-            static_cast<KIGFX::PCB_PAINTER*>( m_frame->GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::VIEW* view = getView();
     KIGFX::PCB_RENDER_SETTINGS* settings =
-            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
+            static_cast<KIGFX::PCB_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
     const LAYER_ID layers[] = { F_Adhes, B_Adhes, F_Paste, B_Paste,
             F_SilkS, B_SilkS, F_Mask, B_Mask,
@@ -576,7 +574,7 @@ int MODULE_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
         for( BOARD_ITEM* item = module->GraphicalItems(); item; item = item ->Next() )
         {
             if( item->Type() == PCB_MODULE_EDGE_T )
-                getView()->Update( item, KIGFX::GEOMETRY );
+                view->Update( item, KIGFX::GEOMETRY );
         }
     }
 
