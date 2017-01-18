@@ -545,7 +545,7 @@ endif()
 # Find Cairo library, required
 #
 find_package( Cairo 1.8.8 REQUIRED )
-find_package( Pixman 1.0 REQUIRED )
+find_package( Pixman 0.30 REQUIRED )
 
 #
 # Find Boost library, required.
