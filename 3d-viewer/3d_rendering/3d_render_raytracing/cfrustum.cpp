@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2017 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,22 +49,10 @@ void CFRUSTUM::GenerateFrustum( const RAY &topLeft,
     m_point[2] = bottomLeft.m_Origin;
     m_point[3] = topLeft.m_Origin;
 
-    if( topRight.m_Dir == topLeft.m_Dir )
-    {
-        // This will be the case if the camera is Ortho projection
-
-        m_normals[0] = glm::normalize( bottomLeft.m_Origin - topLeft.m_Origin );    // TOP
-        m_normals[1] = glm::normalize( topLeft.m_Origin    - topRight.m_Origin );   // RIGHT
-        m_normals[2] = -m_normals[0];                                               // BOTTOM
-        m_normals[3] = -m_normals[1];                                               // LEFT
-    }
-    else
-    {
-        m_normals[0] = glm::cross( topRight.m_Dir,    topLeft.m_Dir );              // TOP
-        m_normals[1] = glm::cross( bottomRight.m_Dir, topRight.m_Dir );             // RIGHT
-        m_normals[2] = glm::cross( bottomLeft.m_Dir,  bottomRight.m_Dir );          // BOTTOM
-        m_normals[3] = glm::cross( topLeft.m_Dir,     bottomLeft.m_Dir );           // LEFT
-    }
+    m_normals[0] = glm::cross( topRight.m_Dir,    topLeft.m_Dir );              // TOP
+    m_normals[1] = glm::cross( bottomRight.m_Dir, topRight.m_Dir );             // RIGHT
+    m_normals[2] = glm::cross( bottomLeft.m_Dir,  bottomRight.m_Dir );          // BOTTOM
+    m_normals[3] = glm::cross( topLeft.m_Dir,     bottomLeft.m_Dir );           // LEFT
 }
 
 
@@ -99,7 +87,7 @@ bool CFRUSTUM::Intersect( const CBBOX &aBBox ) const
             const SFVEC3F OP = pointPlane - box[j];
             const float dot = glm::dot( OP, normalPlane );
 
-            if( dot < 0.0f )
+            if( dot < FLT_EPSILON )
             {
                 out_side++;
 

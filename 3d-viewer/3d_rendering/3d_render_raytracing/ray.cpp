@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2017 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include <wx/debug.h>
 
-static unsigned int gs_next_rayID = 0;
+//static unsigned int gs_next_rayID = 0;
 
 void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
 {
@@ -41,25 +41,17 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
     m_Dir = d;
     m_InvDir = 1.0f / d;
 
-    if( fabs(m_Dir.x) < FLT_EPSILON )
-        m_InvDir.x = NextFloatDown(FLT_MAX);
-
-    if( fabs(m_Dir.y) < FLT_EPSILON )
-        m_InvDir.y = NextFloatDown(FLT_MAX);
-
-    if( fabs(m_Dir.z) < FLT_EPSILON )
-        m_InvDir.z = NextFloatDown(FLT_MAX);
-
-    rayID = gs_next_rayID;
-    gs_next_rayID++;
+    //rayID = gs_next_rayID;
+    //gs_next_rayID++;
 
     // An Efficient and Robust Ray–Box Intersection Algorithm
     // Amy Williams Steve Barrus R. Keith Morley Peter Shirley
     // University of Utah
     // http://people.csail.mit.edu/amy/papers/box-jgt.pdf
-    m_dirIsNeg[0] = m_Dir.x < 0.0f;
-    m_dirIsNeg[1] = m_Dir.y < 0.0f;
-    m_dirIsNeg[2] = m_Dir.z < 0.0f;
+    m_dirIsNeg[0] = m_Dir.x <= 0.0f;
+    m_dirIsNeg[1] = m_Dir.y <= 0.0f;
+    m_dirIsNeg[2] = m_Dir.z <= 0.0f;
+
 
     // ray slope
 
