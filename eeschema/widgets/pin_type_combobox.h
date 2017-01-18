@@ -48,4 +48,8 @@ public:
 
     ELECTRICAL_PINTYPE  GetPinTypeSelection();
     void                SetSelection( ELECTRICAL_PINTYPE aType );
+
+private:
+    // fixes hidden overloaded virtual function warnings
+    using wxBitmapComboBox::SetSelection;
 };

@@ -48,4 +48,8 @@ public:
 
     GRAPHIC_PINSHAPE GetPinShapeSelection();
     void             SetSelection( GRAPHIC_PINSHAPE aShape );
+
+private:
+    // fixes hidden overloaded virtual function warnings
+    using wxBitmapComboBox::SetSelection;
 };
