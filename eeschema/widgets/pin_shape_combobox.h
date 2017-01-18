@@ -47,5 +47,4 @@ public:
             const wxString& name = wxBitmapComboBoxNameStr );
 
     GRAPHIC_PINSHAPE GetPinShapeSelection();
-    void             SetSelection( GRAPHIC_PINSHAPE aShape );
 };
