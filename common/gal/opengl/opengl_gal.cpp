@@ -226,7 +226,7 @@ void OPENGL_GAL::BeginDrawing()
             mainBuffer = compositor->CreateBuffer();
             overlayBuffer = compositor->CreateBuffer();
         }
-        catch( std::runtime_error& e )
+        catch( std::runtime_error& )
         {
             GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
             throw;      // DRAW_PANEL_GAL will handle it
@@ -1561,7 +1561,7 @@ void OPENGL_GAL::init()
             throw std::runtime_error( "Requested texture size is not supported" );
         }
     }
-    catch( std::runtime_error& e )
+    catch( std::runtime_error& )
     {
         GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
         throw;
