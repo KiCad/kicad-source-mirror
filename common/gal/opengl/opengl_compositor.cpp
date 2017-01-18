@@ -130,8 +130,6 @@ void OPENGL_COMPOSITOR::Initialize()
 
 void OPENGL_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 {
-    assert( aWidth > 0 && aHeight > 0 );
-
     if( m_initialized )
         clean();
 
