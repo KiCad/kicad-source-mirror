@@ -77,7 +77,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
 
 SELECTION_TOOL::~SELECTION_TOOL()
 {
-    getView()->Remove( m_selection.ViewGroup() );
+    getView()->Remove( &m_selection );
 }
 
 
@@ -123,8 +123,8 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         clearSelection();
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
-    getView()->Remove( m_selection.ViewGroup() );
-    getView()->Add( m_selection.ViewGroup() );
+    getView()->Remove( &m_selection );
+    getView()->Add( &m_selection );
 }
 
 
@@ -1384,9 +1384,9 @@ VECTOR2I SELECTION::GetCenter() const
 }
 
 
-const KIGFX::VIEW_GROUP::ITEMS SELECTION::SELECTION_VIEW_GROUP::updateDrawList() const
+const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
 {
-    std::vector<KIGFX::VIEW_ITEM*> items;
+    std::vector<VIEW_ITEM*> items;
 
     for( auto item : m_items )
     {

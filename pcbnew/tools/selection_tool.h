@@ -45,7 +45,7 @@ namespace KIGFX
     class GAL;
 }
 
-struct SELECTION
+struct SELECTION : public KIGFX::VIEW_GROUP
 {
 public:
     using ITER = std::set<BOARD_ITEM*>::iterator;
@@ -56,35 +56,27 @@ public:
     CITER begin() const { return m_items.cbegin(); }
     CITER end() const { return m_items.cend(); }
 
-    SELECTION()
-        : m_viewGroup( m_items )
-    {
-    }
-
-    void Add( BOARD_ITEM* aItem )
+    virtual void Add( BOARD_ITEM* aItem )
     {
         m_items.insert( aItem );
-        m_viewGroup.Add( aItem );
     }
 
-    void Remove( BOARD_ITEM *aItem )
+    virtual void Remove( BOARD_ITEM *aItem )
     {
         m_items.erase( aItem );
-        m_viewGroup.Remove( aItem );
     }
 
-    void Clear()
+    virtual void Clear() override
     {
         m_items.clear();
-        m_viewGroup.Clear();
     }
 
-    unsigned int GetSize() const
+    virtual unsigned int GetSize() const override
     {
         return m_items.size();
     }
 
-    KIGFX::VIEW_ITEM* GetItem( unsigned int idx ) const
+    virtual KIGFX::VIEW_ITEM* GetItem( unsigned int idx ) const override
     {
         auto iter = m_items.begin();
 
@@ -141,34 +133,16 @@ public:
         return m_items;
     }
 
-    KIGFX::VIEW_GROUP* ViewGroup()
-    {
-        return &m_viewGroup;
-    }
+    virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
 
 private:
-    class SELECTION_VIEW_GROUP : public KIGFX::VIEW_GROUP
-    {
-    public:
-        SELECTION_VIEW_GROUP( std::set<BOARD_ITEM*>& aItemSet )
-            : m_items( aItemSet )
-        {
-        }
-
-    protected:
-        virtual const VIEW_GROUP::ITEMS updateDrawList() const override;
-
-    private:
-        std::set<BOARD_ITEM*>& m_items;
-    };
-
-    /// VIEW_GROUP keeping the selected items
-    SELECTION_VIEW_GROUP m_viewGroup;
-
     /// Set of selected items
     std::set<BOARD_ITEM*> m_items;
-};
 
+    // mute hidden overloaded virtual function warnings
+    using VIEW_GROUP::Add;
+    using VIEW_GROUP::Remove;
+};
 
 enum SELECTION_LOCK_FLAGS
 {
@@ -176,7 +150,6 @@ enum SELECTION_LOCK_FLAGS
     SELECTION_LOCK_OVERRIDE = 1,
     SELECTION_LOCKED = 2
 };
-
 
 /**
  * Class SELECTION_TOOL

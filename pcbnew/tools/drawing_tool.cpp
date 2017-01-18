@@ -195,7 +195,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
-    m_view->Add( preview.ViewGroup() );
+    m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -239,13 +239,13 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
             {
                 text->Rotate( text->GetPosition(), m_frame->GetRotationAngle() );
-                m_view->Update( preview.ViewGroup() );
+                m_view->Update( &preview );
             }
             // TODO rotate CCW
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
                 text->Flip( text->GetPosition() );
-                m_view->Update( preview.ViewGroup() );
+                m_view->Update( &preview );
             }
         }
 
@@ -340,7 +340,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             text->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
             // Show a preview of the item
-            m_view->Update( preview.ViewGroup() );
+            m_view->Update( &preview );
         }
     }
 
@@ -349,7 +349,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
 
-    m_view->Remove( preview.ViewGroup() );
+    m_view->Remove( &preview );
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
     return 0;
@@ -365,7 +365,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
-    m_view->Add( preview.ViewGroup() );
+    m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -409,7 +409,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
             dimension->SetWidth( dimension->GetWidth() + WIDTH_STEP );
-            m_view->Update( preview.ViewGroup() );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && step != SET_ORIGIN )
@@ -419,7 +419,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             if( width > WIDTH_STEP )
             {
                 dimension->SetWidth( width - WIDTH_STEP );
-                m_view->Update( preview.ViewGroup() );
+                m_view->Update( &preview );
             }
         }
 
@@ -523,7 +523,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
 
             // Show a preview of the item
-            m_view->Update( preview.ViewGroup() );
+            m_view->Update( &preview );
         }
     }
 
@@ -534,7 +534,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
-    m_view->Remove( preview.ViewGroup() );
+    m_view->Remove( &preview );
 
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
@@ -589,7 +589,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     }
 
     BOARD_ITEM* firstItem = preview.Front();
-    m_view->Add( preview.ViewGroup() );
+    m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -611,7 +611,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             for( auto item : preview )
                 item->Move( wxPoint( delta.x, delta.y ) );
 
-            m_view->Update( preview.ViewGroup() );
+            m_view->Update( &preview );
         }
 
         else if( evt->Category() == TC_COMMAND )
@@ -623,18 +623,18 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                     item->Rotate( wxPoint( cursorPos.x, cursorPos.y ),
                                  m_frame->GetRotationAngle() );
 
-                m_view->Update( preview.ViewGroup() );
+                m_view->Update( &preview );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
                 for( auto item : preview )
                     item->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
 
-                m_view->Update( preview.ViewGroup() );
+                m_view->Update( &preview );
             }
             else if( evt->IsCancel() || evt->IsActivate() )
             {
-                preview.ViewGroup()->FreeItems();
+                preview.FreeItems();
                 break;
             }
         }
@@ -731,7 +731,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
-    m_view->Remove( preview.ViewGroup() );
+    m_view->Remove( &preview );
 
     return 0;
 }
@@ -800,7 +800,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
-    m_view->Add( preview.ViewGroup() );
+    m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -962,14 +962,14 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         }
 
         if( updatePreview )
-            m_view->Update( preview.ViewGroup() );
+            m_view->Update( &preview );
     }
 
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
-    m_view->Remove( preview.ViewGroup() );
+    m_view->Remove( &preview );
 
     return started;
 }
@@ -988,7 +988,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
-    m_view->Add( preview.ViewGroup() );
+    m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -1116,13 +1116,13 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             }
 
             // Show a preview of the item
-            m_view->Update( preview.ViewGroup() );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
         {
             aGraphic->SetWidth( aGraphic->GetWidth() + WIDTH_STEP );
-            m_view->Update( preview.ViewGroup() );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
@@ -1132,7 +1132,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             if( width > WIDTH_STEP )
             {
                 aGraphic->SetWidth( width - WIDTH_STEP );
-                m_view->Update( preview.ViewGroup() );
+                m_view->Update( &preview );
             }
         }
 
@@ -1144,7 +1144,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
                 aGraphic->SetAngle( aGraphic->GetAngle() + 3600.0 );
 
             clockwise = !clockwise;
-            m_view->Update( preview.ViewGroup() );
+            m_view->Update( &preview );
         }
     }
 
@@ -1152,7 +1152,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
-    m_view->Remove( preview.ViewGroup() );
+    m_view->Remove( &preview );
 
     return ( step > SET_ORIGIN );
 }
@@ -1167,7 +1167,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
-    m_view->Add( preview.ViewGroup() );
+    m_view->Add( &preview );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -1219,7 +1219,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     direction45 = false;
                 }
 
-                preview.ViewGroup()->FreeItems();
+                preview.FreeItems();
                 updatePreview = true;
 
                 numPoints = 0;
@@ -1274,7 +1274,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     direction45 = false;
                 }
 
-                preview.ViewGroup()->FreeItems();
+                preview.FreeItems();
                 updatePreview = true;
             }
             else
@@ -1357,14 +1357,14 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
         }
 
         if( updatePreview )
-            m_view->Update( preview.ViewGroup() );
+            m_view->Update( &preview );
     }
 
     m_controls->ShowCursor( false );
     m_controls->SetSnapping( false );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
-    m_view->Remove( preview.ViewGroup() );
+    m_view->Remove( &preview );
 
     m_frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
