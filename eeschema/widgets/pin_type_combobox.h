@@ -47,4 +47,5 @@ public:
             const wxString& name = wxBitmapComboBoxNameStr );
 
     ELECTRICAL_PINTYPE  GetPinTypeSelection();
+    void                SetSelection( ELECTRICAL_PINTYPE aType );
 };

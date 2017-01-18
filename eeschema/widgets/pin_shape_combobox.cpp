@@ -61,3 +61,9 @@ GRAPHIC_PINSHAPE PinShapeComboBox::GetPinShapeSelection()
 {
     return static_cast<GRAPHIC_PINSHAPE>( GetSelection() );
 }
+
+
+void PinShapeComboBox::SetSelection( GRAPHIC_PINSHAPE aShape )
+{
+    wxBitmapComboBox::SetSelection( aShape );
+}
