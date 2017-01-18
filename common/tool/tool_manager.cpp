@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -164,13 +164,11 @@ struct TOOL_MANAGER::TOOL_STATE
             *this = *stateStack.top();
             delete stateStack.top();
             stateStack.pop();
-
             return true;
         }
         else
         {
             cofunc = NULL;
-
             return false;
         }
     }
@@ -534,9 +532,11 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 
     for( TOOL_STATE* st : ( m_toolState | boost::adaptors::map_values ) )
     {
+        bool handled = false;
+
         // no state handler in progress - check if there are any transitions (defined by
         // Go() method that match the event.
-        if( !st->pendingWait && !st->transitions.empty() )
+        if( !st->transitions.empty() )
         {
             for( TRANSITION& tr : st->transitions )
             {
@@ -559,11 +559,16 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     if( !st->cofunc->Running() )
                         finishTool( st ); // The couroutine has finished immediately?
 
+                    handled = true;
+
                     // there is no point in further checking, as transitions got cleared
                     break;
                 }
             }
         }
+
+        if( handled )
+            break;      // only the first tool gets the event
     }
 }
 
@@ -656,10 +661,6 @@ bool TOOL_MANAGER::finishTool( TOOL_STATE* aState, bool aDeactivate )
 {
     bool shouldDeactivate = false;
 
-    // Reset VIEW_CONTROLS only if the most recent tool is finished
-    if( m_activeTools.empty() || m_activeTools.front() == aState->theTool->GetId() )
-        m_viewControls->Reset();
-
     if( !aState->Pop() )        // if there are no other contexts saved on the stack
     {
         // find the tool and deactivate it
@@ -669,12 +670,14 @@ bool TOOL_MANAGER::finishTool( TOOL_STATE* aState, bool aDeactivate )
         if( tool != m_activeTools.end() )
         {
             shouldDeactivate = true;
+            m_viewControls->Reset();
 
             if( aDeactivate )
                 m_activeTools.erase( tool );
         }
     }
 
+    // Set transitions to be ready for future TOOL_EVENTs
     aState->theTool->SetTransitions();
 
     return shouldDeactivate;

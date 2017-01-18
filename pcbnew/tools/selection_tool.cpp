@@ -217,50 +217,9 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::selectionCursor ) )
-        {
-            selectCursor( true );
-        }
-
-        else if( evt->IsAction( &COMMON_ACTIONS::find ) )
-        {
-            find( *evt );
-        }
-
-        else if( evt->IsAction( &COMMON_ACTIONS::findMove ) )
-        {
-            findMove( *evt );
-        }
-
-        else if( evt->IsAction( &COMMON_ACTIONS::selectItem ) )
-        {
-            SelectItem( *evt );
-        }
-
-        else if( evt->IsAction( &COMMON_ACTIONS::unselectItem ) )
-        {
-            UnselectItem( *evt );
-        }
-
-        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE ||
-                 evt->IsAction( &COMMON_ACTIONS::selectionClear ) )
+        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
         {
             clearSelection();
-        }
-
-        else if( evt->IsAction( &COMMON_ACTIONS::selectConnection ) )
-        {
-            selectConnection( *evt );
-        }
-
-        else if( evt->IsAction( &COMMON_ACTIONS::selectCopper ) )
-        {
-            selectCopper( *evt );
-        }
-
-        else if( evt->IsAction( &COMMON_ACTIONS::selectNet ) )
-        {
-            selectNet( *evt );
         }
 
         else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )

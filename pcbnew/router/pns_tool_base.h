@@ -63,7 +63,7 @@ protected:
     virtual ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1 );
     virtual void highlightNet( bool aEnabled, int aNetcode = -1 );
     virtual void updateStartItem( TOOL_EVENT& aEvent );
-    virtual void updateEndItem( TOOL_EVENT& aEvent );
+    virtual void updateEndItem( const TOOL_EVENT& aEvent );
     void deleteTraces( ITEM* aStartItem, bool aWholeTrack );
 
     MSG_PANEL_ITEMS m_panelItems;

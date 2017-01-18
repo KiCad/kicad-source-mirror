@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013  CERN
+ * Copyright (C) 2013-2017 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -60,50 +60,50 @@ using namespace std::placeholders;
 using namespace KIGFX;
 using boost::optional;
 
-static TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT,
+static const TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT,
     TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
     _( "New Track" ),  _( "Starts laying a new track." ), add_tracks_xpm );
 
-static TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END,
+static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END,
     _( "End Track" ),  _( "Stops laying the current track." ), checked_ok_xpm );
 
-static TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'F',
+static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'F',
     _( "Auto-end Track" ),  _( "Automagically finishes currently routed track." ) );
 
-static TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag", AS_CONTEXT,
+static const TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag", AS_CONTEXT,
     TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
     _( "Drag Track/Via" ), _( "Drags a track or a via." ), drag_track_segment_xpm );
 
-static TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
+static const TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_THROUGH_VIA ),
     _( "Place Through Via" ),
     _( "Adds a through-hole via at the end of currently routed track." ),
     via_xpm );
 
-static TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
+static const TOOL_ACTION ACT_PlaceBlindVia( "pcbnew.InteractiveRouter.PlaceBlindVia",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_BLIND_BURIED_VIA ),
     _( "Place Blind/Buried Via" ),
     _( "Adds a blind or buried via at the end of currently routed track."),
     via_buried_xpm );
 
-static TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
+static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicroVia",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_MICROVIA ),
     _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
     via_microvia_xpm );
 
-static TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
+static const TOOL_ACTION ACT_CustomTrackWidth( "pcbnew.InteractiveRouter.CustomTrackViaSize",
     AS_CONTEXT, 'Q',
     _( "Custom Track/Via Size" ),
     _( "Shows a dialog for changing the track width and via size." ),
     width_track_xpm );
 
-static TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT,
+static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPosture", AS_CONTEXT,
     TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_POSTURE ),
     _( "Switch Track Posture" ),
     _( "Switches posture of the currently routed track." ),
     change_entry_orient_xpm );
 
-static TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimensions",
+static const TOOL_ACTION ACT_SetDpDimensions( "pcbnew.InteractiveRouter.SetDpDimensions",
     AS_CONTEXT, 'P',
     _( "Differential Pair Dimensions..." ),
     _( "Sets the width and gap of the currently routed differential pair." ),
@@ -251,12 +251,6 @@ bool ROUTER_TOOL::Init()
 void ROUTER_TOOL::Reset( RESET_REASON aReason )
 {
     TOOL_BASE::Reset( aReason );
-
-    Go( &ROUTER_TOOL::RouteSingleTrace, COMMON_ACTIONS::routerActivateSingle.MakeEvent() );
-    Go( &ROUTER_TOOL::RouteDiffPair, COMMON_ACTIONS::routerActivateDiffPair.MakeEvent() );
-    Go( &ROUTER_TOOL::DpDimensionsDialog, COMMON_ACTIONS::routerActivateDpDimensionsDialog.MakeEvent() );
-    Go( &ROUTER_TOOL::SettingsDialog, COMMON_ACTIONS::routerActivateSettingsDialog.MakeEvent() );
-    Go( &ROUTER_TOOL::InlineDrag, COMMON_ACTIONS::routerInlineDrag.MakeEvent() );
 }
 
 
@@ -306,46 +300,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
             break;
         }
     }
-    else
 #endif
-    if( aEvent.IsAction( &ACT_RouterOptions ) )
-    {
-        DIALOG_PNS_SETTINGS settingsDlg( m_frame, m_router->Settings() );
-
-        if( settingsDlg.ShowModal() == wxID_OK )
-        {
-            // FIXME: do we need an explicit update?
-        }
-    }
-    else if( aEvent.IsAction( &ACT_SetDpDimensions ) )
-    {
-        PNS::SIZES_SETTINGS sizes = m_router->Sizes();
-        DIALOG_PNS_DIFF_PAIR_DIMENSIONS settingsDlg( m_frame, sizes );
-
-        if( settingsDlg.ShowModal() )
-        {
-            m_router->UpdateSizes( sizes );
-        }
-    }
-    else if( aEvent.IsAction( &ACT_CustomTrackWidth ) )
-    {
-        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-        DIALOG_TRACK_VIA_SIZE sizeDlg( m_frame, bds );
-
-        if( sizeDlg.ShowModal() )
-        {
-            bds.UseCustomTrackViaSize( true );
-            m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
-        }
-    }
-
-    else if( aEvent.IsAction( &COMMON_ACTIONS::trackViaSizeChanged ) )
-    {
-
-        PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
-        sizes.ImportCurrent( m_board->GetDesignSettings() );
-        m_router->UpdateSizes( sizes );
-    }
 }
 
 
@@ -387,8 +342,19 @@ void ROUTER_TOOL::switchLayerOnViaPlacement()
 }
 
 
-bool ROUTER_TOOL::onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType )
+int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 {
+    VIATYPE_T viaType = VIA_THROUGH;
+
+    if( aEvent.IsAction( &ACT_PlaceThroughVia ) )
+        viaType = VIA_THROUGH;
+    else if( aEvent.IsAction( &ACT_PlaceBlindVia ) )
+        viaType = VIA_BLIND_BURIED;
+    else if( aEvent.IsAction( &ACT_PlaceMicroVia ) )
+        viaType = VIA_MICROVIA;
+    else
+        wxASSERT_MSG( false, "Unhandled via type" );
+
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     const int layerCount = bds.GetCopperLayerCount();
@@ -404,27 +370,27 @@ bool ROUTER_TOOL::onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType )
     if( !m_router->IsPlacingVia() )
     {
         // Cannot place microvias or blind vias if not allowed (obvious)
-        if( ( aType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
+        if( ( viaType == VIA_BLIND_BURIED ) && ( !bds.m_BlindBuriedViaAllowed ) )
         {
             DisplayError( m_frame, _( "Blind/buried vias have to be enabled in the design settings." ) );
             return false;
         }
 
-        if( ( aType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
+        if( ( viaType == VIA_MICROVIA ) && ( !bds.m_MicroViasAllowed ) )
         {
             DisplayError( m_frame, _( "Microvias have to be enabled in the design settings." ) );
             return false;
         }
 
         // Can only place through vias on 2-layer boards
-        if( ( aType != VIA_THROUGH ) && ( layerCount <= 2 ) )
+        if( ( viaType != VIA_THROUGH ) && ( layerCount <= 2 ) )
         {
             DisplayError( m_frame, _( "Only through vias are allowed on 2 layer boards." ) );
             return false;
         }
 
         // Can only place microvias if we're on an outer layer, or directly adjacent to one
-        if( ( aType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount - 2 ) )
+        if( ( viaType == VIA_MICROVIA ) && ( currentLayer > In1_Cu ) && ( currentLayer < layerCount - 2 ) )
         {
             DisplayError( m_frame, _( "Microvias can be placed only between the outer layers " \
                                       "(F.Cu/B.Cu) and the ones directly adjacent to them." ) );
@@ -433,14 +399,14 @@ bool ROUTER_TOOL::onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType )
     }
 
     // Convert blind/buried via to a through hole one, if it goes through all layers
-    if( aType == VIA_BLIND_BURIED && ( ( currentLayer == B_Cu ) || ( currentLayer == F_Cu ) )
+    if( viaType == VIA_BLIND_BURIED && ( ( currentLayer == B_Cu ) || ( currentLayer == F_Cu ) )
                                     && ( ( pairTop == B_Cu && pairBottom == F_Cu )
                                       || ( pairTop == F_Cu && pairBottom == B_Cu ) ) )
     {
-        aType = VIA_THROUGH;
+        viaType = VIA_THROUGH;
     }
 
-    switch( aType )
+    switch( viaType )
     {
     case VIA_THROUGH:
         sizes.SetViaDiameter( bds.GetCurrentViaSize() );
@@ -475,7 +441,7 @@ bool ROUTER_TOOL::onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType )
         break;
     }
 
-    sizes.SetViaType( aType );
+    sizes.SetViaType( viaType );
 
     m_router->UpdateSizes( sizes );
     m_router->ToggleViaPlacement();
@@ -484,7 +450,7 @@ bool ROUTER_TOOL::onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType )
 
     m_router->Move( m_endSnapPoint, m_endItem );        // refresh
 
-    return false;
+    return 0;
 }
 
 
@@ -582,18 +548,6 @@ void ROUTER_TOOL::performRouting()
             m_router->Move( m_endSnapPoint, m_endItem );
             m_startItem = NULL;
         }
-        else if( evt->IsAction( &ACT_PlaceThroughVia ) )
-        {
-            onViaCommand( *evt, VIA_THROUGH );
-        }
-        else if( evt->IsAction( &ACT_PlaceBlindVia ) )
-        {
-            onViaCommand( *evt, VIA_BLIND_BURIED );
-        }
-        else if( evt->IsAction( &ACT_PlaceMicroVia ) )
-        {
-            onViaCommand( *evt, VIA_MICROVIA );
-        }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
             m_router->FlipPosture();
@@ -615,8 +569,6 @@ void ROUTER_TOOL::performRouting()
         }
         else if( evt->IsCancel() || evt->IsActivate() || evt->IsUndoRedo() )
             break;
-
-        handleCommonEvents( *evt );
     }
 
     finishInteractive();
@@ -647,10 +599,30 @@ int ROUTER_TOOL::SettingsDialog( const TOOL_EVENT& aEvent )
     DIALOG_PNS_SETTINGS settingsDlg( m_frame, m_router->Settings() );
 
     if( settingsDlg.ShowModal() )
-    {
         m_savedSettings = m_router->Settings();
-    }
+
     return 0;
+}
+
+
+void ROUTER_TOOL::SetTransitions()
+{
+    Go( &ROUTER_TOOL::RouteSingleTrace, COMMON_ACTIONS::routerActivateSingle.MakeEvent() );
+    Go( &ROUTER_TOOL::RouteDiffPair, COMMON_ACTIONS::routerActivateDiffPair.MakeEvent() );
+    Go( &ROUTER_TOOL::DpDimensionsDialog, COMMON_ACTIONS::routerActivateDpDimensionsDialog.MakeEvent() );
+    Go( &ROUTER_TOOL::SettingsDialog, COMMON_ACTIONS::routerActivateSettingsDialog.MakeEvent() );
+    Go( &ROUTER_TOOL::InlineDrag, COMMON_ACTIONS::routerInlineDrag.MakeEvent() );
+
+    Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceThroughVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceBlindVia.MakeEvent() );
+    Go( &ROUTER_TOOL::onViaCommand, ACT_PlaceMicroVia.MakeEvent() );
+
+    // TODO is not this redundant? the same actions can be used for menus and hotkeys
+    Go( &ROUTER_TOOL::SettingsDialog, ACT_RouterOptions.MakeEvent() );
+    Go( &ROUTER_TOOL::DpDimensionsDialog, ACT_SetDpDimensions.MakeEvent() );
+
+    Go( &ROUTER_TOOL::CustomTrackWidthDialog, ACT_CustomTrackWidth.MakeEvent() );
+    Go( &ROUTER_TOOL::onTrackViaSizeChanged, COMMON_ACTIONS::trackViaSizeChanged.MakeEvent() );
 }
 
 
@@ -732,8 +704,6 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
         {
             deleteTraces( m_startItem, false );
         }
-
-        handleCommonEvents( *evt );
     }
 
     frame->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
@@ -860,6 +830,31 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     ctls->SetAutoPan( false );
     ctls->ShowCursor( false );
     frame->UndoRedoBlock( false );
+
+    return 0;
+}
+
+
+int ROUTER_TOOL::CustomTrackWidthDialog( const TOOL_EVENT& aEvent )
+{
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    DIALOG_TRACK_VIA_SIZE sizeDlg( m_frame, bds );
+
+    if( sizeDlg.ShowModal() )
+    {
+        bds.UseCustomTrackViaSize( true );
+        m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
+    }
+
+    return 0;
+}
+
+
+int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
+{
+    PNS::SIZES_SETTINGS sizes( m_router->Sizes() );
+    sizes.ImportCurrent( m_board->GetDesignSettings() );
+    m_router->UpdateSizes( sizes );
 
     return 0;
 }

@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2017 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
@@ -39,13 +39,16 @@ public:
     int TuneSingleTrace( const TOOL_EVENT& aEvent );
     int TuneDiffPair( const TOOL_EVENT& aEvent );
     int TuneDiffPairSkew( const TOOL_EVENT& aEvent );
-    int ClearMeanders( const TOOL_EVENT& aEvent );
+
+    void SetTransitions() override;
 
 private:
     void performTuning();
     int mainLoop( PNS::ROUTER_MODE aMode );
-    void handleCommonEvents( const TOOL_EVENT& aEvent );
     void updateStatusPopup( PNS_TUNE_STATUS_POPUP& aPopup );
+
+    int routerOptionsDialog( const TOOL_EVENT& aEvent );
+    int meanderSettingsDialog( const TOOL_EVENT& aEvent );
 
     PNS::MEANDER_SETTINGS m_savedMeanderSettings;
 };

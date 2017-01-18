@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2013-2017 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
@@ -38,11 +38,14 @@ public:
     int RouteDiffPair( const TOOL_EVENT& aEvent );
     int InlineDrag( const TOOL_EVENT& aEvent );
 
-    int DpDimensionsDialog ( const TOOL_EVENT& aEvent );
-    int SettingsDialog ( const TOOL_EVENT& aEvent );
+    // TODO make this private?
+    int DpDimensionsDialog( const TOOL_EVENT& aEvent );
+    int SettingsDialog( const TOOL_EVENT& aEvent );
+    int CustomTrackWidthDialog( const TOOL_EVENT& aEvent );
+
+    void SetTransitions() override;
 
 private:
-
     int mainLoop( PNS::ROUTER_MODE aMode );
 
     int getDefaultWidth( int aNetCode );
@@ -55,7 +58,10 @@ private:
 
     int getStartLayer( const PNS::ITEM* aItem );
     void switchLayerOnViaPlacement();
-    bool onViaCommand( TOOL_EVENT& aEvent, VIATYPE_T aType );
+
+    int onViaCommand( const TOOL_EVENT& aEvent );
+    int onTrackViaSizeChanged( const TOOL_EVENT& aEvent );
+    int onLayerChanged( const TOOL_EVENT& aEvent );
 
     bool prepareInteractive();
     bool finishInteractive();

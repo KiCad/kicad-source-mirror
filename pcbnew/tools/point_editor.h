@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -116,6 +116,11 @@ private:
 
     ///> Condition to display "Remove corner" context menu entry.
     bool removeCornerCondition( const SELECTION& aSelection );
+
+    /// TOOL_ACTION handlers
+    int addCorner( const TOOL_EVENT& aEvent );
+    int removeCorner( const TOOL_EVENT& aEvent );
+    int modifiedSelection( const TOOL_EVENT& aEvent );
 };
 
 #endif
