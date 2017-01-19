@@ -27,12 +27,13 @@
 
 bool SHAPE::Parse( std::stringstream& aStream )
 {
-    assert ( false );
+    assert( false );
     return false;
-};
+}
 
-const std::string SHAPE::Format( ) const
+
+const std::string SHAPE::Format() const
 {
-    assert ( false );
-    return std::string("");
-};
+    assert( false );
+    return std::string( "" );
+}

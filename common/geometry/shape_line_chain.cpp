@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -586,4 +586,29 @@ bool SHAPE_LINE_CHAIN::Parse( std::stringstream& aStream )
     }
 
     return true;
+}
+
+
+const VECTOR2I SHAPE_LINE_CHAIN::PointAlong( int aPathLength ) const
+{
+    int total = 0;
+
+    if( aPathLength == 0 )
+        return CPoint( 0 );
+
+    for( int i = 0; i < SegmentCount(); i++ )
+    {
+        const SEG& s = CSegment( i );
+        int l = s.Length();
+
+        if( total + l >= aPathLength )
+        {
+            VECTOR2I d( s.B - s.A );
+            return s.A + d.Resize( aPathLength - total );
+        }
+
+        total += l;
+    }
+
+    return CPoint( -1 );
 }

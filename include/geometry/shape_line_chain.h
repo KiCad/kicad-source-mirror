@@ -571,7 +571,7 @@ public:
         return false;
     }
 
-    bool CompareGeometry( const SHAPE_LINE_CHAIN & aOther ) const;
+    bool CompareGeometry( const SHAPE_LINE_CHAIN& aOther ) const;
 
     void Move( const VECTOR2I& aVector ) override
     {
@@ -583,6 +583,8 @@ public:
     {
         return false;
     }
+
+    const VECTOR2I PointAlong( int aPathLength ) const;
 
 private:
     /// array of vertices

@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2013-2017 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -335,6 +335,11 @@ private:
      */
     void routeStep( const VECTOR2I& aP );
 
+    const LINE reduceToNearestObstacle( const LINE& aOriginalLine );
+
+    bool rhStopAtNearestObstacle( const VECTOR2I& aP, LINE& aNewHead );
+
+
     ///> route step, walkaround mode
     bool rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead);
 
@@ -346,7 +351,7 @@ private:
 
     const VIA makeVia( const VECTOR2I& aP );
 
-    bool buildInitialLine( const VECTOR2I& aP, LINE& aHead );
+    bool buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aInvertPosture = false );
 
     ///> current routing direction
     DIRECTION_45 m_direction;
