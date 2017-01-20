@@ -62,6 +62,7 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef )
     plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
     plotter->SetColorMode( getModeColor() );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
+    plotter->SetTitle( m_parent->GetTitleBlock().GetTitle() );
 
     wxString msg;
     wxFileName plotFileName;

@@ -7,7 +7,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2012 Lorenzo Marcantonio, l.marcantonio@logossrl.com
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -692,6 +692,14 @@ bool PDF_PLOTTER::EndPlot()
     time_t ltime = time( NULL );
     strftime( date_buf, 250, "D:%Y%m%d%H%M%S",
               localtime( &ltime ) );
+
+    if( title.IsEmpty() )
+    {
+        // Windows uses '\' and other platforms ue '/' as sepatator
+        title = filename.AfterLast('\\');
+        title = title.AfterLast('/');
+    }
+
     fprintf( outputFile,
              "<<\n"
              "/Producer (KiCAD PDF)\n"
@@ -701,7 +709,7 @@ bool PDF_PLOTTER::EndPlot()
              "/Trapped false\n",
              date_buf,
              TO_UTF8( creator ),
-             TO_UTF8( filename ) );
+             TO_UTF8( title ) );
 
     fputs( ">>\n", outputFile );
     closePdfObject();

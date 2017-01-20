@@ -153,6 +153,11 @@ public:
         creator = aCreator;
     }
 
+    virtual void SetTitle( const wxString& aTitle )
+    {
+        title = aTitle;
+    }
+
     /**
      * Function AddLineToHeader
      * Add a line to the list of free lines to print at the beginning of the file
@@ -539,6 +544,7 @@ protected:      // variables used in most of plotters:
     wxPoint       penLastpos;
     wxString      creator;
     wxString      filename;
+    wxString      title;
     PAGE_INFO     pageInfo;
     /// Paper size in IU - not in mils
     wxSize        paperSize;
