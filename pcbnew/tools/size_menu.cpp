@@ -24,14 +24,14 @@
 #include <class_board.h>
 #include <pcbnew_id.h>
 
-CONTEXT_TRACK_VIA_SIZE_MENU::CONTEXT_TRACK_VIA_SIZE_MENU( bool aTrackSizes, bool aViaSizes ) :
+TRACK_VIA_SIZE_MENU::TRACK_VIA_SIZE_MENU( bool aTrackSizes, bool aViaSizes ) :
     m_tracks( aTrackSizes ), m_vias( aViaSizes )
 {
     SetIcon( width_track_via_xpm );
 }
 
 
-void CONTEXT_TRACK_VIA_SIZE_MENU::AppendSizes( const BOARD* aBoard )
+void TRACK_VIA_SIZE_MENU::AppendSizes( const BOARD* aBoard )
 {
     wxString msg;
 

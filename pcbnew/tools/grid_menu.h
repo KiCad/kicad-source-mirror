@@ -34,10 +34,15 @@ class GRID_MENU : public CONTEXT_MENU
 public:
     GRID_MENU( EDA_DRAW_FRAME* aParent );
 
-    OPT_TOOL_EVENT EventHandler( const wxMenuEvent& aEvent );
-    void Update();
-
 private:
+    CONTEXT_MENU* create() const override
+    {
+        return new GRID_MENU( m_parent );
+    }
+
+    OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override;
+    void update() override;
+
     EDA_DRAW_FRAME* m_parent;
 };
 

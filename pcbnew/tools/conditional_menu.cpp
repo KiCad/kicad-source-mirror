@@ -72,7 +72,6 @@ CONTEXT_MENU* CONDITIONAL_MENU::Generate( SELECTION& aSelection )
                 break;
 
             case ENTRY::MENU:
-                it->Menu()->UpdateAll();
                 m_menu->Add( it->Menu(), it->Label(), it->Expand() );
                 break;
 

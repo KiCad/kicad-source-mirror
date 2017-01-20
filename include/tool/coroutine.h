@@ -33,6 +33,7 @@
 
 #if BOOST_VERSION < 106100
 #include <boost/context/fcontext.hpp>
+#include <memory>
 #else
 #include <boost/context/execution_context.hpp>
 #include <boost/context/protected_fixedsize_stack.hpp>

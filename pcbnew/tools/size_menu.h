@@ -27,7 +27,7 @@ class BOARD;
  * @brief Context menu that displays track and/or via sizes basing on the board design settings
  * of a BOARD object.
  */
-class CONTEXT_TRACK_VIA_SIZE_MENU: public CONTEXT_MENU
+class TRACK_VIA_SIZE_MENU : public CONTEXT_MENU
 {
 public:
     /**
@@ -35,9 +35,9 @@ public:
      * @param aTrackSizes decides if the context menu should contain track sizes.
      * @param aTrackSizes decides if the context menu should contain via sizes.
      */
-    CONTEXT_TRACK_VIA_SIZE_MENU( bool aTrackSizes, bool aViaSizes );
+    TRACK_VIA_SIZE_MENU( bool aTrackSizes, bool aViaSizes );
 
-    virtual ~CONTEXT_TRACK_VIA_SIZE_MENU() {}
+    virtual ~TRACK_VIA_SIZE_MENU() {}
 
     /**
      * Function AppendSizes()
@@ -45,6 +45,11 @@ public:
      * @param aBoard is the BOARD object whose board settings will be used to generate the list.
      */
     virtual void AppendSizes( const BOARD* aBoard );
+
+    virtual CONTEXT_MENU* create() const override
+    {
+        return new TRACK_VIA_SIZE_MENU( m_tracks, m_vias );
+    }
 
 protected:
     ///> Whether the generated menu should contain track sizes.

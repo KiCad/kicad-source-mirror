@@ -28,7 +28,6 @@
 #include <stack>
 #include <algorithm>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 #include <boost/range/adaptor/map.hpp>
 
@@ -631,10 +630,11 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
             VECTOR2D cursorPos = m_viewControls->GetCursorPosition();
             m_viewControls->ForceCursorPosition( true, m_viewControls->GetCursorPosition() );
 
-            // Run update handlers
-            m->UpdateAll();
+            // Display a copy of menu
+            std::unique_ptr<CONTEXT_MENU> menu( m->Clone() );
 
-            boost::scoped_ptr<CONTEXT_MENU> menu( new CONTEXT_MENU( *m ) );
+            // Run update handlers on the created copy
+            menu->UpdateAll();
             GetEditFrame()->PopupMenu( menu.get() );
 
             // If nothing was chosen from the context menu, we must notify the tool as well
@@ -645,12 +645,12 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
                 dispatchInternal( evt );
             }
 
+            // Notify the tools that menu has been closed
             TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CLOSED );
             evt.SetParameter( m );
             dispatchInternal( evt );
 
             m_viewControls->ForceCursorPosition( forcedCursor, cursorPos );
-
             break;
         }
     }

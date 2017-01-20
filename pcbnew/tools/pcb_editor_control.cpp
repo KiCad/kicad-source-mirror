@@ -60,7 +60,6 @@ public:
     ZONE_CONTEXT_MENU()
     {
         SetIcon( add_zone_xpm );
-        SetUpdateHandler( std::bind( &ZONE_CONTEXT_MENU::update, this ) );
         Add( COMMON_ACTIONS::zoneFill );
         Add( COMMON_ACTIONS::zoneFillAll );
         Add( COMMON_ACTIONS::zoneUnfill );
@@ -68,8 +67,14 @@ public:
         Add( COMMON_ACTIONS::zoneMerge );
     }
 
+protected:
+    CONTEXT_MENU* create() const override
+    {
+        return new ZONE_CONTEXT_MENU();
+    }
+
 private:
-    void update()
+    void update() override
     {
         SELECTION_TOOL* selTool = getToolManager()->GetTool<SELECTION_TOOL>();
 
@@ -99,6 +104,11 @@ public:
         Add( COMMON_ACTIONS::lock );
         Add( COMMON_ACTIONS::unlock );
         Add( COMMON_ACTIONS::toggleLock );
+    }
+
+    CONTEXT_MENU* create() const override
+    {
+        return new LOCK_CONTEXT_MENU();
     }
 };
 

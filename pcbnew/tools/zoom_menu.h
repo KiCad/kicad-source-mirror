@@ -35,8 +35,13 @@ public:
     ZOOM_MENU( EDA_DRAW_FRAME* aParent );
 
 private:
-    OPT_TOOL_EVENT EventHandler( const wxMenuEvent& aEvent );
-    void Update();
+    CONTEXT_MENU* create() const override
+    {
+        return new ZOOM_MENU( m_parent );
+    }
+
+    OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override;
+    void update() override;
 
     EDA_DRAW_FRAME* m_parent;
 };

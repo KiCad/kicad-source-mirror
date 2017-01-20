@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -47,12 +47,10 @@ public:
     ///> Default constructor
     CONTEXT_MENU();
 
-    ///> Copy constructor
-    CONTEXT_MENU( const CONTEXT_MENU& aMenu );
-
     virtual ~CONTEXT_MENU();
 
-    CONTEXT_MENU& operator=( const CONTEXT_MENU& aMenu );
+    CONTEXT_MENU( const CONTEXT_MENU& aMenu ) = delete;
+    CONTEXT_MENU& operator=( const CONTEXT_MENU& aMenu ) = delete;
 
     /**
      * Function SetTitle()
@@ -125,28 +123,6 @@ public:
      */
     void UpdateAll();
 
-    // Helper typedefs
-    typedef std::function<OPT_TOOL_EVENT(const wxMenuEvent&)> MENU_HANDLER;
-    typedef std::function<void()> UPDATE_HANDLER;
-
-    /**
-     * Function SetMenuHandler()
-     * Sets the menu event handler to another function.
-     */
-    inline void SetMenuHandler( MENU_HANDLER aMenuHandler )
-    {
-        m_menu_handler = aMenuHandler;
-    }
-
-    /**
-     * Function SetUpdateHandler()
-     * Sets the update handler to a different function.
-     */
-    inline void SetUpdateHandler( UPDATE_HANDLER aUpdateHandler )
-    {
-        m_update_handler = aUpdateHandler;
-    }
-
     /**
      * Function SetTool()
      * Sets a tool that is the creator of the menu.
@@ -154,7 +130,15 @@ public:
      */
     void SetTool( TOOL_INTERACTIVE* aTool );
 
+    /**
+     * Creates a deep, recursive copy of this CONTEXT_MENU.
+     */
+    CONTEXT_MENU* Clone() const;
+
 protected:
+    ///> Returns an instance of this class. It has to be overridden in inheriting classes.
+    virtual CONTEXT_MENU* create() const;
+
     ///> Returns an instance of TOOL_MANAGER class.
     TOOL_MANAGER* getToolManager();
 
@@ -164,19 +148,35 @@ protected:
         return aAction.GetId() + ACTION_ID;
     }
 
-private:
-    // Empty stubs used by the default constructor
-    static OPT_TOOL_EVENT menuHandlerStub(const wxMenuEvent& );
-    static void updateHandlerStub();
+    /**
+     * Update menu state stub. It is called before a menu is shown, in order to update its state.
+     * Here you can tick current settings, enable/disable entries, etc.
+     */
+    virtual void update()
+    {
+    }
 
+    /**
+     * Event handler stub. It should be used if you want to generate a TOOL_EVENT from a wxMenuEvent.
+     * It will be called when a menu entry is clicked.
+     */
+    virtual OPT_TOOL_EVENT eventHandler( const wxMenuEvent& )
+    {
+        return OPT_TOOL_EVENT();
+    }
+
+    /**
+     * Copies another menus data to this instance. Old entries are preserved, and ones form aMenu
+     * are copied.
+     */
+    void copyFrom( const CONTEXT_MENU& aMenu );
+
+private:
     /**
      * Function appendCopy
      * Appends a copy of wxMenuItem.
      */
     wxMenuItem* appendCopy( const wxMenuItem* aSource );
-
-    ///> Common part of copy constructor and assignment operator.
-    void copyFrom( const CONTEXT_MENU& aMenu );
 
     ///> Initializes handlers for events.
     void setupEvents();
@@ -204,7 +204,7 @@ private:
     TOOL_INTERACTIVE* m_tool;
 
     ///> Menu items with ID higher than that are considered TOOL_ACTIONs
-    static const int ACTION_ID = 30000;
+    static const int ACTION_ID = 2000;
 
     ///> Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;
@@ -217,12 +217,6 @@ private:
 
     ///> Optional icon
     const BITMAP_OPAQUE* m_icon;
-
-    ///> Optional callback to translate wxMenuEvents to TOOL_EVENTs.
-    MENU_HANDLER m_menu_handler;
-
-    ///> Optional callback to update the menu state before it is displayed.
-    UPDATE_HANDLER m_update_handler;
 
     friend class TOOL_INTERACTIVE;
 };

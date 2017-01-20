@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -30,20 +30,10 @@
 
 #include <functional>
 using namespace std::placeholders;
-#include <cassert>
 
 CONTEXT_MENU::CONTEXT_MENU() :
-    m_titleSet( false ), m_selected( -1 ), m_tool( NULL ), m_parent( NULL ), m_icon( NULL ),
-    m_menu_handler( CONTEXT_MENU::menuHandlerStub ),
-    m_update_handler( CONTEXT_MENU::updateHandlerStub )
+    m_titleSet( false ), m_selected( -1 ), m_tool( nullptr ), m_parent( nullptr ), m_icon( nullptr )
 {
-    setupEvents();
-}
-
-
-CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu )
-{
-    copyFrom( aMenu );
     setupEvents();
 }
 
@@ -51,20 +41,12 @@ CONTEXT_MENU::CONTEXT_MENU( const CONTEXT_MENU& aMenu )
 CONTEXT_MENU::~CONTEXT_MENU()
 {
     // Set parent to NULL to prevent submenus from unregistering from a notexisting object
-    for( std::list<CONTEXT_MENU*>::iterator it = m_submenus.begin(); it != m_submenus.end(); ++it )
-        (*it)->m_parent = NULL;
+    //for( std::list<CONTEXT_MENU*>::iterator it = m_submenus.begin(); it != m_submenus.end(); ++it )
+    for( auto menu : m_submenus )
+        menu->m_parent = nullptr;
 
     if( m_parent )
         m_parent->m_submenus.remove( this );
-}
-
-
-CONTEXT_MENU& CONTEXT_MENU::operator=( const CONTEXT_MENU& aMenu )
-{
-    Clear();
-    copyFrom( aMenu );
-
-    return *this;
 }
 
 
@@ -124,14 +106,15 @@ wxMenuItem* CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 
     m_toolActions[getMenuId( aAction )] = &aAction;
 
-    return Append( item );
+    wxMenuItem* i = Append( item );
+    return i;
 }
 
 
 std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& aLabel, bool aExpand )
 {
     std::list<wxMenuItem*> items;
-    CONTEXT_MENU* menuCopy = new CONTEXT_MENU( *aMenu );
+    CONTEXT_MENU* menuCopy = aMenu->Clone();
     m_submenus.push_back( menuCopy );
     menuCopy->m_parent = this;
 
@@ -173,7 +156,7 @@ void CONTEXT_MENU::Clear()
     m_submenus.clear();
     m_parent = NULL;
 
-    assert( GetMenuItemCount() == 0 );
+    wxASSERT( GetMenuItemCount() == 0 );
 }
 
 
@@ -181,11 +164,11 @@ void CONTEXT_MENU::UpdateAll()
 {
     try
     {
-        m_update_handler();
+        update();
     }
     catch( std::exception& e )
     {
-        std::cerr << "CONTEXT_MENU error running update handler: " << e.what() << std::endl;
+        wxLogDebug( wxString::Format( "CONTEXT_MENU update handler exception: %s", e.what() ) );
     }
 
     if( m_tool )
@@ -198,15 +181,34 @@ void CONTEXT_MENU::UpdateAll()
 void CONTEXT_MENU::SetTool( TOOL_INTERACTIVE* aTool )
 {
     m_tool = aTool;
-
     runOnSubmenus( std::bind( &CONTEXT_MENU::SetTool, _1, aTool ) );
+}
+
+
+CONTEXT_MENU* CONTEXT_MENU::Clone() const
+{
+    CONTEXT_MENU* clone = create();
+    clone->Clear();
+    clone->copyFrom( *this );
+    return clone;
+}
+
+
+CONTEXT_MENU* CONTEXT_MENU::create() const
+{
+    CONTEXT_MENU* menu = new CONTEXT_MENU();
+
+    wxASSERT_MSG( typeid( *this ) == typeid( *menu ),
+            wxString::Format( "You need to override create() method for class %s", typeid(*this).name() ) );
+
+    return menu;
 }
 
 
 TOOL_MANAGER* CONTEXT_MENU::getToolManager()
 {
-    assert( m_tool );
-    return m_tool->GetManager();
+    wxASSERT( m_tool );
+    return m_tool ? m_tool->GetManager() : nullptr;
 }
 
 
@@ -269,23 +271,22 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
         }
         else
         {
-            runEventHandlers( aEvent, evt );
-
-            // Under Linux, every submenu can have a separate event handler, under
-            // Windows all submenus are handled by the main menu.
 #ifdef __WINDOWS__
             if( !evt )
             {
                 // Try to find the submenu which holds the selected item
-                wxMenu* menu = NULL;
+                wxMenu* menu = nullptr;
                 FindItem( m_selected, &menu );
 
                 if( menu && menu != this )
                 {
-                    menu->ProcessEvent( aEvent );
-                    return;
+                    CONTEXT_MENU* cxmenu = static_cast<CONTEXT_MENU*>( menu );
+                    evt = cxmenu->eventHandler( aEvent );
                 }
             }
+#else
+            if( !evt )
+                runEventHandlers( aEvent, evt );
 #endif
 
             // Handling non-action menu entries (e.g. items in clarification list)
@@ -294,17 +295,20 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
         }
     }
 
-    assert( m_tool );   // without tool & tool manager we cannot handle events
+    wxASSERT( m_tool );   // without tool & tool manager we cannot handle events
 
     // forward the action/update event to the TOOL_MANAGER
     if( evt && m_tool )
+    {
+        //aEvent.StopPropagation();
         m_tool->GetManager()->ProcessEvent( *evt );
+    }
 }
 
 
 void CONTEXT_MENU::runEventHandlers( const wxMenuEvent& aMenuEvent, OPT_TOOL_EVENT& aToolEvent )
 {
-    aToolEvent = m_menu_handler( aMenuEvent );
+    aToolEvent = eventHandler( aMenuEvent );
 
     if( !aToolEvent )
         runOnSubmenus( std::bind( &CONTEXT_MENU::runEventHandlers, _1, aMenuEvent, aToolEvent ) );
@@ -319,7 +323,25 @@ void CONTEXT_MENU::runOnSubmenus( std::function<void(CONTEXT_MENU*)> aFunction )
     }
     catch( std::exception& e )
     {
-        std::cerr << "CONTEXT_MENU runOnSubmenus error: " << e.what() << std::endl;
+        wxLogDebug( wxString::Format( "CONTEXT_MENU runOnSubmenus exception: %s", e.what() ) );
+    }
+}
+
+
+void CONTEXT_MENU::copyFrom( const CONTEXT_MENU& aMenu )
+{
+    m_icon = aMenu.m_icon;
+    m_titleSet = aMenu.m_titleSet;
+    m_selected = -1; // aMenu.m_selected;
+    m_tool = aMenu.m_tool;
+    m_toolActions = aMenu.m_toolActions;
+    m_parent = NULL; // aMenu.m_parent;
+
+    // Copy all the menu entries
+    for( int i = 0; i < (int) aMenu.GetMenuItemCount(); ++i )
+    {
+        wxMenuItem* item = aMenu.FindItemByPosition( i );
+        appendCopy( item );
     }
 }
 
@@ -334,59 +356,25 @@ wxMenuItem* CONTEXT_MENU::appendCopy( const wxMenuItem* aSource )
 
     if( aSource->IsSubMenu() )
     {
-#ifdef DEBUG
-        // Submenus of a CONTEXT_MENU are supposed to be CONTEXT_MENUs as well
-        assert( dynamic_cast<CONTEXT_MENU*>( aSource->GetSubMenu() ) );
-#endif
+        CONTEXT_MENU* menu = dynamic_cast<CONTEXT_MENU*>( aSource->GetSubMenu() );
+        wxASSERT_MSG( menu, "Submenus are expected to be a CONTEXT_MENU" );
 
-        CONTEXT_MENU* menu = new CONTEXT_MENU( static_cast<const CONTEXT_MENU&>( *aSource->GetSubMenu() ) );
-        newItem->SetSubMenu( menu );
-        Append( newItem );
-
-        m_submenus.push_back( menu );
-        menu->m_parent = this;
+        if( menu )
+        {
+            CONTEXT_MENU* menuCopy = menu->Clone();
+            newItem->SetSubMenu( menuCopy );
+            m_submenus.push_back( menuCopy );
+            menuCopy->m_parent = this;  // TODO remove m_parent
+        }
     }
-    else
-    {
-        Append( newItem );
-        newItem->SetKind( aSource->GetKind() );
-        newItem->SetHelp( aSource->GetHelp() );
-        newItem->Enable( aSource->IsEnabled() );
 
-        if( aSource->IsCheckable() )
-            newItem->Check( aSource->IsChecked() );
-    }
+    // wxMenuItem has to be added before enabling/disabling or checking
+    Append( newItem );
+
+    if( aSource->IsCheckable() )
+        newItem->Check( aSource->IsChecked() );
+
+    newItem->Enable( aSource->IsEnabled() );
 
     return newItem;
-}
-
-
-void CONTEXT_MENU::copyFrom( const CONTEXT_MENU& aMenu )
-{
-    m_icon = aMenu.m_icon;
-    m_titleSet = aMenu.m_titleSet;
-    m_selected = -1; // aMenu.m_selected;
-    m_tool = aMenu.m_tool;
-    m_toolActions = aMenu.m_toolActions;
-    m_parent = NULL; // aMenu.m_parent;
-    m_menu_handler = aMenu.m_menu_handler;
-    m_update_handler = aMenu.m_update_handler;
-
-    // Copy all the menu entries
-    for( int i = 0; i < (int) aMenu.GetMenuItemCount(); ++i )
-    {
-        wxMenuItem* item = aMenu.FindItemByPosition( i );
-        appendCopy( item );
-    }
-}
-
-
-OPT_TOOL_EVENT CONTEXT_MENU::menuHandlerStub( const wxMenuEvent& )
-{
-    return boost::none;
-}
-
-
-void CONTEXT_MENU::updateHandlerStub()
-{
 }

@@ -34,10 +34,7 @@ using namespace std::placeholders;
 ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 {
     BASE_SCREEN* screen = aParent->GetScreen();
-
     SetIcon( zoom_selection_xpm );
-    SetMenuHandler( std::bind( &ZOOM_MENU::EventHandler, this, _1 ) );
-    SetUpdateHandler( std::bind( &ZOOM_MENU::Update, this ) );
 
     //int zoom = screen->GetZoom();
     int maxZoomIds = std::min( ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START,
@@ -52,7 +49,7 @@ ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 }
 
 
-OPT_TOOL_EVENT ZOOM_MENU::EventHandler( const wxMenuEvent& aEvent )
+OPT_TOOL_EVENT ZOOM_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT event( COMMON_ACTIONS::zoomPreset.MakeEvent() );
     long idx = aEvent.GetId() - ID_POPUP_ZOOM_LEVEL_START;
@@ -62,11 +59,12 @@ OPT_TOOL_EVENT ZOOM_MENU::EventHandler( const wxMenuEvent& aEvent )
 }
 
 
-void ZOOM_MENU::Update()
+void ZOOM_MENU::update()
 {
     double zoom = m_parent->GetScreen()->GetZoom();
     const std::vector<double>& zoomList = m_parent->GetScreen()->m_ZoomList;
 
+    // Check the current zoom
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
         Check( ID_POPUP_ZOOM_LEVEL_START + i, std::fabs( zoomList[i] - zoom ) < 1e-6 );
 }

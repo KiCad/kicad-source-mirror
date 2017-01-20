@@ -117,18 +117,20 @@ ROUTER_TOOL::ROUTER_TOOL() :
 }
 
 
-class CONTEXT_TRACK_WIDTH_MENU: public CONTEXT_TRACK_VIA_SIZE_MENU
+class TRACK_WIDTH_MENU: public TRACK_VIA_SIZE_MENU
 {
 public:
-    CONTEXT_TRACK_WIDTH_MENU()
-        : CONTEXT_TRACK_VIA_SIZE_MENU( true, true ), m_board( NULL )
+    TRACK_WIDTH_MENU( const BOARD* aBoard )
+        : TRACK_VIA_SIZE_MENU( true, true )
     {
-        SetMenuHandler( std::bind( &CONTEXT_TRACK_WIDTH_MENU::EventHandler, this, _1 ) );
+        SetBoard( aBoard );
     }
 
-    void SetBoard( BOARD* aBoard )
+    void SetBoard( const BOARD* aBoard )
     {
         m_board = aBoard;
+
+        Clear();
 
         Append( ID_POPUP_PCB_SELECT_CUSTOM_WIDTH, _( "Custom size" ),
                 wxEmptyString, wxITEM_CHECK );
@@ -145,7 +147,13 @@ public:
         AppendSizes( aBoard );
     }
 
-    OPT_TOOL_EVENT EventHandler( const wxMenuEvent& aEvent )
+protected:
+    CONTEXT_MENU* create() const override
+    {
+        return new TRACK_WIDTH_MENU( m_board );
+    }
+
+    OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override
     {
         BOARD_DESIGN_SETTINGS &bds = m_board->GetDesignSettings();
         int id = aEvent.GetId();
@@ -198,20 +206,20 @@ public:
             bds.UseCustomTrackViaSize( useCustomTrackViaSize );
         }
 
-
         return OPT_TOOL_EVENT( COMMON_ACTIONS::trackViaSizeChanged.MakeEvent() );
     }
 
 private:
-    BOARD* m_board;
+    const BOARD* m_board;
 };
 
 
-class ROUTER_TOOL_MENU: public CONTEXT_MENU
+class ROUTER_TOOL_MENU : public CONTEXT_MENU
 {
 public:
-    ROUTER_TOOL_MENU( BOARD* aBoard, PCB_EDIT_FRAME& frame, PNS::ROUTER_MODE aMode ) :
-                      m_zoomMenu( &frame ), m_gridMenu( &frame )
+    ROUTER_TOOL_MENU( const BOARD* aBoard, PCB_EDIT_FRAME& aFrame, PNS::ROUTER_MODE aMode ) :
+        m_board( aBoard ), m_frame( aFrame ), m_mode( aMode ),
+        m_widthMenu( aBoard ), m_zoomMenu( &aFrame ), m_gridMenu( &aFrame )
     {
         SetTitle( _( "Interactive Router" ) );
         Add( ACT_NewTrack );
@@ -242,7 +250,15 @@ public:
     }
 
 private:
-    CONTEXT_TRACK_WIDTH_MENU m_widthMenu;
+    CONTEXT_MENU* create() const override
+    {
+        return new ROUTER_TOOL_MENU( m_board, m_frame, m_mode );
+    }
+
+    const BOARD* m_board;
+    PCB_EDIT_FRAME& m_frame;
+    PNS::ROUTER_MODE m_mode;
+    TRACK_WIDTH_MENU m_widthMenu;
     ZOOM_MENU m_zoomMenu;
     GRID_MENU m_gridMenu;
 };
@@ -252,6 +268,7 @@ ROUTER_TOOL::~ROUTER_TOOL()
 {
     m_savedSettings.Save( GetSettings() );
 }
+
 
 bool ROUTER_TOOL::Init()
 {
@@ -723,9 +740,6 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     // Store routing settings till the next invocation
     m_savedSettings = m_router->Settings();
     m_savedSizes = m_router->Sizes();
-
-    // Disable the context menu before it is destroyed
-    SetContextMenu( NULL, CMENU_OFF );
 
     return 0;
 }

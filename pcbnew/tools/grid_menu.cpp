@@ -37,8 +37,6 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
     BASE_SCREEN* screen = aParent->GetScreen();
 
     SetIcon( grid_select_xpm );
-    SetMenuHandler( std::bind( &GRID_MENU::EventHandler, this, _1 ) );
-    SetUpdateHandler( std::bind( &GRID_MENU::Update, this ) );
 
     wxArrayString gridsList;
     screen->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );
@@ -51,7 +49,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 }
 
 
-OPT_TOOL_EVENT GRID_MENU::EventHandler( const wxMenuEvent& aEvent )
+OPT_TOOL_EVENT GRID_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT event( COMMON_ACTIONS::gridPreset.MakeEvent() );
     long idx = aEvent.GetId() - ID_POPUP_GRID_SELECT - 1;
@@ -61,10 +59,11 @@ OPT_TOOL_EVENT GRID_MENU::EventHandler( const wxMenuEvent& aEvent )
 }
 
 
-void GRID_MENU::Update()
+void GRID_MENU::update()
 {
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
         Check( ID_POPUP_GRID_SELECT + 1 + i, false );
 
+    // Check the current grid size
     Check( m_parent->GetScreen()->GetGridCmdId(), true );
 }

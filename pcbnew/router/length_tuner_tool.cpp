@@ -73,10 +73,10 @@ LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
 }
 
 
-class TUNER_TOOL_MENU: public CONTEXT_MENU
+class TUNER_TOOL_MENU : public CONTEXT_MENU
 {
 public:
-    TUNER_TOOL_MENU( BOARD* aBoard )
+    TUNER_TOOL_MENU()
     {
         SetTitle( _( "Length Tuner" ) );
 
@@ -90,6 +90,12 @@ public:
         Add( ACT_AmplIncrease );
         Add( ACT_AmplDecrease );
         Add( ACT_Settings );
+    }
+
+private:
+    CONTEXT_MENU* create() const override
+    {
+        return new TUNER_TOOL_MENU();
     }
 };
 
@@ -242,7 +248,7 @@ int LENGTH_TUNER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     m_ctls->ShowCursor( true );
     m_frame->UndoRedoBlock( true );
 
-    std::unique_ptr<TUNER_TOOL_MENU> ctxMenu( new TUNER_TOOL_MENU( m_board ) );
+    std::unique_ptr<TUNER_TOOL_MENU> ctxMenu( new TUNER_TOOL_MENU );
     SetContextMenu( ctxMenu.get() );
 
     // Main loop: keep receiving events
