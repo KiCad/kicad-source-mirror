@@ -179,7 +179,7 @@ double MICROSTRIP::delta_u_thickness( double u, double t_h, double e_r )
 void MICROSTRIP::microstrip_Z0()
 {
     double e_r, h2, h2h, u, t_h;
-    double Z0_h_r, Z0;
+    double Z0_h_r;
     double delta_u_1, delta_u_r, q_inf, q_c, q_t, e_r_eff, e_r_eff_t, q;
 
     e_r = er;
