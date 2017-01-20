@@ -257,7 +257,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 
     wxMenu* zoom_choice = new wxMenu;
     AddMenuItem( MasterMenu, zoom_choice,
-                 ID_POPUP_ZOOM_SELECT, _( "Zoom select" ),
+                 ID_POPUP_ZOOM_SELECT, _( "Zoom Select" ),
                  KiBitmap( zoom_selection_xpm ) );
 
     zoom = screen->GetZoom();
@@ -281,7 +281,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     {
         wxMenu* gridMenu = new wxMenu;
         AddMenuItem( MasterMenu, gridMenu, ID_POPUP_GRID_SELECT,
-                     _( "Grid select" ), KiBitmap( grid_select_xpm ) );
+                     _( "Grid Select" ), KiBitmap( grid_select_xpm ) );
 
         wxArrayString gridsList;
         int icurr = screen->BuildGridsChoiceList( gridsList, g_UserUnit != INCHES );

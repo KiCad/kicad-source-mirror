@@ -237,8 +237,8 @@ public:
         Add( PNS::TOOL_BASE::ACT_RouterOptions );
 
         AppendSeparator();
-        Add( &m_zoomMenu, _( "Zoom select" ), false );
-        Add( &m_gridMenu, _( "Grid select" ), false );
+        Add( &m_zoomMenu, _( "Zoom Select" ), false );
+        Add( &m_gridMenu, _( "Grid Select" ), false );
     }
 
 private:
