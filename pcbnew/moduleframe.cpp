@@ -67,6 +67,7 @@
 #include "tools/module_tools.h"
 #include "tools/placement_tool.h"
 #include "tools/picker_tool.h"
+#include "tools/pad_tool.h"
 #include "tools/common_actions.h"
 
 
@@ -950,12 +951,14 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
+    m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new POINT_EDITOR );
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new MODULE_TOOLS );
     m_toolManager->RegisterTool( new PLACEMENT_TOOL );
     m_toolManager->RegisterTool( new PICKER_TOOL );
+
 
     m_toolManager->GetTool<SELECTION_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<EDIT_TOOL>()->SetEditModules( true );

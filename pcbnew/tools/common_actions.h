@@ -272,6 +272,16 @@ public:
     /// Display module texts as outlines
     static TOOL_ACTION moduleTextOutlines;
 
+    // Pad tools
+    /// Copy the selected pad's settings to the board design settings
+    static TOOL_ACTION exportPadSettings;
+
+    /// Copy the pad settings in the board design settings to the selected pad
+    static TOOL_ACTION importPadSettings;
+
+    /// Copy the current pad's settings to other pads in the module or on the board
+    static TOOL_ACTION pushPadSettings;
+
     /// Cursor control with keyboard
     static TOOL_ACTION cursorUp;
     static TOOL_ACTION cursorDown;

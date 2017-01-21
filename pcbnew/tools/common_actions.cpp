@@ -459,6 +459,24 @@ TOOL_ACTION COMMON_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutline
        AS_GLOBAL, 0,
        "", "" );
 
+// Pad tools
+TOOL_ACTION COMMON_ACTIONS::exportPadSettings(
+        "pcbnew.PadTool.ExportPadSettings",
+        AS_GLOBAL, 0,
+        _( "Export pad settings" ), _( "Copy current pad's settings to the board design settings" ),
+        export_options_pad_xpm );
+
+TOOL_ACTION COMMON_ACTIONS::importPadSettings(
+        "pcbnew.PadTool.ImportPadSettings",
+        AS_GLOBAL, 0,
+        _( "Import pad settings" ), _( "Copy the board design settings pad properties to the current pad" ),
+        options_new_pad_xpm );
+
+TOOL_ACTION COMMON_ACTIONS::pushPadSettings(
+        "pcbnew.PadTool.PushPadSettings",
+        AS_GLOBAL, 0,
+        _( "Push pad settings" ), _( "Copy the current pad settings to other pads" ),
+        global_options_pad_xpm );
 
 // Cursor control
 TOOL_ACTION COMMON_ACTIONS::cursorUp( "pcbnew.Control.cursorUp",
