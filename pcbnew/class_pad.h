@@ -111,7 +111,7 @@ public:
      * @return true if the pad has a footprint parent flipped
      * (on the back/bottom layer)
      */
-    bool IsFlipped();
+    bool IsFlipped() const;
 
     /**
      * Set the pad name (sometimes called pad number, although
@@ -124,7 +124,7 @@ public:
      * @return the pad name
      * the pad name is limited to 4 ASCII chars
      */
-    const wxString GetPadName() const;
+    wxString GetPadName() const;
 
     /**
      * @return the pad name in a wxUint32 which is possible
@@ -132,7 +132,7 @@ public:
      * The packed pad name should be used only to compare 2
      * pad names, not to try to print this name
      */
-    const wxUint32 GetPackedPadName() const { return m_NumPadName; }
+    wxUint32 GetPackedPadName() const { return m_NumPadName; }
 
     /**
      * Function IncrementPadName
@@ -430,7 +430,7 @@ public:
         return m_boundingRadius;
     }
 
-    const wxPoint ShapePos() const;
+    wxPoint ShapePos() const;
 
     /**
      * has meaning only for rounded rect pads
@@ -439,7 +439,7 @@ public:
      * Cannot be > 0.5
      * the normalized IPC-7351C value is 0.25
      */
-    double GetRoundRectRadiusRatio()
+    double GetRoundRectRadiusRatio() const
     {
         return m_padRoundRectRadiusScale;
     }

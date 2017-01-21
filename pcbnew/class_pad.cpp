@@ -120,7 +120,7 @@ LSET D_PAD::UnplatedHoleMask()
     return saved;
 }
 
-bool D_PAD::IsFlipped()
+bool D_PAD::IsFlipped() const
 {
     if( GetParent() &&  GetParent()->GetLayer() == B_Cu )
         return true;
@@ -363,7 +363,7 @@ void D_PAD::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 
 
 // Returns the position of the pad.
-const wxPoint D_PAD::ShapePos() const
+wxPoint D_PAD::ShapePos() const
 {
     if( m_Offset.x == 0 && m_Offset.y == 0 )
         return m_Pos;
@@ -378,7 +378,7 @@ const wxPoint D_PAD::ShapePos() const
 }
 
 
-const wxString D_PAD::GetPadName() const
+wxString D_PAD::GetPadName() const
 {
     wxString name;
 
