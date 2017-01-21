@@ -45,6 +45,7 @@ CMATERIAL::CMATERIAL()
     m_transparency  = 0.0f; // completely opaque
     m_cast_shadows  = true;
     m_reflection    = 0.0f;
+    m_absorbance    = 1.0f;
 
     m_normal_perturbator = NULL;
 }
@@ -72,6 +73,7 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
     m_specularColor = aSpecular;
     m_shinness      = aShinness;
     m_transparency  = aTransparency;
+    m_absorbance    = 1.0f;
     m_reflection    = aReflection;
     m_cast_shadows  = true;
 

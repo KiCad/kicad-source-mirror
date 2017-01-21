@@ -1905,15 +1905,17 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
                 if( m_accelerator->Intersect( reflectedRay, reflectedHit ) )
                 {
-                    sum_color += objMaterial->GetReflection() *
+                    sum_color += ( diffuseColorObj + objMaterial->GetSpecularColor() ) *
                                  shadeHit( aBgColor,
                                            reflectedRay,
                                            reflectedHit,
                                            false,
                                            aRecursiveLevel + 1,
                                            is_testShadow ) *
-                                 (1.0f / ( 1.0f + 0.75f * reflectedHit.m_tHit *
-                                                          reflectedHit.m_tHit) ); // Falloff factor
+                                 SFVEC3F( objMaterial->GetReflection() *
+                                          // Falloff factor
+                                          (1.0f / ( 1.0f + 0.75f * reflectedHit.m_tHit *
+                                                    reflectedHit.m_tHit) ) );
                 }
             }
 
@@ -1941,8 +1943,10 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                          refractionRatio,
                          refractedVector ) )
             {
-                // If we want to apply some randomize to the refracted vector
-                //refractedVector = refractedVector + UniformRandomHemisphereDirection() * 0.01f;
+                const float objTransparency = objMaterial->GetTransparency();
+
+                // apply some randomize to the refracted vector
+                refractedVector = refractedVector + UniformRandomHemisphereDirection() * 0.2f * (1.0f - objTransparency);
                 refractedVector = glm::normalize( refractedVector );
 
                 // This increase the start point by a "fixed" factor so it will work the
@@ -1957,9 +1961,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                 HITINFO refractedHit;
                 refractedHit.m_tHit = std::numeric_limits<float>::infinity();
 
-                SFVEC3F refractedColor = aBgColor;
-
-                float objTransparency = objMaterial->GetTransparency();
+                SFVEC3F refractedColor = objMaterial->GetAmbientColor();
 
                 if( m_accelerator->Intersect( refractedRay, refractedHit ) )
                 {
@@ -1972,7 +1974,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
                     const SFVEC3F absorbance = ( SFVEC3F(1.0f) - diffuseColorObj ) *
                                                (1.0f - objTransparency ) *
-                                               1.0000f *  // Adjust falloff factor
+                                               objMaterial->GetAbsorvance() *   // Adjust falloff factor
                                                -refractedHit.m_tHit;
 
                     const SFVEC3F transparency = SFVEC3F( expf( absorbance.r ),

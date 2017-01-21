@@ -182,6 +182,9 @@ public:
     float GetShinness()     const { return m_shinness; }
     float GetTransparency() const { return m_transparency; }
     float GetReflection()   const { return m_reflection; }
+    float GetAbsorvance()   const { return m_absorbance; }
+
+    void SetAbsorvance( float aAbsorvanceFactor ) { m_absorbance = aAbsorvanceFactor; }
 
     /**
      * @brief SetCastShadows - Set if the material can receive shadows
@@ -226,6 +229,7 @@ protected:
     SFVEC3F m_specularColor;
     float   m_shinness;
     float   m_transparency;     ///< 1.0 is completely transparent, 0.0 completely opaque
+    float   m_absorbance;       ///< absorvance factor for the transparent material
     float   m_reflection;       ///< 1.0 completely reflective, 0.0 no reflective
     bool    m_cast_shadows;     ///< true if this object will block the light
 

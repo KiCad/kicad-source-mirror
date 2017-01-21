@@ -146,6 +146,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 0.10f,                                            // transparency
                 0.0f );                                           // reflection
 
+    m_materials.m_EpoxyBoard.SetAbsorvance( 10.0f );
+
     if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
         m_materials.m_EpoxyBoard.SetNormalPerturbator( &m_board_normal_perturbator );
 
