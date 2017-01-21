@@ -324,7 +324,7 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 }
 
 
-bool CLAYERITEM::IntersectP(const RAY &aRay , float aMaxDistance ) const
+bool CLAYERITEM::IntersectP( const RAY &aRay , float aMaxDistance ) const
 {
     float tBBoxStart;
     float tBBoxEnd;

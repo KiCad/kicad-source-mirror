@@ -183,8 +183,12 @@ public:
     float GetTransparency() const { return m_transparency; }
     float GetReflection()   const { return m_reflection; }
     float GetAbsorvance()   const { return m_absorbance; }
+    unsigned int GetNrRefractionsSamples() const { return m_refraction_nr_samples; }
+    unsigned int GetNrReflectionsSamples() const { return m_reflections_nr_samples; }
 
     void SetAbsorvance( float aAbsorvanceFactor ) { m_absorbance = aAbsorvanceFactor; }
+    void SetNrRefractionsSamples( unsigned int aNrRefractions ) { m_refraction_nr_samples = aNrRefractions; }
+    void SetNrReflectionsSamples( unsigned int aNrReflections ) { m_reflections_nr_samples = aNrReflections; }
 
     /**
      * @brief SetCastShadows - Set if the material can receive shadows
@@ -228,10 +232,12 @@ protected:
     SFVEC3F m_emissiveColor;
     SFVEC3F m_specularColor;
     float   m_shinness;
-    float   m_transparency;     ///< 1.0 is completely transparent, 0.0 completely opaque
-    float   m_absorbance;       ///< absorvance factor for the transparent material
-    float   m_reflection;       ///< 1.0 completely reflective, 0.0 no reflective
-    bool    m_cast_shadows;     ///< true if this object will block the light
+    float   m_transparency;                     ///< 1.0 is completely transparent, 0.0 completely opaque
+    float   m_absorbance;                       ///< absorvance factor for the transparent material
+    float   m_reflection;                       ///< 1.0 completely reflective, 0.0 no reflective
+    bool    m_cast_shadows;                     ///< true if this object will block the light
+    unsigned int     m_refraction_nr_samples;   ///< nr of rays that will be interpolated for this material if it is a transparent
+    unsigned int     m_reflections_nr_samples;  ///< nr of rays that will be interpolated for this material if it is reflective
 
     const CPROCEDURALGENERATOR *m_normal_perturbator;
 };

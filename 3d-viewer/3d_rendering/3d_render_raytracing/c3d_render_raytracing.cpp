@@ -1881,7 +1881,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
             (objMaterial->GetReflection() > 0.0f) &&
             m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) )
         {
-            const unsigned int reflection_number_of_samples = 3;
+            const unsigned int reflection_number_of_samples = objMaterial->GetNrReflectionsSamples();
 
             SFVEC3F sum_color = SFVEC3F(0.0f);
 
@@ -1891,14 +1891,14 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
             for( unsigned int i = 0; i < reflection_number_of_samples; ++i )
             {
-                // If we want to apply some randomize to the reflected vector
-                // const SFVEC3F random_reflectVector =
-                //        glm::normalize( reflectVector +
-                //                        UniformRandomHemisphereDirection() *
-                //                        0.02f );
+                // Apply some randomize to the reflected vector
+                 const SFVEC3F random_reflectVector =
+                         glm::normalize( reflectVector +
+                                         UniformRandomHemisphereDirection() *
+                                         0.025f );
 
                 RAY reflectedRay;
-                reflectedRay.Init( hitPoint, reflectVector );
+                reflectedRay.Init( hitPoint, random_reflectVector );
 
                 HITINFO reflectedHit;
                 reflectedHit.m_tHit = std::numeric_limits<float>::infinity();
@@ -1934,7 +1934,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
             const float air_over_glass = airIndex / glassIndex;
             const float glass_over_air = glassIndex / airIndex;
 
-            float refractionRatio = aIsInsideObject?glass_over_air:air_over_glass;
+            const float refractionRatio = aIsInsideObject?glass_over_air:air_over_glass;
 
             SFVEC3F refractedVector;
 
@@ -1945,50 +1945,68 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
             {
                 const float objTransparency = objMaterial->GetTransparency();
 
-                // apply some randomize to the refracted vector
-                refractedVector = refractedVector + UniformRandomHemisphereDirection() * 0.2f * (1.0f - objTransparency);
-                refractedVector = glm::normalize( refractedVector );
-
                 // This increase the start point by a "fixed" factor so it will work the
                 // same for all distances
                 const SFVEC3F startPoint = aRay.at( NextFloatUp(
                                                     NextFloatUp(
                                                     NextFloatUp( aHitInfo.m_tHit ) ) ) );
 
-                RAY refractedRay;
-                refractedRay.Init( startPoint, refractedVector );
+                const unsigned int refractions_number_of_samples = objMaterial->GetNrRefractionsSamples();
 
-                HITINFO refractedHit;
-                refractedHit.m_tHit = std::numeric_limits<float>::infinity();
+                SFVEC3F sum_color = SFVEC3F(0.0f);
 
-                SFVEC3F refractedColor = objMaterial->GetAmbientColor();
-
-                if( m_accelerator->Intersect( refractedRay, refractedHit ) )
+                for( unsigned int i = 0; i < refractions_number_of_samples; ++i )
                 {
-                    refractedColor = shadeHit( aBgColor,
-                                               refractedRay,
-                                               refractedHit,
-                                               true,
-                                               aRecursiveLevel + 1,
-                                               is_testShadow );
+                    RAY refractedRay;
 
-                    const SFVEC3F absorbance = ( SFVEC3F(1.0f) - diffuseColorObj ) *
-                                               (1.0f - objTransparency ) *
-                                               objMaterial->GetAbsorvance() *   // Adjust falloff factor
-                                               -refractedHit.m_tHit;
+                    if( refractions_number_of_samples > 1 )
+                    {
+                        // apply some randomize to the refracted vector
+                        const SFVEC3F randomizeRefractedVector = glm::normalize( refractedVector +
+                                                                                 UniformRandomHemisphereDirection() *
+                                                                                 0.15f *
+                                                                                 (1.0f - objTransparency) );
 
-                    const SFVEC3F transparency = SFVEC3F( expf( absorbance.r ),
-                                                          expf( absorbance.g ),
-                                                          expf( absorbance.b ) );
+                        refractedRay.Init( startPoint, randomizeRefractedVector );
+                    }
+                    else
+                    {
+                        refractedRay.Init( startPoint, refractedVector );
+                    }
 
-                    outColor = outColor * (1.0f - objTransparency) +
-                               refractedColor * transparency * objTransparency;
+                    HITINFO refractedHit;
+                    refractedHit.m_tHit = std::numeric_limits<float>::infinity();
+
+                    SFVEC3F refractedColor = objMaterial->GetAmbientColor();
+
+                    if( m_accelerator->Intersect( refractedRay, refractedHit ) )
+                    {
+                        refractedColor = shadeHit( aBgColor,
+                                                   refractedRay,
+                                                   refractedHit,
+                                                   true,
+                                                   aRecursiveLevel + 1,
+                                                   false );
+
+                        const SFVEC3F absorbance = ( SFVEC3F(1.0f) - diffuseColorObj ) *
+                                                   (1.0f - objTransparency ) *
+                                                   objMaterial->GetAbsorvance() *   // Adjust falloff factor
+                                                   -refractedHit.m_tHit;
+
+                        const SFVEC3F transparency = SFVEC3F( expf( absorbance.r ),
+                                                              expf( absorbance.g ),
+                                                              expf( absorbance.b ) );
+
+                        sum_color += refractedColor * transparency * objTransparency;
+                    }
+                    else
+                    {
+                        sum_color += refractedColor * objTransparency;
+                    }
                 }
-                else
-                {
-                    outColor = outColor * (1.0f - objTransparency) +
-                               refractedColor * objTransparency;
-                }
+
+                outColor = outColor * (1.0f - objTransparency) +
+                           (sum_color / SFVEC3F( (float)refractions_number_of_samples) );
             }
         }
     }

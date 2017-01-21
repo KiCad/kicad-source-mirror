@@ -130,6 +130,8 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 0.16f );                                // reflection
 
     m_materials.m_SolderMask.SetCastShadows( true );
+    m_materials.m_SolderMask.SetNrRefractionsSamples( 1 );
+    m_materials.m_SolderMask.SetNrReflectionsSamples( 2 );
 
     if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
         m_materials.m_SolderMask.SetNormalPerturbator( &m_solder_mask_normal_perturbator );
@@ -147,6 +149,7 @@ void C3D_RENDER_RAYTRACING::setupMaterials()
                 0.0f );                                           // reflection
 
     m_materials.m_EpoxyBoard.SetAbsorvance( 10.0f );
+    m_materials.m_EpoxyBoard.SetNrRefractionsSamples( 3 );
 
     if( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) )
         m_materials.m_EpoxyBoard.SetNormalPerturbator( &m_board_normal_perturbator );

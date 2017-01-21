@@ -46,6 +46,8 @@ CMATERIAL::CMATERIAL()
     m_cast_shadows  = true;
     m_reflection    = 0.0f;
     m_absorbance    = 1.0f;
+    m_refraction_nr_samples = 4;
+    m_reflections_nr_samples = 3;
 
     m_normal_perturbator = NULL;
 }
@@ -76,6 +78,8 @@ CMATERIAL::CMATERIAL( const SFVEC3F &aAmbient,
     m_absorbance    = 1.0f;
     m_reflection    = aReflection;
     m_cast_shadows  = true;
+    m_refraction_nr_samples = 4;
+    m_reflections_nr_samples = 3;
 
     m_normal_perturbator = NULL;
 }
@@ -225,19 +229,21 @@ SFVEC3F CPLASTICNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) con
 {
         const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-        const float noise1 = (m_perlin.noise( hitPos.x * 0.1f,
-                                              hitPos.y * 0.1f,
-                                              hitPos.z * 0.1f) - 0.5f);
+        const float noise1 = m_perlin.noise( hitPos.x * 1.0f,
+                                             hitPos.y * 1.0f,
+                                             hitPos.z * 1.0f ) - 0.5f;
 
-        const float noise2 = (m_perlin.noise( hitPos.x * 4.0f,
-                                              hitPos.y * 4.0f,
-                                              hitPos.z * 4.0f ) - 0.5f);
+        const float noise2 = m_perlin.noise( hitPos.x * 1.5f,
+                                             hitPos.y * 1.5f,
+                                             hitPos.z * 2.0f ) - 0.5f;
 
-        const float noise3 = (m_perlin.noise( hitPos.x * 8.0f + Fast_RandFloat() * 0.10f,
-                                              hitPos.y * 8.0f + Fast_RandFloat() * 0.10f,
-                                              hitPos.z * 8.0f + Fast_RandFloat() * 0.10f ) - 0.5f);
+        const float noise3 = m_perlin.noise( hitPos.x * 2.0f,
+                                             hitPos.y * 2.0f,
+                                             hitPos.z * 2.0f ) - 0.5f;
 
-        return SFVEC3F( noise1 * 0.10f + noise2 * 0.20f + noise3 * 0.50f );
+        return SFVEC3F( noise1 * noise2 * noise3 * 4.00f,
+                        noise1 * expf(noise2) * noise3 * 4.00f,
+                        noise3 * noise3 * 1.00f );
 }
 
 
@@ -251,17 +257,17 @@ SFVEC3F CPLASTICSHINENORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo 
 {
     const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-    const float noise1 = (m_perlin.noise( hitPos.x * 0.05f,
-                                          hitPos.y * 0.05f,
-                                          hitPos.z * 0.05f ) - 0.5f);
+    const float noise1 = m_perlin.noise( hitPos.x * 0.05f,
+                                         hitPos.y * 0.05f,
+                                         hitPos.z * 0.05f ) - 0.5f;
 
-    const float noise2 = (m_perlin.noise( hitPos.x * 0.2f,
-                                          hitPos.y * 0.2f,
-                                          hitPos.z * 0.2f ) - 0.5f);
+    const float noise2 = m_perlin.noise( hitPos.x * 0.2f,
+                                         hitPos.y * 0.2f,
+                                         hitPos.z * 0.2f ) - 0.5f;
 
-    const float noise3 = (m_perlin.noise( hitPos.x * 0.5f,
-                                          hitPos.y * 0.5f,
-                                          hitPos.z * 0.5f ) - 0.5f);
+    const float noise3 = m_perlin.noise( hitPos.x * 0.5f,
+                                         hitPos.y * 0.5f,
+                                         hitPos.z * 0.5f ) - 0.5f;
 
     return SFVEC3F( noise1 * 0.5f, noise2 * 0.5f, noise3 * 0.5f );
 }
@@ -275,9 +281,9 @@ CMETALBRUSHEDNORMAL::CMETALBRUSHEDNORMAL( float aScale )
 
 SFVEC3F CMETALBRUSHEDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
 {
-    SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
+    const SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-    SFVEC3F hitPosRelative = hitPos - glm::floor( hitPos );
+    const SFVEC3F hitPosRelative = hitPos - glm::floor( hitPos );
 
     const float noiseX = (m_perlin.noise( hitPos.x * (60.0f),
                                           hitPos.y * 1.0f,
@@ -292,20 +298,20 @@ SFVEC3F CMETALBRUSHEDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo 
                                           hitPos.z * 1.0f ) - 0.5f);
 
     const float noise3X = (m_perlin.noise( hitPos.x * (80.0f + noise2 * 0.5f),
-                                           hitPos.y * 0.5f + Fast_RandFloat() * 0.05f,
+                                           hitPos.y * 0.5f,
                                            hitPos.z * 0.5f ) - 0.5f );
 
-    const float noise3Y = (m_perlin.noise( hitPos.x * 0.5f + Fast_RandFloat() * 0.05f,
+    const float noise3Y = (m_perlin.noise( hitPos.x * 0.5f,
                                            hitPos.y * (80.0f + noise2 * 0.5f),
                                            hitPos.z * 0.5f ) - 0.5f );
 
     // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIoKHgtZmxvb3IoeCkpK3Npbih4KSleMyIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi02LjcxNDAwMDAxOTAzMDA3NyIsIjcuMjQ0NjQzNjkyOTY5NzM5IiwiLTMuMTU1NTUyNjAxNDUyNTg4IiwiNS40MzQzODE5OTA1NDczMDY1Il0sInNpemUiOls2NDQsMzk0XX1d
     // ((x - floor(x))+sin(x))^3
 
-    float sawX = (hitPosRelative.x + glm::sin(10.0f * hitPos.x + 5.0f * noise2 + Fast_RandFloat() ) );
+    float sawX = (hitPosRelative.x + glm::sin( 10.0f * hitPos.x + 5.0f * noise2 + Fast_RandFloat() ) );
           sawX = sawX * sawX * sawX;
 
-    float sawY = (hitPosRelative.y + glm::sin(10.0f * hitPos.y + 5.0f * noise2 + Fast_RandFloat() ) );
+    float sawY = (hitPosRelative.y + glm::sin( 10.0f * hitPos.y + 5.0f * noise2 + Fast_RandFloat() ) );
           sawY = sawY * sawY * sawY;
 
     float xOut = sawX * noise3X * 0.17f + noiseX * 0.25f + noise3X * 0.57f;
