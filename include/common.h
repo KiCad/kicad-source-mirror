@@ -44,6 +44,8 @@
 
 #include <atomic>
 
+// C++11 "polyfill" for the C++14 std::make_unique function
+#include "make_unique.h"
 
 class wxAboutDialogInfo;
 class SEARCH_STACK;
