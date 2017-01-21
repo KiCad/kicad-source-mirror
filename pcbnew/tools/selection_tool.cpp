@@ -867,12 +867,23 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     case PCB_MODULE_EDGE_T:
     case PCB_PAD_T:
     {
+        // Multiple selection is only allowed in modedit mode
+        // In pcbnew, you have to select subparts of modules
+        // one-by-one, rather than with a drag selection.
+        // This is so you can pick up items under an (unlocked)
+        // module without also moving the module's sub-parts.
         if( m_multiple && !m_editModules )
             return false;
 
-        MODULE* mod = static_cast<const D_PAD*>( aItem )->GetParent();
-        if( mod && mod->IsLocked() )
-            return false;
+        // When editing modules, it's allowed to select them, even when
+        // locked, since you already have to explicitly activate the
+        // module editor to get to this stage
+        if ( !m_editModules )
+        {
+            MODULE* mod = static_cast<const D_PAD*>( aItem )->GetParent();
+            if( mod && mod->IsLocked() )
+                return false;
+        }
 
         break;
     }
