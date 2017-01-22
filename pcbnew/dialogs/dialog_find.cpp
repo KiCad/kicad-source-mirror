@@ -51,13 +51,17 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent 
     GetSizer()->SetSizeHints( this );
 
     m_SearchTextCtrl->AppendText( prevSearchString );
-    m_SearchTextCtrl->SetFocus();
-    m_SearchTextCtrl->SetSelection( -1, -1 );
     m_NoMouseWarpCheckBox->SetValue( !warpMouse );
 
     itemCount = markerCount = 0;
 
     Center();
+}
+
+void DIALOG_FIND::OnInitDialog( wxInitDialogEvent& event )
+{
+    m_SearchTextCtrl->SetFocus();
+    m_SearchTextCtrl->SetSelection( -1, -1 );
 }
 
 void DIALOG_FIND::EnableWarp( bool aEnabled )

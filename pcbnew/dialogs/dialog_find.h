@@ -33,6 +33,7 @@ class DIALOG_FIND : public DIALOG_FIND_BASE
 {
 public:
     DIALOG_FIND( PCB_BASE_FRAME* aParent );
+    void OnInitDialog( wxInitDialogEvent& event ) override;
     inline BOARD_ITEM* GetItem() const { return foundItem; }
     void EnableWarp( bool aEnabled );
     void SetCallback( boost::function<void (BOARD_ITEM*)> aCallback ) { callback = aCallback; }

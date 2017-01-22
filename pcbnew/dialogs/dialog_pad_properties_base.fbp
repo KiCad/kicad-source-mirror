@@ -67,7 +67,7 @@
             <event name="OnHibernate"></event>
             <event name="OnIconize"></event>
             <event name="OnIdle"></event>
-            <event name="OnInitDialog"></event>
+            <event name="OnInitDialog">OnInitDialog</event>
             <event name="OnKeyDown"></event>
             <event name="OnKeyUp"></event>
             <event name="OnKillFocus"></event>

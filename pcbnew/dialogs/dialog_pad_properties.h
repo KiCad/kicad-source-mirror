@@ -56,6 +56,7 @@ class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
 public:
     DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad );
+    void OnInitDialog( wxInitDialogEvent& event ) override;
     ~DIALOG_PAD_PROPERTIES()
     {
         delete m_dummyPad;

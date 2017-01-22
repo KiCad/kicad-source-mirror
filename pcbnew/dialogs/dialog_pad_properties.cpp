@@ -150,7 +150,6 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     TransferDataToWindow();
 
     m_sdbSizerOK->SetDefault();
-    m_PadNumCtrl->SetFocus();
     m_canUpdate = true;
 
     FixOSXCancelButtonIssue();
@@ -159,6 +158,11 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     FinishDialogSettings();
 }
 
+void DIALOG_PAD_PROPERTIES::OnInitDialog( wxInitDialogEvent& event )
+{
+    m_PadNumCtrl->SetFocus();
+    m_PadNumCtrl->SetSelection( -1, -1 );
+}
 
 void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 {

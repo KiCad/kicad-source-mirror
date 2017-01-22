@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 10 2012)
+// C++ code generated with wxFormBuilder (version Jan 15 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,6 +11,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -44,6 +46,7 @@ class DIALOG_FIND_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
 		virtual void onButtonFindItemClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onButtonFindMarkerClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onButtonCloseClick( wxCommandEvent& event ) { event.Skip(); }
