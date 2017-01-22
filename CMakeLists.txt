@@ -63,6 +63,10 @@ option( KICAD_SCRIPTING_WXPYTHON
     "Build wxPython implementation for wx interface building in Python and py.shell (default OFF)."
     )
 
+option( KICAD_SCRIPTING_ACTION_MENU
+    "Build a tools menu with registred python plugins: actions plugins (default OFF)."
+    )
+
 option( KICAD_USE_SCH_IO_MANAGER
     "Build Eeschema with the I/O manager for handling schematic and symbol library I/O. (default OFF)"
     )
@@ -84,6 +88,12 @@ option( KICAD_INSTALL_DEMOS
 # KICAD_SCRIPTING_MODULES requires KICAD_SCRIPTING enable it here if KICAD_SCRIPTING_MODULES is ON
 if ( KICAD_SCRIPTING_MODULES AND NOT KICAD_SCRIPTING )
     message(STATUS "Changing KICAD_SCRIPTING to ON as needed by KICAD_SCRIPTING_MODULES")
+    set ( KICAD_SCRIPTING ON )
+endif()
+
+# same with KICAD_SCRIPTING_ACTION_MENUS
+if ( KICAD_SCRIPTING_ACTION_MENU AND NOT KICAD_SCRIPTING )
+    message(STATUS "Changing KICAD_SCRIPTING to ON as needed by KICAD_SCRIPTING_ACTION_MENU")
     set ( KICAD_SCRIPTING ON )
 endif()
 
@@ -287,6 +297,10 @@ endif()
 
 if( KICAD_SCRIPTING_WXPYTHON )
     add_definitions( -DKICAD_SCRIPTING_WXPYTHON )
+endif()
+
+if( KICAD_SCRIPTING_ACTION_MENU )
+    add_definitions( -DKICAD_SCRIPTING_ACTION_MENU )
 endif()
 
 if( KICAD_SPICE )

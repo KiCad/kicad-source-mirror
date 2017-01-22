@@ -208,7 +208,8 @@ class KiCadPlugin:
             return
 
         if isinstance(self,ActionPlugin):
-            pass # register to action plugins in C++
+            PYTHON_ACTION_PLUGINS.register_action(self)
+            return
 
         return
 
@@ -221,7 +222,8 @@ class KiCadPlugin:
             return
 
         if isinstance(self,ActionPlugin):
-            pass # deregister to action plugins in C++
+            PYTHON_ACTION_PLUGINS.deregister_action(self)
+            return
 
         return
 
@@ -560,8 +562,26 @@ class FootprintWizardPlugin(KiCadPlugin, object):
 
         return text
 
-class ActionPlugin(KiCadPlugin):
-    def __init__(self):
-        KiCadPlugin.__init__(self)
+class ActionPlugin(KiCadPlugin, object):
+    def __init__( self ):
+        KiCadPlugin.__init__( self )
+        self.defaults()
+
+    def defaults( self ):
+        self.name = "Undefined Action plugin"
+        self.category = "Undefined"
+        self.description = ""
+
+    def GetName( self ):
+        return self.name
+
+    def GetCategoryName( self ):
+        return self.category
+
+    def GetDescription( self ):
+        return self.description
+
+    def Run(self):
+        return
 
 }

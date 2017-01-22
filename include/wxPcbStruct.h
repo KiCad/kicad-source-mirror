@@ -117,6 +117,28 @@ protected:
      */
     void enableGALSpecificMenus();
 
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+    /**
+     * Function initActionPluginMenus
+     * Fill action menu with all registred action plugins
+     */
+    void initActionPluginMenus();
+
+    /**
+     * Function OnActionPlugin
+     * Launched by the menu when an action is called
+     * @param aEvent sent by wx
+     */
+    void OnActionPlugin( wxCommandEvent& aEvent);
+
+    /**
+     * Function OnActionPluginRefresh
+     * Refresh plugin list (reload Python plugins)
+     * @param aEvent sent by wx
+     */
+    void OnActionPluginRefresh( wxCommandEvent& aEvent);
+#endif
+
 
     // Has meaning only if DKICAD_SCRIPTING_WXPYTHON option is on
     /**

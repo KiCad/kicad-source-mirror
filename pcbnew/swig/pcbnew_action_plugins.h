@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 NBEE Embedded Systems SL, Miguel Angel Ajo <miguelangel@ajo.es>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,23 +21,42 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-%{
-#include <pcbnew_footprint_wizards.h>
-#include <pcbnew_action_plugins.h>
-%}
+/**
+ * @file  pcbnew_action_plugins.h
+ * @brief Class PCBNEW_ACTION_PLUGINS
+ */
 
-class PYTHON_FOOTPRINT_WIZARDS
+#ifndef PCBNEW_ACTION_PLUGINS_H
+#define PCBNEW_ACTION_PLUGINS_H
+#include <Python.h>
+#include <vector>
+#include <class_action_plugin.h>
+
+
+class PYTHON_ACTION_PLUGIN : public ACTION_PLUGIN
 {
-public:
-    static void register_wizard( PyObject* wizard );
-    static void deregister_wizard( PyObject* wizard );
+    PyObject* m_PyAction;
+    PyObject* CallMethod( const char* aMethod,
+            PyObject* aArglist = NULL );
+    wxString CallRetStrMethod( const char* aMethod,
+            PyObject* aArglist = NULL );
 
+public:
+    PYTHON_ACTION_PLUGIN( PyObject* action );
+    ~PYTHON_ACTION_PLUGIN();
+    wxString    GetCategoryName() override;
+    wxString    GetName() override;
+    wxString    GetDescription() override;
+    void        Run() override;
+    void*       GetObject() override;
 };
+
 
 class PYTHON_ACTION_PLUGINS
 {
 public:
-    static void register_action( PyObject* wizard );
-    static void deregister_action( PyObject* wizard );
-
+    static void register_action( PyObject* aPyAction );
+    static void deregister_action( PyObject* aPyAction );
 };
+
+#endif /* PCBNEW_ACTION_PLUGINS_H */

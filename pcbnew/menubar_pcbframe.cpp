@@ -642,6 +642,27 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( py_script_xpm ) );
 #endif
 
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+    toolsMenu->AppendSeparator( );
+
+    wxMenu* submenuActionPluginsMenu = new wxMenu();
+
+    AddMenuItem( toolsMenu, submenuActionPluginsMenu, ID_TOOLBARH_PCB_ACTION_PLUGIN,
+                 _( "&External plugins" ),
+                 _( "Give access to python action plugin" ),
+                 KiBitmap( hammer_xpm ) );
+
+    AddMenuItem( submenuActionPluginsMenu, ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH,
+                 _( "&Refresh" ),
+                 _( "Reload all python plugins and refresh menu" ),
+                 KiBitmap( reload_xpm ) );
+
+    submenuActionPluginsMenu->AppendSeparator();
+
+#endif
+
+
+
     wxMenu* designRulesMenu = new wxMenu;
 
     AddMenuItem( designRulesMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
