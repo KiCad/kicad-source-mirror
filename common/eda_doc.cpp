@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,7 +166,7 @@ bool GetAssociatedDocument( wxWindow* aParent,
 
     wxString file_ext = currentFileName.GetExt();
 
-    if( file_ext == wxT( "pdf" ) )
+    if( file_ext.Lower() == wxT( "pdf" ) )
     {
         success = OpenPDF( fullfilename );
         return success;
