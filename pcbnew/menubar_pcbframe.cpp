@@ -658,10 +658,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( reload_xpm ) );
 
     submenuActionPluginsMenu->AppendSeparator();
-
 #endif
-
-
 
     wxMenu* designRulesMenu = new wxMenu;
 
@@ -723,4 +720,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         SetMenuBar( menuBar );
     else
         menuBar->Refresh();
+
+#if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
+    // Populate the Action Plugin sub-menu
+    RebuildActionPluginMenus();
+#endif
+
 }

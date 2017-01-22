@@ -119,10 +119,10 @@ protected:
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     /**
-     * Function initActionPluginMenus
+     * Function RebuildActionPluginMenus
      * Fill action menu with all registred action plugins
      */
-    void initActionPluginMenus();
+    void RebuildActionPluginMenus();
 
     /**
      * Function OnActionPlugin

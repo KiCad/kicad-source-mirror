@@ -40,7 +40,13 @@
 class ACTION_PLUGIN
 {
 public:
-    ACTION_PLUGIN() {}
+    // association between the plugin and its menu id
+    // m_actionMenuId set to 0 means the corresponding menuitem to call this
+    // action is not yet created
+    int m_actionMenuId;
+
+public:
+    ACTION_PLUGIN() : m_actionMenuId( 0 ) {}
     virtual ~ACTION_PLUGIN();
 
     /**
@@ -94,15 +100,9 @@ private:
     /**
      * ACTION_PLUGIN system wide static list
      */
-    static std::vector<ACTION_PLUGIN*> m_Actions;
-
-    /**
-     * system wide static association between Plugin and menu id
-     */
-    static std::vector<int> m_ActionsMenu;
+    static std::vector<ACTION_PLUGIN*> m_actionsList;
 
 public:
-
     /**
      * Function register_action
      * An action calls this static method when it wants to register itself
@@ -150,10 +150,10 @@ public:
     /**
      * Function GetActionByMenu
      * find action plugin associated to a menu id
-     * @param menu is the menu id (defined with SetActionMenu)
+     * @param aMenu is the menu id (defined with SetActionMenu)
      * @return the associated ACTION_PLUGIN (or null if not found)
      */
-    static ACTION_PLUGIN* GetActionByMenu( int menu );
+    static ACTION_PLUGIN* GetActionByMenu( int aMenu );
 
 
     /**

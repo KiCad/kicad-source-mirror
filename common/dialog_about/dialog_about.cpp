@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -520,6 +520,13 @@ void dialog_about::OnCopyVersionInfo( wxCommandEvent& event )
 
     msg_version << "                  KICAD_SCRIPTING_WXPYTHON=";
 #ifdef KICAD_SCRIPTING_WXPYTHON
+    msg_version << ON;
+#else
+    msg_version << OFF;
+#endif
+
+    msg_version << "                  KICAD_SCRIPTING_ACTION_MENU=";
+#ifdef KICAD_SCRIPTING_ACTION_MENU
     msg_version << ON;
 #else
     msg_version << OFF;

@@ -41,24 +41,23 @@ void ACTION_PLUGIN::register_action()
 }
 
 
-std::vector<ACTION_PLUGIN*> ACTION_PLUGINS::m_Actions;
-std::vector<int> ACTION_PLUGINS::m_ActionsMenu;
+std::vector<ACTION_PLUGIN*> ACTION_PLUGINS::m_actionsList;
 
 
 ACTION_PLUGIN* ACTION_PLUGINS::GetAction( int aIndex )
 {
-    return m_Actions[aIndex];
+    return m_actionsList[aIndex];
 }
 
 
-ACTION_PLUGIN* ACTION_PLUGINS::GetActionByMenu( int menu )
+ACTION_PLUGIN* ACTION_PLUGINS::GetActionByMenu( int aMenu )
 {
     int max = GetActionsCount();
 
-    for( int i = 0; i<max; i++ )
+    for( int i = 0; i < max; i++ )
     {
-        if( m_ActionsMenu[i] == menu )
-            return m_Actions[i];
+        if( m_actionsList[i]->m_actionMenuId == aMenu )
+            return m_actionsList[i];
     }
 
     return NULL;
@@ -67,13 +66,13 @@ ACTION_PLUGIN* ACTION_PLUGINS::GetActionByMenu( int menu )
 
 void ACTION_PLUGINS::SetActionMenu( int aIndex, int idMenu )
 {
-    m_ActionsMenu[aIndex] = idMenu;
+    m_actionsList[aIndex]->m_actionMenuId = idMenu;
 }
 
 
 int ACTION_PLUGINS::GetActionMenu( int aIndex )
 {
-    return m_ActionsMenu[aIndex];
+    return m_actionsList[aIndex]->m_actionMenuId;
 }
 
 
@@ -97,14 +96,12 @@ ACTION_PLUGIN* ACTION_PLUGINS::GetAction( wxString aName )
 
 int ACTION_PLUGINS::GetActionsCount()
 {
-    return m_Actions.size();
+    return m_actionsList.size();
 }
 
 
 void ACTION_PLUGINS::register_action( ACTION_PLUGIN* aAction )
 {
-    int updatedMenu = 0;
-
     // Search for this entry do not register twice this action:
     for( int ii = 0; ii < GetActionsCount(); ii++ )
     {
@@ -119,9 +116,7 @@ void ACTION_PLUGINS::register_action( ACTION_PLUGIN* aAction )
 
         if( action->GetName() == aAction->GetName() )
         {
-            updatedMenu = GetActionMenu( ii );
-            m_Actions.erase( m_Actions.begin() + ii );
-            m_ActionsMenu.erase( m_ActionsMenu.begin() + ii );
+            m_actionsList.erase( m_actionsList.begin() + ii );
 
             delete action;
 
@@ -129,8 +124,7 @@ void ACTION_PLUGINS::register_action( ACTION_PLUGIN* aAction )
         }
     }
 
-    m_Actions.push_back( aAction );
-    m_ActionsMenu.push_back( updatedMenu );
+    m_actionsList.push_back( aAction );
 }
 
 
@@ -144,8 +138,8 @@ bool ACTION_PLUGINS::deregister_object( void* aObject )
 
         if( action->GetObject() == aObject )
         {
-            m_Actions.erase( m_Actions.begin() + i );
-            m_ActionsMenu.erase( m_ActionsMenu.begin() + i );
+            m_actionsList.erase( m_actionsList.begin() + i );
+            //m_actionsListMenu.erase( m_actionsListMenu.begin() + i );
             delete action;
             return true;
         }

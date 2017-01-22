@@ -208,33 +208,67 @@ void PCB_EDIT_FRAME::OnActionPluginRefresh( wxCommandEvent& aEvent )
     // ReRun the Python method pcbnew.LoadPlugins (already called when starting Pcbnew)
     PyRun_SimpleString( cmd );
 
-    initActionPluginMenus();
+    RebuildActionPluginMenus();
 }
 
 
-void PCB_EDIT_FRAME::initActionPluginMenus()
+void PCB_EDIT_FRAME::RebuildActionPluginMenus()
 {
     wxMenu* actionMenu = GetMenuBar()->FindItem( ID_TOOLBARH_PCB_ACTION_PLUGIN )->GetSubMenu();
 
-    for( int i = 0; i < ACTION_PLUGINS::GetActionsCount(); i++ )
+    if( !actionMenu )   // Should not occur.
+        return;
+
+    // First, remove existing submenus, if they are too many
+    wxMenuItemList list = actionMenu->GetMenuItems();
+    // The first menuitems are the refresh menu and separator. do not count them
+    int act_menu_count = -2;
+
+    std::vector<wxMenuItem*> available_menus;
+
+    for( auto iter = list.begin(); iter != list.end(); ++iter, act_menu_count++ )
     {
-        // Init menu only for not already created Items
-        if( ACTION_PLUGINS::GetActionMenu( i ) == 0 )
+        if( act_menu_count < 0 )
+            continue;
+
+        wxMenuItem* item = *iter;
+
+        if( act_menu_count < ACTION_PLUGINS::GetActionsCount() )
         {
-            wxMenuItem* item = AddMenuItem( actionMenu, wxID_ANY,
-                    ACTION_PLUGINS::GetAction( i )->GetName(),
-                    ACTION_PLUGINS::GetAction( i )->GetDescription(),
-                    KiBitmap( hammer_xpm ) );
-
-            ACTION_PLUGINS::SetActionMenu( i, item->GetId() );
-
-            Connect(
-                    item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
-                    PCB_EDIT_FRAME::OnActionPlugin );
+            available_menus.push_back( item );
+            continue;
         }
 
-        // Delete is not handled by plugins system (yet)
+        // Remove menus which are not usable for our current plugin list
+        Disconnect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+                (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
+                PCB_EDIT_FRAME::OnActionPlugin );
+        actionMenu->Delete( item );
+    }
+
+    for( int ii = 0; ii < ACTION_PLUGINS::GetActionsCount(); ii++ )
+    {
+        wxMenuItem* item;
+
+        if( ii < (int)available_menus.size() )
+        {
+            item = available_menus[ii];
+            item->SetItemLabel( ACTION_PLUGINS::GetAction( ii )->GetName() );
+            item->SetHelp( ACTION_PLUGINS::GetAction( ii )->GetDescription() );
+        }
+        else
+        {
+            item = AddMenuItem( actionMenu, wxID_ANY,
+                    ACTION_PLUGINS::GetAction( ii )->GetName(),
+                    ACTION_PLUGINS::GetAction( ii )->GetDescription(),
+                    KiBitmap( hammer_xpm ) );
+
+                Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+                         (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
+                         PCB_EDIT_FRAME::OnActionPlugin );
+        }
+
+        ACTION_PLUGINS::SetActionMenu( ii, item->GetId() );
     }
 }
 
