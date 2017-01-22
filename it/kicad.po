@@ -81,7 +81,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-01-22 14:37+0100\n"
-"PO-Revision-Date: 2017-01-22 17:48+0100\n"
+"PO-Revision-Date: 2017-01-22 22:20+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -22657,7 +22657,7 @@ msgstr "Copia immagine 3D sugli appunti"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Render current view using Raytracing"
-msgstr "Render della vista corrent con raytracing"
+msgstr "Render della vista corrente con raytracing"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:82
 msgid "Fit in page"
