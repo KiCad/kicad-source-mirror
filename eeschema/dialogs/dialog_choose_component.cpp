@@ -44,7 +44,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_external_browser_requested = false;
     m_received_doubleclick_in_tree = false;
     m_search_container->SetTree( m_libraryComponentTree );
-    m_searchBox->SetFocus();
     m_componentDetails->SetEditable( false );
     m_componentView->SetLayoutDirection( wxLayout_LeftToRight );
 
@@ -69,6 +68,11 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
 {
     m_search_container->SetTree( NULL );
+}
+
+void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& event )
+{
+	m_searchBox->SetFocus();
 }
 
 

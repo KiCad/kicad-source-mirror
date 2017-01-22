@@ -54,6 +54,7 @@ public:
                              COMPONENT_TREE_SEARCH_CONTAINER* const aSearchContainer,
                              int aDeMorganConvert );
     virtual ~DIALOG_CHOOSE_COMPONENT();
+    void OnInitDialog( wxInitDialogEvent& event ) override;
 
     /** Function GetSelectedAlias
      * To be called after this dialog returns from ShowModal().
