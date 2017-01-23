@@ -62,6 +62,12 @@ public:
         Add( COMMON_ACTIONS::selectCopper );
         Add( COMMON_ACTIONS::selectNet );
     }
+
+private:
+    CONTEXT_MENU* create() const override
+    {
+        return new SELECT_MENU();
+    }
 };
 
 
