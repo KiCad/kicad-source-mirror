@@ -140,7 +140,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 
     gluTessProperty( tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_POSITIVE );
 
-    currentManager = nonCachedManager;
+    SetTarget( TARGET_NONCACHED );
 }
 
 
