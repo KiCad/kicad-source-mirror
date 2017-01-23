@@ -58,6 +58,7 @@ class SELECT_MENU: public CONTEXT_MENU
 public:
     SELECT_MENU()
     {
+        SetTitle( _( "Select..." ) );
         Add( COMMON_ACTIONS::selectConnection );
         Add( COMMON_ACTIONS::selectCopper );
         Add( COMMON_ACTIONS::selectNet );
@@ -100,7 +101,7 @@ bool SELECTION_TOOL::Init()
 
     auto& menu = m_menu.GetMenu();
 
-    menu.AddMenu( selectMenu.get(), _( "Select..." ), false, showSelectMenuFunctor );
+    menu.AddMenu( selectMenu.get(), false, showSelectMenuFunctor );
     // only show separator if there is a Select menu to show above it
     menu.AddSeparator( showSelectMenuFunctor, 1000 );
 
@@ -722,6 +723,7 @@ BOARD_ITEM* SELECTION_TOOL::disambiguationMenu( GENERAL_COLLECTOR* aCollector )
     }
 
     menu.SetTitle( _( "Clarify selection" ) );
+    menu.DisplayTitle( true );
     SetContextMenu( &menu, CMENU_NOW );
 
     while( OPT_TOOL_EVENT evt = Wait() )

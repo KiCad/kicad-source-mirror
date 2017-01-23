@@ -60,6 +60,7 @@ bool PLACEMENT_TOOL::Init()
     // Create a context menu and make it available through selection tool
     m_placementMenu = new CONTEXT_MENU;
     m_placementMenu->SetIcon( align_items_xpm );
+    m_placementMenu->SetTitle( _( "Align/distribute" ) );
 
     // Add all align/distribute commands
     m_placementMenu->Add( COMMON_ACTIONS::alignTop );
@@ -70,8 +71,7 @@ bool PLACEMENT_TOOL::Init()
     m_placementMenu->Add( COMMON_ACTIONS::distributeHorizontally );
     m_placementMenu->Add( COMMON_ACTIONS::distributeVertically );
 
-    m_selectionTool->GetToolMenu().GetMenu().AddMenu(
-            m_placementMenu, _( "Align/distribute" ), false,
+    m_selectionTool->GetToolMenu().GetMenu().AddMenu( m_placementMenu, false,
             SELECTION_CONDITIONS::MoreThan( 1 ) );
 
     return true;

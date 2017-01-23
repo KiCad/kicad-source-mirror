@@ -61,6 +61,12 @@ public:
     void SetTitle( const wxString& aTitle ) override;
 
     /**
+     * Function DisplayTitle()
+     * Decides whether a title for a pop up menu should be displayed.
+     */
+    void DisplayTitle( bool aDisplay = true );
+
+    /**
      * Function SetIcon()
      * Assigns an icon for the entry.
      * @param aIcon is the icon to be assigned. NULL is used to remove icon.
@@ -93,11 +99,10 @@ public:
      * Adds a context menu as a submenu. The difference between this function and wxMenu::AppendSubMenu()
      * is the capability to handle icons.
      * @param aMenu is the submenu to be added.
-     * @param aLabel is the caption displayed for the menu entry.
      * @param aExpand allows to add all entries from the menu as individual entries rather than
      *                add everything as a submenu.
      */
-    std::list<wxMenuItem*> Add( CONTEXT_MENU* aMenu, const wxString& aLabel, bool aExpand = false );
+    std::list<wxMenuItem*> Add( CONTEXT_MENU* aMenu, bool aExpand = false );
 
     /**
      * Function Clear()
@@ -195,7 +200,10 @@ private:
     void runOnSubmenus( std::function<void(CONTEXT_MENU*)> aFunction );
 
     ///> Flag indicating that the menu title was set up.
-    bool m_titleSet;
+    bool m_titleDisplayed;
+
+    ///> Menu title
+    wxString m_title;
 
     ///> Stores the id number of selected item.
     int m_selected;

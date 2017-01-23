@@ -64,14 +64,13 @@ public:
      * Adds a submenu to the menu. CONDITIONAL_MENU takes ownership of the added menu, so it will
      * be freed when the CONDITIONAL_MENU object is destroyed.
      * @param aMenu is the submenu to be added.
-     * @param aLabel is the label of added submenu.
      * @param aExpand determines if the added submenu items should be added as individual items
      * or as a submenu.
      * @param aCondition is a condition that has to be fulfilled to enable the submenu entry.
      * @param aOrder determines location of the added menu, higher numbers are put on the bottom.
      * You may use ANY_ORDER here if you think it does not matter.
      */
-    void AddMenu( CONTEXT_MENU* aMenu, const wxString& aLabel, bool aExpand = false,
+    void AddMenu( CONTEXT_MENU* aMenu, bool aExpand = false,
                   const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
                   int aOrder = ANY_ORDER );
 
@@ -108,10 +107,10 @@ private:
             m_data.action = aAction;
         }
 
-        ENTRY( CONTEXT_MENU* aMenu, const wxString aLabel, bool aExpand = false,
+        ENTRY( CONTEXT_MENU* aMenu, bool aExpand = false,
                             const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
                             int aOrder = ANY_ORDER ) :
-            m_type( MENU ), m_condition( aCondition ), m_order( aOrder ), m_label( aLabel ), m_expand( aExpand )
+            m_type( MENU ), m_condition( aCondition ), m_order( aOrder ), m_expand( aExpand )
         {
             m_data.menu = aMenu;
         }
@@ -162,12 +161,6 @@ private:
             return m_data.wxItem;
         }
 
-        inline const wxString& Label() const
-        {
-            assert( m_type == MENU );
-            return m_label;
-        }
-
         inline bool Expand() const
         {
             assert( m_type == MENU );
@@ -204,8 +197,7 @@ private:
         ///> Order number, the higher the number the lower position it takes it is in the menu.
         int m_order;
 
-        /// CONTEXT_MENU specific fields.
-        const wxString m_label;
+        ///> CONTEXT_MENU expand flag
         bool m_expand;
     };
 

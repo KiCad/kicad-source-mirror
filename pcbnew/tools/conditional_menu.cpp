@@ -33,10 +33,10 @@ void CONDITIONAL_MENU::AddItem( const TOOL_ACTION& aAction, const SELECTION_COND
 }
 
 
-void CONDITIONAL_MENU::AddMenu( CONTEXT_MENU* aMenu, const wxString& aLabel, bool aExpand,
+void CONDITIONAL_MENU::AddMenu( CONTEXT_MENU* aMenu, bool aExpand,
                                 const SELECTION_CONDITION& aCondition, int aOrder )
 {
-    addEntry( ENTRY( aMenu, aLabel, aExpand, aCondition, aOrder ) );
+    addEntry( ENTRY( aMenu, aExpand, aCondition, aOrder ) );
 }
 
 
@@ -72,7 +72,7 @@ CONTEXT_MENU* CONDITIONAL_MENU::Generate( SELECTION& aSelection )
                 break;
 
             case ENTRY::MENU:
-                m_menu->Add( it->Menu(), it->Label(), it->Expand() );
+                m_menu->Add( it->Menu(), it->Expand() );
                 break;
 
             case ENTRY::WXITEM:

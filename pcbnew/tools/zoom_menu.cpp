@@ -34,6 +34,8 @@ using namespace std::placeholders;
 ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 {
     BASE_SCREEN* screen = aParent->GetScreen();
+
+    SetTitle( _( "Zoom" ) );
     SetIcon( zoom_selection_xpm );
 
     //int zoom = screen->GetZoom();

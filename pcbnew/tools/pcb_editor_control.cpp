@@ -60,6 +60,8 @@ public:
     ZONE_CONTEXT_MENU()
     {
         SetIcon( add_zone_xpm );
+        SetTitle( _( "Zones" ) );
+
         Add( COMMON_ACTIONS::zoneFill );
         Add( COMMON_ACTIONS::zoneFillAll );
         Add( COMMON_ACTIONS::zoneUnfill );
@@ -101,6 +103,8 @@ public:
     LOCK_CONTEXT_MENU()
     {
         SetIcon( locked_xpm );
+        SetTitle( _( "Locking" ) );
+
         Add( COMMON_ACTIONS::lock );
         Add( COMMON_ACTIONS::unlock );
         Add( COMMON_ACTIONS::toggleLock );
@@ -164,11 +168,11 @@ bool PCB_EDITOR_CONTROL::Init()
         toolMenu.AddSubMenu( zoneMenu );
         toolMenu.AddSubMenu( lockMenu );
 
-        menu.AddMenu( zoneMenu.get(), _( "Zones" ), false,
-                      SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
+        menu.AddMenu( zoneMenu.get(), false,
+                SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ) );
 
-        menu.AddMenu( lockMenu.get(), _( "Locking" ), false,
-                      SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
+        menu.AddMenu( lockMenu.get(), false,
+                SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) );
     }
 
     DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<DRAWING_TOOL>();
@@ -190,8 +194,7 @@ bool PCB_EDITOR_CONTROL::Init()
             };
         };
 
-        menu.AddMenu( zoneMenu.get(), _( "Zones" ), false,
-                      toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ) );
+        menu.AddMenu( zoneMenu.get(), false, toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ) );
     }
 
     return true;

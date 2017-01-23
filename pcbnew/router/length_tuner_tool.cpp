@@ -79,6 +79,7 @@ public:
     TUNER_TOOL_MENU()
     {
         SetTitle( _( "Length Tuner" ) );
+        DisplayTitle( true );
 
         //Add( ACT_StartTuning );
         //Add( ACT_EndTuning );

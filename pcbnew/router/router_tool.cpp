@@ -123,6 +123,7 @@ public:
     TRACK_WIDTH_MENU( const BOARD* aBoard )
         : TRACK_VIA_SIZE_MENU( true, true )
     {
+        SetTitle( _( "Select Track/Via Width" ) );
         SetBoard( aBoard );
     }
 
@@ -234,7 +235,7 @@ public:
         AppendSeparator();
 
         m_widthMenu.SetBoard( aBoard );
-        Add( &m_widthMenu, _( "Select Track/Via Width" ) );
+        Add( &m_widthMenu );
 
         Add( ACT_CustomTrackWidth );
 
@@ -245,8 +246,8 @@ public:
         Add( PNS::TOOL_BASE::ACT_RouterOptions );
 
         AppendSeparator();
-        Add( &m_zoomMenu, _( "Zoom Select" ), false );
-        Add( &m_gridMenu, _( "Grid Select" ), false );
+        Add( &m_zoomMenu );
+        Add( &m_gridMenu );
     }
 
 private:

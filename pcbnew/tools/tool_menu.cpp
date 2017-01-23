@@ -96,10 +96,8 @@ void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME& aFrame )
     m_menu.AddItem( COMMON_ACTIONS::zoomOut, S_C::ShowAlways, 1000 );
     m_menu.AddItem( COMMON_ACTIONS::zoomFitScreen, S_C::ShowAlways, 1000 );
 
-    m_menu.AddSeparator(SELECTION_CONDITIONS::ShowAlways, 1000);
-    m_menu.AddMenu( createOwnSubMenu<ZOOM_MENU>( &aFrame ).get(),
-            _( "Zoom Select" ), false, S_C::ShowAlways, 1000 );
+    m_menu.AddSeparator(SELECTION_CONDITIONS::ShowAlways, 1000 );
 
-    m_menu.AddMenu( createOwnSubMenu<GRID_MENU>( &aFrame ).get(),
-            _( "Grid Select" ), false, S_C::ShowAlways, 1000 );
+    m_menu.AddMenu( createOwnSubMenu<ZOOM_MENU>( &aFrame ).get(), false, S_C::ShowAlways, 1000 );
+    m_menu.AddMenu( createOwnSubMenu<GRID_MENU>( &aFrame ).get(), false, S_C::ShowAlways, 1000 );
 }

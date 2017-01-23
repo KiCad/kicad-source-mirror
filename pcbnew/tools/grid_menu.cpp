@@ -36,6 +36,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 {
     BASE_SCREEN* screen = aParent->GetScreen();
 
+    SetTitle( _( "Grid" ) );
     SetIcon( grid_select_xpm );
 
     wxArrayString gridsList;
