@@ -38,8 +38,6 @@ Documentation/doxygen
 Documentation/development/doxygen
 *.bak
 *.pyc
-.*.swp
-*~
 common/pcb_plot_params_keywords.cpp
 include/pcb_plot_params_lexer.h
 pcbnew/specctra_keywords.cpp
@@ -59,3 +57,8 @@ include/pcb_lexer.h
 # demo project auxillary files
 demos/**/*-bak
 demos/**/_autosave-*
+
+# editor/OS fluff
+.*.swp
+*~
+.DS_Store
