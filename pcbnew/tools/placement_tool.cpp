@@ -61,21 +61,14 @@ bool PLACEMENT_TOOL::Init()
     m_placementMenu = new CONTEXT_MENU;
     m_placementMenu->SetIcon( align_items_xpm );
 
-    // Add all menuitem commands
-    wxMenuItem* item;
-    item = m_placementMenu->Add( COMMON_ACTIONS::alignTop );
-    SET_BITMAP( KiBitmap( up_xpm ) );
-    item = m_placementMenu->Add( COMMON_ACTIONS::alignBottom );
-    SET_BITMAP( KiBitmap( down_xpm ) );
-    item = m_placementMenu->Add( COMMON_ACTIONS::alignLeft );
-    SET_BITMAP( KiBitmap( left_xpm ) );
-    item = m_placementMenu->Add( COMMON_ACTIONS::alignRight );
-    SET_BITMAP( KiBitmap( right_xpm ) );
+    // Add all align/distribute commands
+    m_placementMenu->Add( COMMON_ACTIONS::alignTop );
+    m_placementMenu->Add( COMMON_ACTIONS::alignBottom );
+    m_placementMenu->Add( COMMON_ACTIONS::alignLeft );
+    m_placementMenu->Add( COMMON_ACTIONS::alignRight );
     m_placementMenu->AppendSeparator();
-    item = m_placementMenu->Add( COMMON_ACTIONS::distributeHorizontally );
-    SET_BITMAP( KiBitmap( distribute_horizontal_xpm ) );
-    item = m_placementMenu->Add( COMMON_ACTIONS::distributeVertically );
-    SET_BITMAP( KiBitmap( distribute_vertical_xpm ) );
+    m_placementMenu->Add( COMMON_ACTIONS::distributeHorizontally );
+    m_placementMenu->Add( COMMON_ACTIONS::distributeVertically );
 
     m_selectionTool->GetToolMenu().GetMenu().AddMenu(
             m_placementMenu, _( "Align/distribute" ), false,

@@ -580,32 +580,32 @@ TOOL_ACTION COMMON_ACTIONS::pointEditorRemoveCorner( "pcbnew.PointEditor.removeC
 TOOL_ACTION COMMON_ACTIONS::alignTop( "pcbnew.Place.alignTop",
         AS_GLOBAL, 0,
         _( "Align items to the top" ),
-        _( "Aligns selected items to the top edge" ) );
+        _( "Aligns selected items to the top edge" ), up_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::alignBottom( "pcbnew.Place.alignBottom",
         AS_GLOBAL, 0,
         _( "Align items to the bottom" ),
-        _( "Aligns selected items to the bottom edge" ) );
+        _( "Aligns selected items to the bottom edge" ), down_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::alignLeft( "pcbnew.Place.alignLeft",
         AS_GLOBAL, 0,
         _( "Align items to the left" ),
-        _( "Aligns selected items to the left edge" ) );
+        _( "Aligns selected items to the left edge" ), left_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::alignRight( "pcbnew.Place.alignRight",
         AS_GLOBAL, 0,
         _( "Align items to the right" ),
-        _( "Aligns selected items to the right edge" ) );
+        _( "Aligns selected items to the right edge" ), right_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::distributeHorizontally( "pcbnew.Place.distributeHorizontally",
         AS_GLOBAL, 0,
         _( "Distribute horizontally" ),
-        _( "Distributes selected items along the horizontal axis" ) );
+        _( "Distributes selected items along the horizontal axis" ), distribute_horizontal_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::distributeVertically( "pcbnew.Place.distributeVertically",
         AS_GLOBAL, 0,
         _( "Distribute vertically" ),
-        _( "Distributes selected items along the vertical axis" ) );
+        _( "Distributes selected items along the vertical axis" ), distribute_vertical_xpm );
 
 
 boost::optional<TOOL_EVENT> COMMON_ACTIONS::TranslateLegacyId( int aId )
