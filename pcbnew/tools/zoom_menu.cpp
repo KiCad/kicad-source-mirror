@@ -52,7 +52,7 @@ ZOOM_MENU::ZOOM_MENU( EDA_DRAW_FRAME* aParent ) : m_parent( aParent )
 OPT_TOOL_EVENT ZOOM_MENU::eventHandler( const wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT event( COMMON_ACTIONS::zoomPreset.MakeEvent() );
-    long idx = aEvent.GetId() - ID_POPUP_ZOOM_LEVEL_START;
+    intptr_t idx = aEvent.GetId() - ID_POPUP_ZOOM_LEVEL_START;
     event->SetParameter( idx );
 
     return event;
