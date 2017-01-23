@@ -212,9 +212,6 @@ private:
     ///> List of submenus.
     std::list<CONTEXT_MENU*> m_submenus;
 
-    ///> Parent CONTEXT_MENU.
-    CONTEXT_MENU* m_parent;
-
     ///> Optional icon
     const BITMAP_OPAQUE* m_icon;
 

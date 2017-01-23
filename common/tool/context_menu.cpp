@@ -32,7 +32,7 @@
 using namespace std::placeholders;
 
 CONTEXT_MENU::CONTEXT_MENU() :
-    m_titleSet( false ), m_selected( -1 ), m_tool( nullptr ), m_parent( nullptr ), m_icon( nullptr )
+    m_titleSet( false ), m_selected( -1 ), m_tool( nullptr ), m_icon( nullptr )
 {
     setupEvents();
 }
@@ -41,12 +41,14 @@ CONTEXT_MENU::CONTEXT_MENU() :
 CONTEXT_MENU::~CONTEXT_MENU()
 {
     // Set parent to NULL to prevent submenus from unregistering from a notexisting object
-    //for( std::list<CONTEXT_MENU*>::iterator it = m_submenus.begin(); it != m_submenus.end(); ++it )
     for( auto menu : m_submenus )
-        menu->m_parent = nullptr;
+        menu->SetParent( nullptr );
 
-    if( m_parent )
-        m_parent->m_submenus.remove( this );
+    CONTEXT_MENU* parent = dynamic_cast<CONTEXT_MENU*>( GetParent() );
+    wxASSERT( parent || !GetParent() );
+
+    if( parent )
+        parent->m_submenus.remove( this );
 }
 
 
@@ -116,7 +118,6 @@ std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, const wxString& a
     std::list<wxMenuItem*> items;
     CONTEXT_MENU* menuCopy = aMenu->Clone();
     m_submenus.push_back( menuCopy );
-    menuCopy->m_parent = this;
 
     if( aExpand )
     {
@@ -154,7 +155,6 @@ void CONTEXT_MENU::Clear()
 
     m_toolActions.clear();
     m_submenus.clear();
-    m_parent = NULL;
 
     wxASSERT( GetMenuItemCount() == 0 );
 }
@@ -335,7 +335,6 @@ void CONTEXT_MENU::copyFrom( const CONTEXT_MENU& aMenu )
     m_selected = -1; // aMenu.m_selected;
     m_tool = aMenu.m_tool;
     m_toolActions = aMenu.m_toolActions;
-    m_parent = NULL; // aMenu.m_parent;
 
     // Copy all the menu entries
     for( int i = 0; i < (int) aMenu.GetMenuItemCount(); ++i )
@@ -364,7 +363,6 @@ wxMenuItem* CONTEXT_MENU::appendCopy( const wxMenuItem* aSource )
             CONTEXT_MENU* menuCopy = menu->Clone();
             newItem->SetSubMenu( menuCopy );
             m_submenus.push_back( menuCopy );
-            menuCopy->m_parent = this;  // TODO remove m_parent
         }
     }
 
