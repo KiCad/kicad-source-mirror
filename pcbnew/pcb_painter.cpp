@@ -804,7 +804,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aText->GetLayer() );
-    VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
+    VECTOR2D position( aText->GetTextPos().x, aText->GetTextPos().y );
 
     if( m_pcbSettings.m_sketchMode[aLayer] )
     {
@@ -821,7 +821,7 @@ void PCB_PAINTER::draw( const TEXTE_PCB* aText, int aLayer )
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
     m_gal->SetTextAttributes( aText );
-    m_gal->StrokeText( shownText, position, aText->GetOrientationRadians() );
+    m_gal->StrokeText( shownText, position, aText->GetTextAngleRadians() );
 }
 
 
@@ -832,7 +832,7 @@ void PCB_PAINTER::draw( const TEXTE_MODULE* aText, int aLayer )
         return;
 
     const COLOR4D& color = m_pcbSettings.GetColor( aText, aLayer );
-    VECTOR2D position( aText->GetTextPosition().x, aText->GetTextPosition().y );
+    VECTOR2D position( aText->GetTextPos().x, aText->GetTextPos().y );
 
     if( m_pcbSettings.m_sketchMode[aLayer] )
     {
@@ -933,8 +933,8 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
         for( int i = 0; i < polySet.OutlineCount(); i++ )
         {
             const SHAPE_LINE_CHAIN& outline = polySet.COutline( i );
-			// fixme: GAL drawing API that accepts SHAPEs directly (this fiddling with double<>int conversion
-			// is just a performance hog)
+            // fixme: GAL drawing API that accepts SHAPEs directly (this fiddling with double<>int conversion
+            // is just a performance hog)
 
             for( int j = 0; j < outline.PointCount(); j++ )
                 corners.push_back ( (VECTOR2D) outline.CPoint( j ) );
@@ -979,11 +979,11 @@ void PCB_PAINTER::draw( const DIMENSION* aDimension, int aLayer )
 
     // Draw text
     TEXTE_PCB& text = aDimension->Text();
-    VECTOR2D position( text.GetTextPosition().x, text.GetTextPosition().y );
+    VECTOR2D position( text.GetTextPos().x, text.GetTextPos().y );
 
     m_gal->SetLineWidth( text.GetThickness() );
     m_gal->SetTextAttributes( &text );
-    m_gal->StrokeText( text.GetShownText(), position, text.GetOrientationRadians() );
+    m_gal->StrokeText( text.GetShownText(), position, text.GetTextAngleRadians() );
 }
 
 

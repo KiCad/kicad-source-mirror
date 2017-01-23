@@ -66,9 +66,9 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw )
     DIALOG_SCH_EDIT_SHEET_PIN dlg( this );
 
     dlg.SetLabelName( aSheetPin->GetText() );
-    dlg.SetTextHeight( StringFromValue( g_UserUnit, aSheetPin->GetSize().y ) );
+    dlg.SetTextHeight( StringFromValue( g_UserUnit, aSheetPin->GetTextHeight() ) );
     dlg.SetTextHeightUnits( GetUnitsLabel( g_UserUnit ) );
-    dlg.SetTextWidth( StringFromValue( g_UserUnit, aSheetPin->GetSize().x ) );
+    dlg.SetTextWidth( StringFromValue( g_UserUnit, aSheetPin->GetTextWidth() ) );
     dlg.SetTextWidthUnits( GetUnitsLabel( g_UserUnit ) );
     dlg.SetConnectionType( aSheetPin->GetShape() );
 
@@ -91,8 +91,11 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw )
     }
 
     aSheetPin->SetText( dlg.GetLabelName() );
-    aSheetPin->SetSize( wxSize( ValueFromString( g_UserUnit, dlg.GetTextWidth() ),
-                                ValueFromString( g_UserUnit, dlg.GetTextHeight() ) ) );
+
+    aSheetPin->SetTextSize( wxSize(
+            ValueFromString( g_UserUnit, dlg.GetTextWidth() ),
+            ValueFromString( g_UserUnit, dlg.GetTextHeight() ) ) );
+
     aSheetPin->SetShape( dlg.GetConnectionType() );
 
     OnModify();
@@ -111,7 +114,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
 
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), line );
     sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetSize( GetLastSheetPinTextSize() );
+    sheetPin->SetTextSize( GetLastSheetPinTextSize() );
     sheetPin->SetShape( m_lastSheetPinType );
 
     int response = EditSheetPin( sheetPin, false );
@@ -123,7 +126,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
     }
 
     m_lastSheetPinType = sheetPin->GetShape();
-    m_lastSheetPinTextSize = sheetPin->GetSize();
+    m_lastSheetPinTextSize = sheetPin->GetTextSize();
 
     sheetPin->SetPosition( GetCrossHairPosition() );
     sheetPin->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
@@ -167,7 +170,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
 
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->GetText() );
     sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetSize( GetLastSheetPinTextSize() );
+    sheetPin->SetTextSize( GetLastSheetPinTextSize() );
     m_lastSheetPinType = label->GetShape();
     sheetPin->SetShape( label->GetShape() );
     sheetPin->SetPosition( GetCrossHairPosition() );

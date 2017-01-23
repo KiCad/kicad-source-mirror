@@ -467,7 +467,7 @@ void WORKSHEET_DATAITEM_TEXT::TransfertSetupToGraphicText( WS_DRAW_ITEM_TEXT* aG
 {
     aGText->SetHorizJustify( m_Hjustify ) ;
     aGText->SetVertJustify( m_Vjustify );
-    aGText->SetOrientation( m_Orient * 10 );    // graphic text orient unit = 0.1 degree
+    aGText->SetTextAngle( m_Orient * 10 );    // graphic text orient unit = 0.1 degree
 }
 
 

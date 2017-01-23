@@ -54,6 +54,7 @@ enum PINSHEETLABEL_SHAPE {
 
 extern const char* SheetLabelType[];    /* names of types of labels */
 
+
 class SCH_TEXT : public SCH_ITEM, public EDA_TEXT
 {
 protected:
@@ -70,9 +71,9 @@ protected:
      * 2 is horizontal and right justified.  It is the equivalent of the mirrored 0 orentation.
      * 3 is veritcal and bottom justifiend. It is the equivalent of the mirrored 1 orentation.
      * This is a duplicattion of m_Orient, m_HJustified, and m_VJustified in #EDA_TEXT but is
-     * easier to handle that 3 parameters when editing and reading and saving files.
+     * easier to handle than 3 parameters when editing and reading and saving files.
      */
-    int m_schematicOrientation;
+    int m_spin_style;
 
 public:
     SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ),
@@ -104,22 +105,20 @@ public:
     void IncrementLabel( int aIncrement );
 
     /**
-     * Function SetOrientation
-     * Set m_schematicOrientation, and initialize
-     * m_orient,m_HJustified and m_VJustified, according to the value of
-     * m_schematicOrientation (for a text )
-     * must be called after changing m_schematicOrientation
-     * @param aSchematicOrientation =
+     * Function SetLabelSpinStyle
+     * sets a spin or rotation angle, along with specific horizontal and vertical
+     * justification styles with each angle.
+     *
+     * @param aSpinStyle =
      *  0 = normal (horizontal, left justified).
      *  1 = up (vertical)
      *  2 = (horizontal, right justified). This can be seen as the mirrored position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void SetOrientation( int aSchematicOrientation );
+    virtual void SetLabelSpinStyle( int aSpinStyle );
+    int GetLabelSpinStyle() const               { return m_spin_style; }
 
-    int GetOrientation() { return m_schematicOrientation; }
-
-    PINSHEETLABEL_SHAPE GetShape() const { return m_shape; }
+    PINSHEETLABEL_SHAPE GetShape() const        { return m_shape; }
 
     void SetShape( PINSHEETLABEL_SHAPE aShape ) { m_shape = aShape; }
 
@@ -161,7 +160,7 @@ public:
 
     virtual void Move( const wxPoint& aMoveVector ) override
     {
-        m_Pos += aMoveVector;
+        EDA_TEXT::Offset( aMoveVector );
     }
 
     virtual void MirrorY( int aYaxis_position ) override;
@@ -198,9 +197,9 @@ public:
     virtual void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
                                  SCH_SHEET_PATH*      aSheetPath ) override;
 
-    virtual wxPoint GetPosition() const override { return m_Pos; }
+    virtual wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
 
-    virtual void SetPosition( const wxPoint& aPosition ) override { m_Pos = aPosition; }
+    virtual void SetPosition( const wxPoint& aPosition ) override { EDA_TEXT::SetTextPos( aPosition ); }
 
     virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
 
@@ -236,7 +235,7 @@ public:
         return wxT( "SCH_LABEL" );
     }
 
-    void SetOrientation( int aSchematicOrientation ) override;
+    void SetLabelSpinStyle( int aSpinStyle ) override;
 
     wxPoint GetSchematicTextOffset() const override;
 
@@ -261,7 +260,7 @@ public:
     EDA_ITEM* Clone() const override;
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const override { return m_Pos == aPosition; }
+    bool doIsConnected( const wxPoint& aPosition ) const override { return EDA_TEXT::GetTextPos() == aPosition; }
 };
 
 
@@ -282,7 +281,7 @@ public:
         return wxT( "SCH_GLOBALLABEL" );
     }
 
-    void SetOrientation( int aSchematicOrientation ) override;
+    void SetLabelSpinStyle( int aSpinStyle ) override;
 
     wxPoint GetSchematicTextOffset() const override;
 
@@ -309,7 +308,7 @@ public:
     EDA_ITEM* Clone() const override;
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const override { return m_Pos == aPosition; }
+    bool doIsConnected( const wxPoint& aPosition ) const override { return EDA_TEXT::GetTextPos() == aPosition; }
 };
 
 
@@ -332,7 +331,7 @@ public:
         return wxT( "SCH_HIERLABEL" );
     }
 
-    void SetOrientation( int aSchematicOrientation ) override;
+    void SetLabelSpinStyle( int aSpinStyle ) override;
 
     wxPoint GetSchematicTextOffset() const override;
 
@@ -359,7 +358,7 @@ public:
     EDA_ITEM* Clone() const override;
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const override { return m_Pos == aPosition; }
+    bool doIsConnected( const wxPoint& aPosition ) const override { return EDA_TEXT::GetTextPos() == aPosition; }
 };
 
 #endif /* CLASS_TEXT_LABEL_H */

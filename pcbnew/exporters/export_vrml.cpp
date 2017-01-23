@@ -729,7 +729,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
     model_vrml->m_text_layer    = text->GetLayer();
     model_vrml->m_text_width    = text->GetThickness();
 
-    wxSize size = text->GetSize();
+    wxSize size = text->GetTextSize();
 
     if( text->IsMirrored() )
         size.x = -size.x;
@@ -748,7 +748,7 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
         {
             wxString& txt = strings_list.Item( ii );
             DrawGraphicText( NULL, NULL, positions[ii], color,
-                             txt, text->GetOrientation(), size,
+                             txt, text->GetTextAngle(), size,
                              text->GetHorizJustify(), text->GetVertJustify(),
                              text->GetThickness(), text->IsItalic(),
                              true,
@@ -757,8 +757,8 @@ static void export_vrml_pcbtext( MODEL_VRML& aModel, TEXTE_PCB* text )
     }
     else
     {
-        DrawGraphicText( NULL, NULL, text->GetTextPosition(), color,
-                         text->GetShownText(), text->GetOrientation(), size,
+        DrawGraphicText( NULL, NULL, text->GetTextPos(), color,
+                         text->GetShownText(), text->GetTextAngle(), size,
                          text->GetHorizJustify(), text->GetVertJustify(),
                          text->GetThickness(), text->IsItalic(),
                          true,
@@ -983,7 +983,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module )
 {
     if( module->IsVisible() )
     {
-        wxSize size = module->GetSize();
+        wxSize size = module->GetTextSize();
 
         if( module->IsMirrored() )
             size.x = -size.x;  // Text is mirrored
@@ -991,7 +991,7 @@ static void export_vrml_text_module( TEXTE_MODULE* module )
         model_vrml->m_text_layer    = module->GetLayer();
         model_vrml->m_text_width    = module->GetThickness();
 
-        DrawGraphicText( NULL, NULL, module->GetTextPosition(), BLACK,
+        DrawGraphicText( NULL, NULL, module->GetTextPos(), BLACK,
                          module->GetShownText(), module->GetDrawRotation(), size,
                          module->GetHorizJustify(), module->GetVertJustify(),
                          module->GetThickness(), module->IsItalic(),

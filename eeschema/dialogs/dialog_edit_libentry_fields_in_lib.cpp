@@ -671,7 +671,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     showCheckBox->SetValue( field.IsVisible() );
 
-    rotateCheckBox->SetValue( field.GetOrientation() == TEXT_ORIENT_VERT );
+    rotateCheckBox->SetValue( field.GetTextAngle() == TEXT_ANGLE_VERT );
 
     int style = 0;
 
@@ -730,7 +730,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     fieldValueTextCtrl->SetValidator( SCH_FIELD_VALIDATOR( true, field.GetId() ) );
     fieldValueTextCtrl->SetValue( field.GetText() );
 
-    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetSize().x ) );
+    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( g_UserUnit, field.GetTextSize().x ) );
 
     m_show_datasheet_button->Enable( fieldNdx == DATASHEET || fieldNdx == FOOTPRINT );
 
@@ -754,7 +754,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
             _("Used only for fields Footprint and Datasheet.") );
     }
 
-    wxPoint coord = field.GetTextPosition();
+    wxPoint coord = field.GetTextPos();
     wxPoint zero;
 
     // If the field value is empty and the position is at relative zero, we set the
@@ -763,11 +763,11 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
     // close to the desired position.
     if( coord == zero && field.GetText().IsEmpty() )
     {
-        rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].GetOrientation() == TEXT_ORIENT_VERT );
+        rotateCheckBox->SetValue( m_FieldsBuf[REFERENCE].GetTextAngle() == TEXT_ANGLE_VERT );
 
-        coord.x = m_FieldsBuf[REFERENCE].GetTextPosition().x +
+        coord.x = m_FieldsBuf[REFERENCE].GetTextPos().x +
                   (fieldNdx - MANDATORY_FIELDS + 1) * 100;
-        coord.y = m_FieldsBuf[REFERENCE].GetTextPosition().y +
+        coord.y = m_FieldsBuf[REFERENCE].GetTextPos().y +
                   (fieldNdx - MANDATORY_FIELDS + 1) * 100;
 
         // coord can compute negative if field is < MANDATORY_FIELDS, e.g. FOOTPRINT.
@@ -806,9 +806,9 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
         field.SetVisible( false );
 
     if( rotateCheckBox->GetValue() )
-        field.SetOrientation( TEXT_ORIENT_VERT );
+        field.SetTextAngle( TEXT_ANGLE_VERT );
     else
-        field.SetOrientation( TEXT_ORIENT_HORIZ );
+        field.SetTextAngle( TEXT_ANGLE_HORIZ );
 
     // Copy the text justification
     static const EDA_TEXT_HJUSTIFY_T hjustify[3] = {
@@ -842,7 +842,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
 
     int tmp = EDA_GRAPHIC_TEXT_CTRL::ParseSize( textSizeTextCtrl->GetValue(), g_UserUnit );
 
-    field.SetSize( wxSize( tmp, tmp ) );
+    field.SetTextSize( wxSize( tmp, tmp ) );
 
     int style = m_StyleRadioBox->GetSelection();
 
@@ -856,7 +856,7 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
     // and the screen axis is top to bottom: we must change the y coord sign for editing
     pos.y = -pos.y;
 
-    field.SetTextPosition( pos );
+    field.SetTextPos( pos );
 
     return true;
 }

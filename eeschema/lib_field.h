@@ -165,10 +165,7 @@ public:
      * Function IsVisible
      * @return true is this field is visible, false if flagged invisible
      */
-    bool IsVisible()
-    {
-        return (m_Attributs & TEXT_NO_VISIBLE) == 0 ? true : false;
-    }
+    bool IsVisible() const { return EDA_TEXT::IsVisible(); }  // why needed?
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -178,23 +175,7 @@ public:
 
     bool HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const override;
 
-    void operator=( const LIB_FIELD& field )
-    {
-        m_id = field.m_id;
-        m_Text = field.m_Text;
-        m_name = field.m_name;
-        m_Pos = field.m_Pos;
-        m_Size = field.m_Size;
-        m_Thickness = field.m_Thickness;
-        m_Orient = field.m_Orient;
-        m_Mirror = field.m_Mirror;
-        m_Attributs = field.m_Attributs;
-        m_Italic = field.m_Italic;
-        m_Bold = field.m_Bold;
-        m_HJustify = field.m_HJustify;
-        m_VJustify = field.m_VJustify;
-        m_Parent = field.m_Parent;
-    }
+    void operator=( const LIB_FIELD& field );
 
     /**
      * Return the text of a field.
@@ -239,7 +220,7 @@ public:
 
     void Move( const wxPoint& aPosition ) override;
 
-    wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
 
@@ -250,9 +231,9 @@ public:
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform ) override;
 
-    int GetWidth() const override { return m_Thickness; }
+    int GetWidth() const override { return GetThickness(); }
 
-    void SetWidth( int aWidth ) override { m_Thickness = aWidth; }
+    void SetWidth( int aWidth ) override { SetThickness( aWidth ); }
 
     wxString GetSelectMenuText() const override;
 

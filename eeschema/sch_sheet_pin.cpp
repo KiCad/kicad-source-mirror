@@ -47,7 +47,8 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
     SetParent( parent );
     wxASSERT( parent );
     m_Layer = LAYER_SHEETLABEL;
-    m_Pos   = pos;
+
+    SetTextPos( pos );
 
     if( parent->IsVerticalOrientation() )
         SetEdge( SHEET_TOP_SIDE );
@@ -125,26 +126,26 @@ void SCH_SHEET_PIN::SetEdge( SCH_SHEET_PIN::SHEET_SIDE aEdge )
     {
     case SHEET_LEFT_SIDE:
         m_edge = aEdge;
-        m_Pos.x = Sheet->m_pos.x;
-        SetOrientation( 2 ); /* Orientation horiz inverse */
+        SetTextX( Sheet->m_pos.x );
+        SetLabelSpinStyle( 2 ); // Orientation horiz inverse
         break;
 
     case SHEET_RIGHT_SIDE:
         m_edge = aEdge;
-        m_Pos.x = Sheet->m_pos.x + Sheet->m_size.x;
-        SetOrientation( 0 ); /* Orientation horiz normal */
+        SetTextX( Sheet->m_pos.x + Sheet->m_size.x );
+        SetLabelSpinStyle( 0 ); // Orientation horiz normal
         break;
 
     case SHEET_TOP_SIDE:
         m_edge = aEdge;
-        m_Pos.y = Sheet->m_pos.y;
-        SetOrientation( 3 ); /* Orientation vert BOTTOM  */
+        SetTextY( Sheet->m_pos.y );
+        SetLabelSpinStyle( 3 ); // Orientation vert BOTTOM
         break;
 
     case SHEET_BOTTOM_SIDE:
         m_edge = aEdge;
-        m_Pos.y = Sheet->m_pos.y + Sheet->m_size.y;
-        SetOrientation( 1 ); /* Orientation vert UP  */
+        SetTextY( Sheet->m_pos.y + Sheet->m_size.y );
+        SetLabelSpinStyle( 1 ); // Orientation vert UP
         break;
 
     default:
@@ -179,15 +180,15 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
             SetEdge( SHEET_LEFT_SIDE );
         }
 
-        m_Pos.y = Pos.y;
+        SetTextY( Pos.y );
 
-        if( m_Pos.y < sheet->m_pos.y )
-            m_Pos.y = sheet->m_pos.y;
+        if( GetTextPos().y < sheet->m_pos.y )
+            SetTextY( sheet->m_pos.y );
 
-        if( m_Pos.y > (sheet->m_pos.y + sheet->m_size.y) )
-            m_Pos.y = sheet->m_pos.y + sheet->m_size.y;
+        if( GetTextPos().y > (sheet->m_pos.y + sheet->m_size.y) )
+            SetTextY( sheet->m_pos.y + sheet->m_size.y );
     }
-    else /* vertical sheetpin*/
+    else // vertical sheetpin
     {
         if( Pos.y > center.y )
         {
@@ -198,17 +199,17 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
             SetEdge( SHEET_TOP_SIDE ); //top
         }
 
-        m_Pos.x = Pos.x;
+        SetTextX( Pos.x );
 
-        if( m_Pos.x < sheet->m_pos.x )
-            m_Pos.x = sheet->m_pos.x;
+        if( GetTextPos().x < sheet->m_pos.x )
+            SetTextX( sheet->m_pos.x );
 
-        if( m_Pos.x > (sheet->m_pos.x + sheet->m_size.x) )
-            m_Pos.x = sheet->m_pos.x + sheet->m_size.x;
+        if( GetTextPos().x > (sheet->m_pos.x + sheet->m_size.x) )
+            SetTextX( sheet->m_pos.x + sheet->m_size.x );
     }
 
     printf( "centre %d %d, pos %d %d, pinpos %d %d, edge %d\n",
-        center.x, center.y, Pos.x, Pos.y, m_Pos.x, m_Pos.y, m_edge);
+        center.x, center.y, Pos.x, Pos.y, GetTextPos().x, GetTextPos().y, m_edge);
 }
 
 
@@ -259,8 +260,8 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 
     if( fprintf( aFile, "F%d %s %c %c %-3d %-3d %-3d\n", m_number,
                  EscapedUTF8( m_Text ).c_str(),     // supplies wrapping quotes
-                 type, side, m_Pos.x, m_Pos.y,
-                 m_Size.x ) == EOF )
+                 type, side, GetTextPos().x, GetTextPos().y,
+                 GetTextWidth() ) == EOF )
     {
         return false;
     }
@@ -271,7 +272,7 @@ bool SCH_SHEET_PIN::Save( FILE* aFile ) const
 
 bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
-    int     size;
+    int     x, y, size;
     char    number[256];
     char    name[256];
     char    connectType[256];
@@ -303,7 +304,7 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     cp += strlen( sheetSide ) + 1;
 
-    int r = sscanf( cp, "%d %d %d", &m_Pos.x, &m_Pos.y, &size );
+    int r = sscanf( cp, "%d %d %d", &x, &y, &size );
     if( r != 3 )
     {
         aErrorMsg.Printf( wxT( "Eeschema file sheet hierarchical label error at line %d.\n" ),
@@ -318,7 +319,8 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
     if( size == 0 )
         size = GetDefaultTextSize();
 
-    m_Size.x = m_Size.y = size;
+    SetTextSize( wxSize( size, size ) );
+    SetTextPos( wxPoint( x, y ) );
 
     switch( connectType[0] )
     {
@@ -345,19 +347,19 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     switch( sheetSide[0] )
     {
-    case 'R' : /* pin on right side */
+    case 'R' : // pin on right side
         SetEdge( SHEET_RIGHT_SIDE );
         break;
 
-    case 'T' : /* pin on top side */
+    case 'T' : // pin on top side
         SetEdge( SHEET_TOP_SIDE );
         break;
 
-    case 'B' : /* pin on bottom side */
+    case 'B' : // pin on bottom side
         SetEdge( SHEET_BOTTOM_SIDE );
         break;
 
-    case 'L' : /* pin on left side */
+    case 'L' : // pin on left side
     default  :
         SetEdge( SHEET_LEFT_SIDE );
         break;
@@ -389,9 +391,9 @@ bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData,
 
 void SCH_SHEET_PIN::MirrorX( int aXaxis_position )
 {
-    int p = m_Pos.y - aXaxis_position;
+    int p = GetTextPos().y - aXaxis_position;
 
-    m_Pos.y = aXaxis_position - p;
+    SetTextY( aXaxis_position - p );
 
     switch( m_edge )
     {
@@ -411,9 +413,9 @@ void SCH_SHEET_PIN::MirrorX( int aXaxis_position )
 
 void SCH_SHEET_PIN::MirrorY( int aYaxis_position )
 {
-    int p = m_Pos.x - aYaxis_position;
+    int p = GetTextPos().x - aYaxis_position;
 
-    m_Pos.x = aYaxis_position - p;
+    SetTextX( aYaxis_position - p );
 
     switch( m_edge )
     {
@@ -433,7 +435,9 @@ void SCH_SHEET_PIN::MirrorY( int aYaxis_position )
 
 void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, aPosition, 900 );
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aPosition, 900 );
+    SetTextPos( pt );
 
     switch( m_edge )
     {
@@ -489,7 +493,7 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
 
 void SCH_SHEET_PIN::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    DANGLING_END_ITEM item( SHEET_LABEL_END, this, m_Pos );
+    DANGLING_END_ITEM item( SHEET_LABEL_END, this, GetTextPos() );
     aItemList.push_back( item );
 }
 

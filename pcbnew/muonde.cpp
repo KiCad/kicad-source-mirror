@@ -338,9 +338,9 @@ MODULE* CreateMicrowaveInductor( PCB_EDIT_FRAME* aPcbFrame, wxString& aErrorMess
 
     wxPoint valPos = refPos;
 
-    refPos.y -= module->Reference().GetSize().y;
+    refPos.y -= module->Reference().GetTextSize().y;
     module->Reference().SetPosition( refPos );
-    valPos.y += module->Value().GetSize().y;
+    valPos.y += module->Value().GetTextSize().y;
     module->Value().SetPosition( valPos );
 
     module->CalculateBoundingBox();
@@ -579,9 +579,9 @@ MODULE* PCB_EDIT_FRAME::CreateMuWaveBaseFootprint( const wxString& aValue,
 
     if( aTextSize > 0 )
     {
-        module->Reference().SetSize( wxSize( aTextSize, aTextSize ) );
+        module->Reference().SetTextSize( wxSize( aTextSize, aTextSize ) );
         module->Reference().SetThickness( aTextSize/5 );
-        module->Value().SetSize( wxSize( aTextSize, aTextSize ) );
+        module->Value().SetTextSize( wxSize( aTextSize, aTextSize ) );
         module->Value().SetThickness( aTextSize/5 );
     }
 

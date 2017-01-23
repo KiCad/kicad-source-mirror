@@ -733,13 +733,13 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
         for( int ii = 0; ii < 2; ii++ )
         {
-            double      txt_orient = textmod->GetOrientation();
+            double      txt_orient = textmod->GetTextAngle();
             std::string layer  = GenCADLayerName( cu_count, module->GetFlag() ? B_SilkS : F_SilkS );
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
                      textmod->GetPos0().x / SCALE_FACTOR,
                     -textmod->GetPos0().y / SCALE_FACTOR,
-                     textmod->GetSize().x / SCALE_FACTOR,
+                     textmod->GetTextWidth() / SCALE_FACTOR,
                      txt_orient / 10.0,
                      mirror,
                      layer.c_str(),
@@ -747,8 +747,8 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
             // Please note, the width is approx
             fprintf( aFile, " 0 0 %g %g\n",
-                     ( textmod->GetSize().x * textmod->GetLength() ) / SCALE_FACTOR,
-                     textmod->GetSize().y / SCALE_FACTOR );
+                     ( textmod->GetTextWidth() * textmod->GetLength() ) / SCALE_FACTOR,
+                     textmod->GetTextHeight() / SCALE_FACTOR );
 
             textmod = &module->Value(); // Dirty trick for the second iteration
         }

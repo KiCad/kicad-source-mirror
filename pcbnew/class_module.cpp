@@ -958,8 +958,9 @@ void MODULE::SetPosition( const wxPoint& newpos )
     wxPoint delta = newpos - m_Pos;
 
     m_Pos += delta;
-    m_Reference->SetTextPosition( m_Reference->GetTextPosition() + delta );
-    m_Value->SetTextPosition( m_Value->GetTextPosition() + delta );
+
+    m_Reference->EDA_TEXT::Offset( delta );
+    m_Value->EDA_TEXT::Offset( delta );
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
@@ -980,7 +981,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
         case PCB_MODULE_TEXT_T:
         {
             TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
-            text->SetTextPosition( text->GetTextPosition() + delta );
+            text->EDA_TEXT::Offset( delta );
             break;
         }
 

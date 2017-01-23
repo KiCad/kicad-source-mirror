@@ -71,7 +71,7 @@ TEXTE_MODULE* FOOTPRINT_EDIT_FRAME::CreateTextModule( MODULE* aModule, wxDC* aDC
 
     GetDesignSettings().m_ModuleTextWidth = Clamp_Text_PenSize( GetDesignSettings().m_ModuleTextWidth,
             std::min( GetDesignSettings().m_ModuleTextSize.x, GetDesignSettings().m_ModuleTextSize.y ), true );
-    text->SetSize( GetDesignSettings().m_ModuleTextSize );
+    text->SetTextSize( GetDesignSettings().m_ModuleTextSize );
     text->SetThickness( GetDesignSettings().m_ModuleTextWidth );
     text->SetPosition( GetCrossHairPosition() );
 
@@ -121,7 +121,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
     // we expect MoveVector to be (0,0) if there is no move in progress
     Text->Draw( m_canvas, DC, GR_XOR, MoveVector );
 
-    Text->SetOrientation( Text->GetOrientation() + 900 );
+    Text->SetTextAngle( Text->GetTextAngle() + 900 );
 
     Text->Draw( m_canvas, DC, GR_XOR, MoveVector );
     SetMsgPanel( Text );
@@ -179,7 +179,7 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     // If the text was moved (the move does not change internal data)
     // it could be rotated while moving. So set old value for orientation
     if( Text->IsMoving() )
-        Text->SetOrientation( TextInitialOrientation );
+        Text->SetTextAngle( TextInitialOrientation );
 
     // Redraw the text
     Panel->RefreshDrawingRect( Text->GetBoundingBox() );
@@ -208,8 +208,8 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MoveVector.x = MoveVector.y = 0;
 
-    TextInitialPosition    = Text->GetTextPosition();
-    TextInitialOrientation = Text->GetOrientation();
+    TextInitialPosition    = Text->GetTextPos();
+    TextInitialOrientation = Text->GetTextAngle();
 
     // Center cursor on initial position of text
     SetCrossHairPosition( TextInitialPosition );
@@ -237,19 +237,19 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
         if( Module )
         {
             // Prepare undo command (a rotation can be made while moving)
-            double tmp = Text->GetOrientation();
-            Text->SetOrientation( TextInitialOrientation );
+            double tmp = Text->GetTextAngle();
+            Text->SetTextAngle( TextInitialOrientation );
 
             if( IsType( FRAME_PCB ) )
                 SaveCopyInUndoList( Module, UR_CHANGED );
             else
                 SaveCopyInUndoList( Module, UR_CHANGED );
 
-            Text->SetOrientation( tmp );
+            Text->SetTextAngle( tmp );
 
             // Set the new position for text.
-            Text->SetTextPosition( GetCrossHairPosition() );
-            wxPoint textRelPos = Text->GetTextPosition() - Module->GetPosition();
+            Text->SetTextPos( GetCrossHairPosition() );
+            wxPoint textRelPos = Text->GetTextPos() - Module->GetPosition();
             RotatePoint( &textRelPos, -Module->GetOrientation() );
             Text->SetPos0( textRelPos );
             Text->ClearFlags();
@@ -262,7 +262,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
         }
         else
         {
-            Text->SetTextPosition( GetCrossHairPosition() );
+            Text->SetTextPos( GetCrossHairPosition() );
         }
     }
 
@@ -311,11 +311,11 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
         TEXTE_PCB* text = static_cast<TEXTE_PCB*>( aItem );
 
         // Exit if there's nothing to do
-        if( text->GetSize() == newSize && text->GetThickness() == newThickness )
+        if( text->GetTextSize() == newSize && text->GetThickness() == newThickness )
             return;
 
         SaveCopyInUndoList( text, UR_CHANGED );
-        text->SetSize( newSize );
+        text->SetTextSize( newSize );
         text->SetThickness( newThickness );
     }
 
@@ -326,11 +326,11 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
         TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( aItem );
 
         // Exit if there's nothing to do
-        if( text->GetSize() == newSize && text->GetThickness() == newThickness )
+        if( text->GetTextSize() == newSize && text->GetThickness() == newThickness )
             return;
 
         SaveCopyInUndoList( text->GetParent(), UR_CHANGED );
-        text->SetSize( newSize );
+        text->SetTextSize( newSize );
         text->SetThickness( newThickness );
     }
     else

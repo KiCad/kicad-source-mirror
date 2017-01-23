@@ -52,7 +52,7 @@ extern void IncrementLabelMember( wxString& name, int aIncrement );
 // Margin in internal units (mils) between labels and wires
 #define TXT_MARGIN 4
 
-/* Names of sheet label types. */
+// Names of sheet label types.
 const char* SheetLabelType[] =
 {
     "Input",
@@ -109,10 +109,11 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     m_shape( NET_INPUT )
 {
     m_Layer = LAYER_NOTES;
-    m_Pos = pos;
+    SetTextPos( pos );
     m_isDangling = false;
-    m_MultilineAllowed = true;
-    m_schematicOrientation = 0;
+    m_spin_style = 0;
+
+    SetMultilineAllowed( true );
 }
 
 
@@ -120,11 +121,10 @@ SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
     SCH_ITEM( aText ),
     EDA_TEXT( aText )
 {
-    m_Pos = aText.m_Pos;
     m_shape = aText.m_shape;
-    m_MultilineAllowed = aText.m_MultilineAllowed;
-    m_schematicOrientation = aText.m_schematicOrientation;
     m_isDangling = false;
+
+    SetLabelSpinStyle( aText.GetLabelSpinStyle() );
 }
 
 
@@ -149,22 +149,22 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
     int thick_offset = TXT_MARGIN +
                        ( GetPenSize() + GetDefaultLineThickness() ) / 2;
 
-    switch( m_schematicOrientation )
+    switch( GetLabelSpinStyle() )
     {
     default:
-    case 0: /* Horiz Normal Orientation (left justified) */
+    case 0: // Horiz Normal Orientation (left justified)
         text_offset.y = -thick_offset;
         break;
 
-    case 1: /* Vert Orientation UP */
+    case 1: // Vert Orientation UP
         text_offset.x = -thick_offset;
         break;
 
-    case 2: /* Horiz Orientation - Right justified */
+    case 2: // Horiz Orientation - Right justified
         text_offset.y = -thick_offset;
         break;
 
-    case 3: /*  Vert Orientation BOTTOM */
+    case 3: //  Vert Orientation BOTTOM
         text_offset.x = -thick_offset;
         break;
     }
@@ -194,14 +194,14 @@ bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint 
 void SCH_TEXT::MirrorY( int aYaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable horizontal position
-    switch( GetOrientation() )
+    switch( GetLabelSpinStyle() )
     {
     case 0: // horizontal text
-        SetOrientation( 2 );
+        SetLabelSpinStyle( 2 );
         break;
 
     case 2: // invert horizontal text
-        SetOrientation( 0 );
+        SetLabelSpinStyle( 0 );
         break;
 
     case 1: // Vert Orientation UP
@@ -210,21 +210,21 @@ void SCH_TEXT::MirrorY( int aYaxis_position )
         break;
     }
 
-    MIRROR( m_Pos.x, aYaxis_position );
+    SetTextX( Mirror( GetTextPos().x, aYaxis_position ) );
 }
 
 
 void SCH_TEXT::MirrorX( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable vertical position
-    switch( GetOrientation() )
+    switch( GetLabelSpinStyle() )
     {
     case 1: // Vert Orientation UP
-        SetOrientation( 3 );
+        SetLabelSpinStyle( 3 );
         break;
 
     case 3: // Vert Orientation BOTTOM
-        SetOrientation( 1 );
+        SetLabelSpinStyle( 1 );
         break;
 
     case 0: // horizontal text
@@ -233,7 +233,7 @@ void SCH_TEXT::MirrorX( int aXaxis_position )
         break;
     }
 
-    MIRROR( m_Pos.y, aXaxis_position );
+    SetTextY( Mirror( GetTextPos().y, aXaxis_position ) );
 }
 
 
@@ -241,13 +241,16 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
 {
     int dy;
 
-    RotatePoint( &m_Pos, aPosition, 900 );
-    SetOrientation( (GetOrientation() + 1) % 4 );
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aPosition, 900 );
+    SetTextPos( pt );
 
-    switch( GetOrientation() )
+    SetLabelSpinStyle( (GetLabelSpinStyle() + 1) % 4 );
+
+    switch( GetLabelSpinStyle() )
     {
     case 0:     // horizontal text
-        dy = m_Size.y;
+        dy = GetTextHeight();
         break;
 
     case 1:     // Vert Orientation UP
@@ -255,7 +258,7 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
         break;
 
     case 2:     // invert horizontal text
-        dy = m_Size.y;
+        dy = GetTextHeight();
         break;
 
     case 3:     // Vert Orientation BOTTOM
@@ -267,39 +270,39 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
         break;
     }
 
-    m_Pos.y += dy;
+    SetTextY( GetTextPos().y + dy );
 }
 
 
-void SCH_TEXT::SetOrientation( int aOrientation )
+void SCH_TEXT::SetLabelSpinStyle( int aSpinStyle )
 {
-    m_schematicOrientation = aOrientation;
+    m_spin_style = aSpinStyle;
 
-    switch( m_schematicOrientation )
+    switch( aSpinStyle )
     {
     default:
-    case 0: /* Horiz Normal Orientation (left justified) */
-        m_Orient   = TEXT_ORIENT_HORIZ;
-        m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
-        m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+    case 0: // Horiz Normal Orientation (left justified)
+        SetTextAngle( TEXT_ANGLE_HORIZ );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
-    case 1: /* Vert Orientation UP */
-        m_Orient   = TEXT_ORIENT_VERT;
-        m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
-        m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+    case 1: // Vert Orientation UP
+        SetTextAngle( TEXT_ANGLE_VERT );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
-    case 2: /* Horiz Orientation - Right justified */
-        m_Orient   = TEXT_ORIENT_HORIZ;
-        m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
-        m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+    case 2: // Horiz Orientation - Right justified
+        SetTextAngle( TEXT_ANGLE_HORIZ );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
 
-    case 3: /*  Vert Orientation BOTTOM */
-        m_Orient   = TEXT_ORIENT_VERT;
-        m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
-        m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+    case 3: //  Vert Orientation BOTTOM
+        SetTextAngle( TEXT_ANGLE_VERT );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
     }
 }
@@ -310,34 +313,28 @@ void SCH_TEXT::SwapData( SCH_ITEM* aItem )
     SCH_TEXT* item = (SCH_TEXT*) aItem;
 
     std::swap( m_Text, item->m_Text );
-    std::swap( m_Pos, item->m_Pos );
-    std::swap( m_Size, item->m_Size );
-    std::swap( m_Thickness, item->m_Thickness );
-    std::swap( m_shape, item->m_shape );
-    std::swap( m_Orient, item->m_Orient );
-
     std::swap( m_Layer, item->m_Layer );
-    std::swap( m_HJustify, item->m_HJustify );
-    std::swap( m_VJustify, item->m_VJustify );
     std::swap( m_isDangling, item->m_isDangling );
-    std::swap( m_schematicOrientation, item->m_schematicOrientation );
+    std::swap( m_spin_style, item->m_spin_style );
+
+    SwapEffects( *item );
 }
 
 
 int SCH_TEXT::GetPenSize() const
 {
-    int pensize = m_Thickness;
+    int pensize = GetThickness();
 
     if( pensize == 0 )   // Use default values for pen size
     {
-        if( m_Bold  )
-            pensize = GetPenSizeForBold( m_Size.x );
+        if( IsBold()  )
+            pensize = GetPenSizeForBold( GetTextWidth() );
         else
             pensize = GetDefaultLineThickness();
     }
 
     // Clip pen size for small texts:
-    pensize = Clamp_Text_PenSize( pensize, m_Size, m_Bold );
+    pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
     return pensize;
 }
 
@@ -346,10 +343,10 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
                      GR_DRAWMODE DrawMode, EDA_COLOR_T Color )
 {
     EDA_COLOR_T color;
-    int         linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
-    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
+    int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+    EDA_RECT*   clipbox = panel? panel->GetClipBox() : NULL;
 
-    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
     if( Color >= 0 )
         color = Color;
@@ -359,12 +356,16 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     GRSetDrawMode( DC, DrawMode );
 
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
-    std::swap( linewidth, m_Thickness );            // Set the minimum width
+
+    int savedWidth = GetThickness();
+    SetThickness( linewidth );              // Set the minimum width
+
     EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
-    std::swap( linewidth, m_Thickness );            // set initial value
+
+    SetThickness( savedWidth );
 
     if( m_isDangling && panel)
-        DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
+        DrawDanglingSymbol( panel, DC, GetTextPos() + aOffset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if DRAW_BBOX
@@ -381,7 +382,7 @@ bool SCH_TEXT::Save( FILE* aFile ) const
     bool        success = true;
     const char* shape   = "~";
 
-    if( m_Italic )
+    if( IsItalic() )
         shape = "Italic";
 
     // For compatibility reason, the text must be saved in only one text line
@@ -404,10 +405,9 @@ bool SCH_TEXT::Save( FILE* aFile ) const
             ii++;
     }
 
-
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_schematicOrientation, m_Size.x,
-                 shape, m_Thickness, TO_UTF8( text ) ) == EOF )
+                 GetTextPos().x, GetTextPos().y, GetLabelSpinStyle(), GetTextWidth(),
+                 shape, GetThickness(), TO_UTF8( text ) ) == EOF )
     {
         success = false;
     }
@@ -418,10 +418,11 @@ bool SCH_TEXT::Save( FILE* aFile ) const
 
 bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
-    char      Name1[256];
-    char      Name2[256];
-    char      Name3[256];
-    int       thickness = 0, size = 0, orient = 0;
+    char    Name1[256];
+    char    Name2[256];
+    char    Name3[256];
+    int     thickness = 0, orient = 0;
+    int     x, y, size = 0;
 
     Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
 
@@ -431,7 +432,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         sline++;
 
     // sline points the start of parameters
-    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &m_Pos.x, &m_Pos.y,
+    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &x, &y,
                      &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )
@@ -474,18 +475,21 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     m_Text = val;
-    m_Size.x = m_Size.y = size;
-    SetOrientation( orient );
+
+    SetTextSize( wxSize( size, size ) );
+    SetTextPos( wxPoint( x, y ) );
+
+    SetLabelSpinStyle( orient );
 
     if( isdigit( Name3[0] ) )
     {
         thickness = atol( Name3 );
-        m_Bold = ( thickness != 0 );
-        m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
+        SetBold( thickness != 0 );
+        SetThickness( IsBold() ? GetPenSizeForBold( size ) : 0 );
     }
 
     if( strncasecmp( Name2, "Italic", 6 ) == 0 )
-        m_Italic = 1;
+        SetItalic( true );
 
     return true;
 }
@@ -497,7 +501,7 @@ void SCH_TEXT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
     if( Type() == SCH_TEXT_T )
         return;
 
-    DANGLING_END_ITEM item( LABEL_END, this, m_Pos );
+    DANGLING_END_ITEM item( LABEL_END, this, GetTextPos() );
     aItemList.push_back( item );
 }
 
@@ -523,7 +527,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
         case PIN_END:
         case LABEL_END:
         case SHEET_LABEL_END:
-            if( m_Pos == item.GetPosition() )
+            if( GetTextPos() == item.GetPosition() )
                 m_isDangling = false;
 
             break;
@@ -539,7 +543,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
                          wxT( "Dangling end type list overflow.  Bad programmer!" ) );
 
             DANGLING_END_ITEM & nextItem = aItemList[ii];
-            m_isDangling = !IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), m_Pos );
+            m_isDangling = !IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), GetTextPos() );
         }
             break;
 
@@ -559,7 +563,7 @@ bool SCH_TEXT::IsSelectStateChanged( const wxRect& aRect )
 {
     bool previousState = IsSelected();
 
-    if( aRect.Contains( m_Pos ) )
+    if( aRect.Contains( GetTextPos() ) )
         SetFlags( SELECTED );
     else
         ClearFlags( SELECTED );
@@ -574,7 +578,7 @@ void SCH_TEXT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
     if( Type() == SCH_TEXT_T )
         return;
 
-    aPoints.push_back( m_Pos );
+    aPoints.push_back( GetTextPos() );
 }
 
 
@@ -582,18 +586,20 @@ const EDA_RECT SCH_TEXT::GetBoundingBox() const
 {
     // We must pass the effective text thickness to GetTextBox
     // when calculating the bounding box
-    int linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
+    int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
-    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
     EDA_RECT rect = GetTextBox( -1, linewidth );
 
-    if( m_Orient )                          // Rotate rect
+    if( GetTextAngle() )      // Rotate rect
     {
         wxPoint pos = rect.GetOrigin();
         wxPoint end = rect.GetEnd();
-        RotatePoint( &pos, m_Pos, m_Orient );
-        RotatePoint( &end, m_Pos, m_Orient );
+
+        RotatePoint( &pos, GetTextPos(), GetTextAngle() );
+        RotatePoint( &end, GetTextPos(), GetTextAngle() );
+
         rect.SetOrigin( pos );
         rect.SetEnd( end );
     }
@@ -629,11 +635,11 @@ void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
         item->m_Type = NET_HIERLABEL;
 
     item->m_Label = m_Text;
-    item->m_Start = item->m_End = m_Pos;
+    item->m_Start = item->m_End = GetTextPos();
 
     aNetListItems.push_back( item );
 
-    /* If a bus connects to label */
+    // If a bus connects to label
     if( IsBusLabel( m_Text ) )
         item->ConvertBusToNetListItems( aNetListItems );
 }
@@ -667,7 +673,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 
     aPlotter->SetCurrentLineWidth( thickness );
 
-    if( m_MultilineAllowed )
+    if( IsMultilineAllowed() )
     {
         std::vector<wxPoint> positions;
         wxArrayString strings_list;
@@ -680,19 +686,22 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
         {
             wxPoint textpos = positions[ii] + GetSchematicTextOffset();
             wxString& txt = strings_list.Item( ii );
-            aPlotter->Text( textpos, color, txt, m_Orient, m_Size, m_HJustify,
-                            m_VJustify, thickness, m_Italic, m_Bold );
+            aPlotter->Text( textpos, color, txt, GetTextAngle(), GetTextSize(),
+                            GetHorizJustify(), GetVertJustify(),
+                            thickness, IsItalic(), IsBold() );
         }
     }
     else
     {
-        wxPoint textpos = m_Pos + GetSchematicTextOffset();
-        aPlotter->Text( textpos, color, GetShownText(), m_Orient, m_Size, m_HJustify,
-                        m_VJustify, thickness, m_Italic, m_Bold );
+        wxPoint textpos = GetTextPos() + GetSchematicTextOffset();
+
+        aPlotter->Text( textpos, color, GetShownText(), GetTextAngle(), GetTextSize(),
+                        GetHorizJustify(), GetVertJustify(),
+                        thickness, IsItalic(), IsBold() );
     }
 
-    /* Draw graphic symbol for global or hierarchical labels */
-    CreateGraphicShape( Poly, m_Pos );
+    // Draw graphic symbol for global or hierarchical labels
+    CreateGraphicShape( Poly, GetTextPos() );
 
     aPlotter->SetCurrentLineWidth( GetPenSize() );
 
@@ -736,7 +745,7 @@ void SCH_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     aList.push_back( MSG_PANEL_ITEM( msg, GetShownText(), DARKCYAN ) );
 
-    switch( GetOrientation() )
+    switch( GetLabelSpinStyle() )
     {
     case 0:     // horizontal text
         msg = _( "Horizontal" );
@@ -764,10 +773,10 @@ void SCH_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     wxString textStyle[] = { _( "Normal" ), _( "Italic" ), _( "Bold" ), _( "Bold Italic" ) };
     int style = 0;
 
-    if( m_Italic )
+    if( IsItalic() )
         style = 1;
 
-    if( m_Bold )
+    if( IsBold() )
         style += 2;
 
     aList.push_back( MSG_PANEL_ITEM( _( "Style" ), textStyle[style], BROWN ) );
@@ -792,7 +801,7 @@ void SCH_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
     }
 
     // Display text size (X or Y value, with are the same value in Eeschema)
-    msg = StringFromValue( g_UserUnit, m_Size.x, true );
+    msg = StringFromValue( g_UserUnit, GetTextWidth(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg, RED ) );
 }
 
@@ -821,7 +830,7 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
     m_Layer = LAYER_LOCLABEL;
     m_shape = NET_INPUT;
     m_isDangling = true;
-    m_MultilineAllowed = false;
+    SetMultilineAllowed( false );
 }
 
 
@@ -837,23 +846,23 @@ wxPoint SCH_LABEL::GetSchematicTextOffset() const
 }
 
 
-void SCH_LABEL::SetOrientation( int aOrientation )
+void SCH_LABEL::SetLabelSpinStyle( int aOrientation )
 {
-    SCH_TEXT::SetOrientation( aOrientation );
+    SCH_TEXT::SetLabelSpinStyle( aOrientation );
 }
 
 
 void SCH_LABEL::MirrorX( int aXaxis_position )
 {
     // Text is NOT really mirrored; it is moved to a suitable position
-    switch( GetOrientation() )
+    switch( GetLabelSpinStyle() )
     {
     case 1: // Vert Orientation UP
-        SetOrientation( 3 );
+        SetLabelSpinStyle( 3 );
         break;
 
     case 3: // Vert Orientation BOTTOM
-        SetOrientation( 1 );
+        SetLabelSpinStyle( 1 );
         break;
 
     case 0: // horizontal text
@@ -862,14 +871,17 @@ void SCH_LABEL::MirrorX( int aXaxis_position )
         break;
     }
 
-    MIRROR( m_Pos.y, aXaxis_position );
+    SetTextY( ::Mirror( GetTextPos().y, aXaxis_position ) );
 }
 
 
 void SCH_LABEL::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, aPosition, 900 );
-    SetOrientation( (GetOrientation() + 1) % 4 );
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aPosition, 900 );
+    SetTextPos( pt );
+
+    SetLabelSpinStyle( (GetLabelSpinStyle() + 1) % 4 );
 }
 
 
@@ -878,12 +890,12 @@ bool SCH_LABEL::Save( FILE* aFile ) const
     bool        success = true;
     const char* shape   = "~";
 
-    if( m_Italic )
+    if( IsItalic() )
         shape = "Italic";
 
     if( fprintf( aFile, "Text Label %-4d %-4d %-4d %-4d %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_schematicOrientation, m_Size.x, shape,
-                 m_Thickness, TO_UTF8( m_Text ) ) == EOF )
+                 GetTextPos().x, GetTextPos().y, GetLabelSpinStyle(), GetTextWidth(), shape,
+                 GetThickness(), TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -894,10 +906,11 @@ bool SCH_LABEL::Save( FILE* aFile ) const
 
 bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
-    char      Name1[256];
-    char      Name2[256];
-    char      Name3[256];
-    int       thickness = 0, size = 0, orient = 0;
+    char    Name1[256];
+    char    Name2[256];
+    char    Name3[256];
+    int     thickness = 0, size = 0, orient = 0;
+    int     x, y;
 
     Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
 
@@ -907,7 +920,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         sline++;
 
     // sline points the start of parameters
-    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &m_Pos.x, &m_Pos.y,
+    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &x, &y,
                      &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )
@@ -937,18 +950,21 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     m_Text = FROM_UTF8( text );
-    m_Size.x = m_Size.y = size;
-    SetOrientation( orient );
+
+    SetTextSize( wxSize( size, size ) );
+    SetTextPos( wxPoint( x, y ) );
+
+    SetLabelSpinStyle( orient );
 
     if( isdigit( Name3[0] ) )
     {
         thickness = atol( Name3 );
-        m_Bold = ( thickness != 0 );
-        m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
+        SetBold( thickness != 0 );
+        SetThickness( IsBold() ? GetPenSizeForBold( size ) : 0 );
     }
 
     if( strcasecmp( Name2, "Italic" ) == 0 )
-        m_Italic = 1;
+        SetItalic( true );
 
     return true;
 }
@@ -963,15 +979,18 @@ void SCH_LABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
-    int linewidth = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
-    EDA_RECT rect = GetTextBox( -1, linewidth );
+    int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+    EDA_RECT    rect = GetTextBox( -1, linewidth );
 
-    if( m_Orient )
-    {   // Rotate rect
+    if( GetTextAngle() != 0.0 )
+    {
+        // Rotate rect
         wxPoint pos = rect.GetOrigin();
         wxPoint end = rect.GetEnd();
-        RotatePoint( &pos, m_Pos, m_Orient );
-        RotatePoint( &end, m_Pos, m_Orient );
+
+        RotatePoint( &pos, GetTextPos(), GetTextAngle() );
+        RotatePoint( &end, GetTextPos(), GetTextAngle() );
+
         rect.SetOrigin( pos );
         rect.SetEnd( end );
 
@@ -990,14 +1009,13 @@ wxString SCH_LABEL::GetSelectMenuText() const
 }
 
 
-
 SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
     SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
 {
     m_Layer = LAYER_GLOBLABEL;
     m_shape = NET_BIDI;
     m_isDangling = true;
-    m_MultilineAllowed = false;
+    SetMultilineAllowed( false );
 }
 
 
@@ -1012,12 +1030,12 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
     bool        success = true;
     const char* shape   = "~";
 
-    if( m_Italic )
+    if( IsItalic() )
         shape = "Italic";
 
     if( fprintf( aFile, "Text GLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_schematicOrientation, m_Size.x,
-                 SheetLabelType[m_shape], shape, m_Thickness, TO_UTF8( m_Text ) ) == EOF )
+                 GetTextPos().x, GetTextPos().y, GetLabelSpinStyle(), GetTextWidth(),
+                 SheetLabelType[m_shape], shape, GetThickness(), TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -1028,10 +1046,11 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
 
 bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
-    char      Name1[256];
-    char      Name2[256];
-    char      Name3[256];
-    int       thickness = 0, size = 0, orient = 0;
+    char    Name1[256];
+    char    Name2[256];
+    char    Name3[256];
+    int     thickness = 0, size = 0, orient = 0;
+    int     x, y;
 
     Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
 
@@ -1041,7 +1060,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         sline++;
 
     // sline points the start of parameters
-    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &m_Pos.x, &m_Pos.y,
+    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &x, &y,
                      &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )
@@ -1071,11 +1090,15 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     m_Text = FROM_UTF8( text );
-    m_Size.x = m_Size.y = size;
-    SetOrientation( orient );
+
+    SetTextSize( wxSize( size, size ) );
+    SetTextPos( wxPoint( x, y ) );
+
+    SetLabelSpinStyle( orient );
+
     m_shape  = NET_INPUT;
-    m_Bold = ( thickness != 0 );
-    m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
+    SetBold( thickness != 0 );
+    SetThickness( IsBold() ? GetPenSizeForBold( size ) : 0 );
 
     if( strcasecmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
         m_shape = NET_OUTPUT;
@@ -1090,7 +1113,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         m_shape = NET_UNSPECIFIED;
 
     if( strcasecmp( Name3, "Italic" ) == 0 )
-        m_Italic = 1;
+        SetItalic( true );
 
     return true;
 }
@@ -1103,52 +1126,55 @@ void SCH_GLOBALLABEL::MirrorY( int aYaxis_position )
      *  for a vertical label, the schematic orientation is not changed.
      *  and the label is moved to a suitable position
      */
-    switch( GetOrientation() )
+    switch( GetLabelSpinStyle() )
     {
-    case 0:             /* horizontal text */
-        SetOrientation( 2 );
+    case 0:             // horizontal text
+        SetLabelSpinStyle( 2 );
         break;
 
-    case 2:        /* invert horizontal text*/
-        SetOrientation( 0 );
+    case 2:        // invert horizontal text
+        SetLabelSpinStyle( 0 );
         break;
     }
 
-    MIRROR( m_Pos.x, aYaxis_position );
+    SetTextX( ::Mirror( GetTextPos().x, aYaxis_position ) );
 }
 
 
 void SCH_GLOBALLABEL::MirrorX( int aXaxis_position )
 {
-    switch( GetOrientation() )
+    switch( GetLabelSpinStyle() )
     {
-    case 1:             /* vertical text */
-        SetOrientation( 3 );
+    case 1:             // vertical text
+        SetLabelSpinStyle( 3 );
         break;
 
-    case 3:        /* invert vertical text*/
-        SetOrientation( 1 );
+    case 3:        // invert vertical text
+        SetLabelSpinStyle( 1 );
         break;
     }
 
-    MIRROR( m_Pos.y, aXaxis_position );
+    SetTextY( ::Mirror( GetTextPos().y, aXaxis_position ) );
 }
 
 
 void SCH_GLOBALLABEL::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, aPosition, 900 );
-    SetOrientation( (GetOrientation() + 3) % 4 );
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aPosition, 900 );
+    SetTextPos( pt );
+
+    SetLabelSpinStyle( (GetLabelSpinStyle() + 3) % 4 );
 }
 
 
 wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
-    int     width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
+    int     width = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
-    width = Clamp_Text_PenSize( width, m_Size, m_Bold );
-    int     halfSize = m_Size.x / 2;
+    width = Clamp_Text_PenSize( width, GetTextSize(), IsBold() );
+    int     halfSize = GetTextWidth() / 2;
     int     offset   = width;
 
     switch( m_shape )
@@ -1168,21 +1194,21 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
         break;
     }
 
-    switch( m_schematicOrientation )
+    switch( GetLabelSpinStyle() )
     {
-    case 0:             /* Orientation horiz normal */
+    case 0:             // Orientation horiz normal
         text_offset.x -= offset;
         break;
 
-    case 1:             /* Orientation vert UP */
+    case 1:             // Orientation vert UP
         text_offset.y -= offset;
         break;
 
-    case 2:             /* Orientation horiz inverse */
+    case 2:             // Orientation horiz inverse
         text_offset.x += offset;
         break;
 
-    case 3:             /* Orientation vert BOTTOM */
+    case 3:             // Orientation vert BOTTOM
         text_offset.y += offset;
         break;
     }
@@ -1191,35 +1217,35 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 }
 
 
-void SCH_GLOBALLABEL::SetOrientation( int aOrientation )
+void SCH_GLOBALLABEL::SetLabelSpinStyle( int aSpinStyle )
 {
-    m_schematicOrientation = aOrientation;
+    m_spin_style = aSpinStyle;
 
-    switch( m_schematicOrientation )
+    switch( aSpinStyle )
     {
     default:
-    case 0: /* Horiz Normal Orientation */
-        m_Orient   = TEXT_ORIENT_HORIZ;
-        m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
-        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+    case 0: // Horiz Normal Orientation
+        SetTextAngle( TEXT_ANGLE_HORIZ );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 1: /* Vert Orientation UP */
-        m_Orient   = TEXT_ORIENT_VERT;
-        m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
-        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+    case 1: // Vert Orientation UP
+        SetTextAngle( TEXT_ANGLE_VERT );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 2: /* Horiz Orientation */
-        m_Orient   = TEXT_ORIENT_HORIZ;
-        m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
-        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+    case 2: // Horiz Orientation
+        SetTextAngle( TEXT_ANGLE_HORIZ );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 3: /*  Vert Orientation BOTTOM */
-        m_Orient   = TEXT_ORIENT_VERT;
-        m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
-        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+    case 3: //  Vert Orientation BOTTOM
+        SetTextAngle( TEXT_ANGLE_VERT );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
     }
 }
@@ -1242,18 +1268,23 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     GRSetDrawMode( DC, DrawMode );
 
-    int linewidth = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
-    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
-    std::swap( linewidth, m_Thickness );            // Set the minimum width
+    int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+
+    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
+
+    int save_width = GetThickness();
+    SetThickness( linewidth );
+
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
     EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
-    std::swap( linewidth, m_Thickness );            // set initial value
 
-    CreateGraphicShape( Poly, m_Pos + aOffset );
+    SetThickness( save_width );   // restore initial value
+
+    CreateGraphicShape( Poly, GetTextPos() + aOffset );
     GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
     if( m_isDangling && panel )
-        DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
+        DrawDanglingSymbol( panel, DC, GetTextPos() + aOffset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if DRAW_BBOX
@@ -1267,10 +1298,10 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
 
 void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
-    int halfSize  = m_Size.y / 2;
-    int linewidth = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
+    int halfSize  = GetTextHeight() / 2;
+    int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
-    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
     aPoints.clear();
 
@@ -1342,20 +1373,20 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     int angle = 0;
 
-    switch( m_schematicOrientation )
+    switch( GetLabelSpinStyle() )
     {
-    case 0:             /* Orientation horiz normal */
+    case 0:             // Orientation horiz normal
         break;
 
-    case 1:             /* Orientation vert UP */
+    case 1:             // Orientation vert UP
         angle = -900;
         break;
 
-    case 2:             /* Orientation horiz inverse */
+    case 2:             // Orientation horiz inverse
         angle = 1800;
         break;
 
-    case 3:             /* Orientation vert BOTTOM */
+    case 3:             // Orientation vert BOTTOM
         angle = 900;
         break;
     }
@@ -1379,40 +1410,41 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
-    x  = m_Pos.x;
-    y  = m_Pos.y;
+    x  = GetTextPos().x;
+    y  = GetTextPos().y;
     dx = dy = 0;
 
-    int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
-    height = ( (m_Size.y * 15) / 10 ) + width + 2 * TXT_MARGIN;
+    int width = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+
+    height = ( (GetTextHeight() * 15) / 10 ) + width + 2 * TXT_MARGIN;
 
     // text X size add height for triangular shapes(bidirectional)
     length = LenSize( GetShownText() ) + height + DANGLING_SYMBOL_SIZE;
 
-    switch( m_schematicOrientation )    // respect orientation
+    switch( GetLabelSpinStyle() )    // respect orientation
     {
-    case 0:                             /* Horiz Normal Orientation (left justified) */
+    case 0:                             // Horiz Normal Orientation (left justified)
         dx = -length;
         dy = height;
         x += DANGLING_SYMBOL_SIZE;
         y -= height / 2;
         break;
 
-    case 1:     /* Vert Orientation UP */
+    case 1:     // Vert Orientation UP
         dx = height;
         dy = -length;
         x -= height / 2;
         y += DANGLING_SYMBOL_SIZE;
         break;
 
-    case 2:     /* Horiz Orientation - Right justified */
+    case 2:     // Horiz Orientation - Right justified
         dx = length;
         dy = height;
         x -= DANGLING_SYMBOL_SIZE;
         y -= height / 2;
         break;
 
-    case 3:     /*  Vert Orientation BOTTOM */
+    case 3:     //  Vert Orientation BOTTOM
         dx = height;
         dy = length;
         x -= height / 2;
@@ -1441,7 +1473,7 @@ SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T 
     m_Layer = LAYER_HIERLABEL;
     m_shape = NET_INPUT;
     m_isDangling = true;
-    m_MultilineAllowed = false;
+    SetMultilineAllowed( false );
 }
 
 
@@ -1456,12 +1488,12 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
     bool        success = true;
     const char* shape   = "~";
 
-    if( m_Italic )
+    if( IsItalic() )
         shape = "Italic";
 
     if( fprintf( aFile, "Text HLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_schematicOrientation, m_Size.x,
-                 SheetLabelType[m_shape], shape, m_Thickness, TO_UTF8( m_Text ) ) == EOF )
+                 GetTextPos().x, GetTextPos().y, GetLabelSpinStyle(), GetTextWidth(),
+                 SheetLabelType[m_shape], shape, GetThickness(), TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -1472,10 +1504,11 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
 
 bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
-    char      Name1[256];
-    char      Name2[256];
-    char      Name3[256];
-    int       thickness = 0, size = 0, orient = 0;
+    char    Name1[256];
+    char    Name2[256];
+    char    Name3[256];
+    int     thickness = 0, size = 0, orient = 0;
+    int     x, y;
 
     Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
 
@@ -1485,7 +1518,8 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         sline++;
 
     // sline points the start of parameters
-    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1, &m_Pos.x, &m_Pos.y,
+    int ii = sscanf( sline, "%255s %d %d %d %d %255s %255s %d", Name1,
+                     &x, &y,
                      &orient, &size, Name2, Name3, &thickness );
 
     if( ii < 4 )
@@ -1515,11 +1549,15 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     m_Text = FROM_UTF8( text );
-    m_Size.x = m_Size.y = size;
-    SetOrientation( orient );
+
+    SetTextSize( wxSize( size, size ) );
+    SetTextPos( wxPoint( x, y ) );
+
+    SetLabelSpinStyle( orient );
     m_shape  = NET_INPUT;
-    m_Bold = ( thickness != 0 );
-    m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
+    SetBold( thickness != 0 );
+
+    SetThickness( IsBold() ? GetPenSizeForBold( size ) : 0 );
 
     if( strcasecmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
         m_shape = NET_OUTPUT;
@@ -1534,41 +1572,41 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
         m_shape = NET_UNSPECIFIED;
 
     if( strcasecmp( Name3, "Italic" ) == 0 )
-        m_Italic = 1;
+        SetItalic( true );
 
     return true;
 }
 
 
-void SCH_HIERLABEL::SetOrientation( int aOrientation )
+void SCH_HIERLABEL::SetLabelSpinStyle( int aSpinStyle )
 {
-    m_schematicOrientation = aOrientation;
+    m_spin_style = aSpinStyle;
 
-    switch( m_schematicOrientation )
+    switch( aSpinStyle )
     {
     default:
-    case 0: /* Horiz Normal Orientation */
-        m_Orient   = TEXT_ORIENT_HORIZ;
-        m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
-        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+    case 0: // Horiz Normal Orientation
+        SetTextAngle( TEXT_ANGLE_HORIZ );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 1: /* Vert Orientation UP */
-        m_Orient   = TEXT_ORIENT_VERT;
-        m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
-        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+    case 1: // Vert Orientation UP
+        SetTextAngle( TEXT_ANGLE_VERT );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 2: /* Horiz Orientation */
-        m_Orient   = TEXT_ORIENT_HORIZ;
-        m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
-        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+    case 2: // Horiz Orientation
+        SetTextAngle( TEXT_ANGLE_HORIZ );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
-    case 3: /*  Vert Orientation BOTTOM */
-        m_Orient   = TEXT_ORIENT_VERT;
-        m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
-        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+    case 3: //  Vert Orientation BOTTOM
+        SetTextAngle( TEXT_ANGLE_VERT );
+        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
     }
 }
@@ -1582,11 +1620,10 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 {
     static std::vector <wxPoint> Poly;
     EDA_COLOR_T color;
-    int         linewidth = m_Thickness == 0 ?
-                            GetDefaultLineThickness() : m_Thickness;
-    EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
+    int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+    EDA_RECT*   clipbox = panel? panel->GetClipBox() : NULL;
 
-    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
     if( Color >= 0 )
         color = Color;
@@ -1595,16 +1632,19 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     GRSetDrawMode( DC, DrawMode );
 
-    std::swap( linewidth, m_Thickness );            // Set the minimum width
+    int save_width = GetThickness();
+    SetThickness( linewidth );
+
     wxPoint text_offset = offset + GetSchematicTextOffset();
     EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
-    std::swap( linewidth, m_Thickness );            // set initial value
 
-    CreateGraphicShape( Poly, m_Pos + offset );
+    SetThickness( save_width );         // restore initial value
+
+    CreateGraphicShape( Poly, GetTextPos() + offset );
     GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
     if( m_isDangling && panel )
-        DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
+        DrawDanglingSymbol( panel, DC, GetTextPos() + offset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if DRAW_BBOX
@@ -1618,8 +1658,8 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
 void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
-    int* Template = TemplateShape[m_shape][m_schematicOrientation];
-    int  halfSize = m_Size.x / 2;
+    int* Template = TemplateShape[m_shape][m_spin_style];
+    int  halfSize = GetTextWidth() / 2;
 
     int  imax = *Template; Template++;
 
@@ -1643,40 +1683,41 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
-    x  = m_Pos.x;
-    y  = m_Pos.y;
+    x  = GetTextPos().x;
+    y  = GetTextPos().y;
     dx = dy = 0;
 
-    int width = (m_Thickness == 0) ? GetDefaultLineThickness() : m_Thickness;
-    height = m_Size.y + width + 2 * TXT_MARGIN;
+    int width = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+
+    height = GetTextHeight() + width + 2 * TXT_MARGIN;
     length = LenSize( GetShownText() )
              + height                 // add height for triangular shapes
              + 2 * DANGLING_SYMBOL_SIZE;
 
-    switch( m_schematicOrientation )    // respect orientation
+    switch( GetLabelSpinStyle() )
     {
-    case 0:                             /* Horiz Normal Orientation (left justified) */
+    case 0:                             // Horiz Normal Orientation (left justified)
         dx = -length;
         dy = height;
         x += DANGLING_SYMBOL_SIZE;
         y -= height / 2;
         break;
 
-    case 1:     /* Vert Orientation UP */
+    case 1:     // Vert Orientation UP
         dx = height;
         dy = -length;
         x -= height / 2;
         y += DANGLING_SYMBOL_SIZE;
         break;
 
-    case 2:     /* Horiz Orientation - Right justified */
+    case 2:     // Horiz Orientation - Right justified
         dx = length;
         dy = height;
         x -= DANGLING_SYMBOL_SIZE;
         y -= height / 2;
         break;
 
-    case 3:     /*  Vert Orientation BOTTOM */
+    case 3:     //  Vert Orientation BOTTOM
         dx = height;
         dy = length;
         x -= height / 2;
@@ -1694,25 +1735,25 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
 
-    int     width = std::max( m_Thickness, GetDefaultLineThickness() );
+    int     width = std::max( GetThickness(), GetDefaultLineThickness() );
 
-    int     ii = m_Size.x + TXT_MARGIN + width;
+    int     ii = GetTextWidth() + TXT_MARGIN + width;
 
-    switch( m_schematicOrientation )
+    switch( GetLabelSpinStyle() )
     {
-    case 0:             /* Orientation horiz normale */
+    case 0:             // Orientation horiz normale
         text_offset.x = -ii;
         break;
 
-    case 1:             /* Orientation vert UP */
+    case 1:             // Orientation vert UP
         text_offset.y = -ii;
         break;
 
-    case 2:             /* Orientation horiz inverse */
+    case 2:             // Orientation horiz inverse
         text_offset.x = ii;
         break;
 
-    case 3:             /* Orientation vert BOTTOM */
+    case 3:             // Orientation vert BOTTOM
         text_offset.y = ii;
         break;
     }
@@ -1727,43 +1768,45 @@ void SCH_HIERLABEL::MirrorY( int aYaxis_position )
      * orientation is changed.  For a vertical label, the schematic orientation is not changed
      * and the label is moved to a suitable position.
      */
-
-    switch( GetOrientation() )
+    switch( GetLabelSpinStyle() )
     {
-    case 0:             /* horizontal text */
-        SetOrientation( 2 );
+    case 0:             // horizontal text
+        SetLabelSpinStyle( 2 );
         break;
 
-    case 2:             /* invert horizontal text*/
-        SetOrientation( 0 );
+    case 2:             // invert horizontal text
+        SetLabelSpinStyle( 0 );
         break;
     }
 
-    MIRROR( m_Pos.x, aYaxis_position );
+    SetTextX( Mirror( GetTextPos().x, aYaxis_position ) );
 }
 
 
 void SCH_HIERLABEL::MirrorX( int aXaxis_position )
 {
-    switch( GetOrientation() )
+    switch( GetLabelSpinStyle() )
     {
-    case 1:             /* vertical text */
-        SetOrientation( 3 );
+    case 1:             // vertical text
+        SetLabelSpinStyle( 3 );
         break;
 
-    case 3:        /* invert vertical text*/
-        SetOrientation( 1 );
+    case 3:        // invert vertical text
+        SetLabelSpinStyle( 1 );
         break;
     }
 
-    MIRROR( m_Pos.y, aXaxis_position );
+    SetTextY( Mirror( GetTextPos().y, aXaxis_position ) );
 }
 
 
 void SCH_HIERLABEL::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, aPosition, 900 );
-    SetOrientation( (GetOrientation() + 3) % 4 );
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aPosition, 900 );
+    SetTextPos( pt );
+
+    SetLabelSpinStyle( (GetLabelSpinStyle() + 3) % 4 );
 }
 
 

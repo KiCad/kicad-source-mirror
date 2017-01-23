@@ -107,10 +107,10 @@ void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField )
     if( aField->GetFlags() == 0 )
         SaveCopyInUndoList( component, UR_CHANGED );
 
-    if( aField->GetOrientation() == TEXT_ORIENT_HORIZ )
-        aField->SetOrientation( TEXT_ORIENT_VERT );
+    if( aField->GetTextAngle() == TEXT_ANGLE_HORIZ )
+        aField->SetTextAngle( TEXT_ANGLE_VERT );
     else
-        aField->SetOrientation( TEXT_ORIENT_HORIZ );
+        aField->SetTextAngle( TEXT_ANGLE_HORIZ );
 
     OnModify();
 }

@@ -65,36 +65,48 @@ enum EDA_DRAW_MODE_T {
  * you do not fully realize the effect it has on sexp serialization
  * (text size equal to this is not explicitly wrote, so it would change
  * subsequent reads) */
-#define DEFAULT_SIZE_TEXT 60    // default text height (in mils, i.e. 1/1000")
-#define TEXT_NO_VISIBLE   1     //< EDA_TEXT::m_Attribut(e?) visibility flag.
-#define DIM_ANCRE_TEXTE  2      // Anchor size for text
+#define DEFAULT_SIZE_TEXT   60      // default text height (in mils, i.e. 1/1000")
+#define DIM_ANCRE_TEXTE     2       // Anchor size for text
+
+
+/**
+ * Struct TEXT_EFFECTS
+ * is a bucket for text effects.  These fields are bundled so they
+ * can be easily copied together as a lot. The privacy policy is established
+ * by client (incorporating) code.
+ */
+struct TEXT_EFFECTS
+{
+    TEXT_EFFECTS( int aSetOfBits = 0 ) :
+        bits( aSetOfBits ),
+        hjustify( GR_TEXT_HJUSTIFY_CENTER ),
+        vjustify( GR_TEXT_VJUSTIFY_CENTER ),
+        penwidth( 0 ),
+        angle( 0.0 )
+    {}
+
+    short       bits;           ///< any set of booleans a client uses.
+    signed char hjustify;       ///< horizontal justification
+    signed char vjustify;       ///< vertical justification
+    wxSize      size;
+    int         penwidth;
+    double      angle;          ///< now: 0.1 degrees; future: degrees
+    wxPoint     pos;
+
+    void Bit( int aBit, bool aValue )   { aValue ? bits |= (1<<aBit) : bits &= ~(1<<aBit); }
+    bool Bit( int aBit ) const          { return bits & (1<<aBit); }
+};
 
 
 /**
  * Class EDA_TEXT
- * is a basic class to handle texts (labels, texts on components or footprints
- * ..) not used directly. The "used" text classes are derived from EDA_ITEM and
- * EDA_TEXT using multiple inheritance.
+ * is a mix-in class (via multiple inheritance) that handles texts such as
+ * labels, parts, components, or footprints.  Because it's a mix-in class, care
+ * is used to provide function names (accessors) that to not collide with function
+ * names likely to be seen in the combined derived classes.
  */
 class EDA_TEXT
 {
-protected:
-    wxString            m_Text;             ///< The 'base' text, maybe later processed for display
-    int                 m_Thickness;        ///< pen size used to draw this text
-    double              m_Orient;           ///< Orient in 0.1 degrees
-    wxPoint             m_Pos;              ///< XY position of anchor text.
-    wxSize              m_Size;             ///< XY size of text
-    bool                m_Mirror;           ///< true if mirrored
-    int                 m_Attributs;        ///< bit flags such as visible, etc.
-    bool                m_Italic;           ///< should be italic font (if available)
-    bool                m_Bold;             ///< should be bold font (if available)
-    EDA_TEXT_HJUSTIFY_T m_HJustify;         ///< horizontal justification
-    EDA_TEXT_VJUSTIFY_T m_VJustify;         ///< vertical justification
-    bool                m_MultilineAllowed; /**< true to use multiline option, false
-                                             * to use only single line text
-                                             * Single line is faster in
-                                             * calculations than multiline */
-
 public:
     EDA_TEXT( const wxString& text = wxEmptyString );
 
@@ -124,74 +136,93 @@ public:
 
     /**
      * Function SetThickness
-     * sets text thickness.
-     * @param aNewThickness is the new text thickness.
+     * sets pen width.
+     * @param aNewThickness is the new pen width
      */
-    void SetThickness( int aNewThickness ) { m_Thickness = aNewThickness; };
+    void SetThickness( int aNewThickness )      { m_e.penwidth = aNewThickness; };
 
     /**
      * Function GetThickness
-     * returns text thickness.
-     * @return int - text thickness.
+     * returns pen width.
      */
-    int GetThickness() const               { return m_Thickness; };
+    int GetThickness() const                    { return m_e.penwidth; };
 
-    void SetOrientation( double aOrientation );
-    void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation*10.0 ); }
-    double GetOrientation() const          { return m_Orient; }
-    double GetOrientationDegrees() const   { return m_Orient/10.0; }
-    double GetOrientationRadians() const   { return m_Orient*M_PI/1800; }
-
-    void SetItalic( bool isItalic )        { m_Italic = isItalic; }
-    bool IsItalic() const                  { return m_Italic; }
-
-    void SetBold( bool aBold )             { m_Bold = aBold; }
-    bool IsBold() const                    { return m_Bold; }
-
-    void SetVisible( bool aVisible )
+    void SetTextAngle( double aAngle )
     {
-        ( aVisible ) ? m_Attributs &= ~TEXT_NO_VISIBLE : m_Attributs |= TEXT_NO_VISIBLE;
+        // Higher level classes may be more restrictive than this by
+        // overloading SetTextAngle() (probably non-virtual) or merely
+        // calling EDA_TEXT::SetTextAngle() after clamping aAngle
+        // before calling this lowest inline accessor.
+        m_e.angle = aAngle;
     }
-    bool IsVisible() const                 { return !( m_Attributs & TEXT_NO_VISIBLE ); }
+    double GetTextAngle() const                 { return m_e.angle; }
 
-    void SetMirrored( bool isMirrored )    { m_Mirror = isMirrored; }
-    bool IsMirrored() const                { return m_Mirror; }
+    double GetTextAngleDegrees() const          { return GetTextAngle() / 10.0; }
+    double GetTextAngleRadians() const          { return GetTextAngle() * M_PI/1800; }
 
-    void SetAttributes( int aAttributes )  { m_Attributs = aAttributes; }
-    int GetAttributes() const              { return m_Attributs; }
+    void SetItalic( bool isItalic )             { m_e.Bit( TE_ITALIC, isItalic ); }
+    bool IsItalic() const                       { return m_e.Bit( TE_ITALIC ); }
+
+    void SetBold( bool aBold )                  { m_e.Bit( TE_BOLD, aBold); }
+    bool IsBold() const                         { return m_e.Bit( TE_BOLD ); }
+
+    void SetVisible( bool aVisible )            { m_e.Bit( TE_VISIBLE, aVisible ); }
+    bool IsVisible() const                      { return m_e.Bit( TE_VISIBLE ); }
+
+    void SetMirrored( bool isMirrored )         { m_e.Bit( TE_MIRROR, isMirrored ); }
+    bool IsMirrored() const                     { return m_e.Bit( TE_MIRROR ); }
+
+    /**
+     * Function SetMultiLineAllowed
+     * @param aAllow true if ok to use multiline option, false
+     *  if ok to use only single line text.  (Single line is faster in
+     *  calculations than multiline.)
+     */
+    void SetMultilineAllowed( bool aAllow )     { m_e.Bit( TE_MULTILINE, aAllow ); }
+    bool IsMultilineAllowed() const             { return m_e.Bit( TE_MULTILINE ); }
+
+    EDA_TEXT_HJUSTIFY_T GetHorizJustify() const { return EDA_TEXT_HJUSTIFY_T( m_e.hjustify ); };
+    EDA_TEXT_VJUSTIFY_T GetVertJustify() const  { return EDA_TEXT_VJUSTIFY_T( m_e.vjustify ); };
+
+    void SetHorizJustify( EDA_TEXT_HJUSTIFY_T aType )   { m_e.hjustify = aType; };
+    void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType )    { m_e.vjustify = aType; };
+
+    /**
+     * Function SetEffects
+     * sets the text effects from another instance.  (TEXT_EFFECTS
+     * is not exposed in the public API, but includes everything except the actual
+     * text string itself.)
+     */
+    void SetEffects( const EDA_TEXT& aSrc );
+
+    /**
+     * Function SwapEffects
+     * swaps the text effects of the two involved instances.  (TEXT_EFECTS
+     * is not exposed in the public API, but includes everything except the actual
+     * text string itself.)
+     */
+    void SwapEffects( EDA_TEXT& aTradingPartner );
 
     bool IsDefaultFormatting() const;
 
-    /**
-     * Function SetSize
-     * sets text size.
-     * @param aNewSize is the new text size.
-     */
-    void SetSize( const wxSize& aNewSize ) { m_Size = aNewSize; };
+    void SetTextSize( const wxSize& aNewSize )  { m_e.size = aNewSize; };
+    const wxSize& GetTextSize() const           { return m_e.size; };
 
-    /**
-     * Function GetSize
-     * returns text size.
-     * @return wxSize - text size.
-     */
-    const wxSize& GetSize() const          { return m_Size; };
+    void SetTextWidth( int aWidth )             { m_e.size.x = aWidth; }
+    int GetTextWidth() const                    { return m_e.size.x; }
 
-    void SetWidth( int aWidth ) { m_Size.x = aWidth; }
-    int GetWidth() const { return m_Size.x; }
+    void SetTextHeight( int aHeight )           { m_e.size.y = aHeight; }
+    int GetTextHeight() const                   { return m_e.size.y; }
 
-    void SetHeight( int aHeight ) { m_Size.y = aHeight; }
-    int GetHeight() const { return m_Size.y; }
+    void SetTextPos( const wxPoint& aPoint )    { m_e.pos = aPoint; }
+    const wxPoint& GetTextPos() const           { return m_e.pos; }
 
-    /// named differently than the ones using multiple inheritance and including this class
-    void SetTextPosition( const wxPoint& aPoint ) { m_Pos = aPoint; }
-    const wxPoint& GetTextPosition() const { return m_Pos; }
+    void SetTextX( int aX )                     { m_e.pos.x = aX; }
+    void SetTextY( int aY )                     { m_e.pos.y = aY; }
 
-    void SetMultilineAllowed( bool aAllow )  { m_MultilineAllowed = aAllow; }
-    bool IsMultilineAllowed() const          { return m_MultilineAllowed; }
+    void Offset( const wxPoint& aOffset )       { m_e.pos += aOffset; }
 
-    void Offset( const wxPoint& aOffset ) { m_Pos += aOffset; }
-
-    void Empty() { m_Text.Empty(); }
+    void Empty()                                { m_Text.Empty(); }
 
     /**
      * Function Draw
@@ -256,9 +287,8 @@ public:
      * @param aLine The line of text to consider.
      * for single line text, aLine is unused
      * If aLine == -1, the full area (considering all lines) is returned
-     * @param aThickness Overrides the current thickness when greater than 0.
-     * this is needed when the current m_Thickness is 0 and a default line thickness
-     * is used
+     * @param aThickness Overrides the current penwidth when greater than 0.
+     * This is needed when the current penwidth is 0 and a default penwidth is used.
      * @param aInvertY Invert the Y axis when calculating bounding box.
      */
     EDA_RECT GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false ) const;
@@ -267,6 +297,12 @@ public:
      * Function GetInterline
      * return the distance between 2 text lines
      * has meaning only for multiline texts
+     * <p>
+     * Calculates the distance (pitch) between 2 text lines
+     * the distance includes the interline + room for chars like j { and [
+     * Is used for multiline texts, but also for single line texts, to calculate
+     * the text bounding box
+     *.
      * @param aTextThickness Overrides the current thickness when greater than 0.
      * this is needed when the current m_Thickness is 0 and a default line thickness
      * is used
@@ -278,12 +314,6 @@ public:
      * @return a wxString with the style name( Normal, Italic, Bold, Bold+Italic)
      */
     wxString GetTextStyleName();
-
-    EDA_TEXT_HJUSTIFY_T GetHorizJustify() const         { return m_HJustify; };
-    EDA_TEXT_VJUSTIFY_T GetVertJustify() const          { return m_VJustify; };
-
-    void SetHorizJustify( EDA_TEXT_HJUSTIFY_T aType )   { m_HJustify = aType; };
-    void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType )    { m_VJustify = aType; };
 
     /**
      * Function GetPositionsOfLinesOfMultilineText
@@ -308,11 +338,13 @@ public:
     virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
 
-private:
+protected:
+    wxString    m_Text;
 
+private:
     /**
      * Function drawOneLineOfText
-     * Draw a single text line.
+     * draws a single text line.
      * Used to draw each line of this EDA_TEXT, that can be multiline
      * @param aClipBox = the clipping rect, or NULL if no clipping
      * @param aDC = the current Device Context
@@ -326,7 +358,20 @@ private:
     void drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
                             const wxPoint& aOffset, EDA_COLOR_T aColor,
                             GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
-                            const wxString& aText, const wxPoint &aPos );
+                            const wxString& aText, const wxPoint& aPos );
+
+    // Private text effects data. API above provides accessor funcs.
+    TEXT_EFFECTS    m_e;
+
+    /// EDA_TEXT effects bools
+    enum TE_FLAGS {
+        // start at zero, sequence is irrelevant
+        TE_MIRROR,
+        TE_ITALIC,
+        TE_BOLD,
+        TE_MULTILINE,
+        TE_VISIBLE,
+    };
 };
 
 

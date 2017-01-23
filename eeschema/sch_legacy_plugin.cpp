@@ -881,7 +881,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( FILE_LINE_READER& aReader )
 
                 size = parseInt( aReader, line, &line );
 
-                sheetPin->SetSize( wxSize( size, size ) );
+                sheetPin->SetTextSize( wxSize( size, size ) );
 
                 sheet->AddPin( sheetPin.release() );
             }
@@ -1131,11 +1131,11 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
     position.x = parseInt( aReader, line, &line );
     position.y = parseInt( aReader, line, &line );
     text->SetPosition( position );
-    text->SetOrientation( parseInt( aReader, line, &line ) );
+    text->SetLabelSpinStyle( parseInt( aReader, line, &line ) );
 
     int size = parseInt( aReader, line, &line );
 
-    text->SetSize( wxSize( size, size ) );
+    text->SetTextSize( wxSize( size, size ) );
 
     // Parse the global and hierarchical label type.
     if( text->Type() == SCH_HIERARCHICAL_LABEL_T || text->Type() == SCH_GLOBAL_LABEL_T )
@@ -1379,14 +1379,14 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             }
 
             component->GetField( index )->SetText( text );
-            component->GetField( index )->SetTextPosition( pos );
-            component->GetField( index )->SetAttributes( attributes );
-            component->GetField( index )->SetSize( wxSize( size, size ) );
+            component->GetField( index )->SetTextPos( pos );
+            component->GetField( index )->SetVisible( !attributes );
+            component->GetField( index )->SetTextSize( wxSize( size, size ) );
 
             if( orientation == 'H' )
-                component->GetField( index )->SetOrientation( TEXT_ORIENT_HORIZ );
+                component->GetField( index )->SetTextAngle( TEXT_ANGLE_HORIZ );
             else if( orientation == 'V' )
-                component->GetField( index )->SetOrientation( TEXT_ORIENT_VERT );
+                component->GetField( index )->SetTextAngle( TEXT_ANGLE_VERT );
             else
                 SCH_PARSE_ERROR( _( "component field orientation must be H or V" ),
                                  aReader, line );
@@ -1671,10 +1671,10 @@ void SCH_LEGACY_PLUGIN::saveField( SCH_FIELD* aField )
     m_out->Print( 0, "F %d %s %c %-3d %-3d %-3d %4.4X %c %c%c%c",
                   aField->GetId(),
                   EscapedUTF8( aField->GetText() ).c_str(),     // wraps in quotes too
-                  aField->GetOrientation() == TEXT_ORIENT_HORIZ ? 'H' : 'V',
+                  aField->GetTextAngle() == TEXT_ANGLE_HORIZ ? 'H' : 'V',
                   aField->GetLibPosition().x, aField->GetLibPosition().y,
-                  aField->GetSize().x,
-                  aField->GetAttributes(),
+                  aField->GetTextWidth(),
+                  !aField->IsVisible(),
                   hjustify, vjustify,
                   aField->IsItalic() ? 'I' : 'N',
                   aField->IsBold() ? 'B' : 'N' );
@@ -1732,7 +1732,8 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
     wxCHECK_RET( aSheet != NULL, "SCH_SHEET* is NULL" );
 
     m_out->Print( 0, "$Sheet\n" );
-    m_out->Print( 0, "S %-4d %-4d %-4d %-4d\n", aSheet->GetPosition().x, aSheet->GetPosition().y,
+    m_out->Print( 0, "S %-4d %-4d %-4d %-4d\n",
+                  aSheet->GetPosition().x, aSheet->GetPosition().y,
                   aSheet->GetSize().x, aSheet->GetSize().y );
 
     m_out->Print( 0, "U %8.8lX\n", (unsigned long) aSheet->GetTimeStamp() );
@@ -1794,7 +1795,7 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
         m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n", pin.GetNumber(),
                       EscapedUTF8( pin.GetText() ).c_str(),     // supplies wrapping quotes
                       type, side, pin.GetPosition().x, pin.GetPosition().y,
-                      pin.GetSize().x );
+                      pin.GetTextWidth() );
     }
 
     m_out->Print( 0, "$EndSheet\n" );
@@ -1894,16 +1895,21 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
         }
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %d\n%s\n", textType,
-                      aText->GetPosition().x, aText->GetPosition().y, aText->GetOrientation(),
-                      aText->GetSize().x, italics, aText->GetThickness(), TO_UTF8( text ) );
+                      aText->GetPosition().x, aText->GetPosition().y,
+                      aText->GetLabelSpinStyle(),
+                      aText->GetTextWidth(),
+                      italics, aText->GetThickness(), TO_UTF8( text ) );
     }
     else if( layer == LAYER_GLOBLABEL || layer == LAYER_HIERLABEL )
     {
         textType = ( layer == LAYER_GLOBLABEL ) ? "GLabel" : "HLabel";
 
         m_out->Print( 0, "Text %s %-4d %-4d %-4d %-4d %s %s %d\n%s\n", textType,
-                      aText->GetPosition().x, aText->GetPosition().y, aText->GetOrientation(),
-                      aText->GetSize().x, SheetLabelType[aText->GetShape()], italics,
+                      aText->GetPosition().x, aText->GetPosition().y,
+                      aText->GetLabelSpinStyle(),
+                      aText->GetTextWidth(),
+                      SheetLabelType[aText->GetShape()],
+                      italics,
                       aText->GetThickness(), TO_UTF8( text ) );
     }
 }
@@ -2524,14 +2530,14 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
     wxSize textSize;
 
     textSize.x = textSize.y = parseInt( aReader, line, &line );
-    field->SetSize( textSize );
+    field->SetTextSize( textSize );
 
     char textOrient = parseChar( aReader, line, &line );
 
     if( textOrient == 'H' )
-        field->SetOrientation( TEXT_ORIENT_HORIZ );
+        field->SetTextAngle( TEXT_ANGLE_HORIZ );
     else if( textOrient == 'V' )
-        field->SetOrientation( TEXT_ORIENT_VERT );
+        field->SetTextAngle( TEXT_ANGLE_VERT );
     else
         SCH_PARSE_ERROR( _( "invalid field text orientation parameter" ), aReader, line );
 
@@ -2818,7 +2824,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
 
     std::unique_ptr< LIB_TEXT > text( new LIB_TEXT( aPart.get() ) );
 
-    text->SetOrientation( (double) parseInt( aReader, line, &line ) );
+    text->SetTextAngle( (double) parseInt( aReader, line, &line ) );
 
     wxPoint center;
 
@@ -2829,8 +2835,8 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
     wxSize size;
 
     size.x = size.y = parseInt( aReader, line, &line );
-    text->SetSize( size );
-    text->SetAttributes( parseInt( aReader, line, &line ) );
+    text->SetTextSize( size );
+    text->SetVisible( !parseInt( aReader, line, &line ) );
     text->SetUnit( parseInt( aReader, line, &line ) );
     text->SetConvert( parseInt( aReader, line, &line ) );
 

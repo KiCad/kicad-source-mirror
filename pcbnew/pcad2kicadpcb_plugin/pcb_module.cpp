@@ -536,7 +536,7 @@ void PCB_MODULE::AddToBoard()
     SetTextSizeFromStrokeFontHeight( ref_text, m_name.textHeight );
 
     r = m_name.textRotation - m_rotation;
-    ref_text->SetOrientation( r );
+    ref_text->SetTextAngle( r );
 
     ref_text->SetThickness( m_name.textstrokeWidth );
 
@@ -558,7 +558,7 @@ void PCB_MODULE::AddToBoard()
     SetTextSizeFromStrokeFontHeight( val_text, m_value.textHeight );
 
     r = m_value.textRotation - m_rotation;
-    val_text->SetOrientation( r );
+    val_text->SetTextAngle( r );
 
     val_text->SetThickness( m_value.textstrokeWidth );
 

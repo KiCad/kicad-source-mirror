@@ -172,7 +172,7 @@ public:
 
     void Move( const wxPoint& aMoveVector ) override
     {
-        m_Pos += aMoveVector;
+        Offset( aMoveVector );
     }
 
     void MirrorY( int aYaxis_position ) override;

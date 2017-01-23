@@ -103,9 +103,14 @@ static inline const wxChar* GetChars( const wxString& s )
  * Mirror @a aPoint in @a aMirrorRef.
  */
 template<typename T>
+T Mirror( T aPoint, T aMirrorRef )
+{
+    return -( aPoint - aMirrorRef ) + aMirrorRef;
+}
+template<typename T>
 void MIRROR( T& aPoint, const T& aMirrorRef )
 {
-    aPoint = -( aPoint - aMirrorRef ) + aMirrorRef;
+    aPoint = Mirror( aPoint, aMirrorRef );
 }
 
 

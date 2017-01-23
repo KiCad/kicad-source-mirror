@@ -147,7 +147,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART*      LibEntry, wxDC* DC )
+LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
 {
     m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
     wxPoint drawPos = GetCrossHairPosition( true );
@@ -176,24 +176,25 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART*      LibEntry, wxDC* DC )
 
     case ID_LIBEDIT_BODY_TEXT_BUTT:
         {
-            LIB_TEXT* Text = new LIB_TEXT( LibEntry );
-            Text->SetSize( wxSize( m_textSize, m_textSize ) );
-            Text->SetOrientation( m_textOrientation );
+            LIB_TEXT* text = new LIB_TEXT( LibEntry );
+            text->SetTextSize( wxSize( m_textSize, m_textSize ) );
+            text->SetTextAngle( m_current_text_angle );
 
             // Enter the graphic text info
             m_canvas->SetIgnoreMouseEvents( true );
-            EditSymbolText( NULL, Text );
+            EditSymbolText( NULL, text );
+
             m_canvas->SetIgnoreMouseEvents( false );
             m_canvas->MoveCursorToCrossHair();
 
-            if( Text->GetText().IsEmpty() )
+            if( text->GetText().IsEmpty() )
             {
-                delete Text;
+                delete text;
                 m_drawItem = NULL;
             }
             else
             {
-                m_drawItem = Text;
+                m_drawItem = text;
             }
         }
         break;

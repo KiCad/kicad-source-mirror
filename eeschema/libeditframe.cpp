@@ -71,7 +71,7 @@ LIB_ITEM* LIB_EDIT_FRAME::m_drawItem = NULL;
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
 wxSize LIB_EDIT_FRAME::        m_clientSize      = wxSize( -1, -1 );
 int LIB_EDIT_FRAME::           m_textSize        = -1;
-int LIB_EDIT_FRAME::           m_textOrientation = TEXT_ORIENT_HORIZ;
+double LIB_EDIT_FRAME::        m_current_text_angle = TEXT_ANGLE_HORIZ;
 int LIB_EDIT_FRAME::           m_drawLineWidth   = 0;
 
 // these values are overridden when reading the config

@@ -1491,9 +1491,9 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                 pcbtxt->SetLayer( layer );
                 pcbtxt->SetTimeStamp( timeStamp( gr->second ) );
                 pcbtxt->SetText( FROM_UTF8( t.text.c_str() ) );
-                pcbtxt->SetTextPosition( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
+                pcbtxt->SetTextPos( wxPoint( kicad_x( t.x ), kicad_y( t.y ) ) );
 
-                pcbtxt->SetSize( kicad_fontz( t.size ) );
+                pcbtxt->SetTextSize( kicad_fontz( t.size ) );
 
                 double  ratio = t.ratio ? *t.ratio : 8;     // DTD says 8 is default
 
@@ -1509,12 +1509,12 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
                     double degrees = t.rot->degrees;
 
                     if( degrees == 90 || t.rot->spin )
-                        pcbtxt->SetOrientation( sign * t.rot->degrees * 10 );
+                        pcbtxt->SetTextAngle( sign * t.rot->degrees * 10 );
                     else if( degrees == 180 )
                         align = ETEXT::TOP_RIGHT;
                     else if( degrees == 270 )
                     {
-                        pcbtxt->SetOrientation( sign * 90 * 10 );
+                        pcbtxt->SetTextAngle( sign * 90 * 10 );
                         align = ETEXT::TOP_RIGHT;
                     }
                 }
@@ -1681,10 +1681,10 @@ void EAGLE_PLUGIN::loadPlain( CPTREE& aGraphics )
             // The origin and end are assumed to always be in this order from eagle
             dimension->SetOrigin( wxPoint( kicad_x( d.x1 ), kicad_y( d.y1 ) ) );
             dimension->SetEnd( wxPoint( kicad_x( d.x2 ), kicad_y( d.y2 ) ) );
-            dimension->Text().SetSize( m_board->GetDesignSettings().m_PcbTextSize );
+            dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
 
             int width = m_board->GetDesignSettings().m_PcbTextWidth;
-            int maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
+            int maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
 
             if( width > maxThickness )
                 width = maxThickness;
@@ -2031,18 +2031,18 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
         if( a.x && a.y )    // boost::optional
         {
             wxPoint pos( kicad_x( *a.x ), kicad_y( *a.y ) );
-            txt->SetTextPosition( pos );
+            txt->SetTextPos( pos );
         }
 
         // Even though size and ratio are both optional, I am not seeing
         // a case where ratio is present but size is not.
         double  ratio = 8;
-        wxSize  fontz = txt->GetSize();
+        wxSize  fontz = txt->GetTextSize();
 
         if( a.size )
         {
             fontz = kicad_fontz( *a.size );
-            txt->SetSize( fontz );
+            txt->SetTextSize( fontz );
 
             if( a.ratio )
                 ratio = *a.ratio;
@@ -2073,24 +2073,24 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
         if( degrees == 90 || degrees == 0 || spin )
         {
             orient = degrees - m->GetOrientation() / 10;
-            txt->SetOrientation( sign * orient * 10 );
+            txt->SetTextAngle( sign * orient * 10 );
         }
         else if( degrees == 180 )
         {
             orient = 0 - m->GetOrientation() / 10;
-            txt->SetOrientation( sign * orient * 10 );
+            txt->SetTextAngle( sign * orient * 10 );
             align = ETEXT::TOP_RIGHT;
         }
         else if( degrees == 270 )
         {
             orient = 90 - m->GetOrientation() / 10;
             align = ETEXT::TOP_RIGHT;
-            txt->SetOrientation( sign * orient * 10 );
+            txt->SetTextAngle( sign * orient * 10 );
         }
         else
         {
             orient = 90 - degrees - m->GetOrientation() / 10;
-            txt->SetOrientation( sign * orient * 10 );
+            txt->SetTextAngle( sign * orient * 10 );
         }
 
         switch( align )
@@ -2111,7 +2111,7 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e,
     }
     else    // Part is not smash so use Lib default for NAME/VALUE // the text is per the original package, sans <attribute>
     {
-        double degrees = ( txt->GetOrientation() + m->GetOrientation() ) / 10;
+        double degrees = ( txt->GetTextAngle() + m->GetOrientation() ) / 10;
 
         // @todo there are a few more cases than these to contend with:
         if( (!txt->IsMirrored() && ( abs( degrees ) == 180 || abs( degrees ) == 270 ))
@@ -2322,12 +2322,11 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
 
     wxPoint pos( kicad_x( t.x ), kicad_y( t.y ) );
 
-    txt->SetTextPosition( pos );
+    txt->SetTextPos( pos );
     txt->SetPos0( pos - aModule->GetPosition() );
 
     txt->SetLayer( layer );
-
-    txt->SetSize( kicad_fontz( t.size ) );
+    txt->SetTextSize( kicad_fontz( t.size ) );
 
     double ratio = t.ratio ? *t.ratio : 8;  // DTD says 8 is default
 
@@ -2346,13 +2345,13 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, CPTREE& aTree ) const
         double degrees = t.rot->degrees;
 
         if( degrees == 90 || t.rot->spin )
-            txt->SetOrientation( sign * degrees * 10 );
+            txt->SetTextAngle( sign * degrees * 10 );
         else if( degrees == 180 )
             align = ETEXT::TOP_RIGHT;
         else if( degrees == 270 )
         {
             align = ETEXT::TOP_RIGHT;
-            txt->SetOrientation( sign * 90 * 10 );
+            txt->SetTextAngle( sign * 90 * 10 );
         }
     }
 

@@ -136,10 +136,10 @@ bool DialogEditModuleText::TransferDataToWindow()
     m_Style->SetSelection( m_currentText->IsItalic() ? 1 : 0 );
 
     AddUnitSymbol( *m_SizeXTitle );
-    PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->GetSize().x );
+    PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->GetTextWidth() );
 
     AddUnitSymbol( *m_SizeYTitle );
-    PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->GetSize().y );
+    PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->GetTextHeight() );
 
     AddUnitSymbol( *m_PosXTitle );
     PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->GetPos0().x );
@@ -150,10 +150,10 @@ bool DialogEditModuleText::TransferDataToWindow()
     AddUnitSymbol( *m_WidthTitle );
     PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->GetThickness() );
 
-    double text_orient = m_currentText->GetOrientation();
+    double text_orient = m_currentText->GetTextAngle();
     NORMALIZE_ANGLE_90( text_orient );
 
-    if( (text_orient != 0) )
+    if( text_orient != 0.0 )
         m_Orient->SetSelection( 1 );
 
     if( !m_currentText->IsVisible() )
@@ -244,7 +244,7 @@ bool DialogEditModuleText::TransferDataFromWindow()
     if( textSize.y < TEXTS_MIN_SIZE )
         textSize.y = TEXTS_MIN_SIZE;
 
-    m_currentText->SetSize( textSize );
+    m_currentText->SetTextSize( textSize );
 
     int width = ValueFromString( g_UserUnit, m_TxtWidthCtlr->GetValue() );
 
@@ -252,7 +252,7 @@ bool DialogEditModuleText::TransferDataFromWindow()
     if( width <= 1 )
         width = 1;
 
-    int maxthickness = Clamp_Text_PenSize(width, m_currentText->GetSize() );
+    int maxthickness = Clamp_Text_PenSize(width, m_currentText->GetTextSize() );
 
     if( width > maxthickness )
     {
@@ -269,24 +269,24 @@ bool DialogEditModuleText::TransferDataFromWindow()
     switch( m_Orient->GetSelection() )
     {
     case 0:
-        m_currentText->SetOrientation( 0 );
+        m_currentText->SetTextAngle( 0 );
         break;
 
     case 1:
-        m_currentText->SetOrientation( 900 );
+        m_currentText->SetTextAngle( 900 );
         break;
 
     case 2:
-        m_currentText->SetOrientation( -900 );
+        m_currentText->SetTextAngle( -900 );
         break;
 
     default:
         custom_orientation = true;
-        m_currentText->SetOrientation( KiROUND( m_OrientValue * 10.0 ) );
+        m_currentText->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
         break;
     };
 
-    switch( int( m_currentText->GetOrientation() ) )
+    switch( int( m_currentText->GetTextAngle() ) )
     {
     case 0:
         m_Orient->SetSelection( 0 );
@@ -304,11 +304,11 @@ bool DialogEditModuleText::TransferDataFromWindow()
 
     default:
         m_Orient->SetSelection( 3 );
-        m_currentText->SetOrientation( KiROUND( m_OrientValue * 10.0 ) );
+        m_currentText->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
         custom_orientation = true;
         break;
     }
-    m_OrientValue = 10.0 * m_currentText->GetOrientation();
+    m_OrientValue = 10.0 * m_currentText->GetTextAngle();
     m_OrientValueCtrl->Enable( custom_orientation );
     m_OrientValidator.TransferToWindow();
 

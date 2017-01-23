@@ -548,11 +548,13 @@ void CorrectTextPosition( TTEXTVALUE* aValue )
     }
 }
 
+
 void SetTextSizeFromStrokeFontHeight( EDA_TEXT* aText, int aTextHeight )
 {
-    aText->SetSize( wxSize( KiROUND( aTextHeight * TEXT_WIDTH_TO_SIZE ),
-                            KiROUND( aTextHeight * TEXT_HEIGHT_TO_SIZE ) ) );
+    aText->SetTextSize( wxSize( KiROUND( aTextHeight * TEXT_WIDTH_TO_SIZE ),
+                                KiROUND( aTextHeight * TEXT_HEIGHT_TO_SIZE ) ) );
 }
+
 
 XNODE* FindNode( XNODE* aChild, wxString aTag )
 {

@@ -407,7 +407,7 @@ void GBR_LAYOUT::DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
             else
                 width = std::min( item->m_Size.x, item->m_Size.y );
 
-            double orient = TEXT_ORIENT_HORIZ;
+            double orient = TEXT_ANGLE_HORIZ;
 
             if( item->m_Flashed )
             {
@@ -419,7 +419,7 @@ void GBR_LAYOUT::DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                 wxPoint delta = item->m_Start - item->m_End;
 
                 if( abs( delta.x ) < abs( delta.y ) )
-                    orient = TEXT_ORIENT_VERT;
+                    orient = TEXT_ANGLE_VERT;
 
                 // A reasonable size for text is width/2 because text needs margin below and above it.
                 // a margin = width/4 seems good

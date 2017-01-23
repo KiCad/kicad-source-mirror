@@ -184,9 +184,7 @@ double DRAWSEGMENT::GetArcAngleStart() const
 
 void DRAWSEGMENT::SetAngle( double aAngle )
 {
-    NORMALIZE_ANGLE_360( aAngle );
-
-    m_Angle = aAngle;
+    m_Angle = NormalizeAngle360( aAngle );
 }
 
 

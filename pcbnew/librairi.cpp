@@ -791,7 +791,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
         module->SetReference( settings.m_RefDefaultText );
 
     module->Reference().SetThickness( settings.m_ModuleTextWidth );
-    module->Reference().SetSize( settings.m_ModuleTextSize );
+    module->Reference().SetTextSize( settings.m_ModuleTextSize );
     default_pos.y = GetDesignSettings().m_ModuleTextSize.y / 2;
     module->Reference().SetPosition( default_pos );
     module->Reference().SetLayer( ToLAYER_ID( settings.m_RefDefaultlayer ) );
@@ -804,7 +804,7 @@ MODULE* PCB_BASE_FRAME::CreateNewModule( const wxString& aModuleName )
         module->SetValue( settings.m_ValueDefaultText );
 
     module->Value().SetThickness( GetDesignSettings().m_ModuleTextWidth );
-    module->Value().SetSize( GetDesignSettings().m_ModuleTextSize );
+    module->Value().SetTextSize( GetDesignSettings().m_ModuleTextSize );
     default_pos.y = -default_pos.y;
     module->Value().SetPosition( default_pos );
     module->Value().SetLayer( ToLAYER_ID( settings.m_ValueDefaultlayer ) );

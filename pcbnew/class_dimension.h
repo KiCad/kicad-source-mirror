@@ -93,15 +93,15 @@ public:
 
     void SetTextSize( const wxSize& aTextSize )
     {
-        m_Text.SetSize( aTextSize );
+        m_Text.SetTextSize( aTextSize );
     }
 
     void SetLayer( LAYER_ID aLayer ) override;
 
     void SetShape( int aShape )         { m_Shape = aShape; }
-    int GetShape() const { return m_Shape; }
+    int GetShape() const                { return m_Shape; }
 
-    int GetWidth() const { return m_Width; }
+    int GetWidth() const                { return m_Width; }
     void SetWidth( int aWidth )         { m_Width = aWidth; }
 
     /**

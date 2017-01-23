@@ -76,14 +76,16 @@ public:
 
     virtual const wxPoint& GetPosition() const override
     {
-        return m_Pos;
+        return EDA_TEXT::GetTextPos();
     }
 
     virtual void SetPosition( const wxPoint& aPos ) override
     {
-        m_Pos = aPos;
+        EDA_TEXT::SetTextPos( aPos );
         SetLocalCoord();
     }
+
+    void SetTextAngle( double aAngle );
 
     /// Rotate text, in footprint editor
     /// (for instance in footprint rotation transform)
@@ -106,8 +108,28 @@ public:
     void SetType( TEXT_TYPE aType )     { m_Type = aType; }
     TEXT_TYPE GetType() const           { return m_Type; }
 
-    void SetVisible( bool isVisible )   { m_NoShow = !isVisible; }
-    bool IsVisible() const              { return !m_NoShow; }
+    /**
+     * Function SetEffects
+     * sets the text effects from another instance.
+     */
+    void SetEffects( const TEXTE_MODULE& aSrc )
+    {
+        EDA_TEXT::SetEffects( aSrc );
+        SetLocalCoord();
+        // SetType( aSrc.GetType() );
+    }
+
+    /**
+     * Function SwapEffects
+     * swaps the text effects of the two involved instances.
+     */
+    void SwapEffects( TEXTE_MODULE& aTradingPartner )
+    {
+        EDA_TEXT::SwapEffects( aTradingPartner );
+        SetLocalCoord();
+        aTradingPartner.SetLocalCoord();
+        // std::swap( m_Type, aTradingPartner.m_Type );
+    }
 
     // The Pos0 accessors are for module-relative coordinates
     void SetPos0( const wxPoint& aPos ) { m_Pos0 = aPos; SetDrawCoord(); }
@@ -196,10 +218,9 @@ private:
      */
 
     TEXT_TYPE m_Type;       ///< 0=ref, 1=val, etc.
-    bool      m_NoShow;     ///< true = invisible
 
-    wxPoint   m_Pos0;       ///< text coordinates relatives to the footprint anchor, orient 0.
-                            ///< text coordinate ref point is the text centre
+    wxPoint   m_Pos0;       ///< text coordinates relative to the footprint anchor, orient 0.
+                            ///< text coordinate ref point is the text center
 };
 
 #endif // TEXT_MODULE_H_

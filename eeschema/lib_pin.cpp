@@ -700,7 +700,7 @@ bool LIB_PIN::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
     // the full line starts by "X ". The pin data starts at line + 2.
     wxString utf8line = FROM_UTF8( aLineReader.Line() + 2 );
-	wxStringTokenizer tokenizer( utf8line, wxT(" \n\r" ) );
+    wxStringTokenizer tokenizer( utf8line, wxT(" \n\r" ) );
     int prms_count = tokenizer.CountTokens();
 
     if( prms_count < 11 )
@@ -1258,7 +1258,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                     x = x1 + TextInside;
                     DrawGraphicText( clipbox, DC, wxPoint( x, y1 ), NameColor,
                                      m_name,
-                                     TEXT_ORIENT_HORIZ,
+                                     TEXT_ANGLE_HORIZ,
                                      PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
                                      GR_TEXT_VJUSTIFY_CENTER, nameLineWidth,
@@ -1269,7 +1269,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                     x = x1 - TextInside;
                     DrawGraphicText( clipbox, DC, wxPoint( x, y1 ), NameColor,
                                      m_name,
-                                     TEXT_ORIENT_HORIZ,
+                                     TEXT_ANGLE_HORIZ,
                                      PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
                                      GR_TEXT_VJUSTIFY_CENTER, nameLineWidth,
@@ -1283,7 +1283,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                                  wxPoint( (x1 + pin_pos.x) / 2,
                                          y1 - num_offset ), NumColor,
                                  StringPinNum,
-                                 TEXT_ORIENT_HORIZ, PinNumSize,
+                                 TEXT_ANGLE_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_BOTTOM, numLineWidth,
                                  false, false );
@@ -1299,7 +1299,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                 if( DrawPinName )
                     DrawGraphicText( clipbox, DC, wxPoint( x1, y ), NameColor,
                                      m_name,
-                                     TEXT_ORIENT_VERT, PinNameSize,
+                                     TEXT_ANGLE_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_RIGHT,
                                      GR_TEXT_VJUSTIFY_CENTER, nameLineWidth,
                                      false, false );
@@ -1309,7 +1309,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                                      wxPoint( x1 - num_offset,
                                               (y1 + pin_pos.y) / 2 ), NumColor,
                                      StringPinNum,
-                                     TEXT_ORIENT_VERT, PinNumSize,
+                                     TEXT_ANGLE_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
                                      GR_TEXT_VJUSTIFY_BOTTOM, numLineWidth,
                                      false, false );
@@ -1321,7 +1321,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                 if( DrawPinName )
                     DrawGraphicText( clipbox, DC, wxPoint( x1, y ), NameColor,
                                      m_name,
-                                     TEXT_ORIENT_VERT, PinNameSize,
+                                     TEXT_ANGLE_VERT, PinNameSize,
                                      GR_TEXT_HJUSTIFY_LEFT,
                                      GR_TEXT_VJUSTIFY_CENTER, nameLineWidth,
                                      false, false );
@@ -1331,7 +1331,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                                      wxPoint( x1 - num_offset,
                                               (y1 + pin_pos.y) / 2 ), NumColor,
                                      StringPinNum,
-                                     TEXT_ORIENT_VERT, PinNumSize,
+                                     TEXT_ANGLE_VERT, PinNumSize,
                                      GR_TEXT_HJUSTIFY_CENTER,
                                      GR_TEXT_VJUSTIFY_BOTTOM, numLineWidth,
                                      false, false );
@@ -1348,7 +1348,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                 x = (x1 + pin_pos.x) / 2;
                 DrawGraphicText( clipbox, DC, wxPoint( x, y1 - name_offset ),
                                  NameColor, m_name,
-                                 TEXT_ORIENT_HORIZ, PinNameSize,
+                                 TEXT_ANGLE_HORIZ, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_BOTTOM, nameLineWidth,
                                  false, false );
@@ -1358,7 +1358,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                 x = (x1 + pin_pos.x) / 2;
                 DrawGraphicText( clipbox, DC, wxPoint( x, y1 + num_offset ),
                                  NumColor, StringPinNum,
-                                 TEXT_ORIENT_HORIZ, PinNumSize,
+                                 TEXT_ANGLE_HORIZ, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_TOP, numLineWidth,
                                  false, false );
@@ -1371,7 +1371,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                 y = (y1 + pin_pos.y) / 2;
                 DrawGraphicText( clipbox, DC, wxPoint( x1 - name_offset, y ),
                                  NameColor, m_name,
-                                 TEXT_ORIENT_VERT, PinNameSize,
+                                 TEXT_ANGLE_VERT, PinNameSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_BOTTOM, nameLineWidth,
                                  false, false );
@@ -1383,7 +1383,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
                                  wxPoint( x1 + num_offset, (y1 + pin_pos.y)
                                           / 2 ),
                                  NumColor, StringPinNum,
-                                 TEXT_ORIENT_VERT, PinNumSize,
+                                 TEXT_ANGLE_VERT, PinNumSize,
                                  GR_TEXT_HJUSTIFY_CENTER,
                                  GR_TEXT_VJUSTIFY_TOP, numLineWidth,
                                  false, false );
@@ -1421,19 +1421,19 @@ void LIB_PIN::DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     wxPoint txtpos = aPosition;
     int offset = Millimeter2iu( 0.4 );
     EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_LEFT;
-    int orient = TEXT_ORIENT_HORIZ;
+    int orient = TEXT_ANGLE_HORIZ;
 
     switch( aOrientation )
     {
     case PIN_UP:
         txtpos.y += offset;
-        orient = TEXT_ORIENT_VERT;
+        orient = TEXT_ANGLE_VERT;
         hjustify = GR_TEXT_HJUSTIFY_RIGHT;
         break;
 
     case PIN_DOWN:
         txtpos.y -= offset;
-        orient = TEXT_ORIENT_VERT;
+        orient = TEXT_ANGLE_VERT;
         break;
 
     case PIN_LEFT:
@@ -1676,7 +1676,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                     x = x1 + TextInside;
                     plotter->Text( wxPoint( x, y1 ), NameColor,
                                    m_name,
-                                   TEXT_ORIENT_HORIZ,
+                                   TEXT_ANGLE_HORIZ,
                                    PinNameSize,
                                    GR_TEXT_HJUSTIFY_LEFT,
                                    GR_TEXT_VJUSTIFY_CENTER,
@@ -1688,7 +1688,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
 
                     if( DrawPinName )
                         plotter->Text( wxPoint( x, y1 ),
-                                       NameColor, m_name, TEXT_ORIENT_HORIZ,
+                                       NameColor, m_name, TEXT_ANGLE_HORIZ,
                                        PinNameSize,
                                        GR_TEXT_HJUSTIFY_RIGHT,
                                        GR_TEXT_VJUSTIFY_CENTER,
@@ -1700,7 +1700,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                 plotter->Text( wxPoint( (x1 + pin_pos.x) / 2,
                                         y1 - num_offset ),
                                NumColor, StringPinNum,
-                               TEXT_ORIENT_HORIZ, PinNumSize,
+                               TEXT_ANGLE_HORIZ, PinNumSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_BOTTOM,
                                aWidth, false, false );
@@ -1715,7 +1715,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                 if( DrawPinName )
                     plotter->Text( wxPoint( x1, y ), NameColor,
                                    m_name,
-                                   TEXT_ORIENT_VERT, PinNameSize,
+                                   TEXT_ANGLE_VERT, PinNameSize,
                                    GR_TEXT_HJUSTIFY_RIGHT,
                                    GR_TEXT_VJUSTIFY_CENTER,
                                    aWidth, false, false );
@@ -1725,7 +1725,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                     plotter->Text( wxPoint( x1 - num_offset,
                                             (y1 + pin_pos.y) / 2 ),
                                    NumColor, StringPinNum,
-                                   TEXT_ORIENT_VERT, PinNumSize,
+                                   TEXT_ANGLE_VERT, PinNumSize,
                                    GR_TEXT_HJUSTIFY_CENTER,
                                    GR_TEXT_VJUSTIFY_BOTTOM,
                                    aWidth, false, false );
@@ -1738,7 +1738,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                 if( DrawPinName )
                     plotter->Text( wxPoint( x1, y ), NameColor,
                                    m_name,
-                                   TEXT_ORIENT_VERT, PinNameSize,
+                                   TEXT_ANGLE_VERT, PinNameSize,
                                    GR_TEXT_HJUSTIFY_LEFT,
                                    GR_TEXT_VJUSTIFY_CENTER,
                                    aWidth, false, false );
@@ -1748,7 +1748,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                     plotter->Text( wxPoint( x1 - num_offset,
                                             (y1 + pin_pos.y) / 2 ),
                                    NumColor, StringPinNum,
-                                   TEXT_ORIENT_VERT, PinNumSize,
+                                   TEXT_ANGLE_VERT, PinNumSize,
                                    GR_TEXT_HJUSTIFY_CENTER,
                                    GR_TEXT_VJUSTIFY_BOTTOM,
                                    aWidth, false, false );
@@ -1766,7 +1766,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                 x = (x1 + pin_pos.x) / 2;
                 plotter->Text( wxPoint( x, y1 - name_offset ),
                                NameColor, m_name,
-                               TEXT_ORIENT_HORIZ, PinNameSize,
+                               TEXT_ANGLE_HORIZ, PinNameSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_BOTTOM,
                                aWidth, false, false );
@@ -1777,7 +1777,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                 x = ( x1 + pin_pos.x ) / 2;
                 plotter->Text( wxPoint( x, y1 + num_offset ),
                                NumColor, StringPinNum,
-                               TEXT_ORIENT_HORIZ, PinNumSize,
+                               TEXT_ANGLE_HORIZ, PinNumSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_TOP,
                                aWidth, false, false );
@@ -1790,7 +1790,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                 y = ( y1 + pin_pos.y ) / 2;
                 plotter->Text( wxPoint( x1 - name_offset, y ),
                                NameColor, m_name,
-                               TEXT_ORIENT_VERT, PinNameSize,
+                               TEXT_ANGLE_VERT, PinNameSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_BOTTOM,
                                aWidth, false, false );
@@ -1801,7 +1801,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter, wxPoint& pin_pos, int  orient,
                 plotter->Text( wxPoint( x1 + num_offset,
                                         ( y1 + pin_pos.y ) / 2 ),
                                NumColor, StringPinNum,
-                               TEXT_ORIENT_VERT, PinNumSize,
+                               TEXT_ANGLE_VERT, PinNumSize,
                                GR_TEXT_HJUSTIFY_CENTER,
                                GR_TEXT_VJUSTIFY_TOP,
                                aWidth, false, false );

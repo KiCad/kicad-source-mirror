@@ -51,12 +51,18 @@ TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
     BOARD_ITEM( parent, PCB_TEXT_T ),
     EDA_TEXT()
 {
-    m_MultilineAllowed = true;
+    SetMultilineAllowed( true );
 }
 
 
-TEXTE_PCB:: ~TEXTE_PCB()
+TEXTE_PCB::~TEXTE_PCB()
 {
+}
+
+
+void TEXTE_PCB::SetTextAngle( double aAngle )
+{
+    EDA_TEXT::SetTextAngle( NormalizeAngle360( aAngle ) );
 }
 
 
@@ -118,30 +124,31 @@ void TEXTE_PCB::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), BLUE ) );
 
-    if( !m_Mirror )
+    if( !IsMirrored() )
         aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), _( "No" ), DARKGREEN ) );
     else
         aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), _( "Yes" ), DARKGREEN ) );
 
-    msg.Printf( wxT( "%.1f" ), m_Orient / 10.0 );
+    msg.Printf( wxT( "%.1f" ), GetTextAngle() / 10.0 );
     aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
 
-    msg = ::CoordinateToString( m_Thickness );
+    msg = ::CoordinateToString( GetThickness() );
     aList.push_back( MSG_PANEL_ITEM( _( "Thickness" ), msg, MAGENTA ) );
 
-    msg = ::CoordinateToString( m_Size.x );
+    msg = ::CoordinateToString( GetTextWidth() );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, RED ) );
 
-    msg = ::CoordinateToString( m_Size.y );
+    msg = ::CoordinateToString( GetTextHeight() );
     aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, RED ) );
 }
+
 
 const EDA_RECT TEXTE_PCB::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox( -1, -1 );
 
-    if( m_Orient )
-        rect = rect.GetBoundingBoxRotated( m_Pos, m_Orient );
+    if( GetTextAngle() )
+        rect = rect.GetBoundingBoxRotated( GetTextPos(), GetTextAngle() );
 
     return rect;
 }
@@ -149,18 +156,22 @@ const EDA_RECT TEXTE_PCB::GetBoundingBox() const
 
 void TEXTE_PCB::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    RotatePoint( &m_Pos, aRotCentre, aAngle );
-    m_Orient += aAngle;
-    NORMALIZE_ANGLE_360( m_Orient );
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aRotCentre, aAngle );
+    SetTextPos( pt );
+
+    SetTextAngle( GetTextAngle() + aAngle );
 }
 
 
-void TEXTE_PCB::Flip(const wxPoint& aCentre )
+void TEXTE_PCB::Flip( const wxPoint& aCentre )
 {
-    m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
+    SetTextY( aCentre.y - ( GetTextPos().y - aCentre.y ) );
+
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
+
     SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
-    m_Mirror = !m_Mirror;
+    SetMirrored( !IsMirrored() );
 }
 
 

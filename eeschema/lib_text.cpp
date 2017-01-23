@@ -47,7 +47,7 @@ LIB_TEXT::LIB_TEXT( LIB_PART * aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
     EDA_TEXT()
 {
-    m_Size       = wxSize( 50, 50 );
+    SetTextSize( wxSize( 50, 50 ) );
     m_typeName   = _( "Text" );
     m_rotate     = false;
     m_updateText = false;
@@ -71,23 +71,24 @@ bool LIB_TEXT::Save( OUTPUTFORMATTER& aFormatter )
         text.Replace( wxT( " " ), wxT( "~" ) );
     }
 
-    aFormatter.Print( 0, "T %g %d %d %d %d %d %d %s", GetOrientation(), m_Pos.x, m_Pos.y,
-                      m_Size.x, m_Attributs, m_Unit, m_Convert, TO_UTF8( text ) );
+    aFormatter.Print( 0, "T %g %d %d %d %d %d %d %s", GetTextAngle(),
+                      GetTextPos().x, GetTextPos().y,
+                      GetTextWidth(), !IsVisible(), m_Unit, m_Convert, TO_UTF8( text ) );
 
-    aFormatter.Print( 0, " %s %d", m_Italic ? "Italic" : "Normal", ( m_Bold > 0 ) ? 1 : 0 );
+    aFormatter.Print( 0, " %s %d", IsItalic() ? "Italic" : "Normal", IsBold() );
 
     char hjustify = 'C';
 
-    if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
+    if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
         hjustify = 'L';
-    else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+    else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
         hjustify = 'R';
 
     char vjustify = 'C';
 
-    if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+    if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
         vjustify = 'B';
-    else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+    else if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
 
     aFormatter.Print( 0, " %c %c\n", hjustify, vjustify );
@@ -104,14 +105,18 @@ bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
     char    tmp[256];
     char*   line = (char*) aLineReader;
     double  angle;
+    int     not_visible;
+    int     x, y, size;
 
     buf[0] = 0;
     tmp[0] = 0;         // For italic option, Not in old versions
 
     cnt = sscanf( line + 2, "%lf %d %d %d %d %d %d \"%[^\"]\" %255s %d %c %c",
-                  &angle, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
+                  &angle, &x, &y, &size, &not_visible,
                   &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
                   &vjustify );
+
+    SetVisible( !not_visible );
 
     if( cnt >= 8 ) // if quoted loading failed, load as not quoted
     {
@@ -123,7 +128,7 @@ bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
     else
     {
         cnt = sscanf( line + 2, "%lf %d %d %d %d %d %d %255s %255s %d %c %c",
-                      &angle, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
+                      &angle, &x, &y, &size, &not_visible,
                       &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
                       &vjustify );
 
@@ -133,53 +138,55 @@ bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
             return false;
         }
 
+        SetVisible( !not_visible );
+
         /* Convert '~' to spaces (only if text is not quoted). */
         m_Text = FROM_UTF8( buf );
         m_Text.Replace( wxT( "~" ), wxT( " " ) );
     }
 
-    SetOrientation( angle );
+    SetTextAngle( angle );
 
-    m_Size.y = m_Size.x;
+    SetTextSize( wxSize( size, size ) );
+    SetTextPos( wxPoint( x, y ) );
 
     if( strncasecmp( tmp, "Italic", 6 ) == 0 )
-        m_Italic = true;
+        SetItalic( true );
 
     if( thickness > 0 )
     {
-        m_Bold = true;
+        SetBold( true );
     }
 
     switch( hjustify )
     {
     case 'L':
-        m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
+        SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
         break;
 
     case 'C':
-        m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+        SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
         break;
 
     case 'R':
-        m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
+        SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
         break;
     }
 
     switch( vjustify )
     {
     case 'T':
-        m_VJustify = GR_TEXT_VJUSTIFY_TOP;
+        SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
         break;
 
     case 'C':
-        m_VJustify = GR_TEXT_VJUSTIFY_CENTER;
+        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case 'B':
-        m_VJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+        SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         break;
     }
-
 
     return true;
 }
@@ -197,14 +204,15 @@ bool LIB_TEXT::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFOR
         aThreshold = 0;
 
     EDA_TEXT tmp_text( *this );
-    tmp_text.SetTextPosition( aTransform.TransformCoordinate( m_Pos ) );
+    tmp_text.SetTextPos( aTransform.TransformCoordinate( GetTextPos() ) );
 
     /* The text orientation may need to be flipped if the
-     *  transformation matrix causes xy axes to be flipped.
+     * transformation matrix causes xy axes to be flipped.
      * this simple algo works only for schematic matrix (rot 90 or/and mirror)
      */
-    int t1 = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
-    tmp_text.SetOrientation( t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT );
+    bool t1 = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != 0 );
+
+    tmp_text.SetTextAngle( t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
     return tmp_text.TextHitTest( aPosition );
 }
 
@@ -213,19 +221,13 @@ EDA_ITEM* LIB_TEXT::Clone() const
 {
     LIB_TEXT* newitem = new LIB_TEXT(NULL);
 
-    newitem->m_Pos       = m_Pos;
-    newitem->m_Orient    = m_Orient;
-    newitem->m_Size      = m_Size;
-    newitem->m_Attributs = m_Attributs;
     newitem->m_Unit      = m_Unit;
     newitem->m_Convert   = m_Convert;
     newitem->m_Flags     = m_Flags;
     newitem->m_Text      = m_Text;
-    newitem->m_Thickness = m_Thickness;
-    newitem->m_Italic    = m_Italic;
-    newitem->m_Bold      = m_Bold;
-    newitem->m_HJustify  = m_HJustify;
-    newitem->m_VJustify  = m_VJustify;
+
+    newitem->SetEffects( *this );
+
     return newitem;
 }
 
@@ -241,17 +243,17 @@ int LIB_TEXT::compare( const LIB_ITEM& other ) const
     if( result != 0 )
         return result;
 
-    if( m_Pos.x != tmp->m_Pos.x )
-        return m_Pos.x - tmp->m_Pos.x;
+    if( GetTextPos().x != tmp->GetTextPos().x )
+        return GetTextPos().x - tmp->GetTextPos().x;
 
-    if( m_Pos.y != tmp->m_Pos.y )
-        return m_Pos.y - tmp->m_Pos.y;
+    if( GetTextPos().y != tmp->GetTextPos().y )
+        return GetTextPos().y - tmp->GetTextPos().y;
 
-    if( m_Size.x != tmp->m_Size.x )
-        return m_Size.x - tmp->m_Size.x;
+    if( GetTextWidth() != tmp->GetTextWidth() )
+        return GetTextWidth() - tmp->GetTextWidth();
 
-    if( m_Size.y != tmp->m_Size.y )
-        return m_Size.y - tmp->m_Size.y;
+    if( GetTextHeight() != tmp->GetTextHeight() )
+        return GetTextHeight() - tmp->GetTextHeight();
 
     return 0;
 }
@@ -259,7 +261,7 @@ int LIB_TEXT::compare( const LIB_ITEM& other ) const
 
 void LIB_TEXT::SetOffset( const wxPoint& aOffset )
 {
-    m_Pos += aOffset;
+    EDA_TEXT::Offset( aOffset );
 }
 
 
@@ -269,36 +271,49 @@ bool LIB_TEXT::Inside( EDA_RECT& rect ) const
      * FIXME: This should calculate the text size and justification and
      *        use rectangle intersect.
      */
-    return rect.Contains( m_Pos.x, -m_Pos.y );
+    return rect.Contains( GetTextPos().x, -GetTextPos().y );
 }
 
 
 void LIB_TEXT::Move( const wxPoint& newPosition )
 {
-    m_Pos = newPosition;
+    SetTextPos( newPosition );
 }
 
 
 void LIB_TEXT::MirrorHorizontal( const wxPoint& center )
 {
-    m_Pos.x -= center.x;
-    m_Pos.x *= -1;
-    m_Pos.x += center.x;
+    int x = GetTextPos().x;
+
+    x -= center.x;
+    x *= -1;
+    x += center.x;
+
+    SetTextX( x );
 }
+
 
 void LIB_TEXT::MirrorVertical( const wxPoint& center )
 {
-    m_Pos.y -= center.y;
-    m_Pos.y *= -1;
-    m_Pos.y += center.y;
+    int y = GetTextPos().y;
+
+    y -= center.y;
+    y *= -1;
+    y += center.y;
+
+    SetTextY( y );
 }
+
 
 void LIB_TEXT::Rotate( const wxPoint& center, bool aRotateCCW )
 {
     int rot_angle = aRotateCCW ? -900 : 900;
 
-    RotatePoint( &m_Pos, center, rot_angle );
-    m_Orient = m_Orient ? 0 : 900;
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, center, rot_angle );
+    SetTextPos( pt );
+
+    SetTextAngle( GetTextAngle() != 0.0 ? 0 : 900 );
 }
 
 
@@ -314,7 +329,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 
     /* The text orientation may need to be flipped if the
      * transformation matrix causes xy axes to be flipped. */
-    int t1  = ( aTransform.x1 != 0 ) ^ ( m_Orient != 0 );
+    int t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != 0 );
     wxPoint pos = aTransform.TransformCoordinate( txtpos ) + offset;
 
     // Get color
@@ -326,26 +341,26 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
         color = BLACK;
 
     plotter->Text( pos, color, GetShownText(),
-                   t1 ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT,
-                   m_Size, GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                   GetPenSize(), m_Italic, m_Bold );
+                   t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT,
+                   GetTextSize(), GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                   GetPenSize(), IsItalic(), IsBold() );
 }
 
 
 int LIB_TEXT::GetPenSize() const
 {
-    int     pensize = m_Thickness;
+    int pensize = GetThickness();
 
     if( pensize == 0 )   // Use default values for pen size
     {
-        if( m_Bold  )
-            pensize = GetPenSizeForBold( m_Size.x );
+        if( IsBold() )
+            pensize = GetPenSizeForBold( GetTextWidth() );
         else
             pensize = GetDefaultLineThickness();
     }
 
     // Clip pen size for small texts:
-    pensize = Clamp_Text_PenSize( pensize, m_Size, m_Bold );
+    pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
     return pensize;
 }
 
@@ -371,14 +386,14 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     /* Calculate the text orientation, according to the component
      * orientation/mirror (needed when draw text in schematic)
      */
-    int orient = m_Orient;
+    int orient = GetTextAngle();
 
     if( aTransform.y1 )  // Rotate component 90 degrees.
     {
-        if( orient == TEXT_ORIENT_HORIZ )
-            orient = TEXT_ORIENT_VERT;
+        if( orient == TEXT_ANGLE_HORIZ )
+            orient = TEXT_ANGLE_VERT;
         else
-            orient = TEXT_ORIENT_HORIZ;
+            orient = TEXT_ANGLE_HORIZ;
     }
 
     /* Calculate the text justification, according to the component
@@ -393,6 +408,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
      * and use GetBoundaryBox to know the text coordinate considered as centered
     */
     EDA_RECT bBox = GetBoundingBox();
+
     // convert coordinates from draw Y axis to libedit Y axis:
     bBox.RevertYAxis();
     wxPoint txtpos = bBox.Centre();
@@ -401,9 +417,9 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
 
     EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, aDC, txtpos, color, GetShownText(), orient, m_Size,
+    DrawGraphicText( clipbox, aDC, txtpos, color, GetShownText(), orient, GetTextSize(),
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, GetPenSize(),
-                     m_Italic, m_Bold );
+                     IsItalic(), IsBold() );
 
 
     /* Enable this to draw the bounding box around the text field to validate
@@ -424,7 +440,7 @@ void LIB_TEXT::GetMsgPanelInfo( MSG_PANEL_ITEMS& aList )
 
     LIB_ITEM::GetMsgPanelInfo( aList );
 
-    msg = StringFromValue( g_UserUnit, m_Thickness, true );
+    msg = StringFromValue( g_UserUnit, GetThickness(), true );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
 }
@@ -440,9 +456,10 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
 
     // We are using now a bottom to top Y axis.
     wxPoint orig = rect.GetOrigin();
-    wxPoint end = rect.GetEnd();
-    RotatePoint( &orig, m_Pos, -m_Orient );
-    RotatePoint( &end, m_Pos, -m_Orient );
+    wxPoint end  = rect.GetEnd();
+
+    RotatePoint( &orig, GetTextPos(), -GetTextAngle() );
+    RotatePoint( &end,  GetTextPos(), -GetTextAngle() );
 
     rect.SetOrigin( orig );
     rect.SetEnd( end );
@@ -462,7 +479,7 @@ void LIB_TEXT::Rotate()
     }
     else
     {
-        m_Orient = ( m_Orient == TEXT_ORIENT_VERT ) ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
+        SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
     }
 }
 
@@ -499,13 +516,13 @@ void LIB_TEXT::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 
     if( aEditMode == IS_MOVED )
     {
-        m_initialPos = m_Pos;
+        m_initialPos = GetTextPos();
         m_initialCursorPos = aPosition;
         SetEraseLastDrawItem();
     }
     else
     {
-        m_Pos = aPosition;
+        SetTextPos( aPosition );
     }
 
     m_Flags = aEditMode;
@@ -537,7 +554,7 @@ void LIB_TEXT::calcEdit( const wxPoint& aPosition )
 {
     if( m_rotate )
     {
-        m_Orient = ( m_Orient == TEXT_ORIENT_VERT ) ? TEXT_ORIENT_HORIZ : TEXT_ORIENT_VERT;
+        SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
         m_rotate = false;
     }
 
@@ -550,7 +567,7 @@ void LIB_TEXT::calcEdit( const wxPoint& aPosition )
     if( m_Flags == IS_NEW )
     {
         SetEraseLastDrawItem();
-        m_Pos = aPosition;
+        SetTextPos( aPosition );
     }
     else if( m_Flags == IS_MOVED )
     {

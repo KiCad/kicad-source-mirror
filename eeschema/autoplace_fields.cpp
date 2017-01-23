@@ -195,11 +195,11 @@ protected:
 
             if( m_component->GetTransform().y1 )
             {
-                field->SetOrientation( TEXT_ORIENT_VERT );
+                field->SetTextAngle( TEXT_ANGLE_VERT );
             }
             else
             {
-                field->SetOrientation( TEXT_ORIENT_HORIZ );
+                field->SetTextAngle( TEXT_ANGLE_HORIZ );
             }
 
             field_width = field->GetBoundingBox().GetWidth();

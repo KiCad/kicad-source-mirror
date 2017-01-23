@@ -1832,11 +1832,11 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     aText->SetType( static_cast<TEXTE_MODULE::TEXT_TYPE>( type ) );
 
     aText->SetPos0( wxPoint( pos0_x, pos0_y ) );
-    aText->SetSize( wxSize( size0_x, size0_y ) );
+    aText->SetTextSize( wxSize( size0_x, size0_y ) );
 
     orient -= ( static_cast<MODULE*>( aText->GetParent() ) )->GetOrientation();
 
-    aText->SetOrientation( orient );
+    aText->SetTextAngle( orient );
 
     // @todo put in accessors?
     // Set a reasonable width:
@@ -2174,7 +2174,7 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
                 sz.y = 5;
             */
 
-            pcbtxt->SetSize( size );
+            pcbtxt->SetTextSize( size );
 
             /* @todo move into an accessor
             // Set a reasonable width:
@@ -2185,9 +2185,9 @@ void LEGACY_PLUGIN::loadPCB_TEXT()
             */
 
             pcbtxt->SetThickness( thickn );
-            pcbtxt->SetOrientation( angle );
+            pcbtxt->SetTextAngle( angle );
 
-            pcbtxt->SetTextPosition( wxPoint( pos_x, pos_y ) );
+            pcbtxt->SetTextPos( wxPoint( pos_x, pos_y ) );
         }
 
         else if( TESTLINE( "De" ) )
@@ -2823,7 +2823,7 @@ void LEGACY_PLUGIN::loadDIMENSION()
 
             dim->Text().SetMirrored( mirror && *mirror == '0' );
             dim->Text().SetThickness( thickn );
-            dim->Text().SetOrientation( orient );
+            dim->Text().SetTextAngle( orient );
         }
 
         else if( TESTLINE( "Sb" ) )

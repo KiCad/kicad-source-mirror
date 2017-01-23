@@ -78,13 +78,14 @@ GAL::~GAL()
 
 void GAL::SetTextAttributes( const EDA_TEXT* aText )
 {
-    SetGlyphSize( VECTOR2D( aText->GetSize() ) );
+    SetGlyphSize( VECTOR2D( aText->GetTextSize() ) );
     SetHorizontalJustify( aText->GetHorizJustify() );
     SetVerticalJustify( aText->GetVertJustify() );
     SetFontBold( aText->IsBold() );
     SetFontItalic( aText->IsItalic() );
     SetTextMirrored( aText->IsMirrored() );
 }
+
 
 VECTOR2D GAL::GetTextLineSize( const UTF8& aText ) const
 {

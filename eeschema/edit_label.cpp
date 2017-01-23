@@ -52,13 +52,13 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem )
     wxCHECK_RET( (aTextItem != NULL) && aTextItem->CanIncrementLabel(),
                  wxT( "Invalid schematic text item." )  );
 
-    int orient = ( aTextItem->GetOrientation() + 1 ) & 3;
+    int orient = ( aTextItem->GetLabelSpinStyle() + 1 ) & 3;
 
     // Save current text orientation in undo list if is not already in edit.
     if( aTextItem->GetFlags() == 0 )
         SaveCopyInUndoList( aTextItem, UR_CHANGED );
 
-    aTextItem->SetOrientation( orient );
+    aTextItem->SetLabelSpinStyle( orient );
     OnModify();
 }
 
@@ -96,8 +96,8 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
 
     textItem->SetBold( lastTextBold );
     textItem->SetItalic( lastTextItalic );
-    textItem->SetOrientation( lastTextOrientation );
-    textItem->SetSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+    textItem->SetLabelSpinStyle( lastTextOrientation );
+    textItem->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
     textItem->SetFlags( IS_NEW | IS_MOVED );
 
     EditSchematicText( textItem );
@@ -110,7 +110,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
 
     lastTextBold = textItem->IsBold();
     lastTextItalic = textItem->IsItalic();
-    lastTextOrientation = textItem->GetOrientation();
+    lastTextOrientation = textItem->GetLabelSpinStyle();
 
     if( ( textItem->Type() == SCH_GLOBAL_LABEL_T ) ||
         ( textItem->Type() == SCH_HIERARCHICAL_LABEL_T ) )
@@ -205,8 +205,8 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
      */
     newtext->SetFlags( text->GetFlags() );
     newtext->SetShape( text->GetShape() );
-    newtext->SetOrientation( text->GetOrientation() );
-    newtext->SetSize( text->GetSize() );
+    newtext->SetLabelSpinStyle( text->GetLabelSpinStyle() );
+    newtext->SetTextSize( text->GetTextSize() );
     newtext->SetThickness( text->GetThickness() );
     newtext->SetItalic( text->IsItalic() );
     newtext->SetBold( text->IsBold() );

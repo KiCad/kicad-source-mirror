@@ -113,11 +113,11 @@ void PCB_TEXT::AddToBoard()
     SetTextSizeFromStrokeFontHeight( pcbtxt, m_name.textHeight );
 
     pcbtxt->SetThickness( m_name.textstrokeWidth );
-    pcbtxt->SetOrientation( m_name.textRotation );
+    pcbtxt->SetTextAngle( m_name.textRotation );
 
     SetTextJustify( pcbtxt, m_name.justify );
-    pcbtxt->SetTextPosition( wxPoint( m_name.textPositionX,
-                                      m_name.textPositionY ) );
+    pcbtxt->SetTextPos( wxPoint( m_name.textPositionX,
+                                 m_name.textPositionY ) );
 
     pcbtxt->SetMirrored( m_name.mirror );
     pcbtxt->SetTimeStamp( 0 );

@@ -290,7 +290,7 @@ bool DIALOG_MODEDIT_FP_BODY_ITEM_PROPERTIES::Validate()
         // Check angle of arc.
         double angle;
         m_AngleCtrl->GetValue().ToDouble( &angle );
-        NORMALIZE_ANGLE_360( angle );
+        angle = NormalizeAngle360( angle );
 
         if( angle == 0 )
         {

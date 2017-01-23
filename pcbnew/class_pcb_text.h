@@ -57,18 +57,20 @@ public:
 
     virtual const wxPoint& GetPosition() const override
     {
-        return m_Pos;
+        return EDA_TEXT::GetTextPos();
     }
 
     virtual void SetPosition( const wxPoint& aPos ) override
     {
-        m_Pos = aPos;
+        EDA_TEXT::SetTextPos( aPos );
     }
 
     void Move( const wxPoint& aMoveVector ) override
     {
-        m_Pos += aMoveVector;
+        EDA_TEXT::Offset( aMoveVector );
     }
+
+    void SetTextAngle( double aAngle );
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
 

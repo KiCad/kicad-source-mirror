@@ -606,9 +606,9 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     pos_filename = GetFileNamePosition() + aOffset;
 
     if( IsVerticalOrientation() )
-        name_orientation = TEXT_ORIENT_VERT;
+        name_orientation = TEXT_ANGLE_VERT;
     else
-        name_orientation = TEXT_ORIENT_HORIZ;
+        name_orientation = TEXT_ANGLE_HORIZ;
 
     /* Draw text : SheetName */
     if( aColor > 0 )
@@ -1162,13 +1162,13 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     {
         pos_sheetname    = wxPoint( m_pos.x - 8, m_pos.y + m_size.y );
         pos_filename     = wxPoint( m_pos.x + m_size.x + 4, m_pos.y + m_size.y );
-        name_orientation = TEXT_ORIENT_VERT;
+        name_orientation = TEXT_ANGLE_VERT;
     }
     else
     {
         pos_sheetname    = wxPoint( m_pos.x, m_pos.y - 4 );
         pos_filename     = wxPoint( m_pos.x, m_pos.y + m_size.y + 4 );
-        name_orientation = TEXT_ORIENT_HORIZ;
+        name_orientation = TEXT_ANGLE_HORIZ;
     }
 
     /* Draw texts: SheetName */

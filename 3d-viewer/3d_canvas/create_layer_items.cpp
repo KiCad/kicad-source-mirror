@@ -93,7 +93,7 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aTextPCB,
                                                      LAYER_ID aLayerId,
                                                      int aClearanceValue )
 {
-    wxSize size = aTextPCB->GetSize();
+    wxSize size = aTextPCB->GetTextSize();
 
     if( aTextPCB->IsMirrored() )
         size.x = -size.x;
@@ -121,7 +121,7 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aTextPCB,
             wxString txt = strings_list.Item( ii );
 
             DrawGraphicText( NULL, NULL, positions[ii], dummy_color,
-                             txt, aTextPCB->GetOrientation(), size,
+                             txt, aTextPCB->GetTextAngle(), size,
                              aTextPCB->GetHorizJustify(), aTextPCB->GetVertJustify(),
                              aTextPCB->GetThickness(), aTextPCB->IsItalic(),
                              true, addTextSegmToContainer );
@@ -129,8 +129,8 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aTextPCB,
     }
     else
     {
-        DrawGraphicText( NULL, NULL, aTextPCB->GetTextPosition(), dummy_color,
-                         aTextPCB->GetShownText(), aTextPCB->GetOrientation(), size,
+        DrawGraphicText( NULL, NULL, aTextPCB->GetTextPos(), dummy_color,
+                         aTextPCB->GetShownText(), aTextPCB->GetTextAngle(), size,
                          aTextPCB->GetHorizJustify(), aTextPCB->GetVertJustify(),
                          aTextPCB->GetThickness(), aTextPCB->IsItalic(),
                          true, addTextSegmToContainer );
@@ -199,12 +199,12 @@ void CINFO3D_VISU::AddGraphicsShapesWithClearanceToContainer( const MODULE* aMod
     {
         TEXTE_MODULE *textmod = texts[ii];
         s_textWidth = textmod->GetThickness() + ( 2 * aInflateValue );
-        wxSize size = textmod->GetSize();
+        wxSize size = textmod->GetTextSize();
 
         if( textmod->IsMirrored() )
             size.x = -size.x;
 
-        DrawGraphicText( NULL, NULL, textmod->GetTextPosition(), BLACK,
+        DrawGraphicText( NULL, NULL, textmod->GetTextPos(), BLACK,
                          textmod->GetShownText(), textmod->GetDrawRotation(), size,
                          textmod->GetHorizJustify(), textmod->GetVertJustify(),
                          textmod->GetThickness(), textmod->IsItalic(),

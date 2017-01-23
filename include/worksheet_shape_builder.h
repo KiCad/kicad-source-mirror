@@ -297,6 +297,11 @@ public:
     // Accessors:
     int GetPenWidth() { return GetThickness(); }
 
+    void SetTextAngle( double aAngle )
+    {
+        EDA_TEXT::SetTextAngle( NormalizeAngle360( aAngle ) );
+    }
+
     /**
      * Virtual function
      * return true if the point aPosition is on the text

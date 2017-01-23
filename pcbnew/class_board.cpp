@@ -2550,6 +2550,16 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                         // will be used
                         footprint->CopyNetlistSettings( newFootprint, false );
 
+                        // Compare the footprint name only, in case the nickname is empty or in case
+                        // user moved the footprint to a new library.  Chances are if footprint name is
+                        // same then the footprint is very nearly the same and the two texts should
+                        // be kept at same size, position, and rotation.
+                        if( newFootprint->GetFPID().GetLibItemName() == footprint->GetFPID().GetLibItemName() )
+                        {
+                            newFootprint->Reference().SetEffects( footprint->Reference() );
+                            newFootprint->Value().SetEffects( footprint->Value() );
+                        }
+
                         Remove( footprint );
                         Add( newFootprint, ADD_APPEND );
                         footprint = newFootprint;

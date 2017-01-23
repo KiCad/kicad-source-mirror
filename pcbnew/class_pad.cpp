@@ -835,8 +835,8 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 void D_PAD::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
-    m_Orient += aAngle;
-    NORMALIZE_ANGLE_360( m_Orient );
+
+    m_Orient = NormalizeAngle360( m_Orient + aAngle );
 
     SetLocalCoord();
 }

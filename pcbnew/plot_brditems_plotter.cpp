@@ -305,8 +305,8 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, EDA_COLOR_T aColo
     m_plotter->SetColor( aColor );
 
     // calculate some text parameters :
-    size = pt_texte->GetSize();
-    pos = pt_texte->GetTextPosition();
+    size = pt_texte->GetTextSize();
+    pos = pt_texte->GetTextPos();
 
     orient = pt_texte->GetDrawRotation();
 
@@ -565,9 +565,9 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
 
     m_plotter->SetColor( getColor( pt_texte->GetLayer() ) );
 
-    size      = pt_texte->GetSize();
-    pos       = pt_texte->GetTextPosition();
-    orient    = pt_texte->GetOrientation();
+    size      = pt_texte->GetTextSize();
+    pos       = pt_texte->GetTextPos();
+    orient    = pt_texte->GetTextAngle();
     thickness = pt_texte->GetThickness();
 
     if( pt_texte->IsMirrored() )

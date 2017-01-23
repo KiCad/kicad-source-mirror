@@ -50,19 +50,12 @@
 
 #include <convert_to_biu.h>
 
-EDA_TEXT::EDA_TEXT( const wxString& text )
+EDA_TEXT::EDA_TEXT( const wxString& text ) :
+    m_Text( text ),
+    m_e( 1<<TE_VISIBLE )
 {
-    m_Size.x    = m_Size.y = Mils2iu( DEFAULT_SIZE_TEXT );  // Width and height of font.
-    m_Orient    = 0;                             // Rotation angle in 0.1 degrees.
-    m_Attributs = 0;
-    m_Mirror    = false;                         // display mirror if true
-    m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;       // Default horizontal justification is centered.
-    m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;       // Default vertical justification is centered.
-    m_Thickness = 0;                             // thickness
-    m_Italic    = false;                         // true = italic shape.
-    m_Bold      = false;
-    m_MultilineAllowed = false;                  // Set to true for multiline text.
-    m_Text = text;
+    int sz = Mils2iu( DEFAULT_SIZE_TEXT );
+    SetTextSize( wxSize( sz, sz ) );
 }
 
 
@@ -71,18 +64,23 @@ EDA_TEXT::~EDA_TEXT()
 }
 
 
-void EDA_TEXT::SetOrientation( double aOrientation )
+void EDA_TEXT::SetEffects( const EDA_TEXT& aSrc )
 {
-    m_Orient = aOrientation;
-    NORMALIZE_ANGLE_360( m_Orient );
+    m_e = aSrc.m_e;
+}
+
+
+void EDA_TEXT::SwapEffects( EDA_TEXT& aTradingPartner )
+{
+    std::swap( m_e, aTradingPartner.m_e );
 }
 
 
 int EDA_TEXT::LenSize( const wxString& aLine ) const
 {
-    basic_gal.SetFontItalic( m_Italic );
-    basic_gal.SetFontBold( m_Bold );
-    basic_gal.SetGlyphSize( VECTOR2D( m_Size ) );
+    basic_gal.SetFontItalic( IsItalic() );
+    basic_gal.SetFontBold( IsBold() );
+    basic_gal.SetGlyphSize( VECTOR2D( GetTextSize() ) );
 
     VECTOR2D tsize = basic_gal.GetTextLineSize( aLine );
 
@@ -93,6 +91,7 @@ int EDA_TEXT::LenSize( const wxString& aLine ) const
 wxString EDA_TEXT::ShortenedShownText() const
 {
     wxString tmp = GetShownText();
+
     tmp.Replace( wxT( "\n" ), wxT( " " ) );
     tmp.Replace( wxT( "\r" ), wxT( " " ) );
     tmp.Replace( wxT( "\t" ), wxT( " " ) );
@@ -104,28 +103,24 @@ wxString EDA_TEXT::ShortenedShownText() const
 }
 
 
-/*
- * calculate the distance (pitch) between 2 text lines
- * the distance includes the interline + room for chars like j { and [
- * Is used for multiline texts, but also for single line texts, to calculate
- * the text bounding box
- */
 int EDA_TEXT::GetInterline( int aTextThickness ) const
 {
-    int thickness = aTextThickness <= 0 ? m_Thickness : aTextThickness;
-    return KiROUND( KIGFX::STROKE_FONT::GetInterline( m_Size.y, thickness ) );
+    int thickness = aTextThickness <= 0 ? GetThickness() : aTextThickness;
+
+    return KiROUND( KIGFX::STROKE_FONT::GetInterline( GetTextHeight(), thickness ) );
 }
+
 
 EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
 {
     EDA_RECT       rect;
     wxArrayString  strings;
     wxString       text = GetShownText();
-    int            thickness = ( aThickness < 0 ) ? m_Thickness : aThickness;
+    int            thickness = ( aThickness < 0 ) ? GetThickness() : aThickness;
     int            linecount = 1;
     bool           hasOverBar = false;     // true if the first line of text as an overbar
 
-    if( m_MultilineAllowed )
+    if( IsMultilineAllowed() )
     {
         wxStringSplit( text, strings, '\n' );
 
@@ -153,14 +148,14 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
 
     // calculate the H and V size
     int dx = KiROUND( basic_gal.GetStrokeFont().ComputeStringBoundaryLimits(
-                            text, VECTOR2D( m_Size ), double( thickness ) ).x );
+                            text, VECTOR2D( GetTextSize() ), double( thickness ) ).x );
     int dy = GetInterline( thickness );
 
     // Creates bounding box (rectangle) for an horizontal
     // and left and top justified text. the bounding box will be moved later
     // according to the actual text options
     wxSize textsize = wxSize( dx, dy );
-    wxPoint pos = m_Pos;
+    wxPoint pos = GetTextPos();
 
     if( aInvertY )
         pos.y = -pos.y;
@@ -171,15 +166,15 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     // includes letters like j and y and ] + interval between lines.
     // The interval below the last line is not usefull, and we can use its half value
     // as vertical margin above the text
-    // the full interval is roughly m_Size.y * 0.4 - aThickness/2
-    rect.Move( wxPoint( 0, thickness/4 - KiROUND( m_Size.y * 0.22 ) ) );
+    // the full interval is roughly GetTextHeight() * 0.4 - aThickness/2
+    rect.Move( wxPoint( 0, thickness/4 - KiROUND( GetTextHeight() * 0.22 ) ) );
 
     if( hasOverBar )
     {   // A overbar adds an extra size to the text
         // Height from the base line text of chars like [ or {
-        double curr_height = m_Size.y * 1.15;
+        double curr_height = GetTextHeight() * 1.15;
         int extra_height = KiROUND(
-            basic_gal.GetStrokeFont().ComputeOverbarVerticalPosition( m_Size.y, thickness ) - curr_height );
+            basic_gal.GetStrokeFont().ComputeOverbarVerticalPosition( GetTextHeight(), thickness ) - curr_height );
         extra_height += thickness/2;
         textsize.y += extra_height;
         rect.Move( wxPoint( 0, -extra_height ) );
@@ -187,13 +182,13 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
 
     // for multiline texts and aLine < 0, merge all rectangles
     // ( if aLine < 0, we want the full text bounding box )
-    if( m_MultilineAllowed && aLine < 0 )
+    if( IsMultilineAllowed() && aLine < 0 )
     {
         for( unsigned ii = 1; ii < strings.GetCount(); ii++ )
         {
             text = strings.Item( ii );
             dx   = KiROUND( basic_gal.GetStrokeFont().ComputeStringBoundaryLimits(
-                            text, VECTOR2D( m_Size ), double( thickness ) ).x );
+                            text, VECTOR2D( GetTextSize() ), double( thickness ) ).x );
             textsize.x  = std::max( textsize.x, dx );
             textsize.y += dy;
         }
@@ -207,10 +202,10 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
      * orientation). and must be recalculated for others justifications
      * also, note the V justification is relative to the first line
      */
-    switch( m_HJustify )
+    switch( GetHorizJustify() )
     {
     case GR_TEXT_HJUSTIFY_LEFT:
-        if( m_Mirror )
+        if( IsMirrored() )
             rect.SetX( rect.GetX() - rect.GetWidth() );
         break;
 
@@ -219,14 +214,14 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
         break;
 
     case GR_TEXT_HJUSTIFY_RIGHT:
-        if( !m_Mirror )
+        if( !IsMirrored() )
             rect.SetX( rect.GetX() - rect.GetWidth() );
         break;
     }
 
-    dy = m_Size.y + thickness;
+    dy = GetTextHeight() + thickness;
 
-    switch( m_VJustify )
+    switch( GetVertJustify() )
     {
     case GR_TEXT_VJUSTIFY_TOP:
         break;
@@ -245,7 +240,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
         int yoffset;
         linecount -= 1;
 
-        switch( m_VJustify )
+        switch( GetVertJustify() )
         {
         case GR_TEXT_VJUSTIFY_TOP:
             break;
@@ -274,7 +269,7 @@ bool EDA_TEXT::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
     wxPoint location = aPoint;
 
     rect.Inflate( aAccuracy );
-    RotatePoint( &location, m_Pos, -m_Orient );
+    RotatePoint( &location, GetTextPos(), -GetTextAngle() );
 
     return rect.Contains( location );
 }
@@ -297,14 +292,15 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
                      EDA_COLOR_T aColor, GR_DRAWMODE aDrawMode,
                      EDA_DRAW_MODE_T aFillMode, EDA_COLOR_T aAnchor_color )
 {
-    if( m_MultilineAllowed )
+    if( IsMultilineAllowed() )
     {
         std::vector<wxPoint> positions;
         wxArrayString  strings;
         wxStringSplit( GetShownText(), strings, '\n' );
+
         positions.reserve( strings.Count() );
 
-        GetPositionsOfLinesOfMultilineText(positions, strings.Count() );
+        GetPositionsOfLinesOfMultilineText( positions, strings.Count() );
 
         for( unsigned ii = 0; ii < strings.Count(); ii++ )
         {
@@ -315,13 +311,13 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
     }
     else
         drawOneLineOfText( aClipBox, aDC, aOffset, aColor,
-                           aDrawMode, aFillMode, GetShownText(), m_Pos );
+                           aDrawMode, aFillMode, GetShownText(), GetTextPos() );
 
     // Draw text anchor, if requested
     if( aAnchor_color != UNSPECIFIED_COLOR )
     {
         GRDrawAnchor( aClipBox, aDC,
-                      m_Pos.x + aOffset.x, m_Pos.y + aOffset.y,
+                      GetTextPos().x + aOffset.x, GetTextPos().y + aOffset.y,
                       DIM_ANCRE_TEXTE, aAnchor_color );
     }
 }
@@ -330,17 +326,17 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
 void EDA_TEXT::GetPositionsOfLinesOfMultilineText(
         std::vector<wxPoint>& aPositions, int aLineCount ) const
 {
-    wxPoint        pos  = m_Pos;  // Position of first line of the
-                                  // multiline text according to
-                                  // the center of the multiline text block
+    wxPoint        pos  = GetTextPos();     // Position of first line of the
+                                            // multiline text according to
+                                            // the center of the multiline text block
 
-    wxPoint        offset;        // Offset to next line.
+    wxPoint        offset;                  // Offset to next line.
 
     offset.y = GetInterline();
 
     if( aLineCount > 1 )
     {
-        switch( m_VJustify )
+        switch( GetVertJustify() )
         {
         case GR_TEXT_VJUSTIFY_TOP:
             break;
@@ -357,10 +353,10 @@ void EDA_TEXT::GetPositionsOfLinesOfMultilineText(
 
     // Rotate the position of the first line
     // around the center of the multiline text block
-    RotatePoint( &pos, m_Pos, m_Orient );
+    RotatePoint( &pos, GetTextPos(), GetTextAngle() );
 
     // Rotate the offset lines to increase happened in the right direction
-    RotatePoint( &offset, m_Orient );
+    RotatePoint( &offset, GetTextAngle() );
 
     for( int ii = 0; ii < aLineCount; ii++ )
     {
@@ -374,7 +370,7 @@ void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
                                   GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aFillMode,
                                   const wxString& aText, const wxPoint &aPos )
 {
-    int width = m_Thickness;
+    int width = GetThickness();
 
     if( aDrawMode != UNSPECIFIED_DRAWMODE )
         GRSetDrawMode( aDC, aDrawMode );
@@ -382,13 +378,14 @@ void EDA_TEXT::drawOneLineOfText( EDA_RECT* aClipBox, wxDC* aDC,
     if( aFillMode == SKETCH )
         width = -width;
 
-    wxSize size = m_Size;
+    wxSize size = GetTextSize();
 
-    if( m_Mirror )
+    if( IsMirrored() )
         size.x = -size.x;
 
-    DrawGraphicText( aClipBox, aDC, aOffset + aPos, aColor, aText, m_Orient, size,
-                     m_HJustify, m_VJustify, width, m_Italic, m_Bold );
+    DrawGraphicText( aClipBox, aDC, aOffset + aPos, aColor, aText, GetTextAngle(), size,
+                     GetHorizJustify(), GetVertJustify(),
+                     width, IsItalic(), IsBold() );
 }
 
 
@@ -396,10 +393,10 @@ wxString EDA_TEXT::GetTextStyleName()
 {
     int style = 0;
 
-    if( m_Italic )
+    if( IsItalic() )
         style = 1;
 
-    if( m_Bold )
+    if( IsBold() )
         style += 2;
 
     wxString stylemsg[4] = {
@@ -415,16 +412,17 @@ wxString EDA_TEXT::GetTextStyleName()
 
 bool EDA_TEXT::IsDefaultFormatting() const
 {
-    return (  ( m_Size.x == Mils2iu( DEFAULT_SIZE_TEXT ) )
-           && ( m_Size.y == Mils2iu( DEFAULT_SIZE_TEXT ) )
-           && ( m_Attributs == 0 )
-           && ( m_Mirror == false )
-           && ( m_HJustify == GR_TEXT_HJUSTIFY_CENTER )
-           && ( m_VJustify == GR_TEXT_VJUSTIFY_CENTER )
-           && ( m_Thickness == 0 )
-           && ( m_Italic == false )
-           && ( m_Bold == false )
-           && ( m_MultilineAllowed == false ) );
+    return (  GetTextWidth()  == Mils2iu( DEFAULT_SIZE_TEXT )
+           && GetTextHeight() == Mils2iu( DEFAULT_SIZE_TEXT )
+           && IsVisible()
+           && !IsMirrored()
+           && GetHorizJustify() == GR_TEXT_HJUSTIFY_CENTER
+           && GetVertJustify() == GR_TEXT_VJUSTIFY_CENTER
+           && GetThickness() == 0
+           && !IsItalic()
+           && !IsBold()
+           && !IsMultilineAllowed()
+           );
 }
 
 void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
@@ -437,23 +435,27 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
     {
         aFormatter->Print( aNestLevel+1, "(effects" );
 
-        if( ( m_Size.x != Mils2iu( DEFAULT_SIZE_TEXT ) )
-          || ( m_Size.y != Mils2iu( DEFAULT_SIZE_TEXT ) )
-          || ( m_Thickness != 0 ) || m_Bold || m_Italic )
+        if( ( GetTextWidth() != Mils2iu( DEFAULT_SIZE_TEXT ) )
+          || ( GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) )
+          || ( GetThickness() != 0 ) || IsBold() || IsItalic() )
         {
             aFormatter->Print( 0, " (font" );
 
             // Add font support here at some point in the future.
 
-            if( ( m_Size.x != Mils2iu( DEFAULT_SIZE_TEXT ) )
-              || ( m_Size.y != Mils2iu( DEFAULT_SIZE_TEXT ) ) )
-                aFormatter->Print( 0, " (size %s %s)", FMT_IU( m_Size.GetHeight() ).c_str(),
-                                   FMT_IU( m_Size.GetWidth() ).c_str() );
+            if(  GetTextWidth()  != Mils2iu( DEFAULT_SIZE_TEXT )
+              || GetTextHeight() != Mils2iu( DEFAULT_SIZE_TEXT ) )
+            {
+                aFormatter->Print( 0, " (size %s %s)",
+                        FMT_IU( GetTextHeight() ).c_str(),
+                        FMT_IU( GetTextWidth() ).c_str()
+                        );
+            }
 
-            if( m_Thickness != 0 )
+            if( GetThickness() )
                 aFormatter->Print( 0, " (thickness %s)", FMT_IU( GetThickness() ).c_str() );
 
-            if( m_Bold )
+            if( IsBold() )
                 aFormatter->Print( 0, " bold" );
 
             if( IsItalic() )
@@ -462,25 +464,25 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
             aFormatter->Print( 0, ")");
         }
 
-        if( m_Mirror || ( m_HJustify != GR_TEXT_HJUSTIFY_CENTER )
-          || ( m_VJustify != GR_TEXT_VJUSTIFY_CENTER ) )
+        if( IsMirrored() || ( GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER )
+          || ( GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER ) )
         {
             aFormatter->Print( 0, " (justify");
 
-            if( m_HJustify != GR_TEXT_HJUSTIFY_CENTER )
-                aFormatter->Print( 0, (m_HJustify == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
+            if( GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER )
+                aFormatter->Print( 0, (GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
 
-            if( m_VJustify != GR_TEXT_VJUSTIFY_CENTER )
-                aFormatter->Print( 0, (m_VJustify == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
+            if( GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
+                aFormatter->Print( 0, (GetVertJustify() == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
 
-            if( m_Mirror )
+            if( IsMirrored() )
                 aFormatter->Print( 0, " mirror" );
 
             aFormatter->Print( 0, ")" );
         }
 
         // As of now the only place this is used is in Eeschema to hide or show the text.
-        if( m_Attributs )
+        if( !IsVisible() )
             aFormatter->Print( 0, " hide" );
 
         aFormatter->Print( 0, ")\n" );
@@ -503,7 +505,7 @@ static void addTextSegmToBuffer( int x0, int y0, int xf, int yf )
 
 void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuffer ) const
 {
-    wxSize size = GetSize();
+    wxSize size = GetTextSize();
 
     if( IsMirrored() )
         size.x = -size.x;
@@ -523,7 +525,7 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
         {
             wxString txt = strings_list.Item( ii );
             DrawGraphicText( NULL, NULL, positions[ii], color,
-                             txt, GetOrientation(), size,
+                             txt, GetTextAngle(), size,
                              GetHorizJustify(), GetVertJustify(),
                              GetThickness(), IsItalic(),
                              true, addTextSegmToBuffer );
@@ -531,8 +533,8 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
     }
     else
     {
-        DrawGraphicText( NULL, NULL, GetTextPosition(), color,
-                         GetText(), GetOrientation(), size,
+        DrawGraphicText( NULL, NULL, GetTextPos(), color,
+                         GetText(), GetTextAngle(), size,
                          GetHorizJustify(), GetVertJustify(),
                          GetThickness(), IsItalic(),
                          true, addTextSegmToBuffer );

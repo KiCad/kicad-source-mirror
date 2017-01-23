@@ -57,20 +57,20 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     MODULE* module = static_cast<MODULE*>( m_Parent );
 
     m_Type = text_type;
-    m_NoShow = false;
+
     // Set text thickness to a default value
-    m_Thickness = Millimeter2iu( 0.15 );
+    SetThickness( Millimeter2iu( 0.15 ) );
     SetLayer( F_SilkS );
 
     // Set position and give a default layer if a valid parent footprint exists
     if( module && ( module->Type() == PCB_MODULE_T ) )
     {
-        m_Pos = module->GetPosition();
+        SetTextPos( module->GetPosition() );
 
         if( IsBackLayer( module->GetLayer() ) )
         {
             SetLayer( B_SilkS );
-            m_Mirror = true;
+            SetMirrored( true );
         }
     }
 
@@ -83,12 +83,22 @@ TEXTE_MODULE::~TEXTE_MODULE()
 }
 
 
+void TEXTE_MODULE::SetTextAngle( double aAngle )
+{
+    EDA_TEXT::SetTextAngle( NormalizeAngle360( aAngle ) );
+}
+
+
 void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     // Used in footprint edition
     // Note also in module editor, m_Pos0 = m_Pos
-    RotatePoint( &m_Pos, aRotCentre, aAngle );
-    SetOrientation( GetOrientation() + aAngle );
+
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aRotCentre, aAngle );
+    SetTextPos( pt );
+
+    SetTextAngle( GetTextAngle() + aAngle );
     SetLocalCoord();
 }
 
@@ -96,10 +106,12 @@ void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 void TEXTE_MODULE::Flip( const wxPoint& aCentre )
 {
     // flipping the footprint is relative to the X axis
-    MIRROR( m_Pos.y, aCentre.y );
-    NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
+    SetTextY( ::Mirror( GetTextPos().y, aCentre.y ) );
+
+    SetTextAngle( -GetTextAngle() );
+
     SetLayer( FlipLayer( GetLayer() ) );
-    m_Mirror = IsBackLayer( GetLayer() );
+    SetMirrored( IsBackLayer( GetLayer() ) );
     SetLocalCoord();
 }
 
@@ -110,18 +122,17 @@ void TEXTE_MODULE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     // the mirror is around the Y axis or X axis if aMirrorAroundXAxis = true
     // the position is mirrored, but the text itself is not mirrored
     if( aMirrorAroundXAxis )
-        MIRROR( m_Pos.y, aCentre.y );
+        SetTextY( ::Mirror( GetTextPos().y, aCentre.y ) );
     else
-        MIRROR( m_Pos.x, aCentre.x );
+        SetTextX( ::Mirror( GetTextPos().x, aCentre.x ) );
 
-    NEGATE_AND_NORMALIZE_ANGLE_POS( m_Orient );
     SetLocalCoord();
 }
 
 
 void TEXTE_MODULE::Move( const wxPoint& aMoveVector )
 {
-    m_Pos += aMoveVector;
+    Offset( aMoveVector );
     SetLocalCoord();
 }
 
@@ -136,14 +147,17 @@ void TEXTE_MODULE::SetDrawCoord()
 {
     const MODULE* module = static_cast<const MODULE*>( m_Parent );
 
-    m_Pos = m_Pos0;
+    SetTextPos( m_Pos0 );
 
     if( module  )
     {
         double angle = module->GetOrientation();
 
-        RotatePoint( &m_Pos.x, &m_Pos.y, angle );
-        m_Pos += module->GetPosition();
+        wxPoint pt = GetTextPos();
+        RotatePoint( &pt, angle );
+        SetTextPos( pt );
+
+        Offset( module->GetPosition() );
     }
 }
 
@@ -154,13 +168,15 @@ void TEXTE_MODULE::SetLocalCoord()
 
     if( module )
     {
-        m_Pos0 = m_Pos - module->GetPosition();
+        m_Pos0 = GetTextPos() - module->GetPosition();
+
         double angle = module->GetOrientation();
+
         RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
     }
     else
     {
-        m_Pos0 = m_Pos;
+        m_Pos0 = GetTextPos();
     }
 }
 
@@ -174,7 +190,7 @@ bool TEXTE_MODULE::HitTest( const wxPoint& aPosition ) const
      * is relative to an horizontal text)
      */
     rel_pos = aPosition;
-    RotatePoint( &rel_pos, m_Pos, -GetDrawRotation() );
+    RotatePoint( &rel_pos, GetTextPos(), -GetDrawRotation() );
 
     if( area.Contains( rel_pos ) )
         return true;
@@ -189,7 +205,7 @@ const EDA_RECT TEXTE_MODULE::GetBoundingBox() const
     EDA_RECT text_area = GetTextBox( -1, -1 );
 
     if( angle )
-        text_area = text_area.GetBoundingBoxRotated( m_Pos, angle );
+        text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
 
     return text_area;
 }
@@ -216,7 +232,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
 
     // Invisible texts are still drawn (not plotted) in MOD_TEXT_INVISIBLE
     // Just because we must have to edit them (at least to make them visible)
-    if( m_NoShow )
+    if( !IsVisible() )
     {
         if( !brd->IsElementVisible( MOD_TEXT_INVISIBLE ) )
             return;
@@ -236,13 +252,13 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
     }
 
     // Draw mode compensation for the width
-    int width = m_Thickness;
+    int width = GetThickness();
 
     if( displ_opts && displ_opts->m_DisplayModTextFill == SKETCH )
         width = -width;
 
     GRSetDrawMode( aDC, aDrawMode );
-    wxPoint pos = m_Pos - aOffset;
+    wxPoint pos = GetTextPos() - aOffset;
 
     // Draw the text anchor point
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
@@ -252,15 +268,16 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMod
     }
 
     // Draw the text proper, with the right attributes
-    wxSize size   = m_Size;
+    wxSize size   = GetTextSize();
     double orient = GetDrawRotation();
 
     // If the text is mirrored : negate size.x (mirror / Y axis)
-    if( m_Mirror )
+    if( IsMirrored() )
         size.x = -size.x;
 
     DrawGraphicText( aPanel->GetClipBox(), aDC, pos, color, GetShownText(), orient,
-                     size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
+                     size, GetHorizJustify(), GetVertJustify(),
+                     width, IsItalic(), IsBold() );
 
     // Enable these line to draw the bounding box (debug test purpose only)
 #if 0
@@ -284,7 +301,7 @@ void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
 
     GRSetDrawMode( aDC, GR_XOR );
     GRLine( aPanel->GetClipBox(), aDC,
-            parent->GetPosition(), GetTextPosition() + aOffset,
+            parent->GetPosition(), GetTextPos() + aOffset,
             0, UMBILICAL_COLOR);
 }
 
@@ -292,7 +309,7 @@ void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
 double TEXTE_MODULE::GetDrawRotation() const
 {
     MODULE* module = (MODULE*) m_Parent;
-    double  rotation = m_Orient;
+    double  rotation = GetTextAngle();
 
     if( module )
         rotation += module->GetOrientation();
@@ -332,7 +349,7 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     wxASSERT( m_Type >= TEXT_is_REFERENCE && m_Type <= TEXT_is_DIVERS );
     aList.push_back( MSG_PANEL_ITEM( _( "Type" ), text_type_msg[m_Type], DARKGREEN ) );
 
-    if( m_NoShow )
+    if( !IsVisible() )
         msg = _( "No" );
     else
         msg = _( "Yes" );
@@ -342,23 +359,23 @@ void TEXTE_MODULE::GetMsgPanelInfo( std::vector< MSG_PANEL_ITEM >& aList )
     // Display text layer
     aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), GetLayerName(), DARKGREEN ) );
 
-    if( m_Mirror )
+    if( IsMirrored() )
         msg = _( " Yes" );
     else
         msg = _( " No" );
 
     aList.push_back( MSG_PANEL_ITEM( _( "Mirror" ), msg, DARKGREEN ) );
 
-    msg.Printf( wxT( "%.1f" ), GetOrientationDegrees() );
+    msg.Printf( wxT( "%.1f" ), GetTextAngleDegrees() );
     aList.push_back( MSG_PANEL_ITEM( _( "Angle" ), msg, DARKGREEN ) );
 
-    msg = ::CoordinateToString( m_Thickness );
+    msg = ::CoordinateToString( GetThickness() );
     aList.push_back( MSG_PANEL_ITEM( _( "Thickness" ), msg, DARKGREEN ) );
 
-    msg = ::CoordinateToString( m_Size.x );
+    msg = ::CoordinateToString( GetTextWidth() );
     aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, RED ) );
 
-    msg = ::CoordinateToString( m_Size.y );
+    msg = ::CoordinateToString( GetTextHeight() );
     aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, RED ) );
 }
 
@@ -400,7 +417,7 @@ const BOX2I TEXTE_MODULE::ViewBBox() const
     EDA_RECT text_area = GetTextBox( -1, -1 );
 
     if( angle )
-        text_area = text_area.GetBoundingBoxRotated( m_Pos, angle );
+        text_area = text_area.GetBoundingBoxRotated( GetTextPos(), angle );
 
     return BOX2I( text_area.GetPosition(), text_area.GetSize() );
 }
@@ -408,7 +425,7 @@ const BOX2I TEXTE_MODULE::ViewBBox() const
 
 void TEXTE_MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    if( m_NoShow )      // Hidden text
+    if( !IsVisible() )      // Hidden text
         aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_INVISIBLE );
     //else if( IsFrontLayer( m_Layer ) )
         //aLayers[0] = ITEM_GAL_LAYER( MOD_TEXT_FR_VISIBLE );

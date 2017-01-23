@@ -480,7 +480,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
     }
 
     int orientation = parseInt( parameters[paramCnt-4], 1.0 );
-    module->Reference().SetOrientation( (orientation % 2) ? 900 : 0 );
+    module->Reference().SetTextAngle( (orientation % 2) ? 900 : 0 );
 
     // Calculate size: default height is 40 mils, width 30 mil.
     // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
@@ -500,19 +500,19 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader ) throw( IO_ERROR,
     textPos.x -= thsize / 10;
     textPos.y += thsize / 2;
 
-    module->Reference().SetTextPosition( textPos );
+    module->Reference().SetTextPos( textPos );
     module->Reference().SetPos0( textPos );
-    module->Reference().SetSize( wxSize( twsize, thsize ) );
+    module->Reference().SetTextSize( wxSize( twsize, thsize ) );
     module->Reference().SetThickness( thickness );
 
     // gEDA/pcb shows only one of value/reference/description at a time. Which
     // one is selectable by a global menu setting. pcbnew needs reference as
     // well as value visible, so place the value right below the reference.
-    module->Value().SetOrientation( module->Reference().GetOrientation() );
-    module->Value().SetSize( module->Reference().GetSize() );
+    module->Value().SetTextAngle( module->Reference().GetTextAngle() );
+    module->Value().SetTextSize( module->Reference().GetTextSize() );
     module->Value().SetThickness( module->Reference().GetThickness() );
     textPos.y += thsize * 13 / 10;  // 130% line height
-    module->Value().SetTextPosition( textPos );
+    module->Value().SetTextPos( textPos );
     module->Value().SetPos0( textPos );
 
     while( aLineReader->ReadLine() )

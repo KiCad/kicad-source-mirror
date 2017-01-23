@@ -761,7 +761,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnEditReference( wxCommandEvent& event )
 {
     wxPoint tmp = m_Parent->GetCrossHairPosition();
 
-    m_Parent->SetCrossHairPosition( m_ReferenceCopy->GetTextPosition() );
+    m_Parent->SetCrossHairPosition( m_ReferenceCopy->GetTextPos() );
     m_ReferenceCopy->SetParent( m_CurrentModule );
     m_Parent->InstallTextModOptionsFrame( m_ReferenceCopy, NULL );
     m_Parent->SetCrossHairPosition( tmp );
@@ -773,7 +773,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnEditValue( wxCommandEvent& event )
 {
     wxPoint tmp = m_Parent->GetCrossHairPosition();
 
-    m_Parent->SetCrossHairPosition( m_ValueCopy->GetTextPosition() );
+    m_Parent->SetCrossHairPosition( m_ValueCopy->GetTextPos() );
     m_ValueCopy->SetParent( m_CurrentModule );
     m_Parent->InstallTextModOptionsFrame( m_ValueCopy, NULL );
     m_Parent->SetCrossHairPosition( tmp );

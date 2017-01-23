@@ -160,7 +160,7 @@ void DrawGraphicText( EDA_RECT* aClipBox,
     if( size.x < 0 )
         size.x = - size.x;
 
-    dummy.SetSize( size );
+    dummy.SetTextSize( size );
 
     basic_gal.SetTextAttributes( &dummy );
     basic_gal.SetPlotter( aPlotter );
@@ -171,6 +171,7 @@ void DrawGraphicText( EDA_RECT* aClipBox,
 
     basic_gal.StrokeText( aText, VECTOR2D( aPos ), aOrient * M_PI/1800 );
 }
+
 
 void DrawGraphicHaloText( EDA_RECT* aClipBox, wxDC * aDC,
                           const wxPoint &aPos,

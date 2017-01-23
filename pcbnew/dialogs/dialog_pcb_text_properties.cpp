@@ -136,11 +136,11 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataToWindow()
     // Fill fields with current values
     *m_TextContentCtrl << m_SelectedPCBText->GetText();
 
-    PutValueInLocalUnits( *m_SizeXCtrl, m_SelectedPCBText->GetSize().x );
-    PutValueInLocalUnits( *m_SizeYCtrl, m_SelectedPCBText->GetSize().y );
+    PutValueInLocalUnits( *m_SizeXCtrl, m_SelectedPCBText->GetTextWidth() );
+    PutValueInLocalUnits( *m_SizeYCtrl, m_SelectedPCBText->GetTextHeight() );
     PutValueInLocalUnits( *m_ThicknessCtrl, m_SelectedPCBText->GetThickness() );
-    PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->GetTextPosition().x );
-    PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->GetTextPosition().y );
+    PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->GetTextPos().x );
+    PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->GetTextPos().y );
 
     // Configure the layers list selector
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
@@ -151,7 +151,7 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataToWindow()
     m_LayerSelectionCtrl->Resync();
     m_LayerSelectionCtrl->SetLayerSelection( m_SelectedPCBText->GetLayer() );
 
-    m_OrientValue = m_SelectedPCBText->GetOrientation() / 10.0;
+    m_OrientValue = m_SelectedPCBText->GetTextAngleDegrees();
 
     if( m_SelectedPCBText->IsMirrored() )
         m_DisplayCtrl->SetSelection( 1 );
@@ -235,7 +235,7 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataFromWindow()
     // Set PCB Text position
     newPosition.x = ValueFromString( g_UserUnit, m_PositionXCtrl->GetValue() );
     newPosition.y = ValueFromString( g_UserUnit, m_PositionYCtrl->GetValue() );
-    m_SelectedPCBText->SetTextPosition( newPosition );
+    m_SelectedPCBText->SetTextPos( newPosition );
 
     // Check constraints and set PCB Text size
     newSize.x = ValueFromString( g_UserUnit, m_SizeXCtrl->GetValue() );
@@ -253,7 +253,7 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataFromWindow()
     if( newSize.y > TEXTS_MAX_WIDTH )
         newSize.y = TEXTS_MAX_WIDTH;
 
-    m_SelectedPCBText->SetSize( newSize );
+    m_SelectedPCBText->SetTextSize( newSize );
 
     // Set the new thickness
     m_SelectedPCBText->SetThickness( ValueFromString( g_UserUnit,
@@ -261,7 +261,7 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataFromWindow()
 
     // Test for acceptable values for thickness and size and clamp if fails
     int maxthickness = Clamp_Text_PenSize( m_SelectedPCBText->GetThickness(),
-                                           m_SelectedPCBText->GetSize()  );
+                                           m_SelectedPCBText->GetTextSize()  );
 
     if( m_SelectedPCBText->GetThickness() > maxthickness )
     {
@@ -276,8 +276,8 @@ bool DIALOG_PCB_TEXT_PROPERTIES::TransferDataFromWindow()
     // Set whether the PCB text is mirrored (faced down from layer face perspective)
     m_SelectedPCBText->SetMirrored( m_DisplayCtrl->GetSelection() == 1 );
 
-    // Set the text orientation
-    m_SelectedPCBText->SetOrientation( m_OrientValue * 10.0 );
+    // Set the text angle
+    m_SelectedPCBText->SetTextAngle( m_OrientValue * 10.0 );
 
     // Set whether the PCB text is slanted (it is not italics, as italics has additional curves in style)
     m_SelectedPCBText->SetItalic( m_StyleCtrl->GetSelection() );

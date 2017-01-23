@@ -264,9 +264,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     TEXTE_MODULE* textMod = new TEXTE_MODULE( (MODULE*) m_frame->GetModel() );
 
                     textMod->SetLayer( m_frame->GetActiveLayer() );
-                    textMod->SetSize( dsnSettings.m_ModuleTextSize );
+                    textMod->SetTextSize( dsnSettings.m_ModuleTextSize );
                     textMod->SetThickness( dsnSettings.m_ModuleTextWidth );
-                    textMod->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+                    textMod->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
 
                     DialogEditModuleText textDialog( m_frame, textMod, NULL );
                     bool placing;
@@ -293,9 +293,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     if( IsBackLayer( layer ) )
                         textPcb->SetMirrored( true );
 
-                    textPcb->SetSize( dsnSettings.m_PcbTextSize );
+                    textPcb->SetTextSize( dsnSettings.m_PcbTextSize );
                     textPcb->SetThickness( dsnSettings.m_PcbTextWidth );
-                    textPcb->SetTextPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+                    textPcb->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
 
                     RunMainStack( [&]() {
                         getEditFrame<PCB_EDIT_FRAME>()->InstallTextPCBOptionsFrame( textPcb, NULL );
@@ -319,7 +319,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             else
             {
                 //assert( text->GetText().Length() > 0 );
-                //assert( text->GetSize().x > 0 && text->GetSize().y > 0 );
+                //assert( text->GetTextSize().x > 0 && text->GetTextSize().y > 0 );
 
                 text->ClearFlags();
                 preview.Remove( text );
@@ -448,10 +448,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                         dimension->SetLayer( layer );
                         dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
                         dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-                        dimension->Text().SetSize( m_board->GetDesignSettings().m_PcbTextSize );
+                        dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
 
                         int width = m_board->GetDesignSettings().m_PcbTextWidth;
-                        maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetSize() );
+                        maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
 
                         if( width > maxThickness )
                             width = maxThickness;
@@ -663,22 +663,27 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                     {
                         TEXTE_PCB* text = static_cast<TEXTE_PCB*>( item );
                         TEXTE_MODULE* textMod = new TEXTE_MODULE( (MODULE*) parent );
+
                         // Assignment operator also copies the item PCB_TEXT_T type,
                         // so it cannot be added to a module which handles PCB_MODULE_TEXT_T
-                        textMod->SetPosition( text->GetPosition() );
                         textMod->SetText( text->GetText() );
-                        textMod->SetSize( text->GetSize() );
+#if 0
+                        textMod->SetTextSize( text->GetTextSize() );
                         textMod->SetThickness( text->GetThickness() );
-                        textMod->SetOrientation( text->GetOrientation() );
-                        textMod->SetTextPosition( text->GetTextPosition() );
-                        textMod->SetSize( text->GetSize() );
+                        textMod->SetOrientation( text->GetTextAngle() );
+                        textMod->SetTextPos( text->GetTextPos() );
+                        textMod->SetTextSize( text->GetTextSize() );
+                        textMod->SetVisible( text->GetVisible() );
                         textMod->SetMirrored( text->IsMirrored() );
-                        textMod->SetAttributes( text->GetAttributes() );
                         textMod->SetItalic( text->IsItalic() );
                         textMod->SetBold( text->IsBold() );
                         textMod->SetHorizJustify( text->GetHorizJustify() );
                         textMod->SetVertJustify( text->GetVertJustify() );
                         textMod->SetMultilineAllowed( text->IsMultilineAllowed() );
+#else
+                        textMod->EDA_TEXT::SetEffects( *text );
+                        textMod->SetLocalCoord();   // using changed SetTexPos() via SetEffects()
+#endif
                         converted = textMod;
                         break;
                     }

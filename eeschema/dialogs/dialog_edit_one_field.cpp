@@ -89,8 +89,8 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
     m_text = aTextItem->GetText();
     m_style = aTextItem->IsItalic() ? 1 : 0;
     m_style += aTextItem->IsBold() ? 2 : 0;
-    m_size = aTextItem->GetSize().x;
-    m_orientation = ( aTextItem->GetOrientation() == TEXT_ORIENT_VERT );
+    m_size = aTextItem->GetTextWidth();
+    m_orientation = ( aTextItem->GetTextAngle() == TEXT_ANGLE_VERT );
     m_verticalJustification = aTextItem->GetVertJustify() + 1;
     m_horizontalJustification = aTextItem->GetHorizJustify() + 1;
     m_isVisible = aTextItem->IsVisible();
@@ -211,9 +211,9 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
 
 void DIALOG_EDIT_ONE_FIELD::updateText( EDA_TEXT* aText )
 {
-    aText->SetSize( wxSize( m_size, m_size ) );
+    aText->SetTextSize( wxSize( m_size, m_size ) );
     aText->SetVisible( m_isVisible );
-    aText->SetOrientation( m_orientation ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ );
+    aText->SetTextAngle( m_orientation ? TEXT_ANGLE_VERT : TEXT_ANGLE_HORIZ );
     aText->SetItalic( (m_style & 1) != 0 );
     aText->SetBold( (m_style & 2) != 0 );
     aText->SetHorizJustify( IntToEdaTextHorizJustify( m_horizontalJustification - 1 ) );

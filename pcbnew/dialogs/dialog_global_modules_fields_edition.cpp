@@ -162,12 +162,12 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
         {
             TEXTE_MODULE* item = &module->Reference();
 
-            if( item->GetSize() != GetDesignSettings().m_ModuleTextSize ||
+            if( item->GetTextSize() != GetDesignSettings().m_ModuleTextSize ||
                 item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
             {
                 commit.Modify( item );
                 item->SetThickness( modTextWidth );
-                item->SetSize( modTextSize );
+                item->SetTextSize( modTextSize );
             }
         }
 
@@ -175,12 +175,12 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
         {
             TEXTE_MODULE* item = &module->Value();
 
-            if( item->GetSize() != GetDesignSettings().m_ModuleTextSize ||
+            if( item->GetTextSize() != GetDesignSettings().m_ModuleTextSize ||
                 item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
             {
                 commit.Modify( item );
                 item->SetThickness( modTextWidth );
-                item->SetSize( modTextSize );
+                item->SetTextSize( modTextSize );
             }
         }
 
@@ -193,12 +193,12 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( const wxString & aFilter, bool aRef,
                 {
                     TEXTE_MODULE* item = static_cast<TEXTE_MODULE*>( boardItem );
 
-                    if( item->GetSize() != GetDesignSettings().m_ModuleTextSize
+                    if( item->GetTextSize() != GetDesignSettings().m_ModuleTextSize
                         || item->GetThickness() != GetDesignSettings().m_ModuleTextWidth )
                     {
                         commit.Modify( item );
                         item->SetThickness( modTextWidth );
-                        item->SetSize( modTextSize );
+                        item->SetTextSize( modTextSize );
                     }
                 }
             }

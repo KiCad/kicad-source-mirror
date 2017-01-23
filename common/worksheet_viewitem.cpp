@@ -184,11 +184,11 @@ void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_POLYGON* aItem, GAL* aGal ) co
 
 void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_TEXT* aItem, GAL* aGal ) const
 {
-    VECTOR2D position( aItem->GetTextPosition().x, aItem->GetTextPosition().y );
+    VECTOR2D position( aItem->GetTextPos().x, aItem->GetTextPos().y );
 
     aGal->Save();
     aGal->Translate( position );
-    aGal->Rotate( -aItem->GetOrientation() * M_PI / 1800.0 );
+    aGal->Rotate( -aItem->GetTextAngle() * M_PI / 1800.0 );
     aGal->SetStrokeColor( COLOR4D( aItem->GetColor() ) );
     aGal->SetLineWidth( aItem->GetThickness() );
     aGal->SetTextAttributes( aItem );

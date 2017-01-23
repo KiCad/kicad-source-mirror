@@ -102,7 +102,7 @@ static LIB_PART* dummy()
 
         LIB_TEXT* text = new LIB_TEXT( part );
 
-        text->SetSize( wxSize( 150, 150 ) );
+        text->SetTextSize( wxSize( 150, 150 ) );
         text->SetText( wxString( wxT( "??" ) ) );
 
         part->AddDrawItem( square );
@@ -171,7 +171,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
             schField = AddField( fld );
         }
 
-        schField->SetTextPosition( m_Pos + it->GetTextPosition() );
+        schField->SetTextPos( m_Pos + it->GetTextPos() );
         schField->ImportValues( *it );
         schField->SetText( it->GetText() );
     }
@@ -541,11 +541,11 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     SCH_FIELD* rf = GetField( REFERENCE );
 
     if( rf->GetText().IsEmpty()
-      || ( abs( rf->GetTextPosition().x - m_Pos.x ) +
-           abs( rf->GetTextPosition().y - m_Pos.y ) > 10000 ) )
+      || ( abs( rf->GetTextPos().x - m_Pos.x ) +
+           abs( rf->GetTextPos().y - m_Pos.y ) > 10000 ) )
     {
         // move it to a reasonable position
-        rf->SetTextPosition( m_Pos + wxPoint( 50, 50 ) );
+        rf->SetTextPos( m_Pos + wxPoint( 50, 50 ) );
     }
 
     rf->SetText( ref );  // for drawing.
@@ -1209,7 +1209,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         m_part_name.Empty();
         GetField( VALUE )->Empty();
-        GetField( VALUE )->SetOrientation( TEXT_ORIENT_HORIZ );
+        GetField( VALUE )->SetTextAngle( TEXT_ANGLE_HORIZ );
         GetField( VALUE )->SetVisible( false );
     }
 
@@ -1276,7 +1276,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             for( int i = 0; i<GetFieldCount();  i++ )
             {
                 if( GetField( i )->GetText().IsEmpty() )
-                    GetField( i )->SetTextPosition( m_Pos );
+                    GetField( i )->SetTextPos( m_Pos );
             }
         }
         else if( line[0] == 'A' && line[1] == 'R' )
@@ -1386,17 +1386,17 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 continue;
             }
 
-            GetField( fieldNdx )->SetTextPosition( wxPoint( x, y ) );
-            GetField( fieldNdx )->SetAttributes( attr );
+            GetField( fieldNdx )->SetTextPos( wxPoint( x, y ) );
+            GetField( fieldNdx )->SetVisible( !attr );
 
             if( (w == 0 ) || (ii == 4) )
                 w = GetDefaultTextSize();
 
-            GetField( fieldNdx )->SetSize( wxSize( w, w ) );
-            GetField( fieldNdx )->SetOrientation( TEXT_ORIENT_HORIZ );
+            GetField( fieldNdx )->SetTextSize( wxSize( w, w ) );
+            GetField( fieldNdx )->SetTextAngle( TEXT_ANGLE_HORIZ );
 
             if( char1[0] == 'V' )
-                GetField( fieldNdx )->SetOrientation( TEXT_ORIENT_VERT );
+                GetField( fieldNdx )->SetTextAngle( TEXT_ANGLE_VERT );
 
             if( ii >= 7 )
             {
@@ -1577,9 +1577,9 @@ void SCH_COMPONENT::MirrorY( int aYaxis_position )
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
         // Move the fields to the new position because the component itself has moved.
-        wxPoint pos = GetField( ii )->GetTextPosition();
+        wxPoint pos = GetField( ii )->GetTextPos();
         pos.x -= dx;
-        GetField( ii )->SetTextPosition( pos );
+        GetField( ii )->SetTextPos( pos );
     }
 }
 
@@ -1595,9 +1595,9 @@ void SCH_COMPONENT::MirrorX( int aXaxis_position )
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
         // Move the fields to the new position because the component itself has moved.
-        wxPoint pos = GetField( ii )->GetTextPosition();
+        wxPoint pos = GetField( ii )->GetTextPos();
         pos.y -= dy;
-        GetField( ii )->SetTextPosition( pos );
+        GetField( ii )->SetTextPos( pos );
     }
 }
 
@@ -1613,10 +1613,10 @@ void SCH_COMPONENT::Rotate( wxPoint aPosition )
     for( int ii = 0; ii < GetFieldCount(); ii++ )
     {
         // Move the fields to the new position because the component itself has moved.
-        wxPoint pos = GetField( ii )->GetTextPosition();
+        wxPoint pos = GetField( ii )->GetTextPos();
         pos.x -= prev.x - m_Pos.x;
         pos.y -= prev.y - m_Pos.y;
-        GetField( ii )->SetTextPosition( pos );
+        GetField( ii )->SetTextPos( pos );
     }
 }
 

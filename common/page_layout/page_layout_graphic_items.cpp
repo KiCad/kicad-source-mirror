@@ -140,7 +140,7 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
                 WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
 
                 if( markerSize )
-                    drawMarker( aClipBox, aDC, text->GetTextPosition(),
+                    drawMarker( aClipBox, aDC, text->GetTextPos(),
                                 markerSize );
                }
             break;
@@ -179,8 +179,8 @@ WS_DRAW_ITEM_TEXT::WS_DRAW_ITEM_TEXT( WORKSHEET_DATAITEM* aParent,
                    bool aItalic, bool aBold ) :
     WS_DRAW_ITEM_BASE( aParent, wsg_text, aColor ), EDA_TEXT( aText )
 {
-    SetTextPosition( aPos );
-    SetSize( aSize );
+    SetTextPos( aPos );
+    SetTextSize( aSize );
     SetThickness( aPenWidth );
     SetItalic( aItalic );
     SetBold( aBold );
@@ -211,7 +211,7 @@ bool WS_DRAW_ITEM_TEXT::HitTest( const EDA_RECT& aRect ) const
 
 bool WS_DRAW_ITEM_TEXT::HitTestStartPoint( const wxPoint& aPosition)
 {
-    wxPoint pos = GetTextPosition();
+    wxPoint pos = GetTextPos();
 
     if( std::abs( pos.x - aPosition.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 &&
         std::abs( pos.y - aPosition.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi()/2 )

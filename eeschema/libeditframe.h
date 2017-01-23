@@ -108,8 +108,8 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     /// The current text size setting.
     static int m_textSize;
 
-    /// Current text orientation setting.
-    static int m_textOrientation;
+    /// Current text angle setting.
+    static double m_current_text_angle;
 
     /// The default pin num text size setting.
     static int m_textPinNumDefaultSize;

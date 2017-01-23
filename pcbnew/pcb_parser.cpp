@@ -264,7 +264,7 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
                     wxSize sz;
                     sz.SetHeight( parseBoardUnits( "text height" ) );
                     sz.SetWidth( parseBoardUnits( "text width" ) );
-                    aText->SetSize( sz );
+                    aText->SetTextSize( sz );
                     NeedRIGHT();
                     break;
                 }
@@ -1518,14 +1518,14 @@ TEXTE_PCB* PCB_PARSER::parseTEXTE_PCB() throw( IO_ERROR, PARSE_ERROR )
 
     pt.x = parseBoardUnits( "X coordinate" );
     pt.y = parseBoardUnits( "Y coordinate" );
-    text->SetTextPosition( pt );
+    text->SetTextPos( pt );
 
     // If there is no orientation defined, then it is the default value of 0 degrees.
     token = NextTok();
 
     if( token == T_NUMBER )
     {
-        text->SetOrientation( parseDouble() * 10.0 );
+        text->SetTextAngle( parseDouble() * 10.0 );
         NeedRIGHT();
     }
     else if( token != T_RIGHT )
@@ -1607,7 +1607,7 @@ DIMENSION* PCB_PARSER::parseDIMENSION() throw( IO_ERROR, PARSE_ERROR )
         {
             TEXTE_PCB* text = parseTEXTE_PCB();
             dimension->Text() = *text;
-            dimension->SetPosition( text->GetTextPosition() );
+            dimension->SetPosition( text->GetTextPos() );
             delete text;
             break;
         }
@@ -1919,9 +1919,9 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             {
                 TEXTE_MODULE* text = parseTEXTE_MODULE();
                 text->SetParent( module.get() );
-                double orientation = text->GetOrientation();
+                double orientation = text->GetTextAngle();
                 orientation -= module->GetOrientation();
-                text->SetOrientation( orientation );
+                text->SetTextAngle( orientation );
                 text->SetDrawCoord();
 
                 switch( text->GetType() )
@@ -2017,6 +2017,18 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 
     NeedSYMBOLorNUMBER();
 
+#if defined(DEBUG)
+    {
+        wxString ref = FromUTF8();
+
+        if( ref == "LED7" )
+        {
+            int breakhere = 1;
+            (void) breakhere;
+        }
+    }
+#endif
+
     text->SetText( FromUTF8() );
     NeedLEFT();
     token = NextTok();
@@ -2034,7 +2046,7 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
     // If there is no orientation defined, then it is the default value of 0 degrees.
     if( token == T_NUMBER )
     {
-        text->SetOrientation( parseDouble() * 10.0 );
+        text->SetTextAngle( parseDouble() * 10.0 );
         NeedRIGHT();
     }
     else if( token != T_RIGHT )

@@ -64,41 +64,40 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
     // Disable options for fieldedition, not existing in  graphic text
     m_Invisible->Show(false);
 
-    if ( m_graphicText )
+    if( m_graphicText )
     {
-        msg = StringFromValue( g_UserUnit, m_graphicText->GetSize().x );
+        msg = StringFromValue( g_UserUnit, m_graphicText->GetTextWidth() );
         m_TextSize->SetValue( msg );
         m_TextValue->SetValue( m_graphicText->GetText() );
 
-        if ( m_graphicText->GetUnit() == 0 )
+        if( m_graphicText->GetUnit() == 0 )
             m_CommonUnit->SetValue( true );
-        if ( m_graphicText->GetConvert() == 0 )
+        if( m_graphicText->GetConvert() == 0 )
             m_CommonConvert->SetValue( true );
-        if ( m_graphicText->GetOrientation() == TEXT_ORIENT_VERT )
+        if( m_graphicText->GetTextAngle() == TEXT_ANGLE_VERT )
             m_Orient->SetValue( true );
 
         int shape = 0;
-        if ( m_graphicText->IsItalic() )
+        if( m_graphicText->IsItalic() )
             shape = 1;
-        if ( m_graphicText->IsBold() )
+        if( m_graphicText->IsBold() )
             shape |= 2;
 
         m_TextShapeOpt->SetSelection( shape );
 
         switch ( m_graphicText->GetHorizJustify() )
         {
-            case GR_TEXT_HJUSTIFY_LEFT:
-                m_TextHJustificationOpt->SetSelection( 0 );
-                break;
+        case GR_TEXT_HJUSTIFY_LEFT:
+            m_TextHJustificationOpt->SetSelection( 0 );
+            break;
 
-            case GR_TEXT_HJUSTIFY_CENTER:
-                m_TextHJustificationOpt->SetSelection( 1 );
-                break;
+        case GR_TEXT_HJUSTIFY_CENTER:
+            m_TextHJustificationOpt->SetSelection( 1 );
+            break;
 
-            case GR_TEXT_HJUSTIFY_RIGHT:
-                m_TextHJustificationOpt->SetSelection( 2 );
-                break;
-
+        case GR_TEXT_HJUSTIFY_RIGHT:
+            m_TextHJustificationOpt->SetSelection( 2 );
+            break;
         }
 
         switch ( m_graphicText->GetVertJustify() )
@@ -121,11 +120,11 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
         msg = StringFromValue( g_UserUnit, m_parent->m_textSize );
         m_TextSize->SetValue( msg );
 
-        if ( ! m_parent->m_drawSpecificUnit )
+        if( ! m_parent->m_drawSpecificUnit )
             m_CommonUnit->SetValue( true );
-        if ( ! m_parent->m_drawSpecificConvert )
+        if( ! m_parent->m_drawSpecificConvert )
             m_CommonConvert->SetValue( true );
-        if ( m_parent->m_textOrientation == TEXT_ORIENT_VERT )
+        if( m_parent->m_current_text_angle == TEXT_ANGLE_VERT )
             m_Orient->SetValue( true );
     }
 
@@ -155,7 +154,7 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
     wxString Line;
 
     Line = m_TextValue->GetValue();
-    m_parent->m_textOrientation = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
+    m_parent->m_current_text_angle = m_Orient->GetValue() ? TEXT_ANGLE_VERT : TEXT_ANGLE_HORIZ;
     wxString msg = m_TextSize->GetValue();
     m_parent->m_textSize = ValueFromString( g_UserUnit, msg );
     m_parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
@@ -168,8 +167,8 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
         else
             m_graphicText->SetText( wxT( "[null]" ) );
 
-        m_graphicText->SetSize( wxSize( m_parent->m_textSize, m_parent->m_textSize ) );
-        m_graphicText->SetOrientation( m_parent->m_textOrientation );
+        m_graphicText->SetTextSize( wxSize( m_parent->m_textSize, m_parent->m_textSize ) );
+        m_graphicText->SetTextAngle( m_parent->m_current_text_angle );
 
         if( m_parent->m_drawSpecificUnit )
             m_graphicText->SetUnit( m_parent->GetUnit() );

@@ -259,12 +259,12 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
     {
         TEXTE_MODULE *textmod = texts[ii];
         s_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
-        wxSize size = textmod->GetSize();
+        wxSize size = textmod->GetTextSize();
 
         if( textmod->IsMirrored() )
             size.x = -size.x;
 
-        DrawGraphicText( NULL, NULL, textmod->GetTextPosition(), BLACK,
+        DrawGraphicText( NULL, NULL, textmod->GetTextPos(), BLACK,
                          textmod->GetShownText(), textmod->GetDrawRotation(), size,
                          textmod->GetHorizJustify(), textmod->GetVertJustify(),
                          textmod->GetThickness(), textmod->IsItalic(),
@@ -328,12 +328,12 @@ void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
     {
         TEXTE_MODULE *textmod = texts[ii];
         s_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
-        wxSize size = textmod->GetSize();
+        wxSize size = textmod->GetTextSize();
 
         if( textmod->IsMirrored() )
             size.x = -size.x;
 
-        DrawGraphicText( NULL, NULL, textmod->GetTextPosition(), BLACK,
+        DrawGraphicText( NULL, NULL, textmod->GetTextPos(), BLACK,
                          textmod->GetShownText(), textmod->GetDrawRotation(), size,
                          textmod->GetHorizJustify(), textmod->GetVertJustify(),
                          textmod->GetThickness(), textmod->IsItalic(),
@@ -413,7 +413,7 @@ void TEXTE_PCB::TransformBoundingBoxWithClearanceToPolygon(
     for( int ii = 0; ii < 4; ii++ )
     {
         // Rotate polygon
-        RotatePoint( &corners[ii].x, &corners[ii].y, m_Pos.x, m_Pos.y, m_Orient );
+        RotatePoint( &corners[ii].x, &corners[ii].y, GetTextPos().x, GetTextPos().y, GetTextAngle() );
         aCornerBuffer.Append( corners[ii].x, corners[ii].y );
     }
 }
@@ -437,7 +437,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
                             int                    aCircleToSegmentsCount,
                             double                 aCorrectionFactor ) const
 {
-    wxSize size = GetSize();
+    wxSize size = GetTextSize();
 
     if( IsMirrored() )
         size.x = -size.x;
@@ -459,7 +459,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
         {
             wxString txt = strings_list.Item( ii );
             DrawGraphicText( NULL, NULL, positions[ii], color,
-                             txt, GetOrientation(), size,
+                             txt, GetTextAngle(), size,
                              GetHorizJustify(), GetVertJustify(),
                              GetThickness(), IsItalic(),
                              true, addTextSegmToPoly );
@@ -467,8 +467,8 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
     }
     else
     {
-        DrawGraphicText( NULL, NULL, GetTextPosition(), color,
-                         GetShownText(), GetOrientation(), size,
+        DrawGraphicText( NULL, NULL, GetTextPos(), color,
+                         GetShownText(), GetTextAngle(), size,
                          GetHorizJustify(), GetVertJustify(),
                          GetThickness(), IsItalic(),
                          true, addTextSegmToPoly );

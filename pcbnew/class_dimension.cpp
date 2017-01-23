@@ -60,13 +60,13 @@ DIMENSION::~DIMENSION()
 
 void DIMENSION::SetPosition( const wxPoint& aPos )
 {
-    m_Text.SetTextPosition( aPos );
+    m_Text.SetTextPos( aPos );
 }
 
 
 const wxPoint& DIMENSION::GetPosition() const
 {
-    return m_Text.GetTextPosition();
+    return m_Text.GetTextPos();
 }
 
 
@@ -91,7 +91,8 @@ void DIMENSION::SetLayer( LAYER_ID aLayer )
 
 void DIMENSION::Move( const wxPoint& offset )
 {
-    m_Text.SetTextPosition( m_Text.GetTextPosition() + offset );
+    m_Text.Offset( offset );
+
     m_crossBarO     += offset;
     m_crossBarF     += offset;
     m_featureLineGO += offset;
@@ -107,11 +108,11 @@ void DIMENSION::Move( const wxPoint& offset )
 
 void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    wxPoint tmp = m_Text.GetTextPosition();
+    wxPoint tmp = m_Text.GetTextPos();
     RotatePoint( &tmp, aRotCentre, aAngle );
-    m_Text.SetTextPosition( tmp );
+    m_Text.SetTextPos( tmp );
 
-    double newAngle = m_Text.GetOrientation() + aAngle;
+    double newAngle = m_Text.GetTextAngle() + aAngle;
 
     if( newAngle >= 3600 )
         newAngle -= 3600;
@@ -119,7 +120,7 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
     if( newAngle > 900  &&  newAngle < 2700 )
         newAngle -= 1800;
 
-    m_Text.SetOrientation( newAngle );
+    m_Text.SetTextAngle( newAngle );
 
     RotatePoint( &m_crossBarO, aRotCentre, aAngle );
     RotatePoint( &m_crossBarF, aRotCentre, aAngle );
@@ -146,15 +147,15 @@ void DIMENSION::Flip( const wxPoint& aCentre )
 
 void DIMENSION::Mirror( const wxPoint& axis_pos )
 {
-    wxPoint newPos = m_Text.GetTextPosition();
+    wxPoint newPos = m_Text.GetTextPos();
 
 #define INVERT( pos ) (pos) = axis_pos.y - ( (pos) - axis_pos.y )
     INVERT( newPos.y );
 
-    m_Text.SetTextPosition( newPos );
+    m_Text.SetTextPos( newPos );
 
     // invert angle
-    m_Text.SetOrientation( -m_Text.GetOrientation() );
+    m_Text.SetTextAngle( -m_Text.GetTextAngle() );
 
     INVERT( m_crossBarO.y );
     INVERT( m_crossBarF.y );
@@ -220,7 +221,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     m_Text.SetLayer( GetLayer() );
 
     // calculate the size of the dimension (text + line above the text)
-    ii = m_Text.GetSize().y + m_Text.GetThickness() + (m_Width * 3);
+    ii = m_Text.GetTextHeight() + m_Text.GetThickness() + (m_Width * 3);
 
     deltax  = m_featureLineDO.x - m_featureLineGO.x;
     deltay  = m_featureLineDO.y - m_featureLineGO.y;
@@ -291,7 +292,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     wxPoint textPos;
     textPos.x  = (m_crossBarF.x + m_featureLineGF.x) / 2;
     textPos.y  = (m_crossBarF.y + m_featureLineGF.y) / 2;
-    m_Text.SetTextPosition( textPos );
+    m_Text.SetTextPos( textPos );
 
     double newAngle = -RAD2DECIDEG( angle );
 
@@ -300,7 +301,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     if( newAngle > 900  &&  newAngle < 2700 )
         newAngle -= 1800;
 
-    m_Text.SetOrientation( newAngle );
+    m_Text.SetTextAngle( newAngle );
 
     if( !aDoNotChangeText )
     {

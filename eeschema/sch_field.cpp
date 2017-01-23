@@ -55,11 +55,11 @@ SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
     SCH_ITEM( aParent, SCH_FIELD_T ),
     EDA_TEXT()
 {
-    m_Pos = aPos;
+    SetTextPos( aPos );
     m_id = aFieldId;
-    m_Attributs = TEXT_NO_VISIBLE;
     m_name = aName;
 
+    SetVisible( false );
     SetLayer( LAYER_FIELDS );
 }
 
@@ -98,18 +98,18 @@ const wxString SCH_FIELD::GetFullyQualifiedText() const
 
 int SCH_FIELD::GetPenSize() const
 {
-    int pensize = m_Thickness;
+    int pensize = GetThickness();
 
     if( pensize == 0 )   // Use default values for pen size
     {
-        if( m_Bold  )
-            pensize = GetPenSizeForBold( m_Size.x );
+        if( IsBold()  )
+            pensize = GetPenSizeForBold( GetTextWidth() );
         else
             pensize = GetDefaultLineThickness();
     }
 
     // Clip pen size for small texts:
-    pensize = Clamp_Text_PenSize( pensize, m_Size, m_Bold );
+    pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
     return pensize;
 }
 
@@ -121,33 +121,33 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
     EDA_COLOR_T    color;
     wxPoint        textpos;
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
-    int            LineWidth = m_Thickness;
+    int            lineWidth = GetThickness();
 
-    if( LineWidth == 0 )   // Use default values for pen size
+    if( lineWidth == 0 )   // Use default values for pen size
     {
-        if( m_Bold  )
-            LineWidth = GetPenSizeForBold( m_Size.x );
+        if( IsBold() )
+            lineWidth = GetPenSizeForBold( GetTextWidth() );
         else
-            LineWidth = GetDefaultLineThickness();
+            lineWidth = GetDefaultLineThickness();
     }
 
     // Clip pen size for small texts:
-    LineWidth = Clamp_Text_PenSize( LineWidth, m_Size, m_Bold );
+    lineWidth = Clamp_Text_PenSize( lineWidth, GetTextSize(), IsBold() );
 
-    if( ((m_Attributs & TEXT_NO_VISIBLE) && !m_forceVisible) || IsVoid() )
+    if( ( !IsVisible() && !m_forceVisible) || IsVoid() )
         return;
 
     GRSetDrawMode( aDC, aDrawMode );
 
     // Calculate the text orientation according to the component orientation.
-    orient = m_Orient;
+    orient = GetTextAngle();
 
     if( parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
     {
-        if( orient == TEXT_ORIENT_HORIZ )
-            orient = TEXT_ORIENT_VERT;
+        if( orient == TEXT_ANGLE_HORIZ )
+            orient = TEXT_ANGLE_VERT;
         else
-            orient = TEXT_ORIENT_HORIZ;
+            orient = TEXT_ANGLE_HORIZ;
     }
 
     /* Calculate the text justification, according to the component
@@ -179,15 +179,15 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
     }
 
     EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
-    DrawGraphicText( clipbox, aDC, textpos, color, GetFullyQualifiedText(), orient, m_Size,
+    DrawGraphicText( clipbox, aDC, textpos, color, GetFullyQualifiedText(), orient, GetTextSize(),
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                     LineWidth, m_Italic, m_Bold );
+                     lineWidth, IsItalic(), IsBold() );
 
     // While moving: don't loose visual contact to which component this label belongs.
     if ( IsWireImage() )
     {
         const wxPoint origin = parentComponent->GetPosition();
-        textpos  = m_Pos - origin;
+        textpos  = GetTextPos() - origin;
         textpos  = parentComponent->GetScreenCoord( textpos );
         textpos += parentComponent->GetPosition();
         GRLine( clipbox, aDC, origin, textpos, 2, DARKGRAY );
@@ -219,31 +219,17 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
 
 void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 {
-    m_Orient    = aSource.GetOrientation();
-    m_Size      = aSource.GetSize();
-    m_HJustify  = aSource.GetHorizJustify();
-    m_VJustify  = aSource.GetVertJustify();
-    m_Italic    = aSource.IsItalic();
-    m_Bold      = aSource.IsBold();
-    m_Thickness = aSource.GetThickness();
-    m_Attributs = aSource.GetAttributes();
-    m_Mirror    = aSource.IsMirrored();
+    SetEffects( aSource );
 }
+
 
 void SCH_FIELD::ExportValues( LIB_FIELD& aDest ) const
 {
     aDest.SetId( GetId() );
     aDest.SetText( m_Text );        // Set field value
     aDest.SetName( GetName() );
-    aDest.SetOrientation( GetOrientation() );
-    aDest.SetSize( GetSize() );
-    aDest.SetTextPosition( GetTextPosition() );
-    aDest.SetHorizJustify( GetHorizJustify() );
-    aDest.SetVertJustify( GetVertJustify() );
-    aDest.SetItalic( IsItalic() );
-    aDest.SetBold( IsBold() );
-    aDest.SetThickness( GetThickness() );
-    aDest.SetAttributes( GetAttributes() );
+
+    aDest.SetEffects( *this );
 }
 
 
@@ -256,27 +242,19 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_Text, item->m_Text );
     std::swap( m_Layer, item->m_Layer );
-    std::swap( m_Pos, item->m_Pos );
-    std::swap( m_Size, item->m_Size );
-    std::swap( m_Thickness, item->m_Thickness );
-    std::swap( m_Orient, item->m_Orient );
-    std::swap( m_Mirror, item->m_Mirror );
-    std::swap( m_Attributs, item->m_Attributs );
-    std::swap( m_Italic, item->m_Italic );
-    std::swap( m_Bold, item->m_Bold );
-    std::swap( m_HJustify, item->m_HJustify );
-    std::swap( m_VJustify, item->m_VJustify );
+
+    SwapEffects( *item );
 }
 
 
 const EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
-    int linewidth = ( m_Thickness == 0 ) ? GetDefaultLineThickness() : m_Thickness;
+    int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
     // We must pass the effective text thickness to GetTextBox
     // when calculating the bounding box
-    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+    linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
     // Calculate the text bounding box:
     EDA_RECT rect;
@@ -293,11 +271,11 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
 
     // Calculate the bounding box position relative to the component:
     wxPoint origin = parentComponent->GetPosition();
-    wxPoint pos = m_Pos - origin;
+    wxPoint pos = GetTextPos() - origin;
     wxPoint begin = rect.GetOrigin() - origin;
     wxPoint end = rect.GetEnd() - origin;
-    RotatePoint( &begin, pos, m_Orient );
-    RotatePoint( &end, pos, m_Orient );
+    RotatePoint( &begin, pos, GetTextAngle() );
+    RotatePoint( &end, pos, GetTextAngle() );
 
     // Due to the Y axis direction, we must mirror the bounding box,
     // relative to the text position:
@@ -336,28 +314,28 @@ bool SCH_FIELD::Save( FILE* aFile ) const
 {
     char hjustify = 'C';
 
-    if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
+    if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
         hjustify = 'L';
-    else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
+    else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
         hjustify = 'R';
 
     char vjustify = 'C';
 
-    if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
+    if( GetVertJustify() == GR_TEXT_VJUSTIFY_BOTTOM )
         vjustify = 'B';
-    else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
+    else if( GetVertJustify() == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
 
     if( fprintf( aFile, "F %d %s %c %-3d %-3d %-3d %4.4X %c %c%c%c",
                  m_id,
                  EscapedUTF8( m_Text ).c_str(),     // wraps in quotes too
-                 m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
-                 m_Pos.x, m_Pos.y,
-                 m_Size.x,
-                 m_Attributs,
+                 GetTextAngle() == TEXT_ANGLE_HORIZ ? 'H' : 'V',
+                 GetTextPos().x, GetTextPos().y,
+                 GetTextWidth(),
+                 !IsVisible(),
                  hjustify, vjustify,
-                 m_Italic ? 'I' : 'N',
-                 m_Bold ? 'B' : 'N' ) == EOF )
+                 IsItalic() ? 'I' : 'N',
+                 IsBold() ? 'B' : 'N' ) == EOF )
     {
         return false;
     }
@@ -476,7 +454,9 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 
 void SCH_FIELD::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, aPosition, 900 );
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aPosition, 900 );
+    SetTextPos( pt );
 }
 
 
@@ -555,7 +535,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
 
     EDA_COLOR_T color = GetLayerColor( GetLayer() );
 
-    if( m_Attributs & TEXT_NO_VISIBLE )
+    if( !IsVisible() )
         return;
 
     if( IsVoid() )
@@ -563,14 +543,14 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
 
     /* Calculate the text orientation, according to the component
      * orientation/mirror */
-    int orient = m_Orient;
+    int orient = GetTextAngle();
 
     if( parent->GetTransform().y1 )  // Rotate component 90 deg.
     {
-        if( orient == TEXT_ORIENT_HORIZ )
-            orient = TEXT_ORIENT_VERT;
+        if( orient == TEXT_ANGLE_HORIZ )
+            orient = TEXT_ANGLE_VERT;
         else
-            orient = TEXT_ORIENT_HORIZ;
+            orient = TEXT_ANGLE_HORIZ;
     }
 
     /* Calculate the text justification, according to the component
@@ -591,8 +571,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
 
     int      thickness = GetPenSize();
 
-    aPlotter->Text( textpos, color, GetFullyQualifiedText(), orient, m_Size, hjustify, vjustify,
-            thickness, m_Italic, m_Bold );
+    aPlotter->Text( textpos, color, GetFullyQualifiedText(), orient, GetTextSize(),
+            hjustify, vjustify,
+            thickness, IsItalic(), IsBold() );
 }
 
 
@@ -607,16 +588,15 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
     // the position relative to the parent component.
     wxPoint pt = aPosition - pos;
 
-    m_Pos = pos + component->GetTransform().InverseTransform().TransformCoordinate( pt );
+    SetTextPos( pos + component->GetTransform().InverseTransform().TransformCoordinate( pt ) );
 }
 
 
 wxPoint SCH_FIELD::GetPosition() const
 {
-
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
 
-    wxPoint pos = m_Pos - component->GetPosition();
+    wxPoint pos = GetTextPos() - component->GetPosition();
 
     return component->GetTransform().TransformCoordinate( pos ) + component->GetPosition();
 }

@@ -112,7 +112,7 @@ public:
 
     void Move( const wxPoint& aPosition ) override;
 
-    wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
 
@@ -123,9 +123,9 @@ public:
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform ) override;
 
-    int GetWidth() const override { return m_Thickness; }
+    int GetWidth() const override { return GetThickness(); }
 
-    void SetWidth( int aWidth ) override { m_Thickness = aWidth; }
+    void SetWidth( int aWidth ) override { SetThickness( aWidth ); }
 
     wxString GetSelectMenuText() const override;
 

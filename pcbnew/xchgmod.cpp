@@ -395,6 +395,16 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE* aOldModule,
     aNewModule->SetReference( aOldModule->GetReference() );
     aNewModule->SetValue( aOldModule->GetValue() );
 
+    // Compare the footprint name only, in case the nickname is empty or in case
+    // user moved the footprint to a new library.  Chances are if footprint name is
+    // same then the footprint is very nearly the same and the two texts should
+    // be kept at same size, position, and rotation.
+    if( aNewModule->GetFPID().GetLibItemName() == aOldModule->GetFPID().GetLibItemName() )
+    {
+        aNewModule->Reference().SetEffects( aOldModule->Reference() );
+        aNewModule->Value().SetEffects( aOldModule->Value() );
+    }
+
     // Updating other parameters
     aNewModule->SetTimeStamp( aOldModule->GetTimeStamp() );
     aNewModule->SetPath( aOldModule->GetPath() );

@@ -206,7 +206,7 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     EnsureTextCtrlWidth( m_textLabel, &textWidth );
 
     // Set validators
-    m_TextOrient->SetSelection( m_CurrentText->GetOrientation() );
+    m_TextOrient->SetSelection( m_CurrentText->GetTextAngle() );
     m_TextShape->SetSelection( m_CurrentText->GetShape() );
 
     int style = 0;
@@ -223,7 +223,7 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     msg.Printf( _( "H%s x W%s" ), GetChars( units ), GetChars( units ) );
     m_staticSizeUnits->SetLabel( msg );
 
-    msg = StringFromValue( g_UserUnit, m_CurrentText->GetSize().x );
+    msg = StringFromValue( g_UserUnit, m_CurrentText->GetTextWidth() );
     m_TextSize->SetValue( msg );
 
     if( m_CurrentText->Type() != SCH_GLOBAL_LABEL_T
@@ -290,10 +290,10 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
         return;
     }
 
-    m_CurrentText->SetOrientation( m_TextOrient->GetSelection() );
+    m_CurrentText->SetLabelSpinStyle( m_TextOrient->GetSelection() );
     text  = m_TextSize->GetValue();
     value = ValueFromString( g_UserUnit, text );
-    m_CurrentText->SetSize( wxSize( value, value ) );
+    m_CurrentText->SetTextSize( wxSize( value, value ) );
 
     if( m_TextShape )
         /// @todo move cast to widget
@@ -306,7 +306,7 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
     if( ( style & 2 ) )
     {
         m_CurrentText->SetBold( true );
-        m_CurrentText->SetThickness( GetPenSizeForBold( m_CurrentText->GetSize().x ) );
+        m_CurrentText->SetThickness( GetPenSizeForBold( m_CurrentText->GetTextWidth() ) );
     }
     else
     {
@@ -318,7 +318,7 @@ void DIALOG_LABEL_EDITOR::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     // Make the text size the new default size ( if it is a new text ):
     if( m_CurrentText->IsNew() )
-        SetDefaultTextSize( m_CurrentText->GetSize().x );
+        SetDefaultTextSize( m_CurrentText->GetTextWidth() );
 
     m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
     m_Parent->GetCanvas()->MoveCursorToCrossHair();
