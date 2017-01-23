@@ -267,7 +267,6 @@ set( BMAPS_MID
     glabel2text
     gl_change
     global_options_pad
-    graphic_mode_option
     green
     grid_select
     grid_select_axis
@@ -327,7 +326,6 @@ set( BMAPS_MID
     leave_sheet
     left
     libedit
-    libedprt
     lib_next
     lib_previous
     library_browse
