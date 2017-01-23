@@ -72,7 +72,8 @@ public:
     };
 
     ///> Determines how zones should be displayed
-    enum DisplayZonesMode {
+    enum DISPLAY_ZONE_MODE
+    {
         DZ_HIDE_FILLED = 0,
         DZ_SHOW_FILLED,
         DZ_SHOW_OUTLINED
@@ -171,7 +172,7 @@ protected:
     static const double MAX_FONT_SIZE;
 
     ///> Option for different display modes for zones
-    DisplayZonesMode m_displayZoneMode;
+    DISPLAY_ZONE_MODE m_displayZone;
 };
 
 

@@ -48,7 +48,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_padNumbers = true;
     m_netNamesOnPads = true;
     m_netNamesOnTracks = true;
-    m_displayZoneMode = DZ_SHOW_FILLED;
+    m_displayZone = DZ_SHOW_FILLED;
 
     // By default everything should be displayed as filled
     for( unsigned int i = 0; i < TOTAL_LAYER_COUNT; ++i )
@@ -145,18 +145,19 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS* aOptions )
         break;
     }
 
+    // Zone display settings
     switch( aOptions->m_DisplayZonesMode )
     {
     case 0:
-        m_displayZoneMode = DZ_SHOW_FILLED;
+        m_displayZone = DZ_SHOW_FILLED;
         break;
 
     case 1:
-        m_displayZoneMode = DZ_HIDE_FILLED;
+        m_displayZone = DZ_HIDE_FILLED;
         break;
 
     case 2:
-        m_displayZoneMode = DZ_SHOW_OUTLINED;
+        m_displayZone = DZ_SHOW_OUTLINED;
         break;
     }
 }
@@ -671,7 +672,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             // Add the beginning point to close the outline
             pointList.push_back( pointList.front() );
             m_gal->DrawPolyline( pointList );
-
         }
         else
         {
@@ -885,7 +885,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone )
 {
     const COLOR4D& color = m_pcbSettings.GetColor( aZone, aZone->GetLayer() );
     std::deque<VECTOR2D> corners;
-    PCB_RENDER_SETTINGS::DisplayZonesMode displayMode = m_pcbSettings.m_displayZoneMode;
+    PCB_RENDER_SETTINGS::DISPLAY_ZONE_MODE displayMode = m_pcbSettings.m_displayZone;
 
     // Draw the outline
     m_gal->SetStrokeColor( color );
