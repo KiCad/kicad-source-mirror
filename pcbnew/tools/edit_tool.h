@@ -81,6 +81,13 @@ public:
     int Flip( const TOOL_EVENT& aEvent );
 
     /**
+     * Function Mirror
+     *
+     * Mirrors the current selection. The mirror axis passes through the current point.
+     */
+    int Mirror( const TOOL_EVENT& aEvent );
+
+    /**
      * Function Remove()
      *
      * Deletes currently selected items. The rotation point is the current cursor position.

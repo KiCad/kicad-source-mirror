@@ -86,6 +86,10 @@ bool EDIT_TOOL::Init()
         return false;
     }
 
+    auto editingModuleCondition = [ this ] ( const SELECTION& aSelection ) {
+        return m_editModules;
+    };
+
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
     menu.AddItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
@@ -97,6 +101,9 @@ bool EDIT_TOOL::Init()
     menu.AddItem( COMMON_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( COMMON_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( COMMON_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
+
+    // Mirror only available in modedit
+    menu.AddItem( COMMON_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
 
     // Footprint actions
     menu.AddItem( COMMON_ACTIONS::editFootprintInFpEditor,
@@ -404,6 +411,115 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+/*!
+ * Mirror a point about the vertical axis passing through another point
+ */
+static wxPoint mirrorPointX( const wxPoint& aPoint, const wxPoint& aMirrorPoint )
+{
+    wxPoint mirrored = aPoint;
+
+    mirrored.x -= aMirrorPoint.x;
+    mirrored.x = -mirrored.x;
+    mirrored.x += aMirrorPoint.x;
+
+    return mirrored;
+}
+
+
+/**
+ * Mirror a pad in the vertical axis passing through a point
+ */
+static void mirrorPadX( D_PAD& aPad, const wxPoint& aMirrorPoint )
+{
+    wxPoint tmpPt = mirrorPointX( aPad.GetPosition(), aMirrorPoint );
+
+    aPad.SetPosition( tmpPt );
+
+    aPad.SetX0( aPad.GetPosition().x );
+
+    tmpPt = aPad.GetOffset();
+    tmpPt.x = -tmpPt.x;
+    aPad.SetOffset( tmpPt );
+
+    auto tmpz = aPad.GetDelta();
+    tmpz.x = -tmpz.x;
+    aPad.SetDelta( tmpz );
+
+    aPad.SetOrientation( -aPad.GetOrientation() );
+}
+
+
+int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
+{
+    const SELECTION& selection = m_selectionTool->GetSelection();
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    // Shall the selection be cleared at the end?
+    bool unselect = selection.Empty();
+
+    if( !hoverSelection() || m_selectionTool->CheckLock() == SELECTION_LOCKED )
+        return 0;
+
+    wxPoint mirrorPoint = getModificationPoint( selection );
+
+    for( auto item : selection )
+    {
+        // only modify items we can mirror
+        switch( item->Type() )
+        {
+        case PCB_MODULE_EDGE_T:
+        case PCB_MODULE_TEXT_T:
+        case PCB_PAD_T:
+            m_commit->Modify( item );
+            break;
+        default:
+            continue;
+        }
+
+        // modify each object as necessary
+        switch( item->Type() )
+        {
+        case PCB_MODULE_EDGE_T:
+        {
+            auto& edge = static_cast<EDGE_MODULE&>( *item );
+            edge.Mirror( mirrorPoint, false );
+            break;
+        }
+
+        case PCB_MODULE_TEXT_T:
+        {
+            auto& modText = static_cast<TEXTE_MODULE&>( *item );
+            modText.Mirror( mirrorPoint, false );
+            break;
+        }
+
+        case PCB_PAD_T:
+        {
+            auto& pad = static_cast<D_PAD&>( *item );
+            mirrorPadX( pad, mirrorPoint );
+            break;
+        }
+
+        default:
+            // it's likely the commit object is wrong if you get here
+            assert( false );
+            break;
+        }
+    }
+
+    if( !m_dragging )
+        m_commit->Push( _( "Mirror" ) );
+
+    if( unselect )
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+
+    // TODO selectionModified
+    m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
+    editFrame->Refresh();
+
+    return 0;
+}
+
 
 int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 {
@@ -671,6 +787,7 @@ void EDIT_TOOL::SetTransitions()
     Go( &EDIT_TOOL::Duplicate,  COMMON_ACTIONS::duplicate.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,  COMMON_ACTIONS::duplicateIncrement.MakeEvent() );
     Go( &EDIT_TOOL::CreateArray,COMMON_ACTIONS::createArray.MakeEvent() );
+    Go( &EDIT_TOOL::Mirror,     COMMON_ACTIONS::mirror.MakeEvent() );
     Go( &EDIT_TOOL::editFootprintInFpEditor, COMMON_ACTIONS::editFootprintInFpEditor.MakeEvent() );
 }
 

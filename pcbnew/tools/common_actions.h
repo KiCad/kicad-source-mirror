@@ -76,6 +76,9 @@ public:
     /// Flipping of selected objects
     static TOOL_ACTION flip;
 
+    /// Mirroring of selected items
+    static TOOL_ACTION mirror;
+
     /// Activation of the edit tool
     static TOOL_ACTION properties;
 
