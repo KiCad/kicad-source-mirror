@@ -910,7 +910,7 @@ void PNS_KICAD_IFACE::Commit()
 }
 
 
-void PNS_KICAD_IFACE::SetView( KIGFX::VIEW *aView )
+void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 {
     wxLogTrace( "PNS", "SetView %p", aView );
 
