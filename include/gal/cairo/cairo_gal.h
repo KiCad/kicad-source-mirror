@@ -120,10 +120,12 @@ public:
     /// @copydoc GAL::DrawPolyline()
     virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override { drawPoly( aPointList ); }
     virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override { drawPoly( aPointList, aListSize ); }
+    virtual void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) override { drawPoly( aLineChain ); }
 
     /// @copydoc GAL::DrawPolygon()
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) override { drawPoly( aPointList ); }
     virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override { drawPoly( aPointList, aListSize ); }
+    virtual void DrawPolygon( const SHAPE_POLY_SET& aPolySet ) override;
 
     /// @copydoc GAL::DrawCurve()
     virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
@@ -397,6 +399,7 @@ private:
     /// Drawing polygons & polylines is the same in cairo, so here is the common code
     void drawPoly( const std::deque<VECTOR2D>& aPointList );
     void drawPoly( const VECTOR2D aPointList[], int aListSize );
+    void drawPoly( const SHAPE_LINE_CHAIN& aLineChain );
 
     /**
      * @brief Returns a valid key that can be used as a new group number.

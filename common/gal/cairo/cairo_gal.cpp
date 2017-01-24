@@ -3,6 +3,8 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017 CERN
+ * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * CAIRO_GAL - Graphics Abstraction Layer for Cairo
  *
@@ -30,6 +32,7 @@
 #include <gal/cairo/cairo_gal.h>
 #include <gal/cairo/cairo_compositor.h>
 #include <gal/definitions.h>
+#include <geometry/shape_poly_set.h>
 
 #include <limits>
 
@@ -250,6 +253,13 @@ void CAIRO_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
     flushPath();
 
     isElementAdded = true;
+}
+
+
+void CAIRO_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
+{
+    for( int i = 0; i < aPolySet.OutlineCount(); ++i )
+        drawPoly( aPolySet.COutline( i ) );
 }
 
 
@@ -1043,6 +1053,25 @@ void CAIRO_GAL::drawPoly( const VECTOR2D aPointList[], int aListSize )
     {
         ++ptr;
         cairo_line_to( currentContext, ptr->x, ptr->y );
+    }
+
+    flushPath();
+    isElementAdded = true;
+}
+
+
+void CAIRO_GAL::drawPoly( const SHAPE_LINE_CHAIN& aLineChain )
+{
+    if( aLineChain.PointCount() < 2 )
+        return;
+
+    const VECTOR2I start = aLineChain.CPoint( 0 );
+    cairo_move_to( currentContext, start.x, start.y );
+
+    for( int i = 1; i < aLineChain.PointCount(); ++i )
+    {
+        const VECTOR2I& p = aLineChain.CPoint( i );
+        cairo_line_to( currentContext, p.x, p.y );
     }
 
     flushPath();

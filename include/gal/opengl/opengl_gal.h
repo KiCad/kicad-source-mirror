@@ -137,10 +137,12 @@ public:
     /// @copydoc GAL::DrawPolyline()
     virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override;
     virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override;
+    virtual void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) override;
 
     /// @copydoc GAL::DrawPolygon()
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) override;
     virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override;
+    virtual void DrawPolygon( const SHAPE_POLY_SET& aPolySet ) override;
 
     /// @copydoc GAL::DrawCurve()
     virtual void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
@@ -364,6 +366,21 @@ private:
      *
      */
     void drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRadius, double aAngle );
+
+    /**
+     * @param Generic way of drawing a polyline stored in different containers.
+     * @param aPointGetter is a function to obtain coordinates of n-th vertex.
+     * @param aPointCount is the number of points to be drawn.
+     */
+    void drawPolyline( std::function<VECTOR2D (int)> aPointGetter, int aPointCount );
+
+    /**
+     * @brief Draws a filled polygon. It does not need the last point to have the same coordinates
+     * as the first one.
+     * @param aPoints is the vertices data (3 coordinates: x, y, z).
+     * @param aPointCount is the number of points.
+     */
+    void drawPolygon( GLdouble* aPoints, int aPointCount );
 
     /**
      * @brief Draws a single character using bitmap font.

@@ -38,6 +38,9 @@
 #include <gal/stroke_font.h>
 #include <newstroke_font.h>
 
+class SHAPE_LINE_CHAIN;
+class SHAPE_POLY_SET;
+
 namespace KIGFX
 {
 /**
@@ -117,6 +120,7 @@ public:
      */
     virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) {};
     virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) {};
+    virtual void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) {};
 
     /**
      * @brief Draw a circle using world coordinates.
@@ -152,6 +156,7 @@ public:
      */
     virtual void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) {};
     virtual void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) {};
+    virtual void DrawPolygon( const SHAPE_POLY_SET& aPolySet ) {};
 
     /**
      * @brief Draw a cubic bezier spline.

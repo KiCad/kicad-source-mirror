@@ -30,6 +30,7 @@
 #include <gal/opengl/utils.h>
 #include <gal/definitions.h>
 #include <gl_context_mgr.h>
+#include <geometry/shape_poly_set.h>
 
 #include <macros.h>
 
@@ -619,123 +620,75 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
 
 void OPENGL_GAL::DrawPolyline( const std::deque<VECTOR2D>& aPointList )
 {
-    if( aPointList.size() < 2 )
-        return;
-
-    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
-    std::deque<VECTOR2D>::const_iterator it = aPointList.begin();
-
-    // Start from the second point
-    for( ++it; it != aPointList.end(); ++it )
-    {
-        const VECTOR2D startEndVector = ( *it - *( it - 1 ) );
-        double lineAngle = startEndVector.Angle();
-
-        drawLineQuad( *( it - 1 ), *it );
-
-        // There is no need to draw line caps on both ends of polyline's segments
-        drawFilledSemiCircle( *( it - 1 ), lineWidth / 2, lineAngle + M_PI / 2 );
-    }
-
-    // ..and now - draw the ending cap
-    const VECTOR2D startEndVector = ( *( it - 1 ) - *( it - 2 ) );
-    double lineAngle = startEndVector.Angle();
-    drawFilledSemiCircle( *( it - 1 ), lineWidth / 2, lineAngle - M_PI / 2 );
+    drawPolyline( [&](int idx) { return aPointList[idx]; }, aPointList.size() );
 }
 
 
 void OPENGL_GAL::DrawPolyline( const VECTOR2D aPointList[], int aListSize )
 {
-    if( aListSize < 2 )
-        return;
+    drawPolyline( [&](int idx) { return aPointList[idx]; }, aListSize );
+}
 
-    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
-    // Start from the second point
-    for( int i = 1; i < aListSize; ++i )
-    {
-        const VECTOR2D startEndVector = ( aPointList[i] - aPointList[i - 1] );
-        double lineAngle = startEndVector.Angle();
-
-        drawLineQuad( aPointList[i - 1], aPointList[i] );
-
-        // There is no need to draw line caps on both ends of polyline's segments
-        drawFilledSemiCircle( aPointList[i - 1], lineWidth / 2, lineAngle + M_PI / 2 );
-    }
-
-    // ..and now - draw the ending cap
-    const VECTOR2D startEndVector = ( aPointList[aListSize - 1] - aPointList[aListSize - 2] );
-    double lineAngle = startEndVector.Angle();
-    drawFilledSemiCircle( aPointList[aListSize - 1], lineWidth / 2, lineAngle - M_PI / 2 );
+void OPENGL_GAL::DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain )
+{
+    drawPolyline( [&](int idx) { return aLineChain.CPoint(idx); }, aLineChain.PointCount() + 1 );
 }
 
 
 void OPENGL_GAL::DrawPolygon( const std::deque<VECTOR2D>& aPointList )
 {
-    currentManager->Shader( SHADER_NONE );
-    currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+    auto points = std::unique_ptr<GLdouble[]>( new GLdouble[3 * aPointList.size()] );
+    GLdouble* ptr = points.get();
 
-    // Any non convex polygon needs to be tesselated
-    // for this purpose the GLU standard functions are used
-    TessParams params = { currentManager, tessIntersects };
-    gluTessBeginPolygon( tesselator, &params );
-    gluTessBeginContour( tesselator );
-
-    std::unique_ptr<GLdouble[]> points( new GLdouble[ 3 * aPointList.size() ] );
-    int v = 0;
-
-    for( std::deque<VECTOR2D>::const_iterator it = aPointList.begin(); it != aPointList.end(); ++it )
+    for( const VECTOR2D& p : aPointList )
     {
-        points[v]     = it->x;
-        points[v + 1] = it->y;
-        points[v + 2] = layerDepth;
-        gluTessVertex( tesselator, &points[v], &points[v] );
-        v += 3;
+        *ptr++ = p.x;
+        *ptr++ = p.y;
+        *ptr++ = layerDepth;
     }
 
-    gluTessEndContour( tesselator );
-    gluTessEndPolygon( tesselator );
-
-    // Free allocated intersecting points
-    tessIntersects.clear();
-
-    // vertexList destroyed here
+    drawPolygon( points.get(), aPointList.size() );
 }
 
 
 void OPENGL_GAL::DrawPolygon( const VECTOR2D aPointList[], int aListSize )
 {
-    currentManager->Shader( SHADER_NONE );
-    currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
-
-    // Any non convex polygon needs to be tesselated
-    // for this purpose the GLU standard functions are used
-    TessParams params = { currentManager, tessIntersects };
-    gluTessBeginPolygon( tesselator, &params );
-    gluTessBeginContour( tesselator );
-
-    std::unique_ptr<GLdouble[]> points( new GLdouble[3 * aListSize] );
-    int v = 0;
-    const VECTOR2D* ptr = aPointList;
+    auto points = std::unique_ptr<GLdouble[]>( new GLdouble[3 * aListSize] );
+    GLdouble* target = points.get();
+    const VECTOR2D* src = aPointList;
 
     for( int i = 0; i < aListSize; ++i )
     {
-        points[v]     = ptr->x;
-        points[v + 1] = ptr->y;
-        points[v + 2] = layerDepth;
-        gluTessVertex( tesselator, &points[v], &points[v] );
-        ++ptr;
-        v += 3;
+        *target++ = src->x;
+        *target++ = src->y;
+        *target++ = layerDepth;
+        ++src;
     }
 
-    gluTessEndContour( tesselator );
-    gluTessEndPolygon( tesselator );
+    drawPolygon( points.get(), aListSize );
+}
 
-    // Free allocated intersecting points
-    tessIntersects.clear();
 
-    // vertexList destroyed here
+void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
+{
+    for( int j = 0; j < aPolySet.OutlineCount(); ++j )
+    {
+        const SHAPE_LINE_CHAIN& outline = aPolySet.COutline( j );
+        const int pointCount = outline.PointCount();
+        std::unique_ptr<GLdouble[]> points( new GLdouble[3 * pointCount] );
+        GLdouble* ptr = points.get();
+
+        for( int i = 0; i < outline.PointCount(); ++i )
+        {
+            const VECTOR2I& p = outline.CPoint( i );
+            *ptr++ = p.x;
+            *ptr++ = p.y;
+            *ptr++ = layerDepth;
+        }
+
+        drawPolygon( points.get(), pointCount );
+    }
 }
 
 
@@ -1338,6 +1291,63 @@ void OPENGL_GAL::drawStrokedSemiCircle( const VECTOR2D& aCenterPoint, double aRa
     currentManager->Vertex( 0.0f, outerRadius * 2.0f, layerDepth );                     // v2
 
     Restore();
+}
+
+
+void OPENGL_GAL::drawPolygon( GLdouble* aPoints, int aPointCount )
+{
+    currentManager->Shader( SHADER_NONE );
+    currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
+
+    // Any non convex polygon needs to be tesselated
+    // for this purpose the GLU standard functions are used
+    TessParams params = { currentManager, tessIntersects };
+    gluTessBeginPolygon( tesselator, &params );
+    gluTessBeginContour( tesselator );
+
+    GLdouble* point = aPoints;
+
+    for( int i = 0; i < aPointCount; ++i )
+    {
+        gluTessVertex( tesselator, point, point );
+        point += 3;     // 3 coordinates
+    }
+
+    gluTessEndContour( tesselator );
+    gluTessEndPolygon( tesselator );
+
+    // Free allocated intersecting points
+    tessIntersects.clear();
+}
+
+
+void OPENGL_GAL::drawPolyline( std::function<VECTOR2D (int)> aPointGetter, int aPointCount )
+{
+    if( aPointCount < 2 )
+        return;
+
+    currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+    int i;
+
+    for( i = 1; i < aPointCount; ++i )
+    {
+        auto start = aPointGetter( i - 1 );
+        auto end = aPointGetter( i );
+        const VECTOR2D startEndVector = ( end - start );
+        double lineAngle = startEndVector.Angle();
+
+        drawLineQuad( start, end );
+
+        // There is no need to draw line caps on both ends of polyline's segments
+        drawFilledSemiCircle( start, lineWidth / 2, lineAngle + M_PI / 2 );
+    }
+
+    // ..and now - draw the ending cap
+    auto start = aPointGetter( i - 2 );
+    auto end = aPointGetter( i - 1 );
+    const VECTOR2D startEndVector = ( end - start );
+    double lineAngle = startEndVector.Angle();
+    drawFilledSemiCircle( end, lineWidth / 2, lineAngle - M_PI / 2 );
 }
 
 
