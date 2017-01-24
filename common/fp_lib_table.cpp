@@ -323,7 +323,17 @@ void FP_LIB_TABLE::Parse( FP_LIB_TABLE_LEXER* in ) throw( IO_ERROR, PARSE_ERROR 
                     in->Duplicate( tok );
                 sawUri = true;
                 in->NeedSYMBOLorNUMBER();
-                row.SetFullURI( in->FromUTF8() );
+                // Saved path and file names use the Unix notation (separator = '/')
+                // However old files, and files edited by hand can use the windows
+                // separator. Force the unix notation.
+                // (It works on windows, and moreover, wxFileName and wxDir takes care to that
+                // on windows)
+                // moreover, URLs use the '/' as separator
+                {
+                wxString uri = in->FromUTF8();
+                uri.Replace( '\\', '/' );
+                row.SetFullURI( uri );
+                }
                 break;
 
             case T_type:
@@ -393,10 +403,15 @@ void FP_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
 void FP_LIB_TABLE::ROW::Format( OUTPUTFORMATTER* out, int nestLevel ) const
     throw( IO_ERROR, boost::interprocess::lock_exception )
 {
+    // In Kicad, we save path and file names using the Unix notation (separator = '/')
+    // So ensure separator is always '/' is saved URI string
+    wxString uri = GetFullURI();
+    uri.Replace( '\\', '/' );
+
     out->Print( nestLevel, "(lib (name %s)(type %s)(uri %s)(options %s)(descr %s))\n",
                 out->Quotew( GetNickName() ).c_str(),
                 out->Quotew( GetType() ).c_str(),
-                out->Quotew( GetFullURI() ).c_str(),
+                out->Quotew( uri ).c_str(),
                 out->Quotew( GetOptions() ).c_str(),
                 out->Quotew( GetDescr() ).c_str()
                 );
