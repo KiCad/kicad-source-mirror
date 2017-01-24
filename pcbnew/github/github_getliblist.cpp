@@ -35,9 +35,6 @@
  *
  *  This gets just information on the repo in JSON format.
  *
- *  I used avhttp, already used in the pcbnew Github plugin to download
- *  the json file.
- *
  *  JP Charras.
  */
 
