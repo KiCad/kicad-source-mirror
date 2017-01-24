@@ -122,6 +122,7 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS* aOptions )
     m_sketchMode[ITEM_GAL_LAYER( VIA_MICROVIA_VISIBLE )] = !aOptions->m_DisplayViaFill;
     m_sketchMode[ITEM_GAL_LAYER( TRACKS_VISIBLE )]       = !aOptions->m_DisplayPcbTrackFill;
 
+    // Net names display settings
     switch( aOptions->m_DisplayNetNamesMode )
     {
     case 0:
@@ -160,6 +161,33 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const DISPLAY_OPTIONS* aOptions )
         m_displayZone = DZ_SHOW_OUTLINED;
         break;
     }
+
+    // Clearance settings
+    switch( aOptions->m_ShowTrackClearanceMode )
+    {
+        case DO_NOT_SHOW_CLEARANCE:
+            m_clearance = CL_NONE;
+            break;
+
+        case SHOW_CLEARANCE_NEW_TRACKS:
+            m_clearance = CL_NEW | CL_TRACKS;
+            break;
+
+        case SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
+            m_clearance = CL_NEW | CL_TRACKS | CL_VIAS;
+            break;
+
+        case SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
+            m_clearance = CL_NEW | CL_EDITED | CL_TRACKS | CL_VIAS;
+            break;
+
+        case SHOW_CLEARANCE_ALWAYS:
+            m_clearance = CL_NEW | CL_EDITED | CL_EXISTING | CL_TRACKS | CL_VIAS;
+            break;
+    }
+
+    if( aOptions->m_DisplayPadIsol )
+        m_clearance |= CL_PADS;
 }
 
 
@@ -337,6 +365,18 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
         }
 
         m_gal->DrawSegment( start, end, width );
+
+        // Clearance lines
+        constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING | PCB_RENDER_SETTINGS::CL_TRACKS;
+
+        if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags )
+        {
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( color );
+            m_gal->DrawSegment( start, end, width + aTrack->GetClearance() * 2 );
+        }
     }
 }
 
@@ -381,6 +421,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
     if( aVia->GetViaType() == VIA_BLIND_BURIED )
     {
+        // Buried vias are drawn in a special way to indicate the top and bottom layers
         LAYER_ID layerTop, layerBottom;
         aVia->LayerPair( &layerTop, &layerBottom );
 
@@ -417,6 +458,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     }
     else
     {
+        // Regular vias
         m_gal->SetIsFill( !sketchMode );
         m_gal->SetIsStroke( sketchMode );
 
@@ -434,26 +476,38 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
         m_gal->DrawCircle( center, radius );
     }
+
+    // Clearance lines
+    constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING | PCB_RENDER_SETTINGS::CL_VIAS;
+
+    if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
+            && aLayer != ITEM_GAL_LAYER( VIAS_HOLES_VISIBLE ) )
+    {
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( color );
+        m_gal->DrawCircle( center, radius + aVia->GetClearance() );
+    }
 }
 
 
 void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 {
     PAD_SHAPE_T shape;
-    double      m, n;
-    double      orientation = aPad->GetOrientation();
+    double m, n;
+    double orientation = aPad->GetOrientation();
     wxString buffer;
 
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
     {
-        VECTOR2D    position( aPad->ShapePos() );
+        VECTOR2D position( aPad->ShapePos() );
 
         // Is anything that we can display enabled?
         if( m_pcbSettings.m_netNamesOnPads || m_pcbSettings.m_padNumbers )
         {
-            bool displayNetname = ( m_pcbSettings.m_netNamesOnPads &&
-                                    !aPad->GetNetname().empty() );
+            bool displayNetname = ( m_pcbSettings.m_netNamesOnPads && !aPad->GetNetname().empty() );
             VECTOR2D padsize = VECTOR2D( aPad->GetSize() );
             double maxSize = PCB_RENDER_SETTINGS::MAX_FONT_SIZE;
             double size = padsize.y;
@@ -541,6 +595,8 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
     // Pad drawing
     const COLOR4D& color = m_pcbSettings.GetColor( aPad, aLayer );
+    VECTOR2D size;
+
     if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
     {
         // Outline mode
@@ -562,8 +618,6 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     m_gal->Rotate( -aPad->GetOrientationRadians() );
 
     // Choose drawing settings depending on if we are drawing a pad itself or a hole
-    VECTOR2D    size;
-
     if( aLayer == ITEM_GAL_LAYER( PADS_HOLES_VISIBLE ) )
     {
         // Drawing hole: has same shape as PAD_CIRCLE or PAD_OVAL
@@ -651,32 +705,17 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
     case PAD_SHAPE_ROUNDRECT:
     {
-        std::deque<VECTOR2D> pointList;
-
-        // Use solder[Paste/Mask]size or pad size to build pad shape
-        SHAPE_POLY_SET outline;
-        wxSize prsize( size.x*2, size.y*2 );
+        SHAPE_POLY_SET polySet;
+        wxSize prsize( size.x * 2, size.y * 2 );
         const int segmentToCircleCount = 64;
-        int corner_radius = aPad->GetRoundRectCornerRadius( prsize );
-        TransformRoundRectToPolygon( outline, wxPoint( 0, 0 ), prsize,
-                                    0.0 , corner_radius, segmentToCircleCount );
-
-        // Draw the polygon: Inflate creates only one convex polygon
-        SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
-
-        for( int ii = 0; ii < poly.PointCount(); ii++ )
-            pointList.push_back( poly.Point( ii ) );
+        const int corner_radius = aPad->GetRoundRectCornerRadius( prsize );
+        TransformRoundRectToPolygon( polySet, wxPoint( 0, 0 ), prsize,
+                0.0, corner_radius, segmentToCircleCount );
 
         if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
-        {
-            // Add the beginning point to close the outline
-            pointList.push_back( pointList.front() );
-            m_gal->DrawPolyline( pointList );
-        }
+            m_gal->DrawPolyline( polySet.Outline( 0 ) );
         else
-        {
-            m_gal->DrawPolygon( pointList );
-        }
+            m_gal->DrawPolygon( polySet );
         break;
     }
 
@@ -689,21 +728,17 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         VECTOR2D deltaPadSize = size - padSize; // = solder[Paste/Mask]Margin or 0
 
         aPad->BuildPadPolygon( corners, wxSize( deltaPadSize.x, deltaPadSize.y ), 0.0 );
-        pointList.push_back( VECTOR2D( corners[0] ) );
-        pointList.push_back( VECTOR2D( corners[1] ) );
-        pointList.push_back( VECTOR2D( corners[2] ) );
-        pointList.push_back( VECTOR2D( corners[3] ) );
+        SHAPE_POLY_SET polySet;
+        polySet.NewOutline();
+        polySet.Append( VECTOR2I( corners[0] ) );
+        polySet.Append( VECTOR2I( corners[1] ) );
+        polySet.Append( VECTOR2I( corners[2] ) );
+        polySet.Append( VECTOR2I( corners[3] ) );
 
         if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
-        {
-            // Add the beginning point to close the outline
-            pointList.push_back( pointList.front() );
-            m_gal->DrawPolyline( pointList );
-        }
+            m_gal->DrawPolyline( polySet.COutline( 0 ) );
         else
-        {
-            m_gal->DrawPolygon( pointList );
-        }
+            m_gal->DrawPolygon( polySet );
     }
     break;
 
@@ -713,6 +748,27 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     }
 
     m_gal->Restore();
+
+    // Clearance lines
+    // It has to be called after GAL::Restore() as TransformShapeWithClearanceToPolygon()
+    // returns already transformed coordinates
+    constexpr int clearanceFlags = /*PCB_RENDER_SETTINGS::CL_EXISTING |*/ PCB_RENDER_SETTINGS::CL_PADS;
+
+    if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
+            && ( aLayer == ITEM_GAL_LAYER( PAD_FR_VISIBLE )
+                || aLayer == ITEM_GAL_LAYER( PAD_BK_VISIBLE )
+                || aLayer == ITEM_GAL_LAYER( PADS_VISIBLE ) ) )
+    {
+        SHAPE_POLY_SET polySet;
+        constexpr int SEGCOUNT = 64;
+        aPad->TransformShapeWithClearanceToPolygon( polySet, aPad->GetClearance(), SEGCOUNT, 1.0 );
+
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( false );
+        m_gal->SetStrokeColor( color );
+        m_gal->DrawPolyline( polySet.COutline( 0 ) );
+    }
 }
 
 
