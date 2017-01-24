@@ -93,7 +93,7 @@ Improve the coverage and usability of the electrical rules checker (ERC).
 **Status:**
 - No progress.
 
-# Implement GAL and New Tool Framework ## {#v6_sch_gal}
+## Implement GAL and New Tool Framework ## {#v6_sch_gal}
 **Goal:**
 
 Implement the GAL and the tool framework used by Pcbnew in Eechema to
@@ -109,7 +109,7 @@ provide advanced graphics and tool capabilities.
 **Status:**
 - Initial Discussion..
 
-# Port Editing Tools ## {#v6_sch_tool_framework}
+## Port Editing Tools ## {#v6_sch_tool_framework}
 **Goal:**
 
 Convert all editing tool to new tool framework.
@@ -157,7 +157,7 @@ representations easier.
 **Status:**
 - No progress.
 
-## Allow Use of System Fonts ## {#sch_sys_fonts}
+## Allow Use of System Fonts ## {#v6_sch_sys_fonts}
 **Goal:**
 
 Currently the schematic editor uses the stroke drawn fonts which aren't really
@@ -294,7 +294,7 @@ Add support for keepout zones on boards and footprints.
 **Progress:**
 - Planning
 
-## Clipboard Support ## {#fp_edit_clipboard}
+## Clipboard Support ## {#v6_fp_edit_clipboard}
 **Goal:**
 
 Provide clipboard cut and paste for footprints.
@@ -309,7 +309,7 @@ Provide clipboard cut and paste for footprints.
 **Status:**
 - No progress.
 
-## Net Highlighting ## {#pcb_net_highlight}
+## Net Highlighting ## {#v6_pcb_net_highlight}
 **Goal:**
 
 Highlight rats nest links and/or traces when corresponding net in Eeschema is selected.
@@ -325,7 +325,7 @@ Highlight rats nest links and/or traces when corresponding net in Eeschema is se
 **Status:**
 - No progress.
 
-## Hatched Zone Filling ## {#pcb_hatched_zones}
+## Hatched Zone Filling ## {#v6_pcb_hatched_zones}
 **Goal:**
 
 Currently Pcbnew only supports solid zone files.  Add option to fill zones
@@ -341,7 +341,7 @@ with hatching.
 **Status:**
 - No progress.
 
-## Board Stack Up Impedance Calculator ## {#pcb_impedance_calc}
+## Board Stack Up Impedance Calculator ## {#v6_pcb_impedance_calc}
 **Goal:**
 
 Provide a calculator to compute trace impedances using a full board stackup.
@@ -356,7 +356,7 @@ Maybe this should be included in the PCB calculator application.
 **Status:**
 - No progress.
 
-## Net Class Improvements ## {#pcb_net_class_improvements}
+## Net Class Improvements ## {#v6_pcb_net_class_improvements}
 **Goal:**
 
 Add support for route impedance, color selection, etc in net class object.
@@ -375,7 +375,7 @@ Add support for route impedance, color selection, etc in net class object.
 **Status:**
 - No progress.
 
-## Ratsnest Improvements ## {#pcb_ratsnest_improvements}
+## Ratsnest Improvements ## {#v6_pcb_ratsnest_improvements}
 **Goal:**
 
 Add support for per net color and visibility settings.

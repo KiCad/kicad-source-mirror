@@ -12,7 +12,7 @@ Dick Hollenbeck \<<dick@softplc.com>\>
 
 [TOC]
 
-# 1. Introduction # {#intro}
+# 1. Introduction # {#csp_intro}
 The purpose of this document is to provide a reference guide for KiCad
 developers about how source code should be styled and formatted in
 KiCad. It is not a comprehensive programming guide because it does not

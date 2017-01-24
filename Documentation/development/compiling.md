@@ -174,6 +174,12 @@ whether install them or not with the KICAD_INSTALL_DEMOS option. You can also se
 install them with the KICAD_DEMOS variable. On Linux the demos are installed in
 $PREFIX/share/kicad/demos by default.
 
+## Python Scripting Action Menu Support ## {#python_action_menu_opt}
+
+The KICAD_SCRIPTING_ACTION_MENU option allows Python scripts to be added directly to the Pcbnew
+menu.  This option is disabled by default.  Please note that this option is highly experimental
+and can cause Pcbnew to crash if Python scripts create an invalid object state within Pcbnew.
+
 ## Setting the Build Version and Repository Name ## {#build_version_opt}
 
 The KiCad version string is defined by the three CMake variables KICAD_VERSION, KICAD_BRANCH_NAME,
