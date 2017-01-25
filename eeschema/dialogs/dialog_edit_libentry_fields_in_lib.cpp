@@ -3,7 +3,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -325,7 +325,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::EditSpiceModel( wxCommandEvent& event )
     for( unsigned ii = 0; ii < m_FieldsBuf.size(); ++ii )
     {
         LIB_FIELD& libfield = m_FieldsBuf[ii];
-        SCH_FIELD schfield( libfield.GetTextPosition(), libfield.GetId(),
+        SCH_FIELD schfield( libfield.GetTextPos(), libfield.GetId(),
                             &component,  libfield.GetName() );
         schfield.ImportValues( m_FieldsBuf[ii] );
         schfield.SetText( m_FieldsBuf[ii].GetText() );
