@@ -1,3 +1,13 @@
+
+if( UNIX AND NOT APPLE )
+    # Setting this ON slows down linking and is a advanced (=hidden) developer option for
+    # linux, not a user option.
+    option( PCBNEW_LINK_MAPS
+        "Developer: create linker map files for pcbnew binaries, not typical for Debug builds"
+        )
+    mark_as_advanced( PCBNEW_LINK_MAPS )
+endif()
+
 add_definitions( -DPCBNEW )
 
 add_subdirectory(router)
@@ -18,8 +28,9 @@ endif()
 
 if( BUILD_GITHUB_PLUGIN )
     set( GITHUB_3DLIBRARIES_WIZARD
-            dialogs/wizard_3DShape_Libs_downloader_base.cpp
-            dialogs/wizard_3DShape_Libs_downloader.cpp )
+        dialogs/wizard_3DShape_Libs_downloader_base.cpp
+        dialogs/wizard_3DShape_Libs_downloader.cpp
+        )
 endif()
 
 include_directories( BEFORE ${INC_BEFORE} )
@@ -339,7 +350,7 @@ if( KICAD_SCRIPTING )
 
     # Swig generated files do not use the override specifier, therefore
     # disable suggest-override warnings
-    if (COMPILER_SUPPORTS_WSUGGEST_OVERRIDE)
+    if( COMPILER_SUPPORTS_WSUGGEST_OVERRIDE )
         set_source_files_properties( pcbnew_wrap.cxx pcbnewPYTHON_wrap.cxx
             PROPERTIES COMPILE_FLAGS -Wno-suggest-override
         )
@@ -371,7 +382,10 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 endif()
 
 
-if( KICAD_SCRIPTING )
+if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
+
+    # We deliberately do not use the CMake support for swig here,
+    # i.e. swig_add_module()) because we want full control.
 
     set( SWIG_OPTS -python -c++ -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
@@ -388,6 +402,8 @@ if( KICAD_SCRIPTING )
         DEPENDS exporters/gendrill_Excellon_writer.h
         DEPENDS swig/pcbnew.i
         DEPENDS swig/board.i
+        DEPENDS swig/board_connected_item.i
+        DEPENDS swig/board_design_settings.i
         DEPENDS swig/board_item.i
         DEPENDS swig/board_item_container.i
         DEPENDS swig/dimension.i
@@ -405,6 +421,7 @@ if( KICAD_SCRIPTING )
         DEPENDS swig/track.i
         DEPENDS swig/units.i
         DEPENDS swig/zone.i
+        DEPENDS swig/zone_settings.i
 
         DEPENDS ../common/swig/dlist.i
         DEPENDS ../common/swig/kicad.i
@@ -413,13 +430,19 @@ if( KICAD_SCRIPTING )
         DEPENDS ../scripting/kicadplugins.i
 
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/docstrings
-        COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/docstrings/docstrings.i # this makes docstrings.i available if it doesn't exist
 
-        COMMAND ${SWIG_EXECUTABLE} ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx  swig/pcbnew.i
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+        # Make docstrings.i available if it doesn't exist
+        COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/docstrings/docstrings.i
+
+        COMMAND ${SWIG_EXECUTABLE}
+            ${SWIG_OPTS} -o ${CMAKE_CURRENT_BINARY_DIR}/pcbnew_wrap.cxx swig/pcbnew.i
+
+        COMMAND ${PYTHON_EXECUTABLE}
+            ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py
+            ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
+
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
-
 endif()
 
 
@@ -429,84 +452,6 @@ endif()
 
 if( UNIX AND NOT APPLE )
     list( APPEND PCBNEW_EXTRA_LIBS rt )
-endif()
-
-
-if( KICAD_SCRIPTING_MODULES )
-
-    #message( "building pcbnew scripting" )
-
-    set( CMAKE_SWIG_FLAGS ${SWIG_FLAGS} )
-    set_source_files_properties( swig/pcbnew.i PROPERTIES CPLUSPLUS ON )
-
-    # https://cmake.org/cmake/help/v3.2/module/UseSWIG.html
-    # Set this ..EXTRA_DEPS variable before invoking swig_add_module() macro
-    set( SWIG_MODULE_pcbnew_EXTRA_DEPS
-        swig/board.i
-        swig/board_item.i
-        swig/board_item_container.i
-        swig/dimension.i
-        swig/drawsegment.i
-        swig/edge_mod.i
-        swig/marker_pcb.i
-        swig/mire.i
-        swig/module.i
-        swig/netclass.i
-        swig/netinfo.i
-        swig/pad.i
-        swig/pcb_text.i
-        swig/plugins.i
-        swig/text_mod.i
-        swig/track.i
-        swig/units.i
-        swig/zone.i
-
-        ../common/swig/dlist.i
-        ../common/swig/kicad.i
-        ../common/swig/wx.i
-        ../common/swig/ki_exception.i
-        ../scripting/kicadplugins.i
-        )
-
-    swig_add_module( pcbnew
-        python
-        swig/pcbnew.i
-        ${PCBNEW_SCRIPTING_PYTHON_HELPERS}
-        pcbnew.cpp
-        ${PCBNEW_SRCS}
-        ${PCBNEW_COMMON_SRCS}
-        )
-
-    swig_link_libraries( pcbnew
-        3d-viewer
-        pcbcommon
-        pnsrouter
-        pcad2kicadpcb
-        common
-        lib_dxf
-        idf3
-        polygon
-        bitmaps
-        gal
-        ${wxWidgets_LIBRARIES}
-        ${GITHUB_PLUGIN_LIBRARIES}
-        ${GDI_PLUS_LIBRARIES}
-        ${PYTHON_LIBRARIES}
-        ${PCBNEW_EXTRA_LIBS}
-        ${Boost_LIBRARIES}      # must follow GITHUB
-        )
-
-    if( MAKE_LINK_MAPS )
-        set_target_properties( _pcbnew PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.so.map"
-            )
-    endif()
-
-    if( ${OPENMP_FOUND} )
-        set_property( TARGET _pcbnew APPEND_STRING
-            PROPERTY LINK_FLAGS " ${OpenMP_CXX_FLAGS}"
-        )
-    endif()
 endif()
 
 
@@ -617,7 +562,7 @@ target_link_libraries( pcbnew
     ${wxWidgets_LIBRARIES}
     )
 
-if( MAKE_LINK_MAPS )
+if( PCBNEW_LINK_MAPS )
     set_target_properties( pcbnew PROPERTIES
         LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map" )
 endif()
@@ -667,7 +612,7 @@ set_source_files_properties( pcbnew.cpp PROPERTIES
     COMPILE_DEFINITIONS     "BUILD_KIWAY_DLL;COMPILING_DLL"
     )
 
-if( MAKE_LINK_MAPS )
+if( PCBNEW_LINK_MAPS )
     set_target_properties( pcbnew_kiface PROPERTIES
         LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcbnew.kiface.map"
         )
@@ -747,15 +692,28 @@ if( KICAD_SCRIPTING )
     )
 endif()
 
+
 if( KICAD_SCRIPTING_MODULES )
-    add_custom_target( FixSwigImportsModuleScripting ALL
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripting/build_tools/fix_swig_imports.py ${CMAKE_CURRENT_BINARY_DIR}/pcbnew.py
-        DEPENDS _pcbnew
-        COMMENT "Fixing swig_import_helper in Kicad scripting modules"
-        )
+
+    # 1) KICAD_SCRIPTING enables python inside _pcbnew.kiface.
+    # 2) KICAD_SCRIPTING_MODULES enables python from the OS command line for pcbnew.
+    # When python is running within _pcbnew.kiface (case 1 above) it uses said
+    # kiface for the native part of the pcbnew python module.  This is a kind of
+    # circular dependency that works well.  When running python from
+    # the command line (case 2 above) then python needs a native portion of the pcbnew
+    # python module also, and this is _pcbnew.{so,pyd}.  It turns out that the
+    # kiface file is built adequately to serve the needs of 2) for now if it is
+    # merely renamed. This is phase 1 of a 2 step plan.
+    # In phase 2 we will use the _pcbnew.kiface file without renaming, by doctoring
+    # what the python portion of the pcbnew python module wants to load when run
+    # from the command line, case 2 above.
+
+    # Here is built the _pcbnew.{so,pyd} which is the native part of the pcbnew Python library
+    # when Python is used from the command line.
 
     if( MINGW )
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST} )
+        set( PYMOD_EXT "pyd" )
     elseif( APPLE )
          # put everything into bundle at build time, it is relocated at install
         add_custom_target( ScriptingModulesPcbnewSoCopy ALL
@@ -764,10 +722,26 @@ if( KICAD_SCRIPTING_MODULES )
             COMMENT "Copying _pcbnew.so into ${PYTHON_DEST}"
             )
         add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingWxpythonCopy )
-    else()
+        set( PYMOD_EXT "so" )
+
+    else()  # only linux remains among supported platforms
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.so DESTINATION ${PYTHON_DEST} )
+        set( PYMOD_EXT "so" )
     endif()
+
+    # For phase 1, copy _pcbnew.kiface to the python module.
+    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+        DEPENDS pcbnew_kiface
+        COMMAND ${CMAKE_COMMAND} -E copy _pcbnew.kiface _pcbnew.${PYMOD_EXT}
+        COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
+        )
+    add_custom_target(
+        pcbnew_python_module ALL
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+        )
+
 endif()
+
 
 if( APPLE )
     if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
