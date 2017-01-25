@@ -31,6 +31,8 @@ class PNS_PCBNEW_DEBUG_DECORATOR;
 
 class BOARD;
 class BOARD_COMMIT;
+class DISPLAY_OPTIONS;
+
 namespace KIGFX
 {
     class VIEW;
@@ -63,9 +65,9 @@ private:
     PNS_PCBNEW_RULE_RESOLVER* m_ruleResolver;
     PNS_PCBNEW_DEBUG_DECORATOR* m_debugDecorator;
 
-    std::unique_ptr< PNS::SOLID >   syncPad( D_PAD* aPad );
-    std::unique_ptr< PNS::SEGMENT > syncTrack( TRACK* aTrack );
-    std::unique_ptr< PNS::VIA >     syncVia( VIA* aVia );
+    std::unique_ptr<PNS::SOLID>   syncPad( D_PAD* aPad );
+    std::unique_ptr<PNS::SEGMENT> syncTrack( TRACK* aTrack );
+    std::unique_ptr<PNS::VIA>     syncVia( VIA* aVia );
 
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_GROUP* m_previewItems;
@@ -77,6 +79,7 @@ private:
     PICKED_ITEMS_LIST m_undoBuffer;
     PCB_EDIT_FRAME* m_frame;
     std::unique_ptr<BOARD_COMMIT> m_commit;
+    DISPLAY_OPTIONS* m_dispOptions;
 };
 
 #endif

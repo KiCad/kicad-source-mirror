@@ -68,7 +68,8 @@ public:
     PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* aRouter );
     virtual ~PNS_PCBNEW_RULE_RESOLVER();
 
-    virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
+    virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) const override;
+    virtual int Clearance( int aNetCode ) const override;
     virtual void OverrideClearance( bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0 ) override;
     virtual void UseDpGap( bool aUseDpGap ) override { m_useDpGap = aUseDpGap; }
     virtual int DpCoupledNet( int aNet ) override;
@@ -107,6 +108,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
     PNS::TOPOLOGY topo( world );
     m_netClearanceCache.resize( m_board->GetNetCount() );
 
+    // Build clearance cache for net classes
     for( unsigned int i = 0; i < m_board->GetNetCount(); i++ )
     {
         NETINFO_ITEM* ni = m_board->FindNet( i );
@@ -127,6 +129,7 @@ PNS_PCBNEW_RULE_RESOLVER::PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER* 
         wxLogTrace( "PNS", "Add net %u netclass %s clearance %d", i, netClassName.mb_str(), clearance );
     }
 
+    // Build clearance cache for pads
     for( MODULE* mod = m_board->m_Modules; mod ; mod = mod->Next() )
     {
         auto moduleClearance = mod->GetLocalClearance();
@@ -174,7 +177,7 @@ int PNS_PCBNEW_RULE_RESOLVER::localPadClearance( const PNS::ITEM* aItem ) const
 }
 
 
-int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB )
+int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) const
 {
     int net_a = aA->Net();
     int cl_a = ( net_a >= 0 ? m_netClearanceCache[net_a].clearance : m_defaultClearance );
@@ -199,6 +202,15 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         cl_b = pad_b;
 
     return std::max( cl_a, cl_b );
+}
+
+
+int PNS_PCBNEW_RULE_RESOLVER::Clearance( int aNetCode ) const
+{
+    if( aNetCode > 0 && aNetCode < (int) m_netClearanceCache.size() )
+        return m_netClearanceCache[aNetCode].clearance;
+
+    return m_defaultClearance;
 }
 
 
@@ -458,7 +470,7 @@ PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 }
 
 
-std::unique_ptr< PNS::SOLID > PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
+std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 {
     LAYER_RANGE layers( 0, MAX_CU_LAYERS - 1 );
 
@@ -697,7 +709,7 @@ std::unique_ptr< PNS::SOLID > PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
 }
 
 
-std::unique_ptr< PNS::SEGMENT > PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
+std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
 {
     std::unique_ptr< PNS::SEGMENT > segment(
         new PNS::SEGMENT( SEG( aTrack->GetStart(), aTrack->GetEnd() ), aTrack->GetNetCode() )
@@ -707,15 +719,14 @@ std::unique_ptr< PNS::SEGMENT > PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
     segment->SetLayers( LAYER_RANGE( aTrack->GetLayer() ) );
     segment->SetParent( aTrack );
 
-    if( aTrack->IsLocked() ) {
+    if( aTrack->IsLocked() )
         segment->Mark( PNS::MK_LOCKED );
-    }
 
     return segment;
 }
 
 
-std::unique_ptr< PNS::VIA > PNS_KICAD_IFACE::syncVia( VIA* aVia )
+std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE::syncVia( VIA* aVia )
 {
     LAYER_ID top, bottom;
     aVia->LayerPair( &top, &bottom );
@@ -730,9 +741,8 @@ std::unique_ptr< PNS::VIA > PNS_KICAD_IFACE::syncVia( VIA* aVia )
 
     via->SetParent( aVia );
 
-    if( aVia->IsLocked() ) {
+    if( aVia->IsLocked() )
         via->Mark( PNS::MK_LOCKED );
-    }
 
     return via;
 }
@@ -819,10 +829,20 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClea
         pitem->SetColor( KIGFX::COLOR4D( aColor ) );
 
     if( aClearance >= 0 )
+    {
         pitem->SetClearance( aClearance );
 
-    m_previewItems->Add( pitem );
+        if( m_dispOptions )
+        {
+            auto clearanceDisp = m_dispOptions->m_ShowTrackClearanceMode;
+            pitem->ShowTrackClearance( clearanceDisp != DO_NOT_SHOW_CLEARANCE );
+            pitem->ShowViaClearance( clearanceDisp != DO_NOT_SHOW_CLEARANCE
+                    && clearanceDisp != SHOW_CLEARANCE_NEW_TRACKS );
+        }
+    }
 
+
+    m_previewItems->Add( pitem );
     m_view->Update( m_previewItems );
 }
 
@@ -954,4 +974,5 @@ void PNS_KICAD_IFACE::SetHostFrame( PCB_EDIT_FRAME* aFrame )
     m_frame = aFrame;
 
     m_commit.reset( new BOARD_COMMIT( m_frame ) );
+    m_dispOptions = (DISPLAY_OPTIONS*) m_frame->GetDisplayOptions();
 }

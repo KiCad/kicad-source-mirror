@@ -46,6 +46,9 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
     m_clearance = -1;
     m_originLayer = m_layer = ITEM_GAL_LAYER( GP_OVERLAY );
 
+    m_showTrackClearance = false;
+    m_showViaClearance = false;
+
     // initialize variables, overwritten by Update( aItem ), if aItem != NULL
     m_router = NULL;
     m_type = PR_SHAPE;
@@ -177,6 +180,15 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         {
             const SHAPE_LINE_CHAIN* l = (const SHAPE_LINE_CHAIN*) m_shape;
             drawLineChain( *l, gal );
+
+            if( m_showTrackClearance && m_clearance > 0 )
+            {
+                gal->SetLayerDepth( ClearanceOverlayDepth );
+                gal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
+                gal->SetFillColor( COLOR4D( DARKDARKGRAY ) );
+                gal->SetLineWidth( m_width + 2 * m_clearance );
+                drawLineChain( *l, gal );
+            }
             break;
         }
 
@@ -185,7 +197,7 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) m_shape;
             gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() );
 
-            if( m_clearance > 0 )
+            if( m_showTrackClearance && m_clearance > 0 )
             {
                 gal->SetLayerDepth( ClearanceOverlayDepth );
                 gal->SetStrokeColor( COLOR4D( DARKDARKGRAY ) );
@@ -201,7 +213,7 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             const SHAPE_CIRCLE* c = (const SHAPE_CIRCLE*) m_shape;
             gal->DrawCircle( c->GetCenter(), c->GetRadius() );
 
-            if( m_clearance > 0 )
+            if( m_showViaClearance && m_clearance > 0 )
             {
                 gal->SetLayerDepth( ClearanceOverlayDepth );
                 gal->SetFillColor( COLOR4D( DARKDARKGRAY ) );

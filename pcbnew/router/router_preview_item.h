@@ -77,6 +77,16 @@ public:
         m_clearance = aClearance;
     }
 
+    void ShowTrackClearance( bool aEnabled )
+    {
+        m_showTrackClearance = aEnabled;
+    }
+
+    void ShowViaClearance( bool aEnabled )
+    {
+        m_showViaClearance = aEnabled;
+    }
+
 #if defined(DEBUG)
     void Show( int aA, std::ostream& aB ) const override {}
 #endif
@@ -117,6 +127,9 @@ private:
     int m_layer;
     int m_originLayer;
     int m_clearance;
+
+    bool m_showTrackClearance;
+    bool m_showViaClearance;
 
     // fixme: shouldn't this go to VIEW?
     static const int ClearanceOverlayDepth;

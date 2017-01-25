@@ -93,7 +93,7 @@ public:
     void SetSuggestFinish( bool aSuggestFinish ) { m_suggestFinish = aSuggestFinish; }
 
     ///> Returns true if Smart Pads (automatic neckdown) is enabled.
-    bool SmartPads () const { return m_smartPads; }
+    bool SmartPads() const { return m_smartPads; }
 
     ///> Enables/disables Smart Pads (automatic neckdown).
     void SetSmartPads( bool aSmartPads ) { m_smartPads = aSmartPads; }
@@ -134,7 +134,7 @@ public:
     TIME_LIMIT WalkaroundTimeLimit() const;
 
     void SetInlineDragEnabled ( bool aEnable ) { m_inlineDragEnabled = aEnable; }
-    bool InlineDragEnabled( ) const { return m_inlineDragEnabled; }
+    bool InlineDragEnabled() const { return m_inlineDragEnabled; }
 
 private:
     bool m_shoveVias;

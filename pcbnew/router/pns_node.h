@@ -58,7 +58,8 @@ class RULE_RESOLVER
 public:
     virtual ~RULE_RESOLVER() {}
 
-    virtual int Clearance( const ITEM* aA, const ITEM* aB ) = 0;
+    virtual int Clearance( const ITEM* aA, const ITEM* aB ) const = 0;
+    virtual int Clearance( int aNetCode ) const = 0;
     virtual void OverrideClearance( bool aEnable, int aNetA = 0, int aNetB = 0, int aClearance = 0 ) = 0;
     virtual void UseDpGap( bool aUseDpGap ) = 0;
     virtual int DpCoupledNet( int aNet ) = 0;
@@ -433,18 +434,16 @@ private:
                        int                 aNet );
 
     ///> touches a joint and links it to an m_item
-    void linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers,
-                    int aNet, ITEM* aWhere );
+    void linkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet, ITEM* aWhere );
 
     ///> unlinks an item from a joint
-    void unlinkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers,
-                        int aNet, ITEM* aWhere );
+    void unlinkJoint( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aNet, ITEM* aWhere );
 
     ///> helpers for adding/removing items
     void addSolid( SOLID* aSeg );
     void addSegment( SEGMENT* aSeg );
     void addVia( VIA* aVia );
-    
+
     void removeLine( LINE& aLine );
     void removeSolidIndex( SOLID* aSeg );
     void removeSegmentIndex( SEGMENT* aSeg );

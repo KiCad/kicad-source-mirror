@@ -26,6 +26,7 @@
 #include <view/view_item.h>
 #include <view/view_group.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <gal/color4d.h>
 
 #include <pcb_painter.h>
 
@@ -306,10 +307,12 @@ void ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
             continue;
 
         const LINE* l = static_cast<const LINE*>( item );
-        m_iface->DisplayItem( l );
+        int clearance = GetRuleResolver()->Clearance( item->Net() );
+
+        m_iface->DisplayItem( l, -1, clearance );
 
         if( l->EndsWithVia() )
-            m_iface->DisplayItem( &l->Via() );
+            m_iface->DisplayItem( &l->Via(), -1, clearance );
     }
 
     //ITEM_SET tmp( &current );
@@ -324,10 +327,10 @@ void ROUTER::CommitRouting( NODE* aNode )
 
     aNode->GetUpdatedItems( removed, added );
 
-    for ( auto item : removed )
-        m_iface->RemoveItem ( item );
+    for( auto item : removed )
+        m_iface->RemoveItem( item );
 
-    for ( auto item : added )
+    for( auto item : added )
         m_iface->AddItem( item );
 
     m_iface->Commit();
