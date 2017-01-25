@@ -531,7 +531,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 
     for( TOOL_STATE* st : ( m_toolState | boost::adaptors::map_values ) )
     {
-        bool handled = false;
+        bool finished = false;
 
         // no state handler in progress - check if there are any transitions (defined by
         // Go() method that match the event.
@@ -558,7 +558,8 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     if( !st->cofunc->Running() )
                         finishTool( st ); // The couroutine has finished immediately?
 
-                    handled = true;
+                    // if it is a message, continue processing
+                    finished = !( aEvent.Category() == TC_MESSAGE );
 
                     // there is no point in further checking, as transitions got cleared
                     break;
@@ -566,7 +567,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             }
         }
 
-        if( handled )
+        if( finished )
             break;      // only the first tool gets the event
     }
 }
