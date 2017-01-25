@@ -355,6 +355,7 @@ void CONTEXT_MENU::runOnSubmenus( std::function<void(CONTEXT_MENU*)> aFunction )
 
 void CONTEXT_MENU::copyFrom( const CONTEXT_MENU& aMenu )
 {
+    SetTitle( aMenu.GetTitle() );
     m_icon = aMenu.m_icon;
     m_titleDisplayed = aMenu.m_titleDisplayed;
     m_selected = -1; // aMenu.m_selected;
