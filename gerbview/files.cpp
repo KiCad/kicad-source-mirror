@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,10 @@
 #include <class_gerbview_layer_widget.h>
 #include <wildcards_and_files_ext.h>
 
+// HTML Messages used more than one time:
+#define MSG_NO_MORE_LAYER\
+    _( "<b>No more available free graphic layer</b> in Gerbview to load files" )
+#define MSG_NOT_LOADED _( "\n<b>Not loaded:</b> <i>%s</i>" )
 
 void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
 {
@@ -225,9 +229,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
             if( layer == NO_AVAILABLE_LAYERS && ii < filenamesList.GetCount()-1 )
             {
                 success = false;
-
-                reporter.Report( _( "No available graphic layer in Gerbview to load files" ),
-                                  REPORTER::RPT_ERROR );
+                reporter.Report( MSG_NO_MORE_LAYER, REPORTER::RPT_ERROR );
 
                 // Report the name of not loaded files:
                 ii += 1;
@@ -235,7 +237,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
                 {
                     filename = filenamesList[ii++];
                     wxString txt;
-                    txt.Printf( _( "\nNot loaded: '%s'" ),
+                    txt.Printf( MSG_NOT_LOADED,
                                 GetChars( filename.GetFullName() ) );
                     reporter.Report( txt, REPORTER::RPT_ERROR );
                 }
@@ -284,11 +286,8 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         else
             currentPath = m_mruPath;
 
-        wxFileDialog dlg( this,
-                          _( "Open Drill File" ),
-                          currentPath,
-                          filename.GetFullName(),
-                          filetypes,
+        wxFileDialog dlg( this, _( "Open Drill File" ),
+                          currentPath, filename.GetFullName(), filetypes,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -334,9 +333,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
             if( layer == NO_AVAILABLE_LAYERS && ii < filenamesList.GetCount()-1 )
             {
                 success = false;
-
-                reporter.Report( _( "No available graphic layer in Gerbview to load files" ),
-                                  REPORTER::RPT_ERROR );
+                reporter.Report( MSG_NO_MORE_LAYER, REPORTER::RPT_ERROR );
 
                 // Report the name of not loaded files:
                 ii += 1;
@@ -344,7 +341,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
                 {
                     filename = filenamesList[ii++];
                     wxString txt;
-                    txt.Printf( _( "\nNot loaded: '%s'" ),
+                    txt.Printf( MSG_NOT_LOADED,
                                 GetChars( filename.GetFullName() ) );
                     reporter.Report( txt, REPORTER::RPT_ERROR );
                 }
@@ -409,13 +406,14 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         // In order to load a file in this archive, this file is unzipped and
         // a temporary file is created in the same folder as the archive.
         // This file will be deleted after being loaded in the viewer.
-        // One other way is to load it from the memory image, but currently
-        // Read_GERBER_File and Read_EXCELLON_File expect a file.
+        // One other (and better) way is to load it from the memory image, but currently
+        // Read_GERBER_File and Read_EXCELLON_File expects a file.
         wxFileName uzfn = localfilename.AfterLast( ':' );
         uzfn.MakeAbsolute( unzipDir );
 
         // The unzipped file in only a temporary file. Give it a filename
         // which cannot conflict with an usual gerber or drill file
+        // by adding a '$' to its ext.
         wxString unzipfilename = uzfn.GetFullPath() + "$";
 
         wxInputStream* stream = zipfile->GetStream();
@@ -428,17 +426,22 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             success = false;
         }
 
+        // Close streams:
         delete temporary_ofile;
         delete zipfile;
 
-        // The archiv contains Gerber and/or Excellon drill files. Use the right loader;
-        // gerber files ext is usually "gbr", but can be also an other value, starting by "g"
+        // The archive contains Gerber and/or Excellon drill files. Use the right loader.
+        // However it can contain a few other files (reports, pdf files...),
+        // which will be skipped.
+        // Gerber files ext is usually "gbr", but can be also an other value, starting by "g"
         // old gerber files ext from kicad is .pho
         // drill files do not have a well defined ext
-        // (it is .drl in kicad, but .txt in Altium for istance)
+        // It is .drl in kicad, but .txt in Altium for instance
+        // Allows only .drl for drill files.
         int layer = getActiveLayer();
         setActiveLayer( layer, false );
         bool read_ok = true;
+        bool skip_file = false;
 
         wxString curr_ext = uzfn.GetExt().Lower();
 
@@ -447,55 +450,70 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             // Read gerber files: each file is loaded on a new GerbView layer
             read_ok = Read_GERBER_File( unzipfilename );
         }
-        else
+        else if( curr_ext == "drl" )
         {
             read_ok = Read_EXCELLON_File( unzipfilename );
         }
-
-        if( !read_ok )
+        else    // if the ext is not "pho", "g*" or "drl",
         {
+                // the type is unknown for Gerbview. Skip it
+            skip_file = true;
             success = false;
 
             if( aReporter )
             {
-                msg.Printf( _("file %s was not read"), GetChars( unzipfilename ) );
-                aReporter->Report( msg, REPORTER::RPT_ERROR );
+                msg.Printf( _( "Info: skip <i>%s</i> (unknown type)\n" ),
+                            GetChars( localfilename.AfterLast( ':' ) ) );
+                aReporter->Report( msg, REPORTER::RPT_WARNING );
             }
         }
 
         // The unzipped file is only a temporary file, delete it.
         wxRemoveFile( unzipfilename );
 
-        // Prepare the loading of the next file in archive, if exists
-        localfilename = zipfilesys.FindNext();
-
-        if( read_ok )
+        if( !read_ok && !skip_file)
         {
-            layer = getNextAvailableLayer( layer );
+            success = false;
 
-            if( layer == NO_AVAILABLE_LAYERS && !localfilename.IsEmpty() )
+            if( aReporter )
             {
-                success = false;
-
-                if( aReporter )
-                {
-                    msg = _( "No available graphic layer in Gerbview to load files" );
-                    aReporter->Report( msg, REPORTER::RPT_ERROR );
-
-                    // Report the name of not loaded files:
-                    while( !localfilename.IsEmpty() )
-                    {
-                        msg.Printf( _( "\nNot loaded: '%s'" ),
-                                    GetChars( localfilename.AfterLast( ':' ) ) );
-                        aReporter->Report( msg, REPORTER::RPT_ERROR );
-                        localfilename = zipfilesys.FindNext();
-                    }
-                }
-                break;
+                msg.Printf( _("<b>file %s read error<\b>\n"), GetChars( unzipfilename ) );
+                aReporter->Report( msg, REPORTER::RPT_ERROR );
             }
         }
 
-        setActiveLayer( layer, false );
+        // Prepare the loading of the next file in archive, if exists
+        localfilename = zipfilesys.FindNext();
+
+        if( !skip_file )
+        {
+            if( read_ok )
+            {
+                layer = getNextAvailableLayer( layer );
+
+                if( layer == NO_AVAILABLE_LAYERS && !localfilename.IsEmpty() )
+                {
+                    success = false;
+
+                    if( aReporter )
+                    {
+                        aReporter->Report( MSG_NO_MORE_LAYER, REPORTER::RPT_ERROR );
+
+                        // Report the name of not loaded files:
+                        while( !localfilename.IsEmpty() )
+                        {
+                            msg.Printf( MSG_NOT_LOADED,
+                                        GetChars( localfilename.AfterLast( ':' ) ) );
+                            aReporter->Report( msg, REPORTER::RPT_ERROR );
+                            localfilename = zipfilesys.FindNext();
+                        }
+                    }
+                    break;
+                }
+            }
+
+            setActiveLayer( layer, false );
+        }
     }
 
     return success;
@@ -537,19 +555,11 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
         m_mruPath = currentPath;
     }
 
-    if( filename.IsOk() )
-    {
-        wxString msg;
-        WX_STRING_REPORTER reporter( &msg );
-        bool success = unarchiveFiles( filename.GetFullPath(), &reporter );
+    wxString msg;
+    WX_STRING_REPORTER reporter( &msg );
 
-        if( !success )
-        {
-            HTML_MESSAGE_BOX mbox( this, _( "Errors" ) );
-            mbox.ListSet( msg );
-            mbox.ShowModal();
-        }
-    }
+    if( filename.IsOk() )
+        unarchiveFiles( filename.GetFullPath(), &reporter );
 
     Zoom_Automatique( false );
 
@@ -558,6 +568,15 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
     setActiveLayer( getActiveLayer() );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
+
+    if( !msg.IsEmpty() )
+    {
+        wxSafeYield();  // Allows slice of time to redraw the screen
+                        // to refresh widgets, before displaying messages
+        HTML_MESSAGE_BOX mbox( this, _( "Messages" ) );
+        mbox.ListSet( msg );
+        mbox.ShowModal();
+    }
 
     return true;
 }
