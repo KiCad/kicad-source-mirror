@@ -58,19 +58,26 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
-    // Load
+    // Load Gerber files
     AddMenuItem( fileMenu,
                  wxID_FILE,
                  _( "Load &Gerber File" ),
                  _( "Load a new Gerber file on the current layer. Previous data will be deleted" ),
                  KiBitmap( gerber_file_xpm ) );
 
-    // Excellon
+    // Load Excellon drill files
     AddMenuItem( fileMenu,
                  ID_GERBVIEW_LOAD_DRILL_FILE,
                  _( "Load &EXCELLON Drill File" ),
                  _( "Load excellon drill file" ),
                  KiBitmap( gerbview_drill_file_xpm ) );
+
+    // Load Zip archive files
+    AddMenuItem( fileMenu,
+                 ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE,
+                 _( "Load &Zip Archive File" ),
+                 _( "Load a zipped archive (Gerber and drill) file" ),
+                 KiBitmap( zip_xpm ) );
 
     // Recent gerber files
     static wxMenu* openRecentGbrMenu;
@@ -105,6 +112,21 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  _( "Open Recent Dri&ll File" ),
                  _( "Open a recent opened drill file" ),
                  KiBitmap( gerbview_open_recent_drill_files_xpm ) );
+
+    // Recent drill files
+    static wxMenu* openRecentZipArchiveMenu;
+
+    if( openRecentZipArchiveMenu )
+        m_zipFileHistory.RemoveMenu( openRecentZipArchiveMenu );
+
+    openRecentZipArchiveMenu = new wxMenu();
+    m_zipFileHistory.UseMenu( openRecentZipArchiveMenu );
+    m_zipFileHistory.AddFilesToMenu( );
+    AddMenuItem( fileMenu, openRecentZipArchiveMenu,
+                 wxID_ANY,
+                 _( "Open Recent Zip &Archive File" ),
+                 _( "Open a recent opened zip archive file" ),
+                 KiBitmap( gerbview_open_recent_ziparchive_files_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
@@ -182,7 +204,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     AddMenuItem( miscellaneousMenu,
                  ID_GERBVIEW_SHOW_LIST_DCODES,
                  _( "&List DCodes" ),
-                 _( "List and edit D-codes" ),
+                 _( "List D-codes defined in Gerber files" ),
                  KiBitmap( show_dcodenumber_xpm ) );
 
     // Show source

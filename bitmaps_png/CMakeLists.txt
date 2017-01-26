@@ -261,6 +261,7 @@ set( BMAPS_MID
     gerbview_drill_file
     gerbview_clear_layers
     gerbview_open_recent_drill_files
+    gerbview_open_recent_ziparchive_files
     general_deletions
     general_ratsnest
     glabel2label

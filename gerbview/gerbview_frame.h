@@ -48,6 +48,7 @@ class GBR_LAYER_BOX_SELECTOR;
 class GERBER_DRAW_ITEM;
 class GERBER_FILE_IMAGE;
 class GERBER_FILE_IMAGE_LIST;
+class REPORTER;
 
 
 /**
@@ -152,8 +153,12 @@ public:
 protected:
     GERBER_LAYER_WIDGET*    m_LayersManager;
 
+    // Auxiliary file history used to store zip files history.
+    wxFileHistory           m_zipFileHistory;
+
     // Auxiliary file history used to store drill files history.
     wxFileHistory           m_drillFileHistory;
+
     /// The last filename chosen to be proposed to the user
     wxString                m_lastFileName;
 
@@ -591,6 +596,22 @@ public:
     void                OnDrlFileHistory( wxCommandEvent& event );
 
     /**
+     * Function OnZipFileHistory
+     * deletes the current data and load a zip archive file selected from the
+     * history list. The archive is expected coantaining a set of gerber and drill file
+     */
+    void                OnZipFileHistory( wxCommandEvent& event );
+
+    /**
+     * Extracts gerber and drill files from the zip archive, and load them
+     * @param aFullFileName is the full filename of the zip archive
+     * @param aReporter a REPORTER to collect warning and error messages
+     * @return true if OK, false if a file cannot be readable
+     */
+    bool                unarchiveFiles( const wxString& aFullFileName,
+                                        REPORTER* aReporter = nullptr );
+
+    /**
      * function LoadGerberFiles
      * Load a photoplot (Gerber) file or many files.
      * @param aFileName - void string or file name with full path to open or empty string to
@@ -602,15 +623,25 @@ public:
     bool                Read_GERBER_File( const wxString&   GERBER_FullFileName );
 
     /**
-     * function Read_EXCELLON_File
+     * function LoadExcellonFiles
      * Load a drill (EXCELLON) file or many files.
      * @param aFileName - void string or file name with full path to open or empty string to
      *                    open a new file. In this case one one file is loaded
-     *                    if void string: user will be prompted for filename(s)
+     *                    if empty string: user will be prompted for filename(s)
      * @return true if file was opened successfully.
      */
     bool                LoadExcellonFiles( const wxString& aFileName );
     bool                Read_EXCELLON_File( const wxString& aFullFileName );
+
+    /**
+     * function LoadZipArchiveFileLoadZipArchiveFile
+     * Load a zipped archive file.
+     * @param aFileName - void string or file name with full path to open or empty string to
+     *                    open a new file.
+     *                    if empty string: user will be prompted for filename(s)
+     * @return true if file was opened successfully.
+     */
+    bool                LoadZipArchiveFile( const wxString& aFileName );
 
     bool                GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 

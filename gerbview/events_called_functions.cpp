@@ -53,6 +53,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( wxID_FILE, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_GERBVIEW_ERASE_ALL, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, GERBVIEW_FRAME::Files_io )
+    EVT_TOOL( ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_GERBVIEW_SET_PAGE_BORDER, GERBVIEW_FRAME::Process_Special_Functions )
 
@@ -62,8 +63,12 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_GERBVIEW_EXPORT_TO_PCBNEW, GERBVIEW_FRAME::ExportDataInPcbnewFormat )
 
     EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, GERBVIEW_FRAME::OnGbrFileHistory )
+
     EVT_MENU_RANGE( ID_GERBVIEW_DRILL_FILE1, ID_GERBVIEW_DRILL_FILE9,
                     GERBVIEW_FRAME::OnDrlFileHistory )
+
+    EVT_MENU_RANGE( ID_GERBVIEW_ZIP_FILE1, ID_GERBVIEW_ZIP_FILE9,
+                    GERBVIEW_FRAME::OnZipFileHistory )
 
     EVT_MENU( wxID_EXIT, GERBVIEW_FRAME::OnQuit )
 
@@ -317,7 +322,19 @@ void GERBVIEW_FRAME::OnShowGerberSourceFile( wxCommandEvent& event )
         if( !editorname.IsEmpty() )
         {
             wxFileName fn( gerber_layer->m_FileName );
-            ExecuteFile( this, editorname, QuoteFullPath( fn ) );
+
+            // Call the editor only if the Gerber/drill source file is available.
+            // This is not always the case, because it can be a temporary file
+            // if it comes from a zip archive.
+            if( !fn.FileExists() )
+            {
+                wxString msg;
+                msg.Printf( _( "Source file '%s' is not available" ),
+                            GetChars( fn.GetFullPath() ) );
+                wxMessageBox( msg );
+            }
+            else
+                ExecuteFile( this, editorname, QuoteFullPath( fn ) );
         }
         else
             wxMessageBox( _( "No editor defined. Please select one" ) );

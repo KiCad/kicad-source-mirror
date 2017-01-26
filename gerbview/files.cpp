@@ -27,8 +27,13 @@
  */
 
 #include <fctsys.h>
+#include <wx/fs_zip.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
+
 #include <common.h>
 #include <class_drawpanel.h>
+#include <reporter.h>
 
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
@@ -63,6 +68,18 @@ void GERBVIEW_FRAME::OnDrlFileHistory( wxCommandEvent& event )
     }
 }
 
+void GERBVIEW_FRAME::OnZipFileHistory( wxCommandEvent& event )
+{
+    wxString filename;
+    filename = GetFileFromHistory( event.GetId(), _( "Zip files" ), &m_zipFileHistory );
+
+    if( !filename.IsEmpty() )
+    {
+        Erase_Current_DrawLayer( false );
+        LoadZipArchiveFile( filename );
+    }
+}
+
 
 /* File commands. */
 void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
@@ -85,6 +102,11 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
 
     case ID_GERBVIEW_LOAD_DRILL_FILE:
         LoadExcellonFiles( wxEmptyString );
+        m_canvas->Refresh();
+        break;
+
+    case ID_GERBVIEW_LOAD_ZIP_ARCHIVE_FILE:
+        LoadZipArchiveFile( wxEmptyString );
         m_canvas->Refresh();
         break;
 
@@ -289,6 +311,174 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
             setActiveLayer( layer, false );
         }
+    }
+
+    Zoom_Automatique( false );
+
+    // Synchronize layers tools with actual active layer:
+    ReFillLayerWidget();
+    setActiveLayer( getActiveLayer() );
+    m_LayersManager->UpdateLayerIcons();
+    syncLayerBox();
+
+    return true;
+}
+
+
+bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter )
+{
+    wxFileSystem zipfilesys;
+
+    zipfilesys.AddHandler( new wxZipFSHandler );
+    zipfilesys.ChangePathTo( aFullFileName + wxT( "#zip:" ), true );
+
+    wxString  localfilename = zipfilesys.FindFirst( wxT( "*.*" ) );
+    wxFileName fn( aFullFileName );
+    wxString unzipDir = fn.GetPath();
+
+    // Update the list of recent zip files.
+    UpdateFileHistory( aFullFileName,  &m_zipFileHistory );
+
+    bool success = true;
+    wxString msg;
+
+    while( !localfilename.IsEmpty() )
+    {
+        wxFSFile* zipfile = zipfilesys.OpenFile( localfilename );
+
+        if( !zipfile )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "Zip file '%s' cannot be read" ), GetChars( aFullFileName ) );
+                aReporter->Report( msg, REPORTER::RPT_ERROR );
+            }
+            success = false;
+            break;
+        }
+
+        // In order to load a file in this archive, this file is unzipped and
+        // a temporary file is created in the same folder as the archive.
+        // This file will be deleted after being loaded in the viewer.
+        // One other way is to load it from the memory image, but currently
+        // Read_GERBER_File and Read_EXCELLON_File expect a file.
+        wxFileName uzfn = localfilename.AfterLast( ':' );
+        uzfn.MakeAbsolute( unzipDir );
+
+        // The unzipped file in only a temporary file. Give it a filename
+        // which cannot conflict with an usual gerber or drill file
+        wxString unzipfilename = uzfn.GetFullPath() + "$";
+
+        wxInputStream* stream = zipfile->GetStream();
+        wxFFileOutputStream* temporary_ofile = new wxFFileOutputStream( unzipfilename );
+
+        if( temporary_ofile->Ok() )
+            temporary_ofile->Write( *stream );
+        else
+        {
+            success = false;
+        }
+
+        delete temporary_ofile;
+        delete zipfile;
+
+        // The archiv contains Gerber and/or Excellon drill files. Use the right loader;
+        // gerber files ext is usually "gbr", but can be also an other value, starting by "g"
+        // drill files do not have a well defined ext
+        // (it is .drl in kicad, but .txt in Altium for istance)
+        int layer = getActiveLayer();
+        setActiveLayer( layer, false );
+        bool read_ok = true;
+
+        if( uzfn.GetExt().Lower()[0] == 'g' )
+        {
+            // Read gerber files: each file is loaded on a new GerbView layer
+            read_ok = Read_GERBER_File( unzipfilename );
+        }
+        else
+        {
+            read_ok = Read_EXCELLON_File( unzipfilename );
+        }
+
+        if( !read_ok )
+        {
+            success = false;
+
+            if( aReporter )
+            {
+                msg.Printf( _("file %s was not read"), GetChars( unzipfilename ) );
+                aReporter->Report( msg, REPORTER::RPT_ERROR );
+            }
+        }
+
+        // The unzipped file is only a temporary file, delete it.
+        wxRemoveFile( unzipfilename );
+
+        layer = getNextAvailableLayer( layer );
+
+        if( layer == NO_AVAILABLE_LAYERS )
+        {
+            if( aReporter )
+            {
+                msg = _( "No more empty available layers.\n"
+                         "The remaining files will not be loaded." );
+                aReporter->Report( msg, REPORTER::RPT_ERROR );
+            }
+            break;
+        }
+
+        setActiveLayer( layer, false );
+
+        localfilename = zipfilesys.FindNext();
+    }
+
+    return success;
+}
+
+
+bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
+{
+#define ZipFileExtension "zip"
+#define ZipFileWildcard  _( "Zip file (*.zip)|*.zip" )
+    wxFileName filename = aFullFileName;
+    wxString currentPath;
+
+    if( !filename.IsOk() )
+    {
+        // Use the current working directory if the file name path does not exist.
+        if( filename.DirExists() )
+            currentPath = filename.GetPath();
+        else
+            currentPath = m_mruPath;
+
+        wxFileDialog dlg( this,
+                          _( "Open Zip File" ),
+                          currentPath,
+                          filename.GetFullName(),
+                          ZipFileWildcard,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        filename = dlg.GetPath();
+        currentPath = wxGetCwd();
+        m_mruPath = currentPath;
+    }
+    else
+    {
+        currentPath = filename.GetPath();
+        m_mruPath = currentPath;
+    }
+
+    if( filename.IsOk() )
+    {
+        wxString msg;
+        WX_STRING_REPORTER reporter( &msg );
+        bool success = unarchiveFiles( filename.GetFullPath(), &reporter );
+
+        if( !success )
+            wxMessageBox( msg );
     }
 
     Zoom_Automatique( false );

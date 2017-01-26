@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2007-2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2007-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -233,7 +233,8 @@ EXTERN_BITMAP( gerber_file_xpm )
 EXTERN_BITMAP( gerber_recent_files_xpm )
 EXTERN_BITMAP( gerbview_clear_layers_xpm )
 EXTERN_BITMAP( gerbview_open_recent_drill_files_xpm )
-EXTERN_BITMAP( gerbview_show_negative_objects_xpm );
+EXTERN_BITMAP( gerbview_open_recent_ziparchive_files_xpm )
+EXTERN_BITMAP( gerbview_show_negative_objects_xpm )
 EXTERN_BITMAP( general_deletions_xpm )
 EXTERN_BITMAP( general_ratsnest_xpm )
 EXTERN_BITMAP( glabel2label_xpm )
