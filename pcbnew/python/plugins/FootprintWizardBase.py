@@ -530,10 +530,10 @@ class FootprintWizardDrawingAids:
         text_size = pcbnew.wxSize(size, size)
 
         self.module.Reference().SetPos0(self.TransformPoint(x, y))
-        self.module.Reference().SetTextPosition(
+        self.module.Reference().SetPosition(
             self.module.Reference().GetPos0())
-        self.module.Reference().SetSize(text_size)
-        self.module.Reference().SetOrientation(orientation_degree*10)   # internal angles are in 0.1 deg
+        self.module.Reference().SetTextSize(text_size)
+        self.module.Reference().SetTextAngle(orientation_degree*10)   # internal angles are in 0.1 deg
 
     def Value(self, x, y, size, orientation_degree = 0):
         """
@@ -542,10 +542,10 @@ class FootprintWizardDrawingAids:
         text_size = pcbnew.wxSize(size, size)
 
         self.module.Value().SetPos0(self.TransformPoint(x, y))
-        self.module.Value().SetTextPosition(self.module.Value().GetPos0())
-        self.module.Value().SetSize(text_size)
+        self.module.Value().SetPosition(self.module.Value().GetPos0())
+        self.module.Value().SetTextSize(text_size)
         self.module.Value().SetLayer(self.DefaultTextValueLayer())
-        self.module.Value().SetOrientation(orientation_degree*10)   # internal angles are in 0.1 deg
+        self.module.Value().SetTextAngle(orientation_degree*10)   # internal angles are in 0.1 deg
 
     def Box(self, x, y, w, h):
         """

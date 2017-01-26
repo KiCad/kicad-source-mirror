@@ -76,7 +76,8 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
 
         # Gives a position and size to ref and value texts:
         textposy = pad_height/2 + pcbnew.FromMM(1) + self.GetTextThickness()
-        self.draw.Reference( 0, textposy, size_text )
+        angle_degree = 0.0
+        self.draw.Reference( 0, textposy, size_text, angle_degree )
 
         textposy = textposy + size_text + self.GetTextThickness()
         self.draw.Value( 0, textposy, size_text )
