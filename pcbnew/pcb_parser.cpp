@@ -244,10 +244,8 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
+        if( token == T_LEFT )
+            token = NextTok();
 
         switch( token )
         {
@@ -260,14 +258,14 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
                 switch( token )
                 {
                 case T_size:
-                {
-                    wxSize sz;
-                    sz.SetHeight( parseBoardUnits( "text height" ) );
-                    sz.SetWidth( parseBoardUnits( "text width" ) );
-                    aText->SetTextSize( sz );
-                    NeedRIGHT();
+                    {
+                        wxSize sz;
+                        sz.SetHeight( parseBoardUnits( "text height" ) );
+                        sz.SetWidth( parseBoardUnits( "text width" ) );
+                        aText->SetTextSize( sz );
+                        NeedRIGHT();
+                    }
                     break;
-                }
 
                 case T_thickness:
                     aText->SetThickness( parseBoardUnits( "text thickness" ) );
@@ -286,7 +284,6 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
                     Expecting( "size, bold, or italic" );
                 }
             }
-
             break;
 
         case T_justify:
@@ -2016,18 +2013,6 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
     }
 
     NeedSYMBOLorNUMBER();
-
-#if defined(DEBUG)
-    {
-        wxString ref = FromUTF8();
-
-        if( ref == "LED7" )
-        {
-            int breakhere = 1;
-            (void) breakhere;
-        }
-    }
-#endif
 
     text->SetText( FromUTF8() );
     NeedLEFT();

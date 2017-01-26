@@ -481,7 +481,6 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
             aFormatter->Print( 0, ")" );
         }
 
-        // As of now the only place this is used is in Eeschema to hide or show the text.
         if( !IsVisible() )
             aFormatter->Print( 0, " hide" );
 
