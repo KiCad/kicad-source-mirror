@@ -384,13 +384,16 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
         // The archiv contains Gerber and/or Excellon drill files. Use the right loader;
         // gerber files ext is usually "gbr", but can be also an other value, starting by "g"
+        // old gerber files ext from kicad is .pho
         // drill files do not have a well defined ext
         // (it is .drl in kicad, but .txt in Altium for istance)
         int layer = getActiveLayer();
         setActiveLayer( layer, false );
         bool read_ok = true;
 
-        if( uzfn.GetExt().Lower()[0] == 'g' )
+        wxString curr_ext = uzfn.GetExt().Lower();
+
+        if( curr_ext[0] == 'g' || curr_ext == "pho" )
         {
             // Read gerber files: each file is loaded on a new GerbView layer
             read_ok = Read_GERBER_File( unzipfilename );
@@ -414,22 +417,28 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         // The unzipped file is only a temporary file, delete it.
         wxRemoveFile( unzipfilename );
 
-        layer = getNextAvailableLayer( layer );
+        // Prepare the loading of the next file in archive, if exists
+        localfilename = zipfilesys.FindNext();
 
-        if( layer == NO_AVAILABLE_LAYERS )
+        if( read_ok )
         {
-            if( aReporter )
+            layer = getNextAvailableLayer( layer );
+
+            if( layer == NO_AVAILABLE_LAYERS && !localfilename.IsEmpty() )
             {
-                msg = _( "No more empty available layers.\n"
-                         "The remaining files will not be loaded." );
-                aReporter->Report( msg, REPORTER::RPT_ERROR );
+                success = false;
+
+                if( aReporter )
+                {
+                    msg = _( "No available graphic layer in Gerbview.\n"
+                             "The remaining files will not be loaded." );
+                    aReporter->Report( msg, REPORTER::RPT_ERROR );
+                }
+                break;
             }
-            break;
         }
 
         setActiveLayer( layer, false );
-
-        localfilename = zipfilesys.FindNext();
     }
 
     return success;
