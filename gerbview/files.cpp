@@ -34,6 +34,7 @@
 #include <common.h>
 #include <class_drawpanel.h>
 #include <reporter.h>
+#include <html_messagebox.h>
 
 #include <gerbview_frame.h>
 #include <gerbview_id.h>
@@ -197,7 +198,12 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     }
 
     // Read gerber files: each file is loaded on a new GerbView layer
+    bool success = true;
     int layer = getActiveLayer();
+
+    // Manage errors when loading files
+    wxString msg;
+    WX_STRING_REPORTER reporter( &msg );
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
@@ -216,16 +222,35 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
             layer = getNextAvailableLayer( layer );
 
-            if( layer == NO_AVAILABLE_LAYERS )
+            if( layer == NO_AVAILABLE_LAYERS && ii < filenamesList.GetCount()-1 )
             {
-                wxString msg = wxT( "No more empty available layers.\n"
-                                    "The remaining gerber files will not be loaded." );
-                wxMessageBox( msg );
+                success = false;
+
+                reporter.Report( _( "No available graphic layer in Gerbview to load files" ),
+                                  REPORTER::RPT_ERROR );
+
+                // Report the name of not loaded files:
+                ii += 1;
+                while( ii < filenamesList.GetCount() )
+                {
+                    filename = filenamesList[ii++];
+                    wxString txt;
+                    txt.Printf( _( "\nNot loaded: '%s'" ),
+                                GetChars( filename.GetFullName() ) );
+                    reporter.Report( txt, REPORTER::RPT_ERROR );
+                }
                 break;
             }
 
             setActiveLayer( layer, false );
         }
+    }
+
+    if( !success )
+    {
+        HTML_MESSAGE_BOX mbox( this, _( "Errors" ) );
+        mbox.ListSet( msg );
+        mbox.ShowModal();
     }
 
     Zoom_Automatique( false );
@@ -235,7 +260,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     setActiveLayer( getActiveLayer() );
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
-    return true;
+    return success;
 }
 
 
@@ -280,8 +305,13 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         m_mruPath = currentPath;
     }
 
-    // Read gerber files: each file is loaded on a new GerbView layer
+    // Read Excellon drill files: each file is loaded on a new GerbView layer
+    bool success = true;
     int layer = getActiveLayer();
+
+    // Manage errors when loading files
+    wxString msg;
+    WX_STRING_REPORTER reporter( &msg );
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
     {
@@ -301,16 +331,35 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
             layer = getNextAvailableLayer( layer );
 
-            if( layer == NO_AVAILABLE_LAYERS )
+            if( layer == NO_AVAILABLE_LAYERS && ii < filenamesList.GetCount()-1 )
             {
-                wxString msg = wxT( "No more empty available layers.\n"
-                                    "The remaining gerber files will not be loaded." );
-                wxMessageBox( msg );
+                success = false;
+
+                reporter.Report( _( "No available graphic layer in Gerbview to load files" ),
+                                  REPORTER::RPT_ERROR );
+
+                // Report the name of not loaded files:
+                ii += 1;
+                while( ii < filenamesList.GetCount() )
+                {
+                    filename = filenamesList[ii++];
+                    wxString txt;
+                    txt.Printf( _( "\nNot loaded: '%s'" ),
+                                GetChars( filename.GetFullName() ) );
+                    reporter.Report( txt, REPORTER::RPT_ERROR );
+                }
                 break;
             }
 
             setActiveLayer( layer, false );
         }
+    }
+
+    if( !success )
+    {
+        HTML_MESSAGE_BOX mbox( this, _( "Errors" ) );
+        mbox.ListSet( msg );
+        mbox.ShowModal();
     }
 
     Zoom_Automatique( false );
@@ -321,7 +370,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
 
-    return true;
+    return success;
 }
 
 
@@ -430,9 +479,17 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
                 if( aReporter )
                 {
-                    msg = _( "No available graphic layer in Gerbview.\n"
-                             "The remaining files will not be loaded." );
+                    msg = _( "No available graphic layer in Gerbview to load files" );
                     aReporter->Report( msg, REPORTER::RPT_ERROR );
+
+                    // Report the name of not loaded files:
+                    while( !localfilename.IsEmpty() )
+                    {
+                        msg.Printf( _( "\nNot loaded: '%s'" ),
+                                    GetChars( localfilename.AfterLast( ':' ) ) );
+                        aReporter->Report( msg, REPORTER::RPT_ERROR );
+                        localfilename = zipfilesys.FindNext();
+                    }
                 }
                 break;
             }
@@ -487,7 +544,11 @@ bool GERBVIEW_FRAME::LoadZipArchiveFile( const wxString& aFullFileName )
         bool success = unarchiveFiles( filename.GetFullPath(), &reporter );
 
         if( !success )
-            wxMessageBox( msg );
+        {
+            HTML_MESSAGE_BOX mbox( this, _( "Errors" ) );
+            mbox.ListSet( msg );
+            mbox.ShowModal();
+        }
     }
 
     Zoom_Automatique( false );
