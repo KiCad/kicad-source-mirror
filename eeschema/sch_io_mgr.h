@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -216,6 +216,8 @@ public:
      */
     virtual int GetModifyHash() const = 0;
 
+    virtual void SaveLibrary( const wxString& aFileName, const PROPERTIES* aProperties = NULL );
+
     /**
      * Function Load
      *
@@ -271,6 +273,9 @@ public:
     virtual void Save( const wxString& aFileName, SCH_SCREEN* aSchematic, KIWAY* aKiway,
                        const PROPERTIES* aProperties = NULL );
 
+    virtual size_t GetSymbolLibCount( const wxString&   aLibraryPath,
+                                      const PROPERTIES* aProperties = NULL );
+
     /**
      * Function EnumerateSymbolLib
      *
@@ -290,9 +295,6 @@ public:
     virtual void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                                      const wxString&   aLibraryPath,
                                      const PROPERTIES* aProperties = NULL );
-
-    // Temporary for testing using PART_LIB instead of SCH_PLUGIN.
-    virtual void TransferCache( PART_LIB& aTarget );
 
     /**
      * Function LoadSymbol

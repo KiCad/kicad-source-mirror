@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     m_canvas->SetIgnoreMouseEvents( true );
 
     wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+
     if( !default_path )
         default_path = search->LastVisitedPath();
 
@@ -77,35 +78,28 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     std::unique_ptr<PART_LIB> lib( new PART_LIB( LIBRARY_TYPE_SYMBOL, filename ) );
 
-    wxString err;
+    wxString msg;
 
-    if( !lib->Load( err ) )
+    try
     {
-        wxString msg = wxString::Format( _(
-            "Error '%s' occurred loading part file '%s'." ),
-            GetChars( err ),
-            GetChars( filename )
-            );
-        DisplayError( this, msg );
-        return;
+        if( lib->IsEmpty() )
+        {
+            msg.Printf( _( "No parts found in part file '%s'." ), GetChars( filename ) );
+            DisplayError( this, msg );
+            return;
+        }
     }
-
-    if( lib->IsEmpty() )
+    catch( const IO_ERROR& exc )
     {
-        wxString msg = wxString::Format( _(
-            "No parts found in part file '%s'." ),
-            GetChars( filename )
-            );
+        msg.Printf( _( "Error '%s' occurred loading part file '%s'." ),
+                    GetChars( exc.Problem() ), GetChars( filename ) );
         DisplayError( this, msg );
         return;
     }
 
     if( lib->GetCount() > 1 )
     {
-        wxString msg = wxString::Format( _(
-            "More than one part in part file '%s'." ),
-            GetChars( filename )
-            );
+        msg.Printf( _( "More than one part in part file '%s'." ), GetChars( filename ) );
         wxMessageBox( msg, _( "Warning" ), wxOK | wxICON_EXCLAMATION, this );
     }
 

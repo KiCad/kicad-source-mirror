@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2012-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,9 +279,11 @@ class LIB_TABLE : public PROJECT::_ELEM
 
 public:
 
-    virtual void Parse( LIB_TABLE_LEXER* aLexer ) throw() = 0;
+    virtual void Parse( LIB_TABLE_LEXER* aLexer )
+        throw( IO_ERROR, PARSE_ERROR ) = 0;
 
-    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const throw() = 0;
+    virtual void Format( OUTPUTFORMATTER* out, int nestLevel ) const
+        throw( IO_ERROR, boost::interprocess::lock_exception ) = 0;
 
     /**
      * Constructor LIB_TABLE

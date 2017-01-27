@@ -130,64 +130,28 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
     std::unique_ptr<PART_LIB> temp_lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, fn.GetFullPath() ) );
 
-    SaveOnePart( temp_lib.get() );
-
-    bool result = false;
-
     try
     {
-        FILE_OUTPUTFORMATTER    formatter( fn.GetFullPath() );
-
-        result = temp_lib.get()->Save( formatter );
+        SaveOnePart( temp_lib.get() );
     }
     catch( ... /* IO_ERROR ioe */ )
     {
         fn.MakeAbsolute();
-        msg = wxT( "Failed to create component library file " ) + fn.GetFullPath();
+        msg = wxT( "Failed to create symbol library file " ) + fn.GetFullPath();
         DisplayError( this, msg );
+        msg.Printf( _( "Error creating symbol library '%s'" ), fn.GetFullName() );
+        SetStatusText( msg );
         return;
     }
 
-    try
-    {
-        wxFileName              docFileName = fn;
+    m_mruPath = fn.GetPath();
 
-        docFileName.SetExt( DOC_EXT );
+    msg.Printf( _( "'%s' - OK" ), GetChars( fn.GetFullPath() ) );
+    DisplayInfoMessage( this, _( "This library will not be available until it is loaded by "
+                                 "Eeschema.\n\n"
+                                 "Modify the Eeschema library configuration if you want to "
+                                 "include it as part of this project." ) );
 
-        FILE_OUTPUTFORMATTER    formatter( docFileName.GetFullPath() );
-
-        result = temp_lib.get()->SaveDocs( formatter );
-    }
-    catch( ... /* IO_ERROR ioe */ )
-    {
-        fn.MakeAbsolute();
-        msg = wxT( "Failed to create component library document file " ) + fn.GetFullPath();
-        DisplayError( this, msg );
-        return;
-    }
-
-    if( result )
-        m_mruPath = fn.GetPath();
-
-    if( result )
-    {
-        if( createLib )
-        {
-            msg.Printf( _( "'%s' - OK" ), GetChars( fn.GetFullPath() ) );
-            DisplayInfoMessage( this, _(
-                "This library will not be available until it is loaded by Eeschema.\n\n"
-                "Modify the Eeschema library configuration if you want to include it"
-                " as part of this project." ) );
-        }
-        else
-        {
-            msg.Printf( _( "'%s' - Export OK" ), GetChars( fn.GetFullPath() ) );
-        }
-    }
-    else    // Error
-    {
-        msg.Printf( _( "Error creating '%s'" ), GetChars( fn.GetFullName() ) );
-    }
-
+    msg.Printf( _( "'%s' - Export OK" ), GetChars( fn.GetFullPath() ) );
     SetStatusText( msg );
 }

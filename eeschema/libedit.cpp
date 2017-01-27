@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -163,7 +163,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
             // The entry to load is not in the active lib
             // Ask for a new active lib
             wxString msg = _( "The selected component is not in the active library." );
-            msg += wxT("\n\n");
+            msg += "\n\n";
             msg += _( "Do you want to change the active library?" );
 
             if( IsOK( this, msg ) )
@@ -173,11 +173,9 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 
     if( !libEntry )
     {
-        wxString msg = wxString::Format( _(
-            "Part name '%s' not found in library '%s'" ),
-            GetChars( cmp_name ),
-            GetChars( searchLib->GetName() )
-            );
+        wxString msg = wxString::Format( _( "Part name '%s' not found in library '%s'" ),
+                                         GetChars( cmp_name ),
+                                         GetChars( searchLib->GetName() )  );
         DisplayError( this, msg );
         return;
     }
@@ -201,7 +199,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, PART_LIB* aLibrar
 
     if( aEntry->GetName().IsEmpty() )
     {
-        wxLogWarning( wxT( "Entry in library <%s> has empty name field." ),
+        wxLogWarning( "Entry in library <%s> has empty name field.",
                       GetChars( aLibrary->GetName() ) );
         return false;
     }
@@ -212,7 +210,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, PART_LIB* aLibrar
 
     wxASSERT( lib_part );
 
-    wxLogDebug( wxT( "\"<%s>\" is alias of \"<%s>\"" ),
+    wxLogDebug( "\"<%s>\" is alias of \"<%s>\"",
                 GetChars( cmpName ),
                 GetChars( lib_part->GetName() ) );
 
@@ -309,11 +307,16 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
 
     PART_LIB* lib = GetCurLib();
 
+    // Just in case the library hasn't been cached yet.
+    lib->GetCount();
+
     if( !lib )
     {
         DisplayError( this, _( "No library specified." ) );
         return false;
     }
+
+    wxString oldFileName = lib->GetFullFileName();
 
     if( GetScreen()->IsModify() )
     {
@@ -352,15 +355,13 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     {
         fn = wxFileName( lib->GetFullFileName() );
 
-        msg.Printf( _( "Modify library file '%s' ?" ),
-                    GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Modify library file '%s' ?" ), GetChars( fn.GetFullPath() ) );
 
         if( !IsOK( this, msg ) )
             return false;
     }
 
-    // Verify the user has write privileges before attempting to
-    // save the library file.
+    // Verify the user has write privileges before attempting to save the library file.
     if( !IsWritable( fn ) )
         return false;
 
@@ -372,7 +373,7 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     // Rename the old .lib file to .bak.
     if( libFileName.FileExists() )
     {
-        backupFileName.SetExt( wxT( "bak" ) );
+        backupFileName.SetExt( "bak" );
 
         if( backupFileName.FileExists() )
             wxRemoveFile( backupFileName.GetFullPath() );
@@ -380,32 +381,9 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
         if( !wxRenameFile( libFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
             libFileName.MakeAbsolute();
-            msg = wxT( "Failed to rename old component library file " ) +
-                  backupFileName.GetFullPath();
+            msg = _( "Failed to rename old component library file " ) + backupFileName.GetFullPath();
             DisplayError( this, msg );
         }
-    }
-
-    try
-    {
-        FILE_OUTPUTFORMATTER    libFormatter( libFileName.GetFullPath() );
-
-        if( !lib->Save( libFormatter ) )
-        {
-            msg.Printf( _( "Error occurred while saving library file '%s'" ),
-                        GetChars( fn.GetFullPath() ) );
-            AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
-            DisplayError( this, msg );
-            return false;
-        }
-    }
-    catch( ... /* IO_ERROR ioe */ )
-    {
-        libFileName.MakeAbsolute();
-        msg.Printf( _( "Failed to create component library file '%s'" ),
-                    GetChars( libFileName.GetFullPath() ) );
-        DisplayError( this, msg );
-        return false;
     }
 
     wxFileName docFileName = libFileName;
@@ -415,45 +393,37 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     // Rename .doc file to .bck.
     if( docFileName.FileExists() )
     {
-        backupFileName.SetExt( wxT( "bck" ) );
+        backupFileName.SetExt( "bck" );
 
         if( backupFileName.FileExists() )
             wxRemoveFile( backupFileName.GetFullPath() );
 
         if( !wxRenameFile( docFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
-            msg = wxT( "Failed to save old library document file " ) +
-                  backupFileName.GetFullPath();
+            msg = _( "Failed to save old library document file " ) + backupFileName.GetFullPath();
             DisplayError( this, msg );
         }
     }
 
     try
     {
-        FILE_OUTPUTFORMATTER    docFormatter( docFileName.GetFullPath() );
-
-        if( !lib->SaveDocs( docFormatter ) )
-        {
-            msg.Printf( _( "Error occurred while saving library documentation file <%s>" ),
-                        GetChars( docFileName.GetFullPath() ) );
-            AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
-            DisplayError( this, msg );
-            return false;
-        }
+        lib->SetFileName( fn.GetFullPath() );
+        lib->Save();
     }
     catch( ... /* IO_ERROR ioe */ )
     {
-        docFileName.MakeAbsolute();
-        msg.Printf( _( "Failed to create component document library file <%s>" ),
+        lib->SetFileName( oldFileName );
+        msg.Printf( _( "Failed to create symbol library file '%s'" ),
                     GetChars( docFileName.GetFullPath() ) );
         DisplayError( this, msg );
         return false;
     }
 
-    msg.Printf( _( "Library file '%s' OK" ), GetChars( fn.GetFullName() ) );
+    lib->SetFileName( oldFileName );
+    msg.Printf( _( "Library file '%s' saved" ), GetChars( fn.GetFullPath() ) );
     fn.SetExt( DOC_EXT );
     wxString msg1;
-    msg1.Printf( _( "Documentation file '%s' OK" ), GetChars( fn.GetFullPath() ) );
+    msg1.Printf( _( "Documentation file '%s' saved" ), GetChars( fn.GetFullPath() ) );
     AppendMsgPanel( msg, msg1, BLUE );
 
     return true;
@@ -482,7 +452,7 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
 
     alias = part->GetAlias( m_aliasName );
 
-    wxCHECK_RET( alias != NULL, wxT( "Alias not found in component." ) );
+    wxCHECK_RET( alias != NULL, "Alias not found in component." );
 
     AppendMsgPanel( _( "Alias" ), msg, RED, 8 );
 
@@ -638,7 +608,7 @@ void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
     }
 
     name = dlg.GetName();
-    name.Replace( wxT( " " ), wxT( "_" ) );
+    name.Replace( " ", "_" );
 
     PART_LIB* lib = GetCurLib();
 
@@ -711,18 +681,26 @@ bool LIB_EDIT_FRAME::SaveOnePart( PART_LIB* aLib, bool aPromptUser )
 {
     wxString    msg;
     LIB_PART*   part = GetCurPart();
+    LIB_PART*   old_part = NULL;
 
     GetScreen()->ClrModify();
 
-    LIB_PART* old_part = aLib->FindPart( part->GetName() );
-
-    if( old_part && aPromptUser )
+    if( !wxFileName::FileExists( aLib->GetFullFileName() ) )
     {
-        msg.Printf( _( "Part '%s' already exists. Change it?" ),
-                    GetChars( part->GetName() ) );
+        aLib->Create();
+    }
+    else
+    {
+        old_part = aLib->FindPart( part->GetName() );
 
-        if( !IsOK( this, msg ) )
-            return false;
+        if( old_part && aPromptUser )
+        {
+            msg.Printf( _( "Part '%s' already exists. Change it?" ),
+                        GetChars( part->GetName() ) );
+
+            if( !IsOK( this, msg ) )
+                return false;
+        }
     }
 
     m_drawItem = m_lastDrawItem = NULL;

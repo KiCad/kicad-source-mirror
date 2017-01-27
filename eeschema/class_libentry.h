@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,7 +189,7 @@ class LIB_PART : public EDA_ITEM
 
     PART_SPTR           m_me;               ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
     wxString            m_name;
-    LIB_ID                m_libId;
+    LIB_ID              m_libId;
     int                 m_pinNameOffset;    ///< The offset in mils to draw the pin name.  Set to 0
                                             ///< to draw the pin name above the pin.
     bool                m_unitsLocked;      ///< True if part has multiple units and changing
@@ -237,7 +237,7 @@ public:
 
     virtual void SetName( const wxString& aName );
 
-    const wxString& GetName()       { return m_name; }
+    const wxString& GetName() const { return m_name; }
 
     const LIB_ID& GetLibId() const { return m_libId; }
     void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }

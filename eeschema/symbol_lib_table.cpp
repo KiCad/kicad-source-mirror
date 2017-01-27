@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2017 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,7 +66,8 @@ SYMBOL_LIB_TABLE::SYMBOL_LIB_TABLE( SYMBOL_LIB_TABLE* aFallBackTable ) :
 }
 
 
-void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in ) throw()
+void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
+    throw( IO_ERROR, PARSE_ERROR )
 {
     T       tok;
 
@@ -188,7 +189,7 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in ) throw()
 
 
 void SYMBOL_LIB_TABLE::Format( OUTPUTFORMATTER* out, int nestLevel ) const
-    throw()
+    throw( IO_ERROR, boost::interprocess::lock_exception )
 {
     out->Print( nestLevel, "(sym_lib_table\n" );
 

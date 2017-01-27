@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 #include <wx/filename.h>
 
 #include <class_libentry.h>
+#include <sch_io_mgr.h>
 
 #include <project.h>
 
@@ -42,7 +43,10 @@
 class LINE_READER;
 class OUTPUTFORMATTER;
 class SCH_LEGACY_PLUGIN;
+class SCH_PLUGIN;
 
+
+#define DOC_EXT           "dcm"
 
 /*
  * Part Library version and file header  macros.
@@ -69,11 +73,6 @@ class SCH_LEGACY_PLUGIN;
  */
 #define USE_OLD_DOC_FILE_FORMAT( major, minor )                 \
     ( LIB_VERSION( major, minor ) <= LIB_VERSION( 2, 3 ) )
-
-/* Must be the first line of part library document (.dcm) files. */
-#define DOCFILE_IDENT     "EESchema-DOCLIB  Version 2.0"
-
-#define DOC_EXT           "dcm"
 
 // Helper class to filter a list of libraries, and/or a list of PART_LIB
 // in dialogs
@@ -331,52 +330,27 @@ class PART_LIB
                                          True for the library cache */
     wxString        header;         ///< first line of loaded library.
     bool            isModified;     ///< Library modification status.
-    LIB_ALIAS_MAP   m_amap;         ///< Map of alias objects associated with the library.
     int             m_mod_hash;     ///< incremented each time library is changed.
+    bool            m_buffering;    ///< Set to true to prevent file write on every change.
 
-    friend class LIB_PART;
-    friend class PART_LIBS;
-    friend class SCH_LEGACY_PLUGIN;
+    SCH_IO_MGR::SCH_FILE_T        m_pluginType;
+    std::unique_ptr< SCH_PLUGIN > m_plugin;
 
 public:
-    PART_LIB( int aType, const wxString& aFileName );
+    PART_LIB( int aType, const wxString& aFileName,
+              SCH_IO_MGR::SCH_FILE_T aPluginType = SCH_IO_MGR::SCH_LEGACY );
     ~PART_LIB();
 
-    /**
-     * Function Save
-     * writes library to \a aFormatter.
-     *
-     * @param aFormatter An #OUTPUTFORMATTER object to write the library to.
-     * @return True if success writing to \a aFormatter.
-     */
-    bool Save( OUTPUTFORMATTER& aFormatter );
+    int GetModHash() const { return m_mod_hash; }
 
-    /**
-     * Function SaveDocs
-     * write the library document information to \a aFormatter.
-     *
-     * @param aFormatter An #OUTPUTFORMATTER object to write the library documentation to.
-     * @return True if success writing to \a aFormatter.
-     */
-    bool SaveDocs( OUTPUTFORMATTER& aFormatter );
+    SCH_IO_MGR::SCH_FILE_T GetPluginType() const { return m_pluginType; }
 
-    /**
-     * Load library from file.
-     *
-     * @param aErrorMsg - Error message if load fails.
-     * @return True if load was successful otherwise false.
-     */
-    bool Load( wxString& aErrorMsg );
+    void SetPluginType( SCH_IO_MGR::SCH_FILE_T aPluginType );
 
-    bool LoadDocs( wxString& aErrorMsg );
+    void Create( const wxString& aFileName = wxEmptyString );
 
-private:
-    bool SaveHeader( OUTPUTFORMATTER& aFormatter );
+    void SetFileName( const wxString& aFileName ) { fileName = aFileName; }
 
-    bool LoadHeader( LINE_READER& aLineReader );
-    void LoadAliases( LIB_PART* aPart );
-
-public:
     /**
      * Get library entry status.
      *
@@ -384,7 +358,7 @@ public:
      */
     bool IsEmpty() const
     {
-        return m_amap.empty();
+        return m_plugin->GetSymbolLibCount( fileName.GetFullPath() ) == 0;
     }
 
     /**
@@ -395,7 +369,7 @@ public:
      */
     int GetCount() const
     {
-        return m_amap.size();
+        return (int) m_plugin->GetSymbolLibCount( fileName.GetFullPath() );
     }
 
     bool IsModified() const
@@ -406,6 +380,10 @@ public:
     bool IsCache() const { return isCache; }
 
     void SetCache( void ) { isCache = true; }
+
+    void EnableBuffering( bool aEnable = true ) { m_buffering = aEnable; }
+
+    void Save( bool aSaveDocFile = true );
 
     /**
      * Function IsReadOnly
@@ -445,20 +423,6 @@ public:
      * @return LIB_PART* - part if found, else NULL.
      */
     LIB_PART* FindPart( const wxString& aName );
-
-    /**
-     * Add a new \a aAlias entry to the library.
-     *
-     * First check if a part or alias with the same name already exists
-     * in the library and add alias if no conflict occurs.  Once the alias
-     * is added to the library it is owned by the library.  Deleting the
-     * alias pointer will render the library unstable.  Use RemoveEntry to
-     * remove the alias from the library.
-     *
-     * @param aAlias - Alias to add to library.
-     * @return True if alias added to library.  False if a conflict exists.
-     */
-    bool AddAlias( LIB_ALIAS* aAlias );
 
     /**
      * Add \a aPart entry to library.

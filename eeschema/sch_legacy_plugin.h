@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -75,6 +75,23 @@ public:
         return wxT( "sch" );
     }
 
+    /**
+     * const char* PropBuffering
+     *
+     * is a property used internally by the plugin to enable cache buffering which prevents
+     * the library file from being written every time the cache is changed.  This is useful
+     * when writing the schematic cache library file or saving a library to a new file name.
+     */
+    static const char* PropBuffering;
+
+    /**
+     * const char* PropBuffering
+     *
+     * is a property used internally by the plugin to disable writing the library
+     * documentation (.dcm) file when saving the library cache.
+     */
+    static const char* PropNoDocFile;
+
     int GetModifyHash() const override;
 
     SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
@@ -85,6 +102,8 @@ public:
 
     void Format( SCH_SCREEN* aScreen );
 
+    size_t GetSymbolLibCount( const wxString&   aLibraryPath,
+                              const PROPERTIES* aProperties = NULL ) override;
     void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                              const wxString&   aLibraryPath,
                              const PROPERTIES* aProperties = NULL ) override;
@@ -100,9 +119,7 @@ public:
                           const PROPERTIES* aProperties = NULL ) override;
     bool DeleteSymbolLib( const wxString& aLibraryPath,
                           const PROPERTIES* aProperties = NULL ) override;
-
-    // Temporary for testing using PART_LIB instead of SCH_PLUGIN.
-    void TransferCache( PART_LIB& aTarget ) override;
+    void SaveLibrary( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL ) override;
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
@@ -129,6 +146,8 @@ private:
     void saveText( SCH_TEXT* aText );
 
     void cacheLib( const wxString& aLibraryFileName );
+    bool writeDocFile( const PROPERTIES* aProperties );
+    bool isBuffering( const PROPERTIES* aProperties );
 
 protected:
     int               m_version;    ///< Version of file being loaded.

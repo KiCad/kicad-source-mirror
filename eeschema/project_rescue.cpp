@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,31 +44,19 @@ typedef std::pair<SCH_COMPONENT*, wxString> COMPONENT_NAME_PAIR;
  * Function save_library
  * writes the library out to disk. Returns true on success.
  *
- * @param aFileName - Filename to receive the library
  * @param aLibrary - Library to write
  * @param aEditFrame - the calling SCH_EDIT_FRAME
  */
-static bool save_library( const wxString& aFileName, PART_LIB* aLibrary, SCH_EDIT_FRAME* aEditFrame )
+static bool save_library( PART_LIB* aLibrary, SCH_EDIT_FRAME* aEditFrame )
 {
     try
     {
-        FILE_OUTPUTFORMATTER formatter( aFileName );
-
-        if( !aLibrary->Save( formatter ) )
-        {
-            wxString msg = wxString::Format( _(
-                "An error occurred attempting to save component library '%s'." ),
-                GetChars( aFileName )
-                );
-            DisplayError( aEditFrame, msg );
-            return false;
-        }
+        aLibrary->Save( false );
     }
     catch( ... /* IO_ERROR ioe */ )
     {
-        wxString msg = wxString::Format( _(
-            "Failed to create component library file '%s'" ),
-            GetChars( aFileName )
+        wxString msg = wxString::Format( _( "Failed to create component library file '%s'" ),
+                                         GetChars( aLibrary->GetFullFileName() )
             );
         DisplayError( aEditFrame, msg );
         return false;
@@ -162,7 +150,8 @@ static void get_components( std::vector<SCH_COMPONENT*>& aComponents )
     {
         for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
         {
-            if( item->Type() != SCH_COMPONENT_T ) continue;
+            if( item->Type() != SCH_COMPONENT_T )
+                continue;
             SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( item );
             aComponents.push_back( component );
         }
@@ -299,7 +288,8 @@ public:
     {
         for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
         {
-            if( each_component->GetPartName() != m_requested_name ) continue;
+            if( each_component->GetPartName() != m_requested_name )
+                continue;
             each_component->SetPartName( m_new_name );
             each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
@@ -317,7 +307,6 @@ class RESCUE_CACHE_CANDIDATE: public RESCUE_CANDIDATE
     LIB_PART* m_lib_candidate;
 
     static std::unique_ptr<PART_LIB> m_rescue_lib;
-    static wxFileName m_library_fn;
 
 public:
     /**
@@ -398,14 +387,12 @@ public:
         wxFileName fn( g_RootSheet->GetScreen()->GetFileName() );
         fn.SetName( fn.GetName() + wxT( "-rescue" ) );
         fn.SetExt( SchematicLibraryFileExtension );
-        m_library_fn.SetPath( fn.GetPath() );
-        m_library_fn.SetName( fn.GetName() );
-        m_library_fn.SetExt( wxT( "lib" ) );
 
         std::unique_ptr<PART_LIB> rescue_lib( new PART_LIB( LIBRARY_TYPE_EESCHEMA,
-                        fn.GetFullPath() ) );
+                                                            fn.GetFullPath() ) );
 
         m_rescue_lib = std::move( rescue_lib );
+        m_rescue_lib->EnableBuffering();
     }
 
     virtual bool PerformAction( RESCUER* aRescuer ) override
@@ -417,7 +404,8 @@ public:
 
         for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
         {
-            if( each_component->GetPartName() != m_requested_name ) continue;
+            if( each_component->GetPartName() != m_requested_name )
+                continue;
             each_component->SetPartName( m_new_name );
             each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
@@ -433,15 +421,15 @@ public:
      */
     static bool WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame, PROJECT* aProject )
     {
-
-        if( !save_library( m_library_fn.GetFullPath(), m_rescue_lib.get(), aEditFrame ) )
+        if( !save_library( m_rescue_lib.get(), aEditFrame ) )
             return false;
         return insert_library( aProject, m_rescue_lib.get(), 0 );
     }
 };
 
+
 std::unique_ptr<PART_LIB> RESCUE_CACHE_CANDIDATE::m_rescue_lib;
-wxFileName RESCUE_CACHE_CANDIDATE::m_library_fn;
+
 
 RESCUER::RESCUER( SCH_EDIT_FRAME& aEditFrame, PROJECT& aProject )
 {

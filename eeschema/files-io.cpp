@@ -2,9 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2013-2017 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2013 CERN (www.cern.ch)
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,39 +110,24 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
     wxLogTrace( traceAutoSave,
                 wxT( "Saving file <" ) + schematicFileName.GetFullPath() + wxT( ">" ) );
 
-#ifdef KICAD_USE_SCH_IO_MANAGER
-        SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
-        try
-        {
-            pi->Save( schematicFileName.GetFullPath(), aScreen, &Kiway() );
-            success = true;
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            msg.Printf( _( "Error saving schematic file '%s'.\n%s" ),
-                        GetChars( schematicFileName.GetFullPath() ), GetChars( ioe.What() ) );
-            DisplayError( this, msg );
-
-            msg.Printf( _( "Failed to save '%s'" ), GetChars( schematicFileName.GetFullPath() ) );
-            AppendMsgPanel( wxEmptyString, msg, CYAN );
-
-            success = false;
-        }
-#else
-    FILE* f = wxFopen( schematicFileName.GetFullPath(), wxT( "wt" ) );
-
-    if( !f )
+    try
     {
-        msg.Printf( _( "Failed to create file '%s'" ),
-                    GetChars( schematicFileName.GetFullPath() ) );
-        DisplayError( this, msg );
-        return false;
+        pi->Save( schematicFileName.GetFullPath(), aScreen, &Kiway() );
+        success = true;
     }
+    catch( const IO_ERROR& ioe )
+    {
+        msg.Printf( _( "Error saving schematic file '%s'.\n%s" ),
+                    GetChars( schematicFileName.GetFullPath() ), GetChars( ioe.What() ) );
+        DisplayError( this, msg );
 
-    success = aScreen->Save( f );
-    fclose( f );
-#endif
+        msg.Printf( _( "Failed to save '%s'" ), GetChars( schematicFileName.GetFullPath() ) );
+        AppendMsgPanel( wxEmptyString, msg, CYAN );
+
+        success = false;
+    }
 
     if( success )
     {
@@ -315,7 +300,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
     else
     {
-#ifdef KICAD_USE_SCH_IO_MANAGER
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
 
@@ -343,14 +327,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             return false;
         }
-#else
-        g_RootSheet->SetScreen( NULL );
 
-        DBG( printf( "%s: loading schematic %s\n", __func__, TO_UTF8( fullFileName ) );)
-
-        bool diag = g_RootSheet->Load( this );
-        (void) diag;
-#endif
         SetScreen( m_CurrentSheet->LastScreen() );
 
         GetScreen()->ClrModify();

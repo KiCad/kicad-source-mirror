@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras ar wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
     else
         fn = g_RootSheet->GetScreen()->GetFileName();
 
-    fn.SetName( fn.GetName() + wxT( "-cache" ) );
+    fn.SetName( fn.GetName() + "-cache" );
     fn.SetExt( SchematicLibraryFileExtension );
 
     return CreateArchiveLibrary( fn.GetFullPath() );
@@ -58,17 +58,18 @@ bool SCH_EDIT_FRAME::CreateArchiveLibraryCacheFile( bool aUseCurrentSheetFilenam
 
 bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 {
+    wxString        msg;
     SCH_SCREENS     screens;
     PART_LIBS*      libs = Prj().SchLibs();
 
     std::unique_ptr<PART_LIB> libCache( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
     libCache->SetCache();
+    libCache->EnableBuffering();
 
-    /* examine all screens (not sheets) used and build the list of components
-     * found in lib.
-     * Complex hierarchies are not a problem because we just want
-     * to know used components in libraries
+    /* Examine all screens (not hierarchical sheets) used in the schematic and build a
+     * library of unique symbols found in all screens.  Complex hierarchies are not a
+     * problem because we just want to know the library symbols used in the schematic.
      */
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
@@ -79,13 +80,27 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-            // If not already saved in the new cache, put it:
+            // If not already saved in the new cache, add it.
             if( !libCache->FindAlias( component->GetPartName() ) )
             {
-                if( LIB_PART* part = libs->FindLibPart( component->GetPartName() ) )
+                LIB_PART* part = NULL;
+
+                try
                 {
-                    // AddPart() does first clone the part before adding.
-                    libCache->AddPart( part );
+                    part = libs->FindLibPart( component->GetPartName() );
+
+                    if( part )
+                    {
+                        // AddPart() does first clone the part before adding.
+                        libCache->AddPart( part );
+                    }
+                }
+                catch( ... /* IO_ERROR ioe */ )
+                {
+                    msg.Printf( _( "Failed to add symbol %s to library file '%s'" ),
+                                component->GetPartName(), aFileName );
+                    DisplayError( this, msg );
+                    return false;
                 }
             }
         }
@@ -93,24 +108,11 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 
     try
     {
-        FILE_OUTPUTFORMATTER    formatter( aFileName );
-
-        if( !libCache->Save( formatter ) )
-        {
-            wxString msg = wxString::Format( _(
-                "An error occurred attempting to save component library '%s'." ),
-                GetChars( aFileName )
-                );
-            DisplayError( this, msg );
-            return false;
-        }
+        libCache->Save( false );
     }
     catch( ... /* IO_ERROR ioe */ )
     {
-        wxString msg = wxString::Format( _(
-            "Failed to create component library file '%s'" ),
-            GetChars( aFileName )
-            );
+        msg.Printf( _( "Failed to save symbol library file '%s'" ), aFileName );
         DisplayError( this, msg );
         return false;
     }
