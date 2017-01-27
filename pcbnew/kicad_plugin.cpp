@@ -1422,14 +1422,12 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     m_out->Print( 0, ")" );
     formatLayer( aText );
 
-    /* 25-Jan-2017: "hide" now moved into (effects ... ) block
     if( !aText->IsVisible() )
         m_out->Print( 0, " hide" );
-    */
 
     m_out->Print( 0, "\n" );
 
-    aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl );
+    aText->EDA_TEXT::Format( m_out, aNestLevel, m_ctl | CTL_OMIT_HIDE );
 
     m_out->Print( aNestLevel, ")\n" );
 }

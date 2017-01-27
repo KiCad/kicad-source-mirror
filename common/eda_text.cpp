@@ -425,6 +425,7 @@ bool EDA_TEXT::IsDefaultFormatting() const
            );
 }
 
+
 void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
     throw( IO_ERROR )
 {
@@ -481,7 +482,7 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
             aFormatter->Print( 0, ")" );
         }
 
-        if( !IsVisible() )
+        if( !(aControlBits & CTL_OMIT_HIDE) && !IsVisible() )
             aFormatter->Print( 0, " hide" );
 
         aFormatter->Print( 0, ")\n" );

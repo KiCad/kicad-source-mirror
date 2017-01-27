@@ -36,6 +36,10 @@
 #include <base_struct.h>            // EDA_RECT
 
 
+// part of the kicad_plugin.h family of defines.
+#define CTL_OMIT_HIDE               (1 << 6)    // found in eda_text.h
+
+
 // Graphic Text justify:
 // Values -1,0,1 are used in computations, do not change them
 enum EDA_TEXT_HJUSTIFY_T {
