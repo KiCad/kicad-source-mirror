@@ -1286,9 +1286,12 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
             {
                 if( numPoints == 0 )        // it's the first click
                 {
+                    const auto& board = *getModel<BOARD>();
+
                     // Get the current default settings for zones
                     ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
                     zoneInfo.m_CurrentZone_Layer = m_frame->GetScreen()->m_Active_Layer;
+                    zoneInfo.m_NetcodeSelection = board.GetHighLightNetCode();
                     zoneInfo.SetIsKeepout( aKeepout );
 
                     m_controls->SetAutoPan( true );
