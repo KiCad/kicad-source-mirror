@@ -29,7 +29,14 @@
 #include <hashtables.h>
 #include <kiway_player.h>
 
+#ifdef  __WXMAC__
+/**
+ * MACOS requires this option to be set to 1 in order to set dialogs focus.
+ **/
+#define DLGSHIM_USE_SETFOCUS      1
+#else
 #define DLGSHIM_USE_SETFOCUS      0
+#endif
 
 class WDO_ENABLE_DISABLE;
 class EVENT_LOOP;

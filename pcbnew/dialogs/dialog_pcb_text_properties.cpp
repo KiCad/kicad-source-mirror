@@ -101,7 +101,6 @@ DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
 
     m_StandardSizerOK->SetDefault();
 
-    FixOSXCancelButtonIssue();
 }
 
 

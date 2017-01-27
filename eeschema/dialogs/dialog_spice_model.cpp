@@ -95,7 +95,6 @@ DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aCompo
 
     m_sdbSizerOK->SetDefault();
 
-    FixOSXCancelButtonIssue();
 }
 
 

@@ -102,8 +102,6 @@ public:
 
         m_sdbSizerOK->SetDefault();
 
-        FixOSXCancelButtonIssue();
-
         // Now all widgets have the size fixed, call FinishDialogSettings
         FinishDialogSettings();
     }

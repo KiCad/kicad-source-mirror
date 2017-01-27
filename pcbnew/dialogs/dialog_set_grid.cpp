@@ -99,7 +99,6 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& 
     m_TextPosXUnits->SetLabel( GetUnitsLabel( m_parent->m_UserGridUnit ) );
     m_TextPosYUnits->SetLabel( GetUnitsLabel( m_parent->m_UserGridUnit ) );
 
-    FixOSXCancelButtonIssue();
 }
 
 

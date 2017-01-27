@@ -220,8 +220,6 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( wxWindow
     wxToolTip::Enable( true );
     stdDialogButtonSizerOK->SetDefault();
 
-    FixOSXCancelButtonIssue();
-
     Fit();
 }
 

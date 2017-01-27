@@ -66,8 +66,6 @@ void DIALOG_LIB_EDIT_PIN::OnInitDialog( wxInitDialogEvent& event )
 {
     m_textPinName->SetFocus();
 
-    FixOSXCancelButtonIssue();
-
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }

@@ -103,7 +103,6 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
 
     Layout();
 
-    FixOSXCancelButtonIssue();
 }
 
 

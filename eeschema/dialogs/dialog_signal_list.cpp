@@ -31,7 +31,6 @@ DIALOG_SIGNAL_LIST::DIALOG_SIGNAL_LIST( SIM_PLOT_FRAME* aParent, NETLIST_EXPORTE
     : DIALOG_SIGNAL_LIST_BASE( aParent ), m_plotFrame( aParent ), m_exporter( aExporter )
 {
 
-    FixOSXCancelButtonIssue();
 }
 
 

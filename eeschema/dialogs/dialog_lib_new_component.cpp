@@ -38,8 +38,6 @@ DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( wxWindow* parent ) :
     // What happens when user presses "Enter"? OK button!  OK?
     m_sdbSizerOK->SetDefault();
 
-    FixOSXCancelButtonIssue();
-
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }

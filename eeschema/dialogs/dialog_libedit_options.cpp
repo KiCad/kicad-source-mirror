@@ -43,8 +43,6 @@ DIALOG_LIBEDIT_OPTIONS::DIALOG_LIBEDIT_OPTIONS( LIB_EDIT_FRAME* parent ) :
     SetItemRepeatStep( Parent()->GetRepeatStep() );
     SetPinRepeatStep( Parent()->GetRepeatPinStep() );
 
-    FixOSXCancelButtonIssue();
-
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }

@@ -103,7 +103,6 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_EDIT_FRAME* 
 
     m_StandardButtonsSizerOK->SetDefault();
 
-    FixOSXCancelButtonIssue();
 }
 
 

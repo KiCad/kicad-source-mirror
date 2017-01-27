@@ -87,8 +87,6 @@ public:
         m_VRML_Yref->SetValue( tmpStr );
         m_sdbSizer1OK->SetDefault();
 
-        FixOSXCancelButtonIssue();
-
         // Now all widgets have the size fixed, call FinishDialogSettings
         FinishDialogSettings();
 

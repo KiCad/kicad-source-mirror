@@ -34,8 +34,6 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( wxWindow* parent ) :
     m_textFileName->SetFocus();
     m_sdbSizer1OK->SetDefault();
 
-    FixOSXCancelButtonIssue();
-
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }

@@ -170,6 +170,9 @@ bool DIALOG_SHIM::Show( bool show )
 
         ret = wxDialog::Show( show );
     }
+
+    FixOSXCancelButtonIssue();
+
     return ret;
 }
 

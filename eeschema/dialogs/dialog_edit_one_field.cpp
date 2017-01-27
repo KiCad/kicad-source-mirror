@@ -142,8 +142,6 @@ void DIALOG_EDIT_ONE_FIELD::init()
 
     m_sdbSizerButtonsOK->SetDefault();
 
-    FixOSXCancelButtonIssue();
-
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }

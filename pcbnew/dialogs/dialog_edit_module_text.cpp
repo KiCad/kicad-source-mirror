@@ -85,7 +85,6 @@ DialogEditModuleText::DialogEditModuleText( PCB_BASE_FRAME* aParent,
     m_sdbSizerOK->SetDefault();
     SetFocus();
 
-    FixOSXCancelButtonIssue();
 }
 
 
