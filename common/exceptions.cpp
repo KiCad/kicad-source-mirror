@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,13 +90,23 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
 FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError, const wxString& aRequiredVersion ) :
     PARSE_ERROR(), requiredVersion( aRequiredVersion )
 {
-    problem.Printf( _(
-        "KiCad was unable to open this file, as it was created with a more "
-        "recent version than the one you are running. To open it, you'll need "
-        "to upgrade KiCad to a more recent version.\n\n"
-        "Date of KiCad version required (or newer): %s\n\n"
-        "Full error text:\n%s" ),
-            requiredVersion, aParseError.Problem() );
+    // Avoid double-printing the error message
+    bool wrapped_same_type = !!( dynamic_cast<const FUTURE_FORMAT_ERROR *>( &aParseError ) );
+
+    if( wrapped_same_type )
+    {
+        problem = aParseError.Problem();
+    }
+    else
+    {
+        problem.Printf( _(
+            "KiCad was unable to open this file, as it was created with a more "
+            "recent version than the one you are running. To open it, you'll need "
+            "to upgrade KiCad to a more recent version.\n\n"
+            "Date of KiCad version required (or newer): %s\n\n"
+            "Full error text:\n%s" ),
+                requiredVersion, aParseError.Problem() );
+    }
 
     lineNumber = aParseError.lineNumber;
     byteIndex = aParseError.byteIndex;
