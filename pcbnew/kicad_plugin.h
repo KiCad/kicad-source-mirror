@@ -41,7 +41,8 @@ class NETINFO_MAPPING;
 //#define SEXPR_BOARD_FILE_VERSION    3         // first s-expression format, used legacy cu stack
 //#define SEXPR_BOARD_FILE_VERSION    4         // reversed cu stack, changed Inner* to In* in reverse order
 //                                              // went to 32 Cu layers from 16.
-#define SEXPR_BOARD_FILE_VERSION    20160815    // differential pair settings per net class
+//#define SEXPR_BOARD_FILE_VERSION    20160815  // differential pair settings per net class
+#define SEXPR_BOARD_FILE_VERSION    20170123    // EDA_TEXT refactor, moved 'hide'
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
