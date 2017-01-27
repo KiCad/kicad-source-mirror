@@ -213,8 +213,6 @@ int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
     board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
     board->GetDesignSettings().UseCustomTrackViaSize( false );
 
-    wxUpdateUIEvent dummy;
-    m_frame->OnUpdateSelectTrackWidth( dummy );
     m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
 
     return 0;
@@ -232,8 +230,6 @@ int PCB_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
     board->GetDesignSettings().SetTrackWidthIndex( widthIndex );
     board->GetDesignSettings().UseCustomTrackViaSize( false );
 
-    wxUpdateUIEvent dummy;
-    m_frame->OnUpdateSelectTrackWidth( dummy );
     m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
 
     return 0;
@@ -251,8 +247,6 @@ int PCB_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
     board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
     board->GetDesignSettings().UseCustomTrackViaSize( false );
 
-    wxUpdateUIEvent dummy;
-    m_frame->OnUpdateSelectViaSize( dummy );
     m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
 
     return 0;
@@ -270,8 +264,6 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
     board->GetDesignSettings().SetViaSizeIndex( sizeIndex );
     board->GetDesignSettings().UseCustomTrackViaSize( false );
 
-    wxUpdateUIEvent dummy;
-    m_frame->OnUpdateSelectViaSize( dummy );
     m_toolMgr->RunAction( COMMON_ACTIONS::trackViaSizeChanged );
 
     return 0;
