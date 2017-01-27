@@ -353,7 +353,7 @@ public:
      * Function GetHighLightNetCode
      * @return netcode of net to highlight (-1 when no net selected)
      */
-    int GetHighLightNetCode() { return m_highLight.m_netCode; }
+    int GetHighLightNetCode() const { return m_highLight.m_netCode; }
 
     /**
      * Function SetHighLightNet
@@ -368,7 +368,7 @@ public:
      * Function IsHighLightNetON
      * @return true if a net is currently highlighted
      */
-    bool IsHighLightNetON() { return m_highLight.m_highLightOn; }
+    bool IsHighLightNetON() const { return m_highLight.m_highLightOn; }
 
     /**
      * Function HighLightOFF
@@ -645,7 +645,7 @@ public:
      * @return const wxString - containing the layer name or "BAD INDEX" if aLayerId
      *                      is not legal
      */
-    static const wxString GetStandardLayerName( LAYER_ID aLayerId )
+    static wxString GetStandardLayerName( LAYER_ID aLayerId )
     {
         // a BOARD's standard layer name is the LAYER_ID fixed name
         return LSET::Name( aLayerId );
