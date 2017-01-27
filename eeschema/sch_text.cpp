@@ -123,8 +123,7 @@ SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
 {
     m_shape = aText.m_shape;
     m_isDangling = false;
-
-    SetLabelSpinStyle( aText.GetLabelSpinStyle() );
+    m_spin_style = aText.m_spin_style;
 }
 
 
@@ -314,6 +313,8 @@ void SCH_TEXT::SwapData( SCH_ITEM* aItem )
 
     std::swap( m_Text, item->m_Text );
     std::swap( m_Layer, item->m_Layer );
+
+    std::swap( m_shape, item->m_shape );
     std::swap( m_isDangling, item->m_isDangling );
     std::swap( m_spin_style, item->m_spin_style );
 
