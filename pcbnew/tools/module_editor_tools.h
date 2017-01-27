@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef MODULE_TOOLS_H
-#define MODULE_TOOLS_H
+#ifndef MODULE_EDITOR_TOOLS_H
+#define MODULE_EDITOR_TOOLS_H
 
 #include <tool/tool_interactive.h>
 #include <origin_viewitem.h>
@@ -37,15 +37,15 @@ class BOARD;
 class PCB_EDIT_FRAME;
 
 /**
- * Class MODULE_TOOLS
+ * Class MODULE_EDITOR_TOOLS
  *
  * Module editor specific tools.
  */
-class MODULE_TOOLS : public TOOL_INTERACTIVE
+class MODULE_EDITOR_TOOLS : public TOOL_INTERACTIVE
 {
 public:
-    MODULE_TOOLS();
-    ~MODULE_TOOLS();
+    MODULE_EDITOR_TOOLS();
+    ~MODULE_EDITOR_TOOLS();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;

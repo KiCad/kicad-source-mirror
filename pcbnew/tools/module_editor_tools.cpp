@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "module_tools.h"
+#include "module_editor_tools.h"
 #include "selection_tool.h"
 #include "common_actions.h"
 #include <tool/tool_manager.h>
@@ -49,7 +49,7 @@
 using namespace std::placeholders;
 #include <wx/defs.h>
 
-MODULE_TOOLS::MODULE_TOOLS() :
+MODULE_EDITOR_TOOLS::MODULE_EDITOR_TOOLS() :
     TOOL_INTERACTIVE( "pcbnew.ModuleEditor" ), m_view( NULL ), m_controls( NULL ),
     m_board( NULL ), m_frame( NULL )
 {
@@ -62,13 +62,13 @@ MODULE_TOOLS::MODULE_TOOLS() :
 }
 
 
-MODULE_TOOLS::~MODULE_TOOLS()
+MODULE_EDITOR_TOOLS::~MODULE_EDITOR_TOOLS()
 {
     delete m_axisOrigin;
 }
 
 
-void MODULE_TOOLS::Reset( RESET_REASON aReason )
+void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 {
     // Init variables used by every drawing tool
     m_view = getView();
@@ -85,7 +85,7 @@ void MODULE_TOOLS::Reset( RESET_REASON aReason )
 }
 
 
-bool MODULE_TOOLS::Init()
+bool MODULE_EDITOR_TOOLS::Init()
 {
     // Find the selection tool, so they can cooperate
     SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
@@ -102,7 +102,7 @@ bool MODULE_TOOLS::Init()
 }
 
 
-int MODULE_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
+int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
 
@@ -189,7 +189,7 @@ int MODULE_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
+int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 {
     std::list<D_PAD*> pads;
     std::set<D_PAD*> allPads;
@@ -331,7 +331,7 @@ int MODULE_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
+int MODULE_EDITOR_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
 {
     const SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
@@ -401,7 +401,7 @@ int MODULE_TOOLS::CopyItems( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
+int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
 {
     // Parse clipboard
     PCB_IO io( CTL_FOR_CLIPBOARD );
@@ -519,7 +519,7 @@ int MODULE_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
+int MODULE_EDITOR_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = getView();
     KIGFX::PCB_RENDER_SETTINGS* settings =
@@ -554,7 +554,7 @@ int MODULE_TOOLS::ModuleTextOutlines( const TOOL_EVENT& aEvent )
 }
 
 
-int MODULE_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
+int MODULE_EDITOR_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = getView();
     KIGFX::PCB_RENDER_SETTINGS* settings =
@@ -584,12 +584,12 @@ int MODULE_TOOLS::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
 }
 
 
-void MODULE_TOOLS::SetTransitions()
+void MODULE_EDITOR_TOOLS::SetTransitions()
 {
-    Go( &MODULE_TOOLS::PlacePad,            COMMON_ACTIONS::placePad.MakeEvent() );
-    Go( &MODULE_TOOLS::EnumeratePads,       COMMON_ACTIONS::enumeratePads.MakeEvent() );
-    Go( &MODULE_TOOLS::CopyItems,           COMMON_ACTIONS::copyItems.MakeEvent() );
-    Go( &MODULE_TOOLS::PasteItems,          COMMON_ACTIONS::pasteItems.MakeEvent() );
-    Go( &MODULE_TOOLS::ModuleTextOutlines,  COMMON_ACTIONS::moduleTextOutlines.MakeEvent() );
-    Go( &MODULE_TOOLS::ModuleEdgeOutlines,  COMMON_ACTIONS::moduleEdgeOutlines.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::PlacePad,            COMMON_ACTIONS::placePad.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::EnumeratePads,       COMMON_ACTIONS::enumeratePads.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::CopyItems,           COMMON_ACTIONS::copyItems.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::PasteItems,          COMMON_ACTIONS::pasteItems.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::ModuleTextOutlines,  COMMON_ACTIONS::moduleTextOutlines.MakeEvent() );
+    Go( &MODULE_EDITOR_TOOLS::ModuleEdgeOutlines,  COMMON_ACTIONS::moduleEdgeOutlines.MakeEvent() );
 }
