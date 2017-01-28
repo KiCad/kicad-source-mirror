@@ -729,7 +729,7 @@ void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
     // call PCB_EDIT_FRAME::PythonPluginsReload() if the board editor
     // is running
     PCB_EDIT_FRAME* brd_frame =
-        static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, false ) );
+        static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB, false ) );
 
     if( brd_frame )
         brd_frame->PythonPluginsReload();
