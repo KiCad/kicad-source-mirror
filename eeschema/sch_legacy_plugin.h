@@ -63,7 +63,7 @@ class SCH_LEGACY_PLUGIN : public SCH_PLUGIN
 public:
 
     SCH_LEGACY_PLUGIN();
-    virtual ~SCH_LEGACY_PLUGIN() {}
+    virtual ~SCH_LEGACY_PLUGIN();
 
     const wxString GetName() const override
     {

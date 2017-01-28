@@ -470,6 +470,12 @@ SCH_LEGACY_PLUGIN::SCH_LEGACY_PLUGIN()
 }
 
 
+SCH_LEGACY_PLUGIN::~SCH_LEGACY_PLUGIN()
+{
+    delete m_cache;
+}
+
+
 void SCH_LEGACY_PLUGIN::init( KIWAY* aKiway, const PROPERTIES* aProperties )
 {
     m_version = 0;
@@ -3381,7 +3387,7 @@ size_t SCH_LEGACY_PLUGIN::GetSymbolLibCount( const wxString&   aLibraryPath,
 {
     LOCALE_IO toggle;
 
-    init( NULL, aProperties );
+    m_props = aProperties;
 
     cacheLib( aLibraryPath );
 
@@ -3395,7 +3401,7 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    init( NULL, aProperties );
+    m_props = aProperties;
 
     cacheLib( aLibraryPath );
 
