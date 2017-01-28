@@ -248,10 +248,8 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
-        if( token != T_LEFT )
-            Expecting( T_LEFT );
-
-        token = NextTok();
+        if( token == T_LEFT )
+            token = NextTok();
 
         switch( token )
         {
@@ -264,14 +262,14 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText ) throw( PARSE_ERROR, IO_ERROR )
                 switch( token )
                 {
                 case T_size:
-                {
-                    wxSize sz;
-                    sz.SetHeight( parseBoardUnits( "text height" ) );
-                    sz.SetWidth( parseBoardUnits( "text width" ) );
-                    aText->SetSize( sz );
-                    NeedRIGHT();
+                    {
+                        wxSize sz;
+                        sz.SetHeight( parseBoardUnits( "text height" ) );
+                        sz.SetWidth( parseBoardUnits( "text width" ) );
+                        aText->SetSize( sz );
+                        NeedRIGHT();
+                    }
                     break;
-                }
 
                 case T_thickness:
                     aText->SetThickness( parseBoardUnits( "text thickness" ) );
@@ -2058,6 +2056,23 @@ TEXTE_MODULE* PCB_PARSER::parseTEXTE_MODULE() throw( IO_ERROR, PARSE_ERROR )
 
         case T_effects:
             parseEDA_TEXT( (EDA_TEXT*) text.get() );
+            // Due to a double definition (a bug) of SetVisible (one in EDA_TEXT and
+            // one in TEXTE_MODULE), verify if the EDA_TEXT is set to invisible
+            // This allows compatibility with files which could be created
+            // by pcbnew version janv 25, 2017, which fix a old bug (this one)
+            // This compatibility is especially important for footprint files.
+            if( !text->EDA_TEXT::IsVisible() )
+            {
+                // Only if the EDA_TEXT visibility is false, set the
+                // TEXTE_MODULE visibility to false.
+                // in files created by 4.05 version and older, the EDA_TEXT
+                // visibility is always true (the default), due to this bug
+                text->SetVisible( false );
+                // If we want a full compatibiliy with previous stable version,
+                // this ugly workaround avoids writing "hide" token
+                // in "effects" section, when the file comes from some recent pcbnew version
+                text->EDA_TEXT::SetVisible( true );
+            }
             break;
 
         default:
