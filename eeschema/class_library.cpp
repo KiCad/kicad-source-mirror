@@ -302,10 +302,20 @@ PART_LIB* PART_LIB::LoadLibrary( const wxString& aFileName ) throw( IO_ERROR, bo
     wxArrayString tmp;
 
     // This loads the library although we could probably do lazy loading.
-    lib->GetCount();
+    lib->GetAliasNames( tmp );
+
+    // This not them most efficient way to set the LIB_PART m_library member but it will
+    // only be used when loading legacy libraries in the future.  Once the symbols in the
+    // schematic have a full #LIB_ID, this will not get called.
+    for( size_t i = 0; i < tmp.GetCount();  i++ )
+    {
+        LIB_ALIAS* alias = lib->FindAlias( tmp[i] );
+
+        if( alias && alias->GetPart() )
+            alias->GetPart()->SetLib( lib.get() );
+    }
 
     PART_LIB* ret = lib.release();
-
     return ret;
 }
 
