@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,6 +74,8 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
                             _( "Print schematic" ) );
 
+    m_mainToolBar->AddTool( ID_GEN_PLOT_SCHEMATIC, wxEmptyString, KiBitmap( plot_xpm ),
+                            _( "Plot schematic" ) );
 
     m_mainToolBar->AddSeparator();
 
@@ -138,6 +140,10 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
                             HELP_RUN_LIB_VIEWER );
 
+    // modedit is with libedit in a "library section" because the user must have footprints before
+    // they can be assigned.
+    m_mainToolBar->AddTool( ID_RUN_PCB_MODULE_EDITOR, wxEmptyString, KiBitmap( module_editor_xpm ),
+                            _( "Footprint Editor" ) );
 
     m_mainToolBar->AddSeparator();
 
@@ -147,6 +153,9 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_GET_ERC, wxEmptyString, KiBitmap( erc_xpm ),
                             _( "Perform electrical rules check" ) );
 
+    m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
+                            _( "Run CvPcb to associate components and footprints" ) );
+
     m_mainToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
                             _( "Generate netlist" ) );
 
@@ -155,14 +164,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
 
     m_mainToolBar->AddSeparator();
-
-    // The user must have footprints before he can assign them.  So put this before CvPcb.
-
-    m_mainToolBar->AddTool( ID_RUN_PCB_MODULE_EDITOR, wxEmptyString, KiBitmap( module_editor_xpm ),
-                            _( "Footprint Editor" ) );
-
-    m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
-                            _( "Run CvPcb to associate components and footprints" ) );
 
     m_mainToolBar->AddTool( ID_RUN_PCB, wxEmptyString, KiBitmap( pcbnew_xpm ),
                             _( "Run Pcbnew to layout printed circuit board" ) );
