@@ -477,7 +477,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
 
             if( aReporter )
             {
-                msg.Printf( _("<b>file %s read error<\b>\n"), GetChars( unzipfilename ) );
+                msg.Printf( _("<b>file %s read error</b>\n"), GetChars( unzipfilename ) );
                 aReporter->Report( msg, REPORTER::RPT_ERROR );
             }
         }
