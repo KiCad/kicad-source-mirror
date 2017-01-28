@@ -73,10 +73,14 @@ void        pcbnewGetScriptsSearchPaths( wxString& aNames );
 void        pcbnewGetWizardsBackTrace( wxString& aNames );
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
-
 void        RedirectStdio();
 wxWindow*   CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId );
+#endif
 
+
+#if 0 && defined (KICAD_SCRIPTING_WXPYTHON)
+// This definition of PyLOCK crashed Pcbnew under some conditions (JPC),
+// especially reloading plugins
 class PyLOCK
 {
     wxPyBlock_t b;

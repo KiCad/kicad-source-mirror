@@ -720,6 +720,30 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateVToolbar()
     // Currently, there is no vertical toolbar
 }
 
+#if defined(KICAD_SCRIPTING)
+#include <python_scripting.h>
+void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
+{
+    // Reload the Python plugins
+    // Because the board editor has also a plugin python menu,
+    // call PCB_EDIT_FRAME::PythonPluginsReload() if the board editor
+    // is running
+    PCB_EDIT_FRAME* brd_frame =
+        static_cast<PCB_BASE_FRAME*>( Kiway().Player( FRAME_PCB, false ) );
+
+    if( brd_frame )
+        brd_frame->PythonPluginsReload();
+    else
+    {
+        char cmd[1024];
+        snprintf( cmd, sizeof(cmd),
+                  "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
+        PyLOCK lock;
+        // ReRun the Python method pcbnew.LoadPlugins (already called when starting Pcbnew)
+        PyRun_SimpleString( cmd );
+    }
+}
+#endif
 
 // frame to display messages from footprint builder scripts
 FOOTPRINT_WIZARD_MESSAGES::FOOTPRINT_WIZARD_MESSAGES( FOOTPRINT_WIZARD_FRAME* aParent, wxConfigBase* aCfg ) :

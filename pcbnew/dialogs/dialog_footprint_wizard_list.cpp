@@ -33,6 +33,7 @@
 #include <kiface_i.h>
 #include <dialog_footprint_wizard_list.h>
 #include <class_footprint_wizard.h>
+#include <footprint_wizard_frame.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -150,13 +151,9 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
 
 void DIALOG_FOOTPRINT_WIZARD_LIST::onUpdatePythonModulesClick( wxCommandEvent& event )
 {
-#if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
-    char cmd[1024];
-    snprintf( cmd, sizeof(cmd),
-              "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
-    PyLOCK lock;
-    // ReRun the Python method pcbnew.LoadPlugins (already called when starting Pcbnew)
-    PyRun_SimpleString( cmd );
+#if defined(KICAD_SCRIPTING)
+    FOOTPRINT_WIZARD_FRAME* fpw_frame = static_cast<FOOTPRINT_WIZARD_FRAME*>( GetParent() );
+    fpw_frame->PythonPluginsReload();
 
     initLists();
 #endif

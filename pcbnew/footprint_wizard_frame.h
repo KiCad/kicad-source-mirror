@@ -74,6 +74,13 @@ public:
 
     MODULE*             GetBuiltFootprint();
 
+    /**
+     * Reload the Python plugins if they are newer than
+     * the already loaded, and load new plugins if any
+     * Do nothing if KICAD_SCRIPTING is not defined
+     */
+    void PythonPluginsReload();
+
 private:
 
     void                OnSize( wxSizeEvent& event ) override;

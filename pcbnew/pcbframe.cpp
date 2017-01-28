@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2013-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1056,7 +1056,6 @@ void PCB_EDIT_FRAME::ScriptingConsoleEnableDisable( wxCommandEvent& aEvent )
     else
         wxMessageBox( wxT( "Error: unable to create the Python Console" ) );
 }
-
 #endif
 
 
@@ -1158,4 +1157,27 @@ void PCB_EDIT_FRAME::OnFlipPcbView( wxCommandEvent& evt )
     view->SetMirror( evt.IsChecked(), false );
     view->RecacheAllItems();
     Refresh();
+}
+
+void PCB_EDIT_FRAME::PythonPluginsReload()
+{
+    // Reload plugin list: reload Python plugins if they are newer than
+    // the already loaded, and load new plugins
+#if defined(KICAD_SCRIPTING)
+    //Reload plugin list: reload Python plugins if they are newer than
+    // the already loaded, and load new plugins
+    char cmd[1024];
+
+    snprintf( cmd, sizeof(cmd),
+            "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
+
+    PyLOCK lock;
+
+    // ReRun the Python method pcbnew.LoadPlugins (already called when starting Pcbnew)
+    PyRun_SimpleString( cmd );
+
+    #if defined(KICAD_SCRIPTING_ACTION_MENU)
+        RebuildActionPluginMenus();
+    #endif
+#endif
 }

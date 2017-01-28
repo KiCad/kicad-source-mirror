@@ -199,16 +199,7 @@ void PCB_EDIT_FRAME::OnActionPlugin( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnActionPluginRefresh( wxCommandEvent& aEvent )
 {
-    char cmd[1024];
-
-    snprintf( cmd, sizeof(cmd),
-            "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
-
-    PyLOCK lock;
-    // ReRun the Python method pcbnew.LoadPlugins (already called when starting Pcbnew)
-    PyRun_SimpleString( cmd );
-
-    RebuildActionPluginMenus();
+   PythonPluginsReload();
 }
 
 

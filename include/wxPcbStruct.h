@@ -139,9 +139,8 @@ protected:
     void OnActionPluginRefresh( wxCommandEvent& aEvent);
 #endif
 
-
-    // Has meaning only if DKICAD_SCRIPTING_WXPYTHON option is on
-    /**
+    /** Has meaning only if KICAD_SCRIPTING_WXPYTHON option is
+     * not defined
      * @return the frame name identifier for the python console frame
      */
     static const wxChar * pythonConsoleNameId()
@@ -248,6 +247,13 @@ public:
         throw( IO_ERROR, PARSE_ERROR );
 
     void OnQuit( wxCommandEvent& event );
+
+    /**
+     * Reload the Python plugins if they are newer than
+     * the already loaded, and load new plugins if any
+     * Do nothing if KICAD_SCRIPTING is not defined
+     */
+    void PythonPluginsReload();
 
     /**
      * Function GetAutoSaveFilePrefix
