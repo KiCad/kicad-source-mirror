@@ -32,6 +32,7 @@
 #include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <wxPcbStruct.h>
+#include <pcbnew.h>
 #include <3d_viewer/eda_3d_viewer.h>
 #include <msgpanel.h>
 #include <macros.h>
@@ -721,7 +722,6 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateVToolbar()
 }
 
 #if defined(KICAD_SCRIPTING)
-#include <python_scripting.h>
 void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
 {
     // Reload the Python plugins
@@ -734,14 +734,7 @@ void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
     if( brd_frame )
         brd_frame->PythonPluginsReload();
     else
-    {
-        char cmd[1024];
-        snprintf( cmd, sizeof(cmd),
-                  "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
-        PyLOCK lock;
-        // ReRun the Python method pcbnew.LoadPlugins (already called when starting Pcbnew)
-        PyRun_SimpleString( cmd );
-    }
+        PythonPluginsReloadBase();
 }
 #endif
 

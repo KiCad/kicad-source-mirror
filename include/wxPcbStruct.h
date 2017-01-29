@@ -136,7 +136,10 @@ protected:
      * Refresh plugin list (reload Python plugins)
      * @param aEvent sent by wx
      */
-    void OnActionPluginRefresh( wxCommandEvent& aEvent);
+    void OnActionPluginRefresh( wxCommandEvent& aEvent)
+    {
+       PythonPluginsReload();
+    }
 #endif
 
     /** Has meaning only if KICAD_SCRIPTING_WXPYTHON option is

@@ -197,12 +197,6 @@ void PCB_EDIT_FRAME::OnActionPlugin( wxCommandEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::OnActionPluginRefresh( wxCommandEvent& aEvent )
-{
-   PythonPluginsReload();
-}
-
-
 void PCB_EDIT_FRAME::RebuildActionPluginMenus()
 {
     wxMenu* actionMenu = GetMenuBar()->FindItem( ID_TOOLBARH_PCB_ACTION_PLUGIN )->GetSubMenu();

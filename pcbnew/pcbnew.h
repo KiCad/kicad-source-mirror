@@ -108,5 +108,14 @@ enum MagneticPadOptionValues {
     capture_always
 };
 
+/**
+ * Helper function PythonPluginsReloadBase
+ * Reload Python plugins if they are newer than
+ * the already loaded, and load new plugins if any
+ * It calls the LoadPlugins(bundlepath) Python method
+ * see kicadplugins.i
+ */
+void PythonPluginsReloadBase();
+
 
 #endif // PCBNEW_H

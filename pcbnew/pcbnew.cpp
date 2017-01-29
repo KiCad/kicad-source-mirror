@@ -277,6 +277,25 @@ static bool scriptingSetup()
 #endif  // KICAD_SCRIPTING
 
 
+void PythonPluginsReloadBase()
+{
+#if defined(KICAD_SCRIPTING)
+    //Reload plugin list: reload Python plugins if they are newer than
+    // the already loaded, and load new plugins
+    char cmd[1024];
+
+    snprintf( cmd, sizeof(cmd),
+            "pcbnew.LoadPlugins(\"%s\")", TO_UTF8( PyScriptingPath() ) );
+
+    PyLOCK lock;
+
+    // ReRun the Python method pcbnew.LoadPlugins
+    // (already called when starting Pcbnew)
+    PyRun_SimpleString( cmd );
+#endif
+}
+
+
 /// The global footprint library table.  This is not dynamically allocated because
 /// in a multiple project environment we must keep its address constant (since it is
 /// the fallback table for multiple projects).
