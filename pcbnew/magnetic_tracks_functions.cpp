@@ -40,6 +40,8 @@
 #include <class_board.h>
 #include <class_track.h>
 
+#include <pcbnew_id.h>
+
 
 /**
  * Function Join
