@@ -40,9 +40,6 @@
 #include <class_board.h>
 #include <class_track.h>
 
-#include <protos.h>
-#include <pcbnew_id.h>
-
 
 /**
  * Function Join
@@ -130,7 +127,7 @@ bool Project( wxPoint* aNearPos, wxPoint on_grid, const TRACK* track )
 bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 wxPoint on_grid, wxPoint* curpos )
 {
-    bool    doCheckNet = g_MagneticPadOption != capture_always && g_Drc_On;
+    bool    doCheckNet = g_MagneticPadOption != CAPTURE_ALWAYS && g_Drc_On;
     bool    doTrack = false;
     bool    doPad = false;
     bool    amMovingVia = false;
@@ -156,15 +153,15 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
         currTrack = NULL;
     }
 
-    if( g_MagneticPadOption == capture_always )
+    if( g_MagneticPadOption == CAPTURE_ALWAYS )
         doPad = true;
 
-    if( g_MagneticTrackOption == capture_always )
+    if( g_MagneticTrackOption == CAPTURE_ALWAYS )
         doTrack = true;
 
     if( aCurrentTool == ID_TRACK_BUTT || amMovingVia )
     {
-        int q = capture_cursor_in_track_tool;
+        int q = CAPTURE_CURSOR_IN_TRACK_TOOL;
 
         if( g_MagneticPadOption == q )
             doPad = true;
@@ -173,10 +170,7 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
             doTrack = true;
     }
 
-    // D(printf("doPad=%d doTrack=%d aCurrentTool=%d amMovingVia=%d\n", doPad, doTrack, aCurrentTool, amMovingVia );)
-
     //  The search precedence order is pads, then tracks/vias
-
     if( doPad )
     {
         LSET    layer_mask( screen->m_Active_Layer );
@@ -220,11 +214,9 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
 
             if( !track || track->Type() != PCB_TRACE_T )
             {
-                // D(printf("!currTrack and track=%p not found, layer_mask=0x%X\n", track, layer_mask );)
                 return false;
             }
 
-            // D( printf( "Project\n" ); )
             return Project( curpos, on_grid, track );
         }
 
@@ -259,11 +251,8 @@ bool Magnetize( PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
             if( !track->HitTest( *curpos ) )
                 continue;
 
-            // D(printf( "have track prospect\n");)
-
             if( Join( curpos, track->GetStart(), track->GetEnd(), currTrack->GetStart(), currTrack->GetEnd() ) )
             {
-                // D(printf( "join currTrack->Type()=%d\n", currTrack->Type() );)
                 return true;
             }
 

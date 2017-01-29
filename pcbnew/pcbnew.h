@@ -102,10 +102,11 @@ extern DLIST<TRACK> g_CurrentTrackList;
 #define g_FirstTrackSegment   g_CurrentTrackList.GetFirst()   ///< first segment created
 
 
-enum MagneticPadOptionValues {
-    no_effect,
-    capture_cursor_in_track_tool,
-    capture_always
+enum MAGNETICPAD_OPTION_VALUES
+{
+    NO_EFFECT,
+    CAPTURE_CURSOR_IN_TRACK_TOOL,
+    CAPTURE_ALWAYS
 };
 
 /**

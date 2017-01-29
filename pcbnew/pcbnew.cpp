@@ -72,8 +72,8 @@ bool        g_TwoSegmentTrackBuild = true;
 
 LAYER_ID    g_Route_Layer_TOP;
 LAYER_ID    g_Route_Layer_BOTTOM;
-int         g_MagneticPadOption   = capture_cursor_in_track_tool;
-int         g_MagneticTrackOption = capture_cursor_in_track_tool;
+int         g_MagneticPadOption   = CAPTURE_CURSOR_IN_TRACK_TOOL;
+int         g_MagneticTrackOption = CAPTURE_CURSOR_IN_TRACK_TOOL;
 
 wxPoint     g_Offset_Module;     // module offset used when moving a footprint
 
