@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jpe.charras at wanadoo.fr
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,9 @@
 
 
 // part of the kicad_plugin.h family of defines.
-#define CTL_OMIT_HIDE               (1 << 6)    // found in eda_text.h
+// See kicad_plugin.h for the choice of the value
+// When set when calling  EDA_TEXT::Format, disable writing the "hide" keyword in save file
+#define CTL_OMIT_HIDE               (1 << 6)
 
 
 // Graphic Text justify:

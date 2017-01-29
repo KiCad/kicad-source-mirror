@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN.
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ class NETINFO_MAPPING;
 #define CTL_OMIT_PATH               (1 << 4)    ///< Omit component sheet time stamp (useless in library)
 #define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation
                                                 // (always saved with potion 0,0 and rotation = 0 in library)
-//#define CTL_OMIT_HIDE               (1 << 6)    // found in eda_text.h
+//#define CTL_OMIT_HIDE             (1 << 6)    // found and defined in eda_text.h
 
 
 // common combinations of the above:
