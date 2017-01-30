@@ -171,19 +171,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     do
     {
-        if( evt->IsCancel() )
-        {
-            restore = true; // Cancelling the tool means that items have to be restored
-            break;          // Finish
-        }
-
-        else if( evt->Action() == TA_UNDO_REDO_PRE )
-        {
-            unselect = true;
-            break;
-        }
-
-        else if( evt->IsAction( &COMMON_ACTIONS::editActivate )
+        if( evt->IsAction( &COMMON_ACTIONS::editActivate )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
             BOARD_ITEM* curr_item = selection.Front();
@@ -251,6 +239,18 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
             getView()->Update( &selection );
             m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
+        }
+
+        else if( evt->IsCancel() || evt->IsActivate() )
+        {
+            restore = true; // Cancelling the tool means that items have to be restored
+            break;          // Finish
+        }
+
+        else if( evt->Action() == TA_UNDO_REDO_PRE )
+        {
+            unselect = true;
+            break;
         }
 
         // Dispatch TOOL_ACTIONs
