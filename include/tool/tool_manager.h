@@ -199,6 +199,14 @@ public:
     void ResetTools( TOOL_BASE::RESET_REASON aReason );
 
     /**
+     * Function InitTools()
+     * Initializes all registered tools. If a tool fails during the initialization, it is
+     * deactivated and becomes unavailable for further use. Initialization should be done
+     * only once.
+     */
+    void InitTools();
+
+    /**
      * Propagates an event to tools that requested events of matching type(s).
      * @param aEvent is the event to be processed.
      */

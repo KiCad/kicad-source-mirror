@@ -568,8 +568,7 @@ void PCB_EDIT_FRAME::setupTools()
 
     // Register tools
     registerAllTools( m_toolManager );
-
-    m_toolManager->ResetTools( TOOL_BASE::RUN );
+    m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );

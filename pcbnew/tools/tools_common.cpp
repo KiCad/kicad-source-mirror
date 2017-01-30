@@ -42,7 +42,7 @@
 #include <router/router_tool.h>
 #include <router/length_tuner_tool.h>
 
-void registerAllTools( TOOL_MANAGER *aToolManager )
+void registerAllTools( TOOL_MANAGER* aToolManager )
 {
     aToolManager->RegisterTool( new SELECTION_TOOL );
     aToolManager->RegisterTool( new ZOOM_TOOL );
@@ -56,5 +56,4 @@ void registerAllTools( TOOL_MANAGER *aToolManager )
     aToolManager->RegisterTool( new PCBNEW_CONTROL );
     aToolManager->RegisterTool( new PCB_EDITOR_CONTROL );
     aToolManager->RegisterTool( new PLACEMENT_TOOL );
-
 }

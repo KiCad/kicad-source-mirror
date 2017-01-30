@@ -233,23 +233,6 @@ void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
     m_toolTypes[typeid( *aTool ).name()] = st->theTool;
 
     aTool->attachManager( this );
-
-    if( !aTool->Init() )
-    {
-        std::string msg = StrPrintf( "Initialization of the %s tool failed",
-                                     aTool->GetName().c_str() );
-
-        DisplayError( NULL, wxString::FromUTF8( msg.c_str() ) );
-
-        // Unregister the tool
-        m_toolState.erase( aTool );
-        m_toolNameIndex.erase( aTool->GetName() );
-        m_toolIdIndex.erase( aTool->GetId() );
-        m_toolTypes.erase( typeid( *aTool ).name() );
-
-        delete st;
-        delete aTool;
-    }
 }
 
 
@@ -424,11 +407,13 @@ TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
     return NULL;
 }
 
+
 void TOOL_MANAGER::DeactivateTool()
 {
     TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, "" );      // deactivate the active tool
     ProcessEvent( evt );
 }
+
 
 void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 {
@@ -439,6 +424,34 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
         tool->Reset( aReason );
         tool->SetTransitions();
     }
+}
+
+
+void TOOL_MANAGER::InitTools()
+{
+    for( auto it = m_toolState.begin(); it != m_toolState.end(); /* iteration in the loop */ )
+    {
+        TOOL_BASE* tool = it->first;
+        TOOL_STATE* state = it->second;
+        ++it;   // keep the iterator valid if the element is going to be erased
+
+        if( !tool->Init() )
+        {
+            DisplayError( nullptr,
+                    wxString::Format( "Initialization of tool '%s' failed", tool->GetName() ) );
+
+            // Unregister the tool
+            m_toolState.erase( tool );
+            m_toolNameIndex.erase( tool->GetName() );
+            m_toolIdIndex.erase( tool->GetId() );
+            m_toolTypes.erase( typeid( *tool ).name() );
+
+            delete state;
+            delete tool;
+        }
+    }
+
+    ResetTools( TOOL_BASE::RUN );
 }
 
 

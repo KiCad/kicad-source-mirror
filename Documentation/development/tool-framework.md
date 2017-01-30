@@ -446,18 +446,6 @@ The last step is to register the tool in the tool manager.
 This is done by adding a new instance of the tool to the
 `registerAllTools()` function in `pcbnew/tools/tools_common.cpp`.
 
-Note - because the `RegisterTool()` function calls the tool's `Init()`
-function, any _tools_ that your tools refers to in the init function
-must already be registered so that your tool can access it via the
-tool manager. Equally, if your tool is referenced by another in its
-`Init()` function, your tool must be registered. In general, "top
-level" tools go first, and other tools add items to their menus later.
-If you register _actions_, that's OK, by the time the menu is invoked,
-the tools will all be ready and bound to actions.
-
-In our case, it doesn't matter as our menu is not touched by anyone
-else, we only add an _action_.
-
     // add your tool header
     #include <tools/useless_tool.h>
 
