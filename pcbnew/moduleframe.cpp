@@ -958,12 +958,12 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new MODULE_EDITOR_TOOLS );
     m_toolManager->RegisterTool( new PLACEMENT_TOOL );
     m_toolManager->RegisterTool( new PICKER_TOOL );
+    m_toolManager->InitTools();
 
     m_toolManager->GetTool<SELECTION_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<EDIT_TOOL>()->SetEditModules( true );
     m_toolManager->GetTool<DRAWING_TOOL>()->SetEditModules( true );
 
-    m_toolManager->ResetTools( TOOL_BASE::RUN );
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 }
 
