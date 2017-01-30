@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ enum hotkey_id_commnand {
     HK_LIBEDIT_MOVE_GRAPHIC_ITEM,
     HK_MOVEBLOCK_TO_DRAGBLOCK,
     HK_SAVE_BLOCK,
+    HK_LIBEDIT_LOAD_PART,
     HK_LIBEDIT_CREATE_PIN,
     HK_DELETE_PIN,
     HK_ROTATE,

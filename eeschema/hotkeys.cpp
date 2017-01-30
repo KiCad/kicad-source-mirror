@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,6 +211,7 @@ static EDA_HOTKEY HkFindNextDrcMarker( _HKI( "Find Next DRC Marker" ), HK_FIND_N
 static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, '@', ID_ZOOM_SELECTION );
 
 // Special keys for library editor:
+static EDA_HOTKEY HkLoadPart( _HKI( "Load Component" ), HK_LIBEDIT_LOAD_PART, 'L' + GR_KB_CTRL );
 static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
 static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
@@ -314,6 +315,7 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
 static EDA_HOTKEY* libEdit_Hotkey_List[] =
 {
     &HkSaveLib,
+    &HkLoadPart,
     &HkCreatePin,
     &HkInsertPin,
     &HkMoveLibItem,
@@ -750,6 +752,10 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             cmd.SetId( ID_LIBEDIT_ROTATE_ITEM );
             GetEventHandler()->ProcessEvent( cmd );
         }
+        break;
+
+    case HK_LIBEDIT_LOAD_PART:
+        LoadOneLibraryPart( cmd );
         break;
 
     case HK_LIBEDIT_CREATE_PIN:
