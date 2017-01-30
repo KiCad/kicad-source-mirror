@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,7 +101,8 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilte
                                                      int&            aHistoryLastUnit,
                                                      bool            aUseLibBrowser,
                                                      int*            aUnit,
-                                                     int*            aConvert )
+                                                     int*            aConvert,
+                                                     const wxString& aHighlight )
 {
     wxString        dialogTitle;
     PART_LIBS*      libs = Prj().SchLibs();
@@ -151,6 +152,9 @@ wxString SCH_BASE_FRAME::SelectComponentFromLibrary( const SCHLIB_FILTER* aFilte
         search_container.AddAliasList( nodename, aHistoryList, NULL );
         search_container.SetPreselectNode( aHistoryList[0], aHistoryLastUnit );
     }
+
+    if( !aHighlight.IsEmpty() )
+        search_container.SetPreselectNode( aHighlight, /* aUnit */ 0 );
 
     const int deMorgan = aConvert ? *aConvert : 1;
     dialogTitle.Printf( _( "Choose Component (%d items loaded)" ), search_container.GetComponentsCount() );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -445,6 +445,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     const wxTreeItemId root_id = m_tree->AddRoot( wxEmptyString );
     const TREE_NODE* first_match = NULL;
     const TREE_NODE* preselected_node = NULL;
+    bool override_preselect = false;
 
     for( TREE_NODE* node : m_nodes )
     {
@@ -470,16 +471,26 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
         node->TreeId = m_tree->AppendItem( node->Parent ? node->Parent->TreeId : root_id,
                                            node_text );
 
-        // If we are a nicely scored alias, we want to have it visible. Also, if there
-        // is only a single library in this container, we want to have it unfolded
-        // (example: power library).
-        if( node->Type == TREE_NODE::TYPE_ALIAS
-             && ( node->MatchScore > kLowestDefaultScore || m_libraries_added == 1 ) )
+        // If there is only a single library in this container, we want to have it
+        // unfolded (example: power library, libedit)
+        if( node->Type == TREE_NODE::TYPE_ALIAS && m_libraries_added == 1 )
+        {
+            m_tree->Expand( node->TreeId );
+
+            if( first_match == NULL )
+                first_match = node;
+        }
+
+        // If we are a nicely scored alias, we want to have it visible.
+        if( node->Type == TREE_NODE::TYPE_ALIAS && ( node->MatchScore > kLowestDefaultScore ) )
         {
             m_tree->Expand( node->TreeId );
 
             if( first_match == NULL )
                 first_match = node;   // First, highest scoring: the "I am feeling lucky" element.
+
+            // The user is searching, don't preselect!
+            override_preselect = true;
         }
 
         // The first node that matches our pre-select criteria is choosen. 'First node'
@@ -497,12 +508,12 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
             preselected_node = node;
     }
 
-    if( first_match )                      // Highest score search match pre-selected.
+    if( first_match && ( !preselected_node || override_preselect ) )
     {
         m_tree->SelectItem( first_match->TreeId );
         m_tree->EnsureVisible( first_match->TreeId );
     }
-    else if( preselected_node )            // No search, so history item preselected.
+    else if( preselected_node )
     {
         m_tree->SelectItem( preselected_node->TreeId );
         m_tree->EnsureVisible( preselected_node->TreeId );

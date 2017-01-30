@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,12 +122,16 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
             return;
     }
 
+    // Get the name of the current part to preselect it
+    LIB_PART* current_part = GetCurPart();
+    wxString part_name = current_part ? current_part->GetName() : wxString( wxEmptyString );
+
     wxArrayString dummyHistoryList;
     int dummyLastUnit;
     SCHLIB_FILTER filter;
     filter.LoadFrom( lib->GetName() );
     cmp_name = SelectComponentFromLibrary( &filter, dummyHistoryList, dummyLastUnit,
-                                          true, NULL, NULL );
+                                          true, NULL, NULL, part_name );
 
     if( cmp_name.IsEmpty() )
         return;
