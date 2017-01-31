@@ -1,14 +1,10 @@
-/**
- * @file xchgmod.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,43 +38,12 @@
 #include <project.h>
 
 #include <pcbnew.h>
-#include <dialog_exchange_modules_base.h>
+#include <dialog_exchange_modules.h>
 #include <wildcards_and_files_ext.h>
 #include <kiway.h>
 
 
 static bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName );
-
-
-class DIALOG_EXCHANGE_MODULE : public DIALOG_EXCHANGE_MODULE_BASE
-{
-private:
-    PCB_EDIT_FRAME* m_parent;
-    MODULE*         m_currentModule;
-    static int      m_selectionMode;    // Remember the last exchange option
-
-public:
-    DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* aParent, MODULE* aModule );
-    ~DIALOG_EXCHANGE_MODULE() { };
-
-private:
-    void OnSelectionClicked( wxCommandEvent& event ) override;
-    void OnOkClick( wxCommandEvent& event ) override;
-    void OnQuit( wxCommandEvent& event ) override;
-    void BrowseAndSelectFootprint( wxCommandEvent& event ) override;
-    void ViewAndSelectFootprint( wxCommandEvent& event ) override;
-    void RebuildCmpList( wxCommandEvent& event ) override;
-    void init();
-
-    bool changeCurrentFootprint();
-    bool changeSameFootprints( bool aUseValue);
-    bool changeAllFootprints();
-    bool change_1_Module( MODULE*            aModule,
-                          const LIB_ID&      aNewFootprintFPID,
-                          bool               eShowError );
-
-    BOARD_COMMIT m_commit;
-};
 
 
 int DIALOG_EXCHANGE_MODULE::m_selectionMode = 0;
@@ -93,14 +58,6 @@ DIALOG_EXCHANGE_MODULE::DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* parent, MODULE* 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Center();
-}
-
-
-int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module )
-{
-    DIALOG_EXCHANGE_MODULE dialog( this, Module );
-
-    return dialog.ShowQuasiModal();
 }
 
 

@@ -53,6 +53,7 @@
 #include <module_editor_frame.h>
 #include <dialog_helpers.h>
 #include <dialog_plot.h>
+#include <dialog_exchange_modules.h>
 #include <convert_to_biu.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -1174,4 +1175,12 @@ void PCB_EDIT_FRAME::PythonPluginsReload()
         RebuildActionPluginMenus();
     #endif
 #endif
+}
+
+
+int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module )
+{
+    DIALOG_EXCHANGE_MODULE dialog( this, Module );
+
+    return dialog.ShowQuasiModal();
 }
