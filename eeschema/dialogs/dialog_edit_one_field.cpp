@@ -168,6 +168,39 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
     wxLogDebug( "In DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()" );
 
     m_TextValue->SetValue( m_text );
+
+    if( m_fieldId == REFERENCE )
+    {
+        if( m_text.find_first_of( '?' ) != m_text.npos )
+        {
+            m_TextValue->SetSelection( m_text.find_first_of( '?' ),
+                                       m_text.find_last_of( '?' ) + 1 );
+        }
+        else
+        {
+            wxString num = m_text;
+
+            while( !num.IsEmpty() && ( !isdigit( num.Last() ) ||
+                                       !isdigit( num.GetChar( 0 ) ) ) )
+            {
+                if( !isdigit( num.Last() ) )
+                    num.RemoveLast();
+                if( !isdigit( num.GetChar ( 0 ) ) )
+                    num = num.Right( num.Length() - 1);
+            }
+
+            m_TextValue->SetSelection( m_text.Find( num ),
+                                       m_text.Find( num ) + num.Length() );
+
+            if( num.IsEmpty() )
+                m_TextValue->SetSelection( -1, -1 );
+        }
+    }
+    else
+    {
+        m_TextValue->SetSelection( -1, -1 );
+    }
+
     m_Orient->SetValue( m_orientation );
     m_TextSize->SetValue( StringFromValue( g_UserUnit, m_size ) );
     m_TextHJustificationOpt->SetSelection( m_horizontalJustification );
