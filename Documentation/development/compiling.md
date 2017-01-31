@@ -285,7 +285,8 @@ method of building KiCad, your task is significantly more involved.  For 64 bit 
 the `mingw64_shell.bat` file located in the MSYS2 install path.  At the command prompt run the
 the following commands:
 
-    pacman -S mingw-w64-x86_64-cmake \
+    pacman -S base-devel \
+              mingw-w64-x86_64-cmake \
               mingw-w64-x86_64-doxygen \
               mingw-w64-x86_64-gcc \
               mingw-w64-x86_64-python2 \
