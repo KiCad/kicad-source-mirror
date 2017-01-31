@@ -396,7 +396,7 @@ wxArrayString PART_LIBS::GetLibraryNames( bool aSorted )
 }
 
 
-LIB_PART* PART_LIBS::FindLibPart( const wxString& aPartName, const wxString& aLibraryName )
+LIB_PART* PART_LIBS::FindLibPart( const LIB_ID& aLibId, const wxString& aLibraryName )
 {
     LIB_PART* part = NULL;
 
@@ -405,7 +405,7 @@ LIB_PART* PART_LIBS::FindLibPart( const wxString& aPartName, const wxString& aLi
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
-        part = lib.FindPart( aPartName );
+        part = lib.FindPart( aLibId.GetLibItemName() );
 
         if( part )
             break;
@@ -415,7 +415,7 @@ LIB_PART* PART_LIBS::FindLibPart( const wxString& aPartName, const wxString& aLi
 }
 
 
-LIB_ALIAS* PART_LIBS::FindLibraryAlias( const wxString& aEntryName, const wxString& aLibraryName )
+LIB_ALIAS* PART_LIBS::FindLibraryAlias( const LIB_ID& aLibId, const wxString& aLibraryName )
 {
     LIB_ALIAS* entry = NULL;
 
@@ -424,7 +424,7 @@ LIB_ALIAS* PART_LIBS::FindLibraryAlias( const wxString& aEntryName, const wxStri
         if( !aLibraryName.IsEmpty() && lib.GetName() != aLibraryName )
             continue;
 
-        entry = lib.FindAlias( aEntryName );
+        entry = lib.FindAlias( aLibId.GetLibItemName() );
 
         if( entry )
             break;

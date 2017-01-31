@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2016 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2017 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,7 +152,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
     wxVector<wxVariant> data;
     for( SCH_COMPONENT* each_component : *m_Rescuer->GetComponents() )
     {
-        if( each_component->GetPartName() != selected_part.GetRequestedName() )
+        if( each_component->GetLibId().Format() != UTF8( selected_part.GetRequestedName() ) )
             continue;
 
         SCH_FIELD* valueField = each_component->GetField( 1 );

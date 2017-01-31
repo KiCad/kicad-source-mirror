@@ -1180,7 +1180,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     {
         if( PART_LIBS* libs = Prj().SchLibs() )
         {
-            LIB_ALIAS* entry = libs->FindLibraryAlias( component->GetPartName() );
+            LIB_ALIAS* entry = libs->FindLibraryAlias( component->GetLibId() );
 
             if( !entry )     // Should not occur
                 return;

@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -228,7 +228,10 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           aDC,
     // Set the m_ChipName value, from component name in lib, for aliases
     // Note if part is found, and if name is an alias of a component,
     // alias exists because its root component was found
-    component->SetPartName( name );
+    LIB_ID libId;
+
+    libId.SetLibItemName( name );
+    component->SetLibId( libId );
 
     // Be sure the link to the corresponding LIB_PART is OK:
     component->Resolve( Prj().SchLibs() );
@@ -304,7 +307,7 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
 
     int unit = aEvent.GetId() + 1 - ID_POPUP_SCH_SELECT_UNIT1;
 
-    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( component->GetPartName() ) )
+    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( component->GetLibId() ) )
     {
         int unitCount = part->GetUnitCount();
 
@@ -350,7 +353,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
     if( !DrawComponent )
         return;
 
-    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( DrawComponent->GetPartName() ) )
+    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( DrawComponent->GetLibId() ) )
     {
         if( !part->HasConversion() )
         {

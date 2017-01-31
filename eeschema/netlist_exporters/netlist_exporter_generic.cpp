@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -169,11 +169,12 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents()
             // "logical" library name, which is in anticipation of a better search
             // algorithm for parts based on "logical_lib.part" and where logical_lib
             // is merely the library name minus path and extension.
-            LIB_PART* part = m_libs->FindLibPart( comp->GetPartName() );
+            LIB_PART* part = m_libs->FindLibPart( comp->GetLibId() );
             if( part )
                 xlibsource->AddAttribute( sLib, part->GetLib()->GetLogicalName() );
 
-            xlibsource->AddAttribute( sPart, comp->GetPartName() );
+            // We only want the symbol name, not the full LIB_ID.
+            xlibsource->AddAttribute( sPart, comp->GetLibId().GetLibItemName() );
 
             XNODE* xsheetpath;
 

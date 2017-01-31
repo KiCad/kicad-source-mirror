@@ -238,7 +238,7 @@ public:
 
         for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
-            wxString part_name( each_component->GetPartName() );
+            wxString part_name( each_component->GetLibId().GetLibItemName() );
 
             LIB_ALIAS* case_sensitive_match = aRescuer.GetLibs()->FindLibraryAlias( part_name );
             std::vector<LIB_ALIAS*> case_insensitive_matches;
@@ -288,9 +288,13 @@ public:
     {
         for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
         {
-            if( each_component->GetPartName() != m_requested_name )
+            if( each_component->GetLibId().GetLibItemName() != UTF8( m_requested_name ) )
                 continue;
-            each_component->SetPartName( m_new_name );
+
+            LIB_ID libId;
+
+            libId.SetLibItemName( m_new_name );
+            each_component->SetLibId( libId );
             each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
         }
@@ -324,7 +328,7 @@ public:
 
         for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
-            wxString part_name( each_component->GetPartName() );
+            wxString part_name( each_component->GetLibId().GetLibItemName() );
 
             LIB_PART* cache_match = find_component( part_name, aRescuer.GetLibs(), /* aCached */ true );
             LIB_PART* lib_match = aRescuer.GetLibs()->FindLibPart( part_name );
@@ -404,9 +408,13 @@ public:
 
         for( SCH_COMPONENT* each_component : *aRescuer->GetComponents() )
         {
-            if( each_component->GetPartName() != m_requested_name )
+            if( each_component->GetLibId().GetLibItemName() != UTF8( m_requested_name ) )
                 continue;
-            each_component->SetPartName( m_new_name );
+
+            LIB_ID libId;
+
+            libId.SetLibItemName( m_new_name );
+            each_component->SetLibId( libId );
             each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
         }
@@ -479,7 +487,10 @@ void RESCUER::UndoRescues()
 {
     for( RESCUE_LOG& each_logitem : m_rescue_log )
     {
-        each_logitem.component->SetPartName( each_logitem.old_name );
+        LIB_ID libId;
+
+        libId.SetLibItemName( each_logitem.old_name );
+        each_logitem.component->SetLibId( libId );
         each_logitem.component->ClearFlags();
     }
 }

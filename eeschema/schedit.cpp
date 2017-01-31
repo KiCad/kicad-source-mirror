@@ -299,7 +299,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             if( PART_LIBS* libs = Prj().SchLibs() )
             {
-                LIB_ALIAS* entry = libs->FindLibraryAlias( ( (SCH_COMPONENT*) item )->GetPartName() );
+                LIB_ALIAS* entry = libs->FindLibraryAlias( ( (SCH_COMPONENT*) item )->GetLibId() );
 
                 if( entry && !!entry->GetDocFileName() )
                 {

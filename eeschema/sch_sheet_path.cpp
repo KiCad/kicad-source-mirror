@@ -194,7 +194,7 @@ void SCH_SHEET_PATH::AnnotatePowerSymbols( PART_LIBS* aLibs, int* aReference )
             continue;
 
         SCH_COMPONENT*  component = (SCH_COMPONENT*) item;
-        LIB_PART*       part = aLibs->FindLibPart( component->GetPartName() );
+        LIB_PART*       part = aLibs->FindLibPart( component->GetLibId() );
 
         if( !part || !part->IsPower() )
             continue;
@@ -232,7 +232,7 @@ void SCH_SHEET_PATH::GetComponents( PART_LIBS* aLibs, SCH_REFERENCE_LIST& aRefer
             if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
                 continue;
 
-            LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
+            LIB_PART* part = aLibs->FindLibPart( component->GetLibId() );
 
             if( part )
             {
@@ -263,7 +263,7 @@ void SCH_SHEET_PATH::GetMultiUnitComponents( PART_LIBS* aLibs,
         if( !aIncludePowerSymbols && component->GetRef( this )[0] == wxT( '#' ) )
             continue;
 
-        LIB_PART* part = aLibs->FindLibPart( component->GetPartName() );
+        LIB_PART* part = aLibs->FindLibPart( component->GetLibId() );
 
         if( part && part->GetUnitCount() > 1 )
         {

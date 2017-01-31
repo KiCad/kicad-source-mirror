@@ -277,10 +277,10 @@ DIALOG_SCH_EDIT_ONE_FIELD::DIALOG_SCH_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent,
     wxASSERT_MSG( component != NULL && component->Type() == SCH_COMPONENT_T,
                   wxT( "Invalid schematic field parent item." ) );
 
-    const LIB_PART* part = GetParent()->Prj().SchLibs()->FindLibPart( component->GetPartName() );
+    const LIB_PART* part = GetParent()->Prj().SchLibs()->FindLibPart( component->GetLibId() );
 
     wxASSERT_MSG( part, wxT( "Library part for component <" ) +
-                  component->GetPartName() + wxT( "> could not be found." ) );
+                  component->GetLibId().Format() + wxT( "> could not be found." ) );
 
     m_isPower = part->IsPower();
 

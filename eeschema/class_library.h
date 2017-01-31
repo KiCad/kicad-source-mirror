@@ -40,6 +40,7 @@
 
 #include <map>
 
+class LIB_ID;
 class LINE_READER;
 class OUTPUTFORMATTER;
 class SCH_LEGACY_PLUGIN;
@@ -274,12 +275,11 @@ public:
      * A part object will always be returned.  If the entry found
      * is an alias.  The root part will be found and returned.
      *
-     * @param aPartName - Name of part to search for.
+     * @param aLibId - The #LIB_ID of the symbol to search for.
      * @param aLibraryName - Name of the library to search for part.
      * @return LIB_PART* - The part object if found, otherwise NULL.
      */
-    LIB_PART* FindLibPart( const wxString& aPartName,
-                           const wxString& aLibraryName = wxEmptyString );
+    LIB_PART* FindLibPart( const LIB_ID& aLibId, const wxString& aLibraryName = wxEmptyString );
 
     /**
      * Function FindLibraryEntry
@@ -291,7 +291,7 @@ public:
      * @param aLibraryName - Name of the library to search.
      * @return The entry object if found, otherwise NULL.
      */
-    LIB_ALIAS* FindLibraryAlias( const wxString& aEntryName,
+    LIB_ALIAS* FindLibraryAlias( const LIB_ID& aLibId,
                                  const wxString& aLibraryName = wxEmptyString );
 
     /**

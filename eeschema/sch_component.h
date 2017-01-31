@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #ifndef COMPONENT_CLASS_H
 #define COMPONENT_CLASS_H
 
+#include <lib_id.h>
 
 #include <sch_field.h>
 #include <transform.h>
@@ -73,7 +74,9 @@ public:
 private:
 
     wxPoint     m_Pos;
-    wxString    m_part_name;    ///< Name to look for in the library, i.e. "74LS00".
+
+    ///< Name and library where symbol was loaded from, i.e. "74xx:74LS00".
+    LIB_ID      m_lib_id;
 
     int         m_unit;         ///< The unit for multiple part per package components.
     int         m_convert;      ///< The alternate body style for components that have more than
@@ -158,8 +161,8 @@ public:
      */
     bool IsMovableFromAnchorPoint() override { return false; }
 
-    void SetPartName( const wxString& aName, PART_LIBS* aLibs=NULL );
-    const wxString& GetPartName() const        { return m_part_name; }
+    void SetLibId( const LIB_ID& aName, PART_LIBS* aLibs=NULL );
+    const LIB_ID& GetLibId() const        { return m_lib_id; }
 
     /**
      * Function Resolve

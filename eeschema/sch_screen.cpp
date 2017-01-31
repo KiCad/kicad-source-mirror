@@ -646,7 +646,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
         {
             pin = NULL;
 
-            LIB_PART* part = Prj().SchLibs()->FindLibPart( component->GetPartName() );
+            LIB_PART* part = Prj().SchLibs()->FindLibPart( component->GetLibId() );
 
             if( !part )
                 continue;

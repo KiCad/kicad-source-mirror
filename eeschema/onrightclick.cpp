@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2014 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -357,7 +357,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_LIBS*
     }
 
     wxString       msg;
-    LIB_ALIAS*     libEntry = aLibs->FindLibraryAlias( Component->GetPartName() );
+    LIB_ALIAS*     libEntry = aLibs->FindLibraryAlias( Component->GetLibId() );
 
     if( !Component->GetFlags() )
     {
@@ -412,7 +412,7 @@ void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, PART_L
 
     wxString    msg;
     LIB_PART*   part = NULL;
-    LIB_ALIAS*  libEntry = aLibs->FindLibraryAlias( Component->GetPartName() );
+    LIB_ALIAS*  libEntry = aLibs->FindLibraryAlias( Component->GetLibId() );
 
     if( libEntry )
         part = libEntry->GetPart();

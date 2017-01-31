@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -335,30 +335,33 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCancelButtonClick( wxCommandEvent& ev
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 {
-    wxString newname = chipnameTextCtrl->GetValue();
+    LIB_ID id;
+    wxString tmp = chipnameTextCtrl->GetValue();
+
+    tmp.Replace( wxT( " " ), wxT( "_" ) );
+
+    id.SetLibItemName( tmp );
 
     // Save current flags which could be modified by next change settings
     STATUS_FLAGS flags = m_cmp->GetFlags();
 
-    newname.Replace( wxT( " " ), wxT( "_" ) );
-
-    if( newname.IsEmpty() )
+    if( id.empty() )
     {
         DisplayError( NULL, _( "No Component Name!" ) );
     }
-    else if( newname != m_cmp->m_part_name )
+    else if( id != m_cmp->GetLibId() )
     {
         PART_LIBS* libs = Prj().SchLibs();
 
-        if( libs->FindLibraryAlias( newname ) == NULL )
+        if( libs->FindLibraryAlias( id ) == NULL )
         {
-            wxString msg = wxString::Format( _(
-                "Component '%s' not found!" ),  GetChars( newname ) );
+            wxString msg = wxString::Format( _( "Component '%s' not found!" ),
+                                             GetChars( id.Format() ) );
             DisplayError( this, msg );
         }
         else    // Change component from lib!
         {
-            m_cmp->SetPartName( newname, libs );
+            m_cmp->SetLibId( id, libs );
         }
     }
 
@@ -433,7 +436,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
 
     // save old cmp in undo list if not already in edit, or moving ...
     // or the component to be edited is part of a block
-    if( m_cmp->m_Flags == 0
+    if( m_cmp->GetFlags() == 0
       || m_parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         m_parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
 
@@ -481,10 +484,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
         m_FieldsBuf[i].Offset( m_cmp->m_Pos );
     }
 
-    LIB_PART* entry = Prj().SchLibs()->FindLibPart( m_cmp->m_part_name );
+    LIB_PART* entry = Prj().SchLibs()->FindLibPart( m_cmp->GetLibId() );
 
     if( entry && entry->IsPower() )
-        m_FieldsBuf[VALUE].SetText( m_cmp->m_part_name );
+        m_FieldsBuf[VALUE].SetText( m_cmp->GetLibId().GetLibItemName() );
 
     // copy all the fields back, and change the length of m_Fields.
     m_cmp->SetFields( m_FieldsBuf );
@@ -673,7 +676,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
         which came from the component.
     */
 
-    m_part = Prj().SchLibs()->FindLibPart( m_cmp->m_part_name );
+    m_part = Prj().SchLibs()->FindLibPart( m_cmp->GetLibId() );
 
 #if 0 && defined(DEBUG)
     for( int i = 0;  i<aComponent->GetFieldCount();  ++i )
@@ -1077,7 +1080,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
         convertCheckBox->Enable( false );
 
     // Set the component's library name.
-    chipnameTextCtrl->SetValue( m_cmp->m_part_name );
+    chipnameTextCtrl->SetValue( m_cmp->GetLibId().Format() );
 
     // Set the component's unique ID time stamp.
     m_textCtrlTimeStamp->SetValue( wxString::Format( wxT( "%8.8lX" ),
@@ -1093,10 +1096,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     if( !m_cmp )
         return;
 
-    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( m_cmp->m_part_name ) )
+    if( LIB_PART* part = Prj().SchLibs()->FindLibPart( m_cmp->GetLibId() ) )
     {
         // save old cmp in undo list if not already in edit, or moving ...
-        if( m_cmp->m_Flags == 0 )
+        if( m_cmp->GetFlags() == 0 )
             m_parent->SaveCopyInUndoList( m_cmp, UR_CHANGED );
 
         INSTALL_UNBUFFERED_DC( dc, m_parent->GetCanvas() );

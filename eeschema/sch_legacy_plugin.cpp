@@ -464,6 +464,87 @@ static void parseQuotedString( wxString& aString, FILE_LINE_READER& aReader,
 }
 
 
+/**
+ * Class SCH_LEGACY_PLUGIN_CACHE
+ * is a cache assistant for the part library portion of the #SCH_PLUGIN API, and only for the
+ * #SCH_LEGACY_PLUGIN, so therefore is private to this implementation file, i.e. not placed
+ * into a header.
+ */
+class SCH_LEGACY_PLUGIN_CACHE
+{
+    wxFileName      m_libFileName;  // Absolute path and file name is required here.
+    wxDateTime      m_fileModTime;
+    LIB_ALIAS_MAP   m_aliases;      // Map of names of LIB_ALIAS pointers.
+    bool            m_isWritable;
+    bool            m_isModified;
+    int             m_modHash;      // Keep track of the modification status of the library.
+    int             m_versionMajor;
+    int             m_versionMinor;
+    int             m_libType;      // Is this cache a component or symbol library.
+
+    LIB_PART*       loadPart( FILE_LINE_READER& aReader );
+    void            loadHeader( FILE_LINE_READER& aReader );
+    void            loadAliases( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
+    void            loadField( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
+    void            loadDrawEntries( std::unique_ptr< LIB_PART >& aPart,
+                                     FILE_LINE_READER&            aReader );
+    void            loadFootprintFilters( std::unique_ptr< LIB_PART >& aPart,
+                                          FILE_LINE_READER&            aReader );
+    void            loadDocs();
+    LIB_ARC*        loadArc( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
+    LIB_CIRCLE*     loadCircle( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
+    LIB_TEXT*       loadText( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
+    LIB_RECTANGLE*  loadRectangle( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
+    LIB_PIN*        loadPin( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
+    LIB_POLYLINE*   loadPolyLine( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
+    LIB_BEZIER*     loadBezier( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
+
+    FILL_T          parseFillMode( FILE_LINE_READER& aReader, const char* aLine,
+                                   const char** aOutput );
+    bool            checkForDuplicates( wxString& aAliasName );
+    LIB_ALIAS*      removeAlias( LIB_ALIAS* aAlias );
+
+    void            saveDocFile();
+
+    friend SCH_LEGACY_PLUGIN;
+
+public:
+    SCH_LEGACY_PLUGIN_CACHE( const wxString& aLibraryPath );
+    ~SCH_LEGACY_PLUGIN_CACHE();
+
+    int GetModifyHash() const { return m_modHash; }
+
+    // Most all functions in this class throw IO_ERROR exceptions.  There are no
+    // error codes nor user interface calls from here, nor in any SCH_PLUGIN objects.
+    // Catch these exceptions higher up please.
+
+    /// Save the entire library to file m_libFileName;
+    void Save( bool aSaveDocFile = true );
+
+    void Load();
+
+    void AddSymbol( const LIB_PART* aPart );
+
+    void DeleteAlias( const wxString& aAliasName );
+
+    void DeleteSymbol( const wxString& aAliasName );
+
+    wxDateTime GetLibModificationTime();
+
+    bool IsFile( const wxString& aFullPathAndFileName ) const;
+
+    bool IsFileChanged() const;
+
+    void SetModified( bool aModified = true ) { m_isModified = aModified; }
+
+    wxString GetLogicalName() const { return m_libFileName.GetName(); }
+
+    void SetFileName( const wxString& aFileName ) { m_libFileName = aFileName; }
+
+    wxString GetFileName() const { return m_libFileName.GetFullPath(); }
+};
+
+
 SCH_LEGACY_PLUGIN::SCH_LEGACY_PLUGIN()
 {
     init( NULL );
@@ -1224,7 +1305,10 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
 
             parseUnquotedString( libName, aReader, line, &line );
             libName.Replace( "~", " " );
-            component->SetPartName( libName );
+
+            LIB_ID libId( libName );
+
+            component->SetLibId( libId );
 
             wxString refDesignator;
 
@@ -1584,7 +1668,7 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
             name1 = toUTFTildaText( aComponent->GetField( REFERENCE )->GetText() );
     }
 
-    wxString part_name = aComponent->GetPartName();
+    wxString part_name = aComponent->GetLibId().GetLibItemName();
 
     if( part_name.size() )
     {
@@ -1923,87 +2007,6 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
                       aText->GetThickness(), TO_UTF8( text ) );
     }
 }
-
-
-/**
- * Class SCH_LEGACY_PLUGIN_CACHE
- * is a cache assistant for the part library portion of the #SCH_PLUGIN API, and only for the
- * #SCH_LEGACY_PLUGIN, so therefore is private to this implementation file, i.e. not placed
- * into a header.
- */
-class SCH_LEGACY_PLUGIN_CACHE
-{
-    wxFileName      m_libFileName;  // Absolute path and file name is required here.
-    wxDateTime      m_fileModTime;
-    LIB_ALIAS_MAP   m_aliases;      // Map of names of LIB_ALIAS pointers.
-    bool            m_isWritable;
-    bool            m_isModified;
-    int             m_modHash;      // Keep track of the modification status of the library.
-    int             m_versionMajor;
-    int             m_versionMinor;
-    int             m_libType;      // Is this cache a component or symbol library.
-
-    LIB_PART*       loadPart( FILE_LINE_READER& aReader );
-    void            loadHeader( FILE_LINE_READER& aReader );
-    void            loadAliases( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
-    void            loadField( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
-    void            loadDrawEntries( std::unique_ptr< LIB_PART >& aPart,
-                                     FILE_LINE_READER&            aReader );
-    void            loadFootprintFilters( std::unique_ptr< LIB_PART >& aPart,
-                                          FILE_LINE_READER&            aReader );
-    void            loadDocs();
-    LIB_ARC*        loadArc( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
-    LIB_CIRCLE*     loadCircle( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
-    LIB_TEXT*       loadText( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
-    LIB_RECTANGLE*  loadRectangle( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
-    LIB_PIN*        loadPin( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
-    LIB_POLYLINE*   loadPolyLine( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
-    LIB_BEZIER*     loadBezier( std::unique_ptr< LIB_PART >& aPart, FILE_LINE_READER& aReader );
-
-    FILL_T          parseFillMode( FILE_LINE_READER& aReader, const char* aLine,
-                                   const char** aOutput );
-    bool            checkForDuplicates( wxString& aAliasName );
-    LIB_ALIAS*      removeAlias( LIB_ALIAS* aAlias );
-
-    void            saveDocFile();
-
-    friend SCH_LEGACY_PLUGIN;
-
-public:
-    SCH_LEGACY_PLUGIN_CACHE( const wxString& aLibraryPath );
-    ~SCH_LEGACY_PLUGIN_CACHE();
-
-    int GetModifyHash() const { return m_modHash; }
-
-    // Most all functions in this class throw IO_ERROR exceptions.  There are no
-    // error codes nor user interface calls from here, nor in any SCH_PLUGIN objects.
-    // Catch these exceptions higher up please.
-
-    /// Save the entire library to file m_libFileName;
-    void Save( bool aSaveDocFile = true );
-
-    void Load();
-
-    void AddSymbol( const LIB_PART* aPart );
-
-    void DeleteAlias( const wxString& aAliasName );
-
-    void DeleteSymbol( const wxString& aAliasName );
-
-    wxDateTime GetLibModificationTime();
-
-    bool IsFile( const wxString& aFullPathAndFileName ) const;
-
-    bool IsFileChanged() const;
-
-    void SetModified( bool aModified = true ) { m_isModified = aModified; }
-
-    wxString GetLogicalName() const { return m_libFileName.GetName(); }
-
-    void SetFileName( const wxString& aFileName ) { m_libFileName = aFileName; }
-
-    wxString GetFileName() const { return m_libFileName.GetFullPath(); }
-};
 
 
 SCH_LEGACY_PLUGIN_CACHE::SCH_LEGACY_PLUGIN_CACHE( const wxString& aFullPathAndFileName ) :

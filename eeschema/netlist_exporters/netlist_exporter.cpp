@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,7 +125,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_P
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_PART* part = m_libs->FindLibPart( comp->GetPartName() );
+        LIB_PART* part = m_libs->FindLibPart( comp->GetLibId() );
         if( !part )
             continue;
 
@@ -184,7 +184,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponentAndCreatePinList( EDA_ITEM*   
         // (several sheets pointing to 1 screen), this will be erroneously be
         // toggled.
 
-        LIB_PART* part = m_libs->FindLibPart( comp->GetPartName() );
+        LIB_PART* part = m_libs->FindLibPart( comp->GetLibId() );
 
         if( !part )
             continue;

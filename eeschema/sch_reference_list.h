@@ -152,7 +152,8 @@ public:
 
     int CompareLibName( const SCH_REFERENCE& item ) const
     {
-        return m_RootCmp->GetPartName().Cmp( item.m_RootCmp->GetPartName() );
+        return m_RootCmp->GetLibId().GetLibItemName().compare(
+            item.m_RootCmp->GetLibId().GetLibItemName() );
     }
 
     /**
