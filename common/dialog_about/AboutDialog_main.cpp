@@ -165,10 +165,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     description << wxT( "<p><u>" )
                 << _( "Non official repositories" )
                 << wxT( "</u>" );
-    description << wxT( "<li>" )
-                << HtmlHyperlink( wxT( "http://www.kicadlib.org" ),
-                                  _( "Additional component libraries repository (kicadlib)" ) )
-                << wxT( "</li>" );
+
     description << wxT( "<li>" )
                 << HtmlHyperlink( wxT( "http://smisioto.no-ip.org/elettronica/kicad/kicad-en.htm" ),
                                   _( "Additional component libraries repository (smisioto)" ) )
