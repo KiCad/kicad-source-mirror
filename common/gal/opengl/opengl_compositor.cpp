@@ -38,7 +38,8 @@ using namespace KIGFX;
 
 OPENGL_COMPOSITOR::OPENGL_COMPOSITOR() :
     m_initialized( false ), m_curBuffer( 0 ),
-    m_mainFbo( 0 ), m_depthBuffer( 0 ), m_curFbo( DIRECT_RENDERING )
+    m_mainFbo( 0 ), m_depthBuffer( 0 ), m_curFbo( DIRECT_RENDERING ),
+    m_currentAntialiasingMode( OPENGL_ANTIALIASING_MODE::NONE )
 {
     m_antialiasing.reset( new ANTIALIASING_NONE( this ) );
 }

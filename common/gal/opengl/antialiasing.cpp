@@ -127,8 +127,8 @@ namespace {
 
 ANTIALIASING_SUPERSAMPLING::ANTIALIASING_SUPERSAMPLING( OPENGL_COMPOSITOR* aCompositor,
     SUPERSAMPLING_MODE aMode )
-    : compositor( aCompositor ), mode( aMode ), areBuffersCreated( false ),
-    areShadersCreated( false )
+    : compositor( aCompositor ), mode( aMode ), ssaaMainBuffer( 0 ),
+    areBuffersCreated( false ), areShadersCreated( false )
 {
 }
 
@@ -234,6 +234,15 @@ ANTIALIASING_SMAA::ANTIALIASING_SMAA( OPENGL_COMPOSITOR* aCompositor, SMAA_QUALI
     : areBuffersInitialized( false ), shadersLoaded( false ),
     quality( aQuality ), compositor( aCompositor )
 {
+    smaaBaseBuffer = 0;
+    smaaEdgesBuffer = 0;
+    smaaBlendBuffer = 0;
+    smaaAreaTex = 0;
+    smaaSearchTex = 0;
+
+    pass_1_metrics = 0;
+    pass_2_metrics = 0;
+    pass_3_metrics = 0;
 }
 
 

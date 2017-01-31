@@ -49,6 +49,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_netNamesOnPads = true;
     m_netNamesOnTracks = true;
     m_displayZone = DZ_SHOW_FILLED;
+    m_clearance = CL_NONE;
 
     // By default everything should be displayed as filled
     for( unsigned int i = 0; i < TOTAL_LAYER_COUNT; ++i )

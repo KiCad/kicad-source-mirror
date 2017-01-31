@@ -35,6 +35,10 @@ namespace KIGFX {
     class OPENGL_PRESENTOR
     {
     public:
+        virtual ~OPENGL_PRESENTOR()
+        {
+        }
+
         virtual bool Init() = 0;
         virtual unsigned int CreateBuffer() = 0;
 

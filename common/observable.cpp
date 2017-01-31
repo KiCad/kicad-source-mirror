@@ -28,7 +28,7 @@ namespace UTIL {
 
     namespace DETAIL {
 
-        template< typename T >
+        template<typename T>
         struct equals {
             equals( const T& val ) : val_( val ) {}
 
@@ -96,6 +96,12 @@ namespace UTIL {
         {
             auto it = std::find( observers_.begin(), observers_.end(), observer );
 
+            if( it == observers_.end() )
+            {
+                assert( false );
+                return;
+            }
+
             if( is_iterating() )
                 *it = nullptr;
             else
@@ -112,6 +118,7 @@ namespace UTIL {
 
 
     LINK::LINK()
+        : observer_( nullptr )
     {
     }
 
