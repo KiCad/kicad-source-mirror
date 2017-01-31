@@ -150,15 +150,34 @@ private:
     ///> selected items.
     wxPoint getModificationPoint( const SELECTION& aSelection );
 
-    ///> If there are no items currently selected, it tries to choose the item that is under
-    ///> the cursor or displays a disambiguation menu if there are multiple items.
-    bool hoverSelection( bool aSanitize = true );
-
     int editFootprintInFpEditor( const TOOL_EVENT& aEvent );
 
     bool invokeInlineRouter();
 
-    template<class T> T* uniqueSelected()
+    /**
+     * Function hoverSelection()
+     *
+     * If there are no items currently selected, it tries to choose the
+     * item that is under he cursor or displays a disambiguation menu
+     * if there are multiple items.
+     *
+     * @param aSanitize sanitize selection using SanitizeSelection()
+     * @return true if the eventual selection contains any items, or
+     * false if it fails to select any items.
+     */
+    bool hoverSelection( bool aSanitize = true );
+
+    /**
+     * Function uniqueSelected()
+     *
+     * Get a single selected item of a certain type
+     *
+     * @tparam T type of item to select
+     * @return pointer to the item (of type T), or nullptr if there isn't
+     * a single selected item, or it's not of the right type.
+     */
+    template<class T>
+    T* uniqueSelected()
     {
         const SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -167,6 +186,28 @@ private:
 
         auto item = selection[0];
         return dyn_cast<T*>( item );
+    }
+
+    /**
+     * Function uniqueHoverSelection()
+     *
+     * Get a single unique selection of an item, either from the
+     * current selection, or from the items under cursor via
+     * hoverSelection()
+     *
+     * @tparam T type of item to select
+     * @return pointer to a selected item, or nullptr if none could
+     * be found.
+     */
+    template<class T>
+    T* uniqueHoverSelection( bool aSanitize = true )
+    {
+        if( !hoverSelection( aSanitize ) )
+            return nullptr;
+
+        T* item = uniqueSelected<T>();
+
+        return item;
     }
 
     std::unique_ptr<BOARD_COMMIT> m_commit;

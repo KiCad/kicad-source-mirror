@@ -783,10 +783,7 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 {
-    if( !hoverSelection() )
-        return 0;
-
-    MODULE* mod = uniqueSelected<MODULE>();
+    MODULE* mod = uniqueHoverSelection<MODULE>();
 
     if( !mod )
         return 0;
@@ -895,10 +892,7 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
     SELECTION& selection = m_selectionTool->GetSelection();
     bool unselect = selection.Empty();
 
-    if( !hoverSelection() )
-        return 0;
-
-    MODULE* mod = uniqueSelected<MODULE>();
+    MODULE* mod = uniqueHoverSelection<MODULE>();
 
     if( !mod )
         return 0;
