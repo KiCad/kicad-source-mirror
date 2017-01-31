@@ -116,6 +116,13 @@ public:
      */
     int CreateArray( const TOOL_EVENT& aEvent );
 
+    /**
+     * Function ExchangeFootprints()
+     *
+     * Invoke the dialog used to change the footprints used for modules
+     * and update module footprints based on result
+     */
+    int ExchangeFootprints( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void SetTransitions() override;

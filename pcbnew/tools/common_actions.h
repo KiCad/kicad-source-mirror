@@ -94,6 +94,9 @@ public:
     /// Activation of the duplication tool with incrementing (e.g. pad number)
     static TOOL_ACTION duplicateIncrement;
 
+    /// Exchange footprints of modules
+    static TOOL_ACTION exchangeFootprints;
+
     /// Deleting a BOARD_ITEM
     static TOOL_ACTION remove;
     static TOOL_ACTION removeAlt;

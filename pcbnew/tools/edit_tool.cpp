@@ -56,6 +56,7 @@ using namespace std::placeholders;
 
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
+#include <dialogs/dialog_exchange_modules.h>
 
 #include <board_commit.h>
 
@@ -90,6 +91,9 @@ bool EDIT_TOOL::Init()
         return m_editModules;
     };
 
+    auto singleModuleCondition = SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T )
+                                    && SELECTION_CONDITIONS::Count( 1 );
+
     // Add context menu entries that are displayed when selection tool is active
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
     menu.AddItem( COMMON_ACTIONS::editActivate, SELECTION_CONDITIONS::NotEmpty );
@@ -107,8 +111,9 @@ bool EDIT_TOOL::Init()
 
     // Footprint actions
     menu.AddItem( COMMON_ACTIONS::editFootprintInFpEditor,
-                                        SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T ) &&
-                                        SELECTION_CONDITIONS::Count( 1 ) );
+                  singleModuleCondition );
+    menu.AddItem( COMMON_ACTIONS::exchangeFootprints,
+                  singleModuleCondition );
 
     m_offset.x = 0;
     m_offset.y = 0;
@@ -776,6 +781,38 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
+{
+    if( !hoverSelection() )
+        return 0;
+
+    MODULE* mod = uniqueSelected<MODULE>();
+
+    if( !mod )
+        return 0;
+
+    auto& editFrame = *getEditFrame<PCB_EDIT_FRAME>();
+
+    editFrame.SetCurItem( mod );
+
+    // Footprint exchange could remove modules, so they have to be
+    // removed from the selection first
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+
+    // invoke the exchange dialog process
+    {
+        DIALOG_EXCHANGE_MODULE dialog( &editFrame, mod );
+        dialog.ShowQuasiModal();
+    }
+
+    // The current item can be deleted by exchange module, and the
+    // selection is emptied, so remove current item from frame info area
+    editFrame.SetCurItem( nullptr );
+
+    return 0;
+}
+
+
 void EDIT_TOOL::SetTransitions()
 {
     Go( &EDIT_TOOL::Main,       COMMON_ACTIONS::editActivate.MakeEvent() );
@@ -789,6 +826,7 @@ void EDIT_TOOL::SetTransitions()
     Go( &EDIT_TOOL::CreateArray,COMMON_ACTIONS::createArray.MakeEvent() );
     Go( &EDIT_TOOL::Mirror,     COMMON_ACTIONS::mirror.MakeEvent() );
     Go( &EDIT_TOOL::editFootprintInFpEditor, COMMON_ACTIONS::editFootprintInFpEditor.MakeEvent() );
+    Go( &EDIT_TOOL::ExchangeFootprints,      COMMON_ACTIONS::exchangeFootprints.MakeEvent() );
 }
 
 

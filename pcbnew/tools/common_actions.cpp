@@ -137,6 +137,11 @@ TOOL_ACTION COMMON_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BACK_SPACE ),
         _( "Remove (alterative)" ), _( "Deletes selected item(s)" ), delete_xpm );
 
+TOOL_ACTION COMMON_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFootprints",
+        AS_GLOBAL, 0,
+        _( "Exchange footprint(s)" ), _( "Change the footprint used for modules" ),
+        import_module_xpm );
+
 
 TOOL_ACTION COMMON_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
