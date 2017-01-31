@@ -979,11 +979,12 @@ void FOOTPRINT_EDIT_FRAME::SetActiveLayer( LAYER_ID aLayer )
 {
     PCB_BASE_FRAME::SetActiveLayer( aLayer );
 
-    GetGalCanvas()->SetHighContrastLayer( aLayer );
-
     m_Layers->SelectLayer( GetActiveLayer() );
     m_Layers->OnLayerSelected();
 
     if( IsGalCanvasActive() )
+    {
+        GetGalCanvas()->SetHighContrastLayer( aLayer );
         GetGalCanvas()->Refresh();
+    }
 }
