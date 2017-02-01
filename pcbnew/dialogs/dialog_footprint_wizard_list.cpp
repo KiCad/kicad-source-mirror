@@ -101,8 +101,12 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
     m_footprintGeneratorsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     int curr_row_cnt = m_footprintGeneratorsGrid->GetNumberRows();
-    m_footprintGeneratorsGrid->DeleteRows( 0, curr_row_cnt );
-    m_footprintGeneratorsGrid->InsertRows( 0, n_wizards );
+
+    if( curr_row_cnt )
+        m_footprintGeneratorsGrid->DeleteRows( 0, curr_row_cnt );
+
+    if( n_wizards )
+        m_footprintGeneratorsGrid->InsertRows( 0, n_wizards );
 
     // Put all wizards in the list
     for( int ii = 0; ii < n_wizards; ii++ )
@@ -139,6 +143,7 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
     m_tcSearchPaths->SetValue( message );
     // Display info about scripts: unloadable scripts (due to syntax errors is python source)
     pcbnewGetUnloadableScriptNames( message );
+
     if( message.IsEmpty() )
     {
         m_tcNotLoaded->SetValue( _( "All footprint generator scripts were loaded" ) );
