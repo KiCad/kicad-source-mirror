@@ -38,7 +38,6 @@ namespace SEXPR
         SEXPR* parseString(const std::string& aString, std::string::const_iterator& it);
         static const std::string whitespaceCharacters;
         int m_lineNumber;
-        int m_lineOffset;
     };
 }
 

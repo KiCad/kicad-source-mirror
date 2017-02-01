@@ -31,7 +31,7 @@ namespace SEXPR
     }
 
     SEXPR::SEXPR(SEXPR_TYPE type) :
-        m_type(type), m_lineNumber(0)
+        m_type(type), m_lineNumber(1)
     {
     }
 
