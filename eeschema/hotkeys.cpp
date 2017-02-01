@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -225,10 +225,12 @@ static EDA_HOTKEY HkLoadSchematic( _HKI( "Load Schematic" ), HK_LOAD_SCH, 'L' + 
 static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O',
                                         ID_AUTOPLACE_FIELDS );
 
-static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematics" ), HK_UPDATE_PCB_FROM_SCH, WXK_F8 );
+static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematics" ), HK_UPDATE_PCB_FROM_SCH,
+                                      WXK_F8 );
 
 // Higtlight connection
-static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT, 'X' + GR_KB_CTRL );
+static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
+                                         'X' + GR_KB_CTRL );
 
 // List of common hotkey descriptors
 static EDA_HOTKEY* common_Hotkey_List[] =
@@ -645,8 +647,6 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     cmd.SetEventObject( this );
 
-    bool itemInEdit = m_drawItem && m_drawItem->InEditMode();
-
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
     if( (aHotKey >= 'a') && (aHotKey <= 'z') )
@@ -659,6 +659,10 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     if( hotKey == NULL )
         return false;
+
+    bool itemInEdit = GetScreen()->GetCurItem() && GetScreen()->GetCurItem()->GetFlags();
+
+    bool blocInProgress = GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK;
 
     switch( hotKey->m_Idcommand )
     {
@@ -744,13 +748,20 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_ROTATE:
-        if( ! itemInEdit )
+        if( blocInProgress )
+        {
+            GetScreen()->m_BlockLocate.SetCommand( BLOCK_ROTATE );
+            HandleBlockPlace( aDC );
+        }
+        else
+        {
             m_drawItem = LocateItemUsingCursor( aPosition );
 
-        if( m_drawItem )
-        {
-            cmd.SetId( ID_LIBEDIT_ROTATE_ITEM );
-            GetEventHandler()->ProcessEvent( cmd );
+            if( m_drawItem )
+            {
+                cmd.SetId( ID_LIBEDIT_ROTATE_ITEM );
+                GetEventHandler()->ProcessEvent( cmd );
+            }
         }
         break;
 
@@ -802,6 +813,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             }
         }
         break;
+
     case HK_MIRROR_Y:                       // Mirror Y
         m_drawItem = LocateItemUsingCursor( aPosition );
         cmd.SetId( ID_LIBEDIT_MIRROR_Y );
@@ -831,8 +843,7 @@ EDA_HOTKEY* LIB_VIEW_FRAME::GetHotKeyDescription( int aCommand ) const
 }
 
 
-bool LIB_VIEW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
-                                     EDA_ITEM* aItem )
+bool LIB_VIEW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
     if( aHotKey == 0 )
         return false;
