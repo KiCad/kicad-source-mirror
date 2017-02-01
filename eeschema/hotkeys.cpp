@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2015 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -621,8 +621,6 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     cmd.SetEventObject( this );
 
-    bool itemInEdit = m_drawItem && m_drawItem->InEditMode();
-
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
     if( (aHotKey >= 'a') && (aHotKey <= 'z') )
@@ -635,6 +633,10 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     if( hotKey == NULL )
         return false;
+
+    bool itemInEdit = GetScreen()->GetCurItem() && GetScreen()->GetCurItem()->GetFlags();
+
+    bool blocInProgress = GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK;
 
     switch( hotKey->m_Idcommand )
     {
@@ -720,13 +722,20 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_ROTATE:
-        if( ! itemInEdit )
+        if( blocInProgress )
+        {
+            GetScreen()->m_BlockLocate.SetCommand( BLOCK_ROTATE );
+            HandleBlockPlace( aDC );
+        }
+        else
+        {
             m_drawItem = LocateItemUsingCursor( aPosition );
 
-        if( m_drawItem )
-        {
-            cmd.SetId( ID_LIBEDIT_ROTATE_ITEM );
-            GetEventHandler()->ProcessEvent( cmd );
+            if( m_drawItem )
+            {
+                cmd.SetId( ID_LIBEDIT_ROTATE_ITEM );
+                GetEventHandler()->ProcessEvent( cmd );
+            }
         }
         break;
 
@@ -792,8 +801,7 @@ EDA_HOTKEY* LIB_VIEW_FRAME::GetHotKeyDescription( int aCommand ) const
 }
 
 
-bool LIB_VIEW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
-                                     EDA_ITEM* aItem )
+bool LIB_VIEW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
     if( aHotKey == 0 )
         return false;
