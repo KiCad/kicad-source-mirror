@@ -94,7 +94,8 @@ bool KICADMODULE::Read( SEXPR::SEXPR* aEntry )
             if( !child->IsList() )
             {
                 std::ostringstream ostr;
-                ostr << "* corrupt module in PCB file\n";
+                ostr << "* corrupt module in PCB file at line ";
+                ostr << child->GetLineNumber() << "\n";
                 wxLogMessage( "%s\n", ostr.str().c_str() );
                 return false;
             }
@@ -181,7 +182,8 @@ bool KICADMODULE::parseLayer( SEXPR::SEXPR* data )
     else
     {
         std::ostringstream ostr;
-        ostr << "* corrupt module in PCB file; layer cannot be parsed\n";
+        ostr << "* corrupt module in PCB file (line ";
+        ostr << val->GetLineNumber() << "); layer cannot be parsed\n";
         wxLogMessage( "%s\n", ostr.str().c_str() );
         return false;
     }
@@ -206,7 +208,8 @@ bool KICADMODULE::parseAttribute( SEXPR::SEXPR* data )
     if( data->GetNumberOfChildren() < 2 )
     {
         std::ostringstream ostr;
-        ostr << "* corrupt module in PCB file; attribute cannot be parsed\n";
+        ostr << "* corrupt module in PCB file (line ";
+        ostr << data->GetLineNumber() << "); attribute cannot be parsed\n";
         wxLogMessage( "%s\n", ostr.str().c_str() );
         return false;
     }

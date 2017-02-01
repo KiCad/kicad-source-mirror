@@ -234,7 +234,8 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
             if( !child->IsList() )
             {
                 std::ostringstream ostr;
-                ostr << "* corrupt PCB file: '" << m_filename << "'\n";
+                ostr << "* corrupt PCB file (line " << child->GetLineNumber();
+                ostr << "): '" << m_filename << "'\n";
                 wxLogMessage( "%s\n", ostr.str().c_str() );
                 return false;
             }
@@ -278,7 +279,8 @@ bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
         if( !child->IsList() )
         {
             std::ostringstream ostr;
-            ostr << "* corrupt PCB file: '" << m_filename << "'\n";
+            ostr << "* corrupt PCB file (line " << child->GetLineNumber();
+            ostr << "): '" << m_filename << "'\n";
             wxLogMessage( "%s\n", ostr.str().c_str() );
             return false;
         }
@@ -293,7 +295,8 @@ bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
     }
 
     std::ostringstream ostr;
-    ostr << "* corrupt PCB file: '" << m_filename << "'\n";
+    ostr << "* corrupt PCB file (line " << child->GetLineNumber();
+    ostr << "): '" << m_filename << "'\n";
     ostr << "* no PCB thickness specified in general section\n";
     wxLogMessage( "%s\n", ostr.str().c_str() );
 
@@ -313,7 +316,8 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
         if( !child->IsList() )
         {
             std::ostringstream ostr;
-            ostr << "* corrupt PCB file: '" << m_filename << "'\n";
+            ostr << "* corrupt PCB file (line " << child->GetLineNumber();
+            ostr << "): '" << m_filename << "'\n";
             wxLogMessage( "%s\n", ostr.str().c_str() );
             return false;
         }
@@ -325,7 +329,8 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
             if( child->GetNumberOfChildren() != 3 )
             {
                 std::ostringstream ostr;
-                ostr << "* corrupt PCB file: '" << m_filename << "'\n";
+                ostr << "* corrupt PCB file (line " << child->GetLineNumber();
+                ostr << "): '" << m_filename << "'\n";
                 ostr << "* grid_origin has " << child->GetNumberOfChildren();
                 ostr << " children (expected: 3)\n";
                 wxLogMessage( "%s\n", ostr.str().c_str() );
@@ -342,7 +347,8 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
             if( child->GetNumberOfChildren() != 3 )
             {
                 std::ostringstream ostr;
-                ostr << "* corrupt PCB file: '" << m_filename << "'\n";
+                ostr << "* corrupt PCB file (line " << child->GetLineNumber();
+                ostr << "): '" << m_filename << "'\n";
                 ostr << "* aux_axis_origin has " << child->GetNumberOfChildren();
                 ostr << " children (expected: 3)\n";
                 wxLogMessage( "%s\n", ostr.str().c_str() );
