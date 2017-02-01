@@ -51,6 +51,7 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
 #include <drawtxt.h>
+#include <utility>
 #include <vector>
 
 
@@ -134,6 +135,40 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aTextPCB,
                          aTextPCB->GetHorizJustify(), aTextPCB->GetVertJustify(),
                          aTextPCB->GetThickness(), aTextPCB->IsItalic(),
                          true, addTextSegmToContainer );
+    }
+}
+
+
+void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DIMENSION* aDimension,
+                                                     CGENERICCONTAINER2D *aDstContainer,
+                                                     LAYER_ID aLayerId,
+                                                     int aClearanceValue )
+{
+    AddShapeWithClearanceToContainer(&aDimension->Text(), aDstContainer, aLayerId, aClearanceValue);
+
+    const int linewidth = aDimension->GetWidth() + (2 * aClearanceValue);
+
+    std::pair<wxPoint const *, wxPoint const *> segs[] = {
+        {&aDimension->m_crossBarO,     &aDimension->m_crossBarF},
+        {&aDimension->m_featureLineGO, &aDimension->m_featureLineGF},
+        {&aDimension->m_featureLineDO, &aDimension->m_featureLineDF},
+        {&aDimension->m_crossBarF,     &aDimension->m_arrowD1F},
+        {&aDimension->m_crossBarF,     &aDimension->m_arrowD2F},
+        {&aDimension->m_crossBarO,     &aDimension->m_arrowG1F},
+        {&aDimension->m_crossBarO,     &aDimension->m_arrowG2F}};
+
+    for( auto const & ii : segs )
+    {
+        const SFVEC2F start3DU(  ii.first->x * m_biuTo3Dunits,
+                                -ii.first->y * m_biuTo3Dunits );
+
+        const SFVEC2F end3DU  (  ii.second->x * m_biuTo3Dunits,
+                                -ii.second->y * m_biuTo3Dunits );
+
+        aDstContainer->Add( new CROUNDSEGMENT2D( start3DU,
+                                                 end3DU,
+                                                 linewidth * m_biuTo3Dunits,
+                                                 *aDimension ) );
     }
 }
 
@@ -1676,6 +1711,13 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                                                   0 );
             break;
 
+            case PCB_DIMENSION_T:
+                AddShapeWithClearanceToContainer( (DIMENSION*) item,
+                                                  layerContainer,
+                                                  curr_layer_id,
+                                                  0 );
+            break;
+
             default:
                 wxLogTrace( m_logTrace,
                             wxT( "createLayers: item type: %d not implemented" ),
@@ -1962,6 +2004,13 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
             case PCB_TEXT_T:
                 AddShapeWithClearanceToContainer( (TEXTE_PCB*) item,
+                                                  layerContainer,
+                                                  curr_layer_id,
+                                                  0 );
+                break;
+
+            case PCB_DIMENSION_T:
+                AddShapeWithClearanceToContainer( (DIMENSION*) item,
                                                   layerContainer,
                                                   curr_layer_id,
                                                   0 );
