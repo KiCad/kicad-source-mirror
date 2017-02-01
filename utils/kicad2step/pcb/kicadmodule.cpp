@@ -81,13 +81,12 @@ bool KICADMODULE::Read( SEXPR::SEXPR* aEntry )
 
         bool result = true;
 
-        for( size_t i = 1; i < nc && result; ++i )
+        for( size_t i = 2; i < nc && result; ++i )
         {
             child = aEntry->GetChild( i );
 
-            // skip the module name and the optional 'locked' attribute;
-            // due to the vagaries of the kicad version of sexpr, the
-            // name may be a Symbol or a String
+            // skip the optional 'locked' attribute; due to the vagaries of the
+            // kicad version of sexpr, the attribute may be a Symbol or a String
             if( i <= 2 && ( child->IsSymbol() || child->IsString() ) )
                 continue;
 
