@@ -44,6 +44,7 @@
 #include <class_library.h>
 #include <sch_legacy_plugin.h>
 
+#include <wx/progdlg.h>
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
 
@@ -900,7 +901,7 @@ const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
 }
 
 
-void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::bad_pointer )
+void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress ) throw( IO_ERROR, boost::bad_pointer )
 {
     wxString        filename;
     wxString        libs_not_found;
@@ -920,8 +921,26 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
 
     wxASSERT( !size() );    // expect to load into "this" empty container.
 
+    wxProgressDialog lib_dialog( _( "Loading symbol libraries" ),
+                                 wxEmptyString,
+                                 lib_names.GetCount(),
+                                 NULL,
+                                 wxPD_APP_MODAL );
+
+    if( aShowProgress )
+    {
+        lib_dialog.Show();
+    }
+
+    wxString progress_message;
+
     for( unsigned i = 0; i < lib_names.GetCount();  ++i )
     {
+        if( aShowProgress )
+        {
+            lib_dialog.Update( i, _( "Loading " + lib_names[i] ) );
+        }
+
         wxFileName fn = lib_names[i];
         // lib_names[] does not store the file extension. Set it:
         fn.SetExt( SchematicLibraryFileExtension );
@@ -964,6 +983,11 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject ) throw( IO_ERROR, boost::ba
 
             wxLogError( msg );
         }
+    }
+
+    if( aShowProgress )
+    {
+        lib_dialog.Destroy();
     }
 
     // add the special cache library.
