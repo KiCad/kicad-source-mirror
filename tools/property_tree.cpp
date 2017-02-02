@@ -85,7 +85,7 @@ int main( int argc, char** argv )
     }
     catch( const IO_ERROR& ioe )
     {
-        fprintf( stderr, "%s\n", TO_UTF8( ioe.errorText ) );
+        fprintf( stderr, "%s\n", TO_UTF8( ioe.What() ) );
     }
 }
 

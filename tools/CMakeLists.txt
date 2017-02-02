@@ -28,6 +28,7 @@ add_executable( property_tree
     EXCLUDE_FROM_ALL
     property_tree.cpp
     ../common/richio.cpp
+    ../common/exceptions.cpp
     ../common/dsnlexer.cpp
     ../common/ptree.cpp
     )
