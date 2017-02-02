@@ -28,19 +28,7 @@
 
 
 #ifndef SWIG
-#include <cstdio>
-
-template<typename T>
-struct remove_pointer
-{
-    typedef T type;
-};
-
-template<typename T>
-struct remove_pointer<T*>
-{
-    typedef typename remove_pointer<T>::type type;
-};
+#include <type_traits>
 
 /**
  * Function IsA()
@@ -52,13 +40,13 @@ struct remove_pointer<T*>
 template <class T, class I>
 bool IsA( const I* aObject )
 {
-    return aObject && remove_pointer<T>::type::ClassOf( aObject );
+    return aObject && std::remove_pointer<T>::type::ClassOf( aObject );
 }
 
 template <class T, class I>
 bool IsA( const I& aObject )
 {
-    return remove_pointer<T>::type::ClassOf( &aObject );
+    return std::remove_pointer<T>::type::ClassOf( &aObject );
 }
 
 /**
@@ -72,10 +60,10 @@ bool IsA( const I& aObject )
 template<class Casted, class From>
 Casted dyn_cast( From aObject )
 {
-    if( remove_pointer<Casted>::type::ClassOf ( aObject ) )
+    if( std::remove_pointer<Casted>::type::ClassOf ( aObject ) )
         return static_cast<Casted>( aObject );
 
-    return NULL;
+    return nullptr;
 }
 
 class EDA_ITEM;
