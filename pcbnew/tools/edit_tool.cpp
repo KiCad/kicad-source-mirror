@@ -179,6 +179,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         if( evt->IsAction( &COMMON_ACTIONS::editActivate )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
+            if( selection.Empty() )
+                break;
+
             BOARD_ITEM* curr_item = selection.Front();
 
             if( m_dragging && evt->Category() == TC_MOUSE )
