@@ -203,8 +203,8 @@ void DIALOG_LABEL_EDITOR::InitDialog()
     textWidth.Append( 'M', MINTEXTWIDTH );
     EnsureTextCtrlWidth( m_textLabel, &textWidth );
 
-    // Set validators
-    m_TextOrient->SetSelection( m_CurrentText->GetTextAngle() );
+    // Set text options:
+    m_TextOrient->SetSelection( m_CurrentText->GetLabelSpinStyle() );
     m_TextShape->SetSelection( m_CurrentText->GetShape() );
 
     int style = 0;
