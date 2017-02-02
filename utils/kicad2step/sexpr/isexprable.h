@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2016 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2016 QiEDA Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +30,7 @@ namespace SEXPR
     public:
         virtual ~ISEXPRABLE() {}
         virtual SEXPR* SerializeSEXPR() const { return nullptr; }
-        virtual void DeserializeSEXPR(SEXPR& sexp) {}
+        virtual void DeserializeSEXPR( SEXPR& sexp ) {}
     };
 }
 
