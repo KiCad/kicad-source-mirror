@@ -45,9 +45,6 @@
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 
-#include <dialog_choose_component.h>
-#include <component_tree_search_container.h>
-
 #include <dialogs/dialog_lib_new_component.h>
 
 
@@ -536,33 +533,30 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         }
     }
 
-    COMPONENT_TREE_SEARCH_CONTAINER search_container( Prj().SchLibs() );
+    lib->GetAliasNames( nameList );
 
-    search_container.AddLibrary( *lib );
-
-    wxString dialogTitle;
-    dialogTitle.Printf( _( "Delete Component (%u items loaded)" ), search_container.GetComponentsCount() );
-
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, m_convert );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( nameList.IsEmpty() )
     {
+        msg.Printf( _( "Part library '%s' is empty." ), GetChars( lib->GetName() ) );
+        wxMessageBox( msg, _( "Delete Entry Error" ), wxID_OK | wxICON_EXCLAMATION, this );
         return;
     }
 
-    LIB_ALIAS* const alias = dlg.GetSelectedAlias( &m_unit );
+    msg.Printf( _( "Select one of %d components to delete\nfrom library '%s'." ),
+                int( nameList.GetCount() ),
+                GetChars( lib->GetName() ) );
 
-    if( !alias || !alias->GetLib() )
-    {
+    wxSingleChoiceDialog dlg( this, msg, _( "Delete Part" ), nameList );
+
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
         return;
-    }
 
-    libEntry = lib->FindAlias( alias->GetName() );
+    libEntry = lib->FindAlias( dlg.GetStringSelection() );
 
     if( !libEntry )
     {
         msg.Printf( _( "Entry '%s' not found in library '%s'." ),
-                    GetChars( alias->GetName() ),
+                    GetChars( dlg.GetStringSelection() ),
                     GetChars( lib->GetName() ) );
         DisplayError( this, msg );
         return;
