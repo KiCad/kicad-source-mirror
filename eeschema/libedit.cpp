@@ -45,6 +45,9 @@
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 
+#include <dialog_choose_component.h>
+#include <component_tree_search_container.h>
+
 #include <dialogs/dialog_lib_new_component.h>
 
 
@@ -519,6 +522,7 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     m_lastDrawItem = NULL;
     m_drawItem = NULL;
 
+    LIB_PART *part = GetCurPart();
     PART_LIB* lib = GetCurLib();
 
     if( !lib )
@@ -533,30 +537,28 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
         }
     }
 
-    lib->GetAliasNames( nameList );
+    COMPONENT_TREE_SEARCH_CONTAINER search_container( Prj().SchLibs() );
 
-    if( nameList.IsEmpty() )
+    wxString name = part ? part->GetName() : wxString( wxEmptyString );
+    search_container.AddLibrary( *lib );
+    search_container.SetPreselectNode( name, /* aUnit */ 0 );
+
+    wxString dialogTitle;
+    dialogTitle.Printf( _( "Delete Component (%u items loaded)" ), search_container.GetComponentsCount() );
+
+    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, &search_container, m_convert );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
     {
-        msg.Printf( _( "Part library '%s' is empty." ), GetChars( lib->GetName() ) );
-        wxMessageBox( msg, _( "Delete Entry Error" ), wxID_OK | wxICON_EXCLAMATION, this );
         return;
     }
 
-    msg.Printf( _( "Select one of %d components to delete\nfrom library '%s'." ),
-                int( nameList.GetCount() ),
-                GetChars( lib->GetName() ) );
-
-    wxSingleChoiceDialog dlg( this, msg, _( "Delete Part" ), nameList );
-
-    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetStringSelection().IsEmpty() )
-        return;
-
-    libEntry = lib->FindAlias( dlg.GetStringSelection() );
+    libEntry = dlg.GetSelectedAlias( NULL );
 
     if( !libEntry )
     {
         msg.Printf( _( "Entry '%s' not found in library '%s'." ),
-                    GetChars( dlg.GetStringSelection() ),
+                    GetChars( libEntry->GetName() ),
                     GetChars( lib->GetName() ) );
         DisplayError( this, msg );
         return;
@@ -569,11 +571,12 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     if( !IsOK( this, msg ) )
         return;
 
-    LIB_PART* part = GetCurPart();
+    part = GetCurPart();
 
     if( !part || !part->HasAlias( libEntry->GetName() ) )
     {
         lib->RemoveAlias( libEntry );
+        m_canvas->Refresh();
         return;
     }
 
