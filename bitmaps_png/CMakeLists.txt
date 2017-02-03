@@ -136,6 +136,7 @@ set( BMAPS_MID
     annotate_down_right
     annotate_right_down
     annotate
+    apply_pad_settings
     array_line
     array_module
     array_pad
@@ -171,6 +172,7 @@ set( BMAPS_MID
     copycomponent
     copy_button
     copy_library
+    copy_pad_settings
     copper_layers_setup
     cursor_shape
     cursor
@@ -241,7 +243,6 @@ set( BMAPS_MID
     export_idf
     export_footprint_names
     export_module
-    export_options_pad
     export
     fabrication
     file_footprint
@@ -267,7 +268,6 @@ set( BMAPS_MID
     glabel2label
     glabel2text
     gl_change
-    global_options_pad
     green
     grid_select
     grid_select_axis
@@ -412,7 +412,6 @@ set( BMAPS_MID
     options_arc
     options_circle
     options_module
-    options_new_pad
     options_pad
     options_pinsheet
     options_pin
@@ -468,6 +467,7 @@ set( BMAPS_MID
     ps_diff_pair_tune_phase
     ps_diff_pair_via_gap
     ps_tune_length
+    push_pad_settings
     py_script
     ratsnest
     read_setup

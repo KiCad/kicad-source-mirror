@@ -951,7 +951,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
                  _( "Push Pad Settings" ),
                  _( "Copy this pad's settings to all pads in this footprint (or similar footprints)" ),
-                 KiBitmap( global_options_pad_xpm ) );
+                 KiBitmap( push_pad_settings_xpm ) );
     sub_menu_Pad->AppendSeparator();
 
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_DELETE_PAD, _( "Delete" ), KiBitmap( delete_pad_xpm ) );

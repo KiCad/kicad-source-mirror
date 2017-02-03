@@ -331,7 +331,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             {
                 PopMenu->AppendSeparator();
                 AddMenuItem( PopMenu, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
-                             _( "Push Pad Settings" ), KiBitmap( global_options_pad_xpm ) );
+                             _( "Push Pad Settings" ), KiBitmap( push_pad_settings_xpm ) );
             }
 
             break;

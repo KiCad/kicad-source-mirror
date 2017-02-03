@@ -94,7 +94,7 @@ TOOL_ACTION COMMON_ACTIONS::copySettingsToPads( "pcbnew.InteractiveEdit.copySett
 TOOL_ACTION COMMON_ACTIONS::globalEditPads( "pcbnew.InteractiveEdit.globalPadEdit",
         AS_GLOBAL, 0,
         _( "Global Pad Edition" ),
-        _( "Changes pad properties globally." ), global_options_pad_xpm );
+        _( "Changes pad properties globally." ), push_pad_settings_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
