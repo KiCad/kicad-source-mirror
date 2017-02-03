@@ -50,11 +50,11 @@ public:
     void SetTransitions() override;
 
 private:
-    ///> Import pad settings from board design settings to a pad
-    int importPadSettings( const TOOL_EVENT& aEvent );
+    ///> Apply pad settings from board design settings to a pad
+    int applyPadSettings( const TOOL_EVENT& aEvent );
 
-    ///> Export pad settings from a pad to the board design settings
-    int exportPadSettings( const TOOL_EVENT& aEvent );
+    ///> Copy pad settings from a pad to the board design settings
+    int copyPadSettings( const TOOL_EVENT& aEvent );
 
     ///> Push pad settings from a pad to other pads on board or module
     int pushPadSettings( const TOOL_EVENT& aEvent );

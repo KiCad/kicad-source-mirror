@@ -99,8 +99,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_CU_LAYER_AND_PLACE_BLIND_BURIED_VIA:
     case ID_POPUP_PCB_PLACE_MICROVIA:
     case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
-    case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
-    case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
+    case ID_POPUP_PCB_APPLY_PAD_SETTINGS:
+    case ID_POPUP_PCB_COPY_PAD_SETTINGS:
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE:
     case ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER:
@@ -938,7 +938,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         break;
 
-    case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
+    case ID_POPUP_PCB_APPLY_PAD_SETTINGS:
         m_canvas->MoveCursorToCrossHair();
         SaveCopyInUndoList( GetCurItem()->GetParent(), UR_CHANGED );
         Import_Pad_Settings( (D_PAD*) GetCurItem(), true );
@@ -949,7 +949,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DlgGlobalChange_PadSettings( (D_PAD*) GetCurItem(), true );
         break;
 
-    case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
+    case ID_POPUP_PCB_COPY_PAD_SETTINGS:
         m_canvas->MoveCursorToCrossHair();
         Export_Pad_Settings( (D_PAD*) GetCurItem() );
         break;

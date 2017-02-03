@@ -217,8 +217,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
     case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
-    case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
-    case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
+    case ID_POPUP_PCB_APPLY_PAD_SETTINGS:
+    case ID_POPUP_PCB_COPY_PAD_SETTINGS:
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
     case ID_POPUP_MODEDIT_EDIT_BODY_ITEM:
@@ -649,7 +649,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         createArray();
         break;
 
-    case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
+    case ID_POPUP_PCB_APPLY_PAD_SETTINGS:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         m_canvas->MoveCursorToCrossHair();
         Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
@@ -662,7 +662,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         break;
 
-    case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
+    case ID_POPUP_PCB_COPY_PAD_SETTINGS:
         m_canvas->MoveCursorToCrossHair();
         Export_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem() );
         break;
