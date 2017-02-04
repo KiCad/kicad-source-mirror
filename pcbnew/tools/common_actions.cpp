@@ -136,12 +136,14 @@ TOOL_ACTION COMMON_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",
         _( "Mirror" ), _( "Mirrors selected item" ), mirror_h_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
-        _( "Remove" ), _( "Deletes selected item(s)" ), delete_xpm );
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BACK_SPACE ),
+        _( "Remove" ), _( "Deletes selected item(s)" ), delete_xpm,
+        AF_NONE, (void*) REMOVE_FLAGS::NORMAL );
 
 TOOL_ACTION COMMON_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BACK_SPACE ),
-        _( "Remove (Alternative)" ), _( "Deletes selected item(s)" ), delete_xpm );
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
+        _( "Remove (Alternative)" ), _( "Deletes selected item(s)" ), delete_xpm,
+        AF_NONE, (void*) REMOVE_FLAGS::ALT );
 
 TOOL_ACTION COMMON_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFootprints",
         AS_GLOBAL, 0,

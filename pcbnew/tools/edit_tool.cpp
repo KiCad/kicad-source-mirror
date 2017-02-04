@@ -575,6 +575,18 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     if( !hoverSelection() || m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
+    // is this "alternative" remove?
+    const bool isAlt = aEvent.Parameter<intptr_t>() ==
+            (int) COMMON_ACTIONS::REMOVE_FLAGS::ALT;
+
+    // in "alternative" mode, deletion is not just a simple list
+    // of selected items, it is:
+    //   - whole tracks, not just segments
+    if( isAlt )
+    {
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectConnection, true );
+    }
+
     // Get a copy instead of a reference, as we are going to clear current selection
     auto selection = m_selectionTool->GetSelection().GetItems();
 
@@ -830,6 +842,7 @@ void EDIT_TOOL::SetTransitions()
     Go( &EDIT_TOOL::Rotate,     COMMON_ACTIONS::rotateCcw.MakeEvent() );
     Go( &EDIT_TOOL::Flip,       COMMON_ACTIONS::flip.MakeEvent() );
     Go( &EDIT_TOOL::Remove,     COMMON_ACTIONS::remove.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,     COMMON_ACTIONS::removeAlt.MakeEvent() );
     Go( &EDIT_TOOL::Properties, COMMON_ACTIONS::properties.MakeEvent() );
     Go( &EDIT_TOOL::MoveExact,  COMMON_ACTIONS::moveExact.MakeEvent() );
     Go( &EDIT_TOOL::Duplicate,  COMMON_ACTIONS::duplicate.MakeEvent() );

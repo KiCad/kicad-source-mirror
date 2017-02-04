@@ -359,6 +359,9 @@ public:
     ///> Cursor control event types
     enum CURSOR_EVENT_TYPE { CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
                              CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_FAST_MOVE = 0x8000 };
+
+    ///> Remove event modifier flags
+    enum class REMOVE_FLAGS { NORMAL = 0x00, ALT = 0x01 };
 };
 
 void registerAllTools( TOOL_MANAGER* aToolManager );
