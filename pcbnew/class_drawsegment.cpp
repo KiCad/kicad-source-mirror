@@ -608,9 +608,10 @@ const BOX2I DRAWSEGMENT::ViewBBox() const
 
 void DRAWSEGMENT::computeArcBBox( EDA_RECT& aBBox ) const
 {
-    aBBox.Merge( m_End );
-    // TODO perhaps the above line can be replaced with this one, so we do not include the center
-    //aBBox.SetOrigin( m_End );
+    // Do not include the center, which is not necessarily
+    // inside the BB of a arc with a small angle
+    aBBox.SetOrigin( m_End );
+
     wxPoint end = m_End;
     RotatePoint( &end, m_Start, -m_Angle );
     aBBox.Merge( end );
