@@ -648,13 +648,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* submenuActionPluginsMenu = new wxMenu();
 
     AddMenuItem( toolsMenu, submenuActionPluginsMenu, ID_TOOLBARH_PCB_ACTION_PLUGIN,
-                 _( "&External plugins" ),
-                 _( "Give access to python action plugin" ),
+                 _( "&External Plugins" ),
+                 _( "Execute or reload python action plugins" ),
                  KiBitmap( hammer_xpm ) );
 
     AddMenuItem( submenuActionPluginsMenu, ID_TOOLBARH_PCB_ACTION_PLUGIN_REFRESH,
-                 _( "&Refresh" ),
-                 _( "Reload all python plugins and refresh menu" ),
+                 _( "&Refresh Plugins" ),
+                 _( "Reload all python plugins and refresh plugin menus" ),
                  KiBitmap( reload_xpm ) );
 
     submenuActionPluginsMenu->AppendSeparator();

@@ -139,7 +139,7 @@ TOOL_ACTION COMMON_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
 
 TOOL_ACTION COMMON_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFootprints",
         AS_GLOBAL, 0,
-        _( "Exchange footprint(s)" ), _( "Change the footprint used for modules" ),
+        _( "Exchange Footprint(s)" ), _( "Change the footprint used for modules" ),
         import_module_xpm );
 
 
@@ -472,19 +472,19 @@ TOOL_ACTION COMMON_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutline
 TOOL_ACTION COMMON_ACTIONS::exportPadSettings(
         "pcbnew.PadTool.ExportPadSettings",
         AS_GLOBAL, 0,
-        _( "Export pad settings" ), _( "Copy current pad's settings to the board design settings" ),
+        _( "Export Pad Settings" ), _( "Copy current pad's settings to the board design settings" ),
         export_options_pad_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::importPadSettings(
         "pcbnew.PadTool.ImportPadSettings",
         AS_GLOBAL, 0,
-        _( "Import pad settings" ), _( "Copy the board design settings pad properties to the current pad" ),
+        _( "Import Pad Settings" ), _( "Copy the board design settings pad properties to the current pad" ),
         options_new_pad_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::pushPadSettings(
         "pcbnew.PadTool.PushPadSettings",
         AS_GLOBAL, 0,
-        _( "Push pad settings" ), _( "Copy the current pad settings to other pads" ),
+        _( "Push Pad Settings" ), _( "Copy the current pad settings to other pads" ),
         global_options_pad_xpm );
 
 // Cursor control

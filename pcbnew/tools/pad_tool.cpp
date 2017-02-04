@@ -226,7 +226,7 @@ int PAD_TOOL::importPadSettings( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Import pad settings" ) );
+    commit.Push( _( "Import Pad Settings" ) );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
     frame.Refresh();
@@ -275,7 +275,7 @@ static void globalChangePadSettings( BOARD& board,
     // pads to aply the src pad settings to
     if( moduleRef == nullptr )
     {
-        wxLogDebug( _( "globalChangePadSettings() Error: NULL module" ) );
+        wxLogDebug( "globalChangePadSettings() Error: NULL module" );
         return;
     }
 
@@ -380,7 +380,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
                               DIALOG_GLOBAL_PADS_EDITION::m_Pad_Orient_Filter,
                               DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter );
 
-    commit.Push( _( "Import pad settings" ) );
+    commit.Push( _( "Import Pad Settings" ) );
 
     m_toolMgr->RunAction( COMMON_ACTIONS::editModifiedSelection, true );
     frame.Refresh();
