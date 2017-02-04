@@ -254,14 +254,32 @@ private:
      */
     bool selectMultiple();
 
-    ///> Selects a trivial connection (between two junctions).
+    ///> Selects a trivial connection (between two junctions) of items in selection
     int selectConnection( const TOOL_EVENT& aEvent );
 
-    ///> Selects a continuous copper connection.
+    ///> Selects items with a continuous copper connection to items in selection
     int selectCopper( const TOOL_EVENT& aEvent );
 
-    ///> Selects all copper connections belonging to a single net.
+    /**
+     * Selects all copper connections belonging to the same net(s) as the
+     * items in the selection
+     */
     int selectNet( const TOOL_EVENT& aEvent );
+
+    /**
+     * Selects all items connected by copper tracks to the given TRACK
+     */
+    void selectAllItemsConnectedToTrack( TRACK& aSourceTrack );
+
+    /**
+     * Selects all items connected (by copper) to the given item
+     */
+    void selectAllItemsConnectedToItem( BOARD_CONNECTED_ITEM& aSourceItem );
+
+    /**
+     * Selects all items with the given net code
+     */
+    void selectAllItemsOnNet( int aNetCode );
 
     ///> Find dialog callback.
     void findCallback( BOARD_ITEM* aItem );
