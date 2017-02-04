@@ -62,7 +62,7 @@ add_dependencies( gal lib-dependencies )
 target_link_libraries( gal
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
-    ${PIXMAN_LIBRARY}
+    ${PIXMAN_LIBRARIES}
     ${OPENGL_LIBRARIES}
 )
 
