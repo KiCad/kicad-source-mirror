@@ -53,7 +53,7 @@
 #include <class_module.h>
 
 #include <tools/selection_tool.h>
-
+#include <tools/tool_event_utils.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
@@ -239,12 +239,14 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
         else if( text && evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
-                text->Rotate( text->GetPosition(), m_frame->GetRotationAngle() );
+                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
+                        *m_frame, *evt );
+
+                text->Rotate( text->GetPosition(), rotationAngle );
                 m_view->Update( &preview );
             }
-            // TODO rotate CCW
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
             {
                 text->Flip( text->GetPosition() );
@@ -612,11 +614,16 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
         else if( evt->Category() == TC_COMMAND )
         {
             // TODO it should be handled by EDIT_TOOL, so add items and select?
-            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
+                const auto rotationPoint = wxPoint( cursorPos.x, cursorPos.y );
+                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
+                        *m_frame, *evt );
+
                 for( auto item : preview )
-                    item->Rotate( wxPoint( cursorPos.x, cursorPos.y ),
-                                 m_frame->GetRotationAngle() );
+                {
+                    item->Rotate( rotationPoint, rotationAngle );
+                }
 
                 m_view->Update( &preview );
             }

@@ -45,6 +45,8 @@
 #include <class_edge_mod.h>
 #include <board_commit.h>
 
+#include <tools/tool_event_utils.h>
+
 #include <functional>
 using namespace std::placeholders;
 #include <wx/defs.h>
@@ -138,9 +140,11 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
         else if( evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
-                pad->Rotate( pad->GetPosition(), m_frame->GetRotationAngle() );
+                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
+                        *m_frame, *evt );
+                pad->Rotate( pad->GetPosition(), rotationAngle );
                 m_view->Update( &preview );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )
@@ -451,9 +455,11 @@ int MODULE_EDITOR_TOOLS::PasteItems( const TOOL_EVENT& aEvent )
 
         else if( evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
-                pastedModule->Rotate( pastedModule->GetPosition(), m_frame->GetRotationAngle() );
+                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
+                        *m_frame, *evt );
+                pastedModule->Rotate( pastedModule->GetPosition(), rotationAngle );
                 m_view->Update( &preview );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )

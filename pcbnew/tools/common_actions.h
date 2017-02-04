@@ -70,8 +70,11 @@ public:
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;
 
-    /// Rotation of selected objects
-    static TOOL_ACTION rotate;
+    /// Rotation of selected objects clockwise
+    static TOOL_ACTION rotateCw;
+
+    /// Rotation of selected objects counter-clockwise
+    static TOOL_ACTION rotateCcw;
 
     /// Flipping of selected objects
     static TOOL_ACTION flip;

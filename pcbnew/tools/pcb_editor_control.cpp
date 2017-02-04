@@ -50,6 +50,8 @@
 #include <view/view_controls.h>
 #include <origin_viewitem.h>
 
+#include <tools/tool_event_utils.h>
+
 #include <functional>
 using namespace std::placeholders;
 
@@ -312,9 +314,11 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
         else if( module && evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &COMMON_ACTIONS::rotate ) )
+            if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
-                module->Rotate( module->GetPosition(), m_frame->GetRotationAngle() );
+                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle(
+                        *m_frame, *evt );
+                module->Rotate( module->GetPosition(), rotationAngle );
                 view->Update( &preview );
             }
             else if( evt->IsAction( &COMMON_ACTIONS::flip ) )

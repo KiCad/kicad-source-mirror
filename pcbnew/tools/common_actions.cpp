@@ -117,9 +117,15 @@ TOOL_ACTION COMMON_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CREATE_ARRAY ),
         _( "Create array" ), _( "Create array" ), array_module_xpm, AF_ACTIVATE );
 
-TOOL_ACTION COMMON_ACTIONS::rotate( "pcbnew.InteractiveEdit.rotate",
+TOOL_ACTION COMMON_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM ),
-        _( "Rotate" ), _( "Rotates selected item(s)" ), rotate_cw_xpm );
+        _( "Rotate clockwise" ), _( "Rotates selected item(s) clockwise" ),
+        rotate_cw_xpm, AF_NONE, (void*) 1 );
+
+TOOL_ACTION COMMON_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
+        AS_GLOBAL, MD_SHIFT + 'R',
+        _( "Rotate counter-clockwise" ), _( "Rotates selected item(s) counter-clockwise" ),
+        rotate_ccw_xpm, AF_NONE, (void*) -1 );
 
 TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FLIP_ITEM ),
