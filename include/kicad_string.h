@@ -74,6 +74,11 @@ int ReadDelimitedText( wxString* aDest, const char* aSource );
 std::string EscapedUTF8( const wxString& aString );
 
 /**
+ * Return a new wxString escaped for embedding in HTML.
+ */
+wxString EscapedHTML( const wxString& aString );
+
+/**
  * Function GetLine
  * reads one line line from \a aFile.
  * @return A pointer the first useful line read by eliminating blank lines and comments.

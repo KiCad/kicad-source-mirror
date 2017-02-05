@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,6 +164,30 @@ std::string EscapedUTF8( const wxString& aString )
     ret += '"';
 
     return ret;
+}
+
+
+wxString EscapedHTML( const wxString& aString )
+{
+    wxString converted;
+
+    for( wxUniChar c: aString )
+    {
+        if( c == '\"' )
+            converted += "&quot;";
+        else if( c == '\'' )
+            converted += "&apos;";
+        else if( c == '&' )
+            converted += "&amp;";
+        else if( c == '<' )
+            converted += "&lt;";
+        else if( c == '>' )
+            converted += "&gt;";
+        else
+            converted += c;
+    }
+
+    return converted;
 }
 
 

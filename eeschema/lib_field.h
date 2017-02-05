@@ -189,7 +189,7 @@ public:
      * @param unit - The package unit number.  Only effects reference field.
      * @return Field text.
      */
-    wxString GetFullText( int unit = 1 );
+    wxString GetFullText( int unit = 1 ) const;
 
     EDA_COLOR_T GetDefaultColor() override;
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <class_library.h>
 #include <component_tree_search_container.h>
 #include <sch_base_frame.h>
+#include <kicad_string.h>
 
 // Tree navigation helpers.
 static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
@@ -44,7 +45,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_external_browser_requested = false;
     m_received_doubleclick_in_tree = false;
     m_search_container->SetTree( m_libraryComponentTree );
-    m_componentDetails->SetEditable( false );
     m_componentView->SetLayoutDirection( wxLayout_LeftToRight );
 
     m_libraryComponentTree->ScrollTo( m_libraryComponentTree->GetFocusedItem() );
@@ -221,70 +221,83 @@ bool DIALOG_CHOOSE_COMPONENT::updateSelection()
 
     m_componentView->Refresh();
 
-    m_componentDetails->Clear();
+    m_componentDetails->SetPage( wxEmptyString );
 
     if( selection == NULL )
         return false;
 
     m_componentDetails->Freeze();
-    wxFont font_normal = m_componentDetails->GetFont();
-    wxFont font_bold = m_componentDetails->GetFont();
-    font_bold.SetWeight( wxFONTWEIGHT_BOLD );
-
-    wxTextAttr headline_attribute;
-    headline_attribute.SetFont( font_bold );
-    wxTextAttr text_attribute;
-    text_attribute.SetFont( font_normal );
 
     const wxString name = selection->GetName();
+    wxString description = selection->GetDescription();
 
     if ( !name.empty() )
     {
-        m_componentDetails->SetDefaultStyle( headline_attribute );
-        m_componentDetails->AppendText( name );
+        m_componentDetails->AppendToPage( "<b>" );
+        m_componentDetails->AppendToPage( EscapedHTML( name ) );
+        m_componentDetails->AppendToPage( "</b>" );
     }
 
-    const wxString description = selection->GetDescription();
+    if( !selection->IsRoot() )
+    {
+        LIB_PART* root_part = selection->GetPart();
+        const wxString root_name( root_part ? root_part->GetName() : _( "Unknown" ) );
+
+        m_componentDetails->AppendToPage(
+                "<br><i>" + _( "Alias of " ) + EscapedHTML( root_name ) + "</i>" );
+
+        // For some reason descriptions are a property of aliases, even though
+        // only the root component's main LIB_ALIAS can actually have a description.
+        // If the description was empty, go through the alias list and find an alias
+        // that actually has one.
+
+        if( description.empty() )
+        {
+            for( size_t i = 0; i < root_part->GetAliasCount(); ++i )
+            {
+                LIB_ALIAS* alias = root_part->GetAlias( i );
+
+                if( !alias )
+                    continue;
+
+                description = alias->GetDescription();
+
+                if( !description.empty() )
+                    break;
+            }
+        }
+    }
 
     if( !description.empty() )
     {
-        if ( !m_componentDetails->IsEmpty() )
-            m_componentDetails->AppendText( wxT( "\n\n" ) );
-
-        m_componentDetails->SetDefaultStyle( headline_attribute );
-        m_componentDetails->AppendText( _( "Description\n" ) );
-        m_componentDetails->SetDefaultStyle( text_attribute );
-        m_componentDetails->AppendText( description );
+        m_componentDetails->AppendToPage( "<br>" );
+        m_componentDetails->AppendToPage( EscapedHTML( description ) );
     }
 
-    const wxString keywords = selection->GetKeyWords();
-
+    wxString keywords = selection->GetKeyWords();
     if( !keywords.empty() )
     {
-        if ( !m_componentDetails->IsEmpty() )
-            m_componentDetails->AppendText( wxT( "\n\n" ) );
-
-        m_componentDetails->SetDefaultStyle( headline_attribute );
-        m_componentDetails->AppendText( _( "Keywords\n" ) );
-        m_componentDetails->SetDefaultStyle( text_attribute );
-        m_componentDetails->AppendText( keywords );
+        m_componentDetails->AppendToPage( "<br>" + _( "Keywords:" ) + " " );
+        m_componentDetails->AppendToPage( EscapedHTML( keywords ) );
     }
 
-    if ( !selection->IsRoot() )
+    m_componentDetails->AppendToPage( "<hr><table border=0>" );
+
+
+    LIB_FIELDS fields;
+    selection->GetPart()->GetFields( fields );
+
+    for( auto const & field: fields )
     {
-        LIB_PART* root_part = selection->GetPart();
-        const wxString root_component_name( root_part ? root_part->GetName() : _( "Unknown" ) );
+        wxString name = field.GetName();
+        wxString text = field.GetFullText();
 
-        if ( !m_componentDetails->IsEmpty() )
-            m_componentDetails->AppendText( wxT( "\n\n" ) );
-
-        m_componentDetails->SetDefaultStyle( headline_attribute );
-        m_componentDetails->AppendText( _( "Alias of " ) );
-        m_componentDetails->SetDefaultStyle( text_attribute );
-        m_componentDetails->AppendText( root_component_name );
+        m_componentDetails->AppendToPage( "<tr><td><b>" + EscapedHTML( name ) + "</b></td>" );
+        m_componentDetails->AppendToPage( "<td>" + EscapedHTML( text ) + "</td></tr>" );
     }
 
-    m_componentDetails->SetInsertionPoint( 0 );  // scroll up.
+    m_componentDetails->AppendToPage( "</table>" );
+
     m_componentDetails->Thaw();
 
     return true;
