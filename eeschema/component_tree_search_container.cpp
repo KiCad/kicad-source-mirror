@@ -104,6 +104,7 @@ COMPONENT_TREE_SEARCH_CONTAINER::COMPONENT_TREE_SEARCH_CONTAINER( PART_LIBS* aLi
       m_libraries_added( 0 ),
       m_components_added( 0 ),
       m_preselect_unit_number( -1 ),
+      m_show_units( true ),
       m_libs( aLibs ),
       m_filter( CMP_FILTER_NONE )
 {
@@ -124,6 +125,12 @@ void COMPONENT_TREE_SEARCH_CONTAINER::SetPreselectNode( const wxString& aCompone
 {
     m_preselect_node_name = aComponentName.Lower();
     m_preselect_unit_number = aUnit;
+}
+
+
+void COMPONENT_TREE_SEARCH_CONTAINER::ShowUnits( bool aShowUnits )
+{
+    m_show_units = aShowUnits;
 }
 
 
@@ -198,7 +205,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
                                                a, a->GetName(), display_info, search_text );
         m_nodes.push_back( alias_node );
 
-        if( a->GetPart()->IsMulti() )    // Add all units as sub-nodes.
+        if( m_show_units && a->GetPart()->IsMulti() )    // Add all units as sub-nodes.
         {
             for( int u = 1; u <= a->GetPart()->GetUnitCount(); ++u )
             {

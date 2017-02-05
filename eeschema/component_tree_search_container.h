@@ -89,6 +89,13 @@ public:
      */
     void SetPreselectNode( const wxString& aComponentName, int aUnit );
 
+    /**
+     * Set whether units should be shown under parts. Default: true
+     *
+     * Must be called before AddLibrary, as this is when the list is populated!
+     */
+    void ShowUnits( bool aShowUnits );
+
     /** Function SetTree
      * Set the tree to be manipulated.
      * Each update of the search term will update the tree, with the most
@@ -136,6 +143,7 @@ private:
 
     wxString m_preselect_node_name;
     int m_preselect_unit_number;
+    bool m_show_units;
 
     PART_LIBS*      m_libs;         // no ownership
 

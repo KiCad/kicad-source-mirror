@@ -540,8 +540,9 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     COMPONENT_TREE_SEARCH_CONTAINER search_container( Prj().SchLibs() );
 
     wxString name = part ? part->GetName() : wxString( wxEmptyString );
-    search_container.AddLibrary( *lib );
     search_container.SetPreselectNode( name, /* aUnit */ 0 );
+    search_container.ShowUnits( false );
+    search_container.AddLibrary( *lib );
 
     wxString dialogTitle;
     dialogTitle.Printf( _( "Delete Component (%u items loaded)" ), search_container.GetComponentsCount() );
