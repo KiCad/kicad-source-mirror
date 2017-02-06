@@ -32,7 +32,6 @@
 #define __WX_VIEW_CONTROLS_H
 
 #include <wx/wx.h>
-#include <wx/event.h>
 
 #include <view/view_controls.h>
 
@@ -147,6 +146,9 @@ private:
 
     /// Ratio used for scaling world coordinates to scrollbar position.
     VECTOR2D    m_scrollScale;
+
+    /// Current scrollbar position
+    VECTOR2I    m_scrollPos;
 };
 } // namespace KIGFX
 

@@ -26,8 +26,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/wx.h>
-
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -117,7 +115,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         double scrollX = 0.0;
         double scrollY = 0.0;
 
-        if ( m_enableMousewheelPan )
+        if( m_enableMousewheelPan )
         {
             if ( axis == wxMOUSE_WHEEL_HORIZONTAL || aEvent.ShiftDown() )
                 scrollX = scrollVec.x;
@@ -126,7 +124,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         }
         else
         {
-            if ( aEvent.ControlDown() )
+            if( aEvent.ControlDown() )
                 scrollX = -scrollVec.x;
             else
                 scrollY = -scrollVec.y;
@@ -328,9 +326,9 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
     const BOX2I& boundary = m_view->GetBoundary();
 
     if( aEvent.GetOrientation() == wxHORIZONTAL )
-        center.x = (double) aEvent.GetPosition() * boundary.GetWidth() / m_scrollScale.x + boundary.GetLeft();
+        center.x = boundary.GetLeft() + aEvent.GetPosition() / m_scrollScale.x;
     else if( aEvent.GetOrientation() == wxVERTICAL )
-        center.y = (double) aEvent.GetPosition() * boundary.GetHeight() / m_scrollScale.y + boundary.GetTop();
+        center.y = boundary.GetTop() + aEvent.GetPosition() / m_scrollScale.y;
 
     m_view->SetCenter( center );
     m_parentPanel->Refresh();
@@ -483,19 +481,30 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
     const BOX2D viewport = m_view->GetViewport();
     const BOX2I& boundary = m_view->GetBoundary();
 
-    m_scrollScale.x = 2e3 * boundary.GetWidth() / viewport.GetWidth();
-    m_scrollScale.y = 2e3 * boundary.GetHeight() / viewport.GetHeight();
+    m_scrollScale.x = 2e3 / viewport.GetWidth();    // TODO it does not have to be updated so often
+    m_scrollScale.y = 2e3 / viewport.GetHeight();
+    VECTOR2I newScroll( ( viewport.Centre().x - boundary.GetLeft() ) * m_scrollScale.x,
+                ( viewport.Centre().y - boundary.GetTop() ) * m_scrollScale.y );
 
-    // Another example of wxWidgets being broken by design: scroll position is determined by the
-    // left (or top, if vertical) edge of the slider. Fortunately, slider size seems to be constant
-    // (at least for wxGTK 3.0), so we have to add its size to allow user to scroll the workspace
-    // till the end.
-    m_parentPanel->SetScrollbars( 1, 1,
-#ifdef __LINUX__
-            m_scrollScale.x + 1623, m_scrollScale.y + 1623,
+    // Adjust scrollbars only if it is needed. Otherwise there are cases when canvas is continuosly
+    // refreshed (Windows)
+    if( m_scrollPos != newScroll )
+    {
+        // Another example of wxWidgets being broken by design: scroll position is determined by the
+        // left (or top, if vertical) edge of the slider. Fortunately, slider size seems to be constant
+        // (at least for wxGTK and wxMSW), so we have to add its size to allow user to scroll the workspace
+        // till the end.
+
+        m_parentPanel->SetScrollbars( 1, 1,
+#if defined(__LINUX__)
+            m_scrollScale.x * boundary.GetWidth() + 1623, m_scrollScale.y * boundary.GetHeight() + 1623,
+#elif defined(__WIN32__) || defined(__WIN64__)
+            m_scrollScale.x * boundary.GetWidth() + 1377, m_scrollScale.y * boundary.GetHeight() + 741,
 #else
-            m_scrollScale.x, m_scrollScale.y,
+            m_scrollScale.x * boundary.GetWidth(), m_scrollScale.y * boundary.GetHeight(),
 #endif
-            ( viewport.Centre().x - boundary.GetLeft() ) / boundary.GetWidth() * m_scrollScale.x,
-            ( viewport.Centre().y - boundary.GetTop() ) / boundary.GetHeight() * m_scrollScale.y );
+            newScroll.x, newScroll.y, false );
+
+        m_scrollPos = newScroll;
+    }
 }
