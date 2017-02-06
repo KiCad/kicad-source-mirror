@@ -38,6 +38,7 @@ set(3D-VIEWER_SRCS
     ${DIR_DLG}/dlg_3d_pathconfig_base.cpp
     ${DIR_DLG}/dlg_3d_pathconfig.cpp
     ${DIR_DLG}/dlg_select_3dmodel.cpp
+    ${DIR_DLG}/panel_prev_3d_base.cpp
     ${DIR_DLG}/panel_prev_model.cpp
     ../polygon/poly2tri/common/shapes.cc
     ../polygon/poly2tri/sweep/advancing_front.cc

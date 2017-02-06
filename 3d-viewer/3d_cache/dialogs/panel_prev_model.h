@@ -36,9 +36,13 @@
 #ifndef PANEL_PREV_MODEL_H
 #define PANEL_PREV_MODEL_H
 
-#include <wx/textctrl.h>
+#include "panel_prev_3d_base.h"
+
+//#include <wx/textctrl.h>
 #include "../3d_info.h"
 #include <vector>
+
+#include <3d_canvas/eda_3d_canvas.h>
 
 // Declared classes to create pointers
 class S3D_CACHE;
@@ -48,37 +52,120 @@ class BOARD;
 class CINFO3D_VISU;
 class MODULE;
 
+#define PANEL_PREV_3D_B PANEL_PREV_3D
 
-class PANEL_PREV_3D : public wxPanel
+class PANEL_PREV_3D_B: public PANEL_PREV_3D_BASE
 {
 public:
+    PANEL_PREV_3D_B( wxWindow* aParent, S3D_CACHE* aCacheManager,
+                     MODULE* aModuleCopy,
+                     std::vector<S3D_INFO> *aParentInfoList = NULL );
+
+    ~PANEL_PREV_3D_B();
+
+private:
+    wxString                currentModelFile;   ///< Used to check if the model file was changed
+    S3D_FILENAME_RESOLVER   *m_resolver;        ///< Used to get the full path name
+
+    /// The 3D canvas
+    EDA_3D_CANVAS   *m_previewPane;
+
+    /// A dummy board used to store the copy moduled
+    BOARD           *m_dummyBoard;
+
+    /// The settings that will be used for this 3D viewer canvas
+    CINFO3D_VISU    *m_settings3Dviewer;
+
+    /// A pointer to a new copy of the original module
+    MODULE          *m_copyModule;
+
+    /// A pointer to the parent S3D_INFO list that we will use to copy to the preview module
+    std::vector<S3D_INFO> *m_parentInfoList;
+
+    /// The current selected index of the S3D_INFO list
+    int             m_currentSelectedIdx;
+
+    /// Current S3D_INFO that is being edited
+    S3D_INFO        m_modelInfo;
+
+    // Methods of the class
+private:
+    void initPanel();
 
     /**
-     * @brief PANEL_PREV_3D - Creator
-     * @param aParent: the parent windows (or object)
-     * @param aCacheManager: the cache manager to use to resolve the 3D model files
-     * @param aModule: a copy of the original module that is edited. this is for preview propose and
-     * it will be changes, so dont use the original one.
-     * @param aParentInfoList: a pointer to the Info list managed by the parent. This list will be
-     * passed o the aModuleCopy so it will have the updated 3d model shapes list.
+     * @brief updateOrientation - it will receive the events from editing the fields
+     * @param event
      */
-    PANEL_PREV_3D( wxWindow* aParent,
-                   S3D_CACHE* aCacheManager,
-                   MODULE* aModuleCopy,
-                   std::vector<S3D_INFO> *aParentInfoList = NULL );
+    void updateOrientation( wxCommandEvent &event ) override;
 
-    ~PANEL_PREV_3D();
+    /**
+     * @brief getOrientationVars - gets the transformation from entries and validate it
+     * @param aScale: output scale var
+     * @param aRotation: output rotation var
+     * @param aOffset: output offset var
+     */
+    void getOrientationVars( SGPOINT& aScale, SGPOINT& aRotation, SGPOINT& aOffset );
 
-    // 3D views buttons
-    void View3DISO( wxCommandEvent& event );
-    void View3DUpdate( wxCommandEvent& event );
-    void View3DLeft( wxCommandEvent& event );
-    void View3DRight( wxCommandEvent& event );
-    void View3DFront( wxCommandEvent& event );
-    void View3DBack( wxCommandEvent& event );
-    void View3DTop( wxCommandEvent& event );
-    void View3DBottom( wxCommandEvent& event );
+    /**
+     * @brief updateListOnModelCopy - copy the current shape list to the copy of module that is on
+     * the preview dummy board
+     */
+    void updateListOnModelCopy();
 
+    /**
+     * @brief OnCloseWindow - called when the frame is closed
+     * @param event
+     */
+    void OnCloseWindow( wxCloseEvent &event );
+
+	void onEnterPreviewCanvas( wxMouseEvent& event )
+    {
+        m_previewPane->SetFocus();
+    }
+
+	void View3DISO( wxCommandEvent& event ) override
+    {
+        m_settings3Dviewer->CameraGet().ToggleProjection();
+        m_previewPane->Refresh();
+    }
+
+	void View3DLeft( wxCommandEvent& event ) override
+    {
+        m_previewPane->SetView3D( 'X' );
+    }
+
+	void View3DFront( wxCommandEvent& event ) override
+    {
+        m_previewPane->SetView3D( 'Y' );
+    }
+
+	void View3DTop( wxCommandEvent& event ) override
+    {
+        m_previewPane->SetView3D( 'z' );
+    }
+
+	void View3DUpdate( wxCommandEvent& event ) override
+    {
+        m_previewPane->ReloadRequest();
+        m_previewPane->Refresh();
+    }
+
+	void View3DRight( wxCommandEvent& event ) override
+    {
+        m_previewPane->SetView3D( 'x' );
+    }
+
+	void View3DBack( wxCommandEvent& event ) override
+    {
+        m_previewPane->SetView3D( 'y' );
+    }
+
+	void View3DBottom( wxCommandEvent& event ) override
+    {
+        m_previewPane->SetView3D( 'Z' );
+    }
+
+public:
     /**
      * @brief SetModelDataIdx - This will set the index of the INFO list that was set on the parent.
      * So we will update our values to edit based on the index on that list.
@@ -107,71 +194,6 @@ public:
         wxString temp;
         return ValidateWithMessage(temp);
     }
-
-private:
-    wxString                currentModelFile;   ///< Used to check if the model file was changed
-    S3D_FILENAME_RESOLVER   *m_resolver;        ///< Used to get the full path name
-
-    // Parameters
-    wxTextCtrl* xscale;
-    wxTextCtrl* yscale;
-    wxTextCtrl* zscale;
-    wxTextCtrl* xrot;
-    wxTextCtrl* yrot;
-    wxTextCtrl* zrot;
-    wxTextCtrl* xoff;
-    wxTextCtrl* yoff;
-    wxTextCtrl* zoff;
-
-    EDA_3D_CANVAS   *m_previewPane;
-
-    /// The settings that will be used for this 3D viewer canvas
-    CINFO3D_VISU    *m_settings3Dviewer;
-
-    /// A dummy board used to store the copy moduled
-    BOARD           *m_dummyBoard;
-
-    /// A pointer to a new copy of the original module
-    MODULE          *m_copyModule;
-
-    /// A pointer to the parent S3D_INFO list that we will use to copy to the preview module
-    std::vector<S3D_INFO> *m_parentInfoList;
-
-    /// The current selected index of the S3D_INFO list
-    int             m_currentSelectedIdx;
-
-    /// Current S3D_INFO that is being edited
-    S3D_INFO        m_modelInfo;
-
-private:
-
-    /**
-     * @brief updateOrientation - it will receive the events from editing the fields
-     * @param event
-     */
-    void updateOrientation( wxCommandEvent &event );
-
-    /**
-     * @brief getOrientationVars - gets the transformation from entries and validate it
-     * @param aScale: output scale var
-     * @param aRotation: output rotation var
-     * @param aOffset: output offset var
-     */
-    void getOrientationVars( SGPOINT& aScale, SGPOINT& aRotation, SGPOINT& aOffset );
-
-    /**
-     * @brief updateListOnModelCopy - copy the current shape list to the copy of module that is on
-     * the preview dummy board
-     */
-    void updateListOnModelCopy();
-
-    /**
-     * @brief OnCloseWindow - called when the frame is closed
-     * @param event
-     */
-    void OnCloseWindow( wxCloseEvent &event );
-
-    wxDECLARE_EVENT_TABLE();
 };
 
 #endif  // PANEL_PREV_MODEL_H
