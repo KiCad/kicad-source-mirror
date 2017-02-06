@@ -74,6 +74,7 @@ public:
 
         Add( COMMON_ACTIONS::zoneMerge );
         Add( COMMON_ACTIONS::zoneDuplicate );
+        Add( COMMON_ACTIONS::drawZoneCutout );
     }
 
 protected:
@@ -93,6 +94,7 @@ private:
                                         )( selTool->GetSelection() );
 
         Enable( getMenuId( COMMON_ACTIONS::zoneDuplicate), singleZoneActionsEnabled );
+        Enable( getMenuId( COMMON_ACTIONS::drawZoneCutout), singleZoneActionsEnabled );
 
         // enable zone actions that ably to a specific set of zones (as opposed to all of them)
         bool nonGlobalActionsEnabled = ( SELECTION_CONDITIONS::MoreThan( 0 ) )( selTool->GetSelection() );

@@ -189,6 +189,11 @@ TOOL_ACTION COMMON_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, 0,
         _( "Add Keepout Area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
+        AS_GLOBAL, 0,
+        _( "Add a Zone Cutout" ), _( "Add a cutout area of an existing zone" ),
+        add_zone_cutout_xpm, AF_ACTIVATE );
+
 TOOL_ACTION COMMON_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
         AS_GLOBAL, 0,
         "Place DXF", "", NULL, AF_ACTIVATE );

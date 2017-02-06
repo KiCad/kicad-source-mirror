@@ -545,7 +545,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ZONE );
     m_frame->SetToolID( ID_PCB_ZONES_BUTT, wxCURSOR_PENCIL, _( "Add zones" ) );
 
-    return drawZone( false );
+    return drawZone( false, ZONE_MODE::ADD );
 }
 
 
@@ -554,7 +554,16 @@ int DRAWING_TOOL::DrawKeepout( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::KEEPOUT );
     m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add keepout" ) );
 
-    return drawZone( true );
+    return drawZone( true, ZONE_MODE::ADD );
+}
+
+
+int DRAWING_TOOL::DrawZoneCutout( const TOOL_EVENT& aEvent )
+{
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ZONE );
+    m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add zone cutout" ) );
+
+    return drawZone( false, ZONE_MODE::CUTOUT );
 }
 
 
@@ -1186,12 +1195,89 @@ std::unique_ptr<ZONE_CONTAINER> DRAWING_TOOL::createNewZone(
 }
 
 
-int DRAWING_TOOL::drawZone( bool aKeepout )
+std::unique_ptr<ZONE_CONTAINER> DRAWING_TOOL::createZoneFromExisting(
+        const ZONE_CONTAINER& aSrcZone )
+{
+    auto newZone = std::make_unique<ZONE_CONTAINER>( m_board );
+
+    ZONE_SETTINGS zoneSettings;
+    zoneSettings << aSrcZone;
+
+    zoneSettings.ExportSetting( *newZone );
+
+    return newZone;
+}
+
+
+bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode,
+                                           ZONE_CONTAINER*& aZone )
+{
+    aZone = nullptr;
+
+    // not an action that needs a source zone
+    if( aMode == ZONE_MODE::ADD )
+        return true;
+
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+
+    if( selection.Empty() )
+        m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+
+    // we want a single zone
+    if( selection.Size() != 1 )
+        return false;
+
+    aZone = dyn_cast<ZONE_CONTAINER*>( selection[0] );
+
+    // expected a zone, but didn't get one
+    if( !aZone )
+        return false;
+
+    return true;
+}
+
+
+void DRAWING_TOOL::performZoneCutout( ZONE_CONTAINER& aExistingZone,
+                                      ZONE_CONTAINER& cutout )
+{
+    // Copy cutout corners into existing zone
+    for( int ii = 0; ii < cutout.GetNumCorners(); ii++ )
+    {
+        aExistingZone.AppendCorner( cutout.GetCornerPosition( ii ) );
+    }
+
+    // Close the current corner list
+    aExistingZone.Outline()->CloseLastContour();
+
+    m_board->OnAreaPolygonModified( nullptr, &aExistingZone );
+
+    // Re-fill if needed
+    if( aExistingZone.IsFilled() )
+    {
+        SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+
+        auto& selection = selTool->GetSelection();
+
+        selection.Clear();
+        selection.Add( &aExistingZone );
+
+        m_toolMgr->RunAction( COMMON_ACTIONS::zoneFill, true );
+    }
+}
+
+
+int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 {
     std::unique_ptr<ZONE_CONTAINER> zone;
     DRAWSEGMENT line45;
     DRAWSEGMENT* helperLine = NULL;  // we will need more than one helper line
     BOARD_COMMIT commit( m_frame );
+    ZONE_CONTAINER* sourceZone = nullptr;
+
+    // get a source zone, if we need one
+    if( !getSourceZoneForAction( aMode, sourceZone ) )
+        return 0;
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
@@ -1279,8 +1365,21 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     if( !aKeepout )
                         static_cast<PCB_EDIT_FRAME*>( m_frame )->Fill_Zone( zone.get() );
 
-                    commit.Add( zone.release() );
-                    commit.Push( _( "Draw a zone" ) );
+                    if ( aMode == ZONE_MODE::CUTOUT )
+                    {
+                        // For cutouts, subtract from the source
+                        commit.Modify( sourceZone );
+
+                        performZoneCutout( *sourceZone, *zone );
+
+                        commit.Push( _( "Add a zone cutout" ) );
+                    }
+                    else
+                    {
+                        // Add the zone as a new board item
+                        commit.Add( zone.release() );
+                        commit.Push( _( "Draw a zone" ) );
+                    }
                 }
 
                 // if kept, this was released. if still not null,
@@ -1304,7 +1403,14 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
             {
                 if( numPoints == 0 )        // it's the first click
                 {
-                    zone = createNewZone( aKeepout );
+                    if( sourceZone )
+                    {
+                        zone = createZoneFromExisting( *sourceZone );
+                    }
+                    else
+                    {
+                        zone = createNewZone( aKeepout );
+                    }
 
                     if( !zone )
                     {
@@ -1397,6 +1503,7 @@ void DRAWING_TOOL::SetTransitions()
     Go( &DRAWING_TOOL::DrawDimension,    COMMON_ACTIONS::drawDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,         COMMON_ACTIONS::drawZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawKeepout,      COMMON_ACTIONS::drawKeepout.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZoneCutout,   COMMON_ACTIONS::drawZoneCutout.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,        COMMON_ACTIONS::placeText.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceDXF,         COMMON_ACTIONS::placeDXF.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,        COMMON_ACTIONS::setAnchor.MakeEvent() );

@@ -144,6 +144,15 @@ public:
     int DrawKeepout( const TOOL_EVENT& aEvent );
 
     /**
+     * Function DrawZoneCutout()
+     * Starts interactively drawing a zone cutout area of an existing zone.
+     * The normal zone interactive tool is used, but the zone settings
+     * dialog is not shown (since the cutout affects only shape of an
+     * existing zone).
+     */
+    int DrawZoneCutout( const TOOL_EVENT& aEvent );
+
+    /**
      * Function PlaceDXF()
      * Places a drawing imported from a DXF file in module editor.
      */
@@ -159,6 +168,13 @@ public:
     void SetTransitions() override;
 
 private:
+
+    enum class ZONE_MODE
+    {
+        ADD,            ///< Add a new zone/keepout with fresh settings
+        CUTOUT,         ///< Make a cutout to an existing zone
+    };
+
     ///> Shows the context menu for the drawing tool
     ///> This menu consists of normal UI functions (zoom, grid, etc)
     ///> And any suitable global functions for the active drawing type.
@@ -180,9 +196,14 @@ private:
     ///> the same point.
     bool drawArc( DRAWSEGMENT*& aGraphic );
 
-    ///> Draws a polygon, that is added as a zone or a keepout area.
-    ///> @param aKeepout decides if the drawn polygon is a zone or a keepout area.
-    int drawZone( bool aKeepout );
+    /**
+     * Draws a polygon, that is added as a zone or a keepout area.
+     *
+     * @param aKeepout dictates if the drawn polygon is a zone or a
+     * keepout area.
+     * @param aMode dictates the mode of the zone tool
+     */
+    int drawZone( bool aKeepout, ZONE_MODE aMode );
 
     /**
      * Function createNewZone()
@@ -194,6 +215,44 @@ private:
      * @return the new zone, can be null if the user aborted
      */
     std::unique_ptr<ZONE_CONTAINER> createNewZone( bool aKeepout );
+
+    /**
+     * Function createZoneFromExisting
+     *
+     * Create a new zone with the settings from an existing zone
+     *
+     * @param aSrcZone the zone to copy settings from
+     * @return the new zone
+     */
+    std::unique_ptr<ZONE_CONTAINER> createZoneFromExisting(
+            const ZONE_CONTAINER& aSrcZone );
+
+    /**
+     * Function getSourceZoneForAction()
+     *
+     * Gets a source zone item for an action that takes an existing zone
+     * into account (for example a cutout of an existing zone). The source
+     * zone is taken from the current selection
+     *
+     * @param aMode mode of the zone tool
+     * @param aZone updated pointer to a suitable source zone,
+     * or nullptr if none found, or the action doesn't need a source
+     * @return true if a suitable zone was found, or the action doesn't
+     * need a zone. False if the action needs a zone but none was found.
+     */
+    bool getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZone );
+
+    /**
+     * Function performZoneCutout()
+     *
+     * Cut one zone out of another one (i.e. subtraction) and
+     * update the zone.
+     *
+     * @param aExistingZone the zone to removed area from
+     * @param aCutout the area to remove
+     */
+    void performZoneCutout( ZONE_CONTAINER& aExistingZone,
+                            ZONE_CONTAINER& cutout );
 
     /**
      * Function make45DegLine()

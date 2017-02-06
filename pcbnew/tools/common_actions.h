@@ -126,6 +126,9 @@ public:
     /// Activation of the drawing tool (drawing a keepout area)
     static TOOL_ACTION drawKeepout;
 
+    /// Activation of the drawing tool (drawing a ZONE cutout)
+    static TOOL_ACTION drawZoneCutout;
+
     /// Activation of the drawing tool (placing a TARGET)
     static TOOL_ACTION placeTarget;
 
