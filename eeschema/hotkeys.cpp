@@ -634,7 +634,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( hotKey == NULL )
         return false;
 
-    bool itemInEdit = GetScreen()->GetCurItem() && GetScreen()->GetCurItem()->GetFlags();
+    bool itemInEdit = m_drawItem && m_drawItem->InEditMode();
 
     bool blocInProgress = GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK;
 
@@ -689,7 +689,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_EDIT:
-        if( ! itemInEdit )
+        if( !itemInEdit )
             m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem )
@@ -729,7 +729,8 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         else
         {
-            m_drawItem = LocateItemUsingCursor( aPosition );
+            if( !itemInEdit )
+                m_drawItem = LocateItemUsingCursor( aPosition );
 
             if( m_drawItem )
             {
