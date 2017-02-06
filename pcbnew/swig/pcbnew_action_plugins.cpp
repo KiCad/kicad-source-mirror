@@ -36,6 +36,8 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <class_track.h>
+#include <class_drawsegment.h>
+#include <class_zone.h>
 #include <board_commit.h>
 #include <kicad_device_context.h>
 
@@ -176,13 +178,189 @@ void PCB_EDIT_FRAME::OnActionPlugin( wxCommandEvent& aEvent )
 
     if( actionPlugin )
     {
-        // TODO: Adding recovery point for jobs
-        // BOARD_COMMIT commit( this );
-        // commit.Push( _( "External plugin" ) );
+        PICKED_ITEMS_LIST itemsList;
+        BOARD*  currentPcb  = GetBoard();
+        bool    fromEmpty   = false;
 
-        actionPlugin->Run();
+        itemsList.m_Status = UR_CHANGED;
 
         OnModify();
+
+        // Append tracks:
+        for( BOARD_ITEM* item = currentPcb->m_Track; item != NULL; item = item->Next() )
+        {
+            ITEM_PICKER picker( item, UR_CHANGED );
+            itemsList.PushItem( picker );
+        }
+
+        // Append modules:
+        for( BOARD_ITEM* item = currentPcb->m_Modules; item != NULL; item = item->Next() )
+        {
+            ITEM_PICKER picker( item, UR_CHANGED );
+            itemsList.PushItem( picker );
+        }
+
+        // Append drawings
+        for( BOARD_ITEM* item = currentPcb->m_Drawings; item != NULL; item = item->Next() )
+        {
+            ITEM_PICKER picker( item, UR_CHANGED );
+            itemsList.PushItem( picker );
+        }
+
+        // Append zones outlines
+        for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+        {
+            ITEM_PICKER picker( (EDA_ITEM*) currentPcb->GetArea(
+                            ii ), UR_CHANGED );
+            itemsList.PushItem( picker );
+        }
+
+        // Append zones segm:
+        for( BOARD_ITEM* item = currentPcb->m_Zone; item != NULL; item = item->Next() )
+        {
+            ITEM_PICKER picker( item, UR_CHANGED );
+            itemsList.PushItem( picker );
+        }
+
+        if( itemsList.GetCount() > 0 )
+            SaveCopyInUndoList( itemsList, UR_CHANGED, wxPoint( 0.0, 0.0 ) );
+        else
+            fromEmpty = true;
+
+        itemsList.ClearItemsList();
+
+        // Execute plugin himself...
+        actionPlugin->Run();
+
+        currentPcb->m_Status_Pcb = 0;
+
+        // Get back the undo buffer to fix some modifications
+        PICKED_ITEMS_LIST* oldBuffer = NULL;
+
+        if( fromEmpty )
+        {
+            oldBuffer = new PICKED_ITEMS_LIST();
+            oldBuffer->m_Status = UR_NEW;
+        }
+        else
+        {
+            oldBuffer = GetScreen()->PopCommandFromUndoList();
+            wxASSERT( oldBuffer );
+        }
+
+        // Try do discover what was modified
+
+        PICKED_ITEMS_LIST deletedItemsList;
+
+        // Found deleted modules
+        for( unsigned int i = 0; i < oldBuffer->GetCount(); i++ )
+        {
+            BOARD_ITEM* item = (BOARD_ITEM*) oldBuffer->GetPickedItem( i );
+            ITEM_PICKER picker( item, UR_DELETED );
+
+            wxASSERT( item );
+
+            switch( item->Type() )
+            {
+            case PCB_NETINFO_T:
+            case PCB_MARKER_T:
+            case PCB_MODULE_T:
+            case PCB_TRACE_T:
+            case PCB_VIA_T:
+            case PCB_LINE_T:
+            case PCB_TEXT_T:
+            case PCB_DIMENSION_T:
+            case PCB_TARGET_T:
+            case PCB_ZONE_T:
+
+                // If item has a list it's mean that the element is on the board
+                if( item->GetList() == NULL )
+                {
+                    deletedItemsList.PushItem( picker );
+                }
+
+                break;
+
+            case PCB_ZONE_AREA_T:
+            {
+                bool zoneFound = false;
+
+                for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+                    zoneFound |= currentPcb->GetArea( ii ) == item;
+
+                if( !zoneFound )
+                {
+                    deletedItemsList.PushItem( picker );
+                }
+
+                break;
+            }
+
+            default:
+                wxString msg;
+                msg.Printf( wxT( "(PCB_EDIT_FRAME::OnActionPlugin) needs work: "
+                                 "BOARD_ITEM type (%d) not handled" ),
+                        item->Type() );
+                wxFAIL_MSG( msg );
+                break;
+            }
+        }
+
+        // Mark deleted elements in undolist
+        for( unsigned int i = 0; i < deletedItemsList.GetCount(); i++ )
+        {
+            oldBuffer->PushItem( deletedItemsList.GetItemWrapper( i ) );
+        }
+
+        // Find new modules
+        for( BOARD_ITEM* item = currentPcb->m_Modules; item != NULL; item = item->Next() )
+        {
+            if( !oldBuffer->ContainsItem( item ) )
+            {
+                ITEM_PICKER picker( item, UR_NEW );
+                oldBuffer->PushItem( picker );
+            }
+        }
+
+        for( BOARD_ITEM* item = currentPcb->m_Track; item != NULL; item = item->Next() )
+        {
+            if( !oldBuffer->ContainsItem( item ) )
+            {
+                ITEM_PICKER picker( item, UR_NEW );
+                oldBuffer->PushItem( picker );
+            }
+        }
+
+        for( BOARD_ITEM* item = currentPcb->m_Drawings; item != NULL; item = item->Next() )
+        {
+            if( !oldBuffer->ContainsItem( item ) )
+            {
+                ITEM_PICKER picker( item, UR_NEW );
+                oldBuffer->PushItem( picker );
+            }
+        }
+
+        for( BOARD_ITEM* item = currentPcb->m_Zone; item != NULL; item = item->Next() )
+        {
+            if( !oldBuffer->ContainsItem( item ) )
+            {
+                ITEM_PICKER picker( item, UR_NEW );
+                oldBuffer->PushItem( picker );
+            }
+        }
+
+        for( int ii = 0; ii < currentPcb->GetAreaCount(); ii++ )
+        {
+            if( !oldBuffer->ContainsItem( (EDA_ITEM*) currentPcb->GetArea( ii ) ) )
+            {
+                ITEM_PICKER picker( (EDA_ITEM*) currentPcb->GetArea(
+                                ii ), UR_NEW );
+                oldBuffer->PushItem( picker );
+            }
+        }
+
+
+        GetScreen()->PushCommandToUndoList( oldBuffer );
 
         if( IsGalCanvasActive() )
         {
@@ -201,7 +379,7 @@ void PCB_EDIT_FRAME::RebuildActionPluginMenus()
 {
     wxMenu* actionMenu = GetMenuBar()->FindItem( ID_TOOLBARH_PCB_ACTION_PLUGIN )->GetSubMenu();
 
-    if( !actionMenu )   // Should not occur.
+    if( !actionMenu ) // Should not occur.
         return;
 
     // First, remove existing submenus, if they are too many
@@ -235,7 +413,7 @@ void PCB_EDIT_FRAME::RebuildActionPluginMenus()
     {
         wxMenuItem* item;
 
-        if( ii < (int)available_menus.size() )
+        if( ii < (int) available_menus.size() )
         {
             item = available_menus[ii];
             item->SetItemLabel( ACTION_PLUGINS::GetAction( ii )->GetName() );
@@ -248,9 +426,9 @@ void PCB_EDIT_FRAME::RebuildActionPluginMenus()
                     ACTION_PLUGINS::GetAction( ii )->GetDescription(),
                     KiBitmap( hammer_xpm ) );
 
-                Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                         (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
-                         PCB_EDIT_FRAME::OnActionPlugin );
+            Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+                    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &
+                    PCB_EDIT_FRAME::OnActionPlugin );
         }
 
         ACTION_PLUGINS::SetActionMenu( ii, item->GetId() );
