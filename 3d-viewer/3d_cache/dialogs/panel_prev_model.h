@@ -38,16 +38,29 @@
 
 #include "panel_prev_3d_base.h"
 
-//#include <wx/textctrl.h>
 #include "../3d_info.h"
 #include <vector>
 
 #include <3d_canvas/eda_3d_canvas.h>
 
+// Define min and max parameter values
+#define MIN_SCALE          0.01
+#define MAX_SCALE          100.0
+#define MIN_ROTATION       -180.0
+#define MAX_ROTATION       180.0
+#define MIN_OFFSET         -1000.0
+#define MAX_OFFSET         1000.0
+
+#define SCALE_INCREMENT    0.02
+#define ROTATION_INCREMENT 5            // in degrees, for spin button command
+#define ROTATION_INCREMENT_WHEEL 1      // in degrees, for mouse wheel command
+#define OFFSET_INCREMENT_MM   0.1
+#define OFFSET_INCREMENT_MIL   5.0
+
+
 // Declared classes to create pointers
 class S3D_CACHE;
 class S3D_FILENAME_RESOLVER;
-class EDA_3D_CANVAS;
 class BOARD;
 class CINFO3D_VISU;
 class MODULE;
@@ -98,6 +111,17 @@ private:
      */
     void updateOrientation( wxCommandEvent &event ) override;
 
+	void onMouseWheelScale( wxMouseEvent& event ) override;
+	void onMouseWheelRot( wxMouseEvent& event ) override;
+	void onMouseWheelOffset( wxMouseEvent& event ) override;
+
+	void onIncrementRot( wxSpinEvent& event ) override;
+	void onDecrementRot( wxSpinEvent& event ) override;
+	void onIncrementScale( wxSpinEvent& event ) override;
+	void onDecrementScale( wxSpinEvent& event ) override;
+	void onIncrementOffset( wxSpinEvent& event ) override;
+	void onDecrementOffset( wxSpinEvent& event ) override;
+
     /**
      * @brief getOrientationVars - gets the transformation from entries and validate it
      * @param aScale: output scale var
@@ -112,11 +136,6 @@ private:
      */
     void updateListOnModelCopy();
 
-    /**
-     * @brief OnCloseWindow - called when the frame is closed
-     * @param event
-     */
-    void OnCloseWindow( wxCloseEvent &event );
 
 	void onEnterPreviewCanvas( wxMouseEvent& event )
     {
