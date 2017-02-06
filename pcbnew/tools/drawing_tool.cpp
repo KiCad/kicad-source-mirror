@@ -1143,9 +1143,52 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 }
 
 
+std::unique_ptr<ZONE_CONTAINER> DRAWING_TOOL::createNewZone(
+        bool aKeepout )
+{
+    const auto& board = *getModel<BOARD>();
+
+    // Get the current default settings for zones
+    ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
+    zoneInfo.m_CurrentZone_Layer = m_frame->GetScreen()->m_Active_Layer;
+    zoneInfo.m_NetcodeSelection = board.GetHighLightNetCode();
+    zoneInfo.SetIsKeepout( aKeepout );
+
+    m_controls->SetAutoPan( true );
+    m_controls->CaptureCursor( true );
+
+    // Show options dialog
+    ZONE_EDIT_T dialogResult;
+
+    if( aKeepout )
+        dialogResult = InvokeKeepoutAreaEditor( m_frame, &zoneInfo );
+    else
+    {
+        if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) )
+            dialogResult = InvokeCopperZonesEditor( m_frame, &zoneInfo );
+        else
+            dialogResult = InvokeNonCopperZonesEditor( m_frame, NULL, &zoneInfo );
+    }
+
+    if( dialogResult == ZONE_ABORT )
+    {
+        m_controls->SetAutoPan( false );
+        m_controls->CaptureCursor( false );
+        return nullptr;
+    }
+
+    auto newZone = std::make_unique<ZONE_CONTAINER>( m_board );
+
+    // Apply the selected settings
+    zoneInfo.ExportSetting( *newZone );
+
+    return newZone;
+}
+
+
 int DRAWING_TOOL::drawZone( bool aKeepout )
 {
-    ZONE_CONTAINER* zone = NULL;
+    std::unique_ptr<ZONE_CONTAINER> zone;
     DRAWSEGMENT line45;
     DRAWSEGMENT* helperLine = NULL;  // we will need more than one helper line
     BOARD_COMMIT commit( m_frame );
@@ -1192,8 +1235,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
         {
             if( numPoints > 0 )         // cancel the current zone
             {
-                delete zone;
-                zone = NULL;
+                zone = nullptr;
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
 
@@ -1235,18 +1277,15 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     zone->Outline()->RemoveNullSegments();
 
                     if( !aKeepout )
-                        static_cast<PCB_EDIT_FRAME*>( m_frame )->Fill_Zone( zone );
+                        static_cast<PCB_EDIT_FRAME*>( m_frame )->Fill_Zone( zone.get() );
 
-                    commit.Add( zone );
+                    commit.Add( zone.release() );
                     commit.Push( _( "Draw a zone" ) );
+                }
 
-                    zone = NULL;
-                }
-                else
-                {
-                    delete zone;
-                    zone = NULL;
-                }
+                // if kept, this was released. if still not null,
+                // this zone is now unwanted and can be removed
+                zone = nullptr;
 
                 numPoints = 0;
                 m_controls->SetAutoPan( false );
@@ -1265,44 +1304,17 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
             {
                 if( numPoints == 0 )        // it's the first click
                 {
-                    const auto& board = *getModel<BOARD>();
+                    zone = createNewZone( aKeepout );
 
-                    // Get the current default settings for zones
-                    ZONE_SETTINGS zoneInfo = m_frame->GetZoneSettings();
-                    zoneInfo.m_CurrentZone_Layer = m_frame->GetScreen()->m_Active_Layer;
-                    zoneInfo.m_NetcodeSelection = board.GetHighLightNetCode();
-                    zoneInfo.SetIsKeepout( aKeepout );
-
-                    m_controls->SetAutoPan( true );
-                    m_controls->CaptureCursor( true );
-
-                    // Show options dialog
-                    ZONE_EDIT_T dialogResult;
-
-                    if( aKeepout )
-                        dialogResult = InvokeKeepoutAreaEditor( m_frame, &zoneInfo );
-                    else
+                    if( !zone )
                     {
-                        if( IsCopperLayer( zoneInfo.m_CurrentZone_Layer ) )
-                            dialogResult = InvokeCopperZonesEditor( m_frame, &zoneInfo );
-                        else
-                            dialogResult = InvokeNonCopperZonesEditor( m_frame, NULL, &zoneInfo );
-                    }
-
-                    if( dialogResult == ZONE_ABORT )
-                    {
-                        m_controls->SetAutoPan( false );
-                        m_controls->CaptureCursor( false );
                         continue;
                     }
 
-                    // Apply the selected settings
-                    zone = new ZONE_CONTAINER( m_board );
-                    zoneInfo.ExportSetting( *zone );
-                    m_frame->GetGalCanvas()->SetTopLayer( zoneInfo.m_CurrentZone_Layer );
+                    m_frame->GetGalCanvas()->SetTopLayer( zone->GetLayer() );
 
                     // Add the first point
-                    zone->Outline()->Start( zoneInfo.m_CurrentZone_Layer,
+                    zone->Outline()->Start( zone->GetLayer(),
                                             cursorPos.x, cursorPos.y,
                                             zone->GetHatchStyle() );
                     origin = cursorPos;
@@ -1311,7 +1323,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                     helperLine = new DRAWSEGMENT;
                     helperLine->SetShape( S_SEGMENT );
                     helperLine->SetWidth( 1 );
-                    helperLine->SetLayer( zoneInfo.m_CurrentZone_Layer );
+                    helperLine->SetLayer( zone->GetLayer() );
                     helperLine->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
                     helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
                     line45 = *helperLine;

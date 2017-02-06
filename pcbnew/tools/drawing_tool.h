@@ -185,6 +185,17 @@ private:
     int drawZone( bool aKeepout );
 
     /**
+     * Function createNewZone()
+     *
+     * Prompt the user for new zone settings, and create a new zone with
+     * those settings
+     *
+     * @param aKeepout should the zone be a keepout
+     * @return the new zone, can be null if the user aborted
+     */
+    std::unique_ptr<ZONE_CONTAINER> createNewZone( bool aKeepout );
+
+    /**
      * Function make45DegLine()
      * Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin stays the same,
      * the end of the aSegment is modified according to the current cursor position.
