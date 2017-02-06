@@ -45,6 +45,7 @@
 #include <collectors.h>
 #include <zones_functions_for_undo_redo.h>
 #include <board_commit.h>
+#include <confirm.h>
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
@@ -68,7 +69,11 @@ public:
         Add( COMMON_ACTIONS::zoneFillAll );
         Add( COMMON_ACTIONS::zoneUnfill );
         Add( COMMON_ACTIONS::zoneUnfillAll );
+
+        AppendSeparator();
+
         Add( COMMON_ACTIONS::zoneMerge );
+        Add( COMMON_ACTIONS::zoneDuplicate );
     }
 
 protected:
@@ -81,6 +86,13 @@ private:
     void update() override
     {
         SELECTION_TOOL* selTool = getToolManager()->GetTool<SELECTION_TOOL>();
+
+        // enable zone actions that act on a single zone
+        bool singleZoneActionsEnabled = ( SELECTION_CONDITIONS::Count( 1 )
+                                          && SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T )
+                                        )( selTool->GetSelection() );
+
+        Enable( getMenuId( COMMON_ACTIONS::zoneDuplicate), singleZoneActionsEnabled );
 
         // enable zone actions that ably to a specific set of zones (as opposed to all of them)
         bool nonGlobalActionsEnabled = ( SELECTION_CONDITIONS::MoreThan( 0 ) )( selTool->GetSelection() );
@@ -721,6 +733,60 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
+{
+    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    const auto& selection = selTool->GetSelection();
+
+    // because this pops up the zone editor, it would be confusing
+    // to handle multiple zones, so just handle single selections
+    // containing exactly one zone
+    if( selection.Size() != 1 )
+        return 0;
+
+    auto oldZone = dyn_cast<ZONE_CONTAINER*>( selection[0] );
+
+    if( !oldZone )
+        return 0;
+
+    auto newZone = std::make_unique<ZONE_CONTAINER>( *oldZone );
+    newZone->ClearSelected();
+    newZone->UnFill();
+    ZONE_SETTINGS zoneSettings;
+    zoneSettings << *oldZone;
+
+    bool success = false;
+
+    if( oldZone->GetIsKeepout() )
+        success = InvokeKeepoutAreaEditor( m_frame, &zoneSettings );
+    else if( oldZone->IsOnCopperLayer() )
+        success = InvokeCopperZonesEditor( m_frame, &zoneSettings );
+    else
+        success = InvokeNonCopperZonesEditor( m_frame, oldZone, &zoneSettings );
+
+    // If the new zone is on the same layer as the the initial zone,
+    // do nothing
+    if( success && ( oldZone->GetLayer() == zoneSettings.m_CurrentZone_Layer ) )
+    {
+        DisplayError( m_frame,
+            _( "The duplicated zone cannot be on the same layer as the original zone." ) );
+        success = false;
+    }
+
+    // duplicate the zone
+    if( success )
+    {
+        BOARD_COMMIT commit( m_frame );
+        zoneSettings.ExportSetting( *newZone );
+
+        commit.Add( newZone.release() );
+        commit.Push( _( "Duplicate zone" ) );
+    }
+
+    return 0;
+}
+
+
 int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
 {
     if( m_probingSchToPcb )
@@ -887,6 +953,7 @@ void PCB_EDITOR_CONTROL::SetTransitions()
     Go( &PCB_EDITOR_CONTROL::ZoneUnfill,         COMMON_ACTIONS::zoneUnfill.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ZoneUnfillAll,      COMMON_ACTIONS::zoneUnfillAll.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ZoneMerge,          COMMON_ACTIONS::zoneMerge.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ZoneDuplicate,      COMMON_ACTIONS::zoneDuplicate.MakeEvent() );
 
     // Placing tools
     Go( &PCB_EDITOR_CONTROL::PlaceTarget,        COMMON_ACTIONS::placeTarget.MakeEvent() );

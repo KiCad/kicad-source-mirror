@@ -407,6 +407,11 @@ TOOL_ACTION COMMON_ACTIONS::zoneMerge( "pcbnew.EditorControl.zoneMerge",
         AS_GLOBAL, 0,
         _( "Merge zones" ), _( "Merge zones" ) );
 
+TOOL_ACTION COMMON_ACTIONS::zoneDuplicate( "pcbnew.EditorControl.zoneDuplicate",
+        AS_GLOBAL, 0,
+        _( "Duplicate zone onto layer" ), _( "Duplicate zone outline onto a different layer" ),
+        zone_duplicate_xpm );
+
 
 TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
         AS_GLOBAL, 0,

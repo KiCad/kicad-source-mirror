@@ -259,6 +259,9 @@ public:
     static TOOL_ACTION zoneUnfillAll;
     static TOOL_ACTION zoneMerge;
 
+    /// Duplicate zone onto another layer
+    static TOOL_ACTION zoneDuplicate;
+
     // Module editor tools
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
