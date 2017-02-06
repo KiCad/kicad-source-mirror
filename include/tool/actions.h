@@ -44,6 +44,9 @@ public:
 
     virtual ~ACTIONS() {};
 
+    // Generic actions
+    static TOOL_ACTION cancelInteractive;
+
     // View controls
     static TOOL_ACTION zoomIn;
     static TOOL_ACTION zoomOut;

@@ -52,6 +52,7 @@ using namespace std::placeholders;
 #include <tools/edit_tool.h>
 #include <tools/grid_menu.h>
 #include <tools/zoom_menu.h>
+#include <tools/tool_event_utils.h>
 
 #include <ratsnest_data.h>
 
@@ -257,6 +258,11 @@ public:
         m_widthMenu( aBoard ), m_zoomMenu( &aFrame ), m_gridMenu( &aFrame )
     {
         SetTitle( _( "Interactive Router" ) );
+
+        Add( ACTIONS::cancelInteractive );
+
+        AppendSeparator();
+
         Add( ACT_NewTrack );
         Add( ACT_EndTrack );
 //        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
@@ -636,7 +642,8 @@ void ROUTER_TOOL::performRouting()
                 still_routing = m_router->FixRoute( m_endSnapPoint, m_endItem );
             break;
         }
-        else if( evt->IsCancel() || evt->IsActivate() || evt->IsUndoRedo() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt )
+                 || evt->IsUndoRedo() )
             break;
     }
 
@@ -731,7 +738,7 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             break; // Finish
         }
@@ -816,7 +823,8 @@ void ROUTER_TOOL::performDragging()
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
         }
-        else if( evt->IsCancel() || evt->IsActivate() || evt->IsUndoRedo() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt )
+                 || evt->IsUndoRedo() )
             break;
 
         handleCommonEvents( *evt );

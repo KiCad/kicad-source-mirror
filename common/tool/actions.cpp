@@ -4,6 +4,12 @@
 
 // These members are static in class ACTIONS: Build them here:
 
+// Generic Actions
+TOOL_ACTION ACTIONS::cancelInteractive( "common.Interactive.cancel",
+        AS_GLOBAL, 0,   // ESC key is handled in the dispatcher
+        _( "Cancel" ), _( "Cancel current tool" ),
+        cancel_xpm, AF_NONE );
+
 // View Controls
 TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_IN ),

@@ -27,6 +27,12 @@
 
 #include <pcb_base_edit_frame.h>
 
+bool TOOL_EVT_UTILS::IsCancelInteractive( const TOOL_EVENT& aEvt )
+{
+    return aEvt.IsAction( &ACTIONS::cancelInteractive )
+            || aEvt.IsActivate()
+            || aEvt.IsCancel();
+}
 
 bool TOOL_EVT_UTILS::IsRotateToolEvt( const TOOL_EVENT& aEvt )
 {

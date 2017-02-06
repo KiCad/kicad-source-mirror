@@ -136,6 +136,16 @@ DRAWING_TOOL::~DRAWING_TOOL()
 
 bool DRAWING_TOOL::Init()
 {
+    auto activeToolFunctor = [ this ] ( const SELECTION& aSel ) {
+        return m_mode != MODE::NONE;
+    };
+
+    auto& ctxMenu = m_menu.GetMenu();
+
+    // cancel current toool goes in main context menu at the top if present
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1000 );
+    ctxMenu.AddSeparator( activeToolFunctor, 1000 );
+
     // Drawing type-specific options will be added by the PCB control tool
     m_menu.AddStandardSubMenus( *getEditFrame<PCB_BASE_FRAME>() );
 
@@ -278,7 +288,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( text )
             {
@@ -458,7 +468,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( step != SET_ORIGIN )    // start from the beginning
             {
@@ -714,7 +724,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 
                 m_view->Update( &preview );
             }
-            else if( evt->IsCancel() || evt->IsActivate() )
+            else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             {
                 preview.FreeItems();
                 break;
@@ -862,7 +872,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu();
         }
-        else if( evt->IsCancel() || evt->IsActivate() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt )  )
             break;
     }
 
@@ -944,7 +954,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             m_view->Update( &preview );
         }
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             preview.Clear();
             m_view->Update( &preview );
@@ -1086,7 +1096,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     {
         cursorPos = m_controls->GetCursorPosition();
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             preview.Clear();
             delete aGraphic;
@@ -1386,7 +1396,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
             m_view->Update( &preview );
         }
 
-        if( evt->IsCancel() || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( numPoints > 0 )         // cancel the current zone
             {
