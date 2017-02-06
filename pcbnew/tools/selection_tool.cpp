@@ -679,6 +679,14 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
     {
         clearSelection();
         toggleSelection( module );
+
+        // Place event on module origin first, so the generic anchor snap
+        // doesn't just choose the closest pin for us
+        // Don't warp the view - we want the component to
+        // "teleport" to cursor, not move to the components position
+        getViewControls()->ForceCursorPosition( true, module->GetPosition() );
+
+        // pick the component up and start moving
         m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
     }
 
