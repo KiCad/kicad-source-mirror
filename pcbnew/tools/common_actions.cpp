@@ -194,6 +194,11 @@ TOOL_ACTION COMMON_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutou
         _( "Add a Zone Cutout" ), _( "Add a cutout area of an existing zone" ),
         add_zone_cutout_xpm, AF_ACTIVATE );
 
+TOOL_ACTION COMMON_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone",
+        AS_GLOBAL, 0,
+        _( "Add a Similar Zone" ), _( "Add a zone with the same settings as an existing zone" ),
+        add_zone_xpm, AF_ACTIVATE );
+
 TOOL_ACTION COMMON_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
         AS_GLOBAL, 0,
         "Place DXF", "", NULL, AF_ACTIVATE );

@@ -153,6 +153,15 @@ public:
     int DrawZoneCutout( const TOOL_EVENT& aEvent );
 
     /**
+     * Function DrawSimilarZone()
+     * Starts interactively drawing a zone with same settings as
+     * an existing zone.
+     * The normal zone interactive tool is used, but the zone settings
+     * dialog is not shown at the start.
+     */
+    int DrawSimilarZone( const TOOL_EVENT& aEvent );
+
+    /**
      * Function PlaceDXF()
      * Places a drawing imported from a DXF file in module editor.
      */
@@ -173,6 +182,7 @@ private:
     {
         ADD,            ///< Add a new zone/keepout with fresh settings
         CUTOUT,         ///< Make a cutout to an existing zone
+        SIMILAR         ///< Add a new zone with the same settings as an existing one
     };
 
     ///> Shows the context menu for the drawing tool

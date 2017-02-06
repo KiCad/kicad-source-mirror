@@ -567,6 +567,15 @@ int DRAWING_TOOL::DrawZoneCutout( const TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::DrawSimilarZone( const TOOL_EVENT& aEvent )
+{
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ZONE );
+    m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add similar zone" ) );
+
+    return drawZone( false, ZONE_MODE::SIMILAR );
+}
+
+
 int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
 {
     if( !m_frame->GetModel() )
@@ -1504,6 +1513,7 @@ void DRAWING_TOOL::SetTransitions()
     Go( &DRAWING_TOOL::DrawZone,         COMMON_ACTIONS::drawZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawKeepout,      COMMON_ACTIONS::drawKeepout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZoneCutout,   COMMON_ACTIONS::drawZoneCutout.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawSimilarZone,  COMMON_ACTIONS::drawSimilarZone.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText,        COMMON_ACTIONS::placeText.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceDXF,         COMMON_ACTIONS::placeDXF.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor,        COMMON_ACTIONS::setAnchor.MakeEvent() );

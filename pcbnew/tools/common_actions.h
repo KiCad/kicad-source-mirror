@@ -129,6 +129,9 @@ public:
     /// Activation of the drawing tool (drawing a ZONE cutout)
     static TOOL_ACTION drawZoneCutout;
 
+    /// Activation of the drawing tool (drawing a similar ZONE to another one)
+    static TOOL_ACTION drawSimilarZone;
+
     /// Activation of the drawing tool (placing a TARGET)
     static TOOL_ACTION placeTarget;
 
