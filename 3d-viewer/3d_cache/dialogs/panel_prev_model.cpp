@@ -104,23 +104,23 @@ void PANEL_PREV_3D_B::initPanel()
 
 
 /**
- * @brief checkRotation - ensure -360 < rotation < 360
- * @param rot: in out parameter
+ * @brief checkRotation
+ * Ensure -MAX_ROTATION <= rotation <= MAX_ROTATION
+ * aRotation will be normalized between -MAX_ROTATION and MAX_ROTATION
+ * @param aRotation: in out parameter
  */
-static void checkRotation( double& rot )
+static void checkRotation( double& aRotation )
 {
-    if( rot >= 360.0 )
+    if( aRotation > MAX_ROTATION )
     {
-        int n = rot / 360.0;
-        rot -= 360.0 * (double)n;
+        int n = aRotation / MAX_ROTATION;
+        aRotation -= MAX_ROTATION * n;
     }
-    else if( rot <= -360.0 )
+    else if( aRotation < -MAX_ROTATION )
     {
-        int n = -rot / 360.0;
-        rot += 360.0 * (double)n;
+        int n = -aRotation / MAX_ROTATION;
+        aRotation += MAX_ROTATION * n;
     }
-
-    return;
 }
 
 static bool validateFloatTextCtrl( wxTextCtrl* aTextCtrl )
@@ -141,6 +141,7 @@ static bool validateFloatTextCtrl( wxTextCtrl* aTextCtrl )
     return true;
 }
 
+
 static void incrementTextCtrl( wxTextCtrl* aTextCtrl, double aInc, double aMinval, double aMaxval )
 {
     if( !validateFloatTextCtrl( aTextCtrl ) )
@@ -151,8 +152,11 @@ static void incrementTextCtrl( wxTextCtrl* aTextCtrl, double aInc, double aMinva
     aTextCtrl->GetValue().ToDouble( &curr_value );
     curr_value += aInc;
 
-    if ( curr_value > aMaxval || curr_value < aMinval )
-        return;
+    if( curr_value > aMaxval )
+        curr_value = aMaxval;
+
+    if( curr_value < aMinval )
+        curr_value = aMinval;
 
     aTextCtrl->SetValue( wxString::Format( "%.4f", curr_value ) );
 }
@@ -359,7 +363,7 @@ void PANEL_PREV_3D::onIncrementRot( wxSpinEvent& event )
     else if( spinCtrl == m_spinZrot )
         textCtrl = zrot;
 
-    incrementTextCtrl( textCtrl, ROTATION_INCREMENT, MIN_ROTATION, MAX_ROTATION );
+    incrementTextCtrl( textCtrl, ROTATION_INCREMENT, -MAX_ROTATION, MAX_ROTATION );
 }
 
 
@@ -374,7 +378,7 @@ void PANEL_PREV_3D::onDecrementRot( wxSpinEvent& event )
     else if( spinCtrl == m_spinZrot )
         textCtrl = zrot;
 
-    incrementTextCtrl( textCtrl, -ROTATION_INCREMENT, MIN_ROTATION, MAX_ROTATION );
+    incrementTextCtrl( textCtrl, -ROTATION_INCREMENT, -MAX_ROTATION, MAX_ROTATION );
 }
 
 
@@ -389,7 +393,7 @@ void PANEL_PREV_3D::onIncrementScale( wxSpinEvent& event )
     else if( spinCtrl == m_spinZscale )
         textCtrl = zscale;
 
-    incrementTextCtrl( textCtrl, SCALE_INCREMENT, MIN_SCALE, MAX_SCALE );
+    incrementTextCtrl( textCtrl, SCALE_INCREMENT, 1/MAX_SCALE, MAX_SCALE );
 }
 
 
@@ -404,7 +408,7 @@ void PANEL_PREV_3D::onDecrementScale( wxSpinEvent& event )
     else if( spinCtrl == m_spinZscale )
         textCtrl = zscale;
 
-    incrementTextCtrl( textCtrl, -SCALE_INCREMENT, MIN_SCALE, MAX_SCALE );
+    incrementTextCtrl( textCtrl, -SCALE_INCREMENT, 1/MAX_SCALE, MAX_SCALE );
 }
 
 
@@ -424,7 +428,7 @@ void PANEL_PREV_3D::onIncrementOffset( wxSpinEvent& event )
     if( g_UserUnit == INCHES )
         step = OFFSET_INCREMENT_MIL/1000.0;
 
-    incrementTextCtrl( textCtrl, step, MIN_OFFSET, MAX_OFFSET );
+    incrementTextCtrl( textCtrl, step, -MAX_OFFSET, MAX_OFFSET );
 }
 
 
@@ -444,7 +448,7 @@ void PANEL_PREV_3D::onDecrementOffset( wxSpinEvent& event )
     if( g_UserUnit == INCHES )
         step = OFFSET_INCREMENT_MIL/1000.0;
 
-    incrementTextCtrl( textCtrl, -step, MIN_OFFSET, MAX_OFFSET );
+    incrementTextCtrl( textCtrl, -step, -MAX_OFFSET, MAX_OFFSET );
 }
 
 
@@ -457,7 +461,7 @@ void PANEL_PREV_3D::onMouseWheelScale( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
-    incrementTextCtrl( textCtrl, step, MIN_SCALE, MAX_SCALE );
+    incrementTextCtrl( textCtrl, step, 1/MAX_SCALE, MAX_SCALE );
 }
 
 
@@ -470,7 +474,7 @@ void PANEL_PREV_3D::onMouseWheelRot( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
-    incrementTextCtrl( textCtrl, step, MIN_ROTATION, MAX_ROTATION );
+    incrementTextCtrl( textCtrl, step, -MAX_ROTATION, MAX_ROTATION );
 }
 
 void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
@@ -485,7 +489,7 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
     if( event.GetWheelRotation() >= 0 )
         step = -step;
 
-    incrementTextCtrl( textCtrl, step, MIN_OFFSET, MAX_OFFSET );
+    incrementTextCtrl( textCtrl, step, -MAX_OFFSET, MAX_OFFSET );
 }
 
 void PANEL_PREV_3D::getOrientationVars( SGPOINT& aScale, SGPOINT& aRotation, SGPOINT& aOffset )
@@ -548,14 +552,14 @@ bool PANEL_PREV_3D::ValidateWithMessage( wxString& aErrorMessage )
 
         SGPOINT scale = s3dshape.m_Scale;
 
-        if( MIN_SCALE > scale.x || MAX_SCALE < scale.x )
+        if( 1/MAX_SCALE > scale.x || MAX_SCALE < scale.x )
         {
             invalidScale = true;
             addError = true;
             msg += _( "Invalid X scale" );
         }
 
-        if( MIN_SCALE > scale.y || MAX_SCALE < scale.y )
+        if( 1/MAX_SCALE > scale.y || MAX_SCALE < scale.y )
         {
             invalidScale = true;
             addError = true;
@@ -566,7 +570,7 @@ bool PANEL_PREV_3D::ValidateWithMessage( wxString& aErrorMessage )
             msg += _( "Invalid Y scale" );
         }
 
-        if( MIN_SCALE > scale.z || MAX_SCALE < scale.z )
+        if( 1/MAX_SCALE > scale.z || MAX_SCALE < scale.z )
         {
             invalidScale = true;
             addError = true;
@@ -592,7 +596,7 @@ bool PANEL_PREV_3D::ValidateWithMessage( wxString& aErrorMessage )
     {
         aErrorMessage += "\n\n";
         aErrorMessage += wxString::Format( "Min value = %.4f and max value = %.4f",
-                                           MIN_SCALE, MAX_SCALE );
+                                           1/MAX_SCALE, MAX_SCALE );
     }
 
     return invalidScale == false;
