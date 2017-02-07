@@ -293,6 +293,9 @@ private:
     ///> Find an item and start moving.
     int findMove( const TOOL_EVENT& aEvent );
 
+    ///> Invoke filter dialog and modify current selection
+    int filterSelection( const TOOL_EVENT& aEvent );
+
     /**
      * Function clearSelection()
      * Clears the current selection.
@@ -407,6 +410,10 @@ private:
 
     /// Menu model displayed by the tool.
     TOOL_MENU m_menu;
+
+    /// Private state (opaque pointer/compilation firewall)
+    class PRIV;
+    std::unique_ptr<PRIV> m_priv;
 };
 
 #endif

@@ -28,10 +28,16 @@
 
 
 DIALOG_BLOCK_OPTIONS::DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent,
-        OPTIONS& aOptions, const wxString& aTitle ) :
+        OPTIONS& aOptions, bool aShowLegacyOptions,
+        const wxString& aTitle ) :
     DIALOG_BLOCK_OPTIONS_BASE( aParent, -1, aTitle ),
     m_options( aOptions )
 {
+    if( !aShowLegacyOptions )
+    {
+        m_DrawBlockItems->Hide();
+    }
+
     m_Include_Modules->SetValue( m_options.includeModules );
     m_IncludeLockedModules->SetValue( m_options.includeLockedModules );
 

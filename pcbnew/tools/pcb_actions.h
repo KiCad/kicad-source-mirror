@@ -69,6 +69,10 @@ public:
 
     /// Selects all components on the same sheet.
     static TOOL_ACTION selectSameSheet;
+
+    /// Filters the items in the current selection (invokes dialog)
+    static TOOL_ACTION filterSelection;
+
     // Edit Tool
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;

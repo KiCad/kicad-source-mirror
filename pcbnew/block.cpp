@@ -81,7 +81,7 @@ static bool InstallBlockCmdFrame( PCB_BASE_FRAME* parent, const wxString& title 
     wxPoint oldpos = parent->GetCrossHairPosition();
 
     parent->GetCanvas()->SetIgnoreMouseEvents( true );
-    DIALOG_BLOCK_OPTIONS * dlg = new DIALOG_BLOCK_OPTIONS( parent, blockOpts, title );
+    DIALOG_BLOCK_OPTIONS * dlg = new DIALOG_BLOCK_OPTIONS( parent, blockOpts, true, title );
 
     int cmd = dlg->ShowModal();
     dlg->Destroy();

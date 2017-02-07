@@ -50,6 +50,7 @@ public:
     };
 
     DIALOG_BLOCK_OPTIONS( PCB_BASE_FRAME* aParent, OPTIONS& aOptions,
+                          bool aShowLegacyOptions,
                           const wxString& aTitle );
 
     ~DIALOG_BLOCK_OPTIONS()

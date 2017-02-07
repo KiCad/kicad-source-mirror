@@ -38,6 +38,7 @@ using namespace std::placeholders;
 #include <collectors.h>
 #include <confirm.h>
 #include <dialog_find.h>
+#include <dialog_block_options.h>
 
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
@@ -99,6 +100,12 @@ TOOL_ACTION PCB_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
 TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ) );
 
+TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSelection",
+        AS_GLOBAL, MD_SHIFT + 'F',
+        _( "Filter selection" ), _( "Filter the types of items in the selection" ),
+        nullptr );
+
+
 
 class SELECT_MENU: public CONTEXT_MENU
 {
@@ -106,6 +113,11 @@ public:
     SELECT_MENU()
     {
         SetTitle( _( "Select..." ) );
+
+        Add( PCB_ACTIONS::filterSelection );
+
+        AppendSeparator();
+
         Add( PCB_ACTIONS::selectConnection );
         Add( PCB_ACTIONS::selectCopper );
         Add( PCB_ACTIONS::selectNet );
@@ -138,10 +150,21 @@ private:
 };
 
 
+/**
+ * Private implementation of firewalled private data
+ */
+class SELECTION_TOOL::PRIV
+{
+public:
+    DIALOG_BLOCK_OPTIONS::OPTIONS m_filterOpts;
+};
+
+
 SELECTION_TOOL::SELECTION_TOOL() :
         PCB_TOOL( "pcbnew.InteractiveSelection" ),
         m_frame( NULL ), m_additive( false ), m_multiple( false ),
-        m_locked( true ), m_menu( *this )
+        m_locked( true ), m_menu( *this ),
+        m_priv( std::make_unique<PRIV>() )
 {
     // Do not leave uninitialized members:
     m_preliminary = false;
@@ -522,6 +545,7 @@ void SELECTION_TOOL::SetTransitions()
     Go( &SELECTION_TOOL::UnselectItem, PCB_ACTIONS::unselectItem.MakeEvent() );
     Go( &SELECTION_TOOL::find, PCB_ACTIONS::find.MakeEvent() );
     Go( &SELECTION_TOOL::findMove, PCB_ACTIONS::findMove.MakeEvent() );
+    Go( &SELECTION_TOOL::filterSelection, PCB_ACTIONS::filterSelection.MakeEvent() );
     Go( &SELECTION_TOOL::selectConnection, PCB_ACTIONS::selectConnection.MakeEvent() );
     Go( &SELECTION_TOOL::selectCopper, PCB_ACTIONS::selectCopper.MakeEvent() );
     Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
@@ -910,6 +934,134 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
         m_toolMgr->InvokeTool( "pcbnew.InteractiveEdit" );
     }
 
+    return 0;
+}
+
+
+/**
+ * Function itemIsIncludedByFilter()
+ *
+ * Determine if an item is included by the filter specified
+ *
+ * @return true if the parameter indicate the items should be selected
+ * by this filter (i..e not filtered out)
+ */
+static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem,
+                                    const BOARD& aBoard,
+                                    const LSET& aTechnlLayerMask,
+                                    const DIALOG_BLOCK_OPTIONS::OPTIONS& aBlockOpts )
+{
+    bool include = true;
+    const LAYER_ID layer = aItem.GetLayer();
+
+    // can skip without even checking item type
+    if( !aBlockOpts.includeItemsOnInvisibleLayers
+        && !aBoard.IsLayerVisible( layer ) )
+    {
+        include = false;
+    }
+
+    // if the item needsto be checked agains the options
+    if( include )
+    {
+        switch( aItem.Type() )
+        {
+        case PCB_MODULE_T:
+        {
+            const auto& module = static_cast<const MODULE&>( aItem );
+
+            include = aBlockOpts.includeModules;
+
+            if( include && !aBlockOpts.includeLockedModules )
+            {
+                include = !module.IsLocked();
+            }
+
+            break;
+        }
+        case PCB_TRACE_T:
+        {
+            include = aBlockOpts.includeTracks;
+            break;
+        }
+        case PCB_ZONE_AREA_T:
+        {
+            include = aBlockOpts.includeZones;
+            break;
+        }
+        case PCB_LINE_T:
+        case PCB_TARGET_T:
+        case PCB_DIMENSION_T:
+        {
+            include = aTechnlLayerMask[layer];
+            break;
+        }
+        case PCB_TEXT_T:
+        {
+            include = aBlockOpts.includePcbTexts
+                        && aTechnlLayerMask[layer];
+            break;
+        }
+        default:
+        {
+            // no filterering, just select it
+            break;
+        }
+        }
+    }
+
+    return include;
+}
+
+
+/**
+ * Gets the technical layers that are part of the given selection opts
+ */
+static LSET getFilteredLayerSet(
+        const DIALOG_BLOCK_OPTIONS::OPTIONS& blockOpts )
+{
+    LSET layerMask( Edge_Cuts );
+
+    if( blockOpts.includeItemsOnTechLayers )
+        layerMask.set();
+
+    if( !blockOpts.includeBoardOutlineLayer )
+        layerMask.set( Edge_Cuts, false );
+
+    return layerMask;
+}
+
+
+int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
+{
+    auto& opts = m_priv->m_filterOpts;
+    DIALOG_BLOCK_OPTIONS dlg( m_frame, opts, false, _( "Filter selection" ) );
+
+    const int cmd = dlg.ShowModal();
+
+    if( cmd != wxID_OK )
+        return 0;
+
+    const auto& board = *getModel<BOARD>();
+    const auto layerMask = getFilteredLayerSet( opts );
+
+    // copy current selection
+    auto selection = m_selection.GetItems();
+
+    // clear current selection
+    clearSelection();
+
+    // copy selection items from the saved selection
+    // according to the dialog options
+    for( auto item : selection )
+    {
+        bool include = itemIsIncludedByFilter( *item, board, layerMask, opts );
+
+        if( include )
+        {
+            select( item );
+        }
+    }
     return 0;
 }
 
