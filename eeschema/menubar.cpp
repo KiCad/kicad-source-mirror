@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,9 @@ static void prepareEditMenu( wxMenu* aParentMenu );
 // Build the view menu
 static void prepareViewMenu( wxMenu* aParentMenu );
 
+// Build the preferences menu
+static void preparePreferencesMenu( wxMenu* aParentMenu );
+
 
 void SCH_EDIT_FRAME::ReCreateMenuBar()
 {
@@ -101,37 +104,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
-
-    // Library
-    AddMenuItem( preferencesMenu,
-                 ID_CONFIG_REQ,
-                 _( "Component &Libraries" ),
-                 _( "Configure component libraries and paths" ),
-                 KiBitmap( library_xpm ) );
-
-    // Options (Preferences on WXMAC)
-#ifdef __WXMAC__
-    preferencesMenu->Append( wxID_PREFERENCES );
-#else
-    AddMenuItem( preferencesMenu,
-                 wxID_PREFERENCES,
-                 _( "Schematic Editor &Options" ),
-                 _( "Set Eeschema preferences" ),
-                 KiBitmap( preference_xpm ) );
-#endif // __WXMAC__
-
-    // Language submenu
-    Pgm().AddMenuLanguageList( preferencesMenu );
-
-    // Import/export (submenu in preferences menu)
-    wxMenu* importExportSubmenu = new wxMenu();
-    prepareImportExportMenu( importExportSubmenu );
-
-    AddMenuItem( preferencesMenu, importExportSubmenu,
-                 wxID_ANY,
-                 _( "&Import and export" ),
-                 _( "Import and export settings" ),
-                 KiBitmap( save_setup_xpm ) );
+    preparePreferencesMenu( preferencesMenu );
 
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
@@ -403,14 +376,14 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     AddMenuItem( aParentMenu,
                  wxID_PRINT,
-                 _( "Pri&nt" ),
+                 _( "Pri&nt..." ),
                  _( "Print schematic sheet" ),
                  KiBitmap( print_button_xpm ) );
 
     // Plot submenu
     wxMenu* choice_plot_fmt = new wxMenu;
 
-    AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_SCHEMATIC, _( "&Plot" ),
+    AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_SCHEMATIC, _( u8"&Plot..." ),
                  _( "Plot schematic sheet in PostScript, PDF, SVG, DXF or HPGL format" ),
                  KiBitmap( plot_xpm ) );
 
@@ -455,11 +428,11 @@ void prepareEditMenu( wxMenu* aParentMenu )
 
     // Find
     aParentMenu->AppendSeparator();
-    text = AddHotkeyName( _( "&Find" ), g_Schematic_Hokeys_Descr, HK_FIND_ITEM );
+    text = AddHotkeyName( _( "&Find..." ), g_Schematic_Hokeys_Descr, HK_FIND_ITEM );
     AddMenuItem( aParentMenu, ID_FIND_ITEMS, text, HELP_FIND, KiBitmap( find_xpm ) );
 
     // Find/Replace
-    text = AddHotkeyName( _( "Find and Re&place" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Find and Re&place..." ), g_Schematic_Hokeys_Descr,
                           HK_FIND_REPLACE );
     AddMenuItem( aParentMenu, wxID_REPLACE, text, HELP_REPLACE,
                  KiBitmap( find_replace_xpm ) );
@@ -513,7 +486,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_GET_ANNOTATE,
-                 _( "&Annotate Schematic" ), HELP_ANNOTATE,
+                 _( "&Annotate Schematic..." ), HELP_ANNOTATE,
                  KiBitmap( annotate_xpm ) );
 
     // ERC
@@ -525,13 +498,13 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_GET_NETLIST,
-                 _( "Generate &Netlist File" ),
+                 _( "Generate &Netlist File..." ),
                  _( "Generate the component netlist file" ),
                  KiBitmap( netlist_xpm ) );
 
     AddMenuItem( aParentMenu,
                  ID_GET_TOOLS,
-                 _( "Generate Bill of &Materials" ),
+                 _( "Generate Bill of &Materials..." ),
                  HELP_GENERATE_BOM,
                  KiBitmap( bom_xpm ) );
 
@@ -619,4 +592,38 @@ void prepareImportExportMenu( wxMenu* aParentMenu )
                  _( "&Import Hotkeys" ),
                  _( "Load an existing hotkey configuration file" ),
                  KiBitmap( hotkeys_import_xpm ) );
+}
+
+static void preparePreferencesMenu( wxMenu* aParentMenu )
+{
+    // Library
+    AddMenuItem( aParentMenu,
+                 ID_CONFIG_REQ,
+                 _( "Component &Libraries" ),
+                 _( "Configure component libraries and paths" ),
+                 KiBitmap( library_xpm ) );
+
+    // Options (Preferences on WXMAC)
+#ifdef __WXMAC__
+    aParentMenu->Append( wxID_PREFERENCES );
+#else
+    AddMenuItem( aParentMenu,
+                 wxID_PREFERENCES,
+                 _( "Schematic Editor &Options" ),
+                 _( "Set Eeschema preferences" ),
+                 KiBitmap( preference_xpm ) );
+#endif // __WXMAC__
+
+    // Language submenu
+    Pgm().AddMenuLanguageList( aParentMenu );
+
+    // Import/export (submenu in preferences menu)
+    wxMenu* importExportSubmenu = new wxMenu();
+    prepareImportExportMenu( importExportSubmenu );
+
+    AddMenuItem( aParentMenu, importExportSubmenu,
+                 wxID_ANY,
+                 _( "&Import and export" ),
+                 _( "Import and export settings" ),
+                 KiBitmap( save_setup_xpm ) );
 }
