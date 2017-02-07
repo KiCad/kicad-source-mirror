@@ -117,13 +117,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Save module in new lib
     AddMenuItem( fileMenu, ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                 _( "S&ave Footprint in New Library" ),
+                 _( "S&ave Footprint in New Library..." ),
                  _( "Create a new library and save current footprint into it" ),
                  KiBitmap( new_library_xpm ) );
 
     // Export module
     AddMenuItem( fileMenu, ID_MODEDIT_EXPORT_PART,
-                 _( "&Export Footprint" ),
+                 _( "&Export Footprint..." ),
                  _( "Save currently loaded footprint into file" ),
                  KiBitmap( export_module_xpm ) );
 
@@ -137,7 +137,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     // Print
     AddMenuItem( fileMenu, wxID_PRINT,
-                 _( "&Print" ),
+                 _( "&Print..." ),
                  _( "Print current footprint" ),
                  KiBitmap( plot_xpm ) );
 
