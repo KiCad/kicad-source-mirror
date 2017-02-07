@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 17 2015)
+// C++ code generated with wxFormBuilder (version Feb  6 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -25,6 +25,7 @@ class NETS_LIST_CTRL;
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/combobox.h>
+#include <wx/statline.h>
 #include <wx/listctrl.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
@@ -35,7 +36,6 @@ class NETS_LIST_CTRL;
 #include <wx/valtext.h>
 #include <wx/checkbox.h>
 #include <wx/notebook.h>
-#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -63,12 +63,14 @@ class DIALOG_DESIGN_RULES_BASE : public DIALOG_SHIM
 		wxButton* m_removeButton;
 		wxButton* m_moveUpButton;
 		wxComboBox* m_leftClassChoice;
+		wxStaticLine* m_staticline21;
+		wxButton* m_buttonLeftSelAll;
 		NETS_LIST_CTRL* m_leftListCtrl;
 		wxButton* m_buttonRightToLeft;
 		wxButton* m_buttonLeftToRight;
-		wxButton* m_buttonLeftSelAll;
-		wxButton* m_buttonRightSelAll;
 		wxComboBox* m_rightClassChoice;
+		wxStaticLine* m_staticline3;
+		wxButton* m_buttonRightSelAll;
 		NETS_LIST_CTRL* m_rightListCtrl;
 		wxPanel* m_panelGolbalDesignRules;
 		wxStaticText* m_TrackMinWidthTitle;
@@ -106,11 +108,11 @@ class DIALOG_DESIGN_RULES_BASE : public DIALOG_SHIM
 		virtual void OnRemoveNetclassClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveUpSelectedNetClass( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftCBSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLeftSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightToLeftCopyButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLeftToRightCopyButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnLeftSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRightSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightCBSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRightSelectAllButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAllowMicroVias( wxCommandEvent& event ) { event.Skip(); }
 		
 	
