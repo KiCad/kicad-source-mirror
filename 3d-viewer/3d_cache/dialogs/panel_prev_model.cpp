@@ -31,6 +31,7 @@
 #include <3d_canvas/eda_3d_canvas.h>
 #include <common_ogl/cogl_att_list.h>
 #include <cstdlib>
+#include <limits.h>
 
 #include <wx/valnum.h>
 #include <wx/tglbtn.h>
@@ -101,9 +102,10 @@ void PANEL_PREV_3D_B::initPanel()
     m_bpUpdate->SetBitmap( KiBitmap( reload_xpm ) );
 
     // Set the min and max values of spin buttons (mandatory on Linux)
-    // This is an arbitray value, but it avoids blocking the up or down
-    // arrows when reaching a limit. The current value will be forced to 0
-    // because it is not used in dialog
+    // They are not used, so they are set to min and max 32 bits int values
+    // (the min and max values supported by a wxSpinButton)
+    // It avoids blocking the up or down arrows when reaching this limit after
+    // a few clicks.
     wxSpinButton* spinButtonList[] =
     {
         m_spinXscale, m_spinYscale, m_spinZscale,
@@ -112,10 +114,7 @@ void PANEL_PREV_3D_B::initPanel()
     };
 
     for( int ii = 0; ii < 9; ii++ )
-    {
-        spinButtonList[ii]->SetRange( -10, 10 );
-        spinButtonList[ii]->SetValue( 0 );
-    }
+        spinButtonList[ii]->SetRange( INT_MIN, INT_MAX );
 }
 
 
@@ -382,11 +381,6 @@ void PANEL_PREV_3D::onIncrementRot( wxSpinEvent& event )
         textCtrl = zrot;
 
     incrementTextCtrl( textCtrl, ROTATION_INCREMENT, -MAX_ROTATION, MAX_ROTATION );
-
-    // Reset the currentl spin button value (not used in this dialog,
-    // to avoid on Linux blocking the up or down arrow after a few click
-    // on arrow
-    spinCtrl->SetValue( 0 );
 }
 
 
@@ -402,11 +396,6 @@ void PANEL_PREV_3D::onDecrementRot( wxSpinEvent& event )
         textCtrl = zrot;
 
     incrementTextCtrl( textCtrl, -ROTATION_INCREMENT, -MAX_ROTATION, MAX_ROTATION );
-
-    // Reset the currentl spin button value (not used in this dialog,
-    // to avoid on Linux blocking the up or down arrow after a few click
-    // on arrow
-    spinCtrl->SetValue( 0 );
 }
 
 
@@ -422,11 +411,6 @@ void PANEL_PREV_3D::onIncrementScale( wxSpinEvent& event )
         textCtrl = zscale;
 
     incrementTextCtrl( textCtrl, SCALE_INCREMENT, 1/MAX_SCALE, MAX_SCALE );
-
-    // Reset the currentl spin button value (not used in this dialog,
-    // to avoid on Linux blocking the up or down arrow after a few click
-    // on arrow
-    spinCtrl->SetValue( 0 );
 }
 
 
@@ -442,11 +426,6 @@ void PANEL_PREV_3D::onDecrementScale( wxSpinEvent& event )
         textCtrl = zscale;
 
     incrementTextCtrl( textCtrl, -SCALE_INCREMENT, 1/MAX_SCALE, MAX_SCALE );
-
-    // Reset the currentl spin button value (not used in this dialog,
-    // to avoid on Linux blocking the up or down arrow after a few click
-    // on arrow
-    spinCtrl->SetValue( 0 );
 }
 
 
@@ -467,11 +446,6 @@ void PANEL_PREV_3D::onIncrementOffset( wxSpinEvent& event )
         step = OFFSET_INCREMENT_MIL/1000.0;
 
     incrementTextCtrl( textCtrl, step, -MAX_OFFSET, MAX_OFFSET );
-
-    // Reset the currentl spin button value (not used in this dialog,
-    // to avoid on Linux blocking the up or down arrow after a few click
-    // on arrow
-    spinCtrl->SetValue( 0 );
 }
 
 
@@ -492,11 +466,6 @@ void PANEL_PREV_3D::onDecrementOffset( wxSpinEvent& event )
         step = OFFSET_INCREMENT_MIL/1000.0;
 
     incrementTextCtrl( textCtrl, -step, -MAX_OFFSET, MAX_OFFSET );
-
-    // Reset the currentl spin button value (not used in this dialog,
-    // to avoid on Linux blocking the up or down arrow after a few click
-    // on arrow
-    spinCtrl->SetValue( 0 );
 }
 
 
