@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,7 +263,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
     AddMenuItem( fileMenu,
                  ID_SAVE_AND_ZIP_FILES,
-                 _( "&Archive Current Project" ),
+                 _( "&Archive Current Project..." ),
                  _( "Archive project files in zip archive" ),
                  KiBitmap( zip_xpm ) );
 
