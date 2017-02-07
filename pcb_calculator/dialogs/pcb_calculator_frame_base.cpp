@@ -1180,7 +1180,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	int m_rbToleranceSelectionNChoices = sizeof( m_rbToleranceSelectionChoices ) / sizeof( wxString );
 	m_rbToleranceSelection = new wxRadioBox( m_panelColorCode, wxID_ANY, _("Tolerance"), wxDefaultPosition, wxDefaultSize, m_rbToleranceSelectionNChoices, m_rbToleranceSelectionChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbToleranceSelection->SetSelection( 0 );
-	bSizerPanelColorCode->Add( m_rbToleranceSelection, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerPanelColorCode->Add( m_rbToleranceSelection, 0, wxALL|wxALIGN_TOP, 5 );
 	
 	wxFlexGridSizer* fgSizerColoCode;
 	fgSizerColoCode = new wxFlexGridSizer( 2, 6, 0, 0 );
