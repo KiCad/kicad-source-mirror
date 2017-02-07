@@ -228,6 +228,15 @@ protected:
     void draw( const DIMENSION* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );
     void draw( const MARKER_PCB* aMarker );
+
+    /**
+     * Function getLineThickness()
+     * Get the thickness to draw for a line (e.g. 0 thickness lines
+     * get a minimum value).
+     * @param aActualThickness line own thickness
+     * @return the thickness to draw
+     */
+    int getLineThickness( int aActualThickness ) const;
 };
 } // namespace KIGFX
 
