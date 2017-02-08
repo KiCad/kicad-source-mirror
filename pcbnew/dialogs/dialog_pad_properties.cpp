@@ -945,7 +945,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_padMaster->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     if( !m_currentPad )   // Set current Pad parameters
-        return false;
+        return true;
 
     commit.Modify( m_currentPad );
 
