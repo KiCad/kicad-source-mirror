@@ -62,9 +62,28 @@ public:
         Add( COMMON_ACTIONS::selectConnection );
         Add( COMMON_ACTIONS::selectCopper );
         Add( COMMON_ACTIONS::selectNet );
+        Add( COMMON_ACTIONS::selectSameSheet );
     }
 
 private:
+
+    void update() override
+    {
+        SELECTION_TOOL* selTool = getToolManager()->GetTool<SELECTION_TOOL>();
+
+        // lines like this make me really think about a better name for SELECTION_CONDITIONS class
+        bool selEnabled =  ( SELECTION_CONDITIONS::OnlyType( PCB_VIA_T )
+                || SELECTION_CONDITIONS::OnlyType( PCB_TRACE_T ) )
+                              ( selTool->GetSelection() );
+
+        bool sheetSelEnabled = ( SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T ) )
+                              ( selTool->GetSelection() );
+
+        Enable( getMenuId( COMMON_ACTIONS::selectNet ), selEnabled );
+        Enable( getMenuId( COMMON_ACTIONS::selectCopper ), selEnabled );
+        Enable( getMenuId( COMMON_ACTIONS::selectConnection ), selEnabled );
+        Enable( getMenuId( COMMON_ACTIONS::selectSameSheet ), sheetSelEnabled );
+    }
     CONTEXT_MENU* create() const override
     {
         return new SELECT_MENU();
@@ -92,9 +111,10 @@ bool SELECTION_TOOL::Init()
 {
     using S_C = SELECTION_CONDITIONS;
 
-    // can show the select menu as long as there is something the
-    // subitems can be run on
-    auto showSelectMenuFunctor = ( S_C::HasType( PCB_VIA_T ) || S_C::HasType( PCB_TRACE_T ) );
+    auto showSelectMenuFunctor = ( S_C::OnlyType( PCB_VIA_T ) ||
+            S_C::OnlyType( PCB_TRACE_T ) ||
+            S_C::OnlyType( PCB_MODULE_T ) ) &&
+            S_C::Count( 1 );
 
     auto selectMenu = std::make_shared<SELECT_MENU>();
     selectMenu->SetTool( this );
@@ -458,6 +478,7 @@ void SELECTION_TOOL::SetTransitions()
     Go( &SELECTION_TOOL::selectConnection, COMMON_ACTIONS::selectConnection.MakeEvent() );
     Go( &SELECTION_TOOL::selectCopper, COMMON_ACTIONS::selectCopper.MakeEvent() );
     Go( &SELECTION_TOOL::selectNet, COMMON_ACTIONS::selectNet.MakeEvent() );
+    Go( &SELECTION_TOOL::selectSameSheet, COMMON_ACTIONS::selectSameSheet.MakeEvent() );
 }
 
 
@@ -677,6 +698,112 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
             selectAllItemsOnNet( connItem.GetNetCode() );
         }
+    }
+
+    // Inform other potentially interested tools
+    if( m_selection.Size() > 0 )
+        m_toolMgr->ProcessEvent( SelectedEvent );
+
+    return 0;
+}
+
+int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
+{
+    if( !selectCursor( true ) )
+        return 0;
+
+    // this function currently only supports modules since they are only
+    // on one sheet.
+    auto item = m_selection.Front();
+    if( item->Type() != PCB_MODULE_T )
+        return 0;
+    if( !item )
+        return 0;
+    auto mod = dynamic_cast<MODULE*>( item );
+
+    clearSelection();
+
+    // get the lowest subsheet name for this.
+    wxString sheetPath = mod->GetPath();
+    sheetPath = sheetPath.BeforeLast( '/' );
+    sheetPath = sheetPath.AfterLast( '/' );
+
+    auto modules = board()->m_Modules.GetFirst();
+    std::list<MODULE*> modList;
+
+    // store all modules that are on that sheet
+    for( MODULE* item = modules; item; item = item->Next() )
+    {
+        if ( item != NULL && item->GetPath().Contains( sheetPath ) )
+        {
+            modList.push_back( item );
+        }
+    }
+
+    //Generate a list of all pads, and of all nets they belong to.
+    std::list<int> netcodeList;
+    for( MODULE* mod : modList )
+    {
+        for( D_PAD* pad = mod->Pads().GetFirst(); pad; pad = pad->Next() )
+        {
+            if( pad->IsConnected() )
+            {
+                netcodeList.push_back( pad->GetNetCode() );
+            }
+        }
+    }
+
+    // remove all duplicates
+    netcodeList.sort();
+    netcodeList.unique();
+
+    // now we need to find all modules that are connected to each of these nets
+    // then we need to determine if these modules are in the list of modules
+    // belonging to this sheet ( modList )
+    RN_DATA* ratsnest = getModel<BOARD>()->GetRatsnest();
+    std::list<int> removeCodeList;
+    for( int netCode : netcodeList )
+    {
+        std::list<BOARD_CONNECTED_ITEM*> netPads;
+        ratsnest->GetNetItems( netCode, netPads, (RN_ITEM_TYPE)( RN_PADS ) );
+        for( BOARD_CONNECTED_ITEM* item : netPads )
+        {
+            bool found = ( std::find( modList.begin(), modList.end(), item->GetParent() ) != modList.end() );
+            if( !found )
+            {
+                // if we cannot find the module of the pad in the modList
+                // then we can assume that that module is not located in the same
+                // schematic, therefore invalidate this netcode.
+                removeCodeList.push_back( netCode );
+                break;
+            }
+        }
+    }
+
+    // remove all duplicates
+    removeCodeList.sort();
+    removeCodeList.unique();
+
+    for( int removeCode : removeCodeList )
+    {
+        netcodeList.remove( removeCode );
+    }
+
+    std::list<BOARD_CONNECTED_ITEM*> localConnectionList;
+    for( int netCode : netcodeList )
+    {
+        ratsnest->GetNetItems( netCode, localConnectionList, (RN_ITEM_TYPE)( RN_TRACKS | RN_VIAS ) );
+    }
+
+    for( BOARD_ITEM* i : modList )
+    {
+        if( i != NULL )
+            select( i );
+    }
+    for( BOARD_CONNECTED_ITEM* i : localConnectionList )
+    {
+        if( i != NULL )
+            select( i );
     }
 
     // Inform other potentially interested tools

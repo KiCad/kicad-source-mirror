@@ -281,6 +281,9 @@ private:
      */
     void selectAllItemsOnNet( int aNetCode );
 
+    ///> Selects all modules belonging to same sheet.
+    int selectSameSheet( const TOOL_EVENT& aEvent );
+
     ///> Find dialog callback.
     void findCallback( BOARD_ITEM* aItem );
 

@@ -66,6 +66,8 @@ public:
     /// Selects all connections belonging to a single net.
     static TOOL_ACTION selectNet;
 
+    /// Selects all components on the same sheet.
+    static TOOL_ACTION selectSameSheet;
     // Edit Tool
     /// Activation of the edit tool
     static TOOL_ACTION editActivate;

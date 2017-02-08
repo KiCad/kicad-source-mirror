@@ -66,6 +66,10 @@ TOOL_ACTION COMMON_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0,
         _( "Whole Net" ), _( "Selects all tracks & vias belonging to the same net." ) );
 
+TOOL_ACTION COMMON_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSameSheet",
+        AS_GLOBAL,  'P',
+        _( "Same Sheet" ), _( "Selects all modules and tracks in the same schematic sheet" ) );
+
 TOOL_ACTION COMMON_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
         AS_GLOBAL, 0, //TOOL_ACTION::LegacyHotKey( HK_FIND_ITEM ), // handled by wxWidgets
         _( "Find Item" ), _( "Searches the document for an item" ), find_xpm );
