@@ -187,6 +187,25 @@ void CONTEXT_MENU::Clear()
 }
 
 
+bool CONTEXT_MENU::HasEnabledItems() const
+{
+    bool hasEnabled = false;
+
+    auto& items = GetMenuItems();
+
+    for( auto item : items )
+    {
+        if( item->IsEnabled() && !item->IsSeparator() )
+        {
+            hasEnabled = true;
+            break;
+        }
+    }
+
+    return hasEnabled;
+}
+
+
 void CONTEXT_MENU::UpdateAll()
 {
     try

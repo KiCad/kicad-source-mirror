@@ -44,7 +44,11 @@
 class PAD_CONTEXT_MENU : public CONTEXT_MENU
 {
 public:
-    PAD_CONTEXT_MENU()
+
+    using SHOW_FUNCTOR = std::function<bool()>;
+
+    PAD_CONTEXT_MENU( SHOW_FUNCTOR aHaveGlobalPadSetting):
+        m_haveGlobalPadSettings( aHaveGlobalPadSetting )
     {
         SetIcon( pad_xpm );
         SetTitle( _( "Pads" ) );
@@ -58,36 +62,56 @@ protected:
 
     CONTEXT_MENU* create() const override
     {
-        return new PAD_CONTEXT_MENU();
+        return new PAD_CONTEXT_MENU( m_haveGlobalPadSettings );
     }
 
 private:
+
+    struct ENABLEMENTS
+    {
+        bool canImport;
+        bool canExport;
+        bool canPush;
+    };
+
+    ENABLEMENTS getEnablements( const SELECTION& aSelection )
+    {
+        using S_C = SELECTION_CONDITIONS;
+        ENABLEMENTS enablements;
+
+        auto anyPadSel = S_C::HasType( PCB_PAD_T );
+
+        auto singlePadSel = S_C::Count( 1 )
+                                && S_C::OnlyType( PCB_PAD_T );
+
+        // Apply pads enabled when any pads selected (it applies to each one
+        // individually), plus need a valid global pad setting
+        enablements.canImport = m_haveGlobalPadSettings()
+                                && ( anyPadSel )( aSelection );
+
+        // Copy pads item enabled only when there is a single pad selected
+        // (otherwise how would we know which one to copy?)
+        enablements.canExport = ( singlePadSel )( aSelection );
+
+        // Push pads available when there is a single pad to push from
+        enablements.canPush = ( singlePadSel ) ( aSelection );
+
+        return enablements;
+    }
 
     void update() override
     {
         auto selTool = getToolManager()->GetTool<SELECTION_TOOL>();
         const SELECTION& selection = selTool->GetSelection();
 
-        auto anyPadSel = SELECTION_CONDITIONS::HasType( PCB_PAD_T );
+        auto enablements = getEnablements( selection );
 
-        auto singlePadSel = SELECTION_CONDITIONS::Count( 1 )
-                                && SELECTION_CONDITIONS::OnlyType( PCB_PAD_T );
-        auto emptySel = SELECTION_CONDITIONS::Count( 0 );
-
-        // Apply pads enabled when any pads selected (it applies to each one
-        // individually)
-        const bool canImport = ( anyPadSel )( selection );
-        Enable( getMenuId( COMMON_ACTIONS::applyPadSettings ), canImport );
-
-        // Copy pads item enabled only when there is a single pad selected
-        // (otherwise how would we know which one to copy?)
-        const bool canExport = ( singlePadSel )( selection );
-        Enable( getMenuId( COMMON_ACTIONS::copyPadSettings ), canExport );
-
-        // Push pads available when nothing selected, or a single pad
-        const bool canPush = ( singlePadSel || emptySel ) ( selection );
-        Enable( getMenuId( COMMON_ACTIONS::pushPadSettings ), canPush );
+        Enable( getMenuId( COMMON_ACTIONS::applyPadSettings ), enablements.canImport );
+        Enable( getMenuId( COMMON_ACTIONS::copyPadSettings ), enablements.canExport );
+        Enable( getMenuId( COMMON_ACTIONS::pushPadSettings ), enablements.canPush );
     }
+
+    SHOW_FUNCTOR m_haveGlobalPadSettings;
 };
 
 
@@ -106,9 +130,29 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
 }
 
 
+bool PAD_TOOL::hasMasterPadSettings()
+{
+    auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
+    D_PAD& masterPad = frame.GetDesignSettings().m_Pad_Master;
+    return masterPad.GetParent() != nullptr;
+}
+
+
+bool PAD_TOOL::haveFootprints()
+{
+    auto& board = *getModel<BOARD>();
+    return board.m_Modules.GetCount() > 0;
+}
+
+
 bool PAD_TOOL::Init()
 {
-    auto contextMenu = std::make_shared<PAD_CONTEXT_MENU>();
+    // functor to report if the current frame has master pad settings
+    std::function<bool()> haveMasterPad = [this] () {
+        return hasMasterPadSettings();
+    };
+
+    auto contextMenu = std::make_shared<PAD_CONTEXT_MENU>( haveMasterPad );
     contextMenu->SetTool( this );
 
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
@@ -120,10 +164,15 @@ bool PAD_TOOL::Init()
 
         toolMenu.AddSubMenu( contextMenu );
 
-        // show menu when any pads selected, or nothing selected
-        // (push settings works on no selection)
-        auto showCond = SELECTION_CONDITIONS::HasType( PCB_PAD_T )
-                        || SELECTION_CONDITIONS::Count( 0 );
+        SELECTION_CONDITION canShowMenuCond = [this, contextMenu] ( const SELECTION& aSel ) {
+            contextMenu->UpdateAll();
+            return haveFootprints() && contextMenu->HasEnabledItems();
+        };
+
+        // show menu when there is a footprint, and the menu has any items
+        auto showCond = canShowMenuCond &&
+                        ( SELECTION_CONDITIONS::HasType( PCB_PAD_T )
+                            || SELECTION_CONDITIONS::Count( 0 ) );
 
         menu.AddMenu( contextMenu.get(), false, showCond );
     }

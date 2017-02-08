@@ -50,6 +50,12 @@ public:
     void SetTransitions() override;
 
 private:
+    ///> Determine if the frame has a valid master pad setting
+    bool hasMasterPadSettings();
+
+    ///> Determine if there are any footprints on the board
+    bool haveFootprints();
+
     ///> Apply pad settings from board design settings to a pad
     int applyPadSettings( const TOOL_EVENT& aEvent );
 

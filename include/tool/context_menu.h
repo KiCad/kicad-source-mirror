@@ -112,6 +112,13 @@ public:
     void Clear();
 
     /**
+     * Function HasEnabledItems();
+     *
+     * Returns true if the menu has any enabled items
+     */
+    bool HasEnabledItems() const;
+
+    /**
      * Function GetSelected()
      * Returns the position of selected item. If the returned value is negative, that means that
      * menu was dismissed.
