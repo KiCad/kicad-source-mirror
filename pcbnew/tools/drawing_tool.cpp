@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2017 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -108,6 +108,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_LINE_TOOL : ID_PCB_ADD_LINE_BUTT,
                         wxCURSOR_PENCIL, _( "Add graphic line" ) );
+    m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     while( drawSegment( S_SEGMENT, line, startingPoint ) )
     {
@@ -141,6 +142,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_CIRCLE_TOOL : ID_PCB_CIRCLE_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic circle" ) );
+    m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     while( drawSegment( S_CIRCLE, circle ) )
     {
@@ -169,6 +171,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_ARC_TOOL : ID_PCB_ARC_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic arc" ) );
+    m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     while( drawArc( arc ) )
     {
@@ -375,6 +378,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     Activate();
     m_frame->SetToolID( ID_PCB_DIMENSION_BUTT, wxCURSOR_PENCIL, _( "Add dimension" ) );
+    m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     enum DIMENSION_STEPS
     {
@@ -408,17 +412,17 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) && step != SET_ORIGIN )
         {
-            dimension->SetWidth( dimension->GetWidth() + WIDTH_STEP );
+            m_lineWidth += WIDTH_STEP;
+            dimension->SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && step != SET_ORIGIN )
         {
-            int width = dimension->GetWidth();
-
-            if( width > WIDTH_STEP )
+            if( m_lineWidth > WIDTH_STEP )
             {
-                dimension->SetWidth( width - WIDTH_STEP );
+                m_lineWidth -= WIDTH_STEP;
+                dimension->SetWidth( m_lineWidth );
                 m_view->Update( &preview );
             }
         }
@@ -434,37 +438,29 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             {
             case SET_ORIGIN:
                 {
-                    LAYER_ID layer = m_frame->GetScreen()->m_Active_Layer;
+                    LAYER_ID layer = getDrawingLayer();
 
-                    if( IsCopperLayer( layer ) || layer == Edge_Cuts )
-                    {
-                        DisplayInfoMessage( NULL, _( "Dimension not allowed on Copper or Edge Cut layers" ) );
-                        --step;
-                    }
-                    else
-                    {
-                        // Init the new item attributes
-                        dimension = new DIMENSION( m_board );
-                        dimension->SetLayer( layer );
-                        dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
-                        dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-                        dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
+                    // Init the new item attributes
+                    dimension = new DIMENSION( m_board );
+                    dimension->SetLayer( layer );
+                    dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
+                    dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                    dimension->Text().SetTextSize( m_board->GetDesignSettings().m_PcbTextSize );
 
-                        int width = m_board->GetDesignSettings().m_PcbTextWidth;
-                        maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
+                    int width = m_board->GetDesignSettings().m_PcbTextWidth;
+                    maxThickness = Clamp_Text_PenSize( width, dimension->Text().GetTextSize() );
 
-                        if( width > maxThickness )
-                            width = maxThickness;
+                    if( width > maxThickness )
+                        width = maxThickness;
 
-                        dimension->Text().SetThickness( width );
-                        dimension->SetWidth( width );
-                        dimension->AdjustDimensionDetails();
+                    dimension->Text().SetThickness( width );
+                    dimension->SetWidth( width );
+                    dimension->AdjustDimensionDetails();
 
-                        preview.Add( dimension );
+                    preview.Add( dimension );
 
-                        m_controls->SetAutoPan( true );
-                        m_controls->CaptureCursor( true );
-                    }
+                    m_controls->SetAutoPan( true );
+                    m_controls->CaptureCursor( true );
                 }
                 break;
 
@@ -584,7 +580,6 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     for( auto item : list )
     {
         assert( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
-
         preview.Add( item );
     }
 
@@ -819,14 +814,12 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
     if( aStartingPoint )
     {
-        LAYER_ID layer = m_frame->GetScreen()->m_Active_Layer;
-
         // Init the new item attributes
         aGraphic->SetShape( (STROKE_T) aShape );
         aGraphic->SetWidth( m_lineWidth );
         aGraphic->SetStart( wxPoint( aStartingPoint->x, aStartingPoint->y ) );
         aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-        aGraphic->SetLayer( layer );
+        aGraphic->SetLayer( getDrawingLayer() );
 
         if( aShape == S_SEGMENT )
             line45 = *aGraphic; // used only for direction 45 mode with lines
@@ -841,7 +834,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        bool updatePreview = false;            // should preview be updated
         cursorPos = m_controls->GetCursorPosition();
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
@@ -862,16 +854,21 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
             }
 
-            updatePreview = true;
+            m_view->Update( &preview );
         }
 
-        if( evt->IsCancel() || evt->IsActivate() || evt->IsAction( &COMMON_ACTIONS::layerChanged ) )
+        if( evt->IsCancel() || evt->IsActivate() )
         {
             preview.Clear();
-            updatePreview = true;
+            m_view->Update( &preview );
             delete aGraphic;
             aGraphic = NULL;
             break;
+        }
+        else if( evt->IsAction( &COMMON_ACTIONS::layerChanged ) )
+        {
+            aGraphic->SetLayer( getDrawingLayer() );
+            m_view->Update( &preview );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -881,38 +878,28 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         {
             if( !started )
             {
-                LAYER_ID layer = m_frame->GetScreen()->m_Active_Layer;
+                // Init the new item attributes
+                aGraphic->SetShape( (STROKE_T) aShape );
+                aGraphic->SetWidth( m_lineWidth );
+                aGraphic->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
+                aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                aGraphic->SetLayer( getDrawingLayer() );
 
-                if( IsCopperLayer( layer ) )
-                {
-                    DisplayInfoMessage( NULL, _( "Graphic not allowed on Copper layers" ) );
-                }
-                else
-                {
-                    // Init the new item attributes
-                    aGraphic->SetShape( (STROKE_T) aShape );
-                    m_lineWidth = getSegmentWidth( layer );
-                    aGraphic->SetWidth( m_lineWidth );
-                    aGraphic->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
-                    aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-                    aGraphic->SetLayer( layer );
+                if( aShape == S_SEGMENT )
+                    line45 = *aGraphic; // used only for direction 45 mode with lines
 
-                    if( aShape == S_SEGMENT )
-                        line45 = *aGraphic; // used only for direction 45 mode with lines
+                preview.Add( aGraphic );
+                m_controls->SetAutoPan( true );
+                m_controls->CaptureCursor( true );
 
-                    preview.Add( aGraphic );
-                    m_controls->SetAutoPan( true );
-                    m_controls->CaptureCursor( true );
-
-                    started = true;
-                }
+                started = true;
             }
             else
             {
                 if( aGraphic->GetEnd() == aGraphic->GetStart() ||
                         ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT ) )
-                                                // User has clicked twice in the same spot
-                {                               // a clear sign that the current drawing is finished
+                                        // User has clicked twice in the same spot
+                {                       // a clear sign that the current drawing is finished
                     // Now we have to add the helper line as well
                     if( direction45 )
                     {
@@ -946,28 +933,24 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             else
                 aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
-            updatePreview = true;
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
         {
             m_lineWidth += WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
-            updatePreview = true;
-        }
-
-        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
-        {
-            if( m_lineWidth > (unsigned) WIDTH_STEP )
-            {
-                m_lineWidth -= WIDTH_STEP;
-                aGraphic->SetWidth( m_lineWidth );
-                updatePreview = true;
-            }
-        }
-
-        if( updatePreview )
+            line45.SetWidth( m_lineWidth );
             m_view->Update( &preview );
+        }
+
+        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && ( m_lineWidth > WIDTH_STEP ) )
+        {
+            m_lineWidth -= WIDTH_STEP;
+            aGraphic->SetWidth( m_lineWidth );
+            line45.SetWidth( m_lineWidth );
+            m_view->Update( &preview );
+        }
     }
 
     m_controls->ShowCursor( false );
@@ -986,6 +969,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     double startAngle = 0.0f;   // angle of the first arc line
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
+    // Line from the arc center to its origin, to visualize its radius
     DRAWSEGMENT helperLine;
     helperLine.SetShape( S_SEGMENT );
     helperLine.SetLayer( Dwgs_User );
@@ -1032,31 +1016,26 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             {
             case SET_ORIGIN:
             {
-                LAYER_ID layer = m_frame->GetScreen()->m_Active_Layer;
+                LAYER_ID layer = getDrawingLayer();
 
-                if( IsCopperLayer( layer ) )
-                {
-                    DisplayInfoMessage( NULL, _( "Graphic not allowed on Copper layers" ) );
-                    --step;
-                }
-                else
-                {
-                    // Init the new item attributes
-                    aGraphic->SetShape( S_ARC );
-                    aGraphic->SetAngle( 0.0 );
-                    aGraphic->SetWidth( getSegmentWidth( layer ) );
-                    aGraphic->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
-                    aGraphic->SetLayer( layer );
+                if( layer == Edge_Cuts )    // dimensions are not allowed on EdgeCuts
+                    layer = Dwgs_User;
 
-                    helperLine.SetStart( aGraphic->GetCenter() );
-                    helperLine.SetEnd( aGraphic->GetCenter() );
+                // Init the new item attributes
+                aGraphic->SetShape( S_ARC );
+                aGraphic->SetAngle( 0.0 );
+                aGraphic->SetWidth( m_lineWidth );
+                aGraphic->SetCenter( wxPoint( cursorPos.x, cursorPos.y ) );
+                aGraphic->SetLayer( layer );
 
-                    preview.Add( aGraphic );
-                    preview.Add( &helperLine );
+                helperLine.SetStart( aGraphic->GetCenter() );
+                helperLine.SetEnd( aGraphic->GetCenter() );
 
-                    m_controls->SetAutoPan( true );
-                    m_controls->CaptureCursor( true );
-                }
+                preview.Add( aGraphic );
+                preview.Add( &helperLine );
+
+                m_controls->SetAutoPan( true );
+                m_controls->CaptureCursor( true );
             }
             break;
 
@@ -1120,25 +1099,21 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             break;
             }
 
-            // Show a preview of the item
             m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::incWidth ) )
         {
-            aGraphic->SetWidth( aGraphic->GetWidth() + WIDTH_STEP );
+            m_lineWidth += WIDTH_STEP;
+            aGraphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
         }
 
-        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) )
+        else if( evt->IsAction( &COMMON_ACTIONS::decWidth ) && m_lineWidth > WIDTH_STEP )
         {
-            int width = aGraphic->GetWidth();
-
-            if( width > WIDTH_STEP )
-            {
-                aGraphic->SetWidth( width - WIDTH_STEP );
-                m_view->Update( &preview );
-            }
+            m_lineWidth -= WIDTH_STEP;
+            aGraphic->SetWidth( m_lineWidth );
+            m_view->Update( &preview );
         }
 
         else if( evt->IsAction( &COMMON_ACTIONS::arcPosture ) )
@@ -1187,7 +1162,6 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        bool updatePreview = false;            // should preview be updated
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
         // Enable 45 degrees lines only mode by holding control
@@ -1206,7 +1180,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
             }
 
-            updatePreview = true;
+            m_view->Update( &preview );
         }
 
         if( evt->IsCancel() || evt->IsActivate() )
@@ -1225,7 +1199,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 }
 
                 preview.FreeItems();
-                updatePreview = true;
+                m_view->Update( &preview );
 
                 numPoints = 0;
             }
@@ -1280,7 +1254,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 }
 
                 preview.FreeItems();
-                updatePreview = true;
+                m_view->Update( &preview );
             }
             else
             {
@@ -1348,7 +1322,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
                 }
 
                 ++numPoints;
-                updatePreview = true;
+                m_view->Update( &preview );
             }
         }
 
@@ -1360,12 +1334,8 @@ int DRAWING_TOOL::drawZone( bool aKeepout )
             else
                 helperLine->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
-            // Show a preview of the item
-            updatePreview = true;
-        }
-
-        if( updatePreview )
             m_view->Update( &preview );
+        }
     }
 
     m_controls->ShowCursor( false );
@@ -1429,4 +1399,23 @@ int DRAWING_TOOL::getSegmentWidth( unsigned int aLayer ) const
 }
 
 
-const int DRAWING_TOOL::WIDTH_STEP = 100000;
+LAYER_ID DRAWING_TOOL::getDrawingLayer() const
+{
+    LAYER_ID layer = m_frame->GetActiveLayer();
+
+    if( IsCopperLayer( layer ) )
+    {
+        if( layer == F_Cu )
+            layer = F_SilkS;
+        else if( layer == B_Cu )
+            layer = B_SilkS;
+        else
+            layer = Dwgs_User;
+
+        m_frame->SetActiveLayer( layer );
+    }
+
+    return layer;
+}
+
+const unsigned int DRAWING_TOOL::WIDTH_STEP = 100000;

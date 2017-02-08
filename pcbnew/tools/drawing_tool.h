@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -196,6 +196,9 @@ private:
     ///> Returns the appropriate width for a segment depending on the settings.
     int getSegmentWidth( unsigned int aLayer ) const;
 
+    ///> Selects a non-copper layer for drawing
+    LAYER_ID getDrawingLayer() const;
+
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     BOARD* m_board;
@@ -209,7 +212,7 @@ private:
     TOOL_MENU m_menu;
 
     // How does line width change after one -/+ key press.
-    static const int WIDTH_STEP;
+    static const unsigned int WIDTH_STEP;
 };
 
 #endif /* __DRAWING_TOOL_H */
