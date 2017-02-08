@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -200,6 +200,43 @@ EDIT_LINE* EDIT_POINTS::Next( const EDIT_LINE& aLine )
     }
 
     return NULL;
+}
+
+
+const BOX2I EDIT_POINTS::ViewBBox() const
+{
+    BOX2I box;
+    bool empty = true;
+
+    for( const auto& point : m_points )
+    {
+        if( empty )
+        {
+            box.SetOrigin( point.GetPosition() );
+            empty = false;
+        }
+        else
+        {
+            box.Merge( point.GetPosition() );
+        }
+    }
+
+    for( const auto& line : m_lines )
+    {
+        if( empty )
+        {
+            box.SetOrigin( line.GetOrigin().GetPosition() );
+            box.SetEnd( line.GetEnd().GetPosition() );
+            empty = false;
+        }
+        else
+        {
+            box.Merge( line.GetOrigin().GetPosition() );
+            box.Merge( line.GetEnd().GetPosition() );
+        }
+    }
+
+    return box;
 }
 
 

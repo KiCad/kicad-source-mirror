@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2014-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -493,10 +493,7 @@ public:
     }
 
     ///> @copydoc VIEW_ITEM::ViewBBox()
-    virtual const BOX2I ViewBBox() const override
-    {
-        return m_parent->ViewBBox();
-    }
+    virtual const BOX2I ViewBBox() const override;
 
     ///> @copydoc VIEW_ITEM::ViewDraw()
     virtual void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
