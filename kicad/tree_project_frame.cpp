@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,8 @@
 #include <wx/regex.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
+
+#include <wxstruct.h>
 
 #include <bitmaps.h>
 #include <gestfich.h>
@@ -127,7 +129,7 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
                         ID_LEFT_FRAME,
                         wxDefaultPosition,
                         wxDefaultSize,
-                        wxNO_BORDER | wxSW_3D | wxTAB_TRAVERSAL )
+                        KICAD_DEFAULT_DRAWFRAME_STYLE | wxTAB_TRAVERSAL )
 {
     m_Parent = parent;
     m_TreeProject = NULL;
