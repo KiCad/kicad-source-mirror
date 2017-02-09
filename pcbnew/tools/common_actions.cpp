@@ -56,19 +56,19 @@ TOOL_ACTION COMMON_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
 
 TOOL_ACTION COMMON_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
         AS_GLOBAL, 'U',
-        _( "trivial connection" ), _( "Selects a connection between two junctions." ) );
+        _( "Trivial Connection" ), _( "Selects a connection between two junctions." ) );
 
 TOOL_ACTION COMMON_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
         AS_GLOBAL, 'I',
-        _( "copper connection" ), _( "Selects whole copper connection." ) );
+        _( "Copper Connection" ), _( "Selects whole copper connection." ) );
 
 TOOL_ACTION COMMON_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0,
-        _( "whole net" ), _( "Selects all tracks & vias belonging to the same net." ) );
+        _( "Whole Net" ), _( "Selects all tracks & vias belonging to the same net." ) );
 
 TOOL_ACTION COMMON_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
         AS_GLOBAL, 0, //TOOL_ACTION::LegacyHotKey( HK_FIND_ITEM ), // handled by wxWidgets
-        _( "Find an item" ), _( "Searches the document for an item" ), find_xpm );
+        _( "Find Item" ), _( "Searches the document for an item" ), find_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ) );
@@ -83,12 +83,12 @@ TOOL_ACTION COMMON_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.edi
 
 TOOL_ACTION COMMON_ACTIONS::copyPadToSettings( "pcbnew.InteractiveEdit.copyPadToSettings",
         AS_GLOBAL, 0,
-        _( "Copy pad settings to Current Settings" ),
+        _( "Copy Pad Settings to Current Settings" ),
         _( "Copies the properties of selected pad to the current template pad settings." ) );
 
 TOOL_ACTION COMMON_ACTIONS::copySettingsToPads( "pcbnew.InteractiveEdit.copySettingsToPads",
         AS_GLOBAL, 0,
-        _( "Copy Current Settings to pads" ),
+        _( "Copy Current Settings to Pads" ),
         _( "Copies the current template pad settings to the selected pad(s)." ) );
 
 TOOL_ACTION COMMON_ACTIONS::globalEditPads( "pcbnew.InteractiveEdit.globalPadEdit",
@@ -115,16 +115,16 @@ TOOL_ACTION COMMON_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
 
 TOOL_ACTION COMMON_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CREATE_ARRAY ),
-        _( "Create array" ), _( "Create array" ), array_module_xpm, AF_ACTIVATE );
+        _( "Create Array" ), _( "Create array" ), array_module_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM ),
-        _( "Rotate clockwise" ), _( "Rotates selected item(s) clockwise" ),
+        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
         rotate_cw_xpm, AF_NONE, (void*) 1 );
 
 TOOL_ACTION COMMON_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
         AS_GLOBAL, MD_SHIFT + 'R',
-        _( "Rotate counter-clockwise" ), _( "Rotates selected item(s) counter-clockwise" ),
+        _( "Rotate Counter-clockwise" ), _( "Rotates selected item(s) counter-clockwise" ),
         rotate_ccw_xpm, AF_NONE, (void*) -1 );
 
 TOOL_ACTION COMMON_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
@@ -141,7 +141,7 @@ TOOL_ACTION COMMON_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
 
 TOOL_ACTION COMMON_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BACK_SPACE ),
-        _( "Remove (alterative)" ), _( "Deletes selected item(s)" ), delete_xpm );
+        _( "Remove (Alternative)" ), _( "Deletes selected item(s)" ), delete_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFootprints",
         AS_GLOBAL, 0,
@@ -161,52 +161,52 @@ TOOL_ACTION COMMON_ACTIONS::editModifiedSelection( "pcbnew.InteractiveEdit.Modif
 // Drawing tool actions
 TOOL_ACTION COMMON_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
         AS_GLOBAL, 0,
-        _( "Draw a line" ), _( "Draw a line" ), NULL, AF_ACTIVATE );
+        _( "Draw Line" ), _( "Draw a line" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
         AS_GLOBAL, 0,
-        _( "Draw a circle" ), _( "Draw a circle" ), NULL, AF_ACTIVATE );
+        _( "Draw Circle" ), _( "Draw a circle" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
         AS_GLOBAL, 0,
-        _( "Draw an arc" ), _( "Draw an arc" ), NULL, AF_ACTIVATE );
+        _( "Draw Arc" ), _( "Draw an arc" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         AS_GLOBAL, 0,
-        _( "Add a text" ), _( "Add a text" ), NULL, AF_ACTIVATE );
+        _( "Add Text" ), _( "Add a text" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
         AS_GLOBAL, 0,
-        _( "Add a dimension" ), _( "Add a dimension" ), NULL, AF_ACTIVATE );
+        _( "Add Dimension" ), _( "Add a dimension" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
         AS_GLOBAL, 0,
-        _( "Add a filled zone" ), _( "Add a filled zone" ), NULL, AF_ACTIVATE );
+        _( "Add Filled Zone" ), _( "Add a filled zone" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, 0,
-        _( "Add a keepout area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
+        _( "Add Keepout Area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
         AS_GLOBAL, 0,
-        "", "", NULL, AF_ACTIVATE );
+        "Place DXF", "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
         AS_GLOBAL, 0,
-        _( "Place the footprint anchor" ), _( "Place the footprint anchor" ),
+        _( "Place the Footprint Anchor" ), _( "Place the footprint anchor" ),
         NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
         AS_CONTEXT, '+',
-        _( "Increase the line width" ), _( "Increase the line width" ) );
+        _( "Increase Line Width" ), _( "Increase the line width" ) );
 
 TOOL_ACTION COMMON_ACTIONS::decWidth( "pcbnew.InteractiveDrawing.decWidth",
         AS_CONTEXT, '-',
-        _( "Decrease the line width" ), _( "Decrease the line width" ) );
+        _( "Decrease Line Width" ), _( "Decrease the line width" ) );
 
 TOOL_ACTION COMMON_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
         AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_POSTURE ),
-        _( "Switch the arc posture" ), _( "Switch the arc posture" ) );
+        _( "Switch Arc Posture" ), _( "Switch the arc posture" ) );
 
 
 // View Controls
@@ -393,7 +393,7 @@ TOOL_ACTION COMMON_ACTIONS::zoneFill( "pcbnew.EditorControl.zoneFill",
 
 TOOL_ACTION COMMON_ACTIONS::zoneFillAll( "pcbnew.EditorControl.zoneFillAll",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_FILL_OR_REFILL ),
-        _( "Fill all" ), _( "Fill all zones" ) );
+        _( "Fill All" ), _( "Fill all zones" ) );
 
 TOOL_ACTION COMMON_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
         AS_GLOBAL, 0,
@@ -401,25 +401,25 @@ TOOL_ACTION COMMON_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
 
 TOOL_ACTION COMMON_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_REMOVE_FILLED ),
-        _( "Unfill all" ), _( "Unfill all zones" ) );
+        _( "Unfill All" ), _( "Unfill all zones" ) );
 
 TOOL_ACTION COMMON_ACTIONS::zoneMerge( "pcbnew.EditorControl.zoneMerge",
         AS_GLOBAL, 0,
-        _( "Merge zones" ), _( "Merge zones" ) );
+        _( "Merge Zones" ), _( "Merge zones" ) );
 
 TOOL_ACTION COMMON_ACTIONS::zoneDuplicate( "pcbnew.EditorControl.zoneDuplicate",
         AS_GLOBAL, 0,
-        _( "Duplicate zone onto layer" ), _( "Duplicate zone outline onto a different layer" ),
+        _( "Duplicate Zone onto Layer" ), _( "Duplicate zone outline onto a different layer" ),
         zone_duplicate_xpm );
 
 
 TOOL_ACTION COMMON_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
         AS_GLOBAL, 0,
-        _( "Add layer alignment target" ), _( "Add layer alignment target" ), NULL, AF_ACTIVATE );
+        _( "Add Layer Alignment Target" ), _( "Add a layer alignment target" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_MODULE ),
-        _( "Add footprints" ), _( "Add footprints" ), NULL, AF_ACTIVATE );
+        _( "Add Footprint" ), _( "Add a footprint" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
         AS_GLOBAL, 0,
@@ -431,7 +431,7 @@ TOOL_ACTION COMMON_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbS
 
 TOOL_ACTION COMMON_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         AS_GLOBAL, 'L',
-        "Toggle lock", "" );
+        "Toggle Lock", "" );
 
 TOOL_ACTION COMMON_ACTIONS::lock( "pcbnew.EditorControl.lock",
         AS_GLOBAL, 0,
@@ -457,19 +457,19 @@ TOOL_ACTION COMMON_ACTIONS::highlightNetCursor( "pcbnew.EditorControl.highlightN
 // Module editor tools
 TOOL_ACTION COMMON_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
         AS_GLOBAL, 0,
-        _( "Add pads" ), _( "Add pads" ), NULL, AF_ACTIVATE );
+        _( "Add Pad" ), _( "Add a pad" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
         AS_GLOBAL, 0,
-        _( "Enumerate pads" ), _( "Enumerate pads" ), pad_enumerate_xpm, AF_ACTIVATE );
+        _( "Enumerate Pads" ), _( "Enumerate pads" ), pad_enumerate_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_COPY_ITEM ),
-        _( "Copy items" ), _( "Copy items" ), NULL, AF_ACTIVATE );
+        _( "Copy" ), _( "Copy items" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::pasteItems( "pcbnew.ModuleEditor.pasteItems",
         AS_GLOBAL, MD_CTRL + int( 'V' ),
-        _( "Paste items" ), _( "Paste items" ), NULL, AF_ACTIVATE );
+        _( "Paste" ), _( "Paste items" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::moduleEdgeOutlines( "pcbnew.ModuleEditor.graphicOutlines",
         AS_GLOBAL, 0,
@@ -540,7 +540,7 @@ TOOL_ACTION COMMON_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
 
 TOOL_ACTION COMMON_ACTIONS::zoomTool( "pcbnew.Control.zoomTool",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_SELECTION ),
-        _( "Zoom to selection" ), "", NULL, AF_ACTIVATE );
+        _( "Zoom to Selection" ), "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
 
@@ -571,22 +571,22 @@ TOOL_ACTION COMMON_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
-        _( "Run push & shove router (single tracks)" ),
+        _( "Interactive Router (Single Tracks)" ),
         _( "Run push & shove router (single tracks)" ), ps_router_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffPair",
         AS_GLOBAL, '6',
-        _( "Run push & shove router (differential pairs)" ),
+        _( "Interactive Router (Differential Pairs)" ),
         _( "Run push & shove router (differential pairs)" ), ps_diff_pair_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
         AS_GLOBAL, 0,
-        _( "Open Interactive Router settings" ),
+        _( "Interactive Router Settings" ),
         _( "Open Interactive Router settings" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateDpDimensionsDialog( "pcbnew.InteractiveRouter.DpDimensionsDialog",
         AS_GLOBAL, 0,
-        _( "Open Differential Pair Dimension settings" ),
+        _( "Differential Pair Dimension settings" ),
         _( "Open Differential Pair Dimension settings" ), ps_diff_pair_gap_xpm, AF_ACTIVATE );
 
 TOOL_ACTION COMMON_ACTIONS::routerActivateTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
@@ -603,47 +603,47 @@ TOOL_ACTION COMMON_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.
 
 TOOL_ACTION COMMON_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
-        _( "Drag track/via" ), _( "Drags tracks and vias without breaking connections" ),
+        _( "Drag Track/Via" ), _( "Drags tracks and vias without breaking connections" ),
         drag_track_segment_xpm );
 
 // Point editor
 TOOL_ACTION COMMON_ACTIONS::pointEditorAddCorner( "pcbnew.PointEditor.addCorner",
         AS_GLOBAL, 0,
-        _( "Create corner" ), _( "Create corner" ), add_corner_xpm );
+        _( "Create Corner" ), _( "Create a corner" ), add_corner_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::pointEditorRemoveCorner( "pcbnew.PointEditor.removeCorner",
         AS_GLOBAL, 0,
-        _( "Remove corner" ), _( "Remove corner" ), delete_xpm );
+        _( "Remove Corner" ), _( "Remove corner" ), delete_xpm );
 
 // Placement tool
 TOOL_ACTION COMMON_ACTIONS::alignTop( "pcbnew.Place.alignTop",
         AS_GLOBAL, 0,
-        _( "Align items to the top" ),
+        _( "Align to Top" ),
         _( "Aligns selected items to the top edge" ), up_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::alignBottom( "pcbnew.Place.alignBottom",
         AS_GLOBAL, 0,
-        _( "Align items to the bottom" ),
+        _( "Align to Bottom" ),
         _( "Aligns selected items to the bottom edge" ), down_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::alignLeft( "pcbnew.Place.alignLeft",
         AS_GLOBAL, 0,
-        _( "Align items to the left" ),
+        _( "Align to Left" ),
         _( "Aligns selected items to the left edge" ), left_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::alignRight( "pcbnew.Place.alignRight",
         AS_GLOBAL, 0,
-        _( "Align items to the right" ),
+        _( "Align to Right" ),
         _( "Aligns selected items to the right edge" ), right_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::distributeHorizontally( "pcbnew.Place.distributeHorizontally",
         AS_GLOBAL, 0,
-        _( "Distribute horizontally" ),
+        _( "Distribute Horizontally" ),
         _( "Distributes selected items along the horizontal axis" ), distribute_horizontal_xpm );
 
 TOOL_ACTION COMMON_ACTIONS::distributeVertically( "pcbnew.Place.distributeVertically",
         AS_GLOBAL, 0,
-        _( "Distribute vertically" ),
+        _( "Distribute Vertically" ),
         _( "Distributes selected items along the vertical axis" ), distribute_vertical_xpm );
 
 
