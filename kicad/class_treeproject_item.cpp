@@ -32,6 +32,7 @@
 #include <wx/regex.h>
 
 #include <gestfich.h>
+#include <executable_names.h>
 
 #include "class_treeprojectfiles.h"
 #include "pgm_kicad.h"

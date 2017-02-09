@@ -86,26 +86,6 @@ enum pseudokeys {
 
 #define ESC 27
 
-// TODO Executable names TODO
-#ifdef __WINDOWS__
-#define CVPCB_EXE           wxT( "cvpcb.exe" )
-#define PCBNEW_EXE          wxT( "pcbnew.exe" )
-#define EESCHEMA_EXE        wxT( "eeschema.exe" )
-#define GERBVIEW_EXE        wxT( "gerbview.exe" )
-#define BITMAPCONVERTER_EXE wxT( "bitmap2component.exe" )
-#define PCB_CALCULATOR_EXE  wxT( "pcb_calculator.exe" )
-#define PL_EDITOR_EXE       wxT( "pl_editor.exe" )
-#else
-#define CVPCB_EXE           wxT( "cvpcb" )
-#define PCBNEW_EXE          wxT( "pcbnew" )
-#define EESCHEMA_EXE        wxT( "eeschema" )
-#define GERBVIEW_EXE        wxT( "gerbview" )
-#define BITMAPCONVERTER_EXE wxT( "bitmap2component" )
-#define PCB_CALCULATOR_EXE  wxT( "pcb_calculator" )
-#define PL_EDITOR_EXE       wxT( "pl_editor" )
-#endif
-
-
 /// Frequent text rotations, used with {Set,Get}TextAngle(),
 /// in 0.1 degrees for now, hoping to migrate to degrees eventually.
 #define TEXT_ANGLE_HORIZ    0

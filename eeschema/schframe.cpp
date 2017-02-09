@@ -36,6 +36,7 @@
 #include <base_units.h>
 #include <msgpanel.h>
 #include <html_messagebox.h>
+#include <executable_names.h>
 
 #include <general.h>
 #include <eeschema_id.h>

@@ -241,6 +241,7 @@ set( COMMON_SRCS
     eda_doc.cpp
     eda_pattern_match.cpp
     exceptions.cpp
+    executable_names.cpp
     filter_reader.cpp
     lib_id.cpp
     lib_table_keywords.cpp
