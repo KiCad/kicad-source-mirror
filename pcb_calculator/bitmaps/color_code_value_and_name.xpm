@@ -1,5 +1,5 @@
 /* XPM */
-static char * color_code_value_and_name_xpm[] = {
+static const char * color_code_value_and_name_xpm[] = {
 "90 280 14 1",
 " 	c None",
 ".	c #000000",
