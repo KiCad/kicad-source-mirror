@@ -71,8 +71,7 @@
 #include <vector>
 #include <boost/range/algorithm/partition.hpp>
 #include <boost/range/algorithm/nth_element.hpp>
-//#include <mm_malloc.h>
-#include <xmmintrin.h>
+#include <stdlib.h>
 
 #include <stack>
 #include <wx/debug.h>
@@ -287,9 +286,8 @@ CBVH_PBRT::CBVH_PBRT( const CGENERICCONTAINER &aObjectContainer,
     m_primitives.swap( orderedPrims );
 
     // Compute representation of depth-first traversal of BVH tree
-    m_nodes = static_cast<LinearBVHNode *>( _mm_malloc( sizeof( LinearBVHNode ) *
-                                                        totalNodes,
-                                                        L1_CACHE_LINE_SIZE ) );
+    m_nodes = static_cast<LinearBVHNode *>( malloc( sizeof( LinearBVHNode ) *
+                                                    totalNodes ) );
     m_addresses_pointer_to_mm_free.push_back( m_nodes );
 
     for( int i = 0; i < totalNodes; ++i )
@@ -337,7 +335,7 @@ CBVH_PBRT::~CBVH_PBRT()
              ii != m_addresses_pointer_to_mm_free.end();
              ++ii )
         {
-            _mm_free( *ii );
+            free( *ii );
             *ii = NULL;
         }
     }
@@ -461,8 +459,7 @@ BVHBuildNode *CBVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo> &primiti
     (*totalNodes)++;
 
     // !TODO: implement an memory Arena
-    BVHBuildNode *node = static_cast<BVHBuildNode *>( _mm_malloc( sizeof( BVHBuildNode ),
-                                                                  L1_CACHE_LINE_SIZE ) );
+    BVHBuildNode *node = static_cast<BVHBuildNode *>( malloc( sizeof( BVHBuildNode ) ) );
     m_addresses_pointer_to_mm_free.push_back( node );
 
     node->bounds.Reset();
@@ -774,9 +771,8 @@ BVHBuildNode *CBVH_PBRT::HLBVHBuild( const std::vector<BVHPrimitiveInfo> &primit
             const int maxBVHNodes = 2 * numPrimitives;
 
             // !TODO: implement a memory arena
-            BVHBuildNode *nodes = static_cast<BVHBuildNode *>( _mm_malloc( maxBVHNodes *
-                                                                           sizeof( BVHBuildNode ),
-                                                                           L1_CACHE_LINE_SIZE ) );
+            BVHBuildNode *nodes = static_cast<BVHBuildNode *>( malloc( maxBVHNodes *
+                                                                           sizeof( BVHBuildNode ) ) );
 
             m_addresses_pointer_to_mm_free.push_back( nodes );
 
@@ -965,8 +961,7 @@ BVHBuildNode *CBVH_PBRT::buildUpperSAH(
 
     (*totalNodes)++;
 
-    BVHBuildNode *node = static_cast<BVHBuildNode *>( _mm_malloc( sizeof( BVHBuildNode ),
-                                                                  L1_CACHE_LINE_SIZE ) );
+    BVHBuildNode *node = static_cast<BVHBuildNode *>( malloc( sizeof( BVHBuildNode ) ) );
 
     m_addresses_pointer_to_mm_free.push_back( node );
 
