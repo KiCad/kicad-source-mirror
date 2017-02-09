@@ -141,14 +141,6 @@ static inline int kiRound_( double v, int line, const char* filename )
 //-----</KiROUND KIT>-----------------------------------------------------------
 
 
-
-/// Convert mm to mils.
-inline int Mm2mils( double x ) { return KiROUND( x * 1000./25.4 ); }
-
-/// Convert mils to mm.
-inline int Mils2mm( double x ) { return KiROUND( x * 25.4 / 1000. ); }
-
-
 enum EDA_UNITS_T {
     INCHES = 0,
     MILLIMETRES = 1,
@@ -239,31 +231,6 @@ time_t GetNewTimeStamp();
 int GetCommandOptions( const int argc, const char** argv,
                        const char* stringtst, const char** optarg,
                        int* optind );
-
-/**
- * Returns the units symbol.
- *
- * @param aUnits - Units type, default is current units setting.
- * @param aFormatString - A formatting string to embed the units symbol into.  Note:
- *                        the format string must contain the %s format specifier.
- * @return The formatted units symbol.
- */
-wxString ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
-                           const wxString& aFormatString = _( " (%s):" ) );
-
-/**
- * Get a human readable units string.
- *
- * The strings returned are full text name and not abbreviations or symbolic
- * representations of the units.  Use ReturnUnitSymbol() for that.
- *
- * @param aUnits - The units text to return.
- * @return The human readable units string.
- */
-wxString GetUnitsLabel( EDA_UNITS_T aUnits );
-wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit = g_UserUnit );
-
-void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
 
 /**
  * Round to the nearest precision.

@@ -416,3 +416,101 @@ wxString AngleToStringDegrees( double aAngle )
     return text;
 }
 
+
+wxString ReturnUnitSymbol( EDA_UNITS_T aUnit, const wxString& formatString )
+{
+    wxString tmp;
+    wxString label;
+
+    switch( aUnit )
+    {
+    case INCHES:
+        tmp = _( "\"" );
+        break;
+
+    case MILLIMETRES:
+        tmp = _( "mm" );
+        break;
+
+    case UNSCALED_UNITS:
+        break;
+
+    case DEGREES:
+        wxASSERT( false );
+        break;
+    }
+
+    if( formatString.IsEmpty() )
+        return tmp;
+
+    label.Printf( formatString, GetChars( tmp ) );
+
+    return label;
+}
+
+
+wxString GetUnitsLabel( EDA_UNITS_T aUnit )
+{
+    wxString label;
+
+    switch( aUnit )
+    {
+    case INCHES:
+        label = _( "inches" );
+        break;
+
+    case MILLIMETRES:
+        label = _( "millimeters" );
+        break;
+
+    case UNSCALED_UNITS:
+        label = _( "units" );
+        break;
+
+    case DEGREES:
+        label = _( "degrees" );
+        break;
+    }
+
+    return label;
+}
+
+
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit )
+{
+    wxString label;
+
+    switch( aUnit )
+    {
+    case INCHES:
+        label = _( "in" );
+        break;
+
+    case MILLIMETRES:
+        label = _( "mm" );
+        break;
+
+    case UNSCALED_UNITS:
+        break;
+
+    case DEGREES:
+        label = _( "deg" );
+        break;
+
+    default:
+        label = wxT( "??" );
+        break;
+    }
+
+    return label;
+}
+
+
+void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit )
+{
+    wxString msg = Stext.GetLabel();
+
+    msg += ReturnUnitSymbol( aUnit );
+
+    Stext.SetLabel( msg );
+}
