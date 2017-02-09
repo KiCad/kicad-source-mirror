@@ -1059,8 +1059,6 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
                     assert( aGraphic->GetArcStart() != aGraphic->GetArcEnd() );
                     assert( aGraphic->GetWidth() > 0 );
 
-                    m_view->Add( aGraphic );
-
                     preview.Remove( aGraphic );
                     preview.Remove( &helperLine );
                 }
