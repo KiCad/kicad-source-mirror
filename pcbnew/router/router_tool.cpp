@@ -71,10 +71,6 @@ static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_C
 static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'F',
     _( "Auto-end Track" ),  _( "Automagically finishes currently routed track." ) );
 
-static const TOOL_ACTION ACT_Drag( "pcbnew.InteractiveRouter.Drag", AS_CONTEXT,
-    TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
-    _( "Drag Track/Via" ), _( "Drags a track or a via." ), drag_track_segment_xpm );
-
 static const TOOL_ACTION ACT_PlaceThroughVia( "pcbnew.InteractiveRouter.PlaceVia",
     AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_ADD_THROUGH_VIA ),
     _( "Place Through Via" ),
@@ -226,7 +222,6 @@ public:
         Add( ACT_NewTrack );
         Add( ACT_EndTrack );
 //        Add( ACT_AutoEndRoute );  // fixme: not implemented yet. Sorry.
-        Add( ACT_Drag );
         Add( ACT_PlaceThroughVia );
         Add( ACT_PlaceBlindVia );
         Add( ACT_PlaceMicroVia );
@@ -273,6 +268,12 @@ ROUTER_TOOL::~ROUTER_TOOL()
 
 bool ROUTER_TOOL::Init()
 {
+    // Track & via dragging menu entry
+    auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    CONDITIONAL_MENU& menu = selectionTool->GetToolMenu().GetMenu();
+    menu.AddItem( COMMON_ACTIONS::routerInlineDrag, SELECTION_CONDITIONS::Count( 1 )
+            && SELECTION_CONDITIONS::OnlyTypes( { PCB_TRACE_T, PCB_VIA_T, EOT } ) );
+
     m_savedSettings.Load( GetSettings() );
     return true;
 }
@@ -717,11 +718,6 @@ int ROUTER_TOOL::mainLoop( PNS::ROUTER_MODE aMode )
             else
                 performRouting();
         }
-        else if( evt->IsAction( &ACT_Drag ) )
-        {
-            updateStartItem( *evt );
-            performDragging();
-        }
         else if( evt->IsAction( &ACT_PlaceThroughVia ) )
         {
             m_toolMgr->RunAction( COMMON_ACTIONS::layerToggle, true );
@@ -802,16 +798,22 @@ void ROUTER_TOOL::performDragging()
 
 int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
-    const BOARD_CONNECTED_ITEM* item = aEvent.Parameter<const BOARD_CONNECTED_ITEM*>();
-    PCB_EDIT_FRAME* frame = getEditFrame<PCB_EDIT_FRAME>();
-    VIEW_CONTROLS* ctls = getViewControls();
+    // Get the item under the cursor
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
+    const auto& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
-    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
+    if( selection.Size() != 1 )
+        return 0;
+
+    const BOARD_CONNECTED_ITEM* item = static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
+
+    if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T )
+        return 0;
 
     Activate();
 
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
     m_router->SyncWorld();
-
     m_startItem = m_router->GetWorld()->FindItemByParent( item );
 
     if( m_startItem && m_startItem->IsLocked() )
@@ -820,20 +822,20 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             return false;
     }
 
-    VECTOR2I p0 = ctls->GetCursorPosition();
+    VECTOR2I p0 = m_ctls->GetCursorPosition();
 
     bool dragStarted = m_router->StartDragging( p0, m_startItem );
 
     if( !dragStarted )
         return 0;
 
-    ctls->ForceCursorPosition( false );
-    ctls->SetAutoPan( true );
-    frame->UndoRedoBlock( true );
+    m_ctls->ShowCursor( true );
+    m_ctls->ForceCursorPosition( false );
+    m_ctls->SetAutoPan( true );
+    m_frame->UndoRedoBlock( true );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-
         if( evt->IsCancel() )
         {
             break;
@@ -854,9 +856,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
 
-    ctls->SetAutoPan( false );
-    ctls->ShowCursor( false );
-    frame->UndoRedoBlock( false );
+    m_ctls->SetAutoPan( false );
+    m_ctls->ShowCursor( false );
+    m_frame->UndoRedoBlock( false );
 
     return 0;
 }
