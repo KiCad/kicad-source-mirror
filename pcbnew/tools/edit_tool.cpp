@@ -867,26 +867,8 @@ wxPoint EDIT_TOOL::getModificationPoint( const SELECTION& aSelection )
 
 bool EDIT_TOOL::hoverSelection( bool aSanitize )
 {
-    const SELECTION& selection = m_selectionTool->GetSelection();
-
-    if( selection.Empty() )                        // Try to find an item that could be modified
-    {
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true );
-
-        if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
-        {
-            m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
-            return false;
-        }
-    }
-
-    if( aSanitize )
-        m_selectionTool->SanitizeSelection();
-
-    if( selection.Empty() )        // TODO is it necessary?
-        m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
-
-    return !selection.Empty();
+    m_toolMgr->RunAction( COMMON_ACTIONS::selectionCursor, true, aSanitize );
+    return !m_selectionTool->GetSelection().Empty();
 }
 
 

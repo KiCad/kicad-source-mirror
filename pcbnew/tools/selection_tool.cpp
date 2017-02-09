@@ -507,7 +507,21 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 
 int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 {
-    selectCursor( true );
+    bool sanitize = (bool) aEvent.Parameter<intptr_t>();
+
+    if( m_selection.Empty() )                        // Try to find an item that could be modified
+    {
+        selectCursor( true );
+
+        if( CheckLock() == SELECTION_LOCKED )
+        {
+            clearSelection();
+            return 0;
+        }
+    }
+
+    if( sanitize )
+        SanitizeSelection();
 
     return 0;
 }
