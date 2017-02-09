@@ -38,6 +38,8 @@
 #include <kiway.h>
 #include <richio.h>
 #include <wildcards_and_files_ext.h>
+#include <systemdirsappend.h>
+
 #include <stdexcept>
 
 #include "pgm_kicad.h"

@@ -29,6 +29,7 @@
 
 #include <kiface_i.h>
 #include <pgm_base.h>
+#include <systemdirsappend.h>
 
 #include <common.h>
 

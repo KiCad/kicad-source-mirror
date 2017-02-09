@@ -304,16 +304,6 @@ double RoundTo0( double x, double precision );
  */
 void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter );
 
-
-/**
- * Function SystemDirsAppend
- * appends system places to aSearchStack in a platform specific way, and pertinent
- * to KiCad programs.  It seems to be a place to collect bad ideas and keep them
- * out of view.
- */
-void SystemDirsAppend( SEARCH_STACK* aSearchStack );
-
-
 /**
  * Function SearchHelpFileFullPath
  * returns the help file's full path.
