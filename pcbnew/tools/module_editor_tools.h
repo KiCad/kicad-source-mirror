@@ -50,9 +50,6 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init() override;
-
     /**
      * Function PlacePad()
      * Places a pad in module editor.

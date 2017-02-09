@@ -87,23 +87,6 @@ void MODULE_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 }
 
 
-bool MODULE_EDITOR_TOOLS::Init()
-{
-    // Find the selection tool, so they can cooperate
-    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-
-    if( !selectionTool )
-    {
-        DisplayError( NULL, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
-        return false;
-    }
-
-    selectionTool->GetToolMenu().GetMenu().AddItem( COMMON_ACTIONS::enumeratePads );
-
-    return true;
-}
-
-
 int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );

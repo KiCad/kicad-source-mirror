@@ -47,7 +47,9 @@ public:
 
     using SHOW_FUNCTOR = std::function<bool()>;
 
-    PAD_CONTEXT_MENU( SHOW_FUNCTOR aHaveGlobalPadSetting):
+    PAD_CONTEXT_MENU( bool aEditingFootprint,
+                      SHOW_FUNCTOR aHaveGlobalPadSetting ):
+        m_editingFootprint( aEditingFootprint ),
         m_haveGlobalPadSettings( aHaveGlobalPadSetting )
     {
         SetIcon( pad_xpm );
@@ -56,13 +58,21 @@ public:
         Add( COMMON_ACTIONS::copyPadSettings );
         Add( COMMON_ACTIONS::applyPadSettings );
         Add( COMMON_ACTIONS::pushPadSettings );
+
+        // show modedit-specific items
+        if( m_editingFootprint )
+        {
+            AppendSeparator();
+
+            Add( COMMON_ACTIONS::enumeratePads );
+        }
     }
 
 protected:
 
     CONTEXT_MENU* create() const override
     {
-        return new PAD_CONTEXT_MENU( m_haveGlobalPadSettings );
+        return new PAD_CONTEXT_MENU( m_editingFootprint, m_haveGlobalPadSettings );
     }
 
 private:
@@ -111,6 +121,7 @@ private:
         Enable( getMenuId( COMMON_ACTIONS::pushPadSettings ), enablements.canPush );
     }
 
+    bool m_editingFootprint;
     SHOW_FUNCTOR m_haveGlobalPadSettings;
 };
 
@@ -152,7 +163,8 @@ bool PAD_TOOL::Init()
         return hasMasterPadSettings();
     };
 
-    auto contextMenu = std::make_shared<PAD_CONTEXT_MENU>( haveMasterPad );
+    auto contextMenu = std::make_shared<PAD_CONTEXT_MENU>(
+            EditingModules(), haveMasterPad );
     contextMenu->SetTool( this );
 
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
