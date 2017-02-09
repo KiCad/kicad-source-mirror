@@ -286,15 +286,14 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
     // One of menu entries was selected..
     else if( type == wxEVT_COMMAND_MENU_SELECTED )
     {
-        // Store the selected position
+        // Store the selected position, so it can be checked by the tools
         m_selected = aEvent.GetId();
 
         // Check if there is a TOOL_ACTION for the given ID
-        if( m_toolActions.count( aEvent.GetId() ) == 1 )
-        {
-            evt = m_toolActions[aEvent.GetId()]->MakeEvent();
-        }
-        else
+        if( m_selected >= ACTION_ID )
+            evt = findToolAction( m_selected );
+
+        if( !evt )
         {
 #ifdef __WINDOWS__
             if( !evt )
@@ -344,12 +343,38 @@ void CONTEXT_MENU::runOnSubmenus( std::function<void(CONTEXT_MENU*)> aFunction )
 {
     try
     {
-        std::for_each( m_submenus.begin(), m_submenus.end(), aFunction );
+        std::for_each( m_submenus.begin(), m_submenus.end(), [&]( CONTEXT_MENU* m ) {
+            aFunction( m );
+            m->runOnSubmenus( aFunction );
+        } );
     }
     catch( std::exception& e )
     {
         wxLogDebug( wxString::Format( "CONTEXT_MENU runOnSubmenus exception: %s", e.what() ) );
     }
+}
+
+
+OPT_TOOL_EVENT CONTEXT_MENU::findToolAction( int aId )
+{
+    OPT_TOOL_EVENT evt;
+
+    auto findFunc = [&]( CONTEXT_MENU* m ) {
+        if( evt )
+            return;
+
+        const auto it = m->m_toolActions.find( aId );
+
+        if( it != m->m_toolActions.end() )
+            evt = it->second->MakeEvent();
+    };
+
+    findFunc( this );
+
+    if( !evt )
+        runOnSubmenus( findFunc );
+
+    return evt;
 }
 
 

@@ -199,6 +199,9 @@ private:
     ///> Runs a function on the menu and all its submenus.
     void runOnSubmenus( std::function<void(CONTEXT_MENU*)> aFunction );
 
+    ///> Checks if any of submenus contains a TOOL_ACTION with a specific ID.
+    OPT_TOOL_EVENT findToolAction( int aId );
+
     ///> Flag indicating that the menu title was set up.
     bool m_titleDisplayed;
 
