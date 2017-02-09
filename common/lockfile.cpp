@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,12 +22,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <lockfile.h>
+
 #include <wx/filename.h>
 #include <wx/snglinst.h>
+
 #include <common.h>
 
-
-wxSingleInstanceChecker* LockFile( const wxString& aFileName )
+std::unique_ptr<wxSingleInstanceChecker> LockFile( const wxString& aFileName )
 {
     // first make absolute and normalize, to avoid that different lock files
     // for the same file can be created
@@ -35,22 +37,61 @@ wxSingleInstanceChecker* LockFile( const wxString& aFileName )
 
     fn.MakeAbsolute();
 
-    wxString lockFileName = fn.GetFullPath() + wxT( ".lock" );
+    wxString lockFileName = fn.GetFullPath() + ".lock";
 
-    lockFileName.Replace( wxT( "/" ), wxT( "_" ) );
+    lockFileName.Replace( "/", "_" );
 
     // We can have filenames coming from Windows, so also convert Windows separator
-    lockFileName.Replace( wxT( "\\" ), wxT( "_" ) );
+    lockFileName.Replace( "\\", "_" );
 
-    wxSingleInstanceChecker* p = new wxSingleInstanceChecker( lockFileName,
-                                                              GetKicadLockFilePath() );
+    auto p = std::make_unique<wxSingleInstanceChecker>( lockFileName,
+                                                        GetKicadLockFilePath() );
 
     if( p->IsAnotherRunning() )
     {
-        delete p;
-        p = NULL;
+        p = nullptr;
     }
 
     return p;
 }
 
+
+wxString GetKicadLockFilePath()
+{
+    wxFileName lockpath;
+    lockpath.AssignDir( wxGetHomeDir() ); // Default wx behavior
+
+#if defined( __WXMAC__ )
+    // In OSX use the standard per user cache directory
+    lockpath.AppendDir( "Library" );
+    lockpath.AppendDir( "Caches" );
+    lockpath.AppendDir( "kicad" );
+#elif defined( __UNIX__ )
+    wxString envstr;
+    // Try first the standard XDG_RUNTIME_DIR, falling back to XDG_CACHE_HOME
+    if( wxGetEnv( "XDG_RUNTIME_DIR", &envstr ) && !envstr.IsEmpty() )
+    {
+        lockpath.AssignDir( envstr );
+    }
+    else if( wxGetEnv( "XDG_CACHE_HOME", &envstr ) && !envstr.IsEmpty() )
+    {
+        lockpath.AssignDir( envstr );
+    }
+    else
+    {
+        // If all fails, just use ~/.cache
+        lockpath.AppendDir( ".cache" );
+    }
+
+    lockpath.AppendDir( "kicad" );
+#endif
+
+#if defined( __WXMAC__ ) || defined( __UNIX__ )
+    if( !lockpath.DirExists() )
+    {
+        // Lockfiles should be only readable by the user
+        lockpath.Mkdir( 0700, wxPATH_MKDIR_FULL );
+    }
+#endif
+    return lockpath.GetPath();
+}

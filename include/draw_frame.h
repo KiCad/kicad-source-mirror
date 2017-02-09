@@ -71,7 +71,7 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 
 protected:
 
-    wxSingleInstanceChecker* m_file_checker;    ///< prevents opening same file multiple times.
+    std::unique_ptr<wxSingleInstanceChecker> m_file_checker;    ///< prevents opening same file multiple times.
 
     EDA_HOTKEY_CONFIG* m_hotkeysDescrList;
     int         m_LastGridSizeId;           // the command id offset (>= 0) of the last selected grid

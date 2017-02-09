@@ -49,7 +49,6 @@
 
 class wxAboutDialogInfo;
 class SEARCH_STACK;
-class wxSingleInstanceChecker;
 class REPORTER;
 
 
@@ -350,14 +349,6 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
                                   const wxString& aBaseFilename,
                                   REPORTER*       aReporter = NULL );
 
-/**
- * Function LockFile
- * tests to see if aFileName can be locked (is not already locked) and only then
- * returns a wxSingleInstanceChecker protecting aFileName.  Caller owns the return value.
- */
-wxSingleInstanceChecker* LockFile( const wxString& aFileName );
-
-
 /// Put aPriorityPath in front of all paths in the value of aEnvVar.
 const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPath );
 
@@ -377,11 +368,6 @@ const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPa
  */
 wxConfigBase* GetNewConfig( const wxString& aProgName );
 
-/**
- * Function GetKicadLockFilePath
- * @return A wxString containing the path for lockfiles in Kicad
- */
-wxString GetKicadLockFilePath();
 
 /**
  * Function GetKicadConfigPath

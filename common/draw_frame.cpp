@@ -45,6 +45,7 @@
 #include <dialog_helpers.h>
 #include <base_units.h>
 #include <math/box2.h>
+#include <lockfile.h>
 
 #include <wx/fontdlg.h>
 #include <wx/snglinst.h>
@@ -130,8 +131,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
     m_galDisplayOptions( std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>() )
 {
-    m_file_checker        = NULL;
-
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
     m_gridSelectBox       = NULL;
@@ -229,15 +228,12 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 
 void EDA_DRAW_FRAME::ReleaseFile()
 {
-    delete m_file_checker;
-    m_file_checker = 0;
+    m_file_checker = nullptr;
 }
 
 
 bool EDA_DRAW_FRAME::LockFile( const wxString& aFileName )
 {
-    delete m_file_checker;
-
     m_file_checker = ::LockFile( aFileName );
 
     return bool( m_file_checker );
