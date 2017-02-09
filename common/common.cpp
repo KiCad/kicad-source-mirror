@@ -53,7 +53,6 @@ using KIGFX::COLOR4D;
  *       application class.
  */
 
-bool           g_ShowPageLimits = true;
 EDA_UNITS_T    g_UserUnit;
 COLOR4D        g_GhostColor;
 
