@@ -76,7 +76,7 @@ void CONTEXT_MENU::DisplayTitle( bool aDisplay )
     {
         // Destroy the menu entry keeping the title..
         wxMenuItem* item = FindItemByPosition( 0 );
-        wxASSERT( item->GetLabel() == GetTitle() );
+        wxASSERT( item->GetItemLabelText() == GetTitle() );
         Destroy( item );
         // ..and separator
         item = FindItemByPosition( 0 );
