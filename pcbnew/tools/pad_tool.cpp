@@ -132,76 +132,6 @@ bool PAD_TOOL::Init()
 }
 
 
-/**
- * Function doCopyPadSettings
- *
- * Copy a given pad setting to the destination pad. Normally, the destination
- * would be a board reference settings master pad.
- */
-static void doCopyPadSettings( const D_PAD& aSrc, D_PAD& aDest )
-{
-    // Copy all settings. Some of them are not used, but they break anything
-    aDest = aSrc;
-
-    // The pad orientation, for historical reasons is the
-    // pad rotation + parent rotation.
-    // store only the pad rotation.
-    aDest.SetOrientation( aSrc.GetOrientation() - aSrc.GetParent()->GetOrientation() );
-}
-
-
-/**
- * Function doApplyPadSettings
- *
- * Apply pad settings from a "reference" source to a destination.
- * Often, the reference source will be a board reference settings
- * master pad.
- */
-static void doApplyPadSettings( const D_PAD& aSrc, D_PAD& aDest )
-{
-    const auto& destParent = *aDest.GetParent();
-
-    aDest.SetShape( aSrc.GetShape() );
-    aDest.SetLayerSet( aSrc.GetLayerSet() );
-    aDest.SetAttribute( aSrc.GetAttribute() );
-    aDest.SetOrientation( aSrc.GetOrientation() + destParent.GetOrientation() );
-    aDest.SetSize( aSrc.GetSize() );
-    aDest.SetDelta( wxSize( 0, 0 ) );
-    aDest.SetOffset( aSrc.GetOffset() );
-    aDest.SetDrillSize( aSrc.GetDrillSize() );
-    aDest.SetDrillShape( aSrc.GetDrillShape() );
-    aDest.SetRoundRectRadiusRatio( aSrc.GetRoundRectRadiusRatio() );
-
-    switch( aSrc.GetShape() )
-    {
-    case PAD_SHAPE_TRAPEZOID:
-        aDest.SetDelta( aSrc.GetDelta() );
-        break;
-
-    case PAD_SHAPE_CIRCLE:
-        // ensure size.y == size.x
-        aDest.SetSize( wxSize( aDest.GetSize().x, aDest.GetSize().x ) );
-        break;
-
-    default:
-        ;
-    }
-
-    switch( aSrc.GetAttribute() )
-    {
-    case PAD_ATTRIB_SMD:
-    case PAD_ATTRIB_CONN:
-        // These pads do not have hole (they are expected to be only on one
-        // external copper layer)
-        aDest.SetDrillSize( wxSize( 0, 0 ) );
-        break;
-
-    default:
-        ;
-    }
-}
-
-
 int PAD_TOOL::applyPadSettings( const TOOL_EVENT& aEvent )
 {
     auto& selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
@@ -220,9 +150,8 @@ int PAD_TOOL::applyPadSettings( const TOOL_EVENT& aEvent )
         {
             commit.Modify( item );
 
-            auto& destPad = static_cast<D_PAD&>( *item );
-
-            doApplyPadSettings( masterPad, destPad );
+            D_PAD& destPad = static_cast<D_PAD&>( *item );
+            destPad.ImportSettingsFromMaster( masterPad );
         }
     }
 
@@ -252,8 +181,7 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T )
         {
             const auto& selPad = static_cast<const D_PAD&>( *item );
-
-            doCopyPadSettings( selPad, masterPad );
+            masterPad.ImportSettingsFromMaster( selPad );
         }
     }
 
@@ -309,7 +237,7 @@ static void globalChangePadSettings( BOARD& board,
             commit.Modify( pad );
 
             // Apply source pad settings to this pad
-            doApplyPadSettings( aSrcPad, *pad );
+            pad->ImportSettingsFromMaster( aSrcPad );
         }
     }
 }

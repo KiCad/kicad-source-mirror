@@ -50,13 +50,9 @@ void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* aPad )
 
     SetMsgPanel( aPad );
 
-    D_PAD& mp = GetDesignSettings().m_Pad_Master;
-    // Copy all settings. Some of them are not used, but they break anything
-    mp = *aPad;
-    // The pad orientation, for historical reasons is the
-    // pad rotation + parent rotation.
-    // store only the pad rotation.
-    mp.SetOrientation( aPad->GetOrientation() - aPad->GetParent()->GetOrientation() );
+    D_PAD& masterPad = GetDesignSettings().m_Pad_Master;
+
+    masterPad.ImportSettingsFromMaster( *aPad );
 }
 
 
@@ -73,46 +69,9 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         aPad->ClearFlags( DO_NOT_DRAW );
     }
 
-    D_PAD& mp = GetDesignSettings().m_Pad_Master;
+    const D_PAD& mp = GetDesignSettings().m_Pad_Master;
 
-    aPad->SetShape( mp.GetShape() );
-    aPad->SetLayerSet( mp.GetLayerSet() );
-    aPad->SetAttribute( mp.GetAttribute() );
-    aPad->SetOrientation( mp.GetOrientation() + aPad->GetParent()->GetOrientation() );
-    aPad->SetSize( mp.GetSize() );
-    aPad->SetDelta( wxSize( 0, 0 ) );
-    aPad->SetOffset( mp.GetOffset() );
-    aPad->SetDrillSize( mp.GetDrillSize() );
-    aPad->SetDrillShape( mp.GetDrillShape() );
-    aPad->SetRoundRectRadiusRatio( mp.GetRoundRectRadiusRatio() );
-
-    switch( mp.GetShape() )
-    {
-    case PAD_SHAPE_TRAPEZOID:
-        aPad->SetDelta( mp.GetDelta() );
-        break;
-
-    case PAD_SHAPE_CIRCLE:
-        // ensure size.y == size.x
-        aPad->SetSize( wxSize( aPad->GetSize().x, aPad->GetSize().x ) );
-        break;
-
-    default:
-        ;
-    }
-
-    switch( mp.GetAttribute() )
-    {
-    case PAD_ATTRIB_SMD:
-    case PAD_ATTRIB_CONN:
-        // These pads do not have hole (they are expected to be only on one
-        // external copper layer)
-        aPad->SetDrillSize( wxSize( 0, 0 ) );
-        break;
-
-    default:
-        ;
-    }
+    aPad->ImportSettingsFromMaster( mp );
 
     if( aDraw )
         m_canvas->RefreshDrawingRect( aPad->GetBoundingBox() );

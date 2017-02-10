@@ -108,6 +108,14 @@ public:
     MODULE* GetParent() const { return (MODULE*) m_Parent; }
 
     /**
+     * Imports the pad settings from aMasterPad.
+     * The result is "this" has the same settinds (sizes, shapes ... )
+     * as aMasterPad
+     * @param aMasterPad = the template pad
+     */
+    void ImportSettingsFromMaster( const D_PAD& aMasterPad );
+
+    /**
      * @return true if the pad has a footprint parent flipped
      * (on the back/bottom layer)
      */

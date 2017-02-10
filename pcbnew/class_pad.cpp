@@ -1036,3 +1036,59 @@ wxString LayerMaskDescribe( const BOARD *aBoard, LSET aMask )
 
     return layerInfo;
 }
+
+
+void D_PAD::ImportSettingsFromMaster( const D_PAD& aMasterPad )
+{
+    SetShape( aMasterPad.GetShape() );
+    SetLayerSet( aMasterPad.GetLayerSet() );
+    SetAttribute( aMasterPad.GetAttribute() );
+
+    // The pad orientation, for historical reasons is the
+    // pad rotation + parent rotation.
+    // So we have to manage this parent rotation
+    double pad_rot = aMasterPad.GetOrientation();
+
+    if( aMasterPad.GetParent() )
+        pad_rot -= aMasterPad.GetParent()->GetOrientation();
+
+    if( GetParent() )
+        pad_rot += GetParent()->GetOrientation();
+
+    SetOrientation( pad_rot );
+
+    SetSize( aMasterPad.GetSize() );
+    SetDelta( wxSize( 0, 0 ) );
+    SetOffset( aMasterPad.GetOffset() );
+    SetDrillSize( aMasterPad.GetDrillSize() );
+    SetDrillShape( aMasterPad.GetDrillShape() );
+    SetRoundRectRadiusRatio( aMasterPad.GetRoundRectRadiusRatio() );
+
+    switch( aMasterPad.GetShape() )
+    {
+    case PAD_SHAPE_TRAPEZOID:
+        SetDelta( aMasterPad.GetDelta() );
+        break;
+
+    case PAD_SHAPE_CIRCLE:
+        // ensure size.y == size.x
+        SetSize( wxSize( GetSize().x, GetSize().x ) );
+        break;
+
+    default:
+        ;
+    }
+
+    switch( aMasterPad.GetAttribute() )
+    {
+    case PAD_ATTRIB_SMD:
+    case PAD_ATTRIB_CONN:
+        // These pads do not have hole (they are expected to be only on one
+        // external copper layer)
+        SetDrillSize( wxSize( 0, 0 ) );
+        break;
+
+    default:
+        ;
+    }
+}
