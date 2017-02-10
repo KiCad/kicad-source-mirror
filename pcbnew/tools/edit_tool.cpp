@@ -412,6 +412,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( !m_dragging )
         m_commit->Push( _( "Rotate" ) );
+    else
+        updateRatsnest( true );
 
     if( unselect )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -521,6 +523,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     if( !m_dragging )
         m_commit->Push( _( "Mirror" ) );
+    else
+        updateRatsnest( true );
 
     if( unselect )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
@@ -553,6 +557,8 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     if( !m_dragging )
         m_commit->Push( _( "Flip" ) );
+    else
+        updateRatsnest( true );
 
     if( unselect )
         m_toolMgr->RunAction( COMMON_ACTIONS::selectionClear, true );
