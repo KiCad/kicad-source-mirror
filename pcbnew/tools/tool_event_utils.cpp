@@ -38,8 +38,7 @@ bool TOOL_EVT_UTILS::IsRotateToolEvt( const TOOL_EVENT& aEvt )
 int TOOL_EVT_UTILS::GetEventRotationAngle( const PCB_BASE_EDIT_FRAME& aFrame,
                                            const TOOL_EVENT& aEvt )
 {
-    wxASSERT_MSG( IsRotateToolEvt( aEvt ),
-                  _( "Expected rotation event" ) );
+    wxASSERT_MSG( IsRotateToolEvt( aEvt ), "Expected rotation event" );
 
     const int rotAngle = aFrame.GetRotationAngle();
     const int angleMultiplier = aEvt.Parameter<intptr_t>();
