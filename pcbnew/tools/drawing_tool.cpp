@@ -254,7 +254,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if ( evt->IsClick( BUT_RIGHT ) )
+        else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
@@ -429,7 +429,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if ( evt->IsClick( BUT_RIGHT ) )
+        else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
@@ -659,7 +659,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if ( evt->IsClick( BUT_RIGHT ) )
+        else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
@@ -796,7 +796,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
             // so deselect the active tool
             break;
         }
-        else if ( evt->IsClick( BUT_RIGHT ) )
+        else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu();
         }
@@ -1218,8 +1218,7 @@ std::unique_ptr<ZONE_CONTAINER> DRAWING_TOOL::createZoneFromExisting(
 }
 
 
-bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode,
-                                           ZONE_CONTAINER*& aZone )
+bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZone )
 {
     aZone = nullptr;
 
@@ -1247,13 +1246,12 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode,
 }
 
 
-void DRAWING_TOOL::performZoneCutout( ZONE_CONTAINER& aExistingZone,
-                                      ZONE_CONTAINER& cutout )
+void DRAWING_TOOL::performZoneCutout( ZONE_CONTAINER& aExistingZone, ZONE_CONTAINER& aCutout )
 {
     // Copy cutout corners into existing zone
-    for( int ii = 0; ii < cutout.GetNumCorners(); ii++ )
+    for( int ii = 0; ii < aCutout.GetNumCorners(); ii++ )
     {
-        aExistingZone.AppendCorner( cutout.GetCornerPosition( ii ) );
+        aExistingZone.AppendCorner( aCutout.GetCornerPosition( ii ) );
     }
 
     // Close the current corner list
@@ -1374,7 +1372,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
                     if( !aKeepout )
                         static_cast<PCB_EDIT_FRAME*>( m_frame )->Fill_Zone( zone.get() );
 
-                    if ( aMode == ZONE_MODE::CUTOUT )
+                    if( aMode == ZONE_MODE::CUTOUT )
                     {
                         // For cutouts, subtract from the source
                         commit.Modify( sourceZone );

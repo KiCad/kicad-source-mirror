@@ -234,8 +234,7 @@ private:
      * @param aSrcZone the zone to copy settings from
      * @return the new zone
      */
-    std::unique_ptr<ZONE_CONTAINER> createZoneFromExisting(
-            const ZONE_CONTAINER& aSrcZone );
+    std::unique_ptr<ZONE_CONTAINER> createZoneFromExisting( const ZONE_CONTAINER& aSrcZone );
 
     /**
      * Function getSourceZoneForAction()
@@ -261,8 +260,7 @@ private:
      * @param aExistingZone the zone to removed area from
      * @param aCutout the area to remove
      */
-    void performZoneCutout( ZONE_CONTAINER& aExistingZone,
-                            ZONE_CONTAINER& cutout );
+    void performZoneCutout( ZONE_CONTAINER& aExistingZone, ZONE_CONTAINER& aCutout );
 
     /**
      * Function make45DegLine()
