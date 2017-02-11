@@ -44,7 +44,8 @@ static void DisplayCmpDocAndKeywords( wxString& aName, void* aData )
 
     wxASSERT( libs );
 
-    LIB_ALIAS* part = libs->FindLibraryAlias( aName );
+    LIB_ID id( wxEmptyString, aName );
+    LIB_ALIAS* part = libs->FindLibraryAlias( id );
 
     if( !part )
         return;

@@ -239,8 +239,8 @@ public:
         for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
         {
             wxString part_name( each_component->GetLibId().GetLibItemName() );
-
-            LIB_ALIAS* case_sensitive_match = aRescuer.GetLibs()->FindLibraryAlias( part_name );
+            LIB_ID id( wxEmptyString, part_name );
+            LIB_ALIAS* case_sensitive_match = aRescuer.GetLibs()->FindLibraryAlias( id );
             std::vector<LIB_ALIAS*> case_insensitive_matches;
             aRescuer.GetLibs()->FindLibraryNearEntries( case_insensitive_matches, part_name );
 
@@ -293,7 +293,7 @@ public:
 
             LIB_ID libId;
 
-            libId.SetLibItemName( m_new_name );
+            libId.SetLibItemName( m_new_name, false );
             each_component->SetLibId( libId );
             each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
@@ -330,8 +330,10 @@ public:
         {
             wxString part_name( each_component->GetLibId().GetLibItemName() );
 
-            LIB_PART* cache_match = find_component( part_name, aRescuer.GetLibs(), /* aCached */ true );
-            LIB_PART* lib_match = aRescuer.GetLibs()->FindLibPart( part_name );
+            LIB_PART* cache_match = find_component( part_name,
+                                                    aRescuer.GetLibs(), /* aCached */ true );
+            LIB_ID id( wxEmptyString, part_name );
+            LIB_PART* lib_match = aRescuer.GetLibs()->FindLibPart( id );
 
             // Test whether there is a conflict
             if( !cache_match || !lib_match )
@@ -413,7 +415,7 @@ public:
 
             LIB_ID libId;
 
-            libId.SetLibItemName( m_new_name );
+            libId.SetLibItemName( m_new_name, false );
             each_component->SetLibId( libId );
             each_component->ClearFlags();
             aRescuer->LogRescue( each_component, m_requested_name, m_new_name );
@@ -489,7 +491,7 @@ void RESCUER::UndoRescues()
     {
         LIB_ID libId;
 
-        libId.SetLibItemName( each_logitem.old_name );
+        libId.SetLibItemName( each_logitem.old_name, false );
         each_logitem.component->SetLibId( libId );
         each_logitem.component->ClearFlags();
     }

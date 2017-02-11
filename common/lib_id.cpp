@@ -207,6 +207,15 @@ LIB_ID::LIB_ID( const wxString& aId ) throw( PARSE_ERROR )
 }
 
 
+LIB_ID::LIB_ID( const wxString& aLibName, const wxString& aLibItemName,
+                const wxString& aRevision ) :
+    nickname( aLibName ),
+    item_name( aLibItemName ),
+    revision( aRevision )
+{
+}
+
+
 int LIB_ID::SetLibNickname( const UTF8& aLogical )
 {
     int offset = okLogical( aLogical );
@@ -220,11 +229,11 @@ int LIB_ID::SetLibNickname( const UTF8& aLogical )
 }
 
 
-int LIB_ID::SetLibItemName( const UTF8& aLibItemName )
+int LIB_ID::SetLibItemName( const UTF8& aLibItemName, bool aTestForRev )
 {
     int separation = int( aLibItemName.find_first_of( "/" ) );
 
-    if( separation != -1 )
+    if( aTestForRev && separation != -1 )
     {
         item_name = aLibItemName.substr( 0, separation-1 );
         return separation;

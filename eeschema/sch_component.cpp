@@ -130,7 +130,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
 
     m_unit      = unit;
     m_convert   = convert;
-    m_lib_id.SetLibItemName( aPart.GetName() );
+    m_lib_id.SetLibItemName( aPart.GetName(), false );
     m_part      = aPart.SharedPtr();
     m_currentSheetPath = NULL;
     m_fieldsAutoplaced = AUTOPLACED_NO;
@@ -275,7 +275,7 @@ bool SCH_COMPONENT::Resolve( PART_LIBS* aLibs )
 {
     // I've never been happy that the actual individual PART_LIB is left up to
     // flimsy search path ordering.  None-the-less find a part based on that design:
-    if( LIB_PART* part = aLibs->FindLibPart( m_lib_id.GetLibItemName() ) )
+    if( LIB_PART* part = aLibs->FindLibPart( m_lib_id ) )
     {
         m_part = part->SharedPtr();
         return true;
@@ -1199,7 +1199,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( partname != NULL_STRING )
     {
-        m_lib_id.SetLibItemName( partname );
+        m_lib_id.SetLibItemName( partname, false );
 
         if( !newfmt )
             GetField( VALUE )->SetText( partname );

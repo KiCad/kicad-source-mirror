@@ -154,7 +154,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     {
         // Not found in the active library: search inside the full list
         // (can happen when using Viewlib to load a component)
-        libEntry = Prj().SchLibs()->FindLibraryAlias( cmp_name );
+        libEntry = Prj().SchLibs()->FindLibraryAlias( LIB_ID( wxEmptyString, cmp_name ) );
 
         if( libEntry )
         {

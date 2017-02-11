@@ -114,7 +114,8 @@ void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
 
 void LIB_VIEW_FRAME::onViewSymbolDocument( wxCommandEvent& aEvent )
 {
-    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryAlias( m_entryName, m_libraryName );
+    LIB_ID id( wxEmptyString, m_entryName );
+    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryAlias( id, m_libraryName );
 
     if( entry && !entry->GetDocFileName().IsEmpty() )
     {
@@ -185,7 +186,8 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
 
 void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryAlias( m_entryName, m_libraryName );
+    LIB_ID id( wxEmptyString, m_entryName );
+    LIB_ALIAS* entry = Prj().SchLibs()->FindLibraryAlias( id, m_libraryName );
 
     if( !entry )
         return;

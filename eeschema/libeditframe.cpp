@@ -986,7 +986,7 @@ LIB_PART* LIB_EDIT_FRAME::GetCurPart()
         wxString    name = Prj().GetRString( PROJECT::SCH_LIBEDIT_CUR_PART );
         LIB_PART*   part;
 
-        if( !!name && ( part = Prj().SchLibs()->FindLibPart( name ) ) )
+        if( !!name && ( part = Prj().SchLibs()->FindLibPart( LIB_ID( wxEmptyString, name ) ) ) )
         {
             // clone it from the PART_LIB and own it.
             m_my_part = new LIB_PART( *part );

@@ -75,6 +75,19 @@ public:
     LIB_ID( const wxString& aId ) throw( PARSE_ERROR );
 
     /**
+     * This LIB_ID ctor is a special version which ignores the parsing due to symbol
+     * names allowing '/' as a valid character.  This was causing the symbol names to
+     * be truncated at the first occurrence of '/' in the symbol name.
+     *
+     * @param aLibName is the library nickname used to look up the library item in the #LIB_TABLE.
+     * @param aLibItemName is the name of the library item which is not parsed by the standard
+     *                     LIB_ID::Parse() function.
+     * @param aRevision is the revision of the library item.
+     */
+    LIB_ID( const wxString& aLibName, const wxString& aLibItemName,
+            const wxString& aRevision = wxEmptyString );
+
+    /**
      * Function Parse
      *
      * [re-]stuffs this LIB_ID with the information from @a aId.
@@ -124,7 +137,7 @@ public:
      *               into the parameter at which an error was detected, usually because it
      *               contained '/'.
      */
-    int SetLibItemName( const UTF8& aLibItemName );
+    int SetLibItemName( const UTF8& aLibItemName, bool aTestForRev = true );
 
     int SetRevision( const UTF8& aRevision );
 

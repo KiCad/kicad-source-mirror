@@ -1306,7 +1306,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             parseUnquotedString( libName, aReader, line, &line );
             libName.Replace( "~", " " );
 
-            LIB_ID libId( libName );
+            LIB_ID libId( wxEmptyString, libName );
 
             component->SetLibId( libId );
 

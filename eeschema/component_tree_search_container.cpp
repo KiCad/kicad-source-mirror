@@ -171,7 +171,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         if( aOptionalLib )
             a = aOptionalLib->FindAlias( aName );
         else
-            a = m_libs->FindLibraryAlias( aName, wxEmptyString );
+            a = m_libs->FindLibraryAlias( LIB_ID( wxEmptyString, aName ), wxEmptyString );
 
         if( a == NULL )
             continue;

@@ -340,7 +340,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 
     tmp.Replace( wxT( " " ), wxT( "_" ) );
 
-    id.SetLibItemName( tmp );
+    id.SetLibItemName( tmp, false );
 
     // Save current flags which could be modified by next change settings
     STATUS_FLAGS flags = m_cmp->GetFlags();
