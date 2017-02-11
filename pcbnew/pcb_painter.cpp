@@ -724,9 +724,14 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 0.0, corner_radius, segmentToCircleCount );
 
         if( m_pcbSettings.m_sketchMode[ITEM_GAL_LAYER( PADS_VISIBLE )] )
-            m_gal->DrawPolyline( polySet.Outline( 0 ) );
+        {
+            if( polySet.OutlineCount() > 0 )
+                m_gal->DrawPolyline( polySet.Outline( 0 ) );
+        }
         else
+        {
             m_gal->DrawPolygon( polySet );
+        }
         break;
     }
 
@@ -774,11 +779,14 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         constexpr int SEGCOUNT = 64;
         aPad->TransformShapeWithClearanceToPolygon( polySet, aPad->GetClearance(), SEGCOUNT, 1.0 );
 
-        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetIsStroke( true );
-        m_gal->SetIsFill( false );
-        m_gal->SetStrokeColor( color );
-        m_gal->DrawPolyline( polySet.COutline( 0 ) );
+        if( polySet.OutlineCount() > 0 )
+        {
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetIsStroke( true );
+            m_gal->SetIsFill( false );
+            m_gal->SetStrokeColor( color );
+            m_gal->DrawPolyline( polySet.COutline( 0 ) );
+        }
     }
 }
 
