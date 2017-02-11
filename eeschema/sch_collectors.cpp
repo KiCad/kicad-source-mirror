@@ -199,6 +199,16 @@ const KICAD_T SCH_COLLECTOR::OrientableItems[] = {
 };
 
 
+const KICAD_T SCH_COLLECTOR::CopyableItems[] = {
+    SCH_TEXT_T,
+    SCH_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_HIERARCHICAL_LABEL_T,
+    SCH_COMPONENT_T,
+    EOT
+};
+
+
 SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
     if( aItem->Type() != LIB_PIN_T && !aItem->HitTest( m_RefPos ) )

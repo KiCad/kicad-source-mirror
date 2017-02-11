@@ -575,7 +575,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem == NULL )
         {
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::MovableItems );
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::CopyableItems );
 
             if( aItem == NULL )
                 break;

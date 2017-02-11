@@ -113,6 +113,11 @@ public:
     static const KICAD_T OrientableItems[];
 
     /**
+     * A scan list for schematic items that can be copied/duplicated.
+     */
+    static const KICAD_T CopyableItems[];
+
+    /**
      * Constructor SCH_COLLECTOR
      */
     SCH_COLLECTOR( const KICAD_T* aScanTypes = SCH_COLLECTOR::AllItems )
