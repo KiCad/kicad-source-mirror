@@ -288,10 +288,7 @@ public:
 
 protected:
     ///> Pointer to controlled VIEW.
-    VIEW*  m_view;
-
-    ///> Current cursor position (world coordinates)
-    VECTOR2D m_cursorPosition;
+    VIEW* m_view;
 
     ///> Current VIEW_CONTROLS settings
     SETTINGS m_settings;

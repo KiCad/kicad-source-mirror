@@ -70,6 +70,7 @@ struct TOOL_MANAGER::TOOL_STATE
         wakeupEvent = aState.wakeupEvent;
         waitEvents = aState.waitEvents;
         transitions = aState.transitions;
+        vcSettings = aState.vcSettings;
         // do not copy stateStack
     }
 
@@ -110,6 +111,9 @@ struct TOOL_MANAGER::TOOL_STATE
     /// upon the event reception
     std::vector<TRANSITION> transitions;
 
+    /// VIEW_CONTROLS settings to preserve settings when the tools are switched
+    KIGFX::VIEW_CONTROLS::SETTINGS vcSettings;
+
     void operator=( const TOOL_STATE& aState )
     {
         theTool = aState.theTool;
@@ -122,6 +126,7 @@ struct TOOL_MANAGER::TOOL_STATE
         wakeupEvent = aState.wakeupEvent;
         waitEvents = aState.waitEvents;
         transitions = aState.transitions;
+        vcSettings = aState.vcSettings;
         // do not copy stateStack
     }
 
@@ -142,8 +147,9 @@ struct TOOL_MANAGER::TOOL_STATE
      */
     void Push()
     {
-        stateStack.push( new TOOL_STATE( *this ) );
-
+        auto state = std::make_unique<TOOL_STATE>( *this );
+        //state->vcSettings = theTool->getViewControls()->GetSettings();
+        stateStack.push( std::move( state ) );
         clear();
     }
 
@@ -159,8 +165,7 @@ struct TOOL_MANAGER::TOOL_STATE
 
         if( !stateStack.empty() )
         {
-            *this = *stateStack.top();
-            delete stateStack.top();
+            *this = *stateStack.top().get();
             stateStack.pop();
             return true;
         }
@@ -173,7 +178,7 @@ struct TOOL_MANAGER::TOOL_STATE
 
 private:
     ///> Stack preserving previous states of a TOOL.
-    std::stack<TOOL_STATE*> stateStack;
+    std::stack<std::unique_ptr<TOOL_STATE>> stateStack;
 
     ///> Restores the initial state.
     void clear()
@@ -184,6 +189,7 @@ private:
         cofunc = NULL;
         contextMenu = NULL;
         contextMenuTrigger = CMENU_OFF;
+        vcSettings.Reset();
         transitions.clear();
     }
 };
@@ -365,13 +371,13 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
         return false;
     }
 
+    TOOL_ID id = aTool->GetId();
+
     // If the tool is already active, bring it to the top of the active tools stack
     if( isActive( aTool ) )
     {
-        m_activeTools.erase( std::find( m_activeTools.begin(), m_activeTools.end(),
-                                        aTool->GetId() ) );
-        m_activeTools.push_front( aTool->GetId() );
-
+        m_activeTools.erase( std::find( m_activeTools.begin(), m_activeTools.end(), id ) );
+        m_activeTools.push_front( id );
         return false;
     }
 
@@ -379,7 +385,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
     aTool->SetTransitions();
 
     // Add the tool on the front of the processing queue (it gets events first)
-    m_activeTools.push_front( aTool->GetId() );
+    m_activeTools.push_front( id );
 
     return true;
 }
@@ -409,7 +415,8 @@ TOOL_BASE* TOOL_MANAGER::FindTool( const std::string& aName ) const
 
 void TOOL_MANAGER::DeactivateTool()
 {
-    TOOL_EVENT evt( TC_COMMAND, TA_ACTIVATE, "" );      // deactivate the active tool
+    // Deactivate the active tool, but do not run anything new
+    TOOL_EVENT evt( TC_COMMAND, TA_CANCEL_TOOL );
     ProcessEvent( evt );
 }
 
@@ -508,11 +515,9 @@ optional<TOOL_EVENT> TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool,
 void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
     // iterate over all registered tools
-    for( auto it = m_activeTools.begin(); it != m_activeTools.end(); /* iteration is done inside */)
+    for( auto it = m_activeTools.begin(); it != m_activeTools.end(); ++it )
     {
-        auto curIt = it;
         TOOL_STATE* st = m_toolIdIndex[*it];
-        ++it;       // it might be overwritten, if the tool is removed the m_activeTools deque
 
         // the tool state handler is waiting for events (i.e. called Wait() method)
         if( st->pendingWait )
@@ -528,10 +533,7 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                 st->waitEvents.clear();
 
                 if( st->cofunc && !st->cofunc->Resume() )
-                {
-                    if( finishTool( st, false ) ) // The couroutine has finished
-                        it = m_activeTools.erase( curIt );
-                }
+                    it = finishTool( st );
 
                 // If the tool did not request to propagate
                 // the event to other tools, we should stop it now
@@ -557,7 +559,13 @@ void TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 
                     // if there is already a context, then store it
                     if( st->cofunc )
+                    {
+                        // store the VIEW_CONTROLS settings if we launch a subtool
+                        if( GetCurrentToolState() == st )
+                            st->vcSettings = m_viewControls->GetSettings();
+
                         st->Push();
+                    }
 
                     st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( std::move( func_copy ) );
 
@@ -670,30 +678,29 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
 }
 
 
-bool TOOL_MANAGER::finishTool( TOOL_STATE* aState, bool aDeactivate )
+TOOL_MANAGER::ID_LIST::iterator TOOL_MANAGER::finishTool( TOOL_STATE* aState )
 {
-    bool shouldDeactivate = false;
+    auto it = std::find( m_activeTools.begin(), m_activeTools.end(), aState->theTool->GetId() );
 
-    if( !aState->Pop() )        // if there are no other contexts saved on the stack
+    // Store the current VIEW_CONTROLS settings
+    if( TOOL_STATE* state = GetCurrentToolState() )
+        state->vcSettings = m_viewControls->GetSettings();
+
+    if( !aState->Pop() )
     {
-        // find the tool and deactivate it
-        auto tool = std::find( m_activeTools.begin(), m_activeTools.end(),
-                                                        aState->theTool->GetId() );
-
-        if( tool != m_activeTools.end() )
-        {
-            shouldDeactivate = true;
-            m_viewControls->Reset();
-
-            if( aDeactivate )
-                m_activeTools.erase( tool );
-        }
+        // Deactivate the tool if there are no other contexts saved on the stack
+        if( it != m_activeTools.end() )
+            it = m_activeTools.erase( it );
     }
+
+    // Restore VIEW_CONTROLS settings stored by the previous tool
+    if( TOOL_STATE* state = GetCurrentToolState() )
+        m_viewControls->ApplySettings( state->vcSettings );
 
     // Set transitions to be ready for future TOOL_EVENTs
     aState->theTool->SetTransitions();
 
-    return shouldDeactivate;
+    return it;
 }
 
 
