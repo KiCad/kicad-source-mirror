@@ -78,7 +78,7 @@ public:
      */
     void SetAutoPan( bool aEnabled ) override
     {
-        m_autoPanEnabled = aEnabled;
+        m_settings.m_autoPanEnabled = aEnabled;
 
         if( m_state == AUTO_PANNING )
             m_state = IDLE;

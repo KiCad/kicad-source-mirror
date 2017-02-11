@@ -864,6 +864,15 @@ public:
     }
 
     /**
+     * @brief Returns information about cursor visibility.
+     * @return True if cursor is visible.
+     */
+    bool IsCursorEnabled() const
+    {
+        return isCursorEnabled;
+    }
+
+    /**
      * @brief Set the cursor color.
      *
      * @param aCursorColor is the color of the cursor.

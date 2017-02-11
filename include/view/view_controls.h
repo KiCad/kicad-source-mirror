@@ -48,15 +48,13 @@ class VIEW;
 class VIEW_CONTROLS
 {
 public:
-    VIEW_CONTROLS( VIEW* aView ) : m_view( aView ),
-        m_forceCursorPosition( false ), m_cursorCaptured( false ), m_snappingEnabled( false ),
-        m_grabMouse( false ), m_autoPanEnabled( false ), m_autoPanMargin( 0.1 ),
-        m_autoPanSpeed( 0.15 ), m_warpCursor( false ), m_enableMousewheelPan( false )
+    VIEW_CONTROLS( VIEW* aView ) : m_view( aView )
     {
     }
 
     virtual ~VIEW_CONTROLS()
-    {}
+    {
+    }
 
     /**
      * Function SetSnapping()
@@ -66,7 +64,7 @@ public:
      */
     virtual void SetSnapping( bool aEnabled )
     {
-        m_snappingEnabled = aEnabled;
+        m_settings.m_snappingEnabled = aEnabled;
     }
 
     /**
@@ -76,7 +74,7 @@ public:
      */
     virtual void SetGrabMouse( bool aEnabled )
     {
-        m_grabMouse = aEnabled;
+        m_settings.m_grabMouse = aEnabled;
     }
 
     /**
@@ -87,7 +85,7 @@ public:
      */
     virtual void SetAutoPan( bool aEnabled )
     {
-        m_autoPanEnabled = aEnabled;
+        m_settings.m_autoPanEnabled = aEnabled;
     }
 
     /**
@@ -97,7 +95,7 @@ public:
      */
     virtual void SetAutoPanSpeed( float aSpeed )
     {
-        m_autoPanSpeed = aSpeed;
+        m_settings.m_autoPanSpeed = aSpeed;
     }
 
     /**
@@ -107,7 +105,7 @@ public:
      */
     virtual void SetAutoPanMargin( float aMargin )
     {
-        m_autoPanMargin = aMargin;
+        m_settings.m_autoPanMargin = aMargin;
     }
 
     /**
@@ -137,8 +135,8 @@ public:
      */
     virtual void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) )
     {
-        m_forcedPosition = aPosition;
-        m_forceCursorPosition = aEnabled;
+        m_settings.m_forceCursorPosition = aEnabled;
+        m_settings.m_forcedPosition = aPosition;
     }
 
     /**
@@ -149,18 +147,25 @@ public:
     virtual void ShowCursor( bool aEnabled );
 
     /**
+     * Function IsCursorShown()
+     * Returns true when cursor is visible.
+     * @return True if cursor is visible.
+     */
+    bool IsCursorShown() const;
+
+    /**
      * Function CaptureCursor()
      * Forces the cursor to stay within the drawing panel area.
      * @param aEnabled determines if the cursor should be captured.
      */
     virtual void CaptureCursor( bool aEnabled )
     {
-        m_cursorCaptured = aEnabled;
+        m_settings.m_cursorCaptured = aEnabled;
     }
 
     inline bool IsCursorPositionForced() const
     {
-        return m_forceCursorPosition;
+        return m_settings.m_forceCursorPosition;
     }
 
     /**
@@ -183,7 +188,7 @@ public:
      */
     void EnableCursorWarping( bool aEnable )
     {
-        m_warpCursor = aEnable;
+        m_settings.m_warpCursor = aEnable;
     }
 
     /**
@@ -192,7 +197,7 @@ public:
      */
     bool IsCursorWarpingEnabled() const
     {
-        return m_warpCursor;
+        return m_settings.m_warpCursor;
     }
 
     /**
@@ -202,7 +207,7 @@ public:
      */
     virtual void EnableMousewheelPan( bool aEnable )
     {
-        m_enableMousewheelPan = aEnable;
+        m_settings.m_enableMousewheelPan = aEnable;
     }
 
     /**
@@ -211,7 +216,7 @@ public:
      */
     virtual bool IsMousewheelPanEnabled() const
     {
-        return m_enableMousewheelPan;
+        return m_settings.m_enableMousewheelPan;
     }
 
     /**
@@ -227,42 +232,69 @@ public:
      */
     virtual void Reset();
 
+    ///> Structure to keep VIEW_CONTROLS settings for easy store/restore operations
+    struct SETTINGS
+    {
+        SETTINGS()
+        {
+            Reset();
+        }
+
+        ///> Restores the default settings
+        void Reset();
+
+        ///> Flag determining the cursor visibility
+        bool m_showCursor;
+
+        ///> Forced cursor position (world coordinates)
+        VECTOR2D m_forcedPosition;
+
+        ///> Is the forced cursor position enabled
+        bool m_forceCursorPosition;
+
+        ///> Should the cursor be locked within the parent window area
+        bool m_cursorCaptured;
+
+        ///> Should the cursor snap to grid or move freely
+        bool m_snappingEnabled;
+
+        ///> Flag for grabbing the mouse cursor
+        bool m_grabMouse;
+
+        ///> Flag for turning on autopanning
+        bool m_autoPanEnabled;
+
+        ///> Distance from cursor to VIEW edge when panning is active
+        float m_autoPanMargin;
+
+        ///> How fast is panning when in auto mode
+        float m_autoPanSpeed;
+
+        ///> If the cursor is allowed to be warped
+        bool m_warpCursor;
+
+        ///> Mousewheel (2-finger touchpad) panning
+        bool m_enableMousewheelPan;
+    };
+
+    ///> Returns the current VIEW_CONTROLS settings
+    const SETTINGS& GetSettings() const
+    {
+        return m_settings;
+    }
+
+    ///> Applies VIEW_CONTROLS settings from an object
+    void ApplySettings( const SETTINGS& aSettings );
+
 protected:
-    /// Pointer to controlled VIEW.
-    VIEW*       m_view;
+    ///> Pointer to controlled VIEW.
+    VIEW*  m_view;
 
-    /// Current cursor position
-    VECTOR2D    m_cursorPosition;
+    ///> Current cursor position (world coordinates)
+    VECTOR2D m_cursorPosition;
 
-    /// Forced cursor position
-    VECTOR2D    m_forcedPosition;
-
-    /// Is the forced cursor position enabled
-    bool        m_forceCursorPosition;
-
-    /// Should the cursor be locked within the parent window area
-    bool        m_cursorCaptured;
-
-    /// Should the cursor snap to grid or move freely
-    bool        m_snappingEnabled;
-
-    /// Flag for grabbing the mouse cursor
-    bool        m_grabMouse;
-
-    /// Flag for turning on autopanning
-    bool        m_autoPanEnabled;
-
-    /// Distance from cursor to VIEW edge when panning is active
-    float       m_autoPanMargin;
-
-    /// How fast is panning when in auto mode
-    float       m_autoPanSpeed;
-
-    /// If the cursor is allowed to be warped
-    bool        m_warpCursor;
-
-    /// Mousewheel (2-finger touchpad) panning
-    bool        m_enableMousewheelPan;
+    ///> Current VIEW_CONTROLS settings
+    SETTINGS m_settings;
 };
 } // namespace KIGFX
 

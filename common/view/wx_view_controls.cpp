@@ -73,15 +73,15 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
     bool isAutoPanning = false;
 
-    if( m_autoPanEnabled )
+    if( m_settings.m_autoPanEnabled )
         isAutoPanning = handleAutoPanning( aEvent );
 
     if( !isAutoPanning && aEvent.Dragging() )
     {
         if( m_state == DRAG_PANNING )
         {
-            VECTOR2D   d = m_dragStartPoint - VECTOR2D( aEvent.GetX(), aEvent.GetY() );
-            VECTOR2D   delta = m_view->ToWorld( d, false );
+            VECTOR2D d = m_dragStartPoint - VECTOR2D( aEvent.GetX(), aEvent.GetY() );
+            VECTOR2D delta = m_view->ToWorld( d, false );
 
             m_view->SetCenter( m_lookStartPoint + delta );
             aEvent.StopPropagation();
@@ -105,8 +105,8 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     //      wheel + ctrl    -> zooming;
     //      wheel + shift   -> horizontal scrolling.
 
-    if( ( !m_enableMousewheelPan && ( aEvent.ControlDown() || aEvent.ShiftDown() ) ) ||
-        ( m_enableMousewheelPan && !aEvent.ControlDown() ) )
+    if( ( !m_settings.m_enableMousewheelPan && ( aEvent.ControlDown() || aEvent.ShiftDown() ) ) ||
+        ( m_settings.m_enableMousewheelPan && !aEvent.ControlDown() ) )
     {
         // Scrolling
         VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
@@ -115,7 +115,7 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         double scrollX = 0.0;
         double scrollY = 0.0;
 
-        if( m_enableMousewheelPan )
+        if( m_settings.m_enableMousewheelPan )
         {
             if ( axis == wxMOUSE_WHEEL_HORIZONTAL || aEvent.ShiftDown() )
                 scrollX = scrollVec.x;
@@ -237,7 +237,7 @@ void WX_VIEW_CONTROLS::onEnter( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onLeave( wxMouseEvent& aEvent )
 {
-    if( m_cursorCaptured )
+    if( m_settings.m_cursorCaptured )
     {
         bool warp = false;
         int x = aEvent.GetX();
@@ -283,8 +283,8 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             break;
 #endif
 
-        double borderSize = std::min( m_autoPanMargin * m_view->GetScreenPixelSize().x,
-                                      m_autoPanMargin * m_view->GetScreenPixelSize().y );
+        double borderSize = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
+                                      m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
 
         VECTOR2D dir( m_panDirection );
 
@@ -292,7 +292,7 @@ void WX_VIEW_CONTROLS::onTimer( wxTimerEvent& aEvent )
             dir = dir.Resize( borderSize );
 
         dir = m_view->ToWorld( dir, false );
-        m_view->SetCenter( m_view->GetCenter() + dir * m_autoPanSpeed );
+        m_view->SetCenter( m_view->GetCenter() + dir * m_settings.m_autoPanSpeed );
 
         // Notify tools that the cursor position has changed in the world coordinates
         wxMouseEvent moveEvent( EVT_REFRESH_MOUSE );
@@ -337,9 +337,9 @@ void WX_VIEW_CONTROLS::onScroll( wxScrollWinEvent& aEvent )
 
 void WX_VIEW_CONTROLS::SetGrabMouse( bool aEnabled )
 {
-    if( aEnabled && !m_grabMouse )
+    if( aEnabled && !m_settings.m_grabMouse )
         m_parentPanel->CaptureMouse();
-    else if( !aEnabled && m_grabMouse )
+    else if( !aEnabled && m_settings.m_grabMouse )
         m_parentPanel->ReleaseMouse();
 
     VIEW_CONTROLS::SetGrabMouse( aEnabled );
@@ -357,15 +357,15 @@ VECTOR2I WX_VIEW_CONTROLS::GetMousePosition() const
 
 VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition() const
 {
-    if( m_forceCursorPosition )
+    if( m_settings.m_forceCursorPosition )
     {
-        return m_forcedPosition;
+        return m_settings.m_forcedPosition;
     }
     else
     {
         VECTOR2D mousePosition = GetMousePosition();
 
-        if( m_snappingEnabled )
+        if( m_settings.m_snappingEnabled )
             return m_view->GetGAL()->GetGridPoint( m_view->ToWorld( mousePosition ) );
         else
             return m_view->ToWorld( mousePosition );
@@ -420,8 +420,8 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     VECTOR2D p( aEvent.GetX(), aEvent.GetY() );
 
     // Compute areas where autopanning is active
-    double borderStart = std::min( m_autoPanMargin * m_view->GetScreenPixelSize().x,
-                                   m_autoPanMargin * m_view->GetScreenPixelSize().y );
+    double borderStart = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
+                                   m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
     double borderEndX = m_view->GetScreenPixelSize().x - borderStart;
     double borderEndY = m_view->GetScreenPixelSize().y - borderStart;
 

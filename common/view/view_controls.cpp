@@ -32,16 +32,51 @@ using namespace KIGFX;
 
 void VIEW_CONTROLS::ShowCursor( bool aEnabled )
 {
+    m_settings.m_showCursor = aEnabled;
     m_view->GetGAL()->SetCursorEnabled( aEnabled );
+}
+
+
+bool VIEW_CONTROLS::IsCursorShown() const
+{
+    assert( m_settings.m_showCursor == m_view->GetGAL()->IsCursorEnabled() );
+    return m_settings.m_showCursor;
 }
 
 
 void VIEW_CONTROLS::Reset()
 {
-    SetSnapping( false );
-    SetAutoPan( false );
-    ForceCursorPosition( false );
-    ShowCursor( false );
-    CaptureCursor( false );
-    SetGrabMouse( false );
+    // Get the default settings from the default constructor
+    SETTINGS dummy;
+    ApplySettings( dummy );
+}
+
+
+void VIEW_CONTROLS::SETTINGS::Reset()
+{
+    m_showCursor = false;
+    m_forceCursorPosition = false;
+    m_cursorCaptured = false;
+    m_snappingEnabled = false;
+    m_grabMouse = false;
+    m_autoPanEnabled = false;
+    m_autoPanMargin = 0.1;
+    m_autoPanSpeed = 0.15;
+    m_warpCursor = false;
+    m_enableMousewheelPan = false;
+}
+
+
+void VIEW_CONTROLS::ApplySettings( const SETTINGS& aSettings )
+{
+    ShowCursor( aSettings.m_showCursor );
+    ForceCursorPosition( aSettings.m_forceCursorPosition, aSettings.m_forcedPosition );
+    CaptureCursor( aSettings.m_cursorCaptured );
+    SetSnapping( aSettings.m_snappingEnabled );
+    SetGrabMouse( aSettings.m_grabMouse );
+    SetAutoPan( aSettings.m_autoPanEnabled );
+    SetAutoPanMargin( aSettings.m_autoPanMargin );
+    SetAutoPanSpeed( aSettings.m_autoPanSpeed );
+    EnableCursorWarping( aSettings.m_warpCursor );
+    EnableMousewheelPan( aSettings.m_enableMousewheelPan );
 }
