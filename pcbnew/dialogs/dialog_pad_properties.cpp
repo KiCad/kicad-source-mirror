@@ -347,14 +347,19 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( m_currentPad )
     {
-        MODULE* footprint = m_currentPad->GetParent();
         m_isFlipped = m_currentPad->IsFlipped();
 
         if( m_isFlipped )
             m_staticModuleSideValue->SetLabel( _( "Back side (footprint is mirrored)" ) );
 
         // Diplay footprint rotation ( angles are in 0.1 degree )
-        msg.Printf( wxT( "%.1f" ), footprint->GetOrientation() / 10.0 );
+        MODULE* footprint = m_currentPad->GetParent();
+
+        if( footprint )
+            msg.Printf( "%.1f", footprint->GetOrientationDegrees() );
+        else
+            msg = _("No footprint" );
+
         m_staticModuleRotValue->SetLabel( msg );
     }
 
@@ -459,8 +464,11 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( m_currentPad )
     {
+        angle = m_currentPad->GetOrientation();
         MODULE* footprint = m_currentPad->GetParent();
-        angle = m_currentPad->GetOrientation() - footprint->GetOrientation();
+
+        if( footprint )
+            angle -= footprint->GetOrientation();
 
         if( m_isFlipped )
             angle = -angle;
@@ -952,7 +960,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     wxSize  size;
     MODULE* footprint = m_currentPad->GetParent();
 
-    footprint->SetLastEditTime();
+    if( footprint )
+        footprint->SetLastEditTime();
 
     // redraw the area where the pad was, without pad (delete pad on screen)
     m_currentPad->SetFlags( DO_NOT_DRAW );
