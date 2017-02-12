@@ -397,8 +397,15 @@ bool SCH_EDIT_FRAME::AppendOneEEProject()
     {
         PART_LIBS*  libs = Prj().SchLibs();
 
-        if( PART_LIB* lib = libs->AddLibrary( cache_name ) )
-            lib->SetCache();
+        try
+        {
+            if( PART_LIB* lib = libs->AddLibrary( cache_name ) )
+                lib->SetCache();
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayError( this, ioe.What() );
+        }
     }
 
     wxLogDebug( wxT( "Importing schematic " ) + fullFileName );

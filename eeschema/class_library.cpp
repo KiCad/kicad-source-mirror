@@ -548,7 +548,8 @@ const wxString PART_LIBS::CacheName( const wxString& aFullProjectFilename )
 }
 
 
-void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress ) throw( IO_ERROR, boost::bad_pointer )
+void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
+    throw( IO_ERROR, boost::bad_pointer )
 {
     wxString        filename;
     wxString        libs_not_found;

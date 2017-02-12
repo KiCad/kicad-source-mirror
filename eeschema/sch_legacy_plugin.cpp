@@ -2382,10 +2382,6 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
         value.SetVisible( false );
     }
 
-    // Add the root alias to the alias list.
-    part->m_aliases.push_back( new LIB_ALIAS( name, part.get() ) );
-    m_aliases[ part->GetName() ] = part->GetAlias( name );
-
     LIB_FIELD& reference = part->GetReferenceField();
 
     if( prefix == "~" )
@@ -2450,7 +2446,13 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
         else if( strCompare( "$FPLIST", line, &line ) )  // Footprint filter list
             loadFootprintFilters( part, aReader );
         else if( strCompare( "ENDDEF", line, &line ) )   // End of part description
+        {
+            // Add the root alias to the alias list.
+            part->m_aliases.push_back( new LIB_ALIAS( name, part.get() ) );
+            m_aliases[ part->GetName() ] = part->GetAlias( name );
+
             return part.release();
+        }
 
         line = aReader.ReadLine();
     }
