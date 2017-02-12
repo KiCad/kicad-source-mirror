@@ -62,10 +62,10 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     SCH_SCREENS     screens;
     PART_LIBS*      libs = Prj().SchLibs();
 
-    std::unique_ptr<PART_LIB> libCache( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
+    std::unique_ptr<PART_LIB> cacheLib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
 
-    libCache->SetCache();
-    libCache->EnableBuffering();
+    cacheLib->SetCache();
+    cacheLib->EnableBuffering();
 
     /* Examine all screens (not hierarchical sheets) used in the schematic and build a
      * library of unique symbols found in all screens.  Complex hierarchies are not a
@@ -79,36 +79,31 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 continue;
 
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+            LIB_PART* part = NULL;
 
-            // If not already saved in the new cache, add it.
-            if( !libCache->FindAlias( component->GetLibId().GetLibItemName() ) )
+            try
             {
-                LIB_PART* part = NULL;
+                part = libs->FindLibPart( component->GetLibId() );
 
-                try
+                if( part )
                 {
-                    part = libs->FindLibPart( component->GetLibId() );
-
-                    if( part )
-                    {
-                        // AddPart() does first clone the part before adding.
-                        libCache->AddPart( part );
-                    }
+                    // AddPart() does first clone the part before adding.
+                    cacheLib->AddPart( part );
                 }
-                catch( ... /* IO_ERROR ioe */ )
-                {
-                    msg.Printf( _( "Failed to add symbol %s to library file '%s'" ),
-                                wxString( component->GetLibId().GetLibItemName() ), aFileName );
-                    DisplayError( this, msg );
-                    return false;
-                }
+            }
+            catch( ... /* IO_ERROR ioe */ )
+            {
+                msg.Printf( _( "Failed to add symbol %s to library file '%s'" ),
+                            wxString( component->GetLibId().GetLibItemName() ), aFileName );
+                DisplayError( this, msg );
+                return false;
             }
         }
     }
 
     try
     {
-        libCache->Save( false );
+        cacheLib->Save( false );
     }
     catch( ... /* IO_ERROR ioe */ )
     {

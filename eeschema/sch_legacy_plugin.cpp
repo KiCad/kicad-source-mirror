@@ -3527,20 +3527,20 @@ bool SCH_LEGACY_PLUGIN::DeleteSymbolLib( const wxString& aLibraryPath,
 
 void SCH_LEGACY_PLUGIN::SaveLibrary( const wxString& aLibraryPath, const PROPERTIES* aProperties )
 {
-    if( m_cache )
+    if( !m_cache )
+        m_cache = new SCH_LEGACY_PLUGIN_CACHE( aLibraryPath );
+
+    wxString oldFileName = m_cache->GetFileName();
+
+    if( !m_cache->IsFile( aLibraryPath ) )
     {
-        wxString oldFileName = m_cache->GetFileName();
-
-        if( !m_cache->IsFile( aLibraryPath ) )
-        {
-            m_cache->SetFileName( aLibraryPath );
-        }
-
-        // This is a forced save.
-        m_cache->SetModified();
-        m_cache->Save( writeDocFile( aProperties ) );
-        m_cache->SetFileName( oldFileName );
+        m_cache->SetFileName( aLibraryPath );
     }
+
+    // This is a forced save.
+    m_cache->SetModified();
+    m_cache->Save( writeDocFile( aProperties ) );
+    m_cache->SetFileName( oldFileName );
 }
 
 
