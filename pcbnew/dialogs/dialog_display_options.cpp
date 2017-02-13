@@ -51,6 +51,9 @@ static const double gridThicknessMin = 0.5;
 static const double gridThicknessMax = 10.0;
 static const double gridThicknessStep = 0.5;
 
+static const double gridMinSpacingMin = 5;
+static const double gridMinSpacingMax = 200;
+static const double gridMinSpacingStep = 5;
 
 static void setRadioFromGridStyle( wxRadioBox& aRBox,
                                    KIGFX::GRID_STYLE aStyle )
@@ -214,6 +217,13 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
                                     gridThicknessStep );
     m_gridSizeIncrementer->SetPrecision( 1 );
 
+    m_gridMinSpacingIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
+                *m_gridMinSpacingSpinBtn, *m_gridMinSpacing);
+
+    m_gridMinSpacingIncrementer->SetStep( gridMinSpacingMin, gridMinSpacingMax,
+                                          gridMinSpacingStep );
+    m_gridMinSpacingIncrementer->SetPrecision( 0 ); // restrict to ints
+
     // load settings into controls
     init();
 
@@ -254,6 +264,8 @@ void DIALOG_DISPLAY_OPTIONS::init()
     setRadioFromGridStyle( *m_gridStyle, gal_opts.m_gridStyle );
 
     m_gridSizeIncrementer->SetValue( gal_opts.m_gridLineWidth );
+
+    m_gridMinSpacingIncrementer->SetValue( gal_opts.m_gridMinSpacing );
 }
 
 
@@ -299,6 +311,8 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     gal_opts.m_gridStyle = getGridStyleFromRadio( *m_gridStyle );
 
     gal_opts.m_gridLineWidth = m_gridSizeIncrementer->GetValue();
+
+    gal_opts.m_gridMinSpacing = m_gridMinSpacingIncrementer->GetValue();
 
     gal_opts.NotifyChanged();
 

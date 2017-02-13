@@ -852,8 +852,10 @@ void OPENGL_GAL::DrawGrid()
     double minorLineWidth = std::max( 1.0, gridLineWidth );
     double majorLineWidth = minorLineWidth * 2.0;
 
+    const double gridThreshold = computeMinGridSpacing();
+
     // Check if the grid would not be too dense
-    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridDrawThreshold )
+    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridThreshold )
         return;
 
     SetTarget( TARGET_NONCACHED );
@@ -907,13 +909,13 @@ void OPENGL_GAL::DrawGrid()
     // Vertical lines
     for( int j = gridStartY; j != gridEndY; j += dirY )
     {
-        if( j % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
+        if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
             glLineWidth( majorLineWidth );
         else
             glLineWidth( minorLineWidth );
 
-        if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
-            || gridScreenSizeDense > gridDrawThreshold )
+        if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+            || gridScreenSizeDense > gridThreshold )
         {
             glBegin( GL_LINES );
             glVertex2d( gridStartX * gridSize.x, j * gridSize.y + gridOrigin.y );
@@ -931,13 +933,13 @@ void OPENGL_GAL::DrawGrid()
     // Horizontal lines
     for( int i = gridStartX; i != gridEndX; i += dirX )
     {
-        if( i % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
+        if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
             glLineWidth( majorLineWidth );
         else
             glLineWidth( minorLineWidth );
 
-        if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
-            || gridScreenSizeDense > gridDrawThreshold )
+        if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+            || gridScreenSizeDense > gridThreshold )
         {
             glBegin( GL_LINES );
             glVertex2d( i * gridSize.x + gridOrigin.x, gridStartY * gridSize.y );

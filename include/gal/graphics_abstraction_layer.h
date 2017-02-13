@@ -767,16 +767,6 @@ public:
     }
 
     /**
-     * @brief Set the threshold for grid drawing.
-     *
-     * @param aThreshold is the minimum grid cell size (in pixels) for which the grid is drawn.
-     */
-    inline void SetGridDrawThreshold( int aThreshold )
-    {
-        gridDrawThreshold = aThreshold;
-    }
-
-    /**
      * @brief Set the grid size.
      *
      * @param aGridSize is a vector containing the grid size in x and y direction.
@@ -978,7 +968,7 @@ protected:
     COLOR4D            gridColor;              ///< Color of the grid
     int                gridTick;               ///< Every tick line gets the double width
     double             gridLineWidth;          ///< Line width of the grid
-    int                gridDrawThreshold;      ///< Minimum screen size of the grid (pixels)
+    int                gridMinSpacing;         ///< Minimum screen size of the grid (pixels)
                                                ///< below which the grid is not drawn
 
     // Cursor settings
@@ -995,6 +985,13 @@ protected:
     {
         worldScale = screenDPI * worldUnitLength * zoomFactor;
     }
+
+    /**
+     * @brief compute minimum grid spacing from the grid settings
+     *
+     * @return the minimum spacing to use for drawing the grid
+     */
+    double computeMinGridSpacing() const;
 
     /**
      * @brief Draw a grid line (usually a simplified line function).

@@ -56,7 +56,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	sGridSettings->Add( m_gridStyle, 0, wxALL|wxEXPAND, 5 );
 	
 	wxFlexGridSizer* sGridSettingsGrid;
-	sGridSettingsGrid = new wxFlexGridSizer( 0, 3, 0, 0 );
+	sGridSettingsGrid = new wxFlexGridSizer( 0, 4, 0, 0 );
 	sGridSettingsGrid->AddGrowableCol( 1 );
 	sGridSettingsGrid->SetFlexibleDirection( wxBOTH );
 	sGridSettingsGrid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -66,10 +66,28 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	sGridSettingsGrid->Add( l_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_gridLineWidth = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY, _("0.5"), wxDefaultPosition, wxDefaultSize, 0 );
-	sGridSettingsGrid->Add( m_gridLineWidth, 0, wxEXPAND, 0 );
+	sGridSettingsGrid->Add( m_gridLineWidth, 0, wxEXPAND, 5 );
 	
 	m_gridLineWidthSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
 	sGridSettingsGrid->Add( m_gridLineWidthSpinBtn, 0, wxALL, 0 );
+	
+	l_gridLineWidthUnits = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
+	l_gridLineWidthUnits->Wrap( -1 );
+	sGridSettingsGrid->Add( l_gridLineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	l_gridMinSpacing = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _("Min grid spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
+	l_gridMinSpacing->Wrap( -1 );
+	sGridSettingsGrid->Add( l_gridMinSpacing, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_gridMinSpacing = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY, _("10"), wxDefaultPosition, wxDefaultSize, 0 );
+	sGridSettingsGrid->Add( m_gridMinSpacing, 0, wxEXPAND, 5 );
+	
+	m_gridMinSpacingSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
+	sGridSettingsGrid->Add( m_gridMinSpacingSpinBtn, 0, wxALL, 0 );
+	
+	l_gridMinSpacingUnits = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
+	l_gridMinSpacingUnits->Wrap( -1 );
+	sGridSettingsGrid->Add( l_gridMinSpacingUnits, 0, wxALL, 5 );
 	
 	
 	sGridSettings->Add( sGridSettingsGrid, 1, wxALL|wxEXPAND, 5 );

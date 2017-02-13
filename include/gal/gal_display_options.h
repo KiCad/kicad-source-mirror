@@ -74,6 +74,9 @@ namespace KIGFX
 
         ///> Thickness to render grid lines/dots
         double m_gridLineWidth;
+
+        ///> Minimum pixel distance between displayed grid lines
+        double m_gridMinSpacing;
     };
 
 }

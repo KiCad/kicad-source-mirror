@@ -35,6 +35,7 @@ private:
    PCB_EDIT_FRAME* m_Parent;
 
    std::unique_ptr<INCREMENTAL_TEXT_CTRL> m_gridSizeIncrementer;
+   std::unique_ptr<INCREMENTAL_TEXT_CTRL> m_gridMinSpacingIncrementer;
 
    void init();
 

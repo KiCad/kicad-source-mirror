@@ -32,6 +32,7 @@ using namespace KIGFX;
 static const wxString GalGLAntialiasingKeyword( "OpenGLAntialiasingMode" );
 static const wxString GalGridStyleConfig( "GridStyle" );
 static const wxString GalGridLineWidthConfig( "GridLineWidth" );
+static const wxString GalGridMaxDensityConfig( "GridMaxDensity" );
 
 
 GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
@@ -53,6 +54,9 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
     aCfg->Read( aBaseName + GalGridLineWidthConfig,
                 &m_gridLineWidth, 0.5 );
 
+    aCfg->Read( aBaseName + GalGridMaxDensityConfig,
+                &m_gridMinSpacing, 10 );
+
     NotifyChanged();
 }
 
@@ -67,6 +71,9 @@ void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase* aCfg, wxString aBaseName )
 
     aCfg->Write( aBaseName + GalGridLineWidthConfig,
                  m_gridLineWidth );
+
+    aCfg->Write( aBaseName + GalGridMaxDensityConfig,
+                 m_gridMinSpacing );
 }
 
 

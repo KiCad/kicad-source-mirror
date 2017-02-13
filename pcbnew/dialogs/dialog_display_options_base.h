@@ -53,6 +53,11 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxStaticText* l_gridLineWidth;
 		wxTextCtrl* m_gridLineWidth;
 		wxSpinButton* m_gridLineWidthSpinBtn;
+		wxStaticText* l_gridLineWidthUnits;
+		wxStaticText* l_gridMinSpacing;
+		wxTextCtrl* m_gridMinSpacing;
+		wxSpinButton* m_gridMinSpacingSpinBtn;
+		wxStaticText* l_gridMinSpacingUnits;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxRadioBox* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayModOutlines;
