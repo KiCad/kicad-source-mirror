@@ -37,6 +37,8 @@
 #include "hotkeys.h"
 #include "libeditframe.h"
 
+extern int CreateNewLibAndSavePartId;
+
 
 /**
  * @brief (Re)Create the menubar for the component editor frame
@@ -71,9 +73,9 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
 
     // Save current library
+    text = AddHotkeyName( _( "&Save Current Library" ), g_Libedit_Hokeys_Descr, HK_SAVE_LIB );
     AddMenuItem( fileMenu,
-                 ID_LIBEDIT_SAVE_CURRENT_LIB,
-                 _( "&Save Current Library\tCtrl+S" ),
+                 ID_LIBEDIT_SAVE_CURRENT_LIB, text,
                  _( "Save the current active library" ),
                  KiBitmap( save_xpm ) );
 
@@ -83,6 +85,12 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Save Current Library &As..." ),
                  _( "Save current active library as..." ),
                  KiBitmap( save_as_xpm ) );
+
+    AddMenuItem( fileMenu,
+                 CreateNewLibAndSavePartId,
+                 _( "Create &New Library and Save Current Component" ),
+                 _( "Save current component to new library" ),
+                 KiBitmap( new_library_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
