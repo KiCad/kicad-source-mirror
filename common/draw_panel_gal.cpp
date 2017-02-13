@@ -114,15 +114,12 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     Connect( m_onShowTimer.GetId(), wxEVT_TIMER,
             wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onShowTimer ), NULL, this );
     m_onShowTimer.Start( 10 );
-
-    LoadGalSettings();
 }
 
 
 EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 {
     StopDrawing();
-    SaveGalSettings();
 
     assert( !m_drawing );
 
@@ -353,7 +350,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             break;
 
         case GAL_TYPE_CAIRO:
-            new_gal = new KIGFX::CAIRO_GAL( this, this, this );
+            new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
             break;
 
         default:
@@ -363,19 +360,21 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         case GAL_TYPE_NONE:
             // KIGFX::GAL is a stub - it actually does cannot display anything,
             // but prevents code relying on GAL canvas existence from crashing
-            new_gal = new KIGFX::GAL();
+            new_gal = new KIGFX::GAL( m_options );
             break;
         }
     }
     catch( std::runtime_error& err )
     {
-        new_gal = new KIGFX::GAL();
+        new_gal = new KIGFX::GAL( m_options );
         aGalType = GAL_TYPE_NONE;
         DisplayError( m_parent, wxString( err.what() ) );
         result = false;
     }
 
-    SaveGalSettings();
+    // trigger update of the gal options in case they differ
+    // from the defaults
+    m_options.NotifyChanged();
 
     assert( new_gal );
     delete m_gal;
@@ -391,46 +390,8 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         m_view->SetGAL( m_gal );
 
     m_backend = aGalType;
-    LoadGalSettings();
 
     return result;
-}
-
-
-bool EDA_DRAW_PANEL_GAL::SaveGalSettings()
-{
-    if( !m_edaFrame || !m_gal )
-        return false;
-
-    wxConfigBase* cfg = Kiface().KifaceSettings();
-    wxString baseCfgName = m_edaFrame->GetName();
-
-    if( !cfg )
-        return false;
-
-    if( !cfg->Write( baseCfgName + GRID_STYLE_CFG, (long) GetGAL()->GetGridStyle() ) )
-        return false;
-
-    return true;
-}
-
-
-bool EDA_DRAW_PANEL_GAL::LoadGalSettings()
-{
-    if( !m_edaFrame || !m_gal )
-        return false;
-
-    wxConfigBase* cfg = Kiface().KifaceSettings();
-    wxString baseCfgName = m_edaFrame->GetName();
-
-    if( !cfg )
-        return false;
-
-    long gridStyle;
-    cfg->Read( baseCfgName + GRID_STYLE_CFG, &gridStyle, (long) KIGFX::GRID_STYLE::GRID_STYLE_DOTS );
-    GetGAL()->SetGridStyle( (KIGFX::GRID_STYLE) gridStyle );
-
-    return true;
 }
 
 

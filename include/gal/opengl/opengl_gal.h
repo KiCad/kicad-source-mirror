@@ -62,7 +62,7 @@ class SHADER;
  * and quads. The purpose is to provide a fast graphics interface, that takes advantage of modern
  * graphics card GPUs. All methods here benefit thus from the hardware acceleration.
  */
-class OPENGL_GAL : public GAL, public wxGLCanvas, GAL_DISPLAY_OPTIONS_OBSERVER
+class OPENGL_GAL : public GAL, public wxGLCanvas
 {
 public:
     /**
@@ -98,8 +98,6 @@ public:
     {
         return IsShownOnScreen();
     }
-
-    void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& ) override;
 
     // ---------------
     // Drawing methods
@@ -282,9 +280,6 @@ private:
     /// Super class definition
     typedef GAL super;
 
-    GAL_DISPLAY_OPTIONS&    options;
-    UTIL::LINK              observerLink;
-
     static const int    CIRCLE_POINTS   = 64;   ///< The number of points for circle approximation
     static const int    CURVE_POINTS    = 32;   ///< The number of points for curve approximation
 
@@ -321,6 +316,9 @@ private:
     bool                    isInitialized;              ///< Basic initialization flag, has to be done
                                                         ///< when the window is visible
     bool                    isGrouping;                 ///< Was a group started?
+
+    ///< Update handler for OpenGL settings
+    bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
 
     // Polygon tesselation
     /// The tessellator

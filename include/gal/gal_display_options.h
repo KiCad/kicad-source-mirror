@@ -29,9 +29,16 @@
 class wxConfigBase;
 class wxString;
 
-namespace KIGFX {
-
-    class GAL_DISPLAY_OPTIONS;
+namespace KIGFX
+{
+    /**
+     * GridStyle: Type definition of the grid style
+     */
+    enum GRID_STYLE
+    {
+        GRID_STYLE_LINES,   ///< Use lines for the grid
+        GRID_STYLE_DOTS     ///< Use dots for the grid
+    };
 
     enum class OPENGL_ANTIALIASING_MODE : long
     {
@@ -41,6 +48,8 @@ namespace KIGFX {
         SUPERSAMPLING_X2 = 3,
         SUPERSAMPLING_X4 = 4
     };
+
+    class GAL_DISPLAY_OPTIONS;
 
     class GAL_DISPLAY_OPTIONS_OBSERVER
     {
@@ -53,12 +62,12 @@ namespace KIGFX {
     public:
         GAL_DISPLAY_OPTIONS();
 
-        OPENGL_ANTIALIASING_MODE gl_antialiasing_mode;
-
         void ReadConfig ( wxConfigBase* aCfg, wxString aBaseName );
         void WriteConfig( wxConfigBase* aCfg, wxString aBaseName );
 
         void NotifyChanged();
+
+        OPENGL_ANTIALIASING_MODE gl_antialiasing_mode;
     };
 
 }

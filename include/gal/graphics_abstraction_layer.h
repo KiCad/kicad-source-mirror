@@ -36,6 +36,7 @@
 #include <gal/color4d.h>
 #include <gal/definitions.h>
 #include <gal/stroke_font.h>
+#include <gal/gal_display_options.h>
 #include <newstroke_font.h>
 
 class SHAPE_LINE_CHAIN;
@@ -43,15 +44,6 @@ class SHAPE_POLY_SET;
 
 namespace KIGFX
 {
-/**
- * GridStyle: Type definition of the grid style
- */
-enum GRID_STYLE
-{
-    GRID_STYLE_LINES,   ///< Use lines for the grid
-    GRID_STYLE_DOTS     ///< Use dots for the grid
-};
-
 
 /**
  * @brief Class GAL is the abstract interface for drawing on a 2D-surface.
@@ -63,11 +55,11 @@ enum GRID_STYLE
  * for drawing purposes these are transformed to screen units with this layer. So zooming is handled here as well.
  *
  */
-class GAL
+class GAL: GAL_DISPLAY_OPTIONS_OBSERVER
 {
 public:
     // Constructor / Destructor
-    GAL();
+    GAL( GAL_DISPLAY_OPTIONS& aOptions );
     virtual ~GAL();
 
     /// @brief Returns the initalization status for the canvas.
@@ -975,6 +967,10 @@ public:
     static const double METRIC_UNIT_LENGTH;
 
 protected:
+
+    GAL_DISPLAY_OPTIONS&    options;
+    UTIL::LINK              observerLink;
+
     std::stack<double> depthStack;             ///< Stored depth values
     VECTOR2I           screenSize;             ///< Screen size in screen coordinates
 
@@ -1042,6 +1038,25 @@ protected:
 
     /// Depth level on which the grid is drawn
     static const int GRID_DEPTH;
+
+    // ---------------
+    // Settings observer interface
+    // ---------------
+    /**
+     * Handler for observer settings changes
+     */
+    void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aOptions ) override;
+
+    /**
+     * Function updatedGalDisplayOptions
+     *
+     * @brief handler for updated display options. Derived classes
+     * should call up to this to set base-class methods.
+     *
+     * @return true if the new settings changed something. Derived classes
+     * can use this information to refresh themselves
+     */
+    virtual bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions );
 
 private:
     struct TEXT_PROPERTIES

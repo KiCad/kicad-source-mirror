@@ -37,7 +37,8 @@ using namespace KIGFX;
 const double GAL::METRIC_UNIT_LENGTH = 1e9;
 
 
-GAL::GAL() :
+GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
+    options( aDisplayOptions ),
     strokeFont( this )
 {
     // Set the default values for the internal variables
@@ -68,11 +69,31 @@ GAL::GAL() :
     SetCursorEnabled( false );
 
     strokeFont.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize );
+
+    // subscribe for settings updates
+    observerLink = options.Subscribe( this );
 }
 
 
 GAL::~GAL()
 {
+}
+
+void GAL::OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aOptions )
+{
+    // defer to the child class first
+    updatedGalDisplayOptions( aOptions );
+
+    // there is no refresh to do at this level
+}
+
+
+bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
+{
+    bool refresh = false;
+
+    // tell the derived class if the base class needs an update or not
+    return refresh;
 }
 
 

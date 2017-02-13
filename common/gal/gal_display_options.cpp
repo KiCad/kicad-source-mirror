@@ -26,7 +26,11 @@
 
 using namespace KIGFX;
 
-static const wxString GalGLAntialiasingKeyword( wxT( "OpenGLAntialiasingMode" ) );
+/*
+ * Config option strings
+ */
+static const wxString GalGLAntialiasingKeyword( "OpenGLAntialiasingMode" );
+
 
 GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
     : gl_antialiasing_mode( OPENGL_ANTIALIASING_MODE::NONE )
@@ -36,8 +40,8 @@ GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
 void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
 {
     aCfg->Read( aBaseName + GalGLAntialiasingKeyword,
-        reinterpret_cast<long*>(&gl_antialiasing_mode),
-        (long)KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
+                reinterpret_cast<long*>( &gl_antialiasing_mode ),
+                static_cast<long>( KIGFX::OPENGL_ANTIALIASING_MODE::NONE ) );
 
     NotifyChanged();
 }
@@ -46,7 +50,7 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
 void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase* aCfg, wxString aBaseName )
 {
     aCfg->Write( aBaseName + GalGLAntialiasingKeyword,
-                    static_cast<long>(gl_antialiasing_mode) );
+                 static_cast<long>( gl_antialiasing_mode ) );
 }
 
 

@@ -66,9 +66,10 @@ SHADER* OPENGL_GAL::shader = NULL;
 OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
                         wxEvtHandler* aMouseListener, wxEvtHandler* aPaintListener,
                         const wxString& aName ) :
+    GAL( aDisplayOptions ),
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
-    options( aDisplayOptions ), mouseListener( aMouseListener ), paintListener( aPaintListener )
+    mouseListener( aMouseListener ), paintListener( aPaintListener )
 {
     if( glMainContext == NULL )
     {
@@ -100,8 +101,6 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 #ifdef RETINA_OPENGL_PATCH
     SetViewWantsBestResolution( true );
 #endif
-
-    observerLink = options.Subscribe( this );
 
     // Connecting the event handlers
     Connect( wxEVT_PAINT,           wxPaintEventHandler( OPENGL_GAL::onPaint ) );
@@ -182,18 +181,27 @@ OPENGL_GAL::~OPENGL_GAL()
         GL_CONTEXT_MANAGER::Get().DestroyCtx( glMainContext );
         glMainContext = NULL;
     }
-
 }
 
 
-void OPENGL_GAL::OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aDisplayOptions )
+bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 {
+    bool refresh = false;
+
     if( options.gl_antialiasing_mode != compositor->GetAntialiasingMode() )
     {
         compositor->SetAntialiasingMode( options.gl_antialiasing_mode );
         isFramebufferInitialized = false;
-        Refresh();
+        refresh = true;
     }
+
+    if( super::updatedGalDisplayOptions( aOptions ) || refresh )
+    {
+        Refresh();
+        refresh = true;
+    }
+
+    return refresh;
 }
 
 

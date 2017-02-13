@@ -178,18 +178,6 @@ public:
     }
 
     /**
-     * Function SaveGalSettings()
-     * Stores GAL related settings in the configuration storage.
-     */
-    virtual bool SaveGalSettings();
-
-    /**
-     * Function LoadGalSettings()
-     * Loads GAL related settings from the configuration storage.
-     */
-    virtual bool LoadGalSettings();
-
-    /**
      * Function OnShow()
      * Called when the window is shown for the first time.
      */
