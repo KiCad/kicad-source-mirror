@@ -61,8 +61,13 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     wxString        msg;
     SCH_SCREENS     screens;
     PART_LIBS*      libs = Prj().SchLibs();
+    PART_LIB*       cacheLib = libs->FindLibraryByFullFileName( aFileName );
 
-    std::unique_ptr<PART_LIB> cacheLib( new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName ) );
+    if( !cacheLib )
+    {
+        cacheLib = new PART_LIB( LIBRARY_TYPE_EESCHEMA, aFileName );
+        libs->push_back( cacheLib );
+    }
 
     cacheLib->SetCache();
     cacheLib->EnableBuffering();
@@ -79,24 +84,28 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
                 continue;
 
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-            LIB_PART* part = NULL;
 
-            try
+            if( !cacheLib->FindAlias( component->GetLibId().GetLibItemName() ) )
             {
-                part = libs->FindLibPart( component->GetLibId() );
+                LIB_PART* part = NULL;
 
-                if( part )
+                try
                 {
-                    // AddPart() does first clone the part before adding.
-                    cacheLib->AddPart( part );
+                    part = libs->FindLibPart( component->GetLibId() );
+
+                    if( part )
+                    {
+                        // AddPart() does first clone the part before adding.
+                        cacheLib->AddPart( part );
+                    }
                 }
-            }
-            catch( ... /* IO_ERROR ioe */ )
-            {
-                msg.Printf( _( "Failed to add symbol %s to library file '%s'" ),
-                            wxString( component->GetLibId().GetLibItemName() ), aFileName );
-                DisplayError( this, msg );
-                return false;
+                catch( ... /* IO_ERROR ioe */ )
+                {
+                    msg.Printf( _( "Failed to add symbol %s to library file '%s'" ),
+                                wxString( component->GetLibId().GetLibItemName() ), aFileName );
+                    DisplayError( this, msg );
+                    return false;
+                }
             }
         }
     }

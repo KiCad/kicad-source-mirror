@@ -2060,7 +2060,10 @@ bool SCH_LEGACY_PLUGIN_CACHE::IsFile( const wxString& aFullPathAndFileName ) con
 
 bool SCH_LEGACY_PLUGIN_CACHE::IsFileChanged() const
 {
-    return m_libFileName.GetModificationTime() != m_fileModTime;
+    if( m_fileModTime.IsValid() && m_libFileName.IsOk() && m_libFileName.FileExists() )
+        return m_libFileName.GetModificationTime() != m_fileModTime;
+
+    return false;
 }
 
 
