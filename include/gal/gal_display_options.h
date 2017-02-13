@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KICAD, a free EDA CAD application.
 *
-* Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
+* Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -68,6 +68,9 @@ namespace KIGFX
         void NotifyChanged();
 
         OPENGL_ANTIALIASING_MODE gl_antialiasing_mode;
+
+        ///> The grid style to draw the grid in
+        KIGFX::GRID_STYLE m_gridStyle;
     };
 
 }

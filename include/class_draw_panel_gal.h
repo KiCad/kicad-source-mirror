@@ -240,9 +240,6 @@ protected:
     /// Flag to indicate that focus should be regained on the next mouse event. It is a workaround
     /// for cases when the panel loses keyboard focus, so it does not react to hotkeys anymore.
     bool                     m_lostFocus;
-
-    /// Grid style setting string
-    static const wxChar GRID_STYLE_CFG[];
 };
 
 #endif

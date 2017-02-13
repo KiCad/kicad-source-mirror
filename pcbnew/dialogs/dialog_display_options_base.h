@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 15 2016)
+// C++ code generated with wxFormBuilder (version Jan  9 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -46,6 +46,7 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_OptDisplayTracks;
 		wxCheckBox* m_OptDisplayVias;
 		wxChoice* m_choiceAntialiasing;
+		wxRadioBox* m_gridStyle;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxRadioBox* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayModOutlines;

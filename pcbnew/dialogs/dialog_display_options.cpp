@@ -44,6 +44,19 @@
 #include <gal/gal_display_options.h>
 
 
+static void setRadioFromGridStyle( wxRadioBox& aRBox,
+                                   KIGFX::GRID_STYLE aStyle )
+{
+    aRBox.SetSelection( aStyle != KIGFX::GRID_STYLE_DOTS );
+}
+
+
+static KIGFX::GRID_STYLE getGridStyleFromRadio( const wxRadioBox& aRBox )
+{
+    return aRBox.GetSelection() == 0 ? KIGFX::GRID_STYLE_DOTS : KIGFX::GRID_STYLE_LINES;
+}
+
+
 void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 {
     DIALOG_DISPLAY_OPTIONS dlg( this );
@@ -131,6 +144,7 @@ void DIALOG_DISPLAY_OPTIONS::init()
             break;
     }
 
+    setRadioFromGridStyle( *m_gridStyle, gal_opts.m_gridStyle );
 }
 
 
@@ -213,6 +227,8 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
             break;
     }
 
+    gal_opts.m_gridStyle = getGridStyleFromRadio( *m_gridStyle );
+
     gal_opts.NotifyChanged();
 
     // Apply changes to the GAL
@@ -222,6 +238,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->LoadDisplayOptions( displ_opts );
     view->RecacheAllItems();
+    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     m_Parent->GetCanvas()->Refresh();
 

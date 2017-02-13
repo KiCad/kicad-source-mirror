@@ -30,10 +30,12 @@ using namespace KIGFX;
  * Config option strings
  */
 static const wxString GalGLAntialiasingKeyword( "OpenGLAntialiasingMode" );
+static const wxString GalGridStyleConfig( "GridStyle" );
 
 
 GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
-    : gl_antialiasing_mode( OPENGL_ANTIALIASING_MODE::NONE )
+    : gl_antialiasing_mode( OPENGL_ANTIALIASING_MODE::NONE ),
+      m_gridStyle( GRID_STYLE_DOTS )
 {}
 
 
@@ -43,6 +45,10 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
                 reinterpret_cast<long*>( &gl_antialiasing_mode ),
                 static_cast<long>( KIGFX::OPENGL_ANTIALIASING_MODE::NONE ) );
 
+    aCfg->Read( aBaseName + GalGridStyleConfig,
+                reinterpret_cast<long*>( &m_gridStyle ),
+                static_cast<long>( KIGFX::GRID_STYLE::GRID_STYLE_DOTS ) );
+
     NotifyChanged();
 }
 
@@ -51,6 +57,9 @@ void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase* aCfg, wxString aBaseName )
 {
     aCfg->Write( aBaseName + GalGLAntialiasingKeyword,
                  static_cast<long>( gl_antialiasing_mode ) );
+
+    aCfg->Write( aBaseName + GalGridStyleConfig,
+                 static_cast<long>( m_gridStyle ) );
 }
 
 

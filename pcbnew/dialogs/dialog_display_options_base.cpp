@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 15 2016)
+// C++ code generated with wxFormBuilder (version Jan  9 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	sSketchModeSizer->Add( m_OptDisplayVias, 0, wxALL, 5 );
 	
 	
-	sLeftSizer->Add( sSketchModeSizer, 0, wxEXPAND|wxALL, 5 );
+	sLeftSizer->Add( sSketchModeSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sOpenGLRenderingSizer;
 	sOpenGLRenderingSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("OpenGL Rendering:") ), wxVERTICAL );
@@ -44,7 +44,19 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	sOpenGLRenderingSizer->Add( m_choiceAntialiasing, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	sLeftSizer->Add( sOpenGLRenderingSizer, 1, wxEXPAND, 5 );
+	sLeftSizer->Add( sOpenGLRenderingSizer, 0, wxALL|wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sGridSettings;
+	sGridSettings = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Display (OpenGL && Cairo)") ), wxVERTICAL );
+	
+	wxString m_gridStyleChoices[] = { _("Dots"), _("Lines") };
+	int m_gridStyleNChoices = sizeof( m_gridStyleChoices ) / sizeof( wxString );
+	m_gridStyle = new wxRadioBox( sGridSettings->GetStaticBox(), wxID_ANY, _("Grid Style"), wxDefaultPosition, wxDefaultSize, m_gridStyleNChoices, m_gridStyleChoices, 1, wxRA_SPECIFY_COLS );
+	m_gridStyle->SetSelection( 0 );
+	sGridSettings->Add( m_gridStyle, 0, wxALL|wxEXPAND, 5 );
+	
+	
+	sLeftSizer->Add( sGridSettings, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bupperSizer->Add( sLeftSizer, 1, wxEXPAND, 5 );

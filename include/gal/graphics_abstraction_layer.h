@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2017 Kicad Developers, see change_log.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) - base class
  *
@@ -850,24 +850,6 @@ public:
      * @return The nearest grid point in world coordinates.
      */
     VECTOR2D GetGridPoint( const VECTOR2D& aPoint ) const;
-
-    /**
-     * @brief Change the grid display style.
-     *
-     * @param aGridStyle is the new style for grid.
-     */
-    virtual void SetGridStyle( GRID_STYLE aGridStyle )
-    {
-        gridStyle = aGridStyle;
-    }
-
-    /**
-     * @brief Returns the current grid drawing style.
-     */
-    virtual GRID_STYLE GetGridStyle() const
-    {
-        return gridStyle;
-    }
 
     /**
      * @brief Compute the point position in world coordinates from given screen coordinates.

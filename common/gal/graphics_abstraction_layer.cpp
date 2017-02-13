@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2017 Kicad Developers, see change_log.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) - base class
  *
@@ -58,10 +58,10 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
 
     // Set grid defaults
     SetGridVisibility( true );
-    SetGridStyle( GRID_STYLE_LINES );
     SetGridDrawThreshold( 10 );
     SetCoarseGrid( 10 );
     SetGridLineWidth( 0.5 );
+    gridStyle = GRID_STYLE_LINES;
 
     // Initialize the cursor shape
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
@@ -91,6 +91,12 @@ void GAL::OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aOptions )
 bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 {
     bool refresh = false;
+
+    if( options.m_gridStyle != gridStyle )
+    {
+        gridStyle = options.m_gridStyle ;
+        refresh = true;
+    }
 
     // tell the derived class if the base class needs an update or not
     return refresh;
