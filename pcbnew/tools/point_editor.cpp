@@ -42,6 +42,7 @@ using namespace std::placeholders;
 #include <class_zone.h>
 #include <class_board.h>
 #include <class_module.h>
+#include <ratsnest_data.h>
 
 // Few constants to avoid using bare numbers for point indices
 enum SEG_POINTS
@@ -523,7 +524,10 @@ void POINT_EDITOR::finishItem() const
         ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
 
         if( zone->IsFilled() )
+        {
             getEditFrame<PCB_EDIT_FRAME>()->Fill_Zone( zone );
+            zone->GetBoard()->GetRatsnest()->Recalculate( zone->GetNetCode() );
+        }
     }
 }
 

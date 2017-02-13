@@ -499,6 +499,9 @@ bool RN_NET::AddItem( const ZONE_CONTAINER* aZone )
     // Prepare a list of polygons (every zone can contain one or more polygons)
     const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList();
 
+    // This ensures that we record aZone as added even if it contains no polygons.
+    (void) m_zones[aZone];
+
     for( int i = 0; i < polySet.OutlineCount(); ++i )
     {
         const SHAPE_LINE_CHAIN& path = polySet.COutline( i );
