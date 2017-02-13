@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,8 +94,11 @@ void PCB_POLYGON::SetOutline( VERTICES_ARRAY* aOutline )
     for( i = 0; i < (int) aOutline->GetCount(); i++ )
         m_outline.Add( new wxRealPoint( (*aOutline)[i]->x, (*aOutline)[i]->y ) );
 
-    m_positionX = m_outline[0]->x;
-    m_positionY = m_outline[0]->y;
+    if( m_outline.Count() > 0 )
+    {
+        m_positionX = m_outline[0]->x;
+        m_positionY = m_outline[0]->y;
+    }
 }
 
 void PCB_POLYGON::FormPolygon( XNODE*   aNode, VERTICES_ARRAY* aPolygon,
