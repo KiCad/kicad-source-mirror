@@ -113,6 +113,7 @@ bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
     try
     {
         cacheLib->Save( false );
+        cacheLib->EnableBuffering( false );
     }
     catch( ... /* IO_ERROR ioe */ )
     {

@@ -2411,10 +2411,10 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
 
         if( locked == 'L' )
             part->LockUnits( true );
-        else if( locked == 'F' )
+        else if( locked == 'F' || locked == '0' )
             part->LockUnits( false );
         else
-            SCH_PARSE_ERROR( "expected L or F", aReader, line );
+            SCH_PARSE_ERROR( "expected L, F, or 0", aReader, line );
     }
 
 
