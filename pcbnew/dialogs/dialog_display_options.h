@@ -27,10 +27,14 @@
  */
 #include <dialog_display_options_base.h>
 
+class INCREMENTAL_TEXT_CTRL;
+
 class DIALOG_DISPLAY_OPTIONS : public DIALOG_DISPLAY_OPTIONS_BASE
 {
 private:
    PCB_EDIT_FRAME* m_Parent;
+
+   std::unique_ptr<INCREMENTAL_TEXT_CTRL> m_gridSizeIncrementer;
 
    void init();
 

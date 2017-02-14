@@ -24,6 +24,9 @@ class DIALOG_SHIM;
 #include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/radiobox.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include <wx/spinbutt.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -47,6 +50,9 @@ class DIALOG_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_OptDisplayVias;
 		wxChoice* m_choiceAntialiasing;
 		wxRadioBox* m_gridStyle;
+		wxStaticText* l_gridLineWidth;
+		wxTextCtrl* m_gridLineWidth;
+		wxSpinButton* m_gridLineWidthSpinBtn;
 		wxRadioBox* m_ShowNetNamesOption;
 		wxRadioBox* m_OptDisplayTracksClearance;
 		wxCheckBox* m_OptDisplayModOutlines;

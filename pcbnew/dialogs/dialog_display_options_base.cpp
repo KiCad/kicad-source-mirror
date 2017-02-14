@@ -55,6 +55,25 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	m_gridStyle->SetSelection( 0 );
 	sGridSettings->Add( m_gridStyle, 0, wxALL|wxEXPAND, 5 );
 	
+	wxFlexGridSizer* sGridSettingsGrid;
+	sGridSettingsGrid = new wxFlexGridSizer( 0, 3, 0, 0 );
+	sGridSettingsGrid->AddGrowableCol( 1 );
+	sGridSettingsGrid->SetFlexibleDirection( wxBOTH );
+	sGridSettingsGrid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	l_gridLineWidth = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _("Grid thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	l_gridLineWidth->Wrap( -1 );
+	sGridSettingsGrid->Add( l_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_gridLineWidth = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY, _("0.5"), wxDefaultPosition, wxDefaultSize, 0 );
+	sGridSettingsGrid->Add( m_gridLineWidth, 0, wxEXPAND, 0 );
+	
+	m_gridLineWidthSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
+	sGridSettingsGrid->Add( m_gridLineWidthSpinBtn, 0, wxALL, 0 );
+	
+	
+	sGridSettings->Add( sGridSettingsGrid, 1, wxALL|wxEXPAND, 5 );
+	
 	
 	sLeftSizer->Add( sGridSettings, 1, wxALL|wxEXPAND, 5 );
 	

@@ -71,6 +71,9 @@ namespace KIGFX
 
         ///> The grid style to draw the grid in
         KIGFX::GRID_STYLE m_gridStyle;
+
+        ///> Thickness to render grid lines/dots
+        double m_gridLineWidth;
     };
 
 }

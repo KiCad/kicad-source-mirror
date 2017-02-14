@@ -848,6 +848,10 @@ void OPENGL_GAL::DrawGrid()
     int gridScreenSizeDense  = KiROUND( gridSize.x * worldScale );
     int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
 
+    // sub-pixel lines all render the same
+    double minorLineWidth = std::max( 1.0, gridLineWidth );
+    double majorLineWidth = minorLineWidth * 2.0;
+
     // Check if the grid would not be too dense
     if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridDrawThreshold )
         return;
@@ -904,9 +908,9 @@ void OPENGL_GAL::DrawGrid()
     for( int j = gridStartY; j != gridEndY; j += dirY )
     {
         if( j % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
-            glLineWidth( 2.0 );
+            glLineWidth( majorLineWidth );
         else
-            glLineWidth( 1.0 );
+            glLineWidth( minorLineWidth );
 
         if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
             || gridScreenSizeDense > gridDrawThreshold )
@@ -928,9 +932,9 @@ void OPENGL_GAL::DrawGrid()
     for( int i = gridStartX; i != gridEndX; i += dirX )
     {
         if( i % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
-            glLineWidth( 2.0 );
+            glLineWidth( majorLineWidth );
         else
-            glLineWidth( 1.0 );
+            glLineWidth( minorLineWidth );
 
         if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
             || gridScreenSizeDense > gridDrawThreshold )

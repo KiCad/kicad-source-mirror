@@ -829,16 +829,6 @@ public:
         return gridLineWidth;
     }
 
-    /**
-     * @brief Set the grid line width.
-     *
-     * @param aGridLineWidth is the rid line width.
-     */
-    inline void SetGridLineWidth( double aGridLineWidth )
-    {
-        gridLineWidth = aGridLineWidth;
-    }
-
     ///> @brief Draw the grid
     virtual void DrawGrid();
 

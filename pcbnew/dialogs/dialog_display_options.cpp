@@ -32,6 +32,7 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <pcbstruct.h>
+#include <incremental_text_ctrl.h>
 
 #include <pcbnew_id.h>
 
@@ -42,6 +43,13 @@
 #include <view/view.h>
 #include <pcb_painter.h>
 #include <gal/gal_display_options.h>
+
+/*
+ * Spin control parameters
+ */
+static const double gridThicknessMin = 0.5;
+static const double gridThicknessMax = 10.0;
+static const double gridThicknessStep = 0.5;
 
 
 static void setRadioFromGridStyle( wxRadioBox& aRBox,
@@ -198,7 +206,17 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
 {
     m_Parent = parent;
 
+    // bind the spin button and text box
+    m_gridSizeIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
+                *m_gridLineWidthSpinBtn, *m_gridLineWidth);
+
+    m_gridSizeIncrementer->SetStep( gridThicknessMin, gridThicknessMax,
+                                    gridThicknessStep );
+    m_gridSizeIncrementer->SetPrecision( 1 );
+
+    // load settings into controls
     init();
+
     m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
@@ -234,6 +252,8 @@ void DIALOG_DISPLAY_OPTIONS::init()
                               gal_opts.gl_antialiasing_mode );
 
     setRadioFromGridStyle( *m_gridStyle, gal_opts.m_gridStyle );
+
+    m_gridSizeIncrementer->SetValue( gal_opts.m_gridLineWidth );
 }
 
 
@@ -277,6 +297,8 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
             *m_choiceAntialiasing );
 
     gal_opts.m_gridStyle = getGridStyleFromRadio( *m_gridStyle );
+
+    gal_opts.m_gridLineWidth = m_gridSizeIncrementer->GetValue();
 
     gal_opts.NotifyChanged();
 

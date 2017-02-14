@@ -60,7 +60,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetGridVisibility( true );
     SetGridDrawThreshold( 10 );
     SetCoarseGrid( 10 );
-    SetGridLineWidth( 0.5 );
+    gridLineWidth = 0.5;
     gridStyle = GRID_STYLE::LINES;
 
     // Initialize the cursor shape
@@ -95,6 +95,12 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
     if( options.m_gridStyle != gridStyle )
     {
         gridStyle = options.m_gridStyle ;
+        refresh = true;
+    }
+
+    if( options.m_gridLineWidth != gridLineWidth )
+    {
+        gridLineWidth = options.m_gridLineWidth ;
         refresh = true;
     }
 
@@ -168,7 +174,10 @@ void GAL::DrawGrid()
     int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
 
     // Compute the line marker or point radius of the grid
-    double marker = 2.0 * gridLineWidth / worldScale;
+    // Note: generic grids can't handle sub-pixel lines without
+    // either losing fine/course distinction or having some dots
+    // fail to render
+    double marker = std::max( 1.0, gridLineWidth ) / worldScale;
     double doubleMarker = 2.0 * marker;
 
     // Check if the grid would not be too dense
@@ -265,7 +274,7 @@ void GAL::DrawGrid()
 
                     if( tickX || tickY || gridScreenSizeDense > gridDrawThreshold )
                     {
-                        double radius = ( tickX && tickY ) ? doubleMarker : marker;
+                        double radius = ( ( tickX && tickY ) ? doubleMarker : marker ) / 2.0;
                         DrawRectangle( VECTOR2D( i * gridSize.x - radius + gridOrigin.x,
                                                  j * gridSize.y - radius + gridOrigin.y ),
                                        VECTOR2D( i * gridSize.x + radius + gridOrigin.x,

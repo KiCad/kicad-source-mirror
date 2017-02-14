@@ -31,6 +31,7 @@ using namespace KIGFX;
  */
 static const wxString GalGLAntialiasingKeyword( "OpenGLAntialiasingMode" );
 static const wxString GalGridStyleConfig( "GridStyle" );
+static const wxString GalGridLineWidthConfig( "GridLineWidth" );
 
 
 GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
@@ -49,6 +50,9 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
                 reinterpret_cast<long*>( &m_gridStyle ),
                 static_cast<long>( KIGFX::GRID_STYLE::DOTS ) );
 
+    aCfg->Read( aBaseName + GalGridLineWidthConfig,
+                &m_gridLineWidth, 0.5 );
+
     NotifyChanged();
 }
 
@@ -60,6 +64,9 @@ void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase* aCfg, wxString aBaseName )
 
     aCfg->Write( aBaseName + GalGridStyleConfig,
                  static_cast<long>( m_gridStyle ) );
+
+    aCfg->Write( aBaseName + GalGridLineWidthConfig,
+                 m_gridLineWidth );
 }
 
 
