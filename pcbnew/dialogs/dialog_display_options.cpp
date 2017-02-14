@@ -57,6 +57,135 @@ static KIGFX::GRID_STYLE getGridStyleFromRadio( const wxRadioBox& aRBox )
 }
 
 
+static void setRadioFromClearanceMode( wxRadioBox& aCtrl,
+                                       TRACE_CLEARANCE_DISPLAY_MODE_T aClearance )
+{
+    int value = 0;
+
+    switch ( aClearance )
+    {
+        case DO_NOT_SHOW_CLEARANCE:
+            value = 0;
+            break;
+
+        case SHOW_CLEARANCE_NEW_TRACKS:
+            value = 1;
+            break;
+
+        case SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
+            value = 3;
+            break;
+
+        case SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
+            value = 2;
+            break;
+
+        case SHOW_CLEARANCE_ALWAYS:
+            value = 4;
+            break;
+
+
+    }
+
+    aCtrl.SetSelection( value );
+}
+
+
+static TRACE_CLEARANCE_DISPLAY_MODE_T getClearanceModeFromRadio(
+        const wxRadioBox& aCtrl )
+{
+    TRACE_CLEARANCE_DISPLAY_MODE_T mode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
+
+    switch ( aCtrl.GetSelection() )
+    {
+        case 0:
+            mode = DO_NOT_SHOW_CLEARANCE;
+            break;
+
+        case 1:
+            mode = SHOW_CLEARANCE_NEW_TRACKS;
+            break;
+
+        case 2:
+            mode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
+            break;
+
+        case 3:
+            mode = SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS;
+            break;
+
+        case 4:
+            mode = SHOW_CLEARANCE_ALWAYS;
+            break;
+    }
+
+    return mode;
+}
+
+
+static void setCtrlFromAntiAliasMode( wxChoice& aCtrl,
+                                      KIGFX::OPENGL_ANTIALIASING_MODE mode )
+{
+    int value = 0;
+
+    switch( mode )
+    {
+        case KIGFX::OPENGL_ANTIALIASING_MODE::NONE:
+            value = 0;
+            break;
+
+        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
+            value = 1;
+            break;
+
+        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
+            value = 2;
+            break;
+
+        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
+            value = 3;
+            break;
+
+        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
+            value = 4;
+            break;
+    }
+
+    aCtrl.Select( value );
+}
+
+static KIGFX::OPENGL_ANTIALIASING_MODE getAntiAliasModeFromRadio(
+        const wxChoice& aCtrl )
+{
+    auto mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
+
+    switch( aCtrl.GetSelection() )
+    {
+        case 0:
+            mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
+            break;
+
+        case 1:
+            mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH;
+            break;
+
+        case 2:
+            mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA;
+            break;
+
+        case 3:
+            mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2;
+            break;
+
+        case 4:
+            mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4;
+            break;
+    }
+
+    return mode;
+}
+
+
 void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
 {
     DIALOG_DISPLAY_OPTIONS dlg( this );
@@ -79,34 +208,13 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
 void DIALOG_DISPLAY_OPTIONS::init()
 {
     SetFocus();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
-    KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
+    const DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    const KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
 
     m_OptDisplayTracks->SetValue( displ_opts->m_DisplayPcbTrackFill == SKETCH );
 
-    switch ( displ_opts->m_ShowTrackClearanceMode )
-    {
-        case DO_NOT_SHOW_CLEARANCE:
-            m_OptDisplayTracksClearance->SetSelection( 0 );
-            break;
-
-        case SHOW_CLEARANCE_NEW_TRACKS:
-            m_OptDisplayTracksClearance->SetSelection( 1 );
-            break;
-
-        case SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
-            m_OptDisplayTracksClearance->SetSelection( 3 );
-            break;
-
-        default:
-        case SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
-            m_OptDisplayTracksClearance->SetSelection( 2 );
-            break;
-
-        case SHOW_CLEARANCE_ALWAYS:
-            m_OptDisplayTracksClearance->SetSelection( 4 );
-            break;
-    }
+    setRadioFromClearanceMode( *m_OptDisplayTracksClearance,
+                               displ_opts->m_ShowTrackClearanceMode );
 
     m_OptDisplayPads->SetValue( displ_opts->m_DisplayPadFill == SKETCH );
     m_OptDisplayVias->SetValue( displ_opts->m_DisplayViaFill == SKETCH );
@@ -121,28 +229,8 @@ void DIALOG_DISPLAY_OPTIONS::init()
     m_OptDisplayDrawings->SetValue( displ_opts->m_DisplayDrawItemsFill == SKETCH );
     m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
 
-    switch( gal_opts.gl_antialiasing_mode )
-    {
-        case KIGFX::OPENGL_ANTIALIASING_MODE::NONE:
-            m_choiceAntialiasing->Select( 0 );
-            break;
-
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
-            m_choiceAntialiasing->Select( 1 );
-            break;
-
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
-            m_choiceAntialiasing->Select( 2 );
-            break;
-
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
-            m_choiceAntialiasing->Select( 3 );
-            break;
-
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
-            m_choiceAntialiasing->Select( 4 );
-            break;
-    }
+    setCtrlFromAntiAliasMode( *m_choiceAntialiasing,
+                              gal_opts.gl_antialiasing_mode );
 
     setRadioFromGridStyle( *m_gridStyle, gal_opts.m_gridStyle );
 }
@@ -165,28 +253,8 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 
     displ_opts->m_DisplayPcbTrackFill = not m_OptDisplayTracks->GetValue();
 
-    switch ( m_OptDisplayTracksClearance->GetSelection() )
-    {
-        case 0:
-            displ_opts->m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
-            break;
-
-        case 1:
-            displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS;
-            break;
-
-        case 2:
-            displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
-            break;
-
-        case 3:
-            displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS;
-            break;
-
-        case 4:
-            displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
-            break;
-    }
+    displ_opts->m_ShowTrackClearanceMode = getClearanceModeFromRadio(
+            *m_OptDisplayTracksClearance );
 
     displ_opts->m_DisplayModTextFill = not m_OptDisplayModTexts->GetValue();
     displ_opts->m_DisplayModEdgeFill = not m_OptDisplayModOutlines->GetValue();
@@ -204,28 +272,8 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     displ_opts->m_DisplayDrawItemsFill = not m_OptDisplayDrawings->GetValue();
     displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
-    switch( m_choiceAntialiasing->GetSelection() )
-    {
-        case 0:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
-            break;
-
-        case 1:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH;
-            break;
-
-        case 2:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA;
-            break;
-
-        case 3:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2;
-            break;
-
-        case 4:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4;
-            break;
-    }
+    gal_opts.gl_antialiasing_mode = getAntiAliasModeFromRadio(
+            *m_choiceAntialiasing );
 
     gal_opts.m_gridStyle = getGridStyleFromRadio( *m_gridStyle );
 
