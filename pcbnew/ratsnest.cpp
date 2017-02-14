@@ -567,9 +567,13 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
         m_Pcb->m_LocalRatsnest.clear();
 
         // collect active pads of the module:
-        for( pad_ref = aModule->Pads();  pad_ref;  pad_ref = pad_ref->Next() )
+        for( pad_ref = aModule->Pads(); pad_ref; pad_ref = pad_ref->Next() )
         {
             if( pad_ref->GetNetCode() == NETINFO_LIST::UNCONNECTED )
+                continue;
+
+            if( !( pad_ref->GetLayerSet() & LSET::AllCuMask() ).any() )
+                // pad not a copper layer (happens when building complex shapes)
                 continue;
 
             localPadList.push_back( pad_ref );

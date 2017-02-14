@@ -96,6 +96,7 @@ void CONNECTIONS::SearchConnectionsPadsToIntersectingPads()
 
             if( !( pad->GetLayerSet() & candidate_pad->GetLayerSet() ).any() )
                 continue;
+
             if( pad->HitTest( item->GetPoint() ) )
             {
                 pad->m_PadsConnected.push_back( candidate_pad );
@@ -227,6 +228,7 @@ void CONNECTIONS::BuildPadsCandidatesList()
 {
     m_candidates.clear();
     m_candidates.reserve( m_sortedPads.size() );
+
     for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
     {
         D_PAD * pad = m_sortedPads[ii];

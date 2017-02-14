@@ -214,6 +214,10 @@ void NETINFO_LIST::buildListOfNets()
         if( pad->GetNetCode() == NETINFO_LIST::UNCONNECTED ) // pad not connected
             continue;
 
+        if( !( pad->GetLayerSet() & LSET::AllCuMask() ).any() )
+            // pad not a copper layer (happens when building complex shapes)
+            continue;
+
         // Add pad to the appropriate list of pads
         NETINFO_ITEM* net = pad->GetNet();
 
