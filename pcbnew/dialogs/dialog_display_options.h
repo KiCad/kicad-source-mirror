@@ -36,7 +36,7 @@ private:
 
 public:
    DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent );
-   ~DIALOG_DISPLAY_OPTIONS( ) { };
+   ~DIALOG_DISPLAY_OPTIONS() {};
    void OnOkClick( wxCommandEvent& event ) override;
    void OnCancelClick( wxCommandEvent& event ) override;
 };

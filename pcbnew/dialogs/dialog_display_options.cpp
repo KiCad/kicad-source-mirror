@@ -205,6 +205,7 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
     FinishDialogSettings();
 }
 
+
 void DIALOG_DISPLAY_OPTIONS::init()
 {
     SetFocus();
