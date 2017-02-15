@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-13 18:44+0100\n"
-"PO-Revision-Date: 2017-02-13 19:39+0100\n"
+"POT-Creation-Date: 2017-02-15 11:20+0100\n"
+"PO-Revision-Date: 2017-02-15 11:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -3848,20 +3848,20 @@ msgstr ""
 "Cela peut causer un comportement inattendu lors du chargement des composants "
 "dans une schématique."
 
-#: eeschema/class_library.cpp:514
+#: eeschema/class_library.cpp:540
 #, c-format
 msgid "Unable to load project's '%s' file"
 msgstr "Impossible de charger le fichier projet '%s'"
 
-#: eeschema/class_library.cpp:572
+#: eeschema/class_library.cpp:598
 msgid "Loading symbol libraries"
 msgstr "Chargement des librairies de symboles"
 
-#: eeschema/class_library.cpp:589
+#: eeschema/class_library.cpp:615
 msgid "Loading "
 msgstr "Chargement..."
 
-#: eeschema/class_library.cpp:629
+#: eeschema/class_library.cpp:655
 #, c-format
 msgid ""
 "Part library '%s' failed to load. Error:\n"
@@ -3870,7 +3870,7 @@ msgstr ""
 "La librairie de composant '%s' n'a pu être chargée. Erreur:\n"
 " %s"
 
-#: eeschema/class_library.cpp:657
+#: eeschema/class_library.cpp:683
 #, c-format
 msgid ""
 "Part library '%s' failed to load.\n"
@@ -7710,12 +7710,12 @@ msgstr "Le texte a seulement %d paramètres sur les 8 requis"
 msgid "Graphic Text %s"
 msgstr "Texte graphique %s"
 
-#: eeschema/libarch.cpp:96
+#: eeschema/libarch.cpp:104
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'"
 msgstr "Impossible d’ajouter le symbole %s au fichier librairie '%s'"
 
-#: eeschema/libarch.cpp:110
+#: eeschema/libarch.cpp:119
 #, c-format
 msgid "Failed to save symbol library file '%s'"
 msgstr "Impossible de sauver la librairie de symboles '%s'"
@@ -9387,12 +9387,12 @@ msgstr "Entrée de Bus (Bus vers Fil)"
 msgid "Bus to Bus Entry"
 msgstr "Entrée de Bus (Bus vers Bus)"
 
-#: eeschema/sch_collectors.cpp:432
+#: eeschema/sch_collectors.cpp:442
 #, c-format
 msgid "Child item %s of parent item %s found in sheet %s"
 msgstr "Élément %s venant de l'élément %s trouvé en feuille %s"
 
-#: eeschema/sch_collectors.cpp:439
+#: eeschema/sch_collectors.cpp:449
 #, c-format
 msgid "Item %s found in sheet %s"
 msgstr "Item %s trouvé en feuille %s"
@@ -9444,7 +9444,7 @@ msgstr "Valeur inconnue pour SCH_FILE_T : %d"
 #: eeschema/sch_legacy_plugin.cpp:328 eeschema/sch_legacy_plugin.cpp:341
 #: eeschema/sch_legacy_plugin.cpp:392 eeschema/sch_legacy_plugin.cpp:405
 #: eeschema/sch_legacy_plugin.cpp:424 eeschema/sch_legacy_plugin.cpp:919
-#: eeschema/sch_legacy_plugin.cpp:2533
+#: eeschema/sch_legacy_plugin.cpp:2536
 msgid "unexpected end of line"
 msgstr "fin de ligne inattendue"
 
@@ -9482,7 +9482,7 @@ msgid "invalid page size"
 msgstr "taille de page non valide"
 
 #: eeschema/sch_legacy_plugin.cpp:795 eeschema/sch_legacy_plugin.cpp:1057
-#: eeschema/sch_legacy_plugin.cpp:1065 eeschema/sch_legacy_plugin.cpp:2144
+#: eeschema/sch_legacy_plugin.cpp:1065 eeschema/sch_legacy_plugin.cpp:2147
 msgid "unexpected end of file"
 msgstr "fin de fichier inattendue"
 
@@ -9556,108 +9556,108 @@ msgstr "invalid component X2 transform value"
 msgid "invalid component Y2 transform value"
 msgstr "invalid component Y2 transform value"
 
-#: eeschema/sch_legacy_plugin.cpp:2228
+#: eeschema/sch_legacy_plugin.cpp:2231
 #, c-format
 msgid "user does not have permission to read library document file '%s'"
 msgstr ""
 "l'utilisateur n'a pas la permission de lire le fichier de documentation de "
 "librairie '%s'"
 
-#: eeschema/sch_legacy_plugin.cpp:2236
+#: eeschema/sch_legacy_plugin.cpp:2239
 msgid "symbol document library file is empty"
 msgstr "le fichier de documentation de librairie est vide"
 
-#: eeschema/sch_legacy_plugin.cpp:2524
+#: eeschema/sch_legacy_plugin.cpp:2527
 msgid "invalid field ID"
 msgstr "ID de champ invalide"
 
-#: eeschema/sch_legacy_plugin.cpp:2563
+#: eeschema/sch_legacy_plugin.cpp:2566
 msgid "invalid field text orientation parameter"
 msgstr "parametre orientation du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2572
+#: eeschema/sch_legacy_plugin.cpp:2575
 msgid "invalid field text visibility parameter"
 msgstr "parametre visibilité du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2589
+#: eeschema/sch_legacy_plugin.cpp:2592
 msgid "invalid field text horizontal justification parameter"
 msgstr "parametre justification horizontale du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2597
+#: eeschema/sch_legacy_plugin.cpp:2600
 msgid "invalid field text attributes size"
 msgstr "attributs de taille du texte de champ invalides"
 
-#: eeschema/sch_legacy_plugin.cpp:2607
+#: eeschema/sch_legacy_plugin.cpp:2610
 msgid "invalid field text vertical justification parameter"
 msgstr "parametre justification verticale du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2615
+#: eeschema/sch_legacy_plugin.cpp:2618
 msgid "invalid field text italic parameter"
 msgstr "parametre italique du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2620
+#: eeschema/sch_legacy_plugin.cpp:2623
 msgid "invalid field text bold parameter"
 msgstr "parametre gras du texte de champ non valide"
 
-#: eeschema/sch_legacy_plugin.cpp:2709
+#: eeschema/sch_legacy_plugin.cpp:2712
 msgid "undefined DRAW entry"
 msgstr "DRAW entry indéfinie"
 
-#: eeschema/sch_legacy_plugin.cpp:2715
+#: eeschema/sch_legacy_plugin.cpp:2718
 msgid "file ended prematurely loading component draw element"
 msgstr ""
 "fin de fichier prématurée lors du chargement d'élément de graphique du "
 "composant"
 
-#: eeschema/sch_legacy_plugin.cpp:2739
+#: eeschema/sch_legacy_plugin.cpp:2742
 msgid "invalid fill type, expected f, F, or N"
 msgstr "type de remplissage non valide, attendu f,F ou N"
 
-#: eeschema/sch_legacy_plugin.cpp:2893
+#: eeschema/sch_legacy_plugin.cpp:2896
 msgid "invalid text stype, expected 'Normal' or 'Italic'"
 msgstr "stype text invalide, attendu 'Normal' ou 'Italic'"
 
-#: eeschema/sch_legacy_plugin.cpp:2914
+#: eeschema/sch_legacy_plugin.cpp:2917
 msgid "invalid horizontal text justication parameter, expected L, C, or R"
 msgstr ""
 "parametre justification horizontale du texte de champ non valide, attendu L,"
 "C ou R"
 
-#: eeschema/sch_legacy_plugin.cpp:2933
+#: eeschema/sch_legacy_plugin.cpp:2936
 msgid "invalid vertical text justication parameter, expected T, C, or B"
 msgstr ""
 "parametre justification verticale du texte de champ non valide, attendu T,C "
 "ou B"
 
-#: eeschema/sch_legacy_plugin.cpp:3057
+#: eeschema/sch_legacy_plugin.cpp:3060
 msgid "unknown pin type"
 msgstr "type de pin inconnu"
 
-#: eeschema/sch_legacy_plugin.cpp:3110
+#: eeschema/sch_legacy_plugin.cpp:3113
 msgid "unknown pin attribute"
 msgstr "attribut de pin inconnu"
 
-#: eeschema/sch_legacy_plugin.cpp:3153
+#: eeschema/sch_legacy_plugin.cpp:3156
 msgid "pin attributes do not define a valid pin shape"
 msgstr "les attributs de pin ne définissent pas une forme de pin valide"
 
-#: eeschema/sch_legacy_plugin.cpp:3242
+#: eeschema/sch_legacy_plugin.cpp:3245
 msgid "file ended prematurely while loading footprint filters"
 msgstr "fin de fichier prématurée lors du chargement des filtres d'empreintes"
 
-#: eeschema/sch_legacy_plugin.cpp:3295 eeschema/sch_legacy_plugin.cpp:3330
+#: eeschema/sch_legacy_plugin.cpp:3298 eeschema/sch_legacy_plugin.cpp:3333
 #, c-format
 msgid "library %s does not contain an alias %s"
 msgstr "la librairie %s ne contient pas un alias %s"
 
-#: eeschema/sch_legacy_plugin.cpp:3486
+#: eeschema/sch_legacy_plugin.cpp:3489
 #, c-format
 msgid "symbol library '%s' already exists, cannot create a new library"
 msgstr ""
 "La librairie de symboles '%s' existe déjà, impossible de créer une nouvelle "
 "bibliothèque"
 
-#: eeschema/sch_legacy_plugin.cpp:3514 pcbnew/legacy_plugin.cpp:3478
+#: eeschema/sch_legacy_plugin.cpp:3517 pcbnew/legacy_plugin.cpp:3478
 #, c-format
 msgid "library '%s' cannot be deleted"
 msgstr "la librairie '%s' ne peut pas être supprimée"
@@ -11475,7 +11475,7 @@ msgstr "Charger Fichier Excellon"
 
 #: gerbview/menubar.cpp:78
 msgid "Load &Zip Archive File"
-msgstr "Ouvrir Archive &Zip Récente"
+msgstr "Ouvrir Fichier Archive &Zip"
 
 #: gerbview/menubar.cpp:79
 msgid "Load a zipped archive (Gerber and drill) file"
@@ -25266,19 +25266,19 @@ msgstr "Distribuer horizontalement"
 msgid "Distribute vertically"
 msgstr "Distribuer verticalement"
 
-#: pcbnew/tools/point_editor.cpp:314
+#: pcbnew/tools/point_editor.cpp:315
 msgid "Drag a line ending"
 msgstr "Dragger une extrémité de ligne"
 
-#: pcbnew/tools/point_editor.cpp:801
+#: pcbnew/tools/point_editor.cpp:805
 msgid "Add a zone corner"
 msgstr "Ajouter un sommet à la zone"
 
-#: pcbnew/tools/point_editor.cpp:840
+#: pcbnew/tools/point_editor.cpp:844
 msgid "Split segment"
 msgstr "Diviser le segment"
 
-#: pcbnew/tools/point_editor.cpp:870
+#: pcbnew/tools/point_editor.cpp:874
 msgid "Remove a zone corner"
 msgstr "Supprimer un sommet de la zone"
 
