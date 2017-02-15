@@ -29,10 +29,14 @@
 #include <wxstruct.h>
 #include <kiway_player.h>
 #include <climits>
-#include <gal/gal_display_options.h>
 
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
+
+namespace KIGFX
+{
+    class GAL_DISPLAY_OPTIONS;
+}
 
 #define DEFAULT_MAX_UNDO_ITEMS 0
 #define ABS_MAX_UNDO_ITEMS (INT_MAX / 2)
@@ -57,7 +61,9 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
     bool        m_galCanvasActive;              ///< whether to use new GAL engine
 
     EDA_DRAW_PANEL_GAL* m_galCanvas;
-    KIGFX::GAL_DISPLAY_OPTIONS m_galDisplayOptions;
+
+    ///< GAL display options - this is the frame's interface to setting GAL display options
+    std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_galDisplayOptions;
 
 protected:
 
@@ -819,7 +825,7 @@ public:
     * Function GetGalDisplayOptions
     * Returns a reference to the gal rendering options used by GAL for rendering.
     */
-    KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return m_galDisplayOptions; }
+    KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return *m_galDisplayOptions; }
 
     DECLARE_EVENT_TABLE()
 };

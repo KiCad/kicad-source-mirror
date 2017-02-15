@@ -41,6 +41,7 @@
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
+#include <gal/gal_display_options.h>
 
 
 void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
