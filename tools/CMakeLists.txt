@@ -35,3 +35,5 @@ add_executable( property_tree
 target_link_libraries( property_tree
     ${wxWidgets_LIBRARIES}
     )
+
+add_subdirectory( io_benchmark )
