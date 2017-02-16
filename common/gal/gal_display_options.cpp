@@ -35,7 +35,7 @@ static const wxString GalGridStyleConfig( "GridStyle" );
 
 GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
     : gl_antialiasing_mode( OPENGL_ANTIALIASING_MODE::NONE ),
-      m_gridStyle( GRID_STYLE_DOTS )
+      m_gridStyle( GRID_STYLE::DOTS )
 {}
 
 
@@ -47,7 +47,7 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, wxString aBaseName )
 
     aCfg->Read( aBaseName + GalGridStyleConfig,
                 reinterpret_cast<long*>( &m_gridStyle ),
-                static_cast<long>( KIGFX::GRID_STYLE::GRID_STYLE_DOTS ) );
+                static_cast<long>( KIGFX::GRID_STYLE::DOTS ) );
 
     NotifyChanged();
 }

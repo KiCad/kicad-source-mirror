@@ -61,7 +61,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetGridDrawThreshold( 10 );
     SetCoarseGrid( 10 );
     SetGridLineWidth( 0.5 );
-    gridStyle = GRID_STYLE_LINES;
+    gridStyle = GRID_STYLE::LINES;
 
     // Initialize the cursor shape
     SetCursorColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
@@ -202,7 +202,7 @@ void GAL::DrawGrid()
         // Draw the grid behind all other layers
         SetLayerDepth( depthRange.y * 0.75 );
 
-        if( gridStyle == GRID_STYLE_LINES )
+        if( gridStyle == GRID_STYLE::LINES )
         {
             SetIsFill( false );
             SetIsStroke( true );

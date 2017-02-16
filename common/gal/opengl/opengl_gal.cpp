@@ -888,7 +888,7 @@ void OPENGL_GAL::DrawGrid()
     glDisable( GL_DEPTH_TEST );
     glDisable( GL_TEXTURE_2D );
 
-    if( gridStyle == GRID_STYLE_DOTS )
+    if( gridStyle == GRID_STYLE::DOTS )
     {
         glEnable( GL_STENCIL_TEST );
         glStencilFunc( GL_ALWAYS, 1, 1 );
@@ -918,7 +918,7 @@ void OPENGL_GAL::DrawGrid()
         }
     }
 
-    if( gridStyle == GRID_STYLE_DOTS )
+    if( gridStyle == GRID_STYLE::DOTS )
     {
         glStencilFunc( GL_NOTEQUAL, 0, 1 );
         glColor4d( gridColor.r, gridColor.g, gridColor.b, 1.0 );
@@ -942,7 +942,7 @@ void OPENGL_GAL::DrawGrid()
         }
     }
 
-    if( gridStyle == GRID_STYLE_DOTS )
+    if( gridStyle == GRID_STYLE::DOTS )
         glDisable( GL_STENCIL_TEST );
 
     glEnable( GL_DEPTH_TEST );

@@ -47,13 +47,13 @@
 static void setRadioFromGridStyle( wxRadioBox& aRBox,
                                    KIGFX::GRID_STYLE aStyle )
 {
-    aRBox.SetSelection( aStyle != KIGFX::GRID_STYLE_DOTS );
+    aRBox.SetSelection( aStyle != KIGFX::GRID_STYLE::DOTS );
 }
 
 
 static KIGFX::GRID_STYLE getGridStyleFromRadio( const wxRadioBox& aRBox )
 {
-    return aRBox.GetSelection() == 0 ? KIGFX::GRID_STYLE_DOTS : KIGFX::GRID_STYLE_LINES;
+    return aRBox.GetSelection() == 0 ? KIGFX::GRID_STYLE::DOTS : KIGFX::GRID_STYLE::LINES;
 }
 
 

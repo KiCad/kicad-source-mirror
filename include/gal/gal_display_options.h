@@ -32,12 +32,12 @@ class wxString;
 namespace KIGFX
 {
     /**
-     * GridStyle: Type definition of the grid style
+     * GRID_STYLE: Type definition of the grid style
      */
-    enum GRID_STYLE
+    enum class GRID_STYLE
     {
-        GRID_STYLE_LINES,   ///< Use lines for the grid
-        GRID_STYLE_DOTS     ///< Use dots for the grid
+        LINES,   ///< Use lines for the grid
+        DOTS     ///< Use dots for the grid
     };
 
     enum class OPENGL_ANTIALIASING_MODE : long
