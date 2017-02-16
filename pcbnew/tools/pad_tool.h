@@ -50,9 +50,6 @@ public:
     void SetTransitions() override;
 
 private:
-    ///> Determine if the frame has a valid master pad setting
-    bool hasMasterPadSettings();
-
     ///> Determine if there are any footprints on the board
     bool haveFootprints();
 
@@ -64,7 +61,9 @@ private:
 
     ///> Push pad settings from a pad to other pads on board or module
     int pushPadSettings( const TOOL_EVENT& aEvent );
-};
 
+    ///> Flag to indicate there are valid settings stored in the Master Pad object
+    bool m_padCopied;
+};
 
 #endif // __PAD_TOOL_H

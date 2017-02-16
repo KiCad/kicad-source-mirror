@@ -90,21 +90,18 @@ private:
         ENABLEMENTS enablements;
 
         auto anyPadSel = S_C::HasType( PCB_PAD_T );
-
-        auto singlePadSel = S_C::Count( 1 )
-                                && S_C::OnlyType( PCB_PAD_T );
+        auto singlePadSel = S_C::Count( 1 ) && S_C::OnlyType( PCB_PAD_T );
 
         // Apply pads enabled when any pads selected (it applies to each one
         // individually), plus need a valid global pad setting
-        enablements.canImport = m_haveGlobalPadSettings()
-                                && ( anyPadSel )( aSelection );
+        enablements.canImport = m_haveGlobalPadSettings() && ( anyPadSel )( aSelection );
 
         // Copy pads item enabled only when there is a single pad selected
         // (otherwise how would we know which one to copy?)
         enablements.canExport = ( singlePadSel )( aSelection );
 
         // Push pads available when there is a single pad to push from
-        enablements.canPush = ( singlePadSel ) ( aSelection );
+        enablements.canPush = ( singlePadSel )( aSelection );
 
         return enablements;
     }
@@ -127,7 +124,7 @@ private:
 
 
 PAD_TOOL::PAD_TOOL() :
-        PCB_TOOL( "pcbnew.PadTool" )
+        PCB_TOOL( "pcbnew.PadTool" ), m_padCopied( false )
 {
 }
 
@@ -138,14 +135,7 @@ PAD_TOOL::~PAD_TOOL()
 
 void PAD_TOOL::Reset( RESET_REASON aReason )
 {
-}
-
-
-bool PAD_TOOL::hasMasterPadSettings()
-{
-    auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
-    D_PAD& masterPad = frame.GetDesignSettings().m_Pad_Master;
-    return masterPad.GetParent() != nullptr;
+    m_padCopied = false;
 }
 
 
@@ -158,13 +148,8 @@ bool PAD_TOOL::haveFootprints()
 
 bool PAD_TOOL::Init()
 {
-    // functor to report if the current frame has master pad settings
-    std::function<bool()> haveMasterPad = [this] () {
-        return hasMasterPadSettings();
-    };
-
-    auto contextMenu = std::make_shared<PAD_CONTEXT_MENU>(
-            EditingModules(), haveMasterPad );
+    auto contextMenu = std::make_shared<PAD_CONTEXT_MENU>( EditingModules(),
+            [this]() { return m_padCopied; } );
     contextMenu->SetTool( this );
 
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
@@ -243,6 +228,7 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
         {
             const auto& selPad = static_cast<const D_PAD&>( *item );
             masterPad.ImportSettingsFromMaster( selPad );
+            m_padCopied = true;
         }
     }
 
@@ -302,7 +288,6 @@ static void globalChangePadSettings( BOARD& board,
         }
     }
 }
-
 
 
 int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
@@ -376,6 +361,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
 
 void PAD_TOOL::SetTransitions()
 {
