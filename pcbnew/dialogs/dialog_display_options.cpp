@@ -33,6 +33,7 @@
 #include <wxPcbStruct.h>
 #include <pcbstruct.h>
 #include <incremental_text_ctrl.h>
+#include <config_map.h>
 
 #include <pcbnew_id.h>
 
@@ -55,146 +56,32 @@ static const double gridMinSpacingMin = 5;
 static const double gridMinSpacingMax = 200;
 static const double gridMinSpacingStep = 5;
 
-static void setRadioFromGridStyle( wxRadioBox& aRBox,
-                                   KIGFX::GRID_STYLE aStyle )
+
+static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
 {
-    aRBox.SetSelection( aStyle != KIGFX::GRID_STYLE::DOTS );
-}
+    { KIGFX::GRID_STYLE::DOTS,     0 },    // Default
+    { KIGFX::GRID_STYLE::LINES,    1 },
+};
 
 
-static KIGFX::GRID_STYLE getGridStyleFromRadio( const wxRadioBox& aRBox )
+static const UTIL::CFG_MAP<TRACE_CLEARANCE_DISPLAY_MODE_T> traceClearanceSelectMap =
 {
-    return aRBox.GetSelection() == 0 ? KIGFX::GRID_STYLE::DOTS : KIGFX::GRID_STYLE::LINES;
-}
+    { SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS,            2 },     // Default
+    { DO_NOT_SHOW_CLEARANCE,                              0 },
+    { SHOW_CLEARANCE_NEW_TRACKS,                          1 },
+    { SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS, 3 },
+    { SHOW_CLEARANCE_ALWAYS,                              4 },
+};
 
 
-static void setRadioFromClearanceMode( wxRadioBox& aCtrl,
-                                       TRACE_CLEARANCE_DISPLAY_MODE_T aClearance )
+static const UTIL::CFG_MAP<KIGFX::OPENGL_ANTIALIASING_MODE> aaModeSelectMap =
 {
-    int value = 0;
-
-    switch ( aClearance )
-    {
-        case DO_NOT_SHOW_CLEARANCE:
-            value = 0;
-            break;
-
-        case SHOW_CLEARANCE_NEW_TRACKS:
-            value = 1;
-            break;
-
-        case SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
-            value = 3;
-            break;
-
-        case SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
-            value = 2;
-            break;
-
-        case SHOW_CLEARANCE_ALWAYS:
-            value = 4;
-            break;
-
-
-    }
-
-    aCtrl.SetSelection( value );
-}
-
-
-static TRACE_CLEARANCE_DISPLAY_MODE_T getClearanceModeFromRadio(
-        const wxRadioBox& aCtrl )
-{
-    TRACE_CLEARANCE_DISPLAY_MODE_T mode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
-
-    switch ( aCtrl.GetSelection() )
-    {
-        case 0:
-            mode = DO_NOT_SHOW_CLEARANCE;
-            break;
-
-        case 1:
-            mode = SHOW_CLEARANCE_NEW_TRACKS;
-            break;
-
-        case 2:
-            mode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
-            break;
-
-        case 3:
-            mode = SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS;
-            break;
-
-        case 4:
-            mode = SHOW_CLEARANCE_ALWAYS;
-            break;
-    }
-
-    return mode;
-}
-
-
-static void setCtrlFromAntiAliasMode( wxChoice& aCtrl,
-                                      KIGFX::OPENGL_ANTIALIASING_MODE mode )
-{
-    int value = 0;
-
-    switch( mode )
-    {
-        case KIGFX::OPENGL_ANTIALIASING_MODE::NONE:
-            value = 0;
-            break;
-
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
-            value = 1;
-            break;
-
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
-            value = 2;
-            break;
-
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
-            value = 3;
-            break;
-
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
-            value = 4;
-            break;
-    }
-
-    aCtrl.Select( value );
-}
-
-static KIGFX::OPENGL_ANTIALIASING_MODE getAntiAliasModeFromRadio(
-        const wxChoice& aCtrl )
-{
-    auto mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
-
-    switch( aCtrl.GetSelection() )
-    {
-        case 0:
-            mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
-            break;
-
-        case 1:
-            mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH;
-            break;
-
-        case 2:
-            mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA;
-            break;
-
-        case 3:
-            mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2;
-            break;
-
-        case 4:
-            mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4;
-            break;
-    }
-
-    return mode;
-}
+    { KIGFX::OPENGL_ANTIALIASING_MODE::NONE,              0 },    // Default
+    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH,    1 },
+    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA,   2 },
+    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2,  3 },
+    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4,  4 },
+};
 
 
 void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
@@ -211,14 +98,14 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
 
     // bind the spin button and text box
     m_gridSizeIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
-                *m_gridLineWidthSpinBtn, *m_gridLineWidth);
+                *m_gridLineWidthSpinBtn, *m_gridLineWidth );
 
     m_gridSizeIncrementer->SetStep( gridThicknessMin, gridThicknessMax,
                                     gridThicknessStep );
     m_gridSizeIncrementer->SetPrecision( 1 );
 
     m_gridMinSpacingIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
-                *m_gridMinSpacingSpinBtn, *m_gridMinSpacing);
+                *m_gridMinSpacingSpinBtn, *m_gridMinSpacing );
 
     m_gridMinSpacingIncrementer->SetStep( gridMinSpacingMin, gridMinSpacingMax,
                                           gridMinSpacingStep );
@@ -242,8 +129,8 @@ void DIALOG_DISPLAY_OPTIONS::init()
 
     m_OptDisplayTracks->SetValue( displ_opts->m_DisplayPcbTrackFill == SKETCH );
 
-    setRadioFromClearanceMode( *m_OptDisplayTracksClearance,
-                               displ_opts->m_ShowTrackClearanceMode );
+    m_OptDisplayTracksClearance->SetSelection( UTIL::GetConfigForVal(
+            traceClearanceSelectMap, displ_opts->m_ShowTrackClearanceMode ) );
 
     m_OptDisplayPads->SetValue( displ_opts->m_DisplayPadFill == SKETCH );
     m_OptDisplayVias->SetValue( displ_opts->m_DisplayViaFill == SKETCH );
@@ -258,10 +145,11 @@ void DIALOG_DISPLAY_OPTIONS::init()
     m_OptDisplayDrawings->SetValue( displ_opts->m_DisplayDrawItemsFill == SKETCH );
     m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
 
-    setCtrlFromAntiAliasMode( *m_choiceAntialiasing,
-                              gal_opts.gl_antialiasing_mode );
+    m_choiceAntialiasing->SetSelection( UTIL::GetConfigForVal(
+            aaModeSelectMap, gal_opts.gl_antialiasing_mode ) );
 
-    setRadioFromGridStyle( *m_gridStyle, gal_opts.m_gridStyle );
+    m_gridStyle->SetSelection( UTIL::GetConfigForVal(
+            gridStyleSelectMap, gal_opts.m_gridStyle ) );
 
     m_gridSizeIncrementer->SetValue( gal_opts.m_gridLineWidth );
 
@@ -275,9 +163,10 @@ void DIALOG_DISPLAY_OPTIONS::OnCancelClick( wxCommandEvent& event )
 }
 
 
-/* Update variables with new options
-*/
-void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
+/*
+ * Update variables with new options
+ */
+void DIALOG_DISPLAY_OPTIONS::OnOkClick( wxCommandEvent& event )
 {
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
@@ -286,8 +175,8 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 
     displ_opts->m_DisplayPcbTrackFill = not m_OptDisplayTracks->GetValue();
 
-    displ_opts->m_ShowTrackClearanceMode = getClearanceModeFromRadio(
-            *m_OptDisplayTracksClearance );
+    displ_opts->m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
+            traceClearanceSelectMap, m_OptDisplayTracksClearance->GetSelection() );
 
     displ_opts->m_DisplayModTextFill = not m_OptDisplayModTexts->GetValue();
     displ_opts->m_DisplayModEdgeFill = not m_OptDisplayModOutlines->GetValue();
@@ -299,16 +188,17 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 
     displ_opts->m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
 
-    m_Parent->SetElementVisibility( PCB_VISIBLE(NO_CONNECTS_VISIBLE),
+    m_Parent->SetElementVisibility( PCB_VISIBLE( NO_CONNECTS_VISIBLE ),
                                     m_OptDisplayPadNoConn->GetValue() );
 
     displ_opts->m_DisplayDrawItemsFill = not m_OptDisplayDrawings->GetValue();
     displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
-    gal_opts.gl_antialiasing_mode = getAntiAliasModeFromRadio(
-            *m_choiceAntialiasing );
+    gal_opts.gl_antialiasing_mode = UTIL::GetValFromConfig(
+            aaModeSelectMap, m_choiceAntialiasing->GetSelection() );
 
-    gal_opts.m_gridStyle = getGridStyleFromRadio( *m_gridStyle );
+    gal_opts.m_gridStyle = UTIL::GetValFromConfig(
+            gridStyleSelectMap, m_gridStyle->GetSelection() );
 
     gal_opts.m_gridLineWidth = m_gridSizeIncrementer->GetValue();
 
