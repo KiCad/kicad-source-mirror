@@ -3425,7 +3425,7 @@ void SCH_LEGACY_PLUGIN::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
     const LIB_ALIAS_MAP& aliases = m_cache->m_aliases;
 
     for( LIB_ALIAS_MAP::const_iterator it = aliases.begin();  it != aliases.end();  ++it )
-        aAliasNameList.Add( FROM_UTF8( it->first.c_str() ) );
+        aAliasNameList.Add( it->first );
 }
 
 
@@ -3438,7 +3438,7 @@ LIB_ALIAS* SCH_LEGACY_PLUGIN::LoadSymbol( const wxString& aLibraryPath, const wx
 
     cacheLib( aLibraryPath );
 
-    LIB_ALIAS_MAP::const_iterator it = m_cache->m_aliases.find( TO_UTF8( aAliasName ) );
+    LIB_ALIAS_MAP::const_iterator it = m_cache->m_aliases.find( aAliasName );
 
     if( it == m_cache->m_aliases.end() )
         return NULL;
