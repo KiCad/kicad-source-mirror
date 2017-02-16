@@ -697,7 +697,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
         THROW_PARSE_ERROR( wxEmptyString, UTF8( __func__ ), UTF8( libs_not_found ), 0, 0 );
     }
 
-#if defined(DEBUG) && 0
+#if defined(DEBUG) && 1
     printf( "%s: lib_names:\n", __func__ );
 
     for( PART_LIBS::const_iterator it = begin(); it < end(); ++it )

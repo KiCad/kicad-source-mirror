@@ -321,7 +321,24 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     if( GetScreen()->IsModify() )
     {
         if( IsOK( this, _( "Include last component changes?" ) ) )
-            SaveOnePart( lib, false );
+        {
+            lib->EnableBuffering();
+
+            try
+            {
+                SaveOnePart( lib, false );
+            }
+            catch( ... )
+            {
+                lib->EnableBuffering( false );
+                msg.Printf( _( "Unexpected error occured saving part to '%s' symbol library." ),
+                            lib->GetName() );
+                DisplayError( this, msg );
+                return false;
+            }
+
+            lib->EnableBuffering( false );
+        }
     }
 
     if( newFile )
@@ -425,6 +442,8 @@ bool LIB_EDIT_FRAME::SaveActiveLibrary( bool newFile )
     wxString msg1;
     msg1.Printf( _( "Documentation file '%s' saved" ), GetChars( fn.GetFullPath() ) );
     AppendMsgPanel( msg, msg1, BLUE );
+    UpdateAliasSelectList();
+    UpdatePartSelectList();
 
     return true;
 }
