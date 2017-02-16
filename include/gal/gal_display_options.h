@@ -55,6 +55,9 @@ namespace KIGFX
     {
     public:
         virtual void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& ) = 0;
+    protected:
+        // Observer lifetimes aren't handled by base class pointer
+        virtual ~GAL_DISPLAY_OPTIONS_OBSERVER() {}
     };
 
     class GAL_DISPLAY_OPTIONS : public UTIL::OBSERVABLE<GAL_DISPLAY_OPTIONS_OBSERVER>
