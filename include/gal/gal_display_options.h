@@ -40,13 +40,13 @@ namespace KIGFX
         DOTS     ///< Use dots for the grid
     };
 
-    enum class OPENGL_ANTIALIASING_MODE : long
+    enum class OPENGL_ANTIALIASING_MODE
     {
-        NONE = 0,
-        SUBSAMPLE_HIGH = 1,
-        SUBSAMPLE_ULTRA = 2,
-        SUPERSAMPLING_X2 = 3,
-        SUPERSAMPLING_X4 = 4
+        NONE,
+        SUBSAMPLE_HIGH,
+        SUBSAMPLE_ULTRA,
+        SUPERSAMPLING_X2,
+        SUPERSAMPLING_X4,
     };
 
     class GAL_DISPLAY_OPTIONS;
