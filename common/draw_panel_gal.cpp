@@ -30,7 +30,7 @@
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
-#include <pcb_painter.h>
+#include <painter.h>
 
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/opengl/opengl_gal.h>
@@ -38,8 +38,6 @@
 
 #include <tool/tool_dispatcher.h>
 #include <tool/tool_manager.h>
-
-#include <pcbstruct.h>  // display options definition
 
 #ifdef PROFILE
 #include <profile.h>
@@ -164,7 +162,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     wxASSERT( m_painter );
 
     m_drawing = true;
-    KIGFX::PCB_RENDER_SETTINGS* settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_painter->GetSettings() );
+    KIGFX::RENDER_SETTINGS* settings = static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );
 
 // Scrollbars broken in GAL on OSX
 #ifndef __WXMAC__

@@ -225,20 +225,6 @@ const COLOR4D& PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
 }
 
 
-void PCB_RENDER_SETTINGS::update()
-{
-    RENDER_SETTINGS::update();
-
-    // Calculate darkened/highlighted variants of layer colors
-    for( int i = 0; i < TOTAL_LAYER_COUNT; i++ )
-    {
-        m_layerColorsHi[i]   = m_layerColors[i].Brightened( m_highlightFactor );
-        m_layerColorsDark[i] = m_layerColors[i].Darkened( 1.0 - m_highlightFactor );
-        m_layerColorsSel[i]  = m_layerColors[i].Brightened( m_selectFactor );
-    }
-}
-
-
 PCB_PAINTER::PCB_PAINTER( GAL* aGal ) :
     PAINTER( aGal )
 {

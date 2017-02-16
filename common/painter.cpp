@@ -62,6 +62,14 @@ void RENDER_SETTINGS::update()
 {
     m_hiContrastColor = COLOR4D( m_hiContrastFactor, m_hiContrastFactor, m_hiContrastFactor,
                                  m_layerOpacity );
+
+    // Calculate darkened/highlighted variants of layer colors
+    for( int i = 0; i < TOTAL_LAYER_COUNT; i++ )
+    {
+        m_layerColorsHi[i]   = m_layerColors[i].Brightened( m_highlightFactor );
+        m_layerColorsDark[i] = m_layerColors[i].Darkened( 1.0 - m_highlightFactor );
+        m_layerColorsSel[i]  = m_layerColors[i].Brightened( m_selectFactor );
+    }
 }
 
 
