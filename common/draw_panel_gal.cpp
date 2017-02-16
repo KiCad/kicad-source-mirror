@@ -73,10 +73,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 #endif
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
 
-    m_painter = new KIGFX::PCB_PAINTER( m_gal );
-
     m_view = new KIGFX::VIEW( true );
-    m_view->SetPainter( m_painter );
     m_view->SetGAL( m_gal );
 
     Connect( wxEVT_SIZE, wxSizeEventHandler( EDA_DRAW_PANEL_GAL::onSize ), NULL, this );
@@ -131,7 +128,6 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 
     assert( !m_drawing );
 
-    delete m_painter;
     delete m_viewControls;
     delete m_view;
     delete m_gal;
@@ -164,6 +160,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 #ifdef PROFILE
     PROF_COUNTER totalRealTime;
 #endif /* PROFILE */
+
+    wxASSERT( m_painter );
 
     m_drawing = true;
     KIGFX::PCB_RENDER_SETTINGS* settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( m_painter->GetSettings() );
