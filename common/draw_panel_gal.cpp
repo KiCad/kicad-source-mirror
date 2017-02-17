@@ -302,7 +302,7 @@ void EDA_DRAW_PANEL_GAL::StopDrawing()
 }
 
 
-void EDA_DRAW_PANEL_GAL::SetHighContrastLayer( LAYER_ID aLayer )
+void EDA_DRAW_PANEL_GAL::SetHighContrastLayer( int aLayer )
 {
     // Set display settings for high contrast mode
     KIGFX::RENDER_SETTINGS* rSettings = m_view->GetPainter()->GetSettings();
@@ -316,7 +316,7 @@ void EDA_DRAW_PANEL_GAL::SetHighContrastLayer( LAYER_ID aLayer )
 }
 
 
-void EDA_DRAW_PANEL_GAL::SetTopLayer( LAYER_ID aLayer )
+void EDA_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
 {
     m_view->ClearTopLayers();
     m_view->SetTopLayer( aLayer );
