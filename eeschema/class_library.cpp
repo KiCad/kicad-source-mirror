@@ -595,7 +595,7 @@ void PART_LIBS::LoadAllLibraries( PROJECT* aProject, bool aShowProgress )
 
     wxASSERT( !size() );    // expect to load into "this" empty container.
 
-    wxProgressDialog lib_dialog( _( "Loading symbol libraries" ),
+    wxProgressDialog lib_dialog( _( "Loading Symbol Libraries" ),
                                  wxEmptyString,
                                  lib_names.GetCount(),
                                  NULL,
