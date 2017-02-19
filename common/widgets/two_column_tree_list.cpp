@@ -45,6 +45,14 @@ TWO_COLUMN_TREE_LIST::TWO_COLUMN_TREE_LIST( wxWindow* aParent, wxWindowID aID,
     GetDataView()->SetIndent( 10 );
 }
 
+
+void TWO_COLUMN_TREE_LIST::AutosizeColumns()
+{
+    wxSizeEvent dummy;
+    OnSize( dummy );
+}
+
+
 void TWO_COLUMN_TREE_LIST::OnSize( wxSizeEvent& aEvent )
 {
     wxDataViewCtrl* view = GetDataView();
@@ -104,7 +112,10 @@ void TWO_COLUMN_TREE_LIST::OnSize( wxSizeEvent& aEvent )
 
     wxASSERT( m_rubber_band_column == 0 || m_rubber_band_column == 1 );
 
-    SetColumnWidth( m_rubber_band_column, rubber_width );
-    SetColumnWidth( clamped_column, clamped_column_width );
+    if( GetColumnCount() >= 2 )
+    {
+        SetColumnWidth( m_rubber_band_column, rubber_width );
+        SetColumnWidth( clamped_column, clamped_column_width );
+    }
 }
 

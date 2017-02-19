@@ -515,8 +515,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
         //m_tree->EnsureVisible( preselected_node->TreeId );
     }
 
-    wxSizeEvent dummy;
-    m_tree->OnSize( dummy );
+    m_tree->AutosizeColumns();
     m_tree->Thaw();
 
 #ifdef SHOW_CALC_TIME

@@ -67,6 +67,13 @@ class TWO_COLUMN_TREE_LIST : public wxTreeListCtrl
         }
 
         /**
+         * Recompute column sizes. This should be called after adding columns.
+         * There is no need to call this in an OnSize handler - this CALLS the
+         * OnSize handler.
+         */
+        void AutosizeColumns();
+
+        /**
          * Override buggy wxTreeListCtrl size handler.
          */
         void OnSize( wxSizeEvent& aEvent );
