@@ -2448,7 +2448,7 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
     while( line )
     {
         if( *line == '#' )                               // Comment
-            continue;
+            ;
         else if( strCompare( "Ti", line, &line ) )       // Modification date is ignored.
             continue;
         else if( strCompare( "ALIAS", line, &line ) )    // Aliases
