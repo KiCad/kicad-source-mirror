@@ -31,10 +31,10 @@
 #include <class_library.h>
 #include <component_tree_search_container.h>
 #include <sch_base_frame.h>
-#include <kicad_string.h>
 #include <widgets/footprint_preview_panel.h>
 #include <widgets/two_column_tree_list.h>
-#include <template_fieldnames.h>    // Field ID definitions
+#include <template_fieldnames.h>
+#include <generate_alias_info.h>
 
 // Tree navigation helpers.
 static wxTreeListItem GetPrevItem( const wxTreeListCtrl& tree, const wxTreeListItem& item );
@@ -231,8 +231,6 @@ bool DIALOG_CHOOSE_COMPONENT::updateSelection()
 
     m_componentView->Refresh();
 
-    m_componentDetails->SetPage( wxEmptyString );
-
     if( selection == NULL )
     {
         if( m_footprintPreviewPanel )
@@ -240,96 +238,12 @@ bool DIALOG_CHOOSE_COMPONENT::updateSelection()
             m_footprintPreviewPanel->SetStatusText( wxEmptyString );
         }
 
+        m_componentDetails->SetPage( wxEmptyString );
+
         return false;
     }
 
-    m_componentDetails->Freeze();
-
-    const wxString name = selection->GetName();
-    wxString description = selection->GetDescription();
-
-    if ( !name.empty() )
-    {
-        m_componentDetails->AppendToPage( "<b>" );
-        m_componentDetails->AppendToPage( EscapedHTML( name ) );
-        m_componentDetails->AppendToPage( "</b>" );
-    }
-
-    if( !selection->IsRoot() )
-    {
-        LIB_PART* root_part = selection->GetPart();
-        const wxString root_name( root_part ? root_part->GetName() : _( "Unknown" ) );
-
-        m_componentDetails->AppendToPage(
-                "<br><i>" + _( "Alias of " ) + EscapedHTML( root_name ) + "</i>" );
-
-        // For some reason descriptions are a property of aliases, even though
-        // only the root component's main LIB_ALIAS can actually have a description.
-        // If the description was empty, go through the alias list and find an alias
-        // that actually has one.
-
-        if( description.empty() )
-        {
-            for( size_t i = 0; i < root_part->GetAliasCount(); ++i )
-            {
-                LIB_ALIAS* alias = root_part->GetAlias( i );
-
-                if( !alias )
-                    continue;
-
-                description = alias->GetDescription();
-
-                if( !description.empty() )
-                    break;
-            }
-        }
-    }
-
-    if( !description.empty() )
-    {
-        m_componentDetails->AppendToPage( "<br>" );
-        m_componentDetails->AppendToPage( EscapedHTML( description ) );
-    }
-
-    wxString keywords = selection->GetKeyWords();
-    if( !keywords.empty() )
-    {
-        m_componentDetails->AppendToPage( "<br>" + _( "Keywords:" ) + " " );
-        m_componentDetails->AppendToPage( EscapedHTML( keywords ) );
-    }
-
-    m_componentDetails->AppendToPage( "<hr><table border=0>" );
-
-
-    LIB_FIELDS fields;
-    selection->GetPart()->GetFields( fields );
-
-    for( auto const & field: fields )
-    {
-        wxString name = field.GetName();
-        wxString text = field.GetFullText();
-
-        m_componentDetails->AppendToPage( "<tr><td><b>" + EscapedHTML( name ) + "</b></td>" );
-        m_componentDetails->AppendToPage( "<td>" );
-
-        if( field.GetId() == DATASHEET )
-        {
-            m_componentDetails->AppendToPage( "<a href=\"" + EscapedHTML( text ) + "\">" );
-        }
-
-        m_componentDetails->AppendToPage( EscapedHTML( text ) );
-
-        if( field.GetId() == DATASHEET )
-        {
-            m_componentDetails->AppendToPage( "</a>" );
-        }
-
-        m_componentDetails->AppendToPage( "</td></tr>" );
-    }
-
-    m_componentDetails->AppendToPage( "</table>" );
-
-    m_componentDetails->Thaw();
+    m_componentDetails->SetPage( GenerateAliasInfo( selection ) );
 
     updateFootprint();
 
@@ -507,6 +421,7 @@ static wxTreeListItem GetNextItem( const wxTreeListCtrl& tree, const wxTreeListI
 
     return nextItem;
 }
+
 
 static wxTreeListItem GetPrevSibling( const wxTreeListCtrl& tree, const wxTreeListItem& item )
 {

@@ -104,6 +104,7 @@ set( EESCHEMA_SRCS
     find.cpp
     getpart.cpp
     component_tree_search_container.cpp
+    generate_alias_info.cpp
     hierarch.cpp
     highlight_connection.cpp
     hotkeys.cpp
