@@ -72,6 +72,7 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     Layout();
     Centre();
+    updateSelection();
 }
 
 
@@ -119,6 +120,8 @@ void DIALOG_CHOOSE_COMPONENT::selectIfValid( const wxTreeListItem& aTreeId )
 {
     if( aTreeId.IsOk() && aTreeId != m_libraryComponentTree->GetRootItem() )
         m_libraryComponentTree->Select( aTreeId );
+
+    updateSelection();
 }
 
 
