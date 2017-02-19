@@ -30,7 +30,7 @@
 class LIB_ALIAS;
 class PART_LIB;
 class PART_LIBS;
-class wxTreeCtrl;
+class TWO_COLUMN_TREE_LIST;
 class wxArrayString;
 
 // class COMPONENT_TREE_SEARCH_CONTAINER
@@ -104,7 +104,7 @@ public:
      *
      * @param aTree that is to be modified on search updates.
      */
-    void SetTree( wxTreeCtrl* aTree );
+    void SetTree( TWO_COLUMN_TREE_LIST* aTree );
 
     /** Function UpdateSearchTerm
      * Update the search string provided by the user and narrow down the result list.
@@ -137,7 +137,7 @@ private:
     static bool scoreComparator( const TREE_NODE* a1, const TREE_NODE* a2 );
 
     std::vector<TREE_NODE*> m_nodes;
-    wxTreeCtrl* m_tree;
+    TWO_COLUMN_TREE_LIST* m_tree;
     int m_libraries_added;
     int m_components_added;
 

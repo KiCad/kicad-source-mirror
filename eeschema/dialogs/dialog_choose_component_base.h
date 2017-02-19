@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  5 2017)
+// C++ code generated with wxFormBuilder (version Feb  5 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -12,6 +12,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class DIALOG_SHIM;
+class TWO_COLUMN_TREE_LIST;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -22,9 +23,11 @@ class DIALOG_SHIM;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
-#include <wx/treectrl.h>
-#include <wx/panel.h>
+#include <wx/treelist.h>
 #include <wx/html/htmlwin.h>
+#include <wx/panel.h>
+#include <wx/choice.h>
+#include <wx/splitter.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -41,9 +44,15 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_searchLabel;
 		wxTextCtrl* m_searchBox;
-		wxTreeCtrl* m_libraryComponentTree;
-		wxPanel* m_componentView;
+		wxSplitterWindow* m_splitter1;
+		wxPanel* m_panel3;
+		TWO_COLUMN_TREE_LIST* m_libraryComponentTree;
 		wxHtmlWindow* m_componentDetails;
+		wxPanel* m_panel4;
+		wxPanel* m_componentView;
+		wxStaticText* m_stFootprint;
+		wxChoice* m_chooseFootprint;
+		wxPanel* m_footprintView;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
@@ -55,16 +64,23 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 		virtual void OnSearchBoxEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInterceptTreeEnter( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnTreeMouseUp( wxMouseEvent& event ) { event.Skip(); }
-		virtual void OnDoubleClickTreeActivation( wxTreeEvent& event ) { event.Skip(); }
-		virtual void OnTreeSelect( wxTreeEvent& event ) { event.Skip(); }
+		virtual void OnDoubleClickTreeActivation( wxTreeListEvent& event ) { event.Skip(); }
+		virtual void OnTreeSelect( wxTreeListEvent& event ) { event.Skip(); }
+		virtual void OnDatasheetClick( wxHtmlLinkEvent& event ) { event.Skip(); }
 		virtual void OnStartComponentBrowser( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnHandlePreviewRepaint( wxPaintEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 503,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,650 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_CHOOSE_COMPONENT_BASE();
+		
+		void m_splitter1OnIdle( wxIdleEvent& )
+		{
+			m_splitter1->SetSashPosition( -300 );
+			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::m_splitter1OnIdle ), NULL, this );
+		}
 	
 };
 

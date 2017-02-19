@@ -28,11 +28,13 @@
 
 #include <wx/string.h>
 #include <wx/tokenzr.h>
-#include <wx/treectrl.h>
 #include <wx/arrstr.h>
+#include <wx/dataview.h>
+#include <widgets/two_column_tree_list.h>
 
 #include <class_library.h>
 #include <macros.h>
+#include <profile.h>
 
 #include <eda_pattern_match.h>
 
@@ -77,7 +79,7 @@ struct COMPONENT_TREE_SEARCH_CONTAINER::TREE_NODE
 
     unsigned MatchScore;          ///< Result-Score after UpdateSearchTerm()
     unsigned PreviousScore;       ///< Optimization: used to see if we need any tree update.
-    wxTreeItemId TreeId;          ///< Tree-ID if stored in the tree (if MatchScore > 0).
+    wxTreeListItem TreeId;          ///< Tree-ID if stored in the tree (if MatchScore > 0).
 };
 
 
@@ -134,9 +136,17 @@ void COMPONENT_TREE_SEARCH_CONTAINER::ShowUnits( bool aShowUnits )
 }
 
 
-void COMPONENT_TREE_SEARCH_CONTAINER::SetTree( wxTreeCtrl* aTree )
+void COMPONENT_TREE_SEARCH_CONTAINER::SetTree( TWO_COLUMN_TREE_LIST* aTree )
 {
     m_tree = aTree;
+
+    if( m_tree )
+    {
+        m_tree->AppendColumn( _( "Part" ), wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT, wxCOL_RESIZABLE );
+        m_tree->AppendColumn( _( "Description" ), 100, wxALIGN_LEFT, wxCOL_RESIZABLE );
+        m_tree->SetRubberBandColumn( 1 );
+    }
+
     UpdateSearchTerm( wxEmptyString );
 }
 
@@ -184,21 +194,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
 
         if( !a->GetDescription().empty() )
         {
-            // Preformatting. Unfortunately, the tree widget doesn't have columns
-            // and using tabs does not work very well or does not work at all
-            // (depending on OS versions). So indent with spaces in fixed-font width.
-
-            // The 98%-ile of length of strings found in the standard library is 15
-            // characters. Use this as a reasonable cut-off point for aligned indentation.
-            // For the few component names longer than that, the description is indented a
-            // bit more.
-            // The max found in the default lib would be 20 characters, but that creates too
-            // much visible whitespace for the less extreme component names.
-            const int COLUMN_DESCR_POS = 15;
-            const int indent_len = COLUMN_DESCR_POS - a->GetName().length();
-            display_info = wxString::Format( wxT( " %*s [ %s ]" ),
-                                             indent_len > 0 ? indent_len : 0, wxT( "" ),
-                                             GetChars( a->GetDescription() ) );
+            display_info = a->GetDescription();
         }
 
         TREE_NODE* alias_node = new TREE_NODE( TREE_NODE::TYPE_ALIAS, lib_node,
@@ -209,7 +205,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::AddAliasList( const wxString& aNodeName,
         {
             for( int u = 1; u <= a->GetPart()->GetUnitCount(); ++u )
             {
-                wxString unitName = _("Unit");
+                wxString unitName = _( "Unit" );
                 unitName += wxT( " " ) + LIB_PART::SubReference( u, false );
                 TREE_NODE* unit_node = new TREE_NODE( TREE_NODE::TYPE_UNIT,
                                                       alias_node, a,
@@ -230,7 +226,7 @@ LIB_ALIAS* COMPONENT_TREE_SEARCH_CONTAINER::GetSelectedAlias( int* aUnit )
     if( m_tree == NULL )
         return NULL;
 
-    const wxTreeItemId& select_id = m_tree->GetSelection();
+    const wxTreeListItem& select_id = m_tree->GetSelection();
 
     for( TREE_NODE* node : m_nodes )
     {
@@ -449,7 +445,7 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
     // items is pretty complex, so we just re-build the whole tree.
     m_tree->Freeze();
     m_tree->DeleteAllItems();
-    const wxTreeItemId root_id = m_tree->AddRoot( wxEmptyString );
+    const wxTreeListItem root_id = m_tree->GetRootItem();
     const TREE_NODE* first_match = NULL;
     const TREE_NODE* preselected_node = NULL;
     bool override_preselect = false;
@@ -467,16 +463,9 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
         if( highest_score_seen > kLowestDefaultScore && node->MatchScore == kLowestDefaultScore )
             continue;
 
-        wxString node_text;
-#if 0
-        // Node text with scoring information for debugging
-        node_text.Printf( wxT("%s (s=%u)%s"), GetChars(node->DisplayName),
-                          node->MatchScore, GetChars( node->DisplayInfo ));
-#else
-        node_text = node->DisplayName + node->DisplayInfo;
-#endif
         node->TreeId = m_tree->AppendItem( node->Parent ? node->Parent->TreeId : root_id,
-                                           node_text );
+                                           node->DisplayName );
+        m_tree->SetItemText( node->TreeId, 1, node->DisplayInfo );
 
         // If there is only a single library in this container, we want to have it
         // unfolded (example: power library, libedit)
@@ -517,15 +506,17 @@ void COMPONENT_TREE_SEARCH_CONTAINER::UpdateSearchTerm( const wxString& aSearch 
 
     if( first_match && ( !preselected_node || override_preselect ) )
     {
-        m_tree->SelectItem( first_match->TreeId );
-        m_tree->EnsureVisible( first_match->TreeId );
+        m_tree->Select( first_match->TreeId );
+        //m_tree->EnsureVisible( first_match->TreeId );
     }
     else if( preselected_node )
     {
-        m_tree->SelectItem( preselected_node->TreeId );
-        m_tree->EnsureVisible( preselected_node->TreeId );
+        m_tree->Select( preselected_node->TreeId );
+        //m_tree->EnsureVisible( preselected_node->TreeId );
     }
 
+    wxSizeEvent dummy;
+    m_tree->OnSize( dummy );
     m_tree->Thaw();
 
 #ifdef SHOW_CALC_TIME

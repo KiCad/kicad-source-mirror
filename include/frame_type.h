@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 1992-2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -45,6 +45,7 @@ enum FRAME_T
     FRAME_PCB_MODULE_VIEWER_MODAL,
     FRAME_PCB_FOOTPRINT_WIZARD_MODAL,
     FRAME_PCB_DISPLAY3D,
+    FRAME_PCB_FOOTPRINT_PREVIEW,
 
     FRAME_CVPCB,
     FRAME_CVPCB_DISPLAY,

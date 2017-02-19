@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <vector>
 
 #include <wx/treelist.h>
+#include <widgets/two_column_tree_list.h>
 
 #include <hotkeys_basic.h>
 
@@ -51,7 +52,7 @@ typedef std::vector<EDA_HOTKEY>     HOTKEY_LIST;
 
 class WIDGET_HOTKEY_CLIENT_DATA;
 
-class WIDGET_HOTKEY_LIST : public wxTreeListCtrl
+class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
 {
     HOTKEY_SECTIONS             m_sections;
     std::vector<HOTKEY_LIST>    m_hotkeys;

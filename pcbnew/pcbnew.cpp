@@ -52,10 +52,12 @@
 #include <hotkeys.h>
 #include <wildcards_and_files_ext.h>
 #include <class_board.h>
+#include <class_draw_panel_gal.h>
 #include <fp_lib_table.h>
 #include <module_editor_frame.h>
 #include <modview_frame.h>
 #include <footprint_wizard_frame.h>
+#include <widgets/footprint_preview_panel.h>
 #include <gl_context_mgr.h>
 extern bool IsWxPythonLoaded();
 
@@ -143,6 +145,9 @@ static struct IFACE : public KIFACE_I
             frame = dynamic_cast< wxWindow* >( new FOOTPRINT_WIZARD_FRAME( aKiway, aParent,
                                                                            FRAME_T( aClassId ) ) );
             break;
+
+        case FRAME_PCB_FOOTPRINT_PREVIEW:
+            frame = dynamic_cast< wxWindow* >( FOOTPRINT_PREVIEW_PANEL::New( aKiway, aParent ) );
 
         default:
             break;

@@ -21,19 +21,25 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
 #include <dialog_choose_component.h>
 
 #include <set>
 #include <wx/tokenzr.h>
+#include <wx/utils.h>
 
 #include <class_library.h>
 #include <component_tree_search_container.h>
 #include <sch_base_frame.h>
 #include <kicad_string.h>
+#include <widgets/footprint_preview_panel.h>
+#include <widgets/two_column_tree_list.h>
+#include <template_fieldnames.h>    // Field ID definitions
 
 // Tree navigation helpers.
-static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
-static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& item );
+static wxTreeListItem GetPrevItem( const wxTreeListCtrl& tree, const wxTreeListItem& item );
+static wxTreeListItem GetNextItem( const wxTreeListCtrl& tree, const wxTreeListItem& item );
+static wxTreeListItem GetPrevSibling( const wxTreeListCtrl& tree, const wxTreeListItem& item );
 
 DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
                                                   COMPONENT_TREE_SEARCH_CONTAINER* const aContainer,
@@ -46,21 +52,24 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_received_doubleclick_in_tree = false;
     m_search_container->SetTree( m_libraryComponentTree );
     m_componentView->SetLayoutDirection( wxLayout_LeftToRight );
+    m_footprintPreviewPanel = NULL;
 
-    m_libraryComponentTree->ScrollTo( m_libraryComponentTree->GetFocusedItem() );
+    // Initialize footprint preview through Kiway
+    m_footprintPreviewPanel = FOOTPRINT_PREVIEW_PANEL::AddToPanel( Kiway(), m_footprintView, true );
 
-    // The tree showing libs and component uses a fixed font,
-    // because we want controle the position of some info when drawing the
-    // tree. Using tabs does not work very well (does not work on Windows)
-    wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    m_libraryComponentTree->SetFont( wxFont( font.GetPointSize(),
-             wxFONTFAMILY_MODERN,  wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL ) );
+    if( m_footprintPreviewPanel )
+    {
+        // This hides the GAL panel and shows the status label
+        m_footprintPreviewPanel->SetStatusText( wxEmptyString );
+    }
 
-    // We have to call SetSizeHints to fix the minimal size of the dialog
-    // and its widgets.
-    // this line also fixes an issue on Linux Ubuntu using Unity (dialog not shown).
-    GetSizer()->SetSizeHints( this );
+#ifndef KICAD_FOOTPRINT_SELECTOR
+    // Footprint chooser isn't implemented yet or isn't selected, don't show it.
+    m_stFootprint->Hide();
+    m_chooseFootprint->Hide();
+#endif
 
+    Layout();
     Centre();
 }
 
@@ -105,10 +114,10 @@ void DIALOG_CHOOSE_COMPONENT::OnSearchBoxEnter( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::selectIfValid( const wxTreeItemId& aTreeId )
+void DIALOG_CHOOSE_COMPONENT::selectIfValid( const wxTreeListItem& aTreeId )
 {
     if( aTreeId.IsOk() && aTreeId != m_libraryComponentTree->GetRootItem() )
-        m_libraryComponentTree->SelectItem( aTreeId );
+        m_libraryComponentTree->Select( aTreeId );
 }
 
 
@@ -119,7 +128,7 @@ void DIALOG_CHOOSE_COMPONENT::OnInterceptSearchBoxKey( wxKeyEvent& aKeyStroke )
     // the text search box (which has the focus by default). That way, we are mostly keyboard
     // operable.
     // (If the tree has the focus, it can handle that by itself).
-    const wxTreeItemId sel = m_libraryComponentTree->GetSelection();
+    const wxTreeListItem sel = m_libraryComponentTree->GetSelection();
 
     switch( aKeyStroke.GetKeyCode() )
     {
@@ -154,7 +163,7 @@ void DIALOG_CHOOSE_COMPONENT::OnInterceptSearchBoxKey( wxKeyEvent& aKeyStroke )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxTreeEvent& aEvent )
+void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxTreeListEvent& aEvent )
 {
     updateSelection();
 }
@@ -164,7 +173,7 @@ void DIALOG_CHOOSE_COMPONENT::OnTreeSelect( wxTreeEvent& aEvent )
 //  - search for an item.
 //  - use the mouse to double-click on an item in the tree.
 //  -> The dialog should close, and the component should _not_ be immediately placed
-void DIALOG_CHOOSE_COMPONENT::OnDoubleClickTreeActivation( wxTreeEvent& aEvent )
+void DIALOG_CHOOSE_COMPONENT::OnDoubleClickTreeActivation( wxTreeListEvent& aEvent )
 {
     if( !updateSelection() )
         return;
@@ -224,7 +233,14 @@ bool DIALOG_CHOOSE_COMPONENT::updateSelection()
     m_componentDetails->SetPage( wxEmptyString );
 
     if( selection == NULL )
+    {
+        if( m_footprintPreviewPanel )
+        {
+            m_footprintPreviewPanel->SetStatusText( wxEmptyString );
+        }
+
         return false;
+    }
 
     m_componentDetails->Freeze();
 
@@ -293,14 +309,71 @@ bool DIALOG_CHOOSE_COMPONENT::updateSelection()
         wxString text = field.GetFullText();
 
         m_componentDetails->AppendToPage( "<tr><td><b>" + EscapedHTML( name ) + "</b></td>" );
-        m_componentDetails->AppendToPage( "<td>" + EscapedHTML( text ) + "</td></tr>" );
+        m_componentDetails->AppendToPage( "<td>" );
+
+        if( field.GetId() == DATASHEET )
+        {
+            m_componentDetails->AppendToPage( "<a href=\"" + EscapedHTML( text ) + "\">" );
+        }
+
+        m_componentDetails->AppendToPage( EscapedHTML( text ) );
+
+        if( field.GetId() == DATASHEET )
+        {
+            m_componentDetails->AppendToPage( "</a>" );
+        }
+
+        m_componentDetails->AppendToPage( "</td></tr>" );
     }
 
     m_componentDetails->AppendToPage( "</table>" );
 
     m_componentDetails->Thaw();
 
+    updateFootprint();
+
     return true;
+}
+
+
+void DIALOG_CHOOSE_COMPONENT::updateFootprint()
+{
+    if( !m_footprintPreviewPanel )
+        return;
+
+    int dummy_unit = 0;
+    LIB_ALIAS* selection = m_search_container->GetSelectedAlias( &dummy_unit );
+
+    if( !selection )
+        return;
+
+    LIB_FIELDS fields;
+    selection->GetPart()->GetFields( fields );
+
+    for( auto const & field: fields )
+    {
+        if( field.GetId() != FOOTPRINT )
+            continue;
+        wxString fpname = field.GetFullText();
+        if( fpname == wxEmptyString )
+        {
+            m_footprintPreviewPanel->SetStatusText( _( "No footprint specified" ) );
+        }
+        else
+        {
+            m_footprintPreviewPanel->ClearStatus();
+            m_footprintPreviewPanel->CacheFootprint( LIB_ID( fpname ) );
+            m_footprintPreviewPanel->DisplayFootprint( LIB_ID( fpname ) );
+        }
+        break;
+    }
+}
+
+
+void DIALOG_CHOOSE_COMPONENT::OnDatasheetClick( wxHtmlLinkEvent& aEvent )
+{
+    const wxHtmlLinkInfo & info = aEvent.GetLinkInfo();
+    ::wxLaunchDefaultBrowser( info.GetHref() );
 }
 
 
@@ -376,9 +449,9 @@ void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_PART* aComponent, int aUnit )
 }
 
 
-static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& item )
+static wxTreeListItem GetPrevItem( const wxTreeListCtrl& tree, const wxTreeListItem& item )
 {
-    wxTreeItemId prevItem = tree.GetPrevSibling( item );
+    wxTreeListItem prevItem = GetPrevSibling( tree, item );
 
     if( !prevItem.IsOk() )
     {
@@ -386,31 +459,40 @@ static wxTreeItemId GetPrevItem( const wxTreeCtrl& tree, const wxTreeItemId& ite
     }
     else if( tree.IsExpanded( prevItem ) )
     {
-        prevItem = tree.GetLastChild( prevItem );
+        // wxTreeListCtrl has no .GetLastChild. Simulate it
+        prevItem = tree.GetFirstChild( prevItem );
+        wxTreeListItem next;
+        do
+        {
+            next = tree.GetNextSibling( prevItem );
+            if( next.IsOk() )
+            {
+                prevItem = next;
+            }
+        } while( next.IsOk() );
     }
 
     return prevItem;
 }
 
 
-static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& item )
+static wxTreeListItem GetNextItem( const wxTreeListCtrl& tree, const wxTreeListItem& item )
 {
-    wxTreeItemId nextItem;
+    wxTreeListItem nextItem;
 
     if( !item.IsOk() )
-        return nextItem;    // item is not valid: return a not valid wxTreeItemId
+        return nextItem;    // item is not valid: return a not valid wxTreeListItem
 
     if( tree.IsExpanded( item ) )
     {
-        wxTreeItemIdValue dummy;
-        nextItem = tree.GetFirstChild( item, dummy );
+        nextItem = tree.GetFirstChild( item );
     }
     else
     {
-        wxTreeItemId root_cell=  tree.GetRootItem();
+        wxTreeListItem root_cell=  tree.GetRootItem();
 
         // Walk up levels until we find one that has a next sibling.
-        for ( wxTreeItemId walk = item; walk.IsOk(); walk = tree.GetItemParent( walk ) )
+        for ( wxTreeListItem walk = item; walk.IsOk(); walk = tree.GetItemParent( walk ) )
         {
             if( walk == root_cell )     // the root cell (not displayed) is reached
                 break;                  // Exit (calling GetNextSibling( root_cell ) crashes.
@@ -423,4 +505,32 @@ static wxTreeItemId GetNextItem( const wxTreeCtrl& tree, const wxTreeItemId& ite
     }
 
     return nextItem;
+}
+
+static wxTreeListItem GetPrevSibling( const wxTreeListCtrl& tree, const wxTreeListItem& item )
+{
+    // Why wxTreeListCtrl has no GetPrevSibling when it does have GetNextSibling
+    // is beyond me. wxTreeCtrl has this.
+
+    wxTreeListItem last_item;
+    wxTreeListItem parent = tree.GetItemParent( item );
+
+    if( !parent.IsOk() )
+        return last_item; // invalid signifies not found
+
+    last_item = tree.GetFirstChild( parent );
+    while( last_item.IsOk() )
+    {
+        wxTreeListItem next_item = tree.GetNextSibling( last_item );
+        if( next_item == item )
+        {
+            return last_item;
+        }
+        else
+        {
+            last_item = next_item;
+        }
+    }
+
+    return last_item;
 }

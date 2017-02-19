@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,10 +26,11 @@
 
 #include <dialog_choose_component_base.h>
 
+class FOOTPRINT_PREVIEW_PANEL;
 class COMPONENT_TREE_SEARCH_CONTAINER;
 class LIB_ALIAS;
 class LIB_PART;
-class wxTreeItemId;
+class wxTreeListItem;
 class SCH_BASE_FRAME;
 
 class DIALOG_CHOOSE_COMPONENT : public DIALOG_CHOOSE_COMPONENT_BASE
@@ -76,18 +77,23 @@ protected:
     virtual void OnSearchBoxEnter( wxCommandEvent& aEvent ) override;
     virtual void OnInterceptSearchBoxKey( wxKeyEvent& aEvent ) override;
 
-    virtual void OnTreeSelect( wxTreeEvent& aEvent ) override;
-    virtual void OnDoubleClickTreeActivation( wxTreeEvent& aEvent ) override;
+    virtual void OnTreeSelect( wxTreeListEvent& aEvent ) override;
+    virtual void OnDoubleClickTreeActivation( wxTreeListEvent& aEvent ) override;
     virtual void OnInterceptTreeEnter( wxKeyEvent& aEvent ) override;
     virtual void OnTreeMouseUp( wxMouseEvent& aMouseEvent ) override;
 
     virtual void OnStartComponentBrowser( wxMouseEvent& aEvent ) override;
     virtual void OnHandlePreviewRepaint( wxPaintEvent& aRepaintEvent ) override;
+    virtual void OnDatasheetClick( wxHtmlLinkEvent& aEvent ) override;
 
 private:
     bool updateSelection();
-    void selectIfValid( const wxTreeItemId& aTreeId );
+    void selectIfValid( const wxTreeListItem& aTreeId );
     void renderPreview( LIB_PART*      aComponent, int aUnit );
+
+    void updateFootprint();
+
+    FOOTPRINT_PREVIEW_PANEL* m_footprintPreviewPanel;
 };
 
 #endif /* DIALOG_CHOOSE_COMPONENT_H */

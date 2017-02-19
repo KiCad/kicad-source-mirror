@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@
 
 #include <widgets/widget_hotkey_list.h>
 
-#include <wx/dataview.h>
 #include <wx/statline.h>
 
 #include <draw_frame.h>
@@ -37,12 +36,6 @@
  * Minimum width of the hotkey column
  */
 static const int HOTKEY_MIN_WIDTH = 100;
-
-
-/**
- * Extra margin to compensate for vertical scrollbar
- */
-static const int HORIZ_MARGIN = 30;
 
 
 /**
@@ -327,7 +320,7 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
 
         // Trigger a resize in case column widths have changed
         wxSizeEvent dummy_evt;
-        OnSize( dummy_evt );
+        TWO_COLUMN_TREE_LIST::OnSize( dummy_evt );
     }
 }
 
@@ -424,50 +417,6 @@ void WIDGET_HOTKEY_LIST::OnMenu( wxCommandEvent& aEvent )
 }
 
 
-void WIDGET_HOTKEY_LIST::OnSize( wxSizeEvent& aEvent )
-{
-    // Handle this manually - wxTreeListCtrl screws up the width of the first column
-    wxDataViewCtrl* view = GetDataView();
-
-    if( !view )
-        return;
-
-    wxRect rect = GetClientRect();
-    view->SetSize( rect );
-
-#ifdef wxHAS_GENERIC_DATAVIEWCTRL
-    {
-        wxWindow* win_view = GetView();
-        win_view->Refresh();
-        win_view->Update();
-    }
-#endif
-
-    // Find the maximum width of the hotkey column
-    int hk_column_width = 0;
-
-    for( wxTreeListItem item = GetFirstItem(); item.IsOk(); item = GetNextItem( item ) )
-    {
-        const wxString& text = GetItemText( item, 1 );
-        int width = WidthFor( text );
-
-        if( width > hk_column_width )
-            hk_column_width = width;
-    }
-
-    if( hk_column_width < HOTKEY_MIN_WIDTH )
-        hk_column_width = HOTKEY_MIN_WIDTH;
-
-    int name_column_width = rect.width - hk_column_width - HORIZ_MARGIN;
-
-    if( name_column_width <= 0 )
-        name_column_width = 1;
-
-    SetColumnWidth( 1, hk_column_width );
-    SetColumnWidth( 0, name_column_width );
-}
-
-
 bool WIDGET_HOTKEY_LIST::CheckKeyConflicts( long aKey, const wxString& aSectionTag,
         EDA_HOTKEY** aConfKey, EDA_HOTKEY_CONFIG** aConfSect )
 {
@@ -558,16 +507,17 @@ bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( long aKey, const wxString& aSectio
 
 
 WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, const HOTKEY_SECTIONS& aSections )
-    :   wxTreeListCtrl( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
+    :   TWO_COLUMN_TREE_LIST( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
         m_sections( aSections )
 {
     AppendColumn( _( "Command" ) );
     AppendColumn( _( "Hotkey" ) );
+    SetRubberBandColumn( 0 );
+    SetClampedMinWidth( HOTKEY_MIN_WIDTH );
 
     Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::OnActivated, this );
     Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::OnContextMenu, this );
     Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::OnMenu, this );
-    Bind( wxEVT_SIZE, &WIDGET_HOTKEY_LIST::OnSize, this );
 }
 
 
