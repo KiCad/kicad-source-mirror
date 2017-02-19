@@ -362,6 +362,7 @@ void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_PART* aComponent, int aUnit )
     wxPoint offset = -bBox.Centre();
 
     auto opts = PART_DRAW_OPTIONS::Default();
+    opts.draw_hidden_fields = false;
     aComponent->Draw( NULL, &dc, offset, aUnit, m_deMorganConvert, opts );
 }
 
