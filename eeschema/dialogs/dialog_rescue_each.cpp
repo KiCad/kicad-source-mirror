@@ -238,8 +238,7 @@ void DIALOG_RESCUE_EACH::renderPreview( LIB_PART* aComponent, int aUnit, wxPanel
     if( !width || !height )
         return;
 
-    aComponent->Draw( NULL, &dc, offset, aUnit, /* deMorganConvert */ 1, GR_COPY,
-                      UNSPECIFIED_COLOR, DefaultTransform, true, true, false );
+    aComponent->Draw( NULL, &dc, offset, aUnit, 1, PART_DRAW_OPTIONS::Default() );
 }
 
 

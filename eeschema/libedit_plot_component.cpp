@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,7 +208,7 @@ void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMod
     plot_offset.x = pagesize.x/2;
     plot_offset.y = pagesize.y/2;
 
-    part->Draw( m_canvas, aDC, plot_offset, m_unit, m_convert, GR_DEFAULT_DRAWMODE );
+    part->Draw( m_canvas, aDC, plot_offset, m_unit, m_convert, PART_DRAW_OPTIONS::Default() );
 }
 
 

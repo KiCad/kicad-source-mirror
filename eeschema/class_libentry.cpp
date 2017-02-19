@@ -313,15 +313,12 @@ void LIB_PART::SetName( const wxString& aName )
 }
 
 
-void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, int aMulti,
-                     int aConvert, GR_DRAWMODE aDrawMode, EDA_COLOR_T aColor,
-                     const TRANSFORM& aTransform, bool aShowPinText, bool aDrawFields,
-                     bool aOnlySelected, const std::vector<bool>* aPinsDangling,
-                     bool aShowElectricalType )
+void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
+            int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts )
 {
     BASE_SCREEN*   screen = aPanel ? aPanel->GetScreen() : NULL;
 
-    GRSetDrawMode( aDc, aDrawMode );
+    GRSetDrawMode( aDc, aOpts.draw_mode );
 
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background
@@ -330,14 +327,14 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
      *   If the color is not the default color (aColor != -1 )
      */
     if( ! (screen && screen->m_IsPrinting && GetGRForceBlackPenState())
-            && (aColor == UNSPECIFIED_COLOR) )
+            && ( aOpts.color == UNSPECIFIED_COLOR ) )
     {
         for( LIB_ITEM& drawItem : drawings )
         {
             if( drawItem.m_Fill != FILLED_WITH_BG_BODYCOLOR )
                 continue;
 
-            if( aOnlySelected && !drawItem.IsSelected() )
+            if( aOpts.only_selected && !drawItem.IsSelected() )
                 continue;
 
             // Do not draw an item while moving (the cursor handler does that)
@@ -356,12 +353,14 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
 
             if( drawItem.Type() == LIB_FIELD_T )
             {
-                drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) NULL, aTransform );
+                drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
+                               aOpts.draw_mode, (void*) NULL, aOpts.transform );
             }
 
             // Now, draw only the background for items with
             // m_Fill == FILLED_WITH_BG_BODYCOLOR:
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) false, aTransform );
+            drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
+                           aOpts.draw_mode, (void*) false, aOpts.transform );
         }
     }
 
@@ -370,7 +369,7 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
 
     for( LIB_ITEM& drawItem : drawings )
     {
-        if( aOnlySelected && !drawItem.IsSelected() )
+        if( aOpts.only_selected && !drawItem.IsSelected() )
             continue;
 
         // Do not draw an item while moving (the cursor handler does that)
@@ -384,39 +383,50 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
         if( aConvert && drawItem.m_Convert && ( drawItem.m_Convert != aConvert ) )
             continue;
 
-        if( !aDrawFields && drawItem.Type() == LIB_FIELD_T )
-            continue;
+        if( drawItem.Type() == LIB_FIELD_T )
+        {
+            LIB_FIELD& field = dynamic_cast<LIB_FIELD&>( drawItem );
+
+            if( field.IsVisible() && !aOpts.draw_visible_fields )
+                continue;
+
+            if( !field.IsVisible() && !aOpts.draw_hidden_fields )
+                continue;
+        }
 
         if( drawItem.Type() == LIB_PIN_T )
         {
             LIB_PIN& pin = dynamic_cast<LIB_PIN&>( drawItem );
 
             uintptr_t flags = 0;
-            if( aShowPinText )
+            if( aOpts.show_pin_text )
                 flags |= PIN_DRAW_TEXTS;
 
-            if( aShowElectricalType )
+            if( aOpts.show_elec_type )
                 flags |= PIN_DRAW_ELECTRICAL_TYPE_NAME;
 
-            if( !aPinsDangling || (aPinsDangling->size() > pin_index && (*aPinsDangling)[pin_index] ) )
+            if( aOpts.PinIsDangling( pin_index ) )
                 flags |= PIN_DRAW_DANGLING;
 
             if( pin.IsPowerConnection() && IsPower() )
                 flags |= PIN_DANGLING_HIDDEN;
 
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) flags, aTransform );
+            drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
+                           aOpts.draw_mode, (void*) flags, aOpts.transform );
 
             ++pin_index;
         }
         else if( drawItem.Type() == LIB_FIELD_T )
         {
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) NULL, aTransform );
+            drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
+                           aOpts.draw_mode, (void*) NULL, aOpts.transform );
         }
         else
         {
             bool forceNoFill = drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR;
-            drawItem.Draw( aPanel, aDc, aOffset, aColor, aDrawMode, (void*) forceNoFill,
-                           aTransform );
+            drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
+                           aOpts.draw_mode, (void*) forceNoFill,
+                           aOpts.transform );
         }
 
     }
@@ -427,9 +437,9 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
     EDA_RECT* const clipbox  = aPanel ? aPanel->GetClipBox() : NULL;
 
     GRLine( clipbox, aDc, aOffset.x, aOffset.y - len, aOffset.x,
-            aOffset.y + len, 0, aColor );
+            aOffset.y + len, 0, aOpts.color );
     GRLine( clipbox, aDc, aOffset.x - len, aOffset.y, aOffset.x + len,
-            aOffset.y, 0, aColor );
+            aOffset.y, 0, aOpts.color );
 #endif
 
     /* Enable this to draw the bounding box around the component to validate
@@ -437,7 +447,7 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset, 
 #if 0
     EDA_RECT bBox = GetUnitBoundingBox( aMulti, aConvert );
     bBox.RevertYAxis();
-    bBox = aTransform.TransformCoordinate( bBox );
+    bBox = aOpts.transform.TransformCoordinate( bBox );
     bBox.Move( aOffset );
     GRRect( aPanel ? aPanel->GetClipBox() : NULL, aDc, bBox, 0, LIGHTMAGENTA );
 #endif

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -343,12 +343,14 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     int unit = parent->GetUnit();
     int convert = parent->GetConvert();
 
+    auto opts = PART_DRAW_OPTIONS::Default();
+    opts.draw_mode = g_XorMode;
+    opts.only_selected = true;
+
     if( aErase )
     {
         block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
-
-        component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert,
-                         g_XorMode, UNSPECIFIED_COLOR, DefaultTransform, true, true, true );
+        component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert, opts );
     }
 
     // Repaint new view
@@ -357,6 +359,5 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     GRSetDrawMode( aDC, g_XorMode );
     block->Draw( aPanel, aDC, block->GetMoveVector(), g_XorMode, block->GetColor() );
 
-    component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert,
-                     g_XorMode, UNSPECIFIED_COLOR, DefaultTransform, true, true, true );
+    component->Draw( aPanel, aDC, block->GetMoveVector(), unit, convert, opts );
 }

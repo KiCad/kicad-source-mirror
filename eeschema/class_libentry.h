@@ -174,6 +174,42 @@ extern bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 );
 extern int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2 );
 
 
+struct PART_DRAW_OPTIONS
+{
+    GR_DRAWMODE draw_mode;      ///< Device context drawing mode, see wxDC
+    EDA_COLOR_T color;          ///< Color to draw part in
+    TRANSFORM transform;        ///< Coordinate adjustment settings
+    bool show_pin_text;         ///< Whether to show pin texts
+    bool draw_visible_fields;   ///< Whether to draw "visible" fields
+    bool draw_hidden_fields;    ///< Whether to draw "hidden" fields
+    bool only_selected;         ///< Draws only the body items that are selected, for block moves
+    std::vector<bool> dangling; ///< which pins should display as dangling, or empty for All
+    bool show_elec_type;        ///< Whether to show the pin electrical type
+
+    static PART_DRAW_OPTIONS Default()
+    {
+        PART_DRAW_OPTIONS def;
+        def.draw_mode = GR_DEFAULT_DRAWMODE;
+        def.color     = UNSPECIFIED_COLOR;
+        def.transform = DefaultTransform;
+        def.show_pin_text       = true;
+        def.draw_visible_fields = true;
+        def.draw_hidden_fields  = true;
+        def.only_selected       = false;
+        def.show_elec_type      = false;
+        return def;
+    }
+
+    bool PinIsDangling( size_t aPin ) const
+    {
+        if( aPin < dangling.size() )
+            return dangling[aPin];
+        else
+            return true;
+    }
+};
+
+
 /**
  * Class LIB_PART
  * defines a library part object.
@@ -408,31 +444,11 @@ public:
      * @param aOffset - Position of part.
      * @param aMulti - unit if multiple units per part.
      * @param aConvert - Component conversion (DeMorgan) if available.
-     * @param aDrawMode - Device context drawing mode, see wxDC.
-     * @param aColor - Color to draw part.
-     * @param aTransform - Coordinate adjustment settings.
-     * @param aShowPinText - Show pin text if true.
-     * @param aDrawFields - Draw field text if true otherwise just draw
-     *                      body items (useful to draw a body in schematic,
-     *                      because fields of schematic components replace
-     *                      the lib part fields).
-     * @param aOnlySelected - Draws only the body items that are selected.
-     *                        Used for block move redraws.
-     * @param aPinsDangling - if not NULL, this should be a pointer to
-     *              vector<bool> exactly the same length as the number of pins,
-     *              indicating whether each pin is dangling. If NULL, all pins
-     *              will be drawn as if they were dangling.
-     * @param aShowElectricalType - show the electrical type name of the pin
-     *              used only in component editor and component viewer
+     * @param aOpts - Drawing options
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
-               int aMulti, int aConvert, GR_DRAWMODE aDrawMode,
-               EDA_COLOR_T aColor = UNSPECIFIED_COLOR,
-               const TRANSFORM& aTransform = DefaultTransform,
-               bool aShowPinText = true, bool aDrawFields = true,
-               bool aOnlySelected = false,
-               const std::vector<bool>* aPinsDangling = NULL,
-               bool aShowElectricalType = false );
+               int aMulti, int aConvert,
+               const PART_DRAW_OPTIONS& aOpts );
 
     /**
      * Plot lib part to plotter.

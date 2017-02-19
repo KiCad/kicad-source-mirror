@@ -361,9 +361,8 @@ void DIALOG_CHOOSE_COMPONENT::renderPreview( LIB_PART* aComponent, int aUnit )
 
     wxPoint offset = -bBox.Centre();
 
-
-    aComponent->Draw( NULL, &dc, offset, aUnit, m_deMorganConvert, GR_COPY,
-                      UNSPECIFIED_COLOR, DefaultTransform, true, true, false );
+    auto opts = PART_DRAW_OPTIONS::Default();
+    aComponent->Draw( NULL, &dc, offset, aUnit, m_deMorganConvert, opts );
 }
 
 

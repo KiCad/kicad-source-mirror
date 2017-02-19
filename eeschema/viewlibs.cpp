@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,9 +219,9 @@ void LIB_VIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     else
         msg = _( "None" );
 
-    part->Draw( m_canvas, DC, wxPoint( 0, 0 ), m_unit, m_convert, GR_DEFAULT_DRAWMODE,
-                UNSPECIFIED_COLOR, DefaultTransform,
-                true, true,false, NULL, GetShowElectricalType() );
+    auto opts = PART_DRAW_OPTIONS::Default();
+    opts.show_elec_type = GetShowElectricalType();
+    part->Draw( m_canvas, DC, wxPoint( 0, 0 ), m_unit, m_convert, opts );
 
     // Redraw the cursor
     m_canvas->DrawCrossHair( DC );

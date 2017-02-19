@@ -253,9 +253,9 @@ void LIB_EDIT_FRAME::RedrawComponent( wxDC* aDC, wxPoint aOffset  )
         wxString    fieldfullText = field->GetFullText( m_unit );
 
         field->EDA_TEXT::SetText( fieldfullText );  // change the field text string only
-        part->Draw( m_canvas, aDC, aOffset, m_unit, m_convert, GR_DEFAULT_DRAWMODE,
-                    UNSPECIFIED_COLOR, DefaultTransform,
-                    true, true,false, NULL, GetShowElectricalType() );
+        auto opts = PART_DRAW_OPTIONS::Default();
+        opts.show_elec_type = GetShowElectricalType();
+        part->Draw( m_canvas, aDC, aOffset, m_unit, m_convert, opts );
         field->EDA_TEXT::SetText( fieldText );      // restore the field text string
     }
 }
