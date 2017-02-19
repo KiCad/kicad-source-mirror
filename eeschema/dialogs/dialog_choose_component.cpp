@@ -55,7 +55,8 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     m_footprintPreviewPanel = NULL;
 
     // Initialize footprint preview through Kiway
-    m_footprintPreviewPanel = FOOTPRINT_PREVIEW_PANEL::AddToPanel( Kiway(), m_footprintView, true );
+    m_footprintPreviewPanel =
+        FOOTPRINT_PREVIEW_PANEL::InstallOnPanel( Kiway(), m_footprintView, true );
 
     if( m_footprintPreviewPanel )
     {

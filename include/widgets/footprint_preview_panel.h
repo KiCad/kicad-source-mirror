@@ -98,9 +98,9 @@ public:
      *
      * @param aKiway - an active Kiway instance
      * @param aPanel - a blank panel to receive the previewer
-     * @param aIndicator - if true, also add indicator elements to display status and errors.
+     * @param aStatus - if true, also add indicator elements to display status and errors.
      */
-    static FOOTPRINT_PREVIEW_PANEL* AddToPanel( KIWAY& aKiway, wxPanel* aPanel, bool aIndicator );
+    static FOOTPRINT_PREVIEW_PANEL* InstallOnPanel( KIWAY& aKiway, wxPanel* aPanel, bool aStatus );
 
 protected:
 

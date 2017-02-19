@@ -23,8 +23,8 @@
 #include <kiway.h>
 
 
-FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::AddToPanel(
-        KIWAY& aKiway, wxPanel* aPanel, bool aIndicator )
+FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::InstallOnPanel(
+        KIWAY& aKiway, wxPanel* aPanel, bool aStatus )
 {
     FOOTPRINT_PREVIEW_PANEL* fpp = NULL;
 
@@ -43,7 +43,7 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::AddToPanel(
     auto sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( fpp, 1, wxALL | wxEXPAND, 0 );
 
-    if( aIndicator )
+    if( aStatus )
     {
         auto label = new wxStaticText( aPanel, -1, wxEmptyString );
         auto sizer2 = new wxBoxSizer( wxVERTICAL );
