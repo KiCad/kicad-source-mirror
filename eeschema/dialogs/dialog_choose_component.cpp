@@ -246,7 +246,7 @@ bool DIALOG_CHOOSE_COMPONENT::updateSelection()
         return false;
     }
 
-    m_componentDetails->SetPage( GenerateAliasInfo( selection ) );
+    m_componentDetails->SetPage( GenerateAliasInfo( selection, unit ) );
 
     updateFootprint();
 

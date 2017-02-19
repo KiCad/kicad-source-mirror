@@ -46,11 +46,13 @@ class ALIAS_INFO_GENERATOR
 {
     wxString m_html;
     LIB_ALIAS const * m_part;
+    int m_unit;
 
 public:
-    ALIAS_INFO_GENERATOR( LIB_ALIAS const * aAlias )
+    ALIAS_INFO_GENERATOR( LIB_ALIAS const * aAlias, int aUnit )
         : m_html( DescriptionFormat ),
-          m_part( aAlias )
+          m_part( aAlias ),
+          m_unit( aUnit )
     { }
 
     /**
@@ -139,19 +141,22 @@ protected:
     wxString GetHtmlFieldRow( LIB_FIELD const & aField )
     {
         wxString name = aField.GetName();
-        wxString text = aField.GetFullText();
+        wxString text = aField.GetFullText( m_unit > 0 ? m_unit : 1 );
         wxString fieldhtml = FieldFormat;
 
         fieldhtml.Replace( "__NAME__", EscapedHTML( name ) );
 
-        if( aField.GetId() == DATASHEET )
+        switch( aField.GetId() )
         {
-            wxString datasheetlink = DatasheetLinkFormat;
-            datasheetlink.Replace( "__VALUE__", EscapedHTML( text ) );
-            fieldhtml.Replace( "__VALUE__", datasheetlink );
-        }
-        else
-        {
+        case DATASHEET:
+            {
+                wxString datasheetlink = DatasheetLinkFormat;
+                datasheetlink.Replace( "__VALUE__", EscapedHTML( text ) );
+                fieldhtml.Replace( "__VALUE__", datasheetlink );
+            }
+            break;
+
+        default:
             fieldhtml.Replace( "__VALUE__", EscapedHTML( text ) );
         }
 
@@ -175,9 +180,9 @@ protected:
 };
 
 
-wxString GenerateAliasInfo( LIB_ALIAS const * aAlias )
+wxString GenerateAliasInfo( LIB_ALIAS const * aAlias, int aUnit )
 {
-    ALIAS_INFO_GENERATOR gen( aAlias );
+    ALIAS_INFO_GENERATOR gen( aAlias, aUnit );
     gen.GenerateHtml();
     return gen.GetHtml();
 }

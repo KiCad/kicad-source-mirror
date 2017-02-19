@@ -27,6 +27,6 @@
  * Return an HTML page describing a LIB_ALIAS. This is suitable for inclusion
  * in a wxHtmlWindow.
  */
-wxString GenerateAliasInfo( LIB_ALIAS const * aAlias );
+wxString GenerateAliasInfo( LIB_ALIAS const * aAlias, int aUnit );
 
 #endif // GENERATE_ALIAS_INFO_H
