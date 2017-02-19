@@ -41,7 +41,7 @@
 #include <class_board.h>
 
 
-PANEL_PREV_3D_B::PANEL_PREV_3D_B( wxWindow* aParent, S3D_CACHE* aCacheManager,
+PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
                                   MODULE* aModuleCopy,
                                   std::vector<S3D_INFO> *aParentInfoList ):
                 PANEL_PREV_3D_BASE( aParent, wxID_ANY )
@@ -69,14 +69,14 @@ PANEL_PREV_3D_B::PANEL_PREV_3D_B( wxWindow* aParent, S3D_CACHE* aCacheManager,
         m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND );
 
         m_previewPane->Connect( wxEVT_ENTER_WINDOW, wxMouseEventHandler(
-                            PANEL_PREV_3D_B::onEnterPreviewCanvas ), NULL, this );
+                            PANEL_PREV_3D::onEnterPreviewCanvas ), NULL, this );
     }
 
 
-PANEL_PREV_3D_B::~PANEL_PREV_3D_B()
+PANEL_PREV_3D::~PANEL_PREV_3D()
 {
     m_previewPane->Disconnect( wxEVT_ENTER_WINDOW,
-            wxMouseEventHandler( PANEL_PREV_3D_B::onEnterPreviewCanvas ), NULL, this );
+            wxMouseEventHandler( PANEL_PREV_3D::onEnterPreviewCanvas ), NULL, this );
 
     delete m_settings3Dviewer;
     delete m_dummyBoard;
@@ -84,7 +84,7 @@ PANEL_PREV_3D_B::~PANEL_PREV_3D_B()
 }
 
 
-void PANEL_PREV_3D_B::initPanel()
+void PANEL_PREV_3D::initPanel()
 {
     m_resolver = NULL;
     currentModelFile.clear();

@@ -62,16 +62,14 @@ class BOARD;
 class CINFO3D_VISU;
 class MODULE;
 
-#define PANEL_PREV_3D_B PANEL_PREV_3D
-
-class PANEL_PREV_3D_B: public PANEL_PREV_3D_BASE
+class PANEL_PREV_3D: public PANEL_PREV_3D_BASE
 {
 public:
-    PANEL_PREV_3D_B( wxWindow* aParent, S3D_CACHE* aCacheManager,
+    PANEL_PREV_3D( wxWindow* aParent, S3D_CACHE* aCacheManager,
                      MODULE* aModuleCopy,
                      std::vector<S3D_INFO> *aParentInfoList = NULL );
 
-    ~PANEL_PREV_3D_B();
+    ~PANEL_PREV_3D();
 
 private:
     wxString                currentModelFile;   ///< Used to check if the model file was changed
