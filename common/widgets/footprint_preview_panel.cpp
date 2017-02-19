@@ -40,6 +40,9 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::InstallOnPanel(
         return NULL;
     }
 
+    aPanel->SetBackgroundColour( *wxBLACK );
+    aPanel->SetForegroundColour( *wxWHITE );
+
     auto sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( fpp, 1, wxALL | wxEXPAND, 0 );
 

@@ -199,6 +199,7 @@ FOOTPRINT_PREVIEW_PANEL::CacheFootprint ( const LIB_ID& aFPID )
 
 void FOOTPRINT_PREVIEW_PANEL::renderFootprint(  MODULE *module )
 {
+    Freeze();
     GetView()->Clear();
     module->SetParent ( &*m_dummyBoard );
     module->RunOnChildren( boost::bind( &KIGFX::VIEW::Add, GetView(), _1 ) );
@@ -214,7 +215,6 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint(  MODULE *module )
 
     if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
     {
-
         // Autozoom
         GetView()->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
 
@@ -223,6 +223,8 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint(  MODULE *module )
 
         Refresh();
     }
+
+    Thaw();
 }
 
 
@@ -275,6 +277,7 @@ void FOOTPRINT_PREVIEW_PANEL::OnLoaderThreadUpdate( wxCommandEvent& event )
 
 void FOOTPRINT_PREVIEW_PANEL::SetStatusText( wxString const & aText )
 {
+    Freeze();
     if( m_label )
     {
         m_label->SetLabel( aText );
@@ -287,11 +290,13 @@ void FOOTPRINT_PREVIEW_PANEL::SetStatusText( wxString const & aText )
     }
 
     GetParent()->Layout();
+    Thaw();
 }
 
 
 void FOOTPRINT_PREVIEW_PANEL::ClearStatus()
 {
+    Freeze();
     if( m_label )
     {
         m_label->SetLabel( wxEmptyString );
@@ -304,6 +309,7 @@ void FOOTPRINT_PREVIEW_PANEL::ClearStatus()
     }
 
     GetParent()->Layout();
+    Thaw();
 }
 
 
