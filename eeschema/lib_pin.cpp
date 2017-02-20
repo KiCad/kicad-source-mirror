@@ -993,7 +993,7 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
 
     COLOR4D color = GetLayerColor( LAYER_PIN );
 
-    if( aColor == UNSPECIFIED_COLOR4D )       // Used normal color or selected color
+    if( aColor == COLOR4D::UNSPECIFIED )       // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();
@@ -1210,12 +1210,12 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
 
     /* Get the num and name colors */
-    if( ( Color == UNSPECIFIED_COLOR4D ) && IsSelected() )
+    if( ( Color == COLOR4D::UNSPECIFIED ) && IsSelected() )
         Color = GetItemSelectedColor();
 
-    COLOR4D NameColor = Color == UNSPECIFIED_COLOR4D ?
+    COLOR4D NameColor = Color == COLOR4D::UNSPECIFIED ?
                             GetLayerColor( LAYER_PINNAM ) : Color;
-    COLOR4D NumColor  = Color == UNSPECIFIED_COLOR4D ?
+    COLOR4D NumColor  = Color == COLOR4D::UNSPECIFIED ?
                             GetLayerColor( LAYER_PINNUM ) : Color;
 
     /* Create the pin num string */
@@ -1411,7 +1411,7 @@ void LIB_PIN::DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     int pensize = etextSize/6;
 
     // Get a suitable color
-    if( ( aColor == UNSPECIFIED_COLOR4D ) && IsSelected() )
+    if( ( aColor == COLOR4D::UNSPECIFIED ) && IsSelected() )
         aColor = GetItemSelectedColor();
     else if( !IsVisible() )
         aColor = GetInvisibleItemColor();

@@ -191,9 +191,9 @@ void WS_DRAW_ITEM_TEXT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint
        GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
     Draw( aClipBox, aDC, aOffset,
-            aColor == UNSPECIFIED_COLOR4D ? GetColor() : aColor,
+            aColor == COLOR4D::UNSPECIFIED ? GetColor() : aColor,
             aDrawMode == UNSPECIFIED_DRAWMODE ? GR_COPY : aDrawMode,
-            FILLED, UNSPECIFIED_COLOR4D );
+            FILLED, COLOR4D::UNSPECIFIED );
 }
 
 
@@ -238,7 +238,7 @@ void WS_DRAW_ITEM_POLYGON::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPo
         points = &m_Corners[0];
     }
 
-    auto color = ( aColor == UNSPECIFIED_COLOR4D ) ? GetColor() : aColor;
+    auto color = ( aColor == COLOR4D::UNSPECIFIED ) ? GetColor() : aColor;
 
     GRSetDrawMode( aDC, ( aDrawMode == UNSPECIFIED_DRAWMODE ? GR_COPY : aDrawMode ) );
     GRPoly( aClipBox, aDC,
@@ -295,7 +295,7 @@ void WS_DRAW_ITEM_RECT::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint
             GetStart().x + aOffset.x, GetStart().y + aOffset.y,
             GetEnd().x + aOffset.x, GetEnd().y + aOffset.y,
             GetPenWidth(),
-            ( aColor == UNSPECIFIED_COLOR4D ) ? GetColor() : aColor );
+            ( aColor == COLOR4D::UNSPECIFIED ) ? GetColor() : aColor );
     GRSetDrawMode( aDC, GR_COPY );
 }
 
@@ -398,7 +398,7 @@ void WS_DRAW_ITEM_LINE::DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint
     GRSetDrawMode( aDC, ( aDrawMode == UNSPECIFIED_DRAWMODE ) ? GR_COPY : aDrawMode );
     GRLine( aClipBox, aDC, GetStart() + aOffset, GetEnd() + aOffset,
             GetPenWidth(),
-            ( aColor == UNSPECIFIED_COLOR4D ) ? GetColor() : aColor );
+            ( aColor == COLOR4D::UNSPECIFIED ) ? GetColor() : aColor );
     GRSetDrawMode( aDC, GR_COPY );
 }
 

@@ -237,14 +237,14 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
     colourData.SetColour( currentColors[ colorButton->m_Layer ].ToColour() );
     wxColourDialog *dialog = new wxColourDialog( this, &colourData );
 
-    COLOR4D newColor = UNSPECIFIED_COLOR4D;
+    COLOR4D newColor = COLOR4D::UNSPECIFIED;
 
     if( dialog->ShowModal() == wxID_OK )
     {
         newColor = COLOR4D( dialog->GetColourData().GetColour() );
     }
 
-    if( newColor == UNSPECIFIED_COLOR4D || currentColors[ colorButton->m_Layer ] == newColor )
+    if( newColor == COLOR4D::UNSPECIFIED || currentColors[ colorButton->m_Layer ] == newColor )
         return;
 
     currentColors[ colorButton->m_Layer ] = newColor;

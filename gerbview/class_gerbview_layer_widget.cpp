@@ -114,7 +114,7 @@ void GERBER_LAYER_WIDGET::ReFillRender()
 
     for( unsigned row=0;  row<DIM(renderRows);  ++row )
     {
-        if( renderRows[row].color != UNSPECIFIED_COLOR4D )       // does this row show a color?
+        if( renderRows[row].color != COLOR4D::UNSPECIFIED )       // does this row show a color?
         {
             renderRows[row].color = myframe->GetVisibleElementColor(
                                     (GERBER_VISIBLE_ID)renderRows[row].id );

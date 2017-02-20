@@ -167,7 +167,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     wxPaintDC    dc( m_panelShowPad );
     PAD_DRAWINFO drawInfo;
 
-    COLOR4D color = COLOR4D_BLACK;
+    COLOR4D color = COLOR4D::BLACK;
 
     if( m_dummyPad->GetLayerSet()[F_Cu] )
     {

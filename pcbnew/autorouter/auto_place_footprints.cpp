@@ -425,7 +425,7 @@ void drawPlacementRoutingMatrix( BOARD* aBrd, wxDC* DC )
         for( jj = 0; jj < RoutingMatrix.m_Ncols; jj++ )
         {
             ox      = RoutingMatrix.m_BrdBox.GetX() + (jj * RoutingMatrix.m_GridRouting);
-            color   = COLOR4D_BLACK;
+            color   = COLOR4D::BLACK;
 
             top_state       = RoutingMatrix.GetCell( ii, jj, TOP );
             bottom_state    = RoutingMatrix.GetCell( ii, jj, BOTTOM );
@@ -435,7 +435,7 @@ void drawPlacementRoutingMatrix( BOARD* aBrd, wxDC* DC )
 
             // obstacles
             if( ( top_state & CELL_is_EDGE ) || ( bottom_state & CELL_is_EDGE ) )
-                color = COLOR4D_WHITE;
+                color = COLOR4D::WHITE;
             else if( top_state & ( HOLE | CELL_is_MODULE ) )
                 color = COLOR4D( LIGHTRED );
             else if( bottom_state & (HOLE | CELL_is_MODULE) )

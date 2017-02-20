@@ -233,7 +233,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     for( LAYERSCH_ID ii = LAYER_FIRST; ii < LAYERSCH_ID_COUNT; ++ii )
         SetLayerColor( COLOR4D( DARKGRAY ), ii );
 
-    SetLayerColor( COLOR4D_WHITE, LAYER_BACKGROUND );
+    SetLayerColor( COLOR4D::WHITE, LAYER_BACKGROUND );
 
     // Must be called before creating the main frame in order to
     // display the real hotkeys in menus or tool tips

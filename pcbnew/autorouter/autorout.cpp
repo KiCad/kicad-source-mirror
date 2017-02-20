@@ -236,7 +236,7 @@ void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
     {
         for( int row = 0; row < RoutingMatrix.m_Nrows; row++ )
         {
-            color  = COLOR4D_BLACK;
+            color  = COLOR4D::BLACK;
             dcell0 = RoutingMatrix.GetCell( row, col, BOTTOM );
 
             if( dcell0 & HOLE )
@@ -253,7 +253,7 @@ void DisplayRoutingMatrix( EDA_DRAW_PANEL* panel, wxDC* DC )
 
             dcell0 |= dcell1;
 #endif
-            if( ( color == COLOR4D_BLACK ) && ( dcell0 & VIA_IMPOSSIBLE ) )
+            if( ( color == COLOR4D::BLACK ) && ( dcell0 & VIA_IMPOSSIBLE ) )
                 color = COLOR4D( BLUE );
 
             if( dcell0 & CELL_is_EDGE )

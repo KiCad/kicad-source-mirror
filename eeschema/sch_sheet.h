@@ -113,7 +113,7 @@ public:
     bool IsMovableFromAnchorPoint() override { return true; }
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
+               GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     /**
      * Function CreateGraphicShape (virtual)
@@ -429,7 +429,7 @@ public:
     int GetPenSize() const override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
+               GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     EDA_RECT const GetBoundingBox() const override;
 

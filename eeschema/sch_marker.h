@@ -53,7 +53,7 @@ public:
     }
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDraw_mode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
+               GR_DRAWMODE aDraw_mode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     void Plot( PLOTTER* aPlotter ) override
     {

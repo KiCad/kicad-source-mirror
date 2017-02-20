@@ -273,7 +273,7 @@ void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
 
     // First try reading old format
     EDA_COLOR_T itmp = ColorByName( aConfig->Read( m_Ident, wxT( "NONE" ) ) );
-    COLOR4D wtmp = UNSPECIFIED_COLOR4D;
+    COLOR4D wtmp = COLOR4D::UNSPECIFIED;
 
     if( itmp == UNSPECIFIED_COLOR )
     {

@@ -187,7 +187,7 @@ void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     COLOR4D color;
     EDA_RECT* clipbox = aPanel->GetClipBox();
 
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         color = aColor;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );

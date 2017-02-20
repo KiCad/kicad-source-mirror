@@ -203,7 +203,7 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     COLOR4D color = GetLayerColor( LAYER_DEVICE );
 
-    if( aColor == UNSPECIFIED_COLOR4D )       // Used normal color or selected color
+    if( aColor == COLOR4D::UNSPECIFIED )       // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();
@@ -218,7 +218,7 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         fill = NO_FILL;
 
     GRSetDrawMode( aDC, aDrawMode );

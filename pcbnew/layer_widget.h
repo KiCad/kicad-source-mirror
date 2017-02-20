@@ -85,11 +85,11 @@ public:
     {
         wxString    rowName;    ///< the prompt or layername
         int         id;         ///< either a layer or "visible element" id
-        COLOR4D     color;      ///< UNSPECIFIED_COLOR4D if none.
+        COLOR4D     color;      ///< COLOR4D::UNSPECIFIED if none.
         bool        state;      ///< initial wxCheckBox state
         wxString    tooltip;    ///< if not empty, use this tooltip on row
 
-        ROW( const wxString& aRowName, int aId, COLOR4D aColor = UNSPECIFIED_COLOR4D,
+        ROW( const wxString& aRowName, int aId, COLOR4D aColor = COLOR4D::UNSPECIFIED,
             const wxString& aTooltip = wxEmptyString, bool aState = true )
         {
             rowName = aRowName;

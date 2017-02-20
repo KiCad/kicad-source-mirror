@@ -83,7 +83,7 @@ public:
     void SwapData( SCH_ITEM* aItem ) override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
+               GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     static bool Load( LINE_READER& aLine, wxString& aErrorMsg, SCH_ITEM **out );
 

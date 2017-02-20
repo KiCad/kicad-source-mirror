@@ -91,13 +91,13 @@ public:
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC)
     {
         wxPoint offset( 0, 0 );
-        DrawWsItem( aClipBox, aDC, offset, UNSPECIFIED_DRAWMODE, UNSPECIFIED_COLOR4D );
+        DrawWsItem( aClipBox, aDC, offset, UNSPECIFIED_DRAWMODE, COLOR4D::UNSPECIFIED );
     }
 
     /// More advanced version of DrawWsItem. This is what must be
     /// defined in the derived type.
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) = 0;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) = 0;
 
     /**
      * Abstract function: should exist for derived items
@@ -159,7 +159,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_LINE
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     /**
      * Virtual function
@@ -216,7 +216,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_POLYGON
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     /**
      * Virtual function
@@ -251,7 +251,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_RECT
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     /**
      * Virtual function
@@ -292,7 +292,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_TEXT
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     // Accessors:
     int GetPenWidth() { return GetThickness(); }
@@ -327,13 +327,13 @@ class WS_DRAW_ITEM_BITMAP : public WS_DRAW_ITEM_BASE
 
 public:
     WS_DRAW_ITEM_BITMAP( WORKSHEET_DATAITEM* aParent, wxPoint aPos )
-        :WS_DRAW_ITEM_BASE( aParent, wsg_bitmap, UNSPECIFIED_COLOR4D )
+        :WS_DRAW_ITEM_BASE( aParent, wsg_bitmap, COLOR4D::UNSPECIFIED )
     {
         m_pos = aPos;
     }
 
     WS_DRAW_ITEM_BITMAP()
-        :WS_DRAW_ITEM_BASE( NULL, wsg_bitmap, UNSPECIFIED_COLOR4D )
+        :WS_DRAW_ITEM_BASE( NULL, wsg_bitmap, COLOR4D::UNSPECIFIED )
     {
     }
 
@@ -342,7 +342,7 @@ public:
     /** The function to draw a WS_DRAW_ITEM_BITMAP
      */
     virtual void DrawWsItem( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
-            GR_DRAWMODE aDrawMode, COLOR4D aColor = UNSPECIFIED_COLOR4D ) override;
+            GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 
     /**
      * Virtual function

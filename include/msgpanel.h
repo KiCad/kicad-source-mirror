@@ -82,7 +82,7 @@ public:
         m_X = 0;
         m_UpperY = 0;
         m_LowerY = 0;
-        m_Color = UNSPECIFIED_COLOR4D;
+        m_Color = COLOR4D::UNSPECIFIED;
     }
 
     void SetUpperText( const wxString& aUpperText ) { m_UpperText = aUpperText; }

@@ -77,7 +77,7 @@ COLOR4D DisplayColorFrame( wxWindow* aParent, COLOR4D aOldColor )
         return dlg.GetSelectedColor();
     }
 
-    return UNSPECIFIED_COLOR4D;
+    return COLOR4D::UNSPECIFIED;
 }
 
 

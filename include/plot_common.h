@@ -1209,7 +1209,7 @@ public:
     DXF_PLOTTER() : textAsLines( false )
     {
         textAsLines = true;
-        m_currentColor = COLOR4D_BLACK;
+        m_currentColor = COLOR4D::BLACK;
     }
 
     virtual PlotFormat GetPlotterType() const override

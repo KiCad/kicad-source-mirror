@@ -72,7 +72,7 @@ void PSLIKE_PLOTTER::SetColor( COLOR4D color )
          * holes in white on pads in black
          */
         double k = 1; // White
-        if( color != COLOR4D_WHITE )
+        if( color != COLOR4D::WHITE )
             k = 0;
         if( negativeMode )
             emitSetRGBColor( 1 - k, 1 - k, 1 - k );

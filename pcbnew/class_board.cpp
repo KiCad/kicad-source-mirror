@@ -779,7 +779,7 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
 
 COLOR4D BOARD::GetVisibleElementColor( int aPCB_VISIBLE )
 {
-    COLOR4D color = UNSPECIFIED_COLOR4D;
+    COLOR4D color = COLOR4D::UNSPECIFIED;
 
     switch( aPCB_VISIBLE )
     {

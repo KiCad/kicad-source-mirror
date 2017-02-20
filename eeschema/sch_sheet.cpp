@@ -592,7 +592,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     int      lineWidth = GetPenSize();
     EDA_RECT* clipbox  = aPanel? aPanel->GetClipBox() : NULL;
 
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         color = aColor;
     else
         color = GetLayerColor( m_Layer );
@@ -611,7 +611,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         name_orientation = TEXT_ANGLE_HORIZ;
 
     /* Draw text : SheetName */
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         txtcolor = aColor;
     else
         txtcolor = GetLayerColor( LAYER_SHEETNAME );
@@ -624,7 +624,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                      false, false );
 
     /* Draw text : FileName */
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         txtcolor = aColor;
     else
         txtcolor = GetLayerColor( LAYER_SHEETFILENAME );
@@ -1138,7 +1138,7 @@ void SCH_SHEET::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
 
 void SCH_SHEET::Plot( PLOTTER* aPlotter )
 {
-    COLOR4D    txtcolor = UNSPECIFIED_COLOR4D;
+    COLOR4D    txtcolor = COLOR4D::UNSPECIFIED;
     wxSize      size;
     wxString    Text;
     int         name_orientation;

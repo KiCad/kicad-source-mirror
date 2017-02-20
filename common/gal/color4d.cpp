@@ -81,10 +81,10 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
         static std::map< std::pair< uint32_t, uint32_t >, uint32_t > mix_cache;
 
         // First easy thing: a black gives always the other colour
-        if( *this == COLOR4D_BLACK )
+        if( *this == COLOR4D::BLACK )
             return aColor;
 
-        if( aColor == COLOR4D_BLACK )
+        if( aColor == COLOR4D::BLACK )
             return *this;
 
         uint32_t myPackedColor = ToU32();
@@ -95,11 +95,11 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
          * an answer */
         auto search = mix_cache.find( std::pair< uint32_t, uint32_t >( myPackedColor,
                                                                        aPackedColor ) );
-        COLOR4D candidate = COLOR4D_BLACK;
+        COLOR4D candidate = COLOR4D::BLACK;
         if( search != mix_cache.end() )
             candidate.FromU32( search->second );
 
-        if( candidate != COLOR4D_BLACK )
+        if( candidate != COLOR4D::BLACK )
             return candidate;
 
         // Blend the two colors (i.e. OR the RGB values)
@@ -112,7 +112,7 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
         /* Here, BLACK is *not* a good answer, since it would recompute the next time.
          * Even theorically its not possible (with the current rules), but
          * maybe the metric will change in the future */
-        if( candidate == COLOR4D_BLACK )
+        if( candidate == COLOR4D::BLACK )
             candidate = COLOR4D( DARKDARKGRAY );
 
         // Store the result in the cache. The operation is commutative, too
@@ -214,7 +214,8 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
         }
         else
         {
-            for( EDA_COLOR_T candidate = BLACK; candidate < NBCOLORS; candidate = NextColor(candidate) )
+            for( EDA_COLOR_T candidate = ::BLACK;
+                    candidate < NBCOLORS; candidate = NextColor( candidate ) )
             {
                 double ch, cs, cv;
 
@@ -245,7 +246,8 @@ COLOR4D::COLOR4D( EDA_COLOR_T aColor )
 
         // Now we have the desired hue; let's find the nearest value
         minDist = 1.0;
-        for( EDA_COLOR_T candidate = BLACK; candidate < NBCOLORS; candidate = NextColor(candidate) )
+        for( EDA_COLOR_T candidate = ::BLACK;
+                candidate < NBCOLORS; candidate = NextColor( candidate ) )
         {
             // If the target hue is NAN, we didn't extract the value for any colors above
             if( std::isnan( legacyHue ) )
@@ -407,3 +409,7 @@ COLOR4D& COLOR4D::Saturate( double aFactor )
 
     return *this;
 }
+
+const COLOR4D COLOR4D::UNSPECIFIED( 0, 0, 0, 0 );
+const COLOR4D COLOR4D::WHITE( 1, 1, 1, 1 );
+const COLOR4D COLOR4D::BLACK( 0, 0, 0, 1 );

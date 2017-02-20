@@ -96,7 +96,7 @@ void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                   GetLayerColor( LAYER_ERC_ERR ) : GetLayerColor( LAYER_ERC_WARN );
     }
 
-    if( aColor == UNSPECIFIED_COLOR4D )
+    if( aColor == COLOR4D::UNSPECIFIED )
         m_Color = color;
     else
         m_Color = aColor;

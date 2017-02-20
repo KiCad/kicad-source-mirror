@@ -314,7 +314,7 @@ void EDA_TEXT::Draw( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint& aOffset,
                            aDrawMode, aFillMode, GetShownText(), GetTextPos() );
 
     // Draw text anchor, if requested
-    if( aAnchor_color != UNSPECIFIED_COLOR4D )
+    if( aAnchor_color != COLOR4D::UNSPECIFIED )
     {
         GRDrawAnchor( aClipBox, aDC,
                       GetTextPos().x + aOffset.x, GetTextPos().y + aOffset.y,
@@ -511,7 +511,7 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
         size.x = -size.x;
 
     s_cornerBuffer = &aCornerBuffer;
-    COLOR4D color = COLOR4D_BLACK;  // not actually used, but needed by DrawGraphicText
+    COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by DrawGraphicText
 
     if( IsMultilineAllowed() )
     {

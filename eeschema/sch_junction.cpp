@@ -115,7 +115,7 @@ void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
 {
     COLOR4D color;
 
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         color = aColor;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );

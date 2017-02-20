@@ -98,13 +98,13 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 if( !( masklayer & layersmask_plotpads ).any() )
                     continue;
 
-                COLOR4D color = COLOR4D_BLACK;
+                COLOR4D color = COLOR4D::BLACK;
 
                 if( layersmask_plotpads[B_SilkS] )
                    color = aBoard->GetLayerColor( B_SilkS );
 
                 if( layersmask_plotpads[F_SilkS] )
-                    color = ( color == COLOR4D_BLACK) ? aBoard->GetLayerColor( F_SilkS ) : color;
+                    color = ( color == COLOR4D::BLACK) ? aBoard->GetLayerColor( F_SilkS ) : color;
 
                 itemplotter.PlotPad( pad, color, SKETCH );
             }
@@ -408,7 +408,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
             if( padPlotsSize.x <= 0 || padPlotsSize.y <= 0 )
                 continue;
 
-            COLOR4D color = COLOR4D_BLACK;
+            COLOR4D color = COLOR4D::BLACK;
 
             if( pad->GetLayerSet()[B_Cu] )
                color = aBoard->GetVisibleElementColor( PAD_BK_VISIBLE );

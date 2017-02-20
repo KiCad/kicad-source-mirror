@@ -84,7 +84,7 @@ class LIB_ITEM : public EDA_ITEM
      * @param aDC A pointer to the device context used to draw the object.
      * @param aOffset A reference to a wxPoint object containing the offset where to draw
      *                from the object's current position.
-     * @param aColor A COLOR4D to draw the object or UNSPECIFIED_COLOR4D to draw
+     * @param aColor A COLOR4D to draw the object or COLOR4D::UNSPECIFIED to draw
      *               the object in it's default color.
      * @param aDrawMode The mode used to perform the draw (#GR_OR, #GR_COPY, etc.).
      * @param aData A pointer to any object specific data required to perform the draw.
@@ -207,7 +207,7 @@ public:
      * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
      * @param aDC Device Context (can be null)
      * @param aOffset Offset to draw
-     * @param aColor Draw color, or UNSPECIFIED_COLOR4D to use the normal body item color
+     * @param aColor Draw color, or COLOR4D::UNSPECIFIED to use the normal body item color
      * @param aDrawMode GR_OR, GR_XOR, ...
      * @param aData Value or pointer used to pass others parameters, depending on body items.
      *              Used for some items to force to force no fill mode ( has meaning only for

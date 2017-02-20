@@ -93,7 +93,7 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
             color = COLOR4D( DARKDARKGRAY );
     }
 
-    COLOR4D anchor_color = UNSPECIFIED_COLOR4D;
+    COLOR4D anchor_color = COLOR4D::UNSPECIFIED;
 
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
         anchor_color = brd->GetVisibleElementColor( ANCHOR_VISIBLE );

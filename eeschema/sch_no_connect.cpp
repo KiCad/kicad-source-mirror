@@ -139,7 +139,7 @@ void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 
     COLOR4D color;
 
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         color = aColor;
     else
         color = GetLayerColor( LAYER_NOCONNECT );

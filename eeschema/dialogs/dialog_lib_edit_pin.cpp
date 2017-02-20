@@ -104,7 +104,7 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     // This is a flag for m_dummyPin->Draw
     uintptr_t flags = uintptr_t( PIN_DRAW_TEXTS | PIN_DRAW_DANGLING );
 
-    m_dummyPin->Draw( NULL, &dc, offset, UNSPECIFIED_COLOR4D, GR_COPY,
+    m_dummyPin->Draw( NULL, &dc, offset, COLOR4D::UNSPECIFIED, GR_COPY,
                       (void*)flags, DefaultTransform );
 
     m_dummyPin->SetParent(NULL);

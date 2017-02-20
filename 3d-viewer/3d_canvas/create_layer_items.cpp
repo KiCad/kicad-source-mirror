@@ -106,7 +106,7 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const TEXTE_PCB* aTextPCB,
     s_boardBBox3DU = &m_board2dBBox3DU;
 
     // not actually used, but needed by DrawGraphicText
-    const COLOR4D dummy_color = COLOR4D_BLACK;
+    const COLOR4D dummy_color = COLOR4D::BLACK;
 
     if( aTextPCB->IsMultilineAllowed() )
     {

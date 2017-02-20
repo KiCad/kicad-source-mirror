@@ -195,7 +195,7 @@ void SCH_BITMAP::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset
 {
     wxPoint pos = m_pos + aOffset;
 
-    if( aColor == UNSPECIFIED_COLOR4D )    // Use normal drawing function
+    if( aColor == COLOR4D::UNSPECIFIED )    // Use normal drawing function
     {
         // https://bugs.launchpad.net/kicad/+bug/1529163
         // "Moving images in eeschema on OS X uses

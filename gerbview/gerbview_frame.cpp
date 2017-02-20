@@ -609,7 +609,7 @@ bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 
 COLOR4D GERBVIEW_FRAME::GetVisibleElementColor( GERBER_VISIBLE_ID aItemIdVisible ) const
 {
-    COLOR4D color = UNSPECIFIED_COLOR4D;
+    COLOR4D color = COLOR4D::UNSPECIFIED;
 
     switch( aItemIdVisible )
     {

@@ -272,7 +272,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     if( drillShapeOpt != PRINT_PARAMETERS::NO_DRILL_SHAPE )
     {
         TRACK*      track = Pcb->m_Track;
-        COLOR4D     color = COLOR4D_WHITE;
+        COLOR4D     color = COLOR4D::WHITE;
 
         bool blackpenstate = GetGRForceBlackPenState();
 

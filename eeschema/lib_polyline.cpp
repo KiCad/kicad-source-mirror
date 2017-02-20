@@ -270,7 +270,7 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
     COLOR4D color = GetLayerColor( LAYER_DEVICE );
     wxPoint* buffer = NULL;
 
-    if( aColor == UNSPECIFIED_COLOR4D )                // Used normal color or selected color
+    if( aColor == COLOR4D::UNSPECIFIED )                // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();
@@ -289,7 +289,7 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         fill = NO_FILL;
 
     GRSetDrawMode( aDC, aDrawMode );

@@ -421,7 +421,7 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     wxPoint pos1, pos2, posc;
     COLOR4D color = GetLayerColor( LAYER_DEVICE );
 
-    if( aColor == UNSPECIFIED_COLOR4D )       // Used normal color or selected color
+    if( aColor == COLOR4D::UNSPECIFIED )       // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();
@@ -448,7 +448,7 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         fill = NO_FILL;
 
     EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;

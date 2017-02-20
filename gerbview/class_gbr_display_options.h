@@ -64,7 +64,7 @@ public:
         m_DisplayNegativeObjects = false;
         m_ForceBlackAndWhite    = false;
         m_NegativeDrawColor     = COLOR4D( DARKGRAY );
-        m_BgDrawColor = COLOR4D_BLACK;
+        m_BgDrawColor = COLOR4D::BLACK;
     }
 };
 

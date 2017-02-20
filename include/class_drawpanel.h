@@ -367,7 +367,7 @@ public:
      * @param aDC - the device context to draw the cursor
      * @param aColor - the color to draw the cursor
      */
-    void DrawCrossHair( wxDC* aDC, COLOR4D aColor = COLOR4D_WHITE );
+    void DrawCrossHair( wxDC* aDC, COLOR4D aColor = COLOR4D::WHITE );
 
     // Hide the cross hair.
     void CrossHairOff( wxDC* DC );

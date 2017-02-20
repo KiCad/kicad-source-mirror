@@ -291,7 +291,7 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
                              const TRANSFORM& aTransform )
 {
     wxPoint  text_pos;
-    COLOR4D color = UNSPECIFIED_COLOR4D;
+    COLOR4D color = COLOR4D::UNSPECIFIED;
     int      linewidth = GetPenSize();
 
     if( IsBold() )
@@ -299,11 +299,11 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     else
         linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
-    if( !IsVisible() && ( aColor == UNSPECIFIED_COLOR4D ) )
+    if( !IsVisible() && ( aColor == COLOR4D::UNSPECIFIED ) )
     {
         color = GetInvisibleItemColor();
     }
-    else if( IsSelected() && ( aColor == UNSPECIFIED_COLOR4D ) )
+    else if( IsSelected() && ( aColor == COLOR4D::UNSPECIFIED ) )
     {
         color = GetItemSelectedColor();
     }
@@ -312,7 +312,7 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
         color = aColor;
     }
 
-    if( color == UNSPECIFIED_COLOR4D )
+    if( color == COLOR4D::UNSPECIFIED )
         color = GetDefaultColor();
 
     text_pos = aTransform.TransformCoordinate( GetTextPos() ) + aOffset;

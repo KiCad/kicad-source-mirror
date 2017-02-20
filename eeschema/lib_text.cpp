@@ -339,7 +339,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     if( plotter->GetColorMode() )       // Used normal color or selected color
         color = IsSelected() ? GetItemSelectedColor() : GetDefaultColor();
     else
-        color = COLOR4D_BLACK;
+        color = COLOR4D::BLACK;
 
     plotter->Text( pos, color, GetShownText(),
                    t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT,
@@ -372,7 +372,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
 {
     COLOR4D color = GetDefaultColor();
 
-    if( aColor == UNSPECIFIED_COLOR4D )       // Used normal color or selected color
+    if( aColor == COLOR4D::UNSPECIFIED )       // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();

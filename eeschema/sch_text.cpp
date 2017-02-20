@@ -350,7 +350,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 
     linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
-    if( Color != UNSPECIFIED_COLOR4D )
+    if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
@@ -362,7 +362,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     int savedWidth = GetThickness();
     SetThickness( linewidth );              // Set the minimum width
 
-    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR4D );
+    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, COLOR4D::UNSPECIFIED );
 
     SetThickness( savedWidth );
 
@@ -1275,7 +1275,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     COLOR4D color;
     wxPoint     text_offset = aOffset + GetSchematicTextOffset();
 
-    if( Color != UNSPECIFIED_COLOR4D )
+    if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
@@ -1290,7 +1290,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     SetThickness( linewidth );
 
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
-    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR4D );
+    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, COLOR4D::UNSPECIFIED );
 
     SetThickness( save_width );   // restore initial value
 
@@ -1645,7 +1645,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
-    if( Color != UNSPECIFIED_COLOR4D )
+    if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
@@ -1656,7 +1656,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
     SetThickness( linewidth );
 
     wxPoint text_offset = offset + GetSchematicTextOffset();
-    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR4D );
+    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, COLOR4D::UNSPECIFIED );
 
     SetThickness( save_width );         // restore initial value
 

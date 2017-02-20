@@ -238,12 +238,12 @@ public:
      * @param aColor = text color
      * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
      * @param aDisplay_mode = FILLED or SKETCH
-     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR4D = do not draw anchor ).
+     * @param aAnchor_color = anchor color ( COLOR4D::UNSPECIFIED = do not draw anchor ).
      */
     void Draw( EDA_RECT* aClipBox, wxDC* aDC,
                const wxPoint& aOffset, COLOR4D aColor,
                GR_DRAWMODE aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = FILLED,
-               COLOR4D aAnchor_color = UNSPECIFIED_COLOR4D );
+               COLOR4D aAnchor_color = COLOR4D::UNSPECIFIED );
 
     /**
      * Convert the text shape to a list of segment

@@ -400,13 +400,13 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( aErase )
     {
         cur_pin->Move( PinPreviousPos );
-        cur_pin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR4D, g_XorMode,
+        cur_pin->Draw( aPanel, aDC, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, g_XorMode,
                           showOptions, DefaultTransform );
     }
 
     // Redraw pin in new position
     cur_pin->Move( aPanel->GetParent()->GetCrossHairPosition( true ) );
-    cur_pin->Draw( aPanel, aDC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR4D, g_XorMode,
+    cur_pin->Draw( aPanel, aDC, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, g_XorMode,
                    showOptions, DefaultTransform );
 
     PinPreviousPos = cur_pin->GetPosition();
@@ -480,7 +480,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
             // Build it:
             void* showOptions = reinterpret_cast<void*>( show_opts );
 
-            pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), UNSPECIFIED_COLOR4D, GR_COPY,
+            pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, GR_COPY,
                        showOptions, DefaultTransform );
         }
 

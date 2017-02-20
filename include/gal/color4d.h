@@ -41,7 +41,7 @@ class COLOR4D
 public:
     // Constructor (creates the Color 0,0,0,0)
     COLOR4D() :
-        r( 0 ), g( 0 ), b( 0 ), a( 1 )
+        r( 0 ), g( 0 ), b( 0 ), a( 0 )
     {
     }
 
@@ -269,6 +269,13 @@ public:
     double g; ///< Green component
     double b; ///< Blue component
     double a; ///< Alpha component
+
+    /// For legacy support; used as a value to indicate color hasn't been set yet
+    static const COLOR4D UNSPECIFIED;
+
+    // Declare a few color shortcuts that are used for comparisons frequently
+    static const COLOR4D WHITE;
+    static const COLOR4D BLACK;
 };
 
 /// @brief Equality operator, are two colors equal
@@ -278,13 +285,5 @@ const bool operator==( const COLOR4D& lhs, const COLOR4D& rhs );
 const bool operator!=( const COLOR4D& lhs, const COLOR4D& rhs );
 
 } // namespace KIGFX
-
-/// For legacy support; used as a value to indicate color hasn't been set yet
-#define UNSPECIFIED_COLOR4D ( KIGFX::COLOR4D( 0, 0, 0, 0 ) )
-
-/// Declare a few color shortcuts that are used for comparisons frequently
-#define COLOR4D_WHITE ( KIGFX::COLOR4D( 1, 1, 1, 1 ) )
-#define COLOR4D_BLACK ( KIGFX::COLOR4D( 0, 0, 0, 1 ) )
-
 
 #endif /* COLOR4D_H_ */

@@ -130,7 +130,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDraw_mode,
     else
         drawInfo.m_ShowPadFilled = true;
 
-    COLOR4D color = COLOR4D_BLACK;
+    COLOR4D color = COLOR4D::BLACK;
 
     if( m_layerMask[F_Cu] )
     {

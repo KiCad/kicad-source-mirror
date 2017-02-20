@@ -69,7 +69,7 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 
     SetDefaultLineWidth( 0 );               // No line width on DXF
     m_plotMirror = false;                     // No mirroring on DXF
-    m_currentColor = COLOR4D_BLACK;
+    m_currentColor = COLOR4D::BLACK;
 }
 
 /**
@@ -280,13 +280,13 @@ void DXF_PLOTTER::SetColor( COLOR4D color )
 {
     wxASSERT( outputFile );
     if( ( colorMode )
-       || ( color == COLOR4D_BLACK )
-       || ( color == COLOR4D_WHITE ) )
+       || ( color == COLOR4D::BLACK )
+       || ( color == COLOR4D::WHITE ) )
     {
         m_currentColor = color;
     }
     else
-        m_currentColor = COLOR4D_BLACK;
+        m_currentColor = COLOR4D::BLACK;
 }
 
 /**

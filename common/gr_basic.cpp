@@ -196,8 +196,8 @@ static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int
 void GRResetPenAndBrush( wxDC* DC )
 {
     GRSetBrush( DC, BLACK );  // Force no fill
-    s_DC_lastbrushcolor = UNSPECIFIED_COLOR4D;
-    s_DC_lastcolor =  UNSPECIFIED_COLOR4D;
+    s_DC_lastbrushcolor = COLOR4D::UNSPECIFIED;
+    s_DC_lastcolor =  COLOR4D::UNSPECIFIED;
     s_DC_lastDC    = NULL;
 }
 
@@ -214,7 +214,7 @@ void GRSetColorPen( wxDC* DC, COLOR4D Color, int width, wxPenStyle style )
         width = DC->DeviceToLogicalXRel( 1 );
 
     if( s_ForceBlackPen )
-        Color = COLOR4D_BLACK;
+        Color = COLOR4D::BLACK;
 
     const wxPen& curr_pen = DC->GetPen();
 
@@ -240,7 +240,7 @@ void GRSetColorPen( wxDC* DC, COLOR4D Color, int width, wxPenStyle style )
 void GRSetBrush( wxDC* DC, COLOR4D Color, bool fill )
 {
     if( s_ForceBlackPen )
-        Color = COLOR4D_BLACK;
+        Color = COLOR4D::BLACK;
 
     if(   s_DC_lastbrushcolor != Color
        || s_DC_lastbrushfill  != fill
@@ -377,10 +377,10 @@ void GRDashedLine( EDA_RECT* ClipBox, wxDC*     DC,
 {
     GRLastMoveToX  = x2;
     GRLastMoveToY  = y2;
-    s_DC_lastcolor = UNSPECIFIED_COLOR4D;
+    s_DC_lastcolor = COLOR4D::UNSPECIFIED;
     GRSetColorPen( DC, Color, width, wxPENSTYLE_SHORT_DASH );
     WinClipAndDrawLine( ClipBox, DC, x1, y1, x2, y2, width );
-    s_DC_lastcolor = UNSPECIFIED_COLOR4D;
+    s_DC_lastcolor = COLOR4D::UNSPECIFIED;
     GRSetColorPen( DC, Color, width );
 }
 

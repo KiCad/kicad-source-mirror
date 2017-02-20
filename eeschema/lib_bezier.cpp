@@ -303,7 +303,7 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
         PolyPointsTraslated.push_back( aTransform.TransformCoordinate( m_PolyPoints[i] ) +
                                        aOffset );
 
-    if( aColor == UNSPECIFIED_COLOR4D )                // Used normal color or selected color
+    if( aColor == COLOR4D::UNSPECIFIED )                // Used normal color or selected color
     {
         if( IsSelected() )
             color = GetItemSelectedColor();
@@ -315,7 +315,7 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    if( aColor != UNSPECIFIED_COLOR4D )
+    if( aColor != COLOR4D::UNSPECIFIED )
         fill = NO_FILL;
 
     GRSetDrawMode( aDC, aDrawMode );

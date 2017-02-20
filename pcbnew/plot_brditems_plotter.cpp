@@ -57,7 +57,7 @@
 COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 {
     COLOR4D color = m_board->GetLayerColor( ToLAYER_ID( aLayer ) );
-    if( color == COLOR4D_WHITE )
+    if( color == COLOR4D::WHITE )
         color = COLOR4D( LIGHTGRAY );
     return color;
 }
@@ -223,7 +223,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
     // Plot text fields, if allowed
     if( trace_ref )
     {
-        if( GetReferenceColor() == UNSPECIFIED_COLOR4D )
+        if( GetReferenceColor() == COLOR4D::UNSPECIFIED )
             PlotTextModule( &aModule->Reference(), getColor( textLayer ) );
         else
             PlotTextModule( &aModule->Reference(), GetReferenceColor() );
@@ -231,7 +231,7 @@ bool BRDITEMS_PLOTTER::PlotAllTextsModule( MODULE* aModule )
 
     if( trace_val )
     {
-        if( GetValueColor() == UNSPECIFIED_COLOR4D )
+        if( GetValueColor() == COLOR4D::UNSPECIFIED )
             PlotTextModule( &aModule->Value(), getColor( textLayer ) );
         else
             PlotTextModule( &aModule->Value(), GetValueColor() );
@@ -299,7 +299,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, COLOR4D aColor )
     double  orient;
     int     thickness;
 
-    if( aColor == COLOR4D_WHITE )
+    if( aColor == COLOR4D::WHITE )
         aColor = COLOR4D( LIGHTGRAY );
 
     m_plotter->SetColor( aColor );
@@ -591,14 +591,14 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
         for( unsigned ii = 0; ii <  strings_list.Count(); ii++ )
         {
             wxString& txt =  strings_list.Item( ii );
-            m_plotter->Text( positions[ii], UNSPECIFIED_COLOR4D, txt, orient, size,
+            m_plotter->Text( positions[ii], COLOR4D::UNSPECIFIED, txt, orient, size,
                              pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
                              thickness, pt_texte->IsItalic(), allow_bold, false, &gbr_metadata );
         }
     }
     else
     {
-        m_plotter->Text( pos, UNSPECIFIED_COLOR4D, shownText, orient, size,
+        m_plotter->Text( pos, COLOR4D::UNSPECIFIED, shownText, orient, size,
                          pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
                          thickness, pt_texte->IsItalic(), allow_bold, false, &gbr_metadata );
     }

@@ -112,7 +112,7 @@ COLOR4D COLORS_DESIGN_SETTINGS::GetLayerColor( LAYER_NUM aLayer ) const
     {
         return m_LayersColors[aLayer];
     }
-    return UNSPECIFIED_COLOR4D;
+    return COLOR4D::UNSPECIFIED;
 }
 
 
@@ -132,7 +132,7 @@ COLOR4D COLORS_DESIGN_SETTINGS::GetItemColor( int aItemIdx ) const
         return m_ItemsColors[aItemIdx];
     }
 
-    return UNSPECIFIED_COLOR4D;
+    return COLOR4D::UNSPECIFIED;
 }
 
 

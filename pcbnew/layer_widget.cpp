@@ -283,7 +283,7 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& aEvent )
 
     COLOR4D oldColor;
     wxASSERT( oldColor.SetFromWxString( colorTxt ) );
-    COLOR4D newColor = UNSPECIFIED_COLOR4D;
+    COLOR4D newColor = COLOR4D::UNSPECIFIED;
 
     if( AreArbitraryColorsAllowed() )
     {
@@ -301,7 +301,7 @@ void LAYER_WIDGET::OnMiddleDownLayerColor( wxMouseEvent& aEvent )
         newColor = DisplayColorFrame( this, oldColor );
     }
 
-    if( newColor != UNSPECIFIED_COLOR4D )
+    if( newColor != COLOR4D::UNSPECIFIED )
     {
         eventSource->SetName( makeColorTxt( newColor ) );
 
@@ -339,7 +339,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
 
     COLOR4D oldColor;
     wxASSERT( oldColor.SetFromWxString( colorTxt ) );
-    COLOR4D newColor = UNSPECIFIED_COLOR4D;
+    COLOR4D newColor = COLOR4D::UNSPECIFIED;
 
     if( AreArbitraryColorsAllowed() )
     {
@@ -357,7 +357,7 @@ void LAYER_WIDGET::OnMiddleDownRenderColor( wxMouseEvent& event )
         newColor = DisplayColorFrame( this, oldColor );
     }
 
-    if( newColor != UNSPECIFIED_COLOR4D )
+    if( newColor != COLOR4D::UNSPECIFIED )
     {
         eventSource->SetName( makeColorTxt( newColor ) );
 
@@ -495,7 +495,7 @@ void LAYER_WIDGET::insertRenderRow( int aRow, const ROW& aSpec )
 
     // column 0
     col = 0;
-    if( aSpec.color != UNSPECIFIED_COLOR4D )
+    if( aSpec.color != COLOR4D::UNSPECIFIED )
     {
         wxBitmapButton* bmb = makeColorButton( m_RenderScrolledWindow, aSpec.color, encodeId( col, aSpec.id ) );
         bmb->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( LAYER_WIDGET::OnMiddleDownRenderColor ), NULL, this );
@@ -827,7 +827,7 @@ COLOR4D LAYER_WIDGET::GetLayerColor( LAYER_NUM aLayer ) const
         return ColorFromInt( strtoul( TO_UTF8(colorTxt), NULL, 0 ) );
     }
 
-    return UNSPECIFIED_COLOR4D;   // it's caller fault, gave me a bad layer
+    return COLOR4D::UNSPECIFIED;   // it's caller fault, gave me a bad layer
 }
 
 
@@ -951,7 +951,7 @@ public:
 
         // add some render rows
         static const LAYER_WIDGET::ROW renderRows[] = {
-            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, UNSPECIFIED_COLOR4D, wxT("Spock here") ),
+            LAYER_WIDGET::ROW( wxT("With Very Large Ears"), 0, COLOR4D::UNSPECIFIED, wxT("Spock here") ),
             LAYER_WIDGET::ROW( wxT("With Legs"), 1, YELLOW ),
             LAYER_WIDGET::ROW( wxT("With Oval Eyes"), 1, BROWN, wxT("My eyes are upon you") ),
         };

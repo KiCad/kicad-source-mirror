@@ -217,7 +217,7 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
     COLOR4D color;
     int width = GetPenSize();
 
-    if( Color != UNSPECIFIED_COLOR4D )
+    if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
     else
         color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );

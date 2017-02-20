@@ -327,7 +327,7 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
      *   If the color is not the default color (aColor != -1 )
      */
     if( ! ( screen && screen->m_IsPrinting && GetGRForceBlackPenState() )
-            && ( aOpts.color == UNSPECIFIED_COLOR4D ) )
+            && ( aOpts.color == COLOR4D::UNSPECIFIED ) )
     {
         for( LIB_ITEM& drawItem : drawings )
         {
@@ -560,7 +560,7 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
         if( *i == aItem )
         {
             if( aDc != NULL )
-                aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), UNSPECIFIED_COLOR4D,
+                aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED,
                              g_XorMode, NULL, DefaultTransform );
 
             drawings.erase( i );
