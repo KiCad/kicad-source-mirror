@@ -808,7 +808,7 @@ void FOOTPRINT_EDIT_FRAME::updateView()
 {
     static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() )->DisplayBoard( GetBoard() );
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    m_toolManager->RunAction( PCB_ACTIONS::zoomFitScreen, true );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 }
 
 

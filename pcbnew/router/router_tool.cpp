@@ -62,6 +62,43 @@ using namespace std::placeholders;
 using namespace KIGFX;
 using boost::optional;
 
+TOOL_ACTION PCB_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
+        _( "Interactive Router (Single Tracks)" ),
+        _( "Run push & shove router (single tracks)" ), ps_router_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffPair",
+        AS_GLOBAL, '6',
+        _( "Interactive Router (Differential Pairs)" ),
+        _( "Run push & shove router (differential pairs)" ), ps_diff_pair_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::routerActivateSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
+        AS_GLOBAL, 0,
+        _( "Interactive Router Settings" ),
+        _( "Open Interactive Router settings" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::routerActivateDpDimensionsDialog( "pcbnew.InteractiveRouter.DpDimensionsDialog",
+        AS_GLOBAL, 0,
+        _( "Differential Pair Dimension settings" ),
+        _( "Open Differential Pair Dimension settings" ), ps_diff_pair_gap_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::routerActivateTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
+        AS_GLOBAL, '7',
+        _( "Tune length of a single track" ), "", ps_tune_length_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::routerActivateTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
+        AS_GLOBAL, '8',
+        _( "Tune length of a differential pair" ), "", NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
+        AS_GLOBAL, '9',
+        _( "Tune skew of a differential pair" ), "", NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG_TRACK_KEEP_SLOPE ),
+        _( "Drag Track/Via" ), _( "Drags tracks and vias without breaking connections" ),
+        drag_track_segment_xpm );
+
 static const TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT,
     TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
     _( "New Track" ),  _( "Starts laying a new track." ), add_tracks_xpm );

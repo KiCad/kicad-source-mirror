@@ -44,6 +44,8 @@
 #include <ratsnest_data.h>
 #include <board_commit.h>
 #include <scoped_set_reset.h>
+#include <bitmaps.h>
+#include <hotkeys.h>
 
 #include <class_board.h>
 #include <class_edge_mod.h>
@@ -56,6 +58,66 @@
 #include <tools/tool_event_utils.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
+
+// Drawing tool actions
+TOOL_ACTION PCB_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
+        AS_GLOBAL, 0,
+        _( "Draw Line" ), _( "Draw a line" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
+        AS_GLOBAL, 0,
+        _( "Draw Circle" ), _( "Draw a circle" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
+        AS_GLOBAL, 0,
+        _( "Draw Arc" ), _( "Draw an arc" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
+        AS_GLOBAL, 0,
+        _( "Add Text" ), _( "Add a text" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
+        AS_GLOBAL, 0,
+        _( "Add Dimension" ), _( "Add a dimension" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
+        AS_GLOBAL, 0,
+        _( "Add Filled Zone" ), _( "Add a filled zone" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drawKeepout( "pcbnew.InteractiveDrawing.keepout",
+        AS_GLOBAL, 0,
+        _( "Add Keepout Area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
+        AS_GLOBAL, 0,
+        _( "Add a Zone Cutout" ), _( "Add a cutout area of an existing zone" ),
+        add_zone_cutout_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone",
+        AS_GLOBAL, 0,
+        _( "Add a Similar Zone" ), _( "Add a zone with the same settings as an existing zone" ),
+        add_zone_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
+        AS_GLOBAL, 0,
+        "Place DXF", "", NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
+        AS_GLOBAL, 0,
+        _( "Place the Footprint Anchor" ), _( "Place the footprint anchor" ),
+        NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
+        AS_CONTEXT, '+',
+        _( "Increase Line Width" ), _( "Increase the line width" ) );
+
+TOOL_ACTION PCB_ACTIONS::decWidth( "pcbnew.InteractiveDrawing.decWidth",
+        AS_CONTEXT, '-',
+        _( "Decrease Line Width" ), _( "Decrease the line width" ) );
+
+TOOL_ACTION PCB_ACTIONS::arcPosture( "pcbnew.InteractiveDrawing.arcPosture",
+        AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_POSTURE ),
+        _( "Switch Arc Posture" ), _( "Switch the arc posture" ) );
 
 DRAWING_TOOL::DRAWING_TOOL() :
     PCB_TOOL( "pcbnew.InteractiveDrawing" ),

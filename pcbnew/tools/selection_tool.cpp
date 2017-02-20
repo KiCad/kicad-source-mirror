@@ -43,6 +43,8 @@ using namespace std::placeholders;
 #include <view/view_controls.h>
 #include <view/view_group.h>
 #include <painter.h>
+#include <bitmaps.h>
+#include <hotkeys.h>
 
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
@@ -52,6 +54,51 @@ using namespace std::placeholders;
 #include "selection_area.h"
 #include "bright_box.h"
 #include "pcb_actions.h"
+
+// Selection tool actions
+TOOL_ACTION PCB_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
+        AS_GLOBAL, 0,
+        "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
+
+TOOL_ACTION PCB_ACTIONS::selectionCursor( "pcbnew.InteractiveSelection.Cursor",
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
+
+TOOL_ACTION PCB_ACTIONS::selectItem( "pcbnew.InteractiveSelection.SelectItem",
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
+
+TOOL_ACTION PCB_ACTIONS::unselectItem( "pcbnew.InteractiveSelection.UnselectItem",
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
+
+TOOL_ACTION PCB_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
+        AS_GLOBAL, 0,
+        "", "" );    // No description, it is not supposed to be shown anywhere
+
+TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
+        AS_GLOBAL, 'U',
+        _( "Trivial Connection" ), _( "Selects a connection between two junctions." ) );
+
+TOOL_ACTION PCB_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
+        AS_GLOBAL, 'I',
+        _( "Copper Connection" ), _( "Selects whole copper connection." ) );
+
+TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
+        AS_GLOBAL, 0,
+        _( "Whole Net" ), _( "Selects all tracks & vias belonging to the same net." ) );
+
+TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSameSheet",
+        AS_GLOBAL,  'P',
+        _( "Same Sheet" ), _( "Selects all modules and tracks in the same schematic sheet" ) );
+
+TOOL_ACTION PCB_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
+        AS_GLOBAL, 0, //TOOL_ACTION::LegacyHotKey( HK_FIND_ITEM ), // handled by wxWidgets
+        _( "Find Item" ), _( "Searches the document for an item" ), find_xpm );
+
+TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ) );
+
 
 class SELECT_MENU: public CONTEXT_MENU
 {

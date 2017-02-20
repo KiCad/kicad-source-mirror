@@ -29,6 +29,9 @@
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 
+TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
+
+
 PICKER_TOOL::PICKER_TOOL()
     : TOOL_INTERACTIVE( "pcbnew.Picker" )
 {

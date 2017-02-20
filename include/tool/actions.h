@@ -44,6 +44,24 @@ public:
 
     virtual ~ACTIONS() {};
 
+    // View controls
+    static TOOL_ACTION zoomIn;
+    static TOOL_ACTION zoomOut;
+    static TOOL_ACTION zoomInCenter;
+    static TOOL_ACTION zoomOutCenter;
+    static TOOL_ACTION zoomCenter;
+    static TOOL_ACTION zoomFitScreen;
+    static TOOL_ACTION zoomPreset;
+
+    // Grid control
+    static TOOL_ACTION gridFast1;
+    static TOOL_ACTION gridFast2;
+    static TOOL_ACTION gridNext;
+    static TOOL_ACTION gridPrev;
+    static TOOL_ACTION gridSetOrigin;
+    static TOOL_ACTION gridResetOrigin;
+    static TOOL_ACTION gridPreset;
+
     /**
      * Function TranslateLegacyId()
      * Translates legacy tool ids to the corresponding TOOL_ACTION name.

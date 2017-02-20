@@ -48,9 +48,6 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     // View controls
-    int ZoomInOut( const TOOL_EVENT& aEvent );
-    int ZoomInOutCenter( const TOOL_EVENT& aEvent );
-    int ZoomCenter( const TOOL_EVENT& aEvent );
     int ZoomFitScreen( const TOOL_EVENT& aEvent );
     int ZoomPreset( const TOOL_EVENT& aEvent );
 
@@ -77,11 +74,8 @@ public:
     // Grid control
     int GridFast1( const TOOL_EVENT& aEvent );
     int GridFast2( const TOOL_EVENT& aEvent );
-    int GridNext( const TOOL_EVENT& aEvent );
-    int GridPrev( const TOOL_EVENT& aEvent );
     int GridSetOrigin( const TOOL_EVENT& aEvent );
     int GridResetOrigin( const TOOL_EVENT& aEvent );
-    int GridPreset( const TOOL_EVENT& aEvent );
 
     // Miscellaneous
     int ResetCoords( const TOOL_EVENT& aEvent );

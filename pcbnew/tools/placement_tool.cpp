@@ -31,9 +31,42 @@
 #include <class_board.h>
 #include <ratsnest_data.h>
 #include <board_commit.h>
+#include <bitmaps.h>
 
 #include <confirm.h>
 #include <menus_helpers.h>
+
+// Placement tool
+TOOL_ACTION PCB_ACTIONS::alignTop( "pcbnew.Place.alignTop",
+        AS_GLOBAL, 0,
+        _( "Align to Top" ),
+        _( "Aligns selected items to the top edge" ), up_xpm );
+
+TOOL_ACTION PCB_ACTIONS::alignBottom( "pcbnew.Place.alignBottom",
+        AS_GLOBAL, 0,
+        _( "Align to Bottom" ),
+        _( "Aligns selected items to the bottom edge" ), down_xpm );
+
+TOOL_ACTION PCB_ACTIONS::alignLeft( "pcbnew.Place.alignLeft",
+        AS_GLOBAL, 0,
+        _( "Align to Left" ),
+        _( "Aligns selected items to the left edge" ), left_xpm );
+
+TOOL_ACTION PCB_ACTIONS::alignRight( "pcbnew.Place.alignRight",
+        AS_GLOBAL, 0,
+        _( "Align to Right" ),
+        _( "Aligns selected items to the right edge" ), right_xpm );
+
+TOOL_ACTION PCB_ACTIONS::distributeHorizontally( "pcbnew.Place.distributeHorizontally",
+        AS_GLOBAL, 0,
+        _( "Distribute Horizontally" ),
+        _( "Distributes selected items along the horizontal axis" ), distribute_horizontal_xpm );
+
+TOOL_ACTION PCB_ACTIONS::distributeVertically( "pcbnew.Place.distributeVertically",
+        AS_GLOBAL, 0,
+        _( "Distribute Vertically" ),
+        _( "Distributes selected items along the vertical axis" ), distribute_vertical_xpm );
+
 
 PLACEMENT_TOOL::PLACEMENT_TOOL() :
     TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL ), m_placementMenu( NULL )

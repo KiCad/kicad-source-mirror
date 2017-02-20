@@ -47,6 +47,7 @@
 #include <board_commit.h>
 #include <confirm.h>
 #include <bitmaps.h>
+#include <hotkeys.h>
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
@@ -56,6 +57,96 @@
 
 #include <functional>
 using namespace std::placeholders;
+
+
+// Track & via size control
+TOOL_ACTION PCB_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_WIDTH_TO_NEXT ),
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::trackWidthDec( "pcbnew.EditorControl.trackWidthDec",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS ),
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::viaSizeInc( "pcbnew.EditorControl.viaSizeInc",
+        AS_GLOBAL, '\'',
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
+        AS_GLOBAL, '\\',
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
+        AS_GLOBAL, 0,
+        "", "", NULL, AF_NOTIFY );
+
+
+// Zone actions
+TOOL_ACTION PCB_ACTIONS::zoneFill( "pcbnew.EditorControl.zoneFill",
+        AS_GLOBAL, 0,
+        _( "Fill" ), _( "Fill zone(s)" ), fill_zone_xpm );
+
+TOOL_ACTION PCB_ACTIONS::zoneFillAll( "pcbnew.EditorControl.zoneFillAll",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_FILL_OR_REFILL ),
+        _( "Fill All" ), _( "Fill all zones" ) );
+
+TOOL_ACTION PCB_ACTIONS::zoneUnfill( "pcbnew.EditorControl.zoneUnfill",
+        AS_GLOBAL, 0,
+        _( "Unfill" ), _( "Unfill zone(s)" ), zone_unfill_xpm );
+
+TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.EditorControl.zoneUnfillAll",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_REMOVE_FILLED ),
+        _( "Unfill All" ), _( "Unfill all zones" ) );
+
+TOOL_ACTION PCB_ACTIONS::zoneMerge( "pcbnew.EditorControl.zoneMerge",
+        AS_GLOBAL, 0,
+        _( "Merge Zones" ), _( "Merge zones" ) );
+
+TOOL_ACTION PCB_ACTIONS::zoneDuplicate( "pcbnew.EditorControl.zoneDuplicate",
+        AS_GLOBAL, 0,
+        _( "Duplicate Zone onto Layer" ), _( "Duplicate zone outline onto a different layer" ),
+        zone_duplicate_xpm );
+
+
+TOOL_ACTION PCB_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
+        AS_GLOBAL, 0,
+        _( "Add Layer Alignment Target" ), _( "Add a layer alignment target" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_MODULE ),
+        _( "Add Footprint" ), _( "Add a footprint" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbSchToPcb",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
+        AS_GLOBAL, 'L',
+        "Toggle Lock", "" );
+
+TOOL_ACTION PCB_ACTIONS::lock( "pcbnew.EditorControl.lock",
+        AS_GLOBAL, 0,
+        _( "Lock" ), "" );
+
+TOOL_ACTION PCB_ACTIONS::unlock( "pcbnew.EditorControl.unlock",
+        AS_GLOBAL, 0,
+        _( "Unlock" ), "" );
+
+TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::highlightNetCursor( "pcbnew.EditorControl.highlightNetCursor",
+        AS_GLOBAL, 0,
+        "", "" );
 
 
 class ZONE_CONTEXT_MENU : public CONTEXT_MENU

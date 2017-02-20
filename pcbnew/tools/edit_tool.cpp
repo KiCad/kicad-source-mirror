@@ -42,6 +42,8 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <ratsnest_data.h>
 #include <confirm.h>
+#include <bitmaps.h>
+#include <hotkeys.h>
 
 #include <cassert>
 #include <functional>
@@ -61,6 +63,92 @@ using namespace std::placeholders;
 #include <tools/tool_event_utils.h>
 
 #include <board_commit.h>
+
+// Edit tool actions
+TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_MODULE_WITH_MODEDIT ),
+        _( "Open in Footprint Editor" ),
+        _( "Opens the selected footprint in the Footprint Editor" ),
+        module_editor_xpm );
+
+TOOL_ACTION PCB_ACTIONS::copyPadToSettings( "pcbnew.InteractiveEdit.copyPadToSettings",
+        AS_GLOBAL, 0,
+        _( "Copy Pad Settings to Current Settings" ),
+        _( "Copies the properties of selected pad to the current template pad settings." ) );
+
+TOOL_ACTION PCB_ACTIONS::copySettingsToPads( "pcbnew.InteractiveEdit.copySettingsToPads",
+        AS_GLOBAL, 0,
+        _( "Copy Current Settings to Pads" ),
+        _( "Copies the current template pad settings to the selected pad(s)." ) );
+
+TOOL_ACTION PCB_ACTIONS::globalEditPads( "pcbnew.InteractiveEdit.globalPadEdit",
+        AS_GLOBAL, 0,
+        _( "Global Pad Edition" ),
+        _( "Changes pad properties globally." ), push_pad_settings_xpm );
+
+TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
+        _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM ),
+        _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_module_xpm );
+
+TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM_AND_INCREMENT ),
+        _( "Duplicate" ), _( "Duplicates the selected item(s), incrementing pad numbers" ) );
+
+TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM_EXACT ),
+        _( "Move Exactly..." ), _( "Moves the selected item(s) by an exact amount" ),
+        move_module_xpm );
+
+TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CREATE_ARRAY ),
+        _( "Create Array" ), _( "Create array" ), array_module_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM ),
+        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
+        rotate_cw_xpm, AF_NONE, (void*) 1 );
+
+TOOL_ACTION PCB_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
+        AS_GLOBAL, MD_SHIFT + 'R',
+        _( "Rotate Counter-clockwise" ), _( "Rotates selected item(s) counter-clockwise" ),
+        rotate_ccw_xpm, AF_NONE, (void*) -1 );
+
+TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FLIP_ITEM ),
+        _( "Flip" ), _( "Flips selected item(s)" ), swap_layer_xpm );
+
+TOOL_ACTION PCB_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",
+        AS_GLOBAL, 0,
+        _( "Mirror" ), _( "Mirrors selected item" ), mirror_h_xpm );
+
+TOOL_ACTION PCB_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BACK_SPACE ),
+        _( "Remove" ), _( "Deletes selected item(s)" ), delete_xpm,
+        AF_NONE, (void*) REMOVE_FLAGS::NORMAL );
+
+TOOL_ACTION PCB_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
+        _( "Remove (Alternative)" ), _( "Deletes selected item(s)" ), delete_xpm,
+        AF_NONE, (void*) REMOVE_FLAGS::ALT );
+
+TOOL_ACTION PCB_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFootprints",
+        AS_GLOBAL, 0,
+        _( "Exchange Footprint(s)" ), _( "Change the footprint used for modules" ),
+        import_module_xpm );
+
+
+TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
+        _( "Properties..." ), _( "Displays item properties dialog" ), editor_xpm );
+
+TOOL_ACTION PCB_ACTIONS::editModifiedSelection( "pcbnew.InteractiveEdit.ModifiedSelection",
+        AS_GLOBAL, 0,
+        "", "" );
+
 
 EDIT_TOOL::EDIT_TOOL() :
     PCB_TOOL( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),

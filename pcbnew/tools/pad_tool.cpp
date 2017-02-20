@@ -42,6 +42,26 @@
 #include "selection_conditions.h"
 #include "edit_tool.h"
 
+// Pad tools
+TOOL_ACTION PCB_ACTIONS::copyPadSettings(
+        "pcbnew.PadTool.CopyPadSettings",
+        AS_GLOBAL, 0,
+        _( "Copy Pad Settings" ), _( "Copy current pad's settings to the board design settings" ),
+        copy_pad_settings_xpm );
+
+TOOL_ACTION PCB_ACTIONS::applyPadSettings(
+        "pcbnew.PadTool.ApplyPadSettings",
+        AS_GLOBAL, 0,
+        _( "Apply Pad Settings" ), _( "Copy the board design settings pad properties to the current pad" ),
+        apply_pad_settings_xpm );
+
+TOOL_ACTION PCB_ACTIONS::pushPadSettings(
+        "pcbnew.PadTool.PushPadSettings",
+        AS_GLOBAL, 0,
+        _( "Push Pad Settings" ), _( "Copy the current pad settings to other pads" ),
+        push_pad_settings_xpm );
+
+
 class PAD_CONTEXT_MENU : public CONTEXT_MENU
 {
 public:

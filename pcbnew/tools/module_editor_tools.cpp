@@ -38,6 +38,8 @@
 #include <collectors.h>
 #include <confirm.h>
 #include <dialogs/dialog_enum_pads.h>
+#include <hotkeys.h>
+#include <bitmaps.h>
 
 #include <wxPcbStruct.h>
 #include <class_board.h>
@@ -50,6 +52,32 @@
 #include <functional>
 using namespace std::placeholders;
 #include <wx/defs.h>
+
+// Module editor tools
+TOOL_ACTION PCB_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
+        AS_GLOBAL, 0,
+        _( "Add Pad" ), _( "Add a pad" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
+        AS_GLOBAL, 0,
+        _( "Enumerate Pads" ), _( "Enumerate pads" ), pad_enumerate_xpm, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::copyItems( "pcbnew.ModuleEditor.copyItems",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_COPY_ITEM ),
+        _( "Copy" ), _( "Copy items" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::pasteItems( "pcbnew.ModuleEditor.pasteItems",
+        AS_GLOBAL, MD_CTRL + int( 'V' ),
+        _( "Paste" ), _( "Paste items" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.ModuleEditor.graphicOutlines",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::moduleTextOutlines( "pcbnew.ModuleEditor.textOutlines",
+       AS_GLOBAL, 0,
+       "", "" );
+
 
 MODULE_EDITOR_TOOLS::MODULE_EDITOR_TOOLS() :
     TOOL_INTERACTIVE( "pcbnew.ModuleEditor" ), m_view( NULL ), m_controls( NULL ),

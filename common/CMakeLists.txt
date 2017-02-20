@@ -294,6 +294,8 @@ set( COMMON_SRCS
     tool/tool_interactive.cpp
     tool/action_manager.cpp
     tool/context_menu.cpp
+    tool/actions.cpp
+    tool/common_tools.cpp
 
     geometry/seg.cpp
     geometry/shape.cpp

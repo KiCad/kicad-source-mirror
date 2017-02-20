@@ -154,7 +154,7 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
         mgr->RunAction( "common.Control.gridPreset", true,
                 screen->GetGridCmdId() - ID_POPUP_GRID_LEVEL_1000 );
 
-        TOOL_EVENT gridOriginUpdate = PCB_ACTIONS::gridSetOrigin.MakeEvent();
+        TOOL_EVENT gridOriginUpdate = ACTIONS::gridSetOrigin.MakeEvent();
         gridOriginUpdate.SetParameter( new VECTOR2D( gridOrigin ) );
         mgr->ProcessEvent( gridOriginUpdate );
     }

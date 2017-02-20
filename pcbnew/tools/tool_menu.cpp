@@ -91,10 +91,10 @@ using S_C = SELECTION_CONDITIONS;
 
 void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME& aFrame )
 {
-    m_menu.AddItem( PCB_ACTIONS::zoomCenter, S_C::ShowAlways, 1000 );
-    m_menu.AddItem( PCB_ACTIONS::zoomIn, S_C::ShowAlways, 1000  );
-    m_menu.AddItem( PCB_ACTIONS::zoomOut, S_C::ShowAlways, 1000 );
-    m_menu.AddItem( PCB_ACTIONS::zoomFitScreen, S_C::ShowAlways, 1000 );
+    m_menu.AddItem( ACTIONS::zoomCenter, S_C::ShowAlways, 1000 );
+    m_menu.AddItem( ACTIONS::zoomIn, S_C::ShowAlways, 1000  );
+    m_menu.AddItem( ACTIONS::zoomOut, S_C::ShowAlways, 1000 );
+    m_menu.AddItem( ACTIONS::zoomFitScreen, S_C::ShowAlways, 1000 );
 
     m_menu.AddSeparator(SELECTION_CONDITIONS::ShowAlways, 1000 );
 
