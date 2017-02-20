@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 21 2016)
+// C++ code generated with wxFormBuilder (version Jan  9 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -128,12 +128,6 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	
 	
 	bUpperSizer->Add( bSizer4, 1, wxEXPAND, 5 );
-	
-	wxString m_StyleChoices[] = { _("Dots"), _("Lines") };
-	int m_StyleNChoices = sizeof( m_StyleChoices ) / sizeof( wxString );
-	m_Style = new wxRadioBox( this, wxID_ANY, _("Style (OpenGL && Cairo)"), wxDefaultPosition, wxDefaultSize, m_StyleNChoices, m_StyleChoices, 1, wxRA_SPECIFY_COLS );
-	m_Style->SetSelection( 0 );
-	bUpperSizer->Add( m_Style, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerMain->Add( bUpperSizer, 1, wxEXPAND, 5 );

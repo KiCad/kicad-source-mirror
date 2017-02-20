@@ -32,6 +32,8 @@
 #include <pcbnew.h>
 #include <wxPcbStruct.h>
 #include <pcbstruct.h>
+#include <incremental_text_ctrl.h>
+#include <config_map.h>
 
 #include <pcbnew_id.h>
 
@@ -41,6 +43,45 @@
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
 #include <pcb_painter.h>
+#include <gal/gal_display_options.h>
+
+/*
+ * Spin control parameters
+ */
+static const double gridThicknessMin = 0.5;
+static const double gridThicknessMax = 10.0;
+static const double gridThicknessStep = 0.5;
+
+static const double gridMinSpacingMin = 5;
+static const double gridMinSpacingMax = 200;
+static const double gridMinSpacingStep = 5;
+
+
+static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
+{
+    { KIGFX::GRID_STYLE::DOTS,     0 },    // Default
+    { KIGFX::GRID_STYLE::LINES,    1 },
+};
+
+
+static const UTIL::CFG_MAP<TRACE_CLEARANCE_DISPLAY_MODE_T> traceClearanceSelectMap =
+{
+    { SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS,            2 },     // Default
+    { DO_NOT_SHOW_CLEARANCE,                              0 },
+    { SHOW_CLEARANCE_NEW_TRACKS,                          1 },
+    { SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS, 3 },
+    { SHOW_CLEARANCE_ALWAYS,                              4 },
+};
+
+
+static const UTIL::CFG_MAP<KIGFX::OPENGL_ANTIALIASING_MODE> aaModeSelectMap =
+{
+    { KIGFX::OPENGL_ANTIALIASING_MODE::NONE,              0 },    // Default
+    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH,    1 },
+    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA,   2 },
+    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2,  3 },
+    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4,  4 },
+};
 
 
 void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )
@@ -55,44 +96,41 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
 {
     m_Parent = parent;
 
+    // bind the spin button and text box
+    m_gridSizeIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
+                *m_gridLineWidthSpinBtn, *m_gridLineWidth );
+
+    m_gridSizeIncrementer->SetStep( gridThicknessMin, gridThicknessMax,
+                                    gridThicknessStep );
+    m_gridSizeIncrementer->SetPrecision( 1 );
+
+    m_gridMinSpacingIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
+                *m_gridMinSpacingSpinBtn, *m_gridMinSpacing );
+
+    m_gridMinSpacingIncrementer->SetStep( gridMinSpacingMin, gridMinSpacingMax,
+                                          gridMinSpacingStep );
+    m_gridMinSpacingIncrementer->SetPrecision( 0 ); // restrict to ints
+
+    // load settings into controls
     init();
+
     m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
 
+
 void DIALOG_DISPLAY_OPTIONS::init()
 {
     SetFocus();
-    DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
-    KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
+    const DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    const KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
 
     m_OptDisplayTracks->SetValue( displ_opts->m_DisplayPcbTrackFill == SKETCH );
 
-    switch ( displ_opts->m_ShowTrackClearanceMode )
-    {
-        case DO_NOT_SHOW_CLEARANCE:
-            m_OptDisplayTracksClearance->SetSelection( 0 );
-            break;
-
-        case SHOW_CLEARANCE_NEW_TRACKS:
-            m_OptDisplayTracksClearance->SetSelection( 1 );
-            break;
-
-        case SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
-            m_OptDisplayTracksClearance->SetSelection( 3 );
-            break;
-
-        default:
-        case SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
-            m_OptDisplayTracksClearance->SetSelection( 2 );
-            break;
-
-        case SHOW_CLEARANCE_ALWAYS:
-            m_OptDisplayTracksClearance->SetSelection( 4 );
-            break;
-    }
+    m_OptDisplayTracksClearance->SetSelection( UTIL::GetConfigForVal(
+            traceClearanceSelectMap, displ_opts->m_ShowTrackClearanceMode ) );
 
     m_OptDisplayPads->SetValue( displ_opts->m_DisplayPadFill == SKETCH );
     m_OptDisplayVias->SetValue( displ_opts->m_DisplayViaFill == SKETCH );
@@ -107,29 +145,15 @@ void DIALOG_DISPLAY_OPTIONS::init()
     m_OptDisplayDrawings->SetValue( displ_opts->m_DisplayDrawItemsFill == SKETCH );
     m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
 
-    switch( gal_opts.gl_antialiasing_mode )
-    {
-        case KIGFX::OPENGL_ANTIALIASING_MODE::NONE:
-            m_choiceAntialiasing->Select( 0 );
-            break;
+    m_choiceAntialiasing->SetSelection( UTIL::GetConfigForVal(
+            aaModeSelectMap, gal_opts.gl_antialiasing_mode ) );
 
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH:
-            m_choiceAntialiasing->Select( 1 );
-            break;
+    m_gridStyle->SetSelection( UTIL::GetConfigForVal(
+            gridStyleSelectMap, gal_opts.m_gridStyle ) );
 
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA:
-            m_choiceAntialiasing->Select( 2 );
-            break;
+    m_gridSizeIncrementer->SetValue( gal_opts.m_gridLineWidth );
 
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
-            m_choiceAntialiasing->Select( 3 );
-            break;
-
-        case KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
-            m_choiceAntialiasing->Select( 4 );
-            break;
-    }
-
+    m_gridMinSpacingIncrementer->SetValue( gal_opts.m_gridMinSpacing );
 }
 
 
@@ -139,9 +163,10 @@ void DIALOG_DISPLAY_OPTIONS::OnCancelClick( wxCommandEvent& event )
 }
 
 
-/* Update variables with new options
-*/
-void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
+/*
+ * Update variables with new options
+ */
+void DIALOG_DISPLAY_OPTIONS::OnOkClick( wxCommandEvent& event )
 {
     DISPLAY_OPTIONS* displ_opts = (DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
     KIGFX::GAL_DISPLAY_OPTIONS& gal_opts = m_Parent->GetGalDisplayOptions();
@@ -150,28 +175,8 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 
     displ_opts->m_DisplayPcbTrackFill = not m_OptDisplayTracks->GetValue();
 
-    switch ( m_OptDisplayTracksClearance->GetSelection() )
-    {
-        case 0:
-            displ_opts->m_ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
-            break;
-
-        case 1:
-            displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS;
-            break;
-
-        case 2:
-            displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
-            break;
-
-        case 3:
-            displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS;
-            break;
-
-        case 4:
-            displ_opts->m_ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
-            break;
-    }
+    displ_opts->m_ShowTrackClearanceMode = UTIL::GetValFromConfig(
+            traceClearanceSelectMap, m_OptDisplayTracksClearance->GetSelection() );
 
     displ_opts->m_DisplayModTextFill = not m_OptDisplayModTexts->GetValue();
     displ_opts->m_DisplayModEdgeFill = not m_OptDisplayModOutlines->GetValue();
@@ -183,34 +188,21 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 
     displ_opts->m_DisplayPadNum = m_OptDisplayPadNumber->GetValue();
 
-    m_Parent->SetElementVisibility( PCB_VISIBLE(NO_CONNECTS_VISIBLE),
+    m_Parent->SetElementVisibility( PCB_VISIBLE( NO_CONNECTS_VISIBLE ),
                                     m_OptDisplayPadNoConn->GetValue() );
 
     displ_opts->m_DisplayDrawItemsFill = not m_OptDisplayDrawings->GetValue();
     displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
-    switch( m_choiceAntialiasing->GetSelection() )
-    {
-        case 0:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE;
-            break;
+    gal_opts.gl_antialiasing_mode = UTIL::GetValFromConfig(
+            aaModeSelectMap, m_choiceAntialiasing->GetSelection() );
 
-        case 1:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH;
-            break;
+    gal_opts.m_gridStyle = UTIL::GetValFromConfig(
+            gridStyleSelectMap, m_gridStyle->GetSelection() );
 
-        case 2:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA;
-            break;
+    gal_opts.m_gridLineWidth = m_gridSizeIncrementer->GetValue();
 
-        case 3:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2;
-            break;
-
-        case 4:
-            gal_opts.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4;
-            break;
-    }
+    gal_opts.m_gridMinSpacing = m_gridMinSpacingIncrementer->GetValue();
 
     gal_opts.NotifyChanged();
 
@@ -221,6 +213,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
             static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->LoadDisplayOptions( displ_opts );
     view->RecacheAllItems();
+    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     m_Parent->GetCanvas()->Refresh();
 

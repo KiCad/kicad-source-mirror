@@ -81,7 +81,8 @@ public:
      *
      * @param aName is the name of this window for use by wxWindow::FindWindowByName()
      */
-    CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener = NULL,
+    CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
+               wxWindow* aParent, wxEvtHandler* aMouseListener = NULL,
                wxEvtHandler* aPaintListener = NULL, const wxString& aName = wxT( "CairoCanvas" ) );
 
     virtual ~CAIRO_GAL();
@@ -351,6 +352,9 @@ private:
     COLOR4D             backgroundColor;        ///< Background color
 
     int wxBufferWidth;
+
+    ///> Cairo-specific update handlers
+    bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
 
     void flushPath();
     // Methods

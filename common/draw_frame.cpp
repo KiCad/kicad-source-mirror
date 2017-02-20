@@ -51,6 +51,7 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <gal/gal_display_options.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 
@@ -127,7 +128,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                 const wxString& aTitle,
                                 const wxPoint& aPos, const wxSize& aSize,
                                 long aStyle, const wxString & aFrameName ) :
-    KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
+    KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
+    m_galDisplayOptions( std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>() )
 {
     m_file_checker        = NULL;
 
@@ -711,7 +713,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     m_UndoRedoCountMax = aCfg->Read( baseCfgName + MaxUndoItemsEntry,
             long( DEFAULT_MAX_UNDO_ITEMS ) );
 
-    m_galDisplayOptions.ReadConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
+    m_galDisplayOptions->ReadConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
 }
 
 
@@ -729,7 +731,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
     if( GetScreen() )
         aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
 
-    m_galDisplayOptions.WriteConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
+    m_galDisplayOptions->WriteConfig( aCfg, baseCfgName + GalDisplayOptionsKeyword );
 }
 
 

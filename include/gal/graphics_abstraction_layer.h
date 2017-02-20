@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2017 Kicad Developers, see change_log.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) - base class
  *
@@ -36,6 +36,7 @@
 #include <gal/color4d.h>
 #include <gal/definitions.h>
 #include <gal/stroke_font.h>
+#include <gal/gal_display_options.h>
 #include <newstroke_font.h>
 
 class SHAPE_LINE_CHAIN;
@@ -43,15 +44,6 @@ class SHAPE_POLY_SET;
 
 namespace KIGFX
 {
-/**
- * GridStyle: Type definition of the grid style
- */
-enum GRID_STYLE
-{
-    GRID_STYLE_LINES,   ///< Use lines for the grid
-    GRID_STYLE_DOTS     ///< Use dots for the grid
-};
-
 
 /**
  * @brief Class GAL is the abstract interface for drawing on a 2D-surface.
@@ -63,11 +55,11 @@ enum GRID_STYLE
  * for drawing purposes these are transformed to screen units with this layer. So zooming is handled here as well.
  *
  */
-class GAL
+class GAL: GAL_DISPLAY_OPTIONS_OBSERVER
 {
 public:
     // Constructor / Destructor
-    GAL();
+    GAL( GAL_DISPLAY_OPTIONS& aOptions );
     virtual ~GAL();
 
     /// @brief Returns the initalization status for the canvas.
@@ -775,16 +767,6 @@ public:
     }
 
     /**
-     * @brief Set the threshold for grid drawing.
-     *
-     * @param aThreshold is the minimum grid cell size (in pixels) for which the grid is drawn.
-     */
-    inline void SetGridDrawThreshold( int aThreshold )
-    {
-        gridDrawThreshold = aThreshold;
-    }
-
-    /**
      * @brief Set the grid size.
      *
      * @param aGridSize is a vector containing the grid size in x and y direction.
@@ -837,16 +819,6 @@ public:
         return gridLineWidth;
     }
 
-    /**
-     * @brief Set the grid line width.
-     *
-     * @param aGridLineWidth is the rid line width.
-     */
-    inline void SetGridLineWidth( double aGridLineWidth )
-    {
-        gridLineWidth = aGridLineWidth;
-    }
-
     ///> @brief Draw the grid
     virtual void DrawGrid();
 
@@ -858,24 +830,6 @@ public:
      * @return The nearest grid point in world coordinates.
      */
     VECTOR2D GetGridPoint( const VECTOR2D& aPoint ) const;
-
-    /**
-     * @brief Change the grid display style.
-     *
-     * @param aGridStyle is the new style for grid.
-     */
-    virtual void SetGridStyle( GRID_STYLE aGridStyle )
-    {
-        gridStyle = aGridStyle;
-    }
-
-    /**
-     * @brief Returns the current grid drawing style.
-     */
-    virtual GRID_STYLE GetGridStyle() const
-    {
-        return gridStyle;
-    }
 
     /**
      * @brief Compute the point position in world coordinates from given screen coordinates.
@@ -975,6 +929,10 @@ public:
     static const double METRIC_UNIT_LENGTH;
 
 protected:
+
+    GAL_DISPLAY_OPTIONS&    options;
+    UTIL::LINK              observerLink;
+
     std::stack<double> depthStack;             ///< Stored depth values
     VECTOR2I           screenSize;             ///< Screen size in screen coordinates
 
@@ -1010,7 +968,7 @@ protected:
     COLOR4D            gridColor;              ///< Color of the grid
     int                gridTick;               ///< Every tick line gets the double width
     double             gridLineWidth;          ///< Line width of the grid
-    int                gridDrawThreshold;      ///< Minimum screen size of the grid (pixels)
+    int                gridMinSpacing;         ///< Minimum screen size of the grid (pixels)
                                                ///< below which the grid is not drawn
 
     // Cursor settings
@@ -1029,6 +987,13 @@ protected:
     }
 
     /**
+     * @brief compute minimum grid spacing from the grid settings
+     *
+     * @return the minimum spacing to use for drawing the grid
+     */
+    double computeMinGridSpacing() const;
+
+    /**
      * @brief Draw a grid line (usually a simplified line function).
      *
      * @param aStartPoint is the start point of the line.
@@ -1042,6 +1007,25 @@ protected:
 
     /// Depth level on which the grid is drawn
     static const int GRID_DEPTH;
+
+    // ---------------
+    // Settings observer interface
+    // ---------------
+    /**
+     * Handler for observer settings changes
+     */
+    void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aOptions ) override;
+
+    /**
+     * Function updatedGalDisplayOptions
+     *
+     * @brief handler for updated display options. Derived classes
+     * should call up to this to set base-class methods.
+     *
+     * @return true if the new settings changed something. Derived classes
+     * can use this information to refresh themselves
+     */
+    virtual bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions );
 
 private:
     struct TEXT_PROPERTIES

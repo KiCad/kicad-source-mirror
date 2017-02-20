@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 15 2016)
+// C++ code generated with wxFormBuilder (version Jan  9 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	sSketchModeSizer->Add( m_OptDisplayVias, 0, wxALL, 5 );
 	
 	
-	sLeftSizer->Add( sSketchModeSizer, 0, wxEXPAND|wxALL, 5 );
+	sLeftSizer->Add( sSketchModeSizer, 0, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sOpenGLRenderingSizer;
 	sOpenGLRenderingSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("OpenGL Rendering:") ), wxVERTICAL );
@@ -44,7 +44,56 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	sOpenGLRenderingSizer->Add( m_choiceAntialiasing, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	sLeftSizer->Add( sOpenGLRenderingSizer, 1, wxEXPAND, 5 );
+	sLeftSizer->Add( sOpenGLRenderingSizer, 0, wxALL|wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sGridSettings;
+	sGridSettings = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Display (OpenGL && Cairo)") ), wxVERTICAL );
+	
+	wxString m_gridStyleChoices[] = { _("Dots"), _("Lines") };
+	int m_gridStyleNChoices = sizeof( m_gridStyleChoices ) / sizeof( wxString );
+	m_gridStyle = new wxRadioBox( sGridSettings->GetStaticBox(), wxID_ANY, _("Grid Style"), wxDefaultPosition, wxDefaultSize, m_gridStyleNChoices, m_gridStyleChoices, 1, wxRA_SPECIFY_COLS );
+	m_gridStyle->SetSelection( 0 );
+	sGridSettings->Add( m_gridStyle, 0, wxALL|wxEXPAND, 5 );
+	
+	wxFlexGridSizer* sGridSettingsGrid;
+	sGridSettingsGrid = new wxFlexGridSizer( 0, 4, 0, 0 );
+	sGridSettingsGrid->AddGrowableCol( 1 );
+	sGridSettingsGrid->SetFlexibleDirection( wxBOTH );
+	sGridSettingsGrid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	l_gridLineWidth = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _("Grid thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	l_gridLineWidth->Wrap( -1 );
+	sGridSettingsGrid->Add( l_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_gridLineWidth = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY, _("0.5"), wxDefaultPosition, wxDefaultSize, 0 );
+	sGridSettingsGrid->Add( m_gridLineWidth, 0, wxEXPAND, 5 );
+	
+	m_gridLineWidthSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
+	sGridSettingsGrid->Add( m_gridLineWidthSpinBtn, 0, wxALL, 0 );
+	
+	l_gridLineWidthUnits = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
+	l_gridLineWidthUnits->Wrap( -1 );
+	sGridSettingsGrid->Add( l_gridLineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	l_gridMinSpacing = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _("Min grid spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
+	l_gridMinSpacing->Wrap( -1 );
+	sGridSettingsGrid->Add( l_gridMinSpacing, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_gridMinSpacing = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY, _("10"), wxDefaultPosition, wxDefaultSize, 0 );
+	sGridSettingsGrid->Add( m_gridMinSpacing, 0, wxEXPAND, 5 );
+	
+	m_gridMinSpacingSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
+	sGridSettingsGrid->Add( m_gridMinSpacingSpinBtn, 0, wxALL, 0 );
+	
+	l_gridMinSpacingUnits = new wxStaticText( sGridSettings->GetStaticBox(), wxID_ANY, _("px"), wxDefaultPosition, wxDefaultSize, 0 );
+	l_gridMinSpacingUnits->Wrap( -1 );
+	sGridSettingsGrid->Add( l_gridMinSpacingUnits, 0, wxALL, 5 );
+	
+	
+	sGridSettings->Add( sGridSettingsGrid, 1, wxALL|wxEXPAND, 5 );
+	
+	
+	sLeftSizer->Add( sGridSettings, 1, wxALL|wxEXPAND, 5 );
 	
 	
 	bupperSizer->Add( sLeftSizer, 1, wxEXPAND, 5 );

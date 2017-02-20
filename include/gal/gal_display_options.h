@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KICAD, a free EDA CAD application.
 *
-* Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
+* Copyright (C) 2017 Kicad Developers, see change_log.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -29,23 +29,35 @@
 class wxConfigBase;
 class wxString;
 
-namespace KIGFX {
+namespace KIGFX
+{
+    /**
+     * GRID_STYLE: Type definition of the grid style
+     */
+    enum class GRID_STYLE
+    {
+        LINES,   ///< Use lines for the grid
+        DOTS     ///< Use dots for the grid
+    };
+
+    enum class OPENGL_ANTIALIASING_MODE
+    {
+        NONE,
+        SUBSAMPLE_HIGH,
+        SUBSAMPLE_ULTRA,
+        SUPERSAMPLING_X2,
+        SUPERSAMPLING_X4,
+    };
 
     class GAL_DISPLAY_OPTIONS;
-
-    enum class OPENGL_ANTIALIASING_MODE : long
-    {
-        NONE = 0,
-        SUBSAMPLE_HIGH = 1,
-        SUBSAMPLE_ULTRA = 2,
-        SUPERSAMPLING_X2 = 3,
-        SUPERSAMPLING_X4 = 4
-    };
 
     class GAL_DISPLAY_OPTIONS_OBSERVER
     {
     public:
         virtual void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& ) = 0;
+    protected:
+        // Observer lifetimes aren't handled by base class pointer
+        virtual ~GAL_DISPLAY_OPTIONS_OBSERVER() {}
     };
 
     class GAL_DISPLAY_OPTIONS : public UTIL::OBSERVABLE<GAL_DISPLAY_OPTIONS_OBSERVER>
@@ -53,12 +65,21 @@ namespace KIGFX {
     public:
         GAL_DISPLAY_OPTIONS();
 
-        OPENGL_ANTIALIASING_MODE gl_antialiasing_mode;
-
         void ReadConfig ( wxConfigBase* aCfg, wxString aBaseName );
         void WriteConfig( wxConfigBase* aCfg, wxString aBaseName );
 
         void NotifyChanged();
+
+        OPENGL_ANTIALIASING_MODE gl_antialiasing_mode;
+
+        ///> The grid style to draw the grid in
+        KIGFX::GRID_STYLE m_gridStyle;
+
+        ///> Thickness to render grid lines/dots
+        double m_gridLineWidth;
+
+        ///> Minimum pixel distance between displayed grid lines
+        double m_gridMinSpacing;
     };
 
 }

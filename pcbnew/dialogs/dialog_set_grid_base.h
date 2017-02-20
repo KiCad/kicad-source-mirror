@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version May 21 2016)
+// C++ code generated with wxFormBuilder (version Jan  9 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -55,7 +55,6 @@ class DIALOG_SET_GRID_BASE : public DIALOG_SHIM
 		wxComboBox* m_comboBoxGrid1;
 		wxStaticText* m_staticTextGrid2;
 		wxComboBox* m_comboBoxGrid2;
-		wxRadioBox* m_Style;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

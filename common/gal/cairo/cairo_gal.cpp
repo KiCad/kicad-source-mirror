@@ -42,8 +42,10 @@ using namespace KIGFX;
 
 
 
-CAIRO_GAL::CAIRO_GAL( wxWindow* aParent, wxEvtHandler* aMouseListener,
+CAIRO_GAL::CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
+        wxWindow* aParent, wxEvtHandler* aMouseListener,
         wxEvtHandler* aPaintListener, const wxString& aName ) :
+    GAL( aDisplayOptions ),
     wxWindow( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxEXPAND, aName )
 {
     parentWindow  = aParent;
@@ -100,6 +102,20 @@ CAIRO_GAL::~CAIRO_GAL()
     delete cursorPixelsSaved;
 
     ClearCache();
+}
+
+
+bool CAIRO_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
+{
+    bool refresh = false;
+
+    if( super::updatedGalDisplayOptions( aOptions ) )
+    {
+        Refresh();
+        refresh = true;
+    }
+
+    return refresh;
 }
 
 

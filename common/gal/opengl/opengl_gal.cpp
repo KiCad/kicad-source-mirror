@@ -66,9 +66,10 @@ SHADER* OPENGL_GAL::shader = NULL;
 OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
                         wxEvtHandler* aMouseListener, wxEvtHandler* aPaintListener,
                         const wxString& aName ) :
+    GAL( aDisplayOptions ),
     wxGLCanvas( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
-    options( aDisplayOptions ), mouseListener( aMouseListener ), paintListener( aPaintListener )
+    mouseListener( aMouseListener ), paintListener( aPaintListener )
 {
     if( glMainContext == NULL )
     {
@@ -100,8 +101,6 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 #ifdef RETINA_OPENGL_PATCH
     SetViewWantsBestResolution( true );
 #endif
-
-    observerLink = options.Subscribe( this );
 
     // Connecting the event handlers
     Connect( wxEVT_PAINT,           wxPaintEventHandler( OPENGL_GAL::onPaint ) );
@@ -182,18 +181,27 @@ OPENGL_GAL::~OPENGL_GAL()
         GL_CONTEXT_MANAGER::Get().DestroyCtx( glMainContext );
         glMainContext = NULL;
     }
-
 }
 
 
-void OPENGL_GAL::OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aDisplayOptions )
+bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 {
+    bool refresh = false;
+
     if( options.gl_antialiasing_mode != compositor->GetAntialiasingMode() )
     {
         compositor->SetAntialiasingMode( options.gl_antialiasing_mode );
         isFramebufferInitialized = false;
-        Refresh();
+        refresh = true;
     }
+
+    if( super::updatedGalDisplayOptions( aOptions ) || refresh )
+    {
+        Refresh();
+        refresh = true;
+    }
+
+    return refresh;
 }
 
 
@@ -840,8 +848,14 @@ void OPENGL_GAL::DrawGrid()
     int gridScreenSizeDense  = KiROUND( gridSize.x * worldScale );
     int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
 
+    // sub-pixel lines all render the same
+    double minorLineWidth = std::max( 1.0, gridLineWidth );
+    double majorLineWidth = minorLineWidth * 2.0;
+
+    const double gridThreshold = computeMinGridSpacing();
+
     // Check if the grid would not be too dense
-    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridDrawThreshold )
+    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridThreshold )
         return;
 
     SetTarget( TARGET_NONCACHED );
@@ -880,7 +894,7 @@ void OPENGL_GAL::DrawGrid()
     glDisable( GL_DEPTH_TEST );
     glDisable( GL_TEXTURE_2D );
 
-    if( gridStyle == GRID_STYLE_DOTS )
+    if( gridStyle == GRID_STYLE::DOTS )
     {
         glEnable( GL_STENCIL_TEST );
         glStencilFunc( GL_ALWAYS, 1, 1 );
@@ -895,13 +909,13 @@ void OPENGL_GAL::DrawGrid()
     // Vertical lines
     for( int j = gridStartY; j != gridEndY; j += dirY )
     {
-        if( j % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
-            glLineWidth( 2.0 );
+        if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
+            glLineWidth( majorLineWidth );
         else
-            glLineWidth( 1.0 );
+            glLineWidth( minorLineWidth );
 
-        if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
-            || gridScreenSizeDense > gridDrawThreshold )
+        if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+            || gridScreenSizeDense > gridThreshold )
         {
             glBegin( GL_LINES );
             glVertex2d( gridStartX * gridSize.x, j * gridSize.y + gridOrigin.y );
@@ -910,7 +924,7 @@ void OPENGL_GAL::DrawGrid()
         }
     }
 
-    if( gridStyle == GRID_STYLE_DOTS )
+    if( gridStyle == GRID_STYLE::DOTS )
     {
         glStencilFunc( GL_NOTEQUAL, 0, 1 );
         glColor4d( gridColor.r, gridColor.g, gridColor.b, 1.0 );
@@ -919,13 +933,13 @@ void OPENGL_GAL::DrawGrid()
     // Horizontal lines
     for( int i = gridStartX; i != gridEndX; i += dirX )
     {
-        if( i % gridTick == 0 && gridScreenSizeDense > gridDrawThreshold )
-            glLineWidth( 2.0 );
+        if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
+            glLineWidth( majorLineWidth );
         else
-            glLineWidth( 1.0 );
+            glLineWidth( minorLineWidth );
 
-        if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridDrawThreshold )
-            || gridScreenSizeDense > gridDrawThreshold )
+        if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
+            || gridScreenSizeDense > gridThreshold )
         {
             glBegin( GL_LINES );
             glVertex2d( i * gridSize.x + gridOrigin.x, gridStartY * gridSize.y );
@@ -934,7 +948,7 @@ void OPENGL_GAL::DrawGrid()
         }
     }
 
-    if( gridStyle == GRID_STYLE_DOTS )
+    if( gridStyle == GRID_STYLE::DOTS )
         glDisable( GL_STENCIL_TEST );
 
     glEnable( GL_DEPTH_TEST );

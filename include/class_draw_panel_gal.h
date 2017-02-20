@@ -178,18 +178,6 @@ public:
     }
 
     /**
-     * Function SaveGalSettings()
-     * Stores GAL related settings in the configuration storage.
-     */
-    virtual bool SaveGalSettings();
-
-    /**
-     * Function LoadGalSettings()
-     * Loads GAL related settings from the configuration storage.
-     */
-    virtual bool LoadGalSettings();
-
-    /**
      * Function OnShow()
      * Called when the window is shown for the first time.
      */
@@ -252,9 +240,6 @@ protected:
     /// Flag to indicate that focus should be regained on the next mouse event. It is a workaround
     /// for cases when the panel loses keyboard focus, so it does not react to hotkeys anymore.
     bool                     m_lostFocus;
-
-    /// Grid style setting string
-    static const wxChar GRID_STYLE_CFG[];
 };
 
 #endif

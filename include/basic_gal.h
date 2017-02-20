@@ -64,7 +64,8 @@ private:
     std::stack <TRANSFORM_PRM>  m_transformHistory;
 
 public:
-    BASIC_GAL()
+    BASIC_GAL( KIGFX::GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
+        GAL( aDisplayOptions )
     {
         m_DC = NULL;
         m_Color = RED;
