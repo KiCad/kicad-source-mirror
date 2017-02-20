@@ -154,13 +154,24 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
             COLOR4D color = GetLayerColor( LAYERSCH_ID( buttons->m_Layer ) );
             currentColors[ buttons->m_Layer ] = color;
 
-            wxColourPickerCtrl* colourPicker = new wxColourPickerCtrl(
-                                    this, buttonId, color.ToColour(), wxDefaultPosition,
-                                    wxSize( BUTT_SIZE_X+20, BUTT_SIZE_Y+20 ) );
+            wxMemoryDC iconDC;
+            wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
 
-            colourPicker->SetClientData( (void*) buttons );
+            iconDC.SelectObject( bitmap );
+            iconDC.SetPen( *wxBLACK_PEN );
 
-            rowBoxSizer->Add( colourPicker, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
+            wxBrush brush;
+            brush.SetColour( color.ToColour() );
+            brush.SetStyle( wxBRUSHSTYLE_SOLID );
+            iconDC.SetBrush( brush );
+            iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+
+            wxBitmapButton* bitmapButton = new wxBitmapButton(
+                                    this, buttonId, bitmap, wxDefaultPosition,
+                                    wxSize( BUTT_SIZE_X+8, BUTT_SIZE_Y+6 ) );
+            bitmapButton->SetClientData( (void*) buttons );
+
+            rowBoxSizer->Add( bitmapButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
 
             label = new wxStaticText( this, wxID_ANY, wxGetTranslation( buttons->m_Name ) );
             rowBoxSizer->Add( label, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
@@ -171,22 +182,27 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
         groups++;
     }
 
-    Connect( 1800, buttonId - 1, wxEVT_COLOURPICKER_CHANGED,
-             wxCommandEventHandler( WIDGET_EESCHEMA_COLOR_CONFIG::SetColor ) );
-
-    /*wxArrayString selBgColorStrings;
-    selBgColorStrings.Add( _( "White" ) );
-    selBgColorStrings.Add( _( "Black" ) );
-    m_SelBgColor = new wxRadioBox( this, wxID_ANY, _( "Background Color" ),
-                                   wxDefaultPosition, wxDefaultSize,
-                                   selBgColorStrings, 1, wxRA_SPECIFY_COLS );
-    m_SelBgColor->SetSelection( ( GetDrawFrame()->GetDrawBgColor() == BLACK ) ? 1 : 0 );
-    */
-
     COLOR4D bgColor = GetDrawFrame()->GetDrawBgColor();
-    m_SelBgColor = new wxColourPickerCtrl(
-                        this, buttonId, bgColor.ToColour(), wxDefaultPosition,
-                        wxSize( BUTT_SIZE_X+20, BUTT_SIZE_Y+20 ) );
+    wxMemoryDC iconDC;
+    wxBitmap   bitmap( BUTT_SIZE_X, BUTT_SIZE_Y );
+
+    iconDC.SelectObject( bitmap );
+    iconDC.SetPen( *wxBLACK_PEN );
+
+    wxBrush brush;
+    brush.SetColour( bgColor.ToColour() );
+    brush.SetStyle( wxBRUSHSTYLE_SOLID );
+    iconDC.SetBrush( brush );
+    iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+
+    buttonId++;
+    wxBitmapButton* m_SelBgColor = new wxBitmapButton(
+                            this, buttonId, bitmap, wxDefaultPosition,
+                            wxSize( BUTT_SIZE_X + 8, BUTT_SIZE_Y + 6 ) );
+    m_SelBgColor->SetClientData( (void*) &bgColorButton );
+
+    Connect( 1800, buttonId, wxEVT_COMMAND_BUTTON_CLICKED,
+             wxCommandEventHandler( WIDGET_EESCHEMA_COLOR_CONFIG::SetColor ) );
 
     wxStaticText* bgColorLabel = new wxStaticText( this, wxID_ANY, _( "Background Color" ) );
     wxFont font( bgColorLabel->GetFont() );
@@ -201,8 +217,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
         columnBoxSizer->Add( m_SelBgColor, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 5 );
     }
 
-    // TODO(jon) fix currentColors
-    //currentColors[ LAYER_BACKGROUND ] =  GetDrawFrame()->GetDrawBgColor();
+    currentColors[ LAYER_BACKGROUND ] = bgColor;
 
     // Dialog now needs to be resized, but the associated command is found elsewhere.
 }
@@ -210,21 +225,44 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
 
 void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 {
-    wxColourPickerCtrl* picker = (wxColourPickerCtrl*) event.GetEventObject();
+    wxBitmapButton* button = (wxBitmapButton*) event.GetEventObject();
 
-    wxCHECK_RET( picker != NULL, wxT( "Color picker event object is NULL." ) );
+    wxCHECK_RET( button != NULL, wxT( "Color button event object is NULL." ) );
 
-    COLORBUTTON* colorButton = (COLORBUTTON*) picker->GetClientData();
+    COLORBUTTON* colorButton = (COLORBUTTON*) button->GetClientData();
 
     wxCHECK_RET( colorButton != NULL, wxT( "Client data not set for color button." ) );
 
-    // DisplayColorFrame( this, currentColors[colorButton->m_Layer] );
-    COLOR4D color = COLOR4D( picker->GetColour() );
+    wxColourData colourData;
+    colourData.SetColour( currentColors[ colorButton->m_Layer ].ToColour() );
+    wxColourDialog *dialog = new wxColourDialog( this, &colourData );
 
-    if( color == UNSPECIFIED_COLOR4D || currentColors[ colorButton->m_Layer ] == color )
+    COLOR4D newColor = UNSPECIFIED_COLOR4D;
+
+    if( dialog->ShowModal() == wxID_OK )
+    {
+        newColor = COLOR4D( dialog->GetColourData().GetColour() );
+    }
+
+    if( newColor == UNSPECIFIED_COLOR4D || currentColors[ colorButton->m_Layer ] == newColor )
         return;
 
-    currentColors[ colorButton->m_Layer ] = color;
+    currentColors[ colorButton->m_Layer ] = newColor;
+
+    wxMemoryDC iconDC;
+
+    wxBitmap bitmap = button->GetBitmapLabel();
+    iconDC.SelectObject( bitmap );
+    iconDC.SetPen( *wxBLACK_PEN );
+
+    wxBrush  brush;
+    brush.SetColour( newColor.ToColour() );
+    brush.SetStyle( wxBRUSHSTYLE_SOLID );
+
+    iconDC.SetBrush( brush );
+    iconDC.DrawRectangle( 0, 0, BUTT_SIZE_X, BUTT_SIZE_Y );
+    button->SetBitmapLabel( bitmap );
+    button->Refresh();
 
     Refresh( false );
 }
@@ -237,7 +275,7 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
     // Check for color conflicts with background color to give user a chance to bail
     // out before making changes.
 
-    COLOR4D bgcolor = m_SelBgColor->GetColour();
+    COLOR4D bgcolor = currentColors[LAYER_BACKGROUND];
 
     for( LAYERSCH_ID clyr = LAYER_WIRE; clyr < LAYERSCH_ID_COUNT; ++clyr )
     {
