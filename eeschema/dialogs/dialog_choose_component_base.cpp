@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  5 2017)
+// C++ code generated with wxFormBuilder (version Feb  6 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -18,19 +18,6 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bSearchSizer;
-	bSearchSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_searchLabel = new wxStaticText( this, wxID_ANY, _("Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_searchLabel->Wrap( -1 );
-	bSearchSizer->Add( m_searchLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
-	
-	m_searchBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
-	bSearchSizer->Add( m_searchBox, 1, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-	
-	
-	bSizerMain->Add( bSearchSizer, 0, wxEXPAND, 5 );
-	
 	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE );
 	m_splitter1->SetSashGravity( 0.9 );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_CHOOSE_COMPONENT_BASE::m_splitter1OnIdle ), NULL, this );
@@ -39,6 +26,13 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	m_panel3 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
+	
+	m_searchBox = new wxSearchCtrl( m_panel3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_searchBox->ShowSearchButton( true );
+	#endif
+	m_searchBox->ShowCancelButton( false );
+	bSizer10->Add( m_searchBox, 0, wxALL|wxEXPAND, 5 );
 	
 	m_libraryComponentTree = new TWO_COLUMN_TREE_LIST( m_panel3, wxID_ANY, wxDefaultPosition, wxSize( 320,240 ), wxTL_DEFAULT_STYLE );
 	
@@ -67,10 +61,6 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	wxBoxSizer* bSizer14;
 	bSizer14 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_stFootprint = new wxStaticText( m_panel4, wxID_ANY, _("Footprint:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stFootprint->Wrap( -1 );
-	bSizer14->Add( m_stFootprint, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
 	wxArrayString m_chooseFootprintChoices;
 	m_chooseFootprint = new wxChoice( m_panel4, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_chooseFootprintChoices, 0 );
 	m_chooseFootprint->SetSelection( 0 );
@@ -93,7 +83,7 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	m_panel4->Layout();
 	bSizer11->Fit( m_panel4 );
 	m_splitter1->SplitVertically( m_panel3, m_panel4, -300 );
-	bSizerMain->Add( m_splitter1, 1, wxEXPAND, 5 );
+	bSizerMain->Add( m_splitter1, 1, wxALL|wxEXPAND, 5 );
 	
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
@@ -102,7 +92,7 @@ DIALOG_CHOOSE_COMPONENT_BASE::DIALOG_CHOOSE_COMPONENT_BASE( wxWindow* parent, wx
 	m_stdButtons->AddButton( m_stdButtonsCancel );
 	m_stdButtons->Realize();
 	
-	bSizerMain->Add( m_stdButtons, 0, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( m_stdButtons, 0, wxBOTTOM|wxEXPAND, 10 );
 	
 	
 	this->SetSizer( bSizerMain );

@@ -66,7 +66,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
 #ifndef KICAD_FOOTPRINT_SELECTOR
     // Footprint chooser isn't implemented yet or isn't selected, don't show it.
-    m_stFootprint->Hide();
     m_chooseFootprint->Hide();
 #endif
 

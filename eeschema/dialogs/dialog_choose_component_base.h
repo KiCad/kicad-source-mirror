@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  5 2017)
+// C++ code generated with wxFormBuilder (version Feb  6 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -16,15 +16,14 @@ class TWO_COLUMN_TREE_LIST;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
-#include <wx/stattext.h>
+#include <wx/srchctrl.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
-#include <wx/sizer.h>
 #include <wx/treelist.h>
 #include <wx/html/htmlwin.h>
+#include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
 #include <wx/splitter.h>
@@ -42,15 +41,13 @@ class DIALOG_CHOOSE_COMPONENT_BASE : public DIALOG_SHIM
 	private:
 	
 	protected:
-		wxStaticText* m_searchLabel;
-		wxTextCtrl* m_searchBox;
 		wxSplitterWindow* m_splitter1;
 		wxPanel* m_panel3;
+		wxSearchCtrl* m_searchBox;
 		TWO_COLUMN_TREE_LIST* m_libraryComponentTree;
 		wxHtmlWindow* m_componentDetails;
 		wxPanel* m_panel4;
 		wxPanel* m_componentView;
-		wxStaticText* m_stFootprint;
 		wxChoice* m_chooseFootprint;
 		wxPanel* m_footprintView;
 		wxStdDialogButtonSizer* m_stdButtons;
