@@ -35,8 +35,6 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
-#include <wxstruct.h>
-
 #include <bitmaps.h>
 #include <gestfich.h>
 #include <menus_helpers.h>
@@ -125,11 +123,9 @@ END_EVENT_TABLE()
 
 
 TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
-    wxSashLayoutWindow( parent,
-                        ID_LEFT_FRAME,
-                        wxDefaultPosition,
-                        wxDefaultSize,
-                        KICAD_DEFAULT_DRAWFRAME_STYLE | wxTAB_TRAVERSAL )
+    wxSashLayoutWindow( parent, ID_LEFT_FRAME,
+                        wxDefaultPosition, wxDefaultSize,
+                        wxNO_BORDER | wxTAB_TRAVERSAL )
 {
     m_Parent = parent;
     m_TreeProject = NULL;
